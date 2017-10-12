@@ -1,0 +1,497 @@
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Typography
+# Elements
+# Forms
+# Accessibility
+# Alignments
+# Clearings
+# Media
+# Media: Captions
+# Media: Galleries
+
+/*--------------------------------------------------------------
+# Typography
+--------------------------------------------------------------*/
+body,
+button,
+input,
+select,
+optgroup,
+textarea {
+    color: $color_text;
+    font-family: $font_main;
+    font-weight: 400;
+    line-height: 1.618;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* # Heading */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 300;
+    margin: 0 0 ms(-3);
+    color: darken($color_text, 20%);
+    clear: both;
+}
+
+h1, .h1 {
+    font-size: ms(4);
+    line-height: 1.216;
+}
+
+h2, .h2 {
+    font-size: 2.1em;
+    line-height: 1.216;
+    & + h3 {
+        border-top: 1px solid $color_border;
+        padding-top: ms(-3);
+    }
+}
+
+h3, .h3 {
+    font-size: ms(2);
+}
+
+h4, .h4 {
+    font-size: ms(1);
+}
+
+/* # Copy */
+p {
+    margin: 0 0 ms(1);
+}
+
+dfn, cite, em, i {
+    font-style: italic;
+}
+
+blockquote {
+    padding: 0px ms(1);
+    border-left: 3px solid $color_border;
+    font-style: italic;
+    font-weight: 200;
+    font-size: 1.2em;
+}
+
+address {
+    margin: 0 0 ms(2);
+}
+
+pre {
+    background: darken($background_body, 5%);
+    font-family: "Courier 10 Pitch", Courier, monospace;
+    margin-bottom: ms(3);
+    padding: ms(2);
+    overflow: auto;
+    max-width: 100%;
+}
+
+code, kbd, tt, var {
+    background-color: rgba(0, 0, 0, 0.05);
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+    padding: 0.15em ms(-3);
+    border-radius: 2px;
+}
+
+abbr, acronym {
+    border-bottom: 1px dotted $color_text;
+    cursor: help;
+}
+
+mark, ins {
+    background: transparent;
+    text-decoration: none;
+}
+
+big {
+    font-size: 125%;
+}
+
+/*--------------------------------------------------------------
+# Elements
+--------------------------------------------------------------*/
+html {
+    box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after { /* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+    box-sizing: inherit;
+}
+
+body {
+    background: $background_body; /* Fallback for when there is no custom background color defined. */
+}
+
+hr {
+    background-color: #ccc;
+    border: 0;
+    height: 1px;
+    margin: 0 0 ms(2);
+}
+
+img {
+    height: auto; /* Make sure images are scaled correctly. */
+    max-width: 100%; /* Adhere to container width. */
+}
+
+figure {
+    margin: ms(0) 0; /* Extra wide images within figure tags don't overflow the content area. */
+}
+
+/* Links */
+a {
+    color: $color_link;
+    text-decoration: none;
+    &:visited {
+        color: $color_link_hover;
+    }
+    &:hover,
+    &:focus,
+    &:active {
+        color: $color_link_hover;
+    }
+    &:focus {
+        outline: thin dotted;
+    }
+    &:hover,
+    &:active {
+        outline: 0;
+    }
+}
+
+/* # Lists */
+
+ul, ol {
+    margin: 0 0 ms(2) ms(4);
+    padding: 0;
+}
+
+ul {
+    list-style: disc;
+}
+
+ol {
+    list-style: decimal;
+}
+
+li > ul,
+li > ol {
+    margin-bottom: 0;
+    margin-left: ms(4);
+}
+
+dt {
+    font-weight: bold;
+}
+
+dd {
+    margin: 0 0 ms(2);
+}
+
+/* # Table */
+table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: ms(3);
+    border-spacing: 0;
+    border-collapse: separate;
+
+    caption {
+        padding: ms(1);
+        font-weight: 600;
+    }
+    th {
+        background: darken($background_body, 5%);
+        font-weight: 500;
+    }
+
+    th,
+    td {
+        padding: ms(0) ms(2);
+        vertical-align: top;
+        text-align: left;
+    }
+
+    thead th {
+        vertical-align: middle;
+    }
+
+    tbody {
+        td {
+            background: darken($background_body, 2%);
+        }
+        tr:nth-child(2n) td {
+            background: darken($background_body, 3%);
+        }
+
+    }
+}
+
+/*--------------------------------------------------------------
+# Forms
+--------------------------------------------------------------*/
+form {
+    margin-bottom: ms(3);
+}
+
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    border: none;
+    background: $color_primary;
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: ms(-2) ms(2);
+    font-weight: 600;
+    &:hover {
+        background: darken($color_text, 20%);
+    }
+
+    &:active,
+    &:focus {
+        outline: none;
+    }
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+    color: $color_text;
+    border: none;
+    background: darken($background_body, 5%);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    padding: ms(-2);
+
+    &:focus {
+        background: darken($background_body, 6%);
+        outline: none;
+    }
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+}
+
+select {
+    //border: 1px solid darken( $background_body,5% );
+}
+
+textarea {
+    width: 100%;
+}
+
+fieldset {
+    border: none;
+    margin: ms(3) 0;
+    padding: 0;
+    legend {
+        margin-bottom: ms(-3);
+        font-weight: 600;
+    }
+}
+
+/*--------------------------------------------------------------
+# Accessibility
+--------------------------------------------------------------*/
+/* Text meant only for screen readers. */
+.screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    word-wrap: normal !important; /* Many screen reader and browser combinations announce broken words as they would appear visually. */
+
+    &:focus {
+        background-color: #f1f1f1;
+        border-radius: 3px;
+        box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+        clip: auto !important;
+        display: block;
+        font-weight: bold;
+        height: auto;
+        left: 0px;
+        line-height: normal;
+        padding: 1em ms(3);
+        text-decoration: none;
+        top: 0px;
+        width: auto;
+        z-index: 100000; /* Above WP toolbar. */
+    }
+}
+
+/* Do not show the outline on the skip link target. */
+#content[tabindex="-1"]:focus {
+    outline: 0;
+}
+
+/*--------------------------------------------------------------
+# Alignments
+--------------------------------------------------------------*/
+.alignleft {
+    display: inline;
+    float: left;
+    margin-right: ms(1);
+}
+
+.alignright {
+    display: inline;
+    float: right;
+    margin-left: ms(1);
+}
+
+.aligncenter {
+    clear: both;
+    display: block;
+    margin: 0 auto;
+}
+
+/*--------------------------------------------------------------
+# Clearings
+--------------------------------------------------------------*/
+.clear:before,
+.clear:after,
+.entry-content:before,
+.entry-content:after,
+.comment-content:before,
+.comment-content:after,
+.site-header:before,
+.site-header:after,
+.site-content:before,
+.site-content:after,
+.site-footer:before,
+.site-footer:after {
+    content: "";
+    display: table;
+    table-layout: fixed;
+}
+
+.clear:after,
+.entry-content:after,
+.comment-content:after,
+.site-header:after,
+.site-content:after,
+.site-footer:after {
+    clear: both;
+}
+
+/*--------------------------------------------------------------
+# Media
+--------------------------------------------------------------*/
+.page-content .wp-smiley,
+.entry-content .wp-smiley,
+.comment-content .wp-smiley {
+    border: none;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 0;
+}
+
+/* Make sure embeds and iframes fit their containers. */
+embed,
+iframe,
+object {
+    max-width: 100%;
+}
+
+/* Make sure logo link wraps around logo image. */
+.custom-logo-link {
+    display: inline-block;
+}
+
+/*--------------------------------------------------------------
+## Media: Captions
+--------------------------------------------------------------*/
+.wp-caption {
+    margin-bottom: ms(1);
+    max-width: 100%;
+}
+
+.wp-caption img[class*="wp-image-"] {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wp-caption .wp-caption-text {
+    padding: 1em 0;
+}
+
+.wp-caption-text {
+    text-align: left;
+    font-style: italic;
+    color: darken( $background_body, 40% );
+}
+
+/*--------------------------------------------------------------
+## Media: Galleries
+--------------------------------------------------------------*/
+.gallery {
+    margin-bottom: 1.5em;
+    @include clearfix;
+    margin-bottom: ms(1);
+}
+
+.gallery-item {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+    max-width: 50%;
+}
+
+.gallery-columns-3 .gallery-item {
+    max-width: 33.33%;
+}
+
+.gallery-columns-4 .gallery-item {
+    max-width: 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+    max-width: 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+    max-width: 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+    max-width: 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+    max-width: 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+    max-width: 11.11%;
+}
+
+.gallery-caption {
+    display: block;
+}

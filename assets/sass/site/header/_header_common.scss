@@ -1,0 +1,17 @@
+.site-header {
+    position: relative;
+}
+
+.site-branding {
+    float: left;
+    .site-title {
+        font-size: 1.9em;
+        margin: 0px 0px 3px 0px;
+        font-weight: 500;
+        line-height: 1.216;
+    }
+    .site-description {
+        font-size: ms(-1);
+    }
+}
+
