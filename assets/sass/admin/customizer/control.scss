@@ -1,0 +1,115 @@
+$text_color: #555d66;
+
+// Device tabs settings
+._beacon--hide {
+    display: none !important;
+}
+._beacon--device-select {
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    //margin-left: -10px;
+    //margin-right: -10px;
+    padding: 0px 10px;
+    a {
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        background: #ddd;
+        border-bottom: 0px none;
+        display: block;
+        margin-bottom: -1px;
+        margin-right: 10px;
+        text-decoration: none;
+        outline: none !important;
+        box-shadow: none !important;
+        color: $text_color;
+        &._beacon--active {
+            background: #EEEEEE;
+        }
+    }
+}
+
+/*
+._beacon--device-show {
+    &._beacon--device-general {
+
+    }
+    &._beacon--device-mobile {
+        display: none;
+    }
+}
+*/
+
+._beacon--settings-fields {
+
+}
+
+._beacon--repeater-items {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    ._beacon--repeater-item-inner {
+        padding: 10px;
+    }
+
+    ._beacon--repeater-item-heading {
+        background: #EEEEEE;
+        padding: 10px;
+        position: relative;
+        min-height: 18px;
+        display: block;
+    }
+    ._beacon--repeater-item {
+        border: 1px solid #ddd;
+        background: #ffffff;
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        ._beacon--repeater-item-toggle {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            text-decoration: none;
+            width: 32px;
+            display: block;
+            text-align: center;
+            color: $text_color;
+            box-shadow: none !important;
+            &:before {
+                font: 400 20px/37px dashicons;
+                content: "\f140";
+            }
+        }
+        ._beacon--repeater-item-settings {
+            display: none;
+        }
+        &._beacon--open {
+            ._beacon--repeater-item-heading {
+                border-bottom: 1px solid #ddd;
+            }
+            ._beacon--repeater-item-settings {
+                display: block;
+            }
+            ._beacon--repeater-item-toggle {
+                &:before {
+                    content: "\f142";
+                }
+            }
+        }
+    }
+}
+
+
+._beacon--field {
+    margin-bottom: 15px;
+    &:last-child {
+        margin-bottom: 0px;
+    }
+    label {
+        display: block;
+    }
+    textarea {
+        width: 100%;
+    }
+}
+

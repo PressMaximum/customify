@@ -6,81 +6,223 @@
  */
 
 
+if ( ! class_exists( '_Beacon_Customizer' ) ) {
+    class  _Beacon_Customizer {
+        private $fields = array();
+        private $panels = array();
+        private $sections = array();
+
+        function __construct()
+        {
+            add_action( 'customize_register', array( $this, 'register' ) );
+        }
+
+        function get_config(){
+
+            $this->add_panel( '_beacon_test', array(
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => esc_html__( 'Beacon Test', '_beacon' ),
+                'description'    => '',
+            ) );
+
+            $this->add_section( '_beacon_test_section', array(
+                'priority'    => 3,
+                'title'       => esc_html__( 'Test Section', '_beacon' ),
+                'description' => '',
+                'panel'       => '_beacon_test',
+            ) );
 
 
-/**
- * Add postMessage support for site title and description for the Theme Customizer.
- *
- * @param WP_Customize_Manager $wp_customize Theme Customizer object.
- */
-function _beacon_customize_register( $wp_customize ) {
+            $this->add_setting( 'test_settings_tabs', array(
+                //'priority'    => 1,
+                'setting_type' => 'device_select'
+            ) );
 
-    require_once get_template_directory().'/inc/customizer/customizer-control.php';
+            $this->add_setting( 'test_settings_text', array(
+                'label'       => esc_html__( 'Test Settings Text', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => 'Test Settings Desc',
+                //'priority'    => 1,
+                'setting_type' => 'text', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+            ) );
 
-	$wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-	$wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-	$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-
-	if ( isset( $wp_customize->selective_refresh ) ) {
-		$wp_customize->selective_refresh->add_partial( 'blogname', array(
-			'selector'        => '.site-title a',
-			'render_callback' => '_beacon_customize_partial_blogname',
-		) );
-		$wp_customize->selective_refresh->add_partial( 'blogdescription', array(
-			'selector'        => '.site-description',
-			'render_callback' => '_beacon_customize_partial_blogdescription',
-		) );
-	}
-
-
-    /*------------------------------------------------------------------------*/
-    /*  Site Options
-    /*------------------------------------------------------------------------*/
-    $wp_customize->add_panel( '_beacon_test',
-        array(
-            //'priority'       => 22,
-           // 'capability'     => 'edit_theme_options',
-            'theme_supports' => '',
-            'title'          => esc_html__( 'Beacon Test', '_beacon' ),
-            'description'    => '',
-        )
-    );
-
-    /* Global Settings
-    ----------------------------------------------------------------------*/
-    $wp_customize->add_section( '_beacon_test_section' ,
-        array(
-            'priority'    => 3,
-            'title'       => esc_html__( 'Test Section', '_beacon' ),
-            'description' => '',
-            'panel'       => '_beacon_test',
-        )
-    );
-
-    // Sidebar settings
-    $wp_customize->add_setting( 'test_settings',
-        array(
-            'sanitize_callback' => 'sanitize_text_field',
-            'default'           => 'right-sidebar',
-            //'transport'			=> 'postMessage'
-        )
-    );
-
-    $wp_customize->add_control( new _Beacon_Customizer_Control( $wp_customize, 'test_settings',
-        array(
-            'label'       => esc_html__( 'Test Settings', '_beacon' ),
-            'section'     => '_beacon_test_section',
-            'description' => '',
-            'priority'    => 1
-        )
-    ));
+            $this->add_setting( 'test_settings_repeater', array(
+                'label'       => esc_html__( 'Test Settings repeater', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => 'Test repeater Settings Desc',
+                //'priority'    => 1,
+                'setting_type' => 'repeater', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'live_title_field' => 'text_name',
+                'fields' => array(
+                    array(
+                        'type' => 'text',
+                        'name' => 'text_name',
+                        'label' => __( 'Text Field', '_beacon' ),
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'name' => 'textarea_name',
+                        'label' => __( 'Textarea Field', '_beacon' )
+                    )
+                )
+            ) );
 
 
+            $this->add_setting( 'test_settings', array(
+                'label'       => esc_html__( 'Test Settings Show all', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => 'Test Settings Desc',
+                //'priority'    => 1,
+                'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'fields' => array(
+                    array(
+                        'type' => 'text',
+                        'name' => 'text_name',
+                        'label' => __( 'Text Field', '_beacon' ),
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'name' => 'textarea_name',
+                        'label' => __( 'Textarea Field', '_beacon' )
+                    )
+                )
+            ) );
+
+
+            $this->add_setting( 'test_settings_general', array(
+                'label'       => esc_html__( 'General Group', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => 'Test Settings Desc',
+                //'priority'    => 1,
+                'device'        => 'general',
+                'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'fields' => array(
+                    array(
+                        'type' => 'text',
+                        'name' => 'text_name',
+                        'label' => __( 'Text Field', '_beacon' ),
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'name' => 'textarea_name',
+                        'label' => __( 'Textarea Field', '_beacon' )
+                    )
+                )
+            ) );
+
+
+            $this->add_setting( 'test_settings_mobile', array(
+                'label'       => esc_html__( 'Mobile Group', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => 'Test Settings Desc',
+                //'priority'    => 1,
+                'device'        => 'mobile',
+                'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'fields' => array(
+                    array(
+                        'type' => 'text',
+                        'name' => 'text_name',
+                        'label' => __( 'Text Field', '_beacon' ),
+                    ),
+                    array(
+                        'type' => 'textarea',
+                        'name' => 'textarea_name',
+                        'label' => __( 'Textarea Field', '_beacon' )
+                    )
+                )
+            ) );
 
 
 
+
+            $this->panels   = apply_filters('_beacon/customizer/panels', $this->panels, $this );
+            $this->sections = apply_filters('_beacon/customizer/sections', $this->sections, $this );
+            $this->fields   = apply_filters('_beacon/customizer/fields', $this->fields, $this );
+        }
+
+        function add_panel( $name, $args ){
+            $this->panels[ $name ] = $args;
+        }
+
+        function add_section( $name, $args ){
+            $this->sections[ $name ] = $args;
+        }
+
+        function add_setting( $name, $args ){
+            $this->fields[ $name ] = $args;
+        }
+
+        function register( $wp_customize ){
+            require_once get_template_directory().'/inc/customizer/customizer-control.php';
+
+            $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
+            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
+            $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+
+            if ( isset( $wp_customize->selective_refresh ) ) {
+                $wp_customize->selective_refresh->add_partial( 'blogname', array(
+                    'selector'        => '.site-title a',
+                    'render_callback' => '_beacon_customize_partial_blogname',
+                ) );
+                $wp_customize->selective_refresh->add_partial( 'blogdescription', array(
+                    'selector'        => '.site-description',
+                    'render_callback' => '_beacon_customize_partial_blogdescription',
+                ) );
+            }
+
+            $this->get_config();
+
+            foreach ( $this->panels as $name => $args ) {
+                $wp_customize->add_panel( $name, $args );
+            }
+
+            foreach ( $this->sections as $name => $args ) {
+                $wp_customize->add_section( $name, $args );
+            }
+
+            foreach ( $this->fields as $name => $args ) {
+                $_settings = array();
+                if ( isset( $args['_settings'] ) ) {
+                    $_settings =  $args['_settings'];
+                }
+
+                //unset( $args['_settings'] );
+                $_settings = wp_parse_args( $_settings, array(
+                    'sanitize_callback' => 'sanitize_text_field',
+                    'default'           => null,
+                    //'transport'			=> 'postMessage' // for selective refresh
+                ) );
+                $selective_refresh = false;
+                if ( isset( $args['_selective_refresh'] ) ) {
+                    $selective_refresh = $args['_selective_refresh'];
+                    //unset( $args['_selective_refresh' ]);
+                    $selective_refresh = wp_parse_args( $selective_refresh, array(
+                        'selector'        => '',
+                        'render_callback' => '',
+                    ) );
+                }
+
+                $wp_customize->add_setting( $name, $_settings );
+                $wp_customize->add_control( new _Beacon_Customizer_Control( $wp_customize, $name, $args ));
+                if ( $selective_refresh ) {
+                    $wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
+                }
+
+            }
+
+        }
+    }
 }
-add_action( 'customize_register', '_beacon_customize_register' );
+
+
+new _Beacon_Customizer();
+
+function _beacon_sanitize_select( $input, $setting ) {
+    $input = sanitize_key( $input );
+    $choices = $setting->manager->get_control( $setting->id )->choices;
+    return ( array_key_exists( $input, $choices ) ? $input : $setting->default );
+}
 
 /**
  * Render the site title for the selective refresh partial.
