@@ -37,6 +37,9 @@
   margin-bottom: 15px; }
   ._beacon--repeater-items ._beacon--repeater-item-inner {
     padding: 10px; }
+  ._beacon--repeater-items ._beacon--remove {
+    padding: 0 10px 10px;
+    display: inline-block; }
   ._beacon--repeater-items ._beacon--repeater-item-heading {
     background: #EEEEEE;
     padding: 10px;

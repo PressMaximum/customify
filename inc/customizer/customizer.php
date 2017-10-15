@@ -34,23 +34,68 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             ) );
 
 
-            $this->add_setting( 'test_settings_tabs', array(
+            $this->add_setting( 'test_settings_device', array(
                 //'priority'    => 1,
+                'section'     => '_beacon_test_section',
                 'setting_type' => 'device_select'
             ) );
 
-            $this->add_setting( 'test_settings_text', array(
-                'label'       => esc_html__( 'Test Settings Text', '_beacon' ),
+            $this->add_setting( '_text', array(
+                'label'       => __( 'Text', '_beacon' ),
                 'section'     => '_beacon_test_section',
-                'description' => 'Test Settings Desc',
+                'description' => __( 'This is description' ),
                 //'priority'    => 1,
                 'setting_type' => 'text', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
             ) );
 
-            $this->add_setting( 'test_settings_repeater', array(
-                'label'       => esc_html__( 'Test Settings repeater', '_beacon' ),
+            $this->add_setting( '_textarea', array(
+                'label'       => __( 'Textarea', '_beacon' ),
                 'section'     => '_beacon_test_section',
-                'description' => 'Test repeater Settings Desc',
+                'description' => __( 'This is description' ),
+                //'priority'    => 1,
+                'setting_type' => 'textarea', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+            ) );
+
+            $this->add_setting( '_select', array(
+                'label'       => __( 'Select', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => __( 'This is description' ),
+                //'priority'    => 1,
+                'setting_type' => 'select', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'choices' => array(
+                    '1' => __( 'One', '_beacon' ),
+                    '2' => __( 'Two', '_beacon' ),
+                    '3' => __( 'Three', '_beacon' ),
+                )
+            ) );
+
+            $this->add_setting( '_checkbox', array(
+                'label'       => __( 'Checkbox', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => __( 'This is description' ),
+                'setting_type' => 'checkbox',
+                'checkbox_label' => __( 'This is checkbox label' ),
+            ) );
+
+
+            $this->add_setting( '_radio', array(
+                'label'       => __( 'Radio', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => __( 'This is description' ),
+                //'priority'    => 1,
+                'setting_type' => 'radio', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'choices' => array(
+                    '1' => __( 'One', '_beacon' ),
+                    '2' => __( 'Two', '_beacon' ),
+                    '3' => __( 'Three', '_beacon' ),
+                )
+            ) );
+
+
+            $this->add_setting( '_repeater', array(
+                'label'       => __( 'Repeater', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => __( 'This is description', '_beacon' ),
                 //'priority'    => 1,
                 'setting_type' => 'repeater', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
                 'live_title_field' => 'text_name',
@@ -69,10 +114,10 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             ) );
 
 
-            $this->add_setting( 'test_settings', array(
-                'label'       => esc_html__( 'Test Settings Show all', '_beacon' ),
+            $this->add_setting( '_group', array(
+                'label'       => esc_html__( 'Group', '_beacon' ),
                 'section'     => '_beacon_test_section',
-                'description' => 'Test Settings Desc',
+                'description' => __( 'This is description', '_beacon' ),
                 //'priority'    => 1,
                 'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
                 'fields' => array(
@@ -90,10 +135,10 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             ) );
 
 
-            $this->add_setting( 'test_settings_general', array(
+            $this->add_setting( '_general', array(
                 'label'       => esc_html__( 'General Group', '_beacon' ),
                 'section'     => '_beacon_test_section',
-                'description' => 'Test Settings Desc',
+                'description' => __( 'This is description', '_beacon' ),
                 //'priority'    => 1,
                 'device'        => 'general',
                 'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
@@ -112,10 +157,10 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             ) );
 
 
-            $this->add_setting( 'test_settings_mobile', array(
+            $this->add_setting( '_mobile', array(
                 'label'       => esc_html__( 'Mobile Group', '_beacon' ),
                 'section'     => '_beacon_test_section',
-                'description' => 'Test Settings Desc',
+                'description' => __( 'This is description', '_beacon' ),
                 //'priority'    => 1,
                 'device'        => 'mobile',
                 'setting_type' => 'group', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
@@ -189,7 +234,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
                 //unset( $args['_settings'] );
                 $_settings = wp_parse_args( $_settings, array(
-                    'sanitize_callback' => 'sanitize_text_field',
+                    'sanitize_callback' => '_beacon_sanitize_input',
                     'default'           => null,
                     //'transport'			=> 'postMessage' // for selective refresh
                 ) );
@@ -217,6 +262,10 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
 
 new _Beacon_Customizer();
+
+function _beacon_sanitize_input( $input ){
+    return $input;
+}
 
 function _beacon_sanitize_select( $input, $setting ) {
     $input = sanitize_key( $input );

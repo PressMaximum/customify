@@ -61,8 +61,69 @@
                     break;
             }
 
-        },
+            control.container.on( 'change keyup data-change', 'input, select, textarea', function(){
+                control.getValue();
+            } );
 
+        },
+        getFieldValue: function( name, type, $field ){
+            var control = this;
+            if ( _.isUndefined( $field ) ) {
+                $field = control.container.find( '._beacon--settings-fields ._beacon--field' ).first();
+            }
+
+            if ( _.isUndefined( type ) ) {
+                type = control.params.setting_type;
+            }
+
+
+            var value = '';
+            switch ( type ) {
+                case 'color':
+
+                case 'radio':
+
+                    break;
+                default:
+                        value = $( '[data-name="'+name+'"]', $field ).val();
+                    break;
+            }
+
+            return value;
+
+        },
+        getValue: function(){
+            var control = this;
+            var value = '';
+            switch ( control.params.setting_type ) {
+                case 'group':
+                    value = {};
+                    _.each( control.params.fields, function( f ){
+                        var $_field = $( '[data-field-name="'+f.name+'"]', control.container ).closest('._beacon--field');
+                        value[ f.name ] = control.getFieldValue( f.name, f.type, $_field );
+                    } );
+                    break;
+                case 'repeater':
+                        value = [];
+                        $( '._beacon--repeater-item', control.container ).each( function( index){
+                            var $item = $( this );
+                            var _v = {};
+                            _.each( control.params.fields, function( f ){
+                                var $_field = $( '[data-field-name="'+f.name+'"]', $item ).closest('._beacon--field');
+                                _v[ f.name ] = control.getFieldValue( f.name, f.type, $_field );
+                            } );
+                            value[index] = _v;
+                        } );
+                    break;
+                default:
+                    value = this.getFieldValue( control.id );
+                    break;
+            }
+
+            console.log( 'getValue', value );
+
+            return value;
+        },
         initGroup: function(){
             var control = this;
             var template = control.getTemplate();
@@ -73,12 +134,20 @@
         initField: function( ){
             var control = this;
             var template = control.getTemplate();
-            var fields =  [{
+            var field = {
                 type: control.params.setting_type,
                 name: control.id,
                 value: control.params.value
-            }];
-            var $fields = template( fields , 'tmpl-customize-control-'+control.type+'-fields');
+            };
+
+            if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {
+                field.choices = control.params.choices;
+            }
+            if ( control.params.setting_type == 'checkbox' ) {
+                field.label = control.params.checkbox_label;
+            }
+
+            var $fields = template( [ field ] , 'tmpl-customize-control-'+control.type+'-fields');
             control.container.find( '._beacon--settings-fields' ).html( $fields );
         },
 
@@ -137,16 +206,25 @@
 
         initRepeater: function(){
             var control = this;
-
+            // Sortable
             control.container.find( '._beacon--settings-fields' ).sortable({
                 handle: '._beacon--repeater-item-heading',
                 containment: "parent"
             });
 
+            // Toggle
             control.container.on( 'click', '._beacon--repeater-item-toggle', function(e){
                 e.preventDefault();
                 var  p = $( this ).closest('._beacon--repeater-item');
                 p.toggleClass('_beacon--open');
+            } );
+
+            // Remove
+            control.container.on( 'click', '._beacon--remove', function(e){
+                e.preventDefault();
+                var  p = $( this ).closest('._beacon--repeater-item');
+                p.remove();
+                $document.trigger('_beacon/customizer/repeater/remove', [ control ] );
             } );
 
             control.addRepeaterItem();
@@ -156,7 +234,6 @@
                 control.addRepeaterItem();
             } );
         }
-
 
     });
 

@@ -20,8 +20,10 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
     public $setting_type = 'group';
     public $fields = array();
+    public $choices = array();
     public $default = array();
     public $device = '';
+    public $checkbox_label = '';
 
     public $live_title_field; // for repeater
 
@@ -88,6 +90,13 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
             $this->json['live_title_field'] = $this->live_title_field;
         }
+
+        if ( $this->setting_type == 'select' || $this->setting_type == 'radio' ) {
+            $this->json['choices'] = $this->choices;
+        }
+        if ( $this->setting_type == 'checkbox' ) {
+            $this->json['checkbox_label'] = $this->checkbox_label;
+        }
         //$this->json['link']       = $this->get_link();
     }
 
@@ -133,7 +142,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                     <?php if (!empty($this->description)) : ?>
                         <span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span>
                     <?php endif; ?>
-                    <input type="hidden" {{{ data.inputAttrs }}} value="" <?php echo wp_kses_post($this->get_link()); ?> />
                 </label>
                 <div class="_beacon--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' _beacon--repeater-items' : ''; ?>"></div>
                 <?php if ( $this->setting_type == 'repeater' ) { ?>
@@ -157,8 +165,16 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             <# _.each( data, function( field ){
                     switch( field.type ) { case 'select':
                     #>
+                    <?php $this->field_select(); ?>
+                <# break; #>
                 <# case 'textarea': #>
                     <?php $this->field_textarea(); ?>
+                    <# break; #>
+                <# case 'checkbox': #>
+                    <?php $this->field_checkbox(); ?>
+                    <# break; #>
+                <# case 'radio': #>
+                    <?php $this->field_radio(); ?>
                     <# break; #>
                 <# break;
                     default: #>
@@ -174,7 +190,11 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                     <a href="#" class="_beacon--repeater-item-toggle"><span class="screen-reader-text"><?php _e( 'Close', '_beacon' ) ?></span></a>
                 </div>
                 <div class="_beacon--repeater-item-settings">
-                    <div class="_beacon--repeater-item-inner">{{{ data }}}</div>
+                    <div class="_beacon--repeater-item-inside">
+                        <div class="_beacon--repeater-item-inner">{{{ data }}}</div>
+                        <a href="#" class="_beacon--remove"><?php _e( 'Remove', '_beacon' ); ?></a>
+                    </div>
+
                 </div>
             </div>
         </script>
@@ -183,7 +203,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
     function before_field(){
         ?>
-        <div class="_beacon--field _beacon--field-{{ field.type }}">
+        <div class="_beacon--field _beacon--field-{{ field.type }}" data-field-name="{{ field.name }}">
         <?php
     }
 
@@ -202,7 +222,43 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <# if ( field.description ) { #>
             <p class="description">{{{ field.description }}}</p>
         <# } #>
-        <input type="text" data-name="{{ field.name }}" value="{{ field.value }}">
+        <input type="text" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
+        <?php
+        $this->after_field();
+    }
+
+    function field_radio(){
+        $this->before_field();
+        ?>
+        <#
+        var uniqueID = field.name + ( new Date().getTime() );
+
+        if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <div class="_beacon-radio-list">
+            <# _.each( field.choices, function( label, key ){  #>
+                <p>
+                <label><input type="radio" data-name="{{ field.name }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> {{ label }}</label>
+                </p>
+            <# } ); #>
+        </div>
+        <?php
+        $this->after_field();
+    }
+
+    function field_checkbox(){
+        $this->before_field();
+        ?>
+        <label>
+            <input type="checkbox" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}"> {{{ field.label }}}
+        </label>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
         <?php
         $this->after_field();
     }
@@ -216,10 +272,30 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <# if ( field.description ) { #>
             <p class="description">{{{ field.description }}}</p>
         <# } #>
-        <textarea rows="10" data-name="{{ field.name }}">{{ field.value }}</textarea>
+        <textarea rows="10" class="_beacon-input" data-name="{{ field.name }}">{{ field.value }}</textarea>
         <?php
         $this->after_field();
     }
+
+    function field_select(){
+        $this->before_field();
+        ?>
+        <# if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <select class="_beacon-input" data-name="{{ field.name }}">
+            <# _.each( field.choices, function( label, key ){  #>
+            <option <# if ( field.value == key ){ #> selected="selected" <# } #> value="{{ key }}">{{ label }}</option>
+            <# } ); #>
+        </select>
+        <?php
+        $this->after_field();
+    }
+
+
 
 
 
