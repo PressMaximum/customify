@@ -4,6 +4,9 @@ $text_color: #555d66;
 ._beacon--hide {
     display: none !important;
 }
+.customize-control-_beacon-device_select {
+    display: none !important;
+}
 ._beacon--device-select {
     display: flex;
     z-index: 20;

@@ -462,9 +462,9 @@
             $document.trigger( '_beacon/customizer/device/change',['general'] );
         } );
 
-        $( '._beacon--device-select' ).each( function(){
-            var t = $( this );
-            var s = $( this ).closest('.accordion-section');
+        $( '.accordion-section' ).each( function(){
+            var s = $( this );
+            var t = $( '._beacon--device-select', s ).first();
             $( '.customize-section-title', s ).append( t );
         } );
 

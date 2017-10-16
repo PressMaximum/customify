@@ -1,6 +1,9 @@
 ._beacon--hide {
   display: none !important; }
 
+.customize-control-_beacon-device_select {
+  display: none !important; }
+
 ._beacon--device-select {
   display: -webkit-box;
   display: -ms-flexbox;
