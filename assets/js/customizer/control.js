@@ -221,17 +221,17 @@
 
 
             // When add/Change
-            control.container.on( 'click',  '._beacon--field-image ._beacon--add, ._beacon--field-image ._beacon--change', function( e ) {
+            control.container.on( 'click',  '._beacon--media ._beacon--add, ._beacon--media ._beacon--change, ._beacon--media ._beacon-image-preview', function( e ) {
                 e.preventDefault();
-                var p = $( this ).closest('._beacon--field-image');
+                var p = $( this ).closest('._beacon--media');
                 control.controlMedia.setPreview( p )  ;
                 control.controlMediaImage.open();
             } );
 
             // When add/Change
-            control.container.on( 'click',  '._beacon--field-image ._beacon--remove', function( e ) {
+            control.container.on( 'click',  '._beacon--media ._beacon--remove', function( e ) {
                 e.preventDefault();
-                var p = $( this ).closest('._beacon--field-image');
+                var p = $( this ).closest('._beacon--media');
                 control.controlMedia.remove( p );
             } );
 
