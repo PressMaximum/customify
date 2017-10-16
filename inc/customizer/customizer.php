@@ -53,7 +53,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 'section'     => '_beacon_test_section',
                 'description' => __( 'This is description' ),
                 //'priority'    => 1,
-                'setting_type' => 'textarea', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'setting_type' => 'textarea',
             ) );
 
             $this->add_setting( '_select', array(
@@ -61,7 +61,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 'section'     => '_beacon_test_section',
                 'description' => __( 'This is description' ),
                 //'priority'    => 1,
-                'setting_type' => 'select', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'setting_type' => 'select',
                 'choices' => array(
                     '1' => __( 'One', '_beacon' ),
                     '2' => __( 'Two', '_beacon' ),
@@ -83,7 +83,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 'section'     => '_beacon_test_section',
                 'description' => __( 'This is description' ),
                 //'priority'    => 1,
-                'setting_type' => 'radio', // text, color, image, textarea,..: if use only one, group: if have more than 1 fields. tabs if you use tab
+                'setting_type' => 'radio',
                 'choices' => array(
                     '1' => __( 'One', '_beacon' ),
                     '2' => __( 'Two', '_beacon' ),
@@ -91,6 +91,12 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 )
             ) );
 
+            $this->add_setting( '_image', array(
+                'label'       => __( 'Image', '_beacon' ),
+                'section'     => '_beacon_test_section',
+                'description' => __( 'This is description' ),
+                'setting_type' => 'image',
+            ) );
 
             $this->add_setting( '_repeater', array(
                 'label'       => __( 'Repeater', '_beacon' ),
@@ -102,12 +108,17 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 'fields' => array(
                     array(
                         'type' => 'text',
-                        'name' => 'text_name',
+                        'name' => 'text',
                         'label' => __( 'Text Field', '_beacon' ),
                     ),
                     array(
+                        'type' => 'image',
+                        'name' => 'image',
+                        'label' => __( 'Image Field', '_beacon' )
+                    ),
+                    array(
                         'type' => 'textarea',
-                        'name' => 'textarea_name',
+                        'name' => 'textarea',
                         'label' => __( 'Textarea Field', '_beacon' )
                     )
                 )
@@ -263,9 +274,18 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
 new _Beacon_Customizer();
 
-function _beacon_sanitize_input( $input ){
-    return $input;
+if ( ! function_exists( '_beacon_sanitize_input' ) ) {
+    function _beacon_sanitize_input( $input ){
+        $input = wp_unslash( $input );
+        if ( ! is_array( $input ) ) {
+            $input = json_decode( urldecode_deep( $input ) );
+        }
+        return $input;
+    }
 }
+
+
+
 
 function _beacon_sanitize_select( $input, $setting ) {
     $input = sanitize_key( $input );

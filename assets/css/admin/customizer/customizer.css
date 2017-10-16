@@ -46,6 +46,12 @@
     position: relative;
     min-height: 18px;
     display: block; }
+  ._beacon--repeater-items ._beacon--repeater-live-title {
+    white-space: nowrap;
+    margin-right: 35px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block; }
   ._beacon--repeater-items ._beacon--repeater-item {
     border: 1px solid #ddd;
     background: #ffffff;
@@ -83,3 +89,7 @@
     display: block; }
   ._beacon--field textarea {
     width: 100%; }
+
+._beacon-image-preview {
+  margin: 10px 0;
+  display: block; }

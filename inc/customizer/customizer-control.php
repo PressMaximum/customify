@@ -51,6 +51,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         }
         wp_enqueue_style('_beacon-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
         wp_enqueue_script( '_beacon-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
+        wp_localize_script( '_beacon-customizer-control', '_Beacon_Control_Args', array(
+                'home_url' => home_url('')
+        ) );
     }
 
 
@@ -176,6 +179,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 <# case 'radio': #>
                     <?php $this->field_radio(); ?>
                     <# break; #>
+                <# case 'image': case 'media': #>
+                    <?php $this->field_media(); ?>
+                    <# break; #>
                 <# break;
                     default: #>
                     <?php $this->field_text(); ?>
@@ -242,7 +248,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <div class="_beacon-radio-list">
             <# _.each( field.choices, function( label, key ){  #>
                 <p>
-                <label><input type="radio" data-name="{{ field.name }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> {{ label }}</label>
+                <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> {{ label }}</label>
                 </p>
             <# } ); #>
         </div>
@@ -254,7 +260,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         $this->before_field();
         ?>
         <label>
-            <input type="checkbox" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}"> {{{ field.label }}}
+            <input type="checkbox" class="_beacon-input" <# if ( field.value == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}" value="1"> {{{ field.label }}}
         </label>
         <# if ( field.description ) { #>
             <p class="description">{{{ field.description }}}</p>
@@ -294,6 +300,58 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+
+    function field_media(){
+        $this->before_field();
+        ?>
+        <#
+
+        if ( ! _.isObject(field.value) ) {
+            field.value = {};
+        }
+        if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <div class="_beacon--media">
+            <input type="hidden" class="attachment-id" value="{{ field.value.id }}" data-name="{{ field.name }}">
+            <input type="hidden" class="attachment-url"  value="{{ field.value.url }}" data-name="{{ field.name }}-url">
+            <input type="hidden" class="attachment-mime"  value="{{ field.value.mime }}" data-name="{{ field.name }}-mime">
+            <div class="_beacon-image-preview">
+                <#
+                var url = field.value.url;
+                if ( url ) {
+                    if ( url.indexOf('http://') > -1 || url.indexOf('https://') ){
+
+                    } else {
+                        url = _Beacon_Control_Args.home_url + url;
+                    }
+
+                    if ( ! field.value.mime || field.value.mime.indexOf('image/') > -1 ) {
+                        #>
+                        <img src="{{ url }}" alt="">
+                    <# } else if ( field.value.mime.indexOf('video/' ) > -1 ) { #>
+                        <video width="100%" height="" controls><source src="{{ url }}" type="{{ field.value.mime }}">Your browser does not support the video tag.</video>
+                    <# } else {
+                    var basename = url.replace(/^.*[\\\/]/, '');
+                    #>
+                        <a href="{{ url }}" class="attachment-file" target="_blank">{{ basename }}</a>
+                    <# }
+                }
+                #>
+            </div>
+            <button type="button" class="button _beacon--add"><?php _e( 'Add', '_beacon' ); ?></button>
+            <button type="button" class="button _beacon--change _beacon--hide"><?php _e( 'Change', '_beacon' ); ?></button>
+            <button type="button" class="button _beacon--remove"><?php _e( 'Remove', '_beacon' ); ?></button>
+        </div>
+
+        <?php
+        $this->after_field();
+    }
+
+
 
 
 

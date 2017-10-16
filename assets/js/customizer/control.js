@@ -65,6 +65,176 @@
                 control.getValue();
             } );
 
+            control.initMedia();
+
+        },
+
+        addParamsURL: function( url, data )
+        {
+            if ( ! $.isEmptyObject(data) )
+            {
+                url += ( url.indexOf('?') >= 0 ? '&' : '?' ) + $.param(data);
+            }
+
+            return url;
+        },
+
+        initMedia: function(){
+            var control = this;
+            control.controlMedia =  {
+                setAttachment: function( attachment ){
+                    this.attachment = attachment;
+                },
+                getThumb: function( attachment ){
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+                    var t = new Date().getTime();
+                    if ( typeof this.attachment.sizes !== "undefined" ) {
+                        if ( typeof this.attachment.sizes.medium !== "undefined" ) {
+                            return control.addParamsURL( this.attachment.sizes.medium.url, { t : t } );
+                        }
+                    }
+                    return control.addParamsURL( this.attachment.url, { t : t } );
+                },
+                getURL: function( attachment ) {
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+                    var t = new Date().getTime();
+                    return control.addParamsURL( this.attachment.url, { t : t } );
+                },
+                getID: function( attachment ){
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+                    return this.attachment.id;
+                },
+                getInputID: function( attachment ){
+                    $( '.attachment-id', this.preview ).val( );
+                },
+                setPreview: function( $el ){
+                    this.preview = $el;
+                },
+                insertImage: function( attachment ){
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+
+                    var url = this.getThumb();
+                    var id = this.getID();
+                    var mime = this.attachment.mime;
+                    $( '._beacon-image-preview', this.preview ).html(  '<img src="'+url+'" alt="">' );
+                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+                    $( '.attachment-mime', this.preview ).val( mime );
+                    $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
+                    this.preview.addClass( 'attachment-added' );
+                    this.showChangeBtn();
+
+                },
+                toRelativeUrl: function( url ){
+                    return url.replace( _Beacon_Control_Args.home_url, '' );
+                },
+                showChangeBtn: function(){
+                    $( '._beacon--add', this.preview ).addClass( '_beacon--hide' );
+                    $( '._beacon--change', this.preview ).removeClass( '_beacon--hide' );
+                },
+                insertVideo: function(attachment ){
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+
+                    var url = this.getURL();
+                    var id = this.getID();
+                    var mime = this.attachment.mime;
+                    var html = '<video width="100%" height="" controls><source src="'+url+'" type="'+mime+'">Your browser does not support the video tag.</video>';
+                    $( '._beacon-image-preview', this.preview ).html( html );
+                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+                    $( '.attachment-mime', this.preview ).val( mime );
+                    $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
+                    this.preview.addClass( 'attachment-added' );
+                    this.showChangeBtn();
+                },
+                insertFile: function( attachment ){
+                    if ( typeof attachment !== "undefined" ) {
+                        this.attachment = attachment;
+                    }
+                    var url = attachment.url;
+                    var mime = this.attachment.mime;
+                    var basename = url.replace(/^.*[\\\/]/, '');
+
+                    $( '._beacon-image-preview', this.preview ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
+                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+                    $( '.attachment-mime', this.preview ).val( mime );
+                    $( '.attachment-id', this.preview ).val( this.getID() ).trigger( 'change' );
+                    this.preview.addClass( 'attachment-added' );
+                    this.showChangeBtn();
+                },
+                remove: function( $el ){
+                    if ( typeof $el !== "undefined" ) {
+                        this.preview = $el;
+                    }
+                    $( '._beacon-image-preview', this.preview ).removeAttr( 'style').html( '' );
+                    $( '.attachment-url', this.preview ).val( '' );
+                    $( '.attachment-mime', this.preview ).val( '' );
+                    $( '.attachment-id', this.preview ).val( '' ).trigger( 'change' );
+                    this.preview.removeClass( 'attachment-added' );
+
+                    $( '._beacon--add', this.preview ).removeClass( '_beacon--hide' );
+                    $( '._beacon--change', this.preview ).addClass( '_beacon--hide' );
+                }
+
+            };
+
+            control.controlMediaImage = wp.media({
+                title: wp.media.view.l10n.addMedia,
+                multiple: false,
+                library: {type: 'image' }
+            });
+
+            control.controlMediaImage.on('select', function () {
+                var attachment = control.controlMediaImage.state().get('selection').first().toJSON();
+                control.controlMedia.insertImage( attachment );
+            });
+
+            control.controlMediaVideo = wp.media({
+                title: wp.media.view.l10n.addMedia,
+                multiple: false,
+                library: {type: 'video' }
+            });
+
+            control.controlMediaVideo.on('select', function () {
+                var attachment = control.controlMediaVideo.state().get('selection').first().toJSON();
+                control.controlMedia.insertVideo( attachment );
+            });
+
+            control.controlMediaFile = wp.media({
+                title: wp.media.view.l10n.addMedia,
+                multiple: false
+            });
+
+            control.controlMediaFile.on('select', function () {
+                var attachment = control.controlMediaFile.state().get('selection').first().toJSON();
+                control.controlMedia.insertFile( attachment );
+            });
+
+
+            // When add/Change
+            control.container.on( 'click',  '._beacon--field-image ._beacon--add, ._beacon--field-image ._beacon--change', function( e ) {
+                e.preventDefault();
+                var p = $( this ).closest('._beacon--field-image');
+                control.controlMedia.setPreview( p )  ;
+                control.controlMediaImage.open();
+            } );
+
+            // When add/Change
+            control.container.on( 'click',  '._beacon--field-image ._beacon--remove', function( e ) {
+                e.preventDefault();
+                var p = $( this ).closest('._beacon--field-image');
+                control.controlMedia.remove( p );
+            } );
+
+
         },
         getFieldValue: function( name, type, $field ){
             var control = this;
@@ -76,13 +246,23 @@
                 type = control.params.setting_type;
             }
 
-
             var value = '';
             switch ( type ) {
                 case 'color':
-
+                    //
+                    break;
+                case 'media':
+                case 'image':
+                case 'video':
+                case 'attachment':
+                    value = {
+                        id:  $( 'input[data-name="'+name+'"]', $field ).val(),
+                        url:  $( 'input[data-name="'+name+'-url"]', $field ).val(),
+                        mime:  $( 'input[data-name="'+name+'-mime"]', $field ).val()
+                    };
+                break;
                 case 'radio':
-
+                    value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
                     break;
                 default:
                         value = $( '[data-name="'+name+'"]', $field ).val();
@@ -92,7 +272,10 @@
             return value;
 
         },
-        getValue: function(){
+        updateRepeaterLiveTitle: function( value, $item, field ){
+            $( '._beacon--repeater-live-title', $item ).text( value );
+        },
+        getValue: function( save ){
             var control = this;
             var value = '';
             switch ( control.params.setting_type ) {
@@ -105,14 +288,30 @@
                     break;
                 case 'repeater':
                         value = [];
-                        $( '._beacon--repeater-item', control.container ).each( function( index){
+                        $( '._beacon--repeater-item', control.container ).each( function( index ){
                             var $item = $( this );
                             var _v = {};
                             _.each( control.params.fields, function( f ){
-                                var $_field = $( '[data-field-name="'+f.name+'"]', $item ).closest('._beacon--field');
-                                _v[ f.name ] = control.getFieldValue( f.name, f.type, $_field );
+                                var inputField = $( '[data-field-name="'+f.name+'"]', $item );
+                                var $_field = inputField.closest('._beacon--field');
+                                var _fv =  control.getFieldValue( f.name, f.type, $_field );
+                                _v[ f.name ] = _fv;
+
+                                // Update Live title
+                                if ( control.params.live_title_field == f.name ) {
+                                    if ( inputField.prop("tagName") == 'select' ) {
+                                        _fv = $( 'option[value="'+_fv+'"]' ).first().text();
+                                    }
+                                }
+
+                                if ( _.isUndefined( _fv ) || _fv == '' ){
+                                    _fv = control.params.l10n.untitled;
+                                }
+                                control.updateRepeaterLiveTitle( _fv, $item, f );
+
                             } );
                             value[index] = _v;
+
                         } );
                     break;
                 default:
@@ -120,8 +319,10 @@
                     break;
             }
 
-            console.log( 'getValue', value );
-
+            console.log( 'getValue:', value );
+            if ( _.isUndefined( save ) || save ) {
+                control.setting.set( encodeURI( JSON.stringify( value ) ) );
+            }
             return value;
         },
         initGroup: function(){
@@ -181,24 +382,17 @@
             var fields = control.params.fields;
             var liveTitleValue = '';
             _.each( fields, function( f, index ){
-                fields.value = '';
+                fields[index].value = '';
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
-                    fields.value = value[ f.name ];
-                }
-                if ( f.name == control.params.live_title_field ) {
-                    liveTitleValue = f.value;
+                    fields[index].value = value[ f.name ];
                 }
             } );
 
-            if ( ! liveTitleValue || liveTitleValue == '' ) {
-                liveTitleValue = control.params.l10n.untitled;
-            }
 
             var htmlSettings = template( fields , 'tmpl-customize-control-'+control.type+'-fields');
             var $itemWrapper = $( template( htmlSettings , 'tmpl-customize-control-'+control.type+'-repeater') );
             control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
             $itemWrapper.find( '._beacon--repeater-live-title' ).html( liveTitleValue );
-
 
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
@@ -211,6 +405,16 @@
                 handle: '._beacon--repeater-item-heading',
                 containment: "parent"
             });
+
+            // Add item when customizer loaded
+
+            if ( _.isArray( control.params.value ) ) {
+                console.log( 'control.params.value', control.params.value  );
+                _.each(  control.params.value, function( itemValue ){
+                    control.addRepeaterItem( itemValue );
+                } );
+                control.getValue( false );
+            }
 
             // Toggle
             control.container.on( 'click', '._beacon--repeater-item-toggle', function(e){
@@ -227,8 +431,6 @@
                 $document.trigger('_beacon/customizer/repeater/remove', [ control ] );
             } );
 
-            control.addRepeaterItem();
-            control.addRepeaterItem();
             control.container.on( 'click', '._beacon--repeater-add-new', function(e){
                 e.preventDefault();
                 control.addRepeaterItem();
