@@ -41,7 +41,7 @@
     padding: 0 10px 10px;
     display: inline-block; }
   ._beacon--repeater-items ._beacon--repeater-item-heading {
-    background: #EEEEEE;
+    background: #FFF;
     padding: 10px;
     position: relative;
     min-height: 18px;
@@ -89,6 +89,8 @@
     display: block; }
   ._beacon--field textarea {
     width: 100%; }
+  ._beacon--field .wp-picker-container input[type=text].wp-color-picker {
+    width: 65px !important; }
 
 ._beacon-image-preview {
   margin: 10px 0;

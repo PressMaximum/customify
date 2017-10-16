@@ -78,19 +78,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             ),
 
             array(
-                'name' => 'dependence_text',
-                'type' => 'text',
-                'default'           => null,
-                'transport'			=> 'postMessage', // for selective refresh
-                'section' => '_beacon_section',
-                //'priority' => 22,
-                'theme_supports' => '',
-                'title'          => __( 'Dependence Text Field', '_beacon' ),
-                'description'   => __( 'This is description' ),
-                'required'      => array( 'select','==','2' )
-            ),
-
-            array(
                 'name' => 'radio',
                 'type' => 'radio',
                 'default' => '',
@@ -106,10 +93,34 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             ),
 
             array(
+                'name' => 'dependence_text',
+                'type' => 'text',
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section' => '_beacon_section',
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => __( 'Dependence Text Field', '_beacon' ),
+                'description'   => __( 'Show only select=2' ),
+                'required'      => array( 'select','==','2' )
+            ),
+
+            array(
+                'name' => 'color',
+                'type' => 'color',
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section'           => '_beacon_section',
+                'theme_supports' => '',
+                'title'          => __( 'Color', '_beacon' ),
+                'description'   => __( 'This is description' ),
+            ),
+
+            array(
                 'name' => 'multiple_dependence_text',
                 'type' => 'text',
                 'default'           => null,
-                'transport'			=> 'postMessage', // for selective refresh
+                'transport'			=> 'postMessage', // or refresh
                 'section' => '_beacon_section',
                 //'priority' => 22,
                 'theme_supports' => '',
@@ -120,7 +131,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array( 'radio','==','2' )
                 )
             ),
-
 
             array(
                 'name' => 'repeater',
@@ -148,7 +158,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     ),
                     array(
                         'name' => 'image',
-                        'type' => 'Image',
+                        'type' => 'image',
                         'label' => __( 'Image', '_beacon' ),
                     ),
                     array(
@@ -159,7 +169,36 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 )
             ),
 
-
+            array(
+                'name' => 'group',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                //'priority' => 22,
+                'title'          => __( 'Group', '_beacon' ),
+                'description'    => __( 'This is description' ),
+                'live_title_field' => 'title',
+                'default' => array(
+                    'title' => __( 'Title 1', '_beacon' ),
+                    'content' => __( 'Content 1', '_beacon' ),
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'title',
+                        'type' => 'text',
+                        'label' => __( 'Title', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'content',
+                        'type' => 'textarea',
+                        'label' => __( 'Textarea', '_beacon' ),
+                    )
+                )
+            ),
 
 
         );

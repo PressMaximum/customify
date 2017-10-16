@@ -55,7 +55,12 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         if( $this->setting_type == 'repeater' ) {
             wp_enqueue_script('jquery-ui-sortable');
         }
+       // wp_enqueue_editor();
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
+
         wp_enqueue_style('_beacon-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
+        wp_enqueue_script( '_beacon-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
         wp_enqueue_script( '_beacon-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         wp_localize_script( '_beacon-customizer-control', '_Beacon_Control_Args', array(
                 'home_url' => home_url('')
@@ -178,8 +183,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
                 return $active;
             }
-
-
         }
 
        return true;
@@ -252,6 +255,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                     #>
                     <?php $this->field_select(); ?>
                 <# break; #>
+                <# case 'color': #>
+                    <?php $this->field_color(); ?>
+                    <# break; #>
                 <# case 'textarea': #>
                     <?php $this->field_textarea(); ?>
                     <# break; #>
@@ -311,6 +317,24 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             <p class="description">{{{ field.description }}}</p>
         <# } #>
         <input type="text" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
+        <?php
+        $this->after_field();
+    }
+
+    function field_color(){
+        $this->before_field();
+        ?>
+        <# if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <div class="_beacon-input-color">
+            <input type="hidden" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
+            <input type="text" class="_beacon--color-panel" data-alpha="true" value="{{ field.value }}">
+            <span class=""></span>
+        </div>
         <?php
         $this->after_field();
     }

@@ -66,6 +66,7 @@
             } );
 
             control.initMedia();
+            control.initColor( control.container );
 
         },
 
@@ -236,6 +237,17 @@
 
 
         },
+        initColor: function( $el ){
+            $( '._beacon-input-color', $el ).each( function(){
+                var colorInput = $( this );
+                $( '._beacon--color-panel', colorInput ).wpColorPicker({
+                    change: function( event, ui ){
+                        $( '._beacon-input', colorInput ).val( ui.color.toString() ).trigger('change');
+                    }
+                });
+            } );
+
+        },
         getFieldValue: function( name, type, $field ){
             var control = this;
             if ( _.isUndefined( $field ) ) {
@@ -248,9 +260,6 @@
 
             var value = '';
             switch ( type ) {
-                case 'color':
-                    //
-                    break;
                 case 'media':
                 case 'image':
                 case 'video':
@@ -393,7 +402,7 @@
             var $itemWrapper = $( template( htmlSettings , 'tmpl-customize-control-'+control.type+'-repeater') );
             control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
             $itemWrapper.find( '._beacon--repeater-live-title' ).html( control.params.l10n.untitled );
-
+            control.initColor( $itemWrapper );
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },

@@ -55,7 +55,7 @@ $text_color: #555d66;
     }
 
     ._beacon--repeater-item-heading {
-        background: #EEEEEE;
+        background: #FFF;
         padding: 10px;
         position: relative;
         min-height: 18px;
@@ -121,6 +121,9 @@ $text_color: #555d66;
     }
     textarea {
         width: 100%;
+    }
+    .wp-picker-container input[type=text].wp-color-picker {
+        width: 65px !important;
     }
 }
 ._beacon-image-preview {
