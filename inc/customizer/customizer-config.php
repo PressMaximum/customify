@@ -36,6 +36,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section' => '_beacon_section',
                 //'priority' => 22,
                 'theme_supports' => '',
+                'device' => 'mobile',
                 'title'          => __( 'Text', '_beacon' ),
                 'description' => __( 'This is description' ),
             ),
@@ -197,6 +198,32 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'type' => 'textarea',
                         'label' => __( 'Textarea', '_beacon' ),
                     )
+                )
+            ),
+
+
+            array(
+                'name' => 'background',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                //'priority' => 22,
+                'title'          => __( 'Background', '_beacon' ),
+                'description'    => __( 'This is description' ),
+                'live_title_field' => 'title',
+                'default' => array(
+
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', '_beacon' ),
+                    ),
                 )
             ),
 

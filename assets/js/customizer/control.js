@@ -365,21 +365,6 @@
 
         initTabs: function(){
 
-            var control = this;
-            if ( control.container.hasClass( '_beacon--device-mobile' ) ) {
-                control.container.addClass( '_beacon--hide' );
-            }
-
-            $( '._beacon--tab-device-mobile', control.container ).on( 'click', function(e){
-                e.preventDefault();
-                $document.trigger( '_beacon/customizer/device/change',['mobile'] );
-            } );
-
-            $( '._beacon--tab-device-general', control.container ).on( 'click', function(e){
-                e.preventDefault();
-                $document.trigger( '_beacon/customizer/device/change',['general'] );
-            } );
-
         },
 
         addRepeaterItem: function( value ){
@@ -452,7 +437,7 @@
     });
 
 
-    $document.ready( function( $ ){
+    wpcustomize.bind( 'ready', function( e, b ) {
 
         $document.on( '_beacon/customizer/device/change', function( e, device ) {
             $( '._beacon--device-select a' ).removeClass( '_beacon--active' );
@@ -466,6 +451,28 @@
                 $( '._beacon--tab-device-mobile' ).addClass('_beacon--active');
             }
         } );
+
+        $document.on( 'click', '._beacon--tab-device-mobile', function(e){
+            e.preventDefault();
+            $document.trigger( '_beacon/customizer/device/change',['mobile'] );
+        } );
+
+        $document.on( 'click', '._beacon--tab-device-general', function(e){
+            e.preventDefault();
+            $document.trigger( '_beacon/customizer/device/change',['general'] );
+        } );
+
+        $( '._beacon--device-select' ).each( function(){
+            var t = $( this );
+            var s = $( this ).closest('.accordion-section');
+            $( '.customize-section-title', s ).append( t );
+        } );
+
+
+
+    } );
+
+    $document.ready( function( $ ){
 
     } );
 

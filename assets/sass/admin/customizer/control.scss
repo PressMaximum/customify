@@ -6,10 +6,13 @@ $text_color: #555d66;
 }
 ._beacon--device-select {
     display: flex;
+    z-index: 20;
+    //background:  #EEEEEE;
+    border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
     //margin-left: -10px;
     //margin-right: -10px;
-    padding: 0px 10px;
+    padding: 5px 0 0;
     a {
         padding: 5px 10px;
         border: 1px solid #ddd;
