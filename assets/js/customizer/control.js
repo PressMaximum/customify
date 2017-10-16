@@ -273,6 +273,7 @@
 
         },
         updateRepeaterLiveTitle: function( value, $item, field ){
+            console.log( 'Live Title:', value );
             $( '._beacon--repeater-live-title', $item ).text( value );
         },
         getValue: function( save ){
@@ -287,32 +288,33 @@
                     } );
                     break;
                 case 'repeater':
-                        value = [];
-                        $( '._beacon--repeater-item', control.container ).each( function( index ){
-                            var $item = $( this );
-                            var _v = {};
-                            _.each( control.params.fields, function( f ){
-                                var inputField = $( '[data-field-name="'+f.name+'"]', $item );
-                                var $_field = inputField.closest('._beacon--field');
-                                var _fv =  control.getFieldValue( f.name, f.type, $_field );
-                                _v[ f.name ] = _fv;
+                    value = [];
+                    $( '._beacon--repeater-item', control.container ).each( function( index ){
+                        var $item = $( this );
+                        var _v = {};
+                        _.each( control.params.fields, function( f ){
+                            var inputField = $( '[data-field-name="'+f.name+'"]', $item );
+                            var $_field = inputField.closest('._beacon--field');
+                            var _fv =  control.getFieldValue( f.name, f.type, $_field );
+                            _v[ f.name ] = _fv;
 
-                                // Update Live title
-                                if ( control.params.live_title_field == f.name ) {
-                                    if ( inputField.prop("tagName") == 'select' ) {
-                                        _fv = $( 'option[value="'+_fv+'"]' ).first().text();
-                                    }
+                            // Update Live title
+                            if ( control.params.live_title_field == f.name ) {
+                                if ( inputField.prop("tagName") == 'select' ) {
+                                    _fv = $( 'option[value="'+_fv+'"]' ).first().text();
                                 }
 
                                 if ( _.isUndefined( _fv ) || _fv == '' ){
                                     _fv = control.params.l10n.untitled;
                                 }
-                                control.updateRepeaterLiveTitle( _fv, $item, f );
 
-                            } );
-                            value[index] = _v;
+                                control.updateRepeaterLiveTitle( _fv, $item, f );
+                            }
 
                         } );
+                        value[index] = _v;
+
+                    } );
                     break;
                 default:
                     value = this.getFieldValue( control.id );
@@ -380,7 +382,6 @@
             var template = control.getTemplate();
 
             var fields = control.params.fields;
-            var liveTitleValue = '';
             _.each( fields, function( f, index ){
                 fields[index].value = '';
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
@@ -388,11 +389,10 @@
                 }
             } );
 
-
             var htmlSettings = template( fields , 'tmpl-customize-control-'+control.type+'-fields');
             var $itemWrapper = $( template( htmlSettings , 'tmpl-customize-control-'+control.type+'-repeater') );
             control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
-            $itemWrapper.find( '._beacon--repeater-live-title' ).html( liveTitleValue );
+            $itemWrapper.find( '._beacon--repeater-live-title' ).html( control.params.l10n.untitled );
 
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
@@ -409,7 +409,7 @@
             // Add item when customizer loaded
 
             if ( _.isArray( control.params.value ) ) {
-                console.log( 'control.params.value', control.params.value  );
+                console.log( 'control.params.value', control.params.value );
                 _.each(  control.params.value, function( itemValue ){
                     control.addRepeaterItem( itemValue );
                 } );
@@ -429,11 +429,14 @@
                 var  p = $( this ).closest('._beacon--repeater-item');
                 p.remove();
                 $document.trigger('_beacon/customizer/repeater/remove', [ control ] );
+                control.getValue();
             } );
 
+            // Add Item
             control.container.on( 'click', '._beacon--repeater-add-new', function(e){
                 e.preventDefault();
                 control.addRepeaterItem();
+                control.getValue();
             } );
         }
 

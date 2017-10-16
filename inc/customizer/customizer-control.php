@@ -30,6 +30,12 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     public $_settings;
     public $_selective_refresh;
 
+    /**
+     * Provide the parent, comparison operator, and value which affects the field’s visibility
+     *
+     * @var
+     */
+    public $required;
 
     static $_js_template_added;
     function __construct($manager, $id, $args = array())
@@ -69,16 +75,24 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         $value = $this->value();
         if ( $this->setting_type == 'group' ) {
             if ( ! is_array( $value ) ) {
-                $value = ( array ) $value;
+                $value = array();
             }
             foreach ( $this->fields as $k => $f ) {
                 if ( isset( $value[ $f['name'] ] ) ) {
                     $this->fields[ $k ]['value'] = $value[ $f['name'] ];
                 }
             }
+
+            if ( ! is_array( $this->default ) ) {
+                $this->default = array();
+            }
+
         } elseif (  $this->setting_type == 'repeater' ) {
             if ( ! is_array( $value ) ) {
-                $value = ( array ) $value;
+                $value = array();
+            }
+            if ( ! is_array( $this->default ) ) {
+                $this->default = array();
             }
         }
 
@@ -90,7 +104,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             $this->json['l10n'] = array(
                 'untitled' => __( 'Untitled', '_beacon' )
             );
-
             $this->json['live_title_field'] = $this->live_title_field;
         }
 
@@ -101,6 +114,75 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             $this->json['checkbox_label'] = $this->checkbox_label;
         }
         //$this->json['link']       = $this->get_link();
+    }
+
+    function compare( $value1, $condition, $value2 ){
+        $equal = false;
+        switch ( $condition ) {
+            case '===':
+                $equal = $value1 === $value2 ? true : false;
+                break;
+            case '>':
+                $equal = $value1 > $value2 ? true : false;
+                break;
+            case '<':
+                $equal = $value1 < $value2 ? true : false;
+                break;
+            case '!=':
+                $equal = $value1 != $value2 ? true : false;
+                break;
+            default:
+                  $equal = $value1 == $value2 ? true : false;
+
+        }
+
+        return $equal;
+    }
+
+    function active_callback() {
+
+        if ( $this->required && is_array( $this->required ) ) {
+            $test_field = current( $this->required );
+            reset( $this->required );
+
+            if ( is_string( $test_field ) ) {
+                $condition = $this->required[1];
+                if ( ! $condition ) {
+                    $condition = '=';
+                }
+                $condition_value = $this->required[2];
+                if ( isset( $this->required[3] ) && $this->required[3] == 'option' ) {
+                    $value = get_option( $test_field );
+                } else {
+                    $_settings = $this->manager->get_setting( $test_field );
+                    $value = get_theme_mod( $test_field, ( $_settings ) ? $_settings->default : null );
+                }
+                return $this->compare( $value, $condition, $condition_value );
+            } else {
+
+                $active = true;
+                foreach (  $this->required as $cond ) {
+                    $field_name = $cond[0];
+                    $field_cond = $cond[1];
+                    $field_cond_value = $cond[2];
+                    if ( isset( $cond[3] ) && $cond[3] == 'option' ) {
+                        $value = get_option( $field_name );
+                    } else {
+                        $_settings = $this->manager->get_setting( $field_name );
+                        $value = get_theme_mod( $field_name, ( $_settings ) ? $_settings->default : null );
+                    }
+                    if ( ! $this->compare( $value, $field_cond, $field_cond_value ) ) {
+                        $active = false;
+                    }
+                }
+
+                return $active;
+            }
+
+
+        }
+
+       return true;
     }
 
 
