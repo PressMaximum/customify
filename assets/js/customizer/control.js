@@ -234,9 +234,86 @@
                 var p = $( this ).closest('._beacon--media');
                 control.controlMedia.remove( p );
             } );
-
-
         },
+        compare: function( value1, cond, value2 ){
+            var equal = false;
+            switch ( cond ) {
+                case '===':
+                    equal = ( value1 === value2 ) ? true : false;
+                    break;
+                case '>':
+                    equal = ( value1 > value2 ) ? true : false;
+                    break;
+                case '<':
+                    equal = ( value1 < value2 ) ? true : false;
+                    break;
+                case '!=':
+                    equal = ( value1 != value2 ) ? true : false;
+                    break;
+                case 'not_empty':
+                    equal = _.isEmpty( value2 );
+                    break;
+                default:
+                    equal = ( value1 == value2 ) ? true : false;
+
+            }
+            return equal;
+        },
+
+        multiple_compare: function( list, values ){
+            var control = this;
+            try {
+                var test =  list[0];
+                var check = true;
+                if ( _.isString( test ) ) {
+                    check = false;
+                    var cond = list[1];
+                    var cond_val = list[2];
+                    if ( ! _.isUndefined( values[ test ] ) ) {
+                        check = control.compare( values[ test ], cond, cond_val );
+                    }
+                } else if ( _.isArray( test ) ) {
+                    check  = true;
+                    _.each( list, function( req ) {
+                        var cond_key = req[0];
+                        var cond_cond = req[1];
+                        var cond_val = req[2];
+                        var t_val = values[ cond_key ];
+                        if ( _.isUndefined( t_val ) ) {
+                            t_val = '';
+                        }
+                        if ( ! control.compare( t_val, cond_cond, cond_val ) ) {
+                            check = false;
+                        }
+                    } );
+                }
+            } catch  ( e ) {
+
+            }
+
+
+            return check;
+        },
+
+        initConditional: function ( $el, values ){
+            var control = this;
+            var $fields  = $( '._beacon--field', $el );
+            $fields.each( function( ) {
+                var $field = $(this);
+                var check = true;
+                var req = $field.attr('data-required') || false;
+                if ( !_.isUndefined( req ) && req ) {
+                    req = JSON.parse( req );
+                    check = control.multiple_compare( req, values );
+                    if ( ! check ) {
+                        $field.addClass( '_beacon--hide' );
+                    } else {
+                        $field.removeClass( '_beacon--hide' );
+                    }
+                }
+            });
+        },
+
         initColor: function( $el ){
             $( '._beacon-input-color', $el ).each( function(){
                 var colorInput = $( this );
@@ -295,6 +372,8 @@
                         var $_field = $( '[data-field-name="'+f.name+'"]', control.container ).closest('._beacon--field');
                         value[ f.name ] = control.getFieldValue( f.name, f.type, $_field );
                     } );
+                    //console.log( 'GROUP_VALUE' );
+                    control.initConditional( control.container, value );
                     break;
                 case 'repeater':
                     value = [];
@@ -312,15 +391,16 @@
                                 if ( inputField.prop("tagName") == 'select' ) {
                                     _fv = $( 'option[value="'+_fv+'"]' ).first().text();
                                 }
-
                                 if ( _.isUndefined( _fv ) || _fv == '' ){
                                     _fv = control.params.l10n.untitled;
                                 }
-
                                 control.updateRepeaterLiveTitle( _fv, $item, f );
                             }
 
                         } );
+
+                        control.initConditional( $item, _v );
+
                         value[index] = _v;
 
                     } );
@@ -341,6 +421,7 @@
             var template = control.getTemplate();
             var $fields = template( control.params.fields , 'tmpl-customize-control-'+control.type+'-fields');
             control.container.find( '._beacon--settings-fields' ).html( $fields );
+            control.getValue( false );
         },
 
         initField: function( ){
@@ -401,7 +482,6 @@
             });
 
             // Add item when customizer loaded
-
             if ( _.isArray( control.params.value ) ) {
                 console.log( 'control.params.value', control.params.value );
                 _.each(  control.params.value, function( itemValue ){

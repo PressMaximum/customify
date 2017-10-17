@@ -50,7 +50,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Textarea', '_beacon' ),
-                'description'    => '',
+                'description' => __( 'This is description' ),
             ),
 
             array(
@@ -163,10 +163,22 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'label' => __( 'Image', '_beacon' ),
                     ),
                     array(
+                        'name' => 'select',
+                        'type' => 'select',
+                        'label' => __( 'Select', '_beacon' ),
+                        'description' => __( 'Select 2 to show text area', '_beacon' ),
+                        'choices' => array(
+                            1 => 1,
+                            2 => 2,
+                            3=> 3
+                        )
+                    ),
+                    array(
                         'name' => 'content',
                         'type' => 'textarea',
                         'label' => __( 'Textarea', '_beacon' ),
-                    )
+                        'required' =>  array( 'select','==','2' )
+                    ),
                 )
             ),
 
@@ -194,10 +206,24 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'label' => __( 'Image', '_beacon' ),
                     ),
                     array(
+                        'name' => 'select',
+                        'type' => 'select',
+                        'label' => __( 'Select', '_beacon' ),
+                        'description' => __( 'Select 2 to show text area', '_beacon' ),
+                        'choices' => array(
+                            1 => 1,
+                            2 => 2,
+                            3=> 3
+                        )
+                    ),
+                    array(
                         'name' => 'content',
                         'type' => 'textarea',
                         'label' => __( 'Textarea', '_beacon' ),
-                    )
+                        'required' =>  array( 'select','==','2' )
+                    ),
+
+
                 )
             ),
 

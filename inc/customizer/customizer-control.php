@@ -136,6 +136,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             case '!=':
                 $equal = $value1 != $value2 ? true : false;
                 break;
+            case 'not_empty':
+                $equal = ! empty( $value2 );
+                break;
             default:
                   $equal = $value1 == $value2 ? true : false;
 
@@ -297,7 +300,13 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
     function before_field(){
         ?>
-        <div class="_beacon--field _beacon--field-{{ field.type }}" data-field-name="{{ field.name }}">
+        <#
+        var required = '';
+        if ( ! _.isUndefined( field.required ) ) {
+            required = JSON.stringify( field.required  );
+        }
+        #>
+        <div class="_beacon--field _beacon--field-{{ field.type }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
         <?php
     }
 
