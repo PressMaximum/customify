@@ -72,3 +72,7 @@
 
 	<div id="content" class="site-content">
         <div class="_beacon-container">
+            <?php
+            var_dump( get_theme_mod( 'css_ruler' ) );
+
+            ?>

@@ -12,10 +12,8 @@
             console.log( control );
             control.init();
         },
-
         type: '_beacon',
         settingField: null,
-
         getTemplate: _.memoize(function () {
             var control = this;
             var compiled,
@@ -61,15 +59,15 @@
                     break;
             }
 
-            control.container.on( 'change keyup data-change', 'input, select, textarea', function(){
+            control.container.on( 'change keyup data-change', 'input:not(.change-by-js), select:not(.change-by-js), textarea:not(.change-by-js)', function(){
                 control.getValue();
             } );
 
             control.initMedia();
             control.initColor( control.container );
+            control.initCSSRuler();
 
         },
-
         addParamsURL: function( url, data )
         {
             if ( ! $.isEmptyObject(data) )
@@ -259,7 +257,6 @@
             }
             return equal;
         },
-
         multiple_compare: function( list, values ){
             var control = this;
             try {
@@ -295,6 +292,37 @@
             return check;
         },
 
+        initCSSRuler: function(){
+            var control = this;
+            control.container.on( 'change', '._beacon--label-parent', function(){
+                if ( $( this ).attr( 'type' ) == 'radio' ){
+                    var name = $( this ).attr( 'name' );
+                    $( 'input[name="'+name+'"]', control.container ).parent().removeClass('_beacon--label-active');
+                }
+                var checked = $( this ).is( ':checked' );
+                if ( checked ) {
+                    $( this ).parent().addClass( '_beacon--label-active' );
+                } else {
+                    $( this ).parent().removeClass( '_beacon--label-active' );
+                }
+
+                control.getValue();
+            } );
+
+
+            control.container.on( 'change keyup', '._beacon--css-ruler ._beacon-input-css', function(){
+                var p = $( this ).closest('._beacon--css-ruler');
+                var link_checked = $( '._beacon--css-ruler-link input', p ).is( ':checked' );
+                if ( link_checked ) {
+                    var v = $( this ).val();
+                    $( '._beacon-input-css', p ).not( $( this ) ).val(v);
+                }
+
+                control.getValue();
+            } );
+
+        },
+
         initConditional: function ( $el, values ){
             var control = this;
             var $fields  = $( '._beacon--field', $el );
@@ -313,7 +341,6 @@
                 }
             });
         },
-
         initColor: function( $el ){
             $( '._beacon-input-color', $el ).each( function(){
                 var colorInput = $( this );
@@ -347,8 +374,21 @@
                         mime:  $( 'input[data-name="'+name+'-mime"]', $field ).val()
                     };
                 break;
+                case 'css_ruler':
+                    value = {
+                        unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
+                        top:  $( 'input[data-name="'+name+'-top"]', $field ).val(),
+                        right:  $( 'input[data-name="'+name+'-right"]', $field ).val(),
+                        bottom:  $( 'input[data-name="'+name+'-bottom"]', $field ).val(),
+                        left:  $( 'input[data-name="'+name+'-left"]', $field ).val(),
+                        link:  $( 'input[data-name="'+name+'-link"]', $field ).is(':checked') ? 1 : ''
+                    };
+                    break;
                 case 'radio':
                     value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
+                    break;
+                case 'checkbox':
+                    value = $( 'input[data-name="'+name+'"]', $field ).is(':checked') ? 1 : '' ;
                     break;
                 default:
                         value = $( '[data-name="'+name+'"]', $field ).val();
@@ -423,7 +463,6 @@
             control.container.find( '._beacon--settings-fields' ).html( $fields );
             control.getValue( false );
         },
-
         initField: function( ){
             var control = this;
             var template = control.getTemplate();
@@ -443,11 +482,8 @@
             var $fields = template( [ field ] , 'tmpl-customize-control-'+control.type+'-fields');
             control.container.find( '._beacon--settings-fields' ).html( $fields );
         },
-
         initTabs: function(){
-
         },
-
         addRepeaterItem: function( value ){
             if ( ! _.isObject( value ) ) {
                 value = {};
@@ -472,7 +508,6 @@
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },
-
         initRepeater: function(){
             var control = this;
             // Sortable

@@ -118,6 +118,17 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             ),
 
             array(
+                'name' => 'css_ruler',
+                'type'      => 'css_ruler',
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section'           => '_beacon_section',
+                'theme_supports' => '',
+                'title'          => __( 'CSS Ruler', '_beacon' ),
+                'description'   => __( 'This is description' ),
+            ),
+
+            array(
                 'name' => 'multiple_dependence_text',
                 'type' => 'text',
                 'default'           => null,
@@ -236,6 +247,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'title'          => __( 'Background', '_beacon' ),
                 'description'    => __( 'This is description' ),
                 'live_title_field' => 'title',
+                'field_class' => '_beacon-background-field',
                 'default' => array(
 
                 ),

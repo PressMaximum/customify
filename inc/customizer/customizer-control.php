@@ -37,6 +37,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
      */
     public $required;
 
+    public $field_class = '';
+
     static $_js_template_added;
     function __construct($manager, $id, $args = array())
     {
@@ -200,6 +202,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     protected function render() {
         $id    = 'customize-control-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );
         $class = 'customize-control customize-control-' . $this->type.'-'.$this->setting_type;
+        if ( $this->field_class ) {
+            $class = sanitize_text_field( $this->field_class ).' '.$class;
+        }
 
         ?><li id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?><?php echo ( $this->device ) ? '  _beacon--device-show _beacon--device-'.esc_attr( $this->device ) : ''; ?>">
         <?php $this->render_content(); ?>
@@ -258,6 +263,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                     #>
                     <?php $this->field_select(); ?>
                 <# break; #>
+                <# case 'css_ruler': #>
+                    <?php $this->field_css_ruler(); ?>
+                    <# break; #>
                 <# case 'color': #>
                     <?php $this->field_color(); ?>
                     <# break; #>
@@ -329,6 +337,64 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+    function field_css_ruler(){
+        $this->before_field();
+        ?>
+        <#
+        if ( ! _.isObject( field.value ) ) {
+            field.value = { link: 1 };
+        }
+
+        var uniqueID = field.name + ( new Date().getTime() );
+
+        if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <div class="_beacon--css-unit">
+            <label class="<# if ( field.value.unit == 'px' || ! field.value.unit ){ #> _beacon--label-active <# } #>">
+                <?php _e( 'px', '_beacon' ); ?>
+                <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
+            </label>
+            <label class="<# if ( field.value.unit == 'rem' ){ #> _beacon--label-active <# } #>">
+                <?php _e( 'rem', '_beacon' ); ?>
+                <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'rem' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="rem">
+            </label>
+            <label class="<# if ( field.value.unit == 'em' ){ #> _beacon--label-active <# } #>">
+                <?php _e( 'em', '_beacon' ); ?>
+                <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'em' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="em">
+            </label>
+            <label class="<# if ( field.value.unit == '%' ){ #> _beacon--label-active <# } #>">
+                <?php _e( '%', '_beacon' ); ?>
+                <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == '%' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="%">
+            </label>
+        </div>
+        <div class="_beacon--css-ruler">
+            <span>
+                <input type="number" class="_beacon-input _beacon-input-css change-by-js" data-name="{{ field.name }}-top" value="{{ field.value.top }}">
+                <span class="_beacon--small-label"><?php _e( 'Top', '_beacon' ); ?></span>
+            </span>
+            <span>
+                <input type="number" class="_beacon-input _beacon-input-css change-by-js" data-name="{{ field.name }}-right" value="{{ field.value.right }}">
+                <span class="_beacon--small-label"><?php _e( 'Right', '_beacon' ); ?></span>
+            </span>
+            <span>
+                <input type="number" class="_beacon-input _beacon-input-css change-by-js" data-name="{{ field.name }}-bottom" value="{{ field.value.bottom }}">
+                <span class="_beacon--small-label"><?php _e( 'Bottom', '_beacon' ); ?></span>
+            </span>
+            <span>
+                <input type="number" class="_beacon-input _beacon-input-css change-by-js" data-name="{{ field.name }}-left" value="{{ field.value.left }}">
+                <span class="_beacon--small-label"><?php _e( 'Left', '_beacon' ); ?></span>
+            </span>
+            <label class="_beacon--css-ruler-link <# if ( field.value.link == 1 ){ #> _beacon--label-active <# } #>">
+                <input type="checkbox" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.link == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-link" value="1">
+            </label>
+        </div>
+        <?php
+        $this->after_field();
+    }
 
     function field_color(){
         $this->before_field();
@@ -342,7 +408,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <div class="_beacon-input-color">
             <input type="hidden" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
             <input type="text" class="_beacon--color-panel" data-alpha="true" value="{{ field.value }}">
-            <span class=""></span>
         </div>
         <?php
         $this->after_field();

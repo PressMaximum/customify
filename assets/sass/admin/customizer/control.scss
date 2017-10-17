@@ -132,6 +132,62 @@ $text_color: #555d66;
         width: 65px !important;
     }
 }
+._beacon--css-unit {
+    display: block;
+    margin-bottom: 5px;
+    label {
+        display: inline-block;
+        margin-right: 5px;
+        text-transform: uppercase;
+        padding: 0px 5px;
+        font-size: 11px;
+        &:first-child {
+            margin-left: -5px;
+        }
+        &._beacon--label-active {
+            font-weight: bold;
+        }
+    }
+    input {
+        display: none;
+    }
+}
+._beacon--css-ruler {
+    display: flex;
+    margin-left: -2px;
+    margin-right: -2px;
+    > span {
+        padding: 0px 2px;
+    }
+    ._beacon--small-label {
+        font-size: 10px;
+        display: block;
+        text-transform: uppercase;
+    }
+    label {
+        cursor: pointer;
+        input{
+            display: none;
+        }
+        width: 25px;
+        flex: none;
+        position: relative;
+        &:before {
+            font: 400 18px/37px dashicons;
+            content: "\f225";
+            position: absolute;
+            top: -3px;
+            left: 5px;
+            display: block;
+        }
+        &._beacon--label-active {
+            &:before {
+                content: "\f103";
+            }
+        }
+
+    }
+}
 ._beacon-image-preview {
     margin: 10px 0;
     display: block;

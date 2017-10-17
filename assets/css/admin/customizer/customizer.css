@@ -97,6 +97,53 @@
   ._beacon--field .wp-picker-container input[type=text].wp-color-picker {
     width: 65px !important; }
 
+._beacon--css-unit {
+  display: block;
+  margin-bottom: 5px; }
+  ._beacon--css-unit label {
+    display: inline-block;
+    margin-right: 5px;
+    text-transform: uppercase;
+    padding: 0px 5px;
+    font-size: 11px; }
+    ._beacon--css-unit label:first-child {
+      margin-left: -5px; }
+    ._beacon--css-unit label._beacon--label-active {
+      font-weight: bold; }
+  ._beacon--css-unit input {
+    display: none; }
+
+._beacon--css-ruler {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin-left: -2px;
+  margin-right: -2px; }
+  ._beacon--css-ruler > span {
+    padding: 0px 2px; }
+  ._beacon--css-ruler ._beacon--small-label {
+    font-size: 10px;
+    display: block;
+    text-transform: uppercase; }
+  ._beacon--css-ruler label {
+    cursor: pointer;
+    width: 25px;
+    -webkit-box-flex: 0;
+        -ms-flex: none;
+            flex: none;
+    position: relative; }
+    ._beacon--css-ruler label input {
+      display: none; }
+    ._beacon--css-ruler label:before {
+      font: 400 18px/37px dashicons;
+      content: "\f225";
+      position: absolute;
+      top: -3px;
+      left: 5px;
+      display: block; }
+    ._beacon--css-ruler label._beacon--label-active:before {
+      content: "\f103"; }
+
 ._beacon-image-preview {
   margin: 10px 0;
   display: block; }
