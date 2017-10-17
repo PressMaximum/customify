@@ -9,7 +9,6 @@
         ready: function() {
 
             var control = this;
-            console.log( control );
             control.init();
         },
         type: '_beacon',
@@ -68,8 +67,7 @@
             control.initCSSRuler();
 
         },
-        addParamsURL: function( url, data )
-        {
+        addParamsURL: function( url, data ) {
             if ( ! $.isEmptyObject(data) )
             {
                 url += ( url.indexOf('?') >= 0 ? '&' : '?' ) + $.param(data);
@@ -77,7 +75,6 @@
 
             return url;
         },
-
         initMedia: function(){
             var control = this;
             control.controlMedia =  {
@@ -132,7 +129,8 @@
 
                 },
                 toRelativeUrl: function( url ){
-                    return url.replace( _Beacon_Control_Args.home_url, '' );
+                    return url;
+                    //return url.replace( _Beacon_Control_Args.home_url, '' );
                 },
                 showChangeBtn: function(){
                     $( '._beacon--add', this.preview ).addClass( '_beacon--hide' );
@@ -291,7 +289,6 @@
 
             return check;
         },
-
         initCSSRuler: function(){
             var control = this;
             control.container.on( 'change', '._beacon--label-parent', function(){
@@ -322,7 +319,6 @@
             } );
 
         },
-
         initConditional: function ( $el, values ){
             var control = this;
             var $fields  = $( '._beacon--field', $el );
@@ -344,9 +340,16 @@
         initColor: function( $el ){
             $( '._beacon-input-color', $el ).each( function(){
                 var colorInput = $( this );
+                var current_val = $( '._beacon-input', colorInput ).val();
                 $( '._beacon--color-panel', colorInput ).wpColorPicker({
                     change: function( event, ui ){
-                        $( '._beacon-input', colorInput ).val( ui.color.toString() ).trigger('change');
+                        var new_color = ui.color.toString();
+                        $( '._beacon-input', colorInput ).val( new_color );
+                        if( ui.color.toString() !== current_val ) {
+                            current_val = new_color;
+                            $( '._beacon-input', colorInput ).trigger('change');
+                        }
+
                     }
                 });
             } );
@@ -450,9 +453,12 @@
                     break;
             }
 
-            console.log( 'getValue:', value );
+
             if ( _.isUndefined( save ) || save ) {
+                console.log( 'SAVE getValue:', value );
                 control.setting.set( encodeURI( JSON.stringify( value ) ) );
+            } else {
+                console.log( 'NO_SAVE getValue:', value );
             }
             return value;
         },
@@ -482,8 +488,7 @@
             var $fields = template( [ field ] , 'tmpl-customize-control-'+control.type+'-fields');
             control.container.find( '._beacon--settings-fields' ).html( $fields );
         },
-        initTabs: function(){
-        },
+        initTabs: function(){},
         addRepeaterItem: function( value ){
             if ( ! _.isObject( value ) ) {
                 value = {};
@@ -508,8 +513,34 @@
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },
+        limitRepeaterItems: function(){
+            var control = this;
+            if ( control.params.limit > 0 ) {
+                var addButton = $( '._beacon--repeater-add-new', control.container );
+                var c = $( '._beacon--settings-fields ._beacon--repeater-item', control.container ).length;
+                if ( c >= control.params.limit ) {
+                    addButton.addClass( '_beacon--hide' );
+                    if ( control.params.limit_msg ) {
+                        if ( $( '._beacon--limit-item-msg', control.container ).length === 0 ) {
+                            $( '<p class="_beacon--limit-item-msg">'+control.params.limit_msg+'</p>' ).insertBefore( addButton );
+                        } else {
+                            $( '._beacon--limit-item-msg', control.container ).removeClass( '_beacon--hide' );
+                        }
+
+                    }
+                } else {
+                    $( '._beacon--limit-item-msg', control.container ).addClass( '_beacon--hide' );
+                    addButton.removeClass( '_beacon--hide' );
+                }
+            }
+        },
         initRepeater: function(){
             var control = this;
+            control.params.limit = parseInt( control.params.limit );
+            if ( isNaN( control.params.limit ) ) {
+                control.params.limit = 0;
+            }
+
             // Sortable
             control.container.find( '._beacon--settings-fields' ).sortable({
                 handle: '._beacon--repeater-item-heading',
@@ -524,6 +555,7 @@
                 } );
                 control.getValue( false );
             }
+            control.limitRepeaterItems();
 
             // Toggle
             control.container.on( 'click', '._beacon--repeater-item-toggle', function(e){
@@ -539,6 +571,7 @@
                 p.remove();
                 $document.trigger('_beacon/customizer/repeater/remove', [ control ] );
                 control.getValue();
+                control.limitRepeaterItems();
             } );
 
             // Add Item
@@ -546,6 +579,7 @@
                 e.preventDefault();
                 control.addRepeaterItem();
                 control.getValue();
+                control.limitRepeaterItems();
             } );
         }
 

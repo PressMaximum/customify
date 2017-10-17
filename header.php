@@ -73,6 +73,12 @@
 	<div id="content" class="site-content">
         <div class="_beacon-container">
             <?php
-            var_dump( get_theme_mod( 'css_ruler' ) );
+            $fields = apply_filters( '_beacon/customizer/config', array() );
+            foreach ( $fields as $f ) {
+                if (  $f['type'] != 'panel' && $f['type'] != 'section' ) {
+                    var_dump( $f['name'] );
+                    var_dump( get_theme_mod( $f['name'] ) );
+                }
+            }
 
             ?>

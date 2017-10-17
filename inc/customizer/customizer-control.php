@@ -24,6 +24,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     public $default = array();
     public $device = '';
     public $checkbox_label = '';
+    public $limit ;
+    public $limit_msg = '';
 
     public $live_title_field; // for repeater
 
@@ -112,6 +114,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 'untitled' => __( 'Untitled', '_beacon' )
             );
             $this->json['live_title_field'] = $this->live_title_field;
+            $this->json['limit'] = $this->limit;
+            $this->json['limit_msg'] = $this->limit_msg;
         }
 
         if ( $this->setting_type == 'select' || $this->setting_type == 'radio' ) {

@@ -152,6 +152,8 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'title'          => __( 'Repeater', '_beacon' ),
                 'description'    => __( 'This is description' ),
                 'live_title_field' => 'title',
+                'limit' => 4,
+                'limit_msg' => __( 'Just limit 4 item, Ability HTML here' ),
                 'default' => array(
                     array(
                         'title' => __( 'Title 1', '_beacon' ),
