@@ -41,8 +41,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description' => __( 'This is description' ),
             ),
 
-
-
             array(
                 'name' => 'slider',
                 'type' => 'slider',

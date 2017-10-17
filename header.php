@@ -77,8 +77,7 @@
             foreach ( $fields as $f ) {
                 if (  $f['type'] != 'panel' && $f['type'] != 'section' ) {
                     var_dump( $f['name'] );
-                    var_dump( get_theme_mod( $f['name'] ) );
+                    var_dump( _Beacon_Customizer()->get_setting( $f['name'] ) );
                 }
             }
-
             ?>
