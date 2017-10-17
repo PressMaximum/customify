@@ -1,0 +1,73 @@
+/* Widget Common */
+.widget-title {
+    font-size: 1.2em;
+    font-weight: 400;
+}
+.widget-area {
+    .widget {
+        margin-bottom: ms(2);
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+        ul {
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+            &:after {
+                clear: both;
+                content: ".";
+                display: block;
+                height: 0;
+                visibility: hidden;
+            }
+            li {
+                margin: 0px 0px ms(-4);
+            }
+        }
+        a {
+            color: lighten($color_text, 10%);
+            &:hover {
+                color: $color_primary;
+                text-decoration: underline;
+            }
+        }
+        select {
+            max-width: 100%;
+        }
+        table {
+            font-size: 85%;
+            th, td {
+                padding: ms(-6);
+                text-align: center;
+            }
+            tfoot td{
+                text-align: left;
+            }
+        }
+        *:last-child {
+            margin-bottom: 0px;
+        }
+
+    }
+    .widget_categories, .widget_nav_menu, .widget_pages, .widget_product_categories {
+        ul ul {
+            margin-top: ms(-4);
+            margin-left: ms(1);
+            margin-bottom: -(ms(-4));
+        }
+    }
+    .widget_rss ul li {
+        margin-bottom: ms(1);
+        .rsswidget {
+            font-weight: 400;
+            font-size: 1.2em;
+            line-height: 1.28;
+        }
+        .rss-date {
+            display: block;
+            margin: ms(-3) 0px;
+            font-size: 85%;
+        }
+    }
+
+}

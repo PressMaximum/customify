@@ -53,10 +53,10 @@
 
                     <nav id="site-navigation" class="main-navigation">
                         <?php
-                            wp_nav_menu( array(
-                                'theme_location' => 'menu-1',
-                                'menu_id'        => 'primary-menu',
-                            ) );
+//                            wp_nav_menu( array(
+//                                'theme_location' => 'menu-1',
+//                                'menu_id'        => 'primary-menu',
+//                            ) );
                         ?>
                     </nav><!-- #site-navigation -->
                 </div> <!-- #._beacon-container -->
@@ -70,5 +70,4 @@
 
 	</header><!-- #masthead -->
 
-	<div id="content" class="site-content">
-        <div class="_beacon-container">
+	<div id="site-content" <?php _beacon_site_content_class(); ?>>

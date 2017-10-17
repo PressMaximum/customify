@@ -1,4 +1,6 @@
 .header-bottom {
-     padding: ms(1) 0px;
-     background: darken( $background_body, 5% );
+    padding: ms(0) 0px;
+    border: 1px solid $color_border;
+    border-left: none;
+    border-right: none;
  }

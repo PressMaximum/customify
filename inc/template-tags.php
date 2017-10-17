@@ -100,3 +100,5 @@ if ( ! function_exists( '_beacon_entry_footer' ) ) :
 		);
 	}
 endif;
+
+
