@@ -192,4 +192,42 @@ $text_color: #555d66;
     margin: 10px 0;
     display: block;
 }
-
+._beacon-input-slider-wrapper {
+    position: relative;
+    margin-top: 5px;
+    display: block;
+    ._beacon--slider-input {
+        width: 50px;
+        max-width: 50px;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        height: 26px;
+        line-height: 18px;
+    }
+}
+._beacon-input-slider {
+    position: relative;
+    margin: 15px 0px 20px;
+    height: 5px;
+    display: block;
+    background: #CCCCCC;
+    .ui-slider-range {
+        width: 100%;
+        display: block;
+        height: 5px;
+        background: #CCCCCC;
+    }
+    .ui-slider-handle {
+        width: 15px;
+        height: 15px;
+        display: block;
+        position: absolute;
+        top: -6px;
+        background: #ffffff;
+        border: 1px solid #CCCCCC;
+        border-radius: 50%;
+        cursor: pointer;
+        transform: translateX(-5px);
+    }
+}

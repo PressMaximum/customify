@@ -16,8 +16,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
      */
     public $option_type = 'theme_mod';
 
-
-
     public $setting_type = 'group';
     public $fields = array();
     public $choices = array();
@@ -25,6 +23,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     public $device = '';
     public $checkbox_label = '';
     public $limit ;
+
     public $limit_msg = '';
 
     public $live_title_field; // for repeater
@@ -62,6 +61,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
        // wp_enqueue_editor();
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
+        wp_enqueue_script( 'jquery-ui-slider' );
 
         wp_enqueue_style('_beacon-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
         wp_enqueue_script( '_beacon-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
@@ -270,6 +270,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 <# case 'css_ruler': #>
                     <?php $this->field_css_ruler(); ?>
                     <# break; #>
+                <# case 'slider': #>
+                    <?php $this->field_slider(); ?>
+                    <# break; #>
                 <# case 'color': #>
                     <?php $this->field_color(); ?>
                     <# break; #>
@@ -412,6 +415,46 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <div class="_beacon-input-color">
             <input type="hidden" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
             <input type="text" class="_beacon--color-panel" data-alpha="true" value="{{ field.value }}">
+        </div>
+        <?php
+        $this->after_field();
+    }
+
+    function field_slider(){
+        $this->before_field();
+        ?>
+        <#
+        if ( ! _.isObject( field.value ) ) {
+            field.value = { unit: 'px' };
+        }
+
+        if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+        <div class="_beacon-input-slider-wrapper">
+            <div class="_beacon--css-unit">
+                <label class="<# if ( field.value.unit == 'px' || ! field.value.unit ){ #> _beacon--label-active <# } #>">
+                    <?php _e( 'px', '_beacon' ); ?>
+                    <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
+                </label>
+                <label class="<# if ( field.value.unit == 'rem' ){ #> _beacon--label-active <# } #>">
+                    <?php _e( 'rem', '_beacon' ); ?>
+                    <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'rem' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="rem">
+                </label>
+                <label class="<# if ( field.value.unit == 'em' ){ #> _beacon--label-active <# } #>">
+                    <?php _e( 'em', '_beacon' ); ?>
+                    <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'em' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="em">
+                </label>
+                <label class="<# if ( field.value.unit == '%' ){ #> _beacon--label-active <# } #>">
+                    <?php _e( '%', '_beacon' ); ?>
+                    <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == '%' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="%">
+                </label>
+            </div>
+            <div class="_beacon-input-slider"></div>
+            <input type="number" class="_beacon--slider-input _beacon-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
         </div>
         <?php
         $this->after_field();

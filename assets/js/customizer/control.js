@@ -64,6 +64,7 @@
 
             control.initMedia();
             control.initColor( control.container );
+            control.initSlider( control.container );
             control.initCSSRuler();
 
         },
@@ -353,7 +354,32 @@
                     }
                 });
             } );
+        },
+        initSlider: function( $el ){
+            if ( $( '._beacon-input-slider', $el ).length > 0 ) {
+                $('._beacon-input-slider', $el ).each( function(){
+                    var slider = $( this );
+                    var p = slider.parent();
+                    var input = $( '._beacon--slider-input', p );
 
+                    var current_val = input.val();
+                    slider.slider({
+                        range: "min",
+                        value: current_val,
+                        step: 1,
+                        min: 1,
+                        max: 300,
+                        slide: function (event, ui) {
+                            input.val( ui.value ).trigger('data-change');
+                        }
+                    });
+
+                    input.on( 'change', function(){
+                        slider.slider( "value", $( this ).val() );
+                    } );
+
+                } );
+            }
         },
         getFieldValue: function( name, type, $field ){
             var control = this;
@@ -386,6 +412,12 @@
                         left:  $( 'input[data-name="'+name+'-left"]', $field ).val(),
                         link:  $( 'input[data-name="'+name+'-link"]', $field ).is(':checked') ? 1 : ''
                     };
+                    break;
+                    case 'slider':
+                        value = {
+                            unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
+                            value:  $( 'input[data-name="'+name+'-value"]', $field ).val()
+                        };
                     break;
                 case 'radio':
                     value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
@@ -510,6 +542,7 @@
             control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
             $itemWrapper.find( '._beacon--repeater-live-title' ).html( control.params.l10n.untitled );
             control.initColor( $itemWrapper );
+            control.initSlider( $itemWrapper );
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },
