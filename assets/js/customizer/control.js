@@ -413,11 +413,17 @@
                         link:  $( 'input[data-name="'+name+'-link"]', $field ).is(':checked') ? 1 : ''
                     };
                     break;
-                    case 'slider':
+                case 'slider':
                         value = {
                             unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
                             value:  $( 'input[data-name="'+name+'-value"]', $field ).val()
                         };
+                    break;
+                case 'icon':
+                    value = {
+                        type:  $( 'input[data-name="'+name+'-type"]', $field ).val(),
+                        icon:  $( 'input[data-name="'+name+'"]', $field ).val()
+                    };
                     break;
                 case 'radio':
                     value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
@@ -434,7 +440,6 @@
 
         },
         updateRepeaterLiveTitle: function( value, $item, field ){
-            console.log( 'Live Title:', value );
             $( '._beacon--repeater-live-title', $item ).text( value );
         },
         getValue: function( save ){
@@ -487,10 +492,8 @@
 
 
             if ( _.isUndefined( save ) || save ) {
-                console.log( 'SAVE getValue:', value );
                 control.setting.set( encodeURI( JSON.stringify( value ) ) );
             } else {
-                console.log( 'NO_SAVE getValue:', value );
             }
             return value;
         },
@@ -582,7 +585,6 @@
 
             // Add item when customizer loaded
             if ( _.isArray( control.params.value ) ) {
-                console.log( 'control.params.value', control.params.value );
                 _.each(  control.params.value, function( itemValue ){
                     control.addRepeaterItem( itemValue );
                 } );
@@ -619,6 +621,140 @@
     });
 
 
+    var IconPicker = {
+        pickingEl: null,
+        render: function(){
+            var that = this;
+            if ( !_.isUndefined( _Beacon_Control_Args.icons ) && !_.isEmpty( _Beacon_Control_Args.icons ) ) {
+                _.each( _Beacon_Control_Args.icons, function( icon_config, font_type ) {
+                    $( '#_beacon--sidebar-icon-type' ).append( ' <option value="'+font_type+'">'+icon_config.name+'</option>' );
+                    that.addCSS( icon_config, font_type );
+                    that.addIcons( icon_config, font_type );
+                } );
+            }
+        },
+
+        addCSS: function( icon_config, font_type ){
+            $( 'head' ).append( "<link rel='stylesheet' id='font-icon-"+font_type+"'  href='"+icon_config.url+"' type='text/css' media='all' />" )
+        },
+
+        addIcons: function( icon_config, font_type ){
+            var icon_html = '<ul class="_beacon--list-icons icon-'+font_type+'" data-type="'+font_type+'">';
+            _.each( icon_config.icons, function( icon_class, i ){
+                var class_name = '';
+                if ( icon_config.class_config ) {
+                    class_name = icon_config.class_config.replace(/__icon_name__/g, icon_class  );
+                } else {
+                    class_name = icon_class;
+                }
+
+                icon_html += '<li title="'+icon_class+'" data-type="'+font_type+'" data-icon="'+class_name+'"><span class="icon-wrapper"><i class="'+class_name+'"></i></span></li>';
+
+            } );
+            icon_html += '</ul>';
+
+            $( '#_beacon--icon-browser').append( icon_html );
+        },
+        changeType: function(){
+            $document.on( 'change', '#_beacon--sidebar-icon-type', function(){
+                var type = $( this ).val();
+                if ( ! type || type == 'all' ) {
+                    $( '#_beacon--icon-browser ._beacon--list-icons' ).show();
+                } else {
+                    $( '#_beacon--icon-browser ._beacon--list-icons' ).hide();
+                    $( '#_beacon--icon-browser ._beacon--list-icons.icon-'+type ).show();
+                }
+            } );
+        },
+        show: function () {
+            var controlWidth = $( '#customize-controls' ).width();
+            $( '#_beacon--sidebar-icons' ).css( 'left', controlWidth ).addClass( '_beacon--active' );
+        },
+        close: function () {
+            $( '#_beacon--sidebar-icons' ).css( 'left', -300 ).removeClass( '_beacon--active' );
+            $( '._beacon--icon-picker' ).removeClass('_beacon--icon-picking');
+            this.pickingEl = null;
+        },
+        autoClose: function(){
+            var that = this;
+            $document.on( 'click', function( e ) {
+                if ( ! $(event.target).closest('._beacon--icon-picker').length ) {
+                    if ( ! $(event.target).closest('#_beacon--sidebar-icons').length ) {
+                        // customize-controls-close
+                        that.close();
+                    }
+                }
+            } );
+
+            $( '#_beacon--sidebar-icons .customize-controls-close' ).on( 'click', function(){
+                that.close();
+            } );
+        },
+        picker: function(){
+            var that = this;
+            $document.on( 'click', '._beacon--icon-picker ._beacon--pick-icon', function( e ) {
+                e.preventDefault();
+                if (  that.pickingEl ) {
+                    that.pickingEl.removeClass('_beacon--icon-picking');
+                }
+                that.pickingEl =  $( this ).closest( '._beacon--icon-picker' );
+                that.pickingEl.addClass( '_beacon--picking-icon' );
+                that.show();
+            } );
+
+
+            $document.on( 'click', '#_beacon--icon-browser li', function( e ) {
+                e.preventDefault();
+                var li = $( this );
+                var icon_preview = li.find( 'i' ).clone();
+                var icon = li.attr( "data-icon" ) || '';
+                var type = li.attr( 'data-type' ) || '';
+                $( '._beacon--input-icon-type', that.pickingEl ).val( type );
+                $( '._beacon--input-icon-name', that.pickingEl ).val( icon ).trigger( 'change' );
+                $( '._beacon--icon-preview-icon', that.pickingEl ).html( icon_preview );
+
+                that.close();
+            } );
+
+            // remove
+            $document.on( 'click', '._beacon--icon-picker ._beacon--icon-remove', function( e ) {
+                e.preventDefault();
+                if (  that.pickingEl ) {
+                    that.pickingEl.removeClass('_beacon--icon-picking');
+                }
+                that.pickingEl =  $( this ).closest( '._beacon--icon-picker' );
+                that.pickingEl.addClass( '_beacon--picking-icon' );
+
+
+                $( '._beacon--input-icon-type', that.pickingEl ).val( '' );
+                $( '._beacon--input-icon-name', that.pickingEl ).val( '' ).trigger( 'change' );
+                $( '._beacon--icon-preview-icon', that.pickingEl ).html( '' );
+
+            } );
+
+
+        },
+        init: function(){
+            this.render();
+            this.changeType();
+            this.picker();
+            this.autoClose();
+
+            // Search icon
+            $document.on( 'keyup', '#_beacon--icon-search', function( e ) {
+                var v = $( this).val();
+                v = v.trim();
+                if ( v ) {
+                    $( "#_beacon--icon-browser li" ).hide();
+                    $( "#_beacon--icon-browser li[data-icon*='"+v+"']" ).show();
+                } else {
+                    $( "#_beacon--icon-browser li" ).show();
+                }
+            } );
+        }
+    };
+
+
     wpcustomize.bind( 'ready', function( e, b ) {
 
         $document.on( '_beacon/customizer/device/change', function( e, device ) {
@@ -650,7 +786,7 @@
             $( '.customize-section-title', s ).append( t );
         } );
 
-
+        IconPicker.init();
 
     } );
 

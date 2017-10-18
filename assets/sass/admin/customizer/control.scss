@@ -231,3 +231,115 @@ $text_color: #555d66;
         transform: translateX(-5px);
     }
 }
+
+._beacon--icon-picker {
+    display: flex;
+    ._beacon--icon-preview {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-right: 0px;
+        cursor: pointer;
+        position: relative;
+    }
+    ._beacon--icon-preview-icon {
+        width: 35px; display: block;
+        border-right: 0px;
+        text-align: center;
+        height: 100%;
+        position: relative;
+        i {
+            position: absolute;
+            top: 50%;
+            left: 13px;
+            transform:  translateY(-50%);
+        }
+    }
+    input {
+        box-shadow: none !important;
+        outline: none !important;
+    }
+    ._beacon--icon-remove {
+        cursor: pointer;
+        flex: 1;
+        border: 1px solid #ddd;
+        border-left: 0px;
+        font-size: 18px;
+        .dashicons {
+            width: 30px;
+            display: block;
+            transform: translateY(2px);
+        }
+    }
+}
+
+#_beacon--sidebar-icons {
+    position: fixed;
+    left: -300px;
+    transition: all .5s ease;
+    &._beacon--active {
+        left: 300px;
+    }
+    width: 300px;
+    bottom: 0px;
+    top: 0px;
+    display: block;
+    z-index: 8;
+    background: #EBEBEB;
+    border-right: 1px solid #ddd;
+    *{
+        box-sizing: border-box;
+    }
+    ._beacon--sidebar-header {
+        height: 46px;
+        display: block;
+        border-bottom: 1px solid #ddd;
+    }
+    ._beacon--icon-type-inner {
+        padding: 10px 10px 10px 50px;
+        display: block;
+    }
+    .customize-controls-close {
+        height: 45px;
+    }
+    #_beacon--sidebar-icon-type {
+        display: block;
+        width: 100%;
+        height: 26px;
+    }
+    ._beacon--sidebar-search {
+        background: #ffffff;
+        padding: 10px;
+        input {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    #_beacon--icon-browser {
+        position: absolute;
+        top: 100px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        overflow: auto;
+    }
+    ._beacon--list-icons {
+        li {
+            width: 20%;
+            float: left;
+            font-size: 24px;
+            text-align: center;
+            padding: 10px 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition:all 0.3s ease;
+            &:hover {
+                transform: scale(1.5);
+            }
+
+        }
+        &:after {
+            clear: both; content: ""; display: block;
+        }
+    }
+}

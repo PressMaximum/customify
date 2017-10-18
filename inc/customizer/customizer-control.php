@@ -63,11 +63,17 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
 
+        if ( _Beacon_Customizer()->has_icon() ) {
+            require_once get_template_directory().'/inc/customizer/customizer-icons.php';
+        }
+
         wp_enqueue_style('_beacon-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
         wp_enqueue_script( '_beacon-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
         wp_enqueue_script( '_beacon-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         wp_localize_script( '_beacon-customizer-control', '_Beacon_Control_Args', array(
-                'home_url' => home_url('')
+            'home_url' => home_url(''),
+            'has_icons' => _Beacon_Customizer()->has_icon(),
+            'icons' => _Beacon_Font_Icons()->get_icons(),
         ) );
     }
 
@@ -270,6 +276,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 <# case 'css_ruler': #>
                     <?php $this->field_css_ruler(); ?>
                     <# break; #>
+                <# case 'icon': #>
+                    <?php $this->field_icon(); ?>
+                    <# break; #>
                 <# case 'slider': #>
                     <?php $this->field_slider(); ?>
                     <# break; #>
@@ -310,6 +319,24 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 </div>
             </div>
         </script>
+        <div id="_beacon--sidebar-icons">
+            <div class="_beacon--sidebar-header">
+                <a class="customize-controls-close" href="#">
+                    <span class="screen-reader-text"><?php _e( 'Cancel', '_beacon' );  ?></span>
+                </a>
+                <div class="_beacon--icon-type-inner">
+
+                    <select id="_beacon--sidebar-icon-type">
+                        <option value="all"><?php _e( 'All Icon Types', '_beacon' ); ?></option>
+                    </select>
+                </div>
+            </div>
+            <div class="_beacon--sidebar-search">
+               <input type="text" id="_beacon--icon-search" placeholder="<?php esc_attr_e( 'Type icon name', '_beacon' ) ?>">
+            </div>
+            <div id="_beacon--icon-browser">
+            </div>
+        </div>
         <?php
     }
 
@@ -344,6 +371,41 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+    function field_icon(){
+        $this->before_field();
+        ?>
+        <#
+        if ( ! _.isObject( field.value ) ) {
+            field.value = { };
+        }
+        if ( field.label ) { #>
+            <label>{{{ field.label }}}</label>
+        <# } #>
+        <# if ( field.description ) { #>
+            <p class="description">{{{ field.description }}}</p>
+        <# } #>
+            <div class="_beacon--icon-picker">
+                <div class="_beacon--icon-preview">
+                    <input type="hidden" class="_beacon-input _beacon--input-icon-type" data-name="{{ field.name }}-type" value="{{ field.value.type }}">
+                    <div class="_beacon--icon-preview-icon _beacon--pick-icon">
+                        <# if ( field.value.icon ) {  #>
+                            <i class="{{ field.value.icon }}"></i>
+                        <# }  #>
+                    </div>
+                </div>
+                <input type="text" class="_beacon-input _beacon--pick-icon _beacon--input-icon-name" placeholder="<?php esc_attr_e( 'Pick an icon', '_beacon' ); ?>" data-name="{{ field.name }}" value="{{ field.value.icon }}">
+                <span class="_beacon--icon-remove">
+                    <span class="dashicons dashicons-no-alt"></span>
+                    <span class="screen-reader-text">
+                    <?php _e( 'Remove', '_beacon' ) ?></span>
+                </span>
+            </div>
+        <?php
+        $this->after_field();
+    }
+
+
+
     function field_css_ruler(){
         $this->before_field();
         ?>
@@ -427,7 +489,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         if ( ! _.isObject( field.value ) ) {
             field.value = { unit: 'px' };
         }
-
+        var uniqueID = field.name + ( new Date().getTime() );
         if ( field.label ) { #>
             <label>{{{ field.label }}}</label>
         <# } #>
@@ -569,8 +631,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 }
                 #>
             </div>
-            <button type="button" class="button _beacon--add"><?php _e( 'Add', '_beacon' ); ?></button>
-            <button type="button" class="button _beacon--change _beacon--hide"><?php _e( 'Change', '_beacon' ); ?></button>
+            <button type="button" class="button _beacon--add <# if ( url ) { #> _beacon--hide <# } #>"><?php _e( 'Add', '_beacon' ); ?></button>
+            <button type="button" class="button _beacon--change <# if ( ! url ) { #> _beacon--hide <# } #>"><?php _e( 'Change', '_beacon' ); ?></button>
             <button type="button" class="button _beacon--remove"><?php _e( 'Remove', '_beacon' ); ?></button>
         </div>
 

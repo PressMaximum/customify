@@ -11,6 +11,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
     class  _Beacon_Customizer {
         static $config;
         static $_instance;
+        static $has_icon = false;
         function __construct()
         {
             add_action( 'customize_register', array( $this, 'register' ) );
@@ -41,6 +42,9 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                             $config['section|'.$f['name']] = $f;
                             break;
                         default:
+                            if ( $f['type'] == 'icon' ) {
+                                self::$has_icon = true;
+                            }
                             $config['setting|'.$f['name']] = $f;
 
                     }
@@ -48,6 +52,10 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 self::$config = $config;
             }
             return self::$config;
+        }
+
+        function has_icon(){
+            return self::$has_icon;
         }
 
         function get_setting( $key ){
@@ -200,9 +208,11 @@ _Beacon_Customizer();
 if ( ! function_exists( '_beacon_sanitize_input' ) ) {
 
     class _Beacon_Sanitize_Input {
-        
+
         private $control;
         private $setting;
+        private $font_icon_types;
+        public $has_icon = false;
 
         function __construct( $control, $setting )
         {
@@ -237,7 +247,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             $value = wp_parse_args( $value, $default );
             $new_value = array();
             $new_value['unit'] = sanitize_text_field( $value['unit'] );
-            $new_value['value'] = sanitize_text_field( $value['top'] );
+            $new_value['value'] = sanitize_text_field( $value['value'] );
             return $new_value;
         }
 

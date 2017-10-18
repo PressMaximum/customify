@@ -76,7 +76,7 @@
             $fields = apply_filters( '_beacon/customizer/config', array() );
             foreach ( $fields as $f ) {
                 if (  $f['type'] != 'panel' && $f['type'] != 'section' ) {
-                    var_dump( $f['name'] );
+                    echo $f['name'] ;
                     var_dump( _Beacon_Customizer()->get_setting( $f['name'] ) );
                 }
             }
