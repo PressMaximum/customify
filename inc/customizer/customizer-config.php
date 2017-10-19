@@ -22,15 +22,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             ),
 
             array(
-                'name' => 'device_select',
-                'type' => 'device_select',
-                'section' => '_beacon_section',
-            ),
-
-            array(
                 'name' => 'text',
                 'type' => 'text',
-                'sanitize_callback' => '_beacon_sanitize_input',
+                'device_settings' => true,
+                'sanitize_callback' => '',
                 'default'           => null,
                 'transport'			=> 'postMessage', // for selective refresh
                 'section' => '_beacon_section',
@@ -44,6 +39,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'slider',
                 'type' => 'slider',
+                'device_settings' => true,
                 'default' => '',
                 'section' => '_beacon_section',
                 //'device' => 'mobile', // mobile || general
@@ -56,6 +52,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'icon',
                 'type' => 'icon',
+                'device_settings' => true,
                 'default' => '',
                 'section' => '_beacon_section',
                 //'device' => 'mobile', // mobile || general
@@ -68,6 +65,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'textarea',
                 'type' => 'textarea',
+                'device_settings' => true,
                 'default' => '',
                 'section' => '_beacon_section',
                 //'device' => 'mobile', // mobile || general
@@ -80,6 +78,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name'  => 'checkbox',
                 'type'  => 'checkbox',
+                'device_settings' => true,
                 'label'       => __( 'Checkbox', '_beacon' ),
                 'section'     => '_beacon_section',
                 'description' => __( 'This is description' ),
@@ -90,6 +89,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'select',
                 'type' => 'select',
+                'device_settings' => true,
                 'default' => '',
                 'section'     => '_beacon_section',
                 //'priority' => 22,
@@ -105,6 +105,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'radio',
                 'type' => 'radio',
+                'device_settings' => true,
                 'default' => '',
                 'section'     => '_beacon_section',
                 //'priority' => 22,
@@ -120,6 +121,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'dependence_text',
                 'type' => 'text',
+                'device_settings' => true,
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
                 'section' => '_beacon_section',
@@ -132,6 +134,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
 
             array(
                 'name' => 'color',
+                'device_settings' => true,
                 'type' => 'color',
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
@@ -143,6 +146,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
 
             array(
                 'name' => 'css_ruler',
+                'device_settings' => true,
                 'type'      => 'css_ruler',
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
@@ -155,6 +159,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'multiple_dependence_text',
                 'type' => 'text',
+                'device_settings' => true,
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
                 'section' => '_beacon_section',
@@ -197,6 +202,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'slider',
                         'type' => 'slider',
+                        'device_settings' => true,
                         'label' => __( 'Slider', '_beacon' ),
                     ),
                     array(
@@ -240,6 +246,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'title',
                         'type' => 'text',
+                        'device_settings' => true,
                         'label' => __( 'Title', '_beacon' ),
                     ),
                     array(
@@ -287,11 +294,13 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'name' => 'color',
                         'type' => 'color',
                         'label' => __( 'Color', '_beacon' ),
+                        'device_settings' => true,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
                         'label' => __( 'Image', '_beacon' ),
+                        'device_settings' => true,
                     ),
                 )
             ),

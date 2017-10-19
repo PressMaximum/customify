@@ -13,6 +13,7 @@
         },
         type: '_beacon',
         settingField: null,
+        devices:  ['desktop', 'tablet', 'mobile'],
         getTemplate: _.memoize(function () {
             var control = this;
             var compiled,
@@ -29,21 +30,39 @@
                     variable: 'data'
                 };
 
-            return function (data, id) {
+            return function (data, id, data_variable_name ) {
                 if (_.isUndefined(id)) {
                     id = 'tmpl-customize-control-' + control.type;
+                }
+                if ( ! _.isUndefined( data_variable_name ) && _.isString( data_variable_name ) ) {
+                    options.variable = data_variable_name;
+                } else {
+                    options.variable = 'data';
                 }
                 compiled = _.template($('#' + id).html(), null, options);
                 return compiled(data);
             };
 
         }),
+        addDeviceSwitchers: function( $el ){
+            var control = this;
+            if ( _.isUndefined( $el ) ) {
+                $el = control.container;
+            }
+            var clone = $('#customize-footer-actions .devices').clone();
+            clone.addClass('_beacon-devices');
+            $('._beacon-field-heading', $el ).append(clone).addClass( '_beacon-devices-added' );
+
+        },
         init: function() {
             var control = this;
             // The hidden field that keeps the data saved (though we never update it)
             control.settingField = control.container.find( '[data-customize-setting-link]' ).first();
 
             control.initTabs();
+            if ( control.params.device_settings ) {
+                control.addDeviceSwitchers();
+            }
 
             switch ( control.params.setting_type ) {
                 case 'group':
@@ -381,14 +400,22 @@
                 } );
             }
         },
-        getFieldValue: function( name, type, $field ){
+        getFieldValue: function( name, fieldSetting, $field ){
             var control = this;
+            var type = undefined ;
+            var support_devices = false;
             if ( _.isUndefined( $field ) ) {
                 $field = control.container.find( '._beacon--settings-fields ._beacon--field' ).first();
             }
 
-            if ( _.isUndefined( type ) ) {
+            if ( ! _.isUndefined( fieldSetting ) ) {
+                type = fieldSetting.type;
+                support_devices = fieldSetting.device_settings;
+            }
+
+            if ( _.isUndefined( type ) || ! type ) {
                 type = control.params.setting_type;
+                support_devices = control.params.device_settings;
             }
 
             var value = '';
@@ -397,50 +424,127 @@
                 case 'image':
                 case 'video':
                 case 'attachment':
-                    value = {
-                        id:  $( 'input[data-name="'+name+'"]', $field ).val(),
-                        url:  $( 'input[data-name="'+name+'-url"]', $field ).val(),
-                        mime:  $( 'input[data-name="'+name+'-mime"]', $field ).val()
-                    };
+                case 'audio':
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            value[ device ] = {
+                                id:  $( 'input[data-name="'+_name+'"]', $field ).val(),
+                                url:  $( 'input[data-name="'+_name+'-url"]', $field ).val(),
+                                mime:  $( 'input[data-name="'+_name+'-mime"]', $field ).val()
+                            };
+                        } );
+                    } else {
+                        value = {
+                            id:  $( 'input[data-name="'+name+'"]', $field ).val(),
+                            url:  $( 'input[data-name="'+name+'-url"]', $field ).val(),
+                            mime:  $( 'input[data-name="'+name+'-mime"]', $field ).val()
+                        };
+                    }
+
                 break;
                 case 'css_ruler':
-                    value = {
-                        unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
-                        top:  $( 'input[data-name="'+name+'-top"]', $field ).val(),
-                        right:  $( 'input[data-name="'+name+'-right"]', $field ).val(),
-                        bottom:  $( 'input[data-name="'+name+'-bottom"]', $field ).val(),
-                        left:  $( 'input[data-name="'+name+'-left"]', $field ).val(),
-                        link:  $( 'input[data-name="'+name+'-link"]', $field ).is(':checked') ? 1 : ''
-                    };
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            value[ device ] = {
+                                unit:  $( 'input[data-name="'+_name+'-unit"]:checked', $field ).val(),
+                                top:  $( 'input[data-name="'+_name+'-top"]', $field ).val(),
+                                right:  $( 'input[data-name="'+_name+'-right"]', $field ).val(),
+                                bottom:  $( 'input[data-name="'+_name+'-bottom"]', $field ).val(),
+                                left:  $( 'input[data-name="'+_name+'-left"]', $field ).val(),
+                                link:  $( 'input[data-name="'+_name+'-link"]', $field ).is(':checked') ? 1 : ''
+                            };
+                        } );
+                    } else {
+                        value = {
+                            unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
+                            top:  $( 'input[data-name="'+name+'-top"]', $field ).val(),
+                            right:  $( 'input[data-name="'+name+'-right"]', $field ).val(),
+                            bottom:  $( 'input[data-name="'+name+'-bottom"]', $field ).val(),
+                            left:  $( 'input[data-name="'+name+'-left"]', $field ).val(),
+                            link:  $( 'input[data-name="'+name+'-link"]', $field ).is(':checked') ? 1 : ''
+                        };
+                    }
+
                     break;
                 case 'slider':
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            value[ device ] = {
+                                unit:  $( 'input[data-name="'+_name+'-unit"]:checked', $field ).val(),
+                                value:  $( 'input[data-name="'+_name+'-value"]', $field ).val()
+                            };
+                        } );
+                    } else {
                         value = {
                             unit:  $( 'input[data-name="'+name+'-unit"]:checked', $field ).val(),
                             value:  $( 'input[data-name="'+name+'-value"]', $field ).val()
                         };
+                    }
+
                     break;
                 case 'icon':
-                    value = {
-                        type:  $( 'input[data-name="'+name+'-type"]', $field ).val(),
-                        icon:  $( 'input[data-name="'+name+'"]', $field ).val()
-                    };
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            value[ device ] = {
+                                type:  $( 'input[data-name="'+_name+'-type"]', $field ).val(),
+                                icon:  $( 'input[data-name="'+_name+'"]', $field ).val()
+                            };
+                        } );
+                    } else {
+                        value = {
+                            type:  $( 'input[data-name="'+name+'-type"]', $field ).val(),
+                            icon:  $( 'input[data-name="'+name+'"]', $field ).val()
+                        };
+                    }
                     break;
                 case 'radio':
-                    value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            value[ device ] =  value = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                        } );
+                    } else {
+                        value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
+                    }
+
                     break;
                 case 'checkbox':
-                    value = $( 'input[data-name="'+name+'"]', $field ).is(':checked') ? 1 : '' ;
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            value[ device ] =  value = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                        } );
+                    } else {
+                        value = $( 'input[data-name="'+name+'"]', $field ).is(':checked') ? 1 : '' ;
+                    }
+
                     break;
                 default:
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            value[ device ] = $( '[data-name="'+name+'-'+device+'"]', $field ).val();
+                        } );
+                    } else {
                         value = $( '[data-name="'+name+'"]', $field ).val();
+                    }
                     break;
             }
 
             return value;
 
-        },
-        updateRepeaterLiveTitle: function( value, $item, field ){
-            $( '._beacon--repeater-live-title', $item ).text( value );
         },
         getValue: function( save ){
             var control = this;
@@ -449,8 +553,9 @@
                 case 'group':
                     value = {};
                     _.each( control.params.fields, function( f ){
-                        var $_field = $( '[data-field-name="'+f.name+'"]', control.container ).closest('._beacon--field');
-                        value[ f.name ] = control.getFieldValue( f.name, f.type, $_field );
+                        var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', control.container );
+                        console.log( $_field );
+                        value[ f.name ] = control.getFieldValue( f.name, f, $_field );
                     } );
                     //console.log( 'GROUP_VALUE' );
                     control.initConditional( control.container, value );
@@ -463,7 +568,7 @@
                         _.each( control.params.fields, function( f ){
                             var inputField = $( '[data-field-name="'+f.name+'"]', $item );
                             var $_field = inputField.closest('._beacon--field');
-                            var _fv =  control.getFieldValue( f.name, f.type, $_field );
+                            var _fv =  control.getFieldValue( f.name, f,  $_field );
                             _v[ f.name ] = _fv;
 
                             // Update Live title
@@ -492,21 +597,84 @@
 
 
             if ( _.isUndefined( save ) || save ) {
+                console.log( 'VALUES: ', value );
+                console.log( 'VALUES encodeURI: ', encodeURI( JSON.stringify( value )  ) );
                 control.setting.set( encodeURI( JSON.stringify( value ) ) );
             } else {
             }
             return value;
         },
+        updateRepeaterLiveTitle: function( value, $item, field ){
+            $( '._beacon--repeater-live-title', $item ).text( value );
+        },
         initGroup: function(){
             var control = this;
-            var template = control.getTemplate();
-            var $fields = template( control.params.fields , 'tmpl-customize-control-'+control.type+'-fields');
-            control.container.find( '._beacon--settings-fields' ).html( $fields );
+
+            _.each( control.params.fields, function( f, index ){
+                var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
+                control.container.find( '._beacon--settings-fields' ).append( $fieldArea );
+                control.addField( f, $fieldArea );
+
+                if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
+                    control.addDeviceSwitchers( $fieldArea );
+                }
+            } );
+
             control.getValue( false );
+        },
+        addField: function( field, $fieldsArea ){
+            var control = this;
+            var template = control.getTemplate();
+            var template_id =  'tmpl-field-'+control.type+'-'+field.type;
+            if (  $( '#'+template_id ).length == 0 ) {
+                template_id =  'tmpl-field-'+control.type+'-text';
+            }
+            if ( field.device_settings ) {
+
+                var fieldItem =  null;
+                _.each( control.devices , function( device, index ){
+
+                    var _field = _.clone( field );
+                    _field.original_name = field.name;
+                    if ( _.isObject( field.value ) ){
+                        if ( ! _.isUndefined( field.value[device] ) ) {
+                            _field.value = field.value[device];
+                        } else {
+                            _field.value = '';
+                        }
+                    } else {
+                        _field.value = '';
+                        if ( index === 0 ) {
+                            _field.value = field.value;
+                        }
+                    }
+                    _field.name =  field.name+'-'+device;
+
+                    var $deviceFields = $( template( _field , template_id, 'field' ) );
+                    var deviceFieldItem = $deviceFields.find( '._beacon-field-settings-inner' ).first();
+
+                    if ( ! fieldItem ) {
+                        $fieldsArea.append( $deviceFields ).addClass( '_beacon--multiple-devices' );
+                    }
+
+                    deviceFieldItem.addClass( '_beacon--for-'+device );
+                    deviceFieldItem.attr( 'data-for-device', device );
+
+                    if ( fieldItem ) {
+                        deviceFieldItem.insertAfter( fieldItem );
+                        fieldItem = deviceFieldItem;
+                    }
+                    fieldItem = deviceFieldItem;
+
+                }) ;
+            } else {
+                var $fields = template( field , template_id, 'field' );
+                $fieldsArea.html( $fields );
+            }
         },
         initField: function( ){
             var control = this;
-            var template = control.getTemplate();
+
             var field = {
                 type: control.params.setting_type,
                 name: control.id,
@@ -520,8 +688,11 @@
                 field.label = control.params.checkbox_label;
             }
 
-            var $fields = template( [ field ] , 'tmpl-customize-control-'+control.type+'-fields');
-            control.container.find( '._beacon--settings-fields' ).html( $fields );
+            field.device_settings = control.params.device_settings;
+            var $fieldsArea = control.container.find('._beacon--settings-fields');
+
+            control.addField( field, $fieldsArea );
+
         },
         initTabs: function(){},
         addRepeaterItem: function( value ){
@@ -531,19 +702,26 @@
 
             var control = this;
             var template = control.getTemplate();
-
             var fields = control.params.fields;
+
+            var $itemWrapper = $( template( '' , 'tmpl-customize-control-'+control.type+'-repeater') );
+            control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
             _.each( fields, function( f, index ){
-                fields[index].value = '';
+                f.value = '';
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
-                    fields[index].value = value[ f.name ];
+                    f.value = value[ f.name ];
+                }
+                var $fieldArea = $( '<div class="_beacon--repeater-field"></div>' );
+                $( '._beacon--repeater-item-inner', $itemWrapper ).append( $fieldArea );
+                control.addField( f, $fieldArea );
+
+                if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
+                    control.addDeviceSwitchers( $fieldArea );
                 }
             } );
 
-            var htmlSettings = template( fields , 'tmpl-customize-control-'+control.type+'-fields');
-            var $itemWrapper = $( template( htmlSettings , 'tmpl-customize-control-'+control.type+'-repeater') );
-            control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
             $itemWrapper.find( '._beacon--repeater-live-title' ).html( control.params.l10n.untitled );
+
             control.initColor( $itemWrapper );
             control.initSlider( $itemWrapper );
             $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
@@ -677,7 +855,7 @@
         },
         autoClose: function(){
             var that = this;
-            $document.on( 'click', function( e ) {
+            $document.on( 'click', function( event ) {
                 if ( ! $(event.target).closest('._beacon--icon-picker').length ) {
                     if ( ! $(event.target).closest('#_beacon--sidebar-icons').length ) {
                         // customize-controls-close
@@ -725,13 +903,11 @@
                 that.pickingEl =  $( this ).closest( '._beacon--icon-picker' );
                 that.pickingEl.addClass( '_beacon--picking-icon' );
 
-
                 $( '._beacon--input-icon-type', that.pickingEl ).val( '' );
                 $( '._beacon--input-icon-name', that.pickingEl ).val( '' ).trigger( 'change' );
                 $( '._beacon--icon-preview-icon', that.pickingEl ).html( '' );
 
             } );
-
 
         },
         init: function(){
@@ -787,6 +963,14 @@
         } );
 
         IconPicker.init();
+
+        // Devices Switcher
+        $document.on( 'click', '._beacon-devices button', function(e){
+            e.preventDefault();
+            var device = $( this ).attr( 'data-device' ) || '';
+            console.log( 'Device', device );
+            $( '#customize-footer-actions .devices button[data-device="'+device+'"]' ).trigger('click');
+        } );
 
     } );
 

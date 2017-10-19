@@ -77,7 +77,7 @@
             foreach ( $fields as $f ) {
                 if (  $f['type'] != 'panel' && $f['type'] != 'section' ) {
                     echo $f['name'] ;
-                    var_dump( _Beacon_Customizer()->get_setting( $f['name'] ) );
+                    var_dump( _Beacon_Customizer()->get_setting( $f['name'], 'all' ) );
                 }
             }
             ?>

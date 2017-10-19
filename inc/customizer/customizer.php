@@ -12,6 +12,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         static $config;
         static $_instance;
         static $has_icon = false;
+        public $devices = array( 'desktop', 'tablet', 'mobile');
         function __construct()
         {
             add_action( 'customize_register', array( $this, 'register' ) );
@@ -58,11 +59,19 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             return self::$has_icon;
         }
 
-        function get_setting( $key ){
+        function get_setting( $key, $device = 'desktop' ){
             $config = self::get_config();
             if ( isset( $config['setting|'.$key ] ) ) {
                 $default = isset( $config['setting|'.$key ]['default'] ) ? $config['setting|'.$key ]['default'] : false;
-                return get_theme_mod( $key, $default );
+                $value =  get_theme_mod( $key, $default );
+                if ( $device != 'all' ) {
+                    if ( is_array( $value ) && isset( $value[ $device ] ) ) {
+                        return $value[ $device ];
+                    } else {
+                        return $value;
+                    }
+                }
+                return $value;
             } else {
                 return null;
             }
@@ -148,7 +157,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
                         ) );
 
-                        // _beacon_sanitize_input
 
                        $settings_args = array(
                            'sanitize_callback' => $args['sanitize_callback'],
@@ -158,6 +166,9 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                            'default' => $args['default'],
                        );
                         $settings_args['transport'] = 'refresh';
+                        if ( ! $settings_args['sanitize_callback'] ) {
+                            $settings_args['sanitize_callback'] = '_beacon_sanitize_customizer_input';
+                        }
 
                        foreach ( $settings_args as $k => $v ) {
                            unset( $args[ $k ] );
@@ -205,14 +216,14 @@ if ( ! function_exists( '_Beacon_Customizer' ) ) {
 _Beacon_Customizer();
 
 
-if ( ! function_exists( '_beacon_sanitize_input' ) ) {
+if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
 
     class _Beacon_Sanitize_Input {
 
         private $control;
         private $setting;
         private $font_icon_types;
-        public $has_icon = false;
+        private $has_icon = false;
 
         function __construct( $control, $setting )
         {
@@ -220,7 +231,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             $this->setting = $setting;
         }
 
-        function sanitize_css_ruler( $value ){
+        private function sanitize_css_ruler( $value ){
             $default = array(
                 'unit' => 'px',
                 'top' => null,
@@ -239,7 +250,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             return $new_value;
         }
 
-        function sanitize_slider( $value ){
+        private function sanitize_slider( $value ){
             $default = array(
                 'unit' => 'px',
                 'value' => null,
@@ -251,7 +262,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             return $new_value;
         }
 
-        function sanitize_checkbox( $value ){
+        private function sanitize_checkbox( $value ){
             if ( $value == 1 || $value == 'on' ) {
                 $value = 1;
             } else {
@@ -260,7 +271,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             return $value;
         }
 
-        function sanitize_color( $color ){
+        private function sanitize_color( $color ){
             if ( empty( $color ) || is_array( $color ) ){
                 return '';
             }
@@ -284,12 +295,12 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
                 'mime'  => ''
             ) );
             $value['id'] = sanitize_text_field( $value['id'] );
-            $value['url'] = sanitize_text_field( $value['id'] );
-            $value['mime'] = sanitize_text_field( $value['id'] );
+            $value['url'] = sanitize_text_field( $value['url'] );
+            $value['mime'] = sanitize_text_field( $value['mime'] );
             return $value;
         }
 
-        function sanitize_text_field_deep( $value ){
+        private function sanitize_text_field_deep( $value ){
             if ( ! is_array(  $value ) ) {
                 $value = sanitize_text_field( $value );
             } else {
@@ -299,63 +310,26 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
                     }
                 }
             }
-
             return $value;
         }
 
-        function sanitize_group( $value ){
+        private function sanitize_group( $value ){
 
             if ( ! is_array( $value ) ) {
                 $value = array();
             }
-
             foreach ( $this->control->fields as $field ) {
-
                 if ( ! isset( $value[ $field['name'] ] ) ) {
                     $value[ $field['name'] ] = '';
                 }
-
                 $_v =  $value[ $field['name'] ];
-
-                switch (  $field['type'] ) {
-                    case 'color':
-                        $_v = $this->sanitize_color( $_v );
-                        break;
-                    case 'media':
-                    case 'image':
-                    case 'attachment':
-                    case 'video':
-                        $_v = $this->_sanitize_media( $_v );
-                        break;
-                    case 'select':
-                    case 'radio':
-                    case 'image_select':
-                        if ( ! isset( $field['choices'][ $_v ] ) ) {
-                            $_v = ( isset( $field['default'] ) ) ? $field['default'] : null;
-                        }
-                        break;
-                    case 'checkbox':
-                        $_v = $this->sanitize_checkbox( $_v );
-                        break;
-                    case 'css_ruler':
-                        $_v = $this->sanitize_css_ruler( $_v );
-                        break;
-                    case 'slider':
-                        $_v = $this->sanitize_slider( $_v );
-                        break;
-                    default:
-                        $_v = $this->sanitize_text_field_deep( $_v );
-
-                }
-
+                $_v = $this->sanitize( $_v, $field );
                 $value[ $field['name'] ] = $_v;
-
             }
-
             return $value;
         }
 
-        function sanitize_repeater( $value ){
+        private function sanitize_repeater( $value ){
             if ( ! is_array( $value ) ) {
                 $value = array();
             }
@@ -368,37 +342,7 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
                     }
 
                     $_v =  $iv[ $field['name'] ];
-                    switch (  $field['type'] ) {
-                        case 'color':
-                            $_v = $this->sanitize_color( $_v );
-                            break;
-                        case 'media':
-                        case 'image':
-                        case 'attachment':
-                        case 'video':
-                            $_v = $this->_sanitize_media( $_v );
-                            break;
-                        case 'select':
-                        case 'radio':
-                        case 'image_select':
-                            if ( ! isset( $field['choices'][ $_v ] ) ) {
-                                $_v = ( isset( $field['default'] ) ) ? $field['default'] : null;
-                            }
-                            break;
-                        case 'checkbox':
-                            $_v = $this->sanitize_checkbox( $_v );
-                            break;
-                        case 'css_ruler':
-                            $_v = $this->sanitize_css_ruler( $_v );
-                            break;
-                        case 'slider':
-                            $_v = $this->sanitize_slider( $_v );
-                            break;
-                        default:
-                            $_v = $this->sanitize_text_field_deep( $_v );
-
-                    }
-
+                    $_v = $this->sanitize( $_v, $field );
                     $iv[ $field['name'] ] = $_v;
                 }
 
@@ -408,41 +352,219 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
             return $value;
         }
 
-        function sanitize( $value, $type = null ){
+        function sanitize( $value, $field = array() ){
+
+            $type = null;
+            $device_settings = false;
+            if ( is_array( $field ) && ! empty( $field ) ) {
+                if ( isset( $field['type'] ) ) {
+                    $type = $field['type'];
+                } elseif ( isset( $field['setting_type'] ) ) {
+                    $type =  $field['setting_type'];
+                }
+
+                if ( isset( $field['device_settings'] ) && $field['device_settings'] ) {
+                    $device_settings = true;
+                }
+
+            } else {
+                $type = $this->control->setting_type;
+                $device_settings = $this->control->device_settings ;
+            }
+
             switch ( $type ) {
                 case 'color':
-                    $value = $this->sanitize_color( $value );
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_color( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_color( $value );
+                    }
                     break;
                 case 'group':
-                    $value = $this->sanitize_group( $value );
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_group( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_group( $value );
+                    }
                     break;
                 case 'repeater':
-                    $value = $this->sanitize_repeater( $value );
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_repeater( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_repeater( $value );
+                    }
+
                     break;
                 case 'media':
                 case 'image':
                 case 'attachment':
                 case 'video':
-                    $value = $this->_sanitize_media( $value );
+                case 'autio':
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->_sanitize_media( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->_sanitize_media( $value );
+                    }
+
                     break;
                 case 'select':
                 case 'radio':
                 case 'image_select':
-                    if ( ! isset( $this->control->choices[ $value ] ) ) {
-                        $value = $this->setting->default;
+
+                    $default = null;
+                    $choices = array();
+                    if ( ! empty( $field )  ) {
+                        if ( isset( $field['default'] ) ) {
+                            $default =  $field['default'];
+                        }
+
+                        if ( isset( $field['choices'] ) ) {
+                            $choices =  $field['choices'];
+                        }
+
+                    } else {
+                        $default = $this->setting->default;
+                        $choices =  $this->control->choices;
                     }
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    if ( ! isset( $choices[ $value[ $device ] ] ) ) {
+                                        if ( is_array( $default ) && isset( $default[ $device ] ) ) {
+                                            $value[ $device ] = $default;
+                                        } else {
+                                            $value[ $device ] = $default;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        if ( ! isset( $choices[ $value ] ) ) {
+                            $value = $default;
+                        }
+                    }
+
                     break;
                 case 'checkbox':
-                    $value = $this->sanitize_checkbox( $value );
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_checkbox( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_checkbox( $value );
+                    }
+
                     break;
                 case 'css_ruler':
-                    $value = $this->sanitize_css_ruler( $value );
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_css_ruler( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_css_ruler( $value );
+                    }
+
                     break;
                 case 'slider':
-                    $value = $this->sanitize_slider( $value );
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_slider( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_slider( $value );
+                    }
+
                     break;
                 default:
-                    $value = $this->sanitize_text_field_deep( $value );
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_text_field_deep( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_text_field_deep( $value );
+                    }
 
             }
 
@@ -451,14 +573,20 @@ if ( ! function_exists( '_beacon_sanitize_input' ) ) {
     }
 
     function _beacon_sanitize_customizer_input( $input, $setting ){
+
         $input = wp_unslash( $input );
         if ( ! is_array( $input ) ) {
             $input = json_decode( urldecode_deep( $input ), true );
         }
+
+        // Skip sanitize to test
+        //return $input;
+
         $control = $setting->manager->get_control( $setting->id );
         $s = new _Beacon_Sanitize_Input( $control, $setting );
         $input = $s->sanitize( $input );
         return $input;
+
     }
 
 }
