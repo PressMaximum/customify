@@ -140,7 +140,7 @@
                     var url = this.getThumb();
                     var id = this.getID();
                     var mime = this.attachment.mime;
-                    $( '._beacon-image-preview', this.preview ).html(  '<img src="'+url+'" alt="">' );
+                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html(  '<img src="'+url+'" alt="">' );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
@@ -166,7 +166,7 @@
                     var id = this.getID();
                     var mime = this.attachment.mime;
                     var html = '<video width="100%" height="" controls><source src="'+url+'" type="'+mime+'">Your browser does not support the video tag.</video>';
-                    $( '._beacon-image-preview', this.preview ).html( html );
+                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html( html );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
@@ -181,7 +181,7 @@
                     var mime = this.attachment.mime;
                     var basename = url.replace(/^.*[\\\/]/, '');
 
-                    $( '._beacon-image-preview', this.preview ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
+                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( this.getID() ).trigger( 'change' );
@@ -192,7 +192,7 @@
                     if ( typeof $el !== "undefined" ) {
                         this.preview = $el;
                     }
-                    $( '._beacon-image-preview', this.preview ).removeAttr( 'style').html( '' );
+                    $( '._beacon-image-preview', this.preview ).removeAttr( 'style').html( '' ).removeClass( '_beacon--has-file' );
                     $( '.attachment-url', this.preview ).val( '' );
                     $( '.attachment-mime', this.preview ).val( '' );
                     $( '.attachment-id', this.preview ).val( '' ).trigger( 'change' );
@@ -200,6 +200,7 @@
 
                     $( '._beacon--add', this.preview ).removeClass( '_beacon--hide' );
                     $( '._beacon--change', this.preview ).addClass( '_beacon--hide' );
+                    $( '._beacon--remove', this.preview ).addClass( '_beacon--hide' );
                 }
 
             };

@@ -287,6 +287,9 @@ $text_color: #555d66;
     &:last-child {
         margin-bottom: 0px;
     }
+    * {
+        box-sizing: border-box;
+    }
     label {
 
     }
@@ -356,6 +359,18 @@ $text_color: #555d66;
 ._beacon-image-preview {
     margin: 10px 0;
     display: block;
+    &:before {
+        content: attr(data-no-file-text);
+        display: block;
+        border: 1px dashed #DDDDDD;
+        padding: 25px;
+        text-align: center;
+    }
+    &._beacon--has-file {
+        &:before {
+            display: none;
+        }
+    }
 }
 ._beacon-input-slider-wrapper {
     position: relative;

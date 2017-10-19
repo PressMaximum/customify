@@ -598,6 +598,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         if ( ! _.isObject(field.value) ) {
             field.value = {};
         }
+        var url = field.value.url;
         #>
         <?php echo $this->field_header(); ?>
         <div class="_beacon-field-settings-inner">
@@ -605,9 +606,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 <input type="hidden" class="attachment-id" value="{{ field.value.id }}" data-name="{{ field.name }}">
                 <input type="hidden" class="attachment-url"  value="{{ field.value.url }}" data-name="{{ field.name }}-url">
                 <input type="hidden" class="attachment-mime"  value="{{ field.value.mime }}" data-name="{{ field.name }}-mime">
-                <div class="_beacon-image-preview">
+                <div class="_beacon-image-preview <# if ( url ) { #> _beacon--has-file <# } #>" data-no-file-text="<?php esc_attr_e( "No file selected", '_beacon' ); ?>">
                     <#
-                    var url = field.value.url;
+
                     if ( url ) {
                         if ( url.indexOf('http://') > -1 || url.indexOf('https://') ){
 

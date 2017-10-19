@@ -210,6 +210,8 @@
   margin-bottom: 15px; }
   ._beacon--field:last-child {
     margin-bottom: 0px; }
+  ._beacon--field * {
+    box-sizing: border-box; }
   ._beacon--field textarea {
     width: 100%; }
   ._beacon--field .wp-picker-container input[type=text].wp-color-picker {
@@ -265,6 +267,14 @@
 ._beacon-image-preview {
   margin: 10px 0;
   display: block; }
+  ._beacon-image-preview:before {
+    content: attr(data-no-file-text);
+    display: block;
+    border: 1px dashed #DDDDDD;
+    padding: 25px;
+    text-align: center; }
+  ._beacon-image-preview._beacon--has-file:before {
+    display: none; }
 
 ._beacon-input-slider-wrapper {
   position: relative;
