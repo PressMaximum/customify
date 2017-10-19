@@ -8,7 +8,7 @@
  */
 
 global $site_layout;
-$site_layout = 'content-sidebar';
+$site_layout = 'sidebar-content-sidebar';
 
 if ( ! function_exists( '_beacon_setup' ) ) :
 	/**

@@ -160,3 +160,37 @@ if ( ! function_exists( '_beacon_main_content_classes' ) ) :
 	}
 	add_filter( '_beacon_main_content_class', '_beacon_main_content_classes' );
 endif;
+
+if ( ! function_exists( '_beacon_site_content_grid_classes' ) ) :
+	/**
+	 * Adds custom classes to the array of site content grid classes.
+	 *
+	 * @param array $classes Classes for the main content element.
+	 *
+	 * @return array
+	 */
+	function _beacon_site_content_grid_classes( $classes ) {
+
+		$classes[] = '_beacon-grid';
+
+		return $classes;
+	}
+	add_filter( '_beacon_site_content_grid_class', '_beacon_site_content_grid_classes' );
+endif;
+
+if ( ! function_exists( '_beacon_site_content_container_classes' ) ) :
+	/**
+	 * Adds custom classes to the array of site content container classes.
+	 *
+	 * @param array $classes Classes for the main content element.
+	 *
+	 * @return array
+	 */
+	function _beacon_site_content_container_classes( $classes ) {
+
+		$classes[] = '_beacon-container';
+
+		return $classes;
+	}
+	add_filter( '_beacon_site_content_container_class', '_beacon_site_content_container_classes' );
+endif;

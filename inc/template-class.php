@@ -171,3 +171,89 @@ if ( ! function_exists( '_beacon_get_main_content_class' ) ) :
 		return array_unique( $classes );
 	}
 endif;
+
+if ( ! function_exists( '_beacon_site_content_grid_class' ) ) :
+	/**
+	 * Display the classes for the site content grid wrapper element.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 */
+	function _beacon_site_content_grid_class( $class = '' ) {
+		// Separates classes with a single space, collates classes for body element
+		echo 'class="' . join( ' ', _beacon_get_site_content_grid_class( $class ) ) . '"';
+	}
+endif;
+
+if ( ! function_exists( '_beacon_get_site_content_grid_class' ) ) :
+	/**
+	 * Retrieve the classes for the site content grid element as an array.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 * @return array Array of classes.
+	 */
+	function _beacon_get_site_content_grid_class( $class = '' ) {
+
+		$classes = array();
+
+		if ( ! empty( $class ) ) {
+			if ( !is_array( $class ) )
+				$class = preg_split( '#\s+#', $class );
+			$classes = array_merge( $classes, $class );
+		} else {
+			// Ensure that we always coerce class to being an array.
+			$class = array();
+		}
+
+		$classes = array_map( 'esc_attr', $classes );
+		$classes = apply_filters( '_beacon_site_content_grid_class', $classes, $class );
+
+		return array_unique( $classes );
+	}
+endif;
+
+if ( ! function_exists( '_beacon_site_content_container_class' ) ) :
+	/**
+	 * Display the classes for the site content container wrapper element.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 */
+	function _beacon_site_content_container_class( $class = '' ) {
+		// Separates classes with a single space, collates classes for body element
+		echo 'class="' . join( ' ', _beacon_get_site_content_container_class( $class ) ) . '"';
+	}
+endif;
+
+if ( ! function_exists( '_beacon_get_site_content_container_class' ) ) :
+	/**
+	 * Retrieve the classes for the site content container element as an array.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @param string|array $class One or more classes to add to the class list.
+	 * @return array Array of classes.
+	 */
+	function _beacon_get_site_content_container_class( $class = '' ) {
+
+		$classes = array();
+
+		if ( ! empty( $class ) ) {
+			if ( !is_array( $class ) )
+				$class = preg_split( '#\s+#', $class );
+			$classes = array_merge( $classes, $class );
+		} else {
+			// Ensure that we always coerce class to being an array.
+			$class = array();
+		}
+
+		$classes = array_map( 'esc_attr', $classes );
+		$classes = apply_filters( '_beacon_site_content_container_class', $classes, $class );
+
+		return array_unique( $classes );
+	}
+endif;

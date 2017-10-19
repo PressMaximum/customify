@@ -14,8 +14,8 @@
 
 get_header(); ?>
 
-    <div class="_beacon-container">
-    <div class="_beacon-grid__equalHeight">
+    <div <?php _beacon_site_content_container_class(); ?>>
+    <div <?php _beacon_site_content_grid_class(); ?>>
 
         <main id="main" <?php _beacon_main_content_class(); ?>>
             <div class="content-inner">
@@ -51,8 +51,8 @@ get_header(); ?>
 
                 endif; ?>
 
-            </div>
-        </main>
+            </div><!-- #.content-inner -->
+        </main><!-- #main -->
 
 
 	    <?php do_action( '_beacon_sidebars' ); ?>
