@@ -126,6 +126,8 @@ function _beacon_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+    wp_add_inline_style( '_beacon-style', _Beacon_Customizer_Auto_CSS()->auto_css() );
 }
 add_action( 'wp_enqueue_scripts', '_beacon_scripts' );
 

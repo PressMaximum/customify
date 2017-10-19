@@ -24,6 +24,10 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     public $checkbox_label = '';
     public $limit ;
 
+    // For slider
+    public $min = 0;
+    public $max = 700;
+
     public $limit_msg = '';
 
     public $live_title_field; // for repeater
@@ -118,6 +122,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         $this->json['default']      = $this->default;
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
+
+        $this->json['min'] = $this->min;
+        $this->json['max'] = $this->max;
         // Devices switcher settings = true;
         $this->json['device_settings'] = $this->device_settings;
         if ( $this->setting_type == 'repeater' ) {
@@ -523,7 +530,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                         <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == '%' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="%">
                     </label>
                 </div>
-                <div class="_beacon-input-slider"></div>
+                <div data-min="{{ field.min }}" data-max="{{ field.max }}" class="_beacon-input-slider"></div>
                 <input type="number" class="_beacon--slider-input _beacon-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
             </div>
         </div>

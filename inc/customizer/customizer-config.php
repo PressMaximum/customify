@@ -27,7 +27,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device_settings' => true,
                 'sanitize_callback' => '',
                 'default'           => null,
-                'transport'			=> 'postMessage', // for selective refresh
                 'section' => '_beacon_section',
                 //'priority' => 22,
                 'theme_supports' => '',
@@ -47,6 +46,27 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'theme_supports' => '',
                 'title'          => __( 'Slider', '_beacon' ),
                 'description' => __( 'This is description' ),
+                'selector' => 'h2',
+                'css_format' => 'padding: {{value}}'
+            ),
+
+            array(
+                'name' => 'css_ruler',
+                'device_settings' => true,
+                'type'      => 'css_ruler',
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section'           => '_beacon_section',
+                'theme_supports' => '',
+                'title'          => __( 'CSS Ruler', '_beacon' ),
+                'description'   => __( 'This is description' ),
+                'selector' => 'h4',
+                'css_format' => array(
+                    'top'   => 'padding-top: {value}',
+                    'right' => 'padding-right: {value}',
+                    'bottom' => 'padding-bottom: {value}',
+                    'left'  => 'padding-left: {value}',
+                )
             ),
 
             array(
@@ -144,17 +164,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description'   => __( 'This is description' ),
             ),
 
-            array(
-                'name' => 'css_ruler',
-                'device_settings' => true,
-                'type'      => 'css_ruler',
-                'default'           => null,
-                'transport'			=> 'postMessage', // or refresh
-                'section'           => '_beacon_section',
-                'theme_supports' => '',
-                'title'          => __( 'CSS Ruler', '_beacon' ),
-                'description'   => __( 'This is description' ),
-            ),
+
 
             array(
                 'name' => 'multiple_dependence_text',

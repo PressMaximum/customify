@@ -6,6 +6,7 @@
  */
 
 require get_template_directory() . '/inc/customizer/customizer-config.php';
+require get_template_directory() . '/inc/customizer/customizer-auto-css.php';
 
 if ( ! class_exists( '_Beacon_Customizer' ) ) {
     class  _Beacon_Customizer {
@@ -204,8 +205,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         }
 
     }
-
-
 }
 
 if ( ! function_exists( '_Beacon_Customizer' ) ) {
@@ -222,8 +221,8 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
 
         private $control;
         private $setting;
-        private $font_icon_types;
-        private $has_icon = false;
+        private $fonts = array();
+        private $icons = array();
 
         function __construct( $control, $setting )
         {
@@ -288,7 +287,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             return 'rgba('.$red.','.$green.','.$blue.','.$alpha.')';
         }
 
-        private function _sanitize_media( $value ){
+        private function sanitize_media( $value ){
             $value = wp_parse_args( $value, array(
                 'id'    => '',
                 'url'   => '',
@@ -297,6 +296,17 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             $value['id'] = sanitize_text_field( $value['id'] );
             $value['url'] = sanitize_text_field( $value['url'] );
             $value['mime'] = sanitize_text_field( $value['mime'] );
+            return $value;
+        }
+
+        private function sanitize_icon( $value ){
+            $value = wp_parse_args( $value, array(
+                'type'    => '',
+                'icon'   => '',
+            ) );
+            $value['type'] = sanitize_text_field( $value['type'] );
+            $value['icon'] = sanitize_text_field( $value['icon'] );
+            $this->icons[ $value['type'] ] = true;
             return $value;
         }
 
@@ -350,6 +360,10 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             }
 
             return $value;
+        }
+
+        function end_sanitize(){
+           // update_option( '_beacon_customizer_config', true );
         }
 
         function sanitize( $value, $field = array() ){
@@ -438,13 +452,13 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                             foreach ( _Beacon_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
-                                    $value[ $device ] = $this->_sanitize_media( $value[ $device ] );
+                                    $value[ $device ] = $this->sanitize_media( $value[ $device ] );
                                 }
                             }
                         }
                     }
                     if ( ! $has_device ) {
-                        $value = $this->_sanitize_media( $value );
+                        $value = $this->sanitize_media( $value );
                     }
 
                     break;
@@ -549,6 +563,25 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     }
 
                     break;
+                case 'icon':
+
+                    $has_device = false;
+                    if ( $device_settings ) {
+                        if ( is_array( $value ) ) {
+                            $has_device = false;
+                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                                if ( isset( $value[ $device ] ) ) {
+                                    $has_device = true;
+                                    $value[ $device ] = $this->sanitize_icon( $value[ $device ] );
+                                }
+                            }
+                        }
+                    }
+                    if ( ! $has_device ) {
+                        $value = $this->sanitize_icon( $value );
+                    }
+
+                    break;
                 default:
                     $has_device = false;
                     if ( $device_settings ) {
@@ -568,6 +601,8 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
 
             }
 
+            $this->end_sanitize();
+
             return $value;
         }
     }
@@ -578,10 +613,6 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
         if ( ! is_array( $input ) ) {
             $input = json_decode( urldecode_deep( $input ), true );
         }
-
-        // Skip sanitize to test
-        //return $input;
-
         $control = $setting->manager->get_control( $setting->id );
         $s = new _Beacon_Sanitize_Input( $control, $setting );
         $input = $s->sanitize( $input );
