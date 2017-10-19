@@ -258,7 +258,11 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 <?php endif; ?>
                 <div class="_beacon--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' _beacon--repeater-items' : ''; ?>"></div>
                 <?php if ( $this->setting_type == 'repeater' ) { ?>
-                    <a href="#" class="_beacon--repeater-add-new"><?php _e( 'Add item', '_beacon' ); ?></a>
+                    <div class="_beacon--repeater-actions">
+                        <a href="#" class="_beacon--repeater-reorder" data-text="<?php _e( 'Reorder', '_beacon' ); ?>" data-done="<?php _e( 'Done', '_beacon' ); ?>"><?php _e( 'Reorder', '_beacon' ); ?></a>
+                        <button type="button" class="button _beacon--repeater-add-new"><?php _e( 'Add an item', '_beacon' ); ?></button>
+                    </div>
+
                 <?php } ?>
             </div>
             <?php
@@ -309,6 +313,10 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             <div class="_beacon--repeater-item">
                 <div class="_beacon--repeater-item-heading">
                     <span class="_beacon--repeater-live-title"></span>
+                    <div class="_beacon-nav-reorder">
+                        <span class="_beacon--down" tabindex="-1"><span class="screen-reader-text"><?php _e( 'Move Down', '_beacon' ) ?></span></span>
+                        <span class="_beacon--up" tabindex="0"><span class="screen-reader-text"><?php _e( 'Move Up', '_beacon' ) ?></span></span>
+                    </div>
                     <a href="#" class="_beacon--repeater-item-toggle"><span class="screen-reader-text"><?php _e( 'Close', '_beacon' ) ?></span></a>
                 </div>
                 <div class="_beacon--repeater-item-settings">
@@ -403,8 +411,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                         <# }  #>
                     </div>
                 </div>
-                <input type="text" class="_beacon-input _beacon--pick-icon _beacon--input-icon-name" placeholder="<?php esc_attr_e( 'Pick an icon', '_beacon' ); ?>" data-name="{{ field.name }}" value="{{ field.value.icon }}">
-                <span class="_beacon--icon-remove">
+                <input type="text" readonly class="_beacon-input _beacon--pick-icon _beacon--input-icon-name" placeholder="<?php esc_attr_e( 'Pick an icon', '_beacon' ); ?>" data-name="{{ field.name }}" value="{{ field.value.icon }}">
+                <span class="_beacon--icon-remove" title="<?php esc_attr_e( 'Remove', '_beacon' ); ?>">
                     <span class="dashicons dashicons-no-alt"></span>
                     <span class="screen-reader-text">
                     <?php _e( 'Remove', '_beacon' ) ?></span>
@@ -427,7 +435,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         #>
         <?php echo $this->field_header(); ?>
         <div class="_beacon-field-settings-inner">
-            <div class="_beacon--css-unit">
+            <div class="_beacon--css-unit" title="<?php esc_attr_e( 'Chose an unit', '_beacon' ); ?>">
                 <label class="<# if ( field.value.unit == 'px' || ! field.value.unit ){ #> _beacon--label-active <# } #>">
                     <?php _e( 'px', '_beacon' ); ?>
                     <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
@@ -462,7 +470,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                     <input type="number" class="_beacon-input _beacon-input-css change-by-js" data-name="{{ field.name }}-left" value="{{ field.value.left }}">
                     <span class="_beacon--small-label"><?php _e( 'Left', '_beacon' ); ?></span>
                 </span>
-                <label class="_beacon--css-ruler-link <# if ( field.value.link == 1 ){ #> _beacon--label-active <# } #>">
+                <label title="<?php esc_attr_e( 'Toggle values together', '_beacon' ); ?>" class="_beacon--css-ruler-link <# if ( field.value.link == 1 ){ #> _beacon--label-active <# } #>">
                     <input type="checkbox" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.link == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-link" value="1">
                 </label>
             </div>
@@ -622,7 +630,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                 </div>
                 <button type="button" class="button _beacon--add <# if ( url ) { #> _beacon--hide <# } #>"><?php _e( 'Add', '_beacon' ); ?></button>
                 <button type="button" class="button _beacon--change <# if ( ! url ) { #> _beacon--hide <# } #>"><?php _e( 'Change', '_beacon' ); ?></button>
-                <button type="button" class="button _beacon--remove"><?php _e( 'Remove', '_beacon' ); ?></button>
+                <button type="button" class="button _beacon--remove <# if ( ! url ) { #> _beacon--hide <# } #>"><?php _e( 'Remove', '_beacon' ); ?></button>
             </div>
         </div>
 

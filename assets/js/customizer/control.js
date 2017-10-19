@@ -155,6 +155,7 @@
                 showChangeBtn: function(){
                     $( '._beacon--add', this.preview ).addClass( '_beacon--hide' );
                     $( '._beacon--change', this.preview ).removeClass( '_beacon--hide' );
+                    $( '._beacon--remove', this.preview ).removeClass( '_beacon--hide' );
                 },
                 insertVideo: function(attachment ){
                     if ( typeof attachment !== "undefined" ) {
@@ -554,7 +555,6 @@
                     value = {};
                     _.each( control.params.fields, function( f ){
                         var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', control.container );
-                        console.log( $_field );
                         value[ f.name ] = control.getFieldValue( f.name, f, $_field );
                     } );
                     //console.log( 'GROUP_VALUE' );
@@ -761,6 +761,44 @@
                 containment: "parent"
             });
 
+            // Toggle Move
+            control.container.on( 'click', '._beacon--repeater-reorder', function ( e ) {
+                e.preventDefault();
+                $( '._beacon--repeater-items', control.container ).toggleClass('reorder-active');
+                $( '._beacon--repeater-add-new', control.container ).toggleClass('disabled');
+                if ( $( '._beacon--repeater-items', control.container ).hasClass( 'reorder-active' ) ) {
+                    $( this ).html( $( this ).data( 'done' ) );
+                } else {
+                    $( this ).html( $( this ).data( 'text' ) );
+                }
+            } );
+
+            // Move Up
+            control.container.on( 'click', '._beacon--repeater-item ._beacon--up', function( e ){
+                e.preventDefault();
+                var i = $( this ).closest('._beacon--repeater-item');
+                var index = i.index();
+                if ( index > 0 ) {
+                    var up =  i.prev();
+                    i.insertBefore( up );
+                    control.getValue();
+                }
+            } );
+
+            control.container.on( 'click', '._beacon--repeater-item ._beacon--down', function( e ){
+                e.preventDefault();
+                var n = $( '._beacon--repeater-items ._beacon--repeater-item', control.container ).length;
+                var i = $( this ).closest('._beacon--repeater-item');
+                var index = i.index();
+                if ( index < n - 1 ) {
+                    var down =  i.next();
+                    i.insertAfter( down );
+                    control.getValue();
+                }
+            } );
+
+
+
             // Add item when customizer loaded
             if ( _.isArray( control.params.value ) ) {
                 _.each(  control.params.value, function( itemValue ){
@@ -790,9 +828,11 @@
             // Add Item
             control.container.on( 'click', '._beacon--repeater-add-new', function(e){
                 e.preventDefault();
-                control.addRepeaterItem();
-                control.getValue();
-                control.limitRepeaterItems();
+                if ( ! $( this ).hasClass( 'disabled' ) ) {
+                    control.addRepeaterItem();
+                    control.getValue();
+                    control.limitRepeaterItems();
+                }
             } );
         }
 

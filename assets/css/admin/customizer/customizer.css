@@ -88,6 +88,25 @@
     ._beacon--device-select a._beacon--active {
       background: #EEEEEE; }
 
+._beacon--repeater-actions {
+  text-align: right; }
+  ._beacon--repeater-actions ._beacon--repeater-add-new {
+    margin-left: 15px; }
+    ._beacon--repeater-actions ._beacon--repeater-add-new:before {
+      content: "\f132";
+      display: inline-block;
+      position: relative;
+      left: -2px;
+      top: -1px;
+      font: 400 20px/1 dashicons;
+      vertical-align: middle;
+      -webkit-transition: all .2s;
+      transition: all .2s;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale; }
+  ._beacon--repeater-actions ._beacon--repeater-reorder {
+    line-height: 27px; }
+
 ._beacon--repeater-items {
   margin-top: 15px;
   margin-bottom: 15px; }
@@ -100,22 +119,70 @@
     display: inline-block; }
   ._beacon--repeater-items ._beacon--repeater-item-heading {
     background: #FFF;
-    padding: 10px;
+    padding: 15px;
     position: relative;
-    min-height: 18px;
-    display: block; }
+    display: block;
+    line-height: 1;
+    font-size: 1em; }
   ._beacon--repeater-items ._beacon--repeater-live-title {
     white-space: nowrap;
     margin-right: 35px;
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+    font-weight: 600;
+    line-height: 1; }
+  ._beacon--repeater-items ._beacon-nav-reorder {
+    display: none;
+    float: right;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    background-color: #fafafa; }
+    ._beacon--repeater-items ._beacon-nav-reorder > span {
+      position: relative;
+      overflow: hidden;
+      float: left;
+      display: block;
+      width: 33px;
+      height: 43px;
+      color: #82878c;
+      text-indent: -9999px;
+      cursor: pointer;
+      outline: 0; }
+      ._beacon--repeater-items ._beacon-nav-reorder > span:hover {
+        color: #191e23;
+        background: #eee; }
+      ._beacon--repeater-items ._beacon-nav-reorder > span:before {
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        font: 400 20px/43px dashicons;
+        text-align: center;
+        text-indent: 0;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale; }
+    ._beacon--repeater-items ._beacon-nav-reorder ._beacon--down:before {
+      content: "\f347"; }
+    ._beacon--repeater-items ._beacon-nav-reorder ._beacon--up:before {
+      content: "\f343"; }
+  ._beacon--repeater-items.reorder-active ._beacon-nav-reorder {
     display: block; }
+  ._beacon--repeater-items.reorder-active ._beacon--repeater-item-toggle {
+    display: none !important; }
   ._beacon--repeater-items ._beacon--repeater-item {
     border: 1px solid #ddd;
     background: #ffffff;
     margin-bottom: 10px; }
     ._beacon--repeater-items ._beacon--repeater-item:last-child {
       margin-bottom: 0px; }
+      ._beacon--repeater-items ._beacon--repeater-item:last-child ._beacon-nav-reorder > span._beacon--down {
+        background: #ffffff; }
+    ._beacon--repeater-items ._beacon--repeater-item:first-child ._beacon-nav-reorder > span._beacon--up {
+      background: #ffffff; }
     ._beacon--repeater-items ._beacon--repeater-item ._beacon--repeater-item-toggle {
       position: absolute;
       top: 0px;
@@ -128,7 +195,7 @@
       color: #555d66;
       box-shadow: none !important; }
       ._beacon--repeater-items ._beacon--repeater-item ._beacon--repeater-item-toggle:before {
-        font: 400 20px/37px dashicons;
+        font: 400 20px/2 dashicons;
         content: "\f140"; }
     ._beacon--repeater-items ._beacon--repeater-item ._beacon--repeater-item-settings {
       display: none; }
