@@ -59,7 +59,8 @@
 
         $.each( _Beacon_Preview_Config_Fields, function ( index, field ) {
             if ( index.indexOf( 'setting|' ) > -1 ) {
-                if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format ) ) {
+                console.log( field );
+                if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format )  && field.selector ) {
                     console.log( 'Selector' , field.selector  );
                     $document.on( 'click', field.selector, function(){
                         console.log( 'field.selector-Click', field.selector );

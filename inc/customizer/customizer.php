@@ -194,6 +194,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                             );
 
                             if ( $args['css_format'] ) {
+                                $selective_refresh['selector'] = '#_beacon-style-inline-css';
                                 $selective_refresh['render_callback'] = '_Beacon_Customizer_Auto_CSS';
                             }
 

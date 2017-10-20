@@ -66,8 +66,8 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'theme_supports' => '',
                 'title'          => __( 'Slider', '_beacon' ),
                 'description' => __( 'This is description' ),
-                'selector' => 'h2',
-                'css_format' => 'padding: {{value}}'
+                'selector' => 'h4',
+                'css_format' => 'font-size: {{value}}'
             ),
 
             array(
