@@ -24,8 +24,8 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'text',
                 'type' => 'text',
-                'device_settings' => true,
-                'sanitize_callback' => '',
+                //'device_settings' => true,
+                //'sanitize_callback' => '',
                 'default'           => null,
                 'section' => '_beacon_section',
                 //'priority' => 22,
@@ -33,6 +33,26 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device' => 'mobile',
                 'title'          => __( 'Text', '_beacon' ),
                 'description' => __( 'This is description' ),
+
+
+                'selector' => '._test_text1',
+                'render_callback' => '_test_1_render_callback'
+            ),
+
+            array(
+                'name' => 'text2',
+                'type' => 'text',
+                'device_settings' => true,
+                'sanitize_callback' => '',
+                'default'           => null,
+                'section' => '_beacon_section',
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => __( 'Text 2 Inside the Text', '_beacon' ),
+                'description' => __( 'This is description' ),
+
+                //'selector' => '._test_text_2',
+                //'render_callback' => '_test_2_render_callback'
             ),
 
             array(
@@ -62,10 +82,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description'   => __( 'This is description' ),
                 'selector' => 'h4',
                 'css_format' => array(
-                    'top'   => 'padding-top: {value}',
-                    'right' => 'padding-right: {value}',
-                    'bottom' => 'padding-bottom: {value}',
-                    'left'  => 'padding-left: {value}',
+                    'top'    => 'padding-top: {{value}}',
+                    'right'  => 'padding-right: {{value}}',
+                    'bottom' => 'padding-bottom: {{value}}',
+                    'left'   => 'padding-left: {{value}}',
                 )
             ),
 

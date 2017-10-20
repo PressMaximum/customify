@@ -11,7 +11,8 @@
 
 ._beacon-field-heading ._beacon-devices {
   display: inline-block;
-  margin-left: 10px; }
+  margin-left: 0px;
+  float: right; }
   ._beacon-field-heading ._beacon-devices button {
     cursor: pointer;
     background: 0 0;
@@ -61,32 +62,6 @@
 
 .preview-mobile ._beacon-field-settings-inner._beacon--for-mobile {
   display: block; }
-
-.customize-control-_beacon-device_select {
-  display: none !important; }
-
-._beacon--device-select {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  z-index: 20;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  padding: 5px 0 0; }
-  ._beacon--device-select a {
-    padding: 5px 10px;
-    border: 1px solid #ddd;
-    background: #ddd;
-    border-bottom: 0px none;
-    display: block;
-    margin-bottom: -1px;
-    margin-right: 10px;
-    text-decoration: none;
-    outline: none !important;
-    box-shadow: none !important;
-    color: #555d66; }
-    ._beacon--device-select a._beacon--active {
-      background: #EEEEEE; }
 
 ._beacon--repeater-actions {
   text-align: right; }

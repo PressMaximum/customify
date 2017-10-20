@@ -15,7 +15,8 @@ $text_color: #555d66;
     }
     ._beacon-devices {
         display: inline-block;
-        margin-left: 10px;
+        margin-left: 0px;
+        float: right;
         button {
             cursor: pointer;
             background: 0 0;
@@ -80,35 +81,6 @@ $text_color: #555d66;
     }
 }
 
-.customize-control-_beacon-device_select {
-    display: none !important;
-}
-._beacon--device-select {
-    display: flex;
-    z-index: 20;
-    //background:  #EEEEEE;
-    border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    //margin-left: -10px;
-    //margin-right: -10px;
-    padding: 5px 0 0;
-    a {
-        padding: 5px 10px;
-        border: 1px solid #ddd;
-        background: #ddd;
-        border-bottom: 0px none;
-        display: block;
-        margin-bottom: -1px;
-        margin-right: 10px;
-        text-decoration: none;
-        outline: none !important;
-        box-shadow: none !important;
-        color: $text_color;
-        &._beacon--active {
-            background: #EEEEEE;
-        }
-    }
-}
 
 ._beacon--settings-fields {
 

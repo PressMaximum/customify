@@ -32,6 +32,38 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 $_config = apply_filters( '_beacon/customizer/config', array() );
                 $config = array();
                 foreach ( $_config as $f ) {
+
+                    $f = wp_parse_args( $f, array(
+
+                        'priority'    => null,
+                        'title'       => null,
+                        'label'       => null,
+                        'name'        => null,
+                        'type'        => null,
+                        'description' => null,
+                        'capability' => null,
+
+                        'device' => null,
+                        'device_settings' => null,
+
+                        // For settings
+                        'sanitize_callback'     => '_beacon_sanitize_customizer_input',
+                        'sanitize_js_callback'  => null,
+                        'theme_supports'        => null,
+                        //'transport'             => 'postMessage', // refresh
+                        'default' => null,
+
+                        // for selective refresh
+                        'selector'        => null,
+                        'render_callback' => null,
+                        'css_format'      => null,
+
+                        // For control
+                        'active_callback' => null,
+
+                    ) );
+
+
                     if ( ! isset( $f['type'] ) )  {
                         $f['type'] = null;
                     }
@@ -78,6 +110,14 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             }
         }
 
+        function get_field_setting( $key ){
+            $config = self::get_config();
+            if ( isset($config['setting|'.$key] ) ) {
+                return $config['setting|'.$key];
+            }
+            return false;
+        }
+
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
@@ -97,15 +137,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             }
 
             foreach ( self::get_config() as $args ) {
-                $args = wp_parse_args( $args, array(
-                    'priority'    => null,
-                    'title'       => null,
-                    'label'       => null,
-                    'name'        => null,
-                    'type'        => null,
-                    'description' => null,
-                    'capability' => null,
-                ) );
                 switch (  $args['type'] ) {
                     case  'panel':
                         $name = $args['name'];
@@ -130,34 +161,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         $wp_customize->add_section( $name, $args );
                         break;
                     default:
-
-                        $args = wp_parse_args( $args, array(
-                            'priority'    => null,
-                            'title'       => null,
-                            'label'       => null,
-                            'name'        => null,
-                            'type'        => null,
-                            'description' => null,
-                            'capability' => null,
-
-                            'device' => null,
-
-                            // For settings
-                            'sanitize_callback'     => '_beacon_sanitize_customizer_input',
-                            'sanitize_js_callback'  => null,
-                            'theme_supports'        => null,
-                            //'transport'             => 'postMessage', // refresh
-                            'default' => null,
-
-                            // for selective refresh
-                            'selector'        => null,
-                            'render_callback' => null,
-
-                            // For control
-                            'active_callback' => null,
-
-                        ) );
-
 
                        $settings_args = array(
                            'sanitize_callback' => $args['sanitize_callback'],
@@ -184,17 +187,26 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                        }
 
                         $selective_refresh = null;
-                        if ( $args['selector'] ) {
+                        if ( $args['selector'] && ( $args['render_callback'] || $args['css_format'] ) ) {
                             $selective_refresh= array(
                                 'selector'  => $args['selector'],
                                 'render_callback' => $args['render_callback'],
                             );
+
+                            if ( $args['css_format'] ) {
+                                $selective_refresh['render_callback'] = '_Beacon_Customizer_Auto_CSS';
+                            }
+
+                            $settings_args['transport'] = 'postMessage';
                         }
                         unset( $args['default'] );
+
 
                         $wp_customize->add_setting( $name, $settings_args );
                         $wp_customize->add_control( new _Beacon_Customizer_Control( $wp_customize, $name, $args ));
                         if ( $selective_refresh ) {
+
+
                             $wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
                         }
 
@@ -206,6 +218,8 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
     }
 }
+
+
 
 if ( ! function_exists( '_Beacon_Customizer' ) ) {
     function _Beacon_Customizer(){
@@ -623,6 +637,27 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
 }
 
 
+function _test_1_render_callback( $partial = false ){
+    echo '<div class="_test_text1">';
+
+    if( $partial ) {
+        $control_settings = $partial->component->manager->get_control($partial->id);
+        echo '<pre>';
+        var_dump($control_settings);
+        echo '</pre>';
+
+    }
+
+    $html = '<h2 class="dsadsadsa">'.esc_html( _Beacon_Customizer()->get_setting( 'text' ) ).'<div class="_test_text_2">'.esc_html( _Beacon_Customizer()->get_setting( 'text2' ) ).'</div></h2>';
+    echo $html;
+
+    echo '</div>';
+}
+function _test_2_render_callback(){
+    $html = '<div class="_test_text_2">'.esc_html( get_theme_mod( 'text2' ) ).'</div>';
+    echo $html;
+}
+
 
 /**
  * Render the site title for the selective refresh partial.
@@ -647,5 +682,7 @@ function _beacon_customize_partial_blogdescription() {
  */
 function _beacon_customize_preview_js() {
 	wp_enqueue_script( '_beacon-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array( 'customize-preview' ), '20151215', true );
+	wp_localize_script( '_beacon-customizer', '_Beacon_Preview_Config_Fields', _Beacon_Customizer::get_config() );
+
 }
 add_action( 'customize_preview_init', '_beacon_customize_preview_js' );
