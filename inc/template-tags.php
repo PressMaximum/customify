@@ -102,3 +102,89 @@ if ( ! function_exists( '_beacon_entry_footer' ) ) :
 endif;
 
 
+if ( ! function_exists( '_beacon_comment' ) ) :
+	/**
+	 * Template for comments and pingbacks.
+	 *
+	 * To override this walker in a child theme without modifying the comments template
+	 * simply create your own _beacon_comment(), and that function will be used instead.
+	 *
+	 * Used as a callback by wp_list_comments() for displaying the comments.
+	 *
+	 * @return void
+	 */
+	function _beacon_comment( $comment, $args, $depth ) {
+		$GLOBALS['comment'] = $comment;
+		switch ( $comment->comment_type ) :
+			case 'pingback' :
+			case 'trackback' :
+				// Display trackbacks differently than normal comments.
+				?>
+				<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
+				<p><?php _e( 'Pingback:', '_beacon' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', '_beacon' ), '<span class="edit-link">', '</span>' ); ?></p>
+				<?php
+				break;
+			default :
+				// Proceed with normal comments.
+				global $post;
+				?>
+			<li <?php comment_class(); ?> id="li-comment-<?php comment_ID(); ?>">
+				<article id="comment-<?php comment_ID(); ?>" class="comment clearfix">
+					<div class="comment-image">
+						<?php echo get_avatar( $comment, 60 ); ?>
+					</div>
+					<div class="comment-reply">
+						<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', '_beacon' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+					</div>
+					<div class="comment-wrap">
+						<header class="comment-meta">
+							<?php
+							printf( '<cite class="comment-author fn vcard">%1$s %2$s</cite>',
+								get_comment_author_link(),
+								// If current post author is also comment author, make it known visually.
+								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author">' . __( 'Post author', '_beacon' ) . '</span>' : ''
+							);
+							?>
+							<div class="comment-time-wrap">
+								<?php
+								printf( '<a class="comment-time" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
+									esc_url( get_comment_link( $comment->comment_ID ) ),
+									get_comment_time( 'c' ),
+									/* translators: 1: date, 2: time */
+									sprintf( __( '%1$s', '_beacon' ), get_comment_date() )
+								);
+								?>
+							</div>
+							<?php edit_comment_link( __( 'Edit', '_beacon' ), '<span class="edit-link">', '</span>' ); ?>
+						</header><!-- .comment-meta -->
+
+						<?php if ( '0' == $comment->comment_approved ) : ?>
+							<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', '_beacon' ); ?></p>
+						<?php endif; ?>
+
+						<div class="comment-content entry-content">
+							<?php comment_text(); ?>
+							<?php  ?>
+						</div><!-- .comment-content -->
+
+					</div><!--/comment-wrapper-->
+
+				</article><!-- #comment-## -->
+				<?php
+				break;
+		endswitch; // end comment_type check
+	}
+endif;
+
+if ( ! function_exists( '_beacon_comment_field_to_bottom' ) ) :
+	/**
+	 * Move the comment content field to bottom of the respond form.
+	 */
+	function _beacon_comment_field_to_bottom( $fields ) {
+		$comment_field = $fields['comment'];
+		unset( $fields['comment'] );
+		$fields['comment'] = $comment_field;
+		return $fields;
+	}
+	add_filter( 'comment_form_fields', '_beacon_comment_field_to_bottom' );
+endif;

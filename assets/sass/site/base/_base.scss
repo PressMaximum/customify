@@ -10,6 +10,7 @@
 # Media
 # Media: Captions
 # Media: Galleries
+# Comments
 
 /*--------------------------------------------------------------
 # Typography
@@ -70,10 +71,14 @@ dfn, cite, em, i {
 
 blockquote {
     padding: 0px ms(1);
+    margin: ms(1) ms(2);
     border-left: 3px solid $color_border;
     font-style: italic;
     font-weight: 200;
     font-size: 1.2em;
+    p:last-of-type {
+        margin-bottom: 0px;
+    }
 }
 
 address {
@@ -494,4 +499,134 @@ object {
 
 .gallery-caption {
     display: block;
+}
+
+/*--------------------------------------------------------------
+## Comments
+--------------------------------------------------------------*/
+.comments-area {
+    .comments-title {
+        @extend h3;
+    }
+}
+.comment-list {
+    list-style: none;
+    margin: 0;
+    ul {
+        list-style: none;
+        margin: 0;
+    }
+    .children li.comment {
+        padding-left: 30px;
+        @include mq(min-md) {
+            padding-left: 85px;
+            border-left: 1px solid $color_border;
+            position: relative;
+            &:after {
+                content: "";
+                display: block;
+                position: absolute;
+                float: left;
+                top: ms(2);
+                left: 0;
+                width: 25px;
+                height: 1px;
+                background-color: $color_border;
+            }
+        }
+        @include mq(max-sm) {
+            li.comment li.comment li.comment {
+                padding-left: 0px;
+            }
+        }
+    }
+}
+article.comment {
+    padding: ms(2) 0;
+    margin-bottom: ms(2);
+    .comment-content {
+        p:last-of-type {
+            margin-bottom: 0px;
+        }
+    }
+    .comment-image {
+        float: left;
+    }
+    .comment-reply {
+        float: left;
+        clear: left;
+        line-height: 1;
+        a {
+            font-size: 90%;
+            color: $color_meta;
+            &:hover {
+                color: $color_primary;
+            }
+        }
+    }
+    .comment-meta {
+        margin-bottom: ms(-1);
+    }
+    .comment-time {
+        color: $color_meta;
+        font-size: 90%;
+        &:hover {
+            color: $color_primary;
+        }
+    }
+    .comment-wrap {
+        margin-left: 85px;
+    }
+    .comment-author {
+        font-weight: 500;
+        font-size: 140%;
+        line-height: 1;
+        display: inline-block;
+        font-style: normal;
+        a {
+            color: $color_text;
+            &:hover {
+                color: $color_primary;
+            }
+        }
+    }
+    .comment-post-author {
+        border: 1px solid $color_primary;
+        font-size: 13px;
+        padding: 2px 6px 3px;
+        border-radius: 2px;
+        color: $color_primary;
+        position: relative;
+        top: -3px;
+        margin-left: 4px;
+    }
+}
+#respond {
+    .comment-form-author,
+    .comment-form-email,
+    .comment-form-url {
+        @include mq(min-md) {
+            width: 29.4117647059%;
+            margin-right: 5.8823529412%;
+            float: left;
+        }
+        input {
+            width: 100%;
+        }
+    }
+    .comment-form-url {
+        margin-right: 0px;
+    }
+    #cancel-comment-reply-link {
+        border: 1px solid $color_primary;
+        font-size: 13px;
+        padding: 2px 6px 3px;
+        border-radius: 2px;
+        color: $color_primary;
+        position: relative;
+        top: -4px;
+        margin-left: 4px;
+
+    }
+
 }
