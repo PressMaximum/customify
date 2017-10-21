@@ -203,19 +203,17 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $css['position'] = 'background-position: center center;';
             }
 
-            if ( $value['cover'] ) {
-                $css['cover'] = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
-            }
+
 
             switch ( $value['repeat'] ) {
                 case 'no-repeat':
-                    $css['repeat'] = 'background-attachment: no-repeat;';
+                    $css['repeat'] = 'background-repeat: no-repeat;';
                     break;
                 case 'repeat-x':
-                    $css['repeat'] = 'background-attachment: repeat-x;';
+                    $css['repeat'] = 'background-repeat: repeat-x;';
                     break;
                 case 'repeat-y':
-                    $css['repeat'] = 'background-attachment: repeat-y;';
+                    $css['repeat'] = 'background-repeat: repeat-y;';
                     break;
                 default:
 
@@ -229,6 +227,11 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $css['attachment'] = 'background-attachment: fixed;';
                     break;
                 default:
+            }
+
+            if ( $value['cover'] ) {
+                $css['cover'] = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
+                $css['attachment'] = 'background-attachment: fixed;';
             }
 
             return join( "\n\t",  $css );

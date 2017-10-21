@@ -340,7 +340,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'name' => 'image',
                         'type' => 'image',
                         'label' => __( 'Image', '_beacon' ),
-                        //'device_settings' => true,
                     ),
                     array(
                         'name' => 'cover',
@@ -387,7 +386,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'label' => __( 'Background Attachment', '_beacon' ),
                         'required' => array(
                             array('image', 'not_empty', ''),
-                            // array('style', '!=', 'cover' ),
+                            array('cover', '!=', '1' ),
                         ),
                         'choices' => array(
                             'default' => __( 'Default', '_beacon' ),

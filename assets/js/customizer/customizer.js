@@ -63,8 +63,8 @@
                 if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format )  && field.selector ) {
                     console.log( 'Selector' , field.selector  );
                     $document.on( 'click', field.selector, function(){
-                        console.log( 'field.selector-Click', field.selector );
-                        defaultTarget.wp.customize.control( field.name ).focus();
+                        //console.log( 'field.selector-Click', field.selector );
+                       // defaultTarget.wp.customize.control( field.name ).focus();
                     } );
                 }
             }

@@ -7,9 +7,7 @@
 
         // When we're finished loading continue processing
         ready: function() {
-
             var control = this;
-            console.log( 'Control Params '+control.id+': ', control.params );
             control.init();
         },
         type: '_beacon',
@@ -299,6 +297,22 @@
                     break;
                 case '!=':
                     equal = ( value1 != value2 ) ? true : false;
+                    break;
+                case 'empty':
+                    var _v =  _.clone( value1 );
+                    if ( _.isObject( _v ) || _.isArray( _v ) ) {
+                        _.each( _v, function ( v, i ) {
+                            if ( _.isEmpty( v ) ) {
+                                delete _v[ i ];
+                            }
+                        } );
+
+                        equal = _.isEmpty( _v ) ? true: false;
+                    } else {
+                        equal = _.isNull( _v ) || _v == '' ? true : false;
+                    }
+
+
                     break;
                 case 'not_empty':
                     var _v =  _.clone( value1 );
@@ -667,8 +681,6 @@
                 if ( ! _.isObject( control.params.value ) ) {
                     control.params.value = {};
                 }
-
-                console.log( 'Group_value', control.params.value );
 
                 _.each( control.devices , function( device, device_index ){
                     var $group_device = $( '<div class="_beacon-group-device-fields _beacon-field-settings-inner _beacon--for-'+device+'"></div>' );
