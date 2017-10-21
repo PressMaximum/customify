@@ -8,6 +8,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
         private $setting;
         private $fonts = array();
         private $icons = array();
+        private $skip_devices = false;
 
         function __construct( $control, $setting )
         {
@@ -108,7 +109,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             return $value;
         }
 
-        private function sanitize_group( $value ){
+        private function sanitize_group( $value, $skip_device = false ){
 
             if ( ! is_array( $value ) ) {
                 $value = array();
@@ -182,7 +183,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             switch ( $type ) {
                 case 'color':
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             foreach ( _Beacon_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
@@ -199,6 +200,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'group':
                     $has_device = false;
                     if ( $device_settings ) {
+                        $this->skip_devices = true;
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -208,6 +210,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                                 }
                             }
                         }
+                        $this->skip_devices = false;
                     }
                     if ( ! $has_device ) {
                         $value = $this->sanitize_group( $value );
@@ -216,7 +219,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'repeater':
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -239,7 +242,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'autio':
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -282,13 +285,13 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     }
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
-                                    if ( ! isset( $choices[ $value[ $device ] ] ) ) {
+                                    if ( ! isset( $choices[ (string ) $value[ $device ] ] ) ) {
                                         if ( is_array( $default ) && isset( $default[ $device ] ) ) {
                                             $value[ $device ] = $default;
                                         } else {
@@ -300,7 +303,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                         }
                     }
                     if ( ! $has_device ) {
-                        if ( ! isset( $choices[ $value ] ) ) {
+                        if ( is_array( $value ) || ! isset( $choices[ $value  ] ) ) {
                             $value = $default;
                         }
                     }
@@ -308,7 +311,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     break;
                 case 'checkbox':
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -327,7 +330,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'css_ruler':
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -346,7 +349,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'slider':
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -365,7 +368,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 case 'icon':
 
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {
@@ -383,7 +386,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     break;
                 default:
                     $has_device = false;
-                    if ( $device_settings ) {
+                    if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
                             foreach ( _Beacon_Customizer()->devices as $device ) {

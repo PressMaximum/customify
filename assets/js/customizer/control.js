@@ -301,7 +301,15 @@
                     equal = ( value1 != value2 ) ? true : false;
                     break;
                 case 'not_empty':
-                    equal = _.isEmpty( value2 );
+                    var _v =  _.clone( value1 );
+                    if ( _.isObject( _v ) || _.isArray( _v ) ) {
+                        _.each( _v, function ( v, i ) {
+                            if ( _.isEmpty( v ) ) {
+                                delete _v[ i ];
+                            }
+                        } )
+                    }
+                    equal = _.isEmpty( _v ) ? false : true;
                     break;
                 default:
                     equal = ( value1 == value2 ) ? true : false;
@@ -330,10 +338,6 @@
                         check = control.compare( value, cond, cond_val );
                     }
 
-                    console.log( 'TEST value', value );
-                    console.log( 'TEST cond', cond );
-                    console.log( 'TEST cond_val', cond_val );
-
                 } else if ( _.isArray( test ) ) {
                     check  = true;
                     _.each( list, function( req ) {
@@ -353,9 +357,10 @@
                             check = false;
                         }
                     } );
+
                 }
             } catch  ( e ) {
-
+                console.log( 'Trying_test_errror', e  );
             }
 
 
@@ -574,12 +579,31 @@
             switch ( control.params.setting_type ) {
                 case 'group':
                     value = {};
-                    _.each( control.params.fields, function( f ){
-                        var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', control.container );
-                        value[ f.name ] = control.getFieldValue( f.name, f, $_field );
-                    } );
+
+                    if ( control.params.device_settings ) {
+                        _.each( control.devices, function( device ){
+                            var $area = $( '._beacon-group-device-fields._beacon--for-'+device, control.container );
+                            value[ device ] = {};
+                            var _value = {};
+                            _.each( control.params.fields, function( f ){
+                                var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', $area );
+                                _value[ f.name ] = control.getFieldValue( f.name, f, $_field );
+                            } );
+                            value[ device ] = _value;
+                            control.initConditional( $area, _value );
+
+                        } );
+                    } else {
+                        _.each( control.params.fields, function( f ){
+                            var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', control.container );
+                            value[ f.name ] = control.getFieldValue( f.name, f, $_field );
+                        } );
+
+                        control.initConditional( control.container, value );
+                    }
+
                     //console.log( 'GROUP_VALUE' );
-                    control.initConditional( control.container, value );
+
                     break;
                 case 'repeater':
                     value = [];
@@ -638,16 +662,46 @@
         },
         initGroup: function(){
             var control = this;
-
-            _.each( control.params.fields, function( f, index ){
-                var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
-                control.container.find( '._beacon--settings-fields' ).append( $fieldArea );
-                control.addField( f, $fieldArea );
-
-                if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
-                    control.addDeviceSwitchers( $fieldArea );
+            if ( control.params.device_settings ) {
+                control.container.find( '._beacon--settings-fields' ).addClass( '_beacon--multiple-devices' );
+                if ( ! _.isObject( control.params.value ) ) {
+                    control.params.value = {};
                 }
-            } );
+
+                console.log( 'Group_value', control.params.value );
+
+                _.each( control.devices , function( device, device_index ){
+                    var $group_device = $( '<div class="_beacon-group-device-fields _beacon-field-settings-inner _beacon--for-'+device+'"></div>' );
+                    control.container.find( '._beacon--settings-fields' ).append( $group_device );
+                    var device_value = {};
+                    if ( ! _.isUndefined( control.params.value[ device] ) ) {
+                        device_value = control.params.value[ device ];
+                    }
+                    if ( ! _.isObject( device_value ) ) {
+                        device_value = {};
+                    }
+
+                    _.each( control.params.fields, function( f, index ){
+                        var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
+                        $group_device.append( $fieldArea );
+                        f.device_settings = false;
+                        f.value = device_value[ f.name ];
+                        control.addField( f, $fieldArea );
+                    } );
+
+                });
+
+            } else {
+                _.each( control.params.fields, function( f, index ){
+                    var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
+                    control.container.find( '._beacon--settings-fields' ).append( $fieldArea );
+                    control.addField( f, $fieldArea );
+
+                    if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
+                        control.addDeviceSwitchers( $fieldArea );
+                    }
+                } );
+            }
 
             control.getValue( false );
         },
@@ -1048,7 +1102,7 @@
                 decodeValue = false;
             }
             var allValues = wpcustomize.get( );
-            console.log( 'ALL Control Values', allValues );
+           // console.log( 'ALL Control Values', allValues );
             _.each( allValues, function( value, id ){
                 var control = wpcustomize.control( id );
                 if ( ! _.isUndefined( control ) ) {
@@ -1056,7 +1110,7 @@
                         if ( ! _.isEmpty( control.params.required ) ) {
                             var check = false;
                             check = control.multiple_compare( control.params.required, allValues, decodeValue );
-                            console.log( 'Check C '+control.id, check );
+                            //console.log( 'Check C '+control.id, check );
                             if ( ! check ) {
                                 control.container.addClass( '_beacon--hide' );
                             } else {

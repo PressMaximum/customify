@@ -19,7 +19,7 @@
     border: none;
     height: 23px;
     padding: 0 3px;
-    margin: 0 0 0 4px;
+    margin: 0 0 0 1px;
     box-shadow: none;
     outline: none !important;
     -webkit-transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
@@ -41,6 +41,8 @@
 
 ._beacon--multiple-devices ._beacon-field-settings-inner {
   display: none; }
+  ._beacon--multiple-devices ._beacon-field-settings-inner ._beacon-field-settings-inner {
+    display: block; }
 
 .preview-desktop ._beacon-devices .preview-desktop {
   border-color: #191e23;

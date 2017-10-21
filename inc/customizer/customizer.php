@@ -42,7 +42,9 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         'name'        => null,
                         'type'        => null,
                         'description' => null,
+
                         'capability' => null,
+                        'mod' => null, // theme_mod || option default theme_mod
 
                         'device' => null,
                         'device_settings' => null,
@@ -64,7 +66,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
 
                     ) );
 
-
                     if ( ! isset( $f['type'] ) )  {
                         $f['type'] = null;
                     }
@@ -80,6 +81,13 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                             if ( $f['type'] == 'icon' ) {
                                 self::$has_icon = true;
                             }
+
+                            if ( isset( $f['fields'] ) ) {
+                                $types = wp_list_pluck( $f['fields'], 'type' );
+                                if ( in_array( 'icon', $types ) ) {
+                                    self::$has_icon = true;
+                                }
+                            }
                             $config['setting|'.$f['name']] = $f;
 
                     }
@@ -89,26 +97,62 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             return self::$config;
         }
 
+        /**
+         * Check if has icon field;
+         *
+         * @return bool
+         */
         function has_icon(){
             return self::$has_icon;
         }
 
-        function get_setting( $key, $device = 'desktop' ){
+        /**
+         *  Get Customizer setting.
+         *
+         * @param $name
+         * @param string $device
+         * @param bool $key
+         * @return array|bool|mixed|null|string|void
+         */
+        function get_setting( $name, $device = 'desktop', $key = false ){
             $config = self::get_config();
-            if ( isset( $config['setting|'.$key ] ) ) {
-                $default = isset( $config['setting|'.$key ]['default'] ) ? $config['setting|'.$key ]['default'] : false;
-                $value =  get_theme_mod( $key, $default );
+            $get_value = null;
+            if ( isset( $config['setting|'.$name ] ) ) {
+                $default = isset( $config['setting|'.$name ]['default'] ) ? $config['setting|'.$name ]['default'] : false;
+                if ( 'option' == $config['setting|'.$name]['mod'] ) {
+                    $value =  get_option( $name, $default );
+                } else {
+                    $value =  get_theme_mod( $name, $default );
+                }
+
+            } else {
+                $value =  get_theme_mod( $name, null );
+            }
+
+            if ( ! $key ) {
                 if ( $device != 'all' ) {
                     if ( is_array( $value ) && isset( $value[ $device ] ) ) {
-                        return $value[ $device ];
+                        $get_value =  $value[ $device ];
                     } else {
-                        return $value;
+                        $get_value =  $value;
                     }
+                } else {
+                    $get_value = $value;
                 }
-                return $value;
             } else {
-                return null;
+                $value_by_key = isset( $value[ $key ] ) ?  $value[ $key ]: false;
+                if ( $device != 'all' && is_array( $value_by_key ) ) {
+                    if ( is_array( $value_by_key ) && isset( $value_by_key[ $device ] ) ) {
+                        $get_value =  $value_by_key[ $device ];
+                    } else {
+                        $get_value =  $value_by_key;
+                    }
+                } else {
+                    $get_value = $value_by_key;
+                }
             }
+
+            return $get_value;
         }
 
 
@@ -120,6 +164,54 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             return false;
         }
 
+        function get_media( $value, $size = null ) {
+            if ( is_numeric( $value ) ) {
+                if ( ! $size ) {
+                    return wp_get_attachment_url( $value );
+                } else {
+                    $image_attributes = wp_get_attachment_image_src( $value = 8, $size );
+                    if ( $image_attributes ) {
+                        return $image_attributes[0];
+                    } else {
+                        return false;
+                    }
+                }
+            }elseif ( is_string( $value ) ) {
+                return $value;
+            } elseif ( is_array( $value ) ) {
+                $value = wp_parse_args( $value, array(
+                    'id'    => '',
+                    'url'   => '',
+                    'mime'  => ''
+                ) );
+
+                $url = '';
+
+                if ( strpos( $value['mime'], 'image/' ) !== false ) {
+                    $image_attributes = wp_get_attachment_image_src( $value = 8, $size );
+                    if ( $image_attributes ) {
+                        $url =  $image_attributes[0];
+                    }
+                } else {
+                    $url = wp_get_attachment_url( $value );
+                }
+
+                if ( ! $url ) {
+                    $url = $value['value'];
+                }
+
+                return $url;
+
+            }
+
+            return false;
+        }
+
+        /**
+         * Register Customize Settings
+         *
+         * @param $wp_customize
+         */
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
@@ -164,29 +256,32 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         break;
                     default:
 
-                       $settings_args = array(
+                        $args['setting_type'] = $args['type'];
+                        $settings_args = array(
                            'sanitize_callback' => $args['sanitize_callback'],
                            'sanitize_js_callback' => $args['sanitize_js_callback'],
                            'theme_supports' => $args['theme_supports'],
                            //'transport' => $args['transport'],
                            'default' => $args['default'],
-                       );
+                           'type' => $args['mod'],
+                        );
                         $settings_args['transport'] = 'refresh';
                         if ( ! $settings_args['sanitize_callback'] ) {
                             $settings_args['sanitize_callback'] = '_beacon_sanitize_customizer_input';
                         }
 
-                       foreach ( $settings_args as $k => $v ) {
+                        foreach ( $settings_args as $k => $v ) {
                            unset( $args[ $k ] );
-                       }
+                        }
+                        unset( $args['mod'] );
 
-                       $name = $args['name'];
-                       unset( $args['name'] );
-                       $args['setting_type'] = $args['type'];
-                       unset( $args['type'] );
-                       if ( ! $args['label'] ) {
+                        $name = $args['name'];
+                        unset( $args['name'] );
+
+                        unset( $args['type'] );
+                        if ( ! $args['label'] ) {
                            $args['label'] =  $args['title'];
-                       }
+                        }
 
                         $selective_refresh = null;
                         if ( $args['selector'] && ( $args['render_callback'] || $args['css_format'] ) ) {
@@ -208,8 +303,6 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         $wp_customize->add_setting( $name, $settings_args );
                         $wp_customize->add_control( new _Beacon_Customizer_Control( $wp_customize, $name, $args ));
                         if ( $selective_refresh ) {
-
-
                             $wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
                         }
 

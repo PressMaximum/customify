@@ -23,7 +23,7 @@ $text_color: #555d66;
             border: none;
             height: 23px;
             padding: 0 3px;
-            margin: 0 0 0 4px;
+            margin: 0 0 0 1px;
             -webkit-box-shadow: none;
             box-shadow: none;
             outline: none !important;
@@ -55,6 +55,9 @@ $text_color: #555d66;
 }
 ._beacon--multiple-devices ._beacon-field-settings-inner {
     display: none;
+    ._beacon-field-settings-inner {
+        display: block;
+    }
 }
 .preview-desktop  {
     ._beacon-devices .preview-desktop{ border-color: #191e23; color: #191e23; }

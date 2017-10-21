@@ -134,7 +134,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             $code = '';
             if ( $field['device_settings'] ) {
                 foreach ( _Beacon_Customizer()->devices as $device ) {
-                    $value = _Beacon_Customizer()->get_setting(  $field['name'], $device );
+                    $value = _Beacon_Customizer()->get_setting( $field['name'], $device );
                     $_c = $this->setup_color( $value, $field['css_format'] );
                     if ( $_c ) {
                         if ( 'desktop' == $device ) {
@@ -155,22 +155,59 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             return $code;
         }
 
+        function setup_background( $value ) {
+            $value = wp_parse_args( $value, array(
+                'color' => '',
+                'image' => '',
+                'style' => '',
+                'repeat' => ''
+            ) );
+        }
+
+        function background( $field ){
+            if ( $field['device_settings'] ) {
+                foreach ( _Beacon_Customizer()->devices as $device ) {
+                    $value = _Beacon_Customizer()->get_setting( $field['name'], $device );
+                    $_c = '';
+                    if ( $_c ) {
+                        if ( 'desktop' == $device ) {
+                            $code .= "{$field['selector']} { {$_c} }";
+                        } else {
+                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                        }
+
+                    }
+                }
+            } else {
+                $value = _Beacon_Customizer()->get_setting( $field['name'] );
+
+            }
+
+        }
+
         function auto_css( $partial = false ){
             $config = _Beacon_Customizer::get_config();
             //  $control_settings = $partial->component->manager->get_control($partial->id);
             $css_code = '';
             foreach ( $config as $field ) {
+                $field_css = '';
                 switch ( $field['type'] ) {
                     case 'css_ruler':
-                        $css_code .= $this->css_ruler( $field );
+                        $field_css .= $this->css_ruler( $field );
                         break;
                     case 'slider':
-                        $css_code .= $this->slider( $field );
+                        $field_css .= $this->slider( $field );
                         break;
                     case 'color':
-                        $css_code .= $this->color( $field );
-                        break;
+                        $field_css .= $this->color( $field );
+                    break;
+                    default:
+                        if ( isset( $field['css_format'] ) && $field['css_format'] == 'background' ) {
+                            $field_css .= $this->background( $field );
+                        }
                 }
+                $css_code .= apply_filters('_beacon/customizer/auto_css',  $field_css, $field );
+
             }
 
             return $css_code;

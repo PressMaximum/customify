@@ -324,6 +324,9 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description'    => __( 'This is description' ),
                 'live_title_field' => 'title',
                 'field_class' => '_beacon-background-field',
+                'selector' => 'body',
+                'css_format' => 'background',
+                'device_settings' => true,
                 'default' => array(
 
                 ),
@@ -338,8 +341,42 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'name' => 'image',
                         'type' => 'image',
                         'label' => __( 'Image', '_beacon' ),
-                        'device_settings' => true,
+                        //'device_settings' => true,
                     ),
+                    array(
+                        'name' => 'style',
+                        'type' => 'select',
+                        'label' => __( 'Style', '_beacon' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default' => __( 'Style', '_beacon' ),
+                            'cover' => __( 'Cover', '_beacon' ),
+                            'center' => __( 'Center', '_beacon' ),
+                            'top_left' => __( 'Top Left', '_beacon' ),
+                            'top_right' => __( 'Top Right', '_beacon' ),
+                            'top_center' => __( 'Top Center', '_beacon' ),
+                            'bottom_left' => __( 'Bottom Left', '_beacon' ),
+                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
+                            'bottom_right' => __( 'Bottom Right', '_beacon' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background repeat', '_beacon' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            array('style', '!=', 'cover' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Default', '_beacon' ),
+                            'no-repeat' => __( 'No-repeat', '_beacon' ),
+                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
+                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                        ),
+                    ),
+
                 )
             ),
 

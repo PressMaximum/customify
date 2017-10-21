@@ -136,8 +136,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
 
-
-
         if ( $this->setting_type == 'repeater' ) {
             $this->json['l10n'] = array(
                 'untitled' => __( 'Untitled', '_beacon' )
@@ -156,7 +154,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         //$this->json['link']       = $this->get_link();
     }
 
-    
+
     /**
      * Renders the control wrapper and calls $this->render_content() for the internals.
      *
