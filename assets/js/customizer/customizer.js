@@ -50,16 +50,16 @@
         var $document = $( document );
 
         // Get all values
-        console.log( 'ALL Control Values', api.get( ) );
+       // console.log( 'ALL Control Values', api.get( ) );
         var defaultTarget = window.parent === window ? null : window.parent;
         // Get a control
        // console.log( 'Test Get control',  defaultTarget.wp.customize.control( 'repeater' ) );
-        console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );
+        //console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );
 
 
         $.each( _Beacon_Preview_Config_Fields, function ( index, field ) {
             if ( index.indexOf( 'setting|' ) > -1 ) {
-                console.log( field );
+                //console.log( field );
                 if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format )  && field.selector ) {
                     console.log( 'Selector' , field.selector  );
                     $document.on( 'click', field.selector, function(){

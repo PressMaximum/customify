@@ -21,6 +21,39 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description' => __( 'This is section description' ),
             ),
 
+
+            array(
+                'name' => 'select',
+                'type' => 'select',
+                //'device_settings' => true,
+                'default' => '',
+                'section'     => '_beacon_section',
+                //'priority' => 22,
+                'title'          => __( 'Select', '_beacon' ),
+                'description'    => __( 'Select 2 to show Dependence field' ),
+                'choices' => array(
+                    '1' => __( 'One', '_beacon' ),
+                    '2' => __( 'Two', '_beacon' ),
+                    '3' => __( 'Three', '_beacon' ),
+                )
+            ),
+
+            array(
+                'name' => 'dependence_text',
+                'type' => 'text',
+                'device_settings' => true,
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section' => '_beacon_section',
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => __( 'Dependence Text Field', '_beacon' ),
+                'description'   => __( 'Show only select=2' ),
+                'required'      => array( 'select','==','2' )
+            ),
+
+
+
             array(
                 'name' => 'text',
                 'type' => 'text',
@@ -126,21 +159,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'checkbox_label' => __( 'This is checkbox label' ),
             ),
 
-            array(
-                'name' => 'select',
-                'type' => 'select',
-                'device_settings' => true,
-                'default' => '',
-                'section'     => '_beacon_section',
-                //'priority' => 22,
-                'title'          => __( 'Select', '_beacon' ),
-                'description'    => '',
-                'choices' => array(
-                    '1' => __( 'One', '_beacon' ),
-                    '2' => __( 'Two', '_beacon' ),
-                    '3' => __( 'Three', '_beacon' ),
-                )
-            ),
+
 
             array(
                 'name' => 'radio',
@@ -158,19 +177,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 )
             ),
 
-            array(
-                'name' => 'dependence_text',
-                'type' => 'text',
-                'device_settings' => true,
-                'default'           => null,
-                'transport'			=> 'postMessage', // or refresh
-                'section' => '_beacon_section',
-                //'priority' => 22,
-                'theme_supports' => '',
-                'title'          => __( 'Dependence Text Field', '_beacon' ),
-                'description'   => __( 'Show only select=2' ),
-                'required'      => array( 'select','==','2' )
-            ),
 
             array(
                 'name' => 'color',
@@ -182,6 +188,8 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'theme_supports' => '',
                 'title'          => __( 'Color', '_beacon' ),
                 'description'   => __( 'This is description' ),
+                'selector' => 'h4',
+                'css_format' => 'color: {{value}}'
             ),
 
 

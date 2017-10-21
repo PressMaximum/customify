@@ -118,15 +118,26 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             }
         }
 
+        // Devices switcher settings = true;
+        $this->json['device_settings'] = $this->device_settings;
+        if ( ! $this->device_settings ) {
+            // Fallback value when device_settings from tru to false
+            if ( is_array( $value ) && isset( $value['desktop'] ) ) {
+                $value = $value['desktop'];
+            }
+        }
+
         $this->json['value']        = $value;
         $this->json['default']      = $this->default;
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
+        $this->json['required']     = $this->required;
 
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
-        // Devices switcher settings = true;
-        $this->json['device_settings'] = $this->device_settings;
+
+
+
         if ( $this->setting_type == 'repeater' ) {
             $this->json['l10n'] = array(
                 'untitled' => __( 'Untitled', '_beacon' )
@@ -145,77 +156,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         //$this->json['link']       = $this->get_link();
     }
 
-    function compare( $value1, $condition, $value2 ){
-        $equal = false;
-        switch ( $condition ) {
-            case '===':
-                $equal = $value1 === $value2 ? true : false;
-                break;
-            case '>':
-                $equal = $value1 > $value2 ? true : false;
-                break;
-            case '<':
-                $equal = $value1 < $value2 ? true : false;
-                break;
-            case '!=':
-                $equal = $value1 != $value2 ? true : false;
-                break;
-            case 'not_empty':
-                $equal = ! empty( $value2 );
-                break;
-            default:
-                  $equal = $value1 == $value2 ? true : false;
-
-        }
-
-        return $equal;
-    }
-
-    function active_callback() {
-
-        if ( $this->required && is_array( $this->required ) ) {
-            $test_field = current( $this->required );
-            reset( $this->required );
-
-            if ( is_string( $test_field ) ) {
-                $condition = $this->required[1];
-                if ( ! $condition ) {
-                    $condition = '=';
-                }
-                $condition_value = $this->required[2];
-                if ( isset( $this->required[3] ) && $this->required[3] == 'option' ) {
-                    $value = get_option( $test_field );
-                } else {
-                    $_settings = $this->manager->get_setting( $test_field );
-                    $value = get_theme_mod( $test_field, ( $_settings ) ? $_settings->default : null );
-                }
-                return $this->compare( $value, $condition, $condition_value );
-            } else {
-
-                $active = true;
-                foreach (  $this->required as $cond ) {
-                    $field_name = $cond[0];
-                    $field_cond = $cond[1];
-                    $field_cond_value = $cond[2];
-                    if ( isset( $cond[3] ) && $cond[3] == 'option' ) {
-                        $value = get_option( $field_name );
-                    } else {
-                        $_settings = $this->manager->get_setting( $field_name );
-                        $value = get_theme_mod( $field_name, ( $_settings ) ? $_settings->default : null );
-                    }
-                    if ( ! $this->compare( $value, $field_cond, $field_cond_value ) ) {
-                        $active = false;
-                    }
-                }
-
-                return $active;
-            }
-        }
-
-       return true;
-    }
-
-
+    
     /**
      * Renders the control wrapper and calls $this->render_content() for the internals.
      *

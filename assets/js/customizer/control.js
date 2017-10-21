@@ -9,6 +9,7 @@
         ready: function() {
 
             var control = this;
+            console.log( 'Control Params '+control.id+': ', control.params );
             control.init();
         },
         type: '_beacon',
@@ -253,64 +254,6 @@
                 control.controlMedia.remove( p );
             } );
         },
-        compare: function( value1, cond, value2 ){
-            var equal = false;
-            switch ( cond ) {
-                case '===':
-                    equal = ( value1 === value2 ) ? true : false;
-                    break;
-                case '>':
-                    equal = ( value1 > value2 ) ? true : false;
-                    break;
-                case '<':
-                    equal = ( value1 < value2 ) ? true : false;
-                    break;
-                case '!=':
-                    equal = ( value1 != value2 ) ? true : false;
-                    break;
-                case 'not_empty':
-                    equal = _.isEmpty( value2 );
-                    break;
-                default:
-                    equal = ( value1 == value2 ) ? true : false;
-
-            }
-            return equal;
-        },
-        multiple_compare: function( list, values ){
-            var control = this;
-            try {
-                var test =  list[0];
-                var check = true;
-                if ( _.isString( test ) ) {
-                    check = false;
-                    var cond = list[1];
-                    var cond_val = list[2];
-                    if ( ! _.isUndefined( values[ test ] ) ) {
-                        check = control.compare( values[ test ], cond, cond_val );
-                    }
-                } else if ( _.isArray( test ) ) {
-                    check  = true;
-                    _.each( list, function( req ) {
-                        var cond_key = req[0];
-                        var cond_cond = req[1];
-                        var cond_val = req[2];
-                        var t_val = values[ cond_key ];
-                        if ( _.isUndefined( t_val ) ) {
-                            t_val = '';
-                        }
-                        if ( ! control.compare( t_val, cond_cond, cond_val ) ) {
-                            check = false;
-                        }
-                    } );
-                }
-            } catch  ( e ) {
-
-            }
-
-
-            return check;
-        },
         initCSSRuler: function(){
             var control = this;
             control.container.on( 'change', '._beacon--label-parent', function(){
@@ -340,6 +283,83 @@
                 control.getValue();
             } );
 
+        },
+
+        compare: function( value1, cond, value2 ){
+            var equal = false;
+            switch ( cond ) {
+                case '===':
+                    equal = ( value1 === value2 ) ? true : false;
+                    break;
+                case '>':
+                    equal = ( value1 > value2 ) ? true : false;
+                    break;
+                case '<':
+                    equal = ( value1 < value2 ) ? true : false;
+                    break;
+                case '!=':
+                    equal = ( value1 != value2 ) ? true : false;
+                    break;
+                case 'not_empty':
+                    equal = _.isEmpty( value2 );
+                    break;
+                default:
+                    equal = ( value1 == value2 ) ? true : false;
+
+            }
+            return equal;
+        },
+        multiple_compare: function( list, values, decodeValue ){
+            if ( _.isUndefined( decodeValue ) ) {
+                decodeValue = false;
+            }
+            var control = this;
+            try {
+                var test =  list[0];
+                var check = true;
+                if ( _.isString( test ) ) {
+                    check = false;
+                    var cond = list[1];
+                    var cond_val = list[2];
+                    var value;
+                    if ( ! _.isUndefined( values[ test ] ) ) {
+                        value = values[ test ];
+                        if ( decodeValue ) {
+                            value = control.decodeValue( value )
+                        }
+                        check = control.compare( value, cond, cond_val );
+                    }
+
+                    console.log( 'TEST value', value );
+                    console.log( 'TEST cond', cond );
+                    console.log( 'TEST cond_val', cond_val );
+
+                } else if ( _.isArray( test ) ) {
+                    check  = true;
+                    _.each( list, function( req ) {
+                        var cond_key = req[0];
+                        var cond_cond = req[1];
+                        var cond_val = req[2];
+                        var t_val = values[ cond_key ];
+
+                        if ( _.isUndefined( t_val ) ) {
+                            t_val = '';
+                        }
+                        if ( decodeValue ) {
+                            t_val = control.decodeValue( t_val )
+                        }
+
+                        if ( ! control.compare( t_val, cond_cond, cond_val ) ) {
+                            check = false;
+                        }
+                    } );
+                }
+            } catch  ( e ) {
+
+            }
+
+
+            return check;
         },
         initConditional: function ( $el, values ){
             var control = this;
@@ -596,14 +616,22 @@
                     break;
             }
 
-
             if ( _.isUndefined( save ) || save ) {
                 console.log( 'VALUES: ', value );
-                console.log( 'VALUES encodeURI: ', encodeURI( JSON.stringify( value )  ) );
-                control.setting.set( encodeURI( JSON.stringify( value ) ) );
+                control.setting.set( control.encodeValue( value ) );
+                $document.trigger( '_beacon/customizer/change' );
             } else {
+
             }
+
+           // console.log( 'All Value: ', wpcustomize.get( ) );
             return value;
+        },
+        encodeValue: function( value ){
+            return encodeURI( JSON.stringify( value ) )
+        },
+        decodeValue: function( value ){
+            return JSON.parse( decodeURI( value ) );
         },
         updateRepeaterLiveTitle: function( value, $item, field ){
             $( '._beacon--repeater-live-title', $item ).text( value );
@@ -1012,6 +1040,43 @@
             console.log( 'Device', device );
             $( '#customize-footer-actions .devices button[data-device="'+device+'"]' ).trigger('click');
         } );
+
+        // Setup conditional
+
+        var ControlConditional = function( decodeValue ){
+            if ( _.isUndefined( decodeValue ) ) {
+                decodeValue = false;
+            }
+            var allValues = wpcustomize.get( );
+            console.log( 'ALL Control Values', allValues );
+            _.each( allValues, function( value, id ){
+                var control = wpcustomize.control( id );
+                if ( ! _.isUndefined( control ) ) {
+                    if ( control.params.type == '_beacon' ) {
+                        if ( ! _.isEmpty( control.params.required ) ) {
+                            var check = false;
+                            check = control.multiple_compare( control.params.required, allValues, decodeValue );
+                            console.log( 'Check C '+control.id, check );
+                            if ( ! check ) {
+                                control.container.addClass( '_beacon--hide' );
+                            } else {
+                                control.container.removeClass( '_beacon--hide' );
+                            }
+                        }
+                    }
+                }
+
+            } );
+        };
+
+        ControlConditional( false );
+        $document.on( '_beacon/customizer/change', function(){
+            ControlConditional( true );
+        } );
+
+
+
+
 
     } );
 

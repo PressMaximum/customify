@@ -68,6 +68,17 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
+        function setup_color( $value, $format ){
+            $value = _Beacon_Sanitize_Input::sanitize_color( $value );
+            if ( $format ) {
+                if (!is_null( $value ) && $value !== '') {
+                    return $this->replace_value( $value, $format ).';';
+                }
+            }
+
+            return false;
+        }
+
         function css_ruler( $field ){
             $code = '';
             if ( $field['device_settings'] ) {
@@ -92,6 +103,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             }
             return $code;
         }
+
 
         function slider( $field ){
             $code = '';
@@ -118,6 +130,31 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             return $code;
         }
 
+        function color( $field ){
+            $code = '';
+            if ( $field['device_settings'] ) {
+                foreach ( _Beacon_Customizer()->devices as $device ) {
+                    $value = _Beacon_Customizer()->get_setting(  $field['name'], $device );
+                    $_c = $this->setup_color( $value, $field['css_format'] );
+                    if ( $_c ) {
+                        if ( 'desktop' == $device ) {
+                            $code .= "{$field['selector']} { {$_c} }";
+                        } else {
+                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                        }
+
+                    }
+                }
+            } else {
+                $value = _Beacon_Customizer()->get_setting(  $field['name'] );
+                $_c = $this->setup_color( $value, $field['css_format'] );
+                if ( $_c ) {
+                    $code .= "{$field['selector']} { {$_c} }";
+                }
+            }
+            return $code;
+        }
+
         function auto_css( $partial = false ){
             $config = _Beacon_Customizer::get_config();
             //  $control_settings = $partial->component->manager->get_control($partial->id);
@@ -129,6 +166,9 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                         break;
                     case 'slider':
                         $css_code .= $this->slider( $field );
+                        break;
+                    case 'color':
+                        $css_code .= $this->color( $field );
                         break;
                 }
             }
