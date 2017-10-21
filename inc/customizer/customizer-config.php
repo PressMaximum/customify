@@ -159,8 +159,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'checkbox_label' => __( 'This is checkbox label' ),
             ),
 
-
-
             array(
                 'name' => 'radio',
                 'type' => 'radio',

@@ -71,7 +71,6 @@
         } );
 
 
-
         wp.customize.selectiveRefresh.bind( 'sidebar-updated', function( sidebarPartial ) {
             var widgetArea;
 

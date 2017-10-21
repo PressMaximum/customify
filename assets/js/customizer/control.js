@@ -343,9 +343,18 @@
                     check = false;
                     var cond = list[1];
                     var cond_val = list[2];
+                    var cond_device = false;
+                    if ( ! _.isUndefined( list[3] ) ) { // can be desktop, tablet, mobile
+                        cond_device = list[3];
+                    }
                     var value;
                     if ( ! _.isUndefined( values[ test ] ) ) {
                         value = values[ test ];
+                        if ( cond_device ) {
+                            if ( _.isObject( value ) && !_.isUndefined( value[ cond_device ] ) ) {
+                                value =  value[ cond_device ];
+                            }
+                        }
                         if ( decodeValue ) {
                             value = control.decodeValue( value )
                         }
@@ -358,6 +367,11 @@
                         var cond_key = req[0];
                         var cond_cond = req[1];
                         var cond_val = req[2];
+                        var cond_device = false;
+                        if ( ! _.isUndefined( req[3] ) ) { // can be desktop, tablet, mobile
+                            cond_device = req[3];
+                        }
+
                         var t_val = values[ cond_key ];
 
                         if ( _.isUndefined( t_val ) ) {
@@ -367,6 +381,12 @@
                             t_val = control.decodeValue( t_val )
                         }
 
+                        if ( cond_device ) {
+                            if ( _.isObject( t_val ) && !_.isUndefined( t_val[ cond_device ] ) ) {
+                                t_val =  t_val[ cond_device ];
+                            }
+                        }
+
                         if ( ! control.compare( t_val, cond_cond, cond_val ) ) {
                             check = false;
                         }
@@ -374,7 +394,7 @@
 
                 }
             } catch  ( e ) {
-                console.log( 'Trying_test_errror', e  );
+                console.log( 'Trying_test_error', e  );
             }
 
 
