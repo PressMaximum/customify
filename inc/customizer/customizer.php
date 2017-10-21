@@ -188,7 +188,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 $url = '';
 
                 if ( strpos( $value['mime'], 'image/' ) !== false ) {
-                    $image_attributes = wp_get_attachment_image_src( $value = 8, $size );
+                    $image_attributes = wp_get_attachment_image_src( $value['id'], $size );
                     if ( $image_attributes ) {
                         $url =  $image_attributes[0];
                     }
@@ -197,7 +197,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                 }
 
                 if ( ! $url ) {
-                    $url = $value['value'];
+                    $url = $value['url'];
                 }
 
                 return $url;

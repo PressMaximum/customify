@@ -87,9 +87,9 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $_c = $this->setup_css_ruler( $value, $field['css_format'] );
                     if ( $_c ) {
                         if ( 'desktop' == $device ) {
-                            $code .= "{$field['selector']} { {$_c} }";
+                            $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
                         } else {
-                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                            $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n}";
                         }
 
                     }
@@ -98,7 +98,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 $value = _Beacon_Customizer()->get_setting(  $field['name'] );
                 $_c = $this->setup_css_ruler( $value, $field['css_format'] );
                 if ( $_c ) {
-                    $code .= "{$field['selector']} { {$_c} }";
+                    $code .= "{$field['selector']} {\r\n\t{$_c}\r\n}";
                 }
             }
             return $code;
@@ -113,9 +113,9 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $_c = $this->setup_slider( $value, $field['css_format'] );
                     if ( $_c ) {
                         if ( 'desktop' == $device ) {
-                            $code .= "{$field['selector']} { {$_c} }";
+                            $code .= "\r\n {$field['selector']} {\r\n\t{$_c}\r\n} ";
                         } else {
-                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                            $code .= "\r\n .{$device} {$field['selector']} {\r\n\t{$_c}\r\n} ";
                         }
 
                     }
@@ -124,7 +124,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 $value = _Beacon_Customizer()->get_setting(  $field['name'] );
                 $_c = $this->setup_slider( $value, $field['css_format'] );
                 if ( $_c ) {
-                    $code .= "{$field['selector']} { {$_c} }";
+                    $code .= "{$field['selector']} {\r\n\t{$_c}\r\n}";
                 }
             }
             return $code;
@@ -138,9 +138,9 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $_c = $this->setup_color( $value, $field['css_format'] );
                     if ( $_c ) {
                         if ( 'desktop' == $device ) {
-                            $code .= "{$field['selector']} { {$_c} }";
+                            $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n} ";
                         } else {
-                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                            $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n} ";
                         }
 
                     }
@@ -149,7 +149,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 $value = _Beacon_Customizer()->get_setting(  $field['name'] );
                 $_c = $this->setup_color( $value, $field['css_format'] );
                 if ( $_c ) {
-                    $code .= "{$field['selector']} { {$_c} }";
+                    $code .= "{$field['selector']} {\r\n\t{$_c}\r\n}";
                 }
             }
             return $code;
@@ -159,29 +159,104 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             $value = wp_parse_args( $value, array(
                 'color' => '',
                 'image' => '',
-                'style' => '',
-                'repeat' => ''
+                'position' => '',
+                'cover' => '',
+                'repeat' => '',
+                'attachment' => '',
             ) );
+
+            $css = array();
+            $color = _Beacon_Sanitize_Input::sanitize_color( $value['color'] );
+            if ( $color ) {
+                $css['color'] = "background-color: {$color};";
+            }
+
+            $image = _Beacon_Customizer()->get_media( $value['image'] );
+
+            if ( $image ) {
+                $css['image'] = "background-image: url(\"{$image}\");";
+            }
+
+            switch ( $value['position'] ) {
+                case 'center':
+                    $css['position'] = 'background-position: center center;';
+                    break;
+                case 'top_left':
+                    $css['position'] = 'background-position: top left;';
+                    break;
+                case 'top_center':
+                    $css['position'] = 'background-position: top center;';
+                    break;
+                case 'top_right':
+                    $css['position'] = 'background-position: top right;';
+                    break;
+                case 'bottom_left':
+                    $css['position'] = 'background-position: bottom left;';
+                    break;
+                case 'bottom_center':
+                    $css['position'] = 'background-position: bottom center;';
+                    break;
+                case 'bottom_right':
+                    $css['position'] = 'background-position: bottom right;';
+                    break;
+                default:
+                    $css['position'] = 'background-position: center center;';
+            }
+
+            if ( $value['cover'] ) {
+                $css['cover'] = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
+            }
+
+            switch ( $value['repeat'] ) {
+                case 'no-repeat':
+                    $css['repeat'] = 'background-attachment: no-repeat;';
+                    break;
+                case 'repeat-x':
+                    $css['repeat'] = 'background-attachment: repeat-x;';
+                    break;
+                case 'repeat-y':
+                    $css['repeat'] = 'background-attachment: repeat-y;';
+                    break;
+                default:
+
+            }
+
+            switch ( $value['attachment'] ) {
+                case 'scroll':
+                    $css['attachment'] = 'background-attachment: scroll;';
+                    break;
+                case 'fixed':
+                    $css['attachment'] = 'background-attachment: fixed;';
+                    break;
+                default:
+            }
+
+            return join( "\n\t",  $css );
+
         }
 
         function background( $field ){
+            $code = '';
             if ( $field['device_settings'] ) {
                 foreach ( _Beacon_Customizer()->devices as $device ) {
                     $value = _Beacon_Customizer()->get_setting( $field['name'], $device );
-                    $_c = '';
+                    $_c = $this->setup_background( $value );
                     if ( $_c ) {
                         if ( 'desktop' == $device ) {
-                            $code .= "{$field['selector']} { {$_c} }";
+                            $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
                         } else {
-                            $code .= ".{$device} {$field['selector']} { {$_c} }";
+                            $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n}";
                         }
 
                     }
                 }
             } else {
                 $value = _Beacon_Customizer()->get_setting( $field['name'] );
-
+                $code = $this->setup_background( $value );
+                $code .= "{$field['selector']} {\r\n\t{$code}\r\n}";
             }
+
+            return $code;
 
         }
 
@@ -206,6 +281,10 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                             $field_css .= $this->background( $field );
                         }
                 }
+                if ( $field_css ){
+                    $field_css .= "\r\n";
+                }
+
                 $css_code .= apply_filters('_beacon/customizer/auto_css',  $field_css, $field );
 
             }
