@@ -504,6 +504,24 @@ $text_color: #555d66;
     }
 }
 
+/* Typography */
+._beacon--font-style {
+    .button {
+        input {
+            display: none;
+        }
+        span {
+            line-height: inherit;
+            &:before {
+                line-height: inherit;
+            }
+        }
+        &._beacon--checked {
+            background: #ccc;
+        }
+    }
+}
+
 /*Background field*/
 .customize-control {
     &._beacon-background-control {

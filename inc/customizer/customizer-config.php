@@ -18,7 +18,64 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Beacon Section', '_beacon' ),
-                'description' => __( 'This is section description' ),
+                'description' => __( 'This is section description',  '_beacon' ),
+            ),
+
+            array(
+                'name' => 'typography',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                'title'          => __( 'Typography', '_beacon' ),
+                'description'    => __( 'This is description',  '_beacon' ),
+                'field_class' => '_beacon-typography-control',
+                'selector' => '#page',
+                'css_format' => 'typography',
+                'default' => array(
+
+                ),
+                'fields' => array(
+
+                    array(
+                        'name' => 'font',
+                        'type' => 'font',
+                        'label' => __( 'Font', '_beacon' ),
+                    ),
+
+                    array(
+                        'name' => 'font_style',
+                        'type' => 'font_style',
+                        'label' => __( 'Font Style', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'font_size',
+                        'type' => 'slider',
+                        'label' => __( 'Font Size', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'line_height',
+                        'type' => 'slider',
+                        'label' => __( 'Line Height', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'letter_spacing',
+                        'type' => 'slider',
+                        'label' => __( 'Letter Spacing', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', '_beacon' ),
+                    ),
+
+                )
             ),
 
             array(
@@ -26,7 +83,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'group',
                 'section'     => '_beacon_section',
                 'title'          => __( 'Background', '_beacon' ),
-                'description'    => __( 'This is description' ),
+                'description'    => __( 'This is description',  '_beacon' ),
                 'live_title_field' => 'title',
                 'field_class' => '_beacon-background-control',
                 'selector' => '#page',
@@ -109,7 +166,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'group',
                 'section'     => '_beacon_section',
                 'title'          => __( 'Background P', '_beacon' ),
-                'description'    => __( 'This is description' ),
+                'description'    => __( 'This is description',  '_beacon' ),
                 'live_title_field' => 'title',
                 'field_class' => '_beacon-background-control',
                 'selector' => '#page p',
@@ -195,7 +252,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'     => '_beacon_section',
                 //'priority' => 22,
                 'title'          => __( 'Select', '_beacon' ),
-                'description'    => __( 'Select 2 to show Dependence field' ),
+                'description'    => __( 'Select 2 to show Dependence field',  '_beacon' ),
                 'choices' => array(
                     '1' => __( 'One', '_beacon' ),
                     '2' => __( 'Two', '_beacon' ),
@@ -213,7 +270,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Dependence Text Field', '_beacon' ),
-                'description'   => __( 'Show only select=2' ),
+                'description'   => __( 'Show only select=2',  '_beacon' ),
                 'required'      => array( 'select','==','2' )
             ),
 
@@ -230,7 +287,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'theme_supports' => '',
                 'device' => 'mobile',
                 'title'          => __( 'Text', '_beacon' ),
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description', '_beacon' ),
 
 
                 'selector' => '._test_text1',
@@ -247,7 +304,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Text 2 Inside the Text', '_beacon' ),
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description', '_beacon' ),
 
                 //'selector' => '._test_text_2',
                 //'render_callback' => '_test_2_render_callback'
@@ -265,7 +322,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Slider', '_beacon' ),
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description',  '_beacon' ),
                 'selector' => 'h4',
                 'css_format' => 'font-size: {{value}}'
             ),
@@ -279,7 +336,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'           => '_beacon_section',
                 'theme_supports' => '',
                 'title'          => __( 'CSS Ruler', '_beacon' ),
-                'description'   => __( 'This is description' ),
+                'description'   => __( 'This is description',  '_beacon' ),
                 'selector' => 'h4',
                 'css_format' => array(
                     'top'    => 'padding-top: {{value}}',
@@ -299,7 +356,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Icon', '_beacon' ),
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description',  '_beacon' ),
             ),
 
             array(
@@ -312,7 +369,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Textarea', '_beacon' ),
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description',  '_beacon' ),
             ),
 
             array(
@@ -321,9 +378,9 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device_settings' => true,
                 'label'       => __( 'Checkbox', '_beacon' ),
                 'section'     => '_beacon_section',
-                'description' => __( 'This is description' ),
+                'description' => __( 'This is description',  '_beacon' ),
                 'setting_type' => 'checkbox',
-                'checkbox_label' => __( 'This is checkbox label' ),
+                'checkbox_label' => __( 'This is checkbox label',  '_beacon' ),
             ),
 
             array(
@@ -334,7 +391,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'     => '_beacon_section',
                 //'priority' => 22,
                 'title'          => __( 'Radio', '_beacon' ),
-                'description'    => __( 'This is description' ),
+                'description'    => __( 'This is description',  '_beacon' ),
                 'choices' => array(
                     '1' => __( 'One', '_beacon' ),
                     '2' => __( 'Two', '_beacon' ),
@@ -352,7 +409,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'           => '_beacon_section',
                 'theme_supports' => '',
                 'title'          => __( 'Color', '_beacon' ),
-                'description'   => __( 'This is description' ),
+                'description'   => __( 'This is description',  '_beacon' ),
                 'selector' => 'h4',
                 'css_format' => 'color: {{value}}'
             ),
@@ -367,7 +424,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'priority' => 22,
                 'theme_supports' => '',
                 'title'          => __( 'Multiple Dependence Text Field', '_beacon' ),
-                'description'   => __( 'Show only select=3 and radio=2' ),
+                'description'   => __( 'Show only select=3 and radio=2',  '_beacon' ),
                 'required'      => array(
                     array( 'select','==','3' ),
                     array( 'radio','==','2' )
@@ -380,10 +437,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'     => '_beacon_section',
                 //'priority' => 22,
                 'title'          => __( 'Repeater', '_beacon' ),
-                'description'    => __( 'This is description' ),
+                'description'    => __( 'This is description',  '_beacon' ),
                 'live_title_field' => 'title',
                 'limit' => 4,
-                'limit_msg' => __( 'Just limit 4 item, Ability HTML here' ),
+                'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  '_beacon' ),
                 'default' => array(
                     array(
                         'title' => __( 'Title 1', '_beacon' ),
@@ -437,7 +494,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'section'     => '_beacon_section',
                 //'priority' => 22,
                 'title'          => __( 'Group', '_beacon' ),
-                'description'    => __( 'This is description' ),
+                'description'    => __( 'This is description',  '_beacon' ),
                 'live_title_field' => 'title',
                 'default' => array(
                     'title' => __( 'Title 1', '_beacon' ),

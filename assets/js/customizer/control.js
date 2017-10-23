@@ -543,6 +543,68 @@
                     }
 
                     break;
+                case 'font_style':
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            value[ device ] = {
+                                b:  $( 'input[data-name="'+_name+'-b"]', $field ).is(':checked') ? 1 : '',
+                                i: $( 'input[data-name="'+_name+'-i"]', $field ).is(':checked') ? 1 : '',
+                                u:  $( 'input[data-name="'+_name+'-u"]', $field ).is(':checked') ? 1 : '',
+                                s: $( 'input[data-name="'+_name+'-s"]', $field ).is(':checked') ? 1 : '',
+                                t: $( 'input[data-name="'+_name+'-t"]', $field ).is(':checked') ? 1 : ''
+                            };
+                        } );
+                    } else {
+                        value = {
+                            b:  $( 'input[data-name="'+name+'-b"]', $field ).is(':checked') ? 1 : '',
+                            i: $( 'input[data-name="'+name+'-i"]', $field ).is(':checked') ? 1 : '',
+                            u:  $( 'input[data-name="'+name+'-u"]', $field ).is(':checked') ? 1 : '',
+                            s: $( 'input[data-name="'+name+'-s"]', $field ).is(':checked') ? 1 : '',
+                            t: $( 'input[data-name="'+name+'-t"]', $field ).is(':checked') ? 1 : ''
+                        };
+                    }
+
+                    break;
+                case 'font':
+
+                    if ( support_devices ) {
+                        value = {};
+                        _.each( control.devices, function( device ){
+                            var _name = name+'-'+device;
+                            var subsets = {};
+                            $( '.list-subsets[data-name="'+_name+'-subsets"] input', $field ).each ( function(){
+                                if ( $(this ).is(':checked') ) {
+                                    var _v = $( this ).val();
+                                    subsets[ _v ] = _v;
+                                }
+                            } );
+                            value[ device ] = {
+                                font:  $( 'select[data-name="'+_name+'-font"]', $field ).val(),
+                                type:  $( 'input[data-name="'+_name+'-type"]', $field ).val(),
+                                variant:  $( 'select[data-name="'+_name+'-variant"]', $field ).val(), // variant
+                                subsets:  subsets
+                            };
+                        } );
+                    } else {
+                        var subsets = {};
+                        $( '.list-subsets[data-name="'+name+'-subsets"] input', $field ).each ( function(){
+                            if ( $(this ).is(':checked') ) {
+                                var _v = $( this ).val();
+                                subsets[ _v ] = _v;
+                            }
+                        } );
+                        value = {
+                            font:  $( 'select[data-name="'+name+'-font"]', $field ).val(),
+                            type:  $( 'input[data-name="'+name+'-type"]', $field ).val(),
+                            variant:  $( 'select[data-name="'+name+'-variant"]', $field ).val(),
+                            subsets:  subsets
+                        };
+                    }
+
+                    break;
                 case 'slider':
 
                     if ( support_devices ) {
@@ -584,7 +646,7 @@
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            value[ device ] =  value = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                            value[ device ] = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
@@ -646,9 +708,7 @@
 
                         control.initConditional( control.container, value );
                     }
-
                     //console.log( 'GROUP_VALUE' );
-
                     break;
                 case 'repeater':
                     value = [];
@@ -1103,6 +1163,129 @@
         }
     };
 
+    var FontSelector = {
+        fonts: null,
+        optionHtml: '',
+        get: function(){
+            var that = this;
+            $.get( _Beacon_Control_Args.ajax, { action: '_beacon/customizer/ajax/fonts'  }, function(res ){
+                if ( res.success ) {
+                    that.fonts = res.data;
+                    that.ready()
+                }
+            } );
+        },
+        toSelectOptions: function ( options, v ){
+            var html = '';
+            if ( _.isUndefined( v ) ) {
+                v = '';
+            }
+            _.each( options, function( value ) {
+                var selected = '';
+                if ( value === v ) {
+                    selected = ' selected="selected" ';
+                }
+                html += '<option'+selected+' value="'+value+'">'+value+'</option>';
+            } );
+            return html;
+        },
+        toCheckboxes: function ( options, v ){
+            var html = '';
+            if ( ! _.isObject( v ) ) {
+                v = {};
+            }
+            _.each( options, function( value ) {
+                var checked = '';
+                if ( ! _.isUndefined( v[ value ] ) ) {
+                    checked = ' checked="checked" ';
+                }
+                html += '<p><label><input '+checked+'type="checkbox" value="'+value+'"> '+value+'</label></p>';
+            } );
+            return html;
+        },
+        ready: function(){
+            var that = this;
+            _.each( that.fonts, function( group, type ){
+                that.optionHtml += '<optgroup label="'+group.title+'">';
+                    _.each( group.fonts, function( font, font_name ) {
+                        that.optionHtml += '<option value="'+font_name+'">'+font_name+'</option>';
+                    } );
+                that.optionHtml += '</optgroup>';
+            } );
+
+            $( 'select._beacon--font-families' ).html( that.optionHtml );
+
+            $( 'select._beacon--font-families' ).each( function(){
+                var save_value = $( this ).data( 'value' );
+                if ( ! _.isObject( save_value ) ) {
+                    save_value = {};
+                }
+                var p = $( this ).closest('._beacon-field-settings-inner');
+                if ( save_value.font ) {
+                    $( 'option[value="'+save_value.font+'"]' ).attr( 'selected', 'selected' );
+                }
+                that.setUpFont( save_value, p );
+
+            } );
+
+
+            $document.on( 'change', 'select._beacon--font-families', function(){
+                var font =  $( this ).val();
+                var p = $( this ).closest('._beacon-field-settings-inner');
+                that.setUpFont( font, p );
+
+            } );
+        },
+
+        setUpFont: function( font, p ){
+            var that = this;
+            var font_settings, variants, subsets, type;
+
+            if ( _.isEmpty( font ) ) {
+                type = 'normal';
+            }
+
+
+            if (  _.isString( font ) ) {
+                if ( ! _.isUndefined( that.fonts.google.fonts[ font ] ) ) {
+                    type = 'google';
+                } else {
+                    type = 'normal';
+                }
+
+                font_settings = that.fonts.google.fonts[ font ];
+            } else {
+                font_settings = that.fonts.google.fonts[ font.font ];
+            }
+
+            if ( ! _.isUndefined( font_settings ) && ! _.isEmpty( font_settings ) ) {
+                variants = font_settings.variants;
+                subsets = font_settings.subsets;
+            }
+
+            if ( _.isObject( font ) && ! _.isUndefined( font.type ) ) {
+                type = font.type;
+            }
+
+
+            if ( type == 'normal' ) {
+                $( '._beacon--font-variants-wrapper', p ).addClass( '_beacon--hide').find('select').html('');
+                $( '._beacon--font-subsets-wrapper', p ).addClass( '_beacon--hide').find( '.list-subsets' ).html('');
+            } else {
+                $( '._beacon--font-type', p ).val( type );
+                $( '._beacon--font-variants', p).html( that.toSelectOptions(variants, _.isObject( font ) ? font.variant : '' ) );
+                $( '.list-subsets', p).html( that.toCheckboxes(subsets, _.isObject( font ) ? font.subsets : '' ) );
+            }
+
+        },
+
+
+        init: function(){
+            this.get();
+        }
+
+    };
+
 
     wpcustomize.bind( 'ready', function( e, b ) {
 
@@ -1136,6 +1319,9 @@
         } );
 
         IconPicker.init();
+        if ( $( '._beacon--font-families' ).length > 0 ) {
+            FontSelector.init();
+        }
 
         // Devices Switcher
         $document.on( 'click', '._beacon-devices button', function(e){
@@ -1143,6 +1329,15 @@
             var device = $( this ).attr( 'data-device' ) || '';
             console.log( 'Device', device );
             $( '#customize-footer-actions .devices button[data-device="'+device+'"]' ).trigger('click');
+        } );
+
+        // Devices Switcher
+        $document.on( 'change', '._beacon--field input:checkbox', function(e){
+            if ( $( this ).is(':checked') ) {
+                $( this ).parent().addClass('_beacon--checked');
+            } else {
+                $( this ).parent().removeClass('_beacon--checked');
+            }
         } );
 
         // Setup conditional
@@ -1177,9 +1372,6 @@
         $document.on( '_beacon/customizer/change', function(){
             ControlConditional( true );
         } );
-
-
-
 
 
     } );

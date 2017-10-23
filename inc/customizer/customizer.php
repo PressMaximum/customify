@@ -6,6 +6,7 @@
  */
 
 require get_template_directory() . '/inc/customizer/customizer-config.php';
+require get_template_directory() . '/inc/customizer/customizer-fonts.php';
 require get_template_directory() . '/inc/customizer/customizer-sanitize.php';
 require get_template_directory() . '/inc/customizer/customizer-auto-css.php';
 
@@ -14,6 +15,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         static $config;
         static $_instance;
         static $has_icon = false;
+        static $has_font = false;
         public $devices = array( 'desktop', 'tablet', 'mobile');
         function __construct()
         {
@@ -82,10 +84,18 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                                 self::$has_icon = true;
                             }
 
+                            if ( $f['type'] == 'font' ) {
+                                self::$has_font = true;
+                            }
+
                             if ( isset( $f['fields'] ) ) {
                                 $types = wp_list_pluck( $f['fields'], 'type' );
                                 if ( in_array( 'icon', $types ) ) {
                                     self::$has_icon = true;
+                                }
+
+                                if ( in_array( 'font', $types ) ) {
+                                    self::$has_font = true;
                                 }
                             }
                             $config['setting|'.$f['name']] = $f;
@@ -103,6 +113,15 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
          * @return bool
          */
         function has_icon(){
+            return self::$has_icon;
+        }
+
+        /**
+         * Check if has font field;
+         *
+         * @return bool
+         */
+        function has_font(){
             return self::$has_icon;
         }
 
@@ -310,7 +329,9 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         break;
                 }
 
-            }
+            } // End loop config
+
+            do_action( '_beacon/customize/register_completed', $this );
         }
 
     }

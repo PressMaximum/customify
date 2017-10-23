@@ -80,6 +80,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_script( '_beacon-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         wp_localize_script( '_beacon-customizer-control', '_Beacon_Control_Args', array(
             'home_url' => home_url(''),
+            'ajax' => admin_url( 'admin-ajax.php' ),
             'has_icons' => _Beacon_Customizer()->has_icon(),
             'icons' => _Beacon_Font_Icons()->get_icons(),
         ) );
@@ -225,6 +226,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
         $fields = array(
             'select',
+            'font',
+            'font_style',
             'checkbox',
             'css_ruler',
             'icon',
@@ -536,6 +539,50 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+
+    function field_font(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <div class="_beacon-field-settings-inner">
+            <input type="hidden" class="_beacon--font-type" data-name="{{ field.name }}-type" >
+            <div class="_beacon--font-families-wrapper">
+                <select class="_beacon--font-families" data-value="{{ JSON.stringify( field.value ) }}" data-name="{{ field.name }}-font"></select>
+            </div>
+            <div class="_beacon--font-variants-wrapper">
+                <label><?php _e( 'Variants' ) ?></label>
+                <select class="_beacon--font-variants" data-name="{{ field.name }}-variant"></select>
+            </div>
+            <div class="_beacon--font-subsets-wrapper">
+                <label><?php _e( 'Languages' ) ?></label>
+                <div data-name="{{ field.name }}-subsets" class="list-subsets">
+
+                </div>
+            </div>
+        </div>
+        <?php
+        $this->after_field();
+    }
+    function field_font_style(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <#
+        if ( ! _.isObject( field.value ) ) {
+            field.value = { };
+        }
+        #>
+        <div class="_beacon-field-settings-inner _beacon--font-style">
+            <label title="<?php esc_attr_e( 'Bold', '_beacon' ); ?>" class="button <# if ( field.value.b == 1 ){ #> _beacon--checked <# } #>"><input type="checkbox" <# if ( field.value.b == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-b" value="1"><span class="dashicons dashicons-editor-bold"></span></label>
+            <label title="<?php esc_attr_e( 'Italic', '_beacon' ); ?>" class="button <# if ( field.value.i == 1 ){ #> _beacon--checked <# } #>"><input type="checkbox" <# if ( field.value.i == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-i" value="1"><span class="dashicons dashicons-editor-italic"></span></label>
+            <label title="<?php esc_attr_e( 'Underline', '_beacon' ); ?>" class="button <# if ( field.value.u == 1 ){ #> _beacon--checked <# } #>"><input type="checkbox" <# if ( field.value.u == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-u" value="1"><span class="dashicons dashicons-editor-underline"></span></label>
+            <label title="<?php esc_attr_e( 'Strikethrough', '_beacon' ); ?>" class="button <# if ( field.value.s == 1 ){ #> _beacon--checked <# } #>"><input type="checkbox" <# if ( field.value.s == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-s" value="1"><span class="dashicons dashicons-editor-strikethrough"></span></label>
+            <label title="<?php esc_attr_e( 'Uppercase', '_beacon' ); ?>" class="button <# if ( field.value.t == 1 ){ #> _beacon--checked <# } #>"><input type="checkbox" <# if ( field.value.t == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-t" value="1"><span class="dashicons dashicons-editor-textcolor"></span></label>
+        </div>
+        <?php
+        $this->after_field();
+    }
+
 
     function field_media(){
         $this->before_field();

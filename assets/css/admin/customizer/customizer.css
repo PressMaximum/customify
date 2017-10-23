@@ -398,6 +398,18 @@
     content: "";
     display: block; }
 
+/* Typography */
+._beacon--font-style .button input {
+  display: none; }
+
+._beacon--font-style .button span {
+  line-height: inherit; }
+  ._beacon--font-style .button span:before {
+    line-height: inherit; }
+
+._beacon--font-style .button._beacon--checked {
+  background: #ccc; }
+
 /*Background field*/
 .customize-control._beacon-background-control ._beacon-group-device-fields {
   position: relative; }
