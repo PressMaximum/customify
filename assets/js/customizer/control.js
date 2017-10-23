@@ -443,14 +443,23 @@
                     var slider = $( this );
                     var p = slider.parent();
                     var input = $( '._beacon--slider-input', p );
+                    var min = slider.data( 'min' ) || 0;
+                    var max = slider.data( 'max' ) || 300;
+                    if ( !_.isNumber( min ) ) {
+                        min = 0;
+                    }
+
+                    if ( !_.isNumber( max ) ) {
+                        max = 300;
+                    }
 
                     var current_val = input.val();
                     slider.slider({
                         range: "min",
                         value: current_val,
                         step: 1,
-                        min: 1,
-                        max: 300,
+                        min: min,
+                        max: max,
                         slide: function (event, ui) {
                             input.val( ui.value ).trigger('data-change');
                         }
@@ -800,6 +809,10 @@
                 value: control.params.value,
                 default: control.params.default
             };
+            if ( field.type == 'slider' ) {
+                field.min = control.params.min;
+                field.max = control.params.max;
+            }
 
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {
                 field.choices = control.params.choices;

@@ -258,6 +258,8 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'slider',
                 'device_settings' => true,
                 'default' => '',
+                'min' => -10,
+                'max' => 100,
                 'section' => '_beacon_section',
                 //'device' => 'mobile', // mobile || general
                 //'priority' => 22,
