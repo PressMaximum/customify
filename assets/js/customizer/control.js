@@ -421,8 +421,10 @@
         initColor: function( $el ){
             $( '._beacon-input-color', $el ).each( function(){
                 var colorInput = $( this );
+                var df = colorInput.data( 'default' ) || '';
                 var current_val = $( '._beacon-input', colorInput ).val();
                 $( '._beacon--color-panel', colorInput ).wpColorPicker({
+                    defaultColor: df,
                     change: function( event, ui ){
                         var new_color = ui.color.toString();
                         $( '._beacon-input', colorInput ).val( new_color );
@@ -727,6 +729,7 @@
                 _.each( control.params.fields, function( f, index ){
                     var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
                     control.container.find( '._beacon--settings-fields' ).append( $fieldArea );
+                    f.original_name = f.name;
                     control.addField( f, $fieldArea );
 
                     if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
@@ -783,17 +786,19 @@
 
                 }) ;
             } else {
+                field.original_name = field.name;
                 var $fields = template( field , template_id, 'field' );
                 $fieldsArea.html( $fields );
             }
         },
         initField: function( ){
             var control = this;
-
+            console.log( 'control.params - '+ control.id, control.params );
             var field = {
                 type: control.params.setting_type,
                 name: control.id,
-                value: control.params.value
+                value: control.params.value,
+                default: control.params.default
             };
 
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {

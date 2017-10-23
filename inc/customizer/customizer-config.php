@@ -21,6 +21,171 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'description' => __( 'This is section description' ),
             ),
 
+            array(
+                'name' => 'background',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                'title'          => __( 'Background', '_beacon' ),
+                'description'    => __( 'This is description' ),
+                'live_title_field' => 'title',
+                'field_class' => '_beacon-background-control',
+                'selector' => '#page',
+                'css_format' => 'background',
+                'device_settings' => true,
+                'default' => array(
+
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'cover',
+                        'type' => 'checkbox',
+                        'required' => array( 'image', 'not_empty', ''),
+                        'label' => __( 'Background cover', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'position',
+                        'type' => 'select',
+                        'label' => __( 'Background Position', '_beacon' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default'       => __( 'Position', '_beacon' ),
+                            'center'        => __( 'Center', '_beacon' ),
+                            'top_left'      => __( 'Top Left', '_beacon' ),
+                            'top_right'     => __( 'Top Right', '_beacon' ),
+                            'top_center'    => __( 'Top Center', '_beacon' ),
+                            'bottom_left'   => __( 'Bottom Left', '_beacon' ),
+                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
+                            'bottom_right'  => __( 'Bottom Right', '_beacon' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background Repeat', '_beacon' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            // array('style', '!=', 'cover' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Repeat', '_beacon' ),
+                            'no-repeat' => __( 'No-repeat', '_beacon' ),
+                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
+                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'attachment',
+                        'type' => 'select',
+                        'label' => __( 'Background Attachment', '_beacon' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            array('cover', '!=', '1' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Attachment', '_beacon' ),
+                            'scroll' => __( 'Scroll', '_beacon' ),
+                            'fixed' => __( 'Fixed', '_beacon' )
+                        ),
+                    ),
+
+                )
+            ),
+
+            array(
+                'name' => 'background_p',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                'title'          => __( 'Background P', '_beacon' ),
+                'description'    => __( 'This is description' ),
+                'live_title_field' => 'title',
+                'field_class' => '_beacon-background-control',
+                'selector' => '#page p',
+                'css_format' => 'background',
+                'device_settings' => false,
+                'default' => array(
+
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'cover',
+                        'type' => 'checkbox',
+                        'required' => array( 'image', 'not_empty', ''),
+                        'label' => __( 'Background cover', '_beacon' ),
+                    ),
+                    array(
+                        'name' => 'position',
+                        'type' => 'select',
+                        'label' => __( 'Background Position', '_beacon' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default' => __( 'Default', '_beacon' ),
+                            'center' => __( 'Center', '_beacon' ),
+                            'top_left' => __( 'Top Left', '_beacon' ),
+                            'top_right' => __( 'Top Right', '_beacon' ),
+                            'top_center' => __( 'Top Center', '_beacon' ),
+                            'bottom_left' => __( 'Bottom Left', '_beacon' ),
+                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
+                            'bottom_right' => __( 'Bottom Right', '_beacon' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background Repeat', '_beacon' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            // array('style', '!=', 'cover' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Default', '_beacon' ),
+                            'no-repeat' => __( 'No-repeat', '_beacon' ),
+                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
+                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'attachment',
+                        'type' => 'select',
+                        'label' => __( 'Background Attachment', '_beacon' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            array('cover', '!=', '1' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Default', '_beacon' ),
+                            'scroll' => __( 'Scroll', '_beacon' ),
+                            'fixed' => __( 'Fixed', '_beacon' )
+                        ),
+                    ),
+
+                )
+            ),
 
             array(
                 'name' => 'select',
@@ -180,7 +345,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'name' => 'color',
                 'device_settings' => true,
                 'type' => 'color',
-                'default'           => null,
+                'default'           => '#f5f5f5',
                 'transport'			=> 'postMessage', // or refresh
                 'section'           => '_beacon_section',
                 'theme_supports' => '',
@@ -189,8 +354,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'selector' => 'h4',
                 'css_format' => 'color: {{value}}'
             ),
-
-
 
             array(
                 'name' => 'multiple_dependence_text',
@@ -313,88 +476,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             ),
 
 
-            array(
-                'name' => 'background',
-                'type' => 'group',
-                'section'     => '_beacon_section',
-                'title'          => __( 'Background', '_beacon' ),
-                'description'    => __( 'This is description' ),
-                'live_title_field' => 'title',
-                'field_class' => '_beacon-background-field',
-                'selector' => '#page',
-                'css_format' => 'background',
-                'device_settings' => true,
-                'default' => array(
-
-                ),
-                'fields' => array(
-                    array(
-                        'name' => 'color',
-                        'type' => 'color',
-                        'label' => __( 'Color', '_beacon' ),
-                        'device_settings' => true,
-                    ),
-                    array(
-                        'name' => 'image',
-                        'type' => 'image',
-                        'label' => __( 'Image', '_beacon' ),
-                    ),
-                    array(
-                        'name' => 'cover',
-                        'type' => 'checkbox',
-                        'required' => array( 'image', 'not_empty', ''),
-                        'label' => __( 'Background cover', '_beacon' ),
-                    ),
-                    array(
-                        'name' => 'position',
-                        'type' => 'select',
-                        'label' => __( 'Background Position', '_beacon' ),
-                        'required' => array( 'image', 'not_empty', ''),
-                        'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'center' => __( 'Center', '_beacon' ),
-                            'top_left' => __( 'Top Left', '_beacon' ),
-                            'top_right' => __( 'Top Right', '_beacon' ),
-                            'top_center' => __( 'Top Center', '_beacon' ),
-                            'bottom_left' => __( 'Bottom Left', '_beacon' ),
-                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
-                            'bottom_right' => __( 'Bottom Right', '_beacon' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'repeat',
-                        'type' => 'select',
-                        'label' => __( 'Background Repeat', '_beacon' ),
-                        'required' => array(
-                            array('image', 'not_empty', ''),
-                           // array('style', '!=', 'cover' ),
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'no-repeat' => __( 'No-repeat', '_beacon' ),
-                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
-                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'attachment',
-                        'type' => 'select',
-                        'label' => __( 'Background Attachment', '_beacon' ),
-                        'required' => array(
-                            array('image', 'not_empty', ''),
-                            array('cover', '!=', '1' ),
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'scroll' => __( 'Scroll', '_beacon' ),
-                            'fixed' => __( 'Fixed', '_beacon' )
-                        ),
-                    ),
-
-                )
-            ),
 
 
         );

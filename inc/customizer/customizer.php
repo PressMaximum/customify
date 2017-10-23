@@ -257,13 +257,14 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                     default:
 
                         $args['setting_type'] = $args['type'];
+                        $args['defaultValue'] = $args['default'];
                         $settings_args = array(
                            'sanitize_callback' => $args['sanitize_callback'],
                            'sanitize_js_callback' => $args['sanitize_js_callback'],
                            'theme_supports' => $args['theme_supports'],
                            //'transport' => $args['transport'],
-                           'default' => $args['default'],
                            'type' => $args['mod'],
+                           'default' => $args['default'],
                         );
                         $settings_args['transport'] = 'refresh';
                         if ( ! $settings_args['sanitize_callback'] ) {
@@ -273,8 +274,8 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         foreach ( $settings_args as $k => $v ) {
                            unset( $args[ $k ] );
                         }
-                        unset( $args['mod'] );
 
+                        unset( $args['mod'] );
                         $name = $args['name'];
                         unset( $args['name'] );
 

@@ -189,6 +189,8 @@
     margin-bottom: 0px; }
   ._beacon--field * {
     box-sizing: border-box; }
+  ._beacon--field._beacon--field-color * {
+    box-sizing: content-box; }
   ._beacon--field textarea {
     width: 100%; }
   ._beacon--field .wp-picker-container input[type=text].wp-color-picker {
@@ -276,13 +278,13 @@
     width: 100%;
     display: block;
     height: 5px;
-    background: #CCCCCC; }
+    background: #3068af; }
   ._beacon-input-slider .ui-slider-handle {
     width: 15px;
     height: 15px;
     display: block;
     position: absolute;
-    top: -6px;
+    top: -5px;
     background: #ffffff;
     border: 1px solid #CCCCCC;
     border-radius: 50%;
@@ -395,3 +397,97 @@
     clear: both;
     content: "";
     display: block; }
+
+/*Background field*/
+.customize-control._beacon-background-control ._beacon-group-device-fields {
+  position: relative; }
+  .customize-control._beacon-background-control ._beacon-group-device-fields::after {
+    clear: both;
+    content: "";
+    display: block; }
+
+.customize-control._beacon-background-control ._beacon--settings-fields {
+  position: relative;
+  min-height: 160px;
+  display: block;
+  margin-top: 7px; }
+  .customize-control._beacon-background-control ._beacon--settings-fields::after {
+    clear: both;
+    content: "";
+    display: block; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field select {
+    width: 135px; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color {
+    position: absolute;
+    top: 0px;
+    right: 0px; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color ._beacon-field-heading {
+      display: none; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-container {
+      position: relative; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-container input.wp-color-picker {
+        display: none !important; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-container .wp-color-result {
+        padding-left: 50px; }
+        .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-container .wp-color-result.wp-picker-open {
+          padding-left: 75px; }
+          .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-container .wp-color-result.wp-picker-open:after {
+            display: none; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-color .wp-picker-holder {
+      position: absolute;
+      right: 0px;
+      z-index: 10; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image {
+    width: 115px;
+    display: block;
+    float: left; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image ._beacon-field-header {
+      display: none; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image .button {
+      overflow: hidden;
+      width: 35px;
+      vertical-align: middle; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image .button:before {
+        font-family: dashicons;
+        margin-right: 35px;
+        display: inline-block; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image .button._beacon--change:before, .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image .button._beacon--add:before {
+        content: "\f317"; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image .button._beacon--remove:before {
+        content: "\f335"; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image ._beacon-image-preview {
+      margin: 0px 0px 10px; }
+      .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image ._beacon-image-preview:before {
+        padding: 35px 20px; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image ._beacon-field-header {
+      display: none; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-image img {
+      width: 115px;
+      height: 115px;
+      display: block;
+      -o-object-fit: cover;
+         object-fit: cover; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-position {
+    position: absolute;
+    top: 30px;
+    right: 0px; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-position ._beacon-field-header {
+      display: none; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-repeat {
+    position: absolute;
+    top: 60px;
+    right: 0px; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-repeat ._beacon-field-header {
+      display: none; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-cover {
+    clear: both;
+    position: absolute;
+    top: 90px;
+    right: 0px; }
+  .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-attachment {
+    clear: both;
+    position: absolute;
+    top: 120px;
+    right: 0px; }
+    .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-attachment ._beacon-field-header {
+      display: none; }

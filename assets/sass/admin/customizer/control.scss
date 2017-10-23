@@ -265,6 +265,11 @@ $text_color: #555d66;
     * {
         box-sizing: border-box;
     }
+    &._beacon--field-color {
+        * {
+            box-sizing: content-box;
+        }
+    }
     label {
 
     }
@@ -371,14 +376,14 @@ $text_color: #555d66;
         width: 100%;
         display: block;
         height: 5px;
-        background: #CCCCCC;
+        background: #3068af;
     }
     .ui-slider-handle {
         width: 15px;
         height: 15px;
         display: block;
         position: absolute;
-        top: -6px;
+        top: -5px;
         background: #ffffff;
         border: 1px solid #CCCCCC;
         border-radius: 50%;
@@ -495,6 +500,141 @@ $text_color: #555d66;
         }
         &:after {
             clear: both; content: ""; display: block;
+        }
+    }
+}
+
+/*Background field*/
+.customize-control {
+    &._beacon-background-control {
+        ._beacon-group-device-fields {
+            position: relative;
+            &::after {
+                clear: both; content: ""; display: block;
+            }
+        }
+
+        ._beacon--settings-fields {
+            position: relative;
+            min-height: 160px;
+            display: block;
+            margin-top: 7px;
+            &::after {
+                clear: both; content: ""; display: block;
+            }
+            ._beacon--field {
+                select {
+                    width: 135px;
+                }
+                &._beacon--field-name-color{
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    ._beacon-field-heading {
+                        display: none;
+                    }
+                    .wp-picker-container {
+                        position: relative;
+
+                        input.wp-color-picker {
+                            display: none !important;
+                        }
+                        .wp-color-result{
+                            padding-left: 50px;
+                            &.wp-picker-open {
+                                padding-left: 75px;
+                                &:after {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    .wp-picker-holder {
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                    }
+                }
+
+                &._beacon--field-name-image {
+                    width: 115px;
+                    display: block;
+                    float: left;
+                    ._beacon-field-header{
+                        display: none;
+                    }
+                    .button {
+                        overflow: hidden;
+                        width: 35px;
+                        vertical-align: middle;
+                        &:before {
+                            font-family: dashicons;
+                            margin-right: 35px;
+                            display: inline-block;
+                        }
+                        &._beacon--change, &._beacon--add {
+                            &:before {
+                                content: "\f317";
+                            }
+                        }
+                        &._beacon--remove {
+                            &:before {
+                                content: "\f335";
+                            }
+                        }
+                    }
+                    ._beacon-image-preview {
+                        margin: 0px 0px 10px;
+                        &:before {
+                            padding: 35px 20px;
+                        }
+                    }
+                    ._beacon-field-header {
+                        display: none;
+                    }
+                    img {
+                        width: 115px;
+                        height: 115px;
+                        display: block;
+                        object-fit: cover;
+                    }
+                }
+
+                &._beacon--field-name-position {
+                    ._beacon-field-header{ display: none; }
+                    position: absolute;
+                    top: 30px;
+                    right: 0px;
+                }
+
+                &._beacon--field-name-repeat {
+                    ._beacon-field-header { display: none; }
+                    position: absolute;
+                    top: 60px;
+                    right: 0px;
+                }
+
+                &._beacon--field-name-cover {
+                   clear: both;
+                    position: absolute;
+                    top: 90px;
+                    right: 0px;
+                }
+
+                &._beacon--field-name-attachment {
+                    ._beacon-field-header { display: none; }
+                    clear: both;
+                    position: absolute;
+                    top: 120px;
+                    right: 0px;
+                }
+
+            }
+
+        }
+        ._beacon-group-device-fields {
+
+
         }
     }
 }

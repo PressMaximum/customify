@@ -19,7 +19,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     public $setting_type = 'group';
     public $fields = array();
     public $choices = array();
-    public $default = array();
+    public $default = null;
+    public $defaultValue = null;
     public $device = '';
     public $checkbox_label = '';
     public $limit ;
@@ -128,7 +129,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         }
 
         $this->json['value']        = $value;
-        $this->json['default']      = $this->default;
+        $this->json['default']      = $this->defaultValue;
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
         $this->json['required']     = $this->required;
@@ -151,7 +152,6 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         if ( $this->setting_type == 'checkbox' ) {
             $this->json['checkbox_label'] = $this->checkbox_label;
         }
-        //$this->json['link']       = $this->get_link();
     }
 
 
@@ -303,7 +303,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             required = JSON.stringify( field.required  );
         }
         #>
-        <div class="_beacon--field _beacon--field-{{ field.type }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
+        <div class="_beacon--field _beacon--field-{{ field.type }} _beacon--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
         <?php
     }
 
@@ -430,7 +430,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         ?>
         <?php echo $this->field_header(); ?>
         <div class="_beacon-field-settings-inner">
-            <div class="_beacon-input-color">
+            <div class="_beacon-input-color" data-default="{{ field.default }}">
                 <input type="hidden" class="_beacon-input" data-name="{{ field.name }}" value="{{ field.value }}">
                 <input type="text" class="_beacon--color-panel" data-alpha="true" value="{{ field.value }}">
             </div>
@@ -547,7 +547,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
         var url = field.value.url;
         #>
         <?php echo $this->field_header(); ?>
-        <div class="_beacon-field-settings-inner">
+        <div class="_beacon-field-settings-inner _beacon-media-type-{{ field.type }}">
             <div class="_beacon--media">
                 <input type="hidden" class="attachment-id" value="{{ field.value.id }}" data-name="{{ field.name }}">
                 <input type="hidden" class="attachment-url"  value="{{ field.value.url }}" data-name="{{ field.name }}-url">
