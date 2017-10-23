@@ -1273,8 +1273,10 @@
                 $( '._beacon--font-subsets-wrapper', p ).addClass( '_beacon--hide').find( '.list-subsets' ).html('');
             } else {
                 $( '._beacon--font-type', p ).val( type );
+                $( '._beacon--font-variants-wrapper', p ).removeClass( '_beacon--hide');
+                $( '._beacon--font-subsets-wrapper', p ).removeClass( '_beacon--hide');
                 $( '._beacon--font-variants', p).html( that.toSelectOptions(variants, _.isObject( font ) ? font.variant : '' ) );
-                $( '.list-subsets', p).html( that.toCheckboxes(subsets, _.isObject( font ) ? font.subsets : '' ) );
+                $( '.list-subsets', p).removeClass('_beacon--hide').html( that.toCheckboxes(subsets, _.isObject( font ) ? font.subsets : '' ) );
             }
 
         },
