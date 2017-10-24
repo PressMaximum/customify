@@ -20,6 +20,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         function __construct()
         {
             add_action( 'customize_register', array( $this, 'register' ) );
+            add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
         }
 
         static function get_instance(){
@@ -28,6 +29,16 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
             }
             return self::$_instance ;
         }
+
+        /**
+         * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
+         */
+        function preview_js() {
+            wp_enqueue_script( '_beacon-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array( 'customize-preview' ), '20151215', true );
+            wp_localize_script( '_beacon-customizer', '_Beacon_Preview_Config_Fields', _Beacon_Customizer::get_config() );
+
+        }
+
 
         static function get_config(){
             if ( is_null( self::$config  ) ) {
@@ -343,38 +354,6 @@ if ( ! function_exists( '_Beacon_Customizer' ) ) {
     }
 }
 _Beacon_Customizer();
-
-/**
- * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
- */
-function _beacon_customize_preview_js() {
-    wp_enqueue_script( '_beacon-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array( 'customize-preview' ), '20151215', true );
-    wp_localize_script( '_beacon-customizer', '_Beacon_Preview_Config_Fields', _Beacon_Customizer::get_config() );
-
-}
-add_action( 'customize_preview_init', '_beacon_customize_preview_js' );
-
-
-function _test_1_render_callback( $partial = false ){
-    echo '<div class="_test_text1">';
-
-    if( $partial ) {
-        $control_settings = $partial->component->manager->get_control($partial->id);
-        echo '<pre>';
-        var_dump($control_settings);
-        echo '</pre>';
-
-    }
-
-    $html = '<h2 class="dsadsadsa">'.esc_html( _Beacon_Customizer()->get_setting( 'text' ) ).'<div class="_test_text_2">'.esc_html( _Beacon_Customizer()->get_setting( 'text2' ) ).'</div></h2>';
-    echo $html;
-
-    echo '</div>';
-}
-function _test_2_render_callback(){
-    $html = '<div class="_test_text_2">'.esc_html( get_theme_mod( 'text2' ) ).'</div>';
-    echo $html;
-}
 
 
 /**

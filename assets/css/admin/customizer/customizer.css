@@ -503,3 +503,80 @@
     right: 0px; }
     .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-attachment ._beacon-field-header {
       display: none; }
+
+._beacon--customize-builder {
+  position: fixed;
+  bottom: 0px;
+  right: 0px;
+  left: 300px;
+  height: 500px;
+  display: block;
+  background: #EBEBEB;
+  border-top: 1px solid #ddd; }
+  ._beacon--customize-builder * {
+    box-sizing: border-box; }
+
+._beacon--cb-header {
+  padding: 20px; }
+  ._beacon--cb-header:before, ._beacon--cb-header:after {
+    content: "";
+    display: table; }
+  ._beacon--cb-header:after {
+    clear: both; }
+  ._beacon--cb-header ._beacon--cb-devices-switcher {
+    float: left; }
+    ._beacon--cb-header ._beacon--cb-devices-switcher a {
+      display: inline-block; }
+  ._beacon--cb-header ._beacon--cb-actions {
+    float: right; }
+    ._beacon--cb-header ._beacon--cb-actions a {
+      display: inline-block; }
+
+._beacon--cb-body {
+  padding: 20px; }
+
+._beacon--cb-row {
+  padding: 0px 0 0 40px;
+  position: relative;
+  border: 1px solid #ddd;
+  display: block;
+  margin-bottom: 25px; }
+  ._beacon--cb-row:last-child {
+    margin-bottom: 0px; }
+  ._beacon--cb-row:before, ._beacon--cb-row:after {
+    content: "";
+    display: table; }
+  ._beacon--cb-row:after {
+    clear: both; }
+  ._beacon--cb-row ._beacon--cb-row-settings {
+    position: absolute;
+    top: 0px;
+    left: 0px; }
+  ._beacon--cb-row ._beacon--cb-items {
+    background: #ffffff;
+    height: 50px;
+    display: block; }
+  ._beacon--cb-row ._beacon--cb-item {
+    position: relative;
+    display: block;
+    float: left;
+    height: 50px;
+    background: #CCCCCC; }
+    ._beacon--cb-row ._beacon--cb-item .ui-resizable-w {
+      width: 3px;
+      bottom: 0px;
+      left: 0px;
+      top: 0px;
+      display: block;
+      cursor: ew-resize;
+      position: absolute;
+      background: #65ae1f; }
+    ._beacon--cb-row ._beacon--cb-item .ui-resizable-e {
+      width: 3px;
+      bottom: 0px;
+      right: 0px;
+      top: 0px;
+      display: block;
+      cursor: ew-resize;
+      position: absolute;
+      background: red; }

@@ -522,7 +522,6 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 if ( $field_css ){
                     $field_css .= "\r\n";
                 }
-
                 $css_code .= apply_filters('_beacon/customizer/auto_css',  $field_css, $field );
 
             }

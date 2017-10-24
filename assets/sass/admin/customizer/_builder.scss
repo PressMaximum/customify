@@ -1,0 +1,84 @@
+$cb_padding: 20px;
+
+._beacon--customize-builder {
+    position: fixed;
+    bottom: 0px;
+    right: 0px;
+    left: 300px;
+    height: 500px;
+    display: block;
+    background: $bg;
+    border-top: $border;
+    * {
+        box-sizing: border-box;
+    }
+}
+
+._beacon--cb-header {
+    padding: $cb_padding;
+    @include clearfix();
+    ._beacon--cb-devices-switcher {
+        float: left;
+        a {
+            display: inline-block;
+        }
+    }
+    ._beacon--cb-actions {
+        float: right;
+        a {
+            display: inline-block;
+        }
+    }
+}
+._beacon--cb-body {
+    padding: $cb_padding;
+}
+._beacon--cb-row {
+    padding: 0px 0 0 40px;
+    position: relative;
+    border: $border;
+    display: block;
+    margin-bottom: 25px;
+    &:last-child {
+        margin-bottom: 0px;
+    }
+    @include clearfix;
+    ._beacon--cb-row-settings {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+    }
+    ._beacon--cb-items {
+        background: #ffffff;
+        height: 50px;
+        display: block;
+
+    }
+    ._beacon--cb-item {
+        position: relative;
+        display: block;
+        float: left;
+        height: 50px;
+        background: #CCCCCC;
+        .ui-resizable-w {
+            width: 3px;
+            bottom: 0px;
+            left: 0px;
+            top: 0px;
+            display: block;
+            cursor: ew-resize;
+            position: absolute;
+            background: #65ae1f;
+        }
+        .ui-resizable-e {
+            width: 3px;
+            bottom: 0px;
+            right: 0px;
+            top: 0px;
+            display: block;
+            cursor: ew-resize;
+            position: absolute;
+            background: red;
+        }
+    }
+}

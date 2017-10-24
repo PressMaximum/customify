@@ -348,7 +348,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
 
 
                 'selector' => '._test_text1',
-                'render_callback' => '_test_1_render_callback'
+                'render_callback' => ''
             ),
 
             array(

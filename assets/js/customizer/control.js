@@ -862,7 +862,7 @@
         },
         initField: function( ){
             var control = this;
-            console.log( 'control.params - '+ control.id, control.params );
+            //console.log( 'control.params - '+ control.id, control.params );
             var field = {
                 type: control.params.setting_type,
                 name: control.id,

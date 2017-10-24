@@ -73,7 +73,7 @@
 	<div id="content" class="site-content">
         <div class="_beacon-container">
             <?php
-            _test_1_render_callback();
+            //_test_1_render_callback();
 
             $fields = apply_filters( '_beacon/customizer/config', array() );
             foreach ( $fields as $f ) {
