@@ -7,6 +7,9 @@
  * @package _beacon
  */
 
+global $site_layout;
+$site_layout = 'content-sidebar';
+
 if ( ! function_exists( '_beacon_setup' ) ) :
 	/**
 	 * Sets up theme defaults and registers support for various WordPress features.
@@ -102,8 +105,53 @@ add_action( 'after_setup_theme', '_beacon_content_width', 0 );
  */
 function _beacon_widgets_init() {
 	register_sidebar( array(
-		'name'          => esc_html__( 'Sidebar', '_beacon' ),
+		'name'          => esc_html__( 'Sidebar Primary', '_beacon' ),
 		'id'            => 'sidebar-1',
+		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Sidebar Secondary', '_beacon' ),
+		'id'            => 'sidebar-2',
+		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Footer 1', '_beacon' ),
+		'id'            => 'footer-1',
+		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Footer 2', '_beacon' ),
+		'id'            => 'footer-2',
+		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Footer 3', '_beacon' ),
+		'id'            => 'footer-3',
+		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
+		'before_widget' => '<section id="%1$s" class="widget %2$s">',
+		'after_widget'  => '</section>',
+		'before_title'  => '<h4 class="widget-title">',
+		'after_title'   => '</h4>',
+	) );
+	register_sidebar( array(
+		'name'          => esc_html__( 'Footer 4', '_beacon' ),
+		'id'            => 'footer-4',
 		'description'       => esc_html__( 'Add widgets here.', '_beacon' ),
 		'before_widget' => '<section id="%1$s" class="widget %2$s">',
 		'after_widget'  => '</section>',
@@ -130,6 +178,16 @@ function _beacon_scripts() {
     wp_add_inline_style( '_beacon-style', _Beacon_Customizer_Auto_CSS() );
 }
 add_action( 'wp_enqueue_scripts', '_beacon_scripts' );
+
+/**
+ * Template element classes.
+ */
+require get_template_directory() . '/inc/template-class.php';
+
+/**
+ * Functions which enhance the theme by hooking into WordPerss and itself (huh?).
+ */
+require get_template_directory() . '/inc/element-classes.php';
 
 /**
  * Custom template tags for this theme.

@@ -1,3 +1,4 @@
+// clearfix helper
 @mixin clearfix {
     &:before, &:after {
         content: "";
@@ -5,5 +6,41 @@
     }
     &:after {
         clear: both;
+    }
+}
+
+//$screen_lg: 80em;   // max 1280px
+//$screen_md: 64em;   // max 1024px
+//$screen_sm: 48em;   // max 768px
+//$screen_xs: 35.5em; // up to 568px
+
+// Mobile first responsive
+@mixin mq($media) {
+    @if $media == min-xs {
+        @media screen and (min-width: $screen_xs) { @content; }
+    }
+    @else if $media == max-xs {
+        @media screen and (max-width: $screen_xs) { @content; }
+    }
+
+    @if $media == min-sm {
+        @media screen and (min-width: $screen_sm) { @content; }
+    }
+    @else if $media == max-sm {
+        @media screen and (max-width: $screen_sm) { @content; }
+    }
+
+    @else if $media == min-md {
+        @media screen and (min-width: $screen_md) { @content; }
+    }
+    @else if $media == max-md {
+        @media screen and (max-width: $screen_md) { @content; }
+    }
+
+    @else if $media == min-lg {
+        @media screen and (min-width: $screen_lg) { @content; }
+    }
+    @else if $media == max-lg {
+        @media screen and (max-width: $screen_lg) { @content; }
     }
 }

@@ -53,10 +53,10 @@
 
                     <nav id="site-navigation" class="main-navigation">
                         <?php
-                            wp_nav_menu( array(
-                                'theme_location' => 'menu-1',
-                                'menu_id'        => 'primary-menu',
-                            ) );
+//                            wp_nav_menu( array(
+//                                'theme_location' => 'menu-1',
+//                                'menu_id'        => 'primary-menu',
+//                            ) );
                         ?>
                     </nav><!-- #site-navigation -->
                 </div> <!-- #._beacon-container -->
@@ -70,16 +70,5 @@
 
 	</header><!-- #masthead -->
 
-	<div id="content" class="site-content">
-        <div class="_beacon-container">
-            <?php
-            //_test_1_render_callback();
+	<div id="site-content" <?php _beacon_site_content_class(); ?>>
 
-            $fields = apply_filters( '_beacon/customizer/config', array() );
-            foreach ( $fields as $f ) {
-                if (  $f['type'] != 'panel' && $f['type'] != 'section' ) {
-                   // echo $f['name'] ;
-                   // var_dump( _Beacon_Customizer()->get_setting( $f['name'], 'all' ) );
-                }
-            }
-            ?>

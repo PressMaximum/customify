@@ -9,27 +9,34 @@
 
 get_header(); ?>
 
-	<div id="primary" class="content-area">
-		<main id="main" class="site-main">
+    <div <?php _beacon_site_content_container_class(); ?>>
+        <div <?php _beacon_site_content_grid_class(); ?>>
 
-		<?php
-		while ( have_posts() ) : the_post();
+            <main id="main" <?php _beacon_main_content_class(); ?>>
+                <div class="content-inner">
 
-			get_template_part( 'template-parts/content', get_post_type() );
+                    <?php
+                    while ( have_posts() ) : the_post();
 
-			the_post_navigation();
+                        get_template_part( 'template-parts/content', get_post_type() );
 
-			// If comments are open or we have at least one comment, load up the comment template.
-			if ( comments_open() || get_comments_number() ) :
-				comments_template();
-			endif;
+                        the_post_navigation();
 
-		endwhile; // End of the loop.
-		?>
+                        // If comments are open or we have at least one comment, load up the comment template.
+                        if ( comments_open() || get_comments_number() ) :
+                            comments_template();
+                        endif;
 
-		</main><!-- #main -->
-	</div><!-- #primary -->
+                    endwhile; // End of the loop.
+                    ?>
+
+                </div><!-- #.content-inner -->
+            </main><!-- #main -->
+
+            <?php do_action( '_beacon_sidebars' ); ?>
+
+        </div><!-- #._beacon-grid -->
+    </div><!-- #._beacon-container -->
 
 <?php
-get_sidebar();
 get_footer();
