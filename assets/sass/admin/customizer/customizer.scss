@@ -1,5 +1,19 @@
 // Import custom controls
-@import "controls";
+$border: 1px solid #ddd;
+$bg: #EBEBEB;
+
+@mixin clearfix {
+    &:before, &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+
+@import "control";
+@import "builder";
 
 // Import header builder style
 @import "header_builder";

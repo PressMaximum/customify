@@ -71,3 +71,4 @@
 	</header><!-- #masthead -->
 
 	<div id="site-content" <?php _beacon_site_content_class(); ?>>
+

@@ -174,6 +174,8 @@ function _beacon_scripts() {
 	if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 		wp_enqueue_script( 'comment-reply' );
 	}
+
+    wp_add_inline_style( '_beacon-style', _Beacon_Customizer_Auto_CSS() );
 }
 add_action( 'wp_enqueue_scripts', '_beacon_scripts' );
 
@@ -201,5 +203,6 @@ require get_template_directory() . '/inc/template-functions.php';
  * Customizer additions.
  */
 require get_template_directory() . '/inc/customizer/customizer.php';
+//require get_template_directory() . '/inc/customizer-layout-builder/init.php';
 
 
