@@ -144,8 +144,6 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $css['position'] = 'background-position: center center;';
             }
 
-
-
             switch ( $value['repeat'] ) {
                 case 'no-repeat':
                     $css['repeat'] = 'background-repeat: no-repeat;';
@@ -189,7 +187,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             $code_array = array();
             $has_device = false;
             $format = isset( $field['css_format'] ) ? $field['css_format']: false;
-            if ( $field['device_settings'] ) {
+            if ( isset( $field['device_settings'] ) && $field['device_settings'] ) {
                 $has_device = true;
                 foreach ( _Beacon_Customizer()->devices as $device ) {
                     $value = null;
@@ -225,6 +223,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             if ( $no_selector ) {
                 return $code_array;
             } else {
+                $code = '';
                 if ( $has_device ) {
                     foreach ( _Beacon_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
@@ -424,7 +423,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
 
             if (isset($fields['letter_spacing'])) {
                 $fields['letter_spacing']['css_format'] = 'letter-spacing: {{value}};';
-                $font_size_css = $this->maybe_devices_setup($fields['line_height'], 'setup_slider', $values['line_height'], true);
+                $font_size_css = $this->maybe_devices_setup($fields['letter_spacing'], 'setup_slider', $values['letter_spacing'], true);
                 if ($font_size_css) {
                     if (isset($font_size_css['no_devices'])) {
                         $code['letter_spacing'] = $font_size_css['no_devices'];
