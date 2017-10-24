@@ -83,6 +83,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             'ajax' => admin_url( 'admin-ajax.php' ),
             'has_icons' => _Beacon_Customizer()->has_icon(),
             'icons' => _Beacon_Font_Icons()->get_icons(),
+            'theme_default' => __( 'Theme Default', '_beacon' ),
         ) );
     }
 

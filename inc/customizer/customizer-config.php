@@ -45,7 +45,6 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'name' => 'font_style',
                         'type' => 'font_style',
                         'label' => __( 'Font Style', '_beacon' ),
-                        'device_settings' => true,
                     ),
 
                     array(
@@ -66,7 +65,65 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                         'name' => 'letter_spacing',
                         'type' => 'slider',
                         'label' => __( 'Letter Spacing', '_beacon' ),
+                        'min' => -10,
+                        'max' => 10,
+                    ),
+
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', '_beacon' ),
+                    ),
+
+                )
+            ),
+
+            array(
+                'name' => 'typography_h1',
+                'type' => 'group',
+                'section'     => '_beacon_section',
+                'title'          => __( 'Typography H1', '_beacon' ),
+                'description'    => __( 'This is description',  '_beacon' ),
+                'field_class' => '_beacon-typography-control',
+                'selector' => '#page h1',
+                'css_format' => 'typography',
+                'default' => array(
+
+                ),
+                'fields' => array(
+
+                    array(
+                        'name' => 'font',
+                        'type' => 'font',
+                        'label' => __( 'Font', '_beacon' ),
+                    ),
+
+                    array(
+                        'name' => 'font_style',
+                        'type' => 'font_style',
+                        'label' => __( 'Font Style', '_beacon' ),
+                    ),
+
+                    array(
+                        'name' => 'font_size',
+                        'type' => 'slider',
+                        'label' => __( 'Font Size', '_beacon' ),
                         'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'line_height',
+                        'type' => 'slider',
+                        'label' => __( 'Line Height', '_beacon' ),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'letter_spacing',
+                        'type' => 'slider',
+                        'label' => __( 'Letter Spacing', '_beacon' ),
+                        'min' => -10,
+                        'max' => 10,
                     ),
 
                     array(

@@ -1206,6 +1206,8 @@
         ready: function(){
             var that = this;
             _.each( that.fonts, function( group, type ){
+                // theme_default
+                that.optionHtml += '<option value="">'+_Beacon_Control_Args.theme_default+'</option>';
                 that.optionHtml += '<optgroup label="'+group.title+'">';
                     _.each( group.fonts, function( font, font_name ) {
                         that.optionHtml += '<option value="'+font_name+'">'+font_name+'</option>';
@@ -1214,7 +1216,6 @@
             } );
 
             $( 'select._beacon--font-families' ).html( that.optionHtml );
-
             $( 'select._beacon--font-families' ).each( function(){
                 var save_value = $( this ).data( 'value' );
                 if ( ! _.isObject( save_value ) ) {
@@ -1222,18 +1223,15 @@
                 }
                 var p = $( this ).closest('._beacon-field-settings-inner');
                 if ( save_value.font ) {
-                    $( 'option[value="'+save_value.font+'"]' ).attr( 'selected', 'selected' );
+                    $( 'option[value="'+save_value.font+'"]', $( this ) ).attr( 'selected', 'selected' );
                 }
                 that.setUpFont( save_value, p );
-
             } );
-
 
             $document.on( 'change', 'select._beacon--font-families', function(){
                 var font =  $( this ).val();
                 var p = $( this ).closest('._beacon-field-settings-inner');
                 that.setUpFont( font, p );
-
             } );
         },
 
