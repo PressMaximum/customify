@@ -25,49 +25,9 @@
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', '_beacon' ); ?></a>
 
 	<header id="masthead" class="site-header">
-
-            <div class="header-top">
-                <div class="_beacon-container">
-                    header top
-                </div> <!-- #._beacon-container -->
-            </div><!-- #.header-top -->
-
-            <div class="header-main">
-                <div class="_beacon-container">
-                    <div class="site-branding">
-                        <?php
-                        the_custom_logo();
-                        if ( is_front_page() && is_home() ) : ?>
-                            <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-                        <?php else : ?>
-                            <p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-                        <?php
-                        endif;
-
-                        $description = get_bloginfo( 'description', 'display' );
-                        if ( $description || is_customize_preview() ) : ?>
-                            <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-                        <?php
-                        endif; ?>
-                    </div><!-- .site-branding -->
-
-                    <nav id="site-navigation" class="main-navigation">
-                        <?php
-//                            wp_nav_menu( array(
-//                                'theme_location' => 'menu-1',
-//                                'menu_id'        => 'primary-menu',
-//                            ) );
-                        ?>
-                    </nav><!-- #site-navigation -->
-                </div> <!-- #._beacon-container -->
-            </div><!-- #.header-main -->
-
-            <div class="header-bottom">
-                <div class="_beacon-container">
-                    header bottom
-                </div> <!-- #._beacon-container -->
-            </div><!-- #.header-bottom -->
-
+        <?php
+        _beacon_customize_render_header();
+        ?>
 	</header><!-- #masthead -->
 
 	<div id="site-content" <?php _beacon_site_content_class(); ?>>

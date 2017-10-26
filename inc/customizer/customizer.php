@@ -296,6 +296,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                            'type' => $args['mod'],
                            'default' => $args['default'],
                         );
+
                         $settings_args['transport'] = 'refresh';
                         if ( ! $settings_args['sanitize_callback'] ) {
                             $settings_args['sanitize_callback'] = '_beacon_sanitize_customizer_input';

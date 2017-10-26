@@ -182,39 +182,32 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
      * @access protected
      */
     protected function render_content() {
-
-        if ( $this->setting_type == 'device_select' ) {
-            ?>
-            <div class="_beacon--device-select">
-                <a href="#" class="_beacon--active _beacon--tab-device-general"><?php _e( 'General', '_beacon' ); ?></a>
-                <a href="#" class="_beacon--tab-device-mobile"><?php _e( 'Mobile', '_beacon' ); ?></a>
-            </div>
-            <?php
-
-        } else {
-            ?>
-            <div class="_beacon--settings-wrapper">
-                <div class="_beacon-control-field-header _beacon-field-heading">
-                    <label>
-                        <?php if (!empty($this->label)) : ?>
-                            <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
-                        <?php endif; ?>
-                    </label>
-                </div>
-                <?php if (!empty($this->description)) : ?>
-                    <span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span>
-                <?php endif; ?>
-                <div class="_beacon--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' _beacon--repeater-items' : ''; ?>"></div>
-                <?php if ( $this->setting_type == 'repeater' ) { ?>
-                    <div class="_beacon--repeater-actions">
-                        <a href="#" class="_beacon--repeater-reorder" data-text="<?php _e( 'Reorder', '_beacon' ); ?>" data-done="<?php _e( 'Done', '_beacon' ); ?>"><?php _e( 'Reorder', '_beacon' ); ?></a>
-                        <button type="button" class="button _beacon--repeater-add-new"><?php _e( 'Add an item', '_beacon' ); ?></button>
-                    </div>
-
-                <?php } ?>
-            </div>
-            <?php
+        if ( $this->setting_type == 'js_raw' ) {
+            return '';
         }
+
+        ?>
+        <div class="_beacon--settings-wrapper">
+            <div class="_beacon-control-field-header _beacon-field-heading">
+                <label>
+                    <?php if (!empty($this->label)) : ?>
+                        <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
+                    <?php endif; ?>
+                </label>
+            </div>
+            <?php if (!empty($this->description)) : ?>
+                <span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span>
+            <?php endif; ?>
+            <div class="_beacon--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' _beacon--repeater-items' : ''; ?>"></div>
+            <?php if ( $this->setting_type == 'repeater' ) { ?>
+                <div class="_beacon--repeater-actions">
+                    <a href="#" class="_beacon--repeater-reorder" data-text="<?php _e( 'Reorder', '_beacon' ); ?>" data-done="<?php _e( 'Done', '_beacon' ); ?>"><?php _e( 'Reorder', '_beacon' ); ?></a>
+                    <button type="button" class="button _beacon--repeater-add-new"><?php _e( 'Add an item', '_beacon' ); ?></button>
+                </div>
+
+            <?php } ?>
+        </div>
+        <?php
 
     }
 

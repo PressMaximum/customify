@@ -3,14 +3,18 @@ $cb_padding: 20px;
 ._beacon--customize-builder {
     position: fixed;
     bottom: 0px;
-    right: 0px;
-    left: 300px;
+    width: 100%;
+    max-width: 100%;
+    left: 0px;
     height: 500px;
     display: block;
     background: $bg;
     border-top: $border;
     * {
         box-sizing: border-box;
+    }
+    ._beacon--cb-inner {
+        margin-left: 300px;
     }
 }
 
@@ -49,36 +53,85 @@ $cb_padding: 20px;
         left: 0px;
     }
     ._beacon--cb-items {
-        background: #ffffff;
-        height: 50px;
         display: block;
-
+        min-height: 45px;
     }
-    ._beacon--cb-item {
-        position: relative;
+    ._beacon--row-inner {
+        background: #ffffff;
+        padding: 10px 0px;
+    }
+
+    .grid-stack-item-content {
+        background: #fafafa;
+        border: 1px solid #DDDDDD;
+    }
+
+    ._beacon--cb-item-name {
+        line-height: 40px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin: 0 35px 0 0;
         display: block;
+    }
+    ._beacon--cb-item-add {
+        display: none;
+    }
+}
+._beacon-available-items {
+    padding: $cb_padding;
+    @include clearfix;
+    .grid-stack-item {
+        padding: 10px;
         float: left;
-        height: 50px;
-        background: #CCCCCC;
-        .ui-resizable-w {
-            width: 3px;
-            bottom: 0px;
-            left: 0px;
-            top: 0px;
-            display: block;
-            cursor: ew-resize;
-            position: absolute;
-            background: #65ae1f;
+        border: $border;
+        margin-right: 10px;
+        cursor: pointer;
+    }
+    ._beacon--cb-item-setting, ._beacon--cb-item-remove {
+        display: none;
+    }
+    ._beacon--cb-item-name {
+        margin-right: 20px;
+    }
+}
+.grid-stack > .grid-stack-item > .grid-stack-item-content {
+    overflow: hidden !important;
+}
+.grid-stack-item {
+    position: relative;
+
+    ._beacon-cb-icon {
+        position: absolute;
+        &:before {
+            -webkit-font-smoothing: antialiased;
+            font: 400 20px/26px dashicons;
         }
-        .ui-resizable-e {
-            width: 3px;
-            bottom: 0px;
-            right: 0px;
-            top: 0px;
-            display: block;
-            cursor: ew-resize;
-            position: absolute;
-            background: red;
+    }
+
+    ._beacon--cb-item-add {
+        top: 50%;
+        right: 10px;
+        transform: translateY(-50%);
+        &:before {
+            content: "\f132";
+        }
+    }
+
+    ._beacon--cb-item-remove {
+        top: 50%;
+        right: 5px;
+        transform: translateY(-50%);
+        &:before {
+            content: "\f335";
+        }
+    }
+
+    ._beacon--cb-item-setting {
+        top: 50%;
+        right: 30px;
+        transform: translateY(-50%);
+        &:before {
+            content: "\f111";
         }
     }
 }

@@ -56,7 +56,7 @@
        // console.log( 'Test Get control',  defaultTarget.wp.customize.control( 'repeater' ) );
         //console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );
 
-
+        /*
         $.each( _Beacon_Preview_Config_Fields, function ( index, field ) {
             if ( index.indexOf( 'setting|' ) > -1 ) {
                 //console.log( field );
@@ -69,7 +69,10 @@
                 }
             }
         } );
+        */
 
+
+        /*
 
         wp.customize.selectiveRefresh.bind( 'sidebar-updated', function( sidebarPartial ) {
             var widgetArea;
@@ -86,6 +89,7 @@
             var widgetArea;
             console.log( 'partial-content-rendered', sidebarPartial );
         } );
+        */
 
 
     } );

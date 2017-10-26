@@ -4,6 +4,7 @@ class _Beacon_Customizer_Layout_Builder {
     static $_instance;
     function __construct()
     {
+        require_once get_template_directory().'/inc/customizer-layout-builder/config/header-builder.php';
 
         add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
@@ -11,7 +12,12 @@ class _Beacon_Customizer_Layout_Builder {
 
     function scripts(){
         wp_enqueue_script( 'jquery-ui-resizable' );
-        wp_enqueue_script( '_beacon-customizer-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable' ), false, true );
+        wp_enqueue_script( 'gridstack.js', get_template_directory_uri() . '/assets/js/customizer/gridstack.js' );
+        wp_enqueue_script( 'gridstack.jQueryUI.js', get_template_directory_uri() . '/assets/js/customizer/gridstack.jQueryUI.js' );
+        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'gridstack.js', 'gridstack.jQueryUI.js' ), false, true );
+        wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
+            'header_items' => $this->get_header_items()
+        ) );
     }
 
     static function get_instance(){
@@ -19,6 +25,85 @@ class _Beacon_Customizer_Layout_Builder {
             self::$_instance = new self();
         }
         return self::$_instance ;
+    }
+
+    function get_header_items(){
+        $items = array(
+            array(
+                'name' => __( 'Logo', '_beacon' ),
+                'x' => 0,
+                'id' => 'logo',
+                'width' => '1',
+                'limit' => 1,
+                'section' => 'header_logo' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Nav Icon', '_beacon' ),
+                'x' => 0,
+                'id' => 'nav-icon',
+                'width' => '1',
+                'limit' => 1,
+                'section' => 'header_nav_icon' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Primary Menu', '_beacon' ),
+                'id' => 'nav-menu',
+                'x' => 0,
+                'width' => '6',
+                'limit' => 2,
+                'section' => 'header_menu_primary' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Search', '_beacon' ),
+                'id' => 'search',
+                'x' => 0,
+                'width' => '1',
+                'limit' => 1,
+                'section' => 'search' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Social Icons', '_beacon' ),
+                'id' => 'social-icons',
+                'x' => 0,
+                'width' => '4',
+                'limit' => 1,
+                'section' => 'search' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Button', '_beacon' ),
+                'id' => 'button',
+                'x' => 0,
+                'width' => '4',
+                'limit' => 3,
+                'section' => 'search' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Icon List', '_beacon' ),
+                'id' => 'icon-list',
+                'x' => 0,
+                'width' => '4',
+                'limit' => 2,
+                'section' => 'search' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'HTML', '_beacon' ),
+                'id' => 'html',
+                'x' => 0,
+                'width' => '4',
+                'limit' => 2,
+                'section' => 'header_html' // Customizer section to focus when click settings
+            ),
+
+        );
+
+        return $items;
     }
 
     function template(){
@@ -42,57 +127,46 @@ class _Beacon_Customizer_Layout_Builder {
                     <div class="_beacon--row-top _beacon--cb-row">
                         <a class="_beacon--cb-row-settings" href="#">set</a>
                         <div class="_beacon--row-inner">
-                            <div class="_beacon--cb-items">
-
-                                <div class="_beacon--cb-item">
-                                    <span class="resize-left"><--</span>
-                                    Item 1
-                                    <span class="resize-left">--></span>
-                                </div>
-
-                                <div class="_beacon--cb-item">
-                                    <span class="resize-left"><--</span>
-                                    Item 2
-                                    <span class="resize-left">--></span>
-                                </div>
-
-                                <div class="_beacon--cb-item">
-                                    <span class="resize-left"><--</span>
-                                    Item 3
-                                    <span class="resize-left">--></span>
-                                </div>
-
-                                <div class="_beacon--cb-item">
-                                    <span class="resize-left"><--</span>
-                                    Item 4
-                                    <span class="resize-left">--></span>
-                                </div>
-
-
-                            </div>
+                            <div class="_beacon--cb-items grid-stack" data-id="top"></div>
                         </div>
                     </div>
                     <div class="_beacon--row-main _beacon--cb-row">
                         <a class="_beacon--cb-row-settings" href="#">set</a>
                         <div class="_beacon--row-inner">
-                            <div class="_beacon--cb-items"></div>
+                            <div class="_beacon--cb-items grid-stack" data-id="main"></div>
                         </div>
                     </div>
                     <div class="_beacon--row-bottom _beacon--cb-row">
                         <a class="_beacon--cb-row-settings" href="#">set</a>
                         <div class="_beacon--row-inner">
-                            <div class="_beacon--cb-items"></div>
+                            <div class="_beacon--cb-items grid-stack" data-id="bottom"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="_beacon--cb-footer">
+                    <div class="_beacon-available-items">
 
+                    </div>
                 </div>
 
             </div>
 
         </div>
+        <script type="text/html" id="tmpl-_beacon--cb-item">
+            <div class="grid-stack-item"
+                 title="{{ data.name }}"
+                 data-id="{{ data.id }}"
+                 data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
+                 data-gs-width="{{ data.width }}" data-gs-height="1">
+                <div class="grid-stack-item-content">
+                    <span class="_beacon--cb-item-name">{{ data.name }}</span>
+                    <span class="_beacon--cb-item-add _beacon-cb-icon"></span>
+                    <span class="_beacon--cb-item-remove _beacon-cb-icon"></span>
+                    <span class="_beacon--cb-item-setting _beacon-cb-icon" data-section="{{ data.section }}"></span>
+                </div>
+            </div>
+        </script>
         <?php
     }
 
@@ -101,3 +175,51 @@ class _Beacon_Customizer_Layout_Builder {
 }
 
 new _Beacon_Customizer_Layout_Builder();
+
+
+function _beacon_customize_render_header(){
+    ?>
+    <div class="header-top">
+        <div class="_beacon-container">
+            header top
+        </div> <!-- #._beacon-container -->
+    </div><!-- #.header-top -->
+
+    <div class="header-main">
+        <div class="_beacon-container">
+            <div class="site-branding">
+                <?php
+                the_custom_logo();
+                if ( is_front_page() && is_home() ) : ?>
+                    <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
+                <?php else : ?>
+                    <p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
+                    <?php
+                endif;
+
+                $description = get_bloginfo( 'description', 'display' );
+                if ( $description || is_customize_preview() ) : ?>
+                    <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+                    <?php
+                endif; ?>
+            </div><!-- .site-branding -->
+
+            <nav id="site-navigation" class="main-navigation">
+                <?php
+                //                            wp_nav_menu( array(
+                //                                'theme_location' => 'menu-1',
+                //                                'menu_id'        => 'primary-menu',
+                //                            ) );
+                ?>
+            </nav><!-- #site-navigation -->
+        </div> <!-- #._beacon-container -->
+    </div><!-- #.header-main -->
+
+    <div class="header-bottom">
+        <div class="_beacon-container">
+            header bottom
+        </div> <!-- #._beacon-container -->
+    </div><!-- #.header-bottom -->
+    <div class="debug"><?php var_dump( get_theme_mod( 'header_builder_panel' ) ); ?></div>
+    <?php
+}

@@ -384,6 +384,9 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     }
 
                     break;
+                case 'js_raw':
+                    $value = $this->sanitize_text_field_deep( $value );
+                    break;
                 default:
                     $has_device = false;
                     if ( $device_settings && ! $this->skip_devices ) {
