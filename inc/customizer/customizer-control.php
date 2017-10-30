@@ -123,7 +123,7 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
 
         // Devices switcher settings = true;
         $this->json['device_settings'] = $this->device_settings;
-        if ( ! $this->device_settings ) {
+        if ( ! $this->device_settings && $this->setting_type != 'js_raw' ) {
             // Fallback value when device_settings from tru to false
             if ( is_array( $value ) && isset( $value['desktop'] ) ) {
                 $value = $value['desktop'];

@@ -173,10 +173,12 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                 $device_settings = $this->control->device_settings ;
             }
 
-            if ( ! $device_settings ) {
-                // Fallback value when device_settings from tru to false
-                if ( is_array( $value ) && isset( $value['desktop'] ) ) {
-                    $value = $value['desktop'];
+            if ( $type != 'js_raw' ) {
+                if (!$device_settings) {
+                    // Fallback value when device_settings from tru to false
+                    if (is_array($value) && isset($value['desktop'])) {
+                        $value = $value['desktop'];
+                    }
                 }
             }
 

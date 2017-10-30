@@ -46,64 +46,8 @@
 
             }),
 
-            inElement: function( mousePosition, $el ){
-                var pos = $el.offset();
-                var width = $el.width();
-                var height = $el.height();
-                var right = pos.left + width;
-                var bottom = pos.top + height;
-
-                if (
-                    mousePosition.x >= pos.left && mousePosition.y >= pos.top
-                    && mousePosition.x <= right
-                    && mousePosition.y <= bottom
-                ) {
-                    return true;
-                }
-
-                return false;
-            },
-
             drag_drop: function(){
                 var that = this;
-
-                var current_gridster;
-                //this is the listener for mouse entry
-                $document.on('mousemove', '.gridster', function(e) {
-                    // store current_grid
-
-                   // console.log( 'ID', $(this).attr( 'id' ) );
-                   // console.log( 'Mouse X-Y', e.pageX + '--'+e.pageY );
-                   // console.log( 'E Target', e );
-
-
-                    if (!$('body').hasClass('gridster-dragging')) {
-                        return;
-                    }
-
-
-                    _.each( that.panels[ that.activePanel ], function( setting, id ){
-                        if ( that.inElement( { x: e.pageX, y: e.pageY }, setting.container ) ) {
-                            var ul = setting.container.find( 'ul' );
-                            var gridster = ul.data('gridster');
-                            if ( ! gridster.drag_api.is_dragging) {
-                                setting.container.addClass('gridster-item--over');
-                                console.log('IN', id );
-                                current_gridster = ul;
-                            }
-                        } else {
-                            setting.container.removeClass('gridster-item--over');
-                        }
-                    } );
-
-                    $(this).addClass('gridster-item--over');
-                });
-                $document.on('mouseleave', '.gridster', function(e) {
-                    // store current_grid
-                    $(this).removeClass('gridster-item--over');
-                });
-
-
                 _.each( that.devices, function( device_name, device ) {
                     var devicePanel = $( '._beacon--device-panel[data-device="'+device+'"]', that.container );
                     that.panels[ device ] = {};
@@ -112,127 +56,59 @@
                      *
                      * view-source:http://gridstackjs.com/demo/serialization.html
                      */
-                    $('._beacon--cb-items.gridster', devicePanel ).each(function () {
+                    console.log( devicePanel );
+                    $('._beacon--cb-items.grid-stack', devicePanel ).each(function () {
                         var g = $(this);
                        // var appendTo =  $( '._beacon--cb-items.grid-stack', devicePanel ).not( g );
-
                         var id = $(this).data('id');
                         that.panels[ device ][id] = {};
-                        var elID = 'builder-ul-'+device+'-'+id;
-                        var ul = $( 'ul', g ).first();
-                        g.attr( 'id', elID );
+                        g.gridstack({
 
 
-                        var options = {
-                            widget_base_dimensions: ['auto', 45],
-                            autogenerate_stylesheet: true,
-
-                            widget_margins: [5, 5],
-                            max_cols: 12,
-                            min_cols: 1,
-                            resize: {
-                                enabled: true,
-                                axes: ['x']
+                            //float: false,
+                            //removable: '.trash',
+                            //removeTimeout: 100,
+                            acceptWidgets: true,
+                            verticalMargin: 10,
+                            resizable: {
+                                autoHide: true, handles: 'e, w'
                             },
                             draggable: {
-                                start: function(e, data) {
-                                    $('body').addClass('gridster-dragging');
-                                },
-                                stop: function(e, data) {
-
-                                    /*
-                                    var outerGrid = $('.gridster-item--over').not( '.dragging' );
-                                    if (outerGrid.length) {
-                                        var clone = this.$player.clone(),
-                                            sizeX = this.$player.data('sizex'),
-                                            sizeY = this.$player.data('sizey');
-                                        this.$el.data('gridster').remove_widget(this.$player, true, function() {
-                                            outerGrid.find('ul').data('gridster').add_widget(clone, sizeX, sizeY);
-                                            outerGrid.removeClass('gridster-item--over');
-                                        });
-                                    }
-                                    */
-
-                                    var $el = this.$el;
-
-                                    if ( current_gridster && ! $el.is( current_gridster ) ) {
-
-                                        var clone = this.$player.clone(),
-                                            sizeX = this.$player.data('sizex'),
-                                            sizeY = this.$player.data('sizey');
-                                        var gridster  = current_gridster.data( 'gridster' );
-                                        $el.data('gridster').remove_widget(this.$player, true, function() {
-                                            gridster.add_widget(clone, sizeX, sizeY);
-                                            if ( $el.find( 'li' ).length == 0 ) {
-                                                $el.height( '' );
-                                            }
-
-                                            console.log( 'add_new' );
-                                            $( '.gridster', that.container ) .removeClass('gridster-item--over');
-                                        });
-
-                                        //current_gridster =  null;
-
-                                    }
-
-                                    $('body').removeClass('gridster-dragging');
-                                }
+                                handle: '.grid-stack-item-content',
+                                scroll: false,
+                                revert: 'invalid'
                             }
-                        };
-                        options.namespace = '#'+elID;
-                        //console.log( 'ul', ul );
-                        //console.log( 'options', options );
-                         ul.gridster(options);
+                            // revert: true
 
-                        var data_gridster = ul.data('gridster');
+                            /*
 
-                        that.panels[ device ][id].container = g;
-                        that.panels[ device ][id].gridster = data_gridster;
+                            resizable: {
+                                autoHide: true, handles: 'e, w'
+                            },
+                            acceptWidgets: '.grid-stack-item',
+                            //acceptWidgets: false,
+                            cellHeight: that.cellHeight,
+                            height: 3,
+                            draggable: {handle: '.grid-stack-item-content', scroll: false, appendTo: appendTo }
 
-
-                        /*
-                        g.on('change', function (event, items) {
-                            that.save();
+                            */
 
                         });
-                        */
+                        that.panels[ device ][id].container = $(this);
+                        that.panels[ device ][id].gridstack = g.data('gridstack');
+
+                        console.log( device+'==='+id );
+                        g.on('change', function (event, items) {
+                            that.save();
+                            that.panels[ device ][id].gridstack .batchUpdate();
+                            that.panels[ device ][id].gridstack .commit();
+
+                        });
 
                     });
                 });
 
             },
-
-            addExistingRowsItems: function(){
-
-                var that = this;
-                var data =  wpcustomize.control( that.controlId ).params.value;
-
-                if ( ! _.isObject( data ) ) {
-                    data = {};
-                }
-                _.each( that.panels, function( settings,  device ) {
-                    if( _.isUndefined( data[device] ) ) {
-                        data[device] = {};
-                    }
-                    _.each(settings, function (row, index) {
-                        if ( _.isUndefined( data[device][index] ) ) {
-                            data[device][index] = {};
-                        }
-                        var rowData = data[device][index];
-                        if (!_.isUndefined(rowData) && !_.isEmpty(rowData)) {
-                            _.each(rowData, function (node) {
-                               // var $item = $('._beacon-available-items[data-device="'+device+'"] .grid-stack-item[data-id="' + node.id + '"]', that.container).first();
-                                var html = '<li data-row="1" data-col="4" data-sizex="1" data-sizey="1"></li>';
-                               // console.log( html );
-                                that.panels[ device ][index].gridster.add_widget( html );
-                            });
-                        }
-                    });
-                });
-
-                that.ready = true;
-            },
-
 
             findNewPosition: function( new_node ){
                 var that = this;
@@ -305,7 +181,7 @@
 
                 // <div class="_beacon-available-items"></div>
                 _.each( that.devices, function(device_name, device ){
-                    var $itemWrapper = $( '<ul class="_beacon-available-items _beacon-available-items-'+device+' _beacon--panel-hide" data-device="'+device+'"></ul>' );
+                    var $itemWrapper = $( '<div class="_beacon-available-items _beacon-available-items-'+device+' _beacon--panel-hide" data-device="'+device+'"></div>' );
                     $( '._beacon--cb-footer' ).append( $itemWrapper );
                     _.each( that.items, function( node ) {
                         var item = that.addItem( node );
@@ -324,18 +200,52 @@
                 that.activePanel = device;
             },
 
+            addExistingRowsItems: function(){
+                var that = this;
+                var data =  wpcustomize.control( that.controlId ).params.value;
+
+                if ( ! _.isObject( data ) ) {
+                    data = {};
+                }
+                _.each( that.panels, function( settings,  device ) {
+                    if( _.isUndefined( data[device] ) ) {
+                        data[device] = {};
+                    }
+                    _.each(settings, function (row, index) {
+                        if ( _.isUndefined( data[device][index] ) ) {
+                            data[device][index] = {};
+                        }
+                        var rowData = data[device][index];
+                        if (!_.isUndefined(rowData) && !_.isEmpty(rowData)) {
+                            _.each(rowData, function (node) {
+                                var $item = $('._beacon-available-items[data-device="'+device+'"] .grid-stack-item[data-id="' + node.id + '"]', that.container).first();
+                                if ($item.length > 0) {
+                                    try {
+                                        that.panels[ device ][index].gridstack.addWidget($item, node.x, node.y, node.width, node.height);
+                                    } catch  ( e ) {
+                                        console.log( 'Node Error', e );
+                                        console.log( 'Node Error Data', node );
+                                    }
+
+                                }
+                            });
+                        }
+                    });
+                });
+
+                that.ready = true;
+            },
 
 
             addNewWidget: function ( $item ) {
                 var node = {
-                    si: 0,
+                    x: 0,
                     y: 0,
                     width: $item.data('gs-width') || 3,
                     height: 1
                 };
                 //node = this.findNewPosition( node );
-                //that.panels[ device ][index].gridster.add_widget( html );
-                this.panels[ this.activePanel ][ this.activeRow ].gridster.add_widget( $item , node.x, node.y, node.width, node.height, true, 1,12, 1,1 );
+                this.panels[ this.activePanel ][ this.activeRow ].gridstack.addWidget( $item , node.x, node.y, node.width, node.height, true, 1,12, 1,1 );
             },
             focus: function(){
                 $document.on( 'click', '._beacon--cb-item-setting', function( e ) {
