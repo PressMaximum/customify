@@ -42,79 +42,75 @@ class _Beacon_Customizer_Layout_Builder {
         $items = array(
             array(
                 'name' => __( 'Logo', '_beacon' ),
-                'x' => 0,
                 'id' => 'logo',
                 'width' => '3',
-                'limit' => 1,
                 'section' => 'header_logo' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Nav Icon', '_beacon' ),
-                'x' => 0,
                 'id' => 'nav-icon',
                 'width' => '3',
-                'limit' => 1,
                 'section' => 'header_nav_icon' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Primary Menu', '_beacon' ),
                 'id' => 'nav-menu',
-                'x' => 0,
                 'width' => '6',
-                'limit' => 2,
                 'section' => 'header_menu_primary' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Search', '_beacon' ),
                 'id' => 'search',
-                'x' => 0,
+                'col' => 0,
                 'width' => '3',
-                'limit' => 1,
                 'section' => 'search' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Social Icons', '_beacon' ),
                 'id' => 'social-icons',
-                'x' => 0,
+                'col' => 0,
                 'width' => '4',
-                'limit' => 1,
                 'section' => 'search' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Button', '_beacon' ),
                 'id' => 'button',
-                'x' => 0,
+                'col' => 0,
                 'width' => '4',
-                'limit' => 3,
                 'section' => 'search' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'Icon List', '_beacon' ),
                 'id' => 'icon-list',
-                'x' => 0,
+                'col' => 0,
                 'width' => '4',
-                'limit' => 2,
                 'section' => 'search' // Customizer section to focus when click settings
             ),
 
             array(
                 'name' => __( 'HTML', '_beacon' ),
                 'id' => 'html',
-                'x' => 0,
+                'col' => 0,
                 'width' => '4',
-                'limit' => 2,
                 'section' => 'header_html' // Customizer section to focus when click settings
             ),
 
         );
 
-        return $items;
+
+        $items = apply_filters( '_beacon/builder/header/items', $items );
+        $new_items = array();
+        foreach (  $items as $k => $i ) {
+            $new_items[ $i['id'] ] = $i;
+        }
+
+        return $new_items;
     }
 
     function template(){
@@ -172,8 +168,10 @@ class _Beacon_Customizer_Layout_Builder {
             <li class="grid-stack-item"
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
-                 data-sizex="{{ data.x }}" data-sizey-="{{ data.y }}"
-                 data-size="{{ data.width }}" data-row="1">
+
+                 data-sizex="{{ data.width }}" data-sizey="1"
+                 data-col="{{ data.x }}" data-row="{{ data.y }}"
+            >
                 <div class="grid-stack-item-content">
                     <span class="_beacon--cb-item-name">{{ data.name }}</span>
                     <span class="_beacon--cb-item-add _beacon-cb-icon"></span>
@@ -235,6 +233,6 @@ function _beacon_customize_render_header(){
             header bottom
         </div> <!-- #._beacon-container -->
     </div><!-- #.header-bottom -->
-    <div class="debug"><?php var_dump( get_theme_mod( 'header_builder_panel' ) ); ?></div>
+    <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
 }

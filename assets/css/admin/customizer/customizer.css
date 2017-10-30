@@ -602,7 +602,6 @@
     background: #fafafa;
     border: 1px solid #DDDDDD; }
   ._beacon--cb-row ._beacon--cb-item-name {
-    line-height: 40px;
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0 35px 0 0;
@@ -668,8 +667,10 @@
     .grid-stack-item ._beacon--cb-item-setting:before {
       content: "\f111"; }
 
-._beacon--cb-items .gs-w {
-  background: #CCCCCC; }
+._beacon--cb-items {
+  padding: 0; }
+  ._beacon--cb-items .gs-w {
+    background: #CCCCCC; }
 
 /*! gridster.js - v0.6.10 - 2015-05-31
 * https://dsmorse.github.io/gridster.js/
@@ -681,6 +682,9 @@
     display: block;
     min-height: 45px;
     margin: 0px; }
+    .gridster ul li {
+      margin: 0;
+      padding: 0; }
   .gridster.gridster-item--over ul {
     background: yellow; }
 

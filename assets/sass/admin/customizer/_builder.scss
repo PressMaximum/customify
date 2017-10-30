@@ -109,7 +109,6 @@ $cb_padding: 20px;
     }
 
     ._beacon--cb-item-name {
-        line-height: 40px;
         overflow: hidden;
         text-overflow: ellipsis;
         margin: 0 35px 0 0;
@@ -186,6 +185,7 @@ $cb_padding: 20px;
 
 
 ._beacon--cb-items {
+    padding: 0;
     .gs-w {
         background: #CCCCCC;
     }
@@ -202,6 +202,10 @@ $cb_padding: 20px;
         display: block;
         min-height: 45px;
         margin: 0px;
+        li {
+            margin: 0;
+            padding: 0;
+        }
     }
    &.gridster-item--over {
        ul {
