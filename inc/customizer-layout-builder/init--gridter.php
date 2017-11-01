@@ -11,12 +11,21 @@ class _Beacon_Customizer_Layout_Builder {
     }
 
     function scripts(){
+        wp_enqueue_script( 'jquery-ui-resizable' );
+        wp_enqueue_script( 'jquery-ui-draggable' );
+        wp_enqueue_script( 'jquery-ui-droppable' );
+        wp_enqueue_script( 'gridstack.js', get_template_directory_uri() . '/assets/js/customizer/gridstack.js' );
+        wp_enqueue_script( 'gridstack.jQueryUI.js', get_template_directory_uri() . '/assets/js/customizer/gridstack.jQueryUI.js' );
 
-        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
+        wp_enqueue_script( 'jquery.gridster.js', get_template_directory_uri() . '/assets/js/customizer/jquery.gridster.js' );
+
+
+        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable', 'gridstack.js', 'gridstack.jQueryUI.js', 'jquery.gridster.js' ), false, true );
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
             'header_items' => $this->get_header_items(),
             'header_devices' => array(
-                'desktop' => __( 'Desktop/Tablet', '_beacon' ),
+                'desktop' => __( 'Desktop', '_beacon' ),
+                'tablet' => __( 'Tablet', '_beacon' ),
                 'mobile' => __( 'Mobile', '_beacon' ),
             ),
         ) );
@@ -117,9 +126,10 @@ class _Beacon_Customizer_Layout_Builder {
                         <a href="#"><?php _e( 'Close', '_beacon' ); ?></a>
                     </div>
                 </div>
-                <div class="_beacon--cb-body">
+                <div class="_beacon--cb-body"></div>
 
-                </div>
+                <div class="_beacon--cb-footer"></div>
+
             </div>
 
         </div>
@@ -128,49 +138,19 @@ class _Beacon_Customizer_Layout_Builder {
                 <div class="_beacon--row-top _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="top">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="top"><ul></ul></div>
                     </div>
                 </div>
                 <div class="_beacon--row-main _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="main">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="main"><ul></ul></div>
                     </div>
                 </div>
                 <div class="_beacon--row-bottom _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="bottom">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="bottom"><ul></ul></div>
                     </div>
                 </div>
             </div>
@@ -178,29 +158,19 @@ class _Beacon_Customizer_Layout_Builder {
                 <div class="_beacon--row-bottom _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar"><ul></ul></div>
                     </div>
                 </div>
             <div>
         </script>
 
         <script type="text/html" id="tmpl-_beacon--cb-item">
-            <div class="grid-stack-item"
+            <li class="grid-stack-item"
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
 
-                data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
-                data-gs-width="{{ data.width }}" data-gs-height="1"
+                 data-sizex="{{ data.width }}" data-sizey="1"
+                 data-col="{{ data.x }}" data-row="{{ data.y }}"
             >
                 <div class="grid-stack-item-content">
                     <span class="_beacon--cb-item-name">{{ data.name }}</span>
@@ -208,7 +178,7 @@ class _Beacon_Customizer_Layout_Builder {
                     <span class="_beacon--cb-item-remove _beacon-cb-icon"></span>
                     <span class="_beacon--cb-item-setting _beacon-cb-icon" data-section="{{ data.section }}"></span>
                 </div>
-            </div>
+            </li>
         </script>
         <?php
     }

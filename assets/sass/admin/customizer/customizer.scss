@@ -5,7 +5,8 @@ $bg: #EBEBEB;
 @mixin clearfix {
     &:before, &:after {
         content: "";
-        display: table;
+        display: block;
+        clear: both;
     }
     &:after {
         clear: both;

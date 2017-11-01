@@ -798,10 +798,12 @@
 
         if (!self.opts.staticGrid && self.opts.acceptWidgets) {
             var draggingElement = null;
+            var draggingElementNode = null;
 
             var onDrag = function(event, ui) {
                 var el = draggingElement;
                 var node = el.data('_gridstack_node');
+                draggingElementNode = node;
                 var pos = self.getCellFromPixel({left: event.pageX, top: event.pageY}, true);
                 var x = Math.max(0, pos.x);
                 var y = Math.max(0, pos.y);
@@ -833,6 +835,7 @@
                     return;
                 }
                 self.grid.moveNode(node, x, y);
+
                 self._updateContainerHeight();
             };
 
@@ -882,10 +885,21 @@
                     self.placeholder.detach();
 
                     var node = $(ui.draggable).data('_gridstack_node');
+                    var originalNode = $(ui.draggable).data('_gridstack_node_orig');
+
+                    console.log( 'draggingElement', draggingElement );
+                    console.log( 'draggingElement Node', draggingElement.data('_gridstack_node') );
+                    console.log( 'draggingElement _gridstack_node_orig', draggingElement.data('_gridstack_node_orig') );
+                    if ( typeof node === 'undefined') {
+                        node = draggingElementNode;
+                        originalNode = node;
+                    }
+
+
                     node._grid = self;
                     var el = $(ui.draggable).clone(false);
                     el.data('_gridstack_node', node);
-                    var originalNode = $(ui.draggable).data('_gridstack_node_orig');
+
                     if (typeof originalNode !== 'undefined' && typeof originalNode._grid !== 'undefined') {
                         originalNode._grid._triggerRemoveEvent();
                     }
