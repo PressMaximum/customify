@@ -835,7 +835,6 @@
                     return;
                 }
                 self.grid.moveNode(node, x, y);
-
                 self._updateContainerHeight();
             };
 
@@ -875,6 +874,9 @@
                     }
                     el.unbind('drag', onDrag);
                     var node = el.data('_gridstack_node');
+                    if ( _.isUndefined( node ) ) {
+                        node = draggingElementNode;
+                    }
                     node.el = null;
                     self.grid.removeNode(node);
                     self.placeholder.detach();
@@ -886,15 +888,12 @@
 
                     var node = $(ui.draggable).data('_gridstack_node');
                     var originalNode = $(ui.draggable).data('_gridstack_node_orig');
-
-                    console.log( 'draggingElement', draggingElement );
-                    console.log( 'draggingElement Node', draggingElement.data('_gridstack_node') );
-                    console.log( 'draggingElement _gridstack_node_orig', draggingElement.data('_gridstack_node_orig') );
-                    if ( typeof node === 'undefined') {
+                    if ( _.isUndefined( node ) ) {
                         node = draggingElementNode;
-                        originalNode = node;
+                        originalNode = draggingElementNode;
                     }
 
+                    console.log( 'DROP', node );
 
                     node._grid = self;
                     var el = $(ui.draggable).clone(false);
@@ -903,6 +902,7 @@
                     if (typeof originalNode !== 'undefined' && typeof originalNode._grid !== 'undefined') {
                         originalNode._grid._triggerRemoveEvent();
                     }
+
                     $(ui.helper).remove();
                     node.el = el;
                     self.placeholder.hide();

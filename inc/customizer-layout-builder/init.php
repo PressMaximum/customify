@@ -12,7 +12,12 @@ class _Beacon_Customizer_Layout_Builder {
 
     function scripts(){
 
-        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
+
+
+        wp_enqueue_script( 'gridstackjs', get_template_directory_uri() . '/assets/js/customizer/gridstack.js' );
+        wp_enqueue_script( 'gridstack.jQueryUI', get_template_directory_uri() . '/assets/js/customizer/gridstack.jQueryUI.js' );
+
+        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable', 'gridstackjs', 'gridstack.jQueryUI' ), false, true );
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
             'header_items' => $this->get_header_items(),
             'header_devices' => array(
@@ -129,15 +134,7 @@ class _Beacon_Customizer_Layout_Builder {
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="top">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -145,15 +142,7 @@ class _Beacon_Customizer_Layout_Builder {
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="main">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -161,15 +150,7 @@ class _Beacon_Customizer_Layout_Builder {
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="bottom">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -179,15 +160,7 @@ class _Beacon_Customizer_Layout_Builder {
                     <a class="_beacon--cb-row-settings" href="#">set</a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar">
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
-                            <div class="_beacon--p-cell">
-                                <div class="_beacon--p-items"></div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
