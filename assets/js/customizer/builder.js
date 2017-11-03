@@ -78,11 +78,17 @@
                                 console.log( 'drop pos', ui.position );
                                 that.grid( $wrapper, ui, event );
                                 that.sortGrid( $wrapper );
+                                that.updateGridFlag( $wrapper );
                                 that.save();
                             }
                         } );
 
                     } );
+
+
+                    $( '._beacon-available-items .grid-stack-item', panel ).draggable({
+                        revert: 'invalid'
+                    });
 
 
                 } );
@@ -130,6 +136,24 @@
                 }
                 console.log( 'empty_slots', empty_slots );
                 return empty_slots;
+            },
+
+            findElFromX: function( x, flag, $wrapper ){
+                var that = this;
+                var item =  false;
+                if ( flag[ x ] > 1 ) {
+                    item = $( '.grid-stack-item[data-gs-x="'+x+'"]', $wrapper );
+                    return item;
+                }
+                var i = x;
+                while ( i >= 0 && ! item && flag[ i ] > 0 ) {
+                    if ( flag[ i ] > 1 ) {
+                        item = $( '.grid-stack-item[data-gs-x="'+i+'"]', $wrapper );
+                    }
+                    i--;
+                }
+
+                return item;
             },
 
             findNextElFromX: function( x, flag, $wrapper ){
@@ -278,9 +302,24 @@
                 if ( ! check ) {
                     console.log( '_____' );
 
-                    var moveLeft = function( itemInfo ) {
-                        var flag = itemInfo.flag;
-                        var newX = itemInfo.x - itemInfo.before;
+                    $( '.grid-stack-item', $wrapper ).each( function(){
+                        $( this ).attr( 'data-revert', $( this ).attr( 'data-gs-x' ) );
+                    } );
+
+
+
+                    var moveLeft = function( itemInfo, slots ) {
+
+                        if ( slots <= 0 ) {
+                            return ;
+                        }
+
+                        var steps = itemInfo.before;
+                        if ( slots <= itemInfo.before ) {
+                            steps = slots;
+                        }
+
+                        var newX = itemInfo.x - steps;
 
                         // remove index
                         for ( i = itemInfo.x; i < itemInfo.x + itemInfo.w; i ++  ) {
@@ -296,18 +335,35 @@
                             }
                         }
 
+                        console.log( 'moveLeft Flag', flag );
+
                         itemInfo.item.attr( 'data-gs-x', newX );
-                        if ( itemInfo.prev && itemInfo.prev.length ) {
-                            flag = moveLeft( that.gridGetItemInfo( itemInfo.prev, itemInfo.flag, itemInfo.wrapper ) );
+                        var slot_left = slots - itemInfo.before;
+                        if ( slot_left <= 0 ) {
+                            return 0;
                         }
 
-                        return flag;
+                        if ( itemInfo.prev && itemInfo.prev.length ) {
+                            slot_left = moveLeft( that.gridGetItemInfo( itemInfo.prev, itemInfo.flag, itemInfo.wrapper ), slot_left );
+                        }
+
+                        return slot_left;
+
                     };
 
-                    var moveRight = function( itemInfo ) {
-                        var flag = itemInfo.flag;
-                        var newX = itemInfo.x + itemInfo.after;
+                    var moveRight = function( itemInfo, slots ) {
+                        if ( slots <= 0 ) {
+                            return ;
+                        }
+
+                        var steps = itemInfo.after;
+                        if ( slots <= itemInfo.after ) {
+                            steps = slots;
+                        }
+
+                        var newX = itemInfo.x + steps;
                         var i;
+
                         // remove index
                         for ( i = itemInfo.x; i < itemInfo.x + itemInfo.w; i ++  ) {
                             flag[ i ] = 0;
@@ -322,38 +378,55 @@
                             }
                         }
 
+                        console.log( 'moveRight Flag New '+newX, flag );
+
                         itemInfo.item.attr( 'data-gs-x', newX );
-                        if ( itemInfo.next && itemInfo.next.length ) {
-                            flag = moveRight( that.gridGetItemInfo( itemInfo.next, itemInfo.flag, itemInfo.wrapper  ) );
+                        var slot_left = slots - itemInfo.after;
+                        if ( slot_left <= 0 ) {
+                            return 0;
                         }
-                        return flag;
+
+
+                        if ( itemInfo.next && itemInfo.next.length ) {
+                            slot_left = moveRight( that.gridGetItemInfo( itemInfo.next, itemInfo.flag, itemInfo.wrapper  ), slot_left );
+                        }
+
+                        return slot_left;
+
                     };
 
                     // move other items to have spaces
-                    var _slots = 0;
-                    var _x = 0;
-                    var next;
+                    var next, prev;
 
-                    next = that.findNextElFromX( x, flag, $wrapper );
-
-                    var prev = that.findPrevElFromX( x, flag, $wrapper );
+                    if ( x === 0 ) {
+                        next = $( '.grid-stack-item', $wrapper ).first();
+                        prev = false;
+                    } else {
+                        var item = that.findElFromX( x, flag, $wrapper );
+                        if ( ! item || item.length <= 0 ) {
+                            next = that.findNextElFromX( x, flag, $wrapper );
+                            prev = item;
+                        } else {
+                            next = that.findNextElFromX( x, flag, $wrapper );
+                            prev = that.findPrevElFromX( x, flag, $wrapper );
+                        }
+                    }
 
                     console.log('Next item', next );
+                    var move_slots = w;
                     if ( next.length ) {
                         var nextInfo = that.gridGetItemInfo( next, flag, $wrapper );
-                        flag = moveRight( nextInfo );
+                        move_slots = moveRight( nextInfo, move_slots );
                         console.log('Next Item info', nextInfo );
                     }
                     console.log('prev item', prev );
                     if ( prev.length ) {
                         var prevInfo = that.gridGetItemInfo( prev, flag, $wrapper );
-                        flag = moveLeft( prevInfo );
-                        console.log('Prev Item info',prevInfo );
+                        move_slots = moveLeft( prevInfo, move_slots );
+                        console.log('Prev Item info', prevInfo );
                     }
 
-                    //flag = that.updateGridFlag( $wrapper );
-
-                }
+                } // end check
 
 
                 console.log( 'NEW FLAG', flag );
@@ -386,30 +459,49 @@
                     }
                 }
 
+                if ( x + w > that.cols ) {
+                    check_revert = true;
+                }
+
                 if ( check_revert ) {
                     // revert
-                    console.log( 'revert' );
+                    console.log( 'revert', x + '-'+w );
                     ui.draggable.removeAttr( 'style' );
-                    that.updateGridFlag( row );
+                    $( '.grid-stack-item', $wrapper ).each( function(){
+                        var id = $( this ).attr( 'data-id' );
+                        var rx = $( this ).attr( 'data-revert' ) || '';
+                        if (  ! _.isEmpty( rx ) ) {
+                            $( this ).attr( 'data-gs-x', rx );
+                        }
+                        $( this ).attr( 'data-revert', '' );
+                    } );
+
+                    that.draggingItem = null;
+
+                    _.each( that.panels[ that.activePanel ], function( row, row_id ) {
+                        that.updateGridFlag( row );
+                    });
                     return ;
                 }
+
+                console.log( 'No revert',  x + '-'+w  );
 
 
                 // Add drop item from somewhere to current row
                 $wrapper.append(ui.draggable);
 
 
-
                 ui.draggable.removeAttr( 'style' );
                 ui.draggable.attr( 'data-gs-x', x );
                 ui.draggable.attr( 'data-gs-y', y );
 
+                that.draggingItem = null;
 
                 _.each(  that.panels[ that.activePanel ], function( row, row_id ) {
                     that.updateGridFlag( row );
                 });
 
-                that.draggingItem = null;
+
             },
 
             setGridWidth: function( $wrapper, ui ){
@@ -419,16 +511,11 @@
                 var prev  = $item.prev();
 
                 var width  = $wrapper.width();
-                var itemWidth = $item.width();
+                var itemWidth = ui.size.width;
                 var colWidth = width/that.cols;
 
                 var isShiftLeft = ui.originalPosition.left > ui.position.left;
                 var isShiftRight = ui.originalPosition.left < ui.position.left;
-
-                console.log( 'ui.originalPosition', ui.originalPosition );
-                console.log( 'ui.position', ui.position );
-                console.log( 'isShiftLeft', isShiftLeft );
-
 
                 var ow =  ui.originalElement.attr( 'data-gs-width' ) || 1;
                 var ox =  ui.originalElement.attr( 'data-gs-x' ) || 0;
@@ -492,6 +579,8 @@
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
 
+                    that.updateGridFlag( $wrapper );
+
                     return ;
 
                 } else if( isShiftRight ) {
@@ -506,21 +595,24 @@
 
                     newX = ox + addW;
 
-                    console.log( 'Right addW:', addW );
-                    console.log( 'Right newX:', newX );
-                    console.log( 'Right newW:', newW );
-                    console.log( 'Right Ox:', ox );
-                    console.log( 'Right Ow:', ow );
-
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
 
+                    that.updateGridFlag( $wrapper );
 
                     return ;
                 }
 
+                var w ;
+                if ( itemWidth <  ui.originalSize.width ) {
+                    w = Math.floor( itemWidth/ colWidth  );
+                } else {
+                    w = Math.ceil( itemWidth/ colWidth );
+                }
+                if ( w <=0 ) {
+                    w = 1;
+                }
 
-                var w = Math.ceil( itemWidth/ colWidth );
                 var x = $item.attr( 'data-gs-x' ) || 0;
                 x = parseInt( x );
 
@@ -539,19 +631,19 @@
                 }
 
                 $item.attr('data-gs-width', w ).removeAttr('style');
+                that.updateGridFlag( $wrapper );
 
             },
 
             addFlag: function( $row, x, w ){
                 var i;
                 var flag = this.getFlag( $row );
-                for ( i = x; i< x + w; i ++  ) {
+                for ( i = x; i < x + w; i ++  ) {
                     if ( i === x ) {
                         flag[ i ] = 2;
                     } else {
                         flag[ i ] = 1;
                     }
-
                 }
 
                 $row.data( 'gridflag', flag );
@@ -564,7 +656,7 @@
                 for ( i = x; i < x + w; i ++  ) {
                     flag[ i ] = 0;
                 }
-                console.log( 'removeFlag: '+$row.attr( 'data-id' ), flag );
+                //console.log( 'removeFlag: '+$row.attr( 'data-id' ), flag );
                 $row.data( 'gridflag', flag );
                 return flag;
             },
@@ -585,22 +677,33 @@
             updateGridFlag: function( $row ){
                 var that = this;
 
-                var flag = $row.data( 'gridflag' ) || {};
+                var flag = {};
                 var i;
-                if ( _.isEmpty( flag ) ) {
-                    for ( i =0; i< that.cols; i++ ) {
-                        flag[ i ] = 0;
-                    }
+                for ( i = 0; i < that.cols; i++ ) {
+                    flag[ i ] = 0;
                 }
+                var items;
 
-                $( '.grid-stack-item', $row ).not( that.draggingItem ) .each( function(){
+                items =  $( '.grid-stack-item', $row );
+                items.each( function( index ){
                     var x = that.getX( $( this ) );
                     var w = that.getW( $( this ) );
-                    flag = that.addFlag( $row, x, w );
+
+                    for ( i = x; i < x + w; i ++  ) {
+                        if ( i === x ) {
+                            flag[ i ] = 2;
+                        } else {
+                            flag[ i ] = 1;
+                        }
+                    }
+
                 } );
 
                 $row.data( 'gridflag', flag );
-                //console.log( 'Update Flag: '+$row.attr( 'data-id' ), flag );
+                if ( $row.attr( 'data-id' ) == 'main' ) {
+                    console.log( 'Update Flag: '+$row.attr( 'data-id' ), flag );
+                }
+
                 return flag;
             },
 
@@ -614,7 +717,6 @@
                     el =  panel.find( '._beacon--cb-items' ).first();
                 }
 
-                //var elItem = $('<div class="grid-stack-item" data-gs-width="1"><div class="grid-stack-item-content" /></div></div>');
                 var elItem = $item;
                 elItem.draggable({
                     revert: "invalid",
@@ -764,6 +866,8 @@
             remove: function(){
                 var that = this;
 
+                
+
             },
 
             encodeValue: function( value ){
@@ -792,8 +896,6 @@
                                 height: 1,
                                 id: el.data('id') || ''
                             };
-
-                            return false;
 
                         });
                         data[device][row_id] = rowData;
