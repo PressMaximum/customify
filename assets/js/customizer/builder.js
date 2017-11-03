@@ -3,7 +3,7 @@
 (function( $, wpcustomize ) {
     var $document = $( document );
 
-    var CustomizeBuilder = function( $el ,controlId, items ){
+    var CustomizeBuilder = function( $el ,controlId, items, devices ){
 
         var Builder = {
             controlId: '',
@@ -12,7 +12,7 @@
             items: [],
             container: null,
             ready: false,
-            devices: {'desktop': 'Desktop/Tablet', 'mobile': 'Mobile' },
+            devices: {'desktop': 'Desktop', 'mobile': 'Mobile/Tablet' },
             activePanel: 'desktop',
             panels: {},
             activeRow: 'main',
@@ -497,11 +497,16 @@
 
                 that.draggingItem = null;
 
+                that.updateAllGrids( );
+
+
+            },
+
+            updateAllGrids: function(){
+                var that = this;
                 _.each(  that.panels[ that.activePanel ], function( row, row_id ) {
                     that.updateGridFlag( row );
                 });
-
-
             },
 
             setGridWidth: function( $wrapper, ui ){
@@ -513,6 +518,8 @@
                 var width  = $wrapper.width();
                 var itemWidth = ui.size.width;
                 var colWidth = width/that.cols;
+
+                console.log( 'ui.size', ui.size );
 
                 var isShiftLeft = ui.originalPosition.left > ui.position.left;
                 var isShiftRight = ui.originalPosition.left < ui.position.left;
@@ -531,50 +538,20 @@
                 var preW;
                 var newX;
                 var newW;
+                var flag = that.getFlag( $wrapper );
+                var itemInfo = that.gridGetItemInfo( ui.originalElement, flag, $wrapper );
+                console.log( 'resize itemInfo', itemInfo );
+                var diffLeft, diffRight;
 
                 if ( isShiftLeft ) {
-
-                    var diffLeft = ui.originalPosition.left - ui.position.left;
+                    diffLeft = ui.originalPosition.left - ui.position.left;
                     addW =  Math.ceil( diffLeft / colWidth );
 
-                    if ( prev.length > 0 ) {
-                        preX = prev.attr( 'data-gs-x' ) || 0;
-                        preW = prev.attr( 'data-gs-width' ) || 1;
-                        preX = parseInt( preX );
-                        preW = parseInt( preW );
-                        empty_slots = ox - ( preX + preW ) ;
-                        console.log( 'lefft Child' );
-                    } else {
-                        console.log( 'No L Child' );
-                        empty_slots = ox;
+                    if ( addW > itemInfo.before ) {
+                        addW = itemInfo.before;
                     }
-
-                    console.log( 'Empty Slots:', empty_slots );
-
-                    if( addW >= empty_slots ) {
-                        addW = empty_slots;
-                        newX = ox - addW -1;
-                        newW = ow + addW;
-                    } else {
-                        newX = ox - addW;
-                        newW = ow + addW;
-                        if ( ! next.length > 0 ) {
-                            if ( newX < 0 ) {
-                                newX = 0;
-                                newW = ox + ow;
-                            }
-                        }
-
-                    }
-
-                    if ( empty_slots <= 0 ) {
-                        newX = ox;
-                        newW = ow;
-                    }
-
-                    console.log( 'addW', addW );
-                    console.log( 'newX', newX );
-                    console.log( 'newW', newW );
+                    newX = ox - addW;
+                    newW = ow + addW;
 
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
@@ -584,7 +561,7 @@
                     return ;
 
                 } else if( isShiftRight ) {
-                    var diffRight = ui.position.left - ui.originalPosition.left ;
+                    diffRight = ui.position.left - ui.originalPosition.left ;
                     addW =  Math.ceil( diffRight / colWidth );
 
                     newW = ow - addW;
@@ -594,7 +571,6 @@
                     }
 
                     newX = ox + addW;
-
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
 
@@ -604,30 +580,28 @@
                 }
 
                 var w ;
+                var x = itemInfo.x;
+                diffRight = ui.position.left - ui.originalPosition.left ;
                 if ( itemWidth <  ui.originalSize.width ) {
+
+                    diffRight = ui.position.left - ui.originalPosition.left ;
+
                     w = Math.floor( itemWidth/ colWidth  );
+
+                    console.log( 'New w 1', w );
                 } else {
                     w = Math.ceil( itemWidth/ colWidth );
-                }
-                if ( w <=0 ) {
-                    w = 1;
-                }
-
-                var x = $item.attr( 'data-gs-x' ) || 0;
-                x = parseInt( x );
-
-                if ( next.length ) {
-                    var nx = next.attr( 'data-gs-x' ) || 0;
-                    nx = parseInt( nx );
-                    console.log( 'NX W1', w  +'---'+nx );
-                    if ( w + x >= nx ) {
-                        w = nx - x;
-                        console.log( 'NX W2', w );
+                    if ( itemInfo.x + w > itemInfo.x + itemInfo.w + itemInfo.after ) {
+                        w = itemInfo.w + itemInfo.after;
                     }
+
+                    console.log( 'New w 2', w );
+
                 }
 
-                if ( w + x > that.cols ) {
-                    w = that.cols - x;
+
+                if ( w <= 0 ) {
+                    w = 1;
                 }
 
                 $item.attr('data-gs-width', w ).removeAttr('style');
@@ -865,8 +839,18 @@
              */
             remove: function(){
                 var that = this;
+                $document.on( 'click', '._beacon--device-panel ._beacon--cb-item-remove', function ( e ) {
+                    e.preventDefault();
 
-                
+                    var item = $( this ).closest('.grid-stack-item');
+                    var panel = item.closest( '._beacon--device-panel' );
+                    item.attr( 'data-gs-width', 1 );
+                    item.attr( 'data-gs-x', 0 );
+                    item.removeAttr( 'style' );
+                    $( '._beacon-available-items', panel ).append( item );
+                    that.updateAllGrids();
+                    that.save();
+                } );
 
             },
 
@@ -907,11 +891,12 @@
 
             },
 
-            init: function( $el, controlId, items ){
+            init: function( $el, controlId, items, devices ){
                 var that = this;
                 that.container = $el;
                 that.controlId = controlId;
                 that.items = items;
+                that.devices = devices;
 
                 that.addDevicePanels();
                 that.switchToDevice( that.activePanel );
@@ -921,12 +906,6 @@
                 that.focus();
                 that.remove();
                 that.addExistingRowsItems();
-
-                $( '._beacon-available-items', that.container ).on( 'click', '.grid-stack-item', function( e ){
-                    e.preventDefault();
-                    var item = $( this );
-                    that.addNewWidget( item );
-                } );
 
                 // Switch panel
                 that.container.on( 'click', '._beacon--cb-devices-switcher a', function(e){
@@ -939,7 +918,7 @@
             }
         };
 
-        Builder.init( $el, controlId, items );
+        Builder.init( $el, controlId, items, devices );
         return Builder;
     };
 
@@ -948,7 +927,8 @@
         var Header = new CustomizeBuilder(
             $( '._beacon--customize-builder' ),
             'header_builder_panel',
-            _Beacon_Layout_Builder.header_items
+            _Beacon_Layout_Builder.header_items,
+            _Beacon_Layout_Builder.header_devices,
         );
     });
 

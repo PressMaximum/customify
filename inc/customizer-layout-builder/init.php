@@ -4,7 +4,10 @@ class _Beacon_Customizer_Layout_Builder {
     static $_instance;
     function __construct()
     {
-        require_once get_template_directory().'/inc/customizer-layout-builder/config/header-builder.php';
+
+
+        require_once get_template_directory().'/inc/customizer-layout-builder/config/header/logo.php';
+        require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
 
         add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
@@ -21,8 +24,8 @@ class _Beacon_Customizer_Layout_Builder {
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
             'header_items' => $this->get_header_items(),
             'header_devices' => array(
-                'desktop' => __( 'Desktop/Tablet', '_beacon' ),
-                'mobile' => __( 'Mobile', '_beacon' ),
+                'desktop' => __( 'Desktop', '_beacon' ),
+                'mobile' => __( 'Mobile/Tablet', '_beacon' ),
             ),
         ) );
     }

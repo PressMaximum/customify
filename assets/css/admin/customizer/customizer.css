@@ -1438,11 +1438,11 @@
       right: 10px;
       top: 0; }
     .grid-stack > .grid-stack-item > .ui-resizable-e {
-      cursor: e-resize;
+      cursor: col-resize;
       width: 10px;
       right: 10px;
-      top: 15px;
-      bottom: 15px; }
+      top: 0px;
+      bottom: 0px; }
     .grid-stack > .grid-stack-item > .ui-resizable-se {
       cursor: se-resize;
       width: 20px;
@@ -1462,11 +1462,11 @@
       left: 10px;
       bottom: 0; }
     .grid-stack > .grid-stack-item > .ui-resizable-w {
-      cursor: w-resize;
+      cursor: col-resize;
       width: 10px;
       left: 10px;
-      top: 15px;
-      bottom: 15px; }
+      top: 0px;
+      bottom: 0px; }
     .grid-stack > .grid-stack-item.ui-draggable-dragging > .ui-resizable-handle {
       display: none !important; }
     .grid-stack > .grid-stack-item[data-gs-width='1'] {
