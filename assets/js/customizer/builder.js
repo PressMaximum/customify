@@ -3,7 +3,7 @@
 (function( $, wpcustomize ) {
     var $document = $( document );
 
-    var CustomizeBuilder = function( $el ,controlId, items, devices ){
+    var CustomizeBuilder = function( options ){
 
         var Builder = {
             controlId: '',
@@ -486,10 +486,8 @@
 
                 console.log( 'No revert',  x + '-'+w  );
 
-
                 // Add drop item from somewhere to current row
                 $wrapper.append(ui.draggable);
-
 
                 ui.draggable.removeAttr( 'style' );
                 ui.draggable.attr( 'data-gs-x', x );
@@ -498,8 +496,6 @@
                 that.draggingItem = null;
 
                 that.updateAllGrids( );
-
-
             },
 
             updateAllGrids: function(){
@@ -581,22 +577,13 @@
 
                 var w ;
                 var x = itemInfo.x;
-                diffRight = ui.position.left - ui.originalPosition.left ;
                 if ( itemWidth <  ui.originalSize.width ) {
-
-                    diffRight = ui.position.left - ui.originalPosition.left ;
-
                     w = Math.floor( itemWidth/ colWidth  );
-
-                    console.log( 'New w 1', w );
                 } else {
                     w = Math.ceil( itemWidth/ colWidth );
                     if ( itemInfo.x + w > itemInfo.x + itemInfo.w + itemInfo.after ) {
                         w = itemInfo.w + itemInfo.after;
                     }
-
-                    console.log( 'New w 2', w );
-
                 }
 
 
@@ -813,7 +800,7 @@
             },
 
             focus: function(){
-                $document.on( 'click', '._beacon--cb-item-setting', function( e ) {
+                this.container.on( 'click', '._beacon--cb-item-setting', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
                     var control = $( this ).data( 'control' ) || '';
@@ -829,6 +816,18 @@
                             wpcustomize.section( section ).focus();
                             did = true;
                         }
+                    }
+                } );
+
+                // Focus rows
+                this.container.on( 'click', '._beacon--cb-row-settings', function( e ){
+                    e.preventDefault();
+                    var id = $( this ).attr( 'data-id' ) || '';
+
+                    var section = options.id + '_'+id;
+
+                    if ( ! _.isUndefined(  wpcustomize.section( section ) ) ) {
+                        wpcustomize.section( section ).focus();
                     }
 
                 } );
@@ -891,9 +890,49 @@
 
             },
 
-            init: function( $el, controlId, items, devices ){
+            showPanel: function(){
+                //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
+                    //console.log( 'expandedPanel state', paneVisible );
+               // });
+                //this.container.show();
+                this.container.addClass( '_beacon--builder-hide' );
+            },
+            hidePanel: function(){
+                //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
+                //console.log( 'expandedPanel state', paneVisible );
+                // });
+                //this.container.hide();
+                this.container.removeClass( '_beacon--builder-hide' );
+            },
+
+            togglePanel: function(){
                 var that = this;
-                that.container = $el;
+                wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
+                    if ( wpcustomize.panel( options.panel ).expanded() ) {
+                        that.showPanel();
+                    } else {
+                        that.hidePanel();
+                    }
+                });
+            },
+
+            panelLayoutCSS: function(){
+                //wpcustomize.state( 'paneVisible' ).get()
+                var sidebarWidth = $( '#customize-controls' ).width();
+                if ( ! wpcustomize.state( 'paneVisible' ).get() ) {
+                    sidebarWidth = 0;
+                }
+                this.container.find( '._beacon--cb-inner' ).css( {'margin-left': sidebarWidth } );
+            },
+
+            init: function( controlId, items, devices ){
+                var that = this;
+
+                var template = that.getTemplate();
+                var template_id =  'tmpl-_beacon--builder-panel';
+                var html = template( {}, template_id );
+                that.container = $( html );
+                $( 'body .wp-full-overlay' ).append( that.container );
                 that.controlId = controlId;
                 that.items = items;
                 that.devices = devices;
@@ -907,6 +946,26 @@
                 that.remove();
                 that.addExistingRowsItems();
 
+
+                if ( wpcustomize.panel( options.panel ).expanded() ) {
+                    that.showPanel();
+                } else {
+                    that.hidePanel();
+                }
+
+                that.togglePanel();
+                if ( wpcustomize.state( 'paneVisible' ).get() ) {
+                    that.panelLayoutCSS();
+                }
+                wpcustomize.state( 'paneVisible' ).bind( function(){
+                    that.panelLayoutCSS();
+                } );
+
+
+                $( window ).resize( _.throttle( function(){
+                    that.panelLayoutCSS();
+                }, 100 )  );
+
                 // Switch panel
                 that.container.on( 'click', '._beacon--cb-devices-switcher a', function(e){
                     e.preventDefault();
@@ -914,22 +973,89 @@
                     that.switchToDevice( device );
                 } );
 
-
             }
         };
 
-        Builder.init( $el, controlId, items, devices );
+
+
+        Builder.init( options.control_id, options.items, options.devices );
         return Builder;
     };
 
 
+    /*
+    // Extend panel
+    var _panelFocus = wpcustomize.Panel.prototype.focus;
+    var _panelAttachEvents = wpcustomize.Panel.prototype.attachEvents;
+    wp.customize.Panel = wp.customize.Panel.extend({
+        attachEvents: function () {
+            var panel = this;
+            _panelAttachEvents.call( this );
+            panel.expanded.bind( function( expanded ) {
+                console.log( '_panelAttachEvents expand - ' +panel.id, expanded );
+            });
+        },
+
+        focus: function ( params ) {
+            var panel = this;
+            _panelFocus.call( this );
+            wpcustomize.bind( '__panelFocus_focus', [ panel ] );
+            console.log( '_panelFocus Focusted', panel.id );
+        }
+
+    });
+
+
+
+    // Extend Section
+    var _sectionFocus = wpcustomize.Section.prototype.focus;
+    var _sectionAttachEvents = wpcustomize.Section.prototype.attachEvents;
+    wp.customize.Section = wp.customize.Section.extend({
+        attachEvents: function () {
+            var meta, content, section = this;
+            _sectionAttachEvents.call( this );
+            section.expanded.bind( function( expanded ) {
+                console.log( 'expand section', expanded );
+            });
+        },
+
+        focus: function ( params ) {
+            var section = this;
+            _sectionFocus.call( this );
+            wpcustomize.bind( '_section_focus', [ section ] );
+            console.log( 'section focus', section );
+        }
+    });
+    */
+
+
+
     wpcustomize.bind( 'ready', function( e, b ) {
-        var Header = new CustomizeBuilder(
-            $( '._beacon--customize-builder' ),
-            'header_builder_panel',
-            _Beacon_Layout_Builder.header_items,
-            _Beacon_Layout_Builder.header_devices,
-        );
+
+        var Header = new CustomizeBuilder( _Beacon_Layout_Builder.header );
+
+
+        wpcustomize.bind( '_section_focus', function( e, b ) {
+            console.log( '_section_focus', b );
+        });
+
+       //Event when panel toggle
+        /**
+         * See /wp-admin/js/customize-controls.js L4690
+         */
+        console.log( '___a',  wpcustomize.state( 'paneVisible' ).get() );
+
+        wpcustomize.state( 'paneVisible' ).bind( function( paneVisible ) {
+            console.log( 'paneVisible state', paneVisible );
+        });
+
+        wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
+            console.log( 'expandedPanel state', paneVisible );
+            console.log( 'expandedPanel state Builder', wpcustomize.state( 'expandedPanel' ).get() );
+        });
+
+
+
     });
 
 
@@ -938,7 +1064,22 @@
     wpcustomize.bind( 'change', function( e, b ) {
        console.log( 'Change' );
     });
+
+    // app/public/wp-admin/js/customize-controls.js L4873
+
+    api.section.each( function( section ) {
+				if ( section.expanded() ) {
+					expandedSections.push( section );
+				}
+			});
+			api.panel.each( function( panel ) {
+				if ( panel.expanded() ) {
+					expandedPanels.push( panel );
+				}
+			});
     */
+
+
 
 
 })( jQuery, wp.customize || null );

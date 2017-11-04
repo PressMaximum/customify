@@ -30,80 +30,22 @@ if ( ! function_exists( '_beacon_customizer_header_config' ) ) {
                 'render_callback' => '_beacon_customize_render_header'
             ),
 
-            // ------  HEADER TOP     --------
-
-            // ------  /END HEADER TOP   --------
-
-
-
-            // ------  MENU     --------
-            array(
-                'name' => 'header_menus',
-                'type' => 'section',
-                'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'Primary Menu', '_beacon' ),
-            ),
-
-            array(
-                'name' => 'header_menu_primary',
-                'type' => 'image',
-                'section' => 'header_menus',
-                'theme_supports' => '',
-                'title'          => __( 'Primary menu', '_beacon' ),
-            ),
-
-            // ------ /END MENU --------
-
-
-            // ------ NAV ICON  -------------
-            array(
-                'name' => 'header_nav_icon',
-                'type' => 'section',
-                'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'Nav Icon', '_beacon' ),
-                'description' => __( 'This is section description',  '_beacon' ),
-            ),
-
-            array(
-                'name' => 'header_nav_icon',
-                'type' => 'icon',
-                'section' => 'header_nav_icon',
-                'theme_supports' => '',
-                'title'          => __( 'Nav Icon', '_beacon' ),
-            ),
-
-            // ------ /END NAV ICON --------
-
-
-            // ------ HTML  -------------
-            array(
-                'name' => 'header_html',
-                'type' => 'section',
-                'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'HTML', '_beacon' ),
-                'description' => __( 'This is section description',  '_beacon' ),
-            ),
-
-            array(
-                'name' => 'header_html',
-                'type' => 'icon',
-                'section' => 'header_nav_icon',
-                'theme_supports' => '',
-                'title'          => __( 'HTML', '_beacon' ),
-            ),
-
-            // ------ /END HTML --------
 
 
         );
 
-        if ( function_exists( '_beacon_builder_config_header_logo' ) ) {
-            $config =  array_merge( $config, _beacon_builder_config_header_logo() );
-        }
+        foreach ( _Beacon_Customizer_Layout_Builder::get_header_sections() as $id ) {
+            $file = get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
+            if (  is_file( $file ) ) {
+                require_once get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
+            }
 
+            $func_id = str_replace( '-', '_', $id );
+
+            if ( function_exists( '_beacon_builder_config_header_'.$func_id ) ) {
+                $config = array_merge( $config, call_user_func_array( '_beacon_builder_config_header_'.$func_id, array() ) );
+            }
+        }
 
         return array_merge( $configs, $config );
     }

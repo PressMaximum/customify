@@ -513,10 +513,21 @@
   height: 430px;
   display: block;
   background: #EBEBEB;
-  border-top: 1px solid #ddd; }
+  border-top: 1px solid #ddd;
+  -webkit-transition: all 500ms;
+  transition: all 500ms;
+  -webkit-transform: translateY(100%);
+      -ms-transform: translateY(100%);
+          transform: translateY(100%); }
+  ._beacon--customize-builder._beacon--builder-hide {
+    -webkit-transform: translateY(0);
+        -ms-transform: translateY(0);
+            transform: translateY(0); }
   ._beacon--customize-builder * {
     box-sizing: border-box; }
   ._beacon--customize-builder ._beacon--cb-inner {
+    -webkit-transition: all 500ms;
+    transition: all 500ms;
     margin-left: 300px;
     height: 100%;
     display: block;

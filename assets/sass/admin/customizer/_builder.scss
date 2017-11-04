@@ -10,10 +10,18 @@ $cb_padding: 20px;
     display: block;
     background: $bg;
     border-top: $border;
+
+    transition: all 500ms;
+    transform: translateY(100%);
+    &._beacon--builder-hide {
+        transform: translateY(0);
+    }
+
     * {
         box-sizing: border-box;
     }
     ._beacon--cb-inner {
+        transition: all 500ms;
         margin-left: 300px;
         height: 100%;
         display: block;
@@ -30,6 +38,7 @@ $cb_padding: 20px;
     z-index: 4;
     position: relative;
     //background: #DDDDDD;
+
 
     &._beacon--panel-hide {
         opacity: 0;

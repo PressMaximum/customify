@@ -5,28 +5,44 @@ class _Beacon_Customizer_Layout_Builder {
     function __construct()
     {
 
-
-        require_once get_template_directory().'/inc/customizer-layout-builder/config/header/logo.php';
         require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
 
         add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
     }
 
+    static function get_header_sections(){
+        $elements = array(
+            'row-top',
+            'row-main',
+            'row-bottom',
+            'row-sidebar',
+
+            'logo',
+            'primary-menu',
+            'nav-icon',
+            'search',
+            'html',
+        );
+
+        return $elements;
+    }
+
     function scripts(){
 
-
-
-        wp_enqueue_script( 'gridstackjs', get_template_directory_uri() . '/assets/js/customizer/gridstack.js' );
-        wp_enqueue_script( 'gridstack.jQueryUI', get_template_directory_uri() . '/assets/js/customizer/gridstack.jQueryUI.js' );
-
-        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable', 'gridstackjs', 'gridstack.jQueryUI' ), false, true );
+        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
-            'header_items' => $this->get_header_items(),
-            'header_devices' => array(
-                'desktop' => __( 'Desktop', '_beacon' ),
-                'mobile' => __( 'Mobile/Tablet', '_beacon' ),
-            ),
+            'header' => array(
+                'id' => 'header',
+                'control_id' => 'header_builder_panel',
+                'panel'      => 'header_settings',
+                'items' => $this->get_header_items(),
+                'devices' => array(
+                    'desktop' => __( 'Desktop', '_beacon' ),
+                    'mobile' => __( 'Mobile/Tablet', '_beacon' ),
+                ),
+            )
+
         ) );
     }
 
@@ -65,7 +81,7 @@ class _Beacon_Customizer_Layout_Builder {
                 'id' => 'search',
                 'col' => 0,
                 'width' => '3',
-                'section' => 'search' // Customizer section to focus when click settings
+                'section' => 'header_search' // Customizer section to focus when click settings
             ),
 
             array(
@@ -73,7 +89,7 @@ class _Beacon_Customizer_Layout_Builder {
                 'id' => 'social-icons',
                 'col' => 0,
                 'width' => '4',
-                'section' => 'search' // Customizer section to focus when click settings
+                'section' => 'header_social_icons' // Customizer section to focus when click settings
             ),
 
             array(
@@ -81,7 +97,7 @@ class _Beacon_Customizer_Layout_Builder {
                 'id' => 'button',
                 'col' => 0,
                 'width' => '4',
-                'section' => 'search' // Customizer section to focus when click settings
+                'section' => 'header_button' // Customizer section to focus when click settings
             ),
 
             array(
@@ -89,7 +105,7 @@ class _Beacon_Customizer_Layout_Builder {
                 'id' => 'icon-list',
                 'col' => 0,
                 'width' => '4',
-                'section' => 'search' // Customizer section to focus when click settings
+                'section' => 'header_icon_list' // Customizer section to focus when click settings
             ),
 
             array(
@@ -114,57 +130,50 @@ class _Beacon_Customizer_Layout_Builder {
 
     function template(){
         ?>
-        <div class="_beacon--customize-builder">
-            <div class="_beacon--cb-inner">
-                <div class="_beacon--cb-header">
-                    <div class="_beacon--cb-devices-switcher">
+        <script type="text/html" id="tmpl-_beacon--builder-panel">
+            <div class="_beacon--customize-builder">
+                <div class="_beacon--cb-inner">
+                    <div class="_beacon--cb-header">
+                        <div class="_beacon--cb-devices-switcher">
+                        </div>
+                        <div class="_beacon--cb-actions">
+                            <a href="#"><?php _e( 'Settings', '_beacon' ); ?></a>
+                            <a href="#"><?php _e( 'Templates', '_beacon' ); ?></a>
+                            <a href="#"><?php _e( 'Close', '_beacon' ); ?></a>
+                        </div>
                     </div>
-                    <div class="_beacon--cb-actions">
-                        <a href="#"><?php _e( 'Settings', '_beacon' ); ?></a>
-                        <a href="#"><?php _e( 'Templates', '_beacon' ); ?></a>
-                        <a href="#"><?php _e( 'Close', '_beacon' ); ?></a>
-                    </div>
-                </div>
-                <div class="_beacon--cb-body">
-
+                    <div class="_beacon--cb-body"></div>
                 </div>
             </div>
+        </script>
 
-        </div>
+
         <script type="text/html" id="tmpl-_beacon--cb-panel">
             <div class="_beacon--cp-rows">
                 <div class="_beacon--row-top _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="top" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="top">
-
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
                 <div class="_beacon--row-main _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="main" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="main">
-
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
                 <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="bottom" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="bottom">
-
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="bottom"></div>
                     </div>
                 </div>
             </div>
             <div class="_beacon--cp-sidebar">
                 <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="sidebar" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar">
-
-                        </div>
+                        <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar"></div>
                     </div>
                 </div>
             <div>
