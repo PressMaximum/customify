@@ -7,15 +7,15 @@ function _beacon_builder_config_header_html(){
             'panel' => 'header_settings',
             'theme_supports' => '',
             'title'          => __( 'HTML', '_beacon' ),
-            'description' => __( 'This is section description',  '_beacon' ),
         ),
 
         array(
             'name' => 'header_html',
-            'type' => 'icon',
+            'type' => 'textarea',
             'section' => 'header_html',
             'theme_supports' => '',
             'title'          => __( 'HTML', '_beacon' ),
+            'description'          => __( 'Arbitrary HTML code.', '_beacon' ),
         ),
     );
 }

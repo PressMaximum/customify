@@ -1,8 +1,9 @@
 <?php
 function _beacon_builder_config_header_search(){
+    $section = 'header_search';
     $config  = array(
         array(
-            'name' => 'header_search',
+            'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
@@ -11,7 +12,7 @@ function _beacon_builder_config_header_search(){
 
         array(
             'name' => 'header_search',
-            'type' => 'image',
+            'type' => 'text',
             'section' => 'header_search',
             'theme_supports' => '',
             'title'          => __( 'Search', '_beacon' ),

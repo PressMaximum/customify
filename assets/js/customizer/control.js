@@ -432,8 +432,12 @@
                             current_val = new_color;
                             $( '._beacon-input', colorInput ).trigger('change');
                         }
-
+                    },
+                    clear: function( event, ui ){
+                        $( '._beacon-input', colorInput ).val( '' );
+                        $( '._beacon-input', colorInput ).trigger('data-change');
                     }
+
                 });
             } );
         },
@@ -658,7 +662,7 @@
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            value[ device ] =  value = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                            value[ device ] = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]', $field ).is(':checked') ? 1 : '' ;
@@ -867,8 +871,9 @@
                 type: control.params.setting_type,
                 name: control.id,
                 value: control.params.value,
-                default: control.params.default
+                default: control.params.default,
             };
+
             if ( field.type == 'slider' ) {
                 field.min = control.params.min;
                 field.max = control.params.max;
@@ -877,7 +882,7 @@
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {
                 field.choices = control.params.choices;
             }
-            if ( control.params.setting_type == 'checkbox' ) {
+            if ( control.params.setting_type == 'checkbox' && ! field.label ) {
                 field.label = control.params.checkbox_label;
             }
 

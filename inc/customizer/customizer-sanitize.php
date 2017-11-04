@@ -96,9 +96,13 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
             return $value;
         }
 
-        private function sanitize_text_field_deep( $value ){
+        private function sanitize_text_field_deep( $value, $html = false ){
             if ( ! is_array(  $value ) ) {
-                $value = sanitize_text_field( $value );
+                if ( $html ) {
+                    $value = wp_kses_post( $value );
+                } else {
+                    $value = sanitize_text_field( $value );
+                }
             } else {
                 if ( is_array( $value ) ) {
                     foreach ( $value as $k => $v ) {
@@ -388,6 +392,9 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     break;
                 case 'js_raw':
                     $value = $this->sanitize_text_field_deep( $value );
+                    break;
+                case 'textarea':
+                    $value = $this->sanitize_text_field_deep( $value, true );
                     break;
                 default:
                     $has_device = false;

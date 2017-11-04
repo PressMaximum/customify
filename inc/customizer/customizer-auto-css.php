@@ -499,24 +499,26 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             $css_code = '';
             foreach ( $config as $field ) {
                 $field_css = '';
-                switch ( $field['type'] ) {
-                    case 'css_ruler':
-                        $field_css .= $this->css_ruler( $field );
-                        break;
-                    case 'slider':
-                        $field_css .= $this->slider( $field );
-                        break;
-                    case 'color':
-                        $field_css .= $this->color( $field );
-                    case 'font':
-                        $field_css .= $this->font( $field );
-                    break;
-                    default:
-                        if ( isset( $field['css_format'] ) && $field['css_format'] == 'background' ) {
-                            $field_css .= $this->background( $field );
-                        } else if ( isset( $field['css_format'] ) && $field['css_format'] == 'typography' ) {
-                            $field_css .= $this->typography( $field );
-                        }
+                if ( $field['selector'] ) {
+                    switch ($field['type']) {
+                        case 'css_ruler':
+                            $field_css .= $this->css_ruler($field);
+                            break;
+                        case 'slider':
+                            $field_css .= $this->slider($field);
+                            break;
+                        case 'color':
+                            $field_css .= $this->color($field);
+                        case 'font':
+                            $field_css .= $this->font($field);
+                            break;
+                        default:
+                            if (isset($field['css_format']) && $field['css_format'] == 'background') {
+                                $field_css .= $this->background($field);
+                            } else if (isset($field['css_format']) && $field['css_format'] == 'typography') {
+                                $field_css .= $this->typography($field);
+                            }
+                    }
                 }
                 if ( $field_css ){
                     $field_css .= "\r\n";

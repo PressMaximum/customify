@@ -22,6 +22,8 @@ class _Beacon_Customizer_Layout_Builder {
             'primary-menu',
             'nav-icon',
             'search',
+            'button',
+            'icon-list',
             'html',
         );
 

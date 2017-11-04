@@ -498,12 +498,15 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
     function field_checkbox(){
         $this->before_field();
         ?>
-        <label>
-            <input type="checkbox" class="_beacon-input" <# if ( field.value == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}" value="1"> {{{ field.label }}}
-        </label>
-        <# if ( field.description ) { #>
-            <p class="description">{{{ field.description }}}</p>
-        <# } #>
+        <?php echo $this->field_header(); ?>
+
+        <div class="_beacon-field-settings-inner">
+            <label>
+            <input type="checkbox" class="_beacon-input" <# if ( field.value == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}" value="1">
+                {{{ field.checkbox_label }}}
+            </label>
+        </div>
+
         <?php
         $this->after_field();
     }
