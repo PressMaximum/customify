@@ -186,6 +186,22 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             return '';
         }
 
+        if ( $this->setting_type == 'heading' ) {
+            ?>
+            <div class="_beacon-control--heading">
+                <label>
+                    <?php if (!empty($this->label)) : ?>
+                        <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
+                    <?php endif; ?>
+                </label>
+            </div>
+            <?php if (!empty($this->description)) : ?>
+                <span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span>
+            <?php endif; ?>
+            <?php
+            return '';
+        }
+
         ?>
         <div class="_beacon--settings-wrapper">
             <div class="_beacon-control-field-header _beacon-field-heading">
@@ -198,6 +214,8 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
             <?php if (!empty($this->description)) : ?>
                 <span class="description customize-control-description"><?php echo wp_kses_post($this->description); ?></span>
             <?php endif; ?>
+
+
             <div class="_beacon--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' _beacon--repeater-items' : ''; ?>"></div>
             <?php if ( $this->setting_type == 'repeater' ) { ?>
                 <div class="_beacon--repeater-actions">

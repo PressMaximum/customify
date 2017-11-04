@@ -24,6 +24,8 @@ class _Beacon_Customizer_Layout_Builder {
             'search',
             'button',
             'icon-list',
+            'user',
+            'social-icons',
             'html',
         );
 

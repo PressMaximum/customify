@@ -1,14 +1,14 @@
 <?php
-function _beacon_builder_config_header_icon_list(){
-    $section = 'header_icon_list';
-    $prefix = 'header_icon_list_';
+function _beacon_builder_config_header_social_icons(){
+    $section = 'header_social_icons';
+    $prefix = 'header_social_icons_';
     return array(
         array(
             'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Icon List', '_beacon' ),
+            'title'          => __( 'Social Icons', '_beacon' ),
         ),
 
         array(
@@ -51,7 +51,6 @@ function _beacon_builder_config_header_icon_list(){
             )
         ),
 
-
         array(
             'name' => $prefix.'target',
             'type' => 'checkbox',
@@ -59,6 +58,7 @@ function _beacon_builder_config_header_icon_list(){
             'checkbox_label' => __( 'Open URL in new window.',  '_beacon' ),
             'label' => __( 'Target', '_beacon' ),
         ),
+
 
     );
 }

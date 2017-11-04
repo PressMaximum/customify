@@ -882,8 +882,8 @@
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {
                 field.choices = control.params.choices;
             }
-            if ( control.params.setting_type == 'checkbox' && ! field.label ) {
-                field.label = control.params.checkbox_label;
+            if ( control.params.setting_type == 'checkbox' ) {
+                field.checkbox_label = control.params.checkbox_label;
             }
 
             field.device_settings = control.params.device_settings;
