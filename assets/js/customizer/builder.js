@@ -89,6 +89,13 @@
                     $( '._beacon-available-items .grid-stack-item', panel ).draggable({
                         revert: 'invalid'
                     });
+                    $( '._beacon-available-items .grid-stack-item', panel ).resizable({
+                        handles: 'w, e',
+                        stop: function( event, ui ){
+                            that.setGridWidth( ui.element.parent(), ui );
+                            that.save();
+                        }
+                    });
 
 
                 } );
@@ -668,7 +675,6 @@
                 return flag;
             },
 
-
             addNewWidget: function ( $item, row ) {
 
                 var that = this;
@@ -701,7 +707,6 @@
                 }).resizable({
                     handles: 'w, e',
                     stop: function( event, ui ){
-                        console.log( 'Size- M', ui.position );
                         that.setGridWidth( ui.element.parent(), ui );
                         that.save();
                     }
@@ -726,7 +731,6 @@
                 var html = template( {}, template_id );
                 return '<div class="_beacon--device-panel _beacon-vertical-panel _beacon--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
             },
-
 
             addDevicePanels: function(){
                 var that = this;
