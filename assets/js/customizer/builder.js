@@ -273,9 +273,19 @@
                     x = 0;
                 }
                 var w = that.getW( ui.draggable );
-                var hasSpace = that.countEmptySlots( $wrapper ) >= w ? true : false;
+                var slots_empty = that.countEmptySlots( $wrapper );
+                var hasSpace = slots_empty >= w ? true : false;
 
                 var in_this_row;
+
+                if ( ui.draggable.hasClass( 'item-from-list' ) ) {
+                    if ( slots_empty > 0 && ! hasSpace ) {
+                        w = 1;
+                        ui.draggable.attr( 'data-gs-width', w );
+                        hasSpace = true;
+                    }
+                }
+
 
                 // Not enough space to drop
                 //Revert
@@ -494,6 +504,7 @@
                 console.log( 'No revert',  x + '-'+w  );
 
                 // Add drop item from somewhere to current row
+                ui.draggable.removeClass( 'item-from-list' );
                 $wrapper.append(ui.draggable);
 
                 ui.draggable.removeAttr( 'style' );
@@ -794,6 +805,7 @@
                                 var item = $('._beacon-available-items[data-device="' + device + '"] .grid-stack-item[data-id="' + node.id + '"]').first();
                                 item.attr('data-gs-width', node.width);
                                 item.attr('data-gs-x', node.x);
+                                item.removeClass( 'item-from-list' );
                                 that.addNewWidget( item,  $rows[ row_id  ] );
                             });
                         }

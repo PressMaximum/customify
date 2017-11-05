@@ -657,16 +657,15 @@
     clear: both; }
   ._beacon-available-items:after {
     clear: both; }
-  ._beacon-available-items .grid-stack-item {
+  ._beacon-available-items .grid-stack-item-content {
     padding: 10px;
-    float: left;
     border: 1px solid #ddd;
     margin-right: 10px;
     cursor: pointer; }
+  ._beacon-available-items .grid-stack-item {
+    float: left; }
   ._beacon-available-items ._beacon--cb-item-setting, ._beacon-available-items ._beacon--cb-item-remove {
     display: none; }
-  ._beacon-available-items ._beacon--cb-item-name {
-    margin-right: 20px; }
 
 .grid-stack > .grid-stack-item > .grid-stack-item-content {
   overflow: hidden !important; }
@@ -676,6 +675,8 @@
   height: 40px;
   display: inline-block;
   overflow: hidden; }
+  .grid-stack-item .grid-stack-item-content {
+    background: #fafafa; }
   .grid-stack-item ._beacon-cb-icon {
     position: absolute; }
     .grid-stack-item ._beacon-cb-icon:before {

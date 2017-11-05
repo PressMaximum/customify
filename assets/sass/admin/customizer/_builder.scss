@@ -159,18 +159,17 @@ $cb_padding: 20px;
         visibility: hidden;
     }
     @include clearfix;
-    .grid-stack-item {
+    .grid-stack-item-content {
         padding: 10px;
-        float: left;
         border: $border;
         margin-right: 10px;
         cursor: pointer;
     }
+    .grid-stack-item {
+        float: left;
+    }
     ._beacon--cb-item-setting, ._beacon--cb-item-remove {
         display: none;
-    }
-    ._beacon--cb-item-name {
-        margin-right: 20px;
     }
 }
 .grid-stack > .grid-stack-item > .grid-stack-item-content {
@@ -183,6 +182,9 @@ $cb_padding: 20px;
     height: 40px;
     display: inline-block;
     overflow: hidden;
+    .grid-stack-item-content {
+        background: #fafafa;
+    }
     ._beacon-cb-icon {
         position: absolute;
         &:before {

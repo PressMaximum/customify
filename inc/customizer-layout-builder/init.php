@@ -120,6 +120,14 @@ class _Beacon_Customizer_Layout_Builder {
                 'section' => 'header_html' // Customizer section to focus when click settings
             ),
 
+            array(
+                'name' => __( 'User', '_beacon' ),
+                'id' => 'user',
+                'col' => 0,
+                'width' => '4',
+                'section' => 'header_user' // Customizer section to focus when click settings
+            ),
+
         );
 
 
@@ -184,7 +192,7 @@ class _Beacon_Customizer_Layout_Builder {
         </script>
 
         <script type="text/html" id="tmpl-_beacon--cb-item">
-            <div class="grid-stack-item"
+            <div class="grid-stack-item item-from-list"
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
 
@@ -193,7 +201,6 @@ class _Beacon_Customizer_Layout_Builder {
             >
                 <div class="grid-stack-item-content">
                     <span class="_beacon--cb-item-name">{{ data.name }}</span>
-                    <span class="_beacon--cb-item-add _beacon-cb-icon"></span>
                     <span class="_beacon--cb-item-remove _beacon-cb-icon"></span>
                     <span class="_beacon--cb-item-setting _beacon-cb-icon" data-section="{{ data.section }}"></span>
                 </div>
