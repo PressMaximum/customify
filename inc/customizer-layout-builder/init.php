@@ -281,12 +281,12 @@ class _Beacon_Customizer_Layout_Builder {
         </script>
 
         <script type="text/html" id="tmpl-_beacon--cb-item">
-            <div class="grid-stack-item item-from-list"
+            <div class="grid-stack-item item-from-list for-s-{{ data.section }}"
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
-
-                data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
-                data-gs-width="{{ data.width }}" data-gs-height="1"
+                 data-section="{{ data.section }}"
+                 data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
+                 data-gs-width="{{ data.width }}" data-gs-height="1"
             >
                 <div class="grid-stack-item-content">
                     <span class="_beacon--cb-item-name">{{ data.name }}</span>

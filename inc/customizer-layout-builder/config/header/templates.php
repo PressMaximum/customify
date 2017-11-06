@@ -17,7 +17,7 @@ function _beacon_builder_config_header_templates(){
     $n = count( $saved_templates );
 
     $html = '';
-    $html .= '<span class="customize-control-title">'.__( 'Saved Template', '_beacon' ).'</span>';
+    $html .= '<span class="customize-control-title">'.__( 'Saved Templates', '_beacon' ).'</span>';
     $html .= '<ul class="list-saved-templates '.( $n > 0 ? 'has-templates' : 'no-templates' ).'">';
     if ( count( $saved_templates ) > 0 ) {
         foreach ( $saved_templates as $key => $tpl ) {
@@ -55,7 +55,7 @@ function _beacon_builder_config_header_templates(){
             'section' => $section,
             'theme_supports' => '',
             'title'       => __( 'Save Template', '_beacon' ),
-            'description' => '<div class="save-template-form"><input type="text" data-builder-id="header" data-control-id="'.esc_attr( $prefix.'save' ).'" class="template-input-name change-by-js"><button class="save-builder-template" type="button">'.esc_html__( 'Save', '_beacon' ).'</button></div>'.$html,
+            'description' => '<div class="save-template-form"><input type="text" data-builder-id="header" data-control-id="'.esc_attr( $prefix.'save' ).'" class="template-input-name change-by-js"><button class="button button-secondary save-builder-template" type="button">'.esc_html__( 'Save', '_beacon' ).'</button></div>'.$html,
         ),
     );
 }

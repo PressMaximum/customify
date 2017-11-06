@@ -141,6 +141,14 @@ $cb_padding: 20px;
         border: 1px solid #DDDDDD;
     }
 
+    .grid-stack-item {
+        &.item-active {
+            .grid-stack-item-content {
+                background: #e8b262;
+            }
+        }
+    }
+
     ._beacon--cb-item-name {
         overflow: hidden;
         text-overflow: ellipsis;
@@ -195,6 +203,11 @@ $cb_padding: 20px;
     overflow: hidden;
     .grid-stack-item-content {
         background: #fafafa;
+    }
+    &.item-active {
+        .grid-stack-item-content {
+            background: #e8b262;
+        }
     }
     ._beacon-cb-icon {
         position: absolute;
@@ -396,7 +409,12 @@ $animation_speed: .3s !default;
 
 
 /* Saved templates */
+.save-template-form {
+    display: flex;
+    margin-bottom: 15px;
+}
 .list-saved-templates{
+
     &.has-templates {
         .no_template {
             display: none;

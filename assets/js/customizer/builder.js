@@ -968,11 +968,9 @@
                 that.items = items;
                 that.devices = devices;
 
-                console.log( wpcustomize.control( that.controlId ).container );
                 if ( options.section ) {
                     wpcustomize.section( options.section ).container.addClass( '_beacon--hide' );
                 }
-
 
                 that.addDevicePanels();
                 that.switchToDevice( that.activePanel );
@@ -1073,6 +1071,8 @@
 
 
 
+
+
     wpcustomize.bind( 'ready', function( e, b ) {
 
         var Header = new CustomizeBuilder( _Beacon_Layout_Builder.header );
@@ -1081,6 +1081,18 @@
         wpcustomize.bind( '_section_focus', function( e, b ) {
             console.log( '_section_focus', b );
         });
+
+        // When focus section
+        wpcustomize.state( 'expandedSection' ).bind( function( section ) {
+            $( '._beacon--device-panel .grid-stack-item' ).removeClass( 'item-active' );
+            if ( section ) {
+                $( '._beacon--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
+            }
+        });
+
+
+
+
 
        //Event when panel toggle
         /**
