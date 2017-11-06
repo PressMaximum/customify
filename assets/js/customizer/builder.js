@@ -1220,12 +1220,38 @@
             }
         } );
 
-        setTimeout( function(){
-            $( window ).off( 'beforeunload.customize-confirm' );
-            top.location.href = urlParser.href;
-            deferred.resolve();
+        var overlay = $( '.wp-full-overlay' );
+        overlay.addClass( 'customize-loading' );
+
+        var onceProcessingComplete = function(){
+
+            var request;
+            if ( wpcustomize.state( 'processing' ).get() > 0 ) {
+                return;
+            }
+
+            wpcustomize.state( 'processing' ).unbind( onceProcessingComplete );
+
+            request = wpcustomize.requestChangesetUpdate();
+            request.done( function() {
+                $( window ).off( 'beforeunload.customize-confirm' );
+                top.location.href = urlParser.href;
+                deferred.resolve();
+            } );
+            request.fail( function() {
+                overlay.removeClass( 'customize-loading' );
+                deferred.reject();
+            } );
+
             return deferred.promise();
-        }, 300 );
+        };
+
+
+        if ( 0 === wpcustomize.state( 'processing' ).get() ) {
+            onceProcessingComplete();
+        } else {
+            wpcustomize.state( 'processing' ).bind( onceProcessingComplete );
+        }
 
     });
 
