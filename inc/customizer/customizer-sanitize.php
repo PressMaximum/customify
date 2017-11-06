@@ -10,7 +10,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
         private $icons = array();
         private $skip_devices = false;
 
-        function __construct( $control, $setting )
+        function __construct( $control= null, $setting = null )
         {
             $this->control = $control;
             $this->setting = $setting;

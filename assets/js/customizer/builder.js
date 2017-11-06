@@ -71,11 +71,18 @@
                         var _id = $( this ).attr( 'data-id' ) || '';
                         that.panels[ device ][ _id ] = $( this );
                         $( this ).droppable( {
+                            out: function ( event, ui ) {
+
+                            },
                             over: function( event, ui ) {
+                                var $wrapper = $( this );
                                 /**
                                  * @see http://api.jqueryui.com/droppable/#event-over
                                  */
                                 //var $wrapper = $( this );
+
+                                console.log( 'DROP Over',  ui.offset );
+
                             },
                             drop: function( event, ui ) {
                                 var $wrapper = $( this );
@@ -90,13 +97,14 @@
 
                     } );
 
+                    var sidebar = $( '#_sid_mobile-sidebar', panel );
+                    var sidebar_id = sidebar.attr( 'id' ) || false;
 
                     $( '._beacon-available-items .grid-stack-item', panel ).draggable({
                         revert: 'invalid',
-                        connectToSortable: "#_sid_mobile-sidebar"
+                        connectToSortable: ( sidebar_id ) ? '#'+sidebar_id : false
                     });
 
-                    var sidebar = $( '#_sid_mobile-sidebar', panel );
                     if ( sidebar.length > 0 ) {
                         sidebar.sortable({
                             revert: true,
@@ -149,10 +157,6 @@
             getW: function( $item ){
                 var w = $item.attr( 'data-gs-width' ) || 1;
                 return parseInt( w );
-            },
-
-            gridCanDrop: function( x, w, $wrapper ){
-
             },
 
             countEmptySlots: function( $wrapper ){
@@ -269,7 +273,6 @@
                     wrapper: $wrapper
                 }
             },
-
 
             grid: function( $wrapper, ui ){
                 var that = this;
@@ -637,21 +640,6 @@
 
             },
 
-            addFlag: function( $row, x, w ){
-                var i;
-                var flag = this.getFlag( $row );
-                for ( i = x; i < x + w; i ++  ) {
-                    if ( i === x ) {
-                        flag[ i ] = 2;
-                    } else {
-                        flag[ i ] = 1;
-                    }
-                }
-
-                $row.data( 'gridflag', flag );
-                return flag;
-            },
-
             removeFlag: function( $row, x, w ){
                 var  flag = this.getFlag( $row );
                 var i;
@@ -748,10 +736,6 @@
 
                 el.append( elItem );
                 that.updateGridFlag( el );
-
-            },
-
-            findNewPosition: function( new_node ){
 
             },
 
@@ -1034,12 +1018,8 @@
                     that.switchToDevice( device );
                 } );
 
-
-
             }
         };
-
-
 
         Builder.init( options.control_id, options.items, options.devices );
         return Builder;
@@ -1152,12 +1132,59 @@
     } );
 
     // Save Template
-    $document.on( 'click', '.save-template-form .save-builder-template', function( e ){
+    $document.on( 'click', '.save-template-form .save-builder-template', function( e ) {
         e.preventDefault();
-        var form = $( this ).closest('.save-template-form');
+        var form = $(this).closest('.save-template-form');
         var input = $( '.template-input-name', form );
-        // Need Improve
-    } );
+        var template_name =  input.val();
+        if ( template_name && template_name !== '' ) {
+            // Need Improve
+            $.post(ajaxurl, {
+                action: '_beacon_builder_save_template',
+                name: input.val(),
+                id: input.attr('data-builder-id') || '',
+                preview_data: wpcustomize.get()
+            }, function (res) {
+                input.val('');
+
+                /**
+                 * @see app/public/wp-admin/js/customize-controls.js L1452
+                 *  loadThemePreview
+                 */
+
+
+            });
+        }
+
+
+    });
+
+
+    // Load templates
+    $document.on( 'click', '.list-saved-templates .saved_template', function( e ) {
+        e.preventDefault();
+        var deferred = $.Deferred();
+        var urlParser;
+        urlParser = document.createElement( 'a' );
+        urlParser.href = location.href;
+        urlParser.search = $.param( _.extend(
+            wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
+            {
+                changeset_uuid: wpcustomize.settings.changeset.uuid
+            }
+        ) );
+
+        console.log( ' urlParser.href',  urlParser.href );
+
+        $( window ).off( 'beforeunload.customize-confirm' );
+        top.location.href = urlParser.href;
+        window.location = urlParser.href;
+        deferred.resolve();
+        return deferred.promise();
+
+    });
+
+
 
 
 })( jQuery, wp.customize || null );

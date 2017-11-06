@@ -4,12 +4,79 @@ class _Beacon_Customizer_Layout_Builder {
     static $_instance;
     function __construct()
     {
-
         require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
 
         add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
         add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
+
+
+
+        add_action( 'wp_ajax__beacon_builder_save_template', array( $this, 'ajax_save_template' ) );
     }
+
+    function ajax_save_template(){
+
+        if ( ! current_user_can('edit_theme_options' ) ) {
+            wp_send_json_error( __( 'Access denied', '_beacon' ) );
+        }
+
+        $id = sanitize_text_field( $_POST['id'] );
+        $save_name = sanitize_text_field( $_POST['name'] );
+        $data = wp_unslash( $_POST['preview_data'] );
+        $fn = '_beacon_customizer_get_'.$id.'_config' ;
+
+        if ( ! function_exists( $fn ) ){
+            wp_send_json_error( __( 'No Support', '_beacon' ) );
+        }
+
+        $config = call_user_func_array( $fn, array() );
+        $new_template_data = array();
+        $s = new _Beacon_Sanitize_Input();
+
+        foreach ( $config as $k => $field ) {
+            if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
+                $name = $field['name'];
+                $value = isset( $data[ $name ] ) ? $data[ $name ] : '';
+
+                if ( ! is_array( $value ) ) {
+                    $value = json_decode( urldecode_deep( $value ), true );
+                }
+
+
+                $value = $s->sanitize( $value, $field );
+                $new_template_data[ $name ] = $value;
+            }
+        }
+
+        $theme_name = wp_get_theme()->get('Name');
+        $option_name = $theme_name.'_saved_templates';
+
+        $saved_templates = get_option( $option_name );
+        if ( ! is_array( $saved_templates ) ) {
+            $saved_templates = array();
+        }
+
+        if ( ! $save_name ) {
+            $key_id = date_i18n( 'Y-m-d H:i:s', current_time('timestamp') );
+            $save_name = sprintf( __( 'Saved %s', '_beacon' ), $key_id );
+        } else {
+            $key_id = $save_name;
+        }
+
+        $saved_templates[ $key_id ] = array(
+            'name' => $save_name,
+            'image' => '',
+            'data' => $new_template_data
+        );
+
+        update_option( $option_name, $saved_templates );
+
+        wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name ) );
+
+
+        die();
+    }
+
 
     static function get_header_sections(){
         $elements = array(
@@ -38,6 +105,7 @@ class _Beacon_Customizer_Layout_Builder {
 
         wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
+
             'header' => array(
                 'id'         => 'header',
                 'control_id' => 'header_builder_panel',
@@ -265,6 +333,13 @@ function _beacon_customize_render_header(){
             header bottom
         </div> <!-- #._beacon-container -->
     </div><!-- #.header-bottom -->
+    <?php
+
+    $theme_name = wp_get_theme()->get('Name');
+    $option_name = $theme_name.'_saved_templates';
+
+    ?>
+    <pre class="debug"><?php print_r( get_option( $option_name ) ); ?></pre>
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
 }

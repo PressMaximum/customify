@@ -1,6 +1,6 @@
 <?php
 if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
-    function _beacon_customizer_get_header_config( $configs ){
+    function _beacon_customizer_get_header_config( $configs = array() ){
 
         $config = array(
             array(
