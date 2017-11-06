@@ -504,6 +504,9 @@
     .customize-control._beacon-background-control ._beacon--settings-fields ._beacon--field._beacon--field-name-attachment ._beacon-field-header {
       display: none; }
 
+._beacon--hide {
+  display: none !important; }
+
 ._beacon--customize-builder {
   position: fixed;
   bottom: 0px;

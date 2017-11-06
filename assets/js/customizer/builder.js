@@ -762,7 +762,7 @@
                 if (  $( '#'+template_id ).length == 0 ) {
                     return ;
                 }
-                var html = template( {}, template_id );
+                var html = template( { device: device, id: options.id }, template_id );
                 return '<div class="_beacon--device-panel _beacon-vertical-panel _beacon--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
             },
 
@@ -814,7 +814,6 @@
                 } else {
                     $( '#customize-footer-actions .preview-mobile' ).trigger('click');
                 }
-
 
             },
 
@@ -975,14 +974,21 @@
             init: function( controlId, items, devices ){
                 var that = this;
 
+
                 var template = that.getTemplate();
                 var template_id =  'tmpl-_beacon--builder-panel';
-                var html = template( {}, template_id );
+                var html = template( { id: options.id }, template_id );
                 that.container = $( html );
                 $( 'body .wp-full-overlay' ).append( that.container );
                 that.controlId = controlId;
                 that.items = items;
                 that.devices = devices;
+
+                console.log( wpcustomize.control( that.controlId ).container );
+                if ( options.section ) {
+                    wpcustomize.section( options.section ).container.addClass( '_beacon--hide' );
+                }
+
 
                 that.addDevicePanels();
                 that.switchToDevice( that.activePanel );
@@ -1027,6 +1033,8 @@
                     var device = $( this ).data('device');
                     that.switchToDevice( device );
                 } );
+
+
 
             }
         };
@@ -1109,32 +1117,47 @@
         });
         */
 
-
-
     });
 
 
-    // When data change
-    /*
-    wpcustomize.bind( 'change', function( e, b ) {
-       console.log( 'Change' );
-    });
+    // Focus
+    $document.on( 'click', '.focus-section', function( e ) {
+        e.preventDefault();
+        var id = $( this ).attr( 'data-id' ) || '';
+        if ( id ) {
+            if ( wpcustomize.section( id ) ) {
+                wpcustomize.section( id ).focus();
+            }
+        }
+    } );
 
-    // app/public/wp-admin/js/customize-controls.js L4873
+    $document.on( 'click', '.focus-control', function( e ) {
+        e.preventDefault();
+        var id = $( this ).attr( 'data-id' ) || '';
+        if ( id ) {
+            if ( wpcustomize.control( id ) ) {
+                wpcustomize.control( id ).focus();
+            }
+        }
+    } );
 
-    api.section.each( function( section ) {
-				if ( section.expanded() ) {
-					expandedSections.push( section );
-				}
-			});
-			api.panel.each( function( panel ) {
-				if ( panel.expanded() ) {
-					expandedPanels.push( panel );
-				}
-			});
-    */
+    $document.on( 'click', '.focus-panel', function( e ) {
+        e.preventDefault();
+        var id = $( this ).attr( 'data-id' ) || '';
+        if ( id ) {
+            if ( wpcustomize.panel( id ) ) {
+                wpcustomize.panel( id ).focus();
+            }
+        }
+    } );
 
-
+    // Save Template
+    $document.on( 'click', '.save-template-form .save-builder-template', function( e ){
+        e.preventDefault();
+        var form = $( this ).closest('.save-template-form');
+        var input = $( '.template-input-name', form );
+        // Need Improve
+    } );
 
 
 })( jQuery, wp.customize || null );

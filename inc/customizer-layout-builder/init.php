@@ -18,6 +18,8 @@ class _Beacon_Customizer_Layout_Builder {
             'row-bottom',
             'row-sidebar',
 
+            'templates',
+
             'logo',
             'primary-menu',
             'nav-icon',
@@ -37,13 +39,14 @@ class _Beacon_Customizer_Layout_Builder {
         wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
         wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
             'header' => array(
-                'id' => 'header',
+                'id'         => 'header',
                 'control_id' => 'header_builder_panel',
                 'panel'      => 'header_settings',
-                'items' => $this->get_header_items(),
+                'section'    => 'header_builder_panel',
+                'items'      => $this->get_header_items(),
                 'devices' => array(
-                    'desktop' => __( 'Desktop', '_beacon' ),
-                    'mobile' => __( 'Mobile/Tablet', '_beacon' ),
+                    'desktop'   => __( 'Desktop', '_beacon' ),
+                    'mobile'    => __( 'Mobile/Tablet', '_beacon' ),
                 ),
             )
 
@@ -149,9 +152,8 @@ class _Beacon_Customizer_Layout_Builder {
                         <div class="_beacon--cb-devices-switcher">
                         </div>
                         <div class="_beacon--cb-actions">
-                            <a href="#"><?php _e( 'Settings', '_beacon' ); ?></a>
-                            <a href="#"><?php _e( 'Templates', '_beacon' ); ?></a>
-                            <a href="#"><?php _e( 'Close', '_beacon' ); ?></a>
+                            <a data-id="{{ data.id }}_templates" class="focus-section" href="#"><?php _e( 'Templates', '_beacon' ); ?></a>
+                            <a class="_beacon--panel-close" href="#"><?php _e( 'Close', '_beacon' ); ?></a>
                         </div>
                     </div>
                     <div class="_beacon--cb-body"></div>
@@ -181,6 +183,8 @@ class _Beacon_Customizer_Layout_Builder {
                     </div>
                 </div>
             </div>
+
+            <# if ( data.device != 'desktop' ) { #>
             <div class="_beacon--cp-sidebar">
                 <div class="_beacon--row-bottom _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" data-id="sidebar" href="#">set</a>
@@ -189,6 +193,8 @@ class _Beacon_Customizer_Layout_Builder {
                     </div>
                 </div>
             <div>
+            <# } #>
+
         </script>
 
         <script type="text/html" id="tmpl-_beacon--cb-item">

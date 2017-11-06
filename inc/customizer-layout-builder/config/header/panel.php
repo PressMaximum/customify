@@ -1,6 +1,6 @@
 <?php
-if ( ! function_exists( '_beacon_customizer_header_config' ) ) {
-    function _beacon_customizer_header_config( $configs ){
+if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
+    function _beacon_customizer_get_header_config( $configs ){
 
         $config = array(
             array(
@@ -30,8 +30,6 @@ if ( ! function_exists( '_beacon_customizer_header_config' ) ) {
                 'render_callback' => '_beacon_customize_render_header'
             ),
 
-
-
         );
 
         foreach ( _Beacon_Customizer_Layout_Builder::get_header_sections() as $id ) {
@@ -51,4 +49,4 @@ if ( ! function_exists( '_beacon_customizer_header_config' ) ) {
     }
 }
 
-add_filter( '_beacon/customizer/config', '_beacon_customizer_header_config' );
+add_filter( '_beacon/customizer/config', '_beacon_customizer_get_header_config' );
