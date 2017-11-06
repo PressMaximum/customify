@@ -618,6 +618,11 @@
   ._beacon--cb-row ._beacon--cb-items {
     display: block;
     min-height: 45px; }
+    ._beacon--cb-row ._beacon--cb-items._beacon--sidebar-items {
+      padding: 0px 5px 0px; }
+      ._beacon--cb-row ._beacon--cb-items._beacon--sidebar-items .grid-stack-item {
+        display: block;
+        margin-bottom: 5px; }
   ._beacon--cb-row ._beacon--row-inner {
     width: 100%;
     padding: 5px 0px;
@@ -630,7 +635,7 @@
     text-overflow: ellipsis;
     margin: 0 35px 0 10px;
     display: block;
-    line-height: 43px; }
+    line-height: 37px; }
   ._beacon--cb-row ._beacon--cb-item-add {
     display: none; }
 

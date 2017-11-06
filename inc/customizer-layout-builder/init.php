@@ -185,7 +185,7 @@ class _Beacon_Customizer_Layout_Builder {
                 <div class="_beacon--row-bottom _beacon--cb-row">
                     <a class="_beacon--cb-row-settings" data-id="sidebar" href="#">set</a>
                     <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="sidebar"></div>
+                        <div class="_beacon--cb-items _beacon--sidebar-items grid-stack----" data-id="sidebar"></div>
                     </div>
                 </div>
             <div>

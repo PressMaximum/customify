@@ -50,7 +50,6 @@
 
             drag_drop: function(){
                 var that = this;
-                var handleTarget;
 
                 $( '._beacon--device-panel', that.container ).each( function(){
                     var panel = $( this );
@@ -58,7 +57,13 @@
                     var sortable_ids= [];
                     that.panels[ device ] = {};
                     $( '._beacon--cb-items', panel ).each( function( index ){
-                        var id = '_sid_'+device+index;
+                        var data_name = $( this ).attr( 'data-id' ) || '';
+                        var id;
+                        if ( ! data_name ) {
+                            id = '_sid_'+device+index;
+                        } else {
+                            id = '_sid_'+device+'-'+data_name;
+                        }
                         $( this ).attr( 'id', id );
                         sortable_ids[ index ] = '#'+id;
                     });
@@ -70,7 +75,7 @@
                                 /**
                                  * @see http://api.jqueryui.com/droppable/#event-over
                                  */
-                                var $wrapper = $( this );
+                                //var $wrapper = $( this );
                             },
                             drop: function( event, ui ) {
                                 var $wrapper = $( this );
@@ -87,8 +92,26 @@
 
 
                     $( '._beacon-available-items .grid-stack-item', panel ).draggable({
-                        revert: 'invalid'
+                        revert: 'invalid',
+                        connectToSortable: "#_sid_mobile-sidebar"
                     });
+
+                    var sidebar = $( '#_sid_mobile-sidebar', panel );
+                    if ( sidebar.length > 0 ) {
+                        sidebar.sortable({
+                            revert: true,
+                            change: function( event, ui ) {
+                                that.save();
+                            },
+                            receive: function( event, ui ) {
+                                $( this ).find( '.grid-stack-item' ).removeAttr('style');
+                            }
+                        });
+
+                        that.panels[ device ][ 'sidebar' ] = sidebar;
+                    }
+
+
                     $( '._beacon-available-items .grid-stack-item', panel ).resizable({
                         handles: 'w, e',
                         stop: function( event, ui ){
@@ -785,6 +808,14 @@
                 $( '._beacon--device-panel', that.container  ).addClass( '_beacon--panel-hide' );
                 $( '._beacon--device-panel._beacon--panel-'+device, that.container  ).removeClass( '_beacon--panel-hide' );
                 that.activePanel = device;
+
+                if ( device == 'desktop' ) {
+                    $( '#customize-footer-actions .preview-desktop' ).trigger('click');
+                } else {
+                    $( '#customize-footer-actions .preview-mobile' ).trigger('click');
+                }
+
+
             },
 
             addExistingRowsItems: function(){
@@ -969,6 +1000,14 @@
                     that.hidePanel();
                 }
 
+                wpcustomize.previewedDevice.bind( function( newDevice ) {
+                    if ( newDevice === 'desktop' ) {
+                        that.switchToDevice( 'desktop' );
+                    } else {
+                        that.switchToDevice( 'mobile' );
+                    }
+                });
+
                 that.togglePanel();
                 if ( wpcustomize.state( 'paneVisible' ).get() ) {
                     that.panelLayoutCSS();
@@ -1059,8 +1098,7 @@
         /**
          * See /wp-admin/js/customize-controls.js L4690
          */
-        console.log( '___a',  wpcustomize.state( 'paneVisible' ).get() );
-
+        /*
         wpcustomize.state( 'paneVisible' ).bind( function( paneVisible ) {
             console.log( 'paneVisible state', paneVisible );
         });
@@ -1069,6 +1107,7 @@
             console.log( 'expandedPanel state', paneVisible );
             console.log( 'expandedPanel state Builder', wpcustomize.state( 'expandedPanel' ).get() );
         });
+        */
 
 
 

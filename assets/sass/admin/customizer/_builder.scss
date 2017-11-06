@@ -118,6 +118,14 @@ $cb_padding: 20px;
     ._beacon--cb-items {
         display: block;
         min-height: 45px;
+
+        &._beacon--sidebar-items {
+            padding: 0px 5px 0px;
+            .grid-stack-item {
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
     }
     ._beacon--row-inner {
         width: 100%;
@@ -135,7 +143,7 @@ $cb_padding: 20px;
         text-overflow: ellipsis;
         margin: 0 35px 0 10px;
         display: block;
-        line-height: 43px;
+        line-height: 37px;
     }
     ._beacon--cb-item-add {
         display: none;
