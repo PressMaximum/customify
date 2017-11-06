@@ -112,7 +112,7 @@
                                 that.save();
                             },
                             receive: function( event, ui ) {
-                                $( this ).find( '.grid-stack-item' ).removeAttr('style');
+                                $( this ).find( '.grid-stack-item' ).removeAttr('style').attr( 'data-gs-width', 1 );
                             }
                         });
 

@@ -687,8 +687,6 @@
   overflow: hidden; }
   .grid-stack-item .grid-stack-item-content {
     background: #fafafa; }
-  .grid-stack-item.item-active .grid-stack-item-content {
-    background: #e8b262; }
   .grid-stack-item ._beacon-cb-icon {
     position: absolute; }
     .grid-stack-item ._beacon-cb-icon:before {
