@@ -1606,6 +1606,33 @@
       .grid-stack.grid-stack-one-column-mode > .grid-stack-item > .ui-resizable-handle {
         display: none; }
 
+/* Saved templates */
+.list-saved-templates.has-templates .no_template {
+  display: none; }
+
+.list-saved-templates li:before, .list-saved-templates li:after {
+  content: "";
+  display: block;
+  clear: both; }
+
+.list-saved-templates li:after {
+  clear: both; }
+
+.list-saved-templates li.saved_template {
+  background: #fff;
+  padding: 10px 10px;
+  position: relative; }
+
+.list-saved-templates li a {
+  cursor: pointer;
+  float: right; }
+  .list-saved-templates li a.load-tpl {
+    margin-left: 10px; }
+
+.list-saved-templates li.no_template {
+  padding: 15px 0;
+  font-style: italic; }
+
 .grid-stack.grid-stack-1 > .grid-stack-item {
   min-width: 100%; }
   .grid-stack.grid-stack-1 > .grid-stack-item[data-gs-width='1'] {

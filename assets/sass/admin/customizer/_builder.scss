@@ -393,3 +393,32 @@ $animation_speed: .3s !default;
         }
     }
 }
+
+
+/* Saved templates */
+.list-saved-templates{
+    &.has-templates {
+        .no_template {
+            display: none;
+        }
+    }
+    li {
+        @include clearfix;
+        &.saved_template {
+            background: #fff;
+            padding: 10px 10px;
+            position: relative;
+        }
+        a {
+            cursor: pointer;
+            float: right;
+            &.load-tpl {
+                margin-left: 10px;
+            }
+        }
+        &.no_template {
+            padding: 15px 0;
+            font-style: italic;
+        }
+    }
+}

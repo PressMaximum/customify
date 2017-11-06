@@ -12,9 +12,13 @@ function _beacon_builder_config_header_templates(){
         $saved_templates = array();
     }
 
+    $saved_templates = array_reverse( $saved_templates );
+
+    $n = count( $saved_templates );
+
     $html = '';
     $html .= '<span class="customize-control-title">'.__( 'Saved Template', '_beacon' ).'</span>';
-    $html .= '<ul class="list-saved-templates">';
+    $html .= '<ul class="list-saved-templates '.( $n > 0 ? 'has-templates' : 'no-templates' ).'">';
     if ( count( $saved_templates ) > 0 ) {
         foreach ( $saved_templates as $key => $tpl ) {
             $tpl = wp_parse_args( $tpl, array(
@@ -26,11 +30,12 @@ function _beacon_builder_config_header_templates(){
             } else {
                 $name = $tpl['name'] ;
             }
-            $html .= '<li class="saved_template" data-id="'.esc_attr( $key ).'" data-data="'.esc_attr( json_encode( $tpl['data'] ) ).'">'.esc_html( $name ).'</li>';
+            $html .= '<li class="saved_template" data-control-id="'.esc_attr( $prefix.'save' ).'" data-id="'.esc_attr( $key ).'" data-data="'.esc_attr( json_encode( $tpl['data'] ) ).'">'.esc_html( $name ).' <a href="#" class="load-tpl">'.__( 'Load', '_beacon' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', '_beacon' ).'</a></li>';
         }
-    } else {
-        $html .= '<li class="no_template">'.__( 'No saved templates.', '_beacon' ).'</li>';
     }
+
+    $html .= '<li class="no_template">'.__( 'No saved templates.', '_beacon' ).'</li>';
+
     $html .= '</ul>';
     $html .= '</div>';
 
@@ -50,7 +55,7 @@ function _beacon_builder_config_header_templates(){
             'section' => $section,
             'theme_supports' => '',
             'title'       => __( 'Save Template', '_beacon' ),
-            'description' => '<div class="save-template-form"><input type="text" data-builder-id="header" class="template-input-name"><button class="save-builder-template" type="button">'.esc_html__( 'Save', '_beacon' ).'</button></div>'.$html,
+            'description' => '<div class="save-template-form"><input type="text" data-builder-id="header" data-control-id="'.esc_attr( $prefix.'save' ).'" class="template-input-name change-by-js"><button class="save-builder-template" type="button">'.esc_html__( 'Save', '_beacon' ).'</button></div>'.$html,
         ),
     );
 }

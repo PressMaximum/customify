@@ -12,6 +12,12 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
 
         function __construct( $control= null, $setting = null )
         {
+            if ( is_array( $control ) ) {
+                $control = ( object ) $control;
+            }
+            if ( is_array( $setting ) ) {
+                $setting = ( object ) $setting;
+            }
             $this->control = $control;
             $this->setting = $setting;
         }

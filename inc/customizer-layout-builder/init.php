@@ -21,6 +21,7 @@ class _Beacon_Customizer_Layout_Builder {
         }
 
         $id = sanitize_text_field( $_POST['id'] );
+        $control = sanitize_text_field( $_POST['control'] );
         $save_name = sanitize_text_field( $_POST['name'] );
         $data = wp_unslash( $_POST['preview_data'] );
         $fn = '_beacon_customizer_get_'.$id.'_config' ;
@@ -29,9 +30,27 @@ class _Beacon_Customizer_Layout_Builder {
             wp_send_json_error( __( 'No Support', '_beacon' ) );
         }
 
+        $theme_name = wp_get_theme()->get('Name');
+        $option_name = $theme_name.'_saved_templates';
+
+        $saved_templates = get_option( $option_name );
+        if ( ! is_array( $saved_templates ) ) {
+            $saved_templates = array();
+        }
+
+        if ( isset( $_POST['remove'] ) ) {
+            $remove = sanitize_text_field( $_POST['remove'] );
+            if ( isset( $saved_templates[ $remove ] ) ) {
+                unset( $saved_templates[ $remove ] );
+            }
+
+            update_option( $option_name, $saved_templates );
+            wp_send_json_success();
+        }
+
+
         $config = call_user_func_array( $fn, array() );
         $new_template_data = array();
-        $s = new _Beacon_Sanitize_Input();
 
         foreach ( $config as $k => $field ) {
             if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
@@ -42,19 +61,13 @@ class _Beacon_Customizer_Layout_Builder {
                     $value = json_decode( urldecode_deep( $value ), true );
                 }
 
+                $s = new _Beacon_Sanitize_Input( $field, $field );
 
                 $value = $s->sanitize( $value, $field );
                 $new_template_data[ $name ] = $value;
             }
         }
 
-        $theme_name = wp_get_theme()->get('Name');
-        $option_name = $theme_name.'_saved_templates';
-
-        $saved_templates = get_option( $option_name );
-        if ( ! is_array( $saved_templates ) ) {
-            $saved_templates = array();
-        }
 
         if ( ! $save_name ) {
             $key_id = date_i18n( 'Y-m-d H:i:s', current_time('timestamp') );
@@ -71,7 +84,9 @@ class _Beacon_Customizer_Layout_Builder {
 
         update_option( $option_name, $saved_templates );
 
-        wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name ) );
+        $html = '<li class="saved_template" data-control-id="'.esc_attr( $control ).'" data-id="'.esc_attr( $key_id ).'" data-data="'.esc_attr( json_encode( $new_template_data ) ).'">'.esc_html( $save_name ).' <a href="#" class="load-tpl">'.__( 'Load', '_beacon' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', '_beacon' ).'</a></li>';
+
+        wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name, 'li' => $html ) );
 
 
         die();

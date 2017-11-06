@@ -1134,7 +1134,7 @@
     // Save Template
     $document.on( 'click', '.save-template-form .save-builder-template', function( e ) {
         e.preventDefault();
-        var form = $(this).closest('.save-template-form');
+        var form = $(this).closest('.customize-control');
         var input = $( '.template-input-name', form );
         var template_name =  input.val();
         if ( template_name && template_name !== '' ) {
@@ -1143,44 +1143,89 @@
                 action: '_beacon_builder_save_template',
                 name: input.val(),
                 id: input.attr('data-builder-id') || '',
+                control: input.attr('data-control-id') || '',
                 preview_data: wpcustomize.get()
             }, function (res) {
-                input.val('');
+
+                if ( res.success  ) {
+                    input.val('');
+                    form.find('.list-saved-templates').prepend(res.data.li);
+                    form.find('.list-saved-templates').addClass('has-templates');
+                }
 
                 /**
                  * @see app/public/wp-admin/js/customize-controls.js L1452
                  *  loadThemePreview
                  */
 
-
             });
         }
-
-
     });
 
 
-    // Load templates
-    $document.on( 'click', '.list-saved-templates .saved_template', function( e ) {
+    $document.on( 'click', '.list-saved-templates .saved_template .remove-tpl', function( e ) {
         e.preventDefault();
+        var item = $( this ).parent();
+        var form = $(this).closest('.customize-control');
+        var input = $( '.template-input-name', form );
+        var key = item.data( 'id' ) || '';
+        $.post(ajaxurl, {
+            action: '_beacon_builder_save_template',
+            id: input.attr('data-builder-id') || '',
+            remove: key
+        }, function (res) {
+            item.remove();
+            if ( form.find('.list-saved-templates li.saved_template').length <= 0 ) {
+                form.find('.list-saved-templates').removeClass( 'has-templates' );
+            }
+
+        });
+
+    });
+
+    var encodeValue = function( value ){
+        return encodeURI( JSON.stringify( value ) )
+    };
+
+
+    // Load templates
+    $document.on( 'click', '.list-saved-templates .saved_template .load-tpl', function( e ) {
+        e.preventDefault();
+        var item = $( this ).parent();
         var deferred = $.Deferred();
         var urlParser;
         urlParser = document.createElement( 'a' );
         urlParser.href = location.href;
+
+        var control_id = item.data('control-id') || '';
+
         urlParser.search = $.param( _.extend(
             wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
             {
-                changeset_uuid: wpcustomize.settings.changeset.uuid
+                changeset_uuid: wpcustomize.settings.changeset.uuid,
+                autofocus: {
+                    control: control_id
+                }
             }
         ) );
 
-        console.log( ' urlParser.href',  urlParser.href );
+        var data = item.data( 'data' ) || {};
+        if ( !_.isObject( data ) ) {
+            data = {};
+        }
 
-        $( window ).off( 'beforeunload.customize-confirm' );
-        top.location.href = urlParser.href;
-        window.location = urlParser.href;
-        deferred.resolve();
-        return deferred.promise();
+        _.each( data, function( value, key ){
+            if ( wpcustomize.control( key ) ) {
+                wpcustomize.control( key ).setting.set( encodeValue( value ) );
+            }
+        } );
+
+        setTimeout( function(){
+            $( window ).off( 'beforeunload.customize-confirm' );
+            top.location.href = urlParser.href;
+            deferred.resolve();
+            return deferred.promise();
+        }, 300 );
 
     });
 
