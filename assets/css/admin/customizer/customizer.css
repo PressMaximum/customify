@@ -513,7 +513,7 @@
   width: 100%;
   max-width: 100%;
   left: 0px;
-  height: 430px;
+  height: 350px;
   display: block;
   background: #EBEBEB;
   border-top: 1px solid #ddd;
@@ -572,7 +572,8 @@
     float: left; }
 
 ._beacon--cb-header {
-  padding: 20px; }
+  padding: 10px 20px 0px;
+  border-bottom: 1px solid #ccc; }
   ._beacon--cb-header:before, ._beacon--cb-header:after {
     content: "";
     display: block;
@@ -582,10 +583,18 @@
   ._beacon--cb-header ._beacon--cb-devices-switcher {
     float: left; }
     ._beacon--cb-header ._beacon--cb-devices-switcher a {
+      border: 1px solid #ccc;
       display: inline-block;
-      margin-right: 10px; }
+      margin-right: 10px;
+      padding: 5px 10px;
+      margin-bottom: -1px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #444444; }
+      ._beacon--cb-header ._beacon--cb-devices-switcher a:focus {
+        box-shadow: none; }
       ._beacon--cb-header ._beacon--cb-devices-switcher a._beacon--tab-active {
-        font-weight: bold; }
+        border-bottom-color: #EBEBEB; }
   ._beacon--cb-header ._beacon--cb-actions {
     float: right; }
     ._beacon--cb-header ._beacon--cb-actions a {
@@ -601,11 +610,11 @@
   z-index: 5; }
 
 ._beacon--cb-row {
-  padding: 0px 0 0 40px;
+  padding: 0px 0 0 35px;
   position: relative;
   border: 1px solid #ddd;
   display: block;
-  margin-bottom: 25px; }
+  margin-bottom: 10px; }
   ._beacon--cb-row:last-child {
     margin-bottom: 0px; }
   ._beacon--cb-row:before, ._beacon--cb-row:after {
@@ -617,7 +626,19 @@
   ._beacon--cb-row ._beacon--cb-row-settings {
     position: absolute;
     top: 0px;
-    left: 0px; }
+    left: 0px;
+    bottom: 0px;
+    text-decoration: none;
+    width: 34px;
+    display: block;
+    color: #444444;
+    text-align: center; }
+    ._beacon--cb-row ._beacon--cb-row-settings:focus {
+      box-shadow: none; }
+    ._beacon--cb-row ._beacon--cb-row-settings:before {
+      -webkit-font-smoothing: antialiased;
+      font: 400 20px/54px dashicons;
+      content: "\f111"; }
   ._beacon--cb-row ._beacon--cb-items {
     display: block;
     min-height: 45px; }
@@ -639,7 +660,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin: 0 35px 0 10px;
-    display: block;
+    display: inline-block;
     line-height: 37px; }
   ._beacon--cb-row ._beacon--cb-item-add {
     display: none; }
@@ -649,7 +670,7 @@
 
 ._beacon-available-items {
   clear: both;
-  padding-top: 20px; }
+  padding-top: 10px; }
   ._beacon-available-items:before, ._beacon-available-items:after {
     content: "";
     display: block;
@@ -672,8 +693,14 @@
     border: 1px solid #ddd;
     margin-right: 10px;
     cursor: pointer; }
+  ._beacon-available-items * {
+    box-sizing: content-box; }
   ._beacon-available-items .grid-stack-item {
-    float: left; }
+    float: left;
+    width: auto !important;
+    margin-bottom: 5px; }
+    ._beacon-available-items .grid-stack-item .item-tooltip {
+      display: none; }
   ._beacon-available-items ._beacon--cb-item-setting, ._beacon-available-items ._beacon--cb-item-remove {
     display: none; }
 
@@ -683,8 +710,36 @@
 .grid-stack-item {
   position: relative;
   height: 40px;
-  display: inline-block;
-  overflow: hidden; }
+  display: inline-block; }
+  .grid-stack-item .item-tooltip {
+    position: absolute;
+    background: #333333;
+    color: #ffffff;
+    font-size: 11px;
+    line-height: 15px;
+    padding: 3px 10px;
+    top: 0px;
+    left: 11px;
+    z-index: 0;
+    opacity: 0;
+    height: 0px;
+    overflow: hidden; }
+    .grid-stack-item .item-tooltip:before {
+      bottom: -7px;
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 8px 8px 0 8px;
+      border-color: #333333 transparent transparent transparent; }
+  .grid-stack-item.show-tooltip .item-tooltip {
+    top: -29px;
+    left: 11px;
+    z-index: 68;
+    opacity: 1;
+    height: auto;
+    overflow: initial; }
   .grid-stack-item .grid-stack-item-content {
     background: #fafafa; }
   .grid-stack-item ._beacon-cb-icon {

@@ -1268,6 +1268,23 @@
     });
 
 
+    // tooltop
+
+    $document.on( 'mouseover', '._beacon--cb-row .grid-stack-item', function( e ) {
+        var item = $( this );
+        var nameW = $( '._beacon--cb-item-name',item ).innerWidth();
+        var itemW = $( '.grid-stack-item-content', item ).innerWidth();
+        console.log( 'width', nameW+'----'+itemW );
+        if ( nameW > itemW - 50 ) {
+            item.addClass('show-tooltip');
+        }
+    });
+
+    $document.on( 'mouseleave', '._beacon--cb-row .grid-stack-item', function( e ) {
+        $( this ).removeClass('show-tooltip');
+    });
+
+
 
 
 })( jQuery, wp.customize || null );

@@ -9,7 +9,7 @@ $cb_padding: 20px;
     width: 100%;
     max-width: 100%;
     left: 0px;
-    height: 430px;
+    height: 350px;
     display: block;
     background: $bg;
     border-top: $border;
@@ -75,15 +75,26 @@ $cb_padding: 20px;
 }
 
 ._beacon--cb-header {
-    padding: $cb_padding;
+    padding: 10px $cb_padding 0px;
     @include clearfix();
+    border-bottom: 1px solid #ccc;
+
     ._beacon--cb-devices-switcher {
         float: left;
         a {
+            border: 1px solid #ccc;
             display: inline-block;
             margin-right: 10px;
+            padding: 5px 10px;
+            margin-bottom: -1px;
+            font-weight: bold;
+            text-decoration: none;
+            color: #444444;
+            &:focus {
+                box-shadow: none;
+            }
             &._beacon--tab-active {
-                font-weight: bold;
+                border-bottom-color: #EBEBEB ;
             }
         }
     }
@@ -104,19 +115,34 @@ $cb_padding: 20px;
     z-index: 5;
 }
 ._beacon--cb-row {
-    padding: 0px 0 0 40px;
+    padding: 0px 0 0 35px;
     position: relative;
     border: $border;
     display: block;
-    margin-bottom: 25px;
+    margin-bottom: 10px;
     &:last-child {
         margin-bottom: 0px;
     }
-    @include clearfix;
+    @include clearfix();
+
     ._beacon--cb-row-settings {
         position: absolute;
         top: 0px;
         left: 0px;
+        bottom: 0px;
+        text-decoration: none;
+        width: 34px;
+        display: block;
+        color: #444444;
+        text-align: center;
+        &:focus {
+            box-shadow: none;
+        }
+        &:before {
+            -webkit-font-smoothing: antialiased;
+            font: 400 20px/54px dashicons;
+            content: "\f111";
+        }
     }
     ._beacon--cb-items {
         display: block;
@@ -153,7 +179,7 @@ $cb_padding: 20px;
         overflow: hidden;
         text-overflow: ellipsis;
         margin: 0 35px 0 10px;
-        display: block;
+        display: inline-block;
         line-height: 37px;
     }
     ._beacon--cb-item-add {
@@ -170,7 +196,7 @@ $cb_padding: 20px;
 ._beacon-available-items {
     @include clearfix();
     clear: both;
-    padding-top: $cb_padding ;
+    padding-top: 10px;
     &._beacon--panel-hide {
         height: 0px;
         overflow: hidden;
@@ -184,8 +210,16 @@ $cb_padding: 20px;
         margin-right: 10px;
         cursor: pointer;
     }
+    * {
+        box-sizing: content-box;
+    }
     .grid-stack-item {
         float: left;
+        width: auto !important;
+        margin-bottom: 5px;
+        .item-tooltip {
+            display: none;
+        }
     }
     ._beacon--cb-item-setting, ._beacon--cb-item-remove {
         display: none;
@@ -200,7 +234,44 @@ $cb_padding: 20px;
     position: relative;
     height: 40px;
     display: inline-block;
-    overflow: hidden;
+    .item-tooltip {
+        position: absolute;
+        background: #333333;
+        color: #ffffff;
+        font-size: 11px;
+        line-height: 15px;
+        padding: 3px 10px;
+        top: 0px;
+        left: 11px;
+        z-index: 0;
+        opacity: 0;
+        height: 0px;
+        overflow: hidden;
+
+        &:before{
+            bottom: -7px;
+            content: "";
+            position: absolute;
+
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 8px 8px 0 8px;
+            border-color: #333333 transparent transparent transparent;
+
+        }
+    }
+
+    &.show-tooltip {
+        .item-tooltip {
+            top:-29px;
+            left: 11px;
+            z-index: 68;
+            opacity: 1;
+            height: auto;
+            overflow: initial;
+        }
+    }
     .grid-stack-item-content {
         background: #fafafa;
     }

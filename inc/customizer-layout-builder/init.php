@@ -248,19 +248,19 @@ class _Beacon_Customizer_Layout_Builder {
         <script type="text/html" id="tmpl-_beacon--cb-panel">
             <div class="_beacon--cp-rows">
                 <div class="_beacon--row-top _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="top" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="top" href="#"></a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
                 <div class="_beacon--row-main _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="main" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="main" href="#"></a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
                 <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="bottom" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="bottom" href="#"></a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items grid-stack gridster" data-id="bottom"></div>
                     </div>
@@ -270,7 +270,7 @@ class _Beacon_Customizer_Layout_Builder {
             <# if ( data.device != 'desktop' ) { #>
             <div class="_beacon--cp-sidebar">
                 <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="sidebar" href="#">set</a>
+                    <a class="_beacon--cb-row-settings" data-id="sidebar" href="#"></a>
                     <div class="_beacon--row-inner">
                         <div class="_beacon--cb-items _beacon--sidebar-items grid-stack----" data-id="sidebar"></div>
                     </div>
@@ -288,6 +288,7 @@ class _Beacon_Customizer_Layout_Builder {
                  data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
                  data-gs-width="{{ data.width }}" data-gs-height="1"
             >
+                <div class="item-tooltip">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
                     <span class="_beacon--cb-item-name">{{ data.name }}</span>
                     <span class="_beacon--cb-item-remove _beacon-cb-icon"></span>
