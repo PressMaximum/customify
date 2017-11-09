@@ -110,6 +110,7 @@ class _Beacon_Customizer_Layout_Builder {
             'icon-list',
             'user',
             'social-icons',
+            'languages',
             'html',
         );
 
@@ -212,6 +213,14 @@ class _Beacon_Customizer_Layout_Builder {
                 'col' => 0,
                 'width' => '4',
                 'section' => 'header_user' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Languages', '_beacon' ),
+                'id' => 'languages',
+                'col' => 0,
+                'width' => '4',
+                'section' => 'header_languages' // Customizer section to focus when click settings
             ),
 
         );

@@ -641,19 +641,22 @@
       content: "\f111"; }
   ._beacon--cb-row ._beacon--cb-items {
     display: block;
-    min-height: 45px; }
+    min-height: 40px; }
     ._beacon--cb-row ._beacon--cb-items._beacon--sidebar-items {
       padding: 0px 5px 0px; }
       ._beacon--cb-row ._beacon--cb-items._beacon--sidebar-items .grid-stack-item {
         display: block;
         margin-bottom: 5px; }
+        ._beacon--cb-row ._beacon--cb-items._beacon--sidebar-items .grid-stack-item:last-child {
+          margin-bottom: 0px; }
   ._beacon--cb-row ._beacon--row-inner {
     width: 100%;
     padding: 5px 0px;
     background: #ffffff; }
   ._beacon--cb-row .grid-stack-item-content {
     background: #fafafa;
-    border: 1px solid #DDDDDD; }
+    border: 1px solid #DDDDDD;
+    line-height: 1; }
   ._beacon--cb-row .grid-stack-item.item-active .grid-stack-item-content {
     background: #e8b262; }
   ._beacon--cb-row ._beacon--cb-item-name {

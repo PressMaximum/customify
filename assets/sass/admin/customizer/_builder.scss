@@ -146,13 +146,16 @@ $cb_padding: 20px;
     }
     ._beacon--cb-items {
         display: block;
-        min-height: 45px;
+        min-height: 40px;
 
         &._beacon--sidebar-items {
             padding: 0px 5px 0px;
             .grid-stack-item {
                 display: block;
                 margin-bottom: 5px;
+                &:last-child {
+                    margin-bottom: 0px;
+                }
             }
         }
     }
@@ -165,6 +168,7 @@ $cb_padding: 20px;
     .grid-stack-item-content {
         background: #fafafa;
         border: 1px solid #DDDDDD;
+        line-height: 1;
     }
 
     .grid-stack-item {
