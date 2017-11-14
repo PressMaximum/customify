@@ -6,19 +6,11 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         private $fonts = array();
         private $variants = array();
         private $subsets = array();
-        /*
         private $media_queries = array(
             'all' => '%s',
             'desktop' => '@media screen and (min-width: 64em) { %s }',
             'tablet' => '@media screen and (max-width: 48em) and (min-width: 35.5em) { %s }',
             'mobile' => '@media screen and (max-width: 35.5em) { %s }',
-        );
-        */
-        private $media_queries = array(
-            'all' => '%s',
-            'desktop' => '%s',
-            'tablet' =>  '%s',
-            'mobile' =>  '%s',
         );
         private $css = array(
             'all' => '',

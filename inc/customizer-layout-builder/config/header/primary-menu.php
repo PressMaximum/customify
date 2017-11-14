@@ -7,7 +7,8 @@ function _beacon_builder_config_header_primary_menu() {
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Primary Menu', '_beacon' ),
+            'title' => __( 'Primary Menu', '_beacon' ),
+            'description' => __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for Primary menu', '_beacon' )
         ),
 
         array(
@@ -23,16 +24,31 @@ function _beacon_builder_config_header_primary_menu() {
 
         array(
             'name' => 'primary_menu_item_padding',
-            'type' => 'slider',
+            'type' => 'css_ruler',
             'section' => $section,
-            'title'          => __( 'Item Padding', '_beacon' ),
+            'title' => __( 'Item Padding', '_beacon' ),
+            'selector' => '.primary-menu li a',
+            'css_format' => array(
+                'unit' => '',
+                'top' => 'padding-top: {{value}};',
+                'right' => 'padding-right: {{value}};',
+                'bottom' => 'padding-bottom: {{value}};',
+                'left' => 'padding-left: {{value}};',
+            ),
         ),
 
         array(
             'name' => 'primary_menu_item_margin',
-            'type' => 'slider',
+            'type' => 'css_ruler',
             'section' => $section,
-            'title'          => __( 'Item Margin', '_beacon' ),
+            'selector' => '.primary-menu .menu li',
+            'css_format' => array(
+                'top' => 'margin-top: {{value}};',
+                'right' => 'margin-right: {{value}};',
+                'bottom' => 'margin-bottom: {{value}};',
+                'left' => 'margin-left: {{value}};',
+            ),
+            'title'  => __( 'Item Margin', '_beacon' ),
         ),
 
         array(
@@ -56,7 +72,7 @@ function _beacon_builder_config_header_primary_menu() {
             'title'          => __( 'Typography', '_beacon' ),
             'description'    => __( 'This is description',  '_beacon' ),
             'field_class' => '_beacon-typography-control',
-            'selector' => '#primary-menu',
+            'selector' => '.primary-menu',
             'css_format' => 'typography',
             'default' => array(
 
@@ -101,4 +117,17 @@ function _beacon_builder_config_header_primary_menu() {
         ),
 
     );
+}
+
+
+function _beacon_builder_primary_menu_item(){
+
+    wp_nav_menu( array(
+        'theme_location' => 'menu-1',
+        'container' => 'nav',
+        'container_id' => 'site-navigation-__id__',
+        'container_class' => 'primary-menu',
+        'menu_id'        => 'primary-menu-__id__',
+    ) );
+
 }

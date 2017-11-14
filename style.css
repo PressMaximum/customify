@@ -2551,8 +2551,15 @@ article.comment {
   border-left: none;
   border-right: none; }
 
-.main-navigation {
-  float: right; }
+.primary-menu .menu {
+  list-style: none;
+  padding: 0px;
+  margin: 0px; }
+  .primary-menu .menu li {
+    display: inline-block;
+    margin-right: 15px; }
+    .primary-menu .menu li:last-child {
+      margin-right: 0px; }
 
 /* customizer shortcut */
 #masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {

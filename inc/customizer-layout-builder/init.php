@@ -160,7 +160,7 @@ class _Beacon_Customizer_Layout_Builder {
 
             array(
                 'name' => __( 'Primary Menu', '_beacon' ),
-                'id' => 'nav-menu',
+                'id' => 'primary-menu',
                 'width' => '6',
                 'section' => 'header_menu_primary' // Customizer section to focus when click settings
             ),
@@ -409,9 +409,9 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                             }
 
                             if ( ! $has_cb ) {
-                                echo $id;
+                                //echo $id;
 
-                               // printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
+                               printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
                             }
 
                             $ob_render = ob_get_clean();
@@ -477,7 +477,7 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
         return $items;
     }
 
-     function render_row( $items, $device = 'desktop' ){
+     function render_row( $items, $id = '', $device = 'desktop' ){
          $row_html     = '';
          $count        = 0;
          $columns      = 0;
@@ -534,9 +534,8 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                  $count = 0;
              }
 
-
              echo '<div class="builder-item ' . join(' ', $classes) . '" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
-             echo $content;
+             echo str_replace( '__id__', $id.'-'.$device, $content );
              //echo $item_id;
              echo '</div>';
          }
@@ -560,14 +559,14 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                         $desktop_items = $this->get_row_settings( $row_id, 'desktop' );
                         if ( $desktop_items ) {
                             echo '<div class="hide-on-mobile hide-on-tablet _beacon-grid">';
-                                $this->render_row( $desktop_items );
+                                $this->render_row( $desktop_items, $row_id, 'desktop' );
                             echo '</div>';
                         }
 
                         $mobile_items = $this->get_row_settings( $row_id, 'mobile' );
                         if ( $mobile_items ) {
                             echo '<div class="hide-on-desktop _beacon-grid">';
-                            $this->render_row( $mobile_items );
+                            $this->render_row( $mobile_items, $row_id, 'mobile' );
                             echo '</div>';
                         }
                         ?>
