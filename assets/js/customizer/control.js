@@ -473,6 +473,25 @@
                         slider.slider( "value", $( this ).val() );
                     } );
 
+                    // Reset
+                    var wrapper = slider.closest('._beacon-input-slider-wrapper');
+                    wrapper.on( 'click', '.reset', function( e ) {
+                        e.preventDefault();
+                        var d = slider.data('default');
+                        if ( ! _.isObject( d ) ) {
+                            d = {
+                                'unit': 'px',
+                                'value': ''
+                            }
+                        }
+
+                        $( '._beacon--slider-input', wrapper ).val( d.value);
+                        slider.slider( "option", "value", d.value );
+                        $( '._beacon--css-unit input._beacon-input[value="'+d.unit+'"]', wrapper ).trigger('click');
+                        $( '._beacon--slider-input', wrapper ).trigger( 'change' );
+
+                    });
+
                 } );
             }
         },

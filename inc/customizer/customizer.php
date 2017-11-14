@@ -354,7 +354,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                                 $this->selective_settings[ $s_id ] = array(
                                     'settings' => array(),
                                     'selector' => $selective_refresh['selector'],
-                                    'container_inclusive' => true,
+                                    'container_inclusive' => $s_id == '_Beacon_Customizer_Auto_CSS' ? false : true,
                                     'render_callback' => $s_id ,
                                 );
 

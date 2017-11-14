@@ -531,7 +531,6 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                      // $classes[] = 'sp-header-post-' . ( $max_columns - $columns );
                      $atts[] = 'off-' . $p;
                  }
-
                  $count = 0;
              }
 
@@ -587,8 +586,6 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
 
 
 function _beacon_customize_render_header(){
-    // header_logo_use_default
-    //remove_theme_mod( 'header_logo_use_default' );
     $b = new _Beacon_Customizer_Layout_Builder_Frontend();
     if ( is_customize_preview() ) {
         ?>
@@ -597,15 +594,14 @@ function _beacon_customize_render_header(){
     }
     $b->render();
 
-
+    /*
     $theme_name = wp_get_theme()->get('Name');
     $option_name = $theme_name.'_saved_templates';
     ?>
     <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
-
-
+    */
 }
 
 

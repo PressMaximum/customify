@@ -479,20 +479,9 @@ class _Beacon_Customizer_Control extends WP_Customize_Control {
                         <?php _e( 'px', '_beacon' ); ?>
                         <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
                     </label>
-                    <label class="<# if ( field.value.unit == 'rem' ){ #> _beacon--label-active <# } #>">
-                        <?php _e( 'rem', '_beacon' ); ?>
-                        <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'rem' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="rem">
-                    </label>
-                    <label class="<# if ( field.value.unit == 'em' ){ #> _beacon--label-active <# } #>">
-                        <?php _e( 'em', '_beacon' ); ?>
-                        <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == 'em' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="em">
-                    </label>
-                    <label class="<# if ( field.value.unit == '%' ){ #> _beacon--label-active <# } #>">
-                        <?php _e( '%', '_beacon' ); ?>
-                        <input type="radio" class="_beacon-input _beacon--label-parent change-by-js" <# if ( field.value.unit == '%' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="%">
-                    </label>
+                    <a href="#" class="reset">Reset</a>
                 </div>
-                <div data-min="{{ field.min }}" data-max="{{ field.max }}" class="_beacon-input-slider"></div>
+                <div data-min="{{ field.min }}" data-default="{{ JSON.stringify( field.default ) }}" data-max="{{ field.max }}" class="_beacon-input-slider"></div>
                 <input type="number" class="_beacon--slider-input _beacon-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
             </div>
         </div>

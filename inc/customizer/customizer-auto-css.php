@@ -6,11 +6,19 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         private $fonts = array();
         private $variants = array();
         private $subsets = array();
+        /*
         private $media_queries = array(
             'all' => '%s',
             'desktop' => '@media screen and (min-width: 64em) { %s }',
             'tablet' => '@media screen and (max-width: 48em) and (min-width: 35.5em) { %s }',
             'mobile' => '@media screen and (max-width: 35.5em) { %s }',
+        );
+        */
+        private $media_queries = array(
+            'all' => '%s',
+            'desktop' => '%s',
+            'tablet' =>  '%s',
+            'mobile' =>  '%s',
         );
         private $css = array(
             'all' => '',
@@ -243,11 +251,11 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     foreach ( _Beacon_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
                             $_c =  $code_array[ $device ];
-                            $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}" ;
+                            $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
                         }
                     }
                 } else {
-                    $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}";
+                    $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
                 }
             }
 
@@ -305,11 +313,11 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
 
                     $_c = $this->setup_font( $value );
                     if ( $_c ) {
-                        $this->css[ $device ] = "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
+                        $this->css[ $device ] = "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n";
                         if ( 'desktop' == $device ) {
                             $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
                         } else {
-                            $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n}";
+                            $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n}\r\n";
                         }
 
                     }
@@ -319,8 +327,8 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $values = _Beacon_Customizer()->get_setting( $field['name'] );
                 }
                 $code = $this->setup_font( $values );
-                $this->css[ 'all' ] .= "{$field['selector']} {\r\n\t{$code}\r\n}";
-                $code .= "{$field['selector']} {\r\n\t{$code}\r\n}";
+                $this->css[ 'all' ] .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
+                $code .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
             }
 
             return $code;

@@ -69,10 +69,14 @@ function _beacon_builder_config_header_logo(){
             'name' => 'logo_height',
             'type' => 'slider',
             'section' =>  $section,
+            'default' => array(
+                'unit' => 'px',
+                'value' => 60
+            ),
             'device_settings' => true,
             'title' => __( 'Logo Height', '_beacon' ),
             'selector' => '.site-branding img',
-            'css_format' => 'height: {{value}}'
+            'css_format' => 'height: {{value}};'
         ),
 
     );
