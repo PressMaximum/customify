@@ -17,6 +17,7 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         static $has_icon = false;
         static $has_font = false;
         public $devices = array( 'desktop', 'tablet', 'mobile');
+        private $selective_settings = array();
         function __construct()
         {
             add_action( 'customize_register', array( $this, 'register' ) );
@@ -155,9 +156,14 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                     $value =  get_theme_mod( $name, $default );
                 }
 
+                if ( ! $config['setting|'.$name ]['device_settings'] ) {
+                    return $value;
+                }
+
             } else {
                 $value =  get_theme_mod( $name, null );
             }
+
 
             if ( ! $key ) {
                 if ( $device != 'all' ) {
@@ -245,20 +251,28 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
+
+            $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
             $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
             $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-            $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
+
+            /*
+            $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
+            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 
             if ( isset( $wp_customize->selective_refresh ) ) {
                 $wp_customize->selective_refresh->add_partial( 'blogname', array(
-                    'selector'        => '.site-title a',
-                    'render_callback' => '_beacon_customize_partial_blogname',
+                    'selector'        => '.site-branding',
+                    'render_callback' => '_beacon_builder_logo_item',
                 ) );
                 $wp_customize->selective_refresh->add_partial( 'blogdescription', array(
-                    'selector'        => '.site-description',
-                    'render_callback' => '_beacon_customize_partial_blogdescription',
+                    'selector'        => '.site-branding',
+                    'render_callback' => '_beacon_builder_logo_item',
                 ) );
             }
+            */
+
+
 
             foreach ( self::get_config() as $args ) {
                 switch (  $args['type'] ) {
@@ -335,13 +349,39 @@ if ( ! class_exists( '_Beacon_Customizer' ) ) {
                         $wp_customize->add_setting( $name, $settings_args );
                         $wp_customize->add_control( new _Beacon_Customizer_Control( $wp_customize, $name, $args ));
                         if ( $selective_refresh ) {
-                            $wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
+                            $s_id = $selective_refresh['render_callback'];
+                            if ( ! isset( $this->selective_settings[ $s_id ] ) ) {
+                                $this->selective_settings[ $s_id ] = array(
+                                    'settings' => array(),
+                                    'selector' => $selective_refresh['selector'],
+                                    'container_inclusive' => true,
+                                    'render_callback' => $s_id ,
+                                );
+
+                            }
+
+                            $this->selective_settings[ $s_id ]['settings'][] = $name;
+                            //$wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
                         }
 
                         break;
-                }
+                }// end switch
 
             } // End loop config
+
+            // add selective refresh
+            // remove_partial
+            $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
+            foreach ( $this->selective_settings as $cb => $settings ){
+                $name = current( $settings['settings'] );
+                reset( $settings['settings'] );
+                if ( $cb == '_beacon_builder_logo_item' ){
+                    $settings['settings'][] = 'custom_logo';
+                    $settings['settings'][] = 'blogname';
+                    $settings['settings'][] = 'blogdescription';
+                }
+                $wp_customize->selective_refresh->add_partial( $name, $settings );
+            }
 
             do_action( '_beacon/customize/register_completed', $this );
         }

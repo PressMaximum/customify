@@ -48,10 +48,15 @@
 
     api.bind( 'preview-ready', function() {
         var $document = $( document );
+        var defaultTarget = window.parent === window ? null : window.parent;
+        $document.on( 'click', '#masthead .customize-partial-edit-shortcut-header_panel', function( e ){
+            e.preventDefault();
+            defaultTarget.wp.customize.panel( 'header_settings' ).focus();
+        } );
 
         // Get all values
        // console.log( 'ALL Control Values', api.get( ) );
-        var defaultTarget = window.parent === window ? null : window.parent;
+
         // Get a control
        // console.log( 'Test Get control',  defaultTarget.wp.customize.control( 'repeater' ) );
         //console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );

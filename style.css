@@ -2551,6 +2551,13 @@ article.comment {
 .main-navigation {
   float: right; }
 
+/* customizer shortcut */
+#masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {
+  display: none; }
+
+#masthead > .customize-partial-edit-shortcut button {
+  left: 0px; }
+
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------

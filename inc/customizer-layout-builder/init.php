@@ -320,6 +320,7 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
      private $id = 'header';
      private $render_items = array();
      private $rows = array();
+     private $data = false;
 
      public function __construct()
      {
@@ -327,6 +328,9 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
      }
 
      function get_settings(){
+         if ( $this->data ) {
+             return $this->data;
+         }
          $data =  get_theme_mod( $this->control_id );
          $data = wp_parse_args( $data, array(
              'desktop' => '',
@@ -340,6 +344,8 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
              }
              $data[ $k ] = $v;
          }
+
+         $this->data = $data;
 
          return $data;
      }
@@ -403,7 +409,9 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                             }
 
                             if ( ! $has_cb ) {
-                                printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
+                                echo $id;
+
+                               // printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
                             }
 
                             $ob_render = ob_get_clean();
@@ -451,12 +459,32 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
          return $items;
      }
 
+    /**
+     * Sort items by their position on the grid.
+     * @access  private
+     * @since   1.0.0
+     * @return  array
+     */
+    private function _sort_items_by_position( $items = array() ) {
+        $ordered_items = array();
+
+        foreach ( $items as $key => $item ) {
+            $ordered_items[ $key ] = $item['x'];
+        }
+
+        array_multisort( $ordered_items, SORT_ASC, $items );
+
+        return $items;
+    }
+
      function render_row( $items, $device = 'desktop' ){
          $row_html     = '';
          $count        = 0;
          $columns      = 0;
          $max_columns  = 12;
          $widget_count = count( $items );
+
+         $items = $this->_sort_items_by_position( $items );
 
          foreach ( $items as $item ) {
 
@@ -509,8 +537,8 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
 
 
              echo '<div class="builder-item ' . join(' ', $classes) . '" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
-            // echo $content;
-             echo $item_id;
+             echo $content;
+             //echo $item_id;
              echo '</div>';
          }
      }
@@ -527,8 +555,9 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
              if ( ! empty( $show_on_devices ) ) {
                  $class = sprintf( '%1$s-%2$s', $this->id, $row_id );
                  ?>
-                  <div class="<?php echo esc_attr( $class ); ?>" data-row-id="<?php echo esc_attr( $row_id ); ?>" data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
-                        <?php
+                 <div class="<?php echo esc_attr( $class ); ?>" data-row-id="<?php echo esc_attr( $row_id ); ?>" data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
+                     <div class="_beacon-container">
+                         <?php
                         $desktop_items = $this->get_row_settings( $row_id, 'desktop' );
                         if ( $desktop_items ) {
                             echo '<div class="hide-on-mobile hide-on-tablet _beacon-grid">';
@@ -542,35 +571,41 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                             $this->render_row( $mobile_items );
                             echo '</div>';
                         }
-
                         ?>
-                  </div>
+                     </div>
+                 </div>
                  <?php
              }
 
          } // end for each row_ids
 
-
      }
-
 }
 
 
 
 
+
 function _beacon_customize_render_header(){
-
-
+    // header_logo_use_default
+    //remove_theme_mod( 'header_logo_use_default' );
     $b = new _Beacon_Customizer_Layout_Builder_Frontend();
+    if ( is_customize_preview() ) {
+        ?>
+        <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button aria-label="Click to edit this element." title="Click to edit this element." class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
+        <?php
+    }
     $b->render();
+
 
     $theme_name = wp_get_theme()->get('Name');
     $option_name = $theme_name.'_saved_templates';
-
     ?>
     <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
+
+
 }
 
 

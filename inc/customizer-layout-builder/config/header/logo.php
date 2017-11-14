@@ -1,27 +1,74 @@
 <?php
 function _beacon_builder_config_header_logo(){
+    $section = 'header_logo';
+    $render_cb_el = '_beacon_builder_logo_item';
     $config  = array(
         array(
-            'name' => 'header_logo',
+            'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
+            'title' => __( 'Logo', '_beacon' ),
+        ),
+
+        array(
+            'name' => 'header_logo_use_default',
+            'type' => 'checkbox',
+            'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'Logo', '_beacon' ),
+            'default' => 0,
+            'title' => __( 'Logo', '_beacon' ),
+            'checkbox_label' => __( 'Use Site Identity Logo', '_beacon' ),
+            'description' => __( 'If check this, you can settings your logo in <a href="#title_tagline" class="focus-section">Site Identity</a> section.', '_beacon' ),
         ),
 
         array(
             'name' => 'header_logo',
             'type' => 'image',
-            'section' => 'header_logo',
+            'section' =>  $section,
             'theme_supports' => '',
             'device_settings' => true,
-            'title'          => __( 'Logo', '_beacon' ),
+            'selector' => '.site-branding',
+            'render_callback' => $render_cb_el,
+            'title' => __( 'Logo', '_beacon' ),
+            'required' => array( 'header_logo_use_default', '!=', '1'),
+        ),
+
+        array(
+            'name' => 'header_logo_retina',
+            'type' => 'image',
+            'section' =>  $section,
+            'theme_supports' => '',
+            'device_settings' => true,
+            'selector' => '.site-branding',
+            'render_callback' => $render_cb_el,
+            'title' => __( 'Logo Retina', '_beacon' ),
+            'required' => array( 'header_logo_use_default', '!=', '1'),
+        ),
+
+        array(
+            'name' => 'header_logo_name',
+            'type' => 'checkbox',
+            'section' => $section,
+            'theme_supports' => '',
+            'default' => '',
+            'title' => __( 'Show Site Name', '_beacon' ),
+            'checkbox_label' => __( 'Show site name ?', '_beacon' ),
+        ),
+
+        array(
+            'name' => 'header_logo_desc',
+            'type' => 'checkbox',
+            'section' => $section,
+            'theme_supports' => '',
+            'default' => '',
+            'title' => __( 'Show Site Description', '_beacon' ),
+            'checkbox_label' => __( 'Show site description ?', '_beacon' ),
         ),
 
         array(
             'name' => 'logo_height',
             'type' => 'slider',
-            'section' => 'header_logo',
+            'section' =>  $section,
             'device_settings' => true,
             'title'          => __( 'Logo Height', '_beacon' ),
         ),
@@ -29,7 +76,7 @@ function _beacon_builder_config_header_logo(){
         array(
             'name' => 'logo_width',
             'type' => 'slider',
-            'section' => 'header_logo',
+            'section' =>  $section,
             'device_settings' => true,
             'title'          => __( 'Logo Width', '_beacon' ),
         ),
@@ -37,4 +84,52 @@ function _beacon_builder_config_header_logo(){
 
     );
     return $config;
+}
+
+function _beacon_builder_logo_item(){
+
+    $logo_default = _Beacon_Customizer()->get_setting( 'header_logo_use_default' );
+    $show_name = _Beacon_Customizer()->get_setting( 'header_logo_name' );
+    $show_desc = _Beacon_Customizer()->get_setting( 'header_logo_desc' );
+    ?>
+    <div class="site-branding">
+        <?php
+        if ( $logo_default ) {
+            the_custom_logo();
+        } else {
+
+            $logo = _Beacon_Customizer()->get_setting( 'header_logo' );
+            $logo_image = _Beacon_Customizer()->get_media( $logo );
+
+            $logo_retina = _Beacon_Customizer()->get_setting( 'header_logo_retina' );
+            $logo_retina_image = _Beacon_Customizer()->get_media( $logo_retina );
+
+            if ( $logo ) {
+                ?>
+                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
+                <img src="<?php echo esc_url($logo_image); ?>"
+                     alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
+                </a>
+                <?php
+            }
+        }
+        if ( $show_name ) {
+            if (is_front_page() && is_home()) : ?>
+                <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
+            <?php else : ?>
+                <p class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
+                <?php
+            endif;
+        }
+
+        if ( $show_desc ) {
+            $description = get_bloginfo('description', 'display');
+            if ($description || is_customize_preview()) { ?>
+                <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+                <?php
+            };
+        }
+        ?>
+    </div><!-- .site-branding -->
+    <?php
 }

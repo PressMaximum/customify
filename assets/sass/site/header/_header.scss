@@ -5,3 +5,15 @@
 @import "header_bottom";
 
 @import "navigation";
+
+/* customizer shortcut */
+#masthead{
+    > .customize-partial-edit-shortcut {
+        &.customize-partial-edit-shortcut-header_builder_panel {
+            display: none;
+        }
+        button {
+            left: 0px;
+        }
+    }
+}

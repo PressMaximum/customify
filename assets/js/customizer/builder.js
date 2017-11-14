@@ -1116,6 +1116,11 @@
     $document.on( 'click', '.focus-section', function( e ) {
         e.preventDefault();
         var id = $( this ).attr( 'data-id' ) || '';
+        if ( ! id ) {
+            id = $( this ).attr( 'href' ) || '';
+            id = id.replace('#','');
+        }
+
         if ( id ) {
             if ( wpcustomize.section( id ) ) {
                 wpcustomize.section( id ).focus();
@@ -1126,6 +1131,10 @@
     $document.on( 'click', '.focus-control', function( e ) {
         e.preventDefault();
         var id = $( this ).attr( 'data-id' ) || '';
+        if ( ! id ) {
+            id = $( this ).attr( 'href' ) || '';
+            id = id.replace('#','');
+        }
         if ( id ) {
             if ( wpcustomize.control( id ) ) {
                 wpcustomize.control( id ).focus();
@@ -1136,6 +1145,10 @@
     $document.on( 'click', '.focus-panel', function( e ) {
         e.preventDefault();
         var id = $( this ).attr( 'data-id' ) || '';
+        if ( ! id ) {
+            id = $( this ).attr( 'href' ) || '';
+            id = id.replace('#','');
+        }
         if ( id ) {
             if ( wpcustomize.panel( id ) ) {
                 wpcustomize.panel( id ).focus();
