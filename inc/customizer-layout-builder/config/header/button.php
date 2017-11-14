@@ -93,3 +93,8 @@ function _beacon_builder_config_header_button(){
     );
     return $config;
 }
+
+
+function _beacon_builder_header_button_item(){
+    echo "Button Here";
+}

@@ -5,12 +5,10 @@ class _Beacon_Customizer_Layout_Builder {
     function __construct()
     {
         require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
-
-        add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
-        add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
-
-
-
+        if ( is_admin() ) {
+            add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
+            add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
+        }
         add_action( 'wp_ajax__beacon_builder_save_template', array( $this, 'ajax_save_template' ) );
     }
 
@@ -308,21 +306,277 @@ class _Beacon_Customizer_Layout_Builder {
         <?php
     }
 
-
-
 }
 
 new _Beacon_Customizer_Layout_Builder();
 
+function _Beacon_Customizer_Layout_Builder(){
+
+}
+
+
+class _Beacon_Customizer_Layout_Builder_Frontend {
+     private $control_id = 'header_builder_panel';
+     private $id = 'header';
+     private $render_items = array();
+     private $rows = array();
+
+     public function __construct()
+     {
+
+     }
+
+     function get_settings(){
+         $data =  get_theme_mod( $this->control_id );
+         $data = wp_parse_args( $data, array(
+             'desktop' => '',
+             'tablet' => '',
+             'mobile' => '',
+         ) );
+
+         foreach ( $data as $k => $v ) {
+             if ( ! is_array( $v ) ) {
+                 $v = array();
+             }
+             $data[ $k ] = $v;
+         }
+
+         return $data;
+     }
+
+     function get_row_settings( $row_id, $device = 'desktop' ){
+        $data = $this->get_settings();
+        if ( isset( $data[ $device ] ) ) {
+            if ( isset( $data[ $device ][ $row_id ] ) ) {
+                return ! empty( $data[ $device ][ $row_id ] ) ? $data[ $device ][ $row_id ] : false;
+            }
+        }
+        return false;
+     }
+
+     function render_items(){
+         $setting = $this->get_settings();
+         $items = array();
+
+         foreach ( $setting as $device => $device_settings ) {
+            foreach ( $device_settings as $row_id => $row_items ) {
+                if ( ! isset( $this->rows[ $row_id ] ) ) {
+                    $this->rows[ $row_id ] = array();
+                }
+
+                if ( is_array( $row_items ) && count( $row_items ) ) {
+
+                    $this->rows[ $row_id ][ $device ] = $device;
+
+                    foreach ( $row_items as $item_index => $item ) {
+
+                        $item = wp_parse_args( $item, array(
+                            'x' => '',
+                            'width' => '1',
+                            'id' => '',
+                        ) );
+
+                        if ( ! isset( $items[ $item['id'] ] ) ) {
+                            $items[ $item['id'] ] = array(
+                                'render_content' => '',
+                                'devices' => array(),
+                                'rows' => array(),
+                                'id' => $item['id']
+                            );
+                        }
+
+                        if ( ! $items[ $item['id'] ] ['render_content'] ) {
+                            ob_start();
+                            $id = str_replace('-', '_', $item['id']);
+                            $fn = '_beacon_builder_' . $id . '_item';
+                            $has_cb = false;
+                            $return_render = false;
+                            if (function_exists($fn)) {
+                                $return_render = call_user_func_array($fn, array($item));
+                                $has_cb = true;
+                            } else {
+                                $fn = '_beacon_builder_' . $this->id . '_' . $id . '_item';
+                                if (function_exists($fn)) {
+                                    $return_render = call_user_func_array($fn, array($item));
+                                    $has_cb = true;
+                                }
+                            }
+
+                            if ( ! $has_cb ) {
+                                printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
+                            }
+
+                            $ob_render = ob_get_clean();
+
+                            if ( ! $return_render ) {
+                                if ( $ob_render ) {
+                                    $return_render = $ob_render;
+                                }
+                            }
+
+                            if ( $return_render ) {
+                                $items[ $item['id'] ] ['render_content'] = $return_render;
+                            }
+                        }
+
+                        $items[ $item['id'] ]['added'] = false;
+
+                        $items[ $item['id'] ]['devices'][ $device ] = array(
+                                'x' => $item['x'],
+                                'width' => $item['width'],
+                                'id' => $item['id'],
+                                'row' => $row_id,
+
+                        );
+                        if( isset( $items[ $item['id'] ]['rows'][ $row_id ] ) ) {
+                            $items[ $item['id'] ]['rows'][ $row_id ] = array(
+                                $items[ $item['id'] ]['rows'][ $row_id ]
+                            );
+
+                            $items[ $item['id'] ]['rows'][ $row_id ][] = $device;
+
+                        } else {
+                            $items[ $item['id'] ]['rows'][ $row_id ] = $device;
+                        }
+
+
+                    }
+                }
+
+            }
+         }
+
+         $this->render_items = $items;
+
+         return $items;
+     }
+
+     function render_row( $items, $device = 'desktop' ){
+         $row_html     = '';
+         $count        = 0;
+         $columns      = 0;
+         $max_columns  = 12;
+         $widget_count = count( $items );
+
+         foreach ( $items as $item ) {
+
+             $content = $this->render_items[$item['id']]['render_content'];
+
+             $item_id = $item['id'];
+
+             if ($content) {
+                 $count++;
+             } else {
+                 $widget_count--;
+                 continue;
+             }
+
+
+             // Used to calculate empty columns between widgets.
+             $empty = 0;
+
+             // Init array for widget row classes.
+             $classes = array();
+
+             // Calculate empty space between columns.
+             if ($columns < intval($item['x'])) {
+                 $empty = intval($item['x']) - $columns;
+             }
+
+             $atts = array();
+
+             // Add pre class and add empty columns to $columns var.
+             if (0 < $empty) {
+                 $columns = $columns + $empty;
+                 $atts[] = 'off-' . $empty;
+
+             }
+
+             $columns = $columns + intval($item['width']);
+             $classes[] = '_beacon-col-' . intval($item['width']);
+
+             if ($widget_count === $count) {
+                 if ($max_columns === $columns) {
+                     $classes[] = '_beacon-col-last';
+                 } else {
+                     $p = $max_columns - $columns;
+                     // $classes[] = 'sp-header-post-' . ( $max_columns - $columns );
+                     $atts[] = 'off-' . $p;
+                 }
+
+                 $count = 0;
+             }
+
+
+             echo '<div class="builder-item ' . join(' ', $classes) . '" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
+            // echo $content;
+             echo $item_id;
+             echo '</div>';
+         }
+     }
+
+     function render(){
+         $setting = $this->get_settings();
+         $items = $this->render_items();
+
+         $row_ids = array( 'top', 'main', 'bottom' );
+
+         foreach ($row_ids as $row_id ) {
+
+             $show_on_devices = $this->rows[ $row_id ];
+             if ( ! empty( $show_on_devices ) ) {
+                 $class = sprintf( '%1$s-%2$s', $this->id, $row_id );
+                 ?>
+                  <div class="<?php echo esc_attr( $class ); ?>" data-row-id="<?php echo esc_attr( $row_id ); ?>" data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
+                        <?php
+                        $desktop_items = $this->get_row_settings( $row_id, 'desktop' );
+                        if ( $desktop_items ) {
+                            echo '<div class="hide-on-mobile hide-on-tablet _beacon-grid">';
+                                $this->render_row( $desktop_items );
+                            echo '</div>';
+                        }
+
+                        $mobile_items = $this->get_row_settings( $row_id, 'mobile' );
+                        if ( $mobile_items ) {
+                            echo '<div class="hide-on-desktop _beacon-grid">';
+                            $this->render_row( $mobile_items );
+                            echo '</div>';
+                        }
+
+                        ?>
+                  </div>
+                 <?php
+             }
+
+         } // end for each row_ids
+
+
+     }
+
+}
+
+
+
 
 function _beacon_customize_render_header(){
-    ?>
-    <div class="header-top">
-        <div class="_beacon-container">
-            header top
-        </div> <!-- #._beacon-container -->
-    </div><!-- #.header-top -->
 
+
+    $b = new _Beacon_Customizer_Layout_Builder_Frontend();
+    $b->render();
+
+    $theme_name = wp_get_theme()->get('Name');
+    $option_name = $theme_name.'_saved_templates';
+
+    ?>
+    <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
+    <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
+    <?php
+}
+
+
+
+function __backup(){
+    ?>
     <div class="header-main">
         <div class="_beacon-container">
             <div class="site-branding">
@@ -358,13 +612,5 @@ function _beacon_customize_render_header(){
             header bottom
         </div> <!-- #._beacon-container -->
     </div><!-- #.header-bottom -->
-    <?php
-
-    $theme_name = wp_get_theme()->get('Name');
-    $option_name = $theme_name.'_saved_templates';
-
-    ?>
-    <pre class="debug"><?php print_r( get_option( $option_name ) ); ?></pre>
-    <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
 }

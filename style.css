@@ -1963,6 +1963,21 @@ template {
     [class*="_beacon-grid_"] > [class*="_xs-0"] {
       display: none; } }
 
+/************************
+    HIDING COLS FOR DEVICES
+*************************/
+@media screen and (min-width: 64em) {
+  .hide-on-desktop {
+    display: none; } }
+
+@media screen and (max-width: 48em) and (min-width: 35.5em) {
+  .hide-on-tablet {
+    display: none; } }
+
+@media screen and (max-width: 35.5em) {
+  .hide-on-mobile {
+    display: none; } }
+
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------

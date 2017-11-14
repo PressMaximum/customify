@@ -14,6 +14,12 @@ $gl-mq-list: (
   xs: "screen and (max-width: 35.5em)" // up to 568px
 ) !default;
 
+$gl-devices-list: (
+        desktop: "screen and (min-width: 64em)", // up 1024px
+        tablet: "screen and (max-width: 48em) and ( min-width: 35.5em )", // 568px - 768px
+        mobile: "screen and (max-width: 35.5em)" // from to 568px to smaller
+) !default;
+
 
 $glp_col-1: (100%/12);
 $glp_col-2: ($glp_col-1*2);
