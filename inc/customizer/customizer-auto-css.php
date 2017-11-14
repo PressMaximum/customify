@@ -6,6 +6,18 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         private $fonts = array();
         private $variants = array();
         private $subsets = array();
+        private $media_queries = array(
+            'all' => '%s',
+            'desktop' => '@media screen and (min-width: 64em) { %s }',
+            'tablet' => '@media screen and (max-width: 48em) and (min-width: 35.5em) { %s }',
+            'mobile' => '@media screen and (max-width: 35.5em) { %s }',
+        );
+        private $css = array(
+            'all' => '',
+            'desktop' => '',
+            'tablet' => '',
+            'mobile' => ''
+        );
         static function get_instance(){
             if ( is_null( self::$_instance ) ) {
                 self::$_instance = new self();
@@ -216,28 +228,26 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 $code_array['no_devices'] = $code;
 
             }
+
+            $code_array = apply_filters( '_beacon/customizer/auto_css', $code_array, $field, $this );
+
             if ( empty( $code_array ) ) {
                 return false;
             }
-
+            $code = '';
             if ( $no_selector ) {
                 return $code_array;
             } else {
-                $code = '';
+
                 if ( $has_device ) {
                     foreach ( _Beacon_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
                             $_c =  $code_array[ $device ];
-                            if ( 'desktop' == $device ) {
-                                $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
-                            } else {
-                                $code .= "\r\n.{$device} {$field['selector']} {\r\n\t{$_c}\r\n}";
-                            }
+                            $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}" ;
                         }
-
                     }
                 } else {
-                    $code .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}";
+                    $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}";
                 }
             }
 
@@ -295,6 +305,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
 
                     $_c = $this->setup_font( $value );
                     if ( $_c ) {
+                        $this->css[ $device ] = "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
                         if ( 'desktop' == $device ) {
                             $code .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}";
                         } else {
@@ -308,6 +319,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                     $values = _Beacon_Customizer()->get_setting( $field['name'] );
                 }
                 $code = $this->setup_font( $values );
+                $this->css[ 'all' ] .= "{$field['selector']} {\r\n\t{$code}\r\n}";
                 $code .= "{$field['selector']} {\r\n\t{$code}\r\n}";
             }
 
@@ -449,8 +461,13 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 }
             }
 
-            $css_code = "{$field['selector']} {\r\n\t".join("\r\n\t", $code )."\r\n}";
-            return $css_code;
+            $devices_css = apply_filters( '_beacon/customizer/auto_css', $devices_css, $field, $this );
+
+            foreach ( $devices_css as $device => $els ) {
+                $this->css[$device] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $els )."\r\n}";
+            }
+
+            $this->css['all'] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $code )."\r\n}";
         }
 
         function get_google_fonts_url(){
@@ -496,36 +513,43 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         function auto_css( $partial = false ){
             $config = _Beacon_Customizer::get_config();
             //$control_settings = $partial->component->manager->get_control($partial->id);
-            $css_code = '';
             foreach ( $config as $field ) {
                 $field_css = '';
                 if ( $field['selector'] ) {
                     switch ($field['type']) {
                         case 'css_ruler':
-                            $field_css .= $this->css_ruler($field);
+                            $this->css_ruler($field);
                             break;
                         case 'slider':
-                            $field_css .= $this->slider($field);
+                            $this->slider($field);
                             break;
                         case 'color':
-                            $field_css .= $this->color($field);
+                            $this->color($field);
                         case 'font':
-                            $field_css .= $this->font($field);
+                            $this->font($field);
                             break;
                         default:
                             if (isset($field['css_format']) && $field['css_format'] == 'background') {
-                                $field_css .= $this->background($field);
+                                $this->background($field);
                             } else if (isset($field['css_format']) && $field['css_format'] == 'typography') {
-                                $field_css .= $this->typography($field);
+                                $this->typography($field);
                             }
                     }
                 }
-                if ( $field_css ){
-                    $field_css .= "\r\n";
-                }
-                $css_code .= apply_filters('_beacon/customizer/auto_css',  $field_css, $field );
 
             }
+
+            $css_code = '';
+            $i = 0;
+            foreach ( $this->css as $device => $code ) {
+                $new_line = '';
+                if ( $i > 0 ) {
+                    $new_line=  "\r\n\r\n\r\n\r\n\r";
+                }
+                $css_code .= $new_line.sprintf( $this->media_queries[ $device ], $code )."\r\n";
+                $i++;
+            }
+
 
            $url = $this->get_google_fonts_url();
             if ( $url ) {

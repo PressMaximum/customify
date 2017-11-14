@@ -2526,6 +2526,9 @@ article.comment {
 
 .site-branding {
   float: left; }
+  .site-branding img {
+    display: block;
+    width: auto; }
   .site-branding .site-title {
     font-size: 1.9em;
     margin: 0;

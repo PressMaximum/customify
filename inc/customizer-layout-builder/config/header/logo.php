@@ -70,17 +70,10 @@ function _beacon_builder_config_header_logo(){
             'type' => 'slider',
             'section' =>  $section,
             'device_settings' => true,
-            'title'          => __( 'Logo Height', '_beacon' ),
+            'title' => __( 'Logo Height', '_beacon' ),
+            'selector' => '.site-branding img',
+            'css_format' => 'height: {{value}}'
         ),
-
-        array(
-            'name' => 'logo_width',
-            'type' => 'slider',
-            'section' =>  $section,
-            'device_settings' => true,
-            'title'          => __( 'Logo Width', '_beacon' ),
-        ),
-
 
     );
     return $config;
@@ -104,7 +97,7 @@ function _beacon_builder_logo_item(){
             $logo_retina = _Beacon_Customizer()->get_setting( 'header_logo_retina' );
             $logo_retina_image = _Beacon_Customizer()->get_media( $logo_retina );
 
-            if ( $logo ) {
+            if ( $logo_image ) {
                 ?>
                 <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
                 <img src="<?php echo esc_url($logo_image); ?>"

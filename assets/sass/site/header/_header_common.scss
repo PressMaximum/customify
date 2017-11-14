@@ -4,6 +4,10 @@
 
 .site-branding {
     float: left;
+    img {
+        display: block;
+        width: auto;
+    }
     .site-title {
         font-size: 1.9em;
         margin: 0;

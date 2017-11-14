@@ -56,7 +56,7 @@ function _beacon_builder_config_header_primary_menu() {
             'title'          => __( 'Typography', '_beacon' ),
             'description'    => __( 'This is description',  '_beacon' ),
             'field_class' => '_beacon-typography-control',
-            'selector' => '',
+            'selector' => '#primary-menu',
             'css_format' => 'typography',
             'default' => array(
 
