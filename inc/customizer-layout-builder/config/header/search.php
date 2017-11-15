@@ -8,7 +8,7 @@
 function _beacon_builder_config_header_search(){
     $section = 'header_search';
     $prefix = 'header_search_';
-    $render_fn = '_beacon_builder_header_search_item';
+    $fn = '_beacon_builder_header_search_item';
 
     $config  = array(
         array(
@@ -16,29 +16,47 @@ function _beacon_builder_config_header_search(){
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Search', '_beacon' ),
+            'title' => __( 'Search', '_beacon' ),
         ),
 
         array(
-            'name' => 'header_search',
+            'name' => 'header_search_placeholder',
             'type' => 'text',
-            'section' => 'header_search',
-            'selector' => '.'.$section.'-item',
-            'render_callback' => $render_fn,
-            'title'          => __( 'Search', '_beacon' ),
+            'section' => $section,
+            'selector' => '.header-search-form',
+            'render_callback' => $fn,
+            'default' => __( 'Search...', '_beacon' ),
+            'title' => __( 'Placeholder Text', '_beacon' ),
         ),
+
+        array(
+            'name' => 'header_search_btn',
+            'type' => 'checkbox',
+            'section' => $section,
+            'selector' => '.'.$section.'-item',
+            'render_callback' => $fn,
+            'title' => __( 'Show Submit Button', '_beacon' ),
+            'default' => 1,
+            'checkbox_label' => __( 'Show Submit Button', '_beacon' ),
+        ),
+
     );
     return $config;
 }
 
 
 function _beacon_builder_header_search_item(){
-    $section = 'header_search';
-    $prefix = 'header_search_';
+
+    $placeholder = _Beacon_Customizer()->get_setting( 'header_search_placeholder' );
+    $show_btn = _Beacon_Customizer()->get_setting( 'header_search_btn' );
+
     ?>
-    <div class="header_search-item">
-        <input type="text" placeholder="Search">
-    </div>
+    <form role="search" method="get" class="header-search-form search-form" action="<?php echo home_url( '/' ); ?>">
+        <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
+        <?php if ( $show_btn ) { ?>
+        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', '_beacon' ); ?>" />
+        <?php } ?>
+    </form>
 
     <?php
 }

@@ -2538,6 +2538,14 @@ article.comment {
     font-size: 0.875em;
     margin: 3px 0px 0px 0px; }
 
+.header-search-form {
+  margin: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .header-search-form .s {
+    width: 100%; }
+
 .header-top {
   padding: 0.3819820591em 0px;
   border-bottom: 1px solid #eaecee; }
