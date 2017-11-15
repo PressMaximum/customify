@@ -55,14 +55,18 @@ function _beacon_builder_config_header_primary_menu() {
             'name' => 'primary_menu_item_color',
             'type' => 'color',
             'section' => $section,
-            'title'          => __( 'Item Color', '_beacon' ),
+            'title'  => __( 'Item Color', '_beacon' ),
+            'selector'  => '.primary-menu li a',
+            'css_format'  => 'color: {{value}};',
         ),
 
         array(
             'name' => 'primary_menu_item_color_hover',
             'type' => 'color',
             'section' => $section,
-            'title'          => __( 'Item Color Hover', '_beacon' ),
+            'title' => __( 'Item Color Hover', '_beacon' ),
+            'selector'  => '.primary-menu li a:hover',
+            'css_format'  => 'color: {{value}};',
         ),
 
         array(

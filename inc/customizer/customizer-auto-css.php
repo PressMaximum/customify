@@ -455,7 +455,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             }
 
             if ( isset($fields['letter_spacing'])) {
-                $_c = $this->setup_color($values['color'], 'color: {{value}};');
+                $_c = $this->setup_color($values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
                 if ( $_c ) {
                     $code['color'] = $_c;
                 }
