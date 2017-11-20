@@ -6,7 +6,7 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
  *
- * @package _beacon
+ * @package customify
  */
 
 ?>
@@ -22,13 +22,13 @@
 
 <body <?php body_class(); ?>>
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', '_beacon' ); ?></a>
+	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'customify' ); ?></a>
 
 	<header id="masthead" class="site-header">
         <?php
-        _beacon_customize_render_header();
+        customify_customize_render_header();
         ?>
 	</header><!-- #masthead -->
 
-	<div id="site-content" <?php _beacon_site_content_class(); ?>>
+	<div id="site-content" <?php customify_site_content_class(); ?>>
 

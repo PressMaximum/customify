@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
- * @package _beacon
+ * @package customify
  */
 
 ?>
@@ -20,7 +20,7 @@
 
 		if ( 'post' === get_post_type() ) : ?>
 		<div class="entry-meta">
-			<?php _beacon_posted_on(); ?>
+			<?php customify_posted_on(); ?>
 		</div><!-- .entry-meta -->
 		<?php
 		endif; ?>
@@ -31,7 +31,7 @@
 			the_content( sprintf(
 				wp_kses(
 					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', '_beacon' ),
+					__( 'Continue reading<span class="screen-reader-text"> "%s"</span>', 'customify' ),
 					array(
 						'span' => array(
 							'class' => array(),
@@ -42,13 +42,13 @@
 			) );
 
 			wp_link_pages( array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', '_beacon' ),
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'customify' ),
 				'after'  => '</div>',
 			) );
 		?>
 	</div><!-- .entry-content -->
 
 	<footer class="entry-footer">
-		<?php _beacon_entry_footer(); ?>
+		<?php customify_entry_footer(); ?>
 	</footer><!-- .entry-footer -->
 </article><!-- #post-<?php the_ID(); ?> -->

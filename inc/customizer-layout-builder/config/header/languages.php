@@ -1,5 +1,5 @@
 <?php
-function _beacon_builder_config_header_languages(){
+function customify_builder_config_header_languages(){
     $section = 'header_languages';
     $prefix = 'header_languages';
     return array(
@@ -8,7 +8,7 @@ function _beacon_builder_config_header_languages(){
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Languages Switcher', '_beacon' ),
+            'title'          => __( 'Languages Switcher', 'customify' ),
         ),
 
         array(
@@ -16,7 +16,7 @@ function _beacon_builder_config_header_languages(){
             'type' => 'textarea',
             'section' => $section,
             'theme_supports' => '',
-            'title'    => __( 'Languages Switcher', '_beacon' ),
+            'title'    => __( 'Languages Switcher', 'customify' ),
         ),
     );
 }

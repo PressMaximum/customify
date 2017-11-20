@@ -1,5 +1,5 @@
 <?php
-function _beacon_builder_config_header_icon_list(){
+function customify_builder_config_header_icon_list(){
     $section = 'header_icon_list';
     $prefix = 'header_icon_list_';
     return array(
@@ -8,7 +8,7 @@ function _beacon_builder_config_header_icon_list(){
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Icon List', '_beacon' ),
+            'title'          => __( 'Icon List', 'customify' ),
         ),
 
         array(
@@ -16,10 +16,10 @@ function _beacon_builder_config_header_icon_list(){
             'type' => 'repeater',
             'section'     => $section,
             //'priority' => 22,
-            'title'          => __( 'Items', '_beacon' ),
+            'title'          => __( 'Items', 'customify' ),
             'live_title_field' => 'title',
             'limit' => 4,
-            'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  '_beacon' ),
+            'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  'customify' ),
             'default' => array(
 
             ),
@@ -27,25 +27,25 @@ function _beacon_builder_config_header_icon_list(){
                 array(
                     'name' => 'title',
                     'type' => 'text',
-                    'label' => __( 'Title', '_beacon' ),
+                    'label' => __( 'Title', 'customify' ),
                 ),
                 array(
                     'name' => 'icon',
                     'type' => 'icon',
-                    'label' => __( 'Icon', '_beacon' ),
+                    'label' => __( 'Icon', 'customify' ),
                 ),
                 array(
                     'name' => 'show_text',
                     'type' => 'checkbox',
                     'device_settings' => true,
-                    'checkbox_label' => __( 'Show text',  '_beacon' ),
-                    'label' => __( 'Show text', '_beacon' ),
+                    'checkbox_label' => __( 'Show text',  'customify' ),
+                    'label' => __( 'Show text', 'customify' ),
                 ),
 
                 array(
                     'name' => 'url',
                     'type' => 'text',
-                    'label' => __( 'URL', '_beacon' ),
+                    'label' => __( 'URL', 'customify' ),
                 ),
 
             )
@@ -56,9 +56,19 @@ function _beacon_builder_config_header_icon_list(){
             'name' => $prefix.'target',
             'type' => 'checkbox',
             'section'     => $section,
-            'checkbox_label' => __( 'Open URL in new window.',  '_beacon' ),
-            'label' => __( 'Target', '_beacon' ),
+            'checkbox_label' => __( 'Open URL in new window.',  'customify' ),
+            'label' => __( 'Target', 'customify' ),
         ),
 
     );
+}
+
+function customify_builder_header_icon_list_item(){
+    $target = Customify_Customizer()->get_setting('header_icon_list_target');
+    $items = Customify_Customizer()->get_setting('header_icon_list_items')
+    ?>
+
+    icon heres
+    <?php
+
 }

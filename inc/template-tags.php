@@ -4,14 +4,14 @@
  *
  * Eventually, some of the functionality here could be replaced by core features.
  *
- * @package _beacon
+ * @package customify
  */
 
-if ( ! function_exists( '_beacon_posted_on' ) ) :
+if ( ! function_exists( 'customify_posted_on' ) ) :
 	/**
 	 * Prints HTML with meta information for the current post-date/time and author.
 	 */
-	function _beacon_posted_on() {
+	function customify_posted_on() {
 		$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 		if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
 			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
@@ -26,13 +26,13 @@ if ( ! function_exists( '_beacon_posted_on' ) ) :
 
 		$posted_on = sprintf(
 			/* translators: %s: post date. */
-			esc_html_x( 'Posted on %s', 'post date', '_beacon' ),
+			esc_html_x( 'Posted on %s', 'post date', 'customify' ),
 			'<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
 		);
 
 		$byline = sprintf(
 			/* translators: %s: post author. */
-			esc_html_x( 'by %s', 'post author', '_beacon' ),
+			esc_html_x( 'by %s', 'post author', 'customify' ),
 			'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
 		);
 
@@ -41,25 +41,25 @@ if ( ! function_exists( '_beacon_posted_on' ) ) :
 	}
 endif;
 
-if ( ! function_exists( '_beacon_entry_footer' ) ) :
+if ( ! function_exists( 'customify_entry_footer' ) ) :
 	/**
 	 * Prints HTML with meta information for the categories, tags and comments.
 	 */
-	function _beacon_entry_footer() {
+	function customify_entry_footer() {
 		// Hide category and tag text for pages.
 		if ( 'post' === get_post_type() ) {
 			/* translators: used between list items, there is a space after the comma */
-			$categories_list = get_the_category_list( esc_html__( ', ', '_beacon' ) );
+			$categories_list = get_the_category_list( esc_html__( ', ', 'customify' ) );
 			if ( $categories_list ) {
 				/* translators: 1: list of categories. */
-				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', '_beacon' ) . '</span>', $categories_list ); // WPCS: XSS OK.
+				printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'customify' ) . '</span>', $categories_list ); // WPCS: XSS OK.
 			}
 
 			/* translators: used between list items, there is a space after the comma */
-			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', '_beacon' ) );
+			$tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
 			if ( $tags_list ) {
 				/* translators: 1: list of tags. */
-				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', '_beacon' ) . '</span>', $tags_list ); // WPCS: XSS OK.
+				printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'customify' ) . '</span>', $tags_list ); // WPCS: XSS OK.
 			}
 		}
 
@@ -69,7 +69,7 @@ if ( ! function_exists( '_beacon_entry_footer' ) ) :
 				sprintf(
 					wp_kses(
 						/* translators: %s: post title */
-						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', '_beacon' ),
+						__( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'customify' ),
 						array(
 							'span' => array(
 								'class' => array(),
@@ -86,7 +86,7 @@ if ( ! function_exists( '_beacon_entry_footer' ) ) :
 			sprintf(
 				wp_kses(
 					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', '_beacon' ),
+					__( 'Edit <span class="screen-reader-text">%s</span>', 'customify' ),
 					array(
 						'span' => array(
 							'class' => array(),
@@ -102,18 +102,18 @@ if ( ! function_exists( '_beacon_entry_footer' ) ) :
 endif;
 
 
-if ( ! function_exists( '_beacon_comment' ) ) :
+if ( ! function_exists( 'customify_comment' ) ) :
 	/**
 	 * Template for comments and pingbacks.
 	 *
 	 * To override this walker in a child theme without modifying the comments template
-	 * simply create your own _beacon_comment(), and that function will be used instead.
+	 * simply create your own customify_comment(), and that function will be used instead.
 	 *
 	 * Used as a callback by wp_list_comments() for displaying the comments.
 	 *
 	 * @return void
 	 */
-	function _beacon_comment( $comment, $args, $depth ) {
+	function customify_comment( $comment, $args, $depth ) {
 		$GLOBALS['comment'] = $comment;
 		switch ( $comment->comment_type ) :
 			case 'pingback' :
@@ -121,7 +121,7 @@ if ( ! function_exists( '_beacon_comment' ) ) :
 				// Display trackbacks differently than normal comments.
 				?>
 				<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
-				<p><?php _e( 'Pingback:', '_beacon' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', '_beacon' ), '<span class="edit-link">', '</span>' ); ?></p>
+				<p><?php _e( 'Pingback:', 'customify' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'customify' ), '<span class="edit-link">', '</span>' ); ?></p>
 				<?php
 				break;
 			default :
@@ -134,7 +134,7 @@ if ( ! function_exists( '_beacon_comment' ) ) :
 						<?php echo get_avatar( $comment, 60 ); ?>
 					</div>
 					<div class="comment-reply">
-						<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', '_beacon' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+						<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'customify' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
 					</div>
 					<div class="comment-wrap">
 						<header class="comment-meta">
@@ -142,7 +142,7 @@ if ( ! function_exists( '_beacon_comment' ) ) :
 							printf( '<cite class="comment-author fn vcard">%1$s %2$s</cite>',
 								get_comment_author_link(),
 								// If current post author is also comment author, make it known visually.
-								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author">' . __( 'Post author', '_beacon' ) . '</span>' : ''
+								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author">' . __( 'Post author', 'customify' ) . '</span>' : ''
 							);
 							?>
 							<div class="comment-time-wrap">
@@ -151,15 +151,15 @@ if ( ! function_exists( '_beacon_comment' ) ) :
 									esc_url( get_comment_link( $comment->comment_ID ) ),
 									get_comment_time( 'c' ),
 									/* translators: 1: date, 2: time */
-									sprintf( __( '%1$s', '_beacon' ), get_comment_date() )
+									sprintf( __( '%1$s', 'customify' ), get_comment_date() )
 								);
 								?>
 							</div>
-							<?php edit_comment_link( __( 'Edit', '_beacon' ), '<span class="edit-link">', '</span>' ); ?>
+							<?php edit_comment_link( __( 'Edit', 'customify' ), '<span class="edit-link">', '</span>' ); ?>
 						</header><!-- .comment-meta -->
 
 						<?php if ( '0' == $comment->comment_approved ) : ?>
-							<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', '_beacon' ); ?></p>
+							<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'customify' ); ?></p>
 						<?php endif; ?>
 
 						<div class="comment-content entry-content">
@@ -176,15 +176,15 @@ if ( ! function_exists( '_beacon_comment' ) ) :
 	}
 endif;
 
-if ( ! function_exists( '_beacon_comment_field_to_bottom' ) ) :
+if ( ! function_exists( 'customify_comment_field_to_bottom' ) ) :
 	/**
 	 * Move the comment content field to bottom of the respond form.
 	 */
-	function _beacon_comment_field_to_bottom( $fields ) {
+	function customify_comment_field_to_bottom( $fields ) {
 		$comment_field = $fields['comment'];
 		unset( $fields['comment'] );
 		$fields['comment'] = $comment_field;
 		return $fields;
 	}
-	add_filter( 'comment_form_fields', '_beacon_comment_field_to_bottom' );
+	add_filter( 'comment_form_fields', 'customify_comment_field_to_bottom' );
 endif;

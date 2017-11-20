@@ -1,7 +1,7 @@
 <?php
 
-if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
-    class _Beacon_Customizer_Auto_CSS {
+if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
+    class Customify_Customizer_Auto_CSS {
         static $_instance;
         private $fonts = array();
         private $variants = array();
@@ -84,7 +84,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         }
 
         function setup_color( $value, $format ){
-            $value = _Beacon_Sanitize_Input::sanitize_color( $value );
+            $value = Customify_Sanitize_Input::sanitize_color( $value );
             if ( $format ) {
                 if (!is_null( $value ) && $value !== '') {
                     return $this->replace_value( $value, $format ).';';
@@ -119,12 +119,12 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             ) );
 
             $css = array();
-            $color = _Beacon_Sanitize_Input::sanitize_color( $value['color'] );
+            $color = Customify_Sanitize_Input::sanitize_color( $value['color'] );
             if ( $color ) {
                 $css['color'] = "background-color: {$color};";
             }
 
-            $image = _Beacon_Customizer()->get_media( $value['image'] );
+            $image = Customify_Customizer()->get_media( $value['image'] );
 
             if ( $image ) {
                 $css['image'] = "background-image: url(\"{$image}\");";
@@ -201,10 +201,10 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             $format = isset( $field['css_format'] ) ? $field['css_format']: false;
             if ( isset( $field['device_settings'] ) && $field['device_settings'] ) {
                 $has_device = true;
-                foreach ( _Beacon_Customizer()->devices as $device ) {
+                foreach ( Customify_Customizer()->devices as $device ) {
                     $value = null;
                     if ( is_null( $values ) ) {
-                        $value = _Beacon_Customizer()->get_setting( $field['name'], $device );
+                        $value = Customify_Customizer()->get_setting( $field['name'], $device );
                     } else {
                         if ( isset( $values[ $device ] ) ) {
                             $value = $values[ $device ];
@@ -220,7 +220,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 }
             } else {
                 if ( is_null( $values ) ) {
-                    $values = _Beacon_Customizer()->get_setting( $field['name'] );
+                    $values = Customify_Customizer()->get_setting( $field['name'] );
                 }
                 if ( method_exists( $this, $call_back ) ) {
                     $code = call_user_func_array( array( $this, $call_back ), array( $values, $format ) );
@@ -229,7 +229,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
 
             }
 
-            $code_array = apply_filters( '_beacon/customizer/auto_css', $code_array, $field, $this );
+            $code_array = apply_filters( 'customify/customizer/auto_css', $code_array, $field, $this );
 
             if ( empty( $code_array ) ) {
                 return false;
@@ -240,7 +240,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
             } else {
 
                 if ( $has_device ) {
-                    foreach ( _Beacon_Customizer()->devices as $device ) {
+                    foreach ( Customify_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
                             $_c =  $code_array[ $device ];
                             $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
@@ -293,10 +293,10 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         function font( $field, $values = null ){
             $code = '';
             if ( $field['device_settings'] ) {
-                foreach ( _Beacon_Customizer()->devices as $device ) {
+                foreach ( Customify_Customizer()->devices as $device ) {
                     $value = null;
                     if ( is_null( $values ) ) {
-                        $value = _Beacon_Customizer()->get_setting( $field['name'], $device );
+                        $value = Customify_Customizer()->get_setting( $field['name'], $device );
                     } else {
                         if ( isset( $values[ $device ] ) ) {
                             $value = $values[ $device ];
@@ -316,7 +316,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 }
             } else {
                 if ( is_null( $values ) ) {
-                    $values = _Beacon_Customizer()->get_setting( $field['name'] );
+                    $values = Customify_Customizer()->get_setting( $field['name'] );
                 }
                 $code = $this->setup_font( $values );
                 $this->css[ 'all' ] .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
@@ -365,7 +365,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         }
 
         function typography( $field ){
-            $values = _Beacon_Customizer()->get_setting( $field['name'] );
+            $values = Customify_Customizer()->get_setting( $field['name'] );
             $values = wp_parse_args( $values, array(
                 'font' => null,
                 'font_style' => null,
@@ -461,7 +461,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
                 }
             }
 
-            $devices_css = apply_filters( '_beacon/customizer/auto_css', $devices_css, $field, $this );
+            $devices_css = apply_filters( 'customify/customizer/auto_css', $devices_css, $field, $this );
 
             foreach ( $devices_css as $device => $els ) {
                 $this->css[$device] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $els )."\r\n}";
@@ -511,7 +511,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         }
 
         function auto_css( $partial = false ){
-            $config = _Beacon_Customizer::get_config();
+            $config = Customify_Customizer::get_config();
             //$control_settings = $partial->component->manager->get_control($partial->id);
             foreach ( $config as $field ) {
                 $field_css = '';
@@ -560,7 +560,7 @@ if ( ! class_exists( '_Beacon_Customizer_Auto_CSS' ) ) {
         }
     }
 
-    function _Beacon_Customizer_Auto_CSS( $partial = false ){
-        return _Beacon_Customizer_Auto_CSS::get_instance()->auto_css( $partial );
+    function Customify_Customizer_Auto_CSS( $partial = false ){
+        return Customify_Customizer_Auto_CSS::get_instance()->auto_css( $partial );
     }
 }

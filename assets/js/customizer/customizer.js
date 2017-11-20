@@ -59,10 +59,10 @@
 
         // Get a control
        // console.log( 'Test Get control',  defaultTarget.wp.customize.control( 'repeater' ) );
-        //console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );
+        //console.log( 'Customify_Preview_Config_Fields', Customify_Preview_Config_Fields );
 
         /*
-        $.each( _Beacon_Preview_Config_Fields, function ( index, field ) {
+        $.each( Customify_Preview_Config_Fields, function ( index, field ) {
             if ( index.indexOf( 'setting|' ) > -1 ) {
                 //console.log( field );
                 if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format )  && field.selector ) {

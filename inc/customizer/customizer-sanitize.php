@@ -1,8 +1,8 @@
 <?php
 
-if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
+if ( ! function_exists( 'customify_sanitize_customizer_input' ) ) {
 
-    class _Beacon_Sanitize_Input {
+    class Customify_Sanitize_Input {
 
         private $control;
         private $setting;
@@ -159,7 +159,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
         }
 
         function end_sanitize(){
-            // update_option( '_beacon_customizer_config', true );
+            // update_option( 'customify_customizer_config', true );
         }
 
 
@@ -197,7 +197,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     $has_device = false;
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_color( $value[ $device ] );
@@ -215,7 +215,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                         $this->skip_devices = true;
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_group( $value[ $device ] );
@@ -234,7 +234,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_repeater( $value[ $device ] );
@@ -257,7 +257,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_media( $value[ $device ] );
@@ -300,7 +300,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     if ( ! isset( $choices[ (string ) $value[ $device ] ] ) ) {
@@ -326,7 +326,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_checkbox( $value[ $device ] );
@@ -345,7 +345,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_css_ruler( $value[ $device ] );
@@ -364,7 +364,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_slider( $value[ $device ] );
@@ -383,7 +383,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_icon( $value[ $device ] );
@@ -407,7 +407,7 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
                     if ( $device_settings && ! $this->skip_devices ) {
                         if ( is_array( $value ) ) {
                             $has_device = false;
-                            foreach ( _Beacon_Customizer()->devices as $device ) {
+                            foreach ( Customify_Customizer()->devices as $device ) {
                                 if ( isset( $value[ $device ] ) ) {
                                     $has_device = true;
                                     $value[ $device ] = $this->sanitize_text_field_deep( $value[ $device ] );
@@ -427,14 +427,14 @@ if ( ! function_exists( '_beacon_sanitize_customizer_input' ) ) {
         }
     }
 
-    function _beacon_sanitize_customizer_input( $input, $setting ){
+    function customify_sanitize_customizer_input( $input, $setting ){
 
         $input = wp_unslash( $input );
         if ( ! is_array( $input ) ) {
             $input = json_decode( urldecode_deep( $input ), true );
         }
         $control = $setting->manager->get_control( $setting->id );
-        $s = new _Beacon_Sanitize_Input( $control, $setting );
+        $s = new Customify_Sanitize_Input( $control, $setting );
         $input = $s->sanitize( $input );
         return $input;
 

@@ -2,10 +2,10 @@
 /**
  * Functions which enhance the theme by hooking into WordPerss and itself (huh?).
  *
- * @package _beacon
+ * @package customify
  */
 
-if ( ! function_exists( '_beacon_body_classes' ) ) :
+if ( ! function_exists( 'customify_body_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of body classes.
 	 *
@@ -13,14 +13,14 @@ if ( ! function_exists( '_beacon_body_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	add_filter( 'body_class', '_beacon_body_classes' );
-	function _beacon_body_classes( $classes ) {
+	add_filter( 'body_class', 'customify_body_classes' );
+	function customify_body_classes( $classes ) {
 		// Adds a class of hfeed to non-singular pages.
 		if ( ! is_singular() ) {
 			$classes[] = 'hfeed';
 		}
 
-		$layout = _beacon_get_layout();
+		$layout = customify_get_layout();
 		$layout_vertical_border = true;
 
 		if ( $layout != '' ) {
@@ -35,7 +35,7 @@ if ( ! function_exists( '_beacon_body_classes' ) ) :
 	}
 endif;
 
-if ( ! function_exists( '_beacon_site_content_classes' ) ) :
+if ( ! function_exists( 'customify_site_content_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of site content classes.
 	 *
@@ -43,15 +43,15 @@ if ( ! function_exists( '_beacon_site_content_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_site_content_classes( $classes ) {
+	function customify_site_content_classes( $classes ) {
 		$classes[] = 'site-content';
 		return $classes;
 	}
-	add_filter( '_beacon_site_content_class', '_beacon_site_content_classes' );
+	add_filter( 'customify_site_content_class', 'customify_site_content_classes' );
 endif;
 
 
-if ( ! function_exists( '_beacon_sidebar_primary_classes' ) ) :
+if ( ! function_exists( 'customify_sidebar_primary_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of primary sidebar classes.
 	 *
@@ -59,37 +59,37 @@ if ( ! function_exists( '_beacon_sidebar_primary_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_sidebar_primary_classes( $classes ) {
+	function customify_sidebar_primary_classes( $classes ) {
 
 		$classes[] = 'sidebar-primary';
-		$layout = _beacon_get_layout();
+		$layout = customify_get_layout();
 
 		if ( $layout == 'sidebar-sidebar-content' ) {
-			$classes[] = '_beacon-col-3_sm-12';
+			$classes[] = 'customify-col-3_sm-12';
 		}
 
 		if ( $layout == 'sidebar-content-sidebar' ) {
-			$classes[] = '_beacon-col-3_sm-12';
+			$classes[] = 'customify-col-3_sm-12';
 		}
 
 		if ( $layout == 'content-sidebar-sidebar' ) {
-			$classes[] = '_beacon-col-3_sm-12';
+			$classes[] = 'customify-col-3_sm-12';
 		}
 
 		if ( $layout == 'sidebar-content' ) {
-			$classes[] = '_beacon-col-3_sm-12';
+			$classes[] = 'customify-col-3_sm-12';
 		}
 
 		if ( $layout == 'content-sidebar' ) {
-			$classes[] = '_beacon-col-3_sm-12';
+			$classes[] = 'customify-col-3_sm-12';
 		}
 
 		return $classes;
 	}
-	add_filter( '_beacon_sidebar_primary_class', '_beacon_sidebar_primary_classes' );
+	add_filter( 'customify_sidebar_primary_class', 'customify_sidebar_primary_classes' );
 endif;
 
-if ( ! function_exists( '_beacon_sidebar_secondary_classes' ) ) :
+if ( ! function_exists( 'customify_sidebar_secondary_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of secondary sidebar classes.
 	 *
@@ -97,29 +97,29 @@ if ( ! function_exists( '_beacon_sidebar_secondary_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_sidebar_secondary_classes( $classes ) {
+	function customify_sidebar_secondary_classes( $classes ) {
 
 		$classes[] = 'sidebar-secondary';
-		$layout = _beacon_get_layout();
+		$layout = customify_get_layout();
 
 		if ( $layout == 'sidebar-sidebar-content' ) {
-			$classes[] = '_beacon-col-3_md-0_sm-12';
+			$classes[] = 'customify-col-3_md-0_sm-12';
 		}
 
 		if ( $layout == 'sidebar-content-sidebar' ) {
-			$classes[] = '_beacon-col-3_md-0_sm-12-first'; // Not move to bottom on mobile, ueh?
+			$classes[] = 'customify-col-3_md-0_sm-12-first'; // Not move to bottom on mobile, ueh?
 		}
 
 		if ( $layout == 'content-sidebar-sidebar' ) {
-			$classes[] = '_beacon-col-3_md-0_sm-12';
+			$classes[] = 'customify-col-3_md-0_sm-12';
 		}
 
 		return $classes;
 	}
-	add_filter( '_beacon_sidebar_secondary_class', '_beacon_sidebar_secondary_classes' );
+	add_filter( 'customify_sidebar_secondary_class', 'customify_sidebar_secondary_classes' );
 endif;
 
-if ( ! function_exists( '_beacon_main_content_classes' ) ) :
+if ( ! function_exists( 'customify_main_content_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of main content classes.
 	 *
@@ -127,41 +127,41 @@ if ( ! function_exists( '_beacon_main_content_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_main_content_classes( $classes ) {
+	function customify_main_content_classes( $classes ) {
 
 		$classes[] = 'content-area';
-		$layout = _beacon_get_layout();
+		$layout = customify_get_layout();
 
 		if ( $layout == 'sidebar-sidebar-content' ) {
-			$classes[] = '_beacon-col-6_md-9_sm-12-last_sm-first';
+			$classes[] = 'customify-col-6_md-9_sm-12-last_sm-first';
 		}
 
 		if ( $layout == 'sidebar-content-sidebar' ) {
-			$classes[] = '_beacon-col-6_md-9_sm-12';
+			$classes[] = 'customify-col-6_md-9_sm-12';
 		}
 
 		if ( $layout == 'content-sidebar-sidebar' ) {
-			$classes[] = '_beacon-col-6_md-9_sm-12-first';
+			$classes[] = 'customify-col-6_md-9_sm-12-first';
 		}
 
 		if ( $layout == 'sidebar-content' ) {
-			$classes[] = '_beacon-col-9_sm-12-last_sm-first';
+			$classes[] = 'customify-col-9_sm-12-last_sm-first';
 		}
 
 		if ( $layout == 'content-sidebar' ) {
-			$classes[] = '_beacon-col-9_sm-12';
+			$classes[] = 'customify-col-9_sm-12';
 		}
 
 		if ( $layout == 'no-sidebar' ) {
-			$classes[] = '_beacon-col-12';
+			$classes[] = 'customify-col-12';
 		}
 
 		return $classes;
 	}
-	add_filter( '_beacon_main_content_class', '_beacon_main_content_classes' );
+	add_filter( 'customify_main_content_class', 'customify_main_content_classes' );
 endif;
 
-if ( ! function_exists( '_beacon_site_content_grid_classes' ) ) :
+if ( ! function_exists( 'customify_site_content_grid_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of site content grid classes.
 	 *
@@ -169,16 +169,16 @@ if ( ! function_exists( '_beacon_site_content_grid_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_site_content_grid_classes( $classes ) {
+	function customify_site_content_grid_classes( $classes ) {
 
-		$classes[] = '_beacon-grid';
+		$classes[] = 'customify-grid';
 
 		return $classes;
 	}
-	add_filter( '_beacon_site_content_grid_class', '_beacon_site_content_grid_classes' );
+	add_filter( 'customify_site_content_grid_class', 'customify_site_content_grid_classes' );
 endif;
 
-if ( ! function_exists( '_beacon_site_content_container_classes' ) ) :
+if ( ! function_exists( 'customify_site_content_container_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of site content container classes.
 	 *
@@ -186,11 +186,11 @@ if ( ! function_exists( '_beacon_site_content_container_classes' ) ) :
 	 *
 	 * @return array
 	 */
-	function _beacon_site_content_container_classes( $classes ) {
+	function customify_site_content_container_classes( $classes ) {
 
-		$classes[] = '_beacon-container';
+		$classes[] = 'customify-container';
 
 		return $classes;
 	}
-	add_filter( '_beacon_site_content_container_class', '_beacon_site_content_container_classes' );
+	add_filter( 'customify_site_content_container_class', 'customify_site_content_container_classes' );
 endif;

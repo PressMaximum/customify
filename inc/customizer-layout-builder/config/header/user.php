@@ -1,5 +1,5 @@
 <?php
-function _beacon_builder_config_header_user(){
+function customify_builder_config_header_user(){
     $section = 'header_user';
     $prefix = 'header_user_';
     return array(
@@ -8,7 +8,7 @@ function _beacon_builder_config_header_user(){
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'User', '_beacon' ),
+            'title'          => __( 'User', 'customify' ),
         ),
 
         array(
@@ -16,38 +16,38 @@ function _beacon_builder_config_header_user(){
             'type' => 'heading',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'When user not logged in', '_beacon' ),
+            'title'          => __( 'When user not logged in', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'show_login',
             'type' => 'checkbox',
             'section' => $section,
-            'title'   => __( 'Show login', '_beacon' ),
-            'checkbox_label'   => __( 'Show login', '_beacon' ),
+            'title'   => __( 'Show login', 'customify' ),
+            'checkbox_label'   => __( 'Show login', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'login',
             'type' => 'group',
             'section' => $section,
-            'title'   => __( 'Login item', '_beacon' ),
+            'title'   => __( 'Login item', 'customify' ),
             'required'  => array( $prefix.'show_login','==','1' ),
             'fields' => array(
                 array(
                     'name' => 'label',
                     'type' => 'text',
-                    'label' => __( 'Label', '_beacon' ),
+                    'label' => __( 'Label', 'customify' ),
                 ),
                 array(
                     'name' => 'icon',
                     'type' => 'icon',
-                    'label' => __( 'Icon', '_beacon' ),
+                    'label' => __( 'Icon', 'customify' ),
                 ),
                 array(
                     'name' => 'url',
                     'type' => 'text',
-                    'label' => __( 'Custom Login URL', '_beacon' ),
+                    'label' => __( 'Custom Login URL', 'customify' ),
                 ),
             )
         ),
@@ -57,31 +57,31 @@ function _beacon_builder_config_header_user(){
             'name' => $prefix.'show_signup',
             'type' => 'checkbox',
             'section' => $section,
-            'title'   => __( 'Show login', '_beacon' ),
-            'checkbox_label'   => __( 'Show Sign Up', '_beacon' ),
+            'title'   => __( 'Show login', 'customify' ),
+            'checkbox_label'   => __( 'Show Sign Up', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'signup',
             'type' => 'group',
             'section' => $section,
-            'title'   => __( 'SingUp Settings', '_beacon' ),
+            'title'   => __( 'SingUp Settings', 'customify' ),
             'required'  => array( $prefix.'show_signup','==','1' ),
             'fields' => array(
                 array(
                     'name' => 'label',
                     'type' => 'text',
-                    'label' => __( 'Label', '_beacon' ),
+                    'label' => __( 'Label', 'customify' ),
                 ),
                 array(
                     'name' => 'icon',
                     'type' => 'icon',
-                    'label' => __( 'Icon', '_beacon' ),
+                    'label' => __( 'Icon', 'customify' ),
                 ),
                 array(
                     'name' => 'url',
                     'type' => 'text',
-                    'label' => __( 'Custom Sign Up URL', '_beacon' ),
+                    'label' => __( 'Custom Sign Up URL', 'customify' ),
                 ),
             )
         ),
@@ -92,23 +92,23 @@ function _beacon_builder_config_header_user(){
             'type' => 'heading',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'When user logged in', '_beacon' ),
+            'title'          => __( 'When user logged in', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'show_avatar',
             'type' => 'checkbox',
             'section' => $section,
-            'title'   => __( 'Show Avatar', '_beacon' ),
-            'checkbox_label'   => __( 'Show Avatar', '_beacon' ),
+            'title'   => __( 'Show Avatar', 'customify' ),
+            'checkbox_label'   => __( 'Show Avatar', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'show_username',
             'type' => 'checkbox',
             'section' => $section,
-            'title'   => __( 'Show User Name', '_beacon' ),
-            'checkbox_label'   => __( 'Show User Name', '_beacon' ),
+            'title'   => __( 'Show User Name', 'customify' ),
+            'checkbox_label'   => __( 'Show User Name', 'customify' ),
         ),
 
 

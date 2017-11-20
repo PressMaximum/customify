@@ -1,13 +1,13 @@
 <?php
-function _beacon_builder_config_header_logo(){
+function customify_builder_config_header_logo(){
     $section = 'header_logo';
-    $render_cb_el = '_beacon_builder_logo_item';
+    $render_cb_el = 'customify_builder_logo_item';
     $config  = array(
         array(
             'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
-            'title' => __( 'Logo', '_beacon' ),
+            'title' => __( 'Logo', 'customify' ),
         ),
 
         array(
@@ -16,9 +16,9 @@ function _beacon_builder_config_header_logo(){
             'section' => $section,
             'theme_supports' => '',
             'default' => 0,
-            'title' => __( 'Logo', '_beacon' ),
-            'checkbox_label' => __( 'Use Site Identity Logo', '_beacon' ),
-            'description' => __( 'If check this, you can settings your logo in <a href="#title_tagline" class="focus-section">Site Identity</a> section.', '_beacon' ),
+            'title' => __( 'Logo', 'customify' ),
+            'checkbox_label' => __( 'Use Site Identity Logo', 'customify' ),
+            'description' => __( 'If check this, you can settings your logo in <a href="#title_tagline" class="focus-section">Site Identity</a> section.', 'customify' ),
         ),
 
         array(
@@ -29,7 +29,7 @@ function _beacon_builder_config_header_logo(){
             'device_settings' => true,
             'selector' => '.site-branding',
             'render_callback' => $render_cb_el,
-            'title' => __( 'Logo', '_beacon' ),
+            'title' => __( 'Logo', 'customify' ),
             'required' => array( 'header_logo_use_default', '!=', '1'),
         ),
 
@@ -41,7 +41,7 @@ function _beacon_builder_config_header_logo(){
             'device_settings' => true,
             'selector' => '.site-branding',
             'render_callback' => $render_cb_el,
-            'title' => __( 'Logo Retina', '_beacon' ),
+            'title' => __( 'Logo Retina', 'customify' ),
             'required' => array( 'header_logo_use_default', '!=', '1'),
         ),
 
@@ -51,8 +51,8 @@ function _beacon_builder_config_header_logo(){
             'section' => $section,
             'theme_supports' => '',
             'default' => '',
-            'title' => __( 'Show Site Name', '_beacon' ),
-            'checkbox_label' => __( 'Show site name ?', '_beacon' ),
+            'title' => __( 'Show Site Name', 'customify' ),
+            'checkbox_label' => __( 'Show site name ?', 'customify' ),
         ),
 
         array(
@@ -61,8 +61,8 @@ function _beacon_builder_config_header_logo(){
             'section' => $section,
             'theme_supports' => '',
             'default' => '',
-            'title' => __( 'Show Site Description', '_beacon' ),
-            'checkbox_label' => __( 'Show site description ?', '_beacon' ),
+            'title' => __( 'Show Site Description', 'customify' ),
+            'checkbox_label' => __( 'Show site description ?', 'customify' ),
         ),
 
         array(
@@ -74,7 +74,7 @@ function _beacon_builder_config_header_logo(){
                 'value' => 60
             ),
             'device_settings' => true,
-            'title' => __( 'Logo Height', '_beacon' ),
+            'title' => __( 'Logo Height', 'customify' ),
             'selector' => '.site-branding img',
             'css_format' => 'height: {{value}};'
         ),
@@ -83,11 +83,11 @@ function _beacon_builder_config_header_logo(){
     return $config;
 }
 
-function _beacon_builder_logo_item(){
+function customify_builder_logo_item(){
 
-    $logo_default = _Beacon_Customizer()->get_setting( 'header_logo_use_default' );
-    $show_name = _Beacon_Customizer()->get_setting( 'header_logo_name' );
-    $show_desc = _Beacon_Customizer()->get_setting( 'header_logo_desc' );
+    $logo_default = Customify_Customizer()->get_setting( 'header_logo_use_default' );
+    $show_name = Customify_Customizer()->get_setting( 'header_logo_name' );
+    $show_desc = Customify_Customizer()->get_setting( 'header_logo_desc' );
     ?>
     <div class="site-branding">
         <?php
@@ -95,11 +95,11 @@ function _beacon_builder_logo_item(){
             the_custom_logo();
         } else {
 
-            $logo = _Beacon_Customizer()->get_setting( 'header_logo' );
-            $logo_image = _Beacon_Customizer()->get_media( $logo );
+            $logo = Customify_Customizer()->get_setting( 'header_logo' );
+            $logo_image = Customify_Customizer()->get_media( $logo );
 
-            $logo_retina = _Beacon_Customizer()->get_setting( 'header_logo_retina' );
-            $logo_retina_image = _Beacon_Customizer()->get_media( $logo_retina );
+            $logo_retina = Customify_Customizer()->get_setting( 'header_logo_retina' );
+            $logo_retina_image = Customify_Customizer()->get_media( $logo_retina );
 
             if ( $logo_image ) {
                 ?>

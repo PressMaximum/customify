@@ -4,7 +4,7 @@
  *
  * @link https://codex.wordpress.org/Template_Hierarchy
  *
- * @package _beacon
+ * @package customify
  */
 
 ?>
@@ -19,7 +19,7 @@
 			the_content();
 
 			wp_link_pages( array(
-				'before' => '<div class="page-links">' . esc_html__( 'Pages:', '_beacon' ),
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'customify' ),
 				'after'  => '</div>',
 			) );
 		?>
@@ -32,7 +32,7 @@
 					sprintf(
 						wp_kses(
 							/* translators: %s: Name of current post. Only visible to screen readers */
-							__( 'Edit <span class="screen-reader-text">%s</span>', '_beacon' ),
+							__( 'Edit <span class="screen-reader-text">%s</span>', 'customify' ),
 							array(
 								'span' => array(
 									'class' => array(),

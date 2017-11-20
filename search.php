@@ -4,15 +4,15 @@
  *
  * @link https://developer.wordpress.org/themes/basics/template-hierarchy/#search-result
  *
- * @package _beacon
+ * @package customify
  */
 
 get_header(); ?>
 
-    <div <?php _beacon_site_content_container_class(); ?>>
-        <div <?php _beacon_site_content_grid_class(); ?>>
+    <div <?php customify_site_content_container_class(); ?>>
+        <div <?php customify_site_content_grid_class(); ?>>
 
-            <main id="main" <?php _beacon_main_content_class(); ?>>
+            <main id="main" <?php customify_main_content_class(); ?>>
                 <div class="content-inner">
 
                 <?php
@@ -21,7 +21,7 @@ get_header(); ?>
                     <header class="page-header">
                         <h1 class="page-title"><?php
                             /* translators: %s: search query. */
-                            printf( esc_html__( 'Search Results for: %s', '_beacon' ), '<span>' . get_search_query() . '</span>' );
+                            printf( esc_html__( 'Search Results for: %s', 'customify' ), '<span>' . get_search_query() . '</span>' );
                         ?></h1>
                     </header><!-- .page-header -->
 
@@ -49,10 +49,10 @@ get_header(); ?>
                 </div><!-- #.content-inner -->
             </main><!-- #main -->
 
-            <?php do_action( '_beacon_sidebars' ); ?>
+            <?php do_action( 'customify_sidebars' ); ?>
 
-        </div><!-- #._beacon-grid -->
-    </div><!-- #._beacon-container -->
+        </div><!-- #.customify-grid -->
+    </div><!-- #.customify-container -->
 
 <?php
 get_footer();

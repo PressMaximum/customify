@@ -1,33 +1,33 @@
 <?php
-if ( ! function_exists( '_beacon_customizer_config' ) ) {
-    function _beacon_customizer_config( $configs ){
+if ( ! function_exists( 'customify_customizer_config' ) ) {
+    function customify_customizer_config( $configs ){
 
         $config = array(
             array(
-                'name' => '_beacon_panel',
+                'name' => 'customify_panel',
                 'type' => 'panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Panel', '_beacon' ),
+                'title'          => __( 'Beacon Panel', 'customify' ),
             ),
 
             array(
-                'name' => '_beacon_section',
+                'name' => 'customify_section',
                 'type' => 'section',
-                'panel' => '_beacon_panel',
+                'panel' => 'customify_panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Section', '_beacon' ),
-                'description' => __( 'This is section description',  '_beacon' ),
+                'title'          => __( 'Beacon Section', 'customify' ),
+                'description' => __( 'This is section description',  'customify' ),
             ),
 
             array(
                 'name' => 'typography',
                 'type' => 'group',
-                'section'     => '_beacon_section',
-                'title'          => __( 'Typography', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
-                'field_class' => '_beacon-typography-control',
+                'section'     => 'customify_section',
+                'title'          => __( 'Typography', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
+                'field_class' => 'customify-typography-control',
                 'selector' => '#page',
                 'css_format' => 'typography',
                 'default' => array(
@@ -38,33 +38,33 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'font',
                         'type' => 'font',
-                        'label' => __( 'Font', '_beacon' ),
+                        'label' => __( 'Font', 'customify' ),
                     ),
 
                     array(
                         'name' => 'font_style',
                         'type' => 'font_style',
-                        'label' => __( 'Font Style', '_beacon' ),
+                        'label' => __( 'Font Style', 'customify' ),
                     ),
 
                     array(
                         'name' => 'font_size',
                         'type' => 'slider',
-                        'label' => __( 'Font Size', '_beacon' ),
+                        'label' => __( 'Font Size', 'customify' ),
                         'device_settings' => true,
                     ),
 
                     array(
                         'name' => 'line_height',
                         'type' => 'slider',
-                        'label' => __( 'Line Height', '_beacon' ),
+                        'label' => __( 'Line Height', 'customify' ),
                         'device_settings' => true,
                     ),
 
                     array(
                         'name' => 'letter_spacing',
                         'type' => 'slider',
-                        'label' => __( 'Letter Spacing', '_beacon' ),
+                        'label' => __( 'Letter Spacing', 'customify' ),
                         'min' => -10,
                         'max' => 10,
                     ),
@@ -72,7 +72,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', '_beacon' ),
+                        'label' => __( 'Color', 'customify' ),
                     ),
 
                 )
@@ -81,10 +81,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'typography_h1',
                 'type' => 'group',
-                'section'     => '_beacon_section',
-                'title'          => __( 'Typography H1', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
-                'field_class' => '_beacon-typography-control',
+                'section'     => 'customify_section',
+                'title'          => __( 'Typography H1', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
+                'field_class' => 'customify-typography-control',
                 'selector' => '#page h1',
                 'css_format' => 'typography',
                 'default' => array(
@@ -95,33 +95,33 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'font',
                         'type' => 'font',
-                        'label' => __( 'Font', '_beacon' ),
+                        'label' => __( 'Font', 'customify' ),
                     ),
 
                     array(
                         'name' => 'font_style',
                         'type' => 'font_style',
-                        'label' => __( 'Font Style', '_beacon' ),
+                        'label' => __( 'Font Style', 'customify' ),
                     ),
 
                     array(
                         'name' => 'font_size',
                         'type' => 'slider',
-                        'label' => __( 'Font Size', '_beacon' ),
+                        'label' => __( 'Font Size', 'customify' ),
                         'device_settings' => true,
                     ),
 
                     array(
                         'name' => 'line_height',
                         'type' => 'slider',
-                        'label' => __( 'Line Height', '_beacon' ),
+                        'label' => __( 'Line Height', 'customify' ),
                         'device_settings' => true,
                     ),
 
                     array(
                         'name' => 'letter_spacing',
                         'type' => 'slider',
-                        'label' => __( 'Letter Spacing', '_beacon' ),
+                        'label' => __( 'Letter Spacing', 'customify' ),
                         'min' => -10,
                         'max' => 10,
                     ),
@@ -129,7 +129,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', '_beacon' ),
+                        'label' => __( 'Color', 'customify' ),
                     ),
 
                 )
@@ -138,11 +138,11 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'background',
                 'type' => 'group',
-                'section'     => '_beacon_section',
-                'title'          => __( 'Background', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
+                'section'     => 'customify_section',
+                'title'          => __( 'Background', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
-                'field_class' => '_beacon-background-control',
+                'field_class' => 'customify-background-control',
                 'selector' => '#page',
                 'css_format' => 'background',
                 'device_settings' => true,
@@ -153,65 +153,65 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', '_beacon' ),
+                        'label' => __( 'Color', 'customify' ),
                         'device_settings' => true,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', '_beacon' ),
+                        'label' => __( 'Image', 'customify' ),
                     ),
                     array(
                         'name' => 'cover',
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
-                        'label' => __( 'Background cover', '_beacon' ),
+                        'label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
                         'type' => 'select',
-                        'label' => __( 'Background Position', '_beacon' ),
+                        'label' => __( 'Background Position', 'customify' ),
                         'required' => array( 'image', 'not_empty', ''),
                         'choices' => array(
-                            'default'       => __( 'Position', '_beacon' ),
-                            'center'        => __( 'Center', '_beacon' ),
-                            'top_left'      => __( 'Top Left', '_beacon' ),
-                            'top_right'     => __( 'Top Right', '_beacon' ),
-                            'top_center'    => __( 'Top Center', '_beacon' ),
-                            'bottom_left'   => __( 'Bottom Left', '_beacon' ),
-                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
-                            'bottom_right'  => __( 'Bottom Right', '_beacon' ),
+                            'default'       => __( 'Position', 'customify' ),
+                            'center'        => __( 'Center', 'customify' ),
+                            'top_left'      => __( 'Top Left', 'customify' ),
+                            'top_right'     => __( 'Top Right', 'customify' ),
+                            'top_center'    => __( 'Top Center', 'customify' ),
+                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                            'bottom_center' => __( 'Bottom Center', 'customify' ),
+                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
                         ),
                     ),
 
                     array(
                         'name' => 'repeat',
                         'type' => 'select',
-                        'label' => __( 'Background Repeat', '_beacon' ),
+                        'label' => __( 'Background Repeat', 'customify' ),
                         'required' => array(
                             array('image', 'not_empty', ''),
                             // array('style', '!=', 'cover' ),
                         ),
                         'choices' => array(
-                            'default' => __( 'Repeat', '_beacon' ),
-                            'no-repeat' => __( 'No-repeat', '_beacon' ),
-                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
-                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                            'default' => __( 'Repeat', 'customify' ),
+                            'no-repeat' => __( 'No-repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
                         ),
                     ),
 
                     array(
                         'name' => 'attachment',
                         'type' => 'select',
-                        'label' => __( 'Background Attachment', '_beacon' ),
+                        'label' => __( 'Background Attachment', 'customify' ),
                         'required' => array(
                             array('image', 'not_empty', ''),
                             array('cover', '!=', '1' ),
                         ),
                         'choices' => array(
-                            'default' => __( 'Attachment', '_beacon' ),
-                            'scroll' => __( 'Scroll', '_beacon' ),
-                            'fixed' => __( 'Fixed', '_beacon' )
+                            'default' => __( 'Attachment', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
                         ),
                     ),
 
@@ -221,11 +221,11 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'background_p',
                 'type' => 'group',
-                'section'     => '_beacon_section',
-                'title'          => __( 'Background P', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
+                'section'     => 'customify_section',
+                'title'          => __( 'Background P', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
-                'field_class' => '_beacon-background-control',
+                'field_class' => 'customify-background-control',
                 'selector' => '#page p',
                 'css_format' => 'background',
                 'device_settings' => false,
@@ -236,65 +236,65 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', '_beacon' ),
+                        'label' => __( 'Color', 'customify' ),
                         'device_settings' => true,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', '_beacon' ),
+                        'label' => __( 'Image', 'customify' ),
                     ),
                     array(
                         'name' => 'cover',
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
-                        'label' => __( 'Background cover', '_beacon' ),
+                        'label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
                         'type' => 'select',
-                        'label' => __( 'Background Position', '_beacon' ),
+                        'label' => __( 'Background Position', 'customify' ),
                         'required' => array( 'image', 'not_empty', ''),
                         'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'center' => __( 'Center', '_beacon' ),
-                            'top_left' => __( 'Top Left', '_beacon' ),
-                            'top_right' => __( 'Top Right', '_beacon' ),
-                            'top_center' => __( 'Top Center', '_beacon' ),
-                            'bottom_left' => __( 'Bottom Left', '_beacon' ),
-                            'bottom_center' => __( 'Bottom Center', '_beacon' ),
-                            'bottom_right' => __( 'Bottom Right', '_beacon' ),
+                            'default' => __( 'Default', 'customify' ),
+                            'center' => __( 'Center', 'customify' ),
+                            'top_left' => __( 'Top Left', 'customify' ),
+                            'top_right' => __( 'Top Right', 'customify' ),
+                            'top_center' => __( 'Top Center', 'customify' ),
+                            'bottom_left' => __( 'Bottom Left', 'customify' ),
+                            'bottom_center' => __( 'Bottom Center', 'customify' ),
+                            'bottom_right' => __( 'Bottom Right', 'customify' ),
                         ),
                     ),
 
                     array(
                         'name' => 'repeat',
                         'type' => 'select',
-                        'label' => __( 'Background Repeat', '_beacon' ),
+                        'label' => __( 'Background Repeat', 'customify' ),
                         'required' => array(
                             array('image', 'not_empty', ''),
                             // array('style', '!=', 'cover' ),
                         ),
                         'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'no-repeat' => __( 'No-repeat', '_beacon' ),
-                            'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
-                            'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                            'default' => __( 'Default', 'customify' ),
+                            'no-repeat' => __( 'No-repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
                         ),
                     ),
 
                     array(
                         'name' => 'attachment',
                         'type' => 'select',
-                        'label' => __( 'Background Attachment', '_beacon' ),
+                        'label' => __( 'Background Attachment', 'customify' ),
                         'required' => array(
                             array('image', 'not_empty', ''),
                             array('cover', '!=', '1' ),
                         ),
                         'choices' => array(
-                            'default' => __( 'Default', '_beacon' ),
-                            'scroll' => __( 'Scroll', '_beacon' ),
-                            'fixed' => __( 'Fixed', '_beacon' )
+                            'default' => __( 'Default', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
                         ),
                     ),
 
@@ -306,14 +306,14 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'select',
                 //'device_settings' => true,
                 'default' => '',
-                'section'     => '_beacon_section',
+                'section'     => 'customify_section',
                 //'priority' => 22,
-                'title'          => __( 'Select', '_beacon' ),
-                'description'    => __( 'Select 2 to show Dependence field',  '_beacon' ),
+                'title'          => __( 'Select', 'customify' ),
+                'description'    => __( 'Select 2 to show Dependence field',  'customify' ),
                 'choices' => array(
-                    '1' => __( 'One', '_beacon' ),
-                    '2' => __( 'Two', '_beacon' ),
-                    '3' => __( 'Three', '_beacon' ),
+                    '1' => __( 'One', 'customify' ),
+                    '2' => __( 'Two', 'customify' ),
+                    '3' => __( 'Three', 'customify' ),
                 )
             ),
 
@@ -323,11 +323,11 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device_settings' => true,
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Dependence Text Field', '_beacon' ),
-                'description'   => __( 'Show only select=2',  '_beacon' ),
+                'title'          => __( 'Dependence Text Field', 'customify' ),
+                'description'   => __( 'Show only select=2',  'customify' ),
                 'required'      => array( 'select','==','2' )
             ),
 
@@ -339,12 +339,12 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 //'device_settings' => true,
                 //'sanitize_callback' => '',
                 'default'           => null,
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'priority' => 22,
                 'theme_supports' => '',
                 'device' => 'mobile',
-                'title'          => __( 'Text', '_beacon' ),
-                'description' => __( 'This is description', '_beacon' ),
+                'title'          => __( 'Text', 'customify' ),
+                'description' => __( 'This is description', 'customify' ),
 
 
                 'selector' => '._test_text1',
@@ -357,11 +357,11 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device_settings' => true,
                 'sanitize_callback' => '',
                 'default'           => null,
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Text 2 Inside the Text', '_beacon' ),
-                'description' => __( 'This is description', '_beacon' ),
+                'title'          => __( 'Text 2 Inside the Text', 'customify' ),
+                'description' => __( 'This is description', 'customify' ),
 
                 //'selector' => '._test_text_2',
                 //'render_callback' => '_test_2_render_callback'
@@ -374,12 +374,12 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'default' => '',
                 'min' => -10,
                 'max' => 100,
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'device' => 'mobile', // mobile || general
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Slider', '_beacon' ),
-                'description' => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Slider', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
                 'selector' => 'h4',
                 'css_format' => 'font-size: {{value}}'
             ),
@@ -390,10 +390,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type'      => 'css_ruler',
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
-                'section'           => '_beacon_section',
+                'section'           => 'customify_section',
                 'theme_supports' => '',
-                'title'          => __( 'CSS Ruler', '_beacon' ),
-                'description'   => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'CSS Ruler', 'customify' ),
+                'description'   => __( 'This is description',  'customify' ),
                 'selector' => 'h4',
                 'css_format' => array(
                     'top'    => 'padding-top: {{value}}',
@@ -408,12 +408,12 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'icon',
                 'device_settings' => true,
                 'default' => '',
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'device' => 'mobile', // mobile || general
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Icon', '_beacon' ),
-                'description' => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Icon', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
             ),
 
             array(
@@ -421,23 +421,23 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'textarea',
                 'device_settings' => true,
                 'default' => '',
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'device' => 'mobile', // mobile || general
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Textarea', '_beacon' ),
-                'description' => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Textarea', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
             ),
 
             array(
                 'name'  => 'checkbox',
                 'type'  => 'checkbox',
                 'device_settings' => true,
-                'label'       => __( 'Checkbox', '_beacon' ),
-                'section'     => '_beacon_section',
-                'description' => __( 'This is description',  '_beacon' ),
+                'label'       => __( 'Checkbox', 'customify' ),
+                'section'     => 'customify_section',
+                'description' => __( 'This is description',  'customify' ),
                 'setting_type' => 'checkbox',
-                'checkbox_label' => __( 'This is checkbox label',  '_beacon' ),
+                'checkbox_label' => __( 'This is checkbox label',  'customify' ),
             ),
 
             array(
@@ -445,14 +445,14 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'radio',
                 'device_settings' => true,
                 'default' => '',
-                'section'     => '_beacon_section',
+                'section'     => 'customify_section',
                 //'priority' => 22,
-                'title'          => __( 'Radio', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Radio', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
                 'choices' => array(
-                    '1' => __( 'One', '_beacon' ),
-                    '2' => __( 'Two', '_beacon' ),
-                    '3' => __( 'Three', '_beacon' ),
+                    '1' => __( 'One', 'customify' ),
+                    '2' => __( 'Two', 'customify' ),
+                    '3' => __( 'Three', 'customify' ),
                 )
             ),
 
@@ -463,10 +463,10 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'type' => 'color',
                 'default'           => '#f5f5f5',
                 'transport'			=> 'postMessage', // or refresh
-                'section'           => '_beacon_section',
+                'section'           => 'customify_section',
                 'theme_supports' => '',
-                'title'          => __( 'Color', '_beacon' ),
-                'description'   => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Color', 'customify' ),
+                'description'   => __( 'This is description',  'customify' ),
                 'selector' => 'h4',
                 'css_format' => 'color: {{value}}'
             ),
@@ -477,11 +477,11 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                 'device_settings' => true,
                 'default'           => null,
                 'transport'			=> 'postMessage', // or refresh
-                'section' => '_beacon_section',
+                'section' => 'customify_section',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Multiple Dependence Text Field', '_beacon' ),
-                'description'   => __( 'Show only select=3 and radio=2',  '_beacon' ),
+                'title'          => __( 'Multiple Dependence Text Field', 'customify' ),
+                'description'   => __( 'Show only select=3 and radio=2',  'customify' ),
                 'required'      => array(
                     array( 'select','==','3' ),
                     array( 'radio','==','2' )
@@ -491,45 +491,45 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'repeater',
                 'type' => 'repeater',
-                'section'     => '_beacon_section',
+                'section'     => 'customify_section',
                 //'priority' => 22,
-                'title'          => __( 'Repeater', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Repeater', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'limit' => 4,
-                'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  '_beacon' ),
+                'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  'customify' ),
                 'default' => array(
                     array(
-                        'title' => __( 'Title 1', '_beacon' ),
-                        'content' => __( 'Content 1', '_beacon' ),
+                        'title' => __( 'Title 1', 'customify' ),
+                        'content' => __( 'Content 1', 'customify' ),
                     ),
                     array(
-                        'title' => __( 'Title 2', '_beacon' ),
-                        'content' => __( 'Content 2', '_beacon' ),
+                        'title' => __( 'Title 2', 'customify' ),
+                        'content' => __( 'Content 2', 'customify' ),
                     )
                 ),
                 'fields' => array(
                     array(
                         'name' => 'title',
                         'type' => 'text',
-                        'label' => __( 'Title', '_beacon' ),
+                        'label' => __( 'Title', 'customify' ),
                     ),
                     array(
                         'name' => 'slider',
                         'type' => 'slider',
                         'device_settings' => true,
-                        'label' => __( 'Slider', '_beacon' ),
+                        'label' => __( 'Slider', 'customify' ),
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', '_beacon' ),
+                        'label' => __( 'Image', 'customify' ),
                     ),
                     array(
                         'name' => 'select',
                         'type' => 'select',
-                        'label' => __( 'Select', '_beacon' ),
-                        'description' => __( 'Select 2 to show text area', '_beacon' ),
+                        'label' => __( 'Select', 'customify' ),
+                        'description' => __( 'Select 2 to show text area', 'customify' ),
                         'choices' => array(
                             1 => 1,
                             2 => 2,
@@ -539,7 +539,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'content',
                         'type' => 'textarea',
-                        'label' => __( 'Textarea', '_beacon' ),
+                        'label' => __( 'Textarea', 'customify' ),
                         'required' =>  array( 'select','==','2' )
                     ),
                 )
@@ -548,32 +548,32 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
             array(
                 'name' => 'group',
                 'type' => 'group',
-                'section'     => '_beacon_section',
+                'section'     => 'customify_section',
                 //'priority' => 22,
-                'title'          => __( 'Group', '_beacon' ),
-                'description'    => __( 'This is description',  '_beacon' ),
+                'title'          => __( 'Group', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'default' => array(
-                    'title' => __( 'Title 1', '_beacon' ),
-                    'content' => __( 'Content 1', '_beacon' ),
+                    'title' => __( 'Title 1', 'customify' ),
+                    'content' => __( 'Content 1', 'customify' ),
                 ),
                 'fields' => array(
                     array(
                         'name' => 'title',
                         'type' => 'text',
                         'device_settings' => true,
-                        'label' => __( 'Title', '_beacon' ),
+                        'label' => __( 'Title', 'customify' ),
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', '_beacon' ),
+                        'label' => __( 'Image', 'customify' ),
                     ),
                     array(
                         'name' => 'select',
                         'type' => 'select',
-                        'label' => __( 'Select', '_beacon' ),
-                        'description' => __( 'Select 2 to show text area', '_beacon' ),
+                        'label' => __( 'Select', 'customify' ),
+                        'description' => __( 'Select 2 to show text area', 'customify' ),
                         'choices' => array(
                             1 => 1,
                             2 => 2,
@@ -583,7 +583,7 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
                     array(
                         'name' => 'content',
                         'type' => 'textarea',
-                        'label' => __( 'Textarea', '_beacon' ),
+                        'label' => __( 'Textarea', 'customify' ),
                         'required' =>  array( 'select','==','2' )
                     ),
 
@@ -600,4 +600,4 @@ if ( ! function_exists( '_beacon_customizer_config' ) ) {
     }
 }
 
-add_filter( '_beacon/customizer/config', '_beacon_customizer_config' );
+add_filter( 'customify/customizer/config', 'customify_customizer_config' );

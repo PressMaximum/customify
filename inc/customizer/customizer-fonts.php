@@ -1,20 +1,20 @@
 <?php
 
-class _Beacon_Fonts
+class Customify_Fonts
 {
     function __construct()
     {
-        add_action( 'wp_ajax__beacon/customizer/ajax/fonts', array( $this, 'ajax_fonts' ) );
+        add_action( 'wp_ajax_customify/customizer/ajax/fonts', array( $this, 'ajax_fonts' ) );
     }
 
     function ajax_fonts(){
         $fonts = array(
             'normal' => array(
-                'title' => __( 'Default Web Fonts', '_beacon' ),
+                'title' => __( 'Default Web Fonts', 'customify' ),
                 'fonts' => $this->get_normal_fonts(),
             ),
             'google' => array(
-                'title' => __( 'Google Web Fonts', '_beacon' ),
+                'title' => __( 'Google Web Fonts', 'customify' ),
                 'fonts' => $this->get_google_fonts(),
             )
         );
@@ -86,4 +86,4 @@ class _Beacon_Fonts
     }
 }
 
-new _Beacon_Fonts();
+new Customify_Fonts();

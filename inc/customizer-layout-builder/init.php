@@ -1,6 +1,6 @@
 <?php
 
-class _Beacon_Customizer_Layout_Builder {
+class Customify_Customizer_Layout_Builder {
     static $_instance;
     function __construct()
     {
@@ -9,23 +9,23 @@ class _Beacon_Customizer_Layout_Builder {
             add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
             add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
         }
-        add_action( 'wp_ajax__beacon_builder_save_template', array( $this, 'ajax_save_template' ) );
+        add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
     }
 
     function ajax_save_template(){
 
         if ( ! current_user_can('edit_theme_options' ) ) {
-            wp_send_json_error( __( 'Access denied', '_beacon' ) );
+            wp_send_json_error( __( 'Access denied', 'customify' ) );
         }
 
         $id = sanitize_text_field( $_POST['id'] );
         $control = sanitize_text_field( $_POST['control'] );
         $save_name = sanitize_text_field( $_POST['name'] );
         $data = wp_unslash( $_POST['preview_data'] );
-        $fn = '_beacon_customizer_get_'.$id.'_config' ;
+        $fn = 'customify_customizer_get_'.$id.'_config' ;
 
         if ( ! function_exists( $fn ) ){
-            wp_send_json_error( __( 'No Support', '_beacon' ) );
+            wp_send_json_error( __( 'No Support', 'customify' ) );
         }
 
         $theme_name = wp_get_theme()->get('Name');
@@ -59,7 +59,7 @@ class _Beacon_Customizer_Layout_Builder {
                     $value = json_decode( urldecode_deep( $value ), true );
                 }
 
-                $s = new _Beacon_Sanitize_Input( $field, $field );
+                $s = new Customify_Sanitize_Input( $field, $field );
 
                 $value = $s->sanitize( $value, $field );
                 $new_template_data[ $name ] = $value;
@@ -69,7 +69,7 @@ class _Beacon_Customizer_Layout_Builder {
 
         if ( ! $save_name ) {
             $key_id = date_i18n( 'Y-m-d H:i:s', current_time('timestamp') );
-            $save_name = sprintf( __( 'Saved %s', '_beacon' ), $key_id );
+            $save_name = sprintf( __( 'Saved %s', 'customify' ), $key_id );
         } else {
             $key_id = $save_name;
         }
@@ -82,7 +82,7 @@ class _Beacon_Customizer_Layout_Builder {
 
         update_option( $option_name, $saved_templates );
 
-        $html = '<li class="saved_template" data-control-id="'.esc_attr( $control ).'" data-id="'.esc_attr( $key_id ).'" data-data="'.esc_attr( json_encode( $new_template_data ) ).'">'.esc_html( $save_name ).' <a href="#" class="load-tpl">'.__( 'Load', '_beacon' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', '_beacon' ).'</a></li>';
+        $html = '<li class="saved_template" data-control-id="'.esc_attr( $control ).'" data-id="'.esc_attr( $key_id ).'" data-data="'.esc_attr( json_encode( $new_template_data ) ).'">'.esc_html( $save_name ).' <a href="#" class="load-tpl">'.__( 'Load', 'customify' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', 'customify' ).'</a></li>';
 
         wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name, 'li' => $html ) );
 
@@ -117,8 +117,8 @@ class _Beacon_Customizer_Layout_Builder {
 
     function scripts(){
 
-        wp_enqueue_script( '_beacon-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
-        wp_localize_script( '_beacon-layout-builder',  '_Beacon_Layout_Builder',  array(
+        wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
+        wp_localize_script( 'customify-layout-builder',  'Customify_Layout_Builder',  array(
 
             'header' => array(
                 'id'         => 'header',
@@ -127,8 +127,8 @@ class _Beacon_Customizer_Layout_Builder {
                 'section'    => 'header_builder_panel',
                 'items'      => $this->get_header_items(),
                 'devices' => array(
-                    'desktop'   => __( 'Desktop', '_beacon' ),
-                    'mobile'    => __( 'Mobile/Tablet', '_beacon' ),
+                    'desktop'   => __( 'Desktop', 'customify' ),
+                    'mobile'    => __( 'Mobile/Tablet', 'customify' ),
                 ),
             )
 
@@ -145,28 +145,28 @@ class _Beacon_Customizer_Layout_Builder {
     function get_header_items(){
         $items = array(
             array(
-                'name' => __( 'Logo', '_beacon' ),
+                'name' => __( 'Logo', 'customify' ),
                 'id' => 'logo',
                 'width' => '3',
                 'section' => 'header_logo' // Customizer section to focus when click settings
             ),
 
             array(
-                'name' => __( 'Nav Icon', '_beacon' ),
+                'name' => __( 'Nav Icon', 'customify' ),
                 'id' => 'nav-icon',
                 'width' => '3',
                 'section' => 'header_nav_icon' // Customizer section to focus when click settings
             ),
 
             array(
-                'name' => __( 'Primary Menu', '_beacon' ),
+                'name' => __( 'Primary Menu', 'customify' ),
                 'id' => 'primary-menu',
                 'width' => '6',
                 'section' => 'header_menu_primary' // Customizer section to focus when click settings
             ),
 
             array(
-                'name' => __( 'Search', '_beacon' ),
+                'name' => __( 'Search', 'customify' ),
                 'id' => 'search',
                 'col' => 0,
                 'width' => '3',
@@ -174,7 +174,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'Social Icons', '_beacon' ),
+                'name' => __( 'Social Icons', 'customify' ),
                 'id' => 'social-icons',
                 'col' => 0,
                 'width' => '4',
@@ -182,7 +182,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'Button', '_beacon' ),
+                'name' => __( 'Button', 'customify' ),
                 'id' => 'button',
                 'col' => 0,
                 'width' => '4',
@@ -190,7 +190,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'Icon List', '_beacon' ),
+                'name' => __( 'Icon List', 'customify' ),
                 'id' => 'icon-list',
                 'col' => 0,
                 'width' => '4',
@@ -198,7 +198,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'HTML', '_beacon' ),
+                'name' => __( 'HTML', 'customify' ),
                 'id' => 'html',
                 'col' => 0,
                 'width' => '4',
@@ -206,7 +206,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'User', '_beacon' ),
+                'name' => __( 'User', 'customify' ),
                 'id' => 'user',
                 'col' => 0,
                 'width' => '4',
@@ -214,7 +214,7 @@ class _Beacon_Customizer_Layout_Builder {
             ),
 
             array(
-                'name' => __( 'Languages', '_beacon' ),
+                'name' => __( 'Languages', 'customify' ),
                 'id' => 'languages',
                 'col' => 0,
                 'width' => '4',
@@ -224,7 +224,7 @@ class _Beacon_Customizer_Layout_Builder {
         );
 
 
-        $items = apply_filters( '_beacon/builder/header/items', $items );
+        $items = apply_filters( 'customify/builder/header/items', $items );
         $new_items = array();
         foreach (  $items as $k => $i ) {
             $new_items[ $i['id'] ] = $i;
@@ -235,51 +235,51 @@ class _Beacon_Customizer_Layout_Builder {
 
     function template(){
         ?>
-        <script type="text/html" id="tmpl-_beacon--builder-panel">
-            <div class="_beacon--customize-builder">
-                <div class="_beacon--cb-inner">
-                    <div class="_beacon--cb-header">
-                        <div class="_beacon--cb-devices-switcher">
+        <script type="text/html" id="tmpl-customify--builder-panel">
+            <div class="customify--customize-builder">
+                <div class="customify--cb-inner">
+                    <div class="customify--cb-header">
+                        <div class="customify--cb-devices-switcher">
                         </div>
-                        <div class="_beacon--cb-actions">
-                            <a data-id="{{ data.id }}_templates" class="focus-section" href="#"><?php _e( 'Templates', '_beacon' ); ?></a>
-                            <a class="_beacon--panel-close" href="#"><?php _e( 'Close', '_beacon' ); ?></a>
+                        <div class="customify--cb-actions">
+                            <a data-id="{{ data.id }}_templates" class="focus-section" href="#"><?php _e( 'Templates', 'customify' ); ?></a>
+                            <a class="customify--panel-close" href="#"><?php _e( 'Close', 'customify' ); ?></a>
                         </div>
                     </div>
-                    <div class="_beacon--cb-body"></div>
+                    <div class="customify--cb-body"></div>
                 </div>
             </div>
         </script>
 
 
-        <script type="text/html" id="tmpl-_beacon--cb-panel">
-            <div class="_beacon--cp-rows">
-                <div class="_beacon--row-top _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="top" href="#"></a>
-                    <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="top"></div>
+        <script type="text/html" id="tmpl-customify--cb-panel">
+            <div class="customify--cp-rows">
+                <div class="customify--row-top customify--cb-row">
+                    <a class="customify--cb-row-settings" data-id="top" href="#"></a>
+                    <div class="customify--row-inner">
+                        <div class="customify--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
-                <div class="_beacon--row-main _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="main" href="#"></a>
-                    <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="main"></div>
+                <div class="customify--row-main customify--cb-row">
+                    <a class="customify--cb-row-settings" data-id="main" href="#"></a>
+                    <div class="customify--row-inner">
+                        <div class="customify--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
-                <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="bottom" href="#"></a>
-                    <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items grid-stack gridster" data-id="bottom"></div>
+                <div class="customify--row-bottom customify--cb-row">
+                    <a class="customify--cb-row-settings" data-id="bottom" href="#"></a>
+                    <div class="customify--row-inner">
+                        <div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
                     </div>
                 </div>
             </div>
 
             <# if ( data.device != 'desktop' ) { #>
-            <div class="_beacon--cp-sidebar">
-                <div class="_beacon--row-bottom _beacon--cb-row">
-                    <a class="_beacon--cb-row-settings" data-id="sidebar" href="#"></a>
-                    <div class="_beacon--row-inner">
-                        <div class="_beacon--cb-items _beacon--sidebar-items grid-stack----" data-id="sidebar"></div>
+            <div class="customify--cp-sidebar">
+                <div class="customify--row-bottom customify--cb-row">
+                    <a class="customify--cb-row-settings" data-id="sidebar" href="#"></a>
+                    <div class="customify--row-inner">
+                        <div class="customify--cb-items customify--sidebar-items grid-stack----" data-id="sidebar"></div>
                     </div>
                 </div>
             <div>
@@ -287,7 +287,7 @@ class _Beacon_Customizer_Layout_Builder {
 
         </script>
 
-        <script type="text/html" id="tmpl-_beacon--cb-item">
+        <script type="text/html" id="tmpl-customify--cb-item">
             <div class="grid-stack-item item-from-list for-s-{{ data.section }}"
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
@@ -297,9 +297,9 @@ class _Beacon_Customizer_Layout_Builder {
             >
                 <div class="item-tooltip">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
-                    <span class="_beacon--cb-item-name">{{ data.name }}</span>
-                    <span class="_beacon--cb-item-remove _beacon-cb-icon"></span>
-                    <span class="_beacon--cb-item-setting _beacon-cb-icon" data-section="{{ data.section }}"></span>
+                    <span class="customify--cb-item-name">{{ data.name }}</span>
+                    <span class="customify--cb-item-remove customify-cb-icon"></span>
+                    <span class="customify--cb-item-setting customify-cb-icon" data-section="{{ data.section }}"></span>
                 </div>
             </div>
         </script>
@@ -308,14 +308,14 @@ class _Beacon_Customizer_Layout_Builder {
 
 }
 
-new _Beacon_Customizer_Layout_Builder();
+new Customify_Customizer_Layout_Builder();
 
-function _Beacon_Customizer_Layout_Builder(){
+function Customify_Customizer_Layout_Builder(){
 
 }
 
 
-class _Beacon_Customizer_Layout_Builder_Frontend {
+class Customify_Customizer_Layout_Builder_Frontend {
      private $control_id = 'header_builder_panel';
      private $id = 'header';
      private $render_items = array();
@@ -394,14 +394,14 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                         if ( ! $items[ $item['id'] ] ['render_content'] ) {
                             ob_start();
                             $id = str_replace('-', '_', $item['id']);
-                            $fn = '_beacon_builder_' . $id . '_item';
+                            $fn = 'customify_builder_' . $id . '_item';
                             $has_cb = false;
                             $return_render = false;
                             if (function_exists($fn)) {
                                 $return_render = call_user_func_array($fn, array($item));
                                 $has_cb = true;
                             } else {
-                                $fn = '_beacon_builder_' . $this->id . '_' . $id . '_item';
+                                $fn = 'customify_builder_' . $this->id . '_' . $id . '_item';
                                 if (function_exists($fn)) {
                                     $return_render = call_user_func_array($fn, array($item));
                                     $has_cb = true;
@@ -411,7 +411,7 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                             if ( ! $has_cb ) {
                                 //echo $id;
 
-                               printf( __( 'Callback function <strong>%s</strong> do not exists.', '_beacon' ), $fn );
+                               printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
                             }
 
                             $ob_render = ob_get_clean();
@@ -521,11 +521,11 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
              }
 
              $columns = $columns + intval($item['width']);
-             $classes[] = '_beacon-col-' . intval($item['width']);
+             $classes[] = 'customify-col-' . intval($item['width']);
 
              if ($widget_count === $count) {
                  if ($max_columns === $columns) {
-                     $classes[] = '_beacon-col-last';
+                     $classes[] = 'customify-col-last';
                  } else {
                      $p = $max_columns - $columns;
                      // $classes[] = 'sp-header-post-' . ( $max_columns - $columns );
@@ -554,18 +554,18 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
                  $class = sprintf( '%1$s-%2$s', $this->id, $row_id );
                  ?>
                  <div class="<?php echo esc_attr( $class ); ?>" data-row-id="<?php echo esc_attr( $row_id ); ?>" data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
-                     <div class="_beacon-container">
+                     <div class="customify-container">
                          <?php
                         $desktop_items = $this->get_row_settings( $row_id, 'desktop' );
                         if ( $desktop_items ) {
-                            echo '<div class="hide-on-mobile hide-on-tablet _beacon-grid">';
+                            echo '<div class="hide-on-mobile hide-on-tablet customify-grid">';
                                 $this->render_row( $desktop_items, $row_id, 'desktop' );
                             echo '</div>';
                         }
 
                         $mobile_items = $this->get_row_settings( $row_id, 'mobile' );
                         if ( $mobile_items ) {
-                            echo '<div class="hide-on-desktop _beacon-grid">';
+                            echo '<div class="hide-on-desktop customify-grid">';
                             $this->render_row( $mobile_items, $row_id, 'mobile' );
                             echo '</div>';
                         }
@@ -584,8 +584,8 @@ class _Beacon_Customizer_Layout_Builder_Frontend {
 
 
 
-function _beacon_customize_render_header(){
-    $b = new _Beacon_Customizer_Layout_Builder_Frontend();
+function customify_customize_render_header(){
+    $b = new Customify_Customizer_Layout_Builder_Frontend();
     if ( is_customize_preview() ) {
         ?>
         <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button aria-label="Click to edit this element." title="Click to edit this element." class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
@@ -608,7 +608,7 @@ function _beacon_customize_render_header(){
 function __backup(){
     ?>
     <div class="header-main">
-        <div class="_beacon-container">
+        <div class="customify-container">
             <div class="site-branding">
                 <?php
                 the_custom_logo();
@@ -634,13 +634,13 @@ function __backup(){
                 //                            ) );
                 ?>
             </nav><!-- #site-navigation -->
-        </div> <!-- #._beacon-container -->
+        </div> <!-- #.customify-container -->
     </div><!-- #.header-main -->
 
     <div class="header-bottom">
-        <div class="_beacon-container">
+        <div class="customify-container">
             header bottom
-        </div> <!-- #._beacon-container -->
+        </div> <!-- #.customify-container -->
     </div><!-- #.header-bottom -->
     <?php
 }

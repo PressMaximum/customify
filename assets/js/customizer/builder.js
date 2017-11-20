@@ -51,12 +51,12 @@
             drag_drop: function(){
                 var that = this;
 
-                $( '._beacon--device-panel', that.container ).each( function(){
+                $( '.customify--device-panel', that.container ).each( function(){
                     var panel = $( this );
                     var device = panel.data( 'device' );
                     var sortable_ids= [];
                     that.panels[ device ] = {};
-                    $( '._beacon--cb-items', panel ).each( function( index ){
+                    $( '.customify--cb-items', panel ).each( function( index ){
                         var data_name = $( this ).attr( 'data-id' ) || '';
                         var id;
                         if ( ! data_name ) {
@@ -100,7 +100,7 @@
                     var sidebar = $( '#_sid_mobile-sidebar', panel );
                     var sidebar_id = sidebar.attr( 'id' ) || false;
 
-                    $( '._beacon-available-items .grid-stack-item', panel ).draggable({
+                    $( '.customify-available-items .grid-stack-item', panel ).draggable({
                         revert: 'invalid',
                         connectToSortable: ( sidebar_id ) ? '#'+sidebar_id : false
                     });
@@ -120,7 +120,7 @@
                     }
 
 
-                    $( '._beacon-available-items .grid-stack-item', panel ).resizable({
+                    $( '.customify-available-items .grid-stack-item', panel ).resizable({
                         handles: 'w, e',
                         stop: function( event, ui ){
                             that.setGridWidth( ui.element.parent(), ui );
@@ -700,10 +700,10 @@
             addNewWidget: function ( $item, row ) {
 
                 var that = this;
-                var panel = that.container.find('._beacon--device-panel._beacon--panel-'+that.activePanel );
+                var panel = that.container.find('.customify--device-panel.customify--panel-'+that.activePanel );
                 var el = row;
                 if ( ! _.isObject( el ) ) {
-                    el =  panel.find( '._beacon--cb-items' ).first();
+                    el =  panel.find( '.customify--cb-items' ).first();
                 }
 
                 var elItem = $item;
@@ -742,20 +742,20 @@
             addPanel: function( device ){
                 var that = this;
                 var template = that.getTemplate();
-                var template_id =  'tmpl-_beacon--cb-panel';
+                var template_id =  'tmpl-customify--cb-panel';
                 if (  $( '#'+template_id ).length == 0 ) {
                     return ;
                 }
                 var html = template( { device: device, id: options.id }, template_id );
-                return '<div class="_beacon--device-panel _beacon-vertical-panel _beacon--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
+                return '<div class="customify--device-panel customify-vertical-panel customify--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
             },
 
             addDevicePanels: function(){
                 var that = this;
                 _.each( that.devices, function( device_name, device ) {
                     var panelHTML = that.addPanel( device );
-                    $( '._beacon--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
-                    $( '._beacon--cb-body', that.container ).append( panelHTML );
+                    $( '.customify--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
+                    $( '.customify--cb-body', that.container ).append( panelHTML );
                 } );
 
             },
@@ -763,7 +763,7 @@
             addItem: function( node ){
                 var that = this;
                 var template = that.getTemplate();
-                var template_id =  'tmpl-_beacon--cb-item';
+                var template_id =  'tmpl-customify--cb-item';
                 if (  $( '#'+template_id ).length == 0 ) {
                     return ;
                 }
@@ -775,8 +775,8 @@
                 var that = this;
 
                 _.each( that.devices, function(device_name, device ){
-                    var $itemWrapper = $( '<div class="_beacon-available-items" data-device="'+device+'"></div>' );
-                    $( '._beacon--panel-'+device, that.container ).append( $itemWrapper );
+                    var $itemWrapper = $( '<div class="customify-available-items" data-device="'+device+'"></div>' );
+                    $( '.customify--panel-'+device, that.container ).append( $itemWrapper );
                     _.each( that.items, function( node ) {
                         var item = that.addItem( node );
                         $itemWrapper.append( item );
@@ -787,10 +787,10 @@
 
             switchToDevice: function( device ){
                 var that = this;
-                $( '._beacon--cb-devices-switcher a', that.container).removeClass('_beacon--tab-active');
-                $( '._beacon--cb-devices-switcher .switch-to-'+device, that.container ).addClass( '_beacon--tab-active' );
-                $( '._beacon--device-panel', that.container  ).addClass( '_beacon--panel-hide' );
-                $( '._beacon--device-panel._beacon--panel-'+device, that.container  ).removeClass( '_beacon--panel-hide' );
+                $( '.customify--cb-devices-switcher a', that.container).removeClass('customify--tab-active');
+                $( '.customify--cb-devices-switcher .switch-to-'+device, that.container ).addClass( 'customify--tab-active' );
+                $( '.customify--device-panel', that.container  ).addClass( 'customify--panel-hide' );
+                $( '.customify--device-panel.customify--panel-'+device, that.container  ).removeClass( 'customify--panel-hide' );
                 that.activePanel = device;
 
                 if ( device == 'desktop' ) {
@@ -816,7 +816,7 @@
                     _.each( device_data, function( items, row_id ) {
                         if( ! _.isUndefined( items ) ) {
                             _.each( items, function (node, index) {
-                                var item = $('._beacon-available-items[data-device="' + device + '"] .grid-stack-item[data-id="' + node.id + '"]').first();
+                                var item = $('.customify-available-items[data-device="' + device + '"] .grid-stack-item[data-id="' + node.id + '"]').first();
                                 item.attr('data-gs-width', node.width);
                                 item.attr('data-gs-x', node.x);
                                 item.removeClass( 'item-from-list' );
@@ -830,7 +830,7 @@
             },
 
             focus: function(){
-                this.container.on( 'click', '._beacon--cb-item-setting', function( e ) {
+                this.container.on( 'click', '.customify--cb-item-setting', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
                     var control = $( this ).data( 'control' ) || '';
@@ -850,7 +850,7 @@
                 } );
 
                 // Focus rows
-                this.container.on( 'click', '._beacon--cb-row-settings', function( e ){
+                this.container.on( 'click', '.customify--cb-row-settings', function( e ){
                     e.preventDefault();
                     var id = $( this ).attr( 'data-id' ) || '';
 
@@ -868,15 +868,15 @@
              */
             remove: function(){
                 var that = this;
-                $document.on( 'click', '._beacon--device-panel ._beacon--cb-item-remove', function ( e ) {
+                $document.on( 'click', '.customify--device-panel .customify--cb-item-remove', function ( e ) {
                     e.preventDefault();
 
                     var item = $( this ).closest('.grid-stack-item');
-                    var panel = item.closest( '._beacon--device-panel' );
+                    var panel = item.closest( '.customify--device-panel' );
                     item.attr( 'data-gs-width', 1 );
                     item.attr( 'data-gs-x', 0 );
                     item.removeAttr( 'style' );
-                    $( '._beacon-available-items', panel ).append( item );
+                    $( '.customify-available-items', panel ).append( item );
                     that.updateAllGrids();
                     that.save();
                 } );
@@ -925,14 +925,14 @@
                     //console.log( 'expandedPanel state', paneVisible );
                // });
                 //this.container.show();
-                this.container.addClass( '_beacon--builder-hide' );
+                this.container.addClass( 'customify--builder-hide' );
             },
             hidePanel: function(){
                 //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
                 //console.log( 'expandedPanel state', paneVisible );
                 // });
                 //this.container.hide();
-                this.container.removeClass( '_beacon--builder-hide' );
+                this.container.removeClass( 'customify--builder-hide' );
             },
 
             togglePanel: function(){
@@ -952,7 +952,7 @@
                 if ( ! wpcustomize.state( 'paneVisible' ).get() ) {
                     sidebarWidth = 0;
                 }
-                this.container.find( '._beacon--cb-inner' ).css( {'margin-left': sidebarWidth } );
+                this.container.find( '.customify--cb-inner' ).css( {'margin-left': sidebarWidth } );
             },
 
             init: function( controlId, items, devices ){
@@ -960,7 +960,7 @@
 
 
                 var template = that.getTemplate();
-                var template_id =  'tmpl-_beacon--builder-panel';
+                var template_id =  'tmpl-customify--builder-panel';
                 var html = template( { id: options.id }, template_id );
                 that.container = $( html );
                 $( 'body .wp-full-overlay' ).append( that.container );
@@ -969,7 +969,7 @@
                 that.devices = devices;
 
                 if ( options.section ) {
-                    wpcustomize.section( options.section ).container.addClass( '_beacon--hide' );
+                    wpcustomize.section( options.section ).container.addClass( 'customify--hide' );
                 }
 
                 that.addDevicePanels();
@@ -1010,7 +1010,7 @@
                 }, 100 )  );
 
                 // Switch panel
-                that.container.on( 'click', '._beacon--cb-devices-switcher a', function(e){
+                that.container.on( 'click', '.customify--cb-devices-switcher a', function(e){
                     e.preventDefault();
                     var device = $( this ).data('device');
                     that.switchToDevice( device );
@@ -1075,7 +1075,7 @@
 
     wpcustomize.bind( 'ready', function( e, b ) {
 
-        var Header = new CustomizeBuilder( _Beacon_Layout_Builder.header );
+        var Header = new CustomizeBuilder( Customify_Layout_Builder.header );
 
 
         wpcustomize.bind( '_section_focus', function( e, b ) {
@@ -1084,9 +1084,9 @@
 
         // When focus section
         wpcustomize.state( 'expandedSection' ).bind( function( section ) {
-            $( '._beacon--device-panel .grid-stack-item' ).removeClass( 'item-active' );
+            $( '.customify--device-panel .grid-stack-item' ).removeClass( 'item-active' );
             if ( section ) {
-                $( '._beacon--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
+                $( '.customify--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
             }
         });
 
@@ -1165,7 +1165,7 @@
         if ( template_name && template_name !== '' ) {
             // Need Improve
             $.post(ajaxurl, {
-                action: '_beacon_builder_save_template',
+                action: 'customify_builder_save_template',
                 name: input.val(),
                 id: input.attr('data-builder-id') || '',
                 control: input.attr('data-control-id') || '',
@@ -1195,7 +1195,7 @@
         var input = $( '.template-input-name', form );
         var key = item.data( 'id' ) || '';
         $.post(ajaxurl, {
-            action: '_beacon_builder_save_template',
+            action: 'customify_builder_save_template',
             id: input.attr('data-builder-id') || '',
             remove: key
         }, function (res) {
@@ -1280,16 +1280,16 @@
 
     });
 
-    $document.on( 'mouseover', '._beacon--cb-row .grid-stack-item', function( e ) {
+    $document.on( 'mouseover', '.customify--cb-row .grid-stack-item', function( e ) {
         var item = $( this );
-        var nameW = $( '._beacon--cb-item-name',item ).innerWidth();
+        var nameW = $( '.customify--cb-item-name',item ).innerWidth();
         var itemW = $( '.grid-stack-item-content', item ).innerWidth();
         if ( nameW > itemW - 50 ) {
             item.addClass('show-tooltip');
         }
     });
 
-    $document.on( 'mouseleave', '._beacon--cb-row .grid-stack-item', function( e ) {
+    $document.on( 'mouseleave', '.customify--cb-row .grid-stack-item', function( e ) {
         $( this ).removeClass('show-tooltip');
     });
 

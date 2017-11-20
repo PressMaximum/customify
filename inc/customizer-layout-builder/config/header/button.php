@@ -1,5 +1,5 @@
 <?php
-function _beacon_builder_config_header_button(){
+function customify_builder_config_header_button(){
     $section = 'header_button';
     $prefix = 'header_button_';
     $config  = array(
@@ -7,7 +7,7 @@ function _beacon_builder_config_header_button(){
             'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
-            'title' => __( 'Button', '_beacon' ),
+            'title' => __( 'Button', 'customify' ),
         ),
 
         array(
@@ -15,7 +15,7 @@ function _beacon_builder_config_header_button(){
             'type' => 'text',
             'section' => $section,
             'theme_supports' => '',
-            'title'  => __( 'Label', '_beacon' ),
+            'title'  => __( 'Label', 'customify' ),
         ),
 
         array(
@@ -23,24 +23,24 @@ function _beacon_builder_config_header_button(){
             'type' => 'text',
             'section' => $section,
             'theme_supports' => '',
-            'title'  => __( 'Icon', '_beacon' ),
+            'title'  => __( 'Icon', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'link',
             'type' => 'text',
             'section' => $section,
-            'title'  => __( 'Link', '_beacon' ),
+            'title'  => __( 'Link', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'target',
             'type' => 'select',
             'section' => $section,
-            'title'  => __( 'Target', '_beacon' ),
+            'title'  => __( 'Target', 'customify' ),
             'choices' =>  array(
-                'default' => __( 'Current Window', '_beacon' ),
-                '_blank' => __( 'New Window', '_beacon' ),
+                'default' => __( 'Current Window', 'customify' ),
+                '_blank' => __( 'New Window', 'customify' ),
             )
         ),
 
@@ -48,10 +48,10 @@ function _beacon_builder_config_header_button(){
             'name' => $prefix.'style',
             'type' => 'select',
             'section' => $section,
-            'title'  => __( 'Style', '_beacon' ),
+            'title'  => __( 'Style', 'customify' ),
             'choices' =>  array(
-                '1' => __( 'Default', '_beacon' ),
-                '2' => __( 'Style 2', '_beacon' ),
+                '1' => __( 'Default', 'customify' ),
+                '2' => __( 'Style 2', 'customify' ),
             )
         ),
 
@@ -59,35 +59,35 @@ function _beacon_builder_config_header_button(){
             'name' => $prefix.'color',
             'type' => 'color',
             'section' => $section,
-            'title'  => __( 'Color', '_beacon' ),
+            'title'  => __( 'Color', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'color_hover',
             'type' => 'color',
             'section' => $section,
-            'title'  => __( 'Color Hover', '_beacon' ),
+            'title'  => __( 'Color Hover', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'bg_color',
             'type' => 'color',
             'section' => $section,
-            'title'  => __( 'Background Color', '_beacon' ),
+            'title'  => __( 'Background Color', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'bg_color_hover',
             'type' => 'color',
             'section' => $section,
-            'title'  => __( 'Background Color Hover', '_beacon' ),
+            'title'  => __( 'Background Color Hover', 'customify' ),
         ),
 
         array(
             'name' => $prefix.'padding',
             'type' => 'css_ruler',
             'section' => $section,
-            'title'  => __( 'Padding', '_beacon' ),
+            'title'  => __( 'Padding', 'customify' ),
         ),
 
     );
@@ -95,6 +95,6 @@ function _beacon_builder_config_header_button(){
 }
 
 
-function _beacon_builder_header_button_item(){
+function customify_builder_header_button_item(){
     echo "Button Here";
 }

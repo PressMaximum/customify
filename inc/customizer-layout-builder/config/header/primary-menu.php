@@ -1,5 +1,5 @@
 <?php
-function _beacon_builder_config_header_primary_menu() {
+function customify_builder_config_header_primary_menu() {
     $section = 'header_menu_primary';
     return array(
         array(
@@ -7,18 +7,18 @@ function _beacon_builder_config_header_primary_menu() {
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title' => __( 'Primary Menu', '_beacon' ),
-            'description' => __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for Primary menu', '_beacon' )
+            'title' => __( 'Primary Menu', 'customify' ),
+            'description' => __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for Primary menu', 'customify' )
         ),
 
         array(
             'name' => 'primary_menu_style',
             'type' => 'select',
             'section' => $section,
-            'title'          => __( 'Style', '_beacon' ),
+            'title'          => __( 'Style', 'customify' ),
             'choices' => array(
-                'default' => __( 'Default', '_beacon' ),
-                'style_2' => __( 'Style 2', '_beacon' ),
+                'default' => __( 'Default', 'customify' ),
+                'style_2' => __( 'Style 2', 'customify' ),
             )
         ),
 
@@ -26,7 +26,7 @@ function _beacon_builder_config_header_primary_menu() {
             'name' => 'primary_menu_item_padding',
             'type' => 'css_ruler',
             'section' => $section,
-            'title' => __( 'Item Padding', '_beacon' ),
+            'title' => __( 'Item Padding', 'customify' ),
             'selector' => '.primary-menu li a',
             'css_format' => array(
                 'unit' => '',
@@ -48,14 +48,14 @@ function _beacon_builder_config_header_primary_menu() {
                 'bottom' => 'margin-bottom: {{value}};',
                 'left' => 'margin-left: {{value}};',
             ),
-            'title'  => __( 'Item Margin', '_beacon' ),
+            'title'  => __( 'Item Margin', 'customify' ),
         ),
 
         array(
             'name' => 'primary_menu_item_color',
             'type' => 'color',
             'section' => $section,
-            'title'  => __( 'Item Color', '_beacon' ),
+            'title'  => __( 'Item Color', 'customify' ),
             'selector'  => '.primary-menu li a',
             'css_format'  => 'color: {{value}};',
         ),
@@ -64,7 +64,7 @@ function _beacon_builder_config_header_primary_menu() {
             'name' => 'primary_menu_item_color_hover',
             'type' => 'color',
             'section' => $section,
-            'title' => __( 'Item Color Hover', '_beacon' ),
+            'title' => __( 'Item Color Hover', 'customify' ),
             'selector'  => '.primary-menu li a:hover',
             'css_format'  => 'color: {{value}};',
         ),
@@ -73,9 +73,9 @@ function _beacon_builder_config_header_primary_menu() {
             'name' => 'primary_menu_typography',
             'type' => 'group',
             'section'     => $section,
-            'title'          => __( 'Typography', '_beacon' ),
-            'description'    => __( 'This is description',  '_beacon' ),
-            'field_class' => '_beacon-typography-control',
+            'title'          => __( 'Typography', 'customify' ),
+            'description'    => __( 'This is description',  'customify' ),
+            'field_class' => 'customify-typography-control',
             'selector' => '.primary-menu',
             'css_format' => 'typography',
             'default' => array(
@@ -86,33 +86,33 @@ function _beacon_builder_config_header_primary_menu() {
                 array(
                     'name' => 'font',
                     'type' => 'font',
-                    'label' => __( 'Font', '_beacon' ),
+                    'label' => __( 'Font', 'customify' ),
                 ),
 
                 array(
                     'name' => 'font_style',
                     'type' => 'font_style',
-                    'label' => __( 'Font Style', '_beacon' ),
+                    'label' => __( 'Font Style', 'customify' ),
                 ),
 
                 array(
                     'name' => 'font_size',
                     'type' => 'slider',
-                    'label' => __( 'Font Size', '_beacon' ),
+                    'label' => __( 'Font Size', 'customify' ),
                     'device_settings' => true,
                 ),
 
                 array(
                     'name' => 'line_height',
                     'type' => 'slider',
-                    'label' => __( 'Line Height', '_beacon' ),
+                    'label' => __( 'Line Height', 'customify' ),
                     'device_settings' => true,
                 ),
 
                 array(
                     'name' => 'letter_spacing',
                     'type' => 'slider',
-                    'label' => __( 'Letter Spacing', '_beacon' ),
+                    'label' => __( 'Letter Spacing', 'customify' ),
                     'min' => -10,
                     'max' => 10,
                 ),
@@ -124,7 +124,7 @@ function _beacon_builder_config_header_primary_menu() {
 }
 
 
-function _beacon_builder_primary_menu_item(){
+function customify_builder_primary_menu_item(){
 
     wp_nav_menu( array(
         'theme_location' => 'menu-1',

@@ -1,13 +1,13 @@
 <?php
-if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
-    function _beacon_customizer_get_header_config( $configs = array() ){
+if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
+    function customify_customizer_get_header_config( $configs = array() ){
 
         $config = array(
             array(
                 'name' => 'header_settings',
                 'type' => 'panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header', '_beacon' ),
+                'title'          => __( 'Header', 'customify' ),
             ),
 
             array(
@@ -15,8 +15,8 @@ if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
                 'type' => 'section',
                 'panel' => 'header_settings',
                 'theme_supports' => '',
-                'title'          => __( 'Header Builder', '_beacon' ),
-                'description' => __( 'This is section description',  '_beacon' ),
+                'title'          => __( 'Header Builder', 'customify' ),
+                'description' => __( 'This is section description',  'customify' ),
             ),
 
             array(
@@ -24,15 +24,15 @@ if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
                 'type' => 'js_raw',
                 'section' => 'header_builder_panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header Builder', '_beacon' ),
-                'description' => __( 'Header Builder panel here....',  '_beacon' ),
+                'title'          => __( 'Header Builder', 'customify' ),
+                'description' => __( 'Header Builder panel here....',  'customify' ),
                 'selector' => '#masthead',
-                'render_callback' => '_beacon_customize_render_header'
+                'render_callback' => 'customify_customize_render_header'
             ),
 
         );
 
-        foreach ( _Beacon_Customizer_Layout_Builder::get_header_sections() as $id ) {
+        foreach ( Customify_Customizer_Layout_Builder::get_header_sections() as $id ) {
             $file = get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
             if (  is_file( $file ) ) {
                 require_once get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
@@ -40,8 +40,8 @@ if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
 
             $func_id = str_replace( '-', '_', $id );
 
-            if ( function_exists( '_beacon_builder_config_header_'.$func_id ) ) {
-                $config = array_merge( $config, call_user_func_array( '_beacon_builder_config_header_'.$func_id, array() ) );
+            if ( function_exists( 'customify_builder_config_header_'.$func_id ) ) {
+                $config = array_merge( $config, call_user_func_array( 'customify_builder_config_header_'.$func_id, array() ) );
             }
         }
 
@@ -49,15 +49,15 @@ if ( ! function_exists( '_beacon_customizer_get_header_config' ) ) {
     }
 }
 
-add_filter( '_beacon/customizer/config', '_beacon_customizer_get_header_config' );
+add_filter( 'customify/customizer/config', 'customify_customizer_get_header_config' );
 
 
-function _beacon_builder_config_header_row_config( $section = false, $section_name = false ){
+function customify_builder_config_header_row_config( $section = false, $section_name = false ){
     if ( ! $section ) {
         $section  = 'header_top';
     }
     if ( ! $section_name ) {
-        $section_name = __( 'Header Top', '_beacon' );
+        $section_name = __( 'Header Top', 'customify' );
     }
 
     $config  = array(
@@ -74,10 +74,10 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
             'type' => 'select',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'Sticky header', '_beacon' ),
+            'title'          => __( 'Sticky header', 'customify' ),
             'choices' => array(
-                'no' =>  __( 'No', '_beacon' ),
-                'yes' =>  __( 'Yes', '_beacon' ),
+                'no' =>  __( 'No', 'customify' ),
+                'yes' =>  __( 'Yes', 'customify' ),
             )
         ),
 
@@ -86,11 +86,11 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
             'type' => 'select',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'Layout', '_beacon' ),
+            'title'          => __( 'Layout', 'customify' ),
             'choices' => array(
-                'default' =>  __( 'Default', '_beacon' ),
-                'fullwidth' =>  __( 'Full Width', '_beacon' ),
-                'boxed' =>  __( 'Boxed', '_beacon' ),
+                'default' =>  __( 'Default', 'customify' ),
+                'fullwidth' =>  __( 'Full Width', 'customify' ),
+                'boxed' =>  __( 'Boxed', 'customify' ),
             )
         ),
 
@@ -99,10 +99,10 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
             'type' => 'select',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'Sticky header', '_beacon' ),
+            'title'          => __( 'Sticky header', 'customify' ),
             'choices' => array(
-                'no' =>  __( 'No', '_beacon' ),
-                'yes' =>  __( 'Yes', '_beacon' ),
+                'no' =>  __( 'No', 'customify' ),
+                'yes' =>  __( 'Yes', 'customify' ),
             )
         ),
 
@@ -112,17 +112,17 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
             'section' => $section,
             'theme_supports' => '',
             'device_settings' => true,
-            'title'          => __( 'Padding', '_beacon' ),
+            'title'          => __( 'Padding', 'customify' ),
         ),
 
         array(
             'name' => $section.'_background',
             'type' => 'group',
             'section'     => $section,
-            'title'          => __( 'Background', '_beacon' ),
-            'description'    => __( 'This is description',  '_beacon' ),
+            'title'          => __( 'Background', 'customify' ),
+            'description'    => __( 'This is description',  'customify' ),
             'live_title_field' => 'title',
-            'field_class' => '_beacon-background-control',
+            'field_class' => 'customify-background-control',
             'selector' => '#page',
             'css_format' => 'background',
             'device_settings' => true,
@@ -133,65 +133,65 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
                 array(
                     'name' => 'color',
                     'type' => 'color',
-                    'label' => __( 'Color', '_beacon' ),
+                    'label' => __( 'Color', 'customify' ),
                     'device_settings' => true,
                 ),
                 array(
                     'name' => 'image',
                     'type' => 'image',
-                    'label' => __( 'Image', '_beacon' ),
+                    'label' => __( 'Image', 'customify' ),
                 ),
                 array(
                     'name' => 'cover',
                     'type' => 'checkbox',
                     'required' => array( 'image', 'not_empty', ''),
-                    'label' => __( 'Background cover', '_beacon' ),
+                    'label' => __( 'Background cover', 'customify' ),
                 ),
                 array(
                     'name' => 'position',
                     'type' => 'select',
-                    'label' => __( 'Background Position', '_beacon' ),
+                    'label' => __( 'Background Position', 'customify' ),
                     'required' => array( 'image', 'not_empty', ''),
                     'choices' => array(
-                        'default'       => __( 'Position', '_beacon' ),
-                        'center'        => __( 'Center', '_beacon' ),
-                        'top_left'      => __( 'Top Left', '_beacon' ),
-                        'top_right'     => __( 'Top Right', '_beacon' ),
-                        'top_center'    => __( 'Top Center', '_beacon' ),
-                        'bottom_left'   => __( 'Bottom Left', '_beacon' ),
-                        'bottom_center' => __( 'Bottom Center', '_beacon' ),
-                        'bottom_right'  => __( 'Bottom Right', '_beacon' ),
+                        'default'       => __( 'Position', 'customify' ),
+                        'center'        => __( 'Center', 'customify' ),
+                        'top_left'      => __( 'Top Left', 'customify' ),
+                        'top_right'     => __( 'Top Right', 'customify' ),
+                        'top_center'    => __( 'Top Center', 'customify' ),
+                        'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                        'bottom_center' => __( 'Bottom Center', 'customify' ),
+                        'bottom_right'  => __( 'Bottom Right', 'customify' ),
                     ),
                 ),
 
                 array(
                     'name' => 'repeat',
                     'type' => 'select',
-                    'label' => __( 'Background Repeat', '_beacon' ),
+                    'label' => __( 'Background Repeat', 'customify' ),
                     'required' => array(
                         array('image', 'not_empty', ''),
                         // array('style', '!=', 'cover' ),
                     ),
                     'choices' => array(
-                        'default' => __( 'Repeat', '_beacon' ),
-                        'no-repeat' => __( 'No-repeat', '_beacon' ),
-                        'repeat-x' => __( 'Repeat Horizontal', '_beacon' ),
-                        'repeat-y' => __( 'Repeat Vertical', '_beacon' ),
+                        'default' => __( 'Repeat', 'customify' ),
+                        'no-repeat' => __( 'No-repeat', 'customify' ),
+                        'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                        'repeat-y' => __( 'Repeat Vertical', 'customify' ),
                     ),
                 ),
 
                 array(
                     'name' => 'attachment',
                     'type' => 'select',
-                    'label' => __( 'Background Attachment', '_beacon' ),
+                    'label' => __( 'Background Attachment', 'customify' ),
                     'required' => array(
                         array('image', 'not_empty', ''),
                         array('cover', '!=', '1' ),
                     ),
                     'choices' => array(
-                        'default' => __( 'Attachment', '_beacon' ),
-                        'scroll' => __( 'Scroll', '_beacon' ),
-                        'fixed' => __( 'Fixed', '_beacon' )
+                        'default' => __( 'Attachment', 'customify' ),
+                        'scroll' => __( 'Scroll', 'customify' ),
+                        'fixed' => __( 'Fixed', 'customify' )
                     ),
                 ),
 
@@ -203,6 +203,6 @@ function _beacon_builder_config_header_row_config( $section = false, $section_na
 }
 
 
-function _beacon_builder_config_header_row_render( $row_id ){
+function customify_builder_config_header_row_render( $row_id ){
 
 }

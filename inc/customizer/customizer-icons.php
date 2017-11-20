@@ -1,6 +1,6 @@
 <?php
 
-class _Beacon_Font_Icons
+class Customify_Font_Icons
 {
     static $_instance;
 
@@ -16,19 +16,19 @@ class _Beacon_Font_Icons
     {
         $icons = array(
             'font-awesome' => array(
-                'name' => __('FontAwesome', '_beacon'),
+                'name' => __('FontAwesome', 'customify'),
                 'icons' => $this->get_font_awesome_icons(),
                 'url' => get_template_directory_uri() . '/assets/fonts/font-awesome/css/font-awesome.min.css',
                 'class_config' => 'fa __icon_name__' // __icon_name__ will replace by icon class name
             ),
             'themify-icons' => array(
-                'name' => __('Themeify Icons', '_beacon'),
+                'name' => __('Themeify Icons', 'customify'),
                 'icons' => $this->get_themify_icons(),
                 'url' => get_template_directory_uri() . '/assets/fonts/themify-icons/themify-icons.css',
                 'class_config' => '__icon_name__' // __icon_name__ will replace by icon class name
             )
         );
-        return apply_filters('_beacon/customizer/font_icons', $icons);
+        return apply_filters('customify/customizer/font_icons', $icons);
     }
 
     function get_font_awesome_icons()
@@ -822,7 +822,7 @@ class _Beacon_Font_Icons
             785 => 'fa-meetup',
         );
 
-        return apply_filters('_beacon/customizer/font_icons/font_awesome_icons', $icons);
+        return apply_filters('customify/customizer/font_icons/font_awesome_icons', $icons);
     }
 
     function get_themify_icons() {
@@ -1187,7 +1187,7 @@ class _Beacon_Font_Icons
 
 }
 
-function _Beacon_Font_Icons()
+function Customify_Font_Icons()
 {
-    return _Beacon_Font_Icons::get_instance();
+    return Customify_Font_Icons::get_instance();
 }

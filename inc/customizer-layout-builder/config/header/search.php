@@ -2,13 +2,13 @@
 /**
  * Header search item config
  *
- * @see _beacon_customizer_get_header_config
+ * @see customify_customizer_get_header_config
  * @return array
  */
-function _beacon_builder_config_header_search(){
+function customify_builder_config_header_search(){
     $section = 'header_search';
     $prefix = 'header_search_';
-    $fn = '_beacon_builder_header_search_item';
+    $fn = 'customify_builder_header_search_item';
 
     $config  = array(
         array(
@@ -16,7 +16,7 @@ function _beacon_builder_config_header_search(){
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title' => __( 'Search', '_beacon' ),
+            'title' => __( 'Search', 'customify' ),
         ),
 
         array(
@@ -25,8 +25,8 @@ function _beacon_builder_config_header_search(){
             'section' => $section,
             'selector' => '.header-search-form',
             'render_callback' => $fn,
-            'default' => __( 'Search...', '_beacon' ),
-            'title' => __( 'Placeholder Text', '_beacon' ),
+            'default' => __( 'Search...', 'customify' ),
+            'title' => __( 'Placeholder Text', 'customify' ),
         ),
 
         array(
@@ -35,9 +35,9 @@ function _beacon_builder_config_header_search(){
             'section' => $section,
             'selector' => '.'.$section.'-item',
             'render_callback' => $fn,
-            'title' => __( 'Show Submit Button', '_beacon' ),
+            'title' => __( 'Show Submit Button', 'customify' ),
             'default' => 1,
-            'checkbox_label' => __( 'Show Submit Button', '_beacon' ),
+            'checkbox_label' => __( 'Show Submit Button', 'customify' ),
         ),
 
     );
@@ -45,16 +45,16 @@ function _beacon_builder_config_header_search(){
 }
 
 
-function _beacon_builder_header_search_item(){
+function customify_builder_header_search_item(){
 
-    $placeholder = _Beacon_Customizer()->get_setting( 'header_search_placeholder' );
-    $show_btn = _Beacon_Customizer()->get_setting( 'header_search_btn' );
+    $placeholder = Customify_Customizer()->get_setting( 'header_search_placeholder' );
+    $show_btn = Customify_Customizer()->get_setting( 'header_search_btn' );
 
     ?>
     <form role="search" method="get" class="header-search-form search-form" action="<?php echo home_url( '/' ); ?>">
         <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
         <?php if ( $show_btn ) { ?>
-        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', '_beacon' ); ?>" />
+        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'customify' ); ?>" />
         <?php } ?>
     </form>
 
