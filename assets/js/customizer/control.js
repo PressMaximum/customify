@@ -950,9 +950,11 @@
         },
         limitRepeaterItems: function(){
             var control = this;
+
+            var addButton = $( '.customify--repeater-add-new', control.container );
+            var c = $( '.customify--settings-fields .customify--repeater-item', control.container ).length;
+
             if ( control.params.limit > 0 ) {
-                var addButton = $( '.customify--repeater-add-new', control.container );
-                var c = $( '.customify--settings-fields .customify--repeater-item', control.container ).length;
                 if ( c >= control.params.limit ) {
                     addButton.addClass( 'customify--hide' );
                     if ( control.params.limit_msg ) {
@@ -968,6 +970,13 @@
                     addButton.removeClass( 'customify--hide' );
                 }
             }
+
+            if ( c > 0 ) {
+                $( '.customify--repeater-reorder', control.container ).removeClass('customify--hide');
+            } else {
+                $( '.customify--repeater-reorder', control.container ).addClass('customify--hide');
+            }
+
         },
         initRepeater: function(){
             var control = this;

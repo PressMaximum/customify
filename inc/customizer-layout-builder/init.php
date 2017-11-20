@@ -12,6 +12,7 @@ class Customify_Customizer_Layout_Builder {
         add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
     }
 
+
     function ajax_save_template(){
 
         if ( ! current_user_can('edit_theme_options' ) ) {
@@ -311,7 +312,7 @@ class Customify_Customizer_Layout_Builder {
 new Customify_Customizer_Layout_Builder();
 
 function Customify_Customizer_Layout_Builder(){
-
+    return Customify_Customizer_Layout_Builder::get_instance();
 }
 
 
@@ -321,17 +322,22 @@ class Customify_Customizer_Layout_Builder_Frontend {
      private $render_items = array();
      private $rows = array();
      private $data = false;
+     private $config_items = false;
 
      public function __construct()
      {
 
      }
 
+    function set_config_items( $config_items ){
+        $this->config_items = $config_items;
+    }
+
      function get_settings(){
          if ( $this->data ) {
              return $this->data;
          }
-         $data =  get_theme_mod( $this->control_id );
+         $data = get_theme_mod( $this->control_id );
          $data = wp_parse_args( $data, array(
              'desktop' => '',
              'tablet' => '',
@@ -360,7 +366,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
         return false;
      }
 
-     function render_items(){
+     function render_items( $list_items = array() ){
          $setting = $this->get_settings();
          $items = array();
 
@@ -382,6 +388,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             'id' => '',
                         ) );
 
+                        $item_config = isset( $this->config_items[ $item['id'] ] ) ? $this->config_items[ $item['id'] ] : array();
+
                         if ( ! isset( $items[ $item['id'] ] ) ) {
                             $items[ $item['id'] ] = array(
                                 'render_content' => '',
@@ -398,12 +406,12 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             $has_cb = false;
                             $return_render = false;
                             if (function_exists($fn)) {
-                                $return_render = call_user_func_array($fn, array($item));
+                                $return_render = call_user_func_array( $fn, array( $item_config , $item));
                                 $has_cb = true;
                             } else {
                                 $fn = 'customify_builder_' . $this->id . '_' . $id . '_item';
                                 if (function_exists($fn)) {
-                                    $return_render = call_user_func_array($fn, array($item));
+                                    $return_render = call_user_func_array( $fn, array( $item_config , $item));
                                     $has_cb = true;
                                 }
                             }
@@ -517,13 +525,12 @@ class Customify_Customizer_Layout_Builder_Frontend {
              if (0 < $empty) {
                  $columns = $columns + $empty;
                  $atts[] = 'off-' . $empty;
-
              }
 
              $columns = $columns + intval($item['width']);
              $classes[] = 'customify-col-' . intval($item['width']);
 
-             if ($widget_count === $count) {
+             if ($widget_count === $count && $widget_count > 1) {
                  if ($max_columns === $columns) {
                      $classes[] = 'customify-col-last';
                  } else {
@@ -534,46 +541,54 @@ class Customify_Customizer_Layout_Builder_Frontend {
                  $count = 0;
              }
 
-             echo '<div class="builder-item ' . join(' ', $classes) . '" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
+             $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+
+             $classes = "builder-item " . join(' ', $classes);
+             if( is_customize_preview() ) {
+                 $classes = 'builder-item-focus '.$classes;
+             }
+             
+             echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
              echo str_replace( '__id__', $id.'-'.$device, $content );
              //echo $item_id;
              echo '</div>';
          }
      }
 
-     function render(){
+     function render( ){
          $setting = $this->get_settings();
-         $items = $this->render_items();
+         $items = $this->render_items( );
 
          $row_ids = array( 'top', 'main', 'bottom' );
 
          foreach ($row_ids as $row_id ) {
+            if ( isset( $this->rows[ $row_id ] ) ) {
+                $show_on_devices = $this->rows[$row_id];
+                if (!empty($show_on_devices)) {
+                    $class = sprintf('%1$s-%2$s', $this->id, $row_id);
+                    ?>
+                    <div class="<?php echo esc_attr($class); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                        <div class="customify-container">
+                            <?php
+                            $desktop_items = $this->get_row_settings($row_id, 'desktop');
+                            if ($desktop_items) {
+                                echo '<div class="hide-on-mobile hide-on-tablet customify-grid">';
+                                $this->render_row($desktop_items, $row_id, 'desktop');
+                                echo '</div>';
+                            }
 
-             $show_on_devices = $this->rows[ $row_id ];
-             if ( ! empty( $show_on_devices ) ) {
-                 $class = sprintf( '%1$s-%2$s', $this->id, $row_id );
-                 ?>
-                 <div class="<?php echo esc_attr( $class ); ?>" data-row-id="<?php echo esc_attr( $row_id ); ?>" data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
-                     <div class="customify-container">
-                         <?php
-                        $desktop_items = $this->get_row_settings( $row_id, 'desktop' );
-                        if ( $desktop_items ) {
-                            echo '<div class="hide-on-mobile hide-on-tablet customify-grid">';
-                                $this->render_row( $desktop_items, $row_id, 'desktop' );
-                            echo '</div>';
-                        }
-
-                        $mobile_items = $this->get_row_settings( $row_id, 'mobile' );
-                        if ( $mobile_items ) {
-                            echo '<div class="hide-on-desktop customify-grid">';
-                            $this->render_row( $mobile_items, $row_id, 'mobile' );
-                            echo '</div>';
-                        }
-                        ?>
-                     </div>
-                 </div>
-                 <?php
-             }
+                            $mobile_items = $this->get_row_settings($row_id, 'mobile');
+                            if ($mobile_items) {
+                                echo '<div class="hide-on-desktop customify-grid">';
+                                $this->render_row($mobile_items, $row_id, 'mobile');
+                                echo '</div>';
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <?php
+                }
+            }
 
          } // end for each row_ids
 
@@ -591,16 +606,18 @@ function customify_customize_render_header(){
         <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button aria-label="Click to edit this element." title="Click to edit this element." class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
         <?php
     }
+    $list_items = Customify_Customizer_Layout_Builder()->get_header_items();
+    $b->set_config_items( $list_items );
     $b->render();
 
-    /*
+
     $theme_name = wp_get_theme()->get('Name');
     $option_name = $theme_name.'_saved_templates';
     ?>
     <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
-    */
+
 }
 
 

@@ -51,7 +51,6 @@ function customify_builder_config_header_icon_list(){
             )
         ),
 
-
         array(
             'name' => $prefix.'target',
             'type' => 'checkbox',
@@ -63,12 +62,45 @@ function customify_builder_config_header_icon_list(){
     );
 }
 
-function customify_builder_header_icon_list_item(){
-    $target = Customify_Customizer()->get_setting('header_icon_list_target');
-    $items = Customify_Customizer()->get_setting('header_icon_list_items')
-    ?>
+function customify_builder_header_icon_list_item( $item_config ){
 
-    icon heres
-    <?php
+    $target = Customify_Customizer()->get_setting('header_icon_list_target');
+    $items = Customify_Customizer()->get_setting('header_icon_list_items');
+    if ( ! empty( $items ) ) {
+        echo '<ul>';
+        foreach ( ( array ) $items as $index => $item) {
+            $item = wp_parse_args( $item, array(
+                'title' => '',
+                'icon' => '',
+                'url' => '',
+                'show_text' => array(),
+
+            ) );
+
+            echo '<li>';
+            if ( $item['url'] ) {
+                echo '<a href="'.esc_url( $item['url']  ).'">';
+            }
+
+            $icon = wp_parse_args( $item['icon'], array(
+                'type' => '',
+                'icon' => '',
+            ) );
+
+            if ( $icon['icon'] ) {
+                echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
+            }
+            if ( $item['title'] ) {
+                echo '<span>'.wp_kses_post( $item['title'] ).'</span>';
+            }
+
+            if ( $item['url'] ) {
+                echo '</a>';
+            }
+            echo '</li>';
+        }
+
+        echo '</ul>';
+    }
 
 }

@@ -6,12 +6,12 @@
  */
 
 // Load customizer config file.
-require get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
-require get_template_directory() . '/inc/customizer/customizer-config.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 
-require get_template_directory() . '/inc/customizer/customizer-fonts.php';
-require get_template_directory() . '/inc/customizer/customizer-sanitize.php';
-require get_template_directory() . '/inc/customizer/customizer-auto-css.php';
+require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
+require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
+require_once get_template_directory() . '/inc/customizer/customizer-auto-css.php';
 
 if ( ! class_exists( 'Customify_Customizer' ) ) {
     class  Customify_Customizer {

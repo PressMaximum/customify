@@ -3,6 +3,8 @@
 class Customify_Font_Icons
 {
     static $_instance;
+    static $_icons;
+    private $picked_types = array();
 
     static function get_instance()
     {
@@ -14,22 +16,58 @@ class Customify_Font_Icons
 
     function get_icons()
     {
-        $icons = array(
-            'font-awesome' => array(
-                'name' => __('FontAwesome', 'customify'),
-                'icons' => $this->get_font_awesome_icons(),
-                'url' => get_template_directory_uri() . '/assets/fonts/font-awesome/css/font-awesome.min.css',
-                'class_config' => 'fa __icon_name__' // __icon_name__ will replace by icon class name
-            ),
-            'themify-icons' => array(
-                'name' => __('Themeify Icons', 'customify'),
-                'icons' => $this->get_themify_icons(),
-                'url' => get_template_directory_uri() . '/assets/fonts/themify-icons/themify-icons.css',
-                'class_config' => '__icon_name__' // __icon_name__ will replace by icon class name
-            )
-        );
-        return apply_filters('customify/customizer/font_icons', $icons);
+        if ( is_null(self::$_icons) ) {
+            $icons = array(
+                'font-awesome' => array(
+                    'name' => __('FontAwesome', 'customify'),
+                    'icons' => $this->get_font_awesome_icons(),
+                    'url' => get_template_directory_uri() . '/assets/fonts/font-awesome/css/font-awesome.min.css',
+                    'class_config' => 'fa __icon_name__' // __icon_name__ will replace by icon class name
+                ),
+                'themify-icons' => array(
+                    'name' => __('Themeify Icons', 'customify'),
+                    'icons' => $this->get_themify_icons(),
+                    'url' => get_template_directory_uri() . '/assets/fonts/themify-icons/themify-icons.css',
+                    'class_config' => '__icon_name__' // __icon_name__ will replace by icon class name
+                )
+            );
+            self::$_icons = apply_filters('customify/customizer/font_icons', $icons);
+        }
+
+        return self::$_icons;
+
     }
+
+    function _picked_icon( $value ){
+        if ( is_array( $value ) ) {
+            if ( isset($value['icon']) && isset($value['type'] ) ) {
+                $this->picked_types[$value['type']] = $value['type'];
+            }
+
+            foreach( $value as $_k => $_v ) {
+                $this->_picked_icon( $_v );
+            }
+        }
+    }
+
+    function get_icon_types_picked(){
+        $mods = get_theme_mods();
+        foreach( $mods as $key => $value ) {
+            $this->_picked_icon( $value );
+        }
+    }
+
+    function enqueue(){
+        $this->get_icon_types_picked();
+        foreach( $this->get_icons() as $icon_id => $icon ){
+            if ( isset( $this->picked_types[ $icon_id ]  ) ) {
+                wp_enqueue_style( $icon_id, $icon['url'] );
+            }
+
+        }
+    }
+
+
 
     function get_font_awesome_icons()
     {

@@ -54,6 +54,20 @@
             defaultTarget.wp.customize.panel( 'header_settings' ).focus();
         } );
 
+
+        // for custom when click on preview
+
+        $document.on( 'click', '.builder-item-focus', function( e ){
+            e.preventDefault();
+            var section_id =  $( this ).attr( 'data-section' ) || '';
+            if( section_id ) {
+                if ( defaultTarget.wp.customize.section( section_id ) ) {
+                    defaultTarget.wp.customize.section( section_id ).focus();
+                }
+
+            }
+        } );
+
         // Get all values
        // console.log( 'ALL Control Values', api.get( ) );
 

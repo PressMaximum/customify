@@ -170,6 +170,11 @@ add_action( 'widgets_init', 'customify_widgets_init' );
 function customify_scripts() {
 	wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
 
+	if ( ! function_exists( 'a' ) ) {
+	    require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
+    }
+    Customify_Font_Icons()->enqueue();
+
 	wp_enqueue_script( 'customify-navigation', get_template_directory_uri() . '/assets/js/navigation.js', array(), '20151215', true );
 
 	wp_enqueue_script( 'customify-skip-link-focus-fix', get_template_directory_uri() . '/assets/js/skip-link-focus-fix.js', array(), '20151215', true );
