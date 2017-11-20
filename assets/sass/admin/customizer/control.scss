@@ -1,11 +1,11 @@
 $text_color: #555d66;
 
 // Device tabs settings
-._beacon--hide {
+.customify--hide {
     display: none !important;
 }
 
-._beacon-field-heading{
+.customify-field-heading{
     &::after {
         display: block;
         content: ""; clear: both;
@@ -13,7 +13,7 @@ $text_color: #555d66;
     label {
         display: inline-block;
     }
-    ._beacon-devices {
+    .customify-devices {
         display: inline-block;
         margin-left: 0px;
         float: right;
@@ -53,45 +53,45 @@ $text_color: #555d66;
         }
     }
 }
-._beacon--multiple-devices ._beacon-field-settings-inner {
+.customify--multiple-devices .customify-field-settings-inner {
     display: none;
-    ._beacon-field-settings-inner {
+    .customify-field-settings-inner {
         display: block;
     }
 }
 .preview-desktop  {
-    ._beacon-devices .preview-desktop{ border-color: #191e23; color: #191e23; }
-    ._beacon-field-settings-inner {
-        &._beacon--for-desktop {
+    .customify-devices .preview-desktop{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-desktop {
             display: block;
         }
     }
 }
 .preview-tablet {
-    ._beacon-devices .preview-tablet{ border-color: #191e23; color: #191e23; }
-    ._beacon-field-settings-inner {
-        &._beacon--for-tablet {
+    .customify-devices .preview-tablet{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-tablet {
             display: block;
         }
     }
 }
 .preview-mobile {
-    ._beacon-devices .preview-mobile{ border-color: #191e23; color: #191e23; }
-    ._beacon-field-settings-inner {
-        &._beacon--for-mobile {
+    .customify-devices .preview-mobile{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-mobile {
             display: block;
         }
     }
 }
 
 
-._beacon--settings-fields {
+.customify--settings-fields {
 
 }
 
-._beacon--repeater-actions {
+.customify--repeater-actions {
     text-align: right;
-    ._beacon--repeater-add-new {
+    .customify--repeater-add-new {
         margin-left: 15px;
         &:before {
             content: "\f132";
@@ -106,26 +106,26 @@ $text_color: #555d66;
             -moz-osx-font-smoothing: grayscale;
         }
     }
-    ._beacon--repeater-reorder {
+    .customify--repeater-reorder {
         line-height: 27px;
 
     }
 }
-._beacon--repeater-items {
+.customify--repeater-items {
     margin-top: 15px;
     margin-bottom: 15px;
-    ._beacon--repeater-field {
+    .customify--repeater-field {
         margin-bottom: 15px;
     }
-    ._beacon--repeater-item-inner {
+    .customify--repeater-item-inner {
         padding: 10px;
     }
-    ._beacon--remove {
+    .customify--remove {
         padding: 0 10px 10px;
         display: inline-block;
     }
 
-    ._beacon--repeater-item-heading {
+    .customify--repeater-item-heading {
         background: #FFF;
         padding: 15px;
         position: relative;
@@ -133,7 +133,7 @@ $text_color: #555d66;
         line-height: 1;
         font-size: 1em;
     }
-    ._beacon--repeater-live-title {
+    .customify--repeater-live-title {
         white-space: nowrap;
         margin-right: 35px;
         overflow: hidden;
@@ -143,7 +143,7 @@ $text_color: #555d66;
         line-height: 1;
     }
 
-    ._beacon-nav-reorder {
+    .customify-nav-reorder {
         display: none;
         float: right;
         position: absolute;
@@ -179,12 +179,12 @@ $text_color: #555d66;
                 -moz-osx-font-smoothing: grayscale;
             }
         }
-        ._beacon--down {
+        .customify--down {
             &:before {
                 content: "\f347";
             }
         }
-        ._beacon--up {
+        .customify--up {
             &:before {
                 content: "\f343";
             }
@@ -192,36 +192,36 @@ $text_color: #555d66;
     }
 
     &.reorder-active {
-        ._beacon-nav-reorder {
+        .customify-nav-reorder {
             display: block;
         }
-        ._beacon--repeater-item-toggle {
+        .customify--repeater-item-toggle {
             display: none !important;
         }
     }
 
-    ._beacon--repeater-item {
+    .customify--repeater-item {
         border: 1px solid #ddd;
         background: #ffffff;
         margin-bottom: 10px;
         &:last-child {
             margin-bottom: 0px;
-            ._beacon-nav-reorder > span {
-                &._beacon--down {
+            .customify-nav-reorder > span {
+                &.customify--down {
                     background: #ffffff;
                 }
             }
         }
 
         &:first-child {
-            ._beacon-nav-reorder > span {
-                &._beacon--up {
+            .customify-nav-reorder > span {
+                &.customify--up {
                     background: #ffffff;
                 }
             }
         }
 
-        ._beacon--repeater-item-toggle {
+        .customify--repeater-item-toggle {
             position: absolute;
             top: 0px;
             bottom: 0px;
@@ -237,17 +237,17 @@ $text_color: #555d66;
                 content: "\f140";
             }
         }
-        ._beacon--repeater-item-settings {
+        .customify--repeater-item-settings {
             display: none;
         }
-        &._beacon--open {
-            ._beacon--repeater-item-heading {
+        &.customify--open {
+            .customify--repeater-item-heading {
                 border-bottom: 1px solid #ddd;
             }
-            ._beacon--repeater-item-settings {
+            .customify--repeater-item-settings {
                 display: block;
             }
-            ._beacon--repeater-item-toggle {
+            .customify--repeater-item-toggle {
                 &:before {
                     content: "\f142";
                 }
@@ -257,7 +257,7 @@ $text_color: #555d66;
 }
 
 
-._beacon--field {
+.customify--field {
     margin-bottom: 15px;
     &:last-child {
         margin-bottom: 0px;
@@ -265,7 +265,7 @@ $text_color: #555d66;
     * {
         box-sizing: border-box;
     }
-    &._beacon--field-color {
+    &.customify--field-color {
         * {
             box-sizing: content-box;
         }
@@ -280,7 +280,7 @@ $text_color: #555d66;
         width: 65px !important;
     }
 }
-._beacon--css-unit {
+.customify--css-unit {
     display: block;
     margin-bottom: 5px;
     label {
@@ -292,7 +292,7 @@ $text_color: #555d66;
         &:first-child {
             margin-left: -5px;
         }
-        &._beacon--label-active {
+        &.customify--label-active {
             font-weight: bold;
         }
     }
@@ -300,14 +300,14 @@ $text_color: #555d66;
         display: none;
     }
 }
-._beacon--css-ruler {
+.customify--css-ruler {
     display: flex;
     margin-left: -2px;
     margin-right: -2px;
     > span {
         padding: 0px 2px;
     }
-    ._beacon--small-label {
+    .customify--small-label {
         font-size: 10px;
         display: block;
         text-transform: uppercase;
@@ -328,7 +328,7 @@ $text_color: #555d66;
             left: 5px;
             display: block;
         }
-        &._beacon--label-active {
+        &.customify--label-active {
             &:before {
                 content: "\f103";
             }
@@ -336,7 +336,7 @@ $text_color: #555d66;
 
     }
 }
-._beacon-image-preview {
+.customify-image-preview {
     margin: 10px 0;
     display: block;
     &:before {
@@ -346,17 +346,17 @@ $text_color: #555d66;
         padding: 25px;
         text-align: center;
     }
-    &._beacon--has-file {
+    &.customify--has-file {
         &:before {
             display: none;
         }
     }
 }
-._beacon-input-slider-wrapper {
+.customify-input-slider-wrapper {
     position: relative;
     margin-top: 5px;
     display: block;
-    ._beacon--slider-input {
+    .customify--slider-input {
         width: 50px;
         max-width: 50px;
         position: absolute;
@@ -366,7 +366,7 @@ $text_color: #555d66;
         line-height: 18px;
     }
 }
-._beacon-input-slider {
+.customify-input-slider {
     position: relative;
     margin: 15px 0px 20px;
     height: 5px;
@@ -392,16 +392,16 @@ $text_color: #555d66;
     }
 }
 
-._beacon--icon-picker {
+.customify--icon-picker {
     display: flex;
-    ._beacon--icon-preview {
+    .customify--icon-preview {
         flex: 1;
         border: 1px solid #ddd;
         border-right: 0px;
         cursor: pointer;
         position: relative;
     }
-    ._beacon--icon-preview-icon {
+    .customify--icon-preview-icon {
         width: 35px; display: block;
         border-right: 0px;
         text-align: center;
@@ -418,7 +418,7 @@ $text_color: #555d66;
         box-shadow: none !important;
         outline: none !important;
     }
-    ._beacon--icon-remove {
+    .customify--icon-remove {
         cursor: pointer;
         flex: 1;
         border: 1px solid #ddd;
@@ -432,11 +432,11 @@ $text_color: #555d66;
     }
 }
 
-#_beacon--sidebar-icons {
+#customify--sidebar-icons {
     position: fixed;
     left: -300px;
     transition: all .5s ease;
-    &._beacon--active {
+    &.customify--active {
         left: 300px;
     }
     width: 300px;
@@ -449,24 +449,24 @@ $text_color: #555d66;
     *{
         box-sizing: border-box;
     }
-    ._beacon--sidebar-header {
+    .customify--sidebar-header {
         height: 46px;
         display: block;
         border-bottom: 1px solid #ddd;
     }
-    ._beacon--icon-type-inner {
+    .customify--icon-type-inner {
         padding: 10px 10px 10px 50px;
         display: block;
     }
     .customize-controls-close {
         height: 45px;
     }
-    #_beacon--sidebar-icon-type {
+    #customify--sidebar-icon-type {
         display: block;
         width: 100%;
         height: 26px;
     }
-    ._beacon--sidebar-search {
+    .customify--sidebar-search {
         background: #ffffff;
         padding: 10px;
         input {
@@ -475,7 +475,7 @@ $text_color: #555d66;
         }
     }
 
-    #_beacon--icon-browser {
+    #customify--icon-browser {
         position: absolute;
         top: 100px;
         left: 0px;
@@ -483,7 +483,7 @@ $text_color: #555d66;
         bottom: 0px;
         overflow: auto;
     }
-    ._beacon--list-icons {
+    .customify--list-icons {
         li {
             width: 20%;
             float: left;
@@ -505,7 +505,7 @@ $text_color: #555d66;
 }
 
 /* Typography */
-._beacon--font-style {
+.customify--font-style {
     .button {
         input {
             display: none;
@@ -516,7 +516,7 @@ $text_color: #555d66;
                 line-height: inherit;
             }
         }
-        &._beacon--checked {
+        &.customify--checked {
             background: #ccc;
         }
     }
@@ -524,15 +524,15 @@ $text_color: #555d66;
 
 /*Background field*/
 .customize-control {
-    &._beacon-background-control {
-        ._beacon-group-device-fields {
+    &.customify-background-control {
+        .customify-group-device-fields {
             position: relative;
             &::after {
                 clear: both; content: ""; display: block;
             }
         }
 
-        ._beacon--settings-fields {
+        .customify--settings-fields {
             position: relative;
             min-height: 160px;
             display: block;
@@ -540,15 +540,15 @@ $text_color: #555d66;
             &::after {
                 clear: both; content: ""; display: block;
             }
-            ._beacon--field {
+            .customify--field {
                 select {
                     width: 135px;
                 }
-                &._beacon--field-name-color{
+                &.customify--field-name-color{
                     position: absolute;
                     top: 0px;
                     right: 0px;
-                    ._beacon-field-heading {
+                    .customify-field-heading {
                         display: none;
                     }
                     .wp-picker-container {
@@ -574,11 +574,11 @@ $text_color: #555d66;
                     }
                 }
 
-                &._beacon--field-name-image {
+                &.customify--field-name-image {
                     width: 115px;
                     display: block;
                     float: left;
-                    ._beacon-field-header{
+                    .customify-field-header{
                         display: none;
                     }
                     .button {
@@ -590,24 +590,24 @@ $text_color: #555d66;
                             margin-right: 35px;
                             display: inline-block;
                         }
-                        &._beacon--change, &._beacon--add {
+                        &.customify--change, &.customify--add {
                             &:before {
                                 content: "\f317";
                             }
                         }
-                        &._beacon--remove {
+                        &.customify--remove {
                             &:before {
                                 content: "\f335";
                             }
                         }
                     }
-                    ._beacon-image-preview {
+                    .customify-image-preview {
                         margin: 0px 0px 10px;
                         &:before {
                             padding: 35px 20px;
                         }
                     }
-                    ._beacon-field-header {
+                    .customify-field-header {
                         display: none;
                     }
                     img {
@@ -618,29 +618,29 @@ $text_color: #555d66;
                     }
                 }
 
-                &._beacon--field-name-position {
-                    ._beacon-field-header{ display: none; }
+                &.customify--field-name-position {
+                    .customify-field-header{ display: none; }
                     position: absolute;
                     top: 30px;
                     right: 0px;
                 }
 
-                &._beacon--field-name-repeat {
-                    ._beacon-field-header { display: none; }
+                &.customify--field-name-repeat {
+                    .customify-field-header { display: none; }
                     position: absolute;
                     top: 60px;
                     right: 0px;
                 }
 
-                &._beacon--field-name-cover {
+                &.customify--field-name-cover {
                    clear: both;
                     position: absolute;
                     top: 90px;
                     right: 0px;
                 }
 
-                &._beacon--field-name-attachment {
-                    ._beacon-field-header { display: none; }
+                &.customify--field-name-attachment {
+                    .customify-field-header { display: none; }
                     clear: both;
                     position: absolute;
                     top: 120px;
@@ -650,7 +650,7 @@ $text_color: #555d66;
             }
 
         }
-        ._beacon-group-device-fields {
+        .customify-group-device-fields {
 
 
         }

@@ -203,3 +203,15 @@
         }
     }
 }
+
+/************************
+    HIDING COLS FOR DEVICES
+*************************/
+@each $mq-key, $mq-value in $gl-devices-list {
+    @media #{$mq-value} { //_#{$mq-key}
+        .hide-on-#{$mq-key} { display: none; }
+    }
+}
+
+
+

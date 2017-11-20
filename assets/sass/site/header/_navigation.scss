@@ -1,3 +1,15 @@
-.main-navigation {
-    float: right;
+.primary-menu {
+   .menu {
+       list-style: none;
+       padding: 0px;
+       margin: 0px;
+       li {
+           display: inline-block;
+           margin-right: 15px;
+           &:last-child {
+               margin-right: 0px;
+           }
+       }
+   }
 }
+

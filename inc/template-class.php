@@ -1,6 +1,6 @@
 <?php
 
-if ( ! function_exists( '_beacon_site_content_class' ) ) :
+if ( ! function_exists( 'customify_site_content_class' ) ) :
 	/**
 	 * Display the classes for the site content element.
 	 *
@@ -8,13 +8,13 @@ if ( ! function_exists( '_beacon_site_content_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_site_content_class( $class = '' ) {
+	function customify_site_content_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_site_content_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_site_content_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_site_content_class' ) ) :
+if ( ! function_exists( 'customify_get_site_content_class' ) ) :
 	/**
 	 * Retrieve the classes for the site content element as an array.
 	 *
@@ -23,7 +23,7 @@ if ( ! function_exists( '_beacon_get_site_content_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_site_content_class( $class = '' ) {
+	function customify_get_site_content_class( $class = '' ) {
 
 		$classes = array();
 
@@ -37,13 +37,13 @@ if ( ! function_exists( '_beacon_get_site_content_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_site_content_class', $classes, $class );
+		$classes = apply_filters( 'customify_site_content_class', $classes, $class );
 
 		return array_unique( $classes );
 	}
 endif;
 
-if ( ! function_exists( '_beacon_sidebar_primary_class' ) ) :
+if ( ! function_exists( 'customify_sidebar_primary_class' ) ) :
 	/**
 	 * Display the classes for the primary sidebar element.
 	 *
@@ -51,13 +51,13 @@ if ( ! function_exists( '_beacon_sidebar_primary_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_sidebar_primary_class( $class = '' ) {
+	function customify_sidebar_primary_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_sidebar_primary_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_sidebar_primary_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_sidebar_primary_class' ) ) :
+if ( ! function_exists( 'customify_get_sidebar_primary_class' ) ) :
 	/**
 	 * Retrieve the classes for the primary sidebar element as an array.
 	 *
@@ -66,7 +66,7 @@ if ( ! function_exists( '_beacon_get_sidebar_primary_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_sidebar_primary_class( $class = '' ) {
+	function customify_get_sidebar_primary_class( $class = '' ) {
 
 		$classes = array();
 
@@ -80,13 +80,13 @@ if ( ! function_exists( '_beacon_get_sidebar_primary_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_sidebar_primary_class', $classes, $class );
+		$classes = apply_filters( 'customify_sidebar_primary_class', $classes, $class );
 
 		return array_unique( $classes );
 	}
 endif;
 
-if ( ! function_exists( '_beacon_sidebar_secondary_class' ) ) :
+if ( ! function_exists( 'customify_sidebar_secondary_class' ) ) :
 	/**
 	 * Display the classes for the secondary sidebar element.
 	 *
@@ -94,13 +94,13 @@ if ( ! function_exists( '_beacon_sidebar_secondary_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_sidebar_secondary_class( $class = '' ) {
+	function customify_sidebar_secondary_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_sidebar_secondary_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_sidebar_secondary_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_sidebar_secondary_class' ) ) :
+if ( ! function_exists( 'customify_get_sidebar_secondary_class' ) ) :
 	/**
 	 * Retrieve the classes for the secondary sidebar element as an array.
 	 *
@@ -109,7 +109,7 @@ if ( ! function_exists( '_beacon_get_sidebar_secondary_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_sidebar_secondary_class( $class = '' ) {
+	function customify_get_sidebar_secondary_class( $class = '' ) {
 
 		$classes = array();
 
@@ -123,13 +123,13 @@ if ( ! function_exists( '_beacon_get_sidebar_secondary_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_sidebar_secondary_class', $classes, $class );
+		$classes = apply_filters( 'customify_sidebar_secondary_class', $classes, $class );
 
 		return array_unique( $classes );
 	}
 endif;
 
-if ( ! function_exists( '_beacon_main_content_class' ) ) :
+if ( ! function_exists( 'customify_main_content_class' ) ) :
 	/**
 	 * Display the classes for the main content element.
 	 *
@@ -137,13 +137,13 @@ if ( ! function_exists( '_beacon_main_content_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_main_content_class( $class = '' ) {
+	function customify_main_content_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_main_content_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_main_content_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_main_content_class' ) ) :
+if ( ! function_exists( 'customify_get_main_content_class' ) ) :
 	/**
 	 * Retrieve the classes for the main content element as an array.
 	 *
@@ -152,7 +152,7 @@ if ( ! function_exists( '_beacon_get_main_content_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_main_content_class( $class = '' ) {
+	function customify_get_main_content_class( $class = '' ) {
 
 		$classes = array();
 
@@ -166,13 +166,13 @@ if ( ! function_exists( '_beacon_get_main_content_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_main_content_class', $classes, $class );
+		$classes = apply_filters( 'customify_main_content_class', $classes, $class );
 
 		return array_unique( $classes );
 	}
 endif;
 
-if ( ! function_exists( '_beacon_site_content_grid_class' ) ) :
+if ( ! function_exists( 'customify_site_content_grid_class' ) ) :
 	/**
 	 * Display the classes for the site content grid wrapper element.
 	 *
@@ -180,13 +180,13 @@ if ( ! function_exists( '_beacon_site_content_grid_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_site_content_grid_class( $class = '' ) {
+	function customify_site_content_grid_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_site_content_grid_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_site_content_grid_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_site_content_grid_class' ) ) :
+if ( ! function_exists( 'customify_get_site_content_grid_class' ) ) :
 	/**
 	 * Retrieve the classes for the site content grid element as an array.
 	 *
@@ -195,7 +195,7 @@ if ( ! function_exists( '_beacon_get_site_content_grid_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_site_content_grid_class( $class = '' ) {
+	function customify_get_site_content_grid_class( $class = '' ) {
 
 		$classes = array();
 
@@ -209,13 +209,13 @@ if ( ! function_exists( '_beacon_get_site_content_grid_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_site_content_grid_class', $classes, $class );
+		$classes = apply_filters( 'customify_site_content_grid_class', $classes, $class );
 
 		return array_unique( $classes );
 	}
 endif;
 
-if ( ! function_exists( '_beacon_site_content_container_class' ) ) :
+if ( ! function_exists( 'customify_site_content_container_class' ) ) :
 	/**
 	 * Display the classes for the site content container wrapper element.
 	 *
@@ -223,13 +223,13 @@ if ( ! function_exists( '_beacon_site_content_container_class' ) ) :
 	 *
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
-	function _beacon_site_content_container_class( $class = '' ) {
+	function customify_site_content_container_class( $class = '' ) {
 		// Separates classes with a single space, collates classes for body element
-		echo 'class="' . join( ' ', _beacon_get_site_content_container_class( $class ) ) . '"';
+		echo 'class="' . join( ' ', customify_get_site_content_container_class( $class ) ) . '"';
 	}
 endif;
 
-if ( ! function_exists( '_beacon_get_site_content_container_class' ) ) :
+if ( ! function_exists( 'customify_get_site_content_container_class' ) ) :
 	/**
 	 * Retrieve the classes for the site content container element as an array.
 	 *
@@ -238,7 +238,7 @@ if ( ! function_exists( '_beacon_get_site_content_container_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 * @return array Array of classes.
 	 */
-	function _beacon_get_site_content_container_class( $class = '' ) {
+	function customify_get_site_content_container_class( $class = '' ) {
 
 		$classes = array();
 
@@ -252,7 +252,7 @@ if ( ! function_exists( '_beacon_get_site_content_container_class' ) ) :
 		}
 
 		$classes = array_map( 'esc_attr', $classes );
-		$classes = apply_filters( '_beacon_site_content_container_class', $classes, $class );
+		$classes = apply_filters( 'customify_site_content_container_class', $classes, $class );
 
 		return array_unique( $classes );
 	}

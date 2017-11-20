@@ -3,14 +3,14 @@
 
     var $document = $( document );
 
-    wp.customize.controlConstructor._beacon = wp.customize.Control.extend({
+    wp.customize.controlConstructor.customify = wp.customize.Control.extend({
 
         // When we're finished loading continue processing
         ready: function() {
             var control = this;
             control.init();
         },
-        type: '_beacon',
+        type: 'customify',
         settingField: null,
         devices:  ['desktop', 'tablet', 'mobile'],
         getTemplate: _.memoize(function () {
@@ -49,8 +49,8 @@
                 $el = control.container;
             }
             var clone = $('#customize-footer-actions .devices').clone();
-            clone.addClass('_beacon-devices');
-            $('._beacon-field-heading', $el ).append(clone).addClass( '_beacon-devices-added' );
+            clone.addClass('customify-devices');
+            $('.customify-field-heading', $el ).append(clone).addClass( 'customify-devices-added' );
 
         },
         init: function() {
@@ -139,7 +139,7 @@
                     var url = this.getThumb();
                     var id = this.getID();
                     var mime = this.attachment.mime;
-                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html(  '<img src="'+url+'" alt="">' );
+                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html(  '<img src="'+url+'" alt="">' );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
@@ -149,12 +149,12 @@
                 },
                 toRelativeUrl: function( url ){
                     return url;
-                    //return url.replace( _Beacon_Control_Args.home_url, '' );
+                    //return url.replace( Customify_Control_Args.home_url, '' );
                 },
                 showChangeBtn: function(){
-                    $( '._beacon--add', this.preview ).addClass( '_beacon--hide' );
-                    $( '._beacon--change', this.preview ).removeClass( '_beacon--hide' );
-                    $( '._beacon--remove', this.preview ).removeClass( '_beacon--hide' );
+                    $( '.customify--add', this.preview ).addClass( 'customify--hide' );
+                    $( '.customify--change', this.preview ).removeClass( 'customify--hide' );
+                    $( '.customify--remove', this.preview ).removeClass( 'customify--hide' );
                 },
                 insertVideo: function(attachment ){
                     if ( typeof attachment !== "undefined" ) {
@@ -165,7 +165,7 @@
                     var id = this.getID();
                     var mime = this.attachment.mime;
                     var html = '<video width="100%" height="" controls><source src="'+url+'" type="'+mime+'">Your browser does not support the video tag.</video>';
-                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html( html );
+                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( html );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
@@ -180,7 +180,7 @@
                     var mime = this.attachment.mime;
                     var basename = url.replace(/^.*[\\\/]/, '');
 
-                    $( '._beacon-image-preview', this.preview ).addClass( '_beacon--has-file' ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
+                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
                     $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
                     $( '.attachment-mime', this.preview ).val( mime );
                     $( '.attachment-id', this.preview ).val( this.getID() ).trigger( 'change' );
@@ -191,15 +191,15 @@
                     if ( typeof $el !== "undefined" ) {
                         this.preview = $el;
                     }
-                    $( '._beacon-image-preview', this.preview ).removeAttr( 'style').html( '' ).removeClass( '_beacon--has-file' );
+                    $( '.customify-image-preview', this.preview ).removeAttr( 'style').html( '' ).removeClass( 'customify--has-file' );
                     $( '.attachment-url', this.preview ).val( '' );
                     $( '.attachment-mime', this.preview ).val( '' );
                     $( '.attachment-id', this.preview ).val( '' ).trigger( 'change' );
                     this.preview.removeClass( 'attachment-added' );
 
-                    $( '._beacon--add', this.preview ).removeClass( '_beacon--hide' );
-                    $( '._beacon--change', this.preview ).addClass( '_beacon--hide' );
-                    $( '._beacon--remove', this.preview ).addClass( '_beacon--hide' );
+                    $( '.customify--add', this.preview ).removeClass( 'customify--hide' );
+                    $( '.customify--change', this.preview ).addClass( 'customify--hide' );
+                    $( '.customify--remove', this.preview ).addClass( 'customify--hide' );
                 }
 
             };
@@ -238,44 +238,44 @@
 
 
             // When add/Change
-            control.container.on( 'click',  '._beacon--media ._beacon--add, ._beacon--media ._beacon--change, ._beacon--media ._beacon-image-preview', function( e ) {
+            control.container.on( 'click',  '.customify--media .customify--add, .customify--media .customify--change, .customify--media .customify-image-preview', function( e ) {
                 e.preventDefault();
-                var p = $( this ).closest('._beacon--media');
+                var p = $( this ).closest('.customify--media');
                 control.controlMedia.setPreview( p )  ;
                 control.controlMediaImage.open();
             } );
 
             // When add/Change
-            control.container.on( 'click',  '._beacon--media ._beacon--remove', function( e ) {
+            control.container.on( 'click',  '.customify--media .customify--remove', function( e ) {
                 e.preventDefault();
-                var p = $( this ).closest('._beacon--media');
+                var p = $( this ).closest('.customify--media');
                 control.controlMedia.remove( p );
             } );
         },
         initCSSRuler: function(){
             var control = this;
-            control.container.on( 'change', '._beacon--label-parent', function(){
+            control.container.on( 'change', '.customify--label-parent', function(){
                 if ( $( this ).attr( 'type' ) == 'radio' ){
                     var name = $( this ).attr( 'name' );
-                    $( 'input[name="'+name+'"]', control.container ).parent().removeClass('_beacon--label-active');
+                    $( 'input[name="'+name+'"]', control.container ).parent().removeClass('customify--label-active');
                 }
                 var checked = $( this ).is( ':checked' );
                 if ( checked ) {
-                    $( this ).parent().addClass( '_beacon--label-active' );
+                    $( this ).parent().addClass( 'customify--label-active' );
                 } else {
-                    $( this ).parent().removeClass( '_beacon--label-active' );
+                    $( this ).parent().removeClass( 'customify--label-active' );
                 }
 
                 control.getValue();
             } );
 
 
-            control.container.on( 'change keyup', '._beacon--css-ruler ._beacon-input-css', function(){
-                var p = $( this ).closest('._beacon--css-ruler');
-                var link_checked = $( '._beacon--css-ruler-link input', p ).is( ':checked' );
+            control.container.on( 'change keyup', '.customify--css-ruler .customify-input-css', function(){
+                var p = $( this ).closest('.customify--css-ruler');
+                var link_checked = $( '.customify--css-ruler-link input', p ).is( ':checked' );
                 if ( link_checked ) {
                     var v = $( this ).val();
-                    $( '._beacon-input-css', p ).not( $( this ) ).val(v);
+                    $( '.customify-input-css', p ).not( $( this ) ).val(v);
                 }
 
                 control.getValue();
@@ -402,7 +402,7 @@
         },
         initConditional: function ( $el, values ){
             var control = this;
-            var $fields  = $( '._beacon--field', $el );
+            var $fields  = $( '.customify--field', $el );
             $fields.each( function( ) {
                 var $field = $(this);
                 var check = true;
@@ -411,38 +411,42 @@
                     req = JSON.parse( req );
                     check = control.multiple_compare( req, values );
                     if ( ! check ) {
-                        $field.addClass( '_beacon--hide' );
+                        $field.addClass( 'customify--hide' );
                     } else {
-                        $field.removeClass( '_beacon--hide' );
+                        $field.removeClass( 'customify--hide' );
                     }
                 }
             });
         },
         initColor: function( $el ){
-            $( '._beacon-input-color', $el ).each( function(){
+            $( '.customify-input-color', $el ).each( function(){
                 var colorInput = $( this );
                 var df = colorInput.data( 'default' ) || '';
-                var current_val = $( '._beacon-input', colorInput ).val();
-                $( '._beacon--color-panel', colorInput ).wpColorPicker({
+                var current_val = $( '.customify-input', colorInput ).val();
+                $( '.customify--color-panel', colorInput ).wpColorPicker({
                     defaultColor: df,
                     change: function( event, ui ){
                         var new_color = ui.color.toString();
-                        $( '._beacon-input', colorInput ).val( new_color );
+                        $( '.customify-input', colorInput ).val( new_color );
                         if( ui.color.toString() !== current_val ) {
                             current_val = new_color;
-                            $( '._beacon-input', colorInput ).trigger('change');
+                            $( '.customify-input', colorInput ).trigger('change');
                         }
-
+                    },
+                    clear: function( event, ui ){
+                        $( '.customify-input', colorInput ).val( '' );
+                        $( '.customify-input', colorInput ).trigger('data-change');
                     }
+
                 });
             } );
         },
         initSlider: function( $el ){
-            if ( $( '._beacon-input-slider', $el ).length > 0 ) {
-                $('._beacon-input-slider', $el ).each( function(){
+            if ( $( '.customify-input-slider', $el ).length > 0 ) {
+                $('.customify-input-slider', $el ).each( function(){
                     var slider = $( this );
                     var p = slider.parent();
-                    var input = $( '._beacon--slider-input', p );
+                    var input = $( '.customify--slider-input', p );
                     var min = slider.data( 'min' ) || 0;
                     var max = slider.data( 'max' ) || 300;
                     if ( !_.isNumber( min ) ) {
@@ -469,6 +473,25 @@
                         slider.slider( "value", $( this ).val() );
                     } );
 
+                    // Reset
+                    var wrapper = slider.closest('.customify-input-slider-wrapper');
+                    wrapper.on( 'click', '.reset', function( e ) {
+                        e.preventDefault();
+                        var d = slider.data('default');
+                        if ( ! _.isObject( d ) ) {
+                            d = {
+                                'unit': 'px',
+                                'value': ''
+                            }
+                        }
+
+                        $( '.customify--slider-input', wrapper ).val( d.value);
+                        slider.slider( "option", "value", d.value );
+                        $( '.customify--css-unit input.customify-input[value="'+d.unit+'"]', wrapper ).trigger('click');
+                        $( '.customify--slider-input', wrapper ).trigger( 'change' );
+
+                    });
+
                 } );
             }
         },
@@ -477,7 +500,7 @@
             var type = undefined ;
             var support_devices = false;
             if ( _.isUndefined( $field ) ) {
-                $field = control.container.find( '._beacon--settings-fields ._beacon--field' ).first();
+                $field = control.container.find( '.customify--settings-fields .customify--field' ).first();
             }
 
             if ( ! _.isUndefined( fieldSetting ) ) {
@@ -658,7 +681,7 @@
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            value[ device ] =  value = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                            value[ device ] = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]', $field ).is(':checked') ? 1 : '' ;
@@ -689,11 +712,11 @@
 
                     if ( control.params.device_settings ) {
                         _.each( control.devices, function( device ){
-                            var $area = $( '._beacon-group-device-fields._beacon--for-'+device, control.container );
+                            var $area = $( '.customify-group-device-fields.customify--for-'+device, control.container );
                             value[ device ] = {};
                             var _value = {};
                             _.each( control.params.fields, function( f ){
-                                var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', $area );
+                                var $_field = $( '.customify--group-field[data-field-name="'+f.name+'"]', $area );
                                 _value[ f.name ] = control.getFieldValue( f.name, f, $_field );
                             } );
                             value[ device ] = _value;
@@ -702,7 +725,7 @@
                         } );
                     } else {
                         _.each( control.params.fields, function( f ){
-                            var $_field = $( '._beacon--group-field[data-field-name="'+f.name+'"]', control.container );
+                            var $_field = $( '.customify--group-field[data-field-name="'+f.name+'"]', control.container );
                             value[ f.name ] = control.getFieldValue( f.name, f, $_field );
                         } );
 
@@ -712,12 +735,12 @@
                     break;
                 case 'repeater':
                     value = [];
-                    $( '._beacon--repeater-item', control.container ).each( function( index ){
+                    $( '.customify--repeater-item', control.container ).each( function( index ){
                         var $item = $( this );
                         var _v = {};
                         _.each( control.params.fields, function( f ){
                             var inputField = $( '[data-field-name="'+f.name+'"]', $item );
-                            var $_field = inputField.closest('._beacon--field');
+                            var $_field = inputField.closest('.customify--field');
                             var _fv =  control.getFieldValue( f.name, f,  $_field );
                             _v[ f.name ] = _fv;
 
@@ -748,7 +771,7 @@
             if ( _.isUndefined( save ) || save ) {
                 console.log( 'VALUES: ', value );
                 control.setting.set( control.encodeValue( value ) );
-                $document.trigger( '_beacon/customizer/change' );
+                $document.trigger( 'customify/customizer/change' );
             } else {
 
             }
@@ -763,19 +786,19 @@
             return JSON.parse( decodeURI( value ) );
         },
         updateRepeaterLiveTitle: function( value, $item, field ){
-            $( '._beacon--repeater-live-title', $item ).text( value );
+            $( '.customify--repeater-live-title', $item ).text( value );
         },
         initGroup: function(){
             var control = this;
             if ( control.params.device_settings ) {
-                control.container.find( '._beacon--settings-fields' ).addClass( '_beacon--multiple-devices' );
+                control.container.find( '.customify--settings-fields' ).addClass( 'customify--multiple-devices' );
                 if ( ! _.isObject( control.params.value ) ) {
                     control.params.value = {};
                 }
 
                 _.each( control.devices , function( device, device_index ){
-                    var $group_device = $( '<div class="_beacon-group-device-fields _beacon-field-settings-inner _beacon--for-'+device+'"></div>' );
-                    control.container.find( '._beacon--settings-fields' ).append( $group_device );
+                    var $group_device = $( '<div class="customify-group-device-fields customify-field-settings-inner customify--for-'+device+'"></div>' );
+                    control.container.find( '.customify--settings-fields' ).append( $group_device );
                     var device_value = {};
                     if ( ! _.isUndefined( control.params.value[ device] ) ) {
                         device_value = control.params.value[ device ];
@@ -785,7 +808,7 @@
                     }
 
                     _.each( control.params.fields, function( f, index ){
-                        var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
+                        var $fieldArea = $( '<div class="customify--group-field" data-field-name="'+f.name+'"></div>' );
                         $group_device.append( $fieldArea );
                         f.device_settings = false;
                         f.value = device_value[ f.name ];
@@ -796,8 +819,8 @@
 
             } else {
                 _.each( control.params.fields, function( f, index ){
-                    var $fieldArea = $( '<div class="_beacon--group-field" data-field-name="'+f.name+'"></div>' );
-                    control.container.find( '._beacon--settings-fields' ).append( $fieldArea );
+                    var $fieldArea = $( '<div class="customify--group-field" data-field-name="'+f.name+'"></div>' );
+                    control.container.find( '.customify--settings-fields' ).append( $fieldArea );
                     f.original_name = f.name;
                     control.addField( f, $fieldArea );
 
@@ -838,13 +861,13 @@
                     _field.name =  field.name+'-'+device;
 
                     var $deviceFields = $( template( _field , template_id, 'field' ) );
-                    var deviceFieldItem = $deviceFields.find( '._beacon-field-settings-inner' ).first();
+                    var deviceFieldItem = $deviceFields.find( '.customify-field-settings-inner' ).first();
 
                     if ( ! fieldItem ) {
-                        $fieldsArea.append( $deviceFields ).addClass( '_beacon--multiple-devices' );
+                        $fieldsArea.append( $deviceFields ).addClass( 'customify--multiple-devices' );
                     }
 
-                    deviceFieldItem.addClass( '_beacon--for-'+device );
+                    deviceFieldItem.addClass( 'customify--for-'+device );
                     deviceFieldItem.attr( 'data-for-device', device );
 
                     if ( fieldItem ) {
@@ -867,8 +890,9 @@
                 type: control.params.setting_type,
                 name: control.id,
                 value: control.params.value,
-                default: control.params.default
+                default: control.params.default,
             };
+
             if ( field.type == 'slider' ) {
                 field.min = control.params.min;
                 field.max = control.params.max;
@@ -878,11 +902,11 @@
                 field.choices = control.params.choices;
             }
             if ( control.params.setting_type == 'checkbox' ) {
-                field.label = control.params.checkbox_label;
+                field.checkbox_label = control.params.checkbox_label;
             }
 
             field.device_settings = control.params.device_settings;
-            var $fieldsArea = control.container.find('._beacon--settings-fields');
+            var $fieldsArea = control.container.find('.customify--settings-fields');
 
             control.addField( field, $fieldsArea );
 
@@ -898,14 +922,14 @@
             var fields = control.params.fields;
 
             var $itemWrapper = $( template( '' , 'tmpl-customize-control-'+control.type+'-repeater') );
-            control.container.find( '._beacon--settings-fields' ).append( $itemWrapper );
+            control.container.find( '.customify--settings-fields' ).append( $itemWrapper );
             _.each( fields, function( f, index ){
                 f.value = '';
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
                     f.value = value[ f.name ];
                 }
-                var $fieldArea = $( '<div class="_beacon--repeater-field"></div>' );
-                $( '._beacon--repeater-item-inner', $itemWrapper ).append( $fieldArea );
+                var $fieldArea = $( '<div class="customify--repeater-field"></div>' );
+                $( '.customify--repeater-item-inner', $itemWrapper ).append( $fieldArea );
                 control.addField( f, $fieldArea );
 
                 if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
@@ -913,31 +937,31 @@
                 }
             } );
 
-            $itemWrapper.find( '._beacon--repeater-live-title' ).html( control.params.l10n.untitled );
+            $itemWrapper.find( '.customify--repeater-live-title' ).html( control.params.l10n.untitled );
 
             control.initColor( $itemWrapper );
             control.initSlider( $itemWrapper );
-            $document.trigger('_beacon/customizer/repeater/add', [ $itemWrapper, control ] );
+            $document.trigger('customify/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },
         limitRepeaterItems: function(){
             var control = this;
             if ( control.params.limit > 0 ) {
-                var addButton = $( '._beacon--repeater-add-new', control.container );
-                var c = $( '._beacon--settings-fields ._beacon--repeater-item', control.container ).length;
+                var addButton = $( '.customify--repeater-add-new', control.container );
+                var c = $( '.customify--settings-fields .customify--repeater-item', control.container ).length;
                 if ( c >= control.params.limit ) {
-                    addButton.addClass( '_beacon--hide' );
+                    addButton.addClass( 'customify--hide' );
                     if ( control.params.limit_msg ) {
-                        if ( $( '._beacon--limit-item-msg', control.container ).length === 0 ) {
-                            $( '<p class="_beacon--limit-item-msg">'+control.params.limit_msg+'</p>' ).insertBefore( addButton );
+                        if ( $( '.customify--limit-item-msg', control.container ).length === 0 ) {
+                            $( '<p class="customify--limit-item-msg">'+control.params.limit_msg+'</p>' ).insertBefore( addButton );
                         } else {
-                            $( '._beacon--limit-item-msg', control.container ).removeClass( '_beacon--hide' );
+                            $( '.customify--limit-item-msg', control.container ).removeClass( 'customify--hide' );
                         }
 
                     }
                 } else {
-                    $( '._beacon--limit-item-msg', control.container ).addClass( '_beacon--hide' );
-                    addButton.removeClass( '_beacon--hide' );
+                    $( '.customify--limit-item-msg', control.container ).addClass( 'customify--hide' );
+                    addButton.removeClass( 'customify--hide' );
                 }
             }
         },
@@ -949,17 +973,17 @@
             }
 
             // Sortable
-            control.container.find( '._beacon--settings-fields' ).sortable({
-                handle: '._beacon--repeater-item-heading',
+            control.container.find( '.customify--settings-fields' ).sortable({
+                handle: '.customify--repeater-item-heading',
                 containment: "parent"
             });
 
             // Toggle Move
-            control.container.on( 'click', '._beacon--repeater-reorder', function ( e ) {
+            control.container.on( 'click', '.customify--repeater-reorder', function ( e ) {
                 e.preventDefault();
-                $( '._beacon--repeater-items', control.container ).toggleClass('reorder-active');
-                $( '._beacon--repeater-add-new', control.container ).toggleClass('disabled');
-                if ( $( '._beacon--repeater-items', control.container ).hasClass( 'reorder-active' ) ) {
+                $( '.customify--repeater-items', control.container ).toggleClass('reorder-active');
+                $( '.customify--repeater-add-new', control.container ).toggleClass('disabled');
+                if ( $( '.customify--repeater-items', control.container ).hasClass( 'reorder-active' ) ) {
                     $( this ).html( $( this ).data( 'done' ) );
                 } else {
                     $( this ).html( $( this ).data( 'text' ) );
@@ -967,9 +991,9 @@
             } );
 
             // Move Up
-            control.container.on( 'click', '._beacon--repeater-item ._beacon--up', function( e ){
+            control.container.on( 'click', '.customify--repeater-item .customify--up', function( e ){
                 e.preventDefault();
-                var i = $( this ).closest('._beacon--repeater-item');
+                var i = $( this ).closest('.customify--repeater-item');
                 var index = i.index();
                 if ( index > 0 ) {
                     var up =  i.prev();
@@ -978,10 +1002,10 @@
                 }
             } );
 
-            control.container.on( 'click', '._beacon--repeater-item ._beacon--down', function( e ){
+            control.container.on( 'click', '.customify--repeater-item .customify--down', function( e ){
                 e.preventDefault();
-                var n = $( '._beacon--repeater-items ._beacon--repeater-item', control.container ).length;
-                var i = $( this ).closest('._beacon--repeater-item');
+                var n = $( '.customify--repeater-items .customify--repeater-item', control.container ).length;
+                var i = $( this ).closest('.customify--repeater-item');
                 var index = i.index();
                 if ( index < n - 1 ) {
                     var down =  i.next();
@@ -1002,24 +1026,24 @@
             control.limitRepeaterItems();
 
             // Toggle
-            control.container.on( 'click', '._beacon--repeater-item-toggle', function(e){
+            control.container.on( 'click', '.customify--repeater-item-toggle', function(e){
                 e.preventDefault();
-                var  p = $( this ).closest('._beacon--repeater-item');
-                p.toggleClass('_beacon--open');
+                var  p = $( this ).closest('.customify--repeater-item');
+                p.toggleClass('customify--open');
             } );
 
             // Remove
-            control.container.on( 'click', '._beacon--remove', function(e){
+            control.container.on( 'click', '.customify--remove', function(e){
                 e.preventDefault();
-                var  p = $( this ).closest('._beacon--repeater-item');
+                var  p = $( this ).closest('.customify--repeater-item');
                 p.remove();
-                $document.trigger('_beacon/customizer/repeater/remove', [ control ] );
+                $document.trigger('customify/customizer/repeater/remove', [ control ] );
                 control.getValue();
                 control.limitRepeaterItems();
             } );
 
             // Add Item
-            control.container.on( 'click', '._beacon--repeater-add-new', function(e){
+            control.container.on( 'click', '.customify--repeater-add-new', function(e){
                 e.preventDefault();
                 if ( ! $( this ).hasClass( 'disabled' ) ) {
                     control.addRepeaterItem();
@@ -1036,9 +1060,9 @@
         pickingEl: null,
         render: function(){
             var that = this;
-            if ( !_.isUndefined( _Beacon_Control_Args.icons ) && !_.isEmpty( _Beacon_Control_Args.icons ) ) {
-                _.each( _Beacon_Control_Args.icons, function( icon_config, font_type ) {
-                    $( '#_beacon--sidebar-icon-type' ).append( ' <option value="'+font_type+'">'+icon_config.name+'</option>' );
+            if ( !_.isUndefined( Customify_Control_Args.icons ) && !_.isEmpty( Customify_Control_Args.icons ) ) {
+                _.each( Customify_Control_Args.icons, function( icon_config, font_type ) {
+                    $( '#customify--sidebar-icon-type' ).append( ' <option value="'+font_type+'">'+icon_config.name+'</option>' );
                     that.addCSS( icon_config, font_type );
                     that.addIcons( icon_config, font_type );
                 } );
@@ -1050,7 +1074,7 @@
         },
 
         addIcons: function( icon_config, font_type ){
-            var icon_html = '<ul class="_beacon--list-icons icon-'+font_type+'" data-type="'+font_type+'">';
+            var icon_html = '<ul class="customify--list-icons icon-'+font_type+'" data-type="'+font_type+'">';
             _.each( icon_config.icons, function( icon_class, i ){
                 var class_name = '';
                 if ( icon_config.class_config ) {
@@ -1064,81 +1088,81 @@
             } );
             icon_html += '</ul>';
 
-            $( '#_beacon--icon-browser').append( icon_html );
+            $( '#customify--icon-browser').append( icon_html );
         },
         changeType: function(){
-            $document.on( 'change', '#_beacon--sidebar-icon-type', function(){
+            $document.on( 'change', '#customify--sidebar-icon-type', function(){
                 var type = $( this ).val();
                 if ( ! type || type == 'all' ) {
-                    $( '#_beacon--icon-browser ._beacon--list-icons' ).show();
+                    $( '#customify--icon-browser .customify--list-icons' ).show();
                 } else {
-                    $( '#_beacon--icon-browser ._beacon--list-icons' ).hide();
-                    $( '#_beacon--icon-browser ._beacon--list-icons.icon-'+type ).show();
+                    $( '#customify--icon-browser .customify--list-icons' ).hide();
+                    $( '#customify--icon-browser .customify--list-icons.icon-'+type ).show();
                 }
             } );
         },
         show: function () {
             var controlWidth = $( '#customize-controls' ).width();
-            $( '#_beacon--sidebar-icons' ).css( 'left', controlWidth ).addClass( '_beacon--active' );
+            $( '#customify--sidebar-icons' ).css( 'left', controlWidth ).addClass( 'customify--active' );
         },
         close: function () {
-            $( '#_beacon--sidebar-icons' ).css( 'left', -300 ).removeClass( '_beacon--active' );
-            $( '._beacon--icon-picker' ).removeClass('_beacon--icon-picking');
+            $( '#customify--sidebar-icons' ).css( 'left', -300 ).removeClass( 'customify--active' );
+            $( '.customify--icon-picker' ).removeClass('customify--icon-picking');
             this.pickingEl = null;
         },
         autoClose: function(){
             var that = this;
             $document.on( 'click', function( event ) {
-                if ( ! $(event.target).closest('._beacon--icon-picker').length ) {
-                    if ( ! $(event.target).closest('#_beacon--sidebar-icons').length ) {
+                if ( ! $(event.target).closest('.customify--icon-picker').length ) {
+                    if ( ! $(event.target).closest('#customify--sidebar-icons').length ) {
                         // customize-controls-close
                         that.close();
                     }
                 }
             } );
 
-            $( '#_beacon--sidebar-icons .customize-controls-close' ).on( 'click', function(){
+            $( '#customify--sidebar-icons .customize-controls-close' ).on( 'click', function(){
                 that.close();
             } );
         },
         picker: function(){
             var that = this;
-            $document.on( 'click', '._beacon--icon-picker ._beacon--pick-icon', function( e ) {
+            $document.on( 'click', '.customify--icon-picker .customify--pick-icon', function( e ) {
                 e.preventDefault();
                 if (  that.pickingEl ) {
-                    that.pickingEl.removeClass('_beacon--icon-picking');
+                    that.pickingEl.removeClass('customify--icon-picking');
                 }
-                that.pickingEl =  $( this ).closest( '._beacon--icon-picker' );
-                that.pickingEl.addClass( '_beacon--picking-icon' );
+                that.pickingEl =  $( this ).closest( '.customify--icon-picker' );
+                that.pickingEl.addClass( 'customify--picking-icon' );
                 that.show();
             } );
 
 
-            $document.on( 'click', '#_beacon--icon-browser li', function( e ) {
+            $document.on( 'click', '#customify--icon-browser li', function( e ) {
                 e.preventDefault();
                 var li = $( this );
                 var icon_preview = li.find( 'i' ).clone();
                 var icon = li.attr( "data-icon" ) || '';
                 var type = li.attr( 'data-type' ) || '';
-                $( '._beacon--input-icon-type', that.pickingEl ).val( type );
-                $( '._beacon--input-icon-name', that.pickingEl ).val( icon ).trigger( 'change' );
-                $( '._beacon--icon-preview-icon', that.pickingEl ).html( icon_preview );
+                $( '.customify--input-icon-type', that.pickingEl ).val( type );
+                $( '.customify--input-icon-name', that.pickingEl ).val( icon ).trigger( 'change' );
+                $( '.customify--icon-preview-icon', that.pickingEl ).html( icon_preview );
 
                 that.close();
             } );
 
             // remove
-            $document.on( 'click', '._beacon--icon-picker ._beacon--icon-remove', function( e ) {
+            $document.on( 'click', '.customify--icon-picker .customify--icon-remove', function( e ) {
                 e.preventDefault();
                 if (  that.pickingEl ) {
-                    that.pickingEl.removeClass('_beacon--icon-picking');
+                    that.pickingEl.removeClass('customify--icon-picking');
                 }
-                that.pickingEl =  $( this ).closest( '._beacon--icon-picker' );
-                that.pickingEl.addClass( '_beacon--picking-icon' );
+                that.pickingEl =  $( this ).closest( '.customify--icon-picker' );
+                that.pickingEl.addClass( 'customify--picking-icon' );
 
-                $( '._beacon--input-icon-type', that.pickingEl ).val( '' );
-                $( '._beacon--input-icon-name', that.pickingEl ).val( '' ).trigger( 'change' );
-                $( '._beacon--icon-preview-icon', that.pickingEl ).html( '' );
+                $( '.customify--input-icon-type', that.pickingEl ).val( '' );
+                $( '.customify--input-icon-name', that.pickingEl ).val( '' ).trigger( 'change' );
+                $( '.customify--icon-preview-icon', that.pickingEl ).html( '' );
 
             } );
 
@@ -1150,14 +1174,14 @@
             this.autoClose();
 
             // Search icon
-            $document.on( 'keyup', '#_beacon--icon-search', function( e ) {
+            $document.on( 'keyup', '#customify--icon-search', function( e ) {
                 var v = $( this).val();
                 v = v.trim();
                 if ( v ) {
-                    $( "#_beacon--icon-browser li" ).hide();
-                    $( "#_beacon--icon-browser li[data-icon*='"+v+"']" ).show();
+                    $( "#customify--icon-browser li" ).hide();
+                    $( "#customify--icon-browser li[data-icon*='"+v+"']" ).show();
                 } else {
-                    $( "#_beacon--icon-browser li" ).show();
+                    $( "#customify--icon-browser li" ).show();
                 }
             } );
         }
@@ -1168,7 +1192,7 @@
         optionHtml: '',
         get: function(){
             var that = this;
-            $.get( _Beacon_Control_Args.ajax, { action: '_beacon/customizer/ajax/fonts'  }, function(res ){
+            $.get( Customify_Control_Args.ajax, { action: 'customify/customizer/ajax/fonts'  }, function(res ){
                 if ( res.success ) {
                     that.fonts = res.data;
                     that.ready()
@@ -1207,7 +1231,7 @@
             var that = this;
             _.each( that.fonts, function( group, type ){
                 // theme_default
-                that.optionHtml += '<option value="">'+_Beacon_Control_Args.theme_default+'</option>';
+                that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
                 that.optionHtml += '<optgroup label="'+group.title+'">';
                     _.each( group.fonts, function( font, font_name ) {
                         that.optionHtml += '<option value="'+font_name+'">'+font_name+'</option>';
@@ -1215,22 +1239,22 @@
                 that.optionHtml += '</optgroup>';
             } );
 
-            $( 'select._beacon--font-families' ).html( that.optionHtml );
-            $( 'select._beacon--font-families' ).each( function(){
+            $( 'select.customify--font-families' ).html( that.optionHtml );
+            $( 'select.customify--font-families' ).each( function(){
                 var save_value = $( this ).data( 'value' );
                 if ( ! _.isObject( save_value ) ) {
                     save_value = {};
                 }
-                var p = $( this ).closest('._beacon-field-settings-inner');
+                var p = $( this ).closest('.customify-field-settings-inner');
                 if ( save_value.font ) {
                     $( 'option[value="'+save_value.font+'"]', $( this ) ).attr( 'selected', 'selected' );
                 }
                 that.setUpFont( save_value, p );
             } );
 
-            $document.on( 'change', 'select._beacon--font-families', function(){
+            $document.on( 'change', 'select.customify--font-families', function(){
                 var font =  $( this ).val();
-                var p = $( this ).closest('._beacon-field-settings-inner');
+                var p = $( this ).closest('.customify-field-settings-inner');
                 that.setUpFont( font, p );
             } );
         },
@@ -1267,14 +1291,14 @@
 
 
             if ( type == 'normal' ) {
-                $( '._beacon--font-variants-wrapper', p ).addClass( '_beacon--hide').find('select').html('');
-                $( '._beacon--font-subsets-wrapper', p ).addClass( '_beacon--hide').find( '.list-subsets' ).html('');
+                $( '.customify--font-variants-wrapper', p ).addClass( 'customify--hide').find('select').html('');
+                $( '.customify--font-subsets-wrapper', p ).addClass( 'customify--hide').find( '.list-subsets' ).html('');
             } else {
-                $( '._beacon--font-type', p ).val( type );
-                $( '._beacon--font-variants-wrapper', p ).removeClass( '_beacon--hide');
-                $( '._beacon--font-subsets-wrapper', p ).removeClass( '_beacon--hide');
-                $( '._beacon--font-variants', p).html( that.toSelectOptions(variants, _.isObject( font ) ? font.variant : '' ) );
-                $( '.list-subsets', p).removeClass('_beacon--hide').html( that.toCheckboxes(subsets, _.isObject( font ) ? font.subsets : '' ) );
+                $( '.customify--font-type', p ).val( type );
+                $( '.customify--font-variants-wrapper', p ).removeClass( 'customify--hide');
+                $( '.customify--font-subsets-wrapper', p ).removeClass( 'customify--hide');
+                $( '.customify--font-variants', p).html( that.toSelectOptions(variants, _.isObject( font ) ? font.variant : '' ) );
+                $( '.list-subsets', p).removeClass('customify--hide').html( that.toCheckboxes(subsets, _.isObject( font ) ? font.subsets : '' ) );
             }
 
         },
@@ -1289,42 +1313,42 @@
 
     wpcustomize.bind( 'ready', function( e, b ) {
 
-        $document.on( '_beacon/customizer/device/change', function( e, device ) {
-            $( '._beacon--device-select a' ).removeClass( '_beacon--active' );
+        $document.on( 'customify/customizer/device/change', function( e, device ) {
+            $( '.customify--device-select a' ).removeClass( 'customify--active' );
             if ( device != 'mobile' ) {
-                $( '._beacon--device-mobile').addClass( '_beacon--hide' );
-                $( '._beacon--device-general' ).removeClass( '_beacon--hide' );
-                $( '._beacon--tab-device-general' ).addClass('_beacon--active');
+                $( '.customify--device-mobile').addClass( 'customify--hide' );
+                $( '.customify--device-general' ).removeClass( 'customify--hide' );
+                $( '.customify--tab-device-general' ).addClass('customify--active');
             } else {
-                $( '._beacon--device-general' ).addClass( '_beacon--hide' );
-                $( '._beacon--device-mobile' ).removeClass( '_beacon--hide' );
-                $( '._beacon--tab-device-mobile' ).addClass('_beacon--active');
+                $( '.customify--device-general' ).addClass( 'customify--hide' );
+                $( '.customify--device-mobile' ).removeClass( 'customify--hide' );
+                $( '.customify--tab-device-mobile' ).addClass('customify--active');
             }
         } );
 
-        $document.on( 'click', '._beacon--tab-device-mobile', function(e){
+        $document.on( 'click', '.customify--tab-device-mobile', function(e){
             e.preventDefault();
-            $document.trigger( '_beacon/customizer/device/change',['mobile'] );
+            $document.trigger( 'customify/customizer/device/change',['mobile'] );
         } );
 
-        $document.on( 'click', '._beacon--tab-device-general', function(e){
+        $document.on( 'click', '.customify--tab-device-general', function(e){
             e.preventDefault();
-            $document.trigger( '_beacon/customizer/device/change',['general'] );
+            $document.trigger( 'customify/customizer/device/change',['general'] );
         } );
 
         $( '.accordion-section' ).each( function(){
             var s = $( this );
-            var t = $( '._beacon--device-select', s ).first();
+            var t = $( '.customify--device-select', s ).first();
             $( '.customize-section-title', s ).append( t );
         } );
 
         IconPicker.init();
-        if ( $( '._beacon--font-families' ).length > 0 ) {
+        if ( $( '.customify--font-families' ).length > 0 ) {
             FontSelector.init();
         }
 
         // Devices Switcher
-        $document.on( 'click', '._beacon-devices button', function(e){
+        $document.on( 'click', '.customify-devices button', function(e){
             e.preventDefault();
             var device = $( this ).attr( 'data-device' ) || '';
             console.log( 'Device', device );
@@ -1332,11 +1356,11 @@
         } );
 
         // Devices Switcher
-        $document.on( 'change', '._beacon--field input:checkbox', function(e){
+        $document.on( 'change', '.customify--field input:checkbox', function(e){
             if ( $( this ).is(':checked') ) {
-                $( this ).parent().addClass('_beacon--checked');
+                $( this ).parent().addClass('customify--checked');
             } else {
-                $( this ).parent().removeClass('_beacon--checked');
+                $( this ).parent().removeClass('customify--checked');
             }
         } );
 
@@ -1351,15 +1375,15 @@
             _.each( allValues, function( value, id ){
                 var control = wpcustomize.control( id );
                 if ( ! _.isUndefined( control ) ) {
-                    if ( control.params.type == '_beacon' ) {
+                    if ( control.params.type == 'customify' ) {
                         if ( ! _.isEmpty( control.params.required ) ) {
                             var check = false;
                             check = control.multiple_compare( control.params.required, allValues, decodeValue );
                             //console.log( 'Check C '+control.id, check );
                             if ( ! check ) {
-                                control.container.addClass( '_beacon--hide' );
+                                control.container.addClass( 'customify--hide' );
                             } else {
-                                control.container.removeClass( '_beacon--hide' );
+                                control.container.removeClass( 'customify--hide' );
                             }
                         }
                     }
@@ -1369,7 +1393,7 @@
         };
 
         ControlConditional( false );
-        $document.on( '_beacon/customizer/change', function(){
+        $document.on( 'customify/customizer/change', function(){
             ControlConditional( true );
         } );
 

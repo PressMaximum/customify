@@ -2,29 +2,29 @@
 /**
  * Functions which enhance the theme by hooking into WordPress
  *
- * @package _beacon
+ * @package customify
  */
 
-if ( ! function_exists( '_beacon_get_layout' ) ) {
+if ( ! function_exists( 'customify_get_layout' ) ) {
 	/**
 	 * Get the layout for the current page from Customizer setting or individual page/post.
 	 * @since 0.0.1
 	 */
-	function _beacon_get_layout() {
+	function customify_get_layout() {
 		global $site_layout;
 		return $site_layout;
 	}
 }
 
-if ( ! function_exists( '_beacon_get_sidebars' ) ) {
+if ( ! function_exists( 'customify_get_sidebars' ) ) {
 	/**
 	 * Display primary or/and secondary sidebar base on layout setting.
 	 * @since 0.0.1
 	 */
-	function _beacon_get_sidebars() {
+	function customify_get_sidebars() {
 
 		// Get the current layout
-		$layout = _beacon_get_layout();
+		$layout = customify_get_layout();
 
 		// Layout with 2 column
 		$layout_2_columns = array( 'sidebar-content', 'content-sidebar' );
@@ -44,15 +44,15 @@ if ( ! function_exists( '_beacon_get_sidebars' ) ) {
 		}
 
 	}
-	add_action( '_beacon_sidebars', '_beacon_get_sidebars' );
+	add_action( 'customify_sidebars', 'customify_get_sidebars' );
 }
 
 /**
  * Add a pingback url auto-discovery header for singularly identifiable articles.
  */
-function _beacon_pingback_header() {
+function customify_pingback_header() {
 	if ( is_singular() && pings_open() ) {
 		echo '<link rel="pingback" href="', esc_url( get_bloginfo( 'pingback_url' ) ), '">';
 	}
 }
-add_action( 'wp_head', '_beacon_pingback_header' );
+add_action( 'wp_head', 'customify_pingback_header' );

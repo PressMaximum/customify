@@ -48,16 +48,21 @@
 
     api.bind( 'preview-ready', function() {
         var $document = $( document );
+        var defaultTarget = window.parent === window ? null : window.parent;
+        $document.on( 'click', '#masthead .customize-partial-edit-shortcut-header_panel', function( e ){
+            e.preventDefault();
+            defaultTarget.wp.customize.panel( 'header_settings' ).focus();
+        } );
 
         // Get all values
        // console.log( 'ALL Control Values', api.get( ) );
-        var defaultTarget = window.parent === window ? null : window.parent;
+
         // Get a control
        // console.log( 'Test Get control',  defaultTarget.wp.customize.control( 'repeater' ) );
-        //console.log( '_Beacon_Preview_Config_Fields', _Beacon_Preview_Config_Fields );
+        //console.log( 'Customify_Preview_Config_Fields', Customify_Preview_Config_Fields );
 
-
-        $.each( _Beacon_Preview_Config_Fields, function ( index, field ) {
+        /*
+        $.each( Customify_Preview_Config_Fields, function ( index, field ) {
             if ( index.indexOf( 'setting|' ) > -1 ) {
                 //console.log( field );
                 if ( ! _.isUndefined( field.selector ) && ! _.isUndefined( field.css_format )  && field.selector ) {
@@ -69,7 +74,10 @@
                 }
             }
         } );
+        */
 
+
+        /*
 
         wp.customize.selectiveRefresh.bind( 'sidebar-updated', function( sidebarPartial ) {
             var widgetArea;
@@ -86,6 +94,7 @@
             var widgetArea;
             console.log( 'partial-content-rendered', sidebarPartial );
         } );
+        */
 
 
     } );

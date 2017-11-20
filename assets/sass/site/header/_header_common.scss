@@ -4,6 +4,10 @@
 
 .site-branding {
     float: left;
+    img {
+        display: block;
+        width: auto;
+    }
     .site-title {
         font-size: 1.9em;
         margin: 0;
@@ -13,6 +17,14 @@
     .site-description {
         font-size: ms(-1);
         margin: 3px 0px 0px 0px;
+    }
+}
+
+.header-search-form {
+    margin: 0px;
+    display: flex;
+    .s {
+        width: 100%;
     }
 }
 
