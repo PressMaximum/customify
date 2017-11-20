@@ -562,13 +562,12 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 <select class="customify--font-families" data-value="{{ JSON.stringify( field.value ) }}" data-name="{{ field.name }}-font"></select>
             </div>
             <div class="customify--font-variants-wrapper">
-                <label><?php _e( 'Variants' ) ?></label>
+                <label><?php _e( 'Variants', 'customify' ) ?></label>
                 <select class="customify--font-variants" data-name="{{ field.name }}-variant"></select>
             </div>
             <div class="customify--font-subsets-wrapper">
-                <label><?php _e( 'Languages' ) ?></label>
+                <label><?php _e( 'Languages', 'customify' ) ?></label>
                 <div data-name="{{ field.name }}-subsets" class="list-subsets">
-
                 </div>
             </div>
         </div>

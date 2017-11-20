@@ -54,7 +54,7 @@ function customify_builder_header_search_item(){
     <form role="search" method="get" class="header-search-form search-form" action="<?php echo home_url( '/' ); ?>">
         <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
         <?php if ( $show_btn ) { ?>
-        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'customify' ); ?>" />
+        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'search submit', 'customify' ); ?>" />
         <?php } ?>
     </form>
 

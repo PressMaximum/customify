@@ -114,7 +114,7 @@ if ( ! function_exists( 'customify_comment' ) ) :
 	 * @return void
 	 */
 	function customify_comment( $comment, $args, $depth ) {
-		$GLOBALS['comment'] = $comment;
+		//$GLOBALS['comment'] = $comment;
 		switch ( $comment->comment_type ) :
 			case 'pingback' :
 			case 'trackback' :
@@ -151,7 +151,7 @@ if ( ! function_exists( 'customify_comment' ) ) :
 									esc_url( get_comment_link( $comment->comment_ID ) ),
 									get_comment_time( 'c' ),
 									/* translators: 1: date, 2: time */
-									sprintf( __( '%1$s', 'customify' ), get_comment_date() )
+                                    get_comment_date()
 								);
 								?>
 							</div>
