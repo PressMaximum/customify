@@ -1,24 +1,24 @@
 <?php
-if ( ! function_exists( '_beacon_customizer_layouts_config' ) ) {
-	function _beacon_customizer_layouts_config( $configs ){
+if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
+	function customify_customizer_layouts_config( $configs ){
 
 		$config = array(
 			array(
-				'name'           => '_beacon_layouts',
+				'name'           => 'customify_layouts',
 				'type'           => 'panel',
 				'priority' => 22,
 				'theme_supports' => '',
-				'title'          => __( 'Layouts', '_beacon' ),
+				'title'          => __( 'Layouts', 'customify' ),
 			),
 
 			array(
-				'name'           => '_beacon_layouts_section',
+				'name'           => 'customify_layouts_section',
 				'type'           => 'section',
-				'panel'          => '_beacon_layouts',
+				'panel'          => 'customify_layouts',
 				//'priority' => 22,
 				'theme_supports' => '',
-				'title'          => __( 'Beacon Section', '_beacon' ),
-				'description'    => __( 'This is section description', '_beacon' ),
+				'title'          => __( 'Beacon Section', 'customify' ),
+				'description'    => __( 'This is section description', 'customify' ),
 			),
 
 			array(
@@ -28,11 +28,11 @@ if ( ! function_exists( '_beacon_customizer_layouts_config' ) ) {
 				'default' => 1200,
 				'min' => 700,
 				'max' => 2000,
-				'section' => '_beacon_layouts_section',
+				'section' => 'customify_layouts_section',
 				//'device' => 'mobile', // mobile || general
 				//'priority' => 22,
-				'title'          => __( 'Container Width', '_beacon' ),
-				'selector' => '._beacon_container',
+				'title'          => __( 'Container Width', 'customify' ),
+				'selector' => '.customify_container',
 				'css_format' => 'max-width: {{value}}'
 			),
 
@@ -42,4 +42,4 @@ if ( ! function_exists( '_beacon_customizer_layouts_config' ) ) {
 	}
 }
 
-add_filter( '_beacon/customizer/config', '_beacon_customizer_layouts_config' );
+add_filter( 'customify/customizer/config', 'customify_customizer_layouts_config' );

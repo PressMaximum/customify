@@ -189,8 +189,6 @@
     margin-bottom: 0px; }
   .customify--field * {
     box-sizing: border-box; }
-  .customify--field.customify--field-color * {
-    box-sizing: content-box; }
   .customify--field textarea {
     width: 100%; }
   .customify--field .wp-picker-container input[type=text].wp-color-picker {

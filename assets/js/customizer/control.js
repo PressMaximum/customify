@@ -419,10 +419,14 @@
             });
         },
         initColor: function( $el ){
+
+
             $( '.customify-input-color', $el ).each( function(){
                 var colorInput = $( this );
                 var df = colorInput.data( 'default' ) || '';
                 var current_val = $( '.customify-input', colorInput ).val();
+                // data-alpha="true"
+                $( '.customify--color-panel', colorInput ).attr( 'data-alpha', 'true' );
                 $( '.customify--color-panel', colorInput ).wpColorPicker({
                     defaultColor: df,
                     change: function( event, ui ){
