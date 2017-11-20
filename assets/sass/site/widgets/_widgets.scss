@@ -25,7 +25,7 @@
             }
         }
         a {
-            color: lighten($color_text, 10%);
+            color: $color_meta;
             &:hover {
                 color: $color_primary;
                 text-decoration: underline;

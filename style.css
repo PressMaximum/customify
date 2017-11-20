@@ -1986,7 +1986,7 @@ input,
 select,
 optgroup,
 textarea {
-  color: #555555;
+  color: #444444;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.618;
@@ -1996,9 +1996,9 @@ textarea {
 
 /* # Heading */
 h1, h2, h3, .comments-area .comments-title, h4, h5, h6 {
-  font-weight: 400;
+  font-weight: 300;
   margin: 0 0 0.5407911001em;
-  color: #222222;
+  color: #373737;
   clear: both; }
 
 h1, .h1 {
@@ -2053,7 +2053,7 @@ code, kbd, tt, var {
   border-radius: 2px; }
 
 abbr, acronym {
-  border-bottom: 1px dotted #555555;
+  border-bottom: 1px dotted #444444;
   cursor: help; }
 
 mark, ins {
@@ -2175,7 +2175,7 @@ input[type="submit"] {
   input[type="button"]:hover,
   input[type="reset"]:hover,
   input[type="submit"]:hover {
-    background: #222222; }
+    background: #111111; }
   button:active, button:focus,
   input[type="button"]:active,
   input[type="button"]:focus,
@@ -2201,7 +2201,7 @@ input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
 textarea {
-  color: #555555;
+  color: #444444;
   border: none;
   background: #f2f2f2;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
@@ -2428,7 +2428,7 @@ object {
           float: left;
           top: 1.618em;
           left: 0;
-          width: 25px;
+          width: 1.618em;
           height: 1px;
           background-color: #eaecee; } }
     @media screen and (max-width: 48em) {
@@ -2448,13 +2448,13 @@ article.comment {
     line-height: 1; }
     article.comment .comment-reply a {
       font-size: 90%;
-      color: #999999; }
+      color: #6d6d6d; }
       article.comment .comment-reply a:hover {
         color: #c3512f; }
   article.comment .comment-meta {
     margin-bottom: 0.875em; }
   article.comment .comment-time {
-    color: #999999;
+    color: #6d6d6d;
     font-size: 90%; }
     article.comment .comment-time:hover {
       color: #c3512f; }
@@ -2462,12 +2462,12 @@ article.comment {
     margin-left: 85px; }
   article.comment .comment-author {
     font-weight: 500;
-    font-size: 140%;
+    font-size: 133%;
     line-height: 1;
     display: inline-block;
     font-style: normal; }
     article.comment .comment-author a {
-      color: #555555; }
+      color: #444444; }
       article.comment .comment-author a:hover {
         color: #c3512f; }
   article.comment .comment-post-author {
@@ -2498,7 +2498,7 @@ article.comment {
 
 #respond #cancel-comment-reply-link {
   border: 1px solid #c3512f;
-  font-size: 13px;
+  font-size: 12px;
   padding: 2px 6px 3px;
   border-radius: 2px;
   color: #c3512f;
@@ -2648,7 +2648,7 @@ article.comment {
     .widget-area .widget ul li {
       margin: 0px 0px 0.3819820591em; }
   .widget-area .widget a {
-    color: #6f6e6e; }
+    color: #6d6d6d; }
     .widget-area .widget a:hover {
       color: #c3512f;
       text-decoration: underline; }

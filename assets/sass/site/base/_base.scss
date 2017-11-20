@@ -32,9 +32,9 @@ textarea {
 
 /* # Heading */
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 400;
+    font-weight: 300;
     margin: 0 0 ms(-3);
-    color: darken($color_text, 20%);
+    color: darken($color_text, 5%);
     clear: both;
 }
 
@@ -529,7 +529,7 @@ object {
                 float: left;
                 top: ms(2);
                 left: 0;
-                width: 25px;
+                width: ms(2);
                 height: 1px;
                 background-color: $color_border;
             }
@@ -579,7 +579,7 @@ article.comment {
     }
     .comment-author {
         font-weight: 500;
-        font-size: 140%;
+        font-size: 133%;
         line-height: 1;
         display: inline-block;
         font-style: normal;
@@ -619,7 +619,7 @@ article.comment {
     }
     #cancel-comment-reply-link {
         border: 1px solid $color_primary;
-        font-size: 13px;
+        font-size: 12px;
         padding: 2px 6px 3px;
         border-radius: 2px;
         color: $color_primary;
