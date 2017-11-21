@@ -2,6 +2,7 @@
 function customify_builder_config_header_icon_list(){
     $section = 'header_icon_list';
     $prefix = 'header_icon_list_';
+    $fn = 'customify_builder_header_icon_list_item';
     return array(
         array(
             'name' => $section,
@@ -15,6 +16,8 @@ function customify_builder_config_header_icon_list(){
             'name' => $prefix.'items',
             'type' => 'repeater',
             'section'     => $section,
+            'selector' => '.header-icon-list-item',
+            'render_callback' => $fn,
             //'priority' => 22,
             'title'          => __( 'Items', 'customify' ),
             'live_title_field' => 'title',
@@ -38,6 +41,11 @@ function customify_builder_config_header_icon_list(){
                     'name' => 'show_text',
                     'type' => 'checkbox',
                     'device_settings' => true,
+                    'default' => array(
+                        'desktop' => 1,
+                        'tablet' => 1,
+                        'mobile' => 0
+                    ),
                     'checkbox_label' => __( 'Show text',  'customify' ),
                     'label' => __( 'Show text', 'customify' ),
                 ),
@@ -64,22 +72,39 @@ function customify_builder_config_header_icon_list(){
 
 function customify_builder_header_icon_list_item( $item_config ){
 
-    $target = Customify_Customizer()->get_setting('header_icon_list_target');
+    $target_blank = Customify_Customizer()->get_setting('header_icon_list_target');
+    $target = '_self';
+    if ( $target_blank == 1 ) {
+        $target = '_blank';
+    }
+
     $items = Customify_Customizer()->get_setting('header_icon_list_items');
     if ( ! empty( $items ) ) {
-        echo '<ul>';
+        echo '<ul class="header-icon-list-item">';
         foreach ( ( array ) $items as $index => $item) {
             $item = wp_parse_args( $item, array(
                 'title' => '',
                 'icon' => '',
                 'url' => '',
                 'show_text' => array(),
-
             ) );
+
+            $classes = array();
+
+            $show_text = wp_parse_args( $item['show_text'], array(
+                'desktop' => '',
+                'tablet' => '',
+                'mobile' => ''
+            ) );
+            foreach ( $show_text as $k => $v ) {
+                if (  ! $v ) {
+                    $classes[ $k ] = 'hide-on-'.$k;
+                }
+            }
 
             echo '<li>';
             if ( $item['url'] ) {
-                echo '<a href="'.esc_url( $item['url']  ).'">';
+                echo '<a target="'.esc_attr( $target ).'" href="'.esc_url( $item['url']  ).'">';
             }
 
             $icon = wp_parse_args( $item['icon'], array(
@@ -91,7 +116,7 @@ function customify_builder_header_icon_list_item( $item_config ){
                 echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
             }
             if ( $item['title'] ) {
-                echo '<span>'.wp_kses_post( $item['title'] ).'</span>';
+                echo '<span class="'.esc_attr( join(' ', $classes ) ).'">'.wp_kses_post( $item['title'] ).'</span>';
             }
 
             if ( $item['url'] ) {
