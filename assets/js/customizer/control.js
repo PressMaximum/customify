@@ -355,9 +355,14 @@
                                 value =  value[ cond_device ];
                             }
                         }
-                        if ( decodeValue ) {
-                            value = control.decodeValue( value )
+                        try {
+                            if ( decodeValue ) {
+                                value = control.decodeValue( value )
+                            }
+                        } catch ( e ) {
+
                         }
+
                         check = control.compare( value, cond, cond_val );
                     }
 
@@ -394,7 +399,7 @@
 
                 }
             } catch  ( e ) {
-                console.log( 'Trying_test_error', e  );
+                //console.log( 'Trying_test_error', e  );
             }
 
 
@@ -419,7 +424,6 @@
             });
         },
         initColor: function( $el ){
-
 
             $( '.customify-input-color', $el ).each( function(){
                 var colorInput = $( this );
@@ -744,8 +748,9 @@
                         var _v = {};
                         _.each( control.params.fields, function( f ){
                             var inputField = $( '[data-field-name="'+f.name+'"]', $item );
-                            var $_field = inputField.closest('.customify--field');
-                            var _fv =  control.getFieldValue( f.name, f,  $_field );
+                            //var $_field = inputField.closest('.customify--field');
+                            //var $_field = inputField.closest('.customify--repeater-field');
+                            var _fv =  control.getFieldValue( f.name, f,  $item );
                             _v[ f.name ] = _fv;
 
                             // Update Live title
