@@ -785,7 +785,7 @@
 
             },
 
-            switchToDevice: function( device ){
+            switchToDevice: function( device, toggle_button ){
                 var that = this;
                 $( '.customify--cb-devices-switcher a', that.container).removeClass('customify--tab-active');
                 $( '.customify--cb-devices-switcher .switch-to-'+device, that.container ).addClass( 'customify--tab-active' );
@@ -793,10 +793,12 @@
                 $( '.customify--device-panel.customify--panel-'+device, that.container  ).removeClass( 'customify--panel-hide' );
                 that.activePanel = device;
 
-                if ( device == 'desktop' ) {
-                    $( '#customize-footer-actions .preview-desktop' ).trigger('click');
-                } else {
-                    $( '#customize-footer-actions .preview-mobile' ).trigger('click');
+                if ( _.isUndefined( toggle_button ) || toggle_button ) {
+                    if ( device == 'desktop' ) {
+                        $( '#customize-footer-actions .preview-desktop' ).trigger('click');
+                    } else {
+                        $( '#customize-footer-actions .preview-mobile' ).trigger('click');
+                    }
                 }
 
             },
@@ -990,9 +992,9 @@
 
                 wpcustomize.previewedDevice.bind( function( newDevice ) {
                     if ( newDevice === 'desktop' ) {
-                        that.switchToDevice( 'desktop' );
+                        that.switchToDevice( 'desktop', false );
                     } else {
-                        that.switchToDevice( 'mobile' );
+                        that.switchToDevice( 'mobile', false );
                     }
                 });
 
@@ -1003,7 +1005,6 @@
                 wpcustomize.state( 'paneVisible' ).bind( function(){
                     that.panelLayoutCSS();
                 } );
-
 
                 $( window ).resize( _.throttle( function(){
                     that.panelLayoutCSS();

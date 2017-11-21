@@ -1060,11 +1060,20 @@
                 control.limitRepeaterItems();
             } );
 
+
+            var defaultValue = {};
+            _.each( control.params.fields , function( f, k ){
+                defaultValue[ f.name ] = null;
+                if ( !_.isUndefined( f.default ) ) {
+                    defaultValue[ f.name ] = f.default;
+                }
+            } );
+
             // Add Item
             control.container.on( 'click', '.customify--repeater-add-new', function(e){
                 e.preventDefault();
                 if ( ! $( this ).hasClass( 'disabled' ) ) {
-                    control.addRepeaterItem();
+                    control.addRepeaterItem( defaultValue );
                     control.getValue();
                     control.limitRepeaterItems();
                 }
