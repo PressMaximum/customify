@@ -194,6 +194,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             return $get_value;
         }
 
+        function setup_icon( $icon ){
+            if ( ! is_array( $icon ) ) {
+                $icon = array();
+            }
+            return wp_parse_args( $icon, array( 'type' =>'', 'icon' => '') );
+        }
 
         function get_field_setting( $key ){
             $config = self::get_config();
