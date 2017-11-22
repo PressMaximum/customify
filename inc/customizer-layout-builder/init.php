@@ -487,59 +487,41 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
      function render_row( $items, $id = '', $device = 'desktop' ){
          $row_html     = '';
-         $count        = 0;
-         $columns      = 0;
          $max_columns  = 12;
-         $widget_count = count( $items );
-
          $items = $this->_sort_items_by_position( $items );
+         $last_item = false;
+         $next_item = false;
 
-         foreach ( $items as $item ) {
-
+         foreach ( $items as $index => $item ) {
              $content = $this->render_items[$item['id']]['render_content'];
+             if ( isset( $items[ $index + 1 ] ) ) {
+                 $next_item = $items[ $index + 1 ];
+             } else {
+                 $next_item = false;
+             }
 
              $item_id = $item['id'];
-
-             if ($content) {
-                 $count++;
-             } else {
-                 $widget_count--;
-                 continue;
-             }
-
-
-             // Used to calculate empty columns between widgets.
-             $empty = 0;
-
-             // Init array for widget row classes.
-             $classes = array();
-
-             // Calculate empty space between columns.
-             if ($columns < intval($item['x'])) {
-                 $empty = intval($item['x']) - $columns;
-             }
-
-             $atts = array();
-
-             // Add pre class and add empty columns to $columns var.
-             if (0 < $empty) {
-                 $columns = $columns + $empty;
-                 $atts[] = 'off-' . $empty;
-             }
-
-             $columns = $columns + intval($item['width']);
-             $classes[] = 'customify-col-' . intval($item['width']);
-
-             if ($widget_count === $count && $widget_count > 1) {
-                 if ($max_columns === $columns) {
-                     $classes[] = 'customify-col-last';
-                 } else {
-                     $p = $max_columns - $columns;
-                     // $classes[] = 'sp-header-post-' . ( $max_columns - $columns );
-                     $atts[] = 'off-' . $p;
+             $x = intval( $item['x'] );
+             $width = intval($item['width']);
+             if ( ! $next_item ) {
+                 if ( $x + $width < $max_columns ) {
+                     $width += $max_columns - ( $x + $width );
                  }
-                 $count = 0;
              }
+             $atts = array();
+             $classes = array();
+             $classes[] = 'customify-col-' . $width;
+             if ( $x > 0 ) {
+                 if ( ! $last_item ) {
+                     $atts[] = 'off-' . $x;
+                 } else {
+                    $o = intval( $last_item['width'] ) + intval( $last_item['x'] );
+                    if ( $x - $o  > 0 ) {
+                        $atts[] = 'off-' . ( $x - $o );
+                    }
+                 }
+             }
+             $last_item = $item;
 
              $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
 
@@ -550,7 +532,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
              
              echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
              echo str_replace( '__id__', $id.'-'.$device, $content );
-             //echo $item_id;
              echo '</div>';
          }
      }
