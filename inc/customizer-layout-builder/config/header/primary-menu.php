@@ -1,6 +1,7 @@
 <?php
 function customify_builder_config_header_primary_menu() {
     $section = 'header_menu_primary';
+    $fn = 'customify_builder_primary_menu_item';
     return array(
         array(
             'name' => $section,
@@ -15,9 +16,11 @@ function customify_builder_config_header_primary_menu() {
             'name' => 'primary_menu_style',
             'type' => 'select',
             'section' => $section,
-            'title'          => __( 'Style', 'customify' ),
+            'selector' => '.primary-menu',
+            'render_callback' => $fn,
+            'title' => __( 'Style', 'customify' ),
             'choices' => array(
-                'default' => __( 'Default', 'customify' ),
+                'style_default' => __( 'Default', 'customify' ),
                 'style_2' => __( 'Style 2', 'customify' ),
             )
         ),
@@ -126,11 +129,13 @@ function customify_builder_config_header_primary_menu() {
 
 function customify_builder_primary_menu_item(){
 
+    $style = sanitize_text_field( Customify_Customizer()->get_setting('primary_menu_style') );
+
     wp_nav_menu( array(
         'theme_location' => 'menu-1',
         'container' => 'nav',
         'container_id' => 'site-navigation-__id__',
-        'container_class' => 'primary-menu',
+        'container_class' => 'primary-menu'.( $style ? ' '.$style : '' ),
         'menu_id'        => 'primary-menu-__id__',
     ) );
 
