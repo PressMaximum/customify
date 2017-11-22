@@ -194,6 +194,12 @@
   .customify--field .wp-picker-container input[type=text].wp-color-picker {
     width: 65px !important; }
 
+.customify-text-align input {
+  display: none; }
+
+.customify-text-align input:checked + .button {
+  background: #ccc; }
+
 .customify--css-unit {
   display: block;
   margin-bottom: 5px; }

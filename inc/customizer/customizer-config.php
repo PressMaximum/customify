@@ -48,6 +48,12 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                     ),
 
                     array(
+                        'name' => 'font_style',
+                        'type' => 'text_align',
+                        'label' => __( 'Text align', 'customify' ),
+                    ),
+
+                    array(
                         'name' => 'font_size',
                         'type' => 'slider',
                         'label' => __( 'Font Size', 'customify' ),

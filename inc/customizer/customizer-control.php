@@ -248,6 +248,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'select',
             'font',
             'font_style',
+            'text_align',
             'checkbox',
             'css_ruler',
             'icon',
@@ -494,14 +495,13 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         ?>
         <#
         var uniqueID = field.name + ( new Date().getTime() );
-
         #>
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-radio-list">
                 <# _.each( field.choices, function( label, key ){  #>
                     <p>
-                    <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> {{ label }}</label>
+                        <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span>{{ label }}</span></label>
                     </p>
                 <# } ); #>
             </div>
@@ -574,6 +574,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+
     function field_font_style(){
         $this->before_field();
         ?>
@@ -589,6 +590,24 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             <label title="<?php esc_attr_e( 'Underline', 'customify' ); ?>" class="button <# if ( field.value.u == 1 ){ #> customify--checked <# } #>"><input type="checkbox" <# if ( field.value.u == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-u" value="1"><span class="dashicons dashicons-editor-underline"></span></label>
             <label title="<?php esc_attr_e( 'Strikethrough', 'customify' ); ?>" class="button <# if ( field.value.s == 1 ){ #> customify--checked <# } #>"><input type="checkbox" <# if ( field.value.s == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-s" value="1"><span class="dashicons dashicons-editor-strikethrough"></span></label>
             <label title="<?php esc_attr_e( 'Uppercase', 'customify' ); ?>" class="button <# if ( field.value.t == 1 ){ #> customify--checked <# } #>"><input type="checkbox" <# if ( field.value.t == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-t" value="1"><span class="dashicons dashicons-editor-textcolor"></span></label>
+        </div>
+        <?php
+        $this->after_field();
+    }
+
+    function field_text_align(){
+        $this->before_field();
+        ?>
+        <#
+        var uniqueID = field.name + ( new Date().getTime() );
+        #>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-field-settings-inner">
+            <div class="customify-text-align">
+                <label><input type="radio" data-name="{{ field.name }}" value="left" <# if ( field.value == 'left' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-alignleft"></span></span></label>
+                <label><input type="radio" data-name="{{ field.name }}" value="center" <# if ( field.value == 'center' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-aligncenter"></span></span></label>
+                <label><input type="radio" data-name="{{ field.name }}" value="right" <# if ( field.value == 'right' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-alignright"></span></span></label>
+            </div>
         </div>
         <?php
         $this->after_field();

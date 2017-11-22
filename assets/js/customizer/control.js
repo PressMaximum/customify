@@ -674,10 +674,12 @@
                     }
                     break;
                 case 'radio':
+                case 'text_align':
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            value[ device ] = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                            var input = $( 'input[data-name="'+name+'-'+device+'"]', $field );
+                            value[ device ] = input.is(':checked') ? input.val() : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]:checked', $field ).val();

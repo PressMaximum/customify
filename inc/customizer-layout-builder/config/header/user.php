@@ -192,7 +192,7 @@ function customify_builder_config_header_user(){
 
 function customify_builder_header_user_item(){
     echo '<div class="header-user-item">';
-    
+
     if ( is_user_logged_in() ) {
 
         $url = Customify_Customizer()->get_setting('header_user_profile_url' );
@@ -276,7 +276,6 @@ function customify_builder_header_user_item(){
             $login_settings['icon'] = Customify_Customizer()->setup_icon( $login_settings['icon'] );
 
             if ( $login_settings['label'] ) {
-
                 if ( $login_settings['url'] ) {
                     echo '<a class="user-login-item" href="'.esc_url( $login_settings['url'] ).'">';
                 } else {
@@ -291,7 +290,6 @@ function customify_builder_header_user_item(){
                 } else {
                     echo '</span>';
                 }
-
             }
         }
 
