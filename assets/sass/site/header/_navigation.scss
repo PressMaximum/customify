@@ -1,4 +1,4 @@
-.primary-menu {
+.primary-menu-desktop {
    .menu {
        list-style: none;
        padding: 0px;
@@ -13,3 +13,64 @@
    }
 }
 
+
+/*
+* Mobile Panel
+* ---------------------------------------------
+ */
+
+#mobile-header-panel {
+    padding: 0;
+    position: fixed;
+    width: 100%;
+    height: auto;
+    top: 0;
+    left: 0px;
+    z-index: 9999999;
+    visibility: hidden;
+    transform: translate3d(-100%,0,0);
+    transition: transform .5s cubic-bezier(.79,.14,.15,.86);
+    background: #cccccc;
+}
+
+#mobile-header-panel-inner {
+    position: relative;
+    .close-panel {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+}
+
+#page {
+    transition: transform .7s ease;
+    transform-origin: 50% 200px 0;
+    box-shadow: 0 0 46px #000;
+}
+
+.hiding-mobile-header-panel {
+    #mobile-header-panel {
+        transform: translateX(-100%);
+        transition: transform .5s cubic-bezier(.79,.14,.15,.86);
+        //left: 0;
+        visibility: visible;
+    }
+}
+.display-mobile-header-panel {
+    overflow: hidden;
+    #wpadminbar {
+        display: none;
+    }
+    #page {
+        position: fixed;
+        transform: scale3d(.9,.9,.9);
+        box-shadow: 0 0 46px #000;
+    }
+    #mobile-header-panel {
+        height: auto;
+        overflow: auto;
+        transform: translate3d(0, 0, 0);
+        left: 0;
+        visibility: visible;
+    }
+}

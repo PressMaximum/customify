@@ -134,9 +134,9 @@ function customify_builder_primary_menu_item(){
     wp_nav_menu( array(
         'theme_location' => 'menu-1',
         'container' => 'nav',
-        'container_id' => 'site-navigation-__id__',
-        'container_class' => 'primary-menu'.( $style ? ' '.$style : '' ),
-        'menu_id'        => 'primary-menu-__id__',
+        'container_id' => 'site-navigation-__id__-__device__',
+        'container_class' => 'primary-menu primary-menu-__device__'.( $style ? ' '.$style : '' ),
+        'menu_id'        => 'primary-menu-__id__-__device__',
     ) );
 
 }

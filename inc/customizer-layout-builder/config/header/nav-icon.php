@@ -1,13 +1,15 @@
 <?php
 function customify_builder_config_header_nav_icon(){
     $section = 'header_nav_icon';
+    $fn = 'customify_builder_nav_icon_item';
+    $selector = '.nav-mobile-toggle';
     return array(
         array(
             'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => __( 'Nav Icon', 'customify' ),
+            'title' => __( 'Nav Icon', 'customify' ),
         ),
 
         array(
@@ -15,6 +17,8 @@ function customify_builder_config_header_nav_icon(){
             'type' => 'select',
             'section' => $section,
             'title'          => __( 'Style', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $fn,
             'choices' => array(
                 'default' => __( 'Default', 'customify' ),
                 'style_2' => __( 'Style 2', 'customify' ),
@@ -25,54 +29,105 @@ function customify_builder_config_header_nav_icon(){
             'name' => 'nav_icon',
             'type' => 'icon',
             'section' => $section,
-            'title'          => __( 'Icon', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $fn,
+            'title' => __( 'Icon', 'customify' ),
         ),
 
         array(
             'name' => 'nav_icon_text',
             'type' => 'text',
             'section' => $section,
-            'title'          => __( 'Text', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $fn,
+            'default' => __( 'Navigation', 'customify' ),
+            'title' => __( 'Label', 'customify' ),
         ),
 
         array(
             'name' => 'nav_icon_show_text',
             'type' => 'checkbox',
             'section' => $section,
-            'title'          => __( 'Show Text', 'customify' ),
-            'checkbox_label'         => __( 'Show text', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $fn,
+            'default' => 1,
+            'title' => __( 'Show Label', 'customify' ),
+            'checkbox_label' => __( 'Show Label', 'customify' ),
         ),
 
         array(
             'name' => 'nav_icon_size',
             'type' => 'slider',
             'section' => $section,
-            'title'          => __( 'Icon Size', 'customify' ),
+            'selector' => $selector.' i',
+            'render_callback' => $fn,
+            'max' => 100,
+            'css_format' => 'font-size: {{value}};',
+            'title' => __( 'Icon Size', 'customify' ),
         ),
 
         array(
             'name' => 'nav_icon_padding',
-            'type' => 'slider',
+            'type' => 'css_ruler',
             'section' => $section,
-            'title'          => __( 'Icon Padding', 'customify' ),
-
+            'css_format' => array(
+                'top' => 'padding-top: {{value}};',
+                'right' => 'padding-right: {{value}};',
+                'bottom' => 'padding-bottom: {{value}};',
+                'left' => 'padding-left: {{value}};',
+            ),
+            'selector' => $selector,
+            'title'  => __( 'Icon Padding', 'customify' ),
         ),
 
         array(
             'name' => 'nav_icon_item_color',
             'type' => 'color',
             'section' => $section,
-            'title'          => __( 'Color', 'customify' ),
+            'title' => __( 'Color', 'customify' ),
+            'css_format' => 'color: {{value}};',
+            'selector' => $selector,
         ),
 
         array(
             'name' => 'nav_icon_item_color_hover',
             'type' => 'color',
             'section' => $section,
-            'title'          => __( 'Color Hover', 'customify' ),
+            'css_format' => 'color: {{value}};',
+            'selector' => $selector.':hover',
+            'title' => __( 'Color Hover', 'customify' ),
         ),
 
-
-
     );
+}
+
+function customify_builder_nav_icon_item(){
+    $label = sanitize_text_field( Customify_Customizer()->get_setting( 'nav_icon_text' ) );
+    $show_label = Customify_Customizer()->get_setting('nav_icon_show_text');
+    $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
+    $icon = Customify_Customizer()->get_setting('nav_icon' );
+    $icon = Customify_Customizer()->setup_icon( $icon );
+
+    $classes = array('nav-mobile-toggle');
+    if ( $show_label ) {
+        $classes[] = 'nav-show-label';
+    } else {
+        $classes[] = 'nav-hide-label';
+    }
+
+    if( $style ) {
+        $classes[] = $style;
+    }
+
+    ?>
+    <button class="<?php echo esc_attr( join(' ', $classes ) ); ?>"><?php
+        if ( $icon['icon'] ) {
+            echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
+        }
+        if ( $show_label ) {
+            echo $label;
+
+        }
+    ?></button>
+    <?php
 }

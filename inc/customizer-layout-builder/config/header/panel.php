@@ -27,7 +27,8 @@ if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
                 'title'          => __( 'Header Builder', 'customify' ),
                 'description' => __( 'Header Builder panel here....',  'customify' ),
                 'selector' => '#masthead',
-                'render_callback' => 'customify_customize_render_header'
+                'render_callback' => 'customify_customize_render_header',
+                'container_inclusive' => true
             ),
 
         );

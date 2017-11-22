@@ -55,7 +55,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 if ( $string ) {
                     if (!is_null( $v ) && $v !== '') {
                         $v = $v.$value['unit'];
-                        $code[ $pos ] = $this->replace_value( $v, $string ).';';
+                        $code[ $pos ] = $this->replace_value( $v, $string );
                     }
                 }
             }
@@ -577,7 +577,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 $css_code = "\r\n@import url('{$url}');\r\n\r\n".$css_code;
             }
 
-            return $css_code;
+            return trim( $css_code );
         }
     }
 

@@ -122,7 +122,7 @@ function customify_builder_config_header_button(){
             'section' => $section,
             'max' =>  100,
             'default' =>  0,
-            'css_format' =>'-webkit-border-radius: {{value}}; -moz-border-radius: {{value}}; border-radius: {{value}};',
+            'css_format' =>'border-radius: {{value}};',
             'selector' => $selector,
             'title'  => __( 'Border Radius', 'customify' ),
         ),
@@ -139,7 +139,7 @@ function customify_builder_header_button_item(){
     $link = Customify_Customizer()->get_setting('header_button_link' );
     $style = sanitize_text_field( Customify_Customizer()->get_setting('header_button_style' ) );
 
-    $classes = array('header-button-item button');
+    $classes = array('header-button-item button item-button');
     if ( $style ){
         $classes[]= $style;
     }

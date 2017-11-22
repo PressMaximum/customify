@@ -55,6 +55,13 @@ class Customify_Font_Icons
         foreach( $mods as $key => $value ) {
             $this->_picked_icon( $value );
         }
+
+        $config= Customify_Customizer::get_config();
+        foreach( $config as $f ) {
+            $value = Customify_Customizer()->get_setting( $f['name'] );
+            $this->_picked_icon( $value );
+        }
+
     }
 
     function enqueue(){
@@ -63,7 +70,6 @@ class Customify_Font_Icons
             if ( isset( $this->picked_types[ $icon_id ]  ) ) {
                 wp_enqueue_style( $icon_id, $icon['url'] );
             }
-
         }
     }
 

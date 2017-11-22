@@ -676,8 +676,6 @@
                 case 'radio':
                 case 'text_align':
 
-                    console.log( 'Checkbox FIELD', $field );
-
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){

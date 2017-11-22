@@ -113,6 +113,7 @@
                             },
                             receive: function( event, ui ) {
                                 $( this ).find( '.grid-stack-item' ).removeAttr('style').attr( 'data-gs-width', 1 );
+                                that.save();
                             }
                         });
 

@@ -43,9 +43,6 @@
 	} );
 
 
-
-
-
     api.bind( 'preview-ready', function() {
         var $document = $( document );
         var defaultTarget = window.parent === window ? null : window.parent;
@@ -67,6 +64,12 @@
 
             }
         } );
+
+        $( window ).resize( function(){
+            var css_code = $( '#customify-style-inline-css' ).html();
+            // Fix Chrome Lost CSS When resize ??
+            $( '#customify-style-inline-css' ).html( css_code );
+        });
 
         // Get all values
        // console.log( 'ALL Control Values', api.get( ) );
@@ -91,8 +94,8 @@
         */
 
 
-        /*
 
+        /*
         wp.customize.selectiveRefresh.bind( 'sidebar-updated', function( sidebarPartial ) {
             var widgetArea;
 
@@ -103,12 +106,23 @@
             var widgetArea;
             console.log( 'sidebarPartial', sidebarPartial );
         } );
-
-        wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( sidebarPartial ) {
-            var widgetArea;
-            console.log( 'partial-content-rendered', sidebarPartial );
-        } );
         */
+
+        var setupMobileSidebarHeight = function(){
+            var h = $( window ).height();
+            $( '#mobile-header-panel' ).height( h );
+        };
+
+        wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+            //var widgetArea;
+            if( settings.partial.id == 'header_builder_panel' ) {
+                $('body > .mobile-header-panel' ).remove();
+                $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
+                setupMobileSidebarHeight();
+            }
+            //console.log( 'partial-content-rendered', sidebarPartial );
+        } );
+
 
 
     } );

@@ -529,36 +529,45 @@ class Customify_Customizer_Layout_Builder_Frontend {
              if( is_customize_preview() ) {
                  $classes = 'builder-item-focus '.$classes;
              }
+
+             $content = str_replace( '__id__', $id, $content );
+             $content = str_replace( '__device__', $device, $content );
              
              echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
-             echo str_replace( '__id__', $id.'-'.$device, $content );
+                echo $content;
              echo '</div>';
          }
      }
 
-     function render( ){
+     function render( $row_ids = array( 'top', 'main', 'bottom') ){
          $setting = $this->get_settings();
          $items = $this->render_items( );
-
-         $row_ids = array( 'top', 'main', 'bottom' );
-
          foreach ($row_ids as $row_id ) {
             if ( isset( $this->rows[ $row_id ] ) ) {
                 $show_on_devices = $this->rows[$row_id];
                 if (!empty($show_on_devices)) {
-                    $class = sprintf('%1$s-%2$s', $this->id, $row_id);
+                    $classes = array();
+                    $classes[] = sprintf('%1$s-%2$s', $this->id, $row_id);
+                    $desktop_items = $this->get_row_settings($row_id, 'desktop');
+                    $mobile_items = $this->get_row_settings($row_id, 'mobile');
+                    if ( empty( $desktop_items ) ){
+                        $classes[] = 'hide-on-desktop';
+                    }
+                    if ( empty( $mobile_items ) ){
+                        $classes[] = 'hide-on-mobile hide-on-tablet';
+                    }
+
+
                     ?>
-                    <div class="<?php echo esc_attr($class); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                    <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
-                            $desktop_items = $this->get_row_settings($row_id, 'desktop');
                             if ($desktop_items) {
                                 echo '<div class="hide-on-mobile hide-on-tablet customify-grid">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
 
-                            $mobile_items = $this->get_row_settings($row_id, 'mobile');
                             if ($mobile_items) {
                                 echo '<div class="hide-on-desktop customify-grid">';
                                 $this->render_row($mobile_items, $row_id, 'mobile');
@@ -572,7 +581,35 @@ class Customify_Customizer_Layout_Builder_Frontend {
             }
 
          } // end for each row_ids
+     }
 
+     function render_sidebar(){
+         $id = 'sidebar';
+         $mobile_items = $this->get_row_settings( $id, 'mobile');
+         if ($mobile_items) {
+             echo '<div id="mobile-header-panel" class="mobile-header-panel">';
+                 echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
+                     echo '<a class="close-panel" href="#">'.__( 'Close', 'customify' ).'</a>';
+                     foreach( $mobile_items as $item ) {
+                         $item_id = $item['id'];
+                         $content = $this->render_items[$item['id']]['render_content'];
+                         $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+
+                         $classes = "builder-item-sidebar";
+                         if( is_customize_preview() ) {
+                             $classes = 'builder-item-focus '.$classes;
+                         }
+
+                         $content = str_replace( '__id__', $id, $content );
+                         $content = str_replace( '__device__', 'mobile', $content );
+
+                         echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '">';
+                            echo $content;
+                         echo '</div>';
+                     }
+                 echo '</div>';
+             echo '</div>';
+         }
      }
 }
 
@@ -581,6 +618,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
 
 function customify_customize_render_header(){
+    echo '<header id="masthead" class="site-header">';
     $b = new Customify_Customizer_Layout_Builder_Frontend();
     if ( is_customize_preview() ) {
         ?>
@@ -590,55 +628,17 @@ function customify_customize_render_header(){
     $list_items = Customify_Customizer_Layout_Builder()->get_header_items();
     $b->set_config_items( $list_items );
     $b->render();
+    $b->render_sidebar();
 
 
+    /*
     $theme_name = wp_get_theme()->get('Name');
     $option_name = $theme_name.'_saved_templates';
     ?>
     <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
+    */
 
-}
-
-
-
-function __backup(){
-    ?>
-    <div class="header-main">
-        <div class="customify-container">
-            <div class="site-branding">
-                <?php
-                the_custom_logo();
-                if ( is_front_page() && is_home() ) : ?>
-                    <h1 class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></h1>
-                <?php else : ?>
-                    <p class="site-title"><a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a></p>
-                    <?php
-                endif;
-
-                $description = get_bloginfo( 'description', 'display' );
-                if ( $description || is_customize_preview() ) : ?>
-                    <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-                    <?php
-                endif; ?>
-            </div><!-- .site-branding -->
-
-            <nav id="site-navigation" class="main-navigation">
-                <?php
-                //                            wp_nav_menu( array(
-                //                                'theme_location' => 'menu-1',
-                //                                'menu_id'        => 'primary-menu',
-                //                            ) );
-                ?>
-            </nav><!-- #site-navigation -->
-        </div> <!-- #.customify-container -->
-    </div><!-- #.header-main -->
-
-    <div class="header-bottom">
-        <div class="customify-container">
-            header bottom
-        </div> <!-- #.customify-container -->
-    </div><!-- #.header-bottom -->
-    <?php
+    echo '</header>';
 }
