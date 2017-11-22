@@ -185,6 +185,16 @@ function customify_builder_config_header_user(){
             )
         ),
 
+        array(
+            'name' => $prefix.'text_align',
+            'type' => 'text_align',
+            'section' => $section,
+            'selector' => $selector,
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Text Align', 'customify' ),
+        ),
+
+
 
     );
 }

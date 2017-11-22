@@ -42,7 +42,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                     ),
 
                     array(
-                        'name' => 'font_style',
+                        'name' => 'text-align',
                         'type' => 'font_style',
                         'label' => __( 'Font Style', 'customify' ),
                     ),

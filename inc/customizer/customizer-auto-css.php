@@ -93,6 +93,16 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
+        function setup_text_align( $value, $format ){
+            $value = sanitize_text_field( $value );
+            if ( $format ) {
+                if (!is_null( $value ) && $value !== '') {
+                    return $this->replace_value( $value, $format ).';';
+                }
+            }
+            return false;
+        }
+
         function css_ruler( $field ){
             $code = $this->maybe_devices_setup( $field, 'setup_css_ruler' );
             return $code;
@@ -107,6 +117,13 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $code = $this->maybe_devices_setup( $field, 'setup_color' );
             return $code;
         }
+
+        function text_align( $field ){
+            $code = $this->maybe_devices_setup( $field, 'setup_text_align' );
+            return $code;
+        }
+
+
 
         function setup_background( $value ) {
             $value = wp_parse_args( $value, array(
@@ -525,6 +542,10 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                             break;
                         case 'color':
                             $this->color($field);
+                            break;
+                        case 'text_align':
+                            $this->text_align($field);
+                            break;
                         case 'font':
                             $this->font($field);
                             break;
