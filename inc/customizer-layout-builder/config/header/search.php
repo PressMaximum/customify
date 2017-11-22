@@ -40,6 +40,16 @@ function customify_builder_config_header_search(){
             'checkbox_label' => __( 'Show Submit Button', 'customify' ),
         ),
 
+        array(
+            'name' => 'header_search_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'selector' => '.builder-item--search',
+            'css_format' => 'text-align: {{value}};',
+            'title' => __( 'Align', 'customify' ),
+            'device_settings' => true,
+        ),
+
     );
     return $config;
 }
@@ -49,14 +59,14 @@ function customify_builder_header_search_item(){
 
     $placeholder = Customify_Customizer()->get_setting( 'header_search_placeholder' );
     $show_btn = Customify_Customizer()->get_setting( 'header_search_btn' );
-
     ?>
-    <form role="search" method="get" class="header-search-form search-form" action="<?php echo home_url( '/' ); ?>">
+    <form role="search" method="get" class="hide-on-mobile hide-on-tablet header-search-form search-form " action="<?php echo home_url( '/' ); ?>">
         <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
         <?php if ( $show_btn ) { ?>
         <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'search submit', 'customify' ); ?>" />
         <?php } ?>
     </form>
+    <span class="search-toggle hide-on-desktop"><i class="fa fa-search"></i></span>
 
     <?php
 }

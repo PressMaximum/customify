@@ -123,6 +123,16 @@ function customify_builder_config_header_primary_menu() {
             )
         ),
 
+        array(
+            'name' => 'header_primary_menu_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'device_settings' => true,
+            'selector' => '.builder-item--primary-menu',
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Align', 'customify' ),
+        ),
+
     );
 }
 

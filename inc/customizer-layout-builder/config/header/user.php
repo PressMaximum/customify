@@ -187,14 +187,13 @@ function customify_builder_config_header_user(){
 
         array(
             'name' => $prefix.'text_align',
-            'type' => 'text_align',
+            'type' => 'text_align_no_justify',
             'section' => $section,
-            'selector' => $selector,
+            'device_settings' => true,
+            'selector' => '.builder-item--user',
             'css_format' => 'text-align: {{value}};',
-            'title'   => __( 'Text Align', 'customify' ),
+            'title'   => __( 'Align', 'customify' ),
         ),
-
-
 
     );
 }

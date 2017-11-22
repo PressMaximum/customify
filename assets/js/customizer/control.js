@@ -675,12 +675,13 @@
                     break;
                 case 'radio':
                 case 'text_align':
+                case 'text_align_no_justify':
 
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            var input = $( 'input[data-name="'+name+'-'+device+'"]', $field );
-                            value[ device ] = input.is(':checked') ? input.val() : '' ;
+                            var input = $( 'input[data-name="'+name+'-'+device+'"]:checked', $field );
+                            value[ device ] = input.length ? input.val() : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]:checked', $field ).val();

@@ -8,7 +8,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'type' => 'panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Panel', 'customify' ),
+                'title'          => __( 'Customify Panel', 'customify' ),
             ),
 
             array(
@@ -17,7 +17,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'panel' => 'customify_panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Section', 'customify' ),
+                'title'          => __( 'Customify Section', 'customify' ),
                 'description' => __( 'This is section description',  'customify' ),
             ),
 

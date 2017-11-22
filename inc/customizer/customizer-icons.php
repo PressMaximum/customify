@@ -67,7 +67,7 @@ class Customify_Font_Icons
     function enqueue(){
         $this->get_icon_types_picked();
         foreach( $this->get_icons() as $icon_id => $icon ){
-            if ( isset( $this->picked_types[ $icon_id ]  ) ) {
+            if ( isset( $this->picked_types[ $icon_id ]  )  || is_customize_preview() ) {
                 wp_enqueue_style( $icon_id, $icon['url'] );
             }
         }

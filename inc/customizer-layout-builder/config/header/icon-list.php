@@ -67,6 +67,16 @@ function customify_builder_config_header_icon_list(){
             'label' => __( 'Target', 'customify' ),
         ),
 
+        array(
+            'name' => 'header_icon_list_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'device_settings' => true,
+            'selector' => '.builder-item--icon-list',
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Align', 'customify' ),
+        ),
+
     );
 }
 

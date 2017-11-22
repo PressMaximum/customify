@@ -127,6 +127,17 @@ function customify_builder_config_header_button(){
             'title'  => __( 'Border Radius', 'customify' ),
         ),
 
+
+        array(
+            'name' => 'header_button_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'device_settings' => true,
+            'selector' => '.builder-item--button',
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Align', 'customify' ),
+        ),
+
     );
     return $config;
 }

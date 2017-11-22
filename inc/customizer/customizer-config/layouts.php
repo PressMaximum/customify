@@ -17,7 +17,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'panel'          => 'customify_layouts',
 				//'priority' => 22,
 				'theme_supports' => '',
-				'title'          => __( 'Beacon Section', 'customify' ),
+				'title'          => __( 'Customify Section', 'customify' ),
 				'description'    => __( 'This is section description', 'customify' ),
 			),
 

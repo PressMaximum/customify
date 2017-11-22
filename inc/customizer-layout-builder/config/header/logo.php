@@ -2,6 +2,7 @@
 function customify_builder_config_header_logo(){
     $section = 'header_logo';
     $render_cb_el = 'customify_builder_logo_item';
+    $selector = '.site-branding';
     $config  = array(
         array(
             'name' => $section,
@@ -25,9 +26,8 @@ function customify_builder_config_header_logo(){
             'name' => 'header_logo',
             'type' => 'image',
             'section' =>  $section,
-            'theme_supports' => '',
             'device_settings' => true,
-            'selector' => '.site-branding',
+            'selector' => $selector,
             'render_callback' => $render_cb_el,
             'title' => __( 'Logo', 'customify' ),
             'required' => array( 'header_logo_use_default', '!=', '1'),
@@ -37,9 +37,8 @@ function customify_builder_config_header_logo(){
             'name' => 'header_logo_retina',
             'type' => 'image',
             'section' =>  $section,
-            'theme_supports' => '',
             'device_settings' => true,
-            'selector' => '.site-branding',
+            'selector' => $selector,
             'render_callback' => $render_cb_el,
             'title' => __( 'Logo Retina', 'customify' ),
             'required' => array( 'header_logo_use_default', '!=', '1'),
@@ -49,7 +48,6 @@ function customify_builder_config_header_logo(){
             'name' => 'header_logo_name',
             'type' => 'checkbox',
             'section' => $section,
-            'theme_supports' => '',
             'default' => '',
             'title' => __( 'Show Site Name', 'customify' ),
             'checkbox_label' => __( 'Show site name ?', 'customify' ),
@@ -59,7 +57,6 @@ function customify_builder_config_header_logo(){
             'name' => 'header_logo_desc',
             'type' => 'checkbox',
             'section' => $section,
-            'theme_supports' => '',
             'default' => '',
             'title' => __( 'Show Site Description', 'customify' ),
             'checkbox_label' => __( 'Show site description ?', 'customify' ),
@@ -75,8 +72,19 @@ function customify_builder_config_header_logo(){
             ),
             'device_settings' => true,
             'title' => __( 'Logo Height', 'customify' ),
-            'selector' => '.site-branding img',
+            'selector' => $selector.' img',
             'css_format' => 'height: {{value}};'
+        ),
+
+
+        array(
+            'name' => 'header_logo_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'device_settings' => true,
+            'selector' => '.builder-item--logo',
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Align', 'customify' ),
         ),
 
     );

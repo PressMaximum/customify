@@ -510,7 +510,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
              }
              $atts = array();
              $classes = array();
-             $classes[] = 'customify-col-' . $width;
+             $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
              if ( $x > 0 ) {
                  if ( ! $last_item ) {
                      $atts[] = 'off-' . $x;
@@ -524,11 +524,14 @@ class Customify_Customizer_Layout_Builder_Frontend {
              $last_item = $item;
 
              $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+             $classes[] = 'builder-item';
+             $classes[] = 'builder-item--'.$item_id;
 
-             $classes = "builder-item " . join(' ', $classes);
              if( is_customize_preview() ) {
-                 $classes = 'builder-item-focus '.$classes;
+                 $classes[] = ' builder-item-focus';
              }
+
+             $classes = join(' ', $classes ); // customify-grid-middle
 
              $content = str_replace( '__id__', $id, $content );
              $content = str_replace( '__device__', $device, $content );
@@ -558,18 +561,19 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     }
 
 
+
                     ?>
                     <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
                             if ($desktop_items) {
-                                echo '<div class="hide-on-mobile hide-on-tablet customify-grid">';
+                                echo '<div class="hide-on-mobile hide-on-tablet customify-grid customify-grid-middle">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
 
                             if ($mobile_items) {
-                                echo '<div class="hide-on-desktop customify-grid">';
+                                echo '<div class="hide-on-desktop customify-grid customify-grid-middle">';
                                 $this->render_row($mobile_items, $row_id, 'mobile');
                                 echo '</div>';
                             }

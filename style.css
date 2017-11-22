@@ -1967,16 +1967,37 @@ template {
     HIDING COLS FOR DEVICES
 *************************/
 @media screen and (min-width: 64em) {
-  .hide-on-desktop {
-    display: none; } }
+  .hide-on-desktop,
+  .customify-grid .hide-on-desktop {
+    display: none; }
+  .align-left-desktop {
+    text-align: left; }
+  .align-center-desktop {
+    text-align: center; }
+  .align-right-desktop {
+    text-align: right; } }
 
-@media screen and (max-width: 48em) and (min-width: 35.5em) {
-  .hide-on-tablet {
-    display: none; } }
+@media screen and (max-width: 64em) and (min-width: 35.5em) {
+  .hide-on-tablet,
+  .customify-grid .hide-on-tablet {
+    display: none; }
+  .align-left-tablet {
+    text-align: left; }
+  .align-center-tablet {
+    text-align: center; }
+  .align-right-tablet {
+    text-align: right; } }
 
 @media screen and (max-width: 35.5em) {
-  .hide-on-mobile {
-    display: none; } }
+  .hide-on-mobile,
+  .customify-grid .hide-on-mobile {
+    display: none; }
+  .align-left-mobile {
+    text-align: left; }
+  .align-center-mobile {
+    text-align: center; }
+  .align-right-mobile {
+    text-align: right; } }
 
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
@@ -2525,7 +2546,7 @@ article.comment {
   position: relative; }
 
 .site-branding {
-  float: left; }
+  display: inline-block; }
   .site-branding img {
     display: block;
     width: auto; }
@@ -2568,9 +2589,52 @@ article.comment {
   margin: 0px; }
   .primary-menu-desktop .menu li {
     display: inline-block;
-    margin-right: 15px; }
+    margin-right: 15px;
+    position: relative; }
     .primary-menu-desktop .menu li:last-child {
       margin-right: 0px; }
+    .primary-menu-desktop .menu li a {
+      line-height: 1.6;
+      display: inline-block; }
+  .primary-menu-desktop .menu > li > a {
+    padding: 5px 10px; }
+
+.primary-menu-desktop .sub-menu {
+  position: absolute;
+  left: 0px;
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+  width: 14em;
+  margin: 0px;
+  padding: 0px;
+  background: #ffffff;
+  z-index: 36;
+  opacity: 0;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  display: block;
+  -webkit-transform: translateY(40px);
+      -ms-transform: translateY(40px);
+          transform: translateY(40px);
+  top: 100%;
+  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15); }
+  .primary-menu-desktop .sub-menu li {
+    display: block;
+    margin: 0px;
+    padding: 0px; }
+  .primary-menu-desktop .sub-menu a {
+    display: block;
+    padding: 10px 15px; }
+
+.primary-menu-desktop .menu-item:hover .sub-menu {
+  height: auto;
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
+  overflow: initial;
+  visibility: visible;
+  opacity: 1; }
 
 /*
 * Mobile Panel

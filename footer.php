@@ -50,7 +50,7 @@
                             get_bloginfo( 'name' ),
 	                        __( 'Powered by','customify' ),
                             esc_url( 'https://www.famethemes.com/beacon' ),
-                            __( 'Beacon','customify' )
+                            __( 'Customify','customify' )
                         );
                         echo $copyright;
                         ?>

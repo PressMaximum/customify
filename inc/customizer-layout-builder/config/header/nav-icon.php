@@ -98,6 +98,16 @@ function customify_builder_config_header_nav_icon(){
             'title' => __( 'Color Hover', 'customify' ),
         ),
 
+
+        array(
+            'name' => 'header_nav_icon_align',
+            'type' => 'text_align_no_justify',
+            'section' => $section,
+            'selector' => '.builder-item--nav-icon',
+            'css_format' => 'text-align: {{value}};',
+            'title'   => __( 'Align', 'customify' ),
+        ),
+
     );
 }
 
@@ -108,7 +118,7 @@ function customify_builder_nav_icon_item(){
     $icon = Customify_Customizer()->get_setting('nav_icon' );
     $icon = Customify_Customizer()->setup_icon( $icon );
 
-    $classes = array('nav-mobile-toggle');
+    $classes = array('nav-mobile-toggle item-button');
     if ( $show_label ) {
         $classes[] = 'nav-show-label';
     } else {
@@ -120,7 +130,7 @@ function customify_builder_nav_icon_item(){
     }
 
     ?>
-    <button class="<?php echo esc_attr( join(' ', $classes ) ); ?>"><?php
+    <span class="<?php echo esc_attr( join(' ', $classes ) ); ?>"><?php
         if ( $icon['icon'] ) {
             echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
         }
@@ -128,6 +138,6 @@ function customify_builder_nav_icon_item(){
             echo $label;
 
         }
-    ?></button>
+    ?></span>
     <?php
 }
