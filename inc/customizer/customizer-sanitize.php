@@ -37,6 +37,7 @@ if ( ! function_exists( 'customify_sanitize_customizer_input' ) ) {
             $new_value['top'] = sanitize_text_field( $value['top'] );
             $new_value['right'] = sanitize_text_field( $value['right'] );
             $new_value['bottom'] = sanitize_text_field( $value['bottom'] );
+            $new_value['left'] = sanitize_text_field( $value['left'] );
             $new_value['link'] = $value['link'] ? 1 : null;
             return $new_value;
         }
