@@ -550,7 +550,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
                 $show_on_devices = $this->rows[$row_id];
                 if (!empty($show_on_devices)) {
                     $classes = array();
-                    $classes[] = sprintf('%1$s-%2$s', $this->id, $row_id);
+                    $_id = sprintf('%1$s-%2$s', $this->id, $row_id);
+
+                    $classes[] = $_id;
+                    $classes[] = 'header--row';
                     $desktop_items = $this->get_row_settings($row_id, 'desktop');
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
                     if ( empty( $desktop_items ) ){
@@ -560,10 +563,13 @@ class Customify_Customizer_Layout_Builder_Frontend {
                         $classes[] = 'hide-on-mobile hide-on-tablet';
                     }
 
-
+                    $row_layout = Customify_Customizer()->get_setting( $this->id.'_'.$row_id.'_layout' );
+                    if ( $row_layout ) {
+                        $classes[] = 'layout-'.sanitize_text_field( $row_layout );
+                    }
 
                     ?>
-                    <div class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                    <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
                             if ($desktop_items) {
@@ -599,7 +605,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
                          $content = $this->render_items[$item['id']]['render_content'];
                          $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
 
-                         $classes = "builder-item-sidebar";
+                         $classes = "builder-item-sidebar mobile-item--".$item_id;
                          if( is_customize_preview() ) {
                              $classes = 'builder-item-focus '.$classes;
                          }

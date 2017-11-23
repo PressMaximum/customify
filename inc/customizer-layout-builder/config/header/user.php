@@ -200,7 +200,10 @@ function customify_builder_config_header_user(){
 
 
 function customify_builder_header_user_item(){
-    echo '<div class="header-user-item">';
+    $classes = array();
+    $classes[] = is_user_logged_in() ? 'user-logged-in' : 'not-logged-in';
+
+    echo '<div class="header-user-item '.esc_attr( join(' ', $classes ) ).'">';
 
     if ( is_user_logged_in() ) {
 
@@ -216,14 +219,18 @@ function customify_builder_header_user_item(){
             $size = 35;
         }
 
+        if ( ! $url ) {
+            $url = get_edit_profile_url();
+        }
+
         $user = wp_get_current_user();
         $avatar = get_avatar( $user->user_email, $size );
 
         if ( $url ) {
-            echo '<a class="profile-url" href="'.esc_url( $url ).'">';
+            echo '<a class="profile-url '.( $show_avatar ? 'show-avatar' : 'no-avatar' ).'" href="'.esc_url( $url ).'">';
         }
-            if ( $show_avatar ) {
-                echo $avatar;
+            if ( $show_avatar && $avatar ) {
+                echo '<span class="user-avatar">'.$avatar.'</span>';
             }
             if ( $show_username ) {
                 echo '<span class="user-display-name">';
@@ -286,7 +293,7 @@ function customify_builder_header_user_item(){
 
             if ( $login_settings['label'] ) {
                 if ( $login_settings['url'] ) {
-                    echo '<a class="user-login-item" href="'.esc_url( $login_settings['url'] ).'">';
+                    echo '<a class="user-login-item user-link" href="'.esc_url( $login_settings['url'] ).'">';
                 } else {
                     echo '<span class="user-login-item">';
                 }
@@ -317,7 +324,7 @@ function customify_builder_header_user_item(){
             if ( $signup_settings['label'] ) {
 
                 if ( $signup_settings['url'] ) {
-                    echo '<a class="user-singup-item" href="'.esc_url( $signup_settings['url'] ).'">';
+                    echo '<a class="user-singup-item user-link" href="'.esc_url( $signup_settings['url'] ).'">';
                 } else {
                     echo '<span class="user-singup-item">';
                 }

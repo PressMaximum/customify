@@ -630,3 +630,18 @@ article.comment {
     }
 
 }
+
+/* Customize Preview */
+.customize-previewing {
+    .header--row {
+        .customize-partial-edit-shortcut {
+            display: none;
+        }
+        .builder-item-focus {
+            &:hover {
+                outline: 1px dashed #ff472e;
+                outline-offset: -1px;
+            }
+        }
+    }
+}

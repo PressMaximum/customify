@@ -30,6 +30,9 @@ if ( ! function_exists( 'customify_body_classes' ) ) :
 		if ( $layout_vertical_border ) {
 			$classes[] = 'layout_vertial_border';
 		}
+		if ( is_customize_preview() ) {
+            $classes[] = 'customize-previewing';
+        }
 
 		return $classes;
 	}

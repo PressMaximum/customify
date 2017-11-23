@@ -1,21 +1,20 @@
 <?php
 if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
     function customify_customizer_get_header_config( $configs = array() ){
-
+        $fn = 'customify_customize_render_header';
         $config = array(
             array(
                 'name' => 'header_settings',
                 'type' => 'panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header', 'customify' ),
+                'title' => __( 'Header', 'customify' ),
             ),
 
             array(
                 'name' => 'header_builder_panel',
                 'type' => 'section',
                 'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'Header Builder', 'customify' ),
+                'title' => __( 'Header Builder', 'customify' ),
                 'description' => __( 'This is section description',  'customify' ),
             ),
 
@@ -24,10 +23,10 @@ if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
                 'type' => 'js_raw',
                 'section' => 'header_builder_panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header Builder', 'customify' ),
+                'title' => __( 'Header Builder', 'customify' ),
                 'description' => __( 'Header Builder panel here....',  'customify' ),
                 'selector' => '#masthead',
-                'render_callback' => 'customify_customize_render_header',
+                'render_callback' => $fn,
                 'container_inclusive' => true
             ),
 
@@ -61,6 +60,11 @@ function customify_builder_config_header_row_config( $section = false, $section_
         $section_name = __( 'Header Top', 'customify' );
     }
 
+    $selector = '#cb-row--'.str_replace('_', '-', $section );
+
+    $fn = 'customify_customize_render_header';
+    $selector_all = '#masthead';
+
     $config  = array(
         array(
             'name' => $section,
@@ -86,8 +90,9 @@ function customify_builder_config_header_row_config( $section = false, $section_
             'name' => $section.'_layout',
             'type' => 'select',
             'section' => $section,
-            'theme_supports' => '',
-            'title'          => __( 'Layout', 'customify' ),
+            'title' => __( 'Layout', 'customify' ),
+            'selector' => $selector_all,
+            'render_callback' => $fn,
             'choices' => array(
                 'default' =>  __( 'Default', 'customify' ),
                 'fullwidth' =>  __( 'Full Width', 'customify' ),
@@ -113,7 +118,14 @@ function customify_builder_config_header_row_config( $section = false, $section_
             'section' => $section,
             'theme_supports' => '',
             'device_settings' => true,
-            'title'          => __( 'Padding', 'customify' ),
+            'selector' => $selector,
+            'css_format' => array(
+                'top' => 'padding-top: {{value}};',
+                'right' => 'padding-right: {{value}};',
+                'bottom' => 'padding-bottom: {{value}};',
+                'left' => 'padding-left: {{value}};',
+            ),
+            'title' => __( 'Padding', 'customify' ),
         ),
 
         array(
@@ -124,7 +136,7 @@ function customify_builder_config_header_row_config( $section = false, $section_
             'description'    => __( 'This is description',  'customify' ),
             'live_title_field' => 'title',
             'field_class' => 'customify-background-control',
-            'selector' => '#page',
+            'selector' => $selector,
             'css_format' => 'background',
             'device_settings' => true,
             'default' => array(
@@ -135,7 +147,6 @@ function customify_builder_config_header_row_config( $section = false, $section_
                     'name' => 'color',
                     'type' => 'color',
                     'label' => __( 'Color', 'customify' ),
-                    'device_settings' => true,
                 ),
                 array(
                     'name' => 'image',

@@ -2542,6 +2542,14 @@ article.comment {
   top: -4px;
   margin-left: 4px; }
 
+/* Customize Preview */
+.customize-previewing .header--row .customize-partial-edit-shortcut {
+  display: none; }
+
+.customize-previewing .header--row .builder-item-focus:hover {
+  outline: 1px dashed #ff472e;
+  outline-offset: -1px; }
+
 .site-header {
   position: relative; }
 
@@ -2569,6 +2577,113 @@ article.comment {
 
 .item-button {
   display: inline-block; }
+
+/*
+* Row Layouts
+*-------------------------------
+*/
+.header--row.layout-fullwidth .customify-container {
+  max-width: initial; }
+
+/*
+* Icon List
+*-------------------------------
+*/
+.header-icon-list-item {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  display: inline-block; }
+  .header-icon-list-item li {
+    display: inline-block;
+    margin-right: 10px; }
+    .header-icon-list-item li:last-child {
+      margin-right: 0px; }
+    .header-icon-list-item li i {
+      margin-right: 5px; }
+
+/*
+* HTML
+*-------------------------------
+*/
+.item--html p:last-child {
+  margin-bottom: 0px; }
+
+/*
+* Social Icon
+*-------------------------------
+*/
+.header-social-icons {
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  list-style: none; }
+  .header-social-icons li {
+    list-style: none;
+    display: inline-block;
+    margin-right: 10px; }
+    .header-social-icons li:last-child {
+      margin-right: 0px; }
+
+/*
+* User
+*-------------------------------
+*/
+.header-user-item {
+  display: inline-block;
+  position: relative; }
+  .header-user-item .user-avatar {
+    display: inline-block; }
+    .header-user-item .user-avatar img {
+      border-radius: 50%;
+      height: auto;
+      max-width: 100%;
+      vertical-align: middle; }
+  .header-user-item .show-avatar .user-display-name {
+    margin-left: 10px; }
+  .header-user-item .user-link {
+    margin-right: 10px; }
+    .header-user-item .user-link i {
+      margin-right: 5px; }
+    .header-user-item .user-link:last-child {
+      margin-right: 0px; }
+  .header-user-item .user-dropdown-items {
+    position: absolute;
+    top: 100%;
+    width: 10rem;
+    left: 0px;
+    background: #ffffff;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    text-align: left;
+    -webkit-transform: translateY(40px);
+        -ms-transform: translateY(40px);
+            transform: translateY(40px);
+    -webkit-transition: all .3s ease;
+    transition: all .3s ease;
+    opacity: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    display: block;
+    box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.15);
+    z-index: 36; }
+    .header-user-item .user-dropdown-items li {
+      display: block; }
+      .header-user-item .user-dropdown-items li i {
+        margin-right: 5px; }
+    .header-user-item .user-dropdown-items a {
+      display: block;
+      padding: 5px 10px; }
+  .header-user-item:hover .user-dropdown-items {
+    height: auto;
+    -webkit-transform: translateY(0);
+        -ms-transform: translateY(0);
+            transform: translateY(0);
+    overflow: initial;
+    visibility: visible;
+    opacity: 1; }
 
 .header-top {
   padding: 0.3819820591em 0px;
@@ -2618,7 +2733,8 @@ article.comment {
       -ms-transform: translateY(40px);
           transform: translateY(40px);
   top: 100%;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.15); }
+  box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.15);
+  text-align: left; }
   .primary-menu-desktop .sub-menu li {
     display: block;
     margin: 0px;
@@ -2635,6 +2751,56 @@ article.comment {
   overflow: initial;
   visibility: visible;
   opacity: 1; }
+
+/*
+* Mobile Menu
+* ---------------------------------------------
+ */
+.nav-menu-mobile .menu {
+  margin: 0px;
+  padding: 0px;
+  list-style: none; }
+  .nav-menu-mobile .menu a {
+    display: block; }
+  .nav-menu-mobile .menu li {
+    list-style: none;
+    position: relative; }
+    .nav-menu-mobile .menu li.menu-item-has-children > a {
+      padding-right: 30px !important; }
+    .nav-menu-mobile .menu li .nav-t-icon {
+      width: 30px;
+      height: 30px;
+      display: block;
+      position: absolute;
+      top: 0px;
+      right: 0px;
+      font-size: 150%;
+      text-align: center;
+      vertical-align: middle;
+      line-height: 1;
+      -webkit-transition: all .5s ease;
+      transition: all .5s ease;
+      cursor: pointer;
+      border-radius: 50%; }
+      .nav-menu-mobile .menu li .nav-t-icon:before {
+        -webkit-transition: all .5s ease;
+        transition: all .5s ease;
+        font-family: "fontawesome";
+        content: "\f107"; }
+  .nav-menu-mobile .menu .sub-menu {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    -webkit-transition: max-height .5s ease;
+    transition: max-height .5s ease; }
+  .nav-menu-mobile .menu .open-sub > .nav-t-icon:before {
+    -webkit-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+            transform: rotate(-180deg); }
+  .nav-menu-mobile .menu .open-sub .sub-menu {
+    display: block;
+    max-height: 2000px;
+    opacity: 1; }
 
 /*
 * Mobile Panel
@@ -2655,14 +2821,7 @@ article.comment {
   transition: -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
   transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
   transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86), -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
-  background: #cccccc; }
-
-#mobile-header-panel-inner {
-  position: relative; }
-  #mobile-header-panel-inner .close-panel {
-    position: absolute;
-    top: 20px;
-    right: 20px; }
+  background: #333333; }
 
 #page {
   -webkit-transition: -webkit-transform .7s ease;
@@ -2700,6 +2859,18 @@ article.comment {
             transform: translate3d(0, 0, 0);
     left: 0;
     visibility: visible; }
+
+.builder-item-sidebar {
+  margin-bottom: 20px; }
+
+#mobile-header-panel-inner {
+  position: relative;
+  word-wrap: break-word;
+  padding: 20px 20px 0px; }
+  #mobile-header-panel-inner .close-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px; }
 
 /* customizer shortcut */
 #masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {

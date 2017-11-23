@@ -42,9 +42,9 @@
 		} );
 	} );
 
+    var $document = $( document );
 
     api.bind( 'preview-ready', function() {
-        var $document = $( document );
         var defaultTarget = window.parent === window ? null : window.parent;
         $document.on( 'click', '#masthead .customize-partial-edit-shortcut-header_panel', function( e ){
             e.preventDefault();
@@ -108,17 +108,13 @@
         } );
         */
 
-        var setupMobileSidebarHeight = function(){
-            var h = $( window ).height();
-            $( '#mobile-header-panel' ).height( h );
-        };
 
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
             //var widgetArea;
             if( settings.partial.id == 'header_builder_panel' ) {
                 $('body > .mobile-header-panel' ).remove();
                 $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
-                setupMobileSidebarHeight();
+                $document.trigger( 'header_builder_panel_changed',[ settings.partial.id ] );
             }
             //console.log( 'partial-content-rendered', sidebarPartial );
         } );

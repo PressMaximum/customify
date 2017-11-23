@@ -31,6 +31,7 @@ function customify_builder_config_header_primary_menu() {
             'section' => $section,
             'title' => __( 'Item Padding', 'customify' ),
             'selector' => '.primary-menu li a',
+            'device_settings' => true,
             'css_format' => array(
                 'unit' => '',
                 'top' => 'padding-top: {{value}};',
@@ -45,6 +46,7 @@ function customify_builder_config_header_primary_menu() {
             'type' => 'css_ruler',
             'section' => $section,
             'selector' => '.primary-menu .menu li',
+            'device_settings' => true,
             'css_format' => array(
                 'top' => 'margin-top: {{value}};',
                 'right' => 'margin-right: {{value}};',
@@ -59,7 +61,8 @@ function customify_builder_config_header_primary_menu() {
             'type' => 'color',
             'section' => $section,
             'title'  => __( 'Item Color', 'customify' ),
-            'selector'  => '.primary-menu li a',
+            'selector'  => '.primary-menu li a, .primary-menu li',
+            'device_settings' => true,
             'css_format'  => 'color: {{value}};',
         ),
 
@@ -68,7 +71,8 @@ function customify_builder_config_header_primary_menu() {
             'type' => 'color',
             'section' => $section,
             'title' => __( 'Item Color Hover', 'customify' ),
-            'selector'  => '.primary-menu li a:hover',
+            'device_settings' => true,
+            'selector'  => '.primary-menu li a:hover, .primary-menu li:hover > span',
             'css_format'  => 'color: {{value}};',
         ),
 
@@ -127,10 +131,11 @@ function customify_builder_config_header_primary_menu() {
             'name' => 'header_primary_menu_align',
             'type' => 'text_align_no_justify',
             'section' => $section,
-            'device_settings' => true,
+            'device_settings' => false,
             'selector' => '.builder-item--primary-menu',
             'css_format' => 'text-align: {{value}};',
             'title'   => __( 'Align', 'customify' ),
+            'description'   => __( 'Apply for desktop only.', 'customify' ),
         ),
 
     );
@@ -145,7 +150,7 @@ function customify_builder_primary_menu_item(){
         'theme_location' => 'menu-1',
         'container' => 'nav',
         'container_id' => 'site-navigation-__id__-__device__',
-        'container_class' => 'primary-menu primary-menu-__device__'.( $style ? ' '.$style : '' ),
+        'container_class' => 'primary-menu nav-menu-__device__ primary-menu-__device__'.( $style ? ' '.$style : '' ),
         'menu_id'        => 'primary-menu-__id__-__device__',
     ) );
 

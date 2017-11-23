@@ -528,9 +528,16 @@ $text_color: #555d66;
     }
 }
 
+/* Text Align */
+.customify-text-align {
+    .button {
+        padding-top: 3px;
+    }
+}
+
 /*Background field*/
 .customize-control {
-    &.customify-background-control {
+    &.customify-background-control--- {
         .customify-group-device-fields {
             position: relative;
             &::after {
@@ -550,7 +557,10 @@ $text_color: #555d66;
                 select {
                     width: 135px;
                 }
+
                 &.customify--field-name-color{
+
+                    /*
                     position: absolute;
                     top: 0px;
                     right: 0px;
@@ -578,12 +588,28 @@ $text_color: #555d66;
                         right: 0px;
                         z-index: 10;
                     }
+                    */
+
+                    .wp-picker-container {
+                        position: relative;
+                        z-index: 35;
+                    }
+
+                    .wp-picker-holder {
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                    }
+
+
                 }
 
                 &.customify--field-name-image {
                     width: 115px;
                     display: block;
-                    float: left;
+                    position: absolute;
+                    top: 35px;
+                    left: 0px;
                     .customify-field-header{
                         display: none;
                     }
@@ -627,21 +653,21 @@ $text_color: #555d66;
                 &.customify--field-name-position {
                     .customify-field-header{ display: none; }
                     position: absolute;
-                    top: 30px;
+                    top: 60px;
                     right: 0px;
                 }
 
                 &.customify--field-name-repeat {
                     .customify-field-header { display: none; }
                     position: absolute;
-                    top: 60px;
+                    top: 100px;
                     right: 0px;
                 }
 
                 &.customify--field-name-cover {
                    clear: both;
                     position: absolute;
-                    top: 90px;
+                    top: 140px;
                     right: 0px;
                 }
 
@@ -649,7 +675,7 @@ $text_color: #555d66;
                     .customify-field-header { display: none; }
                     clear: both;
                     position: absolute;
-                    top: 120px;
+                    top: 170px;
                     right: 0px;
                 }
 

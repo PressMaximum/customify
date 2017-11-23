@@ -38,7 +38,8 @@ $submenu_width: 14em;
         display: block;
         transform: translateY(40px);
         top: 100%;
-        box-shadow: 1px 1px 4px rgba(0,0,0,.15);
+        box-shadow: 2px 1px 2px rgba(0,0,0,.15);
+        text-align: left;
         li {
             display: block;
             margin: 0px;
@@ -59,9 +60,70 @@ $submenu_width: 14em;
             opacity: 1;
         }
     }
-
-
 }
+
+/*
+* Mobile Menu
+* ---------------------------------------------
+ */
+.nav-menu-mobile {
+    .menu {
+        margin: 0px;
+        padding: 0px;
+        list-style: none;
+        a {
+            display: block;
+        }
+        li {
+            list-style: none;
+            position: relative;
+            &.menu-item-has-children {
+                > a {
+                    padding-right: 30px !important;
+                }
+
+            }
+            .nav-t-icon {
+                width: 30px;
+                height: 30px;
+                display: block;
+                position: absolute;
+                top: 0px;
+                right: 0px;
+                font-size: 150%;
+                text-align: center;
+                vertical-align: middle;
+                line-height: 1;
+                transition: all .5s ease;
+                cursor: pointer;
+                border-radius: 50%;
+                &:before {
+                    transition: all .5s ease;
+                    font-family: "fontawesome";
+                    content: "\f107";
+                }
+            }
+        }
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height .5s ease;
+        }
+        .open-sub {
+            > .nav-t-icon {
+               &:before {
+                   transform: rotate(-180deg);
+               }
+            }
+            .sub-menu {
+                display: block;
+                max-height: 2000px;
+                opacity: 1;
+            }
+        }
+    } // end menu li
+} // end mobile menu
 
 
 /*
@@ -80,16 +142,7 @@ $submenu_width: 14em;
     visibility: hidden;
     transform: translate3d(-100%,0,0);
     transition: transform .5s cubic-bezier(.79,.14,.15,.86);
-    background: #cccccc;
-}
-
-#mobile-header-panel-inner {
-    position: relative;
-    .close-panel {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
+    background: #333333;
 }
 
 #page {
@@ -123,4 +176,18 @@ $submenu_width: 14em;
         left: 0;
         visibility: visible;
     }
+}
+.builder-item-sidebar {
+    margin-bottom: 20px;
+}
+
+#mobile-header-panel-inner {
+    position: relative;
+    word-wrap: break-word;
+    .close-panel {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    padding: 20px 20px 0px;
 }

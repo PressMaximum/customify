@@ -37,7 +37,7 @@ function customify_builder_config_header_html(){
 
 function customify_builder_header_html_item(){
     $content = Customify_Customizer()->get_setting( 'header_html' );
-    echo '<div class="builder-header-html-item">';
+    echo '<div class="builder-header-html-item item--html">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
     echo '</div>';
 }

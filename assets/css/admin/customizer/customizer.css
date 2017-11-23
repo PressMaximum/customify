@@ -414,98 +414,121 @@
 .customify--font-style .button.customify--checked {
   background: #ccc; }
 
+/* Text Align */
+.customify-text-align .button {
+  padding-top: 3px; }
+
 /*Background field*/
-.customize-control.customify-background-control .customify-group-device-fields {
+.customize-control.customify-background-control--- .customify-group-device-fields {
   position: relative; }
-  .customize-control.customify-background-control .customify-group-device-fields::after {
+  .customize-control.customify-background-control--- .customify-group-device-fields::after {
     clear: both;
     content: "";
     display: block; }
 
-.customize-control.customify-background-control .customify--settings-fields {
+.customize-control.customify-background-control--- .customify--settings-fields {
   position: relative;
   min-height: 160px;
   display: block;
   margin-top: 7px; }
-  .customize-control.customify-background-control .customify--settings-fields::after {
+  .customize-control.customify-background-control--- .customify--settings-fields::after {
     clear: both;
     content: "";
     display: block; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field select {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field select {
     width: 135px; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color {
-    position: absolute;
-    top: 0px;
-    right: 0px; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .customify-field-heading {
-      display: none; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container {
-      position: relative; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container input.wp-color-picker {
-        display: none !important; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container .wp-color-result {
-        padding-left: 50px; }
-        .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container .wp-color-result.wp-picker-open {
-          padding-left: 75px; }
-          .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container .wp-color-result.wp-picker-open:after {
-            display: none; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-holder {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-color {
+    /*
+                    position: absolute;
+                    top: 0px;
+                    right: 0px;
+                    .customify-field-heading {
+                        display: none;
+                    }
+                    .wp-picker-container {
+                        position: relative;
+
+                        input.wp-color-picker {
+                            display: none !important;
+                        }
+                        .wp-color-result{
+                            padding-left: 50px;
+                            &.wp-picker-open {
+                                padding-left: 75px;
+                                &:after {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                    .wp-picker-holder {
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                    }
+                    */ }
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container {
+      position: relative;
+      z-index: 35; }
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-holder {
       position: absolute;
       right: 0px;
       z-index: 10; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image {
     width: 115px;
     display: block;
-    float: left; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .customify-field-header {
+    position: absolute;
+    top: 35px;
+    left: 0px; }
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .customify-field-header {
       display: none; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .button {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button {
       overflow: hidden;
       width: 35px;
       vertical-align: middle; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .button:before {
+      .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button:before {
         font-family: dashicons;
         margin-right: 35px;
         display: inline-block; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .button.customify--change:before, .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .button.customify--add:before {
+      .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--change:before, .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--add:before {
         content: "\f317"; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .button.customify--remove:before {
+      .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--remove:before {
         content: "\f335"; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .customify-image-preview {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .customify-image-preview {
       margin: 0px 0px 10px; }
-      .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .customify-image-preview:before {
+      .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .customify-image-preview:before {
         padding: 35px 20px; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image .customify-field-header {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .customify-field-header {
       display: none; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-image img {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image img {
       width: 115px;
       height: 115px;
       display: block;
       -o-object-fit: cover;
          object-fit: cover; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-position {
-    position: absolute;
-    top: 30px;
-    right: 0px; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-position .customify-field-header {
-      display: none; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-repeat {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-position {
     position: absolute;
     top: 60px;
     right: 0px; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-repeat .customify-field-header {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-position .customify-field-header {
       display: none; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-cover {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-repeat {
+    position: absolute;
+    top: 100px;
+    right: 0px; }
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-repeat .customify-field-header {
+      display: none; }
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-cover {
     clear: both;
     position: absolute;
-    top: 90px;
+    top: 140px;
     right: 0px; }
-  .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-attachment {
+  .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-attachment {
     clear: both;
     position: absolute;
-    top: 120px;
+    top: 170px;
     right: 0px; }
-    .customize-control.customify-background-control .customify--settings-fields .customify--field.customify--field-name-attachment .customify-field-header {
+    .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-attachment .customify-field-header {
       display: none; }
 
 .customify--hide {
