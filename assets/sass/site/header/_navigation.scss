@@ -49,10 +49,15 @@ $submenu_width: 14em;
             display: block;
             padding: 10px 15px;
         }
+
+        .sub-menu {
+            top: 0px;
+            left: $submenu_width;
+        }
     }
 
     .menu-item:hover {
-        .sub-menu {
+        > .sub-menu {
             height: auto;
             transform: translateY(0);
             overflow: initial;
@@ -112,11 +117,9 @@ $submenu_width: 14em;
         }
         .open-sub {
             > .nav-t-icon {
-               &:before {
-                   transform: rotate(-180deg);
-               }
+                transform: rotate(-180deg);
             }
-            .sub-menu {
+            > .sub-menu {
                 display: block;
                 max-height: 2000px;
                 opacity: 1;
@@ -159,7 +162,10 @@ $submenu_width: 14em;
         visibility: visible;
     }
 }
-.display-mobile-header-panel {
+.body-y-hidden {
+    overflow: hidden !important;
+}
+.display-mobile-header-panel, .display-mobile-form-panel {
     overflow: hidden;
     #wpadminbar {
         display: none;
@@ -169,6 +175,9 @@ $submenu_width: 14em;
         transform: scale3d(.9,.9,.9);
         box-shadow: 0 0 46px #000;
     }
+}
+
+.display-mobile-header-panel {
     #mobile-header-panel {
         height: auto;
         overflow: auto;
@@ -177,6 +186,7 @@ $submenu_width: 14em;
         visibility: visible;
     }
 }
+
 .builder-item-sidebar {
     margin-bottom: 20px;
 }
@@ -185,9 +195,7 @@ $submenu_width: 14em;
     position: relative;
     word-wrap: break-word;
     .close-panel {
-        position: absolute;
-        top: 20px;
-        right: 20px;
+
     }
     padding: 20px 20px 0px;
 }

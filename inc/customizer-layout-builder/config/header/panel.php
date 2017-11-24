@@ -71,19 +71,7 @@ function customify_builder_config_header_row_config( $section = false, $section_
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title'          => $section_name,
-        ),
-
-        array(
-            'name' => $section.'_sticky',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title'          => __( 'Sticky header', 'customify' ),
-            'choices' => array(
-                'no' =>  __( 'No', 'customify' ),
-                'yes' =>  __( 'Yes', 'customify' ),
-            )
+            'title' => $section_name,
         ),
 
         array(
@@ -105,7 +93,9 @@ function customify_builder_config_header_row_config( $section = false, $section_
             'type' => 'select',
             'section' => $section,
             'theme_supports' => '',
-            'title'          => __( 'Sticky header', 'customify' ),
+            'title' => __( 'Sticky header', 'customify' ),
+            'selector' => $selector_all,
+            'render_callback' => $fn,
             'choices' => array(
                 'no' =>  __( 'No', 'customify' ),
                 'yes' =>  __( 'Yes', 'customify' ),
@@ -211,6 +201,16 @@ function customify_builder_config_header_row_config( $section = false, $section_
         ),
 
     );
+
+
+    /*
+    if ( $section == 'header_main' ) {
+        $config = array_merge( array(
+
+        ), $config );
+    }
+    */
+
     return $config;
 }
 

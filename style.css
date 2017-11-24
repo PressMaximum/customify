@@ -2543,10 +2543,10 @@ article.comment {
   margin-left: 4px; }
 
 /* Customize Preview */
-.customize-previewing .header--row .customize-partial-edit-shortcut {
+.customize-previewing .header--row .customize-partial-edit-shortcut, .customize-previewing .mobile-header-panel .customize-partial-edit-shortcut {
   display: none; }
 
-.customize-previewing .header--row .builder-item-focus:hover {
+.customize-previewing .header--row .builder-item-focus:hover, .customize-previewing .mobile-header-panel .builder-item-focus:hover {
   outline: 1px dashed #ff472e;
   outline-offset: -1px; }
 
@@ -2567,23 +2567,61 @@ article.comment {
     font-size: 0.875em;
     margin: 3px 0px 0px 0px; }
 
-.header-search-form {
-  margin: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; }
-  .header-search-form .s {
-    width: 100%; }
-
 .item-button {
   display: inline-block; }
+
+/*
+* Close Button
+*-------------------------------
+*/
+.mobile-sidebar-panel .close {
+  z-index: 36;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  height: 35px;
+  width: 35px;
+  box-sizing: border-box;
+  line-height: 35px;
+  display: inline-block; }
+  .mobile-sidebar-panel .close:before, .mobile-sidebar-panel .close:after {
+    -webkit-transform: rotate(-45deg);
+        -ms-transform: rotate(-45deg);
+            transform: rotate(-45deg);
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1;
+    margin-left: -17.5px;
+    display: block;
+    height: 2px;
+    width: 35px;
+    background-color: #fff;
+    -webkit-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out; }
+  .mobile-sidebar-panel .close:after {
+    -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+            transform: rotate(45deg); }
 
 /*
 * Row Layouts
 *-------------------------------
 */
-.header--row.layout-fullwidth .customify-container {
-  max-width: initial; }
+.header--row {
+  background: #ffffff; }
+  .header--row.layout-fullwidth .customify-container {
+    max-width: initial; }
+  .header--row.fixed {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 100; }
+  .header--row.fixed.absolute {
+    position: absolute; }
 
 /*
 * Icon List
@@ -2685,6 +2723,49 @@ article.comment {
     visibility: visible;
     opacity: 1; }
 
+/*
+* Search
+*-------------------------------
+*/
+.header-search-form {
+  margin: 0px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex; }
+  .header-search-form .s {
+    width: 100%; }
+
+.mobile-search-form-sidebar {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  display: block;
+  z-index: 300;
+  background: #444444;
+  -webkit-transform: translateX(100%);
+      -ms-transform: translateX(100%);
+          transform: translateX(100%);
+  -webkit-transition: -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  transition: -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86), -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
+  visibility: visible; }
+  .mobile-search-form-sidebar .search-form-inner {
+    padding: 15% 20px;
+    text-align: center; }
+  .mobile-search-form-sidebar .search-submit {
+    display: inline-block;
+    margin: 15px auto 0; }
+
+.display-mobile-form-panel .mobile-search-form-sidebar.builder-item--search-show {
+  height: auto;
+  overflow: auto;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  left: 0;
+  visibility: visible; }
+
 .header-top {
   padding: 0.3819820591em 0px;
   border-bottom: 1px solid #eaecee; }
@@ -2742,8 +2823,11 @@ article.comment {
   .primary-menu-desktop .sub-menu a {
     display: block;
     padding: 10px 15px; }
+  .primary-menu-desktop .sub-menu .sub-menu {
+    top: 0px;
+    left: 14em; }
 
-.primary-menu-desktop .menu-item:hover .sub-menu {
+.primary-menu-desktop .menu-item:hover > .sub-menu {
   height: auto;
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
@@ -2793,11 +2877,11 @@ article.comment {
     opacity: 0;
     -webkit-transition: max-height .5s ease;
     transition: max-height .5s ease; }
-  .nav-menu-mobile .menu .open-sub > .nav-t-icon:before {
+  .nav-menu-mobile .menu .open-sub > .nav-t-icon {
     -webkit-transform: rotate(-180deg);
         -ms-transform: rotate(-180deg);
             transform: rotate(-180deg); }
-  .nav-menu-mobile .menu .open-sub .sub-menu {
+  .nav-menu-mobile .menu .open-sub > .sub-menu {
     display: block;
     max-height: 2000px;
     opacity: 1; }
@@ -2843,22 +2927,26 @@ article.comment {
   transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86), -webkit-transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
   visibility: visible; }
 
-.display-mobile-header-panel {
+.body-y-hidden {
+  overflow: hidden !important; }
+
+.display-mobile-header-panel, .display-mobile-form-panel {
   overflow: hidden; }
-  .display-mobile-header-panel #wpadminbar {
+  .display-mobile-header-panel #wpadminbar, .display-mobile-form-panel #wpadminbar {
     display: none; }
-  .display-mobile-header-panel #page {
+  .display-mobile-header-panel #page, .display-mobile-form-panel #page {
     position: fixed;
     -webkit-transform: scale3d(0.9, 0.9, 0.9);
             transform: scale3d(0.9, 0.9, 0.9);
     box-shadow: 0 0 46px #000; }
-  .display-mobile-header-panel #mobile-header-panel {
-    height: auto;
-    overflow: auto;
-    -webkit-transform: translate3d(0, 0, 0);
-            transform: translate3d(0, 0, 0);
-    left: 0;
-    visibility: visible; }
+
+.display-mobile-header-panel #mobile-header-panel {
+  height: auto;
+  overflow: auto;
+  -webkit-transform: translate3d(0, 0, 0);
+          transform: translate3d(0, 0, 0);
+  left: 0;
+  visibility: visible; }
 
 .builder-item-sidebar {
   margin-bottom: 20px; }
@@ -2867,10 +2955,6 @@ article.comment {
   position: relative;
   word-wrap: break-word;
   padding: 20px 20px 0px; }
-  #mobile-header-panel-inner .close-panel {
-    position: absolute;
-    top: 20px;
-    right: 20px; }
 
 /* customizer shortcut */
 #masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {

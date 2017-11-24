@@ -317,6 +317,7 @@ function Customify_Customizer_Layout_Builder(){
 
 
 class Customify_Customizer_Layout_Builder_Frontend {
+     static $_instance;
      private $control_id = 'header_builder_panel';
      private $id = 'header';
      private $render_items = array();
@@ -328,6 +329,13 @@ class Customify_Customizer_Layout_Builder_Frontend {
      {
 
      }
+
+     static function get_instance(){
+        if ( is_null( self::$_instance ) ) {
+            self::$_instance = new self();
+        }
+        return self::$_instance ;
+    }
 
     function set_config_items( $config_items ){
         $this->config_items = $config_items;
@@ -567,19 +575,23 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     if ( $row_layout ) {
                         $classes[] = 'layout-'.sanitize_text_field( $row_layout );
                     }
+                    $is_sticky = Customify_Customizer()->get_setting($this->id.'_'.$row_id.'_sticky' );
+                    if ( $is_sticky == 1 || $is_sticky == 'yes' ) {
+                        $classes[] = 'is-sticky';
+                    }
 
                     ?>
                     <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
                             if ($desktop_items) {
-                                echo '<div class="hide-on-mobile hide-on-tablet customify-grid customify-grid-middle">';
+                                echo '<div class="cb-row--desktop hide-on-mobile hide-on-tablet customify-grid customify-grid-middle">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
 
                             if ($mobile_items) {
-                                echo '<div class="hide-on-desktop customify-grid customify-grid-middle">';
+                                echo '<div class="cb-row--mobile hide-on-desktop customify-grid customify-grid-middle">';
                                 $this->render_row($mobile_items, $row_id, 'mobile');
                                 echo '</div>';
                             }
@@ -597,9 +609,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
          $id = 'sidebar';
          $mobile_items = $this->get_row_settings( $id, 'mobile');
          if ($mobile_items) {
-             echo '<div id="mobile-header-panel" class="mobile-header-panel">';
+             echo '<div id="mobile-header-panel" class="mobile-header-panel mobile-sidebar-panel">';
                  echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
-                     echo '<a class="close-panel" href="#">'.__( 'Close', 'customify' ).'</a>';
+                     echo $this->close_icon('close-panel' );
                      foreach( $mobile_items as $item ) {
                          $item_id = $item['id'];
                          $content = $this->render_items[$item['id']]['render_content'];
@@ -621,24 +633,30 @@ class Customify_Customizer_Layout_Builder_Frontend {
              echo '</div>';
          }
      }
+
+      function close_icon( $class = '' ){
+         $close = '<a class="close '.esc_attr( $class ).'" href="#"><span class="screen-reader-text">'.__( 'Close', 'customify' ).'</span></a>';
+         return $close;
+    }
 }
 
 
-
+function Customify_Customizer_Layout_Builder_Frontend(){
+    return Customify_Customizer_Layout_Builder_Frontend::get_instance();
+}
 
 
 function customify_customize_render_header(){
     echo '<header id="masthead" class="site-header">';
-    $b = new Customify_Customizer_Layout_Builder_Frontend();
     if ( is_customize_preview() ) {
         ?>
         <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button aria-label="Click to edit this element." title="Click to edit this element." class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
         <?php
     }
     $list_items = Customify_Customizer_Layout_Builder()->get_header_items();
-    $b->set_config_items( $list_items );
-    $b->render();
-    $b->render_sidebar();
+    Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
+    Customify_Customizer_Layout_Builder_Frontend()->render();
+    Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
 
 
     /*

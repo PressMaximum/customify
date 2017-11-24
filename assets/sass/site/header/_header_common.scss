@@ -20,29 +20,78 @@
     }
 }
 
-.header-search-form {
-    margin: 0px;
-    display: flex;
-    .s {
-        width: 100%;
-    }
-}
 .item-button {
     display: inline-block;
 }
+
+/*
+* Close Button
+*-------------------------------
+*/
+$close_size: 35px;
+.mobile-sidebar-panel {
+    .close {
+        z-index: 36;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        height: $close_size;
+        width: $close_size;
+        box-sizing: border-box;
+        line-height: $close_size;
+        display: inline-block;
+
+        &:before, &:after {
+            transform: rotate(-45deg);
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -1;
+            margin-left: -$close_size/2;
+            display: block;
+            height: 2px;
+            width: $close_size;
+            background-color: #fff;
+            transition: all 0.2s ease-out;
+        }
+
+        &:after {
+            transform: rotate(45deg);
+        }
+    }
+}
+
 
 /*
 * Row Layouts
 *-------------------------------
 */
 .header--row {
+    background: #ffffff;
     &.layout-fullwidth {
         .customify-container {
             max-width: initial;
         }
 
     }
+
+    &.fixed {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        box-sizing: border-box;
+        z-index: 100;
+    }
+
+    &.fixed.absolute {
+        position: absolute;
+    }
 }
+
+
+
 
 /*
 * Icon List
@@ -170,5 +219,55 @@
 
 .mobile-item--user {
 
+}
+
+
+/*
+* Search
+*-------------------------------
+*/
+.header-search-form {
+    margin: 0px;
+    display: flex;
+    .s {
+        width: 100%;
+    }
+}
+
+
+
+.mobile-search-form-sidebar {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    display: block;
+    z-index: 300;
+    background: #444444;
+
+    transform: translateX(100%);
+    transition: transform .5s cubic-bezier(.79,.14,.15,.86);
+    //left: 0;
+    visibility: visible;
+    .search-form-inner {
+        padding: 15% 20px;
+        text-align: center;
+    }
+    .search-submit {
+        display: inline-block;
+        margin: 15px auto 0;
+    }
+
+}
+.display-mobile-form-panel {
+    .mobile-search-form-sidebar {
+        &.builder-item--search-show {
+            height: auto;
+            overflow: auto;
+            transform: translate3d(0, 0, 0);
+            left: 0;
+            visibility: visible;
+        }
+    }
 }
 

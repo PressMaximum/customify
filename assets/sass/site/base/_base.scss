@@ -633,7 +633,7 @@ article.comment {
 
 /* Customize Preview */
 .customize-previewing {
-    .header--row {
+    .header--row, .mobile-header-panel {
         .customize-partial-edit-shortcut {
             display: none;
         }

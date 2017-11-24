@@ -114,8 +114,20 @@
             if( settings.partial.id == 'header_builder_panel' ) {
                 $('body > .mobile-header-panel' ).remove();
                 $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
-                $document.trigger( 'header_builder_panel_changed',[ settings.partial.id ] );
+
             }
+
+            var header = $( '#masthead' );
+            if ( $( '.search-form--mobile', header ).length ) {
+                $( '.mobile-search-form-sidebar' ).remove();
+                var search_form = $( '.search-form--mobile' ).eq(0);
+                search_form.addClass('mobile-search-form-sidebar')
+                    .removeClass( 'hide-on-mobile hide-on-tablet' );
+                $( 'body' ).prepend( search_form );
+            }
+
+            $document.trigger( 'header_builder_panel_changed',[ settings.partial.id ] );
+
             //console.log( 'partial-content-rendered', sidebarPartial );
         } );
 

@@ -60,14 +60,16 @@ function customify_builder_header_search_item(){
     $placeholder = Customify_Customizer()->get_setting( 'header_search_placeholder' );
     $show_btn = Customify_Customizer()->get_setting( 'header_search_btn' );
     ?>
-    <form role="search" method="get" class="hide-on-mobile hide-on-tablet header-search-form search-form " action="<?php echo home_url( '/' ); ?>">
-        <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
-        <?php if ( $show_btn ) { ?>
-        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'search submit', 'customify' ); ?>" />
-        <?php } ?>
+    <form role="search" method="get" class="search-form--__device__ hide-on-mobile hide-on-tablet header-search-form search-form " action="<?php echo home_url( '/' ); ?>">
+        <div class="search-form-inner">
+            <input type="text" name="s" class="s" placeholder="<?php echo esc_attr( $placeholder ); ?>">
+            <?php if ( $show_btn ) { ?>
+            <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'search submit', 'customify' ); ?>" />
+            <?php } ?>
+            <a class="close hide-on-desktop" href="#"><?php echo Customify_Customizer_Layout_Builder_Frontend()->close_icon(); ?></a>
+        </div>
     </form>
     <span class="search-toggle hide-on-desktop"><i class="fa fa-search"></i></span>
-
     <?php
 }
 
