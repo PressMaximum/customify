@@ -1,22 +1,22 @@
 <?php
-function customify_builder_config_header_primary_menu() {
-    $section = 'header_menu_primary';
-    $fn = 'customify_builder_primary_menu_item';
+function customify_builder_config_header_menu_2() {
+    $section = 'header_menu_2';
+    $fn = 'customify_builder_menu_2_item';
     return array(
         array(
             'name' => $section,
             'type' => 'section',
             'panel' => 'header_settings',
             'theme_supports' => '',
-            'title' => __( 'Primary Menu', 'customify' ),
+            'title' => __( 'Secondary Menu', 'customify' ),
             'description' => __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for Primary menu', 'customify' )
         ),
 
         array(
-            'name' => 'primary_menu_style',
+            'name' => 'menu_2_style',
             'type' => 'select',
             'section' => $section,
-            'selector' => '.primary-menu',
+            'selector' => '.secondary-menu',
             'render_callback' => $fn,
             'title' => __( 'Style', 'customify' ),
             'choices' => array(
@@ -26,11 +26,11 @@ function customify_builder_config_header_primary_menu() {
         ),
 
         array(
-            'name' => 'primary_menu_item_padding',
+            'name' => 'menu_2_item_padding',
             'type' => 'css_ruler',
             'section' => $section,
             'title' => __( 'Item Padding', 'customify' ),
-            'selector' => '.primary-menu li a',
+            'selector' => '.secondary-menu li a',
             'device_settings' => true,
             'css_format' => array(
                 'unit' => '',
@@ -42,10 +42,10 @@ function customify_builder_config_header_primary_menu() {
         ),
 
         array(
-            'name' => 'primary_menu_item_margin',
+            'name' => 'menu_2_item_margin',
             'type' => 'css_ruler',
             'section' => $section,
-            'selector' => '.primary-menu .menu li',
+            'selector' => '.secondary-menu .menu li',
             'device_settings' => true,
             'css_format' => array(
                 'top' => 'margin-top: {{value}};',
@@ -57,33 +57,33 @@ function customify_builder_config_header_primary_menu() {
         ),
 
         array(
-            'name' => 'primary_menu_item_color',
+            'name' => 'menu_2_item_color',
             'type' => 'color',
             'section' => $section,
             'title'  => __( 'Item Color', 'customify' ),
-            'selector'  => '.primary-menu li a, .primary-menu li',
+            'selector'  => '.secondary-menu li a, .secondary-menu li',
             'device_settings' => true,
             'css_format'  => 'color: {{value}};',
         ),
 
         array(
-            'name' => 'primary_menu_item_color_hover',
+            'name' => 'menu_2_item_color_hover',
             'type' => 'color',
             'section' => $section,
             'title' => __( 'Item Color Hover', 'customify' ),
             'device_settings' => true,
-            'selector'  => '.primary-menu li a:hover, .primary-menu li:hover > span',
+            'selector'  => '.secondary-menu li a:hover, .secondary-menu li:hover > span',
             'css_format'  => 'color: {{value}};',
         ),
 
         array(
-            'name' => 'primary_menu_typography',
+            'name' => 'menu_2_typography',
             'type' => 'group',
             'section'     => $section,
             'title'          => __( 'Typography', 'customify' ),
             'description'    => __( 'This is description',  'customify' ),
             'field_class' => 'customify-typography-control',
-            'selector' => '.primary-menu',
+            'selector' => '.secondary-menu',
             'css_format' => 'typography',
             'default' => array(
 
@@ -128,11 +128,11 @@ function customify_builder_config_header_primary_menu() {
         ),
 
         array(
-            'name' => 'header_primary_menu_align',
+            'name' => 'header_menu_2_align',
             'type' => 'text_align_no_justify',
             'section' => $section,
             'device_settings' => false,
-            'selector' => '.builder-item--primary-menu',
+            'selector' => '.builder-item--secondary-menu',
             'css_format' => 'text-align: {{value}};',
             'title'   => __( 'Align', 'customify' ),
             'description'   => __( 'Apply for desktop only.', 'customify' ),
@@ -142,16 +142,16 @@ function customify_builder_config_header_primary_menu() {
 }
 
 
-function customify_builder_primary_menu_item(){
+function customify_builder_menu_2_item(){
 
-    $style = sanitize_text_field( Customify_Customizer()->get_setting('primary_menu_style') );
+    $style = sanitize_text_field( Customify_Customizer()->get_setting('menu_2_style') );
 
     wp_nav_menu( array(
-        'theme_location' => 'menu-1',
+        'theme_location' => 'menu-2',
         'container' => 'nav',
         'container_id' => 'site-navigation-__id__-__device__',
-        'container_class' => 'primary-menu nav-menu-__device__ primary-menu-__device__'.( $style ? ' '.$style : '' ),
-        'menu_id'        => 'primary-menu-__id__-__device__',
+        'container_class' => 'secondary-menu nav-menu-__device__ secondary-menu-__device__'.( $style ? ' '.$style : '' ),
+        'menu_id'        => 'secondary-menu-__id__-__device__',
         'fallback_cb' => false
     ) );
 

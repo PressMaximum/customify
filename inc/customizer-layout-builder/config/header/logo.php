@@ -70,6 +70,7 @@ function customify_builder_config_header_logo(){
                 'unit' => 'px',
                 'value' => 60
             ),
+            'max' => 200,
             'device_settings' => true,
             'title' => __( 'Logo Height', 'customify' ),
             'selector' => $selector.' img',

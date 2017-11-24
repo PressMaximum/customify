@@ -10,6 +10,8 @@ function customify_builder_config_header_search(){
     $prefix = 'header_search_';
     $fn = 'customify_builder_header_search_item';
 
+    $mobile_selector = '.mobile-search-form-sidebar';
+
     $config  = array(
         array(
             'name' => $section,
@@ -49,6 +51,106 @@ function customify_builder_config_header_search(){
             'title' => __( 'Align', 'customify' ),
             'device_settings' => true,
         ),
+
+        array(
+            'name' => 'header_search_mobile_h',
+            'type' => 'heading',
+            'section' => $section,
+            'title' => __( 'Mobile Search Sidebar', 'customify' ),
+        ),
+
+        array(
+            'name' => 'header_search_mobile_icon_size',
+            'type' => 'slider',
+            'max' => '150',
+            'section' => $section,
+            'selector' => '.builder-item--search .search-toggle i',
+            'css_format' => 'font-size: {{value}};',
+            'title' => __( 'Mobile Icon Size', 'customify' ),
+        ),
+
+        array(
+            'name' => $section.'_background',
+            'type' => 'group',
+            'section'     => $section,
+            'title'          => __( 'Mobile Sidebar Background', 'customify' ),
+            'live_title_field' => 'title',
+            'field_class' => 'customify-background-control',
+            'selector' => $mobile_selector,
+            'css_format' => 'background',
+            'default' => array(
+
+            ),
+            'fields' => array(
+                array(
+                    'name' => 'color',
+                    'type' => 'color',
+                    'label' => __( 'Color', 'customify' ),
+                ),
+                array(
+                    'name' => 'image',
+                    'type' => 'image',
+                    'label' => __( 'Image', 'customify' ),
+                ),
+                array(
+                    'name' => 'cover',
+                    'type' => 'checkbox',
+                    'required' => array( 'image', 'not_empty', ''),
+                    'checkbox_label' => __( 'Background cover', 'customify' ),
+                ),
+                array(
+                    'name' => 'position',
+                    'type' => 'select',
+                    'label' => __( 'Background Position', 'customify' ),
+                    'required' => array( 'image', 'not_empty', ''),
+                    'choices' => array(
+                        'default'       => __( 'Position', 'customify' ),
+                        'center'        => __( 'Center', 'customify' ),
+                        'top_left'      => __( 'Top Left', 'customify' ),
+                        'top_right'     => __( 'Top Right', 'customify' ),
+                        'top_center'    => __( 'Top Center', 'customify' ),
+                        'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                        'bottom_center' => __( 'Bottom Center', 'customify' ),
+                        'bottom_right'  => __( 'Bottom Right', 'customify' ),
+                    ),
+                ),
+
+                array(
+                    'name' => 'repeat',
+                    'type' => 'select',
+                    'label' => __( 'Background Repeat', 'customify' ),
+                    'required' => array(
+                        array('image', 'not_empty', ''),
+                        // array('style', '!=', 'cover' ),
+                    ),
+                    'choices' => array(
+                        'default' => __( 'Repeat', 'customify' ),
+                        'no-repeat' => __( 'No-repeat', 'customify' ),
+                        'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                        'repeat-y' => __( 'Repeat Vertical', 'customify' ),
+                    ),
+                ),
+
+                array(
+                    'name' => 'attachment',
+                    'type' => 'select',
+                    'label' => __( 'Background Attachment', 'customify' ),
+                    'required' => array(
+                        array('image', 'not_empty', ''),
+                        array('cover', '!=', '1' ),
+                    ),
+                    'choices' => array(
+                        'default' => __( 'Attachment', 'customify' ),
+                        'scroll' => __( 'Scroll', 'customify' ),
+                        'fixed' => __( 'Fixed', 'customify' )
+                    ),
+                ),
+
+            )
+        ),
+
+
+
 
     );
     return $config;

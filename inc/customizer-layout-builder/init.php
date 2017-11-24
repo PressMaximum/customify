@@ -5,6 +5,7 @@ class Customify_Customizer_Layout_Builder {
     function __construct()
     {
         require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
+        require_once get_template_directory().'/inc/customizer-layout-builder/config/footer/panel.php';
         if ( is_admin() ) {
             add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
             add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
@@ -91,6 +92,15 @@ class Customify_Customizer_Layout_Builder {
         die();
     }
 
+    static function get_footer_sections(){
+        $elements = array(
+            'row-top',
+            'row-main',
+            'row-bottom',
+        );
+
+        return $elements;
+    }
 
     static function get_header_sections(){
         $elements = array(
@@ -103,6 +113,7 @@ class Customify_Customizer_Layout_Builder {
 
             'logo',
             'primary-menu',
+            'menu-2',
             'nav-icon',
             'search',
             'button',
@@ -126,6 +137,18 @@ class Customify_Customizer_Layout_Builder {
                 'control_id' => 'header_builder_panel',
                 'panel'      => 'header_settings',
                 'section'    => 'header_builder_panel',
+                'items'      => $this->get_header_items(),
+                'devices' => array(
+                    'desktop'   => __( 'Desktop', 'customify' ),
+                    'mobile'    => __( 'Mobile/Tablet', 'customify' ),
+                ),
+            ),
+
+            'footer' => array(
+                'id'         => 'footer',
+                'control_id' => 'footer_builder_panel',
+                'panel'      => 'footer_settings',
+                'section'    => 'footer_builder_panel',
                 'items'      => $this->get_header_items(),
                 'devices' => array(
                     'desktop'   => __( 'Desktop', 'customify' ),
@@ -156,6 +179,7 @@ class Customify_Customizer_Layout_Builder {
                 'name' => __( 'Nav Icon', 'customify' ),
                 'id' => 'nav-icon',
                 'width' => '3',
+                'devices' => 'mobile',
                 'section' => 'header_nav_icon' // Customizer section to focus when click settings
             ),
 
@@ -164,6 +188,13 @@ class Customify_Customizer_Layout_Builder {
                 'id' => 'primary-menu',
                 'width' => '6',
                 'section' => 'header_menu_primary' // Customizer section to focus when click settings
+            ),
+
+            array(
+                'name' => __( 'Secondary Menu', 'customify' ),
+                'id' => 'menu-2',
+                'width' => '6',
+                'section' => 'header_menu_2' // Customizer section to focus when click settings
             ),
 
             array(
@@ -255,19 +286,19 @@ class Customify_Customizer_Layout_Builder {
 
         <script type="text/html" id="tmpl-customify--cb-panel">
             <div class="customify--cp-rows">
-                <div class="customify--row-top customify--cb-row">
-                    <a class="customify--cb-row-settings" data-id="top" href="#"></a>
+                <div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top" >
+                    <a class="customify--cb-row-settings" data-id="top"  href="#"></a>
                     <div class="customify--row-inner">
                         <div class="customify--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
-                <div class="customify--row-main customify--cb-row">
+                <div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main" >
                     <a class="customify--cb-row-settings" data-id="main" href="#"></a>
                     <div class="customify--row-inner">
                         <div class="customify--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
-                <div class="customify--row-bottom customify--cb-row">
+                <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom" >
                     <a class="customify--cb-row-settings" data-id="bottom" href="#"></a>
                     <div class="customify--row-inner">
                         <div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
@@ -277,7 +308,7 @@ class Customify_Customizer_Layout_Builder {
 
             <# if ( data.device != 'desktop' ) { #>
             <div class="customify--cp-sidebar">
-                <div class="customify--row-bottom customify--cb-row">
+                <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
                     <a class="customify--cb-row-settings" data-id="sidebar" href="#"></a>
                     <div class="customify--row-inner">
                         <div class="customify--cb-items customify--sidebar-items grid-stack----" data-id="sidebar"></div>

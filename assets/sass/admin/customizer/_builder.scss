@@ -123,6 +123,12 @@ $cb_padding: 20px;
     &:last-child {
         margin-bottom: 0px;
     }
+    &.row-active {
+        .customify--cb-row-settings {
+            background: #e8b262;
+        }
+        border-color: #e8b262;
+    }
     @include clearfix();
 
     .customify--cb-row-settings {

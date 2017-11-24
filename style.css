@@ -2554,10 +2554,14 @@ article.comment {
   position: relative; }
 
 .site-branding {
-  display: inline-block; }
+  display: inline-block;
+  line-height: .9; }
+  .site-branding a {
+    display: inline-block; }
   .site-branding img {
     display: block;
-    width: auto; }
+    width: auto;
+    line-height: 1; }
   .site-branding .site-title {
     font-size: 1.9em;
     margin: 0;
@@ -2611,6 +2615,8 @@ article.comment {
 *-------------------------------
 */
 .header--row {
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
   background: #ffffff; }
   .header--row.layout-fullwidth .customify-container {
     max-width: initial; }
@@ -2728,10 +2734,11 @@ article.comment {
 *-------------------------------
 */
 .header-search-form {
-  margin: 0px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex; }
+  margin: 0px; }
+  .header-search-form .search-form-inner {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
   .header-search-form .s {
     width: 100%; }
 
@@ -2779,23 +2786,23 @@ article.comment {
   border-left: none;
   border-right: none; }
 
-.primary-menu-desktop .menu {
+.nav-menu-desktop .menu {
   list-style: none;
   padding: 0px;
   margin: 0px; }
-  .primary-menu-desktop .menu li {
+  .nav-menu-desktop .menu li {
     display: inline-block;
     margin-right: 15px;
     position: relative; }
-    .primary-menu-desktop .menu li:last-child {
+    .nav-menu-desktop .menu li:last-child {
       margin-right: 0px; }
-    .primary-menu-desktop .menu li a {
+    .nav-menu-desktop .menu li a {
       line-height: 1.6;
       display: inline-block; }
-  .primary-menu-desktop .menu > li > a {
+  .nav-menu-desktop .menu > li > a {
     padding: 5px 10px; }
 
-.primary-menu-desktop .sub-menu {
+.nav-menu-desktop .sub-menu {
   position: absolute;
   left: 0px;
   -webkit-transition: all .3s ease;
@@ -2816,18 +2823,18 @@ article.comment {
   top: 100%;
   box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.15);
   text-align: left; }
-  .primary-menu-desktop .sub-menu li {
+  .nav-menu-desktop .sub-menu li {
     display: block;
     margin: 0px;
     padding: 0px; }
-  .primary-menu-desktop .sub-menu a {
+  .nav-menu-desktop .sub-menu a {
     display: block;
     padding: 10px 15px; }
-  .primary-menu-desktop .sub-menu .sub-menu {
+  .nav-menu-desktop .sub-menu .sub-menu {
     top: 0px;
     left: 14em; }
 
-.primary-menu-desktop .menu-item:hover > .sub-menu {
+.nav-menu-desktop .menu-item:hover > .sub-menu {
   height: auto;
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);

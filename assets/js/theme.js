@@ -71,10 +71,18 @@ jQuery( document ).ready( function( $ ){
         var $window = $(window),
             $stickies;
 
-        var setData = function( stickies ){
-            $stickies = stickies.each(function() {
+        var lastScrollTop = 0;
 
-                var $thisSticky = $(this).wrap('<div class="followWrap" />');
+        var setData = function( stickies, addWrap  ){
+            if ( typeof addWrap === "undefined" ) {
+                addWrap = true;
+            }
+            $stickies = stickies.each(function() {
+                var $thisSticky = $(this);
+                if ( addWrap ) {
+                    $thisSticky.wrap('<div class="followWrap" />');
+                }
+
                 $thisSticky
                     .data('originalPosition', $thisSticky.offset().top)
                     .data('originalHeight', $thisSticky.outerHeight())
@@ -95,7 +103,7 @@ jQuery( document ).ready( function( $ ){
                 });
 
                 $window.resize( function(){
-                    setData( stickies );
+                    setData( stickies, false );
                     _whenScrolling();
                 } );
 
@@ -104,20 +112,39 @@ jQuery( document ).ready( function( $ ){
 
         var _whenScrolling = function() {
             var scrollTop = $window.scrollTop();
+            var direction;
+            if(scrollTop < lastScrollTop) {
+                direction = 'up';
+            }
+            else {
+                direction = 'down';
+            }
+            lastScrollTop = scrollTop;
+
             var top = 0;
+            var topP = 0;
             $stickies.each(function(i) {
 
                 var $thisSticky = $(this),
                     $stickyPosition = $thisSticky.data('originalPosition');
 
-                if ( $stickyPosition - top <= scrollTop ) {
+                if ( $stickyPosition - topP <= scrollTop ) {
                     $thisSticky.addClass( 'fixed' );
                     $thisSticky.css( 'top', top );
-                    top += $thisSticky.data('originalHeight');
+                    top += $thisSticky.outerHeight();
+                    topP += $thisSticky.data('originalHeight');
+                    if ( direction =='up' ){
+                        if ( $stickyPosition > scrollTop ) {
+                            $thisSticky.removeClass("fixed").removeAttr("style");
+                        }
+                    }
+
                 } else {
                     $thisSticky.removeClass("fixed").removeAttr("style");
                 }
             });
+
+            topP
         };
 
         return {

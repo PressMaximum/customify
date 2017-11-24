@@ -779,8 +779,29 @@
                     var $itemWrapper = $( '<div class="customify-available-items" data-device="'+device+'"></div>' );
                     $( '.customify--panel-'+device, that.container ).append( $itemWrapper );
                     _.each( that.items, function( node ) {
-                        var item = that.addItem( node );
-                        $itemWrapper.append( item );
+                        var _d = true;
+                        if ( ! _.isUndefined( node.devices ) && ! _.isEmpty( node.devices ) ) {
+                            if ( _.isString( node.devices ) ) {
+                                if ( node.devices != device ) {
+                                    _d = false;
+                                }
+                            } else {
+                                var _has_d = false;
+                                _.each( node.devices, function( _v ){
+                                    if ( device == _v ){
+                                        _has_d = true;
+                                    }} );
+                                if ( ! _has_d ) {
+                                    _d = false;
+                                }
+                            }
+                        }
+
+                        if ( _d ) {
+                            var item = that.addItem( node );
+                            $itemWrapper.append( item );
+                        }
+
                     } );
                 } );
 
@@ -1078,6 +1099,7 @@
     wpcustomize.bind( 'ready', function( e, b ) {
 
         var Header = new CustomizeBuilder( Customify_Layout_Builder.header );
+        var Footer = new CustomizeBuilder( Customify_Layout_Builder.footer );
 
 
         wpcustomize.bind( '_section_focus', function( e, b ) {
@@ -1087,7 +1109,9 @@
         // When focus section
         wpcustomize.state( 'expandedSection' ).bind( function( section ) {
             $( '.customify--device-panel .grid-stack-item' ).removeClass( 'item-active' );
+            $( '.customify--cb-row' ).removeClass('row-active');
             if ( section ) {
+                $( '.customify--cb-row[data-id="'+section.id+'"]' ).addClass('row-active');
                 $( '.customify--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
             }
         });

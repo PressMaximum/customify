@@ -1,30 +1,30 @@
 <?php
-if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
-    function customify_customizer_get_header_config( $configs = array() ){
-        $fn = 'customify_customize_render_header';
+if ( ! function_exists( 'customify_customizer_get_footer_config' ) ) {
+    function customify_customizer_get_footer_config( $configs = array() ){
+        $fn = 'customify_customize_render_footer';
         $config = array(
             array(
-                'name' => 'header_settings',
+                'name' => 'footer_settings',
                 'type' => 'panel',
                 'theme_supports' => '',
-                'title' => __( 'Header', 'customify' ),
+                'title' => __( 'Footer', 'customify' ),
             ),
 
             array(
-                'name' => 'header_builder_panel',
+                'name' => 'footer_builder_panel',
                 'type' => 'section',
-                'panel' => 'header_settings',
-                'title' => __( 'Header Builder', 'customify' ),
+                'panel' => 'footer_settings',
+                'title' => __( 'Footer Builder', 'customify' ),
                 'description' => __( 'This is section description',  'customify' ),
             ),
 
             array(
-                'name' => 'header_builder_panel',
+                'name' => 'footer_builder_panel',
                 'type' => 'js_raw',
-                'section' => 'header_builder_panel',
+                'section' => 'footer_builder_panel',
                 'theme_supports' => '',
-                'title' => __( 'Header Builder', 'customify' ),
-                'description' => __( 'Header Builder panel here....',  'customify' ),
+                'title' => __( 'Footer Builder', 'customify' ),
+                'description' => __( 'Footer Builder panel here....',  'customify' ),
                 'selector' => '#masthead',
                 'render_callback' => $fn,
                 'container_inclusive' => true
@@ -32,16 +32,16 @@ if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
 
         );
 
-        foreach ( Customify_Customizer_Layout_Builder::get_header_sections() as $id ) {
-            $file = get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
+        foreach ( Customify_Customizer_Layout_Builder::get_footer_sections() as $id ) {
+            $file = get_template_directory().'/inc/customizer-layout-builder/config/footer/'.$id.'.php';
             if (  is_file( $file ) ) {
-                require_once get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
+                require_once get_template_directory().'/inc/customizer-layout-builder/config/footer/'.$id.'.php';
             }
 
             $func_id = str_replace( '-', '_', $id );
 
-            if ( function_exists( 'customify_builder_config_header_'.$func_id ) ) {
-                $config = array_merge( $config, call_user_func_array( 'customify_builder_config_header_'.$func_id, array() ) );
+            if ( function_exists( 'customify_builder_config_footer_'.$func_id ) ) {
+                $config = array_merge( $config, call_user_func_array( 'customify_builder_config_footer_'.$func_id, array() ) );
             }
         }
 
@@ -49,27 +49,27 @@ if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
     }
 }
 
-add_filter( 'customify/customizer/config', 'customify_customizer_get_header_config' );
+add_filter( 'customify/customizer/config', 'customify_customizer_get_footer_config' );
 
 
-function customify_builder_config_header_row_config( $section = false, $section_name = false ){
+function customify_builder_config_footer_row_config( $section = false, $section_name = false ){
     if ( ! $section ) {
-        $section  = 'header_top';
+        $section  = 'footer_top';
     }
     if ( ! $section_name ) {
-        $section_name = __( 'Header Top', 'customify' );
+        $section_name = __( 'Footer Top', 'customify' );
     }
 
     $selector = '#cb-row--'.str_replace('_', '-', $section );
 
-    $fn = 'customify_customize_render_header';
+    $fn = 'customify_customize_render_footer';
     $selector_all = '#masthead';
 
     $config  = array(
         array(
             'name' => $section,
             'type' => 'section',
-            'panel' => 'header_settings',
+            'panel' => 'footer_settings',
             'theme_supports' => '',
             'title' => $section_name,
         ),
@@ -85,6 +85,20 @@ function customify_builder_config_header_row_config( $section = false, $section_
                 'default' =>  __( 'Default', 'customify' ),
                 'fullwidth' =>  __( 'Full Width', 'customify' ),
                 'boxed' =>  __( 'Boxed', 'customify' ),
+            )
+        ),
+
+        array(
+            'name' => $section.'_sticky',
+            'type' => 'select',
+            'section' => $section,
+            'theme_supports' => '',
+            'title' => __( 'Sticky footer', 'customify' ),
+            'selector' => $selector_all,
+            'render_callback' => $fn,
+            'choices' => array(
+                'no' =>  __( 'No', 'customify' ),
+                'yes' =>  __( 'Yes', 'customify' ),
             )
         ),
 
@@ -185,45 +199,21 @@ function customify_builder_config_header_row_config( $section = false, $section_
             )
         ),
 
-        array(
-            'name' => $section.'_sticky',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title' => __( 'Sticky header', 'customify' ),
-            'selector' => $selector_all,
-            'render_callback' => $fn,
-            'choices' => array(
-                'no' =>  __( 'No', 'customify' ),
-                'yes' =>  __( 'Yes', 'customify' ),
-            )
-        ),
-
-
-        array(
-            'name' => $section.'_padding_fixed',
-            'type' => 'css_ruler',
-            'section' => $section,
-            'theme_supports' => '',
-            'device_settings' => true,
-            'selector' => $selector.'.fixed',
-            'css_format' => array(
-                'top' => 'padding-top: {{value}};',
-                'right' => 'padding-right: {{value}};',
-                'bottom' => 'padding-bottom: {{value}};',
-                'left' => 'padding-left: {{value}};',
-            ),
-            'title' => __( 'Padding When Fixed', 'customify' ),
-        ),
-
-
     );
 
+
+    /*
+    if ( $section == 'footer_main' ) {
+        $config = array_merge( array(
+
+        ), $config );
+    }
+    */
 
     return $config;
 }
 
 
-function customify_builder_config_header_row_render( $row_id ){
+function customify_builder_config_footer_row_render( $row_id ){
 
 }

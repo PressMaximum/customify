@@ -4,9 +4,14 @@
 
 .site-branding {
     display: inline-block;
+    line-height: .9;
+    a {
+        display: inline-block;
+    }
     img {
         display: block;
         width: auto;
+        line-height: 1;
     }
     .site-title {
         font-size: 1.9em;
@@ -69,6 +74,7 @@ $close_size: 35px;
 *-------------------------------
 */
 .header--row {
+    transition: all .3s ease;
     background: #ffffff;
     &.layout-fullwidth {
         .customify-container {
@@ -228,13 +234,13 @@ $close_size: 35px;
 */
 .header-search-form {
     margin: 0px;
-    display: flex;
+    .search-form-inner {
+        display: flex;
+    }
     .s {
         width: 100%;
     }
 }
-
-
 
 .mobile-search-form-sidebar {
     position: fixed;
