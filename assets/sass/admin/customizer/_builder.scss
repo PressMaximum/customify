@@ -309,6 +309,8 @@ $cb_padding: 20px;
 
     .customify--cb-item-remove {
         top: 50%;
+        background: inherit;
+        padding: 5px 0px 5px 5px;
         right: 5px;
         transform: translateY(-50%);
         &:before {
@@ -317,8 +319,10 @@ $cb_padding: 20px;
     }
 
     .customify--cb-item-setting {
+        background: inherit;
         top: 50%;
         right: 30px;
+        padding: 5px 5px;
         transform: translateY(-50%);
         &:before {
             content: "\f111";

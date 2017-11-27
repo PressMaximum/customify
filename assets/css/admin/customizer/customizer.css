@@ -815,6 +815,8 @@
       content: "\f132"; }
   .grid-stack-item .customify--cb-item-remove {
     top: 50%;
+    background: inherit;
+    padding: 5px 0px 5px 5px;
     right: 5px;
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
@@ -822,8 +824,10 @@
     .grid-stack-item .customify--cb-item-remove:before {
       content: "\f335"; }
   .grid-stack-item .customify--cb-item-setting {
+    background: inherit;
     top: 50%;
     right: 30px;
+    padding: 5px 5px;
     -webkit-transform: translateY(-50%);
         -ms-transform: translateY(-50%);
             transform: translateY(-50%); }

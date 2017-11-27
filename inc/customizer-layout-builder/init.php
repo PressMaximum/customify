@@ -151,8 +151,7 @@ class Customify_Customizer_Layout_Builder {
                 'section'    => 'footer_builder_panel',
                 'items'      => $this->get_header_items(),
                 'devices' => array(
-                    'desktop'   => __( 'Desktop', 'customify' ),
-                    'mobile'    => __( 'Mobile/Tablet', 'customify' ),
+                    'desktop'   => __( 'Footer Layout', 'customify' )
                 ),
             )
 
@@ -607,7 +606,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
                         $classes[] = 'layout-'.sanitize_text_field( $row_layout );
                     }
                     $is_sticky = Customify_Customizer()->get_setting($this->id.'_'.$row_id.'_sticky' );
-                    if ( $is_sticky == 1 || $is_sticky == 'yes' ) {
+                    if ( absint( $is_sticky ) == 1 ) {
                         $classes[] = 'is-sticky';
                     }
 

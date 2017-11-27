@@ -128,6 +128,14 @@ jQuery( document ).ready( function( $ ){
 
         var _whenScrolling = function() {
 
+            var top = 0;
+            if ( $( '#wpadminbar' ).length ) {
+                if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
+                    top = $( '#wpadminbar' ).height();
+                }
+
+            }
+
             $stickies.each(function(i) {
 
                 var $thisSticky = $(this),
@@ -141,21 +149,15 @@ jQuery( document ).ready( function( $ ){
 
                     $thisSticky.addClass("fixed");
 
-                    if ($nextSticky.length > 0 && $thisSticky.offset().top >= $nextStickyPosition) {
-
-                        $thisSticky.addClass("absolute").css("top", $nextStickyPosition);
-                    }
+                    $thisSticky.css("top", top );
 
                 } else {
 
                     var $prevSticky = $stickies.eq(i - 1);
 
-                    $thisSticky.removeClass("fixed");
+                    $thisSticky.removeClass("fixed").removeAttr("style");
+                    $prevSticky.removeClass("absolute fixed").removeAttr("style");
 
-                    if ($prevSticky.length > 0 && $window.scrollTop() <= $thisSticky.data('originalPosition') - $thisSticky.data('originalHeight')) {
-
-                        $prevSticky.removeClass("absolute").removeAttr("style");
-                    }
                 }
             });
         };
