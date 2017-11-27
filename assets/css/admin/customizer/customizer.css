@@ -4,16 +4,11 @@
 .customify-control--heading {
   margin-left: -12px;
   margin-right: -12px;
-  border-bottom: 1px solid #ddd;
-  padding: 0px 12px;
-  margin-top: 15px; }
-  .customify-control--heading .customize-control-title {
-    display: inline-block;
-    padding: 5px 10px;
-    border: 1px solid #dddddd;
-    border-bottom: 0px;
-    margin-bottom: -1px;
-    background: #eee; }
+  padding: 5px 12px;
+  margin-top: 15px;
+  background: #dddddd;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc; }
 
 .customify-field-heading::after {
   display: block;
@@ -52,6 +47,19 @@
       content: "\f471"; }
     .customify-field-heading .customify-devices button.preview-mobile:before {
       content: "\f470"; }
+
+/**
+* Group Field
+ */
+.customize-control-customify-group .customify--settings-wrapper .customify--settings-fields {
+  border: 1px solid #dddddd;
+  padding: 10px;
+  background: #ffffff; }
+
+.customize-control-customify-group .customify--settings-wrapper .customify--group-field {
+  margin-bottom: 15px; }
+  .customize-control-customify-group .customify--settings-wrapper .customify--group-field:last-child {
+    margin-bottom: 0px; }
 
 .customify--multiple-devices .customify-field-settings-inner {
   display: none; }
@@ -215,10 +223,9 @@
   background: #ccc; }
 
 .customify--css-unit {
-  display: block;
   margin-bottom: 5px; }
   .customify--css-unit label {
-    display: inline-block;
+    display: none;
     margin-right: 5px;
     text-transform: uppercase;
     padding: 0px 5px;
@@ -554,7 +561,6 @@
   width: 100%;
   max-width: 100%;
   left: 0px;
-  height: 350px;
   display: block;
   background: #EBEBEB;
   border-top: 1px solid #ddd;
@@ -576,6 +582,10 @@
     height: 100%;
     display: block;
     overflow: auto; }
+  .customify--customize-builder .customify--cb-body {
+    height: 290px;
+    overflow: auto;
+    display: block; }
 
 .customify--cb-body {
   position: relative;

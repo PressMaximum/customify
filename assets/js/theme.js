@@ -79,15 +79,20 @@ jQuery( document ).ready( function( $ ){
             }
             $stickies = stickies.each(function() {
                 var $thisSticky = $(this);
-                if ( addWrap ) {
-                    $thisSticky.wrap('<div class="followWrap" />');
+                var p = $thisSticky.parent();
+                if ( ! p.hasClass('followWrap')) {
+                    if ( addWrap ) {
+                        $thisSticky.wrap('<div class="followWrap" />');
+                    }
                 }
 
+                $thisSticky.parent().removeAttr('style');
+
                 $thisSticky
-                    .data('originalPosition', $thisSticky.offset().top)
-                    .data('originalHeight', $thisSticky.outerHeight())
+                    .data('originalPosition', $thisSticky.offset().top )
+                    .data('originalHeight', $thisSticky.height() )
                     .parent()
-                    .height($thisSticky.outerHeight());
+                    .height($thisSticky.height());
             });
         };
 
@@ -97,55 +102,65 @@ jQuery( document ).ready( function( $ ){
 
                 setData( stickies );
 
-
                 $window.off("scroll.stickies").on("scroll.stickies", function() {
                     _whenScrolling();
                 });
 
                 $window.resize( function(){
                     setData( stickies, false );
+                    stickies.each( function(){
+                        $( this ).removeClass("fixed").removeAttr("style");
+                    } );
                     _whenScrolling();
+                } );
+
+                $document.on( 'header_builder_panel_changed', function(){
+                    $( '.followWrap' ).removeAttr('style');
+                        setTimeout( function(){
+                        $( '.followWrap' ).removeAttr('style');
+                        setData( stickies, false );
+                        _whenScrolling();
+                    }, 500 );
                 } );
 
             }
         };
 
         var _whenScrolling = function() {
-            var scrollTop = $window.scrollTop();
-            var direction;
-            if(scrollTop < lastScrollTop) {
-                direction = 'up';
-            }
-            else {
-                direction = 'down';
-            }
-            lastScrollTop = scrollTop;
 
-            var top = 0;
-            var topP = 0;
             $stickies.each(function(i) {
 
                 var $thisSticky = $(this),
                     $stickyPosition = $thisSticky.data('originalPosition');
+                var h = $thisSticky.data('originalHeight');
 
-                if ( $stickyPosition - topP <= scrollTop ) {
-                    $thisSticky.addClass( 'fixed' );
-                    $thisSticky.css( 'top', top );
-                    top += $thisSticky.outerHeight();
-                    topP += $thisSticky.data('originalHeight');
-                    if ( direction =='up' ){
-                        if ( $stickyPosition > scrollTop ) {
-                            $thisSticky.removeClass("fixed").removeAttr("style");
-                        }
+                if ($stickyPosition + h <= $window.scrollTop()) {
+
+                    var $nextSticky = $stickies.eq(i + 1),
+                        $nextStickyPosition = $nextSticky.data('originalPosition') - $thisSticky.data('originalHeight');
+
+                    $thisSticky.addClass("fixed");
+
+                    if ($nextSticky.length > 0 && $thisSticky.offset().top >= $nextStickyPosition) {
+
+                        $thisSticky.addClass("absolute").css("top", $nextStickyPosition);
                     }
 
                 } else {
-                    $thisSticky.removeClass("fixed").removeAttr("style");
+
+                    var $prevSticky = $stickies.eq(i - 1);
+
+                    $thisSticky.removeClass("fixed");
+
+                    if ($prevSticky.length > 0 && $window.scrollTop() <= $thisSticky.data('originalPosition') - $thisSticky.data('originalHeight')) {
+
+                        $prevSticky.removeClass("absolute").removeAttr("style");
+                    }
                 }
             });
-
-            topP
         };
+
+
 
         return {
             load: load

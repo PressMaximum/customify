@@ -689,6 +689,8 @@ function customify_customize_render_header(){
     Customify_Customizer_Layout_Builder_Frontend()->render();
     Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
 
+    print_r( Customify_Customizer()->get_setting('header_sticky_row') );
+
 
     /*
     $theme_name = wp_get_theme()->get('Name');

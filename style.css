@@ -2555,7 +2555,8 @@ article.comment {
 
 .site-branding {
   display: inline-block;
-  line-height: .9; }
+  line-height: .9;
+  vertical-align: middle; }
   .site-branding a {
     display: inline-block; }
   .site-branding img {
@@ -2614,9 +2615,21 @@ article.comment {
 * Row Layouts
 *-------------------------------
 */
+.site-header .followWrap, .site-header .customify-container {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+
 .header--row {
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease;
+  -webkit-transition: all .490s ease;
+  transition: all .490s ease;
   background: #ffffff; }
   .header--row.layout-fullwidth .customify-container {
     max-width: initial; }
@@ -2774,14 +2787,14 @@ article.comment {
   visibility: visible; }
 
 .header-top {
-  padding: 0.3819820591em 0px;
+  padding: 0;
   border-bottom: 1px solid #eaecee; }
 
 .header-main {
-  padding: 1.41575em 0px; }
+  padding: 0px; }
 
 .header-bottom {
-  padding: 1em 0px;
+  padding: 0px;
   border: 1px solid #eaecee;
   border-left: none;
   border-right: none; }

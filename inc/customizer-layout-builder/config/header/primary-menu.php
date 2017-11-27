@@ -112,7 +112,7 @@ function customify_builder_config_header_primary_menu() {
                 array(
                     'name' => 'line_height',
                     'type' => 'slider',
-                    'label' => __( 'Line Height', 'customify' ),
+                    'label' => __( 'Height', 'customify' ),
                     'device_settings' => true,
                 ),
 

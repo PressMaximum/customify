@@ -5,6 +5,7 @@
 .site-branding {
     display: inline-block;
     line-height: .9;
+    vertical-align: middle;
     a {
         display: inline-block;
     }
@@ -73,8 +74,17 @@ $close_size: 35px;
 * Row Layouts
 *-------------------------------
 */
+
+.site-header {
+    .followWrap, .customify-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
 .header--row {
-    transition: all .3s ease;
+    transition: all .490s ease;
     background: #ffffff;
     &.layout-fullwidth {
         .customify-container {
@@ -82,6 +92,7 @@ $close_size: 35px;
         }
 
     }
+
 
     &.fixed {
         position: fixed;

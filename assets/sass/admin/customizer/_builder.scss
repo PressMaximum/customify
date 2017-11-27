@@ -9,7 +9,7 @@ $cb_padding: 20px;
     width: 100%;
     max-width: 100%;
     left: 0px;
-    height: 350px;
+
     display: block;
     background: $bg;
     border-top: $border;
@@ -29,6 +29,11 @@ $cb_padding: 20px;
         height: 100%;
         display: block;
         overflow: auto;
+    }
+    .customify--cb-body {
+        height: 290px;
+        overflow: auto;
+        display: block;
     }
 }
 .customify--cb-body {

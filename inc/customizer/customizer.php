@@ -63,6 +63,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'capability' => null,
                         'mod' => null, // theme_mod || option default theme_mod
 
+                        'settings' => null,
+
                         'device' => null,
                         'device_settings' => null,
 

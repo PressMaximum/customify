@@ -7,17 +7,11 @@ $text_color: #555d66;
 .customify-control--heading {
     margin-left: -12px;
     margin-right: -12px;
-    border-bottom: 1px solid #ddd;
-    padding: 0px 12px;
+    padding: 5px 12px;
     margin-top: 15px;
-    .customize-control-title {
-        display: inline-block;
-        padding: 5px 10px;
-        border: 1px solid #dddddd;
-        border-bottom: 0px;
-        margin-bottom: -1px;
-        background: #eee;
-    }
+    background: #dddddd;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
 }
 
 
@@ -69,6 +63,27 @@ $text_color: #555d66;
         }
     }
 }
+
+/**
+* Group Field
+ */
+.customize-control-customify-group {
+    .customify--settings-wrapper {
+        .customify--settings-fields {
+            border: 1px solid #dddddd;
+            padding:  10px;
+            background: #ffffff;
+        }
+        .customify--group-field {
+            margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+
+    }
+}
+
 .customify--multiple-devices .customify-field-settings-inner {
     display: none;
     .customify-field-settings-inner {
@@ -303,10 +318,9 @@ $text_color: #555d66;
 }
 
 .customify--css-unit {
-    display: block;
     margin-bottom: 5px;
     label {
-        display: inline-block;
+        display: none;
         margin-right: 5px;
         text-transform: uppercase;
         padding: 0px 5px;
