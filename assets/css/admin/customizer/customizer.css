@@ -555,6 +555,21 @@
 .customify--hide {
   display: none !important; }
 
+#customize-preview {
+  -webkit-transition: all 500ms;
+  transition: all 500ms; }
+  #customize-preview.cb--preview-panel-show {
+    bottom: 330px; }
+
+.preview-desktop #customize-preview.cb--preview-panel-show {
+  height: auto; }
+
+.preview-tablet #customize-preview.cb--preview-panel-show {
+  height: auto; }
+
+.preview-mobile #customize-preview.cb--preview-panel-show {
+  height: 480px; }
+
 .customify--customize-builder {
   position: fixed;
   bottom: 0px;
@@ -700,10 +715,11 @@
     left: 0px;
     bottom: 0px;
     text-decoration: none;
-    width: 34px;
+    width: 35px;
     display: block;
     color: #444444;
-    text-align: center; }
+    text-align: center;
+    border-right: 1px solid #ddd; }
     .customify--cb-row .customify--cb-row-settings:focus {
       box-shadow: none; }
     .customify--cb-row .customify--cb-row-settings:before {
@@ -723,7 +739,30 @@
   .customify--cb-row .customify--row-inner {
     width: 100%;
     padding: 5px 0px;
-    background: #ffffff; }
+    background: #ffffff;
+    position: relative; }
+    .customify--cb-row .customify--row-inner .row--grid {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 100%;
+      z-index: 1;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      bottom: 0px; }
+      .customify--cb-row .customify--row-inner .row--grid div {
+        border-right: 1px dashed #dddddd;
+        width: 8.3333333333%;
+        -ms-flex-preferred-size: 8.3333333333%;
+            flex-basis: 8.3333333333%;
+        max-width: 8.3333333333%;
+        display: block; }
+        .customify--cb-row .customify--row-inner .row--grid div:last-child {
+          border-right: 0 none; }
+    .customify--cb-row .customify--row-inner .customify--cb-items {
+      z-index: 36;
+      background: transparent; }
   .customify--cb-row .grid-stack-item-content {
     background: #fafafa;
     border: 1px solid #DDDDDD;
@@ -1543,7 +1582,6 @@
       right: 10px;
       bottom: 0;
       width: auto;
-      z-index: 0 !important;
       overflow-x: hidden;
       overflow-y: auto; }
     .grid-stack > .grid-stack-item > .ui-resizable-handle {

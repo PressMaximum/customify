@@ -456,24 +456,24 @@
                         }
                     }
 
-                    console.log('Next item', next );
+                    //console.log('Next item', next );
                     var move_slots = w;
                     if ( next.length ) {
                         var nextInfo = that.gridGetItemInfo( next, flag, $wrapper );
                         move_slots = moveRight( nextInfo, move_slots );
-                        console.log('Next Item info', nextInfo );
+                        //console.log('Next Item info', nextInfo );
                     }
                     console.log('prev item', prev );
                     if ( prev.length ) {
                         var prevInfo = that.gridGetItemInfo( prev, flag, $wrapper );
                         move_slots = moveLeft( prevInfo, move_slots );
-                        console.log('Prev Item info', prevInfo );
+                        //console.log('Prev Item info', prevInfo );
                     }
 
                 } // end check
 
 
-                console.log( 'NEW FLAG', flag );
+                //console.log( 'NEW FLAG', flag );
                 var getNewPosX = function( x, w ){
                     var i = x ;
                     if ( flag[ i + w ] > 0 ) {
@@ -527,8 +527,6 @@
                     });
                     return ;
                 }
-
-                console.log( 'No revert',  x + '-'+w  );
 
                 // Add drop item from somewhere to current row
                 ui.draggable.removeClass( 'item-from-list' );
@@ -692,7 +690,7 @@
 
                 $row.data( 'gridflag', flag );
                 if ( $row.attr( 'data-id' ) == 'main' ) {
-                    console.log( 'Update Flag: '+$row.attr( 'data-id' ), flag );
+                   // console.log( 'Update Flag: '+$row.attr( 'data-id' ), flag );
                 }
 
                 return flag;
@@ -809,11 +807,16 @@
 
             switchToDevice: function( device, toggle_button ){
                 var that = this;
-                $( '.customify--cb-devices-switcher a', that.container).removeClass('customify--tab-active');
-                $( '.customify--cb-devices-switcher .switch-to-'+device, that.container ).addClass( 'customify--tab-active' );
-                $( '.customify--device-panel', that.container  ).addClass( 'customify--panel-hide' );
-                $( '.customify--device-panel.customify--panel-'+device, that.container  ).removeClass( 'customify--panel-hide' );
-                that.activePanel = device;
+                var numberDevices = _.size( that.devices );
+                if( numberDevices > 1 ) {
+                    $('.customify--cb-devices-switcher a', that.container).removeClass('customify--tab-active');
+                    $('.customify--cb-devices-switcher .switch-to-' + device, that.container).addClass('customify--tab-active');
+                    $('.customify--device-panel', that.container).addClass('customify--panel-hide');
+                    $('.customify--device-panel.customify--panel-' + device, that.container).removeClass('customify--panel-hide');
+                    that.activePanel = device;
+                } else {
+                    $('.customify--cb-devices-switcher a', that.container).addClass('customify--tab-active');
+                }
 
                 if ( _.isUndefined( toggle_button ) || toggle_button ) {
                     if ( device == 'desktop' ) {
@@ -857,6 +860,7 @@
                 this.container.on( 'click', '.customify--cb-item-setting', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
+                    console.log( 'Clicked section' , section );
                     var control = $( this ).data( 'control' ) || '';
                     var did = false;
                     if ( control ) {
@@ -945,18 +949,16 @@
             },
 
             showPanel: function(){
-                //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
-                    //console.log( 'expandedPanel state', paneVisible );
-               // });
-                //this.container.show();
+                var that = this;
                 this.container.removeClass('customify--builder--hide').addClass( 'customify--builder-show' );
+                setTimeout( function(){
+                    var h = that.container.height();
+                    $( '#customize-preview' ).addClass( 'cb--preview-panel-show' ).css( 'bottom', h-1 );
+                }, 100 );
             },
             hidePanel: function(){
-                //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
-                //console.log( 'expandedPanel state', paneVisible );
-                // });
-                //this.container.hide();
                 this.container.removeClass( 'customify--builder-show' );
+                $( '#customize-preview' ).removeClass( 'cb--preview-panel-show' ).removeAttr('style');
             },
 
             togglePanel: function(){
@@ -972,6 +974,11 @@
                 that.container.on( 'click', '.customify--panel-close', function(e){
                     e.preventDefault();
                     that.container.toggleClass( 'customify--builder--hide' );
+                    if( that.container.hasClass('customify--builder--hide') ) {
+                        $( '#customize-preview' ).removeClass( 'cb--preview-panel-show' );
+                    } else {
+                        $( '#customize-preview' ).addClass( 'cb--preview-panel-show' );
+                    }
                 } );
 
             },

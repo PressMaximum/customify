@@ -16,7 +16,7 @@ function customify_builder_config_header_logo(){
             'type' => 'checkbox',
             'section' => $section,
             'theme_supports' => '',
-            'default' => 0,
+            'default' => 1,
             'title' => __( 'Logo', 'customify' ),
             'checkbox_label' => __( 'Use Site Identity Logo', 'customify' ),
             'description' => __( 'If check this, you can settings your logo in <a href="#title_tagline" class="focus-section">Site Identity</a> section.', 'customify' ),

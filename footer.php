@@ -12,6 +12,11 @@
 ?>
 	</div><!-- #content -->
 
+<?php
+customify_customize_render_footer();
+
+/*
+?>
 	<footer id="colophon" class="site-footer">
         <div class="footer-widgets-wrap">
             <div class="customify-container">
@@ -59,6 +64,8 @@
             </div><!-- #.customify_container -->
         </div><!-- #.footer-widgets-wrap -->
 	</footer><!-- #colophon -->
+*/ ?>
+
 </div><!-- #page -->
 
 <?php wp_footer(); ?>

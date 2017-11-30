@@ -25,7 +25,7 @@ if ( ! function_exists( 'customify_customizer_get_footer_config' ) ) {
                 'theme_supports' => '',
                 'title' => __( 'Footer Builder', 'customify' ),
                 'description' => __( 'Footer Builder panel here....',  'customify' ),
-                'selector' => '#masthead',
+                'selector' => '#site-footer',
                 'render_callback' => $fn,
                 'container_inclusive' => true
             ),
@@ -201,23 +201,47 @@ function customify_builder_config_footer_row_config( $section = false, $section_
 
     );
 
-
     return $config;
+}
+
+function customify_builder_config_footer_row_top( ) {
+    return customify_builder_config_footer_row_config( 'footer_top', __( 'Footer Top', 'customify' ) );
+}
+function customify_builder_config_footer_row_main( ) {
+    return customify_builder_config_footer_row_config( 'footer_main', __( 'Footer Middle', 'customify' ) );
+}
+
+function customify_builder_config_footer_row_bottom( ) {
+    return customify_builder_config_footer_row_config( 'footer_bottom', __( 'Footer Bottom', 'customify' ) );
 }
 
 function customify_change_footer_widgets_location( $wp_customize ){
     for ( $i = 1; $i<= 4; $i ++ ) {
         if (  $wp_customize->get_section( 'sidebar-widgets-footer-'.$i ) ) {
             $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->panel = 'footer_settings';
+           // $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->priority = 15 + $i*10;
         }
     }
-
-
 }
-
 add_action( 'customize_register', 'customify_change_footer_widgets_location', 199 );
 
 
-function customify_builder_config_footer_row_render( $row_id ){
-    echo "Footer";
+function customify_builder_footer_widget_item( $footer_id = 'footer-1' ){
+    dynamic_sidebar( $footer_id );
+}
+
+function customify_builder_footer_1_item(){
+    customify_builder_footer_widget_item( 'footer-1' );
+}
+
+function customify_builder_footer_2_item(){
+    customify_builder_footer_widget_item( 'footer-2' );
+}
+
+function customify_builder_footer_3_item(){
+    customify_builder_footer_widget_item( 'footer-3' );
+}
+
+function customify_builder_footer_4_item(){
+    customify_builder_footer_widget_item( 'footer-4' );
 }

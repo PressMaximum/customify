@@ -335,18 +335,35 @@ class Customify_Customizer_Layout_Builder {
                 <div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top" >
                     <a class="customify--cb-row-settings" data-id="top"  href="#"></a>
                     <div class="customify--row-inner">
+                        <div class="row--grid">
+                            <?php for( $i = 1; $i<= 12; $i ++ ){
+                                echo '<div></div>';
+                            } ?>
+                        </div>
                         <div class="customify--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
                 <div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main" >
                     <a class="customify--cb-row-settings" data-id="main" href="#"></a>
+
                     <div class="customify--row-inner">
+                        <div class="row--grid">
+                            <?php for( $i = 1; $i<= 12; $i ++ ){
+                                echo '<div></div>';
+                            } ?>
+                        </div>
                         <div class="customify--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
                 <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom" >
                     <a class="customify--cb-row-settings" data-id="bottom" href="#"></a>
+
                     <div class="customify--row-inner">
+                        <div class="row--grid">
+                            <?php for( $i = 1; $i<= 12; $i ++ ){
+                                echo '<div></div>';
+                            } ?>
+                        </div>
                         <div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
                     </div>
                 </div>
@@ -412,6 +429,16 @@ class Customify_Customizer_Layout_Builder_Frontend {
             self::$_instance = new self();
         }
         return self::$_instance ;
+    }
+
+    function set_id( $id ) {
+         $this->id = $id;
+        $this->data = null;
+    }
+
+    function set_control_id( $id ) {
+        $this->control_id = $id;
+        $this->data = null;
     }
 
     function set_config_items( $config_items ){
@@ -620,6 +647,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
              $content = str_replace( '__id__', $id, $content );
              $content = str_replace( '__device__', $device, $content );
+
+             if( ! isset( $item_config['section'] ) ) {
+                 $item_config['section'] = '';
+             }
              
              echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
                 echo $content;
@@ -638,7 +669,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $_id = sprintf('%1$s-%2$s', $this->id, $row_id);
 
                     $classes[] = $_id;
-                    $classes[] = 'header--row';
+                    $classes[] = $this->id.'--row';
                     $desktop_items = $this->get_row_settings($row_id, 'desktop');
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
                     if ( empty( $desktop_items ) ){
@@ -726,8 +757,6 @@ function Customify_Customizer_Layout_Builder_Frontend(){
 function customify_customize_render_header(){
 
    // remove_theme_mod( 'header_builder_panel' );
-    
-
 
     echo '<header id="masthead" class="site-header">';
     if ( is_customize_preview() ) {
@@ -740,8 +769,6 @@ function customify_customize_render_header(){
     Customify_Customizer_Layout_Builder_Frontend()->render();
     Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
 
-    print_r( Customify_Customizer()->get_setting('header_sticky_row') );
-
 
     /*
     $theme_name = wp_get_theme()->get('Name');
@@ -753,4 +780,14 @@ function customify_customize_render_header(){
     */
 
     echo '</header>';
+}
+
+function customify_customize_render_footer(){
+    echo '<footer id="site-footer">';
+    Customify_Customizer_Layout_Builder_Frontend()->set_id( 'footer' );
+    Customify_Customizer_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );
+    $list_items = Customify_Customizer_Layout_Builder()->get_footer_items();
+    Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
+    Customify_Customizer_Layout_Builder_Frontend()->render();
+    echo '</footer>';
 }
