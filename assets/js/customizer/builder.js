@@ -949,14 +949,14 @@
                     //console.log( 'expandedPanel state', paneVisible );
                // });
                 //this.container.show();
-                this.container.addClass( 'customify--builder-hide' );
+                this.container.removeClass('customify--builder--hide').addClass( 'customify--builder-show' );
             },
             hidePanel: function(){
                 //wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
                 //console.log( 'expandedPanel state', paneVisible );
                 // });
                 //this.container.hide();
-                this.container.removeClass( 'customify--builder-hide' );
+                this.container.removeClass( 'customify--builder-show' );
             },
 
             togglePanel: function(){
@@ -968,6 +968,12 @@
                         that.hidePanel();
                     }
                 });
+
+                that.container.on( 'click', '.customify--panel-close', function(e){
+                    e.preventDefault();
+                    that.container.toggleClass( 'customify--builder--hide' );
+                } );
+
             },
 
             panelLayoutCSS: function(){
@@ -985,7 +991,7 @@
 
                 var template = that.getTemplate();
                 var template_id =  'tmpl-customify--builder-panel';
-                var html = template( { id: options.id }, template_id );
+                var html = template( options , template_id );
                 that.container = $( html );
                 $( 'body .wp-full-overlay' ).append( that.container );
                 that.controlId = controlId;
@@ -1100,6 +1106,19 @@
 
         var Header = new CustomizeBuilder( Customify_Layout_Builder.header );
         var Footer = new CustomizeBuilder( Customify_Layout_Builder.footer );
+        // footer_moved_widgets_text
+
+        wpcustomize.bind( 'pane-contents-reflowed', function(){
+            setTimeout( function(){
+                if ( $( '#sub-accordion-panel-widgets .no-widget-areas-rendered-notice .footer_moved_widgets_text' ).length ) {
+
+                } else {
+                    $( '#sub-accordion-panel-widgets .no-widget-areas-rendered-notice' ).append('<p class="footer_moved_widgets_text">'+Customify_Layout_Builder.footer_moved_widgets_text+'</p>');
+                }
+
+            }, 1000 );
+        } );
+
 
 
         wpcustomize.bind( '_section_focus', function( e, b ) {

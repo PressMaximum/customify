@@ -202,18 +202,22 @@ function customify_builder_config_footer_row_config( $section = false, $section_
     );
 
 
-    /*
-    if ( $section == 'footer_main' ) {
-        $config = array_merge( array(
-
-        ), $config );
-    }
-    */
-
     return $config;
 }
 
+function customify_change_footer_widgets_location( $wp_customize ){
+    for ( $i = 1; $i<= 4; $i ++ ) {
+        if (  $wp_customize->get_section( 'sidebar-widgets-footer-'.$i ) ) {
+            $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->panel = 'footer_settings';
+        }
+    }
+
+
+}
+
+add_action( 'customize_register', 'customify_change_footer_widgets_location', 199 );
+
 
 function customify_builder_config_footer_row_render( $row_id ){
-
+    echo "Footer";
 }

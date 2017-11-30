@@ -131,9 +131,10 @@ class Customify_Customizer_Layout_Builder {
 
         wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
         wp_localize_script( 'customify-layout-builder',  'Customify_Layout_Builder',  array(
-
+            'footer_moved_widgets_text' => __( 'Footer widgets moved', 'customify' ),
             'header' => array(
                 'id'         => 'header',
+                'title'      => __( 'Header Builder', 'customify' ),
                 'control_id' => 'header_builder_panel',
                 'panel'      => 'header_settings',
                 'section'    => 'header_builder_panel',
@@ -146,10 +147,11 @@ class Customify_Customizer_Layout_Builder {
 
             'footer' => array(
                 'id'         => 'footer',
+                'title'      => __( 'Footer Builder', 'customify' ),
                 'control_id' => 'footer_builder_panel',
                 'panel'      => 'footer_settings',
                 'section'    => 'footer_builder_panel',
-                'items'      => $this->get_header_items(),
+                'items'      => $this->get_footer_items(),
                 'devices' => array(
                     'desktop'   => __( 'Footer Layout', 'customify' )
                 ),
@@ -163,6 +165,48 @@ class Customify_Customizer_Layout_Builder {
             self::$_instance = new self();
         }
         return self::$_instance ;
+    }
+
+    function get_footer_items(){
+        $items = array(
+            array(
+                'name' => __( 'Footer 1', 'customify' ),
+                'id' => 'footer-1',
+                'width' => '3',
+                'section' => 'sidebar-widgets-footer-1'
+            ),
+
+            array(
+                'name' => __( 'Footer 2', 'customify' ),
+                'id' => 'footer-2',
+                'width' => '3',
+                'section' => 'sidebar-widgets-footer-2'
+            ),
+
+            array(
+                'name' => __( 'Footer 3', 'customify' ),
+                'id' => 'footer-3',
+                'width' => '3',
+                'section' => 'sidebar-widgets-footer-3'
+            ),
+
+            array(
+                'name' => __( 'Footer 4', 'customify' ),
+                'id' => 'footer-4',
+                'width' => '3',
+                'section' => 'sidebar-widgets-footer-4'
+            ),
+
+        );
+
+
+        $items = apply_filters( 'customify/builder/footer/items', $items );
+        $new_items = array();
+        foreach (  $items as $k => $i ) {
+            $new_items[ $i['id'] ] = $i;
+        }
+
+        return $new_items;
     }
 
     function get_header_items(){
@@ -273,8 +317,11 @@ class Customify_Customizer_Layout_Builder {
                         <div class="customify--cb-devices-switcher">
                         </div>
                         <div class="customify--cb-actions">
-                            <a data-id="{{ data.id }}_templates" class="focus-section" href="#"><?php _e( 'Templates', 'customify' ); ?></a>
-                            <a class="customify--panel-close" href="#"><?php _e( 'Close', 'customify' ); ?></a>
+                            <a data-id="{{ data.id }}_templates" class="focus-section button button-secondary" href="#"><?php _e( 'Templates', 'customify' ); ?></a>
+                            <a class="button button-secondary customify--panel-close" href="#">
+                                <span class="close-text"><?php _e( 'Close', 'customify' ); ?></span>
+                                <span class="panel-name-text">{{ data.title }}</span>
+                            </a>
                         </div>
                     </div>
                     <div class="customify--cb-body"></div>
@@ -677,6 +724,11 @@ function Customify_Customizer_Layout_Builder_Frontend(){
 
 
 function customify_customize_render_header(){
+
+   // remove_theme_mod( 'header_builder_panel' );
+    
+
+
     echo '<header id="masthead" class="site-header">';
     if ( is_customize_preview() ) {
         ?>

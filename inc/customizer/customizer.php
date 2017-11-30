@@ -262,28 +262,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
-
             $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
             $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
             $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-
-            /*
-            $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-
-            if ( isset( $wp_customize->selective_refresh ) ) {
-                $wp_customize->selective_refresh->add_partial( 'blogname', array(
-                    'selector'        => '.site-branding',
-                    'render_callback' => 'customify_builder_logo_item',
-                ) );
-                $wp_customize->selective_refresh->add_partial( 'blogdescription', array(
-                    'selector'        => '.site-branding',
-                    'render_callback' => 'customify_builder_logo_item',
-                ) );
-            }
-            */
-
-
 
             foreach ( self::get_config() as $args ) {
                 switch (  $args['type'] ) {

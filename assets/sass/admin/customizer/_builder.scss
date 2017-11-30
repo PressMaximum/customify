@@ -16,8 +16,26 @@ $cb_padding: 20px;
 
     transition: all 500ms;
     transform: translateY(100%);
-    &.customify--builder-hide {
+    .panel-name-text {
+        display: none;
+    }
+    &.customify--builder-show {
         transform: translateY(0);
+        &.customify--builder--hide {
+            transform: translateY(100%);
+            .close-text {
+                display: none;
+            }
+            .panel-name-text {
+                display: inline-block;
+            }
+            .customify--panel-close {
+                position: absolute;
+                top: -45px;
+                right: 30px;
+                text-transform: uppercase;
+            }
+        }
     }
 
     * {
@@ -36,6 +54,7 @@ $cb_padding: 20px;
         display: block;
     }
 }
+
 .customify--cb-body {
     position: relative;
     overflow: hidden;
@@ -105,6 +124,7 @@ $cb_padding: 20px;
     }
     .customify--cb-actions {
         float: right;
+        margin-top: -4px;
         a {
             display: inline-block;
         }
