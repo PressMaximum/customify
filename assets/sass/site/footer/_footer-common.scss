@@ -8,3 +8,10 @@
     padding-top: ms(3);
     border-top: 1px solid darken($background_body, 10%);
 }
+.footer--row {
+    &.layout-fullwidth {
+        .customify-container {
+            max-width: initial;
+        }
+    }
+}

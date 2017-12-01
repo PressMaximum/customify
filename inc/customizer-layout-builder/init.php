@@ -683,23 +683,32 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     if ( $row_layout ) {
                         $classes[] = 'layout-'.sanitize_text_field( $row_layout );
                     }
-                    $is_sticky = Customify_Customizer()->get_setting($this->id.'_'.$row_id.'_sticky' );
-                    if ( absint( $is_sticky ) == 1 ) {
-                        $classes[] = 'is-sticky';
+
+                    $align_classes = 'customify-grid-top';
+                    if (  $this->id == 'header' ) {
+                        $is_sticky = Customify_Customizer()->get_setting($this->id.'_'.$row_id.'_sticky' );
+                        if ( absint( $is_sticky ) == 1 ) {
+                            $classes[] = 'is-sticky';
+                        }
+
+                        $align_classes = 'customify-grid-middle';
                     }
+
+
+
 
                     ?>
                     <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
                             if ($desktop_items) {
-                                echo '<div class="cb-row--desktop hide-on-mobile hide-on-tablet customify-grid customify-grid-middle">';
+                                echo '<div class="cb-row--desktop hide-on-mobile hide-on-tablet customify-grid '.esc_attr( $align_classes ).'">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
 
                             if ($mobile_items) {
-                                echo '<div class="cb-row--mobile hide-on-desktop customify-grid customify-grid-middle">';
+                                echo '<div class="cb-row--mobile hide-on-desktop customify-grid '.esc_attr( $align_classes ).'">';
                                 $this->render_row($mobile_items, $row_id, 'mobile');
                                 echo '</div>';
                             }
@@ -754,6 +763,9 @@ function Customify_Customizer_Layout_Builder_Frontend(){
 }
 
 
+/**
+ * Display Header Layout
+ */
 function customify_customize_render_header(){
 
    // remove_theme_mod( 'header_builder_panel' );
@@ -782,6 +794,9 @@ function customify_customize_render_header(){
     echo '</header>';
 }
 
+/**
+ * Display Footer Layout
+ */
 function customify_customize_render_footer(){
     echo '<footer id="site-footer">';
     Customify_Customizer_Layout_Builder_Frontend()->set_id( 'footer' );

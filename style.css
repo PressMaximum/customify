@@ -3136,3 +3136,6 @@ article.comment {
   margin-top: 2.2906835em;
   padding-top: 2.2906835em;
   border-top: 1px solid #e6e5e5; }
+
+.footer--row.layout-fullwidth .customify-container {
+  max-width: initial; }

@@ -89,26 +89,12 @@ function customify_builder_config_footer_row_config( $section = false, $section_
         ),
 
         array(
-            'name' => $section.'_sticky',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title' => __( 'Sticky footer', 'customify' ),
-            'selector' => $selector_all,
-            'render_callback' => $fn,
-            'choices' => array(
-                'no' =>  __( 'No', 'customify' ),
-                'yes' =>  __( 'Yes', 'customify' ),
-            )
-        ),
-
-        array(
             'name' => $section.'_padding',
             'type' => 'css_ruler',
             'section' => $section,
             'theme_supports' => '',
             'device_settings' => true,
-            'selector' => $selector,
+            'selector' => $selector.' .customify-container',
             'css_format' => array(
                 'top' => 'padding-top: {{value}};',
                 'right' => 'padding-right: {{value}};',
@@ -119,6 +105,43 @@ function customify_builder_config_footer_row_config( $section = false, $section_
         ),
 
         array(
+            'name' => $section.'_heading',
+            'type' => 'color',
+            'section' => $section,
+            'selector' => join( ', ', array( $selector.' .widget-title', $selector.' h1', $selector.' h2',  $selector.' h3',  $selector.' h4' ) ),
+            'css_format' =>'color: {{value}};',
+            'title' => __( 'Heading Color', 'customify' ),
+        ),
+
+        array(
+            'name' => $section.'_color',
+            'type' => 'color',
+            'section' => $section,
+            'selector' => $selector,
+            'css_format' =>'color: {{value}};',
+            'title' => __( 'Text Color', 'customify' ),
+        ),
+
+        array(
+            'name' => $section.'_link_color',
+            'type' => 'color',
+            'section' => $section,
+            'selector' => $selector.' a',
+            'css_format' =>'color: {{value}};',
+            'title' => __( 'Link Color', 'customify' ),
+        ),
+
+        array(
+            'name' => $section.'_link_hover_color',
+            'type' => 'color',
+            'section' => $section,
+            'selector' => $selector.' a:hover',
+            'css_format' =>'color: {{value}};',
+            'title' => __( 'Link Hover Color', 'customify' ),
+        ),
+
+
+        array(
             'name' => $section.'_background',
             'type' => 'group',
             'section'     => $section,
@@ -127,7 +150,6 @@ function customify_builder_config_footer_row_config( $section = false, $section_
             'field_class' => 'customify-background-control',
             'selector' => $selector,
             'css_format' => 'background',
-            'device_settings' => true,
             'default' => array(
 
             ),
@@ -219,13 +241,32 @@ function customify_change_footer_widgets_location( $wp_customize ){
     for ( $i = 1; $i<= 4; $i ++ ) {
         if (  $wp_customize->get_section( 'sidebar-widgets-footer-'.$i ) ) {
             $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->panel = 'footer_settings';
-           // $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->priority = 15 + $i*10;
         }
     }
 }
 add_action( 'customize_register', 'customify_change_footer_widgets_location', 199 );
 
+/**
+ * Always show footer widgets for customize builder
+ *
+ * @param $active
+ * @param $section
+ * @return bool
+ */
+function customify_customize_footer_widgets_show(  $active, $section ){
+    if ( strpos( $section->id, 'widgets-footer-' ) ) {
+        $active = true;
+    }
+    return $active;
+}
+add_filter( 'customize_section_active', 'customify_customize_footer_widgets_show', 15, 2 );
 
+
+/**
+ * Display Footer widget
+ *
+ * @param string $footer_id
+ */
 function customify_builder_footer_widget_item( $footer_id = 'footer-1' ){
     dynamic_sidebar( $footer_id );
 }
