@@ -1,11 +1,85 @@
 <?php
 
-class Customify_Customizer_Layout_Builder {
-    static $_instance;
+class Customify_Customizer_Builder_Panel {
+    public $id = '';
     function __construct()
     {
-        require_once get_template_directory().'/inc/customizer-layout-builder/config/header/panel.php';
-        require_once get_template_directory().'/inc/customizer-layout-builder/config/footer/panel.php';
+        add_filter( 'customify/customizer/config', array( $this, '_customize' ) );
+    }
+
+    function get_rows_config(){ return array(); }
+    function row_config(){ return array(); }
+    function customize(){ return array(); }
+
+    function get_items(){
+        return Customify_Customizer_Layout_Builder()->get_builder_items( $this->id );
+    }
+
+    function _customize( $configs ){
+        $config = $this->customize();
+        foreach( $this->get_rows_config() as $id => $name ) {
+
+            $m = 'row_'.$id.'_config';
+            if ( method_exists( $this, $m ) ) {
+                $r = call_user_func_array( array( $this, $m ), array( $this->id.'_'.$id, $name ) );
+                $config = array_merge( $config, $r );
+            } else {
+                if ( method_exists( $this, 'row_config' ) ) {
+                    $config = array_merge( $config, $this->row_config( $this->id.'_'.$id, $name ) );
+                }
+            }
+        }
+        $items_config =  Customify_Customizer_Layout_Builder()->get_items_customize( $this->id ) ;
+        if ( is_array( $items_config ) ) {
+            $config = array_merge( $config,  $items_config );
+        }
+
+        return array_merge( $configs, $config );
+    }
+}
+
+
+class Customify_Customizer_Layout_Builder {
+    static $_instance;
+    private $registered_items = array();
+    private $registered_builders = array();
+    function init(){
+        $config_files = array(
+            'header' => array(
+                'panel',
+                'html',
+                'logo',
+                'nav-icon',
+                'primary-menu',
+                'templates',
+                'logo',
+                'primary-menu',
+                'nav-icon',
+                'search',
+                'button',
+                'icon-list',
+                'user',
+                'social-icons',
+                'languages',
+            ),
+            'footer' => array(
+                'panel',
+                'widgets',
+                'templates'
+            )
+        );
+        $path = get_template_directory();
+        foreach( $config_files as $id => $files ) {
+            foreach( $files as $f ) {
+                $file =  $path."/inc/customizer-layout-builder/config/{$id}/{$f}.php";
+                if ( file_exists( $file ) ) {
+                    require_once $file;
+                }
+            }
+        }
+
+        do_action('customify/customize-builder/init' );
+
         if ( is_admin() ) {
             add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
             add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
@@ -13,6 +87,95 @@ class Customify_Customizer_Layout_Builder {
         add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
     }
 
+    function register_builder( $id, $class ){
+        if ( ! isset( $id) ) {
+            return false;
+        }
+
+        if( ! is_object( $class ) ) {
+            if ( ! class_exists( $class ) ) {
+                return false;
+            }
+        }
+
+        $this->registered_builders[ $id ] = $class;
+    }
+
+    function register_item( $builder_id, $class ){
+        if ( ! $builder_id ) {
+            return false;
+        }
+
+        if ( is_object( $class ) ) {
+
+        } else {
+            if ( ! class_exists( $class ) ) {
+                return false;
+            }
+            $class = new $class();
+        }
+
+        if ( ! isset( $this->registered_items[ $builder_id ] ) ) {
+            $this->registered_items[ $builder_id ]  = array();
+        }
+
+        $this->registered_items[ $builder_id ][ $class->id ]  = $class;
+        return true;
+
+    }
+
+    function get_builder_items( $builder_id ) {
+        if ( ! $builder_id ) {
+            return  apply_filters( 'customify/builder/'.$builder_id.'/items', array() );
+        }
+        if ( ! isset( $this->registered_items[ $builder_id ] ) ) {
+            return  apply_filters( 'customify/builder/'.$builder_id.'/items', array() );
+        }
+        $items = array();
+        foreach( $this->registered_items[ $builder_id ] as $name => $obj ) {
+            if ( method_exists( $obj, 'item' ) ) {
+                $item =  $obj->item();
+                $items[ $item['id'] ] = $item;
+            }
+        }
+        $items = apply_filters( 'customify/builder/'.$builder_id.'/items', $items );
+        return $items;
+    }
+
+    function get_items_customize( $builder_id ){
+        if ( ! $builder_id ) {
+            return false;
+        }
+        if ( ! isset( $this->registered_items[ $builder_id ] ) ) {
+            return false;
+        }
+        $items = array();
+        foreach( $this->registered_items[ $builder_id ] as $name => $obj ) {
+            if ( method_exists( $obj, 'customize' ) ) {
+                $item =  $obj->customize();
+                if ( is_array( $item ) ) {
+                    $items = array_merge( $items, $item );
+                }
+
+            }
+        }
+        return $items;
+    }
+
+    function get_builder_item( $builder_id, $item_id ){
+        if ( ! $builder_id ) {
+            return false;
+        }
+        if ( ! isset( $this->registered_items[ $builder_id ] ) ) {
+            return false;
+        }
+
+        if ( ! isset( $this->registered_items[ $builder_id ][ $item_id ] ) ) {
+            return false;
+        }
+
+        return $this->registered_items[ $builder_id ][ $item_id ];
+    }
 
     function ajax_save_template(){
 
@@ -48,7 +211,6 @@ class Customify_Customizer_Layout_Builder {
             wp_send_json_success();
         }
 
-
         $config = call_user_func_array( $fn, array() );
         $new_template_data = array();
 
@@ -83,82 +245,26 @@ class Customify_Customizer_Layout_Builder {
         );
 
         update_option( $option_name, $saved_templates );
-
         $html = '<li class="saved_template" data-control-id="'.esc_attr( $control ).'" data-id="'.esc_attr( $key_id ).'" data-data="'.esc_attr( json_encode( $new_template_data ) ).'">'.esc_html( $save_name ).' <a href="#" class="load-tpl">'.__( 'Load', 'customify' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', 'customify' ).'</a></li>';
-
         wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name, 'li' => $html ) );
-
-
         die();
     }
 
-    static function get_footer_sections(){
-        $elements = array(
-            'row-top',
-            'row-main',
-            'row-bottom',
-
-            'templates',
-        );
-
-        return $elements;
-    }
-
-    static function get_header_sections(){
-        $elements = array(
-            'row-top',
-            'row-main',
-            'row-bottom',
-            'row-sidebar',
-
-            'templates',
-
-            'logo',
-            'primary-menu',
-            'menu-2',
-            'nav-icon',
-            'search',
-            'button',
-            'icon-list',
-            'user',
-            'social-icons',
-            'languages',
-            'html',
-        );
-
-        return $elements;
+    function get_builders(){
+        $builders = array();
+        foreach( $this->registered_builders as $id => $builder ) {
+            $config = $builder->get_config();
+            $config['items'] = $this->get_builder_items( $id );
+            $builders[ $id ] = $config;
+        }
+        return $builders;
     }
 
     function scripts(){
-
         wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array( 'customize-controls', 'jquery-ui-resizable', 'jquery-ui-droppable', 'jquery-ui-draggable' ), false, true );
         wp_localize_script( 'customify-layout-builder',  'Customify_Layout_Builder',  array(
             'footer_moved_widgets_text' => __( 'Footer widgets moved', 'customify' ),
-            'header' => array(
-                'id'         => 'header',
-                'title'      => __( 'Header Builder', 'customify' ),
-                'control_id' => 'header_builder_panel',
-                'panel'      => 'header_settings',
-                'section'    => 'header_builder_panel',
-                'items'      => $this->get_header_items(),
-                'devices' => array(
-                    'desktop'   => __( 'Desktop', 'customify' ),
-                    'mobile'    => __( 'Mobile/Tablet', 'customify' ),
-                ),
-            ),
-
-            'footer' => array(
-                'id'         => 'footer',
-                'title'      => __( 'Footer Builder', 'customify' ),
-                'control_id' => 'footer_builder_panel',
-                'panel'      => 'footer_settings',
-                'section'    => 'footer_builder_panel',
-                'items'      => $this->get_footer_items(),
-                'devices' => array(
-                    'desktop'   => __( 'Footer Layout', 'customify' )
-                ),
-            )
-
+            'builders' => $this->get_builders(),
         ) );
     }
 
@@ -167,147 +273,6 @@ class Customify_Customizer_Layout_Builder {
             self::$_instance = new self();
         }
         return self::$_instance ;
-    }
-
-    function get_footer_items(){
-        $items = array(
-            array(
-                'name' => __( 'Footer 1', 'customify' ),
-                'id' => 'footer-1',
-                'width' => '3',
-                'section' => 'sidebar-widgets-footer-1'
-            ),
-
-            array(
-                'name' => __( 'Footer 2', 'customify' ),
-                'id' => 'footer-2',
-                'width' => '3',
-                'section' => 'sidebar-widgets-footer-2'
-            ),
-
-            array(
-                'name' => __( 'Footer 3', 'customify' ),
-                'id' => 'footer-3',
-                'width' => '3',
-                'section' => 'sidebar-widgets-footer-3'
-            ),
-
-            array(
-                'name' => __( 'Footer 4', 'customify' ),
-                'id' => 'footer-4',
-                'width' => '3',
-                'section' => 'sidebar-widgets-footer-4'
-            ),
-
-        );
-
-
-        $items = apply_filters( 'customify/builder/footer/items', $items );
-        $new_items = array();
-        foreach (  $items as $k => $i ) {
-            $new_items[ $i['id'] ] = $i;
-        }
-
-        return $new_items;
-    }
-
-    function get_header_items(){
-        $items = array(
-            array(
-                'name' => __( 'Logo', 'customify' ),
-                'id' => 'logo',
-                'width' => '3',
-                'section' => 'header_logo' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Nav Icon', 'customify' ),
-                'id' => 'nav-icon',
-                'width' => '3',
-                'devices' => 'mobile',
-                'section' => 'header_nav_icon' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Primary Menu', 'customify' ),
-                'id' => 'primary-menu',
-                'width' => '6',
-                'section' => 'header_menu_primary' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Secondary Menu', 'customify' ),
-                'id' => 'menu-2',
-                'width' => '6',
-                'section' => 'header_menu_2' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Search', 'customify' ),
-                'id' => 'search',
-                'col' => 0,
-                'width' => '3',
-                'section' => 'header_search' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Social Icons', 'customify' ),
-                'id' => 'social-icons',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_social_icons' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Button', 'customify' ),
-                'id' => 'button',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_button' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Icon List', 'customify' ),
-                'id' => 'icon-list',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_icon_list' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'HTML', 'customify' ),
-                'id' => 'html',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_html' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'User', 'customify' ),
-                'id' => 'user',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_user' // Customizer section to focus when click settings
-            ),
-
-            array(
-                'name' => __( 'Languages', 'customify' ),
-                'id' => 'languages',
-                'col' => 0,
-                'width' => '4',
-                'section' => 'header_languages' // Customizer section to focus when click settings
-            ),
-
-        );
-
-
-        $items = apply_filters( 'customify/builder/header/items', $items );
-        $new_items = array();
-        foreach (  $items as $k => $i ) {
-            $new_items[ $i['id'] ] = $i;
-        }
-
-        return $new_items;
     }
 
     function template(){
@@ -405,11 +370,11 @@ class Customify_Customizer_Layout_Builder {
 
 }
 
-new Customify_Customizer_Layout_Builder();
-
 function Customify_Customizer_Layout_Builder(){
     return Customify_Customizer_Layout_Builder::get_instance();
 }
+Customify_Customizer_Layout_Builder()->init();
+
 
 
 class Customify_Customizer_Layout_Builder_Frontend {
@@ -515,18 +480,30 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
                         if ( ! $items[ $item['id'] ] ['render_content'] ) {
                             ob_start();
-                            $id = str_replace('-', '_', $item['id']);
-                            $fn = 'customify_builder_' . $id . '_item';
                             $has_cb = false;
-                            $return_render = false;
-                            if (function_exists($fn)) {
-                                $return_render = call_user_func_array( $fn, array( $item_config , $item));
-                                $has_cb = true;
-                            } else {
-                                $fn = 'customify_builder_' . $this->id . '_' . $id . '_item';
-                                if (function_exists($fn)) {
-                                    $return_render = call_user_func_array( $fn, array( $item_config , $item));
+                            $object_item = Customify_Customizer_Layout_Builder()->get_builder_item( $this->id, $item['id'] );
+                            // Call render in registered class
+                            if ( $object_item ) {
+                                if (  method_exists( $object_item,'render' ) ) {
+                                    $return_render = call_user_func_array( array( $object_item, 'render' ), array( $item_config , $item));
                                     $has_cb = true;
+                                }
+                            }
+
+                            // Call render by function if class do not exists
+                            if ( ! $has_cb ) {
+                                $id = str_replace('-', '_', $item['id']);
+                                $fn = 'customify_builder_' . $id . '_item';
+                                $return_render = false;
+                                if (function_exists($fn)) {
+                                    $return_render = call_user_func_array($fn, array($item_config, $item));
+                                    $has_cb = true;
+                                } else {
+                                    $fn = 'customify_builder_' . $this->id . '_' . $id . '_item';
+                                    if (function_exists($fn)) {
+                                        $return_render = call_user_func_array($fn, array($item_config, $item));
+                                        $has_cb = true;
+                                    }
                                 }
                             }
 
@@ -707,7 +684,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
                         $align_classes = 'customify-grid-middle';
                     }
 
-
                     ?>
                     <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
@@ -717,7 +693,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
                                 if ( empty( $mobile_items ) ) {
                                     $c ='';
                                 }
-                                echo '<div class=" customify-grid '.esc_attr( $align_classes ).'">';
+                                echo '<div class="customify-grid '.esc_attr( $c.' '. $align_classes ).'">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
@@ -740,7 +716,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
      function render_sidebar(){
          $id = 'sidebar';
          $mobile_items = $this->get_row_settings( $id, 'mobile');
-         if ($mobile_items || is_customize_preview() ) {
+         if ( ! is_array( $mobile_items ) ) {
+             $mobile_items= array();
+         }
+         if ( ! empty( $mobile_items ) || is_customize_preview() ) {
              echo '<div id="mobile-header-panel" class="mobile-header-panel mobile-sidebar-panel">';
                  echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
                      echo $this->close_icon('close-panel' );
@@ -791,7 +770,7 @@ function customify_customize_render_header(){
         <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
         <?php
     }
-    $list_items = Customify_Customizer_Layout_Builder()->get_header_items();
+    $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
     Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
     Customify_Customizer_Layout_Builder_Frontend()->render();
     Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
@@ -808,13 +787,13 @@ function customify_customize_render_header(){
 }
 
 /**
- * Display Footer Layout
+ * Display Footer Layout)
  */
 function customify_customize_render_footer(){
     echo '<footer class="site-footer" id="site-footer">';
     Customify_Customizer_Layout_Builder_Frontend()->set_id( 'footer' );
     Customify_Customizer_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );
-    $list_items = Customify_Customizer_Layout_Builder()->get_footer_items();
+    $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'footer' ) ;
     Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
     Customify_Customizer_Layout_Builder_Frontend()->render();
     echo '</footer>';

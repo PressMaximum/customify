@@ -49,6 +49,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $field_class = '';
 
     static $_js_template_added;
+    static $_icon_loaded;
     function __construct($manager, $id, $args = array())
     {
         parent::__construct($manager, $id, $args);
@@ -78,13 +79,16 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
         wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
         wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
-        wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', array(
-            'home_url' => home_url(''),
-            'ajax' => admin_url( 'admin-ajax.php' ),
-            'has_icons' => Customify_Customizer()->has_icon(),
-            'icons' => Customify_Font_Icons()->get_icons(),
-            'theme_default' => __( 'Theme Default', 'customify' ),
-        ) );
+        if ( is_null( self::$_icon_loaded ) ) {
+            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
+                'home_url' => home_url(''),
+                'ajax' => admin_url('admin-ajax.php'),
+                'has_icons' => Customify_Customizer()->has_icon(),
+                'icons' => Customify_Font_Icons()->get_icons(),
+                'theme_default' => __('Theme Default', 'customify'),
+            ));
+            self::$_icon_loaded = true;
+        }
     }
 
 

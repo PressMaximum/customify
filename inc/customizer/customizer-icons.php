@@ -4,6 +4,7 @@ class Customify_Font_Icons
 {
     static $_instance;
     static $_icons;
+    static $enqueued;
     private $picked_types = array();
 
     static function get_instance()
@@ -65,13 +66,16 @@ class Customify_Font_Icons
     }
 
     function enqueue(){
-        $this->get_icon_types_picked();
-        $this->picked_types['font-awesome'] = true;
-        $this->picked_types = apply_filters( 'customify/enqueue/icons', $this->picked_types, $this );
-        foreach( $this->get_icons() as $icon_id => $icon ){
-            if ( isset( $this->picked_types[ $icon_id ]  )  || is_customize_preview() ) {
-                wp_enqueue_style( $icon_id, $icon['url'] );
+        if ( is_null( self::$enqueued ) ) {
+            $this->get_icon_types_picked();
+            $this->picked_types['font-awesome'] = true;
+            $this->picked_types = apply_filters('customify/enqueue/icons', $this->picked_types, $this);
+            foreach ($this->get_icons() as $icon_id => $icon) {
+                if (isset($this->picked_types[$icon_id]) || is_customize_preview()) {
+                    wp_enqueue_style($icon_id, $icon['url']);
+                }
             }
+            self::$enqueued = true;
         }
     }
 

@@ -1110,10 +1110,11 @@
 
 
     wpcustomize.bind( 'ready', function( e, b ) {
-
-        var Header = new CustomizeBuilder( Customify_Layout_Builder.header );
-        var Footer = new CustomizeBuilder( Customify_Layout_Builder.footer );
-        // footer_moved_widgets_text
+        console.log( ' Customify_Layout_Builder.builders', Customify_Layout_Builder.builders );
+        _.each( Customify_Layout_Builder.builders, function( opts, id ){
+            console.log( 'opts', opts );
+            new CustomizeBuilder( opts );
+        } );
 
         wpcustomize.bind( 'pane-contents-reflowed', function(){
             setTimeout( function(){

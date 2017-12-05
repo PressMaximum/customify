@@ -342,8 +342,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         $wp_customize->add_control( new Customify_Customizer_Control( $wp_customize, $name, $args ));
                         if ( $selective_refresh ) {
                             $s_id = $selective_refresh['render_callback'];
-                            if ( ! isset( $this->selective_settings[ $s_id ] ) ) {
-                                $this->selective_settings[ $s_id ] = array(
+                            $__id = '';
+                            if ( is_array( $s_id ) ) {
+                                $__id = get_class( $s_id[0] ).'_'.$s_id[1];
+                            } else {
+                                $__id = $s_id;
+                            }
+                            if ( ! isset( $this->selective_settings[ $__id ] ) ) {
+                                $this->selective_settings[ $__id ] = array(
                                     'settings' => array(),
                                     'selector' => $selective_refresh['selector'],
                                     'container_inclusive' => $s_id == 'Customify_Customizer_Auto_CSS' ? false : true,
@@ -352,8 +358,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
                             }
 
-                            $this->selective_settings[ $s_id ]['settings'][] = $name;
-                            //$wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
+                            $this->selective_settings[ $__id ]['settings'][] = $name;
                         }
 
                         break;
