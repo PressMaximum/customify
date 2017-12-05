@@ -7,7 +7,7 @@
  */
 function customify_builder_config_header_search(){
     $section = 'header_search';
-    $prefix = 'header_search_';
+   // $prefix = 'header_search_';
     $fn = 'customify_builder_header_search_item';
 
     $mobile_selector = '.mobile-search-form-sidebar';
@@ -148,9 +148,6 @@ function customify_builder_config_header_search(){
 
             )
         ),
-
-
-
 
     );
     return $config;

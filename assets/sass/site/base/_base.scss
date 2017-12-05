@@ -644,4 +644,12 @@ article.comment {
             }
         }
     }
+    .footer--row {
+        .builder-item-focus {
+            &:hover {
+                outline: 1px dashed #ff472e;
+                outline-offset: -1px;
+            }
+        }
+    }
 }

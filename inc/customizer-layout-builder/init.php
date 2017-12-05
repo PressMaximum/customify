@@ -97,6 +97,8 @@ class Customify_Customizer_Layout_Builder {
             'row-top',
             'row-main',
             'row-bottom',
+
+            'templates',
         );
 
         return $elements;
@@ -529,9 +531,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             }
 
                             if ( ! $has_cb ) {
-                                //echo $id;
-
-                               printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
+                                if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+                                    printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
+                                }
                             }
 
                             $ob_render = ob_get_clean();
@@ -622,7 +624,13 @@ class Customify_Customizer_Layout_Builder_Frontend {
              }
              $atts = array();
              $classes = array();
-             $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
+             if ( $this->id != 'footer' ) {
+                 $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
+             } else {
+                 $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
+             }
+
+
              if ( $x > 0 ) {
                  if ( ! $last_item ) {
                      $atts[] = 'off-' . $x;
@@ -642,6 +650,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
              if( is_customize_preview() ) {
                  $classes[] = ' builder-item-focus';
              }
+
+             $classes = apply_filters('customify/builder/item-classes', $classes, $item, $item_config );
 
              $classes = join(' ', $classes ); // customify-grid-middle
 
@@ -672,11 +682,14 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $classes[] = $this->id.'--row';
                     $desktop_items = $this->get_row_settings($row_id, 'desktop');
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
-                    if ( empty( $desktop_items ) ){
-                        $classes[] = 'hide-on-desktop';
-                    }
-                    if ( empty( $mobile_items ) ){
-                        $classes[] = 'hide-on-mobile hide-on-tablet';
+
+                    if ( $this->id !='footer' ) {
+                        if (empty($desktop_items)) {
+                            $classes[] = 'hide-on-desktop';
+                        }
+                        if (empty($mobile_items)) {
+                            $classes[] = 'hide-on-mobile hide-on-tablet';
+                        }
                     }
 
                     $row_layout = Customify_Customizer()->get_setting( $this->id.'_'.$row_id.'_layout' );
@@ -695,14 +708,16 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     }
 
 
-
-
                     ?>
                     <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                         <div class="customify-container">
                             <?php
                             if ($desktop_items) {
-                                echo '<div class="cb-row--desktop hide-on-mobile hide-on-tablet customify-grid '.esc_attr( $align_classes ).'">';
+                                $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+                                if ( empty( $mobile_items ) ) {
+                                    $c ='';
+                                }
+                                echo '<div class=" customify-grid '.esc_attr( $align_classes ).'">';
                                 $this->render_row($desktop_items, $row_id, 'desktop');
                                 echo '</div>';
                             }
@@ -725,7 +740,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
      function render_sidebar(){
          $id = 'sidebar';
          $mobile_items = $this->get_row_settings( $id, 'mobile');
-         if ($mobile_items) {
+         if ($mobile_items || is_customize_preview() ) {
              echo '<div id="mobile-header-panel" class="mobile-header-panel mobile-sidebar-panel">';
                  echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
                      echo $this->close_icon('close-panel' );
@@ -773,14 +788,13 @@ function customify_customize_render_header(){
     echo '<header id="masthead" class="site-header">';
     if ( is_customize_preview() ) {
         ?>
-        <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button aria-label="Click to edit this element." title="Click to edit this element." class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
+        <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
         <?php
     }
     $list_items = Customify_Customizer_Layout_Builder()->get_header_items();
     Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
     Customify_Customizer_Layout_Builder_Frontend()->render();
     Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
-
 
     /*
     $theme_name = wp_get_theme()->get('Name');
@@ -790,7 +804,6 @@ function customify_customize_render_header(){
     <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
     <?php
     */
-
     echo '</header>';
 }
 
@@ -798,7 +811,7 @@ function customify_customize_render_header(){
  * Display Footer Layout
  */
 function customify_customize_render_footer(){
-    echo '<footer id="site-footer">';
+    echo '<footer class="site-footer" id="site-footer">';
     Customify_Customizer_Layout_Builder_Frontend()->set_id( 'footer' );
     Customify_Customizer_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );
     $list_items = Customify_Customizer_Layout_Builder()->get_footer_items();
