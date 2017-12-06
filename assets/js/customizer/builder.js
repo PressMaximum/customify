@@ -344,13 +344,9 @@
 
                 //
                 if ( ! check ) {
-                    console.log( '_____' );
-
                     $( '.grid-stack-item', $wrapper ).each( function(){
                         $( this ).attr( 'data-revert', $( this ).attr( 'data-gs-x' ) );
                     } );
-
-
 
                     var moveLeft = function( itemInfo, slots ) {
 
@@ -503,8 +499,19 @@
                     }
                 }
 
+                // Check empty before revert
+
                 if ( x + w > that.cols ) {
-                    check_revert = true;
+                    left  =  ( x + w ) - that.cols;
+                    for ( i = x - left;  i < that.cols; i++ ) {
+                        if ( flag[i] > 0 ) {
+                            check_revert = true;
+                        }
+                    }
+
+                    if ( ! check_revert ) {
+                        x = x - left;
+                    }
                 }
 
                 if ( check_revert ) {
@@ -861,8 +868,9 @@
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
                     console.log( 'Clicked section' , section );
-                    var control = $( this ).data( 'control' ) || '';
+                    var control = $( this ).attr( 'data-control' ) || '';
                     var did = false;
+                    console.log( 'control', control );
                     if ( control ) {
                         if ( ! _.isUndefined(  wpcustomize.control( control ) ) ) {
                             wpcustomize.control( control ).focus();
@@ -1106,13 +1114,8 @@
     */
 
 
-
-
-
     wpcustomize.bind( 'ready', function( e, b ) {
-        console.log( ' Customify_Layout_Builder.builders', Customify_Layout_Builder.builders );
         _.each( Customify_Layout_Builder.builders, function( opts, id ){
-            console.log( 'opts', opts );
             new CustomizeBuilder( opts );
         } );
 

@@ -354,8 +354,11 @@ class Customify_Customizer_Layout_Builder {
                  title="{{ data.name }}"
                  data-id="{{ data.id }}"
                  data-section="{{ data.section }}"
-                 data-gs-x="{{ data.x }}" data-gs-y="{{ data.y }}"
-                 data-gs-width="{{ data.width }}" data-gs-height="1"
+                 data-control="{{ data.control }}"
+                 data-gs-x="{{ data.x }}"
+                 data-gs-y="{{ data.y }}"
+                 data-gs-width="{{ data.width }}"
+                 data-gs-height="1"
             >
                 <div class="item-tooltip">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
