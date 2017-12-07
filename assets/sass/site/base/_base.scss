@@ -633,6 +633,7 @@ article.comment {
 
 /* Customize Preview */
 .customize-previewing {
+    overflow-x: hidden ;
     .header--row, .mobile-header-panel {
         .customize-partial-edit-shortcut {
             display: none;

@@ -58,7 +58,6 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
         );
 
-
         return $config;
     }
 

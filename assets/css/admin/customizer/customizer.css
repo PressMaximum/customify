@@ -734,6 +734,9 @@
       .customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item {
         display: block;
         margin-bottom: 5px; }
+        .customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item.ui-draggable-handle {
+          width: 100% !important;
+          min-width: 100%; }
         .customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item:last-child {
           margin-bottom: 0px; }
   .customify--cb-row .customify--row-inner {

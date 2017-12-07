@@ -71,8 +71,6 @@ jQuery( document ).ready( function( $ ){
         var $window = $(window),
             $stickies;
 
-        var lastScrollTop = 0;
-
         var setData = function( stickies, addWrap  ){
             if ( typeof addWrap === "undefined" ) {
                 addWrap = true;
@@ -85,14 +83,8 @@ jQuery( document ).ready( function( $ ){
                         $thisSticky.wrap('<div class="followWrap" />');
                     }
                 }
-
                 $thisSticky.parent().removeAttr('style');
-
-                $thisSticky
-                    .data('originalPosition', $thisSticky.offset().top )
-                    .data('originalHeight', $thisSticky.height() )
-                    .parent()
-                    .height($thisSticky.height());
+                $thisSticky.parent().height($thisSticky.height());
             });
         };
 
@@ -133,31 +125,28 @@ jQuery( document ).ready( function( $ ){
                 if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
                     top = $( '#wpadminbar' ).height();
                 }
-
             }
 
+            var scrollTop = $window.scrollTop();
+
             $stickies.each(function(i) {
+                var $thisSticky = $(this);
+                var p = $( this ).parent();
+                var $stickyPosition = p.offset().top;
 
-                var $thisSticky = $(this),
-                    $stickyPosition = $thisSticky.data('originalPosition');
-                var h = $thisSticky.data('originalHeight');
+                var $prevSticky = $stickies.eq(i - 1);
 
-                if ($stickyPosition + h <= $window.scrollTop()) {
-
-                    var $nextSticky = $stickies.eq(i + 1),
-                        $nextStickyPosition = $nextSticky.data('originalPosition') - $thisSticky.data('originalHeight');
-
+                if ($stickyPosition- top <= scrollTop ) {
                     $thisSticky.addClass("fixed");
-
                     $thisSticky.css("top", top );
-
+                    if ( $prevSticky && $prevSticky.length ) {
+                        $prevSticky.removeClass("absolute fixed").removeAttr("style");
+                    }
                 } else {
-
-                    var $prevSticky = $stickies.eq(i - 1);
-
                     $thisSticky.removeClass("fixed").removeAttr("style");
-                    $prevSticky.removeClass("absolute fixed").removeAttr("style");
-
+                    if ( $prevSticky && $prevSticky.length ) {
+                        $prevSticky.removeClass("absolute fixed").removeAttr("style");
+                    }
                 }
             });
         };

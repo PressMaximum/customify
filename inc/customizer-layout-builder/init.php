@@ -15,7 +15,10 @@ class Customify_Customizer_Builder_Panel {
         return Customify_Customizer_Layout_Builder()->get_builder_items( $this->id );
     }
 
-    function _customize( $configs ){
+    function _customize( $configs = array() ){
+        if (! is_array( $configs ) ) {
+            $configs = array();
+        }
         $config = $this->customize();
         foreach( $this->get_rows_config() as $id => $name ) {
 
@@ -68,6 +71,7 @@ class Customify_Customizer_Layout_Builder {
                 'templates'
             )
         );
+
         $path = get_template_directory();
         foreach( $config_files as $id => $files ) {
             foreach( $files as $f ) {
@@ -96,6 +100,14 @@ class Customify_Customizer_Layout_Builder {
             if ( ! class_exists( $class ) ) {
                 return false;
             }
+
+            $class = new $class();
+        }
+
+        if ( ! $class instanceof Customify_Customizer_Builder_Panel ) {
+            $name = get_class( $class );
+            _doing_it_wrong( $name,  sprintf( __( 'Class <strong>%s</strong> do not extends class <strong>Customify_Customizer_Builder_Panel</strong>.', 'customify' ), $name ) ,'1.0.0' );
+            return false;
         }
 
         $this->registered_builders[ $id ] = $class;
@@ -183,14 +195,18 @@ class Customify_Customizer_Layout_Builder {
             wp_send_json_error( __( 'Access denied', 'customify' ) );
         }
 
-        $id = sanitize_text_field( $_POST['id'] );
-        $control = sanitize_text_field( $_POST['control'] );
-        $save_name = sanitize_text_field( $_POST['name'] );
-        $data = wp_unslash( $_POST['preview_data'] );
-        $fn = 'customify_customizer_get_'.$id.'_config' ;
-
-        if ( ! function_exists( $fn ) ){
+        $id = isset( $_POST['id'] ) ? sanitize_text_field( $_POST['id'] ) : false;
+        $control = isset( $_POST['control'] ) ? sanitize_text_field( $_POST['control'] ) : '';
+        $save_name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
+        if ( ! $save_name ) {
+            $save_name = sprintf( __( 'Saved %s' ), date_i18n( 'Y-m-d H:i:s' ) );
+        }
+        $data = isset( $_POST['preview_data'] ) ? wp_unslash( $_POST['preview_data'] ) : array();
+        $fn = false;
+        if ( ! isset( $this->registered_builders[ $id ] ) ) {
             wp_send_json_error( __( 'No Support', 'customify' ) );
+        } else {
+            $fn = array( $this->registered_builders[ $id ] , '_customize' );
         }
 
         $theme_name = wp_get_theme()->get('Name');
@@ -255,6 +271,7 @@ class Customify_Customizer_Layout_Builder {
         foreach( $this->registered_builders as $id => $builder ) {
             $config = $builder->get_config();
             $config['items'] = $this->get_builder_items( $id );
+            $config['rows'] = $builder->get_rows_config();
             $builders[ $id ] = $config;
         }
         return $builders;
@@ -299,6 +316,8 @@ class Customify_Customizer_Layout_Builder {
 
         <script type="text/html" id="tmpl-customify--cb-panel">
             <div class="customify--cp-rows">
+
+                <# if ( ! _.isUndefined( data.rows.top ) ) { #>
                 <div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top" >
                     <a class="customify--cb-row-settings" data-id="top"  href="#"></a>
                     <div class="customify--row-inner">
@@ -310,6 +329,9 @@ class Customify_Customizer_Layout_Builder {
                         <div class="customify--cb-items grid-stack gridster" data-id="top"></div>
                     </div>
                 </div>
+                <#  } #>
+
+                <# if ( ! _.isUndefined( data.rows.main ) ) { #>
                 <div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main" >
                     <a class="customify--cb-row-settings" data-id="main" href="#"></a>
 
@@ -322,6 +344,10 @@ class Customify_Customizer_Layout_Builder {
                         <div class="customify--cb-items grid-stack gridster" data-id="main"></div>
                     </div>
                 </div>
+                <#  } #>
+
+
+                <# if ( ! _.isUndefined( data.rows.bottom ) ) { #>
                 <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom" >
                     <a class="customify--cb-row-settings" data-id="bottom" href="#"></a>
 
@@ -334,17 +360,22 @@ class Customify_Customizer_Layout_Builder {
                         <div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
                     </div>
                 </div>
+                <#  } #>
+
             </div>
 
+
             <# if ( data.device != 'desktop' ) { #>
+                <# if ( ! _.isUndefined( data.rows.sidebar ) ) { #>
             <div class="customify--cp-sidebar">
                 <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
                     <a class="customify--cb-row-settings" data-id="sidebar" href="#"></a>
                     <div class="customify--row-inner">
-                        <div class="customify--cb-items customify--sidebar-items grid-stack----" data-id="sidebar"></div>
+                        <div class="customify--cb-items customify--sidebar-items" data-id="sidebar"></div>
                     </div>
                 </div>
             <div>
+                <# } #>
             <# } #>
 
         </script>
@@ -621,6 +652,12 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     }
                  }
              }
+
+             if ( $this->id == 'footer' ) {
+                 $atts[] = '_sm-0';
+             }
+
+
              $last_item = $item;
 
              $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
@@ -662,54 +699,59 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $classes[] = $this->id.'--row';
                     $desktop_items = $this->get_row_settings($row_id, 'desktop');
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
+                    if ( ! empty( $desktop_items ) || ! empty( $mobile_items ) ) {
 
-                    if ( $this->id !='footer' ) {
-                        if (empty($desktop_items)) {
-                            $classes[] = 'hide-on-desktop';
-                        }
-                        if (empty($mobile_items)) {
-                            $classes[] = 'hide-on-mobile hide-on-tablet';
-                        }
-                    }
-
-                    $row_layout = Customify_Customizer()->get_setting( $this->id.'_'.$row_id.'_layout' );
-                    if ( $row_layout ) {
-                        $classes[] = 'layout-'.sanitize_text_field( $row_layout );
-                    }
-
-                    $align_classes = 'customify-grid-top';
-                    if (  $this->id == 'header' ) {
-                        $is_sticky = Customify_Customizer()->get_setting($this->id.'_'.$row_id.'_sticky' );
-                        if ( absint( $is_sticky ) == 1 ) {
-                            $classes[] = 'is-sticky';
+                        if ($this->id != 'footer') {
+                            if (empty($desktop_items)) {
+                                $classes[] = 'hide-on-desktop';
+                            }
+                            if (empty($mobile_items)) {
+                                $classes[] = 'hide-on-mobile hide-on-tablet';
+                            }
                         }
 
-                        $align_classes = 'customify-grid-middle';
-                    }
+                        $row_layout = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_layout');
+                        if ($row_layout) {
+                            $classes[] = 'layout-' . sanitize_text_field( $row_layout );
+                        }
 
-                    ?>
-                    <div id="cb-row--<?php echo esc_attr( $_id ); ?>" class="<?php echo esc_attr( join(' ', $classes ) ); ?>" data-row-id="<?php echo esc_attr($row_id); ?>" data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
-                        <div class="customify-container">
-                            <?php
-                            if ($desktop_items) {
-                                $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
-                                if ( empty( $mobile_items ) ) {
-                                    $c ='';
+                        $align_classes = 'customify-grid-top';
+                        if ($this->id == 'header') {
+                            $is_sticky = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_sticky');
+                            if (absint($is_sticky) == 1) {
+                                $classes[] = 'is-sticky';
+                            }
+
+                            $align_classes = 'customify-grid-middle';
+                        }
+
+                        $classes = apply_filters('customify/builder/row-classes', $classes, $row_id, $this );
+
+                        ?>
+                        <div id="cb-row--<?php echo esc_attr($_id); ?>" class="<?php echo esc_attr(join(' ', $classes)); ?>" data-row-id="<?php echo esc_attr($row_id); ?>"
+                             data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                            <div class="customify-container">
+                                <?php
+                                if ($desktop_items) {
+                                    $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+                                    if (empty($mobile_items)) {
+                                        $c = '';
+                                    }
+                                    echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
+                                    $this->render_row($desktop_items, $row_id, 'desktop');
+                                    echo '</div>';
                                 }
-                                echo '<div class="customify-grid '.esc_attr( $c.' '. $align_classes ).'">';
-                                $this->render_row($desktop_items, $row_id, 'desktop');
-                                echo '</div>';
-                            }
 
-                            if ($mobile_items) {
-                                echo '<div class="cb-row--mobile hide-on-desktop customify-grid '.esc_attr( $align_classes ).'">';
-                                $this->render_row($mobile_items, $row_id, 'mobile');
-                                echo '</div>';
-                            }
-                            ?>
+                                if ($mobile_items) {
+                                    echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
+                                    $this->render_row($mobile_items, $row_id, 'mobile');
+                                    echo '</div>';
+                                }
+                                ?>
+                            </div>
                         </div>
-                    </div>
-                    <?php
+                        <?php
+                    }
                 }
             }
 
@@ -738,6 +780,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
                          $content = str_replace( '__id__', $id, $content );
                          $content = str_replace( '__device__', 'mobile', $content );
+                         if ( ! isset( $item_config['section'] ) ) {
+                             $item_config['section'] = '';
+                         }
 
                          echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '">';
                             echo $content;
@@ -764,8 +809,6 @@ function Customify_Customizer_Layout_Builder_Frontend(){
  * Display Header Layout
  */
 function customify_customize_render_header(){
-
-   // remove_theme_mod( 'header_builder_panel' );
 
     echo '<header id="masthead" class="site-header">';
     if ( is_customize_preview() ) {

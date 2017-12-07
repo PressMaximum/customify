@@ -23,9 +23,9 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
     function get_rows_config()
     {
         return array(
-            'top' => __('Footer Top', 'customify'),
+            //'top' => __('Footer Top', 'customify'),
             'main' => __('Footer Main', 'customify'),
-            'bottom' => __('Footer Bottom', 'customify'),
+           // 'bottom' => __('Footer Bottom', 'customify'),
         );
     }
 
@@ -154,7 +154,6 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                 'css_format' =>'color: {{value}};',
                 'title' => __( 'Link Hover Color', 'customify' ),
             ),
-
 
             array(
                 'name' => $section.'_background',

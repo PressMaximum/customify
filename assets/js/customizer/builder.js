@@ -752,7 +752,11 @@
                 if (  $( '#'+template_id ).length == 0 ) {
                     return ;
                 }
-                var html = template( { device: device, id: options.id }, template_id );
+                var html = template( {
+                        device: device,
+                        id: options.id,
+                        rows: options.rows
+                    }, template_id );
                 return '<div class="customify--device-panel customify-vertical-panel customify--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
             },
 
