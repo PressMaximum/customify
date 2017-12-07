@@ -13,7 +13,7 @@ class Customify_Builder_Item_Logo {
 
     function customize(){
         $section = 'header_logo';
-        $render_cb_el = 'customify_builder_logo_item';
+        $render_cb_el = array( $this, 'render' ) ;
         $selector = '.site-branding';
         $config  = array(
             array(

@@ -293,7 +293,6 @@
 
                 // Vị trí con trỏ chuột cách mép trái của wapper
                 left = iOffset.left - wOffset.left;
-                //console.log( 'Drop Left', left );
 
                 x = Math.round( left/ colWidth );
                 if ( x < 0 ) {
@@ -496,6 +495,7 @@
                 for ( i = x; i< x + w; i++ ) {
                     if ( flag[i] > 0 ) {
                         check_revert = true;
+                        console.log( 'Check R1: '+ i +' Not empty', flag[i]  );
                     }
                 }
 
@@ -506,6 +506,7 @@
                     for ( i = x - left;  i < that.cols; i++ ) {
                         if ( flag[i] > 0 ) {
                             check_revert = true;
+                            console.log( 'Check R: '+ i +' Not empty', flag[i]  );
                         }
                     }
 
@@ -751,6 +752,9 @@
                 var template_id =  'tmpl-customify--cb-panel';
                 if (  $( '#'+template_id ).length == 0 ) {
                     return ;
+                }
+                if ( ! _.isObject( options.rows ) ) {
+                    options.rows = {};
                 }
                 var html = template( {
                         device: device,
