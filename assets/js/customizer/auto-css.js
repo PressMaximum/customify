@@ -351,7 +351,7 @@ var AutoCSS = window.AutoCSS || null;
         }
 
         if ( _.isUndefined( values ) ) {
-            values = false;
+            values = {};
         }
 
         if ( ! _.isUndefined( field.device_settings ) && field.device_settings ) {
@@ -377,7 +377,7 @@ var AutoCSS = window.AutoCSS || null;
             } );
         } else {
             if ( _.isEmpty( values ) ) {
-                values = that.get_setting( field.name );
+                values = that.get_setting( field.name, 'all' );
             }
             if ( that[call_back] ){
                 code = that[ call_back ]( values, format );
@@ -510,6 +510,7 @@ var AutoCSS = window.AutoCSS || null;
     };
 
     AutoCSS.prototype.setup_background = function ( value ) {
+        console.log( 'BG_VALUES', value );
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -649,11 +650,6 @@ var AutoCSS = window.AutoCSS || null;
             color: null,
         });
 
-
-        console.log( 'TYPO Values font_size: '+field.name, values.font_size );
-
-
-        
         var code = {};
         var fields = {};
         var devices_css = {};
@@ -747,16 +743,13 @@ var AutoCSS = window.AutoCSS || null;
         that.css['all'] += " "+field['selector']+" {\r\n\t"+that.join( code, "\r\n\t" )+"\r\n}";
     };
 
-    //console.log( 'Customify_Preview_Config', Customify_Preview_Config );
-
     var AutoCSSInit = new AutoCSS();
 
     api.bind( 'preview-ready', function() {
-        AutoCSSInit.run();
+        //AutoCSSInit.run();
     });
 
     api.bind( 'change', function(){
-        //console.log( 'C Change' );
         AutoCSSInit.run();
     } );
 

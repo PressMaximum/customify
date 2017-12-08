@@ -782,7 +782,7 @@
             }
 
             if ( _.isUndefined( save ) || save ) {
-                console.log( 'VALUES: ', value );
+               //console.log( 'VALUES: ', value );
                 control.setting.set( control.encodeValue( value ) );
                 $document.trigger( 'customify/customizer/change' );
             } else {
