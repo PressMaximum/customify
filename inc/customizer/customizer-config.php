@@ -172,6 +172,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
                         'label' => __( 'Background cover', 'customify' ),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
@@ -255,6 +256,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
                         'label' => __( 'Background cover', 'customify' ),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
@@ -595,6 +597,17 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
 
 
                 )
+            ),
+
+            array(
+                'name' => 'text_align',
+                'type' => 'text_align',
+                'device_settings' => true,
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section' => 'customify_section',
+                'theme_supports' => '',
+                'title'          => __( 'Text Align', 'customify' ),
             ),
 
 

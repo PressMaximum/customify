@@ -319,7 +319,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         }
 
 
-
         function font( $field, $values = null ){
             $code = '';
             if ( $field['device_settings'] ) {
@@ -484,7 +483,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 }
             }
 
-            if ( isset($fields['letter_spacing'])) {
+            if ( isset($fields['color'])) {
                 $_c = $this->setup_color($values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
                 if ( $_c ) {
                     $code['color'] = $_c;

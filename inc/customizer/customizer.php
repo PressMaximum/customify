@@ -38,9 +38,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
          * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
          */
         function preview_js() {
+            wp_enqueue_script( 'customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css.js', array( 'customize-preview' ), '20151215', true );
             wp_enqueue_script( 'customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array( 'customize-preview' ), '20151215', true );
-            wp_localize_script( 'customify-customizer', 'Customify_Preview_Config_Fields', Customify_Customizer::get_config() );
-
+            wp_localize_script( 'customify-customizer-auto-css', 'Customify_Preview_Config', array(
+                'fields' => Customify_Customizer::get_config(),
+                'devices' => $this->devices
+            ) );
         }
 
 
@@ -328,12 +331,18 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                 'render_callback' => $args['render_callback'],
                             );
 
+
+
                             if ( $args['css_format'] ) {
-                                $selective_refresh['selector'] = '#customify-style-inline-css';
-                                $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
+                                //$selective_refresh['selector'] = '#customify-style-inline-css';
+                               // $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
+                                $settings_args['transport'] = 'postMessage';
+                                $selective_refresh = null;
+                            } else {
+                                $settings_args['transport'] = 'postMessage';
                             }
 
-                            $settings_args['transport'] = 'postMessage';
+
                         }
                         unset( $args['default'] );
 

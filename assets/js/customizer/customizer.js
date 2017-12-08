@@ -8,20 +8,6 @@
 
 ( function( $, api ) {
 
-	// Site title and description.
-    /*
-	wp.customize( 'blogname', function( value ) {
-		value.bind( function( to ) {
-			$( '.site-title a' ).text( to );
-		} );
-	} );
-	wp.customize( 'blogdescription', function( value ) {
-		value.bind( function( to ) {
-			$( '.site-description' ).text( to );
-		} );
-	} );
-	*/
-
 	// Header text color.
 	wp.customize( 'header_textcolor', function( value ) {
 		value.bind( function( to ) {
@@ -53,7 +39,6 @@
 
 
         // for custom when click on preview
-
         $document.on( 'click', '.builder-item-focus', function( e ){
             e.preventDefault();
             var section_id =  $( this ).attr( 'data-section' ) || '';
@@ -65,11 +50,14 @@
             }
         } );
 
+
+        /*
         $( window ).resize( function(){
             var css_code = $( '#customify-style-inline-css' ).html();
             // Fix Chrome Lost CSS When resize ??
             $( '#customify-style-inline-css' ).html( css_code );
         });
+        */
 
         // Get all values
        // console.log( 'ALL Control Values', api.get( ) );
