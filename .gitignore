@@ -11,3 +11,6 @@ npm-debug.log
 
 # macOS
 .DS_Store
+
+# SASS Source Map
+*.css.map
