@@ -651,7 +651,7 @@
 }
 
 #customize-preview {
-  transition: all 500ms;
+  /* transition: all 500ms; */
 }
 #customize-preview.cb--preview-panel-show {
   bottom: 330px;

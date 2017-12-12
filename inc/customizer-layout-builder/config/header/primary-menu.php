@@ -75,7 +75,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'title'  => __( 'Item Color', 'customify' ),
                 'selector'  => '.primary-menu li a, .primary-menu li',
                 'device_settings' => true,
-                'css_format'  => 'color: {{value}};',
+                'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
             ),
 
             array(
@@ -84,8 +84,8 @@ class Customify_Builder_Item_Primary_Menu {
                 'section' => $section,
                 'title' => __( 'Item Color Hover', 'customify' ),
                 'device_settings' => true,
-                'selector'  => '.primary-menu li a:hover, .primary-menu li:hover > span',
-                'css_format'  => 'color: {{value}};',
+                'selector'  => '.primary-menu li a:hover, .primary-menu li:hover > span, .primary-menu',
+                'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
             ),
 
             array(

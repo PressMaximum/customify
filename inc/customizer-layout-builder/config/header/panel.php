@@ -178,8 +178,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'select',
                         'label' => __( 'Background Attachment', 'customify' ),
                         'required' => array(
-                            array('image', 'not_empty', ''),
-                            array('cover', '!=', '1' ),
+                            array('image', 'not_empty', '')
                         ),
                         'choices' => array(
                             'default' => __( 'Attachment', 'customify' ),
