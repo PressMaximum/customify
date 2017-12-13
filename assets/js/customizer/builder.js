@@ -525,23 +525,38 @@
                         return false;
                     }
 
+                    var _x;
+                    var _re;
+                    var _w;
+
                     // Check nếu từ vị trí hiện tại đủ chỗ trống rồi thì ko cần dịch chuyển nữa.
-                    if (checkEnoughSpaceFromX(x, w)) {
-                        console.log( { x: x, w: w } );
-                        addItemToFlag(node);
-                        node.el.attr( 'data-gs-x', x );
-                        node.el.attr( 'data-gs-width', w );
-                        return true;
+                    if ( emptySlots <= w ) {
+                        _re = getRightEmptySlotFromX( x, true );
+                        if ( _re >=  emptySlots ) {
+                            _w = w;
+                            while ( _w >= 1 ){
+                                if (checkEnoughSpaceFromX(x, _w)) {
+                                    console.log( { x: x, w: _w } );
+                                    addItemToFlag(node);
+                                    node.el.attr( 'data-gs-x', x );
+                                    node.el.attr( 'data-gs-width', _w );
+                                    return true;
+                                }
+                                _w --;
+                            }
+                        }
+
                     }
+
 
                     // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
                     if ( flag[x] === 1 ) {
                         var prev = getPrevBlock( x );
                         if ( prev.x >=0 ) {
-                            
+
                             if ( x > prev.x + Math.floor( prev.w / 2 ) && x > prev.x ) {
-                                var _x = prev.x + prev.w;
-                                var _re = getRightEmptySlotFromX(_x, true);
+                                _x = prev.x + prev.w;
+                                _re = getRightEmptySlotFromX(_x, true);
                                 console.log('__re', _re);
                                 console.log('__re_X', _x);
                                 if (_re >= w) {
@@ -919,7 +934,7 @@
                     },
                     stop: function(  event, ui ){
                         $( 'body' ).removeClass( 'builder-item-moving' );
-                        ui.helper.parent().css( 'z-index', 'auto' );
+                        ui.helper.parent().css( 'z-index', '' );
                         that.save();
                     },
                     drag: function( event, ui ){
