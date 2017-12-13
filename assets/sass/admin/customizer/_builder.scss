@@ -79,7 +79,7 @@ $cb_padding: 20px;
         overflow: auto;
     }
     .customify--cb-body {
-        height: 290px;
+        height: 280px;
         overflow: auto;
         display: block;
     }
@@ -139,7 +139,7 @@ $cb_padding: 20px;
             border: 1px solid #ccc;
             display: inline-block;
             margin-right: 10px;
-            padding: 5px 10px;
+            padding: 8px 15px 9px;
             margin-bottom: -1px;
             font-weight: bold;
             text-decoration: none;
@@ -154,9 +154,10 @@ $cb_padding: 20px;
     }
     .customify--cb-actions {
         float: right;
-        margin-top: -4px;
+        margin-top: -1px;
         a {
             display: inline-block;
+            margin-left: 10px;
         }
     }
 }
@@ -180,9 +181,14 @@ $cb_padding: 20px;
     }
     &.row-active {
         .customify--cb-row-settings {
-            background: #e8b262;
+            background: $builder_active_color;
         }
-        border-color: #e8b262;
+        border-color: $builder_active_color;
+        .customify--cb-row-settings {
+            &:before {
+                color: #FFF;
+            }
+        }
     }
     @include clearfix();
 
@@ -194,17 +200,23 @@ $cb_padding: 20px;
         text-decoration: none;
         width: 35px;
         display: block;
-        color: #444444;
         text-align: center;
         border-right: 1px solid #ddd;
+        color: #444444;
         &:focus {
             box-shadow: none;
         }
         &:before {
             -webkit-font-smoothing: antialiased;
-            font: 400 20px/54px dashicons;
+            font: 400 18px/54px dashicons;
             content: "\f111";
+            position: relative;
+            top: -2.5px;
         }
+        &:hover {
+            color: $builder_active_color;
+        }
+        
     }
     .customify--cb-items {
         display: block;
@@ -269,7 +281,7 @@ $cb_padding: 20px;
     .grid-stack-item {
         &.item-active {
             .grid-stack-item-content {
-                background: #e8b262;
+                border-color: $builder_active_color;
             }
         }
     }
@@ -295,7 +307,8 @@ $cb_padding: 20px;
 .customify-available-items {
     @include clearfix();
     clear: both;
-    padding-top: 10px;
+    margin-top: 20px;
+    display: inline-block;
     &.customify--panel-hide {
         height: 0px;
         overflow: hidden;
@@ -304,10 +317,24 @@ $cb_padding: 20px;
     }
     @include clearfix;
     .grid-stack-item-content {
-        padding: 10px;
+        padding: 6px 15px;
         border: $border;
         margin-right: 10px;
-        cursor: pointer;
+        cursor: -webkit-grab;
+        cursor:-moz-grab;
+        box-shadow: 0 1px 0 #ccc;
+        background: #f7f7f7;
+        color: #555555;
+        border-radius: 2px;
+        &:hover {
+            color: #23282d;
+            background: #fafafa;
+            border-color: #999;
+        }
+        &:active {
+            cursor: -webkit-grabbing;
+            cursor:-moz-grabbing;
+        }
     }
     * {
         box-sizing: content-box;
@@ -315,7 +342,6 @@ $cb_padding: 20px;
     .grid-stack-item {
         float: left;
         width: auto !important;
-        margin-bottom: 5px;
         .item-tooltip {
             display: none;
         }
@@ -339,7 +365,8 @@ $cb_padding: 20px;
         color: #ffffff;
         font-size: 11px;
         line-height: 15px;
-        padding: 3px 10px;
+        padding: 3px 10px 4px;
+        border-radius: 2px;
         top: 0px;
         left: 11px;
         z-index: 0;
@@ -373,6 +400,7 @@ $cb_padding: 20px;
     }
     .grid-stack-item-content {
         background: #fafafa;
+        border-radius: 2px;
     }
     .customify-cb-icon {
         position: absolute;
@@ -394,22 +422,31 @@ $cb_padding: 20px;
     .customify--cb-item-remove {
         top: 50%;
         background: inherit;
-        padding: 5px 0px 5px 5px;
-        right: 5px;
+        padding: 5px 3px;
+        right: 0px;
         transform: translateY(-50%);
+        cursor: pointer;
         &:before {
             content: "\f335";
+        }
+        &:hover {
+            color: $builder_active_color;
         }
     }
 
     .customify--cb-item-setting {
         background: inherit;
         top: 50%;
-        right: 30px;
-        padding: 5px 5px;
+        right: 22px;
+        padding: 5px 3px;
         transform: translateY(-50%);
+        cursor: pointer;
         &:before {
             content: "\f111";
+            font-size: 15px;
+        }
+        &:hover {
+            color: $builder_active_color;
         }
     }
 }
@@ -580,6 +617,9 @@ $animation_speed: .3s !default;
 .save-template-form {
     display: flex;
     margin-bottom: 15px;
+    .button.save-builder-template {
+        margin-left: 10px;
+    }
 }
 .list-saved-templates{
 
@@ -592,8 +632,10 @@ $animation_speed: .3s !default;
         @include clearfix;
         &.saved_template {
             background: #fff;
-            padding: 10px 10px;
+            padding: 12px 10px;
             position: relative;
+            border: 1px solid #e5e5e5;
+            box-shadow: 0 1px 1px rgba(0,0,0,.04);
         }
         a {
             cursor: pointer;

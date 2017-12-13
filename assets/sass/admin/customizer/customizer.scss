@@ -1,6 +1,7 @@
 // Import custom controls
 $border: 1px solid #ddd;
 $bg: #f1f1f1;
+$builder_active_color: #0073aa;
 
 @mixin clearfix {
     &:before, &:after {

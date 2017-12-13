@@ -8,7 +8,7 @@
  */
 
 global $site_layout;
-$site_layout = 'content-sidebar';
+$site_layout = 'sidebar-content';
 
 if ( ! function_exists( 'customify_setup' ) ) :
 	/**
