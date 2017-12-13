@@ -13,6 +13,12 @@ $text_color: #555d66;
     border-bottom: 1px solid #ccc;
     border-top: 1px solid #ccc;
 }
+.customize-control {
+    .customize-control-description {
+        margin-bottom: 15px;
+        margin-top: -3px;
+    }
+}
 
 
 .customify-field-heading{
@@ -70,8 +76,8 @@ $text_color: #555d66;
 .customize-control-customify-group {
     .customify--settings-wrapper {
         .customify--settings-fields {
-            border: 1px solid #dddddd;
-            padding:  10px;
+            border: 2px dashed #ccc;
+            padding:  15px;
             background: #ffffff;
         }
         .customify--group-field {

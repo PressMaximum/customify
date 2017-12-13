@@ -29,7 +29,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'min' => 700,
 				'max' => 2000,
 				'section' => 'customify_layouts_section',
-				//'device' => 'mobile', // mobile || general
+				'device' => 'mobile', // mobile || general
 				//'priority' => 22,
 				'title'          => __( 'Container Width', 'customify' ),
 				'selector' => '.customify_container',
