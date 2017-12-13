@@ -889,13 +889,12 @@
                         $( 'body' ).addClass( 'builder-item-moving' );
                         //var w = that.getW( ui.helper );
                        // var x = that.getX( ui.helper );
-                        elItem.parent().css( 'z-index', 500 );
+                        ui.helper.parent().css( 'z-index', 500 );
                     },
                     stop: function(  event, ui ){
                         $( 'body' ).removeClass( 'builder-item-moving' );
-                        elItem.parent().css( 'z-index', 'auto' );
+                        ui.helper.parent().css( 'z-index', 'auto' );
                         that.save();
-
                     },
                     drag: function( event, ui ){
 
