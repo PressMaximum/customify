@@ -359,6 +359,10 @@ $cb_padding: 20px;
     position: relative;
     height: 40px;
     display: inline-block;
+    z-index: 50;
+    &.ui-draggable-dragging {
+        z-index: 9999999;
+    }
     .item-tooltip {
         position: absolute;
         background: #333333;

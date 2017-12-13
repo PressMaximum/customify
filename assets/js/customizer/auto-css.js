@@ -510,7 +510,6 @@ var AutoCSS = window.AutoCSS || null;
     };
 
     AutoCSS.prototype.setup_background = function ( value ) {
-        console.log( 'BG_VALUES', value );
         if ( ! _.isObject( value ) ) {
             value = {};
         }

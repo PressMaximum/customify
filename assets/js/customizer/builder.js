@@ -81,16 +81,16 @@
                                  */
                                 //var $wrapper = $( this );
 
-                                console.log( 'DROP Over',  ui.offset );
+                                //console.log( 'DROP Over',  ui.offset );
 
                             },
                             drop: function( event, ui ) {
                                 var $wrapper = $( this );
                                 console.log( 'drop stop', $wrapper );
                                 console.log( 'drop pos', ui.position );
-                                that.grid( $wrapper, ui, event );
-                                that.sortGrid( $wrapper );
-                                that.updateGridFlag( $wrapper );
+                                //that.grid( $wrapper, ui, event );
+                                that.gridster( $wrapper, ui, event );
+                                //that.updateGridFlag( $wrapper );
                                 that.save();
                             }
                         } );
@@ -158,37 +158,6 @@
             getW: function( $item ){
                 var w = $item.attr( 'data-gs-width' ) || 1;
                 return parseInt( w );
-            },
-
-            countEmptySlots: function( $wrapper ){
-                var flag = this.getFlag( $wrapper );
-                var empty_slots = 0;
-                var i;
-                for( i = 0; i < this.cols; i ++ ) {
-                    if( flag[ i ] === 0 ){
-                        empty_slots ++ ;
-                    }
-                }
-                console.log( 'empty_slots', empty_slots );
-                return empty_slots;
-            },
-
-            findElFromX: function( x, flag, $wrapper ){
-                var that = this;
-                var item =  false;
-                if ( flag[ x ] > 1 ) {
-                    item = $( '.grid-stack-item[data-gs-x="'+x+'"]', $wrapper );
-                    return item;
-                }
-                var i = x;
-                while ( i >= 0 && ! item && flag[ i ] > 0 ) {
-                    if ( flag[ i ] > 1 ) {
-                        item = $( '.grid-stack-item[data-gs-x="'+i+'"]', $wrapper );
-                    }
-                    i--;
-                }
-
-                return item;
             },
 
             findNextElFromX: function( x, flag, $wrapper ){
@@ -260,7 +229,6 @@
                     }
                 }
 
-
                 return {
                     flag: flag,
                     x: x,
@@ -275,7 +243,406 @@
                 }
             },
 
-            grid: function( $wrapper, ui ){
+            updateItemsPositions: function( flag ){
+                var maxCol = this.cols;
+                for( var i = 0; i <= maxCol; i++ ) {
+                    if( typeof  flag[i] === 'object' || typeof flag[i] === 'function'  ) {
+                        flag[i].attr( 'data-gs-x', i );
+                    }
+                }
+            },
+
+            gridster: function( $wrapper, ui ){
+                var flag = [], backupFlag = [], that = this;
+                var maxCol = this.cols;
+
+                var addItemToFlag = function( node ){
+                    var x = node.x, w = node.w;
+                    var el = node.el;
+
+                    for ( var i = x; i < x+w ; i++ ) {
+                        if( i === x ) {
+                            flag[ i ] = el; // mean start item item
+                        } else {
+                            flag[ i ] = 1;
+                        }
+                    }
+                };
+
+                var removeNode = function( node ){
+                    var x = node.x, w = node.w;
+                    var el = node.el;
+                    for ( var i = x; i < x+w ; i++ ) {
+                        flag[ i ] = 0;
+                    }
+                };
+
+                var  getEmptySlots = function ( ) {
+                    var emptySlots = 0;
+                    for( var i = 0; i< maxCol; i++ ) {
+                        if ( flag[ i ] === 0 ) {
+                            emptySlots ++;
+                        }
+                    }
+
+                    return emptySlots;
+                };
+
+                var getRightEmptySlotFromX = function (x, stopWhenNotEmpty){
+                    var emptySlots = 0;
+                    for( var i = x; i < maxCol; i++ ) {
+                        if ( flag[ i ] === 0 ) {
+                            emptySlots ++;
+                        } else {
+                            if ( stopWhenNotEmpty ) {
+                                return emptySlots;
+                            }
+                        }
+                    }
+                    return emptySlots;
+                };
+
+                var getLeftEmptySlotFromX = function (x, stopWhenNotEmpty ){
+                    var emptySlots = 0;
+                    if ( typeof stopWhenNotEmpty === "undefined" ) {
+                        stopWhenNotEmpty = false;
+                    }
+                    for( var i = x; i >= 0; i-- ) {
+                        if ( flag[ i ] === 0 ) {
+                            emptySlots ++;
+                        } else {
+                            if ( stopWhenNotEmpty ) {
+                                return emptySlots;
+                            }
+                        }
+                    }
+                    return emptySlots;
+                };
+
+                var isEmptyX = function ( x ){
+                    if ( flag[ x ] === 0 ) {
+                        return true;
+                    }
+                    return false;
+                };
+
+                var checkEnoughSpaceFromX = function (x, w){
+                    var check = true;
+                    var i = x;
+                    var j;
+                    while ( i < x + w && check ) {
+                        if ( flag[ i ] !== 0 ) {
+                            return false;
+                        }
+                        i++;
+                    }
+                    return check;
+                };
+
+                var getPrevBlock = function( x ){
+                    if ( x < 0 ) {
+                        return {
+                            x: -1,
+                            w: 1
+                        }
+                    }
+
+                    var i, _x = -1, _xw, found;
+
+                    if ( flag[x] <= 1  ) {
+                        i= x;
+                        found = false;
+                        while ( i >= 0 && ! found ) {
+                            if ( flag[i] !== 1 && flag[i] !== 0 ) {
+                                _x = i;
+                                found = true;
+                            }
+                            i--;
+                        }
+                    } else {
+                        _x = x;
+                    }
+                    // tìm kiếm độ rộng của chuỗi này
+                    i = _x + 1;
+                    _xw = _x; // chiều rộng nhỏ nhất là môt
+
+                    while( flag[ i ] === 1 ) {
+                        _xw ++ ;
+                        i++;
+                    }
+                    return {
+                        x: _x,
+                        w: ( _xw + 1 ) - _x
+                    }
+                };
+
+                var getNextBlock = function ( x ){
+                    var i, _x = -1, _xw, found;
+
+                    if ( flag[x] < maxCol  ) {
+                        i = x;
+                        found = false;
+                        while ( i < maxCol && ! found ) {
+                            if ( flag[i] !== 1 && flag[i] !== 0 ) {
+                                _x = i;
+                                found = true;
+                            }
+                            i++;
+                        }
+                    } else {
+                        _x = x;
+                    }
+                    // tìm kiếm độ rộng của chuỗi này
+                    i = _x + 1;
+                    _xw = _x; // chiều rộng nhỏ nhất là môt
+
+                    while( flag[ i ] === 1 ) {
+                        _xw ++ ;
+                        i++;
+                    }
+                    return {
+                        x: _x,
+                        w: ( _xw + 1 ) - _x
+                    }
+                };
+
+                var moveAllItemsFromXToLeft = function( x, number ){
+                    var backupFlag = flag.slice();
+                    var maxNumber = getLeftEmptySlotFromX( x );
+
+                    if ( maxNumber === 0 ) {
+                        return number;
+                    }
+                    var prev=  getPrevBlock( x );
+                    var newX = prev.x >= 0 ? prev.x + prev.w - 1 : x;
+                    var nMove = number;
+                    if ( number > maxNumber ) {
+                        nMove = maxNumber;
+                    } else {
+                        nMove = number;
+                    }
+
+                    // Tim vi tri x trống về bên trái
+                    var xE = 0, c = 0, i = newX;
+                    while ( c <= nMove && i >= 0 ) {
+                        if ( flag[i] === 0 ) {
+                            c++;
+                            xE = i;
+                        }
+                        i--;
+                    }
+
+                    // vị trí cần di chuyển tới là x và loại bỏ mọi khoảng trống trừ x đến xE
+                    var flagNoEmpty = [], j = 0;
+                    for ( i =  xE; i <= newX; i++ ) {
+                        flag[i] =0;
+                        if ( backupFlag[ i ] !== 0 ) {
+                            flagNoEmpty[j] = backupFlag[ i ];
+                            j++;
+                        }
+                    }
+
+                    j = 0;
+                    for ( i = xE; i<= newX; i++ ){
+                        if ( typeof flagNoEmpty[ j ] !== "undefined" ) {
+                            flag[ i ] = flagNoEmpty[ j ];
+                        } else {
+                            flag[ i ] = 0;
+                        }
+                        j++;
+                    }
+
+                    var left = number - nMove;
+                    return left;
+
+                };
+
+                var moveAllItemsFromXToRight = function ( x, number ){
+                    var backupFlag = flag.slice();
+                    var maxNumber = getRightEmptySlotFromX( x );
+                    if ( maxNumber === 0 ) {
+                        return number;
+                    }
+
+                    var prev = getPrevBlock( x );
+                    var newX = prev.x >= 0 ? prev.x : x;
+                    var nMove = number;
+                    if ( number <= maxNumber ) {
+                        nMove = number;
+                    } else {
+                        nMove = maxNumber;
+                    }
+
+                    // Tim vi tri x trống về bên trái
+                    var xE = x, c = 0, i = newX;
+                    while ( c < nMove && i < maxCol ) {
+                        if ( flag[i] === 0 ) {
+                            c++;
+                            xE = i;
+                        }
+                        i++;
+                    }
+
+                    // vị trí cần di chuyển tới là x và loại bỏ mọi khoảng trống trừ x đến xE
+                    var flagNoEmpty = [], j = 0;
+
+                    for ( i = newX ; i <= xE; i++ ) {
+                        flag[i] =0;
+                        if ( backupFlag[ i ] !== 0 ) {
+                            flagNoEmpty[j] = backupFlag[ i ];
+                            j++;
+                        }
+                    }
+
+                    j = flagNoEmpty.length - 1;
+                    for ( i = xE; i >= newX; i-- ){
+                        if ( typeof flagNoEmpty[ j ] !== "undefined" ) {
+                            flag[ i ] = flagNoEmpty[ j ];
+                        } else {
+                            flag[ i ] = 0;
+                        }
+                        j--;
+                    }
+
+                    var left = number - nMove ;
+                    return left;
+
+                };
+
+                var updateItemsPositions = function(){
+                    that.updateItemsPositions( flag );
+                };
+
+
+
+                // Chèn vào trong danh sách giới hạn với 1 phẩn tử và có độ vị trí tại X và độ dài là w
+                var insertToFlag = function( node, swap ){
+                    var x = node.x, w = node.w;
+                    var emptySlots = getEmptySlots( );
+                    // không còn bất kỳ chỗ trống nào có thể thêm dc
+                    console.log( 'emptySlots', emptySlots );
+                    if( emptySlots <= 0 ) {
+                        return false;
+                    }
+
+                    if (checkEnoughSpaceFromX(x, w)) {
+                        console.log( { x: x, w: w } );
+                        addItemToFlag(node);
+                        node.el.attr( 'data-gs-x', x );
+                        node.el.attr( 'data-gs-width', w );
+                        return true;
+                    }
+
+
+                    var remain = 0;
+                    if ( _.isUndefined( swap ) ) {
+                        swap = false;
+                    }
+                    if ( swap ) {
+                        remain = moveAllItemsFromXToRight (x, w );
+                        if (remain > 0) {
+                            remain = moveAllItemsFromXToLeft(x, remain);
+                        }
+                    } else {
+                        remain = moveAllItemsFromXToLeft (x, w );
+                        if (remain > 0) {
+                            remain = moveAllItemsFromXToRight(x, remain);
+                        }
+                    }
+
+                    updateItemsPositions();
+                    console.log( 'After moved', flag );
+
+                    var newX = x;
+                    var i;
+                    var found = false;
+                    var le = 0 ;
+                    var re = 0;
+
+                    while( w >= 1 ) {
+                        // Nếu số chỗ trống lớn hơn hoặc  = chiều rộng của item
+                        if ( emptySlots >= w ) {
+                            // Nếu tại vị trí hiện tại mà đủ chỗ trống
+                            if (checkEnoughSpaceFromX(x, w)) {
+                                console.log( { x: x, w: w } );
+                                addItemToFlag(node);
+                                node.el.attr( 'data-gs-x', x );
+                                node.el.attr( 'data-gs-width', w );
+                                return true;
+                            }
+
+                            found = false;
+                            le = getLeftEmptySlotFromX(x, true);
+                            // re = getRightEmptySlotFromX(x, true);
+                            // Nếu trỗ trông bên trái nhiều hơn bên phải
+                            newX = x - le;
+                            // tìm kiếm từ vị trí trống từ new sang bên phải xem có chỗ nào chèn dc ko ?
+                            console.log( 'newX', newX );
+                            i = newX;
+                            while (i < maxCol && !found) {
+                                if ( checkEnoughSpaceFromX(i, w) ) {
+                                    console.log( 'Insert in While', { x: i, w: w } );
+                                    addItemToFlag( {el: node.el, x: i, w: w});
+                                    node.el.attr( 'data-gs-x', i );
+                                    node.el.attr( 'data-gs-width', w );
+                                    found = true;
+                                    return true;
+                                }
+                                i++;
+                            }
+                        }
+                        w --;
+                    }
+
+
+                    // Chèn vào bất kỳ đâu đủ chỗ
+                    w = node.w;
+                    found = false;
+                    while( w >= 1 ) {
+                        i = 0;
+                        while (i < maxCol && !found) {
+                            if ( checkEnoughSpaceFromX(i, w) ) {
+                                console.log( 'Insert in While 2', { x: i, w: w } );
+                                addItemToFlag( {el: node.el, x: i, w: w});
+                                node.el.attr( 'data-gs-x', i );
+                                node.el.attr( 'data-gs-width', w );
+                                found = true;
+                                return true;
+                            }
+                            i++;
+                        }
+                        w --;
+                    }
+
+
+                    console.log( 'Insert END While', { x: i, w: w } );
+
+                    return false;
+                };
+
+                /**
+                 * Dổi chỗ 2 item trong 1 hàng
+                 * @param x Vị trị bắt đầu của item dc thay đổi
+                 * @param newX Vị trí của item chuyển đến
+                 */
+                var swap = function( node, newX ){
+                    var x = node.x;
+                    var w = node.w;
+
+                    removeNode( node );
+
+                    console.log( 'Swap newX', newX );
+                    console.log( 'Swap FLAG', flag );
+
+                    if ( checkEnoughSpaceFromX( newX , w ) ) {
+                        addItemToFlag( { el: node.el, x: newX, w: w } );
+                        return true;
+                    }
+                    var block2 = getPrevBlock( newX );
+                    insertToFlag( { el: node.el, x: newX, w: node.w }, true );
+                };
+
+                //-----------------------------------------------------------------------------------------------------------------------------
                 var that = this;
 
                 var wOffset =  $wrapper.offset();
@@ -299,259 +666,73 @@
                     x = 0;
                 }
                 var w = that.getW( ui.draggable );
-                var slots_empty = that.countEmptySlots( $wrapper );
-                var hasSpace = slots_empty >= w ? true : false;
-
                 var in_this_row;
 
-                if ( ui.draggable.hasClass( 'item-from-list' ) ) {
-                    if ( slots_empty > 0 && ! hasSpace ) {
-                        w = 1;
-                        ui.draggable.attr( 'data-gs-width', w );
-                        hasSpace = true;
-                    }
-                }
-
-
-                // Not enough space to drop
-                //Revert
                 if ( ! ui.draggable.parent().is( $wrapper ) ) {
                     in_this_row = false;
                     console.log( 'Not in this row' );
-                    if ( ! hasSpace ) {
-                        ui.draggable.removeAttr('style');
-                        console.log('Not enough space', w);
-                        return;
-                    }
                 } else {
                     in_this_row = true;
                     console.log( 'Item in this row' );
                 }
 
-                var flag = that.getFlag( $wrapper );
+                flag = that.getFlag( $wrapper );
+                console.log( 'flag', flag );
+                backupFlag = flag.slice();
+
+                var node = {
+                    el: ui.draggable,
+                    x: x,
+                    w: w
+                };
+
+                if ( node.x <= 0 ) {
+                    node.x = 0;
+                }
+
+                var did = false;
+                if ( in_this_row ) {
+                    node.x = parseInt( ui.draggable.attr( 'data-gs-x' ) || 0 );
+                    node.w = parseInt( ui.draggable.attr( 'data-gs-width' ) || 1 );
+                    console.log( 'swap node', node );
+                    swap( node, x );
+                    did = true;
+                } else {
+                    did = insertToFlag( node );
+                    console.log( 'Insert node' );
+                }
+
                 console.log( 'Drop on X: ' + x + ', width: '+ w );
                 console.log( 'Drop Flag: ', flag );
 
-                // try to drop on this pos
-                var i;
-                var check = true;
-                for( i = x; i < x + w; i++ ) {
-                    if ( flag[ i ] > 0 ) {
-                        check = false;
-                    }
-                }
+                if ( ! did ) {
+                    ui.draggable.removeAttr('style');
+                    console.log( 'Can not insert' );
+                    flag = backupFlag; // rollback;
+                } else {
+                    // Add drop item from somewhere to current row
+                    ui.draggable.removeClass( 'item-from-list' );
 
-                //
-                if ( ! check ) {
-                    $( '.grid-stack-item', $wrapper ).each( function(){
-                        $( this ).attr( 'data-revert', $( this ).attr( 'data-gs-x' ) );
-                    } );
-
-                    var moveLeft = function( itemInfo, slots ) {
-
-                        if ( slots <= 0 ) {
-                            return ;
-                        }
-
-                        var steps = itemInfo.before;
-                        if ( slots <= itemInfo.before ) {
-                            steps = slots;
-                        }
-
-                        var newX = itemInfo.x - steps;
-
-                        // remove index
-                        for ( i = itemInfo.x; i < itemInfo.x + itemInfo.w; i ++  ) {
-                            flag[ i ] = 0;
-                        }
-
-                        //move to new index
-                        for ( i = newX; i < newX + itemInfo.w; i ++  ) {
-                            if ( i === newX ) {
-                                flag[ i ] = 2;
-                            } else {
-                                flag[ i ] = 1;
-                            }
-                        }
-
-                        console.log( 'moveLeft Flag', flag );
-
-                        itemInfo.item.attr( 'data-gs-x', newX );
-                        var slot_left = slots - itemInfo.before;
-                        if ( slot_left <= 0 ) {
-                            return 0;
-                        }
-
-                        if ( itemInfo.prev && itemInfo.prev.length ) {
-                            slot_left = moveLeft( that.gridGetItemInfo( itemInfo.prev, itemInfo.flag, itemInfo.wrapper ), slot_left );
-                        }
-
-                        return slot_left;
-
-                    };
-
-                    var moveRight = function( itemInfo, slots ) {
-                        if ( slots <= 0 ) {
-                            return ;
-                        }
-
-                        var steps = itemInfo.after;
-                        if ( slots <= itemInfo.after ) {
-                            steps = slots;
-                        }
-
-                        var newX = itemInfo.x + steps;
-                        var i;
-
-                        // remove index
-                        for ( i = itemInfo.x; i < itemInfo.x + itemInfo.w; i ++  ) {
-                            flag[ i ] = 0;
-                        }
-
-                        //move to new index
-                        for ( i = newX; i < newX + itemInfo.w; i ++  ) {
-                            if ( i === newX ) {
-                                flag[ i ] = 2;
-                            } else {
-                                flag[ i ] = 1;
-                            }
-                        }
-
-                        console.log( 'moveRight Flag New '+newX, flag );
-
-                        itemInfo.item.attr( 'data-gs-x', newX );
-                        var slot_left = slots - itemInfo.after;
-                        if ( slot_left <= 0 ) {
-                            return 0;
-                        }
-
-
-                        if ( itemInfo.next && itemInfo.next.length ) {
-                            slot_left = moveRight( that.gridGetItemInfo( itemInfo.next, itemInfo.flag, itemInfo.wrapper  ), slot_left );
-                        }
-
-                        return slot_left;
-
-                    };
-
-                    // move other items to have spaces
-                    var next, prev;
-
-                    if ( x === 0 ) {
-                        next = $( '.grid-stack-item', $wrapper ).first();
-                        prev = false;
-                    } else {
-                        var item = that.findElFromX( x, flag, $wrapper );
-                        if ( ! item || item.length <= 0 ) {
-                            next = that.findNextElFromX( x, flag, $wrapper );
-                            prev = item;
-                        } else {
-                            next = that.findNextElFromX( x, flag, $wrapper );
-                            prev = that.findPrevElFromX( x, flag, $wrapper );
-                        }
-                    }
-
-                    //console.log('Next item', next );
-                    var move_slots = w;
-                    if ( next.length ) {
-                        var nextInfo = that.gridGetItemInfo( next, flag, $wrapper );
-                        move_slots = moveRight( nextInfo, move_slots );
-                        //console.log('Next Item info', nextInfo );
-                    }
-                    console.log('prev item', prev );
-                    if ( prev.length ) {
-                        var prevInfo = that.gridGetItemInfo( prev, flag, $wrapper );
-                        move_slots = moveLeft( prevInfo, move_slots );
-                        //console.log('Prev Item info', prevInfo );
-                    }
-
-                } // end check
-
-
-                //console.log( 'NEW FLAG', flag );
-                var getNewPosX = function( x, w ){
-                    var i = x ;
-                    if ( flag[ i + w ] > 0 ) {
-                        console.log( 'getNewPosX down' );
-                        while ( flag[ i + w ] > 0 && i >= 0 ) {
-                            i--;
-                        }
-                        i = i + 1;
-                    } else if ( flag[ i ] > 0 ) {
-                        console.log( 'getNewPosX up' );
-                        while ( flag[ i ] > 0 && i < that.cols ) {
-                            i ++ ;
-                        }
-                        //i = i - 1;
-                    }
-
-                    console.log( 'New get post', i );
-                    return i;
-                };
-
-                x = getNewPosX( x, w );
-
-                var check_revert = false;
-                for ( i = x; i< x + w; i++ ) {
-                    if ( flag[i] > 0 ) {
-                        check_revert = true;
-                        console.log( 'Check R1: '+ i +' Not empty', flag[i]  );
-                    }
-                }
-
-                // Check empty before revert
-
-                if ( x + w > that.cols ) {
-                    left  =  ( x + w ) - that.cols;
-                    for ( i = x - left;  i < that.cols; i++ ) {
-                        if ( flag[i] > 0 ) {
-                            check_revert = true;
-                            console.log( 'Check R: '+ i +' Not empty', flag[i]  );
-                        }
-                    }
-
-                    if ( ! check_revert ) {
-                        x = x - left;
-                    }
-                }
-
-                if ( check_revert ) {
-                    // revert
-                    console.log( 'revert', x + '-'+w );
+                    $wrapper.append(ui.draggable);
                     ui.draggable.removeAttr( 'style' );
-                    $( '.grid-stack-item', $wrapper ).each( function(){
-                        var id = $( this ).attr( 'data-id' );
-                        var rx = $( this ).attr( 'data-revert' ) || '';
-                        if (  ! _.isEmpty( rx ) ) {
-                            $( this ).attr( 'data-gs-x', rx );
-                        }
-                        $( this ).attr( 'data-revert', '' );
-                    } );
-
+                    console.log( 'DID Flag: ', flag );
+                    //ui.draggable.attr( 'data-gs-x', x );
+                    //ui.draggable.attr( 'data-gs-y', y );
                     that.draggingItem = null;
-
-                    _.each( that.panels[ that.activePanel ], function( row, row_id ) {
-                        that.updateGridFlag( row );
-                    });
-                    return ;
                 }
 
-                // Add drop item from somewhere to current row
-                ui.draggable.removeClass( 'item-from-list' );
-                $wrapper.append(ui.draggable);
+                updateItemsPositions();
+                that.updateAllGrids();
 
-                ui.draggable.removeAttr( 'style' );
-                ui.draggable.attr( 'data-gs-x', x );
-                ui.draggable.attr( 'data-gs-y', y );
+                //-----------------------------------------------------------------------------------------------------------------------------
 
-                that.draggingItem = null;
 
-                that.updateAllGrids( );
+
             },
 
             updateAllGrids: function(){
                 var that = this;
-                _.each(  that.panels[ that.activePanel ], function( row, row_id ) {
+                _.each( that.panels[ that.activePanel ], function( row, row_id ) {
                     that.updateGridFlag( row );
                 });
             },
@@ -566,8 +747,7 @@
                 var itemWidth = ui.size.width;
                 var colWidth = width/that.cols;
 
-                console.log( 'ui.size', ui.size );
-
+                //console.log( 'ui.size', ui.size );
                 var isShiftLeft = ui.originalPosition.left > ui.position.left;
                 var isShiftRight = ui.originalPosition.left < ui.position.left;
 
@@ -587,7 +767,7 @@
                 var newW;
                 var flag = that.getFlag( $wrapper );
                 var itemInfo = that.gridGetItemInfo( ui.originalElement, flag, $wrapper );
-                console.log( 'resize itemInfo', itemInfo );
+               // console.log( 'resize itemInfo', itemInfo );
                 var diffLeft, diffRight;
 
                 if ( isShiftLeft ) {
@@ -622,7 +802,6 @@
                     $item.attr('data-gs-width', newW ).removeAttr('style');
 
                     that.updateGridFlag( $wrapper );
-
                     return ;
                 }
 
@@ -647,61 +826,47 @@
 
             },
 
-            removeFlag: function( $row, x, w ){
-                var  flag = this.getFlag( $row );
-                var i;
-                for ( i = x; i < x + w; i ++  ) {
-                    flag[ i ] = 0;
-                }
-                //console.log( 'removeFlag: '+$row.attr( 'data-id' ), flag );
-                $row.data( 'gridflag', flag );
-                return flag;
-            },
-
             getFlag: function( $row ){
                 var that = this;
-                var flag = $row.data( 'gridflag' ) || {};
+                var flag = $row.data( 'gridRowFlag' ) || [];
                 var i;
                 if ( _.isEmpty( flag ) ) {
                     for ( i =0; i< that.cols; i++ ) {
                         flag[ i ] = 0;
                     }
-                    $row.data( 'gridflag', flag );
+                    $row.data( 'gridRowFlag', flag );
                 }
                 return flag;
             },
 
             updateGridFlag: function( $row ){
                 var that = this;
-
-                var flag = {};
+                var rowFlag = [];
                 var i;
                 for ( i = 0; i < that.cols; i++ ) {
-                    flag[ i ] = 0;
+                    rowFlag[ i ] = 0;
                 }
                 var items;
-
                 items =  $( '.grid-stack-item', $row );
                 items.each( function( index ){
+                    $( this ).removeAttr( 'style' );
                     var x = that.getX( $( this ) );
                     var w = that.getW( $( this ) );
 
                     for ( i = x; i < x + w; i ++  ) {
                         if ( i === x ) {
-                            flag[ i ] = 2;
+                            rowFlag[ i ] = $( this );
                         } else {
-                            flag[ i ] = 1;
+                            rowFlag[ i ] = 1;
                         }
                     }
 
                 } );
-
-                $row.data( 'gridflag', flag );
-                if ( $row.attr( 'data-id' ) == 'main' ) {
-                   // console.log( 'Update Flag: '+$row.attr( 'data-id' ), flag );
-                }
-
-                return flag;
+                $row.data( 'gridRowFlag', rowFlag );
+                that.updateItemsPositions( rowFlag );
+                that.sortGrid( $row );
+                console.log( 'Update rowFlag: '+ $row.attr( 'data-id' ), rowFlag );
+                return rowFlag;
             },
 
             addNewWidget: function ( $item, row ) {
@@ -718,17 +883,19 @@
                     revert: "invalid",
                     appendTo: panel,
                     scroll: false,
-                    zIndex: 999,
+                    zIndex: 99999,
                     handle: '.grid-stack-item-content',
                     start: function( event, ui ){
                         $( 'body' ).addClass( 'builder-item-moving' );
-                        var w = that.getW( ui.helper );
-                        var x = that.getX( ui.helper );
-                        that.removeFlag( ui.helper.parent(), x, w );
+                        //var w = that.getW( ui.helper );
+                       // var x = that.getX( ui.helper );
+                        elItem.parent().css( 'z-index', 500 );
                     },
                     stop: function(  event, ui ){
                         $( 'body' ).removeClass( 'builder-item-moving' );
+                        elItem.parent().css( 'z-index', 'auto' );
                         that.save();
+
                     },
                     drag: function( event, ui ){
 
