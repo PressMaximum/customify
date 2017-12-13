@@ -525,6 +525,7 @@
                         return false;
                     }
 
+                    // Check nếu từ vị trí hiện tại đủ chỗ trống rồi thì ko cần dịch chuyển nữa.
                     if (checkEnoughSpaceFromX(x, w)) {
                         console.log( { x: x, w: w } );
                         addItemToFlag(node);
@@ -532,6 +533,31 @@
                         node.el.attr( 'data-gs-width', w );
                         return true;
                     }
+
+                    // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
+                    if ( flag[x] === 1 ) {
+                        var prev = getPrevBlock( x );
+                        if ( prev.x >=0 ) {
+                            
+                            if ( x > prev.x + Math.floor( prev.w / 2 ) && x > prev.x ) {
+                                var _x = prev.x + prev.w;
+                                var _re = getRightEmptySlotFromX(_x, true);
+                                console.log('__re', _re);
+                                console.log('__re_X', _x);
+                                if (_re >= w) {
+                                    addItemToFlag({el: node.el, x: _x, w: w});
+                                    node.el.attr('data-gs-x', _x);
+                                    node.el.attr('data-gs-width', w);
+                                    return true;
+                                }
+                            }
+
+
+                        }
+
+                    }
+
+
 
 
                     var remain = 0;
