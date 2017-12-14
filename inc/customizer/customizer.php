@@ -295,7 +295,20 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         break;
                     default:
 
-                        $args['setting_type'] = $args['type'];
+                        switch ( $args['type'] ) {
+                            case  'image_select':
+                                $args['setting_type'] = 'radio';
+                                $args['field_class'] = 'custom-control-image_select'. ( $args['field_class'] ? ' '.$args['field_class'] : '' );
+                                break;
+                            case  'radio_group':
+                                $args['setting_type'] = 'radio';
+                                $args['field_class'] = 'custom-control-radio_group'. ( $args['field_class'] ? ' '.$args['field_class'] : '' );
+                                break;
+                            default:
+                                $args['setting_type'] = $args['type'];
+                        }
+
+
                         $args['defaultValue'] = $args['default'];
                         $settings_args = array(
                            'sanitize_callback' => $args['sanitize_callback'],

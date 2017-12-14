@@ -504,9 +504,23 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-radio-list">
-                <# _.each( field.choices, function( label, key ){  #>
+                <# _.each( field.choices, function( label, key ){
+                    var l = '';
+                    if ( ! _.isObject( label ) ) {
+                        l = label;
+                    } else {
+                        if ( label.img ) {
+                            l = '<img src="'+label.img+'" alt="">';
+                        }
+                        if ( label.label ) {
+                            l += '<span>'+label.label+'</span>';
+                        }
+                    }
+                    #>
                     <p>
-                        <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span>{{ label }}</span></label>
+                        <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}">
+                            <span class="label">{{{ l }}}</span>
+                        </label>
                     </p>
                 <# } ); #>
             </div>

@@ -601,6 +601,65 @@ $text_color: #555d66;
     }
 }
 
+.custom-control-image_select, .custom-control-radio_group  {
+    .customify-radio-list {
+        input {
+            display: none;
+        }
+        p {
+            margin: 0 0 10px;
+        }
+        p, label {
+            display: inline-block;
+        }
+    }
+}
+
+/**
+ Radio Group
+ */
+.custom-control-radio_group {
+    .customify-radio-list {
+        display: flex;
+        p {
+            flex: 1;
+        }
+        label {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+        span.label {
+            border: 3px solid #dddddd;
+            display: inline-block;
+            padding: 5px 5px;
+            width: 100%;
+        }
+        input:checked + span.label {
+            border-color: #3068af;
+        }
+    }
+}
+
+/**
+ Image Select
+ */
+.custom-control-image_select {
+    .customify-radio-list {
+        img {
+            line-height: 0px;
+            display: block;
+        }
+        span.label {
+            border: 3px solid #dddddd;
+            display: inline-block;
+        }
+        input:checked + span.label {
+            border-color: #3068af;
+        }
+    }
+}
+
 /*Background field*/
 .customize-control {
     &.customify-background-control--- {

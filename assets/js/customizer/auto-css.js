@@ -102,6 +102,9 @@ var AutoCSS = window.AutoCSS || null;
         }
         $( '#customify-style-inline-css' ).html( css_code );
 
+
+        $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
+
       /// console.log( 'CSS' , css_code );
     };
 

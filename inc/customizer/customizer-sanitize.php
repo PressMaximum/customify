@@ -274,6 +274,7 @@ if ( ! function_exists( 'customify_sanitize_customizer_input' ) ) {
                 case 'select':
                 case 'radio':
                 case 'image_select':
+                case 'radio_group':
 
                     $default = null;
                     $choices = array();

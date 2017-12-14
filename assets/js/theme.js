@@ -89,6 +89,7 @@ jQuery( document ).ready( function( $ ){
         };
 
         var load = function(stickies) {
+            console.log( stickies );
 
             if (typeof stickies === "object" && stickies instanceof jQuery && stickies.length > 0) {
 
@@ -128,7 +129,7 @@ jQuery( document ).ready( function( $ ){
             }
 
             var scrollTop = $window.scrollTop();
-
+            var l = $stickies.length;
             $stickies.each(function(i) {
                 var $thisSticky = $(this);
                 var p = $( this ).parent();
@@ -136,16 +137,16 @@ jQuery( document ).ready( function( $ ){
 
                 var $prevSticky = $stickies.eq(i - 1);
 
-                if ($stickyPosition- top <= scrollTop ) {
+                if ($stickyPosition - top <= scrollTop ) {
                     $thisSticky.addClass("fixed");
                     $thisSticky.css("top", top );
-                    if ( $prevSticky && $prevSticky.length ) {
+                    if ( l > 1 && $prevSticky && $prevSticky.length > 0 ) {
                         $prevSticky.removeClass("absolute fixed").removeAttr("style");
                     }
                 } else {
                     $thisSticky.removeClass("fixed").removeAttr("style");
-                    if ( $prevSticky && $prevSticky.length ) {
-                        $prevSticky.removeClass("absolute fixed").removeAttr("style");
+                    if (  l > 1 && $prevSticky && $prevSticky.length > 0 ) {
+                       $prevSticky.removeClass("absolute fixed").removeAttr("style");
                     }
                 }
             });

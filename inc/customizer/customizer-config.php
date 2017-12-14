@@ -22,6 +22,49 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
             ),
 
             array(
+                'name' => 'radio_group',
+                'type' => 'radio_group',
+                'device_settings' => true,
+                'default' => '',
+                'section'     => 'customify_section',
+                'title'          => __( 'Radio Group', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
+                'choices' => array(
+                    '1' => __( 'One', 'customify' ),
+                    '2' => __( 'Two', 'customify' ),
+                    '3' => __( 'Three', 'customify' ),
+                )
+            ),
+
+            array(
+                'name' => 'image_select',
+                'type' => 'image_select',
+                'device_settings' => true,
+                'default' => '',
+                'section'     => 'customify_section',
+                'title'          => __( 'Image Select', 'customify' ),
+                'description'    => __( 'This is description',  'customify' ),
+                'choices' => array(
+                    '1' => array(
+                        'img' => 'http://via.placeholder.com/100x100?text=Option_1',
+                        //'label' => 'Option_1'
+                    ),
+                    '2' =>  array(
+                        'img' => 'http://via.placeholder.com/100x100?text=Option_2',
+                        //'label' => 'Option_2'
+                    ),
+                    '3' =>  array(
+                        'img' => 'http://via.placeholder.com/100x100?text=Option_3',
+                        //'label' => 'Option_3'
+                    ),
+                    '4' =>  array(
+                        'img' => 'http://via.placeholder.com/100x100?text=Option_4',
+                        //'label' => 'Option_4'
+                    ),
+                )
+            ),
+
+            array(
                 'name' => 'typography',
                 'type' => 'group',
                 'section'     => 'customify_section',
@@ -454,7 +497,6 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'device_settings' => true,
                 'default' => '',
                 'section'     => 'customify_section',
-                //'priority' => 22,
                 'title'          => __( 'Radio', 'customify' ),
                 'description'    => __( 'This is description',  'customify' ),
                 'choices' => array(
