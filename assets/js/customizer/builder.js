@@ -75,22 +75,14 @@
 
                             },
                             over: function( event, ui ) {
-                                var $wrapper = $( this );
+                                //var $wrapper = $( this );
                                 /**
                                  * @see http://api.jqueryui.com/droppable/#event-over
                                  */
-                                //var $wrapper = $( this );
-
-                                //console.log( 'DROP Over',  ui.offset );
-
                             },
                             drop: function( event, ui ) {
                                 var $wrapper = $( this );
-                                console.log( 'drop stop', $wrapper );
-                                console.log( 'drop pos', ui.position );
-                                //that.grid( $wrapper, ui, event );
                                 that.gridster( $wrapper, ui, event );
-                                //that.updateGridFlag( $wrapper );
                                 that.save();
                             }
                         } );
@@ -102,7 +94,18 @@
 
                     $( '.customify-available-items .grid-stack-item', panel ).draggable({
                         revert: 'invalid',
-                        connectToSortable: ( sidebar_id ) ? '#'+sidebar_id : false
+                        connectToSortable: ( sidebar_id ) ? '#'+sidebar_id : false,
+                        start: function( event, ui ){
+                            $( 'body' ).addClass( 'builder-item-moving' );
+                            $( '.customify--cb-items', panel ).css( 'z-index', '' );
+                            ui.helper.parent().css( 'z-index', 9999 );
+                        },
+                        stop: function(  event, ui ){
+                            $( 'body' ).removeClass( 'builder-item-moving' );
+                            $( '.customify--cb-items', panel ).css( 'z-index', '' );
+                            ui.helper.parent().css( 'z-index', '' );
+                        }
+
                     });
 
                     if ( sidebar.length > 0 ) {
@@ -452,6 +455,7 @@
                         j++;
                     }
 
+                    // Trả về số vị  trí cần dịch chuyển còn lại
                     var left = number - nMove;
                     return left;
 
@@ -504,6 +508,7 @@
                         j--;
                     }
 
+                    // Trả về số vị  trí cần dịch chuyển còn lại
                     var left = number - nMove ;
                     return left;
 
@@ -521,6 +526,7 @@
                     var emptySlots = getEmptySlots( );
                     // không còn bất kỳ chỗ trống nào có thể thêm dc
                     console.log( 'emptySlots', emptySlots );
+                    console.log( 'Node Width', w );
                     if( emptySlots <= 0 ) {
                         return false;
                     }
@@ -530,23 +536,28 @@
                     var _w;
 
                     // Check nếu từ vị trí hiện tại đủ chỗ trống rồi thì ko cần dịch chuyển nữa.
-                    if ( emptySlots <= w ) {
-                        _re = getRightEmptySlotFromX( x, true );
-                        if ( _re >=  emptySlots ) {
-                            _w = w;
-                            while ( _w >= 1 ){
-                                if (checkEnoughSpaceFromX(x, _w)) {
-                                    console.log( { x: x, w: _w } );
-                                    addItemToFlag(node);
-                                    node.el.attr( 'data-gs-x', x );
-                                    node.el.attr( 'data-gs-width', _w );
-                                    return true;
-                                }
-                                _w --;
+
+                    if ( isEmptyX( x ) ) {
+                        _re = getRightEmptySlotFromX(x, true);
+                        console.log('__re', _re);
+
+                        _w = w;
+                        while (_w >= 1) {
+                            if (checkEnoughSpaceFromX(x, _w)) {
+                                console.log({x: x, w: _w});
+                                addItemToFlag(node);
+                                node.el.attr('data-gs-x', x);
+                                node.el.attr('data-gs-width', _w);
+                                return true;
                             }
+                            _w--;
                         }
 
+
+
                     }
+
+
 
 
                     // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
@@ -906,7 +917,6 @@
                 $row.data( 'gridRowFlag', rowFlag );
                 that.updateItemsPositions( rowFlag );
                 that.sortGrid( $row );
-                console.log( 'Update rowFlag: '+ $row.attr( 'data-id' ), rowFlag );
                 return rowFlag;
             },
 
@@ -928,13 +938,12 @@
                     handle: '.grid-stack-item-content',
                     start: function( event, ui ){
                         $( 'body' ).addClass( 'builder-item-moving' );
-                        //var w = that.getW( ui.helper );
-                       // var x = that.getX( ui.helper );
-                        ui.helper.parent().css( 'z-index', 500 );
+                        $( '.customify--cb-items', panel ).css( 'z-index', '' );
+                        ui.helper.parent().css( 'z-index', 9999 );
                     },
                     stop: function(  event, ui ){
                         $( 'body' ).removeClass( 'builder-item-moving' );
-                        ui.helper.parent().css( 'z-index', '' );
+                        $( '.customify--cb-items', panel ).css( 'z-index', '' );
                         that.save();
                     },
                     drag: function( event, ui ){
@@ -1113,14 +1122,10 @@
                 } );
 
             },
-            /**
-             * @see https://github.com/gridstack/gridstack.js/tree/develop/doc#removewidgetel-detachnode
-             */
             remove: function(){
                 var that = this;
                 $document.on( 'click', '.customify--device-panel .customify--cb-item-remove', function ( e ) {
                     e.preventDefault();
-
                     var item = $( this ).closest('.grid-stack-item');
                     var panel = item.closest( '.customify--device-panel' );
                     item.attr( 'data-gs-width', 1 );

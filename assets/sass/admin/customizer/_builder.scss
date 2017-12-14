@@ -264,9 +264,7 @@ $cb_padding: 20px;
                 flex-basis: 8.3333333333%;
                 max-width: 8.3333333333%;
                 display: block;
-                &:last-child {
-                    border-right: 0 none;
-                }
+
             }
         }
         .customify--cb-items {
@@ -369,9 +367,7 @@ $cb_padding: 20px;
     height: 40px;
     display: inline-block;
     z-index: 50;
-    cursor: grab;
-    cursor: -webkit-grab;
-    cursor: -moz-grab;
+    cursor: default;
     &.ui-draggable-dragging {
         z-index: 9999999;
         cursor: grabbing;
