@@ -458,8 +458,31 @@
   padding: 10px 10px 10px 50px;
   display: block;
 }
-#customify--sidebar-icons .customize-controls-close {
-  height: 45px;
+#customify--sidebar-icons .customize-controls-icon-close {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45px;
+  height: 41px;
+  padding: 0 2px 0 0;
+  background: #eee;
+  border: none;
+  border-top: 4px solid #eee;
+  border-right: 1px solid #ddd;
+  color: #444;
+  text-align: left;
+  cursor: pointer;
+  transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
+  box-sizing: content-box;
+  text-decoration: none;
+}
+#customify--sidebar-icons .customize-controls-icon-close:before {
+  font: 400 22px/45px dashicons;
+  content: "\f335";
+  position: relative;
+  top: -3px;
+  left: 13px;
 }
 #customify--sidebar-icons #customify--sidebar-icon-type {
   display: block;

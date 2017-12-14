@@ -1146,15 +1146,22 @@
             $document.on( 'click', function( event ) {
                 if ( ! $(event.target).closest('.customify--icon-picker').length ) {
                     if ( ! $(event.target).closest('#customify--sidebar-icons').length ) {
-                        // customize-controls-close
                         that.close();
                     }
                 }
             } );
 
-            $( '#customify--sidebar-icons .customize-controls-close' ).on( 'click', function(){
+            $( '#customify--sidebar-icons .customize-controls-icon-close' ).on( 'click', function(){
                 that.close();
             } );
+
+            $document.on( 'keyup', function( event ) {
+                if (  event.keyCode === 27 ) {
+                    that.close();
+                }
+            } );
+
+
         },
         picker: function(){
             var that = this;

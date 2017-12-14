@@ -305,7 +305,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         </script>
         <div id="customify--sidebar-icons">
             <div class="customify--sidebar-header">
-                <a class="customize-controls-close" href="#">
+                <a class="customize-controls-icon-close" href="#">
                     <span class="screen-reader-text"><?php _e( 'Cancel', 'customify' );  ?></span>
                 </a>
                 <div class="customify--icon-type-inner">
