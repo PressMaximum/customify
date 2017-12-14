@@ -634,22 +634,51 @@ article.comment {
 /* Customize Preview */
 .customize-previewing {
     overflow-x: hidden ;
+
+    .builder-item-focus {
+        .item--inner {
+            position: relative;
+        }
+        .item--preview-name {
+            position: absolute;
+            top: 100%;
+            //left: 0px;
+           // width: 100%;
+            display: none;
+            background: #ff472e;
+            color: #fff;
+            padding: 5px;
+            font-size: 11px !important;
+            line-height: 14px;
+            cursor: pointer;
+        }
+        &:hover {
+            .item--inner {
+                outline: 1px dashed #ff472e;
+                outline-offset: -1px;
+                .item--preview-name {
+                    display: block;
+                    z-index: 999;
+                }
+            }
+
+        }
+    }
+
     .header--row, .mobile-header-panel {
         .customize-partial-edit-shortcut {
             display: none;
         }
         .builder-item-focus {
-            &:hover {
-                outline: 1px dashed #ff472e;
-                outline-offset: -1px;
-            }
         }
     }
     .footer--row {
         .builder-item-focus {
             &:hover {
-                outline: 1px dashed #ff472e;
-                outline-offset: -1px;
+                .item--inner {
+                    outline: 1px dashed #ff472e;
+                    outline-offset: -1px;
+                }
             }
         }
     }

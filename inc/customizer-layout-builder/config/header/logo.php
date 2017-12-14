@@ -38,7 +38,7 @@ class Customify_Builder_Item_Logo {
                 'name' => 'header_logo',
                 'type' => 'image',
                 'section' =>  $section,
-                'device_settings' => true,
+                'device_settings' => false,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Logo', 'customify' ),
@@ -49,7 +49,7 @@ class Customify_Builder_Item_Logo {
                 'name' => 'header_logo_retina',
                 'type' => 'image',
                 'section' =>  $section,
-                'device_settings' => true,
+                'device_settings' => false,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Logo Retina', 'customify' ),
@@ -108,6 +108,7 @@ class Customify_Builder_Item_Logo {
         $logo_default = Customify_Customizer()->get_setting( 'header_logo_use_default' );
         $show_name = Customify_Customizer()->get_setting( 'header_logo_name' );
         $show_desc = Customify_Customizer()->get_setting( 'header_logo_desc' );
+
         ?>
         <div class="site-branding">
             <?php
@@ -117,7 +118,6 @@ class Customify_Builder_Item_Logo {
 
                 $logo = Customify_Customizer()->get_setting( 'header_logo' );
                 $logo_image = Customify_Customizer()->get_media( $logo );
-
                 $logo_retina = Customify_Customizer()->get_setting( 'header_logo_retina' );
                 $logo_retina_image = Customify_Customizer()->get_media( $logo_retina );
 

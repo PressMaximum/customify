@@ -680,7 +680,14 @@ class Customify_Customizer_Layout_Builder_Frontend {
              }
              
              echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
+                echo '<div class="item--inner">';
                 echo $content;
+
+                 if( is_customize_preview() ) {
+                     echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
+                 }
+
+                echo '</div>';
              echo '</div>';
          }
      }
@@ -785,7 +792,12 @@ class Customify_Customizer_Layout_Builder_Frontend {
                          }
 
                          echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '">';
-                            echo $content;
+                         echo '<div class="item--inner">';
+                             echo $content;
+                             if( is_customize_preview() ) {
+                                 echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
+                             }
+                         echo '</div>';
                          echo '</div>';
                      }
                  echo '</div>';
