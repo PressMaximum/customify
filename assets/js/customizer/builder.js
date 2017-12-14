@@ -713,43 +713,71 @@
                 //-----------------------------------------------------------------------------------------------------------------------------
                 var that = this;
 
+                flag = that.getFlag( $wrapper );
+                //console.log( 'flag', flag );
+                backupFlag = flag.slice();
+
+
+
                 var wOffset =  $wrapper.offset();
-
                 that.draggingItem = ui.draggable;
-
                 var width  = $wrapper.width();
-                var itemWidth = ui.draggable.width();
+                //var itemWidth = ui.draggable.width();
                 var colWidth = width/that.cols;
                 var x = 0;
-                var y = 1;
+               // var y = 1;
                 var left = 0;
                 var iOffset = ui.offset;
 
                 var w = that.getW( ui.draggable );
                 var in_this_row;
 
+                var xc = 0, xi = 0, found = false;
+
                 if ( ! ui.draggable.parent().is( $wrapper ) ) {
                     in_this_row = false;
-                    left = event.clientX - wOffset.left;
+                   // left = event.clientX - wOffset.left;
                     console.log( 'Not in this row' );
+
                 } else {
                     in_this_row = true;
                     console.log( 'Item in this row' );
-                    left = iOffset.left - wOffset.left;
+                    //left = iOffset.left - wOffset.left;
                 }
 
+                // Lấy vị trí thả xuống từ con trỏ chuột
+                xc = Math.round( ( event.clientX - wOffset.left ) / colWidth );
 
-                // Vị trí con trỏ chuột cách mép trái của wapper
+                // Lấy vị trí thả xuống từ mép trái của item
+                xi = Math.round( ( iOffset.left - wOffset.left - 10 )  / colWidth );
+                if ( xi < 0 ) {
+                    xi = 0;
+                }
+                x = xi;
+                if ( ! isEmptyX( x ) ) {
+                    while ( x <= xc && ! found ) {
+                        if ( isEmptyX( x ) ) {
+                            found = true;
+                        }
+                        x++;
+                    }
+                } else {
+                    x = xi;
+                    found = true;
+                }
+                if ( ! found ) {
+                    if ( in_this_row ) {
+                        x = xi;
+                    } else {
+                        x = xc;
+                    }
+                }
 
-                x = Math.round( left/ colWidth );
+                delete found;
+
                 if ( x < 0 ) {
                     x = 0;
                 }
-
-
-                flag = that.getFlag( $wrapper );
-                console.log( 'flag', flag );
-                backupFlag = flag.slice();
 
                 var node = {
                     el: ui.draggable,
@@ -773,8 +801,8 @@
                     console.log( 'Insert node' );
                 }
 
-                console.log( 'Drop on X: ' + x + ', width: '+ w );
-                console.log( 'Drop Flag: ', flag );
+               // console.log( 'Drop on X: ' + x + ', width: '+ w );
+               // console.log( 'Drop Flag: ', flag );
 
                 if ( ! did ) {
                     ui.draggable.removeAttr('style');

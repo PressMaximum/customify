@@ -32,7 +32,7 @@
                 this.attachment = attachment;
             }
             var t = new Date().getTime();
-            return control.addParamsURL( this.attachment.url, { t : t } );
+            return this.addParamsURL( this.attachment.url, { t : t } );
         },
         getID: function( attachment ){
             if ( typeof attachment !== "undefined" ) {
@@ -51,7 +51,7 @@
                 this.attachment = attachment;
             }
 
-            var url = this.getThumb();
+            var url = this.getURL();
             var id = this.getID();
             var mime = this.attachment.mime;
             $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html(  '<img src="'+url+'" alt="">' );
@@ -417,7 +417,6 @@
             } catch  ( e ) {
                 //console.log( 'Trying_test_error', e  );
             }
-
 
             return check;
         },

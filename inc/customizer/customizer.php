@@ -215,18 +215,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         }
 
         function get_media( $value, $size = null ) {
+
+            if ( ! $size ) {
+                $size = 'full';
+            }
+
             if ( is_numeric( $value ) ) {
-                if ( ! $size ) {
-                    return wp_get_attachment_url( $value );
+                $image_attributes = wp_get_attachment_image_src( $value, $size );
+                if ( $image_attributes ) {
+                    return $image_attributes[0];
                 } else {
-                    $image_attributes = wp_get_attachment_image_src( $value = 8, $size );
-                    if ( $image_attributes ) {
-                        return $image_attributes[0];
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
-            }elseif ( is_string( $value ) ) {
+            } elseif ( is_string( $value ) ) {
                 return $value;
             } elseif ( is_array( $value ) ) {
                 $value = wp_parse_args( $value, array(
@@ -240,7 +241,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 if ( strpos( $value['mime'], 'image/' ) !== false ) {
                     $image_attributes = wp_get_attachment_image_src( $value['id'], $size );
                     if ( $image_attributes ) {
-                        $url =  $image_attributes[0];
+                        $url = $image_attributes[0];
                     }
                 } else {
                     $url = wp_get_attachment_url( $value );
@@ -251,7 +252,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 }
 
                 return $url;
-
             }
 
             return false;
