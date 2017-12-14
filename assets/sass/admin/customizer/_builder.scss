@@ -225,6 +225,12 @@ $cb_padding: 20px;
         &.customify--sidebar-items {
             padding: 0px 5px 0px;
             .grid-stack-item {
+                .customify--cb-item-remove {
+                    right: 3px;
+                }
+                .customify--cb-item-setting {
+                    right: 26px;
+                }
                 &.ui-draggable-handle {
                     width: 100% !important;
                     min-width: 100%;

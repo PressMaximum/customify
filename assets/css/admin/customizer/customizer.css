@@ -880,6 +880,12 @@
   display: block;
   margin-bottom: 5px;
 }
+.customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item .customify--cb-item-remove {
+  right: 3px;
+}
+.customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item .customify--cb-item-setting {
+  right: 26px;
+}
 .customify--cb-row .customify--cb-items.customify--sidebar-items .grid-stack-item.ui-draggable-handle {
   width: 100% !important;
   min-width: 100%;
