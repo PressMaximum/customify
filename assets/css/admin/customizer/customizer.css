@@ -149,6 +149,12 @@
   display: block;
   line-height: 1;
   font-size: 1em;
+  cursor: pointer;
+}
+.customify--repeater-items .ui-sortable-helper .customify--repeater-item-heading {
+  cursor: grabbing;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
 }
 .customify--repeater-items .customify--repeater-live-title {
   white-space: nowrap;

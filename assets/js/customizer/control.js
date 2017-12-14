@@ -1048,7 +1048,7 @@
             control.limitRepeaterItems();
 
             // Toggle
-            control.container.on( 'click', '.customify--repeater-item-toggle', function(e){
+            control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-item-heading', function(e){
                 e.preventDefault();
                 var  p = $( this ).closest('.customify--repeater-item');
                 p.toggleClass('customify--open');

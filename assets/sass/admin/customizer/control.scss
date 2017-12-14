@@ -168,6 +168,14 @@ $text_color: #555d66;
         display: block;
         line-height: 1;
         font-size: 1em;
+        cursor: pointer;
+    }
+    .ui-sortable-helper {
+        .customify--repeater-item-heading {
+            cursor: grabbing;
+            cursor: -webkit-grabbing;
+            cursor: -moz-grabbing;
+        }
     }
     .customify--repeater-live-title {
         white-space: nowrap;
