@@ -38,7 +38,7 @@ $text_color: #555d66;
             background: 0 0;
             border: none;
             height: 23px;
-            padding: 0 3px;
+            padding: 0 0px;
             margin: 0 0 0 1px;
             -webkit-box-shadow: none;
             box-shadow: none;
@@ -406,8 +406,8 @@ $text_color: #555d66;
     margin-top: 5px;
     display: block;
     .customify--slider-input {
-        width: 50px;
-        max-width: 50px;
+        width: 60px;
+        max-width: 60px;
         position: absolute;
         top: 0px;
         right: 0px;
@@ -428,11 +428,11 @@ $text_color: #555d66;
         background: #3068af;
     }
     .ui-slider-handle {
-        width: 15px;
-        height: 15px;
+        width: 18px;
+        height: 18px;
         display: block;
         position: absolute;
-        top: -5px;
+        top: -7px;
         background: #ffffff;
         border: 1px solid #CCCCCC;
         border-radius: 50%;
