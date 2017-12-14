@@ -80,7 +80,7 @@ class Customify_Builder_Item_Logo {
                 'section' =>  $section,
                 'default' => array(
                     'unit' => 'px',
-                    'value' => 60
+                    'value' => 60,
                 ),
                 'max' => 200,
                 'device_settings' => true,
