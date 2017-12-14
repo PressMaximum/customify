@@ -17,7 +17,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'panel'          => 'customify_layouts',
 				//'priority' => 22,
 				'theme_supports' => '',
-				'title'          => __( 'Beacon Section', 'customify' ),
+				'title'          => __( 'Customify Section', 'customify' ),
 				'description'    => __( 'This is section description', 'customify' ),
 			),
 
@@ -29,8 +29,6 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'min' => 700,
 				'max' => 2000,
 				'section' => 'customify_layouts_section',
-				//'device' => 'mobile', // mobile || general
-				//'priority' => 22,
 				'title'          => __( 'Container Width', 'customify' ),
 				'selector' => '.customify_container',
 				'css_format' => 'max-width: {{value}}'

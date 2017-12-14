@@ -1,10 +1,14 @@
 <?php
 
-class Customify_Builder_Header_Templates {
-    public $id = 'header_templates';
+
+class Customify_Builder_Footer_Templates
+{
+    public $id = 'footer_templates';
+
     function customize(){
-        $section = 'header_templates';
-        $prefix = 'header_templates_';
+        $section = 'footer_templates';
+        $prefix = 'footer_templates_';
+
 
         $theme_name = wp_get_theme()->get('Name');
         $option_name = $theme_name.'_saved_templates';
@@ -46,7 +50,7 @@ class Customify_Builder_Header_Templates {
             array(
                 'name' => $section,
                 'type' => 'section',
-                'panel' => 'header_settings',
+                'panel' => 'footer_settings',
                 'theme_supports' => '',
                 'title'          => __( 'Templates', 'customify' ),
             ),
@@ -57,10 +61,10 @@ class Customify_Builder_Header_Templates {
                 'section' => $section,
                 'theme_supports' => '',
                 'title'       => __( 'Save Template', 'customify' ),
-                'description' => '<div class="save-template-form"><input type="text" data-builder-id="header" data-control-id="'.esc_attr( $prefix.'save' ).'" class="template-input-name change-by-js"><button class="button button-secondary save-builder-template" type="button">'.esc_html__( 'Save', 'customify' ).'</button></div>'.$html,
+                'description' => '<div class="save-template-form"><input type="text" data-builder-id="footer" data-control-id="'.esc_attr( $prefix.'save' ).'" class="template-input-name change-by-js"><button class="button button-secondary save-builder-template" type="button">'.esc_html__( 'Save', 'customify' ).'</button></div>'.$html,
             ),
         );
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Header_Templates() );
+Customify_Customizer_Layout_Builder()->register_item( 'footer', 'Customify_Builder_Footer_Templates' );

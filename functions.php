@@ -8,7 +8,7 @@
  */
 
 global $site_layout;
-$site_layout = 'content-sidebar';
+$site_layout = 'sidebar-content';
 
 if ( ! function_exists( 'customify_setup' ) ) :
 	/**
@@ -48,6 +48,7 @@ if ( ! function_exists( 'customify_setup' ) ) :
 		// This theme uses wp_nav_menu() in one location.
 		register_nav_menus( array(
 			'menu-1' => esc_html__( 'Primary', 'customify' ),
+			'menu-2' => esc_html__( 'Secondary', 'customify' ),
 		) );
 
 		/*
@@ -88,6 +89,32 @@ add_action( 'after_setup_theme', 'customify_setup' );
 
 
 
+/**
+ *  Same hook for the_content
+ * @TODO: do not effect content by plugins
+ *
+ * 8 WP_Embed:run_shortcode
+ * 8 WP_Embed:autoembed
+ * 10 wptexturize
+ * 10 wpautop
+ * 10 shortcode_unautop
+ * 10 prepend_attachment
+ * 10 wp_make_content_images_responsive
+ * 11 capital_P_dangit
+ * 11 do_shortcode
+ * 20 convert_smilies
+ */
+global $wp_embed;
+add_filter( 'customify_the_content', array( $wp_embed, 'run_shortcode' ), 8 );
+add_filter( 'customify_the_content', array( $wp_embed, 'autoembed' ), 8 );
+add_filter( 'customify_the_content', 'wptexturize' );
+add_filter( 'customify_the_content', 'wpautop' );
+add_filter( 'customify_the_content', 'shortcode_unautop' );
+add_filter( 'customify_the_content', 'prepend_attachment' );
+add_filter( 'customify_the_content', 'wp_make_content_images_responsive' );
+add_filter( 'customify_the_content', 'capital_P_dangit' );
+add_filter( 'customify_the_content', 'do_shortcode' );
+add_filter( 'customify_the_content', 'convert_smilies' );
 
 /**
  * Set the content width in pixels, based on the theme's design and stylesheet.
@@ -169,6 +196,13 @@ add_action( 'widgets_init', 'customify_widgets_init' );
  */
 function customify_scripts() {
 	wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
+
+	if ( ! function_exists( 'a' ) ) {
+	    require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
+    }
+    Customify_Font_Icons()->enqueue();
+
+	wp_enqueue_script( 'customify', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), false, true );
 
 	wp_enqueue_script( 'customify-navigation', get_template_directory_uri() . '/assets/js/navigation.js', array(), '20151215', true );
 

@@ -4,6 +4,22 @@ $text_color: #555d66;
 .customify--hide {
     display: none !important;
 }
+.customify-control--heading {
+    margin-left: -12px;
+    margin-right: -12px;
+    padding: 5px 12px;
+    margin-top: 15px;
+    background: #dddddd;
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+}
+.customize-control {
+    .customize-control-description {
+        margin-bottom: 15px;
+        margin-top: -3px;
+    }
+}
+
 
 .customify-field-heading{
     &::after {
@@ -22,7 +38,7 @@ $text_color: #555d66;
             background: 0 0;
             border: none;
             height: 23px;
-            padding: 0 3px;
+            padding: 0 0px;
             margin: 0 0 0 1px;
             -webkit-box-shadow: none;
             box-shadow: none;
@@ -53,6 +69,26 @@ $text_color: #555d66;
         }
     }
 }
+
+/**
+* Group Field
+ */
+.customize-control-customify-group {
+    .customify--settings-wrapper {
+        .customify--settings-fields {
+            border: 2px dashed #ccc;
+            padding:  15px;
+        }
+        .customify--group-field {
+            margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+
+    }
+}
+
 .customify--multiple-devices .customify-field-settings-inner {
     display: none;
     .customify-field-settings-inner {
@@ -132,6 +168,14 @@ $text_color: #555d66;
         display: block;
         line-height: 1;
         font-size: 1em;
+        cursor: pointer;
+    }
+    .ui-sortable-helper {
+        .customify--repeater-item-heading {
+            cursor: grabbing;
+            cursor: -webkit-grabbing;
+            cursor: -moz-grabbing;
+        }
     }
     .customify--repeater-live-title {
         white-space: nowrap;
@@ -277,11 +321,19 @@ $text_color: #555d66;
         width: 65px !important;
     }
 }
+.customify-text-align {
+    input {
+        display: none;
+    }
+    input:checked + .button {
+        background: #ccc;
+    }
+}
+
 .customify--css-unit {
-    display: block;
     margin-bottom: 5px;
     label {
-        display: inline-block;
+        display: none;
         margin-right: 5px;
         text-transform: uppercase;
         padding: 0px 5px;
@@ -354,8 +406,8 @@ $text_color: #555d66;
     margin-top: 5px;
     display: block;
     .customify--slider-input {
-        width: 50px;
-        max-width: 50px;
+        width: 60px;
+        max-width: 60px;
         position: absolute;
         top: 0px;
         right: 0px;
@@ -376,11 +428,11 @@ $text_color: #555d66;
         background: #3068af;
     }
     .ui-slider-handle {
-        width: 15px;
-        height: 15px;
+        width: 18px;
+        height: 18px;
         display: block;
         position: absolute;
-        top: -5px;
+        top: -7px;
         background: #ffffff;
         border: 1px solid #CCCCCC;
         border-radius: 50%;
@@ -455,8 +507,31 @@ $text_color: #555d66;
         padding: 10px 10px 10px 50px;
         display: block;
     }
-    .customize-controls-close {
-        height: 45px;
+    .customize-controls-icon-close {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 45px;
+        height: 41px;
+        padding: 0 2px 0 0;
+        background: #eee;
+        border: none;
+        border-top: 4px solid #eee;
+        border-right: 1px solid #ddd;
+        color: #444;
+        text-align: left;
+        cursor: pointer;
+        transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
+        box-sizing: content-box;
+        text-decoration: none;
+        &:before {
+            font: 400 22px/45px dashicons;
+            content: "\f335";
+            position: relative;
+            top: -3px;
+            left: 13px;
+        }
     }
     #customify--sidebar-icon-type {
         display: block;
@@ -519,9 +594,16 @@ $text_color: #555d66;
     }
 }
 
+/* Text Align */
+.customify-text-align {
+    .button {
+        padding-top: 3px;
+    }
+}
+
 /*Background field*/
 .customize-control {
-    &.customify-background-control {
+    &.customify-background-control--- {
         .customify-group-device-fields {
             position: relative;
             &::after {
@@ -541,7 +623,10 @@ $text_color: #555d66;
                 select {
                     width: 135px;
                 }
+
                 &.customify--field-name-color{
+
+                    /*
                     position: absolute;
                     top: 0px;
                     right: 0px;
@@ -569,12 +654,28 @@ $text_color: #555d66;
                         right: 0px;
                         z-index: 10;
                     }
+                    */
+
+                    .wp-picker-container {
+                        position: relative;
+                        z-index: 35;
+                    }
+
+                    .wp-picker-holder {
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                    }
+
+
                 }
 
                 &.customify--field-name-image {
                     width: 115px;
                     display: block;
-                    float: left;
+                    position: absolute;
+                    top: 35px;
+                    left: 0px;
                     .customify-field-header{
                         display: none;
                     }
@@ -618,21 +719,21 @@ $text_color: #555d66;
                 &.customify--field-name-position {
                     .customify-field-header{ display: none; }
                     position: absolute;
-                    top: 30px;
+                    top: 60px;
                     right: 0px;
                 }
 
                 &.customify--field-name-repeat {
                     .customify-field-header { display: none; }
                     position: absolute;
-                    top: 60px;
+                    top: 100px;
                     right: 0px;
                 }
 
                 &.customify--field-name-cover {
                    clear: both;
                     position: absolute;
-                    top: 90px;
+                    top: 140px;
                     right: 0px;
                 }
 
@@ -640,7 +741,7 @@ $text_color: #555d66;
                     .customify-field-header { display: none; }
                     clear: both;
                     position: absolute;
-                    top: 120px;
+                    top: 170px;
                     right: 0px;
                 }
 

@@ -24,11 +24,8 @@
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'customify' ); ?></a>
 
-	<header id="masthead" class="site-header">
-        <?php
-        customify_customize_render_header();
-        ?>
-	</header><!-- #masthead -->
-
+    <?php
+    customify_customize_render_header();
+    ?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>
 

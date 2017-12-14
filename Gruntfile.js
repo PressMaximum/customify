@@ -26,10 +26,11 @@ module.exports = function( grunt ) {
 
         // SASS
         sass: {
-            option: {
-                sourceMap: true
-            },
             dist: {
+                options: {
+                    style: 'expanded'
+                },
+
                 files: {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss'
@@ -67,7 +68,8 @@ module.exports = function( grunt ) {
     // Load NPM tasks to be used here
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-postcss' );
-    grunt.loadNpmTasks( 'grunt-sass' );
+    grunt.loadNpmTasks('grunt-contrib-sass');
+    //grunt.loadNpmTasks( 'grunt-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
 
 
@@ -78,7 +80,7 @@ module.exports = function( grunt ) {
     ]);
     grunt.registerTask( 'css', [
         'sass',
-        'postcss',
+        //'postcss',
         //'cssmin'
     ]);
 

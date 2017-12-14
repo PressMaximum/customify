@@ -9,7 +9,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         private $media_queries = array(
             'all' => '%s',
             'desktop' => '@media screen and (min-width: 64em) { %s }',
-            'tablet' => '@media screen and (max-width: 48em) and (min-width: 35.5em) { %s }',
+            'tablet' => '@media screen and (max-width: 64em) and (min-width: 35.5em) { %s }',
             'mobile' => '@media screen and (max-width: 35.5em) { %s }',
         );
         private $css = array(
@@ -55,7 +55,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 if ( $string ) {
                     if (!is_null( $v ) && $v !== '') {
                         $v = $v.$value['unit'];
-                        $code[ $pos ] = $this->replace_value( $v, $string ).';';
+                        $code[ $pos ] = $this->replace_value( $v, $string );
                     }
                 }
             }
@@ -93,6 +93,16 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
+        function setup_text_align( $value, $format ){
+            $value = sanitize_text_field( $value );
+            if ( $format ) {
+                if (!is_null( $value ) && $value !== '') {
+                    return $this->replace_value( $value, $format ).';';
+                }
+            }
+            return false;
+        }
+
         function css_ruler( $field ){
             $code = $this->maybe_devices_setup( $field, 'setup_css_ruler' );
             return $code;
@@ -105,6 +115,11 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
         function color( $field ){
             $code = $this->maybe_devices_setup( $field, 'setup_color' );
+            return $code;
+        }
+
+        function text_align( $field ){
+            $code = $this->maybe_devices_setup( $field, 'setup_default' );
             return $code;
         }
 
@@ -194,6 +209,16 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return  $code;
         }
 
+        function setup_default( $value, $format ){
+            $value = sanitize_text_field( $value );
+            if ( $format ) {
+                if (!is_null( $value ) && $value !== '') {
+                    return $this->replace_value( $value, $format );
+                }
+            }
+            return false;
+        }
+
         function maybe_devices_setup( $field, $call_back, $values = null, $no_selector = false ) {
             $code = '';
             $code_array = array();
@@ -242,12 +267,17 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 if ( $has_device ) {
                     foreach ( Customify_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
-                            $_c =  $code_array[ $device ];
-                            $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
+                            $_c = $code_array[ $device ];
+                            if( $_c ) {
+                                $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
+                            }
+
                         }
                     }
                 } else {
-                    $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
+                    if ( $code_array['no_devices'] ) {
+                        $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
+                    }
                 }
             }
 
@@ -287,7 +317,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
             return "font-family: \"{$value['font']}\";";
         }
-
 
 
         function font( $field, $values = null ){
@@ -454,7 +483,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 }
             }
 
-            if ( isset($fields['letter_spacing'])) {
+            if ( isset($fields['color'])) {
                 $_c = $this->setup_color($values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
                 if ( $_c ) {
                     $code['color'] = $_c;
@@ -515,7 +544,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             //$control_settings = $partial->component->manager->get_control($partial->id);
             foreach ( $config as $field ) {
                 $field_css = '';
-                if ( $field['selector'] ) {
+                if ( $field['selector'] && $field['css_format'] ) {
                     switch ($field['type']) {
                         case 'css_ruler':
                             $this->css_ruler($field);
@@ -525,6 +554,11 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                             break;
                         case 'color':
                             $this->color($field);
+                            break;
+                        case 'text_align':
+                        case 'text_align_no_justify':
+                            $this->text_align($field);
+                            break;
                         case 'font':
                             $this->font($field);
                             break;
@@ -533,6 +567,8 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 $this->background($field);
                             } else if (isset($field['css_format']) && $field['css_format'] == 'typography') {
                                 $this->typography($field);
+                            } else {
+                                $this->maybe_devices_setup( $field, 'setup_default' );
                             }
                     }
                 }
@@ -556,7 +592,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 $css_code = "\r\n@import url('{$url}');\r\n\r\n".$css_code;
             }
 
-            return $css_code;
+            return trim( $css_code );
         }
     }
 

@@ -194,7 +194,7 @@
 
                         self.toggler.find( 'span.color-alpha' ).css( {
                             'width'                     : '30px',
-                            'height'                    : '24px',
+                            'height'                    : '23px',
                             'position'                  : 'absolute',
                             'top'                       : 0,
                             'left'                      : 0,

@@ -49,6 +49,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $field_class = '';
 
     static $_js_template_added;
+    static $_icon_loaded;
     function __construct($manager, $id, $args = array())
     {
         parent::__construct($manager, $id, $args);
@@ -78,13 +79,16 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
         wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
         wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
-        wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', array(
-            'home_url' => home_url(''),
-            'ajax' => admin_url( 'admin-ajax.php' ),
-            'has_icons' => Customify_Customizer()->has_icon(),
-            'icons' => Customify_Font_Icons()->get_icons(),
-            'theme_default' => __( 'Theme Default', 'customify' ),
-        ) );
+        if ( is_null( self::$_icon_loaded ) ) {
+            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
+                'home_url' => home_url(''),
+                'ajax' => admin_url('admin-ajax.php'),
+                'has_icons' => Customify_Customizer()->has_icon(),
+                'icons' => Customify_Font_Icons()->get_icons(),
+                'theme_default' => __('Theme Default', 'customify'),
+            ));
+            self::$_icon_loaded = true;
+        }
     }
 
 
@@ -248,6 +252,8 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'select',
             'font',
             'font_style',
+            'text_align',
+            'text_align_no_justify',
             'checkbox',
             'css_ruler',
             'icon',
@@ -299,7 +305,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         </script>
         <div id="customify--sidebar-icons">
             <div class="customify--sidebar-header">
-                <a class="customize-controls-close" href="#">
+                <a class="customize-controls-icon-close" href="#">
                     <span class="screen-reader-text"><?php _e( 'Cancel', 'customify' );  ?></span>
                 </a>
                 <div class="customify--icon-type-inner">
@@ -494,14 +500,13 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         ?>
         <#
         var uniqueID = field.name + ( new Date().getTime() );
-
         #>
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-radio-list">
                 <# _.each( field.choices, function( label, key ){  #>
                     <p>
-                    <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> {{ label }}</label>
+                        <label><input type="radio" data-name="{{ field.name }}" value="{{ key }}" <# if ( field.value == key ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span>{{ label }}</span></label>
                     </p>
                 <# } ); #>
             </div>
@@ -574,6 +579,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+
     function field_font_style(){
         $this->before_field();
         ?>
@@ -592,6 +598,38 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         </div>
         <?php
         $this->after_field();
+    }
+
+    function field_text_align(){
+        $this->before_field();
+        ?>
+        <#
+        var uniqueID = field.name + ( new Date().getTime() );
+        #>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-field-settings-inner">
+            <div class="customify-text-align">
+                <label><input type="radio" data-name="{{ field.name }}" value="left" <# if ( field.value == 'left' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-alignleft"></span></span></label>
+                <label><input type="radio" data-name="{{ field.name }}" value="center" <# if ( field.value == 'center' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-aligncenter"></span></span></label>
+                <label><input type="radio" data-name="{{ field.name }}" value="right" <# if ( field.value == 'right' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-alignright"></span></span></label>
+                <# if ( ! field.no_justify ) {  #>
+                <label><input type="radio" data-name="{{ field.name }}" value="justify" <# if ( field.value == 'justify' ){ #> checked="checked" <# } #> name="{{ uniqueID }}"> <span class="button"><span class="dashicons dashicons-editor-justify"></span></span></label>
+                <# } #>
+            </div>
+        </div>
+        <?php
+        $this->after_field();
+    }
+    function field_text_align_no_justify() {
+        ?>
+        <#
+            if ( _.isUndefined( field.no_justify ) )  {
+                field.no_justify = true;
+            }
+            field.no_justify = true;
+        #>
+        <?php
+        $this->field_text_align();
     }
 
 

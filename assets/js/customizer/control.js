@@ -3,6 +3,162 @@
 
     var $document = $( document );
 
+    var CustomifyMedia =  {
+        setAttachment: function( attachment ){
+            this.attachment = attachment;
+        },
+        addParamsURL: function( url, data ) {
+            if ( ! $.isEmptyObject(data) )
+            {
+                url += ( url.indexOf('?') >= 0 ? '&' : '?' ) + $.param(data);
+            }
+            return url;
+        },
+        getThumb: function( attachment ){
+            var control = this;
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+            var t = new Date().getTime();
+            if ( typeof this.attachment.sizes !== "undefined" ) {
+                if ( typeof this.attachment.sizes.medium !== "undefined" ) {
+                    return control.addParamsURL( this.attachment.sizes.medium.url, { t : t } );
+                }
+            }
+            return control.addParamsURL( this.attachment.url, { t : t } );
+        },
+        getURL: function( attachment ) {
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+            var t = new Date().getTime();
+            return this.addParamsURL( this.attachment.url, { t : t } );
+        },
+        getID: function( attachment ){
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+            return this.attachment.id;
+        },
+        getInputID: function( attachment ){
+            $( '.attachment-id', this.preview ).val( );
+        },
+        setPreview: function( $el ){
+            this.preview = $el;
+        },
+        insertImage: function( attachment ){
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+
+            var url = this.getURL();
+            var id = this.getID();
+            var mime = this.attachment.mime;
+            $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html(  '<img src="'+url+'" alt="">' );
+            $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+            $( '.attachment-mime', this.preview ).val( mime );
+            $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
+            this.preview.addClass( 'attachment-added' );
+            this.showChangeBtn();
+
+        },
+        toRelativeUrl: function( url ){
+            return url;
+            //return url.replace( Customify_Control_Args.home_url, '' );
+        },
+        showChangeBtn: function(){
+            $( '.customify--add', this.preview ).addClass( 'customify--hide' );
+            $( '.customify--change', this.preview ).removeClass( 'customify--hide' );
+            $( '.customify--remove', this.preview ).removeClass( 'customify--hide' );
+        },
+        insertVideo: function(attachment ){
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+
+            var url = this.getURL();
+            var id = this.getID();
+            var mime = this.attachment.mime;
+            var html = '<video width="100%" height="" controls><source src="'+url+'" type="'+mime+'">Your browser does not support the video tag.</video>';
+            $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( html );
+            $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+            $( '.attachment-mime', this.preview ).val( mime );
+            $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
+            this.preview.addClass( 'attachment-added' );
+            this.showChangeBtn();
+        },
+        insertFile: function( attachment ){
+            if ( typeof attachment !== "undefined" ) {
+                this.attachment = attachment;
+            }
+            var url = attachment.url;
+            var mime = this.attachment.mime;
+            var basename = url.replace(/^.*[\\\/]/, '');
+
+            $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
+            $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
+            $( '.attachment-mime', this.preview ).val( mime );
+            $( '.attachment-id', this.preview ).val( this.getID() ).trigger( 'change' );
+            this.preview.addClass( 'attachment-added' );
+            this.showChangeBtn();
+        },
+        remove: function( $el ){
+            if ( typeof $el !== "undefined" ) {
+                this.preview = $el;
+            }
+            $( '.customify-image-preview', this.preview ).removeAttr( 'style').html( '' ).removeClass( 'customify--has-file' );
+            $( '.attachment-url', this.preview ).val( '' );
+            $( '.attachment-mime', this.preview ).val( '' );
+            $( '.attachment-id', this.preview ).val( '' ).trigger( 'change' );
+            this.preview.removeClass( 'attachment-added' );
+
+            $( '.customify--add', this.preview ).removeClass( 'customify--hide' );
+            $( '.customify--change', this.preview ).addClass( 'customify--hide' );
+            $( '.customify--remove', this.preview ).addClass( 'customify--hide' );
+        }
+
+    };
+
+    CustomifyMedia.controlMediaImage = wp.media({
+        title: wp.media.view.l10n.addMedia,
+        multiple: false,
+        library: {type: 'image' }
+    });
+
+    CustomifyMedia.controlMediaImage.on('select', function () {
+        var attachment = CustomifyMedia.controlMediaImage.state().get('selection').first().toJSON();
+        CustomifyMedia.insertImage( attachment );
+    });
+
+    CustomifyMedia.controlMediaVideo = wp.media({
+        title: wp.media.view.l10n.addMedia,
+        multiple: false,
+        library: {type: 'video' }
+    });
+
+    CustomifyMedia.controlMediaVideo.on('select', function () {
+        var attachment = CustomifyMedia.controlMediaVideo.state().get('selection').first().toJSON();
+        CustomifyMedia.insertVideo( attachment );
+    });
+
+    CustomifyMedia.controlMediaFile = wp.media({
+        title: wp.media.view.l10n.addMedia,
+        multiple: false
+    });
+
+    CustomifyMedia.controlMediaFile.on('select', function () {
+        var attachment = CustomifyMedia.controlMediaFile.state().get('selection').first().toJSON();
+        CustomifyMedia.insertFile( attachment );
+    });
+
+
+
+
+
+
+
+
+
     wp.customize.controlConstructor.customify = wp.customize.Control.extend({
 
         // When we're finished loading continue processing
@@ -96,160 +252,20 @@
         },
         initMedia: function(){
             var control = this;
-            control.controlMedia =  {
-                setAttachment: function( attachment ){
-                    this.attachment = attachment;
-                },
-                getThumb: function( attachment ){
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-                    var t = new Date().getTime();
-                    if ( typeof this.attachment.sizes !== "undefined" ) {
-                        if ( typeof this.attachment.sizes.medium !== "undefined" ) {
-                            return control.addParamsURL( this.attachment.sizes.medium.url, { t : t } );
-                        }
-                    }
-                    return control.addParamsURL( this.attachment.url, { t : t } );
-                },
-                getURL: function( attachment ) {
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-                    var t = new Date().getTime();
-                    return control.addParamsURL( this.attachment.url, { t : t } );
-                },
-                getID: function( attachment ){
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-                    return this.attachment.id;
-                },
-                getInputID: function( attachment ){
-                    $( '.attachment-id', this.preview ).val( );
-                },
-                setPreview: function( $el ){
-                    this.preview = $el;
-                },
-                insertImage: function( attachment ){
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-
-                    var url = this.getThumb();
-                    var id = this.getID();
-                    var mime = this.attachment.mime;
-                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html(  '<img src="'+url+'" alt="">' );
-                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
-                    $( '.attachment-mime', this.preview ).val( mime );
-                    $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
-                    this.preview.addClass( 'attachment-added' );
-                    this.showChangeBtn();
-
-                },
-                toRelativeUrl: function( url ){
-                    return url;
-                    //return url.replace( Customify_Control_Args.home_url, '' );
-                },
-                showChangeBtn: function(){
-                    $( '.customify--add', this.preview ).addClass( 'customify--hide' );
-                    $( '.customify--change', this.preview ).removeClass( 'customify--hide' );
-                    $( '.customify--remove', this.preview ).removeClass( 'customify--hide' );
-                },
-                insertVideo: function(attachment ){
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-
-                    var url = this.getURL();
-                    var id = this.getID();
-                    var mime = this.attachment.mime;
-                    var html = '<video width="100%" height="" controls><source src="'+url+'" type="'+mime+'">Your browser does not support the video tag.</video>';
-                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( html );
-                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
-                    $( '.attachment-mime', this.preview ).val( mime );
-                    $( '.attachment-id', this.preview ).val( id ).trigger( 'change' );
-                    this.preview.addClass( 'attachment-added' );
-                    this.showChangeBtn();
-                },
-                insertFile: function( attachment ){
-                    if ( typeof attachment !== "undefined" ) {
-                        this.attachment = attachment;
-                    }
-                    var url = attachment.url;
-                    var mime = this.attachment.mime;
-                    var basename = url.replace(/^.*[\\\/]/, '');
-
-                    $( '.customify-image-preview', this.preview ).addClass( 'customify--has-file' ).html( '<a href="'+url+'" class="attachment-file" target="_blank">'+basename+'</a>' );
-                    $( '.attachment-url', this.preview ).val( this.toRelativeUrl( url ) );
-                    $( '.attachment-mime', this.preview ).val( mime );
-                    $( '.attachment-id', this.preview ).val( this.getID() ).trigger( 'change' );
-                    this.preview.addClass( 'attachment-added' );
-                    this.showChangeBtn();
-                },
-                remove: function( $el ){
-                    if ( typeof $el !== "undefined" ) {
-                        this.preview = $el;
-                    }
-                    $( '.customify-image-preview', this.preview ).removeAttr( 'style').html( '' ).removeClass( 'customify--has-file' );
-                    $( '.attachment-url', this.preview ).val( '' );
-                    $( '.attachment-mime', this.preview ).val( '' );
-                    $( '.attachment-id', this.preview ).val( '' ).trigger( 'change' );
-                    this.preview.removeClass( 'attachment-added' );
-
-                    $( '.customify--add', this.preview ).removeClass( 'customify--hide' );
-                    $( '.customify--change', this.preview ).addClass( 'customify--hide' );
-                    $( '.customify--remove', this.preview ).addClass( 'customify--hide' );
-                }
-
-            };
-
-            control.controlMediaImage = wp.media({
-                title: wp.media.view.l10n.addMedia,
-                multiple: false,
-                library: {type: 'image' }
-            });
-
-            control.controlMediaImage.on('select', function () {
-                var attachment = control.controlMediaImage.state().get('selection').first().toJSON();
-                control.controlMedia.insertImage( attachment );
-            });
-
-            control.controlMediaVideo = wp.media({
-                title: wp.media.view.l10n.addMedia,
-                multiple: false,
-                library: {type: 'video' }
-            });
-
-            control.controlMediaVideo.on('select', function () {
-                var attachment = control.controlMediaVideo.state().get('selection').first().toJSON();
-                control.controlMedia.insertVideo( attachment );
-            });
-
-            control.controlMediaFile = wp.media({
-                title: wp.media.view.l10n.addMedia,
-                multiple: false
-            });
-
-            control.controlMediaFile.on('select', function () {
-                var attachment = control.controlMediaFile.state().get('selection').first().toJSON();
-                control.controlMedia.insertFile( attachment );
-            });
-
 
             // When add/Change
             control.container.on( 'click',  '.customify--media .customify--add, .customify--media .customify--change, .customify--media .customify-image-preview', function( e ) {
                 e.preventDefault();
                 var p = $( this ).closest('.customify--media');
-                control.controlMedia.setPreview( p )  ;
-                control.controlMediaImage.open();
+                CustomifyMedia.setPreview( p )  ;
+                CustomifyMedia.controlMediaImage.open();
             } );
 
             // When add/Change
             control.container.on( 'click',  '.customify--media .customify--remove', function( e ) {
                 e.preventDefault();
                 var p = $( this ).closest('.customify--media');
-                control.controlMedia.remove( p );
+                CustomifyMedia.remove( p );
             } );
         },
         initCSSRuler: function(){
@@ -355,9 +371,14 @@
                                 value =  value[ cond_device ];
                             }
                         }
-                        if ( decodeValue ) {
-                            value = control.decodeValue( value )
+                        try {
+                            if ( decodeValue ) {
+                                value = control.decodeValue( value )
+                            }
+                        } catch ( e ) {
+
                         }
+
                         check = control.compare( value, cond, cond_val );
                     }
 
@@ -394,9 +415,8 @@
 
                 }
             } catch  ( e ) {
-                console.log( 'Trying_test_error', e  );
+                //console.log( 'Trying_test_error', e  );
             }
-
 
             return check;
         },
@@ -419,7 +439,6 @@
             });
         },
         initColor: function( $el ){
-
 
             $( '.customify-input-color', $el ).each( function(){
                 var colorInput = $( this );
@@ -670,10 +689,14 @@
                     }
                     break;
                 case 'radio':
+                case 'text_align':
+                case 'text_align_no_justify':
+
                     if ( support_devices ) {
                         value = {};
                         _.each( control.devices, function( device ){
-                            value[ device ] = $( 'input[data-name="'+name+'-'+device+'"]', $field ).is(':checked') ? 1 : '' ;
+                            var input = $( 'input[data-name="'+name+'-'+device+'"]:checked', $field );
+                            value[ device ] = input.length ? input.val() : '' ;
                         } );
                     } else {
                         value = $( 'input[data-name="'+name+'"]:checked', $field ).val();
@@ -744,8 +767,9 @@
                         var _v = {};
                         _.each( control.params.fields, function( f ){
                             var inputField = $( '[data-field-name="'+f.name+'"]', $item );
-                            var $_field = inputField.closest('.customify--field');
-                            var _fv =  control.getFieldValue( f.name, f,  $_field );
+                            //var $_field = inputField.closest('.customify--field');
+                            //var $_field = inputField.closest('.customify--repeater-field');
+                            var _fv =  control.getFieldValue( f.name, f,  $item );
                             _v[ f.name ] = _fv;
 
                             // Update Live title
@@ -773,7 +797,7 @@
             }
 
             if ( _.isUndefined( save ) || save ) {
-                console.log( 'VALUES: ', value );
+               //console.log( 'VALUES: ', value );
                 control.setting.set( control.encodeValue( value ) );
                 $document.trigger( 'customify/customizer/change' );
             } else {
@@ -950,9 +974,11 @@
         },
         limitRepeaterItems: function(){
             var control = this;
+
+            var addButton = $( '.customify--repeater-add-new', control.container );
+            var c = $( '.customify--settings-fields .customify--repeater-item', control.container ).length;
+
             if ( control.params.limit > 0 ) {
-                var addButton = $( '.customify--repeater-add-new', control.container );
-                var c = $( '.customify--settings-fields .customify--repeater-item', control.container ).length;
                 if ( c >= control.params.limit ) {
                     addButton.addClass( 'customify--hide' );
                     if ( control.params.limit_msg ) {
@@ -968,6 +994,13 @@
                     addButton.removeClass( 'customify--hide' );
                 }
             }
+
+            if ( c > 0 ) {
+                $( '.customify--repeater-reorder', control.container ).removeClass('customify--hide');
+            } else {
+                $( '.customify--repeater-reorder', control.container ).addClass('customify--hide');
+            }
+
         },
         initRepeater: function(){
             var control = this;
@@ -1030,7 +1063,7 @@
             control.limitRepeaterItems();
 
             // Toggle
-            control.container.on( 'click', '.customify--repeater-item-toggle', function(e){
+            control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-item-heading', function(e){
                 e.preventDefault();
                 var  p = $( this ).closest('.customify--repeater-item');
                 p.toggleClass('customify--open');
@@ -1046,11 +1079,20 @@
                 control.limitRepeaterItems();
             } );
 
+
+            var defaultValue = {};
+            _.each( control.params.fields , function( f, k ){
+                defaultValue[ f.name ] = null;
+                if ( !_.isUndefined( f.default ) ) {
+                    defaultValue[ f.name ] = f.default;
+                }
+            } );
+
             // Add Item
             control.container.on( 'click', '.customify--repeater-add-new', function(e){
                 e.preventDefault();
                 if ( ! $( this ).hasClass( 'disabled' ) ) {
-                    control.addRepeaterItem();
+                    control.addRepeaterItem( defaultValue );
                     control.getValue();
                     control.limitRepeaterItems();
                 }
@@ -1119,15 +1161,22 @@
             $document.on( 'click', function( event ) {
                 if ( ! $(event.target).closest('.customify--icon-picker').length ) {
                     if ( ! $(event.target).closest('#customify--sidebar-icons').length ) {
-                        // customize-controls-close
                         that.close();
                     }
                 }
             } );
 
-            $( '#customify--sidebar-icons .customize-controls-close' ).on( 'click', function(){
+            $( '#customify--sidebar-icons .customize-controls-icon-close' ).on( 'click', function(){
                 that.close();
             } );
+
+            $document.on( 'keyup', function( event ) {
+                if (  event.keyCode === 27 ) {
+                    that.close();
+                }
+            } );
+
+
         },
         picker: function(){
             var that = this;

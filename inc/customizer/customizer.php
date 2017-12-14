@@ -6,12 +6,12 @@
  */
 
 // Load customizer config file.
-require get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
-require get_template_directory() . '/inc/customizer/customizer-config.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 
-require get_template_directory() . '/inc/customizer/customizer-fonts.php';
-require get_template_directory() . '/inc/customizer/customizer-sanitize.php';
-require get_template_directory() . '/inc/customizer/customizer-auto-css.php';
+require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
+require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
+require_once get_template_directory() . '/inc/customizer/customizer-auto-css.php';
 
 if ( ! class_exists( 'Customify_Customizer' ) ) {
     class  Customify_Customizer {
@@ -38,9 +38,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
          * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
          */
         function preview_js() {
+            wp_enqueue_script( 'customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css.js', array( 'customize-preview' ), '20151215', true );
             wp_enqueue_script( 'customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array( 'customize-preview' ), '20151215', true );
-            wp_localize_script( 'customify-customizer', 'Customify_Preview_Config_Fields', Customify_Customizer::get_config() );
-
+            wp_localize_script( 'customify-customizer-auto-css', 'Customify_Preview_Config', array(
+                'fields' => Customify_Customizer::get_config(),
+                'devices' => $this->devices
+            ) );
         }
 
 
@@ -62,6 +65,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
                         'capability' => null,
                         'mod' => null, // theme_mod || option default theme_mod
+
+                        'settings' => null,
 
                         'device' => null,
                         'device_settings' => null,
@@ -194,6 +199,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             return $get_value;
         }
 
+        function setup_icon( $icon ){
+            if ( ! is_array( $icon ) ) {
+                $icon = array();
+            }
+            return wp_parse_args( $icon, array( 'type' =>'', 'icon' => '') );
+        }
 
         function get_field_setting( $key ){
             $config = self::get_config();
@@ -204,18 +215,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         }
 
         function get_media( $value, $size = null ) {
+
+            if ( ! $size ) {
+                $size = 'full';
+            }
+
             if ( is_numeric( $value ) ) {
-                if ( ! $size ) {
-                    return wp_get_attachment_url( $value );
+                $image_attributes = wp_get_attachment_image_src( $value, $size );
+                if ( $image_attributes ) {
+                    return $image_attributes[0];
                 } else {
-                    $image_attributes = wp_get_attachment_image_src( $value = 8, $size );
-                    if ( $image_attributes ) {
-                        return $image_attributes[0];
-                    } else {
-                        return false;
-                    }
+                    return false;
                 }
-            }elseif ( is_string( $value ) ) {
+            } elseif ( is_string( $value ) ) {
                 return $value;
             } elseif ( is_array( $value ) ) {
                 $value = wp_parse_args( $value, array(
@@ -229,7 +241,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 if ( strpos( $value['mime'], 'image/' ) !== false ) {
                     $image_attributes = wp_get_attachment_image_src( $value['id'], $size );
                     if ( $image_attributes ) {
-                        $url =  $image_attributes[0];
+                        $url = $image_attributes[0];
                     }
                 } else {
                     $url = wp_get_attachment_url( $value );
@@ -240,7 +252,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 }
 
                 return $url;
-
             }
 
             return false;
@@ -254,28 +265,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
-
             $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
             $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
             $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-
-            /*
-            $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
-
-            if ( isset( $wp_customize->selective_refresh ) ) {
-                $wp_customize->selective_refresh->add_partial( 'blogname', array(
-                    'selector'        => '.site-branding',
-                    'render_callback' => 'customify_builder_logo_item',
-                ) );
-                $wp_customize->selective_refresh->add_partial( 'blogdescription', array(
-                    'selector'        => '.site-branding',
-                    'render_callback' => 'customify_builder_logo_item',
-                ) );
-            }
-            */
-
-
 
             foreach ( self::get_config() as $args ) {
                 switch (  $args['type'] ) {
@@ -339,12 +331,18 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                 'render_callback' => $args['render_callback'],
                             );
 
+
+
                             if ( $args['css_format'] ) {
-                                $selective_refresh['selector'] = '#customify-style-inline-css';
-                                $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
+                                //$selective_refresh['selector'] = '#customify-style-inline-css';
+                               // $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
+                                $settings_args['transport'] = 'postMessage';
+                                $selective_refresh = null;
+                            } else {
+                                $settings_args['transport'] = 'postMessage';
                             }
 
-                            $settings_args['transport'] = 'postMessage';
+
                         }
                         unset( $args['default'] );
 
@@ -353,8 +351,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         $wp_customize->add_control( new Customify_Customizer_Control( $wp_customize, $name, $args ));
                         if ( $selective_refresh ) {
                             $s_id = $selective_refresh['render_callback'];
-                            if ( ! isset( $this->selective_settings[ $s_id ] ) ) {
-                                $this->selective_settings[ $s_id ] = array(
+                            $__id = '';
+                            if ( is_array( $s_id ) ) {
+                                $__id = get_class( $s_id[0] ).'_'.$s_id[1];
+                            } else {
+                                $__id = $s_id;
+                            }
+                            if ( ! isset( $this->selective_settings[ $__id ] ) ) {
+                                $this->selective_settings[ $__id ] = array(
                                     'settings' => array(),
                                     'selector' => $selective_refresh['selector'],
                                     'container_inclusive' => $s_id == 'Customify_Customizer_Auto_CSS' ? false : true,
@@ -363,8 +367,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
                             }
 
-                            $this->selective_settings[ $s_id ]['settings'][] = $name;
-                            //$wp_customize->selective_refresh->add_partial( $name, $selective_refresh );
+                            $this->selective_settings[ $__id ]['settings'][] = $name;
                         }
 
                         break;

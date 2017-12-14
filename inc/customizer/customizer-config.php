@@ -8,7 +8,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'type' => 'panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Panel', 'customify' ),
+                'title'          => __( 'Customify Panel', 'customify' ),
             ),
 
             array(
@@ -17,7 +17,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'panel' => 'customify_panel',
                 //'priority' => 22,
                 'theme_supports' => '',
-                'title'          => __( 'Beacon Section', 'customify' ),
+                'title'          => __( 'Customify Section', 'customify' ),
                 'description' => __( 'This is section description',  'customify' ),
             ),
 
@@ -42,9 +42,15 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                     ),
 
                     array(
-                        'name' => 'font_style',
+                        'name' => 'text-align',
                         'type' => 'font_style',
                         'label' => __( 'Font Style', 'customify' ),
+                    ),
+
+                    array(
+                        'name' => 'font_style',
+                        'type' => 'text_align',
+                        'label' => __( 'Text align', 'customify' ),
                     ),
 
                     array(
@@ -166,6 +172,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
                         'label' => __( 'Background cover', 'customify' ),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
@@ -249,6 +256,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                         'type' => 'checkbox',
                         'required' => array( 'image', 'not_empty', ''),
                         'label' => __( 'Background cover', 'customify' ),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
                     ),
                     array(
                         'name' => 'position',
@@ -589,6 +597,17 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
 
 
                 )
+            ),
+
+            array(
+                'name' => 'text_align',
+                'type' => 'text_align',
+                'device_settings' => true,
+                'default'           => null,
+                'transport'			=> 'postMessage', // or refresh
+                'section' => 'customify_section',
+                'theme_supports' => '',
+                'title'          => __( 'Text Align', 'customify' ),
             ),
 
 

@@ -1,22 +1,49 @@
 <?php
-if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
-    function customify_customizer_get_header_config( $configs = array() ){
 
+Customify_Customizer_Layout_Builder()->register_builder( 'header', new Customify_Builder_Header() );
+
+class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
+    public $id = 'header';
+
+    function get_config(){
+        return array(
+            'id'         => $this->id,
+            'title'      => __( 'Header Builder', 'customify' ),
+            'control_id' => 'header_builder_panel',
+            'panel'      => 'header_settings',
+            'section'    => 'header_builder_panel',
+            'devices' => array(
+                'desktop'   => __( 'Desktop', 'customify' ),
+                'mobile'    => __( 'Mobile/Tablet', 'customify' ),
+            ),
+        );
+    }
+
+    function get_rows_config(){
+        return array(
+            'top' =>  __( 'Header Top', 'customify' ),
+            'main' =>  __( 'Header Main', 'customify' ),
+            'bottom' =>  __( 'Header Bottom', 'customify' ),
+            'sidebar' =>  __( 'Mobile Sidebar', 'customify' ),
+        );
+    }
+
+    function customize( ){
+
+        $fn = 'customify_customize_render_header';
         $config = array(
             array(
                 'name' => 'header_settings',
                 'type' => 'panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header', 'customify' ),
+                'title' => __( 'Header', 'customify' ),
             ),
 
             array(
                 'name' => 'header_builder_panel',
                 'type' => 'section',
                 'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'Header Builder', 'customify' ),
-                'description' => __( 'This is section description',  'customify' ),
+                'title' => __( 'Header Builder', 'customify' ),
             ),
 
             array(
@@ -24,185 +51,365 @@ if ( ! function_exists( 'customify_customizer_get_header_config' ) ) {
                 'type' => 'js_raw',
                 'section' => 'header_builder_panel',
                 'theme_supports' => '',
-                'title'          => __( 'Header Builder', 'customify' ),
-                'description' => __( 'Header Builder panel here....',  'customify' ),
+                'title' => __( 'Header Builder', 'customify' ),
                 'selector' => '#masthead',
-                'render_callback' => 'customify_customize_render_header'
+                'render_callback' => $fn,
+                'container_inclusive' => true
             ),
+        );
+
+        return $config;
+    }
+
+    function row_config(  $section = false, $section_name = false ){
+
+        if ( ! $section ) {
+            $section  = 'header_top';
+        }
+        if ( ! $section_name ) {
+            $section_name = __( 'Header Top', 'customify' );
+        }
+
+        $selector = '#cb-row--'.str_replace('_', '-', $section );
+
+        $fn = 'customify_customize_render_header';
+        $selector_all = '#masthead';
+
+        $config  = array(
+            array(
+                'name' => $section,
+                'type' => 'section',
+                'panel' => 'header_settings',
+                'theme_supports' => '',
+                'title' => $section_name,
+            ),
+
+            array(
+                'name' => $section.'_layout',
+                'type' => 'select',
+                'section' => $section,
+                'title' => __( 'Layout', 'customify' ),
+                'selector' => $selector_all,
+                'render_callback' => $fn,
+                'choices' => array(
+                    'default' =>  __( 'Default', 'customify' ),
+                    'fullwidth' =>  __( 'Full Width', 'customify' ),
+                    'boxed' =>  __( 'Boxed', 'customify' ),
+                )
+            ),
+
+            array(
+                'name' => $section.'_height',
+                'type' => 'slider',
+                'section' => $section,
+                'theme_supports' => '',
+                'device_settings' => true,
+                'max' => 250,
+                'selector' => $selector.' .customify-grid',
+                'css_format' => 'min-height: {{value}};',
+                'title' => __( 'Height', 'customify' ),
+            ),
+
+            array(
+                'name' => $section.'_background',
+                'type' => 'group',
+                'section'     => $section,
+                'title'          => __( 'Background', 'customify' ),
+                'live_title_field' => 'title',
+                'field_class' => 'customify-background-control',
+                'selector' => $selector,
+                'css_format' => 'background',
+                'device_settings' => true,
+                'default' => array(
+
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'cover',
+                        'type' => 'checkbox',
+                        'required' => array( 'image', 'not_empty', ''),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'position',
+                        'type' => 'select',
+                        'label' => __( 'Background Position', 'customify' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default'       => __( 'Position', 'customify' ),
+                            'center'        => __( 'Center', 'customify' ),
+                            'top_left'      => __( 'Top Left', 'customify' ),
+                            'top_right'     => __( 'Top Right', 'customify' ),
+                            'top_center'    => __( 'Top Center', 'customify' ),
+                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                            'bottom_center' => __( 'Bottom Center', 'customify' ),
+                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background Repeat', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            // array('style', '!=', 'cover' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Repeat', 'customify' ),
+                            'no-repeat' => __( 'No-repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'attachment',
+                        'type' => 'select',
+                        'label' => __( 'Background Attachment', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', '')
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Attachment', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
+                        ),
+                    ),
+
+                )
+            ),
+
+
+            array(
+                'name' => $section.'_sticky',
+                'type' => 'checkbox',
+                'section' => $section,
+                'theme_supports' => '',
+                'title' => __( 'Sticky', 'customify' ),
+                'checkbox_label' => __( 'Sticky header this row', 'customify' ),
+                'selector' => $selector_all,
+                'render_callback' => $fn,
+            ),
+
+
+            array(
+                'name' => $section.'_fixed_height',
+                'type' => 'slider',
+                'section' => $section,
+                'theme_supports' => '',
+                'device_settings' => true,
+                'max' => 250,
+                'selector' => $selector.'.fixed .customify-grid',
+                'required' => array(  $section.'_sticky', '==', '1'),
+                'css_format' => 'min-height: {{value}};',
+                'title' => __( 'Height When Stuck', 'customify' ),
+            ),
+
+            array(
+                'name' => $section.'_background_fixed',
+                'type' => 'group',
+                'section'     => $section,
+                'title'          => __( 'Background When Stuck', 'customify' ),
+                'live_title_field' => 'title',
+                'field_class' => 'customify-background-control',
+                'selector' => $selector.'.fixed',
+                'css_format' => 'background',
+                'device_settings' => true,
+                'required' => array(  $section.'_sticky', '==', '1'),
+                'default' => array(),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'cover',
+                        'type' => 'checkbox',
+                        'required' => array( 'image', 'not_empty', ''),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'position',
+                        'type' => 'select',
+                        'label' => __( 'Background Position', 'customify' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default'       => __( 'Position', 'customify' ),
+                            'center'        => __( 'Center', 'customify' ),
+                            'top_left'      => __( 'Top Left', 'customify' ),
+                            'top_right'     => __( 'Top Right', 'customify' ),
+                            'top_center'    => __( 'Top Center', 'customify' ),
+                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                            'bottom_center' => __( 'Bottom Center', 'customify' ),
+                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background Repeat', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            // array('style', '!=', 'cover' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Repeat', 'customify' ),
+                            'no-repeat' => __( 'No-repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'attachment',
+                        'type' => 'select',
+                        'label' => __( 'Background Attachment', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            array('cover', '!=', '1' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Attachment', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
+                        ),
+                    ),
+
+                )
+            ),
+
 
         );
 
-        foreach ( Customify_Customizer_Layout_Builder::get_header_sections() as $id ) {
-            $file = get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
-            if (  is_file( $file ) ) {
-                require_once get_template_directory().'/inc/customizer-layout-builder/config/header/'.$id.'.php';
-            }
+        return $config;
 
-            $func_id = str_replace( '-', '_', $id );
-
-            if ( function_exists( 'customify_builder_config_header_'.$func_id ) ) {
-                $config = array_merge( $config, call_user_func_array( 'customify_builder_config_header_'.$func_id, array() ) );
-            }
-        }
-
-        return array_merge( $configs, $config );
     }
-}
+    function row_sidebar_config( $section , $section_name ){
+        $selector = '#mobile-header-panel-inner';
 
-add_filter( 'customify/customizer/config', 'customify_customizer_get_header_config' );
-
-
-function customify_builder_config_header_row_config( $section = false, $section_name = false ){
-    if ( ! $section ) {
-        $section  = 'header_top';
-    }
-    if ( ! $section_name ) {
-        $section_name = __( 'Header Top', 'customify' );
-    }
-
-    $config  = array(
-        array(
-            'name' => $section,
-            'type' => 'section',
-            'panel' => 'header_settings',
-            'theme_supports' => '',
-            'title'          => $section_name,
-        ),
-
-        array(
-            'name' => $section.'_sticky',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title'          => __( 'Sticky header', 'customify' ),
-            'choices' => array(
-                'no' =>  __( 'No', 'customify' ),
-                'yes' =>  __( 'Yes', 'customify' ),
-            )
-        ),
-
-        array(
-            'name' => $section.'_layout',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title'          => __( 'Layout', 'customify' ),
-            'choices' => array(
-                'default' =>  __( 'Default', 'customify' ),
-                'fullwidth' =>  __( 'Full Width', 'customify' ),
-                'boxed' =>  __( 'Boxed', 'customify' ),
-            )
-        ),
-
-        array(
-            'name' => $section.'_sticky',
-            'type' => 'select',
-            'section' => $section,
-            'theme_supports' => '',
-            'title'          => __( 'Sticky header', 'customify' ),
-            'choices' => array(
-                'no' =>  __( 'No', 'customify' ),
-                'yes' =>  __( 'Yes', 'customify' ),
-            )
-        ),
-
-        array(
-            'name' => $section.'_padding',
-            'type' => 'css_ruler',
-            'section' => $section,
-            'theme_supports' => '',
-            'device_settings' => true,
-            'title'          => __( 'Padding', 'customify' ),
-        ),
-
-        array(
-            'name' => $section.'_background',
-            'type' => 'group',
-            'section'     => $section,
-            'title'          => __( 'Background', 'customify' ),
-            'description'    => __( 'This is description',  'customify' ),
-            'live_title_field' => 'title',
-            'field_class' => 'customify-background-control',
-            'selector' => '#page',
-            'css_format' => 'background',
-            'device_settings' => true,
-            'default' => array(
-
+        $config  = array(
+            array(
+                'name' => $section,
+                'type' => 'section',
+                'panel' => 'header_settings',
+                'theme_supports' => '',
+                'title'          => $section_name,
             ),
-            'fields' => array(
-                array(
-                    'name' => 'color',
-                    'type' => 'color',
-                    'label' => __( 'Color', 'customify' ),
-                    'device_settings' => true,
+
+            array(
+                'name' => $section.'_padding',
+                'type' => 'css_ruler',
+                'section' => $section,
+                'selector' => $selector,
+                'css_format' => array(
+                    'top' => 'padding-top: {{value}};',
+                    'right' => 'padding-right: {{value}};',
+                    'bottom' => 'padding-bottom: {{value}};',
+                    'left' => 'padding-left: {{value}};',
                 ),
-                array(
-                    'name' => 'image',
-                    'type' => 'image',
-                    'label' => __( 'Image', 'customify' ),
+                'title' => __( 'Padding', 'customify' ),
+            ),
+
+            array(
+                'name' => $section.'_background',
+                'type' => 'group',
+                'section' => $section,
+                'title' => __( 'Background', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
+                'live_title_field' => 'title',
+                'field_class' => 'customify-background-control',
+                'selector' => '#mobile-header-panel',
+                'css_format' => 'background',
+                'default' => array(
+
                 ),
-                array(
-                    'name' => 'cover',
-                    'type' => 'checkbox',
-                    'required' => array( 'image', 'not_empty', ''),
-                    'label' => __( 'Background cover', 'customify' ),
-                ),
-                array(
-                    'name' => 'position',
-                    'type' => 'select',
-                    'label' => __( 'Background Position', 'customify' ),
-                    'required' => array( 'image', 'not_empty', ''),
-                    'choices' => array(
-                        'default'       => __( 'Position', 'customify' ),
-                        'center'        => __( 'Center', 'customify' ),
-                        'top_left'      => __( 'Top Left', 'customify' ),
-                        'top_right'     => __( 'Top Right', 'customify' ),
-                        'top_center'    => __( 'Top Center', 'customify' ),
-                        'bottom_left'   => __( 'Bottom Left', 'customify' ),
-                        'bottom_center' => __( 'Bottom Center', 'customify' ),
-                        'bottom_right'  => __( 'Bottom Right', 'customify' ),
+                'fields' => array(
+                    array(
+                        'name' => 'color',
+                        'type' => 'color',
+                        'label' => __( 'Color', 'customify' ),
+                        'device_settings' => false,
                     ),
-                ),
-
-                array(
-                    'name' => 'repeat',
-                    'type' => 'select',
-                    'label' => __( 'Background Repeat', 'customify' ),
-                    'required' => array(
-                        array('image', 'not_empty', ''),
-                        // array('style', '!=', 'cover' ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __( 'Image', 'customify' ),
                     ),
-                    'choices' => array(
-                        'default' => __( 'Repeat', 'customify' ),
-                        'no-repeat' => __( 'No-repeat', 'customify' ),
-                        'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
-                        'repeat-y' => __( 'Repeat Vertical', 'customify' ),
+                    array(
+                        'name' => 'cover',
+                        'type' => 'checkbox',
+                        'required' => array( 'image', 'not_empty', ''),
+                        'checkbox_label' => __( 'Background cover', 'customify' ),
                     ),
-                ),
-
-                array(
-                    'name' => 'attachment',
-                    'type' => 'select',
-                    'label' => __( 'Background Attachment', 'customify' ),
-                    'required' => array(
-                        array('image', 'not_empty', ''),
-                        array('cover', '!=', '1' ),
+                    array(
+                        'name' => 'position',
+                        'type' => 'select',
+                        'label' => __( 'Background Position', 'customify' ),
+                        'required' => array( 'image', 'not_empty', ''),
+                        'choices' => array(
+                            'default'       => __( 'Position', 'customify' ),
+                            'center'        => __( 'Center', 'customify' ),
+                            'top_left'      => __( 'Top Left', 'customify' ),
+                            'top_right'     => __( 'Top Right', 'customify' ),
+                            'top_center'    => __( 'Top Center', 'customify' ),
+                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
+                            'bottom_center' => __( 'Bottom Center', 'customify' ),
+                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
+                        ),
                     ),
-                    'choices' => array(
-                        'default' => __( 'Attachment', 'customify' ),
-                        'scroll' => __( 'Scroll', 'customify' ),
-                        'fixed' => __( 'Fixed', 'customify' )
+
+                    array(
+                        'name' => 'repeat',
+                        'type' => 'select',
+                        'label' => __( 'Background Repeat', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Repeat', 'customify' ),
+                            'no-repeat' => __( 'No-repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
+                        ),
                     ),
-                ),
 
-            )
-        ),
+                    array(
+                        'name' => 'attachment',
+                        'type' => 'select',
+                        'label' => __( 'Background Attachment', 'customify' ),
+                        'required' => array(
+                            array('image', 'not_empty', ''),
+                            array('cover', '!=', '1' ),
+                        ),
+                        'choices' => array(
+                            'default' => __( 'Attachment', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
+                        ),
+                    ),
 
-    );
-    return $config;
-}
+                )
+            ),
 
-
-function customify_builder_config_header_row_render( $row_id ){
-
+        );
+        return $config;
+    }
 }
