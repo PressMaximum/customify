@@ -1079,13 +1079,12 @@
             },
 
             focus: function(){
-                this.container.on( 'click', '.customify--cb-item-setting', function( e ) {
+                this.container.on( 'click', '.customify--cb-item-setting, .customify--cb-item-name', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
                     console.log( 'Clicked section' , section );
                     var control = $( this ).attr( 'data-control' ) || '';
                     var did = false;
-                    console.log( 'control', control );
                     if ( control ) {
                         if ( ! _.isUndefined(  wpcustomize.control( control ) ) ) {
                             wpcustomize.control( control ).focus();
@@ -1553,7 +1552,7 @@
 
     $document.on( 'mouseover', '.customify--cb-row .grid-stack-item', function( e ) {
         var item = $( this );
-        var nameW = $( '.customify--cb-item-name',item ).innerWidth();
+        var nameW = $( '.customify--cb-item-remove',item ).outerWidth() + $( '.customify--cb-item-setting',item ).outerWidth();
         var itemW = $( '.grid-stack-item-content', item ).innerWidth();
         if ( nameW > itemW - 50 ) {
             item.addClass('show-tooltip');

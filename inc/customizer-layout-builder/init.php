@@ -393,7 +393,7 @@ class Customify_Customizer_Layout_Builder {
             >
                 <div class="item-tooltip">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
-                    <span class="customify--cb-item-name">{{ data.name }}</span>
+                    <span class="customify--cb-item-name" data-section="{{ data.section }}">{{ data.name }}</span>
                     <span class="customify--cb-item-remove customify-cb-icon"></span>
                     <span class="customify--cb-item-setting customify-cb-icon" data-section="{{ data.section }}"></span>
                 </div>

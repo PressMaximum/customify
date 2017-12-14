@@ -289,8 +289,11 @@ $cb_padding: 20px;
     .customify--cb-item-name {
         overflow: hidden;
         text-overflow: ellipsis;
-        margin: 0 35px 0 10px;
+        margin: 0 10px 0 10px;
+        padding-right: 60px;
         display: inline-block;
+        width: 100%;
+        max-width: 100%;
         line-height: 37px;
     }
     .customify--cb-item-add {
@@ -360,8 +363,14 @@ $cb_padding: 20px;
     height: 40px;
     display: inline-block;
     z-index: 50;
+    cursor: grab;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
     &.ui-draggable-dragging {
         z-index: 9999999;
+        cursor: grabbing;
+        cursor: -webkit-grabbing;
+        cursor: -moz-grabbing;
     }
     .item-tooltip {
         position: absolute;
