@@ -518,8 +518,6 @@
                     that.updateItemsPositions( flag );
                 };
 
-
-
                 // Chèn vào trong danh sách giới hạn với 1 phẩn tử và có độ vị trí tại X và độ dài là w
                 var insertToFlag = function( node, swap ){
                     var x = node.x, w = node.w;
@@ -612,12 +610,12 @@
                     if ( swap ) {
                         remain = moveAllItemsFromXToRight (x, w );
                         if (remain > 0) {
-                            remain = moveAllItemsFromXToLeft(x, remain);
+                            remain = moveAllItemsFromXToLeft(x -1, remain);
                         }
                     } else {
                         remain = moveAllItemsFromXToLeft (x, w );
                         if (remain > 0) {
-                            remain = moveAllItemsFromXToRight(x, remain);
+                            remain = moveAllItemsFromXToRight(x -1, remain);
                         }
                     }
 
@@ -761,13 +759,20 @@
                     while ( x <= xc && ! found ) {
                         if ( isEmptyX( x ) ) {
                             found = true;
+                        } else {
+                            x++;
                         }
-                        x++;
+
+                    }
+                    if ( x > xc ) {
+                        x = xc;
                     }
                 } else {
                     x = xi;
                     found = true;
                 }
+
+
                 if ( ! found ) {
                     if ( in_this_row ) {
                         x = xi;
@@ -782,6 +787,8 @@
                     x = 0;
                 }
 
+                console.log( 'DROP XC', xc );
+                console.log( 'DROP XI', xi );
                 console.log( 'DROP X', x );
 
                 var node = {
