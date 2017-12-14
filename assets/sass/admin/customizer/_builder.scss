@@ -369,7 +369,7 @@ $cb_padding: 20px;
     height: 40px;
     display: inline-block;
     z-index: 50;
-    cursor: default;
+    cursor: pointer;
     &.ui-draggable-dragging {
         z-index: 9999999;
         cursor: grabbing;

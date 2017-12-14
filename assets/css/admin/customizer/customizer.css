@@ -915,6 +915,9 @@
   max-width: 8.3333333333%;
   display: block;
 }
+.customify--cb-row .customify--row-inner .row--grid div:last-child {
+  border-right: 0 none;
+}
 .customify--cb-row .customify--row-inner .customify--cb-items {
   z-index: 36;
   background: transparent;
@@ -1015,7 +1018,7 @@
   height: 40px;
   display: inline-block;
   z-index: 50;
-  cursor: default;
+  cursor: pointer;
 }
 .grid-stack-item.ui-draggable-dragging {
   z-index: 9999999;
