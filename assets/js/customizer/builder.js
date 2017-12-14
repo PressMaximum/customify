@@ -558,14 +558,17 @@
 
                             // Kiểm tra xem tổng số chỗ trống có lớn hơn chiều rộng hiện tại không
                             // Và số trống còn thiếu về bên trái phải nhỏ hơn số chỗ trống bên trái
-                            if ( _re + _le >= w && ( w - _re ) >= _le ) {
+                            if ( _re + _le >= w && ( w - _re ) <= _le ) {
                                 _x =  x - ( w - _re );
                             } else {
                                 _x = x - _le;
                             }
+
                             if ( _x < 0 ) {
                                 _x = 0;
                             }
+                            console.log('_re', _re );
+                            console.log('_le', _le );
                             console.log('__x', _x );
 
                             while (_w >= 1) {
@@ -778,6 +781,8 @@
                 if ( x < 0 ) {
                     x = 0;
                 }
+
+                console.log( 'DROP X', x );
 
                 var node = {
                     el: ui.draggable,
