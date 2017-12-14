@@ -555,17 +555,18 @@
 
                             _re = getRightEmptySlotFromX(x, true);
                             _le = getLeftEmptySlotFromX(x-1, true);
-                            if ( _re + _le >= w && ( w - _re ) > _le ) {
+
+                            // Kiểm tra xem tổng số chỗ trống có lớn hơn chiều rộng hiện tại không
+                            // Và số trống còn thiếu về bên trái phải nhỏ hơn số chỗ trống bên trái
+                            if ( _re + _le >= w && ( w - _re ) >= _le ) {
                                 _x =  x - ( w - _re );
                             } else {
                                 _x = x - _le;
                             }
-
-
-                            console.log('__re', _re);
-                            console.log('__le', _le);
+                            if ( _x < 0 ) {
+                                _x = 0;
+                            }
                             console.log('__x', _x );
-
 
                             while (_w >= 1) {
                                 if (checkEnoughSpaceFromX(_x, _w)) {
@@ -581,7 +582,7 @@
                             }
 
                         }
-                        
+
                         // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
                         if (flag[x] === 1) {
                             var prev = getPrevBlock(x);
@@ -1189,8 +1190,7 @@
                 });
 
                 wpcustomize.control( that.controlId ).setting.set( that.encodeValue( data ) );
-                console.log('Panel Data: ', data );
-
+                //console.log('Panel Data: ', data );
             },
 
             showPanel: function(){
