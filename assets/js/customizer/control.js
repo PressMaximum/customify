@@ -1063,7 +1063,7 @@
             control.limitRepeaterItems();
 
             // Toggle
-            control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-item-heading', function(e){
+            control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-live-title', function(e){
                 e.preventDefault();
                 var  p = $( this ).closest('.customify--repeater-item');
                 p.toggleClass('customify--open');
