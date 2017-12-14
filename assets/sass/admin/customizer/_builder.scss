@@ -264,7 +264,9 @@ $cb_padding: 20px;
                 flex-basis: 8.3333333333%;
                 max-width: 8.3333333333%;
                 display: block;
-
+                &:last-child {
+                    border-right: 0 none;
+                }
             }
         }
         .customify--cb-items {
