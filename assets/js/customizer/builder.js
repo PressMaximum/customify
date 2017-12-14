@@ -531,65 +531,80 @@
                         return false;
                     }
 
+                    if ( _.isUndefined( swap ) ) {
+                        swap = false;
+                    }
+
                     var _x;
                     var _re;
+                    var _le;
                     var _w;
 
                     // Check nếu từ vị trí hiện tại đủ chỗ trống rồi thì ko cần dịch chuyển nữa.
+                    if ( ! swap ) {
+                        if (isEmptyX(x)) {
+                            // Nếu đã đủ chỗ trống ko cần resize
+                            _w = w;
 
-                    if ( isEmptyX( x ) ) {
-                        _re = getRightEmptySlotFromX(x, true);
-                        console.log('__re', _re);
-
-                        _w = w;
-                        while (_w >= 1) {
-                            if (checkEnoughSpaceFromX(x, _w)) {
-                                console.log({x: x, w: _w});
+                            if ( checkEnoughSpaceFromX(x, _w)) {
                                 addItemToFlag(node);
                                 node.el.attr('data-gs-x', x);
                                 node.el.attr('data-gs-width', _w);
                                 return true;
                             }
-                            _w--;
-                        }
 
-
-
-                    }
-
-
-
-
-                    // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
-                    if ( flag[x] === 1 ) {
-                        var prev = getPrevBlock( x );
-                        if ( prev.x >=0 ) {
-
-                            if ( x > prev.x + Math.floor( prev.w / 2 ) && x > prev.x ) {
-                                _x = prev.x + prev.w;
-                                _re = getRightEmptySlotFromX(_x, true);
-                                console.log('__re', _re);
-                                console.log('__re_X', _x);
-                                if (_re >= w) {
-                                    addItemToFlag({el: node.el, x: _x, w: w});
-                                    node.el.attr('data-gs-x', _x);
-                                    node.el.attr('data-gs-width', w);
-                                    return true;
-                                }
+                            _re = getRightEmptySlotFromX(x, true);
+                            _le = getLeftEmptySlotFromX(x-1, true);
+                            if ( _re + _le >= w && ( w - _re ) > _le ) {
+                                _x =  x - ( w - _re );
+                            } else {
+                                _x = x - _le;
                             }
 
 
+                            console.log('__re', _re);
+                            console.log('__le', _le);
+                            console.log('__x', _x );
+
+
+                            while (_w >= 1) {
+                                if (checkEnoughSpaceFromX(_x, _w)) {
+                                    console.log({x: _x, w: _w});
+                                    node.x = _x;
+                                    node.w = _w;
+                                    addItemToFlag(node);
+                                    node.el.attr('data-gs-x', _x );
+                                    node.el.attr('data-gs-width', _w);
+                                    return true;
+                                }
+                                _w--;
+                            }
+
                         }
+                        
+                        // Check nếu vị trí hiện tại x  có giá trị là 1 thì thử lùi về sau xem có chỗ nào đủ chỗ trống ko ?
+                        if (flag[x] === 1) {
+                            var prev = getPrevBlock(x);
+                            if (prev.x >= 0) {
 
+                                if (x > prev.x + Math.floor(prev.w / 2) && x > prev.x) {
+                                    _x = prev.x + prev.w;
+                                    _re = getRightEmptySlotFromX(_x, true);
+                                    console.log('__re', _re);
+                                    console.log('__re_X', _x);
+                                    if (_re >= w) {
+                                        addItemToFlag({el: node.el, x: _x, w: w});
+                                        node.el.attr('data-gs-x', _x);
+                                        node.el.attr('data-gs-width', w);
+                                        return true;
+                                    }
+                                }
+
+                            }
+                        }
                     }
-
-
-
 
                     var remain = 0;
-                    if ( _.isUndefined( swap ) ) {
-                        swap = false;
-                    }
                     if ( swap ) {
                         remain = moveAllItemsFromXToRight (x, w );
                         if (remain > 0) {
@@ -707,26 +722,29 @@
                 var x = 0;
                 var y = 1;
                 var left = 0;
-
                 var iOffset = ui.offset;
 
-                // Vị trí con trỏ chuột cách mép trái của wapper
-                left = iOffset.left - wOffset.left;
-
-                x = Math.round( left/ colWidth );
-                if ( x < 0 ) {
-                    x = 0;
-                }
                 var w = that.getW( ui.draggable );
                 var in_this_row;
 
                 if ( ! ui.draggable.parent().is( $wrapper ) ) {
                     in_this_row = false;
+                    left = event.clientX - wOffset.left;
                     console.log( 'Not in this row' );
                 } else {
                     in_this_row = true;
                     console.log( 'Item in this row' );
+                    left = iOffset.left - wOffset.left;
                 }
+
+
+                // Vị trí con trỏ chuột cách mép trái của wapper
+
+                x = Math.round( left/ colWidth );
+                if ( x < 0 ) {
+                    x = 0;
+                }
+
 
                 flag = that.getFlag( $wrapper );
                 console.log( 'flag', flag );
