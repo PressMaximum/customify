@@ -25,7 +25,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'name' => 'radio_group',
                 'type' => 'radio_group',
                 'device_settings' => true,
-                'default' => '',
+                'default' => '2',
                 'section'     => 'customify_section',
                 'title'          => __( 'Radio Group', 'customify' ),
                 'description'    => __( 'This is description',  'customify' ),
@@ -33,6 +33,8 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                     '1' => __( 'One', 'customify' ),
                     '2' => __( 'Two', 'customify' ),
                     '3' => __( 'Three', 'customify' ),
+                    '4' => __( '4', 'customify' ),
+                    '5' => __( 'Five', 'customify' ),
                 )
             ),
 
@@ -40,25 +42,25 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 'name' => 'image_select',
                 'type' => 'image_select',
                 'device_settings' => true,
-                'default' => '',
+                'default' => '3',
                 'section'     => 'customify_section',
                 'title'          => __( 'Image Select', 'customify' ),
                 'description'    => __( 'This is description',  'customify' ),
                 'choices' => array(
                     '1' => array(
-                        'img' => 'http://via.placeholder.com/100x100?text=Option_1',
+                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_chat_messages_conversation_forum-128.png',
                         //'label' => 'Option_1'
                     ),
                     '2' =>  array(
-                        'img' => 'http://via.placeholder.com/100x100?text=Option_2',
+                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_posts_list-128.png',
                         //'label' => 'Option_2'
                     ),
                     '3' =>  array(
-                        'img' => 'http://via.placeholder.com/100x100?text=Option_3',
+                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_list_checkboxes-128.png',
                         //'label' => 'Option_3'
                     ),
                     '4' =>  array(
-                        'img' => 'http://via.placeholder.com/100x100?text=Option_4',
+                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_wizard_step_steps-128.png',
                         //'label' => 'Option_4'
                     ),
                 )

@@ -5,13 +5,19 @@ $text_color: #555d66;
     display: none !important;
 }
 .customify-control--heading {
-    margin-left: -12px;
-    margin-right: -12px;
-    padding: 5px 12px;
-    margin-top: 15px;
-    background: #dddddd;
-    border-bottom: 1px solid #ccc;
-    border-top: 1px solid #ccc;
+    padding: 7px 12px;
+    background: #fff;
+    border-bottom: 1px solid #dddddd;
+    border-top: 1px solid #dddddd;
+    margin: 10px -12px;
+    .customize-control-title {
+        margin: 0px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        font-size: 12px;
+        color: #444444;
+    }
 }
 .customize-control {
     .customize-control-description {
@@ -623,6 +629,19 @@ $text_color: #555d66;
         display: flex;
         p {
             flex: 1;
+            &:last-child {
+                span.label {
+                    border-right: 1px solid #ccc;
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;
+                }
+            }
+            &:first-child {
+                span.label {
+                    border-top-left-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                }
+            }
         }
         label {
             width: 100%;
@@ -630,13 +649,16 @@ $text_color: #555d66;
             text-align: center;
         }
         span.label {
-            border: 3px solid #dddddd;
+            border: 1px solid #ccc;
             display: inline-block;
-            padding: 5px 5px;
+            padding: 6px 5px;
             width: 100%;
+            border-right: none;
         }
         input:checked + span.label {
-            border-color: #3068af;
+            border-color: #0085ba;
+            background: #0085ba;
+            color: #fff;
         }
     }
 }
@@ -651,11 +673,15 @@ $text_color: #555d66;
             display: block;
         }
         span.label {
-            border: 3px solid #dddddd;
             display: inline-block;
+            padding: 3px;
+            max-width: 80px;
+            border-radius: 5px;
         }
         input:checked + span.label {
             border-color: #3068af;
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+
         }
     }
 }

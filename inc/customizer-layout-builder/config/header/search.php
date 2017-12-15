@@ -61,6 +61,7 @@ class Customify_Builder_Item_Search {
                 'type' => 'heading',
                 'section' => $section,
                 'title' => __( 'Mobile Search Sidebar', 'customify' ),
+                'description' => __( 'Heading description', 'customify' ),
             ),
 
             array(
