@@ -11,7 +11,7 @@ class Customify_Builder_Item_Logo {
         );
     }
 
-    function customize(){
+    function customize( $wp_customize ){
         $section = 'header_logo';
         $render_cb_el = array( $this, 'render' ) ;
         $selector = '.site-branding';
@@ -62,6 +62,8 @@ class Customify_Builder_Item_Logo {
                 'type' => 'checkbox',
                 'section' => $section,
                 'default' => '',
+                'selector' => $selector,
+                'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Name', 'customify' ),
                 'checkbox_label' => __( 'Show site name ?', 'customify' ),
             ),
@@ -71,6 +73,8 @@ class Customify_Builder_Item_Logo {
                 'type' => 'checkbox',
                 'section' => $section,
                 'default' => '',
+                'selector' => $selector,
+                'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Description', 'customify' ),
                 'checkbox_label' => __( 'Show site description ?', 'customify' ),
             ),
@@ -102,6 +106,23 @@ class Customify_Builder_Item_Logo {
             ),
 
         );
+
+        // add selective refresh
+        // remove_partial
+        $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
+
+        $settings['settings'][] = 'custom_logo';
+        $settings['settings'][] = 'blogname';
+        $settings['settings'][] = 'blogdescription';
+
+
+        $wp_customize->selective_refresh->add_partial( 'custom_logo', array(
+            'selector' => $selector,
+            'settings' => array( 'custom_logo', 'blogname', 'blogdescription' ),
+            'render_callback' => $render_cb_el,
+        ) );
+
+
         return $config;
     }
 

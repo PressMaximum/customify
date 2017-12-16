@@ -47,10 +47,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         }
 
 
-        static function get_config(){
+        static function get_config( $wp_customize = null ){
             if ( is_null( self::$config  ) ) {
 
-                $_config = apply_filters( 'customify/customizer/config', array() );
+                $_config = apply_filters( 'customify/customizer/config', array(), $wp_customize );
                 $config = array();
                 foreach ( $_config as $f ) {
 
@@ -70,6 +70,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
                         'device' => null,
                         'device_settings' => null,
+
+                        'field_class' => null,
 
                         // For settings
                         'sanitize_callback'     => 'customify_sanitize_customizer_input',
@@ -266,10 +268,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
             $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-            $wp_customize->get_setting( 'blogname' )->transport         = 'postMessage';
-            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 
-            foreach ( self::get_config() as $args ) {
+
+            foreach ( self::get_config( $wp_customize ) as $args ) {
                 switch (  $args['type'] ) {
                     case  'panel':
                         $name = $args['name'];
@@ -376,7 +377,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                     'selector' => $selective_refresh['selector'],
                                     'container_inclusive' => $s_id == 'Customify_Customizer_Auto_CSS' ? false : true,
                                     'render_callback' => $s_id ,
-                                );
+                                ) ;
 
                             }
 
@@ -388,19 +389,27 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
             } // End loop config
 
+
             // add selective refresh
             // remove_partial
             $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
+            $wp_customize->get_setting( 'custom_logo' )->transport         = 'postMessage';
+            $wp_customize->get_setting( 'blogname' )->transport  = 'postMessage';
+            $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
+
             foreach ( $this->selective_settings as $cb => $settings ){
                 $name = current( $settings['settings'] );
                 reset( $settings['settings'] );
-                if ( $cb == 'customify_builder_logo_item' ){
+                if ( $cb == 'Customify_Builder_Item_Logo_render' ){
                     $settings['settings'][] = 'custom_logo';
                     $settings['settings'][] = 'blogname';
                     $settings['settings'][] = 'blogdescription';
                 }
-                $wp_customize->selective_refresh->add_partial( $name, $settings );
+                $settings = apply_filters( $cb, $settings );
+                $wp_customize->selective_refresh->add_partial( $cb , $settings );
             }
+
+
 
             do_action( 'customify/customize/register_completed', $this );
         }

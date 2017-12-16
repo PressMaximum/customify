@@ -4,7 +4,7 @@ class Customify_Customizer_Builder_Panel {
     public $id = '';
     function __construct()
     {
-        add_filter( 'customify/customizer/config', array( $this, '_customize' ) );
+        add_filter( 'customify/customizer/config', array( $this, '_customize' ), 15, 2 );
     }
 
     function get_rows_config(){ return array(); }
@@ -15,11 +15,11 @@ class Customify_Customizer_Builder_Panel {
         return Customify_Customizer_Layout_Builder()->get_builder_items( $this->id );
     }
 
-    function _customize( $configs = array() ){
+    function _customize( $configs = array(), $wp_customize = null ){
         if (! is_array( $configs ) ) {
             $configs = array();
         }
-        $config = $this->customize();
+        $config = $this->customize( $wp_customize );
         foreach( $this->get_rows_config() as $id => $name ) {
 
             $m = 'row_'.$id.'_config';
@@ -32,7 +32,7 @@ class Customify_Customizer_Builder_Panel {
                 }
             }
         }
-        $items_config =  Customify_Customizer_Layout_Builder()->get_items_customize( $this->id ) ;
+        $items_config =  Customify_Customizer_Layout_Builder()->get_items_customize( $this->id ,  $wp_customize ) ;
         if ( is_array( $items_config ) ) {
             $config = array_merge( $config,  $items_config );
         }
@@ -154,7 +154,7 @@ class Customify_Customizer_Layout_Builder {
         return $items;
     }
 
-    function get_items_customize( $builder_id ){
+    function get_items_customize( $builder_id, $wp_customize = null ){
         if ( ! $builder_id ) {
             return false;
         }
@@ -164,7 +164,7 @@ class Customify_Customizer_Layout_Builder {
         $items = array();
         foreach( $this->registered_items[ $builder_id ] as $name => $obj ) {
             if ( method_exists( $obj, 'customize' ) ) {
-                $item =  $obj->customize();
+                $item =  $obj->customize( $wp_customize );
                 if ( is_array( $item ) ) {
                     $items = array_merge( $items, $item );
                 }
