@@ -28,6 +28,8 @@
 		} );
 	} );
 
+
+
     var $document = $( document );
 
     api.bind( 'preview-ready', function() {

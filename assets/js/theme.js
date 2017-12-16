@@ -68,105 +68,114 @@ jQuery( document ).ready( function( $ ){
 
     var stickyHeaders = (function() {
 
+        var that = this;
+        that.$el = null;
+        that.$sticky = null;
+
+        var lastScrollTop = 0;
+
+
         var $window = $(window),
             $stickies;
 
-        var setData = function( stickies, addWrap  ){
-            if ( typeof addWrap === "undefined" ) {
-                addWrap = true;
-            }
-            $stickies = stickies.each(function() {
-                var $thisSticky = $(this);
-                var p = $thisSticky.parent();
-                if ( ! p.hasClass('followWrap')) {
-                    if ( addWrap ) {
-                        $thisSticky.wrap('<div class="followWrap" />');
-                    }
-                }
-                $thisSticky.parent().removeAttr('style');
-                $thisSticky.parent().height($thisSticky.height());
-            });
-        };
-
-        var load = function(stickies) {
-            console.log( stickies );
-
-            if (typeof stickies === "object" && stickies instanceof jQuery && stickies.length > 0) {
-
-                setData( stickies );
-
-                $window.off("scroll.stickies").on("scroll.stickies", function() {
-                    _whenScrolling();
-                });
-
-                $window.resize( function(){
-                    setData( stickies, false );
-                    stickies.each( function(){
-                        $( this ).removeClass("fixed").removeAttr("style");
-                    } );
-                    _whenScrolling();
-                } );
-
-                $document.on( 'header_builder_panel_changed', function(){
-                    $( '.followWrap' ).removeAttr('style');
-                        setTimeout( function(){
-                        $( '.followWrap' ).removeAttr('style');
-                        setData( stickies, false );
-                        _whenScrolling();
-                    }, 500 );
-                } );
-
-            }
-        };
-
-        var _whenScrolling = function() {
-
+        var getTop = function( onlyAdminBar ){
             var top = 0;
             if ( $( '#wpadminbar' ).length ) {
                 if ( $( '#wpadminbar' ).css('position') == 'fixed' ) {
                     top = $( '#wpadminbar' ).height();
                 }
             }
+            if ( typeof onlyAdminBar === "undefined" || onlyAdminBar ) {
+                top += that.$sticky.height();
+            }
 
-            var scrollTop = $window.scrollTop();
-            var l = $stickies.length;
-            $stickies.each(function(i) {
-                var $thisSticky = $(this);
-                var p = $( this ).parent();
-                var $stickyPosition = p.offset().top;
-
-                var $prevSticky = $stickies.eq(i - 1);
-
-                if ($stickyPosition - top <= scrollTop ) {
-                    $thisSticky.addClass("fixed");
-                    $thisSticky.css("top", top );
-                    if ( l > 1 && $prevSticky && $prevSticky.length > 0 ) {
-                        $prevSticky.removeClass("absolute fixed").removeAttr("style");
-                    }
-                } else {
-                    $thisSticky.removeClass("fixed").removeAttr("style");
-                    if (  l > 1 && $prevSticky && $prevSticky.length > 0 ) {
-                       $prevSticky.removeClass("absolute fixed").removeAttr("style");
-                    }
-                }
-            });
+            return top;
         };
 
+        var _whenScrolling = function() {
+            var scrollTop = $window.scrollTop();
+            var top;
+            var direction = '';
+            if (scrollTop > lastScrollTop){
+                // downscroll code
+                direction = 'down';
+            } else {
+                // upscroll code
+                direction = 'up';
+            }
+            lastScrollTop = scrollTop;
 
+            if ( direction === 'down' ) {
+                top = getTop( true );
+                $('>.header--row.is-sticky', that.$el).each(function () {
+                    var row = $(this);
+                    var row_id = row.attr('id');
+                    var ot = row.offset().top;
+
+                    if (scrollTop >= ot - top ) {
+                        row.wrap('<div id="' + row_id + '--backup" data-row-id="'+row_id+'" class="row--backup"></div>');
+                        $('#' + row_id + '--backup ').height(row.height());
+                        that.$sticky.append(row);
+                    }
+                });
+            } else {
+                top = getTop( false );
+                var adminBar = getTop( false );
+                $( ' >.row--backup', that.$el ).each( function () {
+                    var row_backup = $(this);
+                    var row_id = row_backup.attr('data-row-id');
+                    var row = $( '#'+row_id, that.$el );
+                    //var ot = row_backup.offset().top;
+                    var ot = row.offset().top;
+
+                    if ( scrollTop + adminBar <= top || scrollTop === ot) {
+                        //console.log( ot );
+                        row_backup.replaceWith( $( '#'+row_id, that.$el ) );
+                    }
+
+                } );
+            }
+
+
+        };
+
+        var load = function( $el ){
+            that.$el = $el;
+
+            var id = that.$el.attr( 'id' ) || '';
+            if ( ! id ) {
+                id = 'id-sticky--'+( new Date().getTime() );
+            } else {
+                id += '--sticky';
+            }
+
+            that.$el.height( that.$el.height() );
+            that.$sticky = $( "<div id='"+id+"' class='wrapper-sticky'>" );
+            that.$el.prepend( that.$sticky );
+            that.$sticky.css( 'top', getTop() );
+
+
+
+            $window.off("scroll.stickies").on("scroll.stickies", function() {
+                _whenScrolling();
+            });
+
+        };
 
         return {
             load: load
         };
+
     })();
 
-    stickyHeaders.load($(".header--row.is-sticky"));
+    stickyHeaders.load($("#masthead"));
 
 
     // When Header Panel rendered by customizer
     $document.on( 'header_builder_panel_changed', function(){
         setupMobileHeight();
         insertNavIcon();
-        stickyHeaders.load($(".header--row.is-sticky"));
+        //stickyHeaders.load($(".header--row.is-sticky"));
     } );
 
 

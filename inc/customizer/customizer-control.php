@@ -28,6 +28,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     // For slider
     public $min = 0;
     public $max = 700;
+    public $step = 1;
 
     public $limit_msg = '';
 
@@ -142,6 +143,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
+        $this->json['step'] = $this->step;
 
         if ( $this->setting_type == 'repeater' ) {
             $this->json['l10n'] = array(
@@ -476,7 +478,38 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             field.value = { unit: 'px' };
         }
         var uniqueID = field.name + ( new Date().getTime() );
-        #>
+
+        if ( ! field.device_settings ) {
+            if ( ! _.isObject( field.default  ) ) {
+            field.default = {
+                    unit: 'px',
+                    value: field.default
+                }
+            }
+        } else {
+            _.each( field.default, function( value, device ){
+                if ( ! _.isObject( value  ) ) {
+                    value = {
+                        unit: 'px',
+                        value: value
+                    }
+                }
+                field.default[device] = value;
+            } );
+
+            try {
+                if ( ! _.isUndefined( field.default[field._current_device] ) ) {
+                    if ( field._current_device ) {
+                       field.default = field.default[field._current_device];
+                    }
+                }
+            } catch ( e ) {
+
+            }
+        }
+
+
+         #>
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-input-slider-wrapper">
@@ -487,7 +520,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     </label>
                     <a href="#" class="reset">Reset</a>
                 </div>
-                <div data-min="{{ field.min }}" data-default="{{ JSON.stringify( field.default ) }}" data-max="{{ field.max }}" class="customify-input-slider"></div>
+                <div data-min="{{ field.min }}" data-default="{{ JSON.stringify( field.default ) }}" data-step="{{ field.step }}" data-max="{{ field.max }}" class="customify-input-slider"></div>
                 <input type="number" class="customify--slider-input customify-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
             </div>
         </div>

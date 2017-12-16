@@ -22,6 +22,45 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
             ),
 
             array(
+                'name' => 'slider',
+                'type' => 'slider',
+                'device_settings' => false,
+                'default' => 20,
+                'min' => -1,
+                'max' => 10,
+                'step' => .1,
+                'section' => 'customify_section',
+                //'device' => 'mobile', // mobile || general
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => __( 'Slider', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
+                'selector' => 'h4',
+                'css_format' => 'font-size: {{value}}'
+            ),
+
+            array(
+                'name' => 'slider_devices',
+                'type' => 'slider',
+                'device_settings' => true,
+                'default' => array(
+                    'desktop' => 40,
+                    'tablet' => 30,
+                    'mobile' => 20,
+                ),
+                'min' => -10,
+                'max' => 100,
+                'section' => 'customify_section',
+                //'device' => 'mobile', // mobile || general
+                //'priority' => 22,
+                'theme_supports' => '',
+                'title'          => __( 'Slider Multiple Devices', 'customify' ),
+                'description' => __( 'This is description',  'customify' ),
+                'selector' => 'h4',
+                'css_format' => 'font-size: {{value}}'
+            ),
+
+            array(
                 'name' => 'radio_group',
                 'type' => 'radio_group',
                 'device_settings' => true,
@@ -420,22 +459,7 @@ if ( ! function_exists( 'customify_customizer_config' ) ) {
                 //'render_callback' => '_test_2_render_callback'
             ),
 
-            array(
-                'name' => 'slider',
-                'type' => 'slider',
-                'device_settings' => true,
-                'default' => '',
-                'min' => -10,
-                'max' => 100,
-                'section' => 'customify_section',
-                //'device' => 'mobile', // mobile || general
-                //'priority' => 22,
-                'theme_supports' => '',
-                'title'          => __( 'Slider', 'customify' ),
-                'description' => __( 'This is description',  'customify' ),
-                'selector' => 'h4',
-                'css_format' => 'font-size: {{value}}'
-            ),
+
 
             array(
                 'name' => 'css_ruler',

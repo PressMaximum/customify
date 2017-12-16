@@ -708,6 +708,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
                     if ( ! empty( $desktop_items ) || ! empty( $mobile_items ) ) {
 
+                        $data_height = '';
+
                         if ($this->id != 'footer') {
                             if (empty($desktop_items)) {
                                 $classes[] = 'hide-on-desktop';
@@ -715,6 +717,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             if (empty($mobile_items)) {
                                 $classes[] = 'hide-on-mobile hide-on-tablet';
                             }
+
+                            $height = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_height');
+                            $height = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_fixed_height');
                         }
 
                         $row_layout = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_layout');

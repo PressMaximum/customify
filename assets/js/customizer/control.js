@@ -472,6 +472,7 @@
                     var input = $( '.customify--slider-input', p );
                     var min = slider.data( 'min' ) || 0;
                     var max = slider.data( 'max' ) || 300;
+                    var step = slider.data( 'step' ) || 1;
                     if ( !_.isNumber( min ) ) {
                         min = 0;
                     }
@@ -480,11 +481,15 @@
                         max = 300;
                     }
 
+                    if ( !_.isNumber( step ) ) {
+                        step = 1;
+                    }
+
                     var current_val = input.val();
                     slider.slider({
                         range: "min",
                         value: current_val,
-                        step: 1,
+                        step: step,
                         min: min,
                         max: max,
                         slide: function (event, ui) {
@@ -887,6 +892,7 @@
                         }
                     }
                     _field.name =  field.name+'-'+device;
+                    _field._current_device = device;
 
                     var $deviceFields = $( template( _field , template_id, 'field' ) );
                     var deviceFieldItem = $deviceFields.find( '.customify-field-settings-inner' ).first();
@@ -924,6 +930,7 @@
             if ( field.type == 'slider' ) {
                 field.min = control.params.min;
                 field.max = control.params.max;
+                field.step = control.params.step;
             }
 
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {

@@ -84,14 +84,17 @@ $close_size: 35px;
 }
 
 .header--row {
-    transition: all .49s ease;
+    .customify-grid {
+        -webkit-transition: all .5s ease;
+        -moz-transition: all .5s ease;
+        transition: all .5s ease;
+    }
     background: #ffffff;
     &.layout-fullwidth {
         .customify-container {
             max-width: initial;
         }
     }
-
 
     &.fixed {
         position: fixed;
@@ -104,6 +107,19 @@ $close_size: 35px;
     &.fixed.absolute {
         position: absolute;
     }
+}
+
+#masthead--sticky {
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    display: block;
+    min-height: 0px;
+    background: red;
+    z-index: 100;
+}
+.row--backup {
+    display: block;
 }
 
 
