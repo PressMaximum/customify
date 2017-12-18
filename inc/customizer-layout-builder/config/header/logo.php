@@ -107,22 +107,6 @@ class Customify_Builder_Item_Logo {
 
         );
 
-        // add selective refresh
-        // remove_partial
-        $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
-
-        $settings['settings'][] = 'custom_logo';
-        $settings['settings'][] = 'blogname';
-        $settings['settings'][] = 'blogdescription';
-
-
-        $wp_customize->selective_refresh->add_partial( 'custom_logo', array(
-            'selector' => $selector,
-            'settings' => array( 'custom_logo', 'blogname', 'blogdescription' ),
-            'render_callback' => $render_cb_el,
-        ) );
-
-
         return $config;
     }
 

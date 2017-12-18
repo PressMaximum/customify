@@ -1,15 +1,25 @@
 <?php
 
 class Customify_Builder_Item_HTML {
-    public $id = 'html';
-    public $section = 'header_html';
-    public $name = 'header_html';
-    public $label = '';
+    public $id = 'html'; // Required
+    public $section = 'header_html'; // Optional
+    public $name = 'header_html'; // Optional
+    public $label = ''; // Optional
+
+    /**
+     * Optional construct
+     *
+     * Customify_Builder_Item_HTML constructor.
+     */
     function __construct()
     {
         $this->label = __( 'HTML', 'customify' );
     }
 
+    /**
+     * Register Builder item
+     * @return array
+     */
     function item(){
         return array(
             'name' => __( 'HTML', 'customify' ),
@@ -19,6 +29,12 @@ class Customify_Builder_Item_HTML {
             'section' => $this->section // Customizer section to focus when click settings
         );
     }
+
+    /**
+     * Optional, Register customize section and panel.
+     *
+     * @return array
+     */
     function customize(){
         // Render callback function
         $fn = array( $this, 'render' );
@@ -54,6 +70,9 @@ class Customify_Builder_Item_HTML {
         );
     }
 
+    /**
+     * Optional. Render item content
+     */
     function render(){
         $content = Customify_Customizer()->get_setting( $this->name );
         echo '<div class="builder-header-html-item item--html">';
