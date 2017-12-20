@@ -389,6 +389,7 @@ class Customify_Customizer_Layout_Builder {
                  data-gs-x="{{ data.x }}"
                  data-gs-y="{{ data.y }}"
                  data-gs-width="{{ data.width }}"
+                 data-df-width="{{ data.width }}"
                  data-gs-height="1"
             >
                 <div class="item-tooltip">{{ data.name }}</div>
@@ -706,9 +707,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $classes[] = $this->id.'--row';
                     $desktop_items = $this->get_row_settings($row_id, 'desktop');
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
+                    $atts = array();
                     if ( ! empty( $desktop_items ) || ! empty( $mobile_items ) ) {
-
-                        $data_height = '';
 
                         if ($this->id != 'footer') {
                             if (empty($desktop_items)) {
@@ -718,8 +718,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
                                 $classes[] = 'hide-on-mobile hide-on-tablet';
                             }
 
-                            $height = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_height');
-                            $height = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_fixed_height');
+                            $atts['data-height'] = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_height');
+                            $atts['data-fixed-height'] = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_fixed_height');
+
+
                         }
 
                         $row_layout = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_layout');
@@ -732,6 +734,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             $is_sticky = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_sticky');
                             if (absint($is_sticky) == 1) {
                                 $classes[] = 'is-sticky';
+                            } else {
+                                $classes[] = 'hide-when-stuck';
                             }
 
                             $align_classes = 'customify-grid-middle';
@@ -739,8 +743,20 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
                         $classes = apply_filters('customify/builder/row-classes', $classes, $row_id, $this );
 
+                        $atts['class'] = join( ' ', $classes );
+                        $atts['id'] = 'cb-row--'.$_id;
+                        $atts['data-row-id'] = $row_id;
+
+                        $string_atts = '';
+                        foreach ( $atts as $k => $s ) {
+                            if ( is_array( $s ) ) {
+                                $s = json_encode( $s );
+                            }
+                            $string_atts.= ' '.sanitize_text_field( $k ).'="'.esc_attr( $s ).'" ';
+                        }
+
                         ?>
-                        <div id="cb-row--<?php echo esc_attr($_id); ?>" class="<?php echo esc_attr(join(' ', $classes)); ?>" data-row-id="<?php echo esc_attr($row_id); ?>"
+                        <div <?php echo $string_atts; ?>
                              data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                             <div class="customify-container">
                                 <?php
@@ -828,24 +844,19 @@ function Customify_Customizer_Layout_Builder_Frontend(){
 function customify_customize_render_header(){
 
     echo '<header id="masthead" class="site-header">';
-    if ( is_customize_preview() ) {
-        ?>
-        <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
-        <?php
-    }
-    $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
-    Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
-    Customify_Customizer_Layout_Builder_Frontend()->render();
-    Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
-
-    /*
-    $theme_name = wp_get_theme()->get('Name');
-    $option_name = $theme_name.'_saved_templates';
-    ?>
-    <pre class="debug"><?php // print_r( $b->render_items()  ); ?></pre>
-    <pre class="debug"><?php print_r( get_theme_mod( 'header_builder_panel' ) ); ?></pre>
-    <?php
-    */
+        /*
+        if ( is_customize_preview() ) {
+            ?>
+            <span class="customize-partial-edit-shortcut customize-partial-edit-shortcut-header_panel"><button class="customize-partial-edit-shortcut-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13.89 3.39l2.71 2.72c.46.46.42 1.24.03 1.64l-8.01 8.02-5.56 1.16 1.16-5.58s7.6-7.63 7.99-8.03c.39-.39 1.22-.39 1.68.07zm-2.73 2.79l-5.59 5.61 1.11 1.11 5.54-5.65zm-2.97 8.23l5.58-5.6-1.07-1.08-5.59 5.6z"></path></svg></button></span>
+            <?php
+        }
+        */
+        echo '<div id="masthead-inner" class="site-header-inner">';
+        $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
+        Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
+        Customify_Customizer_Layout_Builder_Frontend()->render();
+        Customify_Customizer_Layout_Builder_Frontend()->render_sidebar();
+         echo '</div>';
     echo '</header>';
 }
 

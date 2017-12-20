@@ -158,8 +158,16 @@
                 return parseInt( x );
             },
 
-            getW: function( $item ){
-                var w = $item.attr( 'data-gs-width' ) || 1;
+            getW: function( $item, df ){
+                if ( _.isUndefined( df ) ) {
+                    df = false;
+                }
+                var w;
+                if ( df ) {
+                    w = $item.attr( 'data-df-width' ) || 1;
+                } else {
+                    w = $item.attr( 'data-gs-width' ) || 1;
+                }
                 return parseInt( w );
             },
 
@@ -198,38 +206,29 @@
                 var slot_after = 0;
                 var i;
 
-                var prev =  that.findPrevElFromX( x - 1, flag, $wrapper );
-                var next =  that.findNextElFromX( x + 1, flag, $wrapper );
-                if ( prev && prev.length ) {
-                    var px = that.getX( prev );
-                    var pw = that.getW( prev );
-                    for ( i = px + pw; i < x; i++ ) {
-                        if ( flag[ i ] === 0 ) {
-                            slot_before ++;
-                        }
-
+                var br = false;
+                // Get empty slots before
+                i = x-1;
+                while ( i >= 0 && ! br ) {
+                    if ( flag[ i ] === 0 ) {
+                        slot_before++;
+                    } else {
+                        br = true;
                     }
-                } else {
-                    for ( i = x; i >= 0; i-- ) {
-                        if ( flag[ i ] === 0 ) {
-                            slot_before ++;
-                        }
-                    }
+                    i--;
                 }
 
-                if (  next && next.length ) {
-                    var nx = that.getX( next );
-                    for ( i = x + w; i < nx; i++ ) {
-                        if ( flag[ i ] === 0 ) {
-                            slot_after ++;
-                        }
+                // Get empty slots after
+                br = false;
+                i = x + w ;
+                console.log( 'start R: '+i );
+                while ( i < that.cols && ! br ) {
+                    if ( flag[ i ] === 0 ) {
+                        slot_after++;
+                    } else {
+                        br = true;
                     }
-                } else {
-                    for ( i = x + w; i < that.cols; i++ ) {
-                        if ( flag[ i ] === 0 ) {
-                            slot_after ++;
-                        }
-                    }
+                    i++;
                 }
 
                 return {
@@ -239,8 +238,8 @@
                     item: $item,
                     before: slot_before,
                     after: slot_after,
-                    next: next,
-                    prev: prev,
+                    //next: next,
+                   // prev: prev,
                     id: $item.attr( 'data-id' ) || '',
                     wrapper: $wrapper
                 }
@@ -730,8 +729,10 @@
                 var left = 0;
                 var iOffset = ui.offset;
 
-                var w = that.getW( ui.draggable );
+                var w = that.getW( ui.draggable, true );
                 var in_this_row;
+
+                console.log( 'DROP W', w );
 
                 var xc = 0, xi = 0, found = false;
 
@@ -851,9 +852,6 @@
             setGridWidth: function( $wrapper, ui ){
                 var that = this;
                 var $item = ui.element;
-                var next  = $item.next();
-                var prev  = $item.prev();
-
                 var width  = $wrapper.width();
                 var itemWidth = ui.size.width;
                 var colWidth = width/that.cols;
@@ -878,8 +876,9 @@
                 var newW;
                 var flag = that.getFlag( $wrapper );
                 var itemInfo = that.gridGetItemInfo( ui.originalElement, flag, $wrapper );
-               // console.log( 'resize itemInfo', itemInfo );
                 var diffLeft, diffRight;
+
+                console.log( 'itemInfo', itemInfo );
 
                 if ( isShiftLeft ) {
                     diffLeft = ui.originalPosition.left - ui.position.left;
@@ -893,9 +892,7 @@
 
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
-
                     that.updateGridFlag( $wrapper );
-
                     return ;
 
                 } else if( isShiftRight ) {
@@ -909,6 +906,7 @@
                     }
 
                     newX = ox + addW;
+
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
 
@@ -926,7 +924,6 @@
                         w = itemInfo.w + itemInfo.after;
                     }
                 }
-
 
                 if ( w <= 0 ) {
                     w = 1;
@@ -975,6 +972,7 @@
                 } );
                 $row.data( 'gridRowFlag', rowFlag );
                 that.updateItemsPositions( rowFlag );
+                console.log( 'FLAG: '+ $row.attr( 'id' ) , rowFlag );
                 that.sortGrid( $row );
                 return rowFlag;
             },

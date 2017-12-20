@@ -6,7 +6,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         private $fonts = array();
         private $variants = array();
         private $subsets = array();
-        private $media_queries = array(
+        public $media_queries = array(
             'all' => '%s',
             'desktop' => '@media screen and (min-width: 64em) { %s }',
             'tablet' => '@media screen and (max-width: 64em) and (min-width: 35.5em) { %s }',
@@ -596,7 +596,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         }
     }
 
-    function Customify_Customizer_Auto_CSS( $partial = false ){
-        return Customify_Customizer_Auto_CSS::get_instance()->auto_css( $partial );
+    function Customify_Customizer_Auto_CSS(){
+        return Customify_Customizer_Auto_CSS::get_instance();
     }
 }

@@ -44,6 +44,14 @@ var AutoCSS = window.AutoCSS || null;
     };
     AutoCSS.prototype.run = function(){
         this.values = api.get();
+
+        if ( window.Customify_JS ) {
+            if ( window.Customify_JS.css_media_queries ) {
+                this.media_queries = window.Customify_JS.css_media_queries;
+            }
+        }
+
+
         this.reset();
 
        // console.log( 'NEW CUSTOMIZE VALUES', this.values );

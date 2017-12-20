@@ -212,10 +212,10 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'device_settings' => false,
                 'max' => 250,
                 'render_callback' => $fn,
-                //'selector' => $selector.'.fixed .customify-grid, '.$selector.'.fixed',
-                //'selector' => '.wrapper-sticky '.$selector.' .customify-grid',
+                //selector' => $selector.'.fixed .customify-grid',
+                'selector' => '.stuck '.$selector.' .customify-grid',
                 'required' => array(  $section.'_sticky', '==', '1'),
-                //'css_format' => 'min-height: {{value}};',
+                'css_format' => 'min-height: {{value}};',
                 'title' => __( 'Height When Stuck', 'customify' ),
             ),
 
