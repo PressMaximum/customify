@@ -30,13 +30,14 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $max = 700;
     public $step = 1;
 
+    // For CSS Ruler
+    public $fields_disabled = array();
+
+
     public $limit_msg = '';
-
     public $live_title_field; // for repeater
-
     public $_settings;
     public $_selective_refresh;
-
     public $device_settings = false;
 
 
@@ -144,6 +145,11 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
         $this->json['step'] = $this->step;
+
+        if ( 'css_ruler' == $this->setting_type ) {
+            // $disabled
+            $this->json['fields_disabled'] = $this->fields_disabled;
+        }
 
         if ( $this->setting_type == 'repeater' ) {
             $this->json['l10n'] = array(
@@ -408,6 +414,23 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         if ( ! _.isObject( field.value ) ) {
             field.value = { link: 1 };
         }
+
+        if ( ! _.isObject( field.fields_disabled ) ) {
+            field.fields_disabled = {};
+        }
+
+        var defaultpl = <?php echo json_encode( __( 'Auto', 'customify' ) ); ?>;
+
+        _.each( [ 'top', 'right', 'bottom', 'left' ], function( key ){
+            if ( ! _.isUndefined( field.fields_disabled[ key ] ) ) {
+                if ( ! field.fields_disabled[ key ] ) {
+                    field.fields_disabled[ key ] = defaultpl;
+                }
+            } else {
+                field.fields_disabled[ key ] = false;
+            }
+        } );
+                
         var uniqueID = field.name + ( new Date().getTime() );
         #>
         <?php echo $this->field_header(); ?>
@@ -432,19 +455,19 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             </div>
             <div class="customify--css-ruler">
                 <span>
-                    <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-top" value="{{ field.value.top }}">
+                    <input type="number" class="customify-input customify-input-css change-by-js" <# if ( field.fields_disabled['top'] ) {  #> disabled="disabled" placeholder="{{ field.fields_disabled['top'] }}" <# } #> data-name="{{ field.name }}-top" value="{{ field.value.top }}">
                     <span class="customify--small-label"><?php _e( 'Top', 'customify' ); ?></span>
                 </span>
                 <span>
-                    <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-right" value="{{ field.value.right }}">
+                    <input type="number" class="customify-input customify-input-css change-by-js" <# if ( field.fields_disabled['right'] ) {  #> disabled="disabled" placeholder="{{ field.fields_disabled['right'] }}" <# } #> data-name="{{ field.name }}-right" value="{{ field.value.right }}">
                     <span class="customify--small-label"><?php _e( 'Right', 'customify' ); ?></span>
                 </span>
                 <span>
-                    <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-bottom" value="{{ field.value.bottom }}">
+                    <input type="number" class="customify-input customify-input-css change-by-js" <# if ( field.fields_disabled['bottom'] ) {  #> disabled="disabled" placeholder="{{ field.fields_disabled['bottom'] }}" <# } #> data-name="{{ field.name }}-bottom" value="{{ field.value.bottom }}">
                     <span class="customify--small-label"><?php _e( 'Bottom', 'customify' ); ?></span>
                 </span>
                 <span>
-                    <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-left" value="{{ field.value.left }}">
+                    <input type="number" class="customify-input customify-input-css change-by-js" <# if ( field.fields_disabled['left'] ) {  #> disabled="disabled" placeholder="{{ field.fields_disabled['left'] }}" <# } #> data-name="{{ field.name }}-left" value="{{ field.value.left }}">
                     <span class="customify--small-label"><?php _e( 'Left', 'customify' ); ?></span>
                 </span>
                 <label title="<?php esc_attr_e( 'Toggle values together', 'customify' ); ?>" class="customify--css-ruler-link <# if ( field.value.link == 1 ){ #> customify--label-active <# } #>">

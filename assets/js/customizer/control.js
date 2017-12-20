@@ -270,6 +270,7 @@
         },
         initCSSRuler: function(){
             var control = this;
+            // When toggle value change
             control.container.on( 'change', '.customify--label-parent', function(){
                 if ( $( this ).attr( 'type' ) == 'radio' ){
                     var name = $( this ).attr( 'name' );
@@ -281,7 +282,6 @@
                 } else {
                     $( this ).parent().removeClass( 'customify--label-active' );
                 }
-
                 control.getValue();
             } );
 
@@ -291,9 +291,12 @@
                 var link_checked = $( '.customify--css-ruler-link input', p ).is( ':checked' );
                 if ( link_checked ) {
                     var v = $( this ).val();
-                    $( '.customify-input-css', p ).not( $( this ) ).val(v);
+                    $( '.customify-input-css', p ).not( $( this ) ).each( function(){
+                        if( ! $( this ).is(':disabled') ){
+                            $( this ).val( v );
+                        }
+                    } );
                 }
-
                 control.getValue();
             } );
 
@@ -931,6 +934,10 @@
                 field.min = control.params.min;
                 field.max = control.params.max;
                 field.step = control.params.step;
+            }
+
+            if ( field.type == 'css_ruler' ) {
+                field.fields_disabled = control.params.fields_disabled;
             }
 
             if ( control.params.setting_type == 'select' || control.params.setting_type == 'radio' ) {

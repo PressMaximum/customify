@@ -22,6 +22,29 @@ if (!function_exists('customify_customizer_config')) {
             ),
 
             array(
+                'name' => 'css_ruler_disable',
+                'device_settings' => true,
+                'type' => 'css_ruler',
+                'default' => null,
+                'transport' => 'postMessage', // or refresh
+                'section' => 'customify_section',
+                'theme_supports' => '',
+                'title' => __('CSS Ruler', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'selector' => '.site-content',
+                'fields_disabled' => array(
+                    'left' => '', // custom text  default: Auto
+                    'right' => '',
+                ),
+                'css_format' => array(
+                    'top' => 'padding-top: {{value}}',
+                    //'right' => 'padding-right: {{value}}',
+                    'bottom' => 'padding-bottom: {{value}}',
+                    //'left' => 'padding-left: {{value}}',
+                )
+            ),
+
+            array(
                 'name' => 'slider',
                 'type' => 'slider',
                 'device_settings' => false,
