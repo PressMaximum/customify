@@ -2922,28 +2922,6 @@ article.comment .comment-post-author {
 * Row Layouts
 *-------------------------------
 */
-#masthead.stuck #masthead-inner, #masthead.brm-stuck #masthead-inner {
-  position: fixed;
-  top: 0px;
-  box-sizing: border-box;
-}
-#masthead.stuck .hide-when-stuck {
-  display: none;
-}
-
-#masthead-inner {
-  position: relative;
-  display: block;
-  top: 0px;
-  width: 100%;
-  z-index: 100;
-}
-#masthead-inner.animation {
-  -webkit-transition: top .5s ease;
-  -moz-transition: top .5s ease;
-  transition: top .5s ease;
-}
-
 .site-header .followWrap, .site-header .customify-container {
   display: flex;
   flex-direction: column;
@@ -2954,11 +2932,9 @@ article.comment .comment-post-author {
   background: #ffffff;
 }
 .header--row .customify-grid {
-  /*
   -webkit-transition: all .5s ease;
   -moz-transition: all .5s ease;
   transition: all .5s ease;
-  */
 }
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;

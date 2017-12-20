@@ -717,11 +717,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
                             if (empty($mobile_items)) {
                                 $classes[] = 'hide-on-mobile hide-on-tablet';
                             }
-
-                            $atts['data-height'] = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_height');
-                            $atts['data-fixed-height'] = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_fixed_height');
-
-
                         }
 
                         $row_layout = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_layout');
