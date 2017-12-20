@@ -4,6 +4,7 @@ var AutoCSS = window.AutoCSS || null;
 
     AutoCSS = function(){
         this.values = {};
+        this.lastValues = {};
         this.devices = [ 'desktop', 'tablet', 'mobile' ];
     };
 
@@ -43,6 +44,7 @@ var AutoCSS = window.AutoCSS || null;
         return JSON.parse( decodeURI( value ) );
     };
     AutoCSS.prototype.run = function(){
+        this.lastValues = this.values;
         this.values = api.get();
 
         if ( window.Customify_JS ) {
@@ -76,12 +78,18 @@ var AutoCSS = window.AutoCSS || null;
                         that.font(field);
                         break;
                     default:
-                        if ( !_.isUndefined( field.css_format ) && field.css_format === 'background') {
-                            that.background(field);
-                        } else if (!_.isUndefined( field.css_format ) && field.css_format === 'typography') {
-                            that.typography(field);
-                        } else {
-                            that.maybe_devices_setup( field, 'setup_default' );
+                        switch ( field.css_format ) {
+                            case  'background':
+                                that.background(field);
+                                break;
+                            case 'typography':
+                                that.typography(field);
+                                break;
+                            case 'html_class':
+                                that.html_class(field);
+                                break;
+                            default:
+                                that.maybe_devices_setup( field, 'setup_default' );
                         }
                 }
             }
@@ -644,6 +652,53 @@ var AutoCSS = window.AutoCSS || null;
         return this.join( css, "\r\n\t" );
     };
 
+    AutoCSS.prototype.html_class = function( field ){
+
+        var value = this.get_setting( field.name, 'all' );
+        var that = this;
+        var selector = field.selector;
+        var last_value =  null;
+        if ( ! _.isUndefined( that.lastValues[ field.name ] ) ) {
+            last_value = that.lastValues[ field.name ];
+        }
+
+        if ( _.isString( last_value ) ) {
+            try {
+                var decodeValue = that.decodeValue(last_value);
+                if ( !_.isNull( decodeValue ) ) {
+                    last_value = decodeValue;
+                }
+            } catch (e) {
+
+            }
+        }
+        
+
+        if ( _.isString( last_value ) && !_.isEmpty( last_value ) ) {
+            $( selector ).removeClass( last_value );
+        } else {
+            if ( _.isObject( last_value ) ) {
+                _.each( last_value, function( n, d ) {
+                    $( selector ).removeClass( d +'--' + n );
+                } );
+            }
+        }
+
+        if ( _.isString( value ) ) {
+            $( selector ).addClass( value );
+        } else {
+            if ( _.isObject( value ) ) {
+                _.each( value, function( n, d ) {
+                    if ( n )  {
+                        $( selector ).addClass( d +'--' + n );
+                    }
+
+                } );
+            }
+        }
+
+    };
+
     AutoCSS.prototype.typography = function( field ){
         var values = this.get_setting( field.name, 'all' );
 
@@ -757,6 +812,8 @@ var AutoCSS = window.AutoCSS || null;
 
     api.bind( 'preview-ready', function() {
         //AutoCSSInit.run();
+        AutoCSSInit.lastValues = api.get();
+        AutoCSSInit.values = api.get();
     });
 
     api.bind( 'change', function(){

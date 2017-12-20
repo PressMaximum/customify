@@ -66,17 +66,19 @@ if (!function_exists('customify_customizer_config')) {
             array(
                 'name' => 'radio_group',
                 'type' => 'radio_group',
-                'device_settings' => true,
-                'default' => '2',
+                'css_format' => 'html_class',
+                'selector' => 'body',
+                'device_settings' => false,
+                'default' => 'c-2',
                 'section' => 'customify_section',
                 'title' => __('Radio Group', 'customify'),
                 'description' => __('This is description', 'customify'),
                 'choices' => array(
-                    '1' => __('One', 'customify'),
-                    '2' => __('Two', 'customify'),
-                    '3' => __('Three', 'customify'),
-                    '4' => __('4', 'customify'),
-                    '5' => __('Five', 'customify'),
+                    'c-1' => __('One', 'customify'),
+                    'c-2' => __('Two', 'customify'),
+                    'c-3' => __('Three', 'customify'),
+                    'c-4' => __('4', 'customify'),
+                    'c-5' => __('Five', 'customify'),
                 )
             ),
 
