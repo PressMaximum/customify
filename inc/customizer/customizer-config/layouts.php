@@ -3,36 +3,50 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 	function customify_customizer_layouts_config( $configs ){
 
 		$config = array(
+
+			// Layout panel
 			array(
-				'name'           => 'customify_layouts',
+				'name'           => 'layout_panel',
 				'type'           => 'panel',
 				'priority' => 22,
 				'theme_supports' => '',
 				'title'          => __( 'Layouts', 'customify' ),
 			),
 
+			// Global layout section.
 			array(
-				'name'           => 'customify_layouts_section',
+				'name'           => 'global_layout_section',
 				'type'           => 'section',
-				'panel'          => 'customify_layouts',
-				//'priority' => 22,
+				'panel'          => 'layout_panel',
 				'theme_supports' => '',
-				'title'          => __( 'Customify Section', 'customify' ),
-				'description'    => __( 'This is section description', 'customify' ),
+				'title'          => __( 'Global Layouts', 'customify' ),
 			),
+				array(
+					'name' => 'site_layout',
+					'type' => 'radio_group',
+					'section' => 'global_layout_section',
+					'title' => __('Site layout mode', 'customify'),
+					'description' => __('Select global site layout.', 'customify'),
+					'default' => 'site-full-width',
+					'choices' => array(
+						'site-full-width' => __('Full Width', 'customify'),
+						'site-boxed' => __('Boxed', 'customify'),
+						'site-framed' => __('Framed', 'customify'),
+					)
+				),
 
-			array(
-				'name' => 'container_width',
-				'type' => 'slider',
-				'device_settings' => false,
-				'default' => 1200,
-				'min' => 700,
-				'max' => 2000,
-				'section' => 'customify_layouts_section',
-				'title'          => __( 'Container Width', 'customify' ),
-				'selector' => '.customify_container',
-				'css_format' => 'max-width: {{value}}'
-			),
+				array(
+					'name' => 'container_width',
+					'type' => 'slider',
+					'device_settings' => false,
+					'default' => 1200,
+					'min' => 700,
+					'max' => 2000,
+					'section' => 'global_layout_section',
+					'title'          => __( 'Container Width', 'customify' ),
+					'selector' => '.customify-container',
+					'css_format' => 'max-width: {{value}}'
+				),
 
 		);
 

@@ -34,6 +34,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) :
             $classes[] = 'customize-previewing';
         }
 
+        // Site layout mode.
+		$site_layout = Customify_Customizer()->get_setting( 'site_layout' );
+		if ( $site_layout ) {
+			$classes[] = sanitize_text_field($site_layout);
+		}
+
 		return $classes;
 	}
 endif;
