@@ -210,12 +210,15 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         }
 
         function setup_default( $value, $format ){
-            $value = sanitize_text_field( $value );
-            if ( $format ) {
-                if (!is_null( $value ) && $value !== '') {
-                    return $this->replace_value( $value, $format );
+            if ( is_string( $value ) ) {
+                $value = sanitize_text_field( $value );
+                if ( $format ) {
+                    if (!is_null( $value ) && $value !== '') {
+                        return $this->replace_value( $value, $format );
+                    }
                 }
             }
+
             return false;
         }
 
