@@ -69,7 +69,7 @@ class Customify_Init {
     }
 
     function get( $key ){
-        if ( method_exists( 'get_'.$key ) ) {
+        if ( method_exists( $this,'get_'.$key ) ) {
             return call_user_func_array( array( $this, 'get_'.$key ), array() );
         } elseif ( property_exists( $this, $key ) ) {
             return $this->{ $key };
