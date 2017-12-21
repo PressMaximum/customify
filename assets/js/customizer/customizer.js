@@ -139,8 +139,6 @@
 
         if ( _.isUndefined( skips_to_add_shortcut[ partial.id ] ) ) {
             _.each(partial.placements(), function (placement) {
-                console.log('placement', placement);
-
                 $(placement.container).attr('title', wp.customize.selectiveRefresh.data.l10n.shiftClickToEdit);
                 partial.createEditShortcutForPlacement(placement);
             });
@@ -157,6 +155,6 @@
             });
         }
     };
-    
+
 
 } )( jQuery, wp.customize );
