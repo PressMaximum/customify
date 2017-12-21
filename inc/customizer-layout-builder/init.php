@@ -68,7 +68,8 @@ class Customify_Customizer_Layout_Builder {
             'footer' => array(
                 'panel',
                 'widgets',
-                'templates'
+                'templates',
+                'html'
             )
         );
 
