@@ -69,7 +69,8 @@ class Customify_Customizer_Layout_Builder {
                 'panel',
                 'widgets',
                 'templates',
-                'html'
+                'html',
+                'copyright'
             )
         );
 
