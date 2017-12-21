@@ -95,33 +95,7 @@ $close_size: 35px;
             max-width: initial;
         }
     }
-
-    &.fixed {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        box-sizing: border-box;
-        z-index: 100;
-    }
-
-    &.fixed.absolute {
-        position: absolute;
-    }
 }
-
-#masthead--sticky {
-    position: fixed;
-    top: 0px;
-    width: 100%;
-    display: block;
-    min-height: 0px;
-    background: red;
-    z-index: 100;
-}
-.row--backup {
-    display: block;
-}
-
 
 
 

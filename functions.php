@@ -202,8 +202,7 @@ function customify_scripts() {
     }
     Customify_Font_Icons()->enqueue();
 
-	wp_enqueue_script( 'jquery.waypoints', get_template_directory_uri() . '/assets/js/jquery.waypoints.js', array('jquery'), false, true );
-	wp_enqueue_script( 'customify', get_template_directory_uri() . '/assets/js/theme.js', array('jquery', 'jquery.waypoints' ), false, true );
+	wp_enqueue_script( 'customify', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), false, true );
 
 	wp_enqueue_script( 'customify-navigation', get_template_directory_uri() . '/assets/js/navigation.js', array(), '20151215', true );
 

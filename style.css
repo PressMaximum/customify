@@ -2939,30 +2939,6 @@ article.comment .comment-post-author {
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;
 }
-.header--row.fixed {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  box-sizing: border-box;
-  z-index: 100;
-}
-.header--row.fixed.absolute {
-  position: absolute;
-}
-
-#masthead--sticky {
-  position: fixed;
-  top: 0px;
-  width: 100%;
-  display: block;
-  min-height: 0px;
-  background: red;
-  z-index: 100;
-}
-
-.row--backup {
-  display: block;
-}
 
 /*
 * Icon List
