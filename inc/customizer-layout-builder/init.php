@@ -270,8 +270,8 @@ class Customify_Customizer_Layout_Builder {
         $builders = array();
         foreach( $this->registered_builders as $id => $builder ) {
             $config = $builder->get_config();
-            $config['items'] = $this->get_builder_items( $id );
-            $config['rows'] = $builder->get_rows_config();
+            $config['items'] = apply_filters('customify/builder/'.$id.'/items', $this->get_builder_items( $id ) ) ;
+            $config['rows'] = apply_filters('customify/builder/'.$id.'/rows', $builder->get_rows_config() );
             $builders[ $id ] = $config;
         }
         return $builders;
@@ -319,7 +319,7 @@ class Customify_Customizer_Layout_Builder {
 
                 <# if ( ! _.isUndefined( data.rows.top ) ) { #>
                 <div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top" >
-                    <a class="customify--cb-row-settings" data-id="top"  href="#"></a>
+                    <a class="customify--cb-row-settings" title="{{ data.rows.top }}" data-id="top"  href="#"></a>
                     <div class="customify--row-inner">
                         <div class="row--grid">
                             <?php for( $i = 1; $i<= 12; $i ++ ){
@@ -333,7 +333,7 @@ class Customify_Customizer_Layout_Builder {
 
                 <# if ( ! _.isUndefined( data.rows.main ) ) { #>
                 <div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main" >
-                    <a class="customify--cb-row-settings" data-id="main" href="#"></a>
+                    <a class="customify--cb-row-settings" title="{{ data.rows.main }}" data-id="main" href="#"></a>
 
                     <div class="customify--row-inner">
                         <div class="row--grid">
@@ -349,8 +349,7 @@ class Customify_Customizer_Layout_Builder {
 
                 <# if ( ! _.isUndefined( data.rows.bottom ) ) { #>
                 <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom" >
-                    <a class="customify--cb-row-settings" data-id="bottom" href="#"></a>
-
+                    <a class="customify--cb-row-settings" title="{{ data.rows.bottom }}" data-id="bottom" href="#"></a>
                     <div class="customify--row-inner">
                         <div class="row--grid">
                             <?php for( $i = 1; $i<= 12; $i ++ ){
@@ -369,7 +368,7 @@ class Customify_Customizer_Layout_Builder {
                 <# if ( ! _.isUndefined( data.rows.sidebar ) ) { #>
             <div class="customify--cp-sidebar">
                 <div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
-                    <a class="customify--cb-row-settings" data-id="sidebar" href="#"></a>
+                    <a class="customify--cb-row-settings" title="{{ data.rows.sidebar }}" data-id="sidebar" href="#"></a>
                     <div class="customify--row-inner">
                         <div class="customify--cb-items customify--sidebar-items" data-id="sidebar"></div>
                     </div>
@@ -727,7 +726,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
                         if ($row_layout) {
                             $classes[] = 'layout-' . sanitize_text_field( $row_layout );
                         }
-
 
                         $classes = apply_filters('customify/builder/row-classes', $classes, $row_id, $this );
 

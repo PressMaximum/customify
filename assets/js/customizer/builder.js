@@ -972,7 +972,7 @@
                 } );
                 $row.data( 'gridRowFlag', rowFlag );
                 that.updateItemsPositions( rowFlag );
-                console.log( 'FLAG: '+ $row.attr( 'id' ) , rowFlag );
+                //console.log( 'FLAG: '+ $row.attr( 'id' ) , rowFlag );
                 that.sortGrid( $row );
                 return rowFlag;
             },
