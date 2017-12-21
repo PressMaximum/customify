@@ -122,8 +122,41 @@
         } );
 
 
-
     } );
 
+
+    var skips_to_add_shortcut = {
+        customify_customize_render_header: 1,
+        customify_customize_render_footer: 1
+    };
+
+    /**
+     * Do not focus to header, footer customize control
+     * @see /wp-includes/js/customize-selective-refresh.js
+     */
+    wp.customize.selectiveRefresh.Partial.prototype.ready = function(){
+        var partial = this;
+
+        if ( _.isUndefined( skips_to_add_shortcut[ partial.id ] ) ) {
+            _.each(partial.placements(), function (placement) {
+                console.log('placement', placement);
+
+                $(placement.container).attr('title', wp.customize.selectiveRefresh.data.l10n.shiftClickToEdit);
+                partial.createEditShortcutForPlacement(placement);
+            });
+            $(document).on('click', partial.params.selector, function (e) {
+                if (!e.shiftKey) {
+                    return;
+                }
+                e.preventDefault();
+                _.each(partial.placements(), function (placement) {
+                    if ($(placement.container).is(e.currentTarget)) {
+                        partial.showControl();
+                    }
+                });
+            });
+        }
+    };
+    
 
 } )( jQuery, wp.customize );
