@@ -26,6 +26,9 @@ module.exports = function( grunt ) {
 
         // SASS
         sass: {
+            options: {
+                precision: 10
+            },
             dist: {
                 options: {
                     style: 'expanded'
