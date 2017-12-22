@@ -52,7 +52,7 @@ class Customify_Builder_Footer_Item_Copyright {
                 'render_callback' => $fn,
                 'theme_supports' => '',
                 'title' => __( 'Copyright Content', 'customify' ),
-                'description' => __( 'Arbitrary HTML code or shortcode.', 'customify' ),
+                'description' => __( 'Arbitrary HTML code or shortcode. Available tags: {current_year}, {site_title}, {theme_author}', 'customify' ),
             ),
 
             array(
@@ -71,7 +71,18 @@ class Customify_Builder_Footer_Item_Copyright {
      * Optional. Render item content
      */
     function render(){
+        $tags = array(
+            'current_year' =>  date_i18n('Y'),
+            'site_title' =>  get_bloginfo('name'),
+            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', Customify_Init::$theme_url, Customify_Init::$theme_author ),
+        );
+
         $content = Customify_Customizer()->get_setting( $this->name );
+
+        foreach ( $tags as $k => $v ){
+            $content = str_replace('{'.$k.'}', $v, $content );
+        }
+
         echo '<div class="builder-footer-copyright-item">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';
