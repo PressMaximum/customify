@@ -98,7 +98,7 @@ function customify_builder_footer_widget_item( $footer_id = 'footer-1' ){
             'text' => sprintf( // WPCS: XSS ok.
                 /*
                 Translators:
-                    1: admin URL
+                    1: Admin URL
                     2: Customize URL
                     3: Footer ID
                 */
