@@ -3331,8 +3331,6 @@ article.comment .comment-post-author {
 
 .customify-container {
   position: relative;
-  max-width: 78em;
-  margin: 0 auto;
   padding-left: 1.5em;
   padding-right: 1.5em;
 }
@@ -3342,6 +3340,11 @@ article.comment .comment-post-author {
 }
 .customify-container:after {
   clear: both;
+}
+
+.customify-container, .layout-contained {
+  max-width: 75em;
+  margin: 0 auto;
 }
 
 #sidebar-secondary, #sidebar-primary, #main {

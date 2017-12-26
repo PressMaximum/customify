@@ -89,12 +89,13 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'type' => 'select',
                 'section' => $section,
                 'title' => __( 'Layout', 'customify' ),
-                'selector' => $selector_all,
+                'selector' => $selector,
+                'css_format' => 'html_class',
                 'render_callback' => $fn,
                 'choices' => array(
-                    'default' =>  __( 'Default', 'customify' ),
-                    'fullwidth' =>  __( 'Full Width', 'customify' ),
-                    'boxed' =>  __( 'Boxed', 'customify' ),
+                    'layout-full-contained' =>  __( 'Full width - Contained', 'customify' ),
+                    'layout-fullwidth' =>  __( 'Full Width', 'customify' ),
+                    'layout-contained' =>  __( 'Contained', 'customify' ),
                 )
             ),
 

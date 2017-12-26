@@ -5,7 +5,7 @@ $builder_active_color: #0073aa;
 
 @mixin clearfix {
     &:before, &:after {
-        content: ""; 
+        content: "";
         display: block;
         clear: both;
     }

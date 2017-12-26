@@ -256,6 +256,7 @@ class Customify_Init {
         $files = array(
             '/inc/template-class.php', // Template element classes.
             '/inc/element-classes.php', // Functions which enhance the theme by hooking into WordPerss and itself (huh?).
+            '/inc/metabox.php', //Page settings.
             '/inc/template-tags.php', //  Custom template tags for this theme.
             '/inc/template-functions.php', // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/customizer.php', // Customizer additions.
