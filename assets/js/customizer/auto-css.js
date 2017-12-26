@@ -658,6 +658,7 @@ var AutoCSS = window.AutoCSS || null;
         var that = this;
         var selector = field.selector;
         var last_value =  null;
+        var is_checkbox = field.type === 'checkbox';
         if ( ! _.isUndefined( that.lastValues[ field.name ] ) ) {
             last_value = that.lastValues[ field.name ];
         }
@@ -679,7 +680,14 @@ var AutoCSS = window.AutoCSS || null;
         } else {
             if ( _.isObject( last_value ) ) {
                 _.each( last_value, function( n, d ) {
-                    $( selector ).removeClass( d +'--' + n );
+                    if ( n ) {
+                        var cl = d +'--' + n;
+                        if ( is_checkbox ) {
+                            cl = field.name+'-'+cl;
+                        }
+                        $( selector ).removeClass( cl );
+                    }
+
                 } );
             }
         }
@@ -689,8 +697,12 @@ var AutoCSS = window.AutoCSS || null;
         } else {
             if ( _.isObject( value ) ) {
                 _.each( value, function( n, d ) {
-                    if ( n )  {
-                        $( selector ).addClass( d +'--' + n );
+                    if ( n ) {
+                        var cl = d +'--' + n;
+                        if ( is_checkbox ) {
+                            cl = field.name+'-'+cl;
+                        }
+                        $( selector ).addClass( cl );
                     }
 
                 } );

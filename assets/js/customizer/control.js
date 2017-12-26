@@ -345,7 +345,12 @@
                     equal = _.isEmpty( _v ) ? false : true;
                     break;
                 default:
-                    equal = ( value1 == value2 ) ? true : false;
+                    if ( _.isArray( value2 ) ) {
+                        equal = _.contains( value2, value1 );
+                    } else {
+                        equal = ( value1 == value2 ) ? true : false;
+                    }
+
 
             }
             return equal;

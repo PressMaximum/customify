@@ -2113,63 +2113,6 @@ template {
     display: none;
   }
 }
-/************************
-    HIDING COLS FOR DEVICES
-*************************/
-@media screen and (min-width: 64em) {
-  .hide-on-desktop,
-  .customify-grid .hide-on-desktop {
-    display: none;
-  }
-
-  .align-left-desktop {
-    text-align: left;
-  }
-
-  .align-center-desktop {
-    text-align: center;
-  }
-
-  .align-right-desktop {
-    text-align: right;
-  }
-}
-@media screen and (max-width: 64em) and (min-width: 35.5em) {
-  .hide-on-tablet,
-  .customify-grid .hide-on-tablet {
-    display: none;
-  }
-
-  .align-left-tablet {
-    text-align: left;
-  }
-
-  .align-center-tablet {
-    text-align: center;
-  }
-
-  .align-right-tablet {
-    text-align: right;
-  }
-}
-@media screen and (max-width: 35.5em) {
-  .hide-on-mobile,
-  .customify-grid .hide-on-mobile {
-    display: none;
-  }
-
-  .align-left-mobile {
-    text-align: left;
-  }
-
-  .align-center-mobile {
-    text-align: center;
-  }
-
-  .align-right-mobile {
-    text-align: right;
-  }
-}
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------
@@ -3316,6 +3259,67 @@ article.comment .comment-post-author {
 # Layout: sidebar-content-sidebar
 */
 /* # Layouts Helper */
+/************************
+    HIDING COLS FOR DEVICES
+*************************/
+@media screen and (min-width: 64em) {
+  .hide-on-desktop,
+  .customify-grid .hide-on-desktop {
+    display: none;
+  }
+
+  .align-left-desktop {
+    text-align: left;
+  }
+
+  .align-center-desktop {
+    text-align: center;
+  }
+
+  .align-right-desktop {
+    text-align: right;
+  }
+}
+@media screen and (max-width: 64em) and (min-width: 35.5em) {
+  .hide-on-tablet,
+  .customify-grid .hide-on-tablet {
+    display: none;
+  }
+
+  .align-left-tablet {
+    text-align: left;
+  }
+
+  .align-center-tablet {
+    text-align: center;
+  }
+
+  .align-right-tablet {
+    text-align: right;
+  }
+}
+@media screen and (max-width: 35.5em) {
+  .hide-on-mobile,
+  .customify-grid .hide-on-mobile {
+    display: none;
+  }
+
+  .align-left-mobile {
+    text-align: left;
+  }
+
+  .align-center-mobile {
+    text-align: center;
+  }
+
+  .align-right-mobile {
+    text-align: right;
+  }
+}
+.no-box-shadow {
+  box-shadow: none !important;
+}
+
 .site-boxed .site, .site-framed .site {
   max-width: 1248px;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

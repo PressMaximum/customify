@@ -28,6 +28,9 @@
     }
 }
 
+.no-box-shadow {
+    box-shadow: none !important;
+}
 
 // Site boxed layout.
 .site-boxed, .site-framed {

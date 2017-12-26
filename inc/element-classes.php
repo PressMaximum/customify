@@ -44,6 +44,21 @@ if ( ! function_exists( 'customify_body_classes' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'customify_site_classes' ) )  {
+    function customify_site_classes( ){
+        $classes = array();
+        $classes[] = 'site';
+        $box_shadow = Customify_Customizer()->get_setting( 'site_box_shadow' );
+        if ( $box_shadow ) {
+            $classes[] = esc_attr( $box_shadow );
+        }
+
+        $classes = apply_filters( 'customify_site_classes', $classes );
+
+        echo 'class="' . join( ' ', $classes ) . '"';
+    }
+}
+
 if ( ! function_exists( 'customify_site_content_classes' ) ) :
 	/**
 	 * Adds custom classes to the array of site content classes.
