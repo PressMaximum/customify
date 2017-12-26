@@ -2827,7 +2827,6 @@ article.comment .comment-post-author {
   position: absolute;
   top: 100%;
   left: 0px;
-  width: 100%;
   display: none;
   background: #0073aa;
   color: #fff;
@@ -3447,6 +3446,7 @@ article.comment .comment-post-author {
 }
 
 .widget-area .widget {
+  font-size: 0.875em;
   margin-bottom: 1.618em;
 }
 .widget-area .widget:last-of-type {
