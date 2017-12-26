@@ -92,6 +92,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'selector' => $selector,
                 'css_format' => 'html_class',
                 'render_callback' => $fn,
+                'default' => 'layout-full-contained',
                 'choices' => array(
                     'layout-full-contained' =>  __( 'Full width - Contained', 'customify' ),
                     'layout-fullwidth' =>  __( 'Full Width', 'customify' ),
