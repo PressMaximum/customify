@@ -29,8 +29,21 @@
 /**
 * FOOTER WIDGETS
  */
+@include for_device( sm ) {
+    .site-footer {
+        .builder-item {
+            margin-bottom: 25px;
+        }
+    }
+
+}
 
 .site-footer {
+    p{
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
     ul, li {
         padding: 0px;
         list-style: none;

@@ -461,6 +461,9 @@ template {
     GRIDLEX
     Just a Flexbox Grid System - v. 2.4.1
 ========================================================================== */
+/************************
+   Device Query
+*************************/
 [class~="customify-grid"],
 [class*="customify-grid-"],
 [class*="customify-grid_"] {
@@ -3529,6 +3532,14 @@ article.comment .comment-post-author {
 /**
 * FOOTER WIDGETS
  */
+@media screen and (max-width: 48em) {
+  .site-footer .builder-item {
+    margin-bottom: 25px;
+  }
+}
+.site-footer p:last-child {
+  margin-bottom: 0px;
+}
 .site-footer ul, .site-footer li {
   padding: 0px;
   list-style: none;

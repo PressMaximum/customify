@@ -78,7 +78,7 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
         $selector = '#cb-row--'.str_replace('_', '-', $section );
 
         $fn = 'customify_customize_render_footer';
-        $selector_all = '#masthead';
+        //$selector_all = '#masthead';
 
         $config  = array(
             array(
@@ -94,12 +94,14 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                 'type' => 'select',
                 'section' => $section,
                 'title' => __( 'Layout', 'customify' ),
-                'selector' => $selector_all,
+                'selector' => $selector,
                 'render_callback' => $fn,
+                'css_format' => 'html_class',
+                'default' => 'layout-full-contained',
                 'choices' => array(
-                    'default' =>  __( 'Default', 'customify' ),
-                    'fullwidth' =>  __( 'Full Width', 'customify' ),
-                    'boxed' =>  __( 'Boxed', 'customify' ),
+                    'layout-full-contained' =>  __( 'Full width - Contained', 'customify' ),
+                    'layout-fullwidth' =>  __( 'Full Width', 'customify' ),
+                    'layout-contained' =>  __( 'Contained', 'customify' ),
                 )
             ),
 

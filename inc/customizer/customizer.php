@@ -367,7 +367,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                             $s_id = $selective_refresh['render_callback'];
                             $__id = '';
                             if ( is_array( $s_id ) ) {
-                                $__id = get_class( $s_id[0] ).'_'.$s_id[1];
+                                $__id = get_class( $s_id[0] ).'__'.$s_id[1];
                             } else {
                                 $__id = $s_id;
                             }
