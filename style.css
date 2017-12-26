@@ -2922,7 +2922,7 @@ article.comment .comment-post-author {
 * Row Layouts
 *-------------------------------
 */
-.site-header .followWrap, .site-header .customify-container {
+.site-header .customify-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -3314,10 +3314,6 @@ article.comment .comment-post-author {
 # Layout: sidebar-content-sidebar
 */
 /* # Layouts Helper */
-.site {
-  background: #ffffff;
-}
-
 .site-boxed .site, .site-framed .site {
   max-width: 1248px;
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);

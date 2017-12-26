@@ -726,7 +726,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
                         $row_layout = Customify_Customizer()->get_setting($this->id . '_' . $row_id . '_layout');
                         if ($row_layout) {
-                            $classes[] = 'layout-' . sanitize_text_field( $row_layout );
+                            $classes[] = sanitize_text_field( $row_layout );
                         }
 
                         $classes = apply_filters('customify/builder/row-classes', $classes, $row_id, $this );
