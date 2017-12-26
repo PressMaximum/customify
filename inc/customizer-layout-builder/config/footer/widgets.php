@@ -110,7 +110,7 @@ function customify_builder_footer_widget_item( $footer_id = 'footer-1' ){
             'filter' => true,
             'visual' => true,
         ), array(
-            'before_widget' => '<section class="widget widget_text widget-text">',
+            'before_widget' => '<section id="placeholder-widget-text" class="widget widget_text">',
             'after_widget'  => '</section>',
             'before_title'  => '<h4 class="widget-title">',
             'after_title'   => '</h4>',

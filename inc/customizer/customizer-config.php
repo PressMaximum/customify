@@ -559,7 +559,7 @@ if (!function_exists('customify_customizer_config')) {
                 'theme_supports' => '',
                 'title' => __('Color', 'customify'),
                 'description' => __('This is description', 'customify'),
-                'selector' => 'h4',
+                'selector' => 'h42',
                 'css_format' => 'color: {{value}}'
             ),
 
