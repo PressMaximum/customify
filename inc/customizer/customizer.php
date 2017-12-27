@@ -344,9 +344,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                 'selector'  => $args['selector'],
                                 'render_callback' => $args['render_callback'],
                             );
-
-
-
+                            
                             if ( $args['css_format'] ) {
                                 //$selective_refresh['selector'] = '#customify-style-inline-css';
                                // $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
@@ -360,9 +358,11 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         }
                         unset( $args['default'] );
 
-
                         $wp_customize->add_setting( $name, $settings_args );
-                        $wp_customize->add_control( new Customify_Customizer_Control( $wp_customize, $name, $args ));
+                        if ( $settings_args['type'] != 'js_raw' ) {
+                            $wp_customize->add_control( new Customify_Customizer_Control( $wp_customize, $name, $args ));
+                        }
+
                         if ( $selective_refresh ) {
                             $s_id = $selective_refresh['render_callback'];
                             $__id = '';
@@ -389,18 +389,17 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
             } // End loop config
 
-
-            // add selective refresh
             // remove_partial
             $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
+
+            // add selective refresh
             $wp_customize->get_setting( 'custom_logo' )->transport         = 'postMessage';
             $wp_customize->get_setting( 'blogname' )->transport  = 'postMessage';
             $wp_customize->get_setting( 'blogdescription' )->transport  = 'postMessage';
 
             foreach ( $this->selective_settings as $cb => $settings ){
-                $name = current( $settings['settings'] );
                 reset( $settings['settings'] );
-                if ( $cb == 'Customify_Builder_Item_Logo_render' ){
+                if ( $cb == 'Customify_Builder_Item_Logo__render' ){
                     $settings['settings'][] = 'custom_logo';
                     $settings['settings'][] = 'blogname';
                     $settings['settings'][] = 'blogdescription';
@@ -408,8 +407,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 $settings = apply_filters( $cb, $settings );
                 $wp_customize->selective_refresh->add_partial( $cb , $settings );
             }
-
-
 
             do_action( 'customify/customize/register_completed', $this );
         }
