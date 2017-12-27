@@ -101,6 +101,17 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
 
             array(
+                'name' => $section.'_noti_layout',
+                'type' => 'custom_html',
+                'section' => $section,
+                'title' => '',
+                'description' => __("Layout <code>Full width - Contained</code> and <code>Full Width</code> will not fit browser width because you've selected <a class='focus-control' data-id='site_layout' href='#'>Site Layout</a> as <code>Boxed</code> or <code>Framed</code>", 'customify'),
+                'required' => array(
+                    array( 'site_layout', '=', array( 'site-boxed', 'site-framed' ) ),
+                )
+            ),
+
+            array(
                 'name' => $section.'_height',
                 'type' => 'slider',
                 'section' => $section,
