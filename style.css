@@ -3349,6 +3349,10 @@ article.comment .comment-post-author {
   margin: 0 auto;
 }
 
+.site-content {
+  background: #fff;
+}
+
 #sidebar-secondary, #sidebar-primary, #main {
   padding-top: 3em;
   padding-bottom: 3em;

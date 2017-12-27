@@ -82,9 +82,24 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'min' => 700,
 					'max' => 2000,
 					'section' => 'global_layout_section',
-					'title'          => __( 'Container Width', 'customify' ),
+					'title'          => __( 'Container width', 'customify' ),
 					'selector' => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
 					'css_format' => 'max-width: {{value}}'
+				),
+
+				// Site content layout
+				array(
+					'name' => 'site_content_layout',
+					'type' => 'radio_group',
+					'section' => 'global_layout_section',
+					'title' => __('Site content layout', 'customify'),
+					'choices' => array(
+						'site-content-fullwidth' => __('Full width', 'customify'),
+						'site-content-boxed' => __('Boxed', 'customify'),
+					),
+					'default' => 'site-content-boxed',
+					'css_format' => 'html_class',
+					'selector' => '.site-content',
 				),
 
 				array(
@@ -118,7 +133,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'type' => 'select',
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
-					'title' => __('Global Sidebar Layout', 'customify'),
+					'title' => __('Default Sidebar Layout', 'customify'),
 					'choices' => array(
 						'content-sidebar' => __('Content / Sidebar', 'customify'),
 						'sidebar-content' => __('Sidebar / Content', 'customify'),
@@ -149,7 +164,39 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'type' => 'select',
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
-					'title' => __('Page Sidebar Layout', 'customify'),
+					'title' => __('Pages', 'customify'),
+					'choices' => array(
+						'content-sidebar' => __('Content / Sidebar', 'customify'),
+						'sidebar-content' => __('Sidebar / Content', 'customify'),
+						'content' => __('Content (no sidebars)', 'customify'),
+						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
+						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
+						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
+					)
+				),
+				// Blog Posts sidebar layout
+				array(
+					'name' => 'posts_sidebar_layout',
+					'type' => 'select',
+					'default' => 'content-sidebar',
+					'section' => 'sidebar_layout_section',
+					'title' => __('Blog posts', 'customify'),
+					'choices' => array(
+						'content-sidebar' => __('Content / Sidebar', 'customify'),
+						'sidebar-content' => __('Sidebar / Content', 'customify'),
+						'content' => __('Content (no sidebars)', 'customify'),
+						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
+						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
+						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
+					)
+				),
+				// Blog Posts sidebar layout
+				array(
+					'name' => 'posts_archives_sidebar_layout',
+					'type' => 'select',
+					'default' => 'content-sidebar',
+					'section' => 'sidebar_layout_section',
+					'title' => __('Blog posts archives', 'customify'),
 					'choices' => array(
 						'content-sidebar' => __('Content / Sidebar', 'customify'),
 						'sidebar-content' => __('Sidebar / Content', 'customify'),
