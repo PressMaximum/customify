@@ -56,19 +56,6 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
                     )
                 ),
 
-				array(
-					'name' => 'container_width',
-					'type' => 'slider',
-					'device_settings' => false,
-					'default' => 1200,
-					'min' => 700,
-					'max' => 2000,
-					'section' => $section,
-					'title'          => __( 'Container Width', 'customify' ),
-					'selector' => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
-					'css_format' => 'max-width: {{value}}'
-				),
-
                 array(
                     'name' => 'site_margin',
                     'type' => 'css_ruler',
@@ -85,9 +72,22 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
                     ),
                     'selector' => '.site-framed .site',
                     'required' => array(
-                        array( 'site_layout', '=', array( 'site-boxed', 'site-framed' ) ),
+                        array( 'site_layout', '=','site-framed'),
                     )
                 ),
+
+				array(
+					'name' => 'container_width',
+					'type' => 'slider',
+					'device_settings' => false,
+					'default' => 1200,
+					'min' => 700,
+					'max' => 2000,
+					'section' => $section,
+					'title'          => __( 'Container Width', 'customify' ),
+					'selector' => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
+					'css_format' => 'max-width: {{value}}'
+				),
 
 		);
 

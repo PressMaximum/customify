@@ -344,7 +344,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                 'selector'  => $args['selector'],
                                 'render_callback' => $args['render_callback'],
                             );
-                            
+
                             if ( $args['css_format'] ) {
                                 //$selective_refresh['selector'] = '#customify-style-inline-css';
                                // $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
