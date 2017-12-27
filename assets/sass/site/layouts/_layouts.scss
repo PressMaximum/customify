@@ -74,16 +74,16 @@
 /*-- Layout: content-sidebar --*/
 .content-sidebar {
     @include mq(min-sm) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-area {
                 border-right: 1px solid $color_border;
             }
-            .content-inner {
-                padding-right: ms(-2);
-            }
-            .sidebar-primary-inner {
-                padding-left: ms(-2);
-            }
+            //.content-inner {
+            //    padding-right: ms(-2);
+            //}
+            //.sidebar-primary-inner {
+            //    padding-left: ms(-2);
+            //}
         }
     }
 }
@@ -91,16 +91,16 @@
 /*-- Layout: sidebar-content --*/
 .sidebar-content {
     @include mq(min-sm) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;
             }
-            .content-inner {
-                padding-left: ms(-2);
-            }
-            .sidebar-primary-inner {
-                padding-right: ms(-2);
-            }
+            //.content-inner {
+            //    padding-left: ms(-2);
+            //}
+            //.sidebar-primary-inner {
+            //    padding-right: ms(-2);
+            //}
         }
     }
 }
@@ -108,7 +108,7 @@
 /*-- Layout: sidebar-sidebar-content --*/
 .sidebar-sidebar-content {
     @include mq(min-sm) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-area {
             }
             .sidebar-primary {
@@ -117,16 +117,16 @@
             .sidebar-secondary {
                 border-right: 1px solid $color_border;
             }
-            .content-inner {
-                padding-left: ms(-2);
-            }
-            .sidebar-primary-inner {
-                padding-right: ms(-2);
-            }
-            .sidebar-secondary-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
-            }
+            //.content-inner {
+            //    padding-left: ms(-2);
+            //}
+            //.sidebar-primary-inner {
+            //    padding-right: ms(-2);
+            //}
+            //.sidebar-secondary-inner {
+            //    padding-left: ms(-2);
+            //    padding-right: ms(-2);
+            //}
         }
     }
 }
@@ -136,7 +136,7 @@
 .content-sidebar-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-area {
             }
             .sidebar-primary {
@@ -145,16 +145,16 @@
             .sidebar-secondary {
                 border-left: 1px solid $color_border;
             }
-            .content-inner {
-                padding-right: ms(-2);
-            }
-            .sidebar-primary-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
-            }
-            .sidebar-secondary-inner {
-                padding-left: ms(-2);
-            }
+            //.content-inner {
+            //    padding-right: ms(-2);
+            //}
+            //.sidebar-primary-inner {
+            //    padding-left: ms(-2);
+            //    padding-right: ms(-2);
+            //}
+            //.sidebar-secondary-inner {
+            //    padding-left: ms(-2);
+            //}
         }
     }
 }
@@ -163,25 +163,25 @@
 .sidebar-content-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;
                 border-right: 1px solid $color_border;
             }
-            .content-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
-            }
-            .sidebar-primary-inner {
-                padding-left: ms(-2);
-            }
-            .sidebar-secondary-inner {
-                padding-right: ms(-2);
-            }
+            //.content-inner {
+            //    padding-left: ms(-2);
+            //    padding-right: ms(-2);
+            //}
+            //.sidebar-primary-inner {
+            //    padding-left: ms(-2);
+            //}
+            //.sidebar-secondary-inner {
+            //    padding-right: ms(-2);
+            //}
         }
     }
     @include mq(max-md) {
-        &.layout_vertial_border {
+        &.sidebar_vertical_border {
             .content-inner {
                 padding-left: 0;
             }

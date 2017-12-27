@@ -2,8 +2,6 @@
 if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 	function customify_customizer_layouts_config( $configs ){
 
-	    $section = 'global_layout_section';
-
 		$config = array(
 
 			// Layout panel
@@ -17,17 +15,17 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 
 			// Global layout section.
 			array(
-				'name'           => $section,
+				'name'           => 'global_layout_section',
 				'type'           => 'section',
 				'panel'          => 'layout_panel',
 				'theme_supports' => '',
-				'title'          => __( 'Global Layouts', 'customify' ),
+				'title'          => __( 'Global', 'customify' ),
 			),
 				array(
 					'name' => 'site_layout',
 					'type' => 'radio_group',
-					'section' => $section,
-					'title' => __('Site Layout Mode', 'customify'),
+					'section' => 'global_layout_section',
+					'title' => __('Site layout', 'customify'),
 					'description' => __('Select global site layout.', 'customify'),
 					'default' => 'site-full-width',
                     'css_format' => 'html_class',
@@ -42,8 +40,8 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
                 array(
                     'name' => 'site_box_shadow',
                     'type' => 'radio_group',
-                    'section' => $section,
-                    'title' => __('Site box shadow', 'customify'),
+                    'section' => 'global_layout_section',
+                    'title' => __('Site boxed/framed shadow', 'customify'),
                     'choices' => array(
                         'box-shadow' => __('Yes', 'customify'),
                         'no-box-shadow' => __('No', 'customify'),
@@ -59,8 +57,8 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
                 array(
                     'name' => 'site_margin',
                     'type' => 'css_ruler',
-                    'section' => $section,
-                    'title' => __('Framed Margin', 'customify'),
+                    'section' => 'global_layout_section',
+                    'title' => __('Site framed margin', 'customify'),
                     'device_settings' => true,
                     'fields_disabled' => array(
                         'left' => '',
@@ -83,10 +81,107 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'default' => 1200,
 					'min' => 700,
 					'max' => 2000,
-					'section' => $section,
+					'section' => 'global_layout_section',
 					'title'          => __( 'Container Width', 'customify' ),
 					'selector' => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
 					'css_format' => 'max-width: {{value}}'
+				),
+
+				array(
+					'name' => 'site_content_padding',
+					'type' => 'css_ruler',
+					'section' => 'global_layout_section',
+					'title' => __('Site content padding', 'customify'),
+					'device_settings' => true,
+					'fields_disabled' => array(
+						'left' => '',
+						'right' => '',
+					),
+					'css_format' => array(
+						'top' => 'padding-top: {{value}};',
+						'bottom' => 'padding-bottom: {{value}};',
+					),
+					'selector' => '#sidebar-secondary, #sidebar-primary, #main',
+				),
+
+			// Page layout
+			array(
+				'name'           => 'sidebar_layout_section',
+				'type'           => 'section',
+				'panel'          => 'layout_panel',
+				'theme_supports' => '',
+				'title'          => __( 'Sidebars', 'customify' ),
+			),
+				// Global sidebar layout
+				array(
+					'name' => 'sidebar_layout',
+					'type' => 'select',
+					'default' => 'content-sidebar',
+					'section' => 'sidebar_layout_section',
+					'title' => __('Global Sidebar Layout', 'customify'),
+					'choices' => array(
+						'content-sidebar' => __('Content / Sidebar', 'customify'),
+						'sidebar-content' => __('Sidebar / Content', 'customify'),
+						'content' => __('Content (no sidebars)', 'customify'),
+						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
+						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
+						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
+					)
+				),
+				// Sidebar vertical border.
+				array(
+					'name' => 'sidebar_vertical_border',
+					'type' => 'radio_group',
+					'section' => 'sidebar_layout_section',
+					'title' => __('Sidebar with vertical border', 'customify'),
+					'choices' => array(
+						'sidebar_vertical_border' => __('Yes', 'customify'),
+						'no-sidebar_vertical_border' => __('No', 'customify'),
+					),
+					'default' => 'sidebar_vertical_border',
+					'css_format' => 'html_class',
+					'selector' => 'body'
+				),
+
+				// Page sidebar layout
+				array(
+					'name' => 'page_sidebar_layout',
+					'type' => 'select',
+					'default' => 'content-sidebar',
+					'section' => 'sidebar_layout_section',
+					'title' => __('Page Sidebar Layout', 'customify'),
+					'choices' => array(
+						'content-sidebar' => __('Content / Sidebar', 'customify'),
+						'sidebar-content' => __('Sidebar / Content', 'customify'),
+						'content' => __('Content (no sidebars)', 'customify'),
+						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
+						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
+						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
+					)
+				),
+
+			// Page layout
+			array(
+				'name'           => 'page_layout_section',
+				'type'           => 'section',
+				'panel'          => 'layout_panel',
+				'theme_supports' => '',
+				'title'          => __( 'Pages', 'customify' ),
+			),
+				array(
+					'name' => 'select2',
+					'type' => 'select',
+					//'device_settings' => true,
+					'default' => '',
+					'section' => 'page_layout_section',
+					//'priority' => 22,
+					'title' => __('Select', 'customify'),
+					'description' => __('description', 'customify'),
+					'choices' => array(
+						'1' => __('One', 'customify'),
+						'2' => __('Two', 'customify'),
+						'3' => __('Three', 'customify'),
+					)
 				),
 
 		);

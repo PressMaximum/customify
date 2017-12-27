@@ -15,21 +15,22 @@ if ( ! function_exists( 'customify_body_classes' ) ) :
 	 */
 	add_filter( 'body_class', 'customify_body_classes' );
 	function customify_body_classes( $classes ) {
+
 		// Adds a class of hfeed to non-singular pages.
 		if ( ! is_singular() ) {
 			$classes[] = 'hfeed';
 		}
 
 		$layout = customify_get_layout();
-		$layout_vertical_border = true;
-
 		if ( $layout != '' ) {
 			$classes[] = $layout;
 		}
 
-		if ( $layout_vertical_border ) {
-			$classes[] = 'layout_vertial_border';
+		$sidebar_vertical_border = Customify_Customizer()->get_setting( 'sidebar_vertical_border' );
+		if ( $sidebar_vertical_border == 'sidebar_vertical_border' ) {
+			$classes[] = 'sidebar_vertical_border';
 		}
+
 		if ( is_customize_preview() ) {
             $classes[] = 'customize-previewing';
         }
@@ -176,7 +177,7 @@ if ( ! function_exists( 'customify_main_content_classes' ) ) :
 			$classes[] = 'customify-col-9_sm-12';
 		}
 
-		if ( $layout == 'no-sidebar' ) {
+		if ( $layout == 'content' ) {
 			$classes[] = 'customify-col-12';
 		}
 

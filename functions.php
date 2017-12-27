@@ -8,7 +8,7 @@
  */
 
 global $site_layout;
-$site_layout = 'sidebar-content';
+$site_layout = 'content-sidebar-sidebar';
 
 /**
  *  Same hook for the_content
