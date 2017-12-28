@@ -80,28 +80,3 @@ class Customify_Builder_Item_HTML {
         echo '</div>';
     }
 }
-
-class Customify_Builder_Item_HTML_2 extends  Customify_Builder_Item_HTML {
-    public $id = 'html_2';
-    public $section = 'header_html_2';
-    public $name = 'header_html_2';
-    public $label = '';
-    function __construct()
-    {
-        parent::__construct();
-        $this->label = __( 'HTML 2', 'customify' );
-    }
-    function item(){
-        return array(
-            'name' => __( 'HTML 2', 'customify' ),
-            'id' => $this->id,
-            'col' => 0,
-            'width' => '4',
-            'section' => $this->section // Customizer section to focus when click settings
-        );
-    }
-}
-
-
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_HTML() );
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_HTML_2() );
