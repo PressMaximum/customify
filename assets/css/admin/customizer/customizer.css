@@ -424,7 +424,7 @@
 
 .customify-input-slider-wrapper {
   position: relative;
-  margin-top: 5px;
+  margin-top: 35px;
   display: block;
 }
 .customify-input-slider-wrapper .customify--css-unit {
@@ -433,17 +433,32 @@
   margin-bottom: 0px;
 }
 .customify-input-slider-wrapper .customify--slider-input {
-  width: 60px;
-  max-width: 60px;
+  width: 50px;
+  max-width: 50px;
   position: absolute;
-  top: 22px;
-  right: 21px;
+  top: -9px;
+  right: 41px;
   height: 24px;
   line-height: 18px;
 }
 .customify-input-slider-wrapper .customify--label-active {
   display: block;
-  top: 22px;
+  top: -9px;
+  right: 18px;
+  line-height: 22px;
+  position: absolute;
+  margin-right: 0px;
+  border: 1px solid #ddd;
+  background: #fff;
+  font-weight: normal;
+  font-size: 10px;
+  cursor: default;
+}
+.customify-input-slider-wrapper .reset {
+  text-decoration: none;
+  display: inline-block;
+  color: #555d66;
+  top: -9px;
   right: -5px;
   line-height: 22px;
   position: absolute;
@@ -451,11 +466,6 @@
   border: 1px solid #ddd;
   background: #fff;
   font-weight: normal;
-}
-.customify-input-slider-wrapper .reset {
-  text-decoration: none;
-  display: inline-block;
-  color: #555d66;
 }
 .customify-input-slider-wrapper .reset:before {
   -moz-osx-font-smoothing: grayscale;
@@ -470,11 +480,10 @@
 
 .customify-input-slider {
   position: relative;
-  margin: 11px 0px 20px;
+  margin: 11px 100px 20px 0;
   height: 5px;
   display: block;
   background: #CCCCCC;
-  margin-right: 90px;
 }
 .customify-input-slider .ui-slider-range {
   width: 100%;
