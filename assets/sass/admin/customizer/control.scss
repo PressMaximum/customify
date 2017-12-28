@@ -411,22 +411,54 @@ $text_color: #555d66;
     position: relative;
     margin-top: 5px;
     display: block;
+    .customify--css-unit {
+        text-align: right;
+        margin-top: -15px;
+        margin-bottom: 0px;
+    }
     .customify--slider-input {
         width: 60px;
         max-width: 60px;
         position: absolute;
-        top: 0px;
-        right: 0px;
-        height: 26px;
+        top: 22px;
+        right: 21px;
+        height: 24px;
         line-height: 18px;
+    }
+    .customify--label-active {
+        display: block;
+        top: 22px;
+        right: -5px;
+        line-height: 22px;
+        position: absolute;
+        margin-right: 0px;
+        border: 1px solid #ddd;
+        background: #fff;
+        font-weight: normal;
+    }
+    .reset {
+        text-decoration: none;
+        display: inline-block;
+        color: #555d66;
+        &:before {
+            -moz-osx-font-smoothing: grayscale;
+            border: none;
+            content: "\f531";
+            display: block;
+            font: 12px/1 dashicons;
+            padding: 5px;
+            text-decoration: none !important;
+            text-indent: 0;
+        }
     }
 }
 .customify-input-slider {
     position: relative;
-    margin: 15px 0px 20px;
+    margin: 11px 0px 20px;
     height: 5px;
     display: block;
     background: #CCCCCC;
+    margin-right: 90px;
     .ui-slider-range {
         width: 100%;
         display: block;

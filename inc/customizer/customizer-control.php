@@ -546,10 +546,10 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                         <?php _e( 'px', 'customify' ); ?>
                         <input type="radio" class="customify-input customify--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
                     </label>
-                    <a href="#" class="reset">Reset</a>
+                    <a href="#" class="reset" title="<?php esc_attr_e( 'Reset', 'customify' ); ?>"></a>
                 </div>
                 <div data-min="{{ field.min }}" data-default="{{ JSON.stringify( field.default ) }}" data-step="{{ field.step }}" data-max="{{ field.max }}" class="customify-input-slider"></div>
-                <input type="number" class="customify--slider-input customify-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
+                <input type="number" min="{{ field.min }}" step="{{ field.step }}" max="{{ field.max }}" class="customify--slider-input customify-input" data-name="{{ field.name }}-value" value="{{ field.value.value }}" size="4">
             </div>
         </div>
         <?php

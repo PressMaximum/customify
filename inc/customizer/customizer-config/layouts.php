@@ -80,6 +80,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'device_settings' => false,
 					'default' => 1200,
 					'min' => 700,
+					'step' => 50,
 					'max' => 2000,
 					'section' => 'global_layout_section',
 					'title'          => __( 'Container width', 'customify' ),
