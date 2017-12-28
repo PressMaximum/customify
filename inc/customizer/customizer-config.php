@@ -170,12 +170,14 @@ if (!function_exists('customify_customizer_config')) {
                         'device_settings' => true,
                     ),
 
+
                     array(
                         'name' => 'line_height',
                         'type' => 'slider',
                         'label' => __('Line Height', 'customify'),
                         'device_settings' => true,
                     ),
+
 
                     array(
                         'name' => 'letter_spacing',

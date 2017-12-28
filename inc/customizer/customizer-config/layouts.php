@@ -135,14 +135,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
 					'title' => __('Default Sidebar Layout', 'customify'),
-					'choices' => array(
-						'content-sidebar' => __('Content / Sidebar', 'customify'),
-						'sidebar-content' => __('Sidebar / Content', 'customify'),
-						'content' => __('Content (no sidebars)', 'customify'),
-						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
-						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
-						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
-					)
+					'choices' => customify_get_config_sidebar_layouts()
 				),
 				// Sidebar vertical border.
 				array(
@@ -166,14 +159,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
 					'title' => __('Pages', 'customify'),
-					'choices' => array(
-						'content-sidebar' => __('Content / Sidebar', 'customify'),
-						'sidebar-content' => __('Sidebar / Content', 'customify'),
-						'content' => __('Content (no sidebars)', 'customify'),
-						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
-						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
-						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
-					)
+					'choices' => customify_get_config_sidebar_layouts()
 				),
 				// Blog Posts sidebar layout
 				array(
@@ -182,14 +168,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
 					'title' => __('Blog posts', 'customify'),
-					'choices' => array(
-						'content-sidebar' => __('Content / Sidebar', 'customify'),
-						'sidebar-content' => __('Sidebar / Content', 'customify'),
-						'content' => __('Content (no sidebars)', 'customify'),
-						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
-						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
-						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
-					)
+					'choices' => customify_get_config_sidebar_layouts()
 				),
 				// Blog Posts sidebar layout
 				array(
@@ -198,14 +177,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'default' => 'content-sidebar',
 					'section' => 'sidebar_layout_section',
 					'title' => __('Blog posts archives', 'customify'),
-					'choices' => array(
-						'content-sidebar' => __('Content / Sidebar', 'customify'),
-						'sidebar-content' => __('Sidebar / Content', 'customify'),
-						'content' => __('Content (no sidebars)', 'customify'),
-						'sidebar-content-sidebar' => __('Sidebar / Content / Sidebar)', 'customify'),
-						'sidebar-sidebar-content' => __('Sidebar / Sidebar / Content)', 'customify'),
-						'content-sidebar-sidebar' => __('Content / Sidebar / Sidebar)', 'customify'),
-					)
+					'choices' => customify_get_config_sidebar_layouts()
 				),
 
 			// Page layout

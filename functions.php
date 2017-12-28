@@ -7,9 +7,6 @@
  * @package customify
  */
 
-global $site_layout;
-$site_layout = 'content-sidebar-sidebar';
-
 /**
  *  Same hook for the_content
  * @TODO: do not effect content by plugins

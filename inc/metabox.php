@@ -90,17 +90,16 @@ class Customify_MetaBox {
 
         $settings = isset( $_POST['customify_page_settings'] ) ? wp_unslash( $_POST['customify_page_settings'] ) : array();
         $settings = wp_parse_args( $settings, array(
-            'hide_page_title' => '',
-            'hide_header' => '',
-            'hide_footer' => '',
-            'hide_breadcrumb' => '',
-            'cover' => '',
-            'show_excerpt' => '',
+            'sidebar' => '',
+            'disable_header' => '',
+            'disable_page_title' => '',
+            'disable_footer_main' => '',
+            'disable_footer_bottom' => '',
         ) );
 
         foreach( $settings as $key => $value ) {
             // Update the meta field.
-            update_post_meta( $post_id, '_'.$key, sanitize_text_field( $value ) );
+            update_post_meta( $post_id, '_customify_'.$key, sanitize_text_field( $value ) );
         }
 
     }
@@ -115,51 +114,47 @@ class Customify_MetaBox {
 
         // Add an nonce field so we can check for it later.
         wp_nonce_field( 'customify_page_settings', 'customify_page_settings_nonce' );
-
         $values = array(
-            'hide_page_title' => '',
-            'hide_header' => '',
-            'hide_footer' => '',
-            'hide_breadcrumb' => '',
-            'cover' => '',
-            'show_excerpt' => '',
+            'sidebar' => '',
+            'disable_header' => '',
+            'disable_page_title' => '',
+            'disable_footer_main' => '',
+            'disable_footer_bottom' => '',
         );
-
         foreach( $values as $key => $value ) {
-            $values[ $key ] = get_post_meta( $post->ID, '_'.$key, true );
+            $values[ $key ] = get_post_meta( $post->ID, '_customify_'.$key, true );
         }
         ?>
         <p>
+            <label for="customify_page_layout"><strong><?php _e( 'Sidebar', 'customify' ); ?></strong></label><br/>
+            <select id="customify_page_layout" name="customify_page_settings[sidebar]">
+                <option value=""><?php _e( 'Inherit from Customize Setting', 'customify' ); ?></option>
+                <?php foreach( customify_get_config_sidebar_layouts() as $k => $label ) { ?>
+                <option <?php selected( $values['sidebar'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
+                <?php } ?>
+            </select>
+        </p>
+        <strong><?php _e( 'Disable Elements', 'customify' ); ?></strong>
+        <p>
             <label>
-                <input type="checkbox" name="customify_page_settings[hide_header]" <?php checked( $values['hide_header'], 1 ); ?> value="1"> <?php _e( 'Hide header.', 'customify' ); ?>
+                <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
             </label>
         </p>
         <p>
             <label>
-                <input type="checkbox" name="customify_page_settings[hide_page_title]" <?php checked( $values['hide_page_title'], 1 ); ?> value="1"> <?php _e( 'Hide page title area.', 'customify' ); ?>
+                <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" name="customify_page_settings[cover]" <?php checked( $values['cover'], 1 ); ?> value="1"> <?php _e( 'Display featured image as header cover.', 'customify' ); ?>
+                <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
             </label>
         </p>
 
         <p>
             <label>
-                <input type="checkbox" name="customify_page_settings[show_excerpt]" <?php checked( $values['show_excerpt'], 1 ); ?> value="1"> <?php _e( 'Display page excerpt as header cover description.', 'customify' ); ?>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[hide_breadcrumb]" <?php checked( $values['hide_breadcrumb'], 1 ); ?> value="1"> <?php _e( 'Hide breadcrumb.', 'customify' ); ?>
-            </label>
-        </p>
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[hide_footer]" <?php checked( $values['hide_footer'], 1 ); ?> value="1"> <?php _e( 'Hide footer.', 'customify' ); ?>
+                <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
             </label>
         </p>
         <?php
