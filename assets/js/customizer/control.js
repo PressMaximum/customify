@@ -345,14 +345,21 @@
                     equal = _.isEmpty( _v ) ? false : true;
                     break;
                 default:
+                   // console.log( 'value1', value1 );
+                   // console.log( 'value2', value2 );
                     if ( _.isArray( value2 ) ) {
-                        equal = _.contains( value2, value1 );
+                        if (  !_.isEmpty( value2 ) && !_.isEmpty( value1 ) ) {
+                            equal = _.contains( value2, value1 );
+                        } else {
+                            equal = false;
+                        }
                     } else {
                         equal = ( value1 == value2 ) ? true : false;
                     }
 
 
             }
+
             return equal;
         },
         multiple_compare: function( list, values, decodeValue ){
@@ -360,9 +367,10 @@
                 decodeValue = false;
             }
             var control = this;
+            var check = false;
             try {
                 var test =  list[0];
-                var check = true;
+
                 if ( _.isString( test ) ) {
                     check = false;
                     var cond = list[1];
@@ -392,7 +400,9 @@
 
                 } else if ( _.isArray( test ) ) {
                     check  = true;
+                    //console.log( '___', list );
                     _.each( list, function( req ) {
+
                         var cond_key = req[0];
                         var cond_cond = req[1];
                         var cond_val = req[2];
@@ -400,16 +410,20 @@
                         if ( ! _.isUndefined( req[3] ) ) { // can be desktop, tablet, mobile
                             cond_device = req[3];
                         }
-
                         var t_val = values[ cond_key ];
-
                         if ( _.isUndefined( t_val ) ) {
                             t_val = '';
                         }
-                        if ( decodeValue ) {
-                            t_val = control.decodeValue( t_val )
+                        // console.log( '___reql', req );
+                        if ( decodeValue && _.isString( t_val ) ) {
+                            try {
+                                t_val = control.decodeValue( t_val )
+                            } catch  ( e ) {
+
+                            }
                         }
 
+                        //console.log( '___t_val', t_val );
                         if ( cond_device ) {
                             if ( _.isObject( t_val ) && !_.isUndefined( t_val[ cond_device ] ) ) {
                                 t_val =  t_val[ cond_device ];
@@ -1385,97 +1399,143 @@
 
     wpcustomize.bind( 'ready', function( e, b ) {
 
-        $document.on( 'customify/customizer/device/change', function( e, device ) {
-            $( '.customify--device-select a' ).removeClass( 'customify--active' );
-            if ( device != 'mobile' ) {
-                $( '.customify--device-mobile').addClass( 'customify--hide' );
-                $( '.customify--device-general' ).removeClass( 'customify--hide' );
-                $( '.customify--tab-device-general' ).addClass('customify--active');
+        $document.on('customify/customizer/device/change', function (e, device) {
+            $('.customify--device-select a').removeClass('customify--active');
+            if (device != 'mobile') {
+                $('.customify--device-mobile').addClass('customify--hide');
+                $('.customify--device-general').removeClass('customify--hide');
+                $('.customify--tab-device-general').addClass('customify--active');
             } else {
-                $( '.customify--device-general' ).addClass( 'customify--hide' );
-                $( '.customify--device-mobile' ).removeClass( 'customify--hide' );
-                $( '.customify--tab-device-mobile' ).addClass('customify--active');
+                $('.customify--device-general').addClass('customify--hide');
+                $('.customify--device-mobile').removeClass('customify--hide');
+                $('.customify--tab-device-mobile').addClass('customify--active');
             }
-        } );
+        });
 
-        $document.on( 'click', '.customify--tab-device-mobile', function(e){
+        $document.on('click', '.customify--tab-device-mobile', function (e) {
             e.preventDefault();
-            $document.trigger( 'customify/customizer/device/change',['mobile'] );
-        } );
+            $document.trigger('customify/customizer/device/change', ['mobile']);
+        });
 
-        $document.on( 'click', '.customify--tab-device-general', function(e){
+        $document.on('click', '.customify--tab-device-general', function (e) {
             e.preventDefault();
-            $document.trigger( 'customify/customizer/device/change',['general'] );
-        } );
+            $document.trigger('customify/customizer/device/change', ['general']);
+        });
 
-        $( '.accordion-section' ).each( function(){
-            var s = $( this );
-            var t = $( '.customify--device-select', s ).first();
-            $( '.customize-section-title', s ).append( t );
-        } );
+        $('.accordion-section').each(function () {
+            var s = $(this);
+            var t = $('.customify--device-select', s).first();
+            $('.customize-section-title', s).append(t);
+        });
 
         IconPicker.init();
-        if ( $( '.customify--font-families' ).length > 0 ) {
+        if ($('.customify--font-families').length > 0) {
             FontSelector.init();
         }
 
         // Devices Switcher
-        $document.on( 'click', '.customify-devices button', function(e){
+        $document.on('click', '.customify-devices button', function (e) {
             e.preventDefault();
-            var device = $( this ).attr( 'data-device' ) || '';
-            console.log( 'Device', device );
-            $( '#customize-footer-actions .devices button[data-device="'+device+'"]' ).trigger('click');
-        } );
+            var device = $(this).attr('data-device') || '';
+            console.log('Device', device);
+            $('#customize-footer-actions .devices button[data-device="' + device + '"]').trigger('click');
+        });
 
         // Devices Switcher
-        $document.on( 'change', '.customify--field input:checkbox', function(e){
-            if ( $( this ).is(':checked') ) {
-                $( this ).parent().addClass('customify--checked');
+        $document.on('change', '.customify--field input:checkbox', function (e) {
+            if ($(this).is(':checked')) {
+                $(this).parent().addClass('customify--checked');
             } else {
-                $( this ).parent().removeClass('customify--checked');
+                $(this).parent().removeClass('customify--checked');
             }
-        } );
+        });
 
         // Setup conditional
-
-        var ControlConditional = function( decodeValue ){
-            if ( _.isUndefined( decodeValue ) ) {
+        var ControlConditional = function (decodeValue) {
+            if (_.isUndefined(decodeValue)) {
                 decodeValue = false;
             }
-            var allValues = wpcustomize.get( );
-           // console.log( 'ALL Control Values', allValues );
-            _.each( allValues, function( value, id ){
-                var control = wpcustomize.control( id );
-                if ( ! _.isUndefined( control ) ) {
-                    if ( control.params.type == 'customify' ) {
-                        if ( ! _.isEmpty( control.params.required ) ) {
+            var allValues = wpcustomize.get();
+            // console.log( 'ALL Control Values', allValues );
+            _.each(allValues, function (value, id) {
+                var control = wpcustomize.control(id);
+                if (!_.isUndefined(control)) {
+                    if (control.params.type == 'customify') {
+                        if (!_.isEmpty(control.params.required)) {
                             var check = false;
-                            check = control.multiple_compare( control.params.required, allValues, decodeValue );
-                            //console.log( 'Check C '+control.id, check );
-                            if ( ! check ) {
-                                control.container.addClass( 'customify--hide' );
+                            check = control.multiple_compare(control.params.required, allValues, decodeValue);
+                            if (!check) {
+                                control.container.addClass('customify--hide');
                             } else {
-                                control.container.removeClass( 'customify--hide' );
+                                control.container.removeClass('customify--hide');
                             }
                         }
                     }
                 }
 
-            } );
+            });
         };
 
-        ControlConditional( false );
-        $document.on( 'customify/customizer/change', function(){
-            ControlConditional( true );
+        ControlConditional(false);
+        $document.on('customify/customizer/change', function () {
+            ControlConditional(true);
+        });
+
+
+        // Add reset button to sections
+        wpcustomize.section.each( function ( section ) {
+            if ( section.params.type == 'section' ) {
+                section.container.find( '.customize-section-description-container .customize-section-title' ).append( '<button data-section="'+section.id+'" type="button" title="'+Customify_Control_Args.reset+'" class="customize--reset-section" aria-expanded="false"><span class="screen-reader-text">'+Customify_Control_Args.reset+'</span></button>' );
+            }
+        } );
+        
+        $document.on( 'click', '.customize--reset-section', function( e ){
+            e.preventDefault();
+            if ( $( this ).hasClass( 'loading' ) ) {
+                return ;
+            }
+
+            if ( ! confirm( Customify_Control_Args.confirm_reset ) ) {
+                return ;
+            }
+
+            $( this ).addClass( 'loading' );
+            var section = $( this ).attr( 'data-section' ) || '';
+            var urlParser = _.clone( window.location );
+            urlParser.search = $.param( _.extend(
+                wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
+                {
+                    changeset_uuid: wpcustomize.settings.changeset.uuid,
+                    autofocus: {
+                        section: section
+                    }
+                }
+            ) );
+
+            if ( section ) {
+                var setting_keys = [];
+                var controls = wp.customize.section( section ).controls();
+                _.each( controls, function(c , index ){
+                    setting_keys[ index ] = c.id;
+                } );
+
+               $.post( ajaxurl, {
+                   action: 'customify__reset_section',
+                   section: section,
+                   settings: setting_keys
+               }, function(){
+                    $( window ).off( 'beforeunload.customize-confirm' );
+                    top.location.href = urlParser.origin+urlParser.pathname+'?'+urlParser.search;
+               } );
+
+            }
+
+
         } );
 
 
-    } );
-
-    $document.ready( function( $ ){
-
-    } );
 
 
+    });
 
 })( jQuery, wp.customize || null );

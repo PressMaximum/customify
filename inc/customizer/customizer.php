@@ -25,6 +25,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         {
             add_action( 'customize_register', array( $this, 'register' ) );
             add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
+
+
         }
 
         static function get_instance(){
@@ -420,5 +422,25 @@ if ( ! function_exists( 'Customify_Customizer' ) ) {
     }
 }
 Customify_Customizer();
+
+
+/**
+ * Reset Customize section
+ */
+function customify__reset_customize_section(){
+    if ( ! current_user_can( 'customize' ) ) {
+        wp_send_json_error();
+    }
+
+    $settings = isset( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array();
+
+    foreach( $settings as $k ) {
+        $k = sanitize_text_field( $k );
+        remove_theme_mod( $k );
+    }
+
+    wp_send_json_success();
+}
+add_action( 'wp_ajax_customify__reset_section', 'customify__reset_customize_section' );
 
 

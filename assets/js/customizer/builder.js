@@ -1549,10 +1549,7 @@
         e.preventDefault();
         var item = $( this ).parent();
         var deferred = $.Deferred();
-        var urlParser;
-        urlParser = document.createElement( 'a' );
-        urlParser.href = location.href;
-
+        var urlParser = _.clone( window.location );
         var control_id = item.data('control-id') || '';
 
         urlParser.search = $.param( _.extend(
@@ -1591,7 +1588,8 @@
             request = wpcustomize.requestChangesetUpdate();
             request.done( function() {
                 $( window ).off( 'beforeunload.customize-confirm' );
-                top.location.href = urlParser.href;
+               // top.location.href = urlParser.href;
+                top.location.href = urlParser.origin+urlParser.pathname+'?'+urlParser.search;
                 deferred.resolve();
             } );
             request.fail( function() {
