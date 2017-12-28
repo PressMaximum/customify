@@ -13,7 +13,7 @@ class Customify_Builder_Item_HTML {
      */
     function __construct()
     {
-        $this->label = __( 'HTML', 'customify' );
+        $this->label = __( 'HTML 1', 'customify' );
     }
 
     /**
@@ -22,7 +22,7 @@ class Customify_Builder_Item_HTML {
      */
     function item(){
         return array(
-            'name' => __( 'HTML', 'customify' ),
+            'name' => __( 'HTML 1', 'customify' ),
             'id' => $this->id,
             'col' => 0,
             'width' => '4',
@@ -50,7 +50,7 @@ class Customify_Builder_Item_HTML {
                 'name' => $this->name,
                 'type' => 'textarea',
                 'section' => $this->section,
-                'selector' => '.builder-header-html-item',
+                'selector' => '.builder-header-'.$this->id.'-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
                 'title' => __( 'HTML', 'customify' ),
@@ -75,7 +75,7 @@ class Customify_Builder_Item_HTML {
      */
     function render(){
         $content = Customify_Customizer()->get_setting( $this->name );
-        echo '<div class="builder-header-html-item item--html">';
+        echo '<div class="builder-header-'.esc_attr( $this->id ).'-item item--html">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';
     }
