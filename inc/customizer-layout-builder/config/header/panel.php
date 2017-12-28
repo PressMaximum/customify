@@ -35,7 +35,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             array(
                 'name' => 'header_settings',
                 'type' => 'panel',
-                'theme_supports' => '',
+                'priority'    => 1,
                 'title' => __( 'Header', 'customify' ),
             ),
 

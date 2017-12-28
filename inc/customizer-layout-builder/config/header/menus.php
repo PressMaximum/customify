@@ -1,18 +1,38 @@
 <?php
 class Customify_Builder_Item_Primary_Menu {
-    public  $id = 'primary-menu';
+    public $id;
+    public $label;
+    public $prefix;
+    public $selector;
+    public $section;
+    public $theme_location;
+
+    /**
+     * Optional construct
+     *
+     * Customify_Builder_Item_HTML constructor.
+     */
+    function __construct()
+    {
+        $this->id = 'primary-menu';
+        $this->label = __( 'Primary Menu', 'customify' );
+        $this->prefix = 'primary_menu';
+        $this->selector = '.primary-menu';
+        $this->section = 'header_menu_primary';
+        $this->theme_location = 'menu-1';
+    }
+
     function item(){
         return array(
-            'name' => __( 'Primary Menu', 'customify' ),
-            'id' => 'primary-menu',
+            'name' => $this->label,
+            'id' => $this->id,
             'width' => '6',
-            'section' => 'header_menu_primary' // Customizer section to focus when click settings
+            'section' => $this->section // Customizer section to focus when click settings
         );
     }
 
-
     function customize() {
-        $section = 'header_menu_primary';
+        $section = $this->section;
         $fn = array( $this, 'render' );
         return array(
             array(
@@ -20,15 +40,15 @@ class Customify_Builder_Item_Primary_Menu {
                 'type' => 'section',
                 'panel' => 'header_settings',
                 'theme_supports' => '',
-                'title' => __( 'Primary Menu', 'customify' ),
-                'description' => __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for Primary menu', 'customify' )
+                'title' => $this->label,
+                'description' => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label )
             ),
 
             array(
-                'name' => 'primary_menu_style',
+                'name' => $this->prefix.'_style',
                 'type' => 'select',
                 'section' => $section,
-                'selector' => '.primary-menu',
+                'selector' => $this->selector,
                 'render_callback' => $fn,
                 'title' => __( 'Style', 'customify' ),
                 'choices' => array(
@@ -38,11 +58,11 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => 'primary_menu_item_padding',
+                'name' => $this->prefix.'_item_padding',
                 'type' => 'css_ruler',
                 'section' => $section,
                 'title' => __( 'Item Padding', 'customify' ),
-                'selector' => '.primary-menu li a',
+                'selector' => $this->selector.' li a',
                 'device_settings' => true,
                 'css_format' => array(
                     'unit' => '',
@@ -54,10 +74,10 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => 'primary_menu_item_margin',
+                'name' => $this->prefix.'_item_margin',
                 'type' => 'css_ruler',
                 'section' => $section,
-                'selector' => '.primary-menu .menu li',
+                'selector' => $this->selector.' .menu li',
                 'device_settings' => true,
                 'css_format' => array(
                     'top' => 'margin-top: {{value}};',
@@ -69,33 +89,33 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => 'primary_menu_item_color',
+                'name' => $this->prefix.'_item_color',
                 'type' => 'color',
                 'section' => $section,
                 'title'  => __( 'Item Color', 'customify' ),
-                'selector'  => '.primary-menu li a, .primary-menu li',
+                'selector'  => "{$this->selector} li a, {$this->selector} li",
                 'device_settings' => true,
                 'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
             ),
 
             array(
-                'name' => 'primary_menu_item_color_hover',
+                'name' => $this->prefix.'_item_color_hover',
                 'type' => 'color',
                 'section' => $section,
                 'title' => __( 'Item Color Hover', 'customify' ),
                 'device_settings' => true,
-                'selector'  => '.primary-menu li a:hover, .primary-menu li:hover > span, .primary-menu',
+                'selector'  => "{$this->selector} li a:hover, {$this->selector} li:hover > span, {$this->selector}",
                 'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
             ),
 
             array(
-                'name' => 'primary_menu_typography',
+                'name' => $this->prefix.'_typography',
                 'type' => 'group',
                 'section'     => $section,
                 'title'          => __( 'Typography', 'customify' ),
                 'description'    => __( 'This is description',  'customify' ),
                 'field_class' => 'customify-typography-control',
-                'selector' => '.primary-menu',
+                'selector' => $this->selector,
                 'css_format' => 'typography',
                 'default' => array(
 
@@ -140,11 +160,11 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => 'header_primary_menu_align',
+                'name' => $this->prefix.'_align',
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => false,
-                'selector' => '.builder-item--primary-menu',
+                'selector' => ".builder-item--{$this->id}",
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'description'   => __( 'Apply for desktop only.', 'customify' ),
@@ -156,10 +176,10 @@ class Customify_Builder_Item_Primary_Menu {
 
     function render(){
 
-        $style = sanitize_text_field( Customify_Customizer()->get_setting('primary_menu_style') );
+        $style = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'_style') );
 
         wp_nav_menu( array(
-            'theme_location' => 'menu-1',
+            'theme_location' => $this->theme_location,
             'container' => 'nav',
             'container_id' => 'site-navigation-__id__-__device__',
             'container_class' => 'primary-menu nav-menu-__device__ primary-menu-__device__'.( $style ? ' '.$style : '' ),
@@ -173,3 +193,31 @@ class Customify_Builder_Item_Primary_Menu {
 
 
 Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu() );
+
+
+class Customify_Builder_Item_Secondary_Menu extends  Customify_Builder_Item_Primary_Menu {
+
+    public $id;
+    public $label;
+    public $prefix;
+    public $selector;
+    public $section;
+    public $theme_location;
+
+    /**
+     * Optional construct
+     *
+     */
+    function __construct()
+    {
+        parent::__construct();
+        $this->label = __( 'Secondary Menu', 'customify' );
+        $this->id = 'secondary_menu';
+        $this->prefix = 'secondary_menu';
+        $this->selector = '.secondary-menu';
+        $this->section = 'header_menu_secondary';
+        $this->theme_location = 'menu-2';
+    }
+}
+
+Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Secondary_Menu() );

@@ -36,7 +36,7 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
             array(
                 'name' => 'footer_settings',
                 'type' => 'panel',
-                'theme_supports' => '',
+                'priority' => 98,
                 'title' => __( 'Footer', 'customify' ),
             ),
 

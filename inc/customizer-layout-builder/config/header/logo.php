@@ -34,7 +34,7 @@ class Customify_Builder_Item_Logo {
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Name', 'customify' ),
-                'default' => 'no',
+                'default' => 'yes',
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),
@@ -48,7 +48,7 @@ class Customify_Builder_Item_Logo {
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Description', 'customify' ),
-                'default' => 'no',
+                'default' => 'yes',
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),
@@ -111,7 +111,7 @@ class Customify_Builder_Item_Logo {
                 <?php
             }
 
-            if ( $show_name === 'yes' ) {
+            if ( $show_name !== 'no' ) {
                 if (is_front_page() && is_home()) : ?>
                     <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
                 <?php else : ?>
@@ -120,7 +120,7 @@ class Customify_Builder_Item_Logo {
                 endif;
             }
 
-            if ( $show_desc === 'yes' ) {
+            if ( $show_desc !== 'no' ) {
                 $description = get_bloginfo('description', 'display');
                 if ($description || is_customize_preview()) { ?>
                     <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>

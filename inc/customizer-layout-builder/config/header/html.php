@@ -80,3 +80,5 @@ class Customify_Builder_Item_HTML {
         echo '</div>';
     }
 }
+
+Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_HTML() );
