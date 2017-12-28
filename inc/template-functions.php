@@ -26,10 +26,11 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	function customify_get_layout() {
 	    $layout = apply_filters( 'customify_get_layout', false );
 	    if ( ! $layout ) {
-            $default = Customify_Customizer()->get_setting('sidebar_layout');
-            $page = Customify_Customizer()->get_setting('page_sidebar_layout');
+            $default    = Customify_Customizer()->get_setting('sidebar_layout');
+            $page       = Customify_Customizer()->get_setting('page_sidebar_layout');
             $blog_posts = Customify_Customizer()->get_setting('posts_sidebar_layout');
-            $archive = Customify_Customizer()->get_setting('posts_archives_sidebar_layout');
+            $archive    = Customify_Customizer()->get_setting('posts_archives_sidebar_layout');
+            $search     = Customify_Customizer()->get_setting('search_sidebar_layout');
             if (is_page()) {
                 $page_custom = get_post_meta(get_the_ID(), '_customify_sidebar', true);
                 if ($page_custom) {
@@ -37,14 +38,15 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
                 } else {
                     $layout = $page;
                 }
+            } elseif (is_search()) {
+                $layout = $search;
             } elseif (is_archive()) {
                 $layout = $archive;
-            } elseif (is_home() || is_single()) { // blog page and single page
+            } elseif (is_home() || is_category() || is_tag() || is_single()) { // blog page and single page
                 $layout = $blog_posts;
             } else {
                 $layout = $default;
             }
-
             if (!$layout) {
                 $layout = $default;
             }

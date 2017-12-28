@@ -83,7 +83,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'step' => 50,
 					'max' => 2000,
 					'section' => 'global_layout_section',
-					'title'          => __( 'Container width', 'customify' ),
+					'title' => __( 'Container width', 'customify' ),
 					'selector' => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
 					'css_format' => 'max-width: {{value}}'
 				),
@@ -179,6 +179,16 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'title' => __('Blog posts archives', 'customify'),
 					'choices' => customify_get_config_sidebar_layouts()
 				),
+
+                // Search
+                array(
+                    'name' => 'search_sidebar_layout',
+                    'type' => 'select',
+                    'default' => 'content-sidebar',
+                    'section' => 'sidebar_layout_section',
+                    'title' => __('Search Results', 'customify'),
+                    'choices' => customify_get_config_sidebar_layouts()
+                ),
 
 			// Page layout
 			array(
