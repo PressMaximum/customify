@@ -698,7 +698,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
          $setting = $this->get_settings();
          $items = $this->render_items( );
          foreach ($row_ids as $row_id ) {
-            if ( isset( $this->rows[ $row_id ] ) ) {
+             $show = customify_is_builder_row_display( $this->id, $row_id );
+            if ( $show && isset( $this->rows[ $row_id ] ) ) {
                 $show_on_devices = $this->rows[$row_id];
                 if (!empty($show_on_devices)) {
                     $classes = array();
@@ -710,7 +711,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
                     $mobile_items = $this->get_row_settings($row_id, 'mobile');
                     $atts = array();
                     if ( ! empty( $desktop_items ) || ! empty( $mobile_items ) ) {
-
 
                         $align_classes = 'customify-grid-middle';
                         if ($this->id != 'footer') {
@@ -830,7 +830,9 @@ function Customify_Customizer_Layout_Builder_Frontend(){
  * Display Header Layout
  */
 function customify_customize_render_header(){
-
+    if ( ! customify_is_header_display() ) {
+        return ;
+    }
     echo '<header id="masthead" class="site-header">';
         $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
         Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
@@ -843,6 +845,9 @@ function customify_customize_render_header(){
  * Display Footer Layout)
  */
 function customify_customize_render_footer(){
+    if ( ! customify_is_footer_display() ){
+        return ;
+    }
     echo '<footer class="site-footer" id="site-footer">';
     Customify_Customizer_Layout_Builder_Frontend()->set_id( 'footer' );
     Customify_Customizer_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );

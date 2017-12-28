@@ -511,7 +511,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             field.value = { unit: 'px' };
         }
         var uniqueID = field.name + ( new Date().getTime() );
-                
+
         if ( ! field.device_settings ) {
             if ( ! _.isObject( field.default  ) ) {
                 field.default = {

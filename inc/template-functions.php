@@ -87,12 +87,94 @@ if ( ! function_exists( 'customify_get_sidebars' ) ) {
 }
 add_action( 'customify_sidebars', 'customify_get_sidebars' );
 
-/**
- * Add a pingback url auto-discovery header for singularly identifiable articles.
- */
-function customify_pingback_header() {
-	if ( is_singular() && pings_open() ) {
-		echo '<link rel="pingback" href="', esc_url( get_bloginfo( 'pingback_url' ) ), '">';
-	}
+if ( ! function_exists( 'customify_pingback_header' ) ) {
+    /**
+     * Add a pingback url auto-discovery header for singularly identifiable articles.
+     */
+    function customify_pingback_header()
+    {
+        if (is_singular() && pings_open()) {
+            echo '<link rel="pingback" href="', esc_url(get_bloginfo('pingback_url')), '">';
+        }
+    }
 }
 add_action( 'wp_head', 'customify_pingback_header' );
+
+if ( ! function_exists( 'customify_is_header_display' ) ) {
+    /**
+     * Check if show header
+     *
+     * @return bool
+     */
+    function customify_is_header_display(){
+        $show = true;
+
+        if ( is_page() ) {
+            $disable = get_post_meta(get_the_ID(), '_customify_disable_header', true);
+            if ( $disable ) {
+                $show = false;
+            }
+        }
+
+        return $show;
+    }
+}
+
+if ( ! function_exists( 'customify_is_footer_display' ) ) {
+    /**
+     * Check if show header
+     *
+     * @return bool
+     */
+    function customify_is_footer_display(){
+        $show = true;
+
+        if ( is_page() ) {
+            $rows =  array( 'main', 'bottom' );
+            $count = 0;
+            foreach ( $rows as $row_id ) {
+                if ( ! customify_is_builder_row_display( 'footer', $row_id ) ) {
+                    $count ++ ;
+                }
+            }
+            if ( $count >= count( $rows ) ){
+                $show = false;
+            }
+        }
+
+        return  apply_filters( 'customify_is_header_display', $show );
+    }
+}
+
+if ( ! function_exists( 'customify_is_builder_row_display' ) ) {
+    /**
+     * Check if show header
+     *
+     * @return bool
+     */
+    function customify_is_builder_row_display( $builder_id, $row_id = false ){
+        $show = true;
+
+        if ( $row_id  && $builder_id ) {
+            if (is_page()) {
+                $key = $builder_id . '_' . $row_id;
+                $disable = get_post_meta(get_the_ID(), '_customify_disable_' . $key, true);
+                if ($disable) {
+                    $show = false;
+                }
+            }
+        }
+
+        return apply_filters( 'customify_is_builder_row_display', $show, $builder_id, $row_id );
+    }
+}
+
+if ( ! function_exists( 'customify_show_post_title' ) ) {
+    /**
+     *
+     */
+    function customify_show_post_title(){
+
+    }
+}
+
