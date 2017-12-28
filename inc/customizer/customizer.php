@@ -26,7 +26,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             add_action( 'customize_register', array( $this, 'register' ) );
             add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
 
-
         }
 
         static function get_instance(){
@@ -269,9 +268,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
         function register( $wp_customize ){
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
-            $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-
-
             foreach ( self::get_config( $wp_customize ) as $args ) {
                 switch (  $args['type'] ) {
                     case  'panel':
@@ -394,6 +390,11 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             // remove_partial
             $wp_customize->selective_refresh->remove_partial( 'custom_logo' );
 
+
+            $wp_customize->get_section( 'title_tagline' )->panel = 'header_settings';
+            $wp_customize->get_section( 'title_tagline' )->title = __( 'Logo & Site Identity' );
+
+            $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
             // add selective refresh
             $wp_customize->get_setting( 'custom_logo' )->transport         = 'postMessage';
             $wp_customize->get_setting( 'blogname' )->transport  = 'postMessage';
