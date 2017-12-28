@@ -88,8 +88,8 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 'has_icons' => Customify_Customizer()->has_icon(),
                 'icons' => Customify_Font_Icons()->get_icons(),
                 'theme_default' => __('Theme Default', 'customify'),
-                'reset' => __('Reset', 'customify'),
-                'confirm_reset' => __('Reset this section ?', 'customify'),
+                'reset' => __('Reset this section settings', 'customify'),
+                'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
             ));
             self::$_icon_loaded = true;
         }

@@ -2876,11 +2876,6 @@ article.comment .comment-post-author {
 .header--row {
   background: #ffffff;
 }
-.header--row .customify-grid {
-  -webkit-transition: all .5s ease;
-  -moz-transition: all .5s ease;
-  transition: all .5s ease;
-}
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;
 }
@@ -3095,7 +3090,8 @@ article.comment .comment-post-author {
   display: block;
   transform: translateY(40px);
   top: 100%;
-  box-shadow: 2px 1px 2px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 5px 30px 5px rgba(69, 79, 91, 0.2);
+  border-radius: 2px;
   text-align: left;
 }
 .nav-menu-desktop .sub-menu li {

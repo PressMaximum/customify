@@ -4,6 +4,7 @@ $text_color: #555d66;
 .customify--hide {
     display: none !important;
 }
+
 .customify-control--heading {
     padding: 7px 12px;
     background: #fff;
@@ -413,7 +414,7 @@ $text_color: #555d66;
     display: block;
     .customify--css-unit {
         text-align: right;
-        margin-top: -15px;
+        margin-top: -23px;
         margin-bottom: 0px;
     }
     .customify--slider-input {
@@ -450,7 +451,6 @@ $text_color: #555d66;
         border: 1px solid #ddd;
         background: #fff;
         font-weight: normal;
-
         &:before {
             -moz-osx-font-smoothing: grayscale;
             border: none;
