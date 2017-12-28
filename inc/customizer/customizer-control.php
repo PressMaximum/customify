@@ -138,6 +138,12 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             }
         }
 
+        if ( 'slider' == $this->setting_type ) {
+           if ( ! $value || empty( $value ) ) {
+               $value = $this->defaultValue;
+           }
+        }
+
         $this->json['value']        = $value;
         $this->json['default']      = $this->defaultValue;
         $this->json['fields']       = $this->fields;
@@ -147,7 +153,6 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
         $this->json['step'] = $this->step;
-
         if ( 'css_ruler' == $this->setting_type ) {
             // $disabled
             $this->json['fields_disabled'] = $this->fields_disabled;
@@ -506,14 +511,18 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             field.value = { unit: 'px' };
         }
         var uniqueID = field.name + ( new Date().getTime() );
-
+                
         if ( ! field.device_settings ) {
             if ( ! _.isObject( field.default  ) ) {
-            field.default = {
+                field.default = {
                     unit: 'px',
                     value: field.default
                 }
             }
+            if ( _.isUndefined( field.value.value ) || ! field.value.value ) {
+                field.value.value = field.default.value;
+            }
+
         } else {
             _.each( field.default, function( value, device ){
                 if ( ! _.isObject( value  ) ) {
