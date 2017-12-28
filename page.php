@@ -20,7 +20,6 @@ get_header(); ?>
             <main id="main" <?php customify_main_content_class(); ?>>
                 <div class="content-inner">
 	                <?php
-	                echo customify_get_layout();
 	                while ( have_posts() ) : the_post();
 
 		                get_template_part( 'template-parts/content', 'page' );

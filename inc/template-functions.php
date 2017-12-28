@@ -154,7 +154,6 @@ if ( ! function_exists( 'customify_is_builder_row_display' ) ) {
      */
     function customify_is_builder_row_display( $builder_id, $row_id = false ){
         $show = true;
-
         if ( $row_id  && $builder_id ) {
             if (is_page()) {
                 $key = $builder_id . '_' . $row_id;
@@ -171,10 +170,19 @@ if ( ! function_exists( 'customify_is_builder_row_display' ) ) {
 
 if ( ! function_exists( 'customify_show_post_title' ) ) {
     /**
-     *
+     * Check if display title of any post type
      */
-    function customify_show_post_title(){
+    function customify_is_post_title_display(){
+        $show = true;
 
+        if ( is_page() ) {
+            $disable = get_post_meta(get_the_ID(), '_customify_disable_page_title', true);
+            if ( $disable ) {
+                $show = false;
+            }
+        }
+
+        return apply_filters( 'customify_is_post_title_display', $show );
     }
 }
 
