@@ -80,7 +80,8 @@ var AutoCSS = window.AutoCSS || null;
                     default:
                         switch ( field.css_format ) {
                             case  'background':
-                                that.background(field);
+                            case  'styling':
+                                that.styling(field);
                                 break;
                             case 'typography':
                                 that.typography(field);
@@ -524,11 +525,11 @@ var AutoCSS = window.AutoCSS || null;
         return this.maybe_devices_setup( field, 'setup_text_align' );
     };
 
-    AutoCSS.prototype.background = function( field ){
-        return this.maybe_devices_setup( field, 'setup_background' );
+    AutoCSS.prototype.styling = function( field ){
+        return this.maybe_devices_setup( field, 'setup_styling' );
     };
 
-    AutoCSS.prototype.setup_background = function ( value ) {
+    AutoCSS.prototype.setup_styling = function ( value ) {
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -538,7 +539,11 @@ var AutoCSS = window.AutoCSS || null;
             position: null,
             cover: null,
             repeat: null,
-            attachment: null
+            attachment: null,
+
+            border_width: null,
+            border_color: null,
+            border_style: null
         } );
 
         var css = {};
@@ -602,6 +607,26 @@ var AutoCSS = window.AutoCSS || null;
                 break;
             default:
         }
+
+
+        if ( value.border_width ) {
+            css.border_width = this.setup_css_ruler( value.border_width, {
+                top: 'border-top-width: {{value}};',
+                right: 'border-right-width: {{value}};',
+                bottom: 'border-bottom-width: {{value}};',
+                left: 'border-left-width: {{value}};'
+            } );
+        }
+
+        var border_color = this.sanitize_color( value.border_color );
+        if ( border_color ) {
+            css.border_color = "border-color: "+border_color+";";
+        }
+
+        if ( value.border_style ) {
+            css.border_style = "border-style: "+value.border_style+";";
+        }
+
 
         if ( value.cover ) {
             css.cover = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';

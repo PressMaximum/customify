@@ -45,3 +45,22 @@
     }
 }
 
+
+/************************
+   Device Query
+*************************/
+
+@mixin for_device( $device_name ){
+    @if map-has-key( $gl-devices-list, $device_name) {
+        @media #{map-get( $gl-devices-list, $device_name)} {
+            @content;
+        }
+    }@else {
+        @if map-has-key( $gl-mq-list, $device_name) {
+            @media #{map-get($gl-mq-list, $device_name)} {
+                @content;
+            }
+        }
+    }
+}
+

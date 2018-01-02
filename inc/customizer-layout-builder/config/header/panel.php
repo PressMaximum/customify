@@ -132,11 +132,9 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained",
-                'css_format' => 'background',
+                'css_format' => 'styling', // styling
                 'device_settings' => false,
-                'default' => array(
-
-                ),
+                'default' => array(),
                 'fields' => array(
                     array(
                         'name' => 'color',
@@ -201,6 +199,34 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         ),
                     ),
 
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                    ),
+
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                    ),
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'solid',
+                        'choices' => array(
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                            'none'      => __('None', 'customify'),
+                        ),
+                    ),
+
                 )
             ),
 
@@ -244,7 +270,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => '#mobile-header-panel',
-                'css_format' => 'background',
+                'css_format' => 'styling',
                 'default' => array(
 
                 ),
@@ -312,6 +338,34 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                             'fixed' => __( 'Fixed', 'customify' )
                         ),
                     ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                    ),
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'solid',
+                        'choices' => array(
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                            'none'      => __('None', 'customify'),
+                        ),
+                    ),
+
 
                 )
             ),

@@ -91,11 +91,13 @@ $close_size: 35px;
         }
     }
     background: #ffffff;
-    &.layout-contained {
-        background: transparent;
-        .customify-container {
-            margin-left: 1.5em;
-            margin-right: 1.5em;
+    @include for_device( desktop ){
+        &.layout-contained {
+            background: transparent;
+            .customify-container {
+                margin-left: 1.5em;
+                margin-right: 1.5em;
+            }
         }
     }
     &.layout-fullwidth {

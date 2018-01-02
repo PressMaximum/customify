@@ -123,7 +123,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return $code;
         }
 
-        function setup_background( $value ) {
+        function setup_styling( $value ) {
             $value = wp_parse_args( $value, array(
                 'color' => '',
                 'image' => '',
@@ -131,6 +131,10 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 'cover' => '',
                 'repeat' => '',
                 'attachment' => '',
+
+                'border_width' => '',
+                'border_color' => '',
+                'border_style' => '',
             ) );
 
             $css = array();
@@ -200,12 +204,30 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 $css['attachment'] = 'background-attachment: fixed;';
             }
 
+            if ( $value['border_width'] ) {
+                $css['border_width'] = $this->setup_css_ruler( $value['border_width'], array(
+                    'top' => 'border-top-width: {{value}};',
+                    'right' => 'border-right-width: {{value}};',
+                    'bottom'=> 'border-bottom-width: {{value}};',
+                    'left'=> 'border-left-width: {{value}};'
+                ) );
+            }
+
+            $border_color = Customify_Sanitize_Input::sanitize_color( $value['border_color'] );
+            if ( $border_color ) {
+                $css['border_color'] = "border-color: {$border_color};";
+            }
+            $value['border_style'] = sanitize_text_field( $value['border_style'] );
+            if ( $value['border_style'] ) {
+                $css['border_style'] = "border-style: {$value['border_style']};";
+            }
+
             return join( "\n\t",  $css );
 
         }
 
-        function background( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_background' );
+        function styling( $field ){
+            $code = $this->maybe_devices_setup( $field, 'setup_styling' );
             return  $code;
         }
 
@@ -218,7 +240,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                     }
                 }
             }
-
             return false;
         }
 
@@ -566,13 +587,22 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                             $this->font($field);
                             break;
                         default:
-                            if (isset($field['css_format']) && $field['css_format'] == 'background') {
-                                $this->background($field);
-                            } else if (isset($field['css_format']) && $field['css_format'] == 'typography') {
-                                $this->typography($field);
-                            } else {
-                                $this->maybe_devices_setup( $field, 'setup_default' );
+                            switch( $field['css_format'] ) {
+                                case 'background':
+                                case 'styling':
+                                    $this->styling($field);
+                                    break;
+                                case 'typography':
+                                    $this->typography($field);
+                                    break;
+                                case 'html_class':
+                                    //
+                                    break;
+                                default:
+                                    $this->maybe_devices_setup( $field, 'setup_default' );
+
                             }
+
                     }
                 }
 
