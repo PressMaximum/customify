@@ -2876,6 +2876,16 @@ article.comment .comment-post-author {
 .header--row {
   background: #ffffff;
 }
+.header--row.layout-full-contained .customify-container {
+  background: transparent;
+}
+.header--row.layout-contained {
+  background: transparent;
+}
+.header--row.layout-contained .customify-container {
+  margin-left: 1.5em;
+  margin-right: 1.5em;
+}
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;
 }

@@ -77,7 +77,7 @@ class Customify_Builder_Item_Logo {
                 'device_settings' => true,
                 'title' => __( 'Logo Height', 'customify' ),
                 'selector' => $selector.' img',
-                'css_format' => 'height: {{value}};'
+                'css_format' => 'max-height: {{value}};'
             ),
 
 

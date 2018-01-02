@@ -84,11 +84,20 @@ $close_size: 35px;
 
 .header--row {
     .customify-grid {
-        //-webkit-transition: all .5s ease;
-        //-moz-transition: all .5s ease;
-        //transition: all .5s ease;
+    }
+    &.layout-full-contained {
+        .customify-container {
+            background: transparent;
+        }
     }
     background: #ffffff;
+    &.layout-contained {
+        background: transparent;
+        .customify-container {
+            margin-left: 1.5em;
+            margin-right: 1.5em;
+        }
+    }
     &.layout-fullwidth {
         .customify-container {
             max-width: initial;
