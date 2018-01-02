@@ -218,15 +218,16 @@
 .customify--repeater-items .customify--repeater-visible {
   display: inline-block;
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
+  border-right: 1px solid #dddddd;
 }
 .customify--repeater-items .customify--repeater-visible .r-visible-icon:before {
   -moz-osx-font-smoothing: grayscale;
   border: none;
   content: "\f530";
   display: block;
-  font: 14px/1 dashicons;
+  font: 14px/32px dashicons;
   padding: 5px;
   text-decoration: none !important;
   text-indent: 0;
@@ -245,6 +246,9 @@
   line-height: 1;
   font-size: 1em;
   cursor: pointer;
+}
+.customify--repeater-items .item---visible-hidden .customify--repeater-item-heading {
+  background: #f1f1f1;
 }
 .customify--repeater-items .ui-sortable-helper .customify--repeater-item-heading {
   cursor: grabbing;

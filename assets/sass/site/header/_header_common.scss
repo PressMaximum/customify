@@ -91,9 +91,15 @@ $close_size: 35px;
         }
     }
     background: #ffffff;
+    &.layout-full-contained, &.layout-fullwidth {
+        .customify-container {
+            border: 0 none !important;
+        }
+    }
     @include for_device( desktop ){
         &.layout-contained {
             background: transparent;
+            border: 0 none;
             .customify-container {
                 margin-left: 1.5em;
                 margin-right: 1.5em;

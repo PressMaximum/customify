@@ -36,6 +36,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
     public $limit_msg = '';
     public $live_title_field; // for repeater
+    public $addable = null; // for repeater
     public $_settings;
     public $_selective_refresh;
     public $device_settings = false;
@@ -165,6 +166,14 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             $this->json['live_title_field'] = $this->live_title_field;
             $this->json['limit'] = $this->limit;
             $this->json['limit_msg'] = $this->limit_msg;
+            if ( $this->addable === false ) {
+                $this->json['addable'] = false;
+                if( empty( $this->json['value'] ) ) {
+                    $this->json['value'] = $this->defaultValue;
+                }
+            } else {
+                $this->json['addable'] = true;
+            }
         }
 
         if ( $this->setting_type == 'select' || $this->setting_type == 'radio' ) {
@@ -247,7 +256,9 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 <?php if ( $this->setting_type == 'repeater' ) { ?>
                 <div class="customify--repeater-actions">
                     <a href="#" class="customify--repeater-reorder" data-text="<?php _e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
+                    <?php if ( $this->addable !== false ) { ?>
                     <button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
+                    <?php } ?>
                 </div>
                 <?php } ?>
             <?php } ?>
@@ -302,6 +313,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <script type="text/html" id="tmpl-customize-control-<?php echo esc_attr( $this->type ); ?>-repeater">
             <div class="customify--repeater-item">
                 <div class="customify--repeater-item-heading">
+                    <label class="customify--repeater-visible" title="<?php esc_attr_e( 'Toggle item visible', 'customify' ); ?>"><input type="checkbox" class="r-visible-input"><span class="r-visible-icon"></span><span class="screen-reader-text"><?php _e( 'Show', 'customify' ) ?></label>
                     <span class="customify--repeater-live-title"></span>
                     <div class="customify-nav-reorder">
                         <span class="customify--down" tabindex="-1"><span class="screen-reader-text"><?php _e( 'Move Down', 'customify' ) ?></span></span>
@@ -311,10 +323,11 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 </div>
                 <div class="customify--repeater-item-settings">
                     <div class="customify--repeater-item-inside">
-                        <div class="customify--repeater-item-inner">{{{ data }}}</div>
+                        <div class="customify--repeater-item-inner"></div>
+                        <# if ( data.addable ){  #>
                         <a href="#" class="customify--remove"><?php _e( 'Remove', 'customify' ); ?></a>
+                        <# } #>
                     </div>
-
                 </div>
             </div>
         </script>

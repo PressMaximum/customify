@@ -411,10 +411,22 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 $wp_customize->selective_refresh->add_partial( $cb , $settings );
             }
 
+            // For live CSS
+
+            $wp_customize->add_setting( 'customify__css' , array(
+                'default' => '',
+                'transport' => 'postMessage',
+                'sanitize_callback' => 'customify_sanitize_css_code',
+            ) );
+
             do_action( 'customify/customize/register_completed', $this );
         }
 
     }
+}
+
+function customify_sanitize_css_code( $val ){
+    return wp_kses_post( $val );
 }
 
 if ( ! function_exists( 'Customify_Customizer' ) ) {

@@ -59,27 +59,13 @@ class Customify_Builder_Item_Logo {
                 'name' => 'logo_height',
                 'type' => 'slider',
                 'section' =>  $section,
-                'default' => array(
-                    'desktop' => array(
-                        'unit' => 'px',
-                        'value' => 60,
-                    ),
-                    'tablet' => array(
-                        'unit' => 'px',
-                        'value' => 60,
-                    ),
-                    'mobile' => array(
-                        'unit' => 'px',
-                        'value' => 60,
-                    ),
-                ),
+                'default' => array(),
                 'max' => 200,
                 'device_settings' => true,
                 'title' => __( 'Logo Height', 'customify' ),
                 'selector' => $selector.' img',
                 'css_format' => 'max-height: {{value}};'
             ),
-
 
             array(
                 'name' => 'header_logo_align',

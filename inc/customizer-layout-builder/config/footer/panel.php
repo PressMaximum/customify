@@ -169,14 +169,14 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
             ),
 
             array(
-                'name' => $section.'_background',
+                'name' => $section.'_styling',
                 'type' => 'group',
                 'section'     => $section,
                 'title'          => __( 'Background', 'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => $selector,
-                'css_format' => 'background',
+                'css_format' => 'styling',
                 'default' => array(
 
                 ),
@@ -184,12 +184,12 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', 'customify' ),
+                        'label' => __( 'Background Color', 'customify' ),
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', 'customify' ),
+                        'label' => __( 'Background Image', 'customify' ),
                     ),
                     array(
                         'name' => 'cover',
@@ -242,6 +242,36 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                             'scroll' => __( 'Scroll', 'customify' ),
                             'fixed' => __( 'Fixed', 'customify' )
                         ),
+                    ),
+
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'none',
+                        'choices' => array(
+                            'none'      => __('None', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
                     ),
 
                 )

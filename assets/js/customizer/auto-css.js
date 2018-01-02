@@ -118,8 +118,7 @@ var AutoCSS = window.AutoCSS || null;
             $( 'head' ).append( "<style id='customify-style-inline-css' type='text/css'></style>" )
         }
         $( '#customify-style-inline-css' ).html( css_code );
-
-
+       // api.set( 'customify__css',  css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
 
       /// console.log( 'CSS' , css_code );
@@ -608,23 +607,26 @@ var AutoCSS = window.AutoCSS || null;
             default:
         }
 
+        if ( value.border_style !== 'none' ) {
+            if (value.border_width) {
+                css.border_width = this.setup_css_ruler(value.border_width, {
+                    top: 'border-top-width: {{value}};',
+                    right: 'border-right-width: {{value}};',
+                    bottom: 'border-bottom-width: {{value}};',
+                    left: 'border-left-width: {{value}};'
+                });
+            }
 
-        if ( value.border_width ) {
-            css.border_width = this.setup_css_ruler( value.border_width, {
-                top: 'border-top-width: {{value}};',
-                right: 'border-right-width: {{value}};',
-                bottom: 'border-bottom-width: {{value}};',
-                left: 'border-left-width: {{value}};'
-            } );
+            if (css.border_width) {
+                var border_color = this.sanitize_color(value.border_color);
+                if (border_color) {
+                    css.border_color = "border-color: " + border_color + ";";
+                }
+            }
         }
 
-        var border_color = this.sanitize_color( value.border_color );
-        if ( border_color ) {
-            css.border_color = "border-color: "+border_color+";";
-        }
-
-        if ( value.border_style ) {
-            css.border_style = "border-style: "+value.border_style+";";
+        if (value.border_style) {
+            css.border_style = "border-style: " + value.border_style + ";";
         }
 
 

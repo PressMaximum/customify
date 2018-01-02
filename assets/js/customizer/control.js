@@ -798,7 +798,6 @@
                             //var $_field = inputField.closest('.customify--repeater-field');
                             var _fv =  control.getFieldValue( f.name, f,  $item );
                             _v[ f.name ] = _fv;
-
                             // Update Live title
                             if ( control.params.live_title_field == f.name ) {
                                 if ( inputField.prop("tagName") == 'select' ) {
@@ -809,12 +808,18 @@
                                 }
                                 control.updateRepeaterLiveTitle( _fv, $item, f );
                             }
-
                         } );
 
                         control.initConditional( $item, _v );
 
                         value[index] = _v;
+                        value[index]['_visibility'] = 'visible';
+
+                        if ( $( 'input.r-visible-input', $item ).length ) {
+                            if ( ! $( 'input.r-visible-input', $item ).is(':checked') ) {
+                                value[index]['_visibility'] = 'hidden';
+                            }
+                        }
 
                     } );
                     break;
@@ -981,11 +986,16 @@
             var control = this;
             var template = control.getTemplate();
             var fields = control.params.fields;
+            var addable = true;
+            if ( control.params.addable === false ) {
+                addable = false;
+            }
 
-            var $itemWrapper = $( template( '' , 'tmpl-customize-control-'+control.type+'-repeater') );
+            var $itemWrapper = $( template( control.params , 'tmpl-customize-control-'+control.type+'-repeater') );
             control.container.find( '.customify--settings-fields' ).append( $itemWrapper );
             _.each( fields, function( f, index ){
                 f.value = '';
+                f.addable = addable;
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
                     f.value = value[ f.name ];
                 }
@@ -997,6 +1007,13 @@
                     control.addDeviceSwitchers( $fieldArea );
                 }
             } );
+
+            if ( ! _.isUndefined( value._visibility ) && value._visibility === 'hidden') {
+                $itemWrapper.addClass( 'item---visible-hidden' );
+                $itemWrapper.find( 'input.r-visible-input' ).removeAttr( 'checked' );
+            } else {
+                $itemWrapper.find( 'input.r-visible-input' ).attr( 'checked', 'checked' );
+            }
 
             $itemWrapper.find( '.customify--repeater-live-title' ).html( control.params.l10n.untitled );
 
@@ -1094,6 +1111,18 @@
                 control.getValue( false );
             }
             control.limitRepeaterItems();
+
+            // Toggle visibility
+
+            control.container.on( 'change', '.customify--repeater-item .r-visible-input', function(e){
+                e.preventDefault();
+                var p = $( this ).closest('.customify--repeater-item');
+                if ( $( this ).is(':checked') ) {
+                    p.removeClass( 'item---visible-hidden' );
+                } else {
+                    p.addClass( 'item---visible-hidden' );
+                }
+            } );
 
             // Toggle
             control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-live-title', function(e){
@@ -1533,6 +1562,9 @@
 
         } );
 
+       // console.log( 'wpcustomize.setting', wpcustomize.settings( 'custom_logo' ) );
+
+        //wpcustomize.control( 'customify__css').setting.set( 'cusstom_Css' );
 
 
 

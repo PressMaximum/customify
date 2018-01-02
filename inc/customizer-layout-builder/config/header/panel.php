@@ -125,13 +125,13 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
 
             array(
-                'name' => $section.'_background',
+                'name' => $section.'_styling',
                 'type' => 'group',
-                'section'     => $section,
-                'title'          => __( 'Background', 'customify' ),
+                'section' => $section,
+                'title'  => __( 'Styling', 'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
-                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained",
+                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-full-width",
                 'css_format' => 'styling', // styling
                 'device_settings' => false,
                 'default' => array(),
@@ -139,12 +139,12 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', 'customify' ),
+                        'label' => __( 'Background Color', 'customify' ),
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', 'customify' ),
+                        'label' => __( 'Background Image', 'customify' ),
                     ),
                     array(
                         'name' => 'cover',
@@ -200,22 +200,12 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     ),
 
                     array(
-                        'name' => 'border_width',
-                        'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
-                    ),
-
-                    array(
-                        'name' => 'border_color',
-                        'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
-                    ),
-                    array(
                         'name' => 'border_style',
                         'type' => 'select',
                         'label' => __('Border Style', 'customify'),
-                        'default' => 'solid',
+                        'default' => 'none',
                         'choices' => array(
+                            'none'      => __('None', 'customify'),
                             'solid'     => __('Solid', 'customify'),
                             'dotted'    => __('Dotted', 'customify'),
                             'dashed'    => __('Dashed', 'customify'),
@@ -223,8 +213,20 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                             'ridge'     => __('Ridge', 'customify'),
                             'inset'     => __('Inset', 'customify'),
                             'outset'    => __('Outset', 'customify'),
-                            'none'      => __('None', 'customify'),
                         ),
+                    ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
                     ),
 
                 )
@@ -262,7 +264,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
 
             array(
-                'name' => $section.'_background',
+                'name' => $section.'_styling',
                 'type' => 'group',
                 'section' => $section,
                 'title' => __( 'Background', 'customify' ),
@@ -278,13 +280,13 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __( 'Color', 'customify' ),
+                        'label' => __( 'Background Color', 'customify' ),
                         'device_settings' => false,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __( 'Image', 'customify' ),
+                        'label' => __( 'Background Image', 'customify' ),
                     ),
                     array(
                         'name' => 'cover',
@@ -340,21 +342,12 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     ),
 
                     array(
-                        'name' => 'border_width',
-                        'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
-                    ),
-                    array(
-                        'name' => 'border_color',
-                        'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
-                    ),
-                    array(
                         'name' => 'border_style',
                         'type' => 'select',
                         'label' => __('Border Style', 'customify'),
-                        'default' => 'solid',
+                        'default' => 'none',
                         'choices' => array(
+                            'none'      => __('None', 'customify'),
                             'solid'     => __('Solid', 'customify'),
                             'dotted'    => __('Dotted', 'customify'),
                             'dashed'    => __('Dashed', 'customify'),
@@ -362,8 +355,20 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                             'ridge'     => __('Ridge', 'customify'),
                             'inset'     => __('Inset', 'customify'),
                             'outset'    => __('Outset', 'customify'),
-                            'none'      => __('None', 'customify'),
                         ),
+                    ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
                     ),
 
 

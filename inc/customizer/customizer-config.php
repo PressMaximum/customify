@@ -21,6 +21,64 @@ if (!function_exists('customify_customizer_config')) {
                 'description' => __('This is section description', 'customify'),
             ),
 
+
+            array(
+                'name' => 'repeater',
+                'type' => 'repeater',
+                'section' => 'customify_section',
+                'title' => __('Repeater', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'live_title_field' => 'title',
+                'limit' => 4,
+                'addable' => false,
+                'limit_msg' => __('Just limit 4 item, Ability HTML here', 'customify'),
+                'default' => array(
+                    array(
+                        'title' => __('Title 1', 'customify'),
+                        'content' => __('Content 1', 'customify'),
+                    ),
+                    array(
+                        'title' => __('Title 2', 'customify'),
+                        'content' => __('Content 2', 'customify'),
+                    )
+                ),
+                'fields' => array(
+                    array(
+                        'name' => 'title',
+                        'type' => 'text',
+                        'label' => __('Title', 'customify'),
+                    ),
+                    array(
+                        'name' => 'slider',
+                        'type' => 'slider',
+                        'device_settings' => true,
+                        'label' => __('Slider', 'customify'),
+                    ),
+                    array(
+                        'name' => 'image',
+                        'type' => 'image',
+                        'label' => __('Image', 'customify'),
+                    ),
+                    array(
+                        'name' => 'select',
+                        'type' => 'select',
+                        'label' => __('Select', 'customify'),
+                        'description' => __('Select 2 to show text area', 'customify'),
+                        'choices' => array(
+                            1 => 1,
+                            2 => 2,
+                            3 => 3
+                        )
+                    ),
+                    array(
+                        'name' => 'content',
+                        'type' => 'textarea',
+                        'label' => __('Textarea', 'customify'),
+                        'required' => array('select', '==', '2')
+                    ),
+                )
+            ),
+
             array(
                 'name' => 'css_ruler_disable',
                 'device_settings' => true,
@@ -260,20 +318,20 @@ if (!function_exists('customify_customizer_config')) {
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => '#page',
-                'css_format' => 'background',
+                'css_format' => 'styling',
                 'device_settings' => true,
                 'default' => array(),
                 'fields' => array(
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __('Color', 'customify'),
+                        'label' => __('Background Color', 'customify'),
                         'device_settings' => true,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __('Image', 'customify'),
+                        'label' => __('Background Image', 'customify'),
                     ),
                     array(
                         'name' => 'cover',
@@ -330,6 +388,36 @@ if (!function_exists('customify_customizer_config')) {
                         ),
                     ),
 
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                    ),
+
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                    ),
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'solid',
+                        'choices' => array(
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                            'none'      => __('None', 'customify'),
+                        ),
+                    ),
+
+
+
                 )
             ),
 
@@ -342,20 +430,20 @@ if (!function_exists('customify_customizer_config')) {
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => '#page p',
-                'css_format' => 'background',
+                'css_format' => 'styling',
                 'device_settings' => false,
                 'default' => array(),
                 'fields' => array(
                     array(
                         'name' => 'color',
                         'type' => 'color',
-                        'label' => __('Color', 'customify'),
+                        'label' => __('Background Color', 'customify'),
                         'device_settings' => true,
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
-                        'label' => __('Image', 'customify'),
+                        'label' => __('Background Image', 'customify'),
                     ),
                     array(
                         'name' => 'cover',
@@ -582,61 +670,7 @@ if (!function_exists('customify_customizer_config')) {
                 )
             ),
 
-            array(
-                'name' => 'repeater',
-                'type' => 'repeater',
-                'section' => 'customify_section',
-                'title' => __('Repeater', 'customify'),
-                'description' => __('This is description', 'customify'),
-                'live_title_field' => 'title',
-                'limit' => 4,
-                'limit_msg' => __('Just limit 4 item, Ability HTML here', 'customify'),
-                'default' => array(
-                    array(
-                        'title' => __('Title 1', 'customify'),
-                        'content' => __('Content 1', 'customify'),
-                    ),
-                    array(
-                        'title' => __('Title 2', 'customify'),
-                        'content' => __('Content 2', 'customify'),
-                    )
-                ),
-                'fields' => array(
-                    array(
-                        'name' => 'title',
-                        'type' => 'text',
-                        'label' => __('Title', 'customify'),
-                    ),
-                    array(
-                        'name' => 'slider',
-                        'type' => 'slider',
-                        'device_settings' => true,
-                        'label' => __('Slider', 'customify'),
-                    ),
-                    array(
-                        'name' => 'image',
-                        'type' => 'image',
-                        'label' => __('Image', 'customify'),
-                    ),
-                    array(
-                        'name' => 'select',
-                        'type' => 'select',
-                        'label' => __('Select', 'customify'),
-                        'description' => __('Select 2 to show text area', 'customify'),
-                        'choices' => array(
-                            1 => 1,
-                            2 => 2,
-                            3 => 3
-                        )
-                    ),
-                    array(
-                        'name' => 'content',
-                        'type' => 'textarea',
-                        'label' => __('Textarea', 'customify'),
-                        'required' => array('select', '==', '2')
-                    ),
-                )
-            ),
+
 
             array(
                 'name' => 'group',

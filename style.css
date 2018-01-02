@@ -2879,9 +2879,13 @@ article.comment .comment-post-author {
 .header--row.layout-full-contained .customify-container {
   background: transparent;
 }
+.header--row.layout-full-contained .customify-container, .header--row.layout-fullwidth .customify-container {
+  border: 0 none !important;
+}
 @media screen and (min-width: 64em) {
   .header--row.layout-contained {
     background: transparent;
+    border: 0 none;
   }
   .header--row.layout-contained .customify-container {
     margin-left: 1.5em;
