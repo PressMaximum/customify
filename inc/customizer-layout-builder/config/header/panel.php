@@ -116,7 +116,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'type' => 'slider',
                 'section' => $section,
                 'theme_supports' => '',
-                'device_settings' => false,
+                'device_settings' => true,
                 'max' => 250,
                 //'selector' => $selector.' .customify-grid, '.$selector,
                 'selector' => $selector.' .customify-grid',
