@@ -215,6 +215,28 @@
   padding: 0 10px 10px;
   display: inline-block;
 }
+.customify--repeater-items .customify--repeater-visible {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+.customify--repeater-items .customify--repeater-visible .r-visible-icon:before {
+  -moz-osx-font-smoothing: grayscale;
+  border: none;
+  content: "\f530";
+  display: block;
+  font: 14px/1 dashicons;
+  padding: 5px;
+  text-decoration: none !important;
+  text-indent: 0;
+}
+.customify--repeater-items .customify--repeater-visible input:checked + span.r-visible-icon:before {
+  content: "\f177";
+}
+.customify--repeater-items .customify--repeater-visible input {
+  display: none;
+}
 .customify--repeater-items .customify--repeater-item-heading {
   background: #FFF;
   padding: 15px;
@@ -232,6 +254,7 @@
 .customify--repeater-items .customify--repeater-live-title {
   white-space: nowrap;
   margin-right: 35px;
+  margin-left: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;

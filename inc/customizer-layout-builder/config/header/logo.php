@@ -60,8 +60,18 @@ class Customify_Builder_Item_Logo {
                 'type' => 'slider',
                 'section' =>  $section,
                 'default' => array(
-                    'unit' => 'px',
-                    'value' => 60,
+                    'desktop' => array(
+                        'unit' => 'px',
+                        'value' => 60,
+                    ),
+                    'tablet' => array(
+                        'unit' => 'px',
+                        'value' => 60,
+                    ),
+                    'mobile' => array(
+                        'unit' => 'px',
+                        'value' => 60,
+                    ),
                 ),
                 'max' => 200,
                 'device_settings' => true,
