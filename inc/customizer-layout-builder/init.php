@@ -625,6 +625,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
          $prefix = $this->id . '_' . $id;
 
          $skip_grid = Customify_Customizer()->get_setting($prefix . '_skip_grid');
+
          $is_skip = false;
          if ($skip_grid == 'skip-both' || $skip_grid == 'skip-' . $device) {
              $is_skip = true;
@@ -692,7 +693,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
              $classes = apply_filters('customify/builder/item-classes', $classes, $item, $item_config);
              $classes = join(' ', $classes); // customify-grid-middle
-             if ( $skip_grid ) {
+             if ( $is_skip ) {
                 if ( $skip_keep_first ) {
                     if ( $index == 1 ) {
                         $_w = $max_columns - ( intval($last_item['width']) + intval($last_item['x']) );
@@ -721,7 +722,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
              $last_item = $item;
              $index ++ ;
-             if ( $skip_grid ) {
+             if ( $is_skip ) {
                  if ( $skip_keep_first ) {
                      if ( $index == $total_items ) {
                          echo '</div>';
