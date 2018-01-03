@@ -1236,7 +1236,7 @@
                 this.container.removeClass('customify--builder--hide').addClass( 'customify--builder-show' );
                 setTimeout( function(){
                     var h = that.container.height();
-                    $( '#customize-preview' ).addClass( 'cb--preview-panel-show' ).css( 'bottom', h-1 );
+                    $( '#customize-preview' ).addClass( 'cb--preview-panel-show' ).css( { 'bottom': h-1, 'margin-top' : '0px' } );
                 }, 100 );
             },
             hidePanel: function(){

@@ -268,6 +268,12 @@ class Customify_Init {
                 require_once self::$path.$file;
             }
         }
+
+        //WooCommerce
+        if ( class_exists('WooCommerce') ) {
+            require_once self::$path.'/inc/wc.php';
+        }
+
     }
 
     function init(){

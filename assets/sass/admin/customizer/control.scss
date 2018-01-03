@@ -172,6 +172,8 @@ $text_color: #555d66;
         position: absolute;
         top: 0px;
         left: 0px;
+        width: 35px;
+        text-align: center;
         border-right: 1px solid #dddddd;
         .r-visible-icon {
             &:before {
@@ -219,7 +221,7 @@ $text_color: #555d66;
     .customify--repeater-live-title {
         white-space: nowrap;
         margin-right: 35px;
-        margin-left: 20px;
+        margin-left: 30px;
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
