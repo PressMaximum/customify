@@ -1,7 +1,45 @@
+/* Header Builder Rows */
 .site-header {
-    position: relative;
+    .customify-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 }
 
+.header--row {
+    .customify-grid {
+    }
+    &.layout-full-contained {
+        .customify-container {
+            background: transparent;
+        }
+    }
+    background: #ffffff;
+    &.layout-full-contained, &.layout-fullwidth {
+        .customify-container {
+            border: 0 none !important;
+        }
+    }
+    @include for_device( desktop ){
+        &.layout-contained {
+            background: transparent;
+            border: 0 none;
+            .customify-container {
+                margin-left: 1.5em;
+                margin-right: 1.5em;
+            }
+        }
+    }
+    &.layout-fullwidth {
+        .customify-container {
+            max-width: initial;
+        }
+    }
+}
+
+
+/* Logo & Site Identity */
 .site-branding {
     display: inline-block;
     line-height: .9;
@@ -27,6 +65,34 @@
 }
 .item-button {
     display: inline-block;
+}
+
+
+/* Icon List */
+.header-icon-list-item {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    display: inline-block;
+    li {
+        display: inline-block;
+        margin-right: 10px;
+        &:last-child {
+            margin-right: 0px;
+        }
+        i {
+            margin-right: 5px;
+        }
+    }
+}
+
+/* HTML */
+.item--html {
+    p {
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
 }
 
 /*
@@ -69,49 +135,7 @@ $close_size: 35px;
 }
 
 
-/*
-* Row Layouts
-*-------------------------------
-*/
 
-.site-header {
-    .customify-container {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-}
-
-.header--row {
-    .customify-grid {
-    }
-    &.layout-full-contained {
-        .customify-container {
-            background: transparent;
-        }
-    }
-    background: #ffffff;
-    &.layout-full-contained, &.layout-fullwidth {
-        .customify-container {
-            border: 0 none !important;
-        }
-    }
-    @include for_device( desktop ){
-        &.layout-contained {
-            background: transparent;
-            border: 0 none;
-            .customify-container {
-                margin-left: 1.5em;
-                margin-right: 1.5em;
-            }
-        }
-    }
-    &.layout-fullwidth {
-        .customify-container {
-            max-width: initial;
-        }
-    }
-}
 
 
 
@@ -166,83 +190,6 @@ $close_size: 35px;
         }
     }
 }
-
-
-/*
-* User
-*-------------------------------
-*/
-.header-user-item {
-    display: inline-block;
-    position: relative;
-    .user-avatar {
-        display: inline-block;
-        img {
-            border-radius: 50%;
-            height: auto;
-            max-width: 100%;
-            vertical-align: middle;
-        }
-    }
-    .show-avatar {
-        .user-display-name {
-            margin-left: 10px;
-        }
-    }
-    .user-link {
-        i {
-            margin-right: 5px;
-        }
-        margin-right: 10px;
-        &:last-child {
-            margin-right: 0px;
-        }
-    }
-    .user-dropdown-items {
-        position: absolute;
-        top: 100%;
-        width:10rem;
-        left: 0px;
-        background: #ffffff;
-        list-style: none;
-        margin: 0px;
-        padding: 0px;
-        text-align: left;
-        transform: translateY(40px);
-        transition: all .3s ease;
-        opacity: 0;
-        height: 0;
-        overflow: hidden;
-        visibility: hidden;
-        display: block;
-        box-shadow: 2px 1px 2px rgba(0,0,0,.15);
-        z-index: 36;
-        li {
-            display: block;
-            i {
-                margin-right: 5px;
-            }
-        }
-        a {
-            display: block;
-            padding: 5px 10px;
-        }
-    }
-    &:hover {
-        .user-dropdown-items {
-            height: auto;
-            transform: translateY(0);
-            overflow: initial;
-            visibility: visible;
-            opacity: 1;
-        }
-    }
-}
-
-.mobile-item--user {
-
-}
-
 
 /*
 * Search

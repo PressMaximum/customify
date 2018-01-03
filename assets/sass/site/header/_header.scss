@@ -1,7 +1,11 @@
-@import "header_common";
+.site-header {
+    position: relative;
+}
+
 @import "header_top";
 @import "header_main";
 @import "header_bottom";
+@import "header_builder_items";
 @import "navigation";
 
 /* customizer shortcut */

@@ -17,7 +17,7 @@ class Customify_Builder_Item_Button{
         $section = 'header_button';
         $prefix = 'header_button_';
         $fn = array( $this, 'render' );
-        $selector = '.header-button-item';
+        $selector = '.customify-button';
         $config  = array(
             array(
                 'name' => $section,
@@ -164,7 +164,7 @@ class Customify_Builder_Item_Button{
         $link = Customify_Customizer()->get_setting('header_button_link' );
         $style = sanitize_text_field( Customify_Customizer()->get_setting('header_button_style' ) );
 
-        $classes = array('header-button-item button item-button');
+        $classes = array('customify-button customify-builder-button');
         if ( $style ){
             $classes[]= $style;
         }
