@@ -610,86 +610,132 @@ class Customify_Customizer_Layout_Builder_Frontend {
         return $items;
     }
 
-     function render_row( $items, $id = '', $device = 'desktop' ){
-         $row_html     = '';
-         $max_columns  = 12;
-         $items = $this->_sort_items_by_position( $items );
+    function setup_item_content( $content, $id, $device ){
+        $content = str_replace('__id__', $id, $content);
+        $content = str_replace('__device__', $device, $content);
+        return $content;
+    }
+
+     function render_row( $items, $id = '', $device = 'desktop' )
+     {
+         $row_html = '';
+         $max_columns = 12;
+         $items = $this->_sort_items_by_position($items);
+
+         $prefix = $this->id . '_' . $id;
+
+         $skip_grid = Customify_Customizer()->get_setting($prefix . '_skip_grid');
+         $is_skip = false;
+         if ($skip_grid == 'skip-both' || $skip_grid == 'skip-' . $device) {
+             $is_skip = true;
+         }
+         $skip_keep_first = Customify_Customizer()->get_setting($prefix . '_keep_first') ;
+         $skip_align = Customify_Customizer()->get_setting($prefix . '_skip_align');
+
          $last_item = false;
          $next_item = false;
-
-         foreach ( $items as $index => $item ) {
+         $total_items = count( $items );
+         $index = 0;
+         foreach ( $items as $item ) {
              $content = $this->render_items[$item['id']]['render_content'];
-             if ( isset( $items[ $index + 1 ] ) ) {
-                 $next_item = $items[ $index + 1 ];
+             if (isset($items[$index + 1])) {
+                 $next_item = $items[$index + 1];
              } else {
                  $next_item = false;
              }
 
              $item_id = $item['id'];
-             $x = intval( $item['x'] );
+             $x = intval($item['x']);
              $width = intval($item['width']);
-             if ( ! $next_item ) {
-                 if ( $x + $width < $max_columns ) {
-                     $width += $max_columns - ( $x + $width );
+             if (!$next_item) {
+                 if ($x + $width < $max_columns) {
+                     $width += $max_columns - ($x + $width);
                  }
              }
+             $item_config = isset($this->config_items[$item_id]) ? $this->config_items[$item_id] : array();
              $atts = array();
              $classes = array();
-             if ( $this->id != 'footer' ) {
-                 $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
-             } else {
-                 $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
-             }
 
-
-             if ( $x > 0 ) {
-                 if ( ! $last_item ) {
-                     $atts[] = 'off-' . $x;
+             if ( ! $is_skip || ( $is_skip && $skip_keep_first && $index == 0 ) ) {
+                 if ($this->id != 'footer') {
+                     $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
                  } else {
-                    $o = intval( $last_item['width'] ) + intval( $last_item['x'] );
-                    if ( $x - $o  > 0 ) {
-                        $atts[] = 'off-' . ( $x - $o );
-                    }
+                     $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
+                 }
+
+                 if ($x > 0) {
+                     if (!$last_item) {
+                         $atts[] = 'off-' . $x;
+                     } else {
+                         $o = intval($last_item['width']) + intval($last_item['x']);
+                         if ($x - $o > 0) {
+                             $atts[] = 'off-' . ($x - $o);
+                         }
+                     }
+                 }
+
+                 if ($this->id == 'footer') {
+                     $atts[] = '_sm-0';
                  }
              }
 
-             if ( $this->id == 'footer' ) {
-                 $atts[] = '_sm-0';
-             }
-
-
-             $last_item = $item;
-
-             $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
              $classes[] = 'builder-item';
-             $classes[] = 'builder-item--'.$item_id;
-
-             if( is_customize_preview() ) {
+             $classes[] = 'builder-item--' . $item_id;
+             if (is_customize_preview()) {
                  $classes[] = ' builder-item-focus';
              }
 
-             $classes = apply_filters('customify/builder/item-classes', $classes, $item, $item_config );
-
-             $classes = join(' ', $classes ); // customify-grid-middle
-
-             $content = str_replace( '__id__', $id, $content );
-             $content = str_replace( '__device__', $device, $content );
-
-             if( ! isset( $item_config['section'] ) ) {
+             if (!isset($item_config['section'])) {
                  $item_config['section'] = '';
              }
-             
-             echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
-                echo '<div class="item--inner">';
-                echo $content;
 
-                 if( is_customize_preview() ) {
-                     echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
-                 }
 
-                echo '</div>';
+             $classes = apply_filters('customify/builder/item-classes', $classes, $item, $item_config);
+             $classes = join(' ', $classes); // customify-grid-middle
+             if ( $skip_grid ) {
+                if ( $skip_keep_first ) {
+                    if ( $index == 1 ) {
+                        $_w = $max_columns - ( intval($last_item['width']) + intval($last_item['x']) );
+                        $class = "customify-col-{$_w}_md-{$_w}_sm-{$_w}";
+                        $class .=' '.$skip_align;
+                        echo '<div class="skip-grid--column '.esc_attr( $class ) .'">';
+                    }
+                } else {
+                    if ( $index == 0 ) {
+                        $class = "customify-col-{$max_columns}_md-{$max_columns}_sm-{$max_columns}";
+                        echo '<div class="skip-grid--column ' . esc_attr($class) . '">';
+                    }
+                }
+             }
+
+             echo '<div class="' . esc_attr($classes) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr($item_id) . '" data-push-left="' . join(' ', $atts) . '">';
+             echo '<div class="item--inner">';
+                echo $this->setup_item_content( $content, $id, $device );
+                //echo $item_id;
+             if (is_customize_preview()) {
+                 echo '<span class="item--preview-name">' . esc_html($item_config['name']) . '</span>';
+             }
              echo '</div>';
-         }
+             echo '</div>';
+
+
+             $last_item = $item;
+             $index ++ ;
+             if ( $skip_grid ) {
+                 if ( $skip_keep_first ) {
+                     if ( $index == $total_items ) {
+                         echo '</div>';
+                     }
+                 } else {
+                     if ( $index == $total_items ) {
+                         echo '</div>';
+                     }
+                 }
+             }
+
+
+         } // end loop items
+
      }
 
      function render( $row_ids = array( 'top', 'main', 'bottom') ){

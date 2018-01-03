@@ -3417,6 +3417,10 @@ article.comment .comment-post-author {
   }
 }
 
+.skip-grid--column .builder-item {
+  display: inline-block;
+}
+
 /* Widget Common */
 .widget-title {
   font-size: 1.2em;

@@ -112,6 +112,46 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
 
             array(
+                'name' => $section.'_skip_grid',
+                'type' => 'select',
+                'section' => $section,
+                'title' => __( 'Skip Layout Grid', 'customify' ),
+                'selector' => $selector,
+                'render_callback' => $fn,
+                'default' => 'no-skip',
+                'choices' => array(
+                    'no-skip' =>  __( 'No skip', 'customify' ),
+                    'skip-desktop' =>  __( 'Skip on desktop', 'customify' ),
+                    'skip-mobile' =>  __( 'Skip on mobile', 'customify' ),
+                    'skip-both' =>  __( 'Skip on desktop and mobile', 'customify' ),
+                )
+            ),
+
+            array(
+                'name' => $section.'_keep_first',
+                'type' => 'checkbox',
+                'section' => $section,
+                'checkbox_label' => __( 'Keep first item in the grid', 'customify' ),
+                'description' => '',
+                'selector' => $selector,
+                'render_callback' => $fn,
+                'required' =>  array( $section.'_skip_grid', '!=', 'no-skip' )
+            ),
+
+            array(
+                'name' => $section.'_skip_align',
+                'type' => 'text_align_no_justify',
+                'section' => $section,
+                'title' => __( 'Skip Items Align', 'customify' ),
+                'selector' => $selector.' .skip-grid--column',
+                'render_callback' => $fn,
+                'css_format' => 'text-align: {{value}};',
+                'required' =>  array( $section.'_skip_grid', '!=', 'no-skip' )
+            ),
+
+
+
+            array(
                 'name' => $section.'_height',
                 'type' => 'slider',
                 'section' => $section,
@@ -133,7 +173,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'field_class' => 'customify-background-control',
                 'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
                 'css_format' => 'styling', // styling
-                'device_settings' => false,
+                'device_settings' => true,
                 'default' => array(),
                 'fields' => array(
                     array(

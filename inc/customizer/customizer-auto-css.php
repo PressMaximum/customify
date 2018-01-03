@@ -8,8 +8,13 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         private $subsets = array();
         public $media_queries = array(
             'all' => '%s',
+            /*
             'desktop' => '@media screen and (min-width: 64em) { %s }',
             'tablet' => '@media screen and (max-width: 64em) and (min-width: 35.5em) { %s }',
+            'mobile' => '@media screen and (max-width: 35.5em) { %s }',
+            */
+            'desktop' => '%s',
+            'tablet' => '@media screen and (max-width: 64em) { %s }',
             'mobile' => '@media screen and (max-width: 35.5em) { %s }',
         );
         private $css = array(
