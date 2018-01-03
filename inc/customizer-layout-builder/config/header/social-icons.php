@@ -141,31 +141,34 @@ class Customify_Builder_Item_Social_Icons {
                     'title' => '',
                     'icon' => '',
                     'url' => '',
+                    '_visibility' => '',
                     'show_text' => array(),
                 ) );
 
-                echo '<li>';
-                if( ! $item['url'] ) {
-                    $item['url'] = '#';
-                }
-                if ( $item['url'] ) {
-                    echo '<a target="'.esc_attr( $target ).'" href="'.esc_url( $item['url']  ).'">';
-                }
+                if ( $item['_visibility'] !== 'hidden' ) {
+                    echo '<li>';
+                    if (!$item['url']) {
+                        $item['url'] = '#';
+                    }
+                    if ($item['url']) {
+                        echo '<a target="' . esc_attr($target) . '" href="' . esc_url($item['url']) . '">';
+                    }
 
-                $icon = wp_parse_args( $item['icon'], array(
-                    'type' => '',
-                    'icon' => '',
-                ) );
+                    $icon = wp_parse_args($item['icon'], array(
+                        'type' => '',
+                        'icon' => '',
+                    ));
 
-                if ( $icon['icon'] ) {
-                    echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
-                }
-                if ( $item['title'] ) {
-                    echo '<span class="'.esc_attr( join(' ', $classes ) ).'">'.wp_kses_post( $item['title'] ).'</span>';
-                }
+                    if ($icon['icon']) {
+                        echo '<i class="' . esc_attr($icon['icon']) . '"></i>';
+                    }
+                    if ($item['title']) {
+                        echo '<span class="' . esc_attr(join(' ', $classes)) . '">' . wp_kses_post($item['title']) . '</span>';
+                    }
 
-                if ( $item['url'] ) {
-                    echo '</a>';
+                    if ($item['url']) {
+                        echo '</a>';
+                    }
                 }
                 echo '</li>';
             }

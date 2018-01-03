@@ -1564,10 +1564,8 @@
 
        // console.log( 'wpcustomize.setting', wpcustomize.settings( 'custom_logo' ) );
 
-        //wpcustomize.control( 'customify__css').setting.set( 'cusstom_Css' );
+       // wp.customize('customify__css').set('dsadas');
 
-
-
-    });
+    }); // end customize ready
 
 })( jQuery, wp.customize || null );

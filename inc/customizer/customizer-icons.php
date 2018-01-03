@@ -53,6 +53,9 @@ class Customify_Font_Icons
 
     function get_icon_types_picked(){
         $mods = get_theme_mods();
+        if ( ! is_array( $mods ) ) {
+            $mods = array();
+        }
         foreach( $mods as $key => $value ) {
             $this->_picked_icon( $value );
         }

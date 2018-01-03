@@ -7,7 +7,7 @@ var AutoCSS = window.AutoCSS || null;
         this.lastValues = {};
         this.devices = [ 'desktop', 'tablet', 'mobile' ];
     };
-
+    AutoCSS._change = false;
     AutoCSS.prototype.fonts = {};
     AutoCSS.prototype.subsets = {};
     AutoCSS.prototype.variants = {};
@@ -52,7 +52,6 @@ var AutoCSS = window.AutoCSS || null;
                 this.media_queries = window.Customify_JS.css_media_queries;
             }
         }
-
 
         this.reset();
 
@@ -121,7 +120,8 @@ var AutoCSS = window.AutoCSS || null;
        // api.set( 'customify__css',  css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
 
-      /// console.log( 'CSS' , css_code );
+        //top.wp.customize('customify__css').set( css_code );
+        //console.log( 'customify__css_Change', css_code );
     };
 
 
@@ -856,8 +856,20 @@ var AutoCSS = window.AutoCSS || null;
     });
 
     api.bind( 'change', function(){
-        AutoCSSInit.run();
+       // AutoCSSInit.run();
     } );
+
+    _.each( Customify_Preview_Config.fields, function( field ){
+        if ( field.selector && field.css_format ) {
+            // Header text color.
+            wp.customize( field.name, function( setting ) {
+                setting.bind( function( to ) {
+                    AutoCSSInit.run();
+                } );
+            } );
+
+        }
+    });
 
 
 } )( jQuery, wp.customize );
