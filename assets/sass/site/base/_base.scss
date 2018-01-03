@@ -252,8 +252,10 @@ input[type="submit"] {
     background: $color_primary;
     color: #FFFFFF;
     cursor: pointer;
-    padding: ms(-2) ms(2);
+    padding: ms(-3) ms(2);
     font-weight: 600;
+    text-transform: uppercase;
+    transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
     &:hover {
         background: darken($color_text, 20%);
     }

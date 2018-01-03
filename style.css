@@ -2270,14 +2270,14 @@ figure {
 
 /* Links */
 a {
-  color: #168EEA;
+  color: #003f69;
   text-decoration: none;
 }
 a:visited {
-  color: #168EEA;
+  color: #003f69;
 }
 a:hover, a:focus, a:active {
-  color: #168EEA;
+  color: #003f69;
 }
 a:focus {
   outline: thin dotted;
@@ -2358,11 +2358,13 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   border: none;
-  background: #168EEA;
+  background: #003f69;
   color: #FFFFFF;
   cursor: pointer;
-  padding: 0.6180469716em 1.618em;
+  padding: 0.5407911001em 1.618em;
   font-weight: 600;
+  text-transform: uppercase;
+  transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
 }
 button:hover,
 input[type="button"]:hover,
@@ -2692,7 +2694,7 @@ article.comment .comment-reply a {
   color: #6d6d6d;
 }
 article.comment .comment-reply a:hover {
-  color: #168EEA;
+  color: #003f69;
 }
 article.comment .comment-meta {
   margin-bottom: 0.875em;
@@ -2702,7 +2704,7 @@ article.comment .comment-time {
   font-size: 90%;
 }
 article.comment .comment-time:hover {
-  color: #168EEA;
+  color: #003f69;
 }
 article.comment .comment-wrap {
   margin-left: 85px;
@@ -2718,14 +2720,14 @@ article.comment .comment-author a {
   color: #444444;
 }
 article.comment .comment-author a:hover {
-  color: #168EEA;
+  color: #003f69;
 }
 article.comment .comment-post-author {
-  border: 1px solid #168EEA;
+  border: 1px solid #003f69;
   font-size: 13px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #168EEA;
+  color: #003f69;
   position: relative;
   top: -3px;
   margin-left: 4px;
@@ -2749,11 +2751,11 @@ article.comment .comment-post-author {
   margin-right: 0px;
 }
 #respond #cancel-comment-reply-link {
-  border: 1px solid #168EEA;
+  border: 1px solid #003f69;
   font-size: 12px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #168EEA;
+  color: #003f69;
   position: relative;
   top: -4px;
   margin-left: 4px;
@@ -2803,7 +2805,7 @@ article.comment .comment-post-author {
 
 .header-top {
   padding: 0;
-  background: #323b43;
+  background: #003f69;
   color: #ffffff;
 }
 
@@ -2819,15 +2821,15 @@ article.comment .comment-post-author {
 }
 
 /* Header Builder Rows */
+.site-header {
+  position: relative;
+}
 .site-header .customify-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.header--row {
-  background: #ffffff;
-}
 .header--row.layout-full-contained .customify-container {
   background: transparent;
 }
@@ -2856,6 +2858,9 @@ article.comment .comment-post-author {
 }
 .site-branding a {
   display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
 }
 .site-branding img {
   display: block;
@@ -2863,14 +2868,14 @@ article.comment .comment-post-author {
   line-height: 1;
 }
 .site-branding .site-title {
-  font-size: 1.9em;
+  font-size: 1.7em;
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.216;
 }
 .site-branding .site-description {
   font-size: 0.875em;
-  margin: 3px 0px 0px 0px;
+  margin: 4px 0px 7px 0px;
 }
 
 .item-button {
@@ -3408,7 +3413,7 @@ article.comment .comment-post-author {
   color: #6d6d6d;
 }
 .widget-area .widget a:hover {
-  color: #168EEA;
+  color: #003f69;
   text-decoration: underline;
 }
 .widget-area .widget select {

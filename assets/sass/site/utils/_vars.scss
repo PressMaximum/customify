@@ -15,10 +15,10 @@ $background_body: #ffffff;
 
 // Colors
 $color_text:        #444444;
-$color_primary:     #168EEA;
+$color_primary:     #003f69;
 $color_secondary:   $color_primary;
-$color_link:        #168EEA;
-$color_link_hover:  #168EEA;
+$color_link:        #003f69;
+$color_link_hover:  #003f69;
 $color_border:      #eaecee;
 $color_meta:        #6d6d6d;
 
@@ -29,9 +29,9 @@ $screen_sm: 48em;   // max 768px
 $screen_xs: 35.5em; // up to 568px
 
 $gl-devices-list: (
-        desktop: "screen and (min-width: 64em)", // up 1024px
-        tablet: "screen and (max-width: 64em) and ( min-width: 35.5em )", // 568px - 1024px
-        mobile: "screen and (max-width: 35.5em)" // from to 568px to smaller
+    desktop: "screen and (min-width: 64em)", // up 1024px
+    tablet: "screen and (max-width: 64em) and ( min-width: 35.5em )", // 568px - 1024px
+    mobile: "screen and (max-width: 35.5em)" // from to 568px to smaller
 ) !default;
 
 

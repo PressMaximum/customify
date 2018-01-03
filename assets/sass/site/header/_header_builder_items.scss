@@ -1,5 +1,6 @@
 /* Header Builder Rows */
 .site-header {
+    position: relative;
     .customify-container {
         display: flex;
         flex-direction: column;
@@ -15,7 +16,6 @@
             background: transparent;
         }
     }
-    background: #ffffff;
     &.layout-full-contained, &.layout-fullwidth {
         .customify-container {
             border: 0 none !important;
@@ -46,6 +46,9 @@
     vertical-align: middle;
     a {
         display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        font-weight: 600;
     }
     img {
         display: block;
@@ -53,14 +56,14 @@
         line-height: 1;
     }
     .site-title {
-        font-size: 1.9em;
+        font-size: 1.7em;
         margin: 0;
-        font-weight: 500;
+        font-weight: 600;
         line-height: 1.216;
     }
     .site-description {
         font-size: ms(-1);
-        margin: 3px 0px 0px 0px;
+        margin: 4px 0px 7px 0px;
     }
 }
 .item-button {
