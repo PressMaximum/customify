@@ -131,7 +131,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'title'  => __( 'Styling', 'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
-                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-full-width",
+                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
                 'css_format' => 'styling', // styling
                 'device_settings' => false,
                 'default' => array(),

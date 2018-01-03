@@ -176,9 +176,6 @@ var AutoCSS = window.AutoCSS || null;
             }
         }
 
-        
-
-
         return get_value;
     };
 
@@ -608,6 +605,14 @@ var AutoCSS = window.AutoCSS || null;
         }
 
         if ( value.border_style !== 'none' ) {
+            if ( ! _.isObject( value.border_width ) ) {
+                value.border_width =  {};
+            }
+           _.each( [ 'top', 'right', 'bottom', 'left' ], function( k ){
+               if ( _.isUndefined( value.border_width[ k ] ) || _.isEmpty( value.border_width[ k ] ) ){
+                   value.border_width[ k ] = 0;
+               }
+           } );
             if (value.border_width) {
                 css.border_width = this.setup_css_ruler(value.border_width, {
                     top: 'border-top-width: {{value}};',

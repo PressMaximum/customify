@@ -205,6 +205,15 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             }
 
             if ( $value['border_width'] ) {
+                if ( ! is_array( $value['border_width'] ) ) {
+                    $value['border_width'] = array();
+                }
+                foreach( array( 'top', 'right', 'bottom', 'left' ) as $k ) {
+                    if ( ! isset( $value['border_width'][ $k ] ) || ! is_numeric( $value['border_width'][ $k ] ) ) {
+                        $value['border_width'][ $k ] = 0;
+                    }
+                }
+
                 $css['border_width'] = $this->setup_css_ruler( $value['border_width'], array(
                     'top' => 'border-top-width: {{value}};',
                     'right' => 'border-right-width: {{value}};',
