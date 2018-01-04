@@ -33,7 +33,7 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
             $search     = Customify_Customizer()->get_setting('search_sidebar_layout');
             if (is_page()) {
                 $page_custom = get_post_meta(get_the_ID(), '_customify_sidebar', true);
-                if ($page_custom) {
+                if ($page_custom && $page_custom != 'default') {
                     $layout = $page_custom;
                 } else {
                     $layout = $page;
@@ -64,7 +64,9 @@ if ( ! function_exists( 'customify_get_sidebars' ) ) {
 
 		// Get the current layout
 		$layout = customify_get_layout();
-
+		if ( ! $layout || $layout == 'default' ) {
+            $layout = 'content-sidebar';
+        }
 
 		// Layout with 2 column
 		$layout_2_columns = array( 'sidebar-content', 'content-sidebar' );

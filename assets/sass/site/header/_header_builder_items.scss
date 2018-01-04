@@ -13,7 +13,7 @@
     }
     &.layout-full-contained {
         .customify-container {
-            background: transparent;
+            background: transparent !important;
         }
     }
     &.layout-full-contained, &.layout-fullwidth {
@@ -23,7 +23,7 @@
     }
     @include for_device( desktop ){
         &.layout-contained {
-            background: transparent;
+            background: transparent !important;
             border: 0 none;
             .customify-container {
                 margin-left: 1.5em;

@@ -6,14 +6,14 @@
  *
  * @package customify
  */
-
-if ( ! is_active_sidebar( 'sidebar-2' ) ) {
+$sidebar_id = apply_filters( 'customify/sidebar-id', 'sidebar-2', 'secondary' );
+if ( ! is_active_sidebar( $sidebar_id ) ) {
 	return;
 }
 ?>
 
 <aside id="sidebar-secondary" <?php customify_sidebar_secondary_class(); ?>>
     <div class="sidebar-secondary-inner sidebar-inner widget-area">
-        <?php dynamic_sidebar( 'sidebar-2' ); ?>
+        <?php dynamic_sidebar( $sidebar_id ); ?>
     </div>
 </aside><!-- #sidebar-secondary -->
