@@ -36,7 +36,6 @@ class Customify_Customizer_Builder_Panel {
         if ( is_array( $items_config ) ) {
             $config = array_merge( $config,  $items_config );
         }
-
         return array_merge( $configs, $config );
     }
 }
