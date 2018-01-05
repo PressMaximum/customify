@@ -7,6 +7,14 @@ class Customify_WC {
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
         add_filter( 'customify/customizer/config', array( $this, 'customize_shop_sidebars' ) );
         add_filter( 'customify/sidebar-id', array( $this, 'shop_sidebar_id' ), 15, 2 );
+
+        // Override theme default specification for product # per row
+        /*
+        function loop_columns() {
+            return 5; // 5 products per row
+        }
+        add_filter('loop_shop_columns', 'loop_columns', 999);
+        */
     }
 
     function shop_sidebar_id( $id, $sidebar_type = null ){

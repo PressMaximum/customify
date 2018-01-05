@@ -26,11 +26,44 @@ if (!function_exists('customify_customizer_config')) {
                 'name' => 'repeater',
                 'type' => 'repeater',
                 'section' => 'customify_section',
-                'title' => __('Repeater', 'customify'),
+                'title' => __('Repeater Title Only', 'customify'),
                 'description' => __('This is description', 'customify'),
                 'live_title_field' => 'title',
                 'limit' => 4,
                 'addable' => false,
+                'title_only' => true,
+                'default' => array(
+                    array(
+                        '_key' => 'content_1',
+                        'title' => __('Title 1', 'customify'),
+                    ),
+                    array(
+                        '_key' => 'content_2',
+                        'title' => __('Title 2', 'customify'),
+                    )
+                ),
+                'fields' => array(
+                    array(
+                        'name' => '_key',
+                        'type' => 'hidden',
+                    ),
+                    array(
+                        'name' => 'title',
+                        'type' => 'text',
+                        'label' => __('Title', 'customify'),
+                    ),
+                )
+            ),
+
+
+            array(
+                'name' => 'repeater_default',
+                'type' => 'repeater',
+                'section' => 'customify_section',
+                'title' => __('Repeater', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'live_title_field' => 'title',
+                'limit' => 4,
                 'limit_msg' => __('Just limit 4 item, Ability HTML here', 'customify'),
                 'default' => array(
                     array(

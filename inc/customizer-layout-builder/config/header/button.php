@@ -85,7 +85,7 @@ class Customify_Builder_Item_Button{
 		        'name' => $prefix.'text_options',
 		        'type' => 'group',
 		        'section' => $section,
-		        'device_settings' => true,
+		        'device_settings' => false,
 		        'title' => __('Text Options', 'customify'),
 		        'field_class' => 'customify-typography-control',
 		        'selector' => $selector,
@@ -105,6 +105,7 @@ class Customify_Builder_Item_Button{
 				        'max' => 20,
 				        'step' => 1,
 				        'label' => __('Font Size', 'customify'),
+                        'device_settings' => true,
 			        ),
 
 			        array(

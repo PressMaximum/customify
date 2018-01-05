@@ -987,6 +987,7 @@
             var template = control.getTemplate();
             var fields = control.params.fields;
             var addable = true;
+            var title_only = control.params.title_only;
             if ( control.params.addable === false ) {
                 addable = false;
             }
@@ -999,12 +1000,16 @@
                 if ( ! _.isUndefined( value[ f.name ] ) ) {
                     f.value = value[ f.name ];
                 }
-                var $fieldArea = $( '<div class="customify--repeater-field"></div>' );
+                var $fieldArea;
+
+                $fieldArea = $( '<div class="customify--repeater-field"></div>' );
                 $( '.customify--repeater-item-inner', $itemWrapper ).append( $fieldArea );
                 control.addField( f, $fieldArea );
 
-                if ( ! _.isUndefined( f.device_settings ) && f.device_settings  ) {
-                    control.addDeviceSwitchers( $fieldArea );
+                if( f.type !== 'hidden' ) {
+                    if (!_.isUndefined(f.device_settings) && f.device_settings) {
+                        control.addDeviceSwitchers($fieldArea);
+                    }
                 }
             } );
 
@@ -1016,9 +1021,14 @@
             }
 
             $itemWrapper.find( '.customify--repeater-live-title' ).html( control.params.l10n.untitled );
+            if ( title_only ) {
+                $( '.customify--repeater-item-settings, .customify--repeater-item-toggle', $itemWrapper ).hide();
+            } else {
+                control.initColor( $itemWrapper );
+                control.initSlider( $itemWrapper );
+            }
 
-            control.initColor( $itemWrapper );
-            control.initSlider( $itemWrapper );
+
             $document.trigger('customify/customizer/repeater/add', [ $itemWrapper, control ] );
             return $itemWrapper;
         },
@@ -1062,7 +1072,10 @@
             // Sortable
             control.container.find( '.customify--settings-fields' ).sortable({
                 handle: '.customify--repeater-item-heading',
-                containment: "parent"
+                containment: "parent",
+                update: function( event, ui ) {
+                    control.getValue();
+                }
             });
 
             // Toggle Move
@@ -1089,6 +1102,7 @@
                 }
             } );
 
+            // Move Down
             control.container.on( 'click', '.customify--repeater-item .customify--down', function( e ){
                 e.preventDefault();
                 var n = $( '.customify--repeater-items .customify--repeater-item', control.container ).length;
@@ -1102,7 +1116,6 @@
             } );
 
 
-
             // Add item when customizer loaded
             if ( _.isArray( control.params.value ) ) {
                 _.each(  control.params.value, function( itemValue ){
@@ -1113,7 +1126,6 @@
             control.limitRepeaterItems();
 
             // Toggle visibility
-
             control.container.on( 'change', '.customify--repeater-item .r-visible-input', function(e){
                 e.preventDefault();
                 var p = $( this ).closest('.customify--repeater-item');
@@ -1125,11 +1137,13 @@
             } );
 
             // Toggle
-            control.container.on( 'click', '.customify--repeater-item-toggle, .customify--repeater-live-title', function(e){
-                e.preventDefault();
-                var  p = $( this ).closest('.customify--repeater-item');
-                p.toggleClass('customify--open');
-            } );
+            if ( ! control.params.title_only ) {
+                control.container.on('click', '.customify--repeater-item-toggle, .customify--repeater-live-title', function (e) {
+                    e.preventDefault();
+                    var p = $(this).closest('.customify--repeater-item');
+                    p.toggleClass('customify--open');
+                });
+            }
 
             // Remove
             control.container.on( 'click', '.customify--remove', function(e){
@@ -1545,6 +1559,7 @@
                 var setting_keys = [];
                 var controls = wp.customize.section( section ).controls();
                 _.each( controls, function(c , index ){
+                    wpcustomize( c.id ).set( '' );
                     setting_keys[ index ] = c.id;
                 } );
 

@@ -37,6 +37,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $limit_msg = '';
     public $live_title_field; // for repeater
     public $addable = null; // for repeater
+    public $title_only = null; // for repeater
     public $_settings;
     public $_selective_refresh;
     public $device_settings = false;
@@ -166,6 +167,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             $this->json['live_title_field'] = $this->live_title_field;
             $this->json['limit'] = $this->limit;
             $this->json['limit_msg'] = $this->limit_msg;
+            $this->json['title_only'] = $this->title_only;
             if ( $this->addable === false ) {
                 $this->json['addable'] = false;
                 if( empty( $this->json['value'] ) ) {
@@ -174,6 +176,32 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             } else {
                 $this->json['addable'] = true;
             }
+
+            // Just make live title file translate able.
+            if ( $this->title_only && $this->live_title_field ) {
+                $keys = wp_list_pluck( $this->defaultValue, '_key' );
+                $new_array = array();
+                foreach ( ( array ) $this->defaultValue as $f ) {
+                    if ( isset( $f['_key'] ) ) {
+                        if ( isset( $f[ $this->live_title_field ] ) ) {
+                            $new_array[$f['_key']] = $f[$this->live_title_field];
+                        }
+                    }
+                }
+                if ( ! empty( $new_array ) ) {
+                    $new_values = array();
+                    foreach( ( array ) $this->json['value'] as $index => $f ) {
+                        if ( isset( $f['_key'] ) && $new_values[ $f['_key'] ] ) {
+                            $f[$this->live_title_field] = $new_values[ $f['_key'] ];
+                            $new_values[$index][$f['_key']] = $f;
+                        }
+                    }
+                    if ( ! empty( $new_values ) ) {
+                        $this->json['value'] = $new_values;
+                    }
+                }
+            }
+
         }
 
         if ( $this->setting_type == 'select' || $this->setting_type == 'radio' ) {
@@ -290,7 +318,8 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'image' => 'media',
             'media' => 'media',
             'video' => 'media',
-            'text'
+            'text',
+            'hidden'
         );
         foreach ( $fields as $key => $field ) {
             $id = $field;
@@ -392,6 +421,13 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <div class="customify-field-settings-inner">
             <input type="text" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
+        <?php
+        $this->after_field();
+    }
+    function field_hidden(){
+        $this->before_field();
+        ?>
+        <input type="hidden" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         <?php
         $this->after_field();
     }

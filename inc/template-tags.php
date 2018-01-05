@@ -188,3 +188,174 @@ if ( ! function_exists( 'customify_comment_field_to_bottom' ) ) :
 	}
 	add_filter( 'comment_form_fields', 'customify_comment_field_to_bottom' );
 endif;
+
+
+
+class Customify_Blog_Builder {
+    public $post;
+    static $_instance;
+    public $config = array();
+    function __construct( $_post = null )
+    {
+        $this->set_post( $_post );
+        $this->set_config();
+    }
+
+    function set_config( $config = null ) {
+        if ( ! is_array( $config ) ) {
+            $config = array();
+        }
+        $config = wp_parse_args( $config, array(
+            'excerpt_length' => Customify_Customizer()->get_setting('blog_post_excerpt_length' ),
+            'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
+        ) );
+
+        $this->config = $config;
+    }
+
+    function set_post( $_post = null ) {
+        if ( ! $_post ) {
+            global $post;
+            $_post = get_post();
+        }
+        if ( is_array( $_post ) ) {
+            $_post = ( object ) $_post;
+        }
+        $this->post = $_post;
+    }
+
+    static function get_instance(){
+        if ( is_null( self::$_instance ) ) {
+            self::$_instance = new self();
+        }
+        return self::$_instance ;
+    }
+
+    /**
+     * Trim the excerpt with custom length
+     * @see wp_trim_excerpt
+     * @param $text
+     * @param null $excerpt_length
+     * @return mixed|string|void
+     */
+    function trim_excerpt( $text, $excerpt_length = null ){
+        $text = strip_shortcodes( $text );
+        /** This filter is documented in wp-includes/post-template.php */
+        $text = apply_filters( 'the_content', $text );
+        $text = str_replace(']]>', ']]&gt;', $text);
+
+        if ( ! $excerpt_length ) {
+            /**
+             * Filters the number of words in an excerpt.
+             *
+             * @since 2.7.0
+             *
+             * @param int $number The number of words. Default 55.
+             */
+            $excerpt_length = apply_filters('excerpt_length', 55 );
+        }
+
+
+        /**
+         * Filters the string in the "more" link displayed after a trimmed excerpt.
+         *
+         * @since 2.9.0
+         *
+         * @param string $more_string The string shown within the more link.
+         */
+        $excerpt_more = apply_filters( 'excerpt_more', ' ' . '[&hellip;]' );
+        $text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+        return $text;
+    }
+
+    function post_title( $post = null ){
+        if ( is_singular() ) :
+            the_title( '<h1 class="entry-title">', '</h1>' );
+        else :
+            the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+        endif;
+    }
+    function post_meta( $post = null ){
+        ?>
+        <div class="entry-meta">
+            <?php customify_posted_on(); ?>
+        </div><!-- .entry-meta -->
+        <?php
+    }
+    function post_thumbnail( $post = null ){
+        if ( has_post_thumbnail() ) {
+            ?>
+            <div class="entry-thumbnail">
+                <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
+            </div><!-- .entry-meta -->
+            <?php
+        }
+    }
+    function post_excerpt(){
+        $text= '';
+        if ( $this->post ) {
+            if ( $this->post->post_excerpt ) {
+                $text = $this->post->post_excerpt;
+            } else {
+                $text = $this->post->post_content;
+            }
+        }
+        $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
+        ?>
+        <div class="entry-excerpt">
+            <?php
+            if ( $excerpt ) {
+                // WPCS: XSS OK.
+                echo $excerpt;
+            } else {
+                the_excerpt();
+            }
+            ?>
+        </div><!-- .entry-content -->
+        <?php
+    }
+    function post_content(){
+        ?>
+        <div class="entry-content">
+            <?php
+            the_content();
+            ?>
+        </div><!-- .entry-content -->
+        <?php
+    }
+    function post_readmore()
+    {
+        ?>
+        <div class="entry-readmore">
+            <a href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php _e( "Readmore", 'customify' ); ?></a>
+        </div><!-- .entry-content -->
+        <?php
+    }
+
+    function build( $field ){
+       if ( method_exists( $this, 'post_'.$field ) ) {
+            call_user_func_array( array( $this, 'post_'.$field ), array( $this->post ) );
+       }
+    }
+}
+
+function Customify_Blog_Builder(){
+    return Customify_Blog_Builder::get_instance();
+}
+
+
+if ( ! function_exists( 'customify_the_blog_item' ) ) {
+    function customify_the_blog_item( $post = null ){
+        Customify_Blog_Builder()->set_post( $post );
+        $items_config = Customify_Customizer()->get_setting('blog_post_item' );
+        foreach ( ( array ) $items_config as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => ''
+            ) );
+            if ( $item['_visibility'] !== 'hidden' ) {
+                Customify_Blog_Builder()->build( $item['_key'] );
+            }
+        }
+    }
+}

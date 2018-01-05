@@ -7,6 +7,9 @@
 
 // Load customizer config file.
 require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
+
+
 require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';

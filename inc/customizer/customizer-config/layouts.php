@@ -213,9 +213,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 						'3' => __('Three', 'customify'),
 					)
 				),
-
 		);
-
 		return array_merge( $configs, $config );
 	}
 }

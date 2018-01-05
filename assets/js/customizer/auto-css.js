@@ -244,6 +244,12 @@ var AutoCSS = window.AutoCSS || null;
     };
 
     AutoCSS.prototype.str_value = function( value, format ){
+        if ( _.isEmpty( value ) ) {
+            return '';
+        }
+        if ( ! _.isString( format ) ) {
+            return '';
+        }
         var find = '{{value}}';
         var reg = new RegExp(find, 'g');
         return format.replace( reg, value );
