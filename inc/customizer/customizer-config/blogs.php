@@ -52,6 +52,11 @@ if (!function_exists('customify_customizer_blog_config')) {
                     array(
                         '_key' => 'readmore',
                         'title' => __('Readmore', 'customify'),
+                    ),
+                    array(
+                        '_key' => 'content',
+                        'title' => __('Content', 'customify'),
+                        '_visibility' => 'hidden'
                     )
                 ),
                 'fields' => array(

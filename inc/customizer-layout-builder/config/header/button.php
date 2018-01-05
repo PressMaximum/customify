@@ -48,6 +48,20 @@ class Customify_Builder_Item_Button{
             ),
 
             array(
+                'name' => $prefix.'position',
+                'type' => 'radio_group',
+                'section' => $section,
+                'selector' => $selector,
+                'render_callback' => $fn,
+                'default' => 'before',
+                'title'  => __( 'Icon Position', 'customify' ),
+                'choices' => array(
+                    'before' => __( 'Before', 'customify' ),
+                    'after' => __( 'After', 'customify' ),
+                )
+            ),
+
+            array(
                 'name' => $prefix.'link',
                 'type' => 'text',
                 'section' => $section,
@@ -215,6 +229,7 @@ class Customify_Builder_Item_Button{
         $icon = Customify_Customizer()->get_setting('header_button_icon' );
         $new_window = Customify_Customizer()->get_setting('header_button_target' );
         $link = Customify_Customizer()->get_setting('header_button_link' );
+        $icon_position = Customify_Customizer()->get_setting('header_button_position' );
         //$style = sanitize_text_field( Customify_Customizer()->get_setting('header_button_style' ) );
 
         $classes = array('customify-btn customify-builder-btn');
@@ -236,7 +251,13 @@ class Customify_Builder_Item_Button{
             $icon_html = '<i class="'.esc_attr( $icon['icon'] ).'"></i> ';
         }
 
-        echo '<a'.$target.' href="'.esc_url( $link ).'" class="'.esc_attr( join(" ", $classes ) ).'">'.$icon_html.esc_html( $text ).'</a>';
+        echo '<a'.$target.' href="'.esc_url( $link ).'" class="'.esc_attr( join(" ", $classes ) ).'">';
+            if ( $icon_position != 'after' ) {
+                echo $icon_html.esc_html( $text );
+            } else {
+                echo esc_html( $text ).$icon_html;
+            }
+        echo '</a>';
     }
 }
 

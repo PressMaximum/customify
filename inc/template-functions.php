@@ -46,6 +46,7 @@ if ( ! function_exists( 'customify_get_all_image_sizes' ) ) {
             $options[ $k ] = sprintf( '%1$s - (%2$s x %3$s)', $k, $option['width'], $option['height'] );
         }
 
+        $options[ 'full' ] = 'Full';
         return $options;
     }
 }

@@ -179,25 +179,26 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
             // Just make live title file translate able.
             if ( $this->title_only && $this->live_title_field ) {
-                $keys = wp_list_pluck( $this->defaultValue, '_key' );
                 $new_array = array();
                 foreach ( ( array ) $this->defaultValue as $f ) {
                     if ( isset( $f['_key'] ) ) {
                         if ( isset( $f[ $this->live_title_field ] ) ) {
-                            $new_array[$f['_key']] = $f[$this->live_title_field];
+                            $new_array[$f['_key']] = $f;
                         }
                     }
                 }
                 if ( ! empty( $new_array ) ) {
                     $new_values = array();
                     foreach( ( array ) $this->json['value'] as $index => $f ) {
-                        if ( isset( $f['_key'] ) && $new_values[ $f['_key'] ] ) {
-                            $f[$this->live_title_field] = $new_values[ $f['_key'] ];
-                            $new_values[$index][$f['_key']] = $f;
+                        if ( isset( $f['_key'] ) && $new_array[ $f['_key'] ] ) {
+                            $f[$this->live_title_field] = $new_array[ $f['_key'] ][$this->live_title_field];
+                            $new_values[$f['_key']] = $f;
                         }
                     }
+
+                    $new_values = array_merge( $new_array, $new_values );
                     if ( ! empty( $new_values ) ) {
-                        $this->json['value'] = $new_values;
+                        $this->json['value'] = array_values( $new_values );
                     }
                 }
             }

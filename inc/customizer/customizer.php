@@ -178,7 +178,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 $value =  get_theme_mod( $name, null );
             }
 
-
             if ( ! $key ) {
                 if ( $device != 'all' ) {
                     if ( is_array( $value ) && isset( $value[ $device ] ) ) {
