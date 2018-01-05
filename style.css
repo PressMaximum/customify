@@ -2273,9 +2273,6 @@ a {
   color: #003f69;
   text-decoration: none;
 }
-a:visited {
-  color: #003f69;
-}
 a:hover, a:focus, a:active {
   color: #003f69;
 }
@@ -2831,14 +2828,14 @@ article.comment .comment-post-author {
 }
 
 .header--row.layout-full-contained .customify-container {
-  background: transparent;
+  background: transparent !important;
 }
 .header--row.layout-full-contained .customify-container, .header--row.layout-fullwidth .customify-container {
   border: 0 none !important;
 }
 @media screen and (min-width: 64em) {
   .header--row.layout-contained {
-    background: transparent;
+    background: transparent !important;
     border: 0 none;
   }
   .header--row.layout-contained .customify-container {
@@ -2880,6 +2877,23 @@ article.comment .comment-post-author {
 
 .item-button {
   display: inline-block;
+}
+
+/* Button */
+.customify-button {
+  padding: 0.3819820591em 1em;
+  background: #7aa93c;
+  color: #FFFFFF;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  font-size: 1em;
+  font-weight: bolder;
+  text-transform: uppercase;
+}
+.customify-button:hover {
+  color: #ffffff;
 }
 
 /* Icon List */

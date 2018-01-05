@@ -152,9 +152,6 @@ figure {
 a {
     color: $color_link;
     text-decoration: none;
-    &:visited {
-        color: $color_link_hover;
-    }
     &:hover,
     &:focus,
     &:active {

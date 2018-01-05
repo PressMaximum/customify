@@ -70,6 +70,22 @@
     display: inline-block;
 }
 
+/* Button */
+.customify-button {
+    padding: ms(-4) ms(0);
+    background: #7aa93c;
+    color: #FFFFFF;
+    border-radius: 3px;
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: bolder;
+    text-transform: uppercase;
+    &:hover {
+        color: #ffffff;
+    }
+}
 
 /* Icon List */
 .header-icon-list-item {
