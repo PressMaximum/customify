@@ -17,7 +17,7 @@ class Customify_Builder_Item_Cart
     function customize(){
         $section = 'header_cart';
         $prefix = 'header_cart_';
-        return array(
+        $config = array(
             array(
                 'name' => $section,
                 'type' => 'section',
@@ -72,8 +72,12 @@ class Customify_Builder_Item_Cart
                 'section' => $section,
                 'title' => __( 'Color Hover', 'customify' ),
             ),
-
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
+        return $config;
+
     }
 }
 

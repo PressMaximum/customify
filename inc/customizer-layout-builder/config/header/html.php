@@ -38,7 +38,7 @@ class Customify_Builder_Item_HTML {
     function customize(){
         // Render callback function
         $fn = array( $this, 'render' );
-        return array(
+        $config = array(
             array(
                 'name' => $this->section,
                 'type' => 'section',
@@ -61,13 +61,35 @@ class Customify_Builder_Item_HTML {
                 'name' => $this->name.'_text_align',
                 'type' => 'text_align',
                 'section' => $this->section,
-                'selector' => '.builder-item--'.$this->id,
+                'selector' => '.builder-first--'.$this->id,
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'device_settings' => true,
             ),
 
+            // Merge Item
+            array(
+                'name' => 'header_'.$this->id.'_merge',
+                'type' => 'select',
+                'section' => $this->section,
+                'selector' => '#masthead',
+                'render_callback' => 'customify_customize_render_header',
+                'priority' => 999,
+                'title'   => __( 'Merge Item', 'customify' ),
+                'description'   => __( 'Merge item with previous item.', 'customify' ),
+                'choices' => array(
+                    'no' => __( 'No', 'customify' ),
+                    'desktop' => __( 'Merge on desktop', 'customify' ),
+                    'mobile' => __( 'Merge on mobile', 'customify' ),
+                    'both' => __( 'Merge on desktop & mobile', 'customify' ),
+                )
+            ),
+
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $this->section );
+        return $config;
     }
 
     /**

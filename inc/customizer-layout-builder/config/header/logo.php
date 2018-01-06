@@ -15,6 +15,7 @@ class Customify_Builder_Item_Logo {
         $section = 'title_tagline';
         $render_cb_el = array( $this, 'render' ) ;
         $selector = '.site-branding';
+        $fn = 'customify_customize_render_header';
         $config  = array(
 
             array(
@@ -72,13 +73,16 @@ class Customify_Builder_Item_Logo {
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => true,
-                'selector' => '.builder-item--logo',
+                'selector' => '.builder-first--logo',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
             ),
 
+
         );
 
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
         return $config;
     }
 

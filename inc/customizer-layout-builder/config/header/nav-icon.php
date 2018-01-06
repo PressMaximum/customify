@@ -16,7 +16,7 @@ class Customify_Builder_Item_Nav_Icon{
         $section = 'header_nav_icon';
         $fn = array( $this, 'render' );
         $selector = '.nav-mobile-toggle';
-        return array(
+        $config = array(
             array(
                 'name' => $section,
                 'type' => 'section',
@@ -116,12 +116,15 @@ class Customify_Builder_Item_Nav_Icon{
                 'name' => 'header_nav_icon_align',
                 'type' => 'text_align_no_justify',
                 'section' => $section,
-                'selector' => '.builder-item--nav-icon',
+                'selector' => '.builder-first--nav-icon',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
             ),
-
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
+        return $config;
     }
 
     function render(){

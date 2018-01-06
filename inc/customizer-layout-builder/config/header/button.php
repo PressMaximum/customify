@@ -214,12 +214,16 @@ class Customify_Builder_Item_Button{
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => true,
-                'selector' => '.builder-item--button',
+                'selector' => '.builder-first--button',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
             ),
 
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
+
         return $config;
     }
 

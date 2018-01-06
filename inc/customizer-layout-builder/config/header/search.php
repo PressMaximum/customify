@@ -50,7 +50,7 @@ class Customify_Builder_Item_Search {
                 'name' => 'header_search_align',
                 'type' => 'text_align_no_justify',
                 'section' => $section,
-                'selector' => '.builder-item--search',
+                'selector' => '..builder-first--search',
                 'css_format' => 'text-align: {{value}};',
                 'title' => __( 'Align', 'customify' ),
                 'device_settings' => true,
@@ -153,8 +153,10 @@ class Customify_Builder_Item_Search {
 
                 )
             ),
-
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
         return $config;
     }
 

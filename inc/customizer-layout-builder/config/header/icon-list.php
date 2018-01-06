@@ -16,7 +16,7 @@ class Customify_Builder_Item_Icon_List {
         $section = 'header_icon_list';
         $prefix = 'header_icon_list_';
         $fn = array( $this, 'render' );
-        return array(
+        $config = array(
             array(
                 'name' => $section,
                 'type' => 'section',
@@ -85,12 +85,16 @@ class Customify_Builder_Item_Icon_List {
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => true,
-                'selector' => '.builder-item--icon-list',
+                'selector' => '.builder-first--icon-list',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
             ),
 
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
+        return $config;
     }
 
     function render( $item_config ){

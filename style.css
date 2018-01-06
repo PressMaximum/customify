@@ -2762,7 +2762,7 @@ article.comment .comment-post-author {
 .customize-previewing {
   overflow-x: hidden;
 }
-.customize-previewing .builder-item-focus .item--inner {
+.customize-previewing .builder-item-focus.item--inner {
   position: relative;
 }
 .customize-previewing .builder-item-focus .item--preview-name {
@@ -2780,18 +2780,18 @@ article.comment .comment-post-author {
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
 }
-.customize-previewing .builder-item-focus:hover .item--inner {
+.customize-previewing .builder-item-focus:hover.item--inner {
   outline: 1px solid #0073aa;
   outline-offset: -1px;
 }
-.customize-previewing .builder-item-focus:hover .item--inner .item--preview-name {
+.customize-previewing .builder-item-focus:hover.item--inner .item--preview-name {
   display: block;
   z-index: 999;
 }
 .customize-previewing .header--row .customize-partial-edit-shortcut, .customize-previewing .mobile-header-panel .customize-partial-edit-shortcut {
   display: none;
 }
-.customize-previewing .footer--row .builder-item-focus:hover .item--inner {
+.customize-previewing .footer--row .builder-item-focus:hover.item--inner {
   outline: 1px dashed #ff472e;
   outline-offset: -1px;
 }
@@ -2825,6 +2825,10 @@ article.comment .comment-post-author {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.builder-item .item--inner {
+  display: inline-block;
 }
 
 .header--row.layout-full-contained .customify-container {

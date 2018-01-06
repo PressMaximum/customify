@@ -16,7 +16,7 @@ class Customify_Builder_Item_Social_Icons {
         $section = 'header_social_icons';
         $prefix = 'header_social_icons_';
         $fn = array( $this, 'render' );
-        return array(
+        $config = array(
             array(
                 'name' => $section,
                 'type' => 'section',
@@ -102,13 +102,17 @@ class Customify_Builder_Item_Social_Icons {
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => true,
-                'selector' => '.builder-item--social-icons',
+                'priority' => 990,
+                'selector' => '.builder-first--social-icons',
                 'css_format' => 'text-align: {{value}};',
                 'title' => __( 'Align', 'customify' ),
             ),
 
-
         );
+
+        // Merge Item
+        $config[] = customify_header_merge_item_settings( $this->id, $section );
+        return $config;
     }
 
     function render( $item_config ){
