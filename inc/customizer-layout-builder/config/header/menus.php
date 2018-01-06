@@ -164,7 +164,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'device_settings' => false,
-                'selector' => "..builder-first--{$this->id}",
+                'selector' => ".builder-first--{$this->id}",
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'description'   => __( 'Apply for desktop only.', 'customify' ),
