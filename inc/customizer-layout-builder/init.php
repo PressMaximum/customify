@@ -614,131 +614,178 @@ class Customify_Customizer_Layout_Builder_Frontend {
         return $content;
     }
 
-     function render_row( $items, $id = '', $device = 'desktop' )
-     {
-         $row_html = '';
-         $max_columns = 12;
-         $items = $this->_sort_items_by_position( array_values( $items ) );
+    function render_row($items, $id = '', $device = 'desktop')
+    {
+        $row_html = '';
+        $max_columns = 12;
+        $items = $this->_sort_items_by_position(array_values($items));
 
-         $prefix = $this->id . '_' . $id;
+        $prefix = $this->id . '_' . $id;
 
-         $last_item = false;
-         $next_item = false;
+        $last_item = false;
+        $prev_item = false;
+        $next_item = false;
 
-         $group_items = array();
-         $gi = 0;
-         $n = count( $items );
-         $index = 0;
-         while( $index < $n ) {
-             $item = $items[ $index ];
-             $item_id = $item['id'];
-             $merge_key = $this->id.'_'.$item_id.'_merge';
-             $merge = Customify_Customizer()->get_setting( $merge_key );
-             if ( $merge == $device || $merge == 'both' ) {
-                 $gi --;
-             }
+        $group_items = array();
+        $gi = 0;
+        $n = count($items);
+        $index = 0;
+        while ($index < $n) {
+            $item = $items[$index];
 
-             if ( ! isset( $group_items[ $gi ] ) ) {
-                 $group_items[ $gi ] = $item;
-                 $group_items[ $gi ]['items'] = array();
-                 $group_items[ $gi ]['items'][] =  $item;
-             } else {
-                 $group_items[ $gi ]['width'] = ( $item['x'] + $item['width'] ) - $group_items[ $gi ]['x'];
-                 $group_items[ $gi ]['items'][] =  $item;
-             }
+            if ($gi < 0) {
+                $gi = 0;
+            }
+            if ($n > $index + 1) {
+                $next_item = $items[$index + 1];
+            } else {
+                $next_item = false;
+            }
 
-             $gi++;
-             $index++;
-         }
+            $item_id = $item['id'];
+            $merge_key = $this->id . '_' . $item_id . '_merge';
+            $merge = Customify_Customizer()->get_setting($merge_key, $device);
+            $merge_next = false;
+            $merge_prev = false;
+            if ($merge == 'no' || $merge == '0') {
+                $merge = false;
+            }
 
+            if ($next_item) {
+                $merge_key_next = $this->id . '_' . $next_item['id'] . '_merge';
+                $merge_next = Customify_Customizer()->get_setting($merge_key_next, $device);
+            }
 
-         //echo '<pre>';
-        // print_r( $group_items );
-         //echo '</pre>';
+            if ($merge_next == 'no'  ||$merge_next == '0') {
+                $merge_next = false;
+            }
 
+            if ($prev_item) {
+                $merge_prev = $prev_item['__merge'];
+            }
 
-         $index = 0;
-         foreach ( $group_items as $item ) {
+            /*
+            Increment group_index:
+            a:
+                n-1: = prev || no
+                n = no || left
+                n+1 = no || next
+            b:
+                n-1: = prev || no
+                n = next
+                n+1 = prev
+            */
+            if (
+                ( ! $merge_prev || $merge_prev == 'prev')
+                && (!$merge || $merge == 'next')
+                && (!$merge_next || $merge_next == 'next')
+            ) {
+                $gi++;
+            } elseif (
+                ( ! $merge_prev || $merge_prev == 'prev')
+                && ( $merge == 'next')
+                && (!$merge_next || $merge_next == 'prev')
+            ) {
+                $gi++;
+            }
 
-             if (isset($items[$index + 1])) {
-                 $next_item = $items[$index + 1];
-             } else {
-                 $next_item = false;
-             }
+            if (!isset($group_items[$gi])) {
+                $group_items[$gi] = $item;
+                $group_items[$gi]['items'] = array();
+                $group_items[$gi]['items'][] = $item;
+            } else {
+                $group_items[$gi]['width'] = ($item['x'] + $item['width']) - $group_items[$gi]['x'];
+                $group_items[$gi]['items'][] = $item;
+            }
 
-             $first_id = $item['id'];
-             $x = intval($item['x']);
-             $width = intval($item['width']);
-             if (!$next_item) {
-                 if ($x + $width < $max_columns) {
-                     $width += $max_columns - ($x + $width);
-                 }
-             }
-
-             $atts = array();
-             $classes = array();
-
-
-             if ($this->id != 'footer') {
-                 $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
-             } else {
-                 $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
-             }
-
-             if ($x > 0) {
-                 if (!$last_item) {
-                     $atts[] = 'off-' . $x;
-                 } else {
-                     $o = intval($last_item['width']) + intval($last_item['x']);
-                     if ($x - $o > 0) {
-                         $atts[] = 'off-' . ($x - $o);
-                     }
-                 }
-             }
-
-             if ( $this->id == 'footer' ) {
-                 $atts[] = '_sm-0';
-             }
-
-             $classes[] = 'builder-item builder-first--'.$first_id;
-
-             $classes = apply_filters('customify/builder/item-wrapper-classes', $classes, $item );
-             $classes = join(' ', $classes); // customify-grid-middle
+            $prev_item = $item;
+            $prev_item['__merge'] = $merge;
 
 
-             echo '<div class="' . esc_attr($classes) . '" data-push-left="' . join(' ', $atts) . '">';
+            $index++;
+        }
 
-             foreach( $item['items'] as $_it ) {
-                 $item_id = $_it['id'];
-                 $content = $this->render_items[ $item_id ]['render_content'];
-                 $item_config = isset($this->config_items[$item_id]) ? $this->config_items[$item_id] : array();
-                 if (!isset($item_config['section'])) {
-                     $item_config['section'] = '';
-                 }
-                 $item_classes = array();
-                 $item_classes[] = 'item--inner';
-                 $item_classes[] = 'builder-item--' . $item_id;
-                 if (is_customize_preview()) {
-                     $item_classes[] = ' builder-item-focus';
-                 }
+        $index = 0;
+        foreach ($group_items as $item) {
 
-                 $item_classes = join(' ', $item_classes); // customify-grid-middle
-                 echo '<div class="'.esc_attr( $item_classes ).'" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr($item_id) . '" >';
-                 echo $this->setup_item_content($content, $id, $device);
-                 //echo $item_id;
-                 if (is_customize_preview()) {
-                     echo '<span class="item--preview-name">' . esc_html($item_config['name']) . '</span>';
-                 }
-                 echo '</div>';
-             }
-             echo '</div>';
+            if (isset($items[$index + 1])) {
+                $next_item = $items[$index + 1];
+            } else {
+                $next_item = false;
+            }
 
-             $last_item = $item;
-             $index ++ ;
+            $first_id = $item['id'];
+            $x = intval($item['x']);
+            $width = intval($item['width']);
+            if (!$next_item) {
+                if ($x + $width < $max_columns) {
+                    $width += $max_columns - ($x + $width);
+                }
+            }
 
-         } // end loop items
+            $atts = array();
+            $classes = array();
 
-     }
+            if ($this->id != 'footer') {
+                $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
+            } else {
+                $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
+            }
+
+            if ($x > 0) {
+                if (!$last_item) {
+                    $atts[] = 'off-' . $x;
+                } else {
+                    $o = intval($last_item['width']) + intval($last_item['x']);
+                    if ($x - $o > 0) {
+                        $atts[] = 'off-' . ($x - $o);
+                    }
+                }
+            }
+
+            if ($this->id == 'footer') {
+                $atts[] = '_sm-0';
+            }
+
+            $classes[] = 'builder-item builder-first--' . $first_id;
+
+            $classes = apply_filters('customify/builder/item-wrapper-classes', $classes, $item);
+            $classes = join(' ', $classes); // customify-grid-middle
+
+
+            echo '<div class="' . esc_attr($classes) . '" data-push-left="' . join(' ', $atts) . '">';
+
+            foreach ($item['items'] as $_it) {
+                $item_id = $_it['id'];
+                $content = $this->render_items[$item_id]['render_content'];
+                $item_config = isset($this->config_items[$item_id]) ? $this->config_items[$item_id] : array();
+                if (!isset($item_config['section'])) {
+                    $item_config['section'] = '';
+                }
+                $item_classes = array();
+                $item_classes[] = 'item--inner';
+                $item_classes[] = 'builder-item--' . $item_id;
+                if (is_customize_preview()) {
+                    $item_classes[] = ' builder-item-focus';
+                }
+
+                $item_classes = join(' ', $item_classes); // customify-grid-middle
+                echo '<div class="' . esc_attr($item_classes) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr($item_id) . '" >';
+                echo $this->setup_item_content($content, $id, $device);
+                //echo $item_id;
+                if (is_customize_preview()) {
+                    echo '<span class="item--preview-name">' . esc_html($item_config['name']) . '</span>';
+                }
+                echo '</div>';
+            }
+            echo '</div>';
+
+            $last_item = $item;
+            $index++;
+
+        } // end loop items
+
+    }
 
      function render( $row_ids = array( 'top', 'main', 'bottom') ){
          $setting = $this->get_settings();

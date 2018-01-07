@@ -22,6 +22,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $default = null;
     public $defaultValue = null;
     public $device = '';
+    public $devices = null;
     public $checkbox_label = '';
     public $limit ;
 
@@ -151,6 +152,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
         $this->json['required']     = $this->required;
+        $this->json['devices']      = $this->devices;
 
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;

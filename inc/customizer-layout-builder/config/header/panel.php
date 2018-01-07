@@ -391,13 +391,15 @@ if ( ! function_exists( 'customify_header_merge_item_settings' ) ) {
             'selector' => '#masthead',
             'render_callback' => 'customify_customize_render_header',
             'priority' => 999,
+            'device_settings' => true,
+            'devices' => array( 'desktop', 'mobile' ),
             'title' => __('Merge Item', 'customify'),
             'description' => __('Merge item with previous item.', 'customify'),
             'choices' => array(
-                'no' => __('No', 'customify'),
-                'desktop' => __('Merge on desktop', 'customify'),
-                'mobile' => __('Merge on mobile', 'customify'),
-                'both' => __('Merge on desktop & mobile', 'customify'),
+                0 => __('No', 'customify'),
+                'prev' => __('Merge with previous', 'customify'),
+                'next' => __('Merge with next item', 'customify'),
+
             )
         );
     }

@@ -160,15 +160,18 @@
 
 
     wp.customize.controlConstructor.customify = wp.customize.Control.extend({
-
+        devices:  ['desktop', 'tablet', 'mobile'],
         // When we're finished loading continue processing
         ready: function() {
             var control = this;
+            if ( _.isArray( control.params.devices ) && !_.isEmpty( control.params.devices ) ) {
+                control.devices = control.params.devices;
+            }
             control.init();
         },
         type: 'customify',
         settingField: null,
-        devices:  ['desktop', 'tablet', 'mobile'],
+
         getTemplate: _.memoize(function () {
             var control = this;
             var compiled,
@@ -206,6 +209,12 @@
             }
             var clone = $('#customize-footer-actions .devices').clone();
             clone.addClass('customify-devices');
+            $( 'button', clone ).each( function(){
+                var d = $( this ).attr( 'data-device' );
+                if ( _.indexOf( control.devices, d ) < 0 ) {
+                    $( this ).remove();
+                }
+            } );
             $('.customify-field-heading', $el ).append(clone).addClass( 'customify-devices-added' );
 
         },
@@ -900,7 +909,6 @@
                 template_id =  'tmpl-field-'+control.type+'-text';
             }
             if ( field.device_settings ) {
-
                 var fieldItem =  null;
                 _.each( control.devices , function( device, index ){
 
@@ -952,6 +960,7 @@
                 name: control.id,
                 value: control.params.value,
                 default: control.params.default,
+                devices: control.params.devices,
             };
 
             if ( field.type == 'slider' ) {
