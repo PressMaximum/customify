@@ -673,7 +673,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
             b:
                 n-1: = prev || no
                 n = next
-                n+1 = prev
+                n+1 = prev || no
             */
             if (
                 ( ! $merge_prev || $merge_prev == 'prev')
