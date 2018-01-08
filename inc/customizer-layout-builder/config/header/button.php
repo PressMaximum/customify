@@ -321,7 +321,6 @@ class Customify_Builder_Item_Button{
 
     function render(){
         $text = Customify_Customizer()->get_setting('header_button_text' );
-        var_dump( $text );
         $icon = Customify_Customizer()->get_setting('header_button_icon' );
         $new_window = Customify_Customizer()->get_setting('header_button_target' );
         $link = Customify_Customizer()->get_setting('header_button_link' );

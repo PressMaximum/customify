@@ -1557,7 +1557,6 @@
             urlParser.search = $.param( _.extend(
                 wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
                 {
-                    changeset_uuid: wpcustomize.settings.changeset.uuid,
                     autofocus: {
                         section: section
                     }
