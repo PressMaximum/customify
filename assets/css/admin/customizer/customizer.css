@@ -85,6 +85,19 @@
   color: #444444;
 }
 
+.customify--field .customify-field--heading {
+  padding: 7px 12px;
+  background: #fff;
+  border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
+  margin: 10px -15px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 400;
+  font-size: 12px;
+  color: #444444;
+}
+
 .customize-control .customize-control-description {
   margin-bottom: 15px;
   margin-top: -3px;

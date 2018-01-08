@@ -80,134 +80,189 @@ class Customify_Builder_Item_Button{
                 'checkbox_label'  => __( 'Open link in new window.', 'customify' ),
             ),
 
-            /*
             array(
-                'name' => $prefix.'style',
-                'type' => 'select',
+                'name' => $prefix.'_typography',
+                'type' => 'group',
                 'section' => $section,
+                'device_settings' => false,
+                'title' => __('Typography', 'customify'),
+                'field_class' => 'customify-typography-control',
                 'selector' => $selector,
-                'render_callback' => $fn,
-                'title'  => __( 'Style', 'customify' ),
-                'choices' =>  array(
-                    'style-1' => __( 'Default', 'customify' ),
-                    'style-2' => __( 'Style 2', 'customify' ),
+                'css_format' => 'typography',
+                'default' => array(),
+                'fields' => array(
+                    array(
+                        'name' => 'font_style',
+                        'type' => 'font_style',
+                        'label' => __('Font Style', 'customify'),
+                    ),
+
+                    array(
+                        'name' => 'font_size',
+                        'type' => 'slider',
+                        'min' => 7,
+                        'max' => 20,
+                        'step' => 1,
+                        'label' => __('Font Size', 'customify'),
+                        'device_settings' => true,
+                    ),
+
+                    array(
+                        'name' => 'letter_spacing',
+                        'type' => 'slider',
+                        'label' => __('Letter Spacing', 'customify'),
+                        'min' => -2,
+                        'max' => 5,
+                        'step' => .1,
+                    ),
                 )
             ),
-            */
-
-	        array(
-		        'name' => $prefix.'text_options',
-		        'type' => 'group',
-		        'section' => $section,
-		        'device_settings' => false,
-		        'title' => __('Text Options', 'customify'),
-		        'field_class' => 'customify-typography-control',
-		        'selector' => $selector,
-		        'css_format' => 'typography',
-		        'default' => array(),
-		        'fields' => array(
-			        array(
-				        'name' => 'font_style',
-				        'type' => 'font_style',
-				        'label' => __('Font Style', 'customify'),
-			        ),
-
-			        array(
-				        'name' => 'font_size',
-				        'type' => 'slider',
-				        'min' => 7,
-				        'max' => 20,
-				        'step' => 1,
-				        'label' => __('Font Size', 'customify'),
-                        'device_settings' => true,
-			        ),
-
-			        array(
-				        'name' => 'letter_spacing',
-				        'type' => 'slider',
-				        'label' => __('Letter Spacing', 'customify'),
-				        'min' => -2,
-				        'max' => 5,
-				        'step' => .1,
-			        ),
-		        )
-	        ),
 
             array(
-                'name' => $prefix.'color',
-                'type' => 'color',
+                'name' => $prefix.'_styling',
+                'type' => 'group',
                 'section' => $section,
-                'css_format' => 'color: {{value}};',
-                'selector' => $selector.', '.$selector.':visited',
-                'title'  => __( 'Color', 'customify' ),
-            ),
-
-            array(
-                'name' => $prefix.'color_hover',
-                'type' => 'color',
-                'section' => $section,
-                'css_format' => 'color: {{value}};',
-                'selector' => $selector.':hover',
-                'title'  => __( 'Color Hover', 'customify' ),
-            ),
-
-            array(
-                'name' => $prefix.'bg_color',
-                'type' => 'color',
-                'section' => $section,
-                'css_format' => 'background-color: {{value}};',
+                'title' => __('Styling', 'customify'),
+                'field_class' => 'customify-typography-control',
                 'selector' => $selector,
-                'title'  => __( 'Background Color', 'customify' ),
+                'css_format' => 'styling',
+                'default' => array(),
+                'fields' => array(
+                    array(
+                        'name' => 'text_color',
+                        'type' => 'color',
+                        'label' => __('Text Color', 'customify'),
+                        'selector' => $selector,
+                        'css_format' => 'color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'color', // Background color
+                        'type' => 'color',
+                        'label' => __('Background Color', 'customify'),
+                    ),
+
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'none',
+                        'choices' => array(
+                            'none'      => __('None', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+
+                    array(
+                        'name' => 'border_radius',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'label' => __('Border Radius', 'customify'),
+                        'selector' => $selector,
+                        'css_format' => 'border-radius: {{value}}; -webkit-border-radius: {{value}}; -moz-border-radius: {{value}};',
+                        'required' => array('border_style', '!=', 'none'),
+                    ),
+
+                )
             ),
 
             array(
-                'name' => $prefix.'bg_color_hover',
-                'type' => 'color',
+                'name' => $prefix.'_hover',
+                'type' => 'group',
                 'section' => $section,
-                'css_format' => 'background-color: {{value}};',
-                'selector' => $selector.':hover',
-                'title'  => __( 'Background Color Hover', 'customify' ),
-            ),
-
-	        array(
-		        'name' => $prefix.'border_radius',
-		        'type' => 'slider',
-		        'section' => $section,
-		        'max' =>  100,
-		        'default' =>  3,
-		        'css_format' =>'border-radius: {{value}};',
-		        'selector' => $selector,
-		        'title'  => __( 'Border Radius', 'customify' ),
-	        ),
-
-            array(
-                'name' => $prefix.'padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'css_format' => array(
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
+                'title' => __('Hover Styling', 'customify'),
                 'selector' => $selector,
-                'device_settings' => true,
-                'title'  => __( 'Padding', 'customify' ),
+                'css_format' => 'styling',
+                'default' => array(),
+                'fields' => array(
+                    array(
+                        'name' => 'text_color_hover',
+                        'type' => 'color',
+                        'label' => __('Text Color', 'customify'),
+                        'selector' => $selector.":hover",
+                        'css_format' => 'color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'color_hover', // Background color
+                        'type' => 'color',
+                        'label' => __('Background Color', 'customify'),
+                        'selector' => $selector.":hover",
+                        'css_format' => 'background-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_style_hover',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => '',
+                        'selector' => $selector.":hover",
+                        'css_format' => 'border-style: {{value}};',
+                        'choices' => array(
+                            ''      => __('Inherit', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                    ),
+
+                    array(
+                        'name' => 'border_width_hover',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style_hover', '!=', ''),
+                        'selector' => $selector.":hover",
+                        'css_format' => array(
+                            'top' => 'border-top-width: {{value}};',
+                            'right' => 'border-right-width: {{value}};',
+                            'bottom' => 'border-bottom-width: {{value}};',
+                            'left' => 'border-left-width: {{value}};',
+                        )
+                    ),
+                    array(
+                        'name' => 'border_color_hover',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style_hover', '!=', ''),
+                        'selector' => $selector.":hover",
+                        'css_format' => 'border-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_radius_hover',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'label' => __('Border Radius', 'customify'),
+                        'selector' => $selector.":hover",
+                        'css_format' => 'border-radius: {{value}}; -webkit-border-radius: {{value}}; -moz-border-radius: {{value}};',
+                        'required' => array('border_style_hover', '!=', ''),
+                    ),
+
+                )
             ),
-	        array(
-		        'name' => $prefix.'margin',
-		        'type' => 'css_ruler',
-		        'section' => $section,
-		        'css_format' => array(
-			        'top' => 'margin-top: {{value}};',
-			        'right' => 'margin-right: {{value}};',
-			        'bottom' => 'margin-bottom: {{value}};',
-			        'left' => 'margin-left: {{value}};',
-		        ),
-		        'selector' => $selector,
-		        'device_settings' => true,
-		        'title'  => __( 'Margin', 'customify' ),
-	        ),
 
 	        array(
 		        'name' => 'header_button_layout',
@@ -215,6 +270,35 @@ class Customify_Builder_Item_Button{
 		        'section' => $section,
 		        'title' => __( 'Item Layout', 'customify' )
 	        ),
+
+            array(
+                'name' => $prefix.'_padding',
+                'type' => 'css_ruler',
+                'section' => $section,
+                'device_settings' => true,
+                'css_format' => array(
+                    'top' => 'padding-top: {{value}};',
+                    'right' => 'padding-right: {{value}};',
+                    'bottom' => 'padding-bottom: {{value}};',
+                    'left' => 'padding-left: {{value}};',
+                ),
+                'selector' => $selector,
+                'label'  => __( 'Padding', 'customify' ),
+            ),
+            array(
+                'name' => $prefix.'_margin',
+                'type' => 'css_ruler',
+                'section' => $section,
+                'device_settings' => true,
+                'css_format' => array(
+                    'top' => 'margin-top: {{value}};',
+                    'right' => 'margin-right: {{value}};',
+                    'bottom' => 'margin-bottom: {{value}};',
+                    'left' => 'margin-left: {{value}};',
+                ),
+                'selector' => $selector,
+                'label'  => __( 'Margin', 'customify' ),
+            ),
 
             array(
                 'name' => 'header_button_align',
@@ -237,6 +321,7 @@ class Customify_Builder_Item_Button{
 
     function render(){
         $text = Customify_Customizer()->get_setting('header_button_text' );
+        var_dump( $text );
         $icon = Customify_Customizer()->get_setting('header_button_icon' );
         $new_window = Customify_Customizer()->get_setting('header_button_target' );
         $link = Customify_Customizer()->get_setting('header_button_link' );
@@ -261,6 +346,7 @@ class Customify_Builder_Item_Button{
         if ( $icon['icon'] ) {
             $icon_html = '<i class="'.esc_attr( $icon['icon'] ).'"></i> ';
         }
+        $classes[] = 'btn-icon-'.$icon_position;
 
         echo '<a'.$target.' href="'.esc_url( $link ).'" class="'.esc_attr( join(" ", $classes ) ).'">';
             if ( $icon_position != 'after' ) {

@@ -23,6 +23,20 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             'tablet' => '',
             'mobile' => ''
         );
+
+        private $styling_fields = array(
+            'color' => null,
+            'image' => null,
+            'position' => null,
+            'cove'=> null,
+            'repeat'=> null,
+            'attachment'=> null,
+
+            'border_width'=> null,
+            'border_color'=> null,
+            'border_style'=> null,
+        );
+
         static function get_instance(){
             if ( is_null( self::$_instance ) ) {
                 self::$_instance = new self();
@@ -108,39 +122,28 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
-        function css_ruler( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_css_ruler' );
+        function css_ruler( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_css_ruler', $values );
             return $code;
         }
 
-        function slider( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_slider' );
+        function slider( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_slider', $values );
             return $code;
         }
 
-        function color( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_color' );
+        function color( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_color', $values );
             return $code;
         }
 
-        function text_align( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_default' );
+        function text_align( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_default', $values );
             return $code;
         }
 
         function setup_styling( $value ) {
-            $value = wp_parse_args( $value, array(
-                'color' => '',
-                'image' => '',
-                'position' => '',
-                'cover' => '',
-                'repeat' => '',
-                'attachment' => '',
-
-                'border_width' => '',
-                'border_color' => '',
-                'border_style' => '',
-            ) );
+            $value = wp_parse_args( $value, $this->styling_fields );
 
             $css = array();
             $color = Customify_Sanitize_Input::sanitize_color( $value['color'] );
@@ -240,8 +243,27 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
         }
 
-        function styling( $field ){
-            $code = $this->maybe_devices_setup( $field, 'setup_styling' );
+        function styling( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_styling', $values );
+            $values = Customify_Customizer()->get_setting( $field['name'], 'all' );
+            foreach( $field['fields'] as $k => $f ) {
+                if ( isset( $this->styling_fields[ $k ] ) ) {
+                    unset( $field['fields'][ $k ] );
+                }
+            }
+
+            if ( count( $field['fields'] ) ) {
+                if ( $field['device_settings'] ) {
+                    foreach ( Customify_Customizer()->devices as $device ) {
+                        $value_devices = isset( $values[ $device ] ) ? $values[ $device ] : array();
+                        $this->loop_fields( $field['fields'], $value_devices, true );
+                    }
+                } else {
+                    $this->loop_fields( $field['fields'], $values, true );
+                }
+
+            }
+
             return  $code;
         }
 
@@ -577,51 +599,56 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return $url;
         }
 
-        function auto_css( $partial = false ){
-            $config = Customify_Customizer::get_config();
-            //$control_settings = $partial->component->manager->get_control($partial->id);
-            foreach ( $config as $field ) {
-                $field_css = '';
-                if ( $field['selector'] && $field['css_format'] ) {
-                    switch ($field['type']) {
-                        case 'css_ruler':
-                            $this->css_ruler($field);
-                            break;
-                        case 'slider':
-                            $this->slider($field);
-                            break;
-                        case 'color':
-                            $this->color($field);
-                            break;
-                        case 'text_align':
-                        case 'text_align_no_justify':
-                            $this->text_align($field);
-                            break;
-                        case 'font':
-                            $this->font($field);
-                            break;
-                        default:
-                            switch( $field['css_format'] ) {
-                                case 'background':
-                                case 'styling':
-                                    $this->styling($field);
-                                    break;
-                                case 'typography':
-                                    $this->typography($field);
-                                    break;
-                                case 'html_class':
-                                    //
-                                    break;
-                                default:
-                                    $this->maybe_devices_setup( $field, 'setup_default' );
+        function loop_fields( $fields, $values = null, $skip_if_val_null = false ){
+            foreach ( $fields as $field ) {
+                $v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
+                if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
+                    if ($field['selector'] && $field['css_format']) {
+                        switch ($field['type']) {
+                            case 'css_ruler':
+                                $this->css_ruler($field, $v);
+                                break;
+                            case 'slider':
+                                $this->slider($field, $v);
+                                break;
+                            case 'color':
+                                $this->color($field, $v);
+                                break;
+                            case 'text_align':
+                            case 'text_align_no_justify':
+                                $this->text_align($field, $v);
+                                break;
+                            case 'font':
+                                $this->font($field, $v);
+                                break;
+                            default:
+                                switch ($field['css_format']) {
+                                    case 'background':
+                                    case 'styling':
+                                        $this->styling($field, $v);
+                                        break;
+                                    case 'typography':
+                                        $this->typography($field, $v);
+                                        break;
+                                    case 'html_class':
+                                        //
+                                        break;
+                                    default:
+                                        $this->maybe_devices_setup($field, 'setup_default', $v);
 
-                            }
+                                }
 
+                        }
                     }
                 }
+            } // end for each fields
 
-            }
+        }
 
+        function auto_css( $partial = false ){
+            $config_fields = Customify_Customizer::get_config();
+            //$control_settings = $partial->component->manager->get_control($partial->id);
+            $this->loop_fields( $config_fields );
             $css_code = '';
             $i = 0;
             foreach ( $this->css as $device => $code ) {

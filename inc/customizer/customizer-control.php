@@ -322,7 +322,8 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'media' => 'media',
             'video' => 'media',
             'text',
-            'hidden'
+            'hidden',
+            'heading'
         );
         foreach ( $fields as $key => $field ) {
             $id = $field;
@@ -424,6 +425,13 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <div class="customify-field-settings-inner">
             <input type="text" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
+        <?php
+        $this->after_field();
+    }
+    function field_heading(){
+        $this->before_field();
+        ?>
+        <h3 class="customify-field--heading">{{ field.label }}</h3>
         <?php
         $this->after_field();
     }

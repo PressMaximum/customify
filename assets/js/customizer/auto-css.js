@@ -9,6 +9,18 @@ var AutoCSS = window.AutoCSS || null;
     };
     AutoCSS._change = false;
     AutoCSS.prototype.fonts = {};
+    AutoCSS.prototype.styling_fields = {
+        color: null,
+        image: null,
+        position: null,
+        cover: null,
+        repeat: null,
+        attachment: null,
+
+        border_width: null,
+        border_color: null,
+        border_style: null
+    };
     AutoCSS.prototype.subsets = {};
     AutoCSS.prototype.variants = {};
     AutoCSS.prototype.media_queries = {
@@ -43,7 +55,63 @@ var AutoCSS = window.AutoCSS || null;
     AutoCSS.prototype.decodeValue = function( value ){
         return JSON.parse( decodeURI( value ) );
     };
+
+    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null ){
+        if ( _.isUndefined( skip_if_val_null ) ) {
+            skip_if_val_null = false;
+        }
+
+        if ( ! _.isObject( values ) ) {
+            values = {};
+        }
+
+        var that = this;
+        _.each( fields, function( field ){
+            var v =  ! _.isUndefined( values[ field.name ] ) ? values[ field.name ] : null;
+            if ( !( _.isNull( v ) && skip_if_val_null ) ) {
+                if (field.selector && field.css_format) {
+                    switch (field.type) {
+                        case 'css_ruler':
+                            that.css_ruler(field, v );
+                            break;
+                        case 'slider':
+                            that.slider(field, v );
+                            break;
+                        case 'color':
+                            that.color(field, v );
+                            break;
+                        case 'text_align':
+                        case 'text_align_no_justify':
+                            that.text_align(field, v );
+                            break;
+                        case 'font':
+                            that.font(field, v);
+                            break;
+                        default:
+                            switch (field.css_format) {
+                                case  'background':
+                                case  'styling':
+                                    that.styling(field, v );
+                                    break;
+                                case 'typography':
+                                    that.typography(field, v );
+                                    break;
+                                case 'html_class':
+                                    that.html_class(field, v );
+                                    break;
+                                default:
+                                    that.maybe_devices_setup(field, 'setup_default', v );
+                            }
+                    }
+                } // end if selector and css format
+            }
+
+        } ); // end _.each
+
+
+    };
     AutoCSS.prototype.run = function(){
+
         this.lastValues = this.values;
         this.values = api.get();
 
@@ -57,44 +125,7 @@ var AutoCSS = window.AutoCSS || null;
 
        // console.log( 'NEW CUSTOMIZE VALUES', this.values );
         var that = this;
-        _.each( Customify_Preview_Config.fields, function( field ){
-            if ( field.selector && field.css_format ) {
-                switch (field.type) {
-                    case 'css_ruler':
-                        that.css_ruler(field);
-                        break;
-                    case 'slider':
-                        that.slider(field);
-                        break;
-                    case 'color':
-                        that.color(field);
-                        break;
-                    case 'text_align':
-                    case 'text_align_no_justify':
-                        that.text_align( field );
-                        break;
-                    case 'font':
-                        that.font(field);
-                        break;
-                    default:
-                        switch ( field.css_format ) {
-                            case  'background':
-                            case  'styling':
-                                that.styling(field);
-                                break;
-                            case 'typography':
-                                that.typography(field);
-                                break;
-                            case 'html_class':
-                                that.html_class(field);
-                                break;
-                            default:
-                                that.maybe_devices_setup( field, 'setup_default' );
-                        }
-                }
-            }
-
-        } );
+        that.loop_fields( Customify_Preview_Config.fields );
 
         var css_code = '';
         var i = 0;
@@ -208,7 +239,6 @@ var AutoCSS = window.AutoCSS || null;
                                 }
 
                         }
-
                     }
                 } )
             }
@@ -372,15 +402,18 @@ var AutoCSS = window.AutoCSS || null;
             no_selector = false;
         }
 
-        if ( _.isUndefined( values ) ) {
+        var no_value = false;
+
+        if ( _.isUndefined( values ) || _.isNull( values ) ) {
             values = {};
+            no_value = true;
         }
 
         if ( ! _.isUndefined( field.device_settings ) && field.device_settings ) {
             has_device = true;
             _.each( that.devices, function( device ){
                 var value = null;
-                if ( _.isEmpty( values ) ) {
+                if ( no_value ) {
                     value = that.get_setting( field.name, device );
                 } else {
                     if ( ! _.isUndefined( values[ device ] ) ) {
@@ -398,7 +431,7 @@ var AutoCSS = window.AutoCSS || null;
                 }
             } );
         } else {
-            if ( _.isEmpty( values ) ) {
+            if ( no_value ) {
                 values = that.get_setting( field.name, 'all' );
             }
             if ( that[call_back] ){
@@ -511,42 +544,57 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.css_ruler = function( field ){
-        return this.maybe_devices_setup( field, 'setup_css_ruler' );
+    AutoCSS.prototype.css_ruler = function( field, value ){
+        return this.maybe_devices_setup( field, 'setup_css_ruler', value );
     };
 
-    AutoCSS.prototype.slider = function( field ){
-        return this.maybe_devices_setup( field, 'setup_slider' );
+    AutoCSS.prototype.slider = function( field, value ){
+        return this.maybe_devices_setup( field, 'setup_slider', value );
     };
 
-    AutoCSS.prototype.color = function( field ){
-        return this.maybe_devices_setup( field, 'setup_color' );
+    AutoCSS.prototype.color = function( field, value ){
+        return this.maybe_devices_setup( field, 'setup_color', value );
     };
 
-    AutoCSS.prototype.text_align = function( field ){
-        return this.maybe_devices_setup( field, 'setup_text_align' );
+    AutoCSS.prototype.text_align = function( field, value ){
+        return this.maybe_devices_setup( field, 'setup_text_align', value );
     };
 
     AutoCSS.prototype.styling = function( field ){
-        return this.maybe_devices_setup( field, 'setup_styling' );
+        var that = this;
+        // Setup file by default no need `css_format` key if filed have name in the list above
+        var values = this.get_setting( field.name, 'all' );
+        this.maybe_devices_setup( field, 'setup_styling' );
+
+        var new_fields = {};
+
+        _.each( field.fields, function( f ) {
+            if ( _.isUndefined( that.styling_fields[ f.name ] ) ) {
+                new_fields[ f.name ] = f;
+            }
+        } );
+
+        if ( _.size( new_fields ) > 0 ) {
+            console.log( 'values__', values );
+            if ( field.device_settings ) {
+                _.each( that.devices, function( device ){
+                    var values_device =  _.isUndefined( values[ device ] ) ? { } : values[ device ];
+                    that.loop_fields( new_fields, values_device , true );
+                });
+            } else {
+                that.loop_fields( new_fields, values , true );
+            }
+
+        }
+
     };
 
     AutoCSS.prototype.setup_styling = function ( value ) {
         if ( ! _.isObject( value ) ) {
             value = {};
         }
-        value =_.defaults( value, {
-            color: null,
-            image: null,
-            position: null,
-            cover: null,
-            repeat: null,
-            attachment: null,
 
-            border_width: null,
-            border_color: null,
-            border_style: null
-        } );
+        value =_.defaults( value, this.styling_fields );
 
         var css = {};
         var color = this.sanitize_color( value.color );
@@ -749,8 +797,10 @@ var AutoCSS = window.AutoCSS || null;
 
     };
 
-    AutoCSS.prototype.typography = function( field ){
-        var values = this.get_setting( field.name, 'all' );
+    AutoCSS.prototype.typography = function( field, values ){
+        if ( _.isUndefined( values ) || ! _.isObject( values ) ) {
+            values = this.get_setting( field.name, 'all' );
+        }
 
         var that = this;
         if ( ! _.isObject( values ) ) {

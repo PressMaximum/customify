@@ -55,6 +55,13 @@ if (!function_exists('customify_customizer_config')) {
                 )
             ),
 
+            array(
+                'name' => '__heading_1',
+                'type' => 'heading',
+                'section' => 'customify_section',
+                'label' => __('This is heading', 'customify'),
+            ),
+
 
             array(
                 'name' => 'repeater_default',
