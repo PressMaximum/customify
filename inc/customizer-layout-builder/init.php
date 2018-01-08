@@ -59,7 +59,6 @@ class Customify_Customizer_Layout_Builder {
                 'nav-icon',
                 'search',
                 'button',
-                'icon-list',
                 'social-icons',
             ),
             'footer' => array(
