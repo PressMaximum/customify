@@ -664,6 +664,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                 $merge_prev = $prev_item['__merge'];
             }
 
+
+
             /*
             Increment group_index:
             a:
@@ -676,18 +678,19 @@ class Customify_Customizer_Layout_Builder_Frontend {
                 n+1 = prev || no
             */
             if (
-                ( ! $merge_prev || $merge_prev == 'prev')
+                (!$merge_prev || $merge_prev == 'prev')
                 && (!$merge || $merge == 'next')
                 && (!$merge_next || $merge_next == 'next')
             ) {
                 $gi++;
             } elseif (
-                ( ! $merge_prev || $merge_prev == 'prev')
-                && ( $merge == 'next')
+                (!$merge_prev || $merge_prev == 'prev')
+                && ($merge == 'next')
                 && (!$merge_next || $merge_next == 'prev')
             ) {
                 $gi++;
             }
+
 
             if (!isset($group_items[$gi])) {
                 $group_items[$gi] = $item;
@@ -700,6 +703,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
             $prev_item = $item;
             $prev_item['__merge'] = $merge;
+
+            if ( $index == 0 && ( ! $merge || $merge == 'prev'  ) && ( ! $merge_next || $merge_next == 'next' ) ) {
+                $gi ++;
+            }
 
 
             $index++;
