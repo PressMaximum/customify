@@ -2823,6 +2823,12 @@ article.comment .comment-post-author {
 .builder-item .item--inner {
   display: inline-block;
 }
+.builder-item.builder-item--group .item--inner {
+  margin-right: 1.5em;
+}
+.builder-item.builder-item--group .item--inner:last-child {
+  margin-right: 0px;
+}
 
 .header--row.layout-full-contained .customify-container {
   background: transparent !important;
