@@ -2901,6 +2901,7 @@ article.comment .comment-post-author {
   font-size: 1em;
   font-weight: bolder;
   text-transform: uppercase;
+  transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
 }
 .customify-builder-btn:hover {
   color: #ffffff;
@@ -3180,6 +3181,12 @@ article.comment .comment-post-author {
 }
 .header-social-icons li:last-child {
   margin-right: 0px;
+}
+.header-social-icons li a span {
+  text-transform: uppercase;
+  font-size: 0.875em;
+  margin-left: 6px;
+  font-weight: bolder;
 }
 
 /*--------------------------------------------------------------

@@ -58,6 +58,24 @@ class Customify_Builder_Item_Social_Icons {
 
                 )
             ),
+
+	        array(
+		        'name' => $prefix.'target',
+		        'type' => 'checkbox',
+		        'section' => $section,
+		        'selector' => '.header-social-icons',
+		        'render_callback' => $fn,
+		        'checkbox_label' => __( 'Open URL in new window.',  'customify' ),
+	        ),
+	        array(
+		        'name' => $prefix.'nofollow',
+		        'type' => 'checkbox',
+		        'section' => $section,
+		        'selector' => '.header-social-icons',
+		        'render_callback' => $fn,
+		        'checkbox_label' => __( 'Use rel="nofollow" for social links.',  'customify' ),
+	        ),
+
 	        array(
 		        'name' => $prefix.'predefined_style',
 		        'type' => 'image_select',
@@ -112,15 +130,14 @@ class Customify_Builder_Item_Social_Icons {
                 'label' => __( 'Show item text', 'customify' ),
             ),
 
-            array(
-                'name' => $prefix.'target',
-                'type' => 'checkbox',
-                'section' => $section,
-                'selector' => '.header-social-icons',
-                'render_callback' => $fn,
-                'checkbox_label' => __( 'Open URL in new window.',  'customify' ),
-                'label' => __( 'Target', 'customify' ),
-            ),
+
+
+	        array(
+		        'name' => $prefix.'layout',
+		        'type' => 'heading',
+		        'section' => $section,
+		        'title' => __( 'Item Layout', 'customify' )
+	        ),
 
             array(
                 'name' => 'header_social_icons_align',
