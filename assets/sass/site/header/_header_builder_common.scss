@@ -1,0 +1,94 @@
+/* Header Builder Common */
+.site-header {
+    position: relative;
+    .customify-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+}
+
+.builder-item {
+    .item--inner {
+        display: inline-block;
+    }
+}
+
+.header--row {
+    .customify-grid {
+    }
+    &.layout-full-contained {
+        .customify-container {
+            background: transparent !important;
+        }
+    }
+    &.layout-full-contained, &.layout-fullwidth {
+        .customify-container {
+            border: 0 none !important;
+        }
+    }
+    @include for_device( desktop ){
+        &.layout-contained {
+            background: transparent !important;
+            border: 0 none;
+            .customify-container {
+                margin-left: 1.5em;
+                margin-right: 1.5em;
+            }
+        }
+    }
+    &.layout-fullwidth {
+        .customify-container {
+            max-width: initial;
+        }
+    }
+}
+
+/* Close Button */
+$close_size: 35px;
+.mobile-sidebar-panel {
+    .close {
+        z-index: 36;
+        cursor: pointer;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        height: $close_size;
+        width: $close_size;
+        box-sizing: border-box;
+        line-height: $close_size;
+        display: inline-block;
+
+        &:before, &:after {
+            transform: rotate(-45deg);
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-top: -1;
+            margin-left: -$close_size/2;
+            display: block;
+            height: 2px;
+            width: $close_size;
+            background-color: #fff;
+            transition: all 0.2s ease-out;
+        }
+
+        &:after {
+            transform: rotate(45deg);
+        }
+    }
+}
+
+/* Customizer Shortcut */
+#masthead{
+    > .customize-partial-edit-shortcut {
+        &.customize-partial-edit-shortcut-header_builder_panel {
+            display: none;
+        }
+        button {
+            left: 0px;
+        }
+    }
+}
+

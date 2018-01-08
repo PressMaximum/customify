@@ -1,0 +1,15 @@
+/* Social Icons */
+.header-social-icons {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    li {
+        list-style: none;
+        display: inline-block;
+        margin-right: 10px;
+        &:last-child {
+            margin-right: 0px;
+        }
+    }
+}

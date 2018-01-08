@@ -1,0 +1,8 @@
+/* HTML 1 */
+.item--html {
+    p {
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+}
