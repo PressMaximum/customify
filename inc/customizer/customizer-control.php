@@ -263,6 +263,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
         ?>
         <div class="customify--settings-wrapper">
+            <?php if ( $this->label ) { ?>
             <div class="customify-control-field-header customify-field-heading">
                 <label>
                     <?php if (!empty($this->label)) : ?>
@@ -270,6 +271,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     <?php endif; ?>
                 </label>
             </div>
+            <?php } ?>
             <?php
             if ( $this->setting_type == 'custom_html' ) {
                 ?>
@@ -405,6 +407,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
     function field_header(){
         ?>
+            <# if ( field.label || field.description ) { #>
             <div class="customify-field-header">
                 <# if ( field.label ) { #>
                     <div class="customify-field-heading">
@@ -415,6 +418,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     <p class="description">{{{ field.description }}}</p>
                 <# } #>
             </div>
+            <# } #>
         <?php
     }
 

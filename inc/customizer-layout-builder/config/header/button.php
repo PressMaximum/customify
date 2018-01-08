@@ -76,7 +76,7 @@ class Customify_Builder_Item_Button{
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $fn,
-                'title'  => __( 'Target', 'customify' ),
+                //'title'  => __( 'Target', 'customify' ),
                 'checkbox_label'  => __( 'Open link in new window.', 'customify' ),
             ),
 
