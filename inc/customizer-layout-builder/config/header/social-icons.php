@@ -31,7 +31,7 @@ class Customify_Builder_Item_Social_Icons {
                 'section' => $section,
                 'selector' => '.header-social-icons',
                 'render_callback' => $fn,
-                'title' => __( 'Socials', 'customify' ),
+                'title' => __( 'Social Profiles', 'customify' ),
                 'live_title_field' => 'title',
                 'limit' => 4,
                 'limit_msg' => __( 'Just limit 4 item, Ability HTML here',  'customify' ),
@@ -58,12 +58,37 @@ class Customify_Builder_Item_Social_Icons {
 
                 )
             ),
+	        array(
+		        'name' => $prefix.'predefined_style',
+		        'type' => 'image_select',
+		        'default' => '1',
+		        'section' => $section,
+		        'title' => __('Icon style', 'customify'),
+		        'choices' => array(
+			        '1' => array(
+				        'img' => get_template_directory_uri().'/assets/images/customizer/social_icon_style1.svg',
+			        ),
+			        '2' => array(
+				        'img' => get_template_directory_uri().'/assets/images/customizer/social_icon_style2.svg',
+			        ),
+			        '3' => array(
+				        'img' => get_template_directory_uri().'/assets/images/customizer/social_icon_style3.svg',
+			        ),
+			        '4' => array(
+				        'img' => get_template_directory_uri().'/assets/images/customizer/social_icon_style4.svg',
+			        ),
+			        '5' => array(
+				        'img' => get_template_directory_uri().'/assets/images/customizer/social_icon_style5.svg',
+			        ),
+		        )
+	        ),
 
             array(
                 'name' => $prefix.'size',
                 'type' => 'slider',
                 'device_settings' => true,
                 'section' => $section,
+                'min' => 10,
                 'max' => 150,
                 'selector' => '.header-social-icons i',
                 'css_format' => 'font-size: {{value}};',
