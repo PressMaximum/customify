@@ -152,13 +152,8 @@ figure {
 a {
     color: $color_link;
     text-decoration: none;
-    &:hover,
-    &:focus,
-    &:active {
+    &:hover {
         color: $color_link_hover;
-    }
-    &:focus {
-        outline: thin dotted;
     }
     &:hover,
     &:active {

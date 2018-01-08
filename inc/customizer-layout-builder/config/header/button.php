@@ -209,6 +209,13 @@ class Customify_Builder_Item_Button{
 		        'title'  => __( 'Margin', 'customify' ),
 	        ),
 
+	        array(
+		        'name' => 'header_button_layout',
+		        'type' => 'heading',
+		        'section' => $section,
+		        'title' => __( 'Item Layout', 'customify' )
+	        ),
+
             array(
                 'name' => 'header_button_align',
                 'type' => 'text_align_no_justify',

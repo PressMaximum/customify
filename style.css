@@ -2273,11 +2273,8 @@ a {
   color: #003f69;
   text-decoration: none;
 }
-a:hover, a:focus, a:active {
+a:hover {
   color: #003f69;
-}
-a:focus {
-  outline: thin dotted;
 }
 a:hover, a:active {
   outline: 0;
@@ -2884,7 +2881,7 @@ article.comment .comment-post-author {
 }
 
 /* Button */
-.customify-button {
+.customify-builder-btn {
   padding: 0.3819820591em 1em;
   background: #7aa93c;
   color: #FFFFFF;
@@ -2892,11 +2889,10 @@ article.comment .comment-post-author {
   display: inline-block;
   position: relative;
   text-decoration: none;
-  font-size: 1em;
-  font-weight: bolder;
+  font-weight: 500;
   text-transform: uppercase;
 }
-.customify-button:hover {
+.customify-builder-btn:hover {
   color: #ffffff;
 }
 
@@ -3344,8 +3340,8 @@ article.comment .comment-post-author {
 }
 
 #sidebar-secondary, #sidebar-primary, #main {
-  padding-top: 3em;
-  padding-bottom: 3em;
+  padding-top: 2.617924em;
+  padding-bottom: 2.617924em;
 }
 
 /*-- Layout: content-sidebar --*/
