@@ -11,5 +11,13 @@
         &:last-child {
             margin-right: 0px;
         }
+        a {
+            span {
+                text-transform: uppercase;
+                font-size: ms(-1);
+                margin-left: 6px;
+                font-weight: bolder;
+            }
+        }
     }
 }
