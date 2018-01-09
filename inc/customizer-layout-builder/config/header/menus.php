@@ -185,8 +185,8 @@ class Customify_Builder_Item_Primary_Menu {
             'theme_location' => $this->theme_location,
             'container' => 'nav',
             'container_id' => 'site-navigation-__id__-__device__',
-            'container_class' => 'primary-menu nav-menu-__device__ primary-menu-__device__'.( $style ? ' '.$style : '' ),
-            'menu_id'        => 'primary-menu-__id__-__device__',
+            'container_class' => $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' ),
+            'menu_id'        => $this->id.'-__id__-__device__',
             'fallback_cb' => false
         ) );
 
