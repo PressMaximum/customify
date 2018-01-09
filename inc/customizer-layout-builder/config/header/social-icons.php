@@ -77,25 +77,25 @@ class Customify_Builder_Item_Social_Icons {
 			),
 
 			array(
-				'name'    => $prefix . '_predefined_style',
+				'name'    => $prefix . '_preset',
 				'type'    => 'image_select',
-				'default' => '1',
+				'default' => 'plain',
 				'section' => $section,
-				'title'   => __( 'Icon style', 'customify' ),
+				'title'   => __( 'Icon Preset', 'customify' ),
 				'choices' => array(
-					'1' => array(
+					'plain' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style1.svg',
 					),
-					'2' => array(
+					'outline-square' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style2.svg',
 					),
-					'3' => array(
+					'fill-square' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style3.svg',
 					),
-					'4' => array(
+					'fill-rounded' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style4.svg',
 					),
-					'5' => array(
+					'outline-rounded' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style5.svg',
 					),
 				)
@@ -112,6 +112,17 @@ class Customify_Builder_Item_Social_Icons {
 				'css_format'      => 'font-size: {{value}};',
 				'render_callback' => $fn,
 				'label'           => __( 'Icon Size', 'customify' ),
+			),
+			array(
+				'name'            => $prefix . '_spacing',
+				'type'            => 'slider',
+				'device_settings' => true,
+				'section'         => $section,
+				'min'             => 2,
+				'max'             => 20,
+				'selector'        => '.header-social-icons li',
+				'css_format'      => 'margin-left: {{value}}; margin-right: {{value}};',
+				'label'           => __( 'Icon Spacing', 'customify' ),
 			),
 
 			array(
@@ -154,12 +165,17 @@ class Customify_Builder_Item_Social_Icons {
 			$target = '_blank';
 		}
 
+		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset' );
+
 		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
 		if ( ! empty( $items ) ) {
 
-			$classes   = array();
+			$classes   = array( 'header-social-icons customify-builder-social-icons' );
+			if ( $preset ) {
+				$classes[] = 'is-'.$preset;
+			}
 
-			echo '<ul class="header-social-icons customify-builder-social-icons">';
+			echo '<ul class="' . esc_attr( join( " ", $classes ) ) . '">';
 			foreach ( ( array ) $items as $index => $item ) {
 				$item = wp_parse_args( $item, array(
 					'title'       => '',

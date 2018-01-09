@@ -7,9 +7,12 @@
     li {
         list-style: none;
         display: inline-block;
-        margin-right: 10px;
+        margin: 0px 6px;
         &:last-child {
             margin-right: 0px;
+        }
+        &:first-child {
+            margin-left: 0px;
         }
         a {
 

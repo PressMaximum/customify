@@ -2822,6 +2822,7 @@ article.comment .comment-post-author {
 
 .builder-item .item--inner {
   display: inline-block;
+  vertical-align: middle;
 }
 .builder-item.builder-item--group .item--inner {
   margin-right: 1.5em;
@@ -2899,12 +2900,17 @@ article.comment .comment-post-author {
   position: relative;
   text-decoration: none;
   font-size: 1em;
-  font-weight: bolder;
-  text-transform: uppercase;
+  font-weight: 500;
   transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
 }
 .customify-builder-btn:hover {
   color: #ffffff;
+}
+.customify-builder-btn.is-icon-before i {
+  margin-right: 4px;
+}
+.customify-builder-btn.is-icon-after i {
+  margin-left: 5px;
 }
 
 /* HTML 1 */
@@ -3177,10 +3183,13 @@ article.comment .comment-post-author {
 .customify-builder-social-icons li {
   list-style: none;
   display: inline-block;
-  margin-right: 10px;
+  margin: 0px 6px;
 }
 .customify-builder-social-icons li:last-child {
   margin-right: 0px;
+}
+.customify-builder-social-icons li:first-child {
+  margin-left: 0px;
 }
 
 /*--------------------------------------------------------------
