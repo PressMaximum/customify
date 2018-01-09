@@ -7,7 +7,7 @@ class Customify_Builder_Item_Nav_Icon{
             'name' => __( 'Nav Icon', 'customify' ),
             'id' => 'nav-icon',
             'width' => '3',
-            'devices' => 'mobile',
+            //'devices' => 'mobile',
             'section' => 'header_nav_icon' // Customizer section to focus when click settings
         );
     }
