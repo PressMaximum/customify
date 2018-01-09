@@ -39,15 +39,6 @@ class Customify_Builder_Item_Nav_Icon{
             ),
 
             array(
-                'name' => 'nav_icon',
-                'type' => 'icon',
-                'section' => $section,
-                'selector' => $selector,
-                'render_callback' => $fn,
-                'title' => __( 'Icon', 'customify' ),
-            ),
-
-            array(
                 'name' => 'nav_icon_text',
                 'type' => 'text',
                 'section' => $section,
@@ -64,19 +55,26 @@ class Customify_Builder_Item_Nav_Icon{
                 'selector' => $selector,
                 'render_callback' => $fn,
                 'default' => 1,
-                'title' => __( 'Show Label', 'customify' ),
                 'checkbox_label' => __( 'Show Label', 'customify' ),
             ),
 
             array(
                 'name' => 'nav_icon_size',
-                'type' => 'slider',
+                'type' => 'radio_group',
                 'section' => $section,
-                'selector' => $selector.' i',
+                'selector' => $selector,
                 'render_callback' => $fn,
-                'max' => 100,
-                'css_format' => 'font-size: {{value}};',
+                'css_format' => 'html_class',
                 'title' => __( 'Icon Size', 'customify' ),
+                'default' => 'is-default',
+                'choices' => array(
+                      'is-xs' => __( 'XS', 'customify' ),
+                      'is-s' => __( 'S', 'customify' ),
+                      'is-default' => __( 'Default', 'customify' ),
+                      'is-m' => __( 'M', 'customify' ),
+                      'is-l' => __( 'L', 'customify' ),
+                      'is-xl' => __( 'XL', 'customify' ),
+                )
             ),
 
             array(
@@ -132,6 +130,7 @@ class Customify_Builder_Item_Nav_Icon{
         $show_label = Customify_Customizer()->get_setting('nav_icon_show_text');
         $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
         $icon = Customify_Customizer()->get_setting('nav_icon' );
+        $size = Customify_Customizer()->get_setting('nav_icon_size' );
         $icon = Customify_Customizer()->setup_icon( $icon );
 
         $classes = array('nav-mobile-toggle item-button');
@@ -140,19 +139,22 @@ class Customify_Builder_Item_Nav_Icon{
         } else {
             $classes[] = 'nav-hide-label';
         }
+        $classes[] = $size;
 
         if( $style ) {
             $classes[] = $style;
         }
 
         ?>
-        <span class="<?php echo esc_attr( join(' ', $classes ) ); ?>"><?php
-            if ( $icon['icon'] ) {
-                echo '<i class="'.esc_attr( $icon['icon'] ).'"></i>';
-            }
+        <span class="<?php echo esc_attr( join(' ', $classes ) ); ?>">
+            <span class="hamburger hamburger--squeeze">
+                <span class="hamburger-box">
+                  <span class="hamburger-inner"></span>
+                </span>
+              </span>
+            <?php
             if ( $show_label ) {
-                echo $label;
-
+                echo '<span class="nav-icon--label">'.$label.'</span>';
             }
             ?></span>
         <?php

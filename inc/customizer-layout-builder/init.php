@@ -883,7 +883,18 @@ class Customify_Customizer_Layout_Builder_Frontend {
              $mobile_items= array();
          }
          if ( ! empty( $mobile_items ) || is_customize_preview() ) {
-             echo '<div id="mobile-header-panel" class="mobile-header-panel mobile-sidebar-panel">';
+
+             $animate = Customify_Customizer()->get_setting( 'header_sidebar_animate' );
+             if ( ! $animate ) {
+                 $animate = 'slide_left';
+             }
+
+             $animate = 'slide_right';
+
+             $classes = array('mobile-header-panel mobile-sidebar-panel');
+             $classes[] = 'animate-'.$animate;
+
+             echo '<div id="mobile-header-panel" class="'.esc_attr( join( ' ', $classes )  ).'">';
                  echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
                      echo $this->close_icon('close-panel' );
                      foreach( $mobile_items as $item ) {

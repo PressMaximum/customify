@@ -1,0 +1,186 @@
+/* Nav Icon */
+
+
+$nav_icon_sizes: (
+    xs: (
+            width: 16px,
+            height: 2px,
+    ),
+    s: (
+            width: 20px,
+            height: 4px,
+    ),
+    default: (
+            width: 30px,
+            height: 4px,
+    ),
+    m: (
+            width: 40px,
+            height: 5px,
+    ),
+    l: (
+            width: 50px,
+            height: 6px,
+    ),
+    xl: (
+            width: 60px,
+            height: 8px,
+    ),
+) !default;
+
+$hamburger-layer-border-radius             : 0px !default;
+$hamburger-hover-opacity                   : 0.7 !default;
+$hamburger-hover-transition-duration       : 0.15s !default;
+
+$hamburger-layer-color                     : #000 !default;
+$hamburger-hover-transition-timing-function: linear !default;
+
+// To use CSS filters as the hover effect instead of opacity,
+// set $hamburger-hover-use-filter as true and
+// change the value of $hamburger-hover-filter accordingly.
+$hamburger-hover-use-filter: false !default;
+$hamburger-hover-filter    : opacity(50%) !default;
+
+// Hamburger
+// ==================================================
+.hamburger {
+    padding: 0;
+    display: inline-block;
+    cursor: pointer;
+    transition-property: opacity, filter;
+    transition-duration: $hamburger-hover-transition-duration;
+    transition-timing-function: $hamburger-hover-transition-timing-function;
+
+    // Normalize (<button>)
+    font: inherit;
+    color: inherit;
+    text-transform: none;
+    background-color: transparent;
+    border: 0;
+    margin: 0;
+    overflow: visible;
+
+    &:hover {
+        @if $hamburger-hover-use-filter == true {
+            filter: $hamburger-hover-filter;
+        }
+        @else {
+            opacity: $hamburger-hover-opacity;
+        }
+    }
+}
+
+.hamburger-box {
+    //width: $hamburger-layer-width;
+    //height: $hamburger-layer-height * 3 + $hamburger-layer-spacing * 2;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+}
+
+.hamburger-inner {
+    display: block;
+    top: 50%;
+    //margin-top: $hamburger-layer-height / -2;
+
+    &,
+    &::before,
+    &::after {
+        //width: $hamburger-layer-width;
+       // height: $hamburger-layer-height;
+        background-color: $hamburger-layer-color;
+        border-radius: $hamburger-layer-border-radius;
+        position: absolute;
+        transition-property: transform;
+        transition-duration: 0.15s;
+        transition-timing-function: ease;
+    }
+
+
+    &::before,
+    &::after {
+        content: "";
+        display: block;
+    }
+
+    &::before {
+       // top: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
+    }
+
+    &::after {
+        //bottom: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
+    }
+}
+
+@mixin nav_icon_size(){
+    @each $key, $settings in $nav_icon_sizes {
+        .is-#{$key} {
+            .hamburger {
+                .hamburger-box {
+                    width: map-get($settings, width);
+                    height: map-get($settings, width);
+                }
+                .hamburger-inner {
+                    margin-top: map-get($settings, height) / -2;
+                    &,
+                    &::before,
+                    &::after {
+                        width: map-get($settings, width);
+                        height: map-get($settings, height);
+                    }
+                    &::before {
+                        top:  - ( ( map-get($settings, width) - ( map-get($settings, height) * 2 / 2 ) ) / 2 );
+                    }
+
+                    &::after {
+                        bottom: - ( ( map-get($settings, width) - ( map-get($settings, height)*2 / 2 ) ) / 2 );
+                    }
+                }
+            }
+        }
+    }
+}
+
+@include nav_icon_size();
+
+/*
+* Squeeze
+*/
+.hamburger--squeeze {
+    .hamburger-inner {
+        transition-duration: 0.075s;
+        transition-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
+        &::before {
+            transition: top 0.075s 0.12s ease,
+            opacity 0.075s ease;
+        }
+
+        &::after {
+            transition: bottom 0.075s 0.12s ease,
+            transform 0.075s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+        }
+    }
+
+    &.is-active {
+        .hamburger-inner {
+            transform: rotate(45deg);
+            transition-delay: 0.12s;
+            transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+            &::before {
+                top: 0;
+                opacity: 0;
+                transition: top 0.075s ease,
+                opacity 0.075s 0.12s ease;
+            }
+
+            &::after {
+                bottom: 0;
+                transform: rotate(-90deg);
+                transition: bottom 0.075s ease,
+                transform 0.075s 0.12s cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+        }
+    }
+}

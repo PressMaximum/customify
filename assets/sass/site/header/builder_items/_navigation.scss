@@ -87,7 +87,6 @@ $submenu_width: 14em;
                 > a {
                     padding-right: 30px !important;
                 }
-
             }
             .nav-t-icon {
                 width: 30px;
@@ -135,23 +134,36 @@ $submenu_width: 14em;
 * ---------------------------------------------
  */
 
+$menu_sidebar_width: 300px;
+
 #mobile-header-panel {
     padding: 0;
     position: fixed;
     width: 100%;
-    height: auto;
     top: 0;
-    left: 0px;
+
     z-index: 9999999;
     visibility: hidden;
-    transform: translate3d(-100%,0,0);
+
     transition: transform .5s cubic-bezier(.79,.14,.15,.86);
     background: #333333;
+    &.animate-slide_left {
+        width: $menu_sidebar_width;
+        left: 0;
+        transform: translate3d( - 100% ,0,0);
+    }
+
+    &.animate-slide_right {
+        transform: translate3d( 200%,0,0);
+        width: $menu_sidebar_width;
+        right: 0;
+    }
+
 }
 
 .display-mobile-header-panel, .display-mobile-form-panel {
-    transform-origin: 35px 50px 0;
-    box-shadow: 0 0 46px #000;
+    //transform-origin: 35px 50px 0;
+    //box-shadow: 0 0 46px #000;
 }
 #page {
     transition: transform .7s ease;
@@ -159,35 +171,53 @@ $submenu_width: 14em;
 
 .hiding-mobile-header-panel {
     #mobile-header-panel {
-        transform: translateX(-100%);
-        transition: transform .5s cubic-bezier(.79,.14,.15,.86);
+        &.animate-slide_left{
+            transform: translateX(-100%);
+            transition: transform .5s cubic-bezier(.79,.14,.15,.86);
+        }
         //left: 0;
         visibility: visible;
+        &.animate-slide_right {
+            transform: translateX(200%);
+        }
     }
+
 }
 .body-y-hidden {
     overflow: hidden !important;
 }
 .display-mobile-header-panel, .display-mobile-form-panel {
-    overflow: hidden;
+    //overflow: hidden;
+    overflow-x: hidden;
     #wpadminbar {
-        display: none;
+       // display: none;
     }
     #page {
-        position: fixed;
-        transform: scale3d(.9,.9,.9);
-        box-shadow: 0 0 46px #000;
+        // position: fixed;
+        // transform: scale3d(.9,.9,.9);
+        // box-shadow: 0 0 46px #000;
     }
 }
 
 .display-mobile-header-panel {
     #mobile-header-panel {
-        height: auto;
-        overflow: auto;
-        transform: translate3d(0, 0, 0);
-        left: 0;
-        visibility: visible;
+        &.animate-slide_left {
+            height: auto;
+            overflow: auto;
+            transform: translate3d(0, 0, 0);
+            left: 0;
+            visibility: visible;
+        }
+        &.animate-slide_right {
+            height: auto;
+            overflow: auto;
+            transform: translate3d(0, 0, 0);
+            right: 0;
+            visibility: visible;
+        }
     }
+
+
 }
 
 .builder-item-sidebar {
