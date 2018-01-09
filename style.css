@@ -3162,25 +3162,19 @@ article.comment .comment-post-author {
 }
 
 /* Social Icons */
-.header-social-icons {
+.customify-builder-social-icons {
   display: inline-block;
   margin: 0px;
   padding: 0px;
   list-style: none;
 }
-.header-social-icons li {
+.customify-builder-social-icons li {
   list-style: none;
   display: inline-block;
   margin-right: 10px;
 }
-.header-social-icons li:last-child {
+.customify-builder-social-icons li:last-child {
   margin-right: 0px;
-}
-.header-social-icons li a span {
-  text-transform: uppercase;
-  font-size: 0.875em;
-  margin-left: 6px;
-  font-weight: bolder;
 }
 
 /*--------------------------------------------------------------
