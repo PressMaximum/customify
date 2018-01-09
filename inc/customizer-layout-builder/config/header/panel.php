@@ -409,11 +409,11 @@ if ( ! function_exists( 'customify_header_merge_item_settings' ) ) {
             'device_settings' => true,
             'devices' => array( 'desktop', 'mobile' ),
             'title' => __('Merge Item', 'customify'),
-            'description' => __('If you choice merge item, the alignment of item will inherit from first item of the group.', 'customify'),
+            'description' => __('If you choose to merge this item, the alignment setting will inherit from the item you are merging.', 'customify'),
             'choices' => array(
                 0 => __('No', 'customify'),
-                'prev' => __('Merge with previous item', 'customify'),
-                'next' => __('Merge with next item', 'customify'),
+                'prev' => __('Merge with left item', 'customify'),
+                'next' => __('Merge with right item', 'customify'),
 
             )
         );

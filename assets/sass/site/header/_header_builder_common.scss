@@ -11,6 +11,7 @@
 .builder-item {
     .item--inner {
         display: inline-block;
+        vertical-align: middle;
     }
     &.builder-item--group {
         .item--inner {

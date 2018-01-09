@@ -76,7 +76,6 @@ class Customify_Builder_Item_Button {
 				'section'         => $section,
 				'selector'        => $selector,
 				'render_callback' => $fn,
-				'default'         => 1,
 				'checkbox_label'  => __( 'Open link in new window.', 'customify' ),
 			),
 
@@ -334,7 +333,7 @@ class Customify_Builder_Item_Button {
 		if ( $icon['icon'] ) {
 			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
 		}
-		$classes[] = 'is_icon_' . $icon_position;
+		$classes[] = 'is-icon-' . $icon_position;
 
 		echo '<a' . $target . ' href="' . esc_url( $link ) . '" class="' . esc_attr( join( " ", $classes ) ) . '">';
 		if ( $icon_position != 'after' ) {
