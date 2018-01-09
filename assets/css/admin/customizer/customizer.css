@@ -450,14 +450,14 @@
 }
 
 .customify-image-preview {
-  margin: 10px 0;
+  margin: 10px 0 12px;
   display: block;
 }
 .customify-image-preview:before {
   content: attr(data-no-file-text);
   display: block;
   border: 1px dashed #DDDDDD;
-  padding: 25px;
+  padding: 9px 0px;
   text-align: center;
 }
 .customify-image-preview.customify--has-file:before {

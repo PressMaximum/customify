@@ -19,12 +19,26 @@ class Customify_Builder_Item_Logo {
         $config  = array(
 
             array(
+                'name' => 'logo_height',
+                'type' => 'slider',
+                'section' =>  $section,
+                'default' => array(),
+                'max' => 200,
+                'priority' => 8,
+                'device_settings' => true,
+                'title' => __( 'Logo Height', 'customify' ),
+                'selector' => $selector.' img',
+                'css_format' => 'max-height: {{value}};'
+            ),
+
+            array(
                 'name' => 'header_logo_retina',
                 'type' => 'image',
                 'section' =>  $section,
                 'device_settings' => false,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
+                'priority' => 9,
                 'title' => __( 'Logo Retina', 'customify' )
             ),
 
@@ -54,18 +68,6 @@ class Customify_Builder_Item_Logo {
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),
                 ),
-            ),
-
-            array(
-                'name' => 'logo_height',
-                'type' => 'slider',
-                'section' =>  $section,
-                'default' => array(),
-                'max' => 200,
-                'device_settings' => true,
-                'title' => __( 'Logo Height', 'customify' ),
-                'selector' => $selector.' img',
-                'css_format' => 'max-height: {{value}};'
             ),
 
             array(
