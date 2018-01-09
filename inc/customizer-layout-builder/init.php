@@ -889,7 +889,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
                  $animate = 'slide_left';
              }
 
-             $animate = 'slide_right';
+             //$animate = 'slide_right';
 
              $classes = array('mobile-header-panel mobile-sidebar-panel');
              $classes[] = 'animate-'.$animate;
