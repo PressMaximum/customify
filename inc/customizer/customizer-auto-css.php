@@ -28,7 +28,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             'color' => null,
             'image' => null,
             'position' => null,
-            'cove'=> null,
+            'cover'=> null,
             'repeat'=> null,
             'attachment'=> null,
 
@@ -603,7 +603,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             foreach ( $fields as $field ) {
                 $v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
                 if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
-                    if ($field['selector'] && $field['css_format']) {
+                    if ( isset( $field['selector'] ) && $field['selector'] && $field['css_format']) {
                         switch ($field['type']) {
                             case 'css_ruler':
                                 $this->css_ruler($field, $v);

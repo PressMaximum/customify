@@ -59,7 +59,6 @@ class Customify_Customizer_Layout_Builder {
                 'nav-icon',
                 'search',
                 'button',
-                'icon-list',
                 'social-icons',
             ),
             'footer' => array(
@@ -755,6 +754,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
             }
 
             $classes[] = 'builder-item builder-first--' . $first_id;
+            if ( count( $item['items'] ) > 1 ) {
+                $classes[] = 'builder-item--group';
+            }
 
             $classes = apply_filters('customify/builder/item-wrapper-classes', $classes, $item);
             $classes = join(' ', $classes); // customify-grid-middle

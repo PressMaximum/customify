@@ -200,6 +200,5 @@ class Customify_Builder_Item_Social_Icons {
 
 }
 
-
 Customify_Customizer_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Social_Icons() );
 
