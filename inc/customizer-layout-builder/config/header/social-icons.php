@@ -79,9 +79,16 @@ class Customify_Builder_Item_Social_Icons {
 			array(
 				'name'    => $prefix . '_preset',
 				'type'    => 'image_select',
-				'default' => 'plain',
 				'section' => $section,
+				'render_callback' => $fn,
 				'title'   => __( 'Icon Preset', 'customify' ),
+				'selector'=> '.header-social-icons',
+				'device_settings' => true,
+				'default'         => array (
+					'desktop' => 'plain',
+					'tablet' => 'plain',
+					'mobile' => 'plain',
+				),
 				'choices' => array(
 					'plain' => array(
 						'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style1.svg',
@@ -100,18 +107,25 @@ class Customify_Builder_Item_Social_Icons {
 					),
 				)
 			),
-
 			array(
 				'name'            => $prefix . '_size',
-				'type'            => 'slider',
-				'device_settings' => true,
+				'type'            => 'radio_group',
 				'section'         => $section,
-				'min'             => 10,
-				'max'             => 150,
-				'selector'        => '.header-social-icons i',
-				'css_format'      => 'font-size: {{value}};',
 				'render_callback' => $fn,
-				'label'           => __( 'Icon Size', 'customify' ),
+				'title'           => __( 'Icon Size', 'customify' ),
+				'selector'        => '.header-social-icons',
+				'default'         => array (
+					'desktop' => 'medium',
+					'tablet' => 'medium',
+					'mobile' => 'medium',
+				),
+				'device_settings' => true,
+				'choices'         => array(
+					's'       => __( 'Small', 'customify' ),
+					'medium'  => __( 'Medium', 'customify' ),
+					'l'       => __( 'Large', 'customify' ),
+					'xl'      => __( 'X-Large', 'customify' ),
+				)
 			),
 			array(
 				'name'            => $prefix . '_spacing',
@@ -153,26 +167,30 @@ class Customify_Builder_Item_Social_Icons {
 
 	function render( $item_config ) {
 
+		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset' );
+		$size = Customify_Customizer()->get_setting( 'header_social_icons_size' );
+		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
 		$nofollow      = Customify_Customizer()->get_setting( 'header_social_icons_nofollow' );
+		$target_blank = Customify_Customizer()->get_setting( 'header_social_icons_target' );
+
 		$rel = '';
 		if ( $nofollow == 1 ) {
 			$rel = 'rel="nofollow" ';
 		}
 
-		$target_blank = Customify_Customizer()->get_setting( 'header_social_icons_target' );
 		$target       = '_self';
 		if ( $target_blank == 1 ) {
 			$target = '_blank';
 		}
 
-		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset' );
-
-		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
 		if ( ! empty( $items ) ) {
 
 			$classes   = array( 'header-social-icons customify-builder-social-icons' );
 			if ( $preset ) {
-				$classes[] = 'is-'.$preset;
+				$classes[] = 'is-style-'.$preset;
+			}
+			if ( $size ) {
+				$classes[] = 'is-size-'.$size;
 			}
 
 			echo '<ul class="' . esc_attr( join( " ", $classes ) ) . '">';
@@ -189,17 +207,18 @@ class Customify_Builder_Item_Social_Icons {
 					if ( ! $item['url'] ) {
 						$item['url'] = '#';
 					}
-					if ( $item['url'] ) {
-						echo '<a '.$rel.'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '">';
-					}
 
 					$icon = wp_parse_args( $item['icon'], array(
 						'type' => '',
 						'icon' => '',
 					) );
 
+					if ( $item['url'] && $icon['icon'] ) {
+						echo '<a class="is-'. str_replace( ' ', '', esc_attr( $icon['icon'] )) .'" '.$rel.'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '">';
+					}
+
 					if ( $icon['icon'] ) {
-						echo '<i class="' . esc_attr( $icon['icon'] ) . '"></i>';
+						echo '<i class="icon ' . esc_attr( $icon['icon'] ) . '"></i>';
 					}
 
 					if ( $item['url'] ) {
