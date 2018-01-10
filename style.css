@@ -2364,7 +2364,7 @@ button:hover,
 input[type="button"]:hover,
 input[type="reset"]:hover,
 input[type="submit"]:hover {
-  background: #111111;
+  box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
 button:active, button:focus,
 input[type="button"]:active,
@@ -2800,7 +2800,7 @@ article.comment .comment-post-author {
 }
 
 .header-main {
-  color: #999999;
+  color: #666666;
   padding: 0px;
 }
 
@@ -2809,6 +2809,7 @@ article.comment .comment-post-author {
   border-left: none;
   border-right: none;
   background: #f0f0f0;
+  color: #666666;
 }
 
 /* Header Builder Common */
@@ -2906,6 +2907,7 @@ article.comment .comment-post-author {
 }
 .customify-builder-btn:hover {
   color: #ffffff;
+  box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
 .customify-builder-btn.is-icon-before i {
   margin-right: 4px;
@@ -3289,7 +3291,7 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-fill-square a:hover {
-  background: #7aa93c;
+  box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
 .customify-builder-social-icons.is-style-fill-square.is-size-s a i {
   font-size: 12px;

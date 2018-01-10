@@ -249,7 +249,7 @@ input[type="submit"] {
     text-transform: uppercase;
     transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
     &:hover {
-        background: darken($color_text, 20%);
+        box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
     }
 
     &:active,
