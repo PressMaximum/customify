@@ -319,6 +319,7 @@ $cb_padding: 20px;
     @include clearfix();
     clear: both;
     margin-top: 20px;
+    width: 100%;
     display: inline-block;
     &.customify--panel-hide {
         height: 0px;
