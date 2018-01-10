@@ -45,6 +45,14 @@
         &.is-size-s a i { font-size: 13px }
         &.is-size-l a i { font-size: 22px }
         &.is-size-xl a i { font-size: 28px }
+
+        @each $mq-key, $mq-value in $gl-devices-list {
+            @media #{$mq-value} {
+                &.is-size-#{$mq-key}-s a i { font-size: 13px }
+                &.is-size-#{$mq-key}-l a i { font-size: 22px }
+                &.is-size-#{$mq-key}-xl a i { font-size: 28px }
+            }
+        }
     }
 
     &.is-style-outline-square {
@@ -64,6 +72,14 @@
         &.is-size-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
         &.is-size-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
         &.is-size-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+
+        @each $mq-key, $mq-value in $gl-devices-list {
+            @media #{$mq-value} {
+                &.is-size-#{$mq-key}-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
+                &.is-size-#{$mq-key}-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
+                &.is-size-#{$mq-key}-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+            }
+        }
     }
     &.is-style-fill-square {
         a {
@@ -83,6 +99,14 @@
         &.is-size-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
         &.is-size-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
         &.is-size-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+
+        @each $mq-key, $mq-value in $gl-devices-list {
+            @media #{$mq-value} {
+                &.is-size-#{$mq-key}-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
+                &.is-size-#{$mq-key}-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
+                &.is-size-#{$mq-key}-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+            }
+        }
     }
 
     &.is-style-outline-rounded {
@@ -105,6 +129,14 @@
         &.is-size-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
         &.is-size-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
         &.is-size-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+
+        @each $mq-key, $mq-value in $gl-devices-list {
+            @media #{$mq-value} {
+                &.is-size-#{$mq-key}-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
+                &.is-size-#{$mq-key}-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
+                &.is-size-#{$mq-key}-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+            }
+        }
     }
 
     &.is-style-fill-rounded {
@@ -128,6 +160,13 @@
         &.is-size-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
         &.is-size-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
         &.is-size-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+        @each $mq-key, $mq-value in $gl-devices-list {
+            @media #{$mq-value} {
+                &.is-size-#{$mq-key}-s a i { font-size: 12px; width: 18px; height: 18px;line-height: 18px;}
+                &.is-size-#{$mq-key}-l a i { font-size: 22px; width: 30px; height: 30px;line-height: 30px;}
+                &.is-size-#{$mq-key}-xl a i { font-size: 24px; width: 34px; height: 34px;line-height: 34px;}
+            }
+        }
     }
 }
 
