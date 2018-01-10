@@ -3232,7 +3232,11 @@ article.comment .comment-post-author {
   display: block;
 }
 .customify-builder-social-icons a:hover {
-  color: #003f69;
+  color: #7aa93c;
+}
+.customify-builder-social-icons.is-size-s a {
+  position: relative;
+  top: -2.5px;
 }
 .customify-builder-social-icons.is-style-plain.is-size-s a i {
   font-size: 13px;
@@ -3244,7 +3248,7 @@ article.comment .comment-post-author {
   font-size: 28px;
 }
 .customify-builder-social-icons.is-style-outline-square a {
-  border: 1px solid currentColor;
+  border: 1px solid;
 }
 .customify-builder-social-icons.is-style-outline-square a i {
   width: 27px;
@@ -3253,8 +3257,8 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-outline-square a:hover {
-  color: #003f69;
-  border-color: #003f69;
+  color: #7aa93c;
+  border-color: #7aa93c;
 }
 .customify-builder-social-icons.is-style-outline-square.is-size-s a i {
   font-size: 12px;
@@ -3285,7 +3289,7 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-fill-square a:hover {
-  background: #003f69;
+  background: #7aa93c;
 }
 .customify-builder-social-icons.is-style-fill-square.is-size-s a i {
   font-size: 12px;
@@ -3306,7 +3310,7 @@ article.comment .comment-post-author {
   line-height: 34px;
 }
 .customify-builder-social-icons.is-style-outline-rounded a {
-  border: 1px solid currentColor;
+  border: 1px solid;
   border-radius: 999px;
 }
 .customify-builder-social-icons.is-style-outline-rounded a i {
@@ -3316,8 +3320,8 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-outline-rounded a:hover:hover {
-  color: #003f69;
-  border-color: #003f69;
+  color: #7aa93c;
+  border-color: #7aa93c;
 }
 .customify-builder-social-icons.is-style-outline-rounded.is-size-s a i {
   font-size: 12px;
@@ -3349,7 +3353,7 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-fill-rounded a:hover:hover {
-  background: #003f69;
+  background: #7aa93c;
 }
 .customify-builder-social-icons.is-style-fill-rounded.is-size-s a i {
   font-size: 12px;

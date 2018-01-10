@@ -136,6 +136,13 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'device_settings' => true,
                 'default' => array(),
                 'fields' => array(
+	                array(
+		                'name' => 'text_color',
+		                'type' => 'color',
+		                'label' => __( 'Text Color', 'customify' ),
+		                'css_format' => 'color: {{value}};',
+		                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
+	                ),
                     array(
                         'name' => 'color',
                         'type' => 'color',
