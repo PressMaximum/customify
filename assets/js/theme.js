@@ -1,5 +1,6 @@
 jQuery( document ).ready( function( $ ){
     var $document = $( document );
+    var menu_sidebar_state = 'closed';
     $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
 
     if ( $( '.search-form--mobile' ).length ) {
@@ -9,13 +10,11 @@ jQuery( document ).ready( function( $ ){
         $( 'body' ).prepend( search_form );
     }
 
-
     var insertNavIcon = function(){
         $( '.menu-item-has-children', $( '#mobile-header-panel .nav-menu-mobile' ) ).each( function(){
             var $el = $( this );
             $( '<span class="nav-t-icon"></span>' ).insertBefore( $( '.sub-menu', $el ) );
         } );
-
     };
 
     var setupMobileHeight = function( $el ){
@@ -24,6 +23,16 @@ jQuery( document ).ready( function( $ ){
             $el = $( '#mobile-header-panel' );
         }
         $el.height( h );
+
+        var t = .1;
+        var index = 0;
+        $( 'ul:not(.sub-menu)', $el ).each( function(){
+            $( ' > li', $( this ) ).each( function( ){
+                index ++ ;
+                $( this ).css( { 'transition-delay' : ( index * t ) + 's' } );
+            } );
+        } );
+
     };
     setupMobileHeight();
     insertNavIcon();
@@ -37,17 +46,42 @@ jQuery( document ).ready( function( $ ){
         $( 'body' ).toggleClass( 'display-mobile-header-panel' );
         $( this ).toggleClass( 'is-active' );
         $( this ).find('.hamburger').toggleClass( 'is-active' );
-    } );
 
-    $document.on( 'click',  '#mobile-header-panel .close-panel', function( e ){
-        e.preventDefault();
+    } );
+    // close icon
+    var close_sidebar = function(){
         $( 'body' ).addClass( 'hiding-mobile-header-panel' );
         $( 'body' ).removeClass( 'display-mobile-header-panel' );
         $('.nav-mobile-toggle .hamburger').removeClass( 'is-active' );
         setTimeout( function () {
             $( 'body' ).removeClass( 'hiding-mobile-header-panel' );
         }, 1000 );
+    };
+
+    $document.on( 'click',  '#mobile-header-panel .close-panel, .close-sidebar-panel', function( e ){
+        e.preventDefault();
+        close_sidebar();
     } );
+
+    $document.on( 'click', function(event) {
+        if ( $( 'body' ).hasClass( 'display-mobile-header-panel' ) ) {
+            console.log(  'has_open_panel' );
+            var $sidebar = $("#mobile-header-panel");
+            var $button = $( '.nav-mobile-toggle' );
+            if (
+                $sidebar.has(event.target).length == 0 //checks if descendants of $box was clicked
+                &&
+                !$sidebar.is(event.target) //checks if the $box itself was clicked
+
+                &&  $button.has(event.target).length == 0
+                && !$button.is(event.target)
+            ) {
+                close_sidebar();
+            } else {
+                //$log.text("you clicked inside the box");
+            }
+        }
+    });
 
     // Toggle sub menu
     $document.on( 'click',  'li .nav-t-icon', function( e ){
@@ -75,13 +109,6 @@ jQuery( document ).ready( function( $ ){
         insertNavIcon();
         //stickyHeaders.load($(".header--row.is-sticky"));
     } );
-
-
-
-
-
-
-
 
 
 

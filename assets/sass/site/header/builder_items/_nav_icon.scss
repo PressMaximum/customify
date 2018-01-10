@@ -5,7 +5,7 @@
 .nav-icon--label {
     background: none !important;
 }
- 
+
 $nav_icon_sizes: (
     small: (
         width: 15px,
@@ -30,7 +30,6 @@ $nav_icon_sizes: (
 $hamburger-layer-border-radius             : 0px !default;
 $hamburger-hover-opacity                   : 0.7 !default;
 $hamburger-hover-transition-duration       : 0.15s !default;
-
 $hamburger-layer-color                     : #666666;
 $hamburger-hover-transition-timing-function: linear !default;
 

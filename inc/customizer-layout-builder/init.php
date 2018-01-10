@@ -884,19 +884,11 @@ class Customify_Customizer_Layout_Builder_Frontend {
          }
          if ( ! empty( $mobile_items ) || is_customize_preview() ) {
 
-             $animate = Customify_Customizer()->get_setting( 'header_sidebar_animate' );
-             if ( ! $animate ) {
-                 $animate = 'slide_left';
-             }
-
              //$animate = 'slide_right';
-
              $classes = array('mobile-header-panel mobile-sidebar-panel');
-             $classes[] = 'animate-'.$animate;
-
              echo '<div id="mobile-header-panel" class="'.esc_attr( join( ' ', $classes )  ).'">';
                  echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
-                     echo $this->close_icon('close-panel' );
+
                      foreach( $mobile_items as $item ) {
                          $item_id = $item['id'];
                          $content = $this->render_items[$item['id']]['render_content'];
@@ -946,6 +938,7 @@ function customify_customize_render_header(){
     if ( ! customify_is_header_display() ) {
         return ;
     }
+    echo Customify_Customizer_Layout_Builder_Frontend()->close_icon('close-panel close-sidebar-panel' );
     echo '<header id="masthead" class="site-header">';
         $list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
         Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );

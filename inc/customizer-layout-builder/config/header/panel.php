@@ -260,14 +260,15 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'name' => $section.'_animate',
                 'type' => 'select',
                 'section' => $section,
-                'selector' => $selector,
+                'selector' => 'body',
                 'render_callback' => 'customify_customize_render_header',
+                'css_format' => 'html_class',
                 'title' => __( 'Animate', 'customify' ),
                 'default' => 'slide_left',
                 'choices' => array(
-                    'slide_left' => __( 'Left', 'customify' ),
-                    'slide_right' => __( 'Right', 'customify' ),
-                    'overlay' => __( 'Overlay', 'customify' ),
+                    'menu_sidebar_slide_left' => __( 'Left', 'customify' ),
+                    'menu_sidebar_slide_right' => __( 'Right', 'customify' ),
+                    'menu_sidebar_slide_overlay' => __( 'Overlay', 'customify' ),
                 )
             ),
 

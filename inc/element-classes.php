@@ -41,6 +41,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
             $classes[] = sanitize_text_field($site_layout);
         }
 
+        $animate = Customify_Customizer()->get_setting( 'header_sidebar_animate' );
+        if ( ! $animate ) {
+            $animate = 'menu_sidebar_slide_left';
+        }
+        $classes[] = $animate;
+
         return $classes;
     }
 }

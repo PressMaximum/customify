@@ -53,42 +53,6 @@
     }
 }
 
-/* Close Button */
-$close_size: 35px;
-.mobile-sidebar-panel {
-    .close {
-        z-index: 36;
-        cursor: pointer;
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        height: $close_size;
-        width: $close_size;
-        box-sizing: border-box;
-        line-height: $close_size;
-        display: inline-block;
-
-        &:before, &:after {
-            transform: rotate(-45deg);
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-top: -1;
-            margin-left: -$close_size/2;
-            display: block;
-            height: 2px;
-            width: $close_size;
-            background-color: #fff;
-            transition: all 0.2s ease-out;
-        }
-
-        &:after {
-            transform: rotate(45deg);
-        }
-    }
-}
-
 /* Customizer Shortcut */
 #masthead{
     > .customize-partial-edit-shortcut {
