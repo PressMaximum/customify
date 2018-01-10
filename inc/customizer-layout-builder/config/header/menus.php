@@ -159,21 +159,10 @@ class Customify_Builder_Item_Primary_Menu {
                 )
             ),
 
-            array(
-                'name' => $this->prefix.'_align',
-                'type' => 'text_align_no_justify',
-                'section' => $section,
-                'device_settings' => false,
-                'selector' => ".builder-first--{$this->id}",
-                'css_format' => 'text-align: {{value}};',
-                'title'   => __( 'Align', 'customify' ),
-                'description'   => __( 'Apply for desktop only.', 'customify' ),
-            ),
         );
 
-        // Merge Item
-        $config[] = customify_header_merge_item_settings( $this->id, $section );
-        return $config;
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
 
 

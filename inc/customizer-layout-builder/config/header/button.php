@@ -269,44 +269,10 @@ class Customify_Builder_Item_Button {
 				)
 			),
 
-			array(
-				'name'    => $prefix . '_layout',
-				'type'    => 'heading',
-				'section' => $section,
-				'title'   => __( 'Item Layout', 'customify' )
-			),
-
-			array(
-				'name'            => $prefix . '_margin',
-				'type'            => 'css_ruler',
-				'section'         => $section,
-				'device_settings' => true,
-				'css_format'      => array(
-					'top'    => 'margin-top: {{value}};',
-					'right'  => 'margin-right: {{value}};',
-					'bottom' => 'margin-bottom: {{value}};',
-					'left'   => 'margin-left: {{value}};',
-				),
-				'selector'        => $selector,
-				'label'           => __( 'Margin', 'customify' ),
-			),
-
-			array(
-				'name'            => 'header_button_align',
-				'type'            => 'text_align_no_justify',
-				'section'         => $section,
-				'device_settings' => true,
-				'selector'        => '.builder-first--button',
-				'css_format'      => 'text-align: {{value}};',
-				'title'           => __( 'Align', 'customify' ),
-			),
-
 		);
 
-		// Merge Item
-		$config[] = customify_header_merge_item_settings( $this->id, $section );
-
-		return $config;
+		// Item Layout
+		return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
 	}
 
 

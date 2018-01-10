@@ -114,13 +114,6 @@ class Customify_Builder_Item_Nav_Icon{
             ),
 
             array(
-                'name'    => 'header_nav_icon_l_heading',
-                'type'    => 'heading',
-                'section' => $section,
-                'title'   => __( 'Item Layout', 'customify' )
-            ),
-
-            array(
                 'name' => 'nav_icon_padding',
                 'type' => 'css_ruler',
                 'section' => $section,
@@ -134,20 +127,10 @@ class Customify_Builder_Item_Nav_Icon{
                 'title'  => __( 'Icon Padding', 'customify' ),
             ),
 
-
-            array(
-                'name' => 'header_nav_icon_align',
-                'type' => 'text_align_no_justify',
-                'section' => $section,
-                'selector' => '.builder-first--nav-icon',
-                'css_format' => 'text-align: {{value}};',
-                'title'   => __( 'Align', 'customify' ),
-            ),
         );
 
-        // Merge Item
-        $config[] = customify_header_merge_item_settings( $this->id, $section );
-        return $config;
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
 
     function render(){
@@ -179,11 +162,9 @@ class Customify_Builder_Item_Nav_Icon{
             }
         }
 
-
         if( $style ) {
             $classes[] = $style;
         }
-
         ?>
         <span class="<?php echo esc_attr( join(' ', $classes ) ); ?>">
             <span class="hamburger hamburger--squeeze">

@@ -70,31 +70,10 @@ class Customify_Builder_Item_Logo {
                 ),
             ),
 
-            array(
-                'name' => 'header_logo_layout_heading',
-                'type' => 'heading',
-                'section' => $section,
-                'priority' => 800,
-                'title' => __( 'Item Layout', 'customify' )
-            ),
-
-            array(
-                'name' => 'header_logo_align',
-                'type' => 'text_align_no_justify',
-                'section' => $section,
-                'device_settings' => true,
-                'priority' => 820,
-                'selector' => '.builder-first--logo',
-                'css_format' => 'text-align: {{value}};',
-                'title'   => __( 'Align', 'customify' ),
-            ),
-
-
         );
 
-        // Merge Item
-        $config[] = customify_header_merge_item_settings( $this->id, $section );
-        return $config;
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
 
     /**

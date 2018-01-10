@@ -290,15 +290,13 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'name' => $section.'_styling',
                 'type' => 'group',
                 'section' => $section,
-                'title' => __( 'Background', 'customify' ),
+                'title' => __( 'Styling', 'customify' ),
                 'description' => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => '#mobile-header-panel',
                 'css_format' => 'styling',
-                'default' => array(
-
-                ),
+                'default' => array(),
                 'fields' => array(
                     array(
                         'name' => 'color',
@@ -394,7 +392,6 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'required' => array('border_style', '!=', 'none'),
                     ),
 
-
                 )
             ),
 
@@ -404,26 +401,48 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 
 }
 
-if ( ! function_exists( 'customify_header_merge_item_settings' ) ) {
-    function customify_header_merge_item_settings( $item_id = '', $section = '' )
+if ( ! function_exists( 'customify_header_layout_settings' ) ) {
+    function customify_header_layout_settings( $item_id = '', $section = '' )
     {
-        return array(
-            'name' => 'header_'.$item_id.'_merge',
-            'type' => 'select',
-            'section' => $section,
-            'selector' => '#masthead',
-            'render_callback' => 'customify_customize_render_header',
-            'priority' => 999,
-            'device_settings' => true,
-            'devices' => array( 'desktop', 'mobile' ),
-            'title' => __('Merge Item', 'customify'),
-            'description' => __('If you choose to merge this item, the alignment setting will inherit from the item you are merging.', 'customify'),
-            'choices' => array(
-                0 => __('No', 'customify'),
-                'prev' => __('Merge with left item', 'customify'),
-                'next' => __('Merge with right item', 'customify'),
 
+        $layout = array(
+            array(
+                'name'    => 'header_'.$item_id.'_l_heading',
+                'type'    => 'heading',
+                'priority'    => 800,
+                'section' => $section,
+                'title'   => __( 'Item Layout', 'customify' )
+            ),
+
+            array(
+                'name' => 'header_'.$item_id.'n_align',
+                'type' => 'text_align_no_justify',
+                'section' => $section,
+                'priority'    => 820,
+                'selector' => '.builder-first--'.$item_id,
+                'css_format' => 'text-align: {{value}};',
+                'title'   => __( 'Align', 'customify' ),
+            ),
+
+            array(
+                'name' => 'header_'.$item_id.'_merge',
+                'type' => 'select',
+                'section' => $section,
+                'selector' => '#masthead',
+                'render_callback' => 'customify_customize_render_header',
+                'priority' => 999,
+                'device_settings' => true,
+                'devices' => array( 'desktop', 'mobile' ),
+                'title' => __('Merge Item', 'customify'),
+                'description' => __('If you choose to merge this item, the alignment setting will inherit from the item you are merging.', 'customify'),
+                'choices' => array(
+                    0 => __('No', 'customify'),
+                    'prev' => __('Merge with left item', 'customify'),
+                    'next' => __('Merge with right item', 'customify'),
+                )
             )
         );
+
+        return $layout;
     }
 }

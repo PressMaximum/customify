@@ -74,9 +74,8 @@ class Customify_Builder_Item_Cart
             ),
         );
 
-        // Merge Item
-        $config[] = customify_header_merge_item_settings( $this->id, $section );
-        return $config;
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
 
     }
 }

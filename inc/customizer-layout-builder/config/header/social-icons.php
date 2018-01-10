@@ -139,30 +139,10 @@ class Customify_Builder_Item_Social_Icons {
 				'label'           => __( 'Icon Spacing', 'customify' ),
 			),
 
-			array(
-				'name'    => $prefix . '_layout',
-				'type'    => 'heading',
-				'section' => $section,
-				'title'   => __( 'Item Layout', 'customify' )
-			),
-
-			array(
-				'name'            => 'header_social_icons_align',
-				'type'            => 'text_align_no_justify',
-				'section'         => $section,
-				'device_settings' => true,
-				'priority'        => 990,
-				'selector'        => '.builder-first--social-icons',
-				'css_format'      => 'text-align: {{value}};',
-				'title'           => __( 'Align', 'customify' ),
-			),
-
 		);
 
-		// Merge Item
-		$config[] = customify_header_merge_item_settings( $this->id, $section );
-
-		return $config;
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
 	}
 
 	function render( $item_config ) {
