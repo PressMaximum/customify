@@ -102,12 +102,11 @@ $hamburger-hover-filter    : opacity(50%) !default;
 
 @mixin nav_icon_size(){
     @each $key, $settings in $nav_icon_sizes {
-        .is-#{$key} {
+        .is-size-#{$key} {
             .hamburger {
                 .hamburger-box {
                     margin-top: - 2px;
                     width: map-get($settings, width);
-                    //height: map-get($settings, width);
                 }
                 .hamburger-inner {
                     margin-top: map-get($settings, height) / -2;
@@ -128,6 +127,38 @@ $hamburger-hover-filter    : opacity(50%) !default;
             }
         }
     }
+
+    @each $mq-key, $mq-value in $gl-devices-list {
+        @media #{$mq-value} {
+            @each $key, $settings in $nav_icon_sizes {
+                .is-size-#{$mq-key}-#{$key} {
+                    .hamburger {
+                        .hamburger-box {
+                            margin-top: - 2px;
+                            width: map-get($settings, width);
+                        }
+                        .hamburger-inner {
+                            margin-top: map-get($settings, height) / -2;
+                            &,
+                            &::before,
+                            &::after {
+                                width: map-get($settings, width);
+                                height: map-get($settings, height);
+                            }
+                            &::before {
+                                top:  map-get($settings, top);
+                            }
+
+                            &::after {
+                                bottom: map-get($settings, bottom);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @include nav_icon_size();

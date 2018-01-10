@@ -3762,60 +3762,225 @@ Animation
   display: block;
 }
 
-.is-small .hamburger .hamburger-box {
+.is-size-small .hamburger .hamburger-box {
   margin-top: -2px;
   width: 15px;
 }
-.is-small .hamburger .hamburger-inner {
+.is-size-small .hamburger .hamburger-inner {
   margin-top: -1px;
 }
-.is-small .hamburger .hamburger-inner, .is-small .hamburger .hamburger-inner::before, .is-small .hamburger .hamburger-inner::after {
+.is-size-small .hamburger .hamburger-inner, .is-size-small .hamburger .hamburger-inner::before, .is-size-small .hamburger .hamburger-inner::after {
   width: 15px;
   height: 2px;
 }
-.is-small .hamburger .hamburger-inner::before {
+.is-size-small .hamburger .hamburger-inner::before {
   top: -4px;
 }
-.is-small .hamburger .hamburger-inner::after {
+.is-size-small .hamburger .hamburger-inner::after {
   bottom: -4px;
 }
 
-.is-medium .hamburger .hamburger-box {
+.is-size-medium .hamburger .hamburger-box {
   margin-top: -2px;
   width: 24px;
 }
-.is-medium .hamburger .hamburger-inner {
+.is-size-medium .hamburger .hamburger-inner {
   margin-top: -1px;
 }
-.is-medium .hamburger .hamburger-inner, .is-medium .hamburger .hamburger-inner::before, .is-medium .hamburger .hamburger-inner::after {
+.is-size-medium .hamburger .hamburger-inner, .is-size-medium .hamburger .hamburger-inner::before, .is-size-medium .hamburger .hamburger-inner::after {
   width: 24px;
   height: 2px;
 }
-.is-medium .hamburger .hamburger-inner::before {
+.is-size-medium .hamburger .hamburger-inner::before {
   top: -8px;
 }
-.is-medium .hamburger .hamburger-inner::after {
+.is-size-medium .hamburger .hamburger-inner::after {
   bottom: -8px;
 }
 
-.is-large .hamburger .hamburger-box {
+.is-size-large .hamburger .hamburger-box {
   margin-top: -2px;
   width: 36px;
 }
-.is-large .hamburger .hamburger-inner {
+.is-size-large .hamburger .hamburger-inner {
   margin-top: -1.5px;
 }
-.is-large .hamburger .hamburger-inner, .is-large .hamburger .hamburger-inner::before, .is-large .hamburger .hamburger-inner::after {
+.is-size-large .hamburger .hamburger-inner, .is-size-large .hamburger .hamburger-inner::before, .is-size-large .hamburger .hamburger-inner::after {
   width: 36px;
   height: 3px;
 }
-.is-large .hamburger .hamburger-inner::before {
+.is-size-large .hamburger .hamburger-inner::before {
   top: -10px;
 }
-.is-large .hamburger .hamburger-inner::after {
+.is-size-large .hamburger .hamburger-inner::after {
   bottom: -10px;
 }
 
+@media screen and (min-width: 64em) {
+  .is-size-desktop-small .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 15px;
+  }
+  .is-size-desktop-small .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-desktop-small .hamburger .hamburger-inner, .is-size-desktop-small .hamburger .hamburger-inner::before, .is-size-desktop-small .hamburger .hamburger-inner::after {
+    width: 15px;
+    height: 2px;
+  }
+  .is-size-desktop-small .hamburger .hamburger-inner::before {
+    top: -4px;
+  }
+  .is-size-desktop-small .hamburger .hamburger-inner::after {
+    bottom: -4px;
+  }
+
+  .is-size-desktop-medium .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 24px;
+  }
+  .is-size-desktop-medium .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-desktop-medium .hamburger .hamburger-inner, .is-size-desktop-medium .hamburger .hamburger-inner::before, .is-size-desktop-medium .hamburger .hamburger-inner::after {
+    width: 24px;
+    height: 2px;
+  }
+  .is-size-desktop-medium .hamburger .hamburger-inner::before {
+    top: -8px;
+  }
+  .is-size-desktop-medium .hamburger .hamburger-inner::after {
+    bottom: -8px;
+  }
+
+  .is-size-desktop-large .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 36px;
+  }
+  .is-size-desktop-large .hamburger .hamburger-inner {
+    margin-top: -1.5px;
+  }
+  .is-size-desktop-large .hamburger .hamburger-inner, .is-size-desktop-large .hamburger .hamburger-inner::before, .is-size-desktop-large .hamburger .hamburger-inner::after {
+    width: 36px;
+    height: 3px;
+  }
+  .is-size-desktop-large .hamburger .hamburger-inner::before {
+    top: -10px;
+  }
+  .is-size-desktop-large .hamburger .hamburger-inner::after {
+    bottom: -10px;
+  }
+}
+@media screen and (max-width: 64em) {
+  .is-size-tablet-small .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 15px;
+  }
+  .is-size-tablet-small .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-tablet-small .hamburger .hamburger-inner, .is-size-tablet-small .hamburger .hamburger-inner::before, .is-size-tablet-small .hamburger .hamburger-inner::after {
+    width: 15px;
+    height: 2px;
+  }
+  .is-size-tablet-small .hamburger .hamburger-inner::before {
+    top: -4px;
+  }
+  .is-size-tablet-small .hamburger .hamburger-inner::after {
+    bottom: -4px;
+  }
+
+  .is-size-tablet-medium .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 24px;
+  }
+  .is-size-tablet-medium .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-tablet-medium .hamburger .hamburger-inner, .is-size-tablet-medium .hamburger .hamburger-inner::before, .is-size-tablet-medium .hamburger .hamburger-inner::after {
+    width: 24px;
+    height: 2px;
+  }
+  .is-size-tablet-medium .hamburger .hamburger-inner::before {
+    top: -8px;
+  }
+  .is-size-tablet-medium .hamburger .hamburger-inner::after {
+    bottom: -8px;
+  }
+
+  .is-size-tablet-large .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 36px;
+  }
+  .is-size-tablet-large .hamburger .hamburger-inner {
+    margin-top: -1.5px;
+  }
+  .is-size-tablet-large .hamburger .hamburger-inner, .is-size-tablet-large .hamburger .hamburger-inner::before, .is-size-tablet-large .hamburger .hamburger-inner::after {
+    width: 36px;
+    height: 3px;
+  }
+  .is-size-tablet-large .hamburger .hamburger-inner::before {
+    top: -10px;
+  }
+  .is-size-tablet-large .hamburger .hamburger-inner::after {
+    bottom: -10px;
+  }
+}
+@media screen and (max-width: 35.5em) {
+  .is-size-mobile-small .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 15px;
+  }
+  .is-size-mobile-small .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-mobile-small .hamburger .hamburger-inner, .is-size-mobile-small .hamburger .hamburger-inner::before, .is-size-mobile-small .hamburger .hamburger-inner::after {
+    width: 15px;
+    height: 2px;
+  }
+  .is-size-mobile-small .hamburger .hamburger-inner::before {
+    top: -4px;
+  }
+  .is-size-mobile-small .hamburger .hamburger-inner::after {
+    bottom: -4px;
+  }
+
+  .is-size-mobile-medium .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 24px;
+  }
+  .is-size-mobile-medium .hamburger .hamburger-inner {
+    margin-top: -1px;
+  }
+  .is-size-mobile-medium .hamburger .hamburger-inner, .is-size-mobile-medium .hamburger .hamburger-inner::before, .is-size-mobile-medium .hamburger .hamburger-inner::after {
+    width: 24px;
+    height: 2px;
+  }
+  .is-size-mobile-medium .hamburger .hamburger-inner::before {
+    top: -8px;
+  }
+  .is-size-mobile-medium .hamburger .hamburger-inner::after {
+    bottom: -8px;
+  }
+
+  .is-size-mobile-large .hamburger .hamburger-box {
+    margin-top: -2px;
+    width: 36px;
+  }
+  .is-size-mobile-large .hamburger .hamburger-inner {
+    margin-top: -1.5px;
+  }
+  .is-size-mobile-large .hamburger .hamburger-inner, .is-size-mobile-large .hamburger .hamburger-inner::before, .is-size-mobile-large .hamburger .hamburger-inner::after {
+    width: 36px;
+    height: 3px;
+  }
+  .is-size-mobile-large .hamburger .hamburger-inner::before {
+    top: -10px;
+  }
+  .is-size-mobile-large .hamburger .hamburger-inner::after {
+    bottom: -10px;
+  }
+}
 /*
 * Squeeze
 */

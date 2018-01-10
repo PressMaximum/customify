@@ -84,13 +84,13 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $fn,
-                'css_format' => 'html_class',
                 'title' => __( 'Icon Size', 'customify' ),
-                'default' => 'is-memdium',
+                'default' => 'is-size-memdium',
+                'device_settings' => true,
                 'choices' => array(
-                      'is-small' => __( 'Small', 'customify' ),
-                      'is-medium' => __( 'Medium', 'customify' ),
-                      'is-large' => __( 'Large', 'customify' ),
+                      'small' => __( 'Small', 'customify' ),
+                      'medium' => __( 'Medium', 'customify' ),
+                      'large' => __( 'Large', 'customify' ),
                 )
             ),
 
@@ -154,8 +154,7 @@ class Customify_Builder_Item_Nav_Icon{
         $label = sanitize_text_field( Customify_Customizer()->get_setting( 'nav_icon_text' ) );
         $show_label = Customify_Customizer()->get_setting('nav_icon_show_text');
         $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
-        $icon = Customify_Customizer()->get_setting('nav_icon' );
-        $size = Customify_Customizer()->get_setting('nav_icon_size' );
+        $sizes = Customify_Customizer()->get_setting('nav_icon_size', 'all' );
 
         $classes = array('nav-mobile-toggle item-button');
         if ( $show_label ) {
@@ -163,7 +162,23 @@ class Customify_Builder_Item_Nav_Icon{
         } else {
             $classes[] = 'nav-hide-label';
         }
-        $classes[] = $size;
+
+        if ( empty( $sizes ) ) {
+            $sizes = 'is-size-'.$sizes;
+        }
+
+        if ( is_string( $sizes ) ) {
+            $classes[] = $sizes;
+        } else {
+            foreach ( $sizes as $d => $s ) {
+                if ( !is_string( $s ) ) {
+                    $s = 'is-size-medium';
+                }
+
+                $classes[] = 'is-size-'.$d.'-'.$s;
+            }
+        }
+
 
         if( $style ) {
             $classes[] = $style;
