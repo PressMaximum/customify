@@ -36,12 +36,14 @@ jQuery( document ).ready( function( $ ){
         $( 'body' ).removeClass( 'hiding-mobile-header-panel' );
         $( 'body' ).toggleClass( 'display-mobile-header-panel' );
         $( this ).toggleClass( 'is-active' );
+        $( this ).find('.hamburger').toggleClass( 'is-active' );
     } );
 
     $document.on( 'click',  '#mobile-header-panel .close-panel', function( e ){
         e.preventDefault();
         $( 'body' ).addClass( 'hiding-mobile-header-panel' );
         $( 'body' ).removeClass( 'display-mobile-header-panel' );
+        $('.nav-mobile-toggle .hamburger').removeClass( 'is-active' );
         setTimeout( function () {
             $( 'body' ).removeClass( 'hiding-mobile-header-panel' );
         }, 1000 );

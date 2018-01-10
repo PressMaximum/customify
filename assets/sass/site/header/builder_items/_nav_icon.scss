@@ -1,30 +1,29 @@
 /* Nav Icon */
-
+.nav-mobile-toggle {
+    cursor: pointer;
+}
+.nav-icon--label {
+    background: none !important;
+}
 
 $nav_icon_sizes: (
-    xs: (
-            width: 16px,
-            height: 2px,
+    small: (
+        width: 15px,
+        height: 2px,
+        top: -4px,
+        bottom: -4px
     ),
-    s: (
-            width: 20px,
-            height: 4px,
+    medium: (
+        width: 24px,
+        height: 2px,
+        top: -8px,
+        bottom: -8px
     ),
-    default: (
-            width: 30px,
-            height: 4px,
-    ),
-    m: (
-            width: 40px,
-            height: 5px,
-    ),
-    l: (
-            width: 50px,
-            height: 6px,
-    ),
-    xl: (
-            width: 60px,
-            height: 8px,
+    large: (
+        width: 36px,
+        height: 3px,
+        top: -10px,
+        bottom: -10px
     ),
 ) !default;
 
@@ -32,7 +31,7 @@ $hamburger-layer-border-radius             : 0px !default;
 $hamburger-hover-opacity                   : 0.7 !default;
 $hamburger-hover-transition-duration       : 0.15s !default;
 
-$hamburger-layer-color                     : #000 !default;
+$hamburger-layer-color                     : #666666;
 $hamburger-hover-transition-timing-function: linear !default;
 
 // To use CSS filters as the hover effect instead of opacity,
@@ -60,14 +59,6 @@ $hamburger-hover-filter    : opacity(50%) !default;
     margin: 0;
     overflow: visible;
 
-    &:hover {
-        @if $hamburger-hover-use-filter == true {
-            filter: $hamburger-hover-filter;
-        }
-        @else {
-            opacity: $hamburger-hover-opacity;
-        }
-    }
 }
 
 .hamburger-box {
@@ -96,13 +87,11 @@ $hamburger-hover-filter    : opacity(50%) !default;
         transition-timing-function: ease;
     }
 
-
     &::before,
     &::after {
         content: "";
         display: block;
     }
-
     &::before {
        // top: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
     }
@@ -117,8 +106,9 @@ $hamburger-hover-filter    : opacity(50%) !default;
         .is-#{$key} {
             .hamburger {
                 .hamburger-box {
+                    margin-top: - 2px;
                     width: map-get($settings, width);
-                    height: map-get($settings, width);
+                    //height: map-get($settings, width);
                 }
                 .hamburger-inner {
                     margin-top: map-get($settings, height) / -2;
@@ -129,11 +119,11 @@ $hamburger-hover-filter    : opacity(50%) !default;
                         height: map-get($settings, height);
                     }
                     &::before {
-                        top:  - ( ( map-get($settings, width) - ( map-get($settings, height) * 2 / 2 ) ) / 2 );
+                        top:  map-get($settings, top);
                     }
 
                     &::after {
-                        bottom: - ( ( map-get($settings, width) - ( map-get($settings, height)*2 / 2 ) ) / 2 );
+                        bottom: map-get($settings, bottom);
                     }
                 }
             }

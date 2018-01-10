@@ -168,7 +168,7 @@ class Customify_Builder_Item_Social_Icons {
 	function render( $item_config ) {
 
 		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset' );
-		$size = Customify_Customizer()->get_setting( 'header_social_icons_size' );
+		$sizes = Customify_Customizer()->get_setting( 'header_social_icons_size', 'all' );
 		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
 		$nofollow      = Customify_Customizer()->get_setting( 'header_social_icons_nofollow' );
 		$target_blank = Customify_Customizer()->get_setting( 'header_social_icons_target' );
@@ -189,8 +189,20 @@ class Customify_Builder_Item_Social_Icons {
 			if ( $preset ) {
 				$classes[] = 'is-style-'.$preset;
 			}
-			if ( $size ) {
-				$classes[] = 'is-size-'.$size;
+            
+			if ( ! empty( $sizes ) ) {
+			    if ( is_string( $sizes ) ) {
+                    $classes[] = 'is-size-'.$sizes;
+                } else {
+			        foreach ( $sizes as $d => $s ) {
+			            if (! is_string( $s ) ) {
+                            $s = 'medium';
+                        }
+                        $classes[] = 'is-size-'.$d.'-'.$s;
+                    }
+
+                }
+
 			}
 
 			echo '<ul class="' . esc_attr( join( " ", $classes ) ) . '">';

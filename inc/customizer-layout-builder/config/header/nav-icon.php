@@ -25,16 +25,36 @@ class Customify_Builder_Item_Nav_Icon{
                 'title' => __( 'Nav Icon', 'customify' ),
             ),
 
+
             array(
-                'name' => 'nav_icon_style',
-                'type' => 'select',
+                'name'    => 'nav_icon_style',
+                'type'    => 'image_select',
                 'section' => $section,
-                'title'          => __( 'Style', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $fn,
+                'title'   => __( 'Icon Preset', 'customify' ),
+                'device_settings' => true,
+                'default'         => array (
+                    'desktop' => 'plain',
+                    'tablet' => 'plain',
+                    'mobile' => 'plain',
+                ),
                 'choices' => array(
-                    'default' => __( 'Default', 'customify' ),
-                    'style_2' => __( 'Style 2', 'customify' ),
+                    'plain' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style1.svg',
+                    ),
+                    'outline-square' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style2.svg',
+                    ),
+                    'fill-square' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style3.svg',
+                    ),
+                    'fill-rounded' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style4.svg',
+                    ),
+                    'outline-rounded' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style5.svg',
+                    ),
                 )
             ),
 
@@ -66,15 +86,38 @@ class Customify_Builder_Item_Nav_Icon{
                 'render_callback' => $fn,
                 'css_format' => 'html_class',
                 'title' => __( 'Icon Size', 'customify' ),
-                'default' => 'is-default',
+                'default' => 'is-memdium',
                 'choices' => array(
-                      'is-xs' => __( 'XS', 'customify' ),
-                      'is-s' => __( 'S', 'customify' ),
-                      'is-default' => __( 'Default', 'customify' ),
-                      'is-m' => __( 'M', 'customify' ),
-                      'is-l' => __( 'L', 'customify' ),
-                      'is-xl' => __( 'XL', 'customify' ),
+                      'is-small' => __( 'Small', 'customify' ),
+                      'is-medium' => __( 'Medium', 'customify' ),
+                      'is-large' => __( 'Large', 'customify' ),
                 )
+            ),
+
+            array(
+                'name' => 'nav_icon_item_color',
+                'type' => 'color',
+                'section' => $section,
+                'title' => __( 'Color', 'customify' ),
+                'css_format' => 'color: {{value}}; background-color: {{value}};',
+                'selector' => "{$selector} .nav-icon--label, {$selector} .hamburger-inner, {$selector} .hamburger-inner:after,  {$selector} .hamburger-inner:before",
+
+            ),
+
+            array(
+                'name' => 'nav_icon_item_color_hover',
+                'type' => 'color',
+                'section' => $section,
+                'css_format' => 'color: {{value}}; background-color: {{value}};',
+                'selector' => "{$selector}:hover .nav-icon--label, {$selector}:hover .hamburger-inner, {$selector}:hover .hamburger-inner:after,  {$selector}:hover .hamburger-inner:before",
+                'title' => __( 'Color Hover', 'customify' ),
+            ),
+
+            array(
+                'name'    => 'header_nav_icon_l_heading',
+                'type'    => 'heading',
+                'section' => $section,
+                'title'   => __( 'Item Layout', 'customify' )
             ),
 
             array(
@@ -87,26 +130,8 @@ class Customify_Builder_Item_Nav_Icon{
                     'bottom' => 'padding-bottom: {{value}};',
                     'left' => 'padding-left: {{value}};',
                 ),
-                'selector' => $selector,
+                'selector' => $selector. ' .hamburger',
                 'title'  => __( 'Icon Padding', 'customify' ),
-            ),
-
-            array(
-                'name' => 'nav_icon_item_color',
-                'type' => 'color',
-                'section' => $section,
-                'title' => __( 'Color', 'customify' ),
-                'css_format' => 'color: {{value}};',
-                'selector' => $selector,
-            ),
-
-            array(
-                'name' => 'nav_icon_item_color_hover',
-                'type' => 'color',
-                'section' => $section,
-                'css_format' => 'color: {{value}};',
-                'selector' => $selector.':hover',
-                'title' => __( 'Color Hover', 'customify' ),
             ),
 
 
@@ -131,7 +156,6 @@ class Customify_Builder_Item_Nav_Icon{
         $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
         $icon = Customify_Customizer()->get_setting('nav_icon' );
         $size = Customify_Customizer()->get_setting('nav_icon_size' );
-        $icon = Customify_Customizer()->setup_icon( $icon );
 
         $classes = array('nav-mobile-toggle item-button');
         if ( $show_label ) {
