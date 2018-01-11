@@ -80,6 +80,9 @@ var AutoCSS = window.AutoCSS || null;
                         case 'color':
                             that.color(field, v );
                             break;
+                        case 'image':
+                            that.color(field, v );
+                            break;
                         case 'text_align':
                         case 'text_align_no_justify':
                             that.text_align(field, v );
@@ -282,13 +285,29 @@ var AutoCSS = window.AutoCSS || null;
         }
         var find = '{{value}}';
         var reg = new RegExp(find, 'g');
-        return format.replace( reg, value );
+
+        var s = format.replace( reg, value );
+
+        var find_2 = '{{value_no_unit}}';
+        var reg2 = new RegExp(find_2, 'g');
+        s = s.replace( reg2, value );
+        return s;
     };
 
     AutoCSS.prototype.setup_color = function( value, format ){
         if ( format ) {
             if ( value ) {
                 return this.str_value( value, format );
+            }
+        }
+        return false;
+    };
+
+    AutoCSS.prototype.setup_image = function( value, format ){
+        var image = this.sanitize_media( value );
+        if ( image.url ) {
+            if ( format ) {
+                return this.str_value( image.url, format );
             }
         }
         return false;
@@ -314,6 +333,7 @@ var AutoCSS = window.AutoCSS || null;
             if ( value.value ) {
                 v = value.value + value.unit;
                 c = this.str_value( v, format );
+                c = this.str_value( value.value, format );
             }
         }
         return c;
@@ -556,6 +576,10 @@ var AutoCSS = window.AutoCSS || null;
         return this.maybe_devices_setup( field, 'setup_color', value );
     };
 
+    AutoCSS.prototype.image = function( field, value ){
+        return this.maybe_devices_setup( field, 'setup_image', value );
+    };
+
     AutoCSS.prototype.text_align = function( field, value ){
         return this.maybe_devices_setup( field, 'setup_text_align', value );
     };
@@ -571,11 +595,13 @@ var AutoCSS = window.AutoCSS || null;
         _.each( field.fields, function( f ) {
             if ( _.isUndefined( that.styling_fields[ f.name ] ) ) {
                 new_fields[ f.name ] = f;
+                if ( _.isUndefined( new_fields[ f.name ]['selector'] ) || _.isEmpty( new_fields[ f.name ]['selector'] ) ) {
+                    new_fields[ f.name ]['selector'] = field.selector;
+                }
             }
         } );
 
         if ( _.size( new_fields ) > 0 ) {
-            console.log( 'values__', values );
             if ( field.device_settings ) {
                 _.each( that.devices, function( device ){
                     var values_device =  _.isUndefined( values[ device ] ) ? { } : values[ device ];

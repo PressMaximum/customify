@@ -85,7 +85,11 @@ class Customify_Builder_Item_Nav_Icon{
                 'selector' => $selector,
                 'render_callback' => $fn,
                 'title' => __( 'Icon Size', 'customify' ),
-                'default' => 'is-size-memdium',
+                'default' => array(
+                    'desktop' => 'is-size-memdium',
+                    'tablet' => 'is-size-memdium',
+                    'mobile' => 'is-size-memdium',
+                ),
                 'device_settings' => true,
                 'choices' => array(
                       'small' => __( 'Small', 'customify' ),
@@ -100,7 +104,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'title' => __( 'Color', 'customify' ),
                 'css_format' => 'color: {{value}}; background-color: {{value}};',
-                'selector' => "{$selector} .nav-icon--label, {$selector} .hamburger-inner, {$selector} .hamburger-inner:after,  {$selector} .hamburger-inner:before",
+                'selector' => "{$selector} .nav-icon--label, {$selector} .hamburger-inner",
 
             ),
 
@@ -109,7 +113,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'type' => 'color',
                 'section' => $section,
                 'css_format' => 'color: {{value}}; background-color: {{value}};',
-                'selector' => "{$selector}:hover .nav-icon--label, {$selector}:hover .hamburger-inner, {$selector}:hover .hamburger-inner:after,  {$selector}:hover .hamburger-inner:before",
+                'selector' => "{$selector}:hover .nav-icon--label, {$selector}:hover .hamburger-inner",
                 'title' => __( 'Color Hover', 'customify' ),
             ),
 

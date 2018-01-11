@@ -45,7 +45,8 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
         }
 
         private function replace_value( $value, $format ){
-            return str_replace( '{{value}}', $value, $format );
+            $s = str_replace( '{{value}}', $value, $format );
+            return str_replace( '{{value_no_unit}}', $value, $s );
         }
 
         function setup_css_ruler( $value, $format ){
@@ -112,6 +113,16 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
+        function setup_image( $value, $format ){
+            $image = Customify_Customizer()->get_media( $value );
+            if ( $format ) {
+                if ( $image ) {
+                    return $this->replace_value( $image, $format ).';';
+                }
+            }
+            return false;
+        }
+
         function setup_text_align( $value, $format ){
             $value = sanitize_text_field( $value );
             if ( $format ) {
@@ -134,6 +145,11 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
         function color( $field, $values = null ){
             $code = $this->maybe_devices_setup( $field, 'setup_color', $values );
+            return $code;
+        }
+
+        function image( $field, $values = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_image', $values );
             return $code;
         }
 
@@ -613,6 +629,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 break;
                             case 'color':
                                 $this->color($field, $v);
+                                break;
+                            case 'image':
+                                $this->image($field, $v);
                                 break;
                             case 'text_align':
                             case 'text_align_no_justify':

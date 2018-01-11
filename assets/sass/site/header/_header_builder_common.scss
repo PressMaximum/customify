@@ -54,6 +54,11 @@
 }
 
 /* Customizer Shortcut */
+#masthead, #mobile-header-panel {
+    .customize-partial-edit-shortcut {
+        display: none;
+    }
+}
 #masthead{
     > .customize-partial-edit-shortcut {
         &.customize-partial-edit-shortcut-header_builder_panel {

@@ -951,6 +951,12 @@
                 var $fields = template( field , template_id, 'field' );
                 $fieldsArea.html( $fields );
             }
+
+            if ( field.css_format && _.isString( field.css_format ) ) {
+                if ( field.css_format.indexOf('value_no_unit') > 0 ) {
+                    $( '.customify--css-unit .customify--label-active', $fieldsArea ).hide();
+                }
+            }
         },
         initField: function( ){
             var control = this;

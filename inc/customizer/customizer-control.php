@@ -30,6 +30,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $min = 0;
     public $max = 700;
     public $step = 1;
+    public $no_unit = false;
 
     // For CSS Ruler
     public $fields_disabled = array();

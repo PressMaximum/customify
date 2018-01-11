@@ -920,7 +920,14 @@ class Customify_Customizer_Layout_Builder_Frontend {
      }
 
       function close_icon( $class = '' ){
-         $close = '<a class="close '.esc_attr( $class ).'" href="#"><span class="screen-reader-text">'.__( 'Close', 'customify' ).'</span></a>';
+         $close = '<a class="close is-size-medium '.esc_attr( $class ).'" href="#">
+<span class="hamburger hamburger--squeeze is-active">
+    <span class="hamburger-box">
+      <span class="hamburger-inner"></span>
+    </span>
+</span>
+<span class="screen-reader-text">'.__( 'Close', 'customify' ).'</span>
+</a>';
          return $close;
     }
 }
