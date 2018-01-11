@@ -102,9 +102,12 @@
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
             //var widgetArea;
             if( settings.partial.id == 'header_builder_panel' ) {
-                $('body > .mobile-header-panel' ).remove();
-                $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
-
+                $('body > .mobile-header-panel, #page > .mobile-header-panel' ).remove();
+                if ( $( 'body' ).hasClass( 'menu_sidebar_dropdown' ) ) {
+                    $( '#mobile-header-panel' ).insertAfter( "#masthead" );
+                } else {
+                    $( 'body' ).prepend(  $( '#mobile-header-panel' ) );
+                }
             }
 
             var header = $( '#masthead' );

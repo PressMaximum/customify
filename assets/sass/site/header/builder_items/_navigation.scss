@@ -150,6 +150,11 @@ body {
         visibility: hidden;
         opacity: 0;
     }
+    &.menu_sidebar_dropdown {
+        &:before {
+            display: none;
+        }
+    }
 }
 
 #mobile-header-panel {
@@ -194,6 +199,18 @@ body {
         transform: translate3d( 200%,0,0);
         width: $menu_sidebar_width;
         right: 0;
+    }
+}
+
+.menu_sidebar_dropdown {
+    #mobile-header-panel {
+        position: relative;
+        transition: all .5s linear;
+        height: 0px;
+        display: block;
+        visibility: visible;
+        z-index: 999;
+        overflow: hidden;
     }
 }
 
@@ -272,6 +289,14 @@ body {
             visibility: visible;
         }
     }
+    &.menu_sidebar_dropdown {
+        overflow: hidden;
+        #mobile-header-panel {
+            z-index: 9999;
+            //height: auto;
+            visibility: visible;
+        }
+    }
 }
 
 .builder-item-sidebar {
@@ -325,6 +350,12 @@ $close_size: 35px;
         top: 20px;
         right: auto;
         left: 20px;
+    }
+}
+
+.menu_sidebar_dropdown {
+    .close-sidebar-panel {
+        display: none !important;
     }
 }
 

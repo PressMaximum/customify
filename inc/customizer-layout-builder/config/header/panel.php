@@ -269,6 +269,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     'menu_sidebar_slide_left' => __( 'Left', 'customify' ),
                     'menu_sidebar_slide_right' => __( 'Right', 'customify' ),
                     'menu_sidebar_slide_overlay' => __( 'Overlay', 'customify' ),
+                    'menu_sidebar_dropdown' => __( 'Dropdown', 'customify' ),
                 )
             ),
 
