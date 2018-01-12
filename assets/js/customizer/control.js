@@ -1495,7 +1495,7 @@
         $document.on('click', '.customify-devices button', function (e) {
             e.preventDefault();
             var device = $(this).attr('data-device') || '';
-            console.log('Device', device);
+            //console.log('Device', device);
             $('#customize-footer-actions .devices button[data-device="' + device + '"]').trigger('click');
         });
 

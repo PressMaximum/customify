@@ -1148,7 +1148,7 @@
                 this.container.on( 'click', '.customify--cb-item-setting, .customify--cb-item-name', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
-                    console.log( 'Clicked section' , section );
+                    //console.log( 'Clicked section' , section );
                     var control = $( this ).attr( 'data-control' ) || '';
                     var did = false;
                     if ( control ) {
