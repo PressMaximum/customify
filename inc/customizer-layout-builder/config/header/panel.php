@@ -295,7 +295,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'description' => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
-                'selector' => '#mobile-header-panel-inner:before',
+                'selector' => '#mobile-header-panel-bg:before',
                 //'selector' => '#mobile-header-panel',
                 'css_format' => 'styling',
                 'default' => array(),

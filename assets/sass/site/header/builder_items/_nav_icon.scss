@@ -1,6 +1,7 @@
 /* Nav Icon */
 .nav-mobile-toggle {
     cursor: pointer;
+    transition: opacity .3s;
 }
 .nav-icon--label {
     background: none !important;

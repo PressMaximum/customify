@@ -887,34 +887,36 @@ class Customify_Customizer_Layout_Builder_Frontend {
              //$animate = 'slide_right';
              $classes = array('mobile-header-panel mobile-sidebar-panel');
              echo '<div id="mobile-header-panel" class="'.esc_attr( join( ' ', $classes )  ).'">';
-                 echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
+                 echo '<div id="mobile-header-panel-bg" class="mobile-header-panel-bg">';
+                     echo '<div id="mobile-header-panel-inner" class="mobile-header-panel-inner">';
 
-                     foreach( $mobile_items as $item ) {
-                         $item_id = $item['id'];
-                         $content = $this->render_items[$item['id']]['render_content'];
-                         $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+                         foreach( $mobile_items as $item ) {
+                             $item_id = $item['id'];
+                             $content = $this->render_items[$item['id']]['render_content'];
+                             $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
 
-                         $classes = "builder-item-sidebar mobile-item--".$item_id;
-                         $inner_classes = 'item--inner';
-                         if( is_customize_preview() ) {
-                             $inner_classes = $inner_classes.' builder-item-focus ';
-                         }
-
-                         $content = str_replace( '__id__', $id, $content );
-                         $content = str_replace( '__device__', 'mobile', $content );
-                         if ( ! isset( $item_config['section'] ) ) {
-                             $item_config['section'] = '';
-                         }
-
-                         echo '<div class="'.esc_attr( $classes ).'">';
-                         echo '<div class="'.esc_attr( $inner_classes ).'" data-item-id="' . esc_attr($item_id) . '" data-section="'.$item_config['section'].'">';
-                             echo $content;
+                             $classes = "builder-item-sidebar mobile-item--".$item_id;
+                             $inner_classes = 'item--inner';
                              if( is_customize_preview() ) {
-                                 echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
+                                 $inner_classes = $inner_classes.' builder-item-focus ';
                              }
-                         echo '</div>';
-                         echo '</div>';
-                     }
+
+                             $content = str_replace( '__id__', $id, $content );
+                             $content = str_replace( '__device__', 'mobile', $content );
+                             if ( ! isset( $item_config['section'] ) ) {
+                                 $item_config['section'] = '';
+                             }
+
+                             echo '<div class="'.esc_attr( $classes ).'">';
+                             echo '<div class="'.esc_attr( $inner_classes ).'" data-item-id="' . esc_attr($item_id) . '" data-section="'.$item_config['section'].'">';
+                                 echo $content;
+                                 if( is_customize_preview() ) {
+                                     echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
+                                 }
+                             echo '</div>';
+                             echo '</div>';
+                         }
+                     echo '</div>';
                  echo '</div>';
              echo '</div>';
          }
