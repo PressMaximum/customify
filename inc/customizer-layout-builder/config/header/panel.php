@@ -295,7 +295,8 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'description' => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
-                'selector' => '#mobile-header-panel:before',
+                'selector' => '#mobile-header-panel-inner:before',
+                //'selector' => '#mobile-header-panel',
                 'css_format' => 'styling',
                 'default' => array(),
                 'fields' => array(
@@ -304,11 +305,15 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'color',
                         'label' => __( 'Background Color', 'customify' ),
                         'device_settings' => false,
+                        //'selector' => '#mobile-header-panel-inner:before',
+                        //'css_format' => 'border: {{value}};',
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
                         'label' => __( 'Background Image', 'customify' ),
+                        //'selector' => '#mobile-header-panel-inner:before',
+                        //'css_format' => 'background-image: url("{{value}}");',
                     ),
 
                     array(
@@ -316,6 +321,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'slider',
                         'label' => __( 'Background Opacity', 'customify' ),
                         'css_format' => 'opacity: {{value_no_unit}};',
+                        //'selector' => '#mobile-header-panel-inner:before',
                         'max' => 1,
                         'min' => 0,
                         'step' => 0.01,
@@ -375,10 +381,12 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     ),
 
                     array(
-                        'name' => 'border_style',
+                        'name' => 'sidebar_border_style',
                         'type' => 'select',
                         'label' => __('Border Style', 'customify'),
                         'default' => 'none',
+                        'selector' => '#mobile-header-panel',
+                        'css_format' => 'border-style: {{value}};',
                         'choices' => array(
                             'none'      => __('None', 'customify'),
                             'solid'     => __('Solid', 'customify'),
@@ -392,16 +400,25 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                     ),
 
                     array(
-                        'name' => 'border_width',
+                        'name' => 'sidebar_border_width',
                         'type' => 'css_ruler',
                         'label' => __('Border Width', 'customify'),
-                        'required' => array('border_style', '!=', 'none'),
+                        'required' => array('sidebar_border_style', '!=', 'none'),
+                        'selector' => '#mobile-header-panel',
+                        'css_format' => array(
+                            'top' => 'border-top-width: {{value}};',
+                            'right' => 'border-right-width: {{value}};',
+                            'bottom'=> 'border-bottom-width: {{value}};',
+                            'left'=> 'border-left-width: {{value}};'
+                        ),
                     ),
                     array(
-                        'name' => 'border_color',
+                        'name' => 'sidebar_border_color',
                         'type' => 'color',
                         'label' => __('Border Color', 'customify'),
-                        'required' => array('border_style', '!=', 'none'),
+                        'required' => array('sidebar_border_style', '!=', 'none'),
+                        'selector' => '#mobile-header-panel',
+                        'css_format' => 'border-color: {{value}};',
                     ),
 
                 )

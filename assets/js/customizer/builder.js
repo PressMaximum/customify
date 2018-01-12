@@ -1406,11 +1406,6 @@
         } );
 
 
-
-        wpcustomize.bind( '_section_focus', function( e, b ) {
-            console.log( '_section_focus', b );
-        });
-
         // When focus section
         wpcustomize.state( 'expandedSection' ).bind( function( section ) {
             $( '.customify--device-panel .grid-stack-item' ).removeClass( 'item-active' );
@@ -1420,8 +1415,6 @@
                 $( '.customify--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
             }
         });
-
-
 
 
 

@@ -116,21 +116,6 @@ class Customify_Builder_Item_Nav_Icon{
                 'selector' => "{$selector}:hover .nav-icon--label, {$selector}:hover .hamburger-inner",
                 'title' => __( 'Color Hover', 'customify' ),
             ),
-
-            array(
-                'name' => 'nav_icon_padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'css_format' => array(
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
-                'selector' => $selector. ' .hamburger',
-                'title'  => __( 'Icon Padding', 'customify' ),
-            ),
-
         );
 
         // Item Layout

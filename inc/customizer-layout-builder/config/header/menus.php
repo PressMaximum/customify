@@ -17,7 +17,7 @@ class Customify_Builder_Item_Primary_Menu {
         $this->id = 'primary-menu';
         $this->label = __( 'Primary Menu', 'customify' );
         $this->prefix = 'primary_menu';
-        $this->selector = '.primary-menu';
+        $this->selector = '.builder-item--'.$this->id .' .primary-menu';
         $this->section = 'header_menu_primary';
         $this->theme_location = 'menu-1';
     }
@@ -206,7 +206,8 @@ class Customify_Builder_Item_Secondary_Menu extends  Customify_Builder_Item_Prim
         $this->label = __( 'Secondary Menu', 'customify' );
         $this->id = 'secondary_menu';
         $this->prefix = 'secondary_menu';
-        $this->selector = '.secondary-menu';
+       // $this->selector = '.secondary-menu';
+        $this->selector = '.builder-item--'.$this->id .' .secondary-menu';
         $this->section = 'header_menu_secondary';
         $this->theme_location = 'menu-2';
     }

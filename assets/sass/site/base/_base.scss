@@ -650,6 +650,7 @@ article.comment {
         }
         &:hover {
             &.item--inner {
+                transition-delay: 0s !important;
                 outline: 1px solid #0073aa;
                 outline-offset: -1px;
                 .item--preview-name {

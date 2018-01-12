@@ -895,8 +895,9 @@ class Customify_Customizer_Layout_Builder_Frontend {
                          $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
 
                          $classes = "builder-item-sidebar mobile-item--".$item_id;
+                         $inner_classes = 'item--inner';
                          if( is_customize_preview() ) {
-                             $classes = 'builder-item-focus '.$classes;
+                             $inner_classes = $inner_classes.' builder-item-focus ';
                          }
 
                          $content = str_replace( '__id__', $id, $content );
@@ -905,8 +906,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
                              $item_config['section'] = '';
                          }
 
-                         echo '<div class="'.esc_attr( $classes ).'" data-section="'.$item_config['section'].'" data-item-id="' . esc_attr($item_id) . '">';
-                         echo '<div class="item--inner">';
+                         echo '<div class="'.esc_attr( $classes ).'">';
+                         echo '<div class="'.esc_attr( $inner_classes ).'" data-item-id="' . esc_attr($item_id) . '" data-section="'.$item_config['section'].'">';
                              echo $content;
                              if( is_customize_preview() ) {
                                  echo '<span class="item--preview-name">'.esc_html( $item_config['name'] ).'</span>';
