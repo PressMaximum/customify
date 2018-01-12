@@ -275,20 +275,6 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             ),
 
             array(
-                'name' => $section.'_padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'selector' => $selector,
-                'css_format' => array(
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
-                'title' => __( 'Padding', 'customify' ),
-            ),
-
-            array(
                 'name' => $section.'_styling',
                 'type' => 'group',
                 'section' => $section,
@@ -460,22 +446,6 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                 ),
                 'selector'        => '.builder-item--'.$item_id,
                 'label'           => __( 'Margin', 'customify' ),
-            ),
-
-            array(
-                'name'            => 'header_'.$item_id.'_padding',
-                'type'            => 'css_ruler',
-                'priority'        => 815,
-                'section'         => $section,
-                'device_settings' => true,
-                'css_format'      => array(
-                    'top'    => 'padding-top: {{value}};',
-                    'right'  => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left'   => 'padding-left: {{value}};',
-                ),
-                'selector'        => '.builder-item--'.$item_id,
-                'label'           => __( 'Padding', 'customify' ),
             ),
 
             array(

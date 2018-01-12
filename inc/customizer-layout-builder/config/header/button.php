@@ -105,6 +105,19 @@ class Customify_Builder_Item_Button {
 				'title'      => __( 'Border Radius', 'customify' )
 			),
 
+            array(
+                'name' => $section.'_padding',
+                'type' => 'css_ruler',
+                'section' => $section,
+                'selector' => $selector,
+                'css_format' => array(
+                    'top' => 'padding-top: {{value}};',
+                    'right' => 'padding-right: {{value}};',
+                    'bottom' => 'padding-bottom: {{value}};',
+                    'left' => 'padding-left: {{value}};',
+                ),
+                'title' => __( 'Padding', 'customify' ),
+            ),
 
 			array(
 				'name'            => $prefix . '_typography',
