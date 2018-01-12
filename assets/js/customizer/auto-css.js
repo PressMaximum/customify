@@ -333,7 +333,7 @@ var AutoCSS = window.AutoCSS || null;
             if ( value.value ) {
                 v = value.value + value.unit;
                 c = this.str_value( v, format );
-                c = this.str_value( value.value, format );
+                c = this.str_value( value.value, c );
             }
         }
         return c;
