@@ -31,7 +31,7 @@ $nav_icon_sizes: (
 $hamburger-layer-border-radius             : 0px !default;
 $hamburger-hover-opacity                   : 0.7 !default;
 $hamburger-hover-transition-duration       : 0.15s !default;
-$hamburger-layer-color                     : #666666;
+$hamburger-layer-color                     : currentcolor;
 $hamburger-hover-transition-timing-function: linear !default;
 
 // To use CSS filters as the hover effect instead of opacity,
@@ -72,6 +72,7 @@ $hamburger-hover-filter    : opacity(50%) !default;
 .hamburger-inner {
     display: block;
     top: 50%;
+    background-color: currentcolor;
     //margin-top: $hamburger-layer-height / -2;
 
     &,
@@ -79,7 +80,7 @@ $hamburger-hover-filter    : opacity(50%) !default;
     &::after {
         //width: $hamburger-layer-width;
        // height: $hamburger-layer-height;
-        background-color: inherit;
+
         border-radius: $hamburger-layer-border-radius;
         position: absolute;
         transition-property: transform;
@@ -91,13 +92,7 @@ $hamburger-hover-filter    : opacity(50%) !default;
     &::after {
         content: "";
         display: block;
-    }
-    &::before {
-       // top: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
-    }
-
-    &::after {
-        //bottom: ($hamburger-layer-spacing + $hamburger-layer-height) * -1;
+        background-color: inherit;
     }
 }
 

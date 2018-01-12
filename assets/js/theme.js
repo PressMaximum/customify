@@ -100,6 +100,7 @@ jQuery( document ).ready( function( $ ){
             });
 
         } else {
+            $( '#site-content' ).show();
             setTimeout( function () {
                 $( 'body' ).removeClass( 'hiding-mobile-header-panel' );
             }, 1000 );
@@ -112,6 +113,7 @@ jQuery( document ).ready( function( $ ){
     } );
 
     $document.on( 'customize_section_opened', function( e, id ){
+        $( '#site-content' ).show();
         if( id === 'header_sidebar' ) {
             open_menu_sidebar( false );
         }

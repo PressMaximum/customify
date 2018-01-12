@@ -212,6 +212,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'label' => __('Border Style', 'customify'),
                         'default' => 'none',
                         'choices' => array(
+                            ''          => __('Default', 'customify'),
                             'none'      => __('None', 'customify'),
                             'solid'     => __('Solid', 'customify'),
                             'dotted'    => __('Dotted', 'customify'),
@@ -388,6 +389,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'selector' => '#mobile-header-panel',
                         'css_format' => 'border-style: {{value}};',
                         'choices' => array(
+                            ''          => __('Default', 'customify'),
                             'none'      => __('None', 'customify'),
                             'solid'     => __('Solid', 'customify'),
                             'dotted'    => __('Dotted', 'customify'),

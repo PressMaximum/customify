@@ -3816,9 +3816,9 @@ Animation
 .hamburger-inner {
   display: block;
   top: 50%;
+  background-color: currentcolor;
 }
 .hamburger-inner, .hamburger-inner::before, .hamburger-inner::after {
-  background-color: inherit;
   border-radius: 0px;
   position: absolute;
   transition-property: transform;
@@ -3828,6 +3828,7 @@ Animation
 .hamburger-inner::before, .hamburger-inner::after {
   content: "";
   display: block;
+  background-color: inherit;
 }
 
 .is-size-small .hamburger .hamburger-box {
