@@ -907,7 +907,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 	function render_mobile_sidebar() {
 		$id           = 'sidebar';
 		$mobile_items = $this->get_row_settings( $id, 'mobile' );
-		$menu_sidebar_skin = Customify_Customizer()->get_setting('header_sidebar_skin');
+		$menu_sidebar_skin = Customify_Customizer()->get_setting('header_sidebar_text_mode');
 
 		if ( ! is_array( $mobile_items ) ) {
 			$mobile_items = array();

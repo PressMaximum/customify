@@ -1,10 +1,22 @@
 /* Header mobile sidebar */
 
 $menu_sidebar_width: 360px;
-$menu_sidebar_bg: #cccccc;
 $menu_sidebar_active_z_index: 999900;
 $menu_sidebar_content_max_width: 48em;
 $menu_sidebar_content_gutter: 1.5em;
+$menu_sidebar_boxshadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
+
+// Color Mode MS (Menu Sidebar).
+$ms_dark_color: rgba(255, 255, 255, 0.8);
+$ms_dark_color_hover: rgba(255, 255, 255, 0.9);
+$ms_dark_bg: rgba(0,0,0,0.95);
+$ms_dark_border_color: rgba(255,255,255,0.15);
+$ms_light_color: rgba(0,0,0,0.6);
+$ms_light_color_hover: rgba(0,0,0,0.99);
+$ms_light_bg: #f2f2f2;
+$ms_light_border_color: rgba(0,0,0,0.08);
+
+
 
 /* - General */
 .body-y-hidden {
@@ -24,7 +36,7 @@ body {
         bottom: 0px;
         z-index: -1;
         content: " ";
-        background: rgba( 0, 0, 0, .4 );
+        background: rgba( 0, 0, 0, .5 );
         visibility: hidden;
         opacity: 0;
     }
@@ -43,7 +55,48 @@ body {
     top: 0;
     z-index: $menu_sidebar_active_z_index;
     visibility: hidden;
+    color: $ms_dark_color;
+    a:not(.customify-btn) {
+        color: $ms_dark_color;
+        &:hover {
+            color: $ms_dark_color_hover;
+        }
+    }
+    .builder-item-sidebar {
+        padding: 1.4em 1.5em;
+        border-bottom: 1px solid $ms_dark_border_color;
+        &:last-of-type {
+            border-bottom: none;
+        }
+        &.mobile-item--primary-menu, &.mobile-item--secondary_menu {
+            padding: 0px;
+        }
+    }
+    .header-menu-sidebar-bg {
+        &:before {
+            background: $ms_dark_bg;
+        }
+    }
+    .nav-menu-mobile .nav-t-icon { color: currentColor; }
 
+    // Light mode
+    &.is-mode-light {
+        color: $ms_light_color;
+        a:not(.customify-btn) {
+            color: $ms_light_color;
+            &:hover {
+                color: $ms_light_color_hover;
+            }
+        }
+        .builder-item-sidebar {
+            border-color: $ms_light_border_color;
+        }
+        .header-menu-sidebar-bg {
+            &:before {
+                background: $ms_light_bg;
+            }
+        }
+    }
 }
 .header-menu-sidebar-bg {
     position: relative;
@@ -51,7 +104,6 @@ body {
     min-height: 100%;
     display: block;
     &:before {
-        background: $menu_sidebar_bg;
         content: "";
         position: absolute;
         top: 0; bottom: 0; left: 0; right: 0;
@@ -64,16 +116,13 @@ body {
     word-wrap: break-word;
     min-height: 100%;
     display: block;
-    padding: ($menu_sidebar_content_gutter * 2 ) $menu_sidebar_content_gutter;
+    padding: 1.2em 0;
 }
 
 /* Type : Overlay */
 .menu_sidebar_slide_overlay {
-    .header-menu-sidebar-bg {
-        position: absolute;
-        top: 0px; left: 0px; width: 100%;
-    }
     .header-menu-sidebar {
+        box-shadow: none;
         transition: all .5s linear;
         z-index: 0;
         opacity: 0;
@@ -82,7 +131,10 @@ body {
         right: 0px;
         bottom: 0px;
     }
-
+    .header-menu-sidebar-bg {
+        position: absolute;
+        top: 0px; left: 0px; width: 100%;
+    }
     .header-menu-sidebar-inner {
         max-width: $menu_sidebar_content_max_width;
         margin: ( $menu_sidebar_content_gutter * 2) auto;
@@ -92,6 +144,7 @@ body {
 /* Type: Slide from left */
 .menu_sidebar_slide_left {
     .header-menu-sidebar {
+        box-shadow: $menu_sidebar_boxshadow;
         width: $menu_sidebar_width;
         left: 0;
         transform: translate3d( - 100% ,0,0);
@@ -106,6 +159,7 @@ body {
 /* Type: Slide from right */
 .menu_sidebar_slide_right {
     .header-menu-sidebar {
+        box-shadow: $menu_sidebar_boxshadow;
         transition: transform .5s cubic-bezier(.79,.14,.15,.86);
         transform: translate3d( 200%,0,0);
         width: $menu_sidebar_width;
@@ -132,7 +186,11 @@ body {
     .header-menu-sidebar-inner {
         max-width: $menu_sidebar_content_max_width;
         margin: 0 auto;
-        padding: $menu_sidebar_content_gutter;
+    }
+    .header-menu-sidebar-bg {
+        &:before {
+            box-shadow: inset 0px 0px 12px 0px rgba(0,0,0,0.05);
+        }
     }
 }
 
@@ -227,10 +285,6 @@ body {
         }
     }
 }
-
-.builder-item-sidebar {
-     margin-bottom: 20px;
- }
 
 
 /* Close Button */

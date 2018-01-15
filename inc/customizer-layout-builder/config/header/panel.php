@@ -274,18 +274,38 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 )
             ),
 
+	        /*
 	        array(
 		        'name' => $section.'_skin',
 		        'type' => 'radio_group',
-		        'default' => 'dark',
+		        'default' => 'is-skin-dark',
 		        'section' => $section,
 		        //'selector' => '#masthead',
 		        'selector' => '#header-menu-sidebar',
 		        'css_format' => 'html_class',
 		        'title' => __('Predefined Skin', 'customify'),
 		        'choices' => array(
-			        'dark' => __('Dark', 'customify'),
-			        'light' => __('Light', 'customify'),
+			        'is-skin-dark' => __('Dark', 'customify'),
+			        'is-skin-light' => __('Light', 'customify'),
+		        )
+	        ),
+	        */
+
+	        array(
+		        'name'    => $section.'_text_mode',
+		        'type'    => 'image_select',
+		        'section' => $section,
+		        'selector' => '#header-menu-sidebar',
+		        'css_format' => 'html_class',
+		        'title'   => __( 'Text Mode Color', 'customify' ),
+		        'default'         => 'is-mode-light',
+		        'choices' => array(
+			        'is-mode-dark' => array(
+				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_light.svg',
+			        ),
+			        'is-mode-light' => array(
+				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_dark.svg',
+			        ),
 		        )
 	        ),
 
