@@ -4,28 +4,28 @@ class Customify_Builder_Item_Nav_Icon{
      public $id= 'nav-icon';
     function item(){
         return  array(
-            'name' => __( 'Nav Icon', 'customify' ),
+            'name' => __( 'Menu Icon', 'customify' ),
             'id' => 'nav-icon',
             'width' => '3',
             //'devices' => 'mobile',
-            'section' => 'header_nav_icon' // Customizer section to focus when click settings
+            'section' => 'header_menu_icon' // Customizer section to focus when click settings
         );
     }
 
     function customize(){
-        $section = 'header_nav_icon';
+        $section = 'header_menu_icon';
         $fn = array( $this, 'render' );
-        $selector = '.nav-mobile-toggle';
+        $selector = '.menu-mobile-toggle';
         $config = array(
             array(
                 'name' => $section,
                 'type' => 'section',
                 'panel' => 'header_settings',
                 'theme_supports' => '',
-                'title' => __( 'Nav Icon', 'customify' ),
+                'title' => __( 'Menu Icon', 'customify' ),
             ),
 
-
+            /*
             array(
                 'name'    => 'nav_icon_style',
                 'type'    => 'image_select',
@@ -57,6 +57,7 @@ class Customify_Builder_Item_Nav_Icon{
                     ),
                 )
             ),
+            */
 
             array(
                 'name' => 'nav_icon_text',
@@ -64,7 +65,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $fn,
-                'default' => __( 'Navigation', 'customify' ),
+                'default' => __( 'Menu', 'customify' ),
                 'title' => __( 'Label', 'customify' ),
             ),
 
@@ -74,7 +75,13 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $fn,
-                'default' => 1,
+                'title' => __( 'Label Setting', 'customify' ),
+                'device_settings' => true,
+                'default'         => array (
+	                'desktop' => 1,
+	                'tablet' => 0,
+	                'mobile' => 0,
+                ),
                 'checkbox_label' => __( 'Show Label', 'customify' ),
             ),
 
@@ -86,9 +93,9 @@ class Customify_Builder_Item_Nav_Icon{
                 'render_callback' => $fn,
                 'title' => __( 'Icon Size', 'customify' ),
                 'default' => array(
-                    'desktop' => 'is-size-memdium',
-                    'tablet' => 'is-size-memdium',
-                    'mobile' => 'is-size-memdium',
+                    'desktop' => 'medium',
+                    'tablet' => 'medium',
+                    'mobile' => 'medium',
                 ),
                 'device_settings' => true,
                 'choices' => array(
@@ -128,7 +135,7 @@ class Customify_Builder_Item_Nav_Icon{
         $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
         $sizes = Customify_Customizer()->get_setting('nav_icon_size', 'all' );
 
-        $classes = array('nav-mobile-toggle item-button');
+        $classes = array('menu-mobile-toggle item-button');
         if ( $show_label ) {
             $classes[] = 'nav-show-label';
         } else {
