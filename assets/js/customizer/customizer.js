@@ -13,7 +13,7 @@
         if( _.isUndefined( remove_items ) ) {
             remove_items = false;
         }
-        if( partial_id == 'header_builder_panel' ) {
+        if( partial_id == 'header_builder_panel' || partial_id === 'customify_customize_render_header' ) {
             if ( remove_items ) {
                 $('body > .header-menu-sidebar, #page > .header-menu-sidebar' ).remove();
             }
@@ -102,6 +102,7 @@
 
         // When selective refresh re-rendered content
         wp.customize.selectiveRefresh.bind( 'partial-content-rendered', function( settings ) {
+            console.log( 'settings.partial.id', settings.partial.id );
             header_changed( settings.partial.id );
         } );
 
