@@ -3034,22 +3034,19 @@ article.comment .comment-post-author {
   border-left: 1px solid rgba(255, 255, 255, 0.09);
 }
 .nav-menu-mobile .menu .sub-menu {
-  max-height: 0;
-  overflow: hidden;
   opacity: 0;
-  transition: max-height .5s ease;
+  transition: opacity .5s ease;
   margin: 0px;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
 .nav-menu-mobile .menu .sub-menu li a {
   padding-left: 3em;
 }
-.nav-menu-mobile .menu .open-sub > .nav-toggle-icon:before {
+.nav-menu-mobile .menu .open-sub > a .nav-toggle-icon:before {
   transform: rotate(-180deg);
 }
 .nav-menu-mobile .menu .open-sub > .sub-menu {
   display: block;
-  max-height: 2000px;
   opacity: 1;
 }
 

@@ -109,10 +109,10 @@ $submenu_width: 14em;
         }
 
         .sub-menu {
-            max-height: 0;
-            overflow: hidden;
+            //display: none;
+            //overflow: hidden;
             opacity: 0;
-            transition: max-height .5s ease;
+            transition: opacity .5s ease;
             margin: 0px;
             border-top: 1px solid $ms_tl_border_color;
             li {
@@ -122,14 +122,16 @@ $submenu_width: 14em;
             }
         }
         .open-sub {
-            > .nav-toggle-icon {
-                &:before {
-                    transform: rotate(-180deg);
+            > a {
+                .nav-toggle-icon {
+                    &:before {
+                        transform: rotate(-180deg);
+                    }
                 }
             }
             > .sub-menu {
                 display: block;
-                max-height: 2000px;
+                //max-height: 2000px;
                 opacity: 1;
             }
         }
