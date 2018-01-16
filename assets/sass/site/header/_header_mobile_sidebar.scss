@@ -171,6 +171,12 @@ body {
                 a {
                     border: none;
                     font-size: 130%;
+                    span {
+                        display: inline-block;
+                        position: relative;
+                        border: 0px none;
+                        margin-right: -2.3em;
+                    }
                 }
             }
         }

@@ -3994,6 +3994,12 @@ body.menu_sidebar_dropdown:before {
   border: none;
   font-size: 130%;
 }
+.menu_sidebar_slide_overlay .nav-menu-mobile .menu li a span {
+  display: inline-block;
+  position: relative;
+  border: 0px none;
+  margin-right: -2.3em;
+}
 .menu_sidebar_slide_overlay .nav-menu-mobile .sub-menu {
   border: none;
 }

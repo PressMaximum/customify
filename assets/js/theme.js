@@ -18,9 +18,20 @@ jQuery( document ).ready( function( $ ){
     var insertNavIcon = function(){
         $( '.menu-item-has-children', $( '#header-menu-sidebar .nav-menu-mobile' ) ).each( function(){
             var $el = $( this );
-            $( '<span class="nav-toggle-icon"><i class="fa fa-angle-down"></i></span>' ).insertBefore( $( ' > .sub-menu', $el ) );
+            var first_a = $( ' > a', $el );
+            var d = first_a.clone();
+            //$( '<span class="nav-toggle-icon"><i class="fa fa-angle-down"></i></span>' ).insertBefore( $( ' > .sub-menu', $el ) );
+            first_a.append( '<span class="nav-toggle-icon"><i class="fa fa-angle-down"></i></span>' );
+            $( ' > .sub-menu', $el ).prepend( d );
+            d.wrap( '<li class="menu-item li-duplicator"></li>' );
         } );
     };
+
+    // Toggle sub menu
+    $document.on( 'click',  '.menu-item-has-children > a', function( e ){
+        e.preventDefault();
+        $( this ).closest('li').toggleClass('open-sub');
+    } );
 
     var insertMenuOverlayClass = function() {
         if ( $( 'body' ).hasClass( 'menu_sidebar_slide_overlay' ) ) {
@@ -160,11 +171,6 @@ jQuery( document ).ready( function( $ ){
         }
     } );
 
-    // Toggle sub menu
-    $document.on( 'click',  'li .nav-toggle-icon', function( e ){
-        e.preventDefault();
-        $( this ).parent().toggleClass('open-sub');
-    } );
 
     // Toggle Header Search
     $document.on( 'click',  '.builder-item--search .search-toggle,  .mobile-search-form-sidebar .close', function( e ){
