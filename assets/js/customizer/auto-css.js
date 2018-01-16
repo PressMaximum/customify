@@ -834,22 +834,32 @@ var AutoCSS = window.AutoCSS || null;
         }
         values = _.defaults( values, {
             font: null,
+            font_type: null,
+            languages: null,
             font_style: null,
             font_size: null,
+            font_weight: null,
             line_height: null,
             letter_spacing: null,
-            color: null,
+            style: null,
+            text_decoration: null,
+            text_transform: null,
         });
 
         var code = {};
         var fields = {};
         var devices_css = {};
-        _.each( field.fields, function( f ){
+        _.each( Customify_Preview_Config.typo_fields, function( f ){
             fields[ f.name ] = f;
         } );
 
         if ( ! _.isUndefined( fields.font ) ) {
-            code.font = this.setup_font( values.font );
+            code.font = this.setup_font( {
+                font: values.font,
+                type: values.font_type,
+                subsets: values.languages,
+                variant: values.font_weight,
+            } );
         }
 
         if ( ! _.isUndefined( fields.font_style ) ) {
@@ -857,7 +867,6 @@ var AutoCSS = window.AutoCSS || null;
         }
 
         if ( ! _.isUndefined( fields.font_size ) ) {
-
             fields.font_size.css_format = 'font-size: {{value}};';
             var font_size_css = this.maybe_devices_setup( fields.font_size, 'setup_slider', values.font_size, true );
             if ( !_.isEmpty( font_size_css ) ) {
@@ -895,7 +904,6 @@ var AutoCSS = window.AutoCSS || null;
                             devices_css[ device ]['line_height'] = _c;
                         }
                     } );
-
                 }
             }
         }
@@ -921,12 +929,6 @@ var AutoCSS = window.AutoCSS || null;
             }
         }
 
-        if (  !_.isUndefined(fields['color'] ) ) {
-            var _c = this.setup_color(values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
-            if ( _c ) {
-                code['color'] = _c;
-            }
-        }
         _.each( devices_css, function( els, device ){
             that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
         } );

@@ -29,6 +29,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             add_action( 'customize_register', array( $this, 'register' ) );
             add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
 
+            add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
+
         }
 
         static function get_instance(){
@@ -36,6 +38,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 self::$_instance = new self();
             }
             return self::$_instance ;
+        }
+
+        /**
+         * Reset Customize section
+         */
+        function get_icons(){
+            if ( ! current_user_can( 'customize' ) ) {
+                wp_send_json_error();
+            }
+
+            require_once get_template_directory().'/inc/customizer/customizer-icons.php';
+            wp_send_json_success( Customify_Font_Icons()->get_icons() );
+            die();
         }
 
         /**
@@ -47,7 +62,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
                 wp_localize_script('customify-customizer-auto-css', 'Customify_Preview_Config', array(
                     'fields' => Customify_Customizer::get_config(),
-                    'devices' => $this->devices
+                    'devices' => $this->devices,
+                    'typo_fields' => Customify_Customizer()->get_typo_fields(),
                 ));
             }
         }
@@ -204,6 +220,92 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             }
 
             return $get_value;
+        }
+
+        function get_typo_fields() {
+            $typo_fields =array(
+                array(
+                    'name' => 'font',
+                    'type' => 'select',
+                    'label' => __('Font', 'customify'),
+                    'choices' => array()
+                ),
+
+                array(
+                    'name' => 'languages',
+                    'type' => 'checkboxes',
+                    'label' => __('Font Languages', 'customify'),
+                ),
+
+                array(
+                    'name' => 'font_size',
+                    'type' => 'slider',
+                    'label' => __('Font Size', 'customify'),
+                    'device_settings' => true,
+                ),
+
+                array(
+                    'name' => 'line_height',
+                    'type' => 'slider',
+                    'label' => __('Line Height', 'customify'),
+                    'device_settings' => true,
+                ),
+
+                array(
+                    'name' => 'letter_spacing',
+                    'type' => 'slider',
+                    'label' => __('Letter Spacing', 'customify'),
+                    'min' => -10,
+                    'max' => 10,
+                ),
+
+                array(
+                    'name' => 'font_weight',
+                    'type' => 'select',
+                    'label' => __('Font Weight', 'customify'),
+                    'choices' => array()
+                ),
+
+                array(
+                    'name' => 'style',
+                    'type' => 'select',
+                    'label' => __('Font Style', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'normal' =>__( 'Normal', 'customify' ),
+                        'italic' =>__( 'Italic', 'customify' ),
+                        'oblique' =>__( 'Oblique', 'customify' ),
+                    )
+                ),
+
+                array(
+                    'name' => 'text_decoration',
+                    'type' => 'select',
+                    'label' => __('Text Decoration', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'underline' =>__( 'Underline', 'customify' ),
+                        'overline' =>__( 'Overline', 'customify' ),
+                        'line-through' =>__( 'Line through', 'customify' ),
+                        'none' =>__( 'None', 'customify' ),
+                    )
+                ),
+
+                array(
+                    'name' => 'text_transform',
+                    'type' => 'select',
+                    'label' => __('Text Transform', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'uppercase' =>__( 'Uppercase', 'customify' ),
+                        'lowercase' =>__( 'Lowercase', 'customify' ),
+                        'capitalize' =>__( 'Capitalize', 'customify' ),
+                        'none' =>__( 'None', 'customify' ),
+                    )
+                )
+            );
+
+            return $typo_fields;
         }
 
         function setup_icon( $icon ){

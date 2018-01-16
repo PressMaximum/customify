@@ -78,28 +78,28 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
 
-        if ( Customify_Customizer()->has_icon() ) {
-            require_once get_template_directory().'/inc/customizer/customizer-icons.php';
-        }
-
         wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
-        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
+        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ), false, true );
         wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_icon_loaded ) ) {
+
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
                 'home_url' => home_url(''),
                 'ajax' => admin_url('admin-ajax.php'),
-                'has_icons' => Customify_Customizer()->has_icon(),
-                'icons' => Customify_Font_Icons()->get_icons(),
                 'theme_default' => __('Theme Default', 'customify'),
                 'reset' => __('Reset this section settings', 'customify'),
                 'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
+                'list_font_weight' => array(
+                    'default'   => __('Default', 'customify'),
+                    'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
+                    'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
+                ),
+                'typo_fields' => Customify_Customizer()->get_typo_fields(),
+
             ));
             self::$_icon_loaded = true;
         }
     }
-
-
 
     /**
      * Refresh the parameters passed to the JavaScript via JSON.
@@ -326,7 +326,8 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'video' => 'media',
             'text',
             'hidden',
-            'heading'
+            'heading',
+            'typography'
         );
         foreach ( $fields as $key => $field ) {
             $id = $field;
@@ -385,6 +386,22 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             <div id="customify--icon-browser">
             </div>
         </div>
+
+        <div id="customify-typography-panel" class="customify-typography-panel">
+            <div class="customify-typography-panel--inner">
+                <input type="hidden" id="customify--font-type">
+                <div id="customify-typography-panel--fields"></div>
+            </div>
+        </div>
+
+        <script type="text/html" id="tmpl-customify-modal-settings">
+            <div class="customify-modal-settings">
+                <div class="customify-modal-settings--inner">
+                    <div class="customify-modal-settings--fields"></div>
+                </div>
+            </div>
+        </script>
+
         <?php
     }
 
@@ -430,6 +447,22 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <div class="customify-field-settings-inner">
             <input type="text" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
+        <?php
+        $this->after_field();
+    }
+
+    function field_typography(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-actions">
+            <a href="#" class="action--reset"><span class="dashicons dashicons-image-rotate"></span></a>
+            <a href="#" class="action--edit"><span class="dashicons dashicons-edit"></span></a>
+        </div>
+        <div class="customify-field-settings-inner">
+            <input type="hidden" class="customify-typography-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}">
+        </div>
+
         <?php
         $this->after_field();
     }

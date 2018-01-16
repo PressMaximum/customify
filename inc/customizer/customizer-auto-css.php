@@ -477,14 +477,18 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 'font_size' => null,
                 'line_height' => null,
                 'letter_spacing' => null,
-                'color' => null,
+                'font_type' => null,
+                'languages' => null,
+                'font_weight' => null,
+                'text_decoration' => null,
+                'text_transform' => null,
             ) );
             $code = array();
 
 
             $fields = array();
             $devices_css = array();
-            foreach ($field['fields'] as $f) {
+            foreach ( Customify_Customizer()->get_typo_fields() as $f) {
                 $fields[ $f['name'] ] = $f;
             }
 
@@ -556,13 +560,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                             }
                         }
                     }
-                }
-            }
-
-            if ( isset($fields['color'])) {
-                $_c = $this->setup_color($values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
-                if ( $_c ) {
-                    $code['color'] = $_c;
                 }
             }
 

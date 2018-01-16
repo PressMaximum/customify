@@ -21,7 +21,18 @@ if (!function_exists('customify_customizer_config')) {
                 'description' => __('This is section description', 'customify'),
             ),
 
+            array(
+                'name' => 'typography',
+                'type' => 'typography',
+                'section' => 'customify_section',
+                'title' => __('Typography', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'selector' => '#page',
+                'css_format' => 'typography',
+                'default' => array(),
+            ),
 
+            /*
             array(
                 'name' => 'repeater',
                 'type' => 'repeater',
@@ -213,86 +224,25 @@ if (!function_exists('customify_customizer_config')) {
                 'description' => __('This is description', 'customify'),
                 'choices' => array(
                     '1' => array(
-                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_chat_messages_conversation_forum-128.png',
+                        'img' => get_template_directory_uri().'/assets/images/customizer/021_layout_wireframe_grid_chat_messages_conversation_forum-128.png',
                         //'label' => 'Option_1'
                     ),
                     '2' => array(
-                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_posts_list-128.png',
+                        'img' => get_template_directory_uri().'/assets/images/customizer/021_layout_wireframe_grid_posts_list-128.png',
                         //'label' => 'Option_2'
                     ),
                     '3' => array(
-                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_list_checkboxes-128.png',
+                        'img' => get_template_directory_uri().'/assets/images/customizer/021_layout_wireframe_grid_list_checkboxes-128.png',
                         //'label' => 'Option_3'
                     ),
                     '4' => array(
-                        'img' => 'https://cdn4.iconfinder.com/data/icons/unigrid-layout/60/021_layout_wireframe_grid_wizard_step_steps-128.png',
+                        'img' => get_template_directory_uri().'/assets/images/customizer/021_layout_wireframe_grid_wizard_step_steps-128.png',
                         //'label' => 'Option_4'
                     ),
                 )
             ),
 
-            array(
-                'name' => 'typography',
-                'type' => 'group',
-                'section' => 'customify_section',
-                'title' => __('Typography', 'customify'),
-                'description' => __('This is description', 'customify'),
-                'field_class' => 'customify-typography-control',
-                'selector' => '#page',
-                'css_format' => 'typography',
-                'default' => array(),
-                'fields' => array(
 
-                    array(
-                        'name' => 'font',
-                        'type' => 'font',
-                        'label' => __('Font', 'customify'),
-                    ),
-
-                    array(
-                        'name' => 'text-align',
-                        'type' => 'font_style',
-                        'label' => __('Font Style', 'customify'),
-                    ),
-
-                    array(
-                        'name' => 'font_style',
-                        'type' => 'text_align',
-                        'label' => __('Text align', 'customify'),
-                    ),
-
-                    array(
-                        'name' => 'font_size',
-                        'type' => 'slider',
-                        'label' => __('Font Size', 'customify'),
-                        'device_settings' => true,
-                    ),
-
-
-                    array(
-                        'name' => 'line_height',
-                        'type' => 'slider',
-                        'label' => __('Line Height', 'customify'),
-                        'device_settings' => true,
-                    ),
-
-
-                    array(
-                        'name' => 'letter_spacing',
-                        'type' => 'slider',
-                        'label' => __('Letter Spacing', 'customify'),
-                        'min' => -10,
-                        'max' => 10,
-                    ),
-
-                    array(
-                        'name' => 'color',
-                        'type' => 'color',
-                        'label' => __('Color', 'customify'),
-                    ),
-
-                )
-            ),
 
             array(
                 'name' => 'typography_h1',
@@ -768,6 +718,9 @@ if (!function_exists('customify_customizer_config')) {
                 'theme_supports' => '',
                 'title' => __('Text Align', 'customify'),
             ),
+
+            */
+
 
 
         );
