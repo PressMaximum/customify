@@ -1636,13 +1636,15 @@
             } ) ;
 
             $(document).mouseup(function(e) {
-                var container = $(".typo-actions");
+                var actions = $(".customify-actions .action--edit", that.$el );
                 if (
                     !that.container.is(e.target) && that.container.has(e.target).length === 0
                     &&
-                    !container.is(e.target) && container.has(e.target).length === 0
+                    !actions.is(e.target) && actions.has(e.target).length === 0
                 ) {
-                    that.container.hide().removeClass( 'opening' );
+                    that.container.hide();
+                    that.$el.removeClass( 'modal--opening' );
+                    that.$el.attr( 'data-opening', '' );
                 }
             });
 
@@ -1688,22 +1690,27 @@
         open: function( $el ){
             this.$el = $el;
             var that = this;
-            that.values = $( '.customify-typography-input', this.$el ).val();
-
-            that.values = JSON.parse( that.values );
-
-            $el.addClass( 'customify-modal--inside');
-            if ( ! $( '.customify-modal-settings', $el ).length ) {
-                var $wrap = $( $( '#tmpl-customify-modal-settings' ).html() );
-                that.container = $wrap;
-                this.$el.append( $wrap );
-                that.ready();
+            var status = $el.attr( 'data-opening' ) || false;
+            if ( status !== 'opening' ) {
+                $el.attr( 'data-opening', 'opening' );
+                that.values = $('.customify-typography-input', that.$el).val();
+                that.values = JSON.parse(that.values);
+                $el.addClass('customify-modal--inside');
+                if (!$('.customify-modal-settings', $el).length) {
+                    var $wrap = $($('#tmpl-customify-modal-settings').html());
+                    that.container = $wrap;
+                    this.$el.append($wrap);
+                    that.ready();
+                } else {
+                    that.container = $('.customify-modal-settings', $el);
+                }
+                this.container.show();
+                this.$el.addClass('modal--opening');
             } else {
-                that.container = $( '.customify-modal-settings', $el );
+                $el.attr( 'data-opening', '' );
+                $('.customify-modal-settings', $el).hide();
+                $el.removeClass('modal--opening');
             }
-
-            this.container.show();
-            this.container.addClass( 'opening' );
         },
 
         get: function(){
@@ -1819,7 +1826,6 @@
 
 
         $document.on( 'click', '.customize-control-customify-typography .action--edit', function(){
-            //$( '.customify-field-settings-inner', $( this ).closest('.customify--field-typography') ).append( $( '#customify-typography-panel' ) );
             FontSelector.open( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
         } );
 

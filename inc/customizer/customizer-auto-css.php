@@ -473,7 +473,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $values = Customify_Customizer()->get_setting( $field['name'] );
             $values = wp_parse_args( $values, array(
                 'font' => null,
-                'font_style' => null,
+                'style' => null,
                 'font_size' => null,
                 'line_height' => null,
                 'letter_spacing' => null,
@@ -493,7 +493,12 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             }
 
             if ( isset( $fields['font']) ) {
-                $code['font'] = $this->setup_font($values['font']);
+                $code['font'] = $this->setup_font( array(
+                    'font' =>$values['font'],
+                    'type' =>$values['font_type'],
+                    'subsets' => $values['languages'],
+                    'variant' => $values['font_weight'],
+                ) );
             }
 
             if (isset($fields['font_style'])) {

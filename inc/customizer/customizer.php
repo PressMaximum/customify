@@ -232,6 +232,13 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 ),
 
                 array(
+                    'name' => 'font_weight',
+                    'type' => 'select',
+                    'label' => __('Font Weight', 'customify'),
+                    'choices' => array()
+                ),
+
+                array(
                     'name' => 'languages',
                     'type' => 'checkboxes',
                     'label' => __('Font Languages', 'customify'),
@@ -257,13 +264,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'label' => __('Letter Spacing', 'customify'),
                     'min' => -10,
                     'max' => 10,
-                ),
-
-                array(
-                    'name' => 'font_weight',
-                    'type' => 'select',
-                    'label' => __('Font Weight', 'customify'),
-                    'choices' => array()
                 ),
 
                 array(

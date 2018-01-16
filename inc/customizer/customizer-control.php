@@ -460,7 +460,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             <a href="#" class="action--edit"><span class="dashicons dashicons-edit"></span></a>
         </div>
         <div class="customify-field-settings-inner">
-            <input type="hidden" class="customify-typography-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}">
+            <input type="hidden" class="customify-typography-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
         </div>
 
         <?php

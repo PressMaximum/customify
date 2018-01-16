@@ -836,7 +836,6 @@ var AutoCSS = window.AutoCSS || null;
             font: null,
             font_type: null,
             languages: null,
-            font_style: null,
             font_size: null,
             font_weight: null,
             line_height: null,
@@ -862,8 +861,33 @@ var AutoCSS = window.AutoCSS || null;
             } );
         }
 
-        if ( ! _.isUndefined( fields.font_style ) ) {
-            code.font_style = this.setup_font_style( values.font_style );
+        // Font Style
+        if ( ! _.isUndefined( fields.style ) ) {
+            //code.font_style = this.setup_font_style( values.font_style );
+            if ( values.style && values.style !== 'default' ) {
+                code.style = 'font-style: '+values.style+';';
+            }
+        }
+
+        // Font Weight
+        if ( ! _.isUndefined( fields.font_weight ) ) {
+            if ( values.font_weight && values.font_weight !== 'default' && values.font_weight !== 'default'  ) {
+                code.font_weight = 'font-weight: '+values.font_weight+';';
+            }
+        }
+
+        // Text Decoration
+        if ( ! _.isUndefined( fields.text_decoration ) ) {
+            if ( values.text_decoration && values.text_decoration !== 'default' ) {
+                code.text_decoration = 'text-decoration: '+values.text_decoration+';';
+            }
+        }
+
+        // Text Transform
+        if ( ! _.isUndefined( fields.text_transform ) ) {
+            if ( values.text_transform && values.text_transform !== 'default' ) {
+                code.text_transform = 'text-transform: '+values.text_transform+';';
+            }
         }
 
         if ( ! _.isUndefined( fields.font_size ) ) {

@@ -903,6 +903,9 @@
   border-radius: 3px;
   padding: 5px;
 }
+.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
+  content: "\f335";
+}
 
 #customize-theme-controls .customize-pane-child.accordion-section-content {
   min-height: 100%;
@@ -911,6 +914,43 @@
 
 .customize-control-customify-typography .customize-control-description {
   margin-bottom: 0px;
+}
+.customize-control-customify-typography .list-subsets p {
+  margin-top: 0px;
+  width: 50%;
+  float: left;
+}
+.customize-control-customify-typography .list-subsets:before, .customize-control-customify-typography .list-subsets:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.customize-control-customify-typography .list-subsets:after {
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field:before, .customize-control-customify-typography .customify--group-field:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field:after {
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field .customify-field-header {
+  width: 50%;
+  float: left;
+}
+.customize-control-customify-typography .customify--group-field .customify-field-settings-inner {
+  width: 50%;
+  float: right;
+}
+.customize-control-customify-typography .customify--group-field.customify--multiple-devices .customify-field-header, .customize-control-customify-typography .customify--group-field.customify--multiple-devices .customify-field-settings-inner {
+  width: auto;
+  float: none;
+}
+.customize-control-customify-typography .customify--group-field .customify--field-slider .customify-field-header, .customize-control-customify-typography .customify--group-field .customify--field-slider .customify-field-settings-inner, .customize-control-customify-typography .customify--group-field .customify--field-name-languages .customify-field-header, .customize-control-customify-typography .customify--group-field .customify--field-name-languages .customify-field-settings-inner {
+  width: auto;
+  float: none;
 }
 
 .customify-field-settings-inner {

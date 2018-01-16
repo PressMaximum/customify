@@ -32,6 +32,17 @@ if (!function_exists('customify_customizer_config')) {
                 'default' => array(),
             ),
 
+            array(
+                'name' => 'typography_h',
+                'type' => 'typography',
+                'section' => 'customify_section',
+                'title' => __('Typography Heading', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'selector' => 'h1, h2, h3, h4, h5, h6',
+                'css_format' => 'typography',
+                'default' => array(),
+            ),
+
             /*
             array(
                 'name' => 'repeater',

@@ -933,9 +933,17 @@ $text_color: #555d66;
             border: 1px solid #ddd;
             border-radius: 3px;
             padding: 5px;
+            .modal--opening & {
+                span {
+                    &:before {
+                        content: "\f335";
+                    }
+                }
+            }
         }
     }
 }
+
 #customize-theme-controls .customize-pane-child.accordion-section-content {
     min-height: 100%;
     display: block;
@@ -943,6 +951,38 @@ $text_color: #555d66;
 .customize-control-customify-typography {
     .customize-control-description {
         margin-bottom: 0px;
+    }
+    .list-subsets {
+        p {
+            margin-top: 0px;
+            width: 50%;
+            float: left;
+        }
+        @include clearfix();
+    }
+    .customify--group-field {
+        @include clearfix();
+        .customify-field-header {
+            width: 50%;
+            float: left;
+        }
+        .customify-field-settings-inner {
+            width: 50%;
+            float: right;
+        }
+        &.customify--multiple-devices {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
+
+        .customify--field-slider, .customify--field-name-languages  {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
     }
 }
 
