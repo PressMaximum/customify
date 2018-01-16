@@ -124,9 +124,10 @@ $submenu_width: 14em;
         .open-sub {
             > a {
                 .nav-toggle-icon {
-                    &:before {
+                    i {
                         transform: rotate(-180deg);
                     }
+
                 }
             }
             > .sub-menu {

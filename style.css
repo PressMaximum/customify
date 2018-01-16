@@ -3042,7 +3042,7 @@ article.comment .comment-post-author {
 .nav-menu-mobile .menu .sub-menu li a {
   padding-left: 3em;
 }
-.nav-menu-mobile .menu .open-sub > a .nav-toggle-icon:before {
+.nav-menu-mobile .menu .open-sub > a .nav-toggle-icon i {
   transform: rotate(-180deg);
 }
 .nav-menu-mobile .menu .open-sub > .sub-menu {
