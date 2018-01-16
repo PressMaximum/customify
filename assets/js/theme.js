@@ -28,7 +28,7 @@ jQuery( document ).ready( function( $ ){
     };
 
     // Toggle sub menu
-    $document.on( 'click',  '.menu-item-has-children > a', function( e ){
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
         e.preventDefault();
         $( this ).closest('li').toggleClass('open-sub');
     } );
