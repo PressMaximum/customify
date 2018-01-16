@@ -2,7 +2,6 @@
 @import "header_main";
 @import "header_bottom";
 @import "header_builder_common";
-@import "header_mobile_sidebar";
 
 // Import header builder items.
 @import "builder_items/button";
@@ -12,5 +11,7 @@
 @import "builder_items/search";
 @import "builder_items/social_icons";
 @import "builder_items/nav_icon";
+
+@import "header_mobile_sidebar";
 
 

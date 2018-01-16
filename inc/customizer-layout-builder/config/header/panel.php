@@ -295,15 +295,15 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 		        'name'    => $section.'_text_mode',
 		        'type'    => 'image_select',
 		        'section' => $section,
-		        'selector' => '#header-menu-sidebar',
+		        'selector' => '#header-menu-sidebar, .close-sidebar-panel',
 		        'css_format' => 'html_class',
 		        'title'   => __( 'Text Mode Color', 'customify' ),
-		        'default'         => 'is-mode-light',
+		        'default'         => 'is-text-light',
 		        'choices' => array(
-			        'is-mode-dark' => array(
+			        'is-text-light' => array(
 				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_light.svg',
 			        ),
-			        'is-mode-light' => array(
+			        'is-text-dark' => array(
 				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_dark.svg',
 			        ),
 		        )

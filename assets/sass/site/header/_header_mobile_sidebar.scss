@@ -6,18 +6,6 @@ $menu_sidebar_content_max_width: 48em;
 $menu_sidebar_content_gutter: 1.5em;
 $menu_sidebar_boxshadow: 0px 0px 10px 0px rgba(0,0,0,0.4);
 
-// Color Mode MS (Menu Sidebar).
-$ms_dark_color: rgba(255, 255, 255, 0.8);
-$ms_dark_color_hover: rgba(255, 255, 255, 0.9);
-$ms_dark_bg: rgba(0,0,0,0.95);
-$ms_dark_border_color: rgba(255,255,255,0.15);
-$ms_light_color: rgba(0,0,0,0.6);
-$ms_light_color_hover: rgba(0,0,0,0.99);
-$ms_light_bg: #f2f2f2;
-$ms_light_border_color: rgba(0,0,0,0.08);
-
-
-
 /* - General */
 .body-y-hidden {
     overflow: hidden !important;
@@ -55,16 +43,16 @@ body {
     top: 0;
     z-index: $menu_sidebar_active_z_index;
     visibility: hidden;
-    color: $ms_dark_color;
+    color: $ms_tl_color;
     a:not(.customify-btn) {
-        color: $ms_dark_color;
+        color: $ms_tl_color;
         &:hover {
-            color: $ms_dark_color_hover;
+            color: $ms_tl_color_hover;
         }
     }
     .builder-item-sidebar {
         padding: 1.4em 1.5em;
-        border-bottom: 1px solid $ms_dark_border_color;
+        border-bottom: 1px solid $ms_tl_border_color;
         &:last-of-type {
             border-bottom: none;
         }
@@ -74,30 +62,45 @@ body {
     }
     .header-menu-sidebar-bg {
         &:before {
-            background: $ms_dark_bg;
+            background: $ms_tl_bg;
         }
     }
-    .nav-menu-mobile .nav-t-icon { color: currentColor; }
+    .nav-menu-mobile .nav-toggle-icon { color: currentColor; }
 
     // Light mode
-    &.is-mode-light {
-        color: $ms_light_color;
+    &.is-text-dark {
+        color: $ms_td_color;
         a:not(.customify-btn) {
-            color: $ms_light_color;
+            color: $ms_td_color;
             &:hover {
-                color: $ms_light_color_hover;
+                color: $ms_td_color_hover;
             }
         }
         .builder-item-sidebar {
-            border-color: $ms_light_border_color;
+            border-color: $ms_td_border_color;
+            &:before {
+                background: $ms_td_border_color;
+            }
         }
         .header-menu-sidebar-bg {
             &:before {
-                background: $ms_light_bg;
+                background: $ms_td_bg;
+            }
+        }
+        .close-sidebar-panel {
+            .hamburger-inner {
+                background: $ms_td_color;
+            }
+            &:hover {
+                .hamburger-inner {
+                    background: $ms_td_color_hover;
+                }
             }
         }
     }
 }
+
+
 .header-menu-sidebar-bg {
     position: relative;
     word-wrap: break-word;
@@ -131,6 +134,57 @@ body {
         right: 0px;
         bottom: 0px;
     }
+
+    .builder-item-sidebar {
+        text-align: center;
+        padding: 2em 1.5em;
+        border: none;
+        position: relative;
+        &:before {
+            content: "";
+            width: 8%;
+            height: 2px;
+            display: block;
+            background: $ms_tl_border_color;
+            position: absolute;
+            bottom: 0px;
+            left: 46%;
+            @include mq(max-md) {
+                width: 16%;
+                left: 42%;
+            }
+        }
+        &:last-child {
+            &:before {
+                content: none;
+            }
+        }
+        &[class*="-menu"] {
+            padding: 2.5em 1.5em;
+        }
+    }
+
+    // Menu style
+    .nav-menu-mobile {
+        .menu {
+            li {
+                a {
+                    border: none;
+                    font-size: 130%;
+                }
+            }
+        }
+        .sub-menu {
+            border: none;
+            li {
+                a {
+                    padding: 0.35em 1.5em;
+                    font-size: 100%;
+                }
+            }
+        }
+    }
+
     .header-menu-sidebar-bg {
         position: absolute;
         top: 0px; left: 0px; width: 100%;
@@ -138,6 +192,27 @@ body {
     .header-menu-sidebar-inner {
         max-width: $menu_sidebar_content_max_width;
         margin: ( $menu_sidebar_content_gutter * 2) auto;
+        padding: 0;
+    }
+    .is-text-dark {
+        .header-menu-sidebar-bg {
+            &:before {
+                background: $ms_td_bg;
+            }
+        }
+        &.close-sidebar-panel {
+            .hamburger-inner {
+                background: $ms_td_color;
+                &:before, &::after {
+                    background: inherit;
+                }
+            }
+            &:hover {
+                .hamburger-inner {
+                    background: $ms_td_color_hover;
+                }
+            }
+        }
     }
 }
 
@@ -297,9 +372,14 @@ $close_size: 35px;
     top: 10px;
     right: 12px;
     .hamburger-inner {
-        background: #fff;
+        background: $ms_tl_color;
         &:before, &::after {
             background: inherit;
+        }
+    }
+    &:hover {
+        .hamburger-inner {
+            background: $ms_tl_color_hover;
         }
     }
 }

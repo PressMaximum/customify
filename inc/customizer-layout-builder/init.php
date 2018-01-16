@@ -919,6 +919,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 			if ( $menu_sidebar_skin != '' ) {
 			    $classes[] = $menu_sidebar_skin;
             }
+
 			echo '<div id="header-menu-sidebar" class="' . esc_attr( join( ' ', $classes ) ) . '">';
 			echo '<div id="header-menu-sidebar-bg" class="header-menu-sidebar-bg">';
 			echo '<div id="header-menu-sidebar-inner" class="header-menu-sidebar-inner">';
@@ -956,7 +957,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
 	}
 
 	function close_icon( $class = '' ) {
-		$close = '<a class="close is-size-medium ' . esc_attr( $class ) . '" href="#">
+		$menu_sidebar_skin = Customify_Customizer()->get_setting('header_sidebar_text_mode');
+		$close = '<a class="close is-size-medium '. $menu_sidebar_skin . esc_attr( $class ) . '" href="#">
         <span class="hamburger hamburger--squeeze is-active">
             <span class="hamburger-box">
               <span class="hamburger-inner"></span>
@@ -982,7 +984,7 @@ function customify_customize_render_header() {
 	if ( ! customify_is_header_display() ) {
 		return;
 	}
-	echo Customify_Customizer_Layout_Builder_Frontend()->close_icon( 'close-panel close-sidebar-panel' );
+	echo Customify_Customizer_Layout_Builder_Frontend()->close_icon( ' close-panel close-sidebar-panel' );
 	echo '<header id="masthead" class="site-header">';
 	$list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
 	Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );

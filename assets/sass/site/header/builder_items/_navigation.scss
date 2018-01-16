@@ -88,30 +88,28 @@ $submenu_width: 14em;
             a {
                 display: block;
                 padding: 0.55em 1.5em;
-                border-top: 1px solid $ms_dark_border_color;
+                border-top: 1px solid $ms_tl_border_color;
                 &:hover {
                     background: rgba(0,0,0,0.01);
                 }
             }
-            .nav-t-icon {
-                width: 40px;
-                height: 100%;
+            .nav-toggle-icon {
                 display: block;
                 position: absolute;
                 top: 0px;
                 right: 0px;
-                font-size: 130%;
                 text-align: center;
                 vertical-align: middle;
                 line-height: 1;
                 transition: all .5s ease;
                 cursor: pointer;
-                border-radius: 50%;
-                &:before {
-                    transition: all .5s ease;
-                    font-family: "fontawesome";
-                    content: "\f107";
-                }
+                padding: 0.88em 0.9em;
+                border-left: 1px solid $ms_tl_border_color;
+                //&:before {
+                //    transition: all .5s ease;
+                //    font-family: "fontawesome";
+                //    content: "\f107";
+                //}
             }
         }
 
@@ -121,7 +119,7 @@ $submenu_width: 14em;
             opacity: 0;
             transition: max-height .5s ease;
             margin: 0px;
-            border-top: 1px solid $ms_dark_border_color;
+            border-top: 1px solid $ms_tl_border_color;
             li {
                 a {
                     padding-left: 3em;
@@ -129,7 +127,7 @@ $submenu_width: 14em;
             }
         }
         .open-sub {
-            > .nav-t-icon {
+            > .nav-toggle-icon {
                 &:before {
                     transform: rotate(-180deg);
                 }

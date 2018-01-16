@@ -18,8 +18,16 @@ jQuery( document ).ready( function( $ ){
     var insertNavIcon = function(){
         $( '.menu-item-has-children', $( '#header-menu-sidebar .nav-menu-mobile' ) ).each( function(){
             var $el = $( this );
-            $( '<span class="nav-t-icon"></span>' ).insertBefore( $( '.sub-menu', $el ) );
+            $( '<span class="nav-toggle-icon"><i class="fa fa-angle-down"></i></span>' ).insertBefore( $( ' > .sub-menu', $el ) );
         } );
+    };
+
+    var insertMenuOverlayClass = function() {
+        if ( $( 'body' ).hasClass( 'menu_sidebar_slide_overlay' ) ) {
+            $('.nav-menu-mobile').addClass('nav-menu-overlay');
+        } else {
+            $('.nav-menu-mobile').removeClass('nav-menu-overlay');
+        }
     };
 
     var setupMobileHeight = function( $el ){
@@ -43,6 +51,7 @@ jQuery( document ).ready( function( $ ){
     };
     setupMobileHeight();
     insertNavIcon();
+    insertMenuOverlayClass();
     $( window ).resize( function(){
         setupMobileHeight();
     } );
@@ -152,7 +161,7 @@ jQuery( document ).ready( function( $ ){
     } );
 
     // Toggle sub menu
-    $document.on( 'click',  'li .nav-t-icon', function( e ){
+    $document.on( 'click',  'li .nav-toggle-icon', function( e ){
         e.preventDefault();
         $( this ).parent().toggleClass('open-sub');
     } );
@@ -174,6 +183,7 @@ jQuery( document ).ready( function( $ ){
     $document.on( 'header_builder_panel_changed', function(){
         setupMobileHeight();
         insertNavIcon();
+        insertMenuOverlayClass();
         //stickyHeaders.load($(".header--row.is-sticky"));
     } );
 
