@@ -402,7 +402,8 @@
 
                     break;
                 case 'typography':
-
+                case 'modal':
+                case 'styling':
                     if (support_devices) {
                         value = {};
                         _.each(control.allDevices, function (device) {
@@ -417,7 +418,6 @@
                     } catch  (e) {
 
                     }
-
                     break;
                 default:
                     if (support_devices) {
@@ -904,22 +904,22 @@
             $('.customify-input-color', $el).each(function () {
                 var colorInput = $(this);
                 var df = colorInput.data('default') || '';
-                var current_val = $('.customify-input', colorInput).val();
+                var current_val = $('.customify-input--color', colorInput).val();
                 // data-alpha="true"
                 $('.customify--color-panel', colorInput).attr('data-alpha', 'true');
                 $('.customify--color-panel', colorInput).wpColorPicker({
                     defaultColor: df,
                     change: function (event, ui) {
                         var new_color = ui.color.toString();
-                        $('.customify-input', colorInput).val(new_color);
+                        $('.customify-input--color', colorInput).val(new_color);
                         if (ui.color.toString() !== current_val) {
                             current_val = new_color;
-                            $('.customify-input', colorInput).trigger('change');
+                            $('.customify-input--color', colorInput).trigger('change');
                         }
                     },
                     clear: function (event, ui) {
-                        $('.customify-input', colorInput).val('');
-                        $('.customify-input', colorInput).trigger('data-change');
+                        $('.customify-input--color', colorInput).val('');
+                        $('.customify-input--color', colorInput).trigger('data-change');
                     }
 
                 });
@@ -927,7 +927,8 @@
         },
 
     };
-    //-------------------------------
+
+    //-------------------------------------------------------------------------
 
     var customify_controlConstructor = {
         devices: ['desktop', 'tablet', 'mobile'],
@@ -976,7 +977,6 @@
 
             // The hidden field that keeps the data saved (though we never update it)
             control.settingField = control.container.find('[data-customize-setting-link]').first();
-
 
             switch (control.params.setting_type) {
                 case 'group':
@@ -1081,18 +1081,6 @@
                         device_value = {};
                     }
 
-                    /*
-                    _.each(control.params.fields, function (f, index) {
-                        var $fieldArea = $('<div class="customify--group-field" data-field-name="' + f.name + '"></div>');
-                        $group_device.append($fieldArea);
-                        f.device_settings = false;
-                        f.value = device_value[f.name];
-                        control.addField(f, $fieldArea, function(){
-                            control.getValue();
-                        } );
-                    });
-                    */
-
                     customifyField.addFields( control.params.fields,  device_value, $group_device, function(){
                         control.getValue();
                     } );
@@ -1181,7 +1169,6 @@
                 control.addField(f, $fieldArea,function(){
                     control.getValue();
                 });
-
             });
 
             if (!_.isUndefined(value._visibility) && value._visibility === 'hidden') {
@@ -1352,7 +1339,6 @@
     };
     //---------------------------------------------------------------------------
 
-
     wp.customize.controlConstructor.customify = wp.customize.Control.extend({
         ready: function() {
             customify_controls_list[ this.id] = this;
@@ -1433,8 +1419,6 @@
                     that.close();
                 }
             } );
-
-
         },
         picker: function(){
             var that = this;
@@ -1450,7 +1434,6 @@
 
             $document.on( 'click', '.customify--icon-picker .customify--pick-icon', function( e ) {
                 e.preventDefault();
-
                 if ( _.isNull( that.listIcons ) ) {
                     that.ajaxLoad( function(){
                         open();
@@ -1458,9 +1441,6 @@
                 } else {
                     open();
                 }
-
-
-
             } );
 
             $document.on( 'click', '#customify--icon-browser li', function( e ) {
@@ -1490,7 +1470,6 @@
                 $( '.customify--icon-preview-icon', that.pickingEl ).html( '' );
 
             } );
-
         },
 
         ajaxLoad: function( cb ){
@@ -1713,6 +1692,31 @@
             }
         },
 
+        reset: function( $el ){
+            this.$el = $el;
+            var that = this;
+
+            $el.attr( 'data-opening', '' );
+            $('.customify-modal-settings', $el).remove();
+            $el.removeClass('modal--opening');
+            that.values = $('.customify-typography-input', that.$el).attr('data-default') || '[]';
+            try {
+                that.values = JSON.parse(that.values);
+            } catch (e) {
+            }
+
+            $el.addClass('customify-modal--inside');
+            if (!$('.customify-modal-settings', $el).length) {
+                var $wrap = $($('#tmpl-customify-modal-settings').html());
+                that.container = $wrap;
+                this.$el.append($wrap);
+                that.ready();
+            } else {
+                that.container = $('.customify-modal-settings', $el );
+            }
+            that.get();
+        },
+
         get: function(){
             var data = {};
             var that = this;
@@ -1730,9 +1734,183 @@
 
         init: function(){
             this.load();
+            var that = this;
+            $document.on( 'click', '.customize-control-customify-typography .action--edit', function(){
+                that.open( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
+            } );
         }
 
     };
+    //----------------------------------------------
+
+
+
+    //---------------------------------------------------------------------------
+    var customifyStyling  = {
+        tabs: {
+            normal: 'Normal',
+            hover: 'Hover'
+        },
+        fields:  {},
+        normal_fields: {},
+        hover_fields: {},
+        controlID: '',
+        init: function(){
+            var that = this;
+            $document.on( 'click', '.customize-control-customify-styling .action--edit', function(){
+                that.controlID = $( this ).attr( 'data-control' ) || '';
+                var c = wpcustomize.control( that.controlID );
+
+                if (  that.controlID && ! _.isUndefined( c ) ) {
+                    if ( !_.isUndefined( c.params.fields ) && _.isObject( c.params.fields ) ) {
+
+                        if ( ! _.isUndefined( c.params.fields.tabs  ) ) {
+                            that.tabs = c.params.fields.tabs;
+                        } else {
+                            that.tabs = Customify_Control_Args.styling_config.tabs;
+                        }
+
+                        if ( ! _.isUndefined( c.params.fields.normal_fields  ) ) {
+                            that.normal_fields = c.params.fields.normal_fields;
+                        } else {
+                            that.normal_fields = Customify_Control_Args.styling_config.normal_fields;
+                        }
+
+                        if ( ! _.isUndefined( c.params.fields.hover_fields ) ) {
+                            that.hover_fields = c.params.fields.hover_fields;
+                        } else {
+                            that.hover_fields = Customify_Control_Args.styling_config.hover_fields;
+                        }
+
+                    }
+                }
+
+                that.open( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
+            } );
+
+
+
+
+        },
+        addFields: function(){
+            var that = this;
+            var fieldsArea = $( '.customify-modal-settings--fields', that.container );
+
+            var tabsHTML = $( '<div class="modal--tabs"></div>' );
+            var c = 0;
+            _.each( that.tabs, function( label, key ){
+                if ( label && ! _.isEmpty( that[ key+'_fields' ] ) ) {
+                    c ++ ;
+                    tabsHTML.append( '<div><span data-tab="'+key+'" class="modal--tab modal-tab--'+key+'">'+label+'</span></div>' );
+                }
+            } );
+
+            fieldsArea.append( tabsHTML );
+            if ( c <= 1 ) {
+                tabsHTML.addClass('customify--hide');
+            }
+
+            _.each(that.tabs, function( label, key ){
+                if ( _.isObject( that[ key +'_fields' ] ) && !_.isEmpty( key +'_fields' ) ) {
+
+                    var content = $('<div class="modal-tab-content modal-tab--' + key + '"></div>');
+                    fieldsArea.append(content);
+                    customifyField.addFields( that[ key +'_fields' ], that.values[key], content, function () {
+                        that.get();
+                    });
+                    customifyField.initConditional(content, that.values[key]);
+
+                }
+            });
+
+
+            $( 'input, select, textarea', that.container ).removeClass('customify-input').addClass( 'customify-modal-input change-by-js' );
+
+            fieldsArea.on( 'change data-change', 'input, select, textarea', function(){
+                that.get();
+            } ) ;
+
+            that.container.on( 'click', '.modal--tab', function(){
+                var id = $( this ).attr( 'data-tab' ) || '';
+                $( '.modal--tabs .modal--tab', that.container ).removeClass( 'tab--active' );
+                $( this ).addClass( 'tab--active' );
+                $( '.modal-tab-content', that.container ).removeClass('tab--active');
+                $( '.modal-tab-content.modal-tab--'+id, that.container ).addClass('tab--active');
+            } ) ;
+            $( '.modal--tabs .modal--tab', that.container ).eq(0).trigger('click');
+
+
+            $(document).mouseup(function(e) {
+                var actions = $(".customify-actions .action--edit", that.$el );
+                if (
+                    !that.container.is(e.target) && that.container.has(e.target).length === 0
+                    &&
+                    !actions.is(e.target) && actions.has(e.target).length === 0
+                ) {
+                    that.container.hide();
+                    that.$el.removeClass( 'modal--opening' );
+                    that.$el.attr( 'data-opening', '' );
+                }
+            });
+
+        },
+
+        get: function(){
+            var data = {};
+            var that = this;
+            _.each( that.tabs, function( label, key ){
+                var subdata = {};
+                var content = $( '.modal-tab-content.modal-tab--'+key, that.container );
+                if ( _.isObject( that[key+'_fields'] ) )
+                {
+                    _.each( that[key+'_fields'], function (f) {
+                        subdata[f.name] = customifyField.getValue(f, $('.customify--group-field[data-field-name="' + f.name + '"]', content));
+                    });
+                }
+                data[ key ] = subdata;
+
+                customifyField.initConditional( content, subdata );
+            } );
+
+            $( '.customify-typography-input', this.$el ).val( JSON.stringify( data ) ).trigger( 'change' );
+            console.log( 'Styling_data', data );
+
+            return data;
+        },
+
+        open: function( $el ){
+            this.$el = $el;
+            var that = this;
+            var status = $el.attr( 'data-opening' ) || false;
+            if ( status !== 'opening' ) {
+                $el.attr( 'data-opening', 'opening' );
+
+                that.values = $('.customify-modal-input', that.$el).val();
+                that.values = JSON.parse(that.values);
+                $el.addClass('customify-modal--inside');
+
+                if (!$('.customify-modal-settings', $el).length) {
+                    var $wrap = $($('#tmpl-customify-modal-settings').html());
+                    that.container = $wrap;
+                    this.$el.append($wrap);
+                    that.addFields();
+                } else {
+                    that.container = $('.customify-modal-settings', $el);
+                }
+
+                this.container.show();
+                this.$el.addClass('modal--opening');
+            } else {
+                $el.attr( 'data-opening', '' );
+                $('.customify-modal-settings', $el).hide();
+                $el.removeClass('modal--opening');
+            }
+        },
+    };
+
+    //---------------------------------------------------------------------------
+
+
 
     wpcustomize.bind( 'ready', function( e, b ) {
 
@@ -1821,12 +1999,15 @@
 
             IconPicker.init();
             FontSelector.init();
+            customifyStyling.init();
         });
 
 
 
-        $document.on( 'click', '.customize-control-customify-typography .action--edit', function(){
-            FontSelector.open( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
+
+
+        $document.on( 'click', '.customize-control-customify-typography .action--reset', function(){
+            FontSelector.reset( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
         } );
 
         // Add reset button to sections

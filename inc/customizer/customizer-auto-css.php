@@ -646,7 +646,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 switch ($field['css_format']) {
                                     case 'background':
                                     case 'styling':
-                                        $this->styling($field, $v);
+                                        //$this->styling($field, $v);
                                         break;
                                     case 'typography':
                                         $this->typography($field, $v);
@@ -655,7 +655,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                         //
                                         break;
                                     default:
-                                        $this->maybe_devices_setup($field, 'setup_default', $v);
+                                        //$this->maybe_devices_setup($field, 'setup_default', $v);
 
                                 }
 

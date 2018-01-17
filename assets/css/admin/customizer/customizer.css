@@ -907,6 +907,45 @@
   content: "\f335";
 }
 
+.modal--tabs {
+  display: flex;
+  margin-left: -12px;
+  margin-right: -12px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+.modal--tabs div {
+  flex-basis: 100%;
+  max-width: 100%;
+  text-align: center;
+  padding: 5px 5px 0px;
+}
+.modal--tabs div:first-child {
+  padding-left: 10px;
+}
+.modal--tabs div:last-child {
+  padding-right: 10px;
+}
+.modal--tabs span {
+  display: block;
+  border: 1px solid #dddddd;
+  padding: 5px;
+  cursor: pointer;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+.modal--tabs span.tab--active {
+  background: #ffffff;
+  border-bottom-color: #fff;
+}
+
+.modal-tab-content {
+  display: none;
+}
+.modal-tab-content.tab--active {
+  display: block;
+}
+
 #customize-theme-controls .customize-pane-child.accordion-section-content {
   min-height: 100%;
   display: block;
@@ -970,6 +1009,7 @@
   margin-bottom: 15px;
   top: 100%;
   left: 0px;
+  right: 0px;
   z-index: 99;
 }
 .customify-modal-settings:before {
@@ -987,7 +1027,7 @@
   font-weight: 400;
 }
 .customify-modal-settings .customify--group-field {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 .customify-modal-settings .customify--group-field:last-child {
   margin-bottom: 0px;

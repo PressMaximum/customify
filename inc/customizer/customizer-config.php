@@ -43,6 +43,38 @@ if (!function_exists('customify_customizer_config')) {
                 'default' => array(),
             ),
 
+            array(
+                'name' => 'styling_new',
+                'type' => 'styling',
+                'section' => 'customify_section',
+                'title' => __('Styling New', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'selector' => 'h1, h2, h3, h4, h5, h6', // Global selector
+                'css_format' => 'styling',
+                'default' => array(
+                    'normal' => array(),
+                    'hover' => array(),
+                ),
+                //'fields' => array()
+            ),
+
+            array(
+                'name' => 'styling_normal_only',
+                'type' => 'styling',
+                'section' => 'customify_section',
+                'title' => __('Styling Normal', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'selector' => 'h1, h2, h3, h4, h5, h6', // Global selector
+                'css_format' => 'styling',
+                'default' => array(
+                    'normal' => array(),
+                    'hover' => array(),
+                ),
+                'fields' => array(
+                    'hover_fields' => false
+                )
+            ),
+
             /*
             array(
                 'name' => 'repeater',

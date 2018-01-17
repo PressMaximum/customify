@@ -94,7 +94,7 @@ var AutoCSS = window.AutoCSS || null;
                             switch (field.css_format) {
                                 case  'background':
                                 case  'styling':
-                                    that.styling(field, v );
+                                    that.styling( field, v );
                                     break;
                                 case 'typography':
                                     that.typography(field, v );

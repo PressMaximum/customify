@@ -95,7 +95,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
                 ),
                 'typo_fields' => Customify_Customizer()->get_typo_fields(),
-
+                'styling_config' => Customify_Customizer()->get_styling_config(),
             ));
             self::$_icon_loaded = true;
         }
@@ -327,7 +327,9 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'text',
             'hidden',
             'heading',
-            'typography'
+            'typography',
+            'modal',
+            'styling'
         );
         foreach ( $fields as $key => $field ) {
             $id = $field;
@@ -401,7 +403,6 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 </div>
             </div>
         </script>
-
         <?php
     }
 
@@ -462,10 +463,28 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <div class="customify-field-settings-inner">
             <input type="hidden" class="customify-typography-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
         </div>
-
         <?php
         $this->after_field();
     }
+
+    function field_modal(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-actions">
+            <a href="#" class="action--reset"><span class="dashicons dashicons-image-rotate"></span></a>
+            <a href="#" class="action--edit" data-control="{{ field.name }}"><span class="dashicons dashicons-edit"></span></a>
+        </div>
+        <div class="customify-field-settings-inner">
+            <input type="hidden" class="customify-modal-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
+        </div>
+        <?php
+        $this->after_field();
+    }
+    function field_styling(){
+        $this->field_modal();
+    }
+
     function field_heading(){
         $this->before_field();
         ?>
@@ -593,7 +612,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-input-color" data-default="{{ field.default }}">
-                <input type="hidden" class="customify-input" data-name="{{ field.name }}" value="{{ field.value }}">
+                <input type="hidden" class="customify-input customify-input--color" data-name="{{ field.name }}" value="{{ field.value }}">
                 <input type="text" class="customify--color-panel" data-alpha="true" value="{{ field.value }}">
             </div>
         </div>
