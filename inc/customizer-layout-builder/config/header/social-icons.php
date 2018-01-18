@@ -147,7 +147,7 @@ class Customify_Builder_Item_Social_Icons {
 
 	function render( $item_config ) {
 
-		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset' );
+		$preset = Customify_Customizer()->get_setting( 'header_social_icons_preset', 'all' );
 		$sizes = Customify_Customizer()->get_setting( 'header_social_icons_size', 'all' );
 		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
 		$nofollow      = Customify_Customizer()->get_setting( 'header_social_icons_nofollow' );
@@ -167,7 +167,13 @@ class Customify_Builder_Item_Social_Icons {
 
 			$classes   = array( 'header-social-icons customify-builder-social-icons' );
 			if ( $preset ) {
-				$classes[] = 'is-style-'.$preset;
+			    if ( is_array( $preset ) ) {
+                    foreach ( $preset as $d => $s ) {
+                        $classes[] = 'is-style-'.$d.'-'.$s;
+                    }
+                } else {
+                    $classes[] = 'is-style-'.$preset;
+                }
 			}
             
 			if ( ! empty( $sizes ) ) {

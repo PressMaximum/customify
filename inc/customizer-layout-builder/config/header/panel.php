@@ -465,7 +465,6 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                 'title'   => __( 'Item Layout', 'customify' )
             ),
 
-
             array(
                 'name'            => 'header_'.$item_id.'_margin',
                 'type'            => 'css_ruler',
@@ -478,7 +477,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                     'bottom' => 'margin-bottom: {{value}};',
                     'left'   => 'margin-left: {{value}};',
                 ),
-                'selector'        => '.builder-item--'.$item_id,
+                'selector'        => ".header--row .builder-item--{$item_id}, .builder-item.builder-item--group .item--inner.builder-item--{$item_id}",
                 'label'           => __( 'Margin', 'customify' ),
             ),
 
