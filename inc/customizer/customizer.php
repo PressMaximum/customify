@@ -357,7 +357,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __( 'Background Position', 'customify' ),
                         'required' => array( 'bg_image', 'not_empty', ''),
                         'choices' => array(
-                            ''       => __( 'default', 'customify' ),
+                            ''       => __( 'Default', 'customify' ),
                             'center'        => __( 'Center', 'customify' ),
                             'top left'      => __( 'Top Left', 'customify' ),
                             'top right'     => __( 'Top Right', 'customify' ),

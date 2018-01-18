@@ -1894,6 +1894,7 @@
                     &&
                     !actions.is(e.target) && actions.has(e.target).length === 0
                 ) {
+
                     that.container.hide();
                     that.$el.removeClass( 'modal--opening' );
                     that.$el.attr( 'data-opening', '' );
@@ -1931,7 +1932,7 @@
             if ( status !== 'opening' ) {
                 $el.attr( 'data-opening', 'opening' );
 
-                that.values = $('.customify-modal-input', that.$el).val();
+                that.values = $('.customify-hidden-modal-input', that.$el).val();
                 try {
                     that.values = JSON.parse(that.values);
                 } catch ( e ){

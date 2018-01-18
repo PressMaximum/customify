@@ -83,6 +83,9 @@ var AutoCSS = window.AutoCSS || null;
                         case 'color':
                             fields_code[ field.name ] = that.color(field, v, no_selector );
                             break;
+                        case 'checkbox':
+                            fields_code[ field.name ] = that.checkbox(field, v, no_selector );
+                            break;
                         case 'image':
                             fields_code[ field.name ] = that.image( field, v, no_selector );
                             break;
@@ -304,6 +307,15 @@ var AutoCSS = window.AutoCSS || null;
         if ( format ) {
             if ( value ) {
                 return this.str_value( value, format );
+            }
+        }
+        return false;
+    };
+
+    AutoCSS.prototype.setup_checkbox = function( value, format ){
+        if ( format ) {
+            if ( value ) {
+                return format;
             }
         }
         return false;
@@ -582,6 +594,10 @@ var AutoCSS = window.AutoCSS || null;
         return this.maybe_devices_setup( field, 'setup_color', value, no_selector );
     };
 
+    AutoCSS.prototype.checkbox = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_checkbox', value, no_selector );
+    };
+
     AutoCSS.prototype.image = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_image', value, no_selector );
     };
@@ -633,8 +649,6 @@ var AutoCSS = window.AutoCSS || null;
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
-        //this.maybe_devices_setup( field, 'setup_styling' );
-
 
         values = _.defaults( values, {
             'normal': {},
@@ -707,21 +721,17 @@ var AutoCSS = window.AutoCSS || null;
                         } );
                     }
                 }
-
-
             } );
         };
 
         var selectorCSSAll = {};
         var selectorCSSDevices = {};
 
-        if ( field.name=== 'styling_new' ) {
-            var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
-            console.log('normal_style_fields', listNormalFields);
-            console.log('normal_style__', normal_style );
-            _join( listNormalFields, normal_style );
-        }
 
+        var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
+        var hover_style = that.loop_fields(listHoverFields, values['hover'], true, true);
+        _join( listNormalFields, normal_style );
+        _join( listHoverFields, hover_style );
 
         if ( field.name=== 'styling_new' ) {
             console.log('selectorCSSAll', selectorCSSAll);
@@ -749,115 +759,6 @@ var AutoCSS = window.AutoCSS || null;
             that.css[ device ] += css;
         } );
 
-
-    };
-
-    AutoCSS.prototype.setup_styling = function ( value ) {
-        if ( ! _.isObject( value ) ) {
-            value = {};
-        }
-
-        value =_.defaults( value, this.styling_fields );
-
-        var css = {};
-        var color = this.sanitize_color( value.color );
-        if ( color ) {
-            css.color = "background-color: "+color+";";
-        }
-
-        var image = this.sanitize_media( value.image );
-
-        if ( image.url ) {
-            css.image = "background-image: url(\""+image.url+"\");";
-        }
-
-        switch ( value.position ) {
-            case 'center':
-                css.position = 'background-position: center center;';
-                break;
-            case 'top_left':
-                css.position = 'background-position: top left;';
-                break;
-            case 'top_center':
-                css.position = 'background-position: top center;';
-                break;
-            case 'top_right':
-                css.position = 'background-position: top right;';
-                break;
-            case 'bottom_left':
-                css.position = 'background-position: bottom left;';
-                break;
-            case 'bottom_center':
-                css.position = 'background-position: bottom center;';
-                break;
-            case 'bottom_right':
-                css.position = 'background-position: bottom right;';
-                break;
-            default:
-                css.position = 'background-position: center center;';
-        }
-
-        switch ( value.repeat ) {
-            case 'no-repeat':
-                css.repeat = 'background-repeat: no-repeat;';
-                break;
-            case 'repeat-x':
-                css.repeat = 'background-repeat: repeat-x;';
-                break;
-            case 'repeat-y':
-                css.repeat = 'background-repeat: repeat-y;';
-                break;
-            default:
-
-        }
-
-        switch ( value.attachment ) {
-            case 'scroll':
-                css.attachment = 'background-attachment: scroll;';
-                break;
-            case 'fixed':
-                css.attachment = 'background-attachment: fixed;';
-                break;
-            default:
-        }
-
-        if ( value.border_style !== 'none' ) {
-            if ( ! _.isObject( value.border_width ) ) {
-                value.border_width =  {};
-            }
-           _.each( [ 'top', 'right', 'bottom', 'left' ], function( k ){
-               if ( _.isUndefined( value.border_width[ k ] ) || _.isEmpty( value.border_width[ k ] ) ){
-                   value.border_width[ k ] = 0;
-               }
-           } );
-            if (value.border_width) {
-                css.border_width = this.setup_css_ruler(value.border_width, {
-                    top: 'border-top-width: {{value}};',
-                    right: 'border-right-width: {{value}};',
-                    bottom: 'border-bottom-width: {{value}};',
-                    left: 'border-left-width: {{value}};'
-                });
-            }
-
-            if (css.border_width) {
-                var border_color = this.sanitize_color(value.border_color);
-                if (border_color) {
-                    css.border_color = "border-color: " + border_color + ";";
-                }
-            }
-        }
-
-        if (value.border_style) {
-            css.border_style = "border-style: " + value.border_style + ";";
-        }
-
-
-        if ( value.cover ) {
-            css.cover = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
-            css.attachment = 'background-attachment: fixed;';
-        }
-
-        return this.join( css, "\n\t" );
     };
 
     AutoCSS.prototype.setup_font_style = function ( value ){

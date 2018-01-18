@@ -50,10 +50,10 @@ if (!function_exists('customify_customizer_config')) {
                 'title' => __('Styling New', 'customify'),
                 'description' => __('This is description', 'customify'),
                 'selector' => array(
-                    'normal' => '#page',
-                    'hover' => '#page:hover',
-                    'normal_link_color' => '#page a', // status_{field_name} for special selector
-                    'hover_link_color' => '#page a:hover', // status_{field_name} for special selector
+                    'normal' => '.site-content',
+                    'hover' => '.site-content:hover',
+                    'normal_link_color' => '.site-content a', // status_{field_name} for special selector
+                    'hover_link_color' => '.site-content a:hover', // status_{field_name} for special selector
                 ), // Global selector
                 'css_format' => 'styling',
                 'default' => array(
