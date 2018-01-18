@@ -3560,6 +3560,41 @@ article.comment .comment-post-author {
   .customify-builder-social-icons.is-style-desktop-plain.is-size-xl a i {
     font-size: 28px;
   }
+}
+@media screen and (min-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-desktop-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-desktop-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-desktop-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-tablet-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-tablet-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-tablet-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-mobile-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-mobile-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-desktop-plain.is-size-mobile-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (min-width: 64em) {
   .customify-builder-social-icons.is-style-desktop-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -3593,6 +3628,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (min-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) {
   .customify-builder-social-icons.is-style-desktop-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -3625,6 +3722,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (min-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) {
   .customify-builder-social-icons.is-style-desktop-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -3658,6 +3817,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (min-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) {
   .customify-builder-social-icons.is-style-desktop-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -3691,6 +3912,67 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
+@media screen and (min-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (min-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
 @media screen and (max-width: 64em) {
   .customify-builder-social-icons.is-style-tablet-plain a {
     border: none;
@@ -3705,6 +3987,41 @@ article.comment .comment-post-author {
   .customify-builder-social-icons.is-style-tablet-plain.is-size-xl a i {
     font-size: 28px;
   }
+}
+@media screen and (max-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-desktop-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-desktop-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-desktop-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-tablet-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-tablet-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-tablet-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-mobile-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-mobile-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-tablet-plain.is-size-mobile-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 64em) {
   .customify-builder-social-icons.is-style-tablet-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -3738,6 +4055,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) {
   .customify-builder-social-icons.is-style-tablet-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -3770,6 +4149,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) {
   .customify-builder-social-icons.is-style-tablet-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -3803,6 +4244,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) {
   .customify-builder-social-icons.is-style-tablet-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -3836,6 +4339,67 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
+@media screen and (max-width: 64em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 64em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+
 @media screen and (max-width: 35.5em) {
   .customify-builder-social-icons.is-style-mobile-plain a {
     border: none;
@@ -3850,6 +4414,41 @@ article.comment .comment-post-author {
   .customify-builder-social-icons.is-style-mobile-plain.is-size-xl a i {
     font-size: 28px;
   }
+}
+@media screen and (max-width: 35.5em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-desktop-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-desktop-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-desktop-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-tablet-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-tablet-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-tablet-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-mobile-s a i {
+    font-size: 13px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-mobile-l a i {
+    font-size: 22px;
+  }
+  .customify-builder-social-icons.is-style-mobile-plain.is-size-mobile-xl a i {
+    font-size: 28px;
+  }
+}
+@media screen and (max-width: 35.5em) {
   .customify-builder-social-icons.is-style-mobile-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -3883,6 +4482,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 35.5em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) {
   .customify-builder-social-icons.is-style-mobile-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -3915,6 +4576,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 35.5em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-square.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) {
   .customify-builder-social-icons.is-style-mobile-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -3948,6 +4671,68 @@ article.comment .comment-post-author {
     height: 34px;
     line-height: 34px;
   }
+}
+@media screen and (max-width: 35.5em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-mobile-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) {
   .customify-builder-social-icons.is-style-mobile-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -3975,6 +4760,66 @@ article.comment .comment-post-author {
     line-height: 30px;
   }
   .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (min-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-desktop-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-desktop-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-desktop-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 64em) {
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-tablet-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-tablet-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-tablet-xl a i {
+    font-size: 24px;
+    width: 34px;
+    height: 34px;
+    line-height: 34px;
+  }
+}
+@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-mobile-s a i {
+    font-size: 12px;
+    width: 18px;
+    height: 18px;
+    line-height: 18px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-mobile-l a i {
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+  }
+  .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-mobile-xl a i {
     font-size: 24px;
     width: 34px;
     height: 34px;

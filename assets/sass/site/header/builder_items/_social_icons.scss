@@ -274,21 +274,21 @@
     @each $mq-key, $mq-value in $gl-devices-list {
         @media #{$mq-value} {
             &.is-style-#{$mq-key}-plain {
-                @include social-icon-style-plain(false);
+                @include social-icon-style-plain(true);
             }
             &.is-style-#{$mq-key}-outline-square {
-                @include social-icon-style-outline-square(false);
+                @include social-icon-style-outline-square(true);
             }
             &.is-style-#{$mq-key}-fill-square {
-                @include social-icon-style-fill-square(false);
+                @include social-icon-style-fill-square(true);
             }
 
             &.is-style-#{$mq-key}-outline-rounded {
-                @include social-icon-style-outline-rounded(false);
+                @include social-icon-style-outline-rounded(true);
             }
 
             &.is-style-#{$mq-key}-fill-rounded {
-                @include social-icon-style-fill-rounded(false);
+                @include social-icon-style-fill-rounded(true);
             }
         }
     }
