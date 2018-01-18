@@ -7,7 +7,6 @@ $submenu_width: 14em;
        margin: 0px;
        li {
            display: inline-block;
-           margin-right: 15px;
            position: relative;
            &:last-child {
                margin-right: 0px;
@@ -15,10 +14,16 @@ $submenu_width: 14em;
            a {
                line-height: 1.6;
                display: inline-block;
+               color: currentColor;
+               font-size: 15px;
+               font-weight: 500;
+               &:hover {
+                   color: $color_primary;
+               }
            }
        }
-        >li > a {
-            padding: 5px 10px;
+        > li > a {
+            padding: 28px 15px;
         }
    }
 
@@ -38,22 +43,35 @@ $submenu_width: 14em;
         display: block;
         transform: translateY(40px);
         top: 100%;
-        box-shadow: 0 5px 30px 5px rgba(69,79,91,0.2);
-        border-radius: 2px;
+        //box-shadow: 0 9px 14px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+        //border-radius: 2px;
         text-align: left;
+        border-top: 2px solid $color_primary;
+
+
         li {
             display: block;
             margin: 0px;
             padding: 0px;
         }
+
         a {
             display: block;
-            padding: 10px 15px;
+            width: 100%;
+            padding: 7px 15px;
+            border-left: 1px solid #f2f2f2;
+            border-right: 1px solid #f2f2f2;
+        }
+
+        li:last-child > a {
+            border-bottom: 1px solid #f2f2f2;
         }
 
         .sub-menu {
             top: 0px;
             left: $submenu_width;
+            margin-top: -2px;
         }
     }
 
