@@ -171,12 +171,16 @@ body {
             li {
                 a {
                     border: none;
-                    font-size: 130%;
-                    span {
+                    font-size: 140%;
+                    text-transform: uppercase;
+                    font-weight: 500;
+                    .nav-toggle-icon {
                         display: inline-block;
                         position: relative;
                         border: 0px none;
-                        margin-right: -2.3em;
+                        margin-right: -1.3em;
+                        top: -2px;
+                        padding: 0.28em 0.5em;
                     }
                 }
             }
@@ -185,6 +189,7 @@ body {
             border: none;
             li {
                 a {
+                    text-transform: none;
                     padding: 0.35em 1.5em;
                     font-size: 100%;
                 }
@@ -268,6 +273,7 @@ body {
     .header-menu-sidebar-inner {
         max-width: $menu_sidebar_content_max_width;
         margin: 0 auto;
+        padding: 0px;
     }
     .header-menu-sidebar-bg {
         &:before {

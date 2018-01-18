@@ -2,4 +2,9 @@
     padding: 0;
     background: $color_primary;
     color: #ffffff;
+    text-size-adjust: 100%;
+    line-height: 1;
+    .customify-grid {
+        font-size: 15px;
+    }
 }

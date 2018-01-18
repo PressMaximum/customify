@@ -2805,6 +2805,11 @@ article.comment .comment-post-author {
   padding: 0;
   background: #003f69;
   color: #ffffff;
+  text-size-adjust: 100%;
+  line-height: 1;
+}
+.header-top .customify-grid {
+  font-size: 15px;
 }
 
 .header-main {
@@ -3543,6 +3548,7 @@ article.comment .comment-post-author {
 .menu-mobile-toggle {
   cursor: pointer;
   transition: opacity .3s;
+  text-align: center;
 }
 
 .nav-icon--label {
@@ -3992,18 +3998,23 @@ body.menu_sidebar_dropdown:before {
 }
 .menu_sidebar_slide_overlay .nav-menu-mobile .menu li a {
   border: none;
-  font-size: 130%;
+  font-size: 140%;
+  text-transform: uppercase;
+  font-weight: 500;
 }
-.menu_sidebar_slide_overlay .nav-menu-mobile .menu li a span {
+.menu_sidebar_slide_overlay .nav-menu-mobile .menu li a .nav-toggle-icon {
   display: inline-block;
   position: relative;
   border: 0px none;
-  margin-right: -2.3em;
+  margin-right: -1.3em;
+  top: -2px;
+  padding: 0.28em 0.5em;
 }
 .menu_sidebar_slide_overlay .nav-menu-mobile .sub-menu {
   border: none;
 }
 .menu_sidebar_slide_overlay .nav-menu-mobile .sub-menu li a {
+  text-transform: none;
   padding: 0.35em 1.5em;
   font-size: 100%;
 }
@@ -4073,6 +4084,7 @@ body.menu_sidebar_dropdown:before {
 .menu_sidebar_dropdown .header-menu-sidebar-inner {
   max-width: 48em;
   margin: 0 auto;
+  padding: 0px;
 }
 .menu_sidebar_dropdown .header-menu-sidebar-bg:before {
   box-shadow: inset 0px 0px 12px 0px rgba(0, 0, 0, 0.05);
