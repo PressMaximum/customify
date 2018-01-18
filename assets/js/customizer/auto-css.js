@@ -56,7 +56,7 @@ var AutoCSS = window.AutoCSS || null;
         return JSON.parse( decodeURI( value ) );
     };
 
-    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null ){
+    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null, no_selector ){
         if ( _.isUndefined( skip_if_val_null ) ) {
             skip_if_val_null = false;
         }
@@ -66,44 +66,50 @@ var AutoCSS = window.AutoCSS || null;
         }
 
         var that = this;
+
+        var fields_code = {};
+
         _.each( fields, function( field ){
             var v =  ! _.isUndefined( values[ field.name ] ) ? values[ field.name ] : null;
             if ( !( _.isNull( v ) && skip_if_val_null ) ) {
                 if (field.selector && field.css_format) {
                     switch (field.type) {
                         case 'css_ruler':
-                            that.css_ruler(field, v );
+                            fields_code[ field.name ] = that.css_ruler(field, v, no_selector );
                             break;
                         case 'slider':
-                            that.slider(field, v );
+                            fields_code[ field.name ] = that.slider(field, v, no_selector );
                             break;
                         case 'color':
-                            that.color(field, v );
+                            fields_code[ field.name ] = that.color(field, v, no_selector );
                             break;
                         case 'image':
-                            that.color(field, v );
+                            fields_code[ field.name ] = that.image( field, v, no_selector );
                             break;
                         case 'text_align':
                         case 'text_align_no_justify':
-                            that.text_align(field, v );
+                            fields_code[ field.name ] = that.text_align(field, v, no_selector );
                             break;
                         case 'font':
-                            that.font(field, v);
+                            fields_code[ field.name ] = that.font(field, v, no_selector );
+                            break;
+                        case 'styling':
+                            fields_code[ field.name ] = that.styling( field, v, no_selector );
                             break;
                         default:
                             switch (field.css_format) {
                                 case  'background':
                                 case  'styling':
-                                    that.styling( field, v );
+                                    fields_code[ field.name ] = that.styling( field, v, no_selector );
                                     break;
                                 case 'typography':
-                                    that.typography(field, v );
+                                    fields_code[ field.name ] = that.typography(field, v, no_selector );
                                     break;
                                 case 'html_class':
                                     that.html_class(field, v );
                                     break;
                                 default:
-                                    that.maybe_devices_setup(field, 'setup_default', v );
+                                    fields_code[ field.name ] = that.maybe_devices_setup(field, 'setup_default', v, no_selector );
                             }
                     }
                 } // end if selector and css format
@@ -111,7 +117,7 @@ var AutoCSS = window.AutoCSS || null;
 
         } ); // end _.each
 
-
+        return fields_code;
     };
     AutoCSS.prototype.run = function(){
 
@@ -564,54 +570,185 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.css_ruler = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_css_ruler', value );
+    AutoCSS.prototype.css_ruler = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_css_ruler', value, no_selector );
     };
 
-    AutoCSS.prototype.slider = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_slider', value );
+    AutoCSS.prototype.slider = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_slider', value, no_selector );
     };
 
-    AutoCSS.prototype.color = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_color', value );
+    AutoCSS.prototype.color = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_color', value, no_selector );
     };
 
-    AutoCSS.prototype.image = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_image', value );
+    AutoCSS.prototype.image = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_image', value, no_selector );
     };
 
-    AutoCSS.prototype.text_align = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_text_align', value );
+    AutoCSS.prototype.text_align = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_text_align', value, no_selector );
+    };
+
+    AutoCSS.prototype.setup_styling_fields = function( fields, list, selectors, type ){
+        var newfs;
+        var i;
+        var newList = [];
+        if ( ! _.isObject( selectors ) ) {
+            selectors = {};
+        }
+
+        if ( _.isUndefined( type ) ) {
+            type = 'normal';
+        }
+
+        if ( fields === false ){
+            newList = null;
+        } else {
+            if ( ! _.isObject( fields ) ) {
+                fields = {};
+            }
+            newfs = {};
+            i = 0;
+            _.each( list, function( f ){
+                if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                    newfs[ f.name ] = f;
+                    if ( ! _.isUndefined( selectors[ type+'_'+f.name ] ) ) {
+                        newfs[ f.name ]['selector'] = selectors[ type+'_'+f.name ];
+                    } else {
+                        newfs[ f.name ]['selector'] = selectors[ type ];
+                    }
+                    i++;
+                }
+
+            } );
+
+            newList = newfs;
+
+        }
+        return newList;
     };
 
     AutoCSS.prototype.styling = function( field ){
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
-        this.maybe_devices_setup( field, 'setup_styling' );
+        //this.maybe_devices_setup( field, 'setup_styling' );
 
+
+        values = _.defaults( values, {
+            'normal': {},
+            'hover': {}
+        } );
         var new_fields = {};
+        var selectors = {};
+        if ( _.isString( field.selector ) ) {
+            selectors['normal'] = field.selector;
+            selectors['hover'] = field.selector;
+        } else {
+            selectors = _.defaults( field.selector , {
+                normal : null,
+                hover : null
+            } );
+        }
 
-        _.each( field.fields, function( f ) {
-            if ( _.isUndefined( that.styling_fields[ f.name ] ) ) {
-                new_fields[ f.name ] = f;
-                if ( _.isUndefined( new_fields[ f.name ]['selector'] ) || _.isEmpty( new_fields[ f.name ]['selector'] ) ) {
-                    new_fields[ f.name ]['selector'] = field.selector;
-                }
+        var tabs = null, normal_fields = -1, hover_fields = -1;
+
+        if ( !_.isUndefined( field.fields ) && _.isObject(field.fields ) ) {
+            if ( ! _.isUndefined( field.fields.tabs  ) ) {
+                tabs = field.tabs;
             }
+            if ( ! _.isUndefined( field.fields.normal_fields  ) ) {
+                normal_fields =field.normal_fields;
+            }
+
+            if ( ! _.isUndefined( field.fields.hover_fields ) ) {
+                hover_fields = field.hover_fields;
+            }
+        }
+
+        var listNormalFields = that.setup_styling_fields( normal_fields,  Customify_Preview_Config.styling_config.normal_fields, selectors, 'normal' );
+        var listHoverFields = that.setup_styling_fields( hover_fields,  Customify_Preview_Config.styling_config.hover_fields, selectors, 'hover' );
+
+        var listTabs = _.clone( Customify_Preview_Config.styling_config.tabs );
+        if ( tabs === false ) {
+            listTabs['hover'] = false;
+        } else if ( _.isObject( tabs ) ) {
+            listTabs = tabs;
+        }
+
+
+        var _join = function( lists, codeList ){
+            _.each( lists, function( f, name ){
+                if ( _.isUndefined( selectorCSSAll[ f.selector ] ) ) {
+                    selectorCSSAll[ f.selector ] = '';
+                }
+
+                if( !_.isUndefined( codeList[ name ] ) ) {
+                    if ( ! _.isUndefined( codeList[ name ].no_devices ) ) {
+                        if ( codeList[ name ].no_devices ) {
+                            selectorCSSAll[ f.selector ] += codeList[ name ].no_devices;
+                        }
+                    } else {
+                        _.each( codeList[ name ], function( code, device ) {
+
+                            if ( _.isUndefined( selectorCSSDevices[ device ] ) ) {
+                                selectorCSSDevices[ device ] = {};
+                            }
+
+                            if ( _.isUndefined( selectorCSSDevices[ device ][ f.selector ] ) ) {
+                                selectorCSSDevices[ device ][ f.selector ] = '';
+                            }
+
+                            if ( code ) {
+                                selectorCSSDevices[ device ][ f.selector ] += code;
+                            }
+
+                        } );
+                    }
+                }
+
+
+            } );
+        };
+
+        var selectorCSSAll = {};
+        var selectorCSSDevices = {};
+
+        if ( field.name=== 'styling_new' ) {
+            var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
+            console.log('normal_style_fields', listNormalFields);
+            console.log('normal_style__', normal_style );
+            _join( listNormalFields, normal_style );
+        }
+
+
+        if ( field.name=== 'styling_new' ) {
+            console.log('selectorCSSAll', selectorCSSAll);
+            console.log('selectorCSSDevices', selectorCSSDevices);
+        }
+
+        _.each( selectorCSSAll, function( code, s ){
+            that.css.all += "\r\n"+s+"  {\r\n\t"+code+"\r\n}\r\n";
         } );
 
-        if ( _.size( new_fields ) > 0 ) {
-            if ( field.device_settings ) {
-                _.each( that.devices, function( device ){
-                    var values_device =  _.isUndefined( values[ device ] ) ? { } : values[ device ];
-                    that.loop_fields( new_fields, values_device , true );
-                });
-            } else {
-                that.loop_fields( new_fields, values , true );
+        _.each( that.devices, function( device ){
+            var css = '';
+            if ( ! _.isUndefined( selectorCSSDevices[ device ] ) ) {
+                var deviceCode = selectorCSSDevices[ device ];
+                _.each( deviceCode, function( c, s ){
+                 
+                    if ( _.isString( c ) ) {
+                        css += "\r\n"+s+"  {\r\n\t"+c+"\r\n}\r\n";
+                    } else {
+                        css += "\r\n"+s+"  {\r\n\t"+that.join( c, "\n" )+"\r\n}\r\n";
+                    }
+                } );
             }
 
-        }
+            that.css[ device ] += css;
+        } );
+
 
     };
 

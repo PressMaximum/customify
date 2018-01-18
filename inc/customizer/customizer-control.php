@@ -96,6 +96,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 ),
                 'typo_fields' => Customify_Customizer()->get_typo_fields(),
                 'styling_config' => Customify_Customizer()->get_styling_config(),
+                'devices' => Customify_Customizer()->devices,
             ));
             self::$_icon_loaded = true;
         }
@@ -476,7 +477,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             <a href="#" class="action--edit" data-control="{{ field.name }}"><span class="dashicons dashicons-edit"></span></a>
         </div>
         <div class="customify-field-settings-inner">
-            <input type="hidden" class="customify-modal-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
+            <input type="hidden" class="customify-hidden-modal-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
         </div>
         <?php
         $this->after_field();

@@ -1755,35 +1755,73 @@
         normal_fields: {},
         hover_fields: {},
         controlID: '',
+        setupFields: function( fields, list ){
+            var newfs;
+            var i;
+            var newList = [];
+            if ( fields === -1  ) {
+                newList = list;
+            } else if ( fields === false ){
+                newList = null;
+            } else {
+                if ( _.isObject( fields ) ) {
+                    newfs = {};
+                    i = 0;
+                    _.each( list, function( f ){
+                        if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                            newfs[ i ] = f;
+                            i++;
+                        }
+
+                    } );
+
+                    newList = newfs;
+                }
+            }
+            return newList;
+        },
+        setupConfig: function( tabs, normal_fields, hover_fields ){
+            var that = this;
+            that.tabs = {};
+            that.normal_fields = {};
+            that.hover_fields = {};
+
+            that.tabs = _.clone( Customify_Control_Args.styling_config.tabs );
+            if ( tabs === false ) {
+                that.tabs['hover'] = false;
+            } else if ( _.isObject( tabs ) ) {
+                that.tabs = tabs;
+            }
+
+            that.normal_fields = that.setupFields( normal_fields, Customify_Control_Args.styling_config.normal_fields );
+            that.hover_fields = that.setupFields( hover_fields, Customify_Control_Args.styling_config.hover_fields );
+
+        },
         init: function(){
             var that = this;
             $document.on( 'click', '.customize-control-customify-styling .action--edit', function(){
                 that.controlID = $( this ).attr( 'data-control' ) || '';
                 var c = wpcustomize.control( that.controlID );
-
+                var tabs = null, normal_fields = -1, hover_fields = -1;
                 if (  that.controlID && ! _.isUndefined( c ) ) {
                     if ( !_.isUndefined( c.params.fields ) && _.isObject( c.params.fields ) ) {
 
                         if ( ! _.isUndefined( c.params.fields.tabs  ) ) {
-                            that.tabs = c.params.fields.tabs;
-                        } else {
-                            that.tabs = Customify_Control_Args.styling_config.tabs;
+                            tabs = c.params.fields.tabs;
                         }
 
                         if ( ! _.isUndefined( c.params.fields.normal_fields  ) ) {
-                            that.normal_fields = c.params.fields.normal_fields;
-                        } else {
-                            that.normal_fields = Customify_Control_Args.styling_config.normal_fields;
+                            normal_fields = c.params.fields.normal_fields;
                         }
 
                         if ( ! _.isUndefined( c.params.fields.hover_fields ) ) {
-                            that.hover_fields = c.params.fields.hover_fields;
-                        } else {
-                            that.hover_fields = Customify_Control_Args.styling_config.hover_fields;
+                            hover_fields = c.params.fields.hover_fields;
                         }
 
                     }
                 }
+
+                that.setupConfig( tabs, normal_fields, hover_fields );
 
                 that.open( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
             } );
@@ -1794,6 +1832,13 @@
         },
         addFields: function(){
             var that = this;
+            if ( ! _.isObject( that.values ) ) {
+                that.values = {};
+            }
+            that.values = _.defaults( that.values, {
+                hover: {},
+                normal: {}
+            } );
             var fieldsArea = $( '.customify-modal-settings--fields', that.container );
 
             var tabsHTML = $( '<div class="modal--tabs"></div>' );
@@ -1809,6 +1854,8 @@
             if ( c <= 1 ) {
                 tabsHTML.addClass('customify--hide');
             }
+
+            customifyField.devices = Customify_Control_Args.devices;
 
             _.each(that.tabs, function( label, key ){
                 if ( _.isObject( that[ key +'_fields' ] ) && !_.isEmpty( key +'_fields' ) ) {
@@ -1868,11 +1915,10 @@
                     });
                 }
                 data[ key ] = subdata;
-
                 customifyField.initConditional( content, subdata );
             } );
 
-            $( '.customify-typography-input', this.$el ).val( JSON.stringify( data ) ).trigger( 'change' );
+            $( '.customify-hidden-modal-input', this.$el ).val( JSON.stringify( data ) ) .trigger( 'change' );
             console.log( 'Styling_data', data );
 
             return data;
@@ -1886,7 +1932,12 @@
                 $el.attr( 'data-opening', 'opening' );
 
                 that.values = $('.customify-modal-input', that.$el).val();
-                that.values = JSON.parse(that.values);
+                try {
+                    that.values = JSON.parse(that.values);
+                } catch ( e ){
+
+                }
+
                 $el.addClass('customify-modal--inside');
 
                 if (!$('.customify-modal-settings', $el).length) {

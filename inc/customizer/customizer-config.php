@@ -49,7 +49,12 @@ if (!function_exists('customify_customizer_config')) {
                 'section' => 'customify_section',
                 'title' => __('Styling New', 'customify'),
                 'description' => __('This is description', 'customify'),
-                'selector' => 'h1, h2, h3, h4, h5, h6', // Global selector
+                'selector' => array(
+                    'normal' => '#page',
+                    'hover' => '#page:hover',
+                    'normal_link_color' => '#page a', // status_{field_name} for special selector
+                    'hover_link_color' => '#page a:hover', // status_{field_name} for special selector
+                ), // Global selector
                 'css_format' => 'styling',
                 'default' => array(
                     'normal' => array(),
@@ -71,7 +76,10 @@ if (!function_exists('customify_customizer_config')) {
                     'hover' => array(),
                 ),
                 'fields' => array(
-                    'hover_fields' => false
+                    'hover_fields' => false, // disable hover tab and all fields inside.
+                    'normal_fields' => array(
+                        'link_color' => false // disable for special field.
+                    )
                 )
             ),
 
