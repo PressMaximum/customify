@@ -14,6 +14,9 @@
             remove_items = false;
         }
         if( partial_id == 'header_builder_panel' || partial_id === 'customify_customize_render_header' ) {
+
+            $( '.close-sidebar-panel' ).not( ':first' ).remove();
+
             if ( remove_items ) {
                 $('body > .header-menu-sidebar, #page > .header-menu-sidebar' ).remove();
             }
