@@ -2277,11 +2277,11 @@ figure {
 
 /* Links */
 a {
-  color: #003f69;
+  color: #007ee5;
   text-decoration: none;
 }
 a:hover {
-  color: #003f69;
+  color: #007ee5;
 }
 a:hover, a:active {
   outline: 0;
@@ -2359,7 +2359,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   border: none;
-  background: #6786a1;
+  background: #7b8994;
   color: #FFFFFF;
   cursor: pointer;
   padding: 0.5407911001em 1.618em;
@@ -2695,7 +2695,7 @@ article.comment .comment-reply a {
   color: #6d6d6d;
 }
 article.comment .comment-reply a:hover {
-  color: #6786a1;
+  color: #7b8994;
 }
 article.comment .comment-meta {
   margin-bottom: 0.875em;
@@ -2705,7 +2705,7 @@ article.comment .comment-time {
   font-size: 90%;
 }
 article.comment .comment-time:hover {
-  color: #6786a1;
+  color: #7b8994;
 }
 article.comment .comment-wrap {
   margin-left: 85px;
@@ -2721,14 +2721,14 @@ article.comment .comment-author a {
   color: #444444;
 }
 article.comment .comment-author a:hover {
-  color: #6786a1;
+  color: #7b8994;
 }
 article.comment .comment-post-author {
-  border: 1px solid #6786a1;
+  border: 1px solid #7b8994;
   font-size: 13px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #6786a1;
+  color: #7b8994;
   position: relative;
   top: -3px;
   margin-left: 4px;
@@ -2752,11 +2752,11 @@ article.comment .comment-post-author {
   margin-right: 0px;
 }
 #respond #cancel-comment-reply-link {
-  border: 1px solid #6786a1;
+  border: 1px solid #7b8994;
   font-size: 12px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #6786a1;
+  color: #7b8994;
   position: relative;
   top: -4px;
   margin-left: 4px;
@@ -2803,7 +2803,7 @@ article.comment .comment-post-author {
 
 .header-top {
   padding: 0;
-  background: #6786a1;
+  background: #7b8994;
   color: #ffffff;
   text-size-adjust: 100%;
   line-height: 13px;
@@ -2884,7 +2884,7 @@ article.comment .comment-post-author {
 /* Button */
 .customify-builder-btn {
   padding: 0.3819820591em 1em;
-  background: #7aa93c;
+  background: #007ee5;
   color: #FFFFFF;
   border-radius: 3px;
   display: inline-block;
@@ -2965,12 +2965,13 @@ article.comment .comment-post-author {
   color: currentColor;
   font-size: 15px;
   font-weight: 500;
+  transition: background 0.15s ease-out;
 }
 .nav-menu-desktop .menu li a:hover {
-  color: #6786a1;
+  color: #007ee5;
 }
 .nav-menu-desktop .menu > li > a {
-  padding: 28px 15px;
+  padding: 15px 15px;
 }
 .nav-menu-desktop .sub-menu {
   position: absolute;
@@ -2988,24 +2989,25 @@ article.comment .comment-post-author {
   display: block;
   transform: translateY(40px);
   top: 100%;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
   text-align: left;
-  border-top: 2px solid #6786a1;
+  border-top: 2px solid #7b8994;
 }
 .nav-menu-desktop .sub-menu li {
   display: block;
   margin: 0px;
   padding: 0px;
 }
-.nav-menu-desktop .sub-menu a {
+.nav-menu-desktop .sub-menu li a {
   display: block;
   width: 100%;
-  padding: 7px 15px;
-  border-left: 1px solid #f2f2f2;
-  border-right: 1px solid #f2f2f2;
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: normal;
+  transition: background 0.15s ease-out;
 }
-.nav-menu-desktop .sub-menu li:last-child > a {
-  border-bottom: 1px solid #f2f2f2;
+.nav-menu-desktop .sub-menu li a:hover {
+  background: rgba(0, 0, 0, 0.015);
 }
 .nav-menu-desktop .sub-menu .sub-menu {
   top: 0px;
@@ -3148,7 +3150,7 @@ article.comment .comment-post-author {
   display: block;
 }
 .customify-builder-social-icons a:hover {
-  color: #7aa93c;
+  color: #007ee5;
 }
 .customify-builder-social-icons.is-size-s a {
   position: relative;
@@ -3212,8 +3214,8 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-outline-square a:hover {
-  color: #7aa93c;
-  border-color: #7aa93c;
+  color: #007ee5;
+  border-color: #007ee5;
 }
 .customify-builder-social-icons.is-style-outline-square.is-size-s a i {
   font-size: 12px;
@@ -3397,8 +3399,8 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-outline-rounded a:hover:hover {
-  color: #7aa93c;
-  border-color: #7aa93c;
+  color: #007ee5;
+  border-color: #007ee5;
 }
 .customify-builder-social-icons.is-style-outline-rounded.is-size-s a i {
   font-size: 12px;
@@ -3490,7 +3492,7 @@ article.comment .comment-post-author {
   font-size: 17px;
 }
 .customify-builder-social-icons.is-style-fill-rounded a:hover:hover {
-  background: #7aa93c;
+  background: #007ee5;
 }
 .customify-builder-social-icons.is-style-fill-rounded.is-size-s a i {
   font-size: 12px;
@@ -3631,8 +3633,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-desktop-outline-square a:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-desktop-outline-square.is-size-s a i {
     font-size: 12px;
@@ -3820,8 +3822,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-desktop-outline-rounded a:hover:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-s a i {
     font-size: 12px;
@@ -3915,7 +3917,7 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-desktop-fill-rounded a:hover:hover {
-    background: #7aa93c;
+    background: #007ee5;
   }
   .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-s a i {
     font-size: 12px;
@@ -4058,8 +4060,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-tablet-outline-square a:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-tablet-outline-square.is-size-s a i {
     font-size: 12px;
@@ -4247,8 +4249,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-tablet-outline-rounded a:hover:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-s a i {
     font-size: 12px;
@@ -4342,7 +4344,7 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-tablet-fill-rounded a:hover:hover {
-    background: #7aa93c;
+    background: #007ee5;
   }
   .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-s a i {
     font-size: 12px;
@@ -4485,8 +4487,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-mobile-outline-square a:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-mobile-outline-square.is-size-s a i {
     font-size: 12px;
@@ -4674,8 +4676,8 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-mobile-outline-rounded a:hover:hover {
-    color: #7aa93c;
-    border-color: #7aa93c;
+    color: #007ee5;
+    border-color: #007ee5;
   }
   .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-s a i {
     font-size: 12px;
@@ -4769,7 +4771,7 @@ article.comment .comment-post-author {
     font-size: 17px;
   }
   .customify-builder-social-icons.is-style-mobile-fill-rounded a:hover:hover {
-    background: #7aa93c;
+    background: #007ee5;
   }
   .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-s a i {
     font-size: 12px;
@@ -5705,7 +5707,7 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .widget-area .widget a:hover {
-  color: #6786a1;
+  color: #007ee5;
   text-decoration: underline;
 }
 .widget-area .widget select {

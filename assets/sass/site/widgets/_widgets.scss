@@ -29,7 +29,7 @@
         a {
             color: $color_meta;
             &:hover {
-                color: $color_primary;
+                color: $color_link_hover;
                 text-decoration: underline;
             }
         }
