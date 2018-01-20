@@ -37,6 +37,15 @@ var AutoCSS = window.AutoCSS || null;
         mobile: ''
     };
 
+    AutoCSS.prototype.box_shadow_fields = {
+        box_shadow_color: null,
+        box_shadow_blur: null,
+        box_shadow_spread: null,
+        box_shadow_horizontal: null,
+        box_shadow_vertical: null,
+        box_shadow_position: null,
+    };
+
     AutoCSS.prototype.reset = function(){
         this.fonts = {};
         this.subsets = {};
@@ -418,6 +427,14 @@ var AutoCSS = window.AutoCSS || null;
        return color;
     };
 
+    AutoCSS.prototype.sanitize_slider = function ( value ){
+        value = _.defaults( value, {
+            unit: 'px',
+            value: null
+        });
+        return value;
+    };
+
     AutoCSS.prototype.sanitize_media = function ( value ) {
         if ( ! _.isObject( value ) ) {
             value = {};
@@ -607,6 +624,7 @@ var AutoCSS = window.AutoCSS || null;
     };
 
     AutoCSS.prototype.setup_styling_fields = function( fields, list, selectors, type ){
+        var that  = this;
         var newfs;
         var i;
         var newList = [];
@@ -627,16 +645,22 @@ var AutoCSS = window.AutoCSS || null;
             newfs = {};
             i = 0;
             _.each( list, function( f ){
-                if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
-                    newfs[ f.name ] = f;
-                    if ( ! _.isUndefined( selectors[ type+'_'+f.name ] ) ) {
-                        newfs[ f.name ]['selector'] = selectors[ type+'_'+f.name ];
-                    } else {
-                        newfs[ f.name ]['selector'] = selectors[ type ];
+                if ( ! _.isUndefined( that.box_shadow_fields[ f.name ] ) ) {
+                    if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                        newfs[ f.name ] = f;
+                        newfs[f.name]['selector'] = null;
                     }
-                    i++;
+                } else {
+                    if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                        newfs[ f.name ] = f;
+                        if ( ! _.isUndefined( selectors[ type+'_'+f.name ] ) ) {
+                            newfs[ f.name ]['selector'] = selectors[ type+'_'+f.name ];
+                        } else {
+                            newfs[ f.name ]['selector'] = selectors[ type ];
+                        }
+                        i++;
+                    }
                 }
-
             } );
 
             newList = newfs;
@@ -691,7 +715,6 @@ var AutoCSS = window.AutoCSS || null;
             listTabs = tabs;
         }
 
-
         var _join = function( lists, codeList ){
             _.each( lists, function( f, name ){
                 if ( _.isUndefined( selectorCSSAll[ f.selector ] ) ) {
@@ -724,19 +747,59 @@ var AutoCSS = window.AutoCSS || null;
             } );
         };
 
+        var _box_shadow = function( box_values ){
+            if ( ! _.isObject( box_values ) ) {
+                return '';
+            }
+
+            var _v = _.defaults( box_values, that.box_shadow_fields );
+
+            var color       = that.sanitize_color( _v['box_shadow_color'] );
+            var blur        = that.sanitize_slider( _v['box_shadow_blur'] );
+            var spread      = that.sanitize_slider( _v['box_shadow_spread'] );
+            var horizontal  = that.sanitize_slider( _v['box_shadow_horizontal'] );
+            var vertical    = that.sanitize_slider( _v['box_shadow_vertical'] );
+            var position    = _v['box_shadow_position'];
+            if ( ! color ) {
+                return '';
+            }
+            if ( ! blur.value ) {
+                blur.value = 0;
+            }
+            if ( ! spread.value ) {
+                spread.value = 0;
+            }
+            if ( ! horizontal.value ) {
+                horizontal.value = 0;
+            }
+            if ( ! vertical.value ) {
+                vertical.value = 0;
+            }
+
+
+            var style = 'box-shadow: '
+                + ' ' + horizontal.value+'px'
+                + ' ' + vertical.value+'px'
+                + ' ' + blur.value+'px'
+                +' ' + spread.value+'px'
+                +' ' + color
+                +' ' + position
+                +';';
+
+            /* offset-x | offset-y | blur-radius | spread-radius | color */
+            //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+            return style;
+        };
+
         var selectorCSSAll = {};
         var selectorCSSDevices = {};
 
-
         var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
         var hover_style = that.loop_fields(listHoverFields, values['hover'], true, true);
+
+
         _join( listNormalFields, normal_style );
         _join( listHoverFields, hover_style );
-
-        if ( field.name=== 'styling_new' ) {
-            console.log('selectorCSSAll', selectorCSSAll);
-            console.log('selectorCSSDevices', selectorCSSDevices);
-        }
 
         _.each( selectorCSSAll, function( code, s ){
             that.css.all += "\r\n"+s+"  {\r\n\t"+code+"\r\n}\r\n";
@@ -758,6 +821,16 @@ var AutoCSS = window.AutoCSS || null;
 
             that.css[ device ] += css;
         } );
+
+        var shadow = _box_shadow( values['normal'] );
+        if ( shadow ) {
+            that.css.all += "\r\n"+selectors['normal']+"  {\r\n\t"+shadow+"\r\n}\r\n";
+        }
+
+        var shadow_hover = _box_shadow( values['hover'] );
+        if ( shadow_hover ) {
+            that.css.all += "\r\n"+selectors['hover']+"  {\r\n\t"+shadow_hover+"\r\n}\r\n";
+        }
 
     };
 

@@ -437,6 +437,50 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
                     ),
+
+                    array(
+                        'name' => 'box_shadow_color',
+                        'type' => 'color',
+                        'label' => __('Box Shadow Color', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_blur',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Blur', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_spread',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Spread', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_horizontal',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Horizontal', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_vertical',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Vertical', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_position',
+                        'type' => 'select',
+                        'choices' => array(
+                            '' =>__( 'Outline', 'customify' ),
+                            'inset' =>__( 'inset', 'customify' ),
+                        ),
+                        'label' => __('Box Shadow Position', 'customify'),
+                    ),
+
                 ),
 
                 'hover_fields' => array(
@@ -463,6 +507,25 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     ),
 
                     array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'none',
+                        'choices' => array(
+                            ''          => __('Default', 'customify'),
+                            'none'      => __('None', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                        'css_format' => 'border-style: {{value}};',
+                    ),
+
+                    array(
                         'name' => 'border_width',
                         'type' => 'css_ruler',
                         'label' => __('Border Width', 'customify'),
@@ -480,6 +543,49 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __('Border Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'box_shadow_color',
+                        'type' => 'color',
+                        'label' => __('Box Shadow Color', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_blur',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Blur', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_spread',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Spread', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_horizontal',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Horizontal', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_vertical',
+                        'type' => 'slider',
+                        'max' => 100,
+                        'step' => 1,
+                        'label' => __('Box Shadow Vertical', 'customify'),
+                    ),
+                    array(
+                        'name' => 'box_shadow_position',
+                        'type' => 'select',
+                        'choices' => array(
+                            '' =>__( 'Outline', 'customify' ),
+                            'inset' =>__( 'inset', 'customify' ),
+                        ),
+                        'label' => __('Box Shadow Position', 'customify'),
                     ),
 
 

@@ -779,6 +779,10 @@
                 f.original_name = f.name;
                 if ( !_.isUndefined( values[ f.name ] ) ) {
                     f.value = values[ f.name ];
+                } else if ( !_.isUndefined( f.default ) ) {
+                    f.value = f.default;
+                } else {
+                    f.value = null;
                 }
                 control.add( f, $fieldArea, cb );
             });
@@ -879,7 +883,6 @@
                     change_cb();
                 }
             });
-
 
             $el.on('change keyup', '.customify--css-ruler .customify-input-css', function () {
                 var p = $(this).closest('.customify--css-ruler');
@@ -1184,7 +1187,6 @@
             } else {
 
             }
-
 
             $document.trigger('customify/customizer/repeater/add', [$itemWrapper, control]);
             return $itemWrapper;
@@ -1624,6 +1626,7 @@
                     that.container.hide();
                     that.$el.removeClass( 'modal--opening' );
                     that.$el.attr( 'data-opening', '' );
+                    $( '.action--reset', that.$el ).hide();
                 }
             });
 
@@ -1685,10 +1688,12 @@
                 }
                 this.container.show();
                 this.$el.addClass('modal--opening');
+                $( '.action--reset', this.$el ).show();
             } else {
                 $el.attr( 'data-opening', '' );
                 $('.customify-modal-settings', $el).hide();
                 $el.removeClass('modal--opening');
+                $( '.action--reset', $el ).hide();
             }
         },
 
@@ -1799,7 +1804,7 @@
         },
         init: function(){
             var that = this;
-            $document.on( 'click', '.customize-control-customify-styling .action--edit', function(){
+            $document.on( 'click', '.customize-control-customify-styling .action--edit, .customize-control-customify-styling .action--reset', function(){
                 that.controlID = $( this ).attr( 'data-control' ) || '';
                 var c = wpcustomize.control( that.controlID );
                 var tabs = null, normal_fields = -1, hover_fields = -1;
@@ -1823,14 +1828,19 @@
 
                 that.setupConfig( tabs, normal_fields, hover_fields );
 
-                that.open( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
+                if ( $( this ).hasClass('action--reset') ) {
+                    that.reset( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
+                } else {
+                    that.open( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
+                }
+
+
             } );
 
 
 
-
         },
-        addFields: function(){
+        addFields: function( values ){
             var that = this;
             if ( ! _.isObject( that.values ) ) {
                 that.values = {};
@@ -1839,7 +1849,9 @@
                 hover: {},
                 normal: {}
             } );
+            console.log( 'Value_before_add', that.values );
             var fieldsArea = $( '.customify-modal-settings--fields', that.container );
+            fieldsArea.html('');
 
             var tabsHTML = $( '<div class="modal--tabs"></div>' );
             var c = 0;
@@ -1870,7 +1882,6 @@
                 }
             });
 
-
             $( 'input, select, textarea', that.container ).removeClass('customify-input').addClass( 'customify-modal-input change-by-js' );
 
             fieldsArea.on( 'change data-change', 'input, select, textarea', function(){
@@ -1894,13 +1905,35 @@
                     &&
                     !actions.is(e.target) && actions.has(e.target).length === 0
                 ) {
-
-                    that.container.hide();
-                    that.$el.removeClass( 'modal--opening' );
-                    that.$el.attr( 'data-opening', '' );
+                    that.close();
                 }
             });
 
+        },
+
+        close: function(){
+            var that = this;
+            that.container.hide();
+            that.$el.removeClass( 'modal--opening' );
+            that.$el.attr( 'data-opening', '' );
+            $( '.action--reset', that.$el ).hide();
+        },
+
+        reset: function( $el ){
+            this.$el = $el;
+            var that = this;
+
+            $el.attr( 'data-opening', '' );
+            $('.customify-modal-settings', $el).remove();
+            $el.removeClass('modal--opening');
+
+            try {
+                that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
+            } catch (e) {
+                that.values = {};
+            }
+            $( '.customify-hidden-modal-input', this.$el ).val( '{}' ).trigger('change');
+            $el.addClass('customify-modal--inside');
         },
 
         get: function(){
@@ -1920,8 +1953,6 @@
             } );
 
             $( '.customify-hidden-modal-input', this.$el ).val( JSON.stringify( data ) ) .trigger( 'change' );
-            console.log( 'Styling_data', data );
-
             return data;
         },
 
@@ -1952,10 +1983,14 @@
 
                 this.container.show();
                 this.$el.addClass('modal--opening');
+
+                $( '.action--reset', this.$el ).show();
+
             } else {
                 $el.attr( 'data-opening', '' );
                 $('.customify-modal-settings', $el).hide();
                 $el.removeClass('modal--opening');
+                $( '.action--reset', $el ).hide();
             }
         },
     };

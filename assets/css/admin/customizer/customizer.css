@@ -876,6 +876,7 @@
   top: 0px;
   right: 0px;
   vertical-align: middle;
+  margin-top: 5px;
 }
 .customify--settings-wrapper .customify-actions a {
   text-decoration: none;
@@ -884,6 +885,7 @@
 .customify--settings-wrapper .customify-actions .action--reset {
   font-size: 12px;
   margin-right: 10px;
+  display: none;
 }
 .customify--settings-wrapper .customify-actions .action--reset span {
   font-size: inherit;
@@ -999,6 +1001,9 @@
 .customify-modal--inside {
   position: relative;
 }
+.customify-modal--inside .description {
+  margin-bottom: 0px;
+}
 
 .customify-modal-settings {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
@@ -1008,6 +1013,7 @@
   position: absolute;
   margin-bottom: 15px;
   top: 100%;
+  margin-top: 10px;
   left: 0px;
   right: 0px;
   z-index: 99;

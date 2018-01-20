@@ -908,6 +908,7 @@ $text_color: #555d66;
         top: 0px;
         right: 0px;
         vertical-align: middle;
+        margin-top: 5px;
         a {
             text-decoration: none;
             display: inline-block;
@@ -915,6 +916,7 @@ $text_color: #555d66;
         .action--reset {
             font-size: 12px;
             margin-right: 10px;
+            display: none;
             span {
                 font-size: inherit;
                 width: auto;
@@ -933,6 +935,7 @@ $text_color: #555d66;
             border: 1px solid #ddd;
             border-radius: 3px;
             padding: 5px;
+
             .modal--opening & {
                 span {
                     &:before {
@@ -1029,6 +1032,9 @@ $text_color: #555d66;
 }
 .customify-modal--inside {
     position: relative;
+    .description {
+        margin-bottom: 0px;
+    }
 }
 
 .customify-modal-settings {
@@ -1039,6 +1045,7 @@ $text_color: #555d66;
     position: absolute;
     margin-bottom: 15px;
     top: 100%;
+    margin-top: 10px;
     left: 0px;
     right: 0px;
     z-index: 99;
