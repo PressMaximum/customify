@@ -342,7 +342,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'bg_color',
                         'type' => 'color',
-                        'label' => __( 'Background Color', 'customify' ),
+                        'label' => __( 'Color', 'customify' ),
                         'css_format' => 'background-color: {{value}};'
                     ),
                     array(
@@ -417,15 +417,16 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     ),
 
                     array(
-                        'name' => 'hr_border',
-                        'type' => 'hr',
+                        'name' => 'border_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Border', 'customify' ),
                     ),
 
                     array(
                         'name' => 'border_style',
                         'type' => 'select',
                         'class' => 'clear',
-                        'label' => __('Border Style', 'customify'),
+                        'label' => __('Style', 'customify'),
                         'default' => 'none',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
@@ -444,7 +445,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_width',
                         'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
+                        'label' => __('Width', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => array(
                             'top' => 'border-top-width: {{value}};',
@@ -456,21 +457,15 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_color',
                         'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
+                        'label' => __('Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
                     ),
 
                     array(
-                        'name' => 'box_shadow_heading',
-                        'type' => 'heading',
-                        'label' => __( 'Box Shadow', 'customify' ),
-                    ),
-
-                    array(
                         'name' => 'box_shadow',
                         'type' => 'shadow',
-                        'label' => __('Box Shadow', 'customify'),
+                        'label' =>  __( 'Box Shadow', 'customify' ),
                         'css_format' => 'box-shadow: {{value}};',
                     ),
 
@@ -492,17 +487,30 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __( 'Link Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
+
+                    array(
+                        'name' => 'bg_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Background', 'customify' ),
+                    ),
+
                     array(
                         'name' => 'bg_color',
                         'type' => 'color',
-                        'label' => __( 'Background Color', 'customify' ),
+                        'label' => __( 'Color', 'customify' ),
                         'css_format' => 'background-color: {{value}};'
+                    ),
+
+                    array(
+                        'name' => 'border_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Border', 'customify' ),
                     ),
 
                     array(
                         'name' => 'border_style',
                         'type' => 'select',
-                        'label' => __('Border Style', 'customify'),
+                        'label' => __('Style', 'customify'),
                         'default' => 'none',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
@@ -521,7 +529,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_width',
                         'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
+                        'label' => __('Width', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => array(
                             'top' => 'border-top-width: {{value}};',
@@ -533,7 +541,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_color',
                         'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
+                        'label' => __('Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
                     ),
@@ -544,7 +552,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __('Box Shadow', 'customify'),
                         'css_format' => 'box-shadow: {{value}};',
                     ),
-
 
                 ),
 

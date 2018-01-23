@@ -98,6 +98,13 @@
   color: #444444;
 }
 
+#customize-controls .customify--field .customify-field--heading {
+  font-size: 12px;
+}
+#customize-controls .customify-modal-settings h3.customify-field--heading {
+  font-size: 11px;
+}
+
 .customize-control .customize-control-description {
   margin-bottom: 15px;
   margin-top: -3px;
@@ -418,6 +425,13 @@
   background: #ccc;
 }
 
+.customify-input-color .wp-color-result.button {
+  width: 100%;
+}
+.customify-input-color .wp-picker-active .wp-color-result.button {
+  width: auto;
+}
+
 .customify--css-unit {
   margin-bottom: 5px;
 }
@@ -480,7 +494,7 @@
 }
 
 .customify-image-preview {
-  margin: 10px 0 12px;
+  margin: 0px 0 12px;
   display: block;
 }
 .customify-image-preview:before {
@@ -986,6 +1000,9 @@
 .customize-control-customify-typography .customize-control-description {
   margin-bottom: 0px;
 }
+.customize-control-customify-typography .ft--checkboxes[data-field-name="languages"] {
+  margin-bottom: 0px;
+}
 .customize-control-customify-typography .list-subsets p {
   margin-top: 0px;
   width: 50%;
@@ -1035,6 +1052,10 @@
   margin-bottom: 0px;
 }
 
+.ft--heading {
+  clear: both;
+}
+
 .customify-modal-settings {
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   background: #fff;
@@ -1048,6 +1069,9 @@
   right: 0px;
   z-index: 99;
 }
+.customify-modal-settings .wp-color-result-text {
+  line-height: 23px;
+}
 .customify-modal-settings:before {
   content: '';
   position: absolute;
@@ -1058,6 +1082,11 @@
   background: #fff;
   transform: rotate(45deg);
   border-radius: 3px;
+}
+.customify-modal-settings .customify--field-heading h3.customify-field--heading {
+  font-size: 11px;
+  margin: 10px -12px;
+  padding: 3px 12px;
 }
 .customify-modal-settings .customize-control-title {
   font-weight: 400;

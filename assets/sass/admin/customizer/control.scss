@@ -34,6 +34,20 @@ $text_color: #555d66;
         color: #444444;
     }
 }
+
+#customize-controls {
+    .customify--field {
+        .customify-field--heading {
+            font-size: 12px;
+        }
+    }
+    .customify-modal-settings {
+        h3.customify-field--heading {
+            font-size: 11px;
+        }
+    }
+}
+
 .customize-control {
     .customize-control-description {
         margin-bottom: 15px;
@@ -139,11 +153,6 @@ $text_color: #555d66;
             display: block;
         }
     }
-}
-
-
-.customify--settings-fields {
-
 }
 
 .customify--repeater-actions {
@@ -412,6 +421,17 @@ $text_color: #555d66;
     }
 }
 
+.customify-input-color {
+    .wp-color-result.button {
+        width: 100%;
+    }
+    .wp-picker-active {
+        .wp-color-result.button {
+            width: auto;
+        }
+    }
+}
+
 .customify--css-unit {
     margin-bottom: 5px;
     label {
@@ -475,7 +495,7 @@ $text_color: #555d66;
     }
 }
 .customify-image-preview {
-    margin: 10px 0 12px;
+    margin: 0px 0 12px;
     display: block;
     &:before {
         content: attr(data-no-file-text);
@@ -1026,6 +1046,9 @@ $text_color: #555d66;
     .customize-control-description {
         margin-bottom: 0px;
     }
+    .ft--checkboxes[data-field-name="languages"] {
+        margin-bottom: 0px;
+    }
     .list-subsets {
         p {
             margin-top: 0px;
@@ -1069,6 +1092,9 @@ $text_color: #555d66;
         margin-bottom: 0px;
     }
 }
+.ft--heading {
+    clear: both;
+}
 
 .customify-modal-settings {
     box-shadow: 0 2px 15px rgba(0,0,0,.3);
@@ -1082,6 +1108,9 @@ $text_color: #555d66;
     left: 0px;
     right: 0px;
     z-index: 99;
+    .wp-color-result-text {
+        line-height: 23px;
+    }
 
     &:before {
         content: '';
@@ -1093,6 +1122,13 @@ $text_color: #555d66;
         background: #fff;
         transform: rotate(45deg);
         border-radius: 3px;
+    }
+    .customify--field-heading{
+        h3.customify-field--heading {
+            font-size: 11px;
+            margin: 10px -12px;
+            padding: 3px 12px;
+        }
     }
     .customize-control-title {
         font-weight: 400;
