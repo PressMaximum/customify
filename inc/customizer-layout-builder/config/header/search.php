@@ -78,7 +78,7 @@ class Customify_Builder_Item_Search {
                 'name' => $section.'_background',
                 'type' => 'group',
                 'section'     => $section,
-                'title'          => __( 'Mobile Sidebar Background', 'customify' ),
+                'title'          => __( 'Menu Sidebar Background', 'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => $mobile_selector,

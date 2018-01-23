@@ -24,7 +24,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             'top' =>  __( 'Header Top', 'customify' ),
             'main' =>  __( 'Header Main', 'customify' ),
             'bottom' =>  __( 'Header Bottom', 'customify' ),
-            'sidebar' =>  __( 'Mobile Sidebar', 'customify' ),
+            'sidebar' =>  __( 'Menu Sidebar', 'customify' ),
         );
     }
 
@@ -246,7 +246,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 
     }
     function row_sidebar_config( $section , $section_name ){
-        $selector = '#mobile-header-panel-inner';
+        $selector = '#header-menu-sidebar-inner';
 
         $config  = array(
             array(
@@ -264,26 +264,60 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'selector' => 'body',
                 'render_callback' => 'customify_customize_render_header',
                 'css_format' => 'html_class',
-                'title' => __( 'Animate', 'customify' ),
-                'default' => 'slide_left',
+                'title' => __( 'Display Type', 'customify' ),
+                'default' => 'menu_sidebar_slide_left',
                 'choices' => array(
-                    'menu_sidebar_slide_left' => __( 'Left', 'customify' ),
-                    'menu_sidebar_slide_right' => __( 'Right', 'customify' ),
-                    'menu_sidebar_slide_overlay' => __( 'Overlay', 'customify' ),
-                    'menu_sidebar_dropdown' => __( 'Dropdown', 'customify' ),
+                    'menu_sidebar_slide_left' => __( 'Slide From Left', 'customify' ),
+                    'menu_sidebar_slide_right' => __( 'Slide From Right', 'customify' ),
+                    'menu_sidebar_slide_overlay' => __( 'Full-screen Overlay', 'customify' ),
+                    'menu_sidebar_dropdown' => __( 'Toggle Dropdown', 'customify' ),
                 )
             ),
+
+	        /*
+	        array(
+		        'name' => $section.'_skin',
+		        'type' => 'radio_group',
+		        'default' => 'is-skin-dark',
+		        'section' => $section,
+		        //'selector' => '#masthead',
+		        'selector' => '#header-menu-sidebar',
+		        'css_format' => 'html_class',
+		        'title' => __('Predefined Skin', 'customify'),
+		        'choices' => array(
+			        'is-skin-dark' => __('Dark', 'customify'),
+			        'is-skin-light' => __('Light', 'customify'),
+		        )
+	        ),
+	        */
+
+	        array(
+		        'name'    => $section.'_text_mode',
+		        'type'    => 'image_select',
+		        'section' => $section,
+		        'selector' => '#header-menu-sidebar, .close-sidebar-panel',
+		        'css_format' => 'html_class',
+		        'title'   => __( 'Text Mode Color', 'customify' ),
+		        'default'         => 'is-text-light',
+		        'choices' => array(
+			        'is-text-light' => array(
+				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_light.svg',
+			        ),
+			        'is-text-dark' => array(
+				        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_dark.svg',
+			        ),
+		        )
+	        ),
 
             array(
                 'name' => $section.'_styling',
                 'type' => 'group',
                 'section' => $section,
                 'title' => __( 'Styling', 'customify' ),
-                'description' => __( 'This is description',  'customify' ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
-                'selector' => '#mobile-header-panel-bg:before',
-                //'selector' => '#mobile-header-panel',
+                'selector' => '#header-menu-sidebar-bg:before',
+                //'selector' => '#header-menu-sidebar',
                 'css_format' => 'styling',
                 'default' => array(),
                 'fields' => array(
@@ -292,14 +326,14 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'color',
                         'label' => __( 'Background Color', 'customify' ),
                         'device_settings' => false,
-                        //'selector' => '#mobile-header-panel-inner:before',
+                        //'selector' => '#header-menu-sidebar-inner:before',
                         //'css_format' => 'border: {{value}};',
                     ),
                     array(
                         'name' => 'image',
                         'type' => 'image',
                         'label' => __( 'Background Image', 'customify' ),
-                        //'selector' => '#mobile-header-panel-inner:before',
+                        //'selector' => '#header-menu-sidebar-inner:before',
                         //'css_format' => 'background-image: url("{{value}}");',
                     ),
 
@@ -308,7 +342,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'slider',
                         'label' => __( 'Background Opacity', 'customify' ),
                         'css_format' => 'opacity: {{value_no_unit}};',
-                        //'selector' => '#mobile-header-panel-inner:before',
+                        //'selector' => '#header-menu-sidebar-inner:before',
                         'max' => 1,
                         'min' => 0,
                         'step' => 0.01,
@@ -372,7 +406,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'select',
                         'label' => __('Border Style', 'customify'),
                         'default' => 'none',
-                        'selector' => '#mobile-header-panel',
+                        'selector' => '#header-menu-sidebar',
                         'css_format' => 'border-style: {{value}};',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
@@ -392,7 +426,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'css_ruler',
                         'label' => __('Border Width', 'customify'),
                         'required' => array('sidebar_border_style', '!=', 'none'),
-                        'selector' => '#mobile-header-panel',
+                        'selector' => '#header-menu-sidebar',
                         'css_format' => array(
                             'top' => 'border-top-width: {{value}};',
                             'right' => 'border-right-width: {{value}};',
@@ -405,7 +439,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                         'type' => 'color',
                         'label' => __('Border Color', 'customify'),
                         'required' => array('sidebar_border_style', '!=', 'none'),
-                        'selector' => '#mobile-header-panel',
+                        'selector' => '#header-menu-sidebar',
                         'css_format' => 'border-color: {{value}};',
                     ),
 
@@ -431,7 +465,6 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                 'title'   => __( 'Item Layout', 'customify' )
             ),
 
-
             array(
                 'name'            => 'header_'.$item_id.'_margin',
                 'type'            => 'css_ruler',
@@ -444,7 +477,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                     'bottom' => 'margin-bottom: {{value}};',
                     'left'   => 'margin-left: {{value}};',
                 ),
-                'selector'        => '.builder-item--'.$item_id,
+                'selector'        => ".header--row .builder-item--{$item_id}, .builder-item.builder-item--group .item--inner.builder-item--{$item_id}",
                 'label'           => __( 'Margin', 'customify' ),
             ),
 
@@ -453,6 +486,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'priority'    => 820,
+                'device_settings' => true,
                 'selector' => '.builder-first--'.$item_id,
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
