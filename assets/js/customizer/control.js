@@ -251,6 +251,32 @@
                     }
 
                     break;
+                case 'shadow':
+                    if (support_devices) {
+                        value = {};
+                        _.each(control.allDevices, function (device) {
+                            var _name = name + '-' + device;
+                            value[device] = {
+                                color: $('input[data-name="' + _name + '-color"]', $field).val(),
+                                x: $('input[data-name="' + _name + '-x"]', $field).val(),
+                                y: $('input[data-name="' + _name + '-y"]', $field).val(),
+                                blur: $('input[data-name="' + _name + '-blur"]', $field).val(),
+                                spread: $('input[data-name="' + _name + '-spread"]', $field).val(),
+                                inset: $('input[data-name="' + _name + '-inset"]', $field).is(':checked') ? 1 : false,
+                            };
+                        });
+                    } else {
+                        value = {
+                            color: $('input[data-name="' + name + '-color"]', $field).val(),
+                            x: $('input[data-name="' + name + '-x"]', $field).val(),
+                            y: $('input[data-name="' + name + '-y"]', $field).val(),
+                            blur: $('input[data-name="' + name + '-blur"]', $field).val(),
+                            spread: $('input[data-name="' + name + '-spread"]', $field).val(),
+                            inset: $('input[data-name="' + name + '-inset"]', $field).is(':checked') ? 1 : false,
+                        };
+                    }
+
+                    break;
                 case 'font_style':
 
                     if (support_devices) {
@@ -744,6 +770,7 @@
             // Add unility
             switch ( field.type ) {
                 case  'color':
+                case  'shadow':
                     control.initColor( $fieldsArea );
                     break;
                 case 'image':
@@ -774,7 +801,10 @@
                 values = {};
             }
             _.each(fields, function (f, index) {
-                var $fieldArea = $('<div class="customify--group-field" data-field-name="' + f.name + '"></div>');
+                if ( _.isUndefined( f.class ) ) {
+                    f.class = '';
+                }
+                var $fieldArea = $('<div class="customify--group-field ft--'+f.type+' ' + f.class + '" data-field-name="' + f.name + '"></div>');
                 $fieldsArea.append( $fieldArea );
                 f.original_name = f.name;
                 if ( !_.isUndefined( values[ f.name ] ) ) {

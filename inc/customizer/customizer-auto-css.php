@@ -37,6 +37,15 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             'border_style'=> null,
         );
 
+        private  $box_shadow_fields = array(
+            'color' => null,
+            'x' => 0,
+            'y' => 0,
+            'blur' => 0,
+            'spread' => 0,
+            'inset' => null
+        );
+
         static function get_instance(){
             if ( is_null( self::$_instance ) ) {
                 self::$_instance = new self();
@@ -81,6 +90,44 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             }
 
             return join( "\n\t",  $code );
+        }
+
+        function setup_shadow( $value, $format ){
+
+            if (!is_array($value) || ! $format ) {
+                return '';
+            }
+
+            $p = wp_parse_args($value, $this->box_shadow_fields);
+            $color = $value = Customify_Sanitize_Input::sanitize_color($p['color']);
+            $position = $p['inset'] ? 'inset' : '';
+            if (!$color) {
+                return '';
+            }
+            if (!$p['blur']) {
+                $p['blur'] = 0;
+            }
+            if (!$p['spread']) {
+                $p['spread'] = 0;
+            }
+            if (!$p['x']) {
+                $p['x'] = 0;
+            }
+            if (!$p['y']) {
+                $p['y'] = 0;
+            }
+
+            $style = $p['x'] . 'px'
+                . ' ' . $p['y'] . 'px'
+                . ' ' . $p['blur'] . 'px'
+                . ' ' . $p['spread'] . 'px'
+                . ' ' . $color
+                . ' ' . $position
+                . ';';
+
+            /* offset-x | offset-y | blur-radius | spread-radius | color */
+            //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+            return $this->replace_value( $style, $format );
         }
 
         function setup_slider( $value, $format ){
@@ -154,6 +201,11 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
         function color( $field, $values = null, $no_selector = null ){
             $code = $this->maybe_devices_setup( $field, 'setup_color', $values, $no_selector );
+            return $code;
+        }
+
+        function shadow( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_shadow', $values, $no_selector );
             return $code;
         }
 
@@ -244,8 +296,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             }
         }
 
+
+
         function styling( $field, $values = null ){
-            //$code = $this->maybe_devices_setup( $field, 'setup_styling', $values );
             $values = Customify_Customizer()->get_setting( $field['name'], 'all' );
 
             $values = wp_parse_args( $values, array(
@@ -323,7 +376,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 }
                 $this->css[ $device ] .= $css;
             }
-
         }
 
         function setup_default( $value, $format ){
@@ -667,6 +719,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             foreach ( ( array ) $fields as $field ) {
                 $v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
                 if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
+                    if ( ! isset( $field['css_format'] ) ) {
+                        $field['css_format'] = false;
+                    }
                     if ( isset( $field['selector'] ) && $field['selector'] && $field['css_format']) {
                         switch ($field['type']) {
                             case 'css_ruler':
@@ -677,6 +732,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 break;
                             case 'color':
                                 $listcss[ $field['name'] ] = $this->color($field, $v, $no_selector );
+                                break;
+                            case 'shadow':
+                                $listcss[ $field['name'] ] = $this->shadow($field, $v, $no_selector );
                                 break;
                             case 'image':
                                 $listcss[ $field['name'] ] = $this->image($field, $v, $no_selector);

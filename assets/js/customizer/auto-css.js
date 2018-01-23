@@ -38,12 +38,12 @@ var AutoCSS = window.AutoCSS || null;
     };
 
     AutoCSS.prototype.box_shadow_fields = {
-        box_shadow_color: null,
-        box_shadow_blur: null,
-        box_shadow_spread: null,
-        box_shadow_horizontal: null,
-        box_shadow_vertical: null,
-        box_shadow_position: null,
+        color:  null,
+        x:  0,
+        y:  0,
+        blur:  0,
+        spread:  0,
+        inset: null
     };
 
     AutoCSS.prototype.reset = function(){
@@ -92,6 +92,9 @@ var AutoCSS = window.AutoCSS || null;
                         case 'color':
                             fields_code[ field.name ] = that.color(field, v, no_selector );
                             break;
+                        case 'shadow':
+                            fields_code[ field.name ] = that.shadow(field, v, no_selector );
+                            break;
                         case 'checkbox':
                             fields_code[ field.name ] = that.checkbox(field, v, no_selector );
                             break;
@@ -131,7 +134,10 @@ var AutoCSS = window.AutoCSS || null;
 
         return fields_code;
     };
-    AutoCSS.prototype.run = function(){
+    AutoCSS.prototype.run = function( setting_name ){
+        if ( _.isUndefined( setting_name ) ) {
+            setting_name  = false;
+        }
 
         this.lastValues = this.values;
         this.values = api.get();
@@ -141,10 +147,8 @@ var AutoCSS = window.AutoCSS || null;
                 this.media_queries = window.Customify_JS.css_media_queries;
             }
         }
-
         this.reset();
 
-       // console.log( 'NEW CUSTOMIZE VALUES', this.values );
         var that = this;
         that.loop_fields( Customify_Preview_Config.fields );
 
@@ -169,11 +173,8 @@ var AutoCSS = window.AutoCSS || null;
             $( 'head' ).append( "<style id='customify-style-inline-css' type='text/css'></style>" )
         }
         $( '#customify-style-inline-css' ).html( css_code );
-       // api.set( 'customify__css',  css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
 
-        //top.wp.customize('customify__css').set( css_code );
-        //console.log( 'customify__css_Change', css_code );
     };
 
 
@@ -364,6 +365,46 @@ var AutoCSS = window.AutoCSS || null;
             }
         }
         return c;
+    };
+
+    AutoCSS.prototype.setup_shadow = function ( value, format ){
+        var that = this;
+        if ( ! _.isObject( value ) ) {
+            return '';
+        }
+
+        var p = _.defaults( value,that.box_shadow_fields );
+        var color       = that.sanitize_color( p.color );
+        var position    = p.inset ? 'inset' : '';
+        if ( ! color ) {
+            return '';
+        }
+        if ( ! p.blur ) {
+            p.blur = 0;
+        }
+        if ( !  p.spread ) {
+            p.spread = 0;
+        }
+        if ( ! p.x ) {
+            p.x = 0;
+        }
+        if ( ! p.y ) {
+            p.y = 0;
+        }
+
+
+        var style = p.x+'px'
+            + ' ' + p.y+'px'
+            + ' ' + p.blur +'px'
+            +' ' + p.spread +'px'
+            +' ' + color
+            +' ' + position
+            +';';
+
+        /* offset-x | offset-y | blur-radius | spread-radius | color */
+        //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+        console.log( 'shadow', style );
+        return this.str_value( style, format );
     };
 
     AutoCSS.prototype.setup_default = function( value, format ){
@@ -603,6 +644,10 @@ var AutoCSS = window.AutoCSS || null;
         return this.maybe_devices_setup( field, 'setup_css_ruler', value, no_selector );
     };
 
+    AutoCSS.prototype.shadow = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_shadow', value, no_selector );
+    };
+
     AutoCSS.prototype.slider = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_slider', value, no_selector );
     };
@@ -747,56 +792,12 @@ var AutoCSS = window.AutoCSS || null;
             } );
         };
 
-        var _box_shadow = function( box_values ){
-            if ( ! _.isObject( box_values ) ) {
-                return '';
-            }
-
-            var _v = _.defaults( box_values, that.box_shadow_fields );
-
-            var color       = that.sanitize_color( _v['box_shadow_color'] );
-            var blur        = that.sanitize_slider( _v['box_shadow_blur'] );
-            var spread      = that.sanitize_slider( _v['box_shadow_spread'] );
-            var horizontal  = that.sanitize_slider( _v['box_shadow_horizontal'] );
-            var vertical    = that.sanitize_slider( _v['box_shadow_vertical'] );
-            var position    = _v['box_shadow_position'];
-            if ( ! color ) {
-                return '';
-            }
-            if ( ! blur.value ) {
-                blur.value = 0;
-            }
-            if ( ! spread.value ) {
-                spread.value = 0;
-            }
-            if ( ! horizontal.value ) {
-                horizontal.value = 0;
-            }
-            if ( ! vertical.value ) {
-                vertical.value = 0;
-            }
-
-
-            var style = 'box-shadow: '
-                + ' ' + horizontal.value+'px'
-                + ' ' + vertical.value+'px'
-                + ' ' + blur.value+'px'
-                +' ' + spread.value+'px'
-                +' ' + color
-                +' ' + position
-                +';';
-
-            /* offset-x | offset-y | blur-radius | spread-radius | color */
-            //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-            return style;
-        };
 
         var selectorCSSAll = {};
         var selectorCSSDevices = {};
 
         var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
         var hover_style = that.loop_fields(listHoverFields, values['hover'], true, true);
-
 
         _join( listNormalFields, normal_style );
         _join( listHoverFields, hover_style );
@@ -821,16 +822,6 @@ var AutoCSS = window.AutoCSS || null;
 
             that.css[ device ] += css;
         } );
-
-        var shadow = _box_shadow( values['normal'] );
-        if ( shadow ) {
-            that.css.all += "\r\n"+selectors['normal']+"  {\r\n\t"+shadow+"\r\n}\r\n";
-        }
-
-        var shadow_hover = _box_shadow( values['hover'] );
-        if ( shadow_hover ) {
-            that.css.all += "\r\n"+selectors['hover']+"  {\r\n\t"+shadow_hover+"\r\n}\r\n";
-        }
 
     };
 
@@ -1088,7 +1079,7 @@ var AutoCSS = window.AutoCSS || null;
             // Header text color.
             wp.customize( field.name, function( setting ) {
                 setting.bind( function( to ) {
-                    AutoCSSInit.run();
+                    AutoCSSInit.run( field.name );
                 } );
             } );
 

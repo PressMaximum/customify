@@ -372,8 +372,31 @@
   content: "\f142";
 }
 
+.customify--group-field.ft--hr {
+  clear: both;
+}
+.customify--group-field.field-half {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-left {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-left .customify--field {
+  padding-right: 5px;
+}
+.customify--group-field.field-half-right {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-right .customify--field {
+  padding-left: 5px;
+}
+
 .customify--field {
   margin-bottom: 15px;
+  width: 100%;
 }
 .customify--field:last-child {
   margin-bottom: 0px;
@@ -415,29 +438,36 @@
   display: none;
 }
 
-.customify--css-ruler {
+.customify--gr-inputs {
   display: flex;
   margin-left: -2px;
   margin-right: -2px;
 }
-.customify--css-ruler > span {
+.customify--gr-inputs > span {
   padding: 0px 2px;
 }
-.customify--css-ruler .customify--small-label {
+.customify--gr-inputs .customify--small-label {
   font-size: 10px;
   display: block;
   text-transform: uppercase;
 }
-.customify--css-ruler label {
+.customify--gr-inputs span.input {
+  height: 28px;
+  display: block;
+  vertical-align: middle;
+  line-height: 28px;
+  text-align: center;
+}
+.customify--gr-inputs label {
   cursor: pointer;
   width: 25px;
   flex: none;
   position: relative;
 }
-.customify--css-ruler label input {
+.customify--gr-inputs label input {
   display: none;
 }
-.customify--css-ruler label:before {
+.customify--gr-inputs label:before {
   font: 400 18px/37px dashicons;
   content: "\f225";
   position: absolute;
@@ -445,7 +475,7 @@
   left: 5px;
   display: block;
 }
-.customify--css-ruler label.customify--label-active:before {
+.customify--gr-inputs label.customify--label-active:before {
   content: "\f103";
 }
 
