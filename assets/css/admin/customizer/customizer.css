@@ -590,6 +590,10 @@
   transform: translateX(-5px);
 }
 
+.customify--field-shadow .customify--gr-inputs {
+  margin-top: 10px;
+}
+
 .customify--icon-picker {
   display: flex;
 }

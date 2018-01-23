@@ -591,6 +591,12 @@ $text_color: #555d66;
     }
 }
 
+.customify--field-shadow {
+    .customify--gr-inputs {
+        margin-top: 10px;
+    }
+}
+
 .customify--icon-picker {
     display: flex;
     .customify--icon-preview {
