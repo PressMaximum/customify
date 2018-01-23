@@ -556,7 +556,7 @@ $text_color: #555d66;
 }
 .customify-input-slider {
     position: relative;
-    margin: 11px 118px 20px 0;
+    margin: 11px 118px 20px 4px;
     height: 5px;
     display: block;
     background: #CCCCCC;
@@ -1126,11 +1126,13 @@ $text_color: #555d66;
         h3.customify-field--heading {
             font-size: 11px;
             margin: 10px -12px;
-            padding: 3px 12px;
+            padding: 5px 12px 4px;
+            background: #eeeeee;
         }
     }
     .customize-control-title {
         font-weight: 400;
+        font-size: 13px;
     }
     .customify--group-field {
         margin-bottom: 10px;

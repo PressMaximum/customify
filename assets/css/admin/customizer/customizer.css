@@ -559,7 +559,7 @@
 
 .customify-input-slider {
   position: relative;
-  margin: 11px 118px 20px 0;
+  margin: 11px 118px 20px 4px;
   height: 5px;
   display: block;
   background: #CCCCCC;
@@ -1087,10 +1087,12 @@
 .customify-modal-settings .customify--field-heading h3.customify-field--heading {
   font-size: 11px;
   margin: 10px -12px;
-  padding: 3px 12px;
+  padding: 5px 12px 4px;
+  background: #eeeeee;
 }
 .customify-modal-settings .customize-control-title {
   font-weight: 400;
+  font-size: 13px;
 }
 .customify-modal-settings .customify--group-field {
   margin-bottom: 10px;
