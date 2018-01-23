@@ -34,12 +34,14 @@
     &.layout-full-contained, &.layout-fullwidth {
         .customify-container {
             border: 0 none !important;
+            box-shadow: none !important;
         }
     }
     @include for_device( desktop ){
         &.layout-contained {
             background: transparent !important;
             border: 0 none;
+            box-shadow: none !important;
             .customify-container {
                 margin-left: 1.5em;
                 margin-right: 1.5em;
@@ -49,6 +51,7 @@
     &.layout-fullwidth {
         .customify-container {
             max-width: initial;
+            box-shadow: none !important;
         }
     }
 }

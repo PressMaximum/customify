@@ -79,26 +79,12 @@ class Customify_Builder_Item_Button {
 				'checkbox_label'  => __( 'Open link in new window.', 'customify' ),
 			),
 
-            array(
-                'name' => $section.'_padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'selector' => $selector,
-                'device_settings' => true,
-                'css_format' => array(
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
-                'title' => __( 'Padding', 'customify' ),
-            ),
-
 			array(
 				'name'            => $prefix . '_typography',
 				'type'            => 'typography',
 				'section'         => $section,
 				'title'           => __( 'Typography', 'customify' ),
+				'description'     => __( 'Advanced typography for button', 'customify' ),
 				'selector'        => $selector,
 				'css_format'      => 'typography',
 				'default'         => array(),
@@ -109,6 +95,7 @@ class Customify_Builder_Item_Button {
 				'type'        => 'styling',
 				'section'     => $section,
 				'title'       => __( 'Styling', 'customify' ),
+                'description'     => __( 'Advanced styling for button', 'customify' ),
 				'selector'    => array(
 				    'normal' => $selector,
 				    'hover' => $selector.':hover',

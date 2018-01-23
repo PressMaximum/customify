@@ -398,8 +398,7 @@ var AutoCSS = window.AutoCSS || null;
             + ' ' + p.blur +'px'
             +' ' + p.spread +'px'
             +' ' + color
-            +' ' + position
-            +';';
+            +' ' + position;
 
         /* offset-x | offset-y | blur-radius | spread-radius | color */
         //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);

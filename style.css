@@ -2854,11 +2854,13 @@ article.comment .comment-post-author {
 }
 .header--row.layout-full-contained .customify-container, .header--row.layout-fullwidth .customify-container {
   border: 0 none !important;
+  box-shadow: none !important;
 }
 @media screen and (min-width: 64em) {
   .header--row.layout-contained {
     background: transparent !important;
     border: 0 none;
+    box-shadow: none !important;
   }
   .header--row.layout-contained .customify-container {
     margin-left: 1.5em;
@@ -2867,6 +2869,7 @@ article.comment .comment-post-author {
 }
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;
+  box-shadow: none !important;
 }
 
 /* Customizer Shortcut */

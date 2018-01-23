@@ -651,7 +651,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     </span>
                     <span>
                         <span class="input">
-                            <input type="checkbox" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-inset" value="{{ field.value.inset }}">
+                            <input type="checkbox" class="customify-input customify-input-css change-by-js" <# if ( field.value.inset == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-inset" value="{{ field.value.inset }}">
                         </span>
                         <span class="customify--small-label"><?php _e( 'inset', 'customify' ); ?></span>
                     </span>

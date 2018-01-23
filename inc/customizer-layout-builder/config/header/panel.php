@@ -118,7 +118,6 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'theme_supports' => '',
                 'device_settings' => true,
                 'max' => 250,
-                //'selector' => $selector.' .customify-grid, '.$selector,
                 'selector' => $selector.' .customify-grid',
                 'css_format' => 'min-height: {{value}};',
                 'title' => __( 'Height', 'customify' ),
@@ -129,16 +128,36 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'type' => 'styling',
                 'section' => $section,
                 'title'  => __( 'Styling', 'customify' ),
-                'description'  => sprintf( __( 'Set styling for %s', 'customify' ), $section_name ),
+                'description'  => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
                 'live_title_field' => 'title',
-                'field_class' => 'customify-background-control',
-                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
+                'selector' => array(
+                    'normal' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
+                    'normal_box_shadow' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
+                    'normal_text_color' => "{$selector}",
+                    'normal_link_color' => "{$selector} a",
+                    'hover_link_color' => "{$selector} a:hover",
+                ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
-                    'hover_fields' => false, // disable hover tab and all fields inside.
                     'normal_fields' => array(
-                        'link_color' => false // disable for special field.
-                    )
+                        //'link_color' => false, // disable for special field.
+                        'padding' => false // disable for special field.
+                    ),
+                    'hover_fields' => array(
+                        'text_color' => false,
+                        'padding' => false,
+                        'bg_color' => false,
+                        'bg_heading' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'border_heading' => false,
+                        'border_color' => false,
+                        'border_radius' => false,
+                        'border_width' => false,
+                        'border_style' => false,
+                        'box_shadow' => false,
+                    ), // disable hover tab and all fields inside.
                 )
             ),
 
