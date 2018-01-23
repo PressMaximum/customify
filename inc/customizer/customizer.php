@@ -267,6 +267,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'label' => __('Letter Spacing', 'customify'),
                     'min' => -10,
                     'max' => 10,
+                    'step' => 0.1
                 ),
 
                 array(
@@ -460,6 +461,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __('Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_radius',
+                        'type' => 'slider',
+                        'label' => __('Radius', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                        'css_format' => 'border-radius: {{value}};',
                     ),
 
                     array(

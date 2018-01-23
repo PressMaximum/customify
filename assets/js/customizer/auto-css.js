@@ -403,7 +403,6 @@ var AutoCSS = window.AutoCSS || null;
 
         /* offset-x | offset-y | blur-radius | spread-radius | color */
         //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
-        console.log( 'shadow', style );
         return this.str_value( style, format );
     };
 

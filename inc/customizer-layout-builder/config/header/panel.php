@@ -126,117 +126,19 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 
             array(
                 'name' => $section.'_styling',
-                'type' => 'group',
+                'type' => 'styling',
                 'section' => $section,
                 'title'  => __( 'Styling', 'customify' ),
+                'description'  => sprintf( __( 'Set styling for %s', 'customify' ), $section_name ),
                 'live_title_field' => 'title',
                 'field_class' => 'customify-background-control',
                 'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
                 'css_format' => 'styling', // styling
-                'device_settings' => true,
-                'default' => array(),
                 'fields' => array(
-	                array(
-		                'name' => 'text_color',
-		                'type' => 'color',
-		                'label' => __( 'Text Color', 'customify' ),
-		                'css_format' => 'color: {{value}};',
-		                'selector' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
-	                ),
-                    array(
-                        'name' => 'color',
-                        'type' => 'color',
-                        'label' => __( 'Background Color', 'customify' ),
-                    ),
-                    array(
-                        'name' => 'image',
-                        'type' => 'image',
-                        'label' => __( 'Background Image', 'customify' ),
-                    ),
-                    array(
-                        'name' => 'cover',
-                        'type' => 'checkbox',
-                        'required' => array( 'image', 'not_empty', ''),
-                        'checkbox_label' => __( 'Background cover', 'customify' ),
-                    ),
-                    array(
-                        'name' => 'position',
-                        'type' => 'select',
-                        'label' => __( 'Background Position', 'customify' ),
-                        'required' => array( 'image', 'not_empty', ''),
-                        'choices' => array(
-                            'default'       => __( 'Position', 'customify' ),
-                            'center'        => __( 'Center', 'customify' ),
-                            'top_left'      => __( 'Top Left', 'customify' ),
-                            'top_right'     => __( 'Top Right', 'customify' ),
-                            'top_center'    => __( 'Top Center', 'customify' ),
-                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
-                            'bottom_center' => __( 'Bottom Center', 'customify' ),
-                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'repeat',
-                        'type' => 'select',
-                        'label' => __( 'Background Repeat', 'customify' ),
-                        'required' => array(
-                            array('image', 'not_empty', ''),
-                            // array('style', '!=', 'cover' ),
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Repeat', 'customify' ),
-                            'no-repeat' => __( 'No-repeat', 'customify' ),
-                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
-                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'attachment',
-                        'type' => 'select',
-                        'label' => __( 'Background Attachment', 'customify' ),
-                        'required' => array(
-                            array('image', 'not_empty', '')
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Attachment', 'customify' ),
-                            'scroll' => __( 'Scroll', 'customify' ),
-                            'fixed' => __( 'Fixed', 'customify' )
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'border_style',
-                        'type' => 'select',
-                        'label' => __('Border Style', 'customify'),
-                        'default' => 'none',
-                        'choices' => array(
-                            ''          => __('Default', 'customify'),
-                            'none'      => __('None', 'customify'),
-                            'solid'     => __('Solid', 'customify'),
-                            'dotted'    => __('Dotted', 'customify'),
-                            'dashed'    => __('Dashed', 'customify'),
-                            'double'    => __('Double', 'customify'),
-                            'ridge'     => __('Ridge', 'customify'),
-                            'inset'     => __('Inset', 'customify'),
-                            'outset'    => __('Outset', 'customify'),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'border_width',
-                        'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
-                        'required' => array('border_style', '!=', 'none'),
-                    ),
-                    array(
-                        'name' => 'border_color',
-                        'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
-                        'required' => array('border_style', '!=', 'none'),
-                    ),
-
+                    'hover_fields' => false, // disable hover tab and all fields inside.
+                    'normal_fields' => array(
+                        'link_color' => false // disable for special field.
+                    )
                 )
             ),
 
