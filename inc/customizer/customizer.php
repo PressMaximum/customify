@@ -322,14 +322,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'text_color',
                         'type' => 'color',
-                        'device_settings' => true,
                         'label' => __( 'Text Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
                     array(
                         'name' => 'link_color',
                         'type' => 'color',
-                        'device_settings' => true,
                         'label' => __( 'Link Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
@@ -467,7 +465,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'name' => 'border_radius',
                         'type' => 'slider',
                         'label' => __('Radius', 'customify'),
-                        'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-radius: {{value}};',
                     ),
 
@@ -485,14 +482,12 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'text_color',
                         'type' => 'color',
-                        'device_settings' => true,
                         'label' => __( 'Text Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
                     array(
                         'name' => 'link_color',
                         'type' => 'color',
-                        'device_settings' => true,
                         'label' => __( 'Link Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
@@ -553,6 +548,13 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __('Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_radius',
+                        'type' => 'slider',
+                        'label' => __('Radius', 'customify'),
+                        'css_format' => 'border-radius: {{value}};',
                     ),
 
                     array(

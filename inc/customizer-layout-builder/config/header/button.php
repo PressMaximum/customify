@@ -94,17 +94,6 @@ class Customify_Builder_Item_Button {
 				'label'           => __( 'Padding', 'customify' ),
 			),
 
-			array(
-				'name'       => $prefix . '_border_radius',
-				'type'       => 'slider',
-				'section'    => $section,
-				'min'        => 0,
-				'max'        => 100,
-				'css_format' => 'border-radius: {{value}};',
-				'selector'   => $selector,
-				'title'      => __( 'Border Radius', 'customify' )
-			),
-
             array(
                 'name' => $section.'_padding',
                 'type' => 'css_ruler',
@@ -125,7 +114,6 @@ class Customify_Builder_Item_Button {
 				'type'            => 'typography',
 				'section'         => $section,
 				'title'           => __( 'Typography', 'customify' ),
-				'field_class'     => 'customify-typography-control',
 				'selector'        => $selector,
 				'css_format'      => 'typography',
 				'default'         => array(),
@@ -136,7 +124,6 @@ class Customify_Builder_Item_Button {
 				'type'        => 'styling',
 				'section'     => $section,
 				'title'       => __( 'Styling', 'customify' ),
-				'field_class' => 'customify-typography-control',
 				'selector'    => array(
 				    'normal' => $selector,
 				    'hover' => $selector.':hover',

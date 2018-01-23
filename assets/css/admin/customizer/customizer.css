@@ -425,13 +425,6 @@
   background: #ccc;
 }
 
-.customify-input-color .wp-color-result.button {
-  width: 100%;
-}
-.customify-input-color .wp-picker-active .wp-color-result.button {
-  width: auto;
-}
-
 .customify--css-unit {
   margin-bottom: 5px;
 }
@@ -918,6 +911,7 @@
 
 .customify--settings-wrapper {
   position: relative;
+  display: block;
 }
 .customify--settings-wrapper .customify-actions {
   position: absolute;
@@ -1056,6 +1050,11 @@
   margin-bottom: 0px;
 }
 
+.customize-control-customify-styling .customify--settings-wrapper, .customize-control-customify-typography .customify--settings-wrapper {
+  min-height: 40px;
+  display: block;
+}
+
 .ft--heading {
   clear: both;
 }
@@ -1064,17 +1063,12 @@
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   background: #fff;
   padding: 12px;
-  display: none;
-  position: absolute;
   margin-bottom: 15px;
-  top: 100%;
   margin-top: 10px;
   left: 0px;
   right: 0px;
   z-index: 99;
-}
-.customify-modal-settings .wp-color-result-text {
-  line-height: 23px;
+  position: relative;
 }
 .customify-modal-settings:before {
   content: '';
@@ -1086,6 +1080,9 @@
   background: #fff;
   transform: rotate(45deg);
   border-radius: 3px;
+}
+.customify-modal-settings .wp-color-result-text {
+  line-height: 23px;
 }
 .customify-modal-settings .customify--field-heading h3.customify-field--heading {
   font-size: 11px;

@@ -1646,20 +1646,6 @@
                 that.get();
             } ) ;
 
-            $(document).mouseup(function(e) {
-                var actions = $(".customify-actions .action--edit", that.$el );
-                if (
-                    !that.container.is(e.target) && that.container.has(e.target).length === 0
-                    &&
-                    !actions.is(e.target) && actions.has(e.target).length === 0
-                ) {
-                    that.container.hide();
-                    that.$el.removeClass( 'modal--opening' );
-                    that.$el.attr( 'data-opening', '' );
-                    $( '.action--reset', that.$el ).hide();
-                }
-            });
-
         },
 
         setUpFont: function( font ){
@@ -1711,19 +1697,25 @@
                 if (!$('.customify-modal-settings', $el).length) {
                     var $wrap = $($('#tmpl-customify-modal-settings').html());
                     that.container = $wrap;
+                    that.container.hide();
                     this.$el.append($wrap);
                     that.ready();
                 } else {
                     that.container = $('.customify-modal-settings', $el);
+                    that.container.hide();
                 }
-                this.container.show();
-                this.$el.addClass('modal--opening');
-                $( '.action--reset', this.$el ).show();
+                that.container.slideDown( 300, function(){
+                    that.$el.addClass('modal--opening');
+                    $( '.action--reset', that.$el ).show();
+                } );
+
             } else {
-                $el.attr( 'data-opening', '' );
-                $('.customify-modal-settings', $el).hide();
-                $el.removeClass('modal--opening');
-                $( '.action--reset', $el ).hide();
+                $('.customify-modal-settings', $el).slideUp( 300, function(){
+                    $el.attr( 'data-opening', '' );
+                    $el.removeClass('modal--opening');
+                    $( '.action--reset', $el ).hide();
+                } );
+
             }
         },
 
@@ -1863,11 +1855,7 @@
                 } else {
                     that.open( $( this ).closest('.customize-control-customify-styling').eq( 0 ) );
                 }
-
-
             } );
-
-
 
         },
         addFields: function( values ){
@@ -1879,7 +1867,6 @@
                 hover: {},
                 normal: {}
             } );
-            console.log( 'Value_before_add', that.values );
             var fieldsArea = $( '.customify-modal-settings--fields', that.container );
             fieldsArea.html('');
 
@@ -1896,9 +1883,7 @@
             if ( c <= 1 ) {
                 tabsHTML.addClass('customify--hide');
             }
-
             customifyField.devices = Customify_Control_Args.devices;
-
             _.each(that.tabs, function( label, key ){
                 if ( _.isObject( that[ key +'_fields' ] ) && !_.isEmpty( key +'_fields' ) ) {
 
@@ -1927,43 +1912,36 @@
             } ) ;
             $( '.modal--tabs .modal--tab', that.container ).eq(0).trigger('click');
 
-
-            $(document).mouseup(function(e) {
-                var actions = $(".customify-actions .action--edit", that.$el );
-                if (
-                    !that.container.is(e.target) && that.container.has(e.target).length === 0
-                    &&
-                    !actions.is(e.target) && actions.has(e.target).length === 0
-                ) {
-                    that.close();
-                }
-            });
+            this.container.slideUp( 0 );
 
         },
 
         close: function(){
             var that = this;
-            that.container.hide();
-            that.$el.removeClass( 'modal--opening' );
-            that.$el.attr( 'data-opening', '' );
-            $( '.action--reset', that.$el ).hide();
+            that.container.slideUp( 300, function(){
+                that.$el.removeClass( 'modal--opening' );
+                that.$el.attr( 'data-opening', '' );
+                $( '.action--reset', that.$el ).hide();
+            } );
         },
 
         reset: function( $el ){
             this.$el = $el;
             var that = this;
 
-            $el.attr( 'data-opening', '' );
-            $('.customify-modal-settings', $el).remove();
-            $el.removeClass('modal--opening');
+            $('.customify-modal-settings', $el).slideUp( 300, function () {
+                $el.attr( 'data-opening', '' );
+                $('.customify-modal-settings', $el).remove();
+                $el.removeClass('modal--opening');
+                try {
+                    that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
+                } catch (e) {
+                    that.values = {};
+                }
+                $( '.customify-hidden-modal-input', this.$el ).val( '{}' ).trigger('change');
+                $el.addClass('customify-modal--inside');
+            } );
 
-            try {
-                that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
-            } catch (e) {
-                that.values = {};
-            }
-            $( '.customify-hidden-modal-input', this.$el ).val( '{}' ).trigger('change');
-            $el.addClass('customify-modal--inside');
         },
 
         get: function(){
@@ -2004,6 +1982,7 @@
 
                 if (!$('.customify-modal-settings', $el).length) {
                     var $wrap = $($('#tmpl-customify-modal-settings').html());
+                    $wrap.hide();
                     that.container = $wrap;
                     this.$el.append($wrap);
                     that.addFields();
@@ -2011,16 +1990,19 @@
                     that.container = $('.customify-modal-settings', $el);
                 }
 
-                this.container.show();
+                this.container.slideDown( 300 );
                 this.$el.addClass('modal--opening');
 
                 $( '.action--reset', this.$el ).show();
 
             } else {
-                $el.attr( 'data-opening', '' );
-                $('.customify-modal-settings', $el).hide();
-                $el.removeClass('modal--opening');
-                $( '.action--reset', $el ).hide();
+                this.container.slideUp( 300, function(){
+                    $el.attr( 'data-opening', '' );
+                    $('.customify-modal-settings', $el).hide();
+                    $el.removeClass('modal--opening');
+                    $( '.action--reset', $el ).hide();
+                } );
+
             }
         },
     };
