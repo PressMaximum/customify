@@ -79,21 +79,6 @@ class Customify_Builder_Item_Button {
 				'checkbox_label'  => __( 'Open link in new window.', 'customify' ),
 			),
 
-			array(
-				'name'            => $prefix . '_padding',
-				'type'            => 'css_ruler',
-				'section'         => $section,
-				'device_settings' => true,
-				'css_format'      => array(
-					'top'    => 'padding-top: {{value}};',
-					'right'  => 'padding-right: {{value}};',
-					'bottom' => 'padding-bottom: {{value}};',
-					'left'   => 'padding-left: {{value}};',
-				),
-				'selector'        => $selector,
-				'label'           => __( 'Padding', 'customify' ),
-			),
-
             array(
                 'name' => $section.'_padding',
                 'type' => 'css_ruler',

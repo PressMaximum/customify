@@ -333,6 +333,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     ),
 
                     array(
+                        'name'            => 'padding',
+                        'type'            => 'css_ruler',
+                        'device_settings' => true,
+                        'css_format'      => array(
+                            'top'    => 'padding-top: {{value}};',
+                            'right'  => 'padding-right: {{value}};',
+                            'bottom' => 'padding-bottom: {{value}};',
+                            'left'   => 'padding-left: {{value}};',
+                        ),
+                        'label' => __( 'Padding', 'customify' ),
+                    ),
+
+                    array(
                         'name' => 'bg_heading',
                         'type' => 'heading',
                         'label' => __( 'Background', 'customify' ),
