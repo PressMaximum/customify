@@ -70,12 +70,10 @@ $submenu_width: 14em;
         }
 
         li:last-child > a {
-
         }
-
         .sub-menu {
             top: 0px;
-            left: $submenu_width;
+            left: 100%;
             margin-top: -2px;
         }
     }

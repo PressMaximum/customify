@@ -3037,7 +3037,7 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop .sub-menu .sub-menu {
   top: 0px;
-  left: 14em;
+  left: 100%;
   margin-top: -2px;
 }
 .nav-menu-desktop .menu-item:hover > .sub-menu {

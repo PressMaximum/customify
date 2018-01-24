@@ -329,13 +329,13 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'name' => 'text_color',
                         'type' => 'color',
                         'label' => __( 'Text Color', 'customify' ),
-                        'css_format' => 'color: {{value}};'
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
                     ),
                     array(
                         'name' => 'link_color',
                         'type' => 'color',
                         'label' => __( 'Link Color', 'customify' ),
-                        'css_format' => 'color: {{value}};'
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
                     ),
 
                     array(
@@ -497,7 +497,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 ),
 
                 'hover_fields' => array(
-
                     array(
                         'name' => 'text_color',
                         'type' => 'color',
@@ -510,31 +509,27 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'label' => __( 'Link Color', 'customify' ),
                         'css_format' => 'color: {{value}};'
                     ),
-
                     array(
                         'name' => 'bg_heading',
                         'type' => 'heading',
                         'label' => __( 'Background', 'customify' ),
                     ),
-
                     array(
                         'name' => 'bg_color',
                         'type' => 'color',
-                        'label' => __( 'Color', 'customify' ),
+                        'label' => __( 'Background Color', 'customify' ),
                         'css_format' => 'background-color: {{value}};'
                     ),
-
                     array(
                         'name' => 'border_heading',
                         'type' => 'heading',
                         'label' => __( 'Border', 'customify' ),
                     ),
-
                     array(
                         'name' => 'border_style',
                         'type' => 'select',
-                        'label' => __('Style', 'customify'),
-                        'default' => 'none',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => '',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
                             'none'      => __('None', 'customify'),
@@ -548,11 +543,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         ),
                         'css_format' => 'border-style: {{value}};',
                     ),
-
                     array(
                         'name' => 'border_width',
                         'type' => 'css_ruler',
-                        'label' => __('Width', 'customify'),
+                        'label' => __('Border Width', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => array(
                             'top' => 'border-top-width: {{value}};',
@@ -564,18 +558,16 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_color',
                         'type' => 'color',
-                        'label' => __('Color', 'customify'),
+                        'label' => __('Border Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
                     ),
-
                     array(
                         'name' => 'border_radius',
                         'type' => 'slider',
-                        'label' => __('Radius', 'customify'),
+                        'label' => __('Border Radius', 'customify'),
                         'css_format' => 'border-radius: {{value}};',
                     ),
-
                     array(
                         'name' => 'box_shadow',
                         'type' => 'shadow',

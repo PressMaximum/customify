@@ -17,7 +17,7 @@ class Customify_Builder_Item_Primary_Menu {
         $this->id = 'primary-menu';
         $this->label = __( 'Primary Menu', 'customify' );
         $this->prefix = 'primary_menu';
-        $this->selector = '.builder-item--'.$this->id .' .primary-menu';
+        $this->selector = '.builder-item--'.$this->id .' .primary-menu-ul';
         $this->section = 'header_menu_primary';
         $this->theme_location = 'menu-1';
     }
@@ -58,22 +58,6 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => $this->prefix.'_item_padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'title' => __( 'Item Padding', 'customify' ),
-                'selector' => $this->selector.' li a',
-                'device_settings' => true,
-                'css_format' => array(
-                    'unit' => '',
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
-            ),
-
-            array(
                 'name' => $this->prefix.'_item_margin',
                 'type' => 'css_ruler',
                 'section' => $section,
@@ -85,40 +69,122 @@ class Customify_Builder_Item_Primary_Menu {
                     'bottom' => 'margin-bottom: {{value}};',
                     'left' => 'margin-left: {{value}};',
                 ),
-                'title'  => __( 'Item Margin', 'customify' ),
+                'title'  => __( 'Top Item Margin', 'customify' ),
+            ),
+            // "{$this->selector} li a, {$this->selector} li"
+            array(
+                'name' => $this->prefix.'_submenu_width',
+                'type' => 'slider',
+                'section' => $section,
+                'selector' => $this->selector.' .sub-menu',
+                'device_settings' => true,
+                'css_format' => 'width: {{value}};',
+                'title'  => __( 'Submenu Width', 'customify' ),
+                'min' => 100,
+                'max' => 500,
+                'step' => 5
             ),
 
             array(
-                'name' => $this->prefix.'_item_color',
-                'type' => 'color',
+                'name' => $this->prefix.'_item_styling',
+                'type' => 'styling',
                 'section' => $section,
-                'title'  => __( 'Item Color', 'customify' ),
-                'selector'  => "{$this->selector} li a, {$this->selector} li",
-                'device_settings' => true,
-                'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
+                'title'  => __( 'Top Item Styling', 'customify' ),
+                'description'  => __( 'Advanced styling for top level', 'customify' ),
+                'selector'  => array(
+                    'normal' => "{$this->selector} > li > a",
+                    'hover' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-parent > a",
+                ),
+                'css_format'  => 'styling',
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'padding' => false // disable for special field.
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ),
+                    'hover_fields' => array(
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ), // disable hover tab and all fields inside.
+                )
             ),
 
             array(
-                'name' => $this->prefix.'_item_color_hover',
-                'type' => 'color',
+                'name' => $this->prefix.'_sub_styling',
+                'type' => 'styling',
                 'section' => $section,
-                'title' => __( 'Item Color Hover', 'customify' ),
-                'device_settings' => true,
-                'selector'  => "{$this->selector} li a:hover, {$this->selector} li:hover > span, {$this->selector}",
-                'css_format'  => 'color: {{value}}; text-decoration-color: {{value}};',
+                'title'  => __( 'Submenu Styling', 'customify' ),
+                'description'  => __( 'Advanced styling for submenu', 'customify' ),
+                'selector'  => array(
+                    'normal' => "{$this->selector} .sub-menu",
+                    'hover' => "{$this->selector} .sub-menu",
+                ),
+                'css_format'  => 'styling',
+                'fields' => array(
+                    'normal_fields' => array(
+                        'padding' => false, // disable for special field.
+                        'text_color' => false,
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ),
+                    'hover_fields' => false
+                )
+            ),
+
+
+            array(
+                'name' => $this->prefix.'_sub_item_styling',
+                'type' => 'styling',
+                'section' => $section,
+                'title'  => __( 'Submenu Item Styling', 'customify' ),
+                'description'  => __( 'Advanced styling for submenu item', 'customify' ),
+                'selector'  => array(
+                    'normal' => "{$this->selector} .sub-menu li a",
+                    'hover' => "{$this->selector} .sub-menu li a:hover",
+                ),
+                'css_format'  => 'styling',
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'padding' => false, // disable for special field.
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ),
+                    'hover_fields' => array(
+                        'padding' => false,
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ), // disable hover tab and all fields inside.
+                )
             ),
 
             array(
                 'name' => $this->prefix.'_typography',
                 'type' => 'typography',
-                'section'     => $section,
-                'title'          => __( 'Typography', 'customify' ),
-                'description'    => __( 'This is description',  'customify' ),
+                'section'  => $section,
+                'title' => __( 'Typography', 'customify' ),
+                'description' => __( 'Advanced typography for menu',  'customify' ),
                 'selector' => $this->selector,
                 'css_format' => 'typography',
-                'default' => array(
-
-                ),
             ),
 
         );
@@ -138,6 +204,7 @@ class Customify_Builder_Item_Primary_Menu {
             'container_id' => 'site-navigation-__id__-__device__',
             'container_class' => $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' ),
             'menu_id'        => $this->id.'-__id__-__device__',
+            'menu_class'   => $this->id.'-ul menu',
             'fallback_cb' => false
         ) );
 
@@ -169,7 +236,7 @@ class Customify_Builder_Item_Secondary_Menu extends  Customify_Builder_Item_Prim
         $this->id = 'secondary_menu';
         $this->prefix = 'secondary_menu';
        // $this->selector = '.secondary-menu';
-        $this->selector = '.builder-item--'.$this->id .' .secondary-menu';
+        $this->selector = '.builder-item--'.$this->id .' .secondary-menu-ul';
         $this->section = 'header_menu_secondary';
         $this->theme_location = 'menu-2';
     }

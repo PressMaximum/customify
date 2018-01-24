@@ -151,6 +151,8 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                         'bg_cover' => false,
                         'bg_image' => false,
                         'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
                         'border_heading' => false,
                         'border_color' => false,
                         'border_radius' => false,

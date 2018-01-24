@@ -376,11 +376,13 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                             if ( is_string($c) && trim( $css ) ) {
                                 $css .= "\r\n{$s}  {\r\n\t{$c}\r\n} \r\n";
                             } else {
+                                if ( ! is_array( $c ) ) {
+                                    $c = array();
+                                }
                                 $c = array_map( 'trim', $c );
                                 $c = array_filter( $c );
-
                                 if ( ! empty( $c ) ) {
-                                    $css .= "\r\n{$s}  {\r\n\t" . join($c, "\n") . "\r\n} \r\n";
+                                    $css .= "\r\n{$s}  {\r\n\t" . join( $c, "\n" ) . "\r\n} \r\n";
                                 }
                             }
                         }
