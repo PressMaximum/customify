@@ -252,6 +252,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'type' => 'slider',
                     'label' => __('Font Size', 'customify'),
                     'device_settings' => true,
+                    'min' => 1,
+                    'max' => 100,
+                    'step' => 1
                 ),
 
                 array(
@@ -259,6 +262,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'type' => 'slider',
                     'label' => __('Line Height', 'customify'),
                     'device_settings' => true,
+                    'min' => 1,
+                    'max' => 100,
+                    'step' => 1
                 ),
 
                 array(

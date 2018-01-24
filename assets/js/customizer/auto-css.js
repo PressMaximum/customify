@@ -111,6 +111,9 @@ var AutoCSS = window.AutoCSS || null;
                         case 'styling':
                             fields_code[ field.name ] = that.styling( field, v, no_selector );
                             break;
+                        case 'typography':
+                            fields_code[ field.name ] = that.typography( field, v, no_selector );
+                            break;
                         default:
                             switch (field.css_format) {
                                 case  'background':

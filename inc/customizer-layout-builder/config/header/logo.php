@@ -64,9 +64,27 @@ class Customify_Builder_Item_Logo {
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Description', 'customify' ),
                 'default' => 'yes',
+                'required' => array( 'header_logo_name', '=', 'yes' ),
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),
+                ),
+            ),
+
+            array(
+                'name' => 'header_logo_pos',
+                'type' => 'radio_group',
+                'section' => $section,
+                'selector' => $selector,
+                'render_callback' => $render_cb_el,
+                'title' => __( 'Logo Image Position', 'customify' ),
+                'default' => 'left',
+                'required' => array( 'header_logo_name', '=', 'yes' ),
+                'choices' => array(
+                    'top' => __( 'Top', 'customify' ),
+                    'left' => __( 'Left', 'customify' ),
+                    'right' => __( 'Right', 'customify' ),
+                    'bottom' => __( 'Bottom', 'customify' ),
                 ),
             ),
 
@@ -76,46 +94,58 @@ class Customify_Builder_Item_Logo {
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
 
+    function logo(){
+        $custom_logo_id = get_theme_mod( 'custom_logo' );
+        $logo_image = Customify_Customizer()->get_media( $custom_logo_id, 'full' );
+        $logo_retina = Customify_Customizer()->get_setting( 'header_logo_retina' );
+        $logo_retina_image = Customify_Customizer()->get_media( $logo_retina );
+
+        if ( $logo_image ) {
+            ?>
+            <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
+                <img src="<?php echo esc_url($logo_image); ?>"
+                     alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
+            </a>
+            <?php
+        }
+    }
+
     /**
      * Render Logo item
      * @see get_custom_logo
      *
      */
     function render(){
-        $show_name = Customify_Customizer()->get_setting( 'header_logo_name' );
-        $show_desc = Customify_Customizer()->get_setting( 'header_logo_desc' );
+        $show_name      = Customify_Customizer()->get_setting( 'header_logo_name' );
+        $show_desc      = Customify_Customizer()->get_setting( 'header_logo_desc' );
+        $image_position = Customify_Customizer()->get_setting( 'header_logo_pos' );
         ?>
-        <div class="site-branding">
+        <div class="site-branding logo-<?php echo esc_attr( $image_position ); ?>">
             <?php
-            $custom_logo_id = get_theme_mod( 'custom_logo' );
-            $logo_image = Customify_Customizer()->get_media( $custom_logo_id, 'full' );
-            $logo_retina = Customify_Customizer()->get_setting( 'header_logo_retina' );
-            $logo_retina_image = Customify_Customizer()->get_media( $logo_retina );
 
-            if ( $logo_image ) {
-                ?>
-                <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
-                    <img src="<?php echo esc_url($logo_image); ?>"
-                         alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
-                </a>
-                <?php
-            }
+            $this->logo();
 
             if ( $show_name !== 'no' ) {
-                if (is_front_page() && is_home()) : ?>
-                    <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
-                <?php else : ?>
-                    <p class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
-                    <?php
-                endif;
-            }
+                echo '<div class="site-name-desc">';
 
-            if ( $show_desc !== 'no' ) {
-                $description = get_bloginfo('description', 'display');
-                if ($description || is_customize_preview()) { ?>
-                    <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
-                    <?php
-                };
+                if ($show_name !== 'no') {
+                    if (is_front_page() && is_home()) : ?>
+                        <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
+                    <?php else : ?>
+                        <p class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
+                        <?php
+                    endif;
+                }
+
+                if ($show_desc !== 'no') {
+                    $description = get_bloginfo('description', 'display');
+                    if ($description || is_customize_preview()) { ?>
+                        <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+                        <?php
+                    };
+                }
+
+                echo '</div>';
             }
             ?>
         </div><!-- .site-branding -->

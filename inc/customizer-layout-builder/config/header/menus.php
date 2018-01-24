@@ -110,53 +110,15 @@ class Customify_Builder_Item_Primary_Menu {
 
             array(
                 'name' => $this->prefix.'_typography',
-                'type' => 'group',
+                'type' => 'typography',
                 'section'     => $section,
                 'title'          => __( 'Typography', 'customify' ),
                 'description'    => __( 'This is description',  'customify' ),
-                'field_class' => 'customify-typography-control',
                 'selector' => $this->selector,
                 'css_format' => 'typography',
                 'default' => array(
 
                 ),
-                'fields' => array(
-
-                    array(
-                        'name' => 'font',
-                        'type' => 'font',
-                        'label' => __( 'Font', 'customify' ),
-                    ),
-
-                    array(
-                        'name' => 'font_style',
-                        'type' => 'font_style',
-                        'label' => __( 'Font Style', 'customify' ),
-                    ),
-
-                    array(
-                        'name' => 'font_size',
-                        'type' => 'slider',
-                        'label' => __( 'Font Size', 'customify' ),
-                        'device_settings' => true,
-                    ),
-
-                    array(
-                        'name' => 'line_height',
-                        'type' => 'slider',
-                        'label' => __( 'Height', 'customify' ),
-                        'device_settings' => true,
-                    ),
-
-                    array(
-                        'name' => 'letter_spacing',
-                        'type' => 'slider',
-                        'label' => __( 'Letter Spacing', 'customify' ),
-                        'min' => -10,
-                        'max' => 10,
-                    ),
-
-                )
             ),
 
         );

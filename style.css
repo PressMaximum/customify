@@ -2919,7 +2919,7 @@ article.comment .comment-post-author {
 
 /* Logo & Site Identity */
 .site-branding {
-  display: inline-block;
+  display: flex;
   line-height: .9;
   vertical-align: middle;
 }
@@ -2944,12 +2944,38 @@ article.comment .comment-post-author {
   font-size: 0.875em;
   margin: 4px 0px 7px 0px;
 }
+.site-branding.logo-left .site-name-desc {
+  margin-left: 7px;
+}
+.site-branding.logo-right {
+  flex-direction: row-reverse;
+}
+.site-branding.logo-right .site-name-desc {
+  margin-right: 7px;
+}
+.site-branding.logo-top {
+  flex-direction: column;
+}
+.site-branding.logo-top .site-name-desc {
+  margin-bottom: 7px;
+}
+.site-branding.logo-bottom {
+  flex-direction: column-reverse;
+}
+.site-branding.logo-bottom .site-name-desc {
+  margin-top: 7px;
+}
 
 .item-button {
   display: inline-block;
 }
 
 /* Navigation */
+.nav-menu-desktop {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.6;
+}
 .nav-menu-desktop .menu {
   list-style: none;
   padding: 0px;
@@ -2963,11 +2989,8 @@ article.comment .comment-post-author {
   margin-right: 0px;
 }
 .nav-menu-desktop .menu li a {
-  line-height: 1.6;
   display: inline-block;
   color: currentColor;
-  font-size: 15px;
-  font-weight: 500;
   transition: background 0.15s ease-out;
 }
 .nav-menu-desktop .menu li a:hover {

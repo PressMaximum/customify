@@ -1,6 +1,9 @@
 /* Navigation */
 $submenu_width: 14em;
 .nav-menu-desktop {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.6;
    .menu {
        list-style: none;
        padding: 0px;
@@ -12,11 +15,8 @@ $submenu_width: 14em;
                margin-right: 0px;
            }
            a {
-               line-height: 1.6;
                display: inline-block;
                color: currentColor;
-               font-size: 15px;
-               font-weight: 500;
                transition: background 0.15s ease-out;
                &:hover {
                    color: $color_link_hover;
@@ -49,7 +49,6 @@ $submenu_width: 14em;
         //border-radius: 2px;
         text-align: left;
         border-top: 2px solid $color_primary;
-
 
         li {
             display: block;
