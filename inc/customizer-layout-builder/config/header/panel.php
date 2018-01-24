@@ -167,7 +167,10 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 
     }
     function row_sidebar_config( $section , $section_name ){
-        $selector = '#header-menu-sidebar-inner';
+        //$selector = '#header-menu-sidebar-inner';
+        $selector = '#header-menu-sidebar-bg';
+
+        // #header-menu-sidebar-bg
 
         $config  = array(
             array(
@@ -195,22 +198,6 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 )
             ),
 
-	        /*
-	        array(
-		        'name' => $section.'_skin',
-		        'type' => 'radio_group',
-		        'default' => 'is-skin-dark',
-		        'section' => $section,
-		        //'selector' => '#masthead',
-		        'selector' => '#header-menu-sidebar',
-		        'css_format' => 'html_class',
-		        'title' => __('Predefined Skin', 'customify'),
-		        'choices' => array(
-			        'is-skin-dark' => __('Dark', 'customify'),
-			        'is-skin-light' => __('Light', 'customify'),
-		        )
-	        ),
-	        */
 
 	        array(
 		        'name'    => $section.'_text_mode',
@@ -230,142 +217,55 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
 		        )
 	        ),
 
+
             array(
                 'name' => $section.'_styling',
-                'type' => 'group',
+                'type' => 'styling',
                 'section' => $section,
-                'title' => __( 'Styling', 'customify' ),
+                'title'  => __( 'Styling', 'customify' ),
+                'description'  => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
                 'live_title_field' => 'title',
-                'field_class' => 'customify-background-control',
-                'selector' => '#header-menu-sidebar-bg:before',
-                //'selector' => '#header-menu-sidebar',
-                'css_format' => 'styling',
-                'default' => array(),
+                'selector' => array(
+                    'normal' => $selector,
+                    'normal_link_color' => "{$selector} a",
+                    'hover_link_color' => "{$selector} a:hover",
+                    'normal_bg_color' => "#header-menu-sidebar-bg:before",
+                    'normal_bg_image' => "#header-menu-sidebar-bg:before",
+                    'normal_bg_attachment' => "#header-menu-sidebar-bg:before",
+                    'normal_bg_cover' => "#header-menu-sidebar-bg:before",
+                    'normal_bg_repeat' => "#header-menu-sidebar-bg:before",
+                    'normal_bg_position' => "#header-menu-sidebar-bg:before",
+                    'normal_box_shadow' => "#header-menu-sidebar",
+                ),
+                'css_format' => 'styling', // styling
                 'fields' => array(
-                    array(
-                        'name' => 'color',
-                        'type' => 'color',
-                        'label' => __( 'Background Color', 'customify' ),
-                        'device_settings' => false,
-                        //'selector' => '#header-menu-sidebar-inner:before',
-                        //'css_format' => 'border: {{value}};',
+                    'normal_fields' => array(
+                        //'link_color' => false, // disable for special field.
+                        //'padding' => false // disable for special field.
+                        //'border_heading' => false,
+                        'border_color' => false,
+                        'border_radius' => false,
+                        'border_width' => false,
+                        'border_style' => false,
                     ),
-                    array(
-                        'name' => 'image',
-                        'type' => 'image',
-                        'label' => __( 'Background Image', 'customify' ),
-                        //'selector' => '#header-menu-sidebar-inner:before',
-                        //'css_format' => 'background-image: url("{{value}}");',
-                    ),
-
-                    array(
-                        'name' => 'opacity',
-                        'type' => 'slider',
-                        'label' => __( 'Background Opacity', 'customify' ),
-                        'css_format' => 'opacity: {{value_no_unit}};',
-                        //'selector' => '#header-menu-sidebar-inner:before',
-                        'max' => 1,
-                        'min' => 0,
-                        'step' => 0.01,
-                    ),
-
-                    array(
-                        'name' => 'cover',
-                        'type' => 'checkbox',
-                        'required' => array( 'image', 'not_empty', ''),
-                        'checkbox_label' => __( 'Background cover', 'customify' ),
-                    ),
-                    array(
-                        'name' => 'position',
-                        'type' => 'select',
-                        'label' => __( 'Background Position', 'customify' ),
-                        'required' => array( 'image', 'not_empty', ''),
-                        'choices' => array(
-                            'default'       => __( 'Position', 'customify' ),
-                            'center'        => __( 'Center', 'customify' ),
-                            'top_left'      => __( 'Top Left', 'customify' ),
-                            'top_right'     => __( 'Top Right', 'customify' ),
-                            'top_center'    => __( 'Top Center', 'customify' ),
-                            'bottom_left'   => __( 'Bottom Left', 'customify' ),
-                            'bottom_center' => __( 'Bottom Center', 'customify' ),
-                            'bottom_right'  => __( 'Bottom Right', 'customify' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'repeat',
-                        'type' => 'select',
-                        'label' => __( 'Background Repeat', 'customify' ),
-                        'required' => array(
-                            array('image', 'not_empty', ''),
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Repeat', 'customify' ),
-                            'no-repeat' => __( 'No-repeat', 'customify' ),
-                            'repeat-x' => __( 'Repeat Horizontal', 'customify' ),
-                            'repeat-y' => __( 'Repeat Vertical', 'customify' ),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'attachment',
-                        'type' => 'select',
-                        'label' => __( 'Background Attachment', 'customify' ),
-                        'required' => array(
-                            array('image', 'not_empty', ''),
-                            array('cover', '!=', '1' ),
-                        ),
-                        'choices' => array(
-                            'default' => __( 'Attachment', 'customify' ),
-                            'scroll' => __( 'Scroll', 'customify' ),
-                            'fixed' => __( 'Fixed', 'customify' )
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'sidebar_border_style',
-                        'type' => 'select',
-                        'label' => __('Border Style', 'customify'),
-                        'default' => 'none',
-                        'selector' => '#header-menu-sidebar',
-                        'css_format' => 'border-style: {{value}};',
-                        'choices' => array(
-                            ''          => __('Default', 'customify'),
-                            'none'      => __('None', 'customify'),
-                            'solid'     => __('Solid', 'customify'),
-                            'dotted'    => __('Dotted', 'customify'),
-                            'dashed'    => __('Dashed', 'customify'),
-                            'double'    => __('Double', 'customify'),
-                            'ridge'     => __('Ridge', 'customify'),
-                            'inset'     => __('Inset', 'customify'),
-                            'outset'    => __('Outset', 'customify'),
-                        ),
-                    ),
-
-                    array(
-                        'name' => 'sidebar_border_width',
-                        'type' => 'css_ruler',
-                        'label' => __('Border Width', 'customify'),
-                        'required' => array('sidebar_border_style', '!=', 'none'),
-                        'selector' => '#header-menu-sidebar',
-                        'css_format' => array(
-                            'top' => 'border-top-width: {{value}};',
-                            'right' => 'border-right-width: {{value}};',
-                            'bottom'=> 'border-bottom-width: {{value}};',
-                            'left'=> 'border-left-width: {{value}};'
-                        ),
-                    ),
-                    array(
-                        'name' => 'sidebar_border_color',
-                        'type' => 'color',
-                        'label' => __('Border Color', 'customify'),
-                        'required' => array('sidebar_border_style', '!=', 'none'),
-                        'selector' => '#header-menu-sidebar',
-                        'css_format' => 'border-color: {{value}};',
-                    ),
-
+                    'hover_fields' => array(
+                        'text_color' => false,
+                        'padding' => false,
+                        'bg_color' => false,
+                        'bg_heading' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'border_heading' => false,
+                        'border_color' => false,
+                        'border_radius' => false,
+                        'border_width' => false,
+                        'border_style' => false,
+                        'box_shadow' => false,
+                    ), // disable hover tab and all fields inside.
                 )
             ),
+
 
         );
         return $config;

@@ -354,13 +354,13 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'bg_color',
                         'type' => 'color',
-                        'label' => __( 'Color', 'customify' ),
+                        'label' => __( 'Background Color', 'customify' ),
                         'css_format' => 'background-color: {{value}};'
                     ),
                     array(
                         'name' => 'bg_image',
                         'type' => 'image',
-                        'label' => __( 'Image', 'customify' ),
+                        'label' => __( 'Background Image', 'customify' ),
                         'css_format' => 'background-image: url("{{value}}");'
                     ),
                     array(
@@ -438,7 +438,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'name' => 'border_style',
                         'type' => 'select',
                         'class' => 'clear',
-                        'label' => __('Style', 'customify'),
+                        'label' => __('Border Style', 'customify'),
                         'default' => 'none',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
@@ -457,7 +457,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_width',
                         'type' => 'css_ruler',
-                        'label' => __('Width', 'customify'),
+                        'label' => __('Border Width', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => array(
                             'top' => 'border-top-width: {{value}};',
@@ -469,7 +469,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_color',
                         'type' => 'color',
-                        'label' => __('Color', 'customify'),
+                        'label' => __('Border Color', 'customify'),
                         'required' => array('border_style', '!=', 'none'),
                         'css_format' => 'border-color: {{value}};',
                     ),
@@ -477,7 +477,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'border_radius',
                         'type' => 'slider',
-                        'label' => __('Radius', 'customify'),
+                        'label' => __('Border Radius', 'customify'),
                         'css_format' => 'border-radius: {{value}};',
                     ),
 
