@@ -25,15 +25,15 @@ $color_meta:        #6d6d6d;
 
 // Menu sidebar colors.
 // - Text Light
-$ms_tl_color: rgba(255, 255, 255, 0.8);
-$ms_tl_color_hover: rgba(255, 255, 255, 0.9);
-$ms_tl_bg: rgba(0,0,0,0.95);
+$ms_tl_color: rgba(255, 255, 255, 0.99);
+$ms_tl_color_hover: rgba(255, 255, 255, 0.7);
+$ms_tl_bg: rgba(0,0,0,0.8);
 $ms_tl_border_color: rgba(255,255,255,0.09);
 
 // - Text Dark
-$ms_td_color: rgba(0,0,0,0.6);
-$ms_td_color_hover: rgba(0,0,0,0.99);
-$ms_td_bg: #f2f2f2;
+$ms_td_color: rgba(0,0,0,0.75);
+$ms_td_color_hover: rgba(0,0,0,0.6);
+$ms_td_bg: rgba(255,255,255,0.9);
 $ms_td_border_color: rgba(0,0,0,0.08);
 
 
