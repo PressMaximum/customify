@@ -2817,6 +2817,7 @@ article.comment .comment-post-author {
 
 .header-main {
   color: #666666;
+  background: #fff;
   padding: 0px;
 }
 
@@ -5215,13 +5216,13 @@ body.menu_sidebar_dropdown:before {
   top: 0;
   z-index: 999900;
   visibility: hidden;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.99);
 }
 .header-menu-sidebar a:not(.customify-btn) {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.99);
 }
 .header-menu-sidebar a:not(.customify-btn):hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(255, 255, 255, 0.7);
 }
 .header-menu-sidebar .builder-item-sidebar {
   padding: 1.4em 1.5em;
@@ -5234,19 +5235,19 @@ body.menu_sidebar_dropdown:before {
   padding: 0px;
 }
 .header-menu-sidebar .header-menu-sidebar-bg:before {
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.8);
 }
 .header-menu-sidebar .nav-menu-mobile .nav-toggle-icon {
   color: currentColor;
 }
 .header-menu-sidebar.is-text-dark {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.75);
 }
 .header-menu-sidebar.is-text-dark a:not(.customify-btn) {
-  color: rgba(0, 0, 0, 0.6);
+  color: rgba(0, 0, 0, 0.75);
 }
 .header-menu-sidebar.is-text-dark a:not(.customify-btn):hover {
-  color: rgba(0, 0, 0, 0.99);
+  color: rgba(0, 0, 0, 0.6);
 }
 .header-menu-sidebar.is-text-dark .builder-item-sidebar {
   border-color: rgba(0, 0, 0, 0.08);
@@ -5255,13 +5256,13 @@ body.menu_sidebar_dropdown:before {
   background: rgba(0, 0, 0, 0.08);
 }
 .header-menu-sidebar.is-text-dark .header-menu-sidebar-bg:before {
-  background: #f2f2f2;
+  background: rgba(255, 255, 255, 0.9);
 }
 .header-menu-sidebar.is-text-dark .close-sidebar-panel .hamburger-inner {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.75);
 }
 .header-menu-sidebar.is-text-dark .close-sidebar-panel:hover .hamburger-inner {
-  background: rgba(0, 0, 0, 0.99);
+  background: rgba(0, 0, 0, 0.6);
 }
 .header-menu-sidebar.is-text-dark .nav-menu-mobile .menu li a, .header-menu-sidebar.is-text-dark .sub-menu, .header-menu-sidebar.is-text-dark .nav-menu-mobile .nav-toggle-icon {
   border-color: rgba(0, 0, 0, 0.08);
@@ -5365,16 +5366,16 @@ body.menu_sidebar_dropdown:before {
   padding: 0;
 }
 .menu_sidebar_slide_overlay .is-text-dark .header-menu-sidebar-bg:before {
-  background: #f2f2f2;
+  background: rgba(255, 255, 255, 0.9);
 }
 .menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.75);
 }
 .menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner:before, .menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner::after {
   background: inherit;
 }
 .menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel:hover .hamburger-inner {
-  background: rgba(0, 0, 0, 0.99);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 /* Type: Slide from left */
@@ -5500,13 +5501,13 @@ body.menu_sidebar_dropdown:before {
   right: 12px;
 }
 .close-sidebar-panel .hamburger-inner {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.99);
 }
 .close-sidebar-panel .hamburger-inner:before, .close-sidebar-panel .hamburger-inner::after {
   background: inherit;
 }
 .close-sidebar-panel:hover .hamburger-inner {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .menu_sidebar_slide_right .close-sidebar-panel {
