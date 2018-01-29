@@ -5659,6 +5659,10 @@ body.menu_sidebar_dropdown:before {
   padding-left: 0px;
   padding-right: 0px;
 }
+.site-content.content-full-stretched #main.customify-col-12 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 
 #sidebar-secondary, #sidebar-primary, #main {
   padding-top: 2.617924em;
