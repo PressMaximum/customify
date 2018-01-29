@@ -116,6 +116,7 @@ class Customify_MetaBox {
         wp_nonce_field( 'customify_page_settings', 'customify_page_settings_nonce' );
         $values = array(
             'sidebar' => '',
+            'content_layout' => '',
             'disable_header' => '',
             'disable_page_title' => '',
             'disable_footer_main' => '',
@@ -131,6 +132,20 @@ class Customify_MetaBox {
                 <option value=""><?php _e( 'Inherit from Customize Setting', 'customify' ); ?></option>
                 <?php foreach( customify_get_config_sidebar_layouts() as $k => $label ) { ?>
                 <option <?php selected( $values['sidebar'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
+                <?php } ?>
+            </select>
+        </p>
+        <p>
+            <label for="customify_content_layout"><strong><?php _e( 'Content Layout', 'customify' ); ?></strong></label><br/>
+            <select id="customify_content_layout" name="customify_page_settings[content_layout]">
+                <option value=""><?php _e( 'Default', 'customify' ); ?></option>
+                <?php foreach( array(
+                        'boxed' => __( 'Boxed', 'customify' ),
+                        'boxed-container' => __( 'Boxed Container', 'customify' ),
+                        'full-width' => __( 'Full Width', 'customify' ),
+                        'full-stretched' => __( 'Full Width - Stretched', 'customify' ),
+                       ) as $k => $label ) { ?>
+                    <option <?php selected( $values['content_layout'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
                 <?php } ?>
             </select>
         </p>

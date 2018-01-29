@@ -5644,6 +5644,20 @@ body.menu_sidebar_dropdown:before {
 .site-content {
   background: #fff;
 }
+.site-content.content-full-width .customify-container {
+  max-width: 100%;
+}
+.site-content.content-boxed {
+  max-width: 75em;
+  margin: 0 auto;
+}
+.site-content.content-full-stretched .customify-container {
+  max-width: 100%;
+}
+.site-content.content-full-stretched > .customify-container {
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
 #sidebar-secondary, #sidebar-primary, #main {
   padding-top: 2.617924em;
