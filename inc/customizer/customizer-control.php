@@ -78,28 +78,29 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
 
-        if ( Customify_Customizer()->has_icon() ) {
-            require_once get_template_directory().'/inc/customizer/customizer-icons.php';
-        }
-
         wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
-        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ) );
+        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ), false, true );
         wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_icon_loaded ) ) {
+
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
                 'home_url' => home_url(''),
                 'ajax' => admin_url('admin-ajax.php'),
-                'has_icons' => Customify_Customizer()->has_icon(),
-                'icons' => Customify_Font_Icons()->get_icons(),
                 'theme_default' => __('Theme Default', 'customify'),
                 'reset' => __('Reset this section settings', 'customify'),
                 'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
+                'list_font_weight' => array(
+                    'default'   => __('Default', 'customify'),
+                    'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
+                    'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
+                ),
+                'typo_fields' => Customify_Customizer()->get_typo_fields(),
+                'styling_config' => Customify_Customizer()->get_styling_config(),
+                'devices' => Customify_Customizer()->devices,
             ));
             self::$_icon_loaded = true;
         }
     }
-
-
 
     /**
      * Refresh the parameters passed to the JavaScript via JSON.
@@ -316,6 +317,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'text_align_no_justify',
             'checkbox',
             'css_ruler',
+            'shadow',
             'icon',
             'slider',
             'color',
@@ -326,7 +328,11 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             'video' => 'media',
             'text',
             'hidden',
-            'heading'
+            'heading',
+            'typography',
+            'modal',
+            'styling',
+            'hr'
         );
         foreach ( $fields as $key => $field ) {
             $id = $field;
@@ -385,6 +391,21 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             <div id="customify--icon-browser">
             </div>
         </div>
+
+        <div id="customify-typography-panel" class="customify-typography-panel">
+            <div class="customify-typography-panel--inner">
+                <input type="hidden" id="customify--font-type">
+                <div id="customify-typography-panel--fields"></div>
+            </div>
+        </div>
+
+        <script type="text/html" id="tmpl-customify-modal-settings">
+            <div class="customify-modal-settings">
+                <div class="customify-modal-settings--inner">
+                    <div class="customify-modal-settings--fields"></div>
+                </div>
+            </div>
+        </script>
         <?php
     }
 
@@ -396,7 +417,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             required = JSON.stringify( field.required  );
         }
         #>
-        <div class="customify--field customify--field-{{ field.type }} customify--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
+        <div class="customify--field customify--field-{{ field.type }} {{ field.class }} customify--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
         <?php
     }
 
@@ -423,6 +444,10 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
     }
 
+    function field_hr(){
+       echo '<hr/>';
+    }
+
     function field_text(){
         $this->before_field();
         ?>
@@ -433,6 +458,40 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
         $this->after_field();
     }
+
+    function field_typography(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-actions">
+            <a href="#" class="action--reset" title="<?php esc_attr_e( 'Reset to default', 'customify' ); ?>"><span class="dashicons dashicons-image-rotate"></span></a>
+            <a href="#" class="action--edit" title="<?php esc_attr_e( 'Toggle edit panel', 'customify' ); ?>"><span class="dashicons dashicons-edit"></span></a>
+        </div>
+        <div class="customify-field-settings-inner">
+            <input type="hidden" class="customify-typography-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
+        </div>
+        <?php
+        $this->after_field();
+    }
+
+    function field_modal(){
+        $this->before_field();
+        ?>
+        <?php echo $this->field_header(); ?>
+        <div class="customify-actions">
+            <a href="#" title="<?php esc_attr_e( 'Reset to default', 'customify' ); ?>" class="action--reset" data-control="{{ field.name }}"><span class="dashicons dashicons-image-rotate"></span></a>
+            <a href="#" title="<?php esc_attr_e( 'Toggle edit panel', 'customify' ); ?>" class="action--edit" data-control="{{ field.name }}"><span class="dashicons dashicons-edit"></span></a>
+        </div>
+        <div class="customify-field-settings-inner">
+            <input type="hidden" class="customify-hidden-modal-input customify-only" data-name="{{ field.name }}" value="{{ JSON.stringify( field.value ) }}" data-default="{{ JSON.stringify( field.default ) }}">
+        </div>
+        <?php
+        $this->after_field();
+    }
+    function field_styling(){
+        $this->field_modal();
+    }
+
     function field_heading(){
         $this->before_field();
         ?>
@@ -528,7 +587,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     <input type="radio" class="customify-input customify--label-parent change-by-js" <# if ( field.value.unit == '%' ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="%">
                 </label>
             </div>
-            <div class="customify--css-ruler">
+            <div class="customify--css-ruler customify--gr-inputs">
                 <span>
                     <input type="number" class="customify-input customify-input-css change-by-js" <# if ( fields_disabled['top'] ) {  #> disabled="disabled" placeholder="{{ fields_disabled['top'] }}" <# } #> data-name="{{ field.name }}-top" value="{{ field.value.top }}">
                     <span class="customify--small-label"><?php _e( 'Top', 'customify' ); ?></span>
@@ -554,13 +613,61 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         $this->after_field();
     }
 
+
+    function field_shadow(){
+        $this->before_field();
+        ?>
+        <#
+            if ( ! _.isObject( field.value ) ) {
+            field.value = { };
+            }
+
+            var uniqueID = field.name + ( new Date().getTime() );
+        #>
+            <?php echo $this->field_header(); ?>
+            <div class="customify-field-settings-inner">
+
+                <div class="customify-input-color" data-default="{{ field.default }}">
+                    <input type="hidden" class="customify-input customify-input--color" data-name="{{ field.name }}-color" value="{{ field.value.color }}">
+                    <input type="text" class="customify--color-panel" data-alpha="true" value="{{ field.value.color }}">
+                </div>
+
+                <div class="customify--gr-inputs">
+                    <span>
+                        <input type="number" class="customify-input customify-input-css change-by-js"  data-name="{{ field.name }}-x" value="{{ field.value.x }}">
+                        <span class="customify--small-label"><?php _e( 'X', 'customify' ); ?></span>
+                    </span>
+                    <span>
+                        <input type="number" class="customify-input customify-input-css change-by-js"  data-name="{{ field.name }}-y" value="{{ field.value.y }}">
+                        <span class="customify--small-label"><?php _e( 'Y', 'customify' ); ?></span>
+                    </span>
+                    <span>
+                        <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-blur" value="{{ field.value.blur }}">
+                        <span class="customify--small-label"><?php _e( 'Blur', 'customify' ); ?></span>
+                    </span>
+                    <span>
+                        <input type="number" class="customify-input customify-input-css change-by-js" data-name="{{ field.name }}-spread" value="{{ field.value.spread }}">
+                        <span class="customify--small-label"><?php _e( 'Spread', 'customify' ); ?></span>
+                    </span>
+                    <span>
+                        <span class="input">
+                            <input type="checkbox" class="customify-input customify-input-css change-by-js" <# if ( field.value.inset == 1 ){ #> checked="checked" <# } #> data-name="{{ field.name }}-inset" value="{{ field.value.inset }}">
+                        </span>
+                        <span class="customify--small-label"><?php _e( 'inset', 'customify' ); ?></span>
+                    </span>
+                </div>
+            </div>
+            <?php
+            $this->after_field();
+    }
+
     function field_color(){
         $this->before_field();
         ?>
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-input-color" data-default="{{ field.default }}">
-                <input type="hidden" class="customify-input" data-name="{{ field.name }}" value="{{ field.value }}">
+                <input type="hidden" class="customify-input customify-input--color" data-name="{{ field.name }}" value="{{ field.value }}">
                 <input type="text" class="customify--color-panel" data-alpha="true" value="{{ field.value }}">
             </div>
         </div>

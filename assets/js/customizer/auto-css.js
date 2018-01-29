@@ -37,6 +37,15 @@ var AutoCSS = window.AutoCSS || null;
         mobile: ''
     };
 
+    AutoCSS.prototype.box_shadow_fields = {
+        color:  null,
+        x:  0,
+        y:  0,
+        blur:  0,
+        spread:  0,
+        inset: null
+    };
+
     AutoCSS.prototype.reset = function(){
         this.fonts = {};
         this.subsets = {};
@@ -56,7 +65,7 @@ var AutoCSS = window.AutoCSS || null;
         return JSON.parse( decodeURI( value ) );
     };
 
-    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null ){
+    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null, no_selector ){
         if ( _.isUndefined( skip_if_val_null ) ) {
             skip_if_val_null = false;
         }
@@ -66,44 +75,59 @@ var AutoCSS = window.AutoCSS || null;
         }
 
         var that = this;
+
+        var fields_code = {};
+
         _.each( fields, function( field ){
             var v =  ! _.isUndefined( values[ field.name ] ) ? values[ field.name ] : null;
             if ( !( _.isNull( v ) && skip_if_val_null ) ) {
                 if (field.selector && field.css_format) {
                     switch (field.type) {
                         case 'css_ruler':
-                            that.css_ruler(field, v );
+                            fields_code[ field.name ] = that.css_ruler(field, v, no_selector );
                             break;
                         case 'slider':
-                            that.slider(field, v );
+                            fields_code[ field.name ] = that.slider(field, v, no_selector );
                             break;
                         case 'color':
-                            that.color(field, v );
+                            fields_code[ field.name ] = that.color(field, v, no_selector );
+                            break;
+                        case 'shadow':
+                            fields_code[ field.name ] = that.shadow(field, v, no_selector );
+                            break;
+                        case 'checkbox':
+                            fields_code[ field.name ] = that.checkbox(field, v, no_selector );
                             break;
                         case 'image':
-                            that.color(field, v );
+                            fields_code[ field.name ] = that.image( field, v, no_selector );
                             break;
                         case 'text_align':
                         case 'text_align_no_justify':
-                            that.text_align(field, v );
+                            fields_code[ field.name ] = that.text_align(field, v, no_selector );
                             break;
                         case 'font':
-                            that.font(field, v);
+                            fields_code[ field.name ] = that.font(field, v, no_selector );
+                            break;
+                        case 'styling':
+                            fields_code[ field.name ] = that.styling( field, v, no_selector );
+                            break;
+                        case 'typography':
+                            fields_code[ field.name ] = that.typography( field, v, no_selector );
                             break;
                         default:
                             switch (field.css_format) {
                                 case  'background':
                                 case  'styling':
-                                    that.styling(field, v );
+                                    fields_code[ field.name ] = that.styling( field, v, no_selector );
                                     break;
                                 case 'typography':
-                                    that.typography(field, v );
+                                    fields_code[ field.name ] = that.typography(field, v, no_selector );
                                     break;
                                 case 'html_class':
                                     that.html_class(field, v );
                                     break;
                                 default:
-                                    that.maybe_devices_setup(field, 'setup_default', v );
+                                    fields_code[ field.name ] = that.maybe_devices_setup(field, 'setup_default', v, no_selector );
                             }
                     }
                 } // end if selector and css format
@@ -111,9 +135,12 @@ var AutoCSS = window.AutoCSS || null;
 
         } ); // end _.each
 
-
+        return fields_code;
     };
-    AutoCSS.prototype.run = function(){
+    AutoCSS.prototype.run = function( setting_name ){
+        if ( _.isUndefined( setting_name ) ) {
+            setting_name  = false;
+        }
 
         this.lastValues = this.values;
         this.values = api.get();
@@ -123,10 +150,8 @@ var AutoCSS = window.AutoCSS || null;
                 this.media_queries = window.Customify_JS.css_media_queries;
             }
         }
-
         this.reset();
 
-       // console.log( 'NEW CUSTOMIZE VALUES', this.values );
         var that = this;
         that.loop_fields( Customify_Preview_Config.fields );
 
@@ -151,11 +176,8 @@ var AutoCSS = window.AutoCSS || null;
             $( 'head' ).append( "<style id='customify-style-inline-css' type='text/css'></style>" )
         }
         $( '#customify-style-inline-css' ).html( css_code );
-       // api.set( 'customify__css',  css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
 
-        //top.wp.customize('customify__css').set( css_code );
-        //console.log( 'customify__css_Change', css_code );
     };
 
 
@@ -303,6 +325,15 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
+    AutoCSS.prototype.setup_checkbox = function( value, format ){
+        if ( format ) {
+            if ( value ) {
+                return format;
+            }
+        }
+        return false;
+    };
+
     AutoCSS.prototype.setup_image = function( value, format ){
         var image = this.sanitize_media( value );
         if ( image.url ) {
@@ -337,6 +368,44 @@ var AutoCSS = window.AutoCSS || null;
             }
         }
         return c;
+    };
+
+    AutoCSS.prototype.setup_shadow = function ( value, format ){
+        var that = this;
+        if ( ! _.isObject( value ) ) {
+            return '';
+        }
+
+        var p = _.defaults( value,that.box_shadow_fields );
+        var color       = that.sanitize_color( p.color );
+        var position    = p.inset ? 'inset' : '';
+        if ( ! color ) {
+            return '';
+        }
+        if ( ! p.blur ) {
+            p.blur = 0;
+        }
+        if ( !  p.spread ) {
+            p.spread = 0;
+        }
+        if ( ! p.x ) {
+            p.x = 0;
+        }
+        if ( ! p.y ) {
+            p.y = 0;
+        }
+
+
+        var style = p.x+'px'
+            + ' ' + p.y+'px'
+            + ' ' + p.blur +'px'
+            +' ' + p.spread +'px'
+            +' ' + color
+            +' ' + position;
+
+        /* offset-x | offset-y | blur-radius | spread-radius | color */
+        //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+        return this.str_value( style, format );
     };
 
     AutoCSS.prototype.setup_default = function( value, format ){
@@ -398,6 +467,14 @@ var AutoCSS = window.AutoCSS || null;
 
     AutoCSS.prototype.sanitize_color = function ( color ){
        return color;
+    };
+
+    AutoCSS.prototype.sanitize_slider = function ( value ){
+        value = _.defaults( value, {
+            unit: 'px',
+            value: null
+        });
+        return value;
     };
 
     AutoCSS.prototype.sanitize_media = function ( value ) {
@@ -564,163 +641,189 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.css_ruler = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_css_ruler', value );
+    AutoCSS.prototype.css_ruler = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_css_ruler', value, no_selector );
     };
 
-    AutoCSS.prototype.slider = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_slider', value );
+    AutoCSS.prototype.shadow = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_shadow', value, no_selector );
     };
 
-    AutoCSS.prototype.color = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_color', value );
+    AutoCSS.prototype.slider = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_slider', value, no_selector );
     };
 
-    AutoCSS.prototype.image = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_image', value );
+    AutoCSS.prototype.color = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_color', value, no_selector );
     };
 
-    AutoCSS.prototype.text_align = function( field, value ){
-        return this.maybe_devices_setup( field, 'setup_text_align', value );
+    AutoCSS.prototype.checkbox = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_checkbox', value, no_selector );
+    };
+
+    AutoCSS.prototype.image = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_image', value, no_selector );
+    };
+
+    AutoCSS.prototype.text_align = function( field, value, no_selector ){
+        return this.maybe_devices_setup( field, 'setup_text_align', value, no_selector );
+    };
+
+    AutoCSS.prototype.setup_styling_fields = function( fields, list, selectors, type ){
+        var that  = this;
+        var newfs;
+        var i;
+        var newList = [];
+        if ( ! _.isObject( selectors ) ) {
+            selectors = {};
+        }
+
+        if ( _.isUndefined( type ) ) {
+            type = 'normal';
+        }
+
+        if ( fields === false ){
+            newList = null;
+        } else {
+            if ( ! _.isObject( fields ) ) {
+                fields = {};
+            }
+            newfs = {};
+            i = 0;
+            _.each( list, function( f ){
+                if ( ! _.isUndefined( that.box_shadow_fields[ f.name ] ) ) {
+                    if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                        newfs[ f.name ] = f;
+                        newfs[f.name]['selector'] = null;
+                    }
+                } else {
+                    if ( _.isUndefined( fields[ f.name ] ) || fields[ f.name ] ) {
+                        newfs[ f.name ] = f;
+                        if ( ! _.isUndefined( selectors[ type+'_'+f.name ] ) ) {
+                            newfs[ f.name ]['selector'] = selectors[ type+'_'+f.name ];
+                        } else {
+                            newfs[ f.name ]['selector'] = selectors[ type ];
+                        }
+                        i++;
+                    }
+                }
+            } );
+
+            newList = newfs;
+
+        }
+        return newList;
     };
 
     AutoCSS.prototype.styling = function( field ){
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
-        this.maybe_devices_setup( field, 'setup_styling' );
 
+        values = _.defaults( values, {
+            'normal': {},
+            'hover': {}
+        } );
         var new_fields = {};
+        var selectors = {};
+        if ( _.isString( field.selector ) ) {
+            selectors['normal'] = field.selector;
+            selectors['hover'] = field.selector;
+        } else {
+            selectors = _.defaults( field.selector , {
+                normal : null,
+                hover : null
+            } );
+        }
 
-        _.each( field.fields, function( f ) {
-            if ( _.isUndefined( that.styling_fields[ f.name ] ) ) {
-                new_fields[ f.name ] = f;
-                if ( _.isUndefined( new_fields[ f.name ]['selector'] ) || _.isEmpty( new_fields[ f.name ]['selector'] ) ) {
-                    new_fields[ f.name ]['selector'] = field.selector;
-                }
+        var tabs = null, normal_fields = -1, hover_fields = -1;
+
+        if ( !_.isUndefined( field.fields ) && _.isObject(field.fields ) ) {
+            if ( ! _.isUndefined( field.fields.tabs  ) ) {
+                tabs = field.tabs;
             }
+            if ( ! _.isUndefined( field.fields.normal_fields  ) ) {
+                normal_fields =field.normal_fields;
+            }
+
+            if ( ! _.isUndefined( field.fields.hover_fields ) ) {
+                hover_fields = field.hover_fields;
+            }
+        }
+
+        var listNormalFields = that.setup_styling_fields( normal_fields,  Customify_Preview_Config.styling_config.normal_fields, selectors, 'normal' );
+        var listHoverFields = that.setup_styling_fields( hover_fields,  Customify_Preview_Config.styling_config.hover_fields, selectors, 'hover' );
+
+        var listTabs = _.clone( Customify_Preview_Config.styling_config.tabs );
+        if ( tabs === false ) {
+            listTabs['hover'] = false;
+        } else if ( _.isObject( tabs ) ) {
+            listTabs = tabs;
+        }
+
+        var _join = function( lists, codeList ){
+            _.each( lists, function( f, name ){
+                if ( _.isUndefined( selectorCSSAll[ f.selector ] ) ) {
+                    selectorCSSAll[ f.selector ] = '';
+                }
+
+                if( !_.isUndefined( codeList[ name ] ) ) {
+                    if ( ! _.isUndefined( codeList[ name ].no_devices ) ) {
+                        if ( codeList[ name ].no_devices ) {
+                            selectorCSSAll[ f.selector ] += codeList[ name ].no_devices;
+                        }
+                    } else {
+                        _.each( codeList[ name ], function( code, device ) {
+
+                            if ( _.isUndefined( selectorCSSDevices[ device ] ) ) {
+                                selectorCSSDevices[ device ] = {};
+                            }
+
+                            if ( _.isUndefined( selectorCSSDevices[ device ][ f.selector ] ) ) {
+                                selectorCSSDevices[ device ][ f.selector ] = '';
+                            }
+
+                            if ( code ) {
+                                selectorCSSDevices[ device ][ f.selector ] += code;
+                            }
+
+                        } );
+                    }
+                }
+            } );
+        };
+
+
+        var selectorCSSAll = {};
+        var selectorCSSDevices = {};
+
+        var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
+        var hover_style = that.loop_fields(listHoverFields, values['hover'], true, true);
+
+        _join( listNormalFields, normal_style );
+        _join( listHoverFields, hover_style );
+
+        _.each( selectorCSSAll, function( code, s ){
+            that.css.all += "\r\n"+s+"  {\r\n\t"+code+"\r\n}\r\n";
         } );
 
-        if ( _.size( new_fields ) > 0 ) {
-            if ( field.device_settings ) {
-                _.each( that.devices, function( device ){
-                    var values_device =  _.isUndefined( values[ device ] ) ? { } : values[ device ];
-                    that.loop_fields( new_fields, values_device , true );
-                });
-            } else {
-                that.loop_fields( new_fields, values , true );
+        _.each( that.devices, function( device ){
+            var css = '';
+            if ( ! _.isUndefined( selectorCSSDevices[ device ] ) ) {
+                var deviceCode = selectorCSSDevices[ device ];
+                _.each( deviceCode, function( c, s ){
+                 
+                    if ( _.isString( c ) ) {
+                        css += "\r\n"+s+"  {\r\n\t"+c+"\r\n}\r\n";
+                    } else {
+                        css += "\r\n"+s+"  {\r\n\t"+that.join( c, "\n" )+"\r\n}\r\n";
+                    }
+                } );
             }
 
-        }
+            that.css[ device ] += css;
+        } );
 
-    };
-
-    AutoCSS.prototype.setup_styling = function ( value ) {
-        if ( ! _.isObject( value ) ) {
-            value = {};
-        }
-
-        value =_.defaults( value, this.styling_fields );
-
-        var css = {};
-        var color = this.sanitize_color( value.color );
-        if ( color ) {
-            css.color = "background-color: "+color+";";
-        }
-
-        var image = this.sanitize_media( value.image );
-
-        if ( image.url ) {
-            css.image = "background-image: url(\""+image.url+"\");";
-        }
-
-        switch ( value.position ) {
-            case 'center':
-                css.position = 'background-position: center center;';
-                break;
-            case 'top_left':
-                css.position = 'background-position: top left;';
-                break;
-            case 'top_center':
-                css.position = 'background-position: top center;';
-                break;
-            case 'top_right':
-                css.position = 'background-position: top right;';
-                break;
-            case 'bottom_left':
-                css.position = 'background-position: bottom left;';
-                break;
-            case 'bottom_center':
-                css.position = 'background-position: bottom center;';
-                break;
-            case 'bottom_right':
-                css.position = 'background-position: bottom right;';
-                break;
-            default:
-                css.position = 'background-position: center center;';
-        }
-
-        switch ( value.repeat ) {
-            case 'no-repeat':
-                css.repeat = 'background-repeat: no-repeat;';
-                break;
-            case 'repeat-x':
-                css.repeat = 'background-repeat: repeat-x;';
-                break;
-            case 'repeat-y':
-                css.repeat = 'background-repeat: repeat-y;';
-                break;
-            default:
-
-        }
-
-        switch ( value.attachment ) {
-            case 'scroll':
-                css.attachment = 'background-attachment: scroll;';
-                break;
-            case 'fixed':
-                css.attachment = 'background-attachment: fixed;';
-                break;
-            default:
-        }
-
-        if ( value.border_style !== 'none' ) {
-            if ( ! _.isObject( value.border_width ) ) {
-                value.border_width =  {};
-            }
-           _.each( [ 'top', 'right', 'bottom', 'left' ], function( k ){
-               if ( _.isUndefined( value.border_width[ k ] ) || _.isEmpty( value.border_width[ k ] ) ){
-                   value.border_width[ k ] = 0;
-               }
-           } );
-            if (value.border_width) {
-                css.border_width = this.setup_css_ruler(value.border_width, {
-                    top: 'border-top-width: {{value}};',
-                    right: 'border-right-width: {{value}};',
-                    bottom: 'border-bottom-width: {{value}};',
-                    left: 'border-left-width: {{value}};'
-                });
-            }
-
-            if (css.border_width) {
-                var border_color = this.sanitize_color(value.border_color);
-                if (border_color) {
-                    css.border_color = "border-color: " + border_color + ";";
-                }
-            }
-        }
-
-        if (value.border_style) {
-            css.border_style = "border-style: " + value.border_style + ";";
-        }
-
-
-        if ( value.cover ) {
-            css.cover = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
-            css.attachment = 'background-attachment: fixed;';
-        }
-
-        return this.join( css, "\n\t" );
     };
 
     AutoCSS.prototype.setup_font_style = function ( value ){
@@ -834,30 +937,63 @@ var AutoCSS = window.AutoCSS || null;
         }
         values = _.defaults( values, {
             font: null,
-            font_style: null,
+            font_type: null,
+            languages: null,
             font_size: null,
+            font_weight: null,
             line_height: null,
             letter_spacing: null,
-            color: null,
+            style: null,
+            text_decoration: null,
+            text_transform: null,
         });
 
         var code = {};
         var fields = {};
         var devices_css = {};
-        _.each( field.fields, function( f ){
+        _.each( Customify_Preview_Config.typo_fields, function( f ){
             fields[ f.name ] = f;
         } );
 
         if ( ! _.isUndefined( fields.font ) ) {
-            code.font = this.setup_font( values.font );
+            code.font = this.setup_font( {
+                font: values.font,
+                type: values.font_type,
+                subsets: values.languages,
+                variant: values.font_weight,
+            } );
         }
 
-        if ( ! _.isUndefined( fields.font_style ) ) {
-            code.font_style = this.setup_font_style( values.font_style );
+        // Font Style
+        if ( ! _.isUndefined( fields.style ) ) {
+            //code.font_style = this.setup_font_style( values.font_style );
+            if ( values.style && values.style !== 'default' ) {
+                code.style = 'font-style: '+values.style+';';
+            }
+        }
+
+        // Font Weight
+        if ( ! _.isUndefined( fields.font_weight ) ) {
+            if ( values.font_weight && values.font_weight !== 'default' && values.font_weight !== 'default'  ) {
+                code.font_weight = 'font-weight: '+values.font_weight+';';
+            }
+        }
+
+        // Text Decoration
+        if ( ! _.isUndefined( fields.text_decoration ) ) {
+            if ( values.text_decoration && values.text_decoration !== 'default' ) {
+                code.text_decoration = 'text-decoration: '+values.text_decoration+';';
+            }
+        }
+
+        // Text Transform
+        if ( ! _.isUndefined( fields.text_transform ) ) {
+            if ( values.text_transform && values.text_transform !== 'default' ) {
+                code.text_transform = 'text-transform: '+values.text_transform+';';
+            }
         }
 
         if ( ! _.isUndefined( fields.font_size ) ) {
-
             fields.font_size.css_format = 'font-size: {{value}};';
             var font_size_css = this.maybe_devices_setup( fields.font_size, 'setup_slider', values.font_size, true );
             if ( !_.isEmpty( font_size_css ) ) {
@@ -895,7 +1031,6 @@ var AutoCSS = window.AutoCSS || null;
                             devices_css[ device ]['line_height'] = _c;
                         }
                     } );
-
                 }
             }
         }
@@ -921,12 +1056,6 @@ var AutoCSS = window.AutoCSS || null;
             }
         }
 
-        if (  !_.isUndefined(fields['color'] ) ) {
-            var _c = this.setup_color(values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
-            if ( _c ) {
-                code['color'] = _c;
-            }
-        }
         _.each( devices_css, function( els, device ){
             that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
         } );
@@ -951,7 +1080,7 @@ var AutoCSS = window.AutoCSS || null;
             // Header text color.
             wp.customize( field.name, function( setting ) {
                 setting.bind( function( to ) {
-                    AutoCSSInit.run();
+                    AutoCSSInit.run( field.name );
                 } );
             } );
 

@@ -98,6 +98,13 @@
   color: #444444;
 }
 
+#customize-controls .customify--field .customify-field--heading {
+  font-size: 12px;
+}
+#customize-controls .customify-modal-settings h3.customify-field--heading {
+  font-size: 11px;
+}
+
 .customize-control .customize-control-description {
   margin-bottom: 15px;
   margin-top: -3px;
@@ -372,8 +379,31 @@
   content: "\f142";
 }
 
+.customify--group-field.ft--hr {
+  clear: both;
+}
+.customify--group-field.field-half {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-left {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-left .customify--field {
+  padding-right: 5px;
+}
+.customify--group-field.field-half-right {
+  width: 50%;
+  float: left;
+}
+.customify--group-field.field-half-right .customify--field {
+  padding-left: 5px;
+}
+
 .customify--field {
   margin-bottom: 15px;
+  width: 100%;
 }
 .customify--field:last-child {
   margin-bottom: 0px;
@@ -415,29 +445,36 @@
   display: none;
 }
 
-.customify--css-ruler {
+.customify--gr-inputs {
   display: flex;
   margin-left: -2px;
   margin-right: -2px;
 }
-.customify--css-ruler > span {
+.customify--gr-inputs > span {
   padding: 0px 2px;
 }
-.customify--css-ruler .customify--small-label {
+.customify--gr-inputs .customify--small-label {
   font-size: 10px;
   display: block;
   text-transform: uppercase;
 }
-.customify--css-ruler label {
+.customify--gr-inputs span.input {
+  height: 28px;
+  display: block;
+  vertical-align: middle;
+  line-height: 28px;
+  text-align: center;
+}
+.customify--gr-inputs label {
   cursor: pointer;
   width: 25px;
   flex: none;
   position: relative;
 }
-.customify--css-ruler label input {
+.customify--gr-inputs label input {
   display: none;
 }
-.customify--css-ruler label:before {
+.customify--gr-inputs label:before {
   font: 400 18px/37px dashicons;
   content: "\f225";
   position: absolute;
@@ -445,12 +482,12 @@
   left: 5px;
   display: block;
 }
-.customify--css-ruler label.customify--label-active:before {
+.customify--gr-inputs label.customify--label-active:before {
   content: "\f103";
 }
 
 .customify-image-preview {
-  margin: 10px 0 12px;
+  margin: 0px 0 12px;
   display: block;
 }
 .customify-image-preview:before {
@@ -522,7 +559,7 @@
 
 .customify-input-slider {
   position: relative;
-  margin: 11px 118px 20px 0;
+  margin: 11px 118px 20px 4px;
   height: 5px;
   display: block;
   background: #CCCCCC;
@@ -544,6 +581,10 @@
   border-radius: 50%;
   cursor: pointer;
   transform: translateX(-5px);
+}
+
+.customify--field-shadow .customify--gr-inputs {
+  margin-top: 10px;
 }
 
 .customify--icon-picker {
@@ -786,37 +827,6 @@
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field select {
   width: 135px;
 }
-.customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-color {
-                    /*
-                    position: absolute;
-                    top: 0px;
-                    right: 0px;
-                    .customify-field-heading {
-                        display: none;
-                    }
-                    .wp-picker-container {
-                        position: relative;
-
-                        input.wp-color-picker {
-                            display: none !important;
-                        }
-                        .wp-color-result{
-                            padding-left: 50px;
-                            &.wp-picker-open {
-                                padding-left: 75px;
-                                &:after {
-                                    display: none;
-                                }
-                            }
-                        }
-                    }
-                    .wp-picker-holder {
-                        position: absolute;
-                        right: 0px;
-                        z-index: 10;
-                    }
-                    */
-}
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-color .wp-picker-container {
   position: relative;
   z-index: 35;
@@ -897,6 +907,214 @@
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-attachment .customify-field-header {
   display: none;
+}
+
+.customify--settings-wrapper {
+  position: relative;
+  display: block;
+}
+.customify--settings-wrapper .customify-actions {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  vertical-align: middle;
+  margin-top: 5px;
+}
+.customify--settings-wrapper .customify-actions a {
+  text-decoration: none;
+  display: inline-block;
+}
+.customify--settings-wrapper .customify-actions .action--reset {
+  font-size: 12px;
+  margin-right: 10px;
+  display: none;
+}
+.customify--settings-wrapper .customify-actions .action--reset span {
+  font-size: inherit;
+  width: auto;
+  height: auto;
+  vertical-align: middle;
+  margin-top: 0px;
+}
+.customify--settings-wrapper .customify-actions .action--reset span:before {
+  font-size: 12px;
+  width: auto;
+  height: auto;
+}
+.customify--settings-wrapper .customify-actions .action--edit {
+  background: #FFFFFF;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 5px;
+}
+.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
+  content: "\f335";
+}
+
+.modal--tabs {
+  display: flex;
+  margin-left: -12px;
+  margin-right: -12px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 15px;
+}
+.modal--tabs div {
+  flex-basis: 100%;
+  max-width: 100%;
+  text-align: center;
+  padding: 5px 5px 0px;
+}
+.modal--tabs div:first-child {
+  padding-left: 10px;
+}
+.modal--tabs div:last-child {
+  padding-right: 10px;
+}
+.modal--tabs span {
+  display: block;
+  border: 1px solid #dddddd;
+  padding: 5px;
+  cursor: pointer;
+  margin-bottom: -1px;
+  font-weight: 600;
+}
+.modal--tabs span.tab--active {
+  background: #ffffff;
+  border-bottom-color: #fff;
+}
+
+.modal-tab-content {
+  display: none;
+}
+.modal-tab-content.tab--active {
+  display: block;
+}
+
+#customize-theme-controls .customize-pane-child.accordion-section-content {
+  min-height: 100%;
+  display: block;
+}
+
+.customize-control-customify-typography .customize-control-description {
+  margin-bottom: 0px;
+}
+.customize-control-customify-typography .ft--checkboxes[data-field-name="languages"] {
+  margin-bottom: 0px;
+}
+.customize-control-customify-typography .list-subsets p {
+  margin-top: 0px;
+  width: 50%;
+  float: left;
+}
+.customize-control-customify-typography .list-subsets:before, .customize-control-customify-typography .list-subsets:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.customize-control-customify-typography .list-subsets:after {
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field:before, .customize-control-customify-typography .customify--group-field:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field:after {
+  clear: both;
+}
+.customize-control-customify-typography .customify--group-field .customify-field-header {
+  width: 50%;
+  float: left;
+}
+.customize-control-customify-typography .customify--group-field .customify-field-settings-inner {
+  width: 50%;
+  float: right;
+}
+.customize-control-customify-typography .customify--group-field.customify--multiple-devices .customify-field-header, .customize-control-customify-typography .customify--group-field.customify--multiple-devices .customify-field-settings-inner {
+  width: auto;
+  float: none;
+}
+.customize-control-customify-typography .customify--group-field .customify--field-slider .customify-field-header, .customize-control-customify-typography .customify--group-field .customify--field-slider .customify-field-settings-inner, .customize-control-customify-typography .customify--group-field .customify--field-name-languages .customify-field-header, .customize-control-customify-typography .customify--group-field .customify--field-name-languages .customify-field-settings-inner {
+  width: auto;
+  float: none;
+}
+
+.customify-field-settings-inner {
+  position: relative;
+}
+
+.customify-modal--inside {
+  position: relative;
+}
+.customify-modal--inside .description {
+  margin-bottom: 0px;
+}
+
+.customize-control-customify-styling .customify--settings-wrapper, .customize-control-customify-typography .customify--settings-wrapper {
+  min-height: 40px;
+  display: block;
+}
+
+.ft--heading {
+  clear: both;
+}
+
+.customify-modal-settings {
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  padding: 12px;
+  margin-bottom: 15px;
+  margin-top: 10px;
+  left: 0px;
+  right: 0px;
+  z-index: 99;
+  position: relative;
+}
+.customify-modal-settings:before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 5px;
+  width: 15px;
+  height: 15px;
+  background: #fff;
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+.customify-modal-settings .wp-color-result-text {
+  line-height: 23px;
+}
+.customify-modal-settings .customify--field-heading h3.customify-field--heading {
+  font-size: 11px;
+  margin: 10px -12px;
+  padding: 5px 12px 4px;
+  background: #eeeeee;
+}
+.customify-modal-settings .customize-control-title {
+  font-weight: 400;
+  font-size: 13px;
+}
+.customify-modal-settings .customify--group-field {
+  margin-bottom: 10px;
+}
+.customify-modal-settings .customify--group-field:last-child {
+  margin-bottom: 0px;
+}
+.customify-modal-settings .lb-left:before, .customify-modal-settings .lb-left:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+.customify-modal-settings .lb-left:after {
+  clear: both;
+}
+.customify-modal-settings .lb-left .customify-typography--field-header {
+  width: 50%;
+  float: left;
+}
+.customify-modal-settings .lb-left .customify-typography--field-settings {
+  float: right;
+  width: 50%;
 }
 
 .customify--hide {

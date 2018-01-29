@@ -100,7 +100,6 @@
                 if ( defaultTarget.wp.customize.section( section_id ) ) {
                     defaultTarget.wp.customize.section( section_id ).focus();
                 }
-
             }
         } );
 

@@ -80,206 +80,41 @@ class Customify_Builder_Item_Button {
 			),
 
 			array(
-				'name'            => $prefix . '_padding',
-				'type'            => 'css_ruler',
-				'section'         => $section,
-				'device_settings' => true,
-				'css_format'      => array(
-					'top'    => 'padding-top: {{value}};',
-					'right'  => 'padding-right: {{value}};',
-					'bottom' => 'padding-bottom: {{value}};',
-					'left'   => 'padding-left: {{value}};',
-				),
-				'selector'        => $selector,
-				'label'           => __( 'Padding', 'customify' ),
-			),
-
-			array(
-				'name'       => $prefix . '_border_radius',
-				'type'       => 'slider',
-				'section'    => $section,
-				'min'        => 0,
-				'max'        => 100,
-				'css_format' => 'border-radius: {{value}};',
-				'selector'   => $selector,
-				'title'      => __( 'Border Radius', 'customify' )
-			),
-
-            array(
-                'name' => $section.'_padding',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'selector' => $selector,
-                'css_format' => array(
-                    'top' => 'padding-top: {{value}};',
-                    'right' => 'padding-right: {{value}};',
-                    'bottom' => 'padding-bottom: {{value}};',
-                    'left' => 'padding-left: {{value}};',
-                ),
-                'title' => __( 'Padding', 'customify' ),
-            ),
-
-			array(
 				'name'            => $prefix . '_typography',
-				'type'            => 'group',
+				'type'            => 'typography',
 				'section'         => $section,
-				'device_settings' => false,
 				'title'           => __( 'Typography', 'customify' ),
-				'field_class'     => 'customify-typography-control',
+				'description'     => __( 'Advanced typography for button', 'customify' ),
 				'selector'        => $selector,
 				'css_format'      => 'typography',
 				'default'         => array(),
-				'fields'          => array(
-					array(
-						'name'  => 'font_style',
-						'type'  => 'font_style',
-						'label' => __( 'Font Style', 'customify' ),
-					),
-
-					array(
-						'name'            => 'font_size',
-						'type'            => 'slider',
-						'min'             => 7,
-						'max'             => 20,
-						'step'            => 1,
-						'label'           => __( 'Font Size', 'customify' ),
-						'device_settings' => true,
-					),
-
-					array(
-						'name'  => 'letter_spacing',
-						'type'  => 'slider',
-						'label' => __( 'Letter Spacing', 'customify' ),
-						'min'   => - 2,
-						'max'   => 5,
-						'step'  => .1,
-					),
-				)
 			),
 
 			array(
 				'name'        => $prefix . '_styling',
-				'type'        => 'group',
+				'type'        => 'styling',
 				'section'     => $section,
 				'title'       => __( 'Styling', 'customify' ),
-				'field_class' => 'customify-typography-control',
-				'selector'    => $selector,
+                'description'     => __( 'Advanced styling for button', 'customify' ),
+				'selector'    => array(
+				    'normal' => $selector,
+				    'hover' => $selector.':hover',
+                ),
 				'css_format'  => 'styling',
 				'default'     => array(),
-				'fields'      => array(
-					array(
-						'name'       => 'text_color',
-						'type'       => 'color',
-						'label'      => __( 'Text Color', 'customify' ),
-						'selector'   => $selector,
-						'css_format' => 'color: {{value}};',
-					),
-
-					array(
-						'name'  => 'color', // Background color
-						'type'  => 'color',
-						'label' => __( 'Background Color', 'customify' ),
-					),
-
-					array(
-						'name'    => 'border_style',
-						'type'    => 'select',
-						'label'   => __( 'Border Style', 'customify' ),
-						'default' => 'none',
-						'choices' => array(
-							'none'   => __( 'None', 'customify' ),
-							'solid'  => __( 'Solid', 'customify' ),
-							'dotted' => __( 'Dotted', 'customify' ),
-							'dashed' => __( 'Dashed', 'customify' ),
-							'double' => __( 'Double', 'customify' ),
-							'ridge'  => __( 'Ridge', 'customify' ),
-							'inset'  => __( 'Inset', 'customify' ),
-							'outset' => __( 'Outset', 'customify' ),
-						),
-					),
-
-					array(
-						'name'     => 'border_width',
-						'type'     => 'css_ruler',
-						'label'    => __( 'Border Width', 'customify' ),
-						'required' => array( 'border_style', '!=', 'none' ),
-					),
-					array(
-						'name'     => 'border_color',
-						'type'     => 'color',
-						'label'    => __( 'Border Color', 'customify' ),
-						'required' => array( 'border_style', '!=', 'none' ),
-					),
-
-				)
-			),
-
-			array(
-				'name'       => $prefix . '_hover',
-				'type'       => 'group',
-				'section'    => $section,
-				'title'      => __( 'Hover Styling', 'customify' ),
-				'selector'   => $selector,
-				'css_format' => 'styling',
-				'default'    => array(),
 				'fields'     => array(
-					array(
-						'name'       => 'text_color_hover',
-						'type'       => 'color',
-						'label'      => __( 'Text Color', 'customify' ),
-						'selector'   => $selector . ":hover",
-						'css_format' => 'color: {{value}};',
-					),
-
-					array(
-						'name'       => 'color_hover', // Background color
-						'type'       => 'color',
-						'label'      => __( 'Background Color', 'customify' ),
-						'selector'   => $selector . ":hover",
-						'css_format' => 'background-color: {{value}};',
-					),
-
-					array(
-						'name'       => 'border_style_hover',
-						'type'       => 'select',
-						'label'      => __( 'Border Style', 'customify' ),
-						'default'    => '',
-						'selector'   => $selector . ":hover",
-						'css_format' => 'border-style: {{value}};',
-						'choices'    => array(
-							''       => __( 'Inherit', 'customify' ),
-							'solid'  => __( 'Solid', 'customify' ),
-							'dotted' => __( 'Dotted', 'customify' ),
-							'dashed' => __( 'Dashed', 'customify' ),
-							'double' => __( 'Double', 'customify' ),
-							'ridge'  => __( 'Ridge', 'customify' ),
-							'inset'  => __( 'Inset', 'customify' ),
-							'outset' => __( 'Outset', 'customify' ),
-						),
-					),
-
-					array(
-						'name'       => 'border_width_hover',
-						'type'       => 'css_ruler',
-						'label'      => __( 'Border Width', 'customify' ),
-						'required'   => array( 'border_style_hover', '!=', '' ),
-						'selector'   => $selector . ":hover",
-						'css_format' => array(
-							'top'    => 'border-top-width: {{value}};',
-							'right'  => 'border-right-width: {{value}};',
-							'bottom' => 'border-bottom-width: {{value}};',
-							'left'   => 'border-left-width: {{value}};',
-						)
-					),
-					array(
-						'name'       => 'border_color_hover',
-						'type'       => 'color',
-						'label'      => __( 'Border Color', 'customify' ),
-						'required'   => array( 'border_style_hover', '!=', '' ),
-						'selector'   => $selector . ":hover",
-						'css_format' => 'border-color: {{value}};',
-					),
-				)
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_image' => false,
+                        'bg_cover' => false,
+                        'bg_position' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                    ),
+                    'hover_fields' => array(
+                        'link_color' => false, // disable for special field.
+                    )
+                ),
 			),
 
 		);

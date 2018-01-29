@@ -37,6 +37,15 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             'border_style'=> null,
         );
 
+        private $box_shadow_fields = array(
+            'color' => null,
+            'x' => 0,
+            'y' => 0,
+            'blur' => 0,
+            'spread' => 0,
+            'inset' => null
+        );
+
         static function get_instance(){
             if ( is_null( self::$_instance ) ) {
                 self::$_instance = new self();
@@ -83,6 +92,44 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return join( "\n\t",  $code );
         }
 
+        function setup_shadow( $value, $format ){
+
+            if (!is_array($value) || ! $format ) {
+                return '';
+            }
+
+            $p = wp_parse_args($value, $this->box_shadow_fields);
+            $color = $value = Customify_Sanitize_Input::sanitize_color($p['color']);
+            $position = $p['inset'] ? 'inset' : '';
+            if (!$color) {
+                return '';
+            }
+            if (!$p['blur']) {
+                $p['blur'] = 0;
+            }
+            if (!$p['spread']) {
+                $p['spread'] = 0;
+            }
+            if (!$p['x']) {
+                $p['x'] = 0;
+            }
+            if (!$p['y']) {
+                $p['y'] = 0;
+            }
+
+            $style = $p['x'] . 'px'
+                . ' ' . $p['y'] . 'px'
+                . ' ' . $p['blur'] . 'px'
+                . ' ' . $p['spread'] . 'px'
+                . ' ' . $color
+                . ' ' . $position
+                . ';';
+
+            /* offset-x | offset-y | blur-radius | spread-radius | color */
+            //box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+            return $this->replace_value( $style, $format );
+        }
+
         function setup_slider( $value, $format ){
             $value = wp_parse_args( $value, array(
                 'unit' => '',
@@ -113,6 +160,15 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
+         function setup_checkbox( $value, $format ){
+            if ( $format ) {
+                if ( $value ) {
+                    return $format;
+                }
+            }
+            return false;
+         }
+
         function setup_image( $value, $format ){
             $image = Customify_Customizer()->get_media( $value );
             if ( $format ) {
@@ -133,163 +189,214 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return false;
         }
 
-        function css_ruler( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_css_ruler', $values );
+        function css_ruler( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_css_ruler', $values, $no_selector );
             return $code;
         }
 
-        function slider( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_slider', $values );
+        function slider( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_slider', $values, $no_selector );
             return $code;
         }
 
-        function color( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_color', $values );
+        function color( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_color', $values, $no_selector );
             return $code;
         }
 
-        function image( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_image', $values );
+        function shadow( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_shadow', $values, $no_selector );
             return $code;
         }
 
-        function text_align( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_default', $values );
+        function checkbox( $field, $values = null, $no_selector = null ){
+            return $this->maybe_devices_setup( $field, 'setup_checkbox', $values, $no_selector );
+        }
+
+        function image( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_image', $values, $no_selector );
             return $code;
         }
 
-        function setup_styling( $value ) {
-            $value = wp_parse_args( $value, $this->styling_fields );
+        function text_align( $field, $values = null, $no_selector = null ){
+            $code = $this->maybe_devices_setup( $field, 'setup_default', $values, $no_selector );
+            return $code;
+        }
 
-            $css = array();
-            $color = Customify_Sanitize_Input::sanitize_color( $value['color'] );
-            if ( $color ) {
-                $css['color'] = "background-color: {$color};";
+        function _join( $lists, $codeList,  &$selectorCSSAll = array(), &$selectorCSSDevices = array() ){
+            if ( ! is_array( $selectorCSSAll ) ) {
+                $selectorCSSAll = array();
             }
 
-            $image = Customify_Customizer()->get_media( $value['image'] );
-
-            if ( $image ) {
-                $css['image'] = "background-image: url(\"{$image}\");";
+            if ( ! is_array( $selectorCSSDevices ) ) {
+                $selectorCSSDevices = array();
             }
 
-            switch ( $value['position'] ) {
-                case 'center':
-                    $css['position'] = 'background-position: center center;';
-                    break;
-                case 'top_left':
-                    $css['position'] = 'background-position: top left;';
-                    break;
-                case 'top_center':
-                    $css['position'] = 'background-position: top center;';
-                    break;
-                case 'top_right':
-                    $css['position'] = 'background-position: top right;';
-                    break;
-                case 'bottom_left':
-                    $css['position'] = 'background-position: bottom left;';
-                    break;
-                case 'bottom_center':
-                    $css['position'] = 'background-position: bottom center;';
-                    break;
-                case 'bottom_right':
-                    $css['position'] = 'background-position: bottom right;';
-                    break;
-                default:
-                    $css['position'] = 'background-position: center center;';
-            }
+            foreach( ( array ) $lists as $name => $f ) {
+                if ( isset( $f['selector'] ) && $f['selector'] ) {
+                    if (!isset( $selectorCSSAll[$f['selector']]) ) {
+                        $selectorCSSAll[$f['selector']] = '';
+                    }
 
-            switch ( $value['repeat'] ) {
-                case 'no-repeat':
-                    $css['repeat'] = 'background-repeat: no-repeat;';
-                    break;
-                case 'repeat-x':
-                    $css['repeat'] = 'background-repeat: repeat-x;';
-                    break;
-                case 'repeat-y':
-                    $css['repeat'] = 'background-repeat: repeat-y;';
-                    break;
-                default:
+                    if (isset($codeList[$name])) {
 
-            }
+                        if (isset($codeList[$name]['no_devices'])) {
+                            if ($codeList[$name]['no_devices']) {
+                                $selectorCSSAll[$f['selector']] .= $codeList[$name]['no_devices'];
+                            }
+                        } else {
 
-            switch ( $value['attachment'] ) {
-                case 'scroll':
-                    $css['attachment'] = 'background-attachment: scroll;';
-                    break;
-                case 'fixed':
-                    $css['attachment'] = 'background-attachment: fixed;';
-                    break;
-                default:
-            }
+                            if (is_array($codeList[$name])) {
+                                foreach ($codeList[$name] as $device => $code) {
+                                    if (!isset($selectorCSSDevices[$device])) {
+                                        $selectorCSSDevices[$device] = array();
+                                    }
 
-            if ( $value['cover'] ) {
-                $css['cover'] = '-webkit-background-size: cover; -moz-background-size: cover; -o-background-size: cover; background-size: cover;';
-                $css['attachment'] = 'background-attachment: fixed;';
-            }
+                                    if (!isset($selectorCSSDevices[$device][$f['selector']])) {
+                                        $selectorCSSDevices[$device][$f['selector']] = '';
+                                    }
 
-            if ( $value['border_width'] ) {
-                if ( ! is_array( $value['border_width'] ) ) {
-                    $value['border_width'] = array();
-                }
-                foreach( array( 'top', 'right', 'bottom', 'left' ) as $k ) {
-                    if ( ! isset( $value['border_width'][ $k ] ) || ! is_numeric( $value['border_width'][ $k ] ) ) {
-                        $value['border_width'][ $k ] = 0;
+                                    if ($code) {
+                                        $selectorCSSDevices[$device][$f['selector']] .= $code;
+                                    }
+                                }
+                            }
+
+
+                        }
+
                     }
                 }
-
-                $css['border_width'] = $this->setup_css_ruler( $value['border_width'], array(
-                    'top' => 'border-top-width: {{value}};',
-                    'right' => 'border-right-width: {{value}};',
-                    'bottom'=> 'border-bottom-width: {{value}};',
-                    'left'=> 'border-left-width: {{value}};'
-                ) );
             }
-
-            $border_color = Customify_Sanitize_Input::sanitize_color( $value['border_color'] );
-            if ( $border_color ) {
-                $css['border_color'] = "border-color: {$border_color};";
-            }
-            $value['border_style'] = sanitize_text_field( $value['border_style'] );
-            if ( $value['border_style'] ) {
-                $css['border_style'] = "border-style: {$value['border_style']};";
-            }
-
-            return join( "\n\t",  $css );
 
         }
+
+        function setup_styling_fields( $fields, $list, $selectors, $type ){
+            $newList = array();
+            if (!is_array($selectors)) {
+                $selectors = array();
+            }
+            if ($fields === false) {
+                $newList = null;
+            } else {
+
+                if (!is_array($fields)) {
+                    $fields = array();
+                }
+
+                $newfs = array();
+                $i = 0;
+                foreach ($list as $f) {
+                    $key = $f['name'];
+                    if (!isset($fields[$key]) || $fields[$key]) {
+                        $newfs[$key] = $f;
+                        if (isset($selectors[$type . '_' . $key])) {
+                            $newfs[$key]['selector'] = $selectors[$type . '_' . $key];
+                        } else {
+                            $newfs[$key]['selector'] = $selectors[$type];
+                        }
+                        $i++;
+                    }
+
+                }
+                $newList = $newfs;
+                return $newList;
+            }
+        }
+
+
 
         function styling( $field, $values = null ){
-            $code = $this->maybe_devices_setup( $field, 'setup_styling', $values );
             $values = Customify_Customizer()->get_setting( $field['name'], 'all' );
-            foreach( $field['fields'] as $k => $f ) {
-                if ( isset( $this->styling_fields[ $k ] ) ) {
-                    unset( $field['fields'][ $k ] );
+
+            $values = wp_parse_args( $values, array(
+                'normal' => array(),
+                'hover' => array(),
+            ) );
+
+            $new_fields = array();
+            $selectors = array();
+
+            if ( is_string( $field['selector'] ) ) {
+                $selectors['normal'] = $field['selector'];
+                $selectors['hover'] = $field['selector'];
+            } else {
+                $selectors = wp_parse_args( $field['selector'] ,  array(
+                    'normal' => array(),
+                    'hover' => array(),
+                ) );
+            }
+            $tabs = null;
+            $normal_fields = -1;
+            $hover_fields = -1;
+            if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
+                if ( isset( $field['fields']['tabs']  ) ) {
+                    $tabs = $field['fields']['tabs'];
+                }
+                if ( isset( $field['fields']['normal_fields']  ) ) {
+                    $normal_fields = $field['fields']['normal_fields'];
+                }
+                if ( isset( $field['fields']['hover_fields'] ) ) {
+                    $hover_fields = $field['fields']['hover_fields'];
                 }
             }
 
-            if ( count( $field['fields'] ) ) {
-                if ( $field['device_settings'] ) {
-                    foreach ( Customify_Customizer()->devices as $device ) {
-                        $value_devices = isset( $values[ $device ] ) ? $values[ $device ] : array();
-                        $this->loop_fields( $field['fields'], $value_devices, true );
+            $styling_config = Customify_Customizer()->get_styling_config();
+            $selectorCSSAll = array();
+            $selectorCSSDevices = array();
+            $listNormalFields = $this->setup_styling_fields( $normal_fields,  $styling_config['normal_fields'], $selectors, 'normal' );
+            $listHoverFields = $this->setup_styling_fields( $hover_fields, $styling_config['hover_fields'], $selectors, 'hover' );
+
+            $listTabs = $styling_config['tabs'];
+
+            if ( $tabs === false ) {
+                $listTabs['hover'] = false;
+            } else if ( is_array( $tabs ) ) {
+                $listTabs = $tabs;
+            }
+
+            $normal_style = $this->loop_fields( $listNormalFields, $values['normal'], true, true);
+            $hover_style = $this->loop_fields( $listHoverFields, $values['hover'], true, true);
+
+            $this->_join( $listNormalFields, $normal_style, $selectorCSSAll, $selectorCSSDevices );
+            $this->_join( $listHoverFields, $hover_style, $selectorCSSAll, $selectorCSSDevices );
+
+            foreach( $selectorCSSAll as $s => $code ) {
+                if ( trim( $code ) ) {
+                    $this->css['all'] .= "\r\n{$s}  {\r\n\t{$code}\r\n} \r\n";
+                }
+            }
+
+            foreach( Customify_Customizer()->devices as $device ) {
+                $css = '';
+                if ( isset( $selectorCSSDevices[ $device ] ) ) {
+                    $deviceCode = $selectorCSSDevices[ $device ];
+                    foreach( $deviceCode as $s => $c ){
+                        if ( ! empty( $c ) ) {
+                            if ( is_string($c) && trim( $css ) ) {
+                                $css .= "\r\n{$s}  {\r\n\t{$c}\r\n} \r\n";
+                            } else {
+                                if ( ! is_array( $c ) ) {
+                                    $c = array();
+                                }
+                                $c = array_map( 'trim', $c );
+                                $c = array_filter( $c );
+                                if ( ! empty( $c ) ) {
+                                    $css .= "\r\n{$s}  {\r\n\t" . join( $c, "\n" ) . "\r\n} \r\n";
+                                }
+                            }
+                        }
                     }
-                } else {
-                    $this->loop_fields( $field['fields'], $values, true );
                 }
-
+                $this->css[ $device ] .= $css;
             }
-
-            return  $code;
         }
 
         function setup_default( $value, $format ){
-            if ( is_string( $value ) ) {
+            if ( is_string( $value ) && $value ) {
                 $value = sanitize_text_field( $value );
                 if ( $format ) {
-                    if (!is_null( $value ) && $value !== '') {
-                        return $this->replace_value( $value, $format );
-                    }
+                    return $this->replace_value( $value, $format );
                 }
             }
             return false;
@@ -335,23 +442,25 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             if ( empty( $code_array ) ) {
                 return false;
             }
+
+            $code_array = array_map( 'trim', $code_array );
+            $code_array = array_filter( $code_array );
+
             $code = '';
             if ( $no_selector ) {
                 return $code_array;
             } else {
-
                 if ( $has_device ) {
                     foreach ( Customify_Customizer()->devices as $device ) {
                         if ( isset( $code_array[ $device ] ) ) {
                             $_c = $code_array[ $device ];
-                            if( $_c ) {
+                            if( $_c && trim( $_c ) ) {
                                 $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
                             }
-
                         }
                     }
                 } else {
-                    if ( $code_array['no_devices'] ) {
+                    if ( isset( $code_array['no_devices'] ) && $code_array['no_devices'] ) {
                         $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
                     }
                 }
@@ -473,23 +582,32 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $values = Customify_Customizer()->get_setting( $field['name'] );
             $values = wp_parse_args( $values, array(
                 'font' => null,
-                'font_style' => null,
+                'style' => null,
                 'font_size' => null,
                 'line_height' => null,
                 'letter_spacing' => null,
-                'color' => null,
+                'font_type' => null,
+                'languages' => null,
+                'font_weight' => null,
+                'text_decoration' => null,
+                'text_transform' => null,
             ) );
             $code = array();
 
 
             $fields = array();
             $devices_css = array();
-            foreach ($field['fields'] as $f) {
+            foreach ( Customify_Customizer()->get_typo_fields() as $f) {
                 $fields[ $f['name'] ] = $f;
             }
 
             if ( isset( $fields['font']) ) {
-                $code['font'] = $this->setup_font($values['font']);
+                $code['font'] = $this->setup_font( array(
+                    'font' =>$values['font'],
+                    'type' =>$values['font_type'],
+                    'subsets' => $values['languages'],
+                    'variant' => $values['font_weight'],
+                ) );
             }
 
             if (isset($fields['font_style'])) {
@@ -559,20 +677,18 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 }
             }
 
-            if ( isset($fields['color'])) {
-                $_c = $this->setup_color($values['color'], 'color: {{value}}; text-decoration-color: {{value}};');
-                if ( $_c ) {
-                    $code['color'] = $_c;
+            $devices_css = apply_filters( 'customify/customizer/auto_css', $devices_css, $field, $this );
+            foreach ( $devices_css as $device => $els ) {
+                if( ! empty( $els ) && trim( $els ) ) {
+                    $this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
                 }
             }
 
-            $devices_css = apply_filters( 'customify/customizer/auto_css', $devices_css, $field, $this );
-
-            foreach ( $devices_css as $device => $els ) {
-                $this->css[$device] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $els )."\r\n}";
+            $code = array_filter( $code );
+            if ( ! empty( $code ) ) {
+                $this->css['all'] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $code )."\r\n}";
             }
 
-            $this->css['all'] .= "{$field['selector']} {\r\n\t".join("\r\n\t", $code )."\r\n}";
         }
 
         function get_google_fonts_url(){
@@ -615,45 +731,56 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return $url;
         }
 
-        function loop_fields( $fields, $values = null, $skip_if_val_null = false ){
-            foreach ( $fields as $field ) {
+        function loop_fields( $fields, $values = null, $skip_if_val_null = false, $no_selector = false ){
+
+            $listcss = array();
+
+            foreach ( ( array ) $fields as $field ) {
                 $v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
                 if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
+                    if ( ! isset( $field['css_format'] ) ) {
+                        $field['css_format'] = false;
+                    }
                     if ( isset( $field['selector'] ) && $field['selector'] && $field['css_format']) {
                         switch ($field['type']) {
                             case 'css_ruler':
-                                $this->css_ruler($field, $v);
+                                $listcss[ $field['name'] ] = $this->css_ruler($field, $v, $no_selector );
                                 break;
                             case 'slider':
-                                $this->slider($field, $v);
+                                $listcss[ $field['name'] ] = $this->slider($field, $v, $no_selector);
                                 break;
                             case 'color':
-                                $this->color($field, $v);
+                                $listcss[ $field['name'] ] = $this->color($field, $v, $no_selector );
+                                break;
+                            case 'shadow':
+                                $listcss[ $field['name'] ] = $this->shadow($field, $v, $no_selector );
                                 break;
                             case 'image':
-                                $this->image($field, $v);
+                                $listcss[ $field['name'] ] = $this->image($field, $v, $no_selector);
+                                break;
+                            case 'checkbox':
+                                $listcss[ $field['name'] ] = $this->checkbox($field, $v, $no_selector );
                                 break;
                             case 'text_align':
                             case 'text_align_no_justify':
-                                $this->text_align($field, $v);
+                                $listcss[ $field['name'] ] = $this->text_align($field, $v, $no_selector);
                                 break;
                             case 'font':
                                 $this->font($field, $v);
                                 break;
+                            case 'styling':
+                                $this->styling($field, $v);
+                                break;
                             default:
                                 switch ($field['css_format']) {
-                                    case 'background':
-                                    case 'styling':
-                                        $this->styling($field, $v);
-                                        break;
                                     case 'typography':
-                                        $this->typography($field, $v);
+                                        $this->typography($field );
                                         break;
                                     case 'html_class':
                                         //
                                         break;
                                     default:
-                                        $this->maybe_devices_setup($field, 'setup_default', $v);
+                                        $listcss[ $field['name'] ] = $this->maybe_devices_setup($field, 'setup_default', $v, $no_selector );
 
                                 }
 
@@ -661,6 +788,8 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                     }
                 }
             } // end for each fields
+
+            return $listcss;
 
         }
 

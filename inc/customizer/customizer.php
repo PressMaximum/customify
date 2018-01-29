@@ -29,6 +29,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             add_action( 'customize_register', array( $this, 'register' ) );
             add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
 
+            add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
+
         }
 
         static function get_instance(){
@@ -36,6 +38,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 self::$_instance = new self();
             }
             return self::$_instance ;
+        }
+
+        /**
+         * Reset Customize section
+         */
+        function get_icons(){
+            if ( ! current_user_can( 'customize' ) ) {
+                wp_send_json_error();
+            }
+
+            require_once get_template_directory().'/inc/customizer/customizer-icons.php';
+            wp_send_json_success( Customify_Font_Icons()->get_icons() );
+            die();
         }
 
         /**
@@ -47,7 +62,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                 wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
                 wp_localize_script('customify-customizer-auto-css', 'Customify_Preview_Config', array(
                     'fields' => Customify_Customizer::get_config(),
-                    'devices' => $this->devices
+                    'devices' => $this->devices,
+                    'typo_fields' => Customify_Customizer()->get_typo_fields(),
+                    'styling_config' => Customify_Customizer()->get_styling_config(),
                 ));
             }
         }
@@ -117,9 +134,11 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                             }
 
                             if ( isset( $f['fields'] ) ) {
-                                $types = wp_list_pluck( $f['fields'], 'type' );
-                                if ( in_array( 'icon', $types ) ) {
-                                    self::$has_icon = true;
+                                if ( $f['type'] !=='typography' && $f['type'] !== 'styling' ) {
+                                    $types = wp_list_pluck($f['fields'], 'type');
+                                    if (in_array('icon', $types)) {
+                                        self::$has_icon = true;
+                                    }
                                 }
 
                                 if ( in_array( 'font', $types ) ) {
@@ -204,6 +223,364 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             }
 
             return $get_value;
+        }
+
+        function get_typo_fields() {
+            $typo_fields =array(
+                array(
+                    'name' => 'font',
+                    'type' => 'select',
+                    'label' => __('Font', 'customify'),
+                    'choices' => array()
+                ),
+
+                array(
+                    'name' => 'font_weight',
+                    'type' => 'select',
+                    'label' => __('Font Weight', 'customify'),
+                    'choices' => array()
+                ),
+
+                array(
+                    'name' => 'languages',
+                    'type' => 'checkboxes',
+                    'label' => __('Font Languages', 'customify'),
+                ),
+
+                array(
+                    'name' => 'font_size',
+                    'type' => 'slider',
+                    'label' => __('Font Size', 'customify'),
+                    'device_settings' => true,
+                    'min' => 1,
+                    'max' => 100,
+                    'step' => 1
+                ),
+
+                array(
+                    'name' => 'line_height',
+                    'type' => 'slider',
+                    'label' => __('Line Height', 'customify'),
+                    'device_settings' => true,
+                    'min' => 1,
+                    'max' => 100,
+                    'step' => 1
+                ),
+
+                array(
+                    'name' => 'letter_spacing',
+                    'type' => 'slider',
+                    'label' => __('Letter Spacing', 'customify'),
+                    'min' => -10,
+                    'max' => 10,
+                    'step' => 0.1
+                ),
+
+                array(
+                    'name' => 'style',
+                    'type' => 'select',
+                    'label' => __('Font Style', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'normal' =>__( 'Normal', 'customify' ),
+                        'italic' =>__( 'Italic', 'customify' ),
+                        'oblique' =>__( 'Oblique', 'customify' ),
+                    )
+                ),
+
+                array(
+                    'name' => 'text_decoration',
+                    'type' => 'select',
+                    'label' => __('Text Decoration', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'underline' =>__( 'Underline', 'customify' ),
+                        'overline' =>__( 'Overline', 'customify' ),
+                        'line-through' =>__( 'Line through', 'customify' ),
+                        'none' =>__( 'None', 'customify' ),
+                    )
+                ),
+
+                array(
+                    'name' => 'text_transform',
+                    'type' => 'select',
+                    'label' => __('Text Transform', 'customify'),
+                    'choices' => array(
+                        '' =>__( 'Default', 'customify' ),
+                        'uppercase' =>__( 'Uppercase', 'customify' ),
+                        'lowercase' =>__( 'Lowercase', 'customify' ),
+                        'capitalize' =>__( 'Capitalize', 'customify' ),
+                        'none' =>__( 'None', 'customify' ),
+                    )
+                )
+            );
+
+            return $typo_fields;
+        }
+
+        function get_styling_config() {
+            $fields =array(
+                'tabs' => array(
+                    'normal' => __( 'Normal', 'customify' ),  // null or false to disable
+                    'hover'  => __( 'Hover', 'customify' ), // null or false to disable
+                ),
+                'normal_fields' => array(
+                    array(
+                        'name' => 'text_color',
+                        'type' => 'color',
+                        'label' => __( 'Text Color', 'customify' ),
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                    ),
+                    array(
+                        'name' => 'link_color',
+                        'type' => 'color',
+                        'label' => __( 'Link Color', 'customify' ),
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                    ),
+
+                    array(
+                        'name'            => 'padding',
+                        'type'            => 'css_ruler',
+                        'device_settings' => true,
+                        'css_format'      => array(
+                            'top'    => 'padding-top: {{value}};',
+                            'right'  => 'padding-right: {{value}};',
+                            'bottom' => 'padding-bottom: {{value}};',
+                            'left'   => 'padding-left: {{value}};',
+                        ),
+                        'label' => __( 'Padding', 'customify' ),
+                    ),
+
+                    array(
+                        'name' => 'bg_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Background', 'customify' ),
+                    ),
+
+                    array(
+                        'name' => 'bg_color',
+                        'type' => 'color',
+                        'label' => __( 'Background Color', 'customify' ),
+                        'css_format' => 'background-color: {{value}};'
+                    ),
+                    array(
+                        'name' => 'bg_image',
+                        'type' => 'image',
+                        'label' => __( 'Background Image', 'customify' ),
+                        'css_format' => 'background-image: url("{{value}}");'
+                    ),
+                    array(
+                        'name' => 'bg_cover',
+                        'type' => 'select',
+                        'choices' => array(
+                            ''       => __( 'Default', 'customify' ),
+                            'auto'        => __( 'Center', 'customify' ),
+                            'cover'      => __( 'Top Left', 'customify' ),
+                            'contain'     => __( 'Top Right', 'customify' ),
+                        ),
+                        'required' => array( 'bg_image', 'not_empty', ''),
+                        'label' => __( 'Size', 'customify' ),
+                        'class' => 'field-half-left',
+                        'css_format' => '-webkit-background-size: {{value}}; -moz-background-size: {{value}}; -o-background-size: {{value}}; background-size: {{value}};'
+                    ),
+                    array(
+                        'name' => 'bg_position',
+                        'type' => 'select',
+                        'label' => __( 'Position', 'customify' ),
+                        'required' => array( 'bg_image', 'not_empty', ''),
+                        'class' => 'field-half-right',
+                        'choices' => array(
+                            ''       => __( 'Default', 'customify' ),
+                            'center'        => __( 'Center', 'customify' ),
+                            'top left'      => __( 'Top Left', 'customify' ),
+                            'top right'     => __( 'Top Right', 'customify' ),
+                            'top center'    => __( 'Top Center', 'customify' ),
+                            'bottom left'   => __( 'Bottom Left', 'customify' ),
+                            'bottom center' => __( 'Bottom Center', 'customify' ),
+                            'bottom right'  => __( 'Bottom Right', 'customify' ),
+                        ),
+                        'css_format' => 'background-position: {{value}};'
+                    ),
+                    array(
+                        'name' => 'bg_repeat',
+                        'type' => 'select',
+                        'label' => __( 'Repeat', 'customify' ),
+                        'class' => 'field-half-left',
+                        'required' => array(
+                            array('bg_image', 'not_empty', ''),
+                        ),
+                        'choices' => array(
+                            'repeat' => __( 'Default', 'customify' ),
+                            'no-repeat' => __( 'No repeat', 'customify' ),
+                            'repeat-x' => __( 'Repeat horizontal', 'customify' ),
+                            'repeat-y' => __( 'Repeat vertical', 'customify' ),
+                        ),
+                        'css_format' => 'background-repeat: {{value}};'
+                    ),
+
+                    array(
+                        'name' => 'bg_attachment',
+                        'type' => 'select',
+                        'label' => __( 'Attachment', 'customify' ),
+                        'class' => 'field-half-right',
+                        'required' => array(
+                            array('bg_image', 'not_empty', '')
+                        ),
+                        'choices' => array(
+                            '' => __( 'Default', 'customify' ),
+                            'scroll' => __( 'Scroll', 'customify' ),
+                            'fixed' => __( 'Fixed', 'customify' )
+                        ),
+                        'css_format' => 'background-attachment: {{value}};'
+                    ),
+
+                    array(
+                        'name' => 'border_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Border', 'customify' ),
+                    ),
+
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'class' => 'clear',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => 'none',
+                        'choices' => array(
+                            ''          => __('Default', 'customify'),
+                            'none'      => __('None', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                        'css_format' => 'border-style: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                        'css_format' => array(
+                            'top' => 'border-top-width: {{value}};',
+                            'right' => 'border-right-width: {{value}};',
+                            'bottom'=> 'border-bottom-width: {{value}};',
+                            'left'=> 'border-left-width: {{value}};'
+                        ),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                        'css_format' => 'border-color: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'border_radius',
+                        'type' => 'slider',
+                        'label' => __('Border Radius', 'customify'),
+                        'css_format' => 'border-radius: {{value}};',
+                    ),
+
+                    array(
+                        'name' => 'box_shadow',
+                        'type' => 'shadow',
+                        'label' =>  __( 'Box Shadow', 'customify' ),
+                        'css_format' => 'box-shadow: {{value}};',
+                    ),
+
+                ),
+
+                'hover_fields' => array(
+                    array(
+                        'name' => 'text_color',
+                        'type' => 'color',
+                        'label' => __( 'Text Color', 'customify' ),
+                        'css_format' => 'color: {{value}};'
+                    ),
+                    array(
+                        'name' => 'link_color',
+                        'type' => 'color',
+                        'label' => __( 'Link Color', 'customify' ),
+                        'css_format' => 'color: {{value}};'
+                    ),
+                    array(
+                        'name' => 'bg_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Background', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'bg_color',
+                        'type' => 'color',
+                        'label' => __( 'Background Color', 'customify' ),
+                        'css_format' => 'background-color: {{value}};'
+                    ),
+                    array(
+                        'name' => 'border_heading',
+                        'type' => 'heading',
+                        'label' => __( 'Border', 'customify' ),
+                    ),
+                    array(
+                        'name' => 'border_style',
+                        'type' => 'select',
+                        'label' => __('Border Style', 'customify'),
+                        'default' => '',
+                        'choices' => array(
+                            ''          => __('Default', 'customify'),
+                            'none'      => __('None', 'customify'),
+                            'solid'     => __('Solid', 'customify'),
+                            'dotted'    => __('Dotted', 'customify'),
+                            'dashed'    => __('Dashed', 'customify'),
+                            'double'    => __('Double', 'customify'),
+                            'ridge'     => __('Ridge', 'customify'),
+                            'inset'     => __('Inset', 'customify'),
+                            'outset'    => __('Outset', 'customify'),
+                        ),
+                        'css_format' => 'border-style: {{value}};',
+                    ),
+                    array(
+                        'name' => 'border_width',
+                        'type' => 'css_ruler',
+                        'label' => __('Border Width', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                        'css_format' => array(
+                            'top' => 'border-top-width: {{value}};',
+                            'right' => 'border-right-width: {{value}};',
+                            'bottom'=> 'border-bottom-width: {{value}};',
+                            'left'=> 'border-left-width: {{value}};'
+                        ),
+                    ),
+                    array(
+                        'name' => 'border_color',
+                        'type' => 'color',
+                        'label' => __('Border Color', 'customify'),
+                        'required' => array('border_style', '!=', 'none'),
+                        'css_format' => 'border-color: {{value}};',
+                    ),
+                    array(
+                        'name' => 'border_radius',
+                        'type' => 'slider',
+                        'label' => __('Border Radius', 'customify'),
+                        'css_format' => 'border-radius: {{value}};',
+                    ),
+                    array(
+                        'name' => 'box_shadow',
+                        'type' => 'shadow',
+                        'label' => __('Box Shadow', 'customify'),
+                        'css_format' => 'box-shadow: {{value}};',
+                    ),
+
+                ),
+
+
+            );
+
+            return $fields;
         }
 
         function setup_icon( $icon ){

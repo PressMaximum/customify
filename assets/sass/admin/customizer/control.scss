@@ -34,6 +34,20 @@ $text_color: #555d66;
         color: #444444;
     }
 }
+
+#customize-controls {
+    .customify--field {
+        .customify-field--heading {
+            font-size: 12px;
+        }
+    }
+    .customify-modal-settings {
+        h3.customify-field--heading {
+            font-size: 11px;
+        }
+    }
+}
+
 .customize-control {
     .customize-control-description {
         margin-bottom: 15px;
@@ -139,11 +153,6 @@ $text_color: #555d66;
             display: block;
         }
     }
-}
-
-
-.customify--settings-fields {
-
 }
 
 .customify--repeater-actions {
@@ -356,12 +365,38 @@ $text_color: #555d66;
     }
 }
 
+.customify--group-field {
+    &.ft--hr {
+        clear: both;
+    }
+    &.field-half {
+        width: 50%;
+        float: left;
+    }
+    &.field-half-left {
+        width: 50%;
+        float: left;
+        .customify--field {
+            padding-right: 5px;
+        }
 
+    }
+    &.field-half-right {
+        width: 50%;
+        float: left;
+
+        .customify--field {
+            padding-left: 5px;
+        }
+    }
+}
 .customify--field {
     margin-bottom: 15px;
+    width: 100%;
     &:last-child {
         margin-bottom: 0px;
     }
+
     * {
         box-sizing: border-box;
     }
@@ -405,7 +440,7 @@ $text_color: #555d66;
         display: none;
     }
 }
-.customify--css-ruler {
+.customify--gr-inputs {
     display: flex;
     margin-left: -2px;
     margin-right: -2px;
@@ -416,6 +451,13 @@ $text_color: #555d66;
         font-size: 10px;
         display: block;
         text-transform: uppercase;
+    }
+    span.input {
+        height: 28px;
+        display: block;
+        vertical-align: middle;
+        line-height: 28px;
+        text-align: center;
     }
     label {
         cursor: pointer;
@@ -442,7 +484,7 @@ $text_color: #555d66;
     }
 }
 .customify-image-preview {
-    margin: 10px 0 12px;
+    margin: 0px 0 12px;
     display: block;
     &:before {
         content: attr(data-no-file-text);
@@ -514,7 +556,7 @@ $text_color: #555d66;
 }
 .customify-input-slider {
     position: relative;
-    margin: 11px 118px 20px 0;
+    margin: 11px 118px 20px 4px;
     height: 5px;
     display: block;
     background: #CCCCCC;
@@ -535,6 +577,12 @@ $text_color: #555d66;
         border-radius: 50%;
         cursor: pointer;
         transform: translateX(-5px);
+    }
+}
+
+.customify--field-shadow {
+    .customify--gr-inputs {
+        margin-top: 10px;
     }
 }
 
@@ -801,37 +849,6 @@ $text_color: #555d66;
                 }
 
                 &.customify--field-name-color{
-
-                    /*
-                    position: absolute;
-                    top: 0px;
-                    right: 0px;
-                    .customify-field-heading {
-                        display: none;
-                    }
-                    .wp-picker-container {
-                        position: relative;
-
-                        input.wp-color-picker {
-                            display: none !important;
-                        }
-                        .wp-color-result{
-                            padding-left: 50px;
-                            &.wp-picker-open {
-                                padding-left: 75px;
-                                &:after {
-                                    display: none;
-                                }
-                            }
-                        }
-                    }
-                    .wp-picker-holder {
-                        position: absolute;
-                        right: 0px;
-                        z-index: 10;
-                    }
-                    */
-
                     .wp-picker-container {
                         position: relative;
                         z-index: 35;
@@ -926,7 +943,215 @@ $text_color: #555d66;
         }
         .customify-group-device-fields {
 
+        }
+    }
+}
 
+
+// Modal Style
+.customify--settings-wrapper {
+    position: relative;
+    display: block;
+    .customify-actions {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        vertical-align: middle;
+        margin-top: 5px;
+        a {
+            text-decoration: none;
+            display: inline-block;
+        }
+        .action--reset {
+            font-size: 12px;
+            margin-right: 10px;
+            display: none;
+            span {
+                font-size: inherit;
+                width: auto;
+                height: auto;
+                vertical-align: middle;
+                margin-top: 0px;
+                &:before {
+                    font-size: 12px;
+                    width: auto;
+                    height: auto;
+                }
+            }
+        }
+        .action--edit {
+            background: #FFFFFF;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 5px;
+
+            .modal--opening & {
+                span {
+                    &:before {
+                        content: "\f335";
+                    }
+                }
+            }
+        }
+    }
+}
+
+.modal--tabs {
+    display: flex;
+    margin-left: -12px;
+    margin-right: -12px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    div {
+
+        flex-basis: 100%;
+        max-width: 100%;
+        text-align: center;
+        padding: 5px 5px 0px;
+        &:first-child {
+            padding-left: 10px;
+        }
+        &:last-child {
+            padding-right: 10px;
+        }
+    }
+    span {
+        display: block;
+        border: 1px solid #dddddd;
+        padding: 5px;
+        cursor: pointer;
+        margin-bottom: -1px;
+        font-weight: 600;
+        &.tab--active {
+            background: #ffffff;
+            border-bottom-color: #fff;
+        }
+    }
+}
+.modal-tab-content {
+    display: none;
+    &.tab--active {
+        display: block;
+    }
+}
+#customize-theme-controls .customize-pane-child.accordion-section-content {
+    min-height: 100%;
+    display: block;
+}
+.customize-control-customify-typography {
+    .customize-control-description {
+        margin-bottom: 0px;
+    }
+    .ft--checkboxes[data-field-name="languages"] {
+        margin-bottom: 0px;
+    }
+    .list-subsets {
+        p {
+            margin-top: 0px;
+            width: 50%;
+            float: left;
+        }
+        @include clearfix();
+    }
+    .customify--group-field {
+        @include clearfix();
+        .customify-field-header {
+            width: 50%;
+            float: left;
+        }
+        .customify-field-settings-inner {
+            width: 50%;
+            float: right;
+        }
+        &.customify--multiple-devices {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
+
+        .customify--field-slider, .customify--field-name-languages  {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
+    }
+}
+
+.customify-field-settings-inner {
+    position: relative;
+}
+.customify-modal--inside {
+    position: relative;
+    .description {
+        margin-bottom: 0px;
+    }
+}
+.customize-control-customify-styling, .customize-control-customify-typography {
+    .customify--settings-wrapper {
+        min-height: 40px;
+        display: block;
+    }
+}
+.ft--heading {
+    clear: both;
+}
+
+.customify-modal-settings {
+    box-shadow: 0 2px 15px rgba(0,0,0,.3);
+    background: #fff;
+    padding: 12px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    left: 0px;
+    right: 0px;
+    z-index: 99;
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        right: 5px;
+        width: 15px;
+        height: 15px;
+        background: #fff;
+        transform: rotate(45deg);
+        border-radius: 3px;
+    }
+    .wp-color-result-text {
+        line-height: 23px;
+    }
+    .customify--field-heading{
+        h3.customify-field--heading {
+            font-size: 11px;
+            margin: 10px -12px;
+            padding: 5px 12px 4px;
+            background: #eeeeee;
+        }
+    }
+    .customize-control-title {
+        font-weight: 400;
+        font-size: 13px;
+    }
+    .customify--group-field {
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+    .lb-left {
+        @include clearfix();
+        .customify-typography {
+            &--field-header {
+                width: 50%;
+                float: left;
+            }
+
+            &--field-settings {
+                float: right;
+                width: 50%;
+            }
         }
     }
 }
