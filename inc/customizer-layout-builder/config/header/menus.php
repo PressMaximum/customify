@@ -53,16 +53,16 @@ class Customify_Builder_Item_Primary_Menu {
                 'title'   => __( 'Menu Preset', 'customify' ),
                 'default'         => 'menu_style_1',
                 'choices' => array(
-                    'menu_style_1' => array(
+                    'plain' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
                     ),
-                    'menu_style_2' => array(
+                    'full-height' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_2.svg',
                     ),
-                    'menu_style_3' => array(
+                    'border-bottom' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_3.svg',
                     ),
-                    'menu_style_4' => array(
+                    'border-top' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
                     ),
                     'menu_style_5' => array(

@@ -147,15 +147,13 @@ if ( ! function_exists( 'customify_is_header_display' ) ) {
      */
     function customify_is_header_display(){
         $show = true;
-
         if ( is_singular() ) {
-            $disable = get_post_meta(get_the_ID(), '_customify_disable_header', true);
+            $disable = get_post_meta( get_the_ID(), '_customify_disable_header', true );
             if ( $disable ) {
                 $show = false;
             }
         }
-
-        return $show;
+        return  apply_filters( 'customify_is_header_display', $show );
     }
 }
 
@@ -167,9 +165,8 @@ if ( ! function_exists( 'customify_is_footer_display' ) ) {
      */
     function customify_is_footer_display(){
         $show = true;
-
         if ( is_singular() ) {
-            $rows =  array( 'main', 'bottom' );
+            $rows = array( 'main', 'bottom' );
             $count = 0;
             foreach ( $rows as $row_id ) {
                 if ( ! customify_is_builder_row_display( 'footer', $row_id ) ) {
@@ -180,8 +177,7 @@ if ( ! function_exists( 'customify_is_footer_display' ) ) {
                 $show = false;
             }
         }
-
-        return  apply_filters( 'customify_is_header_display', $show );
+        return  apply_filters( 'customify_is_footer_display', $show );
     }
 }
 
@@ -191,19 +187,20 @@ if ( ! function_exists( 'customify_is_builder_row_display' ) ) {
      *
      * @return bool
      */
-    function customify_is_builder_row_display( $builder_id, $row_id = false ){
+    function customify_is_builder_row_display( $builder_id, $row_id = false, $post_id = false ){
         $show = true;
         if ( $row_id  && $builder_id ) {
-            if (is_singular()) {
-                $key = $builder_id . '_' . $row_id;
-                $disable = get_post_meta(get_the_ID(), '_customify_disable_' . $key, true);
-                if ($disable) {
-                    $show = false;
-                }
+            if ( ! $post_id ) {
+               $post_id = apply_filters( 'customify_builder_row_display_get_post_id', get_the_ID() );
             }
-        }
+            $key = $builder_id . '_' . $row_id;
+            $disable = get_post_meta( $post_id, '_customify_disable_' . $key, true );
+            if ( $disable ) {
+                $show = false;
+            }
 
-        return apply_filters( 'customify_is_builder_row_display', $show, $builder_id, $row_id );
+        }
+        return apply_filters( 'customify_is_builder_row_display', $show, $builder_id, $row_id, $post_id );
     }
 }
 
@@ -213,7 +210,6 @@ if ( ! function_exists( 'customify_show_post_title' ) ) {
      */
     function customify_is_post_title_display(){
         $show = true;
-
         if ( is_singular() ) {
             $disable = get_post_meta(get_the_ID(), '_customify_disable_page_title', true);
             if ( $disable ) {

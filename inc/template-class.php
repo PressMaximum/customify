@@ -39,13 +39,12 @@ if ( ! function_exists( 'customify_get_site_content_class' ) ) :
 		if ( is_singular() ) {
 		    $page_layout = get_post_meta( get_the_ID(), '_customify_content_layout', true );
 		    if( $page_layout ) {
-		        $classes[] = 'content-'.sanitize_text_field( $page_layout );
+		        $classes['content_layout'] = 'content-'.sanitize_text_field( $page_layout );
             }
         }
 
 		$classes = array_map( 'esc_attr', $classes );
 		$classes = apply_filters( 'customify_site_content_class', $classes, $class );
-
 		return array_unique( $classes );
 	}
 endif;
