@@ -45,10 +45,10 @@ $submenu_width: 14em;
         transform: translateY(40px);
         top: 100%;
         //box-shadow: 0 9px 14px rgba(0, 0, 0, 0.05);
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
         //border-radius: 2px;
         text-align: left;
-        border-top: 2px solid $color_primary;
+        //border-top: 2px solid $color_primary;
 
         li {
             display: block;
@@ -74,7 +74,7 @@ $submenu_width: 14em;
         .sub-menu {
             top: 0px;
             left: 100%;
-            margin-top: -2px;
+            //margin-top: -2px;
         }
     }
 

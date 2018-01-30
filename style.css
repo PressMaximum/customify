@@ -2571,6 +2571,7 @@ object {
 
 .wp-caption .wp-caption-text {
   padding: 1em 0;
+  font-size: 85%;
 }
 
 .wp-caption-text {
@@ -3016,9 +3017,8 @@ article.comment .comment-post-author {
   display: block;
   transform: translateY(40px);
   top: 100%;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   text-align: left;
-  border-top: 2px solid #7b8994;
 }
 .nav-menu-desktop .sub-menu li {
   display: block;
@@ -3039,7 +3039,6 @@ article.comment .comment-post-author {
 .nav-menu-desktop .sub-menu .sub-menu {
   top: 0px;
   left: 100%;
-  margin-top: -2px;
 }
 .nav-menu-desktop .menu-item:hover > .sub-menu {
   height: auto;
@@ -5487,7 +5486,7 @@ body.menu_sidebar_dropdown:before {
   opacity: 0;
 }
 .is-menu-sidebar.menu_sidebar_dropdown .header-menu-sidebar {
-  z-index: 999900;
+  z-index: 10;
   visibility: visible;
 }
 
