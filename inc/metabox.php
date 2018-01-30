@@ -30,8 +30,7 @@ class Customify_MetaBox {
      */
     public function add_meta_box( $post_type ) {
         // Limit meta box to certain post types.
-        $post_types = array( 'page' );
-
+        $post_types = array( 'page', 'post' );
         if ( in_array( $post_type, $post_types ) ) {
             add_meta_box(
                 'customify_page_settings',

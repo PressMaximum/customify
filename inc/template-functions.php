@@ -64,14 +64,7 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
             $blog_posts = Customify_Customizer()->get_setting('posts_sidebar_layout');
             $archive    = Customify_Customizer()->get_setting('posts_archives_sidebar_layout');
             $search     = Customify_Customizer()->get_setting('search_sidebar_layout');
-            if (is_page()) {
-                $page_custom = get_post_meta(get_the_ID(), '_customify_sidebar', true);
-                if ($page_custom && $page_custom != 'default') {
-                    $layout = $page_custom;
-                } else {
-                    $layout = $page;
-                }
-            } elseif (is_search()) {
+            if (is_search()) {
                 $layout = $search;
             } elseif (is_archive()) {
                 $layout = $archive;
@@ -80,9 +73,20 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
             } else {
                 $layout = $default;
             }
+
+            if ( is_singular() ) {
+                $page_custom = get_post_meta(get_the_ID(), '_customify_sidebar', true);
+                if ($page_custom && $page_custom != 'default') {
+                    $layout = $page_custom;
+                } else {
+                    $layout = $page;
+                }
+            }
+
             if (!$layout) {
                 $layout = $default;
             }
+
         }
 		return $layout;
 	}
@@ -144,7 +148,7 @@ if ( ! function_exists( 'customify_is_header_display' ) ) {
     function customify_is_header_display(){
         $show = true;
 
-        if ( is_page() ) {
+        if ( is_singular() ) {
             $disable = get_post_meta(get_the_ID(), '_customify_disable_header', true);
             if ( $disable ) {
                 $show = false;
@@ -164,7 +168,7 @@ if ( ! function_exists( 'customify_is_footer_display' ) ) {
     function customify_is_footer_display(){
         $show = true;
 
-        if ( is_page() ) {
+        if ( is_singular() ) {
             $rows =  array( 'main', 'bottom' );
             $count = 0;
             foreach ( $rows as $row_id ) {
@@ -190,7 +194,7 @@ if ( ! function_exists( 'customify_is_builder_row_display' ) ) {
     function customify_is_builder_row_display( $builder_id, $row_id = false ){
         $show = true;
         if ( $row_id  && $builder_id ) {
-            if (is_page()) {
+            if (is_singular()) {
                 $key = $builder_id . '_' . $row_id;
                 $disable = get_post_meta(get_the_ID(), '_customify_disable_' . $key, true);
                 if ($disable) {
@@ -210,7 +214,7 @@ if ( ! function_exists( 'customify_show_post_title' ) ) {
     function customify_is_post_title_display(){
         $show = true;
 
-        if ( is_page() ) {
+        if ( is_singular() ) {
             $disable = get_post_meta(get_the_ID(), '_customify_disable_page_title', true);
             if ( $disable ) {
                 $show = false;
