@@ -4,29 +4,65 @@ $submenu_width: 14em;
     font-size: 15px;
     font-weight: 500;
     line-height: 1.6;
-   .menu {
-       list-style: none;
-       padding: 0px;
-       margin: 0px;
-       li {
-           display: inline-block;
-           position: relative;
-           &:last-child {
-               margin-right: 0px;
-           }
-           a {
-               display: inline-block;
-               color: currentColor;
-               transition: background 0.15s ease-out;
-               &:hover {
-                   color: $color_link_hover;
-               }
-           }
-       }
+    .nav-icon-angle {
+        display: inline-block;
+        font-family: "FontAwesome";
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    .menu {
+        list-style: none;
+        padding: 0px;
+        margin: 0px;
+        li {
+            display: inline-block;
+            position: relative;
+            &:last-child {
+                margin-right: 0px;
+            }
+            a {
+                display: inline-block;
+                color: currentColor;
+                transition: background 0.15s ease-out;
+                &:hover {
+                    color: $color_link_hover;
+                }
+            }
+        }
         > li > a {
             padding: 15px 15px;
         }
-   }
+
+        > li.menu-item-has-children {
+            > a {
+                .nav-icon-angle {
+                    margin-left: 5px;
+                    &:before {
+                        content: "\f107";
+                    }
+                }
+            }
+        }
+
+        .sub-menu {
+            li.menu-item-has-children {
+                > a {
+                    position: relative;
+                    @include clearfix();
+                    .nav-icon-angle {
+                        margin-left: 5px;
+                        float: right;
+                        &:before {
+                            content: "\f105";
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     .sub-menu {
         position: absolute;

@@ -2978,6 +2978,14 @@ article.comment .comment-post-author {
   font-weight: 500;
   line-height: 1.6;
 }
+.nav-menu-desktop .nav-icon-angle {
+  display: inline-block;
+  font-family: "FontAwesome";
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 .nav-menu-desktop .menu {
   list-style: none;
   padding: 0px;
@@ -3000,6 +3008,29 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop .menu > li > a {
   padding: 15px 15px;
+}
+.nav-menu-desktop .menu > li.menu-item-has-children > a .nav-icon-angle {
+  margin-left: 5px;
+}
+.nav-menu-desktop .menu > li.menu-item-has-children > a .nav-icon-angle:before {
+  content: "\f107";
+}
+.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a {
+  position: relative;
+}
+.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a:before, .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a:after {
+  content: "";
+  display: table;
+}
+.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a:after {
+  clear: both;
+}
+.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
+  margin-left: 5px;
+  float: right;
+}
+.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle:before {
+  content: "\f105";
 }
 .nav-menu-desktop .sub-menu {
   position: absolute;

@@ -19,6 +19,7 @@ jQuery( document ).ready( function( $ ){
 
     var insertNavIcon = function(){
         $( '.menu-item-has-children', $( '#header-menu-sidebar .nav-menu-mobile' ) ).each( function(){
+        //$( '.menu-item-has-children' ).each( function(){
             var $el = $( this );
             if ( ! $el.hasClass( 'toggle--added' ) ) {
                 $el.addClass( 'toggle--added' );
@@ -33,6 +34,17 @@ jQuery( document ).ready( function( $ ){
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
+
+
+        $( '.nav-menu-desktop .menu-item-has-children' ).each( function(){
+            var $el = $( this );
+            if ( ! $el.hasClass( 'dr--added' ) ) {
+                $el.addClass( 'dr--added' );
+                var first_a = $(' > a', $el);
+                first_a.append('<span class="nav-icon-angle"></span>');
+            }
+        } );
+
     };
 
     // Toggle sub menu
