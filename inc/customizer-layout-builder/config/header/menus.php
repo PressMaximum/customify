@@ -48,21 +48,22 @@ class Customify_Builder_Item_Primary_Menu {
                 'name' => $this->prefix.'_style',
                 'type'    => 'image_select',
                 'section' => $section,
-                'selector' => $this->selector,
+                'selector' => '.builder-item--'.$this->id ." .primary-menu",
                 'render_callback' => $fn,
                 'title'   => __( 'Menu Preset', 'customify' ),
-                'default'         => 'plain',
+                'default' => 'style-plain',
+                'css_format' => 'html_class',
                 'choices' => array(
-                    'plain' => array(
+                    'style-plain' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
                     ),
-                    'full-height' => array(
+                    'style-full-height' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_2.svg',
                     ),
-                    'border-bottom' => array(
+                    'style-border-bottom' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_3.svg',
                     ),
-                    'border-top' => array(
+                    'style-border-top' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
                     ),
                     'style_5' => array(
@@ -231,12 +232,10 @@ class Customify_Builder_Item_Primary_Menu {
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
 
-
     function render(){
-
         $style = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'_style') );
         if ( $style ) {
-            $style = 'style-'.sanitize_text_field( $style );
+            $style = sanitize_text_field( $style );
         }
 
         wp_nav_menu( array(
