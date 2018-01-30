@@ -90,14 +90,14 @@ class Customify_Builder_Item_Primary_Menu {
                     'bottom' => 'margin-bottom: {{value}};',
                     'left' => 'margin-left: {{value}};',
                 ),
-                'title'  => __( 'Top Item Margin', 'customify' ),
+                'title'  => __( 'Top Items Margin', 'customify' ),
             ),
 
             array(
                 'name' => $this->prefix.'_item_styling',
                 'type' => 'styling',
                 'section' => $section,
-                'title'  => __( 'Top Item Styling', 'customify' ),
+                'title'  => __( 'Top Items Styling', 'customify' ),
                 'description'  => __( 'Advanced styling for top level', 'customify' ),
                 'selector'  => array(
                     'normal' => "{$this->selector} > li > a",
@@ -129,7 +129,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'name' => $this->prefix.'_typography',
                 'type' => 'typography',
                 'section'  => $section,
-                'title' => __( 'Typography', 'customify' ),
+                'title' => __( 'Top Items Typography', 'customify' ),
                 'description' => __( 'Advanced typography for menu',  'customify' ),
                 'selector' => $this->selector,
                 'css_format' => 'typography',
@@ -186,7 +186,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'name' => $this->prefix.'_sub_item_styling',
                 'type' => 'styling',
                 'section' => $section,
-                'title'  => __( 'Submenu Item Styling', 'customify' ),
+                'title'  => __( 'Submenu Items Styling', 'customify' ),
                 'description'  => __( 'Advanced styling for submenu item', 'customify' ),
                 'selector'  => array(
                     'normal' => "{$this->selector} .sub-menu li a",
