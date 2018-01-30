@@ -118,7 +118,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'theme_supports' => '',
                 'device_settings' => true,
                 'max' => 250,
-                'selector' => $selector.' .customify-grid',
+                'selector' => $selector." .customify-grid, $selector .style-full-height .primary-menu-ul > li > a",
                 'css_format' => 'min-height: {{value}};',
                 'title' => __( 'Height', 'customify' ),
             ),

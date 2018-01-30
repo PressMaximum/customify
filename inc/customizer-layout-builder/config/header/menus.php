@@ -51,7 +51,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'selector' => $this->selector,
                 'render_callback' => $fn,
                 'title'   => __( 'Menu Preset', 'customify' ),
-                'default'         => 'menu_style_1',
+                'default'         => 'plain',
                 'choices' => array(
                     'plain' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
@@ -65,12 +65,18 @@ class Customify_Builder_Item_Primary_Menu {
                     'border-top' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
                     ),
-                    'menu_style_5' => array(
+                    'style_5' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_5.svg',
                     ),
                 )
             ),
 
+            array(
+                'name' => $this->prefix.'_top_heading',
+                'type' => 'heading',
+                'section' => $section,
+                'title'  => __( 'Top Menu', 'customify' ),
+            ),
 
             array(
                 'name' => $this->prefix.'_item_margin',
@@ -85,19 +91,6 @@ class Customify_Builder_Item_Primary_Menu {
                     'left' => 'margin-left: {{value}};',
                 ),
                 'title'  => __( 'Top Item Margin', 'customify' ),
-            ),
-            // "{$this->selector} li a, {$this->selector} li"
-            array(
-                'name' => $this->prefix.'_submenu_width',
-                'type' => 'slider',
-                'section' => $section,
-                'selector' => $this->selector.' .sub-menu',
-                'device_settings' => true,
-                'css_format' => 'width: {{value}};',
-                'title'  => __( 'Submenu Width', 'customify' ),
-                'min' => 100,
-                'max' => 500,
-                'step' => 5
             ),
 
             array(
@@ -130,6 +123,36 @@ class Customify_Builder_Item_Primary_Menu {
                         'bg_position' => false,
                     ), // disable hover tab and all fields inside.
                 )
+            ),
+
+            array(
+                'name' => $this->prefix.'_typography',
+                'type' => 'typography',
+                'section'  => $section,
+                'title' => __( 'Typography', 'customify' ),
+                'description' => __( 'Advanced typography for menu',  'customify' ),
+                'selector' => $this->selector,
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name' => $this->prefix.'_submenu_heading',
+                'type' => 'heading',
+                'section' => $section,
+                'title'  => __( 'Submenu', 'customify' ),
+            ),
+
+            array(
+                'name' => $this->prefix.'_submenu_width',
+                'type' => 'slider',
+                'section' => $section,
+                'selector' => $this->selector.' .sub-menu',
+                'device_settings' => true,
+                'css_format' => 'width: {{value}};',
+                'title'  => __( 'Submenu Width', 'customify' ),
+                'min' => 100,
+                'max' => 500,
+                'step' => 5
             ),
 
             array(
@@ -193,16 +216,6 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
-                'name' => $this->prefix.'_typography',
-                'type' => 'typography',
-                'section'  => $section,
-                'title' => __( 'Typography', 'customify' ),
-                'description' => __( 'Advanced typography for menu',  'customify' ),
-                'selector' => $this->selector,
-                'css_format' => 'typography',
-            ),
-
-            array(
                 'name' => $this->prefix.'_typography_submenu',
                 'type' => 'typography',
                 'section'  => $section,
@@ -222,6 +235,9 @@ class Customify_Builder_Item_Primary_Menu {
     function render(){
 
         $style = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'_style') );
+        if ( $style ) {
+            $style = 'style-'.sanitize_text_field( $style );
+        }
 
         wp_nav_menu( array(
             'theme_location' => $this->theme_location,
@@ -230,7 +246,9 @@ class Customify_Builder_Item_Primary_Menu {
             'container_class' => $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' ),
             'menu_id'        => $this->id.'-__id__-__device__',
             'menu_class'   => $this->id.'-ul menu',
-            'fallback_cb' => false
+            'fallback_cb' => false,
+            'link_before' => '<span class="link-before">',
+            'link_after' => '</span>',
         ) );
 
     }

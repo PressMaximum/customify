@@ -3006,6 +3006,9 @@ article.comment .comment-post-author {
 .nav-menu-desktop .menu li a:hover {
   color: #007ee5;
 }
+.nav-menu-desktop .menu li.current-menu-item > a {
+  color: #007ee5;
+}
 .nav-menu-desktop .menu > li > a {
   padding: 15px 15px;
 }
@@ -3077,6 +3080,49 @@ article.comment .comment-post-author {
   overflow: initial;
   visibility: visible;
   opacity: 1;
+}
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a {
+  background: #007ee5;
+  color: #fff;
+  display: inline-flex;
+  vertical-align: middle;
+  align-items: center;
+}
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li > a .link-before {
+  position: relative;
+}
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li > a .link-before:before {
+  position: absolute;
+  bottom: -4px;
+  width: 100%;
+  left: 0px;
+  height: 2px;
+  background-color: transparent;
+  content: "";
+}
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before {
+  background-color: #007ee5;
+}
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before {
+  background-color: #007ee5;
+}
+.nav-menu-desktop.style-border-top .primary-menu-ul > li > a .link-before {
+  position: relative;
+}
+.nav-menu-desktop.style-border-top .primary-menu-ul > li > a .link-before:before {
+  position: absolute;
+  top: -4px;
+  width: 100%;
+  left: 0px;
+  height: 2px;
+  background-color: transparent;
+  content: "";
+}
+.nav-menu-desktop.style-border-top .primary-menu-ul > li:hover > a .link-before:before {
+  background-color: #007ee5;
+}
+.nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before {
+  background-color: #007ee5;
 }
 
 /* On Menu Sidebar */
