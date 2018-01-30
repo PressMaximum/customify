@@ -253,4 +253,15 @@ class Customify_Builder_Item_Primary_Menu {
     }
 }
 
+
+
 Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu() );
+
+function customify_add_icon_to_menu( $title, $item, $args, $depth ){
+    if ( in_array( 'menu-item-has-children', $item->classes ) ) {
+        $title.= '<span class="nav-icon-angle"></span>';
+    }
+    return $title;
+}
+
+add_filter( 'nav_menu_item_title', 'customify_add_icon_to_menu', 25, 4 );

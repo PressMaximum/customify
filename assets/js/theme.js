@@ -34,17 +34,7 @@ jQuery( document ).ready( function( $ ){
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
-
-
-        $( '.nav-menu-desktop .menu-item-has-children' ).each( function(){
-            var $el = $( this );
-            if ( ! $el.hasClass( 'dr--added' ) ) {
-                $el.addClass( 'dr--added' );
-                var first_a = $(' > a', $el);
-                first_a.append('<span class="nav-icon-angle"></span>');
-            }
-        } );
-
+        
     };
 
     // Toggle sub menu
