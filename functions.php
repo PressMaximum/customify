@@ -191,7 +191,7 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Footer 1', 'customify' ),
+            'name'          => esc_html__( 'Footer Sidebar 1', 'customify' ),
             'id'            => 'footer-1',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -200,7 +200,7 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Footer 2', 'customify' ),
+            'name'          => esc_html__( 'Footer Sidebar 2', 'customify' ),
             'id'            => 'footer-2',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -209,7 +209,7 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Footer 3', 'customify' ),
+            'name'          => esc_html__( 'Footer Sidebar 3', 'customify' ),
             'id'            => 'footer-3',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -218,7 +218,7 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Footer 4', 'customify' ),
+            'name'          => esc_html__( 'Footer Sidebar 4', 'customify' ),
             'id'            => 'footer-4',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',

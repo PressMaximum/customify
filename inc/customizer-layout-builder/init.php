@@ -74,6 +74,7 @@ class Customify_Customizer_Layout_Builder {
 			),
 			'footer' => array(
 				'panel',
+				'general',
 				'widgets',
 				'templates',
 				'html',

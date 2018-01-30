@@ -1,6 +1,4 @@
 <?php
-
-
 class Customify_Builder_Footer_Templates
 {
     public $id = 'footer_templates';
@@ -51,7 +49,7 @@ class Customify_Builder_Footer_Templates
                 'name' => $section,
                 'type' => 'section',
                 'panel' => 'footer_settings',
-                'theme_supports' => '',
+                'priority' => 0,
                 'title'          => __( 'Templates', 'customify' ),
             ),
 

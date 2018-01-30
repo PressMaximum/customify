@@ -6,7 +6,7 @@ class Customify_Builder_Item_Footer_Widget_1
     function item()
     {
         return array(
-            'name' => __( 'Footer 1', 'customify' ),
+            'name' => __( 'Footer Sidebar 1', 'customify' ),
             'id' => 'footer-1',
             'width' => '3',
             'section' => 'sidebar-widgets-footer-1'
@@ -21,7 +21,7 @@ class Customify_Builder_Item_Footer_Widget_2
     function item()
     {
         return array(
-            'name' => __( 'Footer 2', 'customify' ),
+            'name' => __( 'Footer Sidebar 2', 'customify' ),
             'id' => 'footer-2',
             'width' => '3',
             'section' => 'sidebar-widgets-footer-2'
@@ -36,7 +36,7 @@ class Customify_Builder_Item_Footer_Widget_3
     function item()
     {
         return array(
-            'name' => __( 'Footer 3', 'customify' ),
+            'name' => __( 'Footer Sidebar 3', 'customify' ),
             'id' => 'footer-3',
             'width' => '3',
             'section' => 'sidebar-widgets-footer-3'
@@ -51,7 +51,7 @@ class Customify_Builder_Item_Footer_Widget_4
     function item()
     {
         return array(
-            'name' => __( 'Footer 4', 'customify' ),
+            'name' => __( 'Footer Sidebar 4', 'customify' ),
             'id' => 'footer-4',
             'width' => '3',
             'section' => 'sidebar-widgets-footer-4'
