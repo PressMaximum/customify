@@ -1938,9 +1938,11 @@
                 } catch (e) {
                     that.values = {};
                 }
-                $( '.customify-hidden-modal-input', this.$el ).val( '{}' ).trigger('change');
+                $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
                 $el.addClass('customify-modal--inside');
             } );
+            $( '.action--reset', that.$el ).hide();
+
 
         },
 

@@ -773,7 +773,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
 
             $wp_customize->get_section( 'title_tagline' )->panel = 'header_settings';
-            $wp_customize->get_section( 'title_tagline' )->title = __( 'Logo & Site Identity' );
+            $wp_customize->get_section( 'title_tagline' )->title = __( 'Logo & Site Identity', 'customify' );
 
             $wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
             // add selective refresh

@@ -1,11 +1,11 @@
 <?php
 
-class Customify_Builder_Item_Search {
-    public $id = 'search';
+class Customify_Builder_Item_Search_Icon {
+    public $id = 'search_icon';
     function item(){
         return array(
-            'name' => __( 'Search Box', 'customify' ),
-            'id' => 'search',
+            'name' => __( 'Search Icon', 'customify' ),
+            'id' => 'search_icon',
             'col' => 0,
             'width' => '3',
             'section' => 'header_search' // Customizer section to focus when click settings
@@ -13,7 +13,7 @@ class Customify_Builder_Item_Search {
     }
 
     function customize(){
-        $section = 'header_search';
+        $section = 'header_search_icon';
         $fn = array( $this, 'render' );
         $mobile_selector = '.mobile-search-form-sidebar';
         $config  = array(
@@ -98,7 +98,7 @@ class Customify_Builder_Item_Search {
 }
 
 
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Search() );
+Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Search_Icon() );
 
 
 

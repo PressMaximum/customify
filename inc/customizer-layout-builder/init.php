@@ -68,6 +68,7 @@ class Customify_Customizer_Layout_Builder {
 				'menus',
 				'nav-icon',
 				'search',
+				'search-icon',
 				'button',
 				'social-icons',
 			),
@@ -211,7 +212,7 @@ class Customify_Customizer_Layout_Builder {
 		$control   = isset( $_POST['control'] ) ? sanitize_text_field( $_POST['control'] ) : '';
 		$save_name = isset( $_POST['name'] ) ? sanitize_text_field( $_POST['name'] ) : '';
 		if ( ! $save_name ) {
-			$save_name = sprintf( __( 'Saved %s' ), date_i18n( 'Y-m-d H:i:s' ) );
+			$save_name = sprintf( __( 'Saved %s', 'customify' ), date_i18n( 'Y-m-d H:i:s' ) );
 		}
 		$data = isset( $_POST['preview_data'] ) ? wp_unslash( $_POST['preview_data'] ) : array();
 		$fn   = false;

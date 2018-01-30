@@ -187,6 +187,16 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format' => 'typography',
             ),
 
+            array(
+                'name' => $this->prefix.'_typography_submenu',
+                'type' => 'typography',
+                'section'  => $section,
+                'title' => __( 'Submenu Typography', 'customify' ),
+                'description' => __( 'Advanced typography for submenu',  'customify' ),
+                'selector'  => "{$this->selector} .sub-menu li a",
+                'css_format' => 'typography',
+            ),
+
         );
 
         // Item Layout
