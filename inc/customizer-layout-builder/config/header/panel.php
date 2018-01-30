@@ -140,6 +140,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'css_format' => 'styling', // styling
                 'fields' => array(
                     'normal_fields' => array(
+                        'text_color' => false, // disable for special field.
                         'link_color' => false, // disable for special field.
                         'padding' => false // disable for special field.
                     ),

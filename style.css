@@ -3103,45 +3103,6 @@ article.comment .comment-post-author {
 }
 
 /* Search */
-.header-search-form {
-  margin: 0px;
-}
-.header-search-form .search-form-inner {
-  display: flex;
-}
-.header-search-form .s {
-  width: 100%;
-}
-
-.mobile-search-form-sidebar {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  display: block;
-  z-index: 300;
-  background: #444444;
-  transform: translateX(100%);
-  transition: transform 0.5s cubic-bezier(0.79, 0.14, 0.15, 0.86);
-  visibility: visible;
-}
-.mobile-search-form-sidebar .search-form-inner {
-  padding: 15% 20px;
-  text-align: center;
-}
-.mobile-search-form-sidebar .search-submit {
-  display: inline-block;
-  margin: 15px auto 0;
-}
-
-.is-mobile-form-panel .mobile-search-form-sidebar.builder-item--search-show {
-  height: auto;
-  overflow: auto;
-  transform: translate3d(0, 0, 0);
-  left: 0;
-  visibility: visible;
-}
-
 /* Social Icons */
 .customify-builder-social-icons {
   display: inline-block;

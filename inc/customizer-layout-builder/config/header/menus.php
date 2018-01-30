@@ -46,16 +46,31 @@ class Customify_Builder_Item_Primary_Menu {
 
             array(
                 'name' => $this->prefix.'_style',
-                'type' => 'select',
+                'type'    => 'image_select',
                 'section' => $section,
                 'selector' => $this->selector,
                 'render_callback' => $fn,
-                'title' => __( 'Style', 'customify' ),
+                'title'   => __( 'Menu Preset', 'customify' ),
+                'default'         => 'menu_style_1',
                 'choices' => array(
-                    'style_default' => __( 'Default', 'customify' ),
-                    'style_2' => __( 'Style 2', 'customify' ),
+                    'menu_style_1' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
+                    ),
+                    'menu_style_2' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_2.svg',
+                    ),
+                    'menu_style_3' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_3.svg',
+                    ),
+                    'menu_style_4' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
+                    ),
+                    'menu_style_5' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_5.svg',
+                    ),
                 )
             ),
+
 
             array(
                 'name' => $this->prefix.'_item_margin',
@@ -219,37 +234,6 @@ class Customify_Builder_Item_Primary_Menu {
         ) );
 
     }
-
 }
-
 
 Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu() );
-
-
-class Customify_Builder_Item_Secondary_Menu extends  Customify_Builder_Item_Primary_Menu {
-
-    public $id;
-    public $label;
-    public $prefix;
-    public $selector;
-    public $section;
-    public $theme_location;
-
-    /**
-     * Optional construct
-     *
-     */
-    function __construct()
-    {
-        parent::__construct();
-        $this->label = __( 'Secondary Menu', 'customify' );
-        $this->id = 'secondary_menu';
-        $this->prefix = 'secondary_menu';
-       // $this->selector = '.secondary-menu';
-        $this->selector = '.builder-item--'.$this->id .' .secondary-menu-ul';
-        $this->section = 'header_menu_secondary';
-        $this->theme_location = 'menu-2';
-    }
-}
-
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Secondary_Menu() );

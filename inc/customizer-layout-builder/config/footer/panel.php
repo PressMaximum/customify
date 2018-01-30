@@ -131,7 +131,6 @@ class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
                 'section' => $section,
                 'title'  => __( 'Styling', 'customify' ),
                 'description'  => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
-                'live_title_field' => 'title',
                 'selector' => array(
                     'normal' => "{$selector}",
                     'normal_padding' => $selector.' .customify-container',
