@@ -169,6 +169,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format'  => 'styling',
                 'fields' => array(
                     'normal_fields' => array(
+                        'margin' => false,
                         'padding' => false, // disable for special field.
                         'text_color' => false,
                         'link_color' => false,
