@@ -75,7 +75,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $fn,
-                'title' => __( 'Label Setting', 'customify' ),
+                'title' => __( 'Label Settings', 'customify' ),
                 'device_settings' => true,
                 'default'         => array (
 	                'desktop' => 1,
@@ -131,15 +131,20 @@ class Customify_Builder_Item_Nav_Icon{
 
     function render(){
         $label = sanitize_text_field( Customify_Customizer()->get_setting( 'nav_icon_text' ) );
-        $show_label = Customify_Customizer()->get_setting('nav_icon_show_text');
+        $show_label = Customify_Customizer()->get_setting('nav_icon_show_text', 'all' );
         $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
         $sizes = Customify_Customizer()->get_setting('nav_icon_size', 'all' );
 
         $classes = array('menu-mobile-toggle item-button');
-        if ( $show_label ) {
-            $classes[] = 'nav-show-label';
-        } else {
-            $classes[] = 'nav-hide-label';
+        $label_classes = array( 'nav-icon--label' );
+        if ( is_array( $show_label ) ) {
+            foreach ( $show_label as $d => $v ) {
+                if ( $v ) {
+
+                } else {
+                    $label_classes[] = 'hide-on-'.$d;
+                }
+            }
         }
 
         if ( empty( $sizes ) ) {
@@ -170,7 +175,7 @@ class Customify_Builder_Item_Nav_Icon{
               </span>
             <?php
             if ( $show_label ) {
-                echo '<span class="nav-icon--label">'.$label.'</span>';
+                echo '<span class="'.esc_attr( join( ' ', $label_classes ) ).'">'.$label.'</span>';
             }
             ?></span>
         <?php
