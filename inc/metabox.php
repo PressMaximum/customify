@@ -34,7 +34,7 @@ class Customify_MetaBox {
         if ( in_array( $post_type, $post_types ) ) {
             add_meta_box(
                 'customify_page_settings',
-                __( 'Page Settings', 'customify' ),
+                __( 'Customify Settings', 'customify' ),
                 array( $this, 'render_meta_box_content' ),
                 $post_type,
                 'side',

@@ -1076,14 +1076,13 @@
             value = customifyField.getValue( field, $( '.customify--settings-fields', control.container ) );
 
             if (_.isUndefined(save) || save) {
-                //console.log( 'VALUES: ', value );
                 control.setting.set(control.encodeValue(value));
                 $document.trigger('customify/customizer/change');
+                console.log( 'Save_Value: ', value );
             } else {
 
             }
 
-            console.log( 'All Value: ', value );
             return value;
         },
         encodeValue: function (value) {
@@ -1121,7 +1120,6 @@
                 });
 
             } else {
-
                 customifyField.addFields( control.params.fields,  control.params.value,  control.container.find('.customify--settings-fields'), function(){
                     control.getValue();
                 } );
@@ -2164,12 +2162,8 @@
 
             }
 
-
         } );
 
-       // console.log( 'wpcustomize.setting', wpcustomize.settings( 'custom_logo' ) );
-
-       // wp.customize('customify__css').set('dsadas');
 
     }); // end customize ready
 
