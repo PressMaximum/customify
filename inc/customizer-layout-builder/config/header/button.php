@@ -105,6 +105,7 @@ class Customify_Builder_Item_Button {
 				'fields'     => array(
                     'normal_fields' => array(
                         'link_color' => false, // disable for special field.
+                        'margin' => false,
                         'bg_image' => false,
                         'bg_cover' => false,
                         'bg_position' => false,

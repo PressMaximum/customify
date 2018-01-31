@@ -90,7 +90,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 'reset' => __('Reset this section settings', 'customify'),
                 'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
                 'list_font_weight' => array(
-                    'default'   => __('Default', 'customify'),
+                    '400'   => __('Default', 'customify'),
                     'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
                     'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
                 ),

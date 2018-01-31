@@ -17,7 +17,7 @@ class Customify_Builder_Item_Primary_Menu {
         $this->id = 'primary-menu';
         $this->label = __( 'Primary Menu', 'customify' );
         $this->prefix = 'primary_menu';
-        $this->selector = '.builder-item--'.$this->id .' .primary-menu-ul';
+        $this->selector = '.builder-item--'.$this->id .' .nav-menu-desktop .primary-menu-ul';
         $this->section = 'header_menu_primary';
         $this->theme_location = 'menu-1';
     }
@@ -73,25 +73,19 @@ class Customify_Builder_Item_Primary_Menu {
             ),
 
             array(
+                'name' => $this->prefix.'__hide-arrow',
+                'type'    => 'checkbox',
+                'section' => $section,
+                'selector' => '.builder-item--'.$this->id ." .primary-menu",
+                'checkbox_label' => __( 'Hide Arrow', 'customify' ),
+                'css_format' => 'html_class',
+            ),
+
+            array(
                 'name' => $this->prefix.'_top_heading',
                 'type' => 'heading',
                 'section' => $section,
                 'title'  => __( 'Top Menu', 'customify' ),
-            ),
-
-            array(
-                'name' => $this->prefix.'_item_margin',
-                'type' => 'css_ruler',
-                'section' => $section,
-                'selector' => $this->selector.' .menu li',
-                'device_settings' => true,
-                'css_format' => array(
-                    'top' => 'margin-top: {{value}};',
-                    'right' => 'margin-right: {{value}};',
-                    'bottom' => 'margin-bottom: {{value}};',
-                    'left' => 'margin-left: {{value}};',
-                ),
-                'title'  => __( 'Top Items Margin', 'customify' ),
             ),
 
             array(
@@ -102,10 +96,16 @@ class Customify_Builder_Item_Primary_Menu {
                 'description'  => __( 'Advanced styling for top level', 'customify' ),
                 'selector'  => array(
                     'normal' => "{$this->selector} > li > a",
+                    'normal_margin' => "{$this->selector} > li",
                     'hover' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-parent > a",
+                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a",
                 ),
                 'css_format'  => 'styling',
                 'fields' => array(
+                    'tabs' => array(
+                        'normal' => __( 'Normal', 'customify' ),
+                        'hover'  => __( 'Hover/Active', 'customify' ),
+                    ),
                     'normal_fields' => array(
                         //'padding' => false // disable for special field.
                         'link_color' => false,
@@ -132,7 +132,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'section'  => $section,
                 'title' => __( 'Top Items Typography', 'customify' ),
                 'description' => __( 'Advanced typography for menu',  'customify' ),
-                'selector' => $this->selector,
+                'selector' => "{$this->selector} > li > a",
                 'css_format' => 'typography',
             ),
 
@@ -182,7 +182,6 @@ class Customify_Builder_Item_Primary_Menu {
                 )
             ),
 
-
             array(
                 'name' => $this->prefix.'_sub_item_styling',
                 'type' => 'styling',
@@ -195,9 +194,14 @@ class Customify_Builder_Item_Primary_Menu {
                 ),
                 'css_format'  => 'styling',
                 'fields' => array(
+                    'tabs' => array(
+                        'normal' => __( 'Normal', 'customify' ),
+                        'hover'  => __( 'Hover/Active', 'customify' ),
+                    ),
                     'normal_fields' => array(
                         //'padding' => false, // disable for special field.
                         'link_color' => false,
+                        'margin' => false,
                         'bg_cover' => false,
                         'bg_image' => false,
                         'bg_repeat' => false,
@@ -236,6 +240,11 @@ class Customify_Builder_Item_Primary_Menu {
         $style = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'_style') );
         if ( $style ) {
             $style = sanitize_text_field( $style );
+        }
+
+        $hide_arrow = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'__hide-arrow') );
+        if ( $hide_arrow ) {
+            $style.=' hide-arrow-active';
         }
 
         wp_nav_menu( array(

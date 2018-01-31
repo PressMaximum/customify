@@ -5,12 +5,21 @@ $submenu_width: 14em;
     font-weight: 500;
     line-height: 1.6;
     .nav-icon-angle {
-        display: inline-block;
+        display: inline;
         font-family: "FontAwesome";
         font-size: inherit;
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
+        text-decoration: none !important;
+        &:before {
+            text-decoration: none !important;
+        }
+    }
+    &.hide-arrow-active {
+        .nav-icon-angle {
+            display: none;
+        }
     }
     .menu {
         list-style: none;
@@ -24,8 +33,9 @@ $submenu_width: 14em;
             }
             a {
                 display: inline-block;
-                color: currentColor;
+                color: inherit;
                 transition: background 0.15s ease-out;
+                text-decoration-color: currentColor;
                 &:hover {
                     color: $color_link_hover;
                 }
@@ -133,14 +143,23 @@ $submenu_width: 14em;
     // Menu Style Full Height
     &.style-full-height {
         .primary-menu-ul {
+            @include clearfix();
              > li {
+                 float: left;
                   > a {
-                      background: $color_link_hover;
-                      color: #fff;
+                      background: transparent;
                       display: inline-flex;
                       vertical-align: middle;
                       align-items: center;
+                      &:hover {
+                          background-color: $color_link_hover;
+                      }
                   }
+                 &.current-menu-item {
+                     a {
+                         background-color: $color_link_hover;
+                     }
+                 }
              }
         }
     }

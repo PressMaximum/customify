@@ -339,6 +339,19 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     ),
 
                     array(
+                        'name'            => 'margin',
+                        'type'            => 'css_ruler',
+                        'device_settings' => true,
+                        'css_format'      => array(
+                            'top'    => 'margin-top: {{value}};',
+                            'right'  => 'margin-right: {{value}};',
+                            'bottom' => 'margin-bottom: {{value}};',
+                            'left'   => 'margin-left: {{value}};',
+                        ),
+                        'label' => __( 'Margin', 'customify' ),
+                    ),
+
+                    array(
                         'name'            => 'padding',
                         'type'            => 'css_ruler',
                         'device_settings' => true,
@@ -501,13 +514,13 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'name' => 'text_color',
                         'type' => 'color',
                         'label' => __( 'Text Color', 'customify' ),
-                        'css_format' => 'color: {{value}};'
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
                     ),
                     array(
                         'name' => 'link_color',
                         'type' => 'color',
                         'label' => __( 'Link Color', 'customify' ),
-                        'css_format' => 'color: {{value}};'
+                        'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
                     ),
                     array(
                         'name' => 'bg_heading',

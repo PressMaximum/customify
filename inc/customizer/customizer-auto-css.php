@@ -373,7 +373,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                     $deviceCode = $selectorCSSDevices[ $device ];
                     foreach( $deviceCode as $s => $c ){
                         if ( ! empty( $c ) ) {
-                            if ( is_string($c) && trim( $css ) ) {
+                            if ( is_string($c) && trim( $c ) ) {
                                 $css .= "\r\n{$s}  {\r\n\t{$c}\r\n} \r\n";
                             } else {
                                 if ( ! is_array( $c ) ) {
@@ -594,7 +594,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             ) );
             $code = array();
 
-
             $fields = array();
             $devices_css = array();
             foreach ( Customify_Customizer()->get_typo_fields() as $f) {
@@ -612,6 +611,21 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
 
             if (isset($fields['font_style'])) {
                 $code['font_style'] = $this->setup_font_style($values['font_style']);
+            }
+
+            // Font Weight
+            if (isset($fields['font_weight'])) {
+                $code['font_weight'] = 'font-weight: '.sanitize_text_field( $values['font_weight'] ).';';
+            }
+
+            // Text Decoration
+            if (isset($fields['text_decoration'])) {
+                $code['text_decoration'] = 'text-decoration: '.sanitize_text_field( $values['text_decoration'] ).';';
+            }
+
+            // Text Transform
+            if (isset($fields['text_transform'])) {
+                $code['text_transform'] = 'text-transform: '.sanitize_text_field( $values['text_transform'] ).';';
             }
 
             if (isset($fields['font_size'])) {
@@ -660,10 +674,10 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 $fields['letter_spacing']['css_format'] = 'letter-spacing: {{value}};';
                 $font_size_css = $this->maybe_devices_setup($fields['letter_spacing'], 'setup_slider', $values['letter_spacing'], true);
                 if ($font_size_css) {
-                    if (isset($font_size_css['no_devices'])) {
+                    if (isset($font_size_css['no_devices']) && ! empty( $font_size_css['no_devices'] ) ) {
                         $code['letter_spacing'] = $font_size_css['no_devices'];
                     } else {
-                        foreach ( $font_size_css  as $device => $_c ) {
+                        foreach ( ( array ) $font_size_css  as $device => $_c ) {
                             if ( $device == 'desktop' ) {
                                 $code['letter_spacing'] = $_c;
                             } else {
@@ -759,7 +773,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 $listcss[ $field['name'] ] = $this->image($field, $v, $no_selector);
                                 break;
                             case 'checkbox':
-                                $listcss[ $field['name'] ] = $this->checkbox($field, $v, $no_selector );
+                                if ( $field['css_format'] !== 'html_class' ) {
+                                    $listcss[ $field['name'] ] = $this->checkbox($field, $v, $no_selector );
+                                }
                                 break;
                             case 'text_align':
                             case 'text_align_no_justify':

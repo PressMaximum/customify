@@ -96,7 +96,11 @@ var AutoCSS = window.AutoCSS || null;
                             fields_code[ field.name ] = that.shadow(field, v, no_selector );
                             break;
                         case 'checkbox':
-                            fields_code[ field.name ] = that.checkbox(field, v, no_selector );
+                            if ( field.css_format == 'html_class' ) {
+                                that.html_class(field, v );
+                            } else {
+                                fields_code[ field.name ] = that.checkbox(field, v, no_selector );
+                            }
                             break;
                         case 'image':
                             fields_code[ field.name ] = that.image( field, v, no_selector );
@@ -888,7 +892,23 @@ var AutoCSS = window.AutoCSS || null;
 
             }
         }
-        
+
+        if ( is_checkbox && ( _.isUndefined( field.device_settings ) || ! field.device_settings ) ) {
+            var _n = field.name.split('__');
+            var cl;
+            if ( _n.length > 1 ) {
+                cl = _n[1]+'-active';
+            } else {
+                cl = field.name+'-active';
+            }
+
+            if ( value ) {
+                $( selector ).addClass( cl );
+            } else {
+                $( selector ).removeClass( cl );
+            }
+            return ;
+        }
 
         if ( _.isString( last_value ) && !_.isEmpty( last_value ) ) {
             $( selector ).removeClass( last_value );

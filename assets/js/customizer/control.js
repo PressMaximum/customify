@@ -1724,9 +1724,7 @@
             this.$el = $el;
             var that = this;
 
-            $el.attr( 'data-opening', '' );
             $('.customify-modal-settings', $el).remove();
-            $el.removeClass('modal--opening');
             that.values = $('.customify-typography-input', that.$el).attr('data-default') || '{}';
             try {
                 that.values = JSON.parse(that.values);
@@ -1944,6 +1942,9 @@
             } else {
                 that.container = $('.customify-modal-settings', $el);
             }
+
+            $el.addClass('customify-modal--inside');
+            $el.addClass( 'modal--opening' );
             that.container.show(0);
             $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
 
@@ -1984,7 +1985,6 @@
                 }
 
                 $el.addClass('customify-modal--inside');
-
                 if (!$('.customify-modal-settings', $el).length) {
                     var $wrap = $($('#tmpl-customify-modal-settings').html());
                     $wrap.hide();
@@ -1997,7 +1997,6 @@
 
                 this.container.slideDown( 300 );
                 this.$el.addClass('modal--opening');
-
                 $( '.action--reset', this.$el ).show();
 
             } else {
