@@ -1610,6 +1610,9 @@
         ready: function(){
             var that = this;
             customifyField.devices = _.clone( customifyField.allDevices );
+            if ( ! _.isObject( that.values ) ) {
+                that.values = {};
+            }
 
             $( '.customify-modal-settings--fields', that.container ).append( '<input type="hidden" class="customify--font-type">' );
 
@@ -1726,7 +1729,7 @@
             $el.attr( 'data-opening', '' );
             $('.customify-modal-settings', $el).remove();
             $el.removeClass('modal--opening');
-            that.values = $('.customify-typography-input', that.$el).attr('data-default') || '[]';
+            that.values = $('.customify-typography-input', that.$el).attr('data-default') || '{}';
             try {
                 that.values = JSON.parse(that.values);
             } catch (e) {
@@ -1929,20 +1932,22 @@
             this.$el = $el;
             var that = this;
 
-            $('.customify-modal-settings', $el).slideUp( 300, function () {
-                $el.attr( 'data-opening', '' );
-                $('.customify-modal-settings', $el).remove();
-                $el.removeClass('modal--opening');
-                try {
-                    that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
-                } catch (e) {
-                    that.values = {};
-                }
-                $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
-                $el.addClass('customify-modal--inside');
-            } );
-            $( '.action--reset', that.$el ).hide();
-
+            $('.customify-modal-settings', $el).remove();
+            try {
+                that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
+            } catch (e) {
+                that.values = {};
+            }
+            if (!$('.customify-modal-settings', $el).length) {
+                var $wrap = $($('#tmpl-customify-modal-settings').html());
+                that.container = $wrap;
+                this.$el.append($wrap);
+                that.addFields();
+            } else {
+                that.container = $('.customify-modal-settings', $el);
+            }
+            that.container.show(0);
+            $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
 
         },
 

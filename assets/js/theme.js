@@ -34,7 +34,7 @@ jQuery( document ).ready( function( $ ){
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
-        
+
     };
 
     // Toggle sub menu
