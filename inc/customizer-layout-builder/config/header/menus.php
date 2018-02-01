@@ -97,8 +97,8 @@ class Customify_Builder_Item_Primary_Menu {
                 'selector'  => array(
                     'normal' => "{$this->selector} > li > a",
                     'normal_margin' => "{$this->selector} > li",
-                    'hover' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-parent > a",
-                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a",
+                    'hover' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a",
+                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
                 ),
                 'css_format'  => 'styling',
                 'fields' => array(
@@ -169,7 +169,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format'  => 'styling',
                 'fields' => array(
                     'normal_fields' => array(
-                        'margin' => false,
+                        //'margin' => true,
                         'padding' => false, // disable for special field.
                         'text_color' => false,
                         'link_color' => false,

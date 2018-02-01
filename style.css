@@ -3106,9 +3106,11 @@ article.comment .comment-post-author {
   align-items: center;
 }
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
+  color: #e5f3ff;
   background-color: #007ee5;
 }
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item a {
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a {
+  color: #e5f3ff;
   background-color: #007ee5;
 }
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li > a .link-before {
@@ -3126,7 +3128,7 @@ article.comment .comment-post-author {
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before {
   background-color: #007ee5;
 }
-.nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before {
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
   background-color: #007ee5;
 }
 .nav-menu-desktop.style-border-top .primary-menu-ul > li > a .link-before {
@@ -3144,7 +3146,7 @@ article.comment .comment-post-author {
 .nav-menu-desktop.style-border-top .primary-menu-ul > li:hover > a .link-before:before {
   background-color: #007ee5;
 }
-.nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before {
+.nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
   background-color: #007ee5;
 }
 

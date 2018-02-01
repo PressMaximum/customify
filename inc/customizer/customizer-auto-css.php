@@ -609,22 +609,22 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 ) );
             }
 
-            if (isset($fields['font_style'])) {
+            if (isset($fields['font_style']) && $values['font_style'] ) {
                 $code['font_style'] = $this->setup_font_style($values['font_style']);
             }
 
             // Font Weight
-            if (isset($fields['font_weight'])) {
+            if (isset($fields['font_weight']) && $values['font_weight'] ) {
                 $code['font_weight'] = 'font-weight: '.sanitize_text_field( $values['font_weight'] ).';';
             }
 
             // Text Decoration
-            if (isset($fields['text_decoration'])) {
+            if (isset($fields['text_decoration']) && $values['text_decoration'] ) {
                 $code['text_decoration'] = 'text-decoration: '.sanitize_text_field( $values['text_decoration'] ).';';
             }
 
             // Text Transform
-            if (isset($fields['text_transform'])) {
+            if (isset($fields['text_transform']) && $values['text_transform'] ) {
                 $code['text_transform'] = 'text-transform: '.sanitize_text_field( $values['text_transform'] ).';';
             }
 
@@ -818,7 +818,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             foreach ( $this->css as $device => $code ) {
                 $new_line = '';
                 if ( $i > 0 ) {
-                    $new_line=  "\r\n\r\n\r\n\r\n\r";
+                    $new_line=  "\r\n/* CSS for {$device} */\r\n";
                 }
                 $css_code .= $new_line.sprintf( $this->media_queries[ $device ], $code )."\r\n";
                 $i++;

@@ -149,28 +149,23 @@ class Customify_MetaBox {
             </select>
         </p>
         <strong><?php _e( 'Disable Elements', 'customify' ); ?></strong>
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
-            </label>
-        </p>
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
-            </label>
-        </p>
+        <br/>
+        <label>
+            <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
+        </label>
+        <br/>
+        <label>
+            <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
+        </label>
+        <br/>
+        <label>
+            <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
+        </label>
+        <br/>
+        <label>
+            <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
+        </label>
 
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
-            </label>
-        </p>
-
-        <p>
-            <label>
-                <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
-            </label>
-        </p>
         <?php
     }
 }
