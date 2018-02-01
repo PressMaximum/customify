@@ -723,12 +723,10 @@ var AutoCSS = window.AutoCSS || null;
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
-
         values = _.defaults( values, {
             'normal': {},
             'hover': {}
         } );
-        var new_fields = {};
         var selectors = {};
         if ( _.isString( field.selector ) ) {
             selectors['normal'] = field.selector;
@@ -749,7 +747,6 @@ var AutoCSS = window.AutoCSS || null;
             if ( ! _.isUndefined( field.fields.normal_fields  ) ) {
                 normal_fields =field.normal_fields;
             }
-
             if ( ! _.isUndefined( field.fields.hover_fields ) ) {
                 hover_fields = field.hover_fields;
             }
@@ -797,7 +794,6 @@ var AutoCSS = window.AutoCSS || null;
             } );
         };
 
-
         var selectorCSSAll = {};
         var selectorCSSDevices = {};
 
@@ -824,10 +820,8 @@ var AutoCSS = window.AutoCSS || null;
                     }
                 } );
             }
-
             that.css[ device ] += css;
         } );
-
     };
 
     AutoCSS.prototype.setup_font_style = function ( value ){
@@ -943,7 +937,6 @@ var AutoCSS = window.AutoCSS || null;
                 } );
             }
         }
-
     };
 
     AutoCSS.prototype.typography = function( field, values ){

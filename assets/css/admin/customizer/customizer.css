@@ -1050,7 +1050,10 @@
   margin-bottom: 0px;
 }
 
-.customize-control-customify-styling .customify--settings-wrapper, .customize-control-customify-typography .customify--settings-wrapper {
+.customize-control-customify-styling .customify--settings-wrapper > .customize-control-description, .customize-control-customify-typography .customify--settings-wrapper > .customize-control-description, .customize-control-customify-modal .customify--settings-wrapper > .customize-control-description {
+  margin-bottom: 0px;
+}
+.customize-control-customify-styling .customify--settings-wrapper, .customize-control-customify-typography .customify--settings-wrapper, .customize-control-customify-modal .customify--settings-wrapper {
   min-height: 40px;
   display: block;
 }

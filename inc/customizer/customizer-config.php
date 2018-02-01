@@ -22,6 +22,132 @@ if (!function_exists('customify_customizer_config')) {
             ),
 
             array(
+                'name' => '_modal',
+                'type' => 'modal',
+                'section' => 'customify_section',
+                'title' => __('Modal', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'tab_1' => __('Tab 1', 'customify'),
+                        'tab_2' => __('Tab 2', 'customify'),
+                        'tab_3' => __('Tab 3', 'customify'),
+                    ),
+                    'tab_1_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    ),
+                    'tab_2_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text 2 Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    ),
+
+                    'tab_3_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text 3 Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    )
+
+
+
+                ),
+            ),
+
+
+            array(
+                'name' => '_modal_2',
+                'type' => 'modal',
+                'section' => 'customify_section',
+                'title' => __('Modal 2', 'customify'),
+                'description' => __('This is description', 'customify'),
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'tab_a' => __('A 1', 'customify'),
+                        'tab_b' => __('B 2', 'customify'),
+                        'tab_c' => __('C 3', 'customify'),
+                    ),
+                    'tab_a_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    ),
+                    'tab_b_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text 2 Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    ),
+
+                    'tab_c_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text 3 Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    )
+
+
+
+                ),
+            ),
+
+
+            array(
                 'name' => 'typography',
                 'type' => 'typography',
                 'section' => 'customify_section',

@@ -134,7 +134,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                             }
 
                             if ( isset( $f['fields'] ) ) {
-                                if ( $f['type'] !=='typography' && $f['type'] !== 'styling' ) {
+                                if ( ! in_array( $f['type'], array('typography', 'styling', 'modal' ) ) ) {
                                     $types = wp_list_pluck($f['fields'], 'type');
                                     if (in_array('icon', $types)) {
                                         self::$has_icon = true;
@@ -252,8 +252,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'type' => 'slider',
                     'label' => __('Font Size', 'customify'),
                     'device_settings' => true,
-                    'min' => 1,
-                    'max' => 100,
+                    'min' => 9,
+                    'max' => 50,
                     'step' => 1
                 ),
 
@@ -262,8 +262,8 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'type' => 'slider',
                     'label' => __('Line Height', 'customify'),
                     'device_settings' => true,
-                    'min' => 1,
-                    'max' => 100,
+                    'min' => 9,
+                    'max' => 50,
                     'step' => 1
                 ),
 

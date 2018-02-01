@@ -1088,7 +1088,12 @@ $text_color: #555d66;
         margin-bottom: 0px;
     }
 }
-.customize-control-customify-styling, .customize-control-customify-typography {
+.customize-control-customify-styling, .customize-control-customify-typography, .customize-control-customify-modal {
+    .customify--settings-wrapper {
+        > .customize-control-description {
+            margin-bottom: 0px;
+        }
+    }
     .customify--settings-wrapper {
         min-height: 40px;
         display: block;
