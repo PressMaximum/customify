@@ -8,6 +8,7 @@ $submenu_width: 14em;
         display: inline;
         font-family: "FontAwesome";
         font-size: inherit;
+        line-height: 1;
         text-rendering: auto;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
@@ -140,6 +141,26 @@ $submenu_width: 14em;
         }
     }
 
+    // Menu Style Plain
+    &.style-plain {
+        .primary-menu-ul {
+            @include clearfix();
+            > li {
+                float: left;
+                a {
+                    &:hover {
+                        color: $color_link_hover;
+                    }
+                }
+                &.current-menu-item, &.current-menu-ancestor {
+                    > a {
+                        color: $color_link_hover;
+                    }
+                }
+            }
+        }
+    } // End style plain
+
     // Menu Style Full Height
     &.style-full-height {
         .primary-menu-ul {
@@ -181,6 +202,7 @@ $submenu_width: 14em;
                             height: 2px;
                             background-color: transparent;
                             content: "";
+
                         }
                     }
                 }
@@ -188,7 +210,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
-                                background-color: $color_link_hover;
+                                background-color: currentColor;
                             }
                         }
                     }
@@ -198,7 +220,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
-                                background-color: $color_link_hover;
+                                background-color: currentColor;
                             }
                         }
                     }
@@ -229,7 +251,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
-                                background-color: $color_link_hover;
+                                background-color: currentColor;
                             }
                         }
                     }
@@ -238,7 +260,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
-                                background-color: $color_link_hover;
+                                background-color: currentColor;
                             }
                         }
                     }

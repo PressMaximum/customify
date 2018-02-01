@@ -2982,6 +2982,7 @@ article.comment .comment-post-author {
   display: inline;
   font-family: "FontAwesome";
   font-size: inherit;
+  line-height: 1;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -3089,6 +3090,22 @@ article.comment .comment-post-author {
   visibility: visible;
   opacity: 1;
 }
+.nav-menu-desktop.style-plain .primary-menu-ul:before, .nav-menu-desktop.style-plain .primary-menu-ul:after {
+  content: "";
+  display: table;
+}
+.nav-menu-desktop.style-plain .primary-menu-ul:after {
+  clear: both;
+}
+.nav-menu-desktop.style-plain .primary-menu-ul > li {
+  float: left;
+}
+.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover {
+  color: #007ee5;
+}
+.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a {
+  color: #007ee5;
+}
 .nav-menu-desktop.style-full-height .primary-menu-ul:before, .nav-menu-desktop.style-full-height .primary-menu-ul:after {
   content: "";
   display: table;
@@ -3126,10 +3143,10 @@ article.comment .comment-post-author {
   content: "";
 }
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before {
-  background-color: #007ee5;
+  background-color: currentColor;
 }
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
-  background-color: #007ee5;
+  background-color: currentColor;
 }
 .nav-menu-desktop.style-border-top .primary-menu-ul > li > a .link-before {
   position: relative;
@@ -3144,10 +3161,10 @@ article.comment .comment-post-author {
   content: "";
 }
 .nav-menu-desktop.style-border-top .primary-menu-ul > li:hover > a .link-before:before {
-  background-color: #007ee5;
+  background-color: currentColor;
 }
 .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
-  background-color: #007ee5;
+  background-color: currentColor;
 }
 
 /* On Menu Sidebar */
