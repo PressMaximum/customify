@@ -10,11 +10,11 @@
                 <g id="Square-Wrapper" stroke="#0085BA" stroke-width="2">
                     <rect id="Rectangle" x="1" y="1" width="398" height="398" rx="6"></rect>
                 </g>
-                <text id="MENU" font-family="Avenir-Heavy, Avenir" font-size="52" font-weight="600" letter-spacing="1" fill="#0085BA">
-                    <tspan x="118" y="219">MENU</tspan>
+                <text id="MENU" font-family="Avenir-Heavy, Avenir" font-size="75" font-weight="600" letter-spacing="1.44230664" fill="#000000">
+                    <tspan x="83.0528867" y="218">MENU</tspan>
                 </text>
-                <g id="Heading-Line" opacity="0.316802536" transform="translate(102.000000, 205.000000)" fill="#0085BA">
-                    <rect id="Rectangle-3" x="0" y="0" width="191" height="29"></rect>
+                <g id="Heading-Line" opacity="0.316802536" transform="translate(78.000000, 204.000000)" fill="#0085BA">
+                    <rect id="Rectangle-3" x="0" y="0" width="240" height="29"></rect>
                 </g>
             </g>
         </g>

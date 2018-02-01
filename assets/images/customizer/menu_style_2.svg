@@ -13,8 +13,8 @@
                 <g id="Blue-Square" transform="translate(40.000000, 2.000000)" fill="#0085BA">
                     <rect id="Rectangle-2" x="0" y="0" width="320" height="398"></rect>
                 </g>
-                <text id="MENU" font-family="Avenir-Heavy, Avenir" font-size="52" font-weight="600" letter-spacing="1" fill="#FFFFFF">
-                    <tspan x="118" y="219">MENU</tspan>
+                <text id="MENU" font-family="Avenir-Heavy, Avenir" font-size="75" font-weight="600" letter-spacing="1.44230664" fill="#FFFFFF">
+                    <tspan x="83.0528867" y="219">MENU</tspan>
                 </text>
             </g>
         </g>
