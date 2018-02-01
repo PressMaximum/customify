@@ -1453,23 +1453,24 @@
         picker: function(){
             var that = this;
 
-            var open = function () {
-                if (  that.pickingEl ) {
+            var open = function ( $el ) {
+                if ( that.pickingEl ) {
                     that.pickingEl.removeClass('customify--icon-picking');
                 }
-                that.pickingEl =  $( this ).closest( '.customify--icon-picker' );
+                that.pickingEl =  $el.closest( '.customify--icon-picker' );
                 that.pickingEl.addClass( 'customify--picking-icon' );
                 that.show();
             };
 
             $document.on( 'click', '.customify--icon-picker .customify--pick-icon', function( e ) {
                 e.preventDefault();
+                var button = $( this );
                 if ( _.isNull( that.listIcons ) ) {
                     that.ajaxLoad( function(){
-                        open();
+                        open( button);
                     } );
                 } else {
-                    open();
+                    open( button  );
                 }
             } );
 
@@ -1479,6 +1480,7 @@
                 var icon_preview = li.find( 'i' ).clone();
                 var icon = li.attr( "data-icon" ) || '';
                 var type = li.attr( 'data-type' ) || '';
+                console.log( 'icon', icon );
                 $( '.customify--input-icon-type', that.pickingEl ).val( type );
                 $( '.customify--input-icon-name', that.pickingEl ).val( icon ).trigger( 'change' );
                 $( '.customify--icon-preview-icon', that.pickingEl ).html( icon_preview );
@@ -1518,9 +1520,8 @@
         },
         init: function(){
             var that = this;
-
+            that.ajaxLoad();
             that.picker();
-
             // Search icon
             $document.on( 'keyup', '#customify--icon-search', function( e ) {
                 var v = $( this).val();
