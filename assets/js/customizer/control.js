@@ -718,6 +718,8 @@
             if ($('#' + template_id).length == 0) {
                 template_id = 'tmpl-field-' + control.type + '-text';
             }
+
+
             if (field.device_settings) {
                 var fieldItem = null;
                 _.each(control.devices, function (device, index) {
@@ -759,6 +761,11 @@
                 field.original_name = field.name;
                 var $fields = template(field, template_id, 'field');
                 $fieldsArea.html($fields);
+            }
+
+            // Repeater
+            if ( field.type === 'repeater' ) {
+               // $fieldsArea.find('.customify-field-settings-inner').replaceWith('<div class="customify--settings-fields customify--repeater-items"></div>');
             }
 
             if (field.css_format && _.isString(field.css_format)) {
@@ -1194,7 +1201,6 @@
                     f.value = value[f.name];
                 }
                 var $fieldArea;
-
                 $fieldArea = $('<div class="customify--repeater-field"></div>');
                 $('.customify--repeater-item-inner', $itemWrapper).append($fieldArea);
                 control.addField(f, $fieldArea,function(){

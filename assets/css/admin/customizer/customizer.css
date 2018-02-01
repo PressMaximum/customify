@@ -109,6 +109,57 @@
   margin-bottom: 15px;
   margin-top: -3px;
 }
+.customize-control.control--bg.bottom-0 {
+  margin-bottom: 0px;
+}
+.customize-control.control--bg .customify--settings-wrapper {
+  background: #fff;
+  margin-left: -12px;
+  margin-right: -12px;
+  min-height: 15px;
+  padding: 10px 10px 8px 14px;
+  border-bottom: 1px solid #ddd;
+}
+.customize-control.control--bg .customify--settings-wrapper > .customize-control-description {
+  display: none;
+}
+.customize-control.control--bg .customify--settings-wrapper .customify-actions {
+  top: 13px;
+  right: 10px;
+  margin-top: 0px;
+}
+.customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit {
+  padding: 0px;
+  border: none;
+}
+.customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit:focus {
+  box-shadow: none;
+}
+.customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span {
+  transition: all .2s linear;
+  transform: rotate(-90deg);
+}
+.customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span:before {
+  content: "\f347";
+}
+.customize-control.control--bg .customify-modal-settings {
+  margin-left: -12px;
+  margin-right: -12px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  box-shadow: none;
+  background: transparent;
+  border-bottom: 1px solid #ddd;
+}
+.customize-control.control--bg .customify-modal-settings:before {
+  display: none !important;
+}
+.customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span {
+  transform: rotate(-180deg);
+}
+.customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
+  content: "\f347";
+}
 
 .customify-field-heading::after {
   display: block;

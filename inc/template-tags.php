@@ -436,6 +436,9 @@ function Customify_Blog_Builder(){
 
 if ( ! function_exists( 'customify_the_blog_item' ) ) {
     function customify_the_blog_item( $post = null ){
+        ?>
+        <div <?php post_class( 'entry',  $post) ?>>
+        <?php
         Customify_Blog_Builder()->set_post( $post );
         $items_config = Customify_Customizer()->get_setting('blog_post_item' );
         foreach ( ( array ) $items_config as $item ) {
@@ -447,5 +450,7 @@ if ( ! function_exists( 'customify_the_blog_item' ) ) {
                 Customify_Blog_Builder()->build( $item['_key'] );
             }
         }
+        ?>
+        </div><!-- /.entry post --> <?php
     }
 }

@@ -139,10 +139,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                                     if (in_array('icon', $types)) {
                                         self::$has_icon = true;
                                     }
-                                }
 
-                                if ( in_array( 'font', $types ) ) {
-                                    self::$has_font = true;
+                                    if ( in_array( 'font', $types ) ) {
+                                        self::$has_font = true;
+                                    }
                                 }
                             }
                             $config['setting|'.$f['name']] = $f;

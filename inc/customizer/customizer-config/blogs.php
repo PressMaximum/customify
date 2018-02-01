@@ -22,6 +22,120 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'theme_supports' => '',
                 'title' => __('Blog Post', 'customify'),
             ),
+
+            array(
+                'name' => 'blog_post_layout',
+                'type' => 'modal',
+                'section' => 'blog_post_layout',
+                'title' => __('Blog Posts Layout', 'customify'),
+                'field_class' => 'control--bg bottom-0',
+                'description' => __('This is description', 'customify'),
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'default' => 'tab_1',
+                    ),
+                    'default_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                    ),
+
+                ),
+            ),
+
+            array(
+                'name' => 'blog_post_layout_2',
+                'type' => 'modal',
+                'section' => 'blog_post_layout',
+                'title' => __('Blog Posts Layout', 'customify'),
+                'field_class' => 'control--bg control--bg',
+                'description' => __('This is description', 'customify'),
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'default' => 'tab_1',
+                    ),
+                    'default_fields' => array(
+                        array(
+                            'name' => 'text_color',
+                            'type' => 'color',
+                            'label' => __( 'Text Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+                        array(
+                            'name' => 'link_color',
+                            'type' => 'color',
+                            'label' => __( 'Link Color', 'customify' ),
+                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                        ),
+
+
+
+                        array(
+                            'name' => 'blog_post_item',
+                            'type' => 'repeater',
+                            'title' => __('Blog Post Item', 'customify'),
+                            'description' => __('Drag and Drop to build your post item layout.', 'customify'),
+                            'live_title_field' => 'title',
+                            'limit' => 4,
+                            'addable' => false,
+                            'title_only' => true,
+                            'default' => array(
+                                array(
+                                    '_key' => 'title',
+                                    'title' => __('Title', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'meta',
+                                    'title' => __('Meta', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'thumbnail',
+                                    'title' => __('Thumbnail', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'excerpt',
+                                    'title' => __('Excerpt', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'readmore',
+                                    'title' => __('Readmore', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'content',
+                                    'title' => __('Content', 'customify'),
+                                    '_visibility' => 'hidden'
+                                )
+                            ),
+                            'fields' => array(
+                                array(
+                                    'name' => '_key',
+                                    'type' => 'hidden',
+                                ),
+                                array(
+                                    'name' => 'title',
+                                    'type' => 'text',
+                                ),
+                            )
+                        ),
+
+
+                    ),
+
+                ),
+            ),
+
+
             array(
                 'name' => 'blog_post_item',
                 'type' => 'repeater',

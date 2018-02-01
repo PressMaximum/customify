@@ -53,6 +53,69 @@ $text_color: #555d66;
         margin-bottom: 15px;
         margin-top: -3px;
     }
+    &.control--bg {
+        &.bottom-0 {
+            margin-bottom: 0px;
+        }
+        .customify--settings-wrapper {
+            background: #fff;
+            margin-left: -12px;
+            margin-right: -12px;
+            min-height: 15px;
+            padding: 10px 10px 8px 14px;
+            border-bottom: 1px solid #ddd;
+            > .customize-control-description {
+                display: none;
+            }
+            .customify-actions {
+                top: 13px;
+                right: 10px;
+                margin-top: 0px;
+                .action--edit {
+                    padding: 0px;
+                    border: none;
+                    &:focus {
+                        box-shadow: none;
+                    }
+                    span {
+                        transition: all .2s linear;
+                        transform: rotate(-90deg);
+                        &:before {
+                            content: "\f347";
+                        }
+                    }
+                }
+            }
+        }
+        .customify-modal-settings {
+            margin-left: -12px;
+            margin-right: -12px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            box-shadow: none;
+            background: transparent;
+            border-bottom: 1px solid #ddd;
+            &:before {
+                display: none !important;
+            }
+        }
+
+        &.modal--opening {
+            .customify--settings-wrapper {
+                .customify-actions {
+                    .action--edit {
+                        span {
+                            transform: rotate(-180deg);
+                            &:before {
+                                content: "\f347";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 }
 
 
