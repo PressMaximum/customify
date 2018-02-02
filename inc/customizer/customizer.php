@@ -225,6 +225,17 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             return $get_value;
         }
 
+        function get_setting_tab( $name, $tab = null ) {
+            $values = $this->get_setting( $name, 'all' );
+            if ( ! $tab ) {
+                return $values;
+            }
+            if ( is_array( $values ) && isset( $values[ $tab ] ) ) {
+                return $values[ $tab ];
+            }
+            return false;
+        }
+
         function get_typo_fields() {
             $typo_fields =array(
                 array(

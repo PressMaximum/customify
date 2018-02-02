@@ -5802,6 +5802,7 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .entry {
   display: flex;
   align-items: stretch;
+  margin-bottom: 20px;
 }
 .posts-layout .entry-media {
   position: relative;
@@ -5821,8 +5822,16 @@ body.menu_sidebar_dropdown:before {
 }
 .posts-layout.layout--blog_classic .entry-media {
   flex-basis: 50%;
+  margin-right: 20px;
 }
 .posts-layout.layout--blog_classic .entry-content-data {
+  flex-basis: 100%;
+}
+.posts-layout.layout--blog_classic_rounded .entry-media {
+  flex-basis: 50%;
+  margin-right: 20px;
+}
+.posts-layout.layout--blog_classic_rounded .entry-content-data {
   flex-basis: 100%;
 }
 

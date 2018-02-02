@@ -72,7 +72,6 @@ class Customify_Font_Icons
         }
     }
 
-
     function get_font_awesome_icons()
     {
         $icons =

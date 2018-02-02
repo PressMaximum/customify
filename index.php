@@ -22,33 +22,32 @@ get_header(); ?>
 
                 <?php
                 if ( have_posts() ) :
-
                     if ( is_home() && ! is_front_page() ) : ?>
                         <header>
                             <h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
                         </header>
-
                     <?php
                     endif;
 
-                    /* Start the Loop */
-                    while ( have_posts() ) : the_post();
-
-                        customify_the_blog_item();
-
-                    endwhile;
-
-                    the_posts_navigation();
+                    $layout = Customify_Customizer()->get_setting_tab( 'blog_post_layout', 'default' );
+                    $post_layout = '';
+                    if ( is_array( $layout ) && isset( $layout['layout'] ) ) {
+                        $post_layout = $layout['layout'] ;
+                    }
+                    $pagination = Customify_Customizer()->get_setting_tab( 'blog_post_pagination', 'default' );
+                    
+                    $l = new Customify_Posts_Layout();
+                    $l->render(  array(
+                        'layout' => $post_layout,
+                        'pagination' => is_array(  $pagination ) ? $pagination : array(),
+                    ) );
 
                 else :
-
                     get_template_part( 'template-parts/content', 'none' );
-
                 endif; ?>
 
             </div><!-- #.content-inner -->
         </main><!-- #main -->
-
 
 	    <?php do_action( 'customify_sidebars' ); ?>
 

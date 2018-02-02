@@ -1,7 +1,10 @@
+$blog_gutter: 20px;
+
 .posts-layout {
     .entry {
         display: flex;
         align-items: stretch;
+        margin-bottom: $blog_gutter;
     }
     .entry-media {
         position: relative;
@@ -19,12 +22,27 @@
             height: auto;
         }
     }
-    &.layout--blog_classic {
-        .entry-media {
-            flex-basis: 50%;
+    &.layout-- {
+        &blog_classic{
+            .entry-media {
+                flex-basis: 50%;
+                margin-right: $blog_gutter;
+            }
+            .entry-content-data {
+                flex-basis: 100%;
+            }
         }
-        .entry-content-data {
-            flex-basis: 100%;
+
+        &blog_classic_rounded {
+            .entry-media {
+                flex-basis: 50%;
+                margin-right: $blog_gutter;
+            }
+            .entry-content-data {
+                flex-basis: 100%;
+            }
         }
     }
+
+
 }

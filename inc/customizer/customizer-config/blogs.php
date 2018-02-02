@@ -99,15 +99,15 @@ if (!function_exists('customify_customizer_blog_config')) {
                         array(
                             'name' => 'show_nav',
                             'type' => 'checkbox',
-                            'checkbox_label' => __( 'Show Number', 'customify' ),
+                            'checkbox_label' => __( 'Show Next, Previous Label', 'customify' ),
                         ),
                         array(
-                            'name' => 'preview_label',
+                            'name' => 'prev_text',
                             'type' => 'text',
                             'label' => __( 'Preview Label', 'customify' ),
                         ),
                         array(
-                            'name' => 'next_label',
+                            'name' => 'next_text',
                             'type' => 'text',
                             'label' => __( 'Next Label', 'customify' ),
                         ),
