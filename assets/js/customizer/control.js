@@ -505,9 +505,8 @@
                             if ( field.live_title_field == f.name) {
                                 if (inputField.prop("tagName") == 'select') {
                                     _fv = $('option[value="' + _fv + '"]').first().text();
-                                }
-                                if (_.isUndefined(_fv) || _fv == '') {
-                                    _fv = 'Untitled';
+                                } else if (_.isUndefined(_fv) || _fv == '') {
+                                    _fv = control.params.l10n.untitled;
                                 }
                                 control.updateRepeaterLiveTitle(_fv, $item, f);
                             }
@@ -719,7 +718,6 @@
                 template_id = 'tmpl-field-' + control.type + '-text';
             }
 
-
             if (field.device_settings) {
                 var fieldItem = null;
                 _.each(control.devices, function (device, index) {
@@ -765,7 +763,10 @@
 
             // Repeater
             if ( field.type === 'repeater' ) {
-               // $fieldsArea.find('.customify-field-settings-inner').replaceWith('<div class="customify--settings-fields customify--repeater-items"></div>');
+                $fieldsArea.find('.customify-field-settings-inner').replaceWith('<div class="customify--settings-fields customify--repeater-items"></div>');
+
+
+
             }
 
             if (field.css_format && _.isString(field.css_format)) {
@@ -1069,6 +1070,7 @@
 
             if (field.type === 'group' || field.type === 'repeater' ) {
                 field.fields = control.params.fields;
+                field.live_title_field = control.params.live_title_field;
             }
 
             if (control.params.setting_type === 'select' || control.params.setting_type === 'radio') {
@@ -1099,7 +1101,7 @@
             return JSON.parse(decodeURI(value));
         },
         updateRepeaterLiveTitle: function (value, $item, field) {
-            $('.customify--repeater-live-title', $item).text(value);
+            $('.customify--repeater-live-title', $item ).text(value);
         },
         initGroup: function () {
             var control = this;
@@ -1206,6 +1208,7 @@
                 control.addField(f, $fieldArea,function(){
                     control.getValue();
                 });
+
             });
 
             if (!_.isUndefined(value._visibility) && value._visibility === 'hidden') {
@@ -1215,11 +1218,8 @@
                 $itemWrapper.find('input.r-visible-input').attr('checked', 'checked');
             }
 
-            $itemWrapper.find('.customify--repeater-live-title').html(control.params.l10n.untitled);
             if (title_only) {
                 $('.customify--repeater-item-settings, .customify--repeater-item-toggle', $itemWrapper).hide();
-            } else {
-
             }
 
             $document.trigger('customify/customizer/repeater/add', [$itemWrapper, control]);

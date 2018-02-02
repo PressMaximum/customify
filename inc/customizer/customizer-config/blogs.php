@@ -29,24 +29,45 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'section' => 'blog_post_layout',
                 'title' => __('Blog Posts Layout', 'customify'),
                 'field_class' => 'control--bg bottom-0',
-                'description' => __('This is description', 'customify'),
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
-                        'default' => 'tab_1',
+                        'default' => __( 'Default', 'customify' ),
                     ),
                     'default_fields' => array(
                         array(
-                            'name' => 'text_color',
-                            'type' => 'color',
-                            'label' => __( 'Text Color', 'customify' ),
-                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
-                        ),
-                        array(
-                            'name' => 'link_color',
-                            'type' => 'color',
-                            'label' => __( 'Link Color', 'customify' ),
-                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                            'name' => 'layout',
+                            'type'    => 'radio',
+                            'label'   => __( 'Layout', 'customify' ),
+                            'default' => 'blog_classic',
+                            'class' => 'custom-control-image_select',
+                            'choices' => array(
+                                'blog_classic' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
+                                ),
+                                'blog_classic_rounded' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic_rounded.svg',
+                                ),
+                                'blog_column' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
+                                ),
+                                'blog_2column' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_2column.svg',
+                                ),
+                                'blog_lateral' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_lateral.svg',
+                                    //'label' => 'Pro only'
+                                ),
+                                'blog_boxed' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_boxed.svg',
+                                ),
+                                'blog_masonry' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_masonry.svg',
+                                ),
+                                'blog_timeline' => array(
+                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_timeline.svg',
+                                ),
+                            )
                         ),
                     ),
 
@@ -54,79 +75,41 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
-                'name' => 'blog_post_layout_2',
+                'name' => 'blog_post_pagination',
                 'type' => 'modal',
                 'section' => 'blog_post_layout',
-                'title' => __('Blog Posts Layout', 'customify'),
+                'title' => __('Pagination', 'customify'),
                 'field_class' => 'control--bg control--bg',
-                'description' => __('This is description', 'customify'),
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
-                        'default' => 'tab_1',
+                        'default' => __( 'Default', 'customify' ),
                     ),
                     'default_fields' => array(
                         array(
-                            'name' => 'text_color',
-                            'type' => 'color',
-                            'label' => __( 'Text Color', 'customify' ),
-                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                            'name' => 'show_paging',
+                            'type' => 'checkbox',
+                            'checkbox_label' => __( 'Show Pagination', 'customify' ),
                         ),
                         array(
-                            'name' => 'link_color',
-                            'type' => 'color',
-                            'label' => __( 'Link Color', 'customify' ),
-                            'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
+                            'name' => 'show_number',
+                            'type' => 'checkbox',
+                            'checkbox_label' => __( 'Show Number', 'customify' ),
                         ),
-
-
-
                         array(
-                            'name' => 'blog_post_item',
-                            'type' => 'repeater',
-                            'title' => __('Blog Post Item', 'customify'),
-                            'description' => __('Drag and Drop to build your post item layout.', 'customify'),
-                            'live_title_field' => 'title',
-                            'limit' => 4,
-                            'addable' => false,
-                            'title_only' => true,
-                            'default' => array(
-                                array(
-                                    '_key' => 'title',
-                                    'title' => __('Title', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'meta',
-                                    'title' => __('Meta', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'thumbnail',
-                                    'title' => __('Thumbnail', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'excerpt',
-                                    'title' => __('Excerpt', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'readmore',
-                                    'title' => __('Readmore', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'content',
-                                    'title' => __('Content', 'customify'),
-                                    '_visibility' => 'hidden'
-                                )
-                            ),
-                            'fields' => array(
-                                array(
-                                    'name' => '_key',
-                                    'type' => 'hidden',
-                                ),
-                                array(
-                                    'name' => 'title',
-                                    'type' => 'text',
-                                ),
-                            )
+                            'name' => 'show_nav',
+                            'type' => 'checkbox',
+                            'checkbox_label' => __( 'Show Number', 'customify' ),
+                        ),
+                        array(
+                            'name' => 'preview_label',
+                            'type' => 'text',
+                            'label' => __( 'Preview Label', 'customify' ),
+                        ),
+                        array(
+                            'name' => 'next_label',
+                            'type' => 'text',
+                            'label' => __( 'Next Label', 'customify' ),
                         ),
 
 

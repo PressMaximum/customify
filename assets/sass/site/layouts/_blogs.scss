@@ -1,0 +1,30 @@
+.posts-layout {
+    .entry {
+        display: flex;
+        align-items: stretch;
+    }
+    .entry-media {
+        position: relative;
+    }
+    .entry-thumbnail {
+        position: absolute;
+        top: 0px;
+        bottom: 0px;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: auto;
+        }
+    }
+    &.layout--blog_classic {
+        .entry-media {
+            flex-basis: 50%;
+        }
+        .entry-content-data {
+            flex-basis: 100%;
+        }
+    }
+}

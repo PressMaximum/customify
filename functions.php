@@ -48,7 +48,7 @@ class Customify_Init {
         add_action( 'after_setup_theme', array( $this, 'theme_setup' ) );
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 3 );
     }
 
     static function get_instance(){
@@ -263,7 +263,10 @@ class Customify_Init {
             '/inc/template-tags.php', //  Custom template tags for this theme.
             '/inc/template-functions.php', // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/customizer.php', // Customizer additions.
-            '/inc/customizer-layout-builder/init.php' // Customizer additions.
+            '/inc/customizer-layout-builder/init.php', // Customizer additions.
+
+            '/inc/posts/post-builder.php',
+            '/inc/posts/posts.php',
         );
 
         foreach( $files as $file ) {

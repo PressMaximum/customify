@@ -16,6 +16,11 @@ get_header(); ?>
             <div class="content-inner">
 
                 <?php
+
+                $l = new Customify_Posts_Layout();
+                $l->render();
+
+                /*
                 if ( have_posts() ) : ?>
 
                     <header class="page-header">
@@ -26,7 +31,7 @@ get_header(); ?>
                     </header><!-- .page-header -->
 
                     <?php
-                    /* Start the Loop */
+
                     while ( have_posts() ) : the_post();
 
                         customify_the_blog_item();
@@ -39,7 +44,10 @@ get_header(); ?>
 
                     get_template_part( 'template-parts/content', 'none' );
 
-                endif; ?>
+                endif;
+
+                */
+                ?>
 
             </div><!-- #.content-inner -->
         </main><!-- #main -->
