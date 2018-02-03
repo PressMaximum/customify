@@ -305,12 +305,15 @@ var AutoCSS = window.AutoCSS || null;
 
     };
 
-    AutoCSS.prototype.str_value = function( value, format ){
+    AutoCSS.prototype.str_value = function( value, format, value_no_unit ){
         if ( _.isEmpty( value ) ) {
             return '';
         }
         if ( ! _.isString( format ) ) {
             return '';
+        }
+        if ( _.isUndefined( value_no_unit ) ) {
+            value_no_unit = '';
         }
         var find = '{{value}}';
         var reg = new RegExp(find, 'g');
@@ -319,7 +322,7 @@ var AutoCSS = window.AutoCSS || null;
 
         var find_2 = '{{value_no_unit}}';
         var reg2 = new RegExp(find_2, 'g');
-        s = s.replace( reg2, value );
+        s = s.replace( reg2, value_no_unit );
         return s;
     };
 
@@ -370,8 +373,7 @@ var AutoCSS = window.AutoCSS || null;
         if ( format ) {
             if ( value.value ) {
                 v = value.value + value.unit;
-                c = this.str_value( v, format );
-                c = this.str_value( value.value, c );
+                c = this.str_value( v, format, value.value );
             }
         }
         return c;
@@ -827,8 +829,9 @@ var AutoCSS = window.AutoCSS || null;
         } );
     };
 
-    AutoCSS.prototype.modal = function ( field, values ){
+    AutoCSS.prototype.modal = function ( field ){
         var that = this;
+        var values = this.get_setting( field.name, 'all' );
         if ( ! _.isObject( values ) ) {
             values = {};
         }

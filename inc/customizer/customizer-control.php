@@ -374,6 +374,17 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 </div>
             </div>
         </script>
+        <script type="text/html" id="tmpl-customize-control-repeater-inner">
+           <div class="customify--repeater-inner">
+               <div class="customify--settings-fields customify--repeater-items"></div>
+               <div class="customify--repeater-actions">
+                   <a href="#" class="customify--repeater-reorder" data-text="<?php _e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
+                   <# if ( data.addable ){  #>
+                       <button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
+                   <# } #>
+               </div>
+           </div>
+        </script>
         <div id="customify--sidebar-icons">
             <div class="customify--sidebar-header">
                 <a class="customize-controls-icon-close" href="#">

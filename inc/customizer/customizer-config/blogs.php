@@ -126,6 +126,60 @@ if (!function_exists('customify_customizer_blog_config')) {
                         ),
 
 
+
+                        array(
+                            'name' => 'blog_post_item',
+                            'type' => 'repeater',
+                            'title' => __('Blog Post Item', 'customify'),
+                            'description' => __('Drag and Drop to build your post item layout.', 'customify'),
+                            'live_title_field' => 'title',
+                            'limit' => 4,
+                            'addable' => true,
+                            'title_only' => true,
+                            'default' => array(
+                                array(
+                                    '_key' => 'title',
+                                    'title' => __('Title', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'meta',
+                                    'title' => __('Meta', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'thumbnail',
+                                    'title' => __('Thumbnail', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'excerpt',
+                                    'title' => __('Excerpt', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'readmore',
+                                    'title' => __('Readmore', 'customify'),
+                                ),
+                                array(
+                                    '_key' => 'content',
+                                    'title' => __('Content', 'customify'),
+                                    '_visibility' => 'hidden'
+                                )
+                            ),
+                            'fields' => array(
+                                array(
+                                    'name' => '_key',
+                                    'type' => 'hidden',
+                                ),
+                                array(
+                                    'name' => 'title',
+                                    'type' => 'text',
+                                ),
+                            )
+                        ),
+
+
+
+
+
+
                     ),
 
                 ),

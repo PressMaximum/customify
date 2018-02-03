@@ -53,9 +53,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             return self::$_instance ;
         }
 
-        private function replace_value( $value, $format ){
+        private function replace_value( $value, $format, $value_no_unit = null ){
             $s = str_replace( '{{value}}', $value, $format );
-            return str_replace( '{{value_no_unit}}', $value, $s );
+            return str_replace( '{{value_no_unit}}', $value_no_unit, $s );
         }
 
         function setup_css_ruler( $value, $format ){
@@ -143,7 +143,8 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             if ( $format ) {
                 if (!is_null( $value['value'] ) && $value['value'] !== '') {
                     $v = $value['value'].$value['unit'];
-                    return $this->replace_value( $v, $format );
+                    $c = $this->replace_value( $v, $format, $value['value'] );
+                    return $c;
                 }
             }
 
@@ -304,8 +305,6 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             }
         }
 
-
-
         function styling( $field, $values = null ){
             $values = Customify_Customizer()->get_setting( $field['name'], 'all' );
 
@@ -390,6 +389,21 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                 }
                 $this->css[ $device ] .= $css;
             }
+        }
+
+        function modal( $field, $values = null ){
+            $values = Customify_Customizer()->get_setting( $field['name'], 'all' );
+            if ( ! is_array( $values ) ) {
+                $values = array();
+            }
+            if ( isset( $field['fields']['tabs'] ) ) {
+                foreach (  $field['fields']['tabs'] as $key => $title ) {
+                    if ( isset( $field['fields'][ $key.'_fields'] ) ) {
+                        $this->loop_fields( $field['fields'][ $key.'_fields'], isset( $values[ $key ] ) ? $values[ $key ] : array() );
+                    }
+                }
+            }
+
         }
 
         function setup_default( $value, $format ){
@@ -750,12 +764,14 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $listcss = array();
 
             foreach ( ( array ) $fields as $field ) {
+                $field = wp_parse_args( $field, array(
+                    'selector' => null,
+                    'css_format' => null,
+                    'type' => null,
+                ) );
                 $v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
                 if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
-                    if ( ! isset( $field['css_format'] ) ) {
-                        $field['css_format'] = false;
-                    }
-                    if ( isset( $field['selector'] ) && $field['selector'] && $field['css_format']) {
+                    if ( ( $field['selector'] && $field['css_format'] ) || $field['type'] == 'modal' ) {
                         switch ($field['type']) {
                             case 'css_ruler':
                                 $listcss[ $field['name'] ] = $this->css_ruler($field, $v, $no_selector );
@@ -786,6 +802,9 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                                 break;
                             case 'styling':
                                 $this->styling($field, $v);
+                                break;
+                            case 'modal':
+                                $this->modal($field, $v);
                                 break;
                             default:
                                 switch ($field['css_format']) {
