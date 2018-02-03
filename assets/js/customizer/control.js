@@ -506,7 +506,8 @@
                                 if (inputField.prop("tagName") == 'select') {
                                     _fv = $('option[value="' + _fv + '"]').first().text();
                                 } else if (_.isUndefined(_fv) || _fv == '') {
-                                    _fv = control.params.l10n.untitled;
+                                    //_fv = control.params.l10n.untitled;
+                                    _fv = 'Untitled';
                                 }
                                 control.updateRepeaterLiveTitle(_fv, $item, f);
                             }

@@ -35,7 +35,7 @@ get_header(); ?>
                         $post_layout = $layout['layout'] ;
                     }
                     $pagination = Customify_Customizer()->get_setting_tab( 'blog_post_pagination', 'default' );
-                    
+
                     $l = new Customify_Posts_Layout();
                     $l->render(  array(
                         'layout' => $post_layout,
