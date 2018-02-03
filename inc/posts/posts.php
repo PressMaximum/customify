@@ -184,3 +184,33 @@ class Customify_Posts_Layout {
     }
 
 }
+
+
+function customify_blog_posts(){
+    echo '<div id="blog-posts">';
+    if ( have_posts() ) :
+        if ( is_home() && ! is_front_page() ) : ?>
+            <header>
+                <h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
+            </header>
+            <?php
+        endif;
+
+        $layout = Customify_Customizer()->get_setting_tab( 'blog_post_layout', 'default' );
+        $post_layout = '';
+        if ( is_array( $layout ) && isset( $layout['layout'] ) ) {
+            $post_layout = $layout['layout'] ;
+        }
+        $pagination = Customify_Customizer()->get_setting_tab( 'blog_post_pagination', 'default' );
+
+        $l = new Customify_Posts_Layout();
+        $l->render(  array(
+            'layout' => $post_layout,
+            'pagination' => is_array(  $pagination ) ? $pagination : array(),
+        ) );
+
+    else :
+        get_template_part( 'template-parts/content', 'none' );
+    endif;
+    echo '</div>';
+}

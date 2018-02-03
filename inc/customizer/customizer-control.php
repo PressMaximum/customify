@@ -88,6 +88,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                 'ajax' => admin_url('admin-ajax.php'),
                 'theme_default' => __('Theme Default', 'customify'),
                 'reset' => __('Reset this section settings', 'customify'),
+                'untitled' => __('Untitled', 'customify'),
                 'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
                 'list_font_weight' => array(
                     ''   => __('Default', 'customify'),

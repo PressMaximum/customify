@@ -118,6 +118,9 @@ var AutoCSS = window.AutoCSS || null;
                         case 'typography':
                             fields_code[ field.name ] = that.typography( field, v, no_selector );
                             break;
+                        case 'modal':
+                             that.modal( field, v );
+                            break;
                         default:
                             switch (field.css_format) {
                                 case  'background':
@@ -824,6 +827,21 @@ var AutoCSS = window.AutoCSS || null;
         } );
     };
 
+    AutoCSS.prototype.modal = function ( field, values ){
+        var that = this;
+        if ( ! _.isObject( values ) ) {
+            values = {};
+        }
+
+        if ( _.isObject( field.fields.tabs ) ) {
+            _.each( field.fields.tabs, function( title, key ){
+                if ( _.isObject( field.fields[ key+'_fields' ] ) ) {
+                    that.loop_fields( field.fields[ key+'_fields' ], values[ key ] );
+                }
+            } );
+        }
+
+    };
     AutoCSS.prototype.setup_font_style = function ( value ){
         if ( ! _.isObject( value ) ) {
             value = {};
@@ -1089,8 +1107,7 @@ var AutoCSS = window.AutoCSS || null;
     } );
 
     _.each( Customify_Preview_Config.fields, function( field ){
-        if ( field.selector && field.css_format ) {
-            // Header text color.
+        if ( ( field.selector && field.css_format ) || field.type === 'modal' ) {
             wp.customize( field.name, function( setting ) {
                 setting.bind( function( to ) {
                     AutoCSSInit.run( field.name );

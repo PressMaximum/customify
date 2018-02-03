@@ -6,7 +6,7 @@ $submenu_width: 14em;
     line-height: 1.6;
     .nav-icon-angle {
         display: inline;
-        font-family: "FontAwesome";
+
         font-size: inherit;
         line-height: 1;
         text-rendering: auto;
@@ -14,6 +14,8 @@ $submenu_width: 14em;
         -moz-osx-font-smoothing: grayscale;
         text-decoration: none !important;
         &:before {
+            //font-family: "FontAwesome";
+            font-family: "FontAwesome", "Font Awesome 5 Solid", "Font Awesome 5 Regular";
             text-decoration: none !important;
         }
     }

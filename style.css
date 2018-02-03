@@ -2980,7 +2980,6 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop .nav-icon-angle {
   display: inline;
-  font-family: "FontAwesome";
   font-size: inherit;
   line-height: 1;
   text-rendering: auto;
@@ -2989,6 +2988,7 @@ article.comment .comment-post-author {
   text-decoration: none !important;
 }
 .nav-menu-desktop .nav-icon-angle:before {
+  font-family: "FontAwesome", "Font Awesome 5 Solid", "Font Awesome 5 Regular";
   text-decoration: none !important;
 }
 .nav-menu-desktop.hide-arrow-active .nav-icon-angle {

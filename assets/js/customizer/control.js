@@ -507,7 +507,7 @@
                                     _fv = $('option[value="' + _fv + '"]').first().text();
                                 } else if (_.isUndefined(_fv) || _fv == '') {
                                     //_fv = control.params.l10n.untitled;
-                                    _fv = 'Untitled';
+                                    _fv = Customify_Control_Args.untitled;
                                 }
                                 control.updateRepeaterLiveTitle(_fv, $item, f);
                             }
@@ -765,13 +765,11 @@
             // Repeater
             if ( field.type === 'repeater' ) {
                 $fieldsArea.find('.customify-field-settings-inner').replaceWith('<div class="customify--settings-fields customify--repeater-items"></div>');
-
-
-
             }
 
             if (field.css_format && _.isString(field.css_format)) {
                 if (field.css_format.indexOf('value_no_unit') > 0) {
+                    $fieldsArea.find( '.customify--slider-input' ).addClass( 'no-unit' );
                     $('.customify--css-unit .customify--label-active', $fieldsArea).hide();
                 }
             }

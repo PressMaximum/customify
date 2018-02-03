@@ -95,6 +95,7 @@ $text_color: #555d66;
             box-shadow: none;
             background: transparent;
             border-bottom: 1px solid #ddd;
+            z-index: 2;
             &:before {
                 display: none !important;
             }
@@ -579,6 +580,9 @@ $text_color: #555d66;
         right: 41px;
         height: 24px;
         line-height: 18px;
+        &.no-unit {
+            right: 18px;
+        }
     }
     .customify--label-active {
         display: block;
@@ -1174,7 +1178,7 @@ $text_color: #555d66;
     margin-top: 10px;
     left: 0px;
     right: 0px;
-    z-index: 99;
+    z-index: 9;
     position: relative;
     &:before {
         content: '';

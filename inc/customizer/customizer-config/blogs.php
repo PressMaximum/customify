@@ -29,6 +29,8 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'section' => 'blog_post_layout',
                 'title' => __('Blog Posts Layout', 'customify'),
                 'field_class' => 'control--bg bottom-0',
+                'selector' => '#blog-posts',
+                'render_callback' => 'customify_blog_posts',
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
@@ -69,7 +71,18 @@ if (!function_exists('customify_customizer_blog_config')) {
                                 ),
                             )
                         ),
-                    ),
+
+                        array(
+                            'name' => 'media_width',
+                            'type' => 'slider',
+                            'label' => __( 'Media Width', 'customify' ),
+                            'selector' => '.posts-layout.layout--blog_classic .entry-media',
+                            'css_format' => 'flex-basis: {{value_no_unit}}%;',
+
+                        ),
+
+
+                    ), // end fields
 
                 ),
             ),
