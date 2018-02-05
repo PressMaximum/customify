@@ -1,13 +1,17 @@
-$blog_gutter: 20px;
+$blog_gutter: $gl-gutter;
 
 .posts-layout {
     .entry {
         display: flex;
+        flex-wrap: wrap;
         align-items: stretch;
         margin-bottom: $blog_gutter;
     }
     .entry-media {
         position: relative;
+        max-width: 100%;
+        flex-basis: 50%;
+        padding-top: 55%;
     }
     .entry-thumbnail {
         position: absolute;
@@ -16,32 +20,134 @@ $blog_gutter: 20px;
         width: 100%;
         height: 100%;
         display: flex;
+        background-color: #d5d5d5;
         img {
             object-fit: cover;
             width: 100%;
             height: auto;
         }
     }
+    .entry-content-data {
+        flex: 1;
+    }
+    .entry-title {
+        font-size: 1.2em;
+    }
+
     &.layout-- {
-        &blog_classic{
+        &blog_classic, &blog_lateral, &blog_classic_rounded {
             .entry-media {
-                flex-basis: 50%;
-                margin-right: $blog_gutter;
+                margin-right: ( $blog_gutter / 2 );
             }
-            .entry-content-data {
-                flex-basis: 100%;
+        }
+
+        &blog_lateral{
+            .entry {
+                &.even {
+                    .entry-content-data {
+                        order: 1;
+                    }
+                    .entry-media {
+                        order: 3;
+                        margin-left: ( $blog_gutter / 2 );
+                        margin-right: 0;
+                    }
+                }
             }
         }
 
         &blog_classic_rounded {
-            .entry-media {
-                flex-basis: 50%;
-                margin-right: $blog_gutter;
-            }
-            .entry-content-data {
-                flex-basis: 100%;
+            .entry-thumbnail {
+                border-radius: 50%;
+                overflow: hidden;
             }
         }
+
+        &blog_2column, &blog_column, &blog_boxed, &blog_timeline {
+            .entry {
+                display: block;
+            }
+            .entry-media {
+                display: block;
+                position: relative;
+                margin-bottom:  ( $blog_gutter /2 );
+            }
+        }
+
+        &blog_boxed {
+            .entry-content-data {
+                padding: ( $blog_gutter /2 );
+            }
+        }
+
+        &blog_masonry {
+            -webkit-column-count: 3;
+            column-count: 3;
+            -webkit-column-gap:0;
+            column-gap: 0;
+            display: block;
+            margin-left: -($gl-gutter/2);
+            margin-right: -($gl-gutter/2);
+            .entry {
+                display: inline-block;
+                margin-bottom: ($gl-gutter);
+                padding-left: ($gl-gutter/2);
+                padding-right: ($gl-gutter/2);
+            }
+            .entry-media {
+                display: block;
+                padding-top: 0 !important;
+                position: relative;
+                min-width: 100%;
+                margin-bottom:  ( $blog_gutter /2 );
+            }
+            .entry-thumbnail {
+                position: relative;
+                display: block;
+                height: auto;
+                line-height: 0;
+            }
+            img {
+                object-fit: none;
+            }
+        }
+
+
+        &blog_timeline {
+            @include clearfix();
+            position: relative;
+            .time-line {
+                width: 6px;
+                background: $color_primary;
+                display: block;
+                height: 100%;
+                left: 50%;
+                margin-left: -3px;
+                position: absolute;
+            }
+            .entry {
+                width: 50%;
+                float: left;
+                &.odd {
+                   clear: both;
+                }
+                &.even {
+                    float: right;
+                }
+            }
+
+            .entry-media {
+                display: block;
+                padding-top: 0;
+                position: relative;
+                margin-bottom:  ( $blog_gutter /2 );
+            }
+            .entry-thumbnail {
+                position: relative;
+            }
+        }
+
+
     }
 
 

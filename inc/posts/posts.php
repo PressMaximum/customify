@@ -5,22 +5,18 @@ class Customify_Posts_Layout {
     function set_args( $args = array() )
     {
 
-        $args = wp_parse_args( $args, array(
+        $_args = wp_parse_args( $args, array(
             'layout' => '',
             'columns' => '',
+            'thumbnail_size' => '',
             'pagination' => array(),
         ) );
 
-        $args[ 'columns' ] = absint( $args['columns'] );
-        if ( $args[ 'columns' ] < 1 ) {
-            $args[ 'columns' ] = 1;
+        if ( ! $_args['layout'] ) {
+            $_args['layout'] = 'blog_classic';
         }
 
-        if ( ! $args['layout'] ) {
-            $args['layout'] = 'blog_classic';
-        }
-
-        $args[ 'pagination' ] = wp_parse_args( $args['pagination'], array(
+        $_args[ 'pagination' ] = wp_parse_args( $_args['pagination'], array(
             'show_paging' => 1,
             'show_number' => 1,
             'show_nav' => 1,
@@ -28,10 +24,30 @@ class Customify_Posts_Layout {
             'next_text' => '',
         ) );
 
-        $this->args = $args;
+        if ( ! $_args['columns'] ) {
+            $c = $this->get_predefined( $_args['layout'] );
+            if ( $c ) {
+                $_args['columns'] = $c['columns'];
+            }
+        }
+
+        $_args[ 'columns'] = absint( $_args['columns'] );
+        if ( $_args[ 'columns' ] < 1 ) {
+            $_args[ 'columns' ] = 1;
+        }
+        if ( ( ! isset( $args['columns'] ) ||  ! $args['columns'] ) && $_args['layout'] == 'blog_masonry' ) {
+            $_args['columns' ] = 3;
+        }
+
+        if( in_array( $_args['layout'] , array( 'blog_lateral', 'blog_classic' ) ) ) {
+            $_args['columns' ] = 1;
+        }
+
+
+        $this->args = $_args;
     }
 
-    function layout_blog_classic(){
+    function layout_blog_classic( $post = null ){
         $media_fields = array(
             array(
                 '_key' => 'thumbnail'
@@ -44,14 +60,17 @@ class Customify_Posts_Layout {
             array(
                 '_key' => 'excerpt',
             ),
+            array(
+                '_key' => 'meta',
+            ),
         );
 
         ?>
         <div class="entry-media">
-            <?php Customify_Blog_Builder()->build_fields( $media_fields ); ?>
+            <?php Customify_Blog_Builder()->build_fields( $media_fields, $post ); ?>
         </div>
         <div class="entry-content-data">
-            <?php Customify_Blog_Builder()->build_fields( $content_fields ); ?>
+            <?php Customify_Blog_Builder()->build_fields( $content_fields, $post ); ?>
         </div>
         <?php
     }
@@ -70,15 +89,18 @@ class Customify_Posts_Layout {
         } else {
             $entry_class = 'entry'. ( $class ? ' '.$class : '' );
         }
+
+        Customify_Blog_Builder()->set_post( $post );
+
         ?>
-        <div <?php post_class( $entry_class,  $post) ?>>
+        <div <?php post_class( $entry_class,  $post ) ?>>
             <?php
-            $this->layout_blog_classic();
+            $this->layout_blog_classic( $post );
             ?>
         </div><!-- /.entry post --> <?php
     }
 
-    function get_predefined( ){
+    function get_predefined( $layout ){
         $presets = array(
             'blog_classic' => array(
                 'columns' => 1,
@@ -106,7 +128,7 @@ class Customify_Posts_Layout {
             ),
 
             'blog_boxed' => array(
-                'columns' => 1,
+                'columns' => 2,
                 'pagination' => array(),
             ),
 
@@ -121,6 +143,11 @@ class Customify_Posts_Layout {
             ),
         );
 
+        if ( isset( $presets[ $layout ] ) ) {
+            return $presets[ $layout ];
+        }
+
+        return false;
     }
 
     function render( $args = array() ){
@@ -128,21 +155,53 @@ class Customify_Posts_Layout {
         $this->set_args( $args );
         $classes =  array();
 
-        if ( $this->args['columns'] > 1 ) {
-            $classes[] = 'customify-grid-'.$this->args['columns'];
+        if ( $this->args['layout'] !=='blog_masonry' && $this->args['layout'] != 'blog_timeline' ) {
+            if ($this->args['columns'] > 1) {
+                $classes[] = 'customify-grid-' . $this->args['columns'];
+            }
         }
+
+        Customify_Blog_Builder()->set_config( array(
+            'thumbnail_size' => $this->args['thumbnail_size'],
+            'meta_config' => array(
+                array(
+                    '_key' => 'author',
+                ),
+                array(
+                    '_key' => 'date',
+                ),
+                /*
+                array(
+                    '_key' => 'categories',
+                ),
+                */
+            )
+        ) );
+
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];
+        $style = '';
+        if ( $this->args['layout'] == 'blog_masonry' ) {
+            // WPCS: XSS OK.
+            $style = '-webkit-column-count: '.$this->args['columns'].';  column-count: '.$this->args['columns'].';';
+        }
         ?>
         <div class="posts-layout-wrapper">
-            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
+
+            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo ( $style != '' ) ? ' style="'.esc_attr( $style).'"' : ''; ?>>
+                <?php
+                if ( $this->args['layout'] == 'blog_timeline' ) {
+                    echo '<div class="time-line"></div>';
+                }
+                ?>
                 <?php
                 if ( have_posts() ) {
+                    global $post;
                     /* Start the Loop */
                     $i = 1;
                     while ( have_posts()) {
                         the_post();
-                        $this->blog_item( null, $i % 2 == 0 ? 'even' : 'odd' );
+                        $this->blog_item( $post, $i % 2 == 0 ? 'even' : 'odd' );
                         $i++;
                     }
 
@@ -196,18 +255,14 @@ function customify_blog_posts(){
             <?php
         endif;
 
-        $layout = Customify_Customizer()->get_setting_tab( 'blog_post_layout', 'default' );
-        $post_layout = '';
-        if ( is_array( $layout ) && isset( $layout['layout'] ) ) {
-            $post_layout = $layout['layout'] ;
+        $args = Customify_Customizer()->get_setting_tab( 'blog_post_layout', 'default' );
+        if ( ! is_array( $args ) ) {
+            $args = array() ;
         }
         $pagination = Customify_Customizer()->get_setting_tab( 'blog_post_pagination', 'default' );
-
         $l = new Customify_Posts_Layout();
-        $l->render(  array(
-            'layout' => $post_layout,
-            'pagination' => is_array(  $pagination ) ? $pagination : array(),
-        ) );
+        $args[ 'pagination' ] = is_array(  $pagination ) ? $pagination : array();
+        $l->render( $args );
 
     else :
         get_template_part( 'template-parts/content', 'none' );

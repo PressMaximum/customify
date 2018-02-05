@@ -14,7 +14,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'title' => __('Blog', 'customify'),
             ),
 
-            // Blog Posts Item
             array(
                 'name' => 'blog_post_layout',
                 'type' => 'section',
@@ -27,7 +26,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => 'blog_post_layout',
                 'type' => 'modal',
                 'section' => 'blog_post_layout',
-                'title' => __('Blog Posts Layout', 'customify'),
+                'title' => __('Layout', 'customify'),
                 'field_class' => 'control--bg bottom-0',
                 'selector' => '#blog-posts',
                 'render_callback' => 'customify_blog_posts',
@@ -73,16 +72,43 @@ if (!function_exists('customify_customizer_blog_config')) {
                         ),
 
                         array(
-                            'name' => 'media_width',
-                            'type' => 'slider',
-                            'label' => __( 'Media Width', 'customify' ),
-                            'selector' => '.posts-layout.layout--blog_classic .entry-media',
-                            'css_format' => 'flex-basis: {{value_no_unit}}%;',
-
+                            'name' => 'columns',
+                            'type' => 'select',
+                            'default' => '',
+                            'label' => __('Columns', 'customify'),
+                            'choices' => array(
+                                '0' => __('Default', 'customify'),
+                                '1' => __('1 Column', 'customify'),
+                                '2' => __('2 Columns', 'customify'),
+                                '3' => __('3 Columns', 'customify'),
+                                '4' => __('4 Columns', 'customify'),
+                                '5' => __('5 Columns', 'customify'),
+                                '6' => __('6 Columns', 'customify'),
+                            ),
+                            'required' => array(
+                                array('layout', '!=', 'blog_classic' ),
+                                array('layout', '!=', 'blog_timeline' ),
+                                array('layout', '!=', 'blog_lateral' ),
+                            ),
                         ),
 
+                        array(
+                            'name' => 'excerpt_length',
+                            'type' => 'text',
+                            'default' => '',
+                            'label' => __('Excerpt Length', 'customify'),
+                        ),
+
+                        array(
+                            'name' => 'thumbnail_size',
+                            'type' => 'select',
+                            'default' => 'medium',
+                            'label' => __('Thumbnail Size', 'customify'),
+                            'choices' => customify_get_all_image_sizes()
+                        ),
 
                     ), // end fields
+
 
                 ),
             ),
@@ -92,7 +118,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'type' => 'modal',
                 'section' => 'blog_post_layout',
                 'title' => __('Pagination', 'customify'),
-                'field_class' => 'control--bg control--bg',
+                'field_class' => 'control--bg bottom-0',
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
@@ -125,59 +151,55 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'label' => __( 'Next Label', 'customify' ),
                         ),
 
+                    ),
 
+                ),
+            ),
+
+            array(
+                'name' => 'blog_post_styling',
+                'type' => 'modal',
+                'section' => 'blog_post_layout',
+                'title' => __('Styling', 'customify'),
+                'field_class' => 'control--bg control--bg',
+                'transport' => 'postMessage',
+                'selector' => '#blog',
+                'css_format' => 'modal',
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'media' => __( 'Media', 'customify' ),
+                        'content' => __( 'Content', 'customify' ),
+                    ),
+                    'media_fields' => array(
 
                         array(
-                            'name' => 'blog_post_item',
-                            'type' => 'repeater',
-                            'title' => __('Blog Post Item', 'customify'),
-                            'description' => __('Drag and Drop to build your post item layout.', 'customify'),
-                            'live_title_field' => 'title',
-                            'limit' => 4,
-                            'addable' => true,
-                            'title_only' => true,
-                            'default' => array(
-                                array(
-                                    '_key' => 'title',
-                                    'title' => __('Title', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'meta',
-                                    'title' => __('Meta', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'thumbnail',
-                                    'title' => __('Thumbnail', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'excerpt',
-                                    'title' => __('Excerpt', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'readmore',
-                                    'title' => __('Readmore', 'customify'),
-                                ),
-                                array(
-                                    '_key' => 'content',
-                                    'title' => __('Content', 'customify'),
-                                    '_visibility' => 'hidden'
-                                )
-                            ),
-                            'fields' => array(
-                                array(
-                                    'name' => '_key',
-                                    'type' => 'hidden',
-                                ),
-                                array(
-                                    'name' => 'title',
-                                    'type' => 'text',
-                                ),
-                            )
+                            'name' => 'media_ratio',
+                            'type' => 'slider',
+                            'label' => __( 'Media Ratio', 'customify' ),
+                            'selector' => '.posts-layout .entry .entry-media',
+                            'css_format' => 'padding-top: {{value_no_unit}}%;',
+                            'max' => 200,
+                            'min' => 0,
                         ),
 
+                        array(
+                            'name' => 'media_width',
+                            'type' => 'slider',
+                            'label' => __( 'Media Width', 'customify' ),
+                            'max' => 100,
+                            'min' => 20,
+                            'selector' => '.posts-layout .entry-media, #blog-posts .posts-layout.layout--blog_classic .entry-media',
+                            'css_format' => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
+                        ),
 
-
-
+                    ),
+                    'content_fields' => array(
+                        array(
+                            'name' => 'media_width',
+                            'type' => 'text',
+                            'label' => __( 'Media Width', 'customify' ),
+                        ),
 
 
                     ),
@@ -185,7 +207,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 ),
             ),
 
-
+            /*
             array(
                 'name' => 'blog_post_item',
                 'type' => 'repeater',
@@ -236,24 +258,6 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
-                'name' => 'blog_post_excerpt_length',
-                'type' => 'text',
-                'section' => 'blog_post_layout',
-                'default' => '30',
-                'title' => __('Excerpt Length', 'customify'),
-                'description' => __('Enter number of words.', 'customify'),
-            ),
-
-            array(
-                'name' => 'blog_post_thumb_size',
-                'type' => 'select',
-                'section' => 'blog_post_layout',
-                'default' => 'medium',
-                'title' => __('Thumbnail Size', 'customify'),
-                'choices' => customify_get_all_image_sizes()
-            ),
-
-            array(
                 'name' => 'blog_post_meta',
                 'type' => 'repeater',
                 'section' => 'blog_post_layout',
@@ -296,6 +300,11 @@ if (!function_exists('customify_customizer_blog_config')) {
                     ),
                 )
             ),
+
+            */
+
+
+
 
         );
 

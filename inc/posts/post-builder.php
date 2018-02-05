@@ -81,7 +81,8 @@ class Customify_Blog_Builder {
     function meta_date(){
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s';
+            // </time><time class="updated" datetime="%3$s">%4$s</time>
         }
         $time_string = sprintf( $time_string,
             esc_attr( get_the_date( 'c' ) ),
@@ -92,7 +93,8 @@ class Customify_Blog_Builder {
 
         $posted_on = sprintf(
         /* translators: %s: post date. */
-            esc_html_x( 'Posted on %s', 'post date', 'customify' ),
+            //esc_html_x( 'Posted on %s', 'post date', 'customify' ),
+             '%s',
             '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
         );
 
@@ -104,8 +106,10 @@ class Customify_Blog_Builder {
             /* translators: used between list items, there is a space after the comma */
             $categories_list = get_the_category_list( esc_html__( ', ', 'customify' ) );
             if ( $categories_list ) {
+                //  esc_html__( 'Posted in %1$s', 'customify' )
+                $string = '%1$s';
                 /* translators: 1: list of categories. */
-                printf( '<span class="cat-links">' . esc_html__( 'Posted in %1$s', 'customify' ) . '</span>', $categories_list ); // WPCS: XSS OK.
+                printf( '<span class="cat-links">' . $string. '</span>', $categories_list ); // WPCS: XSS OK.
             }
         }
     }
@@ -116,7 +120,8 @@ class Customify_Blog_Builder {
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
                 /* translators: 1: list of tags. */
-                printf( '<span class="tags-links">' . esc_html__( 'Tagged %1$s', 'customify' ) . '</span>', $tags_list ); // WPCS: XSS OK.
+                // esc_html__( 'Tagged %1$s', 'customify' )
+                printf( '<span class="tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
             }
         }
     }
@@ -143,12 +148,12 @@ class Customify_Blog_Builder {
     }
 
     function meta_author(){
+        // esc_html_x( 'by %s', 'post author', 'customify' ),
         $byline = sprintf(
         /* translators: %s: post author. */
-            esc_html_x( 'by %s', 'post author', 'customify' ),
+            '%s',
             '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
         );
-
         echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
@@ -182,13 +187,14 @@ class Customify_Blog_Builder {
     }
 
     function post_thumbnail( $post = null ){
-        if ( has_post_thumbnail() ) {
+        //if ( has_post_thumbnail() ) {
+
             ?>
-            <div class="entry-thumbnail">
+            <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
             </div><!-- .entry-meta -->
             <?php
-        }
+        //}
     }
     function post_excerpt(){
         $text= '';
@@ -231,20 +237,20 @@ class Customify_Blog_Builder {
         <?php
     }
 
-    function build( $field ){
+    function build( $field , $post = null ){
         if ( method_exists( $this, 'post_'.$field ) ) {
-            call_user_func_array( array( $this, 'post_'.$field ), array( $this->post ) );
+            call_user_func_array( array( $this, 'post_'.$field ), array( $post ) );
         }
     }
 
-    function build_fields( $fields ){
+    function build_fields( $fields , $post = null ){
         foreach ( ( array ) $fields as $item ) {
             $item = wp_parse_args( $item, array(
                 '_key' => '',
                 '_visibility' => ''
             ) );
             if ( $item['_visibility'] !== 'hidden' ) {
-                $this->build( $item['_key'] );
+                $this->build( $item['_key'] , $post );
             }
         }
     }

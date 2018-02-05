@@ -155,6 +155,10 @@
 .customize-control.control--bg .customify-modal-settings:before {
   display: none !important;
 }
+.customize-control.control--bg .customify-modal-settings .modal--tabs span.tab--active {
+  background-color: #eee;
+  border-bottom-color: #eee;
+}
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span {
   transform: rotate(-180deg);
 }

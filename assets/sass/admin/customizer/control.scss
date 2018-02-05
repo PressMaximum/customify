@@ -99,6 +99,10 @@ $text_color: #555d66;
             &:before {
                 display: none !important;
             }
+            .modal--tabs span.tab--active {
+                background-color: #eee;
+                border-bottom-color: #eee;
+            }
         }
 
         &.modal--opening {
