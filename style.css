@@ -5760,6 +5760,12 @@ body.menu_sidebar_dropdown:before {
   .sidebar-content.sidebar_vertical_border .content-area {
     border-left: 1px solid #eaecee;
   }
+  .sidebar-content.sidebar_vertical_border .content-inner {
+    padding-left: 0.6180469716em;
+  }
+  .sidebar-content.sidebar_vertical_border .sidebar-primary-inner {
+    padding-right: 0.6180469716em;
+  }
 }
 
 /*-- Layout: sidebar-sidebar-content --*/

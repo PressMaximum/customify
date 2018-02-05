@@ -53,6 +53,7 @@ class Customify_Builder_Item_HTML {
                 'selector' => '.builder-header-'.$this->id.'-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
+                'default' => __( 'Add custom text here or remove it', 'customify' ),
                 'title' => __( 'HTML', 'customify' ),
                 'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),

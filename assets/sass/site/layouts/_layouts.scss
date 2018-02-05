@@ -116,12 +116,12 @@
             .content-area {
                 border-left: 1px solid $color_border;
             }
-            //.content-inner {
-            //    padding-left: ms(-2);
-            //}
-            //.sidebar-primary-inner {
-            //    padding-right: ms(-2);
-            //}
+            .content-inner {
+                padding-left: ms(-2);
+            }
+            .sidebar-primary-inner {
+                padding-right: ms(-2);
+            }
         }
     }
 }
