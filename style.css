@@ -5810,6 +5810,7 @@ body.menu_sidebar_dropdown:before {
   max-width: 100%;
   flex-basis: 50%;
   padding-top: 55%;
+  overflow: hidden;
 }
 .posts-layout .entry-thumbnail {
   position: absolute;
@@ -5818,6 +5819,7 @@ body.menu_sidebar_dropdown:before {
   width: 100%;
   height: 100%;
   display: flex;
+  line-height: 0;
   background-color: #d5d5d5;
 }
 .posts-layout .entry-thumbnail img {
@@ -5886,7 +5888,7 @@ body.menu_sidebar_dropdown:before {
   line-height: 0;
 }
 .posts-layout.layout--blog_masonry img {
-  object-fit: none;
+  object-fit: fill;
 }
 .posts-layout.layout--blog_timeline {
   position: relative;

@@ -36,8 +36,8 @@ if ( ! function_exists( 'customify_get_site_content_class' ) ) :
 			$class = array();
 		}
 
-		if ( is_singular() ) {
-		    $page_layout = get_post_meta( get_the_ID(), '_customify_content_layout', true );
+		if ( customify_is_support_meta() ) {
+		    $page_layout = get_post_meta( customify_get_support_meta_id(), '_customify_content_layout', true );
 		    if( $page_layout ) {
 		        $classes['content_layout'] = 'content-'.sanitize_text_field( $page_layout );
             }

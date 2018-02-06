@@ -524,6 +524,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
 							'id'    => '',
 						) );
 
+                        if ( ! $item['id'] ) {
+                            continue;
+                        }
+
 						$item_config = isset( $this->config_items[ $item['id'] ] ) ? $this->config_items[ $item['id'] ] : array();
 
 						if ( ! isset( $items[ $item['id'] ] ) ) {
@@ -569,7 +573,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
 							if ( ! $has_cb ) {
 								if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-									printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
+									//printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
 								}
 							}
 
@@ -928,6 +932,10 @@ class Customify_Customizer_Layout_Builder_Frontend {
 				$item_id     = $item['id'];
 				$content     = $this->render_items[ $item['id'] ]['render_content'];
 				$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+                $item_config = wp_parse_args( $item_config, array(
+                    'section' => '',
+                    'name' => '',
+                ) );
 
 				$classes       = "builder-item-sidebar mobile-item--" . $item_id;
 				$inner_classes = 'item--inner';
@@ -937,9 +945,6 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
 				$content = str_replace( '__id__', $id, $content );
 				$content = str_replace( '__device__', 'mobile', $content );
-				if ( ! isset( $item_config['section'] ) ) {
-					$item_config['section'] = '';
-				}
 
 				echo '<div class="' . esc_attr( $classes ) . '">';
 				echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';

@@ -10,13 +10,14 @@
     var $document = $( document );
 
     var header_changed = function( partial_id, remove_items ){
+
         if( _.isUndefined( remove_items ) ) {
             remove_items = false;
         }
         if( partial_id === 'header_builder_panel' || partial_id === 'customify_customize_render_header' ) {
 
-            $( '.close-sidebar-panel' ).not( ':first' ).remove();
-            $('.header-menu-sidebar' ).not( ':first' ).remove();
+            $( '.close-sidebar-panel' ).not( ':last' ).remove();
+            $('.header-menu-sidebar' ).not( ':last' ).remove();
 
             if ( remove_items ) {
                 $('body > .header-menu-sidebar, #page > .header-menu-sidebar' ).remove();

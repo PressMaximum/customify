@@ -2086,8 +2086,8 @@
                 that.container = $('.customify-modal-settings', that.$el );
             }
 
-            $el.addClass('customify-modal--inside');
-            $el.addClass( 'modal--opening' );
+            that.$el.addClass('customify-modal--inside');
+            that.$el.addClass( 'modal--opening' );
             that.container.show(0);
             $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
 
@@ -2152,7 +2152,7 @@
 
     var initModalControls = {};
     var initModal = function(){
-        $document.on( 'click', '.customize-control-customify-modal .action--edit, .customize-control-customify-modal .action--reset', function( e ){
+        $document.on( 'click', '.customize-control-customify-modal .action--edit, .customize-control-customify-modal .action--reset, .customize-control-customify-modal .customify-control-field-header', function( e ){
             e.preventDefault();
             var controlID = $( this ).attr( 'data-control' ) || '';
             if ( _.isUndefined( initModalControls[ controlID ] ) ) {

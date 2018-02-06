@@ -46,12 +46,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                                 'blog_classic' => array(
                                     'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
                                 ),
-                                'blog_classic_rounded' => array(
-                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic_rounded.svg',
-                                ),
-                                'blog_column' => array(
-                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
-                                ),
                                 'blog_2column' => array(
                                     'img' => get_template_directory_uri() . '/assets/images/customizer/blog_2column.svg',
                                 ),
@@ -98,13 +92,24 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'default' => '',
                             'label' => __('Excerpt Length', 'customify'),
                         ),
-
+                        array(
+                            'name' => 'excerpt_more',
+                            'type' => 'text',
+                            'default' => '',
+                            'label' => __('Excerpt More', 'customify'),
+                        ),
                         array(
                             'name' => 'thumbnail_size',
                             'type' => 'select',
                             'default' => 'medium',
                             'label' => __('Thumbnail Size', 'customify'),
                             'choices' => customify_get_all_image_sizes()
+                        ),
+                        array(
+                            'name' => 'hide_thumb_if_empty',
+                            'type' => 'checkbox',
+                            'default' => '',
+                            'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
                         ),
 
                     ), // end fields
@@ -119,6 +124,8 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'section' => 'blog_post_layout',
                 'title' => __('Pagination', 'customify'),
                 'field_class' => 'control--bg bottom-0',
+                'selector' => '#blog-posts',
+                'render_callback' => 'customify_blog_posts',
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
@@ -191,6 +198,16 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'min' => 20,
                             'selector' => '.posts-layout .entry-media, #blog-posts .posts-layout.layout--blog_classic .entry-media',
                             'css_format' => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
+                        ),
+
+                        array(
+                            'name' => 'media_radius',
+                            'type' => 'slider',
+                            'label' => __( 'Media Radius', 'customify' ),
+                            'max' => 100,
+                            'min' => 0,
+                            'selector' => '.posts-layout .entry-media',
+                            'css_format' => 'border-radius: {{value_no_unit}}%;',
                         ),
 
                     ),

@@ -8,7 +8,10 @@ class Customify_Posts_Layout {
         $_args = wp_parse_args( $args, array(
             'layout' => '',
             'columns' => '',
+            'excerpt_length' => '',
+            'excerpt_more' => '',
             'thumbnail_size' => '',
+            'hide_thumb_if_empty' => '',
             'pagination' => array(),
         ) );
 
@@ -65,22 +68,23 @@ class Customify_Posts_Layout {
             ),
         );
 
+        $show_media = true;
+        if ( ! has_post_thumbnail( $post ) ) {
+            if ( $this->args['hide_thumb_if_empty'] ) {
+                $show_media = false;
+            }
+        }
+
+        if ( $show_media ) {
         ?>
         <div class="entry-media">
             <?php Customify_Blog_Builder()->build_fields( $media_fields, $post ); ?>
         </div>
+        <?php } ?>
         <div class="entry-content-data">
             <?php Customify_Blog_Builder()->build_fields( $content_fields, $post ); ?>
         </div>
         <?php
-    }
-
-    function layout_classic_rounded(){
-        $this->layout_blog_classic();
-    }
-
-    function layout_blog_column(){
-        $this->layout_blog_classic( );
     }
 
     function blog_item( $post = null , $class = null ){
@@ -163,6 +167,8 @@ class Customify_Posts_Layout {
 
         Customify_Blog_Builder()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
+            'excerpt_length' => $this->args['excerpt_length'],
+            'excerpt_more' => $this->args['excerpt_more'],
             'meta_config' => array(
                 array(
                     '_key' => 'author',

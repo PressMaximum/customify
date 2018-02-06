@@ -16,6 +16,7 @@ class Customify_Blog_Builder {
         }
         $config = wp_parse_args( $config, array(
             'excerpt_length' => Customify_Customizer()->get_setting('blog_post_excerpt_length' ),
+            'excerpt_more' => null,
             'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
             'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
         ) );
@@ -73,7 +74,12 @@ class Customify_Blog_Builder {
          *
          * @param string $more_string The string shown within the more link.
          */
-        $excerpt_more = apply_filters( 'excerpt_more', ' ' . '[&hellip;]' );
+        if ( ! $this->config['excerpt_more'] ) {
+            $excerpt_more = apply_filters( 'excerpt_more', ' ' . '&hellip;' );
+        } else {
+            $excerpt_more = $this->config['excerpt_more'];
+        }
+
         $text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
         return $text;
     }

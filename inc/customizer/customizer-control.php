@@ -267,7 +267,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         ?>
         <div class="customify--settings-wrapper">
             <?php if ( $this->label ) { ?>
-            <div class="customify-control-field-header customify-field-heading">
+            <div data-control="<?php echo esc_attr( $this->id ); ?>" class="customify-control-field-header customify-field-heading">
                 <label>
                     <?php if (!empty($this->label)) : ?>
                         <span class="customize-control-title"><?php echo esc_html($this->label); ?></span>
