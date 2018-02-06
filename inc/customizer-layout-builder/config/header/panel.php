@@ -305,7 +305,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
             ),
 
             array(
-                'name' => 'header_'.$item_id.'n_align',
+                'name' => 'header_'.$item_id.'_align',
                 'type' => 'text_align_no_justify',
                 'section' => $section,
                 'priority'    => 820,

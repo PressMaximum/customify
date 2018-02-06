@@ -149,6 +149,9 @@ class Customify_Builder_Item_Button {
 			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
 		}
 		$classes[] = 'is-icon-' . $icon_position;
+		if( ! $text ) {
+            $text = __( 'Button', 'customify' );
+        }
 
 		echo '<a' . $target . ' href="' . esc_url( $link ) . '" class="' . esc_attr( join( " ", $classes ) ) . '">';
 		if ( $icon_position != 'after' ) {
