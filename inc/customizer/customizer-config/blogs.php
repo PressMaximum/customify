@@ -164,22 +164,21 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
-                'name' => 'blog_post_styling',
+                'name' => 'blog_media_styling',
                 'type' => 'modal',
                 'section' => 'blog_post_layout',
-                'title' => __('Styling', 'customify'),
-                'field_class' => 'control--bg control--bg',
+                'title' => __('Media Styling', 'customify'),
+                'field_class' => 'control--bg control--bg bottom-0',
                 'transport' => 'postMessage',
                 'selector' => '#blog',
                 'css_format' => 'modal',
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
-                        'media' => __( 'Media', 'customify' ),
-                        'content' => __( 'Content', 'customify' ),
+                        'normal' => __( 'Normal', 'customify' ),
+                        'hover' => __( 'Hover', 'customify' ),
                     ),
-                    'media_fields' => array(
-
+                    'normal_fields' => array(
                         array(
                             'name' => 'media_ratio',
                             'type' => 'slider',
@@ -189,7 +188,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'max' => 200,
                             'min' => 0,
                         ),
-
                         array(
                             'name' => 'media_width',
                             'type' => 'slider',
@@ -211,18 +209,65 @@ if (!function_exists('customify_customizer_blog_config')) {
                         ),
 
                     ),
-                    'content_fields' => array(
-                        array(
-                            'name' => 'media_width',
-                            'type' => 'text',
-                            'label' => __( 'Media Width', 'customify' ),
-                        ),
+                    'hover_fields' => array(
 
-
-                    ),
+                    ), // end content field
 
                 ),
             ),
+
+            array(
+                'name' => 'blog_posts_box_styling',
+                'type' => 'styling',
+                'section' => 'blog_post_layout',
+                'field_class' => 'control--bg control--bg bottom-0',
+                'title'  => __( 'Box Styling', 'customify' ),
+                'description'  => __( 'Advanced styling for item box', 'customify' ),
+                'selector'  => array(
+                    'normal' => ".posts-layout .entry",
+                    'hover' => ".posts-layout .entry:hover",
+                ),
+                'css_format'  => 'styling',
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'margin' => true,
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ),
+                    'hover_fields' => false
+                )
+            ),
+
+            array(
+                'name' => 'blog_posts_content_styling',
+                'type' => 'styling',
+                'section' => 'blog_post_layout',
+                'field_class' => 'control--bg bottom-0',
+                'title'  => __( 'Content Styling', 'customify' ),
+                'description'  => __( 'Advanced styling for item content', 'customify' ),
+                'selector'  => array(
+                    'normal' => ".posts-layout .entry .entry-content-data",
+                    'hover' => ".posts-layout .entry:hover .entry-content-data",
+                ),
+                'css_format'  => 'styling',
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'margin' => true,
+                        'link_color' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                    ),
+                    'hover_fields' => false
+                )
+            ),
+
 
             /*
             array(

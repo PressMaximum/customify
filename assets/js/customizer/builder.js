@@ -1545,16 +1545,6 @@
         var urlParser = _.clone( window.location );
         var control_id = item.data('control-id') || '';
 
-        urlParser.search = $.param( _.extend(
-            wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
-            {
-                changeset_uuid: wpcustomize.settings.changeset.uuid,
-                autofocus: {
-                    control: control_id
-                }
-            }
-        ) );
-
         var data = item.data( 'data' ) || {};
         if ( !_.isObject( data ) ) {
             data = {};
@@ -1581,8 +1571,10 @@
             request = wpcustomize.requestChangesetUpdate();
             request.done( function() {
                 $( window ).off( 'beforeunload.customize-confirm' );
-               // top.location.href = urlParser.href;
-                top.location.href = urlParser.origin+urlParser.pathname+'?'+urlParser.search;
+                top.location.href = urlParser.origin+urlParser.pathname
+                    +'?autofocus[control]='+control_id
+                    +'&url='+encodeURIComponent(  wpcustomize.previewer.previewUrl.get() )
+                    +'&changeset_uuid='+wpcustomize.settings.changeset.uuid;
                 deferred.resolve();
             } );
             request.fail( function() {

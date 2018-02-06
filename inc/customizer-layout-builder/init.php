@@ -245,6 +245,8 @@ class Customify_Customizer_Layout_Builder {
 		foreach ( $config as $k => $field ) {
 			if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
 				$name  = $field['name'];
+
+				/*
 				$value = isset( $data[ $name ] ) ? $data[ $name ] : '';
 
 				if ( ! is_array( $value ) ) {
@@ -254,6 +256,8 @@ class Customify_Customizer_Layout_Builder {
 				$s = new Customify_Sanitize_Input( $field, $field );
 
 				$value                      = $s->sanitize( $value, $field );
+				*/
+                $value = get_theme_mod( $name );
 				$new_template_data[ $name ] = $value;
 			}
 		}

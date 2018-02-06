@@ -2305,7 +2305,7 @@
             } catch (e) {
                 that.values = {};
             }
-            if (!$('.customify-modal-settings', $el).length) {
+            if (!$('.customify-modal-settings', that.$el).length) {
                 var $wrap = $($('#tmpl-customify-modal-settings').html());
                 that.container = $wrap;
                 that.$el.append($wrap);
@@ -2537,14 +2537,6 @@
             $( this ).addClass( 'loading' );
             var section = $( this ).attr( 'data-section' ) || '';
             var urlParser = _.clone( window.location );
-            urlParser.search = $.param( _.extend(
-                wpcustomize.utils.parseQueryString( urlParser.search.substr( 1 ) ),
-                {
-                    autofocus: {
-                        section: section
-                    }
-                }
-            ) );
 
             if ( section ) {
                 var setting_keys = [];
@@ -2559,8 +2551,8 @@
                    section: section,
                    settings: setting_keys
                }, function(){
-                    $( window ).off( 'beforeunload.customize-confirm' );
-                    top.location.href = urlParser.origin+urlParser.pathname+'?'+urlParser.search;
+                   $( window ).off( 'beforeunload.customize-confirm' );
+                   top.location.href = urlParser.origin+urlParser.pathname+'?autofocus[section]='+section+'&url='+encodeURIComponent(  wpcustomize.previewer.previewUrl.get() );
                } );
 
             }

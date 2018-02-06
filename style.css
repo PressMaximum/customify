@@ -5841,6 +5841,10 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 
+.posts-layout {
+  border-top: 1px solid transparent;
+  border-left: 1px solid transparent;
+}
 .posts-layout .entry {
   display: flex;
   flex-wrap: wrap;

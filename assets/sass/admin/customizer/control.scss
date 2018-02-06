@@ -1173,7 +1173,15 @@ $text_color: #555d66;
 .ft--heading {
     clear: both;
 }
-
+.control--bg {
+    .customify-modal-settings {
+        .customify--field-heading{
+            h3.customify-field--heading {
+                background: #fff;
+            }
+        }
+    }
+}
 .customify-modal-settings {
     box-shadow: 0 2px 15px rgba(0,0,0,.3);
     background: #fff;
@@ -1206,6 +1214,7 @@ $text_color: #555d66;
             background: #eeeeee;
         }
     }
+
     .customize-control-title {
         font-weight: 400;
         font-size: 13px;
