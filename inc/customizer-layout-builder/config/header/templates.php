@@ -6,8 +6,9 @@ class Customify_Builder_Header_Templates {
         $section = 'header_templates';
         $prefix = 'header_templates_';
 
-        $theme_name = wp_get_theme()->get('Name');
-        $option_name = $theme_name.'_saved_templates';
+        $id ='header';
+        $theme_name  = wp_get_theme()->get( 'Name' );
+        $option_name =  "{$theme_name}_{$id}_saved_templates";
 
         $saved_templates = get_option( $option_name );
         if ( ! is_array( $saved_templates ) ) {

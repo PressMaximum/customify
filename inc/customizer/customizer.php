@@ -8,10 +8,7 @@
 // Load customizer config file.
 require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
-
-
 require_once get_template_directory() . '/inc/customizer/customizer-config.php';
-
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
 require_once get_template_directory() . '/inc/customizer/customizer-auto-css.php';
@@ -30,7 +27,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
 
             add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
-
         }
 
         static function get_instance(){
@@ -185,6 +181,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             $get_value = null;
             if ( isset( $config['setting|'.$name ] ) ) {
                 $default = isset( $config['setting|'.$name ]['default'] ) ? $config['setting|'.$name ]['default'] : false;
+                $default = apply_filters( 'customify/customize/settings-default', $default, $name );
                 if ( 'option' == $config['setting|'.$name]['mod'] ) {
                     $value =  get_option( $name, $default );
                 } else {
@@ -720,8 +717,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                            'theme_supports' => $args['theme_supports'],
                            //'transport' => $args['transport'],
                            'type' => $args['mod'],
-                           'default' => $args['default'],
+                           //'default' => $args['default'],
                         );
+                        $settings_args['default'] = apply_filters( 'customify/customize/settings-default', $args['default'], $args['name'] );
+
 
                         $settings_args['transport'] = 'refresh';
                         if ( ! $settings_args['sanitize_callback'] ) {

@@ -7,9 +7,9 @@ class Customify_Builder_Footer_Templates
         $section = 'footer_templates';
         $prefix = 'footer_templates_';
 
-
-        $theme_name = wp_get_theme()->get('Name');
-        $option_name = $theme_name.'_saved_templates';
+        $id ='footer';
+        $theme_name  = wp_get_theme()->get( 'Name' );
+        $option_name =  "{$theme_name}_{$id}_saved_templates";
 
         $saved_templates = get_option( $option_name );
         if ( ! is_array( $saved_templates ) ) {

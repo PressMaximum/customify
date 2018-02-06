@@ -81,6 +81,8 @@ class Customify_Customizer_Layout_Builder {
 		);
 
 		$path = get_template_directory();
+        require_once $path . "/inc/customizer-layout-builder/config/config-default.php";
+
 		foreach ( $config_files as $id => $files ) {
 			foreach ( $files as $f ) {
 				$file = $path . "/inc/customizer-layout-builder/config/{$id}/{$f}.php";
@@ -97,6 +99,7 @@ class Customify_Customizer_Layout_Builder {
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
 		}
 		add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
+		add_action( 'wp_ajax_customify_builder_export_template', array( $this, 'ajax_export_template' ) );
 	}
 
 	function register_builder( $id, $class ) {
@@ -213,7 +216,6 @@ class Customify_Customizer_Layout_Builder {
 		if ( ! $save_name ) {
 			$save_name = sprintf( __( 'Saved %s', 'customify' ), date_i18n( 'Y-m-d H:i:s' ) );
 		}
-		$data = isset( $_POST['preview_data'] ) ? wp_unslash( $_POST['preview_data'] ) : array();
 		$fn   = false;
 		if ( ! isset( $this->registered_builders[ $id ] ) ) {
 			wp_send_json_error( __( 'No Support', 'customify' ) );
@@ -222,7 +224,7 @@ class Customify_Customizer_Layout_Builder {
 		}
 
 		$theme_name  = wp_get_theme()->get( 'Name' );
-		$option_name = $theme_name . '_saved_templates';
+		$option_name =  "{$theme_name}_{$id}_saved_templates";
 
 		$saved_templates = get_option( $option_name );
 		if ( ! is_array( $saved_templates ) ) {
@@ -245,18 +247,6 @@ class Customify_Customizer_Layout_Builder {
 		foreach ( $config as $k => $field ) {
 			if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
 				$name  = $field['name'];
-
-				/*
-				$value = isset( $data[ $name ] ) ? $data[ $name ] : '';
-
-				if ( ! is_array( $value ) ) {
-					$value = json_decode( urldecode_deep( $value ), true );
-				}
-
-				$s = new Customify_Sanitize_Input( $field, $field );
-
-				$value                      = $s->sanitize( $value, $field );
-				*/
                 $value = get_theme_mod( $name );
 				$new_template_data[ $name ] = $value;
 			}
@@ -280,6 +270,34 @@ class Customify_Customizer_Layout_Builder {
 		wp_send_json_success( array( 'key_id' => $key_id, 'name' => $save_name, 'li' => $html ) );
 		die();
 	}
+
+    function ajax_export_template() {
+        if ( ! current_user_can( 'edit_theme_options' ) ) {
+            wp_send_json_error( __( 'Access denied', 'customify' ) );
+        }
+        $id = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : false;
+        $name = isset( $_GET['name'] ) ? sanitize_text_field( $_GET['name'] ) : false;
+
+        $theme_name  = wp_get_theme()->get( 'Name' );
+        $option_name =  "{$theme_name}_{$id}_saved_templates";
+        $data = get_option( $option_name  );
+        $var = null;
+        if ( $name ) {
+            if ( isset( $data[ $name ] ) ) {
+                $var = $data[ $name ]['data'];
+                /*
+                foreach( $var as $k => $d ) {
+                    remove_theme_mod( $k );
+                }
+                */
+            }
+        } else {
+            $var = $data;
+        }
+        var_export( $var );
+
+        die();
+    }
 
 	function get_builders() {
 		$builders = array();
@@ -476,7 +494,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 		if ( $this->data ) {
 			return $this->data;
 		}
-		$data = get_theme_mod( $this->control_id );
+		$data = Customify_Customizer()->get_setting( $this->control_id );
 		$data = wp_parse_args( $data, array(
 			'desktop' => '',
 			'tablet'  => '',
