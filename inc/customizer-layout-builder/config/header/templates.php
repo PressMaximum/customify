@@ -48,8 +48,8 @@ class Customify_Builder_Header_Templates {
                 'name' => $section,
                 'type' => 'section',
                 'panel' => 'header_settings',
-                'theme_supports' => '',
-                'title'          => __( 'Templates', 'customify' ),
+                'priority' => 299,
+                'title' => __( 'Templates', 'customify' ),
             ),
 
             array(

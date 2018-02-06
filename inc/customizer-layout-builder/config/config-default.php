@@ -665,7 +665,7 @@ function customify_layout_builder_config_default($val, $name)
                             'icon' =>
                                 array(
                                     'type' => 'font-awesome',
-                                    'icon' => 'fab fa-twitter',
+                                    'icon' => 'fa fa-twitter',
                                 ),
                             'url' => '#',
                             '_visibility' => 'visible',
@@ -676,7 +676,7 @@ function customify_layout_builder_config_default($val, $name)
                             'icon' =>
                                 array(
                                     'type' => 'font-awesome',
-                                    'icon' => 'fab fa-facebook-f',
+                                    'icon' => 'fa fa-facebook-f',
                                 ),
                             'url' => '',
                             '_visibility' => 'visible',
@@ -687,7 +687,7 @@ function customify_layout_builder_config_default($val, $name)
                             'icon' =>
                                 array(
                                     'type' => 'font-awesome',
-                                    'icon' => 'fab fa-tripadvisor',
+                                    'icon' => 'fa fa-tripadvisor',
                                 ),
                             'url' => '',
                             '_visibility' => 'visible',
@@ -698,7 +698,7 @@ function customify_layout_builder_config_default($val, $name)
                             'icon' =>
                                 array(
                                     'type' => 'font-awesome',
-                                    'icon' => 'fab fa-vk',
+                                    'icon' => 'fa fa-vk',
                                 ),
                             'url' => '',
                             '_visibility' => 'visible',
