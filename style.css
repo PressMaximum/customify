@@ -5753,12 +5753,24 @@ body.menu_sidebar_dropdown:before {
   .content-sidebar.sidebar_vertical_border .content-area {
     border-right: 1px solid #eaecee;
   }
+  .content-sidebar.sidebar_vertical_border .content-inner {
+    padding-right: 0.6180469716em;
+  }
+  .content-sidebar.sidebar_vertical_border .sidebar-primary-inner {
+    padding-left: 0.6180469716em;
+  }
 }
 
 /*-- Layout: sidebar-content --*/
 @media screen and (min-width: 48em) {
   .sidebar-content.sidebar_vertical_border .content-area {
     border-left: 1px solid #eaecee;
+  }
+  .sidebar-content.sidebar_vertical_border .content-inner {
+    padding-left: 0.6180469716em;
+  }
+  .sidebar-content.sidebar_vertical_border .sidebar-primary-inner {
+    padding-right: 0.6180469716em;
   }
 }
 
@@ -5770,6 +5782,16 @@ body.menu_sidebar_dropdown:before {
   .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
     border-right: 1px solid #eaecee;
   }
+  .sidebar-sidebar-content.sidebar_vertical_border .content-inner {
+    padding-left: 0.6180469716em;
+  }
+  .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary-inner {
+    padding-right: 0.6180469716em;
+  }
+  .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary-inner {
+    padding-left: 0.6180469716em;
+    padding-right: 0.6180469716em;
+  }
 }
 
 /*-- Layout: content-sidebar-sidebar --*/
@@ -5780,6 +5802,16 @@ body.menu_sidebar_dropdown:before {
   .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
     border-left: 1px solid #eaecee;
   }
+  .content-sidebar-sidebar.sidebar_vertical_border .content-inner {
+    padding-right: 0.6180469716em;
+  }
+  .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary-inner {
+    padding-left: 0.6180469716em;
+    padding-right: 0.6180469716em;
+  }
+  .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary-inner {
+    padding-left: 0.6180469716em;
+  }
 }
 
 /*-- Layout: sidebar-content-sidebar --*/
@@ -5787,6 +5819,16 @@ body.menu_sidebar_dropdown:before {
   .sidebar-content-sidebar.sidebar_vertical_border .content-area {
     border-left: 1px solid #eaecee;
     border-right: 1px solid #eaecee;
+  }
+  .sidebar-content-sidebar.sidebar_vertical_border .content-inner {
+    padding-left: 0.6180469716em;
+    padding-right: 0.6180469716em;
+  }
+  .sidebar-content-sidebar.sidebar_vertical_border .sidebar-primary-inner {
+    padding-left: 0.6180469716em;
+  }
+  .sidebar-content-sidebar.sidebar_vertical_border .sidebar-secondary-inner {
+    padding-right: 0.6180469716em;
   }
 }
 @media screen and (max-width: 64em) {

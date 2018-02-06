@@ -22,7 +22,7 @@ class Customify_Font_Icons
                 'font-awesome' => array(
                     'name' => __('FontAwesome', 'customify'),
                     'icons' => $this->get_font_awesome_icons(),
-                    'url' => get_template_directory_uri() . '/assets/fonts/font-awesome/css/fontawesome-all.min.css',
+                    'url' => get_template_directory_uri() . '/assets/fonts/font-awesome/css/fontawesome-all.css',
                     'class_config' => '__icon_name__' // __icon_name__ will replace by icon class name
                 ),
             );

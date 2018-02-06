@@ -52,6 +52,7 @@ class Customify_Builder_Footer_Item_HTML {
                 'selector' => '.builder-footer-html-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
+                'default' => __( 'Add custom text here or remove it', 'customify' ),
                 'title' => __( 'HTML', 'customify' ),
                 'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),

@@ -234,12 +234,14 @@ class Customify_Init {
      * Enqueue scripts and styles.
      */
     function scripts() {
-        wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
+
 
         if ( ! function_exists( 'a' ) ) {
             require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
         }
         Customify_Font_Icons()->enqueue();
+
+	    wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
 
         wp_enqueue_script( 'customify', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), self::$version, true );
 

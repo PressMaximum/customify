@@ -78,7 +78,7 @@ class Customify_Builder_Item_Logo {
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Logo Image Position', 'customify' ),
-                'default' => 'left',
+                'default' => 'top',
                 'required' => array( 'header_logo_name', '=', 'yes' ),
                 'choices' => array(
                     'top' => __( 'Top', 'customify' ),
