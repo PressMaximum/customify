@@ -248,22 +248,6 @@ class Customify_Builder_Item_Primary_Menu {
             $style.=' hide-arrow-active';
         }
 
-
-        /*
-        wp_nav_menu( array(
-            'theme_location' => $this->theme_location,
-            'container' => 'nav',
-            'container_id' => 'site-navigation-__id__-__device__',
-            'container_class' => $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' ),
-            'menu_id'        => $this->id.'-__id__-__device__',
-            'menu_class'   => $this->id.'-ul menu',
-            'fallback_cb' => false,
-            'link_before' => '<span class="link-before">',
-            'link_after' => '</span>',
-        ) );
-        */
-
-
         $container_classes = $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' );
         echo '<nav  id="site-navigation-__id__-__device__" class="'.$container_classes.'">';
         wp_nav_menu( array(

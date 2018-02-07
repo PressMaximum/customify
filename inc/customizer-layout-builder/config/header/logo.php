@@ -4,7 +4,7 @@ class Customify_Builder_Item_Logo {
     public $id= 'logo';
     function item(){
         return  array(
-            'name' => __( 'Logo & Site Identity' ),
+            'name' => __( 'Logo & Site Identity', 'customify' ),
             'id' => 'logo',
             'width' => '3',
             'section' => 'title_tagline' // Customizer section to focus when click settings

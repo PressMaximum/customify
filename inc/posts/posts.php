@@ -11,7 +11,7 @@ class Customify_Posts_Layout {
             'excerpt_length' => '',
             'excerpt_more' => '',
             'thumbnail_size' => '',
-            'hide_thumb_if_empty' => '',
+            'hide_thumb_if_empty' => 1,
             'pagination' => array(),
         ) );
 
@@ -25,6 +25,7 @@ class Customify_Posts_Layout {
             'show_nav' => 1,
             'prev_text' => '',
             'next_text' => '',
+            'mid_size' => 3,
         ) );
 
         if ( ! $_args['columns'] ) {
@@ -45,7 +46,7 @@ class Customify_Posts_Layout {
         if( in_array( $_args['layout'] , array( 'blog_lateral', 'blog_classic' ) ) ) {
             $_args['columns' ] = 1;
         }
-
+        $_args[ 'pagination' ]['mid_size'] = absint( $_args[ 'pagination' ]['mid_size'] );
 
         $this->args = $_args;
     }
@@ -111,16 +112,6 @@ class Customify_Posts_Layout {
                 'pagination' => array(),
             ),
 
-            'blog_classic_rounded' => array(
-                'columns' => 1,
-                'pagination' => array(),
-            ),
-
-            'blog_column' => array(
-                'columns' => 1,
-                'pagination' => array(),
-            ),
-
             'blog_2column' => array(
                 'columns' => 2,
                 'pagination' => array(),
@@ -141,10 +132,6 @@ class Customify_Posts_Layout {
                 'pagination' => array(),
             ),
 
-            'blog_timeline' => array(
-                'columns' => 2,
-                'pagination' => array(),
-            ),
         );
 
         if ( isset( $presets[ $layout ] ) ) {
@@ -171,16 +158,14 @@ class Customify_Posts_Layout {
             'excerpt_more' => $this->args['excerpt_more'],
             'meta_config' => array(
                 array(
+                    '_key' => 'categories',
+                ),
+                array(
                     '_key' => 'author',
                 ),
                 array(
                     '_key' => 'date',
                 ),
-                /*
-                array(
-                    '_key' => 'categories',
-                ),
-                */
             )
         ) );
 
@@ -245,33 +230,59 @@ class Customify_Posts_Layout {
             'mid_size' => ( $this->args['pagination']['show_number'] ) ? 3 : 1,
             'prev_text'=> $prev_text,
             'next_text' => $next_text,
+            'mid_size' => $this->args['pagination']['mid_size'],
         ) );
     }
 
 }
 
 
-function customify_blog_posts(){
-    echo '<div id="blog-posts">';
-    if ( have_posts() ) :
-        if ( is_home() && ! is_front_page() ) : ?>
-            <header>
-                <h1 class="page-title screen-reader-text"><?php single_post_title(); ?></h1>
-            </header>
-            <?php
-        endif;
+function customify_blog_posts( $args = array() ){
 
-        $args = Customify_Customizer()->get_setting_tab( 'blog_post_layout', 'default' );
+    $args = wp_parse_args( $args, array(
+        'el_id' => 'blog-posts',
+        'prefix' => 'blog_post',
+    ) );
+
+    echo '<div id="'.esc_attr( $args['el_id'] ).'">';
+
+    if ( is_archive() ){
+        ?>
+        <header class="page-header">
+            <?php
+            the_archive_title( '<h1 class="page-title">', '</h1>' );
+            the_archive_description( '<div class="archive-description">', '</div>' );
+            ?>
+        </header><!-- .page-header -->
+        <?php
+    } else if ( customify_is_post_title_display() ) {
+        ?>
+        <header>
+            <h1 class="page-title"><?php echo get_the_title( customify_get_support_meta_id() ); ?></h1>
+        </header>
+        <?php
+    }
+
+    if ( have_posts() ) :
+
+        $args = Customify_Customizer()->get_setting_tab( $args['prefix'].'_layout', 'default' );
         if ( ! is_array( $args ) ) {
             $args = array() ;
         }
-        $pagination = Customify_Customizer()->get_setting_tab( 'blog_post_pagination', 'default' );
+        $pagination = Customify_Customizer()->get_setting_tab( $args['prefix'].'_pagination', 'default' );
         $l = new Customify_Posts_Layout();
-        $args[ 'pagination' ] = is_array(  $pagination ) ? $pagination : array();
+        $args[ 'pagination' ] = is_array( $pagination ) ? $pagination : array();
         $l->render( $args );
 
     else :
         get_template_part( 'template-parts/content', 'none' );
     endif;
     echo '</div>';
+}
+
+function customify_archive_posts(){
+    customify_blog_posts( array(
+        'el_id' => 'archive-posts',
+        'prefix' => 'archive_post',
+    ));
 }

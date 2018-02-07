@@ -1,35 +1,34 @@
 <?php
 if (!function_exists('customify_customizer_blog_config')) {
-    function customify_customizer_blog_config($configs)
+    function customify_customizer_blog_config( $args = array() )
     {
+
+        $args = wp_parse_args( $args, array(
+            'name' => __('Blog Posts', 'customify'),
+            'id' => 'blog_post',
+            'selector' => '#blog-posts',
+            'cb' => 'customify_blog_posts',
+        ) );
+
+        $section = $args['id'].'_layout';
 
         $config = array(
 
-            // Layout panel
             array(
-                'name' => 'blog_panel',
-                'type' => 'panel',
-                'priority' => 22,
-                'theme_supports' => '',
-                'title' => __('Blog', 'customify'),
-            ),
-
-            array(
-                'name' => 'blog_post_layout',
+                'name' => $args['id'].'_layout',
                 'type' => 'section',
                 'panel' => 'blog_panel',
-                'theme_supports' => '',
-                'title' => __('Blog Post', 'customify'),
+                'title' => $args['name'],
             ),
 
             array(
-                'name' => 'blog_post_layout',
+                'name' => $args['id'].'_layout',
                 'type' => 'modal',
-                'section' => 'blog_post_layout',
+                'section' => $section,
                 'title' => __('Layout', 'customify'),
                 'field_class' => 'control--bg bottom-0',
-                'selector' => '#blog-posts',
-                'render_callback' => 'customify_blog_posts',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
@@ -58,9 +57,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                                 ),
                                 'blog_masonry' => array(
                                     'img' => get_template_directory_uri() . '/assets/images/customizer/blog_masonry.svg',
-                                ),
-                                'blog_timeline' => array(
-                                    'img' => get_template_directory_uri() . '/assets/images/customizer/blog_timeline.svg',
                                 ),
                             )
                         ),
@@ -108,7 +104,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                         array(
                             'name' => 'hide_thumb_if_empty',
                             'type' => 'checkbox',
-                            'default' => '',
+                            'default' => '1',
                             'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
                         ),
 
@@ -119,13 +115,13 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
-                'name' => 'blog_post_pagination',
+                'name' => $args['id'].'_pagination',
                 'type' => 'modal',
-                'section' => 'blog_post_layout',
+                'section' => $section,
                 'title' => __('Pagination', 'customify'),
                 'field_class' => 'control--bg bottom-0',
-                'selector' => '#blog-posts',
-                'render_callback' => 'customify_blog_posts',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
@@ -135,16 +131,19 @@ if (!function_exists('customify_customizer_blog_config')) {
                         array(
                             'name' => 'show_paging',
                             'type' => 'checkbox',
+                            'default' => 1,
                             'checkbox_label' => __( 'Show Pagination', 'customify' ),
                         ),
                         array(
                             'name' => 'show_number',
                             'type' => 'checkbox',
+                            'default' => 1,
                             'checkbox_label' => __( 'Show Number', 'customify' ),
                         ),
                         array(
                             'name' => 'show_nav',
                             'type' => 'checkbox',
+                            'default' => 1,
                             'checkbox_label' => __( 'Show Next, Previous Label', 'customify' ),
                         ),
                         array(
@@ -158,32 +157,38 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'label' => __( 'Next Label', 'customify' ),
                         ),
 
+                        array(
+                            'name' => 'mid_size',
+                            'type' => 'text',
+                            'default' => 3,
+                            'label' => __( 'How many numbers to either side of the current pages', 'customify' ),
+                        ),
+
                     ),
 
                 ),
             ),
 
             array(
-                'name' => 'blog_media_styling',
+                'name' => $args['id'].'_media_styling',
                 'type' => 'modal',
-                'section' => 'blog_post_layout',
+                'section' => $section,
                 'title' => __('Media Styling', 'customify'),
                 'field_class' => 'control--bg control--bg bottom-0',
                 'transport' => 'postMessage',
-                'selector' => '#blog',
+                'selector' => $args['selector'],
                 'css_format' => 'modal',
                 'default' => array(),
                 'fields' => array(
                     'tabs' => array(
                         'normal' => __( 'Normal', 'customify' ),
-                        'hover' => __( 'Hover', 'customify' ),
                     ),
                     'normal_fields' => array(
                         array(
                             'name' => 'media_ratio',
                             'type' => 'slider',
                             'label' => __( 'Media Ratio', 'customify' ),
-                            'selector' => '.posts-layout .entry .entry-media',
+                            'selector' => "{$args['selector']} .posts-layout .entry .entry-media",
                             'css_format' => 'padding-top: {{value_no_unit}}%;',
                             'max' => 200,
                             'min' => 0,
@@ -194,7 +199,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'label' => __( 'Media Width', 'customify' ),
                             'max' => 100,
                             'min' => 20,
-                            'selector' => '.posts-layout .entry-media, #blog-posts .posts-layout.layout--blog_classic .entry-media',
+                            'selector' => "{$args['selector']} .posts-layout .entry-media, {$args['selector']} .posts-layout.layout--blog_classic .entry-media",
                             'css_format' => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
                         ),
 
@@ -204,174 +209,49 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'label' => __( 'Media Radius', 'customify' ),
                             'max' => 100,
                             'min' => 0,
-                            'selector' => '.posts-layout .entry-media',
+                            'selector' => "{$args['selector']} .posts-layout .entry-media",
                             'css_format' => 'border-radius: {{value_no_unit}}%;',
                         ),
 
                     ),
                     'hover_fields' => array(
-
                     ), // end content field
 
                 ),
             ),
 
-            array(
-                'name' => 'blog_posts_box_styling',
-                'type' => 'styling',
-                'section' => 'blog_post_layout',
-                'field_class' => 'control--bg control--bg bottom-0',
-                'title'  => __( 'Box Styling', 'customify' ),
-                'description'  => __( 'Advanced styling for item box', 'customify' ),
-                'selector'  => array(
-                    'normal' => ".posts-layout .entry",
-                    'hover' => ".posts-layout .entry:hover",
-                ),
-                'css_format'  => 'styling',
-                'fields' => array(
-                    'normal_fields' => array(
-                        //'margin' => true,
-                        'link_color' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                        'bg_position' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
-
-            array(
-                'name' => 'blog_posts_content_styling',
-                'type' => 'styling',
-                'section' => 'blog_post_layout',
-                'field_class' => 'control--bg bottom-0',
-                'title'  => __( 'Content Styling', 'customify' ),
-                'description'  => __( 'Advanced styling for item content', 'customify' ),
-                'selector'  => array(
-                    'normal' => ".posts-layout .entry .entry-content-data",
-                    'hover' => ".posts-layout .entry:hover .entry-content-data",
-                ),
-                'css_format'  => 'styling',
-                'fields' => array(
-                    'normal_fields' => array(
-                        //'margin' => true,
-                        'link_color' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                        'bg_position' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
-
-
-            /*
-            array(
-                'name' => 'blog_post_item',
-                'type' => 'repeater',
-                'section' => 'blog_post_layout',
-                'title' => __('Blog Post Item', 'customify'),
-                'description' => __('Drag and Drop to build your post item layout.', 'customify'),
-                'live_title_field' => 'title',
-                'limit' => 4,
-                'addable' => false,
-                'title_only' => true,
-                'default' => array(
-                    array(
-                        '_key' => 'title',
-                        'title' => __('Title', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'meta',
-                        'title' => __('Meta', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'thumbnail',
-                        'title' => __('Thumbnail', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'excerpt',
-                        'title' => __('Excerpt', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'readmore',
-                        'title' => __('Readmore', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'content',
-                        'title' => __('Content', 'customify'),
-                        '_visibility' => 'hidden'
-                    )
-                ),
-                'fields' => array(
-                    array(
-                        'name' => '_key',
-                        'type' => 'hidden',
-                    ),
-                    array(
-                        'name' => 'title',
-                        'type' => 'text',
-                    ),
-                )
-            ),
-
-            array(
-                'name' => 'blog_post_meta',
-                'type' => 'repeater',
-                'section' => 'blog_post_layout',
-                'title' => __('Post Meta', 'customify'),
-                'description' => __('Drag and Drop to order your post meta.', 'customify'),
-                'live_title_field' => 'title',
-                'limit' => 4,
-                'addable' => false,
-                'title_only' => true,
-                'default' => array(
-                    array(
-                        '_key' => 'date',
-                        'title' => __('Date', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'author',
-                        'title' => __('Author', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'comment',
-                        'title' => __('Comment', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'categories',
-                        'title' => __('Categories', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'tags',
-                        'title' => __('Tags', 'customify'),
-                    )
-                ),
-                'fields' => array(
-                    array(
-                        'name' => '_key',
-                        'type' => 'hidden',
-                    ),
-                    array(
-                        'name' => 'title',
-                        'type' => 'text',
-                    ),
-                )
-            ),
-
-            */
-
-
-
-
         );
+
+        return $config;
+    }
+}
+
+
+if (!function_exists('customify_customizer_blog_posts_config')) {
+    function customify_customizer_blog_posts_config($configs)
+    {
+
+        $config = array(
+            array(
+                'name' => 'blog_panel',
+                'type' => 'panel',
+                'priority' => 22,
+                'theme_supports' => '',
+                'title' => __('Blog', 'customify'),
+            ),
+        );
+
+        $blog = customify_customizer_blog_config();
+        $archive = customify_customizer_blog_config( array(
+            'name' => __('Archive Posts', 'customify'),
+            'id' => 'archive_post',
+            'selector' => '#archive-posts',
+            'cb' => 'customify_archive_posts',
+        ) );
+        $config = array_merge($config, $blog,$archive );
 
         return array_merge($configs, $config);
     }
 }
 
-add_filter('customify/customizer/config', 'customify_customizer_blog_config');
+add_filter('customify/customizer/config', 'customify_customizer_blog_posts_config');
