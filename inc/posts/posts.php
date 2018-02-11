@@ -285,15 +285,14 @@ function customify_blog_posts( $args = array() ){
     }
 
     if ( have_posts() ) :
-
-        $args = Customify_Customizer()->get_setting_tab( $args['prefix'].'_layout', 'default' );
-        if ( ! is_array( $args ) ) {
-            $args = array() ;
+        $_args = Customify_Customizer()->get_setting_tab( $args['prefix'].'_layout', 'default' );
+        if ( ! is_array( $_args ) ) {
+            $_args = $args ;
         }
         $pagination = Customify_Customizer()->get_setting_tab( $args['prefix'].'_pagination', 'default' );
         $l = new Customify_Posts_Layout();
-        $args[ 'pagination' ] = is_array( $pagination ) ? $pagination : array();
-        $l->render( $args );
+        $_args[ 'pagination' ] = is_array( $pagination ) ? $pagination : array();
+        $l->render( $_args );
 
     else :
         get_template_part( 'template-parts/content', 'none' );
