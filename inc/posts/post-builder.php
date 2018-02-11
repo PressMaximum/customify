@@ -19,6 +19,7 @@ class Customify_Blog_Builder {
             'excerpt_more' => null,
             'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
             'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
+            'more_text' => null,
         ) );
 
         $this->config = $config;
@@ -134,21 +135,24 @@ class Customify_Blog_Builder {
 
     function meta_comment(){
         if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+            $comment_count = get_comments_number();
             echo '<span class="comments-link">';
-            comments_popup_link(
-                sprintf(
-                    wp_kses(
-                    /* translators: %s: post title */
-                        __( 'Leave a Comment<span class="screen-reader-text"> on %s</span>', 'customify' ),
-                        array(
-                            'span' => array(
-                                'class' => array(),
-                            ),
-                        )
-                    ),
-                    get_the_title()
-                )
-            );
+            echo '<a href="'.esc_url( get_comments_link() ).'">';
+            $comment_count = get_comments_number();
+            if ( 1 === $comment_count ) {
+                printf(
+                /* translators: 1: title. */
+                    esc_html__( '1 Comment', 'customify' ),
+                    $comment_count
+                );
+            } else {
+                printf( // WPCS: XSS OK.
+                /* translators: 1: comment count number, 2: title. */
+                    esc_html( _nx( '%1$s Comment', '%1$s Comments', $comment_count, 'comments number', 'customify' ) ),
+                    number_format_i18n( $comment_count )
+                );
+            }
+            echo '</a>';
             echo '</span>';
         }
     }
@@ -163,11 +167,15 @@ class Customify_Blog_Builder {
         echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
-    function post_meta( $post = null ){
+    function post_meta( $post = null, $meta_fields = array() ){
+
+        if ( empty( $meta_fields ) ) {
+            $meta_fields =  $this->config['meta_config'];
+        }
         ?>
         <div class="entry-meta">
             <?php
-            foreach( ( array ) $this->config['meta_config'] as $item ) {
+            foreach( ( array ) $meta_fields as $item ) {
                 $item = wp_parse_args( $item, array(
                     '_key' => '',
                     '_visibility' => ''
@@ -194,7 +202,6 @@ class Customify_Blog_Builder {
 
     function post_thumbnail( $post = null ){
         //if ( has_post_thumbnail() ) {
-
             ?>
             <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
@@ -236,16 +243,20 @@ class Customify_Blog_Builder {
     }
     function post_readmore()
     {
+        $more = $this->config['more_text'];
+        if ( ! $more ) {
+            $more = __( "Readmore", 'customify' );
+        }
         ?>
         <div class="entry-readmore">
-            <a href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php _e( "Readmore", 'customify' ); ?></a>
+            <a href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php
     }
 
-    function build( $field , $post = null ){
+    function build( $field , $post = null, $fields = null ){
         if ( method_exists( $this, 'post_'.$field ) ) {
-            call_user_func_array( array( $this, 'post_'.$field ), array( $post ) );
+            call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields ) );
         }
     }
 
@@ -253,10 +264,11 @@ class Customify_Blog_Builder {
         foreach ( ( array ) $fields as $item ) {
             $item = wp_parse_args( $item, array(
                 '_key' => '',
-                '_visibility' => ''
+                '_visibility' => '',
+                'fields' => null,
             ) );
             if ( $item['_visibility'] !== 'hidden' ) {
-                $this->build( $item['_key'] , $post );
+                $this->build( $item['_key'] , $post, $item['fields'] );
             }
         }
     }

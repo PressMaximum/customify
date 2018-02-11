@@ -10,17 +10,26 @@ $blog_gutter: $gl-gutter;
         align-items: stretch;
         margin-bottom: $blog_gutter;
     }
-    .sticky {
-        background-color: #fcf8e3;
-        border: 1px solid #faf2cc;
-        color: #8a6d3b;
-    }
+
     .entry-media {
         position: relative;
         max-width: 100%;
         flex-basis: 50%;
         padding-top: 55%;
         overflow: hidden;
+        .entry-meta {
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            margin-bottom: 0px;
+            font-size: 80%;
+            background: $color_text;
+            color: #fff;
+            padding: 1px 5px;
+            a {
+                color: inherit;
+            }
+        }
     }
     .entry-thumbnail {
         position: absolute;
@@ -42,6 +51,39 @@ $blog_gutter: $gl-gutter;
     }
     .entry-title {
         font-size: 1.2em;
+        font-weight: 400;
+        color: $color_text;
+        a {
+            color: inherit;
+            &:hover {
+                color: $color_link;
+            }
+        }
+    }
+    .entry-meta {
+        margin-bottom: 0.5em;
+        color: $color_meta;
+        font-size: 80%;
+        a {
+            color: inherit;
+        }
+        > span {
+            display: inline-block;
+            &:after {
+                content: "-";
+                display: inline-block;
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+            &:last-child {
+                &:after {
+                    display: none;
+                }
+            }
+        }
+        .byline {
+            font-weight: bold;
+        }
     }
 
     &.layout-- {
@@ -73,14 +115,28 @@ $blog_gutter: $gl-gutter;
             }
         }
 
-        &blog_2column, &blog_column, &blog_boxed, &blog_timeline {
+        &blog_2column, &blog_column, &blog_boxed {
             .entry {
                 display: block;
+            }
+            .sticky {
+                .entry-content-data {
+                    background-color: #fcf8e3;
+                    border: 1px solid #faf2cc;
+                    border-top: 0px none;
+                    color: #8a6d3b;
+                    padding: 1rem;
+                }
+            }
+            .has-post-thumbnail {
+                .entry-content-data {
+                    padding-top: 1rem;
+                }
             }
             .entry-media {
                 display: block;
                 position: relative;
-                margin-bottom:  ( $blog_gutter /2 );
+                margin-bottom: 0;
             }
         }
 

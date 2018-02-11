@@ -10,6 +10,7 @@ class Customify_Posts_Layout {
             'columns' => '',
             'excerpt_length' => '',
             'excerpt_more' => '',
+            'more_text' => '',
             'thumbnail_size' => '',
             'hide_thumb_if_empty' => 1,
             'pagination' => array(),
@@ -55,17 +56,36 @@ class Customify_Posts_Layout {
         $media_fields = array(
             array(
                 '_key' => 'thumbnail'
-            )
+            ),
+            array(
+                '_key' => 'meta',
+                'fields' => array(
+                    array(
+                        '_key' => 'categories',
+                    ),
+                ),
+            ),
         );
         $content_fields = array(
             array(
                 '_key' => 'title',
             ),
             array(
-                '_key' => 'excerpt',
+                '_key' => 'meta',
+                'fields' => array(
+                    array(
+                        '_key' => 'author',
+                    ),
+                    array(
+                        '_key' => 'date',
+                    ),
+                    array(
+                        '_key' => 'comment',
+                    ),
+                ),
             ),
             array(
-                '_key' => 'meta',
+                '_key' => 'excerpt',
             ),
         );
 
@@ -156,6 +176,7 @@ class Customify_Posts_Layout {
             'thumbnail_size' => $this->args['thumbnail_size'],
             'excerpt_length' => $this->args['excerpt_length'],
             'excerpt_more' => $this->args['excerpt_more'],
+            'more_text' => $this->args['more_text'],
             'meta_config' => array(
                 array(
                     '_key' => 'categories',

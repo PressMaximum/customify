@@ -88,12 +88,21 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'default' => '',
                             'label' => __('Excerpt Length', 'customify'),
                         ),
+
                         array(
                             'name' => 'excerpt_more',
                             'type' => 'text',
                             'default' => '',
                             'label' => __('Excerpt More', 'customify'),
                         ),
+
+                        array(
+                            'name' => 'more_text',
+                            'type' => 'text',
+                            'default' => '',
+                            'label' => __('More Text', 'customify'),
+                        ),
+
                         array(
                             'name' => 'thumbnail_size',
                             'type' => 'select',
