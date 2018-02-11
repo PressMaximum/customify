@@ -2,6 +2,33 @@ $blog_gutter: $gl-gutter;
 .bypostauthor {
     display: inline-block;
 }
+
+.entry-meta {
+    margin-bottom: 0.5em;
+    color: $color_meta;
+    font-size: 80%;
+    a {
+        color: inherit;
+    }
+    > span {
+        display: inline-block;
+        &:after {
+            content: "-";
+            display: inline-block;
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        &:last-child {
+            &:after {
+                display: none;
+            }
+        }
+    }
+    .byline {
+        font-weight: bold;
+    }
+}
+
 .posts-layout {
 
     .entry {
@@ -60,31 +87,7 @@ $blog_gutter: $gl-gutter;
             }
         }
     }
-    .entry-meta {
-        margin-bottom: 0.5em;
-        color: $color_meta;
-        font-size: 80%;
-        a {
-            color: inherit;
-        }
-        > span {
-            display: inline-block;
-            &:after {
-                content: "-";
-                display: inline-block;
-                margin-left: 5px;
-                margin-right: 5px;
-            }
-            &:last-child {
-                &:after {
-                    display: none;
-                }
-            }
-        }
-        .byline {
-            font-weight: bold;
-        }
-    }
+
 
     &.layout-- {
         &blog_classic, &blog_lateral, &blog_classic_rounded {
@@ -192,5 +195,12 @@ $blog_gutter: $gl-gutter;
             border: 1px solid $color_border ;
             padding: 5px 10px;
         }
+    }
+}
+
+// Single post
+.single {
+    .entry-meta {
+        margin-bottom: ( $blog_gutter / 2 );
     }
 }

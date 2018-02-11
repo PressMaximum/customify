@@ -134,11 +134,10 @@ class Customify_Blog_Builder {
     }
 
     function meta_comment(){
-        if ( ! is_single() && ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+        if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
             $comment_count = get_comments_number();
             echo '<span class="comments-link">';
             echo '<a href="'.esc_url( get_comments_link() ).'">';
-            $comment_count = get_comments_number();
             if ( 1 === $comment_count ) {
                 printf(
                 /* translators: 1: title. */
