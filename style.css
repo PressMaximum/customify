@@ -6034,11 +6034,28 @@ body.menu_sidebar_dropdown:before {
 .nav-links .nav-previous, .nav-links .nav-next {
   width: 49%;
 }
+.nav-links .nav-previous a, .nav-links .nav-next a {
+  color: #444444;
+}
+.nav-links .nav-previous a:hover, .nav-links .nav-next a:hover {
+  color: #007ee5;
+}
+.nav-links .nav-previous a > span, .nav-links .nav-next a > span {
+  font-size: 80%;
+  color: #444444;
+  display: block;
+}
 .nav-links .nav-previous {
   float: left;
+  text-align: left;
 }
 .nav-links .nav-next {
   float: right;
+  text-align: right;
+}
+
+.comments-area {
+  margin-top: 1.5em;
 }
 
 .comment-author {

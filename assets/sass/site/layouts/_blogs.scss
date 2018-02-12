@@ -236,16 +236,33 @@ $blog_gutter: $gl-gutter;
     @include clearfix();
     .nav-previous, .nav-next {
         width: 49%;
+        a {
+            color: $color_text;
+            &:hover {
+                color: $color_link;
+            }
+            > span {
+                font-size: 80%;
+                color: $color_text;
+                display: block;
+            }
+        }
+
     }
     .nav-previous {
         float: left;
+        text-align: left;
     }
     .nav-next {
         float: right;
+        text-align: right;
     }
 }
 
 // Comment
+.comments-area {
+    margin-top: ( $blog_gutter / 2 );
+}
 .comment-author {
     display: block;
 }
