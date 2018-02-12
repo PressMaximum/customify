@@ -2713,9 +2713,8 @@ article.comment .comment-wrap {
 }
 article.comment .comment-author {
   font-weight: 500;
-  font-size: 133%;
+  font-size: 100%;
   line-height: 1;
-  display: inline-block;
   font-style: normal;
 }
 article.comment .comment-author a {
@@ -6001,6 +6000,57 @@ body.menu_sidebar_dropdown:before {
 
 .single .entry-meta {
   margin-bottom: 1.5em;
+}
+.single .entry-footer {
+  margin-bottom: 1.5em;
+}
+
+.entry-footer > span {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 90%;
+}
+.entry-footer > span:last-child {
+  margin-bottom: 0;
+}
+.entry-footer .tagged-label, .entry-footer .cat-label {
+  background-color: #444444;
+  color: #fff;
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+.entry-footer .tags-links a, .entry-footer .cat-links a {
+  padding: 5px 10px;
+  border: 1px solid #eaecee;
+}
+
+.nav-links:before, .nav-links:after {
+  content: "";
+  display: table;
+}
+.nav-links:after {
+  clear: both;
+}
+.nav-links .nav-previous, .nav-links .nav-next {
+  width: 49%;
+}
+.nav-links .nav-previous {
+  float: left;
+}
+.nav-links .nav-next {
+  float: right;
+}
+
+.comment-author {
+  display: block;
+}
+
+.comment-time-wrap {
+  display: inline-block;
+}
+
+.comment-list article.comment {
+  margin-bottom: 0px;
 }
 
 /* Widget Common */
