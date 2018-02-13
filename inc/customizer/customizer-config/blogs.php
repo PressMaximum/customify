@@ -60,28 +60,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                                 ),
                             )
                         ),
-
-                        array(
-                            'name' => 'columns',
-                            'type' => 'select',
-                            'default' => '',
-                            'label' => __('Columns', 'customify'),
-                            'choices' => array(
-                                '0' => __('Default', 'customify'),
-                                '1' => __('1 Column', 'customify'),
-                                '2' => __('2 Columns', 'customify'),
-                                '3' => __('3 Columns', 'customify'),
-                                '4' => __('4 Columns', 'customify'),
-                                '5' => __('5 Columns', 'customify'),
-                                '6' => __('6 Columns', 'customify'),
-                            ),
-                            'required' => array(
-                                array('layout', '!=', 'blog_classic' ),
-                                array('layout', '!=', 'blog_timeline' ),
-                                array('layout', '!=', 'blog_lateral' ),
-                            ),
-                        ),
-
                         array(
                             'name' => 'excerpt_length',
                             'type' => 'text',
