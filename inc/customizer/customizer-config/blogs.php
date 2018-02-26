@@ -9,18 +9,32 @@ if (!function_exists('customify_customizer_blog_config')) {
             'selector' => '#blog-posts',
             'cb' => 'customify_blog_posts',
         ) );
+        $top_panel = 'blog_panel';
+        $level_2_panel = 'panel_'.$args['id'];
         $section = $args['id'].'_layout';
+        $section_layout = 'section_'.$args['id'].'_layout';
+        $section_media = 'section_'.$args['id'].'_media_styling';
+
         $config = array(
+
             array(
-                'name' => $args['id'].'_layout',
-                'type' => 'section',
-                'panel' => 'blog_panel',
+                'name' => $level_2_panel,
+                'type' => 'panel',
+                'panel' => $top_panel,
                 'title' => $args['name'],
             ),
+
+            array(
+                'name' => $level_2_panel.'_layout',
+                'type' => 'section',
+                'panel' => $level_2_panel,
+                'title' => __('Layout', 'customify'),
+            ),
+
             array(
                 'name' => $args['id'].'_layout',
                 'type' => 'modal',
-                'section' => $section,
+                'section' => $level_2_panel.'_layout',
                 'title' => __('Layout', 'customify'),
                 'field_class' => 'control--bg bottom-0',
                 'selector' => $args['selector'],
@@ -76,12 +90,21 @@ if (!function_exists('customify_customizer_blog_config')) {
 
                 ),
             ),
+
+
+            array(
+                'name' => $level_2_panel.'_media',
+                'type' => 'section',
+                'panel' => $level_2_panel,
+                'title' => __('Media', 'customify'),
+            ),
+
             array(
                 'name' => $args['id'].'_media_styling',
                 'type' => 'modal',
-                'section' => $section,
+                'section' => $level_2_panel.'_media',
                 'title' => __('Media Styling', 'customify'),
-                'field_class' => 'control--bg control--bg bottom-0',
+                //'field_class' => 'control--bg control--bg bottom-0',
                 'transport' => 'postMessage',
                 'selector' => $args['selector'],
                 'css_format' => 'modal',
@@ -610,7 +633,6 @@ if (!function_exists('customify_customizer_blog_posts_config')) {
                 'name' => 'blog_panel',
                 'type' => 'panel',
                 'priority' => 22,
-                'theme_supports' => '',
                 'title' => __('Blog', 'customify'),
             ),
         );
