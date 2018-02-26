@@ -101,9 +101,8 @@ class Customify_Blog_Builder {
         );
 
         $posted_on = sprintf(
-        /* translators: %s: post date. */
             //esc_html_x( 'Posted on %s', 'post date', 'customify' ),
-             '%s',
+            '%s',
             '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
         );
 
@@ -197,7 +196,6 @@ class Customify_Blog_Builder {
                 }
             }
         }
-        if ( ! $args[''] )
 
         if ( ! empty( $metas ) ) {
             ?>
