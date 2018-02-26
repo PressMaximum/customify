@@ -303,6 +303,8 @@ function customify_blog_posts( $args = array() ){
         if ( is_array( $meta_settings ) ) {
             $metas = $meta_settings['items'];
             $sep = $meta_settings['sep'];
+        } else {
+            $sep = _x( '-', 'post meta separator', 'customify' );
         }
 
         if ( is_array( $more_settings ) ) {
