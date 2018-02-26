@@ -760,7 +760,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         }
                         unset( $args['default'] );
 
-                        $wp_customize->add_setting( $name, $settings_args );
+                        $wp_customize->add_setting( $name, array_merge( array( 'sanitize_callback' => 'customify_sanitize_customizer_input' ), $settings_args ) );
                         if ( $settings_args['type'] != 'js_raw' ) {
                             $wp_customize->add_control( new Customify_Customizer_Control( $wp_customize, $name, $args ));
                         }
