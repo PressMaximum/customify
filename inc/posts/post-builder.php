@@ -21,6 +21,7 @@ class Customify_Blog_Builder {
             'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
             'meta_sep' => _x( '-', 'post meta separator', 'customify' ),
             'more_text' => null,
+            'more_display' => 1,
         ) );
 
         $this->config = $config;
@@ -260,6 +261,9 @@ class Customify_Blog_Builder {
     }
     function post_readmore()
     {
+        if ( ! $this->config['more_display'] ) {
+            return ;
+        }
         $more = $this->config['more_text'];
         if ( ! $more ) {
             $more = __( "Read more &rarr;", 'customify' );

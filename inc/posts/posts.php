@@ -11,6 +11,7 @@ class Customify_Posts_Layout {
             'excerpt_length' => '',
             'excerpt_more' => '',
             'more_text' => '',
+            'more_display' => 1,
             'thumbnail_size' => '',
             'hide_thumb_if_empty' => 1,
             'pagination' => array(),
@@ -181,6 +182,7 @@ class Customify_Posts_Layout {
             'excerpt_length' => $this->args['excerpt_length'],
             'excerpt_more' => $this->args['excerpt_more'],
             'more_text' => $this->args['more_text'],
+            'more_display' => $this->args['more_display'],
             'meta_config' => $this->args['meta_config'],
             'meta_sep' => $this->args['meta_sep'],
         ) );
@@ -227,7 +229,7 @@ class Customify_Posts_Layout {
         if ( ! $this->args['pagination']['show_paging'] ) {
             return ;
         }
-
+        $prev_next = true;
         if ( $this->args['pagination']['show_nav'] ) {
             $prev_text = $this->args['pagination']['prev_text'];
             $next_text = $this->args['pagination']['next_text'];
@@ -240,12 +242,14 @@ class Customify_Posts_Layout {
         } else {
             $prev_text = false;
             $next_text = false;
+            $prev_next = false;
         }
 
         the_posts_pagination( array(
-            'mid_size' => ( $this->args['pagination']['show_number'] ) ? 3 : 1,
+            'mid_size' => ( $this->args['pagination']['mid_size'] ) ? 3 : 0,
             'prev_text'=> $prev_text,
             'next_text' => $next_text,
+            'prev_next' => $prev_next,
         ) );
     }
 
@@ -279,46 +283,30 @@ function customify_blog_posts( $args = array() ){
     }
 
     if ( have_posts() ) :
-        $_args = Customify_Customizer()->get_setting_tab( $args['prefix'].'_layout', 'default' );
+        $_args = array(
+            'layout'                => Customify_Customizer()->get_setting($args['prefix'].'_layout' ),
+            'excerpt_length'        => Customify_Customizer()->get_setting($args['prefix'].'_excerpt_length' ),
+            'excerpt_more'          => Customify_Customizer()->get_setting($args['prefix'].'_excerpt_more' ),
+            'more_text'             => Customify_Customizer()->get_setting($args['prefix'].'_more_text'),
+            'more_display'          => Customify_Customizer()->get_setting($args['prefix'].'_more_display'),
+            'thumbnail_size'        => Customify_Customizer()->get_setting($args['prefix'].'_thumbnail_size' ),
+            'hide_thumb_if_empty'   => Customify_Customizer()->get_setting($args['prefix'].'_hide_thumb_if_empty' ),
+            'meta_config'           => Customify_Customizer()->get_setting($args['prefix'].'_meta_config' ),
+            'meta_sep'              => Customify_Customizer()->get_setting($args['prefix'].'_meta_sep' ),
+        );
         if ( ! is_array( $_args ) ) {
             $_args = $args ;
         }
-        $pagination = Customify_Customizer()->get_setting_tab( $args['prefix'].'_pagination', 'default' );
-        $more_settings =  Customify_Customizer()->get_setting_tab( $args['prefix'].'_readmore', 'default' );
-        $more_text = null;
-        if ( empty( $pagination ) ) {
-            $pagination = array(
-                'show_paging' => 1,
-                'show_number' => 1,
-                'show_nav' => 1,
-            );
-        }
-        $pagination = wp_parse_args( $pagination, array(
-            'show_paging' => '',
-            'show_number' => '',
-            'show_nav' => '',
-            'mid_size' => '',
-        ) );
-
-        $meta_settings =  Customify_Customizer()->get_setting_tab( $args['prefix'].'_post_metas', 'default' );
-        $metas = array();
-        $sep = null;
-        if ( is_array( $meta_settings ) ) {
-            $metas = $meta_settings['items'];
-            $sep = $meta_settings['sep'];
-        } else {
-            $sep = _x( '-', 'post meta separator', 'customify' );
-        }
-
-        if ( is_array( $more_settings ) ) {
-            $more_text = $more_settings['more_text'];
-        }
+        $pagination = array(
+            'show_paging'   => Customify_Customizer()->get_setting( $args['prefix'].'_pg_show_paging' ),
+            'show_nav'      => Customify_Customizer()->get_setting( $args['prefix'].'_pg_show_nav' ),
+            'mid_size'      => Customify_Customizer()->get_setting( $args['prefix'].'_pg_mid_size' ),
+            'prev_text'     => Customify_Customizer()->get_setting( $args['prefix'].'_pg_prev_text' ),
+            'next_text'     => Customify_Customizer()->get_setting( $args['prefix'].'_pg_next_text' ),
+        ) ;
 
         $l = new Customify_Posts_Layout();
         $_args[ 'pagination' ] = is_array( $pagination ) ? $pagination : array();
-        $_args[ 'meta_config' ] = $metas;
-        $_args[ 'meta_sep' ] = $sep;
-        $_args[ 'more_text' ] = $more_text;
         $l->render( $_args );
 
     else :

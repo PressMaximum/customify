@@ -2875,7 +2875,7 @@
 
         // Add reset button to sections
         wpcustomize.section.each( function ( section ) {
-            if ( section.params.type == 'section' ) {
+            if ( section.params.type == 'section' || section.params.type == 'customify_section' ) {
                 section.container.find( '.customize-section-description-container .customize-section-title' ).append( '<button data-section="'+section.id+'" type="button" title="'+Customify_Control_Args.reset+'" class="customize--reset-section" aria-expanded="false"><span class="screen-reader-text">'+Customify_Control_Args.reset+'</span></button>' );
             }
         } );
