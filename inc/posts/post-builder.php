@@ -19,7 +19,7 @@ class Customify_Blog_Builder {
             'excerpt_more' => null,
             'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
             'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
-            'meta_sep' => null,
+            'meta_sep' => _x( '-', 'post meta separator', 'customify' ),
             'more_text' => null,
         ) );
 

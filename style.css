@@ -5885,7 +5885,7 @@ body.menu_sidebar_dropdown:before {
 }
 @media screen and (max-width: 35.5em) {
   .posts-layout .entry-media {
-    margin-bottom: 1rem;
+    margin-bottom: 1em;
   }
 }
 .posts-layout .entry-media .entry-meta {
@@ -5931,7 +5931,7 @@ body.menu_sidebar_dropdown:before {
   color: #007ee5;
 }
 .posts-layout .entry-readmore {
-  margin-top: 1rem;
+  margin-top: 1em;
 }
 .posts-layout.layout--blog_classic .entry-media, .posts-layout.layout--blog_lateral .entry-media, .posts-layout.layout--blog_classic_rounded .entry-media {
   margin-right: 1.5em;
@@ -5956,10 +5956,10 @@ body.menu_sidebar_dropdown:before {
   border: 1px solid #faf2cc;
   border-top: 0px none;
   color: #8a6d3b;
-  padding: 1rem;
+  padding: 1em;
 }
 .posts-layout.layout--blog_2column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_boxed .has-post-thumbnail .entry-content-data {
-  padding-top: 1rem;
+  padding-top: 1em;
 }
 .posts-layout.layout--blog_2column .entry-media, .posts-layout.layout--blog_column .entry-media, .posts-layout.layout--blog_boxed .entry-media {
   display: block;
@@ -6020,7 +6020,7 @@ body.menu_sidebar_dropdown:before {
 
 .entry-footer > span {
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 1em;
   font-size: 90%;
 }
 .entry-footer > span:last-child {

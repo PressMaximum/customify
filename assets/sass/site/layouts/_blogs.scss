@@ -41,7 +41,7 @@ $blog_gutter: $gl-gutter;
         padding-top: 55%;
         overflow: hidden;
         @include for_device( mobile ){
-            margin-bottom: 1rem;
+            margin-bottom: 1em;
         }
         .entry-meta {
             position: absolute;
@@ -86,11 +86,9 @@ $blog_gutter: $gl-gutter;
             }
         }
     }
-
     .entry-readmore {
-        margin-top: 1rem;
+        margin-top: 1em;
     }
-
 
     &.layout-- {
         &blog_classic, &blog_lateral, &blog_classic_rounded {
@@ -131,12 +129,12 @@ $blog_gutter: $gl-gutter;
                     border: 1px solid #faf2cc;
                     border-top: 0px none;
                     color: #8a6d3b;
-                    padding: 1rem;
+                    padding: 1em;
                 }
             }
             .has-post-thumbnail {
                 .entry-content-data {
-                    padding-top: 1rem;
+                    padding-top: 1em;
                 }
             }
             .entry-media {
@@ -214,7 +212,7 @@ $blog_gutter: $gl-gutter;
 .entry-footer {
     > span {
         display: block;
-        margin-bottom: 1rem;
+        margin-bottom: 1em;
         &:last-child {
             margin-bottom: 0;
         }

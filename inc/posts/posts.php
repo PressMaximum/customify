@@ -61,6 +61,9 @@ class Customify_Posts_Layout {
                 ),
                 array(
                     '_key' => 'date',
+                ),
+                array(
+                    '_key' => 'comment',
                 )
             );
         }
