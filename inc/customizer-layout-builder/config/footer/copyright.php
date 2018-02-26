@@ -61,7 +61,7 @@ class Customify_Builder_Footer_Item_Copyright {
                 'type' => 'text_align',
                 'section' => $this->section,
                 'default' => 'center',
-                'selector' => '.builder-footer-copyright-item',
+                'selector' => '.builder-first--footer_copyright',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'device_settings' => true,

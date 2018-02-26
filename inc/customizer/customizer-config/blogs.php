@@ -222,7 +222,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'type' => 'heading',
                             'label' => __( 'Typography', 'customify' ),
                         ),
-                        
+
                         array(
                             'name' => 'font_size',
                             'type' => 'slider',
@@ -235,7 +235,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                             'max' => 50,
                             'step' => 1
                         ),
-                        /*
+
                         array(
                             'name' => 'font_weight',
                             'type' => 'select',
@@ -258,7 +258,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                                 '900' => 900,
                             )
                         ),
-                        */
 
                         array(
                             'name' => 'letter_spacing',
