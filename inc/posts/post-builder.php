@@ -19,6 +19,7 @@ class Customify_Blog_Builder {
             'excerpt_more' => null,
             'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
             'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
+            'meta_sep' => null,
             'more_text' => null,
         ) );
 
@@ -86,6 +87,7 @@ class Customify_Blog_Builder {
     }
 
     function meta_date(){
+
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
             $time_string = '<time class="entry-date published" datetime="%1$s">%2$s';
@@ -105,10 +107,11 @@ class Customify_Blog_Builder {
             '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
         );
 
-        echo '<span class="posted-on">' . $posted_on . '</span>';
+        return '<span class="posted-on">' . $posted_on . '</span>';
     }
 
     function meta_categories(){
+        $html = '';
         if ( 'post' === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
             $categories_list = get_the_category_list( esc_html__( ', ', 'customify' ) );
@@ -116,44 +119,50 @@ class Customify_Blog_Builder {
                 //  esc_html__( 'Posted in %1$s', 'customify' )
                 $string = '%1$s';
                 /* translators: 1: list of categories. */
-                printf( '<span class="cat-links">' . $string. '</span>', $categories_list ); // WPCS: XSS OK.
+                $html.= sprintf( '<span class="cat-links">' . $string. '</span>', $categories_list ); // WPCS: XSS OK.
             }
         }
+        return $html;
     }
 
     function meta_tags(){
+        $html =  '';
         if ( 'post' === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
                 /* translators: 1: list of tags. */
                 // esc_html__( 'Tagged %1$s', 'customify' )
-                printf( '<span class="tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
+                $html .= sprintf( '<span class="tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
             }
         }
+        return $html;
     }
 
     function meta_comment(){
+        $html =  '';
         if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
             $comment_count = get_comments_number();
-            echo '<span class="comments-link">';
-            echo '<a href="'.esc_url( get_comments_link() ).'">';
+            $html .= '<span class="comments-link">';
+            $html .= '<a href="'.esc_url( get_comments_link() ).'">';
             if ( 1 === $comment_count ) {
-                printf(
+                $html .= sprintf(
                 /* translators: 1: title. */
                     esc_html__( '1 Comment', 'customify' ),
                     $comment_count
                 );
             } else {
-                printf( // WPCS: XSS OK.
+                $html .= sprintf( // WPCS: XSS OK.
                 /* translators: 1: comment count number, 2: title. */
                     esc_html( _nx( '%1$s Comment', '%1$s Comments', $comment_count, 'comments number', 'customify' ) ),
                     number_format_i18n( $comment_count )
                 );
             }
-            echo '</a>';
-            echo '</span>';
+            $html .= '</a>';
+            $html .= '</span>';
         }
+
+        return $html;
     }
 
     function meta_author(){
@@ -163,32 +172,43 @@ class Customify_Blog_Builder {
             '%s',
             '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
         );
-        echo '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+        return '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
-    function post_meta( $post = null, $meta_fields = array() ){
+    function post_meta( $post = null, $meta_fields = array(), $args = array() ){
 
         if ( empty( $meta_fields ) ) {
             $meta_fields =  $this->config['meta_config'];
         }
-        ?>
-        <div class="entry-meta">
-            <?php
-            foreach( ( array ) $meta_fields as $item ) {
-                $item = wp_parse_args( $item, array(
-                    '_key' => '',
-                    '_visibility' => ''
-                ) );
 
-                if ( $item['_visibility'] !== 'hidden' ) {
-                    if ( method_exists( $this, 'meta_'.$item['_key'] ) ) {
-                        call_user_func_array( array( $this, 'meta_'.$item['_key'] ), array( $this->post ) );
+        $metas = array();
+        foreach( ( array ) $meta_fields as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => ''
+            ) );
+
+            if ( $item['_visibility'] !== 'hidden' ) {
+                if ( method_exists( $this, 'meta_'.$item['_key'] ) ) {
+                    $s = call_user_func_array( array( $this, 'meta_'.$item['_key'] ), array( $this->post, $args ) );
+                    if ( $s ) {
+                        $metas[ $item['_key'] ] = $s;
                     }
                 }
             }
+        }
+        if ( ! $args[''] )
+
+        if ( ! empty( $metas ) ) {
             ?>
-        </div><!-- .entry-meta -->
-        <?php
+            <div class="entry-meta">
+                <?php
+                // WPCS: XSS OK.
+                echo join( ( $this->config['meta_sep'] ) ?'<span class="sep">'.$this->config['meta_sep'].'</span>' : '', $metas);
+                ?>
+            </div><!-- .entry-meta -->
+            <?php
+        }
     }
 
     function post_title( $post = null ){
@@ -244,22 +264,22 @@ class Customify_Blog_Builder {
     {
         $more = $this->config['more_text'];
         if ( ! $more ) {
-            $more = __( "Readmore", 'customify' );
+            $more = __( "Read more &rarr;", 'customify' );
         }
         ?>
         <div class="entry-readmore">
-            <a href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
+            <a class="button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php
     }
 
-    function build( $field , $post = null, $fields = null ){
+    function build( $field , $post = null, $fields = null, $args = array() ){
         if ( method_exists( $this, 'post_'.$field ) ) {
-            call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields ) );
+            call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields, $args ) );
         }
     }
 
-    function build_fields( $fields , $post = null ){
+    function build_fields( $fields , $post = null, $args = array() ){
         foreach ( ( array ) $fields as $item ) {
             $item = wp_parse_args( $item, array(
                 '_key' => '',
@@ -267,7 +287,7 @@ class Customify_Blog_Builder {
                 'fields' => null,
             ) );
             if ( $item['_visibility'] !== 'hidden' ) {
-                $this->build( $item['_key'] , $post, $item['fields'] );
+                $this->build( $item['_key'] , $post, $item['fields'], $args );
             }
         }
     }

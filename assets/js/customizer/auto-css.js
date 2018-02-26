@@ -133,6 +133,9 @@ var AutoCSS = window.AutoCSS || null;
                                 case 'html_class':
                                     that.html_class(field, v );
                                     break;
+                                case 'html_replace':
+                                    that.html_replace(field, v );
+                                    break;
                                 default:
                                     fields_code[ field.name ] = that.maybe_devices_setup(field, 'setup_default', v, no_selector );
                             }
@@ -886,9 +889,22 @@ var AutoCSS = window.AutoCSS || null;
         return this.join( css, "\r\n\t" );
     };
 
-    AutoCSS.prototype.html_class = function( field ){
+    AutoCSS.prototype.html_replace = function( field, value ){
+        var selector = field.selector;
+        var v = _.clone( value );
+        if ( _.isUndefined( v )  || _.isEmpty( v ) ) {
+            v = field.default;
+        }
+        $( selector ).html( v );
+    };
+    AutoCSS.prototype.html_class = function( field, v ){
+        var value;
+        if ( _.isUndefined( v ) ) {
+            value = _.clone( v );
+        } else {
+            value = this.get_setting( field.name, 'all' );
+        }
 
-        var value = this.get_setting( field.name, 'all' );
         var that = this;
         var selector = field.selector;
         var last_value =  null;

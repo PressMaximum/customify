@@ -241,20 +241,17 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'label' => __('Font', 'customify'),
                     'choices' => array()
                 ),
-
                 array(
                     'name' => 'font_weight',
                     'type' => 'select',
                     'label' => __('Font Weight', 'customify'),
                     'choices' => array()
                 ),
-
                 array(
                     'name' => 'languages',
                     'type' => 'checkboxes',
                     'label' => __('Font Languages', 'customify'),
                 ),
-
                 array(
                     'name' => 'font_size',
                     'type' => 'slider',
@@ -264,7 +261,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'max' => 50,
                     'step' => 1
                 ),
-
                 array(
                     'name' => 'line_height',
                     'type' => 'slider',
@@ -274,7 +270,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'max' => 50,
                     'step' => 1
                 ),
-
                 array(
                     'name' => 'letter_spacing',
                     'type' => 'slider',
@@ -283,7 +278,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'max' => 10,
                     'step' => 0.1
                 ),
-
                 array(
                     'name' => 'style',
                     'type' => 'select',
@@ -295,7 +289,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'oblique' =>__( 'Oblique', 'customify' ),
                     )
                 ),
-
                 array(
                     'name' => 'text_decoration',
                     'type' => 'select',
@@ -308,7 +301,6 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'none' =>__( 'None', 'customify' ),
                     )
                 ),
-
                 array(
                     'name' => 'text_transform',
                     'type' => 'select',
@@ -395,9 +387,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'type' => 'select',
                         'choices' => array(
                             ''       => __( 'Default', 'customify' ),
-                            'auto'        => __( 'Center', 'customify' ),
-                            'cover'      => __( 'Top Left', 'customify' ),
-                            'contain'     => __( 'Top Right', 'customify' ),
+                            'auto'        => __( 'Auto', 'customify' ),
+                            'cover'      => __( 'Cover', 'customify' ),
+                            'contain'     => __( 'Contain', 'customify' ),
                         ),
                         'required' => array( 'bg_image', 'not_empty', ''),
                         'label' => __( 'Size', 'customify' ),

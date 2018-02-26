@@ -14,6 +14,8 @@ class Customify_Posts_Layout {
             'thumbnail_size' => '',
             'hide_thumb_if_empty' => 1,
             'pagination' => array(),
+            'meta_config' => array(),
+            'meta_sep' => null
         ) );
 
         if ( ! $_args['layout'] ) {
@@ -49,6 +51,20 @@ class Customify_Posts_Layout {
         }
         $_args[ 'pagination' ]['mid_size'] = absint( $_args[ 'pagination' ]['mid_size'] );
 
+        if ( empty( $_args['meta_config'] ) ) {
+            $_args['meta_config'] = array(
+                array(
+                    '_key' => 'categories',
+                ),
+                array(
+                    '_key' => 'author',
+                ),
+                array(
+                    '_key' => 'date',
+                )
+            );
+        }
+
         $this->args = $_args;
     }
 
@@ -57,14 +73,6 @@ class Customify_Posts_Layout {
             array(
                 '_key' => 'thumbnail'
             ),
-            array(
-                '_key' => 'meta',
-                'fields' => array(
-                    array(
-                        '_key' => 'categories',
-                    ),
-                ),
-            ),
         );
         $content_fields = array(
             array(
@@ -72,20 +80,13 @@ class Customify_Posts_Layout {
             ),
             array(
                 '_key' => 'meta',
-                'fields' => array(
-                    array(
-                        '_key' => 'author',
-                    ),
-                    array(
-                        '_key' => 'date',
-                    ),
-                    array(
-                        '_key' => 'comment',
-                    ),
-                ),
+                'fields' => $this->args['meta_config'],
             ),
             array(
                 '_key' => 'excerpt',
+            ),
+            array(
+                '_key' => 'readmore',
             ),
         );
 
@@ -177,17 +178,8 @@ class Customify_Posts_Layout {
             'excerpt_length' => $this->args['excerpt_length'],
             'excerpt_more' => $this->args['excerpt_more'],
             'more_text' => $this->args['more_text'],
-            'meta_config' => array(
-                array(
-                    '_key' => 'categories',
-                ),
-                array(
-                    '_key' => 'author',
-                ),
-                array(
-                    '_key' => 'date',
-                ),
-            )
+            'meta_config' => $this->args['meta_config'],
+            'meta_sep' => $this->args['meta_sep'],
         ) );
 
         $classes[] = 'posts-layout';
@@ -229,7 +221,7 @@ class Customify_Posts_Layout {
     }
 
     function render_pagination(){
-        if ( ! $this->args['pagination']['show_number'] ) {
+        if ( ! $this->args['pagination']['show_paging'] ) {
             return ;
         }
 
@@ -251,7 +243,6 @@ class Customify_Posts_Layout {
             'mid_size' => ( $this->args['pagination']['show_number'] ) ? 3 : 1,
             'prev_text'=> $prev_text,
             'next_text' => $next_text,
-            'mid_size' => $this->args['pagination']['mid_size'],
         ) );
     }
 
@@ -290,8 +281,39 @@ function customify_blog_posts( $args = array() ){
             $_args = $args ;
         }
         $pagination = Customify_Customizer()->get_setting_tab( $args['prefix'].'_pagination', 'default' );
+        $more_settings =  Customify_Customizer()->get_setting_tab( $args['prefix'].'_readmore', 'default' );
+        $more_text = null;
+        if ( empty( $pagination ) ) {
+            $pagination = array(
+                'show_paging' => 1,
+                'show_number' => 1,
+                'show_nav' => 1,
+            );
+        }
+        $pagination = wp_parse_args( $pagination, array(
+            'show_paging' => '',
+            'show_number' => '',
+            'show_nav' => '',
+            'mid_size' => '',
+        ) );
+
+        $meta_settings =  Customify_Customizer()->get_setting_tab( $args['prefix'].'_post_metas', 'default' );
+        $metas = array();
+        $sep = null;
+        if ( is_array( $meta_settings ) ) {
+            $metas = $meta_settings['items'];
+            $sep = $meta_settings['sep'];
+        }
+
+        if ( is_array( $more_settings ) ) {
+            $more_text = $more_settings['more_text'];
+        }
+
         $l = new Customify_Posts_Layout();
         $_args[ 'pagination' ] = is_array( $pagination ) ? $pagination : array();
+        $_args[ 'meta_config' ] = $metas;
+        $_args[ 'meta_sep' ] = $sep;
+        $_args[ 'more_text' ] = $more_text;
         $l->render( $_args );
 
     else :

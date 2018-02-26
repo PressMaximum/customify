@@ -1278,7 +1278,7 @@
                 devices: control.params.devices,
             };
 
-            if (field.type === 'slider') {
+            if ( field.type === 'slider') {
                 field.min = control.params.min;
                 field.max = control.params.max;
                 field.step = control.params.step;
@@ -2039,7 +2039,16 @@
                     customifyField.addFields( that.config[ key +'_fields' ], that.values[key], content, function () {
                         that.get( _.clone( that.config ) );
                     });
-                    customifyField.initConditional( content, that.values[key] );
+                    var fv;
+                    if ( _.isUndefined( that.values[key] ) || _.isEmpty( that.values[key] ) ) {
+                        fv = {};
+                        _.each( that.config[ key +'_fields' ], function( f ) {
+                            fv[ f.name ] = _.isUndefined( f.default ) ? null : f.default;
+                        } );
+                    } else {
+                        fv = that.values[key] ;
+                    }
+                    customifyField.initConditional( content, fv );
                 }
             });
 
