@@ -5,6 +5,61 @@
  * @package customify
  */
 
+
+if ( class_exists( 'WP_Customize_Panel' ) ) {
+
+    class Customify_WP_Customize_Panel extends WP_Customize_Panel {
+
+        public $panel;
+
+        public $type = 'customify_panel';
+
+        public function json() {
+
+            $array = wp_array_slice_assoc( (array) $this, array( 'id', 'description', 'priority', 'type', 'panel', ) );
+            $array['title'] = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );
+            $array['content'] = $this->get_content();
+            $array['active'] = $this->active();
+            $array['instanceNumber'] = $this->instance_number;
+
+            return $array;
+
+        }
+
+    }
+
+}
+
+if ( class_exists( 'WP_Customize_Section' ) ) {
+
+    class Customify_WP_Customize_Section extends WP_Customize_Section {
+
+        public $section;
+
+        public $type = 'customify_section';
+
+        public function json() {
+
+            $array = wp_array_slice_assoc( (array) $this, array( 'id', 'description', 'priority', 'panel', 'type', 'description_hidden', 'section', ) );
+            $array['title'] = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );
+            $array['content'] = $this->get_content();
+            $array['active'] = $this->active();
+            $array['instanceNumber'] = $this->instance_number;
+
+            if ( $this->panel ) {
+                $array['customizeAction'] = sprintf( __( 'Customizing &#9656; %s', 'customify' ), esc_html( $this->manager->get_panel( $this->panel )->title ) );
+
+            } else {
+                $array['customizeAction'] = __( 'Customizing', 'customify' );
+            }
+
+            return $array;
+
+        }
+
+    }
+}
+
 // Load customizer config file.
 require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
@@ -660,10 +715,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
          * @param $wp_customize
          */
         function register( $wp_customize ){
+
+            // Register new panel and section type
+            $wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
+            $wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
             require_once get_template_directory().'/inc/customizer/customizer-control.php';
 
             foreach ( self::get_config( $wp_customize ) as $args ) {
-                switch (  $args['type'] ) {
+                switch ( $args['type'] ) {
                     case  'panel':
                         $name = $args['name'];
                         unset( $args['name'] );
@@ -673,7 +732,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         if ( ! $name ) {
                             $name = $args['title'];
                         }
-                        $wp_customize->add_panel( $name, $args );
+                        unset( $args['name'] );
+                        unset( $args['type'] );
+                        $panel = new Customify_WP_Customize_Panel( $wp_customize, $name, $args );
+                        $wp_customize->add_panel( $panel );
                         break;
                     case 'section':
                         $name = $args['name'];
@@ -684,7 +746,9 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         if ( ! $name ) {
                             $name = $args['title'];
                         }
-                        $wp_customize->add_section( $name, $args );
+                        unset( $args['name'] );
+                        unset( $args['type'] );
+                        $wp_customize->add_section( new Customify_WP_Customize_Section( $wp_customize, $name, $args ) );
                         break;
                     default:
 
