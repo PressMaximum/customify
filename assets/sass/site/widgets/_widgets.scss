@@ -49,6 +49,12 @@
         *:last-child {
             margin-bottom: 0px;
         }
+        .search-field {
+            width: 100%;
+        }
+        .search-submit {
+            margin-top: 5px;
+        }
 
     }
     .widget_categories, .widget_nav_menu, .widget_pages, .widget_product_categories {

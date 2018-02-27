@@ -270,7 +270,7 @@ class Customify_Blog_Builder {
         }
         ?>
         <div class="entry-readmore">
-            <a class="button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
+            <a class="readmore-button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php
     }

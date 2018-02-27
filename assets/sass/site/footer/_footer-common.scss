@@ -1,9 +1,3 @@
-.site-info {
-    margin-top: ms(3);
-    padding-top: ms(3);
-    border-top: 1px solid darken($background_body, 10%);
-}
-
 .footer--row {
     &.layout-fullwidth {
         .customify-container {
@@ -27,9 +21,7 @@
     }
 }
 
-/**
-* FOOTER WIDGETS
- */
+/*  FOOTER WIDGETS */
 @include for_device( sm ) {
     .site-footer {
         .builder-item {
@@ -54,5 +46,10 @@
     ul ul {
         margin-left: 2.617924em;
     }
+}
+
+/* Footer Copyright */
+.footer-copyright {
+    font-size: 15px;
 }
 

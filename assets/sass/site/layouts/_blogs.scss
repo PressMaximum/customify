@@ -89,6 +89,24 @@ $blog_gutter: $gl-gutter;
     .entry-readmore {
         margin-top: 1em;
     }
+    .readmore-button {
+        display: inline-block;
+        border: none;
+        background: $color_primary;
+        color: #FFFFFF;
+        cursor: pointer;
+        padding: 9px 15px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+        line-height: 1;
+        border-radius: 2px;
+        &:hover {
+            color: #fff;
+            background: $color_secondary;
+        }
+    }
 
     &.layout-- {
         &blog_classic, &blog_lateral, &blog_classic_rounded {

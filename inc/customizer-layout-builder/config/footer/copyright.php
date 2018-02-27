@@ -60,7 +60,7 @@ class Customify_Builder_Footer_Item_Copyright {
                 'name' => $this->name.'_text_align',
                 'type' => 'text_align',
                 'section' => $this->section,
-                'default' => 'center',
+                'default' => 'left',
                 'selector' => '.builder-first--footer_copyright',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
@@ -85,7 +85,7 @@ class Customify_Builder_Footer_Item_Copyright {
             $content = str_replace('{'.$k.'}', $v, $content );
         }
 
-        echo '<div class="builder-footer-copyright-item">';
+        echo '<div class="builder-footer-copyright-item footer-copyright">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';
     }
