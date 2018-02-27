@@ -2982,7 +2982,6 @@ article.comment .comment-post-author {
 .nav-menu-desktop .nav-icon-angle {
   display: inline;
   font-size: inherit;
-  line-height: 1;
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
