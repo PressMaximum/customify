@@ -114,7 +114,7 @@ class Customify_Blog_Builder {
         $html = '';
         if ( 'post' === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
-            $categories_list = get_the_category_list( esc_html__( '__cate_sep__', 'customify' ) );
+            $categories_list = get_the_category_list( '__cate_sep__' );
             if ( $categories_list ) {
                 $categories_list = explode( '__cate_sep__', $categories_list );
                 $categories_list = $categories_list[0];
