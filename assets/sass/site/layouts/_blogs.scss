@@ -1,14 +1,18 @@
 $blog_gutter: $gl-gutter;
+
 .bypostauthor {
     display: inline-block;
 }
 
 .entry-meta {
-    margin-bottom: 0.5em;
+    margin-bottom: 0.7em;
     color: $color_meta;
-    font-size: 80%;
+    font-size: 85%;
     a {
-        color: inherit;
+        color: $color_text;
+        &:hover {
+            color: $color_link;
+        }
     }
     > span {
         display: inline-block;
@@ -17,9 +21,7 @@ $blog_gutter: $gl-gutter;
         margin-left: 3px;
         margin-right: 3px;
     }
-    .byline {
-        font-weight: bold;
-    }
+
 }
 
 .posts-layout {
@@ -101,7 +103,7 @@ $blog_gutter: $gl-gutter;
         text-transform: uppercase;
         transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
         line-height: 1;
-        border-radius: 2px;
+        border-radius: 1px;
         &:hover {
             color: #fff;
             background: $color_secondary;
@@ -212,7 +214,19 @@ $blog_gutter: $gl-gutter;
     .nav-links {
         > * {
             border: 1px solid $color_border ;
-            padding: 5px 10px;
+            color: $color_meta;
+            padding: 5px 11px 6px;
+            border-radius: 1px;
+            &:hover {
+                border-color: $color_primary;
+                background: $color_primary;
+                color: #FFFFFF;
+            }
+        }
+        span {
+            border-color: $color_primary;
+            background: $color_primary;
+            color: #FFFFFF;
         }
     }
 }
@@ -220,32 +234,42 @@ $blog_gutter: $gl-gutter;
 // Single post
 .single {
     .entry-meta {
-        margin-bottom: ( $blog_gutter / 2 );
+        margin-bottom: ms(1);
     }
     .entry-footer {
-        margin-bottom: ( $blog_gutter / 2 );
+        margin-bottom: ms(2);
     }
 }
 
 .entry-footer {
-    > span {
-        display: block;
-        margin-bottom: 1em;
-        &:last-child {
-            margin-bottom: 0;
-        }
-        font-size: 90%;
-    }
-    .tagged-label, .cat-label {
-        background-color: $color_text;
-        color: #fff;
-        padding: 5px 10px;
-        text-transform: uppercase;
-    }
     .tags-links, .cat-links {
+        margin-top: ms(-3);
         a {
-            padding: 5px 10px;
+            padding: 3px 8px 4px;
+            margin: 0 6px 7px 0;
             border: 1px solid $color_border;
+            color: $color_meta;
+            display: inline-block;
+            font-size: 13px;
+            -webkit-border-radius: 1px;
+            -moz-border-radius: 1px;
+            border-radius: 1px;
+            &:hover {
+                background: $color_primary;
+                border-color: $color_primary;
+                color: #ffffff;
+            }
+        }
+    }
+    .edit-link {
+        display: block;
+        width: 100%;
+        margin-top: ms(-3);
+        a {
+            text-transform: uppercase;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 0.8px;
         }
     }
 }

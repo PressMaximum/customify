@@ -148,17 +148,17 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'default' => array(
+	                array(
+		                '_key' => 'author',
+		                'title' => __('Author', 'customify'),
+	                ),
+	                array(
+		                '_key' => 'date',
+		                'title' => __('Date', 'customify'),
+	                ),
                     array(
                         '_key' => 'categories',
                         'title' => __('Categories', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'author',
-                        'title' => __('Author', 'customify'),
-                    ),
-                    array(
-                        '_key' => 'date',
-                        'title' => __('Date', 'customify'),
                     ),
                     array(
                         '_key' => 'comment',

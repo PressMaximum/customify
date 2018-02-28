@@ -54,18 +54,18 @@ class Customify_Posts_Layout {
 
         if ( empty( $_args['meta_config'] ) ) {
             $_args['meta_config'] = array(
-                array(
-                    '_key' => 'categories',
-                ),
-                array(
-                    '_key' => 'author',
-                ),
-                array(
-                    '_key' => 'date',
-                ),
-                array(
-                    '_key' => 'comment',
-                )
+	            array(
+		            '_key' => 'author',
+	            ),
+	            array(
+		            '_key' => 'date',
+	            ),
+	            array(
+		            '_key' => 'categories',
+	            ),
+	            array(
+		            '_key' => 'comment',
+	            ),
             );
         }
 

@@ -229,7 +229,6 @@ class Customify_Init {
      */
     function scripts() {
 
-
         if ( ! function_exists( 'a' ) ) {
             require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
         }
@@ -237,10 +236,8 @@ class Customify_Init {
 
 	    wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
 
-        wp_enqueue_script( 'customify', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), self::$version, true );
-
+        wp_enqueue_script( 'customify-themejs', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), self::$version, true );
         wp_enqueue_script( 'customify-navigation', get_template_directory_uri() . '/assets/js/navigation.js', array(), self::$version, true );
-
         wp_enqueue_script( 'customify-skip-link-focus-fix', get_template_directory_uri() . '/assets/js/skip-link-focus-fix.js', array(), self::$version, true );
 
         if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
@@ -255,16 +252,15 @@ class Customify_Init {
 
     function includes(){
         $files = array(
-            '/inc/template-class.php', // Template element classes.
-            '/inc/element-classes.php', // Functions which enhance the theme by hooking into WordPerss and itself (huh?).
-            '/inc/metabox.php', //Page settings.
-            '/inc/template-tags.php', //  Custom template tags for this theme.
-            '/inc/template-functions.php', // Functions which enhance the theme by hooking into WordPress.
-            '/inc/customizer/customizer.php', // Customizer additions.
-            '/inc/customizer-layout-builder/init.php', // Customizer additions.
-
-            '/inc/posts/post-builder.php',
-            '/inc/posts/posts.php',
+            '/inc/template-class.php',                  // Template element classes.
+            '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPerss and itself (huh?).
+            '/inc/metabox.php',                         //Page settings.
+            '/inc/template-tags.php',                   //  Custom template tags for this theme.
+            '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
+            '/inc/customizer/customizer.php',           // Customizer additions.
+            '/inc/customizer-layout-builder/init.php',  // Customizer additions.
+            '/inc/posts/post-builder.php',              // Blog builder
+            '/inc/posts/posts.php',                     // Blog builder config
         );
 
         foreach( $files as $file ) {

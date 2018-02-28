@@ -51,7 +51,7 @@ class Customify_Builder_Footer_Item_Copyright {
                 'selector' => '.builder-footer-copyright-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
-                'default' => __( '&copy; {current_year} {site_title} - Powered by {theme_author}', 'customify' ),
+                'default' => __( '&copy; {current_year} {site_title} - Theme designed by {theme_author}.', 'customify' ),
                 'title' => __( 'Copyright Content', 'customify' ),
                 'description' => __( 'Arbitrary HTML code or shortcode. Available tags: {current_year}, {site_title}, {theme_author}', 'customify' ),
             ),

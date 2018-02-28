@@ -26,9 +26,12 @@ global $post;
                 array(
                     '_key' => 'author',
                 ),
-                array(
-                    '_key' => 'date',
-                ),
+	            array(
+		            '_key' => 'date',
+	            ),
+	            array(
+		            '_key' => 'categories',
+	            ),
                 array(
                     '_key' => 'comment',
                 ),
