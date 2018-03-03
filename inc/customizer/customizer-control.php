@@ -73,14 +73,16 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         if( $this->setting_type == 'repeater' ) {
             wp_enqueue_script('jquery-ui-sortable');
         }
+
+        $suffix = Customify_Init()->get_asset_suffix();
        // wp_enqueue_editor();
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
 
-        wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer.css');
-        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha.js', array( 'wp-color-picker' ), false, true );
-        wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
+        wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer'.$suffix.'.css');
+        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_icon_loaded ) ) {
 
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(

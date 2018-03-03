@@ -21,6 +21,21 @@ class Customify_WC {
         add_filter( 'customify_is_footer_display', array( $this, 'show_shop_footer' ), 15 );
         add_filter( 'customify_site_content_class', array( $this, 'shop_content_layout' ), 15 );
         add_filter( 'customify_builder_row_display_get_post_id', array( $this, 'builder_row_get_id' ), 15 );
+
+
+        add_filter( 'customify/theme/js', array( $this, 'add_js' ) );
+        add_filter( 'customify/theme/css', array( $this, 'add_css' ) );
+    }
+    function add_css( $css_files ){
+        $suffix = Customify_Init()->get_asset_suffix();
+        $css_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
+        return $css_files;
+    }
+
+    function add_js( $js_files ){
+        $suffix = Customify_Init()->get_asset_suffix();
+        $js_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/js/compatibility/woocommerce'.$suffix.'.js';
+        return $js_files;
     }
 
     function get_shop_page_meta( $meta_key ){
