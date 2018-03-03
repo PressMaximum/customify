@@ -274,7 +274,7 @@ function customify_blog_posts( $args = array() ){
             ?>
         </header><!-- .page-header -->
         <?php
-    } else if ( customify_is_post_title_display() ) {
+    } else if ( customify_is_post_title_display() && ! ( is_front_page() && is_home() ) ) {
         ?>
         <header>
             <h1 class="page-title"><?php echo get_the_title( customify_get_support_meta_id() ); ?></h1>
