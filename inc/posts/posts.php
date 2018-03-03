@@ -19,7 +19,7 @@ class Customify_Posts_Layout {
             'meta_sep' => null
         ) );
 
-        if ( ! $_args['layout'] ) {
+        if ( ! $_args['layout'] || is_array( $_args['layout'] ) ) {
             $_args['layout'] = 'blog_classic';
         }
 
@@ -54,18 +54,18 @@ class Customify_Posts_Layout {
 
         if ( empty( $_args['meta_config'] ) ) {
             $_args['meta_config'] = array(
-	            array(
-		            '_key' => 'author',
-	            ),
-	            array(
-		            '_key' => 'date',
-	            ),
-	            array(
-		            '_key' => 'categories',
-	            ),
-	            array(
-		            '_key' => 'comment',
-	            ),
+                array(
+                    '_key' => 'author',
+                ),
+                array(
+                    '_key' => 'date',
+                ),
+                array(
+                    '_key' => 'categories',
+                ),
+                array(
+                    '_key' => 'comment',
+                ),
             );
         }
 
@@ -102,10 +102,10 @@ class Customify_Posts_Layout {
         }
 
         if ( $show_media ) {
-        ?>
-        <div class="entry-media">
-            <?php Customify_Blog_Builder()->build_fields( $media_fields, $post ); ?>
-        </div>
+            ?>
+            <div class="entry-media">
+                <?php Customify_Blog_Builder()->build_fields( $media_fields, $post ); ?>
+            </div>
         <?php } ?>
         <div class="entry-content-data">
             <?php Customify_Blog_Builder()->build_fields( $content_fields, $post ); ?>
@@ -131,14 +131,12 @@ class Customify_Posts_Layout {
     }
 
     function get_predefined( $layout ){
+        if ( ! is_string( $layout ) ) {
+            return false;
+        }
         $presets = array(
             'blog_classic' => array(
                 'columns' => 1,
-                'pagination' => array(),
-            ),
-
-            'blog_2column' => array(
-                'columns' => 2,
                 'pagination' => array(),
             ),
 
@@ -152,15 +150,12 @@ class Customify_Posts_Layout {
                 'pagination' => array(),
             ),
 
-            'blog_masonry' => array(
-                'columns' => 3,
-                'pagination' => array(),
-            ),
-
         );
 
-        if ( isset( $presets[ $layout ] ) ) {
-            return $presets[ $layout ];
+        if ( ! empty( $layout ) ) {
+            if ( isset( $presets[ $layout ] ) && $presets[ $layout ] ) {
+                return $presets[ $layout ];
+            }
         }
 
         return false;
