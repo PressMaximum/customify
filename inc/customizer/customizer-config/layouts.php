@@ -189,30 +189,6 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
                     'title' => __('Search Results', 'customify'),
                     'choices' => customify_get_config_sidebar_layouts()
                 ),
-
-			// Page layout
-			array(
-				'name'           => 'page_layout_section',
-				'type'           => 'section',
-				'panel'          => 'layout_panel',
-				'theme_supports' => '',
-				'title'          => __( 'Pages', 'customify' ),
-			),
-				array(
-					'name' => 'select2',
-					'type' => 'select',
-					//'device_settings' => true,
-					'default' => '',
-					'section' => 'page_layout_section',
-					//'priority' => 22,
-					'title' => __('Select', 'customify'),
-					'description' => __('description', 'customify'),
-					'choices' => array(
-						'1' => __('One', 'customify'),
-						'2' => __('Two', 'customify'),
-						'3' => __('Three', 'customify'),
-					)
-				),
 		);
 		return array_merge( $configs, $config );
 	}
