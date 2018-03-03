@@ -24,9 +24,8 @@
 }
 .footer-bottom {
     .customify-container {
-        padding-top: 35px;
-        padding-bottom: 35px;
-
+        padding-top: ms(2);
+        padding-bottom: ms(2);
     }
 }
 
@@ -59,6 +58,6 @@
 
 /* Footer Copyright */
 .footer-copyright {
-    font-size: 15px;
+    font-size: 14px;
 }
 

@@ -169,7 +169,7 @@ class Customify_Init {
      */
     function register_sidebars() {
         register_sidebar( array(
-            'name'          => esc_html__( 'Sidebar Primary', 'customify' ),
+            'name'          => esc_html__( 'Primary Sidebar', 'customify' ),
             'id'            => 'sidebar-1',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -178,7 +178,7 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Sidebar Secondary', 'customify' ),
+            'name'          => esc_html__( 'Secondary Sidebar', 'customify' ),
             'id'            => 'sidebar-2',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',

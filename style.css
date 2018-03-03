@@ -2942,7 +2942,7 @@ article.comment .comment-post-author {
   line-height: 1;
 }
 .site-branding .site-title {
-  font-size: 1.7em;
+  font-size: 1.5em;
   margin: 0;
   font-weight: 600;
   line-height: 1.216;
@@ -5939,7 +5939,7 @@ body.menu_sidebar_dropdown:before {
   background: #7b8994;
   color: #FFFFFF;
   cursor: pointer;
-  padding: 9px 15px;
+  padding: 9px 14px;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -6020,15 +6020,19 @@ body.menu_sidebar_dropdown:before {
 }
 
 .pagination {
-  margin: 0 auto;
-  text-align: center;
+  margin: 30px auto;
   display: block;
 }
 .pagination .nav-links > * {
   border: 1px solid #eaecee;
   color: #6d6d6d;
-  padding: 5px 11px 6px;
+  padding: 4px 12px 4px;
   border-radius: 1px;
+  text-transform: uppercase;
+  font-weight: 500;
+  letter-spacing: 0.8px;
+  font-size: 13px;
+  display: inline-block;
 }
 .pagination .nav-links > *:hover {
   border-color: #7b8994;
@@ -6181,6 +6185,9 @@ body.menu_sidebar_dropdown:before {
 }
 .widget-area .widget .search-submit {
   margin-top: 5px;
+  line-height: 1;
+  padding: 9px 14px;
+  font-size: 13px;
 }
 .widget-area .widget_categories ul ul, .widget-area .widget_nav_menu ul ul, .widget-area .widget_pages ul ul, .widget-area .widget_product_categories ul ul {
   margin-top: 0.3819820591em;
@@ -6220,8 +6227,8 @@ body.menu_sidebar_dropdown:before {
 }
 
 .footer-bottom .customify-container {
-  padding-top: 35px;
-  padding-bottom: 35px;
+  padding-top: 1.618em;
+  padding-bottom: 1.618em;
 }
 
 /*  FOOTER WIDGETS */
@@ -6244,7 +6251,7 @@ body.menu_sidebar_dropdown:before {
 
 /* Footer Copyright */
 .footer-copyright {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 /*# sourceMappingURL=style.css.map */

@@ -10,7 +10,6 @@ class Customify_WC {
         return self::$_instance ;
     }
 
-
     function __construct()
     {
         add_filter( 'customify_get_layout', array( $this, 'shop_layout' ) );
@@ -117,7 +116,7 @@ class Customify_WC {
     }
     function register_sidebars(){
         register_sidebar( array(
-            'name'          => esc_html__( 'Sidebar Shop Primary', 'customify' ),
+            'name'          => esc_html__( 'WooCommerce Primary Sidebar', 'customify' ),
             'id'            => 'shop-sidebar-1',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
@@ -126,7 +125,7 @@ class Customify_WC {
             'after_title'   => '</h4>',
         ) );
         register_sidebar( array(
-            'name'          => esc_html__( 'Sidebar Shop Secondary', 'customify' ),
+            'name'          => esc_html__( 'WooCommerce Secondary Sidebar', 'customify' ),
             'id'            => 'shop-sidebar-2',
             'description'       => esc_html__( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
