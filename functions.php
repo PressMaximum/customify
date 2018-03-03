@@ -224,6 +224,26 @@ class Customify_Init {
         ) );
     }
 
+    function get_asset_suffix(){
+        $suffix = '.min';
+        if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            $suffix = '';
+        }
+        return $suffix;
+    }
+
+    function get_style_uri(){
+        $css_file = get_stylesheet_uri();
+        if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            $suffix = $this->get_asset_suffix();
+            $style_dir = get_stylesheet_directory();
+            if( file_exists( $style_dir.'/style'.$suffix.'.css' ) ) {
+                $css_file = get_stylesheet_directory_uri() . '/style'.$suffix.'.css';
+            }
+        }
+        return $css_file;
+    }
+
     /**
      * Enqueue scripts and styles.
      */
@@ -234,11 +254,23 @@ class Customify_Init {
         }
         Customify_Font_Icons()->enqueue();
 
-	    wp_enqueue_style( 'customify-style', get_stylesheet_uri() );
+        $suffix = $this->get_asset_suffix();
 
-        wp_enqueue_script( 'customify-themejs', get_template_directory_uri() . '/assets/js/theme.js', array('jquery'), self::$version, true );
-        wp_enqueue_script( 'customify-navigation', get_template_directory_uri() . '/assets/js/navigation.js', array(), self::$version, true );
-        wp_enqueue_script( 'customify-skip-link-focus-fix', get_template_directory_uri() . '/assets/js/skip-link-focus-fix.js', array(), self::$version, true );
+        $css_files = apply_filters(  'customify/theme/css', array(
+            'style' => $this->get_style_uri()
+        ) );
+
+        $js_files = apply_filters(  'customify/theme/js', array(
+            'themejs' => get_template_directory_uri() . '/assets/js/theme'.$suffix.'.js'
+        ) );
+
+        foreach( $css_files as $id => $url ) {
+            wp_enqueue_style( 'customify-'.$id, $url, array(), self::$version );
+        }
+
+        foreach( $js_files as $id => $url ) {
+            wp_enqueue_script( 'customify-'.$id,  $url, array('jquery'), self::$version, true );
+        }
 
         if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
             wp_enqueue_script( 'comment-reply' );
@@ -271,7 +303,7 @@ class Customify_Init {
 
         //WooCommerce
         if ( class_exists('WooCommerce') ) {
-            require_once self::$path.'/inc/wc.php';
+            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
         }
 
     }

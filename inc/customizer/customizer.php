@@ -109,8 +109,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
          */
         function preview_js() {
             if ( is_customize_preview() ) {
-                wp_enqueue_script('customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css.js', array('customize-preview'), '20151215', true);
-                wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
+                $suffix = Customify_Init()->get_asset_suffix();
+
+                wp_enqueue_script('customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css'.$suffix.'.js', array('customize-preview'), '20151215', true);
+                wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer'.$suffix.'.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
                 wp_localize_script('customify-customizer-auto-css', 'Customify_Preview_Config', array(
                     'fields' => Customify_Customizer::get_config(),
                     'devices' => $this->devices,

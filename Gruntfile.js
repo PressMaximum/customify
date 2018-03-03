@@ -34,19 +34,83 @@ module.exports = function( grunt ) {
                     style: 'expanded'
                 },
 
-                files: {
+                files: [
+                    {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss'
-                }
+                    },
+                    {
+                        expand: true,
+                        cwd: 'assets/sass/site/compatibility',
+                        src: '*.scss',
+                        dest: 'assets/css/compatibility',
+                        ext: '.css'
+                    }
+                ]
             }
         },
 
-        // Minify all css files.
+        // Minified all css files.
         cssmin: {
-            main: {
-                files: {
-                    'style.css': ['style.css']
-                }
+            target: {
+                files: [
+                    // Base style
+                    {
+                        expand: true,
+                        cwd: '',
+                        src: ['*.css', '!*.min.css'],
+                        dest: '',
+                        ext: '.min.css'
+                    },
+
+                    // Customizer style
+                    {
+                        expand: true,
+                        cwd: 'assets/css/admin/customizer',
+                        src: ['*.css', '!*.min.css'],
+                        dest: 'assets/css/admin/customizer',
+                        ext: '.min.css'
+                    },
+
+                    // Compatibility style
+                    {
+                        expand: true,
+                        cwd: 'assets/css/compatibility',
+                        src: ['*.css', '!*.min.css'],
+                        dest: 'assets/css/compatibility',
+                        ext: '.min.css'
+                    }
+                ]
+            }
+        },
+
+        uglify: {
+            my_target: {
+                files: [
+                    {
+                        'assets/js/theme.min.js': ['assets/js/theme.js']
+                    },
+                    {
+                        expand: true,
+                        cwd: '.',
+                        src: ['assets/js/compatibility/*.js', '!assets/js/compatibility/*.min.js'],
+                        dest: '.',
+                        rename: function (dst, src) {
+                            // To keep the source js files and make new files as `*.min.js`:
+                            return dst + '/' + src.replace('.js', '.min.js');
+                        }
+                    },
+                    {
+                        expand: true,
+                        cwd: '.',
+                        src: ['assets/js/customizer/*.js', '!assets/js/customizer/*.min.js'],
+                        dest: '.',
+                        rename: function (dst, src) {
+                            // To keep the source js files and make new files as `*.min.js`:
+                            return dst + '/' + src.replace('.js', '.min.js');
+                        }
+                    }
+                ]
             }
         },
 
@@ -60,11 +124,19 @@ module.exports = function( grunt ) {
                     'assets/sass/admin/**/*.scss'
                 ],
                 tasks: [
-                    'sass',
+                    //'sass',
                     'css'
                 ]
+            },
+            scripts: {
+                files: [
+                    'assets/js/*.js',
+                    'assets/js/compatibility/*.js',
+                    'assets/js/customizer/*.js'
+                ],
+                tasks: ['uglify']
             }
-        },
+        }
 
     });
 
@@ -72,8 +144,8 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-postcss' );
     grunt.loadNpmTasks('grunt-contrib-sass');
-    //grunt.loadNpmTasks( 'grunt-sass' );
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+    grunt.loadNpmTasks('grunt-contrib-uglify');
 
 
     // Register tasks
@@ -82,12 +154,17 @@ module.exports = function( grunt ) {
         'css'
     ]);
     grunt.registerTask( 'css', [
-        'sass',
+        'sass'
         //'postcss',
         //'cssmin'
     ]);
 
-
+    grunt.registerTask('before-release', [
+        'css',
+        'postcss',
+        'cssmin',
+        'uglify'
+    ]);
 
     // Update google Fonts
     grunt.registerTask('google-fonts', function () {
