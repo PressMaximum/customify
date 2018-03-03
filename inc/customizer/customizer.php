@@ -671,6 +671,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
             if ( ! $size ) {
                 $size = 'full';
             }
+            // attachment_url_to_postid
 
             if ( is_numeric( $value ) ) {
                 $image_attributes = wp_get_attachment_image_src( $value, $size );
@@ -680,6 +681,15 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     return false;
                 }
             } elseif ( is_string( $value ) ) {
+                $img_id = attachment_url_to_postid( $value );
+                if ( $img_id ) {
+                    $image_attributes = wp_get_attachment_image_src( $img_id, $size );
+                    if ( $image_attributes ) {
+                        return $image_attributes[0];
+                    } else {
+                        return false;
+                    }
+                }
                 return $value;
             } elseif ( is_array( $value ) ) {
                 $value = wp_parse_args( $value, array(
@@ -696,11 +706,17 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         $url = $image_attributes[0];
                     }
                 } else {
-                    $url = wp_get_attachment_url( $value );
+                    $url = wp_get_attachment_url( $value['id'] );
                 }
 
                 if ( ! $url ) {
                     $url = $value['url'];
+                    if( $url ) {
+                        $img_id = attachment_url_to_postid( $url );
+                        if ($img_id) {
+                            return wp_get_attachment_url( $img_id );
+                        }
+                    }
                 }
 
                 return $url;
