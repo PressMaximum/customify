@@ -65,3 +65,11 @@ Source: http://fontawesome.io/
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
 Source: https://necolas.github.io/normalize.css/
+
+Gridlex, Copyright Devlint
+License: MIT, https://github.com/devlint/gridlex/blob/master/LICENSE
+Source: https://github.com/devlint/gridlex
+
+WP Color Picker Alpha, Copyright kallookoo
+Licensed under the GPLv2 license.
+Source: https://github.com/kallookoo/wp-color-picker-alpha
