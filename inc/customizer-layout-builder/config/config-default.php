@@ -966,7 +966,7 @@ function customify_layout_builder_config_default($val, $name)
                                             'link' => '1',
                                         ),
                                 ),
-                            'bg_color' => '#dbdbdb',
+                            'bg_color' => '',
                             'bg_image' =>
                                 array(
                                     'id' => '',
@@ -1074,7 +1074,7 @@ function customify_layout_builder_config_default($val, $name)
                                             'link' => '1',
                                         ),
                                 ),
-                            'bg_color' => '#e2e2e2',
+                            'bg_color' => '',
                             'bg_image' =>
                                 array(
                                     'id' => '',
