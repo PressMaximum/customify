@@ -311,6 +311,7 @@ class Customify_Init {
     function init(){
         $this->init_hooks();
         $this->includes();
+        do_action( 'customify/init' );
     }
 
 }

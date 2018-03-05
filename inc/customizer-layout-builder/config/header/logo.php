@@ -103,8 +103,8 @@ class Customify_Builder_Item_Logo {
         if ( $logo_image ) {
             ?>
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
-                <img src="<?php echo esc_url($logo_image); ?>"
-                     alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
+                <img class="site-img-logo" src="<?php echo esc_url($logo_image); ?>" alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
+                <?php do_action( 'customizer/after-logo-img' ); ?>
             </a>
             <?php
         }

@@ -459,7 +459,7 @@ Customify_Customizer_Layout_Builder()->init();
 class Customify_Customizer_Layout_Builder_Frontend {
 	static $_instance;
 	private $control_id = 'header_builder_panel';
-	private $id = 'header';
+	public  $id = 'header';
 	private $render_items = array();
 	private $rows = array();
 	private $data = false;
@@ -891,6 +891,8 @@ class Customify_Customizer_Layout_Builder_Frontend {
 						$atts['class']       = join( ' ', $classes );
 						$atts['id']          = 'cb-row--' . $_id;
 						$atts['data-row-id'] = $row_id;
+
+                        $atts  = apply_filters( 'customify/builder/row-attrs', $atts, $row_id, $this );
 
 						$string_atts = '';
 						foreach ( $atts as $k => $s ) {
