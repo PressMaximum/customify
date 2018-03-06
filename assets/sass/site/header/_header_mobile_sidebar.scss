@@ -65,7 +65,12 @@ body {
             background: $ms_tl_bg;
         }
     }
-    .nav-menu-mobile .nav-toggle-icon { color: currentColor; }
+    .nav-menu-mobile .nav-toggle-icon {
+        color: currentColor;
+        &:hover, &:focus {
+            background: rgba(0,0,0,0.01);
+        }
+    }
 
     // Light mode
     &.is-text-dark {
@@ -98,6 +103,11 @@ body {
             }
         }
         .nav-menu-mobile .menu li a, .sub-menu, .nav-menu-mobile .nav-toggle-icon { border-color: $ms_td_border_color }
+        .nav-menu-mobile .nav-toggle-icon {
+            &:hover, &:focus {
+                background: rgba(0,0,0,0.01);
+            }
+        }
     }
 }
 

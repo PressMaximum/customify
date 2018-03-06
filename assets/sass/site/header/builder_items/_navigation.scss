@@ -116,6 +116,7 @@ $submenu_width: 14em;
                 font-size: 14px;
                 font-weight: normal;
                 transition: background 0.15s ease-out;
+                line-height: 1.6;
                 &:hover {
                     background: rgba(0,0,0,0.015);
                 }
@@ -310,6 +311,10 @@ $submenu_width: 14em;
                 cursor: pointer;
                 padding: 0.88em 0.9em;
                 border-left: 1px solid $ms_tl_border_color;
+                background: transparent;
+                &:hover {
+                    box-shadow: none;
+                }
             }
         }
 

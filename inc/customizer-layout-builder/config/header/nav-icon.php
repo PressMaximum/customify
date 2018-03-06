@@ -167,7 +167,7 @@ class Customify_Builder_Item_Nav_Icon{
             $classes[] = $style;
         }
         ?>
-        <span class="<?php echo esc_attr( join(' ', $classes ) ); ?>">
+        <button class="<?php echo esc_attr( join(' ', $classes ) ); ?>">
             <span class="hamburger hamburger--squeeze">
                 <span class="hamburger-box">
                   <span class="hamburger-inner"></span>
@@ -177,7 +177,7 @@ class Customify_Builder_Item_Nav_Icon{
             if ( $show_label ) {
                 echo '<span class="'.esc_attr( join( ' ', $label_classes ) ).'">'.$label.'</span>';
             }
-            ?></span>
+            ?></button>
         <?php
     }
 

@@ -991,7 +991,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 		$close = '<a class="close is-size-medium '. $menu_sidebar_skin . esc_attr( $class ) . '" href="#">
         <span class="hamburger hamburger--squeeze is-active">
             <span class="hamburger-box">
-              <span class="hamburger-inner"></span>
+              <span class="hamburger-inner"><span class="screen-reader-text">' . __( 'Menu', 'customify' ) . '</span></span>
             </span>
         </span>
         <span class="screen-reader-text">' . __( 'Close', 'customify' ) . '</span>

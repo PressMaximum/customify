@@ -232,7 +232,7 @@ jQuery( document ).ready( function( $ ){
     if ( -1 === menu.className.indexOf( 'nav-menu' ) ) {
         menu.className += ' nav-menu';
     }
-    
+
     // Get all the link elements within the menu.
     links    = menu.getElementsByTagName( 'a' );
 
