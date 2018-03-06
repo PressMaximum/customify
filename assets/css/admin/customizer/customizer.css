@@ -684,6 +684,7 @@
   text-align: center;
   height: 100%;
   position: relative;
+  background: #FFFFFF;
 }
 .customify--icon-picker .customify--icon-preview-icon i {
   position: absolute;
@@ -694,6 +695,7 @@
 .customify--icon-picker input {
   box-shadow: none !important;
   outline: none !important;
+  background: #ffffff;
 }
 .customify--icon-picker .customify--icon-remove {
   cursor: pointer;
