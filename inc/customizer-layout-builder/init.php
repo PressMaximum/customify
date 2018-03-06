@@ -1025,6 +1025,8 @@ function customify_customize_render_header() {
     do_action( 'customizer/render_header/after' );
 }
 
+add_action( 'customify/site-start', 'customify_customize_render_header' );
+
 /**
  * Display Footer Layout)
  */
@@ -1040,3 +1042,5 @@ function customify_customize_render_footer() {
 	Customify_Customizer_Layout_Builder_Frontend()->render();
 	echo '</footer>';
 }
+
+add_action( 'customify/site-end', 'customify_customize_render_footer' );

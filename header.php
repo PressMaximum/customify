@@ -16,7 +16,6 @@
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
-
 	<?php wp_head(); ?>
 </head>
 
@@ -24,7 +23,13 @@
 <div id="page" <?php customify_site_classes(); ?>>
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'customify' ); ?></a>
     <?php
-    customify_customize_render_header();
+    /**
+     * Site start
+     *
+     * @hooked customify_customize_render_header - 10
+     *
+     * @see customify_customize_render_header
+     */
     do_action( 'customify/site-start' );
     ?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>

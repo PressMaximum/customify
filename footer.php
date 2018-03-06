@@ -13,7 +13,13 @@
 	</div><!-- #content -->
 
 <?php
-customify_customize_render_footer();
+/**
+ * Site end
+ *
+ * @hooked customify_customize_render_footer - 10
+ *
+ * @see customify_customize_render_footer
+ */
 do_action( 'customify/site-end' );
 ?>
 </div><!-- #page -->
