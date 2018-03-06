@@ -1015,12 +1015,14 @@ function customify_customize_render_header() {
 		return;
 	}
 	echo Customify_Customizer_Layout_Builder_Frontend()->close_icon( ' close-panel close-sidebar-panel' );
+	do_action( 'customizer/render_header/before' );
 	echo '<header id="masthead" class="site-header">';
 	$list_items = Customify_Customizer_Layout_Builder()->get_builder_items( 'header' );
 	Customify_Customizer_Layout_Builder_Frontend()->set_config_items( $list_items );
 	Customify_Customizer_Layout_Builder_Frontend()->render();
 	Customify_Customizer_Layout_Builder_Frontend()->render_mobile_sidebar();
 	echo '</header>';
+    do_action( 'customizer/render_header/after' );
 }
 
 /**

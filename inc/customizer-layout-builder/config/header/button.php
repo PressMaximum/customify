@@ -17,7 +17,7 @@ class Customify_Builder_Item_Button {
 		$section  = 'header_button';
 		$prefix   = 'header_button';
 		$fn       = array( $this, 'render' );
-		$selector = '.customify-builder-btn';
+		$selector = '.header--row a.customify-builder-btn';
 		$config   = array(
 			array(
 				'name'  => $section,

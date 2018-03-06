@@ -14,6 +14,7 @@
 
 <?php
 customify_customize_render_footer();
+do_action( 'customify/site-end' );
 ?>
 </div><!-- #page -->
 

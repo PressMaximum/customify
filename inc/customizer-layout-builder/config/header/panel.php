@@ -70,7 +70,7 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
             $section_name = __( 'Header Top', 'customify' );
         }
 
-        $selector = '#cb-row--'.str_replace('_', '-', $section );
+        $selector = '.header--row.'.str_replace('_', '-', $section );
 
         $fn = 'customify_customize_render_header';
         $selector_all = '#masthead';

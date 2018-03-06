@@ -25,6 +25,7 @@
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'customify' ); ?></a>
     <?php
     customify_customize_render_header();
+    do_action( 'customify/site-start' );
     ?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>
 

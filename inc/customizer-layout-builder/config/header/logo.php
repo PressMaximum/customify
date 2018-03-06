@@ -90,6 +90,7 @@ class Customify_Builder_Item_Logo {
 
         );
 
+        $config = apply_filters( 'customify/builder/header/logo-settings', $config, $this );
         // Item Layout
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
@@ -144,7 +145,6 @@ class Customify_Builder_Item_Logo {
                         <?php
                     };
                 }
-
                 echo '</div>';
             }
             ?>
