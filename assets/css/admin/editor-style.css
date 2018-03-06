@@ -1,0 +1,522 @@
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Typography
+# Elements
+# Forms
+# Accessibility
+# Alignments
+# Clearings
+# Media
+# Media: Captions
+# Media: Galleries=
+
+/*--------------------------------------------------------------
+# Typography
+--------------------------------------------------------------*/
+body,
+button,
+input,
+select,
+optgroup,
+textarea {
+	color: #444444;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	font-weight: 400;
+	line-height: 1.618;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
+	-webkit-font-smoothing: antialiased;
+}
+
+/* # Heading */
+h1, h2, h3, .comments-area .comments-title, h4, h5, h6 {
+	font-weight: 300;
+	margin: 0 0 0.5407911001em;
+	color: #373737;
+	clear: both;
+}
+
+h1, .h1 {
+	font-size: 2.617924em;
+	line-height: 1.216;
+}
+
+h2, .h2 {
+	font-size: 2.1em;
+	line-height: 1.216;
+}
+h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title {
+	border-top: 1px solid #eaecee;
+	padding-top: 0.5407911001em;
+}
+
+h3, .comments-area .comments-title, .h3 {
+	font-size: 1.618em;
+}
+
+h4, .h4 {
+	font-size: 1.41575em;
+}
+
+/* # Copy */
+p {
+	margin: 0 0 1.41575em;
+}
+
+dfn, cite, em, i {
+	font-style: italic;
+}
+
+blockquote {
+	padding: 0px 1.41575em;
+	margin: 1.41575em 1.618em;
+	border-left: 3px solid #eaecee;
+	font-style: italic;
+	font-weight: 200;
+	font-size: 1.2em;
+}
+blockquote p:last-of-type {
+	margin-bottom: 0px;
+}
+
+address {
+	margin: 0 0 1.618em;
+}
+
+pre {
+	background: #f2f2f2;
+	font-family: "Courier 10 Pitch", Courier, monospace;
+	margin-bottom: 2.2906835em;
+	padding: 1.618em;
+	overflow: auto;
+	max-width: 100%;
+}
+
+code, kbd, tt, var {
+	background-color: rgba(0, 0, 0, 0.05);
+	font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+	padding: 0.15em 0.5407911001em;
+	border-radius: 2px;
+}
+
+abbr, acronym {
+	border-bottom: 1px dotted #444444;
+	cursor: help;
+}
+
+mark, ins {
+	background: transparent;
+	text-decoration: none;
+}
+
+big {
+	font-size: 125%;
+}
+
+/*--------------------------------------------------------------
+# Elements
+--------------------------------------------------------------*/
+html {
+	box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+	/* Inherit box-sizing to make it easier to change the property for components that leverage other behavior; see http://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/ */
+	box-sizing: inherit;
+}
+
+body {
+	background: #ffffff;
+	/* Fallback for when there is no custom background color defined. */
+}
+
+hr {
+	background-color: #ccc;
+	border: 0;
+	height: 1px;
+	margin: 0 0 1.618em;
+}
+
+img {
+	height: auto;
+	/* Make sure images are scaled correctly. */
+	max-width: 100%;
+	/* Adhere to container width. */
+}
+
+figure {
+	margin: 1em 0;
+	/* Extra wide images within figure tags don't overflow the content area. */
+}
+
+/* Links */
+a {
+	color: #007ee5;
+	text-decoration: none;
+}
+a:hover {
+	color: #007ee5;
+}
+a:hover, a:active {
+	outline: 0;
+}
+
+/* # Lists */
+ul, ol {
+	margin: 0 0 1.618em 2.617924em;
+	padding: 0;
+}
+
+ul {
+	list-style: disc;
+}
+
+ol {
+	list-style: decimal;
+}
+
+li > ul,
+li > ol {
+	margin-bottom: 0;
+	margin-left: 2.617924em;
+}
+
+dt {
+	font-weight: bold;
+}
+
+dd {
+	margin: 0 0 1.618em;
+}
+
+/* # Table */
+table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 2.2906835em;
+	border-spacing: 0;
+	border-collapse: separate;
+}
+table caption {
+	padding: 1.41575em;
+	font-weight: 600;
+}
+table th {
+	background: #f2f2f2;
+	font-weight: 500;
+}
+table th,
+table td {
+	padding: 1em 1.618em;
+	vertical-align: top;
+	text-align: left;
+}
+table thead th {
+	vertical-align: middle;
+}
+table tbody td {
+	background: #fafafa;
+}
+table tbody tr:nth-child(2n) td {
+	background: #f7f7f7;
+}
+
+/*--------------------------------------------------------------
+# Forms
+--------------------------------------------------------------*/
+form {
+	margin-bottom: 2.2906835em;
+}
+
+.button,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+	border: none;
+	background: #7b8994;
+	color: #FFFFFF;
+	cursor: pointer;
+	padding: 0.5407911001em 1.618em;
+	font-weight: 600;
+	text-transform: uppercase;
+	transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+	border-radius: 1px;
+}
+.button:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
+	box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+	color: #FFFFFF;
+}
+.button:active, .button:focus,
+button:active,
+button:focus,
+input[type="button"]:active,
+input[type="button"]:focus,
+input[type="reset"]:active,
+input[type="reset"]:focus,
+input[type="submit"]:active,
+input[type="submit"]:focus {
+	outline: none;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+input[type="search"],
+input[type="number"],
+input[type="tel"],
+input[type="range"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"],
+textarea {
+	color: #444444;
+	border: none;
+	background: #f2f2f2;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+	padding: 0.6180469716em;
+}
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+input[type="search"]:focus,
+input[type="number"]:focus,
+input[type="tel"]:focus,
+input[type="range"]:focus,
+input[type="date"]:focus,
+input[type="month"]:focus,
+input[type="week"]:focus,
+input[type="time"]:focus,
+input[type="datetime"]:focus,
+input[type="datetime-local"]:focus,
+input[type="color"]:focus,
+textarea:focus {
+	background: #f0f0f0;
+	outline: none;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+	border: 0;
+	padding: 0;
+}
+
+textarea {
+	width: 100%;
+}
+
+fieldset {
+	border: none;
+	margin: 2.2906835em 0;
+	padding: 0;
+}
+fieldset legend {
+	margin-bottom: 0.5407911001em;
+	font-weight: 600;
+}
+
+/*--------------------------------------------------------------
+# Accessibility
+--------------------------------------------------------------*/
+/* Text meant only for screen readers. */
+.screen-reader-text {
+	clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px;
+	width: 1px;
+	overflow: hidden;
+	word-wrap: normal !important;
+	/* Many screen reader and browser combinations announce broken words as they would appear visually. */
+}
+.screen-reader-text:focus {
+	background-color: #f1f1f1;
+	border-radius: 3px;
+	box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
+	clip: auto !important;
+	display: block;
+	font-weight: bold;
+	height: auto;
+	left: 0px;
+	line-height: normal;
+	padding: 1em 2.2906835em;
+	text-decoration: none;
+	top: 0px;
+	width: auto;
+	z-index: 100000;
+	/* Above WP toolbar. */
+}
+
+/* Do not show the outline on the skip link target. */
+#content[tabindex="-1"]:focus {
+	outline: 0;
+}
+
+/*--------------------------------------------------------------
+# Alignments
+--------------------------------------------------------------*/
+.alignleft {
+	display: inline;
+	float: left;
+	margin-right: 1.41575em;
+}
+
+.alignright {
+	display: inline;
+	float: right;
+	margin-left: 1.41575em;
+}
+
+.aligncenter {
+	clear: both;
+	display: block;
+	margin: 0 auto;
+}
+
+/*--------------------------------------------------------------
+# Clearings
+--------------------------------------------------------------*/
+.clear:before,
+.clear:after,
+.entry-content:before,
+.entry-content:after,
+.comment-content:before,
+.comment-content:after,
+.site-header:before,
+.site-header:after,
+.site-content:before,
+.site-content:after,
+.site-footer:before,
+.site-footer:after {
+	content: "";
+	display: table;
+	table-layout: fixed;
+}
+
+.clear:after,
+.entry-content:after,
+.comment-content:after,
+.site-header:after,
+.site-content:after,
+.site-footer:after {
+	clear: both;
+}
+
+/*--------------------------------------------------------------
+# Media
+--------------------------------------------------------------*/
+.page-content .wp-smiley,
+.entry-content .wp-smiley,
+.comment-content .wp-smiley {
+	border: none;
+	margin-bottom: 0;
+	margin-top: 0;
+	padding: 0;
+}
+
+/* Make sure embeds and iframes fit their containers. */
+embed,
+iframe,
+object {
+	max-width: 100%;
+}
+
+/* Make sure logo link wraps around logo image. */
+.custom-logo-link {
+	display: inline-block;
+}
+
+/*--------------------------------------------------------------
+## Media: Captions
+--------------------------------------------------------------*/
+.wp-caption {
+	margin-bottom: 1.41575em;
+	max-width: 100%;
+}
+
+.wp-caption img[class*="wp-image-"] {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.wp-caption .wp-caption-text {
+	padding: 1em 0;
+	font-size: 85%;
+}
+
+.wp-caption-text {
+	text-align: left;
+	font-style: italic;
+	color: #999999;
+}
+
+/*--------------------------------------------------------------
+## Media: Galleries
+--------------------------------------------------------------*/
+.gallery {
+	margin-bottom: 1.5em;
+	margin-bottom: 1.41575em;
+}
+.gallery:before, .gallery:after {
+	content: "";
+	display: table;
+}
+.gallery:after {
+	clear: both;
+}
+
+.gallery-item {
+	display: inline-block;
+	text-align: center;
+	vertical-align: top;
+	width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+	max-width: 50%;
+}
+
+.gallery-columns-3 .gallery-item {
+	max-width: 33.33%;
+}
+
+.gallery-columns-4 .gallery-item {
+	max-width: 25%;
+}
+
+.gallery-columns-5 .gallery-item {
+	max-width: 20%;
+}
+
+.gallery-columns-6 .gallery-item {
+	max-width: 16.66%;
+}
+
+.gallery-columns-7 .gallery-item {
+	max-width: 14.28%;
+}
+
+.gallery-columns-8 .gallery-item {
+	max-width: 12.5%;
+}
+
+.gallery-columns-9 .gallery-item {
+	max-width: 11.11%;
+}
+
+.gallery-caption {
+	display: block;
+}

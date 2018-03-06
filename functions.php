@@ -153,12 +153,14 @@ class Customify_Init {
             'flex-height' => true,
         ) );
 
+        // WooCommerce support
         add_theme_support( 'woocommerce' );
         add_theme_support( 'wc-product-gallery-zoom' );
         add_theme_support( 'wc-product-gallery-lightbox' );
         add_theme_support( 'wc-product-gallery-slider' );
 
-        //add_theme_support( 'post-formats', array( 'aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat' ) );
+	    // Add editor style
+	    add_editor_style( 'assets/css/admin/editor-style.min.css' );
 
     }
 

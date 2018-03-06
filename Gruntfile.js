@@ -79,6 +79,14 @@ module.exports = function( grunt ) {
                         src: ['*.css', '!*.min.css'],
                         dest: 'assets/css/compatibility',
                         ext: '.min.css'
+                    },
+                    // Editor style
+                    {
+                        expand: true,
+                        cwd: 'assets/css/admin',
+                        src: ['*.css', '!*.min.css'],
+                        dest: 'assets/css/admin',
+                        ext: '.min.css'
                     }
                 ]
             }
