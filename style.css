@@ -2863,7 +2863,7 @@ article.comment .comment-post-author {
   border: 0 none !important;
   box-shadow: none !important;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .header--row.layout-contained {
     background: transparent !important;
     border: 0 none;
@@ -3100,7 +3100,7 @@ article.comment .comment-post-author {
   top: 0px;
   left: 100%;
 }
-.nav-menu-desktop .menu-item:hover > .sub-menu {
+.nav-menu-desktop .menu-item:hover > .sub-menu, .nav-menu-desktop .menu-item:focus > .sub-menu, .nav-menu-desktop .menu-item.focus > .sub-menu {
   height: auto;
   transform: translateY(0);
   overflow: initial;
@@ -3117,7 +3117,7 @@ article.comment .comment-post-author {
 .nav-menu-desktop.style-plain .primary-menu-ul > li {
   float: left;
 }
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover {
+.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li a:focus {
   color: #007ee5;
 }
 .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a {
@@ -3159,7 +3159,7 @@ article.comment .comment-post-author {
   background-color: transparent;
   content: "";
 }
-.nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before {
+.nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before, .nav-menu-desktop.style-border-bottom .primary-menu-ul > li:focus > a .link-before:before {
   background-color: currentColor;
 }
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
@@ -3177,7 +3177,7 @@ article.comment .comment-post-author {
   background-color: transparent;
   content: "";
 }
-.nav-menu-desktop.style-border-top .primary-menu-ul > li:hover > a .link-before:before {
+.nav-menu-desktop.style-border-top .primary-menu-ul > li:hover > a .link-before:before, .nav-menu-desktop.style-border-top .primary-menu-ul > li:focus > a .link-before:before {
   background-color: currentColor;
 }
 .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before, .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-ancestor > a .link-before:before {
@@ -3205,7 +3205,7 @@ article.comment .comment-post-author {
   padding: 0.55em 1.5em;
   border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
-.nav-menu-mobile .menu li a:hover {
+.nav-menu-mobile .menu li a:hover, .nav-menu-mobile .menu li a:focus {
   background: rgba(0, 0, 0, 0.01);
 }
 .nav-menu-mobile .menu li .nav-toggle-icon {
@@ -3292,7 +3292,7 @@ article.comment .comment-post-author {
 .customify-builder-social-icons.is-style-plain.is-size-xl a i {
   font-size: 28px;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-plain.is-size-desktop-s a i {
     font-size: 13px;
   }
@@ -3303,7 +3303,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-plain.is-size-tablet-s a i {
     font-size: 13px;
   }
@@ -3314,7 +3314,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-plain.is-size-mobile-s a i {
     font-size: 13px;
   }
@@ -3358,7 +3358,7 @@ article.comment .comment-post-author {
   height: 34px;
   line-height: 34px;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-outline-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3378,7 +3378,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-outline-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3398,7 +3398,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-outline-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3450,7 +3450,7 @@ article.comment .comment-post-author {
   height: 34px;
   line-height: 34px;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-fill-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3470,7 +3470,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-fill-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3490,7 +3490,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-fill-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3543,7 +3543,7 @@ article.comment .comment-post-author {
   height: 34px;
   line-height: 34px;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-outline-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3563,7 +3563,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-outline-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3583,7 +3583,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-outline-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3635,7 +3635,7 @@ article.comment .comment-post-author {
   height: 34px;
   line-height: 34px;
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-fill-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3655,7 +3655,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-fill-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3675,7 +3675,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-fill-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3695,7 +3695,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-plain a {
     border: none;
     background: none;
@@ -3710,7 +3710,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (min-width: 64em) and (min-width: 64em) {
+@media screen and (min-width: 1025px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-plain.is-size-desktop-s a i {
     font-size: 13px;
   }
@@ -3721,7 +3721,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 64em) {
+@media screen and (min-width: 1025px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-desktop-plain.is-size-tablet-s a i {
     font-size: 13px;
   }
@@ -3732,7 +3732,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 35.5em) {
+@media screen and (min-width: 1025px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-desktop-plain.is-size-mobile-s a i {
     font-size: 13px;
   }
@@ -3743,7 +3743,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -3778,7 +3778,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (min-width: 64em) {
+@media screen and (min-width: 1025px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-outline-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3798,7 +3798,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 64em) {
+@media screen and (min-width: 1025px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-desktop-outline-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3818,7 +3818,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 35.5em) {
+@media screen and (min-width: 1025px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-desktop-outline-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3838,7 +3838,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -3872,7 +3872,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (min-width: 64em) {
+@media screen and (min-width: 1025px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-fill-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3892,7 +3892,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 64em) {
+@media screen and (min-width: 1025px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-desktop-fill-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -3912,7 +3912,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 35.5em) {
+@media screen and (min-width: 1025px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-desktop-fill-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -3932,7 +3932,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -3967,7 +3967,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (min-width: 64em) {
+@media screen and (min-width: 1025px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -3987,7 +3987,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 64em) {
+@media screen and (min-width: 1025px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4007,7 +4007,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 35.5em) {
+@media screen and (min-width: 1025px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-desktop-outline-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4027,7 +4027,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -4061,7 +4061,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (min-width: 64em) {
+@media screen and (min-width: 1025px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4081,7 +4081,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 64em) {
+@media screen and (min-width: 1025px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4101,7 +4101,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (min-width: 64em) and (max-width: 35.5em) {
+@media screen and (min-width: 1025px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-desktop-fill-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4122,7 +4122,7 @@ article.comment .comment-post-author {
   }
 }
 
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-plain a {
     border: none;
     background: none;
@@ -4137,7 +4137,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 64em) and (min-width: 64em) {
+@media screen and (max-width: 1024px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-tablet-plain.is-size-desktop-s a i {
     font-size: 13px;
   }
@@ -4148,7 +4148,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 64em) {
+@media screen and (max-width: 1024px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-plain.is-size-tablet-s a i {
     font-size: 13px;
   }
@@ -4159,7 +4159,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 35.5em) {
+@media screen and (max-width: 1024px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-tablet-plain.is-size-mobile-s a i {
     font-size: 13px;
   }
@@ -4170,7 +4170,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -4205,7 +4205,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (min-width: 64em) {
+@media screen and (max-width: 1024px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-tablet-outline-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4225,7 +4225,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 64em) {
+@media screen and (max-width: 1024px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-outline-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4245,7 +4245,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 35.5em) {
+@media screen and (max-width: 1024px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-tablet-outline-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4265,7 +4265,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -4299,7 +4299,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (min-width: 64em) {
+@media screen and (max-width: 1024px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-tablet-fill-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4319,7 +4319,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 64em) {
+@media screen and (max-width: 1024px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-fill-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4339,7 +4339,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 35.5em) {
+@media screen and (max-width: 1024px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-tablet-fill-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4359,7 +4359,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -4394,7 +4394,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (min-width: 64em) {
+@media screen and (max-width: 1024px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4414,7 +4414,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 64em) {
+@media screen and (max-width: 1024px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4434,7 +4434,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 35.5em) {
+@media screen and (max-width: 1024px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-tablet-outline-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4454,7 +4454,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -4488,7 +4488,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (min-width: 64em) {
+@media screen and (max-width: 1024px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4508,7 +4508,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 64em) {
+@media screen and (max-width: 1024px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4528,7 +4528,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 64em) and (max-width: 35.5em) {
+@media screen and (max-width: 1024px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-tablet-fill-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4549,7 +4549,7 @@ article.comment .comment-post-author {
   }
 }
 
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-plain a {
     border: none;
     background: none;
@@ -4564,7 +4564,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 35.5em) and (min-width: 64em) {
+@media screen and (max-width: 568px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-mobile-plain.is-size-desktop-s a i {
     font-size: 13px;
   }
@@ -4575,7 +4575,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 64em) {
+@media screen and (max-width: 568px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-mobile-plain.is-size-tablet-s a i {
     font-size: 13px;
   }
@@ -4586,7 +4586,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+@media screen and (max-width: 568px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-plain.is-size-mobile-s a i {
     font-size: 13px;
   }
@@ -4597,7 +4597,7 @@ article.comment .comment-post-author {
     font-size: 28px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-outline-square a {
     border: 1px solid;
     border-radius: 3px;
@@ -4632,7 +4632,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (min-width: 64em) {
+@media screen and (max-width: 568px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-mobile-outline-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4652,7 +4652,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 64em) {
+@media screen and (max-width: 568px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-mobile-outline-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4672,7 +4672,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+@media screen and (max-width: 568px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-outline-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4692,7 +4692,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-fill-square a {
     background: #999999;
     color: #FFFFFF;
@@ -4726,7 +4726,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (min-width: 64em) {
+@media screen and (max-width: 568px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-mobile-fill-square.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4746,7 +4746,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 64em) {
+@media screen and (max-width: 568px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-mobile-fill-square.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4766,7 +4766,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+@media screen and (max-width: 568px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-fill-square.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4786,7 +4786,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-outline-rounded a {
     border: 1px solid;
     border-radius: 999px;
@@ -4821,7 +4821,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (min-width: 64em) {
+@media screen and (max-width: 568px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4841,7 +4841,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 64em) {
+@media screen and (max-width: 568px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4861,7 +4861,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+@media screen and (max-width: 568px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-outline-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -4881,7 +4881,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-fill-rounded a {
     background: #999999;
     color: #FFFFFF;
@@ -4915,7 +4915,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (min-width: 64em) {
+@media screen and (max-width: 568px) and (min-width: 1025px) {
   .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-desktop-s a i {
     font-size: 12px;
     width: 18px;
@@ -4935,7 +4935,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 64em) {
+@media screen and (max-width: 568px) and (max-width: 1024px) {
   .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-tablet-s a i {
     font-size: 12px;
     width: 18px;
@@ -4955,7 +4955,7 @@ article.comment .comment-post-author {
     line-height: 34px;
   }
 }
-@media screen and (max-width: 35.5em) and (max-width: 35.5em) {
+@media screen and (max-width: 568px) and (max-width: 568px) {
   .customify-builder-social-icons.is-style-mobile-fill-rounded.is-size-mobile-s a i {
     font-size: 12px;
     width: 18px;
@@ -5083,7 +5083,7 @@ article.comment .comment-post-author {
   bottom: -9px;
 }
 
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .is-size-desktop-small .hamburger .hamburger-box {
     margin-top: -2px;
     width: 19px;
@@ -5138,7 +5138,7 @@ article.comment .comment-post-author {
     bottom: -9px;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .is-size-tablet-small .hamburger .hamburger-box {
     margin-top: -2px;
     width: 19px;
@@ -5193,7 +5193,7 @@ article.comment .comment-post-author {
     bottom: -9px;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .is-size-mobile-small .hamburger .hamburger-box {
     margin-top: -2px;
     width: 19px;
@@ -5651,7 +5651,7 @@ body.menu_sidebar_dropdown:before {
 /************************
     HIDING COLS FOR DEVICES
 *************************/
-@media screen and (min-width: 64em) {
+@media screen and (min-width: 1025px) {
   .hide-on-desktop,
   .customify-grid .hide-on-desktop {
     display: none;
@@ -5669,7 +5669,7 @@ body.menu_sidebar_dropdown:before {
     text-align: right;
   }
 }
-@media screen and (max-width: 64em) {
+@media screen and (max-width: 1024px) {
   .hide-on-tablet,
   .customify-grid .hide-on-tablet {
     display: none;
@@ -5687,7 +5687,7 @@ body.menu_sidebar_dropdown:before {
     text-align: right;
   }
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .hide-on-mobile,
   .customify-grid .hide-on-mobile {
     display: none;
@@ -5887,7 +5887,7 @@ body.menu_sidebar_dropdown:before {
   align-items: stretch;
   margin-bottom: 3em;
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .posts-layout .entry {
     display: block;
   }
@@ -5899,7 +5899,7 @@ body.menu_sidebar_dropdown:before {
   padding-top: 55%;
   overflow: hidden;
 }
-@media screen and (max-width: 35.5em) {
+@media screen and (max-width: 568px) {
   .posts-layout .entry-media {
     margin-bottom: 1em;
   }

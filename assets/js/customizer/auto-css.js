@@ -25,9 +25,9 @@ var AutoCSS = window.AutoCSS || null;
     AutoCSS.prototype.variants = {};
     AutoCSS.prototype.media_queries = {
         all: '%s',
-        desktop: '@media screen and (min-width: 64em) { %s }',
-        tablet : '@media screen and (max-width: 64em) and (min-width: 35.5em) { %s }',
-        mobile: '@media screen and (max-width: 35.5em) { %s }',
+        desktop: '%s',
+        tablet : '@media screen and (max-width: 1024px) { %s }',
+        mobile: '@media screen and (max-width: 568px) { %s }',
     };
 
     AutoCSS.prototype.css = {
@@ -187,6 +187,7 @@ var AutoCSS = window.AutoCSS || null;
         }
         $( '#customify-style-inline-css' ).html( css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
+        $( document ).trigger( 'after_auto_render_css' );
 
     };
 

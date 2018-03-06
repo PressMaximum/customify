@@ -131,7 +131,7 @@ $submenu_width: 14em;
         }
     }
 
-    .menu-item:hover {
+    .menu-item:hover, .menu-item:focus, .menu-item.focus {
         > .sub-menu {
             height: auto;
             transform: translateY(0);
@@ -148,7 +148,7 @@ $submenu_width: 14em;
             > li {
                 float: left;
                 a {
-                    &:hover {
+                    &:hover, &:focus {
                         color: $color_link_hover;
                     }
                 }
@@ -206,7 +206,7 @@ $submenu_width: 14em;
                         }
                     }
                 }
-                &:hover {
+                &:hover, &:focus {
                     > a {
                         .link-before {
                             &:before {
@@ -248,7 +248,7 @@ $submenu_width: 14em;
                         }
                     }
                 }
-                &:hover {
+                &:hover, &:focus {
                     > a {
                         .link-before {
                             &:before {
@@ -294,7 +294,7 @@ $submenu_width: 14em;
                 display: block;
                 padding: 0.55em 1.5em;
                 border-top: 1px solid $ms_tl_border_color;
-                &:hover {
+                &:hover, &:focus {
                     background: rgba(0,0,0,0.01);
                 }
             }

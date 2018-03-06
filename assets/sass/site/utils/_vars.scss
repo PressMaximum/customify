@@ -42,8 +42,6 @@ $ms_td_color_hover: rgba(0,0,0,0.6);
 $ms_td_bg: rgba(255,255,255,0.9);
 $ms_td_border_color: rgba(0,0,0,0.08);
 
-
-
 $ms_light_color: rgba(255, 255, 255, 0.8);
 $ms_light_color_hover: rgba(255, 255, 255, 0.9);
 $ms_light_bg: #f2f2f2;
@@ -68,9 +66,9 @@ $gl-devices-list: (
 */
 
 $gl-devices-list: (
-        desktop: "screen and (min-width: 64em)", // up 1024px
-        tablet: "screen and (max-width: 64em)", // 568px - 1024px
-        mobile: "screen and (max-width: 35.5em)" // from to 568px to smaller
+        desktop: "screen and (min-width: 1025px)", // up 1024px
+        tablet: "screen and (max-width: 1024px)", // 568px - 1024px
+        mobile: "screen and (max-width: 568px)" // from to 568px to smaller
 ) !default;
 
 

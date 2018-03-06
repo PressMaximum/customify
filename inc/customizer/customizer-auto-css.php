@@ -14,8 +14,8 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             'mobile' => '@media screen and (max-width: 35.5em) { %s }',
             */
             'desktop' => '%s',
-            'tablet' => '@media screen and (max-width: 64em) { %s }',
-            'mobile' => '@media screen and (max-width: 35.5em) { %s }',
+            'tablet' => '@media screen and (max-width: 1024px) { %s }',
+            'mobile' => '@media screen and (max-width: 568px) { %s }',
         );
         private $css = array(
             'all' => '',
