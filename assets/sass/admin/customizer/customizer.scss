@@ -82,10 +82,6 @@ $builder_active_color: #0073aa;
     }
 }
 
-
 @import "control";
-@import "builder";
+@import "header_footer_builder";
 @import "gridstack";
-
-// Import header builder style
-@import "header_builder";
