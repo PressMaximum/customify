@@ -66,9 +66,6 @@ class Customify_Builder_Item_Primary_Menu {
                     'style-border-top' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
                     ),
-                    'style_5' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_5.svg',
-                    ),
                 )
             ),
 
@@ -77,7 +74,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'type'    => 'checkbox',
                 'section' => $section,
                 'selector' => '.builder-item--'.$this->id ." .primary-menu",
-                'checkbox_label' => __( 'Hide Arrow', 'customify' ),
+                'checkbox_label' => __( 'Hide menu dropdown arrow', 'customify' ),
                 'css_format' => 'html_class',
             ),
 
@@ -188,7 +185,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'type' => 'styling',
                 'section' => $section,
                 'title'  => __( 'Submenu Items Styling', 'customify' ),
-                'description'  => __( 'Advanced styling for submenu item', 'customify' ),
+                'description'  => __( 'Styling for submenu items', 'customify' ),
                 'selector'  => array(
                     'normal' => "{$this->selector} .sub-menu li a",
                     'hover' => "{$this->selector} .sub-menu li a:hover",
@@ -225,8 +222,8 @@ class Customify_Builder_Item_Primary_Menu {
                 'name' => $this->prefix.'_typography_submenu',
                 'type' => 'typography',
                 'section'  => $section,
-                'title' => __( 'Submenu Typography', 'customify' ),
-                'description' => __( 'Advanced typography for submenu',  'customify' ),
+                'title' => __( 'Submenu Items Typography', 'customify' ),
+                'description' => __( 'Typography for submenu items',  'customify' ),
                 'selector'  => "{$this->selector} .sub-menu li a",
                 'css_format' => 'typography',
             ),

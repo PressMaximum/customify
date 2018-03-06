@@ -675,6 +675,7 @@ $text_color: #555d66;
         text-align: center;
         height: 100%;
         position: relative;
+        background: #FFFFFF;
         i {
             position: absolute;
             top: 50%;
@@ -685,6 +686,7 @@ $text_color: #555d66;
     input {
         box-shadow: none !important;
         outline: none !important;
+        background: #ffffff;
     }
     .customify--icon-remove {
         cursor: pointer;
