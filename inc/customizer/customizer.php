@@ -670,6 +670,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
         function get_media( $value, $size = null ) {
 
+            if ( empty( $value ) ) {
+                return false;
+            }
+
             if ( ! $size ) {
                 $size = 'full';
             }
@@ -699,6 +703,10 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     'url'   => '',
                     'mime'  => ''
                 ) );
+
+                if ( empty( $value['id'] ) && empty( $value['url'] ) ) {
+                    return false;
+                }
 
                 $url = '';
 

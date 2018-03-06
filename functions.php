@@ -28,7 +28,7 @@ add_filter( 'customify_the_content', array( $wp_embed, 'autoembed' ), 8 );
 add_filter( 'customify_the_content', 'wptexturize' );
 add_filter( 'customify_the_content', 'wpautop' );
 add_filter( 'customify_the_content', 'shortcode_unautop' );
-add_filter( 'customify_the_content', 'prepend_attachment' );
+//add_filter( 'customify_the_content', 'prepend_attachment' );
 add_filter( 'customify_the_content', 'wp_make_content_images_responsive' );
 add_filter( 'customify_the_content', 'capital_P_dangit' );
 add_filter( 'customify_the_content', 'do_shortcode' );
@@ -267,7 +267,8 @@ class Customify_Init {
         ) );
 
         foreach( $css_files as $id => $url ) {
-            wp_enqueue_style( 'customify-'.$id, $url, array(), self::$version );
+            $deeps = array();
+            wp_enqueue_style( 'customify-'.$id, $url, $deeps, self::$version );
         }
 
         foreach( $js_files as $id => $url ) {
