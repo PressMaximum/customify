@@ -4,6 +4,9 @@ $text_color: #555d66;
 .customify--hide {
     display: none !important;
 }
+.customify--clear {
+    clear: both;
+}
 
 .customify-control-field-header {
     cursor: pointer;
@@ -47,6 +50,12 @@ $text_color: #555d66;
     .customify-modal-settings {
         h3.customify-field--heading {
             font-size: 11px;
+        }
+        .wp-picker-container  {
+            z-index: -1;
+            &.wp-picker-active {
+                z-index: 69;
+            }
         }
     }
 }

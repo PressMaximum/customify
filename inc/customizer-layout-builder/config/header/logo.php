@@ -64,7 +64,6 @@ class Customify_Builder_Item_Logo {
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Description', 'customify' ),
                 'default' => 'yes',
-                'required' => array( 'header_logo_name', '=', 'yes' ),
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),
@@ -79,7 +78,6 @@ class Customify_Builder_Item_Logo {
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Logo Image Position', 'customify' ),
                 'default' => 'top',
-                'required' => array( 'header_logo_name', '=', 'yes' ),
                 'choices' => array(
                     'top' => __( 'Top', 'customify' ),
                     'left' => __( 'Left', 'customify' ),
@@ -125,10 +123,8 @@ class Customify_Builder_Item_Logo {
             <?php
 
             $this->logo();
-
-            if ( $show_name !== 'no' ) {
+            if ( $show_name !== 'no' ||  $show_desc !== 'no' ) {
                 echo '<div class="site-name-desc">';
-
                 if ($show_name !== 'no') {
                     if (is_front_page() && is_home()) : ?>
                         <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
@@ -147,6 +143,7 @@ class Customify_Builder_Item_Logo {
                 }
                 echo '</div>';
             }
+
             ?>
         </div><!-- .site-branding -->
         <?php

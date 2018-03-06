@@ -9,6 +9,7 @@
         letter-spacing: 0.4px;
         font-weight: 600;
     }
+
     img {
         display: block;
         width: auto;
@@ -25,14 +26,30 @@
         margin: 4px 0px 7px 0px;
     }
     &.logo-left {
+        .logo-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         .site-name-desc {
             margin-left: 7px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
     }
     &.logo-right {
         flex-direction: row-reverse;
+        .logo-link {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
         .site-name-desc {
             margin-right: 7px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
     }
     &.logo-top{
