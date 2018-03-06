@@ -43,7 +43,6 @@ class Customify_Builder_Footer_Templates
         $html .= '</ul>';
         $html .= '</div>';
 
-
         return array(
             array(
                 'name' => $section,

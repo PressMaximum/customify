@@ -25,40 +25,6 @@ class Customify_Builder_Item_Nav_Icon{
                 'title' => __( 'Menu Icon', 'customify' ),
             ),
 
-            /*
-            array(
-                'name'    => 'nav_icon_style',
-                'type'    => 'image_select',
-                'section' => $section,
-                'selector' => $selector,
-                'render_callback' => $fn,
-                'title'   => __( 'Icon Preset', 'customify' ),
-                'device_settings' => true,
-                'default'         => array (
-                    'desktop' => 'plain',
-                    'tablet' => 'plain',
-                    'mobile' => 'plain',
-                ),
-                'choices' => array(
-                    'plain' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style1.svg',
-                    ),
-                    'outline-square' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style2.svg',
-                    ),
-                    'fill-square' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style3.svg',
-                    ),
-                    'fill-rounded' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style4.svg',
-                    ),
-                    'outline-rounded' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/social_icon_style5.svg',
-                    ),
-                )
-            ),
-            */
-
             array(
                 'name' => 'nav_icon_text',
                 'type' => 'text',

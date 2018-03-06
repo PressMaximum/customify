@@ -5,7 +5,6 @@
  * @package customify
  */
 
-
 if ( class_exists( 'WP_Customize_Panel' ) ) {
 
     class Customify_WP_Customize_Panel extends WP_Customize_Panel {

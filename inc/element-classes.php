@@ -157,7 +157,6 @@ if ( ! function_exists( 'customify_sidebar_secondary_classes' ) ) {
 }
 add_filter('customify_sidebar_secondary_class', 'customify_sidebar_secondary_classes');
 
-
 if ( ! function_exists( 'customify_main_content_classes' ) ) {
     /**
      * Adds custom classes to the array of main content classes.

@@ -28,12 +28,10 @@ add_filter( 'customify_the_content', array( $wp_embed, 'autoembed' ), 8 );
 add_filter( 'customify_the_content', 'wptexturize' );
 add_filter( 'customify_the_content', 'wpautop' );
 add_filter( 'customify_the_content', 'shortcode_unautop' );
-//add_filter( 'customify_the_content', 'prepend_attachment' );
 add_filter( 'customify_the_content', 'wp_make_content_images_responsive' );
 add_filter( 'customify_the_content', 'capital_P_dangit' );
 add_filter( 'customify_the_content', 'do_shortcode' );
 add_filter( 'customify_the_content', 'convert_smilies' );
-
 
 class Customify_Init {
 
@@ -84,7 +82,6 @@ class Customify_Init {
     function content_width() {
         $GLOBALS['content_width'] = apply_filters( 'customify_content_width', 640 );
     }
-
 
     /**
      * Sets up theme defaults and registers support for various WordPress features.
