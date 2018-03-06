@@ -1,8 +1,16 @@
 /* Nav Icon */
-.menu-mobile-toggle {
+button.menu-mobile-toggle {
     cursor: pointer;
-    transition: opacity .3s;
     text-align: center;
+    padding: 2px 5px;
+    background: transparent;
+    color: inherit;
+    box-shadow: none;
+    transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+    &:hover {
+        box-shadow: none;
+        background: transparent;
+    }
 }
 .nav-icon--label {
     background: none !important;
