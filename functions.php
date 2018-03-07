@@ -280,6 +280,8 @@ class Customify_Init {
         wp_localize_script( 'customify', 'Customify_JS', array(
             'css_media_queries' => Customify_Customizer_Auto_CSS()->media_queries
         ) );
+
+        do_action( 'customify/theme/scripts' );
     }
 
     function includes(){

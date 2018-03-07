@@ -163,7 +163,6 @@ class Customify_MetaBox {
         <label>
             <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
         </label>
-
         <?php
     }
 }
