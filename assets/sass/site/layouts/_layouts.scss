@@ -79,6 +79,13 @@
         > .customify-container {
             padding-left: 0px;
             padding-right: 0px;
+            .customify-grid {
+                margin: 0px;
+            }
+            .content-area.customify-col-12 {
+                margin-right: 0px;
+                margin-left: 0px;
+            }
         }
         #main.customify-col-12 {
             padding-top: 0px;

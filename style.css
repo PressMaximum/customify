@@ -5778,6 +5778,13 @@ body.menu_sidebar_dropdown:before {
   padding-left: 0px;
   padding-right: 0px;
 }
+.site-content.content-full-stretched > .customify-container .customify-grid {
+  margin: 0px;
+}
+.site-content.content-full-stretched > .customify-container .content-area.customify-col-12 {
+  margin-right: 0px;
+  margin-left: 0px;
+}
 .site-content.content-full-stretched #main.customify-col-12 {
   padding-top: 0px;
   padding-bottom: 0px;
