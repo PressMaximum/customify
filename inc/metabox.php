@@ -16,6 +16,14 @@ if ( is_admin() ) {
  * The Class.
  */
 class Customify_MetaBox {
+    public $fields = array(
+        'sidebar' => '',
+        'content_layout' => '',
+        'disable_header' => '',
+        'disable_page_title' => '',
+        'disable_footer_main' => '',
+        'disable_footer_bottom' => '',
+    );
 
     /**
      * Hook into the appropriate actions when the class is constructed.
@@ -41,6 +49,10 @@ class Customify_MetaBox {
                 'low'
             );
         }
+    }
+
+    function get_fields(){
+        return apply_filters( 'customify/metabox/fields', $this->fields );
     }
 
     /**
@@ -88,17 +100,16 @@ class Customify_MetaBox {
         }
 
         $settings = isset( $_POST['customify_page_settings'] ) ? wp_unslash( $_POST['customify_page_settings'] ) : array();
-        $settings = wp_parse_args( $settings, array(
-            'sidebar' => '',
-            'disable_header' => '',
-            'disable_page_title' => '',
-            'disable_footer_main' => '',
-            'disable_footer_bottom' => '',
-        ) );
+        $settings = wp_parse_args( $settings, $this->get_fields() );
 
         foreach( $settings as $key => $value ) {
+            if ( ! is_array( $value ) ) {
+                $value = wp_kses_post( $value );
+            } else {
+                $value = array_map( 'wp_kses_post', $value );
+            }
             // Update the meta field.
-            update_post_meta( $post_id, '_customify_'.$key, sanitize_text_field( $value ) );
+            update_post_meta( $post_id, '_customify_'.$key, $value );
         }
 
     }
@@ -113,14 +124,7 @@ class Customify_MetaBox {
 
         // Add an nonce field so we can check for it later.
         wp_nonce_field( 'customify_page_settings', 'customify_page_settings_nonce' );
-        $values = array(
-            'sidebar' => '',
-            'content_layout' => '',
-            'disable_header' => '',
-            'disable_page_title' => '',
-            'disable_footer_main' => '',
-            'disable_footer_bottom' => '',
-        );
+        $values = $this->get_fields();
         foreach( $values as $key => $value ) {
             $values[ $key ] = get_post_meta( $post->ID, '_customify_'.$key, true );
         }
@@ -164,5 +168,6 @@ class Customify_MetaBox {
             <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
         </label>
         <?php
+        do_action('customify/metabox/settings', $post );
     }
 }

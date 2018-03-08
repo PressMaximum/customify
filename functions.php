@@ -304,10 +304,58 @@ class Customify_Init {
         }
 
         //WooCommerce
-        if ( class_exists('WooCommerce') ) {
+        if ( $this->is_woocommerce_active() ) {
             require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
         }
 
+    }
+
+    function is_woocommerce_active(){
+        return class_exists('WooCommerce');
+    }
+
+    function is_using_post(){
+        $use = false;
+        if ( is_singular() ){
+            $use = true;
+        } else {
+            if ( is_front_page() && is_home() ) {
+                $use = false;
+            } elseif ( is_front_page() ) {
+                // static homepage
+                $use = true;
+            } elseif ( is_home() ) {
+                // blog page
+                $use = true;
+            } else {
+                if ( $this->is_woocommerce_active() ) {
+                    if ( is_shop() ) {
+                        $use = true;
+                    }
+                }
+            }
+        }
+        return $use;
+    }
+
+    function get_current_post_id(){
+        $id = get_the_ID();
+        if ( is_front_page() && is_home() ) {
+            $id = false;
+        } elseif ( is_front_page() ) {
+            // static homepage
+            $id = get_option( 'page_on_front' );
+        } elseif ( is_home() ) {
+            // blog page
+            $id = get_option( 'page_for_posts' );
+        } else {
+           if ( $this->is_woocommerce_active() ) {
+               if ( is_shop() ) {
+                   $id = wc_get_page_id('shop');
+               }
+           }
+        }
+        return $id;
     }
 
     function init(){
