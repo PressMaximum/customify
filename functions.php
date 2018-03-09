@@ -47,6 +47,17 @@ class Customify_Init {
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 3 );
+        add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
+    }
+
+    /**
+     * Filter the excerpt "read more" string.
+     *
+     * @param string $more "Read more" excerpt string.
+     * @return string (Maybe) modified "read more" excerpt string.
+     */
+    function excerpt_more( $more ) {
+        return '&hellip;';
     }
 
     static function get_instance(){
