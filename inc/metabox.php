@@ -4,7 +4,7 @@
  * Calls the class on the post edit screen.
  */
 function comtomify_metabox_init() {
-    new Customify_MetaBox();
+    Customify_MetaBox::get_instance();
 }
 
 if ( is_admin() ) {
@@ -16,6 +16,9 @@ if ( is_admin() ) {
  * The Class.
  */
 class Customify_MetaBox {
+
+    static $_instance = null;
+
     public $fields = array(
         'sidebar' => '',
         'content_layout' => '',
@@ -25,12 +28,24 @@ class Customify_MetaBox {
         'disable_footer_bottom' => '',
     );
 
-    /**
-     * Hook into the appropriate actions when the class is constructed.
-     */
-    public function __construct() {
-        add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
-        add_action( 'save_post',      array( $this, 'save'         ) );
+    static function get_instance() {
+        if ( is_null( self::$_instance ) ) {
+            self::$_instance = new self();
+            add_action( 'add_meta_boxes', array( self::$_instance, 'add_meta_box' ) );
+            add_action( 'save_post',      array( self::$_instance, 'save'         ) );
+        }
+        return self::$_instance;
+    }
+
+    function get_support_post_types(){
+        $args = array(
+            'public' => true,
+        );
+
+        $output = 'names'; // names or objects, note names is the default
+        $operator = 'and'; // 'and' or 'or'
+        $post_types = get_post_types( $args, $output, $operator );
+        return array_values( $post_types );
     }
 
     /**
@@ -38,7 +53,7 @@ class Customify_MetaBox {
      */
     public function add_meta_box( $post_type ) {
         // Limit meta box to certain post types.
-        $post_types = array( 'page', 'post' );
+        $post_types = $this->get_support_post_types();
         if ( in_array( $post_type, $post_types ) ) {
             add_meta_box(
                 'customify_page_settings',
