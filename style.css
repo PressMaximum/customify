@@ -3288,6 +3288,8 @@ article.comment .comment-post-author {
   overflow: hidden;
   display: block;
   margin-top: -1px;
+  transition: all .3s linear;
+  transform: scale(0);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
   left: auto;
@@ -3301,6 +3303,7 @@ article.comment .comment-post-author {
   height: auto;
   overflow: initial;
   z-index: 26;
+  transform: scale(1);
 }
 
 .header-search-form {

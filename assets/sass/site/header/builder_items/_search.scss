@@ -25,8 +25,8 @@
         overflow: hidden;
         display: block;
         margin-top: -1px;
-        //transition: all .5s linear;
-       // transform: translateY( 25px );
+        transition: all .3s linear;
+        transform: scale(0);
     }
     &.search-left {
         .header-search-modal-wrapper {
@@ -45,6 +45,7 @@
             height: auto;
             overflow: initial;
             z-index: 26;
+            transform: scale(1);
            // transform: translateY( 0 );
         }
     }
