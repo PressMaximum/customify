@@ -60,7 +60,7 @@ class Customify_Builder_Item_Search_Icon
                 'max'             => 100,
                 'selector'        => "$selector svg",
                 'css_format'      => 'height: {{value}}; width: {{value}};',
-                'label'           => __( 'Size', 'customify' ),
+                'label'           => __( 'Icon Size', 'customify' ),
             ),
 
             array(
@@ -73,7 +73,7 @@ class Customify_Builder_Item_Search_Icon
                 'max'             => 100,
                 'selector'        => "$selector .search-icon",
                 'css_format'      => 'padding: {{value}};',
-                'label'           => __( 'Padding', 'customify' ),
+                'label'           => __( 'Icon Padding', 'customify' ),
             ),
 
             array(
@@ -81,7 +81,7 @@ class Customify_Builder_Item_Search_Icon
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
-                'title' => __('Styling', 'customify'),
+                'title' => __('Icon Styling', 'customify'),
                 'description' => __('Search icon styling', 'customify'),
                 'selector' => array(
                     'normal' => "{$selector} .search-icon",
@@ -111,12 +111,11 @@ class Customify_Builder_Item_Search_Icon
                 )
             ),
 
-
             array(
-                'name'            => $this->section . '_popup_h',
+                'name'            => $this->section . '_modal_h',
                 'type'            => 'heading',
                 'section'         => $this->section,
-                'label'           => __( 'Popup Setting', 'customify' ),
+                'label'           => __( 'Modal Settings', 'customify' ),
             ),
 
             array(
@@ -135,7 +134,7 @@ class Customify_Builder_Item_Search_Icon
                 'section' => $this->section,
                 'css_format' => 'styling',
                 'title' => __('Form Styling', 'customify'),
-                'description' => __('Form popup styling', 'customify'),
+                'description' => __('Form modal styling', 'customify'),
                 'selector' => array(
                     'normal' => "{$selector} .header-search-modal",
                     'normal_bg_color' => "{$selector} .header-search-modal, {$selector} .header-search-modal:before",
@@ -161,7 +160,7 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name'            => $this->section . '_popup_height',
+                'name'            => $this->section . '_modal_height',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
@@ -174,20 +173,17 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name'            => $this->section . '_popup_font_size',
-                'type'            => 'slider',
-                'device_settings' => true,
+                'name'            => $this->section . '_modal_font_size',
+                'type'            => 'typography',
                 'section'         => $this->section,
-                'min'             => 9,
-                'step'            => 1,
-                'max'             => 60,
                 'selector'        => "$selector .header-search-form .search-field",
-                'css_format'      => 'font-size: {{value}};',
-                'label'           => __( 'Font Size', 'customify' ),
+                'css_format'      => 'typography',
+                'label'           => __( 'Typography', 'customify' ),
+                'description'     => __( 'Typography for search input', 'customify' ),
             ),
 
             array(
-                'name'            => $this->section . '_popup_icon_size',
+                'name'            => $this->section . '_modal_icon_size',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
@@ -200,7 +196,7 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name'            => $this->section . '_popup_icon_pos',
+                'name'            => $this->section . '_modal_icon_pos',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'default' => array(
@@ -227,7 +223,7 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name' => $this->section . '_popup_input_styling',
+                'name' => $this->section . '_modal_input_styling',
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
@@ -265,7 +261,7 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name' => $this->section . '_popup_icon_styling',
+                'name' => $this->section . '_modal_icon_styling',
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
@@ -296,8 +292,6 @@ class Customify_Builder_Item_Search_Icon
                     ), // disable hover tab and all fields inside.
                 )
             ),
-
-
 
         );
 

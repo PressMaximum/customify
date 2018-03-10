@@ -137,7 +137,7 @@ class Customify_Builder_Item_Social_Icons {
                 'type'             => 'select',
                 'section'          => $section,
                 'selector'         => '.header-social-icons',
-                'default'         => '',
+                'default'         => 'default',
                 'render_callback'  => $fn,
                 'title'            => __( 'Color', 'customify' ),
                 'choices'          => array(

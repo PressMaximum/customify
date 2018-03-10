@@ -75,15 +75,12 @@ class Customify_Builder_Item_Search_Box
 
             array(
                 'name'            => $this->section . '_font_size',
-                'type'            => 'slider',
-                'device_settings' => true,
+                'type'            => 'typography',
                 'section'         => $this->section,
-                'min'             => 9,
-                'step'            => 1,
-                'max'             => 60,
                 'selector'        => "$selector .header-search-form .search-field",
-                'css_format'      => 'font-size: {{value}};',
-                'label'           => __( 'Font Size', 'customify' ),
+                'css_format'      => 'typography',
+                'label'           => __( 'Typography', 'customify' ),
+                'description'     => __( 'Typography for search input', 'customify' ),
             ),
 
             array(

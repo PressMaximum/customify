@@ -18,6 +18,15 @@
         }
     }
 
+    &.color-default {
+        a {
+            color: #fff;
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+
     a {
         color: currentColor;
         text-align: center;

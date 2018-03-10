@@ -3298,8 +3298,8 @@ article.comment .comment-post-author {
   overflow: hidden;
   display: block;
   margin-top: -1px;
-  transition: all .3s linear;
-  transform: scale(0.5);
+  transition: all .2s linear;
+  transform: scale(0.6);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
   left: auto;
@@ -3407,6 +3407,12 @@ article.comment .comment-post-author {
 }
 .customify-builder-social-icons li:first-child {
   margin-left: 0px;
+}
+.customify-builder-social-icons.color-default a {
+  color: #fff;
+}
+.customify-builder-social-icons.color-default a:hover {
+  color: #fff;
 }
 .customify-builder-social-icons a {
   color: currentColor;
