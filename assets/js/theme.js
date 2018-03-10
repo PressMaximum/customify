@@ -212,13 +212,6 @@ jQuery( document ).ready( function( $ ){
 
     } );
 
-    $( '.header-search_icon-item .search-icon').hover(  function( e ){
-        var w = $( this ).parent();
-        $( '.search-field', w ).focus();
-    }, function(){
-        var w = $( this ).parent();
-        w.removeClass('active');
-    } );
 
     $( '.header-search_icon-item .search-icon').blur(  function( e ){
         var w = $( this ).parent();
@@ -238,31 +231,15 @@ jQuery( document ).ready( function( $ ){
         var w = $( window ).width();
         $( '.header-search_icon-item' ).each( function(){
             var p = $( this );
-            var button = p.find( 'search-icon' );
-            var form = p.find('form');
+            var button = p.find( '.search-icon' );
             p.removeClass( 'search-right search-left' );
-            form.css('width','');
-            var fw = form.width();
-            if ( fw > w ) {
-                fw = w;
-                form.css( 'width', fw );
-            }
-            var form_offset = form.offset();
-            if  ( form_offset.left + fw > w ) {
+            var button_offset = button.offset();
+            if ( button_offset.left > w/2 ) {
                 p.removeClass( 'search-right' );
                 p.addClass( 'search-left' );
-                form_offset = form.offset();
-                var l = form_offset.left ;
-                if ( fw - l < w ) {
-                    fw = w - l;
-                }
-                form.css( 'max-width', fw );
             } else {
                 p.removeClass( 'search-left' );
                 p.addClass( 'search-right' );
-
-                form.css( 'max-width', fw  );
-
             }
 
         } );

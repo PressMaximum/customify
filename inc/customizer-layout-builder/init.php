@@ -66,6 +66,7 @@ class Customify_Customizer_Layout_Builder {
 				'templates',
 				'logo',
 				'search-icon',
+				'search-box',
 				'menus',
 				'nav-icon',
 				'button',

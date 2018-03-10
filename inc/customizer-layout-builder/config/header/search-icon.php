@@ -55,7 +55,7 @@ class Customify_Builder_Item_Search_Icon
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
-                'min'             => 10,
+                'min'             => 5,
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector svg",
@@ -77,7 +77,7 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
-                'name' => $this->section . '_border',
+                'name' => $this->section . '_styling',
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
@@ -85,7 +85,7 @@ class Customify_Builder_Item_Search_Icon
                 'description' => __('Search icon styling', 'customify'),
                 'selector' => array(
                     'normal' => "{$selector} .search-icon",
-                    'hover' => "{$selector} .search-icon :hover",
+                    'hover' => "{$selector} .search-icon:hover",
                     'normal_box_shadow' => "{$selector} .search-icon",
                     'normal_text_color' => "{$selector} .search-icon",
                 ),
@@ -108,17 +108,6 @@ class Customify_Builder_Item_Search_Icon
                     ), // disable hover tab and all fields inside.
                 )
             ),
-
-            array(
-                'name' => $this->section . '_modal_align',
-                'type' => 'text_align_no_justify',
-                'section' => $this->section,
-                'device_settings' => true,
-                'selector' => $selector,
-                'render_callback' => $fn,
-                'title'   => __( 'Search Form Align', 'customify' ),
-            ),
-
 
         );
 
@@ -144,12 +133,16 @@ class Customify_Builder_Item_Search_Icon
     <span class="arrow-down"></span>
 </a>
 <div class="header-search-modal-wrapper">
-    <form role="search" class="header-search-modal" action="<?php echo home_url( '/' ); ?>">
+    <form role="search" class="header-search-modal header-search-form" action="<?php echo home_url( '/' ); ?>">
         <label>
             <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
             <input type="search" class="search-field" placeholder="<?php echo esc_attr_x( 'Search the site …', 'customify' ) ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
         </label>
-        <input type="submit" class="search-submit" value="<?php echo esc_attr_x( 'Search', 'submit button', 'customify' ) ?>" />
+        <button type="submit" class="search-submit" >
+            <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
+                <path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
+            </svg>
+        </button>
     </form>
 </div>
 <?php

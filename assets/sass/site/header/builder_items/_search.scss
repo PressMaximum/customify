@@ -8,8 +8,10 @@
     display: inline-block;
     position: relative;
     box-shadow: none;
+    color: currentColor;
     &:hover {
         box-shadow: none;
+        color: currentColor;
     }
 
 }
@@ -23,8 +25,8 @@
         overflow: hidden;
         display: block;
         margin-top: -1px;
-        transition: all .5s linear;
-        transform: translateY( 40px );
+        //transition: all .5s linear;
+       // transform: translateY( 25px );
     }
     &.search-left {
         .header-search-modal-wrapper {
@@ -38,12 +40,50 @@
             }
         }
     }
-    &.active, &:hover {
+    &.active {
         .header-search-modal-wrapper {
             height: auto;
             overflow: initial;
             z-index: 26;
-            transform: translateY( 0 );
+           // transform: translateY( 0 );
+        }
+    }
+}
+
+.header-search-form {
+    display: flex;
+    margin-bottom: 0px;
+    width: 100%;
+    label {
+        flex-basis: 100%;
+    }
+    .search-field {
+        border: 1px solid $color_border;
+        border-radius: 30px;
+        box-shadow: none;
+        padding-right: 55px;
+        padding-left: 10px;
+        display: block;
+        width: 100%;
+        background: #ffffff;
+        &:focus {
+            box-shadow: none;
+            background: #ffffff;
+        }
+    }
+    .search-submit {
+        overflow: hidden;
+        box-shadow: none;
+        margin-left: -50px;
+        background: transparent;
+        padding-right: 1em;
+        padding-left: 1em;
+        color: $color_text;
+        line-height: 0px;
+        &:hover {
+            box-shadow: none;
+            background-color: transparent;
+            color: $color_text;
         }
     }
 }
@@ -52,9 +92,10 @@
     border: 1px solid $color_border;
     padding: 1em;
     background: #fff;
-    margin-bottom: 0px;
-    display: flex;
     width: 350px;
+    @include for_device( mobile ) {
+        width: 280px;
+    }
     position: relative;
     margin-top: 15px;
     &.search-left {
@@ -77,27 +118,14 @@
         transform: rotate(45deg);
         z-index: 27;
     }
-    .search-field {
-        border: 1px solid $color_border;
-        border-radius: 30px;
-        box-shadow: none;
-        padding-right: 60px;
-        padding-left: 10px;
-        display: block;
-        width: 100%;
-    }
+}
+
+// Search box
+.item--inner.builder-item--search_box {
+    width: 100%;
+}
+.header-search_box-item  {
     .search-submit {
-        text-indent: -99999px;
-        overflow: hidden;
-        background-image: url("assets/images/search.svg") ;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-color: transparent;
-        box-shadow: none;
-        margin-left: -60px;
-        &:hover {
-            box-shadow: none;
-            background-color: transparent;
-        }
+
     }
 }
