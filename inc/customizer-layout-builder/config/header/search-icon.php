@@ -68,7 +68,7 @@ class Customify_Builder_Item_Search_Icon
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
-                'min'             => 10,
+                'min'             => 0,
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector .search-icon",
