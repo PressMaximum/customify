@@ -51,7 +51,17 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name'            => $this->section . '_padding',
+                'name'            => $this->section . '_placeholder',
+                'type'            => 'text',
+                'section'         => $this->section,
+                'selector'        => "$selector",
+                'render_callback' => $fn,
+                'label'           => __( 'Placeholder', 'customify' ),
+                'default'           => __( 'Search ...', 'customify' ),
+            ),
+
+            array(
+                'name'            => $this->section . '_height',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
@@ -59,8 +69,21 @@ class Customify_Builder_Item_Search_Box
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector .header-search-form .search-field",
-                'css_format'      => 'padding: {{value}};',
-                'label'           => __( 'Height', 'customify' ),
+                'css_format'      => 'height: {{value}};',
+                'label'           => __( 'Input Height', 'customify' ),
+            ),
+
+            array(
+                'name'            => $this->section . '_font_size',
+                'type'            => 'slider',
+                'device_settings' => true,
+                'section'         => $this->section,
+                'min'             => 9,
+                'step'            => 1,
+                'max'             => 60,
+                'selector'        => "$selector .header-search-form .search-field",
+                'css_format'      => 'font-size: {{value}};',
+                'label'           => __( 'Font Size', 'customify' ),
             ),
 
             array(
@@ -126,7 +149,7 @@ class Customify_Builder_Item_Search_Box
                         'bg_cover' => false,
                         'bg_image' => false,
                         'bg_repeat' => false,
-                        'padding' => false,
+                        'bg_attachment' => false,
                         'margin' => false,
                     ),
                     'hover_fields' => array(
@@ -157,7 +180,8 @@ class Customify_Builder_Item_Search_Box
                         'bg_cover' => false,
                         'bg_image' => false,
                         'bg_repeat' => false,
-                        'padding' => false,
+                        'bg_attachment' => false,
+                        //'padding' => false,
                         'margin' => false,
                     ),
                     'hover_fields' => array(
@@ -166,11 +190,11 @@ class Customify_Builder_Item_Search_Box
                         'bg_cover' => false,
                         'bg_image' => false,
                         'bg_repeat' => false,
+                        'bg_attachment' => false,
                         'border_radius' => false,
                     ), // disable hover tab and all fields inside.
                 )
             ),
-
 
 
         );
@@ -184,12 +208,15 @@ class Customify_Builder_Item_Search_Box
      */
     function render()
     {
+
+        $placeholder = Customify_Customizer()->get_setting( $this->section.'_placeholder' );
+        $placeholder = sanitize_text_field( $placeholder );
         echo '<div class="header-' . esc_attr($this->id) . '-item item--'.esc_attr( $this->id ).'">';
 ?>
         <form role="search" class="header-search-form" action="<?php echo home_url( '/' ); ?>">
             <label>
                 <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
-                <input type="search" class="search-field" placeholder="<?php echo esc_attr_x( 'Search the site …', 'customify' ) ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
+                <input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
             </label>
             <button type="submit" class="search-submit" >
                 <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">

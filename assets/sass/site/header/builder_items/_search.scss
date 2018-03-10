@@ -20,18 +20,18 @@
     .header-search-modal-wrapper {
         position: absolute;
         top: 100%;
-        left: 0px;
+        left: -.9em;
         height: 0px;
         overflow: hidden;
         display: block;
         margin-top: -1px;
         transition: all .3s linear;
-        transform: scale(0);
+        transform: scale(0.5);
     }
     &.search-left {
         .header-search-modal-wrapper {
             left: auto;
-            right: 0px;
+            right: -.9em;
         }
         .header-search-modal{
             &::before {

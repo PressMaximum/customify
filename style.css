@@ -2860,6 +2860,16 @@ article.comment .comment-post-author {
 .builder-item.builder-item--group .item--inner {
   margin-right: 1.5em;
 }
+@media screen and (max-width: 1024px) {
+  .builder-item.builder-item--group .item--inner {
+    margin-right: 1.0em;
+  }
+}
+@media screen and (max-width: 568px) {
+  .builder-item.builder-item--group .item--inner {
+    margin-right: .5em;
+  }
+}
 .builder-item.builder-item--group .item--inner:last-child {
   margin-right: 0px;
 }
@@ -3283,17 +3293,17 @@ article.comment .comment-post-author {
 .header-search_icon-item .header-search-modal-wrapper {
   position: absolute;
   top: 100%;
-  left: 0px;
+  left: -.9em;
   height: 0px;
   overflow: hidden;
   display: block;
   margin-top: -1px;
   transition: all .3s linear;
-  transform: scale(0);
+  transform: scale(0.5);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
   left: auto;
-  right: 0px;
+  right: -.9em;
 }
 .header-search_icon-item.search-left .header-search-modal::before {
   left: auto;

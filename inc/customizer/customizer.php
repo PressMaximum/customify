@@ -62,6 +62,8 @@ if ( class_exists( 'WP_Customize_Section' ) ) {
 // Load customizer config file.
 require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/styling.php';
+
 require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
@@ -551,9 +553,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
 
                     array(
                         'name' => 'border_radius',
-                        'type' => 'slider',
+                        'type' => 'css_ruler',
                         'label' => __('Border Radius', 'customify'),
-                        'css_format' => 'border-radius: {{value}};',
+                        'css_format' => array(
+                            'top' => 'border-top-left-radius: {{value}};',
+                            'right' => 'border-top-right-radius: {{value}};',
+                            'bottom'=> 'border-bottom-right-radius: {{value}};',
+                            'left'=> 'border-bottom-left-radius: {{value}};'
+                        ),
                     ),
 
                     array(
@@ -633,9 +640,14 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     ),
                     array(
                         'name' => 'border_radius',
-                        'type' => 'slider',
+                        'type' => 'css_ruler',
                         'label' => __('Border Radius', 'customify'),
-                        'css_format' => 'border-radius: {{value}};',
+                        'css_format' => array(
+                            'top' => 'border-top-left-radius: {{value}};',
+                            'right' => 'border-top-right-radius: {{value}};',
+                            'bottom'=> 'border-bottom-right-radius: {{value}};',
+                            'left'=> 'border-bottom-left-radius: {{value}};'
+                        ),
                     ),
                     array(
                         'name' => 'box_shadow',

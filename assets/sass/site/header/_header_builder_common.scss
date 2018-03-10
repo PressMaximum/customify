@@ -16,6 +16,12 @@
     &.builder-item--group {
         .item--inner {
             margin-right: ($gl-gutter/2);
+            @include for_device( tablet ) {
+                margin-right: 1.0em;
+            }
+            @include for_device( mobile ) {
+                margin-right: .5em;
+            }
             &:last-child {
                 margin-right: 0px;
             }
