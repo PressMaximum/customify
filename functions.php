@@ -259,7 +259,7 @@ class Customify_Init {
      */
     function scripts() {
 
-        if ( ! function_exists( 'a' ) ) {
+        if ( ! class_exists( 'Customify_Font_Icons' ) ) {
             require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
         }
         Customify_Font_Icons()->enqueue();

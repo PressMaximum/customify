@@ -384,7 +384,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                     array(
                         'name' => 'text_color',
                         'type' => 'color',
-                        'label' => __( 'Text Color', 'customify' ),
+                        'label' => __( 'Color', 'customify' ),
                         'css_format' => 'color: {{value}}; text-decoration-color: {{value}};'
                     ),
                     array(

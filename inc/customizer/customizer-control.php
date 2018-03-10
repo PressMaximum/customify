@@ -30,7 +30,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     public $min = 0;
     public $max = 700;
     public $step = 1;
-    public $no_unit = false;
+    public $unit = false;
 
     // For CSS Ruler
     public $fields_disabled = array();
@@ -162,6 +162,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;
         $this->json['step'] = $this->step;
+        $this->json['unit'] = $this->unit;
         if ( 'css_ruler' == $this->setting_type ) {
             // $disabled
             $this->json['fields_disabled'] = $this->fields_disabled;
@@ -730,15 +731,17 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
             }
         }
-
-
          #>
         <?php echo $this->field_header(); ?>
         <div class="customify-field-settings-inner">
             <div class="customify-input-slider-wrapper">
                 <div class="customify--css-unit">
                     <label class="<# if ( field.value.unit == 'px' || ! field.value.unit ){ #> customify--label-active <# } #>">
+                        <# if ( field.unit ) { #>
+                            {{ field.unit }}
+                        <#  } else {  #>
                         <?php _e( 'px', 'customify' ); ?>
+                        <#  } #>
                         <input type="radio" class="customify-input customify--label-parent change-by-js" <# if ( field.value.unit == 'px' || ! field.value.unit ){ #> checked="checked" <# } #> data-name="{{ field.name }}-unit" name="r{{ uniqueID }}" value="px">
                     </label>
                     <a href="#" class="reset" title="<?php esc_attr_e( 'Reset', 'customify' ); ?>"></a>

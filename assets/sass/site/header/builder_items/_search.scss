@@ -1,1 +1,103 @@
 /* Search */
+.item--search_icon {
+    line-height: 0px;
+    cursor: pointer;
+}
+.search-icon {
+    line-height: 0px;
+    display: inline-block;
+    position: relative;
+    box-shadow: none;
+    &:hover {
+        box-shadow: none;
+    }
+
+}
+.header-search_icon-item {
+    position: relative;
+    .header-search-modal-wrapper {
+        position: absolute;
+        top: 100%;
+        left: 0px;
+        height: 0px;
+        overflow: hidden;
+        display: block;
+        margin-top: -1px;
+        transition: all .5s linear;
+        transform: translateY( 40px );
+    }
+    &.search-left {
+        .header-search-modal-wrapper {
+            left: auto;
+            right: 0px;
+        }
+        .header-search-modal{
+            &::before {
+                left: auto;
+                right: 15px;
+            }
+        }
+    }
+    &.active, &:hover {
+        .header-search-modal-wrapper {
+            height: auto;
+            overflow: initial;
+            z-index: 26;
+            transform: translateY( 0 );
+        }
+    }
+}
+
+.header-search-modal{
+    border: 1px solid $color_border;
+    padding: 1em;
+    background: #fff;
+    margin-bottom: 0px;
+    display: flex;
+    width: 350px;
+    position: relative;
+    margin-top: 15px;
+    &.search-left {
+
+    }
+    label {
+        flex-basis: 100%;
+    }
+    &::before {
+        border-top: 1px solid $color_border;
+        border-left: 1px solid $color_border;
+        background: #fff;
+        content: "";
+        display: block;
+        position: absolute;
+        top: -8px;
+        left: 15px;
+        width:15px;
+        height: 15px;
+        transform: rotate(45deg);
+        z-index: 27;
+    }
+    .search-field {
+        border: 1px solid $color_border;
+        border-radius: 30px;
+        box-shadow: none;
+        padding-right: 60px;
+        padding-left: 10px;
+        display: block;
+        width: 100%;
+    }
+    .search-submit {
+        text-indent: -99999px;
+        overflow: hidden;
+        background-image: url("assets/images/search.svg") ;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        box-shadow: none;
+        margin-left: -60px;
+        &:hover {
+            box-shadow: none;
+            background-color: transparent;
+        }
+    }
+}

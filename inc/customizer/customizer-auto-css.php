@@ -155,7 +155,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $value = Customify_Sanitize_Input::sanitize_color( $value );
             if ( $format ) {
                 if (!is_null( $value ) && $value !== '') {
-                    return $this->replace_value( $value, $format ).';';
+                    return $this->replace_value( $value, $format );
                 }
             }
             return false;
