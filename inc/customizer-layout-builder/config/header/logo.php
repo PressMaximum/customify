@@ -19,16 +19,16 @@ class Customify_Builder_Item_Logo {
         $config  = array(
 
             array(
-                'name' => 'logo_height',
+                'name' => 'logo_max_width',
                 'type' => 'slider',
                 'section' =>  $section,
                 'default' => array(),
                 'max' => 200,
                 'priority' => 8,
                 'device_settings' => true,
-                'title' => __( 'Logo Height', 'customify' ),
+                'title' => __( 'Logo Max Width', 'customify' ),
                 'selector' => $selector.' img',
-                'css_format' => 'max-height: {{value}};'
+                'css_format' => 'max-width: {{value}};'
             ),
 
             array(

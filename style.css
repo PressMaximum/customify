@@ -3030,7 +3030,7 @@ article.comment .comment-post-author {
 .nav-menu-desktop .menu li a {
   display: inline-block;
   color: inherit;
-  transition: background 0.15s ease-out;
+  transition: all 0.3s ease-out;
   text-decoration-color: currentColor;
 }
 .nav-menu-desktop .menu li a:hover {
@@ -3042,8 +3042,12 @@ article.comment .comment-post-author {
 .nav-menu-desktop .menu > li > a {
   padding: 14px 15px 15px;
 }
+.nav-menu-desktop .menu > li > a i {
+  line-height: 0;
+}
 .nav-menu-desktop .menu > li.menu-item-has-children > a .nav-icon-angle {
   margin-left: 5px;
+  line-height: 0;
 }
 .nav-menu-desktop .menu > li.menu-item-has-children > a .nav-icon-angle:before {
   content: "\f107";
