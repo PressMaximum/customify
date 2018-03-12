@@ -86,7 +86,6 @@ class Customify_TitleBar {
                 'name' => "{$section}_display_cat",
                 'type' => 'checkbox',
                 'section' =>  $section,
-                'default' => 1,
                 'checkbox_label' => __( 'Display on categories', 'customify-pro' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
@@ -95,7 +94,6 @@ class Customify_TitleBar {
                 'name' => "{$section}_display_search",
                 'type' => 'checkbox',
                 'section' =>  $section,
-                'default' => 1,
                 'checkbox_label' => __( 'Display on search', 'customify-pro' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
@@ -104,7 +102,6 @@ class Customify_TitleBar {
             array(
                 'name' => "{$section}_display_archive",
                 'type' => 'checkbox',
-                'default' => 1,
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on archive', 'customify-pro' ),
                 'selector' => $selector,
