@@ -134,6 +134,18 @@ class Customify_Breadcrumb {
             'checkbox_label' => __( 'Display on single post', 'customify' ),
         );
 
+
+        if ( Customify_Init()->is_woocommerce_active() ) {
+            $config[] = array(
+                'name' => "{$section}_display_shop",
+                'type' => 'checkbox',
+                'default' => 1,
+                'section' =>  $section,
+                'checkbox_label' => __( 'Display on shop and product page', 'customify' ),
+            );
+        }
+
+
         $config[] =  array(
             'name' => $section.'_typo',
             'type' => 'typography',
@@ -223,6 +235,15 @@ class Customify_Breadcrumb {
             $is_showing = false;
         }
 
+        if ( Customify_Init()->is_woocommerce_active() ) {
+            if ( is_shop() || is_product_taxonomy() || is_product() ) {
+                if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_shop' ) ) {
+                    $is_showing = false;
+                } else {
+                    $is_showing = true;
+                }
+            }
+        }
 
         if ( Customify_Init()->is_using_post() ) {
             $id = Customify_Init()->get_current_post_id();
@@ -233,6 +254,10 @@ class Customify_Breadcrumb {
                 $is_showing = true;
             }
         }
+
+
+
+        $is_showing = apply_filters( 'customify/breadcrumb/is-showing', $is_showing );
 
         return $is_showing;
     }
