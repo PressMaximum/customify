@@ -20,7 +20,7 @@
                 margin-right: 1.0em;
             }
             @include for_device( mobile ) {
-                margin-right: .5em;
+                margin-right: .4em;
             }
             &:last-child {
                 margin-right: 0px;
