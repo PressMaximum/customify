@@ -4623,6 +4623,10 @@ body.menu_sidebar_dropdown:before {
     text-align: right;
   }
 }
+#page {
+  position: relative;
+}
+
 .no-box-shadow {
   box-shadow: none !important;
 }
