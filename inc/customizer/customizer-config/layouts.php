@@ -8,7 +8,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			array(
 				'name'           => 'layout_panel',
 				'type'           => 'panel',
-				'priority' => 22,
+				'priority' =>     18,
 				'theme_supports' => '',
 				'title'          => __( 'Layouts', 'customify' ),
 			),

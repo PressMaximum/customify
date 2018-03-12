@@ -33,7 +33,7 @@ class Customify_Breadcrumb {
         $selector = '#page-breadcrumb';
 
         if( ! $this->support_plugins_active() ) {
-            $desc = __( 'Your should install and active plugin <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> to use this function.', 'customify-pro' );
+            $desc = __( 'Your should install and active plugin <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> to use this function.', 'customify' );
         } else {
             $desc = '';
         }
@@ -47,7 +47,7 @@ class Customify_Breadcrumb {
                 'name'           => $section,
                 'type'           => 'section',
                 'panel'          => $panel,
-                'title'          => __( 'Breadcrumb', 'customify-pro' ),
+                'title'          => __( 'Breadcrumb', 'customify' ),
                 'description'    => $desc,
             ),
 
@@ -56,10 +56,10 @@ class Customify_Breadcrumb {
                 'type' => 'select',
                 'section' =>  $section,
                 'default' => 1,
-                'title' => __( 'Display Position', 'customify-pro' ),
+                'title' => __( 'Display Position', 'customify' ),
                 'choices' => array(
-                    'below' => __( 'Display below header cover', 'customify-pro' ),
-                    'cover' => __( 'Display inside header cover/titlebar', 'customify-pro' ),
+                    'below' => __( 'Display below header cover', 'customify' ),
+                    'cover' => __( 'Display inside header cover/titlebar', 'customify' ),
                 ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
@@ -70,7 +70,7 @@ class Customify_Breadcrumb {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'default' => 1,
-                'checkbox_label' => __( 'Display on categories', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on categories', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -79,7 +79,7 @@ class Customify_Breadcrumb {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'default' => 1,
-                'checkbox_label' => __( 'Display on search', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on search', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -89,7 +89,7 @@ class Customify_Breadcrumb {
                 'type' => 'checkbox',
                 'default' => 1,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on archive', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on archive', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -99,7 +99,7 @@ class Customify_Breadcrumb {
                 'type' => 'checkbox',
                 'default' => false,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on single page', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on single page', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -108,7 +108,7 @@ class Customify_Breadcrumb {
                 'type' => 'checkbox',
                 'default' => 1,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on single post', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on single post', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),

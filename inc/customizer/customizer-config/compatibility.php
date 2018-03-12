@@ -9,7 +9,7 @@ if ( ! function_exists( 'customify_customizer_compatibility_config' ) ) {
             array(
                 'name'           => $panel.'_panel',
                 'type'           => 'panel',
-                //'priority' => 22,
+                'priority'      => 24,
                 'title'          => __( 'Compatibility', 'customify' ),
             ),
 

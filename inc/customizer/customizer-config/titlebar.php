@@ -24,13 +24,13 @@ class Customify_TitleBar {
                 'name'           => $section,
                 'type'           => 'section',
                 'panel'          => 'layout_panel',
-                'title'          => __( 'Titlebar', 'customify-pro' ),
+                'title'          => __( 'Titlebar', 'customify' ),
             ),
             array(
                 'name' => "{$section}_styling_h",
                 'type' => 'heading',
                 'section' =>  $section,
-                'title' => __( 'Styling Settings', 'customify-pro' )
+                'title' => __( 'Styling Settings', 'customify' )
             ),
 
             array(
@@ -47,7 +47,7 @@ class Customify_TitleBar {
                 'name' => $section.'_styling',
                 'type' => 'styling',
                 'section' => $section,
-                'title'  => __( 'Styling', 'customify-pro' ),
+                'title'  => __( 'Styling', 'customify' ),
                 'selector' => array(
                     'normal' => "{$selector}",
                     'normal_text_color' => "{$selector} h1",
@@ -72,14 +72,14 @@ class Customify_TitleBar {
                 'device_settings' => true,
                 'selector' => "$selector",
                 'css_format' => 'text-align: {{value}};',
-                'title'   => __( 'Text Align', 'customify-pro' ),
+                'title'   => __( 'Text Align', 'customify' ),
             ),
 
             array(
                 'name' => "{$section}_display_h",
                 'type' => 'heading',
                 'section' =>  $section,
-                'title' => __( 'Display Settings', 'customify-pro' )
+                'title' => __( 'Display Settings', 'customify' )
             ),
 
             array(
@@ -87,7 +87,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'default' => 1,
-                'checkbox_label' => __( 'Display on categories', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on categories', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -96,7 +96,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'default' => 1,
-                'checkbox_label' => __( 'Display on search', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on search', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -106,7 +106,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'default' => 1,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on archive', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on archive', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -116,7 +116,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'default' => 1,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on single page', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on single page', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -125,7 +125,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'default' => 1,
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on single post', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on single post', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -164,7 +164,7 @@ class Customify_TitleBar {
                 }
             }
 
-            self::$is_showing = apply_filters('customify-pro/titlebar/is-showing', $is_showing );
+            self::$is_showing = apply_filters('customify/titlebar/is-showing', $is_showing );
         }
         return self::$is_showing;
     }
@@ -195,7 +195,7 @@ class Customify_TitleBar {
                     } elseif( is_search() ) {
                         printf( // WPCS: XSS ok.
                         /* translators: 1: Search query name */
-                            __( 'Search Results for: %s', 'customify-pro' ),
+                            __( 'Search Results for: %s', 'customify' ),
                             '<span>' . get_search_query() . '</span>'
                         );
                     } else {
