@@ -2961,11 +2961,11 @@ article.comment .comment-post-author {
   text-decoration: underline;
 }
 
-.page-titlebar .page-breadcrumb-inner {
+.page-titlebar .page-breadcrumb-inner, .page-cover .page-breadcrumb-inner {
   padding-left: 0;
   padding-right: 0;
 }
-.page-titlebar .page-breadcrumb {
+.page-titlebar .page-breadcrumb, .page-cover .page-breadcrumb {
   border-bottom: none;
   padding-bottom: 0px;
 }

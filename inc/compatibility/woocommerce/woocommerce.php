@@ -140,9 +140,6 @@ class Customify_WC {
             }
         }
 
-
-
-
         return $show;
     }
 

@@ -163,11 +163,11 @@ class Customify_Breadcrumb {
             'title'  => __( 'Styling', 'customify' ),
             'description'  => __( 'Styling for breadcrumb', 'customify' ),
             'selector' => array(
-                'normal' => "{$selector}, #page-titlebar {$selector}",
-                'normal_box_shadow' => "{$selector}, #page-titlebar {$selector}",
-                'normal_text_color' => "{$selector}, #page-titlebar {$selector}",
-                'normal_link_color' => "{$selector} a, #page-titlebar {$selector} a",
-                'hover_link_color' => "{$selector} a:hover, #page-titlebar {$selector} a:hover",
+                'normal' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
+                'normal_box_shadow' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
+                'normal_text_color' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
+                'normal_link_color' => "{$selector} a, #page-titlebar {$selector} a, #page-cover {$selector} a",
+                'hover_link_color' => "{$selector} a:hover, #page-titlebar {$selector} a:hover, #page-cover {$selector} a:hover",
             ),
             'css_format' => 'styling', // styling
             'fields' => array(
