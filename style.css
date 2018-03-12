@@ -2867,7 +2867,7 @@ article.comment .comment-post-author {
 }
 @media screen and (max-width: 568px) {
   .builder-item.builder-item--group .item--inner {
-    margin-right: .5em;
+    margin-right: .4em;
   }
 }
 .builder-item.builder-item--group .item--inner:last-child {
@@ -2898,12 +2898,21 @@ article.comment .comment-post-author {
 }
 
 .page-titlebar {
-  background-color: #f8f9f9;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 40px 0px;
+  padding: 26px 0px 27px;
   border-bottom: 1px solid #eaecee;
+}
+@media screen and (max-width: 1024px) {
+  .page-titlebar {
+    padding: 19px 0px 20px;
+  }
+}
+@media screen and (max-width: 568px) {
+  .page-titlebar {
+    padding: 18px 0px 20px;
+  }
 }
 .page-titlebar .page-titlebar-inner {
   width: 100%;
@@ -2915,10 +2924,10 @@ article.comment .comment-post-author {
 }
 
 .page-breadcrumb {
-  padding: 15px 0px;
+  padding: 9px 0px 10px;
   font-size: 1em;
   border-bottom: 1px solid #eaecee;
-  color: #858585;
+  color: #6d6d6d;
 }
 .page-breadcrumb .page-breadcrumb-inner {
   width: 100%;
@@ -2932,16 +2941,24 @@ article.comment .comment-post-author {
 .page-breadcrumb-list li {
   display: inline-block;
   position: relative;
-  padding-right: 30px;
+  padding-right: 20px;
+  font-size: 14px;
 }
 .page-breadcrumb-list li:after {
   font-family: fontawesome;
   content: "\f105";
   position: absolute;
-  right: 10px;
+  right: 5px;
 }
 .page-breadcrumb-list li:last-child:after {
   display: none;
+}
+.page-breadcrumb-list li a {
+  color: #6d6d6d;
+  font-weight: 500;
+}
+.page-breadcrumb-list li a:hover {
+  text-decoration: underline;
 }
 
 .page-titlebar .page-breadcrumb-inner {
@@ -3342,6 +3359,10 @@ article.comment .comment-post-author {
   box-shadow: none;
   color: currentColor;
 }
+.search-icon svg {
+  width: 18px;
+  height: 18px;
+}
 
 .header-search_icon-item {
   position: relative;
@@ -3381,17 +3402,16 @@ article.comment .comment-post-author {
   flex-basis: 100%;
 }
 .header-search-form .search-field {
-  border: 1px solid #eaecee;
-  border-radius: 30px;
-  box-shadow: none;
-  padding-right: 55px;
-  padding-left: 10px;
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
+  border-radius: 3px;
+  padding: 7px 55px 7px 10px;
+  font-size: 14px;
   display: block;
   width: 100%;
   background: #ffffff;
 }
 .header-search-form .search-field:focus {
-  box-shadow: none;
   background: #ffffff;
 }
 .header-search-form .search-submit {
@@ -3399,9 +3419,8 @@ article.comment .comment-post-author {
   box-shadow: none;
   margin-left: -50px;
   background: transparent;
-  padding-right: 1em;
-  padding-left: 1em;
-  color: #444444;
+  padding: 6px 12px;
+  color: #6d6d6d;
   line-height: 0px;
 }
 .header-search-form .search-submit:hover {
@@ -3409,18 +3428,23 @@ article.comment .comment-post-author {
   background-color: transparent;
   color: #444444;
 }
+.header-search-form .search-submit svg {
+  width: 18px;
+  height: 18px;
+}
 
 .header-search-modal {
   border: 1px solid #eaecee;
   padding: 1em;
   background: #fff;
-  width: 350px;
+  width: 250px;
   position: relative;
   margin-top: 15px;
+  box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
 }
 @media screen and (max-width: 568px) {
   .header-search-modal {
-    width: 280px;
+    width: 220px;
   }
 }
 .header-search-modal label {
@@ -3440,6 +3464,13 @@ article.comment .comment-post-author {
   transform: rotate(45deg);
   z-index: 27;
 }
+.header-search-modal .search-field, .header-search-modal .search-field:focus {
+  box-shadow: none;
+  background: #f9f9f9;
+}
+.header-search-modal .search-submit {
+  color: #AAAAAA;
+}
 
 .item--inner.builder-item--search_box {
   width: 100%;
@@ -3456,7 +3487,7 @@ article.comment .comment-post-author {
 .customify-builder-social-icons li {
   list-style: none;
   display: inline-block;
-  margin: 0px 5px;
+  margin: 0px 3px;
 }
 .customify-builder-social-icons li:last-child {
   margin-right: 0px;
@@ -3476,12 +3507,12 @@ article.comment .comment-post-author {
   vertical-align: middle;
   width: 100%;
   height: 100%;
-  padding: 1em;
+  padding: 0.3em;
   display: inline-block;
 }
 .customify-builder-social-icons a i {
-  width: 1em;
-  height: 1em;
+  width: 1.1em;
+  height: 1.1em;
   position: relative;
   display: block;
 }

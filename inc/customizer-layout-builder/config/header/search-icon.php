@@ -178,7 +178,7 @@ class Customify_Builder_Item_Search_Icon
                 'section'         => $this->section,
                 'selector'        => "$selector .header-search-form .search-field",
                 'css_format'      => 'typography',
-                'label'           => __( 'Typography', 'customify' ),
+                'label'           => __( 'Input Text Typography', 'customify' ),
                 'description'     => __( 'Typography for search input', 'customify' ),
             ),
 
@@ -192,7 +192,7 @@ class Customify_Builder_Item_Search_Icon
                 'max'             => 100,
                 'selector'        => "$selector .search-submit svg",
                 'css_format'      => 'height: {{value}}; width: {{value}};',
-                'label'           => __( 'Icon Height', 'customify' ),
+                'label'           => __( 'Icon Size', 'customify' ),
             ),
 
             array(
@@ -201,15 +201,15 @@ class Customify_Builder_Item_Search_Icon
                 'device_settings' => true,
                 'default' => array(
                     'desktop' => array(
-                        'value' => -45,
+                        'value' => -42,
                         'unit' => 'px'
                     ),
                     'tablet' => array(
-                        'value' => -45,
+                        'value' => -42,
                         'unit' => 'px'
                     ),
                     'mobile' => array(
-                        'value' => -45,
+                        'value' => -42,
                         'unit' => 'px'
                     ),
                 ),

@@ -109,7 +109,7 @@ class Customify_Builder_Item_Social_Icons {
 				'device_settings' => true,
                 'unit'            => 'em',
 				'section'         => $section,
-				'min'             => 2,
+				'min'             => 0,
 				'max'             => 20,
 				'selector'        => "$selector li",
 				'css_format'      => 'margin-left: {{value}}; margin-right: {{value}};',
