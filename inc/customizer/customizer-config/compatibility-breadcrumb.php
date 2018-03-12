@@ -39,128 +39,115 @@ class Customify_Breadcrumb {
         }
 
         $panel = 'compatibility_panel';
+        $config = array();
+        $config[] = array(
+            'name'           => $section,
+            'type'           => 'section',
+            'panel'          => $panel,
+            'title'          => __( 'Breadcrumb', 'customify' ),
+            'description'    => $desc,
+        );
 
-        $config = array(
+        $config = apply_filters( 'customify/breadcrumb/config', $config, $this );
 
-            // Global layout section.
-            array(
-                'name'           => $section,
-                'type'           => 'section',
-                'panel'          => $panel,
-                'title'          => __( 'Breadcrumb', 'customify' ),
-                'description'    => $desc,
+        $config[] =  array(
+            'name' => "{$section}_display_cat",
+            'type' => 'checkbox',
+            'section' =>  $section,
+            'default' => 1,
+            'checkbox_label' => __( 'Display on categories', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $render_cb_el,
+        );
+
+        $config[] = array(
+            'name' => "{$section}_display_search",
+            'type' => 'checkbox',
+            'section' =>  $section,
+            'default' => 1,
+            'checkbox_label' => __( 'Display on search', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $render_cb_el,
+        );
+
+        $config[] = array(
+            'name' => "{$section}_display_archive",
+            'type' => 'checkbox',
+            'default' => 1,
+            'section' =>  $section,
+            'checkbox_label' => __( 'Display on archive', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $render_cb_el,
+        );
+
+
+
+        $config[] = array(
+            'name' => "{$section}_display_page",
+            'type' => 'checkbox',
+            'default' => false,
+            'section' =>  $section,
+            'checkbox_label' => __( 'Display on single page', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $render_cb_el,
+        );
+
+
+        $config[] = array(
+            'name' => "{$section}_display_post",
+            'type' => 'checkbox',
+            'default' => 1,
+            'section' =>  $section,
+            'checkbox_label' => __( 'Display on single post', 'customify' ),
+            'selector' => $selector,
+            'render_callback' => $render_cb_el,
+        );
+
+        $config[] =  array(
+            'name' => $section.'_typo',
+            'type' => 'typography',
+            'section' => $section,
+            'title'  => __( 'Typography', 'customify' ),
+            'description'  => __( 'Typography for breadcrumb', 'customify' ),
+            'selector' => "{$selector}",
+            'css_format' => 'typography',
+        );
+
+        $config[] = array(
+            'name' => $section.'_styling',
+            'type' => 'styling',
+            'section' => $section,
+            'title'  => __( 'Styling', 'customify' ),
+            'description'  => __( 'Styling for breadcrumb', 'customify' ),
+            'selector' => array(
+                'normal' => "{$selector}",
+                'normal_box_shadow' => "{$selector}",
+                'normal_text_color' => "{$selector}",
+                'normal_link_color' => "{$selector} a",
+                'hover_link_color' => "{$selector} a:hover",
             ),
-
-            array(
-                'name' => "{$section}_display_pos",
-                'type' => 'select',
-                'section' =>  $section,
-                'default' => 1,
-                'title' => __( 'Display Position', 'customify' ),
-                'choices' => array(
-                    'below' => __( 'Display below header cover', 'customify' ),
-                    'cover' => __( 'Display inside header cover/titlebar', 'customify' ),
+            'css_format' => 'styling', // styling
+            'fields' => array(
+                'normal_fields' => array(
+                    'margin' => false // disable for special field.
                 ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-
-            array(
-                'name' => "{$section}_display_cat",
-                'type' => 'checkbox',
-                'section' =>  $section,
-                'default' => 1,
-                'checkbox_label' => __( 'Display on categories', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-            array(
-                'name' => "{$section}_display_search",
-                'type' => 'checkbox',
-                'section' =>  $section,
-                'default' => 1,
-                'checkbox_label' => __( 'Display on search', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-
-            array(
-                'name' => "{$section}_display_archive",
-                'type' => 'checkbox',
-                'default' => 1,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on archive', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-
-            array(
-                'name' => "{$section}_display_page",
-                'type' => 'checkbox',
-                'default' => false,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on single page', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-            array(
-                'name' => "{$section}_display_post",
-                'type' => 'checkbox',
-                'default' => 1,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on single post', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
-            ),
-
-            array(
-                'name' => $section.'_typo',
-                'type' => 'typography',
-                'section' => $section,
-                'title'  => __( 'Typography', 'customify' ),
-                'description'  => __( 'Typography for breadcrumb', 'customify' ),
-                'selector' => "{$selector}",
-                'css_format' => 'typography',
-            ),
-
-            array(
-                'name' => $section.'_styling',
-                'type' => 'styling',
-                'section' => $section,
-                'title'  => __( 'Styling', 'customify' ),
-                'description'  => __( 'Styling for breadcrumb', 'customify' ),
-                'selector' => array(
-                    'normal' => "{$selector}",
-                    'normal_box_shadow' => "{$selector}",
-                    'normal_text_color' => "{$selector}",
-                    'normal_link_color' => "{$selector} a",
-                    'hover_link_color' => "{$selector} a:hover",
-                ),
-                'css_format' => 'styling', // styling
-                'fields' => array(
-                    'normal_fields' => array(
-                        'margin' => false // disable for special field.
-                    ),
-                    'hover_fields' => array(
-                        'text_color' => false,
-                        //'link_color' => false,
-                        'padding' => false,
-                        'bg_color' => false,
-                        'bg_heading' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'border_heading' => false,
-                        'border_color' => false,
-                        'border_radius' => false,
-                        'border_width' => false,
-                        'border_style' => false,
-                        'box_shadow' => false,
-                    ), // disable hover tab and all fields inside.
-                )
-            ),
-
-
+                'hover_fields' => array(
+                    'text_color' => false,
+                    //'link_color' => false,
+                    'padding' => false,
+                    'bg_color' => false,
+                    'bg_heading' => false,
+                    'bg_cover' => false,
+                    'bg_image' => false,
+                    'bg_repeat' => false,
+                    'border_heading' => false,
+                    'border_color' => false,
+                    'border_radius' => false,
+                    'border_width' => false,
+                    'border_style' => false,
+                    'box_shadow' => false,
+                ), // disable hover tab and all fields inside.
+            )
         );
 
         $config = array_merge( $config, $config );
