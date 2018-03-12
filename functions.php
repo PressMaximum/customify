@@ -295,6 +295,10 @@ class Customify_Init {
         do_action( 'customify/theme/scripts' );
     }
 
+    function admin_scripts(){
+        wp_enqueue_style( 'customify-admin',  get_template_directory_uri() . '/assets/css/admin/admin.css', false, self::$version );
+    }
+
     function includes(){
         $files = array(
             '/inc/template-class.php',                  // Template element classes.
@@ -303,6 +307,7 @@ class Customify_Init {
             '/inc/template-tags.php',                   //  Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/customizer.php',           // Customizer additions.
+            '/inc/customizer/admin.php',                // Admin additions.
             '/inc/customizer-layout-builder/init.php',  // Customizer additions.
             '/inc/posts/post-builder.php',              // Blog builder
             '/inc/posts/posts.php',                     // Blog builder config
@@ -312,6 +317,10 @@ class Customify_Init {
             if ( file_exists( self::$path.$file ) ) {
                 require_once self::$path.$file;
             }
+        }
+
+        if ( is_admin() ) {
+            add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
         }
 
         //WooCommerce

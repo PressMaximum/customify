@@ -1,0 +1,12 @@
+.customify-mt-divider {
+  border-bottom: 1px solid #eee;
+  border-top: 1px solid #eee;
+  display: block;
+  padding: 7px 12px;
+  margin-top: 15px;
+  margin-left: -12px;
+  margin-right: -12px;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=admin.css.map */

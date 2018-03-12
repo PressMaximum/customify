@@ -564,13 +564,23 @@ var AutoCSS = window.AutoCSS || null;
                     if ( !_.isUndefined( code_array[ device ] ) ) {
                         var _c = code_array[ device ];
                         if( _c ) {
-                            that.css[ device ] += "\r\n"+field.selector+" {\r\n\t"+_c+"\r\n}\r\n" ;
+                            if ( field.selector === 'format' ) {
+                                that.css[ device ] += "\r\n"+_c+"\r\n" ;
+                            } else {
+                                that.css[ device ] += "\r\n"+field.selector+" {\r\n\t"+_c+"\r\n}\r\n" ;
+                            }
+
                         }
                     }
                 } );
             } else {
                 if ( code_array.no_devices ) {
-                    that.css.all += "\r\n"+field.selector+"  {\r\n\t"+code_array.no_devices+"\r\n}\r\n";
+                    if ( field.selector === 'format' ) {
+                        that.css.all += "\r\n"+code_array.no_devices+"\r\n";
+                    } else {
+                        that.css.all += "\r\n"+field.selector+"  {\r\n\t"+code_array.no_devices+"\r\n}\r\n";
+                    }
+
                 }
             }
         }

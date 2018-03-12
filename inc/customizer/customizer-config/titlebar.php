@@ -34,6 +34,16 @@ class Customify_TitleBar {
             ),
 
             array(
+                'name' => $section.'_typo',
+                'type' => 'typography',
+                'section' => $section,
+                'title'  => __( 'Typography', 'customify' ),
+                'description'  => __( 'Typography for titlebar', 'customify' ),
+                'selector' => "{$selector}",
+                'css_format' => 'typography',
+            ),
+
+            array(
                 'name' => $section.'_styling',
                 'type' => 'styling',
                 'section' => $section,

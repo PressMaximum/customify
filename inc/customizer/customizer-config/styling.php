@@ -10,27 +10,69 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
             array(
                 'name'           => 'styling_panel',
                 'type'           => 'panel',
-                'priority' => 22,
-                'theme_supports' => '',
-                'title'          => __( 'Layouts', 'customify' ),
+                //'priority' => 22,
+                'title'          => __( 'Styling', 'customify' ),
             ),
 
             // Styling Global Section
             array(
-                'name'           => "{$section}_global",
+                'name'           => "{$section}",
                 'type'           => 'section',
                 'panel'          => 'styling_panel',
-                'theme_supports' => '',
                 'title'          => __( 'Global', 'customify' ),
             ),
             array(
-                'name' => "{$section}_primary",
+                'name' => "{$section}_color_primary",
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Primary Color', 'customify'),
-                'default' => 'site-full-width',
-                'css_format' => 'background',
-                'selector' => 'body',
+                'css_format' => '',
+                'selector' => 'format',
+            ),
+
+            array(
+                'name' => "{$section}_color_secondary",
+                'type' => 'color',
+                'section' => $section,
+                'title' => __('Secondary Color', 'customify'),
+                'css_format' => '._color_secondary { background-color: {{value}}; }',
+                'selector' => 'format',
+            ),
+
+            array(
+                'name' => "{$section}_color_text",
+                'type' => 'color',
+                'section' => $section,
+                'title' => __('Primary Color', 'customify'),
+                'css_format' => '._color_text { background-color: {{value}}; }',
+                'selector' => 'format',
+            ),
+
+            array(
+                'name' => "{$section}_color_link",
+                'type' => 'color',
+                'section' => $section,
+                'title' => __('Link Color', 'customify'),
+                'css_format' => '._color_link { background-color: {{value}}; }',
+                'selector' => 'format',
+            ),
+
+            array(
+                'name' => "{$section}_color_link_hover",
+                'type' => 'color',
+                'section' => $section,
+                'title' => __('Link Color Hover', 'customify'),
+                'css_format' => '._color_link_hover { background-color: {{value}}; }',
+                'selector' => 'format',
+            ),
+
+            array(
+                'name' => "{$section}_color_border",
+                'type' => 'color',
+                'section' => $section,
+                'title' => __('Link Color Hover', 'customify'),
+                'css_format' => '._color_border { background-color: {{value}}; }',
+                'selector' => 'format',
             ),
 
 

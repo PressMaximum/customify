@@ -26,6 +26,7 @@ class Customify_MetaBox {
         'disable_page_title' => '',
         'disable_footer_main' => '',
         'disable_footer_bottom' => '',
+        'breadcrumb_display' => '',
     );
 
     static function get_instance() {
@@ -183,6 +184,24 @@ class Customify_MetaBox {
             <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
         </label>
         <?php
+
+        if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) { ?>
+            <div class="customify-mt-divider"><?php _e( 'Breadcrumb', 'customify' ); ?></div>
+            <p>
+                <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label><br/>
+                <select id="customify_page_breadcrumb_display" name="customify_page_settings[breadcrumb_display]">
+                    <?php foreach (array(
+                                       'default' => __('Default', 'customify'),
+                                       'hide' => __('Hide', 'customify'),
+                                       'show' => __('Show', 'customify'),
+                                   ) as $k => $label) { ?>
+                        <option <?php selected($values['breadcrumb_display'], $k); ?> value="<?php echo esc_attr($k); ?>"><?php echo esc_html($label); ?></option>
+                    <?php } ?>
+                </select>
+            </p>
+            <?php
+        }
+
         do_action('customify/metabox/settings', $post );
     }
 }

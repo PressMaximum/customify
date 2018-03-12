@@ -19,7 +19,8 @@ module.exports = function( grunt ) {
             dist: {
                 src: [
                     'style.css',
-                    'assets/css/admin/customizer/customizer.css'
+                    'assets/css/admin/customizer/customizer.css',
+                    'assets/css/admin/admin.css'
                 ]
             }
         },
@@ -37,7 +38,8 @@ module.exports = function( grunt ) {
                 files: [
                     {
                     'style.css': 'assets/sass/site/style.scss',
-                    'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss'
+                    'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
+                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss'
                     },
                     {
                         expand: true,

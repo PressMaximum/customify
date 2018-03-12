@@ -64,6 +64,8 @@ require_once get_template_directory() . '/inc/customizer/customizer-config/layou
 require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
 require_once get_template_directory() . '/inc/customizer/customizer-config/styling.php';
 require_once get_template_directory() . '/inc/customizer/customizer-config/titlebar.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/compatibility.php';
+require_once get_template_directory() . '/inc/customizer/customizer-config/compatibility-breadcrumb.php';
 
 require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
