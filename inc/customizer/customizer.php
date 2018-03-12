@@ -59,14 +59,6 @@ if ( class_exists( 'WP_Customize_Section' ) ) {
     }
 }
 
-// Load customizer config file.
-require_once get_template_directory() . '/inc/customizer/customizer-config/layouts.php';
-require_once get_template_directory() . '/inc/customizer/customizer-config/blogs.php';
-require_once get_template_directory() . '/inc/customizer/customizer-config/styling.php';
-require_once get_template_directory() . '/inc/customizer/customizer-config/titlebar.php';
-require_once get_template_directory() . '/inc/customizer/customizer-config/compatibility.php';
-require_once get_template_directory() . '/inc/customizer/customizer-config/compatibility-breadcrumb.php';
-
 require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
@@ -955,5 +947,8 @@ function customify__reset_customize_section(){
     wp_send_json_success();
 }
 add_action( 'wp_ajax_customify__reset_section', 'customify__reset_customize_section' );
+
+
+
 
 

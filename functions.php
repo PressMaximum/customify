@@ -311,7 +311,21 @@ class Customify_Init {
             '/inc/customizer-layout-builder/init.php',  // Customizer additions.
             '/inc/posts/post-builder.php',              // Blog builder
             '/inc/posts/posts.php',                     // Blog builder config
+
+
+            '/inc/customizer/customizer-config/layouts.php',
+            '/inc/customizer/customizer-config/blogs.php',
+            '/inc/customizer/customizer-config/styling.php',
+            '/inc/customizer/customizer-config/titlebar.php',
+            '/inc/customizer/customizer-config/compatibility.php',
+            '/inc/customizer/customizer-config/compatibility-breadcrumb.php',
+
         );
+
+        //WooCommerce
+        if ( $this->is_woocommerce_active() ) {
+            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
+        }
 
         foreach( $files as $file ) {
             if ( file_exists( self::$path.$file ) ) {
@@ -323,10 +337,6 @@ class Customify_Init {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
         }
 
-        //WooCommerce
-        if ( $this->is_woocommerce_active() ) {
-            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
-        }
 
     }
 

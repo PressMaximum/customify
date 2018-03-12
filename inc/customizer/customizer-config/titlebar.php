@@ -39,7 +39,7 @@ class Customify_TitleBar {
                 'section' => $section,
                 'title'  => __( 'Typography', 'customify' ),
                 'description'  => __( 'Typography for titlebar', 'customify' ),
-                'selector' => "{$selector}",
+                'selector' => "{$selector}, {$selector} .titlebar-title",
                 'css_format' => 'typography',
             ),
 
@@ -132,7 +132,7 @@ class Customify_TitleBar {
 
         );
 
-        $config = array_merge( $config, $config );
+        $config = apply_filters( 'customify/titlebar/config', $config, $this );
         return array_merge( $configs, $config );
     }
 
@@ -164,6 +164,14 @@ class Customify_TitleBar {
                 }
             }
 
+            // Do not show if page settings disable page title
+            if ( Customify_Init()->is_using_post() ) {
+                $disable = get_post_meta(Customify_Init()->get_current_post_id(), '_customify_disable_page_title', true);
+                if ( $disable ) {
+                    $is_showing = false;
+                }
+            }
+
             self::$is_showing = apply_filters('customify/titlebar/is-showing', $is_showing );
         }
         return self::$is_showing;
@@ -177,33 +185,36 @@ class Customify_TitleBar {
     }
 
     function render(){
-        $showing = apply_filters( 'customify/titlebar/check-showing', true );
-        if ( ! $showing ) {
-            return '';
-        }
-
         if ( ! $this->is_showing() ){
             return '';
         }
 
+        if ( Customify_Init()->is_using_post() ) {
+            $title =  get_the_title( Customify_Init()->get_current_post_id() );
+        } elseif( is_search() ) {
+            $title = sprintf( // WPCS: XSS ok.
+            /* translators: 1: Search query name */
+                __( 'Search Results for: %s', 'customify' ),
+                '<span>' . get_search_query() . '</span>'
+            );
+        } else {
+            $title = get_the_archive_title();
+        }
+
+        $args = array(
+            'title' => $title,
+            'tag' => 'h1'
+        );
+
+        $args = apply_filters( 'customify/titlebar/args', $args );
+
         ?>
         <div id="page-titlebar" class="page-titlebar">
             <div class="page-titlebar-inner customify-container">
-                <h1>
-                    <?php if ( Customify_Init()->is_using_post() ) {
-                        echo get_the_title( Customify_Init()->get_current_post_id() );
-                    } elseif( is_search() ) {
-                        printf( // WPCS: XSS ok.
-                        /* translators: 1: Search query name */
-                            __( 'Search Results for: %s', 'customify' ),
-                            '<span>' . get_search_query() . '</span>'
-                        );
-                    } else {
-                        the_archive_title();
-                    }
-
-                    ?>
-                </h1>
+                <?php
+                // WPCS: XSS ok.
+                echo '<'.$args['tag'].' class="titlebar-title">'.$args['title'].'</'.$args['tag'].'>';
+                ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>
         </div>

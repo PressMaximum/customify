@@ -74,8 +74,10 @@
     .page-titlebar-inner {
         width: 100%;
     }
-    h1 {
+    .titlebar-title {
         margin-bottom: 0px;
+        font-size: ms(4);
+        line-height: 1.216;
     }
 }
 
@@ -109,6 +111,16 @@
                 display: none;
             }
         }
+    }
+}
+.page-titlebar {
+    .page-breadcrumb-inner {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .page-breadcrumb {
+        border-bottom: none;
+        padding-bottom: 0px;
     }
 }
 

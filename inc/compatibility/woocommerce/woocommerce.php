@@ -23,6 +23,10 @@ class Customify_WC {
         add_filter( 'customify_builder_row_display_get_post_id', array( $this, 'builder_row_get_id' ), 15 );
 
 
+        add_filter( 'customify/titlebar/args', array( $this, 'titlebar_args' ) );
+        add_filter( 'customify/titlebar/config', array( $this, 'titlebar_config' ), 15, 2 );
+        add_filter( 'customify/titlebar/is-showing', array( $this, 'titlebar_is_showing' ), 15 );
+
         add_filter( 'customify/theme/js', array( $this, 'add_js' ) );
         add_filter( 'customify/theme/css', array( $this, 'add_css' ) );
     }
@@ -97,7 +101,62 @@ class Customify_WC {
                 $show = false;
             }
         }
+
+        if ( $this->titlebar_is_showing() ){
+            $show = false;
+        }
+
+        return apply_filters( 'customify_is_shop_title_display', $show );
+    }
+
+    function titlebar_is_showing( $show = true ){
+        if ( is_product_taxonomy() ) {
+            if ( Customify_Customizer()->get_setting( 'titlebar_display_product_tax' ) ) {
+                $show = true;
+            } else {
+                $show = false;
+            }
+        } elseif ( is_product() ) {
+            if ( Customify_Customizer()->get_setting( 'titlebar_display_product' ) ) {
+                $show = true;
+            } else {
+                $show = false;
+            }
+        }
         return $show;
+    }
+
+    function titlebar_config( $config, $titlebar ){
+        $section = 'titlebar';
+
+        $config[] = array(
+            'name' => "{$section}_display_product_tax",
+            'type' => 'checkbox',
+            'default' => 1,
+            'section' =>  $section,
+            'checkbox_label' => __( 'Display on product taxonomies (categories/tags,..)', 'customify' ),
+        );
+
+        $config[] = array(
+            'name' => "{$section}_display_product",
+            'type' => 'checkbox',
+            'default' => 1,
+            'section' =>  $section,
+            'checkbox_label' => __( 'Display on single product', 'customify' ),
+        );
+
+        return $config;
+    }
+
+    function titlebar_args( $args ){
+        if ( is_product_taxonomy() ) {
+            $t = get_queried_object();
+            $args['title'] = $t->name;
+        } else if ( is_singular( 'product' ) ) {
+            $args['title'] =  get_the_title( wc_get_page_id( 'shop' ) );
+            $args['tag'] = 'h2';
+        }
+        return $args;
     }
 
     function shop_sidebar_id( $id, $sidebar_type = null ){
