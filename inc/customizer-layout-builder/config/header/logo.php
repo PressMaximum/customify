@@ -23,7 +23,7 @@ class Customify_Builder_Item_Logo {
                 'type' => 'slider',
                 'section' =>  $section,
                 'default' => array(),
-                'max' => 200,
+                'max' => 400,
                 'priority' => 8,
                 'device_settings' => true,
                 'title' => __( 'Logo Max Width', 'customify' ),

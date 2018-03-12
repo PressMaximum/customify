@@ -9,12 +9,6 @@
 # Layout: sidebar-content-sidebar
 */
 
-/* # Layouts Helper */
-.site {
-    //overflow: hidden;
-   // background: #ffffff;
-}
-
 /************************
     HIDING COLS FOR DEVICES
 *************************/
@@ -51,10 +45,14 @@
 }
 
 .customify-container {
-     position: relative;
-     padding-left: 1.5em;
-     padding-right: 1.5em;
-     @include clearfix;
+    position: relative;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    @include clearfix;
+    @include mq(max-sm) {
+        padding-left: 0.938em;
+        padding-right: 0.938em;
+    }
 }
 .customify-container, .layout-contained{
     max-width: $container_width; // 1200px
