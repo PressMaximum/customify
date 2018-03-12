@@ -186,7 +186,7 @@ class Customify_TitleBar {
         ?>
         <div id="page-titlebar" class="page-titlebar">
             <div class="page-titlebar-inner customify-container">
-                <h1>
+                <h1 class="h2">
                     <?php if ( Customify_Init()->is_using_post() ) {
                         echo get_the_title( Customify_Init()->get_current_post_id() );
                     } elseif( is_search() ) {

@@ -234,7 +234,8 @@ article.comment .comment-time,
 .entry-meta,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a
+.widget-area .widget a,
+.page-breadcrumb, .page-breadcrumb-list li a
 {
     color: {{value}};
 }',
