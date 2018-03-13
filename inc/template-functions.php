@@ -231,14 +231,15 @@ if ( ! function_exists( 'customify_show_post_title' ) ) {
      */
     function customify_is_post_title_display(){
         $show = true;
-        if ( customify_is_support_meta() ) {
-            $disable = get_post_meta(customify_get_support_meta_id(), '_customify_disable_page_title', true);
+        if ( Customify_Init()->is_using_post() ) {
+            $disable = get_post_meta( Customify_Init()->get_current_post_id(), '_customify_disable_page_title', true);
             if ( $disable ) {
                 $show = false;
             }
         }
 
-        return apply_filters( 'customify_is_post_title_display', $show );
+        $r = apply_filters( 'customify_is_post_title_display', $show );
+        return $r;
     }
 }
 

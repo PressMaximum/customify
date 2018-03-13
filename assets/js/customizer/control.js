@@ -1505,6 +1505,7 @@
                 field.min = control.params.min;
                 field.max = control.params.max;
                 field.step = control.params.step;
+                field.unit = control.params.unit;
             }
 
             if (field.type === 'css_ruler') {
@@ -1591,6 +1592,7 @@
                 value: control.params.value,
                 default: control.params.default,
                 devices: control.params.devices,
+                unit: control.params.unit
             };
 
             if (field.type == 'slider') {

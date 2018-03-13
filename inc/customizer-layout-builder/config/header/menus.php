@@ -95,7 +95,7 @@ class Customify_Builder_Item_Primary_Menu {
                     'normal' => "{$this->selector} > li > a",
                     'normal_margin' => "{$this->selector} > li",
                     'hover' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
-                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
+                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li > a:focus, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
                 ),
                 'css_format'  => 'styling',
                 'fields' => array(
@@ -188,7 +188,7 @@ class Customify_Builder_Item_Primary_Menu {
                 'description'  => __( 'Styling for submenu items', 'customify' ),
                 'selector'  => array(
                     'normal' => "{$this->selector} .sub-menu li a",
-                    'hover' => "{$this->selector} .sub-menu li a:hover",
+                    'hover' => "{$this->selector} .sub-menu li a:hover, {$this->selector} .sub-menu li a:focus",
                 ),
                 'css_format'  => 'styling',
                 'fields' => array(

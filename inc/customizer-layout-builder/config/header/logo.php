@@ -14,21 +14,21 @@ class Customify_Builder_Item_Logo {
     function customize( $wp_customize ){
         $section = 'title_tagline';
         $render_cb_el = array( $this, 'render' ) ;
-        $selector = '.site-branding';
+        $selector = 'body .site-branding';
         $fn = 'customify_customize_render_header';
         $config  = array(
 
             array(
-                'name' => 'logo_height',
+                'name' => 'logo_max_width',
                 'type' => 'slider',
                 'section' =>  $section,
                 'default' => array(),
-                'max' => 200,
+                'max' => 400,
                 'priority' => 8,
                 'device_settings' => true,
-                'title' => __( 'Logo Height', 'customify' ),
+                'title' => __( 'Logo Max Width', 'customify' ),
                 'selector' => $selector.' img',
-                'css_format' => 'max-height: {{value}};'
+                'css_format' => 'max-width: {{value}};'
             ),
 
             array(
@@ -102,7 +102,7 @@ class Customify_Builder_Item_Logo {
         if ( $logo_image ) {
             ?>
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
-                <img class="site-img-logo" src="<?php echo esc_url($logo_image); ?>" alt="<?php esc_attr(get_bloginfo('name')); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
+                <img class="site-img-logo" src="<?php echo esc_url($logo_image); ?>" alt="<?php esc_attr_e( 'Logo', 'customify' ); ?>"<?php if ($logo_retina_image) { ?> srcset="<?php echo esc_url($logo_retina_image); ?> 2x"<?php } ?>>
                 <?php do_action( 'customizer/after-logo-img' ); ?>
             </a>
             <?php

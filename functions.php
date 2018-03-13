@@ -47,6 +47,17 @@ class Customify_Init {
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 3 );
+        add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
+    }
+
+    /**
+     * Filter the excerpt "read more" string.
+     *
+     * @param string $more "Read more" excerpt string.
+     * @return string (Maybe) modified "read more" excerpt string.
+     */
+    function excerpt_more( $more ) {
+        return '&hellip;';
     }
 
     static function get_instance(){
@@ -248,7 +259,7 @@ class Customify_Init {
      */
     function scripts() {
 
-        if ( ! function_exists( 'a' ) ) {
+        if ( ! class_exists( 'Customify_Font_Icons' ) ) {
             require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
         }
         Customify_Font_Icons()->enqueue();
@@ -284,6 +295,10 @@ class Customify_Init {
         do_action( 'customify/theme/scripts' );
     }
 
+    function admin_scripts(){
+        wp_enqueue_style( 'customify-admin',  get_template_directory_uri() . '/assets/css/admin/admin.css', false, self::$version );
+    }
+
     function includes(){
         $files = array(
             '/inc/template-class.php',                  // Template element classes.
@@ -292,10 +307,25 @@ class Customify_Init {
             '/inc/template-tags.php',                   //  Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/customizer.php',           // Customizer additions.
+            '/inc/customizer/admin.php',                // Admin additions.
             '/inc/customizer-layout-builder/init.php',  // Customizer additions.
             '/inc/posts/post-builder.php',              // Blog builder
             '/inc/posts/posts.php',                     // Blog builder config
+
+
+            '/inc/customizer/customizer-config/layouts.php',
+            '/inc/customizer/customizer-config/blogs.php',
+            '/inc/customizer/customizer-config/styling.php',
+            '/inc/customizer/customizer-config/titlebar.php',
+            '/inc/customizer/customizer-config/compatibility.php',
+            '/inc/customizer/customizer-config/compatibility-breadcrumb.php',
+
         );
+
+        //WooCommerce
+        if ( $this->is_woocommerce_active() ) {
+            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
+        }
 
         foreach( $files as $file ) {
             if ( file_exists( self::$path.$file ) ) {
@@ -303,11 +333,59 @@ class Customify_Init {
             }
         }
 
-        //WooCommerce
-        if ( class_exists('WooCommerce') ) {
-            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
+        if ( is_admin() ) {
+            add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
         }
 
+
+    }
+
+    function is_woocommerce_active(){
+        return class_exists('WooCommerce');
+    }
+
+    function is_using_post(){
+        $use = false;
+        if ( is_singular() ){
+            $use = true;
+        } else {
+            if ( is_front_page() && is_home() ) {
+                $use = false;
+            } elseif ( is_front_page() ) {
+                // static homepage
+                $use = true;
+            } elseif ( is_home() ) {
+                // blog page
+                $use = true;
+            } else {
+                if ( $this->is_woocommerce_active() ) {
+                    if ( is_shop() ) {
+                        $use = true;
+                    }
+                }
+            }
+        }
+        return $use;
+    }
+
+    function get_current_post_id(){
+        $id = get_the_ID();
+        if ( is_front_page() && is_home() ) {
+            $id = false;
+        } elseif ( is_front_page() ) {
+            // static homepage
+            $id = get_option( 'page_on_front' );
+        } elseif ( is_home() ) {
+            // blog page
+            $id = get_option( 'page_for_posts' );
+        } else {
+           if ( $this->is_woocommerce_active() ) {
+               if ( is_shop() ) {
+                   $id = wc_get_page_id('shop');
+               }
+           }
+        }
+        return $id;
     }
 
     function init(){

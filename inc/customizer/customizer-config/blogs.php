@@ -315,7 +315,7 @@ if (!function_exists('customify_customizer_blog_posts_config')) {
             array(
                 'name' => 'blog_panel',
                 'type' => 'panel',
-                'priority' => 22,
+                'priority' => 20,
                 'title' => __('Blog', 'customify'),
             ),
         );

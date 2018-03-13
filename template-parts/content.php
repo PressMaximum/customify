@@ -19,29 +19,28 @@ global $post;
 		else :
 			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
 		endif;
-
-		if ( 'post' === get_post_type() ) :
-
-            Customify_Blog_Builder()->post_meta( $post, array(
-                array(
-                    '_key' => 'author',
-                ),
-	            array(
-		            '_key' => 'date',
-	            ),
-	            array(
-		            '_key' => 'categories',
-	            ),
-                array(
-                    '_key' => 'comment',
-                ),
-            ) );
-
-            ?>
-		<?php
-		endif; ?>
+		?>
 	</header><!-- .entry-header -->
-    <?php } ?>
+    <?php }
+
+    if ( 'post' === get_post_type() ) :
+        Customify_Blog_Builder()->post_meta( $post, array(
+            array(
+                '_key' => 'author',
+            ),
+            array(
+                '_key' => 'date',
+            ),
+            array(
+                '_key' => 'categories',
+            ),
+            array(
+                '_key' => 'comment',
+            ),
+        ) );
+
+    endif;
+    ?>
 
 	<div class="entry-content">
 		<?php

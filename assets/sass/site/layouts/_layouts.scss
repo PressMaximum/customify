@@ -9,12 +9,6 @@
 # Layout: sidebar-content-sidebar
 */
 
-/* # Layouts Helper */
-.site {
-    //overflow: hidden;
-   // background: #ffffff;
-}
-
 /************************
     HIDING COLS FOR DEVICES
 *************************/
@@ -27,6 +21,10 @@
         .align-right-#{$mq-key} { text-align: right; }
     }
 
+}
+
+#page {
+    position: relative;
 }
 
 .no-box-shadow {
@@ -51,10 +49,14 @@
 }
 
 .customify-container {
-     position: relative;
-     padding-left: 1.5em;
-     padding-right: 1.5em;
-     @include clearfix;
+    position: relative;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
+    @include clearfix;
+    @include mq(max-sm) {
+        padding-left: 0.938em;
+        padding-right: 0.938em;
+    }
 }
 .customify-container, .layout-contained{
     max-width: $container_width; // 1200px
@@ -79,10 +81,16 @@
         > .customify-container {
             padding-left: 0px;
             padding-right: 0px;
+            .customify-grid {
+                margin: 0px;
+            }
+            .content-area.customify-col-12 {
+                margin-right: 0px;
+                margin-left: 0px;
+            }
         }
         #main.customify-col-12 {
-            padding-top: 0px;
-            padding-bottom: 0px;
+            padding:0;
         }
     }
 }

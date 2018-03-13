@@ -14,7 +14,16 @@ get_header(); ?>
 
             <main id="main" <?php customify_main_content_class(); ?>>
                 <div class="content-inner">
-                    <?php customify_archive_posts(); ?>
+                    <?php
+                    if ( have_posts() ){
+                        while ( have_posts() ) {
+                            the_post();
+                            get_template_part( 'template-parts/content', 'search' );
+                        }
+                    } else {
+                        get_template_part( 'template-parts/content', 'none' );
+                    }
+                    ?>
                 </div><!-- #.content-inner -->
             </main><!-- #main -->
 

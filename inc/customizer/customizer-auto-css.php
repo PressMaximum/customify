@@ -155,7 +155,7 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
             $value = Customify_Sanitize_Input::sanitize_color( $value );
             if ( $format ) {
                 if (!is_null( $value ) && $value !== '') {
-                    return $this->replace_value( $value, $format ).';';
+                    return $this->replace_value( $value, $format );
                 }
             }
             return false;
@@ -469,13 +469,23 @@ if ( ! class_exists( 'Customify_Customizer_Auto_CSS' ) ) {
                         if ( isset( $code_array[ $device ] ) ) {
                             $_c = $code_array[ $device ];
                             if( $_c && trim( $_c ) ) {
-                                $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
+                                if ( $field['selector'] == 'format' ) {
+                                    $this->css[ $device ] .= "\r\n{$_c}\r\n" ;
+                                } else {
+                                    $this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n" ;
+                                }
+
                             }
                         }
                     }
                 } else {
                     if ( isset( $code_array['no_devices'] ) && $code_array['no_devices'] ) {
-                        $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
+                        if ( $field['selector'] == 'format' ) {
+                            $this->css[ 'all' ] .= "\r\n{$code_array['no_devices']}\r\n";
+                        } else {
+                            $this->css[ 'all' ] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
+                        }
+
                     }
                 }
             }

@@ -133,20 +133,20 @@ class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
                 'selector' => array(
                     'normal' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
                     'normal_box_shadow' => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
-                    'normal_text_color' => "{$selector}",
+                    'normal_text_color' => "{$selector}, {$selector} .site-branding a",
                     'normal_link_color' => "{$selector} a",
                     'hover_link_color' => "{$selector} a:hover",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
                     'normal_fields' => array(
-                        'text_color' => false, // disable for special field.
-                        'link_color' => false, // disable for special field.
+                        //'text_color' => false, // disable for special field.
+                        //'link_color' => false, // disable for special field.
                         'padding' => false // disable for special field.
                     ),
                     'hover_fields' => array(
-                        'text_color' => false,
-                        'link_color' => false,
+                        //'text_color' => false,
+                        //'link_color' => false,
                         'padding' => false,
                         'bg_color' => false,
                         'bg_heading' => false,
