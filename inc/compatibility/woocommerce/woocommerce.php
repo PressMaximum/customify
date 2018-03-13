@@ -110,19 +110,36 @@ class Customify_WC {
     }
 
     function titlebar_is_showing( $show = true ){
-        if ( is_product_taxonomy() ) {
-            if ( Customify_Customizer()->get_setting( 'titlebar_display_product_tax' ) ) {
+
+        if ( is_shop() ) {
+            // Do not show if page settings disable page title
+            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_page' ) ) {
+                $show = false;
+            } else {
+                $show = true;
+            }
+            if ( Customify_Init()->is_using_post() ) {
+                $breadcrumb_display = get_post_meta( wc_get_page_id( 'shop' ), '_customify_breadcrumb_display', true);
+                if ( $breadcrumb_display == 'hide' ) {
+                    $show = false;
+                } elseif( $breadcrumb_display == 'show' ) {
+                    $show = true;
+                }
+            }
+        } else if (is_product_taxonomy()) {
+            if (Customify_Customizer()->get_setting('titlebar_display_product_tax')) {
                 $show = true;
             } else {
                 $show = false;
             }
-        } elseif ( is_product() ) {
-            if ( Customify_Customizer()->get_setting( 'titlebar_display_product' ) ) {
+        } elseif (is_product()) {
+            if (Customify_Customizer()->get_setting('titlebar_display_product')) {
                 $show = true;
             } else {
                 $show = false;
             }
         }
+
         return $show;
     }
 

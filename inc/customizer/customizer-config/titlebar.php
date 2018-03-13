@@ -8,10 +8,17 @@ class Customify_TitleBar {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
             add_filter( 'customify/customizer/config', array( self::$_instance, 'config' ) );
-            add_action('customify/site-start',  array( self::$_instance, 'render' ), 45 );
-            add_action('customify_is_post_title_display',  array( self::$_instance, 'display_page_title' ), 45 );
+            if (! is_admin() ) {
+                add_action('wp_head',  array( self::$_instance, 'display' ), 15 );
+            }
+
         }
         return self::$_instance;
+    }
+
+    function display(){
+        add_action('customify/site-start',  array( self::$_instance, 'render' ), 45 );
+        add_filter('customify_is_post_title_display', array( self::$_instance, 'display_page_title' ), 65 );
     }
 
     function config( $configs ){
@@ -170,6 +177,7 @@ class Customify_TitleBar {
             }
 
             self::$is_showing = apply_filters('customify/titlebar/is-showing', $is_showing );
+
         }
         return self::$is_showing;
     }

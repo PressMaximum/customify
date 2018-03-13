@@ -173,7 +173,7 @@ class Customify_MetaBox {
         </label>
         <br/>
         <label>
-            <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
+            <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title/Titlebar', 'customify' ); ?>
         </label>
         <br/>
         <label>
