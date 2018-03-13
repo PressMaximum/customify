@@ -14,7 +14,7 @@ class Customify_Builder_Item_Logo {
     function customize( $wp_customize ){
         $section = 'title_tagline';
         $render_cb_el = array( $this, 'render' ) ;
-        $selector = '.site-branding';
+        $selector = 'body .site-branding';
         $fn = 'customify_customize_render_header';
         $config  = array(
 

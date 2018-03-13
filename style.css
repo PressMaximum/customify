@@ -2410,6 +2410,7 @@ textarea {
   background: #f2f2f2;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
   padding: 0.6180469716em;
+  border-radius: 1px;
 }
 input[type="text"]:focus,
 input[type="email"]:focus,
@@ -2987,7 +2988,7 @@ article.comment .comment-post-author {
   padding: 0.3819820591em 1em;
   background: #007ee5;
   color: #FFFFFF;
-  border-radius: 3px;
+  border-radius: 2px;
   display: inline-block;
   position: relative;
   text-decoration: none;
