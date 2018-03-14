@@ -58,9 +58,16 @@ Customify is distributed under the terms of the GNU GPL
 
 Customify bundles the following third-party resources:
 
-Font Awesome icons, Copyright Dave Gandy
+Font Awesome Icons, Copyright Dave Gandy
+
+Font Awesome Copyright
+Font License- Applies to all desktop and webfont files in the following directory: font-awesome/fonts/.
+License: SIL OFL 1.1 - http://scripts.sil.org/OFL
+Code License - Applies to all CSS and LESS files in the following directories: font-awesome/css/, font-awesome/less/, and font-awesome/scss/
+License: MIT License - http://opensource.org/licenses/mit-license.html
+
 License: SIL Open Font License, version 1.1.
-Source: http://fontawesome.io/
+Source: https://fontawesome.com/v4.7.0/license/
 
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
