@@ -196,15 +196,17 @@ class Customify_Init {
             'after_title'   => '</h4>',
         ) );
 
-        register_sidebars( 4, array(
-            'name'          => __( 'Footer Sidebar %d', 'customify' ),
-            'id'            => 'footer-1',
-            'description'       => __( 'Add widgets here.', 'customify' ),
-            'before_widget' => '<section id="%1$s" class="widget %2$s">',
-            'after_widget'  => '</section>',
-            'before_title'  => '<h4 class="widget-title">',
-            'after_title'   => '</h4>',
-        ) );
+        for( $i = 1; $i <= 4; $i++ ) {
+            register_sidebar( array(
+                'name'          => sprintf( __( 'Footer Sidebar %d', 'customify' ), $i ),
+                'id'            => 'footer-'.$i,
+                'description'       => __( 'Add widgets here.', 'customify' ),
+                'before_widget' => '<section id="%1$s" class="widget %2$s">',
+                'after_widget'  => '</section>',
+                'before_title'  => '<h4 class="widget-title">',
+                'after_title'   => '</h4>',
+            ) );
+        }
 
     }
 
