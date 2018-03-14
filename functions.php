@@ -345,7 +345,9 @@ class Customify_Init {
             '/inc/customizer/customizer-config/styling.php',
             '/inc/customizer/customizer-config/titlebar.php',
             '/inc/customizer/customizer-config/compatibility.php',
-            '/inc/customizer/customizer-config/compatibility-breadcrumb.php',
+
+
+            '/inc/compatibility/breadcrumb-navxt.php',
 
         );
 
