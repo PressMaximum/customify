@@ -253,6 +253,18 @@ $blog_gutter: $gl-gutter;
             text-decoration: underline;
         }
     }
+    .page-links {
+        display: block;
+        margin: 5px 0px 20px;
+        font-weight: 500;
+        a {
+            border: 1px solid $color_border;
+            padding: 5px 12px 5px;
+            text-transform: uppercase;
+            color: $color_text;
+            margin: 0px 2px;
+        }
+    }
 }
 
 .entry-footer {

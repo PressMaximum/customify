@@ -153,12 +153,16 @@ nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Border Color', 'customify'),
-                'css_format' => 'h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title {
+                'css_format' => '
+h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
+.comments-area, .page-breadcrumb{
     border-top-color: {{value}};
 }
+
 blockquote {
     border-left-color: {{value}};
 }
+
 @media screen and (min-width: 64em) {
     .comment-list .children li.comment {
         border-left-color: {{value}};
@@ -167,15 +171,19 @@ blockquote {
         background-color: {{value}};
     }
 }
-.page-titlebar {
+
+.page-titlebar, .page-breadcrumb {
     border-bottom-color: {{value}};
 }
-.header-search-form .search-field {
+
+.header-search-form .search-field,
+.entry-content .page-links a,
+.header-search-modal,
+.pagination .nav-links > *
+.entry-footer .tags-links a, .entry-footer .cat-links a {
     border-color: {{value}};
 }
-.header-search-modal {
-    border-color: {{value}};
-}
+
 .header-search-modal::before {
     border-top-color: {{value}};
     border-left-color: {{value}};
@@ -209,18 +217,7 @@ blockquote {
         border-right-color: {{value}};
     }
 }
-.pagination .nav-links > * {
-    border-color: {{value}};
-}
-.entry-footer .tags-links a, .entry-footer .cat-links a {
-    border-color: {{value}};
-}
-.comments-area, .page-breadcrumb {
-    border-top-color: {{value}};
-}
-.page-breadcrumb {
-    border-bottom-color: {{value}};
-}',
+',
                 'selector' => 'format',
             ),
 
