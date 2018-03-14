@@ -58,6 +58,7 @@ class Customify_TitleBar {
                 'selector' => array(
                     'normal' => "{$selector}",
                     'normal_text_color' => "{$selector} .titlebar-title",
+                    'normal_padding' => "{$selector} .page-titlebar-inner",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(

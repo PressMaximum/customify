@@ -510,7 +510,7 @@ if ( ! class_exists( 'Customify_Customizer' ) ) {
                         'type' => 'select',
                         'class' => 'clear',
                         'label' => __('Border Style', 'customify'),
-                        'default' => 'none',
+                        'default' => '',
                         'choices' => array(
                             ''          => __('Default', 'customify'),
                             'none'      => __('None', 'customify'),
