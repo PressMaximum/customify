@@ -59,7 +59,6 @@ if ( class_exists( 'WP_Customize_Section' ) ) {
     }
 }
 
-require_once get_template_directory() . '/inc/customizer/customizer-config.php';
 require_once get_template_directory() . '/inc/customizer/customizer-fonts.php';
 require_once get_template_directory() . '/inc/customizer/customizer-sanitize.php';
 require_once get_template_directory() . '/inc/customizer/customizer-auto-css.php';
