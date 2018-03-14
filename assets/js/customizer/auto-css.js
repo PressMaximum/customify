@@ -1,15 +1,15 @@
-var AutoCSS = window.AutoCSS || null;
+var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 
 ( function( $, api ) {
 
-    AutoCSS = function(){
+    CustomifyAutoCSS = function(){
         this.values = {};
         this.lastValues = {};
         this.devices = [ 'desktop', 'tablet', 'mobile' ];
     };
-    AutoCSS._change = false;
-    AutoCSS.prototype.fonts = {};
-    AutoCSS.prototype.styling_fields = {
+    CustomifyAutoCSS._change = false;
+    CustomifyAutoCSS.prototype.fonts = {};
+    CustomifyAutoCSS.prototype.styling_fields = {
         color: null,
         image: null,
         position: null,
@@ -21,23 +21,23 @@ var AutoCSS = window.AutoCSS || null;
         border_color: null,
         border_style: null
     };
-    AutoCSS.prototype.subsets = {};
-    AutoCSS.prototype.variants = {};
-    AutoCSS.prototype.media_queries = {
+    CustomifyAutoCSS.prototype.subsets = {};
+    CustomifyAutoCSS.prototype.variants = {};
+    CustomifyAutoCSS.prototype.media_queries = {
         all: '%s',
         desktop: '%s',
         tablet : '@media screen and (max-width: 1024px) { %s }',
         mobile: '@media screen and (max-width: 568px) { %s }',
     };
 
-    AutoCSS.prototype.css = {
+    CustomifyAutoCSS.prototype.css = {
         all: '',
         desktop: '',
         tablet : '',
         mobile: ''
     };
 
-    AutoCSS.prototype.box_shadow_fields = {
+    CustomifyAutoCSS.prototype.box_shadow_fields = {
         color:  null,
         x:  0,
         y:  0,
@@ -46,7 +46,7 @@ var AutoCSS = window.AutoCSS || null;
         inset: null
     };
 
-    AutoCSS.prototype.reset = function(){
+    CustomifyAutoCSS.prototype.reset = function(){
         this.fonts = {};
         this.subsets = {};
         this.variants = {};
@@ -58,14 +58,14 @@ var AutoCSS = window.AutoCSS || null;
         };
     };
 
-    AutoCSS.prototype.encodeValue =function( value ){
+    CustomifyAutoCSS.prototype.encodeValue =function( value ){
         return encodeURI( JSON.stringify( value ) )
     };
-    AutoCSS.prototype.decodeValue = function( value ){
+    CustomifyAutoCSS.prototype.decodeValue = function( value ){
         return JSON.parse( decodeURI( value ) );
     };
 
-    AutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null, no_selector ){
+    CustomifyAutoCSS.prototype.loop_fields = function( fields, values, skip_if_val_null, no_selector ){
         if ( _.isUndefined( skip_if_val_null ) ) {
             skip_if_val_null = false;
         }
@@ -147,7 +147,7 @@ var AutoCSS = window.AutoCSS || null;
 
         return fields_code;
     };
-    AutoCSS.prototype.run = function( setting_name ){
+    CustomifyAutoCSS.prototype.run = function( setting_name ){
         if ( _.isUndefined( setting_name ) ) {
             setting_name  = false;
         }
@@ -192,7 +192,7 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.get_setting = function(name, device, key  ){
+    CustomifyAutoCSS.prototype.get_setting = function(name, device, key  ){
         if ( _.isUndefined( device ) ) {
             device = 'desktop';
         }
@@ -246,7 +246,7 @@ var AutoCSS = window.AutoCSS || null;
         return get_value;
     };
 
-    AutoCSS.prototype.get_google_fonts_url = function(){
+    CustomifyAutoCSS.prototype.get_google_fonts_url = function(){
         var url = '//fonts.googleapis.com/css?family=';
         var s = '';
         var that = this;
@@ -291,7 +291,7 @@ var AutoCSS = window.AutoCSS || null;
         return url;
     };
 
-    AutoCSS.prototype.join = function( object, glue ){
+    CustomifyAutoCSS.prototype.join = function( object, glue ){
 
         if( _.isUndefined( glue ) ) {
             glue = '';
@@ -309,7 +309,7 @@ var AutoCSS = window.AutoCSS || null;
 
     };
 
-    AutoCSS.prototype.str_value = function( value, format, value_no_unit ){
+    CustomifyAutoCSS.prototype.str_value = function( value, format, value_no_unit ){
         if ( _.isEmpty( value ) ) {
             return '';
         }
@@ -330,7 +330,7 @@ var AutoCSS = window.AutoCSS || null;
         return s;
     };
 
-    AutoCSS.prototype.setup_color = function( value, format ){
+    CustomifyAutoCSS.prototype.setup_color = function( value, format ){
         if ( format ) {
             if ( value ) {
                 return this.str_value( value, format );
@@ -339,7 +339,7 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
-    AutoCSS.prototype.setup_checkbox = function( value, format ){
+    CustomifyAutoCSS.prototype.setup_checkbox = function( value, format ){
         if ( format ) {
             if ( value ) {
                 return format;
@@ -348,7 +348,7 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
-    AutoCSS.prototype.setup_image = function( value, format ){
+    CustomifyAutoCSS.prototype.setup_image = function( value, format ){
         var image = this.sanitize_media( value );
         if ( image.url ) {
             if ( format ) {
@@ -358,7 +358,7 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
-    AutoCSS.prototype.setup_slider = function ( value, format ){
+    CustomifyAutoCSS.prototype.setup_slider = function ( value, format ){
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -383,7 +383,7 @@ var AutoCSS = window.AutoCSS || null;
         return c;
     };
 
-    AutoCSS.prototype.setup_shadow = function ( value, format ){
+    CustomifyAutoCSS.prototype.setup_shadow = function ( value, format ){
         var that = this;
         if ( ! _.isObject( value ) ) {
             return '';
@@ -421,7 +421,7 @@ var AutoCSS = window.AutoCSS || null;
         return this.str_value( style, format );
     };
 
-    AutoCSS.prototype.setup_default = function( value, format ){
+    CustomifyAutoCSS.prototype.setup_default = function( value, format ){
         if ( format ) {
             if ( value ) {
                 return this.str_value( value, format );
@@ -430,7 +430,7 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
-    AutoCSS.prototype.setup_css_ruler = function ( value, format ){
+    CustomifyAutoCSS.prototype.setup_css_ruler = function ( value, format ){
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -469,7 +469,7 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.setup_text_align = function( value, format ) {
+    CustomifyAutoCSS.prototype.setup_text_align = function( value, format ) {
         if ( format  ) {
             if ( value ) {
                 return this.str_value( value, format );
@@ -478,11 +478,11 @@ var AutoCSS = window.AutoCSS || null;
         return false;
     };
 
-    AutoCSS.prototype.sanitize_color = function ( color ){
+    CustomifyAutoCSS.prototype.sanitize_color = function ( color ){
        return color;
     };
 
-    AutoCSS.prototype.sanitize_slider = function ( value ){
+    CustomifyAutoCSS.prototype.sanitize_slider = function ( value ){
         value = _.defaults( value, {
             unit: 'px',
             value: null
@@ -490,7 +490,7 @@ var AutoCSS = window.AutoCSS || null;
         return value;
     };
 
-    AutoCSS.prototype.sanitize_media = function ( value ) {
+    CustomifyAutoCSS.prototype.sanitize_media = function ( value ) {
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -501,7 +501,7 @@ var AutoCSS = window.AutoCSS || null;
         } );
     };
 
-    AutoCSS.prototype.maybe_devices_setup = function( field, call_back, values, no_selector ) {
+    CustomifyAutoCSS.prototype.maybe_devices_setup = function( field, call_back, values, no_selector ) {
         var code = '';
         var code_array = {};
         var has_device = false;
@@ -587,7 +587,7 @@ var AutoCSS = window.AutoCSS || null;
         return code;
     };
 
-    AutoCSS.prototype.setup_font = function ( value ){
+    CustomifyAutoCSS.prototype.setup_font = function ( value ){
         if( ! _.isObject( value ) ) {
             value = {};
         }
@@ -626,7 +626,7 @@ var AutoCSS = window.AutoCSS || null;
         return "font-family: \""+value.font+"\";";
     };
 
-    AutoCSS.prototype.font = function( field, values ){
+    CustomifyAutoCSS.prototype.font = function( field, values ){
         var code = '';
         var that = this;
         if ( field.device_settings ) {
@@ -664,35 +664,35 @@ var AutoCSS = window.AutoCSS || null;
     };
 
 
-    AutoCSS.prototype.css_ruler = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.css_ruler = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_css_ruler', value, no_selector );
     };
 
-    AutoCSS.prototype.shadow = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.shadow = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_shadow', value, no_selector );
     };
 
-    AutoCSS.prototype.slider = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.slider = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_slider', value, no_selector );
     };
 
-    AutoCSS.prototype.color = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.color = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_color', value, no_selector );
     };
 
-    AutoCSS.prototype.checkbox = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.checkbox = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_checkbox', value, no_selector );
     };
 
-    AutoCSS.prototype.image = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.image = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_image', value, no_selector );
     };
 
-    AutoCSS.prototype.text_align = function( field, value, no_selector ){
+    CustomifyAutoCSS.prototype.text_align = function( field, value, no_selector ){
         return this.maybe_devices_setup( field, 'setup_text_align', value, no_selector );
     };
 
-    AutoCSS.prototype.setup_styling_fields = function( fields, list, selectors, type ){
+    CustomifyAutoCSS.prototype.setup_styling_fields = function( fields, list, selectors, type ){
         var that  = this;
         var newfs;
         var i;
@@ -738,7 +738,7 @@ var AutoCSS = window.AutoCSS || null;
         return newList;
     };
 
-    AutoCSS.prototype.styling = function( field ){
+    CustomifyAutoCSS.prototype.styling = function( field ){
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
@@ -843,7 +843,7 @@ var AutoCSS = window.AutoCSS || null;
         } );
     };
 
-    AutoCSS.prototype.modal = function ( field ){
+    CustomifyAutoCSS.prototype.modal = function ( field ){
         var that = this;
         var values = this.get_setting( field.name, 'all' );
         if ( ! _.isObject( values ) ) {
@@ -859,7 +859,7 @@ var AutoCSS = window.AutoCSS || null;
         }
 
     };
-    AutoCSS.prototype.setup_font_style = function ( value ){
+    CustomifyAutoCSS.prototype.setup_font_style = function ( value ){
         if ( ! _.isObject( value ) ) {
             value = {};
         }
@@ -900,7 +900,7 @@ var AutoCSS = window.AutoCSS || null;
         return this.join( css, "\r\n\t" );
     };
 
-    AutoCSS.prototype.html_replace = function( field, value ){
+    CustomifyAutoCSS.prototype.html_replace = function( field, value ){
         var selector = field.selector;
         var v = _.clone( value );
         if ( _.isUndefined( v )  || _.isEmpty( v ) ) {
@@ -908,7 +908,7 @@ var AutoCSS = window.AutoCSS || null;
         }
         $( selector ).html( v );
     };
-    AutoCSS.prototype.html_class = function( field, v ){
+    CustomifyAutoCSS.prototype.html_class = function( field, v ){
         var value;
         if ( _.isUndefined( v ) ) {
             value = _.clone( v );
@@ -987,7 +987,7 @@ var AutoCSS = window.AutoCSS || null;
         }
     };
 
-    AutoCSS.prototype.typography = function( field, values ){
+    CustomifyAutoCSS.prototype.typography = function( field, values ){
         if ( _.isUndefined( values ) || ! _.isObject( values ) ) {
             values = this.get_setting( field.name, 'all' );
         }
@@ -1124,23 +1124,23 @@ var AutoCSS = window.AutoCSS || null;
         that.css['all'] += " "+field['selector']+" {\r\n\t"+that.join( code, "\r\n\t" )+"\r\n}";
     };
 
-    var AutoCSSInit = new AutoCSS();
+    var CustomifyAutoCSSInit = new CustomifyAutoCSS();
 
     api.bind( 'preview-ready', function() {
-        //AutoCSSInit.run();
-        AutoCSSInit.lastValues = api.get();
-        AutoCSSInit.values = api.get();
+        //CustomifyAutoCSSInit.run();
+        CustomifyAutoCSSInit.lastValues = api.get();
+        CustomifyAutoCSSInit.values = api.get();
     });
 
     api.bind( 'change', function(){
-       // AutoCSSInit.run();
+       // CustomifyAutoCSSInit.run();
     } );
 
     _.each( Customify_Preview_Config.fields, function( field ){
         if ( ( field.selector && field.css_format ) || field.type === 'modal' ) {
             wp.customize( field.name, function( setting ) {
                 setting.bind( function( to ) {
-                    AutoCSSInit.run( field.name );
+                    CustomifyAutoCSSInit.run( field.name );
                 } );
             } );
 
