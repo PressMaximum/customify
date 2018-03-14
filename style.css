@@ -2900,9 +2900,6 @@ article.comment .comment-post-author {
 }
 
 .page-titlebar {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
   padding: 26px 0px 27px;
   border-bottom: 1px solid #eaecee;
   word-break: break-all;
