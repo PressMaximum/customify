@@ -59,15 +59,8 @@ if ( ! function_exists( 'customify_entry_footer' ) ) :
 
 		edit_post_link(
 			sprintf(
-				wp_kses(
-					/* translators: %s: Name of current post. Only visible to screen readers */
-					__( 'Edit <span class="screen-reader-text">%s</span>', 'customify' ),
-					array(
-						'span' => array(
-							'class' => array(),
-						),
-					)
-				),
+                /* translators: %s: Name of current post. Only visible to screen readers */
+                __( 'Edit <span class="screen-reader-text">%s</span>', 'customify' ),
 				get_the_title()
 			),
 			'<span class="edit-link">',
