@@ -279,7 +279,7 @@ function customify_layout_builder_config_default($val, $name)
                                             'link' => '1',
                                         ),
                                 ),
-                            'bg_color' => '#212121',
+                            'bg_color' => '',
                             'bg_image' =>
                                 array(
                                     'id' => '',
@@ -288,9 +288,9 @@ function customify_layout_builder_config_default($val, $name)
                                 ),
                             'bg_cover' => '',
                             'bg_position' => '',
-                            'bg_repeat' => 'repeat',
+                            'bg_repeat' => '',
                             'bg_attachment' => '',
-                            'border_style' => 'none',
+                            'border_style' => '',
                             'border_width' =>
                                 array(
                                     'unit' => 'px',
