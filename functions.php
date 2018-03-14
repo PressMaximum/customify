@@ -195,42 +195,17 @@ class Customify_Init {
             'before_title'  => '<h4 class="widget-title">',
             'after_title'   => '</h4>',
         ) );
-        register_sidebar( array(
-            'name'          => esc_html__( 'Footer Sidebar 1', 'customify' ),
+
+        register_sidebars( 4, array(
+            'name'          => __( 'Footer Sidebar %d', 'customify' ),
             'id'            => 'footer-1',
-            'description'       => esc_html__( 'Add widgets here.', 'customify' ),
+            'description'       => __( 'Add widgets here.', 'customify' ),
             'before_widget' => '<section id="%1$s" class="widget %2$s">',
             'after_widget'  => '</section>',
             'before_title'  => '<h4 class="widget-title">',
             'after_title'   => '</h4>',
         ) );
-        register_sidebar( array(
-            'name'          => esc_html__( 'Footer Sidebar 2', 'customify' ),
-            'id'            => 'footer-2',
-            'description'       => esc_html__( 'Add widgets here.', 'customify' ),
-            'before_widget' => '<section id="%1$s" class="widget %2$s">',
-            'after_widget'  => '</section>',
-            'before_title'  => '<h4 class="widget-title">',
-            'after_title'   => '</h4>',
-        ) );
-        register_sidebar( array(
-            'name'          => esc_html__( 'Footer Sidebar 3', 'customify' ),
-            'id'            => 'footer-3',
-            'description'       => esc_html__( 'Add widgets here.', 'customify' ),
-            'before_widget' => '<section id="%1$s" class="widget %2$s">',
-            'after_widget'  => '</section>',
-            'before_title'  => '<h4 class="widget-title">',
-            'after_title'   => '</h4>',
-        ) );
-        register_sidebar( array(
-            'name'          => esc_html__( 'Footer Sidebar 4', 'customify' ),
-            'id'            => 'footer-4',
-            'description'       => esc_html__( 'Add widgets here.', 'customify' ),
-            'before_widget' => '<section id="%1$s" class="widget %2$s">',
-            'after_widget'  => '</section>',
-            'before_title'  => '<h4 class="widget-title">',
-            'after_title'   => '</h4>',
-        ) );
+
     }
 
     function get_asset_suffix(){
@@ -346,7 +321,7 @@ class Customify_Init {
             '/inc/customizer/customizer-config/titlebar.php',
             '/inc/customizer/customizer-config/compatibility.php',
 
-
+            // compatibility
             '/inc/compatibility/breadcrumb-navxt.php',
 
         );
