@@ -76,7 +76,7 @@ class Customify_Builder_Footer_Item_Copyright {
         $tags = array(
             'current_year' =>  date_i18n('Y'),
             'site_title' =>  get_bloginfo('name'),
-            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', Customify_Init::$theme_url, Customify_Init::$theme_author ),
+            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', esc_url( Customify_Init::$theme_url ), Customify_Init::$theme_author ),
         );
 
         $content = Customify_Customizer()->get_setting( $this->name );
@@ -86,7 +86,7 @@ class Customify_Builder_Footer_Item_Copyright {
         }
 
         echo '<div class="builder-footer-copyright-item footer-copyright">';
-        echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
+        echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) ); // WPCS: XSS OK.
         echo '</div>';
     }
 }
