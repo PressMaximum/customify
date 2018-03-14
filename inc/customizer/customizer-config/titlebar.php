@@ -46,7 +46,7 @@ class Customify_TitleBar {
                 'section' => $section,
                 'title'  => __( 'Typography', 'customify' ),
                 'description'  => __( 'Typography for titlebar', 'customify' ),
-                'selector' => "{$selector}, {$selector} .titlebar-title",
+                'selector' => "{$selector} .titlebar-title",
                 'css_format' => 'typography',
             ),
 
@@ -66,6 +66,7 @@ class Customify_TitleBar {
                         'bg_image' => false,
                         'bg_cover' => false,
                         'bg_repeat' => false,
+                        'margin' => false,
                         //'box_shadow' => false,
                     ),
                     'hover_fields' => false
