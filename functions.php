@@ -270,16 +270,44 @@ class Customify_Init {
         ) );
 
         $js_files = apply_filters(  'customify/theme/js', array(
-            'themejs' => get_template_directory_uri() . '/assets/js/theme'.$suffix.'.js'
+            'jquery.fitvids.js' => array(
+                'url' => get_template_directory_uri() . '/assets/js/jquery.fitvids'.$suffix.'.js',
+                'deps' => array( 'jquery' ),
+                'ver' => '1.1'
+            ),
+            'customify-themejs' => array(
+                'url' => get_template_directory_uri() . '/assets/js/theme'.$suffix.'.js',
+                'deps' => array( 'jquery', 'jquery.fitvids.js' )
+            ),
         ) );
 
         foreach( $css_files as $id => $url ) {
-            $deeps = array();
-            wp_enqueue_style( 'customify-'.$id, $url, $deeps, self::$version );
+            $deps = array();
+            wp_enqueue_style( 'customify-'.$id, $url, $deps, self::$version );
         }
 
-        foreach( $js_files as $id => $url ) {
-            wp_enqueue_script( 'customify-'.$id,  $url, array('jquery'), self::$version, true );
+        foreach( $js_files as $id => $arg ) {
+            $deps = array();
+            $ver = '';
+            if ( is_array( $arg ) ) {
+                $arg = wp_parse_args( $arg, array(
+                    'deps' => '',
+                    'url' => '',
+                    'ver' => ''
+                ) );
+
+                $deps = $arg['deps'];
+                $url = $arg['url'];
+                $ver = $arg['ver'];
+            } else {
+                $url = $arg;
+            }
+
+            if ( ! $ver ) {
+                $ver = self::$version;
+            }
+
+            wp_enqueue_script( $id,  $url, $deps, $ver, true );
         }
 
         if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {

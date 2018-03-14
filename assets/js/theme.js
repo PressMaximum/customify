@@ -270,7 +270,7 @@ jQuery( document ).ready( function( $ ){
     } );
 
 
-
+    $("#page").fitVids();
 
 } );
 

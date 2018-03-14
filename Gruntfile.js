@@ -98,7 +98,8 @@ module.exports = function( grunt ) {
             my_target: {
                 files: [
                     {
-                        'assets/js/theme.min.js': ['assets/js/theme.js']
+                        'assets/js/theme.min.js': ['assets/js/theme.js'],
+                        'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js']
                     },
                     {
                         expand: true,
@@ -137,7 +138,9 @@ module.exports = function( grunt ) {
                     //'sass',
                     'css'
                 ]
-            },
+            }
+            /*
+            ,
             scripts: {
                 files: [
                     'assets/js/*.js',
@@ -146,6 +149,7 @@ module.exports = function( grunt ) {
                 ],
                 tasks: ['uglify']
             }
+            */
         }
 
     });

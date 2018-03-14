@@ -70,6 +70,10 @@ Gridlex, Copyright Devlint
 License: MIT, https://github.com/devlint/gridlex/blob/master/LICENSE
 Source: https://github.com/devlint/gridlex
 
+FitVids, Copyright Chris Coyier
+License: WTFPL license, http://sam.zoy.org/wtfpl/
+Source: http://css-tricks.com + Dave Rupert - http://daverupert.com - https://github.com/davatron5000/FitVids.js
+
 WP Color Picker Alpha, Copyright kallookoo
 Licensed under the GPLv2 license.
 Source: https://github.com/kallookoo/wp-color-picker-alpha
