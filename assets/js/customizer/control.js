@@ -399,13 +399,15 @@
 
             return function (data, id, data_variable_name) {
                 if (_.isUndefined(id)) {
-                    id = 'tmpl-customize-control-' + field.type;
+                    //id = 'tmpl-customize-control-' + field.type;
+                    id = 'tmpl-field-customify-' + field.type;
                 }
                 if (!_.isUndefined(data_variable_name) && _.isString(data_variable_name)) {
                     options.variable = data_variable_name;
                 } else {
                     options.variable = 'data';
                 }
+                console.log( 'id', id );
                 compiled = _.template($('#' + id).html(), null, options);
                 return compiled(data);
             };
@@ -948,7 +950,7 @@
                 addable = false;
             }
 
-            var $itemWrapper = $(template( field, 'tmpl-customize-control-' + control.type + '-repeater'));
+            var $itemWrapper = $(template( field, 'tmpl-customize-control-repeater-layout'));
             $container.find('.customify--settings-fields').append($itemWrapper);
             _.each(fields, function (f, index) {
                 f.value = '';
@@ -1157,6 +1159,7 @@
             var control = this;
             var template = control.getTemplate();
             var template_id = 'tmpl-field-' + control.type + '-' + field.type;
+            console.log( 'template_id', template_id );
             if ($('#' + template_id).length == 0) {
                 template_id = 'tmpl-field-' + control.type + '-text';
             }
@@ -1438,13 +1441,15 @@
 
             return function (data, id, data_variable_name) {
                 if (_.isUndefined(id)) {
-                    id = 'tmpl-customize-control-' + control.type;
+                    id = 'tmpl-field-customify-' + control.type;
                 }
                 if (!_.isUndefined(data_variable_name) && _.isString(data_variable_name)) {
                     options.variable = data_variable_name;
                 } else {
                     options.variable = 'data';
                 }
+
+                console.log( '__id', id );
                 compiled = _.template($('#' + id).html(), null, options);
                 return compiled(data);
             };
@@ -1639,7 +1644,7 @@
                 addable = false;
             }
 
-            var $itemWrapper = $(template(control.params, 'tmpl-customize-control-' + control.type + '-repeater'));
+            var $itemWrapper = $(template(control.params, 'tmpl-customize-control-repeater-item'));
             control.container.find('.customify--settings-fields').append($itemWrapper);
             _.each(fields, function (f, index) {
                 f.value = '';

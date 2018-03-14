@@ -1,6 +1,5 @@
 <?php
-
-class Customify_Customizer_Control extends WP_Customize_Control {
+class Customify_Customizer_Control_Base extends WP_Customize_Control {
     /**
      * The control type.
      *
@@ -57,49 +56,9 @@ class Customify_Customizer_Control extends WP_Customize_Control {
     function __construct($manager, $id, $args = array())
     {
         parent::__construct($manager, $id, $args);
-
-        add_action( 'customize_controls_print_footer_scripts', array( $this, 'content_js_template' ) );
+          add_action( 'customize_controls_print_footer_scripts', array( $this, 'content_js_template' ) );
     }
 
-    /**
-     * Enqueue control related scripts/styles.
-     *
-     * @access public
-     */
-    public function enqueue() {
-        wp_enqueue_media();
-        if( $this->setting_type == 'repeater' ) {
-            wp_enqueue_script('jquery-ui-sortable');
-        }
-
-        $suffix = Customify_Init()->get_asset_suffix();
-        wp_enqueue_style( 'wp-color-picker' );
-        wp_enqueue_script( 'wp-color-picker' );
-        wp_enqueue_script( 'jquery-ui-slider' );
-
-        wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer'.$suffix.'.css');
-        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
-        wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
-        if ( is_null( self::$_icon_loaded ) ) {
-            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
-                'home_url' => home_url(''),
-                'ajax' => admin_url('admin-ajax.php'),
-                'theme_default' => __('Theme Default', 'customify'),
-                'reset' => __('Reset this section settings', 'customify'),
-                'untitled' => __('Untitled', 'customify'),
-                'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
-                'list_font_weight' => array(
-                    ''   => __('Default', 'customify'),
-                    'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
-                    'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
-                ),
-                'typo_fields' => Customify_Customizer()->get_typo_fields(),
-                'styling_config' => Customify_Customizer()->get_styling_config(),
-                'devices' => Customify_Customizer()->devices,
-            ));
-            self::$_icon_loaded = true;
-        }
-    }
 
     /**
      * Refresh the parameters passed to the JavaScript via JSON.
@@ -219,9 +178,49 @@ class Customify_Customizer_Control extends WP_Customize_Control {
 
 
     /**
+     * Enqueue control related scripts/styles.
+     *
+     * @access public
+     */
+    public function enqueue() {
+        wp_enqueue_media();
+        if( $this->setting_type == 'repeater' ) {
+            wp_enqueue_script('jquery-ui-sortable');
+        }
+
+        $suffix = Customify_Init()->get_asset_suffix();
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
+        wp_enqueue_script( 'jquery-ui-slider' );
+
+        wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer'.$suffix.'.css');
+        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
+        if ( is_null( self::$_icon_loaded ) ) {
+            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
+                'home_url' => home_url(''),
+                'ajax' => admin_url('admin-ajax.php'),
+                'theme_default' => __('Theme Default', 'customify'),
+                'reset' => __('Reset this section settings', 'customify'),
+                'untitled' => __('Untitled', 'customify'),
+                'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
+                'list_font_weight' => array(
+                    ''   => __('Default', 'customify'),
+                    'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
+                    'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
+                ),
+                'typo_fields' => Customify_Customizer()->get_typo_fields(),
+                'styling_config' => Customify_Customizer()->get_styling_config(),
+                'devices' => Customify_Customizer()->devices,
+            ));
+            self::$_icon_loaded = true;
+        }
+    }
+
+
+    /**
      * Renders the control wrapper and calls $this->render_content() for the internals.
      *
-     * @since 3.4.0
      */
     protected function render() {
         $id    = 'customize-control-' . str_replace( array( '[', ']' ), array( '-', '' ), $this->id );
@@ -234,6 +233,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php $this->render_content(); ?>
         </li><?php
     }
+
 
 
     /**
@@ -301,96 +301,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
     }
 
-    static function content_js_template() {
-        static $loaded =  null;
-        if ( is_null( $loaded ) ) {
-            $loaded = true;
-        } else {
-           // return ;
-        }
-        ?>
-        <script type="text/html" id="tmpl-field-<?php echo esc_attr( $this->type ).esc_attr( '-'.$this->setting_type ); ?>">
-            <?php
-            if ( method_exists( $this, 'field_template' ) ) {
-                call_user_func_array( array( $this, 'field_template' ), array() );
-            } else {
-                 call_user_func_array( array( $this, 'default_field_template' ), array() );
-            }
-            ?>
-         </script>
-
-         <?php /*
-
-        <script type="text/html" id="tmpl-customize-control-repeater-layout">
-            <div class="customify--repeater-item">
-                <div class="customify--repeater-item-heading">
-                    <label class="customify--repeater-visible" title="<?php esc_attr_e( 'Toggle item visible', 'customify' ); ?>"><input type="checkbox" class="r-visible-input"><span class="r-visible-icon"></span><span class="screen-reader-text"><?php _e( 'Show', 'customify' ) ?></label>
-                    <span class="customify--repeater-live-title"></span>
-                    <div class="customify-nav-reorder">
-                        <span class="customify--down" tabindex="-1"><span class="screen-reader-text"><?php _e( 'Move Down', 'customify' ) ?></span></span>
-                        <span class="customify--up" tabindex="0"><span class="screen-reader-text"><?php _e( 'Move Up', 'customify' ) ?></span></span>
-                    </div>
-                    <a href="#" class="customify--repeater-item-toggle"><span class="screen-reader-text"><?php _e( 'Close', 'customify' ) ?></span></a>
-                </div>
-                <div class="customify--repeater-item-settings">
-                    <div class="customify--repeater-item-inside">
-                        <div class="customify--repeater-item-inner"></div>
-                        <# if ( data.addable ){  #>
-                        <a href="#" class="customify--remove"><?php _e( 'Remove', 'customify' ); ?></a>
-                        <# } #>
-                    </div>
-                </div>
-            </div>
-        </script>
-
-        <script type="text/html" id="tmpl-customize-control-repeater-inner">
-           <div class="customify--repeater-inner">
-               <div class="customify--settings-fields customify--repeater-items"></div>
-               <div class="customify--repeater-actions">
-                   <a href="#" class="customify--repeater-reorder" data-text="<?php _e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
-                   <# if ( data.addable ){  #>
-                       <button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
-                   <# } #>
-               </div>
-           </div>
-        </script>
-
-        <div id="customify--sidebar-icons">
-            <div class="customify--sidebar-header">
-                <a class="customize-controls-icon-close" href="#">
-                    <span class="screen-reader-text"><?php _e( 'Cancel', 'customify' );  ?></span>
-                </a>
-                <div class="customify--icon-type-inner">
-                    <select id="customify--sidebar-icon-type">
-                        <option value="all"><?php _e( 'All Icon Types', 'customify' ); ?></option>
-                    </select>
-                </div>
-            </div>
-            <div class="customify--sidebar-search">
-               <input type="text" id="customify--icon-search" placeholder="<?php esc_attr_e( 'Type icon name', 'customify' ) ?>">
-            </div>
-            <div id="customify--icon-browser"></div>
-        </div>
-
-        <div id="customify-typography-panel" class="customify-typography-panel">
-            <div class="customify-typography-panel--inner">
-                <input type="hidden" id="customify--font-type">
-                <div id="customify-typography-panel--fields"></div>
-            </div>
-        </div>
-
-        <script type="text/html" id="tmpl-customify-modal-settings">
-            <div class="customify-modal-settings">
-                <div class="customify-modal-settings--inner">
-                    <div class="customify-modal-settings--fields"></div>
-                </div>
-            </div>
-        </script>
-        <?php
-        */ ?>
-    }
-
-    function before_field(){
+    static function before_field(){
         ?>
         <#
         var required = '';
@@ -402,13 +313,13 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
     }
 
-    function after_field(){
+    static function after_field(){
         ?>
         </div>
         <?php
     }
 
-    function field_header(){
+    static function field_header(){
         ?>
             <# if ( field.label || field.description ) { #>
             <div class="customify-field-header">
@@ -425,23 +336,22 @@ class Customify_Customizer_Control extends WP_Customize_Control {
         <?php
     }
 
-    function default_field_template(){
-        $this->before_field();
+    static function field_template(){
         ?>
-        <?php echo $this->field_header(); ?>
+        <script type="text/html" id="tmpl-field-customify-text">
+            <?php
+        self::before_field();
+        ?>
+        <?php echo self::field_header(); ?>
         <div class="customify-field-settings-inner">
             <input type="text" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
         <?php
-        $this->after_field();
+        self::after_field();
+        ?>
+        </script>
+        <?php
     }
 
-    function field_heading(){
-        $this->before_field();
-        ?>
-        <h3 class="customify-field--heading">{{ field.label }}</h3>
-        <?php
-        $this->after_field();
-    }
 
 }

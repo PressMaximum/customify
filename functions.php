@@ -236,7 +236,7 @@ class Customify_Init {
     function scripts() {
 
         if ( ! class_exists( 'Customify_Font_Icons' ) ) {
-            require_once  get_template_directory().'/inc/customizer/customizer-icons.php';
+            require_once  get_template_directory().'/inc/customizer/class-customizer-icons.php';
         }
         Customify_Font_Icons()->enqueue();
 
@@ -310,12 +310,11 @@ class Customify_Init {
             '/inc/metabox.php',                         //Page settings.
             '/inc/template-tags.php',                   //  Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
-            '/inc/customizer/customizer.php',           // Customizer additions.
+            '/inc/customizer/customizer-init.php',           // Customizer additions.
             '/inc/customizer/admin.php',                // Admin additions.
             '/inc/customizer-layout-builder/init.php',  // Customizer additions.
             '/inc/posts/post-builder.php',              // Blog builder
             '/inc/posts/posts.php',                     // Blog builder config
-
 
             '/inc/customizer/customizer-config/layouts.php',
             '/inc/customizer/customizer-config/blogs.php',
