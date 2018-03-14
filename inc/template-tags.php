@@ -53,7 +53,7 @@ if ( ! function_exists( 'customify_entry_footer' ) ) :
 			$tags_list = get_the_tag_list( '', ' ' );
 			if ( $tags_list ) {
 				/* translators: 1: list of tags. */
-				printf( '<div class="tags-links">' . __( '%1$s', 'customify' ) . '</div>', $tags_list ); // WPCS: XSS OK.
+				printf( '<div class="tags-links">%1$s</div>', $tags_list ); // WPCS: XSS OK.
 			}
 		}
 
