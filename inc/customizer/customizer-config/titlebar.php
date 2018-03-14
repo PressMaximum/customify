@@ -57,7 +57,7 @@ class Customify_TitleBar {
                 'title'  => __( 'Styling', 'customify' ),
                 'selector' => array(
                     'normal' => "{$selector}",
-                    'normal_text_color' => "{$selector} h1",
+                    'normal_text_color' => "{$selector} .titlebar-title",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
