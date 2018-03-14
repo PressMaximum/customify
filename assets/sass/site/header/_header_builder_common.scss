@@ -70,6 +70,7 @@
     justify-content: center;
     padding: 26px 0px 27px;
     border-bottom: 1px solid $color_border;
+    word-break: break-all;
     @include for_device( tablet ) {
         padding: 19px 0px 20px;
     }
@@ -127,6 +128,7 @@
     }
 }
 .page-titlebar, .page-cover {
+    word-break: break-all;
     .page-breadcrumb-inner {
         padding-left: 0;
         padding-right: 0;

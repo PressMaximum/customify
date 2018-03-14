@@ -2904,6 +2904,7 @@ article.comment .comment-post-author {
   justify-content: center;
   padding: 26px 0px 27px;
   border-bottom: 1px solid #eaecee;
+  word-break: break-all;
 }
 @media screen and (max-width: 1024px) {
   .page-titlebar {
@@ -2962,6 +2963,9 @@ article.comment .comment-post-author {
   text-decoration: underline;
 }
 
+.page-titlebar, .page-cover {
+  word-break: break-all;
+}
 .page-titlebar .page-breadcrumb-inner, .page-cover .page-breadcrumb-inner {
   padding-left: 0;
   padding-right: 0;
@@ -5003,6 +5007,9 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 1.618em;
 }
 
+.entry-content {
+  word-break: break-all;
+}
 .entry-content a:hover {
   text-decoration: underline;
 }
@@ -5092,6 +5099,9 @@ body.menu_sidebar_dropdown:before {
   font-weight: 400;
 }
 
+.widget-area {
+  word-break: break-all;
+}
 .widget-area .widget {
   font-size: 0.875em;
   margin-bottom: 1.618em;
