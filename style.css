@@ -3513,14 +3513,22 @@ article.comment .comment-post-author {
   vertical-align: middle;
   width: 100%;
   height: 100%;
-  padding: 0.3em;
+  padding: 0.5em;
   display: inline-block;
+  line-height: 1;
 }
 .customify-builder-social-icons a i {
-  width: 1.1em;
-  height: 1.1em;
+  width: 1em;
+  height: 1em;
   position: relative;
   display: block;
+}
+.customify-builder-social-icons a i:before {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  transform: translateX(-50%);
 }
 .customify-builder-social-icons a:hover {
   opacity: .9;
