@@ -58,7 +58,7 @@ class Customify_Breadcrumb {
         $selector = '#page-breadcrumb';
 
         if( ! $this->support_plugins_active() ) {
-            $desc = __( 'Your should install and active plugin <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> to use this function.', 'customify' );
+            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will display after you install and active it.', 'customify' );
         } else {
             $desc = '';
         }
