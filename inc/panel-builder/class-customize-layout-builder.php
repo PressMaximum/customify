@@ -257,9 +257,6 @@ class Customify_Customize_Layout_Builder {
         if ( $name ) {
             if ( isset( $data[ $name ] ) ) {
                 $var = $data[ $name ]['data'];
-                foreach( $var as $k => $d ) {
-                    // remove_theme_mod( $k );
-                }
                 $var = array_filter( $var );
             }
         } else {
