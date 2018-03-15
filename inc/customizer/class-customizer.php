@@ -1,6 +1,6 @@
 <?php
 /**
- * customify Theme Customizer
+ * Customify Theme Customizer
  *
  * @package customify
  */
@@ -19,12 +19,16 @@ class  Customify_Customizer
         $this->init();
     }
 
-    function init(){
+    /**
+     * Main initial
+     */
+    function init()
+    {
 
         require_once get_template_directory() . '/inc/customizer/class-customizer-sanitize.php';
         require_once get_template_directory() . '/inc/customizer/class-customizer-auto-css.php';
 
-        if ( is_admin() || is_customize_preview() ) {
+        if (is_admin() || is_customize_preview()) {
             add_action('customize_register', array($this, 'register'));
             add_action('customize_preview_init', array($this, 'preview_js'));
             add_action('wp_ajax_customify/customizer/ajax/get_icons', array($this, 'get_icons'));
@@ -33,7 +37,7 @@ class  Customify_Customizer
             require_once get_template_directory() . '/inc/customizer/class-customizer.php';
         }
 
-        add_action('wp_ajax_customify__reset_section', array( 'Customify_Customizer', 'reset_customize_section' ) );
+        add_action('wp_ajax_customify__reset_section', array('Customify_Customizer', 'reset_customize_section'));
     }
 
     static function get_instance()
@@ -96,7 +100,14 @@ class  Customify_Customizer
         }
     }
 
-
+    /**
+     * Get all customizer settings/control that added via `customify/customizer/config` hook
+     *
+     *  Ensure you call this method after all config files loaded
+     *
+     * @param null $wp_customize
+     * @return array
+     */
     static function get_config($wp_customize = null)
     {
         if (is_null(self::$config)) {
@@ -113,14 +124,14 @@ class  Customify_Customizer
                     'name'        => null,
                     'type'        => null,
                     'description' => null,
-                    'capability' => null,
-                    'mod'        => null, // theme_mod || option default theme_mod
-                    'settings'  => null,
+                    'capability'  => null,
+                    'mod'         => null, // theme_mod || option default theme_mod
+                    'settings'    => null,
 
                     'active_callback'      => null, // For control
 
                     // For settings
-                    'sanitize_callback'    => array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' ),
+                    'sanitize_callback'    => array('Customify_Sanitize_Input', 'sanitize_customizer_input'),
                     'sanitize_js_callback' => null,
                     'theme_supports'       => null,
                     //'transport'          => 'postMessage', // or refresh
@@ -134,7 +145,7 @@ class  Customify_Customizer
                     'device'          => null,
                     'device_settings' => null,
 
-                    'field_class'          => null, // Custom class for control
+                    'field_class' => null, // Custom class for control
                 ));
 
                 if (!isset($f['type'])) {
@@ -253,6 +264,14 @@ class  Customify_Customizer
         return $get_value;
     }
 
+    /**
+     * Get customizer setting data when the field type is `modal`
+     *
+     * @param string $name Setting name
+     * @param string $tab  String tab name
+     *
+     * @return array|bool
+     */
     function get_setting_tab($name, $tab = null)
     {
         $values = $this->get_setting($name, 'all');
@@ -265,6 +284,11 @@ class  Customify_Customizer
         return false;
     }
 
+    /**
+     * Get typography fields
+     *
+     * @return array
+     */
     function get_typo_fields()
     {
         $typo_fields = array(
@@ -351,6 +375,11 @@ class  Customify_Customizer
         return $typo_fields;
     }
 
+    /**
+     * Get styling field
+     *
+     * @return array
+     */
     function get_styling_config()
     {
         $fields = array(
@@ -640,6 +669,12 @@ class  Customify_Customizer
         return $fields;
     }
 
+    /**
+     * Setup icon args
+     *
+     * @param $icon
+     * @return array
+     */
     function setup_icon($icon)
     {
         if (!is_array($icon)) {
@@ -648,6 +683,12 @@ class  Customify_Customizer
         return wp_parse_args($icon, array('type' => '', 'icon' => ''));
     }
 
+    /**
+     * Get customize setting data
+     *
+     * @param string $key Setting name
+     * @return bool|mixed
+     */
     function get_field_setting($key)
     {
         $config = self::get_config();
@@ -657,6 +698,13 @@ class  Customify_Customizer
         return false;
     }
 
+    /**
+     * Get Media url from data
+     *
+     * @param string/array $value   media data
+     * @param null $size            WordPress image size name
+     * @return array|false          Media url or empty
+     */
     function get_media($value, $size = null)
     {
 
@@ -724,7 +772,11 @@ class  Customify_Customizer
         return false;
     }
 
-    function load_controls(){
+    /**
+     * Load support controls
+     */
+    function load_controls()
+    {
         $fields = array(
             'base',
             'select',
@@ -741,7 +793,7 @@ class  Customify_Customizer
             'textarea',
             'radio',
 
-            'media' ,
+            'media',
             'image',
             'video',
 
@@ -756,21 +808,21 @@ class  Customify_Customizer
             'repeater'
         );
 
-        $fields = apply_filters( 'customify/customize/register-controls', $fields );
+        $fields = apply_filters('customify/customize/register-controls', $fields);
 
-        foreach( $fields as $field_type ) {
-            $file = get_template_directory() . '/inc/customizer/controls/class-control-'.str_replace( '_','-', $field_type ).'.php';
-            if ( file_exists( $file ) ) {
+        foreach ($fields as $field_type) {
+            $file = get_template_directory() . '/inc/customizer/controls/class-control-' . str_replace('_', '-', $field_type) . '.php';
+            if (file_exists($file)) {
 
                 $control_class_name = 'Customify_Customizer_Control_';
-                $tpl_type = str_replace( '_', ' ', $field_type );
-                $tpl_type = str_replace( ' ','_', ucfirst( $tpl_type ) );
+                $tpl_type = str_replace('_', ' ', $field_type);
+                $tpl_type = str_replace(' ', '_', ucfirst($tpl_type));
                 $control_class_name .= $tpl_type;
                 require_once $file;
 
-                if ( $control_class_name ) {
-                    if ( method_exists( $control_class_name, 'field_template' ) ) {
-                        add_action( 'customize_controls_print_footer_scripts', array( $control_class_name, 'field_template' ) );
+                if ($control_class_name) {
+                    if (method_exists($control_class_name, 'field_template')) {
+                        add_action('customize_controls_print_footer_scripts', array($control_class_name, 'field_template'));
                     }
                 }
             }
@@ -854,7 +906,7 @@ class  Customify_Customizer
 
                     $settings_args['transport'] = 'refresh';
                     if (!$settings_args['sanitize_callback']) {
-                        $settings_args['sanitize_callback'] = array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' );
+                        $settings_args['sanitize_callback'] = array('Customify_Sanitize_Input', 'sanitize_customizer_input');
                     }
 
                     foreach ($settings_args as $k => $v) {
@@ -890,15 +942,15 @@ class  Customify_Customizer
                     }
                     unset($args['default']);
 
-                    $wp_customize->add_setting($name, array_merge(array('sanitize_callback' => array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' ) ), $settings_args));
+                    $wp_customize->add_setting($name, array_merge(array('sanitize_callback' => array('Customify_Sanitize_Input', 'sanitize_customizer_input')), $settings_args));
 
                     $control_class_name = 'Customify_Customizer_Control_';
-                    $tpl_type = str_replace( '_', ' ', $args['setting_type'] );
-                    $tpl_type = str_replace( ' ','_', ucfirst( $tpl_type ) );
+                    $tpl_type = str_replace('_', ' ', $args['setting_type']);
+                    $tpl_type = str_replace(' ', '_', ucfirst($tpl_type));
                     $control_class_name .= $tpl_type;
 
                     if ($settings_args['type'] != 'js_raw') {
-                        if ( class_exists( $control_class_name ) ) {
+                        if (class_exists($control_class_name)) {
                             $wp_customize->add_control(new $control_class_name($wp_customize, $name, $args));
                         } else {
                             $wp_customize->add_control(new Customify_Customizer_Control_Base($wp_customize, $name, $args));
@@ -916,7 +968,7 @@ class  Customify_Customizer
                             $this->selective_settings[$__id] = array(
                                 'settings'            => array(),
                                 'selector'            => $selective_refresh['selector'],
-                                'container_inclusive' => ( strpos( $__id , 'Customify_Customizer_Auto_CSS' ) === false ) ? false : true,
+                                'container_inclusive' => (strpos($__id, 'Customify_Customizer_Auto_CSS') === false) ? false : true,
                                 'render_callback'     => $s_id,
                             );
 
@@ -956,7 +1008,7 @@ class  Customify_Customizer
         $wp_customize->add_setting('customify__css', array(
             'default'           => '',
             'transport'         => 'postMessage',
-            'sanitize_callback' => array( 'Customify_Sanitize_Input', 'sanitize_css_code' ),
+            'sanitize_callback' => array('Customify_Sanitize_Input', 'sanitize_css_code'),
         ));
 
         do_action('customify/customize/register_completed', $this);

@@ -4,9 +4,13 @@ class Customify_Fonts
 {
     function __construct()
     {
+        // Add ajax handle
         add_action( 'wp_ajax_customify/customizer/ajax/fonts', array( $this, 'ajax_fonts' ) );
     }
 
+    /**
+     * Ajax fonts
+     */
     function ajax_fonts(){
         $fonts = array(
             'normal' => array(
@@ -21,7 +25,10 @@ class Customify_Fonts
         wp_send_json_success( $fonts );
     }
 
-
+    /**
+     * Get Google WebFont fonts from json file
+     * @return array
+     */
     function get_google_fonts(){
         global $wp_filesystem;
         WP_Filesystem();
@@ -33,6 +40,11 @@ class Customify_Fonts
         return array();
     }
 
+    /**
+     * Default fonts
+     *
+     * @return array
+     */
     function get_normal_fonts()
     {
         $fonts = array(

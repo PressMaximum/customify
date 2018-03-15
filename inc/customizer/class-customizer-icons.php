@@ -15,6 +15,11 @@ class Customify_Font_Icons
         return self::$_instance;
     }
 
+    /**
+     * Get support icons
+     *
+     * @return mixed|void
+     */
     function get_icons()
     {
         if ( is_null(self::$_icons) ) {
@@ -72,9 +77,13 @@ class Customify_Font_Icons
         }
     }
 
+    /**
+     * Get FontAwesome icons
+     * @return mixed|void
+     */
     function get_font_awesome_icons()
     {
-        $icons = $icons = array(
+        $icons = array(
             0 => 'fa-glass',
             1 => 'fa-music',
             2 => 'fa-search',

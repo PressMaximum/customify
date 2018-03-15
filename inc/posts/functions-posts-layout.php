@@ -1,23 +1,21 @@
 <?php
 
+/**
+ * Alias of class Customify_Post_Entry
+ *
+ * @return Customify_Post_Entry
+ */
 function Customify_Post_Entry(){
     return Customify_Post_Entry::get_instance();
 }
 
-if ( ! function_exists( 'customify_the_blog_item' ) ) {
-    function customify_the_blog_item( $post = null ){
-        ?>
-        <div <?php post_class( 'entry',  $post) ?>>
-            <?php
-            Customify_Post_Entry()->set_post( $post );
-            $items_config = Customify()->get_setting('blog_post_item' );
-            Customify_Post_Entry()->build_fields( $items_config );
-            ?>
-        </div><!-- /.entry post --> <?php
-    }
-}
 
 if( ! function_exists( 'customify_blog_posts' ) ) {
+    /**
+     * Display blog posts layout
+     *
+     * @param array $args
+     */
     function customify_blog_posts($args = array())
     {
 
@@ -32,10 +30,9 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
                 ?>
                 <header>
                     <h1 class="page-title"><?php printf( // WPCS: XSS ok.
-                        /* translators: 1: Search query name */
                             __('Search Results for: %s', 'customify'),
                             '<span>' . get_search_query() . '</span>'
-                        ); ?></h1>
+                    ); ?></h1>
                 </header>
                 <?php
             } elseif (is_archive()) {
@@ -71,6 +68,7 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
             if (!is_array($_args)) {
                 $_args = $args;
             }
+
             $pagination = array(
                 'show_paging' => Customify()->get_setting($args['prefix'] . '_pg_show_paging'),
                 'show_nav'    => Customify()->get_setting($args['prefix'] . '_pg_show_nav'),
@@ -91,6 +89,9 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
 }
 
 if( ! function_exists( 'customify_archive_posts' ) ) {
+    /*
+     * Display posts as archive layout
+     */
     function customify_archive_posts(){
         customify_blog_posts( array(
             'el_id' => 'archive-posts',

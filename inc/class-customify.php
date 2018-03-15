@@ -13,6 +13,9 @@ class Customify {
      */
     public $customizer = null;
 
+    /**
+     * Add functions to hooks
+     */
     function init_hooks(){
         add_action( 'after_setup_theme', array( $this, 'theme_setup' ) );
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
@@ -31,6 +34,13 @@ class Customify {
         return '&hellip;';
     }
 
+    /**
+     * Main Customify Instance.
+     *
+     * Ensures only one instance of Customify is loaded or can be loaded.
+     *
+     * @return Customify - Main instance.
+     */
     static function get_instance(){
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
@@ -46,6 +56,12 @@ class Customify {
         return self::$_instance ;
     }
 
+    /**
+     * Get data from method of property
+     *
+     * @param $key
+     * @return bool|mixed
+     */
     function get( $key ){
         if ( method_exists( $this,'get_'.$key ) ) {
             return call_user_func_array( array( $this, 'get_'.$key ), array() );
@@ -183,6 +199,11 @@ class Customify {
 
     }
 
+    /**
+     * Get asset suffix `.min` or empty if WP_DEBUG enabled
+     *
+     * @return string
+     */
     function get_asset_suffix(){
         $suffix = '.min';
         if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -191,6 +212,11 @@ class Customify {
         return $suffix;
     }
 
+    /**
+     * Get theme style.css url
+     *
+     * @return string
+     */
     function get_style_uri(){
         $css_file = get_stylesheet_uri();
         if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
@@ -280,16 +306,15 @@ class Customify {
         $files = array(
             '/inc/template-class.php',                  // Template element classes.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
-            '/inc/metabox.php',                         // Page settings.
+            '/inc/metabox.php',                         // Metabox settings.
             '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
-            '/inc/customizer/admin.php',                // Admin additions.
-            '/inc/panel-builder/panel-builder.php',     // Customizer additions.
+            '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
             '/inc/posts/class-post-entry.php',          // Blog entry builder
-            '/inc/posts/class-posts-layout.php',        // Blog builder config
-            '/inc/posts/functions-posts-layout.php',   // Posts layout function
+            '/inc/posts/class-posts-layout.php',        // Blog posts layout
+            '/inc/posts/functions-posts-layout.php',    // Posts layout functions
         );
 
         foreach( $files as $file ) {

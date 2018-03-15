@@ -6,17 +6,21 @@ class Customify_Customizer_Auto_CSS
     private $fonts = array();
     private $variants = array();
     private $subsets = array();
+    /**
+     * CSS device query settings
+     * @var array
+     */
     public $media_queries = array(
         'all'     => '%s',
-        /*
-        'desktop' => '@media screen and (min-width: 64em) { %s }',
-        'tablet' => '@media screen and (max-width: 64em) and (min-width: 35.5em) { %s }',
-        'mobile' => '@media screen and (max-width: 35.5em) { %s }',
-        */
         'desktop' => '%s',
         'tablet'  => '@media screen and (max-width: 1024px) { %s }',
         'mobile'  => '@media screen and (max-width: 568px) { %s }',
     );
+
+    /**
+     * CSS code for devices
+     * @var array
+     */
     private $css = array(
         'all'     => '',
         'desktop' => '',
@@ -24,19 +28,10 @@ class Customify_Customizer_Auto_CSS
         'mobile'  => ''
     );
 
-    private $styling_fields = array(
-        'color'      => null,
-        'image'      => null,
-        'position'   => null,
-        'cover'      => null,
-        'repeat'     => null,
-        'attachment' => null,
-
-        'border_width' => null,
-        'border_color' => null,
-        'border_style' => null,
-    );
-
+    /**
+     * Default shadow fields
+     * @var array
+     */
     private $box_shadow_fields = array(
         'color'  => null,
         'x'      => 0,

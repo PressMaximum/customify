@@ -10,6 +10,11 @@ class Customify_Post_Entry {
         $this->set_config();
     }
 
+    /**
+     * Set config
+     *
+     * @param null $config
+     */
     function set_config( $config = null ) {
         if ( ! is_array( $config ) ) {
             $config = array();
@@ -27,6 +32,11 @@ class Customify_Post_Entry {
         $this->config = $config;
     }
 
+    /**
+     * Set post data
+     *
+     * @param null $_post
+     */
     function set_post( $_post = null ) {
         if ( ! $_post ) {
             global $post;
@@ -38,6 +48,11 @@ class Customify_Post_Entry {
         $this->post = $_post;
     }
 
+    /**
+     * Main instance
+     *
+     * @return Customify_Post_Entry
+     */
     static function get_instance(){
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
@@ -47,6 +62,7 @@ class Customify_Post_Entry {
 
     /**
      * Trim the excerpt with custom length
+     *
      * @see wp_trim_excerpt
      * @param $text
      * @param null $excerpt_length
@@ -87,6 +103,11 @@ class Customify_Post_Entry {
         return $text;
     }
 
+    /**
+     * Get meta date markup
+     *
+     * @return string
+     */
     function meta_date(){
 
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
@@ -110,6 +131,11 @@ class Customify_Post_Entry {
         return '<span class="posted-on">' . $posted_on . '</span>';
     }
 
+    /**
+     * Get first category markup
+     *
+     * @return string
+     */
     function meta_categories(){
         $html = '';
         if ( 'post' === get_post_type() ) {
@@ -127,20 +153,28 @@ class Customify_Post_Entry {
         return $html;
     }
 
+    /**
+     * Get Tags list markup
+     *
+     * @return string
+     */
     function meta_tags(){
         $html =  '';
         if ( 'post' === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
-                /* translators: 1: list of tags. */
-                // esc_html__( 'Tagged %1$s', 'customify' )
                 $html .= sprintf( '<span class="tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
             }
         }
         return $html;
     }
 
+    /**
+     * Get comment number markup
+     *
+     * @return string
+     */
     function meta_comment(){
         $html =  '';
         if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
@@ -167,6 +201,11 @@ class Customify_Post_Entry {
         return $html;
     }
 
+    /**
+     * Get author markup
+     *
+     * @return string
+     */
     function meta_author(){
         // esc_html_x( 'by %s', 'post author', 'customify' ),
         $byline = sprintf(
@@ -177,6 +216,13 @@ class Customify_Post_Entry {
         return '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
+    /**
+     * Get post meta markup
+     *
+     * @param null $post
+     * @param array $meta_fields
+     * @param array $args
+     */
     function post_meta( $post = null, $meta_fields = array(), $args = array() ){
 
         if ( empty( $meta_fields ) ) {
@@ -212,6 +258,11 @@ class Customify_Post_Entry {
         }
     }
 
+    /**
+     * Post title markup
+     *
+     * @param null $post
+     */
     function post_title( $post = null ){
         if ( is_singular() ) :
             the_title( '<h1 class="entry-title">', '</h1>' );
@@ -220,6 +271,11 @@ class Customify_Post_Entry {
         endif;
     }
 
+    /**
+     *  Post thumbnail markup
+     *
+     * @param null $post
+     */
     function post_thumbnail( $post = null ){
         //if ( has_post_thumbnail() ) {
             ?>
@@ -229,6 +285,10 @@ class Customify_Post_Entry {
             <?php
         //}
     }
+
+    /**
+     * Post excerpt markup
+     */
     function post_excerpt(){
         $text= '';
         if ( $this->post ) {
@@ -252,6 +312,10 @@ class Customify_Post_Entry {
         </div><!-- .entry-content -->
         <?php
     }
+
+    /**
+     * Post content markup
+     */
     function post_content(){
         ?>
         <div class="entry-content">
@@ -261,6 +325,10 @@ class Customify_Post_Entry {
         </div><!-- .entry-content -->
         <?php
     }
+
+    /**
+     * Post readmore
+     */
     function post_readmore()
     {
         if ( ! $this->config['more_display'] ) {
@@ -277,12 +345,27 @@ class Customify_Post_Entry {
         <?php
     }
 
+    /**
+     * Build item markup width field config
+     *
+     * @param string    $field               ame of method to render element content
+     * @param object    $post                WP_Post
+     * @param array     $fields
+     * @param array     $args
+     */
     function build( $field , $post = null, $fields = null, $args = array() ){
         if ( method_exists( $this, 'post_'.$field ) ) {
             call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields, $args ) );
         }
     }
 
+    /**
+     * Build item markup width fields config
+     *
+     * @param $fields
+     * @param null $post
+     * @param array $args
+     */
     function build_fields( $fields , $post = null, $args = array() ){
         foreach ( ( array ) $fields as $item ) {
             $item = wp_parse_args( $item, array(

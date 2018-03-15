@@ -21,10 +21,23 @@ class Customify_Sanitize_Input
         $this->setting = $setting;
     }
 
+    /**
+     * Sanitize css code
+     *
+     * @param $val
+     * @return string
+     */
     static function sanitize_css_code( $val ){
         return wp_kses_post( $val);
     }
 
+    /**
+     * Sanitize Customizer Input
+     *
+     * @param $input
+     * @param $setting
+     * @return array|mixed|null|object|string|void
+     */
     static function sanitize_customizer_input( $input, $setting ){
         $input = wp_unslash( $input );
         if ( ! is_array( $input ) ) {
@@ -36,6 +49,12 @@ class Customify_Sanitize_Input
         return $input;
     }
 
+    /**
+     * Sanitize css ruler input
+     *
+     * @param $value
+     * @return array
+     */
     private function sanitize_css_ruler($value)
     {
         $default = array(
@@ -80,6 +99,14 @@ class Customify_Sanitize_Input
         return $value;
     }
 
+    /**
+     * Sanitize color
+     *
+     * Output can be rgba or hex color code
+     *
+     * @param $color
+     * @return string|void
+     */
     static function sanitize_color($color)
     {
         if (empty($color) || is_array($color)) {
@@ -181,12 +208,6 @@ class Customify_Sanitize_Input
 
         return $value;
     }
-
-    function end_sanitize()
-    {
-        // update_option( 'customify_customizer_config', true );
-    }
-
 
     function sanitize($value, $field = array())
     {
@@ -447,8 +468,6 @@ class Customify_Sanitize_Input
                 }
 
         }
-
-        $this->end_sanitize();
 
         return $value;
     }

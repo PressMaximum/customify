@@ -33,8 +33,16 @@ add_filter( 'customify_the_content', 'capital_P_dangit' );
 add_filter( 'customify_the_content', 'do_shortcode' );
 add_filter( 'customify_the_content', 'convert_smilies' );
 
+// Include the main Customify class.
 require_once get_template_directory().'/inc/class-customify.php';
 
+/**
+ * Main instance of Customify.
+ *
+ * Returns the main instance of Customify.
+ *
+ * @return Customify
+ */
 function Customify(){
     return Customify::get_instance();
 }
