@@ -10,25 +10,30 @@ class Customify_WC {
         return self::$_instance ;
     }
 
+    function is_active(){
+        return  Customify()->is_woocommerce_active();
+    }
+
     function __construct()
     {
-        add_filter( 'customify_get_layout', array( $this, 'shop_layout' ) );
-        add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-        add_filter( 'customify/customizer/config', array( $this, 'customize_shop_sidebars' ) );
-        add_filter( 'customify/sidebar-id', array( $this, 'shop_sidebar_id' ), 15, 2 );
+        if (  $this->is_active() ) {
+            add_filter('customify_get_layout', array($this, 'shop_layout'));
+            add_action('widgets_init', array($this, 'register_sidebars'));
+            add_filter('customify/customizer/config', array($this, 'customize_shop_sidebars'));
+            add_filter('customify/sidebar-id', array($this, 'shop_sidebar_id'), 15, 2);
 
-        add_filter( 'customify_is_header_display', array( $this, 'show_shop_header' ), 15 );
-        add_filter( 'customify_is_footer_display', array( $this, 'show_shop_footer' ), 15 );
-        add_filter( 'customify_site_content_class', array( $this, 'shop_content_layout' ), 15 );
-        add_filter( 'customify_builder_row_display_get_post_id', array( $this, 'builder_row_get_id' ), 15 );
+            add_filter('customify_is_header_display', array($this, 'show_shop_header'), 15);
+            add_filter('customify_is_footer_display', array($this, 'show_shop_footer'), 15);
+            add_filter('customify_site_content_class', array($this, 'shop_content_layout'), 15);
+            add_filter('customify_builder_row_display_get_post_id', array($this, 'builder_row_get_id'), 15);
 
+            add_filter('customify/titlebar/args', array($this, 'titlebar_args'));
+            add_filter('customify/titlebar/config', array($this, 'titlebar_config'), 15, 2);
+            add_filter('customify/titlebar/is-showing', array($this, 'titlebar_is_showing'), 15);
 
-        add_filter( 'customify/titlebar/args', array( $this, 'titlebar_args' ) );
-        add_filter( 'customify/titlebar/config', array( $this, 'titlebar_config' ), 15, 2 );
-        add_filter( 'customify/titlebar/is-showing', array( $this, 'titlebar_is_showing' ), 15 );
-
-        add_filter( 'customify/theme/js', array( $this, 'add_js' ) );
-        add_filter( 'customify/theme/css', array( $this, 'add_css' ) );
+            add_filter('customify/theme/js', array($this, 'add_js'));
+            add_filter('customify/theme/css', array($this, 'add_css'));
+        }
     }
     function add_css( $css_files ){
         $suffix = Customify()->get_asset_suffix();
@@ -250,10 +255,14 @@ class Customify_WC {
         return $layout;
     }
 }
+
 function Customify_WC(){
     return Customify_WC::get_instance();
 }
-Customify_WC();
+
+if ( Customify()->is_woocommerce_active() ) {
+    Customify_WC();
+}
 
 
 /**

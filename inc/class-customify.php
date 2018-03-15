@@ -292,11 +292,6 @@ class Customify {
             '/inc/posts/functions-posts-layout.php',   // Posts layout function
         );
 
-        //WooCommerce
-        if ( $this->is_woocommerce_active() ) {
-            require_once self::$path.'/inc/compatibility/woocommerce/woocommerce.php';
-        }
-
         foreach( $files as $file ) {
             require_once self::$path.$file;
         }
@@ -306,6 +301,7 @@ class Customify {
         }
 
         $this->load_configs();
+        $this->load_compatibility();
 
     }
 
@@ -347,10 +343,6 @@ class Customify {
 
         );
 
-        $compatibility_config_files = array(
-            'breadcrumb-navxt'
-        );
-
         $path = get_template_directory();
         // Load default config values
         require_once $path . "/inc/customizer/configs/config-default.php";
@@ -363,14 +355,23 @@ class Customify {
             }
         }
 
-        // Load site compatibility configs
+    }
+
+    /*
+     * Load site compatibility supports
+     */
+    private function load_compatibility(){
+
+        $compatibility_config_files = array(
+            'breadcrumb-navxt', // Plugin breadcrumb-navxt
+            'woocommerce/woocommerce',  // Plugin WooCommerce
+        );
         foreach ( $compatibility_config_files as  $f ) {
-            $file = $path . "/inc/compatibility/{$f}.php";
+            $file = self::$path . "/inc/compatibility/{$f}.php";
             if ( file_exists( $file ) ) {
                 require_once $file;
             }
         }
-
     }
 
     function is_woocommerce_active(){
