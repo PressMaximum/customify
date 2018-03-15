@@ -56,7 +56,6 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     function __construct($manager, $id, $args = array())
     {
         parent::__construct($manager, $id, $args);
-          add_action( 'customize_controls_print_footer_scripts', array( $this, 'content_js_template' ) );
     }
 
 

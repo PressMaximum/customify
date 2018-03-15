@@ -223,7 +223,7 @@ class Customify_Sanitize_Input
                 $has_device = false;
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_color($value[$device]);
@@ -241,7 +241,7 @@ class Customify_Sanitize_Input
                     $this->skip_devices = true;
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_group($value[$device]);
@@ -260,7 +260,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_repeater($value[$device]);
@@ -283,7 +283,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_media($value[$device]);
@@ -327,7 +327,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 if (!isset($choices[(string )$value[$device]])) {
@@ -353,7 +353,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_checkbox($value[$device]);
@@ -372,7 +372,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_css_ruler($value[$device]);
@@ -391,7 +391,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_slider($value[$device]);
@@ -410,7 +410,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_icon($value[$device]);
@@ -434,7 +434,7 @@ class Customify_Sanitize_Input
                 if ($device_settings && !$this->skip_devices) {
                     if (is_array($value)) {
                         $has_device = false;
-                        foreach (Customify_Customizer()->devices as $device) {
+                        foreach (Customify()->customizer->devices as $device) {
                             if (isset($value[$device])) {
                                 $has_device = true;
                                 $value[$device] = $this->sanitize_text_field_deep($value[$device]);

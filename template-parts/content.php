@@ -24,7 +24,7 @@ global $post;
     <?php }
 
     if ( 'post' === get_post_type() ) :
-        Customify_Blog_Builder()->post_meta( $post, array(
+        Customify_Post_Entry()->post_meta( $post, array(
             array(
                 '_key' => 'author',
             ),

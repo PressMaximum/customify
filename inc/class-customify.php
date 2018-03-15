@@ -286,8 +286,10 @@ class Customify {
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/customizer/admin.php',                // Admin additions.
             '/inc/customizer-layout-builder/init.php',  // Customizer additions.
-            '/inc/posts/post-builder.php',              // Blog builder
-            '/inc/posts/posts.php',                     // Blog builder config
+
+            '/inc/posts/class-post-entry.php',          // Blog entry builder
+            '/inc/posts/class-posts-layout.php',        // Blog builder config
+            '/inc/posts/functions-posts-layout.php',   // Posts layout function
 
             '/inc/customizer/customizer-config/layouts.php',
             '/inc/customizer/customizer-config/blogs.php',

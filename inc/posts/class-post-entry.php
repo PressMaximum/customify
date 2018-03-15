@@ -1,6 +1,6 @@
 <?php
 
-class Customify_Blog_Builder {
+class Customify_Post_Entry {
     public $post;
     static $_instance;
     public $config = array();
@@ -294,23 +294,5 @@ class Customify_Blog_Builder {
                 $this->build( $item['_key'] , $post, $item['fields'], $args );
             }
         }
-    }
-}
-
-function Customify_Blog_Builder(){
-    return Customify_Blog_Builder::get_instance();
-}
-
-
-if ( ! function_exists( 'customify_the_blog_item' ) ) {
-    function customify_the_blog_item( $post = null ){
-        ?>
-        <div <?php post_class( 'entry',  $post) ?>>
-            <?php
-            Customify_Blog_Builder()->set_post( $post );
-            $items_config = Customify()->get_setting('blog_post_item' );
-            Customify_Blog_Builder()->build_fields( $items_config );
-            ?>
-        </div><!-- /.entry post --> <?php
     }
 }
