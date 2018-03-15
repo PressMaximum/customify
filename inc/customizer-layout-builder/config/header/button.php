@@ -126,11 +126,11 @@ class Customify_Builder_Item_Button {
 
 
 	function render() {
-		$text          = Customify_Customizer()->get_setting( 'header_button_text' );
-		$icon          = Customify_Customizer()->get_setting( 'header_button_icon' );
-		$new_window    = Customify_Customizer()->get_setting( 'header_button_target' );
-		$link          = Customify_Customizer()->get_setting( 'header_button_link' );
-		$icon_position = Customify_Customizer()->get_setting( 'header_button_position' );
+		$text          = Customify()->get_setting( 'header_button_text' );
+		$icon          = Customify()->get_setting( 'header_button_icon' );
+		$new_window    = Customify()->get_setting( 'header_button_target' );
+		$link          = Customify()->get_setting( 'header_button_link' );
+		$icon_position = Customify()->get_setting( 'header_button_position' );
 
 		$classes = array( 'customify-btn customify-builder-btn' );
 

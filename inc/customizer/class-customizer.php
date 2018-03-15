@@ -14,14 +14,26 @@ class  Customify_Customizer
     public $devices = array('desktop', 'tablet', 'mobile');
     private $selective_settings = array();
 
-    private $controls = array();
-
     function __construct()
     {
-        add_action('customize_register', array($this, 'register'));
-        add_action('customize_preview_init', array($this, 'preview_js'));
+        $this->init();
+    }
 
-        add_action('wp_ajax_customify/customizer/ajax/get_icons', array($this, 'get_icons'));
+    function init(){
+
+        require_once get_template_directory() . '/inc/customizer/class-customizer-sanitize.php';
+        require_once get_template_directory() . '/inc/customizer/class-customizer-auto-css.php';
+
+        if ( is_admin() || is_customize_preview() ) {
+            add_action('customize_register', array($this, 'register'));
+            add_action('customize_preview_init', array($this, 'preview_js'));
+            add_action('wp_ajax_customify/customizer/ajax/get_icons', array($this, 'get_icons'));
+
+            require_once get_template_directory() . '/inc/customizer/class-customizer-fonts.php';
+            require_once get_template_directory() . '/inc/customizer/class-customizer.php';
+        }
+
+        add_action('wp_ajax_customify__reset_section', array( 'Customify_Customizer', 'reset_customize_section' ) );
     }
 
     static function get_instance()
@@ -35,6 +47,25 @@ class  Customify_Customizer
     /**
      * Reset Customize section
      */
+    static function reset_customize_section()
+    {
+        if (!current_user_can('customize')) {
+            wp_send_json_error();
+        }
+
+        $settings = isset($_POST['settings']) ? wp_unslash($_POST['settings']) : array();
+
+        foreach ($settings as $k) {
+            $k = sanitize_text_field($k);
+            remove_theme_mod($k);
+        }
+
+        wp_send_json_success();
+    }
+
+    /**
+     * Reset Customize section
+     */
     function get_icons()
     {
         if (!current_user_can('customize')) {
@@ -42,7 +73,7 @@ class  Customify_Customizer
         }
 
         require_once get_template_directory() . '/inc/customizer/class-customizer-icons.php';
-        wp_send_json_success(Customify_Font_Icons()->get_icons());
+        wp_send_json_success(Customify_Font_Icons::get_instance()->get_icons());
         die();
     }
 
@@ -52,15 +83,15 @@ class  Customify_Customizer
     function preview_js()
     {
         if (is_customize_preview()) {
-            $suffix = Customify_Init()->get_asset_suffix();
+            $suffix = Customify()->get_asset_suffix();
 
             wp_enqueue_script('customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css' . $suffix . '.js', array('customize-preview'), '20151215', true);
             wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer' . $suffix . '.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
             wp_localize_script('customify-customizer-auto-css', 'Customify_Preview_Config', array(
-                'fields'         => Customify_Customizer::get_config(),
+                'fields'         => $this->get_config(),
                 'devices'        => $this->devices,
-                'typo_fields'    => Customify_Customizer()->get_typo_fields(),
-                'styling_config' => Customify_Customizer()->get_styling_config(),
+                'typo_fields'    => $this->get_typo_fields(),
+                'styling_config' => $this->get_styling_config(),
             ));
         }
     }
@@ -82,22 +113,17 @@ class  Customify_Customizer
                     'name'        => null,
                     'type'        => null,
                     'description' => null,
-
                     'capability' => null,
                     'mod'        => null, // theme_mod || option default theme_mod
+                    'settings'  => null,
 
-                    'settings' => null,
-
-                    'device'          => null,
-                    'device_settings' => null,
-
-                    'field_class'          => null,
+                    'active_callback'      => null, // For control
 
                     // For settings
-                    'sanitize_callback'    => 'customify_sanitize_customizer_input',
+                    'sanitize_callback'    => array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' ),
                     'sanitize_js_callback' => null,
                     'theme_supports'       => null,
-                    //'transport'             => 'postMessage', // refresh
+                    //'transport'          => 'postMessage', // or refresh
                     'default'              => null,
 
                     // for selective refresh
@@ -105,9 +131,10 @@ class  Customify_Customizer
                     'render_callback'      => null,
                     'css_format'           => null,
 
-                    // For control
-                    'active_callback'      => null,
+                    'device'          => null,
+                    'device_settings' => null,
 
+                    'field_class'          => null, // Custom class for control
                 ));
 
                 if (!isset($f['type'])) {
@@ -641,7 +668,6 @@ class  Customify_Customizer
             $size = 'full';
         }
         // attachment_url_to_postid
-
         if (is_numeric($value)) {
             $image_attributes = wp_get_attachment_image_src($value, $size);
             if ($image_attributes) {
@@ -698,11 +724,7 @@ class  Customify_Customizer
         return false;
     }
 
-
     function load_controls(){
-
-        //require_once get_template_directory() . '/inc/customizer/customizer-control.php';
-
         $fields = array(
             'base',
             'select',
@@ -745,14 +767,15 @@ class  Customify_Customizer
                 require_once $file;
 
                 if ( $control_class_name ) {
-                    add_action( 'customize_controls_print_footer_scripts', array( $control_class_name, 'field_template' ) );
+                    if ( method_exists( $control_class_name, 'field_template' ) ) {
+                        add_action( 'customize_controls_print_footer_scripts', array( $control_class_name, 'field_template' ) );
+                    }
                 }
-
-
             }
         }
 
     }
+
 
     /**
      * Register Customize Settings
@@ -761,6 +784,11 @@ class  Customify_Customizer
      */
     function register($wp_customize)
     {
+
+        //Custom panel
+        require_once get_template_directory() . '/inc/customizer/class-customify-wp-customize-panel.php';
+        // Load custom section
+        require_once get_template_directory() . '/inc/customizer/class-customify-wp-customize-section.php';
 
         // Register new panel and section type
         $wp_customize->register_panel_type('Customify_WP_Customize_Panel');
@@ -818,16 +846,13 @@ class  Customify_Customizer
                         'sanitize_callback'    => $args['sanitize_callback'],
                         'sanitize_js_callback' => $args['sanitize_js_callback'],
                         'theme_supports'       => $args['theme_supports'],
-                        //'transport' => $args['transport'],
                         'type'                 => $args['mod'],
-                        //'default' => $args['default'],
                     );
                     $settings_args['default'] = apply_filters('customify/customize/settings-default', $args['default'], $args['name']);
 
-
                     $settings_args['transport'] = 'refresh';
                     if (!$settings_args['sanitize_callback']) {
-                        $settings_args['sanitize_callback'] = 'customify_sanitize_customizer_input';
+                        $settings_args['sanitize_callback'] = array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' );
                     }
 
                     foreach ($settings_args as $k => $v) {
@@ -863,7 +888,7 @@ class  Customify_Customizer
                     }
                     unset($args['default']);
 
-                    $wp_customize->add_setting($name, array_merge(array('sanitize_callback' => 'customify_sanitize_customizer_input'), $settings_args));
+                    $wp_customize->add_setting($name, array_merge(array('sanitize_callback' => array( 'Customify_Sanitize_Input', 'sanitize_customizer_input' ) ), $settings_args));
 
                     $control_class_name = 'Customify_Customizer_Control_';
                     $tpl_type = str_replace( '_', ' ', $args['setting_type'] );
@@ -889,7 +914,7 @@ class  Customify_Customizer
                             $this->selective_settings[$__id] = array(
                                 'settings'            => array(),
                                 'selector'            => $selective_refresh['selector'],
-                                'container_inclusive' => $s_id == 'Customify_Customizer_Auto_CSS' ? false : true,
+                                'container_inclusive' => ( strpos( $__id , 'Customify_Customizer_Auto_CSS' ) === false ) ? false : true,
                                 'render_callback'     => $s_id,
                             );
 
@@ -903,13 +928,11 @@ class  Customify_Customizer
 
         } // End loop config
 
-        // remove_partial
+        // Remove partial for default custom logo and add this by theme custom
         $wp_customize->selective_refresh->remove_partial('custom_logo');
-
 
         $wp_customize->get_section('title_tagline')->panel = 'header_settings';
         $wp_customize->get_section('title_tagline')->title = __('Logo & Site Identity', 'customify');
-
         $wp_customize->get_setting('header_textcolor')->transport = 'postMessage';
         // add selective refresh
         $wp_customize->get_setting('custom_logo')->transport = 'postMessage';
@@ -928,11 +951,10 @@ class  Customify_Customizer
         }
 
         // For live CSS
-
         $wp_customize->add_setting('customify__css', array(
             'default'           => '',
             'transport'         => 'postMessage',
-            'sanitize_callback' => 'customify_sanitize_css_code',
+            'sanitize_callback' => array( 'Customify_Sanitize_Input', 'sanitize_css_code' ),
         ));
 
         do_action('customify/customize/register_completed', $this);

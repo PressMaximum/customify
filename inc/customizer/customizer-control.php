@@ -72,7 +72,7 @@ class Customify_Customizer_Control extends WP_Customize_Control {
             wp_enqueue_script('jquery-ui-sortable');
         }
 
-        $suffix = Customify_Init()->get_asset_suffix();
+        $suffix = Customify()->get_asset_suffix();
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
@@ -93,9 +93,9 @@ class Customify_Customizer_Control extends WP_Customize_Control {
                     'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
                     'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
                 ),
-                'typo_fields' => Customify_Customizer()->get_typo_fields(),
-                'styling_config' => Customify_Customizer()->get_styling_config(),
-                'devices' => Customify_Customizer()->devices,
+                'typo_fields' => Customify()->customizer->get_typo_fields(),
+                'styling_config' => Customify()->customizer->get_styling_config(),
+                'devices' => Customify()->customizer->devices,
             ));
             self::$_icon_loaded = true;
         }

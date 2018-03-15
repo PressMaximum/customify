@@ -31,13 +31,13 @@ class Customify_WC {
         add_filter( 'customify/theme/css', array( $this, 'add_css' ) );
     }
     function add_css( $css_files ){
-        $suffix = Customify_Init()->get_asset_suffix();
+        $suffix = Customify()->get_asset_suffix();
         $css_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
         return $css_files;
     }
 
     function add_js( $js_files ){
-        $suffix = Customify_Init()->get_asset_suffix();
+        $suffix = Customify()->get_asset_suffix();
         $js_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/js/compatibility/woocommerce'.$suffix.'.js';
         return $js_files;
     }
@@ -113,12 +113,12 @@ class Customify_WC {
 
         if ( is_shop() ) {
             // Do not show if page settings disable page title
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_page' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_page' ) ) {
                 $show = false;
             } else {
                 $show = true;
             }
-            if ( Customify_Init()->is_using_post() ) {
+            if ( Customify()->is_using_post() ) {
                 $breadcrumb_display = get_post_meta( wc_get_page_id( 'shop' ), '_customify_breadcrumb_display', true);
                 if ( $breadcrumb_display == 'hide' ) {
                     $show = false;
@@ -228,8 +228,8 @@ class Customify_WC {
 
     function shop_layout( $layout = false ){
         if ( $this->is_shop_pages() ) {
-            $default    = Customify_Customizer()->get_setting('sidebar_layout');
-            $page       = Customify_Customizer()->get_setting('page_sidebar_layout');
+            $default    = Customify()->get_setting('sidebar_layout');
+            $page       = Customify()->get_setting('page_sidebar_layout');
             $page_id =  wc_get_page_id('shop');
             $page_custom = get_post_meta( $page_id, '_customify_sidebar', true );
             if ( $page_custom ) {
@@ -242,7 +242,7 @@ class Customify_WC {
         }
 
         if ( is_product() ) {
-            $product_custom = Customify_Customizer()->get_setting( 'product_sidebar_layout' );
+            $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
             if ( $product_custom && $product_custom != 'default' ) {
                 $layout = $product_custom;
             }

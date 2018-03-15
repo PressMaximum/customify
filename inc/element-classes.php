@@ -26,7 +26,7 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
             $classes[] = $layout;
         }
 
-        $sidebar_vertical_border = Customify_Customizer()->get_setting('sidebar_vertical_border');
+        $sidebar_vertical_border = Customify()->get_setting('sidebar_vertical_border');
         if ($sidebar_vertical_border == 'sidebar_vertical_border') {
             $classes[] = 'sidebar_vertical_border';
         }
@@ -36,12 +36,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
         }
 
         // Site layout mode.
-        $site_layout = Customify_Customizer()->get_setting('site_layout');
+        $site_layout = Customify()->get_setting('site_layout');
         if ($site_layout) {
             $classes[] = sanitize_text_field($site_layout);
         }
 
-        $animate = Customify_Customizer()->get_setting( 'header_sidebar_animate' );
+        $animate = Customify()->get_setting( 'header_sidebar_animate' );
         if ( ! $animate ) {
             $animate = 'menu_sidebar_slide_left';
         }
@@ -57,7 +57,7 @@ if ( ! function_exists( 'customify_site_classes' ) )  {
     function customify_site_classes( ){
         $classes = array();
         $classes[] = 'site';
-        $box_shadow = Customify_Customizer()->get_setting( 'site_box_shadow' );
+        $box_shadow = Customify()->get_setting( 'site_box_shadow' );
         if ( $box_shadow ) {
             $classes[] = esc_attr( $box_shadow );
         }

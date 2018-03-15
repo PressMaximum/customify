@@ -496,7 +496,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 		if ( $this->data ) {
 			return $this->data;
 		}
-		$data = Customify_Customizer()->get_setting( $this->control_id );
+		$data = Customify()->get_setting( $this->control_id );
 		$data = wp_parse_args( $data, array(
 			'desktop' => '',
 			'tablet'  => '',
@@ -700,7 +700,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
 			$item_id    = $item['id'];
 			$merge_key  = $this->id . '_' . $item_id . '_merge';
-			$merge      = Customify_Customizer()->get_setting( $merge_key, $device );
+			$merge      = Customify()->get_setting( $merge_key, $device );
 			$merge_next = false;
 			$merge_prev = false;
 			if ( $merge == 'no' || $merge == '0' ) {
@@ -709,7 +709,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 
 			if ( $next_item ) {
 				$merge_key_next = $this->id . '_' . $next_item['id'] . '_merge';
-				$merge_next     = Customify_Customizer()->get_setting( $merge_key_next, $device );
+				$merge_next     = Customify()->get_setting( $merge_key_next, $device );
 			}
 
 			if ( $merge_next == 'no' || $merge_next == '0' ) {
@@ -882,7 +882,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 							$align_classes = 'customify-grid-top';
 						}
 
-						$row_layout = Customify_Customizer()->get_setting( $this->id . '_' . $row_id . '_layout' );
+						$row_layout = Customify()->get_setting( $this->id . '_' . $row_id . '_layout' );
 						if ( $row_layout ) {
 							$classes[] = sanitize_text_field( $row_layout );
 						}
@@ -937,7 +937,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 	function render_mobile_sidebar() {
 		$id           = 'sidebar';
 		$mobile_items = $this->get_row_settings( $id, 'mobile' );
-		$menu_sidebar_skin = Customify_Customizer()->get_setting('header_sidebar_text_mode');
+		$menu_sidebar_skin = Customify()->get_setting('header_sidebar_text_mode');
 
 		if ( ! is_array( $mobile_items ) ) {
 			$mobile_items = array();
@@ -988,7 +988,7 @@ class Customify_Customizer_Layout_Builder_Frontend {
 	}
 
 	function close_icon( $class = '' ) {
-		$menu_sidebar_skin = Customify_Customizer()->get_setting('header_sidebar_text_mode');
+		$menu_sidebar_skin = Customify()->get_setting('header_sidebar_text_mode');
 		$close = '<a class="close is-size-medium '. $menu_sidebar_skin . esc_attr( $class ) . '" href="#">
         <span class="hamburger hamburger--squeeze is-active">
             <span class="hamburger-box">

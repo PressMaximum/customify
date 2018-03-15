@@ -76,10 +76,10 @@ class Customify_Builder_Footer_Item_Copyright {
         $tags = array(
             'current_year' =>  date_i18n('Y'),
             'site_title' =>  get_bloginfo('name'),
-            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', esc_url( Customify_Init::$theme_url ), esc_html( Customify_Init::$theme_author ) ),
+            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', esc_url( Customify::$theme_url ), esc_html( Customify::$theme_author ) ),
         );
 
-        $content = Customify_Customizer()->get_setting( $this->name );
+        $content = Customify()->get_setting( $this->name );
 
         foreach ( $tags as $k => $v ){
             $content = str_replace('{'.$k.'}', $v, $content );

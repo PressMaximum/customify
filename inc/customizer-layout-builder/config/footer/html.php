@@ -72,7 +72,7 @@ class Customify_Builder_Footer_Item_HTML {
      * Optional. Render item content
      */
     function render(){
-        $content = Customify_Customizer()->get_setting( $this->name );
+        $content = Customify()->get_setting( $this->name );
         echo '<div class="builder-footer-html-item item-footer--html">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';

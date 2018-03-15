@@ -15,10 +15,10 @@ class Customify_Blog_Builder {
             $config = array();
         }
         $config = wp_parse_args( $config, array(
-            'excerpt_length' => Customify_Customizer()->get_setting('blog_post_excerpt_length' ),
+            'excerpt_length' => Customify()->get_setting('blog_post_excerpt_length' ),
             'excerpt_more' => null,
-            'thumbnail_size' => Customify_Customizer()->get_setting('blog_post_thumb_size' ),
-            'meta_config' => Customify_Customizer()->get_setting('blog_post_meta' ),
+            'thumbnail_size' => Customify()->get_setting('blog_post_thumb_size' ),
+            'meta_config' => Customify()->get_setting('blog_post_meta' ),
             'meta_sep' => _x( '-', 'post meta separator', 'customify' ),
             'more_text' => null,
             'more_display' => 1,
@@ -308,7 +308,7 @@ if ( ! function_exists( 'customify_the_blog_item' ) ) {
         <div <?php post_class( 'entry',  $post) ?>>
             <?php
             Customify_Blog_Builder()->set_post( $post );
-            $items_config = Customify_Customizer()->get_setting('blog_post_item' );
+            $items_config = Customify()->get_setting('blog_post_item' );
             Customify_Blog_Builder()->build_fields( $items_config );
             ?>
         </div><!-- /.entry post --> <?php

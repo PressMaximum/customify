@@ -59,11 +59,11 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	function customify_get_layout() {
 	    $layout = apply_filters( 'customify_get_layout', false );
 	    if ( ! $layout ) {
-            $default    = Customify_Customizer()->get_setting('sidebar_layout');
-            $page       = Customify_Customizer()->get_setting('page_sidebar_layout');
-            $blog_posts = Customify_Customizer()->get_setting('posts_sidebar_layout');
-            $archive    = Customify_Customizer()->get_setting('posts_archives_sidebar_layout');
-            $search     = Customify_Customizer()->get_setting('search_sidebar_layout');
+            $default    = Customify()->get_setting('sidebar_layout');
+            $page       = Customify()->get_setting('page_sidebar_layout');
+            $blog_posts = Customify()->get_setting('posts_sidebar_layout');
+            $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
+            $search     = Customify()->get_setting('search_sidebar_layout');
             if (is_search()) {
                 $layout = $search;
             } elseif (is_archive()) {
@@ -231,8 +231,8 @@ if ( ! function_exists( 'customify_show_post_title' ) ) {
      */
     function customify_is_post_title_display(){
         $show = true;
-        if ( Customify_Init()->is_using_post() ) {
-            $disable = get_post_meta( Customify_Init()->get_current_post_id(), '_customify_disable_page_title', true);
+        if ( Customify()->is_using_post() ) {
+            $disable = get_post_meta( Customify()->get_current_post_id(), '_customify_disable_page_title', true);
             if ( $disable ) {
                 $show = false;
             }

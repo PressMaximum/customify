@@ -270,11 +270,11 @@ class Customify_Builder_Item_Social_Icons {
 
 	function render( $item_config ) {
 
-		$shape = Customify_Customizer()->get_setting( 'header_social_icons_shape', 'all' );
-		$color_type = Customify_Customizer()->get_setting( 'header_social_icons_color_type' );
-		$items = Customify_Customizer()->get_setting( 'header_social_icons_items' );
-		$nofollow      = Customify_Customizer()->get_setting( 'header_social_icons_nofollow' );
-		$target_blank = Customify_Customizer()->get_setting( 'header_social_icons_target' );
+		$shape = Customify()->get_setting( 'header_social_icons_shape', 'all' );
+		$color_type = Customify()->get_setting( 'header_social_icons_color_type' );
+		$items = Customify()->get_setting( 'header_social_icons_items' );
+		$nofollow      = Customify()->get_setting( 'header_social_icons_nofollow' );
+		$target_blank = Customify()->get_setting( 'header_social_icons_target' );
 
 		$rel = '';
 		if ( $nofollow == 1 ) {

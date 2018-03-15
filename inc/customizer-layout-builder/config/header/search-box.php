@@ -206,7 +206,7 @@ class Customify_Builder_Item_Search_Box
     function render()
     {
 
-        $placeholder = Customify_Customizer()->get_setting( $this->section.'_placeholder' );
+        $placeholder = Customify()->get_setting( $this->section.'_placeholder' );
         $placeholder = sanitize_text_field( $placeholder );
         echo '<div class="header-' . esc_attr($this->id) . '-item item--'.esc_attr( $this->id ).'">';
 ?>

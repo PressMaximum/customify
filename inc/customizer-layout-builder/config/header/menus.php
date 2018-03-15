@@ -235,12 +235,12 @@ class Customify_Builder_Item_Primary_Menu {
     }
 
     function render(){
-        $style = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'_style') );
+        $style = sanitize_text_field( Customify()->get_setting($this->prefix.'_style') );
         if ( $style ) {
             $style = sanitize_text_field( $style );
         }
 
-        $hide_arrow = sanitize_text_field( Customify_Customizer()->get_setting($this->prefix.'__hide-arrow') );
+        $hide_arrow = sanitize_text_field( Customify()->get_setting($this->prefix.'__hide-arrow') );
         if ( $hide_arrow ) {
             $style.=' hide-arrow-active';
         }

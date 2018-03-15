@@ -96,10 +96,10 @@ class Customify_Builder_Item_Nav_Icon{
     }
 
     function render(){
-        $label = sanitize_text_field( Customify_Customizer()->get_setting( 'nav_icon_text' ) );
-        $show_label = Customify_Customizer()->get_setting('nav_icon_show_text', 'all' );
-        $style = sanitize_text_field( Customify_Customizer()->get_setting('nav_icon_style' ) );
-        $sizes = Customify_Customizer()->get_setting('nav_icon_size', 'all' );
+        $label = sanitize_text_field( Customify()->get_setting( 'nav_icon_text' ) );
+        $show_label = Customify()->get_setting('nav_icon_show_text', 'all' );
+        $style = sanitize_text_field( Customify()->get_setting('nav_icon_style' ) );
+        $sizes = Customify()->get_setting('nav_icon_size', 'all' );
 
         $classes = array('menu-mobile-toggle item-button');
         $label_classes = array( 'nav-icon--label' );

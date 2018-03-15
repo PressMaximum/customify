@@ -56,7 +56,7 @@ class Customify_Font_Icons
 
         $config= Customify_Customizer::get_config();
         foreach( $config as $f ) {
-            $value = Customify_Customizer()->get_setting( $f['name'] );
+            $value = Customify()->get_setting( $f['name'] );
             $this->_picked_icon( $value );
         }
 
@@ -865,9 +865,4 @@ class Customify_Font_Icons
         return apply_filters('customify/customizer/font_icons/font_awesome_icons', $icons);
     }
 
-}
-
-function Customify_Font_Icons()
-{
-    return Customify_Font_Icons::get_instance();
 }

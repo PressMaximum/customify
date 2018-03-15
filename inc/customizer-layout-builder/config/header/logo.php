@@ -95,9 +95,9 @@ class Customify_Builder_Item_Logo {
 
     function logo(){
         $custom_logo_id = get_theme_mod( 'custom_logo' );
-        $logo_image = Customify_Customizer()->get_media( $custom_logo_id, 'full' );
-        $logo_retina = Customify_Customizer()->get_setting( 'header_logo_retina' );
-        $logo_retina_image = Customify_Customizer()->get_media( $logo_retina );
+        $logo_image = Customify()->get_media( $custom_logo_id, 'full' );
+        $logo_retina = Customify()->get_setting( 'header_logo_retina' );
+        $logo_retina_image = Customify()->get_media( $logo_retina );
 
         if ( $logo_image ) {
             ?>
@@ -115,9 +115,9 @@ class Customify_Builder_Item_Logo {
      *
      */
     function render(){
-        $show_name      = Customify_Customizer()->get_setting( 'header_logo_name' );
-        $show_desc      = Customify_Customizer()->get_setting( 'header_logo_desc' );
-        $image_position = Customify_Customizer()->get_setting( 'header_logo_pos' );
+        $show_name      = Customify()->get_setting( 'header_logo_name' );
+        $show_desc      = Customify()->get_setting( 'header_logo_desc' );
+        $image_position = Customify()->get_setting( 'header_logo_pos' );
         ?>
         <div class="site-branding logo-<?php echo esc_attr( $image_position ); ?>">
             <?php

@@ -151,30 +151,30 @@ class Customify_TitleBar {
             $is_showing = true;
 
             if ( is_category() ){
-                if ( ! Customify_Customizer()->get_setting( 'titlebar_display_cat' ) ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_cat' ) ) {
                     $is_showing = false;
                 }
             } elseif( is_search() ) {
-                if ( ! Customify_Customizer()->get_setting( 'titlebar_display_search' ) ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_search' ) ) {
                     $is_showing = false;
                 }
             } elseif( is_archive() ) {
-                if ( ! Customify_Customizer()->get_setting( 'titlebar_display_archive' ) ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_archive' ) ) {
                     $is_showing = false;
                 }
             } elseif ( is_page() || ( ! is_front_page() && is_home() ) || ( is_front_page() && ! is_home() )  ) { // is page or page for posts or is front page
-                if ( ! Customify_Customizer()->get_setting( 'titlebar_display_page' ) ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_page' ) ) {
                     $is_showing = false;
                 }
             }  elseif ( is_single() ) {
-                if ( ! Customify_Customizer()->get_setting( 'titlebar_display_post' ) ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_post' ) ) {
                     $is_showing = false;
                 }
             }
 
             // Do not show if page settings disable page title
-            if ( Customify_Init()->is_using_post() ) {
-                $disable = get_post_meta(Customify_Init()->get_current_post_id(), '_customify_disable_page_title', true);
+            if ( Customify()->is_using_post() ) {
+                $disable = get_post_meta(Customify()->get_current_post_id(), '_customify_disable_page_title', true);
                 if ( $disable ) {
                     $is_showing = false;
                 }
@@ -198,8 +198,8 @@ class Customify_TitleBar {
             return '';
         }
 
-        if ( Customify_Init()->is_using_post() ) {
-            $title =  get_the_title( Customify_Init()->get_current_post_id() );
+        if ( Customify()->is_using_post() ) {
+            $title =  get_the_title( Customify()->get_current_post_id() );
         } elseif( is_search() ) {
             $title = sprintf( // WPCS: XSS ok.
             /* translators: 1: Search query name */
