@@ -968,7 +968,7 @@ class  Customify_Customizer
                             $this->selective_settings[$__id] = array(
                                 'settings'            => array(),
                                 'selector'            => $selective_refresh['selector'],
-                                'container_inclusive' => (strpos($__id, 'Customify_Customizer_Auto_CSS') === false) ? false : true,
+                                'container_inclusive' => (strpos($__id, 'Customify_Customizer_Auto_CSS') === false) ? true : false,
                                 'render_callback'     => $s_id,
                             );
 
