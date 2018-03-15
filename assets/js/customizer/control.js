@@ -1447,7 +1447,6 @@
                     options.variable = 'data';
                 }
 
-                console.log( '__id', id );
                 compiled = _.template($('#' + id).html(), null, options);
                 return compiled(data);
             };

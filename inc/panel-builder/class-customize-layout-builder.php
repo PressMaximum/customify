@@ -212,7 +212,12 @@ class Customify_Customize_Layout_Builder {
             if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
                 $name  = $field['name'];
                 $value = get_theme_mod( $name );
-                $new_template_data[ $name ] = $value;
+                if ( is_array( $value ) ) {
+                    $value = array_filter( $value );
+                }
+                if ( $value && ! empty( $value ) ) {
+                    $new_template_data[ $name ] = $value;
+                }
             }
         }
 

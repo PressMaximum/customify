@@ -1552,12 +1552,14 @@
 
         _.each( data, function( value, key ){
             if ( wpcustomize.control( key ) ) {
-                wpcustomize.control( key ).setting.set( encodeValue( value ) );
+                if ( ! _.isEmpty( value ) ) {
+                    wpcustomize.control( key ).setting.set( encodeValue( value ) );
+                }
             }
         } );
 
         var overlay = $( '.wp-full-overlay' );
-        overlay.addClass( 'customize-loading' );
+        overlay.addClass( 'customize-active full-overlay-active customize-loading' );
 
         var onceProcessingComplete = function(){
 
