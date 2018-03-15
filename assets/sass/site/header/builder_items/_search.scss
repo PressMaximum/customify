@@ -58,7 +58,8 @@
 .header-search-form {
     display: flex;
     margin-bottom: 0px;
-    width: 100%;
+    width: 200px;
+    max-width: 100%;
     label {
         flex-basis: 100%;
     }
@@ -134,11 +135,3 @@
 }
 
 // Search box
-.item--inner.builder-item--search_box {
-    width: 100%;
-}
-.header-search_box-item  {
-    .search-submit {
-
-    }
-}

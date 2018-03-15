@@ -173,6 +173,16 @@ class Customify_Builder_Item_Search_Icon
             ),
 
             array(
+                'name'            => $this->section . '_modal_width',
+                'type'            => 'slider',
+                'device_settings' => true,
+                'section'         => $this->section,
+                'selector'        => "$selector .header-search-modal",
+                'css_format'      => 'width: {{value}};',
+                'label'           => __( 'Search Modal Width', 'customify' ),
+            ),
+
+            array(
                 'name'            => $this->section . '_modal_font_size',
                 'type'            => 'typography',
                 'section'         => $this->section,

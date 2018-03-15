@@ -61,6 +61,17 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
+                'name'            => $this->section . '_width',
+                'type'            => 'slider',
+                'device_settings' => true,
+                'section'         => $this->section,
+                'selector'        => "$selector .header-search-form",
+                'css_format'      => 'width: {{value}};',
+                'label'           => __( 'Input Width', 'customify' ),
+                'description'     => __( 'Note: The width can not greater than grid width.', 'customify' ),
+            ),
+
+            array(
                 'name'            => $this->section . '_height',
                 'type'            => 'slider',
                 'device_settings' => true,

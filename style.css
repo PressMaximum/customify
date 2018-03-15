@@ -3399,7 +3399,8 @@ article.comment .comment-post-author {
 .header-search-form {
   display: flex;
   margin-bottom: 0px;
-  width: 100%;
+  width: 200px;
+  max-width: 100%;
 }
 .header-search-form label {
   flex-basis: 100%;
@@ -3473,10 +3474,6 @@ article.comment .comment-post-author {
 }
 .header-search-modal .search-submit {
   color: #AAAAAA;
-}
-
-.item--inner.builder-item--search_box {
-  width: 100%;
 }
 
 /* Social Icons */
