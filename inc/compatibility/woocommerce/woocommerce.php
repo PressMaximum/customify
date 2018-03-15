@@ -132,13 +132,13 @@ class Customify_WC {
                 }
             }
         } else if (is_product_taxonomy()) {
-            if (Customify_Customizer()->get_setting('titlebar_display_product_tax')) {
+            if (Customify()->get_setting('titlebar_display_product_tax')) {
                 $show = true;
             } else {
                 $show = false;
             }
         } elseif (is_product()) {
-            if (Customify_Customizer()->get_setting('titlebar_display_product')) {
+            if (Customify()->get_setting('titlebar_display_product')) {
                 $show = true;
             } else {
                 $show = false;

@@ -407,7 +407,6 @@
                 } else {
                     options.variable = 'data';
                 }
-                console.log( 'id', id );
                 compiled = _.template($('#' + id).html(), null, options);
                 return compiled(data);
             };
@@ -1159,7 +1158,6 @@
             var control = this;
             var template = control.getTemplate();
             var template_id = 'tmpl-field-' + control.type + '-' + field.type;
-            console.log( 'template_id', template_id );
             if ($('#' + template_id).length == 0) {
                 template_id = 'tmpl-field-' + control.type + '-text';
             }
