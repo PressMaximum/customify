@@ -276,30 +276,20 @@ class Customify {
         wp_enqueue_style( 'customify-admin',  get_template_directory_uri() . '/assets/css/admin/admin.css', false, self::$version );
     }
 
-    function includes(){
+    private function includes(){
         $files = array(
             '/inc/template-class.php',                  // Template element classes.
-            '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPerss and itself (huh?).
-            '/inc/metabox.php',                         //Page settings.
-            '/inc/template-tags.php',                   //  Custom template tags for this theme.
+            '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
+            '/inc/metabox.php',                         // Page settings.
+            '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/customizer/admin.php',                // Admin additions.
-            '/inc/customizer-layout-builder/init.php',  // Customizer additions.
+            '/inc/panel-builder/panel-builder.php',     // Customizer additions.
 
             '/inc/posts/class-post-entry.php',          // Blog entry builder
             '/inc/posts/class-posts-layout.php',        // Blog builder config
             '/inc/posts/functions-posts-layout.php',   // Posts layout function
-
-            '/inc/customizer/customizer-config/layouts.php',
-            '/inc/customizer/customizer-config/blogs.php',
-            '/inc/customizer/customizer-config/styling.php',
-            '/inc/customizer/customizer-config/titlebar.php',
-            '/inc/customizer/customizer-config/compatibility.php',
-
-            // compatibility
-            '/inc/compatibility/breadcrumb-navxt.php',
-
         );
 
         //WooCommerce
@@ -308,15 +298,78 @@ class Customify {
         }
 
         foreach( $files as $file ) {
-            if ( file_exists( self::$path.$file ) ) {
-                require_once self::$path.$file;
-            }
+            require_once self::$path.$file;
         }
 
         if ( is_admin() ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
         }
 
+        $this->load_configs();
+
+    }
+
+    /**
+     * Load configs
+     */
+    private function load_configs(){
+
+        $config_files = array(
+            // Site Settings
+            'layouts',
+            'blogs',
+            'styling',
+            'titlebar',
+            'compatibility',
+
+            // Header Builder Panel
+            'header/panel',
+            'header/html',
+            'header/logo',
+            'header/nav-icon',
+            'header/primary-menu',
+            'header/templates',
+            'header/templates',
+            'header/logo',
+            'header/search-icon',
+            'header/search-box',
+            'header/menus',
+            'header/nav-icon',
+            'header/button',
+            'header/social-icons',
+             // Footer Builder Panel
+            'footer/panel',
+            'footer/widgets',
+            'footer/templates',
+            'footer/widgets',
+            'footer/html',
+            'footer/copyright',
+
+        );
+
+        $compatibility_config_files = array(
+            'breadcrumb-navxt'
+        );
+
+        $path = get_template_directory();
+        // Load default config values
+        require_once $path . "/inc/customizer/configs/config-default.php";
+
+        // Load site configs
+        foreach ( $config_files as  $f ) {
+            $file = $path . "/inc/customizer/configs/{$f}.php";
+            if ( file_exists( $file ) ) {
+                require_once $file;
+            }
+        }
+
+        // Load site compatibility configs
+        foreach ( $compatibility_config_files as  $f ) {
+            $file = $path . "/inc/compatibility/{$f}.php";
+            if ( file_exists( $file ) ) {
+                require_once $file;
+            }
+        }
 
     }
 

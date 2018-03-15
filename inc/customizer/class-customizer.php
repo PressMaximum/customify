@@ -756,6 +756,8 @@ class  Customify_Customizer
             'repeater'
         );
 
+        $fields = apply_filters( 'customify/customize/register-controls', $fields );
+
         foreach( $fields as $field_type ) {
             $file = get_template_directory() . '/inc/customizer/controls/class-control-'.str_replace( '_','-', $field_type ).'.php';
             if ( file_exists( $file ) ) {

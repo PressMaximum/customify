@@ -329,7 +329,7 @@ msgstr ""
 #, php-format
 msgid ""
 "Class <strong>%s</strong> do not extends class <strong>"
-"Customify_Customizer_Builder_Panel</strong>."
+"Customify_Customize_Builder_Panel</strong>."
 msgstr ""
 
 #: inc/customizer/customizer-control.php:368

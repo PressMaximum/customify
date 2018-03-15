@@ -1,8 +1,8 @@
 <?php
 
-Customify_Customizer_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
+Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
 
-class Customify_Builder_Footer  extends  Customify_Customizer_Builder_Panel
+class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
 {
     public $id = 'footer';
 

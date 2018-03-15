@@ -1,10 +1,10 @@
 <?php
 
-class Customify_Builder_Item_Search_Box
+class Customify_Builder_Item_Search_Icon
 {
-    public $id = 'search_box'; // Required
-    public $section = 'search_box'; // Optional
-    public $name = 'search_box'; // Optional
+    public $id = 'search_icon'; // Required
+    public $section = 'search_icon'; // Optional
+    public $name = 'search_icon'; // Optional
     public $label = ''; // Optional
 
     /**
@@ -14,7 +14,7 @@ class Customify_Builder_Item_Search_Box
      */
     function __construct()
     {
-        $this->label = __('Search Box', 'customify');
+        $this->label = __('Search Icon', 'customify');
     }
 
     /**
@@ -51,21 +51,120 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name'            => $this->section . '_placeholder',
-                'type'            => 'text',
+                'name'            => $this->section . '_size',
+                'type'            => 'slider',
+                'device_settings' => true,
                 'section'         => $this->section,
-                'selector'        => "$selector",
-                'render_callback' => $fn,
-                'label'           => __( 'Placeholder', 'customify' ),
-                'default'           => __( 'Search ...', 'customify' ),
+                'min'             => 5,
+                'step'            => 1,
+                'max'             => 100,
+                'selector'        => "$selector svg",
+                'css_format'      => 'height: {{value}}; width: {{value}};',
+                'label'           => __( 'Icon Size', 'customify' ),
             ),
 
             array(
-                'name'            => $this->section . '_height',
+                'name'            => $this->section . '_padding',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
                 'min'             => 0,
+                'step'            => 1,
+                'max'             => 100,
+                'selector'        => "$selector .search-icon",
+                'css_format'      => 'padding: {{value}};',
+                'label'           => __( 'Icon Padding', 'customify' ),
+            ),
+
+            array(
+                'name' => $this->section . '_styling',
+                'type' => 'styling',
+                'section' => $this->section,
+                'css_format' => 'styling',
+                'title' => __('Icon Styling', 'customify'),
+                'description' => __('Search icon styling', 'customify'),
+                'selector' => array(
+                    'normal' => "{$selector} .search-icon",
+                    'hover' => "{$selector} .search-icon:hover",
+                    'normal_box_shadow' => "{$selector} .search-icon",
+                    'normal_text_color' => "{$selector} .search-icon",
+                ),
+                'fields' => array(
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'padding' => false,
+                        'margin' => false,
+                    ),
+                    'hover_fields' => array(
+                        'link_color' => false,
+                        'padding' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_attachment' => false,
+                        'bg_repeat' => false,
+                        'border_radius' => false,
+                    ), // disable hover tab and all fields inside.
+                )
+            ),
+
+            array(
+                'name'            => $this->section . '_modal_h',
+                'type'            => 'heading',
+                'section'         => $this->section,
+                'label'           => __( 'Modal Settings', 'customify' ),
+            ),
+
+            array(
+                'name'            => $this->section . '_placeholder',
+                'type'            => 'text',
+                'selector'        => "$selector",
+                'render_callback' => $fn,
+                'section'         => $this->section,
+                'label'           => __( 'Placeholder', 'customify' ),
+                'default'         => __( 'Search ...', 'customify' ),
+            ),
+
+            array(
+                'name' => $this->section . '_form_styling',
+                'type' => 'styling',
+                'section' => $this->section,
+                'css_format' => 'styling',
+                'title' => __('Form Styling', 'customify'),
+                'description' => __('Form modal styling', 'customify'),
+                'selector' => array(
+                    'normal' => "{$selector} .header-search-modal",
+                    'normal_bg_color' => "{$selector} .header-search-modal, {$selector} .header-search-modal:before",
+                    'normal_border_color' => "{$selector} .header-search-modal, {$selector} .header-search-modal:before",
+                ),
+                'default' => array(
+                    'normal' => array(
+                        'border_style' => 'solid'
+                    )
+                ),
+                'fields' => array(
+                    'normal_fields' => array(
+                        'text_color' => false, // disable for special field.
+                        'link_color' => false, // disable for special field.
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'margin' => false,
+                    ),
+                    'hover_fields' => false
+                )
+            ),
+
+            array(
+                'name'            => $this->section . '_modal_height',
+                'type'            => 'slider',
+                'device_settings' => true,
+                'section'         => $this->section,
+                'min'             => 5,
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector .header-search-form .search-field",
@@ -74,7 +173,7 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name'            => $this->section . '_font_size',
+                'name'            => $this->section . '_modal_font_size',
                 'type'            => 'typography',
                 'section'         => $this->section,
                 'selector'        => "$selector .header-search-form .search-field",
@@ -84,7 +183,7 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name'            => $this->section . '_icon_size',
+                'name'            => $this->section . '_modal_icon_size',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
@@ -97,7 +196,7 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name'            => $this->section . '_icon_pos',
+                'name'            => $this->section . '_modal_icon_pos',
                 'type'            => 'slider',
                 'device_settings' => true,
                 'default' => array(
@@ -124,7 +223,7 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name' => $this->section . '_input_styling',
+                'name' => $this->section . '_modal_input_styling',
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
@@ -147,6 +246,7 @@ class Customify_Builder_Item_Search_Box
                         'bg_image' => false,
                         'bg_repeat' => false,
                         'bg_attachment' => false,
+                        //'padding' => false,
                         'margin' => false,
                     ),
                     'hover_fields' => array(
@@ -161,7 +261,7 @@ class Customify_Builder_Item_Search_Box
             ),
 
             array(
-                'name' => $this->section . '_icon_styling',
+                'name' => $this->section . '_modal_icon_styling',
                 'type' => 'styling',
                 'section' => $this->section,
                 'css_format' => 'styling',
@@ -193,7 +293,6 @@ class Customify_Builder_Item_Search_Box
                 )
             ),
 
-
         );
 
         // Item Layout
@@ -208,22 +307,31 @@ class Customify_Builder_Item_Search_Box
 
         $placeholder = Customify()->get_setting( $this->section.'_placeholder' );
         $placeholder = sanitize_text_field( $placeholder );
+
         echo '<div class="header-' . esc_attr($this->id) . '-item item--'.esc_attr( $this->id ).'">';
 ?>
-        <form role="search" class="header-search-form" action="<?php echo home_url( '/' ); ?>">
-            <label>
-                <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
-                <input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
-            </label>
-            <button type="submit" class="search-submit" >
-                <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
-                    <path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
-                </svg>
-            </button>
-        </form>
+<a class="search-icon" href="#">
+    <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
+        <path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
+    </svg>
+    <span class="arrow-down"></span>
+</a>
+<div class="header-search-modal-wrapper">
+    <form role="search" class="header-search-modal header-search-form" action="<?php echo home_url( '/' ); ?>">
+        <label>
+            <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
+            <input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
+        </label>
+        <button type="submit" class="search-submit" >
+            <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
+                <path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
+            </svg>
+        </button>
+    </form>
+</div>
 <?php
         echo '</div>';
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Search_Box());
+Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Search_Icon());

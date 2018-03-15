@@ -64,4 +64,4 @@ class Customify_Builder_Footer_Templates
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item( 'footer', 'Customify_Builder_Footer_Templates' );
+Customify_Customize_Layout_Builder()->register_item( 'footer', 'Customify_Builder_Footer_Templates' );

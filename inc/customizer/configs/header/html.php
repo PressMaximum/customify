@@ -1,9 +1,9 @@
 <?php
 
-class Customify_Builder_Footer_Item_HTML {
+class Customify_Builder_Item_HTML {
     public $id = 'html'; // Required
-    public $section = 'footer_html'; // Optional
-    public $name = 'footer_html'; // Optional
+    public $section = 'header_html'; // Optional
+    public $name = 'header_html'; // Optional
     public $label = ''; // Optional
 
     /**
@@ -13,7 +13,7 @@ class Customify_Builder_Footer_Item_HTML {
      */
     function __construct()
     {
-        $this->label = __( 'HTML', 'customify' );
+        $this->label = __( 'HTML 1', 'customify' );
     }
 
     /**
@@ -22,10 +22,10 @@ class Customify_Builder_Footer_Item_HTML {
      */
     function item(){
         return array(
-            'name' => __( 'HTML', 'customify' ),
+            'name' => __( 'HTML 1', 'customify' ),
             'id' => $this->id,
             'col' => 0,
-            'width' => '6',
+            'width' => '4',
             'section' => $this->section // Customizer section to focus when click settings
         );
     }
@@ -36,12 +36,13 @@ class Customify_Builder_Footer_Item_HTML {
      * @return array
      */
     function customize(){
+        // Render callback function
         $fn = array( $this, 'render' );
-        return array(
+        $config = array(
             array(
                 'name' => $this->section,
                 'type' => 'section',
-                'panel' => 'footer_settings',
+                'panel' => 'header_settings',
                 'title' => $this->label,
             ),
 
@@ -49,23 +50,19 @@ class Customify_Builder_Footer_Item_HTML {
                 'name' => $this->name,
                 'type' => 'textarea',
                 'section' => $this->section,
-                'selector' => '.builder-footer-html-item',
+                'selector' => '.builder-header-'.$this->id.'-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
                 'default' => __( 'Add custom text here or remove it', 'customify' ),
                 'title' => __( 'HTML', 'customify' ),
                 'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),
-            array(
-                'name' => $this->name.'_text_align',
-                'type' => 'text_align',
-                'section' => $this->section,
-                'selector' => '.builder-first--html',
-                'css_format' => 'text-align: {{value}};',
-                'title'   => __( 'Align', 'customify' ),
-                'device_settings' => true,
-            ),
+
+
         );
+
+        // Item Layout
+        return array_merge( $config, customify_header_layout_settings( $this->id, $this->section ) );
     }
 
     /**
@@ -73,10 +70,10 @@ class Customify_Builder_Footer_Item_HTML {
      */
     function render(){
         $content = Customify()->get_setting( $this->name );
-        echo '<div class="builder-footer-html-item item-footer--html">';
+        echo '<div class="builder-header-'.esc_attr( $this->id ).'-item item--html">';
         echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Footer_Item_HTML() );
+Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_HTML() );

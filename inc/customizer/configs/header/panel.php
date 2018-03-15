@@ -1,8 +1,8 @@
 <?php
 
-Customify_Customizer_Layout_Builder()->register_builder( 'header', new Customify_Builder_Header() );
+Customify_Customize_Layout_Builder()->register_builder( 'header', new Customify_Builder_Header() );
 
-class Customify_Builder_Header  extends  Customify_Customizer_Builder_Panel{
+class Customify_Builder_Header  extends  Customify_Customize_Builder_Panel{
     public $id = 'header';
 
     function get_config(){

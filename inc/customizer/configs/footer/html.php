@@ -1,18 +1,19 @@
 <?php
 
-class Customify_Builder_Footer_Item_Copyright {
-    public $id = 'footer_copyright'; // Required
-    public $section = 'footer_copyright'; // Optional
-    public $name = 'footer_copyright'; // Optional
+class Customify_Builder_Footer_Item_HTML {
+    public $id = 'html'; // Required
+    public $section = 'footer_html'; // Optional
+    public $name = 'footer_html'; // Optional
     public $label = ''; // Optional
 
     /**
      * Optional construct
      *
+     * Customify_Builder_Item_HTML constructor.
      */
     function __construct()
     {
-        $this->label = __( 'Copyright', 'customify' );
+        $this->label = __( 'HTML', 'customify' );
     }
 
     /**
@@ -21,7 +22,7 @@ class Customify_Builder_Footer_Item_Copyright {
      */
     function item(){
         return array(
-            'name' => __( 'Copyright', 'customify' ),
+            'name' => __( 'HTML', 'customify' ),
             'id' => $this->id,
             'col' => 0,
             'width' => '6',
@@ -48,20 +49,18 @@ class Customify_Builder_Footer_Item_Copyright {
                 'name' => $this->name,
                 'type' => 'textarea',
                 'section' => $this->section,
-                'selector' => '.builder-footer-copyright-item',
+                'selector' => '.builder-footer-html-item',
                 'render_callback' => $fn,
                 'theme_supports' => '',
-                'default' => __( 'Copyright &copy; {current_year} {site_title} - Powered by {theme_author}.', 'customify' ),
-                'title' => __( 'Copyright Content', 'customify' ),
-                'description' => __( 'Arbitrary HTML code or shortcode. Available tags: {current_year}, {site_title}, {theme_author}', 'customify' ),
+                'default' => __( 'Add custom text here or remove it', 'customify' ),
+                'title' => __( 'HTML', 'customify' ),
+                'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),
-
             array(
                 'name' => $this->name.'_text_align',
                 'type' => 'text_align',
                 'section' => $this->section,
-                'default' => 'left',
-                'selector' => '.builder-first--footer_copyright',
+                'selector' => '.builder-first--html',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'device_settings' => true,
@@ -73,22 +72,11 @@ class Customify_Builder_Footer_Item_Copyright {
      * Optional. Render item content
      */
     function render(){
-        $tags = array(
-            'current_year' =>  date_i18n('Y'),
-            'site_title' =>  get_bloginfo('name'),
-            'theme_author' =>  sprintf( '<a href="%1$s">%2$s</a>', esc_url( Customify::$theme_url ), esc_html( Customify::$theme_author ) ),
-        );
-
         $content = Customify()->get_setting( $this->name );
-
-        foreach ( $tags as $k => $v ){
-            $content = str_replace('{'.$k.'}', $v, $content );
-        }
-
-        echo '<div class="builder-footer-copyright-item footer-copyright">';
-        echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) ); // WPCS: XSS OK.
+        echo '<div class="builder-footer-html-item item-footer--html">';
+        echo apply_filters('customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
         echo '</div>';
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Footer_Item_Copyright() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Footer_Item_HTML() );

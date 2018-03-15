@@ -138,7 +138,7 @@ function customify_builder_footer_4_item(){
     customify_builder_footer_widget_item( 'footer-4' );
 }
 
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_1() );
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_2() );
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_3() );
-Customify_Customizer_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_4() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_1() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_2() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_3() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_4() );

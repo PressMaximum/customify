@@ -150,4 +150,4 @@ class Customify_Builder_Item_Logo {
     }
 }
 
-Customify_Customizer_Layout_Builder()->register_item('header', new Customify_Builder_Item_Logo() );
+Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Logo() );

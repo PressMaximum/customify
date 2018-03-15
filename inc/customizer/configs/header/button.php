@@ -163,6 +163,6 @@ class Customify_Builder_Item_Button {
 	}
 }
 
-Customify_Customizer_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Button() );
+Customify_Customize_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Button() );
 
 
