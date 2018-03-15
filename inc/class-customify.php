@@ -363,7 +363,7 @@ class Customify {
     private function load_compatibility(){
 
         $compatibility_config_files = array(
-            'breadcrumb-navxt', // Plugin breadcrumb-navxt
+            'breadcrumb-navxt',         // Plugin breadcrumb-navxt
             'woocommerce/woocommerce',  // Plugin WooCommerce
         );
         foreach ( $compatibility_config_files as  $f ) {
