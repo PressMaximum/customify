@@ -3,6 +3,10 @@
     background: #f5f5f6;
     position: relative;
     z-index: 10;
+    .item--inner {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 .footer-bottom {

@@ -60,7 +60,7 @@ class Customify_Builder_Footer_Item_HTML {
                 'name' => $this->name.'_text_align',
                 'type' => 'text_align',
                 'section' => $this->section,
-                'selector' => '.builder-first--html',
+                'selector' => '.site-footer .builder-first--html',
                 'css_format' => 'text-align: {{value}};',
                 'title'   => __( 'Align', 'customify' ),
                 'device_settings' => true,

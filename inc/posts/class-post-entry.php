@@ -112,8 +112,7 @@ class Customify_Post_Entry {
 
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s';
-            // </time><time class="updated" datetime="%3$s">%4$s</time>
+            $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time>';
         }
         $time_string = sprintf( $time_string,
             esc_attr( get_the_date( 'c' ) ),
@@ -122,12 +121,7 @@ class Customify_Post_Entry {
             esc_html( get_the_modified_date() )
         );
 
-        $posted_on = sprintf(
-            //esc_html_x( 'Posted on %s', 'post date', 'customify' ),
-            '%s',
-            '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>'
-        );
-
+        $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>';
         return '<span class="posted-on">' . $posted_on . '</span>';
     }
 
@@ -144,10 +138,7 @@ class Customify_Post_Entry {
             if ( $categories_list ) {
                 $categories_list = explode( '__cate_sep__', $categories_list );
                 $categories_list = $categories_list[0];
-                //  esc_html__( 'Posted in %1$s', 'customify' )
-                $string = '%1$s';
-                /* translators: 1: list of categories. */
-                $html.= sprintf( '<span class="cat-links">' . $string. '</span>', $categories_list ); // WPCS: XSS OK.
+                $html.= sprintf( '<span class="cat-links">%1$s</span>', $categories_list ); // WPCS: XSS OK.
             }
         }
         return $html;
@@ -207,12 +198,7 @@ class Customify_Post_Entry {
      * @return string
      */
     function meta_author(){
-        // esc_html_x( 'by %s', 'post author', 'customify' ),
-        $byline = sprintf(
-        /* translators: %s: post author. */
-            '%s',
-            '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
-        );
+        $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>';
         return '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
