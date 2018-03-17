@@ -340,6 +340,7 @@ class Customify {
             'layouts',
             'blogs',
             'styling',
+            'typography',
             'titlebar',
             'compatibility',
 
