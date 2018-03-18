@@ -295,7 +295,7 @@ class  Customify_Customizer
             array(
                 'name'    => 'font',
                 'type'    => 'select',
-                'label'   => __('Font', 'customify'),
+                'label'   => __('Font Family', 'customify'),
                 'choices' => array()
             ),
             array(

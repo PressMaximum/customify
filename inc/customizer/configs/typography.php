@@ -26,9 +26,9 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'type' => 'typography',
                 'section' => "{$section}_base",
                 'title' => __('Heading', 'customify'),
-                'description' => __('Base font for all heading tags', 'customify'),
+                'description' => __('Apply for all heading element.', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h1,h2,h3,h4,h5,h6',
+                'selector' => 'h1,h2,h3,h4,h5,h6,.h1,.h2,.h3',
                 'fields' => array(
                     'font_size' => false,
                     'line_height' => false,
@@ -41,7 +41,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'type' => 'typography',
                 'section' => "{$section}_base",
                 'title' => __('Paragraph', 'customify'),
-                'description' => __('Base font for site', 'customify'),
+                'description' => __('Apply for site paragraph.', 'customify'),
                 'css_format' => 'typography',
                 'selector' => 'body',
             ),
@@ -55,7 +55,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
             ),
 
             array(
-                'name' => "{$section}_site_tt_logo",
+                'name' => "{$section}_site_tt_title",
                 'type' => 'typography',
                 'section' => "{$section}_site_tt",
                 'title' => __('Site Title', 'customify'),
@@ -133,23 +133,6 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'title' => __('Heading H6', 'customify'),
                 'css_format' => 'typography',
                 'selector' => '.entry-content h6',
-            ),
-
-            // Widget title
-            array(
-                'name'           => "{$section}_titlebar",
-                'type'           => 'section',
-                'panel'          => 'typography_panel',
-                'title'          => __( 'Titlebar', 'customify' ),
-            ),
-
-            array(
-                'name' => "{$section}_titlebar",
-                'type' => 'typography',
-                'section' => "{$section}_titlebar",
-                'title' => __('Titlebar', 'customify'),
-                'css_format' => 'typography',
-                'selector' => '.page-titlebar .titlebar-title',
             ),
 
             // Widget title
