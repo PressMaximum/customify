@@ -67,7 +67,7 @@ class Customify_Builder_Item_Search_Box
                 'section'         => $this->section,
                 'selector'        => "$selector .header-search-form",
                 'css_format'      => 'width: {{value}};',
-                'label'           => __( 'Input Width', 'customify' ),
+                'label'           => __( 'Search Form Width', 'customify' ),
                 'description'     => __( 'Note: The width can not greater than grid width.', 'customify' ),
             ),
 
@@ -82,16 +82,6 @@ class Customify_Builder_Item_Search_Box
                 'selector'        => "$selector .header-search-form .search-field",
                 'css_format'      => 'height: {{value}};',
                 'label'           => __( 'Input Height', 'customify' ),
-            ),
-
-            array(
-                'name'            => $this->section . '_font_size',
-                'type'            => 'typography',
-                'section'         => $this->section,
-                'selector'        => "$selector .header-search-form .search-field",
-                'css_format'      => 'typography',
-                'label'           => __( 'Input Text Typography', 'customify' ),
-                'description'     => __( 'Typography for search input', 'customify' ),
             ),
 
             array(
@@ -133,6 +123,16 @@ class Customify_Builder_Item_Search_Box
                 'css_format'      => 'margin-left: {{value}}; ',
                 'label'           => __( 'Icon Position', 'customify' ),
             ),
+
+	        array(
+		        'name'            => $this->section . '_font_size',
+		        'type'            => 'typography',
+		        'section'         => $this->section,
+		        'selector'        => "$selector .header-search-form .search-field",
+		        'css_format'      => 'typography',
+		        'label'           => __( 'Input Text Typography', 'customify' ),
+		        'description'     => __( 'Typography for search input', 'customify' ),
+	        ),
 
             array(
                 'name' => $this->section . '_input_styling',

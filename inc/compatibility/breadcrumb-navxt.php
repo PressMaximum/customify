@@ -73,7 +73,7 @@ class Customify_Breadcrumb {
         );
 
         if( ! $this->support_plugins_active() ) {
-            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will display after you install and active it.', 'customify' );
+            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will be displayed after you install and active it.', 'customify' );
             $config[] = array(
                 'name' => "{$section}_display_pos",
                 'type' => 'custom_html',
