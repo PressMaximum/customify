@@ -13,83 +13,126 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'title'          => __( 'Typography', 'customify' ),
             ),
 
-            // Paragraph
+            // Base
             array(
-                'name'           => "{$section}_p",
+                'name'           => "{$section}_base",
                 'type'           => 'section',
                 'panel'          => 'typography_panel',
-                'title'          => __( 'Paragraph', 'customify' ),
+                'title'          => __( 'Base', 'customify' ),
             ),
 
             array(
-                'name' => "{$section}_p",
+                'name' => "{$section}_base_heading",
                 'type' => 'typography',
-                'section' => "{$section}_p",
+                'section' => "{$section}_base",
+                'title' => __('Heading', 'customify'),
+                'description' => __('Base font for all heading tags', 'customify'),
+                'css_format' => 'typography',
+                'selector' => 'h1,h2,h3,h4,h5,h6',
+                'fields' => array(
+                    'font_size' => false,
+                    'line_height' => false,
+                    'letter_spacing' => false,
+                )
+            ),
+
+            array(
+                'name' => "{$section}_base_p",
+                'type' => 'typography',
+                'section' => "{$section}_base",
                 'title' => __('Paragraph', 'customify'),
+                'description' => __('Base font for site', 'customify'),
                 'css_format' => 'typography',
                 'selector' => 'body',
             ),
 
-            // Heading
+            // Site Title and Tagline
             array(
-                'name'           => "{$section}_heading",
+                'name'           => "{$section}_site_tt",
                 'type'           => 'section',
                 'panel'          => 'typography_panel',
-                'title'          => __( 'Heading', 'customify' ),
+                'title'          => __( 'Site Title & Tagline', 'customify' ),
+            ),
+
+            array(
+                'name' => "{$section}_site_tt_logo",
+                'type' => 'typography',
+                'section' => "{$section}_site_tt",
+                'title' => __('Site Title', 'customify'),
+                'css_format' => 'typography',
+                'selector' => '.site-branding .site-title',
+            ),
+
+            array(
+                'name' => "{$section}_site_tt_desc",
+                'type' => 'typography',
+                'section' => "{$section}_site_tt",
+                'title' => __('Tagline', 'customify'),
+                'css_format' => 'typography',
+                'selector' => '.site-branding .site-description',
+            ),
+
+
+            // Content
+            array(
+                'name'           => "{$section}_content",
+                'type'           => 'section',
+                'panel'          => 'typography_panel',
+                'title'          => __( 'Content', 'customify' ),
             ),
 
             array(
                 'name' => "{$section}_heading_h1",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H1', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h1',
+                'selector' => '.entry-content h1',
             ),
 
             array(
                 'name' => "{$section}_heading_h2",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H2', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h2',
+                'selector' => '.entry-content h2',
             ),
 
             array(
                 'name' => "{$section}_heading_h3",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H3', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h3',
+                'selector' => '.entry-content h3',
             ),
 
             array(
                 'name' => "{$section}_heading_h4",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H4', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h4',
+                'selector' => '.entry-content h4',
             ),
 
             array(
                 'name' => "{$section}_heading_h5",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H5', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h5',
+                'selector' => '.entry-content h5',
             ),
 
             array(
                 'name' => "{$section}_heading_h6",
                 'type' => 'typography',
-                'section' => "{$section}_heading",
+                'section' => "{$section}_content",
                 'title' => __('Heading H6', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h6',
+                'selector' => '.entry-content h6',
             ),
 
             // Widget title

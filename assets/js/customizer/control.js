@@ -1994,14 +1994,14 @@
         optionHtml: '',
         $el: null,
         values: {},
+        config: {}, // Config to disable fields
         container: null,
-        fields: Customify_Control_Args.typo_fields,
+        fields: {},
         load: function(){
             var that = this;
             $.get( Customify_Control_Args.ajax, { action: 'customify/customizer/ajax/fonts'  }, function(res ){
                 if ( res.success ) {
                     that.fonts = res.data;
-                    //that.ready()
                 }
             } );
         },
@@ -2066,16 +2066,36 @@
                 that.values = {};
             }
 
-            $( '.customify-modal-settings--fields', that.container ).append( '<input type="hidden" class="customify--font-type">' );
+            that.fields = {};
 
-            customifyField.addFields( FontSelector.fields, that.values, $( '.customify-modal-settings--fields', that.container ), function () {
+            //Customify_Control_Args.typo_fields
+            if ( !_.isEmpty( that.config ) ) {
+                _.each( Customify_Control_Args.typo_fields, function( _f, _key ){
+                    var show = true;
+                    if ( !_.isUndefined( that.config[ _f.name ] ) ) {
+                        if ( that.config[ _f.name ] === false ) {
+                            show = false;
+                        }
+                    }
+
+                    if ( show )
+                    {
+                        that.fields[ _f.name ] = _f;
+                    }
+
+                } );
+
+            } else {
+                that.fields = Customify_Control_Args.typo_fields;
+            }
+
+            $( '.customify-modal-settings--fields', that.container ).append( '<input type="hidden" class="customify--font-type">' );
+            customifyField.addFields( that.fields, that.values, $( '.customify-modal-settings--fields', that.container ), function () {
                 that.get();
             } );
 
             $( 'input, select, textarea',  $( '.customify-modal-settings--fields' ) ).removeClass('customify-input').addClass( 'customify-typo-input change-by-js' );
-
             _.each( that.fonts, function( group, type ){
-                // theme_default
                 that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
                 that.optionHtml += '<optgroup label="'+group.title+'">';
                     _.each( group.fonts, function( font, font_name ) {
@@ -2117,7 +2137,6 @@
                 } else {
                     type = 'normal';
                 }
-
                 font_settings = that.fonts.google.fonts[ font ];
             } else {
                 font_settings = that.fonts.google.fonts[ font.font ];
@@ -2140,9 +2159,11 @@
 
         },
 
-        open: function( $el ){
-            this.$el = $el;
+        open: function( ){
+            //this.$el = $el;
             var that = this;
+            var $el = that.$el;
+
             var status = $el.attr( 'data-opening' ) || false;
             if ( status !== 'opening' ) {
                 $el.attr( 'data-opening', 'opening' );
@@ -2174,9 +2195,10 @@
             }
         },
 
-        reset: function( $el ){
-            this.$el = $el;
+        reset: function( ){
+            //this.$el = $el;
             var that = this;
+            var $el = that.$el;
 
             $('.customify-modal-settings', $el).remove();
             that.values = $('.customify-typography-input', that.$el).attr('data-default') || '{}';
@@ -2214,13 +2236,39 @@
 
         init: function(){
             this.load();
-            var that = this;
-            $document.on( 'click', '.customize-control-customify-typography .action--edit', function(){
-                that.open( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
-            } );
         }
-
     };
+
+
+    FontSelector.load();
+    var intTypoControls = {};
+    var intTypos = function(){
+        $document.on( 'click', '.customize-control-customify-typography .action--edit, .customize-control-customify-typography .action--reset', function(){
+            var controlID = $( this ).attr( 'data-control' ) || '';
+            if ( _.isUndefined( intTypoControls[ controlID ] ) ) {
+                var c = wpcustomize.control( controlID );
+                if (  controlID && ! _.isUndefined( c ) ) {
+                    var m = _.clone( FontSelector );
+                    m.config = c.params.fields;
+                    m.$el =  $( this ).closest('.customize-control-customify-typography').eq( 0 );
+                    intTypoControls[ controlID ] = m;
+                }
+            }
+
+            if ( ! _.isUndefined( intTypoControls[ controlID ] ) ) {
+                if ( $( this ).hasClass('action--reset') ) {
+                    intTypoControls[ controlID ].reset();
+                } else {
+                    intTypoControls[ controlID ].open();
+                }
+            }
+
+        } );
+    };
+
+
+
+
 
     //---------------------------------------------------------------------------
     var customifyModal = {
@@ -2740,18 +2788,12 @@
             });
 
             IconPicker.init();
-            FontSelector.init();
-            initStyling();
+            // FontSelector.init();
+             initStyling();
             initModal();
+            intTypos();
         });
 
-
-
-
-
-        $document.on( 'click', '.customize-control-customify-typography .action--reset', function(){
-            FontSelector.reset( $( this ).closest('.customize-control-customify-typography').eq( 0 ) );
-        } );
 
         // Add reset button to sections
         wpcustomize.section.each( function ( section ) {

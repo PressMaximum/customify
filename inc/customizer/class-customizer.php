@@ -324,7 +324,7 @@ class  Customify_Customizer
                 'label'           => __('Line Height', 'customify'),
                 'device_settings' => true,
                 'min'             => 9,
-                'max'             => 50,
+                'max'             => 90,
                 'step'            => 1
             ),
             array(
