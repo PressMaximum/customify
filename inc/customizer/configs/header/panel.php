@@ -144,22 +144,7 @@ class Customify_Builder_Header  extends  Customify_Customize_Builder_Panel{
                         //'link_color' => false, // disable for special field.
                         'padding' => false // disable for special field.
                     ),
-                    'hover_fields' => array(
-                        //'text_color' => false,
-                        //'link_color' => false,
-                        'padding' => false,
-                        'bg_color' => false,
-                        'bg_heading' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'border_heading' => false,
-                        'border_color' => false,
-                        'border_radius' => false,
-                        'border_width' => false,
-                        'border_style' => false,
-                        'box_shadow' => false,
-                    ), // disable hover tab and all fields inside.
+                    'hover_fields' => false
                 )
             ),
 
