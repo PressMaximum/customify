@@ -144,6 +144,10 @@ abbr, acronym {
 nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a
 {
     color: {{value}};
+}
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover{
+    background: {{value}};
 }',
                 'selector' => 'format',
             ),

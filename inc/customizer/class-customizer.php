@@ -315,7 +315,7 @@ class  Customify_Customizer
                 'label'           => __('Font Size', 'customify'),
                 'device_settings' => true,
                 'min'             => 9,
-                'max'             => 50,
+                'max'             => 80,
                 'step'            => 1
             ),
             array(
@@ -324,7 +324,7 @@ class  Customify_Customizer
                 'label'           => __('Line Height', 'customify'),
                 'device_settings' => true,
                 'min'             => 9,
-                'max'             => 90,
+                'max'             => 80,
                 'step'            => 1
             ),
             array(
