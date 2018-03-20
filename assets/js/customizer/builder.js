@@ -171,33 +171,6 @@
                 return parseInt( w );
             },
 
-            findNextElFromX: function( x, flag, $wrapper ){
-                var that = this;
-                var next =  false;
-                var i = x;
-                while ( ! next && i < that.cols ) {
-                    if ( flag[ i ] > 1 ) {
-                        next = $( '.grid-stack-item[data-gs-x="'+i+'"]', $wrapper );
-                    }
-                    i++;
-                }
-
-                return next;
-            },
-
-            findPrevElFromX: function( x, flag, $wrapper ){
-                var prev = false;
-                var i = x;
-                while ( ! prev && i >= 0 ) {
-                    if ( flag[ i ] > 1 ) {
-                        prev = $( '.grid-stack-item[data-gs-x="'+i+'"]', $wrapper );
-                    }
-                    i--;
-                }
-
-                return prev;
-            },
-
             gridGetItemInfo: function( $item, flag, $wrapper ) {
                 var that = this;
                 var x = that.getX( $item );
@@ -238,8 +211,6 @@
                     item: $item,
                     before: slot_before,
                     after: slot_after,
-                    //next: next,
-                   // prev: prev,
                     id: $item.attr( 'data-id' ) || '',
                     wrapper: $wrapper
                 }
@@ -378,35 +349,6 @@
                     }
                 };
 
-                var getNextBlock = function ( x ){
-                    var i, _x = -1, _xw, found;
-
-                    if ( flag[x] < maxCol  ) {
-                        i = x;
-                        found = false;
-                        while ( i < maxCol && ! found ) {
-                            if ( flag[i] !== 1 && flag[i] !== 0 ) {
-                                _x = i;
-                                found = true;
-                            }
-                            i++;
-                        }
-                    } else {
-                        _x = x;
-                    }
-                    // tìm kiếm độ rộng của chuỗi này
-                    i = _x + 1;
-                    _xw = _x; // chiều rộng nhỏ nhất là môt
-
-                    while( flag[ i ] === 1 ) {
-                        _xw ++ ;
-                        i++;
-                    }
-                    return {
-                        x: _x,
-                        w: ( _xw + 1 ) - _x
-                    }
-                };
 
                 var moveAllItemsFromXToLeft = function( x, number ){
                     var backupFlag = flag.slice();
@@ -698,7 +640,6 @@
                     var w = node.w;
 
                     removeNode( node );
-
                     console.log( 'Swap newX', newX );
                     console.log( 'Swap FLAG', flag );
 
@@ -712,25 +653,17 @@
 
                 //-----------------------------------------------------------------------------------------------------------------------------
                 var that = this;
-
                 flag = that.getFlag( $wrapper );
-                //console.log( 'flag', flag );
                 backupFlag = flag.slice();
-
-
-
                 var wOffset =  $wrapper.offset();
                 that.draggingItem = ui.draggable;
                 var width  = $wrapper.width();
-                //var itemWidth = ui.draggable.width();
                 var colWidth = width/that.cols;
                 var x = 0;
-               // var y = 1;
                 var left = 0;
                 var iOffset = ui.offset;
-
-                var w = that.getW( ui.draggable, true );
-                var in_this_row;
+                var w, in_this_row;
+                w = that.getW( ui.draggable, true );
 
                 console.log( 'DROP W', w );
 
@@ -740,7 +673,6 @@
                     in_this_row = false;
                    // left = event.clientX - wOffset.left;
                     console.log( 'Not in this row' );
-
                 } else {
                     in_this_row = true;
                     console.log( 'Item in this row' );
@@ -792,6 +724,12 @@
                 console.log( 'DROP XI', xi );
                 console.log( 'DROP X', x );
 
+                //RTL
+                if ( Customify_Layout_Builder.is_rtl ) {
+                    x = that.cols - ( x );
+                    console.log( 'DROP X REVERSE: w:'+w, x );
+                }
+
                 var node = {
                     el: ui.draggable,
                     x: x,
@@ -837,9 +775,6 @@
                 that.updateAllGrids();
 
                 //-----------------------------------------------------------------------------------------------------------------------------
-
-
-
             },
 
             updateAllGrids: function(){
@@ -856,9 +791,11 @@
                 var itemWidth = ui.size.width;
                 var colWidth = width/that.cols;
 
-                //console.log( 'ui.size', ui.size );
                 var isShiftLeft = ui.originalPosition.left > ui.position.left;
                 var isShiftRight = ui.originalPosition.left < ui.position.left;
+
+                console.log( 'position', ui.position );
+                console.log( 'originalPosition', ui.originalPosition );
 
                 var ow =  ui.originalElement.attr( 'data-gs-width' ) || 1;
                 var ox =  ui.originalElement.attr( 'data-gs-x' ) || 0;
@@ -869,26 +806,45 @@
                 console.log( 'ox', ox );
 
                 var addW;
-                var empty_slots;
-                var preX;
-                var preW;
                 var newX;
                 var newW;
                 var flag = that.getFlag( $wrapper );
                 var itemInfo = that.gridGetItemInfo( ui.originalElement, flag, $wrapper );
                 var diffLeft, diffRight;
 
+
                 console.log( 'itemInfo', itemInfo );
+                console.log( 'isShiftLeft', isShiftLeft );
+                console.log( 'isShiftRight', isShiftRight );
 
                 if ( isShiftLeft ) {
-                    diffLeft = ui.originalPosition.left - ui.position.left;
-                    addW =  Math.ceil( diffLeft / colWidth );
 
-                    if ( addW > itemInfo.before ) {
-                        addW = itemInfo.before;
+                    if ( Customify_Layout_Builder.is_rtl ) {
+
+                        diffLeft = ui.originalPosition.left - ui.position.left;
+                        addW =  Math.ceil( diffLeft / colWidth );
+
+                        if ( addW > itemInfo.before ) {
+                            addW = itemInfo.before;
+                        }
+                        newX = ox - addW;
+                        newW = ow + addW;
+
+                        console.log( 'addW_itemInfo', itemInfo );
+                        console.log( 'addW_colWidth', colWidth );
+                        console.log( 'addW_isShiftLeft', addW );
+                        console.log( 'addW_diffLeft', diffLeft );
+
+                    } else {
+                        diffLeft = ui.originalPosition.left - ui.position.left;
+                        addW =  Math.ceil( diffLeft / colWidth );
+
+                        if ( addW > itemInfo.before ) {
+                            addW = itemInfo.before;
+                        }
+                        newX = ox - addW;
+                        newW = ow + addW;
                     }
-                    newX = ox - addW;
-                    newW = ow + addW;
 
                     $item.attr('data-gs-x', newX ).removeAttr('style');
                     $item.attr('data-gs-width', newW ).removeAttr('style');
@@ -944,6 +900,7 @@
                     }
                     $row.data( 'gridRowFlag', flag );
                 }
+
                 return flag;
             },
 
@@ -970,9 +927,9 @@
                     }
 
                 } );
+
                 $row.data( 'gridRowFlag', rowFlag );
                 that.updateItemsPositions( rowFlag );
-                //console.log( 'FLAG: '+ $row.attr( 'id' ) , rowFlag );
                 that.sortGrid( $row );
                 return rowFlag;
             },
@@ -1272,7 +1229,12 @@
                 if ( ! wpcustomize.state( 'paneVisible' ).get() ) {
                     sidebarWidth = 0;
                 }
-                this.container.find( '.customify--cb-inner' ).css( {'margin-left': sidebarWidth } );
+                if ( Customify_Layout_Builder.is_rtl ) {
+                    this.container.find( '.customify--cb-inner' ).css( {'margin-right': sidebarWidth } );
+                } else {
+                    this.container.find( '.customify--cb-inner' ).css( {'margin-left': sidebarWidth } );
+                }
+
             },
 
             init: function( controlId, items, devices ){
@@ -1343,52 +1305,6 @@
     };
 
 
-    /*
-    // Extend panel
-    var _panelFocus = wpcustomize.Panel.prototype.focus;
-    var _panelAttachEvents = wpcustomize.Panel.prototype.attachEvents;
-    wp.customize.Panel = wp.customize.Panel.extend({
-        attachEvents: function () {
-            var panel = this;
-            _panelAttachEvents.call( this );
-            panel.expanded.bind( function( expanded ) {
-                console.log( '_panelAttachEvents expand - ' +panel.id, expanded );
-            });
-        },
-
-        focus: function ( params ) {
-            var panel = this;
-            _panelFocus.call( this );
-            wpcustomize.bind( '__panelFocus_focus', [ panel ] );
-            console.log( '_panelFocus Focusted', panel.id );
-        }
-
-    });
-
-
-
-    // Extend Section
-    var _sectionFocus = wpcustomize.Section.prototype.focus;
-    var _sectionAttachEvents = wpcustomize.Section.prototype.attachEvents;
-    wp.customize.Section = wp.customize.Section.extend({
-        attachEvents: function () {
-            var meta, content, section = this;
-            _sectionAttachEvents.call( this );
-            section.expanded.bind( function( expanded ) {
-                console.log( 'expand section', expanded );
-            });
-        },
-
-        focus: function ( params ) {
-            var section = this;
-            _sectionFocus.call( this );
-            wpcustomize.bind( '_section_focus', [ section ] );
-            console.log( 'section focus', section );
-        }
-    });
-    */
-
-
     wpcustomize.bind( 'ready', function( e, b ) {
         _.each( Customify_Layout_Builder.builders, function( opts, id ){
             new CustomizeBuilder( opts );
@@ -1415,7 +1331,6 @@
                 $( '.customify--device-panel .grid-stack-item.for-s-'+section.id ).addClass( 'item-active' );
             }
         });
-
 
 
        //Event when panel toggle

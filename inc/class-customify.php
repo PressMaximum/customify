@@ -219,12 +219,21 @@ class Customify {
      */
     function get_style_uri(){
         $css_file = get_stylesheet_uri();
+        if ( is_rtl() ) {
+            $css_file = get_stylesheet_directory_uri() . '/style-rtl.css';
+        }
+
         if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
             $suffix = $this->get_asset_suffix();
             $style_dir = get_stylesheet_directory();
-            if( file_exists( $style_dir.'/style'.$suffix.'.css' ) ) {
-                $css_file = get_stylesheet_directory_uri() . '/style'.$suffix.'.css';
+            $suffix_css = $suffix;
+            if ( is_rtl() ) {
+                $suffix_css = '-rtl.'.$suffix;
             }
+            if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
+                $css_file = get_stylesheet_directory_uri() . '/style' . $suffix_css . '.css';
+            }
+
         }
         return $css_file;
     }
