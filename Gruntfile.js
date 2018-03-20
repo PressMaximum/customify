@@ -163,7 +163,7 @@ module.exports = function( grunt ) {
                     'assets/sass/admin/**/*.scss'
                 ],
                 tasks: [
-                    //'sass',
+                    'sass',
                     'css'
                 ]
             }
@@ -197,8 +197,8 @@ module.exports = function( grunt ) {
         'css'
     ]);
     grunt.registerTask( 'css', [
-        'sass',
-        'rtlcss'
+        'sass'
+        //'rtlcss',
         //'postcss',
         //'cssmin'
     ]);
