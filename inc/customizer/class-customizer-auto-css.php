@@ -636,6 +636,7 @@ class Customify_Customizer_Auto_CSS
             'font_weight'     => null,
             'text_decoration' => null,
             'text_transform'  => null,
+            'variant'  => null,
         ));
         $code = array();
 
@@ -650,7 +651,7 @@ class Customify_Customizer_Auto_CSS
                 'font'    => $values['font'],
                 'type'    => $values['font_type'],
                 'subsets' => $values['languages'],
-                'variant' => $values['font_weight'],
+                'variant' => $values['variant'],
             ));
         }
 
@@ -757,6 +758,7 @@ class Customify_Customizer_Auto_CSS
         if (empty($this->fonts)) {
             return false;
         }
+
         foreach ($this->fonts as $font_name) {
             if ($s) {
                 $s .= '|';

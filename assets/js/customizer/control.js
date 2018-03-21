@@ -2229,6 +2229,12 @@
                 data[ f.name ] = customifyField.getValue( f, $( '.customify--group-field[data-field-name="'+f.name+'"]', that.container ) );
             });
 
+
+            data.variant = {};
+            if ( ! _.isUndefined( that.fonts.google.fonts[ data.font ] ) ) {
+                data.variant = that.fonts.google.fonts[ data.font ].variants;
+            }
+
             data.font_type = $( '.customify--font-type', that.container ).val();
             $( '.customify-typography-input', this.$el ).val( JSON.stringify( data ) ).trigger( 'change' );
             return data;
