@@ -108,7 +108,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 
                     // Loop items of this row
                     foreach ( $row_items as $item_index => $item ) {
-
+                        $return_render = null;
                         $item = wp_parse_args( $item, array(
                             'x'     => '',
                             'width' => '1',
@@ -182,7 +182,6 @@ class Customify_Customize_Layout_Builder_Frontend {
                         }
 
                         $items[ $item['id'] ]['added'] = false;
-
                         $items[ $item['id'] ]['devices'][ $device ] = array(
                             'x'     => $item['x'],
                             'width' => $item['width'],
@@ -199,7 +198,6 @@ class Customify_Customize_Layout_Builder_Frontend {
                         } else {
                             $items[ $item['id'] ]['rows'][ $row_id ] = $device;
                         }
-
 
                     }
                 }
@@ -251,17 +249,15 @@ class Customify_Customize_Layout_Builder_Frontend {
         $row_html    = '';
         $max_columns = 12;
         $items       = $this->_sort_items_by_position( array_values( $items ) );
-
-        $prefix = $this->id . '_' . $id;
-
         $last_item = false;
         $prev_item = false;
-        $next_item = false;
-
         $group_items = array();
         $gi          = 0;
         $n           = count( $items );
         $index       = 0;
+
+        ob_start();
+
         while ( $index < $n ) {
             $item = $items[ $index ];
 
@@ -393,38 +389,45 @@ class Customify_Customize_Layout_Builder_Frontend {
             $classes = apply_filters( 'customify/builder/item-wrapper-classes', $classes, $item );
             $classes = join( ' ', $classes ); // customify-grid-middle
 
-
-            echo '<div class="' . esc_attr( $classes ) . '" data-push-left="' . join( ' ', $atts ) . '">';
-
+            $row_items_html = '';
             foreach ( $item['items'] as $_it ) {
                 $item_id     = $_it['id'];
                 $content     = $this->render_items[ $item_id ]['render_content'];
-                $item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
-                if ( ! isset( $item_config['section'] ) ) {
-                    $item_config['section'] = '';
-                }
-                $item_classes   = array();
-                $item_classes[] = 'item--inner';
-                $item_classes[] = 'builder-item--' . $item_id;
-                if ( is_customize_preview() ) {
-                    $item_classes[] = ' builder-item-focus';
-                }
+                if ( $content ) {
+                    $item_config = isset($this->config_items[$item_id]) ? $this->config_items[$item_id] : array();
+                    if (!isset($item_config['section'])) {
+                        $item_config['section'] = '';
+                    }
+                    $item_classes = array();
+                    $item_classes[] = 'item--inner';
+                    $item_classes[] = 'builder-item--' . $item_id;
+                    if (is_customize_preview()) {
+                        $item_classes[] = ' builder-item-focus';
+                    }
 
-                $item_classes = join( ' ', $item_classes ); // customify-grid-middle
-                echo '<div class="' . esc_attr( $item_classes ) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr( $item_id ) . '" >';
-                echo $this->setup_item_content( $content, $id, $device );
-                //echo $item_id;
-                if ( is_customize_preview() ) {
-                    echo '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
+                    $item_classes = join(' ', $item_classes); // customify-grid-middle
+                    $row_items_html .= '<div class="' . esc_attr($item_classes) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr($item_id) . '" >';
+                    $row_items_html .= $this->setup_item_content($content, $id, $device);
+                    if (is_customize_preview()) {
+                        $row_items_html .= '<span class="item--preview-name">' . esc_html($item_config['name']) . '</span>';
+                    }
+                    $row_items_html .= '</div>';
                 }
+            }
+            if ( $row_items_html ) {
+                echo '<div class="' . esc_attr($classes) . '" data-push-left="' . join(' ', $atts) . '">';
+                echo $row_items_html;
                 echo '</div>';
             }
-            echo '</div>';
 
             $last_item = $item;
             $index ++;
 
         } // end loop items
+
+        // Get item output
+        $row_html = ob_get_clean();
+        return $row_html;
 
     }
 
@@ -468,9 +471,7 @@ class Customify_Customize_Layout_Builder_Frontend {
                         $atts['class']       = join( ' ', $classes );
                         $atts['id']          = 'cb-row--' . $_id;
                         $atts['data-row-id'] = $row_id;
-
                         $atts  = apply_filters( 'customify/builder/row-attrs', $atts, $row_id, $this );
-
                         $string_atts = '';
                         foreach ( $atts as $k => $s ) {
                             if ( is_array( $s ) ) {
@@ -478,31 +479,46 @@ class Customify_Customize_Layout_Builder_Frontend {
                             }
                             $string_atts .= ' ' . sanitize_text_field( $k ) . '="' . esc_attr( $s ) . '" ';
                         }
+                        if ($desktop_items) {
+                            $html_desktop = $this->render_row($desktop_items, $row_id, 'desktop');
+                        } else {
+                            $html_desktop = false;
+                        }
+                        if ( $mobile_items ) {
+                            $html_mobile = $this->render_row( $mobile_items, $row_id, 'mobile' );
+                        } else {
+                            $html_mobile = false;
+                        }
 
-                        ?>
-                        <div <?php echo $string_atts; ?>
-                            data-show-on="<?php echo esc_attr( join( " ", $show_on_devices ) ); ?>">
-                            <div class="customify-container">
-                                <?php
-                                if ( $desktop_items ) {
-                                    $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
-                                    if ( empty( $mobile_items ) ) {
-                                        $c = '';
+                        if ( $html_mobile || $html_desktop ) {
+                            ?>
+                            <div <?php echo $string_atts; ?>
+                                    data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                                <div class="customify-container">
+                                    <?php
+                                    if ($html_desktop) {
+
+                                        if ( $html_desktop ) {
+                                            $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+                                            if (empty($mobile_items)) {
+                                                $c = '';
+                                            }
+                                            echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
+                                            echo $html_desktop;
+                                            echo '</div>';
+                                        }
                                     }
-                                    echo '<div class="customify-grid ' . esc_attr( $c . ' ' . $align_classes ) . '">';
-                                    $this->render_row( $desktop_items, $row_id, 'desktop' );
-                                    echo '</div>';
-                                }
 
-                                if ( $mobile_items ) {
-                                    echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr( $align_classes ) . '">';
-                                    $this->render_row( $mobile_items, $row_id, 'mobile' );
-                                    echo '</div>';
-                                }
-                                ?>
+                                    if ($html_mobile) {
+                                        echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
+                                        echo $html_mobile;
+                                        echo '</div>';
+                                    }
+                                    ?>
+                                </div>
                             </div>
-                        </div>
-                        <?php
+                            <?php
+                        }
                     }
                 }
             }
