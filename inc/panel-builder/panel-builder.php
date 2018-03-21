@@ -1,4 +1,4 @@
-<?php
+x<?php
 
 require_once get_template_directory().'/inc/panel-builder/class-customize-builder-panel.php';
 require_once get_template_directory().'/inc/panel-builder/class-customize-layout-builder.php';

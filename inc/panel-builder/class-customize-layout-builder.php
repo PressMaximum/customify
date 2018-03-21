@@ -290,7 +290,8 @@ class Customify_Customize_Layout_Builder {
      * Add script to Customize
      */
     function scripts() {
-        wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder.js', array(
+        $suffix = Customify()->get_asset_suffix();
+        wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder'.$suffix.'.js', array(
             'customize-controls',
             'jquery-ui-resizable',
             'jquery-ui-droppable',
