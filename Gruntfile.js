@@ -217,9 +217,9 @@ module.exports = function( grunt ) {
     grunt.registerTask('before-release', [
         'css',
         'postcss',
-        'rtlcss',
         'uglify',
         'cssmin',
+        'rtlcss',
     ]);
 
     // Update google Fonts
