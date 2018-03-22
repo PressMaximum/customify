@@ -23,7 +23,7 @@ $builder_active_color: #0073aa;
 }
 
 @mixin rtl() {
-    html[dir=rtl] & {
+    html[dir="rtl"] & {
        @content;
     }
 }

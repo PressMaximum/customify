@@ -65,11 +65,14 @@ $cb_padding: 20px;
                 position: absolute;
                 top: -45px;
                 right: 30px;
+                @include rtl(){
+                    right: auto;
+                    left: 30px;
+                }
                 text-transform: uppercase;
             }
         }
     }
-
     * {
         box-sizing: border-box;
     }
@@ -92,8 +95,6 @@ $cb_padding: 20px;
     }
 }
 
-
-
 .customify--cb-body {
     position: relative;
     overflow: hidden;
@@ -103,9 +104,6 @@ $cb_padding: 20px;
     display: block;
     z-index: 4;
     position: relative;
-    //background: #DDDDDD;
-
-
     &.customify--panel-hide {
         opacity: 0;
         height: 0px;
@@ -144,6 +142,9 @@ $cb_padding: 20px;
 
     .customify--cb-devices-switcher {
         float: left;
+        @include rtl(){
+            float: right;
+        }
         a {
             border: 1px solid #ccc;
             display: inline-block;
@@ -163,6 +164,9 @@ $cb_padding: 20px;
     }
     .customify--cb-actions {
         float: right;
+        @include rtl(){
+            float: left;
+        }
         margin-top: -1px;
         a {
             display: inline-block;
@@ -181,6 +185,9 @@ $cb_padding: 20px;
 }
 .customify--cb-row {
     padding: 0px 0 0 35px;
+    @include rtl(){
+        padding: 0px 35px 0 0px;
+    }
     position: relative;
     border: $border;
     display: block;
@@ -205,12 +212,19 @@ $cb_padding: 20px;
         position: absolute;
         top: 0px;
         left: 0px;
+        border-right: 1px solid #ddd;
+        @include rtl(){
+            left: auto;
+            right: 0px;
+            border-right: 0 none;
+            border-left: 1px solid #ddd;
+        }
         bottom: 0px;
         text-decoration: none;
         width: 35px;
         display: block;
         text-align: center;
-        border-right: 1px solid #ddd;
+
         color: #444444;
         &:focus {
             box-shadow: none;
@@ -285,6 +299,7 @@ $cb_padding: 20px;
                         border-left: 0px none;
                     }
                 }
+
             }
         }
         .customify--cb-items {

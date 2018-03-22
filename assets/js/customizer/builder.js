@@ -3,6 +3,8 @@
 (function( $, wpcustomize ) {
     var $document = $( document );
 
+    var is_rtl = Customify_Layout_Builder.is_rtl;
+
     var CustomizeBuilder = function( options ){
 
         var Builder = {
@@ -47,7 +49,6 @@
                 };
 
             }),
-
             drag_drop: function(){
                 var that = this;
 
@@ -135,7 +136,6 @@
 
                 } );
             },
-
             sortGrid: function( $wrapper ){
                 $(".grid-stack-item", $wrapper ).each( function( ){
                     var el = $( this );
@@ -152,12 +152,10 @@
                 } );
 
             },
-
             getX: function( $item ){
                 var x = $item.attr( 'data-gs-x' ) || 0;
                 return parseInt( x );
             },
-
             getW: function( $item, df ){
                 if ( _.isUndefined( df ) ) {
                     df = false;
@@ -170,7 +168,6 @@
                 }
                 return parseInt( w );
             },
-
             gridGetItemInfo: function( $item, flag, $wrapper ) {
                 var that = this;
                 var x = that.getX( $item );
@@ -215,7 +212,6 @@
                     wrapper: $wrapper
                 }
             },
-
             updateItemsPositions: function( flag ){
                 var maxCol = this.cols;
                 for( var i = 0; i <= maxCol; i++ ) {
@@ -224,7 +220,6 @@
                     }
                 }
             },
-
             gridster: function( $wrapper, ui ){
                 var flag = [], backupFlag = [], that = this;
                 var maxCol = this.cols;
@@ -662,10 +657,11 @@
                 var x = 0;
                 var left = 0;
                 var iOffset = ui.offset;
-                var w, in_this_row;
+                var w, itemWidth, in_this_row;
                 w = that.getW( ui.draggable, true );
+                itemWidth = ui.draggable.width();
 
-                console.log( 'DROP W', w );
+                console.log( 'DROP ITEM WIDTH', w );
 
                 var xc = 0, xi = 0, found = false;
 
@@ -679,14 +675,33 @@
                     //left = iOffset.left - wOffset.left;
                 }
 
-                // Lấy vị trí thả xuống từ con trỏ chuột
-                xc = Math.round( ( event.clientX - wOffset.left ) / colWidth );
+                // Kiểm tra RTL
+                if ( ! is_rtl ) { // nếu ko phải RTL
+                    // Lấy vị trí thả xuống từ con trỏ chuột tính theo bên trái của trình duyệt và mép trái của row
+                    xc = Math.round(( event.clientX - wOffset.left ) / colWidth);
 
-                // Lấy vị trí thả xuống từ mép trái của item
-                xi = Math.round( ( iOffset.left - wOffset.left - 10 )  / colWidth );
-                if ( xi < 0 ) {
-                    xi = 0;
+                    // Lấy vị trí thả xuống từ mép trái của item
+                    xi = Math.round(( iOffset.left - wOffset.left - 10 ) / colWidth);
+                    if (xi < 0) {
+                        xi = 0;
+                    }
+                } else {
+                    // Nếu là RTL
+
+                    // Lấy vị trí thả xuống từ con trỏ chuột tính theo bên trái của trình duyệt và mép phải của row
+                    xc = Math.round(( ( wOffset.left + width ) - event.clientX ) / colWidth);
+
+                    // Lấy vị trí thả xuống từ mép phải của item theo bên phải của row
+                    xi = Math.round( ( ( wOffset.left + width  )  - ( iOffset.left + itemWidth + 10 )  ) / colWidth );
+                    if (xi < 0) {
+                        xi = 0;
+                    }
+
+                    console.log( 'RTL XC', xc );
+                    console.log( 'RTL XI', xi );
                 }
+
+
                 x = xi;
                 if ( ! isEmptyX( x ) ) {
                     while ( x <= xc && ! found ) {
@@ -705,7 +720,6 @@
                     found = true;
                 }
 
-
                 if ( ! found ) {
                     if ( in_this_row ) {
                         x = xi;
@@ -723,12 +737,6 @@
                 console.log( 'DROP XC', xc );
                 console.log( 'DROP XI', xi );
                 console.log( 'DROP X', x );
-
-                //RTL
-                if ( Customify_Layout_Builder.is_rtl ) {
-                    x = that.cols - ( x );
-                    console.log( 'DROP X REVERSE: w:'+w, x );
-                }
 
                 var node = {
                     el: ui.draggable,
@@ -776,34 +784,34 @@
 
                 //-----------------------------------------------------------------------------------------------------------------------------
             },
-
             updateAllGrids: function(){
                 var that = this;
                 _.each( that.panels[ that.activePanel ], function( row, row_id ) {
                     that.updateGridFlag( row );
                 });
             },
-
             setGridWidth: function( $wrapper, ui ){
                 var that = this;
                 var $item = ui.element;
                 var width  = $wrapper.width();
                 var itemWidth = ui.size.width;
+                var originalElementWidth = ui.originalSize.width;
                 var colWidth = width/that.cols;
+                var isShiftLeft, isShiftRight;
 
-                var isShiftLeft = ui.originalPosition.left > ui.position.left;
-                var isShiftRight = ui.originalPosition.left < ui.position.left;
 
-                console.log( 'position', ui.position );
-                console.log( 'originalPosition', ui.originalPosition );
+                if ( ! is_rtl ) {
+                    isShiftLeft = ui.originalPosition.left > ui.position.left;
+                    isShiftRight = ui.originalPosition.left < ui.position.left;
+                } else {
+                    isShiftLeft = ui.originalPosition.left > ui.position.left;
+                    isShiftRight = originalElementWidth !== itemWidth;
+                }
 
                 var ow =  ui.originalElement.attr( 'data-gs-width' ) || 1;
                 var ox =  ui.originalElement.attr( 'data-gs-x' ) || 0;
                 ow = parseInt( ow );
                 ox = parseInt( ox );
-
-                console.log( 'ow', ow );
-                console.log( 'ox', ox );
 
                 var addW;
                 var newX;
@@ -812,59 +820,73 @@
                 var itemInfo = that.gridGetItemInfo( ui.originalElement, flag, $wrapper );
                 var diffLeft, diffRight;
 
-
+                /*
+                console.log( '$item.width()',  itemWidth );
+                console.log( 'itemWidth', originalElementWidth );
+                console.log( 'ow', ow );
+                console.log( 'ox', ox );
+                console.log( 'position', ui.position );
+                console.log( 'originalPosition', ui.originalPosition );
                 console.log( 'itemInfo', itemInfo );
                 console.log( 'isShiftLeft', isShiftLeft );
                 console.log( 'isShiftRight', isShiftRight );
+                */
 
                 if ( isShiftLeft ) {
 
-                    if ( Customify_Layout_Builder.is_rtl ) {
-
+                    if ( ! is_rtl ) {
                         diffLeft = ui.originalPosition.left - ui.position.left;
-                        addW =  Math.ceil( diffLeft / colWidth );
+                        addW = Math.ceil(diffLeft / colWidth);
 
-                        if ( addW > itemInfo.before ) {
+                        if (addW > itemInfo.before) {
                             addW = itemInfo.before;
                         }
                         newX = ox - addW;
                         newW = ow + addW;
-
-                        console.log( 'addW_itemInfo', itemInfo );
-                        console.log( 'addW_colWidth', colWidth );
-                        console.log( 'addW_isShiftLeft', addW );
-                        console.log( 'addW_diffLeft', diffLeft );
-
-                    } else {
+                        $item.attr('data-gs-x', newX).removeAttr('style');
+                        $item.attr('data-gs-width', newW).removeAttr('style');
+                    } else { // RTL
                         diffLeft = ui.originalPosition.left - ui.position.left;
-                        addW =  Math.ceil( diffLeft / colWidth );
-
-                        if ( addW > itemInfo.before ) {
-                            addW = itemInfo.before;
+                        addW = Math.ceil(diffLeft / colWidth);
+                        if (addW > itemInfo.after) {
+                            addW = itemInfo.after;
                         }
-                        newX = ox - addW;
                         newW = ow + addW;
+                        $item.attr('data-gs-x', ox ).removeAttr('style');
+                        $item.attr('data-gs-width', newW).removeAttr('style');
                     }
 
-                    $item.attr('data-gs-x', newX ).removeAttr('style');
-                    $item.attr('data-gs-width', newW ).removeAttr('style');
                     that.updateGridFlag( $wrapper );
                     return ;
 
                 } else if( isShiftRight ) {
-                    diffRight = ui.position.left - ui.originalPosition.left ;
-                    addW =  Math.ceil( diffRight / colWidth );
 
-                    newW = ow - addW;
-                    if (  newW <= 0 ) {
-                        newW = 1;
-                        addW = 0;
+                    if ( ! is_rtl ) {
+                        diffRight = ui.position.left - ui.originalPosition.left;
+                        addW = Math.ceil(diffRight / colWidth);
+                        newW = ow - addW;
+                        if (newW <= 0) {
+                            newW = 1;
+                            addW = 0;
+                        }
+                        newX = ox + addW;
+                        $item.attr('data-gs-x', newX).removeAttr('style');
+                        $item.attr('data-gs-width', newW).removeAttr('style');
+                    } else {
+                        diffRight = itemWidth - originalElementWidth;
+                        addW = Math.ceil(diffRight / colWidth);
+                        if (addW > itemInfo.before) {
+                            addW = itemInfo.before;
+                        }
+                        newX = ox - addW;
+                        newW = ow + addW;
+                        if ( newX <= 0 ) {
+                            newX = 0;
+                        }
+                        $item.attr('data-gs-x', newX).removeAttr('style');
+                        $item.attr('data-gs-width', newW).removeAttr('style');
                     }
 
-                    newX = ox + addW;
-
-                    $item.attr('data-gs-x', newX ).removeAttr('style');
-                    $item.attr('data-gs-width', newW ).removeAttr('style');
 
                     that.updateGridFlag( $wrapper );
                     return ;
@@ -889,7 +911,6 @@
                 that.updateGridFlag( $wrapper );
 
             },
-
             getFlag: function( $row ){
                 var that = this;
                 var flag = $row.data( 'gridRowFlag' ) || [];
@@ -903,7 +924,6 @@
 
                 return flag;
             },
-
             updateGridFlag: function( $row ){
                 var that = this;
                 var rowFlag = [];
@@ -933,7 +953,6 @@
                 that.sortGrid( $row );
                 return rowFlag;
             },
-
             addNewWidget: function ( $item, row ) {
 
                 var that = this;
@@ -965,6 +984,11 @@
                     }
                 }).resizable({
                     handles: 'w, e',
+                    start: function( event, ui ) {
+                        // RTL
+                        ui.originalElement.css( { 'right' : 'auto', left: ui.position.left } );
+
+                    },
                     stop: function( event, ui ){
                         that.setGridWidth( ui.element.parent(), ui );
                         that.save();
@@ -975,7 +999,6 @@
                 that.updateGridFlag( el );
 
             },
-
             addPanel: function( device ){
                 var that = this;
                 var template = that.getTemplate();
@@ -993,7 +1016,6 @@
                     }, template_id );
                 return '<div class="customify--device-panel customify-vertical-panel customify--panel-'+device+'" data-device="'+device+'">'+html+'</div>';
             },
-
             addDevicePanels: function(){
                 var that = this;
                 _.each( that.devices, function( device_name, device ) {
@@ -1003,7 +1025,6 @@
                 } );
 
             },
-
             addItem: function( node ){
                 var that = this;
                 var template = that.getTemplate();
@@ -1014,7 +1035,6 @@
                 var html = template( node, template_id );
                 return $( html );
             },
-
             addAvailableItems: function(){
                 var that = this;
 
@@ -1049,7 +1069,6 @@
                 } );
 
             },
-
             switchToDevice: function( device, toggle_button ){
                 var that = this;
                 var numberDevices = _.size( that.devices );
@@ -1072,7 +1091,6 @@
                 }
 
             },
-
             addExistingRowsItems: function(){
                 var that  = this;
 
@@ -1100,7 +1118,6 @@
 
                 that.ready = true;
             },
-
             focus: function(){
                 this.container.on( 'click', '.customify--cb-item-setting, .customify--cb-item-name', function( e ) {
                     e.preventDefault();
@@ -1151,14 +1168,12 @@
                 } );
 
             },
-
             encodeValue: function( value ){
                 return encodeURI( JSON.stringify( value ) )
             },
             decodeValue: function( value ){
                 return JSON.parse( decodeURI( value ) );
             },
-
             save: function(){
                 var that = this;
                 if ( ! that.ready  ) {
@@ -1187,7 +1202,6 @@
                 wpcustomize.control( that.controlId ).setting.set( that.encodeValue( data ) );
                 //console.log('Panel Data: ', data );
             },
-
             showPanel: function(){
                 var that = this;
                 this.container.removeClass('customify--builder--hide').addClass( 'customify--builder-show' );
@@ -1200,7 +1214,6 @@
                 this.container.removeClass( 'customify--builder-show' );
                 $( '#customize-preview' ).removeClass( 'cb--preview-panel-show' ).removeAttr('style');
             },
-
             togglePanel: function(){
                 var that = this;
                 wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
@@ -1222,21 +1235,19 @@
                 } );
 
             },
-
             panelLayoutCSS: function(){
                 //wpcustomize.state( 'paneVisible' ).get()
                 var sidebarWidth = $( '#customize-controls' ).width();
                 if ( ! wpcustomize.state( 'paneVisible' ).get() ) {
                     sidebarWidth = 0;
                 }
-                if ( Customify_Layout_Builder.is_rtl ) {
+                if ( is_rtl ) {
                     this.container.find( '.customify--cb-inner' ).css( {'margin-right': sidebarWidth } );
                 } else {
                     this.container.find( '.customify--cb-inner' ).css( {'margin-left': sidebarWidth } );
                 }
 
             },
-
             init: function( controlId, items, devices ){
                 var that = this;
 
@@ -1304,7 +1315,6 @@
         return Builder;
     };
 
-
     wpcustomize.bind( 'ready', function( e, b ) {
         _.each( Customify_Layout_Builder.builders, function( opts, id ){
             new CustomizeBuilder( opts );
@@ -1349,7 +1359,6 @@
         */
 
     });
-
 
     // Focus
     $document.on( 'click', '.focus-section', function( e ) {
@@ -1425,7 +1434,6 @@
             });
         }
     });
-
 
     $document.on( 'click', '.list-saved-templates .saved_template .remove-tpl', function( e ) {
         e.preventDefault();
