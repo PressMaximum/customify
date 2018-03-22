@@ -3159,6 +3159,9 @@ article.comment .comment-post-author {
   margin-left: 5px;
   float: right;
 }
+html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
+  transform: rotate(180deg);
+}
 .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle:before {
   content: "\f105";
 }
@@ -4802,6 +4805,10 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 
+.entry-title {
+  word-wrap: break-word;
+}
+
 .entry-meta {
   margin-bottom: 0.7em;
   color: #6d6d6d;
@@ -4880,6 +4887,7 @@ body.menu_sidebar_dropdown:before {
   font-size: 1.4em;
   font-weight: 400;
   color: #444444;
+  word-wrap: break-word;
 }
 .posts-layout .entry-title a {
   color: inherit;

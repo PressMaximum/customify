@@ -9,6 +9,13 @@
     }
 }
 
+@mixin rtl() {
+    html[dir="rtl"] & {
+        @content;
+    }
+}
+
+
 //$screen_lg: 80em;   // max 1280px
 //$screen_md: 64em;   // max 1024px
 //$screen_sm: 48em;   // max 768px

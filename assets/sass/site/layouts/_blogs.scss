@@ -4,6 +4,10 @@ $blog_gutter: $gl-gutter;
     display: inline-block;
 }
 
+.entry-title {
+    word-wrap: break-word;
+}
+
 .entry-meta {
     margin-bottom: 0.7em;
     color: $color_meta;
@@ -21,7 +25,6 @@ $blog_gutter: $gl-gutter;
         margin-left: 3px;
         margin-right: 3px;
     }
-
 }
 
 .posts-layout {
@@ -82,6 +85,7 @@ $blog_gutter: $gl-gutter;
         font-size: 1.4em;
         font-weight: 400;
         color: $color_text;
+        word-wrap: break-word;
         a {
             color: inherit;
             &:hover {

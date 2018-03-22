@@ -180,6 +180,10 @@ class Customify_TitleBar {
                 }
             }
 
+            if ( is_home() && is_front_page() ) {
+                $is_showing = false;
+            }
+
             self::$is_showing = apply_filters('customify/titlebar/is-showing', $is_showing );
 
         }

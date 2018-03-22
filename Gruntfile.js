@@ -42,6 +42,7 @@ module.exports = function( grunt ) {
                         cwd: '',
                         src: [
                             '*.css',
+                            '!*.min.css',
                             '!*-rtl.css'
                         ],
                         dest: '',
@@ -52,6 +53,7 @@ module.exports = function( grunt ) {
                         cwd: 'assets/css/compatibility',
                         src: [
                             '*.css',
+                            '!*.min.css',
                             '!*-rtl.css'
                         ],
                         dest: 'assets/css/compatibility',
