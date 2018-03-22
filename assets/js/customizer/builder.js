@@ -701,18 +701,17 @@
                     console.log( 'RTL XI', xi );
                 }
 
-
                 x = xi;
-                if ( ! isEmptyX( x ) ) {
-                    while ( x <= xc && ! found ) {
-                        if ( isEmptyX( x ) ) {
+
+                if (!isEmptyX(x)) {
+                    while (x <= xc && !found) {
+                        if (isEmptyX(x)) {
                             found = true;
                         } else {
                             x++;
                         }
-
                     }
-                    if ( x > xc ) {
+                    if (x > xc) {
                         x = xc;
                     }
                 } else {
@@ -720,8 +719,9 @@
                     found = true;
                 }
 
-                if ( ! found ) {
-                    if ( in_this_row ) {
+
+                if (!found) {
+                    if (in_this_row) {
                         x = xi;
                     } else {
                         x = xc;
@@ -1119,7 +1119,7 @@
                 that.ready = true;
             },
             focus: function(){
-                this.container.on( 'click', '.customify--cb-item-setting, .customify--cb-item-name', function( e ) {
+                this.container.on( 'click', '.customify--cb-item-setting, .customify--cb-item-name, .item-tooltip', function( e ) {
                     e.preventDefault();
                     var section = $( this ).data( 'section' ) || '';
                     //console.log( 'Clicked section' , section );

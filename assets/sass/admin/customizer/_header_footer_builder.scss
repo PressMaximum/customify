@@ -328,6 +328,10 @@ $cb_padding: 20px;
         text-overflow: ellipsis;
         margin: 0 10px 0 10px;
         padding-right: 60px;
+        @include rtl(){
+            padding-right: 0px;
+            padding-left: 60px;
+        }
         display: inline-block;
         width: 100%;
         max-width: 100%;
@@ -473,6 +477,10 @@ $cb_padding: 20px;
         background: inherit;
         padding: 5px 3px;
         right: 0px;
+        @include rtl(){
+            right: auto;
+            left: 0px;
+        }
         transform: translateY(-50%);
         cursor: pointer;
         &:before {
@@ -487,6 +495,10 @@ $cb_padding: 20px;
         background: inherit;
         top: 50%;
         right: 22px;
+        @include rtl(){
+            right: auto;
+            left: 22px;
+        }
         padding: 5px 3px;
         transform: translateY(-50%);
         cursor: pointer;

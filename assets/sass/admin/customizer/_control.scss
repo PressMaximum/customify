@@ -629,7 +629,7 @@ $text_color: #555d66;
         top: -9px;
         right: 18px;
         @include rtl(){
-            left: 18px; right: auto;
+            left: 17px; right: auto;
         }
         line-height: 22px;
         position: absolute;
@@ -712,6 +712,10 @@ $text_color: #555d66;
         flex: 1;
         border: 1px solid #ddd;
         border-right: 0px;
+        @include rtl(){
+            border-right: 1px solid #ddd;
+            border-left: 0px;
+        }
         cursor: pointer;
         position: relative;
     }
@@ -739,6 +743,10 @@ $text_color: #555d66;
         flex: 1;
         border: 1px solid #ddd;
         border-left: 0px;
+        @include rtl(){
+            border-left: 1px solid #ddd;
+            border-right: 0px;
+        }
         font-size: 18px;
         .dashicons {
             width: 30px;
@@ -905,12 +913,27 @@ $text_color: #555d66;
                     border-right: 1px solid #ccc;
                     border-top-right-radius: 3px;
                     border-bottom-right-radius: 3px;
+                    @include rtl(){
+                        border-right: 0px none;
+                        border-left: 1px solid #ccc;
+                        border-top-right-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
+                    }
                 }
             }
             &:first-child {
                 span.label {
                     border-top-left-radius: 3px;
                     border-bottom-left-radius: 3px;
+                    @include rtl(){
+                        border-right: 1px solid #ccc;
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
+                    }
                 }
             }
         }
