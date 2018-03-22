@@ -225,6 +225,7 @@
     'use strict';
 
     var $document = $( document );
+    var is_rtl = Customify_Layout_Builder.is_rtl;
 
     var CustomifyMedia =  {
         setAttachment: function( attachment ){
@@ -1876,10 +1877,19 @@
         },
         show: function () {
             var controlWidth = $( '#customize-controls' ).width();
-            $( '#customify--sidebar-icons' ).css( 'left', controlWidth ).addClass( 'customify--active' );
+            if ( ! is_rtl ) {
+                $( '#customify--sidebar-icons' ).css( 'left', controlWidth ).addClass( 'customify--active' );
+            } else {
+                $( '#customify--sidebar-icons' ).css( 'right', controlWidth ).addClass( 'customify--active' );
+            }
+
         },
         close: function () {
-            $( '#customify--sidebar-icons' ).css( 'left', -300 ).removeClass( 'customify--active' );
+            if ( ! is_rtl ) {
+                $('#customify--sidebar-icons').css('left', -300).removeClass('customify--active');
+            } else {
+                $('#customify--sidebar-icons').css('right', -300).removeClass('customify--active');
+            }
             $( '.customify--icon-picker' ).removeClass('customify--icon-picking');
             this.pickingEl = null;
         },

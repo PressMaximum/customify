@@ -21,7 +21,6 @@ $builder_active_color: #0073aa;
         clear: both;
     }
 }
-
 @mixin rtl() {
     html[dir="rtl"] & {
        @content;
@@ -54,6 +53,10 @@ $builder_active_color: #0073aa;
     position: absolute;
     right: 0;
     top: 30px;
+    @include rtl(){
+        right: auto;
+        left: 0px;
+    }
     &:focus, &:visited, &:active {
         outline: none !important;
     }
@@ -71,7 +74,6 @@ $builder_active_color: #0073aa;
         position: absolute;
         top: 6px;
     }
-
     &.loading {
         -webkit-animation-name: spinnerRotate;
         -webkit-animation-duration: 2s;
