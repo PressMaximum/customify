@@ -25,6 +25,34 @@ module.exports = function( grunt ) {
             }
         },
 
+        rtlcss: {
+            options: {
+                // rtlcss options
+                config: {
+                    preserveComments: true,
+                    greedy: true
+                },
+                // generate source maps
+                map: false
+            },
+            dist: {
+                files: [
+                    {src: 'style-rtl.css', dest: 'style.css'},
+                    { // Front end compatibility
+                        expand: true,
+                        cwd: 'assets/css/compatibility',
+                        src: [
+                            '*.css',
+                            '!*-rtl.css',
+                            '!*.min.css'
+                        ],
+                        dest: 'assets/css/compatibility',
+                        ext: '-rtl.css'
+                    }
+                ]
+            }
+        },
+
         // SASS
         sass: {
             options: {
@@ -135,7 +163,7 @@ module.exports = function( grunt ) {
                     'assets/sass/admin/**/*.scss'
                 ],
                 tasks: [
-                    //'sass',
+                    'sass',
                     'css'
                 ]
             }
@@ -160,6 +188,7 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
     grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-rtlcss');
 
 
     // Register tasks
@@ -169,6 +198,7 @@ module.exports = function( grunt ) {
     ]);
     grunt.registerTask( 'css', [
         'sass'
+        //'rtlcss',
         //'postcss',
         //'cssmin'
     ]);

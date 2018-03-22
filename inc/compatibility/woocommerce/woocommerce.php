@@ -10,34 +10,39 @@ class Customify_WC {
         return self::$_instance ;
     }
 
+    function is_active(){
+        return  Customify()->is_woocommerce_active();
+    }
+
     function __construct()
     {
-        add_filter( 'customify_get_layout', array( $this, 'shop_layout' ) );
-        add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-        add_filter( 'customify/customizer/config', array( $this, 'customize_shop_sidebars' ) );
-        add_filter( 'customify/sidebar-id', array( $this, 'shop_sidebar_id' ), 15, 2 );
+        if (  $this->is_active() ) {
+            add_filter('customify_get_layout', array($this, 'shop_layout'));
+            add_action('widgets_init', array($this, 'register_sidebars'));
+            add_filter('customify/customizer/config', array($this, 'customize_shop_sidebars'));
+            add_filter('customify/sidebar-id', array($this, 'shop_sidebar_id'), 15, 2);
 
-        add_filter( 'customify_is_header_display', array( $this, 'show_shop_header' ), 15 );
-        add_filter( 'customify_is_footer_display', array( $this, 'show_shop_footer' ), 15 );
-        add_filter( 'customify_site_content_class', array( $this, 'shop_content_layout' ), 15 );
-        add_filter( 'customify_builder_row_display_get_post_id', array( $this, 'builder_row_get_id' ), 15 );
+            add_filter('customify_is_header_display', array($this, 'show_shop_header'), 15);
+            add_filter('customify_is_footer_display', array($this, 'show_shop_footer'), 15);
+            add_filter('customify_site_content_class', array($this, 'shop_content_layout'), 15);
+            add_filter('customify_builder_row_display_get_post_id', array($this, 'builder_row_get_id'), 15);
 
+            add_filter('customify/titlebar/args', array($this, 'titlebar_args'));
+            add_filter('customify/titlebar/config', array($this, 'titlebar_config'), 15, 2);
+            add_filter('customify/titlebar/is-showing', array($this, 'titlebar_is_showing'), 15);
 
-        add_filter( 'customify/titlebar/args', array( $this, 'titlebar_args' ) );
-        add_filter( 'customify/titlebar/config', array( $this, 'titlebar_config' ), 15, 2 );
-        add_filter( 'customify/titlebar/is-showing', array( $this, 'titlebar_is_showing' ), 15 );
-
-        add_filter( 'customify/theme/js', array( $this, 'add_js' ) );
-        add_filter( 'customify/theme/css', array( $this, 'add_css' ) );
+            add_filter('customify/theme/js', array($this, 'add_js'));
+            add_filter('customify/theme/css', array($this, 'add_css'));
+        }
     }
     function add_css( $css_files ){
-        $suffix = Customify_Init()->get_asset_suffix();
+        $suffix = Customify()->get_asset_suffix();
         $css_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
         return $css_files;
     }
 
     function add_js( $js_files ){
-        $suffix = Customify_Init()->get_asset_suffix();
+        $suffix = Customify()->get_asset_suffix();
         $js_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/js/compatibility/woocommerce'.$suffix.'.js';
         return $js_files;
     }
@@ -113,12 +118,12 @@ class Customify_WC {
 
         if ( is_shop() ) {
             // Do not show if page settings disable page title
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_page' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_page' ) ) {
                 $show = false;
             } else {
                 $show = true;
             }
-            if ( Customify_Init()->is_using_post() ) {
+            if ( Customify()->is_using_post() ) {
                 $breadcrumb_display = get_post_meta( wc_get_page_id( 'shop' ), '_customify_breadcrumb_display', true);
                 if ( $breadcrumb_display == 'hide' ) {
                     $show = false;
@@ -127,13 +132,13 @@ class Customify_WC {
                 }
             }
         } else if (is_product_taxonomy()) {
-            if (Customify_Customizer()->get_setting('titlebar_display_product_tax')) {
+            if (Customify()->get_setting('titlebar_display_product_tax')) {
                 $show = true;
             } else {
                 $show = false;
             }
         } elseif (is_product()) {
-            if (Customify_Customizer()->get_setting('titlebar_display_product')) {
+            if (Customify()->get_setting('titlebar_display_product')) {
                 $show = true;
             } else {
                 $show = false;
@@ -228,8 +233,8 @@ class Customify_WC {
 
     function shop_layout( $layout = false ){
         if ( $this->is_shop_pages() ) {
-            $default    = Customify_Customizer()->get_setting('sidebar_layout');
-            $page       = Customify_Customizer()->get_setting('page_sidebar_layout');
+            $default    = Customify()->get_setting('sidebar_layout');
+            $page       = Customify()->get_setting('page_sidebar_layout');
             $page_id =  wc_get_page_id('shop');
             $page_custom = get_post_meta( $page_id, '_customify_sidebar', true );
             if ( $page_custom ) {
@@ -242,7 +247,7 @@ class Customify_WC {
         }
 
         if ( is_product() ) {
-            $product_custom = Customify_Customizer()->get_setting( 'product_sidebar_layout' );
+            $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
             if ( $product_custom && $product_custom != 'default' ) {
                 $layout = $product_custom;
             }
@@ -250,10 +255,14 @@ class Customify_WC {
         return $layout;
     }
 }
+
 function Customify_WC(){
     return Customify_WC::get_instance();
 }
-Customify_WC();
+
+if ( Customify()->is_woocommerce_active() ) {
+    Customify_WC();
+}
 
 
 /**

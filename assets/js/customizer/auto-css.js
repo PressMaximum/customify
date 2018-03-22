@@ -594,13 +594,16 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         value = _.defaults( value, {
             font: null,
             type: null,
-            variant: null,
-            subsets: null,
+            variant: null, // font variant user selected
+            subsets: null, // font variant user selected
+            font_data: null, // Original data
         });
 
         if ( ! value.font ) {
             return '';
         }
+
+        console.log( 'Font-Vs', value );
 
         if ( value.type == 'google' ){
             this.fonts[ value.font ] = value.font;
@@ -1021,7 +1024,7 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
                 font: values.font,
                 type: values.font_type,
                 subsets: values.languages,
-                variant: values.font_weight,
+                variant: values.variant,
             } );
         }
 

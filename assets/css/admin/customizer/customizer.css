@@ -95,7 +95,7 @@
   margin: 0px;
   text-transform: uppercase;
   letter-spacing: 2px;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 12px;
   color: #444444;
 }
@@ -1269,9 +1269,14 @@
 .customify--customize-builder .customify--cb-inner {
   transition: all 500ms;
   margin-left: 300px;
+  margin-right: 0px;
   height: 100%;
   display: block;
   overflow: auto;
+}
+html[dir=rtl] .customify--customize-builder .customify--cb-inner {
+  margin-left: 0px;
+  margin-right: 300px;
 }
 .customify--customize-builder .customify--cb-body {
   height: 280px;
@@ -1473,6 +1478,14 @@
 }
 .customify--cb-row .customify--row-inner .row--grid div:last-child {
   border-right: 0 none;
+}
+html[dir=rtl] .customify--cb-row .customify--row-inner .row--grid div {
+  border-right: none 0px;
+  border-left: 1px dashed #dddddd;
+}
+html[dir=rtl] .customify--cb-row .customify--row-inner .row--grid div:last-child {
+  border-right: 0 none;
+  border-left: 0px none;
 }
 .customify--cb-row .customify--row-inner .customify--cb-items {
   z-index: 36;
@@ -4065,6 +4078,7 @@
   cursor: ew-resize;
   width: 10px;
   right: 10px;
+  left: auto;
   top: 0px;
   bottom: 0px;
 }
@@ -4072,6 +4086,7 @@
   cursor: ew-resize;
   width: 10px;
   left: 10px;
+  right: auto;
   top: 0px;
   bottom: 0px;
 }

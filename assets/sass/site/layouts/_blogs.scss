@@ -247,7 +247,6 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-content {
-    word-break: break-all;
     a {
         &:hover {
             text-decoration: underline;
@@ -299,7 +298,6 @@ $blog_gutter: $gl-gutter;
         }
     }
 }
-
 
 .nav-links {
     @include clearfix();

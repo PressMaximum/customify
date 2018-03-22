@@ -76,9 +76,14 @@ $cb_padding: 20px;
     .customify--cb-inner {
         transition: all 500ms;
         margin-left: 300px;
+        margin-right: 0px;
         height: 100%;
         display: block;
         overflow: auto;
+        @include rtl{
+            margin-left: 0px;
+            margin-right: 300px;
+        }
     }
     .customify--cb-body {
         height: 280px;
@@ -86,6 +91,8 @@ $cb_padding: 20px;
         display: block;
     }
 }
+
+
 
 .customify--cb-body {
     position: relative;
@@ -269,14 +276,21 @@ $cb_padding: 20px;
                 &:last-child {
                     border-right: 0 none;
                 }
+
+                @include rtl {
+                    border-right: none 0px;
+                    border-left: 1px dashed #dddddd;
+                    &:last-child {
+                        border-right: 0 none;
+                        border-left: 0px none;
+                    }
+                }
             }
         }
         .customify--cb-items {
             z-index: 36;
             background: transparent;
         }
-
-
 
     }
 

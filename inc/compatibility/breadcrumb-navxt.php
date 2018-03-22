@@ -18,7 +18,7 @@ class Customify_Breadcrumb {
 
     function display(){
         // Display position
-        $display_pos = Customify_Customizer()->get_setting('breadcrumb_display_pos' );
+        $display_pos = Customify()->get_setting('breadcrumb_display_pos' );
         switch( $display_pos ) {
             case 'below_header': // below header
                 add_action('customify/site-start',  array( self::$_instance, 'render' ), 15 );
@@ -73,7 +73,7 @@ class Customify_Breadcrumb {
         );
 
         if( ! $this->support_plugins_active() ) {
-            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will display after you install and active it.', 'customify' );
+            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will be displayed after you install and active it.', 'customify' );
             $config[] = array(
                 'name' => "{$section}_display_pos",
                 'type' => 'custom_html',
@@ -144,7 +144,7 @@ class Customify_Breadcrumb {
             );
 
 
-            if ( Customify_Init()->is_woocommerce_active() ) {
+            if ( Customify()->is_woocommerce_active() ) {
                 $config[] = array(
                     'name' => "{$section}_display_shop",
                     'type' => 'checkbox',
@@ -221,36 +221,36 @@ class Customify_Breadcrumb {
 
         $is_showing = true;
         if ( (  is_home() && ! is_front_page() ) || (  is_home() && is_front_page() ) ) { // Posts page - Blog page
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_blog' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_blog' ) ) {
                 $is_showing = false;
             }
         } elseif ( is_category() ){
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_cat' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_cat' ) ) {
                 $is_showing = false;
             }
         } elseif( is_search() ) {
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_search' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_search' ) ) {
                 $is_showing = false;
             }
         } elseif( is_archive() ) {
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_archive' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_archive' ) ) {
                 $is_showing = false;
             }
         } elseif ( is_page() ) { // is page or page for posts or is front page
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_page' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_page' ) ) {
                 $is_showing = false;
             }
         }  elseif ( is_single() ) {
-            if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_post' ) ) {
+            if ( ! Customify()->get_setting( 'breadcrumb_display_post' ) ) {
                 $is_showing = false;
             }
         } else {
             $is_showing = false;
         }
 
-        if ( Customify_Init()->is_woocommerce_active() ) {
+        if ( Customify()->is_woocommerce_active() ) {
             if ( is_shop() || is_product_taxonomy() || is_product() ) {
-                if ( ! Customify_Customizer()->get_setting( 'breadcrumb_display_shop' ) ) {
+                if ( ! Customify()->get_setting( 'breadcrumb_display_shop' ) ) {
                     $is_showing = false;
                 } else {
                     $is_showing = true;
@@ -258,8 +258,8 @@ class Customify_Breadcrumb {
             }
         }
 
-        if ( Customify_Init()->is_using_post() ) {
-            $id = Customify_Init()->get_current_post_id();
+        if ( Customify()->is_using_post() ) {
+            $id = Customify()->get_current_post_id();
             $breadcrumb_display = get_post_meta( $id, '_customify_breadcrumb_display', true );
             if ( $breadcrumb_display == 'hide' ) {
                 $is_showing = false;
