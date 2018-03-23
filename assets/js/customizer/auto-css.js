@@ -603,8 +603,6 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             return '';
         }
 
-        console.log( 'Font-Vs', value );
-
         if ( value.type == 'google' ){
             this.fonts[ value.font ] = value.font;
             if ( value.variant ) {

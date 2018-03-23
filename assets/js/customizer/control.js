@@ -487,7 +487,7 @@
                                 y: $('input[data-name="' + _name + '-y"]', $field).val(),
                                 blur: $('input[data-name="' + _name + '-blur"]', $field).val(),
                                 spread: $('input[data-name="' + _name + '-spread"]', $field).val(),
-                                inset: $('input[data-name="' + _name + '-inset"]', $field).is(':checked') ? 1 : false,
+                                inset: $('input[data-name="' + _name + '-inset"]', $field).is(':checked') ? 1 : false
                             };
                         });
                     } else {
@@ -2282,10 +2282,6 @@
         } );
     };
 
-
-
-
-
     //---------------------------------------------------------------------------
     var customifyModal = {
         tabs: {
@@ -2805,11 +2801,10 @@
 
             IconPicker.init();
             // FontSelector.init();
-             initStyling();
+            initStyling();
             initModal();
             intTypos();
         });
-
 
         // Add reset button to sections
         wpcustomize.section.each( function ( section ) {
@@ -2817,6 +2812,17 @@
                 section.container.find( '.customize-section-description-container .customize-section-title' ).append( '<button data-section="'+section.id+'" type="button" title="'+Customify_Control_Args.reset+'" class="customize--reset-section" aria-expanded="false"><span class="screen-reader-text">'+Customify_Control_Args.reset+'</span></button>' );
             }
         } );
+
+        // Remove checked align
+        $document.on( 'dblclick', '.customify-text-align label', function( e ){
+            var input = $( this ).find( 'input[type="radio"]' );
+            if( input.length ) {
+                if ( input.is(':checked') ) {
+                    input.removeAttr('checked');
+                    input.trigger( 'data-change' );
+                }
+            }
+        });
         
         $document.on( 'click', '.customize--reset-section', function( e ){
             e.preventDefault();
@@ -2850,7 +2856,6 @@
                } );
 
             }
-
         } );
 
 

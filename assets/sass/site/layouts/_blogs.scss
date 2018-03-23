@@ -80,6 +80,7 @@ $blog_gutter: $gl-gutter;
     .entry-content-data {
         flex: 1;
         word-wrap: break-word;
+        max-width: 100%;
     }
     .entry-title {
         font-size: 1.4em;
