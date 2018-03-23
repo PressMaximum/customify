@@ -191,12 +191,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
-
         wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer'.$suffix.'.css');
-        if ( is_rtl() ) {
-            wp_enqueue_style('customify-customizer-control-rtl', get_template_directory_uri().'/assets/css/admin/customizer/customizer-rtl'.$suffix.'.css');
-        }
-
         wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
         wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_icon_loaded ) ) {
