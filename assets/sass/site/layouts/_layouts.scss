@@ -20,7 +20,6 @@
         .align-center-#{$mq-key} { text-align: center; }
         .align-right-#{$mq-key} { text-align: right; }
     }
-
 }
 
 #page {
@@ -50,12 +49,12 @@
 
 .customify-container {
     position: relative;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding-left: 25px;
+    padding-right: 25px;
     @include clearfix;
     @include mq(max-sm) {
-        padding-left: 0.938em;
-        padding-right: 0.938em;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 .customify-container, .layout-contained{
