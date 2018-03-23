@@ -636,7 +636,7 @@
 
                     removeNode( node );
                     console.log( 'Swap newX', newX );
-                    console.log( 'Swap FLAG', flag );
+                    console.log( 'Before Swap FLAG', flag );
 
                     if ( checkEnoughSpaceFromX( newX , w ) ) {
                         addItemToFlag( { el: node.el, x: newX, w: w } );
@@ -662,6 +662,12 @@
                 itemWidth = ui.draggable.width();
 
                 console.log( 'DROP ITEM WIDTH', w );
+                var ox = that.getX( ui.draggable );
+                removeNode( {
+                    el: ui.draggable,
+                    x: ox,
+                    w: w
+                } );
 
                 var xc = 0, xi = 0, found = false;
 
@@ -689,7 +695,7 @@
                     // Nếu là RTL
 
                     // Lấy vị trí thả xuống từ con trỏ chuột tính theo bên trái của trình duyệt và mép phải của row
-                    xc = Math.round(( ( wOffset.left + width ) - event.clientX ) / colWidth);
+                    xc = Math.round(( ( wOffset.left + width + 10 ) - event.clientX ) / colWidth);
 
                     // Lấy vị trí thả xuống từ mép phải của item theo bên phải của row
                     xi = Math.round( ( ( wOffset.left + width  )  - ( iOffset.left + itemWidth + 10 )  ) / colWidth );
@@ -697,12 +703,32 @@
                         xi = 0;
                     }
 
-                    console.log( 'RTL XC', xc );
-                    console.log( 'RTL XI', xi );
+                }
+                if ( xc > that.cols ) {
+                    xc = that.cols;
                 }
 
                 x = xi;
+                var _i;
+                _i = xi;
 
+                if (!isEmptyX(_i)) {
+                    while (_i < that.cols && !found) {
+                        if (isEmptyX(_i)) {
+                            found = true;
+                        } else {
+                            _i++;
+                        }
+                    }
+                    if (x > xc) {
+                       // x = xc;
+                    }
+                } else {
+                    x = xi;
+                    found = true;
+                }
+
+                /*
                 if (!isEmptyX(x)) {
                     while (x <= xc && !found) {
                         if (isEmptyX(x)) {
@@ -718,6 +744,7 @@
                     x = xi;
                     found = true;
                 }
+                */
 
 
                 if (!found) {
@@ -728,15 +755,35 @@
                     }
                 }
 
-                delete found;
 
                 if ( x < 0 ) {
                     x = 0;
                 }
+                console.log( 'Flag R', _.clone(flag).reverse() );
 
-                console.log( 'DROP XC', xc );
-                console.log( 'DROP XI', xi );
-                console.log( 'DROP X', x );
+                if ( x + w >= that.cols ) {
+                    found = true;
+                    _i = x;
+                    while ( _i + w > that.cols && found ) {
+                        if ( ! isEmptyX( _i ) ) {
+                            found = false;
+                        } else {
+                            _i--;
+                        }
+                        console.log( 'loop_i', _i );
+
+                    }
+
+                    console.log( 'Find new _i, w: '+w, _i );
+
+                    x = _i;
+                }
+
+                delete found;
+
+
+                console.log( 'DROP Cursor', xc );
+                console.log( 'DROP row x cacl', x );
 
                 var node = {
                     el: ui.draggable,
