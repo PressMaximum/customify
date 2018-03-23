@@ -87,11 +87,11 @@ class Customify_Breadcrumb {
                 'type' => 'select',
                 'section' =>  $section,
                 'default' => 1,
-                'title' => __( 'Display Position', 'customify-pro', 'customify' ),
+                'title' => __( 'Display Position', 'customify' ),
                 'choices' => apply_filters( 'customify/breadcrumb/config/positions', array(
-                    'below_header' => __( 'Display below header', 'customify-pro', 'customify' ),
-                    'below_titlebar' => __( 'Display below titlebar', 'customify-pro', 'customify' ),
-                    'inside_titlebar' => __( 'Display inside titlebar', 'customify-pro', 'customify' ),
+                    'below_header' => __( 'Display below header', 'customify' ),
+                    'below_titlebar' => __( 'Display below titlebar', 'customify' ),
+                    'inside_titlebar' => __( 'Display inside titlebar', 'customify' ),
                 ) ),
             );
 
