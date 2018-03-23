@@ -75,6 +75,9 @@ $submenu_width: 14em;
                     .nav-icon-angle {
                         margin-left: 5px;
                         float: right;
+                        @include rtl(){
+                            transform: rotate(180deg);
+                        }
                         &:before {
                             content: "\f105";
                         }

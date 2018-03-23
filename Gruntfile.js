@@ -37,14 +37,24 @@ module.exports = function( grunt ) {
             },
             dist: {
                 files: [
-                    {src: 'style-rtl.css', dest: 'style.css'},
+                    { // Front end compatibility
+                        expand: true,
+                        cwd: '',
+                        src: [
+                            '*.css',
+                            '!*.min.css',
+                            '!*-rtl.css'
+                        ],
+                        dest: '',
+                        ext: '-rtl.css'
+                    },
                     { // Front end compatibility
                         expand: true,
                         cwd: 'assets/css/compatibility',
                         src: [
                             '*.css',
-                            '!*-rtl.css',
-                            '!*.min.css'
+                            '!*.min.css',
+                            '!*-rtl.css'
                         ],
                         dest: 'assets/css/compatibility',
                         ext: '-rtl.css'
@@ -56,7 +66,8 @@ module.exports = function( grunt ) {
         // SASS
         sass: {
             options: {
-                precision: 10
+                precision: 10,
+                sourcemap: 'auto'
             },
             dist: {
                 options: {
@@ -197,8 +208,8 @@ module.exports = function( grunt ) {
         'css'
     ]);
     grunt.registerTask( 'css', [
-        'sass'
-        //'rtlcss',
+        'sass',
+        'rtlcss'
         //'postcss',
         //'cssmin'
     ]);
@@ -206,8 +217,9 @@ module.exports = function( grunt ) {
     grunt.registerTask('before-release', [
         'css',
         'postcss',
+        'uglify',
         'cssmin',
-        'uglify'
+        'rtlcss',
     ]);
 
     // Update google Fonts

@@ -418,7 +418,7 @@ class Customify_Customize_Layout_Builder {
                  data-df-width="{{ data.width }}"
                  data-gs-height="1"
             >
-                <div class="item-tooltip">{{ data.name }}</div>
+                <div class="item-tooltip" data-section="{{ data.section }}">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
                     <span class="customify--cb-item-name" data-section="{{ data.section }}">{{ data.name }}</span>
                     <span class="customify--cb-item-remove customify-cb-icon"></span>
