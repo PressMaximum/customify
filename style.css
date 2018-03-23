@@ -4671,7 +4671,7 @@ body.menu_sidebar_dropdown:before {
 }
 
 .customify-container, .layout-contained {
-  max-width: 75em;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -4682,7 +4682,7 @@ body.menu_sidebar_dropdown:before {
   max-width: 100%;
 }
 .site-content.content-boxed {
-  max-width: 75em;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .site-content.content-full-stretched .customify-container {
@@ -4706,6 +4706,18 @@ body.menu_sidebar_dropdown:before {
 #sidebar-secondary, #sidebar-primary, #main {
   padding-top: 2.617924em;
   padding-bottom: 2.617924em;
+}
+
+@media screen and (max-width: 1024px) {
+  .sidebar-content-sidebar #main {
+    border-left: 0px none;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .sidebar-content-sidebar #sidebar-secondary {
+    order: 5;
+    display: none;
+  }
 }
 
 /*-- Layout: content-sidebar --*/

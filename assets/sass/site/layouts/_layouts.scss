@@ -99,6 +99,20 @@
     padding-top: ms(4);
     padding-bottom: ms(4);
 }
+.sidebar-content-sidebar {
+    #main {
+        @include for_device( tablet ) {
+            border-left: 0px none;
+        }
+    }
+    #sidebar-secondary {
+        @include for_device( tablet ) {
+            order: 5;
+            display: none;
+        }
+    }
+}
+
 
 /*-- Layout: content-sidebar --*/
 .content-sidebar {
