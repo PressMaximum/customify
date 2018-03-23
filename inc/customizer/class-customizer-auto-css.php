@@ -660,7 +660,13 @@ class Customify_Customizer_Auto_CSS
         }
 
         // Font Weight
+        if( $values['font_weight'] == 'default' ) {
+            $values['font_weight'] = '';
+        }
         if (isset($fields['font_weight']) && $values['font_weight']) {
+            if ( $values['font_weight'] =='regular' ) {
+                $values['font_weight'] = 'normal';
+            }
             $code['font_weight'] = 'font-weight: ' . sanitize_text_field($values['font_weight']) . ';';
         }
 
@@ -775,7 +781,8 @@ class Customify_Customizer_Auto_CSS
                             default:
                                 $v[$_v] = str_replace('italic', 'i', $_v);
                         }
-
+                    } else {
+                        $v[$_v] = '400';
                     }
                 }
             }
