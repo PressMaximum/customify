@@ -39,6 +39,9 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'blog_classic' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
                     ),
+                    'blog_column' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
+                    ),
                 )
             ),
             array(
