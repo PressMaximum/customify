@@ -218,22 +218,19 @@ class Customify {
      * @return string
      */
     function get_style_uri(){
-        $css_file = get_stylesheet_uri();
+        $suffix = $this->get_asset_suffix();
+        $style_dir = get_stylesheet_directory();
+        $suffix_css = $suffix;
+        $css_file = false;
         if ( is_rtl() ) {
-            $css_file = get_stylesheet_directory_uri() . '/style-rtl.css';
+            $suffix_css = '-rtl'.$suffix;
+        }
+        if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
+            $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
         }
 
-        if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            $suffix = $this->get_asset_suffix();
-            $style_dir = get_stylesheet_directory();
-            $suffix_css = $suffix;
-            if ( is_rtl() ) {
-                $suffix_css = '-rtl.'.$suffix;
-            }
-            if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
-                $css_file = get_stylesheet_directory_uri() . '/style' . $suffix_css . '.css';
-            }
-
+        if ( ! $css_file ) {
+            $css_file = get_stylesheet_uri();
         }
         return $css_file;
     }

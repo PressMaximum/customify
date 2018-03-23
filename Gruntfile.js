@@ -336,15 +336,6 @@ module.exports = function( grunt ) {
         //'cssmin'
     ]);
 
-    /*
-    grunt.registerTask('before-release', [
-        'css',
-        'postcss',
-        'uglify',
-        'cssmin',
-        'rtlcss',
-    ]);
-     */
 
     // Update google Fonts
     grunt.registerTask('google-fonts', function () {
@@ -377,46 +368,25 @@ module.exports = function( grunt ) {
 
     });
 
+    // To release new version just runt 2 commands below
+    // Re create everything: grunt release --ver=<version_number>
+    // Zip file installable: grunt zipfile
 
-    // Grunt release - Create installable package of the local files
-    /*
-    grunt.registerTask('release', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
-
-    // Bump Version - `grunt bump-version --ver=<version-number>`
-    // Bump Version - `grunt version-bump --ver=<version-number>`
-    grunt.registerTask('version-bump', function (ver) {
-
-        var newVersion = grunt.option('ver');
-
-        if (newVersion) {
-            newVersion = newVersion ? newVersion : 'patch';
-
-            grunt.task.run('bumpup:' + newVersion);
-            grunt.task.run('replace');
-        }
-    });
-
-    // i18n
-    grunt.registerTask('i18n', ['addtextdomain', 'makepot']);
-    */
-
-    grunt.registerTask('do-zip', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
-
+    grunt.registerTask('zipfile', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
     grunt.registerTask('release', function (ver) {
-
         var newVersion = grunt.option('ver');
-
         if (newVersion) {
+            // Replace new version
             newVersion = newVersion ? newVersion : 'patch';
             grunt.task.run('bumpup:' + newVersion);
             grunt.task.run('replace');
+
+            // i18n
+            grunt.task.run(['addtextdomain', 'makepot']);
+            // re create css file and min
             grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
-            grunt.task.run('do-zip');
-
-
         }
     });
-
 
 
 
