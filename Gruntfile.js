@@ -1,7 +1,8 @@
 module.exports = function( grunt ) {
     'use strict';
-
+    var pkgInfo = grunt.file.readJSON('package.json');
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
 
         // Autoprefixer.
         postcss: {
@@ -189,7 +190,120 @@ module.exports = function( grunt ) {
                 tasks: ['uglify']
             }
             */
+        },
+
+        copy: {
+            main: {
+                options: {
+                    mode: true
+                },
+                src: [
+                    '**',
+                    '!node_modules/**',
+                    '!build/**',
+                    '!css/sourcemap/**',
+                    '!.git/**',
+                    '!bin/**',
+                    '!.gitlab-ci.yml',
+                    '!bin/**',
+                    '!tests/**',
+                    '!phpunit.xml.dist',
+                    '!*.sh',
+                    '!*.map',
+                    '!Gruntfile.js',
+                    '!package.json',
+                    '!.gitignore',
+                    '!phpunit.xml',
+                    '!README.md',
+                    '!sass/**',
+                    '!codesniffer.ruleset.xml',
+                    '!vendor/**',
+                    '!composer.json',
+                    '!composer.lock',
+                    '!package-lock.json',
+                    '!phpcs.xml.dist'
+                ],
+                dest: 'customify/'
+            }
+        },
+
+        compress: {
+            main: {
+                options: {
+                    archive: 'customify-' + pkgInfo.version + '.zip',
+                    mode: 'zip'
+                },
+                files: [
+                    {
+                        src: [
+                            './customify/**'
+                        ]
+
+                    }
+                ]
+            }
+        },
+
+        clean: {
+            main: ["customify"],
+            zip: ["*.zip"]
+
+        },
+
+        makepot: {
+            target: {
+                options: {
+                    domainPath: '/',
+                    potFilename: 'languages/customify.pot',
+                    potHeaders: {
+                        poedit: true,
+                        'x-poedit-keywordslist': true
+                    },
+                    type: 'wp-theme',
+                    updateTimestamp: true
+                }
+            }
+        },
+
+        addtextdomain: {
+            options: {
+                textdomain: 'customify'
+            },
+            target: {
+                files: {
+                    src: [
+                        '*.php',
+                        '**/*.php',
+                        '!node_modules/**',
+                        '!php-tests/**',
+                        '!bin/**',
+                    ]
+                }
+            }
+        },
+
+        bumpup: {
+            options: {
+                updateProps: {
+                    pkg: 'package.json'
+                }
+            },
+            file: 'package.json'
+        },
+
+        replace: {
+            theme_main: {
+                src: ['style.css', 'assets/sass/site/style.scss'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /Version: \bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-A-Z-]+(?:\.[\da-z-A-Z-]+)*)?(?:\+[\da-z-A-Z-]+(?:\.[\da-z-A-Z-]+)*)?\b/g,
+                        to: 'Version: <%= pkg.version %>'
+                    }
+                ]
+            }
         }
+
 
     });
 
@@ -200,6 +314,14 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rtlcss');
+
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-wp-i18n');
+    grunt.loadNpmTasks('grunt-bumpup');
+    grunt.loadNpmTasks('grunt-text-replace');
 
 
     // Register tasks
@@ -252,6 +374,27 @@ module.exports = function( grunt ) {
         });
 
     });
+
+
+    // Grunt release - Create installable package of the local files
+    grunt.registerTask('release', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
+
+    // Bump Version - `grunt bump-version --ver=<version-number>`
+    // Bump Version - `grunt version-bump --ver=<version-number>`
+    grunt.registerTask('version-bump', function (ver) {
+
+        var newVersion = grunt.option('ver');
+
+        if (newVersion) {
+            newVersion = newVersion ? newVersion : 'patch';
+
+            grunt.task.run('bumpup:' + newVersion);
+            grunt.task.run('replace');
+        }
+    });
+
+    // i18n
+    grunt.registerTask('i18n', ['addtextdomain', 'makepot']);
 
 
 };
