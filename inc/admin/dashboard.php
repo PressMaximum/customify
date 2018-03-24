@@ -19,11 +19,13 @@ class Customify_Dashboard {
         );
     }
 
-    function scripts( $id ){
-       if ( $id != 'appearance_page_customify' ) {
-           return ;
-       }
-        wp_enqueue_style( 'customify-admin',  get_template_directory_uri() . '/assets/css/admin/dashboard.css', false, Customify::$version );
+    function scripts($id)
+    {
+        if ($id != 'appearance_page_customify') {
+            return;
+        }
+        $suffix = Customify()->get_asset_suffix();
+        wp_enqueue_style('customify-admin', get_template_directory_uri() . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
     }
 
     function setup(){
