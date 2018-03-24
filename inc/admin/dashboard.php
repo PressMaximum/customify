@@ -136,7 +136,7 @@ class Customify_Dashboard {
                     </div>
                 </div>
 
-                <?php do_action( 'customify/dashboard/main', $this ); ?>
+                <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
 
             </div>
         </div>
