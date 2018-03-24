@@ -338,7 +338,6 @@ module.exports = function( grunt ) {
         //'cssmin'
     ]);
 
-
     // Update google Fonts
     grunt.registerTask('google-fonts', function () {
         var done = this.async();
