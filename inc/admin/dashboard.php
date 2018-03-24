@@ -113,7 +113,7 @@ class Customify_Dashboard {
             <div class="cd-main">
 
                 <div class="cd-box">
-                    <div class="cd-box-top">Links to Customizer Settings</div>
+                    <div class="cd-box-top"><?php _e( 'Links to Customizer Settings', 'customify' ); ?></div>
                     <div class="cd-box-content">
                         <ul class="cd-list-flex">
                             <?php foreach( $links as $l ) { ?>
@@ -133,21 +133,10 @@ class Customify_Dashboard {
                     <div class="cd-box-top">Knowledge Base</div>
                     <div class="cd-box-content">
                         <p>Not sure how something works? Take a peek at the knowledge base and learn.</p>
-                        <a href="#">Visit Knowledge Base »</a>
-                    </div>
-                </div>
-
-                <div class="cd-box">
-                    <div class="cd-box-top">Community</div>
-                    <div class="cd-box-content">
-                        <p>Join the community of super helpful Astra users. Say hello, ask questions, give feedback and help each other!
-                        </p>
-                        <a href="#">Visit Knowledge Base »</a>
                     </div>
                 </div>
 
                 <?php do_action( 'customify/dashboard/main', $this ); ?>
-
 
             </div>
         </div>
@@ -157,16 +146,5 @@ class Customify_Dashboard {
 }
 
 new Customify_Dashboard();
-
-
-function sample_admin_notice__success() {
-    ?>
-    <div class="notice notice-success is-dismissible">
-        <p><?php _e( 'Done!', 'sample-text-domain' ); ?></p>
-    </div>
-    <?php
-}
-add_action( 'admin_notices', 'sample_admin_notice__success' );
-
 
 
