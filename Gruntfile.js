@@ -21,7 +21,8 @@ module.exports = function( grunt ) {
                 src: [
                     'style.css',
                     'assets/css/admin/customizer/customizer.css',
-                    'assets/css/admin/admin.css'
+                    'assets/css/admin/admin.css',
+                    'assets/css/admin/dashboard.css'
                 ]
             }
         },
@@ -79,7 +80,8 @@ module.exports = function( grunt ) {
                     {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
-                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss'
+                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss',
+                    'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
                     },
                     {
                         expand: true,
@@ -330,8 +332,8 @@ module.exports = function( grunt ) {
         'css'
     ]);
     grunt.registerTask( 'css', [
-        'sass',
-        'rtlcss'
+        'sass'
+        //'rtlcss'
         //'postcss',
         //'cssmin'
     ]);

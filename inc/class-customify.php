@@ -312,7 +312,6 @@ class Customify {
         $files = array(
             '/inc/template-class.php',                  // Template element classes.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
-            '/inc/metabox.php',                         // Metabox settings.
             '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
@@ -327,13 +326,26 @@ class Customify {
             require_once self::$path.$file;
         }
 
-        if ( is_admin() ) {
-            add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-        }
-
         $this->load_configs();
         $this->load_compatibility();
+        $this->admin_includes();
+    }
 
+    private function admin_includes(){
+        if ( ! is_admin() ){
+            return ;
+        }
+
+        $files = array(
+            '/inc/admin/metabox.php',  // Metabox settings.
+            '/inc/admin/dashboard.php',  // Metabox settings.
+        );
+
+        foreach( $files as $file ) {
+            require_once self::$path.$file;
+        }
+
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
     }
 
     /**
