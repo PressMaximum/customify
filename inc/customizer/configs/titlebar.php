@@ -226,7 +226,7 @@ class Customify_TitleBar {
             <div class="page-titlebar-inner customify-container">
                 <?php
                 // WPCS: XSS ok.
-                echo '<'.$args['tag'].' class="titlebar-title">'.$args['title'].'</'.$args['tag'].'>';
+                echo '<'.$args['tag'].' class="titlebar-title h2">'.$args['title'].'</'.$args['tag'].'>';
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>

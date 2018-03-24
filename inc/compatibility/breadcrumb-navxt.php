@@ -86,7 +86,7 @@ class Customify_Breadcrumb {
                 'name' => "{$section}_display_pos",
                 'type' => 'select',
                 'section' =>  $section,
-                'default' => 1,
+                'default' => 'below_titlebar',
                 'title' => __( 'Display Position', 'customify' ),
                 'choices' => apply_filters( 'customify/breadcrumb/config/positions', array(
                     'below_header' => __( 'Display below header', 'customify' ),
@@ -130,7 +130,7 @@ class Customify_Breadcrumb {
             $config[] = array(
                 'name' => "{$section}_display_page",
                 'type' => 'checkbox',
-                'default' => false,
+                'default' => 1,
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on single page', 'customify' ),
             );
