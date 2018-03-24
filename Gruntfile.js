@@ -331,8 +331,8 @@ module.exports = function( grunt ) {
     ]);
     grunt.registerTask( 'css', [
         'sass',
-        'rtlcss'
-        //'postcss',
+        'postcss',
+        'rtlcss',
         //'cssmin'
     ]);
 

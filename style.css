@@ -2134,7 +2134,6 @@ template {
 # Media: Captions
 # Media: Galleries
 # Comments
-
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
@@ -5131,9 +5130,6 @@ body.menu_sidebar_dropdown:before {
   font-weight: 400;
 }
 
-.widget-area {
-  word-break: break-all;
-}
 .widget-area .widget {
   font-size: 0.875em;
   margin-bottom: 1.618em;
