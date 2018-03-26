@@ -204,9 +204,6 @@ class Customify_Breadcrumb {
         }
 
 
-
-
-
         return array_merge( $configs, $config );
     }
 
@@ -267,7 +264,6 @@ class Customify_Breadcrumb {
                 $is_showing = true;
             }
         }
-
 
 
         $is_showing = apply_filters( 'customify/breadcrumb/is-showing', $is_showing );
