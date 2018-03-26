@@ -59,6 +59,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     }
 
 
+
     /**
      * Refresh the parameters passed to the JavaScript via JSON.
      *
@@ -173,6 +174,8 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         if ( $this->setting_type == 'checkbox' ) {
             $this->json['checkbox_label'] = $this->checkbox_label;
         }
+
+
     }
 
 

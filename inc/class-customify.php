@@ -469,20 +469,21 @@ class Customify {
     function init(){
         $this->init_hooks();
         $this->includes();
-        $this->customizer = new Customify_Customizer();
+        $this->customizer = Customify_Customizer::get_instance();
+        $this->customizer->init();
         do_action( 'customify/init' );
     }
 
     function get_setting( $id, $device = 'desktop', $key = null ){
-        return $this->customizer->get_setting( $id, $device, $key );
+        return Customify_Customizer::get_instance()->get_setting( $id, $device, $key );
     }
 
     function get_media( $value, $size = null ){
-        return $this->customizer->get_media( $value, $size );
+        return Customify_Customizer::get_instance()->get_media( $value, $size );
     }
 
     function get_setting_tab($name, $tab = null) {
-        return $this->customizer->get_setting_tab( $name, $tab );
+        return Customify_Customizer::get_instance()->get_setting_tab( $name, $tab );
     }
 
 }

@@ -16,7 +16,7 @@ class  Customify_Customizer
 
     function __construct()
     {
-        $this->init();
+
     }
 
     /**
@@ -110,7 +110,7 @@ class  Customify_Customizer
      */
     static function get_config($wp_customize = null)
     {
-        if (is_null(self::$config)) {
+        if ( is_null( self::$config ) ) {
 
             $_config = apply_filters('customify/customizer/config', array(), $wp_customize);
             $config = array();

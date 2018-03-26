@@ -663,11 +663,13 @@
 
                 console.log( 'DROP ITEM WIDTH', w );
                 var ox = that.getX( ui.draggable );
-                removeNode( {
-                    el: ui.draggable,
-                    x: ox,
-                    w: w
-                } );
+                if ( is_rtl ) {
+                    removeNode({
+                        el: ui.draggable,
+                        x: ox,
+                        w: w
+                    });
+                }
 
                 var xc = 0, xi = 0, found = false;
 
@@ -712,20 +714,40 @@
                 var _i;
                 _i = xi;
 
-                if (!isEmptyX(_i)) {
-                    while (_i < that.cols && !found) {
-                        if (isEmptyX(_i)) {
-                            found = true;
-                        } else {
-                            _i++;
+                if( is_rtl ) {
+                    if (!isEmptyX(_i)) {
+                        while (_i < that.cols && !found) {
+                            if (isEmptyX(_i)) {
+                                found = true;
+                            } else {
+                                _i++;
+                            }
                         }
-                    }
-                    if (x > xc) {
-                       // x = xc;
+                        if (x > xc) {
+                            // x = xc;
+                        }
+                    } else {
+                        x = xi;
+                        found = true;
                     }
                 } else {
-                    x = xi;
-                    found = true;
+
+                    if (!isEmptyX(x)) {
+                        while (x <= xc && !found) {
+                            if (isEmptyX(x)) {
+                                found = true;
+                            } else {
+                                x++;
+                            }
+                        }
+                        if (x > xc) {
+                            x = xc;
+                        }
+                    } else {
+                        x = xi;
+                        found = true;
+                    }
+
                 }
 
                 /*

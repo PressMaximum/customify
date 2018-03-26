@@ -263,8 +263,6 @@ class Customify_Builder_Item_Primary_Menu {
     }
 }
 
-
-
 Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu() );
 
 function customify_add_icon_to_menu( $title, $item, $args, $depth ){
