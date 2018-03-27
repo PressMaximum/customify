@@ -320,9 +320,9 @@ class Customify {
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
-            '/inc/posts/class-post-entry.php',          // Blog entry builder
-            '/inc/posts/class-posts-layout.php',        // Blog posts layout
-            '/inc/posts/functions-posts-layout.php',    // Posts layout functions
+            '/inc/blog/class-post-entry.php',          // Blog entry builder
+            '/inc/blog/class-posts-layout.php',        // Blog posts layout
+            '/inc/blog/functions-posts-layout.php',    // Posts layout functions
         );
 
         foreach( $files as $file ) {

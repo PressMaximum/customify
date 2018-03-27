@@ -137,6 +137,15 @@ class Customify_TitleBar {
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
+            array(
+                'name' => "{$section}_display_404",
+                'type' => 'checkbox',
+                'section' =>  $section,
+                'default' => 1,
+                'checkbox_label' => __( 'Display on 404 page', 'customify' ),
+                'selector' => $selector,
+                'render_callback' => $render_cb_el,
+            ),
 
         );
 
@@ -168,6 +177,10 @@ class Customify_TitleBar {
                 }
             }  elseif ( is_single() ) {
                 if ( ! Customify()->get_setting( 'titlebar_display_post' ) ) {
+                    $is_showing = false;
+                }
+            } elseif ( is_404() ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_404' ) ) {
                     $is_showing = false;
                 }
             }
@@ -210,8 +223,10 @@ class Customify_TitleBar {
                 __( 'Search Results for: %s', 'customify' ),
                 '<span>' . get_search_query() . '</span>'
             );
-        } else {
+        } elseif( is_archive() || is_tax() ) {
             $title = get_the_archive_title();
+        } else if ( is_404() ) {
+            $title =  __( 'Error 404 - Page not found', 'customify' );
         }
 
         $args = array(

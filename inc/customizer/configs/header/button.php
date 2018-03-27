@@ -131,7 +131,6 @@ class Customify_Builder_Item_Button {
 		$new_window    = Customify()->get_setting( 'header_button_target' );
 		$link          = Customify()->get_setting( 'header_button_link' );
 		$icon_position = Customify()->get_setting( 'header_button_position' );
-
 		$classes = array( 'customify-btn customify-builder-btn' );
 
 		$icon = wp_parse_args( $icon, array(
