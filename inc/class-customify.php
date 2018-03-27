@@ -20,7 +20,7 @@ class Customify {
         add_action( 'after_setup_theme', array( $this, 'theme_setup' ) );
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 3 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 95 );
         add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
     }
 
