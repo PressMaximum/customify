@@ -5182,6 +5182,9 @@ body.menu_sidebar_dropdown:before {
   color: #007ee5;
   text-decoration: underline;
 }
+.widget-area .widget a.button:hover {
+  text-decoration: none;
+}
 .widget-area .widget select {
   max-width: 100%;
 }

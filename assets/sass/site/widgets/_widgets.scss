@@ -33,6 +33,11 @@
                 text-decoration: underline;
             }
         }
+        a.button {
+            &:hover {
+                text-decoration: none;
+            }
+        }
         select {
             max-width: 100%;
         }
