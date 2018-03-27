@@ -32,6 +32,9 @@ $dashboard_border_color: #e5e5e5;
     text-decoration: none;
     outline: none;
     vertical-align: middle;
+    img {
+        max-width: 150px;
+    }
 }
 .cd-version {
     background-color: #e5e5e5;
@@ -48,6 +51,9 @@ $dashboard_border_color: #e5e5e5;
         box-sizing: border-box;
     }
     @include clear_after();
+    &.metabox-holder {
+        margin-top: 20px;
+    }
 }
 
 .cd-header {

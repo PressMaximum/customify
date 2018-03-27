@@ -21,6 +21,9 @@
   outline: none;
   vertical-align: middle;
 }
+.cd-branding img {
+  max-width: 150px;
+}
 
 .cd-version {
   background-color: #e5e5e5;
@@ -41,6 +44,9 @@
   content: '';
   clear: both;
   display: block;
+}
+.cd-row.metabox-holder {
+  margin-top: 20px;
 }
 
 .cd-header {
