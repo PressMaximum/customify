@@ -310,6 +310,7 @@ class Customify {
 
     private function includes(){
         $files = array(
+            '/inc/class-metabox.php',  // Metabox settings.
             '/inc/template-class.php',                  // Template element classes.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
             '/inc/template-tags.php',                   // Custom template tags for this theme.
@@ -337,7 +338,6 @@ class Customify {
         }
 
         $files = array(
-            '/inc/admin/metabox.php',  // Metabox settings.
             '/inc/admin/dashboard.php',  // Metabox settings.
         );
 

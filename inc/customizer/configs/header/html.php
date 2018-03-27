@@ -5,6 +5,7 @@ class Customify_Builder_Item_HTML {
     public $section = 'header_html'; // Optional
     public $name = 'header_html'; // Optional
     public $label = ''; // Optional
+    public $priority = 200;
 
     /**
      * Optional construct
@@ -22,7 +23,7 @@ class Customify_Builder_Item_HTML {
      */
     function item(){
         return array(
-            'name' => __( 'HTML 1', 'customify' ),
+            'name' => $this->label,
             'id' => $this->id,
             'col' => 0,
             'width' => '4',
@@ -43,6 +44,7 @@ class Customify_Builder_Item_HTML {
                 'name' => $this->section,
                 'type' => 'section',
                 'panel' => 'header_settings',
+                'priority' => $this->priority,
                 'title' => $this->label,
             ),
 
