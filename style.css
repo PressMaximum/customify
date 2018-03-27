@@ -2899,7 +2899,7 @@ article.comment .comment-post-author {
 }
 
 .page-titlebar {
-  padding: 26px 0px 27px;
+  padding: 21px 0px 22px;
   border-bottom: 1px solid #eaecee;
   word-break: break-all;
 }
@@ -2921,7 +2921,7 @@ article.comment .comment-post-author {
 }
 
 .page-breadcrumb {
-  padding: 9px 0px 10px;
+  padding: 7px 0px 8px;
   font-size: 1em;
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
@@ -3194,6 +3194,7 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
   font-weight: normal;
   transition: background 0.15s ease-out;
   line-height: 1.6;
+  color: #666666;
 }
 .nav-menu-desktop .sub-menu li a:hover {
   background: rgba(0, 0, 0, 0.015);
@@ -5123,6 +5124,29 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 
+/* Search Page */
+.search .content-area article {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eaecee;
+}
+.search .content-area .entry-title {
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #444444;
+  word-wrap: break-word;
+}
+.search .content-area .entry-title a {
+  color: inherit;
+}
+.search .content-area .entry-title a:hover {
+  color: #007ee5;
+}
+.search .content-area .entry-summary p:last-child {
+  margin-bottom: 0px;
+}
+
+/* 404 Page */
 /* Widget Common */
 .widget-title {
   font-size: 1.2em;

@@ -141,7 +141,8 @@ abbr, acronym {
 .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
 .widget-area .widget a:hover,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a
+nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+.search .content-area .entry-title a:hover
 {
     color: {{value}};
 }
@@ -184,7 +185,9 @@ blockquote {
 .entry-content .page-links a,
 .header-search-modal,
 .pagination .nav-links > *
-.entry-footer .tags-links a, .entry-footer .cat-links a {
+.entry-footer .tags-links a, .entry-footer .cat-links a,
+.search .content-area article
+{
     border-color: {{value}};
 }
 

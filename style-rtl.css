@@ -3440,6 +3440,7 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
 }
 .nav-menu-desktop .sub-menu li a:hover {
   background: rgba(0, 0, 0, 0.015);
+  color: #111111;
 }
 .nav-menu-desktop .sub-menu .sub-menu {
   top: 0px;

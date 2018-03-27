@@ -721,7 +721,7 @@ function customify_layout_builder_config_default($val, $name)
             'header_social_icons_spacing' =>
                 array(
                     'unit' => 'px',
-                    'value' => '',
+                    'value' => '2',
                 ),
             'header_social-icons_margin' =>
                 array(

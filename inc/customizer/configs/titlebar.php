@@ -58,7 +58,7 @@ class Customify_TitleBar {
                 'selector' => array(
                     'normal' => "{$selector}",
                     'normal_text_color' => "{$selector} .titlebar-title",
-                    'normal_padding' => "{$selector} .page-titlebar-inner",
+                    'normal_padding' => "{$selector}",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
@@ -226,7 +226,7 @@ class Customify_TitleBar {
             <div class="page-titlebar-inner customify-container">
                 <?php
                 // WPCS: XSS ok.
-                echo '<'.$args['tag'].' class="titlebar-title h2">'.$args['title'].'</'.$args['tag'].'>';
+                echo '<'.$args['tag'].' class="titlebar-title h3">'.$args['title'].'</'.$args['tag'].'>';
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>

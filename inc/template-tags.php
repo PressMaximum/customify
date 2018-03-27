@@ -56,16 +56,6 @@ if ( ! function_exists( 'customify_entry_footer' ) ) :
 				printf( '<div class="tags-links">%1$s</div>', $tags_list ); // WPCS: XSS OK.
 			}
 		}
-
-		edit_post_link(
-			sprintf(
-                /* translators: %s: Name of current post. Only visible to screen readers */
-                __( 'Edit <span class="screen-reader-text">%s</span>', 'customify' ),
-				get_the_title()
-			),
-			'<span class="edit-link">',
-			'</span>'
-		);
 	}
 endif;
 
