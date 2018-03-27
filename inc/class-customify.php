@@ -247,6 +247,8 @@ class Customify {
 
         $suffix = $this->get_asset_suffix();
 
+        do_action('customify/load-scripts');
+
         $css_files = apply_filters(  'customify/theme/css', array(
             'style' => $this->get_style_uri()
         ) );
