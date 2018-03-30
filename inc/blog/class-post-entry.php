@@ -322,7 +322,11 @@ class Customify_Post_Entry {
         }
         $more = $this->config['more_text'];
         if ( ! $more ) {
-            $more = __( "Read more &rarr;", 'customify' );
+            if ( ! is_rtl() ) {
+                $more = __( "Read more &rarr;", 'customify' );
+            } else {
+                $more = __( "Read more &larr;", 'customify' );
+            }
         }
         ?>
         <div class="entry-readmore">

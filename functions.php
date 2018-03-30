@@ -46,5 +46,5 @@ require_once get_template_directory().'/inc/class-customify.php';
 function Customify(){
     return Customify::get_instance();
 }
-Customify()->init();
+Customify();
 

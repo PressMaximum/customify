@@ -86,12 +86,12 @@ class Customify_Breadcrumb {
                 'name' => "{$section}_display_pos",
                 'type' => 'select',
                 'section' =>  $section,
-                'default' => 1,
-                'title' => __( 'Display Position', 'customify-pro' ),
+                'default' => 'below_titlebar',
+                'title' => __( 'Display Position', 'customify' ),
                 'choices' => apply_filters( 'customify/breadcrumb/config/positions', array(
-                    'below_header' => __( 'Display below header', 'customify-pro' ),
-                    'below_titlebar' => __( 'Display below titlebar', 'customify-pro' ),
-                    'inside_titlebar' => __( 'Display inside titlebar', 'customify-pro' ),
+                    'below_header' => __( 'Display below header', 'customify' ),
+                    'below_titlebar' => __( 'Display below titlebar', 'customify' ),
+                    'inside_titlebar' => __( 'Display inside titlebar', 'customify' ),
                 ) ),
             );
 
@@ -130,7 +130,7 @@ class Customify_Breadcrumb {
             $config[] = array(
                 'name' => "{$section}_display_page",
                 'type' => 'checkbox',
-                'default' => false,
+                'default' => 1,
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on single page', 'customify' ),
             );
@@ -204,9 +204,6 @@ class Customify_Breadcrumb {
         }
 
 
-
-
-
         return array_merge( $configs, $config );
     }
 
@@ -267,7 +264,6 @@ class Customify_Breadcrumb {
                 $is_showing = true;
             }
         }
-
 
 
         $is_showing = apply_filters( 'customify/breadcrumb/is-showing', $is_showing );

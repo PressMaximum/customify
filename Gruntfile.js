@@ -1,7 +1,8 @@
 module.exports = function( grunt ) {
     'use strict';
-
+    var pkgInfo = grunt.file.readJSON('package.json');
     grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
 
         // Autoprefixer.
         postcss: {
@@ -20,7 +21,8 @@ module.exports = function( grunt ) {
                 src: [
                     'style.css',
                     'assets/css/admin/customizer/customizer.css',
-                    'assets/css/admin/admin.css'
+                    'assets/css/admin/admin.css',
+                    'assets/css/admin/dashboard.css'
                 ]
             }
         },
@@ -37,14 +39,24 @@ module.exports = function( grunt ) {
             },
             dist: {
                 files: [
-                    {src: 'style-rtl.css', dest: 'style.css'},
+                    { // Front end compatibility
+                        expand: true,
+                        cwd: '',
+                        src: [
+                            '*.css',
+                            '!*.min.css',
+                            '!*-rtl.css'
+                        ],
+                        dest: '',
+                        ext: '-rtl.css'
+                    },
                     { // Front end compatibility
                         expand: true,
                         cwd: 'assets/css/compatibility',
                         src: [
                             '*.css',
-                            '!*-rtl.css',
-                            '!*.min.css'
+                            '!*.min.css',
+                            '!*-rtl.css'
                         ],
                         dest: 'assets/css/compatibility',
                         ext: '-rtl.css'
@@ -56,7 +68,8 @@ module.exports = function( grunt ) {
         // SASS
         sass: {
             options: {
-                precision: 10
+                precision: 10,
+                sourcemap: 'auto'
             },
             dist: {
                 options: {
@@ -67,7 +80,8 @@ module.exports = function( grunt ) {
                     {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
-                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss'
+                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss',
+                    'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
                     },
                     {
                         expand: true,
@@ -178,7 +192,120 @@ module.exports = function( grunt ) {
                 tasks: ['uglify']
             }
             */
+        },
+
+        copy: {
+            main: {
+                options: {
+                    mode: true
+                },
+                src: [
+                    '**',
+                    '!node_modules/**',
+                    '!build/**',
+                    '!css/sourcemap/**',
+                    '!.git/**',
+                    '!bin/**',
+                    '!.gitlab-ci.yml',
+                    '!bin/**',
+                    '!tests/**',
+                    '!phpunit.xml.dist',
+                    '!*.sh',
+                    '!*.map',
+                    '!Gruntfile.js',
+                    '!package.json',
+                    '!.gitignore',
+                    '!phpunit.xml',
+                    '!README.md',
+                    '!sass/**',
+                    '!codesniffer.ruleset.xml',
+                    '!vendor/**',
+                    '!composer.json',
+                    '!composer.lock',
+                    '!package-lock.json',
+                    '!phpcs.xml.dist'
+                ],
+                dest: 'customify/'
+            }
+        },
+
+        compress: {
+            main: {
+                options: {
+                    archive: 'customify-' + pkgInfo.version + '.zip',
+                    mode: 'zip'
+                },
+                files: [
+                    {
+                        src: [
+                            './customify/**'
+                        ]
+
+                    }
+                ]
+            }
+        },
+
+        clean: {
+            main: ["customify"],
+            zip: ["*.zip"]
+
+        },
+
+        makepot: {
+            target: {
+                options: {
+                    domainPath: '/',
+                    potFilename: 'languages/customify.pot',
+                    potHeaders: {
+                        poedit: true,
+                        'x-poedit-keywordslist': true
+                    },
+                    type: 'wp-theme',
+                    updateTimestamp: true
+                }
+            }
+        },
+
+        addtextdomain: {
+            options: {
+                textdomain: 'customify'
+            },
+            target: {
+                files: {
+                    src: [
+                        '*.php',
+                        '**/*.php',
+                        '!node_modules/**',
+                        '!php-tests/**',
+                        '!bin/**',
+                    ]
+                }
+            }
+        },
+
+        bumpup: {
+            options: {
+                updateProps: {
+                    pkg: 'package.json'
+                }
+            },
+            file: 'package.json'
+        },
+
+        replace: {
+            theme_main: {
+                src: ['style.css', 'assets/sass/site/style.scss'],
+                overwrite: true,
+                replacements: [
+                    {
+                        from: /Version: \bv?(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)\.(?:0|[1-9]\d*)(?:-[\da-z-A-Z-]+(?:\.[\da-z-A-Z-]+)*)?(?:\+[\da-z-A-Z-]+(?:\.[\da-z-A-Z-]+)*)?\b/g,
+                        to: 'Version: <%= pkg.version %>'
+                    }
+                ]
+            }
         }
+
 
     });
 
@@ -190,6 +317,14 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rtlcss');
 
+    grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-copy');
+    grunt.loadNpmTasks('grunt-contrib-compress');
+    grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-wp-i18n');
+    grunt.loadNpmTasks('grunt-bumpup');
+    grunt.loadNpmTasks('grunt-text-replace');
+
 
     // Register tasks
     grunt.registerTask('default', [
@@ -198,16 +333,9 @@ module.exports = function( grunt ) {
     ]);
     grunt.registerTask( 'css', [
         'sass'
-        //'rtlcss',
+        //'rtlcss'
         //'postcss',
         //'cssmin'
-    ]);
-
-    grunt.registerTask('before-release', [
-        'css',
-        'postcss',
-        'cssmin',
-        'uglify'
     ]);
 
     // Update google Fonts
@@ -240,6 +368,27 @@ module.exports = function( grunt ) {
         });
 
     });
+
+    // To release new version just runt 2 commands below
+    // Re create everything: grunt release --ver=<version_number>
+    // Zip file installable: grunt zipfile
+
+    grunt.registerTask('zipfile', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
+    grunt.registerTask('release', function (ver) {
+        var newVersion = grunt.option('ver');
+        if (newVersion) {
+            // Replace new version
+            newVersion = newVersion ? newVersion : 'patch';
+            grunt.task.run('bumpup:' + newVersion);
+            grunt.task.run('replace');
+
+            // i18n
+            grunt.task.run(['addtextdomain', 'makepot']);
+            // re create css file and min
+            grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
+        }
+    });
+
 
 
 };

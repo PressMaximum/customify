@@ -61,15 +61,18 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	    if ( ! $layout ) {
             $default    = Customify()->get_setting('sidebar_layout');
             $page       = Customify()->get_setting('page_sidebar_layout');
-            $blog_posts = Customify()->get_setting('posts_sidebar_layout');
-            $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
-            $search     = Customify()->get_setting('search_sidebar_layout');
+
             if (is_search()) {
+                $search     = Customify()->get_setting('search_sidebar_layout');
                 $layout = $search;
             } elseif (is_archive()) {
+                $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
                 $layout = $archive;
             } elseif (is_home() || is_category() || is_tag() || is_single()) { // blog page and single page
+                $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
+            } elseif( is_404() ) {
+                $layout = Customify()->get_setting('404_sidebar_layout');
             } else {
                 $layout = $default;
             }

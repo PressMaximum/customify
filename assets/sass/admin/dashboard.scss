@@ -1,0 +1,130 @@
+
+$dashboard_width: 930px;
+$dashboard_border_color: #e5e5e5;
+
+@mixin cd_mobile(){
+    @media screen and (max-width: 782px) {
+       @content;
+    }
+}
+
+@mixin clear_after(){
+   &:after{
+       content: ''; clear: both; display: block;
+   }
+}
+
+.appearance_page_customify #wpcontent {
+    padding-left: 0;
+    .wrap {
+        margin: 10px 20px 0 20px;
+        @include cd_mobile(){
+            margin-right: 12px;
+            margin-left: 12px;
+        }
+    }
+}
+.cd-hidden-heading {
+    display: none;
+}
+.cd-branding {
+    display: inline-block;
+    text-decoration: none;
+    outline: none;
+    vertical-align: middle;
+    img {
+        max-width: 150px;
+    }
+}
+.cd-version {
+    background-color: #e5e5e5;
+    padding: 2px 7px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+.cd-row {
+    max-width: $dashboard_width;
+    margin: 0 auto;
+    box-sizing: border-box;
+    * {
+        box-sizing: border-box;
+    }
+    @include clear_after();
+    &.metabox-holder {
+        margin-top: 20px;
+    }
+}
+
+.cd-header {
+    background: #ffffff;
+    padding: 15px 15px;
+    box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
+    .cd-header-inner {
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        width: 100%;
+        align-items: center;
+    }
+}
+.cd-main {
+    width: 65%;
+    float: left;
+    padding-right: 30px;
+    @include cd_mobile(){
+        width: 100%;
+        float: none;
+        padding-right: 0px;
+    }
+}
+.cd-sidebar {
+    width: 35%;
+    float: right;
+    @include cd_mobile(){
+        width: 100%;
+        float: none;
+    }
+}
+.cd-box {
+    border: 1px solid $dashboard_border_color;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+    background: #fff;
+    margin-bottom: 30px;
+    @include cd_mobile(){
+        margin-bottom: 15px;
+    }
+    .cd-box-top {
+        border-bottom: 1px solid #eee;
+        font-size: 1em;
+        padding: 10px 15px;
+        font-weight: 600;
+    }
+    .cd-box-content {
+        padding: 15px;
+        p {
+            margin-top: 0px;
+        }
+    }
+}
+
+.cd-list-flex {
+    list-style: none;
+    @include clear_after();
+    margin: -15px;
+    a {
+        text-decoration: none;
+    }
+    li {
+        width: 50%;
+        float: left;
+        border-bottom: 1px solid #eee;
+        margin-bottom: 0px;
+        border-right: 1px solid #eee;
+        padding: 10px;
+        &:nth-child(2n) {
+            border-right: 0px none;
+        }
+    }
+}

@@ -329,7 +329,7 @@ class Customify_Builder_Item_Search_Icon
 <div class="header-search-modal-wrapper">
     <form role="search" class="header-search-modal header-search-form" action="<?php echo home_url( '/' ); ?>">
         <label>
-            <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label' ) ?></span>
+            <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ) ?></span>
             <input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />
         </label>
         <button type="submit" class="search-submit" >

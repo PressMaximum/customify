@@ -20,7 +20,6 @@
         .align-center-#{$mq-key} { text-align: center; }
         .align-right-#{$mq-key} { text-align: right; }
     }
-
 }
 
 #page {
@@ -50,12 +49,12 @@
 
 .customify-container {
     position: relative;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding-left: 25px;
+    padding-right: 25px;
     @include clearfix;
     @include mq(max-sm) {
-        padding-left: 0.938em;
-        padding-right: 0.938em;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 .customify-container, .layout-contained{
@@ -99,6 +98,20 @@
     padding-top: ms(4);
     padding-bottom: ms(4);
 }
+.sidebar-content-sidebar {
+    #main {
+        @include for_device( tablet ) {
+            border-left: 0px none;
+        }
+    }
+    #sidebar-secondary {
+        @include for_device( tablet ) {
+            order: 5;
+            display: none;
+        }
+    }
+}
+
 
 /*-- Layout: content-sidebar --*/
 .content-sidebar {

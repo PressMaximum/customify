@@ -54,6 +54,7 @@ class Customify_Customize_Layout_Builder {
             return false;
         }
 
+        add_filter( 'customify/customizer/config', array( $class, '_customize' ), 35, 2 );
         $this->registered_builders[ $id ] = $class;
     }
 
@@ -134,7 +135,11 @@ class Customify_Customize_Layout_Builder {
             if ( method_exists( $obj, 'customize' ) ) {
                 $item = $obj->customize( $wp_customize );
                 if ( is_array( $item ) ) {
-                    $items = array_merge( $items, $item );
+                    //$items = array_merge( $items, $item );
+                    foreach( $item as $it ) {
+                        $items[] = $it;
+                    }
+
                 }
 
             }
@@ -299,7 +304,7 @@ class Customify_Customize_Layout_Builder {
         ), false, true );
         wp_localize_script( 'customify-layout-builder', 'Customify_Layout_Builder', array(
             'footer_moved_widgets_text' => __( 'Footer widgets moved', 'customify' ),
-            'builders'                  => $this->get_builders(),
+            'builders'  => $this->get_builders(),
             'is_rtl' => is_rtl()
         ) );
     }
@@ -418,7 +423,7 @@ class Customify_Customize_Layout_Builder {
                  data-df-width="{{ data.width }}"
                  data-gs-height="1"
             >
-                <div class="item-tooltip">{{ data.name }}</div>
+                <div class="item-tooltip" data-section="{{ data.section }}">{{ data.name }}</div>
                 <div class="grid-stack-item-content">
                     <span class="customify--cb-item-name" data-section="{{ data.section }}">{{ data.name }}</span>
                     <span class="customify--cb-item-remove customify-cb-icon"></span>

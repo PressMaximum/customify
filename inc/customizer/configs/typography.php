@@ -21,6 +21,16 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'title'          => __( 'Base', 'customify' ),
             ),
 
+	        array(
+		        'name' => "{$section}_base_p",
+		        'type' => 'typography',
+		        'section' => "{$section}_base",
+		        'title' => __('Body & Paragraph', 'customify'),
+		        'description' => __('Apply for site paragraph.', 'customify'),
+		        'css_format' => 'typography',
+		        'selector' => 'body, p',
+	        ),
+
             array(
                 'name' => "{$section}_base_heading",
                 'type' => 'typography',
@@ -34,16 +44,6 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                     'line_height' => false,
                     'letter_spacing' => false,
                 )
-            ),
-
-            array(
-                'name' => "{$section}_base_p",
-                'type' => 'typography',
-                'section' => "{$section}_base",
-                'title' => __('Paragraph', 'customify'),
-                'description' => __('Apply for site paragraph.', 'customify'),
-                'css_format' => 'typography',
-                'selector' => 'body',
             ),
 
             // Site Title and Tagline

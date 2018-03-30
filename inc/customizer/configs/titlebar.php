@@ -58,7 +58,7 @@ class Customify_TitleBar {
                 'selector' => array(
                     'normal' => "{$selector}",
                     'normal_text_color' => "{$selector} .titlebar-title",
-                    'normal_padding' => "{$selector} .page-titlebar-inner",
+                    'normal_padding' => "{$selector}",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
@@ -95,7 +95,7 @@ class Customify_TitleBar {
                 'name' => "{$section}_display_cat",
                 'type' => 'checkbox',
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on categories', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on categories', 'customify' ),
                 'selector' => $selector,
                 'default' => 1,
                 'render_callback' => $render_cb_el,
@@ -104,7 +104,7 @@ class Customify_TitleBar {
                 'name' => "{$section}_display_search",
                 'type' => 'checkbox',
                 'section' =>  $section,
-                'checkbox_label' => __( 'Display on search', 'customify-pro' ),
+                'checkbox_label' => __( 'Display on search', 'customify' ),
                 'selector' => $selector,
                 'default' => 1,
                 'render_callback' => $render_cb_el,
@@ -134,6 +134,15 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on single post', 'customify' ),
+                'selector' => $selector,
+                'render_callback' => $render_cb_el,
+            ),
+            array(
+                'name' => "{$section}_display_404",
+                'type' => 'checkbox',
+                'section' =>  $section,
+                'default' => 1,
+                'checkbox_label' => __( 'Display on 404 page', 'customify' ),
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
             ),
@@ -170,6 +179,10 @@ class Customify_TitleBar {
                 if ( ! Customify()->get_setting( 'titlebar_display_post' ) ) {
                     $is_showing = false;
                 }
+            } elseif ( is_404() ) {
+                if ( ! Customify()->get_setting( 'titlebar_display_404' ) ) {
+                    $is_showing = false;
+                }
             }
 
             // Do not show if page settings disable page title
@@ -178,6 +191,10 @@ class Customify_TitleBar {
                 if ( $disable ) {
                     $is_showing = false;
                 }
+            }
+
+            if ( is_home() && is_front_page() ) {
+                $is_showing = false;
             }
 
             self::$is_showing = apply_filters('customify/titlebar/is-showing', $is_showing );
@@ -206,8 +223,10 @@ class Customify_TitleBar {
                 __( 'Search Results for: %s', 'customify' ),
                 '<span>' . get_search_query() . '</span>'
             );
-        } else {
+        } elseif( is_archive() || is_tax() ) {
             $title = get_the_archive_title();
+        } else if ( is_404() ) {
+            $title =  __( 'Error 404 - Page not found', 'customify' );
         }
 
         $args = array(
@@ -222,7 +241,7 @@ class Customify_TitleBar {
             <div class="page-titlebar-inner customify-container">
                 <?php
                 // WPCS: XSS ok.
-                echo '<'.$args['tag'].' class="titlebar-title">'.$args['title'].'</'.$args['tag'].'>';
+                echo '<'.$args['tag'].' class="titlebar-title h3">'.$args['title'].'</'.$args['tag'].'>';
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>

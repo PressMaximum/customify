@@ -39,6 +39,9 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'blog_classic' => array(
                         'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
                     ),
+                    'blog_column' => array(
+                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
+                    ),
                 )
             ),
             array(
@@ -201,7 +204,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_more_text',
                 'type' => 'text',
                 'section' => $level_2_panel.'_readmore',
-                'default' => __( 'Read More &rarr;', 'customify' ),
+                'default' => ! is_rtl() ? _x( 'Read More &rarr;', 'readmore LTR', 'customify' ) : _x( 'Read More &larr;', 'readmore RTL' , 'customify' ),
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'label' => __( 'Read More Text', 'customify' ),

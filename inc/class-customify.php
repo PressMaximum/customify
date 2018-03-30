@@ -20,7 +20,7 @@ class Customify {
         add_action( 'after_setup_theme', array( $this, 'theme_setup' ) );
         add_action( 'after_setup_theme', array( $this, 'content_width' ), 0 );
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 3 );
+        add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 95 );
         add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
     }
 
@@ -218,22 +218,19 @@ class Customify {
      * @return string
      */
     function get_style_uri(){
-        $css_file = get_stylesheet_uri();
+        $suffix = $this->get_asset_suffix();
+        $style_dir = get_stylesheet_directory();
+        $suffix_css = $suffix;
+        $css_file = false;
         if ( is_rtl() ) {
-            $css_file = get_stylesheet_directory_uri() . '/style-rtl.css';
+            $suffix_css = '-rtl'.$suffix;
+        }
+        if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
+            $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
         }
 
-        if( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-            $suffix = $this->get_asset_suffix();
-            $style_dir = get_stylesheet_directory();
-            $suffix_css = $suffix;
-            if ( is_rtl() ) {
-                $suffix_css = '-rtl.'.$suffix;
-            }
-            if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
-                $css_file = get_stylesheet_directory_uri() . '/style' . $suffix_css . '.css';
-            }
-
+        if ( ! $css_file ) {
+            $css_file = get_stylesheet_uri();
         }
         return $css_file;
     }
@@ -249,6 +246,8 @@ class Customify {
         Customify_Font_Icons::get_instance()->enqueue();
 
         $suffix = $this->get_asset_suffix();
+
+        do_action('customify/load-scripts');
 
         $css_files = apply_filters(  'customify/theme/css', array(
             'style' => $this->get_style_uri()
@@ -313,30 +312,42 @@ class Customify {
 
     private function includes(){
         $files = array(
+            '/inc/class-metabox.php',  // Metabox settings.
             '/inc/template-class.php',                  // Template element classes.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
-            '/inc/metabox.php',                         // Metabox settings.
             '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
-            '/inc/posts/class-post-entry.php',          // Blog entry builder
-            '/inc/posts/class-posts-layout.php',        // Blog posts layout
-            '/inc/posts/functions-posts-layout.php',    // Posts layout functions
+            '/inc/blog/class-post-entry.php',          // Blog entry builder
+            '/inc/blog/class-posts-layout.php',        // Blog posts layout
+            '/inc/blog/functions-posts-layout.php',    // Posts layout functions
         );
 
         foreach( $files as $file ) {
             require_once self::$path.$file;
         }
 
-        if ( is_admin() ) {
-            add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-        }
-
         $this->load_configs();
         $this->load_compatibility();
+        $this->admin_includes();
+    }
 
+    private function admin_includes(){
+        if ( ! is_admin() ){
+            return ;
+        }
+
+        $files = array(
+            '/inc/admin/dashboard.php',  // Metabox settings.
+        );
+
+        foreach( $files as $file ) {
+            require_once self::$path.$file;
+        }
+
+        add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
     }
 
     /**
@@ -460,20 +471,21 @@ class Customify {
     function init(){
         $this->init_hooks();
         $this->includes();
-        $this->customizer = new Customify_Customizer();
+        $this->customizer = Customify_Customizer::get_instance();
+        $this->customizer->init();
         do_action( 'customify/init' );
     }
 
     function get_setting( $id, $device = 'desktop', $key = null ){
-        return $this->customizer->get_setting( $id, $device, $key );
+        return Customify_Customizer::get_instance()->get_setting( $id, $device, $key );
     }
 
     function get_media( $value, $size = null ){
-        return $this->customizer->get_media( $value, $size );
+        return Customify_Customizer::get_instance()->get_media( $value, $size );
     }
 
     function get_setting_tab($name, $tab = null) {
-        return $this->customizer->get_setting_tab( $name, $tab );
+        return Customify_Customizer::get_instance()->get_setting_tab( $name, $tab );
     }
 
 }

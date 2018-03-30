@@ -275,6 +275,8 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
                                 }
 
                         }
+                    } else {
+                        v[_v] = '400';
                     }
                 } )
             }
@@ -602,8 +604,6 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         if ( ! value.font ) {
             return '';
         }
-
-        console.log( 'Font-Vs', value );
 
         if ( value.type == 'google' ){
             this.fonts[ value.font ] = value.font;
@@ -1039,6 +1039,9 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         // Font Weight
         if ( ! _.isUndefined( fields.font_weight ) ) {
             if ( values.font_weight && values.font_weight !== 'default' && values.font_weight !== 'default'  ) {
+                if( values.font_weight === 'regular' ) {
+                    values.font_weight = 'normal';
+                }
                 code.font_weight = 'font-weight: '+values.font_weight+';';
             }
         }

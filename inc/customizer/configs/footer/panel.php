@@ -122,7 +122,7 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                 'section' => $section,
                 'selector' => join( ', ', array( $selector.' .widget-title', $selector.' h1', $selector.' h2',  $selector.' h3',  $selector.' h4' ) ),
                 'css_format' =>'color: {{value}};',
-                'title' => __( 'Heading Color', 'customify' ),
+                'title' => __( 'Widget Title Color', 'customify' ),
             ),
 
             array(

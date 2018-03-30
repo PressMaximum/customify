@@ -148,6 +148,9 @@ $text_color: #555d66;
         display: inline-block;
         margin-left: 0px;
         float: right;
+        @include rtl(){
+            float: left;
+        }
         button {
             cursor: pointer;
             background: 0 0;
@@ -275,9 +278,15 @@ $text_color: #555d66;
         position: absolute;
         top: 0px;
         left: 0px;
+        border-right: 1px solid #dddddd;
+        @include rtl(){
+            left: auto;
+            right: 0px;
+            border-right: 0px none;
+            border-left: 1px solid #dddddd;
+        }
         width: 35px;
         text-align: center;
-        border-right: 1px solid #dddddd;
         .r-visible-icon {
             &:before {
                 -moz-osx-font-smoothing: grayscale;
@@ -325,6 +334,10 @@ $text_color: #555d66;
         white-space: nowrap;
         margin-right: 35px;
         margin-left: 30px;
+        @include rtl(){
+            margin-left: 35px;
+            margin-right: 30px;
+        }
         overflow: hidden;
         text-overflow: ellipsis;
         display: block;
@@ -415,6 +428,10 @@ $text_color: #555d66;
             top: 0px;
             bottom: 0px;
             right: 0px;
+            @include rtl(){
+                right: auto;
+                left: 0px;
+            }
             text-decoration: none;
             width: 32px;
             display: block;
@@ -511,6 +528,10 @@ $text_color: #555d66;
         font-size: 11px;
         &:first-child {
             margin-left: -5px;
+            @include rtl() {
+                margin-left: 0px;
+            }
+
         }
         &.customify--label-active {
             font-weight: bold;
@@ -594,6 +615,9 @@ $text_color: #555d66;
         position: absolute;
         top: -9px;
         right: 41px;
+        @include rtl(){
+            left: 41px; right: auto;
+        }
         height: 24px;
         line-height: 18px;
         &.no-unit {
@@ -604,6 +628,9 @@ $text_color: #555d66;
         display: block;
         top: -9px;
         right: 18px;
+        @include rtl(){
+            left: 17px; right: auto;
+        }
         line-height: 22px;
         position: absolute;
         margin-right: 0px;
@@ -619,6 +646,9 @@ $text_color: #555d66;
         color: #555d66;
         top: -9px;
         right: -5px;
+        @include rtl(){
+            left: -5px; right: auto;
+        }
         line-height: 22px;
         position: absolute;
         margin-right: 0px;
@@ -640,6 +670,9 @@ $text_color: #555d66;
 .customify-input-slider {
     position: relative;
     margin: 11px 118px 20px 4px;
+    @include rtl(){
+        margin: 11px 4px 20px 118px;
+    }
     height: 5px;
     display: block;
     background: #CCCCCC;
@@ -648,6 +681,10 @@ $text_color: #555d66;
         display: block;
         height: 5px;
         background: #3068af;
+        @include rtl(){
+            position: absolute;
+            left: 0px;
+        }
     }
     .ui-slider-handle {
         width: 18px;
@@ -675,6 +712,10 @@ $text_color: #555d66;
         flex: 1;
         border: 1px solid #ddd;
         border-right: 0px;
+        @include rtl(){
+            border-right: 1px solid #ddd;
+            border-left: 0px;
+        }
         cursor: pointer;
         position: relative;
     }
@@ -702,6 +743,10 @@ $text_color: #555d66;
         flex: 1;
         border: 1px solid #ddd;
         border-left: 0px;
+        @include rtl(){
+            border-left: 1px solid #ddd;
+            border-right: 0px;
+        }
         font-size: 18px;
         .dashicons {
             width: 30px;
@@ -714,9 +759,19 @@ $text_color: #555d66;
 #customify--sidebar-icons {
     position: fixed;
     left: -300px;
+    border-right: 1px solid #ddd;
+    @include rtl(){
+        left: auto; right: -300px;
+        border-right: 0px none;
+        border-left: 1px solid #ddd;
+    }
     transition: all .5s ease;
     &.customify--active {
         left: 300px;
+        @include rtl(){
+            left: auto;
+            right: 300px;
+        }
     }
     width: 300px;
     bottom: 0px;
@@ -724,7 +779,7 @@ $text_color: #555d66;
     display: block;
     z-index: 8;
     background: #EBEBEB;
-    border-right: 1px solid #ddd;
+
     *{
         box-sizing: border-box;
     }
@@ -858,12 +913,27 @@ $text_color: #555d66;
                     border-right: 1px solid #ccc;
                     border-top-right-radius: 3px;
                     border-bottom-right-radius: 3px;
+                    @include rtl(){
+                        border-right: 0px none;
+                        border-left: 1px solid #ccc;
+                        border-top-right-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
+                    }
                 }
             }
             &:first-child {
                 span.label {
                     border-top-left-radius: 3px;
                     border-bottom-left-radius: 3px;
+                    @include rtl(){
+                        border-right: 1px solid #ccc;
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
+                    }
                 }
             }
         }
@@ -1041,6 +1111,9 @@ $text_color: #555d66;
         position: absolute;
         top: 0px;
         right: 0px;
+        @include rtl(){
+            right: auto; left: 0px;
+        }
         vertical-align: middle;
         margin-top: 5px;
         a {
@@ -1211,6 +1284,10 @@ $text_color: #555d66;
         position: absolute;
         top: -6px;
         right: 5px;
+        @include rtl(){
+            right: auto;
+            left: 5px;
+        }
         width: 15px;
         height: 15px;
         background: #fff;

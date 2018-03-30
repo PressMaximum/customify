@@ -118,7 +118,7 @@ class Customify_WC {
 
         if ( is_shop() ) {
             // Do not show if page settings disable page title
-            if ( ! Customify()->get_setting( 'breadcrumb_display_page' ) ) {
+            if ( Customify_Breadcrumb::get_instance()->support_plugins_active() && ! Customify()->get_setting( 'titlebar_display_product' ) ) {
                 $show = false;
             } else {
                 $show = true;
@@ -131,6 +131,7 @@ class Customify_WC {
                     $show = true;
                 }
             }
+
         } else if (is_product_taxonomy()) {
             if (Customify()->get_setting('titlebar_display_product_tax')) {
                 $show = true;

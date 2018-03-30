@@ -1,0 +1,28 @@
+/* Search Page */
+.search {
+    .content-area {
+        article {
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid $color_border;
+        }
+        .entry-title {
+            font-size: 1.4em;
+            font-weight: 400;
+            color: $color_text;
+            word-wrap: break-word;
+            a {
+                color: inherit;
+                &:hover {
+                    color: $color_link;
+                }
+            }
+        }
+        .entry-summary p:last-child {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+
+/* 404 Page */

@@ -2134,7 +2134,6 @@ template {
 # Media: Captions
 # Media: Galleries
 # Comments
-
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
@@ -2900,7 +2899,7 @@ article.comment .comment-post-author {
 }
 
 .page-titlebar {
-  padding: 26px 0px 27px;
+  padding: 21px 0px 22px;
   border-bottom: 1px solid #eaecee;
   word-break: break-all;
 }
@@ -2919,12 +2918,10 @@ article.comment .comment-post-author {
 }
 .page-titlebar .titlebar-title {
   margin-bottom: 0px;
-  font-size: 2.617924em;
-  line-height: 1.216;
 }
 
 .page-breadcrumb {
-  padding: 9px 0px 10px;
+  padding: 7px 0px 8px;
   font-size: 1em;
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
@@ -3159,6 +3156,9 @@ article.comment .comment-post-author {
   margin-left: 5px;
   float: right;
 }
+html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
+  transform: rotate(180deg);
+}
 .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle:before {
   content: "\f105";
 }
@@ -3194,9 +3194,11 @@ article.comment .comment-post-author {
   font-weight: normal;
   transition: background 0.15s ease-out;
   line-height: 1.6;
+  color: #666666;
 }
 .nav-menu-desktop .sub-menu li a:hover {
   background: rgba(0, 0, 0, 0.015);
+  color: #111111;
 }
 .nav-menu-desktop .sub-menu .sub-menu {
   top: 0px;
@@ -4650,8 +4652,8 @@ body.menu_sidebar_dropdown:before {
 
 .customify-container {
   position: relative;
-  padding-left: 1.5em;
-  padding-right: 1.5em;
+  padding-left: 25px;
+  padding-right: 25px;
 }
 .customify-container:before, .customify-container:after {
   content: "";
@@ -4662,13 +4664,13 @@ body.menu_sidebar_dropdown:before {
 }
 @media screen and (max-width: 48em) {
   .customify-container {
-    padding-left: 0.938em;
-    padding-right: 0.938em;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
 .customify-container, .layout-contained {
-  max-width: 75em;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -4679,7 +4681,7 @@ body.menu_sidebar_dropdown:before {
   max-width: 100%;
 }
 .site-content.content-boxed {
-  max-width: 75em;
+  max-width: 1200px;
   margin: 0 auto;
 }
 .site-content.content-full-stretched .customify-container {
@@ -4703,6 +4705,18 @@ body.menu_sidebar_dropdown:before {
 #sidebar-secondary, #sidebar-primary, #main {
   padding-top: 2.617924em;
   padding-bottom: 2.617924em;
+}
+
+@media screen and (max-width: 1024px) {
+  .sidebar-content-sidebar #main {
+    border-left: 0px none;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .sidebar-content-sidebar #sidebar-secondary {
+    order: 5;
+    display: none;
+  }
 }
 
 /*-- Layout: content-sidebar --*/
@@ -4802,6 +4816,10 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 
+.entry-title {
+  word-wrap: break-word;
+}
+
 .entry-meta {
   margin-bottom: 0.7em;
   color: #6d6d6d;
@@ -4875,11 +4893,13 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .entry-content-data {
   flex: 1;
   word-wrap: break-word;
+  max-width: 100%;
 }
 .posts-layout .entry-title {
   font-size: 1.4em;
   font-weight: 400;
   color: #444444;
+  word-wrap: break-word;
 }
 .posts-layout .entry-title a {
   color: inherit;
@@ -5104,15 +5124,35 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 
+/* Search Page */
+.search .content-area article {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eaecee;
+}
+.search .content-area .entry-title {
+  font-size: 1.4em;
+  font-weight: 400;
+  color: #444444;
+  word-wrap: break-word;
+}
+.search .content-area .entry-title a {
+  color: inherit;
+}
+.search .content-area .entry-title a:hover {
+  color: #007ee5;
+}
+.search .content-area .entry-summary p:last-child {
+  margin-bottom: 0px;
+}
+
+/* 404 Page */
 /* Widget Common */
 .widget-title {
   font-size: 1.2em;
   font-weight: 400;
 }
 
-.widget-area {
-  word-break: break-all;
-}
 .widget-area .widget {
   font-size: 0.875em;
   margin-bottom: 1.618em;
@@ -5141,6 +5181,9 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget a:hover {
   color: #007ee5;
   text-decoration: underline;
+}
+.widget-area .widget a.button:hover {
+  text-decoration: none;
 }
 .widget-area .widget select {
   max-width: 100%;

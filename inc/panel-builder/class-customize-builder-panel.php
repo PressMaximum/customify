@@ -10,10 +10,6 @@
 class Customify_Customize_Builder_Panel {
     public $id = '';
 
-    function __construct() {
-        add_filter( 'customify/customizer/config', array( $this, '_customize' ), 15, 2 );
-    }
-
     /**
      * Get Rows Config
      * @todo Set custom name for each row
