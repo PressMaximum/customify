@@ -96,18 +96,14 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on categories', 'customify' ),
-                'selector' => $selector,
                 'default' => 1,
-                'render_callback' => $render_cb_el,
             ),
             array(
                 'name' => "{$section}_display_search",
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on search', 'customify' ),
-                'selector' => $selector,
                 'default' => 1,
-                'render_callback' => $render_cb_el,
             ),
 
             array(
@@ -115,9 +111,7 @@ class Customify_TitleBar {
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on archive', 'customify' ),
-                'selector' => $selector,
                 'default' => 1,
-                'render_callback' => $render_cb_el,
             ),
 
             array(
@@ -126,16 +120,12 @@ class Customify_TitleBar {
                 'default' => 1,
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on single page', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
             ),
             array(
                 'name' => "{$section}_display_post",
                 'type' => 'checkbox',
                 'section' =>  $section,
                 'checkbox_label' => __( 'Display on single post', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
             ),
             array(
                 'name' => "{$section}_display_404",
@@ -143,8 +133,6 @@ class Customify_TitleBar {
                 'section' =>  $section,
                 'default' => 1,
                 'checkbox_label' => __( 'Display on 404 page', 'customify' ),
-                'selector' => $selector,
-                'render_callback' => $render_cb_el,
             ),
 
         );

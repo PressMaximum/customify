@@ -19,7 +19,10 @@ get_header(); ?>
 
         <main id="main" <?php customify_main_content_class(); ?>>
             <div class="content-inner">
-                <?php customify_blog_posts(); ?>
+                <?php
+                customify_blog_posts_heading();
+                customify_blog_posts();
+                ?>
             </div><!-- #.content-inner -->
         </main><!-- #main -->
 

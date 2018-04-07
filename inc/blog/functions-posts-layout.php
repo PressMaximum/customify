@@ -9,6 +9,38 @@ function Customify_Post_Entry(){
     return Customify_Post_Entry::get_instance();
 }
 
+if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
+    function customify_blog_posts_heading (){
+        if (customify_is_post_title_display()) {
+            if (is_search()) {
+                ?>
+                <header class="blog-posts-heading">
+                    <h1 class="page-title"><?php printf( // WPCS: XSS ok.
+                            __('Search Results for: %s', 'customify'),
+                            '<span>' . get_search_query() . '</span>'
+                        ); ?></h1>
+                </header>
+                <?php
+            } elseif (is_archive()) {
+                ?>
+                <header class="page-header blog-posts-heading">
+                    <?php
+                    the_archive_title('<h1 class="page-title">', '</h1>');
+                    the_archive_description('<div class="archive-description">', '</div>');
+                    ?>
+                </header><!-- .page-header -->
+                <?php
+            } else if (customify_is_post_title_display() && !(is_front_page() && is_home())) {
+                ?>
+                <header class="blog-posts-heading">
+                    <h1 class="page-title"><?php echo get_the_title(customify_get_support_meta_id()); ?></h1>
+                </header>
+                <?php
+            }
+        }
+    }
+}
+
 
 if( ! function_exists( 'customify_blog_posts' ) ) {
     /**
@@ -25,34 +57,6 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
         ));
 
         echo '<div id="' . esc_attr($args['el_id']) . '">';
-        if (customify_is_post_title_display()) {
-            if (is_search()) {
-                ?>
-                <header>
-                    <h1 class="page-title"><?php printf( // WPCS: XSS ok.
-                            __('Search Results for: %s', 'customify'),
-                            '<span>' . get_search_query() . '</span>'
-                    ); ?></h1>
-                </header>
-                <?php
-            } elseif (is_archive()) {
-                ?>
-                <header class="page-header">
-                    <?php
-                    the_archive_title('<h1 class="page-title">', '</h1>');
-                    the_archive_description('<div class="archive-description">', '</div>');
-                    ?>
-                </header><!-- .page-header -->
-                <?php
-            } else if (customify_is_post_title_display() && !(is_front_page() && is_home())) {
-                ?>
-                <header>
-                    <h1 class="page-title"><?php echo get_the_title(customify_get_support_meta_id()); ?></h1>
-                </header>
-                <?php
-            }
-        }
-
         if (have_posts()) :
             $_args = array(
                 'layout'              => Customify()->get_setting($args['prefix'] . '_layout'),
