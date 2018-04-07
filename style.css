@@ -4953,13 +4953,10 @@ body.menu_sidebar_dropdown:before {
   color: #8a6d3b;
   padding: 1em;
 }
-.posts-layout.layout--blog_2column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_boxed .has-post-thumbnail .entry-content-data {
-  padding-top: 1em;
-}
 .posts-layout.layout--blog_2column .entry-media, .posts-layout.layout--blog_column .entry-media, .posts-layout.layout--blog_boxed .entry-media {
+  margin-bottom: 1em;
   display: block;
   position: relative;
-  margin-bottom: 0;
 }
 .posts-layout.layout--blog_boxed .entry-content-data {
   padding: 1em;
