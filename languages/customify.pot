@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-03-27 04:13:42+00:00\n"
+"POT-Creation-Date: 2018-04-10 03:28:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,15 +32,6 @@ msgstr ""
 msgid ""
 "It looks like nothing was found at this location. Maybe try one of the "
 "links below or a search?"
-msgstr ""
-
-#: 404.php:33
-msgid "Most Used Categories"
-msgstr ""
-
-#: 404.php:50
-#. translators: %1$s: smiley
-msgid "Try looking in the monthly archives. %1$s"
 msgstr ""
 
 #: comments.php:34
@@ -129,26 +120,50 @@ msgstr ""
 msgid "Join Our Facebook Group »"
 msgstr ""
 
+#: inc/blog/class-post-entry.php:178
+#. translators: 1: title.
+msgid "1 Comment"
+msgstr ""
+
+#: inc/blog/class-post-entry.php:326
+msgid "Read more &rarr;"
+msgstr ""
+
+#: inc/blog/class-post-entry.php:328
+msgid "Read more &larr;"
+msgstr ""
+
+#: inc/blog/class-post-entry.php:333 template-parts/content.php:49
+#. Translators: %s: Name of current post. Only visible to screen readers.
+msgid "Continue reading %s"
+msgstr ""
+
+#: inc/blog/functions-posts-layout.php:19
+#: inc/customizer/configs/titlebar.php:211
+#. translators: 1: Search query name
+msgid "Search Results for: %s"
+msgstr ""
+
 #: inc/class-customify.php:122
 msgid "Primary"
 msgstr ""
 
-#: inc/class-customify.php:170
+#: inc/class-customify.php:173
 msgid "Primary Sidebar"
 msgstr ""
 
-#: inc/class-customify.php:172 inc/class-customify.php:181
-#: inc/class-customify.php:192
+#: inc/class-customify.php:175 inc/class-customify.php:184
+#: inc/class-customify.php:195
 #: inc/compatibility/woocommerce/woocommerce.php:218
 #: inc/compatibility/woocommerce/woocommerce.php:227
 msgid "Add widgets here."
 msgstr ""
 
-#: inc/class-customify.php:179
+#: inc/class-customify.php:182
 msgid "Secondary Sidebar"
 msgstr ""
 
-#: inc/class-customify.php:190
+#: inc/class-customify.php:193
 msgid "Footer Sidebar %d"
 msgstr ""
 
@@ -186,7 +201,7 @@ msgstr ""
 
 #: inc/class-metabox.php:162 inc/customizer/configs/footer/panel.php:103
 #: inc/customizer/configs/header/panel.php:103
-#: inc/customizer/configs/layouts.php:34
+#: inc/customizer/configs/layouts.php:35
 msgid "Full Width"
 msgstr ""
 
@@ -265,22 +280,22 @@ msgid "Display on categories"
 msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:119
-#: inc/customizer/configs/titlebar.php:107
+#: inc/customizer/configs/titlebar.php:105
 msgid "Display on search"
 msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:127
-#: inc/customizer/configs/titlebar.php:117
+#: inc/customizer/configs/titlebar.php:113
 msgid "Display on archive"
 msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:135
-#: inc/customizer/configs/titlebar.php:128
+#: inc/customizer/configs/titlebar.php:122
 msgid "Display on single page"
 msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:143
-#: inc/customizer/configs/titlebar.php:136
+#: inc/customizer/configs/titlebar.php:128
 msgid "Display on single post"
 msgstr ""
 
@@ -431,7 +446,6 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:394
 #: inc/customizer/class-customizer.php:584
-#: inc/customizer/configs/header/cart.php:66
 #: inc/customizer/configs/header/nav-icon.php:78
 #: inc/customizer/configs/header/social-icons.php:141
 msgid "Color"
@@ -610,7 +624,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:554
 #: inc/customizer/class-customizer.php:642
 #: inc/customizer/configs/header/social-icons.php:247
-#: inc/customizer/configs/styling.php:159
+#: inc/customizer/configs/styling.php:160
 msgid "Border Color"
 msgstr ""
 
@@ -834,7 +848,7 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:125
-#: inc/customizer/configs/styling.php:259
+#: inc/customizer/configs/styling.php:262
 msgid "Widget Title Color"
 msgstr ""
 
@@ -928,8 +942,7 @@ msgstr ""
 #: inc/customizer/configs/header/button.php:8
 #: inc/customizer/configs/header/button.php:26
 #: inc/customizer/configs/header/button.php:37
-#: inc/customizer/configs/header/button.php:153
-#: inc/customizer/configs/header/cart.php:9
+#: inc/customizer/configs/header/button.php:152
 msgid "Button"
 msgstr ""
 
@@ -972,32 +985,6 @@ msgstr ""
 msgid "Advanced styling for button"
 msgstr ""
 
-#: inc/customizer/configs/header/cart.php:25
-msgid "Cart"
-msgstr ""
-
-#: inc/customizer/configs/header/cart.php:32
-msgid "Cart Icon"
-msgstr ""
-
-#: inc/customizer/configs/header/cart.php:39
-msgid "Show Total Price"
-msgstr ""
-
-#: inc/customizer/configs/header/cart.php:46
-msgid "Show Number Item"
-msgstr ""
-
-#: inc/customizer/configs/header/cart.php:52
-#: inc/customizer/configs/header/cart.php:59
-msgid "Cart Page URL"
-msgstr ""
-
-#: inc/customizer/configs/header/cart.php:73
-#: inc/customizer/configs/header/nav-icon.php:90
-msgid "Color Hover"
-msgstr ""
-
 #: inc/customizer/configs/header/html.php:17
 msgid "HTML 1"
 msgstr ""
@@ -1016,14 +1003,14 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:54
 #: inc/customizer/configs/header/logo.php:68
-#: inc/customizer/configs/layouts.php:46 inc/customizer/configs/layouts.php:147
+#: inc/customizer/configs/layouts.php:47 inc/customizer/configs/layouts.php:148
 msgid "Yes"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
 #: inc/customizer/configs/header/panel.php:337
-#: inc/customizer/configs/layouts.php:47 inc/customizer/configs/layouts.php:148
+#: inc/customizer/configs/layouts.php:48 inc/customizer/configs/layouts.php:149
 msgid "No"
 msgstr ""
 
@@ -1173,6 +1160,10 @@ msgstr ""
 
 #: inc/customizer/configs/header/nav-icon.php:70
 msgid "Large"
+msgstr ""
+
+#: inc/customizer/configs/header/nav-icon.php:90
+msgid "Color Hover"
 msgstr ""
 
 #: inc/customizer/configs/header/panel.php:18
@@ -1399,80 +1390,84 @@ msgstr ""
 msgid "Border & border radius"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:13
+#: inc/customizer/configs/layouts.php:14
 msgid "Layouts"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:22
+#: inc/customizer/configs/layouts.php:23
 msgid "Global"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:28
+#: inc/customizer/configs/layouts.php:29
 msgid "Site layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:29
+#: inc/customizer/configs/layouts.php:30
 msgid "Select global site layout."
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:35 inc/customizer/configs/layouts.php:99
+#: inc/customizer/configs/layouts.php:36 inc/customizer/configs/layouts.php:100
 msgid "Boxed"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:36
+#: inc/customizer/configs/layouts.php:37
 msgid "Framed"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:44
+#: inc/customizer/configs/layouts.php:45
 msgid "Site boxed/framed shadow"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:61
+#: inc/customizer/configs/layouts.php:62
 msgid "Site framed margin"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:86
+#: inc/customizer/configs/layouts.php:87
 msgid "Container width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:96
+#: inc/customizer/configs/layouts.php:97
 msgid "Site content layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:98
+#: inc/customizer/configs/layouts.php:99
 msgid "Full width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:110
+#: inc/customizer/configs/layouts.php:111
 msgid "Site content padding"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:129
+#: inc/customizer/configs/layouts.php:130
 msgid "Sidebars"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:137
+#: inc/customizer/configs/layouts.php:138
 msgid "Default Sidebar Layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:145
+#: inc/customizer/configs/layouts.php:146
 msgid "Sidebar with vertical border"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:161
+#: inc/customizer/configs/layouts.php:162
 msgid "Pages"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:170
+#: inc/customizer/configs/layouts.php:171
 msgid "Blog posts"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:179
+#: inc/customizer/configs/layouts.php:180
 msgid "Blog posts archives"
 msgstr ""
 
 #: inc/customizer/configs/layouts.php:189
 msgid "Search Results"
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:198
+msgid "404 Page"
 msgstr ""
 
 #: inc/customizer/configs/styling.php:22
@@ -1495,31 +1490,31 @@ msgstr ""
 msgid "Link Color Hover"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:232
+#: inc/customizer/configs/styling.php:235
 msgid "Meta Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:250
+#: inc/customizer/configs/styling.php:253
 msgid "Heading Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:269
+#: inc/customizer/configs/styling.php:272
 msgid "Sidebar Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:276
+#: inc/customizer/configs/styling.php:279
 msgid "Primary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:298
+#: inc/customizer/configs/styling.php:301
 msgid "Secondary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:321
+#: inc/customizer/configs/styling.php:324
 msgid "Footer Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:328
+#: inc/customizer/configs/styling.php:331
 msgid "Footer Widgets Title"
 msgstr ""
 
@@ -1543,10 +1538,12 @@ msgstr ""
 msgid "Display Settings"
 msgstr ""
 
-#: inc/customizer/configs/titlebar.php:210
-#: inc/posts/functions-posts-layout.php:33
-#. translators: 1: Search query name
-msgid "Search Results for: %s"
+#: inc/customizer/configs/titlebar.php:135
+msgid "Display on 404 page"
+msgstr ""
+
+#: inc/customizer/configs/titlebar.php:217
+msgid "Error 404 - Page not found"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:21
@@ -1797,24 +1794,6 @@ msgstr ""
 msgid "Footer widgets moved"
 msgstr ""
 
-#: inc/posts/class-post-entry.php:178
-#. translators: 1: title.
-msgid "1 Comment"
-msgstr ""
-
-#: inc/posts/class-post-entry.php:326
-msgid "Read more &rarr;"
-msgstr ""
-
-#: inc/posts/class-post-entry.php:328
-msgid "Read more &larr;"
-msgstr ""
-
-#: inc/posts/class-post-entry.php:333 template-parts/content.php:49
-#. Translators: %s: Name of current post. Only visible to screen readers.
-msgid "Continue reading %s"
-msgstr ""
-
 #: inc/template-functions.php:11
 msgid "Content / Sidebar"
 msgstr ""
@@ -1839,32 +1818,28 @@ msgstr ""
 msgid "Content / Sidebar / Sidebar"
 msgstr ""
 
-#: inc/template-tags.php:63
-#. translators: %s: Name of current post. Only visible to screen readers
-msgid "Edit <span class=\"screen-reader-text\">%s</span>"
-msgstr ""
-
-#: inc/template-tags.php:92
+#: inc/template-tags.php:82
+#. translators: 1: list of tags.
 msgid "Pingback:"
 msgstr ""
 
-#: inc/template-tags.php:92
+#: inc/template-tags.php:82
 msgid "(Edit)"
 msgstr ""
 
-#: inc/template-tags.php:105
+#: inc/template-tags.php:95
 msgid "Reply"
 msgstr ""
 
-#: inc/template-tags.php:113
+#: inc/template-tags.php:103
 msgid "Post author"
 msgstr ""
 
-#: inc/template-tags.php:125
+#: inc/template-tags.php:115
 msgid "Edit"
 msgstr ""
 
-#: inc/template-tags.php:129
+#: inc/template-tags.php:119
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
@@ -1905,16 +1880,20 @@ msgstr ""
 msgid "Customify"
 msgstr ""
 
-#. Author URI of the plugin/theme
+#. Theme URI of the plugin/theme
 msgid "https://wpcustomify.com"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "Super-Awesome and free business WordPress themes."
+msgid "A free business WordPress themes."
 msgstr ""
 
 #. Author of the plugin/theme
 msgid "WPCustomify"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "https://wpcustomify.com/about"
 msgstr ""
 
 #: comments.php:40
@@ -1925,9 +1904,33 @@ msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/customizer/configs/blogs.php:136 inc/posts/class-post-entry.php:27
+#: inc/blog/class-post-entry.php:27 inc/customizer/configs/blogs.php:136
 msgctxt "post meta separator"
 msgid "-"
+msgstr ""
+
+#: inc/blog/class-post-entry.php:156
+#. translators: used between list items, there is a space after the comma
+msgctxt "list item separator"
+msgid ", "
+msgstr ""
+
+#: inc/blog/class-post-entry.php:184
+#. translators: 1: comment count number, 2: title.
+msgctxt "comments number"
+msgid "%1$s Comment"
+msgid_plural "%1$s Comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: inc/blog/class-posts-layout.php:232
+msgctxt "previous set of posts"
+msgid "Previous"
+msgstr ""
+
+#: inc/blog/class-posts-layout.php:235
+msgctxt "next set of posts"
+msgid "Next"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:207
@@ -1956,30 +1959,6 @@ msgstr ""
 #: inc/customizer/controls/class-control-base.php:211
 msgctxt "customify-font-weight"
 msgid "Bold"
-msgstr ""
-
-#: inc/posts/class-post-entry.php:156
-#. translators: used between list items, there is a space after the comma
-msgctxt "list item separator"
-msgid ", "
-msgstr ""
-
-#: inc/posts/class-post-entry.php:184
-#. translators: 1: comment count number, 2: title.
-msgctxt "comments number"
-msgid "%1$s Comment"
-msgid_plural "%1$s Comments"
-msgstr[0] ""
-msgstr[1] ""
-
-#: inc/posts/class-posts-layout.php:232
-msgctxt "previous set of posts"
-msgid "Previous"
-msgstr ""
-
-#: inc/posts/class-posts-layout.php:235
-msgctxt "next set of posts"
-msgid "Next"
 msgstr ""
 
 #: inc/template-tags.php:29

@@ -389,6 +389,10 @@ module.exports = function( grunt ) {
         }
     });
 
+    grunt.registerTask('re-css', function (ver) {
+        grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
+    });
+
 
 
 };
