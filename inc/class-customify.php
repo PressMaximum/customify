@@ -80,7 +80,7 @@ class Customify {
      * @global int $content_width
      */
     function content_width() {
-        $GLOBALS['content_width'] = apply_filters( 'customify_content_width', 640 );
+        $GLOBALS['content_width'] = apply_filters( 'customify_content_width', 843 );
     }
 
     /**
