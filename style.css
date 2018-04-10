@@ -5040,6 +5040,10 @@ body.menu_sidebar_dropdown:before {
   color: #444444;
   margin: 0px 2px;
 }
+.entry-content .table-wrapper {
+  max-width: 100%;
+  overflow: auto;
+}
 
 .entry-footer .tags-links, .entry-footer .cat-links {
   margin-top: 0.5407911001em;

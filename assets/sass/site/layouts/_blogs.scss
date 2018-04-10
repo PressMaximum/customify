@@ -207,7 +207,6 @@ $blog_gutter: $gl-gutter;
             }
         }
 
-
     }
 
 }
@@ -268,6 +267,10 @@ $blog_gutter: $gl-gutter;
             color: $color_text;
             margin: 0px 2px;
         }
+    }
+    .table-wrapper {
+        max-width: 100%;
+        overflow: auto;
     }
 }
 

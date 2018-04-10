@@ -269,8 +269,10 @@ jQuery( document ).ready( function( $ ){
         }
     } );
 
-
     $("#page").fitVids();
+
+    // Responsive table
+    $( '.entry-content table' ).wrap('<div class="table-wrapper"/>');
 
 } );
 
