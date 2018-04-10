@@ -203,8 +203,10 @@ class Customify_TitleBar {
             return '';
         }
 
+        $excerpt = '';
         if ( Customify()->is_using_post() ) {
             $title =  get_the_title( Customify()->get_current_post_id() );
+            $excerpt = get_the_excerpt( Customify()->get_current_post_id() );
         } elseif( is_search() ) {
             $title = sprintf( // WPCS: XSS ok.
             /* translators: 1: Search query name */
@@ -213,6 +215,9 @@ class Customify_TitleBar {
             );
         } elseif( is_archive() || is_tax() ) {
             $title = get_the_archive_title();
+            if ( is_tax() ) {
+                $excerpt = get_the_archive_description();
+            }
         } else if ( is_404() ) {
             $title =  __( 'Error 404 - Page not found', 'customify' );
         }
@@ -230,6 +235,9 @@ class Customify_TitleBar {
                 <?php
                 // WPCS: XSS ok.
                 echo '<'.$args['tag'].' class="titlebar-title h3">'.$args['title'].'</'.$args['tag'].'>';
+                if ( $excerpt ) {
+                    echo '<div class="titlebar-excerpt">'.$excerpt.'</div>';
+                }
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>
