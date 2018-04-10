@@ -84,7 +84,6 @@ $blog_gutter: $gl-gutter;
     }
     .entry-title {
         font-size: 1.4em;
-        font-weight: 400;
         color: $color_text;
         word-wrap: break-word;
         a {
@@ -160,13 +159,13 @@ $blog_gutter: $gl-gutter;
             }
             .has-post-thumbnail {
                 .entry-content-data {
-                    padding-top: 1em;
+
                 }
             }
             .entry-media {
+                margin-bottom: 1em;
                 display: block;
                 position: relative;
-                margin-bottom: 0;
             }
         }
 
@@ -207,6 +206,7 @@ $blog_gutter: $gl-gutter;
                 object-fit: fill;
             }
         }
+
 
     }
 

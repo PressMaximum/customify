@@ -2,8 +2,8 @@
 Theme Name: Customify
 Theme URI: https://wpcustomify.com
 Author: WPCustomify
-Author URI: https://wpcustomify.com
-Description: Super-Awesome and free business WordPress themes.
+Author URI: https://wpcustomify.com/about
+Description: A free business WordPress themes.
 Version: 0.0.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -2153,15 +2153,15 @@ textarea {
 }
 
 /* # Heading */
-h1, h2, h3, .comments-area .comments-title, h4, h5, h6 {
-  font-weight: 300;
+h1, h2, h3, h4, .comments-area .comments-title, .comments-area .comment-reply-title, h5, h6 {
+  font-weight: 400;
   margin: 0 0 0.5407911001em;
   color: #373737;
   clear: both;
 }
 
 h1, .h1 {
-  font-size: 2.617924em;
+  font-size: 2.42em;
   line-height: 1.216;
 }
 
@@ -2169,16 +2169,16 @@ h2, .h2 {
   font-size: 2.1em;
   line-height: 1.216;
 }
-h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title {
+h2 + h3, .h2 + h3 {
   border-top: 1px solid #eaecee;
   padding-top: 0.5407911001em;
 }
 
-h3, .comments-area .comments-title, .h3 {
+h3, .h3 {
   font-size: 1.618em;
 }
 
-h4, .h4 {
+h4, .comments-area .comments-title, .comments-area .comment-reply-title, .h4 {
   font-size: 1.41575em;
 }
 
@@ -4897,7 +4897,6 @@ body.menu_sidebar_dropdown:before {
 }
 .posts-layout .entry-title {
   font-size: 1.4em;
-  font-weight: 400;
   color: #444444;
   word-wrap: break-word;
 }
@@ -4953,13 +4952,10 @@ body.menu_sidebar_dropdown:before {
   color: #8a6d3b;
   padding: 1em;
 }
-.posts-layout.layout--blog_2column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_column .has-post-thumbnail .entry-content-data, .posts-layout.layout--blog_boxed .has-post-thumbnail .entry-content-data {
-  padding-top: 1em;
-}
 .posts-layout.layout--blog_2column .entry-media, .posts-layout.layout--blog_column .entry-media, .posts-layout.layout--blog_boxed .entry-media {
+  margin-bottom: 1em;
   display: block;
   position: relative;
-  margin-bottom: 0;
 }
 .posts-layout.layout--blog_boxed .entry-content-data {
   padding: 1em;
@@ -5150,7 +5146,6 @@ body.menu_sidebar_dropdown:before {
 /* Widget Common */
 .widget-title {
   font-size: 1.2em;
-  font-weight: 400;
 }
 
 .widget-area .widget {
