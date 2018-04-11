@@ -33,4 +33,8 @@
     do_action( 'customify/site-start' );
     ?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>
+        <div <?php customify_site_content_container_class(); ?>>
+            <div <?php customify_site_content_grid_class(); ?>>
+                <main id="main" <?php customify_main_content_class(); ?>>
+
 

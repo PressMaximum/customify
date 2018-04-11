@@ -33,8 +33,21 @@ class Customify_WC {
 
             add_filter('customify/theme/js', array($this, 'add_js'));
             add_filter('customify/theme/css', array($this, 'add_css'));
+
+            /**
+             * woocommerce_sidebar hook.
+             *
+             * @hooked woocommerce_get_sidebar - 10
+             */
+            add_action( 'wp', array( $this, 'wp' ) );
+
         }
     }
+
+    function wp(){
+        remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar' );
+    }
+
     function add_css( $css_files ){
         $suffix = Customify()->get_asset_suffix();
         $css_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/css/compatibility/woocommerce'.$suffix.'.css';

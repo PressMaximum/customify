@@ -8,29 +8,17 @@
  */
 
 get_header(); ?>
-
-    <div <?php customify_site_content_container_class(); ?>>
-        <div <?php customify_site_content_grid_class(); ?>>
-
-            <main id="main" <?php customify_main_content_class(); ?>>
-                <div class="content-inner">
-                    <?php
-                    if ( have_posts() ){
-                        while ( have_posts() ) {
-                            the_post();
-                            get_template_part( 'template-parts/content', 'search' );
-                        }
-                    } else {
-                        get_template_part( 'template-parts/content', 'none' );
-                    }
-                    ?>
-                </div><!-- #.content-inner -->
-            </main><!-- #main -->
-
-            <?php do_action( 'customify_sidebars' ); ?>
-
-        </div><!-- #.customify-grid -->
-    </div><!-- #.customify-container -->
-
+    <div class="content-inner">
+        <?php
+        if ( have_posts() ){
+            while ( have_posts() ) {
+                the_post();
+                get_template_part( 'template-parts/content', 'search' );
+            }
+        } else {
+            get_template_part( 'template-parts/content', 'none' );
+        }
+        ?>
+    </div><!-- #.content-inner -->
 <?php
 get_footer();

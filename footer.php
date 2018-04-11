@@ -10,8 +10,11 @@
  */
 
 ?>
-	</div><!-- #content -->
-
+            </main><!-- #main -->
+            <?php do_action( 'customify_sidebars' ); ?>
+        </div><!-- #.customify-grid -->
+    </div><!-- #.customify-container -->
+</div><!-- #content -->
 <?php
 /**
  * Site end
