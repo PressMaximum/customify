@@ -80,7 +80,7 @@ module.exports = function( grunt ) {
                     {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
-                    'assets/css/admin/admin.css': 'assets/sass/admin/admin.scss',
+                    'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
                     'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
                     },
                     {
@@ -157,6 +157,16 @@ module.exports = function( grunt ) {
                         expand: true,
                         cwd: '.',
                         src: ['assets/js/customizer/*.js', '!assets/js/customizer/*.min.js'],
+                        dest: '.',
+                        rename: function (dst, src) {
+                            // To keep the source js files and make new files as `*.min.js`:
+                            return dst + '/' + src.replace('.js', '.min.js');
+                        }
+                    },
+                    {
+                        expand: true,
+                        cwd: '.',
+                        src: ['assets/js/admin/*.js', '!assets/js/admin/*.min.js'],
                         dest: '.',
                         rename: function (dst, src) {
                             // To keep the source js files and make new files as `*.min.js`:

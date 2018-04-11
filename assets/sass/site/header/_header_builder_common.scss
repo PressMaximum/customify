@@ -135,6 +135,57 @@
 }
 
 
+// Header Cover
+.page-cover {
+    position: relative;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 300px;
+    &:before {
+        position: absolute;
+        content: "";
+        background-color: rgba( 0,0,0,.3 );
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 1;
+    }
+    .page-cover-inner {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        z-index: 5;
+    }
+}
+.page-cover-title {
+    margin-bottom: 0px;
+}
+.page-cover-tagline {
+    margin-top: 1em;
+}
+.page-cover-title, .page-cover-tagline {
+    display: inline-block;
+    position: relative;
+    color: rgba(255, 255, 255, .8);
+    z-index: 5;
+    p {
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+
+
 /* Customizer Shortcut */
 #masthead, #header-menu-sidebar {
     .customize-partial-edit-shortcut {

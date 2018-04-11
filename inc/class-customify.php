@@ -310,7 +310,7 @@ class Customify {
     }
 
     function admin_scripts(){
-        wp_enqueue_style( 'customify-admin',  get_template_directory_uri() . '/assets/css/admin/admin.css', false, self::$version );
+
     }
 
     private function includes(){
@@ -365,6 +365,7 @@ class Customify {
             'styling',
             'typography',
             'titlebar',
+            'cover',
             'compatibility',
 
             // Header Builder Panel

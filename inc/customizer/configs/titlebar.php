@@ -44,9 +44,19 @@ class Customify_TitleBar {
                 'name' => $section.'_typo',
                 'type' => 'typography',
                 'section' => $section,
-                'title'  => __( 'Typography', 'customify' ),
-                'description'  => __( 'Typography for titlebar', 'customify' ),
+                'title'  => __( 'Title Typography', 'customify' ),
+                'description'  => __( 'Typography for titlebar title', 'customify' ),
                 'selector' => "{$selector} .titlebar-title",
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name' => $section.'_typo_desc',
+                'type' => 'typography',
+                'section' => $section,
+                'title'  => __( 'Tagline Typography', 'customify' ),
+                'description'  => __( 'Typography for titlebar tagline', 'customify' ),
+                'selector' => "{$selector} .titlebar-tagline",
                 'css_format' => 'typography',
             ),
 
@@ -236,7 +246,7 @@ class Customify_TitleBar {
                 // WPCS: XSS ok.
                 echo '<'.$args['tag'].' class="titlebar-title h3">'.$args['title'].'</'.$args['tag'].'>';
                 if ( $excerpt ) {
-                    echo '<div class="titlebar-excerpt">'.$excerpt.'</div>';
+                    echo '<div class="titlebar-tagline">'.$excerpt.'</div>';
                 }
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>

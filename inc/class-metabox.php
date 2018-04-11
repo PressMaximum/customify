@@ -34,8 +34,18 @@ class Customify_MetaBox {
             self::$_instance = new self();
             add_action( 'add_meta_boxes', array( self::$_instance, 'add_meta_box' ) );
             add_action( 'save_post',      array( self::$_instance, 'save'         ) );
+            add_action( 'admin_enqueue_scripts',  array( self::$_instance, 'scripts' ) );
         }
         return self::$_instance;
+    }
+    function scripts( $hook ){
+
+        if($hook != 'post.php' && $hook !='post-new.php' ) {
+            return;
+        }
+        $suffix = Customify()->get_asset_suffix();
+        wp_enqueue_script( 'customify-metabox',  get_template_directory_uri().'/assets/js/admin/metabox'.$suffix.'.js',  array( 'jquery' ),  Customify::$version, true );
+        wp_enqueue_style( 'customify-metabox',  get_template_directory_uri() . '/assets/css/admin/metabox'.$suffix.'.css', false, Customify::$version );
     }
 
     function get_support_post_types(){
