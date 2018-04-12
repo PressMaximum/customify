@@ -258,6 +258,25 @@ class Customify_Post_Entry {
     }
 
     /**
+    * Get first category markup
+    *
+    * @return string
+    */
+    function post_category(){
+        $html = '';
+        if ( 'post' === get_post_type() ) {
+            /* translators: used between list items, there is a space after the comma */
+            $categories_list = get_the_category_list( '__cate_sep__' );
+            if ( $categories_list ) {
+                $categories_list = explode( '__cate_sep__', $categories_list );
+                $categories_list = $categories_list[0];
+                $html.= sprintf( '<span class="entry-cat">%1$s</span>', $categories_list ); // WPCS: XSS OK.
+            }
+        }
+        echo $html;
+    }
+
+    /**
      *  Post thumbnail markup
      *
      * @param null $post
