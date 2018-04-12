@@ -1,9 +1,35 @@
 <?php
 
 class Customify_Posts_Layout {
-    private $args = array();
-    function set_args( $args = array() )
+    public $args = array();
+    public $customizer_args = array();
+
+    function set_args( $customizer_args = array() )
     {
+
+        $args = array(
+            'layout'              => Customify()->get_setting($customizer_args['prefix'] . '_layout'),
+            'excerpt_length'      => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_length'),
+            'excerpt_more'        => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_more'),
+            'more_text'           => Customify()->get_setting($customizer_args['prefix'] . '_more_text'),
+            'more_display'        => Customify()->get_setting($customizer_args['prefix'] . '_more_display'),
+            'thumbnail_size'      => Customify()->get_setting($customizer_args['prefix'] . '_thumbnail_size'),
+            'hide_thumb_if_empty' => Customify()->get_setting($customizer_args['prefix'] . '_hide_thumb_if_empty'),
+            'meta_config'         => Customify()->get_setting($customizer_args['prefix'] . '_meta_config'),
+            'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
+        );
+
+        $pagination = array(
+            'show_paging' => Customify()->get_setting($customizer_args['prefix'] . '_pg_show_paging'),
+            'show_nav'    => Customify()->get_setting($customizer_args['prefix'] . '_pg_show_nav'),
+            'mid_size'    => Customify()->get_setting($customizer_args['prefix'] . '_pg_mid_size'),
+            'prev_text'   => Customify()->get_setting($customizer_args['prefix'] . '_pg_prev_text'),
+            'next_text'   => Customify()->get_setting($customizer_args['prefix'] . '_pg_next_text'),
+        );
+
+        $args['pagination'] = is_array($pagination) ? $pagination : array();
+        $this->customizer_args = $customizer_args;
+
 
         $_args = wp_parse_args( $args, array(
             'layout' => '',
@@ -70,6 +96,16 @@ class Customify_Posts_Layout {
         }
 
         $this->args = $_args;
+
+        Customify_Post_Entry()->set_config( array(
+            'thumbnail_size' => $this->args['thumbnail_size'],
+            'excerpt_length' => $this->args['excerpt_length'],
+            'excerpt_more' => $this->args['excerpt_more'],
+            'more_text' => $this->args['more_text'],
+            'more_display' => $this->args['more_display'],
+            'meta_config' => $this->args['meta_config'],
+            'meta_sep' => $this->args['meta_sep'],
+        ) );
     }
 
     function layout_blog_classic( $post = null ){
@@ -161,9 +197,8 @@ class Customify_Posts_Layout {
         return false;
     }
 
-    function render( $args = array() ){
-
-        $this->set_args( $args );
+    function render( $customizer_args = array() ){
+        $this->set_args( $customizer_args );
         $classes =  array();
 
         if ( $this->args['layout'] !=='blog_masonry' && $this->args['layout'] != 'blog_timeline' ) {
@@ -171,16 +206,6 @@ class Customify_Posts_Layout {
                 $classes[] = 'customify-grid-' . $this->args['columns'];
             }
         }
-
-        Customify_Post_Entry()->set_config( array(
-            'thumbnail_size' => $this->args['thumbnail_size'],
-            'excerpt_length' => $this->args['excerpt_length'],
-            'excerpt_more' => $this->args['excerpt_more'],
-            'more_text' => $this->args['more_text'],
-            'more_display' => $this->args['more_display'],
-            'meta_config' => $this->args['meta_config'],
-            'meta_sep' => $this->args['meta_sep'],
-        ) );
 
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];

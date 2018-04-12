@@ -56,38 +56,19 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
             'prefix' => 'blog_post',
         ));
 
+        $render_class = apply_filters( 'customify/blog/render_callback', 'Customify_Posts_Layout' );
+
         echo '<div id="' . esc_attr($args['el_id']) . '">';
-        if (have_posts()) :
-            $_args = array(
-                'layout'              => Customify()->get_setting($args['prefix'] . '_layout'),
-                'excerpt_length'      => Customify()->get_setting($args['prefix'] . '_excerpt_length'),
-                'excerpt_more'        => Customify()->get_setting($args['prefix'] . '_excerpt_more'),
-                'more_text'           => Customify()->get_setting($args['prefix'] . '_more_text'),
-                'more_display'        => Customify()->get_setting($args['prefix'] . '_more_display'),
-                'thumbnail_size'      => Customify()->get_setting($args['prefix'] . '_thumbnail_size'),
-                'hide_thumb_if_empty' => Customify()->get_setting($args['prefix'] . '_hide_thumb_if_empty'),
-                'meta_config'         => Customify()->get_setting($args['prefix'] . '_meta_config'),
-                'meta_sep'            => Customify()->get_setting($args['prefix'] . '_meta_sep'),
-            );
-            if (!is_array($_args)) {
-                $_args = $args;
+        if (have_posts()) {
+            if ( class_exists( $render_class ) ) {
+                $l = new $render_class();
+                if (method_exists($l, 'render')) {
+                    call_user_func_array(array($l, 'render'), array($args));
+                }
             }
-
-            $pagination = array(
-                'show_paging' => Customify()->get_setting($args['prefix'] . '_pg_show_paging'),
-                'show_nav'    => Customify()->get_setting($args['prefix'] . '_pg_show_nav'),
-                'mid_size'    => Customify()->get_setting($args['prefix'] . '_pg_mid_size'),
-                'prev_text'   => Customify()->get_setting($args['prefix'] . '_pg_prev_text'),
-                'next_text'   => Customify()->get_setting($args['prefix'] . '_pg_next_text'),
-            );
-
-            $l = new Customify_Posts_Layout();
-            $_args['pagination'] = is_array($pagination) ? $pagination : array();
-            $l->render($_args);
-
-        else :
+        }else {
             get_template_part('template-parts/content', 'none');
-        endif;
+        };
         echo '</div>';
     }
 }
