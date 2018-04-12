@@ -655,8 +655,11 @@ class Customify_Customizer_Auto_CSS
             ));
         }
 
-        if (isset($fields['font_style']) && $values['font_style']) {
-            $code['font_style'] = $this->setup_font_style($values['font_style']);
+        if (isset($values['style']) && $values['style']) {
+           // $code['font_style'] = $this->setup_font_style($values['font_style']);
+            if ( $values['style'] && $values['style'] !== 'default' ) {
+                $code['style'] = 'font-style: '.$values['style'].';';
+            }
         }
 
         // Font Weight

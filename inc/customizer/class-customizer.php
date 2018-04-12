@@ -540,7 +540,10 @@ class  Customify_Customizer
                     'name'       => 'border_width',
                     'type'       => 'css_ruler',
                     'label'      => __('Border Width', 'customify'),
-                    'required'   => array('border_style', '!=', 'none'),
+                    'required'   => array(
+                        array( 'border_style', '!=', 'none' ),
+                        array( 'border_style', '!=', '' )
+                    ),
                     'css_format' => array(
                         'top'    => 'border-top-width: {{value}};',
                         'right'  => 'border-right-width: {{value}};',
@@ -552,7 +555,10 @@ class  Customify_Customizer
                     'name'       => 'border_color',
                     'type'       => 'color',
                     'label'      => __('Border Color', 'customify'),
-                    'required'   => array('border_style', '!=', 'none'),
+                    'required'   => array(
+                        array( 'border_style', '!=', 'none' ),
+                        array( 'border_style', '!=', '' )
+                    ),
                     'css_format' => 'border-color: {{value}};',
                 ),
 
@@ -666,7 +672,7 @@ class  Customify_Customizer
 
         );
 
-        return $fields;
+        return apply_filters( 'customify/get_styling_config', $fields );
     }
 
     /**
