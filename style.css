@@ -2919,6 +2919,10 @@ article.comment .comment-post-author {
 .page-titlebar .titlebar-title {
   margin-bottom: 0px;
 }
+.page-titlebar .titlebar-tagline {
+  margin-top: 5px;
+  font-size: 0.875em;
+}
 
 .page-breadcrumb {
   padding: 7px 0px 8px;
