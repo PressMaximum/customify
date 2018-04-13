@@ -24,7 +24,9 @@ class Customify_Post_Entry {
             'term_count' => 1,
             'tax' => 'category',
             'title_tag' => 'h2',
-            'title_link' => 1, // true or false
+            'title_link' => 1,
+            'author_avatar' => false,
+            'avatar_size' => 32,
         );
     }
 
@@ -217,7 +219,13 @@ class Customify_Post_Entry {
      * @return string
      */
     function meta_author(){
-        $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>';
+        if ( $this->config['author_avatar'] ) {
+            $avatar = get_avatar( get_the_author_meta( 'ID' ), $this->config['avatar_size'] );
+        } else {
+            $avatar = '';
+        }
+
+        $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' .$avatar. esc_html( get_the_author() ) . '</a></span>';
         return '<span class="meta-item byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
@@ -273,7 +281,7 @@ class Customify_Post_Entry {
             the_title( '<h1 class="entry-title">', '</h1>' );
         else :
             if ( $this->config['title_link'] ) {
-                the_title( '<'.$this->config['title_tag'].' class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
+                the_title( '<'.$this->config['title_tag'].' class="entry-title"><a href="' . esc_url( get_permalink( $post ) ) . '" title="'.the_title_attribute( array( 'echo' => false ) ).'" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
             } else {
                 the_title( '<'.$this->config['title_tag'].' class="entry-title">','</'.$this->config['title_tag'].'>' );
             }
@@ -322,12 +330,14 @@ class Customify_Post_Entry {
      */
     function post_thumbnail( $post = null ){
         //if ( has_post_thumbnail() ) {
+        /* <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>"> */
             ?>
-            <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
+                <a class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>" href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
-            </div><!-- .entry-meta -->
+                </a>
             <?php
         //}
+        //  </div>
     }
 
     /**
