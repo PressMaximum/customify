@@ -1268,7 +1268,7 @@ html[dir="rtl"] .customify-modal-settings:before {
   font-size: 13px;
 }
 .customify-modal-settings .customify--group-field {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 .customify-modal-settings .customify--group-field:last-child {
   margin-bottom: 0px;
