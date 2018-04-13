@@ -62,7 +62,6 @@
     }
 }
 
-
 // Titlebar
 .page-titlebar {
     padding: 21px 0px 22px;
@@ -80,8 +79,11 @@
     .titlebar-title {
         margin-bottom: 0px;
     }
+    .titlebar-tagline {
+        margin-top: 5px;
+        font-size: ms(-1);
+    }
 }
-
 
 // Breadcrumbs
 .page-breadcrumb {
