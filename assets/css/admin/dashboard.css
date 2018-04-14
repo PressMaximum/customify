@@ -23,6 +23,7 @@
 }
 .cd-branding img {
   max-width: 150px;
+  display: block;
 }
 
 .cd-version {
@@ -51,7 +52,7 @@
 
 .cd-header {
   background: #ffffff;
-  padding: 15px 15px;
+  padding: 18px 15px;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .cd-header .cd-header-inner {
