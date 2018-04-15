@@ -4,10 +4,30 @@ class Customify_Post_Entry {
     public $post;
     static $_instance;
     public $config = array();
+    public $post_type = 'post';
     function __construct( $_post = null )
     {
         $this->set_post( $_post );
         $this->set_config();
+    }
+
+    function get_config_default(){
+        return array(
+            'excerpt_length' => Customify()->get_setting('blog_post_excerpt_length' ),
+            'excerpt_more' => null,
+            'thumbnail_size' => Customify()->get_setting('blog_post_thumb_size' ),
+            'meta_config' => Customify()->get_setting('blog_post_meta' ),
+            'meta_sep' => _x( '-', 'post meta separator', 'customify' ),
+            'more_text' => null,
+            'more_display' => 1,
+            'term_sep' => _x( ',', 'post term separator', 'customify' ),
+            'term_count' => 1,
+            'tax' => 'category',
+            'title_tag' => 'h2',
+            'title_link' => 1,
+            'author_avatar' => false,
+            'avatar_size' => 32,
+        );
     }
 
     /**
@@ -19,17 +39,16 @@ class Customify_Post_Entry {
         if ( ! is_array( $config ) ) {
             $config = array();
         }
-        $config = wp_parse_args( $config, array(
-            'excerpt_length' => Customify()->get_setting('blog_post_excerpt_length' ),
-            'excerpt_more' => null,
-            'thumbnail_size' => Customify()->get_setting('blog_post_thumb_size' ),
-            'meta_config' => Customify()->get_setting('blog_post_meta' ),
-            'meta_sep' => _x( '-', 'post meta separator', 'customify' ),
-            'more_text' => null,
-            'more_display' => 1,
-        ) );
+        $config = wp_parse_args( $config, $this->get_config_default() );
 
         $this->config = $config;
+    }
+
+    /**
+     * Reset config
+     */
+    function reset_config() {
+        $this->config = $this->get_config_default();
     }
 
     /**
@@ -122,7 +141,7 @@ class Customify_Post_Entry {
         );
 
         $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>';
-        return '<span class="posted-on">' . $posted_on . '</span>';
+        return '<span class="meta-item posted-on">' . $posted_on . '</span>';
     }
 
     /**
@@ -132,13 +151,15 @@ class Customify_Post_Entry {
      */
     function meta_categories(){
         $html = '';
-        if ( 'post' === get_post_type() ) {
+        if ( $this->post_type === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
-            $categories_list = get_the_category_list( '__cate_sep__' );
-            if ( $categories_list ) {
+            $categories_list = get_the_term_list( $this->get_post_id( ) , $this->config['tax'], '', '__cate_sep__' );
+            if ( $categories_list && ! is_wp_error( $categories_list ) ) {
                 $categories_list = explode( '__cate_sep__', $categories_list );
-                $categories_list = $categories_list[0];
-                $html.= sprintf( '<span class="cat-links">%1$s</span>', $categories_list ); // WPCS: XSS OK.
+                if ( $this->config['term_count'] > 0 ) {
+                    $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
+                }
+                $html.= sprintf( '<span class="meta-item meta-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
             }
         }
         return $html;
@@ -155,7 +176,7 @@ class Customify_Post_Entry {
             /* translators: used between list items, there is a space after the comma */
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
-                $html .= sprintf( '<span class="tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
+                $html .= sprintf( '<span class="meta-item tags-links">%1$s</span>', $tags_list ); // WPCS: XSS OK.
             }
         }
         return $html;
@@ -170,7 +191,7 @@ class Customify_Post_Entry {
         $html =  '';
         if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
             $comment_count = get_comments_number();
-            $html .= '<span class="comments-link">';
+            $html .= '<span class="meta-item comments-link">';
             $html .= '<a href="'.esc_url( get_comments_link() ).'">';
             if ( 1 === $comment_count ) {
                 $html .= sprintf(
@@ -198,8 +219,14 @@ class Customify_Post_Entry {
      * @return string
      */
     function meta_author(){
-        $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>';
-        return '<span class="byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
+        if ( $this->config['author_avatar'] ) {
+            $avatar = get_avatar( get_the_author_meta( 'ID' ), $this->config['avatar_size'] );
+        } else {
+            $avatar = '';
+        }
+
+        $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' .$avatar. esc_html( get_the_author() ) . '</a></span>';
+        return '<span class="meta-item byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
     /**
@@ -234,7 +261,7 @@ class Customify_Post_Entry {
 
         if ( ! empty( $metas ) ) {
             ?>
-            <div class="entry-meta">
+            <div class="entry-meta entry--item">
                 <?php
                 // WPCS: XSS OK.
                 echo join( ( $this->config['meta_sep'] ) ?'<span class="sep">'.$this->config['meta_sep'].'</span>' : '', $metas);
@@ -251,10 +278,49 @@ class Customify_Post_Entry {
      */
     function post_title( $post = null ){
         if ( is_singular() ) :
-            the_title( '<h1 class="entry-title">', '</h1>' );
+            the_title( '<h1 class="entry-title entry--item">', '</h1>' );
         else :
-            the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+            if ( $this->config['title_link'] ) {
+                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item"><a href="' . esc_url( get_permalink( $post ) ) . '" title="'.the_title_attribute( array( 'echo' => false ) ).'" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
+            } else {
+                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item">','</'.$this->config['title_tag'].'>' );
+            }
+
         endif;
+    }
+
+    function get_post_id( $post = null ) {
+        if ( is_object( $post ) ) {
+            return $post->ID;
+        } else if( is_array( $post ) ) {
+            return $post['ID'];
+        } else if ( is_numeric( $post ) ) {
+            return $post;
+        } else {
+            return get_the_ID();
+        }
+    }
+
+    /**
+    * Get first category markup
+    *
+    * @return string
+    */
+    function post_category( $post = null ){
+        $html = '';
+        if ( $this->post_type === get_post_type() ) {
+            /* translators: used between list items, there is a space after the comma */
+            //$categories_list = get_the_category_list( '__cate_sep__' );
+            $categories_list = get_the_term_list( $this->get_post_id( $post ) , $this->config['tax'], '', '__cate_sep__' );
+            if ( $categories_list  && ! is_wp_error( $categories_list ) ) {
+                $categories_list = explode( '__cate_sep__', $categories_list );
+                if ( $this->config['term_count'] > 0 ) {
+                    $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
+                }
+                $html.= sprintf( '<span class="entry-cat entry--item">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+            }
+        }
+        echo $html;
     }
 
     /**
@@ -264,12 +330,14 @@ class Customify_Post_Entry {
      */
     function post_thumbnail( $post = null ){
         //if ( has_post_thumbnail() ) {
+        /* <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>"> */
             ?>
-            <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
+                <a class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>" href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
-            </div><!-- .entry-meta -->
+                </a>
             <?php
         //}
+        //  </div>
     }
 
     /**
@@ -286,7 +354,7 @@ class Customify_Post_Entry {
         }
         $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
         ?>
-        <div class="entry-excerpt">
+        <div class="entry-excerpt entry--item">
             <?php
             if ( $excerpt ) {
                 // WPCS: XSS OK.
@@ -304,7 +372,7 @@ class Customify_Post_Entry {
      */
     function post_content(){
         ?>
-        <div class="entry-content">
+        <div class="entry-content entry--item">
             <?php
             the_content();
             ?>
@@ -329,7 +397,7 @@ class Customify_Post_Entry {
             }
         }
         ?>
-        <div class="entry-readmore">
+        <div class="entry-readmore entry--item">
             <a class="readmore-button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php

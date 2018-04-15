@@ -44,9 +44,17 @@ class Customify_TitleBar {
                 'name' => $section.'_typo',
                 'type' => 'typography',
                 'section' => $section,
-                'title'  => __( 'Typography', 'customify' ),
-                'description'  => __( 'Typography for titlebar', 'customify' ),
+                'title'  => __( 'Title Typography', 'customify' ),
                 'selector' => "{$selector} .titlebar-title",
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name' => $section.'_typo_desc',
+                'type' => 'typography',
+                'section' => $section,
+                'title'  => __( 'Tagline Typography', 'customify' ),
+                'selector' => "{$selector} .titlebar-tagline",
                 'css_format' => 'typography',
             ),
 
@@ -54,10 +62,10 @@ class Customify_TitleBar {
                 'name' => $section.'_styling',
                 'type' => 'styling',
                 'section' => $section,
-                'title'  => __( 'Styling', 'customify' ),
+                'title'  => __( 'Titlebar Styling', 'customify' ),
                 'selector' => array(
                     'normal' => "{$selector}",
-                    'normal_text_color' => "{$selector} .titlebar-title",
+                    'normal_text_color' => "{$selector} .titlebar-title, {$selector} .titlebar-tagline",
                     'normal_padding' => "{$selector}",
                 ),
                 'css_format' => 'styling', // styling
@@ -73,6 +81,48 @@ class Customify_TitleBar {
                     'hover_fields' => false
                 )
             ),
+
+	        array(
+		        'name' => $section.'title_styling',
+		        'type' => 'styling',
+		        'section' => $section,
+		        'title'  => __( 'Titlebar Title Styling', 'customify' ),
+		        'selector' => array(
+			        'normal' => "{$selector} .titlebar-title",
+		        ),
+		        'css_format' => 'styling',
+		        'fields' => array(
+			        'normal_fields' => array(
+				        'link_color' => false,
+				        'bg_image' => false,
+				        'bg_cover' => false,
+				        'bg_repeat' => false,
+				        'box_shadow' => false,
+			        ),
+			        'hover_fields' => false
+		        )
+	        ),
+
+	        array(
+		        'name' => $section.'tagline_styling',
+		        'type' => 'styling',
+		        'section' => $section,
+		        'title'  => __( 'Titlebar Tagline Styling', 'customify' ),
+		        'selector' => array(
+			        'normal' => "{$selector} .titlebar-tagline",
+		        ),
+		        'css_format' => 'styling',
+		        'fields' => array(
+			        'normal_fields' => array(
+				        'link_color' => false,
+				        'bg_image' => false,
+				        'bg_cover' => false,
+				        'bg_repeat' => false,
+				        'box_shadow' => false,
+			        ),
+			        'hover_fields' => false
+		        )
+	        ),
 
             array(
                 'name' => "{$section}_align",
@@ -203,8 +253,10 @@ class Customify_TitleBar {
             return '';
         }
 
+        $excerpt = '';
         if ( Customify()->is_using_post() ) {
             $title =  get_the_title( Customify()->get_current_post_id() );
+            $excerpt = get_the_excerpt( Customify()->get_current_post_id() );
         } elseif( is_search() ) {
             $title = sprintf( // WPCS: XSS ok.
             /* translators: 1: Search query name */
@@ -213,6 +265,9 @@ class Customify_TitleBar {
             );
         } elseif( is_archive() || is_tax() ) {
             $title = get_the_archive_title();
+            if ( is_tax() ) {
+                $excerpt = get_the_archive_description();
+            }
         } else if ( is_404() ) {
             $title =  __( 'Error 404 - Page not found', 'customify' );
         }
@@ -230,6 +285,9 @@ class Customify_TitleBar {
                 <?php
                 // WPCS: XSS ok.
                 echo '<'.$args['tag'].' class="titlebar-title h3">'.$args['title'].'</'.$args['tag'].'>';
+                if ( $excerpt ) {
+                    echo '<div class="titlebar-tagline">'.$excerpt.'</div>';
+                }
                 ?>
                 <?php do_action('customify/titlebar/after-title'); ?>
             </div>

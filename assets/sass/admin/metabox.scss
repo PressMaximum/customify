@@ -1,0 +1,37 @@
+.customify-mt-divider {
+    border-bottom: 1px solid #eee;
+    border-top: 1px solid #eee;
+    display: block;
+    padding: 7px 12px;
+    margin-top: 15px;
+    margin-left: -12px;
+    margin-right: -12px;
+    font-weight: 600;
+}
+
+.customify-mt-media {
+    display: block;
+    .customify--add {
+        display: block;
+    }
+    .customify--remove {
+        display: none;
+    }
+    .customify-mt-media-preview {
+        display: block;
+    }
+    .customify-image-preview {
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    }
+    &.attachment-added {
+        .customify--add {
+            display: none;
+        }
+        .customify--remove {
+            display: block;
+        }
+    }
+}

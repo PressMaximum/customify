@@ -345,7 +345,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         ?>
         <?php echo self::field_header(); ?>
         <div class="customify-field-settings-inner">
-            <input type="text" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
+            <input type="{{ field.type }}" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
         <?php
         self::after_field();

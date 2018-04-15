@@ -123,7 +123,7 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
-                'name' => $level_2_panel.'_post_metas',
+                'name' => $level_2_panel.'_meta',
                 'type' => 'section',
                 'panel' => $level_2_panel,
                 'title' => __('Meta Settings', 'customify'),
@@ -131,7 +131,7 @@ if (!function_exists('customify_customizer_blog_config')) {
 
             array(
                 'name' => $args['id'].'_meta_sep',
-                'section' => $level_2_panel.'_post_metas',
+                'section' => $level_2_panel.'_meta',
                 'type' => 'text',
                 'default' => _x( '-', 'post meta separator', 'customify' ),
                 'label' => __( 'Separator', 'customify' ),
@@ -141,7 +141,7 @@ if (!function_exists('customify_customizer_blog_config')) {
 
             array(
                 'name' => $args['id']. '_meta_config',
-                'section' => $level_2_panel.'_post_metas',
+                'section' => $level_2_panel.'_meta',
                 'type' => 'repeater',
                 'description' => __('Drag to order meta items', 'customify'),
                 'live_title_field' => 'title',

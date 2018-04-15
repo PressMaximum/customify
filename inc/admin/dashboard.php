@@ -8,6 +8,10 @@ class Customify_Dashboard {
         $this->title = __( 'Customify Options', 'customify' );
         add_action( 'admin_menu', array( $this, 'add_menu' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+
+        add_action( 'customify/dashboard/main', array( $this, 'box_links' ), 10 );
+        add_action( 'customify/dashboard/sidebar', array( $this, 'box_plugins' ), 10 );
+        add_action( 'customify/dashboard/sidebar', array( $this, 'box_community' ), 20 );
     }
     function add_menu(){
         add_theme_page(
@@ -26,6 +30,10 @@ class Customify_Dashboard {
         }
         $suffix = Customify()->get_asset_suffix();
         wp_enqueue_style('customify-admin', get_template_directory_uri() . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
+        wp_enqueue_style( 'plugin-install' );
+        wp_enqueue_script( 'plugin-install' );
+        wp_enqueue_script( 'updates' );
+        add_thickbox();
     }
 
     function setup(){
@@ -62,8 +70,8 @@ class Customify_Dashboard {
         </div>
         <?php
     }
-    private function page_inner(){
 
+    function box_links(){
         $url = admin_url( 'customize.php' ); //
 
         $links = array(
@@ -71,18 +79,18 @@ class Customify_Dashboard {
                 'label' => __( 'Logo & Site Identity', 'customify' ),
                 'url' => add_query_arg( array( 'autofocus' => array( 'section' => 'title_tagline' ) ), $url ),
             ),
-	        array(
-		        'label' => __( 'Layout Settings', 'customify' ),
-		        'url' => add_query_arg( array( 'autofocus' => array( 'section' => 'global_layout_section' ) ), $url ),
-	        ),
-	        array(
-		        'label' => __( 'Header Builder', 'customify' ),
-		        'url' => add_query_arg( array( 'autofocus' => array( 'panel' => 'header_settings' ) ), $url ),
-	        ),
-	        array(
-		        'label' => __( 'Footer Builder', 'customify' ),
-		        'url' => add_query_arg( array( 'autofocus' => array( 'panel' => 'footer_settings' ) ), $url ),
-	        ),
+            array(
+                'label' => __( 'Layout Settings', 'customify' ),
+                'url' => add_query_arg( array( 'autofocus' => array( 'section' => 'global_layout_section' ) ), $url ),
+            ),
+            array(
+                'label' => __( 'Header Builder', 'customify' ),
+                'url' => add_query_arg( array( 'autofocus' => array( 'panel' => 'header_settings' ) ), $url ),
+            ),
+            array(
+                'label' => __( 'Footer Builder', 'customify' ),
+                'url' => add_query_arg( array( 'autofocus' => array( 'panel' => 'footer_settings' ) ), $url ),
+            ),
             array(
                 'label' => __( 'Styling', 'customify' ),
                 'url' => add_query_arg( array( 'autofocus' => array( 'panel' => 'styling_panel' ) ), $url ),
@@ -111,37 +119,152 @@ class Customify_Dashboard {
 
         );
         ?>
+        <div class="cd-box">
+            <div class="cd-box-top"><?php _e( 'Links to Customizer Settings', 'customify' ); ?></div>
+            <div class="cd-box-content">
+                <ul class="cd-list-flex">
+                    <?php foreach( $links as $l ) { ?>
+                        <li class="">
+                            <a class="cd-quick-setting-link" href="<?php echo esc_url( $l['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $l['label'] ); ?></a>
+                        </li>
+                    <?php } ?>
+                </ul>
+            </div>
+        </div>
+        <?php
+    }
+
+    function box_community() {
+        ?>
+        <div class="cd-box">
+            <div class="cd-box-top">Join the community!</div>
+            <div class="cd-box-content">
+                <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
+                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group »', 'customify' ); ?></a>
+            </div>
+        </div>
+        <?php
+    }
+
+    function box_plugins(){
+        ?>
+        <div class="cd-box">
+            <div class="cd-box-top"><?php _e( 'Recommend Customify Site Library', 'customify' ); ?></div>
+            <div id="plugin-filter" class="cd-box-content">
+                <p><?php _e( '<strong>Customify Site Library</strong> is an add-on for the Customify WordPress Theme which help you browse and import your favorite site with few clicks.', 'customify' ) ?></p>
+                <?php
+
+                $plugin_slug = 'contact-form-7';
+                $plugin_info = array(
+                    'name' => 'contact-form-7',
+                    'active_filename' => 'contact-form-7/wp-contact-form-7.php'
+                );
+
+                $plugin_info = wp_parse_args( $plugin_info, array(
+                    'name' => '',
+                    'active_filename' => '',
+                ) );
+                $status = is_dir( WP_PLUGIN_DIR . '/' . $plugin_slug );
+                $button_class = 'install-now button'; //
+                if ( $plugin_info['active_filename'] ) {
+                    $active_file_name = $plugin_info['active_filename'] ;
+                } else {
+                    $active_file_name = $plugin_slug . '/' . $plugin_slug . '.php';
+                }
+
+
+                $sites_url = add_query_arg(
+                    array(
+                        'page' => 'customify-sites',
+                    ),
+                    admin_url( 'themes.php' )
+                );
+
+                $view_site_txt = __( 'View Site Library', 'customify' );
+
+                if ( ! is_plugin_active( $active_file_name ) ) {
+                    $button_txt = esc_html__( 'Install Now', 'customify' );
+                    if ( ! $status ) {
+                        $install_url = wp_nonce_url(
+                            add_query_arg(
+                                array(
+                                    'action' => 'install-plugin',
+                                    'plugin' => $plugin_slug
+                                ),
+                                network_admin_url( 'update.php' )
+                            ),
+                            'install-plugin_'.$plugin_slug
+                        );
+
+                    } else {
+                        $install_url = add_query_arg(array(
+                            'action' => 'activate',
+                            'plugin' => rawurlencode( $active_file_name ),
+                            'plugin_status' => 'all',
+                            'paged' => '1',
+                            '_wpnonce' => wp_create_nonce('activate-plugin_' . $active_file_name ),
+                        ), network_admin_url('plugins.php'));
+                        $button_class = 'activate-now button-primary';
+                        $button_txt = esc_html__( 'Active Now', 'customify' );
+                    }
+
+                    $detail_link = add_query_arg(
+                        array(
+                            'tab' => 'plugin-information',
+                            'plugin' => $plugin_slug,
+                            'TB_iframe' => 'true',
+                            'width' => '772',
+                            'height' => '349',
+
+                        ),
+                        network_admin_url( 'plugin-install.php' )
+                    );
+
+                    echo '<div class="rcp">';
+                    echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+                    echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="'.esc_url( $detail_link ).'">'.esc_html__( 'Details', 'customify' ).'</a>';
+                    echo '</div>';
+                } else {
+                    echo '<div class="rcp">';
+                    echo '<p ><a href="'.esc_url( $sites_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="view-site-library">'.$view_site_txt.'</a></p>';
+                    echo '</div>';
+                }
+
+                ?>
+                <script type="text/javascript">
+                    jQuery( document ).ready( function($){
+                        var  sites_url = <?php echo json_encode( $sites_url ); ?>;
+                        var  view_sites = <?php echo json_encode( $view_site_txt ); ?>;
+                        $( '#plugin-filter' ).on( 'click', '.activate-now', function( e ){
+                            e.preventDefault();
+                            var button = $( this );
+                            var url = button.attr('href');
+                            button.addClass( 'button installing updating-message' );
+                            $.get( url, function( ){
+                                $( '.rcp .plugin-detail' ).hide();
+                                button.attr( 'href', sites_url );
+                                button.attr( 'class', 'view-site-library' );
+                                button.text( view_sites );
+                            } );
+                        } );
+                    } );
+                </script>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function page_inner(){
+
+
+        ?>
         <div class="cd-row metabox-holder">
-            <h1 class="cd-hidden-heading"">&nbsp;</h1>
+            <hr class="wp-header-end">
             <div class="cd-main">
-
-                <div class="cd-box">
-                    <div class="cd-box-top"><?php _e( 'Links to Customizer Settings', 'customify' ); ?></div>
-                    <div class="cd-box-content">
-                        <ul class="cd-list-flex">
-                            <?php foreach( $links as $l ) { ?>
-                            <li class="">
-                                <a class="cd-quick-setting-link" href="<?php echo esc_url( $l['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $l['label'] ); ?></a>
-                            </li>
-                            <?php } ?>
-                        </ul>
-                    </div>
-                </div>
-
                 <?php do_action( 'customify/dashboard/main', $this ); ?>
             </div>
             <div class="cd-sidebar">
-
-                <div class="cd-box">
-                    <div class="cd-box-top">Join the community!</div>
-                    <div class="cd-box-content">
-                        <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
-                        <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group »', 'customify' ); ?></a>
-                    </div>
-                </div>
-
                 <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
-
             </div>
         </div>
     <?php
