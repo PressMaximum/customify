@@ -34,6 +34,7 @@ $dashboard_border_color: #e5e5e5;
     vertical-align: middle;
     img {
         max-width: 150px;
+        display: block;
     }
 }
 .cd-version {
@@ -58,7 +59,7 @@ $dashboard_border_color: #e5e5e5;
 
 .cd-header {
     background: #ffffff;
-    padding: 15px 15px;
+    padding: 18px 15px;
     box-shadow: 0 1px 1px 0 rgba(0,0,0,.1);
     .cd-header-inner {
         display: flex;

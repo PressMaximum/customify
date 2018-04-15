@@ -261,7 +261,7 @@ class Customify_Post_Entry {
 
         if ( ! empty( $metas ) ) {
             ?>
-            <div class="entry-meta">
+            <div class="entry-meta entry--item">
                 <?php
                 // WPCS: XSS OK.
                 echo join( ( $this->config['meta_sep'] ) ?'<span class="sep">'.$this->config['meta_sep'].'</span>' : '', $metas);
@@ -278,12 +278,12 @@ class Customify_Post_Entry {
      */
     function post_title( $post = null ){
         if ( is_singular() ) :
-            the_title( '<h1 class="entry-title">', '</h1>' );
+            the_title( '<h1 class="entry-title entry--item">', '</h1>' );
         else :
             if ( $this->config['title_link'] ) {
-                the_title( '<'.$this->config['title_tag'].' class="entry-title"><a href="' . esc_url( get_permalink( $post ) ) . '" title="'.the_title_attribute( array( 'echo' => false ) ).'" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
+                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item"><a href="' . esc_url( get_permalink( $post ) ) . '" title="'.the_title_attribute( array( 'echo' => false ) ).'" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
             } else {
-                the_title( '<'.$this->config['title_tag'].' class="entry-title">','</'.$this->config['title_tag'].'>' );
+                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item">','</'.$this->config['title_tag'].'>' );
             }
 
         endif;
@@ -317,7 +317,7 @@ class Customify_Post_Entry {
                 if ( $this->config['term_count'] > 0 ) {
                     $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
                 }
-                $html.= sprintf( '<span class="entry-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+                $html.= sprintf( '<span class="entry-cat entry--item">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
             }
         }
         echo $html;
@@ -354,7 +354,7 @@ class Customify_Post_Entry {
         }
         $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
         ?>
-        <div class="entry-excerpt">
+        <div class="entry-excerpt entry--item">
             <?php
             if ( $excerpt ) {
                 // WPCS: XSS OK.
@@ -372,7 +372,7 @@ class Customify_Post_Entry {
      */
     function post_content(){
         ?>
-        <div class="entry-content">
+        <div class="entry-content entry--item">
             <?php
             the_content();
             ?>
@@ -397,7 +397,7 @@ class Customify_Post_Entry {
             }
         }
         ?>
-        <div class="entry-readmore">
+        <div class="entry-readmore entry--item">
             <a class="readmore-button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php

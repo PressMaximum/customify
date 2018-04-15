@@ -5207,7 +5207,7 @@ body.menu_sidebar_dropdown:before {
 }
 
 .widget-area .widget {
-  font-size: 0.875em;
+  font-size: 15px;
   margin-bottom: 1.618em;
 }
 .widget-area .widget:last-of-type {
@@ -5330,8 +5330,8 @@ body.menu_sidebar_dropdown:before {
 }
 
 /* Footer Copyright */
-.footer-copyright {
-  font-size: 14px;
+.footer-copyright, .footer-copyright p {
+  font-size: 15px;
 }
 
 /*# sourceMappingURL=style.css.map */
