@@ -121,6 +121,9 @@ $blog_gutter: $gl-gutter;
         &blog_classic, &blog_lateral, &blog_classic_rounded {
             .entry-media {
                 margin-right: $blog_gutter;
+                @include for_device( mobile ) {
+                    margin-right: 0px;
+                }
             }
         }
 

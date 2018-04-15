@@ -4984,6 +4984,11 @@ body.menu_sidebar_dropdown:before {
 .posts-layout.layout--blog_classic .entry-media, .posts-layout.layout--blog_lateral .entry-media, .posts-layout.layout--blog_classic_rounded .entry-media {
   margin-right: 2em;
 }
+@media screen and (max-width: 568px) {
+  .posts-layout.layout--blog_classic .entry-media, .posts-layout.layout--blog_lateral .entry-media, .posts-layout.layout--blog_classic_rounded .entry-media {
+    margin-right: 0px;
+  }
+}
 .posts-layout.layout--blog_lateral .entry.even .entry-content-data {
   order: 1;
 }
