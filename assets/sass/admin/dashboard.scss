@@ -157,6 +157,8 @@ $dashboard_border_color: #e5e5e5;
     }
     .cd-module-info {
         flex-basis: 100%;
+        position: relative;
+        padding-right: 100px;
     }
     .cd-module-name {
         font-weight: 600;
@@ -164,6 +166,11 @@ $dashboard_border_color: #e5e5e5;
     .cd-module-desc {
         margin-top: 10px;
         font-style: italic;
+    }
+    .cd-module-doc-link {
+        position: absolute;
+        top: 0px;
+        right: 0px;
     }
 }
 
@@ -233,8 +240,8 @@ $dashboard_border_color: #e5e5e5;
 }
 .toast-close-button {
     position: relative;
-    right: -0.3em;
-    top: -0.3em;
+    right: -2px;
+    top: -2px;
     float: right;
     font-size: 20px;
     font-weight: bold;
@@ -242,6 +249,8 @@ $dashboard_border_color: #e5e5e5;
     -webkit-text-shadow: 0 1px 0 #ffffff;
     text-shadow: 0 1px 0 #ffffff;
     opacity: 0.8;
+    background: none;
+    border: none;
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
     filter: alpha(opacity=80);
 }
@@ -256,7 +265,7 @@ $dashboard_border_color: #e5e5e5;
 }
 
 .toast-top-right {
-    top: 100px;
+    top: 60px;
     right: 12px;
 }
 #toast-container {
@@ -274,8 +283,10 @@ $dashboard_border_color: #e5e5e5;
     position: relative;
     overflow: hidden;
     margin: 0 0 6px;
-    padding: 15px 15px 15px 50px;
-    width: 300px;
+    padding: 7px 7px 7px 40px;
+    line-height: 24px;
+    background-size: 16px 16px;
+    width: 260px;
     -moz-border-radius: 3px 3px 3px 3px;
     -webkit-border-radius: 3px 3px 3px 3px;
     border-radius: 3px 3px 3px 3px;

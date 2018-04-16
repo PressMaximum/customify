@@ -116,8 +116,9 @@ class Customify_Dashboard {
                 'label' => __( 'Homepage Settings', 'customify' ),
                 'url' => add_query_arg( array( 'autofocus' => array( 'section' => 'static_front_page' ) ), $url ),
             )
-
         );
+
+        $links = apply_filters( 'customify/dashboard/links', $links );
         ?>
         <div class="cd-box">
             <div class="cd-box-top"><?php _e( 'Links to Customizer Settings', 'customify' ); ?></div>
@@ -137,10 +138,10 @@ class Customify_Dashboard {
     function box_community() {
         ?>
         <div class="cd-box">
-            <div class="cd-box-top">Join the community!</div>
+            <div class="cd-box-top"><?php _e( 'Join the community!', 'customify-pro' ); ?></div>
             <div class="cd-box-content">
                 <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
-                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group »', 'customify' ); ?></a>
+                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group &rarr;	', 'customify' ); ?></a>
             </div>
         </div>
         <?php
@@ -154,10 +155,10 @@ class Customify_Dashboard {
                 <p><?php _e( '<strong>Customify Site Library</strong> is an add-on for the Customify WordPress Theme which help you browse and import your favorite site with few clicks.', 'customify' ) ?></p>
                 <?php
 
-                $plugin_slug = 'contact-form-7';
+                $plugin_slug = 'customify-sites';
                 $plugin_info = array(
-                    'name' => 'contact-form-7',
-                    'active_filename' => 'contact-form-7/wp-contact-form-7.php'
+                    'name' => 'customify-sites',
+                    'active_filename' => 'customify-sites/customify-sites.php'
                 );
 
                 $plugin_info = wp_parse_args( $plugin_info, array(

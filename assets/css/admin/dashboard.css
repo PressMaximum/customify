@@ -163,6 +163,8 @@
 }
 .cd-modules .cd-module-info {
   flex-basis: 100%;
+  position: relative;
+  padding-right: 100px;
 }
 .cd-modules .cd-module-name {
   font-weight: 600;
@@ -170,6 +172,11 @@
 .cd-modules .cd-module-desc {
   margin-top: 10px;
   font-style: italic;
+}
+.cd-modules .cd-module-doc-link {
+  position: absolute;
+  top: 0px;
+  right: 0px;
 }
 
 .onoffswitch {
@@ -264,8 +271,8 @@
 
 .toast-close-button {
   position: relative;
-  right: -0.3em;
-  top: -0.3em;
+  right: -2px;
+  top: -2px;
   float: right;
   font-size: 20px;
   font-weight: bold;
@@ -273,6 +280,8 @@
   -webkit-text-shadow: 0 1px 0 #ffffff;
   text-shadow: 0 1px 0 #ffffff;
   opacity: 0.8;
+  background: none;
+  border: none;
   -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
   filter: alpha(opacity=80);
 }
@@ -288,7 +297,7 @@
 }
 
 .toast-top-right {
-  top: 100px;
+  top: 60px;
   right: 12px;
 }
 
@@ -308,8 +317,10 @@
   position: relative;
   overflow: hidden;
   margin: 0 0 6px;
-  padding: 15px 15px 15px 50px;
-  width: 300px;
+  padding: 7px 7px 7px 40px;
+  line-height: 24px;
+  background-size: 16px 16px;
+  width: 260px;
   -moz-border-radius: 3px 3px 3px 3px;
   -webkit-border-radius: 3px 3px 3px 3px;
   border-radius: 3px 3px 3px 3px;
