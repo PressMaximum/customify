@@ -289,7 +289,7 @@ class Customify_Dashboard {
 
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify-pro' ); ?></div>
+            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
                 <div class="cd-module-item">
@@ -299,7 +299,6 @@ class Customify_Dashboard {
                     </div>
                 </div>
                 <?php } ?>
-
             </div>
         </div>
         <?php
