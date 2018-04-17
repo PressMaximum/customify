@@ -2965,6 +2965,9 @@ article.comment .comment-post-author {
 .page-titlebar, .page-cover {
   word-break: break-all;
 }
+.page-titlebar .customize-partial-edit-shortcut button, .page-cover .customize-partial-edit-shortcut button {
+  left: 0px;
+}
 .page-titlebar .page-breadcrumb-inner, .page-cover .page-breadcrumb-inner {
   padding-left: 0;
   padding-right: 0;
@@ -3003,6 +3006,12 @@ article.comment .comment-post-author {
   flex-direction: column;
   justify-content: center;
   z-index: 5;
+}
+.page-cover .page-breadcrumb-list {
+  color: rgba(255, 255, 255, 0.8);
+}
+.page-cover .page-breadcrumb-list a, .page-cover .page-breadcrumb-list li:after {
+  color: inherit;
 }
 
 .page-cover-title {

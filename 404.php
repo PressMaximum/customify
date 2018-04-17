@@ -11,11 +11,11 @@ get_header(); ?>
 
 <div class="content-inner">
     <section class="error-404 not-found">
-
+    <?php if ( customify_is_post_title_display() ){ ?>
         <header class="page-header">
             <h1 class="page-title"><?php esc_html_e( 'Oops! That page can&rsquo;t be found.', 'customify' ); ?></h1>
         </header><!-- .page-header -->
-
+    <?php } ?>
         <div class="page-content widget-area">
             <p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'customify' ); ?></p>
             <?php get_search_form(); ?>

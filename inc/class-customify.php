@@ -364,8 +364,9 @@ class Customify {
             'blogs',
             'styling',
             'typography',
-            'titlebar',
-            'cover',
+
+            'page-header',
+
             'compatibility',
 
             // Header Builder Panel

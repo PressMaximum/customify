@@ -26,6 +26,7 @@ class Customify_MetaBox {
         'disable_page_title' => '',
         'disable_footer_main' => '',
         'disable_footer_bottom' => '',
+        'page_header_display' => '',
         'breadcrumb_display' => '',
     );
 
@@ -158,7 +159,7 @@ class Customify_MetaBox {
         <p>
             <label for="customify_page_layout"><strong><?php _e( 'Sidebar', 'customify' ); ?></strong></label><br/>
             <select id="customify_page_layout" name="customify_page_settings[sidebar]">
-                <option value=""><?php _e( 'Inherit from Customize Setting', 'customify' ); ?></option>
+                <option value=""><?php _e( 'Inherit from customize settings', 'customify' ); ?></option>
                 <?php foreach( customify_get_config_sidebar_layouts() as $k => $label ) { ?>
                 <option <?php selected( $values['sidebar'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
                 <?php } ?>
@@ -193,25 +194,43 @@ class Customify_MetaBox {
         <label>
             <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
         </label>
+        <div class="customify-mt-divider"><?php _e( 'Page Header', 'customify' ); ?></div>
+        <p>
+            <label for="customify_page_header_display"><strong><?php _e( 'Page Header Display', 'customify' ); ?></strong></label><br/>
+            <select id="customify_page_header_display" name="customify_page_settings[page_header_display]">
+            <?php
+            foreach(
+                array(
+                   'default' => __( 'Inherit from customize settings', 'customify' ),
+                   'cover' => __( 'Cover', 'customify' ),
+                   'titlebar' => __( 'Titlebar', 'customify' ),
+                   'none' => __( 'Hide', 'customify' ),
+                ) as $k => $label ) { ?>
+                <option <?php selected( $values['page_header_display'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
+            <?php } ?>
+            </select>
+        </p>
         <?php
 
+        do_action('customify/metabox/settings', $post );
+
         if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) { ?>
-            <div class="customify-mt-divider"><?php _e( 'Breadcrumb', 'customify' ); ?></div>
-            <p>
-                <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label><br/>
-                <select id="customify_page_breadcrumb_display" name="customify_page_settings[breadcrumb_display]">
-                    <?php foreach (array(
-                                       'default' => __('Default', 'customify'),
-                                       'hide' => __('Hide', 'customify'),
-                                       'show' => __('Show', 'customify'),
-                                   ) as $k => $label) { ?>
-                        <option <?php selected($values['breadcrumb_display'], $k); ?> value="<?php echo esc_attr($k); ?>"><?php echo esc_html($label); ?></option>
-                    <?php } ?>
-                </select>
-            </p>
-            <?php
+        <div class="customify-mt-divider"><?php _e( 'Breadcrumb', 'customify' ); ?></div>
+        <p>
+            <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label><br/>
+            <select id="customify_page_breadcrumb_display" name="customify_page_settings[breadcrumb_display]">
+                <?php
+                foreach (array(
+                             'default' => __('Inherit from customize settings', 'customify'),
+                             'hide' => __('Hide', 'customify'),
+                             'show' => __('Show', 'customify'),
+                         ) as $k => $label) { ?>
+                    <option <?php selected($values['breadcrumb_display'], $k); ?> value="<?php echo esc_attr($k); ?>"><?php echo esc_html($label); ?></option>
+                <?php } ?>
+            </select>
+        </p>
+        <?php
         }
 
-        do_action('customify/metabox/settings', $post );
     }
 }
