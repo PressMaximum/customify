@@ -88,7 +88,7 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                 'type' => 'typography',
                 'section' => 'footer_general',
                 'title' => __( 'Footer Typography', 'customify' ),
-                'selector' => '.site-footer',
+                'selector' => '.site-footer .widget-area .widget',
                 'css_format' => 'typography',
             ),
 
