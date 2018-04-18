@@ -332,9 +332,9 @@ class Customify_Post_Entry {
         //if ( has_post_thumbnail() ) {
         /* <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>"> */
             ?>
-                <a class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>" href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark">
+                <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
-                </a>
+                </div>
             <?php
         //}
         //  </div>

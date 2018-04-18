@@ -140,6 +140,7 @@ class Customify_Posts_Layout {
         if ( $show_media ) {
             ?>
             <div class="entry-media">
+                <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
                 <?php Customify_Post_Entry()->build_fields( $media_fields, $post ); ?>
             </div>
         <?php } ?>

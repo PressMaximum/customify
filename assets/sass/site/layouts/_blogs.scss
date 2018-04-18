@@ -79,6 +79,11 @@ $blog_gutter: $gl-gutter;
             height: auto;
         }
     }
+    .entry-media-link {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0; display: block;
+        z-index: 30;
+    }
     .entry-content-data {
         flex: 1;
         word-wrap: break-word;

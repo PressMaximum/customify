@@ -4953,6 +4953,15 @@ body.menu_sidebar_dropdown:before {
   width: 100%;
   height: auto;
 }
+.posts-layout .entry-media-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  z-index: 30;
+}
 .posts-layout .entry-content-data {
   flex: 1;
   word-wrap: break-word;
