@@ -44,18 +44,35 @@ class Customify_Page_Header
 
         $display_fields = array(
             array(
-                'name' => "index",
+                'name' => "page",
                 'type' => 'select',
-                'label' => __( 'Display on index', 'customify' ),
-                'description' => __( 'Apply when your homepage displays as latest posts', 'customify' ),
+                'label' => __( 'Display on single page', 'customify' ),
+                'description' => __( 'Apply when viewing single page', 'customify' ),
                 'default' => '',
                 'choices' => $choices
             ),
+            array(
+                'name' => "post",
+                'type' => 'select',
+                'label' => __( 'Display on single post', 'customify' ),
+                'description' => __( 'Apply when viewing single post', 'customify' ),
+                'default' => '',
+                'choices' => $choices
+            ),
+
             array(
                 'name' => "category",
                 'type' => 'select',
                 'label' => __( 'Display on categories', 'customify' ),
                 'description' => __( 'Apply when viewing a category page', 'customify' ),
+                'default' => '',
+                'choices' => $choices
+            ),
+            array(
+                'name' => "index",
+                'type' => 'select',
+                'label' => __( 'Display on index', 'customify' ),
+                'description' => __( 'Apply when your homepage displays as latest posts', 'customify' ),
                 'default' => '',
                 'choices' => $choices
             ),
@@ -72,22 +89,6 @@ class Customify_Page_Header
                 'type' => 'select',
                 'label' => __( 'Display on archive', 'customify' ),
                 'description' => __( 'Apply when viewing archive pages, e.g. Tag, Author, Date, Custom Post Type or Custom Taxonomy', 'customify' ),
-                'default' => '',
-                'choices' => $choices
-            ),
-            array(
-                'name' => "page",
-                'type' => 'select',
-                'label' => __( 'Display on single page', 'customify' ),
-                'description' => __( 'Apply when viewing single page', 'customify' ),
-                'default' => '',
-                'choices' => $choices
-            ),
-            array(
-                'name' => "post",
-                'type' => 'select',
-                'label' => __( 'Display on single post', 'customify' ),
-                'description' => __( 'Apply when viewing single post', 'customify' ),
                 'default' => '',
                 'choices' => $choices
             ),
@@ -187,7 +188,7 @@ class Customify_Page_Header
             $title_fields[] = array(
                 'name' => "product",
                 'type' => 'text',
-                'label' => __( 'Title fo product', 'customify' ),
+                'label' => __( 'Title for product', 'customify' ),
                 'description' => __( 'Apply when viewing single product', 'customify' ),
                 'default' => '',
             );
@@ -255,8 +256,8 @@ class Customify_Page_Header
                         ),
                     )
                 ),
-                'selector' => '#page-titlebar, #page-cover',
-                'render_callback' => $render_cb_el,
+                //'selector' => '.page-header--item',
+                //'render_callback' => $render_cb_el,
             ),
 
             array(
@@ -546,7 +547,7 @@ class Customify_Page_Header
                 'section'    => $section,
                 'title'      => __('Cover Title Styling', 'customify'),
                 'selector'   => array(
-                    'normal'            => "{$selector} .header-cover-title",
+                    'normal'            => "{$selector} .page-cover-title",
                     'normal_link_color' => "{$selector} a",
                     'hover_link_color'  => "{$selector} a:hover",
                 ),
@@ -569,7 +570,7 @@ class Customify_Page_Header
                 'section'    => $section,
                 'title'      => __('Cover Tagline Styling', 'customify'),
                 'selector'   => array(
-                    'normal'            => "{$selector} .header-cover-title",
+                    'normal'            => "{$selector} .page-cover-tagline",
                     'normal_link_color' => "{$selector} a",
                     'hover_link_color'  => "{$selector} a:hover",
                 ),
@@ -591,7 +592,7 @@ class Customify_Page_Header
                 'type'            => 'typography',
                 'css_format'      => 'typography',
                 'section'         => $section,
-                'selector'        => "{$selector} .header-cover-title",
+                'selector'        => "{$selector} .page-cover-title",
                 'render_callback' => $render_cb_el,
                 'title'           => __('Cover Title Typography', 'customify')
             ),
@@ -601,7 +602,7 @@ class Customify_Page_Header
                 'type'            => 'typography',
                 'css_format'      => 'typography',
                 'section'         => $section,
-                'selector'        => "{$selector} .header-cover-tagline",
+                'selector'        => "{$selector} .page-cover-tagline",
                 'render_callback' => $render_cb_el,
                 'title'           => __('Cover Tagline Typography', 'customify')
             ),
@@ -932,7 +933,7 @@ class Customify_Page_Header
         }
 
         ?>
-        <div id="page-cover" class="page-cover"<?php echo $style; ?>>
+        <div id="page-cover" class="page-header--item page-cover"<?php echo $style; ?>>
             <div class="page-cover-inner customify-container">
                 <?php
                 if ($args['title']) {
@@ -954,7 +955,7 @@ class Customify_Page_Header
 
     function render_titlebar( $args = array() ){
         ?>
-        <div id="page-titlebar" class="page-titlebar">
+        <div id="page-titlebar" class="page-header--item page-titlebar">
             <div class="page-titlebar-inner customify-container">
                 <?php
                 // WPCS: XSS ok.

@@ -202,8 +202,24 @@ class Customify_Posts_Layout {
         $classes =  array();
 
         if ( $this->args['layout'] !=='blog_masonry' && $this->args['layout'] != 'blog_timeline' ) {
-            if ($this->args['columns'] > 1) {
+            if ( is_numeric( $this->args['columns'] ) &&  $this->args['columns'] > 1) {
                 $classes[] = 'customify-grid-' . $this->args['columns'];
+            } elseif ( is_array( $this->args['columns'] ) ) {
+                $this->args['columns'] = wp_parse_args( $this->args['columns'], array(
+                    'desktop' => 1,
+                    'tablet' => 1,
+                    'mobile' => 1,
+                ) );
+                foreach( $this->args['columns'] as $d => $v ){
+                    $v = absint( $v );
+                    if (  $v < 1 ) {
+                        $v = 1;
+                    } elseif ( $v > 12 ) {
+                        $v = 12;
+                    }
+                    $this->args['columns'][ $d ] = $v;
+                }
+                $classes[] = sprintf( 'customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile'] );
             }
         }
 
