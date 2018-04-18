@@ -2,27 +2,36 @@
 
 class Customify_Builder_Item_Social_Icons {
 	public $id = 'social-icons';
+	public $section = 'header_social_icons';
+	public $class = 'header-social-icons';
+	public $selector = '';
+	public $panel = 'header_settings';
 
-	function item() {
+	function __construct()
+    {
+        $this->selector = '.'.$this->class;
+    }
+
+    function item() {
 		return array(
 			'name'    => __( 'Social Icons', 'customify' ),
-			'id'      => 'social-icons',
+			'id'      => $this->id,
 			'col'     => 0,
 			'width'   => '4',
-			'section' => 'header_social_icons' // Customizer section to focus when click settings
+			'section' =>  $this->section // Customizer section to focus when click settings
 		);
 	}
 
 	function customize() {
-		$section = 'header_social_icons';
-		$prefix  = 'header_social_icons';
+		$section = $this->section;
+		$prefix  = $this->section;
 		$fn      = array( $this, 'render' );
-		$selector = '.header-social-icons.customify-builder-social-icons';
+		$selector = "{$this->selector}.customify-builder-social-icons";
 		$config  = array(
 			array(
 				'name'           => $section,
 				'type'           => 'section',
-				'panel'          => 'header_settings',
+				'panel'          => $this->panel,
 				'theme_supports' => '',
 				'title'          => __( 'Social Icons', 'customify' ),
 			),
@@ -31,7 +40,7 @@ class Customify_Builder_Item_Social_Icons {
 				'name'             => $prefix . '_items',
 				'type'             => 'repeater',
 				'section'          => $section,
-				'selector'         => '.header-social-icons',
+				'selector'         => $this->selector,
 				'render_callback'  => $fn,
 				'title'            => __( 'Social Profiles', 'customify' ),
 				'live_title_field' => 'title',
@@ -61,7 +70,7 @@ class Customify_Builder_Item_Social_Icons {
 				'name'            => $prefix . '_target',
 				'type'            => 'checkbox',
 				'section'         => $section,
-				'selector'        => '.header-social-icons',
+				'selector'        => $this->selector,
 				'render_callback' => $fn,
 				'default'         => 1,
 				'checkbox_label'  => __( 'Open URL in new window.', 'customify' ),
@@ -135,7 +144,7 @@ class Customify_Builder_Item_Social_Icons {
                 'name'             => $prefix . '_color_type',
                 'type'             => 'select',
                 'section'          => $section,
-                'selector'         => '.header-social-icons',
+                'selector'         => $this->selector,
                 'default'         => 'default',
                 'render_callback'  => $fn,
                 'title'            => __( 'Color', 'customify' ),
@@ -149,8 +158,8 @@ class Customify_Builder_Item_Social_Icons {
                 'name'             => $prefix . '_custom_color',
                 'type'             => 'modal',
                 'section'          => $section,
-                'selector'         => '.header-social-icons li a',
-                'required' => array(    $prefix . '_color_type', '=', 'custom'),
+                'selector'         => "{$this->selector} li a",
+                'required'         => array( $prefix . '_color_type', '==', 'custom'),
                 'css_format'       => 'styling',
                 'title'            => __( 'Custom Color', 'customify' ),
                 'fields' => array(
@@ -163,7 +172,7 @@ class Customify_Builder_Item_Social_Icons {
                             'name' => 'primary',
                             'type' => 'color',
                             'label' => __('Background Color', 'customify'),
-                            'selector'        => "$selector.color-custom li a",
+                            'selector'  => "$selector.color-custom li a",
                             'css_format' => 'background-color: {{value}};',
                         ),
                         array(
@@ -198,7 +207,7 @@ class Customify_Builder_Item_Social_Icons {
                 'name'             => $prefix . '_border',
                 'type'             => 'modal',
                 'section'          => $section,
-                'selector'         => '.header-social-icons li a',
+                'selector'         => "{$this->selector} li a",
                 'css_format'       => 'styling',
                 'title'            => __( 'Border', 'customify' ),
                 'description'      => __( 'Border & border radius', 'customify' ),
@@ -268,13 +277,13 @@ class Customify_Builder_Item_Social_Icons {
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
 	}
 
-	function render( $item_config ) {
+	function render( $item_config = array() ) {
 
-		$shape = Customify()->get_setting( 'header_social_icons_shape', 'all' );
-		$color_type = Customify()->get_setting( 'header_social_icons_color_type' );
-		$items = Customify()->get_setting( 'header_social_icons_items' );
-		$nofollow      = Customify()->get_setting( 'header_social_icons_nofollow' );
-		$target_blank = Customify()->get_setting( 'header_social_icons_target' );
+		$shape = Customify()->get_setting( $this->section.'_shape', 'all' );
+		$color_type = Customify()->get_setting( $this->section.'_color_type' );
+		$items = Customify()->get_setting( $this->section.'_items' );
+		$nofollow      = Customify()->get_setting( $this->section.'_nofollow' );
+		$target_blank = Customify()->get_setting( $this->section.'_target' );
 
 		$rel = '';
 		if ( $nofollow == 1 ) {
@@ -287,8 +296,9 @@ class Customify_Builder_Item_Social_Icons {
 		}
 
 		if ( ! empty( $items ) ) {
-
-			$classes   = array( 'header-social-icons customify-builder-social-icons' );
+            $classes = array();
+            $classes[] = $this->class;
+			$classes[] = 'customify-builder-social-icons';
 			if ( $shape ) {
                 $shape = ' shape-'.sanitize_text_field( $shape );
             }

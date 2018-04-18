@@ -2809,7 +2809,7 @@
             } );
 
             ControlConditional(false);
-            $document.on('customify/customizer/change', function () {
+            $document.on('customify/customizer/value_changed', function () {
                 ControlConditional(true);
             });
 
