@@ -646,6 +646,8 @@ html[dir="rtl"] .customify-input-slider-wrapper .customify--slider-input {
   font-weight: normal;
   font-size: 10px;
   cursor: default;
+  min-width: 24px;
+  text-align: center;
 }
 html[dir="rtl"] .customify-input-slider-wrapper .customify--label-active {
   left: 17px;
