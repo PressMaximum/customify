@@ -644,18 +644,14 @@
                     if ( block2.x > -1 ) {
                         block2_right =  ( block2.x + block2.w );
                     }
-
-
-                    console.log( 'block2', block2 );
-
+                    
                     if ( checkEnoughSpaceFromX( newX , w ) ) {
                         addItemToFlag( { el: node.el, x: newX, w: w } );
                         return true;
                     } else if ( block2_right > 0 && checkEnoughSpaceFromX( block2_right , w ) && newX >= block2_right ) {
 
-                        if ( newX + w > that.cols ){
+                        if ( newX + w > that.cols ){ // Nếu newX + w vượt quá số cols. thì thử lùi lại xem  có đủ chỗ ko ?
                             var _x = that.cols - w;
-                            console.log( 'try_nex__x', _x );
                             if ( checkEnoughSpaceFromX( _x , w ) ) {
                                 addItemToFlag( { el: node.el, x: _x, w: w } );
                                 return true;
