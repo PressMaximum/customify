@@ -61,7 +61,7 @@ class Customify_Builder_Footer_Item_Copyright {
 				'type'       => 'typography',
 				'section'    => $this->section,
 				'title'      => __( 'Copyright text typography', 'customify' ),
-				'selector'   => '.builder-footer-copyright-item',
+				'selector'   => '.builder-item--footer_copyright, .builder-item--footer_copyright p',
 				'css_format' => 'typography',
 				'default'    => array(),
 			),

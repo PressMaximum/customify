@@ -390,7 +390,6 @@ class Customify {
             'footer/widgets',
             'footer/templates',
             'footer/widgets',
-            'footer/html',
             'footer/copyright',
 
         );
