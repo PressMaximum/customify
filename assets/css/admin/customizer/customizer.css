@@ -88,6 +88,12 @@ html[dir="rtl"] .customize--reset-section {
   cursor: pointer;
 }
 
+.customize-control-customify-modal .customify-control-field-header,
+.customize-control-customify-typography .customify-control-field-header,
+.customize-control-customify-styling .customify-control-field-header {
+  margin-right: 25px;
+}
+
 .customify-control--heading {
   padding: 7px 12px;
   background: #fff;
@@ -1264,7 +1270,7 @@ html[dir="rtl"] .customify-modal-settings:before {
   background: #eeeeee;
 }
 .customify-modal-settings .customize-control-title {
-  font-weight: 400;
+  font-weight: 600;
   font-size: 13px;
 }
 .customify-modal-settings .customify--group-field {
