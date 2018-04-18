@@ -190,6 +190,7 @@ class Customify {
 
         for( $i = 1; $i <= 6; $i++ ) {
             register_sidebar( array(
+                /* translators: 1: Widget number. */
                 'name'          => sprintf( __( 'Footer Sidebar %d', 'customify' ), $i ),
                 'id'            => 'footer-'.$i,
                 'description'       => __( 'Add widgets here.', 'customify' ),

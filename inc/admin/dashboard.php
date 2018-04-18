@@ -145,7 +145,7 @@ class Customify_Dashboard {
     function box_community() {
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Join the community!', 'customify-pro' ); ?></div>
+            <div class="cd-box-top"><?php _e( 'Join the community!', 'customify' ); ?></div>
             <div class="cd-box-content">
                 <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
                 <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group &rarr;	', 'customify' ); ?></a>
@@ -229,12 +229,12 @@ class Customify_Dashboard {
                     );
 
                     echo '<div class="rcp">';
-                    echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+                    echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>'; // WPCS: XSS OK.
                     echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="'.esc_url( $detail_link ).'">'.esc_html__( 'Details', 'customify' ).'</a>';
                     echo '</div>';
                 } else {
                     echo '<div class="rcp">';
-                    echo '<p ><a href="'.esc_url( $sites_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="view-site-library">'.$view_site_txt.'</a></p>';
+                    echo '<p ><a href="'.esc_url( $sites_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="view-site-library">'.$view_site_txt.'</a></p>'; // // WPCS: XSS OK.
                     echo '</div>';
                 }
 

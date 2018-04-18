@@ -791,7 +791,7 @@ class Customify_Page_Header
             $args['title']  = $titles['page_404'];
             $args['tagline'] = $taglines['page_404'];
             if ( ! $args['title'] ) {
-                $args['title'] = __( 'Oops! That page can’t be found.', 'customify' );
+                $args['title'] = __( "Oops! That page can't be found.", 'customify' );
             }
         } elseif ( is_search() ){
             // Search result

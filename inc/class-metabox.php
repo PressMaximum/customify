@@ -100,7 +100,7 @@ class Customify_MetaBox {
         }
 
 
-        $nonce = sanitize_text_field( $_POST['customify_page_settings_nonce'] );
+        $nonce = sanitize_text_field( wp_unslash( $_POST['customify_page_settings_nonce'] ) );
 
         // Verify that the nonce is valid.
         if ( ! wp_verify_nonce( $nonce, 'customify_page_settings' ) ) {
