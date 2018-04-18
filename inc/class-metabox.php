@@ -156,17 +156,17 @@ class Customify_MetaBox {
             $values[ $key ] = get_post_meta( $post->ID, '_customify_'.$key, true );
         }
         ?>
-        <p>
-            <label for="customify_page_layout"><strong><?php _e( 'Sidebar', 'customify' ); ?></strong></label><br/>
+        <div class="customify_metabox_section">
+            <label for="customify_page_layout"><strong><?php _e( 'Sidebar', 'customify' ); ?></strong></label>
             <select id="customify_page_layout" name="customify_page_settings[sidebar]">
                 <option value=""><?php _e( 'Inherit from customize settings', 'customify' ); ?></option>
                 <?php foreach( customify_get_config_sidebar_layouts() as $k => $label ) { ?>
                 <option <?php selected( $values['sidebar'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
                 <?php } ?>
             </select>
-        </p>
-        <p>
-            <label for="customify_content_layout"><strong><?php _e( 'Content Layout', 'customify' ); ?></strong></label><br/>
+        </div>
+        <div class="customify_metabox_section">
+            <label for="customify_content_layout"><strong><?php _e( 'Content Layout', 'customify' ); ?></strong></label>
             <select id="customify_content_layout" name="customify_page_settings[content_layout]">
                 <option value=""><?php _e( 'Default', 'customify' ); ?></option>
                 <?php foreach( array(
@@ -176,27 +176,30 @@ class Customify_MetaBox {
                     <option <?php selected( $values['content_layout'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
                 <?php } ?>
             </select>
-        </p>
-        <strong><?php _e( 'Disable Elements', 'customify' ); ?></strong>
-        <br/>
-        <label>
-            <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
-        </label>
-        <br/>
-        <label>
-            <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title/Titlebar', 'customify' ); ?>
-        </label>
-        <br/>
-        <label>
-            <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
-        </label>
-        <br/>
-        <label>
-            <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
-        </label>
-        <div class="customify-mt-divider"><?php _e( 'Page Header', 'customify' ); ?></div>
-        <p>
-            <label for="customify_page_header_display"><strong><?php _e( 'Page Header Display', 'customify' ); ?></strong></label><br/>
+        </div>
+        <div class="customify_metabox_section">
+            <label><strong><?php _e( 'Disable Elements', 'customify' ); ?></strong></label>
+
+            <div class="checkbox_input">
+                <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
+            </div>
+
+            <div class="checkbox_input">
+                <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
+            </div>
+
+            <div class="checkbox_input">
+                <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
+            </div>
+
+            <div class="checkbox_input">
+                <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
+            </div>
+
+        </div>
+
+        <div class="customify_metabox_section">
+            <label for="customify_page_header_display"><strong><?php _e( 'Page Header Display', 'customify' ); ?></strong></label>
             <select id="customify_page_header_display" name="customify_page_settings[page_header_display]">
             <?php
             foreach(
@@ -209,15 +212,14 @@ class Customify_MetaBox {
                 <option <?php selected( $values['page_header_display'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
             <?php } ?>
             </select>
-        </p>
+        </div>
         <?php
 
         do_action('customify/metabox/settings', $post );
 
         if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) { ?>
-        <div class="customify-mt-divider"><?php _e( 'Breadcrumb', 'customify' ); ?></div>
-        <p>
-            <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label><br/>
+        <div class="customify_metabox_section">
+            <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label>
             <select id="customify_page_breadcrumb_display" name="customify_page_settings[breadcrumb_display]">
                 <?php
                 foreach (array(
@@ -228,7 +230,7 @@ class Customify_MetaBox {
                     <option <?php selected($values['breadcrumb_display'], $k); ?> value="<?php echo esc_attr($k); ?>"><?php echo esc_html($label); ?></option>
                 <?php } ?>
             </select>
-        </p>
+        </div>
         <?php
         }
 
