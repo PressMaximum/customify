@@ -188,7 +188,7 @@ class Customify {
             'after_title'   => '</h4>',
         ) );
 
-        for( $i = 1; $i <= 4; $i++ ) {
+        for( $i = 1; $i <= 6; $i++ ) {
             register_sidebar( array(
                 'name'          => sprintf( __( 'Footer Sidebar %d', 'customify' ), $i ),
                 'id'            => 'footer-'.$i,

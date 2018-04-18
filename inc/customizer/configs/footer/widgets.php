@@ -59,9 +59,39 @@ class Customify_Builder_Item_Footer_Widget_4
     }
 }
 
+class Customify_Builder_Item_Footer_Widget_5
+{
+    public $id = 'footer-5';
+
+    function item()
+    {
+        return array(
+            'name' => __( 'Footer Sidebar 5', 'customify' ),
+            'id' => 'footer-5',
+            'width' => '3',
+            'section' => 'sidebar-widgets-footer-5'
+        );
+    }
+}
+
+class Customify_Builder_Item_Footer_Widget_6
+{
+    public $id = 'footer-6';
+
+    function item()
+    {
+        return array(
+            'name' => __( 'Footer Sidebar 6', 'customify' ),
+            'id' => 'footer-6',
+            'width' => '3',
+            'section' => 'sidebar-widgets-footer-6'
+        );
+    }
+}
+
 
 function customify_change_footer_widgets_location( $wp_customize ){
-    for ( $i = 1; $i<= 4; $i ++ ) {
+    for ( $i = 1; $i<= 6; $i ++ ) {
         if (  $wp_customize->get_section( 'sidebar-widgets-footer-'.$i ) ) {
             $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->panel = 'footer_settings';
         }
@@ -147,7 +177,16 @@ function customify_builder_footer_4_item(){
     customify_builder_footer_widget_item( 'footer-4' );
 }
 
+function customify_builder_footer_5_item(){
+    customify_builder_footer_widget_item( 'footer-5' );
+}
+function customify_builder_footer_6_item(){
+    customify_builder_footer_widget_item( 'footer-6' );
+}
+
 Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_1() );
 Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_2() );
 Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_3() );
 Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_4() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_5() );
+Customify_Customize_Layout_Builder()->register_item('footer', new Customify_Builder_Item_Footer_Widget_6() );

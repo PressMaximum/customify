@@ -644,7 +644,7 @@
                     if ( block2.x > -1 ) {
                         block2_right =  ( block2.x + block2.w );
                     }
-                    
+
                     if ( checkEnoughSpaceFromX( newX , w ) ) {
                         addItemToFlag( { el: node.el, x: newX, w: w } );
                         return true;
