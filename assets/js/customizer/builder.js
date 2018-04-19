@@ -191,7 +191,7 @@
                 // Get empty slots after
                 br = false;
                 i = x + w ;
-                console.log( 'start R: '+i );
+                //console.log( 'start R: '+i );
                 while ( i < that.cols && ! br ) {
                     if ( flag[ i ] === 0 ) {
                         slot_after++;
@@ -638,11 +638,30 @@
                     console.log( 'Swap newX', newX );
                     console.log( 'Before Swap FLAG', flag );
 
+                    var block2 = getPrevBlock( newX );
+
+                    var block2_right = 0;
+                    if ( block2.x > -1 ) {
+                        block2_right =  ( block2.x + block2.w );
+                    }
+
                     if ( checkEnoughSpaceFromX( newX , w ) ) {
                         addItemToFlag( { el: node.el, x: newX, w: w } );
                         return true;
+                    } else if ( block2_right > 0 && checkEnoughSpaceFromX( block2_right , w ) && newX >= block2_right ) {
+
+                        if ( newX + w > that.cols ){ // Nếu newX + w vượt quá số cols. thì thử lùi lại xem  có đủ chỗ ko ?
+                            var _x = that.cols - w;
+                            if ( checkEnoughSpaceFromX( _x , w ) ) {
+                                addItemToFlag( { el: node.el, x: _x, w: w } );
+                                return true;
+                            }
+                        }
+
+                        addItemToFlag( { el: node.el, x: block2_right, w: w } );
+                        return true;
                     }
-                    var block2 = getPrevBlock( newX );
+
                     insertToFlag( { el: node.el, x: newX, w: node.w }, true );
                 };
 
@@ -750,25 +769,6 @@
 
                 }
 
-                /*
-                if (!isEmptyX(x)) {
-                    while (x <= xc && !found) {
-                        if (isEmptyX(x)) {
-                            found = true;
-                        } else {
-                            x++;
-                        }
-                    }
-                    if (x > xc) {
-                        x = xc;
-                    }
-                } else {
-                    x = xi;
-                    found = true;
-                }
-                */
-
-
                 if (!found) {
                     if (in_this_row) {
                         x = xi;
@@ -865,9 +865,8 @@
                 var width  = $wrapper.width();
                 var itemWidth = ui.size.width;
                 var originalElementWidth = ui.originalSize.width;
-                var colWidth = width/that.cols;
+                var colWidth = Math.ceil( width/that.cols ) - 1;
                 var isShiftLeft, isShiftRight;
-
 
                 if ( ! is_rtl ) {
                     isShiftLeft = ui.originalPosition.left > ui.position.left;
@@ -901,10 +900,17 @@
                 console.log( 'isShiftRight', isShiftRight );
                 */
 
+
                 if ( isShiftLeft ) {
 
                     if ( ! is_rtl ) {
                         diffLeft = ui.originalPosition.left - ui.position.left;
+                        console.log( 'diffLeft', diffLeft );
+                        if ( diffLeft <= colWidth/ 2 ) {
+                            console.log( 'Skip resize left' );
+                            return ;
+                        }
+
                         addW = Math.ceil(diffLeft / colWidth);
 
                         if (addW > itemInfo.before) {
@@ -916,6 +922,7 @@
                         $item.attr('data-gs-width', newW).removeAttr('style');
                     } else { // RTL
                         diffLeft = ui.originalPosition.left - ui.position.left;
+                        console.log( 'diffLeft', diffLeft );
                         addW = Math.ceil(diffLeft / colWidth);
                         if (addW > itemInfo.after) {
                             addW = itemInfo.after;
@@ -932,6 +939,14 @@
 
                     if ( ! is_rtl ) {
                         diffRight = ui.position.left - ui.originalPosition.left;
+
+                        console.log( 'diffRight', diffRight );
+
+                        if ( diffRight <= colWidth/ 2 ) {
+                            console.log( 'Skip resize right' );
+                            return ;
+                        }
+
                         addW = Math.ceil(diffRight / colWidth);
                         newW = ow - addW;
                         if (newW <= 0) {
@@ -943,6 +958,8 @@
                         $item.attr('data-gs-width', newW).removeAttr('style');
                     } else {
                         diffRight = itemWidth - originalElementWidth;
+                        console.log( 'diffRight', diffRight );
+
                         addW = Math.ceil(diffRight / colWidth);
                         if (addW > itemInfo.before) {
                             addW = itemInfo.before;
@@ -963,9 +980,24 @@
 
                 var w ;
                 var x = itemInfo.x;
-                if ( itemWidth <  ui.originalSize.width ) {
+                var diff_width = Math.abs( itemWidth -  ui.originalSize.width );
+                console.log( 'diff_width', diff_width );
+
+                if ( itemWidth <  ui.originalSize.width ) { // Resize from right to left
+                    if ( diff_width <= colWidth / 2 ) {
+                        $item.removeAttr('style');
+                        console.log( 'skipp_resize_rtl', diff_width );
+                        return ;
+                    }
+
                     w = Math.floor( itemWidth/ colWidth  );
-                } else {
+
+                } else { // Resize from left to right
+                    if ( diff_width < colWidth / 2 ) {
+                        $item.removeAttr('style');
+                        console.log( 'skipp_resize_ltr', diff_width );
+                        return ;
+                    }
                     w = Math.ceil( itemWidth/ colWidth );
                     if ( itemInfo.x + w > itemInfo.x + itemInfo.w + itemInfo.after ) {
                         w = itemInfo.w + itemInfo.after;

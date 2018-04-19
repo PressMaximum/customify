@@ -1533,7 +1533,21 @@
 
             if (_.isUndefined(save) || save) {
                 control.setting.set(control.encodeValue(value));
-                $document.trigger('customify/customizer/change');
+
+
+                // Need improve next version
+                if ( _.isArray( control.params.reset_controls ) ) {
+                    _.each( control.params.reset_controls, function( _cid ){
+                        try {
+                            var c = wpcustomize.control( _cid );
+                            c.setting.set(control.encodeValue( c.params.default ));
+                        } catch  ( e ) {
+
+                        }
+                    } );
+                }
+
+                $document.trigger('customify/customizer/value_changed', [control, value] );
                 console.log( 'Save_Value: ', value );
             } else {
 
@@ -2795,7 +2809,7 @@
             } );
 
             ControlConditional(false);
-            $document.on('customify/customizer/change', function () {
+            $document.on('customify/customizer/value_changed', function () {
                 ControlConditional(true);
             });
 
@@ -2862,3 +2876,4 @@
     }); // end customize ready
 
 })( jQuery, wp.customize || null );
+

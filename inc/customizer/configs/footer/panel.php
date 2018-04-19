@@ -41,11 +41,89 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
             ),
 
             array(
+                'name' => 'footer_general',
+                'type' => 'section',
+                'panel' => 'footer_settings',
+                'priority' => 0,
+                'title' => __( 'General Settings', 'customify' ),
+            ),
+
+            array(
+                'name' => 'footer_general_styling',
+                'type' => 'styling',
+                'section' => 'footer_general',
+                'title' => __( 'Footer Styling', 'customify' ),
+                'selector' => array(
+                    'normal' => "#site-footer",
+                    'normal_link_color' => "#site-footer a",
+                    'hover_link_color' => "#site-footer a:hover",
+                ),
+                'css_format' => 'styling', // styling
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'padding' => false // disable for special field.
+                    ),
+                    'hover_fields' => array(
+                        'text_color' => false,
+                        'padding' => false,
+                        'bg_color' => false,
+                        'bg_heading' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                        'border_heading' => false,
+                        'border_color' => false,
+                        'border_radius' => false,
+                        'border_width' => false,
+                        'border_style' => false,
+                        'box_shadow' => false,
+                    ), // disable hover tab and all fields inside.
+                )
+            ),
+
+            array(
+                'name' => 'footer_general_typo',
+                'type' => 'typography',
+                'section' => 'footer_general',
+                'title' => __( 'Footer Typography', 'customify' ),
+                'selector' => '.site-footer .widget-area .widget',
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name' => 'footer_widget_title_styling',
+                'type' => 'styling',
+                'section' => 'footer_general',
+                'title' => __( 'Widget Title Styling', 'customify' ),
+                'selector' => array(
+                    'normal' => ".site-footer .widget-title",
+                ),
+                'css_format' => 'styling', // styling
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'padding' => false // disable for special field.
+                        'link_color' => false
+                    ),
+                    'hover_fields' => false
+                )
+            ),
+
+            array(
+                'name' => 'footer_widget_title_typo',
+                'type' => 'typography',
+                'section' => 'footer_general',
+                'title' => __( 'Widget Title Typography', 'customify' ),
+                'selector' => '.site-footer .widget-title',
+                'css_format' => 'typography',
+            ),
+
+            array(
                 'name' => 'footer_builder_panel',
                 'type' => 'section',
                 'panel' => 'footer_settings',
                 'title' => __( 'Footer Builder', 'customify' ),
-                'description' => __( 'This is section description',  'customify' ),
             ),
 
             array(
@@ -54,11 +132,12 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                 'section' => 'footer_builder_panel',
                 'theme_supports' => '',
                 'title' => __( 'Footer Builder', 'customify' ),
-                'description' => __( 'Footer Builder panel here....',  'customify' ),
                 'selector' => '#site-footer',
                 'render_callback' => $fn,
                 'container_inclusive' => true
             ),
+
+
 
         );
 

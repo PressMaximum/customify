@@ -20,22 +20,15 @@ class Customify_Breadcrumb {
         // Display position
         $display_pos = Customify()->get_setting('breadcrumb_display_pos' );
         switch( $display_pos ) {
-            case 'below_header': // below header
+            case 'after_header': // below header
                 add_action('customify/site-start',  array( self::$_instance, 'render' ), 15 );
                 break;
-            case 'below_titlebar':
+            case 'before_content':
                 add_action('customify/site-start',  array( self::$_instance, 'render' ), 65 );
                 break;
-            case 'inside_titlebar':
-                $cover = false;
-                if ( class_exists( 'Customify_Pro_Header_Cover' ) ) {
-                    $cover = Customify_Pro_Header_Cover::get_instance()->get_settings();
-                }
-                if ( is_array( $cover ) && ! $cover['hide'] ) {
-                    add_action('customify/page-cover/content',  array( self::$_instance, 'render' ), 55 );
-                } else {
-                    add_action('customify/titlebar/after-title',  array( self::$_instance, 'render' ), 55 );
-                }
+            case 'inside':
+                add_action('customify/page-cover/after',  array( self::$_instance, 'render' ), 55 );
+                add_action('customify/titlebar/after',  array( self::$_instance, 'render' ), 55 );
                 break;
             default:
                 add_action('customify/site-start',  array( self::$_instance, 'render' ), 55 );
@@ -82,6 +75,7 @@ class Customify_Breadcrumb {
             );
 
         } else {
+
             $config[] = array(
                 'name' => "{$section}_display_pos",
                 'type' => 'select',
@@ -89,71 +83,89 @@ class Customify_Breadcrumb {
                 'default' => 'below_titlebar',
                 'title' => __( 'Display Position', 'customify' ),
                 'choices' => apply_filters( 'customify/breadcrumb/config/positions', array(
-                    'below_header' => __( 'Display below header', 'customify' ),
-                    'below_titlebar' => __( 'Display below titlebar', 'customify' ),
-                    'inside_titlebar' => __( 'Display inside titlebar', 'customify' ),
+                    'after_header' => __( 'After header', 'customify' ),
+                    'inside' => __( 'Inside cover/titlebar', 'customify' ),
+                    'before_content' => __( 'Before site main', 'customify' ),
                 ) ),
             );
 
-            $config[] =  array(
-                'name' => "{$section}_display_blog",
-                'type' => 'checkbox',
-                'section' =>  $section,
-                'default' => 1,
-                'checkbox_label' => __( 'Display on posts page', 'customify' ),
-            );
+            $display_fields = array(
+                array(
+                    'name' => "index",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on index', 'customify' ),
+                ),
+                array(
+                    'name' => "category",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on categories', 'customify' ),
+                ),
+                array(
+                    'name' => "search",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on search', 'customify' ),
+                ),
+                array(
+                    'name' => "archive",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on archive', 'customify' ),
+                ),
+                array(
+                    'name' => "page",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on single page', 'customify' ),
+                ),
+                array(
+                    'name' => "post",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on single post', 'customify' ),
+                ),
+                array(
+                    'name' => "singular",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on singular', 'customify' ),
+                ),
+                array(
+                    'name' => "page_404",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on 404 page', 'customify' ),
+                ),
 
-            $config[] =  array(
-                'name' => "{$section}_display_cat",
-                'type' => 'checkbox',
-                'section' =>  $section,
-                'default' => 1,
-                'checkbox_label' => __( 'Display on categories', 'customify' ),
             );
-
-            $config[] = array(
-                'name' => "{$section}_display_search",
-                'type' => 'checkbox',
-                'section' =>  $section,
-                'default' => 1,
-                'checkbox_label' => __( 'Display on search', 'customify' ),
-            );
-
-            $config[] = array(
-                'name' => "{$section}_display_archive",
-                'type' => 'checkbox',
-                'default' => 1,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on archive', 'customify' ),
-            );
-
-            $config[] = array(
-                'name' => "{$section}_display_page",
-                'type' => 'checkbox',
-                'default' => 1,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on single page', 'customify' ),
-            );
-
-            $config[] = array(
-                'name' => "{$section}_display_post",
-                'type' => 'checkbox',
-                'default' => 1,
-                'section' =>  $section,
-                'checkbox_label' => __( 'Display on single post', 'customify' ),
-            );
-
 
             if ( Customify()->is_woocommerce_active() ) {
-                $config[] = array(
-                    'name' => "{$section}_display_shop",
+                $display_fields[] = array(
+                    'name' => "product",
                     'type' => 'checkbox',
-                    'default' => 1,
-                    'section' =>  $section,
-                    'checkbox_label' => __( 'Display on shop and product page', 'customify' ),
+                    'checkbox_label' => __( 'Hide on product page', 'customify' ),
                 );
+                $display_fields[] = array(
+                    'name' => "product_cat",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on product category', 'customify' ),
+                );
+                $display_fields[] = array(
+                    'name' => "product_tag",
+                    'type' => 'checkbox',
+                    'checkbox_label' => __( 'Hide on product tag', 'customify' ),
+                );
+
             }
 
+            $config[] =  array(
+                'name' => "{$section}_display_pages",
+                'type' => 'modal',
+                'section' =>  $section,
+                'label' => __( 'Display', 'customify' ),
+                'description' => __( 'Settings display for special pages.', 'customify' ),
+                'default' => array(),
+                'fields' => array(
+                    'tabs' => array(
+                        'display' => __( 'Display', 'customify' ),
+                    ),
+                    'display_fields' => $display_fields
+                ),
+            );
 
             $config[] =  array(
                 'name' => $section.'_typo',
@@ -173,10 +185,10 @@ class Customify_Breadcrumb {
                 'description'  => __( 'Styling for breadcrumb', 'customify' ),
                 'selector' => array(
                     'normal' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
-                    'normal_box_shadow' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
-                    'normal_text_color' => "{$selector}, #page-titlebar {$selector}, #page-cover {$selector}",
-                    'normal_link_color' => "{$selector} a, #page-titlebar {$selector} a, #page-cover {$selector} a",
-                    'hover_link_color' => "{$selector} a:hover, #page-titlebar {$selector} a:hover, #page-cover {$selector} a:hover",
+                    'normal_box_shadow' => "{$selector}, #page-titlebar {$selector} .page-breadcrumb-list, #page-cover {$selector} .page-breadcrumb-list",
+                    'normal_text_color' => "{$selector}, #page-titlebar {$selector} .page-breadcrumb-list, #page-cover {$selector} .page-breadcrumb-list",
+                    'normal_link_color' => "{$selector} a, #page-titlebar {$selector} .page-breadcrumb-list a, #page-cover {$selector} .page-breadcrumb-list a",
+                    'hover_link_color' => "{$selector} a:hover, #page-titlebar {$selector} .page-breadcrumb-list a:hover, #page-cover {$selector} .page-breadcrumb-list a:hover",
                 ),
                 'css_format' => 'styling', // styling
                 'fields' => array(
@@ -203,7 +215,6 @@ class Customify_Breadcrumb {
             );
         }
 
-
         return array_merge( $configs, $config );
     }
 
@@ -212,63 +223,80 @@ class Customify_Breadcrumb {
             return false;
         }
 
-        if( is_home() && is_front_page() ) {
-            return false;
+        $display = Customify()->get_setting_tab('breadcrumb_display_pages', 'display' );
+        $display = wp_parse_args( $display, array(
+            'index' => '',
+            'category' => '',
+            'search' => '',
+            'archive' => '',
+            'page' => '',
+            'post' => '',
+            'singular' => '',
+            'product' => '',
+            'product_cat' => '',
+            'product_tag' => '',
+            'page_404' => '',
+        ) );
+
+        $hide = false;
+
+        if ( is_front_page() && is_home() ) { // index page
+            // Default homepage
+            $hide = $display['index'];
+        } elseif ( is_front_page() ) {
+            // static homepage
+            $hide = $display['page'];
+        } elseif ( is_home() ) {
+            // blog page
+            $hide = $display['page'];
+        } elseif ( is_category() ) {
+            //category
+            $hide = $display['category'];
+        } elseif ( is_page()) {
+            // single page
+            $hide = $display['page'];
+        } elseif ( is_single() ) {
+            // single post
+            $hide = $display['post'];
+        } elseif ( is_singular() ) {
+            // single custom post type
+            $hide = $display['singular'];
+        } elseif ( is_404() ){
+            // page not found
+            $hide = $display['page_404'];
+        } elseif ( is_search() ){
+            // Search result
+            $hide = $display['search'];
+        } elseif ( is_archive() ) {
+            $hide = $display['archive'];
         }
 
-        $is_showing = true;
-        if ( (  is_home() && ! is_front_page() ) || (  is_home() && is_front_page() ) ) { // Posts page - Blog page
-            if ( ! Customify()->get_setting( 'breadcrumb_display_blog' ) ) {
-                $is_showing = false;
-            }
-        } elseif ( is_category() ){
-            if ( ! Customify()->get_setting( 'breadcrumb_display_cat' ) ) {
-                $is_showing = false;
-            }
-        } elseif( is_search() ) {
-            if ( ! Customify()->get_setting( 'breadcrumb_display_search' ) ) {
-                $is_showing = false;
-            }
-        } elseif( is_archive() ) {
-            if ( ! Customify()->get_setting( 'breadcrumb_display_archive' ) ) {
-                $is_showing = false;
-            }
-        } elseif ( is_page() ) { // is page or page for posts or is front page
-            if ( ! Customify()->get_setting( 'breadcrumb_display_page' ) ) {
-                $is_showing = false;
-            }
-        }  elseif ( is_single() ) {
-            if ( ! Customify()->get_setting( 'breadcrumb_display_post' ) ) {
-                $is_showing = false;
-            }
-        } else {
-            $is_showing = false;
-        }
-
+        // WooCommerce Settings
         if ( Customify()->is_woocommerce_active() ) {
-            if ( is_shop() || is_product_taxonomy() || is_product() ) {
-                if ( ! Customify()->get_setting( 'breadcrumb_display_shop' ) ) {
-                    $is_showing = false;
-                } else {
-                    $is_showing = true;
-                }
+            if ( is_product() ) {
+                $hide = $display['product'];
+            } elseif ( is_product_category() ) {
+                $hide = $display['product_cat'];
+            } elseif( is_product_tag() ) {
+                $hide = $display['product_tag'];
+            } elseif( is_shop() ) {
+                $hide = $display['page'];
             }
         }
 
         if ( Customify()->is_using_post() ) {
-            $id = Customify()->get_current_post_id();
-            $breadcrumb_display = get_post_meta( $id, '_customify_breadcrumb_display', true );
-            if ( $breadcrumb_display == 'hide' ) {
-                $is_showing = false;
-            } elseif( $breadcrumb_display == 'show' ) {
-                $is_showing = true;
+            $post_id = Customify()->get_current_post_id();
+            $breadcrumb_display = get_post_meta( $post_id, '_customify_breadcrumb_display', true );
+            if ( $breadcrumb_display  && $breadcrumb_display != 'default'){
+                if ( $breadcrumb_display == 'hide' ) {
+                    $hide = 1;
+                } else {
+                    $hide = 0;
+                }
             }
         }
 
-
-        $is_showing = apply_filters( 'customify/breadcrumb/is-showing', $is_showing );
-
-        return $is_showing;
+        return apply_filters( 'customify/breadcrumb/is-showing', ( ! $hide ) );
     }
 
     /**

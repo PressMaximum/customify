@@ -62,25 +62,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'render_callback' => $args['cb'],
                 'label' => __('Excerpt More', 'customify'),
             ),
-            array(
-                'name' => $args['id'].'_thumbnail_size',
-                'type' => 'select',
-                'section' => $level_2_panel.'_layout',
-                'selector' => $args['selector'],
-                'render_callback' => $args['cb'],
-                'default' => 'medium',
-                'label' => __('Thumbnail Size', 'customify'),
-                'choices' => customify_get_all_image_sizes()
-            ),
-            array(
-                'name' => $args['id'].'_hide_thumb_if_empty',
-                'type' => 'checkbox',
-                'section' => $level_2_panel.'_layout',
-                'default' => '1',
-                'selector' => $args['selector'],
-                'render_callback' => $args['cb'],
-                'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
-            ),
 
             array(
                 'name' => $level_2_panel.'_media',
@@ -120,6 +101,26 @@ if (!function_exists('customify_customizer_blog_config')) {
 
                 'selector' => "{$args['selector']} .posts-layout .entry-media",
                 'css_format' => 'border-radius: {{value_no_unit}}%;',
+            ),
+
+            array(
+                'name' => $args['id'].'_thumbnail_size',
+                'type' => 'select',
+                'section' => $level_2_panel.'_media',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'default' => 'medium',
+                'label' => __('Thumbnail Size', 'customify'),
+                'choices' => customify_get_all_image_sizes()
+            ),
+            array(
+                'name' => $args['id'].'_hide_thumb_if_empty',
+                'type' => 'checkbox',
+                'section' => $level_2_panel.'_media',
+                'default' => '1',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
             ),
 
             array(

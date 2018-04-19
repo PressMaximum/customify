@@ -23,6 +23,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     public $device = '';
     public $devices = null;
     public $checkbox_label = '';
+    public $reset_controls = array();
     public $limit ;
 
     // For slider
@@ -113,6 +114,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         $this->json['setting_type'] = $this->setting_type;
         $this->json['required']     = $this->required;
         $this->json['devices']      = $this->devices;
+        $this->json['reset_controls']      = $this->reset_controls;
 
         $this->json['min'] = $this->min;
         $this->json['max'] = $this->max;

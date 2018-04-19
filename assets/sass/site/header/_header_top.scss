@@ -1,11 +1,11 @@
 .header-top {
     padding: 0;
-    background: $color_primary;
+    background: #333333;
     color: #ffffff;
     text-size-adjust: 100%;
     line-height: 13px;
-    .customify-grid {
-        font-size: 12px;
+    .customify-grid .item--html{
+        font-size: 15px;
     }
     .item--html {
         line-height: 1.3;

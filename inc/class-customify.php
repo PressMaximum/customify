@@ -188,8 +188,9 @@ class Customify {
             'after_title'   => '</h4>',
         ) );
 
-        for( $i = 1; $i <= 4; $i++ ) {
+        for( $i = 1; $i <= 6; $i++ ) {
             register_sidebar( array(
+                /* translators: 1: Widget number. */
                 'name'          => sprintf( __( 'Footer Sidebar %d', 'customify' ), $i ),
                 'id'            => 'footer-'.$i,
                 'description'       => __( 'Add widgets here.', 'customify' ),
@@ -364,8 +365,9 @@ class Customify {
             'blogs',
             'styling',
             'typography',
-            'titlebar',
-            'cover',
+
+            'page-header',
+
             'compatibility',
 
             // Header Builder Panel
@@ -388,8 +390,8 @@ class Customify {
             'footer/widgets',
             'footer/templates',
             'footer/widgets',
-            'footer/html',
             'footer/copyright',
+            'footer/social-icons',
 
         );
 

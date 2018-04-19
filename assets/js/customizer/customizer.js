@@ -94,9 +94,10 @@
         } );
 
         // for custom when click on preview
-        $document.on( 'click', '.builder-item-focus', function( e ){
+        $document.on( 'click', '.builder-item-focus .item--preview-name', function( e ){
             e.preventDefault();
-            var section_id =  $( this ).attr( 'data-section' ) || '';
+            var p = $( this ).closest('.builder-item-focus');
+            var section_id =  p.attr( 'data-section' ) || '';
             if( section_id ) {
                 if ( defaultTarget.wp.customize.section( section_id ) ) {
                     defaultTarget.wp.customize.section( section_id ).focus();

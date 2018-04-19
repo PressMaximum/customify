@@ -1,18 +1,25 @@
 <?php
 
 class Customify_Dashboard {
+    static $_instance;
     public $title;
     public $config;
-    function __construct()
-    {
-        $this->title = __( 'Customify Options', 'customify' );
-        add_action( 'admin_menu', array( $this, 'add_menu' ) );
-        add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+    static function get_instance() {
+        if ( is_null( self::$_instance ) ) {
+            self::$_instance = new self();
 
-        add_action( 'customify/dashboard/main', array( $this, 'box_links' ), 10 );
-        add_action( 'customify/dashboard/sidebar', array( $this, 'box_plugins' ), 10 );
-        add_action( 'customify/dashboard/sidebar', array( $this, 'box_community' ), 20 );
+            self::$_instance->title = __( 'Customify Options', 'customify' );
+            add_action( 'admin_menu', array( self::$_instance, 'add_menu' ) );
+            add_action( 'admin_enqueue_scripts', array(  self::$_instance, 'scripts' ) );
+            add_action( 'customify/dashboard/main', array(  self::$_instance, 'box_links' ), 10 );
+            add_action( 'customify/dashboard/main', array(  self::$_instance, 'pro_modules_box' ), 15 );
+            add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_plugins' ), 10 );
+            add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_community' ), 20 );
+
+        }
+        return self::$_instance;
     }
+
     function add_menu(){
         add_theme_page(
             $this->title,
@@ -116,8 +123,9 @@ class Customify_Dashboard {
                 'label' => __( 'Homepage Settings', 'customify' ),
                 'url' => add_query_arg( array( 'autofocus' => array( 'section' => 'static_front_page' ) ), $url ),
             )
-
         );
+
+        $links = apply_filters( 'customify/dashboard/links', $links );
         ?>
         <div class="cd-box">
             <div class="cd-box-top"><?php _e( 'Links to Customizer Settings', 'customify' ); ?></div>
@@ -137,10 +145,10 @@ class Customify_Dashboard {
     function box_community() {
         ?>
         <div class="cd-box">
-            <div class="cd-box-top">Join the community!</div>
+            <div class="cd-box-top"><?php _e( 'Join the community!', 'customify' ); ?></div>
             <div class="cd-box-content">
                 <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
-                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group »', 'customify' ); ?></a>
+                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group &rarr;	', 'customify' ); ?></a>
             </div>
         </div>
         <?php
@@ -154,10 +162,10 @@ class Customify_Dashboard {
                 <p><?php _e( '<strong>Customify Site Library</strong> is an add-on for the Customify WordPress Theme which help you browse and import your favorite site with few clicks.', 'customify' ) ?></p>
                 <?php
 
-                $plugin_slug = 'contact-form-7';
+                $plugin_slug = 'customify-sites';
                 $plugin_info = array(
-                    'name' => 'contact-form-7',
-                    'active_filename' => 'contact-form-7/wp-contact-form-7.php'
+                    'name' => 'customify-sites',
+                    'active_filename' => 'customify-sites/customify-sites.php'
                 );
 
                 $plugin_info = wp_parse_args( $plugin_info, array(
@@ -221,12 +229,12 @@ class Customify_Dashboard {
                     );
 
                     echo '<div class="rcp">';
-                    echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>';
+                    echo '<p class="action-btn plugin-card-'.esc_attr( $plugin_slug ).'"><a href="'.esc_url( $install_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="'.esc_attr( $button_class ).'">'.$button_txt.'</a></p>'; // WPCS: XSS OK.
                     echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="'.esc_url( $detail_link ).'">'.esc_html__( 'Details', 'customify' ).'</a>';
                     echo '</div>';
                 } else {
                     echo '<div class="rcp">';
-                    echo '<p ><a href="'.esc_url( $sites_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="view-site-library">'.$view_site_txt.'</a></p>';
+                    echo '<p ><a href="'.esc_url( $sites_url ).'" data-slug="'.esc_attr( $plugin_slug ).'" class="view-site-library">'.$view_site_txt.'</a></p>'; // // WPCS: XSS OK.
                     echo '</div>';
                 }
 
@@ -254,8 +262,49 @@ class Customify_Dashboard {
         <?php
     }
 
-    private function page_inner(){
+    function pro_modules_box(){
 
+        $modules = array(
+            array(
+                'name' => __( 'Header Transparent', 'customify' ),
+                'url' => '#',
+            ),
+            array(
+                'name' => __( 'Header Sticky', 'customify' ),
+                'url' => '#',
+            ),
+            array(
+                'name' => __( 'Header Footer Builder Items', 'customify' ),
+                'url' => '#',
+            ),
+            array(
+                'name' => __( 'Scroll To Top', 'customify' ),
+                'url' => '#',
+            ),
+            array(
+                'name' => __( 'Blog Pro', 'customify' ),
+                'url' => '#',
+            ),
+        );
+
+        ?>
+        <div class="cd-box">
+            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?></div>
+            <div class="cd-box-content cd-modules">
+                <?php foreach( $modules as $m ) { ?>
+                <div class="cd-module-item">
+                    <div class="cd-module-info">
+                        <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
+                        <a class="cd-module-doc-link" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+        <?php
+    }
+
+    private function page_inner(){
 
         ?>
         <div class="cd-row metabox-holder">
@@ -272,6 +321,6 @@ class Customify_Dashboard {
 
 }
 
-new Customify_Dashboard();
+Customify_Dashboard::get_instance();
 
 

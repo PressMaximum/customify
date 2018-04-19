@@ -1,19 +1,20 @@
 <?php
 
 class Customify_Builder_Item_Nav_Icon{
-     public $id= 'nav-icon';
+    public $id= 'nav-icon';
+    public $section = 'header_menu_icon';
     function item(){
         return  array(
             'name' => __( 'Menu Icon', 'customify' ),
-            'id' => 'nav-icon',
+            'id' => $this->id,
             'width' => '3',
             //'devices' => 'mobile',
-            'section' => 'header_menu_icon' // Customizer section to focus when click settings
+            'section' => $this->section // Customizer section to focus when click settings
         );
     }
 
     function customize(){
-        $section = 'header_menu_icon';
+        $section = $this->section;
         $fn = array( $this, 'render' );
         $selector = '.menu-mobile-toggle';
         $config = array(

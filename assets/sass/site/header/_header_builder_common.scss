@@ -126,6 +126,9 @@
 }
 .page-titlebar, .page-cover {
     word-break: break-all;
+    .customize-partial-edit-shortcut button {
+        left: 0px;
+    }
     .page-breadcrumb-inner {
         padding-left: 0;
         padding-right: 0;
@@ -148,7 +151,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 300px;
+    min-height: 200px;
     &:before {
         position: absolute;
         content: "";
@@ -166,6 +169,12 @@
         flex-direction: column;
         justify-content: center;
         z-index: 5;
+    }
+    .page-breadcrumb-list {
+        color: rgba(255, 255, 255, .8);
+        a, li:after {
+            color: inherit;
+        }
     }
 }
 .page-cover-title {
@@ -185,7 +194,6 @@
         }
     }
 }
-
 
 
 /* Customizer Shortcut */

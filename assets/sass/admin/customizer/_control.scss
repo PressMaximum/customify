@@ -11,6 +11,13 @@ $text_color: #555d66;
 .customify-control-field-header {
     cursor: pointer;
 }
+.customize-control-customify-modal,
+.customize-control-customify-typography,
+.customize-control-customify-styling{
+    .customify-control-field-header {
+        margin-right: 25px;
+    }
+}
 .customify-control--heading {
     padding: 7px 12px;
     background: #fff;
@@ -639,6 +646,8 @@ $text_color: #555d66;
         font-weight: normal;
         font-size: 10px;
         cursor: default;
+        min-width: 24px;
+        text-align: center;
     }
     .reset {
         text-decoration: none;
@@ -1307,7 +1316,7 @@ $text_color: #555d66;
     }
 
     .customize-control-title {
-        font-weight: 400;
+        font-weight: 600;
         font-size: 13px;
     }
     .customify--group-field {

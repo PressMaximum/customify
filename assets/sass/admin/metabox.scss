@@ -9,6 +9,19 @@
     font-weight: 600;
 }
 
+.customify_metabox_section {
+    margin-bottom: 12px;
+    margin-top: 5px;
+    label strong {
+        display: block;
+        margin-bottom: 6px;
+    }
+    .checkbox_input {
+        display: block;
+        margin-bottom: 3px;
+    }
+}
+
 .customify-mt-media {
     display: block;
     .customify--add {
