@@ -344,6 +344,36 @@
                     }
                 };
 
+                var getNextBlock = function( x ){
+                    var i, _x = -1, _xw, found;
+
+                    if ( flag[x] < maxCol  ) {
+                        i = x;
+                        found = false;
+                        while ( i < maxCol && ! found ) {
+                            if ( flag[i] !== 1 && flag[i] !== 0 ) {
+                                _x = i;
+                                found = true;
+                            }
+                            i++;
+                        }
+                    } else {
+                        _x = x;
+                    }
+                    // tìm kiếm độ rộng của chuỗi này
+                    i = _x + 1;
+                    _xw = _x; // chiều rộng nhỏ nhất là môt
+
+                    while( flag[ i ] === 1 ) {
+                        _xw ++ ;
+                        i++;
+                    }
+                    return {
+                        x: _x,
+                        w: ( _xw + 1 ) - _x
+                    }
+                };
+
 
                 var moveAllItemsFromXToLeft = function( x, number ){
                     var backupFlag = flag.slice();
@@ -619,9 +649,7 @@
                         w --;
                     }
 
-
                     console.log( 'Insert END While', { x: i, w: w } );
-
                     return false;
                 };
 
@@ -640,6 +668,7 @@
 
                     var block2 = getPrevBlock( newX );
 
+
                     var block2_right = 0;
                     if ( block2.x > -1 ) {
                         block2_right =  ( block2.x + block2.w );
@@ -648,6 +677,23 @@
                         addItemToFlag( { el: node.el, x: newX, w: w } );
                         return true;
                     } else if ( block2_right > 0 && checkEnoughSpaceFromX( block2_right , w ) && newX >= block2_right ) {
+                        var block3 = getNextBlock( newX );
+                        if ( block3.x > -1 ) { // Nếu phía sau nó có item
+                            // nếu item chèn vào mà đủ chỗ
+                            // nhưng từ trí từ vị trí thả chuột xuống ko đủ chỗ để chèn vào
+                            // lùi vị trí chèn vào cho đến khi nào đủ
+                            if ( node.w + newX >= block3.x ) {
+                                var _newX = _.clone( newX );
+                                while ( _newX > block2_right ) {
+                                    if ( checkEnoughSpaceFromX( _newX , w ) ) {
+                                        addItemToFlag( { el: node.el, x: _newX, w: w } );
+                                        return  true;
+                                    }
+                                    _newX --;
+                                }
+                            }
+                        }
+
                         if ( newX + w > that.cols ){ // Nếu newX + w vượt quá số cols. thì thử lùi lại xem  có đủ chỗ ko ?
                             var _x = that.cols - w;
                             if ( checkEnoughSpaceFromX( _x , w ) ) {
@@ -658,6 +704,8 @@
                         addItemToFlag( { el: node.el, x: block2_right, w: w } );
                         return true;
                     }
+
+                    console.log('phải chèn và swap rồi' +newX, node );
 
                     insertToFlag( { el: node.el, x: newX, w: node.w }, true );
                 };
@@ -777,7 +825,6 @@
                 if ( x < 0 ) {
                     x = 0;
                 }
-                console.log( 'Flag R', _.clone(flag).reverse() );
 
                 if ( x + w >= that.cols ) {
                     found = true;
@@ -798,6 +845,8 @@
                 }
 
                 delete found;
+
+
 
 
                 console.log( 'DROP Cursor', xc );
