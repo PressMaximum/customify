@@ -4725,8 +4725,8 @@ body.menu_sidebar_dropdown:before {
 }
 @media screen and (max-width: 48em) {
   .customify-container {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 20px;
+    padding-right: 20px;
   }
 }
 
