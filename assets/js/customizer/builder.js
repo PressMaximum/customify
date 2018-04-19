@@ -206,8 +206,8 @@
                     x: x,
                     w: w,
                     item: $item,
-                    before: slot_before,
-                    after: slot_after,
+                    before: slot_before, // empty before
+                    after: slot_after, // empty after
                     id: $item.attr( 'data-id' ) || '',
                     wrapper: $wrapper
                 }
@@ -901,28 +901,31 @@
                 */
 
 
+                console.log( 'ui.originalPosition.left', ui.position.left );
+                console.log( 'wrapper_width', width );
+                console.log( 'itemWidth', itemWidth );
+                console.log( 'colWidth', colWidth );
+                console.log( 'new col = ', Math.floor( ( ui.position.left - 1 ) / colWidth ) );
+
+
+
                 if ( isShiftLeft ) {
 
                     if ( ! is_rtl ) {
-                        diffLeft = ui.originalPosition.left - ui.position.left;
-                        console.log( 'diffLeft', diffLeft );
-                        if ( diffLeft <= colWidth/ 2 ) {
-                            console.log( 'Skip resize left' );
-                            return ;
-                        }
-
-                        addW = Math.ceil(diffLeft / colWidth);
-
+                        // Ok
+                        newX = Math.floor( ( ui.position.left - 1 ) / colWidth );
+                        addW = ox - newX ;
                         if (addW > itemInfo.before) {
                             addW = itemInfo.before;
                         }
+
                         newX = ox - addW;
                         newW = ow + addW;
                         $item.attr('data-gs-x', newX).removeAttr('style');
                         $item.attr('data-gs-width', newW).removeAttr('style');
                     } else { // RTL
                         diffLeft = ui.originalPosition.left - ui.position.left;
-                        console.log( 'diffLeft', diffLeft );
+                        console.log( 'diffLeft_RTL', diffLeft );
                         addW = Math.ceil(diffLeft / colWidth);
                         if (addW > itemInfo.after) {
                             addW = itemInfo.after;
@@ -938,16 +941,9 @@
                 } else if( isShiftRight ) {
 
                     if ( ! is_rtl ) {
-                        diffRight = ui.position.left - ui.originalPosition.left;
-
-                        console.log( 'diffRight', diffRight );
-
-                        if ( diffRight <= colWidth/ 2 ) {
-                            console.log( 'Skip resize right' );
-                            return ;
-                        }
-
-                        addW = Math.ceil(diffRight / colWidth);
+                        // Ok
+                        newX = Math.round( ( ui.position.left - 1 ) / colWidth );
+                        addW = newX - ox ;
                         newW = ow - addW;
                         if (newW <= 0) {
                             newW = 1;
@@ -956,9 +952,11 @@
                         newX = ox + addW;
                         $item.attr('data-gs-x', newX).removeAttr('style');
                         $item.attr('data-gs-width', newW).removeAttr('style');
+
+
                     } else {
                         diffRight = itemWidth - originalElementWidth;
-                        console.log( 'diffRight', diffRight );
+                        console.log( 'diffRight_RTL', diffRight );
 
                         addW = Math.ceil(diffRight / colWidth);
                         if (addW > itemInfo.before) {
@@ -980,25 +978,19 @@
 
                 var w ;
                 var x = itemInfo.x;
-                var diff_width = Math.abs( itemWidth -  ui.originalSize.width );
-                console.log( 'diff_width', diff_width );
+                var x_c;
 
                 if ( itemWidth <  ui.originalSize.width ) { // Resize from right to left
-                    if ( diff_width <= colWidth / 2 ) {
-                        $item.removeAttr('style');
-                        console.log( 'skipp_resize_rtl', diff_width );
-                        return ;
+                    // Ok
+                    x_c = Math.round( ( ui.position.left + ui.size.width - 11 ) / colWidth );
+                    if ( x_c <= x ) {
+                        x_c = x + 1;
                     }
-
-                    w = Math.floor( itemWidth/ colWidth  );
-
+                    w =  itemInfo.w - ( ( x + itemInfo.w ) - x_c );
                 } else { // Resize from left to right
-                    if ( diff_width < colWidth / 2 ) {
-                        $item.removeAttr('style');
-                        console.log( 'skipp_resize_ltr', diff_width );
-                        return ;
-                    }
-                    w = Math.ceil( itemWidth/ colWidth );
+                    //Ok
+                    x_c = Math.ceil( ( ui.position.left + ui.size.width - 11 ) / colWidth );
+                    w = itemInfo.w + ( x_c - ( x + itemInfo.w ) );
                     if ( itemInfo.x + w > itemInfo.x + itemInfo.w + itemInfo.after ) {
                         w = itemInfo.w + itemInfo.after;
                     }
