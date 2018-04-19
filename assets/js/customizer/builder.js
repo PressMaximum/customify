@@ -644,12 +644,10 @@
                     if ( block2.x > -1 ) {
                         block2_right =  ( block2.x + block2.w );
                     }
-
                     if ( checkEnoughSpaceFromX( newX , w ) ) {
                         addItemToFlag( { el: node.el, x: newX, w: w } );
                         return true;
                     } else if ( block2_right > 0 && checkEnoughSpaceFromX( block2_right , w ) && newX >= block2_right ) {
-
                         if ( newX + w > that.cols ){ // Nếu newX + w vượt quá số cols. thì thử lùi lại xem  có đủ chỗ ko ?
                             var _x = that.cols - w;
                             if ( checkEnoughSpaceFromX( _x , w ) ) {
@@ -657,7 +655,6 @@
                                 return true;
                             }
                         }
-
                         addItemToFlag( { el: node.el, x: block2_right, w: w } );
                         return true;
                     }
@@ -776,7 +773,6 @@
                         x = xc;
                     }
                 }
-
 
                 if ( x < 0 ) {
                     x = 0;
@@ -900,15 +896,6 @@
                 console.log( 'isShiftRight', isShiftRight );
                 */
 
-
-                console.log( 'ui.originalPosition.left', ui.position.left );
-                console.log( 'wrapper_width', width );
-                console.log( 'itemWidth', itemWidth );
-                console.log( 'colWidth', colWidth );
-                console.log( 'new col = ', Math.floor( ( ui.position.left - 1 ) / colWidth ) );
-
-
-
                 if ( isShiftLeft ) {
 
                     if ( ! is_rtl ) {
@@ -924,9 +911,11 @@
                         $item.attr('data-gs-x', newX).removeAttr('style');
                         $item.attr('data-gs-width', newW).removeAttr('style');
                     } else { // RTL
-                        diffLeft = ui.originalPosition.left - ui.position.left;
-                        console.log( 'diffLeft_RTL', diffLeft );
-                        addW = Math.ceil(diffLeft / colWidth);
+
+                        // Ok
+                        newX = Math.floor( ( ui.position.left - 1 ) / colWidth );
+                        newX = that.cols - newX;
+                        addW = ( newX - ox ) - ow;
                         if (addW > itemInfo.after) {
                             addW = itemInfo.after;
                         }
@@ -953,24 +942,37 @@
                         $item.attr('data-gs-x', newX).removeAttr('style');
                         $item.attr('data-gs-width', newW).removeAttr('style');
 
+                    } else { // RTL
 
-                    } else {
-                        diffRight = itemWidth - originalElementWidth;
-                        console.log( 'diffRight_RTL', diffRight );
+                        if ( ui.originalPosition.left !== ui.position.left ) { // Nếu resize ở mép trái của Item
+                            // Ok
+                            newX = Math.floor( ( ui.position.left - 1 ) / colWidth );
+                            newX = that.cols - newX;
+                            addW = ( ow + ox ) - newX;
+                            if ( addW > ow ) {
+                                addW = 0;
+                            }
+                            newX = ox;
+                            newW = ow - addW;
+                            if ( newX <= 0 ) {
+                                newX = 0;
+                            }
 
-                        addW = Math.ceil(diffRight / colWidth);
-                        if (addW > itemInfo.before) {
-                            addW = itemInfo.before;
-                        }
-                        newX = ox - addW;
-                        newW = ow + addW;
-                        if ( newX <= 0 ) {
-                            newX = 0;
+                            console.log( 'diffRight_RTL_COL_New __left' );
+                        } else { // Nếu resize ở mép phải của Item
+                            // Ok
+                            newX = Math.ceil( ( ui.position.left + ui.size.width - 11 ) / colWidth );
+                            newX = that.cols - newX;
+                            addW = ox - newX;
+                            if (addW > itemInfo.before ) {
+                                addW = itemInfo.before;
+                            }
+                            newX = ox - addW;
+                            newW = ow + addW;
                         }
                         $item.attr('data-gs-x', newX).removeAttr('style');
                         $item.attr('data-gs-width', newW).removeAttr('style');
                     }
-
 
                     that.updateGridFlag( $wrapper );
                     return ;
