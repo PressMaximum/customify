@@ -162,7 +162,7 @@ class Customify_Dashboard {
                 <img src="<?php echo get_template_directory_uri().'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
             </div>
             <div id="plugin-filter" class="cd-box-content">
-                <p><?php _e( '<strong>Customify Sites</strong> is an free add-on for the Customify Theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
+                <p><?php _e( '<strong>Customify Sites</strong> is an free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
 
                 $plugin_slug = 'customify-sites';

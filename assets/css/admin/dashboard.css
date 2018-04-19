@@ -102,7 +102,7 @@
 .cd-box .cd-box-top {
   border-bottom: 1px solid #eee;
   font-size: 1em;
-  padding: 15px 15px;
+  padding: 12px 15px;
   font-weight: 600;
 }
 .cd-box .cd-box-content {
@@ -170,9 +170,6 @@
   flex-basis: 100%;
   position: relative;
   padding-right: 100px;
-}
-.cd-modules .cd-module-name {
-  font-weight: 600;
 }
 .cd-modules .cd-module-desc {
   margin-top: 10px;

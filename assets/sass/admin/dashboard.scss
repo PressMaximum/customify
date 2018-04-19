@@ -100,7 +100,7 @@ $dashboard_border_color: #e5e5e5;
     .cd-box-top {
         border-bottom: 1px solid #eee;
         font-size: 1em;
-        padding: 15px 15px;
+        padding: 12px 15px;
         font-weight: 600;
     }
     .cd-box-content {
@@ -165,9 +165,6 @@ $dashboard_border_color: #e5e5e5;
         flex-basis: 100%;
         position: relative;
         padding-right: 100px;
-    }
-    .cd-module-name {
-        font-weight: 600;
     }
     .cd-module-desc {
         margin-top: 10px;
