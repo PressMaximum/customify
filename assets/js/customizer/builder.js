@@ -704,7 +704,7 @@
                         addItemToFlag( { el: node.el, x: block2_right, w: w } );
                         return true;
                     }
-                    
+
                     insertToFlag( { el: node.el, x: newX, w: node.w }, true );
                 };
 
