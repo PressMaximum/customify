@@ -223,15 +223,17 @@ class Customify {
      */
     function get_style_uri(){
         $suffix = $this->get_asset_suffix();
-        $style_dir = get_stylesheet_directory();
+        $style_dir = get_template_directory();
         $suffix_css = $suffix;
         $css_file = false;
         if ( is_rtl() ) {
             $suffix_css = '-rtl'.$suffix;
         }
-        if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
-            $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
-        }
+
+	    $min_file = $style_dir . '/style' . $suffix_css . '.css';
+	    if (file_exists($min_file)) {
+		    $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
+	    }
 
         if ( ! $css_file ) {
             $css_file = get_stylesheet_uri();
