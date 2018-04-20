@@ -2383,7 +2383,8 @@
             var that = this;
             $('.customify-modal-settings', that.$el ).remove();
             try {
-                that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el ).attr('data-default') || '{}' );
+                var _default = wpcustomize.control( that.controlID ).params.default;
+                that.values = _default;
             } catch (e) {
                 that.values = {};
             }
@@ -2399,7 +2400,7 @@
             that.$el.addClass('customify-modal--inside');
             that.$el.addClass( 'modal--opening' );
             that.container.show(0);
-            $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
+            $( '.customify-hidden-modal-input', that.$el ).val( JSON.stringify( that.values )  ).trigger('change');
 
         },
 
@@ -2471,6 +2472,7 @@
                     var m = _.clone( customifyModal );
                     m.config = c.params.fields;
                     m.$el = $( this ).closest('.customize-control-customify-modal').eq( 0 );
+                    m.controlID = controlID;
                     initModalControls[ controlID ] = m;
                 }
             }
@@ -2611,7 +2613,8 @@
 
             $('.customify-modal-settings', that.$el ).remove();
             try {
-                that.values = JSON.parse( $('.customify-hidden-modal-input', that.$el).attr('data-default') || '{}' );
+                var _default = wpcustomize.control( that.controlID ).params.default;
+                that.values = _default;
             } catch (e) {
                 that.values = {};
             }
@@ -2627,7 +2630,7 @@
             that.$el.addClass('customify-modal--inside');
             that.$el.addClass( 'modal--opening' );
             that.container.show(0);
-            $( '.customify-hidden-modal-input', that.$el ).val( '{}' ).trigger('change');
+            $( '.customify-hidden-modal-input', that.$el ).val( JSON.stringify( that.values ) ).trigger('change');
 
         },
 
@@ -2713,6 +2716,7 @@
                 }
                 s.$el = $( this ).closest('.customize-control-customify-styling').eq( 0 );
                 s.setupConfig( tabs, normal_fields, hover_fields );
+                s.controlID = controlID;
                 initStylingControls[ controlID ] = s;
             }
 

@@ -3229,7 +3229,7 @@ article.comment .comment-post-author {
 .page-cover-title, .page-cover-tagline {
   display: inline-block;
   position: relative;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.99);
   z-index: 5;
 }
 .page-cover-title p:last-child, .page-cover-tagline p:last-child {
@@ -3847,9 +3847,10 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
   text-align: center;
   vertical-align: middle;
   width: 100%;
-  padding: 0.5em;
+  padding: 0.4em;
   display: inline-block;
   line-height: 1;
+  font-size: 13px;
 }
 .customify-builder-social-icons a i {
   width: 1em;

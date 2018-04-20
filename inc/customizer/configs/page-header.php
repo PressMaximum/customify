@@ -452,6 +452,14 @@ class Customify_Page_Header
                 'title'      => __('Cover Background', 'customify'),
                 'selector'   => $selector,
                 'css_format' => 'styling', // styling
+                'default' => array(
+                    'normal' => array(
+                         'bg_image' => array(
+                             'id' => '',
+                             'url' => get_template_directory_uri().'/assets/images/default-cover.jpg',
+                         )
+                    )
+                ),
                 'fields'     => array(
                     'tabs'          => array(
                         'normal' => '_'
