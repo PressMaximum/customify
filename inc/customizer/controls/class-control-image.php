@@ -20,7 +20,7 @@ class Customify_Customizer_Control_Image extends Customify_Customizer_Control_Me
                     <#
 
                     if ( url ) {
-                        if ( url.indexOf('http://') > -1 || url.indexOf('https://') ){
+                        if ( url.indexOf('http://') > -1 || url.indexOf('https://') >-1 ){
 
                         } else {
                             url = Customify_Control_Args.home_url + url;
