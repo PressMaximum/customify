@@ -194,7 +194,7 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         }
         $( '#customify-style-inline-css' ).html( css_code );
         $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
-        $( document ).trigger( 'after_auto_render_css' );
+        $( document ).trigger( 'after_auto_render_css', [ 'after_auto_render_css' ] );
 
     };
 
