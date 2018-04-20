@@ -191,7 +191,6 @@
                 // Get empty slots after
                 br = false;
                 i = x + w ;
-                //console.log( 'start R: '+i );
                 while ( i < that.cols && ! br ) {
                     if ( flag[ i ] === 0 ) {
                         slot_after++;
@@ -360,9 +359,9 @@
                     } else {
                         _x = x;
                     }
-                    // tìm kiếm độ rộng của chuỗi này
+                    // Calculate the width of this item
                     i = _x + 1;
-                    _xw = _x; // chiều rộng nhỏ nhất là môt
+                    _xw = _x; // the min width is 1
 
                     while( flag[ i ] === 1 ) {
                         _xw ++ ;
@@ -375,6 +374,12 @@
                 };
 
 
+                /**
+                 *  Move all Items form x to left
+                 * @param x
+                 * @param number position left need to move
+                 * @returns {*}
+                 */
                 var moveAllItemsFromXToLeft = function( x, number ){
                     var backupFlag = flag.slice();
                     var maxNumber = getLeftEmptySlotFromX( x );
@@ -382,7 +387,7 @@
                     if ( maxNumber === 0 ) {
                         return number;
                     }
-                    var prev=  getPrevBlock( x );
+                    var prev =  getPrevBlock( x );
                     var newX = prev.x >= 0 ? prev.x + prev.w - 1 : x;
                     var nMove = number;
                     if ( number > maxNumber ) {
@@ -391,7 +396,8 @@
                         nMove = number;
                     }
 
-                    // Tim vi tri x trống về bên trái
+                    // Find empty positions from x to left;
+                    // xE is new empty position from x
                     var xE = 0, c = 0, i = newX;
                     while ( c <= nMove && i >= 0 ) {
                         if ( flag[i] === 0 ) {
@@ -401,7 +407,7 @@
                         i--;
                     }
 
-                    // vị trí cần di chuyển tới là x và loại bỏ mọi khoảng trống trừ x đến xE
+                    // Move item from x to xE and we need empty flag from x to xE
                     var flagNoEmpty = [], j = 0;
                     for ( i =  xE; i <= newX; i++ ) {
                         flag[i] =0;
@@ -421,7 +427,7 @@
                         j++;
                     }
 
-                    // Trả về số vị  trí cần dịch chuyển còn lại
+                    // Return the number positions need to move
                     var left = number - nMove;
                     return left;
 
@@ -443,7 +449,7 @@
                         nMove = maxNumber;
                     }
 
-                    // Tim vi tri x trống về bên trái
+                    // Find empty positions from x to right, stop when see any item while finding.
                     var xE = x, c = 0, i = newX;
                     while ( c < nMove && i < maxCol ) {
                         if ( flag[i] === 0 ) {
@@ -453,7 +459,7 @@
                         i++;
                     }
 
-                    // vị trí cần di chuyển tới là x và loại bỏ mọi khoảng trống trừ x đến xE
+                    // The new position is x, and need empty flag from x to xE
                     var flagNoEmpty = [], j = 0;
 
                     for ( i = newX ; i <= xE; i++ ) {
@@ -474,7 +480,7 @@
                         j--;
                     }
 
-                    // Trả về số vị  trí cần dịch chuyển còn lại
+                    // Return the number positions need to move
                     var left = number - nMove ;
                     return left;
 
@@ -484,13 +490,21 @@
                     that.updateItemsPositions( flag );
                 };
 
-                // Chèn vào trong danh sách giới hạn với 1 phẩn tử và có độ vị trí tại X và độ dài là w
+
+                /**
+                 * Insert to Flag an item with the width is x and position is x
+                 *
+                 * @param node object Item node
+                 * @param swap boolean swap items or not
+                 * @returns {boolean}
+                 */
                 var insertToFlag = function( node, swap ){
                     var x = node.x, w = node.w;
-                    var emptySlots = getEmptySlots( );
-                    // không còn bất kỳ chỗ trống nào có thể thêm dc
-                    console.log( 'emptySlots', emptySlots );
-                    console.log( 'Node Width', w );
+
+                    // get Empty slots
+                    var emptySlots = getEmptySlots();
+
+                    // Not enough empty slots, fallback.
                     if( emptySlots <= 0 ) {
                         return false;
                     }
@@ -572,34 +586,203 @@
                         }
                     }
 
-                    var remain = 0;
-                    if ( swap ) {
-                        remain = moveAllItemsFromXToRight (x, w );
-                        if (remain > 0) {
-                            remain = moveAllItemsFromXToLeft(x -1, remain);
-                        }
-                    } else {
-                        remain = moveAllItemsFromXToLeft (x, w );
-                        if (remain > 0) {
-                            remain = moveAllItemsFromXToRight(x -1, remain);
-                        }
-                    }
 
-                    updateItemsPositions();
-                    console.log( 'After moved', flag );
+                    var remain = 0;
+
+                    // -------------------------
+                    console.log( '--------------------------------------------------------' );
+                   var _move_to_swap = function( node, _x ){
+
+                       var _block_prev;
+                       var _block_next;
+                       var _empty_slots = 0;
+                       var found = false;
+                       var  i, el, er;
+
+                       console.log( 'insert at x', _x );
+                       console.log( 'insert node', node );
+
+                       if ( isEmptyX( _x ) ) { // if insert at empty x
+                           console.log( 'empty_at_X', _x );
+                           _block_prev = getPrevBlock( _x );
+                           _block_next = getNextBlock( _x );
+                           if ( _block_prev.x > -1 ) { // if drop item at position that have item before
+                               console.log( 'found_item_left', _block_prev );
+                               _empty_slots = getRightEmptySlotFromX( _block_prev.x ); // find number empty slots from x top when have item
+                               if( _empty_slots >= node.w ) { // If enough slot for this item
+                                   if ( checkEnoughSpaceFromX( _x, node.w ) ) {
+                                       console.log( 'found', node );
+                                       x = _x;
+                                       found = true;
+                                   } else if ( node.ox > _x ) { // move item from left to right
+                                       i = _block_prev.x + _block_prev.w ;
+                                       el = getLeftEmptySlotFromX( i );
+                                       if ( el <= node.w ) {
+                                           el =  node.w - el;
+                                       } else{
+                                           el = node.w;
+                                       }
+                                       moveAllItemsFromXToRight( i + 1, el );
+                                       _empty_slots = getRightEmptySlotFromX( i );
+                                       console.log( 'loop_start_i', i );
+                                       found = false;
+                                       while ( i > _block_prev.x + _block_prev.w && ! found ) {
+                                           if ( checkEnoughSpaceFromX( i, node.w ) ) {
+                                               console.log( 'found_in_loop__i', i );
+                                               x = i;
+                                               found = true;
+                                           }
+                                           i--;
+                                       }
+                                   }
+                               }
+
+                               if ( ! found  && node.ox < _x ) { // move item from left to right
+                                  // try move item to the left
+                                   console.log( 'try_move_items_to_left', _block_prev );
+                                   i = _block_prev.x + _block_prev.w - 1;
+                                   el = getLeftEmptySlotFromX( _block_prev.x );
+                                   console.log( 'el', el );
+                                   if ( el > node.w ) {
+                                       el =  node.w;
+                                   }
+                                   el -= 2;
+                                   moveAllItemsFromXToLeft( _block_prev.x, el );
+                                   console.log( 'try_move_items_to_left_flag', flag );
+                                   console.log( 'el2', el );
+                                   _empty_slots = getRightEmptySlotFromX( i );
+                                   i -= _empty_slots;
+                                   _block_next = getNextBlock( _x );
+                                   var max = _block_prev.x + _block_prev.w;
+                                   if ( _block_next.x > -1 ) {
+                                       max = _block_next.x;
+                                   }
+                                   console.log( 'loop_start 2_i', i );
+                                   while ( i < max && ! found ) {
+                                       if ( checkEnoughSpaceFromX( i, node.w ) ) {
+                                           console.log( 'found_in_loop__@__i', i );
+                                           x = i;
+                                           found = true;
+                                       }
+                                       i++;
+                                   }
+
+
+                               }
+
+
+                               if ( ! found ) {
+                                   // Try to resize node width;
+                                   x = _block_prev.x + _block_prev.w;
+                                   node.w = _empty_slots;
+                                   node.x = x;
+                                   console.log('resize_new_w', _empty_slots);
+                                   console.log('resize_new_x', x);
+                               }
+
+                           } else if( _block_next.x > -1 ) { // try to get right item form x
+                               console.log( 'found_item_right', _block_next );
+                               _block_next = getNextBlock( _x );
+                               _empty_slots = getRightEmptySlotFromX( _x, false );
+                               console.log('move_all_item_to Right');
+                               var n_move = _empty_slots >= node.w ? node.w : _empty_slots;
+                               moveAllItemsFromXToRight( _x, n_move );
+                               i = _block_next.x;
+                               console.log('loop_start Right', i);
+                               while ( i >= 0 && ! found ) {
+                                   if ( checkEnoughSpaceFromX( i, node.w ) ) {
+                                       x = i;
+                                       node.x = x;
+                                       found = true;
+                                       console.log('found_in_while_r', i);
+                                   }
+                                    i--;
+                               }
+
+                               if ( ! found ) {
+                                   // Try to resize node width;
+                                   x = _x;
+                                   node.w = _empty_slots;
+                                   node.x = x;
+                                   console.log('resize_r_new_w', _empty_slots);
+                                   console.log('resize_r_new_x', x);
+                               }
+
+                           } else { // the row is empty
+                              // Do somthing
+                           }
+
+                       } else { // if x is not empty
+                            // insert before item, that drop in
+                           console.log( 'x is not empty' );
+                           _block_prev = getPrevBlock( _x );
+
+                           if ( node.ox < _block_prev.x ) { // drop from left to right
+                               moveAllItemsFromXToLeft( _x, node.w );
+                               console.log( 'Move All items to left' );
+                               if ( isEmptyX( _x ) ) {
+                                   x = _x;
+                               } else {
+                                   while ( ! isEmptyX( _x ) && _x <= that.cols - 1 ) {
+                                       _x++;
+                                   }
+                                   x = _x;
+                               }
+                           } else {
+                               moveAllItemsFromXToRight( _x, node.w );
+                               console.log( 'Move All items to right' );
+                               if ( isEmptyX( _x ) ) {
+                                   x = _x;
+                               } else {
+                                   while ( ! isEmptyX( _x ) && _x >=0 ) {
+                                       _x--;
+                                   }
+                                   x = _x;
+                               }
+                           }
+                       }
+
+                       if ( x > that.cols ) {
+                           x = that.cols - 1;
+                       }
+                       node.x = x;
+                       console.log( 'new node x', x );
+
+                   };
+
+                    _move_to_swap( node, _.clone( x ) );
+
+                    console.log( '--------------------------------------------------------' );
+                    // -------------------------
 
                     var newX = x;
                     var i;
                     var found = false;
                     var le = 0 ;
-                    var re = 0;
 
+                    console.log( 'in_the_end_x', x );
+                    console.log( 'in_the_end_w', w );
+                    if ( x + w > that.cols - 1 ) {
+                        le = getLeftEmptySlotFromX(x, true);
+                        console.log( 'le', le );
+                        if ( le > 0 ) {
+                            console.log( 'move_Left', ( x + w ) - that.cols - 1 );
+                        }
+                    }
+
+
+                    updateItemsPositions();
+
+                    console.log( 'Flag update', flag );
+
+                    le = 0;
                     while( w >= 1 ) {
                         // Nếu số chỗ trống lớn hơn hoặc  = chiều rộng của item
                         if ( emptySlots >= w ) {
                             // Nếu tại vị trí hiện tại mà đủ chỗ trống
                             if (checkEnoughSpaceFromX(x, w)) {
-                                console.log( { x: x, w: w } );
+                                console.log( '', { x: x, w: w } );
+                                node.w = w;
                                 addItemToFlag(node);
                                 node.el.attr( 'data-gs-x', x );
                                 node.el.attr( 'data-gs-width', w );
@@ -608,7 +791,6 @@
 
                             found = false;
                             le = getLeftEmptySlotFromX(x, true);
-                            // re = getRightEmptySlotFromX(x, true);
                             // Nếu trỗ trông bên trái nhiều hơn bên phải
                             newX = x - le;
                             // tìm kiếm từ vị trí trống từ new sang bên phải xem có chỗ nào chèn dc ko ?
@@ -617,6 +799,7 @@
                             while (i < maxCol && !found) {
                                 if ( checkEnoughSpaceFromX(i, w) ) {
                                     console.log( 'Insert in While', { x: i, w: w } );
+                                    node.w = w;
                                     addItemToFlag( {el: node.el, x: i, w: w});
                                     node.el.attr( 'data-gs-x', i );
                                     node.el.attr( 'data-gs-width', w );
@@ -705,7 +888,9 @@
                         return true;
                     }
 
-                    insertToFlag( { el: node.el, x: newX, w: node.w }, true );
+                    node.x = newX;
+
+                    insertToFlag( node, true );
                 };
 
                 //-----------------------------------------------------------------------------------------------------------------------------
@@ -717,13 +902,14 @@
                 var width  = $wrapper.width();
                 var colWidth = width/that.cols;
                 var x = 0;
-                var left = 0;
                 var iOffset = ui.offset;
-                var w, itemWidth, in_this_row;
+                var w, cw, itemWidth, in_this_row;
+                cw = that.getW( ui.draggable, false );
                 w = that.getW( ui.draggable, true );
                 itemWidth = ui.draggable.width();
 
                 console.log( 'DROP ITEM WIDTH', w );
+                console.log( 'DROP ITEM cw WIDTH', cw );
                 var ox = that.getX( ui.draggable );
                 if ( is_rtl ) {
                     removeNode({
@@ -737,12 +923,14 @@
 
                 if ( ! ui.draggable.parent().is( $wrapper ) ) {
                     in_this_row = false;
-                   // left = event.clientX - wOffset.left;
                     console.log( 'Not in this row' );
+                    if ( w < cw ) {
+                        w = cw;
+                    }
                 } else {
                     in_this_row = true;
                     console.log( 'Item in this row' );
-                    //left = iOffset.left - wOffset.left;
+                    w = cw;
                 }
 
                 // Kiểm tra RTL
@@ -829,6 +1017,7 @@
                     _i = x;
                     while ( _i + w > that.cols && found ) {
                         if ( ! isEmptyX( _i ) ) {
+                            _i++;
                             found = false;
                         } else {
                             _i--;
@@ -845,15 +1034,16 @@
                 delete found;
 
 
-
-
                 console.log( 'DROP Cursor', xc );
                 console.log( 'DROP row x cacl', x );
+                console.log( 'DROP item w', w );
 
                 var node = {
                     el: ui.draggable,
                     x: x,
-                    w: w
+                    w: w,
+                    ox: ox,
+                    ow: cw
                 };
 
                 if ( node.x <= 0 ) {
