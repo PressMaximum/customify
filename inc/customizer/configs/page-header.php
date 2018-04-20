@@ -618,7 +618,7 @@ class Customify_Page_Header
                 'type'            => 'typography',
                 'css_format'      => 'typography',
                 'section'         => $section,
-                'selector'        => "{$selector} .page-cover-tagline",
+                'selector'        => "{$selector} .page-cover-tagline p",
                 'render_callback' => $render_cb_el,
                 'title'           => __('Cover Tagline Typography', 'customify')
             ),
