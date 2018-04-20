@@ -233,6 +233,24 @@ class Customify_Builder_Item_Primary_Menu {
         // Item Layout
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
     }
+    function menu_fallback_cb(){
+        $pages = get_pages( array(
+            'child_of'     => 0,
+            'sort_order'   => 'ASC',
+            'sort_column'  => 'menu_order, post_title',
+            'hierarchical' => 0,
+            'parent'       => 0,
+            'exclude_tree' => array(),
+            'number'       => 10,
+        ) );
+
+        echo '<ul class="'.$this->id.'-ul menu nav-menu menu--pages">';
+        foreach ( ( array ) $pages as $p ) {
+            echo '<li id="menu-item-'.esc_attr( $p->ID ).'" class="menu-item menu-item-type--page  menu-item-'.esc_attr( $p->ID ).'"><a href="#"><span class="link-before">'.apply_filters( '', $p->post_title ).'</span></a></li>';
+        }
+        echo '</ul>';
+    }
+
 
     function render(){
         $style = sanitize_text_field( Customify()->get_setting($this->prefix.'_style') );
@@ -247,23 +265,25 @@ class Customify_Builder_Item_Primary_Menu {
 
         $container_classes = $this->id.' '. $this->id.'-__id__ nav-menu-__device__ '.$this->id.'-__device__'.( $style ? ' '.$style : '' );
         echo '<nav  id="site-navigation-__id__-__device__" class="site-navigation '.$container_classes.'">';
-        wp_nav_menu( array(
-            'theme_location' => $this->theme_location,
-            'container' => false,
-            'container_id' => false,
-            'container_class' => false,
-            'menu_id'    =>false,
-            'menu_class'   => $this->id.'-ul menu nav-menu',
-            'fallback_cb' => false,
-            'link_before' => '<span class="link-before">',
-            'link_after' => '</span>',
-        ) );
+           wp_nav_menu(array(
+               'theme_location'  => $this->theme_location,
+               'container'       => false,
+               'container_id'    => false,
+               'container_class' => false,
+               'menu_id'         => false,
+               'menu_class'      => $this->id . '-ul menu nav-menu',
+               'fallback_cb'     => array( $this, 'menu_fallback_cb' ),
+               'link_before'     => '<span class="link-before">',
+               'link_after'      => '</span>',
+           ));
         echo '</nav>';
 
     }
 }
 
 Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu() );
+
+
 
 function customify_add_icon_to_menu( $title, $item, $args, $depth ){
     if ( in_array( 'menu-item-has-children', $item->classes ) ) {
