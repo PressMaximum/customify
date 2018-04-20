@@ -256,6 +256,7 @@ class Customify {
         do_action('customify/load-scripts');
 
         $css_files = apply_filters(  'customify/theme/css', array(
+            'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
             'style' => $this->get_style_uri()
         ) );
 
@@ -273,7 +274,9 @@ class Customify {
 
         foreach( $css_files as $id => $url ) {
             $deps = array();
-            wp_enqueue_style( 'customify-'.$id, $url, $deps, self::$version );
+            if ( $url ) {
+                wp_enqueue_style('customify-' . $id, $url, $deps, self::$version);
+            }
         }
 
         foreach( $js_files as $id => $arg ) {

@@ -177,8 +177,15 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         } );
 
         var url = that.get_google_fonts_url();
+        if ( $( '#customify-google-font-css' ).length <= 0 ) {
+            $( 'head' ).prepend( "<link rel='stylesheet' id='customify-google-font-css'  href='' type='text/css' media='all' />" );
+        }
+
         if ( url ) {
-            css_code = "\r\n@import url('"+url+"');\r\n\r\n"+css_code;
+            //css_code = "\r\n@import url('"+url+"');\r\n\r\n"+css_code;
+            $( '#customify-google-font-css' ).attr( 'href', url );
+        } else {
+            $( '#customify-google-font-css' ).remove();
         }
 
         css_code = css_code.trim();
