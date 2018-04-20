@@ -48,7 +48,7 @@ class Customify_Page_Header
                 'type' => 'select',
                 'label' => __( 'Display on single page', 'customify' ),
                 'description' => __( 'Apply when viewing single page', 'customify' ),
-                'default' => '',
+                'default' => 'titlebar',
                 'choices' => $choices
             ),
             array(
@@ -223,7 +223,11 @@ class Customify_Page_Header
                 'section' =>  $section,
                 'label' => __( 'Display', 'customify' ),
                 'description' => __( 'Settings display for special pages.', 'customify' ),
-                'default' => array(),
+                'default' => array(
+                        'display' => array(
+                            'page' => 'titlebar'
+                        )
+                ),
                 'fields' => array(
                     'tabs' => array(
                         'display' => __( 'Display', 'customify' ),

@@ -49,8 +49,6 @@ global $post;
                 sprintf( esc_html__( 'Continue reading %s', 'customify' ), '<span class="screen-reader-text">' . the_title( '', '', false ) . '</span>' )
             );
 
-			the_title();
-
 			wp_link_pages( array(
 				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'customify' ),
 				'after'  => '</div>',
