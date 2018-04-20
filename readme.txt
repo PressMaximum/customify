@@ -75,6 +75,9 @@ License:  https://www.pexels.com/photo-license/ (http://creativecommons.org/publ
     assets/images/admin/sites_thumbnail.jpg
     https://www.pexels.com/photo/view-of-high-rise-buildings-during-day-time-302769/
 
+    assets/images/default_cover.jpg
+    https://www.pexels.com/photo/architectural-design-architecture-buildings-city-374811/
+
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
 Source: https://necolas.github.io/normalize.css/
