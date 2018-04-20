@@ -363,7 +363,7 @@ class Customify_Customize_Layout_Builder_Frontend {
             if ( $this->id != 'footer' ) {
                 $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
             } else {
-                $classes[] = "customify-col-{$width}_md-{$width}_sm-12";
+                $classes[] = "customify-col-{$width}_md-{$width}_sm-6_xs-12";
             }
 
             if ( $x > 0 ) {
