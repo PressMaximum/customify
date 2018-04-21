@@ -752,7 +752,7 @@ class Customify_Customizer_Auto_CSS
 
         $devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
         foreach ($devices_css as $device => $els) {
-            if (!empty($els) && trim($els)) {
+            if (!empty($els)) {
                 $this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
             }
         }

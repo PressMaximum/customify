@@ -193,8 +193,8 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             $( 'head' ).append( "<style id='customify-style-inline-css' type='text/css'></style>" )
         }
         $( '#customify-style-inline-css' ).html( css_code );
-        $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css' ] );
-        $( document ).trigger( 'after_auto_render_css', [ 'after_auto_render_css' ] );
+        $( document ).trigger( 'header_builder_panel_changed', [ 'auto_render_css', setting_name ] );
+        $( document ).trigger( 'after_auto_render_css', [ 'after_auto_render_css', setting_name ] );
 
     };
 
