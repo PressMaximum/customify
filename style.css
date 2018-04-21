@@ -2962,9 +2962,6 @@ article.comment .comment-post-author {
   text-decoration: underline;
 }
 
-.page-titlebar, .page-cover {
-  word-break: break-all;
-}
 .page-titlebar .customize-partial-edit-shortcut button, .page-cover .customize-partial-edit-shortcut button {
   left: 0px;
 }
@@ -4718,8 +4715,8 @@ body.menu_sidebar_dropdown:before {
 
 .customify-container {
   position: relative;
-  padding-left: 25px;
-  padding-right: 25px;
+  padding-left: 30px;
+  padding-right: 30px;
 }
 .customify-container:before, .customify-container:after {
   content: "";

@@ -49,8 +49,8 @@
 
 .customify-container {
     position: relative;
-    padding-left: 25px;
-    padding-right: 25px;
+    padding-left: 30px;
+    padding-right: 30px;
     @include clearfix;
     @include mq(max-sm) {
         padding-left: 20px;
