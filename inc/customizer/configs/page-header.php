@@ -283,6 +283,18 @@ class Customify_Page_Header
                 'render_callback' => $render_cb_el,
             ),
 
+            array(
+                'name' => $name.'_show_archive_prefix',
+                'type' => 'checkbox',
+                'section' => $section,
+                'title'  => __( 'Archive Prefix', 'customify' ),
+                'description'  => __( 'Enable/Disable archive prefix on category, date,...', 'customify' ),
+                'checkbox_label'  => __( 'Enable', 'customify' ),
+                'default' => 1,
+                'selector' => '#page-titlebar, #page-cover',
+                'render_callback' => $render_cb_el,
+            ),
+
         );
 
         $configs = array_merge( $configs, $config );
