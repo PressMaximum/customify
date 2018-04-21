@@ -9,7 +9,19 @@
 
 get_header(); ?>
     <div class="content-inner">
-        <?php
+        <?php if ( customify_is_post_title_display() ) {
+
+            $args = Customify_Page_Header::get_instance()->get_settings();
+
+            ?>
+            <header class="blog-posts-heading blog-search-heading">
+                <?php
+                // WPCS: XSS ok.
+                echo '<h1 class="page-title">'.$args['title'].'</h1>';
+               ?>
+            </header><!-- .entry-header -->
+            <?php
+        }
         if ( have_posts() ){
             while ( have_posts() ) {
                 the_post();

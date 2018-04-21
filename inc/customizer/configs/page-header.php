@@ -913,6 +913,9 @@ class Customify_Page_Header
 
         }
 
+        if ( ! $args['display'] ) {
+            $args['display'] = 'default';
+        }
 
         self::$_settings = $args;
         return $args;
