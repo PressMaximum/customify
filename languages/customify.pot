@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.1\n"
+"Project-Id-Version: Customify 0.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-19 02:52:29+00:00\n"
+"POT-Creation-Date: 2018-04-23 09:30:29+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -93,7 +93,7 @@ msgstr ""
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:114 inc/customizer/configs/page-header.php:302
+#: inc/admin/dashboard.php:114 inc/customizer/configs/page-header.php:319
 msgid "Titlebar Settings"
 msgstr ""
 
@@ -124,57 +124,56 @@ msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
 #: inc/admin/dashboard.php:160
-msgid "Recommend Customify Site Library"
+msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:162
+#: inc/admin/dashboard.php:165
 msgid ""
-"<strong>Customify Site Library</strong> is an add-on for the Customify "
-"WordPress Theme which help you browse and import your favorite site with "
-"few clicks."
-msgstr ""
-
-#: inc/admin/dashboard.php:191
-msgid "View Site Library"
+"<strong>Customify Sites</strong> is an free add-on for the Customify theme "
+"which help you browse and import ready made websites with few clicks."
 msgstr ""
 
 #: inc/admin/dashboard.php:194
+msgid "View Site Library"
+msgstr ""
+
+#: inc/admin/dashboard.php:197
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:216
+#: inc/admin/dashboard.php:219
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:233
+#: inc/admin/dashboard.php:236
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:269
+#: inc/admin/dashboard.php:272
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:273
+#: inc/admin/dashboard.php:276
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:277
+#: inc/admin/dashboard.php:280
 msgid "Header Footer Builder Items"
 msgstr ""
 
-#: inc/admin/dashboard.php:281
+#: inc/admin/dashboard.php:284
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:285
+#: inc/admin/dashboard.php:288
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:292
+#: inc/admin/dashboard.php:295
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:298
+#: inc/admin/dashboard.php:301
 msgid "Learn more &rarr;"
 msgstr ""
 
@@ -198,7 +197,7 @@ msgid "Continue reading %s"
 msgstr ""
 
 #: inc/blog/functions-posts-layout.php:19
-#: inc/customizer/configs/page-header.php:801
+#: inc/customizer/configs/page-header.php:836
 #. translators: 1: Search query name
 msgid "Search Results for: %s"
 msgstr ""
@@ -213,8 +212,8 @@ msgstr ""
 
 #: inc/class-customify.php:175 inc/class-customify.php:184
 #: inc/class-customify.php:196
-#: inc/compatibility/woocommerce/woocommerce.php:231
-#: inc/compatibility/woocommerce/woocommerce.php:240
+#: inc/compatibility/woocommerce/woocommerce.php:260
+#: inc/compatibility/woocommerce/woocommerce.php:269
 msgid "Add widgets here."
 msgstr ""
 
@@ -244,7 +243,7 @@ msgstr ""
 msgid "Content Layout"
 msgstr ""
 
-#: inc/class-metabox.php:171 inc/compatibility/woocommerce/woocommerce.php:220
+#: inc/class-metabox.php:171 inc/compatibility/woocommerce/woocommerce.php:249
 #: inc/customizer/class-customizer.php:343
 #: inc/customizer/class-customizer.php:354
 #: inc/customizer/class-customizer.php:366
@@ -255,13 +254,13 @@ msgstr ""
 #: inc/customizer/class-customizer.php:526
 #: inc/customizer/class-customizer.php:621
 #: inc/customizer/configs/header/social-icons.php:226
-#: inc/customizer/configs/page-header.php:38
-#: inc/customizer/configs/page-header.php:241
-#: inc/customizer/configs/page-header.php:252
-#: inc/customizer/configs/page-header.php:463
-#: inc/customizer/configs/page-header.php:481
-#: inc/customizer/configs/page-header.php:502
-#: inc/customizer/configs/page-header.php:520
+#: inc/customizer/configs/page-header.php:36
+#: inc/customizer/configs/page-header.php:245
+#: inc/customizer/configs/page-header.php:256
+#: inc/customizer/configs/page-header.php:492
+#: inc/customizer/configs/page-header.php:510
+#: inc/customizer/configs/page-header.php:531
+#: inc/customizer/configs/page-header.php:549
 #: inc/customizer/controls/class-control-base.php:211
 msgid "Default"
 msgstr ""
@@ -301,17 +300,17 @@ msgid "Page Header Display"
 msgstr ""
 
 #: inc/class-metabox.php:208 inc/customizer/class-customizer.php:454
-#: inc/customizer/configs/page-header.php:39
-#: inc/customizer/configs/page-header.php:465
+#: inc/customizer/configs/page-header.php:37
+#: inc/customizer/configs/page-header.php:494
 msgid "Cover"
 msgstr ""
 
-#: inc/class-metabox.php:209 inc/customizer/configs/page-header.php:40
+#: inc/class-metabox.php:209 inc/customizer/configs/page-header.php:38
 msgid "Titlebar"
 msgstr ""
 
 #: inc/class-metabox.php:210 inc/class-metabox.php:227
-#: inc/customizer/configs/page-header.php:41
+#: inc/customizer/configs/page-header.php:39
 msgid "Hide"
 msgstr ""
 
@@ -398,13 +397,13 @@ msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:159
 #: inc/compatibility/breadcrumb-navxt.php:164
-#: inc/customizer/configs/page-header.php:224
-#: inc/customizer/configs/page-header.php:229
+#: inc/customizer/configs/page-header.php:222
+#: inc/customizer/configs/page-header.php:233
 msgid "Display"
 msgstr ""
 
 #: inc/compatibility/breadcrumb-navxt.php:160
-#: inc/customizer/configs/page-header.php:225
+#: inc/customizer/configs/page-header.php:223
 msgid "Settings display for special pages."
 msgstr ""
 
@@ -416,23 +415,23 @@ msgstr ""
 msgid "Styling for breadcrumb"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:173
+#: inc/compatibility/woocommerce/woocommerce.php:202
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:181
+#: inc/compatibility/woocommerce/woocommerce.php:210
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:218
+#: inc/compatibility/woocommerce/woocommerce.php:247
 msgid "Single Product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:229
+#: inc/compatibility/woocommerce/woocommerce.php:258
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:238
+#: inc/compatibility/woocommerce/woocommerce.php:267
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -558,7 +557,7 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:400
 #: inc/customizer/class-customizer.php:596
-#: inc/customizer/configs/styling.php:123
+#: inc/customizer/configs/styling.php:118
 msgid "Link Color"
 msgstr ""
 
@@ -585,99 +584,99 @@ msgid "Background Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:445
-#: inc/customizer/configs/page-header.php:455
+#: inc/customizer/configs/page-header.php:484
 msgid "Background Image"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:453
-#: inc/customizer/configs/page-header.php:464
+#: inc/customizer/configs/page-header.php:493
 #: inc/customizer/controls/class-control-css-ruler.php:21
 msgid "Auto"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:455
-#: inc/customizer/configs/page-header.php:466
+#: inc/customizer/configs/page-header.php:495
 msgid "Contain"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:458
 #: inc/customizer/configs/header/social-icons.php:98
-#: inc/customizer/configs/page-header.php:469
+#: inc/customizer/configs/page-header.php:498
 msgid "Size"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:465
-#: inc/customizer/configs/page-header.php:477
+#: inc/customizer/configs/page-header.php:506
 msgid "Position"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:470
-#: inc/customizer/configs/page-header.php:482
+#: inc/customizer/configs/page-header.php:511
 msgid "Center"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:471
-#: inc/customizer/configs/page-header.php:483
+#: inc/customizer/configs/page-header.php:512
 msgid "Top Left"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:472
-#: inc/customizer/configs/page-header.php:484
+#: inc/customizer/configs/page-header.php:513
 msgid "Top Right"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:473
-#: inc/customizer/configs/page-header.php:485
+#: inc/customizer/configs/page-header.php:514
 msgid "Top Center"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:474
-#: inc/customizer/configs/page-header.php:486
+#: inc/customizer/configs/page-header.php:515
 msgid "Bottom Left"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:475
-#: inc/customizer/configs/page-header.php:487
+#: inc/customizer/configs/page-header.php:516
 msgid "Bottom Center"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:476
-#: inc/customizer/configs/page-header.php:488
+#: inc/customizer/configs/page-header.php:517
 msgid "Bottom Right"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:483
-#: inc/customizer/configs/page-header.php:496
+#: inc/customizer/configs/page-header.php:525
 msgid "Repeat"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:490
-#: inc/customizer/configs/page-header.php:503
+#: inc/customizer/configs/page-header.php:532
 msgid "No repeat"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:491
-#: inc/customizer/configs/page-header.php:504
+#: inc/customizer/configs/page-header.php:533
 msgid "Repeat horizontal"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:492
-#: inc/customizer/configs/page-header.php:505
+#: inc/customizer/configs/page-header.php:534
 msgid "Repeat vertical"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:500
-#: inc/customizer/configs/page-header.php:514
+#: inc/customizer/configs/page-header.php:543
 msgid "Attachment"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:507
-#: inc/customizer/configs/page-header.php:521
+#: inc/customizer/configs/page-header.php:550
 msgid "Scroll"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:508
-#: inc/customizer/configs/page-header.php:522
+#: inc/customizer/configs/page-header.php:551
 msgid "Fixed"
 msgstr ""
 
@@ -744,7 +743,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:557
 #: inc/customizer/class-customizer.php:648
 #: inc/customizer/configs/header/social-icons.php:256
-#: inc/customizer/configs/styling.php:159
+#: inc/customizer/configs/styling.php:152
 msgid "Border Color"
 msgstr ""
 
@@ -827,7 +826,7 @@ msgstr ""
 
 #: inc/customizer/configs/blogs.php:181
 #: inc/customizer/configs/header/social-icons.php:52
-#: inc/customizer/configs/page-header.php:272
+#: inc/customizer/configs/page-header.php:276
 msgid "Title"
 msgstr ""
 
@@ -967,7 +966,7 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:204
-#: inc/customizer/configs/styling.php:261
+#: inc/customizer/configs/styling.php:255
 msgid "Widget Title Color"
 msgstr ""
 
@@ -1609,259 +1608,278 @@ msgstr ""
 msgid "404 Page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:49
+#: inc/customizer/configs/page-header.php:47
 msgid "Display on single page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:50
+#: inc/customizer/configs/page-header.php:48
 msgid "Apply when viewing single page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:57
+#: inc/customizer/configs/page-header.php:55
 msgid "Display on single post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:58
-#: inc/customizer/configs/page-header.php:126
-#: inc/customizer/configs/page-header.php:150
+#: inc/customizer/configs/page-header.php:56
+#: inc/customizer/configs/page-header.php:124
+#: inc/customizer/configs/page-header.php:148
 msgid "Apply when viewing single post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:66
+#: inc/customizer/configs/page-header.php:64
 msgid "Display on categories"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:67
+#: inc/customizer/configs/page-header.php:65
 msgid "Apply when viewing a category page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:74
+#: inc/customizer/configs/page-header.php:72
 msgid "Display on index"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:75
-#: inc/customizer/configs/page-header.php:119
-#: inc/customizer/configs/page-header.php:143
+#: inc/customizer/configs/page-header.php:73
+#: inc/customizer/configs/page-header.php:117
+#: inc/customizer/configs/page-header.php:141
 msgid "Apply when your homepage displays as latest posts"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:82
+#: inc/customizer/configs/page-header.php:80
 msgid "Display on search"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:83
+#: inc/customizer/configs/page-header.php:81
 msgid "Apply when viewing search results page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:90
+#: inc/customizer/configs/page-header.php:88
 msgid "Display on archive"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:91
+#: inc/customizer/configs/page-header.php:89
 msgid ""
 "Apply when viewing archive pages, e.g. Tag, Author, Date, Custom Post Type "
 "or Custom Taxonomy"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:98
+#: inc/customizer/configs/page-header.php:96
 msgid "Display on singular"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:99
+#: inc/customizer/configs/page-header.php:97
 msgid "Apply when viewing single custom post type"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:106
+#: inc/customizer/configs/page-header.php:104
 msgid "Display on 404 page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:107
-#: inc/customizer/configs/page-header.php:133
-#: inc/customizer/configs/page-header.php:157
+#: inc/customizer/configs/page-header.php:105
+#: inc/customizer/configs/page-header.php:131
+#: inc/customizer/configs/page-header.php:155
 msgid "Apply when the page not found"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:118
+#: inc/customizer/configs/page-header.php:116
 msgid "Title for index page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:125
+#: inc/customizer/configs/page-header.php:123
 msgid "Title for single post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:132
+#: inc/customizer/configs/page-header.php:130
 msgid "Title for 404 page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:142
+#: inc/customizer/configs/page-header.php:140
 msgid "Tagline for index page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:149
+#: inc/customizer/configs/page-header.php:147
 msgid "Tagline for single post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:156
+#: inc/customizer/configs/page-header.php:154
 msgid "Tagline for 404 page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:166
+#: inc/customizer/configs/page-header.php:164
 msgid "Display on product page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:167
-#: inc/customizer/configs/page-header.php:192
-#: inc/customizer/configs/page-header.php:200
+#: inc/customizer/configs/page-header.php:165
+#: inc/customizer/configs/page-header.php:190
+#: inc/customizer/configs/page-header.php:198
 msgid "Apply when viewing single product"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:174
+#: inc/customizer/configs/page-header.php:172
 msgid "Display on product category"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:175
+#: inc/customizer/configs/page-header.php:173
 msgid "Apply when viewing product category"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:182
+#: inc/customizer/configs/page-header.php:180
 msgid "Display on product tag"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:183
+#: inc/customizer/configs/page-header.php:181
 msgid "Apply when viewing product tag"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:191
+#: inc/customizer/configs/page-header.php:189
 msgid "Title for product"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:199
+#: inc/customizer/configs/page-header.php:197
 msgid "Tagline fo product"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:210
+#: inc/customizer/configs/page-header.php:208
 msgid "Page Header"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:217
+#: inc/customizer/configs/page-header.php:215
 msgid "Display Settings"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:230
+#: inc/customizer/configs/page-header.php:234
 msgid "Advanced"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:237
+#: inc/customizer/configs/page-header.php:241
 msgid "Single Post Cover Background"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:238
+#: inc/customizer/configs/page-header.php:242
 msgid "Apply when viewing single post and page header display as cover."
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:242
+#: inc/customizer/configs/page-header.php:246
 msgid "Use featured image form bog page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:243
+#: inc/customizer/configs/page-header.php:247
 msgid "Use featured image of current post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:249
+#: inc/customizer/configs/page-header.php:253
 msgid "Single Post Title & Tagline"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:253
+#: inc/customizer/configs/page-header.php:257
 msgid "Use title & tagline form bog page"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:254
+#: inc/customizer/configs/page-header.php:258
 msgid "Use title & tagline of current post"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:267
+#: inc/customizer/configs/page-header.php:271
 msgid "Title & Tagline"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:268
+#: inc/customizer/configs/page-header.php:272
 msgid "Title & tagline for special pages."
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:273
+#: inc/customizer/configs/page-header.php:277
 #: inc/customizer/configs/typography.php:70
 msgid "Tagline"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:309
-#: inc/customizer/configs/page-header.php:434
+#: inc/customizer/configs/page-header.php:290
+msgid "Archive Prefix"
+msgstr ""
+
+#: inc/customizer/configs/page-header.php:291
+msgid "Enable or disable archive prefix on category, date, tag page."
+msgstr ""
+
+#: inc/customizer/configs/page-header.php:292
+#: inc/customizer/configs/page-header.php:328
+#: inc/customizer/configs/page-header.php:455
+msgid "Enable"
+msgstr ""
+
+#: inc/customizer/configs/page-header.php:326
+#: inc/customizer/configs/page-header.php:453
 msgid "Show Tagline"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:319
+#: inc/customizer/configs/page-header.php:327
+#: inc/customizer/configs/page-header.php:454
+msgid "Tagline is pull from post excerpt, archive description."
+msgstr ""
+
+#: inc/customizer/configs/page-header.php:338
 msgid "Title Typography"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:328
+#: inc/customizer/configs/page-header.php:347
 msgid "Tagline Typography"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:337
+#: inc/customizer/configs/page-header.php:356
 msgid "Titlebar Styling"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:360
+#: inc/customizer/configs/page-header.php:379
 msgid "Titlebar Title Styling"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:381
+#: inc/customizer/configs/page-header.php:400
 msgid "Titlebar Tagline Styling"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:405
+#: inc/customizer/configs/page-header.php:424
 msgid "Text Align"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:427
+#: inc/customizer/configs/page-header.php:446
 msgid "Cover Settings"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:444
+#: inc/customizer/configs/page-header.php:465
 msgid "Cover Background"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:535
+#: inc/customizer/configs/page-header.php:564
 msgid "Cover Overlay"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:548
+#: inc/customizer/configs/page-header.php:577
 msgid "Cover Title Styling"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:571
+#: inc/customizer/configs/page-header.php:600
 msgid "Cover Tagline Styling"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:597
+#: inc/customizer/configs/page-header.php:626
 msgid "Cover Title Typography"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:607
+#: inc/customizer/configs/page-header.php:636
 msgid "Cover Tagline Typography"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:616
+#: inc/customizer/configs/page-header.php:645
 msgid "Cover Height"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:632
+#: inc/customizer/configs/page-header.php:667
 msgid "Cover Margin Top"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:644
+#: inc/customizer/configs/page-header.php:679
 msgid "Cover Text Align"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:794
+#: inc/customizer/configs/page-header.php:829
 msgid "Oops! That page can't be found."
 msgstr ""
 
@@ -1873,43 +1891,39 @@ msgstr ""
 msgid "Primary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:64
-msgid "Secondary Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:73
+#: inc/customizer/configs/styling.php:69
 msgid "Text Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:134
+#: inc/customizer/configs/styling.php:136
 msgid "Link Color Hover"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:234
+#: inc/customizer/configs/styling.php:227
 msgid "Meta Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:252
+#: inc/customizer/configs/styling.php:246
 msgid "Heading Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:271
+#: inc/customizer/configs/styling.php:265
 msgid "Sidebar Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:278
+#: inc/customizer/configs/styling.php:272
 msgid "Primary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:300
+#: inc/customizer/configs/styling.php:294
 msgid "Secondary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:323
+#: inc/customizer/configs/styling.php:317
 msgid "Footer Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:330
+#: inc/customizer/configs/styling.php:324
 msgid "Footer Widgets Title"
 msgstr ""
 
@@ -2231,7 +2245,7 @@ msgid ""
 "searching can help."
 msgstr ""
 
-#: template-parts/content-page.php:24 template-parts/content.php:55
+#: template-parts/content-page.php:24 template-parts/content.php:53
 msgid "Pages:"
 msgstr ""
 
@@ -2323,6 +2337,21 @@ msgstr ""
 #: inc/customizer/controls/class-control-base.php:213
 msgctxt "customify-font-weight"
 msgid "Bold"
+msgstr ""
+
+#: inc/template-functions.php:266
+msgctxt "yearly archives date format"
+msgid "Y"
+msgstr ""
+
+#: inc/template-functions.php:268
+msgctxt "monthly archives date format"
+msgid "F Y"
+msgstr ""
+
+#: inc/template-functions.php:270
+msgctxt "daily archives date format"
+msgid "F j, Y"
 msgstr ""
 
 #: inc/template-tags.php:29
