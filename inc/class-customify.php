@@ -260,6 +260,13 @@ class Customify {
             'style' => $this->get_style_uri()
         ) );
 
+        if ( isset( $css_files['style'] ) ) {
+            // move style file to the bottom
+            $url = $css_files['style'] ;
+            unset( $css_files['style'] );
+            $css_files['style']  = $url;
+        }
+
         $js_files = apply_filters(  'customify/theme/js', array(
             'jquery.fitvids.js' => array(
                 'url' => get_template_directory_uri() . '/assets/js/jquery.fitvids'.$suffix.'.js',

@@ -41,8 +41,27 @@ class Customify_WC {
              */
             add_action( 'wp', array( $this, 'wp' ) );
 
+            // Custom styling
+            add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
         }
     }
+
+    function styling_primary( $selector ){
+        $selector .= ' .woocommerce  #respond input#submit, 
+        .woocommerce  a.button, 
+        .woocommerce  button.button, 
+        .woocommerce  input.button,
+        .woocommerce #respond input#submit:hover, 
+        .woocommerce  a.button:hover, 
+        .woocommerce  button.button:hover, 
+        .woocommerce  input.button:hover {
+            background-color: {{value}};
+        }';
+
+        return $selector;
+    }
+
+
 
     function wp(){
         remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar' );

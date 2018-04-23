@@ -926,6 +926,9 @@ class Customify_Customizer_Auto_CSS
         if ($url) {
            // $css_code = "\r\n@import url('{$url}');\r\n\r\n" . $css_code;
         }
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            return $css_code;
+        }
 
         return $this->min_css($css_code);
     }
