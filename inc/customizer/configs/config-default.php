@@ -113,7 +113,18 @@ function customify_layout_builder_config_default($val, $name)
 
                 ),
             'header_sidebar_animate' => 'menu_sidebar_dropdown',
-            'header_logo_desc'       => 'no',
+            'header_nav-icon_align' =>
+                array (
+                    'desktop' => 'right',
+                    'tablet' => 'right',
+                    'mobile' => 'right',
+                ),
+            'header_primary-menu_align' =>
+                array (
+                    'desktop' => 'right',
+                    'tablet' => '',
+                    'mobile' => '',
+                ),
             'footer_builder_panel'   =>
                 array(
                     'desktop' =>
