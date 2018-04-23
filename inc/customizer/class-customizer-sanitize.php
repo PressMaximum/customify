@@ -156,7 +156,7 @@ class Customify_Sanitize_Input
             if ($html) {
                 $value = wp_kses_post($value);
             } else {
-                $value = sanitize_text_field($value);
+                $value = wp_kses_post($value);
             }
         } else {
             if (is_array($value)) {
