@@ -244,9 +244,16 @@ class Customify_Builder_Item_Primary_Menu {
             'number'       => 10,
         ) );
 
+
+
         echo '<ul class="'.$this->id.'-ul menu nav-menu menu--pages">';
         foreach ( ( array ) $pages as $p ) {
-            echo '<li id="menu-item-'.esc_attr( $p->ID ).'" class="menu-item menu-item-type--page  menu-item-'.esc_attr( $p->ID ).'"><a href="#"><span class="link-before">'.apply_filters( '', $p->post_title ).'</span></a></li>';
+            $class = '';
+            if( is_page( $p ) ) {
+                $class = 'current-menu-item';
+            }
+
+            echo '<li id="menu-item-'.esc_attr( $p->ID ).'" class="menu-item menu-item-type--page  menu-item-'.esc_attr( $p->ID.' '.$class ).'"><a href="'.esc_url( get_the_permalink( $p ) ).'"><span class="link-before">'.apply_filters( '', $p->post_title ).'</span></a></li>';
         }
         echo '</ul>';
     }
