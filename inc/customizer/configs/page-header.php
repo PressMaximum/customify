@@ -997,7 +997,7 @@ class Customify_Page_Header {
             <div class="page-titlebar-inner customify-container">
 				<?php
 				// WPCS: XSS ok.
-				echo '<' . $args['title_tag'] . ' class="titlebar-title h3">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
 				if ( $args['titlebar_tagline'] ) {
 					if ( $args['tagline'] ) {
 						// WPCS: XSS ok.
