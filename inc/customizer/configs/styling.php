@@ -32,7 +32,9 @@ article.comment .comment-time:hover,
 article.comment .comment-author a:hover,
 article.comment .comment-post-author,
 #respond #cancel-comment-reply-link,
-.posts-layout .readmore-button:hover
+.posts-layout .readmore-button:hover,
+.entry-meta a:hover,
+.posts-layout .entry-title a:hover
 {
     color: {{value}};
 }
@@ -90,7 +92,6 @@ textarea,
 article.comment .comment-author a,
 .header-search-form .search-submit,
 .header-search-form .search-submit:hover,
-.entry-meta a,
 .posts-layout .entry-title,
 .nav-links .nav-previous a, .nav-links .nav-next a,
 .nav-links .nav-previous a > span, .nav-links .nav-next a > span,
@@ -115,9 +116,7 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/link-color', 'a, 
-                .entry-meta a:hover, 
-                .posts-layout .entry-title a:hover, 
+                'css_format' => apply_filters( 'customify/styling/link-color', 'a,
                 .nav-links .nav-previous a:hover,
                 .nav-menu-desktop .menu li.current-menu-item > a,
                 .nav-links .nav-next a:hover  {
@@ -229,6 +228,7 @@ blockquote {
                 'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
 article.comment .comment-time,
 .entry-meta,
+.entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .widget-area .widget a,

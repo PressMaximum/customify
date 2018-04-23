@@ -907,7 +907,6 @@ class Customify_Customizer_Auto_CSS
             return self::$code;
         }
         $config_fields = Customify()->customizer->get_config();
-        //$control_settings = $partial->component->manager->get_control($partial->id);
         $this->loop_fields($config_fields);
         $css_code = '';
         $i = 0;
@@ -920,12 +919,8 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
-
         $url = $this->get_google_fonts_url();
         self::$font_url = $url;
-        if ($url) {
-           // $css_code = "\r\n@import url('{$url}');\r\n\r\n" . $css_code;
-        }
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
             return $css_code;
         }

@@ -3178,7 +3178,7 @@ article.comment .comment-post-author {
 .nav-menu-desktop .menu li a {
   display: inline-block;
   color: inherit;
-  transition: all 0.3s ease-out;
+  transition: all 0.14s ease-out;
   text-decoration-color: currentColor;
 }
 .nav-menu-desktop .menu li a:hover {
@@ -4889,7 +4889,7 @@ body.menu_sidebar_dropdown:before {
   font-size: 85%;
 }
 .entry-meta a {
-  color: #444444;
+  color: #6d6d6d;
 }
 .entry-meta a:hover {
   color: #007ee5;
@@ -4987,10 +4987,10 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
   line-height: 1;
   border: 1px solid #cccccc;
-  color: currentColor;
+  color: #6d6d6d;
   border-radius: 2px;
   cursor: pointer;
-  padding: 9px 18px;
+  padding: 8px 16px;
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.3px;
