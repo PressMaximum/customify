@@ -26,7 +26,8 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Primary Color', 'customify'),
-                'css_format' => 'article.comment .comment-reply a:hover,
+                'css_format' => apply_filters('customify/styling/primary-color',
+'article.comment .comment-reply a:hover,
 article.comment .comment-time:hover,
 article.comment .comment-author a:hover,
 article.comment .comment-post-author,
@@ -55,7 +56,7 @@ article.comment .comment-post-author,
 .posts-layout .readmore-button:hover
 {
     border-color: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -64,7 +65,7 @@ article.comment .comment-post-author,
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Text Color', 'customify'),
-                'css_format' => 'body,
+                'css_format' => apply_filters('customify/styling/text-color', 'body,
 button,
 input,
 select,
@@ -105,7 +106,7 @@ abbr, acronym {
 }
 .posts-layout .entry-media .entry-meta {
     background: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -114,7 +115,7 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color', 'customify'),
-                'css_format' => 'a, 
+                'css_format' => apply_filters( 'customify/styling/link-color', 'a, 
                 .entry-meta a:hover, 
                 .posts-layout .entry-title a:hover, 
                 .nav-links .nav-previous a:hover,
@@ -125,7 +126,7 @@ abbr, acronym {
 				.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
 				.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
 					background: {{value}};
-				}',
+				}' ),
                 'selector' => 'format',
             ),
 
@@ -134,14 +135,14 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color Hover', 'customify'),
-                'css_format' => 'a:hover,
+                'css_format' => apply_filters( 'customify/styling/link-color-hover', 'a:hover,
 .site-branding a:hover,
 .nav-menu-desktop .menu li a:hover,
 .widget-area .widget a:hover,
 .search .content-area .entry-title a:hover
 {
     color: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -150,7 +151,7 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Border Color', 'customify'),
-                'css_format' => '
+                'css_format' => apply_filters( 'customify/styling/color-border', '
 h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
 .comments-area, .page-breadcrumb{
     border-top-color: {{value}};
@@ -216,7 +217,7 @@ blockquote {
         border-right-color: {{value}};
     }
 }
-',
+' ),
                 'selector' => 'format',
             ),
 
@@ -225,7 +226,7 @@ blockquote {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Meta Color', 'customify'),
-                'css_format' => 'article.comment .comment-reply a,
+                'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
 article.comment .comment-time,
 .entry-meta,
 .pagination .nav-links > *,
@@ -234,7 +235,7 @@ article.comment .comment-time,
 .page-breadcrumb, .page-breadcrumb-list li a
 {
     color: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -243,7 +244,7 @@ article.comment .comment-time,
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Heading Color', 'customify'),
-                'css_format' => 'h1, h2, h3, h4, h5, h6 { color: {{value}};}',
+                'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
                 'selector' => 'format',
             ),
 
