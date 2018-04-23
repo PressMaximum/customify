@@ -310,8 +310,9 @@ class Customify_Breadcrumb {
         }
         $list = bcn_display_list(true);
         if ( $list ) {
+            $pos = sanitize_text_field( Customify()->get_setting( 'breadcrumb_display_pos' ) );
             ?>
-            <div id="page-breadcrumb" class="page-breadcrumb">
+            <div id="page-breadcrumb" class="page-breadcrumb breadcrumb--<?php echo esc_attr( $pos ); ?>">
                 <div class="page-breadcrumb-inner customify-container">
                     <ul class="page-breadcrumb-list">
                         <?php
