@@ -30,7 +30,8 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 article.comment .comment-time:hover,
 article.comment .comment-author a:hover,
 article.comment .comment-post-author,
-#respond #cancel-comment-reply-link
+#respond #cancel-comment-reply-link,
+.posts-layout .readmore-button:hover
 {
     color: {{value}};
 }
@@ -42,7 +43,7 @@ input[type="submit"],
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
 .entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.posts-layout .readmore-button
+.customify-builder-btn
 {
     background-color: {{value}};
 }
@@ -50,19 +51,11 @@ article.comment .comment-post-author,
 #respond #cancel-comment-reply-link,
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover
+.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
+.posts-layout .readmore-button:hover
 {
     border-color: {{value}};
 }',
-                'selector' => 'format',
-            ),
-
-            array(
-                'name' => "{$section}_color_secondary",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Secondary Color', 'customify'),
-                'css_format' => '.customify-builder-btn, .posts-layout .readmore-button:hover {background: {{value}};}',
                 'selector' => 'format',
             ),
 
@@ -121,9 +114,18 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color', 'customify'),
-                'css_format' => 'a, .entry-meta a:hover, .posts-layout .entry-title a:hover, .nav-links .nav-previous a:hover, .nav-links .nav-next a:hover  {
-    color: {{value}};
-}',
+                'css_format' => 'a, 
+                .entry-meta a:hover, 
+                .posts-layout .entry-title a:hover, 
+                .nav-links .nav-previous a:hover,
+                .nav-menu-desktop .menu li.current-menu-item > a,
+                .nav-links .nav-next a:hover  {
+                    color: {{value}};
+				}
+				.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+				.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
+					background: {{value}};
+				}',
                 'selector' => 'format',
             ),
 
@@ -135,19 +137,10 @@ abbr, acronym {
                 'css_format' => 'a:hover,
 .site-branding a:hover,
 .nav-menu-desktop .menu li a:hover,
-.nav-menu-desktop .menu li.current-menu-item > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
 .widget-area .widget a:hover,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
 .search .content-area .entry-title a:hover
 {
     color: {{value}};
-}
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover{
-    background: {{value}};
 }',
                 'selector' => 'format',
             ),

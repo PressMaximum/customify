@@ -7,13 +7,13 @@ $gl-devices-list: (
 */
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
-  background-color: #7b8994;
+  background-color: #007ee5;
   color: #FFFFFF;
   border-radius: 2px;
   font-weight: 600;
 }
 .woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
-  background-color: #7b8994;
+  background-color: #007ee5;
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
   color: #FFF;
 }

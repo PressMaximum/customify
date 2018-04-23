@@ -177,14 +177,14 @@ $submenu_width: 14em;
                       vertical-align: middle;
                       align-items: center;
                       &:hover {
-                          color: lighten( $color_link_hover, 50% );
-                          background-color: $color_link_hover;
+                          color: #FFFFFF;
+                          background-color: $color_link;
                       }
                   }
                  &.current-menu-item, &.current-menu-ancestor {
                      > a {
-                         color: lighten( $color_link_hover, 50% );
-                         background-color: $color_link_hover;
+                         color: #ffffff;
+                         background-color: $color_link;
                      }
                  }
              }

@@ -20,9 +20,9 @@
 
 /* Shop Alt Button */
 .woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
-    background-color: $color_secondary;
+    background-color: $color_primary;
     &:hover {
-        background-color: $color_secondary;
+        background-color: $color_primary;
         box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
     }
 }
