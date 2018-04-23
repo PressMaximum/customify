@@ -34,6 +34,7 @@ function customify_customize_render_header() {
 		return;
 	}
 	echo Customify_Customize_Layout_Builder_Frontend()->close_icon( ' close-panel close-sidebar-panel' );
+    do_action( 'customizer/render_header/before' );
 	echo '<header id="masthead" class="site-header">';
         echo '<div id="masthead-inner" class="site-header-inner">';
             $list_items = Customify_Customize_Layout_Builder()->get_builder_items( 'header' );

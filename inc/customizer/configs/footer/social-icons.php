@@ -8,7 +8,7 @@ class Customify_Builder_Footer_Item_Social_Icons extends  Customify_Builder_Item
 
     function __construct()
     {
-        $this->id = 'social-icons';
+        $this->id = 'footer-social-icons';
         $this->section = 'footer_social_icons';
         $this->class = 'footer-social-icons';
         $this->panel = 'footer_settings';

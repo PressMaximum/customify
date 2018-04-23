@@ -28,7 +28,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 		        'title' => __('Body & Paragraph', 'customify'),
 		        'description' => __('Apply for site paragraph.', 'customify'),
 		        'css_format' => 'typography',
-		        'selector' => 'body, p',
+		        'selector' => 'body, p, button, input, select, optgroup, textarea',
 	        ),
 
             array(

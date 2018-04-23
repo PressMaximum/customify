@@ -69,6 +69,15 @@ License: MIT License - http://opensource.org/licenses/mit-license.html
 License: SIL Open Font License, version 1.1.
 Source: https://fontawesome.com/v4.7.0/license/
 
+Customify Sites Thumbnail Image from Pexels
+License:  https://www.pexels.com/photo-license/ (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
+
+    assets/images/admin/sites_thumbnail.jpg
+    https://www.pexels.com/photo/view-of-high-rise-buildings-during-day-time-302769/
+
+    assets/images/default_cover.jpg
+    https://www.pexels.com/photo/architectural-design-architecture-buildings-city-374811/
+
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
 Source: https://necolas.github.io/normalize.css/
@@ -84,3 +93,4 @@ Source: http://css-tricks.com + Dave Rupert - http://daverupert.com - https://gi
 WP Color Picker Alpha, Copyright kallookoo
 Licensed under the GPLv2 license.
 Source: https://github.com/kallookoo/wp-color-picker-alpha
+

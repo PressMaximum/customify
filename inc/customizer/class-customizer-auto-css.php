@@ -6,6 +6,9 @@ class Customify_Customizer_Auto_CSS
     private $fonts = array();
     private $variants = array();
     private $subsets = array();
+
+    static $code = null;
+    static $font_url = null;
     /**
      * CSS device query settings
      * @var array
@@ -45,6 +48,7 @@ class Customify_Customizer_Auto_CSS
     {
         if (is_null(self::$_instance)) {
             self::$_instance = new self();
+            self::$code = self::$_instance->auto_css();
         }
         return self::$_instance;
     }
@@ -748,7 +752,7 @@ class Customify_Customizer_Auto_CSS
 
         $devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
         foreach ($devices_css as $device => $els) {
-            if (!empty($els) && trim($els)) {
+            if (!empty($els)) {
                 $this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
             }
         }
@@ -873,10 +877,36 @@ class Customify_Customizer_Auto_CSS
 
     }
 
+    function get_font_url(){
+        return self::$font_url;
+    }
+
+    function min_css( $css ){
+        if ( trim( $css ) == "" ) {
+            return ;
+        }
+        $css = preg_replace(
+            array(
+                // Remove comment(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
+                // Remove unused white-space(s)
+                '#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
+            ),
+            array(
+                '$1',
+                '$1$2$3$4$5$6$7',
+            ),
+            $css
+        );
+        return $css;
+    }
+
     function auto_css($partial = false)
     {
+        if ( ! is_null( self::$code ) ) {
+            return self::$code;
+        }
         $config_fields = Customify()->customizer->get_config();
-        //$control_settings = $partial->component->manager->get_control($partial->id);
         $this->loop_fields($config_fields);
         $css_code = '';
         $i = 0;
@@ -889,13 +919,13 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
-
         $url = $this->get_google_fonts_url();
-        if ($url) {
-            $css_code = "\r\n@import url('{$url}');\r\n\r\n" . $css_code;
+        self::$font_url = $url;
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+            return $css_code;
         }
 
-        return trim($css_code);
+        return $this->min_css($css_code);
     }
 }
 

@@ -148,7 +148,7 @@ class Customify_Dashboard {
             <div class="cd-box-top"><?php _e( 'Join the community!', 'customify' ); ?></div>
             <div class="cd-box-content">
                 <p><?php _e( 'Join the Facebook group for updates, discussions, chat with other Customify lovers.', 'customify' ) ?></p>
-                <a href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group &rarr;	', 'customify' ); ?></a>
+                <a target="_blank" href="https://www.facebook.com/groups/133106770857743"><?php _e( 'Join Our Facebook Group &rarr;	', 'customify' ); ?></a>
             </div>
         </div>
         <?php
@@ -157,9 +157,12 @@ class Customify_Dashboard {
     function box_plugins(){
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Recommend Customify Site Library', 'customify' ); ?></div>
+            <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
+            <div class="cd-sites-thumb">
+                <img src="<?php echo get_template_directory_uri().'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
+            </div>
             <div id="plugin-filter" class="cd-box-content">
-                <p><?php _e( '<strong>Customify Site Library</strong> is an add-on for the Customify WordPress Theme which help you browse and import your favorite site with few clicks.', 'customify' ) ?></p>
+                <p><?php _e( '<strong>Customify Sites</strong> is an free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
 
                 $plugin_slug = 'customify-sites';

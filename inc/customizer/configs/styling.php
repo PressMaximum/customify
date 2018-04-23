@@ -26,11 +26,15 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Primary Color', 'customify'),
-                'css_format' => 'article.comment .comment-reply a:hover,
+                'css_format' => apply_filters('customify/styling/primary-color',
+'article.comment .comment-reply a:hover,
 article.comment .comment-time:hover,
 article.comment .comment-author a:hover,
 article.comment .comment-post-author,
-#respond #cancel-comment-reply-link
+#respond #cancel-comment-reply-link,
+.posts-layout .readmore-button:hover,
+.entry-meta a:hover,
+.posts-layout .entry-title a:hover
 {
     color: {{value}};
 }
@@ -42,7 +46,7 @@ input[type="submit"],
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
 .entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.posts-layout .readmore-button
+.customify-builder-btn
 {
     background-color: {{value}};
 }
@@ -50,19 +54,11 @@ article.comment .comment-post-author,
 #respond #cancel-comment-reply-link,
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover
+.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
+.posts-layout .readmore-button:hover
 {
     border-color: {{value}};
-}',
-                'selector' => 'format',
-            ),
-
-            array(
-                'name' => "{$section}_color_secondary",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Secondary Color', 'customify'),
-                'css_format' => '.customify-builder-btn, .posts-layout .readmore-button:hover {background: {{value}};}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -71,7 +67,7 @@ article.comment .comment-post-author,
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Text Color', 'customify'),
-                'css_format' => 'body,
+                'css_format' => apply_filters('customify/styling/text-color', 'body,
 button,
 input,
 select,
@@ -96,7 +92,6 @@ textarea,
 article.comment .comment-author a,
 .header-search-form .search-submit,
 .header-search-form .search-submit:hover,
-.entry-meta a,
 .posts-layout .entry-title,
 .nav-links .nav-previous a, .nav-links .nav-next a,
 .nav-links .nav-previous a > span, .nav-links .nav-next a > span,
@@ -112,7 +107,7 @@ abbr, acronym {
 }
 .posts-layout .entry-media .entry-meta {
     background: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -121,9 +116,16 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color', 'customify'),
-                'css_format' => 'a, .entry-meta a:hover, .posts-layout .entry-title a:hover, .nav-links .nav-previous a:hover, .nav-links .nav-next a:hover  {
-    color: {{value}};
-}',
+                'css_format' => apply_filters( 'customify/styling/link-color', 'a,
+                .nav-links .nav-previous a:hover,
+                .nav-menu-desktop .menu li.current-menu-item > a,
+                .nav-links .nav-next a:hover  {
+                    color: {{value}};
+				}
+				.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+				.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
+					background: {{value}};
+				}' ),
                 'selector' => 'format',
             ),
 
@@ -132,23 +134,14 @@ abbr, acronym {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Link Color Hover', 'customify'),
-                'css_format' => 'a:hover,
+                'css_format' => apply_filters( 'customify/styling/link-color-hover', 'a:hover,
 .site-branding a:hover,
 .nav-menu-desktop .menu li a:hover,
-.nav-menu-desktop .menu li.current-menu-item > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
 .widget-area .widget a:hover,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
 .search .content-area .entry-title a:hover
 {
     color: {{value}};
-}
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover{
-    background: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -157,7 +150,7 @@ nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Border Color', 'customify'),
-                'css_format' => '
+                'css_format' => apply_filters( 'customify/styling/color-border', '
 h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
 .comments-area, .page-breadcrumb{
     border-top-color: {{value}};
@@ -223,7 +216,7 @@ blockquote {
         border-right-color: {{value}};
     }
 }
-',
+' ),
                 'selector' => 'format',
             ),
 
@@ -232,16 +225,17 @@ blockquote {
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Meta Color', 'customify'),
-                'css_format' => 'article.comment .comment-reply a,
+                'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
 article.comment .comment-time,
 .entry-meta,
+.entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .widget-area .widget a,
 .page-breadcrumb, .page-breadcrumb-list li a
 {
     color: {{value}};
-}',
+}' ),
                 'selector' => 'format',
             ),
 
@@ -250,7 +244,7 @@ article.comment .comment-time,
                 'type' => 'color',
                 'section' => $section,
                 'title' => __('Heading Color', 'customify'),
-                'css_format' => 'h1, h2, h3, h4, h5, h6 { color: {{value}};}',
+                'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
                 'selector' => 'format',
             ),
 

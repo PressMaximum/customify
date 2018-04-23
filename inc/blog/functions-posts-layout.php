@@ -25,7 +25,7 @@ if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
                 ?>
                 <header class="page-header blog-posts-heading">
                     <?php
-                    the_archive_title('<h1 class="page-title">', '</h1>');
+                    the_archive_title('<h1 class="page-title h3">', '</h1>');
                     the_archive_description('<div class="archive-description">', '</div>');
                     ?>
                 </header><!-- .page-header -->

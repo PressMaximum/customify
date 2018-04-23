@@ -35,7 +35,7 @@ $submenu_width: 14em;
             a {
                 display: inline-block;
                 color: inherit;
-                transition: all 0.3s ease-out;
+                transition: all 0.14s ease-out;
                 text-decoration-color: currentColor;
                 &:hover {
                     color: $color_link_hover;
@@ -177,14 +177,14 @@ $submenu_width: 14em;
                       vertical-align: middle;
                       align-items: center;
                       &:hover {
-                          color: lighten( $color_link_hover, 50% );
-                          background-color: $color_link_hover;
+                          color: #FFFFFF;
+                          background-color: $color_link;
                       }
                   }
                  &.current-menu-item, &.current-menu-ancestor {
                      > a {
-                         color: lighten( $color_link_hover, 50% );
-                         background-color: $color_link_hover;
+                         color: #ffffff;
+                         background-color: $color_link;
                      }
                  }
              }

@@ -223,15 +223,17 @@ class Customify {
      */
     function get_style_uri(){
         $suffix = $this->get_asset_suffix();
-        $style_dir = get_stylesheet_directory();
+        $style_dir = get_template_directory();
         $suffix_css = $suffix;
         $css_file = false;
         if ( is_rtl() ) {
             $suffix_css = '-rtl'.$suffix;
         }
-        if (file_exists($style_dir . '/style' . $suffix_css . '.css')) {
-            $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
-        }
+
+	    $min_file = $style_dir . '/style' . $suffix_css . '.css';
+	    if (file_exists($min_file)) {
+		    $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
+	    }
 
         if ( ! $css_file ) {
             $css_file = get_stylesheet_uri();
@@ -254,8 +256,16 @@ class Customify {
         do_action('customify/load-scripts');
 
         $css_files = apply_filters(  'customify/theme/css', array(
+            'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
             'style' => $this->get_style_uri()
         ) );
+
+        if ( isset( $css_files['style'] ) ) {
+            // move style file to the bottom
+            $url = $css_files['style'] ;
+            unset( $css_files['style'] );
+            $css_files['style']  = $url;
+        }
 
         $js_files = apply_filters(  'customify/theme/js', array(
             'jquery.fitvids.js' => array(
@@ -271,7 +281,9 @@ class Customify {
 
         foreach( $css_files as $id => $url ) {
             $deps = array();
-            wp_enqueue_style( 'customify-'.$id, $url, $deps, self::$version );
+            if ( $url ) {
+                wp_enqueue_style('customify-' . $id, $url, $deps, self::$version);
+            }
         }
 
         foreach( $js_files as $id => $arg ) {

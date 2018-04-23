@@ -69,7 +69,7 @@
 }
 
 .cd-main {
-  width: 65%;
+  width: 70%;
   float: left;
   padding-right: 30px;
 }
@@ -82,7 +82,7 @@
 }
 
 .cd-sidebar {
-  width: 35%;
+  width: 30%;
   float: right;
 }
 @media screen and (max-width: 782px) {
@@ -106,7 +106,7 @@
 .cd-box .cd-box-top {
   border-bottom: 1px solid #eee;
   font-size: 1em;
-  padding: 10px 15px;
+  padding: 12px 15px;
   font-weight: 600;
 }
 .cd-box .cd-box-content {
@@ -114,6 +114,11 @@
 }
 .cd-box .cd-box-content p {
   margin-top: 0px;
+}
+.cd-box .cd-sites-thumb img {
+  width: 100%;
+  height: auto;
+  border-bottom: 1px solid #eee;
 }
 
 .cd-list-flex {
@@ -134,7 +139,7 @@
   border-bottom: 1px solid #eee;
   margin-bottom: 0px;
   border-right: 1px solid #eee;
-  padding: 10px;
+  padding: 12px 15px;
 }
 .cd-list-flex li:nth-child(2n) {
   border-right: 0px none;
@@ -156,7 +161,7 @@
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 25px 15px;
+  padding: 16px 15px;
   border-bottom: 1px solid #eee;
 }
 .cd-modules .cd-module-item:last-child {
@@ -173,9 +178,6 @@
       flex-basis: 100%;
   position: relative;
   padding-right: 100px;
-}
-.cd-modules .cd-module-name {
-  font-weight: 600;
 }
 .cd-modules .cd-module-desc {
   margin-top: 10px;

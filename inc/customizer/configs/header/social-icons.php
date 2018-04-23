@@ -129,7 +129,7 @@ class Customify_Builder_Item_Social_Icons {
                 'type'             => 'select',
                 'section'          => $section,
                 'selector'         => '.header-social-icons',
-                'default'         => 'rounded',
+                'default'         => 'circle',
                 'render_callback'  => $fn,
                 'title'            => __( 'Shape', 'customify' ),
                 'choices'          => array(
