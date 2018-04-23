@@ -5202,6 +5202,13 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 
+/* Page Mics */
+.archive .page-title, .search .page-title {
+  margin-bottom: 35px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #eaecee;
+}
+
 /* Search Page */
 .search .content-area article {
   padding-bottom: 20px;

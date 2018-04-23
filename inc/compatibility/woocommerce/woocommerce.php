@@ -43,6 +43,7 @@ class Customify_WC {
 
             // Custom styling
             add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
+            add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
         }
     }
 
@@ -60,6 +61,15 @@ class Customify_WC {
 
         return $selector;
     }
+
+	function styling_linkcolor( $selector ){
+		$selector .= ' .woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
+        .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
+            color: {{value}};
+        }';
+
+		return $selector;
+	}
 
 
 

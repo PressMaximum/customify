@@ -34,7 +34,7 @@ $gl-devices-list: (
 
 /* Coupon Input */
 #add_payment_method table.cart td.actions .coupon .input-text, .woocommerce-cart table.cart td.actions .coupon .input-text, .woocommerce-checkout table.cart td.actions .coupon .input-text {
-  padding: 5px 6px 5px;
+  padding: 7px 6px 9px;
   min-width: 120px;
   background-color: #FFF;
 }
@@ -60,6 +60,30 @@ $gl-devices-list: (
 .single-product div.product .single_variation .price {
   margin-bottom: 1em;
   display: block;
+}
+
+/* My account navigation & content */
+.woocommerce-account .woocommerce-MyAccount-navigation {
+  width: 24%;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul {
+  list-style: none;
+  margin-left: 0px;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a {
+  display: block;
+  padding: 10px 0px 11px;
+  color: currentColor;
+  border-bottom: 1px solid #eaecee;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
+  color: #007ee5;
+}
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a {
+  color: #007ee5;
+}
+.woocommerce-account .woocommerce-MyAccount-content {
+  width: 72%;
 }
 
 /*# sourceMappingURL=woocommerce.css.map */

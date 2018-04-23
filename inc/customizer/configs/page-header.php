@@ -288,7 +288,7 @@ class Customify_Page_Header
                 'type' => 'checkbox',
                 'section' => $section,
                 'title'  => __( 'Archive Prefix', 'customify' ),
-                'description'  => __( 'Enable/Disable archive prefix on category, date,...', 'customify' ),
+                'description'  => __( 'Enable or disable archive prefix on category, date, tag page.', 'customify' ),
                 'checkbox_label'  => __( 'Enable', 'customify' ),
                 'default' => 1,
                 'selector' => '#page-titlebar, #page-cover',
@@ -645,9 +645,15 @@ class Customify_Page_Header
                 'selector'        => "{$selector} .page-cover-inner",
                 'css_format'      => 'min-height: {{value}};',
                 'default'         => array(
-                    'desktop' => 350,
-                    'tablet'  => 350,
-                    'mobile'  => 350,
+                    'desktop' => array(
+                        'value' => '300',
+                    ),
+                    'tablet'  => array(
+	                    'value' => '250',
+                    ),
+                    'mobile'  => array(
+	                    'value' => '200',
+                    ),
                 ),
             ),
 

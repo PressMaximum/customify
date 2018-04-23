@@ -17,7 +17,7 @@ get_header(); ?>
             <header class="blog-posts-heading blog-search-heading">
                 <?php
                 // WPCS: XSS ok.
-                echo '<h1 class="page-title">'.$args['title'].'</h1>';
+                echo '<h1 class="page-title h3">'.$args['title'].'</h1>';
                ?>
             </header><!-- .entry-header -->
             <?php
