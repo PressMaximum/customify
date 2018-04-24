@@ -19,7 +19,7 @@ if (is_admin() || is_customize_preview()) {
              * @access public
              * @var    string
              */
-            public $plus_text = '';
+            public $pro_text = '';
             /**
              * Custom plus section URL.
              *
@@ -27,7 +27,7 @@ if (is_admin() || is_customize_preview()) {
              * @access public
              * @var    string
              */
-            public $plus_url = '';
+            public $pro_url = '';
             /**
              * Custom section ID.
              *
@@ -47,8 +47,8 @@ if (is_admin() || is_customize_preview()) {
             public function json()
             {
                 $json = parent::json();
-                $json['plus_text'] = $this->plus_text;
-                $json['plus_url'] = $this->plus_url;
+                $json['pro_text'] = $this->pro_text;
+                $json['pro_url'] = $this->pro_url;
                 $json['id'] = $this->id;
                 return $json;
             }
@@ -64,7 +64,7 @@ if (is_admin() || is_customize_preview()) {
             { ?>
 
                 <li id="accordion-section-{{ data.id }}" class="accordion-section control-section control-section-{{ data.type }} cannot-expand">
-                    <h3><a href="{{ data.plus_url }}" target="_blank">{{{ data.plus_text }}}</a></h3>
+                    <h3><a href="{{ data.pro_url }}" target="_blank">{{{ data.pro_text }}}</a></h3>
                 </li>
             <?php }
         }
@@ -78,8 +78,8 @@ if (is_admin() || is_customize_preview()) {
                 'customify-pro',
                 array(
                     'priority'  => 0,
-                    'plus_text' => __( 'Customify Pro modules available', 'customify' ),
-                    'plus_url'  => 'https://wpcustomify.com/pricing/'
+                    'pro_text' => __( 'Customify Pro modules available', 'customify' ),
+                    'pro_url'  => 'https://wpcustomify.com/pricing/'
                 )
             )
         );
