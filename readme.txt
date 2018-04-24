@@ -69,7 +69,7 @@ License: MIT License - http://opensource.org/licenses/mit-license.html
 License: SIL Open Font License, version 1.1.
 Source: https://fontawesome.com/v4.7.0/license/
 
-Customify Sites Thumbnail Image from Pexels
+Customify Sites Thumbnail Image, Theme Screenshot images from Pexels
 License:  https://www.pexels.com/photo-license/ (http://creativecommons.org/publicdomain/zero/1.0 - CC0)
 
     assets/images/admin/sites_thumbnail.jpg
@@ -77,6 +77,10 @@ License:  https://www.pexels.com/photo-license/ (http://creativecommons.org/publ
 
     assets/images/default_cover.jpg
     https://www.pexels.com/photo/architectural-design-architecture-buildings-city-374811/
+
+    Theme Screenshot
+    https://www.pexels.com/photo/architecture-buildings-business-city-374870/
+    https://www.pexels.com/photo/low-angle-view-of-office-building-against-clear-sky-258160/
 
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
