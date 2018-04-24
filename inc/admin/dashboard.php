@@ -38,7 +38,7 @@ class Customify_Dashboard {
                 </div>
                 <div class="customify-notice-content">
                     <div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ) ?></div>
-                    <p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ),  esc_url( admin_url( 'customize.php' ) ) ); ?></p>
+                    <p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ),  esc_url( admin_url( 'themes.php?page=customify' ) ) ); ?></p>
                 </div>
             </div>
         </div>
