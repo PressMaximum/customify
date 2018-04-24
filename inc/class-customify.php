@@ -373,6 +373,7 @@ class Customify {
 
         $config_files = array(
             // Site Settings
+            'upsell',
             'layouts',
             'blogs',
             'styling',
