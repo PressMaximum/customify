@@ -4938,6 +4938,7 @@ body.menu_sidebar_dropdown:before {
 @media screen and (max-width: 568px) {
   .posts-layout .entry-media {
     margin-bottom: 1em;
+    width: 100% !important;
   }
 }
 .posts-layout .entry-thumbnail {

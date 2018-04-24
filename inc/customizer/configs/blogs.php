@@ -88,6 +88,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'section' => $level_2_panel.'_media',
                 'label' => __( 'Media Width', 'customify' ),
                 'device_settings' => true,
+                'devices'         => array('desktop', 'tablet'),
                 'max' => 100,
                 'min' => 20,
                 'unit' => '%',

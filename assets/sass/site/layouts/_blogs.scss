@@ -47,6 +47,7 @@ $blog_gutter: $gl-gutter;
         overflow: hidden;
         @include for_device( mobile ){
             margin-bottom: 1em;
+            width: 100% !important;
         }
         /*
         .entry-meta {

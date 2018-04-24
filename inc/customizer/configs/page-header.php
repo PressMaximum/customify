@@ -642,6 +642,7 @@ class Customify_Page_Header {
 				'section'         => $section,
 				'device_settings' => true,
 				'render_callback' => $render_cb_el,
+                'max'             => 1000,
 				'title'           => __( 'Cover Height', 'customify' ),
 				'selector'        => "{$selector} .page-cover-inner",
 				'css_format'      => 'min-height: {{value}};',
