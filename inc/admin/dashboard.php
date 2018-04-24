@@ -16,8 +16,34 @@ class Customify_Dashboard {
             add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_plugins' ), 10 );
             add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_community' ), 20 );
 
+            add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
+
         }
         return self::$_instance;
+    }
+
+    /**
+     * Add admin notice when active theme.
+     *
+     * @return bool|null
+     */
+    function admin_notice() {
+        global $pagenow;
+        if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
+        ?>
+        <div class="customify-notice-wrapper notice">
+            <div class="customify-notice">
+                <div class="customify-notice-img">
+                    <img src="<?php echo get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png'; ?>" alt="logo">
+                </div>
+                <div class="customify-notice-content">
+                    <div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ) ?></div>
+                    <p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ),  esc_url( admin_url( 'customize.php' ) ) ); ?></p>
+                </div>
+            </div>
+        </div>
+        <?php
+        }
     }
 
     function add_menu(){
@@ -32,15 +58,17 @@ class Customify_Dashboard {
 
     function scripts($id)
     {
-        if ($id != 'appearance_page_customify') {
+        if ( $id != 'appearance_page_customify' && $id != 'themes.php' ) {
             return;
         }
         $suffix = Customify()->get_asset_suffix();
         wp_enqueue_style('customify-admin', get_template_directory_uri() . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
-        wp_enqueue_style( 'plugin-install' );
-        wp_enqueue_script( 'plugin-install' );
-        wp_enqueue_script( 'updates' );
-        add_thickbox();
+        if ( $id != 'themes' ) {
+            wp_enqueue_style('plugin-install');
+            wp_enqueue_script('plugin-install');
+            wp_enqueue_script('updates');
+            add_thickbox();
+        }
     }
 
     function setup(){
