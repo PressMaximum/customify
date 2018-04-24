@@ -153,11 +153,7 @@ class Customify_Sanitize_Input
     private function sanitize_text_field_deep($value, $html = false)
     {
         if (!is_array($value)) {
-            if ($html) {
-                $value = wp_kses_post($value);
-            } else {
-                $value = sanitize_text_field($value);
-            }
+            $value = wp_kses_post($value);
         } else {
             if (is_array($value)) {
                 foreach ($value as $k => $v) {
