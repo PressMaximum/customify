@@ -298,7 +298,7 @@ class Customify_Dashboard {
             ),
             array(
                 'name' => __( 'Multiple Headers', 'customify' ),
-                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
             ),
         );
 
