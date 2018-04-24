@@ -29,9 +29,9 @@ class Customify_Dashboard {
      */
     function admin_notice() {
         global $pagenow;
-        if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
+        //if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
         ?>
-        <div class="customify-notice-wrapper notice">
+        <div class="customify-notice-wrapper notice is-dismissible">
             <div class="customify-notice">
                 <div class="customify-notice-img">
                     <img src="<?php echo get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png'; ?>" alt="logo">
@@ -43,7 +43,7 @@ class Customify_Dashboard {
             </div>
         </div>
         <?php
-        }
+        //}
     }
 
     function add_menu(){

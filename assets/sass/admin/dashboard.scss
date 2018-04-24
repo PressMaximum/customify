@@ -361,8 +361,12 @@ $dashboard_border_color: #e5e5e5;
 /*Admin notice*/
 .customify-notice-wrapper {
     &.notice {
-        padding: 0px;
+        padding: 10px !important;
         border-left: 0px;
+        .notice-dismiss {
+            top: 5px;
+            right: 5px;
+        }
     }
 }
 .customify-notice {
@@ -376,10 +380,15 @@ $dashboard_border_color: #e5e5e5;
         font-weight: 600;
     }
     .customify-notice-img {
-        margin-right: 15px;
+        padding-right: 30px;
+        padding-left: 15px;
         img {
-            max-width: 150px;
+            max-width: 140px;
         }
+    }
+    .customify-notice-content {
+        flex-basis: 100%;
+        width: -webkit-fill-available;
     }
     .customify-notice-heading {
         font-size: 18px;
