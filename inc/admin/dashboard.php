@@ -29,7 +29,7 @@ class Customify_Dashboard {
      */
     function admin_notice() {
         global $pagenow;
-        //if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
+        if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
         ?>
         <div class="customify-notice-wrapper notice is-dismissible">
             <div class="customify-notice">
@@ -43,7 +43,7 @@ class Customify_Dashboard {
             </div>
         </div>
         <?php
-        //}
+        }
     }
 
     function add_menu(){
