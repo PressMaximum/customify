@@ -162,7 +162,7 @@ class Customify_Dashboard {
                 <img src="<?php echo get_template_directory_uri().'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
             </div>
             <div id="plugin-filter" class="cd-box-content">
-                <p><?php _e( '<strong>Customify Sites</strong> is an free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
+                <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
 
                 $plugin_slug = 'customify-sites';
@@ -270,23 +270,35 @@ class Customify_Dashboard {
         $modules = array(
             array(
                 'name' => __( 'Header Transparent', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-transparent/',
             ),
             array(
                 'name' => __( 'Header Sticky', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
             ),
             array(
                 'name' => __( 'Header Footer Builder Items', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-footer-builder-items/',
             ),
             array(
                 'name' => __( 'Scroll To Top', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/scroll-to-top/',
             ),
             array(
                 'name' => __( 'Blog Pro', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/blog-pro/',
+            ),
+            array(
+                'name' => __( 'WooCommerce Booster', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/woocommerce-booster/',
+            ),
+            array(
+                'name' => __( 'Portfolio', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
+            ),
+            array(
+                'name' => __( 'Multiple Headers', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
             ),
         );
 
@@ -298,7 +310,7 @@ class Customify_Dashboard {
                 <div class="cd-module-item">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
-                        <a class="cd-module-doc-link" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
+                        <a class="cd-module-doc-link" target="_blank" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
                     </div>
                 </div>
                 <?php } ?>
