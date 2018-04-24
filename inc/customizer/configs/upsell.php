@@ -71,6 +71,9 @@ if (is_admin() || is_customize_preview()) {
     }
 
     function customify_pro_upsell( $wp_customize ){
+        if ( class_exists( 'Customify_Pro' ) ) {
+            return ;
+        }
         $wp_customize->register_section_type( 'Customify_Section_Pro' );
         $wp_customize->add_section(
             new Customify_Section_Pro(
@@ -85,7 +88,6 @@ if (is_admin() || is_customize_preview()) {
         );
 
     }
-
 
     add_action('customize_register', 'customify_pro_upsell');
 }
