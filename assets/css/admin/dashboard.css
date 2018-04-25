@@ -418,8 +418,7 @@
   display: flex;
   align-items: center;
   background: #fff8E5;
-  padding: 15px;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 .customify-notice a {
   color: #f56e28;
