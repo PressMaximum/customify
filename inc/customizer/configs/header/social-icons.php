@@ -66,9 +66,17 @@ class Customify_Builder_Item_Social_Icons {
                         'url' => '#',
                         'icon' => array(
                             'type' => 'font-awesome',
-                            'icon' => 'fa fa-youtube',
+                            'icon' => 'fa fa-youtube-play',
                         )
                     ),
+					array(
+						'title' => "Instagram",
+						'url' => '#',
+						'icon' => array(
+							'type' => 'font-awesome',
+							'icon' => 'fa fa-instagram',
+						)
+					),
                     array(
                         'title' => "Pinterest",
                         'url' => '#',
