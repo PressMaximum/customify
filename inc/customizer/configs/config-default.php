@@ -92,9 +92,13 @@ function customify_layout_builder_config_default($val, $name)
                             'value' => '33',
                         ),
                 ),
-
             'header_main_height' => array (
-                'desktop' => array ( 'unit' => 'px', 'value' => '100', ),
+                'desktop' => array ( 'unit' => 'px', 'value' => '90', ),
+                'tablet' => array ( 'unit' => 'px', 'value' => '', ),
+                'mobile' => array ( 'unit' => 'px', 'value' => '', ),
+            ),
+            'header_bottom_height' => array (
+                'desktop' => array ( 'unit' => 'px', 'value' => '55', ),
                 'tablet' => array ( 'unit' => 'px', 'value' => '', ),
                 'mobile' => array ( 'unit' => 'px', 'value' => '', ),
             ),
