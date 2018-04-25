@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-25 08:01:31+00:00\n"
+"POT-Creation-Date: 2018-04-25 09:00:00+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -278,7 +278,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:506
 #: inc/customizer/class-customizer.php:526
 #: inc/customizer/class-customizer.php:621
-#: inc/customizer/configs/header/social-icons.php:226
+#: inc/customizer/configs/header/social-icons.php:267
 #: inc/customizer/configs/page-header.php:36
 #: inc/customizer/configs/page-header.php:245
 #: inc/customizer/configs/page-header.php:256
@@ -511,7 +511,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:344
 #: inc/customizer/class-customizer.php:387
 #: inc/customizer/configs/header/menus.php:103
-#: inc/customizer/configs/header/social-icons.php:167
+#: inc/customizer/configs/header/social-icons.php:208
 msgid "Normal"
 msgstr ""
 
@@ -545,8 +545,8 @@ msgstr ""
 #: inc/customizer/class-customizer.php:370
 #: inc/customizer/class-customizer.php:527
 #: inc/customizer/class-customizer.php:622
-#: inc/customizer/configs/header/social-icons.php:139
-#: inc/customizer/configs/header/social-icons.php:227
+#: inc/customizer/configs/header/social-icons.php:180
+#: inc/customizer/configs/header/social-icons.php:268
 msgid "None"
 msgstr ""
 
@@ -568,14 +568,14 @@ msgid "Capitalize"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:388
-#: inc/customizer/configs/header/social-icons.php:168
+#: inc/customizer/configs/header/social-icons.php:209
 msgid "Hover"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:394
 #: inc/customizer/class-customizer.php:590
 #: inc/customizer/configs/header/nav-icon.php:79
-#: inc/customizer/configs/header/social-icons.php:150
+#: inc/customizer/configs/header/social-icons.php:191
 msgid "Color"
 msgstr ""
 
@@ -591,7 +591,7 @@ msgid "Margin"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:427
-#: inc/customizer/configs/header/social-icons.php:112
+#: inc/customizer/configs/header/social-icons.php:153
 msgid "Padding"
 msgstr ""
 
@@ -602,8 +602,8 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:439
 #: inc/customizer/class-customizer.php:607
-#: inc/customizer/configs/header/social-icons.php:174
-#: inc/customizer/configs/header/social-icons.php:190
+#: inc/customizer/configs/header/social-icons.php:215
+#: inc/customizer/configs/header/social-icons.php:231
 msgid "Background Color"
 msgstr ""
 
@@ -624,7 +624,7 @@ msgid "Contain"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:458
-#: inc/customizer/configs/header/social-icons.php:98
+#: inc/customizer/configs/header/social-icons.php:139
 #: inc/customizer/configs/page-header.php:498
 msgid "Size"
 msgstr ""
@@ -706,74 +706,74 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:516
 #: inc/customizer/class-customizer.php:613
-#: inc/customizer/configs/header/social-icons.php:212
+#: inc/customizer/configs/header/social-icons.php:253
 msgid "Border"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:523
 #: inc/customizer/class-customizer.php:618
-#: inc/customizer/configs/header/social-icons.php:223
+#: inc/customizer/configs/header/social-icons.php:264
 msgid "Border Style"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:528
 #: inc/customizer/class-customizer.php:623
-#: inc/customizer/configs/header/social-icons.php:228
+#: inc/customizer/configs/header/social-icons.php:269
 msgid "Solid"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:529
 #: inc/customizer/class-customizer.php:624
-#: inc/customizer/configs/header/social-icons.php:229
+#: inc/customizer/configs/header/social-icons.php:270
 msgid "Dotted"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:530
 #: inc/customizer/class-customizer.php:625
-#: inc/customizer/configs/header/social-icons.php:230
+#: inc/customizer/configs/header/social-icons.php:271
 msgid "Dashed"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:531
 #: inc/customizer/class-customizer.php:626
-#: inc/customizer/configs/header/social-icons.php:231
+#: inc/customizer/configs/header/social-icons.php:272
 msgid "Double"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:532
 #: inc/customizer/class-customizer.php:627
-#: inc/customizer/configs/header/social-icons.php:232
+#: inc/customizer/configs/header/social-icons.php:273
 msgid "Ridge"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:533
 #: inc/customizer/class-customizer.php:628
-#: inc/customizer/configs/header/social-icons.php:233
+#: inc/customizer/configs/header/social-icons.php:274
 msgid "Inset"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:534
 #: inc/customizer/class-customizer.php:629
-#: inc/customizer/configs/header/social-icons.php:234
+#: inc/customizer/configs/header/social-icons.php:275
 msgid "Outset"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:542
 #: inc/customizer/class-customizer.php:636
-#: inc/customizer/configs/header/social-icons.php:243
+#: inc/customizer/configs/header/social-icons.php:284
 msgid "Border Width"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:557
 #: inc/customizer/class-customizer.php:648
-#: inc/customizer/configs/header/social-icons.php:256
+#: inc/customizer/configs/header/social-icons.php:297
 #: inc/customizer/configs/styling.php:152
 msgid "Border Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:568
 #: inc/customizer/class-customizer.php:655
-#: inc/customizer/configs/header/social-icons.php:265
+#: inc/customizer/configs/header/social-icons.php:306
 msgid "Border Radius"
 msgstr ""
 
@@ -849,7 +849,7 @@ msgid "Comment"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:185
-#: inc/customizer/configs/header/social-icons.php:52
+#: inc/customizer/configs/header/social-icons.php:93
 #: inc/customizer/configs/page-header.php:276
 msgid "Title"
 msgstr ""
@@ -1101,7 +1101,7 @@ msgid "Text"
 msgstr ""
 
 #: inc/customizer/configs/header/button.php:47
-#: inc/customizer/configs/header/social-icons.php:57
+#: inc/customizer/configs/header/social-icons.php:98
 msgid "Icon"
 msgstr ""
 
@@ -1478,56 +1478,56 @@ msgstr ""
 msgid "Social Profiles"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:63
+#: inc/customizer/configs/header/social-icons.php:104
 msgid "URL"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:76
+#: inc/customizer/configs/header/social-icons.php:117
 msgid "Open URL in new window."
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:84
+#: inc/customizer/configs/header/social-icons.php:125
 msgid "Apply rel \"nofollow\" to social links."
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:124
+#: inc/customizer/configs/header/social-icons.php:165
 msgid "Icon Spacing"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:134
+#: inc/customizer/configs/header/social-icons.php:175
 msgid "Shape"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:136
+#: inc/customizer/configs/header/social-icons.php:177
 msgid "Rounded"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:137
+#: inc/customizer/configs/header/social-icons.php:178
 msgid "Square"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:138
+#: inc/customizer/configs/header/social-icons.php:179
 msgid "Circle"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:152
+#: inc/customizer/configs/header/social-icons.php:193
 msgid "Official Color"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:153
+#: inc/customizer/configs/header/social-icons.php:194
 msgid "Custom"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:164
+#: inc/customizer/configs/header/social-icons.php:205
 msgid "Custom Color"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:181
-#: inc/customizer/configs/header/social-icons.php:197
+#: inc/customizer/configs/header/social-icons.php:222
+#: inc/customizer/configs/header/social-icons.php:238
 msgid "Icon Color"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:213
+#: inc/customizer/configs/header/social-icons.php:254
 msgid "Border & border radius"
 msgstr ""
 
