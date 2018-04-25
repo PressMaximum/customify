@@ -26,7 +26,7 @@
                 margin: 0px 0px ms(-4);
             }
         }
-        a {
+        a:not(.wc-forward) {
             color: $color_meta;
             &:hover {
                 color: $color_link_hover;

@@ -306,7 +306,7 @@ class Customify_Dashboard {
             ),
             array(
                 'name' => __( 'Header Footer Builder Items', 'customify' ),
-                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-footer-builder-items/',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
             ),
             array(
                 'name' => __( 'Scroll To Top', 'customify' ),

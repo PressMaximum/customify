@@ -231,7 +231,7 @@ article.comment .comment-time,
 .entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a,
+.widget-area .widget a:not(.wc-forward),
 .page-breadcrumb, .page-breadcrumb-list li a
 {
     color: {{value}};

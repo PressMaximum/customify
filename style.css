@@ -5260,10 +5260,10 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget ul li {
   margin: 0px 0px 0.3819820591em;
 }
-.widget-area .widget a {
+.widget-area .widget a:not(.wc-forward) {
   color: #6d6d6d;
 }
-.widget-area .widget a:hover {
+.widget-area .widget a:not(.wc-forward):hover {
   color: #3369e7;
   text-decoration: underline;
 }
