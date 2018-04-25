@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.2\n"
+"Project-Id-Version: Customify 0.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-23 09:30:29+00:00\n"
+"POT-Creation-Date: 2018-04-25 08:01:31+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,29 +51,42 @@ msgstr ""
 msgid "Customify Options"
 msgstr ""
 
-#: inc/admin/dashboard.php:86 inc/customizer/class-customizer.php:995
+#: inc/admin/dashboard.php:40
+msgid ""
+"Thanks for installing Customify, you rock! <img draggable=\"false\" "
+"class=\"emoji\" alt=\"\" "
+"src=\"https://s.w.org/images/core/emoji/2.4/svg/1f918.svg\">"
+msgstr ""
+
+#: inc/admin/dashboard.php:41
+msgid ""
+"To fully take advantage of the best our theme can offer please make sure "
+"you visit our <a href=\"%1$s\">Customify options page</a>."
+msgstr ""
+
+#: inc/admin/dashboard.php:114 inc/customizer/class-customizer.php:995
 #: inc/customizer/configs/header/logo.php:7
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:90
+#: inc/admin/dashboard.php:118
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:94 inc/customizer/configs/header/panel.php:13
+#: inc/admin/dashboard.php:122 inc/customizer/configs/header/panel.php:13
 #: inc/customizer/configs/header/panel.php:50
 #: inc/customizer/configs/header/panel.php:58
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:98 inc/customizer/configs/footer/panel.php:13
+#: inc/admin/dashboard.php:126 inc/customizer/configs/footer/panel.php:13
 #: inc/customizer/configs/footer/panel.php:126
 #: inc/customizer/configs/footer/panel.php:134
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:102 inc/compatibility/breadcrumb-navxt.php:184
-#: inc/customizer/configs/blogs.php:234
+#: inc/admin/dashboard.php:130 inc/compatibility/breadcrumb-navxt.php:184
+#: inc/customizer/configs/blogs.php:238
 #: inc/customizer/configs/footer/panel.php:211
 #: inc/customizer/configs/header/button.php:97
 #: inc/customizer/configs/header/panel.php:135
@@ -82,98 +95,110 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:106 inc/compatibility/breadcrumb-navxt.php:174
-#: inc/customizer/configs/blogs.php:220
+#: inc/admin/dashboard.php:134 inc/compatibility/breadcrumb-navxt.php:174
+#: inc/customizer/configs/blogs.php:224
 #: inc/customizer/configs/header/button.php:86
 #: inc/customizer/configs/typography.php:13
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:110
+#: inc/admin/dashboard.php:138
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:114 inc/customizer/configs/page-header.php:319
+#: inc/admin/dashboard.php:142 inc/customizer/configs/page-header.php:319
 msgid "Titlebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:119 inc/customizer/configs/blogs.php:7
+#: inc/admin/dashboard.php:147 inc/customizer/configs/blogs.php:7
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:123
+#: inc/admin/dashboard.php:151
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:131
+#: inc/admin/dashboard.php:159
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:148
+#: inc/admin/dashboard.php:176
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:150
+#: inc/admin/dashboard.php:178
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:151
+#: inc/admin/dashboard.php:179
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:160
+#: inc/admin/dashboard.php:188
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:165
+#: inc/admin/dashboard.php:193
 msgid ""
-"<strong>Customify Sites</strong> is an free add-on for the Customify theme "
+"<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:194
+#: inc/admin/dashboard.php:222
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:197
+#: inc/admin/dashboard.php:225
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:219
+#: inc/admin/dashboard.php:247
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:236
+#: inc/admin/dashboard.php:264
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:272
+#: inc/admin/dashboard.php:300
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:276
+#: inc/admin/dashboard.php:304
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:280
+#: inc/admin/dashboard.php:308
 msgid "Header Footer Builder Items"
 msgstr ""
 
-#: inc/admin/dashboard.php:284
+#: inc/admin/dashboard.php:312
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:288
+#: inc/admin/dashboard.php:316
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:295
+#: inc/admin/dashboard.php:320
+msgid "WooCommerce Booster"
+msgstr ""
+
+#: inc/admin/dashboard.php:324
+msgid "Portfolio"
+msgstr ""
+
+#: inc/admin/dashboard.php:328
+msgid "Multiple Headers"
+msgstr ""
+
+#: inc/admin/dashboard.php:335
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:301
+#: inc/admin/dashboard.php:341
 msgid "Learn more &rarr;"
 msgstr ""
 
@@ -197,7 +222,7 @@ msgid "Continue reading %s"
 msgstr ""
 
 #: inc/blog/functions-posts-layout.php:19
-#: inc/customizer/configs/page-header.php:836
+#: inc/customizer/configs/page-header.php:837
 #. translators: 1: Search query name
 msgid "Search Results for: %s"
 msgstr ""
@@ -486,7 +511,6 @@ msgstr ""
 #: inc/customizer/class-customizer.php:344
 #: inc/customizer/class-customizer.php:387
 #: inc/customizer/configs/header/menus.php:103
-#: inc/customizer/configs/header/menus.php:196
 #: inc/customizer/configs/header/social-icons.php:167
 msgid "Normal"
 msgstr ""
@@ -780,97 +804,97 @@ msgstr ""
 msgid "Media Ratio"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:87
+#: inc/customizer/configs/blogs.php:89
 msgid "Media Width"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:98
+#: inc/customizer/configs/blogs.php:103
 msgid "Media Radius"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:113
+#: inc/customizer/configs/blogs.php:117
 msgid "Thumbnail Size"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:123
+#: inc/customizer/configs/blogs.php:127
 msgid "Hide thumbnail when empty."
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:130
+#: inc/customizer/configs/blogs.php:134
 msgid "Meta Settings"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:138
+#: inc/customizer/configs/blogs.php:142
 msgid "Separator"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:147
+#: inc/customizer/configs/blogs.php:151
 msgid "Drag to order meta items"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:157
+#: inc/customizer/configs/blogs.php:161
 msgid "Author"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:161
+#: inc/customizer/configs/blogs.php:165
 msgid "Date"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:165
+#: inc/customizer/configs/blogs.php:169
 msgid "Categories"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:169
+#: inc/customizer/configs/blogs.php:173
 msgid "Comment"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:181
+#: inc/customizer/configs/blogs.php:185
 #: inc/customizer/configs/header/social-icons.php:52
 #: inc/customizer/configs/page-header.php:276
 msgid "Title"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:191
+#: inc/customizer/configs/blogs.php:195
 msgid "Read More"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:201
+#: inc/customizer/configs/blogs.php:205
 msgid "Show Read More"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:211
+#: inc/customizer/configs/blogs.php:215
 msgid "Read More Text"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:255
+#: inc/customizer/configs/blogs.php:259
 msgid "Pagination"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:265
+#: inc/customizer/configs/blogs.php:269
 msgid "Show Pagination"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:274
+#: inc/customizer/configs/blogs.php:278
 msgid "Show Next, Previous Label"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:283
+#: inc/customizer/configs/blogs.php:287
 msgid "Preview Label"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:292
+#: inc/customizer/configs/blogs.php:296
 msgid "Next Label"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:303
+#: inc/customizer/configs/blogs.php:307
 msgid "How many numbers to either side of the current pages"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:323
+#: inc/customizer/configs/blogs.php:327
 msgid "Blog"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:329
+#: inc/customizer/configs/blogs.php:333
 msgid "Archive Posts"
 msgstr ""
 
@@ -1215,7 +1239,6 @@ msgid "Styling for top level menu items"
 msgstr ""
 
 #: inc/customizer/configs/header/menus.php:104
-#: inc/customizer/configs/header/menus.php:197
 msgid "Hover/Active"
 msgstr ""
 
@@ -1227,36 +1250,16 @@ msgstr ""
 msgid "Typography for menu"
 msgstr ""
 
-#: inc/customizer/configs/header/menus.php:140
+#: inc/customizer/configs/header/menus.php:143
 msgid "Submenu"
 msgstr ""
 
-#: inc/customizer/configs/header/menus.php:150
-msgid "Submenu Width"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:160
-msgid "Submenu Styling"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:161
-msgid "Advanced styling for submenu"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:187
-msgid "Submenu Items Styling"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:188
-msgid "Styling for submenu items"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:225
-msgid "Submenu Items Typography"
-msgstr ""
-
-#: inc/customizer/configs/header/menus.php:226
-msgid "Typography for submenu items"
+#: inc/customizer/configs/header/menus.php:149
+msgid ""
+"Submenu settings is a part of Advanced Header & Footer builder modules "
+"which only available in Customify Pro. <a target=\"_blank\" "
+"href=\"https://wpcustomify.com/help/documentation/customify-pro-modules/"
+"advanced-header-footer-builder/\">Learn more about it here</a>."
 msgstr ""
 
 #: inc/customizer/configs/header/nav-icon.php:8
@@ -1867,19 +1870,19 @@ msgstr ""
 msgid "Cover Tagline Typography"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:645
+#: inc/customizer/configs/page-header.php:646
 msgid "Cover Height"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:667
+#: inc/customizer/configs/page-header.php:668
 msgid "Cover Margin Top"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:679
+#: inc/customizer/configs/page-header.php:680
 msgid "Cover Text Align"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:829
+#: inc/customizer/configs/page-header.php:830
 msgid "Oops! That page can't be found."
 msgstr ""
 
@@ -1986,6 +1989,10 @@ msgstr ""
 #: inc/customizer/configs/typography.php:143
 #: inc/customizer/configs/typography.php:150
 msgid "Widget Title"
+msgstr ""
+
+#: inc/customizer/configs/upsell.php:84
+msgid "Customify Pro modules available"
 msgstr ""
 
 #: inc/customizer/controls/class-control-base.php:206
@@ -2277,7 +2284,7 @@ msgid_plural "%1$s thoughts on &ldquo;%2$s&rdquo;"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/blog/class-post-entry.php:20 inc/customizer/configs/blogs.php:137
+#: inc/blog/class-post-entry.php:20 inc/customizer/configs/blogs.php:141
 msgctxt "post meta separator"
 msgid "-"
 msgstr ""
@@ -2311,12 +2318,12 @@ msgctxt "next set of posts"
 msgid "Next"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:208
+#: inc/customizer/configs/blogs.php:212
 msgctxt "readmore LTR"
 msgid "Read More &rarr;"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:208
+#: inc/customizer/configs/blogs.php:212
 msgctxt "readmore RTL"
 msgid "Read More &larr;"
 msgstr ""
