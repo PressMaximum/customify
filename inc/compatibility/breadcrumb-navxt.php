@@ -316,6 +316,7 @@ class Customify_Breadcrumb {
                 <div class="page-breadcrumb-inner customify-container">
                     <ul class="page-breadcrumb-list">
                         <?php
+                        // WPCS: XSS OK.
                         echo $list;
                         ?>
                     </ul>

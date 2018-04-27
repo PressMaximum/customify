@@ -280,7 +280,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
             <?php
             if ( $this->setting_type == 'custom_html' ) {
                 ?>
-                <div class="custom_html"><?php echo balanceTags( $this->description ) ?></div>
+                <div class="custom_html"><?php echo wp_kses_post( balanceTags( $this->description ) ); ?></div>
                 <?php
             } else {
             ?>

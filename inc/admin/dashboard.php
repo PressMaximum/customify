@@ -34,7 +34,7 @@ class Customify_Dashboard {
         <div class="customify-notice-wrapper notice is-dismissible">
             <div class="customify-notice">
                 <div class="customify-notice-img">
-                    <img src="<?php echo get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png'; ?>" alt="logo">
+                    <img src="<?php echo esc_url( get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png' ); ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
                 </div>
                 <div class="customify-notice-content">
                     <div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ) ?></div>
