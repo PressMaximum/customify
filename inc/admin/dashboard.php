@@ -186,9 +186,6 @@ class Customify_Dashboard {
         ?>
         <div class="cd-box">
             <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
-            <div class="cd-sites-thumb">
-                <img src="<?php echo esc_url( get_template_directory_uri() ).'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
-            </div>
             <div id="plugin-filter" class="cd-box-content">
                 <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
