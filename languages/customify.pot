@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-25 09:00:00+00:00\n"
+"POT-Creation-Date: 2018-04-25 09:14:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1989,10 +1989,6 @@ msgstr ""
 #: inc/customizer/configs/typography.php:143
 #: inc/customizer/configs/typography.php:150
 msgid "Widget Title"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:84
-msgid "Customify Pro modules available"
 msgstr ""
 
 #: inc/customizer/controls/class-control-base.php:206
