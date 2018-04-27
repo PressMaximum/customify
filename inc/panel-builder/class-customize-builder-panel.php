@@ -68,8 +68,8 @@ class Customify_Customize_Builder_Panel {
             $configs = array();
         }
         $config = $this->customize( $wp_customize );
-        foreach ( $this->get_rows_config() as $id => $name ) {
-
+        $rows = apply_filters( 'customify/builder/' . $this->id . '/rows', $this->get_rows_config() );
+        foreach ( $rows as $id => $name ) {
             $m = 'row_' . $id . '_config';
             if ( method_exists( $this, $m ) ) {
                 $r      = call_user_func_array( array( $this, $m ), array( $this->id . '_' . $id, $name ) );
