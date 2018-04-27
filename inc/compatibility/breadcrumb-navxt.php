@@ -317,7 +317,7 @@ class Customify_Breadcrumb {
                     <ul class="page-breadcrumb-list">
                         <?php
                         // WPCS: XSS OK.
-                        echo $list;
+                        echo wp_kses_post( $list );
                         ?>
                     </ul>
                 </div>
