@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.3\n"
+"Project-Id-Version: Customify 0.0.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-25 09:14:50+00:00\n"
+"POT-Creation-Date: 2018-04-27 04:54:02+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -49,6 +49,10 @@ msgstr ""
 
 #: inc/admin/dashboard.php:11
 msgid "Customify Options"
+msgstr ""
+
+#: inc/admin/dashboard.php:37 inc/admin/dashboard.php:100
+msgid "logo"
 msgstr ""
 
 #: inc/admin/dashboard.php:40
@@ -140,65 +144,65 @@ msgstr ""
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:193
+#: inc/admin/dashboard.php:190
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:222
+#: inc/admin/dashboard.php:219
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:225
+#: inc/admin/dashboard.php:222
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:247
+#: inc/admin/dashboard.php:244
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:264
+#: inc/admin/dashboard.php:261
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:300
+#: inc/admin/dashboard.php:297
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:304
+#: inc/admin/dashboard.php:301
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:308
+#: inc/admin/dashboard.php:305
 msgid "Header Footer Builder Items"
 msgstr ""
 
-#: inc/admin/dashboard.php:312
+#: inc/admin/dashboard.php:309
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:316
+#: inc/admin/dashboard.php:313
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:320
+#: inc/admin/dashboard.php:317
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:324
+#: inc/admin/dashboard.php:321
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:328
+#: inc/admin/dashboard.php:325
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:335
+#: inc/admin/dashboard.php:332
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:341
+#: inc/admin/dashboard.php:338
 msgid "Learn more &rarr;"
 msgstr ""
 
@@ -581,7 +585,6 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:400
 #: inc/customizer/class-customizer.php:596
-#: inc/customizer/configs/styling.php:118
 msgid "Link Color"
 msgstr ""
 
@@ -767,7 +770,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:557
 #: inc/customizer/class-customizer.php:648
 #: inc/customizer/configs/header/social-icons.php:297
-#: inc/customizer/configs/styling.php:152
+#: inc/customizer/configs/styling.php:159
 msgid "Border Color"
 msgstr ""
 
@@ -990,7 +993,7 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:204
-#: inc/customizer/configs/styling.php:255
+#: inc/customizer/configs/styling.php:262
 msgid "Widget Title Color"
 msgstr ""
 
@@ -1894,39 +1897,43 @@ msgstr ""
 msgid "Primary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:69
+#: inc/customizer/configs/styling.php:81
 msgid "Text Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:136
-msgid "Link Color Hover"
+#: inc/customizer/configs/styling.php:130
+msgid "Entry Content Link Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:227
+#: inc/customizer/configs/styling.php:145
+msgid "Entry Content Link Color Hover"
+msgstr ""
+
+#: inc/customizer/configs/styling.php:234
 msgid "Meta Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:246
+#: inc/customizer/configs/styling.php:253
 msgid "Heading Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:265
+#: inc/customizer/configs/styling.php:272
 msgid "Sidebar Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:272
+#: inc/customizer/configs/styling.php:279
 msgid "Primary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:294
+#: inc/customizer/configs/styling.php:301
 msgid "Secondary Widgets Title"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:317
+#: inc/customizer/configs/styling.php:324
 msgid "Footer Widgets"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:324
+#: inc/customizer/configs/styling.php:331
 msgid "Footer Widgets Title"
 msgstr ""
 
