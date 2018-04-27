@@ -62,7 +62,7 @@ class Customify_Dashboard {
             return;
         }
         $suffix = Customify()->get_asset_suffix();
-        wp_enqueue_style('customify-admin', get_template_directory_uri() . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
+        wp_enqueue_style('customify-admin', esc_url( get_template_directory_uri() ) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
         if ( $id != 'themes' ) {
             wp_enqueue_style('plugin-install');
             wp_enqueue_script('plugin-install');
@@ -97,7 +97,7 @@ class Customify_Dashboard {
             <div class="cd-row">
                 <div class="cd-header-inner">
                     <a href="https://wpcustomify.com" target="_blank" class="cd-branding">
-                        <img src="<?php echo get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png'; ?>" alt="logo">
+                        <img src="<?php echo esc_url( get_template_directory_uri() ) .'/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
                     </a>
                     <span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
                 </div>
@@ -187,7 +187,7 @@ class Customify_Dashboard {
         <div class="cd-box">
             <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
             <div class="cd-sites-thumb">
-                <img src="<?php echo get_template_directory_uri().'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
+                <img src="<?php echo esc_url( get_template_directory_uri() ).'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
             </div>
             <div id="plugin-filter" class="cd-box-content">
                 <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>

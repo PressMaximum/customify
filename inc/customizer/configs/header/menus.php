@@ -55,16 +55,16 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format' => 'html_class',
                 'choices' => array(
                     'style-plain' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_1.svg',
                     ),
                     'style-full-height' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_2.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_2.svg',
                     ),
                     'style-border-bottom' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_3.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_3.svg',
                     ),
                     'style-border-top' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_4.svg',
                     ),
                 )
             ),

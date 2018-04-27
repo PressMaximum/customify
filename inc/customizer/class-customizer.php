@@ -89,8 +89,8 @@ class  Customify_Customizer
         if (is_customize_preview()) {
             $suffix = Customify()->get_asset_suffix();
 
-            wp_enqueue_script('customify-customizer-auto-css', get_template_directory_uri() . '/assets/js/customizer/auto-css' . $suffix . '.js', array('customize-preview'), '20151215', true);
-            wp_enqueue_script('customify-customizer', get_template_directory_uri() . '/assets/js/customizer/customizer' . $suffix . '.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
+            wp_enqueue_script('customify-customizer-auto-css', esc_url(get_template_directory_uri()) . '/assets/js/customizer/auto-css' . $suffix . '.js', array('customize-preview'), '20151215', true);
+            wp_enqueue_script('customify-customizer', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/customizer' . $suffix . '.js', array('customize-preview', 'customize-selective-refresh'), '20151215', true);
             wp_localize_script('customify-customizer-auto-css', 'Customify_Preview_Config', array(
                 'fields'         => $this->get_config(),
                 'devices'        => $this->devices,

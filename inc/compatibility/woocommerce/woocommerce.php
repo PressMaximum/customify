@@ -79,13 +79,13 @@ class Customify_WC {
 
     function add_css( $css_files ){
         $suffix = Customify()->get_asset_suffix();
-        $css_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
+        $css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
         return $css_files;
     }
 
     function add_js( $js_files ){
         $suffix = Customify()->get_asset_suffix();
-        $js_files['plugin-woocommerce'] = get_template_directory_uri() . '/assets/js/compatibility/woocommerce'.$suffix.'.js';
+        $js_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce'.$suffix.'.js';
         return $js_files;
     }
 

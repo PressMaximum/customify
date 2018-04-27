@@ -45,8 +45,8 @@ class Customify_MetaBox {
             return;
         }
         $suffix = Customify()->get_asset_suffix();
-        wp_enqueue_script( 'customify-metabox',  get_template_directory_uri().'/assets/js/admin/metabox'.$suffix.'.js',  array( 'jquery' ),  Customify::$version, true );
-        wp_enqueue_style( 'customify-metabox',  get_template_directory_uri() . '/assets/css/admin/metabox'.$suffix.'.css', false, Customify::$version );
+        wp_enqueue_script( 'customify-metabox',  esc_url( get_template_directory_uri() ).'/assets/js/admin/metabox'.$suffix.'.js',  array( 'jquery' ),  Customify::$version, true );
+        wp_enqueue_style( 'customify-metabox',  esc_url( get_template_directory_uri() ). '/assets/css/admin/metabox'.$suffix.'.css', false, Customify::$version );
     }
 
     function get_support_post_types(){

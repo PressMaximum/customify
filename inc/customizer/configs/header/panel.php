@@ -218,10 +218,10 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 'default'    => 'is-text-light',
                 'choices'    => array(
                     'is-text-light' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_light.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
                     ),
                     'is-text-dark'  => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/text_mode_dark.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
                     ),
                 )
             ),

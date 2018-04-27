@@ -37,10 +37,10 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'render_callback' => $args['cb'],
                 'choices' => array(
                     'blog_classic' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_classic.svg',
                     ),
                     'blog_column' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
                     ),
                 )
             ),
