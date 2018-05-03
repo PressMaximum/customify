@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.4\n"
+"Project-Id-Version: Customify 0.0.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-04-27 04:54:02+00:00\n"
+"POT-Creation-Date: 2018-05-03 09:58:31+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -34,12 +34,12 @@ msgid ""
 "links below or a search?"
 msgstr ""
 
-#: comments.php:34
+#: comments.php:33
 #. translators: 1: title.
 msgid "One thought on &ldquo;%1$s&rdquo;"
 msgstr ""
 
-#: comments.php:62
+#: comments.php:61
 msgid "Comments are closed."
 msgstr ""
 
@@ -1741,7 +1741,7 @@ msgid "Title for product"
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:197
-msgid "Tagline fo product"
+msgid "Tagline for product"
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:208
@@ -2268,7 +2268,19 @@ msgid "https://wpcustomify.com"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid "A free business WordPress themes."
+msgid ""
+"Customify is fast, lightweight, responsive and super flexible multipurpose "
+"theme built with SEO, speed, and usability in mind. Unleash the power of "
+"your imagination with a true WYSIWYG Header & Footer builder (inside the "
+"WordPress Customizer) built exclusively for this theme. The theme works "
+"great with any of your favorite page builder likes Elementor, Beaver "
+"Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined "
+"with the Header & Footer builder, you can build any type of websites like "
+"shop, business agencies, corporate, portfolio, education, university "
+"portal, consulting, church, restaurant, medical and so on. Customify is "
+"compatible with all well-coded plugins, including major ones like "
+"WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about "
+"the theme and ready to import demo sites at https://wpcustomify.com"
 msgstr ""
 
 #. Author of the plugin/theme
@@ -2279,7 +2291,7 @@ msgstr ""
 msgid "https://wpcustomify.com/about"
 msgstr ""
 
-#: comments.php:40
+#: comments.php:39
 #. translators: 1: comment count number, 2: title.
 msgctxt "comments title"
 msgid "%1$s thought on &ldquo;%2$s&rdquo;"
