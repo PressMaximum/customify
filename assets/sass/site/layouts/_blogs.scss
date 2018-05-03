@@ -43,10 +43,11 @@ $blog_gutter: $gl-gutter;
         position: relative;
         max-width: 100%;
         flex-basis: 50%;
-        padding-top: 55%;
+        padding-top: 0;
         overflow: hidden;
         @include for_device( mobile ){
             margin-bottom: 1em;
+            width: 100% !important;
         }
         /*
         .entry-meta {
@@ -103,6 +104,7 @@ $blog_gutter: $gl-gutter;
     .entry-readmore {
         margin-top: 1em;
     }
+
     .readmore-button {
         display: inline-block;
         line-height: 1;
@@ -110,7 +112,7 @@ $blog_gutter: $gl-gutter;
         color: $color_meta;
         border-radius: 2px;
         cursor: pointer;
-        padding: 8px 16px;
+        padding: 7px 13px;
         font-size: 13px;
         text-transform: uppercase;
         letter-spacing: 0.3px;

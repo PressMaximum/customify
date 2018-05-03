@@ -105,12 +105,14 @@ $socials-list: (
     'youtube': #cd201f,
 );
 
-@each $social-key, $color in $socials-list {
-    [class*="social-icon-#{$social-key}"]{
-        background-color: $color;
-        &.shape-none {
-            background-color: transparent;
-            color: $color;
+.customify-builder-social-icons {
+    @each $social-key, $color in $socials-list {
+        [class*="social-icon-#{$social-key}"] {
+            background-color: $color;
+            &.shape-none {
+                background-color: transparent;
+                color: $color;
+            }
         }
     }
 }

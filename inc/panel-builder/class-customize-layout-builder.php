@@ -296,7 +296,7 @@ class Customify_Customize_Layout_Builder {
      */
     function scripts() {
         $suffix = Customify()->get_asset_suffix();
-        wp_enqueue_script( 'customify-layout-builder', get_template_directory_uri() . '/assets/js/customizer/builder'.$suffix.'.js', array(
+        wp_enqueue_script( 'customify-layout-builder', esc_url(get_template_directory_uri()) . '/assets/js/customizer/builder'.$suffix.'.js', array(
             'customize-controls',
             'jquery-ui-resizable',
             'jquery-ui-droppable',

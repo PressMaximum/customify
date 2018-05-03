@@ -63,7 +63,7 @@ class Customify_Builder_Item_Logo {
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
                 'title' => __( 'Show Site Description', 'customify' ),
-                'default' => 'yes',
+                'default' => 'no',
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
                     'no' => __( 'No', 'customify' ),

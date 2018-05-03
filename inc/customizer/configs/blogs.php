@@ -37,10 +37,10 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'render_callback' => $args['cb'],
                 'choices' => array(
                     'blog_classic' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_classic.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_classic.svg',
                     ),
                     'blog_column' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/blog_column.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
                     ),
                 )
             ),
@@ -48,7 +48,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_excerpt_length',
                 'type' => 'text',
                 'section' => $level_2_panel.'_layout',
-                'default' => '',
+                'default' => '24',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'label' => __('Excerpt Length', 'customify'),
@@ -79,14 +79,19 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'css_format' => 'padding-top: {{value_no_unit}}%;',
                 'max' => 200,
                 'min' => 0,
+                'device_settings' => true,
+                'unit' => '%',
             ),
             array(
                 'name' => $args['id'].'_media_width',
                 'type' => 'slider',
                 'section' => $level_2_panel.'_media',
                 'label' => __( 'Media Width', 'customify' ),
+                'device_settings' => true,
+                'devices'         => array('desktop', 'tablet'),
                 'max' => 100,
                 'min' => 20,
+                'unit' => '%',
                 'selector' => "{$args['selector']} .posts-layout .entry-media, {$args['selector']} .posts-layout.layout--blog_classic .entry-media",
                 'css_format' => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
             ),
@@ -98,9 +103,8 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'label' => __( 'Media Radius', 'customify' ),
                 'max' => 100,
                 'min' => 0,
-
                 'selector' => "{$args['selector']} .posts-layout .entry-media",
-                'css_format' => 'border-radius: {{value_no_unit}}%;',
+                'css_format' => 'border-radius: {{value}};',
             ),
 
             array(

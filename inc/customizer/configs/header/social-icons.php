@@ -44,7 +44,48 @@ class Customify_Builder_Item_Social_Icons {
 				'render_callback'  => $fn,
 				'title'            => __( 'Social Profiles', 'customify' ),
 				'live_title_field' => 'title',
-				'default'          => array(),
+				'default'          => array(
+				   array(
+                       'title' => "Facebook",
+                       'url' => '#',
+                       'icon' => array(
+                           'type' => 'font-awesome',
+                           'icon' => 'fa fa-facebook',
+                       )
+                   ),
+                    array(
+                        'title' => "Twitter",
+                        'url' => '#',
+                        'icon' => array(
+                            'type' => 'font-awesome',
+                            'icon' => 'fa fa-twitter',
+                        )
+                    ),
+                    array(
+                        'title' => "Youtube",
+                        'url' => '#',
+                        'icon' => array(
+                            'type' => 'font-awesome',
+                            'icon' => 'fa fa-youtube-play',
+                        )
+                    ),
+					array(
+						'title' => "Instagram",
+						'url' => '#',
+						'icon' => array(
+							'type' => 'font-awesome',
+							'icon' => 'fa fa-instagram',
+						)
+					),
+                    array(
+                        'title' => "Pinterest",
+                        'url' => '#',
+                        'icon' => array(
+                            'type' => 'font-awesome',
+                            'icon' => 'fa fa-pinterest',
+                        )
+                    ),
+                ),
 				'fields'           => array(
 					array(
 						'name'  => 'title',

@@ -357,3 +357,39 @@ $dashboard_border_color: #e5e5e5;
     -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
     filter: alpha(opacity=40);
 }
+
+/*Admin notice*/
+.customify-notice-wrapper {
+    &.notice {
+        padding: 10px !important;
+        border-left: 0px;
+        .notice-dismiss {
+            top: 5px;
+            right: 5px;
+        }
+    }
+}
+.customify-notice {
+    display: flex;
+    align-items: center;
+    background: #fff8E5;
+    padding: 20px;
+    a {
+        color: #f56e28;
+        font-weight: 600;
+    }
+    .customify-notice-img {
+        padding-right: 30px;
+        padding-left: 15px;
+        img {
+            max-width: 140px;
+        }
+    }
+    .customify-notice-content {
+        flex-basis: 100%;
+    }
+
+    .customify-notice-heading {
+        font-size: 18px;
+    }
+}

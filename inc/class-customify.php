@@ -232,7 +232,7 @@ class Customify {
 
 	    $min_file = $style_dir . '/style' . $suffix_css . '.css';
 	    if (file_exists($min_file)) {
-		    $css_file = get_template_directory_uri() . '/style' . $suffix_css . '.css';
+		    $css_file = esc_url( get_template_directory_uri() ) . '/style' . $suffix_css . '.css';
 	    }
 
         if ( ! $css_file ) {
@@ -269,12 +269,12 @@ class Customify {
 
         $js_files = apply_filters(  'customify/theme/js', array(
             'jquery.fitvids.js' => array(
-                'url' => get_template_directory_uri() . '/assets/js/jquery.fitvids'.$suffix.'.js',
+                'url' => esc_url( get_template_directory_uri() ) . '/assets/js/jquery.fitvids'.$suffix.'.js',
                 'deps' => array( 'jquery' ),
                 'ver' => '1.1'
             ),
             'customify-themejs' => array(
-                'url' => get_template_directory_uri() . '/assets/js/theme'.$suffix.'.js',
+                'url' => esc_url( get_template_directory_uri() ) . '/assets/js/theme'.$suffix.'.js',
                 'deps' => array( 'jquery', 'jquery.fitvids.js' )
             ),
         ) );

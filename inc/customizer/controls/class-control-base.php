@@ -196,9 +196,9 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_style( 'wp-color-picker' );
         wp_enqueue_script( 'wp-color-picker' );
         wp_enqueue_script( 'jquery-ui-slider' );
-        wp_enqueue_style('customify-customizer-control', get_template_directory_uri().'/assets/css/admin/customizer/customizer'.$suffix.'.css');
-        wp_enqueue_script( 'customify-color-picker-alpha',  get_template_directory_uri().'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
-        wp_enqueue_script( 'customify-customizer-control',  get_template_directory_uri().'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
+        wp_enqueue_style('customify-customizer-control', esc_url( get_template_directory_uri() ) .'/assets/css/admin/customizer/customizer'.$suffix.'.css');
+        wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'customify-customizer-control', esc_url( get_template_directory_uri() ).'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_icon_loaded ) ) {
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
                 'home_url' => home_url(''),
@@ -280,7 +280,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
             <?php
             if ( $this->setting_type == 'custom_html' ) {
                 ?>
-                <div class="custom_html"><?php echo balanceTags( $this->description ) ?></div>
+                <div class="custom_html"><?php echo wp_kses_post( balanceTags( $this->description ) ); ?></div>
                 <?php
             } else {
             ?>

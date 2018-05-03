@@ -1,40 +1,49 @@
 <?php
 if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
-    function customify_customizer_styling_config( $configs ){
+	function customify_customizer_styling_config( $configs ) {
 
-        $section = 'global_styling';
+		$section = 'global_styling';
 
-        $config = array(
+		$config = array(
 
-            // Styling panel
-            array(
-                'name'           => 'styling_panel',
-                'type'           => 'panel',
-                'priority'      => 22,
-                'title'          => __( 'Styling', 'customify' ),
-            ),
+			// Styling panel
+			array(
+				'name'     => 'styling_panel',
+				'type'     => 'panel',
+				'priority' => 22,
+				'title'    => __( 'Styling', 'customify' ),
+			),
 
-            // Styling Global Section
-            array(
-                'name'           => "{$section}",
-                'type'           => 'section',
-                'panel'          => 'styling_panel',
-                'title'          => __( 'Global Colors', 'customify' ),
-            ),
-            array(
-                'name' => "{$section}_color_primary",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Primary Color', 'customify'),
-                'css_format' => apply_filters('customify/styling/primary-color',
-'article.comment .comment-reply a:hover,
+			// Styling Global Section
+			array(
+				'name'  => "{$section}",
+				'type'  => 'section',
+				'panel' => 'styling_panel',
+				'title' => __( 'Global Colors', 'customify' ),
+			),
+			array(
+				'name'       => "{$section}_color_primary",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Primary Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/primary-color', '
+article.comment .comment-reply a:hover,
 article.comment .comment-time:hover,
 article.comment .comment-author a:hover,
 article.comment .comment-post-author,
 #respond #cancel-comment-reply-link,
 .posts-layout .readmore-button:hover,
 .entry-meta a:hover,
-.posts-layout .entry-title a:hover
+.posts-layout .entry-title a:hover,
+.nav-menu-desktop .menu li.current-menu-item > a,
+.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, 
+.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
+.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, 
+.nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
+.nav-menu-desktop .menu li a:hover,
+a:hover,
+.site-branding a:hover,
+.widget-area .widget a:not(.wc-forward):hover
 {
     color: {{value}};
 }
@@ -46,7 +55,10 @@ input[type="submit"],
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
 .entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.customify-builder-btn
+.customify-builder-btn,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover 
 {
     background-color: {{value}};
 }
@@ -59,15 +71,15 @@ article.comment .comment-post-author,
 {
     border-color: {{value}};
 }' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_text",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Text Color', 'customify'),
-                'css_format' => apply_filters('customify/styling/text-color', 'body,
+			array(
+				'name'       => "{$section}_color_text",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Text Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/text-color', 'body,
 button,
 input,
 select,
@@ -108,49 +120,44 @@ abbr, acronym {
 .posts-layout .entry-media .entry-meta {
     background: {{value}};
 }' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_link",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Link Color', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/link-color', 'a,
+			array(
+				'name'       => "{$section}_color_link",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Entry Content Link Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/link-color', '
+                a,
                 .nav-links .nav-previous a:hover,
-                .nav-menu-desktop .menu li.current-menu-item > a,
-                .nav-links .nav-next a:hover  {
+                .nav-links .nav-next a:hover  
+                {
                     color: {{value}};
-				}
-				.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-				.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
-					background: {{value}};
 				}' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_link_hover",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Link Color Hover', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/link-color-hover', 'a:hover,
-.site-branding a:hover,
-.nav-menu-desktop .menu li a:hover,
-.widget-area .widget a:hover,
-.search .content-area .entry-title a:hover
+			array(
+				'name'       => "{$section}_color_link_hover",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Entry Content Link Color Hover', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/link-color-hover', '
+.search .content-area .entry-title a:hover,
+.entry-content a:hover
 {
     color: {{value}};
 }' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_border",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Border Color', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/color-border', '
+			array(
+				'name'       => "{$section}_color_border",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Border Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/color-border', '
 h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
 .comments-area, .page-breadcrumb{
     border-top-color: {{value}};
@@ -217,133 +224,133 @@ blockquote {
     }
 }
 ' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_meta",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Meta Color', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
+			array(
+				'name'       => "{$section}_color_meta",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Meta Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
 article.comment .comment-time,
 .entry-meta,
 .entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a,
+.widget-area .widget a:not(.wc-forward),
 .page-breadcrumb, .page-breadcrumb-list li a
 {
     color: {{value}};
 }' ),
-                'selector' => 'format',
-            ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_heading",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Heading Color', 'customify'),
-                'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
-                'selector' => 'format',
-            ),
+			array(
+				'name'       => "{$section}_color_heading",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Heading Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
+				'selector'   => 'format',
+			),
 
-            array(
-                'name' => "{$section}_color_w_title",
-                'type' => 'color',
-                'section' => $section,
-                'title' => __('Widget Title Color', 'customify'),
-                'css_format' => '.widget-title { color: {{value}};}',
-                'selector' => 'format',
-            ),
+			array(
+				'name'       => "{$section}_color_w_title",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Widget Title Color', 'customify' ),
+				'css_format' => '.widget-title { color: {{value}};}',
+				'selector'   => 'format',
+			),
 
-            // Styling Sidebar Widgets
-            array(
-                'name'           => "{$section}_widgets",
-                'type'           => 'section',
-                'panel'          => 'styling_panel',
-                'title'          => __( 'Sidebar Widgets', 'customify' ),
-            ),
+			// Styling Sidebar Widgets
+			array(
+				'name'  => "{$section}_widgets",
+				'type'  => 'section',
+				'panel' => 'styling_panel',
+				'title' => __( 'Sidebar Widgets', 'customify' ),
+			),
 
-            array(
-                'name' => $section.'_styling_p_w_title',
-                'type' => 'styling',
-                'section' =>"{$section}_widgets",
-                'title'  => __( 'Primary Widgets Title', 'customify' ),
-                'selector' => array(
-                    'normal' => ".sidebar-primary .widget-title",
-                ),
-                'css_format' => 'styling', // styling
-                'fields' => array(
-                    'normal_fields' => array(
-                        'link_color' => false, // disable for special field.
-                        'bg_image' => false,
-                        'bg_cover' => false,
-                        'bg_repeat' => false,
-                        //'margin' => false,
-                        //'box_shadow' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
+			array(
+				'name'       => $section . '_styling_p_w_title',
+				'type'       => 'styling',
+				'section'    => "{$section}_widgets",
+				'title'      => __( 'Primary Widgets Title', 'customify' ),
+				'selector'   => array(
+					'normal' => ".sidebar-primary .widget-title",
+				),
+				'css_format' => 'styling', // styling
+				'fields'     => array(
+					'normal_fields' => array(
+						'link_color' => false, // disable for special field.
+						'bg_image'   => false,
+						'bg_cover'   => false,
+						'bg_repeat'  => false,
+						//'margin' => false,
+						//'box_shadow' => false,
+					),
+					'hover_fields'  => false
+				)
+			),
 
-            array(
-                'name' => $section.'_styling_s_w_title',
-                'type' => 'styling',
-                'section' =>"{$section}_widgets",
-                'title'  => __( 'Secondary Widgets Title', 'customify' ),
-                'selector' => array(
-                    'normal' => ".sidebar-secondary .widget-title",
-                ),
-                'css_format' => 'styling', // styling
-                'fields' => array(
-                    'normal_fields' => array(
-                        'link_color' => false, // disable for special field.
-                        'bg_image' => false,
-                        'bg_cover' => false,
-                        'bg_repeat' => false,
-                        //'margin' => false,
-                        //'box_shadow' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
+			array(
+				'name'       => $section . '_styling_s_w_title',
+				'type'       => 'styling',
+				'section'    => "{$section}_widgets",
+				'title'      => __( 'Secondary Widgets Title', 'customify' ),
+				'selector'   => array(
+					'normal' => ".sidebar-secondary .widget-title",
+				),
+				'css_format' => 'styling', // styling
+				'fields'     => array(
+					'normal_fields' => array(
+						'link_color' => false, // disable for special field.
+						'bg_image'   => false,
+						'bg_cover'   => false,
+						'bg_repeat'  => false,
+						//'margin' => false,
+						//'box_shadow' => false,
+					),
+					'hover_fields'  => false
+				)
+			),
 
-            // Styling Sidebar Widgets
-            array(
-                'name'           => "{$section}_footer_widgets",
-                'type'           => 'section',
-                'panel'          => 'styling_panel',
-                'title'          => __( 'Footer Widgets', 'customify' ),
-            ),
+			// Styling Sidebar Widgets
+			array(
+				'name'  => "{$section}_footer_widgets",
+				'type'  => 'section',
+				'panel' => 'styling_panel',
+				'title' => __( 'Footer Widgets', 'customify' ),
+			),
 
-            array(
-                'name' => $section.'_styling_f_w_title',
-                'type' => 'styling',
-                'section' =>"{$section}_footer_widgets",
-                'title'  => __( 'Footer Widgets Title', 'customify' ),
-                'selector' => array(
-                    'normal' => ".site-footer .widget-title",
-                ),
-                'css_format' => 'styling', // styling
-                'fields' => array(
-                    'normal_fields' => array(
-                        'link_color' => false, // disable for special field.
-                        'bg_image' => false,
-                        'bg_cover' => false,
-                        'bg_repeat' => false,
-                        //'margin' => false,
-                        //'box_shadow' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
+			array(
+				'name'       => $section . '_styling_f_w_title',
+				'type'       => 'styling',
+				'section'    => "{$section}_footer_widgets",
+				'title'      => __( 'Footer Widgets Title', 'customify' ),
+				'selector'   => array(
+					'normal' => ".site-footer .widget-title",
+				),
+				'css_format' => 'styling', // styling
+				'fields'     => array(
+					'normal_fields' => array(
+						'link_color' => false, // disable for special field.
+						'bg_image'   => false,
+						'bg_cover'   => false,
+						'bg_repeat'  => false,
+						//'margin' => false,
+						//'box_shadow' => false,
+					),
+					'hover_fields'  => false
+				)
+			),
 
 
+		);
 
-        );
-        return array_merge( $configs, $config );
-    }
+		return array_merge( $configs, $config );
+	}
 }
 
 add_filter( 'customify/customizer/config', 'customify_customizer_styling_config' );

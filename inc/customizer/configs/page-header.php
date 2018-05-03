@@ -194,7 +194,7 @@ class Customify_Page_Header {
 			$tagline_fields[] = array(
 				'name'        => "product",
 				'type'        => 'textarea',
-				'label'       => __( 'Tagline fo product', 'customify' ),
+				'label'       => __( 'Tagline for product', 'customify' ),
 				'description' => __( 'Apply when viewing single product', 'customify' ),
 				'default'     => '',
 			);
@@ -469,7 +469,7 @@ class Customify_Page_Header {
 					'normal' => array(
 						'bg_image' => array(
 							'id'  => '',
-							'url' => get_template_directory_uri() . '/assets/images/default-cover.jpg',
+							'url' => esc_url( get_template_directory_uri() ) . '/assets/images/default-cover.jpg',
 						)
 					)
 				),
@@ -642,6 +642,7 @@ class Customify_Page_Header {
 				'section'         => $section,
 				'device_settings' => true,
 				'render_callback' => $render_cb_el,
+                'max'             => 1000,
 				'title'           => __( 'Cover Height', 'customify' ),
 				'selector'        => "{$selector} .page-cover-inner",
 				'css_format'      => 'min-height: {{value}};',

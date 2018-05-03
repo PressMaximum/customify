@@ -16,8 +16,34 @@ class Customify_Dashboard {
             add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_plugins' ), 10 );
             add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_community' ), 20 );
 
+            add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
+
         }
         return self::$_instance;
+    }
+
+    /**
+     * Add admin notice when active theme.
+     *
+     * @return bool|null
+     */
+    function admin_notice() {
+        global $pagenow;
+        if ( is_admin() && ('themes.php' == $pagenow ) && isset( $_GET['activated'] ) ) {
+        ?>
+        <div class="customify-notice-wrapper notice is-dismissible">
+            <div class="customify-notice">
+                <div class="customify-notice-img">
+                    <img src="<?php echo esc_url( get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png' ); ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
+                </div>
+                <div class="customify-notice-content">
+                    <div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ) ?></div>
+                    <p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ),  esc_url( admin_url( 'themes.php?page=customify' ) ) ); ?></p>
+                </div>
+            </div>
+        </div>
+        <?php
+        }
     }
 
     function add_menu(){
@@ -32,15 +58,17 @@ class Customify_Dashboard {
 
     function scripts($id)
     {
-        if ($id != 'appearance_page_customify') {
+        if ( $id != 'appearance_page_customify' && $id != 'themes.php' ) {
             return;
         }
         $suffix = Customify()->get_asset_suffix();
-        wp_enqueue_style('customify-admin', get_template_directory_uri() . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
-        wp_enqueue_style( 'plugin-install' );
-        wp_enqueue_script( 'plugin-install' );
-        wp_enqueue_script( 'updates' );
-        add_thickbox();
+        wp_enqueue_style('customify-admin', esc_url( get_template_directory_uri() ) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
+        if ( $id != 'themes' ) {
+            wp_enqueue_style('plugin-install');
+            wp_enqueue_script('plugin-install');
+            wp_enqueue_script('updates');
+            add_thickbox();
+        }
     }
 
     function setup(){
@@ -69,7 +97,7 @@ class Customify_Dashboard {
             <div class="cd-row">
                 <div class="cd-header-inner">
                     <a href="https://wpcustomify.com" target="_blank" class="cd-branding">
-                        <img src="<?php echo get_template_directory_uri().'/assets/images/admin/customify_logo@2x.png'; ?>" alt="logo">
+                        <img src="<?php echo esc_url( get_template_directory_uri() ) .'/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
                     </a>
                     <span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
                 </div>
@@ -158,11 +186,8 @@ class Customify_Dashboard {
         ?>
         <div class="cd-box">
             <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
-            <div class="cd-sites-thumb">
-                <img src="<?php echo get_template_directory_uri().'/assets/images/admin/sites_thumbnail.jpg'; ?>" alt="sites">
-            </div>
             <div id="plugin-filter" class="cd-box-content">
-                <p><?php _e( '<strong>Customify Sites</strong> is an free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
+                <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
 
                 $plugin_slug = 'customify-sites';
@@ -270,23 +295,35 @@ class Customify_Dashboard {
         $modules = array(
             array(
                 'name' => __( 'Header Transparent', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-transparent/',
             ),
             array(
                 'name' => __( 'Header Sticky', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
             ),
             array(
                 'name' => __( 'Header Footer Builder Items', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
             ),
             array(
                 'name' => __( 'Scroll To Top', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/scroll-to-top/',
             ),
             array(
                 'name' => __( 'Blog Pro', 'customify' ),
-                'url' => '#',
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/blog-pro/',
+            ),
+            array(
+                'name' => __( 'WooCommerce Booster', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/woocommerce-booster/',
+            ),
+            array(
+                'name' => __( 'Portfolio', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
+            ),
+            array(
+                'name' => __( 'Multiple Headers', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
             ),
         );
 
@@ -298,7 +335,7 @@ class Customify_Dashboard {
                 <div class="cd-module-item">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
-                        <a class="cd-module-doc-link" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
+                        <a class="cd-module-doc-link" target="_blank" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
                     </div>
                 </div>
                 <?php } ?>

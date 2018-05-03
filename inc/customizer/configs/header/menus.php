@@ -55,16 +55,16 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format' => 'html_class',
                 'choices' => array(
                     'style-plain' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_1.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_1.svg',
                     ),
                     'style-full-height' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_2.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_2.svg',
                     ),
                     'style-border-bottom' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_3.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_3.svg',
                     ),
                     'style-border-top' => array(
-                        'img' => get_template_directory_uri() . '/assets/images/customizer/menu_style_4.svg',
+                        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_4.svg',
                     ),
                 )
             ),
@@ -133,102 +133,25 @@ class Customify_Builder_Item_Primary_Menu {
                 'css_format' => 'typography',
             ),
 
-            array(
+        );
+
+        if ( ! class_exists('Customify_Pro') ) {
+            $config[] =  array(
                 'name' => $this->prefix.'_submenu_heading',
                 'type' => 'heading',
                 'section' => $section,
                 'title'  => __( 'Submenu', 'customify' ),
-            ),
-
-            array(
-                'name' => $this->prefix.'_submenu_width',
-                'type' => 'slider',
-                'section' => $section,
-                'selector' => $this->selector.' .sub-menu',
-                'device_settings' => true,
-                'css_format' => 'width: {{value}};',
-                'title'  => __( 'Submenu Width', 'customify' ),
-                'min' => 100,
-                'max' => 500,
-                'step' => 5
-            ),
-
-            array(
-                'name' => $this->prefix.'_sub_styling',
-                'type' => 'styling',
-                'section' => $section,
-                'title'  => __( 'Submenu Styling', 'customify' ),
-                'description'  => __( 'Advanced styling for submenu', 'customify' ),
-                'selector'  => array(
-                    'normal' => "{$this->selector} .sub-menu",
-                    'hover' => "{$this->selector} .sub-menu",
-                ),
-                'css_format'  => 'styling',
-                'fields' => array(
-                    'normal_fields' => array(
-                        //'margin' => true,
-                        'padding' => false, // disable for special field.
-                        'text_color' => false,
-                        'link_color' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                        'bg_position' => false,
-                    ),
-                    'hover_fields' => false
-                )
-            ),
-
-            array(
-                'name' => $this->prefix.'_sub_item_styling',
-                'type' => 'styling',
-                'section' => $section,
-                'title'  => __( 'Submenu Items Styling', 'customify' ),
-                'description'  => __( 'Styling for submenu items', 'customify' ),
-                'selector'  => array(
-                    'normal' => "{$this->selector} .sub-menu li a",
-                    'hover' => "{$this->selector} .sub-menu li a:hover, {$this->selector} .sub-menu li a:focus",
-                ),
-                'css_format'  => 'styling',
-                'fields' => array(
-                    'tabs' => array(
-                        'normal' => __( 'Normal', 'customify' ),
-                        'hover'  => __( 'Hover/Active', 'customify' ),
-                    ),
-                    'normal_fields' => array(
-                        //'padding' => false, // disable for special field.
-                        'link_color' => false,
-                        'margin' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                        'bg_position' => false,
-                    ),
-                    'hover_fields' => array(
-                        'padding' => false,
-                        'link_color' => false,
-                        'bg_cover' => false,
-                        'bg_image' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                        'bg_position' => false,
-                    ), // disable hover tab and all fields inside.
-                )
-            ),
-
-            array(
+            );
+            $config[] = array(
                 'name' => $this->prefix.'_typography_submenu',
-                'type' => 'typography',
+                'type' => 'custom_html',
                 'section'  => $section,
-                'title' => __( 'Submenu Items Typography', 'customify' ),
-                'description' => __( 'Typography for submenu items',  'customify' ),
+                'description' => sprintf( __( 'Submenu settings is a part of Advanced Header & Footer builder modules which only available in Customify Pro. <a target="_blank" href="https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/">Learn more about it here</a>.',  'customify' ) ),
                 'selector'  => "{$this->selector} .sub-menu li a",
-                'css_format' => 'typography',
-            ),
+            );
+        }
 
-        );
+        $config = apply_filters( 'customify/customize-menu-config-more', $config, $section, $this );
 
         // Item Layout
         return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );

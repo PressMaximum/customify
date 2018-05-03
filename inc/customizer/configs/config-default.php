@@ -11,8 +11,7 @@ function customify_layout_builder_config_default($val, $name)
 {
     $defaults =
         array(
-            'header_builder_panel'   =>
-                array(
+            'header_builder_panel'   => array(
                     'desktop' =>
                         array(
                             'main' =>
@@ -76,8 +75,7 @@ function customify_layout_builder_config_default($val, $name)
                                 ),
                         ),
                 ),
-            'header_top_height'      =>
-                array(
+            'header_top_height'      => array(
                     'desktop' =>
                         array(
                             'unit'  => 'px',
@@ -94,8 +92,17 @@ function customify_layout_builder_config_default($val, $name)
                             'value' => '33',
                         ),
                 ),
-            'header_main_styling' =>
-                array (
+            'header_main_height' => array (
+                'desktop' => array ( 'unit' => 'px', 'value' => '90', ),
+                'tablet' => array ( 'unit' => 'px', 'value' => '', ),
+                'mobile' => array ( 'unit' => 'px', 'value' => '', ),
+            ),
+            'header_bottom_height' => array (
+                'desktop' => array ( 'unit' => 'px', 'value' => '55', ),
+                'tablet' => array ( 'unit' => 'px', 'value' => '', ),
+                'mobile' => array ( 'unit' => 'px', 'value' => '', ),
+            ),
+            'header_main_styling' => array (
                     'normal' =>
                         array (
                             'border_width' =>
@@ -113,20 +120,17 @@ function customify_layout_builder_config_default($val, $name)
 
                 ),
             'header_sidebar_animate' => 'menu_sidebar_dropdown',
-            'header_nav-icon_align' =>
-                array (
+            'header_nav-icon_align' => array (
                     'desktop' => 'right',
                     'tablet' => 'right',
                     'mobile' => 'right',
                 ),
-            'header_primary-menu_align' =>
-                array (
+            'header_primary-menu_align' => array (
                     'desktop' => 'right',
                     'tablet' => '',
                     'mobile' => '',
                 ),
-            'footer_builder_panel'   =>
-                array(
+            'footer_builder_panel'   => array(
                     'desktop' =>
                         array(
                             'main'   =>
