@@ -194,7 +194,7 @@ class Customify_Page_Header {
 			$tagline_fields[] = array(
 				'name'        => "product",
 				'type'        => 'textarea',
-				'label'       => __( 'Tagline fo product', 'customify' ),
+				'label'       => __( 'Tagline for product', 'customify' ),
 				'description' => __( 'Apply when viewing single product', 'customify' ),
 				'default'     => '',
 			);
