@@ -6,14 +6,16 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-background, custom-logo, custom-menu, custom-logo, featured-images, flexible-header, footer-widgets, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, one-column, two-columns, three-columns, left-sidebar, right-sidebar, e-commerce, blog
 Requires at least: 4.9
 Tested up to: 4.9.4
-Stable tag: 0.0.1
+Stable tag: 0.0.5
 
 == Description ==
 
-Customify is a fast, lightweight, mobile responsive WordPress theme built with speed, SEO and usability in mind. 
-Customify can serve as a solid base for any website, and works great with any of your favorite page builders.
-With an emphasis on WordPress coding standards, we ensure Customify is compatible with all well-coded plugins, including major ones like WooCommerce, BuddyPress and bbPress. 
-All our options use the native WordPress Customizer, meaning you can see every change you make instantly before pressing the publish button. 
+Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind.
+Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme.
+The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc.
+Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on.
+Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc.
+Learn more about the theme and ready to import demo sites at https://wpcustomify.com
 
 == Installation ==
 

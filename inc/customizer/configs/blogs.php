@@ -48,7 +48,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_excerpt_length',
                 'type' => 'text',
                 'section' => $level_2_panel.'_layout',
-                'default' => '',
+                'default' => '24',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'label' => __('Excerpt Length', 'customify'),
