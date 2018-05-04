@@ -3,7 +3,7 @@ jQuery( document ).ready( function( $ ){
     var menu_sidebar_state = 'closed';
 
     if ( $( 'body' ).hasClass( 'menu_sidebar_dropdown' ) ) {
-        $( '#header-menu-sidebar' ).insertAfter( "#masthead" );
+       // $( '#header-menu-sidebar' ).insertAfter( "#masthead" );
     } else {
         $( 'body' ).prepend(  $( '#header-menu-sidebar' ) );
     }
@@ -19,7 +19,6 @@ jQuery( document ).ready( function( $ ){
 
     var insertNavIcon = function(){
         $( '.menu-item-has-children', $( '#header-menu-sidebar .nav-menu-mobile' ) ).each( function(){
-        //$( '.menu-item-has-children' ).each( function(){
             var $el = $( this );
             if ( ! $el.hasClass( 'toggle--added' ) ) {
                 $el.addClass( 'toggle--added' );

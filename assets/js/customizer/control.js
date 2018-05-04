@@ -1622,14 +1622,19 @@
         },
         initField: function () {
             var control = this;
-            var field = {
+            var field = _.clone( control.params );
+
+            field = _.extend( field, {
                 type: control.params.setting_type,
                 name: control.id,
                 value: control.params.value,
                 default: control.params.default,
                 devices: control.params.devices,
-                unit: control.params.unit
-            };
+                unit: control.params.unit,
+                title: null,
+                label: null,
+                description: null
+            } );
 
             if (field.type == 'slider') {
                 field.min = control.params.min;

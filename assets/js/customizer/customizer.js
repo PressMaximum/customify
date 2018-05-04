@@ -14,16 +14,24 @@
         if( _.isUndefined( remove_items ) ) {
             remove_items = false;
         }
+        //console.log( 'partial_id', partial_id );
         if( partial_id === 'header_builder_panel' || partial_id === 'customify_customize_render_header' ) {
 
+            var is_drop_down = $( 'body' ).hasClass( 'menu_sidebar_dropdown' );
+
             $( '.close-sidebar-panel' ).not( ':last' ).remove();
-            $('.header-menu-sidebar' ).not( ':last' ).remove();
+            if ( ! is_drop_down ) {
+                $('.header-menu-sidebar' ).not( ':last' ).remove();
+            }
 
             if ( remove_items ) {
                 $('body > .header-menu-sidebar, #page > .header-menu-sidebar' ).remove();
             }
-            if ( $( 'body' ).hasClass( 'menu_sidebar_dropdown' ) ) {
-                $( '#header-menu-sidebar' ).insertAfter( "#masthead" );
+
+            if ( is_drop_down ) {
+                $( 'body' ).addClass( 'is-menu-sidebar' );
+                $( '#masthead' ).append( $( '#header-menu-sidebar' ) );
+                $( '#header-menu-sidebar' ).css( { 'display':'block', 'height' : 'auto' } );
             } else {
                 $( 'body' ).prepend(  $( '#header-menu-sidebar' ) );
             }

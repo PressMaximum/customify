@@ -6,6 +6,7 @@ class Customify_Builder_Item_HTML {
     public $name = 'header_html'; // Optional
     public $label = ''; // Optional
     public $priority = 200;
+    public $panel = 'header_settings';
 
     /**
      * Optional construct
@@ -43,7 +44,7 @@ class Customify_Builder_Item_HTML {
             array(
                 'name' => $this->section,
                 'type' => 'section',
-                'panel' => 'header_settings',
+                'panel' => $this->panel,
                 'priority' => $this->priority,
                 'title' => $this->label,
             ),

@@ -329,6 +329,7 @@ class Customify_Customize_Layout_Builder {
                         <div class="customify--cb-devices-switcher">
                         </div>
                         <div class="customify--cb-actions">
+                            <?php do_action('customify/builder-panel/actions-buttons'); ?>
                             <a data-id="{{ data.id }}_templates" class="focus-section button button-secondary"
                                href="#"><?php _e( 'Templates', 'customify' ); ?></a>
                             <a class="button button-secondary customify--panel-close" href="#">

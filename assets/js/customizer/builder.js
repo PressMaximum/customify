@@ -5,9 +5,10 @@
 
     var is_rtl = Customify_Layout_Builder.is_rtl;
 
-    var CustomizeBuilder = function( options ){
+    var CustomizeBuilder = function( options, id ){
 
         var Builder = {
+            id: id,
             controlId: '',
             cols: 12,
             cellHeight: 45,
@@ -1550,6 +1551,8 @@
                 var that = this;
                 wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
                     if ( wpcustomize.panel( options.panel ).expanded() ) {
+                        console.log( 'open-builder:', options.panel );
+                        top._current_builder_panel = id;
                         that.showPanel();
                     } else {
                         that.hidePanel();
@@ -1606,8 +1609,8 @@
                 that.remove();
                 that.addExistingRowsItems();
 
-
                 if ( wpcustomize.panel( options.panel ).expanded() ) {
+                    console.log( 'open-builder:', options.panel );
                     that.showPanel();
                 } else {
                     that.hidePanel();
@@ -1649,7 +1652,7 @@
 
     wpcustomize.bind( 'ready', function( e, b ) {
         _.each( Customify_Layout_Builder.builders, function( opts, id ){
-            new CustomizeBuilder( opts );
+            new CustomizeBuilder( opts, id );
         } );
 
         wpcustomize.bind( 'pane-contents-reflowed', function(){
@@ -1730,6 +1733,7 @@
             id = id.replace('#','');
         }
         if ( id ) {
+
             if ( wpcustomize.panel( id ) ) {
                 wpcustomize.panel( id ).focus();
             }

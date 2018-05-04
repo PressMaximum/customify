@@ -12,7 +12,7 @@ class Customify_Page_Header {
 		if ( ! is_admin() ) {
 			add_action( 'customify_is_post_title_display', array( $this, 'display_page_title' ), 35 );
 			add_action( 'customify/site-start', array( $this, 'render' ), 35 );
-			add_action( 'wp', array( $this, 'wp' ), 35 );
+			add_action( 'wp', array( $this, 'wp' ), 85 );
 		}
 		self::$_instance = $this;
 	}
@@ -873,9 +873,12 @@ class Customify_Page_Header {
 			}
 		}
 
-		if ( $post_id ) {
+        $post = get_post( $post_id );
+		if ( $post ) {
 			$args['title']   = get_the_title( $post_id );
-			$args['tagline'] = get_the_excerpt( $post_id );
+			if ( $post->post_excerpt ) {
+                $args['tagline'] = get_the_excerpt( $post );
+            }
 
 			if ( ! $post_thumbnail_id ) {
 				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
