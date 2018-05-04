@@ -244,7 +244,7 @@
     'use strict';
 
     var $document = $( document );
-    var is_rtl = Customify_Layout_Builder.is_rtl;
+    var is_rtl = Customify_Control_Args.is_rtl;
 
     var CustomifyMedia =  {
         setAttachment: function( attachment ){

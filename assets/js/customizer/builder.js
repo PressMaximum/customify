@@ -1643,6 +1643,8 @@
                     that.switchToDevice( device );
                 } );
 
+                $( document ).trigger( 'customify_builder_panel_loaded', [ id ] );
+
             }
         };
 

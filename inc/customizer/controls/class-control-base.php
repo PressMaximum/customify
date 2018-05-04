@@ -209,6 +209,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
                 'home_url' => home_url(''),
                 'ajax' => admin_url('admin-ajax.php'),
+                'is_rtl' => is_rtl(),
                 'theme_default' => __('Theme Default', 'customify'),
                 'reset' => __('Reset this section settings', 'customify'),
                 'untitled' => __('Untitled', 'customify'),
