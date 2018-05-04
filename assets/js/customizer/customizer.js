@@ -29,9 +29,10 @@
             }
 
             if ( is_drop_down ) {
-                $( 'body' ).addClass( 'is-menu-sidebar' );
                 $( '#masthead' ).append( $( '#header-menu-sidebar' ) );
-                $( '#header-menu-sidebar' ).css( { 'display':'block', 'height' : 'auto' } );
+                if (  $( 'body' ).hasClass( 'is-menu-sidebar' ) ) {
+                    $( '#header-menu-sidebar' ).css( { 'display':'block', 'height' : 'auto' } );
+                }
             } else {
                 $( 'body' ).prepend(  $( '#header-menu-sidebar' ) );
             }
