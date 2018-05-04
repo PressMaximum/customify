@@ -60,7 +60,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'section' => "{$section}_site_tt",
                 'title' => __('Site Title', 'customify'),
                 'css_format' => 'typography',
-                'selector' => '.site-branding .site-title',
+                'selector' => '.site-branding .site-title, .site-branding .site-title a',
             ),
 
             array(
