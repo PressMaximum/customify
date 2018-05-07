@@ -375,13 +375,7 @@ if (!function_exists('customify_customizer_blog_posts_config')) {
         );
 
         $blog = customify_customizer_blog_config();
-        $archive = customify_customizer_blog_config( array(
-            'name' => __('Archive Posts', 'customify'),
-            'id' => 'archive_post',
-            'selector' => '#archive-posts',
-            'cb' => 'customify_archive_posts',
-        ) );
-        $config = array_merge($config, $blog,$archive );
+        $config = array_merge($config, $blog );
 
         return array_merge($configs, $config);
     }

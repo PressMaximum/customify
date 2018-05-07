@@ -72,16 +72,3 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
         echo '</div>';
     }
 }
-
-if( ! function_exists( 'customify_archive_posts' ) ) {
-    /*
-     * Display posts as archive layout
-     */
-    function customify_archive_posts(){
-        customify_blog_posts( array(
-            'el_id' => 'archive-posts',
-            'prefix' => 'archive_post',
-        ));
-    }
-
-}
