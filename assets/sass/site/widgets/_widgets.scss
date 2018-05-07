@@ -110,7 +110,7 @@
                 }
             }
             &.current-menu-item {
-                a {
+                > a {
                     color: $color_primary;
                     position: relative;
                     border: 1px solid $color_border;

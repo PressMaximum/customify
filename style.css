@@ -5353,14 +5353,14 @@ body.menu_sidebar_dropdown:before {
 .site-content .widget-area .menu li ul li li a {
   padding-left: 30px;
 }
-.site-content .widget-area .menu li.current-menu-item a {
+.site-content .widget-area .menu li.current-menu-item > a {
   color: #3369e7;
   position: relative;
   border: 1px solid #eaecee;
   border-left: none;
   border-right: none;
 }
-.site-content .widget-area .menu li.current-menu-item a:before {
+.site-content .widget-area .menu li.current-menu-item > a:before {
   border-bottom: 6px solid transparent;
   border-left: 6px solid #3369e7;
   border-top: 6px solid transparent;
@@ -5370,7 +5370,7 @@ body.menu_sidebar_dropdown:before {
   right: 5px;
   top: 13px;
 }
-.site-content .widget-area .menu li.current-menu-item a:after {
+.site-content .widget-area .menu li.current-menu-item > a:after {
   border-bottom: 6px solid transparent;
   border-left: 6px solid #fff;
   border-top: 6px solid transparent;
