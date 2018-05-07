@@ -3,6 +3,7 @@
 class Customify_Posts_Layout {
     public $args = array();
     public $customizer_args = array();
+    public $entry_class = '';
 
     function set_args( $customizer_args = array() )
     {
@@ -29,7 +30,6 @@ class Customify_Posts_Layout {
 
         $args['pagination'] = is_array($pagination) ? $pagination : array();
         $this->customizer_args = $customizer_args;
-
 
         $_args = wp_parse_args( $args, array(
             'layout' => '',
@@ -97,6 +97,32 @@ class Customify_Posts_Layout {
 
         $this->args = $_args;
 
+
+        $this->args['header_fields'] = array(
+            array(
+                '_visibility' => '',
+                '_key' => 'title',
+            ),
+            array(
+                '_key' => 'meta',
+                '_visibility' => '',
+            ),
+        );
+
+        $this->args['body_fields'] = array(
+            array(
+                '_key' => 'excerpt',
+                '_visibility' => '',
+            ),
+        );
+        $this->args['footer_fields'] = array(
+            array(
+                '_key' => 'readmore',
+                '_visibility' => '',
+            ),
+        );
+        $this->args['media_fields'] = array();
+
         Customify_Post_Entry()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
             'excerpt_length' => $this->args['excerpt_length'],
@@ -108,25 +134,78 @@ class Customify_Posts_Layout {
         ) );
     }
 
-    function layout_blog_classic( $post = null ){
+
+    function has_only_field( $fields, $field = 'category' ){
+        $check = false;
+        $n = 0;
+        $c = false;
+        foreach ( ( array ) $fields as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => '',
+            ) );
+            if ( $item['_visibility'] !== 'hidden' ) {
+                $n ++ ;
+                if ( $item['_key'] == $field ) {
+                    $c = true;
+                }
+            }
+        }
+
+        if ( $c && $n < 2 ) {
+            $check = true;
+        } else {
+            $check = false;
+        }
+
+        return $check;
+    }
+
+    function count_item_visibility( $fields ){
+        $n = 0;
+        foreach ( ( array ) $fields as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => '',
+            ) );
+            if ( $item['_visibility'] !== 'hidden' ) {
+                $n ++ ;
+            }
+        }
+        return $n;
+    }
+
+    function item_part( $part = '', $post = null, $inner_class = '' ){
+
+        $n = $this->count_item_visibility( $this->args[ $part.'_fields'] );
+
+        if  ( isset( $this->args[ $part.'_fields'] ) && $n > 0 ) {
+            if ( $part == 'media' && $this->has_only_field( $this->args[ $part.'_fields'] ) ) {
+                Customify_Post_Entry()->build_fields( $this->args[ $part. '_fields'], $post );
+            } else {
+                $only_more = $this->has_only_field( $this->args[ $part.'_fields'], 'readmore' );
+                $classes = array();
+                $classes[] = 'entry-article-part entry-article-'.$part;
+                if ( $only_more ) {
+                    $classes[] = 'only-more';
+                }
+                echo '<div class="'.esc_attr( join( ' ', $classes ) ).'">';
+                if ( $inner_class ) {
+                    echo '<div class="'.esc_attr( $inner_class ).'">';
+                }
+                Customify_Post_Entry()->build_fields( $this->args[ $part. '_fields'], $post );
+                if ( $inner_class ) {
+                    echo '</div>';
+                }
+                echo '</div>';
+            }
+        }
+    }
+
+    function layout( $post = null ){
         $media_fields = array(
             array(
                 '_key' => 'thumbnail'
-            ),
-        );
-        $content_fields = array(
-            array(
-                '_key' => 'title',
-            ),
-            array(
-                '_key' => 'meta',
-                'fields' => $this->args['meta_config'],
-            ),
-            array(
-                '_key' => 'excerpt',
-            ),
-            array(
-                '_key' => 'readmore',
             ),
         );
 
@@ -137,33 +216,75 @@ class Customify_Posts_Layout {
             }
         }
 
-        if ( $show_media ) {
-            ?>
-            <div class="entry-media">
-                <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
-                <?php Customify_Post_Entry()->build_fields( $media_fields, $post ); ?>
-            </div>
-        <?php } ?>
-        <div class="entry-content-data">
-            <?php Customify_Post_Entry()->build_fields( $content_fields, $post ); ?>
-        </div>
-        <?php
+        switch( $this->args['layout'] ) {
+            case 'blog_column':
+                $this->item_part( 'header', $post );
+                if ( $show_media || ! empty( $this->args['header_fields'] ) ) {
+                    ?>
+                    <div class="entry-article-part entry-media">
+                        <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
+                        <?php
+                        Customify_Post_Entry()->build_fields( $media_fields, $post );
+                        $this->item_part('media', $post, 'media-content-inner');
+                        ?>
+                    </div>
+                <?php } ?>
+                <div class="entry-content-data">
+                    <?php
+                    $this->item_part( 'body', $post );
+                    $this->item_part( 'footer', $post );
+                    ?>
+                </div>
+                <?php
+                break;
+            default:
+                if ( $show_media || ! empty( $this->args['header_fields'] ) ) {
+                    ?>
+                    <div class="entry-media">
+                        <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
+                        <?php
+                        Customify_Post_Entry()->build_fields( $media_fields, $post );
+                        $this->item_part( 'media', $post, 'media-content-inner' );
+                        ?>
+                    </div>
+                <?php } ?>
+                <div class="entry-content-data">
+                    <?php
+                    $this->item_part( 'header', $post );
+                    $this->item_part( 'body', $post );
+                    $this->item_part( 'footer', $post );
+                    ?>
+                </div>
+                <?php
+
+        }
+
     }
 
+
     function blog_item( $post = null , $class = null ){
-        if ( $this->args['columns'] > 1 ) {
-            $entry_class = 'customify-col entry'. ( $class ? ' '.$class : '' );
-        } else {
-            $entry_class = 'entry'. ( $class ? ' '.$class : '' );
+        $entry_class = array('entry');
+
+        if ( is_numeric( $this->args['columns'] ) && $this->args['columns'] > 1 ) {
+            $entry_class[] = 'customify-col';
+        } elseif( is_array( $this->args['columns'] ) ) {
+            $entry_class[] = 'customify-col';
+        }
+        if( $class ) {
+            $entry_class[] = $class;
+        }
+        if(  $this->entry_class  ) {
+            $entry_class[] =  $this->entry_class ;
         }
 
         Customify_Post_Entry()->set_post( $post );
-
         ?>
-        <div <?php post_class( $entry_class,  $post ) ?>>
-            <?php
-            $this->layout_blog_classic( $post );
-            ?>
+        <div <?php post_class( join( ' ', $entry_class ),  $post ) ?>>
+            <div class="entry-inner">
+                <?php
+                $this->layout( $post );
+                ?>
+            </div>
         </div><!-- /.entry post --> <?php
     }
 

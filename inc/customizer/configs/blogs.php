@@ -42,7 +42,11 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'blog_column' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
                     ),
-                )
+                ),
+                'reset_controls' => array(
+                    $args['id'].'_media_ratio',
+                    $args['id'].'_media_width',
+                ),
             ),
 
             array(
@@ -72,7 +76,9 @@ if (!function_exists('customify_customizer_blog_config')) {
                         'bg_repeat' => false,
                         'bg_attachment' => false,
                     ),
-                    //'hover_fields' => false,
+                    'hover_fields' => array(
+                        'link_color' => false
+                    ),
                 ),
                 //'required' => array($args['id'].'_more_display', '==', '1')
             ),
@@ -172,7 +178,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $level_2_panel.'_meta',
                 'type' => 'section',
                 'panel' => $level_2_panel,
-                'title' => __('Meta Settings', 'customify'),
+                'title' => __('Meta', 'customify'),
             ),
 
             array(
@@ -227,7 +233,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                     ),
                 )
             ),
-
 
             array(
                 'name' => $level_2_panel.'_readmore',
