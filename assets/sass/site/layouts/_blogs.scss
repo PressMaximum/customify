@@ -9,7 +9,6 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-meta {
-    margin-bottom: 0.7em;
     color: $color_meta;
     font-size: 85%;
     a {
@@ -25,8 +24,16 @@ $blog_gutter: $gl-gutter;
         margin-left: 3px;
         margin-right: 3px;
     }
-}
 
+    .author {
+        img {
+            vertical-align: middle;
+            overflow: hidden;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+    }
+}
 
 
 .posts-layout {
@@ -119,18 +126,6 @@ $blog_gutter: $gl-gutter;
             &:hover {
                 color: inherit;
             }
-        }
-    }
-
-    .entry-meta {
-        .author {
-            img {
-                vertical-align: middle;
-                overflow: hidden;
-                border-radius: 50%;
-                margin-right: 5px;
-            }
-
         }
     }
 
@@ -377,7 +372,13 @@ $blog_gutter: $gl-gutter;
     }
 }
 
-.entry-footer {
+.entry-single {
+    .entry--item:not( .entry-title ), .entry-thumbnail {
+        margin-bottom: 1.41575em;
+        &:last-child, p:last-child {
+            margin-bottom: 0px;
+        }
+    }
     .tags-links, .cat-links {
         margin-top: ms(-3);
         a {

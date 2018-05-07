@@ -375,6 +375,7 @@ class Customify {
             // Site Settings
             'layouts',
             'blogs',
+            'single-blog-post',
             'styling',
             'typography',
 

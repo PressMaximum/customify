@@ -18,7 +18,13 @@ class Customify_Posts_Layout {
             'hide_thumb_if_empty' => Customify()->get_setting($customizer_args['prefix'] . '_hide_thumb_if_empty'),
             'meta_config'         => Customify()->get_setting($customizer_args['prefix'] . '_meta_config'),
             'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
+            'author_avatar'       => Customify()->get_setting($customizer_args['prefix'] . '_author_avatar'),
         );
+
+        $size =  Customify()->get_setting( $customizer_args['prefix'].'_avatar_size' );
+        if ( is_array( $size ) && isset( $size['value'] ) ) {
+            $args['avatar_size'] = absint($size['value']);
+        }
 
         $pagination = array(
             'show_paging' => Customify()->get_setting($customizer_args['prefix'] . '_pg_show_paging'),
@@ -96,7 +102,6 @@ class Customify_Posts_Layout {
         }
 
         $this->args = $_args;
-
 
         $this->args['header_fields'] = array(
             array(

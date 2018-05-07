@@ -235,6 +235,28 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
+                'name' => $args['id'].'_author_avatar',
+                'type' => 'checkbox',
+                'section' => $level_2_panel.'_meta',
+                'default' => 0,
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'checkbox_label' => __('Show author avatar', 'customify'),
+            ),
+
+            array(
+                'name' => $args['id'].'_avatar_size',
+                'type' => 'slider',
+                'section' => $level_2_panel.'_meta',
+                'default' => 32,
+                'max' => 150,
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'label' => __('Avatar Size', 'customify'),
+                'required' => array($args['id'].'_author_avatar', '==', '1')
+            ),
+
+            array(
                 'name' => $level_2_panel.'_readmore',
                 'type' => 'section',
                 'panel' => $level_2_panel,

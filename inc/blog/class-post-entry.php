@@ -12,7 +12,7 @@ class Customify_Post_Entry {
     }
 
     function get_config_default(){
-        return array(
+        $args = array(
             'excerpt_length' => Customify()->get_setting('blog_post_excerpt_length' ),
             'excerpt_more' => null,
             'thumbnail_size' => Customify()->get_setting('blog_post_thumb_size' ),
@@ -25,9 +25,16 @@ class Customify_Post_Entry {
             'tax' => 'category',
             'title_tag' => 'h2',
             'title_link' => 1,
-            'author_avatar' => false,
+            'author_avatar' => Customify()->get_setting('blog_post_author_avatar' ),
             'avatar_size' => 32,
         );
+
+        $size =  Customify()->get_setting( 'blog_post_avatar_size' );
+        if ( is_array( $size ) && isset( $size['value'] ) ) {
+            $args['avatar_size'] = absint($size['value']);
+        }
+
+        return $args;
     }
 
     /**
@@ -182,6 +189,39 @@ class Customify_Post_Entry {
         return $html;
     }
 
+
+    /**
+     * Get tags list markup
+     *
+     * @return string
+     */
+    function post_tags(){
+        $html =  '';
+        if ( 'post' === get_post_type() ) {
+            /* translators: used between list items, there is a space after the comma */
+            $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
+            if ( $tags_list ) {
+                $html .= sprintf( '<div class="entry--item entry-tags tags-links">%1$s</div>', $tags_list ); // WPCS: XSS OK.
+            }
+        }
+        echo $html;
+    }
+    /**
+     * Get categories list markup
+     *
+     * @return string
+     */
+    function post_categories(){
+        $html =  '';
+        if ( 'post' === get_post_type() ) {
+            /* translators: used between list items, there is a space after the comma */
+            $list = get_the_category_list( esc_html_x( ', ', 'list item separator', 'customify' ) );
+            if ( $list ) {
+                $html .= sprintf( '<div class="entry--item entry-categories cats-links">%1$s</div>', $list ); // WPCS: XSS OK.
+            }
+        }
+        echo $html;
+    }
     /**
      * Get comment number markup
      *
@@ -277,16 +317,17 @@ class Customify_Post_Entry {
      * @param null $post
      */
     function post_title( $post = null ){
-        if ( is_singular() ) :
-            the_title( '<h1 class="entry-title entry--item">', '</h1>' );
-        else :
-            if ( $this->config['title_link'] ) {
-                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item"><a href="' . esc_url( get_permalink( $post ) ) . '" title="'.the_title_attribute( array( 'echo' => false ) ).'" rel="bookmark">', '</a></'.$this->config['title_tag'].'>' );
-            } else {
-                the_title( '<'.$this->config['title_tag'].' class="entry-title entry--item">','</'.$this->config['title_tag'].'>' );
+        if ( is_singular() ) {
+            if ( customify_is_post_title_display() ) {
+                the_title('<h1 class="entry-title entry--item">', '</h1>');
             }
-
-        endif;
+        } else {
+            if ($this->config['title_link']) {
+                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item"><a href="' . esc_url(get_permalink($post)) . '" title="' . the_title_attribute(array('echo' => false)) . '" rel="bookmark">', '</a></' . $this->config['title_tag'] . '>');
+            } else {
+                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item">', '</' . $this->config['title_tag'] . '>');
+            }
+        }
     }
 
     function get_post_id( $post = null ) {
@@ -329,15 +370,21 @@ class Customify_Post_Entry {
      * @param null $post
      */
     function post_thumbnail( $post = null ){
-        //if ( has_post_thumbnail() ) {
-        /* <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>"> */
+        if ( is_single() && ! is_front_page() && ! is_home() ) {
+            if ( has_post_thumbnail() ){
             ?>
-                <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
+            <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
                 <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
-                </div>
+            </div>
             <?php
-        //}
-        //  </div>
+            }
+        } else{
+            ?>
+            <div class="entry-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb': 'no-thumb'; ?>">
+            <?php the_post_thumbnail($this->config['thumbnail_size'] ); ?>
+            </div>
+            <?php
+        }
     }
 
     /**
@@ -371,6 +418,7 @@ class Customify_Post_Entry {
      * Post content markup
      */
     function post_content(){
+
         ?>
         <div class="entry-content entry--item">
             <?php
@@ -401,6 +449,27 @@ class Customify_Post_Entry {
             <a class="readmore-button" href="<?php the_permalink() ?>" title="<?php esc_attr( sprintf( __( 'Continue reading %s', 'customify' ), get_the_title() )  ); ?>"><?php echo wp_kses_post( $more );  ?></a>
         </div><!-- .entry-content -->
         <?php
+    }
+
+    function post_comment_form(){
+        if ( is_single() ) {
+            // If comments are open or we have at least one comment, load up the comment template.
+            if (comments_open() || get_comments_number()) :
+                echo '<div class="entry-comment-form entry--item">';
+                comments_template();
+                echo '</div>';
+            endif;
+        }
+    }
+
+    function post_navigation(){
+        if ( ! is_single() ) {
+            return '';
+        }
+        the_post_navigation( array(
+            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
+            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
+        ) );
     }
 
     /**
