@@ -303,7 +303,7 @@ class Customify_Customize_Layout_Builder {
             'jquery-ui-draggable'
         ), false, true );
         wp_localize_script( 'customify-layout-builder', 'Customify_Layout_Builder', array(
-            'footer_moved_widgets_text' => '', // __( 'Footer widgets moved', 'customify' ),
+            'footer_moved_widgets_text' => '',
             'builders'  => $this->get_builders(),
             'is_rtl' => is_rtl()
         ) );

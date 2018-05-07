@@ -1353,7 +1353,7 @@
                 var that = this;
                 _.each( that.devices, function( device_name, device ) {
                     var panelHTML = that.addPanel( device );
-                    $( '.customify--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
+                    $( '.customify--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
                     $( '.customify--cb-body', that.container ).append( panelHTML );
                 } );
 
@@ -1637,13 +1637,13 @@
                 }, 100 )  );
 
                 // Switch panel
-                that.container.on( 'click', '.customify--cb-devices-switcher a', function(e){
+                that.container.on( 'click', '.customify--cb-devices-switcher a.switch-to', function(e){
                     e.preventDefault();
                     var device = $( this ).data('device');
                     that.switchToDevice( device );
                 } );
 
-                $( document ).trigger( 'customify_builder_panel_loaded', [ id ] );
+                $document.trigger( 'customify_builder_panel_loaded', [ id, that ] );
 
             }
         };
