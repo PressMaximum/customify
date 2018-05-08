@@ -220,7 +220,7 @@
                     }
                 }
             },
-            gridster: function( $wrapper, ui ){
+            gridster: function( $wrapper, ui, event ){
                 var flag = [], backupFlag = [], that = this;
                 var maxCol = this.cols;
 
