@@ -63,7 +63,7 @@ input[type="submit"],
 {
     background-color: {{value}};
 }
-.site-content .widget-area .menu li.current-menu-item a:before {
+.site-content .widget-area .menu li.current-menu-item > a:before {
 	border-left-color: {{value}};
 }
 article.comment .comment-post-author,
@@ -190,7 +190,7 @@ blockquote {
 .pagination .nav-links > *
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
-.site-content .widget-area .menu li.current-menu-item a
+.site-content .widget-area .menu li.current-menu-item > a
 {
     border-color: {{value}};
 }
