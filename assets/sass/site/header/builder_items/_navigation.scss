@@ -1,5 +1,23 @@
 /* Navigation */
 $submenu_width: 14em;
+.menu-item .link-before {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+.nav-icon-angle {
+    display: inline-block;
+    font-size: inherit;
+    text-rendering: auto;
+    text-decoration: none !important;
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-left: 1px solid currentColor;
+    border-top: 1px solid currentColor;
+    transform: rotate(-135deg) translateY(50%);
+}
+
 .nav-menu-desktop {
     font-size: 15px;
     font-weight: 500;
@@ -11,11 +29,6 @@ $submenu_width: 14em;
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         text-decoration: none !important;
-        &:before {
-            //font-family: "FontAwesome";
-            font-family: "FontAwesome", "Font Awesome 5 Solid", "Font Awesome 5 Regular";
-            text-decoration: none !important;
-        }
     }
     &.hide-arrow-active {
         .nav-icon-angle {
@@ -60,9 +73,6 @@ $submenu_width: 14em;
                 .nav-icon-angle {
                     margin-left: 5px;
                     line-height: 0;
-                    &:before {
-                        content: "\f107";
-                    }
                 }
             }
         }
@@ -77,9 +87,6 @@ $submenu_width: 14em;
                         float: right;
                         @include rtl(){
                             transform: rotate(180deg);
-                        }
-                        &:before {
-                            content: "\f105";
                         }
                     }
                 }
@@ -106,6 +113,13 @@ $submenu_width: 14em;
         top: 100%;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
         text-align: left;
+        .link-before {
+            display: flex;
+            justify-content: space-between;
+        }
+        .nav-icon-angle {
+            transform: rotate(135deg) translateY(0);
+        }
         li {
             display: block;
             margin: 0px;
@@ -286,6 +300,9 @@ $submenu_width: 14em;
         li:first-child > a {
             border-top: none;
         }
+        .menu-item a > .link-before .nav-icon-angle {
+            display: none;
+        }
         li {
             list-style: none;
             position: relative;
@@ -318,6 +335,9 @@ $submenu_width: 14em;
                 &:hover {
                     box-shadow: none;
                 }
+                .nav-icon-angle {
+                    transform: rotate(-135deg) translateY(50%) translateX(0);
+                }
             }
         }
 
@@ -338,7 +358,7 @@ $submenu_width: 14em;
             > a {
                 .nav-toggle-icon {
                     i {
-                        transform: rotate(-180deg);
+                        transform: rotate(45deg);
                     }
 
                 }

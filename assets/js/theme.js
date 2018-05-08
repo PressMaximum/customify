@@ -27,7 +27,7 @@ jQuery( document ).ready( function( $ ){
                 if (is_previewing) {
                     first_a.attr('href', 'javascript:;');
                 }
-                first_a.append('<span class="nav-toggle-icon"><i class="fa fa-angle-down"></i></span>');
+                first_a.append('<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>');
                 $(' > .sub-menu', $el).prepend(d);
                 $(' > .sub-menu', $el).slideUp(0);
                 d.wrap('<li class="menu-item li-duplicator"></li>');

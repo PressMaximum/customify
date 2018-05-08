@@ -3143,6 +3143,25 @@ article.comment .comment-post-author {
 }
 
 /* Navigation */
+.menu-item .link-before {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.nav-icon-angle {
+  display: inline-block;
+  font-size: inherit;
+  text-rendering: auto;
+  text-decoration: none !important;
+  position: relative;
+  width: 8px;
+  height: 8px;
+  border-left: 1px solid currentColor;
+  border-top: 1px solid currentColor;
+  transform: rotate(-135deg) translateY(50%);
+}
+
 .nav-menu-desktop {
   font-size: 15px;
   font-weight: 500;
@@ -3154,10 +3173,6 @@ article.comment .comment-post-author {
   text-rendering: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-decoration: none !important;
-}
-.nav-menu-desktop .nav-icon-angle:before {
-  font-family: "FontAwesome", "Font Awesome 5 Solid", "Font Awesome 5 Regular";
   text-decoration: none !important;
 }
 .nav-menu-desktop.hide-arrow-active .nav-icon-angle {
@@ -3197,9 +3212,6 @@ article.comment .comment-post-author {
   margin-left: 5px;
   line-height: 0;
 }
-.nav-menu-desktop .menu > li.menu-item-has-children > a .nav-icon-angle:before {
-  content: "\f107";
-}
 .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a {
   position: relative;
 }
@@ -3216,9 +3228,6 @@ article.comment .comment-post-author {
 }
 html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
   transform: rotate(180deg);
-}
-.nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle:before {
-  content: "\f105";
 }
 .nav-menu-desktop .sub-menu {
   position: absolute;
@@ -3238,6 +3247,13 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
   top: 100%;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   text-align: left;
+}
+.nav-menu-desktop .sub-menu .link-before {
+  display: flex;
+  justify-content: space-between;
+}
+.nav-menu-desktop .sub-menu .nav-icon-angle {
+  transform: rotate(135deg) translateY(0);
 }
 .nav-menu-desktop .sub-menu li {
   display: block;
@@ -3355,6 +3371,9 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
 .nav-menu-mobile .menu li:first-child > a {
   border-top: none;
 }
+.nav-menu-mobile .menu .menu-item a > .link-before .nav-icon-angle {
+  display: none;
+}
 .nav-menu-mobile .menu li {
   list-style: none;
   position: relative;
@@ -3387,6 +3406,9 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
 .nav-menu-mobile .menu li .nav-toggle-icon:hover {
   box-shadow: none;
 }
+.nav-menu-mobile .menu li .nav-toggle-icon .nav-icon-angle {
+  transform: rotate(-135deg) translateY(50%) translateX(0);
+}
 .nav-menu-mobile .menu .sub-menu {
   opacity: 0;
   transition: opacity .5s ease;
@@ -3397,7 +3419,7 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
   padding-left: 3em;
 }
 .nav-menu-mobile .menu .open-sub > a .nav-toggle-icon i {
-  transform: rotate(-180deg);
+  transform: rotate(45deg);
 }
 .nav-menu-mobile .menu .open-sub > .sub-menu {
   display: block;
