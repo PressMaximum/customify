@@ -61,9 +61,9 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'type' => 'styling',
                 'section' => $level_2_panel.'_layout',
                 'selector'    => array(
-                    'normal' => "{$args['selector'] } .entry",
-                    'hover' => "{$args['selector'] } .entry:hover",
-                    'normal_margin' => "{$args['selector'] } .entry",
+                    'normal' => "{$args['selector'] } .entry-inner",
+                    'hover' => "{$args['selector'] } .entry-inner:hover",
+                    'normal_margin' => "{$args['selector'] } .entry-inner",
                 ),
                 'css_format'  => 'styling',
                 'label' => __( 'Article Wrapper', 'customify' ),

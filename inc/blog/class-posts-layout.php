@@ -82,6 +82,7 @@ class Customify_Posts_Layout {
         if( in_array( $_args['layout'] , array( 'blog_lateral', 'blog_classic' ) ) ) {
             $_args['columns' ] = 1;
         }
+
         $_args[ 'pagination' ]['mid_size'] = absint( $_args[ 'pagination' ]['mid_size'] );
 
         if ( empty( $_args['meta_config'] ) ) {
@@ -328,39 +329,45 @@ class Customify_Posts_Layout {
         $this->set_args( $customizer_args );
         $classes =  array();
 
-        if ( $this->args['layout'] !=='blog_masonry' && $this->args['layout'] != 'blog_timeline' ) {
-            if ( is_numeric( $this->args['columns'] ) &&  $this->args['columns'] > 1) {
-                $classes[] = 'customify-grid-' . $this->args['columns'];
-            } elseif ( is_array( $this->args['columns'] ) ) {
-                $this->args['columns'] = wp_parse_args( $this->args['columns'], array(
-                    'desktop' => 1,
-                    'tablet' => 1,
-                    'mobile' => 1,
-                ) );
-                foreach( $this->args['columns'] as $d => $v ){
-                    $v = absint( $v );
-                    if (  $v < 1 ) {
-                        $v = 1;
-                    } elseif ( $v > 12 ) {
-                        $v = 12;
-                    }
-                    $this->args['columns'][ $d ] = $v;
+        $atts = array();
+        if ( is_numeric( $this->args['columns'] ) &&  $this->args['columns'] > 1) {
+            $classes['grid'] = 'customify-grid-' . $this->args['columns'];
+            $atts['data-col'] = $this->args['columns'];
+        } elseif ( is_array( $this->args['columns'] ) ) {
+            $this->args['columns'] = wp_parse_args( $this->args['columns'], array(
+                'desktop' => 1,
+                'tablet' => 1,
+                'mobile' => 1,
+            ) );
+            foreach( $this->args['columns'] as $d => $v ){
+                $v = absint( $v );
+                if (  $v < 1 ) {
+                    $v = 1;
+                } elseif ( $v > 12 ) {
+                    $v = 12;
                 }
-                $classes[] = sprintf( 'customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile'] );
+                $this->args['columns'][ $d ] = $v;
+                $atts['data-col-'.$d] = $v;
             }
+            $classes['grid'] = sprintf( 'customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile'] );
         }
 
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];
-        $style = '';
+
         if ( $this->args['layout'] == 'blog_masonry' ) {
             // WPCS: XSS OK.
-            $style = '-webkit-column-count: '.$this->args['columns'].';  column-count: '.$this->args['columns'].';';
+            unset( $classes['grid']  );
         }
+
+        $s_atts = '';
+        foreach ( $atts as $k => $v ) {
+            $s_atts .= " {$k}='".esc_attr( $v )."' ";
+        }
+        do_action( 'customify/blog/before-render', $this );
         ?>
         <div class="posts-layout-wrapper">
-
-            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo ( $style != '' ) ? ' style="'.esc_attr( $style).'"' : ''; ?>>
+            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $s_atts; // WPCS: XSS OK. ?>>
                 <?php
                 if ( $this->args['layout'] == 'blog_timeline' ) {
                     echo '<div class="time-line"></div>';
@@ -386,6 +393,7 @@ class Customify_Posts_Layout {
             ?>
         </div>
         <?php
+        do_action( 'customify/blog/after-render', $this );
     }
 
     function render_pagination(){

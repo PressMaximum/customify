@@ -919,6 +919,8 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
+        $css_code = apply_filters( 'customify/auto-css', $css_code  );
+
         $url = $this->get_google_fonts_url();
         self::$font_url = $url;
         if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
