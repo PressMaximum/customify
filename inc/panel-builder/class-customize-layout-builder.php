@@ -58,6 +58,7 @@ class Customify_Customize_Layout_Builder {
         $this->registered_builders[ $id ] = $class;
     }
 
+
     /**
      * Add an item builder to panel
      *

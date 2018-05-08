@@ -38,43 +38,45 @@ class Customify_Font_Icons
 
     }
 
-    function _picked_icon( $value ){
-        if ( is_array( $value ) ) {
-            if ( isset($value['icon']) && isset($value['type'] ) ) {
-                $this->picked_types[$value['type']] = $value['type'];
+    function is_used(){
+        if ( is_customize_preview() ) {
+            return true;
+        }
+        $check = apply_filters( 'customify/load-icons', null );
+        if ( is_null( $check ) ) {
+            $builders = array( 'header_builder_panel', 'footer_builder_panel' );
+            $list = apply_filters( 'customify/icon_used', array() );
+
+            foreach ( $builders as $setting_key ) {
+                $data = Customify()->get_setting( $setting_key );
+                if ( is_array( $data ) ) {
+                    foreach( $data as $devices => $rows ) {
+                        foreach( (array) $rows as $row_id => $items ) {
+                            foreach ( (array) $items as $item) {
+                                if (is_array($item)) {
+                                    if (isset($list[$item['id']]) && $list[$item['id']]) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-
-            foreach( $value as $_k => $_v ) {
-                $this->_picked_icon( $_v );
-            }
         }
-    }
-
-    function get_icon_types_picked(){
-        $mods = get_theme_mods();
-        if ( ! is_array( $mods ) ) {
-            $mods = array();
-        }
-        foreach( $mods as $key => $value ) {
-            $this->_picked_icon( $value );
-        }
-
-        $config= Customify_Customizer::get_config();
-        foreach( $config as $f ) {
-            $value = Customify()->get_setting( $f['name'] );
-            $this->_picked_icon( $value );
-        }
-
+        return $check;
     }
 
     function enqueue(){
-        if ( is_null( self::$enqueued ) ) {
-            foreach ($this->get_icons() as $icon_id => $icon) {
-                wp_dequeue_style( $icon_id );
-                wp_enqueue_style($icon_id, $icon['url'], array(), '5.0.0' );
-            }
-            self::$enqueued = true;
-        }
+       if (  $this->is_used() ) {
+           if (is_null(self::$enqueued)) {
+               foreach ($this->get_icons() as $icon_id => $icon) {
+                   wp_dequeue_style($icon_id);
+                   wp_enqueue_style($icon_id, $icon['url'], array(), '5.0.0');
+               }
+               self::$enqueued = true;
+           }
+       }
     }
 
     /**
