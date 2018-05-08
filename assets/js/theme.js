@@ -74,11 +74,14 @@ jQuery( document ).ready( function( $ ){
         if ( typeof ( $el ) ===  "undefined" ) {
             $el = $( '#header-menu-sidebar' );
         }
+
+        /*
         if ( $( 'body' ).hasClass( 'menu_sidebar_dropdown' ) ) {
            // $el.height( 0 );
         } else {
             $el.height( h );
         }
+        */
 
         var t = .2;
         var index = 0;
