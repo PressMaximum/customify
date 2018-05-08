@@ -293,14 +293,20 @@ body {
 
 /* Hiding Menu Sidebar animation. */
 .hiding-header-menu-sidebar {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    display: block;
     &.menu_sidebar_slide_overlay {
         .header-menu-sidebar {
             z-index: 0;
             opacity: 0;
+            height: 100%;
         }
     }
     &.menu_sidebar_slide_left{
         .header-menu-sidebar {
+            height: 100%;
             transform: translateX(-100%);
             transition: transform .5s cubic-bezier(.79, .14, .15, .86);
         }
@@ -313,6 +319,7 @@ body {
     &.menu_sidebar_slide_right {
         .header-menu-sidebar {
             transform: translateX(200%);
+            height: 100%;
         }
     }
 }
@@ -339,6 +346,8 @@ body {
     &.menu_sidebar_slide_overlay {
         overflow: hidden;
         position: fixed;
+        width: 100%;
+        display: block;
         .header-menu-sidebar {
             z-index: $menu_sidebar_active_z_index;
             opacity: 1;
@@ -351,6 +360,8 @@ body {
     &.menu_sidebar_slide_left {
         overflow: hidden;
         position: fixed;
+        width: 100%;
+        display: block;
         .header-menu-sidebar {
             z-index: $menu_sidebar_active_z_index;
             height: 100%;
@@ -365,6 +376,8 @@ body {
     &.menu_sidebar_slide_right {
         overflow: hidden;
         position: fixed;
+        width: 100%;
+        display: block;
         .header-menu-sidebar {
             z-index: $menu_sidebar_active_z_index;
             height: 100%;

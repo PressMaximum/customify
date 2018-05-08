@@ -234,6 +234,7 @@ jQuery( document ).ready( function( $ ){
 
        } );
 
+       /*
         if ( ! customify_is_mobile() ) {
             $('.header-search_icon-item .search-icon').blur( function (e) {
                 var w = $(this).parent();
@@ -249,6 +250,7 @@ jQuery( document ).ready( function( $ ){
                 }
             });
         }
+        */
 
    }
 
