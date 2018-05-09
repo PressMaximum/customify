@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify
 Author URI: https://wpcustomify.com/about
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com
-Version: 0.0.5
+Version: 0.0.6
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -2456,11 +2456,11 @@ figure {
 
 /* Links */
 a {
-  color: #3369e7;
+  color: #0cb4ce;
   text-decoration: none;
 }
 a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 a:hover, a:active {
   outline: 0;
@@ -2539,7 +2539,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   border: none;
-  background: #3369e7;
+  background: #0cb4ce;
   color: #FFFFFF;
   cursor: pointer;
   padding: 0.5407911001em 1.618em;
@@ -2887,7 +2887,7 @@ article.comment .comment-reply a {
   color: #6d6d6d;
 }
 article.comment .comment-reply a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 article.comment .comment-meta {
   margin-bottom: 0.875em;
@@ -2897,7 +2897,7 @@ article.comment .comment-time {
   font-size: 90%;
 }
 article.comment .comment-time:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 article.comment .comment-wrap {
   margin-right: 85px;
@@ -2912,14 +2912,14 @@ article.comment .comment-author a {
   color: #444444;
 }
 article.comment .comment-author a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 article.comment .comment-post-author {
-  border: 1px solid #3369e7;
+  border: 1px solid #0cb4ce;
   font-size: 13px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #3369e7;
+  color: #0cb4ce;
   position: relative;
   top: -3px;
   margin-right: 4px;
@@ -2943,11 +2943,11 @@ article.comment .comment-post-author {
   margin-left: 0px;
 }
 #respond #cancel-comment-reply-link {
-  border: 1px solid #3369e7;
+  border: 1px solid #0cb4ce;
   font-size: 12px;
   padding: 2px 6px 3px;
   border-radius: 2px;
-  color: #3369e7;
+  color: #0cb4ce;
   position: relative;
   top: -4px;
   margin-right: 4px;
@@ -3003,7 +3003,7 @@ article.comment .comment-post-author {
 
 .header-top {
   padding: 0;
-  background: #3369e7;
+  background: #0cb4ce;
   color: #ffffff;
   -webkit-text-size-adjust: 100%;
      -moz-text-size-adjust: 100%;
@@ -3273,7 +3273,7 @@ article.comment .comment-post-author {
 /* Button */
 .customify-builder-btn {
   padding: 0.3819820591em 1em;
-  background: #3369e7;
+  background: #0cb4ce;
   color: #FFFFFF;
   border-radius: 2px;
   display: inline-block;
@@ -3320,7 +3320,7 @@ article.comment .comment-post-author {
   color: #373737;
 }
 .site-branding a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .site-branding img {
   display: block;
@@ -3476,10 +3476,10 @@ article.comment .comment-post-author {
           text-decoration-color: currentColor;
 }
 .nav-menu-desktop .menu li a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .nav-menu-desktop .menu li.current-menu-item > a {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .nav-menu-desktop .menu > li > a {
   padding: 14px 15px 15px;
@@ -3584,10 +3584,10 @@ article.comment .comment-post-author {
   float: right;
 }
 .nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li a:focus {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .nav-menu-desktop.style-full-height .primary-menu-ul:before, .nav-menu-desktop.style-full-height .primary-menu-ul:after {
   content: "";
@@ -3611,11 +3611,11 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover {
   color: #FFFFFF;
-  background-color: #3369e7;
+  background-color: #0cb4ce;
 }
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a {
   color: #ffffff;
-  background-color: #3369e7;
+  background-color: #0cb4ce;
 }
 .nav-menu-desktop.style-border-bottom .primary-menu-ul > li > a .link-before {
   position: relative;
@@ -4640,7 +4640,7 @@ body.menu_sidebar_dropdown:before {
 .header-menu-sidebar .builder-item-sidebar:last-of-type {
   border-bottom: none;
 }
-.header-menu-sidebar .builder-item-sidebar.mobile-item--primary-menu, .header-menu-sidebar .builder-item-sidebar.mobile-item--secondary_menu {
+.header-menu-sidebar .builder-item-sidebar.mobile-item--primary-menu, .header-menu-sidebar .builder-item-sidebar.mobile-item--secondary-menu, .header-menu-sidebar .builder-item-sidebar.mobile-item--menu {
   padding: 0px;
 }
 .header-menu-sidebar .header-menu-sidebar-bg:before {
@@ -5265,7 +5265,7 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .entry-meta a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .entry-meta > span {
   display: inline-block;
@@ -5360,7 +5360,7 @@ body.menu_sidebar_dropdown:before {
   color: inherit;
 }
 .posts-layout .entry-title a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .posts-layout .entry-media-link {
   position: absolute;
@@ -5408,8 +5408,8 @@ body.menu_sidebar_dropdown:before {
   transition: transform .18s, border .18s, background .18s, box-shadow .18s, opacity .18s, color .18s, -webkit-transform .18s;
 }
 .posts-layout .readmore-button:hover {
-  color: #3369e7;
-  border-color: #3369e7;
+  color: #0cb4ce;
+  border-color: #0cb4ce;
 }
 .posts-layout .entry-content-data {
   display: -webkit-box;
@@ -5573,13 +5573,13 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 .pagination .nav-links > *:hover {
-  border-color: #3369e7;
-  background: #3369e7;
+  border-color: #0cb4ce;
+  background: #0cb4ce;
   color: #FFFFFF;
 }
 .pagination .nav-links span {
-  border-color: #3369e7;
-  background: #3369e7;
+  border-color: #0cb4ce;
+  background: #0cb4ce;
   color: #FFFFFF;
 }
 
@@ -5629,8 +5629,8 @@ body.menu_sidebar_dropdown:before {
   border-radius: 1px;
 }
 .entry-single .tags-links a:hover, .entry-single .cat-links a:hover {
-  background: #3369e7;
-  border-color: #3369e7;
+  background: #0cb4ce;
+  border-color: #0cb4ce;
   color: #ffffff;
 }
 .entry-single .edit-link {
@@ -5659,7 +5659,7 @@ body.menu_sidebar_dropdown:before {
   color: #444444;
 }
 .nav-links .nav-previous a:hover, .nav-links .nav-next a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .nav-links .nav-previous a > span, .nav-links .nav-next a > span {
   font-size: 80%;
@@ -5716,7 +5716,7 @@ body.menu_sidebar_dropdown:before {
   color: inherit;
 }
 .search .content-area .entry-title a:hover {
-  color: #3369e7;
+  color: #0cb4ce;
 }
 .search .content-area .entry-summary p:last-child {
   margin-bottom: 0px;
@@ -5754,7 +5754,7 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .widget-area .widget a:not(.wc-forward):hover {
-  color: #3369e7;
+  color: #0cb4ce;
   text-decoration: underline;
 }
 .widget-area .widget a.button:hover {
@@ -5821,7 +5821,7 @@ body.menu_sidebar_dropdown:before {
   padding-right: 30px;
 }
 .site-content .widget-area .menu li.current-menu-item > a {
-  color: #3369e7;
+  color: #0cb4ce;
   position: relative;
   border: 1px solid #eaecee;
   border-right: none;
@@ -5829,7 +5829,7 @@ body.menu_sidebar_dropdown:before {
 }
 .site-content .widget-area .menu li.current-menu-item > a:before {
   border-bottom: 6px solid transparent;
-  border-right: 6px solid #3369e7;
+  border-right: 6px solid #0cb4ce;
   border-top: 6px solid transparent;
   content: "";
   display: inline-block;

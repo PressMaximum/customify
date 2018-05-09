@@ -337,7 +337,7 @@ class Customify_Page_Header {
                 'device_settings' => true,
                 'selector'        => "$selector",
                 'css_format'      => 'text-align: {{value}};',
-                'title'           => __( 'Text Align', 'customify-pro' ),
+                'title'           => __( 'Text Align', 'customify-pro', 'customify' ),
             ),
 
 		);
@@ -525,7 +525,7 @@ class Customify_Page_Header {
                 'device_settings' => true,
                 'selector'        => "$selector",
                 'css_format'      => 'text-align: {{value}};',
-                'title'           => __( 'Cover Text Align', 'customify-pro' ),
+                'title'           => __( 'Cover Text Align', 'customify-pro', 'customify' ),
             ),
 
 		);
