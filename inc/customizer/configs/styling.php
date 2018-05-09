@@ -44,7 +44,7 @@ article.comment .comment-post-author,
 a:hover,
 .site-branding a:hover,
 .widget-area .widget a:not(.wc-forward):hover,
-.site-content .widget-area .menu li.current-menu-item a
+.site-content .widget-area .menu li.current-menu-item > a
 {
     color: {{value}};
 }
