@@ -603,6 +603,7 @@ class Customify_Page_Header {
 				$args['title_tag']                  = 'h1';
 			} else {
 				$post_id = get_option( 'page_for_posts' );
+                $args['force_display_single_title'] = 'show';
 				if ( ! $post_id ) {
 					$args['force_display_single_title'] = 'show';
 					if ( $titles['post'] || $taglines['post'] ) {
@@ -673,7 +674,7 @@ class Customify_Page_Header {
 				$args['_page']   = 'shop';
 			}
 		}
-        
+
 		if ( $post_id > 0 ) {
             $post = get_post($post_id);
             if ($post) {

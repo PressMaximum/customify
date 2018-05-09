@@ -207,7 +207,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_script( 'customify-customizer-control', esc_url( get_template_directory_uri() ).'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_args_loaded ) ) {
             wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
-                'home_url' => home_url(''),
+                'home_url' => esc_url( home_url('') ),
                 'ajax' => admin_url('admin-ajax.php'),
                 'is_rtl' => is_rtl(),
                 'theme_default' => __('Theme Default', 'customify'),
@@ -302,7 +302,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
                 <div class="customify--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' customify--repeater-items' : ''; ?>"></div>
                 <?php if ( $this->setting_type == 'repeater' ) { ?>
                 <div class="customify--repeater-actions">
-                    <a href="#" class="customify--repeater-reorder" data-text="<?php _e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
+                    <a href="#" class="customify--repeater-reorder" data-text="<?php esc_attr_e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
                     <?php if ( $this->addable !== false ) { ?>
                     <button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
                     <?php } ?>
