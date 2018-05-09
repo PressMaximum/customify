@@ -2986,7 +2986,6 @@ article.comment .comment-post-author {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 200px;
 }
 .page-cover:before {
   position: absolute;
@@ -3006,6 +3005,21 @@ article.comment .comment-post-author {
   justify-content: center;
   z-index: 5;
 }
+@media screen and (min-width: 1025px) {
+  .page-cover .page-cover-inner {
+    min-height: 300px;
+  }
+}
+@media screen and (max-width: 1024px) {
+  .page-cover .page-cover-inner {
+    min-height: 250px;
+  }
+}
+@media screen and (max-width: 568px) {
+  .page-cover .page-cover-inner {
+    min-height: 200px;
+  }
+}
 .page-cover .page-breadcrumb-list {
   color: rgba(255, 255, 255, 0.8);
 }
@@ -3014,11 +3028,13 @@ article.comment .comment-post-author {
 }
 
 .page-cover-title {
+  margin-top: 30px;
   margin-bottom: 0px;
 }
 
 .page-cover-tagline {
   margin-top: 1em;
+  margin-bottom: 30px;
 }
 
 .page-cover-title, .page-cover-tagline {

@@ -151,7 +151,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 200px;
     &:before {
         position: absolute;
         content: "";
@@ -169,6 +168,15 @@
         flex-direction: column;
         justify-content: center;
         z-index: 5;
+        @include for_device( desktop ){
+            min-height: 300px;
+        }
+        @include for_device( tablet ){
+            min-height: 250px;
+        }
+        @include for_device( mobile ){
+            min-height: 200px;
+        }
     }
     .page-breadcrumb-list {
         color: rgba(255, 255, 255, .8);
@@ -178,10 +186,12 @@
     }
 }
 .page-cover-title {
+    margin-top: 30px;
     margin-bottom: 0px;
 }
 .page-cover-tagline {
     margin-top: 1em;
+    margin-bottom: 30px;
 }
 .page-cover-title, .page-cover-tagline {
     display: inline-block;
