@@ -646,11 +646,12 @@ class Customify_Page_Header {
 		// WooCommerce Settings
 		if ( Customify()->is_woocommerce_active() ) {
 			if ( is_product() ) {
-				$post_id         = 0;
+                $post_id         = wc_get_page_id( 'shop' );
 				$args['display'] = $display['product'];
 				$args['title']   = $titles['product'];
 				$args['tagline'] = $taglines['product'];
 				$args['_page']   = 'product';
+
 			} elseif ( is_product_category() ) {
 				$post_id         = 0;
 				$args['display'] = $display['product_cat'];
