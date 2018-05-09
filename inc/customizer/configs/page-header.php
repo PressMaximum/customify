@@ -570,6 +570,7 @@ class Customify_Page_Header {
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'category';
+            $post_id = 0;
 		} elseif ( is_page() ) {
 			// single page
 			$args['display'] = $display['page'];
@@ -636,11 +637,13 @@ class Customify_Page_Header {
 			);
 			$args['tagline'] = '';
 			$args['_page']   = 'search';
+            $post_id = 0;
 		} elseif ( is_archive() ) {
 			$args['display'] = $display['archive'];
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'archive';
+            $post_id = 0;
 		}
 
 		// WooCommerce Settings
@@ -670,25 +673,27 @@ class Customify_Page_Header {
 				$args['_page']   = 'shop';
 			}
 		}
+        
+		if ( $post_id > 0 ) {
+            $post = get_post($post_id);
+            if ($post) {
+                $args['title'] = get_the_title($post_id);
+                if ($post->post_excerpt) {
+                    $args['tagline'] = get_the_excerpt($post);
+                }
 
-        $post = get_post( $post_id );
-		if ( $post ) {
-			$args['title']   = get_the_title( $post_id );
-			if ( $post->post_excerpt ) {
-                $args['tagline'] = get_the_excerpt( $post );
+                if (!$post_thumbnail_id) {
+                    $post_thumbnail_id = get_post_thumbnail_id($post_id);
+                }
+
+                if (!$args['image'] && $post_thumbnail_id) {
+                    $_i = Customify()->get_media($post_thumbnail_id);
+                    if ($_i) {
+                        $args['image'] = $_i;
+                    }
+                }
             }
-
-			if ( ! $post_thumbnail_id ) {
-				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
-			}
-
-			if ( ! $args['image'] && $post_thumbnail_id ) {
-				$_i = Customify()->get_media( $post_thumbnail_id );
-				if ( $_i ) {
-					$args['image'] = $_i;
-				}
-			}
-		}
+        }
 
 		if ( Customify()->is_using_post() ) {
 			$post_id = Customify()->get_current_post_id();
