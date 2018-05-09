@@ -476,6 +476,38 @@ class Customify_Page_Header {
 				)
 			),
 
+            array(
+                'name'            => "{$name}_height",
+                'type'            => 'slider',
+                'section'         => $section,
+                'device_settings' => true,
+                'max'             => 1000,
+                'title'           => __( 'Cover Height', 'customify' ),
+                'selector'        => "{$selector} .page-cover-inner",
+                'css_format'      => 'min-height: {{value}};',
+                'default'         => array(
+                    'desktop' => array(
+                        'value' => '300',
+                    ),
+                    'tablet'  => array(
+                        'value' => '250',
+                    ),
+                    'mobile'  => array(
+                        'value' => '200',
+                    ),
+                ),
+            ),
+
+            array(
+                'name'            => "{$name}_padding_top",
+                'type'            => 'slider',
+                'section'         => $section,
+                'device_settings' => true,
+                'title'           => __( 'Cover Margin Top', 'customify' ),
+                'selector'        => "{$selector}",
+                'css_format'      => 'padding-top: {{value}};',
+            ),
+
 		);
 		$config       = apply_filters( 'customify/cover/config', $config, $this );
 
