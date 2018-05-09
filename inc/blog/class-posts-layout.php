@@ -285,13 +285,13 @@ class Customify_Posts_Layout {
 
         Customify_Post_Entry()->set_post( $post );
         ?>
-        <div <?php post_class( join( ' ', $entry_class ),  $post ) ?>>
+        <article <?php post_class( join( ' ', $entry_class ),  $post ) ?>>
             <div class="entry-inner">
                 <?php
                 $this->layout( $post );
                 ?>
             </div>
-        </div><!-- /.entry post --> <?php
+        </article><!-- /.entry post --> <?php
     }
 
     function get_predefined( $layout ){

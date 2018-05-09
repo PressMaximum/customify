@@ -330,6 +330,16 @@ class Customify_Page_Header {
 				'selector'        => "{$selector}",
 				'render_callback' => $render_cb_el,
 			),
+            array(
+                'name'            => "{$name}_align",
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'device_settings' => true,
+                'selector'        => "$selector",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Text Align', 'customify-pro' ),
+            ),
+
 		);
 
 		$config = apply_filters( 'customify/titlebar/config', $config, $this );
@@ -506,6 +516,16 @@ class Customify_Page_Header {
                 'title'           => __( 'Cover Margin Top', 'customify' ),
                 'selector'        => "{$selector}",
                 'css_format'      => 'padding-top: {{value}};',
+            ),
+
+            array(
+                'name'            => "{$name}_align",
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'device_settings' => true,
+                'selector'        => "$selector",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Cover Text Align', 'customify-pro' ),
             ),
 
 		);
@@ -706,6 +726,7 @@ class Customify_Page_Header {
 				$args['display'] = $display['page'];
 				$post_id         = wc_get_page_id( 'shop' );
 				$args['_page']   = 'shop';
+                $args['tagline'] = '';
 			}
 		}
 

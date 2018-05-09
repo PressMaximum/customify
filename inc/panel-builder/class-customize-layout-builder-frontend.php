@@ -559,6 +559,9 @@ class Customify_Customize_Layout_Builder_Frontend {
                 ) );
 
                 $classes       = "builder-item-sidebar mobile-item--" . $item_id;
+                if ( strpos( $item_id, 'menu' ) ) {
+                    $classes  = $classes." mobile-item--menu " ;
+                }
                 $inner_classes = 'item--inner';
                 if ( is_customize_preview() ) {
                     $inner_classes = $inner_classes . ' builder-item-focus ';
