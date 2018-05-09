@@ -235,11 +235,8 @@ Customify_Customize_Layout_Builder()->register_item('header', new Customify_Buil
 function customify_add_icon_to_menu($title, $item, $args, $depth)
 {
     if (in_array('menu-item-has-children', $item->classes)) {
-        if (is_rtl()) {
-            $title = '<span class="nav-icon-angle">&nbsp;</span>' . $title;
-        } else {
-            $title .= '<span class="nav-icon-angle">&nbsp;</span>';
-        }
+
+        $title .= '<span class="nav-icon-angle">&nbsp;</span>';
 
     }
     return $title;

@@ -3137,14 +3137,20 @@ article.comment .comment-post-author {
 .page-breadcrumb-list li {
   display: inline-block;
   position: relative;
-  padding-left: 20px;
+  padding-left: 10px;
   font-size: 14px;
 }
 .page-breadcrumb-list li:after {
-  font-family: fontawesome;
-  content: "\f105";
-  position: absolute;
-  left: 5px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  content: "";
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  -webkit-transform: rotate(-135deg);
+      -ms-transform: rotate(-135deg);
+          transform: rotate(-135deg);
+  right: auto;
 }
 .page-breadcrumb-list li:last-child:after {
   display: none;
@@ -3152,6 +3158,7 @@ article.comment .comment-post-author {
 .page-breadcrumb-list li a {
   color: #6d6d6d;
   font-weight: 500;
+  margin-left: 10px;
 }
 .page-breadcrumb-list li a:hover {
   text-decoration: underline;
@@ -3497,11 +3504,6 @@ article.comment .comment-post-author {
 .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
   margin-right: 5px;
   float: left;
-}
-html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a .nav-icon-angle {
-  -webkit-transform: rotate(-180deg);
-      -ms-transform: rotate(-180deg);
-          transform: rotate(-180deg);
 }
 .nav-menu-desktop .sub-menu {
   position: absolute;
