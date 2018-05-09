@@ -58,41 +58,42 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	 */
 	function customify_get_layout() {
         $default    = Customify()->get_setting('sidebar_layout');
-	    $layout = apply_filters( 'customify_get_layout', $default );
+	    $layout = apply_filters( 'customify_get_layout', null );
 	    if ( ! $layout ) {
-            $page       = Customify()->get_setting('page_sidebar_layout');
-            if (is_search()) {
+            $page = Customify()->get_setting('page_sidebar_layout');
+            if ( is_home() && is_front_page() || ( is_home() && ! is_front_page() ) ) {
+                $blog_posts = Customify()->get_setting('posts_sidebar_layout');
+                $layout = $blog_posts;
+            } elseif (is_search()) {
                 $search     = Customify()->get_setting('search_sidebar_layout');
                 $layout = $search;
             } elseif (is_archive()) {
                 $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
                 $layout = $archive;
-            } elseif (is_home() || is_category() || is_tag() || is_single()) { // blog page and single page
+            } elseif ( is_category() || is_tag() || is_single()) { // blog page and single page
                 $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
             } elseif( is_404() ) {
                 $layout = Customify()->get_setting('404_sidebar_layout');
-            } else {
-                $layout = $default;
             }
 
-            if ( customify_is_support_meta() ) {
+            if ( is_singular() && customify_is_support_meta() ) {
                 $post_type = get_post_type();
                 $page_custom = get_post_meta( customify_get_support_meta_id(), '_customify_sidebar', true);
                 if ( $page_custom ) {
                     if ($page_custom && $page_custom != 'default') {
                         $layout = $page_custom;
                     }
-                }else if ($post_type == 'page') {
+                } else if ($post_type == 'page') {
                     $layout = $page;
                 }
-            }
 
-            if (!$layout) {
-                $layout = $default;
             }
         }
 
+        if (!$layout) {
+            $layout = $default;
+        }
 		return $layout;
 	}
 }
