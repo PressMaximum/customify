@@ -225,7 +225,7 @@ class Customify_Posts_Layout {
         switch( $this->args['layout'] ) {
             case 'blog_column':
                 $this->item_part( 'header', $post );
-                if ( $show_media || ! empty( $this->args['header_fields'] ) ) {
+                if ( $show_media && $this->count_item_visibility($this->args['header_fields'] ) ) {
                     ?>
                     <div class="entry-article-part entry-media">
                         <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
@@ -244,7 +244,7 @@ class Customify_Posts_Layout {
                 <?php
                 break;
             default:
-                if ( $show_media || ! empty( $this->args['header_fields'] ) ) {
+                if ( $show_media  &&  $this->count_item_visibility($this->args['header_fields'] ) ) {
                     ?>
                     <div class="entry-media">
                         <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
