@@ -77,8 +77,8 @@ class Customify_Builder_Item_Nav_Icon{
                 'type' => 'color',
                 'section' => $section,
                 'title' => __( 'Color', 'customify' ),
-                'css_format' => 'color: {{value}}; background-color: {{value}};',
-                'selector' => "{$selector} .nav-icon--label, {$selector} .hamburger-inner",
+                'css_format' => 'color: {{value}};',
+                'selector' => "{$selector}",
 
             ),
 
@@ -86,8 +86,8 @@ class Customify_Builder_Item_Nav_Icon{
                 'name' => 'nav_icon_item_color_hover',
                 'type' => 'color',
                 'section' => $section,
-                'css_format' => 'color: {{value}}; background-color: {{value}};',
-                'selector' => "{$selector}:hover .nav-icon--label, {$selector}:hover .hamburger-inner",
+                'css_format' => 'color: {{value}};',
+                'selector' => "{$selector}:hover",
                 'title' => __( 'Color Hover', 'customify' ),
             ),
         );
