@@ -3469,9 +3469,18 @@ html[dir="rtl"] .nav-menu-desktop .menu .sub-menu li.menu-item-has-children > a 
   width: 18px;
   height: 18px;
 }
+.search-icon .ic-close {
+  display: none;
+}
 
 .header-search_icon-item {
   position: relative;
+}
+.header-search_icon-item.active .search-icon .ic-search {
+  display: none;
+}
+.header-search_icon-item.active .search-icon .ic-close {
+  display: inline-block;
 }
 .header-search_icon-item .header-search-modal-wrapper {
   position: absolute;

@@ -20,10 +20,24 @@
         width: 18px;
         height: 18px;
     }
+    .ic-close {
+        display: none;
+    }
 
 }
+
 .header-search_icon-item {
     position: relative;
+    &.active {
+        .search-icon {
+            .ic-search {
+                display: none;
+            }
+            .ic-close {
+                display: inline-block;
+            }
+        }
+    }
     .header-search-modal-wrapper {
         position: absolute;
         top: 100%;
