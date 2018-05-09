@@ -5,6 +5,11 @@ $gl-devices-list: (
     mobile: "screen and (max-width: 35.5em)" // from to 568px to smaller
 ) !default;
 */
+/* Widgets */
+.widget_product_search .search-field {
+  margin-bottom: 5px;
+}
+
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
   background-color: #0cb4ce;

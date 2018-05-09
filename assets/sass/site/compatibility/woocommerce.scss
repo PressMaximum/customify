@@ -1,5 +1,13 @@
 @import '../utils/vars';
 
+/* Widgets */
+// Product Search
+.widget_product_search {
+    .search-field {
+        margin-bottom: 5px;
+    }
+}
+
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
     background-color: $color_primary;
