@@ -102,14 +102,19 @@
     li {
         display: inline-block;
         position: relative;
-        padding-right: 20px;
+        padding-right: 10px;
         font-size: 14px;
         &:after {
-            font-family: fontawesome;
-            content: "\f105";
-            position: absolute;
-            right: 5px;
+            border-top: 1px solid currentColor;
+            border-left: 1px solid currentColor;
+            content: "";
+            width: 7px;
+            height: 7px;
+            display: inline-block;
+            transform: rotate(135deg);
+            left: auto;
         }
+
         &:last-child {
             &:after {
                 display: none;
@@ -118,6 +123,7 @@
         a {
             color: $color_meta;
             font-weight: 500;
+            margin-right: 10px;
             &:hover {
                 text-decoration: underline;
             }

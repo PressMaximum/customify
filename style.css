@@ -2944,14 +2944,18 @@ article.comment .comment-post-author {
 .page-breadcrumb-list li {
   display: inline-block;
   position: relative;
-  padding-right: 20px;
+  padding-right: 10px;
   font-size: 14px;
 }
 .page-breadcrumb-list li:after {
-  font-family: fontawesome;
-  content: "\f105";
-  position: absolute;
-  right: 5px;
+  border-top: 1px solid currentColor;
+  border-left: 1px solid currentColor;
+  content: "";
+  width: 7px;
+  height: 7px;
+  display: inline-block;
+  transform: rotate(135deg);
+  left: auto;
 }
 .page-breadcrumb-list li:last-child:after {
   display: none;
@@ -2959,6 +2963,7 @@ article.comment .comment-post-author {
 .page-breadcrumb-list li a {
   color: #6d6d6d;
   font-weight: 500;
+  margin-right: 10px;
 }
 .page-breadcrumb-list li a:hover {
   text-decoration: underline;
@@ -3161,20 +3166,20 @@ article.comment .comment-post-author {
 }
 
 /* Navigation */
-.menu-item .link-before {
+.nav-menu-mobile .menu-item .link-before, .nav-menu-desktop .menu-item .link-before {
   position: relative;
   display: inline-flex;
   align-items: center;
 }
-
-.nav-icon-angle {
+.nav-menu-mobile .nav-icon-angle, .nav-menu-desktop .nav-icon-angle {
   display: inline-block;
   font-size: inherit;
   text-rendering: auto;
   text-decoration: none !important;
   position: relative;
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
+  margin-top: 3px;
   border-left: 1px solid currentColor;
   border-top: 1px solid currentColor;
   transform: rotate(-135deg) translateY(50%);
