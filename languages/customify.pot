@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.6\n"
+"Project-Id-Version: Customify 0.0.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-05-09 11:03:50+00:00\n"
+"POT-Creation-Date: 2018-05-09 11:10:43+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1313,7 +1313,7 @@ msgid "Menu Icon"
 msgstr ""
 
 #: inc/customizer/configs/header/nav-icon.php:35
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:599
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:604
 msgid "Menu"
 msgstr ""
 
@@ -2163,7 +2163,7 @@ msgid "Move Up"
 msgstr ""
 
 #: inc/customizer/controls/class-control-repeater.php:25
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:602
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:607
 #: inc/panel-builder/class-customize-layout-builder.php:337
 msgid "Close"
 msgstr ""
@@ -2390,17 +2390,17 @@ msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:266
+#: inc/template-functions.php:269
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:268
+#: inc/template-functions.php:271
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:270
+#: inc/template-functions.php:273
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
