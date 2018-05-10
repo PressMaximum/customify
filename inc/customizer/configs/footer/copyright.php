@@ -52,7 +52,7 @@ class Customify_Builder_Footer_Item_Copyright {
 				'render_callback' => $fn,
 				'theme_supports'  => '',
 				'default'         => __( 'Copyright &copy; {current_year} {site_title} - Powered by {theme_author}.', 'customify' ),
-				'title'           => __( 'Copyright text', 'customify' ),
+				'title'           => __( 'Copyright Text', 'customify' ),
 				'description'     => __( 'Arbitrary HTML code or shortcode. Available tags: {current_year}, {site_title}, {theme_author}', 'customify' ),
 			),
 
@@ -60,7 +60,7 @@ class Customify_Builder_Footer_Item_Copyright {
 				'name'       => $this->name . '_typography',
 				'type'       => 'typography',
 				'section'    => $this->section,
-				'title'      => __( 'Copyright text typography', 'customify' ),
+				'title'      => __( 'Copyright Text Typography', 'customify' ),
 				'selector'   => '.builder-item--footer_copyright, .builder-item--footer_copyright p',
 				'css_format' => 'typography',
 				'default'    => array(),

@@ -120,7 +120,7 @@ class Customify_Builder_Item_Social_Icons {
 				'selector'        => $this->selector,
 				'render_callback' => $fn,
 				'default'         => 1,
-				'checkbox_label'  => __( 'Open URL in new window.', 'customify' ),
+				'checkbox_label'  => __( 'Open link in a new tab.', 'customify' ),
 			),
 			array(
 				'name'            => $prefix . '_nofollow',
@@ -128,7 +128,7 @@ class Customify_Builder_Item_Social_Icons {
 				'section'         => $section,
 				'render_callback' => $fn,
 				'default'         => 1,
-				'checkbox_label'  => __( 'Apply rel "nofollow" to social links.', 'customify' ),
+				'checkbox_label'  => __( 'Adding rel="nofollow" for social links.', 'customify' ),
 			),
 
             array(

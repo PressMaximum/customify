@@ -48,7 +48,7 @@ class Customify_Builder_Item_Logo {
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
-                'title' => __( 'Show Site Name', 'customify' ),
+                'title' => __( 'Show Site Title', 'customify' ),
                 'default' => 'yes',
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
@@ -62,7 +62,7 @@ class Customify_Builder_Item_Logo {
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
-                'title' => __( 'Show Site Description', 'customify' ),
+                'title' => __( 'Show Site Tagline', 'customify' ),
                 'default' => 'no',
                 'choices' => array(
                     'yes' => __( 'Yes', 'customify' ),
@@ -76,7 +76,7 @@ class Customify_Builder_Item_Logo {
                 'section' => $section,
                 'selector' => $selector,
                 'render_callback' => $render_cb_el,
-                'title' => __( 'Logo Image Position', 'customify' ),
+                'title' => __( 'Logo Position', 'customify' ),
                 'default' => 'top',
                 'choices' => array(
                     'top' => __( 'Top', 'customify' ),

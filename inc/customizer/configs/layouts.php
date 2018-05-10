@@ -177,7 +177,7 @@ if (!function_exists('customify_customizer_layouts_config')) {
                 'type'    => 'select',
                 'default' => 'content-sidebar',
                 'section' => 'sidebar_layout_section',
-                'title'   => __('Blog posts archives', 'customify'),
+                'title'   => __('Blog Archive Page', 'customify'),
                 'choices' => customify_get_config_sidebar_layouts()
             ),
             // Search
@@ -186,7 +186,7 @@ if (!function_exists('customify_customizer_layouts_config')) {
                 'type'    => 'select',
                 'default' => 'content-sidebar',
                 'section' => 'sidebar_layout_section',
-                'title'   => __('Search Results', 'customify'),
+                'title'   => __('Search Page', 'customify'),
                 'choices' => customify_get_config_sidebar_layouts()
             ),
             // 404

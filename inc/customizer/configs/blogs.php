@@ -144,7 +144,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'default' => '1',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
-                'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
+                'checkbox_label' => __('Hide featured image if empty.', 'customify'),
             ),
 
             // Article Excerpt ---------------------------------------------------------------------------------
@@ -195,7 +195,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id']. '_meta_config',
                 'section' => $level_2_panel.'_meta',
                 'type' => 'repeater',
-                'description' => __('Drag to order meta items', 'customify'),
+                'description' => __('Drag to reorder the meta item.', 'customify'),
                 'live_title_field' => 'title',
                 'limit' => 4,
                 'addable' => false,
@@ -270,7 +270,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'section' => $level_2_panel.'_readmore',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
-                'checkbox_label' => __( 'Show Read More', 'customify' ),
+                'checkbox_label' => __( 'Show Read More Button', 'customify' ),
             ),
 
             array(

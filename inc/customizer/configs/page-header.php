@@ -238,8 +238,8 @@ class Customify_Page_Header {
 						array(
 							'name'        => "post_bg",
 							'type'        => 'select',
-							'label'       => __( 'Single Post Cover Background', 'customify' ),
-							'description' => __( 'Apply when viewing single post and page header display as cover.', 'customify' ),
+							'label'       => __( 'Post Header Background Cover', 'customify' ),
+							'description' => __( 'Apply when viewing single post and page header setting displays as cover.', 'customify' ),
 							'default'     => '',
 							'choices'     => array(
 								'default'   => __( 'Default', 'customify' ),
