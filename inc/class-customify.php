@@ -328,17 +328,18 @@ class Customify {
 
     private function includes(){
         $files = array(
-            '/inc/class-metabox.php',  // Metabox settings.
+            '/inc/class-metabox.php',                   // Metabox settings.
             '/inc/template-class.php',                  // Template element classes.
+	        '/inc/extras.php',                          // Custom functions that act independently of the theme templates.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
             '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
-            '/inc/blog/class-post-entry.php',          // Blog entry builder
-            '/inc/blog/class-posts-layout.php',        // Blog posts layout
-            '/inc/blog/functions-posts-layout.php',    // Posts layout functions
+            '/inc/blog/class-post-entry.php',           // Blog entry builder
+            '/inc/blog/class-posts-layout.php',         // Blog posts layout
+            '/inc/blog/functions-posts-layout.php',     // Posts layout functions
         );
 
         foreach( $files as $file ) {
