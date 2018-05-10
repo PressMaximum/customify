@@ -11,7 +11,7 @@ get_header(); ?>
 <div class="content-inner">
     <?php
     customify_blog_posts_heading();
-    customify_archive_posts();
+    customify_blog_posts();
     ?>
 </div><!-- #.content-inner -->
 <?php

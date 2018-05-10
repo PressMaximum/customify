@@ -3,6 +3,7 @@
 class Customify_Posts_Layout {
     public $args = array();
     public $customizer_args = array();
+    public $entry_class = '';
 
     function set_args( $customizer_args = array() )
     {
@@ -17,7 +18,13 @@ class Customify_Posts_Layout {
             'hide_thumb_if_empty' => Customify()->get_setting($customizer_args['prefix'] . '_hide_thumb_if_empty'),
             'meta_config'         => Customify()->get_setting($customizer_args['prefix'] . '_meta_config'),
             'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
+            'author_avatar'       => Customify()->get_setting($customizer_args['prefix'] . '_author_avatar'),
         );
+
+        $size =  Customify()->get_setting( $customizer_args['prefix'].'_avatar_size' );
+        if ( is_array( $size ) && isset( $size['value'] ) ) {
+            $args['avatar_size'] = absint($size['value']);
+        }
 
         $pagination = array(
             'show_paging' => Customify()->get_setting($customizer_args['prefix'] . '_pg_show_paging'),
@@ -29,7 +36,6 @@ class Customify_Posts_Layout {
 
         $args['pagination'] = is_array($pagination) ? $pagination : array();
         $this->customizer_args = $customizer_args;
-
 
         $_args = wp_parse_args( $args, array(
             'layout' => '',
@@ -76,6 +82,7 @@ class Customify_Posts_Layout {
         if( in_array( $_args['layout'] , array( 'blog_lateral', 'blog_classic' ) ) ) {
             $_args['columns' ] = 1;
         }
+
         $_args[ 'pagination' ]['mid_size'] = absint( $_args[ 'pagination' ]['mid_size'] );
 
         if ( empty( $_args['meta_config'] ) ) {
@@ -97,6 +104,31 @@ class Customify_Posts_Layout {
 
         $this->args = $_args;
 
+        $this->args['header_fields'] = array(
+            array(
+                '_visibility' => '',
+                '_key' => 'title',
+            ),
+            array(
+                '_key' => 'meta',
+                '_visibility' => '',
+            ),
+        );
+
+        $this->args['body_fields'] = array(
+            array(
+                '_key' => 'excerpt',
+                '_visibility' => '',
+            ),
+        );
+        $this->args['footer_fields'] = array(
+            array(
+                '_key' => 'readmore',
+                '_visibility' => '',
+            ),
+        );
+        $this->args['media_fields'] = array();
+
         Customify_Post_Entry()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
             'excerpt_length' => $this->args['excerpt_length'],
@@ -108,25 +140,78 @@ class Customify_Posts_Layout {
         ) );
     }
 
-    function layout_blog_classic( $post = null ){
+
+    function has_only_field( $fields, $field = 'category' ){
+        $check = false;
+        $n = 0;
+        $c = false;
+        foreach ( ( array ) $fields as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => '',
+            ) );
+            if ( $item['_visibility'] !== 'hidden' ) {
+                $n ++ ;
+                if ( $item['_key'] == $field ) {
+                    $c = true;
+                }
+            }
+        }
+
+        if ( $c && $n < 2 ) {
+            $check = true;
+        } else {
+            $check = false;
+        }
+
+        return $check;
+    }
+
+    function count_item_visibility( $fields ){
+        $n = 0;
+        foreach ( ( array ) $fields as $item ) {
+            $item = wp_parse_args( $item, array(
+                '_key' => '',
+                '_visibility' => '',
+            ) );
+            if ( $item['_visibility'] !== 'hidden' ) {
+                $n ++ ;
+            }
+        }
+        return $n;
+    }
+
+    function item_part( $part = '', $post = null, $inner_class = '' ){
+
+        $n = $this->count_item_visibility( $this->args[ $part.'_fields'] );
+
+        if  ( isset( $this->args[ $part.'_fields'] ) && $n > 0 ) {
+            if ( $part == 'media' && $this->has_only_field( $this->args[ $part.'_fields'] ) ) {
+                Customify_Post_Entry()->build_fields( $this->args[ $part. '_fields'], $post );
+            } else {
+                $only_more = $this->has_only_field( $this->args[ $part.'_fields'], 'readmore' );
+                $classes = array();
+                $classes[] = 'entry-article-part entry-article-'.$part;
+                if ( $only_more ) {
+                    $classes[] = 'only-more';
+                }
+                echo '<div class="'.esc_attr( join( ' ', $classes ) ).'">';
+                if ( $inner_class ) {
+                    echo '<div class="'.esc_attr( $inner_class ).'">';
+                }
+                Customify_Post_Entry()->build_fields( $this->args[ $part. '_fields'], $post );
+                if ( $inner_class ) {
+                    echo '</div>';
+                }
+                echo '</div>';
+            }
+        }
+    }
+
+    function layout( $post = null ){
         $media_fields = array(
             array(
                 '_key' => 'thumbnail'
-            ),
-        );
-        $content_fields = array(
-            array(
-                '_key' => 'title',
-            ),
-            array(
-                '_key' => 'meta',
-                'fields' => $this->args['meta_config'],
-            ),
-            array(
-                '_key' => 'excerpt',
-            ),
-            array(
-                '_key' => 'readmore',
             ),
         );
 
@@ -137,34 +222,76 @@ class Customify_Posts_Layout {
             }
         }
 
-        if ( $show_media ) {
-            ?>
-            <div class="entry-media">
-                <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
-                <?php Customify_Post_Entry()->build_fields( $media_fields, $post ); ?>
-            </div>
-        <?php } ?>
-        <div class="entry-content-data">
-            <?php Customify_Post_Entry()->build_fields( $content_fields, $post ); ?>
-        </div>
-        <?php
+        switch( $this->args['layout'] ) {
+            case 'blog_column':
+                $this->item_part( 'header', $post );
+                if ( $show_media && $this->count_item_visibility($this->args['header_fields'] ) ) {
+                    ?>
+                    <div class="entry-article-part entry-media">
+                        <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
+                        <?php
+                        Customify_Post_Entry()->build_fields( $media_fields, $post );
+                        $this->item_part('media', $post, 'media-content-inner');
+                        ?>
+                    </div>
+                <?php } ?>
+                <div class="entry-content-data">
+                    <?php
+                    $this->item_part( 'body', $post );
+                    $this->item_part( 'footer', $post );
+                    ?>
+                </div>
+                <?php
+                break;
+            default:
+                if ( $show_media  &&  $this->count_item_visibility($this->args['header_fields'] ) ) {
+                    ?>
+                    <div class="entry-media">
+                        <a class="entry-media-link " href="<?php echo esc_url( get_permalink( $post ) ); ?>" title="<?php the_title_attribute(); ?>" rel="bookmark"></a>
+                        <?php
+                        Customify_Post_Entry()->build_fields( $media_fields, $post );
+                        $this->item_part( 'media', $post, 'media-content-inner' );
+                        ?>
+                    </div>
+                <?php } ?>
+                <div class="entry-content-data">
+                    <?php
+                    $this->item_part( 'header', $post );
+                    $this->item_part( 'body', $post );
+                    $this->item_part( 'footer', $post );
+                    ?>
+                </div>
+                <?php
+
+        }
+
     }
 
+
     function blog_item( $post = null , $class = null ){
-        if ( $this->args['columns'] > 1 ) {
-            $entry_class = 'customify-col entry'. ( $class ? ' '.$class : '' );
-        } else {
-            $entry_class = 'entry'. ( $class ? ' '.$class : '' );
+        $entry_class = array('entry');
+
+        if ( is_numeric( $this->args['columns'] ) && $this->args['columns'] > 1 ) {
+            $entry_class[] = 'customify-col';
+        } elseif( is_array( $this->args['columns'] ) ) {
+            $entry_class[] = 'customify-col';
+        }
+        if( $class ) {
+            $entry_class[] = $class;
+        }
+        if(  $this->entry_class  ) {
+            $entry_class[] =  $this->entry_class ;
         }
 
         Customify_Post_Entry()->set_post( $post );
-
         ?>
-        <div <?php post_class( $entry_class,  $post ) ?>>
-            <?php
-            $this->layout_blog_classic( $post );
-            ?>
-        </div><!-- /.entry post --> <?php
+        <article <?php post_class( join( ' ', $entry_class ),  $post ) ?>>
+            <div class="entry-inner">
+                <?php
+                $this->layout( $post );
+                ?>
+            </div>
+        </article><!-- /.entry post --> <?php
     }
 
     function get_predefined( $layout ){
@@ -202,39 +329,45 @@ class Customify_Posts_Layout {
         $this->set_args( $customizer_args );
         $classes =  array();
 
-        if ( $this->args['layout'] !=='blog_masonry' && $this->args['layout'] != 'blog_timeline' ) {
-            if ( is_numeric( $this->args['columns'] ) &&  $this->args['columns'] > 1) {
-                $classes[] = 'customify-grid-' . $this->args['columns'];
-            } elseif ( is_array( $this->args['columns'] ) ) {
-                $this->args['columns'] = wp_parse_args( $this->args['columns'], array(
-                    'desktop' => 1,
-                    'tablet' => 1,
-                    'mobile' => 1,
-                ) );
-                foreach( $this->args['columns'] as $d => $v ){
-                    $v = absint( $v );
-                    if (  $v < 1 ) {
-                        $v = 1;
-                    } elseif ( $v > 12 ) {
-                        $v = 12;
-                    }
-                    $this->args['columns'][ $d ] = $v;
+        $atts = array();
+        if ( is_numeric( $this->args['columns'] ) &&  $this->args['columns'] > 1) {
+            $classes['grid'] = 'customify-grid-' . $this->args['columns'];
+            $atts['data-col'] = $this->args['columns'];
+        } elseif ( is_array( $this->args['columns'] ) ) {
+            $this->args['columns'] = wp_parse_args( $this->args['columns'], array(
+                'desktop' => 1,
+                'tablet' => 1,
+                'mobile' => 1,
+            ) );
+            foreach( $this->args['columns'] as $d => $v ){
+                $v = absint( $v );
+                if (  $v < 1 ) {
+                    $v = 1;
+                } elseif ( $v > 12 ) {
+                    $v = 12;
                 }
-                $classes[] = sprintf( 'customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile'] );
+                $this->args['columns'][ $d ] = $v;
+                $atts['data-col-'.$d] = $v;
             }
+            $classes['grid'] = sprintf( 'customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile'] );
         }
 
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];
-        $style = '';
+
         if ( $this->args['layout'] == 'blog_masonry' ) {
             // WPCS: XSS OK.
-            $style = '-webkit-column-count: '.$this->args['columns'].';  column-count: '.$this->args['columns'].';';
+            unset( $classes['grid']  );
         }
+
+        $s_atts = '';
+        foreach ( $atts as $k => $v ) {
+            $s_atts .= " {$k}='".esc_attr( $v )."' ";
+        }
+        do_action( 'customify/blog/before-render', $this );
         ?>
         <div class="posts-layout-wrapper">
-
-            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo ( $style != '' ) ? ' style="'.esc_attr( $style).'"' : ''; ?>>
+            <div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $s_atts; // WPCS: XSS OK. ?>>
                 <?php
                 if ( $this->args['layout'] == 'blog_timeline' ) {
                     echo '<div class="time-line"></div>';
@@ -260,6 +393,7 @@ class Customify_Posts_Layout {
             ?>
         </div>
         <?php
+        do_action( 'customify/blog/after-render', $this );
     }
 
     function render_pagination(){

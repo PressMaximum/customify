@@ -42,25 +42,45 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'blog_column' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
                     ),
-                )
+                ),
+                'reset_controls' => array(
+                    $args['id'].'_media_ratio',
+                    $args['id'].'_media_width',
+                ),
             ),
+
             array(
-                'name' => $args['id'].'_excerpt_length',
-                'type' => 'text',
+                'name' => $level_2_panel.'_layout_h1',
+                'type' => 'heading',
                 'section' => $level_2_panel.'_layout',
-                'default' => '24',
-                'selector' => $args['selector'],
-                'render_callback' => $args['cb'],
-                'label' => __('Excerpt Length', 'customify'),
+                'title' => __('Article Styling', 'customify'),
             ),
+
             array(
-                'name' => $args['id'].'_excerpt_more',
-                'type' => 'text',
+                'name' => $args['id'].'_a_item',
+                'type' => 'styling',
                 'section' => $level_2_panel.'_layout',
-                'default' => '',
-                'selector' => $args['selector'],
-                'render_callback' => $args['cb'],
-                'label' => __('Excerpt More', 'customify'),
+                'selector'    => array(
+                    'normal' => "{$args['selector'] } .entry-inner",
+                    'hover' => "{$args['selector'] } .entry-inner:hover",
+                    'normal_margin' => "{$args['selector'] } .entry-inner",
+                ),
+                'css_format'  => 'styling',
+                'label' => __( 'Article Wrapper', 'customify' ),
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_image' => false,
+                        'bg_cover' => false,
+                        'bg_position' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                    ),
+                    'hover_fields' => array(
+                        'link_color' => false
+                    ),
+                ),
+                //'required' => array($args['id'].'_more_display', '==', '1')
             ),
 
             array(
@@ -127,11 +147,38 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'checkbox_label' => __('Hide thumbnail when empty.', 'customify'),
             ),
 
+            // Article Excerpt ---------------------------------------------------------------------------------
+            array(
+                'name' => $level_2_panel.'_excerpt',
+                'type' => 'section',
+                'panel' => $level_2_panel,
+                'title' => __('Excerpt', 'customify'),
+            ),
+
+            array(
+                'name' => $args['id'].'_excerpt_length',
+                'type' => 'number',
+                'section' => $level_2_panel.'_excerpt',
+                'default' => '',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'label' => __('Excerpt Length', 'customify'),
+            ),
+            array(
+                'name' => $args['id'].'_excerpt_more',
+                'type' => 'text',
+                'section' => $level_2_panel.'_excerpt',
+                'default' => '',
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'label' => __('Excerpt More', 'customify'),
+            ),
+
             array(
                 'name' => $level_2_panel.'_meta',
                 'type' => 'section',
                 'panel' => $level_2_panel,
-                'title' => __('Meta Settings', 'customify'),
+                'title' => __('Meta', 'customify'),
             ),
 
             array(
@@ -187,6 +234,27 @@ if (!function_exists('customify_customizer_blog_config')) {
                 )
             ),
 
+            array(
+                'name' => $args['id'].'_author_avatar',
+                'type' => 'checkbox',
+                'section' => $level_2_panel.'_meta',
+                'default' => 0,
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'checkbox_label' => __('Show author avatar', 'customify'),
+            ),
+
+            array(
+                'name' => $args['id'].'_avatar_size',
+                'type' => 'slider',
+                'section' => $level_2_panel.'_meta',
+                'default' => 32,
+                'max' => 150,
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+                'label' => __('Avatar Size', 'customify'),
+                'required' => array($args['id'].'_author_avatar', '==', '1')
+            ),
 
             array(
                 'name' => $level_2_panel.'_readmore',
@@ -329,13 +397,7 @@ if (!function_exists('customify_customizer_blog_posts_config')) {
         );
 
         $blog = customify_customizer_blog_config();
-        $archive = customify_customizer_blog_config( array(
-            'name' => __('Archive Posts', 'customify'),
-            'id' => 'archive_post',
-            'selector' => '#archive-posts',
-            'cb' => 'customify_archive_posts',
-        ) );
-        $config = array_merge($config, $blog,$archive );
+        $config = array_merge($config, $blog );
 
         return array_merge($configs, $config);
     }

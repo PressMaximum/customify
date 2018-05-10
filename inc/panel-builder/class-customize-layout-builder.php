@@ -58,6 +58,7 @@ class Customify_Customize_Layout_Builder {
         $this->registered_builders[ $id ] = $class;
     }
 
+
     /**
      * Add an item builder to panel
      *
@@ -303,7 +304,7 @@ class Customify_Customize_Layout_Builder {
             'jquery-ui-draggable'
         ), false, true );
         wp_localize_script( 'customify-layout-builder', 'Customify_Layout_Builder', array(
-            'footer_moved_widgets_text' => '', // __( 'Footer widgets moved', 'customify' ),
+            'footer_moved_widgets_text' => '',
             'builders'  => $this->get_builders(),
             'is_rtl' => is_rtl()
         ) );
@@ -329,6 +330,7 @@ class Customify_Customize_Layout_Builder {
                         <div class="customify--cb-devices-switcher">
                         </div>
                         <div class="customify--cb-actions">
+                            <?php do_action('customify/builder-panel/actions-buttons'); ?>
                             <a data-id="{{ data.id }}_templates" class="focus-section button button-secondary"
                                href="#"><?php _e( 'Templates', 'customify' ); ?></a>
                             <a class="button button-secondary customify--panel-close" href="#">

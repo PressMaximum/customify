@@ -675,14 +675,14 @@ $animation_speed: .3s !default;
 
 
 /* Saved templates */
-.save-template-form {
+.save-template-form, .flex-form {
     display: flex;
     margin-bottom: 15px;
-    .button.save-builder-template {
+    .button {
         margin-left: 10px;
     }
 }
-.list-saved-templates{
+ .list-boxed{
 
     &.has-templates {
         .no_template {
@@ -691,7 +691,7 @@ $animation_speed: .3s !default;
     }
     li {
         @include clearfix;
-        &.saved_template {
+        &.li-boxed {
             background: #fff;
             padding: 12px 10px;
             position: relative;

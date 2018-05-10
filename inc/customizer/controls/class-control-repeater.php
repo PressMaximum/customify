@@ -38,7 +38,7 @@ class Customify_Customizer_Control_Repeater extends Customify_Customizer_Control
             <div class="customify--repeater-inner">
                 <div class="customify--settings-fields customify--repeater-items"></div>
                 <div class="customify--repeater-actions">
-                    <a href="#" class="customify--repeater-reorder" data-text="<?php _e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
+                    <a href="#" class="customify--repeater-reorder" data-text="<?php esc_attr_e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
                     <# if ( data.addable ){  #>
                         <button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
                         <# } #>

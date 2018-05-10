@@ -401,6 +401,11 @@ class Customify_Customize_Layout_Builder_Frontend {
                     $item_classes = array();
                     $item_classes[] = 'item--inner';
                     $item_classes[] = 'builder-item--' . $item_id;
+                    if ( strpos( $item_id, '-menu' ) ) {
+                        $item_classes[] = 'item--m';
+                    } else {
+                        $item_classes[] = 'item--nm';
+                    }
                     if (is_customize_preview()) {
                         $item_classes[] = ' builder-item-focus';
                     }
@@ -559,6 +564,9 @@ class Customify_Customize_Layout_Builder_Frontend {
                 ) );
 
                 $classes       = "builder-item-sidebar mobile-item--" . $item_id;
+                if ( strpos( $item_id, 'menu' ) ) {
+                    $classes  = $classes." mobile-item--menu " ;
+                }
                 $inner_classes = 'item--inner';
                 if ( is_customize_preview() ) {
                     $inner_classes = $inner_classes . ' builder-item-focus ';

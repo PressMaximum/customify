@@ -812,12 +812,21 @@ class  Customify_Customizer
             'hr',
 
             'repeater'
+            // custom_key => full_file_path
         );
 
         $fields = apply_filters('customify/customize/register-controls', $fields);
 
-        foreach ($fields as $field_type) {
-            $file = get_template_directory() . '/inc/customizer/controls/class-control-' . str_replace('_', '-', $field_type) . '.php';
+        foreach ($fields as $k => $f ) {
+            // $field_type
+            if ( is_numeric( $k ) ) {
+                $field_type = $f;
+                $file = get_template_directory() . '/inc/customizer/controls/class-control-' . str_replace('_', '-', $field_type) . '.php';
+            } else {
+                $field_type = $k;
+                $file = $f;
+            }
+
             if (file_exists($file)) {
 
                 $control_class_name = 'Customify_Customizer_Control_';

@@ -3,7 +3,17 @@
 class Customify_Builder_Item_Button {
 	public $id = 'button';
 
-	function item() {
+	function __construct()
+    {
+        add_filter( 'customify/icon_used', array( $this, 'used_icon' ) );
+    }
+
+    function used_icon( $list = array() ){
+        $list[ $this->id ] = 1;
+        return $list;
+    }
+
+    function item() {
 		return array(
 			'name'    => __( 'Button', 'customify' ),
 			'id'      => 'button',

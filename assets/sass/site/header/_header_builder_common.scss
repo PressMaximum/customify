@@ -102,14 +102,19 @@
     li {
         display: inline-block;
         position: relative;
-        padding-right: 20px;
+        padding-right: 10px;
         font-size: 14px;
         &:after {
-            font-family: fontawesome;
-            content: "\f105";
-            position: absolute;
-            right: 5px;
+            border-top: 1px solid currentColor;
+            border-left: 1px solid currentColor;
+            content: "";
+            width: 7px;
+            height: 7px;
+            display: inline-block;
+            transform: rotate(135deg);
+            left: auto;
         }
+
         &:last-child {
             &:after {
                 display: none;
@@ -118,6 +123,7 @@
         a {
             color: $color_meta;
             font-weight: 500;
+            margin-right: 10px;
             &:hover {
                 text-decoration: underline;
             }
@@ -151,7 +157,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-height: 200px;
     &:before {
         position: absolute;
         content: "";
@@ -169,6 +174,15 @@
         flex-direction: column;
         justify-content: center;
         z-index: 5;
+        @include for_device( desktop ){
+            min-height: 300px;
+        }
+        @include for_device( tablet ){
+            min-height: 250px;
+        }
+        @include for_device( mobile ){
+            min-height: 200px;
+        }
     }
     .page-breadcrumb-list {
         color: rgba(255, 255, 255, .8);
@@ -178,10 +192,12 @@
     }
 }
 .page-cover-title {
+    margin-top: 30px;
     margin-bottom: 0px;
 }
 .page-cover-tagline {
     margin-top: 1em;
+    margin-bottom: 30px;
 }
 .page-cover-title, .page-cover-tagline {
     display: inline-block;
@@ -194,7 +210,6 @@
         }
     }
 }
-
 
 /* Customizer Shortcut */
 #masthead, #header-menu-sidebar {

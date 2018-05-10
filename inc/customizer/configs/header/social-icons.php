@@ -10,6 +10,12 @@ class Customify_Builder_Item_Social_Icons {
 	function __construct()
     {
         $this->selector = '.'.$this->class;
+        add_filter( 'customify/icon_used', array( $this, 'used_icon' ) );
+    }
+
+    function used_icon( $list = array() ){
+        $list[ $this->id ] = 1;
+        return $list;
     }
 
     function item() {

@@ -5,9 +5,10 @@
 
     var is_rtl = Customify_Layout_Builder.is_rtl;
 
-    var CustomizeBuilder = function( options ){
+    var CustomizeBuilder = function( options, id ){
 
         var Builder = {
+            id: id,
             controlId: '',
             cols: 12,
             cellHeight: 45,
@@ -219,7 +220,7 @@
                     }
                 }
             },
-            gridster: function( $wrapper, ui ){
+            gridster: function( $wrapper, ui, event ){
                 var flag = [], backupFlag = [], that = this;
                 var maxCol = this.cols;
 
@@ -1352,7 +1353,7 @@
                 var that = this;
                 _.each( that.devices, function( device_name, device ) {
                     var panelHTML = that.addPanel( device );
-                    $( '.customify--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
+                    $( '.customify--cb-devices-switcher', that.container ).append( '<a href="#" class="switch-to switch-to-'+device+'" data-device="'+device+'">'+device_name+'</a>' );
                     $( '.customify--cb-body', that.container ).append( panelHTML );
                 } );
 
@@ -1550,6 +1551,8 @@
                 var that = this;
                 wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
                     if ( wpcustomize.panel( options.panel ).expanded() ) {
+                        console.log( 'open-builder:', options.panel );
+                        top._current_builder_panel = id;
                         that.showPanel();
                     } else {
                         that.hidePanel();
@@ -1606,8 +1609,8 @@
                 that.remove();
                 that.addExistingRowsItems();
 
-
                 if ( wpcustomize.panel( options.panel ).expanded() ) {
+                    console.log( 'open-builder:', options.panel );
                     that.showPanel();
                 } else {
                     that.hidePanel();
@@ -1634,11 +1637,13 @@
                 }, 100 )  );
 
                 // Switch panel
-                that.container.on( 'click', '.customify--cb-devices-switcher a', function(e){
+                that.container.on( 'click', '.customify--cb-devices-switcher a.switch-to', function(e){
                     e.preventDefault();
                     var device = $( this ).data('device');
                     that.switchToDevice( device );
                 } );
+
+                $document.trigger( 'customify_builder_panel_loaded', [ id, that ] );
 
             }
         };
@@ -1649,7 +1654,7 @@
 
     wpcustomize.bind( 'ready', function( e, b ) {
         _.each( Customify_Layout_Builder.builders, function( opts, id ){
-            new CustomizeBuilder( opts );
+            new CustomizeBuilder( opts, id );
         } );
 
         wpcustomize.bind( 'pane-contents-reflowed', function(){
@@ -1730,6 +1735,7 @@
             id = id.replace('#','');
         }
         if ( id ) {
+
             if ( wpcustomize.panel( id ) ) {
                 wpcustomize.panel( id ).focus();
             }

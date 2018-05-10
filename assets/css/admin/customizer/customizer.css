@@ -3169,42 +3169,42 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 /* Saved templates */
-.save-template-form {
+.save-template-form, .flex-form {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin-bottom: 15px;
 }
-.save-template-form .button.save-builder-template {
+.save-template-form .button, .flex-form .button {
   margin-left: 10px;
 }
 
-.list-saved-templates.has-templates .no_template {
+.list-boxed.has-templates .no_template {
   display: none;
 }
-.list-saved-templates li:before, .list-saved-templates li:after {
+.list-boxed li:before, .list-boxed li:after {
   content: "";
   display: block;
   clear: both;
 }
-.list-saved-templates li:after {
+.list-boxed li:after {
   clear: both;
 }
-.list-saved-templates li.saved_template {
+.list-boxed li.li-boxed {
   background: #fff;
   padding: 12px 10px;
   position: relative;
   border: 1px solid #e5e5e5;
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
-.list-saved-templates li a {
+.list-boxed li a {
   cursor: pointer;
   float: right;
 }
-.list-saved-templates li a.load-tpl {
+.list-boxed li a.load-tpl {
   margin-left: 10px;
 }
-.list-saved-templates li.no_template {
+.list-boxed li.no_template {
   padding: 15px 0;
   font-style: italic;
 }

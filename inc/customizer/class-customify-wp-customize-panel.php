@@ -21,7 +21,7 @@ class Customify_WP_Customize_Panel extends WP_Customize_Panel
         $array['content'] = $this->get_content();
         $array['active'] = $this->active();
         $array['instanceNumber'] = $this->instance_number;
-        $array['autoExpandSoleSection'] = $this->auto_expand_sole_section;
+        //$array['autoExpandSoleSection'] = $this->auto_expand_sole_section;
         return $array;
 
     }

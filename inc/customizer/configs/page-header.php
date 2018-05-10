@@ -12,7 +12,7 @@ class Customify_Page_Header {
 		if ( ! is_admin() ) {
 			add_action( 'customify_is_post_title_display', array( $this, 'display_page_title' ), 35 );
 			add_action( 'customify/site-start', array( $this, 'render' ), 35 );
-			add_action( 'wp', array( $this, 'wp' ), 35 );
+			add_action( 'wp', array( $this, 'wp' ), 85 );
 		}
 		self::$_instance = $this;
 	}
@@ -330,99 +330,15 @@ class Customify_Page_Header {
 				'selector'        => "{$selector}",
 				'render_callback' => $render_cb_el,
 			),
-
-			array(
-				'name'       => $name . '_typo',
-				'type'       => 'typography',
-				'section'    => $section,
-				'title'      => __( 'Title Typography', 'customify' ),
-				'selector'   => "{$selector} .titlebar-title",
-				'css_format' => 'typography',
-			),
-
-			array(
-				'name'       => $name . '_typo_desc',
-				'type'       => 'typography',
-				'section'    => $section,
-				'title'      => __( 'Tagline Typography', 'customify' ),
-				'selector'   => "{$selector} .titlebar-tagline",
-				'css_format' => 'typography',
-			),
-
-			array(
-				'name'       => $name . '_styling',
-				'type'       => 'styling',
-				'section'    => $section,
-				'title'      => __( 'Titlebar Styling', 'customify' ),
-				'selector'   => array(
-					'normal'            => "{$selector}",
-					'normal_text_color' => "{$selector} .titlebar-title, {$selector} .titlebar-tagline",
-					'normal_padding'    => "{$selector}",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						'margin'     => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'       => $name . 'title_styling',
-				'type'       => 'styling',
-				'section'    => $section,
-				'title'      => __( 'Titlebar Title Styling', 'customify' ),
-				'selector'   => array(
-					'normal' => "{$selector} .titlebar-title",
-				),
-				'css_format' => 'styling',
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false,
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'       => $name . 'tagline_styling',
-				'type'       => 'styling',
-				'section'    => $section,
-				'title'      => __( 'Titlebar Tagline Styling', 'customify' ),
-				'selector'   => array(
-					'normal' => "{$selector} .titlebar-tagline",
-				),
-				'css_format' => 'styling',
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false,
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'            => "{$name}_align",
-				'type'            => 'text_align_no_justify',
-				'section'         => $section,
-				'device_settings' => true,
-				'selector'        => "$selector",
-				'css_format'      => 'text-align: {{value}};',
-				'title'           => __( 'Text Align', 'customify' ),
-			),
+            array(
+                'name'            => "{$name}_align",
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'device_settings' => true,
+                'selector'        => "$selector",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Text Align', 'customify' ),
+            ),
 
 		);
 
@@ -570,115 +486,48 @@ class Customify_Page_Header {
 				)
 			),
 
-			array(
-				'name'       => $name . '_title_styling',
-				'type'       => 'styling',
-				'section'    => $section,
-				'title'      => __( 'Cover Title Styling', 'customify' ),
-				'selector'   => array(
-					'normal'            => "{$selector} .page-cover-title",
-					'normal_link_color' => "{$selector} a",
-					'hover_link_color'  => "{$selector} a:hover",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'       => $name . '_tagline_styling',
-				'type'       => 'styling',
-				'section'    => $section,
-				'title'      => __( 'Cover Tagline Styling', 'customify' ),
-				'selector'   => array(
-					'normal'            => "{$selector} .page-cover-tagline",
-					'normal_link_color' => "{$selector} a",
-					'hover_link_color'  => "{$selector} a:hover",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'            => "{$name}_title_typo",
-				'type'            => 'typography',
-				'css_format'      => 'typography',
-				'section'         => $section,
-				'selector'        => "{$selector} .page-cover-title",
-				'render_callback' => $render_cb_el,
-				'title'           => __( 'Cover Title Typography', 'customify' )
-			),
-
-			array(
-				'name'            => "{$name}_tagline_typo",
-				'type'            => 'typography',
-				'css_format'      => 'typography',
-				'section'         => $section,
-				'selector'        => "{$selector} .page-cover-tagline",
-				'render_callback' => $render_cb_el,
-				'title'           => __( 'Cover Tagline Typography', 'customify' )
-			),
-
-			array(
-				'name'            => "{$name}_height",
-				'type'            => 'slider',
-				'section'         => $section,
-				'device_settings' => true,
-				'render_callback' => $render_cb_el,
+            array(
+                'name'            => "{$name}_height",
+                'type'            => 'slider',
+                'section'         => $section,
+                'device_settings' => true,
                 'max'             => 1000,
-				'title'           => __( 'Cover Height', 'customify' ),
-				'selector'        => "{$selector} .page-cover-inner",
-				'css_format'      => 'min-height: {{value}};',
-				'default'         => array(
-					'desktop' => array(
-						'value' => '300',
-					),
-					'tablet'  => array(
-						'value' => '250',
-					),
-					'mobile'  => array(
-						'value' => '200',
-					),
-				),
-			),
+                'title'           => __( 'Cover Height', 'customify' ),
+                'selector'        => "{$selector} .page-cover-inner",
+                'css_format'      => 'min-height: {{value}};',
+                'default'         => array(
+                    'desktop' => array(
+                        'value' => '300',
+                    ),
+                    'tablet'  => array(
+                        'value' => '250',
+                    ),
+                    'mobile'  => array(
+                        'value' => '200',
+                    ),
+                ),
+            ),
 
-			array(
-				'name'            => "{$name}_padding_top",
-				'type'            => 'slider',
-				'section'         => $section,
-				'device_settings' => true,
-				'render_callback' => $render_cb_el,
-				'title'           => __( 'Cover Margin Top', 'customify' ),
-				'selector'        => "{$selector}",
-				'css_format'      => 'padding-top: {{value}};',
-			),
+            array(
+                'name'            => "{$name}_padding_top",
+                'type'            => 'slider',
+                'section'         => $section,
+                'device_settings' => true,
+                'title'           => __( 'Cover Margin Top', 'customify' ),
+                'selector'        => "{$selector}",
+                'css_format'      => 'padding-top: {{value}};',
+            ),
 
-			array(
-				'name'            => "{$name}_align",
-				'type'            => 'text_align_no_justify',
-				'section'         => $section,
-				'device_settings' => true,
-				'selector'        => "$selector",
-				'css_format'      => 'text-align: {{value}};',
-				'title'           => __( 'Cover Text Align', 'customify' ),
-			),
+            array(
+                'name'            => "{$name}_align",
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'device_settings' => true,
+                'selector'        => "$selector",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Cover Text Align', 'customify' ),
+            ),
+
 		);
 		$config       = apply_filters( 'customify/cover/config', $config, $this );
 
@@ -773,6 +622,7 @@ class Customify_Page_Header {
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'category';
+            $post_id = 0;
 		} elseif ( is_page() ) {
 			// single page
 			$args['display'] = $display['page'];
@@ -796,23 +646,26 @@ class Customify_Page_Header {
 				}
 			}
 
-			if ( $advanced['post_title_tagline'] == 'blog_page' ) {
-				$post_id                            = get_option( 'page_for_posts' );
-				$args['force_display_single_title'] = 'show';
-			} elseif ( $advanced['post_title_tagline'] == 'current' ) {
-				$post_id                            = get_the_ID();
-				$args['force_display_single_title'] = 'hide';
-				$args['title_tag']                  = 'h1';
-			} else {
-				$post_id = get_option( 'page_for_posts' );
-				if ( ! $post_id ) {
-					$args['force_display_single_title'] = 'show';
-					if ( $titles['post'] || $taglines['post'] ) {
-						$args['title']   = $titles['post'];
-						$args['tagline'] = $taglines['post'];
-					}
-				}
-			}
+			if ( $args['display'] != 'none' ) {
+                if ($advanced['post_title_tagline'] == 'blog_page') {
+                    $post_id = get_option('page_for_posts');
+                    $args['force_display_single_title'] = 'show';
+                } elseif ($advanced['post_title_tagline'] == 'current') {
+                    $post_id = get_the_ID();
+                    $args['force_display_single_title'] = 'hide';
+                    $args['title_tag'] = 'h1';
+                } else {
+                    $post_id = get_option('page_for_posts');
+                    $args['force_display_single_title'] = 'show';
+                    if (!$post_id) {
+                        $args['force_display_single_title'] = 'show';
+                        if ($titles['post'] || $taglines['post']) {
+                            $args['title'] = $titles['post'];
+                            $args['tagline'] = $taglines['post'];
+                        }
+                    }
+                }
+            }
 
 			$args['_page'] = 'post';
 		} elseif ( is_singular() ) {
@@ -839,21 +692,24 @@ class Customify_Page_Header {
 			);
 			$args['tagline'] = '';
 			$args['_page']   = 'search';
+            $post_id = 0;
 		} elseif ( is_archive() ) {
 			$args['display'] = $display['archive'];
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'archive';
+            $post_id = 0;
 		}
 
 		// WooCommerce Settings
 		if ( Customify()->is_woocommerce_active() ) {
 			if ( is_product() ) {
-				$post_id         = 0;
+                $post_id         = wc_get_page_id( 'shop' );
 				$args['display'] = $display['product'];
 				$args['title']   = $titles['product'];
 				$args['tagline'] = $taglines['product'];
 				$args['_page']   = 'product';
+
 			} elseif ( is_product_category() ) {
 				$post_id         = 0;
 				$args['display'] = $display['product_cat'];
@@ -870,24 +726,30 @@ class Customify_Page_Header {
 				$args['display'] = $display['page'];
 				$post_id         = wc_get_page_id( 'shop' );
 				$args['_page']   = 'shop';
+                $args['tagline'] = '';
 			}
 		}
 
-		if ( $post_id ) {
-			$args['title']   = get_the_title( $post_id );
-			$args['tagline'] = get_the_excerpt( $post_id );
+		if ( $post_id > 0 ) {
+            $post = get_post($post_id);
+            if ($post) {
+                $args['title'] = get_the_title($post_id);
+                if ($post->post_excerpt) {
+                    $args['tagline'] = get_the_excerpt($post);
+                }
 
-			if ( ! $post_thumbnail_id ) {
-				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
-			}
+                if (!$post_thumbnail_id) {
+                    $post_thumbnail_id = get_post_thumbnail_id($post_id);
+                }
 
-			if ( ! $args['image'] && $post_thumbnail_id ) {
-				$_i = Customify()->get_media( $post_thumbnail_id );
-				if ( $_i ) {
-					$args['image'] = $_i;
-				}
-			}
-		}
+                if (!$args['image'] && $post_thumbnail_id) {
+                    $_i = Customify()->get_media($post_thumbnail_id);
+                    if ($_i) {
+                        $args['image'] = $_i;
+                    }
+                }
+            }
+        }
 
 		if ( Customify()->is_using_post() ) {
 			$post_id = Customify()->get_current_post_id();

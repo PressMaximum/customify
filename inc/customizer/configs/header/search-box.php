@@ -221,7 +221,7 @@ class Customify_Builder_Item_Search_Box
         $placeholder = sanitize_text_field( $placeholder );
         echo '<div class="header-' . esc_attr($this->id) . '-item item--'.esc_attr( $this->id ).'">';
 ?>
-        <form role="search" class="header-search-form" action="<?php echo home_url( '/' ); ?>">
+        <form role="search" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
             <label>
                 <span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ) ?></span>
                 <input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query() ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ) ?>" />

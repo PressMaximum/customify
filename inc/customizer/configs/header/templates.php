@@ -21,7 +21,7 @@ class Customify_Builder_Header_Templates {
 
         $html = '';
         $html .= '<span class="customize-control-title">'.__( 'Saved Templates', 'customify' ).'</span>';
-        $html .= '<ul class="list-saved-templates '.( $n > 0 ? 'has-templates' : 'no-templates' ).'">';
+        $html .= '<ul class="list-saved-templates list-boxed '.( $n > 0 ? 'has-templates' : 'no-templates' ).'">';
         if ( count( $saved_templates ) > 0 ) {
             foreach ( $saved_templates as $key => $tpl ) {
                 $tpl = wp_parse_args( $tpl, array(
@@ -33,7 +33,7 @@ class Customify_Builder_Header_Templates {
                 } else {
                     $name = $tpl['name'] ;
                 }
-                $html .= '<li class="saved_template" data-control-id="'.esc_attr( $prefix.'save' ).'" data-id="'.esc_attr( $key ).'" data-data="'.esc_attr( json_encode( $tpl['data'] ) ).'">'.esc_html( $name ).' <a href="#" class="load-tpl">'.__( 'Load', 'customify' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', 'customify' ).'</a></li>';
+                $html .= '<li class="saved_template li-boxed" data-control-id="'.esc_attr( $prefix.'save' ).'" data-id="'.esc_attr( $key ).'" data-data="'.esc_attr( json_encode( $tpl['data'] ) ).'">'.esc_html( $name ).' <a href="#" class="load-tpl">'.__( 'Load', 'customify' ).'</a><a href="#" class="remove-tpl">'.__( 'Remove', 'customify' ).'</a></li>';
             }
         }
 

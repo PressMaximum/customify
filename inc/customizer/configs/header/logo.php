@@ -118,8 +118,11 @@ class Customify_Builder_Item_Logo {
         $show_name      = Customify()->get_setting( 'header_logo_name' );
         $show_desc      = Customify()->get_setting( 'header_logo_desc' );
         $image_position = Customify()->get_setting( 'header_logo_pos' );
+        $logo_classes = array( 'site-branding'  );
+        $logo_classes[] = 'logo-'.$image_position;
+        $logo_classes = apply_filters( 'customify/logo-classes', $logo_classes );
         ?>
-        <div class="site-branding logo-<?php echo esc_attr( $image_position ); ?>">
+        <div class="<?php echo esc_attr( join(' ', $logo_classes ) ); ?>">
             <?php
 
             $this->logo();

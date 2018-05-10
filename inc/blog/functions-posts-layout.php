@@ -73,15 +73,30 @@ if( ! function_exists( 'customify_blog_posts' ) ) {
     }
 }
 
-if( ! function_exists( 'customify_archive_posts' ) ) {
-    /*
-     * Display posts as archive layout
-     */
-    function customify_archive_posts(){
-        customify_blog_posts( array(
-            'el_id' => 'archive-posts',
-            'prefix' => 'archive_post',
-        ));
-    }
+if ( ! class_exists( 'customify_single_post' ) ) {
+    function customify_single_post()
+    {
+        the_post();
+        $fields = Customify()->get_setting('single_blog_post_items');
+        $args = array(
+            'meta_sep'  => Customify()->get_setting('single_blog_post_meta_sep'),
+            'meta_config'  => Customify()->get_setting('single_blog_post_meta_config'),
+            'author_avatar'  => Customify()->get_setting('single_blog_post_author_avatar'),
+            'avatar_size' => 32,
+            'thumbnail_size' => Customify()->get_setting('single_blog_post_thumbnail_size'),
+        );
 
+        $size =  Customify()->get_setting( 'single_blog_post_avatar_size' );
+        if ( is_array( $size ) && isset( $size['value'] ) ) {
+            $args['avatar_size'] = absint($size['value']);
+        }
+        Customify_Post_Entry()->set_config($args);
+        ?>
+        <article id="post-<?php the_ID(); ?>" <?php post_class('entry entry-single'); ?>>
+            <?php Customify_Post_Entry()->build_fields($fields); ?>
+        </article>
+        <?php
+
+    }
 }
+

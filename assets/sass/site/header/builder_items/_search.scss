@@ -20,10 +20,24 @@
         width: 18px;
         height: 18px;
     }
+    .ic-close {
+        display: none;
+    }
 
 }
+
 .header-search_icon-item {
     position: relative;
+    &.active {
+        .search-icon {
+            .ic-search {
+                display: none;
+            }
+            .ic-close {
+                display: inline-block;
+            }
+        }
+    }
     .header-search-modal-wrapper {
         position: absolute;
         top: 100%;
@@ -61,7 +75,7 @@
 .header-search-form {
     display: flex;
     margin-bottom: 0px;
-    width: 200px;
+    width: 100%;
     max-width: 100%;
     label {
         flex-basis: 100%;

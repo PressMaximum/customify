@@ -43,7 +43,8 @@ article.comment .comment-post-author,
 .nav-menu-desktop .menu li a:hover,
 a:hover,
 .site-branding a:hover,
-.widget-area .widget a:not(.wc-forward):hover
+.widget-area .widget a:not(.wc-forward):hover,
+.site-content .widget-area .menu li.current-menu-item > a
 {
     color: {{value}};
 }
@@ -61,6 +62,9 @@ input[type="submit"],
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover 
 {
     background-color: {{value}};
+}
+.site-content .widget-area .menu li.current-menu-item > a:before {
+	border-left-color: {{value}};
 }
 article.comment .comment-post-author,
 #respond #cancel-comment-reply-link,
@@ -185,7 +189,8 @@ blockquote {
 .header-search-modal,
 .pagination .nav-links > *
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.search .content-area article
+.search .content-area article,
+.site-content .widget-area .menu li.current-menu-item > a
 {
     border-color: {{value}};
 }
