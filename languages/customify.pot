@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.7\n"
+"Project-Id-Version: Customify 0.0.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-05-09 11:10:43+00:00\n"
+"POT-Creation-Date: 2018-05-10 11:04:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -829,7 +829,7 @@ msgid "Thumbnail Size"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:147
-msgid "Hide thumbnail when empty."
+msgid "Hide featured image if empty."
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:155
@@ -856,7 +856,7 @@ msgstr ""
 
 #: inc/customizer/configs/blogs.php:198
 #: inc/customizer/configs/single-blog-post.php:125
-msgid "Drag to order meta items"
+msgid "Drag to reorder the meta item."
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:208
@@ -904,7 +904,7 @@ msgid "Read More"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:273
-msgid "Show Read More"
+msgid "Show Read More Button"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:283
@@ -953,7 +953,7 @@ msgid "Copyright &copy; {current_year} {site_title} - Powered by {theme_author}.
 msgstr ""
 
 #: inc/customizer/configs/footer/copyright.php:55
-msgid "Copyright text"
+msgid "Copyright Text"
 msgstr ""
 
 #: inc/customizer/configs/footer/copyright.php:56
@@ -963,7 +963,7 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/copyright.php:63
-msgid "Copyright text typography"
+msgid "Copyright Text Typography"
 msgstr ""
 
 #: inc/customizer/configs/footer/copyright.php:76
@@ -1165,7 +1165,8 @@ msgid "Link"
 msgstr ""
 
 #: inc/customizer/configs/header/button.php:89
-msgid "Open link in new window."
+#: inc/customizer/configs/header/social-icons.php:123
+msgid "Open link in a new tab."
 msgstr ""
 
 #: inc/customizer/configs/header/button.php:97
@@ -1201,7 +1202,7 @@ msgid "Logo Retina"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:51
-msgid "Show Site Name"
+msgid "Show Site Title"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:54
@@ -1218,11 +1219,11 @@ msgid "No"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:65
-msgid "Show Site Description"
+msgid "Show Site Tagline"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:79
-msgid "Logo Image Position"
+msgid "Logo Position"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:82
@@ -1527,12 +1528,8 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:123
-msgid "Open URL in new window."
-msgstr ""
-
 #: inc/customizer/configs/header/social-icons.php:131
-msgid "Apply rel \"nofollow\" to social links."
+msgid "Adding rel=\"nofollow\" for social links."
 msgstr ""
 
 #: inc/customizer/configs/header/social-icons.php:171
@@ -1645,11 +1642,11 @@ msgid "Blog posts"
 msgstr ""
 
 #: inc/customizer/configs/layouts.php:180
-msgid "Blog posts archives"
+msgid "Blog Archive Page"
 msgstr ""
 
 #: inc/customizer/configs/layouts.php:189
-msgid "Search Results"
+msgid "Search Page"
 msgstr ""
 
 #: inc/customizer/configs/layouts.php:198
@@ -1799,11 +1796,11 @@ msgid "Advanced"
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:241
-msgid "Single Post Cover Background"
+msgid "Post Header Background Cover"
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:242
-msgid "Apply when viewing single post and page header display as cover."
+msgid "Apply when viewing single post and page header setting displays as cover."
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:246
@@ -1985,7 +1982,7 @@ msgid "Body & Paragraph"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:29
-msgid "Apply for site paragraph."
+msgid "Apply to body and paragraph text."
 msgstr ""
 
 #: inc/customizer/configs/typography.php:38
@@ -1993,7 +1990,7 @@ msgid "Heading"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:39
-msgid "Apply for all heading element."
+msgid "Apply to all heading elements."
 msgstr ""
 
 #: inc/customizer/configs/typography.php:54

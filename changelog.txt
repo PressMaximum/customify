@@ -1,5 +1,5 @@
 = 0.0.8 =
-* UPDATED: Theme setting texts.
+* UPDATED: Improve theme setting copy, ready for translation.
 
 = 0.0.7 =
 * Release!
