@@ -358,6 +358,25 @@ $dashboard_border_color: #e5e5e5;
     filter: alpha(opacity=40);
 }
 
+.cd-list-item {
+    margin: 0 -15px;
+    padding: 0px 15px 15px;
+    border-bottom: 1px solid #eee;
+    &:last-child {
+        border-bottom: 0px;
+        padding-bottom: 0px;
+    }
+    .cd-list-name {
+        font-weight: 600;
+    }
+    .cd-list-desc {
+        margin-bottom: 1em;
+    }
+    .rcp {
+        margin-bottom: 0px;
+    }
+}
+
 /*Admin notice*/
 .customify-notice-wrapper {
     &.notice {
@@ -393,3 +412,4 @@ $dashboard_border_color: #e5e5e5;
         font-size: 18px;
     }
 }
+

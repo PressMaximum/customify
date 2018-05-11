@@ -14,7 +14,8 @@ class Customify_Dashboard {
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'box_links' ), 10 );
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'pro_modules_box' ), 15 );
             add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_plugins' ), 10 );
-            add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_community' ), 20 );
+            add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_recommend_plugins' ), 20 );
+            add_action( 'customify/dashboard/sidebar', array(  self::$_instance, 'box_community' ), 25 );
 
             add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
 
@@ -183,10 +184,11 @@ class Customify_Dashboard {
     }
 
     function box_plugins(){
+
         ?>
-        <div class="cd-box">
+        <div class="cd-box box-plugins">
             <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
-            <div id="plugin-filter" class="cd-box-content">
+            <div class="cd-box-content">
                 <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
 
@@ -271,7 +273,7 @@ class Customify_Dashboard {
                     jQuery( document ).ready( function($){
                         var  sites_url = <?php echo json_encode( $sites_url ); ?>;
                         var  view_sites = <?php echo json_encode( $view_site_txt ); ?>;
-                        $( '#plugin-filter' ).on( 'click', '.activate-now', function( e ){
+                        $( '#plugin-filter .box-plugins' ).on( 'click', '.activate-now', function( e ){
                             e.preventDefault();
                             var button = $( this );
                             var url = button.attr('href');
@@ -288,6 +290,121 @@ class Customify_Dashboard {
             </div>
         </div>
         <?php
+    }
+
+    function get_plugin_file( $plugin_slug ) {
+        $installed_plugins = get_plugins();
+        foreach ( ( array ) $installed_plugins as $plugin_file => $info ) {
+            if ( strpos( $plugin_file, $plugin_slug.'/' ) === 0 ) {
+                return $plugin_file;
+            }
+        }
+        return false;
+    }
+
+    function get_first_tag( $content ){
+        $content =  wp_kses( $content, array(
+            'a' => array(
+                'href' => array(),
+                'title' => array()
+            ),
+            'br' => array(),
+            'p' => array(),
+            'em' => array(),
+            'strong' => array(),
+        ) );
+        $content = substr( $content, 0, strpos( $content, '</p>' ) + 4 );
+        return $content;
+    }
+
+    function box_recommend_plugins(){
+
+        $list_plugins = array(
+            'themeisle-companion',
+            'customify-sites'
+        );
+
+        $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
+        $key = 'customify_plugins_info_'. wp_hash( json_encode( $list_plugins ) );
+        $plugins_info = get_transient( $key );
+        if ( false === $plugins_info) {
+            $plugins_info =array();
+            if ( ! function_exists( 'plugins_api' ) ) {
+                require_once  ABSPATH.'/wp-admin/includes/plugin-install.php';
+            }
+            foreach ( $list_plugins as $slug ) {
+                $info = plugins_api( 'plugin_information', array( 'slug' => $slug ) );
+                if ( ! is_wp_error( $info ) ){
+                    $plugins_info[ $slug ] = $info;
+                }
+            }
+            set_transient( $key, $plugins_info );
+        }
+
+
+        $html  = '';
+        foreach ( $plugins_info as $plugin_slug => $info ) {
+            $status = is_dir( WP_PLUGIN_DIR . '/' . $plugin_slug );
+            $plugin_file = $this->get_plugin_file( $plugin_slug );
+            if ( ! is_plugin_active( $plugin_file )  ) {
+                $html .= '<div class="cd-list-item">';
+                $html .= '<p class="cd-list-name">'.esc_html( $info->name ).'</p>';
+                $html .= '<div class="cd-list-desc">'.$this->get_first_tag( $info->sections['description'] ).'</div>';
+                if ($status) {
+                    $button_class = 'activate-now button button-primary'; //
+                    $button_txt = esc_html__('Activate', 'customify');
+                    $url = wp_nonce_url('plugins.php?action=activate&amp;plugin=' . urlencode($plugin_file), 'activate-plugin_' . $plugin_file);
+                } else {
+                    $button_class = 'install-now button'; //
+                    $button_txt = esc_html__('Install Now', 'customify');
+                    $url = wp_nonce_url(
+                        add_query_arg(
+                            array(
+                                'action' => 'install-plugin',
+                                'plugin' => $plugin_slug
+                            ),
+                            network_admin_url('update.php')
+                        ),
+                        'install-plugin_' . $plugin_slug
+                    );
+                }
+
+
+                $detail_link = add_query_arg(
+                    array(
+                        'tab'       => 'plugin-information',
+                        'plugin'    => $plugin_slug,
+                        'TB_iframe' => 'true',
+                        'width'     => '772',
+                        'height'    => '349',
+
+                    ),
+                    network_admin_url('plugin-install.php')
+                );
+
+                $class = 'action-btn plugin-card-' . $plugin_slug;
+
+                $html .= '<div class="rcp">';
+                $html .= '<p class="' . esc_attr($class) . '"><a href="' . esc_url($url) . '" data-slug="' . esc_attr($plugin_slug) . '" class="' . esc_attr($button_class) . '">' . $button_txt . '</a></p>';
+                $html .= '<a class="plugin-detail thickbox open-plugin-details-modal" href="' . esc_url($detail_link) . '">' . esc_html__('Details', 'customify') . '</a>';
+                $html .= '</div>';
+
+                $html .= '</div>';
+            }
+        } // end foreach
+
+        if ( $html ) {
+            ?>
+            <div class="cd-box">
+                <div class="cd-box-top"><?php _e('Recommend Plugins', 'customify'); ?></div>
+                <div class="cd-box-content cd-list-border">
+                    <?php
+                        echo $html; // WPCS: XSS OK.
+                    ?>
+                </div>
+            </div>
+            <?php
+        }
     }
 
     function pro_modules_box(){
@@ -347,7 +464,7 @@ class Customify_Dashboard {
     private function page_inner(){
 
         ?>
-        <div class="cd-row metabox-holder">
+        <div id="plugin-filter" class="cd-row metabox-holder">
             <hr class="wp-header-end">
             <div class="cd-main">
                 <?php do_action( 'customify/dashboard/main', $this ); ?>
