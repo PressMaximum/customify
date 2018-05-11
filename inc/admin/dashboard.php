@@ -348,11 +348,11 @@ class Customify_Dashboard {
                 $html .= '<div class="cd-list-item">';
                 $html .= '<p class="cd-list-name">'.esc_html( $info->name ).'</p>';
                 if ($status) {
-                    $button_class = 'activate-now button-- button-primary--'; //
+                    $button_class = 'activate-now'; //
                     $button_txt = esc_html__('Activate', 'customify');
                     $url = wp_nonce_url('plugins.php?action=activate&amp;plugin=' . urlencode($plugin_file), 'activate-plugin_' . $plugin_file);
                 } else {
-                    $button_class = 'install-now button---'; //
+                    $button_class = 'install-now'; //
                     $button_txt = esc_html__('Install Now', 'customify');
                     $url = wp_nonce_url(
                         add_query_arg(
