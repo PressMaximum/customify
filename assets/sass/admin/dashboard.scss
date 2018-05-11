@@ -99,7 +99,7 @@ $dashboard_border_color: #e5e5e5;
     }
     .cd-box-top {
         border-bottom: 1px solid #eee;
-        font-size: 1em;
+        font-size: 14px;
         padding: 12px 15px;
         font-weight: 600;
     }
@@ -165,6 +165,9 @@ $dashboard_border_color: #e5e5e5;
         flex-basis: 100%;
         position: relative;
         padding-right: 100px;
+        .cd-module-name {
+            font-weight: 500;
+        }
     }
     .cd-module-desc {
         margin-top: 10px;
@@ -186,8 +189,13 @@ $dashboard_border_color: #e5e5e5;
     display: none !important;
 }
 .onoffswitch-label {
-    display: block; overflow: hidden; cursor: pointer;
-    border: 0px none; border-radius: 10px;
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0px none;
+    border-radius: 10px;
+    position: relative;
+    top: 3px;
 }
 .onoffswitch-inner {
     display: block; width: 200%; margin-left: -100%;
@@ -370,7 +378,7 @@ $dashboard_border_color: #e5e5e5;
         padding-bottom: 0px;
     }
     .cd-list-name {
-        font-weight: 600;
+        font-weight: 500;
     }
     .cd-list-desc {
         margin-bottom: 1em;

@@ -101,7 +101,7 @@
 }
 .cd-box .cd-box-top {
   border-bottom: 1px solid #eee;
-  font-size: 1em;
+  font-size: 14px;
   padding: 12px 15px;
   font-weight: 600;
 }
@@ -171,6 +171,9 @@
   position: relative;
   padding-right: 100px;
 }
+.cd-modules .cd-module-info .cd-module-name {
+  font-weight: 500;
+}
 .cd-modules .cd-module-desc {
   margin-top: 10px;
   font-style: italic;
@@ -199,6 +202,8 @@
   cursor: pointer;
   border: 0px none;
   border-radius: 10px;
+  position: relative;
+  top: 3px;
 }
 
 .onoffswitch-inner {
@@ -417,7 +422,7 @@
   padding-bottom: 0px;
 }
 .cd-list-item .cd-list-name {
-  font-weight: 600;
+  font-weight: 500;
 }
 .cd-list-item .cd-list-desc {
   margin-bottom: 1em;

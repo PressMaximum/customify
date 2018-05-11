@@ -188,6 +188,9 @@ class Customify_Dashboard {
         ?>
         <div class="cd-box box-plugins">
             <div class="cd-box-top"><?php _e( 'Customify ready to import sites', 'customify' ); ?></div>
+            <div class="cd-sites-thumb">
+                <img src="<?php echo esc_url( get_template_directory_uri() ).'/assets/images/admin/sites_thumbnail.jpg'; ?>">
+            </div>
             <div class="cd-box-content">
                 <p><?php _e( '<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify' ) ?></p>
                 <?php
@@ -321,6 +324,7 @@ class Customify_Dashboard {
 
         $list_plugins = array(
             'themeisle-companion',
+            'elementor',
         );
 
         $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
@@ -442,13 +446,12 @@ class Customify_Dashboard {
 
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?></div>
+            <div class="cd-box-top"><?php _e( 'Customify Pro Modules (Coming Soon)', 'customify' ); ?></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
                 <div class="cd-module-item">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
-                        <a class="cd-module-doc-link" target="_blank" href="<?php echo esc_url( $m['url'] ); ?>"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a>
                     </div>
                 </div>
                 <?php } ?>
