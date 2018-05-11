@@ -320,7 +320,7 @@ class Customify_Dashboard {
     function box_recommend_plugins(){
 
         $list_plugins = array(
-            'themeisle-companion'
+            'themeisle-companion',
         );
 
         $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
@@ -340,7 +340,6 @@ class Customify_Dashboard {
             set_transient( $key, $plugins_info );
         }
 
-
         $html  = '';
         foreach ( $plugins_info as $plugin_slug => $info ) {
             $status = is_dir( WP_PLUGIN_DIR . '/' . $plugin_slug );
@@ -348,13 +347,12 @@ class Customify_Dashboard {
             if ( ! is_plugin_active( $plugin_file )  ) {
                 $html .= '<div class="cd-list-item">';
                 $html .= '<p class="cd-list-name">'.esc_html( $info->name ).'</p>';
-                $html .= '<div class="cd-list-desc">'.$this->get_first_tag( $info->sections['description'] ).'</div>';
                 if ($status) {
-                    $button_class = 'activate-now button button-primary'; //
+                    $button_class = 'activate-now button-- button-primary--'; //
                     $button_txt = esc_html__('Activate', 'customify');
                     $url = wp_nonce_url('plugins.php?action=activate&amp;plugin=' . urlencode($plugin_file), 'activate-plugin_' . $plugin_file);
                 } else {
-                    $button_class = 'install-now button'; //
+                    $button_class = 'install-now button---'; //
                     $button_txt = esc_html__('Install Now', 'customify');
                     $url = wp_nonce_url(
                         add_query_arg(
@@ -367,7 +365,6 @@ class Customify_Dashboard {
                         'install-plugin_' . $plugin_slug
                     );
                 }
-
 
                 $detail_link = add_query_arg(
                     array(

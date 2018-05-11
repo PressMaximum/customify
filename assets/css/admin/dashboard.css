@@ -406,8 +406,11 @@
 
 .cd-list-item {
   margin: 0 -15px;
-  padding: 0px 15px 15px;
+  padding: 15px 15px 15px;
   border-bottom: 1px solid #eee;
+}
+.cd-list-item:first-child {
+  padding-top: 0px;
 }
 .cd-list-item:last-child {
   border-bottom: 0px;
@@ -420,6 +423,9 @@
   margin-bottom: 1em;
 }
 .cd-list-item .rcp {
+  margin-bottom: 0px;
+}
+.cd-list-item .rcp p {
   margin-bottom: 0px;
 }
 

@@ -360,8 +360,11 @@ $dashboard_border_color: #e5e5e5;
 
 .cd-list-item {
     margin: 0 -15px;
-    padding: 0px 15px 15px;
+    padding: 15px 15px 15px;
     border-bottom: 1px solid #eee;
+    &:first-child {
+        padding-top: 0px;
+    }
     &:last-child {
         border-bottom: 0px;
         padding-bottom: 0px;
@@ -374,6 +377,9 @@ $dashboard_border_color: #e5e5e5;
     }
     .rcp {
         margin-bottom: 0px;
+        p {
+            margin-bottom: 0px;
+        }
     }
 }
 
