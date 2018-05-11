@@ -1,5 +1,8 @@
-= 0.0.9
- * FIXED: Issue menu icon color.
+= 0.0.9 =
+ * IMPROVED: Improve dashboard CSS style.
+ * IMPROVED: Update new primary color.
+ * IMPROVED: Update theme screenshot to matching the default setting.
+ * FIXED: Mobile menu icon color issue.
  * ADD: Recommend plugins.
 
 = 0.0.8 =
