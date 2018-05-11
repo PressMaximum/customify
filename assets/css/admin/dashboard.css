@@ -463,4 +463,13 @@
   font-size: 18px;
 }
 
+.cd-box-content input[type="text"],
+.cd-box-content input[type="number"],
+.cd-box-content input[type="password"],
+.cd-box-content input[type="email"],
+.cd-box-content input[type="email"] {
+  display: block;
+  max-width: 100%;
+}
+
 /*# sourceMappingURL=dashboard.css.map */

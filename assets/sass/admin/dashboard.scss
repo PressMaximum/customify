@@ -419,3 +419,14 @@ $dashboard_border_color: #e5e5e5;
     }
 }
 
+.cd-box-content {
+    input[type="text"],
+    input[type="number"],
+    input[type="password"],
+    input[type="email"],
+    input[type="email"]{
+        display: block;
+        max-width: 100%;
+    }
+}
+
