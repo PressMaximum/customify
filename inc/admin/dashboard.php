@@ -320,8 +320,7 @@ class Customify_Dashboard {
     function box_recommend_plugins(){
 
         $list_plugins = array(
-            'themeisle-companion',
-            'customify-sites'
+            'themeisle-companion'
         );
 
         $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
