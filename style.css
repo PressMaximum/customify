@@ -3980,16 +3980,16 @@ article.comment .comment-post-author {
 }
 
 /* Nav Icon */
-button.menu-mobile-toggle {
+.menu-mobile-toggle {
   cursor: pointer;
   text-align: center;
   padding: 2px 5px;
   background: transparent;
-  color: inherit;
   box-shadow: none;
+  color: currentColor;
   transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
 }
-button.menu-mobile-toggle:hover {
+.menu-mobile-toggle:hover {
   box-shadow: none;
   background: transparent;
 }
