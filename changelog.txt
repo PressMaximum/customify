@@ -1,3 +1,7 @@
+= 0.0.9
+ * FIXED: Issue menu icon color.
+ * ADD: Recommend plugins.
+
 = 0.0.8 =
 * UPDATED: Improve theme setting copy, ready for translation.
 
