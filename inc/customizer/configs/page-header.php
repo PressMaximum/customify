@@ -243,7 +243,7 @@ class Customify_Page_Header {
 							'default'     => '',
 							'choices'     => array(
 								'default'   => __( 'Default', 'customify' ),
-								'blog_page' => __( 'Use featured image form bog page', 'customify' ),
+								'blog_page' => __( 'Use featured image from blog page', 'customify' ),
 								'featured'  => __( 'Use featured image of current post', 'customify' ),
 							)
 						),
@@ -254,7 +254,7 @@ class Customify_Page_Header {
 							'default' => '',
 							'choices' => array(
 								'default'   => __( 'Default', 'customify' ),
-								'blog_page' => __( 'Use title & tagline form bog page', 'customify' ),
+								'blog_page' => __( 'Use title & tagline from blog page', 'customify' ),
 								'current'   => __( 'Use title & tagline of current post', 'customify' ),
 							)
 						),
