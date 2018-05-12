@@ -1,3 +1,6 @@
+= 0.1.0 =
+ * Fix issue post type layout.
+
 = 0.0.9 =
  * IMPROVED: Improve dashboard CSS style.
  * IMPROVED: Update new primary color.
