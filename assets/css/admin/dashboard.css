@@ -11,6 +11,10 @@
   }
 }
 
+.cd-hide {
+  display: none !important;
+}
+
 .cd-hidden-heading {
   display: none;
 }
@@ -475,6 +479,13 @@
 .cd-box-content input[type="email"] {
   display: block;
   max-width: 100%;
+}
+
+.customify-msg .error {
+  color: #dc3232;
+}
+.customify-msg .success {
+  color: #46b450;
 }
 
 /*# sourceMappingURL=dashboard.css.map */

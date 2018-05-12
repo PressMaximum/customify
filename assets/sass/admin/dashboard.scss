@@ -24,6 +24,9 @@ $dashboard_border_color: #e5e5e5;
         }
     }
 }
+.cd-hide {
+    display: none !important;
+}
 .cd-hidden-heading {
     display: none;
 }
@@ -438,3 +441,11 @@ $dashboard_border_color: #e5e5e5;
     }
 }
 
+.customify-msg {
+    .error {
+        color: #dc3232;
+    }
+    .success {
+        color: #46b450;
+    }
+}
