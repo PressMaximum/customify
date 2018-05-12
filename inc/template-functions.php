@@ -64,6 +64,8 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
             if ( is_home() && is_front_page() || ( is_home() && ! is_front_page() ) ) {
                 $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
+            } elseif (is_page()) {
+                $layout  = Customify()->get_setting('page_sidebar_layout');
             } elseif (is_search()) {
                 $search     = Customify()->get_setting('search_sidebar_layout');
                 $layout = $search;
