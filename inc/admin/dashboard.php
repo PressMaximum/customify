@@ -324,7 +324,6 @@ class Customify_Dashboard {
 
         $list_plugins = array(
             'themeisle-companion',
-            'elementor',
         );
 
         $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
