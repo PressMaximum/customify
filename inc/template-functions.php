@@ -70,7 +70,7 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
             } elseif (is_archive()) {
                 $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
                 $layout = $archive;
-            } elseif ( is_category() || is_tag() || is_single()) { // blog page and single page
+            } elseif ( is_category() || is_tag() || is_singular( 'post' ) ) { // blog page and single page
                 $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
             } elseif( is_404() ) {
