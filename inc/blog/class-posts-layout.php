@@ -10,6 +10,7 @@ class Customify_Posts_Layout {
 
         $args = array(
             'layout'              => Customify()->get_setting($customizer_args['prefix'] . '_layout'),
+            'excerpt_type'       => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_type'),
             'excerpt_length'      => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_length'),
             'excerpt_more'        => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_more'),
             'more_text'           => Customify()->get_setting($customizer_args['prefix'] . '_more_text'),
@@ -129,6 +130,7 @@ class Customify_Posts_Layout {
         );
         $this->args['media_fields'] = array();
 
+        /*
         Customify_Post_Entry()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
             'excerpt_length' => $this->args['excerpt_length'],
@@ -138,6 +140,10 @@ class Customify_Posts_Layout {
             'meta_config' => $this->args['meta_config'],
             'meta_sep' => $this->args['meta_sep'],
         ) );
+        */
+
+        //  $this->args
+        Customify_Post_Entry()->set_config( $this->args );
     }
 
 
