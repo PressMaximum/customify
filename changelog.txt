@@ -1,5 +1,7 @@
 = 0.1.0 =
- * Fix issue post type layout.
+ * FIXED: Issue post type layout.
+ * NEW: Option to display post excerpt.
+ * NEW: Option to hide post media.
 
 = 0.0.9 =
  * IMPROVED: Improve dashboard CSS style.

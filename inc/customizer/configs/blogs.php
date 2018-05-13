@@ -91,6 +91,15 @@ if (!function_exists('customify_customizer_blog_config')) {
             ),
 
             array(
+                'name' => $args['id'].'_media_hide',
+                'type' => 'checkbox',
+                'section' => $level_2_panel.'_media',
+                'checkbox_label' => __( 'Hide Media', 'customify' ),
+                'selector' => $args['selector'],
+                'render_callback' => $args['cb'],
+            ),
+
+            array(
                 'name' => $args['id'].'_media_ratio',
                 'type' => 'slider',
                 'section' => $level_2_panel.'_media',
@@ -101,6 +110,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'min' => 0,
                 'device_settings' => true,
                 'unit' => '%',
+                'required' => array( $args['id'].'_media_hide', '!=', '1' )
             ),
             array(
                 'name' => $args['id'].'_media_width',
@@ -114,6 +124,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'unit' => '%',
                 'selector' => "{$args['selector']} .posts-layout .entry-media, {$args['selector']} .posts-layout.layout--blog_classic .entry-media",
                 'css_format' => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
+                'required' => array( $args['id'].'_media_hide', '!=', '1' )
             ),
 
             array(
@@ -125,6 +136,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'min' => 0,
                 'selector' => "{$args['selector']} .posts-layout .entry-media",
                 'css_format' => 'border-radius: {{value}};',
+                'required' => array( $args['id'].'_media_hide', '!=', '1' )
             ),
 
             array(
@@ -135,7 +147,8 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'render_callback' => $args['cb'],
                 'default' => 'medium',
                 'label' => __('Thumbnail Size', 'customify'),
-                'choices' => customify_get_all_image_sizes()
+                'choices' => customify_get_all_image_sizes(),
+                'required' => array( $args['id'].'_media_hide', '!=', '1' )
             ),
             array(
                 'name' => $args['id'].'_hide_thumb_if_empty',
@@ -145,6 +158,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'checkbox_label' => __('Hide featured image if empty.', 'customify'),
+                'required' => array( $args['id'].'_media_hide', '!=', '1' )
             ),
 
             // Article Excerpt ---------------------------------------------------------------------------------

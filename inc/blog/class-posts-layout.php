@@ -20,6 +20,7 @@ class Customify_Posts_Layout {
             'meta_config'         => Customify()->get_setting($customizer_args['prefix'] . '_meta_config'),
             'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
             'author_avatar'       => Customify()->get_setting($customizer_args['prefix'] . '_author_avatar'),
+            'media_hide'       => Customify()->get_setting($customizer_args['prefix'] . '_media_hide'),
         );
 
         $size =  Customify()->get_setting( $customizer_args['prefix'].'_avatar_size' );
@@ -221,10 +222,14 @@ class Customify_Posts_Layout {
             ),
         );
 
-        $show_media = true;
-        if ( ! has_post_thumbnail( $post ) ) {
-            if ( $this->args['hide_thumb_if_empty'] ) {
-                $show_media = false;
+        if ( $this->args['media_hide'] ) {
+            $show_media = false;
+        } else {
+            $show_media = true;
+            if ( ! has_post_thumbnail( $post ) ) {
+                if ( $this->args['hide_thumb_if_empty'] ) {
+                    $show_media = false;
+                }
             }
         }
 
