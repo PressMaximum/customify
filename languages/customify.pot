@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.0.8\n"
+"Project-Id-Version: Customify 0.0.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-05-10 11:04:50+00:00\n"
+"POT-Creation-Date: 2018-05-11 16:51:44+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -51,45 +51,45 @@ msgstr ""
 msgid "Customify Options"
 msgstr ""
 
-#: inc/admin/dashboard.php:37 inc/admin/dashboard.php:100
+#: inc/admin/dashboard.php:38 inc/admin/dashboard.php:101
 msgid "logo"
 msgstr ""
 
-#: inc/admin/dashboard.php:40
+#: inc/admin/dashboard.php:41
 msgid ""
 "Thanks for installing Customify, you rock! <img draggable=\"false\" "
 "class=\"emoji\" alt=\"\" "
 "src=\"https://s.w.org/images/core/emoji/2.4/svg/1f918.svg\">"
 msgstr ""
 
-#: inc/admin/dashboard.php:41
+#: inc/admin/dashboard.php:42
 msgid ""
 "To fully take advantage of the best our theme can offer please make sure "
 "you visit our <a href=\"%1$s\">Customify options page</a>."
 msgstr ""
 
-#: inc/admin/dashboard.php:114 inc/customizer/class-customizer.php:1004
+#: inc/admin/dashboard.php:115 inc/customizer/class-customizer.php:1004
 #: inc/customizer/configs/header/logo.php:7
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:118
+#: inc/admin/dashboard.php:119
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:122 inc/customizer/configs/header/panel.php:13
+#: inc/admin/dashboard.php:123 inc/customizer/configs/header/panel.php:13
 #: inc/customizer/configs/header/panel.php:50
 #: inc/customizer/configs/header/panel.php:58
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:126 inc/customizer/configs/footer/panel.php:13
+#: inc/admin/dashboard.php:127 inc/customizer/configs/footer/panel.php:13
 #: inc/customizer/configs/footer/panel.php:126
 #: inc/customizer/configs/footer/panel.php:134
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:130 inc/compatibility/breadcrumb-navxt.php:184
+#: inc/admin/dashboard.php:131 inc/compatibility/breadcrumb-navxt.php:184
 #: inc/customizer/configs/blogs.php:306
 #: inc/customizer/configs/footer/panel.php:211
 #: inc/customizer/configs/header/button.php:107
@@ -99,111 +99,115 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:134 inc/compatibility/breadcrumb-navxt.php:174
+#: inc/admin/dashboard.php:135 inc/compatibility/breadcrumb-navxt.php:174
 #: inc/customizer/configs/blogs.php:292
 #: inc/customizer/configs/header/button.php:96
 #: inc/customizer/configs/typography.php:13
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:138
+#: inc/admin/dashboard.php:139
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:142 inc/customizer/configs/page-header.php:319
+#: inc/admin/dashboard.php:143 inc/customizer/configs/page-header.php:319
 msgid "Titlebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:147 inc/customizer/configs/blogs.php:7
+#: inc/admin/dashboard.php:148 inc/customizer/configs/blogs.php:7
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:151
+#: inc/admin/dashboard.php:152
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:159
+#: inc/admin/dashboard.php:160
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:176
+#: inc/admin/dashboard.php:177
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:178
+#: inc/admin/dashboard.php:179
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:179
+#: inc/admin/dashboard.php:180
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:188
+#: inc/admin/dashboard.php:190
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:190
+#: inc/admin/dashboard.php:195
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:219
+#: inc/admin/dashboard.php:224
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:222
+#: inc/admin/dashboard.php:227 inc/admin/dashboard.php:360
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:244
+#: inc/admin/dashboard.php:249
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:261
+#: inc/admin/dashboard.php:266 inc/admin/dashboard.php:389
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:297
+#: inc/admin/dashboard.php:356
+msgid "Activate"
+msgstr ""
+
+#: inc/admin/dashboard.php:399
+msgid "Recommend Plugins"
+msgstr ""
+
+#: inc/admin/dashboard.php:414
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:301
+#: inc/admin/dashboard.php:418
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:305
+#: inc/admin/dashboard.php:422
 msgid "Header Footer Builder Items"
 msgstr ""
 
-#: inc/admin/dashboard.php:309
+#: inc/admin/dashboard.php:426
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:313
+#: inc/admin/dashboard.php:430
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:317
+#: inc/admin/dashboard.php:434
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:321
+#: inc/admin/dashboard.php:438
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:325
+#: inc/admin/dashboard.php:442
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:332
-msgid "Customify Pro Modules"
-msgstr ""
-
-#: inc/admin/dashboard.php:338
-msgid "Learn more &rarr;"
+#: inc/admin/dashboard.php:449
+msgid "Customify Pro Modules (Coming Soon)"
 msgstr ""
 
 #: inc/blog/class-post-entry.php:239

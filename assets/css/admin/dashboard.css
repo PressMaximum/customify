@@ -163,7 +163,7 @@
   border-bottom: 1px solid #eee;
 }
 .cd-modules .cd-module-item:last-child {
-  margin-bottom: 0px none;
+  margin-bottom: 0px;
 }
 .cd-modules .cd-module-toggle {
   flex-basis: 40px;

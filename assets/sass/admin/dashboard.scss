@@ -1,4 +1,3 @@
-
 $dashboard_width: 930px;
 $dashboard_border_color: #e5e5e5;
 
@@ -24,6 +23,7 @@ $dashboard_border_color: #e5e5e5;
         }
     }
 }
+
 .cd-hide {
     display: none !important;
 }
@@ -151,12 +151,13 @@ $dashboard_border_color: #e5e5e5;
     &.cd-box-content {
         padding: 0px;
     }
+
     .cd-module-item {
         display: flex;
         padding: 16px 15px;
         border-bottom: 1px solid #eee;
         &:last-child {
-            margin-bottom: 0px none;
+            margin-bottom: 0px;
         }
     }
     .cd-module-toggle{
