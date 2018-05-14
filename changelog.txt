@@ -1,7 +1,8 @@
 = 0.1.0 =
- * FIXED: Issue post type layout.
  * NEW: Option to display post excerpt.
  * NEW: Option to hide post media.
+ * NEW: Add upsell section.
+ * FIXED: Issue post type layout.
 
 = 0.0.9 =
  * IMPROVED: Improve dashboard CSS style.
