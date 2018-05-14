@@ -178,6 +178,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'custom' => __( 'Custom', 'customify' ),
                     'excerpt' => __( 'Use excerpt metabox', 'customify' ),
                     'more_tag' => __( 'Strip excerpt by more tag', 'customify' ),
+                    'content' => __( 'Full content', 'customify' ),
                 ),
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
@@ -188,7 +189,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_excerpt_length',
                 'type' => 'number',
                 'section' => $level_2_panel.'_excerpt',
-                'default' => '',
+                'default' => 25,
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'label' => __('Excerpt Length', 'customify'),
@@ -382,7 +383,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'type' => 'text',
-                'label' => __( 'Preview Label', 'customify' ),
+                'label' => __( 'Previous Label', 'customify' ),
                 'required' => array($args['id'].'_pg_show_paging', '==', '1')
             ),
             array(

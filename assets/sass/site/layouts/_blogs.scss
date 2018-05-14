@@ -103,6 +103,13 @@ $blog_gutter: $gl-gutter;
             }
         }
     }
+    .entry-excerpt {
+        p{
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
     .entry-media-link {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0; display: block;

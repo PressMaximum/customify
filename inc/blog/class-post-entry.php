@@ -397,6 +397,8 @@ class Customify_Post_Entry {
             the_excerpt();
         } elseif( $this->config['excerpt_type']  == 'more_tag' ) {
             the_content('',  true );
+        } elseif( $this->config['excerpt_type']  == 'content' ) {
+            the_content( '', false );
         } else {
             $text= '';
             if ( $this->post ) {
@@ -409,7 +411,7 @@ class Customify_Post_Entry {
             $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
             if ( $excerpt ) {
                 // WPCS: XSS OK.
-                echo $excerpt;
+                echo apply_filters( 'the_excerpt', $excerpt );
             } else {
                 the_excerpt();
             }

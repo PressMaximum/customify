@@ -22,6 +22,11 @@ class Customify {
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 95 );
         add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
+        add_filter( 'excerpt_length', array( $this, 'excerpt_length' ) );
+    }
+
+    function excerpt_length( $length ){
+        return 25;
     }
 
     /**

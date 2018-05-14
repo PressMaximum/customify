@@ -5020,6 +5020,9 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .entry-title a:hover {
   color: #0cb4ce;
 }
+.posts-layout .entry-excerpt p:last-child {
+  margin-bottom: 0px;
+}
 .posts-layout .entry-media-link {
   position: absolute;
   top: 0;
