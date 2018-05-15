@@ -452,6 +452,9 @@ class Customify_Dashboard {
                 <div class="cd-module-item">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
+                        <?php if ( isset( $m['desc'] ) ) { ?>
+                        <div class="cd-module-desc"><?php echo esc_html( $m['desc'] ); ?></div>
+                        <?php } ?>
                     </div>
                 </div>
                 <?php } ?>
