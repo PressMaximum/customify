@@ -628,7 +628,7 @@ class Customify_Page_Header {
 			$args['display'] = $display['page'];
 			$post_id         = get_the_ID();
 			$args['_page']   = 'page';
-		} elseif ( is_single() ) {
+		} elseif ( is_singular( 'post' ) ) {
 			// single post
 			$args['display']   = $display['post'];
 			$args['title_tag'] = 'h2';
@@ -742,12 +742,13 @@ class Customify_Page_Header {
                     $post_thumbnail_id = get_post_thumbnail_id($post_id);
                 }
 
-                if (!$args['image'] && $post_thumbnail_id) {
-                    $_i = Customify()->get_media($post_thumbnail_id);
-                    if ($_i) {
-                        $args['image'] = $_i;
-                    }
-                }
+            }
+        }
+
+        if (!$args['image'] && $post_thumbnail_id) {
+            $_i = Customify()->get_media($post_thumbnail_id);
+            if ($_i) {
+                $args['image'] = $_i;
             }
         }
 

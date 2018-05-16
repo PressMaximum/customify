@@ -2,7 +2,9 @@
  * NEW: Option to display post excerpt.
  * NEW: Option to hide post media.
  * NEW: Add upsell section.
+ * IMPROVED: Styling config.
  * FIXED: Issue post type layout.
+ * FIXED: Issue single post cover image not show when homepage displays as latest posts.
 
 = 0.0.9 =
  * IMPROVED: Improve dashboard CSS style.
