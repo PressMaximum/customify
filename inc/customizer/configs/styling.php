@@ -20,6 +20,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'  => 'section',
 				'panel' => 'styling_panel',
 				'title' => __( 'Global Colors', 'customify' ),
+                'priority' => 10,
 			),
 			array(
 				'name'       => "{$section}_color_primary",
@@ -274,7 +275,8 @@ article.comment .comment-time,
 				'name'  => "{$section}_widgets",
 				'type'  => 'section',
 				'panel' => 'styling_panel',
-				'title' => __( 'Sidebar Widgets', 'customify' ),
+                'priority' => 90,
+                'title' => __( 'Sidebar Widgets', 'customify' ),
 			),
 
 			array(
@@ -326,7 +328,8 @@ article.comment .comment-time,
 				'name'  => "{$section}_footer_widgets",
 				'type'  => 'section',
 				'panel' => 'styling_panel',
-				'title' => __( 'Footer Widgets', 'customify' ),
+				'priority' => 100,
+                'title' => __( 'Footer Widgets', 'customify' ),
 			),
 
 			array(
