@@ -2,6 +2,7 @@
  * NEW: Option to display post excerpt.
  * NEW: Option to hide post media.
  * IMPROVED: Styling config.
+ * IMPROVED: Styling sidebar search form.
  * FIXED: post type layout issue.
  * FIXED: Single post cover image didn't show when homepage displays as latest posts.
 
