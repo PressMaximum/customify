@@ -109,6 +109,9 @@
   padding: 12px 15px;
   font-weight: 600;
 }
+.cd-box .cd-box-top .cd-upgrade {
+  float: right;
+}
 .cd-box .cd-box-content {
   padding: 15px;
 }

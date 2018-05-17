@@ -81,7 +81,7 @@ if (is_admin() || is_customize_preview()) {
                 array(
                     'priority'  => 0,
                     'pro_text' => __( 'Customify Pro modules available', 'customify' ),
-                    'pro_url'  => 'https://wpcustomify.com/pricing/'
+                    'pro_url'  => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top'
                 )
             )
         );

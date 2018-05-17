@@ -446,7 +446,7 @@ class Customify_Dashboard {
 
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Customify Pro Modules (Coming Soon)', 'customify' ); ?></div>
+            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?> <a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
                 <div class="cd-module-item">

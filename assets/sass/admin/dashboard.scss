@@ -105,7 +105,11 @@ $dashboard_border_color: #e5e5e5;
         font-size: 14px;
         padding: 12px 15px;
         font-weight: 600;
+        .cd-upgrade {
+            float: right;
+        }
     }
+
     .cd-box-content {
         padding: 15px;
         p {
