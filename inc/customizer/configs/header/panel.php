@@ -275,6 +275,16 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 )
             ),
 
+            array(
+                'name'            => $section . '_menu_no_duplicator',
+                'type'            => 'checkbox',
+                'section'         => $section,
+                'selector'        => '.sub-menu .li-duplicator',
+                'css_format'      => 'display:none !important;',
+                'checkbox_label'  => __('Do not copy parent menu to submenu.', 'customify'),
+                'default'         => 1,
+            ),
+
 
         );
         return $config;
