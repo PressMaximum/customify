@@ -9,11 +9,17 @@ class Customify_Breadcrumb {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
             add_filter( 'customify/customizer/config', array( self::$_instance, 'config' ) );
+            add_filter( 'wpseo_breadcrumb_separator', '__return_null' );
+            add_filter( 'wpseo_breadcrumb_single_link', array( self::$_instance , 'yoat_seo_link_link' ) );
             if ( ! is_admin() ) {
                 add_action( 'wp_head', array( self::$_instance, 'display' ) );
             }
         }
         return self::$_instance;
+    }
+
+    function yoat_seo_link_link( $link ){
+        return '<li>'.$link.'</li>';
     }
 
     function display(){
@@ -49,6 +55,14 @@ class Customify_Breadcrumb {
             $activated = true;
         }
 
+        if ( ! $activated && defined( 'WPSEO_FILE' ) ) {
+            $options = get_option( 'wpseo_titles' );
+            if ( is_array( $options ) && isset( $options['breadcrumbs-enable'] ) && $options['breadcrumbs-enable'] ){
+                $activated = true;
+            }
+        }
+
+
         return $activated;
     }
 
@@ -66,7 +80,7 @@ class Customify_Breadcrumb {
         );
 
         if( ! $this->support_plugins_active() ) {
-            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> breadcrumb plugin. All settings will be displayed after you install and active it.', 'customify' );
+            $desc = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> or <a href="https://wordpress.org/plugins/wordpress-seo/" target="_blank">Yoast SEO</a> breadcrumb plugin. All settings will be displayed after you installed and activated it.', 'customify' );
             $config[] = array(
                 'name' => "{$section}_display_pos",
                 'type' => 'custom_html',
@@ -308,7 +322,13 @@ class Customify_Breadcrumb {
         if ( ! $this->is_showing() ) {
             return '';
         }
-        $list = bcn_display_list(true);
+        $list = '';
+        if ( function_exists( 'bcn_display_list' ) ) {
+            $list = bcn_display_list(true);
+        } elseif (  function_exists( 'yoast_breadcrumb' ) ) {
+            $list  = yoast_breadcrumb('','',  false );
+        }
+
         if ( $list ) {
             $pos = sanitize_text_field( Customify()->get_setting( 'breadcrumb_display_pos' ) );
             ?>
