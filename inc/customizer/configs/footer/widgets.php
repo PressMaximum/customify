@@ -12,6 +12,10 @@ class Customify_Builder_Item_Footer_Widget_1
             'section' => 'sidebar-widgets-footer-1'
         );
     }
+
+    function customize(){
+        return customify_footer_layout_settings( 'footer-1', 'sidebar-widgets-footer-1' );
+    }
 }
 
 class Customify_Builder_Item_Footer_Widget_2
@@ -26,6 +30,9 @@ class Customify_Builder_Item_Footer_Widget_2
             'width' => '3',
             'section' => 'sidebar-widgets-footer-2'
         );
+    }
+    function customize(){
+        return customify_footer_layout_settings( 'footer-2', 'sidebar-widgets-footer-2' ) ;
     }
 }
 
@@ -42,6 +49,9 @@ class Customify_Builder_Item_Footer_Widget_3
             'section' => 'sidebar-widgets-footer-3'
         );
     }
+    function customize(){
+        return customify_footer_layout_settings( 'footer-3', 'sidebar-widgets-footer-3' ) ;
+    }
 }
 
 class Customify_Builder_Item_Footer_Widget_4
@@ -56,6 +66,9 @@ class Customify_Builder_Item_Footer_Widget_4
             'width' => '3',
             'section' => 'sidebar-widgets-footer-4'
         );
+    }
+    function customize(){
+        return customify_footer_layout_settings( 'footer-4', 'sidebar-widgets-footer-4' ) ;
     }
 }
 
@@ -72,6 +85,9 @@ class Customify_Builder_Item_Footer_Widget_5
             'section' => 'sidebar-widgets-footer-5'
         );
     }
+    function customize(){
+        return customify_footer_layout_settings( 'footer-5', 'sidebar-widgets-footer-5' ) ;
+    }
 }
 
 class Customify_Builder_Item_Footer_Widget_6
@@ -87,6 +103,9 @@ class Customify_Builder_Item_Footer_Widget_6
             'section' => 'sidebar-widgets-footer-6'
         );
     }
+    function customize(){
+        return customify_footer_layout_settings( 'footer-6', 'sidebar-widgets-footer-6' ) ;
+    }
 }
 
 
@@ -96,6 +115,8 @@ function customify_change_footer_widgets_location( $wp_customize ){
             $wp_customize->get_section( 'sidebar-widgets-footer-'.$i )->panel = 'footer_settings';
         }
     }
+
+
 }
 add_action( 'customize_register', 'customify_change_footer_widgets_location', 199 );
 

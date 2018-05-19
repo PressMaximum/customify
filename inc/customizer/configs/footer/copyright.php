@@ -36,7 +36,7 @@ class Customify_Builder_Footer_Item_Copyright {
 	function customize() {
 		$fn = array( $this, 'render' );
 
-		return array(
+        $config = array(
 			array(
 				'name'  => $this->section,
 				'type'  => 'section',
@@ -65,18 +65,9 @@ class Customify_Builder_Footer_Item_Copyright {
 				'css_format' => 'typography',
 				'default'    => array(),
 			),
-
-			array(
-				'name'            => $this->name . '_text_align',
-				'type'            => 'text_align',
-				'section'         => $this->section,
-				'default'         => 'left',
-				'selector'        => '.builder-first--footer_copyright',
-				'css_format'      => 'text-align: {{value}};',
-				'title'           => __( 'Align', 'customify' ),
-				'device_settings' => true,
-			),
 		);
+
+		return array_merge( $config, customify_footer_layout_settings( $this->id, $this->section ) );
 	}
 
 	/**

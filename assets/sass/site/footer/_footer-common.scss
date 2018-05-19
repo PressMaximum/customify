@@ -9,6 +9,8 @@
     }
 }
 
+
+
 .footer-bottom {
     background: #ededed;
 }
@@ -17,6 +19,13 @@
     &.layout-fullwidth {
         .customify-container {
             max-width: initial;
+        }
+    }
+    .builder-item--group {
+        display: flex;
+        justify-content: flex-start;
+        .item--inner {
+            width: auto;
         }
     }
 }
