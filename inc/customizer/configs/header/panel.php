@@ -344,7 +344,7 @@ if (!function_exists('customify_header_layout_settings')) {
                 'section'         => $section,
                 'priority'        => 820,
                 'device_settings' => true,
-                'selector'        => '.builder-first--' . $item_id,
+                'selector'        => "{$class} .builder-first--" . $item_id,
                 'css_format'      => 'text-align: {{value}};',
                 'title'           => __('Align', 'customify'),
             ),
