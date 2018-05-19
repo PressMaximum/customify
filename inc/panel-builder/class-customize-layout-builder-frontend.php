@@ -340,6 +340,7 @@ class Customify_Customize_Layout_Builder_Frontend {
         }
 
         $index = 0;
+        $number_group_item = count( $group_items );
         foreach ( $group_items as $item ) {
 
             if ( isset( $items[ $index + 1 ] ) ) {
@@ -360,10 +361,17 @@ class Customify_Customize_Layout_Builder_Frontend {
             $atts    = array();
             $classes = array();
 
+            $number_item = count( $item['items'] );
+
             if ( $this->id != 'footer' ) {
                 $classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
             } else {
-                $classes[] = "customify-col-{$width}_md-{$width}_sm-6_xs-12";
+                if ( $number_group_item > 1 ) {
+                    $classes[] = "customify-col-{$width}_md-{$width}_sm-6_xs-12";
+                } else {
+                    $classes[] = "customify-col-{$width}_md-{$width}_sm-12_xs-12";
+                }
+
             }
 
             if ( $x > 0 ) {

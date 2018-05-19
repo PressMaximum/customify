@@ -22,11 +22,21 @@
         }
     }
     .builder-item--group {
-        display: flex;
         justify-content: flex-start;
         .item--inner {
             width: auto;
+            @include for_device( tablet ) {
+                display: block;
+                margin-bottom: 25px;
+                &:last-child {
+                    margin-bottom: 0px;
+                }
+            }
         }
+    }
+    [class~="customify-grid"] > [class*="_sm-"], [class*="customify-grid-"] > [class*="_sm-"],
+    [class*="customify-grid_"] > [class*="_sm-"] {
+        margin-bottom: 0px;
     }
 }
 

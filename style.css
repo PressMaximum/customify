@@ -5497,11 +5497,23 @@ body.menu_sidebar_dropdown:before {
   max-width: initial;
 }
 .footer--row .builder-item--group {
-  display: flex;
   justify-content: flex-start;
 }
 .footer--row .builder-item--group .item--inner {
   width: auto;
+}
+@media screen and (max-width: 1024px) {
+  .footer--row .builder-item--group .item--inner {
+    display: block;
+    margin-bottom: 25px;
+  }
+  .footer--row .builder-item--group .item--inner:last-child {
+    margin-bottom: 0px;
+  }
+}
+.footer--row [class~="customify-grid"] > [class*="_sm-"], .footer--row [class*="customify-grid-"] > [class*="_sm-"],
+.footer--row [class*="customify-grid_"] > [class*="_sm-"] {
+  margin-bottom: 0px;
 }
 
 .footer-main .customify-container, .footer-top .customify-container {

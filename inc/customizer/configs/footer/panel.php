@@ -255,11 +255,10 @@ function customify_footer_layout_settings( $item_id, $section ){
         global $wp_registered_sidebars;
         $name = $section;
         if ( is_array( $wp_registered_sidebars ) ) {
-            if ( isset( $wp_registered_sidebars[ $section ] ) ) {
-                $name = $wp_registered_sidebars[ $section ]['name'];
+            if ( isset( $wp_registered_sidebars[ $item_id ] ) ) {
+                $name = $wp_registered_sidebars[ $item_id ]['name'];
             }
         }
-
         $wp_customize->add_section( $section , array(
             'title'      => $name,
         ) );
