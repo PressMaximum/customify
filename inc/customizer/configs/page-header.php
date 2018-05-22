@@ -652,7 +652,11 @@ class Customify_Page_Header {
                     $args['force_display_single_title'] = 'show';
                 } elseif ($advanced['post_title_tagline'] == 'current') {
                     $post_id = get_the_ID();
-                    $args['force_display_single_title'] = 'hide';
+                    if( $args['display'] != 'default' ) {
+                        $args['force_display_single_title'] = 'hide';
+                    } else {
+                        $args['force_display_single_title'] = 'show';
+                    }
                     $args['title_tag'] = 'h1';
                 } else {
                     $post_id = get_option('page_for_posts');
