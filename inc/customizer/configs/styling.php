@@ -134,7 +134,7 @@ abbr, acronym {
 				'section'    => $section,
 				'title'      => __( 'Entry Content Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                a,
+                .entry-content a,
                 .nav-links .nav-previous a:hover,
                 .nav-links .nav-next a:hover  
                 {

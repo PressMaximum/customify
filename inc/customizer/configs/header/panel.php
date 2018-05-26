@@ -275,6 +275,16 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 )
             ),
 
+            array(
+                'name'            => $section . '_menu_no_duplicator',
+                'type'            => 'checkbox',
+                'section'         => $section,
+                'selector'        => '.sub-menu .li-duplicator',
+                'css_format'      => 'display:none !important;',
+                'checkbox_label'  => __('Do not copy parent menu to submenu.', 'customify'),
+                'default'         => 1,
+            ),
+
 
         );
         return $config;
@@ -283,12 +293,29 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 }
 
 if (!function_exists('customify_header_layout_settings')) {
-    function customify_header_layout_settings($item_id = '', $section = '')
+    function customify_header_layout_settings($item_id = '', $section = '', $cb = '', $name_prefix = 'header_' )
     {
+
+        if ( ! $cb ) {
+            $cb = 'customify_customize_render_header';
+        }
+
+        $class = '.header--row';
+        $selector = '#masthead';
+        if ( ! $name_prefix ) {
+            $name_prefix = 'header_';
+        } else {
+            if ( strpos( $item_id, 'footer' ) !== false ) {
+                $class = '.footer--row';
+                $name_prefix = 'footer_';
+                $cb = 'customify_customize_render_footer';
+            }
+        }
+
 
         $layout = array(
             array(
-                'name'     => 'header_' . $item_id . '_l_heading',
+                'name'     => $name_prefix . $item_id . '_l_heading',
                 'type'     => 'heading',
                 'priority' => 800,
                 'section'  => $section,
@@ -296,7 +323,7 @@ if (!function_exists('customify_header_layout_settings')) {
             ),
 
             array(
-                'name'            => 'header_' . $item_id . '_margin',
+                'name'            => $name_prefix. $item_id . '_margin',
                 'type'            => 'css_ruler',
                 'priority'        => 810,
                 'section'         => $section,
@@ -307,27 +334,27 @@ if (!function_exists('customify_header_layout_settings')) {
                     'bottom' => 'margin-bottom: {{value}};',
                     'left'   => 'margin-left: {{value}};',
                 ),
-                'selector'        => ".header--row .builder-item--{$item_id}, .builder-item.builder-item--group .item--inner.builder-item--{$item_id}",
+                'selector'        => "{$class} .builder-item--{$item_id}, .builder-item.builder-item--group .item--inner.builder-item--{$item_id}",
                 'label'           => __('Margin', 'customify'),
             ),
 
             array(
-                'name'            => 'header_' . $item_id . '_align',
+                'name'            => $name_prefix . $item_id . '_align',
                 'type'            => 'text_align_no_justify',
                 'section'         => $section,
                 'priority'        => 820,
                 'device_settings' => true,
-                'selector'        => '.builder-first--' . $item_id,
+                'selector'        => "{$class} .builder-first--" . $item_id,
                 'css_format'      => 'text-align: {{value}};',
                 'title'           => __('Align', 'customify'),
             ),
 
             array(
-                'name'            => 'header_' . $item_id . '_merge',
+                'name'            => $name_prefix . $item_id . '_merge',
                 'type'            => 'select',
                 'section'         => $section,
-                'selector'        => '#masthead',
-                'render_callback' => 'customify_customize_render_header',
+                'selector'        => $selector,
+                'render_callback' => $cb,
                 'priority'        => 999,
                 'device_settings' => true,
                 'devices'         => array('desktop', 'mobile'),

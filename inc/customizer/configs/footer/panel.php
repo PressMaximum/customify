@@ -247,4 +247,28 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
     }
 }
 
+function customify_footer_layout_settings( $item_id, $section ){
+
+    global $wp_customize;
+
+    if ( is_object( $wp_customize ) ) {
+        global $wp_registered_sidebars;
+        $name = $section;
+        if ( is_array( $wp_registered_sidebars ) ) {
+            if ( isset( $wp_registered_sidebars[ $item_id ] ) ) {
+                $name = $wp_registered_sidebars[ $item_id ]['name'];
+            }
+        }
+        $wp_customize->add_section( $section , array(
+            'title'      => $name,
+        ) );
+    }
+
+    if ( function_exists( 'customify_header_layout_settings' ) ) {
+        return customify_header_layout_settings( $item_id, $section, 'customify_customize_render_footer', 'footer_' );
+    }
+
+    return false;
+}
+
 
