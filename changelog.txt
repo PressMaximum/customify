@@ -3,6 +3,7 @@
  * NEW: Option to hide post media.
  * NEW: Layout settings for footer items.
  * IMPROVED: Styling config.
+ * IMPROVED: Styling sidebar search form.
  * FIXED: post type layout issue.
  * FIXED: Single post cover image didn't show when homepage displays as latest posts.
  * FIXED: Single post title issue.
