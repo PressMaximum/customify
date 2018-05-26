@@ -15,6 +15,14 @@ if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 }
 
 /**
+ * Support Beaver Builder plugin
+ */
+function customify_bb_upgrade_link() {
+	return 'https://www.wpbeaverbuilder.com/pricing/?fla=2294';
+}
+add_filter( 'fl_builder_upgrade_url', 'customify_bb_upgrade_link' );
+
+/**
  * Filter the OrbitFox plugin suggestions.
  */
 function customify_remove_of_sdk_suggestions() {
