@@ -387,6 +387,7 @@ class Customify {
             'typography',
 
             'page-header',
+            'background',
 
             'compatibility',
 
