@@ -61,23 +61,26 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	    $layout = apply_filters( 'customify_get_layout', null );
 	    if ( ! $layout ) {
             $page = Customify()->get_setting('page_sidebar_layout');
-            if ( is_home() && is_front_page() || ( is_home() && ! is_front_page() ) ) {
+            if ( is_home() && is_front_page() || ( is_home() && ! is_front_page() ) ) { // Blog page
                 $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
-            } elseif (is_page()) {
+            } elseif (is_page()) { // Page
                 $layout  = Customify()->get_setting('page_sidebar_layout');
-            } elseif (is_search()) {
+            } elseif (is_search()) { // Search
                 $search     = Customify()->get_setting('search_sidebar_layout');
                 $layout = $search;
-            } elseif (is_archive()) {
+            } elseif (is_archive()) { // Archive
                 $archive    = Customify()->get_setting('posts_archives_sidebar_layout');
                 $layout = $archive;
             } elseif ( is_category() || is_tag() || is_singular( 'post' ) ) { // blog page and single page
                 $blog_posts = Customify()->get_setting('posts_sidebar_layout');
                 $layout = $blog_posts;
-            } elseif( is_404() ) {
+            } elseif( is_404() ) { // 404 Page
                 $layout = Customify()->get_setting('404_sidebar_layout');
+            } else if ( is_singular() ) {
+                $layout = Customify()->get_setting( get_post_type().'_sidebar_layout');
             }
+
 
             if ( is_singular() && customify_is_support_meta() ) {
                 $post_type = get_post_type();
