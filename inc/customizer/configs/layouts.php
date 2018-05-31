@@ -210,7 +210,6 @@ if (!function_exists('customify_customizer_layouts_config')) {
             );
 
             foreach ($post_types as $pt => $label) {
-
                 $config[] = array(
                     'name'    => "{$pt}_sidebar_layout",
                     'type'    => 'select',

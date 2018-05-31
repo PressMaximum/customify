@@ -1,6 +1,8 @@
 = 0.1.1 =
  * NEW: Option sidebar settings for custom post types.
  * NEW: Body background settings.
+ * NEW: Hook for singular post type content.
+ * IMPROVED: Improve core api.
  * FIXED: Single post cover image didn't show when homepage displays as latest posts.
  * FIXED: Single post title issue.
  * FIXED: Duplicate Menu ID in W3C Validate.

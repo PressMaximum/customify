@@ -11,12 +11,14 @@ get_header(); ?>
     <div class="content-inner">
         <?php
         while ( have_posts() ) :
-
-            customify_single_post();
-
+            $post_type = get_post_type();
+            if ( has_action( "customify_single_{$post_type}_content" ) ) {
+                do_action( "customify_single_{$post_type}_content" );
+            } else {
+                customify_single_post();
+            }
         endwhile; // End of the loop.
         ?>
-
     </div><!-- #.content-inner -->
 <?php
 get_footer();

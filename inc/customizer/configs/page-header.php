@@ -91,14 +91,6 @@ class Customify_Page_Header {
 				'choices'     => $choices
 			),
 			array(
-				'name'        => "singular",
-				'type'        => 'select',
-				'label'       => __( 'Display on singular', 'customify' ),
-				'description' => __( 'Apply when viewing single custom post type', 'customify' ),
-				'default'     => '',
-				'choices'     => $choices
-			),
-			array(
 				'name'        => "page_404",
 				'type'        => 'select',
 				'label'       => __( 'Display on 404 page', 'customify' ),
@@ -157,48 +149,55 @@ class Customify_Page_Header {
 			),
 		);
 
-		if ( Customify()->is_woocommerce_active() ) {
-			$display_fields[] = array(
-				'name'        => "product",
-				'type'        => 'select',
-				'label'       => __( 'Display on product page', 'customify' ),
-				'description' => __( 'Apply when viewing single product', 'customify' ),
-				'default'     => '',
-				'choices'     => $choices
-			);
-			$display_fields[] = array(
-				'name'        => "product_cat",
-				'type'        => 'select',
-				'label'       => __( 'Display on product category', 'customify' ),
-				'description' => __( 'Apply when viewing product category', 'customify' ),
-				'default'     => '',
-				'choices'     => $choices
-			);
-			$display_fields[] = array(
-				'name'        => "product_tag",
-				'type'        => 'select',
-				'label'       => __( 'Display on product tag', 'customify' ),
-				'description' => __( 'Apply when viewing product tag', 'customify' ),
-				'default'     => '',
-				'choices'     => $choices
-			);
+		$post_types = Customify()->get_post_types( false );
+		if ( count( $post_types ) > 0 ) {
+		    foreach ( $post_types as $pt => $label ) {
+                $display_fields[] = array(
+                    'name'        => $pt,
+                    'type'        => 'select',
+                    'label'       => sprintf( __( 'Display on %s page', 'customify' ), $label['singular_name'] ),
+                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+                    'default'     => '',
+                    'choices'     => $choices
+                );
 
-			$title_fields[] = array(
-				'name'        => "product",
-				'type'        => 'text',
-				'label'       => __( 'Title for product', 'customify' ),
-				'description' => __( 'Apply when viewing single product', 'customify' ),
-				'default'     => '',
-			);
+                $taxonomy_filter_args = [
+                    'show_in_nav_menus' => true,
+                ];
 
-			$tagline_fields[] = array(
-				'name'        => "product",
-				'type'        => 'textarea',
-				'label'       => __( 'Tagline for product', 'customify' ),
-				'description' => __( 'Apply when viewing single product', 'customify' ),
-				'default'     => '',
-			);
-		}
+                $taxonomy_filter_args['object_type'] = [$pt];
+                $taxonomies = get_taxonomies($taxonomy_filter_args, 'objects');
+                $options = [];
+
+                foreach ($taxonomies as $taxonomy => $object) {
+                    $options[ $taxonomy ] = $object->label;
+                    $display_fields[] = array(
+                        'name'        => $taxonomy ,
+                        'type'        => 'select',
+                        'label'       => sprintf( __( 'Display on %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
+                        'description' => sprintf( __( 'Apply when viewing %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
+                        'default'     => '',
+                        'choices'     => $choices
+                    );
+                }
+
+                $title_fields[] = array(
+                    'name'        => $pt,
+                    'type'        => 'text',
+                    'label'       => sprintf( __( 'Title for %s', 'customify' ), $label['singular_name'] ),
+                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+                    'default'     => '',
+                );
+
+                $tagline_fields[] = array(
+                    'name'        => $pt,
+                    'type'        => 'textarea',
+                    'label'       => sprintf( __( 'Tagline for %s', 'customify' ), $label['singular_name'] ),
+                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+                    'default'     => '',
+                );
+            }
+        }
 
 		$config = array(
 			array(
@@ -674,9 +673,17 @@ class Customify_Page_Header {
 			$args['_page'] = 'post';
 		} elseif ( is_singular() ) {
 			// single custom post type
-			$args['display'] = $display['singular'];
-			$post_id         = get_the_ID();
-			$args['_page']   = 'singular';
+
+            $post_id         = get_the_ID();
+			$post_type = get_post_type();
+			if ( isset( $display[ $post_type ] ) ) {
+                $args['display'] = $display[ $post_type ];
+                $args['_page']   = 'singular_'.$post_type;
+            } elseif ( isset( $display['singular'] ) ) {
+                $args['display'] = $display['singular'];
+                $args['_page']   = 'singular';
+            }
+
 		} elseif ( is_404() ) {
 			// page not found
 			$args['display'] = $display['page_404'];
@@ -704,6 +711,21 @@ class Customify_Page_Header {
 			$args['_page']   = 'archive';
             $post_id = 0;
 		}
+
+        if ( is_tax() ) {
+            $queried_object = get_queried_object();
+            if ( isset( $display[ $queried_object->taxonomy ] ) ) {
+                $args['display'] = $display['product_tag'];
+            }
+            if ( isset( $titles[ $queried_object->taxonomy ] ) ) {
+                $args['display'] = $titles[ $queried_object->taxonomy ];
+            }
+            if ( isset( $taglines[ $queried_object->taxonomy ] ) ) {
+                $args['tagline'] = $taglines[ $queried_object->taxonomy ];
+            }
+            $args['_page']   = 'tax_'.$queried_object->taxonomy;
+        }
+
 
 		// WooCommerce Settings
 		if ( Customify()->is_woocommerce_active() ) {
@@ -734,6 +756,8 @@ class Customify_Page_Header {
 			}
 		}
 
+
+
 		if ( $post_id > 0 ) {
             $post = get_post($post_id);
             if ($post) {
@@ -741,7 +765,6 @@ class Customify_Page_Header {
                 if ($post->post_excerpt) {
                     $args['tagline'] = get_the_excerpt($post);
                 }
-
                 if (!$post_thumbnail_id) {
                     $post_thumbnail_id = get_post_thumbnail_id($post_id);
                 }
