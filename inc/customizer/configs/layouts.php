@@ -201,6 +201,7 @@ if (!function_exists('customify_customizer_layouts_config')) {
         );
 
         $post_types =  Customify()->get_post_types( false ) ;
+
         if ( count( $post_types ) ) {
             $config[] = array(
                 'name'    => "post_types_sidebar_h_tb",

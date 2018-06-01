@@ -318,6 +318,18 @@ class Customify_Page_Header {
 				'title'   => __( 'Titlebar Settings', 'customify' )
 			),
 
+            array(
+                'name'            => $name . '_show_title',
+                'type'            => 'checkbox',
+                'section'         => $section,
+                'label'           => __( 'Show Title', 'customify' ),
+                'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
+                'checkbox_label'  => __( 'Enable', 'customify' ),
+                'default'         => 1,
+                'selector'        => "{$selector}",
+                'render_callback' => $render_cb_el,
+            ),
+
 			array(
 				'name'            => $name . '_show_tagline',
 				'type'            => 'checkbox',
@@ -360,6 +372,18 @@ class Customify_Page_Header {
 				'section' => $section,
 				'title'   => __( 'Cover Settings', 'customify' )
 			),
+
+            array(
+                'name'            => $name . '_show_title',
+                'type'            => 'checkbox',
+                'section'         => $section,
+                'label'           => __( 'Show Title', 'customify' ),
+                'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
+                'checkbox_label'  => __( 'Enable', 'customify' ),
+                'default'         => 1,
+                'selector'        => "{$selector}",
+                'render_callback' => $render_cb_el,
+            ),
 
 			array(
 				'name'            => $name . '_show_tagline',
@@ -865,10 +889,12 @@ class Customify_Page_Header {
         <div id="page-cover" class="page-header--item page-cover"<?php echo $style; ?>>
             <div class="page-cover-inner customify-container">
 				<?php
-				if ( $args['title'] ) {
-					// WPCS: XSS ok.
-					echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
-				}
+                if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
+                    if ($args['title']) {
+                        // WPCS: XSS ok.
+                        echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters('customify_the_title', wp_kses_post($args['title'])) . '</' . $args['title_tag'] . '>';
+                    }
+                }
 				if ( $args['cover_tagline'] ) {
 					if ( $args['tagline'] ) {
 						// WPCS: XSS ok.
@@ -888,7 +914,11 @@ class Customify_Page_Header {
             <div class="page-titlebar-inner customify-container">
 				<?php
 				// WPCS: XSS ok.
-				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+                if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
+                    if ( $args['title'] ) {
+                        echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters('customify_the_title', wp_kses_post($args['title'])) . '</' . $args['title_tag'] . '>';
+                    }
+                }
 				if ( $args['titlebar_tagline'] ) {
 					if ( $args['tagline'] ) {
 						// WPCS: XSS ok.

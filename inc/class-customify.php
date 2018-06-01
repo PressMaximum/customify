@@ -528,10 +528,17 @@ class Customify {
     }
 
     function get_post_types( $_builtin = true ){
-        $post_type_args = [
-            'publicly_queryable' => true,
-            '_builtin' => $_builtin,
-        ];
+        if ( $_builtin === 'all' ) {
+            $post_type_args = [
+                'publicly_queryable' => true,
+            ];
+        } else {
+            $post_type_args = [
+                'publicly_queryable' => true,
+                '_builtin' => $_builtin,
+            ];
+        }
+
         $_post_types = get_post_types( $post_type_args , 'objects' );
 
         $post_types  = [];
