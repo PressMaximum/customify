@@ -2007,7 +2007,12 @@
 
         ajaxLoad: function( cb ){
             var that = this;
-            $.get( Customify_Control_Args.ajax, { action: 'customify/customizer/ajax/get_icons' }, function(res ){
+            $.get( Customify_Control_Args.ajax, {
+                action: 'customify/customizer/ajax/get_icons',
+                wp_customize: 'on',
+                _nonce: _wpCustomizeSettings.nonce.preview,
+                customize_theme: _wpCustomizeSettings.theme.stylesheet
+            }, function(res ){
                 if ( res.success ) {
                     that.listIcons = res.data;
                     that.render( res.data );
@@ -2047,7 +2052,12 @@
         fields: {},
         load: function(){
             var that = this;
-            $.get( Customify_Control_Args.ajax, { action: 'customify/customizer/ajax/fonts'  }, function(res ){
+            $.get( Customify_Control_Args.ajax, {
+                action: 'customify/customizer/ajax/fonts',
+                wp_customize: 'on',
+                _nonce: _wpCustomizeSettings.nonce.preview,
+                customize_theme: _wpCustomizeSettings.theme.stylesheet
+            }, function(res ){
                 if ( res.success ) {
                     that.fonts = res.data;
                 }
@@ -2179,15 +2189,32 @@
                 type = 'normal';
             }
 
-            if (  _.isString( font ) ) {
-                if ( ! _.isUndefined( that.fonts.google.fonts[ font ] ) ) {
-                    type = 'google';
+            if ( ! _.isObject( that.fonts ) || _.isEmpty( that.fonts ) ) {
+                that.fonts = {
+                    normal: {
+                        fonts: {
+
+                        }
+                    },
+                    google: {
+                        fonts: {}
+                    }
+                };
+            }
+            
+            if ( !_.isNull( font ) && font ) {
+                if (  _.isString( font ) ) {
+                    if ( ! _.isUndefined( that.fonts.google.fonts[ font ] ) ) {
+                        type = 'google';
+                    } else {
+                        type = 'normal';
+                    }
+                    font_settings = that.fonts.google.fonts[ font ];
                 } else {
-                    type = 'normal';
+                    font_settings = that.fonts.google.fonts[ font.font ];
                 }
-                font_settings = that.fonts.google.fonts[ font ];
             } else {
-                font_settings = that.fonts.google.fonts[ font.font ];
+                font_settings = {};
             }
 
             if ( ! _.isUndefined( font_settings ) && ! _.isEmpty( font_settings ) ) {
@@ -2293,8 +2320,6 @@
         }
     };
 
-
-    FontSelector.load();
     var intTypoControls = {};
     var intTypos = function(){
         $document.on( 'click', '.customize-control-customify-typography .action--edit, .customize-control-customify-typography .action--reset', function(){
@@ -2842,7 +2867,7 @@
             });
 
             IconPicker.init();
-            // FontSelector.init();
+            FontSelector.init();
             initStyling();
             initModal();
             intTypos();
