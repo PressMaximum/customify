@@ -89,7 +89,7 @@ class Customify_Builder_Item_Primary_Menu
                 'section'         => $section,
                 'selector'        => "format",
                 'max'             => 20,
-                'checkbox_label'  => __('Arrow icon size', 'customify'),
+                'title'  => __('Arrow icon size', 'customify'),
                 'css_format'      => ".builder-item--{$this->id} .nav-icon-angle { width: {{value}}; height: {{value}}; }",
                 'required'      => array(  $this->prefix . '__hide-arrow', '!=', 1 )
             ),
@@ -272,6 +272,22 @@ function customify_add_icon_to_menu($title, $item, $args, $depth)
     return $title;
 }
 add_filter('nav_menu_item_title', 'customify_add_icon_to_menu', 25, 4);
+
+/**
+ * Add more sub menu classes
+ * @since 0.1.1
+ * @see Walker_Nav_Menu::start_lvl
+ *
+ * @param $classes
+ * @param $args
+ * @param $depth
+ * @return array
+ */
+function customify_add_sub_menu_classes( $classes, $args, $depth ){
+    $classes[] ='sub-lv-'.$depth;
+    return $classes;
+}
+add_filter( 'nav_menu_submenu_css_class', 'customify_add_sub_menu_classes', 35, 3 );
 
 // Register header item
 Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu());

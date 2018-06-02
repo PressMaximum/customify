@@ -2798,6 +2798,12 @@ article.comment .comment-post-author {
 .customize-previewing .builder-item-focus.item--inner {
   position: relative;
 }
+.customize-previewing .builder-item-focus.item--inner.item--m {
+  position: initial;
+}
+.customize-previewing .builder-item-focus.item--inner.item--m .item--preview-name {
+  left: auto;
+}
 .customize-previewing .builder-item-focus .item--preview-name {
   position: absolute;
   top: 100%;
@@ -3269,14 +3275,10 @@ article.comment .comment-post-author {
   margin-left: 5px;
   float: right;
 }
-.nav-menu-desktop .sub-menu {
+.nav-menu-desktop .sub-lv-0, .nav-menu-desktop .sub-menu {
   position: absolute;
   left: 0px;
   transition: all .3s ease;
-  width: 14em;
-  margin: 0px;
-  padding: 0px;
-  background: #ffffff;
   z-index: 36;
   opacity: 0;
   height: 0;
@@ -3285,6 +3287,12 @@ article.comment .comment-post-author {
   display: block;
   transform: translateY(40px);
   top: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.nav-menu-desktop .sub-menu {
+  width: 14em;
+  background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   text-align: left;
 }
@@ -3318,7 +3326,7 @@ article.comment .comment-post-author {
   top: 0px;
   left: 100%;
 }
-.nav-menu-desktop .menu-item:hover > .sub-menu, .nav-menu-desktop .menu-item:focus > .sub-menu, .nav-menu-desktop .menu-item.focus > .sub-menu {
+.nav-menu-desktop .menu-item:hover > .sub-menu, .nav-menu-desktop .menu-item:hover > .sub-lv-0, .nav-menu-desktop .menu-item:focus > .sub-menu, .nav-menu-desktop .menu-item:focus > .sub-lv-0, .nav-menu-desktop .menu-item.focus > .sub-menu, .nav-menu-desktop .menu-item.focus > .sub-lv-0 {
   height: auto;
   transform: translateY(0);
   overflow: initial;

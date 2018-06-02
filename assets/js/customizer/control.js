@@ -2201,7 +2201,7 @@
                     }
                 };
             }
-            
+
             if ( !_.isNull( font ) && font ) {
                 if (  _.isString( font ) ) {
                     if ( ! _.isUndefined( that.fonts.google.fonts[ font ] ) ) {
