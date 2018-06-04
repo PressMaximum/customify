@@ -366,11 +366,6 @@ class Customify_Posts_Layout {
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];
 
-        if ( $this->args['layout'] == 'blog_masonry' ) {
-            // WPCS: XSS OK.
-            unset( $classes['grid']  );
-        }
-
         $s_atts = '';
         foreach ( $atts as $k => $v ) {
             $s_atts .= " {$k}='".esc_attr( $v )."' ";
