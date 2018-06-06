@@ -5024,6 +5024,9 @@ body.menu_sidebar_dropdown:before {
 }
 .posts-layout .entry-title a {
   color: inherit;
+  text-align: inherit;
+  display: block;
+  flex-basis: 100%;
 }
 .posts-layout .entry-title a:hover {
   color: #0cb4ce;
