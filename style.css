@@ -5418,8 +5418,6 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 .widget-area .widget .sidebar-search-form {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
   width: 100%;
   max-width: 100%;
@@ -5537,9 +5535,7 @@ body.menu_sidebar_dropdown:before {
   max-width: initial;
 }
 .footer--row .builder-item--group {
-  -webkit-box-pack: start;
-      -ms-flex-pack: start;
-          justify-content: flex-start;
+  justify-content: flex-start;
 }
 .footer--row .builder-item--group .item--inner {
   width: auto;

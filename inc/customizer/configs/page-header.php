@@ -326,8 +326,6 @@ class Customify_Page_Header {
                 'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
                 'checkbox_label'  => __( 'Enable', 'customify' ),
                 'default'         => 1,
-                'selector'        => "{$selector}",
-                'render_callback' => $render_cb_el,
             ),
 
 			array(
@@ -338,8 +336,6 @@ class Customify_Page_Header {
 				'description'     => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
 				'checkbox_label'  => __( 'Enable', 'customify' ),
 				'default'         => 1,
-				'selector'        => "{$selector}",
-				'render_callback' => $render_cb_el,
 			),
             array(
                 'name'            => "{$name}_align",
@@ -381,8 +377,6 @@ class Customify_Page_Header {
                 'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
                 'checkbox_label'  => __( 'Enable', 'customify' ),
                 'default'         => 1,
-                'selector'        => "{$selector}",
-                'render_callback' => $render_cb_el,
             ),
 
 			array(
@@ -393,8 +387,6 @@ class Customify_Page_Header {
 				'description'     => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
 				'checkbox_label'  => __( 'Enable', 'customify' ),
 				'default'         => 1,
-				'selector'        => "{$selector}",
-				'render_callback' => $render_cb_el,
 			),
 
 			array(
