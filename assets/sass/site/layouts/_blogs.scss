@@ -98,6 +98,9 @@ $blog_gutter: $gl-gutter;
         align-items: center;
         a {
             color: inherit;
+            text-align: inherit;
+            display: block;
+            flex-basis: 100%;
             &:hover {
                 color: $color_link;
             }

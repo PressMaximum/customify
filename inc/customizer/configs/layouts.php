@@ -199,6 +199,33 @@ if (!function_exists('customify_customizer_layouts_config')) {
                 'choices' => customify_get_config_sidebar_layouts()
             ),
         );
+
+        $post_types =  Customify()->get_post_types( false ) ;
+
+        if ( count( $post_types ) ) {
+            $config[] = array(
+                'name'    => "post_types_sidebar_h_tb",
+                'type'    => 'heading',
+                'section' => 'sidebar_layout_section',
+                'title'   => __('Post Type Settings', 'customify')
+            );
+
+            foreach ($post_types as $pt => $label) {
+                $config[] = array(
+                    'name'    => "{$pt}_sidebar_layout",
+                    'type'    => 'select',
+                    'default' => 'content',
+                    'section' => 'sidebar_layout_section',
+                    'title'   => sprintf(__('Single %s', 'customify'), $label['singular_name'] ),
+                    'choices' => array_merge(
+                        array('default' => __("Default", 'customify')),
+                        customify_get_config_sidebar_layouts()
+                    )
+                );
+            }
+        }
+
+
         return array_merge($configs, $config);
     }
 }

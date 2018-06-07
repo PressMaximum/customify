@@ -651,6 +651,12 @@ article.comment {
     .builder-item-focus {
         &.item--inner {
             position: relative;
+            &.item--m {
+                position: initial;
+                .item--preview-name {
+                    left: auto;
+                }
+            }
         }
         .item--preview-name {
             position: absolute;

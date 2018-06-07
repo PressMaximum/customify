@@ -209,7 +209,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $level_2_panel.'_meta',
                 'type' => 'section',
                 'panel' => $level_2_panel,
-                'title' => __('Meta', 'customify'),
+                'title' => __('Metas', 'customify'),
             ),
 
             array(

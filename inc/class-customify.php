@@ -387,6 +387,7 @@ class Customify {
             'typography',
 
             'page-header',
+            'background',
 
             'compatibility',
 
@@ -524,6 +525,32 @@ class Customify {
 
     function get_setting_tab($name, $tab = null) {
         return Customify_Customizer::get_instance()->get_setting_tab( $name, $tab );
+    }
+
+    function get_post_types( $_builtin = true ){
+        if ( $_builtin === 'all' ) {
+            $post_type_args = [
+                'publicly_queryable' => true,
+            ];
+        } else {
+            $post_type_args = [
+                'publicly_queryable' => true,
+                '_builtin' => $_builtin,
+            ];
+        }
+
+        $_post_types = get_post_types( $post_type_args , 'objects' );
+
+        $post_types  = [];
+
+        foreach ( $_post_types as $post_type => $object ) {
+            $post_types[ $post_type ] = array(
+                'name' =>  $object->label,
+                'singular_name' =>  $object->labels->singular_name,
+            );
+        }
+
+        return $post_types;
     }
 
 }
