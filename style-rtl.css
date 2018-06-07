@@ -5799,14 +5799,43 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget *:last-child {
   margin-bottom: 0px;
 }
-.widget-area .widget .search-field {
+.widget-area .widget .sidebar-search-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+}
+.widget-area .widget .sidebar-search-form label {
   width: 100%;
 }
-.widget-area .widget .search-submit {
-  margin-top: 5px;
-  line-height: 1;
+.widget-area .widget .sidebar-search-form .search-field {
+  width: 100%;
+  padding: 9px 10px 9px 45px;
+  border: 1px solid rgba(127, 127, 127, 0.2);
+  box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
+  border-radius: 3px;
+  display: block;
+  background: #ffffff;
+}
+.widget-area .widget .sidebar-search-form .search-field:focus {
+  border-color: rgba(127, 127, 127, 0.5);
+}
+.widget-area .widget .sidebar-search-form .search-submit {
   padding: 9px 14px;
-  font-size: 13px;
+  margin-right: -46px;
+  overflow: hidden;
+  box-shadow: none;
+  background: transparent;
+  color: #aaaaaa;
+  line-height: 0px;
+}
+.widget-area .widget .sidebar-search-form .search-submit:hover svg #svg-search {
+  fill: #444444;
+}
+.widget-area .widget .sidebar-search-form .search-submit svg {
+  width: 18px;
+  height: 18px;
 }
 .widget-area .widget_categories ul ul, .widget-area .widget_nav_menu ul ul, .widget-area .widget_pages ul ul, .widget-area .widget_product_categories ul ul {
   margin-top: 0.3819820591em;
@@ -5888,6 +5917,27 @@ body.menu_sidebar_dropdown:before {
 
 .footer--row.layout-fullwidth .customify-container {
   max-width: initial;
+}
+.footer--row .builder-item--group {
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+}
+.footer--row .builder-item--group .item--inner {
+  width: auto;
+}
+@media screen and (max-width: 1024px) {
+  .footer--row .builder-item--group .item--inner {
+    display: block;
+    margin-bottom: 25px;
+  }
+  .footer--row .builder-item--group .item--inner:last-child {
+    margin-bottom: 0px;
+  }
+}
+.footer--row [class~="customify-grid"] > [class*="_sm-"], .footer--row [class*="customify-grid-"] > [class*="_sm-"],
+.footer--row [class*="customify-grid_"] > [class*="_sm-"] {
+  margin-bottom: 0px;
 }
 
 .footer-main .customify-container, .footer-top .customify-container {

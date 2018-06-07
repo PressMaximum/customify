@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-05-17 10:11:56+00:00\n"
+"POT-Creation-Date: 2018-05-26 17:27:04+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -89,7 +89,7 @@ msgstr ""
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:131 inc/compatibility/breadcrumb-navxt.php:184
+#: inc/admin/dashboard.php:131 inc/compatibility/breadcrumb.php:198
 #: inc/customizer/configs/blogs.php:337
 #: inc/customizer/configs/footer/panel.php:211
 #: inc/customizer/configs/header/button.php:107
@@ -99,7 +99,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:135 inc/compatibility/breadcrumb-navxt.php:174
+#: inc/admin/dashboard.php:135 inc/compatibility/breadcrumb.php:188
 #: inc/customizer/configs/blogs.php:323
 #: inc/customizer/configs/header/button.php:96
 #: inc/customizer/configs/typography.php:13
@@ -154,7 +154,7 @@ msgstr ""
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:227 inc/admin/dashboard.php:360
+#: inc/admin/dashboard.php:227 inc/admin/dashboard.php:361
 msgid "Install Now"
 msgstr ""
 
@@ -162,55 +162,55 @@ msgstr ""
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:266 inc/admin/dashboard.php:389
+#: inc/admin/dashboard.php:266 inc/admin/dashboard.php:390
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:356
+#: inc/admin/dashboard.php:357
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:399
+#: inc/admin/dashboard.php:400
 msgid "Recommend Plugins"
 msgstr ""
 
-#: inc/admin/dashboard.php:414
+#: inc/admin/dashboard.php:415
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:418
+#: inc/admin/dashboard.php:419
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:422
+#: inc/admin/dashboard.php:423
 msgid "Header Footer Builder Items"
 msgstr ""
 
-#: inc/admin/dashboard.php:426
+#: inc/admin/dashboard.php:427
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:430
+#: inc/admin/dashboard.php:431
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:434
+#: inc/admin/dashboard.php:435
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:438
+#: inc/admin/dashboard.php:439
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:442
+#: inc/admin/dashboard.php:443
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:449
+#: inc/admin/dashboard.php:450
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:449
+#: inc/admin/dashboard.php:450
 msgid "Learn more &rarr;"
 msgstr ""
 
@@ -242,7 +242,7 @@ msgid "<span>Next post</span> %title"
 msgstr ""
 
 #: inc/blog/functions-posts-layout.php:19
-#: inc/customizer/configs/page-header.php:690
+#: inc/customizer/configs/page-header.php:694
 #. translators: 1: Search query name
 msgid "Search Results for: %s"
 msgstr ""
@@ -368,95 +368,95 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:64
+#: inc/compatibility/breadcrumb.php:78
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:69
+#: inc/compatibility/breadcrumb.php:83
 msgid ""
 "Customify theme support <a target=\"_blank\" "
 "href=\"https://wordpress.org/plugins/breadcrumb-navxt/\">Breadcrumb "
-"NavXT</a> breadcrumb plugin. All settings will be displayed after you "
-"install and active it."
+"NavXT</a> or <a href=\"https://wordpress.org/plugins/wordpress-seo/\" "
+"target=\"_blank\">Yoast SEO</a> breadcrumb plugin. All settings will be "
+"displayed after you installed and activated it."
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:84
+#: inc/compatibility/breadcrumb.php:98
 msgid "Display Position"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:86
+#: inc/compatibility/breadcrumb.php:100
 msgid "After header"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:87
+#: inc/compatibility/breadcrumb.php:101
 msgid "Inside cover/titlebar"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:88
+#: inc/compatibility/breadcrumb.php:102
 msgid "Before site main"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:96
+#: inc/compatibility/breadcrumb.php:110
 msgid "Hide on index"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:101
+#: inc/compatibility/breadcrumb.php:115
 msgid "Hide on categories"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:106
+#: inc/compatibility/breadcrumb.php:120
 msgid "Hide on search"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:111
+#: inc/compatibility/breadcrumb.php:125
 msgid "Hide on archive"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:116
+#: inc/compatibility/breadcrumb.php:130
 msgid "Hide on single page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:121
+#: inc/compatibility/breadcrumb.php:135
 msgid "Hide on single post"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:126
+#: inc/compatibility/breadcrumb.php:140
 msgid "Hide on singular"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:131
+#: inc/compatibility/breadcrumb.php:145
 msgid "Hide on 404 page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:140
+#: inc/compatibility/breadcrumb.php:154
 msgid "Hide on product page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:145
+#: inc/compatibility/breadcrumb.php:159
 msgid "Hide on product category"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:150
+#: inc/compatibility/breadcrumb.php:164
 msgid "Hide on product tag"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:159
-#: inc/compatibility/breadcrumb-navxt.php:164
+#: inc/compatibility/breadcrumb.php:173 inc/compatibility/breadcrumb.php:178
 #: inc/customizer/configs/page-header.php:222
 #: inc/customizer/configs/page-header.php:233
 msgid "Display"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:160
+#: inc/compatibility/breadcrumb.php:174
 #: inc/customizer/configs/page-header.php:223
 msgid "Settings display for special pages."
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:175
+#: inc/compatibility/breadcrumb.php:189
 msgid "Typography for breadcrumb"
 msgstr ""
 
-#: inc/compatibility/breadcrumb-navxt.php:185
+#: inc/compatibility/breadcrumb.php:199
 msgid "Styling for breadcrumb"
 msgstr ""
 
@@ -605,7 +605,7 @@ msgid "Link Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:414
-#: inc/customizer/configs/header/panel.php:311
+#: inc/customizer/configs/header/panel.php:338
 msgid "Margin"
 msgstr ""
 
@@ -999,11 +999,6 @@ msgstr ""
 msgid "Copyright Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/footer/copyright.php:76
-#: inc/customizer/configs/header/panel.php:322
-msgid "Align"
-msgstr ""
-
 #: inc/customizer/configs/footer/panel.php:18
 msgid "Footer Layout"
 msgstr ""
@@ -1130,31 +1125,31 @@ msgstr ""
 msgid "Footer Sidebar 1"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:24
+#: inc/customizer/configs/footer/widgets.php:28
 msgid "Footer Sidebar 2"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:39
+#: inc/customizer/configs/footer/widgets.php:46
 msgid "Footer Sidebar 3"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:54
+#: inc/customizer/configs/footer/widgets.php:64
 msgid "Footer Sidebar 4"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:69
+#: inc/customizer/configs/footer/widgets.php:82
 msgid "Footer Sidebar 5"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:84
+#: inc/customizer/configs/footer/widgets.php:100
 msgid "Footer Sidebar 6"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:138
+#: inc/customizer/configs/footer/widgets.php:159
 msgid "Footer Widget %s"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:146
+#: inc/customizer/configs/footer/widgets.php:167
 #. Translators:                     1: Admin URL                     2:
 #. Customize URL                     3: Footer ID
 msgid ""
@@ -1246,7 +1241,7 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
-#: inc/customizer/configs/header/panel.php:337
+#: inc/customizer/configs/header/panel.php:364
 #: inc/customizer/configs/layouts.php:48 inc/customizer/configs/layouts.php:149
 msgid "No"
 msgstr ""
@@ -1347,7 +1342,7 @@ msgid "Menu Icon"
 msgstr ""
 
 #: inc/customizer/configs/header/nav-icon.php:35
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:604
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:612
 msgid "Menu"
 msgstr ""
 
@@ -1443,25 +1438,33 @@ msgstr ""
 msgid "Text Mode Color"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:295
+#: inc/customizer/configs/header/panel.php:284
+msgid "Do not copy parent menu to submenu."
+msgstr ""
+
+#: inc/customizer/configs/header/panel.php:322
 msgid "Item Layout"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:334
+#: inc/customizer/configs/header/panel.php:349
+msgid "Align"
+msgstr ""
+
+#: inc/customizer/configs/header/panel.php:361
 msgid "Merge Item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:335
+#: inc/customizer/configs/header/panel.php:362
 msgid ""
 "If you choose to merge this item, the alignment setting will inherit from "
 "the item you are merging."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:338
+#: inc/customizer/configs/header/panel.php:365
 msgid "Merge with left item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:339
+#: inc/customizer/configs/header/panel.php:366
 msgid "Merge with right item"
 msgstr ""
 
@@ -1917,7 +1920,7 @@ msgstr ""
 msgid "Cover Text Align"
 msgstr ""
 
-#: inc/customizer/configs/page-header.php:683
+#: inc/customizer/configs/page-header.php:687
 msgid "Oops! That page can't be found."
 msgstr ""
 
@@ -2193,7 +2196,7 @@ msgid "Move Up"
 msgstr ""
 
 #: inc/customizer/controls/class-control-repeater.php:25
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:607
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:615
 #: inc/panel-builder/class-customize-layout-builder.php:337
 msgid "Close"
 msgstr ""
@@ -2406,6 +2409,7 @@ msgstr ""
 #: inc/customizer/configs/header/search-box.php:227
 #: inc/customizer/configs/header/search-icon.php:337
 #: inc/customizer/configs/header/search-icon.php:338
+#: inc/template-functions.php:292 inc/template-functions.php:293
 msgctxt "label"
 msgid "Search for:"
 msgstr ""

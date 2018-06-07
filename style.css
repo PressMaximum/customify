@@ -5800,6 +5800,8 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 .widget-area .widget .sidebar-search-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   width: 100%;
   max-width: 100%;
@@ -5816,6 +5818,9 @@ body.menu_sidebar_dropdown:before {
   display: block;
   background: #ffffff;
 }
+.widget-area .widget .sidebar-search-form .search-field:focus {
+  border-color: rgba(127, 127, 127, 0.5);
+}
 .widget-area .widget .sidebar-search-form .search-submit {
   padding: 9px 14px;
   margin-left: -46px;
@@ -5824,6 +5829,9 @@ body.menu_sidebar_dropdown:before {
   background: transparent;
   color: #aaaaaa;
   line-height: 0px;
+}
+.widget-area .widget .sidebar-search-form .search-submit:hover svg #svg-search {
+  fill: #444444;
 }
 .widget-area .widget .sidebar-search-form .search-submit svg {
   width: 18px;
@@ -5911,7 +5919,9 @@ body.menu_sidebar_dropdown:before {
   max-width: initial;
 }
 .footer--row .builder-item--group {
-  justify-content: flex-start;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
 }
 .footer--row .builder-item--group .item--inner {
   width: auto;
