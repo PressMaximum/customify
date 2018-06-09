@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify
 Author URI: https://wpcustomify.com/about
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com
-Version: 0.1.0
+Version: 0.1.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -2980,6 +2980,12 @@ article.comment .comment-post-author {
 .customize-previewing .builder-item-focus.item--inner {
   position: relative;
 }
+.customize-previewing .builder-item-focus.item--inner.item--m {
+  position: initial;
+}
+.customize-previewing .builder-item-focus.item--inner.item--m .item--preview-name {
+  right: auto;
+}
 .customize-previewing .builder-item-focus .item--preview-name {
   position: absolute;
   top: 100%;
@@ -3525,16 +3531,12 @@ article.comment .comment-post-author {
   margin-right: 5px;
   float: left;
 }
-.nav-menu-desktop .sub-menu {
+.nav-menu-desktop .sub-lv-0, .nav-menu-desktop .sub-menu {
   position: absolute;
   right: 0px;
   -webkit-transition: all .3s ease;
   transition: all .3s ease;
-  width: 14em;
-  margin: 0px;
-  padding: 0px;
-  background: #ffffff;
-  z-index: 36;
+  z-index: 99;
   opacity: 0;
   height: 0;
   overflow: hidden;
@@ -3544,6 +3546,12 @@ article.comment .comment-post-author {
       -ms-transform: translateY(40px);
           transform: translateY(40px);
   top: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.nav-menu-desktop .sub-menu {
+  width: 14em;
+  background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   text-align: right;
 }
@@ -3584,7 +3592,7 @@ article.comment .comment-post-author {
   top: 0px;
   right: 100%;
 }
-.nav-menu-desktop .menu-item:hover > .sub-menu, .nav-menu-desktop .menu-item:focus > .sub-menu, .nav-menu-desktop .menu-item.focus > .sub-menu {
+.nav-menu-desktop .menu-item:hover > .sub-menu, .nav-menu-desktop .menu-item:hover > .sub-lv-0, .nav-menu-desktop .menu-item:focus > .sub-menu, .nav-menu-desktop .menu-item:focus > .sub-lv-0, .nav-menu-desktop .menu-item.focus > .sub-menu, .nav-menu-desktop .menu-item.focus > .sub-lv-0 {
   height: auto;
   -webkit-transform: translateY(0);
       -ms-transform: translateY(0);
@@ -5378,6 +5386,10 @@ body.menu_sidebar_dropdown:before {
 }
 .posts-layout .entry-title a {
   color: inherit;
+  text-align: inherit;
+  display: block;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
 }
 .posts-layout .entry-title a:hover {
   color: #0cb4ce;
