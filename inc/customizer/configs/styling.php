@@ -354,8 +354,33 @@ article.comment .comment-time,
 				)
 			),
 
+            array(
+                'name'       => 'site_content_styling',
+                'type'       => 'section',
+                'panel'       => 'styling_panel',
+                'priority' => 20,
+                'title'      => __( 'Site Content', 'customify' ),
+            ),
 
-		);
+            array(
+                'name'       => 'site_content_styling',
+                'type'       => 'styling',
+                'section'    => 'site_content_styling',
+                'title'      => __( 'Content Area Styling', 'customify' ),
+                'selector'   => array(
+                    'normal'            => ".site-content .content-area",
+                ),
+                'css_format' => 'styling', // styling
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'text_color' => false,
+                        'link_color' => false,
+                    ),
+                    'hover_fields'  => false,
+                )
+            ),
+
+        );
 
 		return array_merge( $configs, $config );
 	}

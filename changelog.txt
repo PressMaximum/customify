@@ -3,6 +3,7 @@
  * NEW: Body background settings.
  * NEW: Hook for singular post type content.
  * NEW: Option settings to hide the page title in header cover and tagline.
+ * NEW: Add content styling.
  * IMPROVED: Increase the submenu z-index to 99.
  * IMPROVED: Improve core api.
  * FIXED: Single post cover image didn't show when homepage displays as latest posts.
