@@ -89,7 +89,7 @@ class Customify_Builder_Item_Primary_Menu
                 'section'         => $section,
                 'selector'        => "format",
                 'max'             => 20,
-                'checkbox_label'  => __('Arrow icon size', 'customify'),
+                'title'  => __('Arrow icon size', 'customify'),
                 'css_format'      => ".builder-item--{$this->id} .nav-icon-angle { width: {{value}}; height: {{value}}; }",
                 'required'      => array(  $this->prefix . '__hide-arrow', '!=', 1 )
             ),
@@ -193,12 +193,14 @@ class Customify_Builder_Item_Primary_Menu
                 $class = 'current-menu-item';
             }
 
-            echo '<li id="menu-item-' . esc_attr($p->ID) . '" class="menu-item menu-item-type--page  menu-item-' . esc_attr($p->ID . ' ' . $class) . '"><a href="' . esc_url(get_the_permalink($p)) . '"><span class="link-before">' . apply_filters('', $p->post_title) . '</span></a></li>';
+            echo '<li id="menu-item--__id__-__device__-' . esc_attr($p->ID) . '" class="menu-item menu-item-type--page  menu-item-' . esc_attr($p->ID . ' ' . $class) . '"><a href="' . esc_url(get_the_permalink($p)) . '"><span class="link-before">' . apply_filters('', $p->post_title) . '</span></a></li>';
         }
         echo '</ul>';
     }
 
-
+    /**
+     * @see Walker_Nav_Menu
+     */
     function render()
     {
         $style = sanitize_text_field(Customify()->get_setting($this->prefix . '_style'));
@@ -223,15 +225,43 @@ class Customify_Builder_Item_Primary_Menu
             'fallback_cb'     => array($this, 'menu_fallback_cb'),
             'link_before'     => '<span class="link-before">',
             'link_after'      => '</span>',
+           // 'echo' => false,
         ));
+
         echo '</nav>';
 
     }
 }
 
-Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu());
+/**
+ * Change menu item ID
+ *
+ * @see Walker_Nav_Menu::start_el();
+ *
+ * @param $string_id
+ * @param $item
+ * @param $args An object of wp_nav_menu() arguments.
+ * @return mixed
+ */
+function customify_change_nav_menu_item_id( $string_id , $item, $args ){
+    if ( $args->theme_location == 'menu-1' || $args->theme_location == 'menu-2' ) {
+        $string_id = 'menu-item--__id__-__device__-'.$item->ID;
+    }
+
+    return $string_id;
+}
+add_filter( 'nav_menu_item_id', 'customify_change_nav_menu_item_id', 55, 3 );
 
 
+/**
+ * Add Nav icon to menu
+ *
+ * @param $title
+ * @param $item
+ * @param $args
+ * @param $depth
+ * @return string
+ */
 function customify_add_icon_to_menu($title, $item, $args, $depth)
 {
     if (in_array('menu-item-has-children', $item->classes)) {
@@ -241,5 +271,24 @@ function customify_add_icon_to_menu($title, $item, $args, $depth)
     }
     return $title;
 }
-
 add_filter('nav_menu_item_title', 'customify_add_icon_to_menu', 25, 4);
+
+/**
+ * Add more sub menu classes
+ * @since 0.1.1
+ * @see Walker_Nav_Menu::start_lvl
+ *
+ * @param $classes
+ * @param $args
+ * @param $depth
+ * @return array
+ */
+function customify_add_sub_menu_classes( $classes, $args, $depth ){
+    $classes[] ='sub-lv-'.$depth;
+    return $classes;
+}
+add_filter( 'nav_menu_submenu_css_class', 'customify_add_sub_menu_classes', 35, 3 );
+
+// Register header item
+Customify_Customize_Layout_Builder()->register_item('header', new Customify_Builder_Item_Primary_Menu());
+

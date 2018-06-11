@@ -238,20 +238,7 @@ class Customify_WC {
     }
 
     function customize_shop_sidebars( $configs = array() ){
-        $config = array(
-            array(
-                'name' => 'product_sidebar_layout',
-                'type' => 'select',
-                'default' => '',
-                'section' => 'sidebar_layout_section',
-                'title' => __('Single Product', 'customify'),
-                'choices' => array_merge(
-                    array( 'default' => __( "Default", 'customify' ) ),
-                    customify_get_config_sidebar_layouts()
-                )
-            ),
-        );
-        return array_merge( $configs, $config );
+        return $configs;
     }
     function register_sidebars(){
         register_sidebar( array(

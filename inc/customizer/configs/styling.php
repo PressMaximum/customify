@@ -20,6 +20,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'  => 'section',
 				'panel' => 'styling_panel',
 				'title' => __( 'Global Colors', 'customify' ),
+                'priority' => 10,
 			),
 			array(
 				'name'       => "{$section}_color_primary",
@@ -133,7 +134,7 @@ abbr, acronym {
 				'section'    => $section,
 				'title'      => __( 'Entry Content Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                a,
+                .entry-content a,
                 .nav-links .nav-previous a:hover,
                 .nav-links .nav-next a:hover  
                 {
@@ -274,7 +275,8 @@ article.comment .comment-time,
 				'name'  => "{$section}_widgets",
 				'type'  => 'section',
 				'panel' => 'styling_panel',
-				'title' => __( 'Sidebar Widgets', 'customify' ),
+                'priority' => 90,
+                'title' => __( 'Sidebar Widgets', 'customify' ),
 			),
 
 			array(
@@ -326,7 +328,8 @@ article.comment .comment-time,
 				'name'  => "{$section}_footer_widgets",
 				'type'  => 'section',
 				'panel' => 'styling_panel',
-				'title' => __( 'Footer Widgets', 'customify' ),
+				'priority' => 100,
+                'title' => __( 'Footer Widgets', 'customify' ),
 			),
 
 			array(
@@ -351,8 +354,33 @@ article.comment .comment-time,
 				)
 			),
 
+            array(
+                'name'       => 'site_content_styling',
+                'type'       => 'section',
+                'panel'       => 'styling_panel',
+                'priority' => 20,
+                'title'      => __( 'Site Content', 'customify' ),
+            ),
 
-		);
+            array(
+                'name'       => 'site_content_styling',
+                'type'       => 'styling',
+                'section'    => 'site_content_styling',
+                'title'      => __( 'Content Area Styling', 'customify' ),
+                'selector'   => array(
+                    'normal'            => ".site-content .content-area",
+                ),
+                'css_format' => 'styling', // styling
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'text_color' => false,
+                        'link_color' => false,
+                    ),
+                    'hover_fields'  => false,
+                )
+            ),
+
+        );
 
 		return array_merge( $configs, $config );
 	}

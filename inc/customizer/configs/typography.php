@@ -26,7 +26,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 		        'type' => 'typography',
 		        'section' => "{$section}_base",
 		        'title' => __('Body & Paragraph', 'customify'),
-		        'description' => __('Apply for site paragraph.', 'customify'),
+		        'description' => __('Apply to body and paragraph text.', 'customify'),
 		        'css_format' => 'typography',
 		        'selector' => 'body, p, button, input, select, optgroup, textarea',
 	        ),
@@ -36,7 +36,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'type' => 'typography',
                 'section' => "{$section}_base",
                 'title' => __('Heading', 'customify'),
-                'description' => __('Apply for all heading element.', 'customify'),
+                'description' => __('Apply to all heading elements.', 'customify'),
                 'css_format' => 'typography',
                 'selector' => 'h1,h2,h3,h4,h5,h6,.h1,.h2,.h3',
                 'fields' => array(

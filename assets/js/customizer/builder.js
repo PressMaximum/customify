@@ -753,16 +753,15 @@
 
                     _move_to_swap( node, _.clone( x ) );
 
-                    console.log( '--------------------------------------------------------' );
+                   // console.log( '--------------------------------------------------------' );
                     // -------------------------
-
                     var newX = x;
                     var i;
                     var found = false;
                     var le = 0 ;
 
-                    console.log( 'in_the_end_x', x );
-                    console.log( 'in_the_end_w', w );
+                    //console.log( 'in_the_end_x', x );
+                    //console.log( 'in_the_end_w', w );
                     if ( x + w > that.cols - 1 ) {
                         le = getLeftEmptySlotFromX(x, true);
                         console.log( 'le', le );
@@ -770,12 +769,8 @@
                             console.log( 'move_Left', ( x + w ) - that.cols - 1 );
                         }
                     }
-
-
                     updateItemsPositions();
-
-                    console.log( 'Flag update', flag );
-
+                    //console.log( 'Flag update', flag );
                     le = 0;
                     while( w >= 1 ) {
                         // Nếu số chỗ trống lớn hơn hoặc  = chiều rộng của item
@@ -1551,6 +1546,7 @@
                 var that = this;
                 wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
                     if ( wpcustomize.panel( options.panel ).expanded() ) {
+                        $document.trigger( 'customify_panel_builder_open', [ options.panel ] );
                         console.log( 'open-builder:', options.panel );
                         top._current_builder_panel = id;
                         that.showPanel();

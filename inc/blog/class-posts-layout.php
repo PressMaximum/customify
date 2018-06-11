@@ -10,6 +10,7 @@ class Customify_Posts_Layout {
 
         $args = array(
             'layout'              => Customify()->get_setting($customizer_args['prefix'] . '_layout'),
+            'excerpt_type'       => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_type'),
             'excerpt_length'      => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_length'),
             'excerpt_more'        => Customify()->get_setting($customizer_args['prefix'] . '_excerpt_more'),
             'more_text'           => Customify()->get_setting($customizer_args['prefix'] . '_more_text'),
@@ -19,6 +20,7 @@ class Customify_Posts_Layout {
             'meta_config'         => Customify()->get_setting($customizer_args['prefix'] . '_meta_config'),
             'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
             'author_avatar'       => Customify()->get_setting($customizer_args['prefix'] . '_author_avatar'),
+            'media_hide'       => Customify()->get_setting($customizer_args['prefix'] . '_media_hide'),
         );
 
         $size =  Customify()->get_setting( $customizer_args['prefix'].'_avatar_size' );
@@ -129,6 +131,7 @@ class Customify_Posts_Layout {
         );
         $this->args['media_fields'] = array();
 
+        /*
         Customify_Post_Entry()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
             'excerpt_length' => $this->args['excerpt_length'],
@@ -138,6 +141,10 @@ class Customify_Posts_Layout {
             'meta_config' => $this->args['meta_config'],
             'meta_sep' => $this->args['meta_sep'],
         ) );
+        */
+
+        //  $this->args
+        Customify_Post_Entry()->set_config( $this->args );
     }
 
 
@@ -215,10 +222,14 @@ class Customify_Posts_Layout {
             ),
         );
 
-        $show_media = true;
-        if ( ! has_post_thumbnail( $post ) ) {
-            if ( $this->args['hide_thumb_if_empty'] ) {
-                $show_media = false;
+        if ( $this->args['media_hide'] ) {
+            $show_media = false;
+        } else {
+            $show_media = true;
+            if ( ! has_post_thumbnail( $post ) ) {
+                if ( $this->args['hide_thumb_if_empty'] ) {
+                    $show_media = false;
+                }
             }
         }
 
@@ -354,11 +365,6 @@ class Customify_Posts_Layout {
 
         $classes[] = 'posts-layout';
         $classes[] = 'layout--'.$this->args['layout'];
-
-        if ( $this->args['layout'] == 'blog_masonry' ) {
-            // WPCS: XSS OK.
-            unset( $classes['grid']  );
-        }
 
         $s_atts = '';
         foreach ( $atts as $k => $v ) {

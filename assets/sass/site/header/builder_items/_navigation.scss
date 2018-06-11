@@ -95,15 +95,11 @@ $submenu_width: 14em;
 
     }
 
-    .sub-menu {
+    .sub-lv-0, .sub-menu {
         position: absolute;
         left: 0px;
         transition: all .3s ease;
-        width: $submenu_width;
-        margin: 0px;
-        padding: 0px;
-        background: #ffffff;
-        z-index: 36;
+        z-index: 99; 
         opacity: 0;
         height: 0;
         overflow: hidden;
@@ -111,6 +107,13 @@ $submenu_width: 14em;
         display: block;
         transform: translateY(40px);
         top: 100%;
+        margin: 0px;
+        padding: 0px;
+    }
+    .sub-menu {
+
+        width: $submenu_width;
+        background: #ffffff;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
         text-align: left;
         .link-before {
@@ -150,7 +153,7 @@ $submenu_width: 14em;
     }
 
     .menu-item:hover, .menu-item:focus, .menu-item.focus {
-        > .sub-menu {
+        > .sub-menu, > .sub-lv-0 {
             height: auto;
             transform: translateY(0);
             overflow: initial;

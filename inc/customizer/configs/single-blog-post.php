@@ -122,7 +122,7 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                 'name' => $args['id']. '_meta_config',
                 'section' => $level_2_panel,
                 'type' => 'repeater',
-                'description' => __('Drag to order meta items', 'customify'),
+                'description' => __('Drag to reorder the meta item.', 'customify'),
                 'live_title_field' => 'title',
                 'limit' => 4,
                 'addable' => false,

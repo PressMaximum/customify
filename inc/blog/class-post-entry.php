@@ -13,6 +13,7 @@ class Customify_Post_Entry {
 
     function get_config_default(){
         $args = array(
+            'excerpt_type' => 'custom',
             'excerpt_length' => Customify()->get_setting('blog_post_excerpt_length' ),
             'excerpt_more' => null,
             'thumbnail_size' => Customify()->get_setting('blog_post_thumb_size' ),
@@ -391,27 +392,33 @@ class Customify_Post_Entry {
      * Post excerpt markup
      */
     function post_excerpt(){
-        $text= '';
-        if ( $this->post ) {
-            if ( $this->post->post_excerpt ) {
-                $text = $this->post->post_excerpt;
-            } else {
-                $text = $this->post->post_content;
+        echo '<div class="entry-excerpt entry--item">';
+        if ( $this->config['excerpt_type']  == 'excerpt' ) {
+            the_excerpt();
+        } elseif( $this->config['excerpt_type']  == 'more_tag' ) {
+            the_content('',  true );
+        } elseif( $this->config['excerpt_type']  == 'content' ) {
+            the_content( '', false );
+        } else {
+            $text= '';
+            if ( $this->post ) {
+                if ( $this->post->post_excerpt ) {
+                    $text = $this->post->post_excerpt;
+                } else {
+                    $text = $this->post->post_content;
+                }
             }
-        }
-        $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
-        ?>
-        <div class="entry-excerpt entry--item">
-            <?php
+            $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
             if ( $excerpt ) {
                 // WPCS: XSS OK.
-                echo $excerpt;
+                echo apply_filters( 'the_excerpt', $excerpt );
             } else {
                 the_excerpt();
             }
-            ?>
-        </div><!-- .entry-content -->
-        <?php
+        }
+
+
+        echo '</div>';
     }
 
     /**

@@ -22,6 +22,11 @@ class Customify {
         add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
         add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 95 );
         add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
+        add_filter( 'excerpt_length', array( $this, 'excerpt_length' ) );
+    }
+
+    function excerpt_length( $length ){
+        return 25;
     }
 
     /**
@@ -328,17 +333,18 @@ class Customify {
 
     private function includes(){
         $files = array(
-            '/inc/class-metabox.php',  // Metabox settings.
+            '/inc/class-metabox.php',                   // Metabox settings.
             '/inc/template-class.php',                  // Template element classes.
+	        '/inc/extras.php',                          // Custom functions that act independently of the theme templates.
             '/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
             '/inc/template-tags.php',                   // Custom template tags for this theme.
             '/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
-            '/inc/blog/class-post-entry.php',          // Blog entry builder
-            '/inc/blog/class-posts-layout.php',        // Blog posts layout
-            '/inc/blog/functions-posts-layout.php',    // Posts layout functions
+            '/inc/blog/class-post-entry.php',           // Blog entry builder
+            '/inc/blog/class-posts-layout.php',         // Blog posts layout
+            '/inc/blog/functions-posts-layout.php',     // Posts layout functions
         );
 
         foreach( $files as $file ) {
@@ -373,6 +379,7 @@ class Customify {
 
         $config_files = array(
             // Site Settings
+            'upsell',
             'layouts',
             'blogs',
             'single-blog-post',
@@ -380,6 +387,7 @@ class Customify {
             'typography',
 
             'page-header',
+            'background',
 
             'compatibility',
 
@@ -428,7 +436,7 @@ class Customify {
     private function load_compatibility(){
 
         $compatibility_config_files = array(
-            'breadcrumb-navxt',         // Plugin breadcrumb-navxt
+            'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo
             'woocommerce/woocommerce',  // Plugin WooCommerce
         );
         foreach ( $compatibility_config_files as  $f ) {
@@ -517,6 +525,32 @@ class Customify {
 
     function get_setting_tab($name, $tab = null) {
         return Customify_Customizer::get_instance()->get_setting_tab( $name, $tab );
+    }
+
+    function get_post_types( $_builtin = true ){
+        if ( $_builtin === 'all' ) {
+            $post_type_args = [
+                'publicly_queryable' => true,
+            ];
+        } else {
+            $post_type_args = [
+                'publicly_queryable' => true,
+                '_builtin' => $_builtin,
+            ];
+        }
+
+        $_post_types = get_post_types( $post_type_args , 'objects' );
+
+        $post_types  = [];
+
+        foreach ( $_post_types as $post_type => $object ) {
+            $post_types[ $post_type ] = array(
+                'name' =>  $object->label,
+                'singular_name' =>  $object->labels->singular_name,
+            );
+        }
+
+        return $post_types;
     }
 
 }

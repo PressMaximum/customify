@@ -975,7 +975,12 @@ class  Customify_Customizer
                     if ($selective_refresh) {
                         $s_id = $selective_refresh['render_callback'];
                         if (is_array($s_id)) {
-                            $__id = get_class($s_id[0]) . '__' . $s_id[1];
+                            if ( is_string( $s_id[0]) )  {
+                                $__id = $s_id[0] . '__' . $s_id[1];
+                            } else {
+                                $__id = get_class($s_id[0]) . '__' . $s_id[1];
+                            }
+
                         } else {
                             $__id = $s_id;
                         }

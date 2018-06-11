@@ -102,6 +102,7 @@
             defaultTarget.wp.customize.panel( 'header_settings' ).focus();
         } );
 
+
         // for custom when click on preview
         $document.on( 'click', '.builder-item-focus .item--preview-name', function( e ){
             e.preventDefault();
@@ -120,6 +121,22 @@
             $document.trigger( 'selective-refresh-content-rendered', [settings.partial.id ] );
             header_changed( settings.partial.id );
         } );
+
+        function setupPreviewNamePosition(){
+            $( '.customify-grid .item--m.builder-item-focus' ).each( function(){
+                var parentPos = $( this ).closest('.customify-grid').offset();
+                var childPos = $( this ).offset();
+                var h = $( this ).innerHeight();
+                var top =  childPos.top - parentPos.top;
+                $( this ).find( '.item--preview-name' ).css( { top: top + h } );
+            } );
+        }
+
+        setupPreviewNamePosition();
+
+        $document .on( 'selective-refresh-content-rendered  after_auto_render_css', function( event, id, field_name ) {
+            setupPreviewNamePosition();
+        });
 
     } );
 
