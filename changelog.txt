@@ -1,3 +1,6 @@
+= 0.1.2 =
+* NEW: Support Elementor 2.0
+
 = 0.1.1 =
  * NEW: Option sidebar settings for custom post types.
  * NEW: Body background settings.

@@ -436,6 +436,7 @@ class Customify {
     private function load_compatibility(){
 
         $compatibility_config_files = array(
+            'elementor',         // Plugin breadcrumb-navxt & Yoat Seo
             'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo
             'woocommerce/woocommerce',  // Plugin WooCommerce
         );

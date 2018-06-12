@@ -10,8 +10,10 @@
 get_header(); ?>
 <div class="content-inner">
     <?php
-    customify_blog_posts_heading();
-    customify_blog_posts();
+    if ( ! customify_is_e_theme_location('archive') ) {
+        customify_blog_posts_heading();
+        customify_blog_posts();
+    }
     ?>
 </div><!-- #.content-inner -->
 <?php
