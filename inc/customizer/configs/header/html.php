@@ -61,7 +61,6 @@ class Customify_Builder_Item_HTML {
                 'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),
 
-
         );
 
         // Item Layout
