@@ -1,7 +1,5 @@
 <?php
 
-Customify_Customize_Layout_Builder()->register_builder('header', new Customify_Builder_Header());
-
 class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 {
     public $id = 'header';
@@ -371,3 +369,5 @@ if (!function_exists('customify_header_layout_settings')) {
         return $layout;
     }
 }
+
+Customify_Customize_Layout_Builder()->register_builder('header', new Customify_Builder_Header());
