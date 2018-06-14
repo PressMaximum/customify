@@ -54,7 +54,7 @@ jQuery( document ).ready( function( $ ){
     };
 
     // Toggle sub menu
-    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a > .nav-toggle-icon', function( e ){
         e.preventDefault();
         var li = $( this ).closest('li');
         li.toggleClass('open-sub');
