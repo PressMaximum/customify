@@ -42,7 +42,7 @@ jQuery( document ).ready( function( $ ){
                 var first_a = $(' > a', $el);
                 var d = first_a.clone();
                 if (is_previewing) {
-                    first_a.attr('href', 'javascript:;');
+                   // first_a.attr('href', 'javascript:;');
                 }
                 first_a.append('<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>');
                 $(' > .sub-menu', $el).prepend(d);
