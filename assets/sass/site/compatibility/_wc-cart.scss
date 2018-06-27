@@ -1,0 +1,197 @@
+// Mini cart
+/**
+ * Cart sidebar
+ */
+.widget-area {
+    .widget {
+        ul.cart_list,
+        ul.product_list_widget {
+            list-style: none outside;
+            padding: 0;
+            margin: 0;
+
+            .wc-product-name, .quantity {
+                display: block;
+            }
+
+            li {
+                margin: 0;
+                @include clearfix();
+                list-style: none;
+                a {
+                    display: block;
+                    line-height: 1.2;
+                    text-decoration: none;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+
+                @include medialeft();
+
+                img {
+                    float: left;
+                    margin-right: 10px;
+                    width: 50px;
+                    height: auto;
+                    box-shadow: none;
+                }
+
+                dl {
+                    margin: 0;
+                    padding-left: 1em;
+                    border-left: 2px solid rgba(0, 0, 0, 0.1);
+                    @include clearfix();
+
+                    dt,
+                    dd {
+                        display: inline-block;
+                        float: left;
+                        margin-bottom: 1em;
+                    }
+
+                    dt {
+                        font-weight: 700;
+                        padding: 0 0 0.25em;
+                        margin: 0 4px 0 0;
+                        clear: left;
+                    }
+
+                    dd {
+                        padding: 0 0 0.25em;
+
+                        p:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+
+                .star-rating {
+                    float: none;
+                }
+            }
+        }
+    }
+
+    .widget_shopping_cart,
+    .widget_shopping_cart {
+        a.remove {
+            position: absolute;
+            top: 15;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            display: block;
+        }
+        a {
+            text-decoration: none;
+        }
+        .wc-product-thumbnail {
+            display: block;
+        }
+        .wc-product-name-wrapper {
+            display: block;
+            margin-left: 60px;
+        }
+        .quantity {
+            margin-top: 10px;
+        }
+
+        .total {
+            display: block;
+            text-align: center;
+            strong {
+                min-width: 40px;
+                display: inline-block;
+            }
+        }
+
+        .cart_list li {
+            padding-right: 20px;
+            position: relative;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-bottom: 0px;
+            border-bottom: 1px solid #eaecee;
+        }
+
+        .buttons {
+            display: flex;
+            margin: 15px 0px;
+            justify-content: space-between;
+        }
+    }
+
+}
+
+
+// Header Item cart
+.item--wc_cart {
+    position: relative;
+    .cart-item-link {
+        color: currentColor;
+        display: flex;
+        align-items: center;
+        > span {
+            display: inline-block;
+            margin: 0 3px;
+            &:first-child {
+                margin-left: 0px;
+            }
+            &:last-child {
+                margin-right: 0px;
+            }
+        }
+    }
+    .cart-icon {
+        display: inline-block;
+        position: relative;
+        font-size: 1.3em;
+        .cart-qty {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            left: auto;
+            transform: translate( 50%, -50% );
+            background: #ff8800;
+            font-size: 11px;
+            padding: 3px;
+            border-radius: 20px;
+        }
+    }
+    .cart-item-dropdown {
+        position: absolute;
+        color: #444444;
+        top: 100%;
+        right: 0px;
+        left: auto;
+        z-index: 30;
+        width: 300px;
+        padding: 15px 15px 15px;
+
+        transition: all .3s ease;
+        opacity: 0;
+        height: 0;
+        overflow: hidden;
+        visibility: hidden;
+        display: block;
+        transform: translateY(40px);
+
+        li {
+            padding: 15px 0px;
+        }
+        background: #ffffff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    &:hover {
+        .cart-item-dropdown {
+            opacity: 1;
+            height: auto;
+            overflow: hidden;
+            visibility: visible;
+            display: block;
+            transform: translateY(0px);
+        }
+    }
+}

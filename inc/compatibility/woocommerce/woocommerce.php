@@ -16,7 +16,7 @@ class Customify_WC {
 
     function __construct()
     {
-        if (  $this->is_active() ) {
+        if ( $this->is_active() ) {
             add_filter('customify_get_layout', array($this, 'shop_layout'));
             add_action('widgets_init', array($this, 'register_sidebars'));
             add_filter('customify/customizer/config', array($this, 'customize_shop_sidebars'));
@@ -32,7 +32,7 @@ class Customify_WC {
             add_filter('customify/titlebar/is-showing', array($this, 'titlebar_is_showing'), 15);
 
             add_filter('customify/theme/js', array($this, 'add_js'));
-            add_filter('customify/theme/css', array($this, 'add_css'));
+           // add_filter('customify/theme/css', array($this, 'add_css'));
 
             /**
              * woocommerce_sidebar hook.
@@ -44,7 +44,56 @@ class Customify_WC {
             // Custom styling
             add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
+
+            // Shopping Cart
+
+            require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
+            add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
+
+
+            // Load theme style
+            add_filter( 'woocommerce_enqueue_styles', array( $this, 'custom_styles' ) );
+
+           // Add body class
+            add_filter( 'body_class',  array( $this, 'body_class' ) );
+
         }
+    }
+
+    function body_class( $classes ){
+        $classes['woocommerce'] = 'woocommerce';
+        return $classes;
+    }
+
+    /**
+     * Set WooCommerce image dimensions upon theme activation
+     */
+    function custom_styles( $enqueue_styles ) {
+
+        $suffix = Customify()->get_asset_suffix();
+        $enqueue_styles['woocommerce-general']['src'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
+
+        //unset( $enqueue_styles['woocommerce-general'] );	// Remove the gloss
+        unset( $enqueue_styles['woocommerce-layout'] );		// Remove the layout
+        //unset( $enqueue_styles['woocommerce-smallscreen'] );	// Remove the smallscreen optimisation
+        return $enqueue_styles;
+    }
+
+    /**
+     * Add more args for cart
+     *
+     * @see WC_AJAX::get_refreshed_fragments();
+     *
+     * @param array $cart_fragments
+     * @return array
+     */
+    function cart_fragments( $cart_fragments = array() ){
+        $sub_total =  WC()->cart->get_subtotal();;
+        $cart_fragments['.customify-wc-sub-total'] =  wc_price( $sub_total );
+        $quantities =  WC()->cart->get_cart_item_quantities();
+        $cart_fragments['.customify-wc-total-qty'] =  array_sum($quantities );
+
+        return $cart_fragments;
     }
 
     function styling_primary( $selector ){
@@ -332,8 +381,6 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
                 <?php do_action( 'woocommerce_before_shop_loop' ); ?>
 
                 <?php woocommerce_product_loop_start(); ?>
-
-                <?php woocommerce_product_subcategories(); ?>
 
                 <?php while ( have_posts() ) : the_post(); ?>
 
