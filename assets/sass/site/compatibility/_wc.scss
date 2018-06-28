@@ -75,6 +75,9 @@ p.demo_store,
         text-decoration: none;
         font-weight: 700;
         border: 0;
+        position: relative;
+        text-indent: -9999px;
+        overflow: hidden;
 
         &:before, &:after {
             background: currentColor;

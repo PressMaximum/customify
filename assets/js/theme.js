@@ -233,27 +233,7 @@ jQuery( document ).ready( function( $ ){
            });
 
        } );
-
-       /*
-        if ( ! customify_is_mobile() ) {
-            $('.header-search_icon-item .search-icon').blur( function (e) {
-                var w = $(this).parent();
-                w.removeClass('active');
-            });
-
-            $('.header-search_icon-item .search-icon, .header-search_icon-item .search-field, .header-search_icon-item .search-submit').focus(function (e) {
-                var w = $(this).closest('.header-search_icon-item');
-                //var $e = $( e.target );
-                w.addClass('active');
-                if (!$('.search-field', w).is(e.target)) {
-                    $('.search-field', w).focus();
-                }
-            });
-        }
-        */
-
    }
-
 
     function search_box_auto_align(){
         var w = $( window ).width();
@@ -269,7 +249,6 @@ jQuery( document ).ready( function( $ ){
                 p.removeClass( 'search-left' );
                 p.addClass( 'search-right' );
             }
-
         } );
 
     }

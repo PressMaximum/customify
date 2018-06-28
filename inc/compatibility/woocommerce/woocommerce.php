@@ -89,9 +89,9 @@ class Customify_WC {
      */
     function cart_fragments( $cart_fragments = array() ){
         $sub_total =  WC()->cart->get_subtotal();;
-        $cart_fragments['.customify-wc-sub-total'] =  wc_price( $sub_total );
+        $cart_fragments['.customify-wc-sub-total'] =  '<span class="customify-wc-sub-total">'.wc_price( $sub_total ).'</span>';
         $quantities =  WC()->cart->get_cart_item_quantities();
-        $cart_fragments['.customify-wc-total-qty'] =  array_sum($quantities );
+        $cart_fragments['.customify-wc-total-qty'] =  '<span class="customify-wc-total-qty">'.array_sum($quantities ).'</span>';
 
         return $cart_fragments;
     }

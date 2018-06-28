@@ -249,7 +249,6 @@ class Customify_Builder_Item_Social_Icons {
                 )
             ),
 
-
             array(
                 'name'             => $prefix . '_border',
                 'type'             => 'modal',
