@@ -16,7 +16,6 @@
 
             li {
                 margin: 0;
-                @include clearfix();
                 list-style: none;
                 a {
                     display: block;
@@ -77,7 +76,7 @@
     .widget_shopping_cart {
         a.remove {
             position: absolute;
-            top: 15;
+            top: 15px;
             right: 0;
             width: 15px;
             height: 15px;
@@ -115,6 +114,12 @@
             padding-bottom: 10px;
             margin-bottom: 0px;
             border-bottom: 1px solid #eaecee;
+        }
+        .cart_list {
+            &:after {
+                content: none !important;
+                display: none !important;
+            }
         }
 
         .buttons {
@@ -195,6 +200,11 @@
         visibility: hidden;
         display: block;
         transform: translateY(40px);
+        .woocommerce-mini-cart {
+            max-height: 300px;
+            overflow: auto;
+            display: block;
+        }
 
         li {
             padding: 15px 0px;
@@ -203,7 +213,23 @@
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
     }
 
-    @include for_device( mobile ){
+
+
+    &:hover, &.cart-active {
+        .cart-item-dropdown {
+            opacity: 1;
+            height: auto;
+            overflow: hidden;
+            visibility: visible;
+            display: block;
+            transform: translateY(0px);
+        }
+    }
+
+}
+
+.item--wc_cart {
+    @include for_device(mobile) {
         &.d-align-mobile-right {
             .cart-item-dropdown {
                 left: auto;
@@ -225,7 +251,7 @@
         }
     }
 
-    @include for_device( tablet ){
+    @include for_device(tablet) {
         &.d-align-tablet-right {
             .cart-item-dropdown {
                 left: auto;
@@ -247,7 +273,7 @@
         }
     }
 
-    @include for_device( desktop ){
+    @include for_device(desktop) {
         &.d-align-desktop-right {
             .cart-item-dropdown {
                 left: auto;
@@ -267,21 +293,12 @@
             display: inline-block;
         }
     }
-
-
-    &:hover, &.cart-active {
-        .cart-item-dropdown {
-            opacity: 1;
-            height: auto;
-            overflow: hidden;
-            visibility: visible;
-            display: block;
-            transform: translateY(0px);
-        }
-    }
-
-
-
 }
 
-///
+.header-menu-sidebar-inner {
+    .cart-item-dropdown{
+        display: none !important;
+        visibility: hidden;
+        height: 0px;
+    }
+}

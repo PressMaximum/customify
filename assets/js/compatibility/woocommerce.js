@@ -13,5 +13,5 @@ jQuery( document ).ready( function ( $ ) {
     $( document.body ).on( 'hover', '.item--wc_cart', function(){
         $( this ).removeClass( 'cart-active' );
     } );
-    
+
 } );

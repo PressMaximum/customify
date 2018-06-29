@@ -89,6 +89,20 @@ class Customify_Builder_Item_WC_Cart
             ),
 
             array(
+                'name'            => "{$this->name}_link_to",
+                'type'            => 'select',
+                'section'         => $this->section,
+                'selector'        => '.builder-header-' . $this->id . '-item',
+                'render_callback' => $fn,
+                'default'         => 'cart',
+                'choices'         => array(
+                    'cart' => __('Cart Page', 'customify'),
+                    'checkout'  => __('Checkout', 'customify'),
+                ),
+                'title'           => __('Link To', 'customify'),
+            ),
+
+            array(
                 'name'            => "{$this->name}_show_label",
                 'type'            => 'checkbox',
                 'default'         => array(
@@ -419,6 +433,7 @@ class Customify_Builder_Item_WC_Cart
         $show_sub_total = Customify()->get_setting("{$this->name}_show_sub_total", 'all');
         $show_qty = Customify()->get_setting("{$this->name}_show_qty");
         $sep = Customify()->get_setting("{$this->name}_sep");
+        $link_to = Customify()->get_setting("{$this->name}_link_to");
 
         $classes = array();
 
@@ -470,9 +485,16 @@ class Customify_Builder_Item_WC_Cart
         $classes[] = 'builder-header-' . $this->id.'-item';
         $classes[] = 'item--' . $this->id;
 
+        $link = '';
+        if ( $link_to == 'checkout' ) {
+            $link = get_permalink( wc_get_page_id( 'checkout' ) );
+        } else {
+            $link = get_permalink( wc_get_page_id( 'cart' ) );
+        }
+
         echo '<div class="' . esc_attr(join( ' ', $classes )) . '">';
 
-        echo '<a href="#" class="cart-item-link">';
+        echo '<a href="'.esc_url( $link ).'" class="cart-item-link">';
         echo $html; // WPCS: XSS OK.
         echo '</a>';
 

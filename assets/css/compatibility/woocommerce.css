@@ -628,19 +628,8 @@ $gl-devices-list: (
 .widget-area .widget ul.cart_list li,
 .widget-area .widget ul.product_list_widget li {
   margin: 0;
-  *zoom: 1;
   list-style: none;
   *zoom: 1;
-}
-.widget-area .widget ul.cart_list li::before, .widget-area .widget ul.cart_list li::after,
-.widget-area .widget ul.product_list_widget li::before,
-.widget-area .widget ul.product_list_widget li::after {
-  content: ' ';
-  display: table;
-}
-.widget-area .widget ul.cart_list li::after,
-.widget-area .widget ul.product_list_widget li::after {
-  clear: both;
 }
 .widget-area .widget ul.cart_list li a,
 .widget-area .widget ul.product_list_widget li a {
@@ -722,7 +711,7 @@ $gl-devices-list: (
 .widget-area .widget_shopping_cart a.remove,
 .widget-area .widget_shopping_cart a.remove {
   position: absolute;
-  top: 15;
+  top: 15px;
   right: 0;
   width: 15px;
   height: 15px;
@@ -765,6 +754,11 @@ $gl-devices-list: (
   padding-bottom: 10px;
   margin-bottom: 0px;
   border-bottom: 1px solid #eaecee;
+}
+.widget-area .widget_shopping_cart .cart_list:after,
+.widget-area .widget_shopping_cart .cart_list:after {
+  content: none !important;
+  display: none !important;
 }
 .widget-area .widget_shopping_cart .buttons,
 .widget-area .widget_shopping_cart .buttons {
@@ -841,9 +835,23 @@ $gl-devices-list: (
   background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
 }
+.item--wc_cart .cart-item-dropdown .woocommerce-mini-cart {
+  max-height: 300px;
+  overflow: auto;
+  display: block;
+}
 .item--wc_cart .cart-item-dropdown li {
   padding: 15px 0px;
 }
+.item--wc_cart:hover .cart-item-dropdown, .item--wc_cart.cart-active .cart-item-dropdown {
+  opacity: 1;
+  height: auto;
+  overflow: hidden;
+  visibility: visible;
+  display: block;
+  transform: translateY(0px);
+}
+
 @media screen and (max-width: 568px) {
   .item--wc_cart.d-align-mobile-right .cart-item-dropdown {
     left: auto;
@@ -892,13 +900,11 @@ $gl-devices-list: (
     display: inline-block;
   }
 }
-.item--wc_cart:hover .cart-item-dropdown, .item--wc_cart.cart-active .cart-item-dropdown {
-  opacity: 1;
-  height: auto;
-  overflow: hidden;
-  visibility: visible;
-  display: block;
-  transform: translateY(0px);
+
+.header-menu-sidebar-inner .cart-item-dropdown {
+  display: none !important;
+  visibility: hidden;
+  height: 0px;
 }
 
 /**
