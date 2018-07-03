@@ -139,6 +139,7 @@ class  Customify_Customizer
 
                     // for selective refresh
                     'selector'             => null,
+                    'render'               => null, // same render_callback
                     'render_callback'      => null,
                     'css_format'           => null,
 
@@ -938,10 +939,10 @@ class  Customify_Customizer
                     }
 
                     $selective_refresh = null;
-                    if ($args['selector'] && ($args['render_callback'] || $args['css_format'])) {
+                    if ($args['selector'] && ( ( $args['render_callback'] || $args['render'] )  || $args['css_format'])) {
                         $selective_refresh = array(
                             'selector'        => $args['selector'],
-                            'render_callback' => $args['render_callback'],
+                            'render_callback' => ( $args['render'] ) ? $args['render'] : $args['render_callback'],
                         );
 
                         if ($args['css_format']) {

@@ -46,7 +46,6 @@ class Customify_WC {
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
 
             // Shopping Cart
-
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
 
@@ -56,6 +55,9 @@ class Customify_WC {
 
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
+
+	        // Single product
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
 
         }
     }

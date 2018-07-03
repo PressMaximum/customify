@@ -885,7 +885,7 @@ $gl-devices-list: (
 .woocommerce-tabs ul.tabs {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 0px 2em;
   position: relative;
 }
 .woocommerce-tabs ul.tabs li {
@@ -944,6 +944,9 @@ $gl-devices-list: (
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li:first-child {
   border-top: 2px solid #666;
 }
+.woocommerce-tabs.wc-tabs-vertical .wc-tabs li a {
+  display: block;
+}
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li:after {
   content: "";
   width: 0.8em;
@@ -956,16 +959,23 @@ $gl-devices-list: (
   transform: rotate(45deg) translateY(-50%);
   border-top: 1px solid #666;
   border-right: 1px solid #666;
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active {
   color: #d7883a;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active:after {
-  border-top-color: #666;
-  border-right-color: #666;
+  opacity: 1;
+  border-top-color: #d7883a;
+  border-right-color: #d7883a;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs-contents {
   flex-basis: 70%;
+}
+
+.woocommerce-Reviews-title {
+  display: none;
 }
 
 /**
@@ -1264,7 +1274,7 @@ p.demo_store a,
 .woocommerce div.product div.images .flex-control-thumbs {
   overflow: hidden;
   zoom: 1;
-  margin: 0;
+  margin: 1em 0 0;
   padding: 0;
 }
 .woocommerce div.product div.images .flex-control-thumbs li {
@@ -1272,6 +1282,9 @@ p.demo_store a,
   float: left;
   margin: 0;
   list-style: none;
+}
+.woocommerce div.product div.images .flex-control-thumbs li:last-child {
+  margin-right: 0px;
 }
 .woocommerce div.product div.images .flex-control-thumbs li img {
   cursor: pointer;
@@ -1918,7 +1931,7 @@ p.demo_store a,
 .woocommerce table.shop_attributes th {
   width: 150px;
   font-weight: 700;
-  padding: 8px;
+  padding: 1em;
   border-top: 0;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
   margin: 0;
@@ -1926,7 +1939,7 @@ p.demo_store a,
 }
 .woocommerce table.shop_attributes td {
   font-style: italic;
-  padding: 0;
+  padding: 1em;
   border-top: 0;
   border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
   margin: 0;

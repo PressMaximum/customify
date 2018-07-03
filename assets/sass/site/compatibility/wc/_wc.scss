@@ -251,7 +251,7 @@ p.demo_store,
             .flex-control-thumbs {
                 overflow: hidden;
                 zoom: 1;
-                margin: 0;
+                margin: 1em 0 0;
                 padding: 0;
 
                 li {
@@ -259,6 +259,9 @@ p.demo_store,
                     float: left;
                     margin: 0;
                     list-style: none;
+                    &:last-child {
+                        margin-right: 0px;
+                    }
 
                     img {
                         cursor: pointer;
@@ -942,7 +945,7 @@ p.demo_store,
         th {
             width: 150px;
             font-weight: 700;
-            padding: 8px;
+            padding: 1em;
             border-top: 0;
             border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
             margin: 0;
@@ -951,7 +954,7 @@ p.demo_store,
 
         td {
             font-style: italic;
-            padding: 0;
+            padding: 1em;
             border-top: 0;
             border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
             margin: 0;

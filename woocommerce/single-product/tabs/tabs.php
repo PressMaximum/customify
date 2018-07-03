@@ -22,9 +22,9 @@ $tabs = apply_filters( 'woocommerce_product_tabs', array() );
 
 if ( ! empty( $tabs ) ) :
 
-    $classes = array( 'woocommerce-tabs wc-tabs-wrapper' );
-	//$classes[] = 'wc-tabs-horizontal';
-	$classes[] = 'wc-tabs-vertical';
+    $classes = array( 'wc-single-tabs woocommerce-tabs wc-tabs-wrapper' );
+
+	$classes[] = 'wc-tabs-'.Customify()->get_setting('wc_single_product_tab');
 
     ?>
 
