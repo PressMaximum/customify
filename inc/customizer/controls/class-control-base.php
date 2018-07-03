@@ -225,8 +225,6 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	            $single_post_url = get_permalink( $posts[0] );
             }
 
-
-
             $args = array(
 	            'home_url' => esc_url( home_url('') ),
 	            'ajax' => admin_url('admin-ajax.php'),
@@ -250,7 +248,6 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	            // Auto redirect to url when section panel
                 'panel_urls' => array(
                     'panel_blog_post' => $blog_url,
-
                 )
             );
 

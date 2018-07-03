@@ -29,7 +29,7 @@ class  Customify_Customizer
         require_once get_template_directory() . '/inc/customizer/class-customizer-auto-css.php';
 
         if (is_admin() || is_customize_preview()) {
-            add_action('customize_register', array($this, 'register'));
+            add_action( 'customize_register', array($this, 'register'), 666 );
             add_action('customize_preview_init', array($this, 'preview_js'));
             add_action('wp_ajax_customify/customizer/ajax/get_icons', array($this, 'get_icons'));
 
