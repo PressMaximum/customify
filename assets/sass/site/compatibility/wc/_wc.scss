@@ -319,98 +319,7 @@ p.demo_store,
             }
         }
 
-        .woocommerce-tabs {
-            ul.tabs {
-                list-style: none;
-                padding: 0 0 0 1em;
-                margin: 0 0 1.618em;
-                overflow: hidden;
-                position: relative;
 
-                li {
-                    border: 1px solid darken( $secondary, 10% );
-                    background-color: $secondary;
-                    display: inline-block;
-                    position: relative;
-                    z-index: 0;
-                    border-radius: 4px 4px 0 0;
-                    margin: 0 -5px;
-                    padding: 0 1em;
-
-                    a {
-                        display: inline-block;
-                        padding: 0.5em 0;
-                        font-weight: 700;
-                        color: $secondarytext;
-                        text-decoration: none;
-
-                        &:hover {
-                            text-decoration: none;
-                            color: lighten( $secondarytext, 10% );
-                        }
-                    }
-
-                    &.active {
-                        background: $contentbg;
-                        z-index: 2;
-                        border-bottom-color: $contentbg;
-
-                        a {
-                            color: inherit;
-                            text-shadow: inherit;
-                        }
-
-                        &::before {
-                            box-shadow: 2px 2px 0 $contentbg;
-                        }
-
-                        &::after {
-                            box-shadow: -2px 2px 0 $contentbg;
-                        }
-                    }
-
-                    &::before,
-                    &::after {
-                        border: 1px solid darken( $secondary, 10% );
-                        position: absolute;
-                        bottom: -1px;
-                        width: 5px;
-                        height: 5px;
-                        content: ' ';
-                        box-sizing: border-box;
-                    }
-
-                    &::before {
-                        left: -5px;
-                        border-bottom-right-radius: 4px;
-                        border-width: 0 1px 1px 0;
-                        box-shadow: 2px 2px 0 $secondary;
-                    }
-
-                    &::after {
-                        right: -5px;
-                        border-bottom-left-radius: 4px;
-                        border-width: 0 0 1px 1px;
-                        box-shadow: -2px 2px 0 $secondary;
-                    }
-                }
-
-                &::before {
-                    position: absolute;
-                    content: ' ';
-                    width: 100%;
-                    bottom: 0;
-                    left: 0;
-                    border-bottom: 1px solid darken( $secondary, 10% );
-                    z-index: 1;
-                }
-            }
-
-            .panel {
-                margin: 0 0 2em;
-                padding: 0;
-            }
-        }
 
         p.cart {
             margin-bottom: 2em;
@@ -725,7 +634,7 @@ p.demo_store,
         }
 
         &:hover {
-            background-color: $secondary - #111;
+            background-color: $secondary ;
             text-decoration: none;
             background-image: none;
             color: $secondarytext;
@@ -737,7 +646,7 @@ p.demo_store,
             -webkit-font-smoothing: antialiased;
 
             &:hover {
-                background-color: $primary - #111;
+                background-color: $primary ;
                 color: $primarytext;
             }
 
@@ -1289,7 +1198,7 @@ p.demo_store,
             .select2-container,
             input.input-text,
             select {
-                border-color: $green - #111;
+                border-color: $green;
             }
         }
 
@@ -1526,7 +1435,7 @@ p.demo_store,
 
         .price_slider_wrapper .ui-widget-content {
             border-radius: 1em;
-            background-color: $primary - #444;
+            background-color: $primary;
             border: 0;
         }
 
@@ -1965,34 +1874,34 @@ p.demo_store,
                 background-size: 32px 20px;
 
                 &.visa {
-                    background-image: url('../images/icons/credit-cards/visa.svg');
+                    background-image: url('../../images/icons/credit-cards/visa.svg');
                 }
 
                 &.mastercard {
-                    background-image: url('../images/icons/credit-cards/mastercard.svg');
+                    background-image: url('../../images/icons/credit-cards/mastercard.svg');
                 }
 
                 &.laser {
-                    background-image: url('../images/icons/credit-cards/laser.svg');
+                    background-image: url('../../images/icons/credit-cards/laser.svg');
                 }
 
                 &.dinersclub {
-                    background-image: url('../images/icons/credit-cards/diners.svg');
+                    background-image: url('../../images/icons/credit-cards/diners.svg');
                 }
 
                 &.maestro {
-                    background-image: url('../images/icons/credit-cards/maestro.svg');
+                    background-image: url('../../images/icons/credit-cards/maestro.svg');
                 }
 
                 &.jcb {
-                    background-image: url('../images/icons/credit-cards/jcb.svg');
+                    background-image: url('../../images/icons/credit-cards/jcb.svg');
                 }
 
                 &.amex {
-                    background-image: url('../images/icons/credit-cards/amex.svg');
+                    background-image: url('../../images/icons/credit-cards/amex.svg');
                 }
                 &.discover {
-                    background-image: url('../images/icons/credit-cards/discover.svg');
+                    background-image: url('../../images/icons/credit-cards/discover.svg');
                 }
             }
 

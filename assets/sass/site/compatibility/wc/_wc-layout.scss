@@ -98,14 +98,6 @@
 			clear: none;
 		}
 
-		.woocommerce-tabs {
-			clear: both;
-
-			ul.tabs {
-				@include menu();
-			}
-		}
-
 		#reviews {
 			.comment {
 				@include mediaright();

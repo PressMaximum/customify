@@ -1,0 +1,105 @@
+$tab_border_color: #666;
+$tab_active_color: #d7883a;
+
+.woocommerce-tabs {
+    clear: both;
+    ul.tabs {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        position: relative;
+        li {
+            text-transform: uppercase;
+            position: relative;
+            a {
+                font-weight: 700;
+                color: currentColor;
+                text-decoration: none;
+                &:hover {
+                    text-decoration: none;
+                    color: inherit;
+                }
+            }
+        }
+    }
+    &.wc-tabs-horizontal {
+        ul.tabs {
+            border-bottom: 2px solid $tab_border_color;
+            li {
+                border-bottom: 2px solid transparent;
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+                padding: 0;
+                margin: 0 1em -2px;
+                &:first-child {
+                    margin-left: 0px;
+                }
+                &:last-child {
+                    margin-right: 0px;
+                }
+                a {
+                    display: inline-block;
+                    padding: 1em 0px;
+
+                }
+                &.active {
+                    z-index: 2;
+                    border-bottom-color: $tab_active_color;
+                    a {
+                        color: inherit;
+                        text-shadow: inherit;
+                    }
+
+                }
+
+            }
+        }
+    } // wc-tabs-horizontal
+
+    &.wc-tabs-vertical {
+        display: flex;
+        .wc-tabs {
+            flex-basis: 30%;
+            margin-right: 2em;
+            li {
+                padding: 1em 0px;
+                border-bottom: 2px solid $tab_border_color;
+                &:first-child {
+                    border-top: 2px solid $tab_border_color;
+                }
+
+
+                &:after {
+                    content: '';
+                    width: .8em;
+                    height: .8em;
+                    display: block;
+                    position: absolute;
+                    top: 50%;
+                    right: .8em;
+                    left: auto;
+                    transform: rotate(45deg) translateY( -50% );
+                    border-top: 1px solid $tab_border_color;
+                    border-right: 1px solid $tab_border_color;
+                }
+
+                &.active {
+                    color: $tab_active_color;
+                    &:after {
+                        border-top-color:  $tab_border_color;
+                        border-right-color:  $tab_border_color;
+                    }
+                }
+
+            }
+        }
+        .wc-tabs-contents {
+            flex-basis: 70%;
+        }
+    }
+
+
+
+
+}

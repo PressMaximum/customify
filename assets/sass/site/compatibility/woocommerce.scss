@@ -103,12 +103,13 @@
 /**
  * Imports
  */
-@import 'mixins';
-@import 'wc-vars';
-@import 'animation';
-@import 'fonts';
+@import 'wc/mixins';
+@import 'wc/wc-vars';
+@import 'wc/animation';
+@import 'wc/fonts';
 
 
-@import "wc-layout";
-@import "wc-cart";
-@import "wc";
+@import "wc/wc-layout";
+@import "wc/wc-cart";
+@import "wc/wc-tabs";
+@import "wc/wc";

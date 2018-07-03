@@ -46,7 +46,7 @@
   box-sizing: border-box;
 }
 .cd-row:after {
-  content: '';
+  content: "";
   clear: both;
   display: block;
 }
@@ -129,7 +129,7 @@
   margin: -15px;
 }
 .cd-list-flex:after {
-  content: '';
+  content: "";
   clear: both;
   display: block;
 }
@@ -475,11 +475,11 @@
   font-size: 18px;
 }
 
-.cd-box-content input[type="text"],
-.cd-box-content input[type="number"],
-.cd-box-content input[type="password"],
-.cd-box-content input[type="email"],
-.cd-box-content input[type="email"] {
+.cd-box-content input[type=text],
+.cd-box-content input[type=number],
+.cd-box-content input[type=password],
+.cd-box-content input[type=email],
+.cd-box-content input[type=email] {
   display: block;
   max-width: 100%;
 }
