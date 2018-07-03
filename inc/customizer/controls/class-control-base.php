@@ -206,23 +206,55 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
         wp_enqueue_script( 'customify-customizer-control', esc_url( get_template_directory_uri() ).'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_args_loaded ) ) {
-            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', array(
-                'home_url' => esc_url( home_url('') ),
-                'ajax' => admin_url('admin-ajax.php'),
-                'is_rtl' => is_rtl(),
-                'theme_default' => __('Theme Default', 'customify'),
-                'reset' => __('Reset this section settings', 'customify'),
-                'untitled' => __('Untitled', 'customify'),
-                'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
-                'list_font_weight' => array(
-                    ''   => __('Default', 'customify'),
-                    'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
-                    'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
+
+            $posts_page = get_option( 'page_for_posts' );
+            if ( $posts_page ) {
+	            $blog_url = get_permalink( $posts_page );
+            } else{
+	            $blog_url = home_url('/');
+            }
+
+	        $query = new WP_Query( array(
+		        'post_type' => 'post',
+		        'posts_per_page' => 1,
+                'orderby' => 'rand'
+	        ) );
+
+	        $posts = $query->get_posts();
+            if ( count( $posts ) ) {
+	            $single_post_url = get_permalink( $posts[0] );
+            }
+
+
+
+            $args = array(
+	            'home_url' => esc_url( home_url('') ),
+	            'ajax' => admin_url('admin-ajax.php'),
+	            'is_rtl' => is_rtl(),
+	            'theme_default' => __('Theme Default', 'customify'),
+	            'reset' => __('Reset this section settings', 'customify'),
+	            'untitled' => __('Untitled', 'customify'),
+	            'confirm_reset' => __('Do you want to reset this section settings?', 'customify'),
+	            'list_font_weight' => array(
+		            ''   => __('Default', 'customify'),
+		            'normal'    => _x('Normal', 'customify-font-weight', 'customify'),
+		            'bold'      => _x('Bold', 'customify-font-weight', 'customify'),
+	            ),
+	            'typo_fields' => Customify()->customizer->get_typo_fields(),
+	            'styling_config' => Customify()->customizer->get_styling_config(),
+	            'devices' => Customify()->customizer->devices,
+	            // Auto redirect to url when section open
+	            'section_urls' => array(
+		            'section_single_blog_post' => $single_post_url
                 ),
-                'typo_fields' => Customify()->customizer->get_typo_fields(),
-                'styling_config' => Customify()->customizer->get_styling_config(),
-                'devices' => Customify()->customizer->devices,
-            ));
+	            // Auto redirect to url when section panel
+                'panel_urls' => array(
+                    'panel_blog_post' => $blog_url,
+
+                )
+            );
+
+            wp_localize_script('customify-customizer-control', 'Customify_Control_Args', apply_filters( 'Customify_Control_Args', $args ) );
             self::$_args_loaded = true;
         }
     }

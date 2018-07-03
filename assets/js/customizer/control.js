@@ -2925,6 +2925,38 @@
             }
         } );
 
+        /**
+         * When panel open
+         */
+
+        _.each( Customify_Control_Args.panel_urls, function( url, id ) {
+            if ( url ) {
+                wp.customize.panel( id, function (panel) {
+                    panel.expanded.bind(function (isExpanded) {
+                        if (isExpanded) {
+                            wp.customize.previewer.previewUrl.set( url );
+                        }
+                    });
+                });
+            }
+        } );
+
+        _.each( Customify_Control_Args.section_urls, function( url, id ) {
+            if ( url ) {
+                wp.customize.section( id, function (section) {
+                    section.expanded.bind(function (isExpanded) {
+                        if (isExpanded) {
+                            wp.customize.previewer.previewUrl.set( url );
+                        }
+                    });
+                });
+            }
+        } );
+
+
+
+
+
 
     }); // end customize ready
 
