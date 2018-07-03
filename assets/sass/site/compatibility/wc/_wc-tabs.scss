@@ -6,7 +6,7 @@ $tab_active_color: #d7883a;
     ul.tabs {
         list-style: none;
         padding: 0;
-        margin: 0;
+        margin: 0 0px 2em;
         position: relative;
         li {
             text-transform: uppercase;
@@ -69,6 +69,9 @@ $tab_active_color: #d7883a;
                     border-top: 2px solid $tab_border_color;
                 }
 
+                a {
+                    display: block;
+                }
 
                 &:after {
                     content: '';
@@ -82,13 +85,16 @@ $tab_active_color: #d7883a;
                     transform: rotate(45deg) translateY( -50% );
                     border-top: 1px solid $tab_border_color;
                     border-right: 1px solid $tab_border_color;
+                    opacity: 0;
+                    transition: all .3s ease;
                 }
 
                 &.active {
                     color: $tab_active_color;
                     &:after {
-                        border-top-color:  $tab_border_color;
-                        border-right-color:  $tab_border_color;
+                        opacity: 1;
+                        border-top-color:  $tab_active_color;
+                        border-right-color:  $tab_active_color;
                     }
                 }
 
@@ -99,7 +105,8 @@ $tab_active_color: #d7883a;
         }
     }
 
+}
 
-
-
+.woocommerce-Reviews-title {
+    display: none;
 }
