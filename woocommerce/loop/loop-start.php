@@ -21,10 +21,10 @@ if ( $tablet > $columns ) {
 }
 $mobile = wc_get_loop_prop( 'mobile_columns' , 1 );
 if ( $mobile > $tablet ) {
-	$tablet = $mobile;
+	$mobile = $tablet;
 }
 
-$class = sprintf( "customify-grid-{$columns}_md-{$tablet}_sm-{$mobile}" );
+$class = sprintf( "customify-grid-{$columns}_md-{$columns}_sm-{$tablet}_xs-{$mobile}" );
 
 ?>
 <ul class="products <?php echo esc_attr( $class ); ?>">

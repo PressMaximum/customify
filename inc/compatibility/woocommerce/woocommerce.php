@@ -59,7 +59,6 @@ class Customify_WC {
             // Change number repleate product
             // wc_set_loop_prop( 'name', 'related' );
             add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
-            add_filter( 'woocommerce_related_products_columns',  array( $this, 'related_products_columns' ) );
             add_filter( 'woocommerce_output_related_products_args',  array( $this, 'related_products_args' ) );
 
 	        // Catalog config
@@ -81,7 +80,20 @@ class Customify_WC {
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
         } elseif ( $name == 'related' ) {
+            $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
+            $columns = wp_parse_args( $columns, array(
+                    'desktop' => 3,
+                    'tablet' => 3,
+                    'mobile' => 1
+            ) );
 
+            if ( ! $columns ) {
+	            $columns['desktop'] = 3;
+            }
+
+	        wc_set_loop_prop( 'columns', $columns['desktop'] );
+	        wc_set_loop_prop( 'tablet_columns', $columns['tablet'] );
+	        wc_set_loop_prop( 'mobile_columns', $columns['mobile'] );
         }
 
     }
@@ -95,7 +107,7 @@ class Customify_WC {
 	 * @return mixed
 	 */
     function related_products_args( $args ) {
-	    $args ['posts_per_page'] = 3;
+	    $args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_related_number' );
 	    return $args;
     }
 
