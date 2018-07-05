@@ -4,8 +4,7 @@
  */
 .widget-area {
     .widget {
-        ul.cart_list,
-        ul.product_list_widget {
+        .cart_list {
             list-style: none outside;
             padding: 0;
             margin: 0;
@@ -13,8 +12,9 @@
                 display: block;
             }
             li {
-                margin: 0;
+                margin: 0 0px 0px;
                 list-style: none;
+                padding: 0px 0px 10px;
                 a {
                     display: block;
                     line-height: 1.2;
@@ -32,6 +32,7 @@
                     width: 50px;
                     height: auto;
                     box-shadow: none;
+                    position: relative;
                 }
 
                 dl {
@@ -70,7 +71,6 @@
         }
     }
 
-    .widget_shopping_cart,
     .widget_shopping_cart {
         a.remove {
             position: absolute;
@@ -80,6 +80,7 @@
             height: 15px;
             display: block;
         }
+
         a {
             text-decoration: none;
         }
@@ -109,8 +110,6 @@
             padding-right: 20px;
             position: relative;
             padding-top: 10px;
-            padding-bottom: 10px;
-            margin-bottom: 0px;
             border-bottom: 1px solid #eaecee;
         }
         .cart_list {

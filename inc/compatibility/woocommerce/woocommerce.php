@@ -55,11 +55,58 @@ class Customify_WC {
 
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
+            add_filter( 'post_class',  array( $this, 'post_class' ) );
+            // Change number repleate product
+            // wc_set_loop_prop( 'name', 'related' );
+            add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
+            add_filter( 'woocommerce_related_products_columns',  array( $this, 'related_products_columns' ) );
+            add_filter( 'woocommerce_output_related_products_args',  array( $this, 'related_products_args' ) );
 
-	        // Single product
+	        // Catalog config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog.php';
+	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
 
         }
+    }
+
+    function loop_start(){
+
+	    /**
+	     * @see wc_set_loop_prop
+	     */
+
+        $name = wc_get_loop_prop( 'name' );
+        if ( ! $name ) { // main loop
+            wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
+            wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
+        } elseif ( $name == 'related' ) {
+
+        }
+
+    }
+
+
+	/**
+     * Custom number related products
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+    function related_products_args( $args ) {
+	    $args ['posts_per_page'] = 3;
+	    return $args;
+    }
+
+
+    function related_products_columns(){
+        return 3;
+    }
+
+    function post_class( $classes ){
+        $classes[] = 'customify-col';
+        return $classes;
     }
 
     function body_class( $classes ){
@@ -121,7 +168,6 @@ class Customify_WC {
 
 		return $selector;
 	}
-
 
 
     function wp(){

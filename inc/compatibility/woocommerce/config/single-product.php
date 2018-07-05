@@ -89,11 +89,11 @@ class Customify_WC_Single_Product {
 		);
 
 		$configs[] = array(
-			'name' => "{$section}_tabs_v_styling",
+			'name' => "{$section}_tabs_styling",
 			'type' => 'modal',
 			'default' => 1,
 			'section' =>  $section,
-			'label' => __( 'Tabs Vertical Styling', 'customify' ),
+			'label' => __( 'Tabs Styling', 'customify' ),
 			'selector' => '.wc-single-tabs',
 			'css_format' => 'styling',
 			'fields' => array(
@@ -102,21 +102,18 @@ class Customify_WC_Single_Product {
 					'active' => __( 'Active', 'customify' ),
 				),
 				'default_fields' => array(
-
 					array(
 						'name'       => 'color',
 						'type'       => 'color',
 						'label'      => __('Color', 'customify'),
 						'selector'    => "format",
-						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li { color: {{value}}; }',
+						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs li { color: {{value}}; }',
 					),
-
 					array(
 						'name'  => 'border_heading',
 						'type'  => 'heading',
 						'label' => __('Border', 'customify'),
 					),
-
 					array(
 						'name'       => 'border_style',
 						'type'       => 'select',
@@ -135,7 +132,7 @@ class Customify_WC_Single_Product {
 							'inset'  => __('Inset', 'customify'),
 							'outset' => __('Outset', 'customify'),
 						),
-						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li { border-bottom-style: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child { border-top-style: {{value}}; }',
+						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs { border-bottom-style: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child { border-top-style: {{value}}; }',
 					),
 
 					array(
@@ -148,7 +145,7 @@ class Customify_WC_Single_Product {
 							array( 'border_style', '!=', '' )
 						),
 						'selector'    => "format",
-						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li { border-bottom-width: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child {border-top-width: {{value}}; }',
+						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs { border-bottom-width: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child {border-top-width: {{value}}; }',
 					),
 					array(
 						'name'       => 'border_color',
@@ -159,9 +156,9 @@ class Customify_WC_Single_Product {
 							array( 'border_style', '!=', 'none' ),
 							array( 'border_style', '!=', '' )
 						),
-						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li { border-bottom-color: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child{ border-top-color: {{value}}; }',
+						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs li, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs { border-bottom-color: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li:first-child{ border-top-color: {{value}}; }',
 					),
-					
+
 				),
 				'active_fields' => array(
 					array(
@@ -169,11 +166,28 @@ class Customify_WC_Single_Product {
 						'type'       => 'color',
 						'label'      => __('Active Color', 'customify'),
 						'selector'    => "format",
-						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li { color: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active:after { border-right-color: {{value}}; border-top-color: {{value}};  }',
+						'css_format' => '.woocommerce-tabs.wc-tabs-vertical .tabs.wc-tabs li.active, .woocommerce-tabs.wc-tabs-horizontal .tabs.wc-tabs li.active { color: {{value}}; } .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active:after { border-right-color: {{value}}; border-top-color: {{value}};  }',
 					),
 				)
 			),
 
+		);
+
+		$configs[] = array(
+			'name' => "{$section}_related_number",
+			'type' => 'text',
+			'default'=> 3,
+			'section' =>  $section,
+			'label' => __( 'Number related products', 'customify' ),
+		);
+
+
+		$configs[] = array(
+			'name' => "{$section}_related_columns",
+			'type' => 'text',
+			'device_settings'=> true,
+			'section' =>  $section,
+			'label' => __( 'Related products per row', 'customify' ),
 		);
 
 

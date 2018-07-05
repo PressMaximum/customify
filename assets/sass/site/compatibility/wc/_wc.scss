@@ -453,14 +453,13 @@ p.demo_store,
      */
     .products ul,
     ul.products {
-        margin: 0 0 1em;
+        margin: 0 -1em 0;
         padding: 0;
         list-style: none outside;
         clear: both;
-        @include clearfix();
-
         li {
             list-style: none outside;
+            margin: 1em 0px;
         }
     }
 
@@ -1417,7 +1416,7 @@ p.demo_store,
             z-index: 2;
             width: 1em;
             height: 1em;
-            background-color: $primary;
+            background-color: $color_primary;
             border-radius: 1em;
             cursor: ew-resize;
             outline: none;
@@ -1433,12 +1432,12 @@ p.demo_store,
             display: block;
             border: 0;
             border-radius: 1em;
-            background-color: $primary;
+            background-color: $color_primary;
         }
 
         .price_slider_wrapper .ui-widget-content {
             border-radius: 1em;
-            background-color: $primary;
+            background-color: $color_border;
             border: 0;
         }
 
@@ -1999,50 +1998,4 @@ p.demo_store,
     display: block;
 }
 
-/**
- * Twenty Eleven specific styles
- */
-#content.twentyeleven .woocommerce-pagination a {
-    font-size: 1em;
-    line-height: 1;
-}
 
-/**
- * Twenty Thirteen specific styles
- */
-.single-product .twentythirteen {
-    .entry-summary,
-    #reply-title,
-    #respond #commentform {
-        padding: 0;
-    }
-
-    p.stars {
-        clear: both;
-    }
-}
-
-.twentythirteen .woocommerce-breadcrumb {
-    padding-top: 40px;
-}
-
-/**
- * Twenty Fourteen specific styles
- */
-.twentyfourteen ul.products li.product {
-    margin-top: 0 !important;
-}
-
-/**
- * Twenty Sixteen specific styles
- */
-body:not( .search-results ) .twentysixteen .entry-summary {
-    color: inherit;
-    font-size: inherit;
-    line-height: inherit;
-}
-
-.twentysixteen .price ins {
-    background: inherit;
-    color: inherit;
-}
