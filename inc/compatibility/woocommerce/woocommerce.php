@@ -117,7 +117,9 @@ class Customify_WC {
     }
 
     function post_class( $classes ){
-        $classes[] = 'customify-col';
+        if ( get_post_type( ) == 'product' ) {
+	        $classes[] = 'customify-col';
+        }
         return $classes;
     }
 
