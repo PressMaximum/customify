@@ -176,7 +176,13 @@ class Customify_WC {
         .woocommerce #respond input#submit:hover, 
         .woocommerce  a.button:hover, 
         .woocommerce  button.button:hover, 
-        .woocommerce  input.button:hover {
+        .woocommerce  input.button:hover,
+        
+        .woocommerce .site #respond input#submit.alt,
+        .woocommerce .site a.button.alt, 
+        .woocommerce .site button.button.alt,
+        .woocommerce .site input.button.alt
+       {
             background-color: {{value}};
         }';
 

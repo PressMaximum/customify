@@ -19,6 +19,11 @@ $tablet = wc_get_loop_prop( 'tablet_columns' , 2 );
 if ( $tablet > $columns && $columns > 1 ) {
 	$tablet = $columns;
 }
+
+if ( ! $tablet ) {
+	$tablet = $columns;
+}
+
 $mobile = wc_get_loop_prop( 'mobile_columns' , 1 );
 if ( $mobile > $tablet  && $tablet > 1) {
 	$mobile = $tablet;

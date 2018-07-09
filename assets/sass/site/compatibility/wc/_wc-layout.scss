@@ -7,7 +7,15 @@
  */
 .wc-product-inner {
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	.wc-product-footer {
+		margin-top: auto;
+		margin-bottom: 0px;
+	}
 }
+
 .wc-loop-cats-separator {
 	clear: both !important;; flex: none !important;
 	display: block !important;

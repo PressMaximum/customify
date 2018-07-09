@@ -195,6 +195,13 @@ $gl-devices-list: (
  */
 .wc-product-inner {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.wc-product-inner .wc-product-footer {
+  margin-top: auto;
+  margin-bottom: 0px;
 }
 
 .wc-loop-cats-separator {
@@ -636,6 +643,24 @@ $gl-devices-list: (
 }
 .product_list_widget li li {
   margin-bottom: 15px;
+}
+
+.woocommerce-product-search {
+  position: relative;
+}
+.woocommerce-product-search .search-field {
+  width: 100%;
+  margin: 0px;
+  padding-right: 45px;
+}
+.woocommerce-product-search button {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  background: none;
+  color: currentColor;
+  padding: 12px;
 }
 
 /**
@@ -1456,6 +1481,7 @@ p.demo_store a,
   left: -0.5em;
   margin: 0;
   border-radius: 100%;
+  line-height: 1;
   background-color: #77a464;
   color: white;
   font-size: 0.857em;
@@ -1506,7 +1532,8 @@ p.demo_store a,
   font-size: 0.857em;
 }
 .woocommerce ul.products li.product .button {
-  margin-top: 1em;
+  margin-top: auto;
+  margin-bottom: 0px;
 }
 .woocommerce ul.products li.product .price {
   color: #77a464;
@@ -1593,8 +1620,6 @@ p.demo_store a,
   font-weight: 700;
   border-radius: 3px;
   left: auto;
-  color: #515151;
-  background-color: #ebe9eb;
   border: 0;
   display: inline-block;
   background-image: none;
@@ -1634,47 +1659,14 @@ p.demo_store a,
 .woocommerce button.button:hover,
 .woocommerce input.button:hover,
 .woocommerce #respond input#submit:hover {
-  background-color: #ebe9eb;
   text-decoration: none;
   background-image: none;
-  color: #515151;
 }
 .woocommerce a.button.alt,
 .woocommerce button.button.alt,
 .woocommerce input.button.alt,
 .woocommerce #respond input#submit.alt {
-  background-color: #a46497;
-  color: white;
   -webkit-font-smoothing: antialiased;
-}
-.woocommerce a.button.alt:hover,
-.woocommerce button.button.alt:hover,
-.woocommerce input.button.alt:hover,
-.woocommerce #respond input#submit.alt:hover {
-  background-color: #a46497;
-  color: white;
-}
-.woocommerce a.button.alt.disabled, .woocommerce a.button.alt:disabled, .woocommerce a.button.alt:disabled[disabled], .woocommerce a.button.alt.disabled:hover, .woocommerce a.button.alt:disabled:hover, .woocommerce a.button.alt:disabled[disabled]:hover,
-.woocommerce button.button.alt.disabled,
-.woocommerce button.button.alt:disabled,
-.woocommerce button.button.alt:disabled[disabled],
-.woocommerce button.button.alt.disabled:hover,
-.woocommerce button.button.alt:disabled:hover,
-.woocommerce button.button.alt:disabled[disabled]:hover,
-.woocommerce input.button.alt.disabled,
-.woocommerce input.button.alt:disabled,
-.woocommerce input.button.alt:disabled[disabled],
-.woocommerce input.button.alt.disabled:hover,
-.woocommerce input.button.alt:disabled:hover,
-.woocommerce input.button.alt:disabled[disabled]:hover,
-.woocommerce #respond input#submit.alt.disabled,
-.woocommerce #respond input#submit.alt:disabled,
-.woocommerce #respond input#submit.alt:disabled[disabled],
-.woocommerce #respond input#submit.alt.disabled:hover,
-.woocommerce #respond input#submit.alt:disabled:hover,
-.woocommerce #respond input#submit.alt:disabled[disabled]:hover {
-  background-color: #a46497;
-  color: white;
 }
 .woocommerce a.button:disabled, .woocommerce a.button.disabled, .woocommerce a.button:disabled[disabled],
 .woocommerce button.button:disabled,
@@ -1702,7 +1694,6 @@ p.demo_store a,
 .woocommerce #respond input#submit.disabled:hover,
 .woocommerce #respond input#submit:disabled[disabled]:hover {
   color: inherit;
-  background-color: #ebe9eb;
 }
 .woocommerce .cart .button,
 .woocommerce .cart input.button {

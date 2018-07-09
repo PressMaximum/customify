@@ -73,3 +73,22 @@
         }
     }
 }
+
+// Search
+.woocommerce-product-search {
+    position: relative;
+    .search-field {
+        width: 100%;
+        margin: 0px;
+        padding-right: 45px;
+    }
+    button {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        bottom: 0px;
+        background: none;
+        color: currentColor;
+        padding: 12px;
+    }
+}

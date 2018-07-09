@@ -441,6 +441,7 @@ p.demo_store,
         left: -0.5em;
         margin: 0;
         border-radius: 100%;
+        line-height: 1;
         background-color: $highlight;
         color: $highlightext;
         font-size: 0.857em;
@@ -502,7 +503,8 @@ p.demo_store,
         }
 
         .button {
-            margin-top: 1em;
+            margin-top: auto;
+            margin-bottom: 0px;
         }
 
         .price {
@@ -606,14 +608,11 @@ p.demo_store,
         font-weight: 700;
         border-radius: 3px;
         left: auto;
-        color: $secondarytext;
-        background-color: $secondary;
         border: 0;
         display: inline-block;
         background-image: none;
         box-shadow: none;
         text-shadow: none;
-
         &.loading {
             opacity: 0.25;
             padding-right: 2.618em;
@@ -638,20 +637,14 @@ p.demo_store,
         }
 
         &:hover {
-            background-color: $secondary ;
             text-decoration: none;
             background-image: none;
-            color: $secondarytext;
         }
 
         &.alt {
-            background-color: $primary;
-            color: $primarytext;
             -webkit-font-smoothing: antialiased;
 
             &:hover {
-                background-color: $primary ;
-                color: $primarytext;
             }
 
             &.disabled,
@@ -660,8 +653,7 @@ p.demo_store,
             &.disabled:hover,
             &:disabled:hover,
             &:disabled[disabled]:hover {
-                background-color: $primary;
-                color: $primarytext;
+
             }
         }
 
@@ -675,7 +667,6 @@ p.demo_store,
 
             &:hover {
                 color: inherit;
-                background-color: $secondary;
             }
         }
     }
