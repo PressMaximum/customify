@@ -46,7 +46,7 @@ $gl-devices-list: (
 
 /* Sale on badge */
 .woocommerce span.onsale {
-  padding: 0.202em 0.602em;
+  padding: .202em .602em;
 }
 
 /* Disable button */
