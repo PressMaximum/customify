@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.1.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-07-09 03:57:16+00:00\n"
+"POT-Creation-Date: 2018-07-09 08:35:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,11 +24,11 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n1.0.2\n"
 
-#: 404.php:16
+#: 404.php:19
 msgid "Oops! That page can&rsquo;t be found."
 msgstr ""
 
-#: 404.php:20
+#: 404.php:23
 msgid ""
 "It looks like nothing was found at this location. Maybe try one of the "
 "links below or a search?"
@@ -77,24 +77,24 @@ msgstr ""
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:123 inc/customizer/configs/header/panel.php:13
-#: inc/customizer/configs/header/panel.php:50
-#: inc/customizer/configs/header/panel.php:58
+#: inc/admin/dashboard.php:123 inc/customizer/configs/header/panel.php:11
+#: inc/customizer/configs/header/panel.php:48
+#: inc/customizer/configs/header/panel.php:56
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:127 inc/customizer/configs/footer/panel.php:13
-#: inc/customizer/configs/footer/panel.php:126
-#: inc/customizer/configs/footer/panel.php:134
+#: inc/admin/dashboard.php:127 inc/customizer/configs/footer/panel.php:11
+#: inc/customizer/configs/footer/panel.php:124
+#: inc/customizer/configs/footer/panel.php:132
 msgid "Footer Builder"
 msgstr ""
 
 #: inc/admin/dashboard.php:131 inc/compatibility/breadcrumb.php:198
 #: inc/customizer/configs/blogs.php:337
-#: inc/customizer/configs/footer/panel.php:211
+#: inc/customizer/configs/footer/panel.php:209
 #: inc/customizer/configs/header/button.php:107
-#: inc/customizer/configs/header/panel.php:135
-#: inc/customizer/configs/header/panel.php:234
+#: inc/customizer/configs/header/panel.php:133
+#: inc/customizer/configs/header/panel.php:232
 #: inc/customizer/configs/styling.php:14
 msgid "Styling"
 msgstr ""
@@ -310,8 +310,8 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: inc/class-metabox.php:173 inc/customizer/configs/footer/panel.php:182
-#: inc/customizer/configs/header/panel.php:103
+#: inc/class-metabox.php:173 inc/customizer/configs/footer/panel.php:180
+#: inc/customizer/configs/header/panel.php:101
 #: inc/customizer/configs/layouts.php:35
 msgid "Full Width"
 msgstr ""
@@ -601,7 +601,7 @@ msgid "Link Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:414
-#: inc/customizer/configs/header/panel.php:338
+#: inc/customizer/configs/header/panel.php:336
 msgid "Margin"
 msgstr ""
 
@@ -803,8 +803,8 @@ msgid "Site Background"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:27 inc/customizer/configs/blogs.php:34
-#: inc/customizer/configs/footer/panel.php:175
-#: inc/customizer/configs/header/panel.php:96
+#: inc/customizer/configs/footer/panel.php:173
+#: inc/customizer/configs/header/panel.php:94
 msgid "Layout"
 msgstr ""
 
@@ -999,58 +999,58 @@ msgstr ""
 msgid "Copyright Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:18
+#: inc/customizer/configs/footer/panel.php:16
 msgid "Footer Layout"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:27
+#: inc/customizer/configs/footer/panel.php:25
 msgid "Footer Main"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:28
+#: inc/customizer/configs/footer/panel.php:26
 msgid "Footer Bottom"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:40
+#: inc/customizer/configs/footer/panel.php:38
 msgid "Footer"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:48
+#: inc/customizer/configs/footer/panel.php:46
 msgid "General Settings"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:55
+#: inc/customizer/configs/footer/panel.php:53
 msgid "Footer Styling"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:90
+#: inc/customizer/configs/footer/panel.php:88
 msgid "Footer Typography"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:99
+#: inc/customizer/configs/footer/panel.php:97
 msgid "Widget Title Styling"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:117
+#: inc/customizer/configs/footer/panel.php:115
 msgid "Widget Title Typography"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:154
+#: inc/customizer/configs/footer/panel.php:152
 msgid "Footer Top"
+msgstr ""
+
+#: inc/customizer/configs/footer/panel.php:179
+#: inc/customizer/configs/header/panel.php:100
+msgid "Full width - Contained"
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:181
 #: inc/customizer/configs/header/panel.php:102
-msgid "Full width - Contained"
-msgstr ""
-
-#: inc/customizer/configs/footer/panel.php:183
-#: inc/customizer/configs/header/panel.php:104
 msgid "Contained"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:192
-#: inc/customizer/configs/header/panel.php:113
+#: inc/customizer/configs/footer/panel.php:190
+#: inc/customizer/configs/header/panel.php:111
 msgid ""
 "Layout <code>Full width - Contained</code> and <code>Full Width</code> will "
 "not fit browser width because you've selected <a class='focus-control' "
@@ -1058,14 +1058,14 @@ msgid ""
 "<code>Framed</code>"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:204
+#: inc/customizer/configs/footer/panel.php:202
 #: inc/customizer/configs/styling.php:268
 msgid "Widget Title Color"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:212
-#: inc/customizer/configs/header/panel.php:136
-#: inc/customizer/configs/header/panel.php:235
+#: inc/customizer/configs/footer/panel.php:210
+#: inc/customizer/configs/header/panel.php:134
+#: inc/customizer/configs/header/panel.php:233
 msgid "Advanced styling for %s"
 msgstr ""
 
@@ -1241,7 +1241,7 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
-#: inc/customizer/configs/header/panel.php:364
+#: inc/customizer/configs/header/panel.php:362
 #: inc/customizer/configs/layouts.php:48 inc/customizer/configs/layouts.php:149
 msgid "No"
 msgstr ""
@@ -1381,90 +1381,90 @@ msgstr ""
 msgid "Color Hover"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:18
+#: inc/customizer/configs/header/panel.php:16
 msgid "Desktop"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:19
+#: inc/customizer/configs/header/panel.php:17
 msgid "Mobile/Tablet"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:27
-#: inc/customizer/configs/header/panel.php:75
+#: inc/customizer/configs/header/panel.php:25
+#: inc/customizer/configs/header/panel.php:73
 msgid "Header Top"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:28
+#: inc/customizer/configs/header/panel.php:26
 msgid "Header Main"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:29
+#: inc/customizer/configs/header/panel.php:27
 msgid "Header Bottom"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:30
+#: inc/customizer/configs/header/panel.php:28
 msgid "Menu Sidebar"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:43
+#: inc/customizer/configs/header/panel.php:41
 msgid "Header"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:128
+#: inc/customizer/configs/header/panel.php:126
 msgid "Height"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:200
+#: inc/customizer/configs/header/panel.php:198
 msgid "Display Type"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:203
+#: inc/customizer/configs/header/panel.php:201
 msgid "Slide From Left"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:204
+#: inc/customizer/configs/header/panel.php:202
 msgid "Slide From Right"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:205
+#: inc/customizer/configs/header/panel.php:203
 msgid "Full-screen Overlay"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:206
+#: inc/customizer/configs/header/panel.php:204
 msgid "Toggle Dropdown"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:217
+#: inc/customizer/configs/header/panel.php:215
 msgid "Text Mode Color"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:284
+#: inc/customizer/configs/header/panel.php:282
 msgid "Do not copy parent menu to submenu."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:322
+#: inc/customizer/configs/header/panel.php:320
 msgid "Item Layout"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:349
+#: inc/customizer/configs/header/panel.php:347
 msgid "Align"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:361
+#: inc/customizer/configs/header/panel.php:359
 msgid "Merge Item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:362
+#: inc/customizer/configs/header/panel.php:360
 msgid ""
 "If you choose to merge this item, the alignment setting will inherit from "
 "the item you are merging."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:365
+#: inc/customizer/configs/header/panel.php:363
 msgid "Merge with left item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:366
+#: inc/customizer/configs/header/panel.php:364
 msgid "Merge with right item"
 msgstr ""
 
