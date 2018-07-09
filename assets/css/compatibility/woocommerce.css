@@ -193,6 +193,17 @@ $gl-devices-list: (
 /**
  * Styling begins
  */
+.wc-product-inner {
+  position: relative;
+}
+
+.wc-loop-cats-separator {
+  clear: both !important;
+  flex: none !important;
+  display: block !important;
+  width: 100%;
+}
+
 .woocommerce, .woocommerce-page {
   /**
    * General layout styles
@@ -1437,7 +1448,6 @@ p.demo_store a,
   min-height: 3.236em;
   min-width: 3.236em;
   padding: 0.202em;
-  font-size: 1em;
   font-weight: 700;
   position: absolute;
   text-align: center;
@@ -1450,6 +1460,9 @@ p.demo_store a,
   color: white;
   font-size: 0.857em;
   z-index: 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .woocommerce .products ul,
 .woocommerce ul.products {

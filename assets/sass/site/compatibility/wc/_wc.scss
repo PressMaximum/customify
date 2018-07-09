@@ -433,7 +433,6 @@ p.demo_store,
         min-height: 3.236em;
         min-width: 3.236em;
         padding: 0.202em;
-        font-size: 1em;
         font-weight: 700;
         position: absolute;
         text-align: center;
@@ -446,6 +445,9 @@ p.demo_store,
         color: $highlightext;
         font-size: 0.857em;
         z-index: 9;
+        display: flex;
+        align-items: center ;
+        justify-content: center;
     }
 
     /**

@@ -56,6 +56,10 @@ class Customify_WC {
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
             add_filter( 'post_class',  array( $this, 'post_class' ) );
+            //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
+            add_filter( 'product_cat_class',  array( $this, 'post_class' ) );
+
+
             // Change number repleate product
             // wc_set_loop_prop( 'name', 'related' );
             add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
@@ -65,20 +69,25 @@ class Customify_WC {
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+	        // Template Hooks
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
         }
     }
 
+	/**
+	 * Custom number layout
+	 */
     function loop_start(){
 
 	    /**
 	     * @see wc_set_loop_prop
 	     */
-
         $name = wc_get_loop_prop( 'name' );
         if ( ! $name ) { // main loop
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
+
         } elseif ( $name == 'related' ) {
             $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
             $columns = wp_parse_args( $columns, array(
@@ -117,7 +126,7 @@ class Customify_WC {
     }
 
     function post_class( $classes ){
-        if ( get_post_type( ) == 'product' ) {
+        if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
 	        $classes[] = 'customify-col';
         }
         return $classes;
@@ -129,7 +138,7 @@ class Customify_WC {
     }
 
     /**
-     * Set WooCommerce image dimensions upon theme activation
+     * Load load theme styling instead.
      */
     function custom_styles( $enqueue_styles ) {
 
@@ -351,6 +360,7 @@ class Customify_WC {
     function customize_shop_sidebars( $configs = array() ){
         return $configs;
     }
+
     function register_sidebars(){
         register_sidebar( array(
             'name'          => esc_html__( 'WooCommerce Primary Sidebar', 'customify' ),

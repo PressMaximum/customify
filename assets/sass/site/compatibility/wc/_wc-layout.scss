@@ -5,6 +5,15 @@
 /**
  * Styling begins
  */
+.wc-product-inner {
+	position: relative;
+}
+.wc-loop-cats-separator {
+	clear: both !important;; flex: none !important;
+	display: block !important;
+	width: 100%;
+}
+
 .woocommerce, .woocommerce-page {
 
 	.woocommerce-message,
