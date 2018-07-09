@@ -69,7 +69,7 @@ module.exports = function( grunt ) {
         sass: {
             options: {
                 precision: 10,
-                sourcemap: 'auto'
+                //sourcemap: 'auto'
             },
             dist: {
                 options: {
