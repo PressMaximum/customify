@@ -45,6 +45,11 @@
 		div.images {
 			float: left;
 			width: 48%;
+			@include for_device( mobile ){
+				width: 100%;
+				float: none;
+				order: 5;
+			}
 		}
 
 		div.thumbnails {
@@ -96,6 +101,12 @@
 			float: right;
 			width: 48%;
 			clear: none;
+
+			@include for_device( mobile ){
+				order: 1;
+				width: 100%;
+				float: none;
+			}
 		}
 
 		#reviews {
