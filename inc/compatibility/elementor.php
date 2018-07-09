@@ -1,0 +1,18 @@
+<?php
+
+function customify_is_e_theme_location( $location ){
+    $is_exist = function_exists( 'elementor_theme_do_location' );
+    if ( $is_exist ) {
+        return elementor_theme_do_location( $location );
+    }
+    return false;
+}
+
+if ( defined( 'ELEMENTOR_VERSION' ) ) {
+    add_action('elementor/theme/register_locations', 'customify_elementor_register_locations');
+    function customify_elementor_register_locations($elementor_theme_manager)
+    {
+        $elementor_theme_manager->register_all_core_location();
+    }
+}
+

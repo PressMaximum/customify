@@ -16,14 +16,19 @@
     </div><!-- #.customify-container -->
 </div><!-- #content -->
 <?php
-/**
- * Site end
- *
- * @hooked customify_customize_render_footer - 10
- *
- * @see customify_customize_render_footer
- */
-do_action( 'customify/site-end' );
+do_action( 'customify/site-end/before' );
+if ( ! customify_is_e_theme_location( 'footer' ) ) {
+    /**
+     * Site end
+     *
+     * @hooked customify_customize_render_footer - 10
+     *
+     * @see customify_customize_render_footer
+     */
+    do_action( 'customify/site-end' );
+}
+do_action( 'customify/site-end/after' );
+
 ?>
 </div><!-- #page -->
 

@@ -42,11 +42,11 @@ jQuery( document ).ready( function( $ ){
                 var first_a = $(' > a', $el);
                 var d = first_a.clone();
                 if (is_previewing) {
-                    first_a.attr('href', 'javascript:;');
+                   // first_a.attr('href', 'javascript:;');
                 }
                 first_a.append('<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>');
                 $(' > .sub-menu', $el).prepend(d);
-                $(' > .sub-menu', $el).slideUp(0);
+                $(' > .sub-menu, .sub-lv-0', $el).slideUp(0);
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
@@ -54,11 +54,11 @@ jQuery( document ).ready( function( $ ){
     };
 
     // Toggle sub menu
-    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a > .nav-toggle-icon', function( e ){
         e.preventDefault();
         var li = $( this ).closest('li');
         li.toggleClass('open-sub');
-        $( ' > ul.sub-menu', li ).slideToggle( 500 );
+        $( ' > ul.sub-menu, .sub-lv-0', li ).slideToggle( 500 );
     } );
 
     var insertMenuOverlayClass = function() {

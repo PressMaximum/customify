@@ -1,7 +1,5 @@
 <?php
 
-Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
-
 class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
 {
     public $id = 'footer';
@@ -270,5 +268,8 @@ function customify_footer_layout_settings( $item_id, $section ){
 
     return false;
 }
+
+Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
+
 
 
