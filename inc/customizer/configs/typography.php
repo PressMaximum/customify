@@ -28,7 +28,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 		        'title' => __('Body & Paragraph', 'customify'),
 		        'description' => __('Apply to body and paragraph text.', 'customify'),
 		        'css_format' => 'typography',
-		        'selector' => 'body, p, button, input, select, optgroup, textarea',
+		        'selector' => 'body, body p, body button, body input, body select, body optgroup, body textarea, body div',
 	        ),
 
             array(
@@ -38,7 +38,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'title' => __('Heading', 'customify'),
                 'description' => __('Apply to all heading elements.', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'h1,h2,h3,h4,h5,h6,.h1,.h2,.h3',
+                'selector' => 'body h1, body h2, body h3, body h4, body h5, body h6, body .h1, body .h2,body .h3',
                 'fields' => array(
                     'font_size' => false,
                     'line_height' => false,

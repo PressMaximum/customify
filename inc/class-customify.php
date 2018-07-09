@@ -436,6 +436,7 @@ class Customify {
     private function load_compatibility(){
 
         $compatibility_config_files = array(
+            'elementor',         // Plugin breadcrumb-navxt & Yoat Seo
             'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo
             'woocommerce/woocommerce',  // Plugin WooCommerce
         );
@@ -529,19 +530,19 @@ class Customify {
 
     function get_post_types( $_builtin = true ){
         if ( $_builtin === 'all' ) {
-            $post_type_args = [
+            $post_type_args = array(
                 'publicly_queryable' => true,
-            ];
+            );
         } else {
-            $post_type_args = [
+            $post_type_args = array(
                 'publicly_queryable' => true,
                 '_builtin' => $_builtin,
-            ];
+            );
         }
 
         $_post_types = get_post_types( $post_type_args , 'objects' );
 
-        $post_types  = [];
+        $post_types  = array();
 
         foreach ( $_post_types as $post_type => $object ) {
             $post_types[ $post_type ] = array(

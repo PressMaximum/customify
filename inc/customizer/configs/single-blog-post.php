@@ -191,7 +191,4 @@ if (!function_exists('customify_customizer_single_blog_config')) {
     }
 }
 
-
-
-
 add_filter('customify/customizer/config', 'customify_customizer_single_blog_config' );
