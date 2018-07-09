@@ -69,6 +69,8 @@ module.exports = function( grunt ) {
         sass: {
             options: {
                 precision: 10,
+                unixNewlines: true
+                //noCache: true
                 //sourcemap: 'auto'
             },
             dist: {
