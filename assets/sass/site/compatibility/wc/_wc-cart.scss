@@ -80,9 +80,17 @@
             height: 15px;
             display: block;
         }
-
         a {
             text-decoration: none;
+            flex-basis: 50%;
+            margin: 0px 8px;
+            text-align: center;
+            &:first-child {
+                margin-left: 0px;
+            }
+            &:last-child {
+                margin-right: 0px;
+            }
         }
         .wc-product-thumbnail {
             display: block;
