@@ -67,6 +67,8 @@ class Customify_WC {
 
 	        // Catalog config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog.php';
+	        // Product catalog designer
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
 	        // Template Hooks
@@ -447,6 +449,8 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
         } else { ?>
 
+            <div class="wc-product-listing">
+
             <?php if ( Customify_WC()->show_shop_title() ) { ?>
                 <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
                     <h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
@@ -474,7 +478,9 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
                 <?php do_action( 'woocommerce_no_products_found' ); ?>
 
-            <?php endif;
+            <?php endif; ?>
+            </div>
+            <?php
 
         }
     }

@@ -16,6 +16,42 @@
 	}
 }
 
+// Before listing Products
+.wc-catalog-header {
+	display: flex;
+	align-items: center;
+}
+.wc-view-mod svg {
+	width: 1.2em;
+	height: 1.2em;
+	display: inline-block;
+}
+.wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
+	margin-bottom: 0;
+	display: flex;
+	align-items: center;
+}
+.wc-view-mod {
+	cursor: pointer;
+	padding: 8px;
+	border: 1px solid $color_border;
+	line-height: 1;
+	margin-right: 15px;
+}
+.woocommerce-ordering {
+	border: 1px solid $color_border;
+	padding: 8px 15px;
+	margin-right: 15px;
+	select {
+		border: 0px solid transparent;
+		background: transparent;
+	}
+}
+.woocommerce-result-count {
+	margin-left: auto;
+}
+
+
 .wc-loop-cats-separator {
 	clear: both !important;; flex: none !important;
 	display: block !important;
@@ -133,13 +169,6 @@
 		}
 	}
 
-
-	.woocommerce-result-count {
-		float: left;
-	}
-	.woocommerce-ordering {
-		float: right;
-	}
 
 	.woocommerce-pagination {
 		ul.page-numbers {
