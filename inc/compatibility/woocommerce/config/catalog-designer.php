@@ -147,14 +147,13 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
-
+		// Product title
 		$configs[] = array(
 			'name' =>   'wc_cd_title_h',
 			'type'  => 'heading',
 			'section' =>  $section,
 			'label' => __( 'Product Title', 'customify' ),
 		);
-
 
 		$configs[] = array(
 			'name' =>   'wc_cd_title_typo',
@@ -298,6 +297,166 @@ class Customify_WC_Catalog_Designer {
 						'label'      => __('Background Color', 'customify'),
 						'css_format'    => "background-color: {{value}};",
 						'selector' => '.wc-product__part.wc-product__title:hover',
+					),
+				)
+			)
+		);
+
+		// Product category
+		$configs[] = array(
+			'name' =>   'wc_cd_cat_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Category', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_cat_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.wc-product__part.wc-product__category a',
+			'section' =>  $section,
+			'label' => __( 'Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_cat_styling',
+			'type'  => 'modal',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  '.wc-product__part.wc-product__title',
+			'label' => __( 'Styling', 'customify' ),
+			'fields' => array(
+				'tabs' => array(
+					'default' => __( 'Normal', 'customify' ),
+					'hover' => __( 'Hover', 'customify' ),
+				),
+				'default_fields' => array(
+					array(
+						'name'       => 'color',
+						'type'       => 'color',
+						'label'      => __('Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+					array(
+						'name'       => 'bg_color',
+						'type'       => 'color',
+						'label'      => __('Background Color', 'customify'),
+						'css_format'    => "background-color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+					array(
+						'name'       => 'padding',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Padding', 'customify'),
+						'css_format' => array(
+							'top' => 'padding-top: {{value}};',
+							'bottom' => 'padding-bottom: {{value}};',
+							'left' => 'padding-left: {{value}};',
+							'right' => 'padding-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+					array(
+						'name'       => 'margin',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Margin', 'customify'),
+						'css_format' => array(
+							'top' => 'margin-top: {{value}};',
+							'bottom' => 'margin-bottom: {{value}};',
+							'left' => 'margin-left: {{value}};',
+							'right' => 'margin-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+					array(
+						'name'  => 'border_heading',
+						'type'  => 'heading',
+						'label' => __('Border', 'customify'),
+					),
+					array(
+						'name'       => 'border_style',
+						'type'       => 'select',
+						'class'      => 'clear',
+						'label'      => __('Border Style', 'customify'),
+						'default'    => '',
+						'css_format'    => "border-style: {{value}};",
+						'choices'    => array(
+							''       => __('Default', 'customify'),
+							'none'   => __('None', 'customify'),
+							'solid'  => __('Solid', 'customify'),
+							'dotted' => __('Dotted', 'customify'),
+							'dashed' => __('Dashed', 'customify'),
+							'double' => __('Double', 'customify'),
+							'ridge'  => __('Ridge', 'customify'),
+							'inset'  => __('Inset', 'customify'),
+							'outset' => __('Outset', 'customify'),
+						),
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+
+					array(
+						'name'       => 'border_width',
+						'type'       => 'css_ruler',
+						'label'      => __('Border Width', 'customify'),
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector'    => '.wc-product__part.wc-product__category a',
+						'css_format' => array(
+							'top' => 'border-top-width: {{value}};',
+							'bottom' => 'border-bottom-width: {{value}};',
+							'left' => 'border-left-width: {{value}};',
+							'right' => 'border-right-width: {{value}};',
+						),
+					),
+					array(
+						'name'       => 'border_color',
+						'type'       => 'color',
+						'label'      => __('Border Color', 'customify'),
+						'css_format'    => "border-color: {{value}};",
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+
+					array(
+						'name'       => 'border_color',
+						'type'       => 'slider',
+						'max'       => 100,
+						'label'      => __('Border Radius', 'customify'),
+						'css_format'    => "border-radius: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category a',
+					),
+
+				),
+				'hover_fields' => array(
+					array(
+						'name'       => 'color',
+						'type'       => 'color',
+						'label'      => __('Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category:hover a',
+					),
+					array(
+						'name'       => 'bg_color',
+						'type'       => 'color',
+						'label'      => __('Background Color', 'customify'),
+						'css_format'    => "background-color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category:hover a',
+					),
+					array(
+						'name'       => 'border_color',
+						'type'       => 'color',
+						'label'      => __('Border Color', 'customify'),
+						'css_format'    => "border-color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__category:hover a',
 					),
 				)
 			)

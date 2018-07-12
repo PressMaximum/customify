@@ -228,6 +228,9 @@ $gl-devices-list: (
   margin-top: auto;
   margin-bottom: 0px;
 }
+.wc-product-inner .wc-product__category a {
+  display: inline-block;
+}
 
 .wc-catalog-header {
   display: flex;
