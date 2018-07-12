@@ -270,9 +270,19 @@ $gl-devices-list: (
   border: 0px solid transparent;
   background: transparent;
 }
+@media screen and (max-width: 568px) {
+  .woocommerce-ordering select {
+    width: 100px;
+  }
+}
 
 .woocommerce-result-count {
   margin-left: auto;
+}
+@media screen and (max-width: 568px) {
+  .woocommerce-result-count {
+    display: none;
+  }
 }
 
 .wc-loop-cats-separator {
@@ -282,28 +292,49 @@ $gl-devices-list: (
   width: 100%;
 }
 
+.wc-grid-view .wc-product-contents {
+  text-align: center;
+}
+
 .woocommerce-listing.wc-grid-view .hide-in-grid {
   display: none;
 }
 .woocommerce-listing.wc-list-view .hide-in-list {
   display: none;
 }
-.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) {
+.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) {
   width: 100%;
   flex: none;
   max-width: 999999px;
 }
-.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner {
+.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner {
   flex-direction: row;
 }
-.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media {
+@media screen and (max-width: 568px) {
+  .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner {
+    flex-direction: column;
+  }
+}
+.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media {
   flex-basis: 32%;
   margin-right: 2em;
 }
-.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents {
+@media screen and (max-width: 568px) {
+  .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media {
+    flex-direction: column;
+    flex-basis: 100%;
+    margin-right: 0;
+  }
+}
+.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents {
   flex-basis: 68%;
   display: inline-block;
   flex-direction: column;
+}
+@media screen and (max-width: 568px) {
+  .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents {
+    flex-basis: 100%;
+  }
 }
 
 .woocommerce, .woocommerce-page {

@@ -85,7 +85,13 @@ class Customify_WC_Catalog_Designer {
 			'selector' =>'.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'default' => array(
-
+				array(
+					'_key' => 'category',
+					'_visibility' => '',
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
+					'title' => __('Category', 'customify'),
+				),
 				array(
 					'_visibility' => '',
 					'_key' => 'title',
@@ -94,12 +100,13 @@ class Customify_WC_Catalog_Designer {
 					'show_in_list' => 1,
 				),
 				array(
-					'_key' => 'category',
+					'_key' => 'rating',
 					'_visibility' => '',
 					'show_in_grid' => 1,
 					'show_in_list' => 1,
-					'title' => __('Category', 'customify'),
+					'title' => __('Rating', 'customify'),
 				),
+
 				array(
 					'_key' => 'price',
 					'_visibility' => '',
@@ -143,6 +150,46 @@ class Customify_WC_Catalog_Designer {
 					'checkbox_label' => __('Show in list view', 'customify'),
 				),
 			)
+		);
+
+		// Product tItemitle
+		$configs[] = array(
+			'name' =>   'wc_cd_item_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Settings', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_list_media_width',
+			'type'            => 'slider',
+			'section'         => $section,
+			'unit'         => '%',
+			'max'         => 100,
+			'device_settings' => true,
+			'selector'      => 'format',
+			'css_format'      => '.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media { flex-basis: {{value_no_unit}}%; } .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents{ flex-basis: calc(100% - {{value_no_unit}}%); }',
+			'title'           => __('List View Media Width', 'customify'),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_item_grid_align',
+			'type'            => 'text_align_no_justify',
+			'section'         => $section,
+			'device_settings' => true,
+			'selector'      => '.wc-grid-view .wc-product-contents',
+			'css_format'      => 'text-align: {{value}};',
+			'title'           => __('Grid View Alignment', 'customify'),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_item_list_align',
+			'type'            => 'text_align_no_justify',
+			'section'         => $section,
+			'device_settings' => true,
+			'selector'      => '.wc-list-view .wc-product-contents',
+			'css_format'      => 'text-align: {{value}};',
+			'title'           => __('List View Alignment', 'customify'),
 		);
 
 		// Product title
@@ -299,6 +346,7 @@ class Customify_WC_Catalog_Designer {
 				)
 			)
 		);
+
 
 		// Product category
 		$configs[] = array(
@@ -772,6 +820,7 @@ class Customify_WC_Catalog_Designer {
 	function product__add_to_cart(){
 		woocommerce_template_loop_add_to_cart();
 	}
+
 
 
 

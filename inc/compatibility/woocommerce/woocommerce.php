@@ -424,8 +424,6 @@ if ( Customify()->is_woocommerce_active() ) {
 }
 
 
-
-
 function customify_get_default_catalog_view_mod(){
 	return apply_filters( 'customify_get_default_catalog_view_mod', 'list' ) ;
 }
