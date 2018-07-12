@@ -31,7 +31,9 @@ if ( $mobile > $tablet  && $tablet > 1) {
 	$mobile = 1;
 }
 
+$view = customify_get_default_catalog_view_mod();
 $class = sprintf( "customify-grid-{$columns}_md-{$columns}_sm-{$tablet}_xs-{$mobile}" );
+$class .=' wc-'.$view.'-view';
 
 ?>
 <ul class="products <?php echo esc_attr( $class ); ?>">

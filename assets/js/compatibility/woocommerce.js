@@ -10,6 +10,37 @@ jQuery( document ).ready( function ( $ ) {
     $( document.body ).on( 'added_to_cart', function( event, fragments, cart_hash ) {
         $( '.item--wc_cart' ).addClass( 'cart-active' );
     });
+
+    $( document.body ).on( 'wc_cart_button_updated', function ( e, button ) {
+        var p = button.parent();
+        $( '.added_to_cart', p ).addClass( 'button' );
+
+        var pos = $( '.add_to_cart_button', p ).data('icon-pos') || 'before';
+        var icon = $( '.add_to_cart_button', p ).data('cart-icon') || '';
+        var text = '';
+        var icon_code = '';
+        if ( icon ) {
+            icon_code = '<i class="'+icon+'"></i>';
+        }
+        if ( pos === 'after' ) {
+            if ( icon_code ) {
+                text = wc_add_to_cart_params.i18n_view_cart+' '+icon_code;
+            } else {
+                text = wc_add_to_cart_params.i18n_view_cart;
+            }
+
+        } else {
+            if ( icon_code ) {
+                text = icon_code+' '+wc_add_to_cart_params.i18n_view_cart;
+            } else {
+                text = wc_add_to_cart_params.i18n_view_cart;
+            }
+        }
+
+        $( '.added_to_cart.wc-forward', p ).html( text );
+    } );
+    
+    
     $( document.body ).on( 'hover', '.item--wc_cart', function(){
         $( this ).removeClass( 'cart-active' );
     } );

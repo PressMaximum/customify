@@ -152,7 +152,7 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
-		// Product tItemitle
+		// Product Item
 		$configs[] = array(
 			'name' =>   'wc_cd_item_h',
 			'type'  => 'heading',
@@ -653,6 +653,24 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
+		// Product Rating
+		$configs[] = array(
+			'name' =>   'wc_cd_rating_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Settings', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_rating_color',
+			'type'            => 'color',
+			'section'         => $section,
+			'device_settings' => true,
+			'selector'        => '.wc-product__part.wc-product__rating',
+			'css_format'      => 'color: {{value}};',
+			'title'           => __('Star Color', 'customify'),
+		);
+
 		// Product Add To cart
 		$configs[] = array(
 			'name' =>   'wc_cd_button_h',
@@ -687,6 +705,16 @@ class Customify_WC_Catalog_Designer {
 			'render_callback' => 'woocommerce_content',
 			'section' =>  $section,
 			'label' => __( 'Icon', 'customify' ),
+			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_cart_icon',
+			'type'  => 'icon',
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'label' => __( 'View Cart icon', 'customify' ),
 			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
 		);
 

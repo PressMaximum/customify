@@ -242,7 +242,7 @@ class Customify_WC {
         return $classes;
     }
 
-    function show_shop_header(  $show = true ){
+    function show_shop_header( $show = true ){
         if ( $this->is_shop_pages() ) {
             $disable = $this->get_shop_page_meta( '_customify_disable_header' );
             if ( $disable ) {
@@ -425,6 +425,10 @@ if ( Customify()->is_woocommerce_active() ) {
 
 
 function customify_get_default_catalog_view_mod(){
+    $name = wc_get_loop_prop( 'name' );
+    if (  $name ) {
+	    return apply_filters( 'customify_get_default_catalog_view_mod', 'grid' ) ;
+    }
 	return apply_filters( 'customify_get_default_catalog_view_mod', 'list' ) ;
 }
 
