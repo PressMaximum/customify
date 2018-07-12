@@ -70,3 +70,5 @@ function customify_wc_product_footer(){
 		<?php
 	}
 }
+
+

@@ -6,8 +6,7 @@ class Customify_WC_Catalog_Designer {
 			add_filter( 'Customify_Control_Args', array( $this, 'add_catalog_url' ), 35 );
 		}
 
-
-		// Looop
+		// Loop
 		add_action( 'customify_wc_product_loop', array( $this, 'render' ) );
 
 	}
@@ -16,7 +15,6 @@ class Customify_WC_Catalog_Designer {
 
 		$items = Customify()->get_setting('wc_cd_positions');
 
-		//add_action( 'customify_wc_product_loop', array( $this, 'product__media' ) );
 		$this->product__media();
 
 		echo '<div class="wc-product-contents">';
@@ -427,7 +425,7 @@ class Customify_WC_Catalog_Designer {
 					),
 
 					array(
-						'name'       => 'border_color',
+						'name'       => 'border_radius',
 						'type'       => 'slider',
 						'max'       => 100,
 						'label'      => __('Border Radius', 'customify'),
@@ -462,7 +460,251 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
+		// Product Price
+		$configs[] = array(
+			'name' =>   'wc_cd_price_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Price', 'customify' ),
+		);
 
+		$configs[] = array(
+			'name' =>   'wc_cd_price_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.wc-product__part.wc-product__price',
+			'section' =>  $section,
+			'label' => __( 'Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_r_price_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.wc-product__part.wc-product__price del',
+			'section' =>  $section,
+			'label' => __( 'Regular Price Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_price_styling',
+			'type'  => 'modal',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  '.wc-product__part.wc-product__price',
+			'label' => __( 'Styling', 'customify' ),
+			'fields' => array(
+				'tabs' => array(
+					'default' => __( 'Normal', 'customify' ),
+				),
+				'default_fields' => array(
+					array(
+						'name'       => 'color',
+						'type'       => 'color',
+						'label'      => __('Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__price',
+					),
+					array(
+						'name'       => 'regular_color',
+						'type'       => 'color',
+						'label'      => __('Regular Price Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__price del',
+					),
+					array(
+						'name'       => 'padding',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Padding', 'customify'),
+						'css_format' => array(
+							'top' => 'padding-top: {{value}};',
+							'bottom' => 'padding-bottom: {{value}};',
+							'left' => 'padding-left: {{value}};',
+							'right' => 'padding-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__price .price',
+					),
+					array(
+						'name'       => 'margin',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Margin', 'customify'),
+						'css_format' => array(
+							'top' => 'margin-top: {{value}};',
+							'bottom' => 'margin-bottom: {{value}};',
+							'left' => 'margin-left: {{value}};',
+							'right' => 'margin-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__price .price',
+					),
+					array(
+						'name'  => 'border_heading',
+						'type'  => 'heading',
+						'label' => __('Border', 'customify'),
+					),
+					array(
+						'name'       => 'border_style',
+						'type'       => 'select',
+						'class'      => 'clear',
+						'label'      => __('Border Style', 'customify'),
+						'default'    => '',
+						'css_format'    => "border-style: {{value}};",
+						'choices'    => array(
+							''       => __('Default', 'customify'),
+							'none'   => __('None', 'customify'),
+							'solid'  => __('Solid', 'customify'),
+							'dotted' => __('Dotted', 'customify'),
+							'dashed' => __('Dashed', 'customify'),
+							'double' => __('Double', 'customify'),
+							'ridge'  => __('Ridge', 'customify'),
+							'inset'  => __('Inset', 'customify'),
+							'outset' => __('Outset', 'customify'),
+						),
+						'selector' => '.wc-product__part.wc-product__price .price',
+					),
+
+					array(
+						'name'       => 'border_width',
+						'type'       => 'css_ruler',
+						'label'      => __('Border Width', 'customify'),
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector' => '.wc-product__part.wc-product__price .price',
+						'css_format' => array(
+							'top' => 'border-top-width: {{value}};',
+							'bottom' => 'border-bottom-width: {{value}};',
+							'left' => 'border-left-width: {{value}};',
+							'right' => 'border-right-width: {{value}};',
+						),
+					),
+					array(
+						'name'       => 'border_color',
+						'type'       => 'color',
+						'label'      => __('Border Color', 'customify'),
+						'css_format'    => "border-color: {{value}};",
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector' => '.wc-product__part.wc-product__price .price',
+					),
+
+					array(
+						'name'       => 'border_radius',
+						'type'       => 'slider',
+						'max'       => 100,
+						'label'      => __('Border Radius', 'customify'),
+						'css_format'    => "border-radius: {{value}};",
+						'selector' => '.wc-product__part.wc-product__price .price',
+					),
+
+				),
+			)
+		);
+
+		// Product Add To cart
+		$configs[] = array(
+			'name' =>   'wc_cd_button_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Add to Cart', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_show_label',
+			'type'  => 'checkbox',
+			'default'  => 1,
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'checkbox_label' => __( 'Show Text', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_show_icon',
+			'type'  => 'checkbox',
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'checkbox_label' => __( 'Show Icon', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_icon',
+			'type'  => 'icon',
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'label' => __( 'Icon', 'customify' ),
+			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_icon_pos',
+			'type'  => 'select',
+			'choices' => array(
+				'before' => __( 'Before', 'customify' ),
+				'after' => __( 'After', 'customify' ),
+			),
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'label' => __( 'Icon Position', 'customify' ),
+			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.wc-product__part.wc-product__add_to_cart a',
+			'section' =>  $section,
+			'label' => __( 'Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_styling',
+			'type'  => 'styling',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  array(
+				'normal' => '.wc-product__part.wc-product__add_to_cart a, .wc-product__part.wc-product__add_to_cart button',
+				'hover' => '.wc-product__part.wc-product__add_to_cart a:hover, .wc-product__part.wc-product__add_to_cart button:hover'
+			),
+			'label' => __( 'Button Styling', 'customify' ),
+			'fields' => array(
+				'normal_fields' => array(
+					'link_color' => false,
+				),
+				'hover_fields' => array(
+					'link_color' => false,
+				)
+			)
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_button_icon_styling',
+			'type'  => 'styling',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  array(
+				'normal' => '.wc-product__part.wc-product__add_to_cart a i, .wc-product__part.wc-product__add_to_cart button i',
+				'hover' => '.wc-product__part.wc-product__add_to_cart a:hover i, .wc-product__part.wc-product__add_to_cart button:hover i'
+			),
+			'label' => __( 'Button Icon Styling', 'customify' ),
+			'fields' => array(
+				'normal_fields' => array(
+					'link_color' => false,
+				),
+				'hover_fields' => array(
+					'link_color' => false,
+				)
+			),
+			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
+		);
 
 		return $configs;
 	}

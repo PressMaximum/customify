@@ -1633,7 +1633,7 @@ p.demo_store a,
 }
 .woocommerce ul.products li.product .price {
   color: #77a464;
-  display: block;
+  display: inline-block;
   font-weight: normal;
   margin-bottom: 0.5em;
   font-size: 0.857em;
