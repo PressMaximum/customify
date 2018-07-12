@@ -26,11 +26,22 @@
 	}
 	.wc-product-media {
 		position: relative;
+		flex-shrink: initial;
+		flex-grow: 0;
 	}
-	.wc-product__part:last-child {
-		margin-top: auto;
-		margin-bottom: 0px;
+	.wc-product__part {
+		a {
+			color: inherit;
+			* {
+				color: inherit;
+			}
+		}
+		&:last-child {
+			margin-top: auto;
+			margin-bottom: 0px;
+		}
 	}
+
 }
 
 // Before listing Products

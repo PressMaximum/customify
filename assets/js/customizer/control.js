@@ -1566,7 +1566,7 @@
                 }
 
                 $document.trigger('customify/customizer/value_changed', [control, value] );
-                console.log( 'Save_Value: ', value );
+               // console.log( 'Save_Value: ', value );
             } else {
 
             }

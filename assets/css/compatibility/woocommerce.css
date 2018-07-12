@@ -215,6 +215,14 @@ $gl-devices-list: (
 }
 .wc-product-inner .wc-product-media {
   position: relative;
+  flex-shrink: initial;
+  flex-grow: 0;
+}
+.wc-product-inner .wc-product__part a {
+  color: inherit;
+}
+.wc-product-inner .wc-product__part a * {
+  color: inherit;
 }
 .wc-product-inner .wc-product__part:last-child {
   margin-top: auto;

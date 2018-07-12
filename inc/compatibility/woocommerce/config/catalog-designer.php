@@ -51,18 +51,15 @@ class Customify_WC_Catalog_Designer {
 			}
 		}
 		echo '</div>';
-
-		/*
-		add_action( 'customify_wc_product_loop', array( $this, 'product__media' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__category' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__title' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__price' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__rating' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__description' ) );
-		add_action( 'customify_wc_product_loop', array( $this, 'product__add_to_cart' ) );
-		*/
 	}
 
+	/**
+	 * Preview url when section open
+	 *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
 	function add_catalog_url( $args ){
 		$args['section_urls']['wc_catalog_designer'] = get_permalink( wc_get_page_id( 'shop' ) );
 		return $args;
@@ -87,7 +84,6 @@ class Customify_WC_Catalog_Designer {
 			'live_title_field' => 'title',
 			'limit' => 4,
 			'addable' => false,
-			//'title_only' => true,
 			'selector' =>'.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'default' => array(
@@ -151,16 +147,172 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
+
+		$configs[] = array(
+			'name' =>   'wc_cd_title_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Title', 'customify' ),
+		);
+
+
+		$configs[] = array(
+			'name' =>   'wc_cd_title_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.wc-product__part.wc-product__title',
+			'section' =>  $section,
+			'label' => __( 'Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_title_list_font_size',
+			'type'  => 'slider',
+			'max' => 100,
+			'device_settings'  => true,
+			'css_format' => 'font-size: {{value}};',
+			'selector' =>  '.wc-list-view .wc-product__part.wc-product__title',
+			'section' =>  $section,
+			'label' => __( 'List View Font Size', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_title_styling',
+			'type'  => 'modal',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  '.wc-product__part.wc-product__title',
+			'label' => __( 'Styling', 'customify' ),
+			'fields' => array(
+				'tabs' => array(
+					'default' => __( 'Normal', 'customify' ),
+					'hover' => __( 'Hover', 'customify' ),
+				),
+				'default_fields' => array(
+					array(
+						'name'       => 'color',
+						'type'       => 'color',
+						'label'      => __('Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+					array(
+						'name'       => 'bg_color',
+						'type'       => 'color',
+						'label'      => __('Background Color', 'customify'),
+						'css_format'    => "background-color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+					array(
+						'name'       => 'padding',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Padding', 'customify'),
+						'css_format' => array(
+							'top' => 'padding-top: {{value}};',
+							'bottom' => 'padding-bottom: {{value}};',
+							'left' => 'padding-left: {{value}};',
+							'right' => 'padding-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+					array(
+						'name'       => 'margin',
+						'type'       => 'css_ruler',
+						'device_settings'       => true,
+						'label'      => __('Margin', 'customify'),
+						'css_format' => array(
+							'top' => 'margin-top: {{value}};',
+							'bottom' => 'margin-bottom: {{value}};',
+							'left' => 'margin-left: {{value}};',
+							'right' => 'margin-right: {{value}};',
+						),
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+					array(
+						'name'  => 'border_heading',
+						'type'  => 'heading',
+						'label' => __('Border', 'customify'),
+					),
+					array(
+						'name'       => 'border_style',
+						'type'       => 'select',
+						'class'      => 'clear',
+						'label'      => __('Border Style', 'customify'),
+						'default'    => '',
+						'css_format'    => "border-style: {{value}};",
+						'choices'    => array(
+							''       => __('Default', 'customify'),
+							'none'   => __('None', 'customify'),
+							'solid'  => __('Solid', 'customify'),
+							'dotted' => __('Dotted', 'customify'),
+							'dashed' => __('Dashed', 'customify'),
+							'double' => __('Double', 'customify'),
+							'ridge'  => __('Ridge', 'customify'),
+							'inset'  => __('Inset', 'customify'),
+							'outset' => __('Outset', 'customify'),
+						),
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+
+					array(
+						'name'       => 'border_width',
+						'type'       => 'css_ruler',
+						'label'      => __('Border Width', 'customify'),
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector'    => '.wc-product__part.wc-product__title',
+						'css_format' => array(
+							'top' => 'border-top-width: {{value}};',
+							'bottom' => 'border-bottom-width: {{value}};',
+							'left' => 'border-left-width: {{value}};',
+							'right' => 'border-right-width: {{value}};',
+						),
+					),
+					array(
+						'name'       => 'border_color',
+						'type'       => 'color',
+						'label'      => __('Border Color', 'customify'),
+						'css_format'    => "border-color: {{value}};",
+						'required'   => array(
+							array( 'border_style', '!=', 'none' ),
+							array( 'border_style', '!=', '' )
+						),
+						'selector' => '.wc-product__part.wc-product__title',
+					),
+
+				),
+				'hover_fields' => array(
+					array(
+						'name'       => 'color',
+						'type'       => 'color',
+						'label'      => __('Color', 'customify'),
+						'css_format'    => "color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__title:hover',
+					),
+					array(
+						'name'       => 'bg_color',
+						'type'       => 'color',
+						'label'      => __('Background Color', 'customify'),
+						'css_format'    => "background-color: {{value}};",
+						'selector' => '.wc-product__part.wc-product__title:hover',
+					),
+				)
+			)
+		);
+
+
+
 		return $configs;
 	}
 
 	function product__media(){
 		echo '<div class="wc-product-media">';
 		woocommerce_template_loop_product_link_open();
-
 		woocommerce_show_product_loop_sale_flash();
 		woocommerce_template_loop_product_thumbnail();
-
 		woocommerce_template_loop_product_link_close();
 		echo '</div>';
 	}
@@ -170,7 +322,6 @@ class Customify_WC_Catalog_Designer {
 		woocommerce_template_loop_product_link_open();
 		woocommerce_template_loop_product_title();
 		woocommerce_template_loop_product_link_close();
-
 	}
 
 	function product__description(){
