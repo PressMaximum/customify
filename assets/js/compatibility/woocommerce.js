@@ -14,4 +14,17 @@ jQuery( document ).ready( function ( $ ) {
         $( this ).removeClass( 'cart-active' );
     } );
 
+
+    $( document.body ).on( 'click', '.wc-view-switcher .wc-view-mod', function( e ){
+        e.preventDefault();
+        var mod = $( this ).data('mod') || 'grid';
+        $( '.wc-view-switcher .wc-view-mod' ).removeClass( 'active' );
+        $( this ).addClass( 'active' );
+        $( '.woocommerce-listing' ).removeClass( 'wc-grid-view wc-list-view' );
+        $( '.woocommerce-listing' ).addClass( 'wc-'+mod+'-view'  );
+    } );
+
+
+    // Switch View mod
+
 } );

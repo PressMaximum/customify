@@ -424,6 +424,25 @@ if ( Customify()->is_woocommerce_active() ) {
 }
 
 
+
+
+function customify_get_default_catalog_view_mod(){
+	return apply_filters( 'customify_get_default_catalog_view_mod', 'list' ) ;
+}
+
+if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
+	/**
+	 * Insert the opening anchor tag for products in the loop.
+	 */
+	function woocommerce_template_loop_product_link_open( $classs = '' ) {
+		global $product;
+
+		$link = apply_filters( 'woocommerce_loop_product_link', get_the_permalink(), $product );
+
+		echo '<a href="' . esc_url( $link ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">';
+	}
+}
+
 /**
  * Template pages
  */
@@ -447,9 +466,11 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
             endwhile;
 
-        } else { ?>
+        } else {
+	        $view = customify_get_default_catalog_view_mod();
 
-            <div class="wc-product-listing">
+            ?>
+            <div class="woocommerce-listing <?php echo esc_attr( 'wc-'.$view.'-view' ) ; ?>">
 
             <?php if ( Customify_WC()->show_shop_title() ) { ?>
                 <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>

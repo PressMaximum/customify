@@ -203,20 +203,25 @@ $gl-devices-list: (
   margin-top: auto;
   margin-bottom: 0px;
 }
+.wc-product-inner > div {
+  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+}
+.wc-product-inner .wc-product-contents {
+  display: flex;
+  flex-direction: column;
+}
+.wc-product-inner .wc-product-media {
+  position: relative;
+}
+.wc-product-inner .wc-product__part:last-child {
+  margin-top: auto;
+  margin-bottom: 0px;
+}
 
 .wc-catalog-header {
-  display: flex;
-  align-items: center;
-}
-
-.wc-view-mod svg {
-  width: 1.2em;
-  height: 1.2em;
-  display: inline-block;
-}
-
-.wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
-  margin-bottom: 0;
   display: flex;
   align-items: center;
 }
@@ -227,6 +232,22 @@ $gl-devices-list: (
   border: 1px solid #eaecee;
   line-height: 1;
   margin-right: 15px;
+}
+.wc-view-mod svg {
+  width: 1.2em;
+  height: 1.2em;
+  display: inline-block;
+  fill: currentColor;
+}
+.wc-view-mod.active {
+  color: #0cb4ce;
+  border-color: #0cb4ce;
+}
+
+.wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
+  margin-bottom: 0;
+  display: flex;
+  align-items: center;
 }
 
 .woocommerce-ordering {
@@ -248,6 +269,30 @@ $gl-devices-list: (
   flex: none !important;
   display: block !important;
   width: 100%;
+}
+
+.woocommerce-listing.wc-grid-view .hide-in-grid {
+  display: none;
+}
+.woocommerce-listing.wc-list-view .hide-in-list {
+  display: none;
+}
+.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) {
+  width: 100%;
+  flex: none;
+  max-width: 999999px;
+}
+.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner {
+  flex-direction: row;
+}
+.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media {
+  flex-basis: 32%;
+  margin-right: 2em;
+}
+.woocommerce-listing.wc-list-view .products .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents {
+  flex-basis: 68%;
+  display: inline-block;
+  flex-direction: column;
 }
 
 .woocommerce, .woocommerce-page {
@@ -1574,10 +1619,6 @@ p.demo_store a,
 }
 .woocommerce ul.products li.product .star-rating {
   font-size: 0.857em;
-}
-.woocommerce ul.products li.product .button {
-  margin-top: auto;
-  margin-bottom: 0px;
 }
 .woocommerce ul.products li.product .price {
   color: #77a464;

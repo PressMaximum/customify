@@ -16,18 +16,41 @@ class Customify_WC_Catalog_Designer {
 
 		$items = Customify()->get_setting('wc_cd_positions');
 
+		//add_action( 'customify_wc_product_loop', array( $this, 'product__media' ) );
+		$this->product__media();
+
+		echo '<div class="wc-product-contents">';
 		foreach ( ( array ) $items as $item ) {
 			$item = wp_parse_args( $item, array(
 				'_key' => '',
 				'_visibility' => '',
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
 			) );
 			if ( $item['_visibility'] !== 'hidden' ) {
 				$cb = array( $this, 'product__'. $item['_key'] );
 				if ( is_callable( $cb ) ) {
+					$classes = array();
+					$classes[] = 'wc-product__part';
+					$classes[] = 'wc-product__'.$item['_key'];
+
+					if ( $item['show_in_grid'] ) {
+						$classes[] = 'show-in-grid';
+					} else {
+						$classes[] = 'hide-in-grid';
+					}
+					if ( $item['show_in_list'] ) {
+						$classes[] = 'show-in-list';
+					} else {
+						$classes[] = 'hide-in-list';
+					}
+					echo '<div class="'.esc_attr( join(' ', $classes ) ).'">';
 					call_user_func( $cb, array() );
+					echo '</div>';
 				}
 			}
 		}
+		echo '</div>';
 
 		/*
 		add_action( 'customify_wc_product_loop', array( $this, 'product__media' ) );
@@ -64,38 +87,44 @@ class Customify_WC_Catalog_Designer {
 			'live_title_field' => 'title',
 			'limit' => 4,
 			'addable' => false,
-			'title_only' => true,
+			//'title_only' => true,
 			'selector' =>'.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'default' => array(
-				array(
-					'_visibility' => '',
-					'_key' => 'media',
-					'title' => __('Media', 'customify'),
-				),
+
 				array(
 					'_visibility' => '',
 					'_key' => 'title',
 					'title' => __('Title', 'customify'),
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
 				),
 				array(
 					'_key' => 'category',
 					'_visibility' => '',
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
 					'title' => __('Category', 'customify'),
 				),
 				array(
 					'_key' => 'price',
 					'_visibility' => '',
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
 					'title' => __('Price', 'customify'),
 				),
 				array(
 					'_key' => 'description',
 					'_visibility' => '',
+					'show_in_grid' => 0,
+					'show_in_list' => 1,
 					'title' => __('Short Description', 'customify'),
 				),
 				array(
 					'_key' => 'add_to_cart',
 					'_visibility' => '',
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
 					'title' => __('Add To Cart', 'customify'),
 				),
 			),
@@ -109,6 +138,16 @@ class Customify_WC_Catalog_Designer {
 					'type' => 'hidden',
 					'label' => __('Title', 'customify'),
 				),
+				array(
+					'name' => 'show_in_grid',
+					'type' => 'checkbox',
+					'checkbox_label' => __('Show in grid view', 'customify'),
+				),
+				array(
+					'name' => 'show_in_list',
+					'type' => 'checkbox',
+					'checkbox_label' => __('Show in list view', 'customify'),
+				),
 			)
 		);
 
@@ -116,12 +155,14 @@ class Customify_WC_Catalog_Designer {
 	}
 
 	function product__media(){
+		echo '<div class="wc-product-media">';
 		woocommerce_template_loop_product_link_open();
 
 		woocommerce_show_product_loop_sale_flash();
 		woocommerce_template_loop_product_thumbnail();
 
 		woocommerce_template_loop_product_link_close();
+		echo '</div>';
 	}
 
 

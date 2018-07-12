@@ -986,7 +986,6 @@
                     }
                 });
 
-
                 var live_title = f.value;
                 // Update Live title
                 if ( field.live_title_field === f.name ) {
@@ -1792,6 +1791,27 @@
                     control.getValue();
                 }
             });
+
+
+            /**
+             * @TODO: Translateable live title if not addable
+             */
+            if ( ! control.params.addable ) {
+                if ( control.params.live_title_field ) {
+                    var _titles = {};
+                    _.each( control.params.default, function( _value ){
+                        if ( ! _.isUndefined( _value._key ) && ! _.isUndefined( _value[ control.params.live_title_field ] ) ) {
+                            _titles[ _value._key ] = _value[ control.params.live_title_field ];
+                        }
+                    } );
+
+                    _.each( control.params.value, function( _value, index ){
+                        if ( ! _.isUndefined( _titles[ _value._key ] ) ) {
+                            control.params.value[ index ][ control.params.live_title_field ] = _titles[ _value._key ];
+                        }
+                    } );
+                }
+            }
 
 
             // Add item when customizer loaded
