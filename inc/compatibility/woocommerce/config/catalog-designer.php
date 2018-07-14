@@ -64,6 +64,33 @@ class Customify_WC_Catalog_Designer {
 	}
 
 	function config( $configs ){
+
+		// Show view mod
+		$configs[] = array(
+			'name'            => 'wc_cd_show_view_mod',
+			'type'            => 'checkbox',
+			'section'         => 'woocommerce_product_catalog',
+			'default' => 1,
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'checkbox_label'           => __('Show Grid/List View Buttons', 'customify'),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_default_view',
+			'type'            => 'select',
+			'section'         => 'woocommerce_product_catalog',
+			'default' => 'grid',
+			'choices' => array(
+				'grid' =>__( 'Grid', 'customify' ),
+				'list' =>__( 'List', 'customify' ),
+			),
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'required' => array( 'wc_cd_show_view_mod', '=', 1 ),
+			'label'           => __('Default View Mod', 'customify'),
+		);
+
 		$section = 'wc_catalog_designer';
 
 		$configs[] = array(

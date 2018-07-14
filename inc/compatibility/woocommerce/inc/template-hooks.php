@@ -18,6 +18,9 @@ function customify_catalog_header(){
 
 function customify_catalog_view_mod(){
     $default = customify_get_default_catalog_view_mod();
+    if ( ! Customify()->get_setting( 'wc_cd_show_view_mod') ) {
+        return '';
+    }
     ?>
     <div class="wc-view-switcher">
         <span class="wc-view-mod wc-grid-view <?php echo ( $default == 'grid' ) ? 'active' : ''; ?>" data-mod="grid">

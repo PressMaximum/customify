@@ -426,10 +426,11 @@ if ( Customify()->is_woocommerce_active() ) {
 
 function customify_get_default_catalog_view_mod(){
     $name = wc_get_loop_prop( 'name' );
-    if (  $name ) {
+    $default = Customify()->get_setting( 'wc_cd_default_view' );
+    if ( $name ) {
 	    return apply_filters( 'customify_get_default_catalog_view_mod', 'grid' ) ;
     }
-	return apply_filters( 'customify_get_default_catalog_view_mod', 'list' ) ;
+	return apply_filters( 'customify_get_default_catalog_view_mod', $default ) ;
 }
 
 if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
