@@ -423,7 +423,11 @@ if ( Customify()->is_woocommerce_active() ) {
     Customify_WC();
 }
 
-
+/**
+ * Get default view for product catalog
+ *
+ * @return string
+ */
 function customify_get_default_catalog_view_mod(){
     $name = wc_get_loop_prop( 'name' );
     $default = Customify()->get_setting( 'wc_cd_default_view' );

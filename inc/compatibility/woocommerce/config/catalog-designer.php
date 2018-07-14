@@ -578,14 +578,14 @@ class Customify_WC_Catalog_Designer {
 						'type'       => 'color',
 						'label'      => __('Color', 'customify'),
 						'css_format'    => "color: {{value}};",
-						'selector' => '.wc-product__part.wc-product__price',
+						'selector' => '.woocommerce .wc-product__part.wc-product__price .price',
 					),
 					array(
 						'name'       => 'regular_color',
 						'type'       => 'color',
 						'label'      => __('Regular Price Color', 'customify'),
 						'css_format'    => "color: {{value}};",
-						'selector' => '.wc-product__part.wc-product__price del',
+						'selector' => '.woocommerce .wc-product__part.wc-product__price .price del',
 					),
 					array(
 						'name'       => 'padding',

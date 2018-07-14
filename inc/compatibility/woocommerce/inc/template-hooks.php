@@ -1,20 +1,22 @@
 <?php
-
-
+/**
+ * Change before shop loop
+ */
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
+
 add_action( 'woocommerce_before_shop_loop', 'customify_catalog_header', 15 );
 
-
+/**
+ * Custom shop header
+ */
 function customify_catalog_header(){
     echo '<div class="wc-catalog-header">';
-	customify_catalog_view_mod();
-	woocommerce_catalog_ordering();
-	woocommerce_result_count();
+        customify_catalog_view_mod();
+        woocommerce_catalog_ordering();
+        woocommerce_result_count();
 	echo '</div>';
 }
-
-
 
 function customify_catalog_view_mod(){
     $default = customify_get_default_catalog_view_mod();
