@@ -1,24 +1,39 @@
 <?php
+
+function customify_wc_secondary_product_thumbnail() {
+	$setting = wc_get_loop_prop( 'media_secondary' );
+    if ( $setting == 'none' ) {
+        return ;
+    }
+	global $product;
+	$image_ids = $product->get_gallery_image_ids( );
+	if ( $image_ids ) {
+		$secondary_img_id = $setting == 'last' ? end( $image_ids ) : reset( $image_ids );
+		$size             = 'shop_catalog';
+		$classes          = 'attachment-' . $size . ' secondary-image image-transition';
+		echo wp_get_attachment_image( $secondary_img_id, $size, false, array( 'class' => $classes ) );
+	}
+}
 /**
  * Change before shop loop
  */
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 
-add_action( 'woocommerce_before_shop_loop', 'customify_catalog_header', 15 );
+add_action( 'woocommerce_before_shop_loop', 'customify_wc_catalog_header', 15 );
 
 /**
  * Custom shop header
  */
-function customify_catalog_header(){
+function customify_wc_catalog_header(){
     echo '<div class="wc-catalog-header">';
-        customify_catalog_view_mod();
+	    customify_wc_catalog_view_mod();
         woocommerce_catalog_ordering();
         woocommerce_result_count();
 	echo '</div>';
 }
 
-function customify_catalog_view_mod(){
+function customify_wc_catalog_view_mod(){
     $default = customify_get_default_catalog_view_mod();
     if ( ! Customify()->get_setting( 'wc_cd_show_view_mod') ) {
         return '';

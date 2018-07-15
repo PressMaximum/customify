@@ -218,6 +218,19 @@ $gl-devices-list: (
   flex-shrink: initial;
   flex-grow: 0;
 }
+.wc-product-inner .wc-product-media img {
+  transition: all .3s ease;
+}
+.wc-product-inner .wc-product-media .secondary-image {
+  position: absolute;
+  z-index: 5;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  display: block;
+  height: auto;
+  opacity: 0;
+}
 .wc-product-inner .wc-product__part a {
   color: inherit;
 }
@@ -233,6 +246,13 @@ $gl-devices-list: (
 }
 .wc-product-inner .wc-product__category a {
   display: inline-block;
+}
+
+.has-gallery .wc-product-inner:hover img {
+  opacity: 0;
+}
+.has-gallery .wc-product-inner:hover .secondary-image {
+  opacity: 1;
 }
 
 .wc-catalog-header {

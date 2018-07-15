@@ -179,12 +179,12 @@ class Customify_WC_Catalog_Designer {
 			)
 		);
 
-		// Product Item
+		// Product Media
 		$configs[] = array(
-			'name' =>   'wc_cd_item_h',
+			'name' =>   'wc_cd_memdia_h',
 			'type'  => 'heading',
 			'section' =>  $section,
-			'label' => __( 'Product Settings', 'customify' ),
+			'label' => __( 'Product Media', 'customify' ),
 		);
 
 		$configs[] = array(
@@ -197,6 +197,31 @@ class Customify_WC_Catalog_Designer {
 			'selector'      => 'format',
 			'css_format'      => '.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media { flex-basis: {{value_no_unit}}%; } .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents{ flex-basis: calc(100% - {{value_no_unit}}%); }',
 			'title'           => __('List View Media Width', 'customify'),
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_media_secondary',
+			'type'            => 'select',
+			'choices'    => array(
+				'first' => __('Use first image of product gallery', 'customify'),
+				'last' => __('Use last image of product gallery', 'customify'),
+				'none' => __('Disable', 'customify'),
+			),
+			'section'         => $section,
+			'default'         => 'first',
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'description' => __('This setting adds a hover effect that will reveal a secondary product thumbnail to product images on your product listings. This is ideal for displaying front and back images of products.', 'customify'),
+			'title'  => __('Secondary Thumbnail', 'customify'),
+		);
+
+
+		// Product Item Alignment
+		$configs[] = array(
+			'name' =>   'wc_cd_align_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Content Alignment', 'customify' ),
 		);
 
 		$configs[] = array(
@@ -864,11 +889,14 @@ class Customify_WC_Catalog_Designer {
 		return $configs;
 	}
 
+
 	function product__media(){
 		echo '<div class="wc-product-media">';
 		woocommerce_template_loop_product_link_open();
 		woocommerce_show_product_loop_sale_flash();
 		woocommerce_template_loop_product_thumbnail();
+		customify_wc_secondary_product_thumbnail();
+		do_action( 'customify_after_loop_product_media');
 		woocommerce_template_loop_product_link_close();
 		echo '</div>';
 	}
@@ -927,8 +955,6 @@ class Customify_WC_Catalog_Designer {
 	function product__add_to_cart(){
 		woocommerce_template_loop_add_to_cart();
 	}
-
-
 
 
 }

@@ -55,7 +55,7 @@ class Customify_WC {
 
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
-            add_filter( 'post_class',  array( $this, 'post_class' ) );
+            add_filter( 'post_class',  array( $this, 'post_class' ), 15, 3 );
             //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
             add_filter( 'product_cat_class',  array( $this, 'post_class' ) );
 
@@ -81,6 +81,9 @@ class Customify_WC {
 	 * Custom number layout
 	 */
     function loop_start(){
+
+	    $setting = Customify()->get_setting( 'wc_cd_media_secondary' );
+	    wc_set_loop_prop( 'media_secondary', $setting );
 
 	    /**
 	     * @see wc_set_loop_prop
@@ -127,10 +130,29 @@ class Customify_WC {
         return 3;
     }
 
-    function post_class( $classes ){
-        if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
-	        $classes[] = 'customify-col';
-        }
+    function post_class( $classes, $class, $post_id ){
+	    if ( ! $post_id || get_post_type( $post_id ) !== 'product' ) {
+		    return $classes;
+	    }
+
+	    global $product;
+
+	    if ( is_object( $product ) ) {
+
+		    if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
+		        $classes[] = 'customify-col';
+	        }
+
+		    $setting = wc_get_loop_prop( 'media_secondary' );
+		    if ( $setting != 'none' ) {
+			    $image_ids = $product->get_gallery_image_ids( );
+			    if ( $image_ids ) {
+				    $classes[] = 'has-gallery';
+			    }
+            }
+
+	    }
+
         return $classes;
     }
 

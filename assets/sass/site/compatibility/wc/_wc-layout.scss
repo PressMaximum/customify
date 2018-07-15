@@ -28,7 +28,21 @@
 		position: relative;
 		flex-shrink: initial;
 		flex-grow: 0;
+		img {
+			transition: all .3s ease;
+		}
+		.secondary-image {
+			position: absolute;
+			z-index: 5;
+			top: 0px;
+			left: 0px;
+			right: 0px;
+			display: block;
+			height: auto;
+			opacity: 0;
+		}
 	}
+
 	.wc-product__part {
 		a {
 			color: inherit;
@@ -50,6 +64,20 @@
 		}
 	}
 
+}
+
+// Secondary image when hover if exist
+.has-gallery {
+	.wc-product-inner {
+		&:hover {
+			img {
+				opacity: 0;
+			}
+			.secondary-image {
+				opacity: 1;
+			}
+		}
+	}
 }
 
 // Before listing Products
