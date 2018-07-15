@@ -799,10 +799,14 @@ $gl-devices-list: (
   display: block;
 }
 .widget-area .widget .cart_list li {
-  margin: 0 0px 0px;
+  margin: 0 0 15px 0px;
   list-style: none;
-  padding: 0px 0px 10px;
+  padding: 0px;
+  position: relative;
   *zoom: 1;
+}
+.widget-area .widget .cart_list li .wc-product-name:hover {
+  text-decoration: underline;
 }
 .widget-area .widget .cart_list li a {
   display: block;
@@ -867,8 +871,8 @@ $gl-devices-list: (
 }
 .widget-area .widget_shopping_cart a.remove {
   position: absolute;
-  top: 15px;
-  right: 0;
+  top: 0px;
+  right: 15px;
   width: 15px;
   height: 15px;
   display: block;
@@ -889,18 +893,12 @@ $gl-devices-list: (
 .widget-area .widget_shopping_cart .total {
   display: block;
   text-align: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 0px;
+  margin-bottom: 15px;
 }
 .widget-area .widget_shopping_cart .total strong {
   min-width: 40px;
   display: inline-block;
-}
-.widget-area .widget_shopping_cart .cart_list li {
-  padding-right: 20px;
-  position: relative;
-  padding-top: 10px;
-  border-bottom: 1px solid #eaecee;
 }
 .widget-area .widget_shopping_cart .cart_list:after {
   content: none !important;
@@ -980,12 +978,12 @@ $gl-devices-list: (
   left: auto;
   z-index: 30;
   width: 300px;
-  padding: 15px 15px 15px;
+  padding: 0px;
   transition: all .3s ease;
   opacity: 0;
   height: 0;
-  overflow: hidden;
   visibility: hidden;
+  overflow: hidden;
   display: block;
   transform: translateY(40px);
   background: #ffffff;
@@ -995,9 +993,17 @@ $gl-devices-list: (
   max-height: 300px;
   overflow: auto;
   display: block;
+  padding: 15px;
 }
-.item--wc_cart .cart-item-dropdown li {
-  padding: 15px 0px;
+.item--wc_cart .cart-item-dropdown .woocommerce-mini-cart li {
+  padding: 15px 30px 15px 15px;
+  margin: 0px;
+}
+.item--wc_cart .cart-item-dropdown .woocommerce-mini-cart li a.remove {
+  top: 15px;
+}
+.item--wc_cart .cart-item-dropdown .woocommerce-mini-cart li:hover {
+  background: #fafafa;
 }
 .item--wc_cart:hover .cart-item-dropdown, .item--wc_cart.cart-active .cart-item-dropdown {
   opacity: 1;
@@ -1006,6 +1012,11 @@ $gl-devices-list: (
   visibility: visible;
   display: block;
   transform: translateY(0px);
+}
+.item--wc_cart .wc-mini-cart-footer {
+  border-top: 1px solid #eaecee;
+  background: #fafafa;
+  padding: 30px;
 }
 
 @media screen and (max-width: 568px) {

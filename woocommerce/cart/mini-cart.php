@@ -44,7 +44,6 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                              echo '<a href="'.esc_url( $product_permalink ).'">';
                          }
                          ?>
-
                             <span class="wc-product-thumbnail">
                                 <?php echo $thumbnail; ?>
                             </span>
@@ -56,8 +55,6 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
                                 <?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
                                 <?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
                             </span>
-
-
 
                          <?php if ( ! empty( $product_permalink ) )  {
                              echo '</a>';
@@ -73,9 +70,10 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 
 	<?php do_action( 'woocommerce_widget_shopping_cart_before_buttons' ); ?>
 
-    <p class="woocommerce-mini-cart__total total"><strong><?php _e( 'Subtotal', 'customify' ); ?>:</strong> <?php echo WC()->cart->get_cart_subtotal(); ?></p>
-
-    <p class="woocommerce-mini-cart__buttons buttons"><?php do_action( 'woocommerce_widget_shopping_cart_buttons' ); ?></p>
+    <div class="wc-mini-cart-footer">
+        <p class="woocommerce-mini-cart__total total"><strong><?php _e( 'Subtotal', 'customify' ); ?>:</strong> <?php echo WC()->cart->get_cart_subtotal(); ?></p>
+        <p class="woocommerce-mini-cart__buttons buttons"><?php do_action( 'woocommerce_widget_shopping_cart_buttons' ); ?></p>
+    </div>
 
 <?php else : ?>
 
