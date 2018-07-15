@@ -477,7 +477,7 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 	        $view = customify_get_default_catalog_view_mod();
 
             ?>
-            <div class="woocommerce-listing <?php echo esc_attr( 'wc-'.$view.'-view' ) ; ?>">
+            <div class="woocommerce-listing wc-product-listing <?php echo esc_attr( 'wc-'.$view.'-view' ) ; ?>">
 
             <?php if ( Customify_WC()->show_shop_title() ) { ?>
                 <?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>

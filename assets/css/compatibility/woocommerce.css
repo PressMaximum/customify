@@ -1231,12 +1231,13 @@ p.demo_store a,
   color: #77a464;
 }
 
-ul.products li.product .onsale {
+.woocommerce ul.products .onsale {
   top: 0;
   right: 0;
   left: auto;
-  margin: -0.5em -0.5em 0 0;
+  margin: 0;
 }
+
 ul.products li.product h3,
 ul.products li.product .woocommerce-loop-product__title,
 ul.products li.product .woocommerce-loop-category__title {
@@ -1677,8 +1678,8 @@ ul.products li.product .price .from {
   position: absolute;
   text-align: center;
   line-height: 3.236;
-  top: -0.5em;
-  left: -0.5em;
+  top: -0;
+  left: -0;
   margin: 0;
   border-radius: 100%;
   line-height: 1;

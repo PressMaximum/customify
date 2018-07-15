@@ -59,16 +59,20 @@ p.demo_store,
     .price {
         color: $highlight;
     }
+
+}
+.woocommerce {
+    ul.products {
+        .onsale {
+            top: 0;
+            right: 0;
+            left: auto;
+            margin: 0;
+        }
+    }
 }
 
 ul.products li.product {
-    .onsale {
-        top: 0;
-        right: 0;
-        left: auto;
-        margin: -0.5em -0.5em 0 0;
-    }
-
     h3,
     .woocommerce-loop-product__title,
     .woocommerce-loop-category__title {
@@ -505,8 +509,8 @@ ul.products li.product {
         position: absolute;
         text-align: center;
         line-height: 3.236;
-        top: -0.5em;
-        left: -0.5em;
+        top: -0;
+        left: -0;
         margin: 0;
         border-radius: 100%;
         line-height: 1;

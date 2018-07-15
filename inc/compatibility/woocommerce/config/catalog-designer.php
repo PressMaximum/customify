@@ -809,6 +809,58 @@ class Customify_WC_Catalog_Designer {
 			'required' => array( 'wc_cd_button_show_icon', '=', 1 )
 		);
 
+		// Product Sale Bubble
+		$configs[] = array(
+			'name' =>   'wc_cd_sale_bubble_h',
+			'type'  => 'heading',
+			'section' =>  $section,
+			'label' => __( 'Product Onsale Bubble', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_sale_bubble_type',
+			'type'  => 'select',
+			'default'  => 'text',
+			'choices' => array(
+				'text' => __( 'Text', 'customify' ),
+				'percent' => __( 'Discount percent', 'customify' ),
+				'value' => __( 'Discount value', 'customify' ),
+			),
+			'selector' =>'.wc-product-listing',
+			'render_callback' => 'woocommerce_content',
+			'section' =>  $section,
+			'label' => __( 'Display Type', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_sale_bubble_typo',
+			'type'  => 'typography',
+			'css_format' => 'typography',
+			'selector' =>  '.woocommerce .wc-product-inner .onsale',
+			'section' =>  $section,
+			'label' => __( 'Typography', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name' =>   'wc_cd_sale_bubble_styling',
+			'type'  => 'styling',
+			'section' =>  $section,
+			'css_format' => 'styling',
+			'selector' =>  array(
+				'normal' => '.woocommerce span.onsale',
+				'hover' => '.woocommerce span.onsale'
+			),
+			'label' => __( 'Onsale Bubble Styling', 'customify' ),
+			'fields' => array(
+				'normal_fields' => array(
+					'link_color' => false,
+				),
+				'hover_fields' => array(
+					'link_color' => false,
+				)
+			),
+		);
+
 		return $configs;
 	}
 
