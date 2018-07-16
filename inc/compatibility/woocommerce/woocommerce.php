@@ -74,6 +74,9 @@ class Customify_WC {
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
+	        // Quick View
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/quick-view.php';
+
         }
     }
 

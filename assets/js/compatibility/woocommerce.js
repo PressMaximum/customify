@@ -18,7 +18,9 @@ jQuery( document ).ready( function ( $ ) {
 
     $( document.body ).on( 'wc_cart_button_updated', function ( e, button ) {
         var p = button.parent();
-        $( '.added_to_cart', p ).addClass( 'button' );
+        if( ! button.hasClass( 'single_add_to_cart_button' ) ) {
+            $( '.added_to_cart', p ).addClass( 'button' );
+        }
 
         var pos = $( '.add_to_cart_button', p ).data('icon-pos') || 'before';
         var icon = $( '.add_to_cart_button', p ).data('cart-icon') || '';
@@ -59,5 +61,144 @@ jQuery( document ).ready( function ( $ ) {
         $( '.woocommerce-listing, .products' ).removeClass( 'wc-grid-view wc-list-view' );
         $( '.woocommerce-listing, .products' ).addClass( 'wc-'+mod+'-view'  );
     } );
+
+    //------------------------------------------------------------------------------------------
+
+    // Quick view
+    // Close quick view
+    $( document.body ).on( 'click', '.customify-wc-modal-close, .customify-wc-modal-overlay', function( e  ) {
+        e.preventDefault();
+        $( this ).closest( '.customify-wc-modal' ).removeClass('show' ).addClass( 'hide' );
+    } );
+
+    $( window ).on('keyup', function(e) {
+        if( e.which=== 27 ){ // esc button
+            $( '.customify-wc-modal' ).removeClass('show' ).addClass( 'hide' );
+        }
+    });
+
+    // Open quick view
+    $( document.body ).on( 'click', '.customify-wc-quick-view', function( e ){
+        e.preventDefault();
+        var id = $( this ).attr(  'data-id') || '';
+
+        if ( id  ) {
+
+            if ( $( '#customify-wc-modal-product-'+id ).length ) {
+                 $( '#customify-wc-modal-product-'+id ).removeClass( 'hide' ).addClass( 'show' );
+                 $( window ).resize();
+            } else {
+                $.ajax({
+                    url: woocommerce_params.ajax_url,
+                    type:'get',
+                    data: {
+                        action: 'customify/wc/quick-view',
+                        product_id: id,
+                    },
+                    success: function( res ){
+                        wc_single_product_params = res.params;
+                        var content = $( '<div id="customify-wc-modal-product-'+id+'" class="customify-wc-modal hide">' +
+                            '<div class="customify-wc-modal-overlay"></div>' +
+                            '<div class="customify-wc-modal-cont  woocommerce woocommerce-page single single-product">' +
+                            '<div class="customify-wc-modal-inner"><a href="#" class="customify-wc-modal-close">x</a> ' +
+                            '<div class="customify-container"><div class="customify-grid">'+res.content+'</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div></div>' );
+                        $( 'body' ).append( content );
+
+                        /*
+                        * Initialize all galleries on page.
+                        */
+                        $( '.woocommerce-product-gallery' ).each( function() {
+                            $( this ).wc_product_gallery();
+                        } );
+
+                        if ( res.type === 'variable' ) {
+                            wc_add_to_cart_variation_params = res.variation_params;
+                            if ( typeof wc_add_to_cart_variation_params !== 'undefined' ) {
+                                $( '.variations_form', content ).each( function() {
+                                    $( this ).wc_variation_form();
+                                });
+                            }
+                        }
+
+                        content.removeClass( 'hide' ).addClass( 'show' );
+
+                    }
+                });
+            }
+        }
+
+    } );
+
+    $.fn._add_cart_serializeObject = function()
+    {
+        var o = {};
+        var a = this.serializeArray();
+        $.each(a, function() {
+            if (o[this.name]) {
+                if (!o[this.name].push) {
+                    o[this.name] = [o[this.name]];
+                }
+                o[this.name].push(this.value || '');
+            } else {
+                o[this.name] = this.value || '';
+            }
+        });
+        return o;
+    };
+
+
+    // Quick view add to cart
+    $( document.body ).on( 'click', '.customify-wc-modal .single_add_to_cart_button', function( e ) {
+        e.preventDefault();
+
+        var $thisbutton = $( this );
+
+        if ( $thisbutton.hasClass( 'disabled' ) || $thisbutton.is( ':disabled' ) ) {
+            return;
+        }
+
+        var form = $thisbutton.closest('form');
+        var data = form._add_cart_serializeObject();
+
+        $thisbutton.removeClass( 'added' );
+        $thisbutton.addClass( 'loading' );
+
+        if ( typeof data.product_id === "undefined" && typeof data['add-to-cart'] !== "undefined" ){
+            data.product_id = data['add-to-cart'];
+        } else if ( typeof data['add-to-cart'] === "undefined" ) {
+            data.product_id = $thisbutton.val();
+        }
+
+        // Trigger event.
+        $( document.body ).trigger( 'adding_to_cart', [ $thisbutton, data ] );
+
+        // Ajax action.
+        $.post( wc_add_to_cart_params.wc_ajax_url.toString().replace( '%%endpoint%%', 'add_to_cart' ), data, function( response ) {
+            console.log( response );
+            if ( ! response ) {
+                return;
+            }
+
+            if ( response.error && response.product_url ) {
+                window.location = response.product_url;
+                return;
+            }
+
+            // Redirect to cart option
+            if ( wc_add_to_cart_params.cart_redirect_after_add === 'yes' ) {
+                window.location = wc_add_to_cart_params.cart_url;
+                return;
+            }
+
+            // Trigger event so themes can refresh other areas.
+            $( document.body ).trigger( 'added_to_cart', [ response.fragments, response.cart_hash, $thisbutton ] );
+        });
+
+    } );
+
+    //---------------------------------------------------------------------
 
 } );
