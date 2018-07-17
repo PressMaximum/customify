@@ -86,7 +86,9 @@ jQuery( document ).ready( function ( $ ) {
 
             if ( $( '#customify-wc-modal-product-'+id ).length ) {
                  $( '#customify-wc-modal-product-'+id ).removeClass( 'hide' ).addClass( 'show' );
-                 $( window ).resize();
+                 setTimeout( function(){
+                     $( window ).resize();
+                 }, 400 );
             } else {
                 $.ajax({
                     url: woocommerce_params.ajax_url,

@@ -61,6 +61,12 @@ p.demo_store,
     }
 
 }
+
+.star-rating {
+    font-size: 0.857em;
+    color: #f9ca63;
+}
+
 .woocommerce {
     ul.products {
         .onsale {
@@ -89,17 +95,11 @@ ul.products li.product {
         width: 100%;
         height: auto;
         display: block;
-        margin: 0 0 1em;
         box-shadow: none;
     }
 
-
     strong {
         display: block;
-    }
-
-    .star-rating {
-        font-size: 0.857em;
     }
 
     .price {
