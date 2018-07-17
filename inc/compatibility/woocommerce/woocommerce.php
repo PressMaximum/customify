@@ -208,7 +208,10 @@ class Customify_WC {
         .woocommerce .site #respond input#submit.alt,
         .woocommerce .site a.button.alt, 
         .woocommerce .site button.button.alt,
-        .woocommerce .site input.button.alt
+        .woocommerce .site input.button.alt,
+        
+        .woocommerce .widget.widget_price_filter .ui-slider .ui-slider-handle,
+        .woocommerce .widget.widget_price_filter .ui-slider .ui-slider-range
        {
             background-color: {{value}};
         }';

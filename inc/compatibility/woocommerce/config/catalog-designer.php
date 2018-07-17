@@ -873,8 +873,8 @@ class Customify_WC_Catalog_Designer {
 			'section'    => $section,
 			'css_format' => 'styling',
 			'selector'   => array(
-				'normal' => '.woocommerce span.onsale',
-				'hover'  => '.woocommerce span.onsale'
+				'normal' => '.woocommerce .wc-product-inner span.onsale',
+				'hover'  => '.woocommerce .wc-product-inner span.onsale'
 			),
 			'label'      => __( 'Onsale Bubble Styling', 'customify' ),
 			'fields'     => array(
