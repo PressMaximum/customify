@@ -18,7 +18,7 @@ class Customify_WC_Quick_View {
 			add_action( 'customify_after_loop_product_media', array( $this, 'button' ) );
 
 			add_action( 'wp_enqueue_scripts', array( $this, 'load_single_scripts' ), 0 );
-			add_action( 'wp_enqueue_scripts', array( $this, 'restore_load_single_scripts' ), 9999 );
+			add_action( 'wp_head', array( $this, 'restore_load_single_scripts' ), 999 );
 		}
     }
 
@@ -208,12 +208,16 @@ class Customify_WC_Quick_View {
 				'post_content' => ''
 			);
 		}
-		$post->post_content .= '|__[product_page';
+		if ( ! strpos( $post->post_content, '[product_page' ) ) {
+			$post->post_content .= '|__[product_page';
+        }
+
 	}
 
 	function restore_load_single_scripts() {
 		global $post;
 		$post = $this->backup_post;
+		$post->post_content = str_replace( '|__[product_page', '', $post->post_content );
 		wp_enqueue_script( 'wc-add-to-cart-variation' );
 	}
 
