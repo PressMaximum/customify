@@ -3253,6 +3253,9 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop .menu > li > a {
   padding: 14px 15px 15px;
+  min-height: 90px;
+  display: inline-flex;
+  align-items: center;
 }
 .nav-menu-desktop .menu > li > a i {
   line-height: 0;

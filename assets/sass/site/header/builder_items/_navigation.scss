@@ -66,6 +66,9 @@ $submenu_width: 14em;
         }
         > li > a {
             padding: 14px 15px 15px;
+            min-height: 90px;
+            display: inline-flex;
+            align-items: center;
             i {
                 line-height: 0;
             }
