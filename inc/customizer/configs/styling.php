@@ -28,21 +28,6 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'    => $section,
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
-article.comment .comment-reply a:hover,
-article.comment .comment-time:hover,
-article.comment .comment-author a:hover,
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
-.posts-layout .readmore-button:hover,
-.entry-meta a:hover,
-.posts-layout .entry-title a:hover,
-a:hover,
-.site-branding a:hover,
-.widget-area .widget a:not(.wc-forward):hover,
-.site-content .widget-area .menu li.current-menu-item > a
-{
-    color: {{value}};
-}
 .button,
 button,
 input[type="button"],
@@ -66,7 +51,6 @@ article.comment .comment-post-author,
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
 .entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.posts-layout .readmore-button:hover
 {
     border-color: {{value}};
 }' ),

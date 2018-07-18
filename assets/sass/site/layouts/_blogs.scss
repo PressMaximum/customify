@@ -11,12 +11,12 @@ $blog_gutter: $gl-gutter;
 .entry-meta {
     color: $color_meta;
     font-size: 85%;
-    a {
-        color: $color_meta;
-        &:hover {
-            color: $color_link;
-        }
-    }
+    //a {
+    //    color: $color_meta;
+    //    &:hover {
+    //        color: $color_link;
+    //    }
+    //}
     > span {
         display: inline-block;
     }
@@ -91,19 +91,15 @@ $blog_gutter: $gl-gutter;
         }
     }
     .entry-title {
-        font-size: 1.4em;
-        color: $color_text;
+        font-size: 1.5em;
+        font-weight: 500;
         word-wrap: break-word;
         display: flex;
         align-items: center;
         a {
-            color: inherit;
             text-align: inherit;
             display: block;
             flex-basis: 100%;
-            &:hover {
-                color: $color_link;
-            }
         }
     }
     .entry-excerpt {
@@ -426,10 +422,6 @@ $blog_gutter: $gl-gutter;
     .nav-previous, .nav-next {
         width: 49%;
         a {
-            color: $color_text;
-            &:hover {
-                color: $color_link;
-            }
             > span {
                 font-size: 80%;
                 color: $color_text;

@@ -33,7 +33,7 @@ textarea {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     margin: 0 0 ms(-3);
-    color: darken($color_text, 20%);
+    color: darken($color_text, 10%);
     clear: both;
 }
 
@@ -160,10 +160,13 @@ figure {
 }
 
 /* Links */
+a.plain_color {
+    color: currentColor;
+}
 a {
     color: $color_link;
     text-decoration: none;
-    &:hover {
+    &:hover, &:focus {
         color: $color_link_hover;
     }
     &:hover,
@@ -631,11 +634,11 @@ article.comment {
         margin-right: 0px;
     }
     #cancel-comment-reply-link {
-        border: 1px solid $color_primary;
+        border: 1px solid $color_border;
         font-size: 12px;
         padding: 2px 6px 3px;
         border-radius: 2px;
-        color: $color_primary;
+        //color: $color_primary;
         position: relative;
         top: -4px;
         margin-left: 4px;
