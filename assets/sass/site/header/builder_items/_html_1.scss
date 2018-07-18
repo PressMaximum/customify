@@ -1,9 +1,9 @@
 /* HTML 1 */
 .item--html {
-    //font-size: 12px;
     p {
-       // text-transform: uppercase;
-        font-weight: 400;
+        font-weight: 500;
+        text-transform: uppercase;
+        font-size: 13px;
         &:last-child {
             margin-bottom: 0px;
         }

@@ -1,6 +1,10 @@
 /* Widget Common */
 .widget-title {
     font-size: 17px;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: $color_text;
+    margin-bottom: 15px;
 }
 
 .widget-area {

@@ -12,13 +12,13 @@ $gl-devices-list: (
 
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
-  background-color: #0cb4ce;
+  background-color: #005670;
   color: #FFFFFF;
   border-radius: 2px;
   font-weight: 600;
 }
 .woocommerce #respond input#submit:hover, .woocommerce a.button:hover, .woocommerce button.button:hover, .woocommerce input.button:hover {
-  background-color: #0cb4ce;
+  background-color: #005670;
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
   color: #FFF;
 }
@@ -30,10 +30,10 @@ $gl-devices-list: (
 
 /* Shop Alt Button */
 .woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
-  background-color: #0cb4ce;
+  background-color: #005670;
 }
 .woocommerce #respond input#submit.alt:hover, .woocommerce a.button.alt:hover, .woocommerce button.button.alt:hover, .woocommerce input.button.alt:hover {
-  background-color: #0cb4ce;
+  background-color: #005670;
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
 
@@ -82,10 +82,10 @@ $gl-devices-list: (
   border-bottom: 1px solid #eaecee;
 }
 .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
-  color: #0cb4ce;
+  color: #005670;
 }
 .woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a {
-  color: #0cb4ce;
+  color: #005670;
 }
 .woocommerce-account .woocommerce-MyAccount-content {
   width: 72%;

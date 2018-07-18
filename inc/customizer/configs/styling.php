@@ -36,12 +36,6 @@ article.comment .comment-post-author,
 .posts-layout .readmore-button:hover,
 .entry-meta a:hover,
 .posts-layout .entry-title a:hover,
-.nav-menu-desktop .menu li.current-menu-item > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
-.nav-menu-desktop .menu li a:hover,
 a:hover,
 .site-branding a:hover,
 .widget-area .widget a:not(.wc-forward):hover,
@@ -132,11 +126,9 @@ abbr, acronym {
 				'name'       => "{$section}_color_link",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color', 'customify' ),
+				'title'      => __( 'Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                .entry-content a,
-                .nav-links .nav-previous a:hover,
-                .nav-links .nav-next a:hover  
+                a   
                 {
                     color: {{value}};
 				}' ),
@@ -147,10 +139,9 @@ abbr, acronym {
 				'name'       => "{$section}_color_link_hover",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color Hover', 'customify' ),
+				'title'      => __( 'Link Hover Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color-hover', '
-.search .content-area .entry-title a:hover,
-.entry-content a:hover
+a:hover, a:focus
 {
     color: {{value}};
 }' ),

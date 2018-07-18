@@ -320,7 +320,7 @@ class Customify_Post_Entry {
     function post_title( $post = null ){
         if ( is_singular() ) {
             if ( customify_is_post_title_display() ) {
-                the_title('<h1 class="entry-title entry--item">', '</h1>');
+                the_title('<h1 class="entry-title entry--item h2">', '</h1>');
             }
         } else {
             if ($this->config['title_link']) {
