@@ -61,6 +61,15 @@ class Customify_Builder_Item_HTML {
                 'description' => __( 'Arbitrary HTML code.', 'customify' ),
             ),
 
+            array(
+                'name' => $this->name.'_typo',
+                'type' => 'typography',
+                'section' => $this->section,
+                'selector' => '.builder-header-'.$this->id.'-item.item--html p, .builder-header-'.$this->id.'-item.item--html',
+                'css_format' => 'typography',
+                'title' => __( 'Typography', 'customify' ),
+            ),
+
         );
 
         // Item Layout
