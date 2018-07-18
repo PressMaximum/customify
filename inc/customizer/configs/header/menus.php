@@ -97,6 +97,16 @@ class Customify_Builder_Item_Primary_Menu
             ),
 
             array(
+                'name'            => $this->prefix . '_style_border_color',
+                'type'            => 'color',
+                'section'         => $section,
+                'selector'        => "format",
+                'title'         => __('Border Color', 'customify'),
+                'css_format'      => ".builder-item--{$this->id} .nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before, .builder-item--{$this->id} .nav-menu-desktop.style-border-top.primary-menu-ul > li :hover > a .link-before:before { background-color: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
                 'name'           => $this->prefix . '__hide-arrow',
                 'type'           => 'checkbox',
                 'section'        => $section,
