@@ -22,8 +22,8 @@ $submenu_width: 16em;
 }
 
 .nav-menu-desktop {
-    font-size: 0.906em;
-    font-weight: 500;
+    font-size: 0.875em;
+    font-weight: 600;
     line-height: 1;
     .nav-icon-angle {
         display: inline;
@@ -54,13 +54,13 @@ $submenu_width: 16em;
                 transition: all 0.14s ease-out;
                 text-decoration-color: currentColor;
                 &:hover {
-                    color: $color_link_hover;
+                    color: rgba(0,0,0,0.9);
                 }
             }
 
             &.current-menu-item {
                  > a {
-                     color: $color_link_hover;
+                     color: rgba(0,0,0,0.9);
                  }
             }
         }
@@ -142,7 +142,7 @@ $submenu_width: 16em;
                 //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);
-                    color: #111111;
+                    color: rgba(0,0,0,0.9);
                 }
             }
         }

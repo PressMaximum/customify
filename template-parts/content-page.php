@@ -12,7 +12,7 @@
 <article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
     <?php if ( customify_is_post_title_display() ){ ?>
 	<header class="entry-header">
-		<?php the_title( '<h1 class="entry-title">', '</h1>' ); ?>
+		<?php the_title( '<h1 class="entry-title h3">', '</h1>' ); ?>
 	</header><!-- .entry-header -->
     <?php } ?>
 
