@@ -61,26 +61,6 @@
             display: inline-block;
         }
     }
-    .customify-wc-quick-view {
-        z-index: 15;
-        position: absolute;
-        bottom: 0px;
-        left: 0px;
-        right: 0px;
-        text-align: center;
-        transition: all .3s ease;
-        background: rgba(0, 0, 0, .5);
-        color: rgba(255, 255, 255, .8);
-        opacity: 0;
-        font-size: 14px;
-        text-transform: uppercase;
-        padding: 5px;
-    }
-    &:hover {
-        .customify-wc-quick-view {
-            opacity: 1;
-        }
-    }
 }
 
 // Secondary image when hover if exist

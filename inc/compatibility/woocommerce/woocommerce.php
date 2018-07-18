@@ -49,7 +49,6 @@ class Customify_WC {
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
 
-
             // Load theme style
             add_filter( 'woocommerce_enqueue_styles', array( $this, 'custom_styles' ) );
 
@@ -58,7 +57,6 @@ class Customify_WC {
             add_filter( 'post_class',  array( $this, 'post_class' ), 15, 3 );
             //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
             add_filter( 'product_cat_class',  array( $this, 'post_class' ) );
-
 
             // Change number repleate product
             // wc_set_loop_prop( 'name', 'related' );
@@ -74,8 +72,6 @@ class Customify_WC {
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
-	        // Quick View
-	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/quick-view.php';
 
         }
     }

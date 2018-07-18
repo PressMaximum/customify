@@ -246,24 +246,6 @@ $gl-devices-list: (
 .wc-product-inner .wc-product__category a {
   display: inline-block;
 }
-.wc-product-inner .customify-wc-quick-view {
-  z-index: 15;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  text-align: center;
-  transition: all .3s ease;
-  background: rgba(0, 0, 0, 0.5);
-  color: rgba(255, 255, 255, 0.8);
-  opacity: 0;
-  font-size: 14px;
-  text-transform: uppercase;
-  padding: 5px;
-}
-.wc-product-inner:hover .customify-wc-quick-view {
-  opacity: 1;
-}
 
 .has-gallery .wc-product-inner:hover img {
   opacity: 0;
