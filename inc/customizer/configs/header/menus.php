@@ -102,13 +102,12 @@ class Customify_Builder_Item_Primary_Menu
                 'section'         => $section,
                 'selector'        => "format",
                 'title'         => __('Border Color', 'customify'),
-                'css_format'      => ".builder-item--{$this->id} .nav-menu-desktop.style-border-bottom .primary-menu-ul > li:hover > a .link-before:before, 
-               .builder-item--{$this->id} .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-item > a .link-before:before, 
-               .builder-item--{$this->id} .nav-menu-desktop.style-border-bottom .primary-menu-ul > li.current-menu-ancestor > a .link-before:before,
-
-                .builder-item--{$this->id} .nav-menu-desktop.style-border-top.primary-menu-ul > li :hover > a .link-before:before,
-                .builder-item--{$this->id} .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-item > a .link-before:before, 
-                .builder-item--{$this->id} .nav-menu-desktop.style-border-top .primary-menu-ul > li.current-menu-ancestor > a .link-before:before
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li:hover > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li :hover > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before
                 { background-color: {{value}}; }",
                 'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
             ),
