@@ -2143,7 +2143,7 @@ input,
 select,
 optgroup,
 textarea {
-  color: #444444;
+  color: #666666;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.618;
@@ -2156,7 +2156,7 @@ textarea {
 h1, h2, h3, h4, .comments-area .comments-title, .comments-area .comment-reply-title, h5, h6 {
   font-weight: 400;
   margin: 0 0 0.5407911001em;
-  color: #373737;
+  color: #595959;
   clear: both;
 }
 
@@ -2244,7 +2244,7 @@ code, kbd, tt, var {
 }
 
 abbr, acronym {
-  border-bottom: 1px dotted #444444;
+  border-bottom: 1px dotted #666666;
   cursor: help;
 }
 
@@ -2425,7 +2425,7 @@ input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
 textarea {
-  color: #444444;
+  color: #666666;
   border: none;
   background: #f2f2f2;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
@@ -2747,7 +2747,7 @@ article.comment .comment-author {
   font-style: normal;
 }
 article.comment .comment-author a {
-  color: #444444;
+  color: #666666;
 }
 article.comment .comment-author a:hover {
   color: #0cb4ce;
@@ -2859,7 +2859,7 @@ article.comment .comment-post-author {
 }
 
 .header-main {
-  color: #444444;
+  color: #666666;
   background: #fff;
   padding: 0px;
 }
@@ -2869,7 +2869,7 @@ article.comment .comment-post-author {
   border-left: none;
   border-right: none;
   background: #f0f0f0;
-  color: #444444;
+  color: #666666;
 }
 
 /* Header Builder Common */
@@ -2954,7 +2954,6 @@ article.comment .comment-post-author {
 
 .page-breadcrumb {
   padding: 7px 0px 8px;
-  font-size: 1em;
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
 }
@@ -3132,7 +3131,7 @@ article.comment .comment-post-author {
   text-transform: uppercase;
   letter-spacing: 0.4px;
   font-weight: 600;
-  color: #373737;
+  color: #595959;
 }
 .site-branding a:hover {
   color: #0cb4ce;
@@ -3205,14 +3204,14 @@ article.comment .comment-post-author {
   position: relative;
   width: 7px;
   height: 7px;
-  margin-top: 3px;
+  margin-top: 2px;
   border-left: 1px solid currentColor;
   border-top: 1px solid currentColor;
   transform: rotate(-135deg) translateY(50%);
 }
 
 .nav-menu-desktop {
-  font-size: 15px;
+  font-size: 0.906em;
   font-weight: 500;
   line-height: 1;
 }
@@ -3256,6 +3255,7 @@ article.comment .comment-post-author {
   min-height: 90px;
   display: inline-flex;
   align-items: center;
+  text-transform: uppercase;
 }
 .nav-menu-desktop .menu > li > a i {
   line-height: 0;
@@ -3294,7 +3294,7 @@ article.comment .comment-post-author {
   padding: 0px;
 }
 .nav-menu-desktop .sub-menu {
-  width: 14em;
+  width: 16em;
   background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
   text-align: left;
@@ -3314,8 +3314,8 @@ article.comment .comment-post-author {
 .nav-menu-desktop .sub-menu li a {
   display: block;
   width: 100%;
-  padding: 8px 15px;
-  font-size: 14px;
+  padding: 9px 15px;
+  font-size: 15px;
   font-weight: normal;
   transition: background 0.15s ease-out;
   line-height: 1.6;
@@ -3346,11 +3346,11 @@ article.comment .comment-post-author {
 .nav-menu-desktop.style-plain .primary-menu-ul > li {
   float: left;
 }
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li a:focus {
-  color: #0cb4ce;
+.nav-menu-desktop.style-plain .primary-menu-ul > li > a:hover, .nav-menu-desktop.style-plain .primary-menu-ul > li > a:focus {
+  color: rgba(0, 0, 0, 0.9);
 }
 .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, .nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a {
-  color: #0cb4ce;
+  color: rgba(0, 0, 0, 0.9);
 }
 .nav-menu-desktop.style-full-height .primary-menu-ul:before, .nav-menu-desktop.style-full-height .primary-menu-ul:after {
   content: "";
@@ -3581,7 +3581,7 @@ article.comment .comment-post-author {
 .header-search-form .search-submit:hover {
   box-shadow: none;
   background-color: transparent;
-  color: #444444;
+  color: #666666;
 }
 .header-search-form .search-submit svg {
   width: 18px;
@@ -4000,7 +4000,6 @@ article.comment .comment-post-author {
 .menu-mobile-toggle {
   cursor: pointer;
   text-align: center;
-  padding: 2px 5px;
   background: transparent;
   box-shadow: none;
   color: currentColor;
@@ -4789,8 +4788,8 @@ body.menu_sidebar_dropdown:before {
 }
 @media screen and (max-width: 48em) {
   .customify-container {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 15px;
+    padding-right: 15px;
   }
 }
 
@@ -5026,7 +5025,7 @@ body.menu_sidebar_dropdown:before {
 }
 .posts-layout .entry-title {
   font-size: 1.4em;
-  color: #444444;
+  color: #666666;
   word-wrap: break-word;
   display: flex;
   align-items: center;
@@ -5250,7 +5249,7 @@ body.menu_sidebar_dropdown:before {
   border: 1px solid #eaecee;
   padding: 5px 12px 5px;
   text-transform: uppercase;
-  color: #444444;
+  color: #666666;
   margin: 0px 2px;
 }
 .entry-content .table-wrapper {
@@ -5306,14 +5305,14 @@ body.menu_sidebar_dropdown:before {
   width: 49%;
 }
 .nav-links .nav-previous a, .nav-links .nav-next a {
-  color: #444444;
+  color: #666666;
 }
 .nav-links .nav-previous a:hover, .nav-links .nav-next a:hover {
   color: #0cb4ce;
 }
 .nav-links .nav-previous a > span, .nav-links .nav-next a > span {
   font-size: 80%;
-  color: #444444;
+  color: #666666;
   display: block;
 }
 .nav-links .nav-previous {
@@ -5359,7 +5358,7 @@ body.menu_sidebar_dropdown:before {
 .search .content-area .entry-title {
   font-size: 1.4em;
   font-weight: 400;
-  color: #444444;
+  color: #666666;
   word-wrap: break-word;
 }
 .search .content-area .entry-title a {

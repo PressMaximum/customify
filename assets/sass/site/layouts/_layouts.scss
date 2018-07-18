@@ -53,8 +53,8 @@
     padding-right: 30px;
     @include clearfix;
     @include mq(max-sm) {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 .customify-container, .layout-contained{

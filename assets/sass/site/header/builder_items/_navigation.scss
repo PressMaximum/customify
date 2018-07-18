@@ -1,5 +1,5 @@
 /* Navigation */
-$submenu_width: 14em;
+$submenu_width: 16em;
 .nav-menu-mobile , .nav-menu-desktop {
     .menu-item .link-before {
         position: relative;
@@ -14,7 +14,7 @@ $submenu_width: 14em;
         position: relative;
         width: 7px;
         height: 7px;
-        margin-top: 3px;
+        margin-top: 2px;
         border-left: 1px solid currentColor;
         border-top: 1px solid currentColor;
         transform: rotate(-135deg) translateY(50%);
@@ -22,7 +22,7 @@ $submenu_width: 14em;
 }
 
 .nav-menu-desktop {
-    font-size: 15px;
+    font-size: 0.906em;
     font-weight: 500;
     line-height: 1;
     .nav-icon-angle {
@@ -65,10 +65,11 @@ $submenu_width: 14em;
             }
         }
         > li > a {
-            padding: 14px 15px 15px;
+            padding: 14px 15px 15px; 
             min-height: 90px;
             display: inline-flex;
             align-items: center;
+            text-transform: uppercase;
             i {
                 line-height: 0;
             }
@@ -133,12 +134,13 @@ $submenu_width: 14em;
             a {
                 display: block;
                 width: 100%;
-                padding: 8px 15px;
-                font-size: 14px;
+                padding: 9px 15px;
+                font-size: 15px;
                 font-weight: normal;
                 transition: background 0.15s ease-out;
                 line-height: 1.6;
-                color: #666666;
+                color: $color_text;
+                //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);
                     color: #111111;
@@ -171,14 +173,14 @@ $submenu_width: 14em;
             @include clearfix();
             > li {
                 float: left;
-                a {
+                > a {
                     &:hover, &:focus {
-                        color: $color_link_hover;
+                        color: rgba(0,0,0,0.9);
                     }
                 }
                 &.current-menu-item, &.current-menu-ancestor {
                     > a {
-                        color: $color_link_hover;
+                        color: rgba(0,0,0,0.9);
                     }
                 }
             }
