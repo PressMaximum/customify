@@ -105,7 +105,7 @@ if ( ! function_exists( 'customify_comment' ) ) :
 							?>
 							<div class="comment-time-wrap">
 								<?php
-								printf( '<a class="comment-time" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
+								printf( '<a class="comment-time plain_color" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
 									esc_url( get_comment_link( $comment->comment_ID ) ),
 									esc_attr( get_comment_time( 'c' ) ),
                                     esc_html( get_comment_date() )

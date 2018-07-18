@@ -28,6 +28,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'    => $section,
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
+.button_secondary,
 .button,
 button,
 input[type="button"],
@@ -39,15 +40,14 @@ input[type="submit"],
 .customify-builder-btn,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover 
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
+#respond #cancel-comment-reply-link
 {
     background-color: {{value}};
 }
 .site-content .widget-area .menu li.current-menu-item > a:before {
 	border-left-color: {{value}};
 }
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
 .entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
@@ -84,7 +84,6 @@ input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
 textarea,
-article.comment .comment-author a,
 .header-search-form .search-submit,
 .header-search-form .search-submit:hover,
 .posts-layout .entry-title,
@@ -213,8 +212,10 @@ blockquote {
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Meta Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
-article.comment .comment-time,
+				'css_format' => apply_filters( 'customify/styling/color-meta',
+'article.comment .comment-post-author {
+	background: {{value}};				
+}
 .entry-meta,
 .entry-meta a,
 .pagination .nav-links > *,
