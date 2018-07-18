@@ -168,7 +168,7 @@ $submenu_width: 16em;
 
     // Menu Style Plain
     &.style-plain {
-        .primary-menu-ul {
+        .nav-menu {
             @include clearfix();
             > li {
                 float: left;
@@ -188,7 +188,7 @@ $submenu_width: 16em;
 
     // Menu Style Full Height
     &.style-full-height {
-        .primary-menu-ul {
+        .nav-menu {
             @include clearfix();
              > li {
                  float: left;
@@ -214,7 +214,7 @@ $submenu_width: 16em;
 
     // Menu style border bottom
     &.style-border-bottom {
-        .primary-menu-ul {
+        .nav-menu {
             > li {
                 > a {
                     .link-before {
@@ -259,7 +259,7 @@ $submenu_width: 16em;
 
     // Top menu item style border top
     &.style-border-top {
-        .primary-menu-ul {
+        .nav-menu {
             > li {
                 > a {
                     .link-before {
