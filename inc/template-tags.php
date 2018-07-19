@@ -104,12 +104,17 @@ if ( ! function_exists( 'customify_comment' ) ) :
 							);
 							?>
 							<div class="comment-time-wrap">
+                                <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>" class="plain_color">
+                                    <time datetime="<?php comment_time( 'c' ); ?>">
+										<?php printf( _x( '%1$s at %2$s', '1: date, 2: time', 'customify' ), get_comment_date(), get_comment_time() ); ?>
+                                    </time>
+                                </a>
 								<?php
-								printf( '<a class="comment-time plain_color" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
-									esc_url( get_comment_link( $comment->comment_ID ) ),
-									esc_attr( get_comment_time( 'c' ) ),
-                                    esc_html( get_comment_date() )
-								);
+//								printf( '<a class="comment-time plain_color" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
+//									esc_url( get_comment_link( $comment->comment_ID ) ),
+//									esc_attr( get_comment_time() ),
+//                                    esc_html( get_comment_date() )
+//								);
 								?>
 							</div>
 							<?php edit_comment_link( __( 'Edit', 'customify' ), '<span class="edit-link">', '</span>' ); ?>
@@ -131,19 +136,6 @@ if ( ! function_exists( 'customify_comment' ) ) :
 				break;
 		endswitch; // end comment_type check
 	}
-endif;
-
-if ( ! function_exists( 'customify_comment_field_to_bottom' ) ) :
-	/**
-	 * Move the comment content field to bottom of the respond form.
-	 */
-	function customify_comment_field_to_bottom( $fields ) {
-		$comment_field = $fields['comment'];
-		unset( $fields['comment'] );
-		$fields['comment'] = $comment_field;
-		return $fields;
-	}
-	add_filter( 'comment_form_fields', 'customify_comment_field_to_bottom' );
 endif;
 
 
