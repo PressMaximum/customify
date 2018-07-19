@@ -138,15 +138,17 @@ $blog_gutter: $gl-gutter;
     .readmore-button {
         display: inline-block;
         line-height: 1;
-        border: 1px solid #cccccc;
+        border: 1px solid $color_border;
+        border-bottom-width: 2px;
         color: $color_meta;
         border-radius: 2px;
         cursor: pointer;
-        padding: 7px 13px;
+        padding: 7px 17px;
         font-size: 13px;
         text-transform: uppercase;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.5px;
         transition: transform .18s, border .18s, background .18s, box-shadow .18s, opacity .18s, color .18s;
+        font-weight: 500;
         &:hover {
             color: $color_primary;
             border-color: $color_primary;
@@ -448,9 +450,6 @@ $blog_gutter: $gl-gutter;
 }
 .comment-author {
     display: block;
-}
-.comment-time-wrap {
-    display: inline-block;
 }
 .comment-list {
     article.comment {
