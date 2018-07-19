@@ -2890,7 +2890,7 @@ article.comment .comment-post-author {
 }
 
 .header-main {
-  color: #444444;
+  color: #6d6d6d;
   background: #fff;
   padding: 0px;
   box-shadow: 0 1px 2px 0 #e1e5ea;
@@ -4978,16 +4978,12 @@ body.menu_sidebar_dropdown:before {
   word-wrap: break-word;
 }
 
-.entry-meta {
-  color: #6d6d6d;
-  font-size: 85%;
-}
 .entry-meta > span {
   display: inline-block;
 }
 .entry-meta .sep {
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
 }
 .entry-meta .author img {
   vertical-align: middle;

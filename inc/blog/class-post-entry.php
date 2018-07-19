@@ -137,7 +137,7 @@ class Customify_Post_Entry {
      */
     function meta_date(){
 
-        $icon = '<i class="fa fa-calendar fa-2" aria-hidden="true"></i> ';
+        $icon = '<i class="fa fa-clock-o" aria-hidden="true"></i> ';
 
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
@@ -341,7 +341,7 @@ class Customify_Post_Entry {
 
         if ( ! empty( $metas ) ) {
             ?>
-            <div class="entry-meta entry--item">
+            <div class="entry-meta entry--item text-uppercase text-xsmall link-meta">
                 <?php
                 // WPCS: XSS OK.
                 echo join('<span class="sep">'.$this->config['meta_sep'].'</span>' , $metas);

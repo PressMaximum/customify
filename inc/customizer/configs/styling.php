@@ -221,8 +221,6 @@ blockquote,
 'article.comment .comment-post-author {
 	background: {{value}};				
 }
-.entry-meta,
-.entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .page-breadcrumb, .page-breadcrumb-list li a,
