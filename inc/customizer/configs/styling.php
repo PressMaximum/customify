@@ -36,7 +36,6 @@ input[type="reset"],
 input[type="submit"],
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.customify-builder-btn,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
@@ -54,6 +53,19 @@ input[type="submit"],
 .posts-layout .readmore-button
 {
     border-color: {{value}};
+}' ),
+				'selector'   => 'format',
+			),
+
+			array(
+				'name'       => "{$section}_color_secondary",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Secondary Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/secondary-color', '
+.customify-builder-btn
+{
+    background-color: {{value}};
 }' ),
 				'selector'   => 'format',
 			),
@@ -168,9 +180,9 @@ blockquote,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
 .site-content .widget-area .menu li.current-menu-item > a,
-.posts-layout .readmore-button,
 .posts-layout .entry-inner,
-.post-navigation .nav-links
+.post-navigation .nav-links,
+article.comment .comment-meta
 {
     border-color: {{value}};
 }

@@ -140,7 +140,7 @@ class Customify_Builder_Item_Logo {
                 if ($show_desc !== 'no') {
                     $description = get_bloginfo('description', 'display');
                     if ($description || is_customize_preview()) { ?>
-                        <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+                        <p class="site-description text-uppercase text-xsmall"><?php echo $description; /* WPCS: xss ok. */ ?></p>
                         <?php
                     };
                 }
