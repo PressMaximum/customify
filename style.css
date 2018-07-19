@@ -4966,8 +4966,8 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 .entry-meta .sep {
-  margin-left: 3px;
-  margin-right: 3px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .entry-meta .author img {
   vertical-align: middle;

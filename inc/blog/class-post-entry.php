@@ -137,6 +137,8 @@ class Customify_Post_Entry {
      */
     function meta_date(){
 
+        $icon = '<i class="fa fa-calendar fa-2" aria-hidden="true"></i> ';
+
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
             $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time>';
@@ -148,8 +150,47 @@ class Customify_Post_Entry {
             esc_html( get_the_modified_date() )
         );
 
-        $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>';
+        $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">'.$icon . $time_string . '</a>';
         return '<span class="meta-item posted-on">' . $posted_on . '</span>';
+    }
+
+    /**
+     * Get terms array
+     *
+     * @param $id
+     * @param $taxonomy
+     * @param bool $icon_first
+     * @return array|bool|false|string|WP_Error
+     */
+    function get_terms_list( $id, $taxonomy, $icon_first = false ){
+        $terms = get_the_terms( $id, $taxonomy );
+
+        if ( is_wp_error( $terms ) )
+            return $terms;
+
+        if ( empty( $terms ) )
+            return false;
+
+        $links = array();
+
+        $icon = '<i class="fa fa-folder-open-o" aria-hidden="true"></i> ';
+
+        foreach ( $terms as $index => $term ) {
+            $link = get_term_link( $term, $taxonomy );
+            if ( is_wp_error( $link ) ) {
+                return $link;
+            }
+
+            if ( $icon_first && $index == 0 ) {
+
+            } else {
+                $icon = '';
+            }
+
+            $links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' .$icon. esc_html( $term->name ) . '</a>';
+        }
+
+        return $links;
     }
 
     /**
@@ -161,14 +202,11 @@ class Customify_Post_Entry {
         $html = '';
         if ( $this->post_type === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
-            $categories_list = get_the_term_list( $this->get_post_id( ) , $this->config['tax'], '', '__cate_sep__' );
-            if ( $categories_list && ! is_wp_error( $categories_list ) ) {
-                $categories_list = explode( '__cate_sep__', $categories_list );
-                if ( $this->config['term_count'] > 0 ) {
-                    $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
-                }
-                $html.= sprintf( '<span class="meta-item meta-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+            $categories_list = $this->get_terms_list( $this->get_post_id( ) , $this->config['tax'],  true );
+            if ( is_array( $categories_list ) && $this->config['term_count'] > 0 ) {
+                $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
             }
+            $html.= sprintf( '<span class="meta-item meta-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
         }
         return $html;
     }
@@ -231,9 +269,10 @@ class Customify_Post_Entry {
     function meta_comment(){
         $html =  '';
         if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+            $icon = '<i class="fa fa-comments-o"></i> ';
             $comment_count = get_comments_number();
             $html .= '<span class="meta-item comments-link">';
-            $html .= '<a href="'.esc_url( get_comments_link() ).'">';
+            $html .= '<a href="'.esc_url( get_comments_link() ).'">'.$icon;
             if ( 1 === $comment_count ) {
                 $html .= sprintf(
                 /* translators: 1: title. */
@@ -263,7 +302,7 @@ class Customify_Post_Entry {
         if ( $this->config['author_avatar'] ) {
             $avatar = get_avatar( get_the_author_meta( 'ID' ), $this->config['avatar_size'] );
         } else {
-            $avatar = '';
+            $avatar = '<i class="fa fa-user-circle-o"></i> ';
         }
 
         $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' .$avatar. esc_html( get_the_author() ) . '</a></span>';
@@ -305,7 +344,7 @@ class Customify_Post_Entry {
             <div class="entry-meta entry--item">
                 <?php
                 // WPCS: XSS OK.
-                echo join( ( $this->config['meta_sep'] ) ?'<span class="sep">'.$this->config['meta_sep'].'</span>' : '', $metas);
+                echo join('<span class="sep">'.$this->config['meta_sep'].'</span>' , $metas);
                 ?>
             </div><!-- .entry-meta -->
             <?php

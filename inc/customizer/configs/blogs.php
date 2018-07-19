@@ -216,10 +216,20 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_meta_sep',
                 'section' => $level_2_panel.'_meta',
                 'type' => 'text',
-                'default' => _x( '-', 'post meta separator', 'customify' ),
+                'default' => '',
                 'label' => __( 'Separator', 'customify' ),
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
+            ),
+
+            array(
+                'name' => $args['id'].'_meta_sep_width',
+                'section' => $level_2_panel.'_meta',
+                'type' => 'slider',
+                'max' => 20,
+                'label' => __( 'Separator Width', 'customify' ),
+                'selector' => $args['selector'] .' .entry-meta .sep',
+                'css_format' => 'margin-left: calc( {{value}} / 2 ); margin-right: calc( {{value}} / 2 );',
             ),
 
             array(
