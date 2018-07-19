@@ -38,6 +38,7 @@ if ( ! function_exists( 'customify_get_site_content_class' ) ) :
 
 		if ( customify_is_support_meta() ) {
 		    $page_layout = get_post_meta( customify_get_support_meta_id(), '_customify_content_layout', true );
+
 		    if( $page_layout ) {
 		        $classes['content_layout'] = 'content-'.sanitize_text_field( $page_layout );
             }
