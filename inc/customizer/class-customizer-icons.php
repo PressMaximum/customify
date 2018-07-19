@@ -42,7 +42,7 @@ class Customify_Font_Icons
         if ( is_customize_preview() ) {
             return true;
         }
-        $check = apply_filters( 'customify/load-icons', null );
+        $check = apply_filters( 'customify/load-icons', true );
         if ( is_null( $check ) ) {
             $builders = array( 'header_builder_panel', 'footer_builder_panel' );
             $list = apply_filters( 'customify/icon_used', array() );
