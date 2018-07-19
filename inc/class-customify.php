@@ -390,6 +390,7 @@ class Customify {
             'background',
 
             'compatibility',
+            'assets',
 
             // Header Builder Panel
             'header/panel',

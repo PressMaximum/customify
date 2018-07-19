@@ -1,4 +1,5 @@
 = 0.2.0 =
+* NEW: Add option setting to always load font awesome.
 * IMPROVED: Primary navigation style.
 * IMPROVED: Remove Menu Icon default padding.
 
