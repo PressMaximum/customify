@@ -102,23 +102,6 @@ function customify_layout_builder_config_default($val, $name)
                 'tablet' => array ( 'unit' => 'px', 'value' => '', ),
                 'mobile' => array ( 'unit' => 'px', 'value' => '', ),
             ),
-            'header_main_styling' => array (
-                    'normal' =>
-                        array (
-                            'border_width' =>
-                                array (
-                                    'unit' => 'px',
-                                    'top' => '0',
-                                    'right' => '0',
-                                    'bottom' => '1',
-                                    'left' => '0',
-                                    'link' => '1',
-                                ),
-                            'border_style' => 'solid',
-                            'border_color' => '#eaecee',
-                        ),
-
-                ),
             'header_sidebar_animate' => 'menu_sidebar_dropdown',
             'header_nav-icon_align' => array (
                     'desktop' => 'right',

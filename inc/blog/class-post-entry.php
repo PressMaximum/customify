@@ -324,7 +324,7 @@ class Customify_Post_Entry {
             }
         } else {
             if ($this->config['title_link']) {
-                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item"><a href="' . esc_url(get_permalink($post)) . '" title="' . the_title_attribute(array('echo' => false)) . '" rel="bookmark">', '</a></' . $this->config['title_tag'] . '>');
+                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item"><a href="' . esc_url(get_permalink($post)) . '" title="' . the_title_attribute(array('echo' => false)) . '" rel="bookmark" class="plain_color">', '</a></' . $this->config['title_tag'] . '>');
             } else {
                 the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item">', '</' . $this->config['title_tag'] . '>');
             }
