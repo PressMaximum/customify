@@ -1,10 +1,10 @@
 <?php
 
-// Remove default hoook
-
+/**
+ * Remove default WC action hooks
+ */
 function customify_wc_remove_default_hook (){
 	remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
-
 
 	remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
 	remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
@@ -21,7 +21,9 @@ function customify_wc_remove_default_hook (){
 add_action( 'wp', 'customify_wc_remove_default_hook' );
 
 
-
+/**
+ * Display secondary thumbnail.
+ */
 function customify_wc_secondary_product_thumbnail() {
 	$setting = wc_get_loop_prop( 'media_secondary' );
     if ( $setting == 'none' ) {
@@ -58,6 +60,11 @@ function customify_wc_catalog_header(){
 	echo '</div>';
 }
 
+/**
+ * Display switcher mod view
+ *
+ * @return string
+ */
 function customify_wc_catalog_view_mod(){
     $default = customify_get_default_catalog_view_mod();
     if ( ! Customify()->get_setting( 'wc_cd_show_view_mod') ) {
@@ -94,6 +101,12 @@ function customify_wc_after_shop_loop_item(){
 
 
 add_filter( 'woocommerce_after_output_product_categories', 'customify_wc_after_output_product_categories' );
+/**
+ * Add separator between product categories and products
+ *
+ * @param $html
+ * @return string
+ */
 function customify_wc_after_output_product_categories( $html ){
 	if ( wc_get_loop_prop( 'is_shortcode' ) && ! WC_Template_Loader::in_content_filter() ) {
 		return $html;

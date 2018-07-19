@@ -1206,6 +1206,10 @@ $gl-devices-list: (
   height: 0px;
 }
 
+.cb-row--mobile .cart-item-dropdown {
+  display: none !important;
+}
+
 .woocommerce-tabs {
   clear: both;
 }

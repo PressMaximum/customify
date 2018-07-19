@@ -320,3 +320,10 @@
         height: 0px;
     }
 }
+
+// Hide cart on mobile
+.cb-row--mobile {
+    .cart-item-dropdown {
+        display: none !important;
+    }
+}
