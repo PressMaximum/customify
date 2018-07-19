@@ -28,7 +28,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'    => $section,
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
-.button_secondary,
+.header-top,
 .button,
 button,
 input[type="button"],
@@ -40,17 +40,18 @@ input[type="submit"],
 .customify-builder-btn,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-#respond #cancel-comment-reply-link
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover
 {
     background-color: {{value}};
 }
-.site-content .widget-area .menu li.current-menu-item > a:before {
-	border-left-color: {{value}};
+.posts-layout .readmore-button:hover {
+	color: {{value}};
 }
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
+.entry-footer .tags-links a:hover, 
+.entry-footer .cat-links a:hover,
+.posts-layout .readmore-button:hover
 {
     border-color: {{value}};
 }' ),
@@ -124,7 +125,9 @@ abbr, acronym {
 				'section'    => $section,
 				'title'      => __( 'Link Hover Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color-hover', '
-a:hover, a:focus
+a:hover, 
+a:focus,
+.link-meta:hover, .link-meta a:hover
 {
     color: {{value}};
 }' ),
@@ -141,8 +144,9 @@ h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .co
 .comments-area, .page-breadcrumb{
     border-top-color: {{value}};
 }
-
-blockquote {
+blockquote,
+.site-content .widget-area .menu li.current-menu-item > a:before
+{
     border-left-color: {{value}};
 }
 
@@ -165,7 +169,8 @@ blockquote {
 .pagination .nav-links > *
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
-.site-content .widget-area .menu li.current-menu-item > a
+.site-content .widget-area .menu li.current-menu-item > a,
+.posts-layout .readmore-button
 {
     border-color: {{value}};
 }
@@ -220,8 +225,8 @@ blockquote {
 .entry-meta a,
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a:not(.wc-forward),
-.page-breadcrumb, .page-breadcrumb-list li a
+.page-breadcrumb, .page-breadcrumb-list li a,
+.link-meta, .link-meta a
 {
     color: {{value}};
 }' ),
