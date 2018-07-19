@@ -16,7 +16,7 @@ class Customify_Builder_Item_WC_Cart
      */
     function __construct()
     {
-        $this->label = __('Cart', 'customify');
+        $this->label = __('Shopping Cart', 'customify');
     }
 
     /**
@@ -162,7 +162,6 @@ class Customify_Builder_Item_WC_Cart
                 'type'        => 'styling',
                 'section'     => $this->section,
                 'title'       => __('Styling', 'customify'),
-                'description' => __('Advanced styling for button', 'customify'),
                 'selector'    => array(
                     'normal' => '.builder-header-' . $this->id . '-item .cart-item-link',
                     'hover'  => '.builder-header-' . $this->id . '-item:hover .cart-item-link',
