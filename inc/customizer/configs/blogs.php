@@ -216,10 +216,20 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_meta_sep',
                 'section' => $level_2_panel.'_meta',
                 'type' => 'text',
-                'default' => _x( '-', 'post meta separator', 'customify' ),
+                'default' => '',
                 'label' => __( 'Separator', 'customify' ),
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
+            ),
+
+            array(
+                'name' => $args['id'].'_meta_sep_width',
+                'section' => $level_2_panel.'_meta',
+                'type' => 'slider',
+                'max' => 20,
+                'label' => __( 'Separator Width', 'customify' ),
+                'selector' => $args['selector'] .' .entry-meta .sep',
+                'css_format' => 'margin-left: calc( {{value}} / 2 ); margin-right: calc( {{value}} / 2 );',
             ),
 
             array(
@@ -308,7 +318,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'name' => $args['id'].'_more_text',
                 'type' => 'text',
                 'section' => $level_2_panel.'_readmore',
-                'default' => ! is_rtl() ? _x( 'Read More &rarr;', 'readmore LTR', 'customify' ) : _x( 'Read More &larr;', 'readmore RTL' , 'customify' ),
+                //'default' => ! is_rtl() ? _x( 'Read More &#8594;', 'readmore LTR', 'customify' ) : _x( 'Read More &#8594;', 'readmore RTL' , 'customify' ),
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'label' => __( 'Read More Text', 'customify' ),

@@ -1,5 +1,5 @@
 /* Navigation */
-$submenu_width: 14em;
+$submenu_width: 16em;
 .nav-menu-mobile , .nav-menu-desktop {
     .menu-item .link-before {
         position: relative;
@@ -14,7 +14,7 @@ $submenu_width: 14em;
         position: relative;
         width: 7px;
         height: 7px;
-        margin-top: 3px;
+        margin-top: 2px;
         border-left: 1px solid currentColor;
         border-top: 1px solid currentColor;
         transform: rotate(-135deg) translateY(50%);
@@ -22,8 +22,8 @@ $submenu_width: 14em;
 }
 
 .nav-menu-desktop {
-    font-size: 15px;
-    font-weight: 500;
+    font-size: 0.875em;
+    font-weight: 600;
     line-height: 1;
     .nav-icon-angle {
         display: inline;
@@ -54,18 +54,21 @@ $submenu_width: 14em;
                 transition: all 0.14s ease-out;
                 text-decoration-color: currentColor;
                 &:hover {
-                    color: $color_link_hover;
+                    color: rgba(0,0,0,0.9);
                 }
             }
 
             &.current-menu-item {
                  > a {
-                     color: $color_link_hover;
+                     color: rgba(0,0,0,0.9);
                  }
             }
         }
         > li > a {
             padding: 14px 15px 15px;
+            display: inline-flex;
+            align-items: center;
+            text-transform: uppercase;
             i {
                 line-height: 0;
             }
@@ -130,15 +133,16 @@ $submenu_width: 14em;
             a {
                 display: block;
                 width: 100%;
-                padding: 8px 15px;
-                font-size: 14px;
+                padding: 9px 15px;
+                font-size: 15px;
                 font-weight: normal;
                 transition: background 0.15s ease-out;
                 line-height: 1.6;
-                color: #666666;
+                color: $color_text;
+                //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);
-                    color: #111111;
+                    color: rgba(0,0,0,0.9);
                 }
             }
         }
@@ -164,18 +168,18 @@ $submenu_width: 14em;
 
     // Menu Style Plain
     &.style-plain {
-        .primary-menu-ul {
+        .nav-menu {
             @include clearfix();
             > li {
                 float: left;
-                a {
+                > a {
                     &:hover, &:focus {
-                        color: $color_link_hover;
+                        color: rgba(0,0,0,0.9);
                     }
                 }
                 &.current-menu-item, &.current-menu-ancestor {
                     > a {
-                        color: $color_link_hover;
+                        color: rgba(0,0,0,0.9);
                     }
                 }
             }
@@ -184,7 +188,7 @@ $submenu_width: 14em;
 
     // Menu Style Full Height
     &.style-full-height {
-        .primary-menu-ul {
+        .nav-menu {
             @include clearfix();
              > li {
                  float: left;
@@ -210,7 +214,7 @@ $submenu_width: 14em;
 
     // Menu style border bottom
     &.style-border-bottom {
-        .primary-menu-ul {
+        .nav-menu {
             > li {
                 > a {
                     .link-before {
@@ -218,12 +222,12 @@ $submenu_width: 14em;
                         &:before {
                             position: absolute;
                             bottom: -6px;
-                            width: 100%;
+                            width: 1px;
                             left: 0px;
                             height: 2px;
                             background-color: transparent;
                             content: "";
-
+                            transition: all .3s ease;
                         }
                     }
                 }
@@ -231,6 +235,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
+                                width: 100%;
                                 background-color: currentColor;
                             }
                         }
@@ -241,6 +246,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
+                                width: 100%;
                                 background-color: currentColor;
                             }
                         }
@@ -253,7 +259,7 @@ $submenu_width: 14em;
 
     // Top menu item style border top
     &.style-border-top {
-        .primary-menu-ul {
+        .nav-menu {
             > li {
                 > a {
                     .link-before {
@@ -261,11 +267,12 @@ $submenu_width: 14em;
                         &:before {
                             position: absolute;
                             top: -6px;
-                            width: 100%;
+                            width: 1px;
                             left: 0px;
                             height: 2px;
                             background-color: transparent;
                             content: "";
+                            transition: all .3s ease;
                         }
                     }
                 }
@@ -273,6 +280,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
+                                width: 100%;
                                 background-color: currentColor;
                             }
                         }
@@ -282,6 +290,7 @@ $submenu_width: 14em;
                     > a {
                         .link-before {
                             &:before {
+                                width: 100%;
                                 background-color: currentColor;
                             }
                         }

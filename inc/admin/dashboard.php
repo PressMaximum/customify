@@ -162,7 +162,7 @@ class Customify_Dashboard {
                 <ul class="cd-list-flex">
                     <?php foreach( $links as $l ) { ?>
                         <li class="">
-                            <a class="cd-quick-setting-link" href="<?php echo esc_url( $l['url'] ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $l['label'] ); ?></a>
+                            <a class="cd-quick-setting-link" href="<?php echo esc_url( $l['url'] ); ?>" target="_blank"><?php echo esc_html( $l['label'] ); ?></a>
                         </li>
                     <?php } ?>
                 </ul>
@@ -420,7 +420,7 @@ class Customify_Dashboard {
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
             ),
             array(
-                'name' => __( 'Header Footer Builder Items', 'customify' ),
+                'name' => __( 'Header and Footer Builder Booster', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
             ),
             array(
@@ -447,7 +447,8 @@ class Customify_Dashboard {
 
         ?>
         <div class="cd-box">
-            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?> <a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a></div>
+            <div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?>
+                <a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
                 <div class="cd-module-item">

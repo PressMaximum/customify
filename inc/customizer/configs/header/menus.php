@@ -74,6 +74,45 @@ class Customify_Builder_Item_Primary_Menu
             ),
 
             array(
+                'name'            => $this->prefix . '_style_border_h',
+                'type'            => 'slider',
+                'section'         => $section,
+                'selector'        => "format",
+                'max'             => 20,
+                'title'         => __('Border Height', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li > a .link-before:before, .nav-menu-desktop.style-border-top .{$this->id}-ul > li > a .link-before:before  { height: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
+                'name'            => $this->prefix . '_style_border_pos',
+                'type'            => 'slider',
+                'section'         => $section,
+                'selector'        => "format",
+                'min'             => -50,
+                'max'             => 50,
+                'title'         => __('Border Position', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li > a .link-before:before { bottom: {{value}}; } .nav-menu-desktop.style-border-top .{$this->id}-ul > li > a .link-before:before { top: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
+                'name'            => $this->prefix . '_style_border_color',
+                'type'            => 'color',
+                'section'         => $section,
+                'selector'        => "format",
+                'title'         => __('Border Color', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li:hover > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li :hover > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before
+                { background-color: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
                 'name'           => $this->prefix . '__hide-arrow',
                 'type'           => 'checkbox',
                 'section'        => $section,

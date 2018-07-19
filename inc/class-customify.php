@@ -385,12 +385,9 @@ class Customify {
             'single-blog-post',
             'styling',
             'typography',
-
             'page-header',
             'background',
-
             'compatibility',
-
             // Header Builder Panel
             'header/panel',
             'header/html',

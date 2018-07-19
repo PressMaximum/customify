@@ -28,27 +28,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'    => $section,
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
-article.comment .comment-reply a:hover,
-article.comment .comment-time:hover,
-article.comment .comment-author a:hover,
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
-.posts-layout .readmore-button:hover,
-.entry-meta a:hover,
-.posts-layout .entry-title a:hover,
-.nav-menu-desktop .menu li.current-menu-item > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
-.nav-menu-desktop .menu li a:hover,
-a:hover,
-.site-branding a:hover,
-.widget-area .widget a:not(.wc-forward):hover,
-.site-content .widget-area .menu li.current-menu-item > a
-{
-    color: {{value}};
-}
+.header-top,
 .button,
 button,
 input[type="button"],
@@ -60,18 +40,17 @@ input[type="submit"],
 .customify-builder-btn,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover 
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover
 {
     background-color: {{value}};
 }
-.site-content .widget-area .menu li.current-menu-item > a:before {
-	border-left-color: {{value}};
+.posts-layout .readmore-button:hover {
+	color: {{value}};
 }
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
+.entry-footer .tags-links a:hover, 
+.entry-footer .cat-links a:hover,
 .posts-layout .readmore-button:hover
 {
     border-color: {{value}};
@@ -106,7 +85,6 @@ input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
 textarea,
-article.comment .comment-author a,
 .header-search-form .search-submit,
 .header-search-form .search-submit:hover,
 .posts-layout .entry-title,
@@ -132,11 +110,9 @@ abbr, acronym {
 				'name'       => "{$section}_color_link",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color', 'customify' ),
+				'title'      => __( 'Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                .entry-content a,
-                .nav-links .nav-previous a:hover,
-                .nav-links .nav-next a:hover  
+                a   
                 {
                     color: {{value}};
 				}' ),
@@ -147,10 +123,11 @@ abbr, acronym {
 				'name'       => "{$section}_color_link_hover",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color Hover', 'customify' ),
+				'title'      => __( 'Link Hover Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color-hover', '
-.search .content-area .entry-title a:hover,
-.entry-content a:hover
+a:hover, 
+a:focus,
+.link-meta:hover, .link-meta a:hover
 {
     color: {{value}};
 }' ),
@@ -167,8 +144,9 @@ h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .co
 .comments-area, .page-breadcrumb{
     border-top-color: {{value}};
 }
-
-blockquote {
+blockquote,
+.site-content .widget-area .menu li.current-menu-item > a:before
+{
     border-left-color: {{value}};
 }
 
@@ -191,7 +169,8 @@ blockquote {
 .pagination .nav-links > *
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
-.site-content .widget-area .menu li.current-menu-item > a
+.site-content .widget-area .menu li.current-menu-item > a,
+.posts-layout .readmore-button
 {
     border-color: {{value}};
 }
@@ -238,14 +217,14 @@ blockquote {
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Meta Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
-article.comment .comment-time,
-.entry-meta,
-.entry-meta a,
+				'css_format' => apply_filters( 'customify/styling/color-meta',
+'article.comment .comment-post-author {
+	background: {{value}};				
+}
 .pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a:not(.wc-forward),
-.page-breadcrumb, .page-breadcrumb-list li a
+.page-breadcrumb, .page-breadcrumb-list li a,
+.link-meta, .link-meta a
 {
     color: {{value}};
 }' ),

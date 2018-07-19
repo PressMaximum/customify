@@ -1,3 +1,8 @@
+= 0.2.0 =
+* NEW: Add option setting to always load font awesome.
+* IMPROVED: Primary navigation style.
+* IMPROVED: Remove Menu Icon default padding.
+
 = 0.1.2 =
 * NEW: Support Elementor 2.0
 * IMPROVED: Improve typography selectors.

@@ -11,6 +11,7 @@
 # Media: Captions
 # Media: Galleries
 # Comments
+# Helper
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
@@ -33,7 +34,7 @@ textarea {
 h1, h2, h3, h4, h5, h6 {
     font-weight: 400;
     margin: 0 0 ms(-3);
-    color: darken($color_text, 5%);
+    color: darken($color_text, 10%);
     clear: both;
 }
 
@@ -160,10 +161,13 @@ figure {
 }
 
 /* Links */
+a.plain_color {
+    color: currentColor;
+}
 a {
     color: $color_link;
     text-decoration: none;
-    &:hover {
+    &:hover, &:focus {
         color: $color_link_hover;
     }
     &:hover,
@@ -239,6 +243,50 @@ table {
 
     }
 }
+/* Float + Clear */
+.clearfix, .clear {
+    &:before, &:after {
+        content: "";
+        display: table;
+    }
+    &:after {
+        clear: both;
+    }
+}
+.pull-right {
+    float: right;
+    margin-right: 0px;
+}
+
+.pull-left {
+    float: left;
+    margin-left: 0px;
+}
+
+/* Pre-defined elements */
+.text-xsmall {
+    font-size: 0.72em;
+}
+.text-small {
+    font-size: 0.85em;
+}
+.text-large {
+    font-size: 1.1em;
+}
+.text-uppercase {
+    text-transform: uppercase;
+    line-height: 1.2;
+    &.text-xsmall {
+        letter-spacing: 0.5px;
+    }
+}
+.link-meta, .link-meta a {
+    color: $color_meta;
+    &:hover {
+        color: $color_primary;
+    }
+}
+
 
 /*--------------------------------------------------------------
 # Forms
@@ -536,6 +584,7 @@ object {
             padding-left: 85px;
             border-left: 1px solid $color_border;
             position: relative;
+            width: 100%;
             &:after {
                 content: "";
                 display: block;
@@ -566,51 +615,31 @@ article.comment {
     .comment-image {
         float: left;
     }
-    .comment-reply {
-        float: left;
-        clear: left;
-        line-height: 1;
-        a {
-            font-size: 90%;
-            color: $color_meta;
-            &:hover {
-                color: $color_primary;
-            }
-        }
-    }
-    .comment-meta {
-        margin-bottom: ms(-1);
-    }
-    .comment-time {
-        color: $color_meta;
-        font-size: 90%;
-        &:hover {
-            color: $color_primary;
-        }
-    }
     .comment-wrap {
         margin-left: 85px;
     }
-    .comment-author {
-        font-weight: 500;
-        font-size: 100%;
-        line-height: 1;
-        font-style: normal;
-        a {
-            color: $color_text;
-            &:hover {
-                color: $color_primary;
-            }
+    .comment-meta {
+        display: block;
+        margin: 12px 0px 12px;
+        padding-bottom: 4px;
+        border-bottom: 1px solid $color_border;
+        .comment-edit-link {
+            margin-left: 10px;
         }
     }
+    .comment-author {
+        font-weight: 500;
+        text-transform: uppercase;
+        line-height: 1;
+        font-style: normal;
+    }
     .comment-post-author {
-        border: 1px solid $color_primary;
-        font-size: 13px;
-        padding: 2px 6px 3px;
+        background: $color_meta;
+        padding: 1px 6px 1px;
         border-radius: 2px;
-        color: $color_primary;
+        color: #FFFFFF;
         position: relative;
-        top: -3px;
+        top: -2px;
         margin-left: 4px;
     }
 }
@@ -630,18 +659,24 @@ article.comment {
     .comment-form-url {
         margin-right: 0px;
     }
-    #cancel-comment-reply-link {
-        border: 1px solid $color_primary;
-        font-size: 12px;
-        padding: 2px 6px 3px;
-        border-radius: 2px;
-        color: $color_primary;
-        position: relative;
-        top: -4px;
-        margin-left: 4px;
-
+    .comment-form-cookies-consent {
+        #wp-comment-cookies-consent {
+            position: relative;
+            top: -1px;
+            margin-right: 5px;
+        }
     }
 
+}
+
+/*--------------------------------------------------------------
+## Helper
+--------------------------------------------------------------*/
+.shape-rounded {
+    border-radius: 10%;
+}
+.shape-circle {
+    border-radius: 50%;
 }
 
 /* Customize Preview */
@@ -704,12 +739,4 @@ article.comment {
             }
         }
     }
-}
-
-.shape-rounded {
-    border-radius: 10%;
-}
-
-.shape-circle {
-    border-radius: 50%;
 }
