@@ -280,7 +280,6 @@ class Customify_Builder_Item_WC_Cart
                 'name'            => "{$this->name}_d_align",
                 'type'            => 'select',
                 'section'         => $this->section,
-                'device_settings' => true,
                 'title'           => __('Dropdown Alignment', 'customify'),
                 'selector'        => '.builder-header-' . $this->id . '-item',
                 'render_callback' => $fn,
@@ -348,6 +347,7 @@ class Customify_Builder_Item_WC_Cart
                 'description' => __('Advanced styling for cart dropdown', 'customify'),
                 'selector'    => array(
                     'normal' => '.builder-header-' . $this->id . '-item .cart-item-dropdown',
+                    'normal_bg_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-item-dropdown .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-item-dropdown .widget::before",
                 ),
                 'css_format'  => 'styling',
                 'default'     => array(),
@@ -361,7 +361,7 @@ class Customify_Builder_Item_WC_Cart
                         'bg_position'   => false,
                         'bg_repeat'     => false,
                         'bg_attachment' => false,
-                        'bg_color'      => false,
+                        //'bg_color'      => false,
                         'bg_heading'      => false,
                         'border_style'      => false,
                         'border_radius'      => false,
@@ -402,8 +402,8 @@ class Customify_Builder_Item_WC_Cart
     }
 
     function array_to_class( $array, $prefix ){
-        if ( ! array( $array ) ) {
-            return '';
+        if ( ! is_array( $array ) ) {
+            return $prefix.'-'.$array;
         }
         $classes = array();
         $array = array_reverse($array);
@@ -436,7 +436,7 @@ class Customify_Builder_Item_WC_Cart
 
         $classes = array();
 
-        $align = Customify()->get_setting("{$this->name}_d_align", 'all');
+        $align = Customify()->get_setting("{$this->name}_d_align");
         $classes[] = $this->array_to_class( $align, 'd-align' );
 
         $label_classes = $this->array_to_class( $show_label, 'wc-cart' );
