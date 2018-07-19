@@ -36,22 +36,22 @@ input[type="reset"],
 input[type="submit"],
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
 .customify-builder-btn,
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
 .nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
+.posts-layout .readmore-button:hover
 {
     background-color: {{value}};
 }
-.posts-layout .readmore-button:hover {
+.posts-layout .readmore-button {
 	color: {{value}};
 }
 .pagination .nav-links > *:hover,
 .pagination .nav-links span,
-.entry-footer .tags-links a:hover, 
-.entry-footer .cat-links a:hover,
-.posts-layout .readmore-button:hover
+.entry-single .tags-links a:hover, 
+.entry-single .cat-links a:hover,
+.posts-layout .readmore-button
 {
     border-color: {{value}};
 }' ),
@@ -64,7 +64,6 @@ input[type="submit"],
 				'section'    => $section,
 				'title'      => __( 'Text Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/text-color', 'body,
-button,
 input,
 select,
 optgroup,
@@ -88,11 +87,7 @@ textarea,
 .header-search-form .search-submit,
 .header-search-form .search-submit:hover,
 .posts-layout .entry-title,
-.nav-links .nav-previous a, .nav-links .nav-next a,
-.nav-links .nav-previous a > span, .nav-links .nav-next a > span,
 .header-bottom,
-.widget-area .widget a,
-.site-branding a,
 .site-branding .site-description
 {
     color: {{value}};
@@ -140,8 +135,11 @@ a:focus,
 				'section'    => $section,
 				'title'      => __( 'Border Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/color-border', '
-h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
-.comments-area, .page-breadcrumb{
+h2 + h3, 
+.comments-area h2 + .comments-title, 
+.h2 + h3, 
+.comments-area .h2 + .comments-title, 
+.page-breadcrumb {
     border-top-color: {{value}};
 }
 blockquote,
@@ -170,7 +168,9 @@ blockquote,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
 .site-content .widget-area .menu li.current-menu-item > a,
-.posts-layout .readmore-button
+.posts-layout .readmore-button,
+.posts-layout .entry-inner,
+.post-navigation .nav-links
 {
     border-color: {{value}};
 }
@@ -222,9 +222,11 @@ blockquote,
 	background: {{value}};				
 }
 .pagination .nav-links > *,
-.entry-footer .tags-links a, .entry-footer .cat-links a,
-.page-breadcrumb, .page-breadcrumb-list li a,
-.link-meta, .link-meta a
+.link-meta, 
+.link-meta a,
+.color-meta,
+.entry-single .tags-links:before, 
+.entry-single .cats-links:before
 {
     color: {{value}};
 }' ),
