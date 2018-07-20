@@ -51,7 +51,8 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 					.pagination .nav-links span,
 					.entry-single .tags-links a:hover, 
 					.entry-single .cat-links a:hover,
-					.posts-layout .readmore-button
+					.posts-layout .readmore-button,
+					.posts-layout .readmore-button:hover
 					{
 					    border-color: {{value}};
 					}'
@@ -66,8 +67,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'title'      => __( 'Secondary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/secondary-color', '
 				
-					.customify-builder-btn,
-					.item--wc_cart .cart-icon .cart-qty
+					.customify-builder-btn
 					{
 					    background-color: {{value}};
 					}'

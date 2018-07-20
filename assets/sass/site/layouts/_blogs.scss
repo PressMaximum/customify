@@ -333,11 +333,6 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-content {
-    a {
-        &:hover {
-            text-decoration: underline;
-        }
-    }
     .page-links {
         display: block;
         margin: 5px 0px 20px;
@@ -353,6 +348,16 @@ $blog_gutter: $gl-gutter;
     .table-wrapper {
         max-width: 100%;
         overflow: auto;
+    }
+}
+
+.single-post {
+    .entry-content {
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
     }
 }
 

@@ -43,6 +43,7 @@ class Customify_WC {
 
             // Custom styling
             add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
+            add_filter('customify/styling/secondary-color', array($this, 'styling_secondary'));
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
 
             // Shopping Cart
@@ -201,38 +202,37 @@ class Customify_WC {
     }
 
     function styling_primary( $selector ){
-        $selector .= ' .woocommerce  #respond input#submit, 
-        .woocommerce  a.button, 
-        .woocommerce  button.button, 
-        .woocommerce  input.button,
-        .woocommerce #respond input#submit:hover, 
-        .woocommerce  a.button:hover, 
-        .woocommerce  button.button:hover, 
-        .woocommerce  input.button:hover,
+        $selector .= ' 
         
-        .woocommerce .site #respond input#submit.alt,
-        .woocommerce .site a.button.alt, 
-        .woocommerce .site button.button.alt,
-        .woocommerce .site input.button.alt,
-        
-        .woocommerce .widget.widget_price_filter .ui-slider .ui-slider-handle,
-        .woocommerce .widget.widget_price_filter .ui-slider .ui-slider-range
-       {
+        .xx
+        {
             background-color: {{value}};
         }';
 
         return $selector;
     }
 
+	function styling_secondary( $selector ){
+		$selector .= ' 
+        
+        .add_to_cart_button
+        {
+            background-color: {{value}};
+        }';
+
+		return $selector;
+	}
+
 	function styling_linkcolor( $selector ){
-		$selector .= ' .woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
+		$selector .= '
+		 
+		.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
         .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
             color: {{value}};
         }';
 
 		return $selector;
 	}
-
 
     function wp(){
         remove_action( 'woocommerce_sidebar', 'woocommerce_get_sidebar' );

@@ -2424,42 +2424,7 @@ table tbody tr:nth-child(2n) td {
 # Forms
 --------------------------------------------------------------*/
 form {
-  margin-bottom: 2.2906835em;
-}
-
-.button,
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-  border: none;
-  background: #005670;
-  color: #FFFFFF;
-  cursor: pointer;
-  padding: 0.5407911001em 1.618em;
-  font-weight: 600;
-  text-transform: uppercase;
-  transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
-  border-radius: 1px;
-}
-.button:hover,
-button:hover,
-input[type="button"]:hover,
-input[type="reset"]:hover,
-input[type="submit"]:hover {
-  box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
-  color: #FFFFFF;
-}
-.button:active, .button:focus,
-button:active,
-button:focus,
-input[type="button"]:active,
-input[type="button"]:focus,
-input[type="reset"]:active,
-input[type="reset"]:focus,
-input[type="submit"]:active,
-input[type="submit"]:focus {
-  outline: none;
+  margin-bottom: 2em;
 }
 
 input[type="text"],
@@ -2511,6 +2476,55 @@ textarea:focus {
   border-color: rgba(0, 0, 0, 0.1);
   outline: none;
   background: #f9f9f9;
+}
+
+.button,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  border: none;
+  cursor: pointer;
+  padding: 0px 1.3em;
+  line-height: 2.5em;
+  min-height: 2.6em;
+  max-width: 100%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+  border-radius: 1px;
+  display: inline-block;
+}
+.button:hover,
+button:hover,
+input[type="button"]:hover,
+input[type="reset"]:hover,
+input[type="submit"]:hover {
+  box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+  color: #FFFFFF;
+}
+.button:active, .button:focus,
+button:active,
+button:focus,
+input[type="button"]:active,
+input[type="button"]:focus,
+input[type="reset"]:active,
+input[type="reset"]:focus,
+input[type="submit"]:active,
+input[type="submit"]:focus {
+  outline: none;
+}
+
+.button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+  color: #FFFFFF;
+  background: #005670;
+}
+
+.button[disabled], button[disabled], button.disabled, .button.disabled {
+  opacity: 0.5;
 }
 
 textarea {
@@ -5276,9 +5290,6 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 1.618em;
 }
 
-.entry-content a:hover {
-  text-decoration: underline;
-}
 .entry-content .page-links {
   display: block;
   margin: 5px 0px 20px;
@@ -5294,6 +5305,10 @@ body.menu_sidebar_dropdown:before {
 .entry-content .table-wrapper {
   max-width: 100%;
   overflow: auto;
+}
+
+.single-post .entry-content a:hover {
+  text-decoration: underline;
 }
 
 .entry-single .entry--item:not(.entry-title), .entry-single .entry-thumbnail {

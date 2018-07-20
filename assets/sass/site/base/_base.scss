@@ -291,32 +291,7 @@ table {
 # Forms
 --------------------------------------------------------------*/
 form {
-    margin-bottom: ms(3);
-}
-
-.button,
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"] {
-    border: none;
-    background: $color_primary;
-    color: #FFFFFF;
-    cursor: pointer;
-    padding: ms(-3) ms(2);
-    font-weight: 600;
-    text-transform: uppercase;
-    transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
-    border-radius: 1px;
-    &:hover {
-        box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
-        color: #FFFFFF;
-    }
-
-    &:active,
-    &:focus {
-        outline: none;
-    }
+    margin-bottom: 2em;
 }
 
 input[type="text"],
@@ -353,6 +328,45 @@ textarea {
         background: #f9f9f9;
     }
 }
+
+.button,
+button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    border: none;
+    cursor: pointer;
+    padding: 0px 1.3em;
+    line-height: 2.5em;
+    min-height: 2.6em;
+    max-width: 100%;
+    font-weight: bolder;
+    text-transform: uppercase;
+    transition: transform .3s, border .3s, background .3s, box-shadow .3s, opacity .3s, color .3s;
+    border-radius: 1px;
+    display: inline-block;
+    &:hover {
+        box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
+        color: #FFFFFF;
+    }
+    &:active,
+    &:focus {
+        outline: none;
+    }
+}
+
+.button,
+input[type="button"],
+input[type="reset"],
+input[type="submit"] {
+    color: #FFFFFF;
+    background: $color_primary;
+}
+
+.button[disabled], button[disabled], button.disabled, .button.disabled {
+    opacity: 0.5;
+}
+
 textarea {
     padding: 0.575em 0.875em 0;
     min-height: 130px;
