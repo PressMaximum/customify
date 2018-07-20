@@ -67,7 +67,7 @@ class Customify_Builder_Item_HTML {
                 'section' => $this->section,
                 'selector' => '.builder-header-'.$this->id.'-item.item--html p, .builder-header-'.$this->id.'-item.item--html',
                 'css_format' => 'typography',
-                'title' => __( 'Typography', 'customify' ),
+                'title' => __( 'Typography Setting', 'customify' ),
             ),
 
         );

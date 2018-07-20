@@ -36,7 +36,7 @@ if ( post_password_required() ) {
 			} else {
 				printf( // WPCS: XSS OK.
 					/* translators: 1: comment count number, 2: title. */
-					esc_html( _nx( '%1$s comment', '%1$s comments', $comment_count, 'comments title', 'customify' ) ),
+					esc_html( _nx( '%1$s Comment', '%1$s Comments', $comment_count, 'comments title', 'customify' ) ),
 					number_format_i18n( $comment_count )
 				);
 			}

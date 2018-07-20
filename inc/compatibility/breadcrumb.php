@@ -332,7 +332,7 @@ class Customify_Breadcrumb {
         if ( $list ) {
             $pos = sanitize_text_field( Customify()->get_setting( 'breadcrumb_display_pos' ) );
             ?>
-            <div id="page-breadcrumb" class="page-breadcrumb breadcrumb--<?php echo esc_attr( $pos ); ?>">
+            <div id="page-breadcrumb" class="page-breadcrumb breadcrumb--<?php echo esc_attr( $pos ); ?> text-uppercase text-xsmall link-meta">
                 <div class="page-breadcrumb-inner customify-container">
                     <ul class="page-breadcrumb-list">
                         <?php
