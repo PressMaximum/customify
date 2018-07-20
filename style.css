@@ -5323,6 +5323,27 @@ body.menu_sidebar_dropdown:before {
   letter-spacing: 0.5px;
 }
 
+.bio-author {
+  display: flex;
+}
+.bio-author .avatar {
+  flex-basis: 90px;
+}
+@media screen and (max-width: 568px) {
+  .bio-author .avatar {
+    flex-basis: 90px;
+  }
+}
+.bio-author .bio-author-details {
+  flex-basis: calc( 100% - 90px );
+  margin-left: 2em;
+}
+@media screen and (max-width: 568px) {
+  .bio-author .bio-author-details {
+    flex-basis: calc( 100% - 50px );
+  }
+}
+
 .post-navigation .nav-links {
   margin-top: 2em;
   padding: 16px 0px 15px;
