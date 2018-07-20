@@ -144,11 +144,11 @@
             }
             &.current-menu-item {
                 > a {
-                    color: $color_primary;
                     position: relative;
                     border: 1px solid $color_border;
                     border-left: none;
                     border-right: none;
+                    font-size: 110%;
                     &:before {
                         border-bottom: 6px solid transparent;
                         border-left: 6px solid $color_border;

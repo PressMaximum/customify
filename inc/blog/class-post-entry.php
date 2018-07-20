@@ -137,7 +137,7 @@ class Customify_Post_Entry {
      */
     function meta_date(){
 
-        $icon = '<i class="fa fa-calendar fa-2" aria-hidden="true"></i> ';
+        $icon = '<i class="fa fa-clock-o" aria-hidden="true"></i> ';
 
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
@@ -240,7 +240,7 @@ class Customify_Post_Entry {
             /* translators: used between list items, there is a space after the comma */
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
-                $html .= sprintf( '<div class="entry--item entry-tags tags-links">%1$s</div>', $tags_list ); // WPCS: XSS OK.
+                $html .= sprintf( '<div class="entry--item entry-tags tags-links">'. esc_html__( 'Tagged ', 'customify' ) .'%1$s</div>', $tags_list ); // WPCS: XSS OK.
             }
         }
         echo $html;
@@ -256,8 +256,9 @@ class Customify_Post_Entry {
             /* translators: used between list items, there is a space after the comma */
             $list = get_the_category_list( esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $list ) {
-                $html .= sprintf( '<div class="entry--item entry-categories cats-links">%1$s</div>', $list ); // WPCS: XSS OK.
+                $html .= sprintf( '<div class="entry--item entry-categories cats-links">'. esc_html__( 'Posted in ', 'customify' ) .'%1$s</div>', $list ); // WPCS: XSS OK.
             }
+
         }
         echo $html;
     }
@@ -341,7 +342,7 @@ class Customify_Post_Entry {
 
         if ( ! empty( $metas ) ) {
             ?>
-            <div class="entry-meta entry--item">
+            <div class="entry-meta entry--item text-uppercase text-xsmall link-meta">
                 <?php
                 // WPCS: XSS OK.
                 echo join('<span class="sep">'.$this->config['meta_sep'].'</span>' , $metas);
@@ -512,10 +513,20 @@ class Customify_Post_Entry {
         if ( ! is_single() ) {
             return '';
         }
-        the_post_navigation( array(
-            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
-            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
-        ) );
+//        the_post_navigation( array(
+//            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
+//            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
+//        ) );
+	    the_post_navigation(
+		    array(
+			    'next_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Next', 'customify' ) . '</span> ' .
+			                   '<span class="screen-reader-text">' . __( 'Next post:', 'customify' ) . '</span> ' .
+			                   '<span class="post-title text-large">%title</span>',
+			    'prev_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Previous', 'customify' ) . '</span> ' .
+			                   '<span class="screen-reader-text">' . __( 'Previous post:', 'customify' ) . '</span> ' .
+			                   '<span class="post-title text-large">%title</span>',
+		    )
+	    );
     }
 
     /**
