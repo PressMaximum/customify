@@ -316,10 +316,6 @@ $gl-devices-list: (
   width: 100%;
 }
 
-.wc-grid-view .wc-product-contents {
-  text-align: center;
-}
-
 .wc-grid-view .hide-in-grid {
   display: none;
 }
@@ -912,17 +908,27 @@ $gl-devices-list: (
 }
 .woocommerce-product-search .search-field {
   width: 100%;
-  margin: 0px;
-  padding-right: 45px;
+  display: block;
 }
-.woocommerce-product-search button {
+.woocommerce-product-search button[type="submit"] {
   position: absolute;
   top: 0px;
   right: 0px;
   bottom: 0px;
-  background: none;
-  color: currentColor;
-  padding: 12px;
+  padding: 9px 14px;
+  margin-left: -46px;
+  overflow: hidden;
+  box-shadow: none;
+  background: transparent;
+  color: #aaaaaa;
+  line-height: 0px;
+}
+.woocommerce-product-search button[type="submit"]:hover svg #svg-search {
+  fill: #444444;
+}
+.woocommerce-product-search button[type="submit"] svg {
+  width: 18px;
+  height: 18px;
 }
 
 /**
@@ -1069,7 +1075,7 @@ $gl-devices-list: (
   font-weight: 600;
 }
 .item--wc_cart .cart-item-link > span {
-  margin: 0 3px;
+  margin: 0 2px;
 }
 .item--wc_cart .cart-item-link > span:first-child {
   margin-left: 0px;
@@ -1102,6 +1108,7 @@ $gl-devices-list: (
   transform: translate(50%, 0%);
   background: #c3512f;
   color: #FFFFFF;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.2);
   font-size: 11px;
   min-width: 16px;
   min-height: 16px;
@@ -1396,24 +1403,22 @@ p.demo_store a,
 }
 
 .input-qty-pm {
+  border-radius: 1px;
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  border: 1px solid #eaecee;
+  border: 1px solid #E5E5E5;
 }
 .input-qty-pm input, .input-qty-pm input[type="text"] {
   box-shadow: none !important;
-  border-left: 1px solid #eaecee;
-  border-right: 1px solid #eaecee;
   border-radius: 0px;
+  border-top: none;
+  border-bottom: none;
 }
 .input-qty-pm .input-pm-act {
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-basis: auto;
-  padding: 0.6180469716em;
-  cursor: pointer;
   text-align: center;
+  line-height: 2.6em;
+  cursor: pointer;
   min-width: 2em;
   -webkit-user-select: none;
   -moz-user-select: none;

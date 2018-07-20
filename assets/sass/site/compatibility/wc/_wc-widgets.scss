@@ -86,16 +86,28 @@
     position: relative;
     .search-field {
         width: 100%;
-        margin: 0px;
-        padding-right: 45px;
+        display: block;
     }
-    button {
+    button[type="submit"] {
         position: absolute;
         top: 0px;
         right: 0px;
         bottom: 0px;
-        background: none;
-        color: currentColor;
-        padding: 12px;
+        padding: 9px 14px;
+        margin-left: -46px;
+        overflow: hidden;
+        box-shadow: none;
+        background: transparent;
+        color: #aaaaaa;
+        line-height: 0px;
+        &:hover {
+            svg #svg-search {
+                fill: #444444;
+            }
+        }
+        svg {
+            width: 18px;
+            height: 18px;
+        }
     }
 }

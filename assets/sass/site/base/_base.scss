@@ -15,12 +15,7 @@
 /*--------------------------------------------------------------
 # Typography
 --------------------------------------------------------------*/
-body,
-button,
-input,
-select,
-optgroup,
-textarea {
+body {
     color: $color_text;
     font-family: $font_main;
     font-weight: 400;
@@ -31,8 +26,9 @@ textarea {
 }
 
 /* # Heading */
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 400;
+    font-family: $font_main;
     margin: 0 0 ms(-3);
     color: darken($color_text, 10%);
     clear: both;
@@ -338,19 +334,28 @@ input[type="time"],
 input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
+select,
 textarea {
-    color: $color_text;
-    border: none;
-    background: darken($background_body, 5%);
+    color: #282828;
+    border: 1px solid #E5E5E5;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-    padding: ms(-2);
+    padding: 0 0.75em;
+    height: 2.6em;
+    width: 100%;
+    max-width: 100%;
+    vertical-align: middle;
     border-radius: 1px;
     -moz-appearance:none;
     -webkit-appearance:none;
     &:focus {
-        background: darken($background_body, 6%);
+        border-color: rgba(0,0,0,0.1);
         outline: none;
+        background: #f9f9f9;
     }
+}
+textarea {
+    padding: 0.575em 0.875em 0;
+    min-height: 130px;
 }
 
 button::-moz-focus-inner,
@@ -361,10 +366,6 @@ input::-moz-focus-inner {
 
 select {
     //border: 1px solid darken( $background_body,5% );
-}
-
-textarea {
-    width: 100%;
 }
 
 fieldset {

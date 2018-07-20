@@ -79,24 +79,21 @@ p.demo_store,
 }
 
 .input-qty-pm {
+    border-radius: 1px;
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    border: 1px solid $color_border;
+    border: 1px solid #E5E5E5;
     input, input[type="text"] {
         box-shadow: none !important;
-        border-left: 1px solid $color_border;
-        border-right: 1px solid $color_border;
         border-radius: 0px;
+        border-top: none;
+        border-bottom: none;
     }
-
     .input-pm-act {
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: auto;
-        padding: 0.6180469716em;
-        cursor: pointer;
         text-align: center;
+        line-height: 2.6em;
+        cursor: pointer;
         min-width: 2em;
         -webkit-user-select: none;
         -moz-user-select: none;
