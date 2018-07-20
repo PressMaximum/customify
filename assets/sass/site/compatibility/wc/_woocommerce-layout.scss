@@ -73,8 +73,8 @@
 }
 
 // Secondary image when hover if exist
-.has-gallery {
-    .wc-product-inner {
+.product-has-gallery {
+    > .wc-product-inner {
         &:hover {
             img {
                 opacity: 0;

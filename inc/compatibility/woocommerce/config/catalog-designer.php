@@ -948,7 +948,6 @@ class Customify_WC_Catalog_Designer {
          */
         do_action( 'woocommerce_after_shop_loop_item_title' );
 
-
 	}
 
 	function product__description() {

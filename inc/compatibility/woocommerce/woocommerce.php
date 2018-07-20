@@ -90,13 +90,13 @@ class Customify_WC {
 	 */
     function loop_start(){
 
-	    $setting = Customify()->get_setting( 'wc_cd_media_secondary' );
-	    wc_set_loop_prop( 'media_secondary', $setting );
-
 	    /**
 	     * @see wc_set_loop_prop
 	     */
         $name = wc_get_loop_prop( 'name' );
+
+        wc_set_loop_prop( 'media_secondary', Customify()->get_setting( 'wc_cd_media_secondary' ) );
+
         if ( ! $name ) { // main loop
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
@@ -155,7 +155,7 @@ class Customify_WC {
 		    if ( $setting != 'none' ) {
 			    $image_ids = $product->get_gallery_image_ids( );
 			    if ( $image_ids ) {
-				    $classes[] = 'has-gallery';
+				    $classes[] = 'product-has-gallery';
 			    }
             }
 
