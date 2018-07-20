@@ -1388,6 +1388,35 @@ p.demo_store a,
   margin: 0;
 }
 
+.input-qty-pm {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  border: 1px solid #eaecee;
+}
+.input-qty-pm input, .input-qty-pm input[type="text"] {
+  box-shadow: none !important;
+  border-left: 1px solid #eaecee;
+  border-right: 1px solid #eaecee;
+  border-radius: 0px;
+}
+.input-qty-pm .input-pm-act {
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-basis: auto;
+  padding: 0.6180469716em;
+  cursor: pointer;
+  text-align: center;
+  min-width: 2em;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+.input-qty-pm .input-pm-act:hover {
+  background: #f2f2f2;
+}
+
 ul.products li.product h3,
 ul.products li.product .woocommerce-loop-product__title,
 ul.products li.product .woocommerce-loop-category__title {

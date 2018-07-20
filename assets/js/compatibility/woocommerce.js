@@ -63,4 +63,63 @@ jQuery( document ).ready( function ( $ ) {
     } );
 
 
+    $.fn._wc_plus_minus = function( ) {
+        this.each(function() {
+            var input = $( this );
+            var check = input.data( 'qty-added' ) || false;
+            if ( ! check ) {
+                input.data( 'qty-added' , 1 );
+
+                input.wrap('<span class="input-qty-pm"></span>');
+                var p = input.parent();
+                input.attr( 'type', 'text' ) ; // remove up/ down arrow default
+                p.append('<span class="input-pm-act input-pm-plus">+</span>');
+                p.prepend('<span class="input-pm-act input-pm-minus">-</span>');
+
+                // This button will increment the value
+                $('.input-pm-plus', p ).click(function(e){
+                    // Stop acting like a button
+                    e.preventDefault();
+                    // Get the field name
+                    // Get its current value
+                    var currentVal = parseInt(input.val());
+                    // If is not undefined
+                    if (!isNaN(currentVal)) {
+                        // Increment
+                        input.val(currentVal + 1);
+                    } else {
+                        // Otherwise put a 0 there
+                        input.val(0);
+                    }
+                });
+                // This button will decrement the value till 0
+                $(".input-pm-minus", p ).click(function(e) {
+                    // Stop acting like a button
+                    e.preventDefault();
+                    // Get the field name
+                    // Get its current value
+                    var currentVal = parseInt(input.val());
+                    // If it isn't undefined or its greater than 0
+                    if (!isNaN(currentVal) && currentVal > 0) {
+                        // Decrement one
+                        input.val(currentVal - 1);
+                    } else {
+                        // Otherwise put a 0 there
+                        input.val(0);
+                    }
+                });
+
+
+            }
+
+        });
+        return this;
+    };
+
+    if (  woocommerce_params.qty_pm ) {
+        $( 'input.qty[type="number"]' )._wc_plus_minus();
+    }
+
+
+
 } );
