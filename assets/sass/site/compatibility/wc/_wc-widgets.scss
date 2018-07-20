@@ -74,7 +74,14 @@
     }
 }
 
-// Search
+/*
+* Widgets
+ */
+.widget_product_search {
+    .search-field {
+        margin-bottom: 5px;
+    }
+}
 .woocommerce-product-search {
     position: relative;
     .search-field {

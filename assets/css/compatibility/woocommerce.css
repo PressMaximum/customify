@@ -9,11 +9,6 @@ $gl-devices-list: (
 /************************
    Device Query
 *************************/
-/* Widgets */
-.widget_product_search .search-field {
-  margin-bottom: 5px;
-}
-
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
   background-color: #005670;
@@ -900,6 +895,13 @@ $gl-devices-list: (
   margin-bottom: 15px;
 }
 
+/*
+* Widgets
+ */
+.widget_product_search .search-field {
+  margin-bottom: 5px;
+}
+
 .woocommerce-product-search {
   position: relative;
 }
@@ -1219,6 +1221,9 @@ $gl-devices-list: (
   }
 }
 
+/**
+* Single Product Tabs
+ */
 .woocommerce-tabs {
   clear: both;
 }
