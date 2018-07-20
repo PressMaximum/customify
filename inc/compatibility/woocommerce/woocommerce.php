@@ -49,6 +49,8 @@ class Customify_WC {
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
 
+            add_filter( 'woocommerce_get_script_data', array($this, 'woocommerce_get_script_data'), 15, 2 );
+
             // Load theme style
             add_filter( 'woocommerce_enqueue_styles', array( $this, 'custom_styles' ) );
 
@@ -74,6 +76,13 @@ class Customify_WC {
 
 
         }
+    }
+
+    function woocommerce_get_script_data( $data, $handle ){
+        if ( $handle == 'woocommerce' ) {
+            $data['qty_pm'] =  apply_filters( 'customify_qty_add_plus_minus', 1 );
+        }
+        return $data;
     }
 
 	/**
