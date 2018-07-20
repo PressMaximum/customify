@@ -493,7 +493,7 @@ class Customify_Builder_Item_WC_Cart
 
         echo '<div class="' . esc_attr(join( ' ', $classes )) . '">';
 
-        echo '<a href="'.esc_url( $link ).'" class="cart-item-link">';
+        echo '<a href="'.esc_url( $link ).'" class="cart-item-link text-uppercase text-small link-meta">';
         echo $html; // WPCS: XSS OK.
         echo '</a>';
 

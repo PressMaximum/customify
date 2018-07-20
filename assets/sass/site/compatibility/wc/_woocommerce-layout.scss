@@ -42,7 +42,7 @@
         }
     }
     .wc-product__part {
-        a {
+        a:not(.button) {
             color: inherit;
             * {
                 color: inherit;

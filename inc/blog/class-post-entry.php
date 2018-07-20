@@ -532,14 +532,14 @@ class Customify_Post_Entry {
                 $user_posts = get_author_posts_url(get_the_author_meta('ID',  $user->ID ));
 
                 if (!empty($display_name)) {
-                    $author_details = '<h3 class="bio-author-heading">' . sprintf( __( 'About the Author: <span>%s</span>', 'customify' ), $display_name ) . '</h3>';
+                    $author_details = '<h4 class="author-bio-heading">' . sprintf( __( 'About the Author: <span>%s</span>', 'customify' ), $display_name ) . '</h4>';
                 }
 
                 $user_description = wptexturize( $user_description );
                 $user_description = wpautop( $user_description );
                 $user_description = convert_smilies( $user_description );
 
-                $author_links = '<p class="author_links"><a href="' . $user_posts . '">' .sprintf( 'View all post by %s', $display_name ). '</a>';
+                $author_links = '<p class="author_links text-uppercase text-xsmall link-meta"><a href="' . $user_posts . '">' .sprintf( 'View all post by %s', $display_name ). '</a>';
 
                 // Check if author has a website in their profile
                 if (!empty($user_website)) {
@@ -550,10 +550,10 @@ class Customify_Post_Entry {
                     $author_links .= '</p>';
                 }
 
-                $author_details .= '<div class="bio-author"><div class="bio-avatar">' . get_avatar(get_the_author_meta('user_email'), 90) . '</div><div class="bio-author-details">'. $user_description . $author_links.'</div></div>';
+                $author_details .= '<div class="author-bio"><div class="author-bio-avatar">' . get_avatar(get_the_author_meta('user_email'), 80) . '</div><div class="author-bio-details">'.'<div class="author-bio-desc">'. $user_description.'</div>'. $author_links.'</div></div>';
 
                 // Pass all this info to post content
-                $content =  '<div class="author-bio-section" >' . $author_details . '</div>';
+                $content =  '<div class="entry-author-bio entry--item" >' . $author_details . '</div>';
             }
 
             echo $content;
@@ -568,6 +568,7 @@ class Customify_Post_Entry {
 //            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
 //            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
 //        ) );
+        echo '<div class="entry-post-navigation entry--item">';
 	    the_post_navigation(
 		    array(
 			    'next_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Next', 'customify' ) . '</span> ' .
@@ -578,6 +579,7 @@ class Customify_Post_Entry {
 			                   '<span class="post-title text-large">%title</span>',
 		    )
 	    );
+	    echo '</div>';
     }
 
     /**

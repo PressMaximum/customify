@@ -54,11 +54,6 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                         'title' => __('Content', 'customify'),
                     ),
                     array(
-                        '_key' => 'author_bio',
-                        '_visibility' => '',
-                        'title' => __('Author Biography', 'customify'),
-                    ),
-                    array(
                         '_key' => 'categories',
                         '_visibility' => 'hidden',
                         'title' => __('Categories', 'customify'),
@@ -68,7 +63,11 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                         '_visibility' => '',
                         'title' => __('Tags', 'customify'),
                     ),
-
+	                array(
+		                '_key' => 'author_bio',
+		                '_visibility' => '',
+		                'title' => __('Author Biography', 'customify'),
+	                ),
                     array(
                         '_key' => 'navigation',
                         '_visibility' => '',

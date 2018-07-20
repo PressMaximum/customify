@@ -2154,7 +2154,7 @@ textarea {
 }
 
 /* # Heading */
-h1, h2, h3, h4, .comments-area .comments-title, .comments-area .comment-reply-title, h5, h6 {
+h1, h2, h3, h4, .comments-area .comment-reply-title, h5, h6 {
   font-weight: 400;
   margin: 0 0 0.5407911001em;
   color: #2b2b2b;
@@ -2199,7 +2199,7 @@ h3, .h3 {
   font-size: 1.618em;
 }
 
-h4, .comments-area .comments-title, .comments-area .comment-reply-title, .h4 {
+h4, .comments-area .comment-reply-title, .h4 {
   font-size: 1.41575em;
 }
 
@@ -2739,6 +2739,9 @@ object {
 .comment-list {
   list-style: none;
   margin: 0;
+}
+.comment-list article.comment {
+  margin-bottom: 0px;
 }
 .comment-list ul {
   list-style: none;
@@ -5294,7 +5297,7 @@ body.menu_sidebar_dropdown:before {
 .entry-single .entry--item:not(.entry-title), .entry-single .entry-thumbnail {
   margin-bottom: 1.41575em;
 }
-.entry-single .entry--item:not(.entry-title):last-child, .entry-single .entry--item:not(.entry-title) p:last-child, .entry-single .entry-thumbnail:last-child, .entry-single .entry-thumbnail p:last-child {
+.entry-single .entry--item:not(.entry-title):last-child, .entry-single .entry-thumbnail:last-child {
   margin-bottom: 0px;
 }
 .entry-single .tags-links:before, .entry-single .cats-links:before {
@@ -5323,29 +5326,31 @@ body.menu_sidebar_dropdown:before {
   letter-spacing: 0.5px;
 }
 
-.bio-author {
+.author-bio {
   display: flex;
 }
-.bio-author .avatar {
+.author-bio .avatar {
   flex-basis: 90px;
 }
 @media screen and (max-width: 568px) {
-  .bio-author .avatar {
+  .author-bio .avatar {
     flex-basis: 90px;
   }
 }
-.bio-author .bio-author-details {
+.author-bio .author-bio-details {
   flex-basis: calc( 100% - 90px );
-  margin-left: 2em;
+  margin-left: 1.5em;
 }
 @media screen and (max-width: 568px) {
-  .bio-author .bio-author-details {
+  .author-bio .author-bio-details {
     flex-basis: calc( 100% - 50px );
   }
 }
+.author-bio .author-bio-desc p:last-child {
+  margin-bottom: 0.72em;
+}
 
 .post-navigation .nav-links {
-  margin-top: 2em;
   padding: 16px 0px 15px;
   border-top: 1px solid #eaecee;
   border-bottom: 1px solid #eaecee;
@@ -5371,18 +5376,6 @@ body.menu_sidebar_dropdown:before {
 .post-navigation .nav-links .nav-next {
   float: right;
   text-align: right;
-}
-
-.comments-area {
-  margin-top: 2em;
-}
-
-.comment-author {
-  display: block;
-}
-
-.comment-list article.comment {
-  margin-bottom: 0px;
 }
 
 /* Page Mics */

@@ -5,12 +5,12 @@
 
 /* Shop Add-to-cart button */
 .woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
-    background-color: $color_primary;
+    background-color: $color_secondary;
     color: #FFFFFF;
     border-radius: 2px;
     font-weight: 600;
     &:hover {
-        background-color: $color_primary;
+        background-color: $color_secondary;
         box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
         color: #FFF;
     }
