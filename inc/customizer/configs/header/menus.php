@@ -105,7 +105,7 @@ class Customify_Builder_Item_Primary_Menu
                 'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li:hover > a .link-before:before, 
                 .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
                 .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before,
-                .nav-menu-desktop.style-border-top .{$this->id}-ul > li :hover > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li:hover > a .link-before:before,
                 .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
                 .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before
                 { background-color: {{value}}; }",
