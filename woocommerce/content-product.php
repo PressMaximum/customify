@@ -21,19 +21,11 @@ if ( empty( $product ) || ! $product->is_visible() ) {
     <?php
 
     /**
-     * Hook: woocommerce_before_shop_loop_item.
-     *
+     * All hooks moved to catalog designer
+     * @see Customify_WC_Catalog_Designer::render();
      */
-    do_action( 'woocommerce_before_shop_loop_item' );
-
-
     do_action('customify_wc_product_loop' );
 
-    /**
-     * Hook: woocommerce_after_shop_loop_item.
-     *
-     */
-    do_action( 'woocommerce_after_shop_loop_item' );
 	?>
     </div>
 </li>

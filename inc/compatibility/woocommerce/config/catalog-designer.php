@@ -19,6 +19,13 @@ class Customify_WC_Catalog_Designer {
 		$this->product__media();
 
 		echo '<div class="wc-product-contents">';
+
+        /**
+         * Hook: woocommerce_before_shop_loop_item.
+         *
+         */
+        do_action( 'woocommerce_before_shop_loop_item' );
+
 		foreach ( ( array ) $items as $item ) {
 			$item = wp_parse_args( $item, array(
 				'_key'         => '',
@@ -27,7 +34,11 @@ class Customify_WC_Catalog_Designer {
 				'show_in_list' => 1,
 			) );
 			if ( $item['_visibility'] !== 'hidden' ) {
-				$cb = array( $this, 'product__' . $item['_key'] );
+			    $cb = apply_filters( 'customify/product-designer/part', false, $item['_key'] );
+			    if ( ! is_callable( $cb ) ) {
+                    $cb = array( $this, 'product__' . $item['_key'] );
+                }
+
 				if ( is_callable( $cb ) ) {
 					$classes   = array();
 					$classes[] = 'wc-product__part';
@@ -49,7 +60,15 @@ class Customify_WC_Catalog_Designer {
 				}
 			}
 		}
-		echo '</div>';
+
+        /**
+         * Hook: woocommerce_after_shop_loop_item.
+         *
+         */
+        do_action( 'woocommerce_after_shop_loop_item' );
+
+		echo '</div>'; // end .wc-product-contents
+
 	}
 
 	/**
@@ -890,7 +909,6 @@ class Customify_WC_Catalog_Designer {
 		return $configs;
 	}
 
-
 	function product__media() {
 		echo '<div class="wc-product-media">';
 		woocommerce_template_loop_product_link_open();
@@ -902,11 +920,35 @@ class Customify_WC_Catalog_Designer {
 		echo '</div>';
 	}
 
-
 	function product__title() {
-		woocommerce_template_loop_product_link_open();
-		woocommerce_template_loop_product_title();
-		woocommerce_template_loop_product_link_close();
+
+        /**
+         * Hook: woocommerce_before_shop_loop_item_title.
+         *
+         * @hooked woocommerce_show_product_loop_sale_flash - 10
+         * @hooked woocommerce_template_loop_product_thumbnail - 10
+         */
+        do_action( 'woocommerce_before_shop_loop_item_title' );
+
+        woocommerce_template_loop_product_link_open();
+        /**
+         * Hook: woocommerce_shop_loop_item_title.
+         *
+         * @hooked woocommerce_template_loop_product_title - 10
+         */
+        do_action( 'woocommerce_shop_loop_item_title' );
+
+        woocommerce_template_loop_product_link_close();
+
+        /**
+         * Hook: woocommerce_after_shop_loop_item_title.
+         *
+         * @hooked woocommerce_template_loop_rating - 5
+         * @hooked woocommerce_template_loop_price - 10
+         */
+        do_action( 'woocommerce_after_shop_loop_item_title' );
+
+
 	}
 
 	function product__description() {

@@ -16,16 +16,25 @@
         flex-shrink: 1;
         flex-basis: auto;
     }
+    .woocommerce-loop-product__desc p {
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
     .wc-product-contents {
-        display: flex;
-        flex-direction: column;
+        > * {
+            margin-top: 10px;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
     }
     .wc-product-media {
         position: relative;
         flex-shrink: initial;
         flex-grow: 0;
         text-align: center;
-        margin-bottom: 1em;
+        margin: 0em;
         img {
             transition: all .3s ease;
             margin-bottom: 0px;

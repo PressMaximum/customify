@@ -85,21 +85,9 @@ function customify_wc_catalog_view_mod(){
 /**
  * Loop Layout
  */
-add_action( 'woocommerce_before_shop_loop_item', 'customify_wc_before_shop_loop_item', 1 );
+
 add_action( 'woocommerce_before_subcategory', 'customify_wc_before_shop_loop_item', 1 );
-
-add_action( 'woocommerce_after_shop_loop_item', 'customify_wc_after_shop_loop_item', 9999 );
 add_action( 'woocommerce_after_subcategory', 'customify_wc_after_shop_loop_item', 9999 );
-
-function customify_wc_before_shop_loop_item(){
-	echo '<div class="wc-product-inner">';
-}
-
-function customify_wc_after_shop_loop_item(){
-	echo '</div>';
-}
-
-
 add_filter( 'woocommerce_after_output_product_categories', 'customify_wc_after_output_product_categories' );
 /**
  * Add separator between product categories and products
