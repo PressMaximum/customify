@@ -396,6 +396,24 @@ $blog_gutter: $gl-gutter;
     }
 }
 
+// Biography box
+.bio-author {
+    display: flex;
+    .avatar {
+        flex-basis: 90px;
+        @include for_device( mobile ){
+            flex-basis: 90px;
+        }
+    }
+    .bio-author-details {
+        flex-basis: calc( 100% - 90px );
+        margin-left: 2em;
+        @include for_device( mobile ){
+            flex-basis: calc( 100% - 50px );
+        }
+    }
+}
+
 .post-navigation .nav-links {
     @include clearfix();
     margin-top: 2em;
