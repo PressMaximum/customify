@@ -248,8 +248,8 @@ class Customify_Builder_Item_WC_Cart
                 'title'       => __('Quantity', 'customify'),
                 'description' => __('Advanced styling for cart quantity', 'customify'),
                 'selector'    => array(
-                    'normal' => '.builder-header-' . $this->id . '-item  .cart-icon .cart-qty',
-                    'hover'  => '.builder-header-' . $this->id . '-item:hover .cart-icon .cart-qty',
+                    'normal' => '.builder-header-' . $this->id . '-item  .cart-icon .cart-qty .customify-wc-total-qty',
+                    'hover'  => '.builder-header-' . $this->id . '-item:hover .cart-icon .cart-qty .customify-wc-total-qty',
                 ),
                 'css_format'  => 'styling',
                 'default'     => array(),
@@ -466,11 +466,16 @@ class Customify_Builder_Item_WC_Cart
         }
         $html .= '<span class="cart-subtotal cart-label '.esc_attr( $subtotal_classes ) .'"><span class="customify-wc-sub-total">' . wc_price($sub_total) . '</span></span>';
 
+        $qty = array_sum($quantities );
+        $class = 'customify-wc-total-qty';
+        if ( $qty <= 0 ) {
+            $class .= ' hide-qty';
+        }
 
         if ($icon_html) {
             $icon_html = '<span class="cart-icon">' . $icon_html;
             if ($show_qty) {
-                $icon_html .= '<span class="cart-qty"><span class="customify-wc-total-qty">' . array_sum($quantities) . '</span></span>';
+                $icon_html .= '<span class="cart-qty"><span class="'.$class.'">' . array_sum($quantities) . '</span></span>';
             }
             $icon_html .= '</span>';
         }

@@ -25,6 +25,7 @@
                     display: block;
                     line-height: 1.2;
                     text-decoration: none;
+                    color: $color_text;
                     &:hover {
                         text-decoration: none;
                     }
@@ -178,15 +179,22 @@
             right: 2px;
             left: auto;
             transform: translate(50%, 0%);
-            background: $color_secondary;
-            color: #FFFFFF;
-            font-size: 11px;
-            min-width: 16px;
-            min-height: 16px;
-            line-height: 16px;
-            display: block;
             text-align: center;
-            border-radius: 20px;
+            display: block;
+            .customify-wc-total-qty {
+                color: #FFFFFF;
+                font-size: 11px;
+                min-width: 16px;
+                min-height: 16px;
+                line-height: 16px;
+                border-radius: 20px;
+                background: $color_secondary;
+                display: block;
+                &.hide-qty {
+                    display: none;
+                }
+            }
+
 
         }
     }
@@ -323,6 +331,12 @@
         visibility: hidden;
         height: 0px;
     }
+}
+
+// When cart empty
+.woocommerce-mini-cart__empty-message {
+    padding: auto 2em;
+    text-align: center;
 }
 
 // Hide cart on mobile

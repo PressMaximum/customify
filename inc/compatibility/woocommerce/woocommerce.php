@@ -195,7 +195,14 @@ class Customify_WC {
         $sub_total =  WC()->cart->get_subtotal();;
         $cart_fragments['.customify-wc-sub-total'] =  '<span class="customify-wc-sub-total">'.wc_price( $sub_total ).'</span>';
         $quantities =  WC()->cart->get_cart_item_quantities();
-        $cart_fragments['.customify-wc-total-qty'] =  '<span class="customify-wc-total-qty">'.array_sum($quantities ).'</span>';
+
+        $qty = array_sum($quantities );
+        $class = 'customify-wc-total-qty';
+        if ( $qty <= 0 ) {
+            $class .= ' hide-qty';
+        }
+
+        $cart_fragments['.customify-wc-total-qty'] =  '<span class="'.$class.'">'.$qty.'</span>';
 
         return $cart_fragments;
     }
