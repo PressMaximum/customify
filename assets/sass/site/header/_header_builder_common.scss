@@ -67,6 +67,7 @@
     padding: 21px 0px 22px;
     border-bottom: 1px solid $color_border;
     word-break: break-word;
+    background: #f9f9f9;
     @include for_device( tablet ) {
         padding: 19px 0px 20px;
     }

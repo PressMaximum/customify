@@ -644,7 +644,7 @@ p.demo_store a,
   text-align: left;
   width: 100%;
   border-collapse: separate;
-  border-radius: 5px;
+  border-radius: 1px;
 }
 .woocommerce table.shop_table th {
   font-weight: 700;
@@ -2399,7 +2399,6 @@ form .form-row textarea {
   height: 4em;
   line-height: 1.5;
   display: block;
-  box-shadow: none;
 }
 form .form-row .select2-container {
   width: 100%;
@@ -2435,7 +2434,7 @@ form.register {
   padding: 20px;
   margin: 2em 0;
   text-align: left;
-  border-radius: 5px;
+  border-radius: 1px;
 }
 
 ul#shipping_method {
