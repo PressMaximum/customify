@@ -4752,6 +4752,13 @@ body.menu_sidebar_dropdown:before {
   transform: translateY(0);
 }
 
+.cb-row--mobile {
+  padding: 0 0.5em 0;
+}
+.cb-row--mobile [class~="customify-col"], .cb-row--mobile [class*="customify-col-"], .cb-row--mobile [class*="customify-col_"] {
+  padding: 0 0.5em 0;
+}
+
 /*--------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------

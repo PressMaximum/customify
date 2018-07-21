@@ -14,4 +14,11 @@
 
 @import "header_mobile_sidebar";
 
+.cb-row--mobile {
+    padding: 0 0.5em 0;
+    [class~="customify-col"], [class*="customify-col-"], [class*="customify-col_"] {
+        padding: 0 0.5em 0;
+    }
+}
+
 
