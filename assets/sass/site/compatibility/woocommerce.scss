@@ -6,10 +6,16 @@
 @import 'wc/woocommerce-fonts';
 @import "wc/woocommerce-layout";
 @import "wc/woocommerce-main";
+@import "wc/wc-loop";
 @import "wc/wc-widgets";
 @import "wc/wc-cart";
 @import "wc/wc-tabs";
 @import "wc/wc-buttons";
+@import "wc/wc-product";
+@import "wc/wc-order";
+@import "wc/wc-forms";
+@import "wc/wc-reviews";
+@import "wc/wc-cart-checkout";
 
 /* Coupon Input */
 .woocommerce-cart-form .coupon .input-text{
