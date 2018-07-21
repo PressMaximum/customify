@@ -51,10 +51,13 @@ add_action( 'woocommerce_before_shop_loop', 'customify_wc_catalog_header', 15 );
  * Custom shop header
  */
 function customify_wc_catalog_header(){
+    if ( ! Customify()->get_setting( 'wc_cd_show_catalog_header' ) ) {
+        return false;
+    }
     echo '<div class="wc-catalog-header">';
 	    customify_wc_catalog_view_mod();
-        woocommerce_catalog_ordering();
         woocommerce_result_count();
+        woocommerce_catalog_ordering();
 	echo '</div>';
 }
 

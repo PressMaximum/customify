@@ -86,21 +86,42 @@ class Customify_WC_Catalog_Designer {
 
 	function config( $configs ) {
 
+        $section = 'wc_catalog_designer';
+
+        $configs[] = array(
+            'name'  => $section,
+            'type'  => 'section',
+            'panel' => 'woocommerce',
+            'label' => __( 'Product Catalog Designer', 'customify' ),
+        );
+
+        // catalog header
+        $configs[] = array(
+            'name'            => 'wc_cd_show_catalog_header',
+            'type'            => 'checkbox',
+            'section'         => $section,
+            'default'         => 1,
+            'selector'        => '.wc-product-listing',
+            'render_callback' => 'woocommerce_content',
+            'checkbox_label'  => __( 'Show Catalog header', 'customify' ),
+        );
+
 		// Show view mod
 		$configs[] = array(
 			'name'            => 'wc_cd_show_view_mod',
 			'type'            => 'checkbox',
-			'section'         => 'woocommerce_product_catalog',
+			'section'         => $section,
 			'default'         => 1,
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'checkbox_label'  => __( 'Show Grid/List View Buttons', 'customify' ),
+			'required'  => array( 'wc_cd_show_catalog_header' , '=', 1 ),
 		);
 
 		$configs[] = array(
 			'name'            => 'wc_cd_default_view',
 			'type'            => 'select',
-			'section'         => 'woocommerce_product_catalog',
+			'section'         => $section,
 			'default'         => 'grid',
 			'choices'         => array(
 				'grid' => __( 'Grid', 'customify' ),
@@ -108,17 +129,11 @@ class Customify_WC_Catalog_Designer {
 			),
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
-			'required'        => array( 'wc_cd_show_view_mod', '=', 1 ),
+			'required'        => array(
+			    array(  'wc_cd_show_view_mod', '=', 1 ),
+                array( 'wc_cd_show_catalog_header' , '=', 1 ),
+            ),
 			'label'           => __( 'Default View Mod', 'customify' ),
-		);
-
-		$section = 'wc_catalog_designer';
-
-		$configs[] = array(
-			'name'  => $section,
-			'type'  => 'section',
-			'panel' => 'woocommerce',
-			'label' => __( 'Product Catalog Designer', 'customify' ),
 		);
 
 		$configs[] = array(

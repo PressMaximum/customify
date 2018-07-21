@@ -82,6 +82,8 @@ p.demo_store,
     align-items: center;
     flex-wrap: wrap;
     border: 1px solid #E5E5E5;
+    background: #f2f2f2;
+    color: inherit;
     input, input[type="text"] {
         box-shadow: none !important;
         border-radius: 0px;
@@ -98,8 +100,11 @@ p.demo_store,
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        box-shadow: none;
+        font-weight: 400;
         &:hover {
             background: #f2f2f2;
+            color: inherit;
         }
     }
 }

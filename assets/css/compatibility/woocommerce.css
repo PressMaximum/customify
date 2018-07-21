@@ -131,7 +131,8 @@ $gl-devices-list: (
 }
 
 .woocommerce-ordering {
-  margin-right: 15px;
+  margin-right: 0px;
+  margin-left: 15px;
 }
 .woocommerce-ordering select {
   padding: 8px 15px;
@@ -441,6 +442,8 @@ p.demo_store a,
   align-items: center;
   flex-wrap: wrap;
   border: 1px solid #E5E5E5;
+  background: #f2f2f2;
+  color: inherit;
 }
 .input-qty-pm input, .input-qty-pm input[type="text"] {
   box-shadow: none !important;
@@ -458,9 +461,12 @@ p.demo_store a,
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  box-shadow: none;
+  font-weight: 400;
 }
 .input-qty-pm .input-pm-act:hover {
   background: #f2f2f2;
+  color: inherit;
 }
 
 .woocommerce {
