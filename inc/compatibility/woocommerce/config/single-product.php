@@ -21,7 +21,6 @@ class Customify_WC_Single_Product {
 			add_filter( 'woocommerce_product_additional_information_heading', '__return_false', 999 );
 		}
 
-
 	}
 
 	function add_product_url( $args ){
