@@ -79,24 +79,22 @@ p.demo_store,
 }
 
 .input-qty-pm {
+    border-radius: 1px;
     display: inline-flex;
     align-items: center;
     flex-wrap: wrap;
-    border: 1px solid $color_border;
+    border: 1px solid #E5E5E5;
     input, input[type="text"] {
         box-shadow: none !important;
-        border-left: 1px solid $color_border;
-        border-right: 1px solid $color_border;
         border-radius: 0px;
+        border-top: none;
+        border-bottom: none;
     }
-
     .input-pm-act {
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: auto;
-        padding: 0.6180469716em;
-        cursor: pointer;
         text-align: center;
+        line-height: 2.4em;
+        min-height: 2.6em;
+        cursor: pointer;
         min-width: 2em;
         -webkit-user-select: none;
         -moz-user-select: none;
@@ -431,12 +429,12 @@ ul.products li.product {
         }
 
         form.cart {
-            margin-bottom: 2em;
+            margin-bottom: 1em;
             @include clearfix();
 
             div.quantity {
                 float: left;
-                margin: 0 4px 0 0;
+                margin: 0 1em 1em 0;
             }
 
             table {
@@ -621,101 +619,7 @@ ul.products li.product {
         }
     }
 
-    /**
-     * Buttons
-     */
-    a.button,
-    button.button,
-    input.button,
-    #respond input#submit {
-        font-size: 100%;
-        line-height: 1;
-        cursor: pointer;
-        position: relative;
-        text-decoration: none;
-        overflow: visible;
-        padding: 0.618em 1em;
-        font-weight: 700;
-        border-radius: 3px;
-        left: auto;
-        border: 0;
-        display: inline-block;
-        background-image: none;
-        box-shadow: none;
-        text-shadow: none;
-        &.loading {
-            opacity: 0.25;
-            padding-right: 2.618em;
 
-            &::after {
-                font-family: 'WooCommerce';
-                content: '\e01c';
-                vertical-align: top;
-                font-weight: 400;
-                position: absolute;
-                top: 0.618em;
-                right: 1em;
-                animation: spin 2s linear infinite;
-            }
-        }
-
-        &.added::after {
-            font-family: 'WooCommerce';
-            content: '\e017';
-            margin-left: 0.53em;
-            vertical-align: bottom;
-        }
-
-        &:hover {
-            text-decoration: none;
-            background-image: none;
-        }
-
-        &.alt {
-            -webkit-font-smoothing: antialiased;
-
-            &:hover {
-            }
-
-            &.disabled,
-            &:disabled,
-            &:disabled[disabled],
-            &.disabled:hover,
-            &:disabled:hover,
-            &:disabled[disabled]:hover {
-
-            }
-        }
-
-        &:disabled,
-        &.disabled,
-        &:disabled[disabled] {
-            color: inherit;
-            cursor: not-allowed;
-            opacity: 0.5;
-            padding: 0.618em 1em;
-
-            &:hover {
-                color: inherit;
-            }
-        }
-    }
-
-    .cart .button,
-    .cart input.button {
-        float: none;
-    }
-
-    a.added_to_cart {
-        padding-top: 0.5em;
-        display: inline-block;
-    }
-    .summary {
-        a.added_to_cart {
-            clear: both;
-            margin-left: 15px;
-        }
-    }
 
     /**
      * Reviews

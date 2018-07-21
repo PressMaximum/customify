@@ -28,32 +28,35 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'    => $section,
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
-.header-top,
-.button,
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"],
-.pagination .nav-links > *:hover,
-.pagination .nav-links span,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-.posts-layout .readmore-button:hover
-{
-    background-color: {{value}};
-}
-.posts-layout .readmore-button {
-	color: {{value}};
-}
-.pagination .nav-links > *:hover,
-.pagination .nav-links span,
-.entry-single .tags-links a:hover, 
-.entry-single .cat-links a:hover,
-.posts-layout .readmore-button
-{
-    border-color: {{value}};
-}' ),
+				
+					.header-top,
+					.button,
+					button,
+					input[type="button"],
+					input[type="reset"],
+					input[type="submit"],
+					.pagination .nav-links > *:hover,
+					.pagination .nav-links span,
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
+					.posts-layout .readmore-button:hover
+					{
+					    background-color: {{value}};
+					}
+					.posts-layout .readmore-button {
+						color: {{value}};
+					}
+					.pagination .nav-links > *:hover,
+					.pagination .nav-links span,
+					.entry-single .tags-links a:hover, 
+					.entry-single .cat-links a:hover,
+					.posts-layout .readmore-button,
+					.posts-layout .readmore-button:hover
+					{
+					    border-color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -63,10 +66,13 @@ input[type="submit"],
 				'section'    => $section,
 				'title'      => __( 'Secondary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/secondary-color', '
-.customify-builder-btn
-{
-    background-color: {{value}};
-}' ),
+				
+					.customify-builder-btn
+					{
+					    background-color: {{value}};
+					}'
+
+				),
 				'selector'   => 'format',
 			),
 
@@ -75,41 +81,15 @@ input[type="submit"],
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Text Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/text-color', 'body,
-input,
-select,
-optgroup,
-textarea,
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-input[type="tel"],
-input[type="range"],
-input[type="date"],
-input[type="month"],
-input[type="week"],
-input[type="time"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="color"],
-textarea,
-.header-search-form .search-submit,
-.header-search-form .search-submit:hover,
-.posts-layout .entry-title,
-.header-bottom,
-.site-branding .site-description
-{
-    color: {{value}};
-}
-abbr, acronym {
-    border-bottom-color: {{value}};
-}
-.posts-layout .entry-media .entry-meta {
-    background: {{value}};
-}' ),
+				'css_format' => apply_filters( 'customify/styling/text-color', '
+					body
+					{
+					    color: {{value}};
+					}
+					abbr, acronym {
+					    border-bottom-color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -119,10 +99,11 @@ abbr, acronym {
 				'section'    => $section,
 				'title'      => __( 'Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                a   
-                {
-                    color: {{value}};
-				}' ),
+	                a   
+	                {
+	                    color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -229,19 +210,20 @@ article.comment .comment-meta
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Meta Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-meta',
-'article.comment .comment-post-author {
-	background: {{value}};				
-}
-.pagination .nav-links > *,
-.link-meta, 
-.link-meta a,
-.color-meta,
-.entry-single .tags-links:before, 
-.entry-single .cats-links:before
-{
-    color: {{value}};
-}' ),
+				'css_format' => apply_filters( 'customify/styling/color-meta', '
+					article.comment .comment-post-author {
+						background: {{value}};				
+					}
+					.pagination .nav-links > *,
+					.link-meta, 
+					.link-meta a,
+					.color-meta,
+					.entry-single .tags-links:before, 
+					.entry-single .cats-links:before
+					{
+					    color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -250,7 +232,7 @@ article.comment .comment-meta
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Heading Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
+				'css_format' => apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
 				'selector'   => 'format',
 			),
 
