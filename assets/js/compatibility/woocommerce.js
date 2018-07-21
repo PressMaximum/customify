@@ -46,11 +46,17 @@ jQuery( document ).ready( function ( $ ) {
 
         $( '.added_to_cart.wc-forward', p ).html( text );
     } );
-    
-    
+
     $( document.body ).on( 'hover', '.item--wc_cart', function(){
         $( this ).removeClass( 'cart-active' );
     } );
+
+    function setCookie(cname, cvalue, exdays) {
+        var d = new Date();
+        d.setTime(d.getTime() + (exdays*24*60*60*1000));
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+    }
 
     // Switch View mod
     $( document.body ).on( 'click', '.wc-view-switcher .wc-view-mod', function( e ){
@@ -60,9 +66,11 @@ jQuery( document ).ready( function ( $ ) {
         $( this ).addClass( 'active' );
         $( '.woocommerce-listing, .products' ).removeClass( 'wc-grid-view wc-list-view' );
         $( '.woocommerce-listing, .products' ).addClass( 'wc-'+mod+'-view'  );
+        setCookie( 'customify_wc_pl_view_mod' ,mod, 360 );
     } );
 
 
+    // Custom plus minus for product/cart quantity
     $.fn._wc_plus_minus = function( ) {
         this.each(function() {
             var input = $( this );
@@ -122,7 +130,6 @@ jQuery( document ).ready( function ( $ ) {
     if (  woocommerce_params.qty_pm ) {
         $( 'input.qty[type="number"]' )._wc_plus_minus();
     }
-
 
 
 } );

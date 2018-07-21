@@ -478,6 +478,17 @@ function customify_get_default_catalog_view_mod(){
     if ( $name ) {
 	    return apply_filters( 'customify_get_default_catalog_view_mod', 'grid' ) ;
     }
+
+    if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) &&  $_COOKIE['customify_wc_pl_view_mod'] ) {
+        if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
+            $default = $_COOKIE['customify_wc_pl_view_mod'];
+        }
+    }
+
+    if( ! $default ) {
+        $default = 'grid';
+    }
+
 	return apply_filters( 'customify_get_default_catalog_view_mod', $default ) ;
 }
 
