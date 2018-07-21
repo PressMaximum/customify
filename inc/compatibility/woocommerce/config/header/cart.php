@@ -373,28 +373,7 @@ class Customify_Builder_Item_WC_Cart
                     'hover_fields'  => false
                 ),
             ),
-
-            array(
-                'name'            => "{$this->name}_li_border_width",
-                'type'            => 'slider',
-                'section'         => $this->section,
-                'max'             => 10,
-                'title'           => __('Item Separator Width', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget  li',
-                'css_format'      => 'border-bottom-width: {{value}};',
-                'default'         => array(),
-            ),
-
-            array(
-                'name'            => "{$this->name}_li_border_color",
-                'type'            => 'color',
-                'section'         => $this->section,
-                'title'           => __('Item Separator Color', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget li',
-                'css_format'      => 'border-bottom-color: {{value}};',
-                'default'         => array(),
-            ),
-
+            
         );
 
         // Item Layout
