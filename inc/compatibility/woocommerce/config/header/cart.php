@@ -437,6 +437,9 @@ class Customify_Builder_Item_WC_Cart
         $classes = array();
 
         $align = Customify()->get_setting("{$this->name}_d_align");
+        if ( ! $align ) {
+            $align = 'right';
+        }
         $classes[] = $this->array_to_class( $align, 'd-align' );
 
         $label_classes = $this->array_to_class( $show_label, 'wc-cart' );
