@@ -1033,7 +1033,6 @@ p.demo_store a,
   color: inherit;
 }
 .wc-product-inner .wc-product__part:last-child {
-  margin-top: auto;
   margin-bottom: 0px;
 }
 .wc-product-inner .wc-product__part .ajax_add_to_cart.added {
