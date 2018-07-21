@@ -73,8 +73,8 @@ jQuery( document ).ready( function ( $ ) {
                 input.wrap('<span class="input-qty-pm"></span>');
                 var p = input.parent();
                 input.attr( 'type', 'text' ) ; // remove up/ down arrow default
-                p.append('<span class="input-pm-act input-pm-plus">+</span>');
-                p.prepend('<span class="input-pm-act input-pm-minus">-</span>');
+                p.append('<button type="button" class="input-pm-act input-pm-plus">+</button>');
+                p.prepend('<button type="button" class="input-pm-act input-pm-minus">-</button>');
 
                 // This button will increment the value
                 $('.input-pm-plus', p ).click(function(e){
@@ -91,6 +91,7 @@ jQuery( document ).ready( function ( $ ) {
                         // Otherwise put a 0 there
                         input.val(0);
                     }
+                    input.trigger( 'change' );
                 });
                 // This button will decrement the value till 0
                 $(".input-pm-minus", p ).click(function(e) {
@@ -107,6 +108,8 @@ jQuery( document ).ready( function ( $ ) {
                         // Otherwise put a 0 there
                         input.val(0);
                     }
+
+                    input.trigger( 'change' );
                 });
 
 
