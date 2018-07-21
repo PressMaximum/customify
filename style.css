@@ -2997,6 +2997,7 @@ article.comment .comment-post-author {
   padding: 21px 0px 22px;
   border-bottom: 1px solid #eaecee;
   word-break: break-word;
+  background: #f9f9f9;
 }
 @media screen and (max-width: 1024px) {
   .page-titlebar {

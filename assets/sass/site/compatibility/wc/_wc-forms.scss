@@ -93,7 +93,6 @@ form .form-row {
         height: 4em;
         line-height: 1.5;
         display: block;
-        box-shadow: none;
     }
 
     .select2-container {
@@ -140,7 +139,7 @@ form.register {
     padding: 20px;
     margin: 2em 0;
     text-align: left;
-    border-radius: 5px;
+    border-radius: 1px;
 }
 
 ul#shipping_method {
