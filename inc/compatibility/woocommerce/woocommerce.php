@@ -59,7 +59,7 @@ class Customify_WC {
             add_filter( 'body_class',  array( $this, 'body_class' ) );
             add_filter( 'post_class',  array( $this, 'post_class' ), 15, 3 );
             //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
-            add_filter( 'product_cat_class',  array( $this, 'post_class' ) );
+            add_filter( 'product_cat_class',  array( $this, 'post_cat_class' ), 15 );
 
             // Change number repleate product
             // wc_set_loop_prop( 'name', 'related' );
@@ -139,6 +139,10 @@ class Customify_WC {
         return 3;
     }
 
+    function post_cat_class( $classes ){
+        $classes[] = 'customify-col';
+        return $classes;
+    }
     function post_class( $classes, $class, $post_id ){
 	    if ( ! $post_id || get_post_type( $post_id ) !== 'product' ) {
 		    return $classes;

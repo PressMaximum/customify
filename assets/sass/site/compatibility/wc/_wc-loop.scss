@@ -2,10 +2,15 @@
 * Product loops
 */
 .woocommerce {
+    .woocommerce-loop-category__title {
+        margin-top: 10px;
+        padding: 0;
+        font-size: 1em;
+    }
     ul.products li.product {
         h3,
-        .woocommerce-loop-product__title,
-        .woocommerce-loop-category__title {
+        .woocommerce-loop-product__title
+        {
             padding: 0;
             margin: 0;
             font-size: 1em;

@@ -38,8 +38,6 @@
         padding: 8px 15px;
         border: 1px solid $color_border;
         background: transparent;
-        -webkit-appearance: none;
-        -moz-appearance: none;
         border-radius: 0px;
         @include for_device(mobile) {
             width: 100px;
