@@ -178,9 +178,6 @@
             right: 2px;
             left: auto;
             transform: translate(50%, 0%);
-            background: $color_secondary;
-            color: #FFFFFF;
-            box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
             font-size: 11px;
             min-width: 16px;
             min-height: 16px;
@@ -189,6 +186,7 @@
             text-align: center;
             .customify-wc-total-qty {
                 color: #FFFFFF;
+                box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.2);
                 font-size: 11px;
                 min-width: 16px;
                 min-height: 16px;
