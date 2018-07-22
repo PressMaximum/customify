@@ -835,7 +835,7 @@ $gl-devices-list: (
   text-align: center;
   border-radius: 20px;
 }
-.item--wc_cart .cart-item-dropdown {
+.item--wc_cart .cart-dropdown-box {
   position: absolute;
   color: #444444;
   top: 100%;
@@ -854,15 +854,15 @@ $gl-devices-list: (
   background: #ffffff;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
 }
-.item--wc_cart .cart-item-dropdown .woocommerce-mini-cart {
+.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart {
   max-height: 300px;
   overflow: auto;
   display: block;
 }
-.item--wc_cart .cart-item-dropdown li {
+.item--wc_cart .cart-dropdown-box li {
   padding: 15px 0px;
 }
-.item--wc_cart:hover .cart-item-dropdown, .item--wc_cart.cart-active .cart-item-dropdown {
+.item--wc_cart:hover .cart-dropdown-box, .item--wc_cart.cart-active .cart-dropdown-box {
   opacity: 1;
   height: auto;
   overflow: hidden;
@@ -872,11 +872,11 @@ $gl-devices-list: (
 }
 
 @media screen and (max-width: 568px) {
-  .item--wc_cart.d-align-mobile-right .cart-item-dropdown {
+  .item--wc_cart.d-align-mobile-right .cart-dropdown-box {
     right: auto;
     left: 0px;
   }
-  .item--wc_cart.d-align-mobile-left .cart-item-dropdown {
+  .item--wc_cart.d-align-mobile-left .cart-dropdown-box {
     right: 0px;
     left: auto;
   }
@@ -888,11 +888,11 @@ $gl-devices-list: (
   }
 }
 @media screen and (max-width: 1024px) {
-  .item--wc_cart.d-align-tablet-right .cart-item-dropdown {
+  .item--wc_cart.d-align-tablet-right .cart-dropdown-box {
     right: auto;
     left: 0px;
   }
-  .item--wc_cart.d-align-tablet-left .cart-item-dropdown {
+  .item--wc_cart.d-align-tablet-left .cart-dropdown-box {
     right: 0px;
     left: auto;
   }
@@ -904,11 +904,11 @@ $gl-devices-list: (
   }
 }
 @media screen and (min-width: 1025px) {
-  .item--wc_cart.d-align-desktop-right .cart-item-dropdown {
+  .item--wc_cart.d-align-desktop-right .cart-dropdown-box {
     right: auto;
     left: 0px;
   }
-  .item--wc_cart.d-align-desktop-left .cart-item-dropdown {
+  .item--wc_cart.d-align-desktop-left .cart-dropdown-box {
     left: auto;
     right: 0px;
   }
@@ -920,7 +920,7 @@ $gl-devices-list: (
   }
 }
 
-.header-menu-sidebar-inner .cart-item-dropdown {
+.header-menu-sidebar-inner .cart-dropdown-box {
   display: none !important;
   visibility: hidden;
   height: 0px;

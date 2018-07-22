@@ -2935,7 +2935,7 @@ article.comment .comment-post-author {
   border-left: none;
   border-right: none;
   background: #f0f0f0;
-  color: #444444;
+  color: #6d6d6d;
   box-shadow: 0 1px 2px 0 #e1e5ea;
 }
 
@@ -3622,26 +3622,19 @@ article.comment .comment-post-author {
   flex-basis: 100%;
 }
 .header-search-form .search-field {
-  border: 1px solid rgba(127, 127, 127, 0.2);
-  box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
-  border-radius: 3px;
-  padding: 7px 55px 7px 10px;
-  font-size: 14px;
   display: block;
   width: 100%;
-  background: #ffffff;
-}
-.header-search-form .search-field:focus {
-  background: #ffffff;
+  border-radius: 2px;
 }
 .header-search-form .search-submit {
   overflow: hidden;
   box-shadow: none;
   margin-left: -50px;
   background: transparent;
-  padding: 6px 12px;
   color: #6d6d6d;
   line-height: 0px;
+  padding: 0px 0.7em;
+  min-height: auto;
 }
 .header-search-form .search-submit:hover {
   box-shadow: none;
@@ -3652,12 +3645,15 @@ article.comment .comment-post-author {
   width: 18px;
   height: 18px;
 }
+.header-search-form input[type="submit"] {
+  min-height: auto;
+}
 
 .header-search-modal {
   border: 1px solid #eaecee;
-  padding: 1em;
+  padding: 1.250em;
   background: #fff;
-  width: 250px;
+  width: 280px;
   position: relative;
   margin-top: 15px;
   box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
@@ -3683,13 +3679,6 @@ article.comment .comment-post-author {
   height: 15px;
   transform: rotate(45deg);
   z-index: 27;
-}
-.header-search-modal .search-field, .header-search-modal .search-field:focus {
-  box-shadow: none;
-  background: #f9f9f9;
-}
-.header-search-modal .search-submit {
-  color: #AAAAAA;
 }
 
 /* Social Icons */

@@ -68,7 +68,7 @@ class Customify_Builder_Item_WC_Cart
                 'selector'        => '.builder-header-' . $this->id . '-item',
                 'render_callback' => $fn,
                 'default'         => array(
-                    'icon' => 'fa fa-shopping-cart',
+                    'icon' => 'fa fa-shopping-basket',
                     'type' => 'font-awesome'
                 ),
                 'title'           => __('Icon', 'customify'),
@@ -296,9 +296,10 @@ class Customify_Builder_Item_WC_Cart
                 'type'            => 'slider',
                 'section'         => $this->section,
                 'device_settings' => true,
+	            'min'             => 280,
                 'max'             => 600,
                 'title'           => __('Dropdown Width', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item  .cart-item-dropdown',
+                'selector'        => '.builder-header-' . $this->id . '-item  .cart-dropdown-box',
                 'css_format'      => 'width: {{value}};',
                 'default'         => array(),
             ),
@@ -308,7 +309,7 @@ class Customify_Builder_Item_WC_Cart
                 'type'            => 'color',
                 'section'         => $this->section,
                 'title'           => __('Color', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget, .builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget a:not(.button)',
+                'selector'        => '.builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget, .builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget a:not(.button)',
                 'css_format'      => 'color: {{value}};',
             ),
 
@@ -317,7 +318,7 @@ class Customify_Builder_Item_WC_Cart
                 'type'            => 'color',
                 'section'         => $this->section,
                 'title'           => __('Button Color', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget a.button',
+                'selector'        => '.builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget a.button',
                 'css_format'      => 'color: {{value}};',
             ),
 
@@ -326,7 +327,7 @@ class Customify_Builder_Item_WC_Cart
                 'type'            => 'color',
                 'section'         => $this->section,
                 'title'           => __('Button Background', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget a.button',
+                'selector'        => '.builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget a.button',
                 'css_format'      => 'background-color: {{value}};',
             ),
 
@@ -335,7 +336,7 @@ class Customify_Builder_Item_WC_Cart
                 'type'            => 'color',
                 'section'         => $this->section,
                 'title'           => __('Button Checkout Background', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-item-dropdown.widget-area .widget a.button.checkout',
+                'selector'        => '.builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget a.button.checkout',
                 'css_format'      => 'background-color: {{value}};',
             ),
 
@@ -346,8 +347,8 @@ class Customify_Builder_Item_WC_Cart
                 'title'       => __('Dropdown Styling', 'customify'),
                 'description' => __('Advanced styling for cart dropdown', 'customify'),
                 'selector'    => array(
-                    'normal' => '.builder-header-' . $this->id . '-item .cart-item-dropdown',
-                    'normal_bg_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-item-dropdown .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-item-dropdown .widget::before",
+                    'normal' => '.builder-header-' . $this->id . '-item .cart-dropdown-box',
+                    'normal_bg_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
                 ),
                 'css_format'  => 'styling',
                 'default'     => array(),
@@ -486,7 +487,7 @@ class Customify_Builder_Item_WC_Cart
 
         add_filter('woocommerce_widget_cart_is_hidden', '__return_false', 999);
 
-        echo '<div class="cart-item-dropdown widget-area">';
+        echo '<div class="cart-dropdown-box widget-area">';
         the_widget('WC_Widget_Cart', array(
             'hide_if_empty' => 0
         ));

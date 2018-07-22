@@ -97,7 +97,29 @@
 //}
 
 
-.button.add_to_cart_button, .button.alt, .button.added_to_cart {
+.button.add_to_cart_button,
+.button.alt,
+.button.added_to_cart,
+.button.checkout
+{
     background: $color_secondary;
+}
+
+/* Remove Button */
+a.remove {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ccc;
+    color: #ccc;
+    border-radius: 2px;
+    font-size: 17px !important;
+    font-weight: normal;
+    line-height: 16px !important;
+    display: block;
+    text-align: center;
+    &:hover {
+        color: red;
+        border-color: red;
+    }
 }
 
