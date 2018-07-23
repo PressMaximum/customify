@@ -51,6 +51,19 @@ add_action( 'woocommerce_before_shop_loop', 'customify_wc_catalog_header', 15 );
  * Custom shop header
  */
 function customify_wc_catalog_header(){
+    // do not show shop header when display categories
+    $d = false;
+    if ( is_product_category() || is_product_tag() || is_product_taxonomy() ) {
+        $d = get_option( 'woocommerce_category_archive_display' );
+    } else {
+        $d = get_option( 'woocommerce_shop_page_display' );
+    }
+
+    if ( $d && $d == 'subcategories' ) {
+        return;
+    }
+
+
     if ( ! Customify()->get_setting( 'wc_cd_show_catalog_header' ) ) {
         return false;
     }
