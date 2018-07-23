@@ -3595,7 +3595,7 @@ article.comment .comment-post-author {
   display: block;
   margin-top: -1px;
   transition: all .2s linear;
-  transform: scale(0.6);
+  transform: translateY(40px);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
   left: auto;
@@ -3609,7 +3609,7 @@ article.comment .comment-post-author {
   height: auto;
   overflow: initial;
   z-index: 26;
-  transform: scale(1);
+  transform: translateY(0);
 }
 
 .header-search-form {
