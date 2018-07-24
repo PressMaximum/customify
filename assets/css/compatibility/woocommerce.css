@@ -2039,13 +2039,14 @@ div.product div.images .woocommerce-product-gallery__trigger:after {
 div.product div.images .flex-control-thumbs {
   overflow: hidden;
   zoom: 1;
-  margin: 0;
+  margin: 10px -10px 0px;
   padding: 0;
 }
 div.product div.images .flex-control-thumbs li {
   width: 25%;
   float: left;
   margin: 0;
+  padding: 10px;
   list-style: none;
 }
 div.product div.images .flex-control-thumbs li:last-child {
