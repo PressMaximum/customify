@@ -344,8 +344,8 @@ body {
         overflow: auto;
     }
     &.menu_sidebar_slide_overlay {
-        overflow: hidden;
-        position: fixed;
+        overflow: initial;
+        position: relative;
         width: 100%;
         display: block;
         .header-menu-sidebar {
@@ -358,8 +358,8 @@ body {
         }
     }
     &.menu_sidebar_slide_left {
-        overflow: hidden;
-        position: fixed;
+        overflow: initial;
+        position: relative;
         width: 100%;
         display: block;
         .header-menu-sidebar {
@@ -374,8 +374,8 @@ body {
         }
     }
     &.menu_sidebar_slide_right {
-        overflow: hidden;
-        position: fixed;
+        overflow: initial;
+        position: relative;
         width: 100%;
         display: block;
         .header-menu-sidebar {

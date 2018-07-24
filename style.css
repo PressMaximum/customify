@@ -4642,8 +4642,8 @@ body.menu_sidebar_dropdown:before {
   overflow: auto;
 }
 .is-menu-sidebar.menu_sidebar_slide_overlay {
-  overflow: hidden;
-  position: fixed;
+  overflow: initial;
+  position: relative;
   width: 100%;
   display: block;
 }
@@ -4656,8 +4656,8 @@ body.menu_sidebar_dropdown:before {
   opacity: 0;
 }
 .is-menu-sidebar.menu_sidebar_slide_left {
-  overflow: hidden;
-  position: fixed;
+  overflow: initial;
+  position: relative;
   width: 100%;
   display: block;
 }
@@ -4672,8 +4672,8 @@ body.menu_sidebar_dropdown:before {
   opacity: 0;
 }
 .is-menu-sidebar.menu_sidebar_slide_right {
-  overflow: hidden;
-  position: fixed;
+  overflow: initial;
+  position: relative;
   width: 100%;
   display: block;
 }
