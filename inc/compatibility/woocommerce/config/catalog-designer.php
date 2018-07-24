@@ -54,9 +54,19 @@ class Customify_WC_Catalog_Designer {
 					} else {
 						$classes[] = 'hide-in-list';
 					}
-					echo '<div class="' . esc_attr( join( ' ', $classes ) ) . '">';
+
+					$item_html = '';
+					ob_start();
 					call_user_func( $cb, array() );
-					echo '</div>';
+					$item_html = ob_get_contents();
+					ob_end_clean();
+
+					if ( trim( $item_html ) != '' ) {
+                        echo '<div class="' . esc_attr( join( ' ', $classes ) ) . '">';
+                        echo $item_html;
+                        echo '</div>';
+                    }
+
 				}
 			}
 		}
