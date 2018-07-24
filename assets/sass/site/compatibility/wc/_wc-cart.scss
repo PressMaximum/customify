@@ -187,15 +187,12 @@
         min-width: 280px;
         padding: 10px 0 0;
         transition: all .3s ease;
-        //opacity: 0;
-        opacity: 1;
-        //height: 0;
-        height: auto;
-        //visibility: hidden;
-        visibility: visible;
+        opacity: 0;
+        height: 0;
+        visibility: hidden;
         display: block;
-        //transform: translateY(40px);
         color: $color_text;
+        transform: translateY(40px);
         .woocommerce-mini-cart {
             max-height: 300px;
             overflow: auto;
