@@ -92,7 +92,7 @@
             }
         }
         .amount {
-            color: #111111;
+            color: inherit;
         }
         .cart_list {
             &:after {
@@ -197,11 +197,15 @@
         visibility: visible;
         display: block;
         //transform: translateY(40px);
+        color: $color_text;
         .woocommerce-mini-cart {
             max-height: 300px;
             overflow: auto;
             display: block;
             padding: 1.25em;
+            a {
+                color: $color_link;
+            }
             li {
                 &:last-child {
                     margin-bottom: 0;

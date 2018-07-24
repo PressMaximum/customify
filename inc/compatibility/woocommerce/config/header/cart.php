@@ -290,7 +290,6 @@ class Customify_Builder_Item_WC_Cart
                 ),
             ),
 
-
             array(
                 'name'            => "{$this->name}_d_width",
                 'type'            => 'slider',
@@ -304,14 +303,6 @@ class Customify_Builder_Item_WC_Cart
                 'default'         => array(),
             ),
 
-            array(
-                'name'            => "{$this->name}_d_color",
-                'type'            => 'color',
-                'section'         => $this->section,
-                'title'           => __('Color', 'customify'),
-                'selector'        => '.builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget, .builder-header-' . $this->id . '-item .cart-dropdown-box.widget-area .widget a:not(.button)',
-                'css_format'      => 'color: {{value}};',
-            ),
 
             array(
                 'name'            => "{$this->name}_d_btn_color",
@@ -347,15 +338,18 @@ class Customify_Builder_Item_WC_Cart
                 'title'       => __('Dropdown Styling', 'customify'),
                 'description' => __('Advanced styling for cart dropdown', 'customify'),
                 'selector'    => array(
-                    'normal' => '.builder-header-' . $this->id . '-item .cart-dropdown-box',
+                    'normal' => '.builder-header-' . $this->id . '-item .cart-dropdown-box .widget',
                     'normal_bg_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
+                    'normal_link_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a",
+                    'normal_border_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
+                    'normal_border_width' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
                 ),
                 'css_format'  => 'styling',
                 'default'     => array(),
                 'fields'      => array(
                     'normal_fields' => array(
-                        'color'    => false, // disable for special field.
-                        'link_color'    => false, // disable for special field.
+                        //'color'    => false, // disable for special field.
+                        //'link_color'    => false, // disable for special field.
                         //'margin' => false,
                         'bg_image'      => false,
                         'bg_cover'      => false,
@@ -363,15 +357,27 @@ class Customify_Builder_Item_WC_Cart
                         'bg_repeat'     => false,
                         'bg_attachment' => false,
                         //'bg_color'      => false,
-                        'bg_heading'      => false,
-                        'border_style'      => false,
-                        'border_radius'      => false,
-                        'border_width'      => false,
-                        'border_color'      => false,
-                        'box_shadow'      => false,
-                        'border_heading'      => false,
                     ),
-                    'hover_fields'  => false
+                    'hover_fields'  => array(
+                        'normal_fields' => array(
+
+                            'link_color'    => false, // disable for special field.
+                            //'margin' => false,
+                            'bg_image'      => false,
+                            'bg_cover'      => false,
+                            'bg_position'   => false,
+                            'bg_repeat'     => false,
+                            'bg_attachment' => false,
+                            //'bg_color'      => false,
+                            'bg_heading'      => false,
+                            'border_style'      => false,
+                            'border_radius'      => false,
+                            'border_width'      => false,
+                            'border_color'      => false,
+                            'box_shadow'      => false,
+                            'border_heading'      => false,
+                        ),
+                    )
                 ),
             ),
             

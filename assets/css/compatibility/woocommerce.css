@@ -1465,7 +1465,7 @@ p.demo_store a,
   top: -2px;
 }
 .widget-area .widget_shopping_cart .amount {
-  color: #111111;
+  color: inherit;
 }
 .widget-area .widget_shopping_cart .cart_list:after {
   content: none !important;
@@ -1556,12 +1556,16 @@ p.demo_store a,
   height: auto;
   visibility: visible;
   display: block;
+  color: #444444;
 }
 .item--wc_cart .cart-dropdown-box .woocommerce-mini-cart {
   max-height: 300px;
   overflow: auto;
   display: block;
   padding: 1.25em;
+}
+.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a {
+  color: #005670;
 }
 .item--wc_cart .cart-dropdown-box .woocommerce-mini-cart li:last-child {
   margin-bottom: 0;
