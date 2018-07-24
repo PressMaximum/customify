@@ -1,8 +1,10 @@
 = 0.2.0 =
+* NEW: Add Biography item for single blog post.
 * NEW: Add option setting to always load font awesome.
 * IMPROVED: Header search form and search modal form.
 * IMPROVED: Primary navigation style.
 * IMPROVED: Remove Menu Icon default padding.
+* FIXED: Issue menu item does not jump to that section ID on mobile #117
 
 = 0.1.2 =
 * NEW: Support Elementor 2.0
