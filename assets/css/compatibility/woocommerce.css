@@ -1564,7 +1564,7 @@ p.demo_store a,
   display: block;
   padding: 1.25em;
 }
-.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a {
+.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a:not(.remove) {
   color: #005670;
 }
 .item--wc_cart .cart-dropdown-box .woocommerce-mini-cart li:last-child {

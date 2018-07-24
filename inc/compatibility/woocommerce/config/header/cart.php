@@ -340,7 +340,7 @@ class Customify_Builder_Item_WC_Cart
                 'selector'    => array(
                     'normal' => '.builder-header-' . $this->id . '-item .cart-dropdown-box .widget',
                     'normal_bg_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
-                    'normal_link_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a",
+                    'normal_link_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a:not(.remove)",
                     'normal_border_color' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
                     'normal_border_width' => ".builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget, .builder-header-{$this->id}-item.item--wc_cart .cart-dropdown-box .widget::before",
                 ),
