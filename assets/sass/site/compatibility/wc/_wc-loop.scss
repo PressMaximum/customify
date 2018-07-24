@@ -132,6 +132,9 @@
     .wc-product__category {
         a {
             display: inline-block;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.72em;
         }
     }
 }

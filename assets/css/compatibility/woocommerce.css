@@ -457,8 +457,9 @@ p.demo_store a,
 }
 .input-qty-pm .input-pm-act {
   text-align: center;
-  line-height: 2.4em;
+  line-height: 2.2em;
   min-height: 2.6em;
+  padding: 0px 0.5em;
   cursor: pointer;
   min-width: 2em;
   -webkit-user-select: none;
@@ -467,9 +468,10 @@ p.demo_store a,
   user-select: none;
   box-shadow: none;
   font-weight: 400;
+  background: #f9f9f9;
 }
 .input-qty-pm .input-pm-act:hover {
-  background: #f2f2f2;
+  background: #f0f0f0;
   color: inherit;
 }
 
@@ -1015,6 +1017,9 @@ p.demo_store a,
 }
 .wc-product-inner .wc-product__category a {
   display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.72em;
 }
 
 .product-has-gallery > .wc-product-inner:hover img {
@@ -1552,11 +1557,12 @@ p.demo_store a,
   min-width: 280px;
   padding: 10px 0 0;
   transition: all .3s ease;
-  opacity: 1;
-  height: auto;
-  visibility: visible;
+  opacity: 0;
+  height: 0;
+  visibility: hidden;
   display: block;
   color: #444444;
+  transform: translateY(40px);
 }
 .item--wc_cart .cart-dropdown-box .woocommerce-mini-cart {
   max-height: 300px;
@@ -1762,8 +1768,41 @@ p.demo_store a,
 .button.add_to_cart_button,
 .button.alt,
 .button.added_to_cart,
-.button.checkout {
+.button.checkout,
+.button.product_type_variable {
   background: #c3512f;
+}
+.button.add_to_cart_button.loading,
+.button.alt.loading,
+.button.added_to_cart.loading,
+.button.checkout.loading,
+.button.product_type_variable.loading {
+  opacity: 0.25;
+  padding-right: 2.618em;
+}
+.button.add_to_cart_button.loading:after,
+.button.alt.loading:after,
+.button.added_to_cart.loading:after,
+.button.checkout.loading:after,
+.button.product_type_variable.loading:after {
+  font-family: 'WooCommerce';
+  content: '\e01c';
+  vertical-align: top;
+  font-weight: 400;
+  position: absolute;
+  top: 0.618em;
+  right: 1em;
+  animation: spin 2s linear infinite;
+}
+.button.add_to_cart_button.loading.added:after,
+.button.alt.loading.added:after,
+.button.added_to_cart.loading.added:after,
+.button.checkout.loading.added:after,
+.button.product_type_variable.loading.added:after {
+  font-family: 'WooCommerce';
+  content: '\e017';
+  margin-left: 0.53em;
+  vertical-align: bottom;
 }
 
 /* Remove Button */

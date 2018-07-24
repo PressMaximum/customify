@@ -100,9 +100,30 @@
 .button.add_to_cart_button,
 .button.alt,
 .button.added_to_cart,
-.button.checkout
+.button.checkout,
+.button.product_type_variable
 {
     background: $color_secondary;
+    &.loading {
+        opacity: 0.25;
+        padding-right: 2.618em;
+        &:after {
+            font-family: 'WooCommerce';
+            content: '\e01c';
+            vertical-align: top;
+            font-weight: 400;
+            position: absolute;
+            top: 0.618em;
+            right: 1em;
+            animation: spin 2s linear infinite;
+        }
+        &.added:after {
+            font-family: 'WooCommerce';
+            content: '\e017';
+            margin-left: 0.53em;
+            vertical-align: bottom;
+        }
+    }
 }
 
 /* Remove Button */
