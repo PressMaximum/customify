@@ -178,13 +178,22 @@ class Customify_WC {
      * Load load theme styling instead.
      */
     function custom_styles( $enqueue_styles ) {
-
         $suffix = Customify()->get_asset_suffix();
         $enqueue_styles['woocommerce-general']['src'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
+        $enqueue_styles['woocommerce-general']['deps'] = 'customify-style';
 
         //unset( $enqueue_styles['woocommerce-general'] );	// Remove the gloss
-        unset( $enqueue_styles['woocommerce-layout'] );		// Remove the layout
-        //unset( $enqueue_styles['woocommerce-smallscreen'] );	// Remove the smallscreen optimisation
+        if ( isset( $enqueue_styles['woocommerce-layout']  ) ) {
+            unset($enqueue_styles['woocommerce-layout']);        // Remove the layout
+        }
+
+        if ( isset(  $enqueue_styles['woocommerce-smallscreen'] ) ) {
+            $enqueue_styles['woocommerce-smallscreen']['deps'] = '';
+            $b = $enqueue_styles['woocommerce-smallscreen'];
+            unset($enqueue_styles['woocommerce-smallscreen']);
+            $enqueue_styles['woocommerce-smallscreen'] = $b;
+        }
+
         return $enqueue_styles;
     }
 
