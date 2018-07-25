@@ -2195,6 +2195,8 @@
 
             $('.customify-typo-input[data-name="font"]', that.container ).trigger('init-change');
 
+            $('.customify-typo-input[data-name="font"]', that.container ).select2();
+
             that.container.on( 'change data-change', 'input, select', function(){
                 that.get();
             } ) ;
