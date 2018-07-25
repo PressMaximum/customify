@@ -205,7 +205,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_style('customify-customizer-control', esc_url( get_template_directory_uri() ) .'/assets/css/admin/customizer/customizer'.$suffix.'.css');
         wp_enqueue_style('select2', esc_url( get_template_directory_uri() ) .'/assets/css/admin/select2'.$suffix.'.css');
         wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
-        wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/select2'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ).'/assets/js/select2'.$suffix.'.js', array( 'jquery' ), false, true );
         wp_enqueue_script( 'customify-customizer-control', esc_url( get_template_directory_uri() ).'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_args_loaded ) ) {
 
