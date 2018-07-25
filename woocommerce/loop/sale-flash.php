@@ -51,11 +51,11 @@ if ( $product->is_on_sale() ) {
 			            $maximumper = $percentage;
 		            }
 	            }
-	            $text = sprintf( __( '%s', 'woocommerce' ), - $maximumper . '%' );
+	            $text = sprintf( __( '%s', 'woocommerce', 'customify' ), - $maximumper . '%' );
 
             } else if ( $product->product_type == 'simple' ) {
 	            $percentage = round( ( ( $product->regular_price - $product->sale_price ) / $product->regular_price ) * 100 );
-	            $text = sprintf( __( '%s', 'woocommerce' ), - $percentage . '%' );
+	            $text = sprintf( __( '%s', 'woocommerce', 'customify' ), - $percentage . '%' );
             }
             break;
         default:
