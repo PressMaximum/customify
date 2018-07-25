@@ -413,23 +413,33 @@ class Customify_Dashboard {
         $modules = array(
             array(
                 'name' => __( 'Header Transparent', 'customify' ),
+                'desc' => __( 'Make your website stand out with transparent header modules.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-transparent/',
             ),
             array(
                 'name' => __( 'Header Sticky', 'customify' ),
+                'desc' => __( 'Let your header accessible when users scroll up or down in unique style.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
             ),
             array(
                 'name' => __( 'Header and Footer Builder Booster', 'customify' ),
+                'desc' => __( 'Get more header and footer builder items, plus advanced styling options.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
             ),
             array(
                 'name' => __( 'Scroll To Top', 'customify' ),
+                'desc' => __( 'Get a better user experience with a scroll to top button with beautiful animation.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/scroll-to-top/',
             ),
             array(
                 'name' => __( 'Blog Pro', 'customify' ),
+                'desc' => __( 'Take advantage of the Blog Pro module to show off your posts in any layouts.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/blog-pro/',
+            ),
+            array(
+                'name' => __( 'Advanced Styling', 'customify' ),
+                'desc' => __( 'Control the layout and typography setting for sub navigation, page header cover and more to come soon.', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
             ),
             array(
                 'name' => __( 'WooCommerce Booster', 'customify' ),
@@ -437,11 +447,18 @@ class Customify_Dashboard {
             ),
             array(
                 'name' => __( 'Portfolio', 'customify' ),
+                'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
             ),
             array(
                 'name' => __( 'Multiple Headers', 'customify' ),
+                'desc' => __( 'Create unique header for each page, post, archive or WooCommerce pages.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
+            ),
+            array(
+                'name' => __( 'Mega Menu', 'customify' ),
+                'desc' => __( 'Create mega menu for your sites that need more space for navigation.', 'customify' ),
+                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/mega-menu/',
             ),
         );
 
