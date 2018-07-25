@@ -1665,6 +1665,20 @@ p.demo_store a,
 }
 
 /**
+* Product description
+ */
+.product_meta {
+  font-size: 0.875em;
+  color: #6d6d6d;
+  margin: 1em 0px;
+}
+.product_meta > span {
+  display: block;
+  padding: 6px 0px;
+  border-top: 1px dotted #eaecee;
+}
+
+/**
 * Single Product Tabs
  */
 .woocommerce-tabs {
