@@ -1,3 +1,18 @@
+
+/**
+* Product description
+ */
+.product_meta {
+    font-size: 0.875em;
+    color: $color_meta;
+    margin: 1em 0px;
+    > span {
+        display: block;
+        padding: 6px 0px;
+        border-top: 1px dotted $color_border;
+    }
+}
+
 /**
 * Single Product Tabs
  */
@@ -109,8 +124,4 @@ $tab_active_color: #d7883a;
         }
     }
 
-}
-
-.woocommerce-Reviews-title {
-    //display: none;
 }
