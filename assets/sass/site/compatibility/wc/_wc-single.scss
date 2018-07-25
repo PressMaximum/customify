@@ -25,7 +25,7 @@ $tab_active_color: #d7883a;
     ul.tabs {
         list-style: none;
         padding: 0;
-        margin: 0 0px 2em;
+        margin: 0 0 1em;
         position: relative;
         li {
             text-transform: uppercase;
@@ -59,7 +59,7 @@ $tab_active_color: #d7883a;
                 }
                 a {
                     display: inline-block;
-                    padding: 1em 0px;
+                    padding: 0.5em 0px;
 
                 }
                 &.active {
@@ -124,4 +124,21 @@ $tab_active_color: #d7883a;
         }
     }
 
+}
+
+/**
+* WooCommerce related heading
+ */
+.woocommerce-Reviews-title,
+.related.products h2,
+.cross-sells h2,
+.cart_totals h2,
+.wc-tab > h2
+{
+    font-size: 1.4em;
+    margin-bottom: 1em;
+}
+
+.related.products h2 {
+    margin-bottom: 0px;
 }

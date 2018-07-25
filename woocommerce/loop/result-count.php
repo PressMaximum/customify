@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<p class="woocommerce-result-count">
+<p class="woocommerce-result-count text-uppercase text-xsmall">
 	<?php
 	if ( $total <= $per_page || -1 === $per_page ) {
 		/* translators: %d: total results */
