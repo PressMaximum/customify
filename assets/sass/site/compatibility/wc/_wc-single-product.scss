@@ -1,6 +1,12 @@
+/*
+# Product meta
+# Product tabs
+# Upsell + Related products section
+*/
+
 
 /**
-* Product description
+* Product meta
  */
 .product_meta {
     font-size: 0.875em;
@@ -14,43 +20,31 @@
 }
 
 /**
-* Single Product Tabs
- */
-
-$tab_border_color: #666;
-$tab_active_color: #d7883a;
+* Product tabs
+*/
 
 .woocommerce-tabs {
     clear: both;
+    margin-bottom: 2em;
     ul.tabs {
         list-style: none;
         padding: 0;
-        margin: 0 0 1em;
+        margin: 0 0 1.41575em;
         position: relative;
         li {
-            text-transform: uppercase;
             position: relative;
-            a {
-                font-weight: 700;
-                color: currentColor;
-                text-decoration: none;
-                &:hover {
-                    text-decoration: none;
-                    color: inherit;
-                }
-            }
         }
     }
     &.wc-tabs-horizontal {
         ul.tabs {
-            border-bottom: 2px solid $tab_border_color;
+            border-bottom: 1px solid $color_border;
             li {
                 border-bottom: 2px solid transparent;
                 display: inline-block;
                 position: relative;
                 z-index: 0;
                 padding: 0;
-                margin: 0 1em -2px;
+                margin: 0 1em 0;
                 &:first-child {
                     margin-left: 0px;
                 }
@@ -64,9 +58,9 @@ $tab_active_color: #d7883a;
                 }
                 &.active {
                     z-index: 2;
-                    border-bottom-color: $tab_active_color;
+                    border-bottom-color: $color_primary;
                     a {
-                        color: inherit;
+                        color: $color_primary;
                         text-shadow: inherit;
                     }
 
@@ -77,60 +71,91 @@ $tab_active_color: #d7883a;
     } // wc-tabs-horizontal
 
     &.wc-tabs-vertical {
-        display: flex;
+
         .wc-tabs {
-            flex-basis: 30%;
-            margin-right: 2em;
+            width: 26%;
+            margin-right: 4%;
+            margin-bottom: 2em;
+            float: left;
+            @include for_device( mobile ) {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 2em;
+            }
             li {
-                padding: 1em 0px;
-                border-bottom: 2px solid $tab_border_color;
+                border-bottom: 1px solid $color_border;
                 &:first-child {
-                    border-top: 2px solid $tab_border_color;
+                    border-top: 1px solid $color_border;
                 }
-
-                a {
-                    display: block;
-                }
-
                 &:after {
                     content: '';
-                    width: .8em;
-                    height: .8em;
+                    width: .5em;
+                    height: .5em;
                     display: block;
                     position: absolute;
                     top: 50%;
                     right: .8em;
                     left: auto;
-                    transform: rotate(45deg) translateY( -50% );
-                    border-top: 1px solid $tab_border_color;
-                    border-right: 1px solid $tab_border_color;
                     opacity: 0;
+                    transform: rotate(45deg) translateY( -50% );
+                    border-top: 1px solid #111111;
+                    border-right: 1px solid #111111;
                     transition: all .3s ease;
                 }
-
+                a {
+                    display: block;
+                    padding: 0.875em 0px;
+                }
                 &.active {
-                    color: $tab_active_color;
                     &:after {
                         opacity: 1;
-                        border-top-color:  $tab_active_color;
-                        border-right-color:  $tab_active_color;
+                    }
+                    a {
+                        color: $color_link_hover;
                     }
                 }
 
             }
         }
         .wc-tabs-contents {
-            flex-basis: 70%;
+            width: 70%;
+            float: right;
+            @include for_device( mobile ) {
+                width: 100%;
+            }
         }
     }
 
+    .wc-tabs-contents {
+        margin-bottom: 2em;
+        .woocommerce-Tabs-panel--description {
+            p:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+
+    #reviews {
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+}
+
+/* Upsell + Related products section */
+.related.products, .upsells.products {
+    margin-bottom: 2em;
+    h2 {
+        font-size: 1.4em;
+        margin-bottom: 0px;
+    }
 }
 
 /**
 * WooCommerce related heading
  */
 .woocommerce-Reviews-title,
-.related.products h2,
 .cross-sells h2,
 .cart_totals h2,
 .wc-tab > h2
@@ -139,6 +164,4 @@ $tab_active_color: #d7883a;
     margin-bottom: 1em;
 }
 
-.related.products h2 {
-    margin-bottom: 0px;
-}
+

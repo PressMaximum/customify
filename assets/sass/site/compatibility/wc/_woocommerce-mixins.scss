@@ -20,7 +20,7 @@
  * Deprecated
  * Vendor prefix no longer required.
  */
-@mixin border_radius($radius: 4px) {
+@mixin border_radius($radius: 1px) {
 	border-radius: $radius;
 }
 
@@ -28,7 +28,7 @@
  * Deprecated
  * Vendor prefix no longer required.
  */
-@mixin border_radius_right($radius: 4px) {
+@mixin border_radius_right($radius: 1px) {
 	border-top-right-radius: $radius;
 	border-bottom-right-radius: $radius;
 }
@@ -37,7 +37,7 @@
  * Deprecated
  * Vendor prefix no longer required.
  */
-@mixin border_radius_left($radius: 4px) {
+@mixin border_radius_left($radius: 1px) {
 	border-top-left-radius: $radius;
 	border-bottom-left-radius: $radius;
 }
@@ -46,7 +46,7 @@
  * Deprecated
  * Vendor prefix no longer required.
  */
-@mixin border_radius_bottom($radius: 4px) {
+@mixin border_radius_bottom($radius: 1px) {
 	border-bottom-left-radius: $radius;
 	border-bottom-right-radius: $radius;
 }
@@ -55,7 +55,7 @@
  * Deprecated
  * Vendor prefix no longer required.
  */
-@mixin border_radius_top($radius: 4px) {
+@mixin border_radius_top($radius: 1px) {
 	border-top-left-radius: $radius;
 	border-top-right-radius: $radius;
 }
