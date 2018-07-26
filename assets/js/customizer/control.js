@@ -2247,7 +2247,7 @@
             $( '.customify-typo-input[data-name="font_weight"]', that.container ).html( that.toSelectOptions( variants, _.isObject( that.values ) ? that.values.font_weight: '', type ) );
             $( '.customify--font-type', that.container ).val( type );
 
-            if ( type == 'normal' ) {
+            if ( type !== 'google' ) {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).addClass( 'customify--hide').find( '.customify-field-settings-inner' ).html('');
             } else {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).removeClass( 'customify--hide');
@@ -2325,7 +2325,6 @@
                 }
                 data[ f.name ] = customifyField.getValue( f, $( '.customify--group-field[data-field-name="'+f.name+'"]', that.container ) );
             });
-
 
             data.variant = {};
             if ( ! _.isUndefined( that.fonts.google.fonts[ data.font ] ) ) {

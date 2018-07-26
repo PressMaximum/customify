@@ -3,9 +3,10 @@
 class Customify_Customizer_Auto_CSS
 {
     static $_instance;
-    private $fonts = array();
-    private $variants = array();
-    private $subsets = array();
+    public $fonts = array();
+    public $custom_fonts = array();
+    public $variants = array();
+    public $subsets = array();
 
     static $code = null;
     static $font_url = null;
@@ -542,6 +543,8 @@ class Customify_Customizer_Auto_CSS
             if ($value['subsets']) {
                 $this->subsets = array_merge($this->subsets, $value['subsets']);
             }
+        } else {
+            $this->custom_fonts[$value['font']] = $value['font'];
         }
 
         return "font-family: \"{$value['font']}\";";
@@ -924,7 +927,7 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
-        $css_code = apply_filters( 'customify/auto-css', $css_code  );
+        $css_code = apply_filters( 'customify/auto-css', $css_code, $this  );
 
         $url = $this->get_google_fonts_url();
         self::$font_url = $url;
