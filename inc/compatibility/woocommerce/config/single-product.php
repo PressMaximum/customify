@@ -13,7 +13,7 @@ class Customify_WC_Single_Product {
 		if ( ! is_product() ) {
 			return ;
 		}
-		if ( Customify()->get_setting('wc_single_product_tab_show_description') ) {
+		if ( Customify()->get_setting('wc_single_product_tab_hide_description') ) {
 			add_filter( 'woocommerce_product_description_heading', '__return_false', 999 );
 		}
 
@@ -62,11 +62,11 @@ class Customify_WC_Single_Product {
 		);
 
 		$configs[] = array(
-			'name' => "{$section}_tab_show_description",
+			'name' => "{$section}_tab_hide_description",
 			'type' => 'checkbox',
 			'default' => 1,
 			'section' =>  $section,
-			'checkbox_label' => __( 'Show product description heading', 'customify' ),
+			'checkbox_label' => __( 'Hide product description heading', 'customify' ),
 		);
 
 		$configs[] = array(
@@ -74,13 +74,13 @@ class Customify_WC_Single_Product {
 			'type' => 'checkbox',
 			'default' => 1,
 			'section' =>  $section,
-			'checkbox_label' => __( 'Show product additional information heading', 'customify' ),
+			'checkbox_label' => __( 'Hide product additional information heading', 'customify' ),
 		);
 
 		$configs[] = array(
 			'name' => "{$section}_tab_hide_review_heading",
 			'type' => 'checkbox',
-			'default' => 1,
+			'default' => 0,
 			'section' =>  $section,
 			'checkbox_label' => __( 'Hide product review heading', 'customify' ),
 			'selector' => '.woocommerce-Reviews-title',
