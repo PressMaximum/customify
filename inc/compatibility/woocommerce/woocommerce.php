@@ -305,6 +305,7 @@ class Customify_WC {
 		.widget_price_filter .price_slider_wrapper .ui-widget-content {
 		    background-color: {{value}};
 		}
+		.product_list_widget li,
 		#reviews #comments ol.commentlist li .comment-text,
 		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
 		.product_meta > span,

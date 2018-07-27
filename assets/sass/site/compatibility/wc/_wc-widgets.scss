@@ -9,13 +9,27 @@
     .wc-product-name, .quantity {
         display: block;
     }
+    .reviewer {
+        font-size: 0.72em;
+        position: relative;
+        top: -4px;
+        text-transform: uppercase;
+    }
     li {
         margin: 0;
         list-style: none;
         position: relative;
-        padding-left: 60px;
-        min-height: 50px;
+        padding-left: 75px;
+        min-height: 74px;
         display: block;
+        padding-bottom: 12px;
+        margin-bottom: 12px !important;
+        border-bottom: 1px solid $color_border;
+        &:last-child {
+            border-bottom: none;
+            margin-bottom: 0%;
+            padding-bottom: 0 !important;
+        }
         a {
             display: block;
             line-height: 1.2;
@@ -24,19 +38,27 @@
                 text-decoration: none;
             }
         }
+        .amount {
+            display: block;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
 
         @include medialeft();
 
         img {
             float: left;
-            margin-right: 10px;
-            width: 50px;
-            height: auto;
+            margin-right: 15px;
+            width: 60px;
+            height: 60px;
             box-shadow: none;
             position: absolute;
             top: 0px;
             left: 0px;
             right: auto;
+            &:hover {
+                opacity: 0.8;
+            }
         }
 
         dl {
