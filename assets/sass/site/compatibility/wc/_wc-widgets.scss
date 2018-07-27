@@ -27,7 +27,7 @@
         border-bottom: 1px solid $color_border;
         &:last-child {
             border-bottom: none;
-            margin-bottom: 0%;
+            margin-bottom: 0 !important;
             padding-bottom: 0 !important;
         }
         a {

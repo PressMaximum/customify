@@ -1110,7 +1110,7 @@ p.demo_store a,
 }
 .product_list_widget li:last-child {
   border-bottom: none;
-  margin-bottom: 0%;
+  margin-bottom: 0 !important;
   padding-bottom: 0 !important;
 }
 .product_list_widget li a {
