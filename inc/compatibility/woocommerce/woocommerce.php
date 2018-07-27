@@ -46,6 +46,7 @@ class Customify_WC {
             add_filter('customify/styling/secondary-color', array($this, 'styling_secondary'));
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
             add_filter('customify/styling/color-border', array($this, 'styling_border_color'));
+            add_filter('customify/styling/color-meta', array($this, 'styling_meta_color'));
 
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
@@ -263,13 +264,26 @@ class Customify_WC {
 
 	function styling_border_color( $selector ){
 		$selector .= '
-		 
+		.widget_price_filter .price_slider_wrapper .ui-widget-content {
+		    background-color: {{value}};
+		}
 		#reviews #comments ol.commentlist li .comment-text,
 		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
 		.product_meta > span,
 		.woocommerce-tabs.wc-tabs-horizontal ul.tabs,
 		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li:first-child {
             border-color: {{value}};
+        }';
+
+		return $selector;
+	}
+
+	function styling_meta_color( $selector ){
+		$selector .= '
+		.widget_price_filter .ui-slider .ui-slider-handle,
+		.widget_price_filter .ui-slider .ui-slider-range,
+		.widget_price_filter .price_slider_amount .button {
+            background-color: {{value}};
         }';
 
 		return $selector;

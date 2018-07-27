@@ -410,9 +410,7 @@ class Customify_Customize_Layout_Builder_Frontend {
                     $item_classes[] = 'item--inner';
                     $item_classes[] = 'builder-item--' . $item_id;
                     if ( strpos( $item_id, '-menu' ) ) {
-                        $item_classes[] = 'item--m';
-                    } else {
-                        $item_classes[] = 'item--nm';
+                        $item_classes[] = 'has_menu';
                     }
                     if (is_customize_preview()) {
                         $item_classes[] = ' builder-item-focus';

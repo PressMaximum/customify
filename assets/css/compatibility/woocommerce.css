@@ -1203,8 +1203,8 @@ p.demo_store a,
 }
 
 /**
-     * Layered nav widget
-     */
+* Layered nav widget
+*/
 .woocommerce-widget-layered-nav-list {
   margin: 0;
   padding: 0;
@@ -1288,9 +1288,14 @@ p.demo_store a,
   line-height: 2.4;
   font-size: 0.8751em;
 }
+.widget_price_filter .price_slider_amount .from, .widget_price_filter .price_slider_amount .to {
+  font-weight: bolder;
+}
 .widget_price_filter .price_slider_amount .button {
-  font-size: 1.15em;
+  font-size: 0.875em;
   float: left;
+  background: #6d6d6d;
+  min-height: auto;
 }
 .widget_price_filter .ui-slider {
   position: relative;
@@ -1303,7 +1308,7 @@ p.demo_store a,
   z-index: 2;
   width: 1em;
   height: 1em;
-  background-color: #005670;
+  background-color: #6d6d6d;
   border-radius: 1em;
   cursor: ew-resize;
   outline: none;
@@ -1318,7 +1323,7 @@ p.demo_store a,
   display: block;
   border: 0;
   border-radius: 1em;
-  background-color: #005670;
+  background-color: #6d6d6d;
 }
 .widget_price_filter .price_slider_wrapper .ui-widget-content {
   border-radius: 1em;
@@ -1869,7 +1874,7 @@ a.remove {
   height: 20px;
   border: 1px solid #ccc;
   color: #ccc;
-  border-radius: 2px;
+  border-radius: 100px;
   font-size: 17px !important;
   font-weight: normal;
   line-height: 16px !important;
