@@ -3,15 +3,17 @@
     font-size: 16px;
     text-transform: uppercase;
     font-weight: 500;
-    color: $color_text;
+    color: currentColor;
     margin-bottom: 15px;
 }
 
 .widget-area {
     .widget {
-        margin-bottom: ms(2);
-        &:last-of-type {
-            margin-bottom: 0;
+        margin-bottom: 2em;
+        @include for_device( desktop ) {
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
 
         ul {
@@ -162,5 +164,17 @@
                 }
             }
         }
+    }
+}
+
+/* Tagcloud widget */
+.tagcloud {
+    a {
+        border: 1px solid currentColor;
+        border-radius: 2px;
+        display: inline-block;
+        font-size: 0.875em !important;
+        margin-bottom: 5px;
+        padding: 1px 10px 1px;
     }
 }

@@ -118,8 +118,8 @@
 
 
 /**
-     * Layered nav widget
-     */
+* Layered nav widget
+*/
 .woocommerce-widget-layered-nav-list {
     margin: 0;
     padding: 0;
@@ -184,9 +184,15 @@
         line-height: 2.4;
         font-size: 0.8751em;
 
+        .from, .to {
+            font-weight: bolder;
+        }
+
         .button {
-            font-size: 1.15em;
+            font-size: 0.875em;
             float: left;
+            background: $color_meta;
+            min-height: auto;
         }
     }
 
@@ -202,7 +208,7 @@
         z-index: 2;
         width: 1em;
         height: 1em;
-        background-color: $color_primary;
+        background-color: $color_meta;
         border-radius: 1em;
         cursor: ew-resize;
         outline: none;
@@ -218,7 +224,7 @@
         display: block;
         border: 0;
         border-radius: 1em;
-        background-color: $color_primary;
+        background-color: $color_meta;
     }
 
     .price_slider_wrapper .ui-widget-content {

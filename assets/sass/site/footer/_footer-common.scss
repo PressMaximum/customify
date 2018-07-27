@@ -27,30 +27,62 @@
             width: auto;
             @include for_device( tablet ) {
                 display: block;
-                margin-bottom: 25px;
+                margin-bottom: 2em;
                 &:last-child {
                     margin-bottom: 0px;
                 }
             }
         }
     }
-    [class~="customify-grid"] > [class*="_sm-"], [class*="customify-grid-"] > [class*="_sm-"],
-    [class*="customify-grid_"] > [class*="_sm-"] {
-        margin-bottom: 0px;
+    //[class~="customify-grid"] > [class*="_sm-"], [class*="customify-grid-"] > [class*="_sm-"],
+    //[class*="customify-grid_"] > [class*="_sm-"] {
+    //    margin-bottom: 0px;
+    //}
+}
+
+
+
+.footer-main, .footer-top, .footer-bottom {
+    .builder-item {
+        &:last-child {
+            margin-bottom: 0;
+        }
+        .widget-area {
+            .widget {
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+    @include for_device( mobile ) {
+        .builder-item--footer_copyright,
+        .builder-item--footer-social-icons {
+            text-align: center;
+        }
     }
 }
 
-.footer-main, .footer-top {
+.footer-top, .footer-main {
     .customify-container {
         padding-top: 45px;
         padding-bottom: 45px;
     }
-
 }
+
 .footer-bottom {
     .customify-container {
-        padding-top: ms(2);
-        padding-bottom: ms(2);
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
+    .builder-item {
+        @include for_device( mobile ) {
+            margin-bottom: ms(2);
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+
     }
 }
 
@@ -58,14 +90,14 @@
 @include for_device( sm ) {
     .site-footer {
         .builder-item {
-            margin-bottom: 25px;
+            margin-bottom: 2em;
         }
     }
 
 }
 
 .site-footer {
-    p{
+    p {
         &:last-child {
             margin-bottom: 0px;
         }
@@ -82,5 +114,6 @@
 }
 
 .footer-copyright {
-    font-size: 15px;
+    font-size: 0.95em;
+    font-weight: 500;
 }

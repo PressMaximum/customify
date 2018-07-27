@@ -57,18 +57,16 @@
                     position: absolute;
                     top: 0;
                     left: 0;
-                    padding: 3px;
-                    width: 32px;
+                    width: 50px;
                     height: auto;
-                    background: $secondary;
-                    border: 1px solid darken( $secondary, 3% );
+                    border: 1px solid $color_border;
                     margin: 0;
                     box-shadow: none;
                 }
 
                 .comment-text {
-                    margin: 0 0 0 50px;
-                    border: 1px solid darken( $secondary, 3% );
+                    margin: 0 0 0 70px;
+                    border: 1px solid $color_border;
                     border-radius: 1px;
                     padding: 1em 1em 0;
                     @include clearfix();
@@ -79,6 +77,14 @@
 
                     p.meta {
                         font-size: 0.83em;
+                        time {
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            font-size: 0.8em;
+                        }
+                    }
+                    .star-rating {
+                        margin-bottom: 4px;
                     }
                 }
             }
@@ -116,10 +122,31 @@
     }
     #respond {
         p {
-            margin: 0 0 10px;
+            margin: 0 0 15px;
             &.form-submit {
                 margin-bottom: 0;
             }
+        }
+        .comment-form-author, .comment-form-email {
+            width: 48%;
+        }
+        .comment-form-author {
+            float: left;
+            margin-right: 3.8823529412%;
+        }
+        .comment-form-email {
+            float: right;
+        }
+        .form-submit {
+            width: 100%;
+        }
+        .comment-subscription-form {
+            margin-bottom: 0;
+        }
+        label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875em;
         }
     }
 }

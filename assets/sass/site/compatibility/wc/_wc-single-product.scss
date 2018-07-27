@@ -33,6 +33,9 @@
         position: relative;
         li {
             position: relative;
+            a {
+                color: currentColor;
+            }
         }
     }
     &.wc-tabs-horizontal {
@@ -104,14 +107,14 @@
                 }
                 a {
                     display: block;
-                    padding: 0.875em 0px;
+                    padding: 0.72em 0px;
                 }
                 &.active {
                     &:after {
                         opacity: 1;
                     }
                     a {
-                        color: $color_link_hover;
+                        color: inherit;
                     }
                 }
 
@@ -134,13 +137,6 @@
             }
         }
     }
-
-    #reviews {
-        max-width: 800px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
 }
 
 /* Upsell + Related products section */
