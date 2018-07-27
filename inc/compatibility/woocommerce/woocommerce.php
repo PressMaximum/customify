@@ -77,8 +77,11 @@ class Customify_WC {
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+	        // Single colors config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
+
 
 
         }

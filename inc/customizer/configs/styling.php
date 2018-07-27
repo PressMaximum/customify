@@ -22,6 +22,14 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'title' => __( 'Global Colors', 'customify' ),
                 'priority' => 10,
 			),
+
+			array(
+				'name'    => "{$section}_color_theme_heading",
+				'type'    => 'heading',
+				'section' => $section,
+				'title'   => __( 'Theme Colors', 'customify' ),
+			),
+
 			array(
 				'name'       => "{$section}_color_primary",
 				'type'       => 'color',
