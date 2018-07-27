@@ -95,11 +95,9 @@ html[dir="rtl"] .customize--reset-section {
 }
 
 .customify-control--heading {
-  padding: 7px 12px;
-  background: #fff;
-  border-bottom: 1px solid #dddddd;
-  border-top: 1px solid #dddddd;
-  margin: 10px -12px;
+  padding: 5px 12px;
+  background: #BBBBBB;
+  margin: 10px -12px 2px;
 }
 .customify-control--heading .customize-control-title {
   margin: 0px;
@@ -107,7 +105,7 @@ html[dir="rtl"] .customize--reset-section {
   letter-spacing: 2px;
   font-weight: 500;
   font-size: 12px;
-  color: #444444;
+  color: #FFFFFF;
 }
 
 .customify--field .customify-field--heading {

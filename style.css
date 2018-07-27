@@ -2502,6 +2502,7 @@ input[type="reset"]:hover,
 input[type="submit"]:hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
   color: #FFFFFF;
+  outline: none;
 }
 .button:active, .button:focus,
 button:active,
@@ -2521,6 +2522,12 @@ input[type="reset"],
 input[type="submit"] {
   color: #FFFFFF;
   background: #005670;
+}
+.button:focus,
+input[type="button"]:focus,
+input[type="reset"]:focus,
+input[type="submit"]:focus {
+  color: #FFFFFF;
 }
 
 .button[disabled], button[disabled], button.disabled, .button.disabled {

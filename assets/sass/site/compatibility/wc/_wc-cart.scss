@@ -198,9 +198,6 @@
             overflow: auto;
             display: block;
             padding: 1.25em;
-            a:not(.remove) {
-                color: $color_link;
-            }
             li {
                 &:last-child {
                     margin-bottom: 0;

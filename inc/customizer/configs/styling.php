@@ -150,14 +150,15 @@ blockquote,
     }
 }
 
-.page-titlebar, .page-breadcrumb {
+.page-titlebar, .page-breadcrumb,
+.posts-layout .entry-inner {
     border-bottom-color: {{value}};
 }
 
 .header-search-form .search-field,
 .entry-content .page-links a,
 .header-search-modal,
-.pagination .nav-links > *
+.pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
 .site-content .widget-area .menu li.current-menu-item > a,

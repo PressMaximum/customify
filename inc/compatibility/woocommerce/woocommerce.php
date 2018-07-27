@@ -45,6 +45,7 @@ class Customify_WC {
             add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
             add_filter('customify/styling/secondary-color', array($this, 'styling_secondary'));
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
+            add_filter('customify/styling/color-border', array($this, 'styling_border_color'));
 
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
@@ -224,9 +225,15 @@ class Customify_WC {
     function styling_primary( $selector ){
         $selector .= ' 
         
-        .xx
-        {
-            background-color: {{value}};
+        .wc-view-mod.active,
+        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active,
+        #review_form {
+            border-color: {{value}};
+        }
+        
+        .wc-view-mod.active,
+        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
+            color: {{value}};
         }';
 
         return $selector;
@@ -249,6 +256,20 @@ class Customify_WC {
 		.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
         .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
             color: {{value}};
+        }';
+
+		return $selector;
+	}
+
+	function styling_border_color( $selector ){
+		$selector .= '
+		 
+		#reviews #comments ol.commentlist li .comment-text,
+		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
+		.product_meta > span,
+		.woocommerce-tabs.wc-tabs-horizontal ul.tabs,
+		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li:first-child {
+            border-color: {{value}};
         }';
 
 		return $selector;

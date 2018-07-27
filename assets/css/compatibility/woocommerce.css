@@ -1570,9 +1570,6 @@ p.demo_store a,
   display: block;
   padding: 1.25em;
 }
-.item--wc_cart .cart-dropdown-box .woocommerce-mini-cart a:not(.remove) {
-  color: #005670;
-}
 .item--wc_cart .cart-dropdown-box .woocommerce-mini-cart li:last-child {
   margin-bottom: 0;
 }
@@ -1699,6 +1696,9 @@ p.demo_store a,
 .woocommerce-tabs ul.tabs li {
   position: relative;
 }
+.woocommerce-tabs ul.tabs li a {
+  color: currentColor;
+}
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs {
   border-bottom: 1px solid #eaecee;
 }
@@ -1764,13 +1764,13 @@ p.demo_store a,
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li a {
   display: block;
-  padding: 0.875em 0px;
+  padding: 0.72em 0px;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active:after {
   opacity: 1;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active a {
-  color: #111111;
+  color: inherit;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs-contents {
   width: 70%;
@@ -1786,11 +1786,6 @@ p.demo_store a,
 }
 .woocommerce-tabs .wc-tabs-contents .woocommerce-Tabs-panel--description p:last-child {
   margin-bottom: 0px;
-}
-.woocommerce-tabs #reviews {
-  max-width: 800px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Upsell + Related products section */
@@ -1822,6 +1817,8 @@ p.demo_store a,
 .button.checkout,
 .button.product_type_variable {
   background: #c3512f;
+  position: relative;
+  cursor: pointer;
 }
 .button.add_to_cart_button.loading,
 .button.alt.loading,
@@ -1841,7 +1838,7 @@ p.demo_store a,
   vertical-align: top;
   font-weight: 400;
   position: absolute;
-  top: 0.618em;
+  top: 0.1em;
   right: 1em;
   animation: spin 2s linear infinite;
 }
@@ -1854,6 +1851,16 @@ p.demo_store a,
   content: '\e017';
   margin-left: 0.53em;
   vertical-align: bottom;
+}
+
+.products .button.add_to_cart_button,
+.products .button.added_to_cart,
+.products .button.product_type_variable {
+  font-size: 0.875em;
+}
+
+.single_add_to_cart_button {
+  font-size: 1.04em;
 }
 
 /* Remove Button */
@@ -2577,17 +2584,15 @@ ul#shipping_method .amount {
   position: absolute;
   top: 0;
   left: 0;
-  padding: 3px;
-  width: 32px;
+  width: 50px;
   height: auto;
-  background: #ebe9eb;
-  border: 1px solid #e4e1e3;
+  border: 1px solid #eaecee;
   margin: 0;
   box-shadow: none;
 }
 #reviews #comments ol.commentlist li .comment-text {
-  margin: 0 0 0 50px;
-  border: 1px solid #e4e1e3;
+  margin: 0 0 0 70px;
+  border: 1px solid #eaecee;
   border-radius: 1px;
   padding: 1em 1em 0;
   *zoom: 1;
@@ -2604,6 +2609,14 @@ ul#shipping_method .amount {
 }
 #reviews #comments ol.commentlist li .comment-text p.meta {
   font-size: 0.83em;
+}
+#reviews #comments ol.commentlist li .comment-text p.meta time {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.8em;
+}
+#reviews #comments ol.commentlist li .comment-text .star-rating {
+  margin-bottom: 4px;
 }
 #reviews #comments ol.commentlist ul.children {
   list-style: none outside;
@@ -2628,10 +2641,31 @@ ul#shipping_method .amount {
   border: 2px solid #005670;
 }
 #review_form #respond p {
-  margin: 0 0 10px;
+  margin: 0 0 15px;
 }
 #review_form #respond p.form-submit {
   margin-bottom: 0;
+}
+#review_form #respond .comment-form-author, #review_form #respond .comment-form-email {
+  width: 48%;
+}
+#review_form #respond .comment-form-author {
+  float: left;
+  margin-right: 3.8823529412%;
+}
+#review_form #respond .comment-form-email {
+  float: right;
+}
+#review_form #respond .form-submit {
+  width: 100%;
+}
+#review_form #respond .comment-subscription-form {
+  margin-bottom: 0;
+}
+#review_form #respond label {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875em;
 }
 
 /**
