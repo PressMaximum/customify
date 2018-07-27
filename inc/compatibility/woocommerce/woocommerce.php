@@ -315,8 +315,12 @@ class Customify_WC {
 
 	function styling_meta_color( $selector ){
 		$selector .= '
-		.wc-product-inner .wc-product__category a,
-		.widget_price_filter .ui-slider .ui-slider-handle,
+		.widget_price_filter .ui-slider .ui-slider-handle {
+		    border-color: {{value}};
+		}
+		.wc-product-inner .wc-product__category a {
+		    color: {{value}};
+		}
 		.widget_price_filter .ui-slider .ui-slider-range,
 		.widget_price_filter .price_slider_amount .button {
             background-color: {{value}};

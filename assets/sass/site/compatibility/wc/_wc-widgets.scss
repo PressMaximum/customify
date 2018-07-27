@@ -184,6 +184,10 @@
         line-height: 2.4;
         font-size: 0.8751em;
 
+        .from, .to {
+            font-weight: bolder;
+        }
+
         .button {
             font-size: 0.875em;
             float: left;
@@ -204,7 +208,8 @@
         z-index: 2;
         width: 1em;
         height: 1em;
-        background-color: $color_meta;
+        background-color: #FFF;
+        border: 2px solid $color_meta;
         border-radius: 1em;
         cursor: ew-resize;
         outline: none;

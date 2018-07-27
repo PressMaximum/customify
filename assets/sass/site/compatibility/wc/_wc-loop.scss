@@ -86,7 +86,7 @@
         padding-top: 0.7em;
         padding-bottom: 0.7em;
         > * {
-            margin-top: 0.4em;
+            margin-top: 0.7em;
             &:first-child {
                 margin-top: 0px;
             }
@@ -127,6 +127,9 @@
             opacity: 0;
         }
     }
+
+    .wc-product__category,
+    .wc-product__price,
     .wc-product__rating {
         line-height: 1;
     }

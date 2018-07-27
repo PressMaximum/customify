@@ -116,6 +116,9 @@
 /*-- Layout: content-sidebar --*/
 .content-sidebar {
     @include mq(min-sm) {
+        .content-inner {
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-right: 1px solid $color_border;
@@ -133,6 +136,9 @@
 /*-- Layout: sidebar-content --*/
 .sidebar-content {
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;
@@ -150,6 +156,9 @@
 /*-- Layout: sidebar-sidebar-content --*/
 .sidebar-sidebar-content {
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
             }
@@ -178,6 +187,9 @@
 .content-sidebar-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
+        .content-inner {
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
             }
@@ -205,6 +217,10 @@
 .sidebar-content-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;

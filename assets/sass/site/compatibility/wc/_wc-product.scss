@@ -93,12 +93,19 @@ div.product {
         padding: 0;
         font-size: 2.1em;
         line-height: 1.216;
+        margin-bottom: 0.3em;
+        @include for_device( tablet ) {
+            font-size: 1.9em;
+        }
+        @include for_device( mobile ) {
+            font-size: 1.7em;
+        }
     }
 
     span.price,
     p.price {
         font-size: 1.25em;
-
+        margin-bottom: 0.875em;
         ins {
             background: inherit;
             font-weight: 500;
@@ -120,7 +127,10 @@ div.product {
     }
 
     .woocommerce-product-rating {
-        margin-bottom: 1.618em;
+        margin-bottom: 0.72em;
+        .woocommerce-review-link {
+            display: none;
+        }
     }
 
     div.images {
