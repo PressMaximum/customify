@@ -65,6 +65,9 @@ class Customify_WC {
             // wc_set_loop_prop( 'name', 'related' );
             add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
             add_filter( 'woocommerce_output_related_products_args',  array( $this, 'related_products_args' ) );
+            add_filter( 'woocommerce_upsell_display_args',  array( $this, 'updsell_products_args' ) );
+            add_action( 'woocommerce_before_single_product',  array( $this, 'maybe_disable_upsell' ), 1 );
+            add_action( 'woocommerce_before_single_product',  array( $this, 'maybe_disable_related' ), 1 );
 
 	        // Catalog config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog.php';
@@ -102,8 +105,14 @@ class Customify_WC {
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-        } elseif ( $name == 'related' ) {
-            $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
+        } elseif ( $name == 'related' || $name == 'up-sells' ) {
+
+            if ( $name == 'up-sells' ) {
+                $columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
+            } else {
+                $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
+            }
+
             $columns = wp_parse_args( $columns, array(
                     'desktop' => 3,
                     'tablet' => 3,
@@ -132,6 +141,32 @@ class Customify_WC {
     function related_products_args( $args ) {
 	    $args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_related_number' );
 	    return $args;
+    }
+
+    function maybe_disable_related(){
+        $n =  Customify()->get_setting( 'wc_single_product_related_number' );
+        if ( $n == 0 ) {
+            remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+        }
+    }
+
+    function maybe_disable_upsell(){
+        $n =  Customify()->get_setting( 'wc_single_product_upsell_number' );
+        if ( $n == 0 ) {
+            remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+        }
+    }
+
+    /**
+     * Custom number related products
+     *
+     * @param $args
+     *
+     * @return mixed
+     */
+    function updsell_products_args( $args ) {
+        $args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_upsell_number' );
+        return $args;
     }
 
 
