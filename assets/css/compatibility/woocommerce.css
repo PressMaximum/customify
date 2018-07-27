@@ -1679,7 +1679,7 @@ p.demo_store a,
 .product_meta {
   font-size: 0.875em;
   color: #6d6d6d;
-  margin: 1em 0px;
+  margin: 1.41575em 0px;
 }
 .product_meta > span {
   display: block;
@@ -1866,8 +1866,10 @@ p.demo_store a,
 
 .products .button.add_to_cart_button,
 .products .button.added_to_cart,
-.products .button.product_type_variable {
-  font-size: 0.875em;
+.products .button.product_type_variable,
+.products .wc-product-contents .button {
+  font-size: 0.8em;
+  min-height: auto;
 }
 
 .single_add_to_cart_button {
@@ -2193,7 +2195,7 @@ div.product p.cart::after {
   clear: both;
 }
 div.product form.cart {
-  margin-bottom: 1em;
+  margin-bottom: 1.41575em;
   *zoom: 1;
 }
 div.product form.cart::before, div.product form.cart::after {
@@ -2205,7 +2207,7 @@ div.product form.cart::after {
 }
 div.product form.cart div.quantity {
   float: left;
-  margin: 0 1em 1em 0;
+  margin: 0 1em 0em 0;
 }
 div.product form.cart table {
   border-width: 0 0 1px;

@@ -289,12 +289,12 @@ div.product {
     }
 
     form.cart {
-        margin-bottom: 1em;
+        margin-bottom: 1.41575em;
         @include clearfix();
 
         div.quantity {
             float: left;
-            margin: 0 1em 1em 0;
+            margin: 0 1em 0em 0;
         }
 
         table {

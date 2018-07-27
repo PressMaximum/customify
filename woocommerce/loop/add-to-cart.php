@@ -35,7 +35,7 @@ $cart_icon = wp_parse_args( $cart_icon, array(
 
 $icon_tag = '';
 if ( ! $show_text ) {
-	$text = '';
+	$text = __( 'Add to cart', 'customify' );
 }
 if ( $show_icon ) {
 	if ( $icon['icon'] ) {

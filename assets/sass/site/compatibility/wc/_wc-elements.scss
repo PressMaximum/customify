@@ -136,8 +136,11 @@
 .products {
     .button.add_to_cart_button,
     .button.added_to_cart,
-    .button.product_type_variable {
-        font-size: 0.875em;
+    .button.product_type_variable,
+    .wc-product-contents .button
+    {
+        font-size: 0.8em;
+        min-height: auto;
     }
 }
 .single_add_to_cart_button {
