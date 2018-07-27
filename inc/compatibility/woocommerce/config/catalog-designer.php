@@ -955,7 +955,6 @@ class Customify_WC_Catalog_Designer {
          */
         do_action( 'woocommerce_before_shop_loop_item_title' );
 
-        woocommerce_template_loop_product_link_open();
         /**
          * Hook: woocommerce_shop_loop_item_title.
          *
@@ -963,7 +962,6 @@ class Customify_WC_Catalog_Designer {
          */
         do_action( 'woocommerce_shop_loop_item_title' );
 
-        woocommerce_template_loop_product_link_close();
 
         /**
          * Hook: woocommerce_after_shop_loop_item_title.

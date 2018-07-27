@@ -571,6 +571,7 @@ function customify_get_default_catalog_view_mod(){
 	return apply_filters( 'customify_get_default_catalog_view_mod', $default ) ;
 }
 
+
 if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 	/**
 	 * Insert the opening anchor tag for products in the loop.
@@ -582,6 +583,22 @@ if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 
 		echo '<a href="' . esc_url( $link ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">';
 	}
+}
+
+if ( ! function_exists( 'woocommerce_shop_loop_item_title' ) ) {
+    /**
+     * overridden function woocommerce_shop_loop_item_title
+     */
+    /**
+     * Show the product title in the product loop. By default this is an H2.
+     */
+    function woocommerce_template_loop_product_title() {
+        echo '<h2 class="woocommerce-loop-product__title">';
+            woocommerce_template_loop_product_link_open();
+            echo get_the_title();
+            woocommerce_template_loop_product_link_close();
+        echo '</h2>';
+    }
 }
 
 /**
