@@ -325,7 +325,8 @@ class Customify_Dashboard {
         $list_plugins = array(
             'themeisle-companion',
             'elementor',
-            'beaver-builder-lite-version'
+            'beaver-builder-lite-version',
+            'wpforms-lite'
         );
 
         $list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
