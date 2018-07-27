@@ -1,3 +1,8 @@
+/*
+# Buttons
+# Price amount
+*/
+
 /**
  * Buttons
  */
@@ -157,3 +162,12 @@ a.remove {
     }
 }
 
+/* Price */
+.price {
+    line-height: 1;
+}
+
+span.amount, .price {
+    color: #222222;
+    font-weight: 600;
+}

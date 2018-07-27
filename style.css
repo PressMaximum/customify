@@ -5631,8 +5631,8 @@ body.menu_sidebar_dropdown:before {
 }
 
 .footer-top .customify-container, .footer-main .customify-container {
-  padding-top: 45px;
-  padding-bottom: 45px;
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 
 .footer-bottom .customify-container {
@@ -5648,7 +5648,6 @@ body.menu_sidebar_dropdown:before {
   }
 }
 
-/*  FOOTER WIDGETS */
 @media screen and (max-width: 48em) {
   .site-footer .builder-item {
     margin-bottom: 2em;

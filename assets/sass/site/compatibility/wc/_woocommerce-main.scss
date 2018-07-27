@@ -55,12 +55,6 @@ p.demo_store,
 /**
  * Main WooCommerce styles
  */
-.product {
-    .price {
-        color: $highlight;
-    }
-
-}
 
 .woocommerce {
     ul.products {
@@ -220,7 +214,10 @@ p.demo_store,
 
             p {
                 margin: 0;
-                padding: 8px 0;
+                padding: 0px 0 10px 0px;
+                &:last-child {
+                    padding-bottom: 0;
+                }
             }
         }
 

@@ -1011,7 +1011,7 @@ class Customify_WC_Catalog_Designer {
 			if ( is_wp_error( $link ) ) {
 				return $link;
 			}
-			$links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' . esc_html( $term->name ) . '</a>';
+			$links[] = '<a class="text-uppercase text-xsmall link-meta" href="' . esc_url( $link ) . '" rel="tag">' . esc_html( $term->name ) . '</a>';
 		}
 
 		$categories_list = array_slice( $links, 0, $num );

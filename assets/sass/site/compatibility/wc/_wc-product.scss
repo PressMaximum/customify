@@ -91,6 +91,8 @@ div.product {
         clear: none;
         margin-top: 0;
         padding: 0;
+        font-size: 2.1em;
+        line-height: 1.216;
     }
 
     span.price,
@@ -99,7 +101,7 @@ div.product {
 
         ins {
             background: inherit;
-            font-weight: 700;
+            font-weight: 500;
             display: inline-block;
         }
 
@@ -107,10 +109,6 @@ div.product {
             opacity: 0.5;
             display: inline-block;
         }
-    }
-
-    p.stock {
-        font-size: 0.92em;
     }
 
     .stock {
@@ -309,9 +307,17 @@ div.product {
         }
 
         .variations {
-            margin-bottom: 1em;
+            margin-bottom: 1.41575em;
             border: 0;
             width: 100%;
+
+            tr {
+                margin-bottom: 0.72em;
+                display: block;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
 
             td,
             th {
@@ -321,7 +327,7 @@ div.product {
             }
 
             label {
-                font-weight: 700;
+                font-weight: 500;
             }
 
             select {
@@ -333,6 +339,8 @@ div.product {
                 -webkit-appearance: none;
                 -moz-appearance: none;
                 color: #444444;
+                box-shadow: none;
+                cursor: pointer;
                 background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
                 background-position: center right 8px;
                 background-repeat: no-repeat;
@@ -349,6 +357,8 @@ div.product {
         .reset_variations {
             visibility: hidden;
             font-size: 0.83em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .wc-no-matching-variations {

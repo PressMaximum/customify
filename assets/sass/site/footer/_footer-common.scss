@@ -9,8 +9,6 @@
     }
 }
 
-
-
 .footer-bottom {
     background: #ededed;
 }
@@ -34,13 +32,7 @@
             }
         }
     }
-    //[class~="customify-grid"] > [class*="_sm-"], [class*="customify-grid-"] > [class*="_sm-"],
-    //[class*="customify-grid_"] > [class*="_sm-"] {
-    //    margin-bottom: 0px;
-    //}
 }
-
-
 
 .footer-main, .footer-top, .footer-bottom {
     .builder-item {
@@ -65,8 +57,8 @@
 
 .footer-top, .footer-main {
     .customify-container {
-        padding-top: 45px;
-        padding-bottom: 45px;
+        padding-top: 3em;
+        padding-bottom: 3em;
     }
 }
 
@@ -86,7 +78,6 @@
     }
 }
 
-/*  FOOTER WIDGETS */
 @include for_device( sm ) {
     .site-footer {
         .builder-item {
