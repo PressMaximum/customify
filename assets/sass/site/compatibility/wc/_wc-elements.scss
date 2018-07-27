@@ -112,7 +112,7 @@
     position: relative;
     cursor: pointer;
     &.loading {
-        opacity: 0.25;
+        opacity: 0.5;
         padding-right: 2.618em;
         &:after {
             font-family: 'WooCommerce';
@@ -120,7 +120,7 @@
             vertical-align: top;
             font-weight: 400;
             position: absolute;
-            top: 0.1em;
+            top: 0.02em;
             right: 1em;
             animation: spin 2s linear infinite;
         }

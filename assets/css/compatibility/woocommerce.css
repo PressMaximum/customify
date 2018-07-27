@@ -1836,7 +1836,7 @@ p.demo_store a,
 .button.added_to_cart.loading,
 .button.checkout.loading,
 .button.product_type_variable.loading {
-  opacity: 0.25;
+  opacity: 0.5;
   padding-right: 2.618em;
 }
 .button.add_to_cart_button.loading:after,
@@ -1849,7 +1849,7 @@ p.demo_store a,
   vertical-align: top;
   font-weight: 400;
   position: absolute;
-  top: 0.1em;
+  top: 0.02em;
   right: 1em;
   animation: spin 2s linear infinite;
 }

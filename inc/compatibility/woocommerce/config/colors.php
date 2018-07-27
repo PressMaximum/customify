@@ -21,7 +21,7 @@ class Customify_WC_Colors {
 			'type'        => 'color',
 			'section'     => $section,
 			'title'       => __( 'Shop Buttons', 'customify' ),
-			'description' => __( 'Color for add to cart, checkout buttons. Default is Secondary color', 'customify' ),
+			'description' => __( 'Color for add to cart, checkout buttons. Default is Secondary Color.', 'customify' ),
 			'css_format'  => apply_filters( 'customify/styling/shop-buttons', '
 					.button.add_to_cart_button, 
 					.button.alt, .button.added_to_cart, 
@@ -49,6 +49,20 @@ class Customify_WC_Colors {
 					.star-rating:focus
 					{
 					    color: {{value}};
+					}'
+			),
+			'selector'   => 'format',
+		);
+
+		$configs[] = array(
+			'name'       => "{$section}_shop_onsale",
+			'type'       => 'color',
+			'section'    => $section,
+			'title'      => __( 'On Sale', 'customify' ),
+			'css_format' => apply_filters( 'customify/styling/shop-onsale', '
+					span.onsale
+					{
+					    background-color: {{value}};
 					}'
 			),
 			'selector'   => 'format',
