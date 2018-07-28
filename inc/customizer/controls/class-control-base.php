@@ -23,6 +23,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     public $device = '';
     public $devices = null;
     public $checkbox_label = '';
+    public $placeholder = '';
     public $reset_controls = array();
     public $limit ;
 
@@ -34,7 +35,6 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 
     // For CSS Ruler
     public $fields_disabled = array();
-
 
     public $limit_msg = '';
     public $live_title_field; // for repeater
@@ -112,6 +112,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         $this->json['value']        = $value;
 
         $this->json['default']      = $this->defaultValue;
+        $this->json['placeholder']  = $this->placeholder;
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
         $this->json['required']     = $this->required;
@@ -387,7 +388,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         ?>
         <?php echo self::field_header(); ?>
         <div class="customify-field-settings-inner">
-            <input type="{{ field.type }}" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
+            <input type="{{ field.type }}" class="customify-input customify-only" placeholder="{{ field.placeholder }}" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
         <?php
         self::after_field();
