@@ -63,7 +63,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
         return $config;
     }
 
-    function row_config($section = false, $section_name = false)
+    function row_config( $section = false, $section_name = false )
     {
 
         if (!$section) {
@@ -72,6 +72,12 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
         if (!$section_name) {
             $section_name = __('Header Top', 'customify');
         }
+
+	    // Text skin
+	    $text_skin_default = 'is-text-dark';
+	    if ( $section == 'header_top' ) {
+		    $text_skin_default = 'is-text-light';
+	    }
 
         $selector = '.header--row.' . str_replace('_', '-', $section);
 
@@ -130,18 +136,18 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 		        'name'       => $section . '_text_mode',
 		        'type'       => 'image_select',
 		        'section'    => $section,
-		        'selector'   => '#cb-row--header-top',
+		        'selector'   => '.header--row',
 		        'css_format' => 'html_class',
 		        'title'      => __('Text Skin', 'customify'),
-		        'default'    => 'is-text-light',
+		        'default'    => $text_skin_default,
 		        'choices'    => array(
 			        'is-text-light' => array(
 				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
-				        'label' => 'Light Text'
+				        'label' => 'Light'
 			        ),
 			        'is-text-dark'  => array(
 				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
-				        'label' => 'Dark Text'
+				        'label' => 'Dark'
 			        ),
 		        )
 	        ),

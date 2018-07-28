@@ -2928,7 +2928,7 @@ article.comment .comment-post-author {
 .header-top {
   padding: 0;
   background: #005670;
-  color: #ffffff;
+  color: rgba(255, 255, 255, 0.99);
   text-size-adjust: 100%;
   line-height: 13px;
 }
@@ -2937,6 +2937,9 @@ article.comment .comment-post-author {
 }
 .header-top .item--html {
   line-height: 1.3;
+}
+.header-top.is-text-dark {
+  color: rgba(0, 0, 0, 0.75);
 }
 
 .header-main {

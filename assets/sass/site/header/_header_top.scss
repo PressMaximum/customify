@@ -1,7 +1,7 @@
 .header-top {
     padding: 0;
     background: #005670;
-    color: #ffffff;
+    color: $ms_tl_color;
     text-size-adjust: 100%;
     line-height: 13px;
     .customify-grid .item--html{
@@ -9,5 +9,8 @@
     }
     .item--html {
         line-height: 1.3;
+    }
+    &.is-text-dark {
+        color: $ms_td_color;
     }
 }
