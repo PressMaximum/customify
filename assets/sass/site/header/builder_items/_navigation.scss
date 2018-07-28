@@ -22,7 +22,6 @@
 
 .nav-menu-desktop {
     font-size: 0.875em;
-    font-weight: 600;
     line-height: 1;
     .nav-icon-angle {
         display: inline;
@@ -49,12 +48,8 @@
             }
             a {
                 display: inline-block;
-                color: inherit;
                 transition: all 0.14s ease-out;
                 text-decoration-color: currentColor;
-                &:hover {
-                    color: rgba(0,0,0,0.9);
-                }
             }
 
             &.current-menu-item {
@@ -68,6 +63,7 @@
             display: inline-flex;
             align-items: center;
             text-transform: uppercase;
+            font-weight: 600;
             i {
                 line-height: 0;
             }
@@ -135,14 +131,13 @@
                 width: 100%;
                 padding: 9px 15px;
                 font-size: 15px;
-                font-weight: normal;
                 transition: background 0.15s ease-out;
                 line-height: 1.6;
-                color: currentColor;
+                color: $dark_color_link;
                 //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);
-                    color: rgba(0,0,0,0.9);
+                    color: $dark_color_link_hover;
                 }
             }
         }
@@ -172,16 +167,16 @@
             @include clearfix();
             > li {
                 float: left;
-                > a {
-                    &:hover, &:focus {
-                        color: rgba(0,0,0,0.9);
-                    }
-                }
-                &.current-menu-item, &.current-menu-ancestor {
-                    > a {
-                        color: rgba(0,0,0,0.9);
-                    }
-                }
+                //> a {
+                //    &:hover, &:focus {
+                //        color: rgba(0,0,0,0.9);
+                //    }
+                //}
+                //&.current-menu-item, &.current-menu-ancestor {
+                //    > a {
+                //        color: rgba(0,0,0,0.9);
+                //    }
+                //}
             }
         }
     } // End style plain
@@ -327,7 +322,7 @@
             a {
                 display: block;
                 padding: 0.55em 1.5em;
-                border-top: 1px solid $ms_tl_border_color;
+                border-top: 1px solid $light_color_border;
                 &:hover, &:focus {
                     background: rgba(0,0,0,0.01);
                 }
@@ -343,7 +338,7 @@
                 transition: all .5s ease;
                 cursor: pointer;
                 padding: 0.88em 0.9em;
-                border-left: 1px solid $ms_tl_border_color;
+                border-left: 1px solid $light_color_border;
                 background: transparent;
                 &:hover {
                     box-shadow: none;
@@ -360,7 +355,7 @@
             opacity: 0;
             transition: opacity .5s ease;
             margin: 0px;
-            border-top: 1px solid $ms_tl_border_color;
+            border-top: 1px solid $light_color_border;
             li {
                 a {
                     padding-left: 3em;

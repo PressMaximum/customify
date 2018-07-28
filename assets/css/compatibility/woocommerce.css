@@ -1510,7 +1510,6 @@ p.demo_store a,
   position: relative;
 }
 .item--wc_cart .cart-item-link {
-  color: currentColor;
   display: flex;
   align-items: center;
   font-weight: 600;
@@ -1523,9 +1522,6 @@ p.demo_store a,
 }
 .item--wc_cart .cart-item-link > span:last-child {
   margin-right: 0px;
-}
-.item--wc_cart span.amount {
-  color: currentColor;
 }
 .item--wc_cart .cart-icon {
   display: inline-block;

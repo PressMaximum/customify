@@ -4561,34 +4561,34 @@ body.menu_sidebar_dropdown:before {
 .header-menu-sidebar .nav-menu-mobile .nav-toggle-icon:hover, .header-menu-sidebar .nav-menu-mobile .nav-toggle-icon:focus {
   background: rgba(0, 0, 0, 0.01);
 }
-.header-menu-sidebar.is-text-dark {
+.header-menu-sidebar.dark-mode {
   color: rgba(0, 0, 0, 0.75);
 }
-.header-menu-sidebar.is-text-dark a:not(.customify-btn) {
+.header-menu-sidebar.dark-mode a:not(.customify-btn) {
   color: rgba(0, 0, 0, 0.75);
 }
-.header-menu-sidebar.is-text-dark a:not(.customify-btn):hover {
+.header-menu-sidebar.dark-mode a:not(.customify-btn):hover {
   color: rgba(0, 0, 0, 0.6);
 }
-.header-menu-sidebar.is-text-dark .builder-item-sidebar {
+.header-menu-sidebar.dark-mode .builder-item-sidebar {
   border-color: rgba(0, 0, 0, 0.08);
 }
-.header-menu-sidebar.is-text-dark .builder-item-sidebar:before {
+.header-menu-sidebar.dark-mode .builder-item-sidebar:before {
   background: rgba(0, 0, 0, 0.08);
 }
-.header-menu-sidebar.is-text-dark .header-menu-sidebar-bg:before {
+.header-menu-sidebar.dark-mode .header-menu-sidebar-bg:before {
   background: rgba(255, 255, 255, 0.9);
 }
-.header-menu-sidebar.is-text-dark .close-sidebar-panel .hamburger-inner {
+.header-menu-sidebar.dark-mode .close-sidebar-panel .hamburger-inner {
   background: rgba(0, 0, 0, 0.75);
 }
-.header-menu-sidebar.is-text-dark .close-sidebar-panel:hover .hamburger-inner {
+.header-menu-sidebar.dark-mode .close-sidebar-panel:hover .hamburger-inner {
   background: rgba(0, 0, 0, 0.6);
 }
-.header-menu-sidebar.is-text-dark .nav-menu-mobile .menu li a, .header-menu-sidebar.is-text-dark .sub-menu, .header-menu-sidebar.is-text-dark .nav-menu-mobile .nav-toggle-icon {
+.header-menu-sidebar.dark-mode .nav-menu-mobile .menu li a, .header-menu-sidebar.dark-mode .sub-menu, .header-menu-sidebar.dark-mode .nav-menu-mobile .nav-toggle-icon {
   border-color: rgba(0, 0, 0, 0.08);
 }
-.header-menu-sidebar.is-text-dark .nav-menu-mobile .nav-toggle-icon:hover, .header-menu-sidebar.is-text-dark .nav-menu-mobile .nav-toggle-icon:focus {
+.header-menu-sidebar.dark-mode .nav-menu-mobile .nav-toggle-icon:hover, .header-menu-sidebar.dark-mode .nav-menu-mobile .nav-toggle-icon:focus {
   background: rgba(0, 0, 0, 0.01);
 }
 
@@ -4690,16 +4690,16 @@ body.menu_sidebar_dropdown:before {
   margin: 3em auto;
   padding: 0;
 }
-.menu_sidebar_slide_overlay .is-text-dark .header-menu-sidebar-bg:before {
+.menu_sidebar_slide_overlay .dark-mode .header-menu-sidebar-bg:before {
   background: rgba(255, 255, 255, 0.9);
 }
-.menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner {
+.menu_sidebar_slide_overlay .dark-mode.close-sidebar-panel .hamburger-inner {
   background: rgba(0, 0, 0, 0.75);
 }
-.menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner:before, .menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel .hamburger-inner::after {
+.menu_sidebar_slide_overlay .dark-mode.close-sidebar-panel .hamburger-inner:before, .menu_sidebar_slide_overlay .dark-mode.close-sidebar-panel .hamburger-inner::after {
   background: inherit;
 }
-.menu_sidebar_slide_overlay .is-text-dark.close-sidebar-panel:hover .hamburger-inner {
+.menu_sidebar_slide_overlay .dark-mode.close-sidebar-panel:hover .hamburger-inner {
   background: rgba(0, 0, 0, 0.6);
 }
 

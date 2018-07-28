@@ -116,7 +116,7 @@
 .item--wc_cart {
     position: relative;
     .cart-item-link {
-        color: currentColor;
+        //color: currentColor;
         display: flex;
         align-items: center;
         font-weight: 600;
@@ -130,9 +130,7 @@
             }
         }
     }
-    span.amount {
-        color: currentColor;
-    }
+
     .cart-icon {
         display: inline-block;
         position: relative;

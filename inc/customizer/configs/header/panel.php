@@ -74,12 +74,13 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
         }
 
 	    // Text skin
-	    $text_skin_default = 'is-text-dark';
+	    $color_mode = 'light-mode';
 	    if ( $section == 'header_top' ) {
-		    $text_skin_default = 'is-text-light';
+		    $color_mode = 'dark-mode';
 	    }
 
         $selector = '.header--row.' . str_replace('_', '-', $section);
+	    $skin_mode_selector = '.header-inner.' . str_replace('_', '-', $section) . '-inner';
 
         $fn = 'customify_customize_render_header';
         $selector_all = '#masthead';
@@ -136,18 +137,18 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 		        'name'       => $section . '_text_mode',
 		        'type'       => 'image_select',
 		        'section'    => $section,
-		        'selector'   => $selector,
+		        'selector'   => $skin_mode_selector,
 		        'css_format' => 'html_class',
-		        'title'      => __('Text Skin', 'customify'),
-		        'default'    => $text_skin_default,
+		        'title'      => __('Skin Mode', 'customify'),
+		        'default'    => $color_mode,
 		        'choices'    => array(
-			        'is-text-light' => array(
+			        'dark-mode' => array(
 				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
-				        'label' => 'Light'
-			        ),
-			        'is-text-dark'  => array(
-				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
 				        'label' => 'Dark'
+			        ),
+			        'light-mode'  => array(
+				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+				        'label' => 'Light'
 			        ),
 		        )
 	        ),
@@ -233,21 +234,21 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 
 
             array(
-                'name'       => $section . '_text_mode',
+                'name'       => $section . '_skin_mode',
                 'type'       => 'image_select',
                 'section'    => $section,
                 'selector'   => '#header-menu-sidebar, .close-sidebar-panel',
                 'css_format' => 'html_class',
-                'title'      => __('Text Skin', 'customify'),
-                'default'    => 'is-text-light',
+                'title'      => __('Skin Mode', 'customify'),
+                'default'    => 'dark-mode',
                 'choices'    => array(
-                    'is-text-light' => array(
+                    'dark-mode' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
-                        'label' => 'Light Text'
+                        'label' => 'Dark'
                     ),
-                    'is-text-dark'  => array(
+                    'light-mode'  => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
-                        'label' => 'Dark Text'
+                        'label' => 'Light'
                     ),
                 )
             ),
@@ -262,8 +263,8 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 'live_title_field' => 'title',
                 'selector'         => array(
                     'normal'               => $selector,
-                    'normal_link_color'    => "{$selector} a",
-                    'hover_link_color'     => "{$selector} a:hover",
+                    'normal_link_color'    => "{$selector} .menu li a, {$selector} .item--html a, {$selector} .cart-item-link",
+                    'hover_link_color'    => "{$selector} .menu li a:hover, {$selector} .item--html a:hover, {$selector} .cart-item-link:hover",
                     'normal_bg_color'      => "#header-menu-sidebar-bg:before",
                     'normal_bg_image'      => "#header-menu-sidebar-bg:before",
                     'normal_bg_attachment' => "#header-menu-sidebar-bg:before",

@@ -477,9 +477,6 @@ class Customify_Customize_Layout_Builder_Frontend {
                         if ( $row_layout ) {
                             $classes[] = sanitize_text_field( $row_layout );
                         }
-                        if ( $row_text_mode ) {
-	                        $classes[] = sanitize_text_field( $row_text_mode );
-                        }
 
                         $classes = apply_filters( 'customify/builder/row-classes', $classes, $row_id, $this );
 
@@ -505,31 +502,40 @@ class Customify_Customize_Layout_Builder_Frontend {
                             $html_mobile = false;
                         }
 
+                        /* Row inner class */
+                        $inner_class = array('header-inner');
+                        $inner_class[] = $_id.'-inner';
+                        if ( $row_text_mode ) {
+                            $inner_class[] = $row_text_mode;
+                        }
+
                         if ( $html_mobile || $html_desktop ) {
                             ?>
                             <div <?php echo $string_atts; ?>
                                     data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
-                                <div class="customify-container">
-                                    <?php
-                                    if ($html_desktop) {
+                                <div class="<?php echo join( ' ', $inner_class ); ?>">
+                                    <div class="customify-container">
+                                        <?php
+                                        if ($html_desktop) {
 
-                                        if ( $html_desktop ) {
-                                            $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
-                                            if (empty($mobile_items)) {
-                                                $c = '';
+                                            if ( $html_desktop ) {
+                                                $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+                                                if (empty($mobile_items)) {
+                                                    $c = '';
+                                                }
+                                                echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
+                                                echo $html_desktop;
+                                                echo '</div>';
                                             }
-                                            echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
-                                            echo $html_desktop;
+                                        }
+
+                                        if ($html_mobile) {
+                                            echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
+                                            echo $html_mobile;
                                             echo '</div>';
                                         }
-                                    }
-
-                                    if ($html_mobile) {
-                                        echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
-                                        echo $html_mobile;
-                                        echo '</div>';
-                                    }
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                             <?php
@@ -547,7 +553,7 @@ class Customify_Customize_Layout_Builder_Frontend {
     function render_mobile_sidebar() {
         $id           = 'sidebar';
         $mobile_items = $this->get_row_settings( $id, 'mobile' );
-        $menu_sidebar_skin = Customify()->get_setting('header_sidebar_text_mode');
+        $menu_sidebar_skin = Customify()->get_setting('header_sidebar_skin_mode');
 
         if ( ! is_array( $mobile_items ) ) {
             $mobile_items = array();
