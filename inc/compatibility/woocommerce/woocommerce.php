@@ -77,8 +77,11 @@ class Customify_WC {
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+	        // Single colors config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
+
 
 
         }
@@ -302,6 +305,7 @@ class Customify_WC {
 		.widget_price_filter .price_slider_wrapper .ui-widget-content {
 		    background-color: {{value}};
 		}
+		.product_list_widget li,
 		#reviews #comments ol.commentlist li .comment-text,
 		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
 		.product_meta > span,
@@ -315,7 +319,12 @@ class Customify_WC {
 
 	function styling_meta_color( $selector ){
 		$selector .= '
-		.widget_price_filter .ui-slider .ui-slider-handle,
+		.widget_price_filter .ui-slider .ui-slider-handle {
+		    border-color: {{value}};
+		}
+		.wc-product-inner .wc-product__category a {
+		    color: {{value}};
+		}
 		.widget_price_filter .ui-slider .ui-slider-range,
 		.widget_price_filter .price_slider_amount .button {
             background-color: {{value}};

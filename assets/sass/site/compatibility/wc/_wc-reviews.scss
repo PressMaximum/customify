@@ -155,9 +155,9 @@
  * Star ratings
  */
 .comment-form-rating a, .star-rating{
-    color: #f9ca63;
-    &:hover {
-        color: #f9ca63;
+    color: $color_secondary;
+    &:hover, &:focus {
+        color: $color_secondary;
     }
 }
 .star-rating {

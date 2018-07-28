@@ -1,3 +1,8 @@
+/*
+# Buttons
+# Price amount
+*/
+
 /**
  * Buttons
  */
@@ -107,7 +112,7 @@
     position: relative;
     cursor: pointer;
     &.loading {
-        opacity: 0.25;
+        opacity: 0.5;
         padding-right: 2.618em;
         &:after {
             font-family: 'WooCommerce';
@@ -115,7 +120,7 @@
             vertical-align: top;
             font-weight: 400;
             position: absolute;
-            top: 0.1em;
+            top: 0.02em;
             right: 1em;
             animation: spin 2s linear infinite;
         }
@@ -131,8 +136,11 @@
 .products {
     .button.add_to_cart_button,
     .button.added_to_cart,
-    .button.product_type_variable {
-        font-size: 0.875em;
+    .button.product_type_variable,
+    .wc-product-contents .button
+    {
+        font-size: 0.8em;
+        min-height: auto;
     }
 }
 .single_add_to_cart_button {
@@ -157,3 +165,11 @@ a.remove {
     }
 }
 
+/* Price */
+.price {
+    line-height: 1;
+}
+
+span.amount, .price {
+    font-weight: 600;
+}

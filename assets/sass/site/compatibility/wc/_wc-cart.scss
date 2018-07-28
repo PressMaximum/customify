@@ -91,9 +91,6 @@
                 top: -2px;
             }
         }
-        .amount {
-            color: inherit;
-        }
         .cart_list {
             &:after {
                 content: none !important;
@@ -132,6 +129,9 @@
                 margin-right: 0px;
             }
         }
+    }
+    span.amount {
+        color: currentColor;
     }
     .cart-icon {
         display: inline-block;
