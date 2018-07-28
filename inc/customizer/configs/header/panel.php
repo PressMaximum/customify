@@ -136,7 +136,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
 		        'name'       => $section . '_text_mode',
 		        'type'       => 'image_select',
 		        'section'    => $section,
-		        'selector'   => '.header--row',
+		        'selector'   => $selector,
 		        'css_format' => 'html_class',
 		        'title'      => __('Text Skin', 'customify'),
 		        'default'    => $text_skin_default,
