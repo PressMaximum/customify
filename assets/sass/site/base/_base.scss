@@ -727,7 +727,7 @@ article.comment {
     .builder-item-focus {
         &.item--inner {
             position: relative;
-            &.item--m {
+            &.has_menu {
                 position: initial;
                 .item--preview-name {
                     left: auto;
