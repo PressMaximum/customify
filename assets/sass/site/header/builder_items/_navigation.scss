@@ -1,5 +1,4 @@
 /* Navigation */
-$submenu_width: 16em;
 .nav-menu-mobile , .nav-menu-desktop {
     .menu-item .link-before {
         position: relative;
@@ -117,8 +116,9 @@ $submenu_width: 16em;
 
         width: $submenu_width;
         background: #ffffff;
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+        box-shadow: $boxshadow_dropdown;
         text-align: left;
+        border: 1px solid $color_border;
         .link-before {
             display: flex;
             justify-content: space-between;
@@ -138,7 +138,7 @@ $submenu_width: 16em;
                 font-weight: normal;
                 transition: background 0.15s ease-out;
                 line-height: 1.6;
-                color: $color_text;
+                color: currentColor;
                 //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);

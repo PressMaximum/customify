@@ -3377,8 +3377,9 @@ article.comment .comment-post-author {
 .nav-menu-desktop .sub-menu {
   width: 16em;
   background: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
   text-align: left;
+  border: 1px solid #eaecee;
 }
 .nav-menu-desktop .sub-menu .link-before {
   display: flex;
@@ -3400,7 +3401,7 @@ article.comment .comment-post-author {
   font-weight: normal;
   transition: background 0.15s ease-out;
   line-height: 1.6;
-  color: #444444;
+  color: currentColor;
 }
 .nav-menu-desktop .sub-menu li a:hover {
   background: rgba(0, 0, 0, 0.015);
@@ -3672,7 +3673,7 @@ article.comment .comment-post-author {
   width: 280px;
   position: relative;
   margin-top: 15px;
-  box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
+  box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
 }
 @media screen and (max-width: 568px) {
   .header-search-modal {

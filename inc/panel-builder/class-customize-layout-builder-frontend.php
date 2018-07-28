@@ -473,8 +473,12 @@ class Customify_Customize_Layout_Builder_Frontend {
                         }
 
                         $row_layout = Customify()->get_setting( $this->id . '_' . $row_id . '_layout' );
+                        $row_text_mode = Customify()->get_setting( $this->id . '_' . $row_id . '_text_mode' );
                         if ( $row_layout ) {
                             $classes[] = sanitize_text_field( $row_layout );
+                        }
+                        if ( $row_text_mode ) {
+	                        $classes[] = sanitize_text_field( $row_text_mode );
                         }
 
                         $classes = apply_filters( 'customify/builder/row-classes', $classes, $row_id, $this );

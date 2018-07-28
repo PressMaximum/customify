@@ -126,6 +126,26 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 'title'           => __('Height', 'customify'),
             ),
 
+	        array(
+		        'name'       => $section . '_text_mode',
+		        'type'       => 'image_select',
+		        'section'    => $section,
+		        'selector'   => '#cb-row--header-top',
+		        'css_format' => 'html_class',
+		        'title'      => __('Text Skin', 'customify'),
+		        'default'    => 'is-text-light',
+		        'choices'    => array(
+			        'is-text-light' => array(
+				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+				        'label' => 'Light Text'
+			        ),
+			        'is-text-dark'  => array(
+				        'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+				        'label' => 'Dark Text'
+			        ),
+		        )
+	        ),
+
             array(
                 'name'             => $section . '_styling',
                 'type'             => 'styling',
@@ -212,14 +232,16 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel
                 'section'    => $section,
                 'selector'   => '#header-menu-sidebar, .close-sidebar-panel',
                 'css_format' => 'html_class',
-                'title'      => __('Text Mode Color', 'customify'),
+                'title'      => __('Text Skin', 'customify'),
                 'default'    => 'is-text-light',
                 'choices'    => array(
                     'is-text-light' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+                        'label' => 'Light Text'
                     ),
                     'is-text-dark'  => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+                        'label' => 'Dark Text'
                     ),
                 )
             ),

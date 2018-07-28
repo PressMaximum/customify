@@ -207,7 +207,7 @@
         .widget {
             border: 1px solid #eaecee;
             background: #ffffff;
-            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+            box-shadow: $boxshadow_dropdown;
             position: relative;
             &::before {
                 border-top: 1px solid $color_border;
@@ -241,7 +241,6 @@
 
     .wc-mini-cart-footer {
         border-top: 1px solid $color_border;
-        background: #f9f9f9;
         padding: 1.250em;
     }
 

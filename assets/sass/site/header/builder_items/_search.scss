@@ -120,7 +120,7 @@
     }
     position: relative;
     margin-top: 15px;
-    box-shadow: 0 2px 3px rgba(127,127,127,0.11);
+    box-shadow: $boxshadow_dropdown;
     label {
         flex-basis: 100%;
     }

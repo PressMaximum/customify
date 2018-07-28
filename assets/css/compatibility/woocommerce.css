@@ -1600,7 +1600,7 @@ p.demo_store a,
 .item--wc_cart .cart-dropdown-box .widget {
   border: 1px solid #eaecee;
   background: #ffffff;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+  box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
   position: relative;
 }
 .item--wc_cart .cart-dropdown-box .widget::before {
@@ -1628,7 +1628,6 @@ p.demo_store a,
 }
 .item--wc_cart .wc-mini-cart-footer {
   border-top: 1px solid #eaecee;
-  background: #f9f9f9;
   padding: 1.250em;
 }
 
