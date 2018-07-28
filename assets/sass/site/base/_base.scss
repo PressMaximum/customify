@@ -732,7 +732,7 @@ article.comment {
 .dark-mode {
     color: $light_color;
     background: $dark_bg;
-
+    
     // Header items
     .nav-menu-desktop {
         &.style-plain {
@@ -843,7 +843,7 @@ article.comment {
     .builder-item-focus {
         &.item--inner {
             position: relative;
-            &.item--m {
+            &.has_menu {
                 position: initial;
                 .item--preview-name {
                     left: auto;

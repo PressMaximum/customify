@@ -2959,10 +2959,10 @@ article.comment .comment-post-author {
 .customize-previewing .builder-item-focus.item--inner {
   position: relative;
 }
-.customize-previewing .builder-item-focus.item--inner.item--m {
+.customize-previewing .builder-item-focus.item--inner.has_menu {
   position: initial;
 }
-.customize-previewing .builder-item-focus.item--inner.item--m .item--preview-name {
+.customize-previewing .builder-item-focus.item--inner.has_menu .item--preview-name {
   left: auto;
 }
 .customize-previewing .builder-item-focus .item--preview-name {
