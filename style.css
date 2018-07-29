@@ -2949,12 +2949,14 @@ article.comment .comment-post-author {
 .light-mode .customify-builder-social-icons.color-custom li a,
 .light-mode .search-icon,
 .light-mode .menu-mobile-toggle,
+.light-mode .item--html a,
 .light-mode .nav-menu > li > a {
   color: rgba(0, 0, 0, 0.5);
 }
 .light-mode .customify-builder-social-icons.color-custom li a:hover,
 .light-mode .search-icon:hover,
 .light-mode .menu-mobile-toggle:hover,
+.light-mode .item--html a:hover,
 .light-mode .nav-menu > li > a:hover {
   color: rgba(0, 0, 0, 0.8);
 }
@@ -3032,7 +3034,7 @@ article.comment .comment-post-author {
 }
 
 .header-main {
-  background: #fff;
+  background: #FFFFFF;
   padding: 0px;
 }
 .header-main .dark-mode {
@@ -3084,14 +3086,6 @@ article.comment .comment-post-author {
 }
 .builder-item.builder-item--group .item--inner:last-child {
   margin-right: 0px;
-}
-
-.customify-grid.cb-row--desktop {
-  margin: 0 -0.5em;
-}
-.customify-grid.cb-row--desktop > [class*="customify-col-"] {
-  padding-left: 0.5em;
-  padding-right: 0.5em;
 }
 
 .header--row.layout-full-contained .customify-container {
@@ -3288,7 +3282,7 @@ article.comment .comment-post-author {
   display: inline-block;
   position: relative;
   text-decoration: none;
-  font-size: 0.82em;
+  font-size: 0.85em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
@@ -3436,7 +3430,7 @@ article.comment .comment-post-author {
   align-items: center;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 0.82em;
+  font-size: 0.875em;
   line-height: 1;
 }
 .nav-menu-desktop .menu > li > a i {
@@ -4181,7 +4175,7 @@ article.comment .comment-post-author {
 .nav-icon--label {
   background: none !important;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 0.875em;
 }
 
 .hamburger {
