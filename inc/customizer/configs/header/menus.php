@@ -52,7 +52,7 @@ class Customify_Builder_Item_Primary_Menu
                 'name'            => $this->prefix . '_style',
                 'type'            => 'image_select',
                 'section'         => $section,
-                'selector'        => '.builder-item--' . $this->id . " .primary-menu",
+                'selector'        => '.builder-item--' . $this->id . " .{$this->id}",
                 'render_callback' => $fn,
                 'title'           => __('Menu Preset', 'customify'),
                 'default'         => 'style-plain',
