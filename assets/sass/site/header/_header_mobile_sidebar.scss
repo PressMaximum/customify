@@ -62,7 +62,8 @@ body {
     }
 
     // Light mode
-    .light-mode {
+    &.light-mode {
+        .sub-menu a,
         .cart-item-link,
         .item--html a,
         .nav-menu a {
@@ -91,26 +92,22 @@ body {
                 background: $light_bg;
             }
         }
-        .close-sidebar-panel {
-            .hamburger-inner {
-                background: $dark_color;
-            }
-            &:hover {
-                .hamburger-inner {
-                    background: $dark_color_link_hover;
-                }
-            }
-        }
         .nav-menu-mobile .menu li a, .sub-menu, .nav-menu-mobile .nav-toggle-icon { border-color: $dark_color_border }
         .nav-menu-mobile .nav-toggle-icon {
             &:hover, &:focus {
                 background: rgba(0,0,0,0.01);
             }
         }
+        .menu {
+            li {
+                border-color: $dark_color_border;
+            }
+        }
     }
 
     // Dark mode
-    .dark-mode {
+    &.dark-mode {
+        .sub-menu a,
         .cart-item-link,
         .item--html a,
         .nav-menu a {
@@ -122,12 +119,6 @@ body {
         .cart-icon {
             color: $light_color_link_hover;
         }
-        //a:not(.customify-btn) {
-        //    color: $light_color;
-        //    &:hover {
-        //        color: $light_color_link_hover;
-        //    }
-        //}
         .builder-item-sidebar {
             border-color: $light_color_border;
             &:before {
@@ -139,20 +130,15 @@ body {
                 background: $dark_bg;
             }
         }
-        .close-sidebar-panel {
-            .hamburger-inner {
-                background: $light_color;
-            }
-            &:hover {
-                .hamburger-inner {
-                    background: $light_color_link_hover;
-                }
-            }
-        }
         .nav-menu-mobile .menu li a, .sub-menu, .nav-menu-mobile .nav-toggle-icon { border-color: $light_color_border }
         .nav-menu-mobile .nav-toggle-icon {
             &:hover, &:focus {
                 background: rgba(0,0,0,0.01);
+            }
+        }
+        .menu {
+            li {
+                border-color: $light_color_border;
             }
         }
     }
@@ -269,6 +255,8 @@ body {
                 background: $dark_bg;
             }
         }
+    }
+    .light-mode {
         &.close-sidebar-panel {
             .hamburger-inner {
                 background: $dark_color;

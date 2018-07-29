@@ -15,9 +15,10 @@ $background_body: #ffffff;
 
 // Colors
 $color_text:        #444444;
-$color_primary:     #005670;
+//$color_primary:     #005670;
+$color_primary:     #097799;
 $color_secondary:   #c3512f;
-$color_link:        #005670;
+$color_link:        #097799;
 $color_link_hover:  #111111;
 $color_border:      #eaecee;
 $color_meta:        #6d6d6d;
@@ -42,7 +43,7 @@ $dark_color: black(0.6);
 $dark_color_link: black(0.5);
 $dark_color_link_hover: black(0.8);
 $dark_color_border: rgba(0,0,0,0.08);
-$dark_bg: rgba(0,0,0,0.8);
+$dark_bg: rgba(0,0,0,0.9);
 
 // Screen resolutions
 $screen_lg: 80em;   // max 1280px

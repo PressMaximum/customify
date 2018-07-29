@@ -122,8 +122,8 @@ $gl-devices-list: (
   fill: currentColor;
 }
 .wc-view-mod.active {
-  color: #005670;
-  border-color: #005670;
+  color: #097799;
+  border-color: #097799;
 }
 
 .wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
@@ -1722,12 +1722,12 @@ p.demo_store a,
   border-bottom: 1px solid #eaecee;
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li {
-  border-bottom: 2px solid transparent;
+  border-bottom: 1px solid transparent;
   display: inline-block;
   position: relative;
   z-index: 0;
   padding: 0;
-  margin: 0 1em 0;
+  margin: 0 1em -1px;
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li:first-child {
   margin-left: 0px;
@@ -1738,13 +1738,14 @@ p.demo_store a,
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li a {
   display: inline-block;
   padding: 0.5em 0px;
+  font-size: 1.05em;
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active {
   z-index: 2;
-  border-bottom-color: #005670;
+  border-bottom-color: #097799;
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
-  color: #005670;
+  color: #097799;
   text-shadow: inherit;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs {
@@ -2688,7 +2689,7 @@ ul#shipping_method .amount {
 /* Review Form */
 #review_form {
   padding: 1.6em 2em 2em;
-  border: 2px solid #005670;
+  border: 2px solid #097799;
 }
 #review_form #respond p {
   margin: 0 0 15px;

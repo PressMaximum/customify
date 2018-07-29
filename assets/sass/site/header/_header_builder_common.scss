@@ -29,6 +29,16 @@
     }
 }
 
+.customify-grid {
+    &.cb-row--desktop {
+        margin: 0 -0.5em;
+        > [class*="customify-col-"] {
+            padding-left: 0.5em;
+            padding-right: 0.5em;
+        }
+    }
+}
+
 .header--row {
     .customify-grid {
     }
