@@ -2880,8 +2880,9 @@ article.comment .comment-post-author {
   color: #6d6d6d;
 }
 
+.header--row.header--transparent .dark-mode,
 .header--row.header--transparent .light-mode {
-  background: transparent;
+  background: transparent !important;
   box-shadow: none;
 }
 
@@ -2890,10 +2891,10 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
   background: rgba(0, 0, 0, 0.9);
 }
-.header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
+.header--transparent .light-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:hover, .header--transparent .light-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:focus, .header--transparent .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:hover, .header--transparent .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:focus, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus, .dark-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:focus, .dark-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:focus, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
   color: rgba(255, 255, 255, 0.99);
 }
-.header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
+.header--transparent .light-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-item > a, .header--transparent .light-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-ancestor > a, .header--transparent .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-item > a, .header--transparent .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-ancestor > a, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a, .dark-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-ancestor > a, .dark-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-ancestor > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
   color: rgba(255, 255, 255, 0.99);
 }
 .header--transparent .light-mode .site-title,
@@ -2910,7 +2911,7 @@ article.comment .comment-post-author {
 .dark-mode .menu-mobile-toggle,
 .dark-mode .nav-menu > li > a,
 .dark-mode .item--html a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header--transparent .light-mode .customify-builder-social-icons.color-custom li a:hover,
 .header--transparent .light-mode .search-icon:hover,
@@ -2924,7 +2925,7 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
 }
 .header--transparent .light-mode .cart-item-link, .dark-mode .cart-item-link {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header--transparent .light-mode .cart-item-link .cart-icon, .dark-mode .cart-item-link .cart-icon {
   color: rgba(255, 255, 255, 0.99);
@@ -2935,13 +2936,13 @@ article.comment .comment-post-author {
 .header--transparent .light-mode .header-search_box-item .search-field, .dark-mode .header-search_box-item .search-field {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header--transparent .light-mode .header-search_box-item .search-field::placeholder, .dark-mode .header-search_box-item .search-field::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header--transparent .light-mode .header-search_box-item .search-submit, .dark-mode .header-search_box-item .search-submit {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header--transparent .light-mode .header-search_box-item .search-submit:hover, .dark-mode .header-search_box-item .search-submit:hover {
   color: rgba(255, 255, 255, 0.99);
@@ -2951,10 +2952,10 @@ article.comment .comment-post-author {
   color: rgba(0, 0, 0, 0.6);
   background: rgba(255, 255, 255, 0.9);
 }
-.light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
+.light-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:hover, .light-mode .nav-menu-desktop.style-border-top .nav-menu > li > a:focus, .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:hover, .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li > a:focus, .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
   color: rgba(0, 0, 0, 0.8);
 }
-.light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
+.light-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-item > a, .light-mode .nav-menu-desktop.style-border-top .nav-menu > li.current-menu-ancestor > a, .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-item > a, .light-mode .nav-menu-desktop.style-border-bottom .nav-menu > li.current-menu-ancestor > a, .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
   color: rgba(0, 0, 0, 0.8);
 }
 .light-mode .site-title,
@@ -2966,7 +2967,7 @@ article.comment .comment-post-author {
 .light-mode .menu-mobile-toggle,
 .light-mode .item--html a,
 .light-mode .nav-menu > li > a {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.55);
 }
 .light-mode .customify-builder-social-icons.color-custom li a:hover,
 .light-mode .search-icon:hover,
@@ -2976,7 +2977,7 @@ article.comment .comment-post-author {
   color: rgba(0, 0, 0, 0.8);
 }
 .light-mode .cart-item-link {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.55);
 }
 .light-mode .cart-item-link .cart-icon {
   color: rgba(0, 0, 0, 0.8);
@@ -3305,7 +3306,7 @@ article.comment .comment-post-author {
   display: inline-block;
   position: relative;
   text-decoration: none;
-  font-size: 0.85em;
+  font-size: 0.82em;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
@@ -3457,7 +3458,7 @@ article.comment .comment-post-author {
   align-items: center;
   text-transform: uppercase;
   font-weight: 600;
-  font-size: 0.875em;
+  font-size: 0.82em;
   line-height: 1;
 }
 .nav-menu-desktop .menu > li > a i {
@@ -3520,7 +3521,7 @@ article.comment .comment-post-author {
   width: 100%;
   padding: 9px 15px;
   transition: background 0.15s ease-out;
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.55);
   font-size: 0.95em;
   line-height: 1.5;
 }
@@ -4202,7 +4203,7 @@ article.comment .comment-post-author {
 .nav-icon--label {
   background: none !important;
   text-transform: uppercase;
-  font-size: 0.875em;
+  font-size: 0.82em;
 }
 
 .hamburger {
@@ -4549,7 +4550,7 @@ body.menu_sidebar_dropdown:before {
 .header-menu-sidebar.light-mode .cart-item-link,
 .header-menu-sidebar.light-mode .item--html a,
 .header-menu-sidebar.light-mode .nav-menu a {
-  color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.55);
 }
 .header-menu-sidebar.light-mode .sub-menu a:hover,
 .header-menu-sidebar.light-mode .cart-item-link:hover,
@@ -4582,7 +4583,7 @@ body.menu_sidebar_dropdown:before {
 .header-menu-sidebar.dark-mode .cart-item-link,
 .header-menu-sidebar.dark-mode .item--html a,
 .header-menu-sidebar.dark-mode .nav-menu a {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.8);
 }
 .header-menu-sidebar.dark-mode .sub-menu a:hover,
 .header-menu-sidebar.dark-mode .cart-item-link:hover,

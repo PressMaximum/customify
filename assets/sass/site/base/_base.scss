@@ -730,9 +730,9 @@ article.comment {
 }
 
 // Skin mode
-
+.header--row.header--transparent .dark-mode,
 .header--row.header--transparent .light-mode {
-    background: transparent;
+    background: transparent !important;
     box-shadow: none;
 }
 
@@ -745,6 +745,8 @@ article.comment {
 
     // Header items
     .nav-menu-desktop {
+        &.style-border-top,
+        &.style-border-bottom,
         &.style-plain {
             .nav-menu {
                 > li {
@@ -818,6 +820,8 @@ article.comment {
 
     // Header items
     .nav-menu-desktop {
+        &.style-border-top,
+        &.style-border-bottom,
         &.style-plain {
             .nav-menu {
                 > li {
