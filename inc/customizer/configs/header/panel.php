@@ -170,6 +170,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'normal_text_color'    => "{$selector} .header-inner, {$selector} .site-branding a",
 					'normal_link_color'    => "{$selector} a:not(.customify-builder-btn)",
 					'hover_link_color'     => "{$selector} a:not(.customify-builder-btn):hover",
+					'normal_bg_color'      => "",
 					'normal_bg_image'      => "{$selector} .header-inner",
 					'normal_bg_attachment' => "{$selector} .header-inner",
 					'normal_bg_cover'      => "{$selector} .header-inner",
