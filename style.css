@@ -3372,6 +3372,10 @@ article.comment .comment-post-author {
   display: inline-block;
 }
 
+.site-header .cb-row--mobile .site-branding img {
+  max-width: 100%;
+}
+
 /* Navigation */
 .nav-menu-mobile .menu-item .link-before, .nav-menu-desktop .menu-item .link-before {
   position: relative;

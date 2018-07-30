@@ -67,3 +67,11 @@
 .item-button {
     display: inline-block;
 }
+
+.site-header {
+    .cb-row--mobile {
+        .site-branding img {
+            max-width: 100%;
+        }
+    }
+}
