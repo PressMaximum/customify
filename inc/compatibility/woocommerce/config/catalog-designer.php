@@ -126,7 +126,7 @@ class Customify_WC_Catalog_Designer {
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'checkbox_label'  => __( 'Show Grid/List View Buttons', 'customify' ),
-			'required'        => array( 'wc_cd_show_catalog_header', '=', 1 ),
+			//'required'        => array( 'wc_cd_show_catalog_header', '=', 1 ),
 		);
 
 		$configs[] = array(
@@ -140,10 +140,12 @@ class Customify_WC_Catalog_Designer {
 			),
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
+			/*
 			'required'        => array(
 				array( 'wc_cd_show_view_mod', '=', 1 ),
 				array( 'wc_cd_show_catalog_header', '=', 1 ),
 			),
+			*/
 			'label'           => __( 'Default View Mod', 'customify' ),
 		);
 

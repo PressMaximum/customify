@@ -82,8 +82,6 @@ class Customify_WC {
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
-
-
         }
     }
 
@@ -567,9 +565,20 @@ function customify_get_default_catalog_view_mod(){
 	    return apply_filters( 'customify_get_default_catalog_view_mod', 'grid' ) ;
     }
 
-    if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) &&  $_COOKIE['customify_wc_pl_view_mod'] ) {
-        if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
-            $default = $_COOKIE['customify_wc_pl_view_mod'];
+    $use_cookies = true;
+    if ( is_customize_preview() ) {
+        $use_cookies = false;
+    }
+
+    if ( ! Customify()->get_setting( 'wc_cd_show_view_mod') ) {
+        $use_cookies = false;
+    }
+
+    if ( $use_cookies ) { // do not use cookie in customize
+        if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) &&  $_COOKIE['customify_wc_pl_view_mod'] ) {
+            if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
+                $default = $_COOKIE['customify_wc_pl_view_mod'];
+            }
         }
     }
 
