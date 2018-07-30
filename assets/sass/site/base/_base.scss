@@ -730,6 +730,12 @@ article.comment {
 }
 
 // Skin mode
+.header--row.header--transparent .light-mode {
+    background: transparent;
+    box-shadow: none;
+}
+
+.header--transparent .light-mode,
 .dark-mode {
     .header--row & {
         color: $light_color;
@@ -857,7 +863,6 @@ article.comment {
     }
 
 }
-
 
 /* Customize Preview */
 .customize-previewing {

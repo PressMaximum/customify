@@ -2880,55 +2880,70 @@ article.comment .comment-post-author {
   color: #6d6d6d;
 }
 
+.header--row.header--transparent .light-mode {
+  background: transparent;
+  box-shadow: none;
+}
+
+.header--row .header--transparent .light-mode,
 .header--row .dark-mode {
   color: rgba(255, 255, 255, 0.99);
   background: rgba(0, 0, 0, 0.9);
 }
-.dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
+.header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:hover, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li > a:focus {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
+.header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .header--transparent .light-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-item > a, .dark-mode .nav-menu-desktop.style-plain .nav-menu > li.current-menu-ancestor > a {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .site-title,
+.header--transparent .light-mode .site-title,
+.header--transparent .light-mode .site-title a, .dark-mode .site-title,
 .dark-mode .site-title a {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .customify-builder-social-icons.color-custom li a,
+.header--transparent .light-mode .customify-builder-social-icons.color-custom li a,
+.header--transparent .light-mode .search-icon,
+.header--transparent .light-mode .menu-mobile-toggle,
+.header--transparent .light-mode .nav-menu > li > a,
+.header--transparent .light-mode .item--html a, .dark-mode .customify-builder-social-icons.color-custom li a,
 .dark-mode .search-icon,
 .dark-mode .menu-mobile-toggle,
 .dark-mode .nav-menu > li > a,
 .dark-mode .item--html a {
   color: rgba(255, 255, 255, 0.7);
 }
-.dark-mode .customify-builder-social-icons.color-custom li a:hover,
+.header--transparent .light-mode .customify-builder-social-icons.color-custom li a:hover,
+.header--transparent .light-mode .search-icon:hover,
+.header--transparent .light-mode .menu-mobile-toggle:hover,
+.header--transparent .light-mode .nav-menu > li > a:hover,
+.header--transparent .light-mode .item--html a:hover, .dark-mode .customify-builder-social-icons.color-custom li a:hover,
 .dark-mode .search-icon:hover,
 .dark-mode .menu-mobile-toggle:hover,
 .dark-mode .nav-menu > li > a:hover,
 .dark-mode .item--html a:hover {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .cart-item-link {
+.header--transparent .light-mode .cart-item-link, .dark-mode .cart-item-link {
   color: rgba(255, 255, 255, 0.7);
 }
-.dark-mode .cart-item-link .cart-icon {
+.header--transparent .light-mode .cart-item-link .cart-icon, .dark-mode .cart-item-link .cart-icon {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .cart-item-link:hover {
+.header--transparent .light-mode .cart-item-link:hover, .dark-mode .cart-item-link:hover {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .header-search_box-item .search-field {
+.header--transparent .light-mode .header-search_box-item .search-field, .dark-mode .header-search_box-item .search-field {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.7);
 }
-.dark-mode .header-search_box-item .search-field::placeholder {
+.header--transparent .light-mode .header-search_box-item .search-field::placeholder, .dark-mode .header-search_box-item .search-field::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
-.dark-mode .header-search_box-item .search-submit {
+.header--transparent .light-mode .header-search_box-item .search-submit, .dark-mode .header-search_box-item .search-submit {
   color: rgba(255, 255, 255, 0.7);
 }
-.dark-mode .header-search_box-item .search-submit:hover {
+.header--transparent .light-mode .header-search_box-item .search-submit:hover, .dark-mode .header-search_box-item .search-submit:hover {
   color: rgba(255, 255, 255, 0.99);
 }
 
