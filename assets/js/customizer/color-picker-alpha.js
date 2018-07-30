@@ -130,6 +130,7 @@
                 self.button = $( _button );
             }
 
+
             // Set up the Clear/Default button.
             if ( self.options.defaultColor ) {
                 self.button.addClass( 'wp-picker-default' ).val( wpColorPickerL10n.defaultString );
@@ -159,6 +160,9 @@
                 self.inputWrapper = el.closest( '.wp-picker-input-wrap' );
             }
 
+            self._placeholderColor = '';
+
+
             el.iris( {
                 target: self.pickerContainer,
                 hide: self.options.hide,
@@ -179,6 +183,12 @@
                  * @returns {void}
                  */
                 change: function( event, ui ) {
+
+                    var color = ui.color.toString();
+                    if ( ! color ) {
+                        color = el.attr( 'placeholder') || '';
+                    }
+
                     if ( self.options.alpha ) {
                         self.toggler.css( { 'background-image' : 'url(' + image + ')' } );
                         if ( _deprecated ) {
@@ -200,10 +210,10 @@
                             'left'                      : 0,
                             'border-top-left-radius'    : '2px',
                             'border-bottom-left-radius' : '2px',
-                            'background'                : ui.color.toString()
+                            'background'                :  self._placeholderColor
                         } );
                     } else {
-                        self.toggler.css( { backgroundColor : ui.color.toString() } );
+                        self.toggler.css( { backgroundColor :  self._placeholderColor } );
                     }
 
                     if ( $.isFunction( self.options.change ) ) {
@@ -214,6 +224,25 @@
 
             el.val( self.initialValue );
             self._addListeners();
+
+            var placeholderColor = el.attr( 'placeholder') || '';
+            if ( placeholderColor ) {
+                self._placeholderColor = placeholderColor;
+                if ( self.options.alpha ) {
+                    self.toggler.find( 'span.color-alpha' ).css( {
+                        'width'                     : '30px',
+                        'height'                    : '23px',
+                        'position'                  : 'absolute',
+                        'top'                       : 0,
+                        'left'                      : 0,
+                        'border-top-left-radius'    : '2px',
+                        'border-bottom-left-radius' : '2px',
+                        'background' : self._placeholderColor
+                    } );
+                } else {
+                    self.toggler.css( { backgroundColor : self._placeholderColor } );
+                }
+            }
 
             // Force the color picker to always be closed on initial load.
             if ( ! self.options.hide ) {
@@ -277,9 +306,9 @@
                         if ( _deprecated ) {
                             self.toggler.removeAttr( 'style' );
                         }
-                        self.toggler.find( 'span.color-alpha' ).css( 'backgroundColor', '' );
+                        self.toggler.find( 'span.color-alpha' ).css( 'backgroundColor', self._placeholderColor );
                     } else {
-                        self.toggler.css( 'backgroundColor', '' );
+                        self.toggler.css( 'backgroundColor', self._placeholderColor );
                     }
 
                     // fire clear callback if we have one
@@ -306,9 +335,9 @@
                         if ( _deprecated ) {
                             self.toggler.removeAttr( 'style' );
                         }
-                        self.toggler.find( 'span.color-alpha' ).css( 'backgroundColor', '' );
+                        self.toggler.find( 'span.color-alpha' ).css( 'backgroundColor', self._placeholderColor );
                     } else {
-                        self.toggler.css( 'backgroundColor', '' );
+                        self.toggler.css( 'backgroundColor', self._placeholderColor );
                     }
 
                     if ( $.isFunction( self.options.clear ) )
@@ -316,6 +345,11 @@
 
                 } else if ( $( this ).hasClass( 'wp-picker-default' ) ) {
                     self.element.val( self.options.defaultColor ).change();
+                    if ( self.options.alpha ) {
+                        self.toggler.find('span.color-alpha').css('backgroundColor', self.options.defaultColor );
+                    } else {
+                        self.toggler.css( 'backgroundColor', self.options.defaultColor );
+                    }
                 }
             });
         },
