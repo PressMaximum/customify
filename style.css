@@ -3107,6 +3107,15 @@ article.comment .comment-post-author {
   max-width: initial;
 }
 
+@media screen and (min-width: 1025px) {
+  .header--row .customify-grid {
+    margin: 0 -0.5em;
+  }
+  .header--row .customify-grid [class~="customify-col-"], .header--row .customify-grid [class*="customify-col-"], .header--row .customify-grid [class*="customify-col_"] {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+  }
+}
 .header--row.layout-full-contained .customify-container {
   background: transparent !important;
 }

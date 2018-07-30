@@ -49,6 +49,17 @@
 }
 
 .header--row {
+
+    .customify-grid {
+        @include for_device( desktop ) {
+            margin: 0 -0.5em;
+            [class~="customify-col-"], [class*="customify-col-"], [class*="customify-col_"] {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+        }
+    }
+
     .customify-grid {
     }
     &.layout-full-contained {

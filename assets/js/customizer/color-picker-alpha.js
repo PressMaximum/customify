@@ -210,10 +210,10 @@
                             'left'                      : 0,
                             'border-top-left-radius'    : '2px',
                             'border-bottom-left-radius' : '2px',
-                            'background'                :  self._placeholderColor
+                            'background'                :  color
                         } );
                     } else {
-                        self.toggler.css( { backgroundColor :  self._placeholderColor } );
+                        self.toggler.css( { backgroundColor :  color  } );
                     }
 
                     if ( $.isFunction( self.options.change ) ) {
