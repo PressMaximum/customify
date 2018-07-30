@@ -34,8 +34,8 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'       => "{$section}_color_primary",
 				'type'       => 'color',
 				'section'    => $section,
-				'placeholder'=> '#dd3333',
-				'default'=> '#333333',
+				'placeholder'=> '',
+				'default'=> '',
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
 				
