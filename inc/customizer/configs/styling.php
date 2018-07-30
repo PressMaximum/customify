@@ -39,7 +39,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
 				
-					.header-top,
+					.header-top .header-inner,
 					.button,
 					button,
 					input[type="button"],

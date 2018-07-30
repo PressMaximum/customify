@@ -730,13 +730,7 @@ article.comment {
 }
 
 // Skin mode
-.header--row.header--transparent .dark-mode,
-.header--row.header--transparent .light-mode {
-    background: transparent !important;
-    box-shadow: none;
-}
 
-.header--transparent .light-mode,
 .dark-mode {
     .header--row & {
         color: $light_color;
