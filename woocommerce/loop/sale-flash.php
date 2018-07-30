@@ -75,7 +75,5 @@ if ( $product->is_on_sale() ) {
     }
 
 	$text = apply_filters( 'woocommerce_sale_flash', '<span class="onsale">'.$text.'</span>' , $post, $product );
-
     echo $text;
-
 }
