@@ -506,8 +506,10 @@ class Customify_Customize_Layout_Builder_Frontend {
                         $inner_class = array('header-inner');
                         $inner_class[] = $_id.'-inner';
                         if ( $row_text_mode ) {
-                            $inner_class[] = $row_text_mode;
+                            $inner_class['row_text_mode'] = $row_text_mode;
                         }
+
+                        $inner_class  = apply_filters( 'customify/builder/inner-row-classes', $inner_class, $row_id, $this );
 
                         if ( $html_mobile || $html_desktop ) {
                             ?>
