@@ -42,6 +42,12 @@
 //    }
 //}
 
+.layout-fullwidth {
+    .customify-container {
+        max-width: initial;
+    }
+}
+
 .header--row {
     .customify-grid {
     }
@@ -68,7 +74,6 @@
     }
     &.layout-fullwidth {
         .customify-container {
-            max-width: initial;
             box-shadow: none !important;
         }
     }

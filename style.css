@@ -3088,6 +3088,10 @@ article.comment .comment-post-author {
   margin-right: 0px;
 }
 
+.layout-fullwidth .customify-container {
+  max-width: initial;
+}
+
 .header--row.layout-full-contained .customify-container {
   background: transparent !important;
 }
@@ -3103,7 +3107,6 @@ article.comment .comment-post-author {
   }
 }
 .header--row.layout-fullwidth .customify-container {
-  max-width: initial;
   box-shadow: none !important;
 }
 
