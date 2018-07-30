@@ -3101,10 +3101,6 @@ article.comment .comment-post-author {
     border: 0 none;
     box-shadow: none !important;
   }
-  .header--row.layout-contained .customify-container {
-    margin-left: 1.5em;
-    margin-right: 1.5em;
-  }
 }
 .header--row.layout-fullwidth .customify-container {
   max-width: initial;
@@ -4989,7 +4985,7 @@ body.menu_sidebar_dropdown:before {
 }
 
 .customify-container, .layout-contained {
-  max-width: 1200px;
+  max-width: 1248px;
   margin: 0 auto;
 }
 

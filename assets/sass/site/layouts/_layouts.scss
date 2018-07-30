@@ -58,7 +58,8 @@
     }
 }
 .customify-container, .layout-contained{
-    max-width: $container_width; // 1200px
+   // max-width: $container_width; // 1200px
+    max-width: 1248px; // 1200px
     margin: 0 auto;
 }
 
