@@ -1,8 +1,10 @@
 .header-main {
-    background: #fff;
+    background: #FFFFFF;
     padding: 0px;
-    box-shadow: 0 1px 2px 0 #e1e5ea;
     .dark-mode {
-        background: $dark_bg;
+        background: #1a1a1a;
+    }
+    .light-mode {
+        box-shadow: 0 1px 2px 0 #e1e5ea;
     }
 }

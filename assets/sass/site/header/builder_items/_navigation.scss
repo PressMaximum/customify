@@ -11,9 +11,9 @@
         text-rendering: auto;
         text-decoration: none !important;
         position: relative;
-        width: 7px;
-        height: 7px;
-        margin-top: 2px;
+        width: 6px;
+        height: 6px;
+        margin-top: 1px;
         border-left: 1px solid currentColor;
         border-top: 1px solid currentColor;
         transform: rotate(-135deg) translateY(50%);
@@ -21,8 +21,6 @@
 }
 
 .nav-menu-desktop {
-    font-size: 0.875em;
-    line-height: 1;
     .nav-icon-angle {
         display: inline;
         font-size: inherit;
@@ -59,11 +57,13 @@
             }
         }
         > li > a {
-            padding: 14px 15px 15px;
+            padding: 14px 13px 15px;
             display: inline-flex;
             align-items: center;
             text-transform: uppercase;
             font-weight: 600;
+            font-size: 0.875em;
+            line-height: 1;
             i {
                 line-height: 0;
             }
@@ -72,7 +72,7 @@
         > li.menu-item-has-children {
             > a {
                 .nav-icon-angle {
-                    margin-left: 5px;
+                    margin-left: 4px;
                     line-height: 0;
                 }
             }
@@ -130,10 +130,10 @@
                 display: block;
                 width: 100%;
                 padding: 9px 15px;
-                font-size: 15px;
                 transition: background 0.15s ease-out;
-                line-height: 1.6;
                 color: $dark_color_link;
+                font-size: 0.95em;
+                line-height: 1.5;
                 //border-bottom: 1px solid rgba(0,0,0,0.015);
                 &:hover {
                     background: rgba(0,0,0,0.015);
@@ -314,6 +314,17 @@
         li {
             list-style: none;
             position: relative;
+            border-bottom: 1px solid transparent;
+            &:last-child {
+                border: none;
+            }
+            ul {
+                li {
+                    &:last-child {
+                        //border-bottom: none;
+                    }
+                }
+            }
             &.menu-item-has-children {
                 > a {
                     padding-right: 30px !important;
@@ -322,7 +333,7 @@
             a {
                 display: block;
                 padding: 0.55em 1.5em;
-                border-top: 1px solid $light_color_border;
+                //border-top: 1px solid $light_color_border;
                 &:hover, &:focus {
                     background: rgba(0,0,0,0.01);
                 }
