@@ -354,7 +354,7 @@ article.comment .comment-meta
                 'section'    => 'site_content_styling',
                 'title'      => __( 'Content Area Styling', 'customify' ),
                 'selector'   => array(
-                    'normal'            => ".site-content .content-area",
+                    'normal'            => ".site-content .content-area .content-inner",
                 ),
                 'css_format' => 'styling', // styling
                 'fields'     => array(
