@@ -122,8 +122,8 @@ $gl-devices-list: (
   fill: currentColor;
 }
 .wc-view-mod.active {
-  color: #097799;
-  border-color: #097799;
+  color: #005670;
+  border-color: #005670;
 }
 
 .wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
@@ -1742,10 +1742,10 @@ p.demo_store a,
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active {
   z-index: 2;
-  border-bottom-color: #097799;
+  border-bottom-color: #005670;
 }
 .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
-  color: #097799;
+  color: #005670;
   text-shadow: inherit;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs {
@@ -2690,7 +2690,7 @@ ul#shipping_method .amount {
 /* Review Form */
 #review_form {
   padding: 1.6em 2em 2em;
-  border: 2px solid #097799;
+  border: 2px solid #005670;
 }
 #review_form #respond p {
   margin: 0 0 15px;

@@ -2298,7 +2298,7 @@ a.plain_color {
 }
 
 a {
-  color: #097799;
+  color: #005670;
   text-decoration: none;
   transition: all 0.14s ease-out;
 }
@@ -2498,7 +2498,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   color: #FFFFFF;
-  background: #097799;
+  background: #005670;
 }
 .button:focus,
 input[type="button"]:focus,
@@ -3030,7 +3030,7 @@ article.comment .comment-post-author {
   background: #f0f0f0;
 }
 .header-top .dark-mode {
-  background: #097799;
+  background: #005670;
 }
 
 .header-main {
@@ -3551,11 +3551,11 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop.style-full-height .nav-menu > li > a:hover {
   color: #FFFFFF;
-  background-color: #097799;
+  background-color: #005670;
 }
 .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-item > a, .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-ancestor > a {
   color: #ffffff;
-  background-color: #097799;
+  background-color: #005670;
 }
 .nav-menu-desktop.style-border-bottom .nav-menu > li > a .link-before {
   position: relative;
@@ -5283,8 +5283,8 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .readmore-button {
   display: inline-block;
   line-height: 1;
-  border: 1px solid #097799;
-  color: #097799;
+  border: 1px solid #005670;
+  color: #005670;
   border-radius: 2px;
   cursor: pointer;
   padding: 7px 17px;
@@ -5295,9 +5295,9 @@ body.menu_sidebar_dropdown:before {
   font-weight: 500;
 }
 .posts-layout .readmore-button:hover {
-  background: #097799;
+  background: #005670;
   color: #FFFFFF;
-  border-color: #097799;
+  border-color: #005670;
 }
 .posts-layout .entry-content-data {
   display: flex;
@@ -5432,13 +5432,13 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 .pagination .nav-links > *:hover {
-  border-color: #097799;
-  background: #097799;
+  border-color: #005670;
+  background: #005670;
   color: #FFFFFF;
 }
 .pagination .nav-links span {
-  border-color: #097799;
-  background: #097799;
+  border-color: #005670;
+  background: #005670;
   color: #FFFFFF;
 }
 
@@ -5577,7 +5577,7 @@ body.menu_sidebar_dropdown:before {
   color: inherit;
 }
 .search .content-area .entry-title a:hover {
-  color: #097799;
+  color: #005670;
 }
 .search .content-area .entry-summary p:last-child {
   margin-bottom: 0px;
