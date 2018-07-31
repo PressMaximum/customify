@@ -214,8 +214,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 		//$selector = '#header-menu-sidebar-inner';
 		$selector = '#header-menu-sidebar-bg';
 
-		// #header-menu-sidebar-bg
-
 		$config = array(
 			array(
 				'name'           => $section,
@@ -322,6 +320,16 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'        => 1,
 			),
 
+            array(
+                'name'            => $section . '_align',
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'priority'        => 820,
+                'device_settings' => true,
+                'selector'        => ".header-menu-sidebar-inner",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Align', 'customify' ),
+            ),
 
 		);
 
