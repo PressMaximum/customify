@@ -363,6 +363,90 @@ class Customify_Page_Header {
                 'title'           => __( 'Text Align', 'customify' ),
             ),
 
+
+            array(
+                'name'       => $name . '_typo',
+                'type'       => 'typography',
+                'section'    => $section,
+                'title'      => __( 'Title Typography', 'customify-pro' ),
+                'selector'   => "{$selector} .titlebar-title",
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name'       => $name . '_typo_desc',
+                'type'       => 'typography',
+                'section'    => $section,
+                'title'      => __( 'Tagline Typography', 'customify-pro' ),
+                'selector'   => "{$selector} .titlebar-tagline",
+                'css_format' => 'typography',
+            ),
+
+            array(
+                'name'       => $name . '_styling',
+                'type'       => 'styling',
+                'section'    => $section,
+                'title'      => __( 'Titlebar Styling', 'customify-pro' ),
+                'selector'   => array(
+                    'normal'            => "{$selector}",
+                    'normal_text_color' => "{$selector} .titlebar-title, {$selector} .titlebar-tagline",
+                    'normal_padding'    => "{$selector}",
+                ),
+                'css_format' => 'styling', // styling
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_image'   => false,
+                        'bg_cover'   => false,
+                        'bg_repeat'  => false,
+                        'margin'     => false,
+                    ),
+                    'hover_fields'  => false
+                )
+            ),
+
+            array(
+                'name'       => $name . 'title_styling',
+                'type'       => 'styling',
+                'section'    => $section,
+                'title'      => __( 'Titlebar Title Styling', 'customify-pro' ),
+                'selector'   => array(
+                    'normal' => "{$selector} .titlebar-title",
+                ),
+                'css_format' => 'styling',
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false,
+                        'bg_image'   => false,
+                        'bg_cover'   => false,
+                        'bg_repeat'  => false,
+                        'box_shadow' => false,
+                    ),
+                    'hover_fields'  => false
+                )
+            ),
+
+            array(
+                'name'       => $name . 'tagline_styling',
+                'type'       => 'styling',
+                'section'    => $section,
+                'title'      => __( 'Titlebar Tagline Styling', 'customify-pro' ),
+                'selector'   => array(
+                    'normal' => "{$selector} .titlebar-tagline",
+                ),
+                'css_format' => 'styling',
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false,
+                        'bg_image'   => false,
+                        'bg_cover'   => false,
+                        'bg_repeat'  => false,
+                        'box_shadow' => false,
+                    ),
+                    'hover_fields'  => false
+                )
+            ),
+
 		);
 
 		$config = apply_filters( 'customify/titlebar/config', $config, $this );
@@ -557,6 +641,81 @@ class Customify_Page_Header {
                 'title'           => __( 'Cover Margin Top', 'customify' ),
                 'selector'        => "{$selector}",
                 'css_format'      => 'padding-top: {{value}};',
+            ),
+
+            array(
+                'name'            => "{$name}_align",
+                'type'            => 'text_align_no_justify',
+                'section'         => $section,
+                'device_settings' => true,
+                'selector'        => "$selector",
+                'css_format'      => 'text-align: {{value}};',
+                'title'           => __( 'Cover Text Align', 'customify' ),
+            ),
+
+
+            array(
+                'name'       => $name . '_title_styling',
+                'type'       => 'styling',
+                'section'    => $section,
+                'title'      => __( 'Cover Title Styling', 'customify-pro' ),
+                'selector'   => array(
+                    'normal'            => "{$selector} .page-cover-title",
+                    'normal_link_color' => "{$selector} a",
+                    'hover_link_color'  => "{$selector} a:hover",
+                ),
+                'css_format' => 'styling', // styling
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_image'   => false,
+                        'bg_cover'   => false,
+                        'bg_repeat'  => false,
+                        'box_shadow' => false,
+                    ),
+                    'hover_fields'  => false
+                )
+            ),
+
+            array(
+                'name'       => $name . '_tagline_styling',
+                'type'       => 'styling',
+                'section'    => $section,
+                'title'      => __( 'Cover Tagline Styling', 'customify-pro' ),
+                'selector'   => array(
+                    'normal'            => "{$selector} .page-cover-tagline",
+                    'normal_link_color' => "{$selector} a",
+                    'hover_link_color'  => "{$selector} a:hover",
+                ),
+                'css_format' => 'styling', // styling
+                'fields'     => array(
+                    'normal_fields' => array(
+                        'link_color' => false, // disable for special field.
+                        'bg_image'   => false,
+                        'bg_cover'   => false,
+                        'bg_repeat'  => false,
+                        'box_shadow' => false,
+                    ),
+                    'hover_fields'  => false
+                )
+            ),
+
+            array(
+                'name'            => "{$name}_title_typo",
+                'type'            => 'typography',
+                'css_format'      => 'typography',
+                'section'         => $section,
+                'selector'        => "{$selector} .page-cover-title",
+                'title'           => __( 'Cover Title Typography', 'customify-pro' )
+            ),
+
+            array(
+                'name'            => "{$name}_tagline_typo",
+                'type'            => 'typography',
+                'css_format'      => 'typography',
+                'section'         => $section,
+                'selector'        => "{$selector} .page-cover-tagline",
+                'title'           => __( 'Cover Tagline Typography', 'customify-pro' )
             ),
 
 		);

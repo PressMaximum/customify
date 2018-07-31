@@ -372,6 +372,17 @@ class Customify_Customizer_Auto_CSS
             $listTabs = $tabs;
         }
 
+        // Do no use bg settings if no bg
+        if( isset( $values['normal']['bg_image'] ) ){
+            $image = Customify()->get_media( $values['normal']['bg_image'] );
+            if ( ! $image ) {
+                unset( $values['normal']['bg_repeat'] );
+                unset( $values['normal']['bg_cover'] );
+                unset( $values['normal']['bg_position'] );
+                unset( $values['normal']['bg_attachment'] );
+            }
+        }
+
         $normal_style = $this->loop_fields($listNormalFields, $values['normal'], true, true);
         $hover_style = $this->loop_fields($listHoverFields, $values['hover'], true, true);
 
