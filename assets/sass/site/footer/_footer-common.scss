@@ -10,6 +10,10 @@
 
 // Footer Top
 .footer-top {
+    .footer--row-inner {
+        padding-top: 2em;
+        padding-bottom: 2em;
+    }
     .light-mode {
         background: #f0f0f0;
     }
@@ -20,6 +24,11 @@
 
 // Footer Main
 .footer-main {
+    .footer--row-inner {
+        padding-top: 2.5em;
+        padding-bottom: 2.5em;
+    }
+
     .light-mode {
         background: #f9f9f9;
     }
@@ -30,6 +39,18 @@
 
 // Footer Bottom
 .footer-bottom {
+    .footer--row-inner {
+        padding-top: 1.5em;
+        padding-bottom: 1.5em;
+    }
+    .builder-item {
+        @include for_device( mobile ) {
+            margin-bottom: 1em;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
     .light-mode {
         background: #ededed;
     }
@@ -113,29 +134,6 @@
     }
 }
 
-.footer-top, .footer-main {
-    .customify-container {
-        padding-top: 3em;
-        padding-bottom: 3em;
-    }
-}
-
-.footer-bottom {
-    .customify-container {
-        padding-top: 2em;
-        padding-bottom: 2em;
-    }
-    .builder-item {
-        @include for_device( mobile ) {
-            margin-bottom: ms(2);
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-
-    }
-}
-
 @include for_device( sm ) {
     .site-footer {
         .builder-item {
@@ -162,6 +160,5 @@
 }
 
 .footer-copyright {
-    font-size: 0.95em;
-    font-weight: 500;
+    font-size: 0.875em;
 }
