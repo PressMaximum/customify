@@ -14,7 +14,7 @@ class Customify_Advanced_Styling_Background
             array(
                 'name'       => 'background',
                 'type'       => 'section',
-                'priority' => 20,
+                'priority' => 15,
                 'panel'       => 'styling_panel',
                 'title'      => __( 'Background', 'customify' ),
             ),

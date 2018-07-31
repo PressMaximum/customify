@@ -19,7 +19,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'     => "{$section}",
 				'type'     => 'section',
 				'panel'    => 'styling_panel',
-				'title'    => __( 'Global Colors', 'customify' ),
+				'title'    => __( 'Colors', 'customify' ),
 				'priority' => 10,
 			),
 
@@ -261,116 +261,6 @@ article.comment .comment-meta
 				'placeholder' => '#444444',
 				'css_format'  => '.widget-title { color: {{value}};}',
 				'selector'    => 'format',
-			),
-
-			// Styling Sidebar Widgets
-			array(
-				'name'     => "{$section}_widgets",
-				'type'     => 'section',
-				'panel'    => 'styling_panel',
-				'priority' => 90,
-				'title'    => __( 'Sidebar Widgets', 'customify' ),
-			),
-
-			array(
-				'name'       => $section . '_styling_p_w_title',
-				'type'       => 'styling',
-				'section'    => "{$section}_widgets",
-				'title'      => __( 'Primary Widgets Title', 'customify' ),
-				'selector'   => array(
-					'normal' => ".sidebar-primary .widget-title",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						//'margin' => false,
-						//'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'       => $section . '_styling_s_w_title',
-				'type'       => 'styling',
-				'section'    => "{$section}_widgets",
-				'title'      => __( 'Secondary Widgets Title', 'customify' ),
-				'selector'   => array(
-					'normal' => ".sidebar-secondary .widget-title",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						//'margin' => false,
-						//'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			// Styling Sidebar Widgets
-			array(
-				'name'     => "{$section}_footer_widgets",
-				'type'     => 'section',
-				'panel'    => 'styling_panel',
-				'priority' => 100,
-				'title'    => __( 'Footer Widgets', 'customify' ),
-			),
-
-			array(
-				'name'       => $section . '_styling_f_w_title',
-				'type'       => 'styling',
-				'section'    => "{$section}_footer_widgets",
-				'title'      => __( 'Footer Widgets Title', 'customify' ),
-				'selector'   => array(
-					'normal' => ".site-footer .widget-title",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'link_color' => false, // disable for special field.
-						'bg_image'   => false,
-						'bg_cover'   => false,
-						'bg_repeat'  => false,
-						//'margin' => false,
-						//'box_shadow' => false,
-					),
-					'hover_fields'  => false
-				)
-			),
-
-			array(
-				'name'     => 'site_content_styling',
-				'type'     => 'section',
-				'panel'    => 'styling_panel',
-				'priority' => 20,
-				'title'    => __( 'Site Content', 'customify' ),
-			),
-
-			array(
-				'name'       => 'site_content_styling',
-				'type'       => 'styling',
-				'section'    => 'site_content_styling',
-				'title'      => __( 'Content Area Styling', 'customify' ),
-				'selector'   => array(
-					'normal' => ".site-content .content-area .content-inner",
-				),
-				'css_format' => 'styling', // styling
-				'fields'     => array(
-					'normal_fields' => array(
-						'text_color' => false,
-						'link_color' => false,
-					),
-					'hover_fields'  => false,
-				)
 			),
 
 		);
