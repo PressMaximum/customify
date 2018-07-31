@@ -517,6 +517,16 @@ class Customify_Page_Header {
 				)
 			),
 
+			array(
+				'name'            => "{$name}_align",
+				'type'            => 'text_align_no_justify',
+				'section'         => $section,
+				'device_settings' => true,
+				'selector'        => "$selector",
+				'css_format'      => 'text-align: {{value}};',
+				'title'           => __( 'Cover Text Align', 'customify' ),
+			),
+
             array(
                 'name'            => "{$name}_height",
                 'type'            => 'slider',
