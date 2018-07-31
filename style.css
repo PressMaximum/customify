@@ -3151,6 +3151,7 @@ article.comment .comment-post-author {
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
   line-height: 1.6;
+  background: #FFF;
 }
 .page-breadcrumb .page-breadcrumb-inner {
   width: 100%;
@@ -3196,6 +3197,7 @@ article.comment .comment-post-author {
 .page-titlebar .page-breadcrumb, .page-cover .page-breadcrumb {
   border-bottom: none;
   padding-bottom: 0px;
+  background: transparent;
 }
 
 .page-cover {
