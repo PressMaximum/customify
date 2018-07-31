@@ -78,7 +78,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'section' => $section,
                 'title' => __( 'Color', 'customify' ),
                 'css_format' => 'color: {{value}};',
-                'selector' => "{$selector}",
+                'selector' => ".header--row:not(.header--transparent) {$selector}",
 
             ),
 
@@ -87,7 +87,7 @@ class Customify_Builder_Item_Nav_Icon{
                 'type' => 'color',
                 'section' => $section,
                 'css_format' => 'color: {{value}};',
-                'selector' => "{$selector}:hover",
+                'selector' => ".header--row:not(.header--transparent) {$selector}:hover",
                 'title' => __( 'Color Hover', 'customify' ),
             ),
         );

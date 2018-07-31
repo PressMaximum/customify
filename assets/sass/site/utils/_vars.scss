@@ -15,33 +15,35 @@ $background_body: #ffffff;
 
 // Colors
 $color_text:        #444444;
-$color_primary:     #0cb4ce;
-$color_link:        #0cb4ce;
-$color_link_hover:  #0cb4ce;
+//$color_primary:     #005670;
+$color_primary:     #097799;
+$color_secondary:   #c3512f;
+$color_link:        #097799;
+$color_link_hover:  #111111;
 $color_border:      #eaecee;
 $color_meta:        #6d6d6d;
 
-// Menu sidebar colors.
-// - Text Light
-$ms_tl_color: rgba(255, 255, 255, 0.99);
-$ms_tl_color_hover: rgba(255, 255, 255, 0.7);
-$ms_tl_bg: rgba(0,0,0,0.8);
-$ms_tl_border_color: rgba(255,255,255,0.09);
+// Box Shadow
+$boxshadow_dropdown: 0 3px 30px rgba(25,30,35,.1);
 
-// - Text Dark
-$ms_td_color: rgba(0,0,0,0.75);
-$ms_td_color_hover: rgba(0,0,0,0.6);
-$ms_td_bg: rgba(255,255,255,0.9);
-$ms_td_border_color: rgba(0,0,0,0.08);
+// Helper
+$submenu_width: 16em;
 
-$ms_light_color: rgba(255, 255, 255, 0.8);
-$ms_light_color_hover: rgba(255, 255, 255, 0.9);
-$ms_light_bg: #f2f2f2;
-$ms_light_border_color: rgba(255,255,255,0.09);
-$ms_dark_color: rgba(0,0,0,0.6);
-$ms_dark_color_hover: rgba(0,0,0,0.99);
-$ms_dark_bg: rgba(0,0,0,0.95);
-$ms_dark_border_color: rgba(0,0,0,0.08);
+// Skin
+
+// - Dark mode
+$light_color: white(0.99);
+$light_color_link: white(0.8);
+$light_color_link_hover: white(0.99);
+$light_color_border: rgba(255,255,255,0.08);
+$light_bg: rgba(255,255,255,0.9);
+
+// - Light mode
+$dark_color: black(0.6);
+$dark_color_link: black(0.55);
+$dark_color_link_hover: black(0.8);
+$dark_color_border: rgba(0,0,0,0.08);
+$dark_bg: rgba(0,0,0,0.9);
 
 // Screen resolutions
 $screen_lg: 80em;   // max 1280px

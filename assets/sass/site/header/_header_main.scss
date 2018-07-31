@@ -1,5 +1,10 @@
 .header-main {
-    color: $color_text;
-    background: #fff;
     padding: 0px;
+    .dark-mode {
+        background: #1a1a1a;
+    }
+    .light-mode {
+        box-shadow: 0 1px 2px 0 #e1e5ea;
+        background: #FFFFFF;
+    }
 }

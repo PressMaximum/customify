@@ -92,27 +92,29 @@ if ( ! function_exists( 'customify_comment' ) ) :
 						<?php echo get_avatar( $comment, 60 ); ?>
 					</div>
 					<div class="comment-reply">
-						<?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'customify' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+
 					</div>
 					<div class="comment-wrap">
-						<header class="comment-meta">
+						<header class="comment-header">
 							<?php
 							printf( '<cite class="comment-author fn vcard">%1$s %2$s</cite>',
 								get_comment_author_link(),
 								// If current post author is also comment author, make it known visually.
-								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author">' . __( 'Post author', 'customify' ) . '</span>' : ''
+								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author text-uppercase text-xsmall">' . __( 'Post author', 'customify' ) . '</span>' : ''
 							);
 							?>
-							<div class="comment-time-wrap">
-								<?php
-								printf( '<a class="comment-time" href="%1$s"><time datetime="%2$s">%3$s</time></a>',
-									esc_url( get_comment_link( $comment->comment_ID ) ),
-									esc_attr( get_comment_time( 'c' ) ),
-                                    esc_html( get_comment_date() )
-								);
-								?>
+							<div class="comment-meta text-uppercase text-xsmall link-meta">
+                                <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
+                                    <time datetime="<?php comment_time( 'c' ); ?>">
+                                        <?php printf( _x( '%1$s at %2$s', '1: date, 2: time', 'customify' ), get_comment_date(), get_comment_time() ); ?>
+                                    </time>
+                                </a>
+                                <?php edit_comment_link( __( 'Edit', 'customify' ) ); ?>
+                                <div class="comment-reply pull-right">
+                                    <?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'customify' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
+                                </div>
 							</div>
-							<?php edit_comment_link( __( 'Edit', 'customify' ), '<span class="edit-link">', '</span>' ); ?>
+
 						</header><!-- .comment-meta -->
 
 						<?php if ( '0' == $comment->comment_approved ) : ?>
@@ -131,19 +133,6 @@ if ( ! function_exists( 'customify_comment' ) ) :
 				break;
 		endswitch; // end comment_type check
 	}
-endif;
-
-if ( ! function_exists( 'customify_comment_field_to_bottom' ) ) :
-	/**
-	 * Move the comment content field to bottom of the respond form.
-	 */
-	function customify_comment_field_to_bottom( $fields ) {
-		$comment_field = $fields['comment'];
-		unset( $fields['comment'] );
-		$fields['comment'] = $comment_field;
-		return $fields;
-	}
-	add_filter( 'comment_form_fields', 'customify_comment_field_to_bottom' );
 endif;
 
 

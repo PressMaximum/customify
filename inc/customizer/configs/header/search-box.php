@@ -41,7 +41,7 @@ class Customify_Builder_Item_Search_Box
     {
         // Render callback function
         $fn = array($this, 'render');
-        $selector = ".header-{$this->id}-item";
+        $selector = ".header--row .header-{$this->id}-item";
         $config = array(
             array(
                 'name' => $this->section,
@@ -76,7 +76,7 @@ class Customify_Builder_Item_Search_Box
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
-                'min'             => 0,
+                'min'             => 25,
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector .header-search-form .search-field",
@@ -103,15 +103,15 @@ class Customify_Builder_Item_Search_Box
                 'device_settings' => true,
                 'default' => array(
                     'desktop' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'tablet' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'mobile' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                 ),

@@ -118,7 +118,7 @@ function customify_change_footer_widgets_location( $wp_customize ){
 
 
 }
-add_action( 'customize_register', 'customify_change_footer_widgets_location', 199 );
+add_action( 'customize_register', 'customify_change_footer_widgets_location', 999 );
 
 /**
  * Always show footer widgets for customize builder

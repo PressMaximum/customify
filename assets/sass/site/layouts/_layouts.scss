@@ -53,12 +53,13 @@
     padding-right: 30px;
     @include clearfix;
     @include mq(max-sm) {
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 15px;
+        padding-right: 15px;
     }
 }
 .customify-container, .layout-contained{
-    max-width: $container_width; // 1200px
+   // max-width: $container_width; // 1200px
+    max-width: 1248px; // 1200px
     margin: 0 auto;
 }
 
@@ -116,15 +117,18 @@
 /*-- Layout: content-sidebar --*/
 .content-sidebar {
     @include mq(min-sm) {
+        .content-inner {
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-right: 1px solid $color_border;
             }
             .content-inner {
-                padding-right: ms(-2);
+                padding-right: ms(0);
             }
             .sidebar-primary-inner {
-                padding-left: ms(-2);
+                padding-left: ms(0);
             }
         }
     }
@@ -133,15 +137,18 @@
 /*-- Layout: sidebar-content --*/
 .sidebar-content {
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;
             }
             .content-inner {
-                padding-left: ms(-2);
+                padding-left: ms(0);
             }
             .sidebar-primary-inner {
-                padding-right: ms(-2);
+                padding-right: ms(0);
             }
         }
     }
@@ -150,6 +157,9 @@
 /*-- Layout: sidebar-sidebar-content --*/
 .sidebar-sidebar-content {
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
             }
@@ -160,14 +170,14 @@
                 border-right: 1px solid $color_border;
             }
             .content-inner {
-                padding-left: ms(-2);
+                padding-left: ms(0);
             }
             .sidebar-primary-inner {
-                padding-right: ms(-2);
+                padding-right: ms(0);
             }
             .sidebar-secondary-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
+                padding-left: ms(0);
+                padding-right: ms(0);
             }
         }
     }
@@ -178,6 +188,9 @@
 .content-sidebar-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
+        .content-inner {
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
             }
@@ -188,14 +201,14 @@
                 border-left: 1px solid $color_border;
             }
             .content-inner {
-                padding-right: ms(-2);
+                padding-right: ms(0);
             }
             .sidebar-primary-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
+                padding-left: ms(0);
+                padding-right: ms(0);
             }
             .sidebar-secondary-inner {
-                padding-left: ms(-2);
+                padding-left: ms(0);
             }
         }
     }
@@ -205,20 +218,24 @@
 .sidebar-content-sidebar {
     // Layout with vertical border, only for large screen
     @include mq(min-sm) {
+        .content-inner {
+            padding-left: ms(0);
+            padding-right: ms(0);
+        }
         &.sidebar_vertical_border {
             .content-area {
                 border-left: 1px solid $color_border;
                 border-right: 1px solid $color_border;
             }
             .content-inner {
-                padding-left: ms(-2);
-                padding-right: ms(-2);
+                padding-left: ms(0);
+                padding-right: ms(0);
             }
             .sidebar-primary-inner {
-                padding-left: ms(-2);
+                padding-left: ms(0);
             }
             .sidebar-secondary-inner {
-                padding-right: ms(-2);
+                padding-right: ms(0);
             }
         }
     }

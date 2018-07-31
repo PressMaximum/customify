@@ -22,60 +22,67 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'title' => __( 'Global Colors', 'customify' ),
                 'priority' => 10,
 			),
+
+			array(
+				'name'    => "{$section}_color_theme_heading",
+				'type'    => 'heading',
+				'section' => $section,
+				'title'   => __( 'Theme Colors', 'customify' ),
+			),
+
 			array(
 				'name'       => "{$section}_color_primary",
 				'type'       => 'color',
 				'section'    => $section,
+				'placeholder'=> '',
+				'default'=> '',
 				'title'      => __( 'Primary Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/primary-color', '
-article.comment .comment-reply a:hover,
-article.comment .comment-time:hover,
-article.comment .comment-author a:hover,
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
-.posts-layout .readmore-button:hover,
-.entry-meta a:hover,
-.posts-layout .entry-title a:hover,
-.nav-menu-desktop .menu li.current-menu-item > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-item > a, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:hover, 
-.nav-menu-desktop.style-plain .primary-menu-ul > li a:focus,
-.nav-menu-desktop .menu li a:hover,
-a:hover,
-.site-branding a:hover,
-.widget-area .widget a:not(.wc-forward):hover,
-.site-content .widget-area .menu li.current-menu-item > a
-{
-    color: {{value}};
-}
-.button,
-button,
-input[type="button"],
-input[type="reset"],
-input[type="submit"],
-.pagination .nav-links > *:hover,
-.pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.customify-builder-btn,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
-.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
-.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover 
-{
-    background-color: {{value}};
-}
-.site-content .widget-area .menu li.current-menu-item > a:before {
-	border-left-color: {{value}};
-}
-article.comment .comment-post-author,
-#respond #cancel-comment-reply-link,
-.pagination .nav-links > *:hover,
-.pagination .nav-links span,
-.entry-footer .tags-links a:hover, .entry-footer .cat-links a:hover,
-.posts-layout .readmore-button:hover
-{
-    border-color: {{value}};
-}' ),
+				
+					.header-top .header-inner,
+					.button,
+					button,
+					input[type="button"],
+					input[type="reset"],
+					input[type="submit"],
+					.pagination .nav-links > *:hover,
+					.pagination .nav-links span,
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
+					.posts-layout .readmore-button:hover
+					{
+					    background-color: {{value}};
+					}
+					.posts-layout .readmore-button {
+						color: {{value}};
+					}
+					.pagination .nav-links > *:hover,
+					.pagination .nav-links span,
+					.entry-single .tags-links a:hover, 
+					.entry-single .cat-links a:hover,
+					.posts-layout .readmore-button,
+					.posts-layout .readmore-button:hover
+					{
+					    border-color: {{value}};
+					}'
+				),
+				'selector'   => 'format',
+			),
+
+			array(
+				'name'       => "{$section}_color_secondary",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Secondary Color', 'customify' ),
+				'css_format' => apply_filters( 'customify/styling/secondary-color', '
+				
+					.customify-builder-btn
+					{
+					    background-color: {{value}};
+					}'
+
+				),
 				'selector'   => 'format',
 			),
 
@@ -84,47 +91,15 @@ article.comment .comment-post-author,
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Text Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/text-color', 'body,
-button,
-input,
-select,
-optgroup,
-textarea,
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-input[type="tel"],
-input[type="range"],
-input[type="date"],
-input[type="month"],
-input[type="week"],
-input[type="time"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="color"],
-textarea,
-article.comment .comment-author a,
-.header-search-form .search-submit,
-.header-search-form .search-submit:hover,
-.posts-layout .entry-title,
-.nav-links .nav-previous a, .nav-links .nav-next a,
-.nav-links .nav-previous a > span, .nav-links .nav-next a > span,
-.header-bottom,
-.widget-area .widget a,
-.site-branding a,
-.site-branding .site-description
-{
-    color: {{value}};
-}
-abbr, acronym {
-    border-bottom-color: {{value}};
-}
-.posts-layout .entry-media .entry-meta {
-    background: {{value}};
-}' ),
+				'css_format' => apply_filters( 'customify/styling/text-color', '
+					body
+					{
+					    color: {{value}};
+					}
+					abbr, acronym {
+					    border-bottom-color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -132,14 +107,13 @@ abbr, acronym {
 				'name'       => "{$section}_color_link",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color', 'customify' ),
+				'title'      => __( 'Link Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color', '
-                .entry-content a,
-                .nav-links .nav-previous a:hover,
-                .nav-links .nav-next a:hover  
-                {
-                    color: {{value}};
-				}' ),
+	                a   
+	                {
+	                    color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -147,10 +121,11 @@ abbr, acronym {
 				'name'       => "{$section}_color_link_hover",
 				'type'       => 'color',
 				'section'    => $section,
-				'title'      => __( 'Entry Content Link Color Hover', 'customify' ),
+				'title'      => __( 'Link Hover Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/link-color-hover', '
-.search .content-area .entry-title a:hover,
-.entry-content a:hover
+a:hover, 
+a:focus,
+.link-meta:hover, .link-meta a:hover
 {
     color: {{value}};
 }' ),
@@ -163,12 +138,16 @@ abbr, acronym {
 				'section'    => $section,
 				'title'      => __( 'Border Color', 'customify' ),
 				'css_format' => apply_filters( 'customify/styling/color-border', '
-h2 + h3, .comments-area h2 + .comments-title, .h2 + h3, .comments-area .h2 + .comments-title,
-.comments-area, .page-breadcrumb{
+h2 + h3, 
+.comments-area h2 + .comments-title, 
+.h2 + h3, 
+.comments-area .h2 + .comments-title, 
+.page-breadcrumb {
     border-top-color: {{value}};
 }
-
-blockquote {
+blockquote,
+.site-content .widget-area .menu li.current-menu-item > a:before
+{
     border-left-color: {{value}};
 }
 
@@ -181,17 +160,21 @@ blockquote {
     }
 }
 
-.page-titlebar, .page-breadcrumb {
+.page-titlebar, .page-breadcrumb,
+.posts-layout .entry-inner {
     border-bottom-color: {{value}};
 }
 
 .header-search-form .search-field,
 .entry-content .page-links a,
 .header-search-modal,
-.pagination .nav-links > *
+.pagination .nav-links > *,
 .entry-footer .tags-links a, .entry-footer .cat-links a,
 .search .content-area article,
-.site-content .widget-area .menu li.current-menu-item > a
+.site-content .widget-area .menu li.current-menu-item > a,
+.posts-layout .entry-inner,
+.post-navigation .nav-links,
+article.comment .comment-meta
 {
     border-color: {{value}};
 }
@@ -238,17 +221,20 @@ blockquote {
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Meta Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-meta', 'article.comment .comment-reply a,
-article.comment .comment-time,
-.entry-meta,
-.entry-meta a,
-.pagination .nav-links > *,
-.entry-footer .tags-links a, .entry-footer .cat-links a,
-.widget-area .widget a:not(.wc-forward),
-.page-breadcrumb, .page-breadcrumb-list li a
-{
-    color: {{value}};
-}' ),
+				'css_format' => apply_filters( 'customify/styling/color-meta', '
+					article.comment .comment-post-author {
+						background: {{value}};				
+					}
+					.pagination .nav-links > *,
+					.link-meta, 
+					.link-meta a,
+					.color-meta,
+					.entry-single .tags-links:before, 
+					.entry-single .cats-links:before
+					{
+					    color: {{value}};
+					}'
+				),
 				'selector'   => 'format',
 			),
 
@@ -257,7 +243,7 @@ article.comment .comment-time,
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Heading Color', 'customify' ),
-				'css_format' => apply_filters( 'customify/styling/color-header', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
+				'css_format' => apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
 				'selector'   => 'format',
 			),
 
@@ -368,7 +354,7 @@ article.comment .comment-time,
                 'section'    => 'site_content_styling',
                 'title'      => __( 'Content Area Styling', 'customify' ),
                 'selector'   => array(
-                    'normal'            => ".site-content .content-area",
+                    'normal'            => ".site-content .content-area .content-inner",
                 ),
                 'css_format' => 'styling', // styling
                 'fields'     => array(

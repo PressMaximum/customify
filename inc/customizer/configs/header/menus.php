@@ -52,7 +52,7 @@ class Customify_Builder_Item_Primary_Menu
                 'name'            => $this->prefix . '_style',
                 'type'            => 'image_select',
                 'section'         => $section,
-                'selector'        => '.builder-item--' . $this->id . " .primary-menu",
+                'selector'        => '.builder-item--' . $this->id . " .{$this->id}",
                 'render_callback' => $fn,
                 'title'           => __('Menu Preset', 'customify'),
                 'default'         => 'style-plain',
@@ -71,6 +71,45 @@ class Customify_Builder_Item_Primary_Menu
                         'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/menu_style_4.svg',
                     ),
                 )
+            ),
+
+            array(
+                'name'            => $this->prefix . '_style_border_h',
+                'type'            => 'slider',
+                'section'         => $section,
+                'selector'        => "format",
+                'max'             => 20,
+                'title'         => __('Border Height', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li > a .link-before:before, .nav-menu-desktop.style-border-top .{$this->id}-ul > li > a .link-before:before  { height: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
+                'name'            => $this->prefix . '_style_border_pos',
+                'type'            => 'slider',
+                'section'         => $section,
+                'selector'        => "format",
+                'min'             => -50,
+                'max'             => 50,
+                'title'         => __('Border Position', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li > a .link-before:before { bottom: {{value}}; } .nav-menu-desktop.style-border-top .{$this->id}-ul > li > a .link-before:before { top: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
+            ),
+
+            array(
+                'name'            => $this->prefix . '_style_border_color',
+                'type'            => 'color',
+                'section'         => $section,
+                'selector'        => "format",
+                'title'         => __('Border Color', 'customify'),
+                'css_format'      => ".nav-menu-desktop.style-border-bottom .{$this->id}-ul > li:hover > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-bottom .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li:hover > a .link-before:before,
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-item > a .link-before:before, 
+                .nav-menu-desktop.style-border-top .{$this->id}-ul > li.current-menu-ancestor > a .link-before:before
+                { background-color: {{value}}; }",
+                'required'      => array(  $this->prefix . '_style', 'in', array( 'style-border-bottom', 'style-border-top' ) )
             ),
 
             array(
@@ -101,6 +140,7 @@ class Customify_Builder_Item_Primary_Menu
                 'title'   => __('Top Menu', 'customify'),
             ),
 
+
             array(
                 'name'        => $this->prefix . '_item_styling',
                 'type'        => 'styling',
@@ -110,8 +150,7 @@ class Customify_Builder_Item_Primary_Menu
                 'selector'    => array(
                     'normal'           => "{$this->selector} > li > a",
                     'normal_margin'    => "{$this->selector} > li",
-                    'hover'            => "{$this->selector} > li > a:hover, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
-                    'hover_text_color' => "{$this->selector} > li > a:hover, {$this->selector} > li > a:focus, {$this->selector} > li.current-menu-item > a, {$this->selector} > li.current-menu-ancestor > a, {$this->selector} > li.current-menu-parent > a",
+                    'hover'            => ".header--row:not(.header--transparent) {$this->selector} > li > a:hover, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-item > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-ancestor > a, .header--row:not(.header--transparent) {$this->selector} > li.current-menu-parent > a",
                 ),
                 'css_format'  => 'styling',
                 'fields'      => array(
@@ -120,7 +159,6 @@ class Customify_Builder_Item_Primary_Menu
                         'hover'  => __('Hover/Active', 'customify'),
                     ),
                     'normal_fields' => array(
-                        //'padding' => false // disable for special field.
                         'link_color'    => false,
                         'bg_cover'      => false,
                         'bg_image'      => false,
@@ -135,7 +173,7 @@ class Customify_Builder_Item_Primary_Menu
                         'bg_repeat'     => false,
                         'bg_attachment' => false,
                         'bg_position'   => false,
-                    ), // disable hover tab and all fields inside.
+                    ),
                 )
             ),
 

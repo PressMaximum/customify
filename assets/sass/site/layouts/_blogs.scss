@@ -9,22 +9,13 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-meta {
-    color: $color_meta;
-    font-size: 85%;
-    a {
-        color: $color_meta;
-        &:hover {
-            color: $color_link;
-        }
-    }
     > span {
         display: inline-block;
     }
     .sep {
-        margin-left: 3px;
-        margin-right: 3px;
+        margin-left: 8px;
+        margin-right: 8px;
     }
-
     .author {
         img {
             vertical-align: middle;
@@ -52,6 +43,8 @@ $blog_gutter: $gl-gutter;
         flex-wrap: wrap;
         align-items: stretch;
         width: 100%;
+        border-bottom: 1px solid $color_border;
+        padding-bottom: 2em;
         @include for_device( mobile ){
             display: block;
         }
@@ -91,19 +84,15 @@ $blog_gutter: $gl-gutter;
         }
     }
     .entry-title {
-        font-size: 1.4em;
-        color: $color_text;
+        font-size: 1.5em;
+        font-weight: 500;
         word-wrap: break-word;
         display: flex;
         align-items: center;
         a {
-            color: inherit;
             text-align: inherit;
             display: block;
             flex-basis: 100%;
-            &:hover {
-                color: $color_link;
-            }
         }
     }
     .entry-excerpt {
@@ -142,17 +131,19 @@ $blog_gutter: $gl-gutter;
     .readmore-button {
         display: inline-block;
         line-height: 1;
-        border: 1px solid #cccccc;
-        color: $color_meta;
+        border: 1px solid $color_primary;
+        color: $color_primary;
         border-radius: 2px;
         cursor: pointer;
-        padding: 7px 13px;
+        padding: 7px 17px;
         font-size: 13px;
         text-transform: uppercase;
-        letter-spacing: 0.3px;
+        letter-spacing: 0.5px;
         transition: transform .18s, border .18s, background .18s, box-shadow .18s, opacity .18s, color .18s;
+        font-weight: 500;
         &:hover {
-            color: $color_primary;
+            background: $color_primary;
+            color: #FFFFFF;
             border-color: $color_primary;
         }
     }
@@ -303,36 +294,19 @@ $blog_gutter: $gl-gutter;
 
 }
 
-
-//--------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // Pagination
 .pagination {
     margin: 30px auto;
     display: block;
     .nav-links {
         > * {
-            border: 1px solid $color_border ;
+            border: 1px solid $color_border;
             color: $color_meta;
             padding: 4px 12px 4px;
             border-radius: 1px;
             text-transform: uppercase;
             font-weight: 500;
             letter-spacing: 0.8px;
-            font-size: 13px;
             display: inline-block;
             &:hover {
                 border-color: $color_primary;
@@ -359,11 +333,6 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-content {
-    a {
-        &:hover {
-            text-decoration: underline;
-        }
-    }
     .page-links {
         display: block;
         margin: 5px 0px 20px;
@@ -382,58 +351,87 @@ $blog_gutter: $gl-gutter;
     }
 }
 
-.entry-single {
-    .entry--item:not( .entry-title ), .entry-thumbnail {
-        margin-bottom: 1.41575em;
-        &:last-child, p:last-child {
-            margin-bottom: 0px;
-        }
-    }
-    .tags-links, .cat-links {
-        margin-top: ms(-3);
+.single-post {
+    .entry-content {
         a {
-            padding: 3px 8px 4px;
-            margin: 0 6px 7px 0;
-            border: 1px solid $color_border;
-            color: $color_meta;
-            display: inline-block;
-            font-size: 13px;
-            -webkit-border-radius: 1px;
-            -moz-border-radius: 1px;
-            border-radius: 1px;
             &:hover {
-                background: $color_primary;
-                border-color: $color_primary;
-                color: #ffffff;
+                text-decoration: underline;
             }
         }
     }
+}
+
+.entry-single {
+    .entry--item:not( .entry-title ), .entry-thumbnail {
+        margin-bottom: 1.41575em;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+    .tags-links, .cats-links {
+        &:before {
+            font: normal normal normal 16px/1 FontAwesome;
+            text-decoration: inherit;
+            text-transform: none;
+            position: relative;
+            margin-right: 5px;
+            color: $color_meta;
+        }
+    }
+
+    .cats-links:before {
+        content: "\f115";
+    }
+
+    .tags-links:before {
+        content: "\f02c";
+    }
+
     .edit-link {
         display: block;
         width: 100%;
         margin-top: ms(-3);
         a {
             text-transform: uppercase;
-            font-weight: 600;
-            font-size: 13px;
-            letter-spacing: 0.8px;
+            font-weight: 500;
+            font-size: 80%;
+            letter-spacing: 0.5px;
         }
     }
 }
 
-.nav-links {
+// Biography box
+.author-bio {
+    display: flex;
+    .avatar {
+        flex-basis: 90px;
+        @include for_device( mobile ){
+            flex-basis: 90px;
+        }
+    }
+    .author-bio-details {
+        flex-basis: calc( 100% - 90px );
+        margin-left: 1.5em;
+        @include for_device( mobile ){
+            flex-basis: calc( 100% - 50px );
+        }
+    }
+    .author-bio-desc p:last-child {
+        margin-bottom: 0.72em;
+    }
+}
+
+.post-navigation .nav-links {
     @include clearfix();
+    padding: 16px 0px 15px;
+    border-top: 1px solid $color_border;
+    border-bottom: 1px solid $color_border;
     .nav-previous, .nav-next {
         width: 49%;
         a {
-            color: $color_text;
-            &:hover {
-                color: $color_link;
-            }
-            > span {
-                font-size: 80%;
-                color: $color_text;
+            span.meta-nav {
                 display: block;
+                margin-bottom: 5px;
             }
         }
 
@@ -445,23 +443,5 @@ $blog_gutter: $gl-gutter;
     .nav-next {
         float: right;
         text-align: right;
-    }
-}
-
-// Comment
-.comments-area {
-    margin-top: ( $blog_gutter / 1.5 );
-    padding-top: ( $blog_gutter / 2 );
-    border-top: 1px solid $color_border;
-}
-.comment-author {
-    display: block;
-}
-.comment-time-wrap {
-    display: inline-block;
-}
-.comment-list {
-    article.comment {
-        margin-bottom: 0px;
     }
 }

@@ -137,6 +137,8 @@ class Customify_Post_Entry {
      */
     function meta_date(){
 
+        $icon = '<i class="fa fa-clock-o" aria-hidden="true"></i> ';
+
         $time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
         if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
             $time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time>';
@@ -148,8 +150,47 @@ class Customify_Post_Entry {
             esc_html( get_the_modified_date() )
         );
 
-        $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">' . $time_string . '</a>';
+        $posted_on = '<a href="' . esc_url( get_permalink() ) . '" rel="bookmark">'.$icon . $time_string . '</a>';
         return '<span class="meta-item posted-on">' . $posted_on . '</span>';
+    }
+
+    /**
+     * Get terms array
+     *
+     * @param $id
+     * @param $taxonomy
+     * @param bool $icon_first
+     * @return array|bool|false|string|WP_Error
+     */
+    function get_terms_list( $id, $taxonomy, $icon_first = false ){
+        $terms = get_the_terms( $id, $taxonomy );
+
+        if ( is_wp_error( $terms ) )
+            return $terms;
+
+        if ( empty( $terms ) )
+            return false;
+
+        $links = array();
+
+        $icon = '<i class="fa fa-folder-open-o" aria-hidden="true"></i> ';
+
+        foreach ( $terms as $index => $term ) {
+            $link = get_term_link( $term, $taxonomy );
+            if ( is_wp_error( $link ) ) {
+                return $link;
+            }
+
+            if ( $icon_first && $index == 0 ) {
+
+            } else {
+                $icon = '';
+            }
+
+            $links[] = '<a href="' . esc_url( $link ) . '" rel="tag">' .$icon. esc_html( $term->name ) . '</a>';
+        }
+
+        return $links;
     }
 
     /**
@@ -161,14 +202,11 @@ class Customify_Post_Entry {
         $html = '';
         if ( $this->post_type === get_post_type() ) {
             /* translators: used between list items, there is a space after the comma */
-            $categories_list = get_the_term_list( $this->get_post_id( ) , $this->config['tax'], '', '__cate_sep__' );
-            if ( $categories_list && ! is_wp_error( $categories_list ) ) {
-                $categories_list = explode( '__cate_sep__', $categories_list );
-                if ( $this->config['term_count'] > 0 ) {
-                    $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
-                }
-                $html.= sprintf( '<span class="meta-item meta-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+            $categories_list = $this->get_terms_list( $this->get_post_id( ) , $this->config['tax'],  true );
+            if ( is_array( $categories_list ) && $this->config['term_count'] > 0 ) {
+                $categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
             }
+            $html.= sprintf( '<span class="meta-item meta-cat">%1$s</span>',join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
         }
         return $html;
     }
@@ -202,7 +240,7 @@ class Customify_Post_Entry {
             /* translators: used between list items, there is a space after the comma */
             $tags_list = get_the_tag_list( '', esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $tags_list ) {
-                $html .= sprintf( '<div class="entry--item entry-tags tags-links">%1$s</div>', $tags_list ); // WPCS: XSS OK.
+                $html .= sprintf( '<div class="entry--item entry-tags tags-links">'. esc_html__( 'Tagged ', 'customify' ) .'%1$s</div>', $tags_list ); // WPCS: XSS OK.
             }
         }
         echo $html;
@@ -218,8 +256,9 @@ class Customify_Post_Entry {
             /* translators: used between list items, there is a space after the comma */
             $list = get_the_category_list( esc_html_x( ', ', 'list item separator', 'customify' ) );
             if ( $list ) {
-                $html .= sprintf( '<div class="entry--item entry-categories cats-links">%1$s</div>', $list ); // WPCS: XSS OK.
+                $html .= sprintf( '<div class="entry--item entry-categories cats-links">'. esc_html__( 'Posted in ', 'customify' ) .'%1$s</div>', $list ); // WPCS: XSS OK.
             }
+
         }
         echo $html;
     }
@@ -231,9 +270,10 @@ class Customify_Post_Entry {
     function meta_comment(){
         $html =  '';
         if ( ! post_password_required() && ( comments_open() || get_comments_number() ) ) {
+            $icon = '<i class="fa fa-comments-o"></i> ';
             $comment_count = get_comments_number();
             $html .= '<span class="meta-item comments-link">';
-            $html .= '<a href="'.esc_url( get_comments_link() ).'">';
+            $html .= '<a href="'.esc_url( get_comments_link() ).'">'.$icon;
             if ( 1 === $comment_count ) {
                 $html .= sprintf(
                 /* translators: 1: title. */
@@ -263,7 +303,7 @@ class Customify_Post_Entry {
         if ( $this->config['author_avatar'] ) {
             $avatar = get_avatar( get_the_author_meta( 'ID' ), $this->config['avatar_size'] );
         } else {
-            $avatar = '';
+            $avatar = '<i class="fa fa-user-circle-o"></i> ';
         }
 
         $byline = '<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' .$avatar. esc_html( get_the_author() ) . '</a></span>';
@@ -302,10 +342,10 @@ class Customify_Post_Entry {
 
         if ( ! empty( $metas ) ) {
             ?>
-            <div class="entry-meta entry--item">
+            <div class="entry-meta entry--item text-uppercase text-xsmall link-meta">
                 <?php
                 // WPCS: XSS OK.
-                echo join( ( $this->config['meta_sep'] ) ?'<span class="sep">'.$this->config['meta_sep'].'</span>' : '', $metas);
+                echo join('<span class="sep">'.$this->config['meta_sep'].'</span>' , $metas);
                 ?>
             </div><!-- .entry-meta -->
             <?php
@@ -320,11 +360,11 @@ class Customify_Post_Entry {
     function post_title( $post = null ){
         if ( is_singular() ) {
             if ( customify_is_post_title_display() ) {
-                the_title('<h1 class="entry-title entry--item">', '</h1>');
+                the_title('<h1 class="entry-title entry--item h2">', '</h1>');
             }
         } else {
             if ($this->config['title_link']) {
-                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item"><a href="' . esc_url(get_permalink($post)) . '" title="' . the_title_attribute(array('echo' => false)) . '" rel="bookmark">', '</a></' . $this->config['title_tag'] . '>');
+                the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item"><a href="' . esc_url(get_permalink($post)) . '" title="' . the_title_attribute(array('echo' => false)) . '" rel="bookmark" class="plain_color">', '</a></' . $this->config['title_tag'] . '>');
             } else {
                 the_title('<' . $this->config['title_tag'] . ' class="entry-title entry--item">', '</' . $this->config['title_tag'] . '>');
             }
@@ -469,14 +509,77 @@ class Customify_Post_Entry {
         }
     }
 
+
+    function post_author_bio()
+    {
+        if (is_single()) {
+            global $post;
+            // Detect if it is a single post with a post author
+            if (is_single() && isset($post->post_author)) {
+
+                $user = get_user_by('ID', $post->post_author );
+                if ( ! $user ) {
+                    return ;
+                }
+
+                $display_name = $user->display_name ? $user->display_name : $user->user_login;
+                // Get author's biographical information or description
+                $user_description = get_the_author_meta('user_description', $user->ID );
+                // Get author's website URL
+                $user_website = get_the_author_meta('url',  $user->ID );
+
+                // Get link to the author archive page
+                $user_posts = get_author_posts_url(get_the_author_meta('ID',  $user->ID ));
+
+                if (!empty($display_name)) {
+                    $author_details = '<h4 class="author-bio-heading">' . sprintf( __( 'About the Author: <span>%s</span>', 'customify' ), $display_name ) . '</h4>';
+                }
+
+                $user_description = wptexturize( $user_description );
+                $user_description = wpautop( $user_description );
+                $user_description = convert_smilies( $user_description );
+
+                $author_links = '<p class="author_links text-uppercase text-xsmall link-meta"><a href="' . $user_posts . '">' .sprintf( 'View all post by %s', $display_name ). '</a>';
+
+                // Check if author has a website in their profile
+                if (!empty($user_website)) {
+                    // Display author website link
+                    $author_links .= ' | <a href="' . $user_website . '" target="_blank" rel="nofollow">Website</a></p>';
+                } else {
+                    // if there is no author website then just close the paragraph
+                    $author_links .= '</p>';
+                }
+
+                $author_details .= '<div class="author-bio"><div class="author-bio-avatar">' . get_avatar(get_the_author_meta('user_email'), 80) . '</div><div class="author-bio-details">'.'<div class="author-bio-desc">'. $user_description.'</div>'. $author_links.'</div></div>';
+
+                // Pass all this info to post content
+                $content =  '<div class="entry-author-bio entry--item" >' . $author_details . '</div>';
+            }
+
+            echo $content;
+        }
+    }
+
     function post_navigation(){
         if ( ! is_single() ) {
             return '';
         }
-        the_post_navigation( array(
-            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
-            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
-        ) );
+//        the_post_navigation( array(
+//            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
+//            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
+//        ) );
+        echo '<div class="entry-post-navigation entry--item">';
+	    the_post_navigation(
+		    array(
+			    'next_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Next', 'customify' ) . '</span> ' .
+			                   '<span class="screen-reader-text">' . __( 'Next post:', 'customify' ) . '</span> ' .
+			                   '<span class="post-title text-large">%title</span>',
+			    'prev_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Previous', 'customify' ) . '</span> ' .
+			                   '<span class="screen-reader-text">' . __( 'Previous post:', 'customify' ) . '</span> ' .
+			                   '<span class="post-title text-large">%title</span>',
+		    )
+	    );
+	    echo '</div>';
     }
 
     /**

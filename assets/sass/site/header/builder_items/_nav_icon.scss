@@ -2,7 +2,7 @@
 .menu-mobile-toggle {
     cursor: pointer;
     text-align: center;
-    padding: 2px 5px;
+    //padding: 2px 5px;
     background: transparent;
     //color: inherit;
     box-shadow: none;
@@ -16,7 +16,7 @@
 .nav-icon--label {
     background: none !important;
     text-transform: uppercase;
-    font-size: 14px;
+    font-size: 0.82em;
 }
 
 $nav_icon_sizes: (

@@ -69,13 +69,14 @@ module.exports = function( grunt ) {
         sass: {
             options: {
                 precision: 10,
-                unixNewlines: false
+                unixNewlines: true
                 //noCache: true
                 //sourcemap: 'auto'
             },
             dist: {
                 options: {
-                    style: 'expanded'
+                    style: 'expanded',
+                   // sourcemap: 'auto'
                 },
 
                 files: [
@@ -143,6 +144,7 @@ module.exports = function( grunt ) {
                 files: [
                     {
                         'assets/js/theme.min.js': ['assets/js/theme.js'],
+                        'assets/js/select2.min.js': ['assets/js/select2.js'],
                         'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js']
                     },
                     {

@@ -410,9 +410,7 @@ class Customify_Customize_Layout_Builder_Frontend {
                     $item_classes[] = 'item--inner';
                     $item_classes[] = 'builder-item--' . $item_id;
                     if ( strpos( $item_id, '-menu' ) ) {
-                        $item_classes[] = 'item--m';
-                    } else {
-                        $item_classes[] = 'item--nm';
+                        $item_classes[] = 'has_menu';
                     }
                     if (is_customize_preview()) {
                         $item_classes[] = ' builder-item-focus';
@@ -475,6 +473,7 @@ class Customify_Customize_Layout_Builder_Frontend {
                         }
 
                         $row_layout = Customify()->get_setting( $this->id . '_' . $row_id . '_layout' );
+                        $row_text_mode = Customify()->get_setting( $this->id . '_' . $row_id . '_text_mode' );
                         if ( $row_layout ) {
                             $classes[] = sanitize_text_field( $row_layout );
                         }
@@ -503,31 +502,42 @@ class Customify_Customize_Layout_Builder_Frontend {
                             $html_mobile = false;
                         }
 
+                        /* Row inner class */
+                        $inner_class = array('header-inner');
+                        $inner_class[] = $_id.'-inner';
+                        if ( $row_text_mode ) {
+                            $inner_class['row_text_mode'] = $row_text_mode;
+                        }
+
+                        $inner_class  = apply_filters( 'customify/builder/inner-row-classes', $inner_class, $row_id, $this );
+
                         if ( $html_mobile || $html_desktop ) {
                             ?>
                             <div <?php echo $string_atts; ?>
                                     data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
-                                <div class="customify-container">
-                                    <?php
-                                    if ($html_desktop) {
+                                <div class="<?php echo join( ' ', $inner_class ); ?>">
+                                    <div class="customify-container">
+                                        <?php
+                                        if ($html_desktop) {
 
-                                        if ( $html_desktop ) {
-                                            $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
-                                            if (empty($mobile_items)) {
-                                                $c = '';
+                                            if ( $html_desktop ) {
+                                                $c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+                                                if (empty($mobile_items)) {
+                                                    $c = '';
+                                                }
+                                                echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
+                                                echo $html_desktop;
+                                                echo '</div>';
                                             }
-                                            echo '<div class="customify-grid ' . esc_attr($c . ' ' . $align_classes) . '">';
-                                            echo $html_desktop;
+                                        }
+
+                                        if ($html_mobile) {
+                                            echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
+                                            echo $html_mobile;
                                             echo '</div>';
                                         }
-                                    }
-
-                                    if ($html_mobile) {
-                                        echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr($align_classes) . '">';
-                                        echo $html_mobile;
-                                        echo '</div>';
-                                    }
-                                    ?>
+                                        ?>
+                                    </div>
                                 </div>
                             </div>
                             <?php
@@ -545,7 +555,7 @@ class Customify_Customize_Layout_Builder_Frontend {
     function render_mobile_sidebar() {
         $id           = 'sidebar';
         $mobile_items = $this->get_row_settings( $id, 'mobile' );
-        $menu_sidebar_skin = Customify()->get_setting('header_sidebar_text_mode');
+        $menu_sidebar_skin = Customify()->get_setting('header_sidebar_skin_mode');
 
         if ( ! is_array( $mobile_items ) ) {
             $mobile_items = array();

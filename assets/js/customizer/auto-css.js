@@ -752,6 +752,9 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         var that = this;
         // Setup file by default no need `css_format` key if filed have name in the list above
         var values = this.get_setting( field.name, 'all' );
+        if ( ! _.isObject( values ) && ! _.isArray( values ) ) {
+            values = {};
+        }
         values = _.defaults( values, {
             'normal': {},
             'hover': {}
@@ -766,6 +769,7 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
                 hover : null
             } );
         }
+
 
         var tabs = null, normal_fields = -1, hover_fields = -1;
 
@@ -825,6 +829,20 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 
         var selectorCSSAll = {};
         var selectorCSSDevices = {};
+
+        // Do no use bg settings if no bg
+        if ( ! _.isEmpty( values ) ) {
+
+           if (!_.isUndefined(values['normal']['bg_image'])) {
+               var _img = that.sanitize_media(values['normal']['bg_image']);
+               if (!_img.url ) {
+                   delete values['normal']['bg_repeat'];
+                   delete values['normal']['bg_cover'];
+                   delete values['normal']['bg_position'];
+                   delete values['normal']['bg_attachment'];
+               }
+           }
+        }
 
         var normal_style = that.loop_fields(listNormalFields, values['normal'], true, true);
         var hover_style = that.loop_fields(listHoverFields, values['hover'], true, true);

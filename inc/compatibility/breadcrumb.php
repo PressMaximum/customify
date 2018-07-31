@@ -329,10 +329,18 @@ class Customify_Breadcrumb {
             $list  = yoast_breadcrumb('','',  false );
         }
 
+
+
         if ( $list ) {
             $pos = sanitize_text_field( Customify()->get_setting( 'breadcrumb_display_pos' ) );
+            $layout  = Customify()->get_setting_tab(  'page_header_layout' );
+            $classes = array( 'page-breadcrumb' );
+            $classes[] = 'breadcrumb--'.$pos;
+            $classes[] = $layout;
+            $classes[] = 'text-uppercase text-xsmall link-meta';
+
             ?>
-            <div id="page-breadcrumb" class="page-breadcrumb breadcrumb--<?php echo esc_attr( $pos ); ?>">
+            <div id="page-breadcrumb" class="page-header--item <?php echo esc_attr( join( ' ', $classes ) ); ?>">
                 <div class="page-breadcrumb-inner customify-container">
                     <ul class="page-breadcrumb-list">
                         <?php

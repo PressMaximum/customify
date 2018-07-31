@@ -8,10 +8,6 @@
         text-transform: uppercase;
         letter-spacing: 0.4px;
         font-weight: 600;
-        color: darken($color_text, 5%);
-        &:hover {
-            color: $color_link_hover;
-        }
     }
 
     img {
@@ -26,8 +22,7 @@
         line-height: 1.216;
     }
     .site-description {
-        font-size: ms(-1);
-        margin: 3px 0px 7px 0px;
+        margin: 5px 0px 7px 0px;
     }
     &.logo-left {
         .logo-link {
@@ -71,4 +66,12 @@
 }
 .item-button {
     display: inline-block;
+}
+
+.site-header {
+    .cb-row--mobile {
+        .site-branding img {
+            max-width: 100%;
+        }
+    }
 }

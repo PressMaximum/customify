@@ -14,7 +14,7 @@ class Customify_Builder_Item_Logo {
     function customize( $wp_customize ){
         $section = 'title_tagline';
         $render_cb_el = array( $this, 'render' ) ;
-        $selector = 'body .site-branding';
+        $selector = '.site-header .site-branding';
         $fn = 'customify_customize_render_header';
         $config  = array(
 
@@ -27,8 +27,9 @@ class Customify_Builder_Item_Logo {
                 'priority' => 8,
                 'device_settings' => true,
                 'title' => __( 'Logo Max Width', 'customify' ),
-                'selector' => $selector.' img',
-                'css_format' => 'max-width: {{value}};'
+                //'selector' => $selector.' img',
+                'selector' => 'format',
+                'css_format' => "$selector img { max-width: {{value}}; } .site-header .cb-row--mobile .site-branding img { width: {{value}}; } "
             ),
 
             array(
@@ -140,7 +141,7 @@ class Customify_Builder_Item_Logo {
                 if ($show_desc !== 'no') {
                     $description = get_bloginfo('description', 'display');
                     if ($description || is_customize_preview()) { ?>
-                        <p class="site-description"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+                        <p class="site-description text-uppercase text-xsmall"><?php echo $description; /* WPCS: xss ok. */ ?></p>
                         <?php
                     };
                 }

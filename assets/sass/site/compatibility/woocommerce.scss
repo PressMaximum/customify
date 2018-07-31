@@ -1,55 +1,30 @@
 @import '../utils/vars';
-
-/* Widgets */
-// Product Search
-.widget_product_search {
-    .search-field {
-        margin-bottom: 5px;
-    }
-}
-
-/* Shop Add-to-cart button */
-.woocommerce #respond input#submit, .woocommerce a.button, .woocommerce button.button, .woocommerce input.button {
-    background-color: $color_primary;
-    color: #FFFFFF;
-    border-radius: 2px;
-    font-weight: 600;
-    &:hover {
-        background-color: $color_primary;
-        box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
-        color: #FFF;
-    }
-}
-
-/* Single Product Add-to-cart */
-.woocommerce div.product form.cart .button {
-    line-height: inherit;
-}
-
-/* Shop Alt Button */
-.woocommerce #respond input#submit.alt, .woocommerce a.button.alt, .woocommerce button.button.alt, .woocommerce input.button.alt {
-    background-color: $color_primary;
-    &:hover {
-        background-color: $color_primary;
-        box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
-    }
-}
+@import "../utils/mixins";
+@import 'wc/woocommerce-mixins';
+@import 'wc/woocommerce-vars';
+@import 'wc/woocommerce-animation';
+@import 'wc/woocommerce-fonts';
+@import "wc/woocommerce-layout";
+@import "wc/woocommerce-main";
+@import "wc/wc-loop";
+@import "wc/wc-widgets";
+@import "wc/wc-cart";
+@import "wc/wc-single-product";
+@import "wc/wc-elements";
+@import "wc/wc-product";
+@import "wc/wc-order";
+@import "wc/wc-forms";
+@import "wc/wc-reviews";
+@import "wc/wc-cart-checkout";
 
 /* Coupon Input */
-#add_payment_method table.cart td.actions .coupon .input-text, .woocommerce-cart table.cart td.actions .coupon .input-text, .woocommerce-checkout table.cart td.actions .coupon .input-text {
-    padding: 7px 6px 9px;
+.woocommerce-cart-form .coupon .input-text{
     min-width: 120px;
-    background-color: #FFF;
 }
 
 /* Sale on badge */
 .woocommerce span.onsale {
     padding: .202em .602em;
-}
-
-/* Disable button */
-.woocommerce button.button:disabled[disabled] {
-    color: #FFF;
 }
 
 /* Single Product */
@@ -75,15 +50,11 @@
                 a {
                     display: block;
                     padding: 10px 0px 11px;
-                    color: currentColor;
                     border-bottom: 1px solid $color_border;
-                    &:hover {
-                        color: $color_link;
-                    }
                 }
                 &.is-active {
                     a {
-                        color: $color_link;
+                        color: $color_link_hover;
                     }
                 }
             }

@@ -123,7 +123,7 @@
         } );
 
         function setupPreviewNamePosition(){
-            $( '.customify-grid .item--m.builder-item-focus' ).each( function(){
+            $( '.customify-grid .has_menu.builder-item-focus' ).each( function(){
                 var parentPos = $( this ).closest('.customify-grid').offset();
                 var childPos = $( this ).offset();
                 var h = $( this ).innerHeight();

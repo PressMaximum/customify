@@ -207,6 +207,22 @@ class Customify_Page_Header {
 				'title' => __( 'Page Header', 'customify' ),
 			),
 
+            array(
+                'name'            => $section . '_layout',
+                'type'            => 'select',
+                'section'         => $section,
+                'title'           => __( 'Layout', 'customify' ),
+                'selector'        => '.page-header--item',
+                'css_format'      => 'html_class',
+                'default'         => '',
+                'choices'         => array(
+                    '' => __( 'Default', 'customify' ),
+                    'layout-full-contained' => __( 'Full width - Contained', 'customify' ),
+                    'layout-fullwidth'      => __( 'Full Width', 'customify' ),
+                    'layout-contained'      => __( 'Contained', 'customify' ),
+                )
+            ),
+
 			array(
 				'name'    => "{$name}_display_h",
 				'type'    => 'heading',
@@ -499,6 +515,16 @@ class Customify_Page_Header {
 					),
 					'hover_fields'  => false
 				)
+			),
+
+			array(
+				'name'            => "{$name}_align",
+				'type'            => 'text_align_no_justify',
+				'section'         => $section,
+				'device_settings' => true,
+				'selector'        => "$selector",
+				'css_format'      => 'text-align: {{value}};',
+				'title'           => __( 'Cover Text Align', 'customify' ),
 			),
 
             array(
@@ -877,8 +903,13 @@ class Customify_Page_Header {
 			$args['title_tag'] = 'h2';
 		}
 
+
+        $layout  = Customify()->get_setting_tab(  'page_header_layout' );
+        $classes = array( 'page-header--item page-cover' );
+        $classes[] = $layout;
+
 		?>
-        <div id="page-cover" class="page-header--item page-cover"<?php echo $style; ?>>
+        <div id="page-cover" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $style; ?>>
             <div class="page-cover-inner customify-container">
 				<?php
                 if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
@@ -901,8 +932,12 @@ class Customify_Page_Header {
 	}
 
 	function render_titlebar( $args = array() ) {
+
+        $classes = array( 'page-header--item page-titlebar' );
+        $layout  = Customify()->get_setting_tab(  'page_header_layout' );
+        $classes[] = $layout;
 		?>
-        <div id="page-titlebar" class="page-header--item page-titlebar">
+        <div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
             <div class="page-titlebar-inner customify-container">
 				<?php
 				// WPCS: XSS ok.
