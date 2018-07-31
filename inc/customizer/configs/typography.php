@@ -134,26 +134,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'css_format' => 'typography',
                 'selector' => '.entry-content h6',
             ),
-
-            // Widget title
-            array(
-                'name'           => "{$section}_widget_title",
-                'type'           => 'section',
-                'panel'          => 'typography_panel',
-                'title'          => __( 'Widget Title', 'customify' ),
-            ),
-
-            array(
-                'name' => "{$section}_widget_title",
-                'type' => 'typography',
-                'section' => "{$section}_widget_title",
-                'title' => __('Widget Title', 'customify'),
-                'css_format' => 'typography',
-                'selector' => '.widget-title',
-            ),
-
-
-
+	        
         );
         return array_merge( $configs, $config );
     }

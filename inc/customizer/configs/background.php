@@ -42,9 +42,43 @@ class Customify_Advanced_Styling_Background
                         'border_style'  => false
                     ),
                     'hover_fields'  => false,
-
                 )
             ),
+
+	        array(
+		        'name'     => 'site_content_styling',
+		        'type'     => 'section',
+		        'panel'    => 'styling_panel',
+		        'priority' => 20,
+		        'title'    => __( 'Site Content', 'customify' ),
+	        ),
+
+	        array(
+		        'name'       => 'site_content_styling',
+		        'type'       => 'styling',
+		        'section'    => 'background',
+		        'title'      => __( 'Content Area Background', 'customify' ),
+		        'selector'   => array(
+			        'normal' => ".site-content",
+		        ),
+		        'css_format' => 'styling', // styling
+		        'fields'     => array(
+			        'normal_fields' => array(
+				        'text_color' => false,
+				        'link_color' => false,
+				        'padding'     => false,
+				        'margin'     => false,
+				        'border_heading' => false,
+				        'border_width' => false,
+				        'border_color' => false,
+				        'border_radius' => false,
+				        'box_shadow' => false,
+				        'border_style'  => false
+			        ),
+			        'hover_fields'  => false,
+		        )
+	        ),
+
 
         );
 

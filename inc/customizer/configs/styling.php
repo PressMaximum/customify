@@ -19,7 +19,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'     => "{$section}",
 				'type'     => 'section',
 				'panel'    => 'styling_panel',
-				'title'    => __( 'Colors', 'customify' ),
+				'title'    => __( 'Global Colors', 'customify' ),
 				'priority' => 10,
 			),
 
