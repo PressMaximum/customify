@@ -1513,6 +1513,7 @@ p.demo_store a,
   display: flex;
   align-items: center;
   font-weight: 600;
+  font-size: 0.82em;
 }
 .item--wc_cart .cart-item-link > span {
   margin: 0 2px;

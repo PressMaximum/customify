@@ -502,8 +502,15 @@ class Customify_Customize_Layout_Builder_Frontend {
                             $html_mobile = false;
                         }
 
-                        /* Row inner class */
-                        $inner_class = array('header-inner');
+
+                        // Row inner class
+                        // Check if the row is header or footer.
+                        $inner_class = array();
+                        if ( $this->id == 'header' ) {
+	                        $inner_class[] = 'header--row-inner';
+                        } else {
+	                        $inner_class[] = 'footer--row-inner';
+                        }
                         $inner_class[] = $_id.'-inner';
                         if ( $row_text_mode ) {
                             $inner_class['row_text_mode'] = $row_text_mode;

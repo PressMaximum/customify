@@ -73,10 +73,16 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
             $section_name = __( 'Footer Top', 'customify' );
         }
 
+	    // Text skin
+	    $color_mode = 'dark-mode';
+	    if ( $section == 'footer_top' ) {
+		    $color_mode = 'light-mode';
+	    }
+
         $selector = '#cb-row--'.str_replace('_', '-', $section );
+	    $skin_mode_selector = '.footer--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
         $fn = 'customify_customize_render_footer';
-        //$selector_all = '#masthead';
 
         $config  = array(
             array(
@@ -114,15 +120,36 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                 )
             ),
 
-            array(
-                'name' => $section.'_heading',
-                'type' => 'color',
-                'section' => $section,
-                'selector' => join( ', ', array( $selector.' .widget-title', $selector.' h1', $selector.' h2',  $selector.' h3',  $selector.' h4' ) ),
-                'css_format' =>'color: {{value}};',
-                'title' => __( 'Widget Title Color', 'customify' ),
-            ),
+	        array(
+		        'name'       => $section . '_text_mode',
+		        'type'       => 'image_select',
+		        'section'    => $section,
+		        'selector'   => $skin_mode_selector,
+		        'css_format' => 'html_class',
+		        'title'      => __( 'Skin Mode', 'customify' ),
+		        'default'    => $color_mode,
+		        'choices'    => array(
+			        'dark-mode'  => array(
+				        'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+				        'label' => 'Dark'
+			        ),
+			        'light-mode' => array(
+				        'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+				        'label' => 'Light'
+			        ),
+		        )
+	        ),
 
+	        array(
+		        'name'       => "{$section}_background_color",
+		        'type'       => 'color',
+		        'section'    => $section,
+		        'title'      => __( 'Background Color', 'customify' ),
+		        'selector'   => "{$selector} .footer--row-inner",
+		        'css_format' => 'background-color: {{value}}',
+	        ),
+
+            /*
             array(
                 'name' => $section.'_styling',
                 'type' => 'styling',
@@ -130,7 +157,7 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                 'title'  => __( 'Styling', 'customify' ),
                 'description'  => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
                 'selector' => array(
-                    'normal' => "{$selector}",
+                    'normal' => "{$selector} .footer--row-inner",
                     'normal_padding' => $selector.' .customify-container',
                     'normal_link_color' => "{$selector} a",
                     'hover_link_color' => "{$selector} a:hover",
@@ -159,6 +186,7 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
                     ), // disable hover tab and all fields inside.
                 )
             ),
+	        */
 
         );
 

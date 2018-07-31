@@ -134,7 +134,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'css_format' => 'typography',
                 'selector' => '.entry-content h6',
             ),
-	        
+
         );
         return array_merge( $configs, $config );
     }
