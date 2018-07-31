@@ -4825,6 +4825,7 @@ body.menu_sidebar_dropdown:before {
 .is-menu-sidebar.menu_sidebar_slide_right .header-menu-sidebar {
   z-index: 999900;
   height: 100%;
+  max-width: 100vh;
   transform: translate3d(0, 0, 0);
   right: 0;
   visibility: visible;
