@@ -140,6 +140,7 @@ class Customify_Builder_Item_Primary_Menu
                 'title'   => __('Top Menu', 'customify'),
             ),
 
+
             array(
                 'name'        => $this->prefix . '_item_styling',
                 'type'        => 'styling',
