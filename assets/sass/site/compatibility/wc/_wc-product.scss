@@ -387,6 +387,11 @@ div.product {
             td:first-child {
                 width: 11em;
                 text-align: center;
+                .button.product_type_variable {
+                    font-size: 0.7em;
+                    min-height: auto;
+                    margin-left: 1em;
+                }
             }
 
             .wc-grouped-product-add-to-cart-checkbox {

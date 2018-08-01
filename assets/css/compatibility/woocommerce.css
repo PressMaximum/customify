@@ -2307,6 +2307,11 @@ div.product form.cart .group_table td:first-child {
   width: 11em;
   text-align: center;
 }
+div.product form.cart .group_table td:first-child .button.product_type_variable {
+  font-size: 0.7em;
+  min-height: auto;
+  margin-left: 1em;
+}
 div.product form.cart .group_table .wc-grouped-product-add-to-cart-checkbox {
   display: inline-block;
   width: auto;
@@ -2635,6 +2640,7 @@ ul#shipping_method .amount {
   position: relative;
   background: 0;
   border: 0;
+  width: 100%;
 }
 #reviews #comments ol.commentlist li .meta {
   color: #777;

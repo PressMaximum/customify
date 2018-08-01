@@ -81,8 +81,10 @@ License:  https://www.pexels.com/photo-license/ (http://creativecommons.org/publ
     https://www.pexels.com/photo/architectural-design-architecture-buildings-city-374811/
 
     Theme Screenshot
-    https://www.pexels.com/photo/architecture-buildings-business-city-374870/
-    https://www.pexels.com/photo/low-angle-view-of-office-building-against-clear-sky-258160/
+    https://www.pexels.com/photo/woman-wearing-yellow-scoop-neck-shirt-762084/
+    https://www.pexels.com/photo/man-wearing-white-crew-neck-vans-top-and-blue-denim-button-up-jacket-1040881/
+    https://www.pexels.com/photo/adult-dark-eyewear-facial-expression-428311/
+    https://www.pexels.com/photo/man-wearing-white-and-black-legendary-print-t-shirt-157646/
 
 normalize.css, Copyright 2012-2016 Nicolas Gallagher and Jonathan Neal
 License: MIT
