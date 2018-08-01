@@ -2139,7 +2139,7 @@ template {
 # Typography
 --------------------------------------------------------------*/
 body {
-  color: #444444;
+  color: #686868;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.618;
@@ -2241,7 +2241,7 @@ code, kbd, tt, var {
 }
 
 abbr, acronym {
-  border-bottom: 1px dotted #444444;
+  border-bottom: 1px dotted #686868;
   cursor: help;
 }
 
@@ -2298,7 +2298,7 @@ a.plain_color {
 }
 
 a {
-  color: #005670;
+  color: #1e4b75;
   text-decoration: none;
   transition: all 0.14s ease-out;
 }
@@ -2498,7 +2498,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   color: #FFFFFF;
-  background: #005670;
+  background: #235787;
 }
 .button:focus,
 input[type="button"]:focus,
@@ -3030,7 +3030,7 @@ article.comment .comment-post-author {
   background: #f0f0f0;
 }
 .header-top .dark-mode {
-  background: #005670;
+  background: #235787;
 }
 
 .header-main {
@@ -3553,11 +3553,11 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop.style-full-height .nav-menu > li > a:hover {
   color: #FFFFFF;
-  background-color: #005670;
+  background-color: #1e4b75;
 }
 .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-item > a, .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-ancestor > a {
   color: #ffffff;
-  background-color: #005670;
+  background-color: #1e4b75;
 }
 .nav-menu-desktop.style-border-bottom .nav-menu > li > a .link-before {
   position: relative;
@@ -3760,7 +3760,7 @@ article.comment .comment-post-author {
 .header-search-form .search-submit:hover {
   box-shadow: none;
   background-color: transparent;
-  color: #444444;
+  color: #686868;
 }
 .header-search-form .search-submit svg {
   width: 18px;
@@ -5285,8 +5285,8 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .readmore-button {
   display: inline-block;
   line-height: 1;
-  border: 1px solid #005670;
-  color: #005670;
+  border: 1px solid #235787;
+  color: #235787;
   border-radius: 2px;
   cursor: pointer;
   padding: 7px 17px;
@@ -5297,9 +5297,9 @@ body.menu_sidebar_dropdown:before {
   font-weight: 500;
 }
 .posts-layout .readmore-button:hover {
-  background: #005670;
+  background: #235787;
   color: #FFFFFF;
-  border-color: #005670;
+  border-color: #235787;
 }
 .posts-layout .entry-content-data {
   display: flex;
@@ -5434,13 +5434,13 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 .pagination .nav-links > *:hover {
-  border-color: #005670;
-  background: #005670;
+  border-color: #235787;
+  background: #235787;
   color: #FFFFFF;
 }
 .pagination .nav-links span {
-  border-color: #005670;
-  background: #005670;
+  border-color: #235787;
+  background: #235787;
   color: #FFFFFF;
 }
 
@@ -5460,7 +5460,7 @@ body.menu_sidebar_dropdown:before {
   border: 1px solid #eaecee;
   padding: 5px 12px 5px;
   text-transform: uppercase;
-  color: #444444;
+  color: #686868;
   margin: 0px 2px;
 }
 .entry-content .table-wrapper {
@@ -5572,14 +5572,14 @@ body.menu_sidebar_dropdown:before {
 .search .content-area .entry-title {
   font-size: 1.4em;
   font-weight: 400;
-  color: #444444;
+  color: #686868;
   word-wrap: break-word;
 }
 .search .content-area .entry-title a {
   color: inherit;
 }
 .search .content-area .entry-title a:hover {
-  color: #005670;
+  color: #1e4b75;
 }
 .search .content-area .entry-summary p:last-child {
   margin-bottom: 0px;

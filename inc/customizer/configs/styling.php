@@ -34,7 +34,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'        => "{$section}_color_primary",
 				'type'        => 'color',
 				'section'     => $section,
-				'placeholder' => '#005670',
+				'placeholder' => '#235787',
 				'title'       => __( 'Primary Color', 'customify' ),
 				'css_format'  => apply_filters( 'customify/styling/primary-color', '
 				
@@ -91,7 +91,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'        => 'color',
 				'section'     => $section,
 				'title'       => __( 'Text Color', 'customify' ),
-				'placeholder' => '#444444',
+				'placeholder' => '#686868',
 				'css_format'  => apply_filters( 'customify/styling/text-color', '
 					body
 					{
@@ -109,7 +109,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'        => 'color',
 				'section'     => $section,
 				'title'       => __( 'Link Color', 'customify' ),
-				'placeholder' => '#005670',
+				'placeholder' => '#1e4b75',
 				'css_format'  => apply_filters( 'customify/styling/link-color', '
 	                a   
 	                {

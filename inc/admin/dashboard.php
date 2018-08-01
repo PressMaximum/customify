@@ -439,7 +439,7 @@ class Customify_Dashboard {
             ),
             array(
                 'name' => __( 'Advanced Styling', 'customify' ),
-                'desc' => __( 'Control the layout and typography setting for sub navigation, page header cover and more to come soon.', 'customify' ),
+                'desc' => __( 'Control the layout and typography setting for page header title, page header cover and more.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
             ),
             array(

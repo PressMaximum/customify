@@ -32,7 +32,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'type'    => 'image_select',
                 'section' => $level_2_panel.'_layout',
                 'label'   => __( 'Layout', 'customify' ),
-                'default' => 'blog_classic',
+                'default' => 'blog_column',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
                 'choices' => array(

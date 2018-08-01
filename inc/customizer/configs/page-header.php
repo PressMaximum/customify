@@ -550,16 +550,6 @@ class Customify_Page_Header {
             ),
 
             array(
-                'name'            => "{$name}_padding_top",
-                'type'            => 'slider',
-                'section'         => $section,
-                'device_settings' => true,
-                'title'           => __( 'Cover Margin Top', 'customify' ),
-                'selector'        => "{$selector}",
-                'css_format'      => 'padding-top: {{value}};',
-            ),
-
-            array(
                 'name'            => "{$name}_align",
                 'type'            => 'text_align_no_justify',
                 'section'         => $section,
