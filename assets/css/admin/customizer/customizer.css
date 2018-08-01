@@ -13,22 +13,6 @@
     -webkit-transform: rotate(-360deg);
   }
 }
-@-moz-keyframes spinnerRotate {
-  from {
-    -moz-transform: rotate(0deg);
-  }
-  to {
-    -moz-transform: rotate(-360deg);
-  }
-}
-@-ms-keyframes spinnerRotate {
-  from {
-    -ms-transform: rotate(0deg);
-  }
-  to {
-    -ms-transform: rotate(-360deg);
-  }
-}
 .customize--reset-section {
   background: 0 0;
   border: none;
@@ -165,8 +149,11 @@ html[dir="rtl"] .customize--reset-section {
   box-shadow: none;
 }
 .customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span {
+  -webkit-transition: all .2s linear;
   transition: all .2s linear;
-  transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+      -ms-transform: rotate(-90deg);
+          transform: rotate(-90deg);
 }
 .customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f347";
@@ -189,7 +176,9 @@ html[dir="rtl"] .customize--reset-section {
   border-bottom-color: #eee;
 }
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span {
-  transform: rotate(-180deg);
+  -webkit-transform: rotate(-180deg);
+      -ms-transform: rotate(-180deg);
+          transform: rotate(-180deg);
 }
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f347";
@@ -218,9 +207,9 @@ html[dir="rtl"] .customify-field-heading .customify-devices {
   height: 23px;
   padding: 0 0px;
   margin: 0 0 0 1px;
-  -webkit-box-shadow: none;
   box-shadow: none;
   outline: none !important;
+  -webkit-transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
   transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
   color: #bbbbbb;
 }
@@ -301,6 +290,7 @@ html[dir="rtl"] .customify-field-heading .customify-devices {
   top: -1px;
   font: 400 20px/1 dashicons;
   vertical-align: middle;
+  -webkit-transition: all .2s;
   transition: all .2s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -551,6 +541,8 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 }
 
 .customify--gr-inputs {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-left: -2px;
   margin-right: -2px;
@@ -573,7 +565,9 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 .customify--gr-inputs label {
   cursor: pointer;
   width: 25px;
-  flex: none;
+  -webkit-box-flex: 0;
+      -ms-flex: none;
+          flex: none;
   position: relative;
 }
 .customify--gr-inputs label input {
@@ -709,7 +703,9 @@ html[dir="rtl"] .customify-input-slider .ui-slider-range {
   border: 1px solid #CCCCCC;
   border-radius: 50%;
   cursor: pointer;
-  transform: translateX(-5px);
+  -webkit-transform: translateX(-5px);
+      -ms-transform: translateX(-5px);
+          transform: translateX(-5px);
 }
 
 .customify--field-shadow .customify--gr-inputs {
@@ -717,10 +713,14 @@ html[dir="rtl"] .customify-input-slider .ui-slider-range {
 }
 
 .customify--icon-picker {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .customify--icon-picker .customify--icon-preview {
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   border: 1px solid #ddd;
   border-right: 0px;
   cursor: pointer;
@@ -743,7 +743,9 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-preview {
   position: absolute;
   top: 50%;
   left: 13px;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 .customify--icon-picker input {
   box-shadow: none !important;
@@ -752,7 +754,9 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-preview {
 }
 .customify--icon-picker .customify--icon-remove {
   cursor: pointer;
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
   border: 1px solid #ddd;
   border-left: 0px;
   font-size: 18px;
@@ -764,13 +768,16 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-remove {
 .customify--icon-picker .customify--icon-remove .dashicons {
   width: 30px;
   display: block;
-  transform: translateY(2px);
+  -webkit-transform: translateY(2px);
+      -ms-transform: translateY(2px);
+          transform: translateY(2px);
 }
 
 #customify--sidebar-icons {
   position: fixed;
   left: -300px;
   border-right: 1px solid #ddd;
+  -webkit-transition: all .5s ease;
   transition: all .5s ease;
   width: 300px;
   bottom: 0px;
@@ -819,6 +826,7 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   color: #444;
   text-align: left;
   cursor: pointer;
+  -webkit-transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
   transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
   box-sizing: content-box;
   text-decoration: none;
@@ -859,10 +867,13 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   padding: 10px 10px;
   overflow: hidden;
   cursor: pointer;
+  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #customify--sidebar-icons .customify--list-icons li:hover {
-  transform: scale(1.5);
+  -webkit-transform: scale(1.5);
+      -ms-transform: scale(1.5);
+          transform: scale(1.5);
 }
 #customify--sidebar-icons .customify--list-icons:after {
   clear: both;
@@ -903,10 +914,14 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
  Radio Group
  */
 .custom-control-radio_group .customify-radio-list {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .custom-control-radio_group .customify-radio-list p {
-  flex: 1;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
 }
 .custom-control-radio_group .customify-radio-list p:last-child span.label {
   border-right: 1px solid #ccc;
@@ -1039,7 +1054,8 @@ html[dir="rtl"] .custom-control-radio_group .customify-radio-list p:first-child 
   width: 115px;
   height: 115px;
   display: block;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-position {
   position: absolute;
@@ -1120,6 +1136,8 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
 }
 
 .modal--tabs {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-left: -12px;
   margin-right: -12px;
@@ -1127,7 +1145,8 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
   margin-bottom: 15px;
 }
 .modal--tabs div {
-  flex-basis: 100%;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
   max-width: 100%;
   text-align: center;
   padding: 5px 5px 0px;
@@ -1253,7 +1272,9 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
   width: 15px;
   height: 15px;
   background: #fff;
-  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+      -ms-transform: rotate(45deg);
+          transform: rotate(45deg);
   border-radius: 3px;
 }
 html[dir="rtl"] .customify-modal-settings:before {
@@ -1344,6 +1365,7 @@ html[dir="rtl"] .customify-modal-settings:before {
 }
 
 #customize-preview {
+  -webkit-transition: all 500ms;
   transition: all 500ms;
 }
 #customize-preview.cb--preview-panel-show {
@@ -1371,17 +1393,24 @@ html[dir="rtl"] .customify-modal-settings:before {
   display: block;
   background: #f1f1f1;
   border-top: 1px solid #ddd;
+  -webkit-transition: all 500ms;
   transition: all 500ms;
-  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+      -ms-transform: translateY(100%);
+          transform: translateY(100%);
 }
 .customify--customize-builder .panel-name-text {
   display: none;
 }
 .customify--customize-builder.customify--builder-show {
-  transform: translateY(0);
+  -webkit-transform: translateY(0);
+      -ms-transform: translateY(0);
+          transform: translateY(0);
 }
 .customify--customize-builder.customify--builder-show.customify--builder--hide {
-  transform: translateY(100%);
+  -webkit-transform: translateY(100%);
+      -ms-transform: translateY(100%);
+          transform: translateY(100%);
 }
 .customify--customize-builder.customify--builder-show.customify--builder--hide .close-text {
   display: none;
@@ -1404,6 +1433,7 @@ html[dir="rtl"] .customify--customize-builder.customify--builder-show.customify-
   box-sizing: border-box;
 }
 .customify--customize-builder .customify--cb-inner {
+  -webkit-transition: all 500ms;
   transition: all 500ms;
   margin-left: 300px;
   margin-right: 0px;
@@ -1618,13 +1648,16 @@ html[dir="rtl"] .customify--cb-row .customify--cb-row-settings {
   left: 0px;
   width: 100%;
   z-index: 1;
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   bottom: 0px;
 }
 .customify--cb-row .customify--row-inner .row--grid div {
   border-right: 1px dashed #dddddd;
   width: 8.3333333333%;
-  flex-basis: 8.3333333333%;
+  -ms-flex-preferred-size: 8.3333333333%;
+      flex-basis: 8.3333333333%;
   max-width: 8.3333333333%;
   display: block;
 }
@@ -1799,7 +1832,9 @@ html[dir="rtl"] .customify--cb-row .customify--cb-item-name {
 .grid-stack-item .customify--cb-item-add {
   top: 50%;
   right: 10px;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
 }
 .grid-stack-item .customify--cb-item-add:before {
   content: "\f132";
@@ -1809,7 +1844,9 @@ html[dir="rtl"] .customify--cb-row .customify--cb-item-name {
   background: inherit;
   padding: 5px 3px;
   right: 0px;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
   cursor: pointer;
 }
 html[dir="rtl"] .grid-stack-item .customify--cb-item-remove {
@@ -1827,7 +1864,9 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-remove {
   top: 50%;
   right: 22px;
   padding: 5px 3px;
-  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+      -ms-transform: translateY(-50%);
+          transform: translateY(-50%);
   cursor: pointer;
 }
 html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
@@ -2827,7 +2866,8 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 :root .grid-stack-item > .ui-resizable-handle {
-  filter: none;
+  -webkit-filter: none;
+          filter: none;
 }
 
 .grid-stack {
@@ -2892,16 +2932,12 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   background-repeat: no-repeat;
   background-position: center;
   -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-se {
   -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-nw {
@@ -3109,16 +3145,10 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 .grid-stack.grid-stack-animate, .grid-stack.grid-stack-animate .grid-stack-item {
   -webkit-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -moz-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -ms-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -o-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
   transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
 }
 .grid-stack.grid-stack-animate .grid-stack-item.ui-draggable-dragging, .grid-stack.grid-stack-animate .grid-stack-item.ui-resizable-resizing, .grid-stack.grid-stack-animate .grid-stack-item.grid-stack-placeholder {
   -webkit-transition: left 0s, top 0s, height 0s, width 0s;
-  -moz-transition: left 0s, top 0s, height 0s, width 0s;
-  -ms-transition: left 0s, top 0s, height 0s, width 0s;
-  -o-transition: left 0s, top 0s, height 0s, width 0s;
   transition: left 0s, top 0s, height 0s, width 0s;
 }
 .grid-stack.grid-stack-one-column-mode {
@@ -3138,6 +3168,8 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 
 /* Saved templates */
 .save-template-form, .flex-form {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-bottom: 15px;
 }
@@ -3176,7 +3208,8 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 :root .grid-stack-item > .ui-resizable-handle {
-  filter: none;
+  -webkit-filter: none;
+          filter: none;
 }
 
 .grid-stack {
@@ -3242,16 +3275,12 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   background-repeat: no-repeat;
   background-position: center;
   -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-se {
   -webkit-transform: rotate(-45deg);
-  -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-e {
@@ -3467,16 +3496,10 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 }
 .grid-stack.grid-stack-animate, .grid-stack.grid-stack-animate .grid-stack-item {
   -webkit-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -moz-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -ms-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
-  -o-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
   transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
 }
 .grid-stack.grid-stack-animate .grid-stack-item.ui-draggable-dragging, .grid-stack.grid-stack-animate .grid-stack-item.ui-resizable-resizing, .grid-stack.grid-stack-animate .grid-stack-item.grid-stack-placeholder {
   -webkit-transition: left 0s, top 0s, height 0s, width 0s;
-  -moz-transition: left 0s, top 0s, height 0s, width 0s;
-  -ms-transition: left 0s, top 0s, height 0s, width 0s;
-  -o-transition: left 0s, top 0s, height 0s, width 0s;
   transition: left 0s, top 0s, height 0s, width 0s;
 }
 .grid-stack.grid-stack-one-column-mode {
@@ -3493,5 +3516,3 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 .grid-stack.grid-stack-one-column-mode > .grid-stack-item > .ui-resizable-handle {
   display: none;
 }
-
-/*# sourceMappingURL=customizer.css.map */
