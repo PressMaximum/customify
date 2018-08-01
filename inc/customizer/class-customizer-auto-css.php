@@ -182,7 +182,7 @@ class Customify_Customizer_Auto_CSS
         $image = Customify()->get_media($value);
         if ($format) {
             if ($image) {
-                return $this->replace_value($image, $format) . ';';
+                return $this->replace_value($image, $format) . '';
             }
         }
         return false;

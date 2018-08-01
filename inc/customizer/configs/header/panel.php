@@ -75,6 +75,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 		}
 
 		$selector           = '.header--row.' . str_replace( '_', '-', $section );
+		$skin_selector      = '.header--row.' . str_replace( '_', '-', $section );
 		$skin_selector      = '.header--row:not(.header--transparent).' . str_replace( '_', '-', $section );
 		$skin_mode_selector = '.header--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
@@ -166,7 +167,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description'      => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => "{$skin_selector} .header-row--inner"
+					'normal' => "{$skin_selector} .header--row-inner"
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(
