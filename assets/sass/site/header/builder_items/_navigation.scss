@@ -109,12 +109,19 @@
         padding: 0px;
     }
     .sub-menu {
-
         width: $submenu_width;
         background: #ffffff;
         box-shadow: $boxshadow_dropdown;
         text-align: left;
-        border: 1px solid $color_border;
+        &:before {
+            position: absolute;
+            content: "";
+            top: 0px;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            border: 1px solid $color_border;
+        }
         .link-before {
             display: flex;
             justify-content: space-between;
