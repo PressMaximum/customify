@@ -11,7 +11,6 @@
     display: inline-block;
     position: relative;
     box-shadow: none;
-    color: currentColor;
     &:hover {
         box-shadow: none;
         color: currentColor;
@@ -85,11 +84,12 @@
         display: block;
         width: 100%;
         border-radius: 2px;
+        height: 2.4em;
     }
     .search-submit {
         overflow: hidden;
         box-shadow: none;
-        margin-left: -50px;
+        margin-left: -40px;
         background: transparent;
         color: $color_meta;
         line-height: 0px;
@@ -120,7 +120,7 @@
     }
     position: relative;
     margin-top: 15px;
-    box-shadow: 0 2px 3px rgba(127,127,127,0.11);
+    box-shadow: $boxshadow_dropdown;
     label {
         flex-basis: 100%;
     }

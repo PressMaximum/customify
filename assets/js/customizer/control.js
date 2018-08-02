@@ -2173,11 +2173,12 @@
             } );
 
             $( 'input, select, textarea',  $( '.customify-modal-settings--fields' ) ).removeClass('customify-input').addClass( 'customify-typo-input change-by-js' );
+            that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
             _.each( that.fonts, function( group, type ){
-                that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
                 that.optionHtml += '<optgroup label="'+group.title+'">';
                     _.each( group.fonts, function( font, font_name ) {
-                        that.optionHtml += '<option value="'+font_name+'">'+font_name+'</option>';
+                        var label = _.isString( font ) ? font: font_name;
+                        that.optionHtml += '<option value="'+font_name+'">'+label+'</option>';
                     } );
                 that.optionHtml += '</optgroup>';
             } );
@@ -2247,7 +2248,7 @@
             $( '.customify-typo-input[data-name="font_weight"]', that.container ).html( that.toSelectOptions( variants, _.isObject( that.values ) ? that.values.font_weight: '', type ) );
             $( '.customify--font-type', that.container ).val( type );
 
-            if ( type == 'normal' ) {
+            if ( type !== 'google' ) {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).addClass( 'customify--hide').find( '.customify-field-settings-inner' ).html('');
             } else {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).removeClass( 'customify--hide');
@@ -2325,7 +2326,6 @@
                 }
                 data[ f.name ] = customifyField.getValue( f, $( '.customify--group-field[data-field-name="'+f.name+'"]', that.container ) );
             });
-
 
             data.variant = {};
             if ( ! _.isUndefined( that.fonts.google.fonts[ data.font ] ) ) {

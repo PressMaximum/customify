@@ -91,15 +91,23 @@ div.product {
         clear: none;
         margin-top: 0;
         padding: 0;
+        font-size: 2em;
+        line-height: 1.216;
+        @include for_device( tablet ) {
+            font-size: 1.9em;
+        }
+        @include for_device( mobile ) {
+            font-size: 1.7em;
+        }
     }
 
     span.price,
     p.price {
         font-size: 1.25em;
-
+        margin-bottom: 0.875em;
         ins {
             background: inherit;
-            font-weight: 700;
+            font-weight: 500;
             display: inline-block;
         }
 
@@ -107,10 +115,6 @@ div.product {
             opacity: 0.5;
             display: inline-block;
         }
-    }
-
-    p.stock {
-        font-size: 0.92em;
     }
 
     .stock {
@@ -122,7 +126,10 @@ div.product {
     }
 
     .woocommerce-product-rating {
-        margin-bottom: 1.618em;
+        margin-bottom: 0.72em;
+        .woocommerce-review-link {
+            display: none;
+        }
     }
 
     div.images {
@@ -282,12 +289,12 @@ div.product {
     }
 
     form.cart {
-        margin-bottom: 1em;
+        margin-bottom: 1.41575em;
         @include clearfix();
 
         div.quantity {
             float: left;
-            margin: 0 1em 1em 0;
+            margin: 0 1em 0em 0;
         }
 
         table {
@@ -309,9 +316,17 @@ div.product {
         }
 
         .variations {
-            margin-bottom: 1em;
+            margin-bottom: 1.41575em;
             border: 0;
             width: 100%;
+
+            tr {
+                margin-bottom: 0.72em;
+                display: block;
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
 
             td,
             th {
@@ -321,7 +336,7 @@ div.product {
             }
 
             label {
-                font-weight: 700;
+                font-weight: 500;
             }
 
             select {
@@ -330,12 +345,7 @@ div.product {
                 width: 150px;
                 display: inline-block;
                 margin-right: 1em;
-                -webkit-appearance: none;
-                -moz-appearance: none;
                 color: #444444;
-                background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
-                background-position: center right 8px;
-                background-repeat: no-repeat;
             }
             td.label {
                 padding-right: 1em;
@@ -349,6 +359,8 @@ div.product {
         .reset_variations {
             visibility: hidden;
             font-size: 0.83em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .wc-no-matching-variations {
@@ -368,13 +380,18 @@ div.product {
 
             td {
                 vertical-align: top;
-                padding-bottom: 0.5em;
+                //padding-bottom: 0.5em;
                 border: 0;
             }
 
             td:first-child {
-                width: 4em;
+                width: 11em;
                 text-align: center;
+                .button.product_type_variable {
+                    font-size: 0.7em;
+                    min-height: auto;
+                    margin-left: 1em;
+                }
             }
 
             .wc-grouped-product-add-to-cart-checkbox {
@@ -388,22 +405,21 @@ div.product {
 }
 
 span.onsale {
-    min-height: 3.236em;
-    min-width: 3.236em;
-    padding: 0.202em;
-    font-weight: 700;
+    padding: 2px 8px;
     position: absolute;
     text-align: center;
-    line-height: 3.236;
-    top: -0;
-    left: -0;
+    top: 1em;
+    left: 1em;
     margin: 0;
-    border-radius: 100%;
+    border-radius: 2px;
     background-color: $highlight;
     color: $highlightext;
-    font-size: 0.857em;
+    font-size: 0.72em;
     z-index: 9;
     display: flex;
     align-items: center ;
     justify-content: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
 }

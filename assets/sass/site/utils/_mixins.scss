@@ -15,6 +15,14 @@
     }
 }
 
+// Skin mode
+@function black($opacity) {
+    @return rgba(black, $opacity)
+}
+@function white($opacity) {
+    @return rgba(white, $opacity)
+}
+
 
 //$screen_lg: 80em;   // max 1280px
 //$screen_md: 64em;   // max 1024px

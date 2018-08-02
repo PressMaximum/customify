@@ -2,30 +2,25 @@
 * Reviews
 */
 #reviews {
+    margin-bottom: 1.41575em;
+    .comment-reply-title {
+        font-size: 1.4em;
+        margin-bottom: 1em;
+        line-height: 1.216;
+        display: block;
+    }
     h2 small {
         float: right;
-        color: $subtext;
         font-size: 15px;
         margin: 10px 0 0;
-
-        a {
-            text-decoration: none;
-            color: $subtext;
-        }
-    }
-
-    h3 {
-        margin: 0;
-    }
-
-    #respond {
-        margin: 0;
-        border: 0;
-        padding: 0;
     }
 
     #comment {
         height: 75px;
+    }
+
+    .comment-form {
+        margin-bottom: 0px;
     }
 
     #comments {
@@ -51,6 +46,7 @@
                 position: relative;
                 background: 0;
                 border: 0;
+                width: 100%;
 
                 .meta {
                     color: $subtext;
@@ -62,19 +58,17 @@
                     position: absolute;
                     top: 0;
                     left: 0;
-                    padding: 3px;
-                    width: 32px;
+                    width: 50px;
                     height: auto;
-                    background: $secondary;
-                    border: 1px solid darken( $secondary, 3% );
+                    border: 1px solid $color_border;
                     margin: 0;
                     box-shadow: none;
                 }
 
                 .comment-text {
-                    margin: 0 0 0 50px;
-                    border: 1px solid darken( $secondary, 3% );
-                    border-radius: 4px;
+                    margin: 0 0 0 70px;
+                    border: 1px solid $color_border;
+                    border-radius: 1px;
                     padding: 1em 1em 0;
                     @include clearfix();
 
@@ -84,6 +78,14 @@
 
                     p.meta {
                         font-size: 0.83em;
+                        time {
+                            text-transform: uppercase;
+                            letter-spacing: 0.5px;
+                            font-size: 0.8em;
+                        }
+                    }
+                    .star-rating {
+                        margin-bottom: 4px;
                     }
                 }
             }
@@ -109,15 +111,54 @@
             content: '';
         }
     }
+
+}
+
+/* Review Form */
+#review_form {
+    padding: 1.6em 2em 2em;
+    border: 2px solid $color_primary;
+    .comment-reply-title {
+
+    }
+    #respond {
+        p {
+            margin: 0 0 15px;
+            &.form-submit {
+                margin-bottom: 0;
+            }
+        }
+        .comment-form-author, .comment-form-email {
+            width: 48%;
+        }
+        .comment-form-author {
+            float: left;
+            margin-right: 3.8823529412%;
+        }
+        .comment-form-email {
+            float: right;
+        }
+        .form-submit {
+            width: 100%;
+        }
+        .comment-subscription-form {
+            margin-bottom: 0;
+        }
+        label {
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.875em;
+        }
+    }
 }
 
 /**
  * Star ratings
  */
 .comment-form-rating a, .star-rating{
-    color: #f9ca63;
-    &:hover {
-        color: #f9ca63;
+    color: $color_secondary;
+    &:hover, &:focus {
+        color: $color_secondary;
     }
 }
 .star-rating {
@@ -175,29 +216,6 @@
     margin: 10px 0 0;
 }
 
-#review_form #respond {
-    @include clearfix();
-    position: static;
-    margin: 0;
-    width: auto;
-    padding: 0;
-    background: transparent none;
-    border: 0;
-
-    p {
-        margin: 0 0 10px;
-    }
-
-    .form-submit input {
-        left: auto;
-    }
-
-    textarea {
-        box-sizing: border-box;
-        width: 100%;
-    }
-}
-
 p.stars {
     a {
         position: relative;
@@ -245,3 +263,4 @@ p.stars {
         }
     }
 }
+

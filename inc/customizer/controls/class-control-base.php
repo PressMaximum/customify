@@ -23,6 +23,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     public $device = '';
     public $devices = null;
     public $checkbox_label = '';
+    public $placeholder = '';
     public $reset_controls = array();
     public $limit ;
 
@@ -34,7 +35,6 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 
     // For CSS Ruler
     public $fields_disabled = array();
-
 
     public $limit_msg = '';
     public $live_title_field; // for repeater
@@ -112,6 +112,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         $this->json['value']        = $value;
 
         $this->json['default']      = $this->defaultValue;
+        $this->json['placeholder']  = $this->placeholder;
         $this->json['fields']       = $this->fields;
         $this->json['setting_type'] = $this->setting_type;
         $this->json['required']     = $this->required;
@@ -205,7 +206,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         wp_enqueue_style('customify-customizer-control', esc_url( get_template_directory_uri() ) .'/assets/css/admin/customizer/customizer'.$suffix.'.css');
         wp_enqueue_style('select2', esc_url( get_template_directory_uri() ) .'/assets/css/admin/select2'.$suffix.'.css');
         wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/customizer/color-picker-alpha'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
-        wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ).'/assets/js/select2'.$suffix.'.js', array( 'wp-color-picker' ), false, true );
+        wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ).'/assets/js/select2'.$suffix.'.js', array( 'jquery' ), false, true );
         wp_enqueue_script( 'customify-customizer-control', esc_url( get_template_directory_uri() ).'/assets/js/customizer/control'.$suffix.'.js', array( 'jquery', 'customize-base', 'jquery-ui-core', 'jquery-ui-sortable' ), false, true );
         if ( is_null( self::$_args_loaded ) ) {
 
@@ -387,7 +388,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         ?>
         <?php echo self::field_header(); ?>
         <div class="customify-field-settings-inner">
-            <input type="{{ field.type }}" class="customify-input customify-only" data-name="{{ field.name }}" value="{{ field.value }}">
+            <input type="{{ field.type }}" class="customify-input customify-only" placeholder="{{ field.placeholder }}" data-name="{{ field.name }}" value="{{ field.value }}">
         </div>
         <?php
         self::after_field();

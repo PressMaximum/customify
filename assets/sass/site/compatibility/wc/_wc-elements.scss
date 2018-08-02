@@ -1,3 +1,8 @@
+/*
+# Buttons
+# Price amount
+*/
+
 /**
  * Buttons
  */
@@ -101,11 +106,15 @@
 .button.alt,
 .button.added_to_cart,
 .button.checkout,
+.button.product_type_grouped,
+.button.product_type_external,
 .button.product_type_variable
 {
     background: $color_secondary;
+    position: relative;
+    cursor: pointer;
     &.loading {
-        opacity: 0.25;
+        opacity: 0.5;
         padding-right: 2.618em;
         &:after {
             font-family: 'WooCommerce';
@@ -113,7 +122,7 @@
             vertical-align: top;
             font-weight: 400;
             position: absolute;
-            top: 0.618em;
+            top: 0.02em;
             right: 1em;
             animation: spin 2s linear infinite;
         }
@@ -126,14 +135,29 @@
     }
 }
 
+.products {
+    .button.add_to_cart_button,
+    .button.added_to_cart,
+    .button.product_type_variable,
+    .wc-product-contents .button
+    {
+        font-size: 0.8em;
+        min-height: auto;
+    }
+}
+.single_add_to_cart_button {
+    font-size: 1.04em;
+}
+
 /* Remove Button */
 a.remove {
     width: 20px;
     height: 20px;
     border: 1px solid #ccc;
     color: #ccc;
-    border-radius: 2px;
-    font-size: 17px !important;
+    border-radius: 100px;
+    font-family: sans-serif !important;
+    font-size: 16px !important;
     font-weight: normal;
     line-height: 16px !important;
     display: block;
@@ -144,3 +168,11 @@ a.remove {
     }
 }
 
+/* Price */
+.price {
+    line-height: 1;
+}
+
+span.amount, .price {
+    font-weight: 600;
+}

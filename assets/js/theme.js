@@ -50,7 +50,6 @@ jQuery( document ).ready( function( $ ){
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
-
     };
 
     // Toggle sub menu
@@ -59,6 +58,12 @@ jQuery( document ).ready( function( $ ){
         var li = $( this ).closest('li');
         li.toggleClass('open-sub');
         $( ' > ul.sub-menu, .sub-lv-0', li ).slideToggle( 500 );
+    } );
+
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
+        if ($( e.target ).is( '.nav-toggle-icon' ) ) {
+            e.preventDefault();
+        }
     } );
 
     var insertMenuOverlayClass = function() {

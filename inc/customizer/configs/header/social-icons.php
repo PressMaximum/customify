@@ -165,7 +165,7 @@ class Customify_Builder_Item_Social_Icons {
 				'device_settings' => true,
 				'section'         => $section,
 				'min'             => 0,
-				'max'             => 20,
+				'max'             => 30,
 				'selector'        => "$selector li",
 				'css_format'      => 'margin-left: {{value}}; margin-right: {{value}};',
 				'label'           => __( 'Icon Spacing', 'customify' ),

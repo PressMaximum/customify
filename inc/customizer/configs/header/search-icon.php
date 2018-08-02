@@ -211,15 +211,15 @@ class Customify_Builder_Item_Search_Icon
                 'device_settings' => true,
                 'default' => array(
                     'desktop' => array(
-                        'value' => -41,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'tablet' => array(
-                        'value' => -41,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'mobile' => array(
-                        'value' => -41,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                 ),

@@ -45,6 +45,8 @@ class Customify_WC {
             add_filter('customify/styling/primary-color', array($this, 'styling_primary'));
             add_filter('customify/styling/secondary-color', array($this, 'styling_secondary'));
             add_filter('customify/styling/link-color', array($this, 'styling_linkcolor'));
+            add_filter('customify/styling/color-border', array($this, 'styling_border_color'));
+            add_filter('customify/styling/color-meta', array($this, 'styling_meta_color'));
 
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
@@ -65,6 +67,9 @@ class Customify_WC {
             // wc_set_loop_prop( 'name', 'related' );
             add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
             add_filter( 'woocommerce_output_related_products_args',  array( $this, 'related_products_args' ) );
+            add_filter( 'woocommerce_upsell_display_args',  array( $this, 'updsell_products_args' ) );
+            add_action( 'woocommerce_before_single_product',  array( $this, 'maybe_disable_upsell' ), 1 );
+            add_action( 'woocommerce_before_single_product',  array( $this, 'maybe_disable_related' ), 1 );
 
 	        // Catalog config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog.php';
@@ -72,9 +77,10 @@ class Customify_WC {
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+	        // Single colors config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
-
 
         }
     }
@@ -102,8 +108,14 @@ class Customify_WC {
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-        } elseif ( $name == 'related' ) {
-            $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
+        } elseif ( $name == 'related' || $name == 'up-sells' ) {
+
+            if ( $name == 'up-sells' ) {
+                $columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
+            } else {
+                $columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
+            }
+
             $columns = wp_parse_args( $columns, array(
                     'desktop' => 3,
                     'tablet' => 3,
@@ -132,6 +144,32 @@ class Customify_WC {
     function related_products_args( $args ) {
 	    $args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_related_number' );
 	    return $args;
+    }
+
+    function maybe_disable_related(){
+        $n =  Customify()->get_setting( 'wc_single_product_related_number' );
+        if ( $n == 0 ) {
+            remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
+        }
+    }
+
+    function maybe_disable_upsell(){
+        $n =  Customify()->get_setting( 'wc_single_product_upsell_number' );
+        if ( $n == 0 ) {
+            remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+        }
+    }
+
+    /**
+     * Custom number related products
+     *
+     * @param $args
+     *
+     * @return mixed
+     */
+    function updsell_products_args( $args ) {
+        $args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_upsell_number' );
+        return $args;
     }
 
 
@@ -178,7 +216,6 @@ class Customify_WC {
      * Load load theme styling instead.
      */
     function custom_styles( $enqueue_styles ) {
-
         $suffix = Customify()->get_asset_suffix();
         $enqueue_styles['woocommerce-general']['src'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce'.$suffix.'.css';
         $enqueue_styles['woocommerce-general']['deps'] = 'customify-style';
@@ -225,9 +262,15 @@ class Customify_WC {
     function styling_primary( $selector ){
         $selector .= ' 
         
-        .xx
-        {
-            background-color: {{value}};
+        .wc-view-mod.active,
+        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active,
+        #review_form {
+            border-color: {{value}};
+        }
+        
+        .wc-view-mod.active,
+        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
+            color: {{value}};
         }';
 
         return $selector;
@@ -250,6 +293,39 @@ class Customify_WC {
 		.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
         .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
             color: {{value}};
+        }';
+
+		return $selector;
+	}
+
+	function styling_border_color( $selector ){
+		$selector .= '
+		.widget_price_filter .price_slider_wrapper .ui-widget-content {
+		    background-color: {{value}};
+		}
+		.product_list_widget li,
+		#reviews #comments ol.commentlist li .comment-text,
+		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
+		.product_meta > span,
+		.woocommerce-tabs.wc-tabs-horizontal ul.tabs,
+		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li:first-child {
+            border-color: {{value}};
+        }';
+
+		return $selector;
+	}
+
+	function styling_meta_color( $selector ){
+		$selector .= '
+		.widget_price_filter .ui-slider .ui-slider-handle {
+		    border-color: {{value}};
+		}
+		.wc-product-inner .wc-product__category a {
+		    color: {{value}};
+		}
+		.widget_price_filter .ui-slider .ui-slider-range,
+		.widget_price_filter .price_slider_amount .button {
+            background-color: {{value}};
         }';
 
 		return $selector;
@@ -489,9 +565,20 @@ function customify_get_default_catalog_view_mod(){
 	    return apply_filters( 'customify_get_default_catalog_view_mod', 'grid' ) ;
     }
 
-    if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) &&  $_COOKIE['customify_wc_pl_view_mod'] ) {
-        if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
-            $default = $_COOKIE['customify_wc_pl_view_mod'];
+    $use_cookies = true;
+    if ( is_customize_preview() ) {
+        $use_cookies = false;
+    }
+
+    if ( ! Customify()->get_setting( 'wc_cd_show_view_mod') ) {
+        $use_cookies = false;
+    }
+
+    if ( $use_cookies ) { // do not use cookie in customize
+        if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) &&  $_COOKIE['customify_wc_pl_view_mod'] ) {
+            if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
+                $default = $_COOKIE['customify_wc_pl_view_mod'];
+            }
         }
     }
 
@@ -501,6 +588,7 @@ function customify_get_default_catalog_view_mod(){
 
 	return apply_filters( 'customify_get_default_catalog_view_mod', $default ) ;
 }
+
 
 if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 	/**
@@ -513,6 +601,22 @@ if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 
 		echo '<a href="' . esc_url( $link ) . '" class="woocommerce-LoopProduct-link woocommerce-loop-product__link">';
 	}
+}
+
+if ( ! function_exists( 'woocommerce_shop_loop_item_title' ) ) {
+    /**
+     * overridden function woocommerce_shop_loop_item_title
+     */
+    /**
+     * Show the product title in the product loop. By default this is an H2.
+     */
+    function woocommerce_template_loop_product_title() {
+        echo '<h2 class="woocommerce-loop-product__title">';
+            woocommerce_template_loop_product_link_open();
+            echo get_the_title();
+            woocommerce_template_loop_product_link_close();
+        echo '</h2>';
+    }
 }
 
 /**

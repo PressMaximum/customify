@@ -2,7 +2,12 @@
     padding: 0px;
     border-left: none;
     border-right: none;
-    background: #f0f0f0;
-    color: #6d6d6d;
-    box-shadow: 0 1px 2px 0 #e1e5ea;
+    //background: #f0f0f0;
+    .light-mode {
+        background: #f0f0f0;
+        box-shadow: 0 1px 2px 0 #e1e5ea;
+    }
+    .dark-mode {
+        background: #303030;
+    }
  }

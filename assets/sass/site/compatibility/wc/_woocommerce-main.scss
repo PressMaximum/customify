@@ -55,23 +55,6 @@ p.demo_store,
 /**
  * Main WooCommerce styles
  */
-.product {
-    .price {
-        color: $highlight;
-    }
-
-}
-
-.woocommerce {
-    ul.products {
-        .onsale {
-            top: 0;
-            right: 0;
-            left: auto;
-            margin: 0;
-        }
-    }
-}
 
 /**
 * Quantity input
@@ -94,9 +77,9 @@ p.demo_store,
         text-align: center;
         line-height: 2.2em;
         min-height: 2.6em;
-        padding: 0px 0.5em;
+        padding: 0px 0.2em;
+        min-width: 1.5em;
         cursor: pointer;
-        min-width: 2em;
         -webkit-user-select: none;
         -moz-user-select: none;
         -ms-user-select: none;
@@ -202,7 +185,7 @@ p.demo_store,
 
         th {
             width: 150px;
-            font-weight: 700;
+            font-weight: 600;
             padding: 1em;
             border-top: 0;
             border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
@@ -220,7 +203,10 @@ p.demo_store,
 
             p {
                 margin: 0;
-                padding: 8px 0;
+                padding: 0px 0 10px 0px;
+                &:last-child {
+                    padding-bottom: 0;
+                }
             }
         }
 
@@ -239,7 +225,7 @@ p.demo_store,
         border-radius: 1px;
 
         th {
-            font-weight: 700;
+            font-weight: 600;
             padding: 9px 12px;
         }
 
@@ -263,7 +249,7 @@ p.demo_store,
         tfoot td,
         tfoot th,
         tbody th {
-            font-weight: 700;
+            font-weight: 600;
             border-top: 1px solid rgba(0, 0, 0, 0.1);
         }
     }
@@ -450,7 +436,7 @@ p.demo_store,
 
     ol.commentlist.notes li.note {
         p.meta {
-            font-weight: 700;
+            font-weight: 600;
             margin-bottom: 0;
         }
 

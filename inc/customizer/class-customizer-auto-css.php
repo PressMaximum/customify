@@ -3,9 +3,10 @@
 class Customify_Customizer_Auto_CSS
 {
     static $_instance;
-    private $fonts = array();
-    private $variants = array();
-    private $subsets = array();
+    public $fonts = array();
+    public $custom_fonts = array();
+    public $variants = array();
+    public $subsets = array();
 
     static $code = null;
     static $font_url = null;
@@ -181,7 +182,7 @@ class Customify_Customizer_Auto_CSS
         $image = Customify()->get_media($value);
         if ($format) {
             if ($image) {
-                return $this->replace_value($image, $format) . ';';
+                return $this->replace_value($image, $format) . '';
             }
         }
         return false;
@@ -371,6 +372,17 @@ class Customify_Customizer_Auto_CSS
             $listTabs = $tabs;
         }
 
+        // Do no use bg settings if no bg
+        if( isset( $values['normal']['bg_image'] ) ){
+            $image = Customify()->get_media( $values['normal']['bg_image'] );
+            if ( ! $image ) {
+                unset( $values['normal']['bg_repeat'] );
+                unset( $values['normal']['bg_cover'] );
+                unset( $values['normal']['bg_position'] );
+                unset( $values['normal']['bg_attachment'] );
+            }
+        }
+
         $normal_style = $this->loop_fields($listNormalFields, $values['normal'], true, true);
         $hover_style = $this->loop_fields($listHoverFields, $values['hover'], true, true);
 
@@ -542,6 +554,8 @@ class Customify_Customizer_Auto_CSS
             if ($value['subsets']) {
                 $this->subsets = array_merge($this->subsets, $value['subsets']);
             }
+        } else {
+            $this->custom_fonts[$value['font']] = $value['font'];
         }
 
         return "font-family: \"{$value['font']}\";";
@@ -924,7 +938,7 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
-        $css_code = apply_filters( 'customify/auto-css', $css_code  );
+        $css_code = apply_filters( 'customify/auto-css', $css_code, $this  );
 
         $url = $this->get_google_fonts_url();
         self::$font_url = $url;

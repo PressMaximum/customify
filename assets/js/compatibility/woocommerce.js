@@ -130,6 +130,9 @@ jQuery( document ).ready( function ( $ ) {
     if (  woocommerce_params.qty_pm ) {
         $( 'input.qty[type="number"]' )._wc_plus_minus();
     }
+    $( document.body ).on( 'updated_wc_div', function(){
+        $( 'input.qty[type="number"]' )._wc_plus_minus();
+    } );
 
 
 } );

@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 400;
     font-family: $font_main;
     margin: 0 0 ms(-3);
-    color: darken($color_text, 10%);
+    color: $color_heading;
     clear: both;
 }
 
@@ -163,6 +163,7 @@ a.plain_color {
 a {
     color: $color_link;
     text-decoration: none;
+    transition: all 0.14s ease-out;;
     &:hover, &:focus {
         color: $color_link_hover;
     }
@@ -259,34 +260,6 @@ table {
     margin-left: 0px;
 }
 
-/* Pre-defined elements */
-.text-xsmall {
-    font-size: 0.72em;
-}
-.text-small {
-    font-size: 0.875em;
-}
-.text-large {
-    font-size: 1.1em;
-}
-.text-uppercase {
-    text-transform: uppercase;
-    line-height: 1.2;
-    &.text-xsmall {
-        letter-spacing: 0.5px;
-    }
-}
-.link-meta, .link-meta a {
-    color: $color_meta;
-}
-.link-meta a:hover {
-    color: $color_link_hover;
-}
-.color-meta {
-    color: $color_meta;
-}
-
-
 /*--------------------------------------------------------------
 # Forms
 --------------------------------------------------------------*/
@@ -328,6 +301,14 @@ textarea {
         background-color: #f9f9f9;
     }
 }
+select {
+    box-shadow: none;
+    background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
+    background-position: center right 8px;
+    background-repeat: no-repeat;
+    padding-right: 1.5em;
+    cursor: pointer;
+}
 
 .button,
 button,
@@ -348,6 +329,7 @@ input[type="submit"] {
     &:hover {
         box-shadow: inset 0 0 0 120px rgba(0,0,0,0.18);
         color: #FFFFFF;
+        outline: none;
     }
     &:active,
     &:focus {
@@ -361,6 +343,9 @@ input[type="reset"],
 input[type="submit"] {
     color: #FFFFFF;
     background: $color_primary;
+    &:focus {
+        color: #FFFFFF;
+    }
 }
 
 .button[disabled], button[disabled], button.disabled, .button.disabled {
@@ -701,11 +686,181 @@ article.comment {
 /*--------------------------------------------------------------
 ## Helper
 --------------------------------------------------------------*/
+
+// Shape
 .shape-rounded {
     border-radius: 10%;
 }
+
 .shape-circle {
     border-radius: 50%;
+}
+
+// Pre-defined classes.
+.text-xsmall {
+    font-size: 0.72em;
+}
+
+.text-small {
+    font-size: 0.875em;
+}
+
+.text-large {
+    font-size: 1.1em;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+    line-height: 1.2;
+    &.text-xsmall {
+        letter-spacing: 0.5px;
+    }
+}
+
+.link-meta, .link-meta a {
+    color: $color_meta;
+}
+
+.link-meta a:hover {
+    color: $color_link_hover;
+}
+
+.color-meta {
+    color: $color_meta;
+}
+
+// Skin mode
+
+.dark-mode {
+    .header--row & {
+        color: $light_color;
+        background: $dark_bg;
+    }
+
+    // Header items
+    .nav-menu-desktop {
+        &.style-border-top,
+        &.style-border-bottom,
+        &.style-plain {
+            .nav-menu {
+                > li {
+                    > a {
+                        &:hover, &:focus {
+                            color: $light_color_link_hover
+                        }
+                    }
+                    &.current-menu-item, &.current-menu-ancestor {
+                        > a {
+                            color: $light_color_link_hover
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Site identity
+    .site-title,
+    .site-title a {
+        color: $light_color_link_hover;
+    }
+
+    .customify-builder-social-icons.color-custom li a,
+    .search-icon,
+    .menu-mobile-toggle,
+    .nav-menu > li > a,
+    .item--html a {
+        color: $light_color_link;
+        &:hover {
+            color: $light_color_link_hover;
+        }
+    }
+
+    .cart-item-link {
+        color: $light_color_link;
+        .cart-icon {
+            color: $light_color_link_hover;
+        }
+        &:hover {
+            color: $light_color_link_hover;
+        }
+    }
+
+    // Only for dark mode
+    .header-search_box-item {
+        .search-field {
+            background: white(0.3);
+            border-color: $light_color_border;
+            color: $light_color_link;
+            &::placeholder {
+                color: $light_color_link;
+            }
+        }
+        .search-submit {
+            color: $light_color_link;
+            &:hover {
+                color: $light_color_link_hover;
+            }
+        }
+    }
+
+}
+
+.light-mode{
+    .header--row & {
+        color: $dark_color;
+        background: $light_bg;
+    }
+
+    // Header items
+    .nav-menu-desktop {
+        &.style-border-top,
+        &.style-border-bottom,
+        &.style-plain {
+            .nav-menu {
+                > li {
+                    > a {
+                        &:hover, &:focus {
+                            color: $dark_color_link_hover
+                        }
+                    }
+                    &.current-menu-item, &.current-menu-ancestor {
+                        > a {
+                            color: $dark_color_link_hover
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Site identity
+    .site-title,
+    .site-title a {
+        color: $dark_color_link_hover;
+    }
+
+    .customify-builder-social-icons.color-custom li a,
+    .search-icon,
+    .menu-mobile-toggle,
+    .item--html a,
+    .nav-menu > li > a {
+        color: $dark_color_link;
+        &:hover {
+            color: $dark_color_link_hover;
+        }
+    }
+
+    .cart-item-link {
+        color: $dark_color_link;
+        .cart-icon {
+            color: $dark_color_link_hover;
+        }
+        &:hover {
+            color: $dark_color_link_hover;
+        }
+    }
+
 }
 
 /* Customize Preview */
@@ -715,7 +870,7 @@ article.comment {
     .builder-item-focus {
         &.item--inner {
             position: relative;
-            &.item--m {
+            &.has_menu {
                 position: initial;
                 .item--preview-name {
                     left: auto;

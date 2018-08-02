@@ -9,13 +9,27 @@
     .wc-product-name, .quantity {
         display: block;
     }
+    .reviewer {
+        font-size: 0.72em;
+        position: relative;
+        top: -4px;
+        text-transform: uppercase;
+    }
     li {
         margin: 0;
         list-style: none;
         position: relative;
-        padding-left: 60px;
-        min-height: 50px;
+        padding-left: 75px;
+        min-height: 74px;
         display: block;
+        padding-bottom: 12px;
+        margin-bottom: 12px !important;
+        border-bottom: 1px solid $color_border;
+        &:last-child {
+            border-bottom: none;
+            margin-bottom: 0 !important;
+            padding-bottom: 0 !important;
+        }
         a {
             display: block;
             line-height: 1.2;
@@ -24,19 +38,26 @@
                 text-decoration: none;
             }
         }
+        .amount {
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
 
         @include medialeft();
 
         img {
             float: left;
-            margin-right: 10px;
-            width: 50px;
-            height: auto;
+            margin-right: 15px;
+            width: 60px;
+            height: 60px;
             box-shadow: none;
             position: absolute;
             top: 0px;
             left: 0px;
             right: auto;
+            &:hover {
+                opacity: 0.8;
+            }
         }
 
         dl {
@@ -118,8 +139,8 @@
 
 
 /**
-     * Layered nav widget
-     */
+* Layered nav widget
+*/
 .woocommerce-widget-layered-nav-list {
     margin: 0;
     padding: 0;
@@ -184,9 +205,15 @@
         line-height: 2.4;
         font-size: 0.8751em;
 
+        .from, .to {
+            font-weight: bolder;
+        }
+
         .button {
-            font-size: 1.15em;
+            font-size: 0.875em;
             float: left;
+            background: $color_meta;
+            min-height: auto;
         }
     }
 
@@ -202,7 +229,8 @@
         z-index: 2;
         width: 1em;
         height: 1em;
-        background-color: $color_primary;
+        background-color: #FFF;
+        border: 2px solid $color_meta;
         border-radius: 1em;
         cursor: ew-resize;
         outline: none;
@@ -218,7 +246,7 @@
         display: block;
         border: 0;
         border-radius: 1em;
-        background-color: $color_primary;
+        background-color: $color_meta;
     }
 
     .price_slider_wrapper .ui-widget-content {
