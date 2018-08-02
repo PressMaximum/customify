@@ -1,3 +1,8 @@
+= 0.2.1 =
+* IMPROVED: Revert styling settings for header rows.
+* IMPROVED: Improve toggle mobile menu.
+* FIXED: Fix issue header row background image not showing.
+
 = 0.2.0 =
 * NOTES: This is a major update with new features and Customizer settings re-structure, if you see any visual
 changes on the site front-end please go to the Customizer to update options.

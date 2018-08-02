@@ -151,15 +151,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			),
 
 			array(
-				'name'       => "{$section}_background_color",
-				'type'       => 'color',
-				'section'    => $section,
-				'title'      => __( 'Background Color', 'customify' ),
-				'selector'   => "{$selector} .header--row-inner",
-				'css_format' => 'background-color: {{value}}',
-			),
-
-			array(
 				'name'             => $section . '_styling',
 				'type'             => 'styling',
 				'section'          => $section,
@@ -175,7 +166,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 						'text_color' => false,
 						'link_color' => false,
 						'padding'    => false,
-						'bg_color'   => false,
 						'margin'     => false,
 					),
 					'hover_fields'  => false,
