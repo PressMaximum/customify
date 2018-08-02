@@ -140,14 +140,43 @@ class Customify_Builder_Footer  extends  Customify_Customize_Builder_Panel
 		        )
 	        ),
 
-	        array(
-		        'name'       => "{$section}_background_color",
-		        'type'       => 'color',
-		        'section'    => $section,
-		        'title'      => __( 'Background Color', 'customify' ),
-		        'selector'   => "{$selector} .footer--row-inner",
-		        'css_format' => 'background-color: {{value}}',
-	        ),
+            array(
+                'name' => $section.'_styling',
+                'type' => 'styling',
+                'section' => $section,
+                'description'  => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
+                'selector' => array(
+                    'normal' => "{$selector} .footer--row-inner",
+                    'normal_padding' => $selector.' .customify-container',
+                    'normal_link_color' => "{$selector}  a",
+                    'hover_link_color' => "{$selector} a:hover",
+                ),
+                'css_format' => 'styling', // styling
+                'fields' => array(
+                    'normal_fields' => array(
+                        //'padding' => false // disable for special field.
+                    ),
+                    'hover_fields' => array(
+                        'text_color' => false,
+                        'padding' => false,
+                        'bg_color' => false,
+                        'bg_heading' => false,
+                        'bg_cover' => false,
+                        'bg_image' => false,
+                        'bg_repeat' => false,
+                        'bg_attachment' => false,
+                        'bg_position' => false,
+                        'border_heading' => false,
+                        'border_color' => false,
+                        'border_radius' => false,
+                        'border_width' => false,
+                        'border_style' => false,
+                        'box_shadow' => false,
+                    ), // disable hover tab and all fields inside.
+                )
+            ),
+
+
         );
 
         return $config;
