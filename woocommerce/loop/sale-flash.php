@@ -59,12 +59,12 @@ if ( $product->is_on_sale() ) {
 			            $maximumper = $percentage;
 		            }
 	            }
-	            $text = sprintf( __( '%s', 'woocommerce', 'customify' ), - $maximumper . '%' );
+	            $text = sprintf( __( '%s','customify' ), - $maximumper . '%' );
 
             } else if ( $product_type == 'simple' ) {
 	            //$percentage = round( ( ( $product->regular_price - $product->sale_price ) / $product->regular_price ) * 100 );
 	            $percentage = round( ( ( $product->get_regular_price() - $product->get_sale_price() ) / $product->get_regular_price() ) * 100 );
-	            $text = sprintf( __( '%s', 'woocommerce', 'customify' ), - $percentage . '%' );
+	            $text = sprintf( __( '%s', 'customify' ), - $percentage . '%' );
             }
             break;
         default:
