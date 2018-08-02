@@ -61,6 +61,12 @@ jQuery( document ).ready( function( $ ){
         $( ' > ul.sub-menu, .sub-lv-0', li ).slideToggle( 500 );
     } );
 
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
+        if ($( e.target ).is( '.nav-toggle-icon' ) ) {
+            e.preventDefault();
+        }
+    } );
+
     var insertMenuOverlayClass = function() {
         if ( $( 'body' ).hasClass( 'menu_sidebar_slide_overlay' ) ) {
             $('.nav-menu-mobile').addClass('nav-menu-overlay');
