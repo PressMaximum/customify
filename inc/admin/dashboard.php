@@ -88,11 +88,19 @@ class Customify_Dashboard {
         $this->setup();
         $this->page_header();
         echo '<div class="wrap">';
-        $this->page_inner();
+        $cb = apply_filters( 'customify/dashboard/content_cb',  false );
+        if ( ! is_callable( $cb ) ) {
+            $cb = array( $this, 'page_inner' );
+        }
+
+        if ( is_callable( $cb ) ) {
+            call_user_func_array( $cb, array( $this ) );
+        }
+
         echo '</div>';
     }
 
-    private function page_header(){
+    public function page_header(){
         ?>
         <div class="cd-header">
             <div class="cd-row">
@@ -489,7 +497,6 @@ class Customify_Dashboard {
     }
 
     private function page_inner(){
-
         ?>
         <div id="plugin-filter" class="cd-row metabox-holder">
             <hr class="wp-header-end">

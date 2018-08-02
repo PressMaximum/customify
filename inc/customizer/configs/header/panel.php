@@ -249,8 +249,8 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'live_title_field' => 'title',
 				'selector'         => array(
 					'normal'               => $selector,
-					'normal_link_color'    => "{$selector} .menu li a, {$selector} .item--html a, {$selector} .cart-item-link",
-					'hover_link_color'     => "{$selector} .menu li a:hover, {$selector} .item--html a:hover, {$selector} .cart-item-link:hover",
+					'normal_link_color'    => "{$selector} .menu li a, {$selector} .item--html a, {$selector} .cart-item-link, {$selector} .nav-toggle-icon",
+					'hover_link_color'     => "{$selector} .menu li a:hover, {$selector} .item--html a:hover, {$selector} .cart-item-link:hover, {$selector} li.open-sub .nav-toggle-icon",
 					'normal_bg_color'      => "#header-menu-sidebar-bg:before",
 					'normal_bg_image'      => "#header-menu-sidebar-bg:before",
 					'normal_bg_attachment' => "#header-menu-sidebar-bg:before",

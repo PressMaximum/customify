@@ -44,7 +44,8 @@ jQuery( document ).ready( function( $ ){
                 if (is_previewing) {
                    // first_a.attr('href', 'javascript:;');
                 }
-                first_a.append('<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>');
+                var toggle_button = '<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>';
+                $( toggle_button ).insertAfter( first_a );
                 $(' > .sub-menu', $el).prepend(d);
                 $(' > .sub-menu, .sub-lv-0', $el).slideUp(0);
                 d.wrap('<li class="menu-item li-duplicator"></li>');
@@ -53,17 +54,11 @@ jQuery( document ).ready( function( $ ){
     };
 
     // Toggle sub menu
-    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a > .nav-toggle-icon', function( e ){
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children .nav-toggle-icon', function( e ){
         e.preventDefault();
         var li = $( this ).closest('li');
         li.toggleClass('open-sub');
         $( ' > ul.sub-menu, .sub-lv-0', li ).slideToggle( 500 );
-    } );
-
-    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a', function( e ){
-        if ($( e.target ).is( '.nav-toggle-icon' ) ) {
-            e.preventDefault();
-        }
     } );
 
     var insertMenuOverlayClass = function() {

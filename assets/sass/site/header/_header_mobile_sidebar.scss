@@ -110,7 +110,7 @@ body {
         .sub-menu a,
         .cart-item-link,
         .item--html a,
-        .nav-menu a {
+        .nav-menu a, .nav-menu .nav-toggle-icon {
             color: $light_color_link;
             &:hover {
                 color: $light_color_link_hover;
