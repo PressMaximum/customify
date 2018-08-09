@@ -105,6 +105,7 @@ class Customify_WC {
         wc_set_loop_prop( 'media_secondary', Customify()->get_setting( 'wc_cd_media_secondary' ) );
 
         if ( ! $name ) { // main loop
+            wc_set_loop_prop( 'columns', get_option( 'woocommerce_catalog_columns' ) );
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 

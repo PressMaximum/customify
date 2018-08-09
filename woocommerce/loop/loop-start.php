@@ -14,8 +14,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 do_action( 'customify_wc_loop_start' );
 
-$columns = wc_get_loop_prop( 'columns', 3 );
-$tablet = wc_get_loop_prop( 'tablet_columns' , 2 );
+$columns = intval( wc_get_loop_prop( 'columns', 3 ) );
+$tablet = intval( wc_get_loop_prop( 'tablet_columns' , 2 ) );
+$mobile = intval( wc_get_loop_prop( 'mobile_columns' , 1 ) );
+
 if ( $tablet > $columns && $columns > 1 ) {
 	$tablet = $columns;
 }
@@ -24,10 +26,11 @@ if ( ! $tablet ) {
 	$tablet = $columns;
 }
 
-$mobile = wc_get_loop_prop( 'mobile_columns' , 1 );
-if ( $mobile > $tablet  && $tablet > 1) {
+if ( $mobile >= $tablet  && $tablet > 1) {
 	$mobile = $tablet;
-} else {
+}
+
+if ( ! $mobile ) {
 	$mobile = 1;
 }
 

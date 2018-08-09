@@ -2977,7 +2977,7 @@
             }
         } );
 
-        
+
     }); // end customize ready
 
 })( jQuery, wp.customize || null );
