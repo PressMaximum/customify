@@ -2328,8 +2328,10 @@
             });
 
             data.variant = {};
-            if ( ! _.isUndefined( that.fonts.google.fonts[ data.font ] ) ) {
-                data.variant = that.fonts.google.fonts[ data.font ].variants;
+            if ( data.font ) {
+                if (!_.isUndefined(that.fonts.google.fonts[data.font])) {
+                    data.variant = that.fonts.google.fonts[data.font].variants;
+                }
             }
 
             data.font_type = $( '.customify--font-type', that.container ).val();
@@ -2975,11 +2977,7 @@
             }
         } );
 
-
-
-
-
-
+        
     }); // end customize ready
 
 })( jQuery, wp.customize || null );
