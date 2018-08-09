@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-08-06 15:21:34+00:00\n"
+"POT-Creation-Date: 2018-08-09 02:08:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -332,8 +332,8 @@ msgstr ""
 
 #: inc/class-customify.php:180 inc/class-customify.php:189
 #: inc/class-customify.php:201
-#: inc/compatibility/woocommerce/woocommerce.php:506
-#: inc/compatibility/woocommerce/woocommerce.php:515
+#: inc/compatibility/woocommerce/woocommerce.php:507
+#: inc/compatibility/woocommerce/woocommerce.php:516
 msgid "Add widgets here."
 msgstr ""
 
@@ -886,19 +886,19 @@ msgstr ""
 msgid "Related products per row"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:460
+#: inc/compatibility/woocommerce/woocommerce.php:461
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:468
+#: inc/compatibility/woocommerce/woocommerce.php:469
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:504
+#: inc/compatibility/woocommerce/woocommerce.php:505
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:513
+#: inc/compatibility/woocommerce/woocommerce.php:514
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
