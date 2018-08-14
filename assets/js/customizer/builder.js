@@ -1369,6 +1369,11 @@
                 _.each( that.devices, function(device_name, device ){
                     var $itemWrapper = $( '<div class="customify-available-items" data-device="'+device+'"></div>' );
                     $( '.customify--panel-'+device, that.container ).append( $itemWrapper );
+
+                    if ( $( '#customify-upsell-tmpl' ).length ) {
+                        $( '.customify--panel-'+device, that.container ).append( $( '#customify-upsell-tmpl' ).html() );
+                    }
+
                     _.each( that.items, function( node ) {
                         var _d = true;
                         if ( ! _.isUndefined( node.devices ) && ! _.isEmpty( node.devices ) ) {

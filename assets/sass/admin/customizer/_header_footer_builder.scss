@@ -89,7 +89,7 @@ $cb_padding: 20px;
         }
     }
     .customify--cb-body {
-        height: 280px;
+        height: 295px;
         overflow: auto;
         display: block;
     }
@@ -710,4 +710,13 @@ $animation_speed: .3s !default;
             font-style: italic;
         }
     }
+}
+
+ /**
+ * Upsell panel
+  */
+.customify-upsell-panel {
+    margin-bottom: 0px;
+    margin-top: 0px;
+    color: #ca4a1f;
 }
