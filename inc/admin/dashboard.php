@@ -4,9 +4,14 @@ class Customify_Dashboard {
     static $_instance;
     public $title;
     public $config;
+    public $current_tab = '';
+    public $url = ''; // current page url
+
     static function get_instance() {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
+            self::$_instance->url = admin_url( 'admin.php' );
+	        self::$_instance->url = add_query_arg( array( 'page' => 'customify' ), self::$_instance->url );
 
             self::$_instance->title = __( 'Customify Options', 'customify' );
             add_action( 'admin_menu', array( self::$_instance, 'add_menu' ) );
@@ -19,8 +24,15 @@ class Customify_Dashboard {
 
             add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
 
+            // Tabs
+            add_action( 'customify/dashboard/tab/changelog', array( self::$_instance, 'tab_changelog' ) );
+
         }
         return self::$_instance;
+    }
+
+    function add_url_args( $args = array() ){
+	    return add_query_arg( $args, self::$_instance->url );
     }
 
     /**
@@ -57,6 +69,11 @@ class Customify_Dashboard {
         );
     }
 
+	/**
+     * Register scripts
+     *
+	 * @param $id
+	 */
     function scripts($id)
     {
         if ( $id != 'appearance_page_customify' && $id != 'themes.php' ) {
@@ -82,6 +99,8 @@ class Customify_Dashboard {
             'author_uri' => $theme->get('AuthorURI'),
             'version' => $theme->get('Version'),
         );
+
+        $this->current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
     }
 
     function page(){
@@ -109,14 +128,35 @@ class Customify_Dashboard {
                         <img src="<?php echo esc_url( get_template_directory_uri() ) .'/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
                     </a>
                     <span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
+                    <a class="cd-top-link" href="<?php echo esc_url( $this->add_url_args( array( 'tab' => 'changelog' ) ) ); ?>"><?php _e( 'Changelog', 'customify' ); ?></a>
                 </div>
             </div>
         </div>
         <?php
     }
 
+    function tab_changelog(){
+	    global $wp_filesystem;
+	    WP_Filesystem();
+	    $file = get_template_directory().'/changelog.txt';
+	    if ( file_exists( $file ) ) {
+		    $file_contents = $wp_filesystem->get_contents( $file );
+	    }
+        ?>
+        <p>
+            <a class="button button-secondary" href="<?php echo esc_url( $this->url ); ?>"><?php _e( 'Back', 'customify' ); ?></a>
+        </p>
+        <div class="cd-box">
+            <div class="cd-box-top"><?php _e( 'Changelog', 'customify' ); ?></div>
+            <div class="cd-box-content">
+                <pre style="width: 100%; max-height: 60vh; overflow: auto"><?php echo esc_textarea( $file_contents ); ?></pre>
+            </div>
+        </div>
+        <?php
+    }
+
     function box_links(){
-        $url = admin_url( 'customize.php' ); //
+        $url = admin_url( 'customize.php' );
 
         $links = array(
             array(
@@ -179,6 +219,9 @@ class Customify_Dashboard {
         <?php
     }
 
+	/**
+	 * Display community info
+	 */
     function box_community() {
         ?>
         <div class="cd-box">
@@ -191,6 +234,9 @@ class Customify_Dashboard {
         <?php
     }
 
+	/**
+	 * Display recommend plugins
+	 */
     function box_plugins(){
 
         ?>
@@ -497,15 +543,30 @@ class Customify_Dashboard {
     }
 
     private function page_inner(){
+
         ?>
         <div id="plugin-filter" class="cd-row metabox-holder">
             <hr class="wp-header-end">
-            <div class="cd-main">
-                <?php do_action( 'customify/dashboard/main', $this ); ?>
-            </div>
-            <div class="cd-sidebar">
-                <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
-            </div>
+            <?php
+
+            do_action( 'customify/dashboard/start', $this );
+
+            if ( $this->current_tab && has_action( 'customify/dashboard/tab/'.$this->current_tab ) ){
+                do_action( 'customify/dashboard/tab/'.$this->current_tab, $this );
+            } else {
+	            ?>
+                <div class="cd-main">
+		            <?php do_action( 'customify/dashboard/main', $this ); ?>
+                </div>
+                <div class="cd-sidebar">
+		            <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
+                </div>
+	            <?php
+            }
+
+            do_action( 'customify/dashboard/end', $this );
+
+            ?>
         </div>
     <?php
     }
