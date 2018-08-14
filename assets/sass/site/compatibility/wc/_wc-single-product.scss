@@ -1,0 +1,163 @@
+/*
+# Product meta
+# Product tabs
+# Upsell + Related products section
+*/
+
+
+/**
+* Product meta
+ */
+.product_meta {
+    font-size: 0.875em;
+    color: $color_meta;
+    margin: 1.41575em 0px;
+    > span {
+        display: block;
+        padding: 6px 0px;
+        border-top: 1px dotted $color_border;
+    }
+}
+
+/**
+* Product tabs
+*/
+
+.woocommerce-tabs {
+    clear: both;
+    margin-bottom: 2em;
+    ul.tabs {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 1.41575em;
+        position: relative;
+        li {
+            position: relative;
+            a {
+                color: currentColor;
+            }
+        }
+    }
+    &.wc-tabs-horizontal {
+        ul.tabs {
+            border-bottom: 1px solid $color_border;
+            li {
+                border-bottom: 1px solid transparent;
+                display: inline-block;
+                position: relative;
+                z-index: 0;
+                padding: 0;
+                margin: 0 1em -1px;
+                &:first-child {
+                    margin-left: 0px;
+                }
+                &:last-child {
+                    margin-right: 0px;
+                }
+                a {
+                    display: inline-block;
+                    padding: 0.5em 0px;
+                    font-size: 1.05em;
+                }
+                &.active {
+                    z-index: 2;
+                    border-bottom-color: $color_primary;
+                    a {
+                        color: $color_primary;
+                        text-shadow: inherit;
+                    }
+
+                }
+
+            }
+        }
+    } // wc-tabs-horizontal
+
+    &.wc-tabs-vertical {
+
+        .wc-tabs {
+            width: 26%;
+            margin-right: 4%;
+            margin-bottom: 2em;
+            float: left;
+            @include for_device( mobile ) {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 2em;
+            }
+            li {
+                border-bottom: 1px solid $color_border;
+                &:first-child {
+                    border-top: 1px solid $color_border;
+                }
+                &:after {
+                    content: '';
+                    width: .5em;
+                    height: .5em;
+                    display: block;
+                    position: absolute;
+                    top: 50%;
+                    right: .8em;
+                    left: auto;
+                    opacity: 0;
+                    transform: rotate(45deg) translateY( -50% );
+                    border-top: 1px solid #111111;
+                    border-right: 1px solid #111111;
+                    transition: all .3s ease;
+                }
+                a {
+                    display: block;
+                    padding: 0.72em 0px;
+                }
+                &.active {
+                    &:after {
+                        opacity: 1;
+                    }
+                    a {
+                        color: inherit;
+                    }
+                }
+
+            }
+        }
+        .wc-tabs-contents {
+            width: 70%;
+            float: right;
+            @include for_device( mobile ) {
+                width: 100%;
+            }
+        }
+    }
+
+    .wc-tabs-contents {
+        margin-bottom: 2em;
+        .woocommerce-Tabs-panel--description {
+            p:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+
+/* Upsell + Related products section */
+.related.products, .upsells.products {
+    margin-bottom: 2em;
+    h2 {
+        font-size: 1.4em;
+        margin-bottom: 0px;
+    }
+}
+
+/**
+* WooCommerce related heading
+ */
+.woocommerce-Reviews-title,
+.cross-sells h2,
+.cart_totals h2,
+.wc-tab > h2
+{
+    font-size: 1.4em;
+    margin-bottom: 1em;
+}
+
+

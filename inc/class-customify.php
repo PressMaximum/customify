@@ -265,13 +265,6 @@ class Customify {
             'style' => $this->get_style_uri()
         ) );
 
-        if ( isset( $css_files['style'] ) ) {
-            // move style file to the bottom
-            $url = $css_files['style'] ;
-            unset( $css_files['style'] );
-            $css_files['style']  = $url;
-        }
-
         $js_files = apply_filters(  'customify/theme/js', array(
             'jquery.fitvids.js' => array(
                 'url' => esc_url( get_template_directory_uri() ) . '/assets/js/jquery.fitvids'.$suffix.'.js',
@@ -320,7 +313,7 @@ class Customify {
         }
 
         wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
-        wp_localize_script( 'customify', 'Customify_JS', array(
+        wp_localize_script( 'customify-themejs', 'Customify_JS', array(
             'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries
         ) );
 

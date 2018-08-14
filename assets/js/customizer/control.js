@@ -986,7 +986,6 @@
                     }
                 });
 
-
                 var live_title = f.value;
                 // Update Live title
                 if ( field.live_title_field === f.name ) {
@@ -1567,7 +1566,7 @@
                 }
 
                 $document.trigger('customify/customizer/value_changed', [control, value] );
-                console.log( 'Save_Value: ', value );
+               // console.log( 'Save_Value: ', value );
             } else {
 
             }
@@ -1792,6 +1791,27 @@
                     control.getValue();
                 }
             });
+
+
+            /**
+             * @TODO: Translateable live title if not addable
+             */
+            if ( ! control.params.addable ) {
+                if ( control.params.live_title_field ) {
+                    var _titles = {};
+                    _.each( control.params.default, function( _value ){
+                        if ( ! _.isUndefined( _value._key ) && ! _.isUndefined( _value[ control.params.live_title_field ] ) ) {
+                            _titles[ _value._key ] = _value[ control.params.live_title_field ];
+                        }
+                    } );
+
+                    _.each( control.params.value, function( _value, index ){
+                        if ( ! _.isUndefined( _titles[ _value._key ] ) ) {
+                            control.params.value[ index ][ control.params.live_title_field ] = _titles[ _value._key ];
+                        }
+                    } );
+                }
+            }
 
 
             // Add item when customizer loaded
@@ -2153,11 +2173,12 @@
             } );
 
             $( 'input, select, textarea',  $( '.customify-modal-settings--fields' ) ).removeClass('customify-input').addClass( 'customify-typo-input change-by-js' );
+            that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
             _.each( that.fonts, function( group, type ){
-                that.optionHtml += '<option value="">'+Customify_Control_Args.theme_default+'</option>';
                 that.optionHtml += '<optgroup label="'+group.title+'">';
                     _.each( group.fonts, function( font, font_name ) {
-                        that.optionHtml += '<option value="'+font_name+'">'+font_name+'</option>';
+                        var label = _.isString( font ) ? font: font_name;
+                        that.optionHtml += '<option value="'+font_name+'">'+label+'</option>';
                     } );
                 that.optionHtml += '</optgroup>';
             } );
@@ -2174,6 +2195,8 @@
             } );
 
             $('.customify-typo-input[data-name="font"]', that.container ).trigger('init-change');
+
+            $('.customify-typo-input[data-name="font"]', that.container ).select2();
 
             that.container.on( 'change data-change', 'input, select', function(){
                 that.get();
@@ -2225,7 +2248,7 @@
             $( '.customify-typo-input[data-name="font_weight"]', that.container ).html( that.toSelectOptions( variants, _.isObject( that.values ) ? that.values.font_weight: '', type ) );
             $( '.customify--font-type', that.container ).val( type );
 
-            if ( type == 'normal' ) {
+            if ( type !== 'google' ) {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).addClass( 'customify--hide').find( '.customify-field-settings-inner' ).html('');
             } else {
                 $( '.customify--group-field[data-field-name="languages"]', that.container ).removeClass( 'customify--hide');
@@ -2304,10 +2327,11 @@
                 data[ f.name ] = customifyField.getValue( f, $( '.customify--group-field[data-field-name="'+f.name+'"]', that.container ) );
             });
 
-
             data.variant = {};
-            if ( ! _.isUndefined( that.fonts.google.fonts[ data.font ] ) ) {
-                data.variant = that.fonts.google.fonts[ data.font ].variants;
+            if ( data.font ) {
+                if (!_.isUndefined(that.fonts.google.fonts[data.font])) {
+                    data.variant = that.fonts.google.fonts[data.font].variants;
+                }
             }
 
             data.font_type = $( '.customify--font-type', that.container ).val();
@@ -2922,6 +2946,34 @@
                    top.location.href = urlParser.origin+urlParser.pathname+'?autofocus[section]='+section+'&url='+encodeURIComponent(  wpcustomize.previewer.previewUrl.get() );
                } );
 
+            }
+        } );
+
+        /**
+         * When panel open
+         */
+
+        _.each( Customify_Control_Args.panel_urls, function( url, id ) {
+            if ( url ) {
+                wp.customize.panel( id, function (panel) {
+                    panel.expanded.bind(function (isExpanded) {
+                        if (isExpanded) {
+                            wp.customize.previewer.previewUrl.set( url );
+                        }
+                    });
+                });
+            }
+        } );
+
+        _.each( Customify_Control_Args.section_urls, function( url, id ) {
+            if ( url ) {
+                wp.customize.section( id, function (section) {
+                    section.expanded.bind(function (isExpanded) {
+                        if (isExpanded) {
+                            wp.customize.previewer.previewUrl.set( url );
+                        }
+                    });
+                });
             }
         } );
 

@@ -81,10 +81,18 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
                 $layout = Customify()->get_setting( get_post_type().'_sidebar_layout');
             }
 
-
             if ( is_singular() && customify_is_support_meta() ) {
                 $post_type = get_post_type();
                 $page_custom = get_post_meta( customify_get_support_meta_id(), '_customify_sidebar', true);
+
+                if ( ! $page_custom ) {
+                    if ( Customify()->is_woocommerce_active() ) {
+                        if ( is_cart() || is_checkout() || is_account_page() || is_product() ) {
+                            $page_custom = 'content';
+                        }
+                    }
+                }
+
                 if ( $page_custom ) {
                     if ($page_custom && $page_custom != 'default') {
                         $layout = $page_custom;

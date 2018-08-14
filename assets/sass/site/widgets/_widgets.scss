@@ -3,15 +3,17 @@
     font-size: 16px;
     text-transform: uppercase;
     font-weight: 500;
-    color: $color_text;
+    color: currentColor;
     margin-bottom: 15px;
 }
 
 .widget-area {
     .widget {
-        margin-bottom: ms(2);
-        &:last-of-type {
-            margin-bottom: 0;
+        margin-bottom: 2em;
+        @include for_device( desktop ) {
+            &:last-of-type {
+                margin-bottom: 0;
+            }
         }
 
         ul {
@@ -65,16 +67,7 @@
             }
             .search-field {
                 width: 100%;
-                padding: 9px 45px 9px 10px;
-                border: 1px solid rgba(127, 127, 127, 0.2);
-                box-shadow: 0 2px 3px rgba(127, 127, 127, 0.11);
-                border-radius: 3px;
                 display: block;
-                background: #ffffff;
-
-                &:focus {
-                    border-color: rgba(127, 127, 127, 0.5);
-                }
             }
             .search-submit {
                 padding: 9px 14px;
@@ -92,7 +85,6 @@
                 svg {
                     width: 18px;
                     height: 18px;
-
                 }
 
             }
@@ -172,5 +164,17 @@
                 }
             }
         }
+    }
+}
+
+/* Tagcloud widget */
+.tagcloud {
+    a {
+        border: 1px solid currentColor;
+        border-radius: 2px;
+        display: inline-block;
+        font-size: 0.875em !important;
+        margin-bottom: 5px;
+        padding: 1px 10px 1px;
     }
 }

@@ -28,7 +28,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 		        'title' => __('Body & Paragraph', 'customify'),
 		        'description' => __('Apply to body and paragraph text.', 'customify'),
 		        'css_format' => 'typography',
-		        'selector' => 'body, body p, body button, body input, body select, body optgroup, body textarea, body div',
+		        'selector' => 'body',
 	        ),
 
             array(
@@ -38,7 +38,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'title' => __('Heading', 'customify'),
                 'description' => __('Apply to all heading elements.', 'customify'),
                 'css_format' => 'typography',
-                'selector' => 'body h1, body h2, body h3, body h4, body h5, body h6, body .h1, body .h2,body .h3',
+                'selector' => 'h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6',
                 'fields' => array(
                     'font_size' => false,
                     'line_height' => false,
@@ -134,25 +134,6 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
                 'css_format' => 'typography',
                 'selector' => '.entry-content h6',
             ),
-
-            // Widget title
-            array(
-                'name'           => "{$section}_widget_title",
-                'type'           => 'section',
-                'panel'          => 'typography_panel',
-                'title'          => __( 'Widget Title', 'customify' ),
-            ),
-
-            array(
-                'name' => "{$section}_widget_title",
-                'type' => 'typography',
-                'section' => "{$section}_widget_title",
-                'title' => __('Widget Title', 'customify'),
-                'css_format' => 'typography',
-                'selector' => '.widget-title',
-            ),
-
-
 
         );
         return array_merge( $configs, $config );

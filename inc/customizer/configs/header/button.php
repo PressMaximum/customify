@@ -3,17 +3,17 @@
 class Customify_Builder_Item_Button {
 	public $id = 'button';
 
-	function __construct()
-    {
-        add_filter( 'customify/icon_used', array( $this, 'used_icon' ) );
-    }
+	function __construct() {
+		add_filter( 'customify/icon_used', array( $this, 'used_icon' ) );
+	}
 
-    function used_icon( $list = array() ){
-        $list[ $this->id ] = 1;
-        return $list;
-    }
+	function used_icon( $list = array() ) {
+		$list[ $this->id ] = 1;
 
-    function item() {
+		return $list;
+	}
+
+	function item() {
 		return array(
 			'name'    => __( 'Button', 'customify' ),
 			'id'      => 'button',
@@ -27,7 +27,7 @@ class Customify_Builder_Item_Button {
 		$section  = 'header_button';
 		$prefix   = 'header_button';
 		$fn       = array( $this, 'render' );
-		$selector = '.header--row a.customify-builder-btn';
+		$selector = 'a.item--'.$this->id;
 		$config   = array(
 			array(
 				'name'  => $section,
@@ -90,14 +90,14 @@ class Customify_Builder_Item_Button {
 			),
 
 			array(
-				'name'            => $prefix . '_typography',
-				'type'            => 'typography',
-				'section'         => $section,
-				'title'           => __( 'Typography', 'customify' ),
-				'description'     => __( 'Advanced typography for button', 'customify' ),
-				'selector'        => $selector,
-				'css_format'      => 'typography',
-				'default'         => array(),
+				'name'        => $prefix . '_typography',
+				'type'        => 'typography',
+				'section'     => $section,
+				'title'       => __( 'Typography', 'customify' ),
+				'description' => __( 'Advanced typography for button', 'customify' ),
+				'selector'    => $selector,
+				'css_format'  => 'typography',
+				'default'     => array(),
 			),
 
 			array(
@@ -105,27 +105,27 @@ class Customify_Builder_Item_Button {
 				'type'        => 'styling',
 				'section'     => $section,
 				'title'       => __( 'Styling', 'customify' ),
-                'description'     => __( 'Advanced styling for button', 'customify' ),
+				'description' => __( 'Advanced styling for button', 'customify' ),
 				'selector'    => array(
-				    'normal' => $selector,
-				    'hover' => $selector.':hover',
-                ),
+					'normal' => $selector,
+					'hover'  => $selector . ':hover',
+				),
 				'css_format'  => 'styling',
 				'default'     => array(),
-				'fields'     => array(
-                    'normal_fields' => array(
-                        'link_color' => false, // disable for special field.
-                        'margin' => false,
-                        'bg_image' => false,
-                        'bg_cover' => false,
-                        'bg_position' => false,
-                        'bg_repeat' => false,
-                        'bg_attachment' => false,
-                    ),
-                    'hover_fields' => array(
-                        'link_color' => false, // disable for special field.
-                    )
-                ),
+				'fields'      => array(
+					'normal_fields' => array(
+						'link_color'    => false, // disable for special field.
+						'margin'        => false,
+						'bg_image'      => false,
+						'bg_cover'      => false,
+						'bg_position'   => false,
+						'bg_repeat'     => false,
+						'bg_attachment' => false,
+					),
+					'hover_fields'  => array(
+						'link_color' => false, // disable for special field.
+					)
+				),
 			),
 
 		);
@@ -141,7 +141,7 @@ class Customify_Builder_Item_Button {
 		$new_window    = Customify()->get_setting( 'header_button_target' );
 		$link          = Customify()->get_setting( 'header_button_link' );
 		$icon_position = Customify()->get_setting( 'header_button_position' );
-		$classes = array( 'customify-btn customify-builder-btn' );
+		$classes       = array( 'item--'.$this->id, 'customify-btn customify-builder-btn' );
 
 		$icon = wp_parse_args( $icon, array(
 			'type' => '',
@@ -158,9 +158,9 @@ class Customify_Builder_Item_Button {
 			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
 		}
 		$classes[] = 'is-icon-' . $icon_position;
-		if( ! $text ) {
-            $text = __( 'Button', 'customify' );
-        }
+		if ( ! $text ) {
+			$text = __( 'Button', 'customify' );
+		}
 
 		echo '<a' . $target . ' href="' . esc_url( $link ) . '" class="' . esc_attr( join( " ", $classes ) ) . '">';
 		if ( $icon_position != 'after' ) {

@@ -1,0 +1,326 @@
+/**
+ * Cart/checkout page
+ */
+.woocommerce-cart,
+.woocommerce-checkout,
+#add_payment_method {
+    table.cart {
+        .product-thumbnail {
+            min-width: 32px;
+        }
+
+        img {
+            width: 32px;
+            box-shadow: none;
+        }
+
+        th,
+        td {
+            vertical-align: middle;
+        }
+
+        td.actions .coupon .input-text {
+            float: left;
+            box-sizing: border-box;
+            border: 1px solid darken( $secondary, 10% );
+            padding: 6px 6px 5px;
+            margin: 0 4px 0 0;
+            outline: 0;
+        }
+
+        input {
+            margin: 0;
+            vertical-align: middle;
+        }
+    }
+
+    .wc-proceed-to-checkout {
+        @include clearfix;
+        padding: 1em 0;
+
+        a.checkout-button {
+            display: block;
+            text-align: center;
+            margin-bottom: 1em;
+            font-size: 1.25em;
+            padding: 1em;
+        }
+    }
+
+    .cart-collaterals {
+        .shipping_calculator {
+            .button {
+                width: 100%;
+                float: none;
+                display: block;
+            }
+
+            .shipping-calculator-button::after {
+                @include iconafter( '\e019' );
+            }
+        }
+
+        .cart_totals {
+            p small {
+                color: $subtext;
+                font-size: 0.83em;
+            }
+
+            table {
+                border-collapse: separate;
+                margin: 0 0 6px;
+                padding: 0;
+
+                tr:first-child {
+                    th,
+                    td {
+                        border-top: 0;
+                    }
+                }
+
+                th {
+                    width: 40%;
+                }
+
+                td,
+                th {
+                    vertical-align: top;
+                    border-left: 0;
+                    border-right: 0;
+                    line-height: 1.5em;
+                }
+
+                small {
+                    color: $subtext;
+                }
+
+                select {
+                    width: 100%;
+                }
+            }
+
+            .discount td {
+                color: $highlight;
+            }
+
+            tr td,
+            tr th {
+                border-top: 1px solid $secondary;
+            }
+        }
+
+        .cross-sells ul.products li.product {
+            margin-top: 0;
+        }
+    }
+    .checkout {
+        .col-2 {
+            h3#ship-to-different-address {
+                float: left;
+                clear: none;
+            }
+
+            .notes {
+                clear: left;
+            }
+
+            .form-row-first {
+                clear: left;
+            }
+        }
+
+        .create-account small {
+            font-size: 11px;
+            color: $subtext;
+            font-weight: normal;
+        }
+
+        div.shipping-address {
+            padding: 0;
+            clear: left;
+            width: 100%;
+        }
+
+        .shipping_address {
+            clear: both;
+        }
+    }
+
+    #payment {
+        background: $secondary;
+        border-radius: 5px;
+
+        ul.payment_methods {
+            @include clearfix();
+            text-align: left;
+            padding: 1em;
+            border-bottom: 1px solid darken( $secondary, 10% );
+            margin: 0;
+            list-style: none outside;
+
+            li {
+                line-height: 2;
+                text-align: left;
+                margin: 0;
+                font-weight: normal;
+
+                input {
+                    margin: 0 1em 0 0;
+                }
+
+                img {
+                    vertical-align: middle;
+                    margin: -2px 0 0 0.5em;
+                    padding: 0;
+                    position: relative;
+                    box-shadow: none;
+                }
+
+                img + img {
+                    margin-left: 2px;
+                }
+            }
+
+            li:not(.woocommerce-notice) {
+                @include clearfix;
+            }
+        }
+
+        div.form-row {
+            padding: 1em;
+        }
+
+        div.payment_box {
+            position: relative;
+            box-sizing: border-box;
+            width: 100%;
+            padding: 1em;
+            margin: 1em 0;
+            font-size: 0.92em;
+            border-radius: 2px;
+            line-height: 1.5;
+            background-color: darken( $secondary, 5% );
+            color: $secondarytext;
+
+            input.input-text, textarea {
+                border-color: darken( $secondary, 15% );
+                border-top-color: darken( $secondary, 20% );
+            }
+
+            ::-webkit-input-placeholder {
+                color: darken( $secondary, 20% );
+            }
+
+            :-moz-placeholder {
+                color: darken( $secondary, 20% );
+            }
+
+            :-ms-input-placeholder {
+                color: darken( $secondary, 20% );
+            }
+
+            .woocommerce-SavedPaymentMethods {
+                list-style: none outside;
+                margin: 0;
+                .woocommerce-SavedPaymentMethods-token,
+                .woocommerce-SavedPaymentMethods-new {
+                    margin: 0 0 0.5em;
+                    label {
+                        cursor: pointer;
+                    }
+                }
+                .woocommerce-SavedPaymentMethods-tokenInput {
+                    vertical-align: middle;
+                    margin: -3px 1em 0 0;
+                    position: relative;
+                }
+            }
+
+            .wc-credit-card-form {
+                border: 0;
+                padding: 0;
+                margin: 1em 0 0;
+            }
+            .wc-credit-card-form-card-number,
+            .wc-credit-card-form-card-expiry,
+            .wc-credit-card-form-card-cvc {
+                font-size: 1.5em;
+                padding: 8px;
+                background-repeat: no-repeat;
+                background-position: right 0.618em center;
+                background-size: 32px 20px;
+
+                &.visa {
+                    background-image: url('../../images/icons/credit-cards/visa.svg');
+                }
+
+                &.mastercard {
+                    background-image: url('../../images/icons/credit-cards/mastercard.svg');
+                }
+
+                &.laser {
+                    background-image: url('../../images/icons/credit-cards/laser.svg');
+                }
+
+                &.dinersclub {
+                    background-image: url('../../images/icons/credit-cards/diners.svg');
+                }
+
+                &.maestro {
+                    background-image: url('../../images/icons/credit-cards/maestro.svg');
+                }
+
+                &.jcb {
+                    background-image: url('../../images/icons/credit-cards/jcb.svg');
+                }
+
+                &.amex {
+                    background-image: url('../../images/icons/credit-cards/amex.svg');
+                }
+                &.discover {
+                    background-image: url('../../images/icons/credit-cards/discover.svg');
+                }
+            }
+
+            span.help {
+                font-size: 0.857em;
+                color: $subtext;
+                font-weight: normal;
+            }
+
+            .form-row {
+                margin: 0 0 1em;
+            }
+
+            p:last-child {
+                margin-bottom: 0;
+            }
+
+            &::before {
+                content: '';
+                display: block;
+                border: 1em solid darken( $secondary, 5% ); /* arrow size / color */
+                border-right-color: transparent;
+                border-left-color: transparent;
+                border-top-color: transparent;
+                position: absolute;
+                top: -0.75em;
+                left: 0;
+                margin: -1em 0 0 2em;
+            }
+        }
+
+        .payment_method_paypal {
+            .about_paypal {
+                float: right;
+                line-height: 52px;
+                font-size: 0.83em;
+            }
+
+            img {
+                max-height: 52px;
+                vertical-align: middle;
+            }
+        }
+    }
+}

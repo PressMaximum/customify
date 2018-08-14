@@ -1,4 +1,7 @@
 /* Header Builder Common */
+
+
+
 .site-header {
     position: relative;
     .customify-container {
@@ -29,7 +32,34 @@
     }
 }
 
+//.customify-grid {
+//    &.cb-row--desktop {
+//        margin: 0 -0.5em;
+//        > [class*="customify-col-"] {
+//            padding-left: 0.5em;
+//            padding-right: 0.5em;
+//        }
+//    }
+//}
+
+.layout-fullwidth {
+    .customify-container {
+        max-width: initial;
+    }
+}
+
 .header--row {
+
+    .customify-grid {
+        @include for_device( desktop ) {
+            margin: 0 -0.5em;
+            [class~="customify-col-"], [class*="customify-col-"], [class*="customify-col_"] {
+                padding-left: 0.5em;
+                padding-right: 0.5em;
+            }
+        }
+    }
+
     .customify-grid {
     }
     &.layout-full-contained {
@@ -49,24 +79,24 @@
             border: 0 none;
             box-shadow: none !important;
             .customify-container {
-                margin-left: 1.5em;
-                margin-right: 1.5em;
+
             }
         }
     }
     &.layout-fullwidth {
         .customify-container {
-            max-width: initial;
             box-shadow: none !important;
         }
     }
 }
+
 
 // Titlebar
 .page-titlebar {
     padding: 21px 0px 22px;
     border-bottom: 1px solid $color_border;
     word-break: break-word;
+    background: #f9f9f9;
     @include for_device( tablet ) {
         padding: 19px 0px 20px;
     }
@@ -87,10 +117,11 @@
 
 // Breadcrumbs
 .page-breadcrumb {
-    padding: 8px 0px 9px;
+    padding: 9px 0px 9px;
     border-bottom: 1px solid $color_border;
     color: $color_meta;
     line-height: 1.6;
+    background: #FFF;
     .page-breadcrumb-inner {
         width: 100%;
     }
@@ -139,6 +170,7 @@
     .page-breadcrumb {
         border-bottom: none;
         padding-bottom: 0px;
+        background: transparent;
     }
 }
 
@@ -189,12 +221,11 @@
     }
 }
 .page-cover-title {
-    margin-top: 30px;
     margin-bottom: 0px;
 }
 .page-cover-tagline {
-    margin-top: 1em;
-    margin-bottom: 30px;
+    margin-top: 0.5em;
+    margin-bottom: 1.5em;
 }
 .page-cover-title, .page-cover-tagline {
     display: inline-block;

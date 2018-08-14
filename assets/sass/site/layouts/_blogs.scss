@@ -308,7 +308,6 @@ $blog_gutter: $gl-gutter;
             font-weight: 500;
             letter-spacing: 0.8px;
             display: inline-block;
-            box-shadow: 0 1px 2px 0 #e1e5ea;
             &:hover {
                 border-color: $color_primary;
                 background: $color_primary;
@@ -334,11 +333,6 @@ $blog_gutter: $gl-gutter;
 }
 
 .entry-content {
-    a {
-        &:hover {
-            text-decoration: underline;
-        }
-    }
     .page-links {
         display: block;
         margin: 5px 0px 20px;
@@ -357,10 +351,20 @@ $blog_gutter: $gl-gutter;
     }
 }
 
+.single-post {
+    .entry-content {
+        a {
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
 .entry-single {
     .entry--item:not( .entry-title ), .entry-thumbnail {
         margin-bottom: 1.41575em;
-        &:last-child, p:last-child {
+        &:last-child {
             margin-bottom: 0px;
         }
     }
@@ -397,7 +401,7 @@ $blog_gutter: $gl-gutter;
 }
 
 // Biography box
-.bio-author {
+.author-bio {
     display: flex;
     .avatar {
         flex-basis: 90px;
@@ -405,18 +409,20 @@ $blog_gutter: $gl-gutter;
             flex-basis: 90px;
         }
     }
-    .bio-author-details {
+    .author-bio-details {
         flex-basis: calc( 100% - 90px );
-        margin-left: 2em;
+        margin-left: 1.5em;
         @include for_device( mobile ){
             flex-basis: calc( 100% - 50px );
         }
+    }
+    .author-bio-desc p:last-child {
+        margin-bottom: 0.72em;
     }
 }
 
 .post-navigation .nav-links {
     @include clearfix();
-    margin-top: 2em;
     padding: 16px 0px 15px;
     border-top: 1px solid $color_border;
     border-bottom: 1px solid $color_border;
@@ -437,18 +443,5 @@ $blog_gutter: $gl-gutter;
     .nav-next {
         float: right;
         text-align: right;
-    }
-}
-
-// Comment
-.comments-area {
-    margin-top: ( $blog_gutter);
-}
-.comment-author {
-    display: block;
-}
-.comment-list {
-    article.comment {
-        margin-bottom: 0px;
     }
 }

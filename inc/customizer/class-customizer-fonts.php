@@ -22,7 +22,8 @@ class Customify_Fonts
                 'fonts' => $this->get_google_fonts(),
             )
         );
-        wp_send_json_success( $fonts );
+
+        wp_send_json_success( apply_filters( 'customify/list-fonts', $fonts ) );
     }
 
     /**

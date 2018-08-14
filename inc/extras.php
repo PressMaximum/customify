@@ -23,6 +23,13 @@ function customify_bb_upgrade_link() {
 add_filter( 'fl_builder_upgrade_url', 'customify_bb_upgrade_link' );
 
 /**
+ * Support WPForms plugin
+ */
+if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
+	define( 'WPFORMS_SHAREASALE_ID', '1816909' );
+}
+
+/**
  * Filter the OrbitFox plugin suggestions.
  */
 function customify_remove_of_sdk_suggestions() {

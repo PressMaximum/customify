@@ -75,7 +75,8 @@ module.exports = function( grunt ) {
             },
             dist: {
                 options: {
-                    style: 'expanded'
+                    style: 'expanded',
+                   // sourcemap: 'auto'
                 },
 
                 files: [
@@ -143,6 +144,7 @@ module.exports = function( grunt ) {
                 files: [
                     {
                         'assets/js/theme.min.js': ['assets/js/theme.js'],
+                        'assets/js/select2.min.js': ['assets/js/select2.js'],
                         'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js']
                     },
                     {

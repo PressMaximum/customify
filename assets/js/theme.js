@@ -44,17 +44,17 @@ jQuery( document ).ready( function( $ ){
                 if (is_previewing) {
                    // first_a.attr('href', 'javascript:;');
                 }
-                first_a.append('<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>');
+                var toggle_button = '<span class="nav-toggle-icon"><i class="nav-icon-angle"></i></span>';
+                $( toggle_button ).insertAfter( first_a );
                 $(' > .sub-menu', $el).prepend(d);
                 $(' > .sub-menu, .sub-lv-0', $el).slideUp(0);
                 d.wrap('<li class="menu-item li-duplicator"></li>');
             }
         } );
-
     };
 
     // Toggle sub menu
-    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children > a > .nav-toggle-icon', function( e ){
+    $document.on( 'click',  '.nav-menu-mobile .menu-item-has-children .nav-toggle-icon', function( e ){
         e.preventDefault();
         var li = $( this ).closest('li');
         li.toggleClass('open-sub');
@@ -233,27 +233,7 @@ jQuery( document ).ready( function( $ ){
            });
 
        } );
-
-       /*
-        if ( ! customify_is_mobile() ) {
-            $('.header-search_icon-item .search-icon').blur( function (e) {
-                var w = $(this).parent();
-                w.removeClass('active');
-            });
-
-            $('.header-search_icon-item .search-icon, .header-search_icon-item .search-field, .header-search_icon-item .search-submit').focus(function (e) {
-                var w = $(this).closest('.header-search_icon-item');
-                //var $e = $( e.target );
-                w.addClass('active');
-                if (!$('.search-field', w).is(e.target)) {
-                    $('.search-field', w).focus();
-                }
-            });
-        }
-        */
-
    }
-
 
     function search_box_auto_align(){
         var w = $( window ).width();
@@ -269,7 +249,6 @@ jQuery( document ).ready( function( $ ){
                 p.removeClass( 'search-left' );
                 p.addClass( 'search-right' );
             }
-
         } );
 
     }

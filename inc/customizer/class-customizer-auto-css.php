@@ -3,9 +3,10 @@
 class Customify_Customizer_Auto_CSS
 {
     static $_instance;
-    private $fonts = array();
-    private $variants = array();
-    private $subsets = array();
+    public $fonts = array();
+    public $custom_fonts = array();
+    public $variants = array();
+    public $subsets = array();
 
     static $code = null;
     static $font_url = null;
@@ -181,7 +182,7 @@ class Customify_Customizer_Auto_CSS
         $image = Customify()->get_media($value);
         if ($format) {
             if ($image) {
-                return $this->replace_value($image, $format) . ';';
+                return $this->replace_value($image, $format) . '';
             }
         }
         return false;
@@ -250,6 +251,7 @@ class Customify_Customizer_Auto_CSS
         }
 
         foreach (( array )$lists as $name => $f) {
+
             if (isset($f['selector']) && $f['selector']) {
                 if (!isset($selectorCSSAll[$f['selector']])) {
                     $selectorCSSAll[$f['selector']] = '';
@@ -279,9 +281,7 @@ class Customify_Customizer_Auto_CSS
                             }
                         }
 
-
                     }
-
                 }
             }
         }
@@ -372,6 +372,17 @@ class Customify_Customizer_Auto_CSS
             $listTabs = $tabs;
         }
 
+        // Do no use bg settings if no bg
+        if( isset( $values['normal']['bg_image'] ) ){
+            $image = Customify()->get_media( $values['normal']['bg_image'] );
+            if ( ! $image ) {
+                unset( $values['normal']['bg_repeat'] );
+                unset( $values['normal']['bg_cover'] );
+                unset( $values['normal']['bg_position'] );
+                unset( $values['normal']['bg_attachment'] );
+            }
+        }
+
         $normal_style = $this->loop_fields($listNormalFields, $values['normal'], true, true);
         $hover_style = $this->loop_fields($listHoverFields, $values['hover'], true, true);
 
@@ -409,8 +420,8 @@ class Customify_Customizer_Auto_CSS
         }
     }
 
-    function modal($field, $values = null)
-    {
+    function modal($field, $values = null) {
+
         $values = Customify()->get_setting($field['name'], 'all');
         if (!is_array($values)) {
             $values = array();
@@ -418,11 +429,10 @@ class Customify_Customizer_Auto_CSS
         if (isset($field['fields']['tabs'])) {
             foreach ($field['fields']['tabs'] as $key => $title) {
                 if (isset($field['fields'][$key . '_fields'])) {
-                    $this->loop_fields($field['fields'][$key . '_fields'], isset($values[$key]) ? $values[$key] : array());
+                    $this->loop_fields($field['fields'][$key . '_fields'], isset($values[$key]) ? $values[$key] : array() );
                 }
             }
         }
-
     }
 
     function setup_default($value, $format)
@@ -544,6 +554,8 @@ class Customify_Customizer_Auto_CSS
             if ($value['subsets']) {
                 $this->subsets = array_merge($this->subsets, $value['subsets']);
             }
+        } else {
+            $this->custom_fonts[$value['font']] = $value['font'];
         }
 
         return "font-family: \"{$value['font']}\";";
@@ -807,7 +819,7 @@ class Customify_Customizer_Auto_CSS
         return $url;
     }
 
-    function loop_fields($fields, $values = null, $skip_if_val_null = false, $no_selector = false)
+    function loop_fields($fields, $values = null, $skip_if_val_null = false, $no_selector = false, $key_name = 'name' )
     {
 
         $listcss = array();
@@ -818,33 +830,40 @@ class Customify_Customizer_Auto_CSS
                 'css_format' => null,
                 'type'       => null,
             ));
+
+            if ( ! $key_name ) {
+	            $key_name = 'name';
+            }
+
+            $key = $field[ $key_name ];
+
             $v = isset($values[$field['name']]) ? $values[$field['name']] : null;
             if (!(is_null($v) && $skip_if_val_null)) {
                 if (($field['selector'] && $field['css_format']) || $field['type'] == 'modal') {
                     switch ($field['type']) {
                         case 'css_ruler':
-                            $listcss[$field['name']] = $this->css_ruler($field, $v, $no_selector);
+                            $listcss[$key] = $this->css_ruler($field, $v, $no_selector);
                             break;
                         case 'slider':
-                            $listcss[$field['name']] = $this->slider($field, $v, $no_selector);
+                            $listcss[$key] = $this->slider($field, $v, $no_selector);
                             break;
                         case 'color':
-                            $listcss[$field['name']] = $this->color($field, $v, $no_selector);
+                            $listcss[$key] = $this->color($field, $v, $no_selector);
                             break;
                         case 'shadow':
-                            $listcss[$field['name']] = $this->shadow($field, $v, $no_selector);
+                            $listcss[$key] = $this->shadow($field, $v, $no_selector);
                             break;
                         case 'image':
-                            $listcss[$field['name']] = $this->image($field, $v, $no_selector);
+                            $listcss[$key] = $this->image($field, $v, $no_selector);
                             break;
                         case 'checkbox':
                             if ($field['css_format'] !== 'html_class') {
-                                $listcss[$field['name']] = $this->checkbox($field, $v, $no_selector);
+                                $listcss[$key] = $this->checkbox($field, $v, $no_selector);
                             }
                             break;
                         case 'text_align':
                         case 'text_align_no_justify':
-                            $listcss[$field['name']] = $this->text_align($field, $v, $no_selector);
+                            $listcss[$key] = $this->text_align($field, $v, $no_selector);
                             break;
                         case 'font':
                             $this->font($field, $v);
@@ -864,7 +883,7 @@ class Customify_Customizer_Auto_CSS
                                     //
                                     break;
                                 default:
-                                    $listcss[$field['name']] = $this->maybe_devices_setup($field, 'setup_default', $v, $no_selector);
+                                    $listcss[$key] = $this->maybe_devices_setup($field, 'setup_default', $v, $no_selector);
 
                             }
 
@@ -919,7 +938,7 @@ class Customify_Customizer_Auto_CSS
             $i++;
         }
 
-        $css_code = apply_filters( 'customify/auto-css', $css_code  );
+        $css_code = apply_filters( 'customify/auto-css', $css_code, $this  );
 
         $url = $this->get_google_fonts_url();
         self::$font_url = $url;

@@ -164,7 +164,7 @@ class Customify_Builder_Item_Search_Icon
                 'type'            => 'slider',
                 'device_settings' => true,
                 'section'         => $this->section,
-                'min'             => 5,
+                'min'             => 25,
                 'step'            => 1,
                 'max'             => 100,
                 'selector'        => "$selector .header-search-form .search-field",
@@ -211,15 +211,15 @@ class Customify_Builder_Item_Search_Icon
                 'device_settings' => true,
                 'default' => array(
                     'desktop' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'tablet' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                     'mobile' => array(
-                        'value' => -42,
+                        'value' => -40,
                         'unit' => 'px'
                     ),
                 ),
