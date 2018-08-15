@@ -435,7 +435,7 @@ class Customify_Customize_Layout_Builder {
 
         <?php if ( ! apply_filters( 'customify/is_pro_activated', false )  ) { ?>
             <script type="text/html" id="customify-upsell-tmpl">
-                <p class="customify-upsell-panel"><?php _e( 'Upgrade to <a target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top">Customify Pro</a> to get more <a href="https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/">builder items</a>.', 'customify' ); ?></p>
+                <p class="customify-upsell-panel"><?php _e( 'Upgrade to <a target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top">Customify Pro</a> to get more <a href="https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/" target="_blank">builder items</a>.', 'customify' ); ?></p>
             </script>
 			<?php
 		}

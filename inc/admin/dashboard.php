@@ -433,7 +433,6 @@ class Customify_Dashboard {
                         'TB_iframe' => 'true',
                         'width'     => '772',
                         'height'    => '349',
-
                     ),
                     network_admin_url('plugin-install.php')
                 );
@@ -543,7 +542,6 @@ class Customify_Dashboard {
     }
 
     private function page_inner(){
-
         ?>
         <div id="plugin-filter" class="cd-row metabox-holder">
             <hr class="wp-header-end">
