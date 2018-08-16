@@ -9,7 +9,7 @@
  * @package customify
  */
 
-?>
+?>              <?php do_action('customify/main/after'); ?>
             </main><!-- #main -->
             <?php do_action( 'customify/sidebars' ); ?>
         </div><!-- #.customify-grid -->

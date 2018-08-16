@@ -41,5 +41,6 @@
         <div <?php customify_site_content_container_class(); ?>>
             <div <?php customify_site_content_grid_class(); ?>>
                 <main id="main" <?php customify_main_content_class(); ?>>
+                    <?php do_action('customify/main/before'); ?>
 
 
