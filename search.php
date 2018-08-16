@@ -10,7 +10,7 @@
 get_header(); ?>
     <div class="content-inner">
         <?php
-
+        do_action('customify/content/before');
         if ( ! customify_is_e_theme_location( 'archive' ) ) {
             if ( customify_is_post_title_display() ) {
 
@@ -34,7 +34,7 @@ get_header(); ?>
                 get_template_part( 'template-parts/content', 'none' );
             }
         }
-
+        do_action('customify/content/after');
         ?>
     </div><!-- #.content-inner -->
 <?php

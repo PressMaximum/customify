@@ -11,7 +11,7 @@
 
 ?>
             </main><!-- #main -->
-            <?php do_action( 'customify_sidebars' ); ?>
+            <?php do_action( 'customify/sidebars' ); ?>
         </div><!-- #.customify-grid -->
     </div><!-- #.customify-container -->
 </div><!-- #content -->

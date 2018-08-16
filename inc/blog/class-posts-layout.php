@@ -278,7 +278,6 @@ class Customify_Posts_Layout {
 
     }
 
-
     function blog_item( $post = null , $class = null ){
         $entry_class = array('entry');
 

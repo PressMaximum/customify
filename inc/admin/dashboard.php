@@ -14,7 +14,7 @@ class Customify_Dashboard {
 	        self::$_instance->url = add_query_arg( array( 'page' => 'customify' ), self::$_instance->url );
 
             self::$_instance->title = __( 'Customify Options', 'customify' );
-            add_action( 'admin_menu', array( self::$_instance, 'add_menu' ) );
+            add_action( 'admin_menu', array( self::$_instance, 'add_menu' ), 5 );
             add_action( 'admin_enqueue_scripts', array(  self::$_instance, 'scripts' ) );
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'box_links' ), 10 );
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'pro_modules_box' ), 15 );

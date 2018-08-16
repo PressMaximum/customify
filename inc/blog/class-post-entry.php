@@ -591,9 +591,18 @@ class Customify_Post_Entry {
      * @param array     $args
      */
     function build( $field , $post = null, $fields = null, $args = array() ){
-        if ( method_exists( $this, 'post_'.$field ) ) {
-            call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields, $args ) );
+        // Allowed 3rd party hook to this
+        $cb = apply_filters( 'customify/single/build_field_callback', false, $field );
+        if ( ! is_callable( $cb ) ) {
+	        if ( method_exists( $this, 'post_' . $field ) ) {
+		        $cb = array( $this, 'post_' . $field );
+	        }
         }
+        do_action('customify/single/field_'.$field.'/before', $post, $fields, $args, $this );
+	    if ( is_callable( $cb ) ) {
+		    call_user_func_array( $cb, array( $post, $fields, $args ) );
+	    }
+	    do_action('customify/single/field_'.$field.'/after', $post, $fields, $args, $this );
     }
 
     /**
