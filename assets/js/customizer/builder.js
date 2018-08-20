@@ -1352,6 +1352,10 @@
                     $( '.customify--cb-body', that.container ).append( panelHTML );
                 } );
 
+                if ( $( '#customify-upsell-tmpl' ).length ) {
+                    $( $( '#customify-upsell-tmpl' ).html() ).insertAfter(  $( '.customify--cb-devices-switcher', that.container ) );
+                }
+
             },
             addItem: function( node ){
                 var that = this;
@@ -1370,9 +1374,6 @@
                     var $itemWrapper = $( '<div class="customify-available-items" data-device="'+device+'"></div>' );
                     $( '.customify--panel-'+device, that.container ).append( $itemWrapper );
 
-                    if ( $( '#customify-upsell-tmpl' ).length ) {
-                        $( '.customify--panel-'+device, that.container ).append( $( '#customify-upsell-tmpl' ).html() );
-                    }
 
                     _.each( that.items, function( node ) {
                         var _d = true;

@@ -146,13 +146,19 @@ class Customify_Dashboard {
         <p>
             <a class="button button-secondary" href="<?php echo esc_url( $this->url ); ?>"><?php _e( 'Back', 'customify' ); ?></a>
         </p>
-        <div class="cd-box">
+
+        <?php
+	    do_action( 'customify/dashboard/changelog/before' );
+        ?>
+        <div class="cd-box theme-changelog">
             <div class="cd-box-top"><?php _e( 'Changelog', 'customify' ); ?></div>
             <div class="cd-box-content">
                 <pre style="width: 100%; max-height: 60vh; overflow: auto"><?php echo esc_textarea( $file_contents ); ?></pre>
             </div>
         </div>
         <?php
+        do_action( 'customify/dashboard/changelog/after' );
+
     }
 
     function box_links(){

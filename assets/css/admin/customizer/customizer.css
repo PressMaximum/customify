@@ -3182,6 +3182,9 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   margin-bottom: 0px;
   margin-top: 0px;
   color: #ca4a1f;
+  float: left;
+  display: block;
+  padding-top: 8px;
 }
 
 :root .grid-stack-item > .ui-resizable-handle {

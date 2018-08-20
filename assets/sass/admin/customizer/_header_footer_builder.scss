@@ -33,7 +33,6 @@ $cb_padding: 20px;
     }
 }
 
-
 .customify--customize-builder {
     position: fixed;
     bottom: 0px;
@@ -719,4 +718,7 @@ $animation_speed: .3s !default;
     margin-bottom: 0px;
     margin-top: 0px;
     color: #ca4a1f;
+    float: left;
+    display: block;
+    padding-top: 8px;
 }
