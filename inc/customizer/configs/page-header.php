@@ -25,7 +25,6 @@ class Customify_Page_Header {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
-
 		return self::$_instance;
 	}
 
@@ -893,7 +892,6 @@ class Customify_Page_Header {
 			$args['title_tag'] = 'h2';
 		}
 
-
         $layout  = Customify()->get_setting_tab(  'page_header_layout' );
         $classes = array( 'page-header--item page-cover' );
         $classes[] = $layout;
@@ -902,6 +900,8 @@ class Customify_Page_Header {
         <div id="page-cover" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $style; ?>>
             <div class="page-cover-inner customify-container">
 				<?php
+				do_action( 'customify/page-cover/before' );
+
                 if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
                     if ($args['title']) {
                         // WPCS: XSS ok.
@@ -914,6 +914,7 @@ class Customify_Page_Header {
 						echo '<div class="page-cover-tagline-wrapper"><div class="page-cover-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div></div>';
 					}
 				}
+
 				do_action( 'customify/page-cover/after' );
 				?>
             </div>
@@ -930,6 +931,11 @@ class Customify_Page_Header {
         <div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
             <div class="page-titlebar-inner customify-container">
 				<?php
+				/**
+				 * Hook titlebar before
+				 */
+				do_action( 'customify/titlebar/before' );
+
 				// WPCS: XSS ok.
                 if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
                     if ( $args['title'] ) {
@@ -942,8 +948,11 @@ class Customify_Page_Header {
 						echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
 					}
 				}
+				/**
+				 * Hook titlebar after
+				 */
+				do_action( 'customify/titlebar/after' );
 				?>
-				<?php do_action( 'customify/titlebar/after' ); ?>
             </div>
         </div>
 		<?php
@@ -954,6 +963,7 @@ class Customify_Page_Header {
 		if ( $args['display'] == 'none' ) {
 			return '';
 		}
+
 		switch ( $args['display'] ) {
 			case  'cover':
 				$this->render_cover( $args );

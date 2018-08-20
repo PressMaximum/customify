@@ -438,8 +438,15 @@ class Customify {
         }
     }
 
+	/**
+	 * Check if WooCommerce plugin activated
+	 * @see WooCommerce
+	 * @see wc
+	 *
+	 * @return bool
+	 */
     function is_woocommerce_active(){
-        return class_exists('WooCommerce');
+        return class_exists('WooCommerce') || function_exists('wc');
     }
 
     function is_using_post(){
