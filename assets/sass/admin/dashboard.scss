@@ -163,6 +163,9 @@ $dashboard_border_color: #e5e5e5;
         display: flex;
         padding: 16px 15px;
         border-bottom: 1px solid #eee;
+        &.cd-sub-module {
+            padding-left: 50px;
+        }
         &:last-child {
             margin-bottom: 0px;
         }
@@ -207,6 +210,8 @@ $dashboard_border_color: #e5e5e5;
     border-radius: 10px;
     position: relative;
     top: 3px;
+    transition: all 0.3s ease-in 0s;
+    opacity: 1;
 }
 .onoffswitch-inner {
     display: block; width: 200%; margin-left: -100%;
@@ -241,6 +246,9 @@ $dashboard_border_color: #e5e5e5;
 }
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
     right: 0px;
+}
+.onoffswitch-checkbox:disabled + .onoffswitch-label {
+    opacity: 0.5;
 }
 
 // Toast

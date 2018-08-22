@@ -169,6 +169,9 @@
   padding: 16px 15px;
   border-bottom: 1px solid #eee;
 }
+.cd-modules .cd-module-item.cd-sub-module {
+  padding-left: 50px;
+}
 .cd-modules .cd-module-item:last-child {
   margin-bottom: 0px;
 }
@@ -215,6 +218,8 @@
   border-radius: 10px;
   position: relative;
   top: 3px;
+  transition: all 0.3s ease-in 0s;
+  opacity: 1;
 }
 
 .onoffswitch-inner {
@@ -266,6 +271,10 @@
 
 .onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
   right: 0px;
+}
+
+.onoffswitch-checkbox:disabled + .onoffswitch-label {
+  opacity: 0.5;
 }
 
 .toast-title {
