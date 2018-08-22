@@ -181,6 +181,11 @@ $dashboard_border_color: #e5e5e5;
         padding-right: 100px;
         .cd-module-name {
             font-weight: 500;
+            .cd-toggle-disable-notice {
+                font-weight: 400;
+                margin-left: 15px;
+                font-style: italic;
+            }
         }
     }
     .cd-module-desc {
@@ -248,7 +253,8 @@ $dashboard_border_color: #e5e5e5;
     right: 0px;
 }
 .onoffswitch-checkbox:disabled + .onoffswitch-label {
-    opacity: 0.5;
+    opacity: 0.4;
+    cursor: default;
 }
 
 // Toast

@@ -188,6 +188,11 @@
 .cd-modules .cd-module-info .cd-module-name {
   font-weight: 500;
 }
+.cd-modules .cd-module-info .cd-module-name .cd-toggle-disable-notice {
+  font-weight: 400;
+  margin-left: 15px;
+  font-style: italic;
+}
 .cd-modules .cd-module-desc {
   margin-top: 10px;
   font-style: italic;
@@ -274,7 +279,8 @@
 }
 
 .onoffswitch-checkbox:disabled + .onoffswitch-label {
-  opacity: 0.5;
+  opacity: 0.4;
+  cursor: default;
 }
 
 .toast-title {
