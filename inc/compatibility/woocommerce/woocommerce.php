@@ -76,6 +76,8 @@ class Customify_WC {
 	        // Product catalog designer
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/cart.php';
+	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
 	        // Single colors config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
