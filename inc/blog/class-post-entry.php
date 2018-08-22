@@ -598,11 +598,22 @@ class Customify_Post_Entry {
 		        $cb = array( $this, 'post_' . $field );
 	        }
         }
-        do_action('customify/single/field_'.$field.'/before', $post, $fields, $args, $this );
+        $type = is_single() ? 'single' :  'loop';
+	    /**
+	     * Hook before post item part
+         *
+         * @since 0.2.2
+	     */
+        do_action("customify/{$type}/field_{$field}/before", $post, $fields, $args, $this );
 	    if ( is_callable( $cb ) ) {
 		    call_user_func_array( $cb, array( $post, $fields, $args ) );
 	    }
-	    do_action('customify/single/field_'.$field.'/after', $post, $fields, $args, $this );
+	    /**
+	     * Hook after post item part
+	     *
+	     * @since 0.2.2
+	     */
+	    do_action("customify/{$type}/field_{$field}/after", $post, $fields, $args, $this );
     }
 
     /**

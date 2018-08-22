@@ -195,7 +195,7 @@ class Customify_Sanitize_Input
                 }
 
                 $_v = $iv[$field['name']];
-                $_v = $this->sanitize($_v, $field);
+                $_v = $this->sanitize( $_v, $field);
                 $iv[$field['name']] = $_v;
             }
 

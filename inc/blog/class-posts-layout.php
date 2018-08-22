@@ -293,7 +293,17 @@ class Customify_Posts_Layout {
             $entry_class[] =  $this->entry_class ;
         }
 
+        $key = 'loop';
+        if ( is_single() ){
+	        $key = 'single';
+        }
+
         Customify_Post_Entry()->set_post( $post );
+	    /**
+	     * Hook before each post
+         * @since 0.2.0
+	     */
+	    do_action( "customify/before-post/{$key}" );
         ?>
         <article <?php post_class( join( ' ', $entry_class ),  $post ) ?>>
             <div class="entry-inner">
@@ -302,6 +312,11 @@ class Customify_Posts_Layout {
                 ?>
             </div>
         </article><!-- /.entry post --> <?php
+	    /**
+	     * Hook after each post
+	     * @since 0.2.0
+	     */
+	    do_action( "customify/after-post/{$key}" );
     }
 
     function get_predefined( $layout ){
