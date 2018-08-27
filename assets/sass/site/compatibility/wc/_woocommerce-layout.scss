@@ -15,6 +15,9 @@
     border: 1px solid $color_border;
     border-radius: 1px;
     line-height: 1;
+    height: 2em;
+    display: inline-flex;
+    align-items: center;
     margin-right: 10px;
     svg {
         width: 1.2em;

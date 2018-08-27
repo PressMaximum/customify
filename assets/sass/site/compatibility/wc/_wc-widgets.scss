@@ -156,10 +156,21 @@
         span {
             padding: 1px 0;
         }
+        a {
+            &:before {
+                @include iconbefore( '\e039' );
+                color: #c6c7ce;
+            }
+        }
+        .count {
+            background: #ededed;
+            padding: 0px 7px;
+            border-radius: 12px;
+        }
     }
     .woocommerce-widget-layered-nav-list__item--chosen a::before {
-        @include iconbefore( '\e013' );
-        color: $red;
+        @include iconbefore( '\e015' );
+        color: #c6c7ce;
     }
 }
 .woocommerce-widget-layered-nav-dropdown__submit {
