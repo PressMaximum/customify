@@ -5626,6 +5626,19 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget ul li {
   margin: 0px 0px 0.5407911001em;
 }
+.widget-area .widget ul li.cat-item .count {
+  float: right;
+  background: #ededed;
+  padding: 0px 0.5em;
+  border-radius: 0.9em;
+}
+.widget-area .widget ul li.cat-item:after:before, .widget-area .widget ul li.cat-item:after:after {
+  content: "";
+  display: table;
+}
+.widget-area .widget ul li.cat-item:after:after {
+  clear: both;
+}
 .widget-area .widget a.button:hover {
   text-decoration: none;
 }

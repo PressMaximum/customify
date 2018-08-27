@@ -84,8 +84,27 @@ class Customify_WC {
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
+	        // Overwrite Categories Walker
+	        add_filter( 'woocommerce_product_categories_widget_args', array( $this, 'customify_wc_cat_list_args' ) );
+
         }
     }
+
+	/**
+     *
+     * Overwrite Categories Walker
+     *
+     * @see WC_Product_Cat_List_Walker
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	function customify_wc_cat_list_args( $args ){
+		require_once get_template_directory().'/inc/compatibility/woocommerce/inc/class-wc-product-cat-list-walker.php';
+		$args['walker'] = new Customify_WC_Product_Cat_List_Walker;
+		return $args;
+	}
 
     function woocommerce_get_script_data( $data, $handle ){
         if ( $handle == 'woocommerce' ) {

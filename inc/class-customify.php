@@ -347,6 +347,10 @@ class Customify {
         $this->load_configs();
         $this->load_compatibility();
         $this->admin_includes();
+        // Custom categories walker class
+        if ( ! is_admin() ) {
+	        require_once self::$path.'/inc/class-categories-walker.php';
+        }
     }
 
     private function admin_includes(){

@@ -15,7 +15,6 @@
                 margin-bottom: 0;
             }
         }
-
         ul {
             list-style: none;
             padding: 0px;
@@ -29,6 +28,18 @@
             }
             li {
                 margin: 0px 0px ms(-3);
+                // cat item
+                &.cat-item {
+                    .count {
+                        float: right;
+                        background: #ededed;
+                        padding: 0px 0.5em;
+                        border-radius: 0.9em;
+                    }
+                    &:after {
+                        @include clearfix();
+                    }
+                }
             }
         }
         //a:not(.wc-forward) {

@@ -1264,9 +1264,10 @@ p.demo_store a,
   color: #c6c7ce;
 }
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item .count {
+  float: right;
   background: #ededed;
-  padding: 0px 7px;
-  border-radius: 12px;
+  padding: 0px 0.5em;
+  border-radius: 0.9em;
 }
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item--chosen a::before {
   font-family: 'WooCommerce';
