@@ -9,7 +9,7 @@
     margin-bottom: 0.5em;
 }
 
-.wc-view-mod {
+.wc-svg-btn {
     cursor: pointer;
     padding: 5px 5px 4px 5px;
     border: 1px solid $color_border;
@@ -26,6 +26,10 @@
         color: $color_primary;
         border-color: $color_primary;
     }
+}
+
+.wc-view-mod {
+
 }
 
 .wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {

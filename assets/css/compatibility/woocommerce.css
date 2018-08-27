@@ -107,7 +107,7 @@ $gl-devices-list: (
   margin-bottom: 0.5em;
 }
 
-.wc-view-mod {
+.wc-svg-btn {
   cursor: pointer;
   padding: 5px 5px 4px 5px;
   border: 1px solid #eaecee;
@@ -115,13 +115,13 @@ $gl-devices-list: (
   line-height: 1;
   margin-right: 10px;
 }
-.wc-view-mod svg {
+.wc-svg-btn svg {
   width: 1.2em;
   height: 1.2em;
   display: inline-block;
   fill: currentColor;
 }
-.wc-view-mod.active {
+.wc-svg-btn.active {
   color: #235787;
   border-color: #235787;
 }
@@ -962,6 +962,9 @@ p.demo_store a,
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+.wc-product-inner:last-child:first-child {
+  height: auto;
 }
 .wc-product-inner > div {
   flex: 1;

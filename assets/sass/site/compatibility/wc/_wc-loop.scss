@@ -71,6 +71,11 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    &:last-child{ // only have child
+        &:first-child {
+            height: auto;
+        }
+    }
     > div {
         flex: 1;
         flex-grow: 1;
