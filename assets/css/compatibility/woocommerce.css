@@ -1007,6 +1007,7 @@ p.demo_store a,
 .wc-product-inner .wc-product-media img {
   transition: all .3s ease;
   margin-bottom: 0px;
+  object-fit: cover;
 }
 .wc-product-inner .wc-product-media .secondary-image {
   position: absolute;
