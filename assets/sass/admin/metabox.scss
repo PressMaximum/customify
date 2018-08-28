@@ -21,7 +21,7 @@
 .customify-mt-media {
     display: block;
     .customify--add {
-        display: block;
+        display: inline-block;;
     }
     .customify--remove {
         display: none;
@@ -40,7 +40,42 @@
             display: none;
         }
         .customify--remove {
+            display: inline-block;
+        }
+    }
+}
+
+.customify-mt-tabs {
+    display: flex;
+    .customify-mt-tabs-list {
+        flex-basis: 20%;
+        margin: 0;
+        float: left;
+        line-height: 1em;
+        padding: 0 0 10px;
+        position: relative;
+        background-color: #fafafa;
+        border-right: 1px solid #eee;
+        box-sizing: border-box;
+        li {
+            margin: 0px;
+            padding: 0px;
+            i {
+                font-size: 14px;
+                margin-top: 4px;
+                margin-right: 5px;
             }
+            &.active {
+                a {
+                    color: #555;
+                    position: relative;
+                    background-color: #eee;
+                }
+            }
+        }
+        a {
+            margin: 0;
+            padding: 10px;
             display: block;
             box-shadow: none;
             text-decoration: none;
