@@ -3,32 +3,23 @@
 /**
  * Calls the class on the post edit screen.
  */
-function comtomify_metabox_init() {
-    Customify_MetaBox::get_instance();
-}
 
 if ( is_admin() ) {
-    add_action( 'load-post.php',     'comtomify_metabox_init' );
-    add_action( 'load-post-new.php', 'comtomify_metabox_init' );
+    add_action( 'load-post.php',     array( 'Customify_MetaBox', 'get_instance' ) );
+    add_action( 'load-post-new.php', array( 'Customify_MetaBox', 'get_instance' ) );
 }
 
 /**
- * The Class.
+ * The Metabox.
  */
 class Customify_MetaBox {
 
     static $_instance = null;
-
-    public $fields = array(
-        'sidebar' => '',
-        'content_layout' => '',
-        'disable_header' => '',
-        'disable_page_title' => '',
-        'disable_footer_main' => '',
-        'disable_footer_bottom' => '',
-        'page_header_display' => '',
-        'breadcrumb_display' => '',
-    );
+	/**
+     * @see Customify_Form_Fields
+	 * @var Customify_Form_Fields null
+	 */
+    public $field_builder = null;
 
     static function get_instance() {
         if ( is_null( self::$_instance ) ) {
@@ -36,11 +27,151 @@ class Customify_MetaBox {
             add_action( 'add_meta_boxes', array( self::$_instance, 'add_meta_box' ) );
             add_action( 'save_post',      array( self::$_instance, 'save'         ) );
             add_action( 'admin_enqueue_scripts',  array( self::$_instance, 'scripts' ) );
+	        require_once get_template_directory().'/inc/class-metabox-fields.php';
+	        self::$_instance->field_builder = new Customify_Form_Fields();
+	        self::$_instance->fields_config();
+	        do_action( 'customify/metabox/init', self::$_instance );
+
         }
         return self::$_instance;
     }
-    function scripts( $hook ){
 
+	/**
+	 * Add metabox fields
+	 *
+	 * @since 0.2.2
+	 */
+    function fields_config(){
+
+	    $this->field_builder->add_tab( 'layout', array(
+		    'title' => __( 'Layout', 'customify' ),
+		    'icon' => 'dashicons dashicons-grid-view'
+	    ) );
+
+	    $this->field_builder->add_tab( 'page_header', array(
+		    'title' => __( 'Page Header', 'customify' ),
+		    'icon' => 'dashicons dashicons-editor-kitchensink'
+	    ) );
+
+	    $this->field_builder->add_field( array(
+		    'title' => __( 'Content Layout', 'customify' ),
+		    'name' => 'sidebar',
+		    'tab' => 'layout',
+		    'type' => 'select',
+		    'choices' =>  array(
+			    'full-width' => __( 'Full Width', 'customify' ),
+			    'full-stretched' => __( 'Full Width - Stretched', 'customify' ),
+		    ),
+		    'show_default' => true,
+	    ) );
+
+	    $this->field_builder->add_field( array(
+		    'title' => __( 'Sidebar', 'customify' ),
+		    'name' => 'sidebar',
+		    'tab' => 'layout',
+		    'type' => 'select',
+		    'choices' => customify_get_config_sidebar_layouts(),
+		    'show_default' => true,
+		    'default_label' => __( 'Inherit from customize settings', 'customify' )
+	    ) );
+
+	    $this->field_builder->add_field( array(
+		    'title' => __( 'Disable Elements', 'customify' ),
+		    'name' => 'disable_elements',
+		    'tab' => 'layout',
+		    'type' => 'multiple_checkbox',
+		    'choices' => array(
+			    'disable_header' => __( 'Disable Header', 'customify' ),
+			    'disable_page_title' => __( 'Disable Title', 'customify' ),
+			    'disable_footer_main' => __( 'Disable Footer Main', 'customify' ),
+			    'disable_footer_bottom' => __( 'Disable Footer Bottom', 'customify' ),
+		    )
+	    ) );
+
+	    $this->field_builder->add_field( array(
+		    'title' => __( 'Display', 'customify' ),
+		    'tab' => 'page_header',
+		    'type' => 'select',
+		    'choices' => array(
+			    'default' => __( 'Inherit from customize settings', 'customify' ),
+			    'cover' => __( 'Cover', 'customify' ),
+			    'titlebar' => __( 'Titlebar', 'customify' ),
+			    'none' => __( 'Hide', 'customify' ),
+		    )
+	    ) );
+
+	    if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) {
+		    $this->field_builder ->add_tab('breadcrumb', array(
+			    'title' => __( 'Breadcrumb', 'Customify' ),
+			    'icon' => 'dashicons dashicons-admin-links'
+		    ));
+		    $this->field_builder->add_field( array(
+			    'title' => __( 'Breadcrumb', 'customify' ),
+			    'tab' => 'breadcrumb',
+			    'type' => 'select',
+			    'choices' => array(
+				    'default' => __('Inherit from customize settings', 'customify'),
+				    'hide' => __('Hide', 'customify'),
+				    'show' => __('Show', 'customify'),
+			    )
+		    ) );
+	    }
+
+	    // If Customify Pro activated
+	    if ( function_exists('Customify_Pro'  ) ) {
+
+		    $this->field_builder->add_field( array(
+			    'title' => __( 'Custom Title', 'customify' ),
+			    'type'  => 'text',
+			    'tab'   => 'page_header',
+			    'name'  => 'page_header_title'
+		    ) );
+
+		    $this->field_builder->add_field( array(
+			    'title' => __( 'Custom Tagline', 'customify' ),
+			    'type'  => 'text',
+			    'tab'   => 'page_header',
+			    'name'  => 'page_header_tagline'
+		    ) );
+
+		    $this->field_builder->add_field( array(
+			    'title' => __( 'Custom Image', 'customify' ),
+			    'type'  => 'image',
+			    'tab'   => 'page_header',
+			    'name'  => 'page_header_image'
+		    ) );
+
+		    $this->field_builder->add_field( array(
+			    'title'       => __( 'Custom Shortcode', 'customify' ),
+			    'type'        => 'textarea',
+			    'tab'         => 'page_header',
+			    'name'        => 'page_header_shortcode',
+			    'description' => __( 'If this field is set the page header cover will replace by this content. Arbitrary HTML code or Shortcode.', 'customify' )
+		    ) );
+
+		    if ( Customify_Pro()->is_enabled_module( 'Customify_Pro_Module_Header_Transparent' ) ) {
+			    $this->field_builder->add_tab( 'header_transparent', array(
+				    'title' => __( 'Header Transparent', 'customify' ),
+				    'icon' => 'dashicons dashicons-admin-page'
+			    ) );
+			    $this->field_builder->add_field( array(
+				    'title'       => __( 'Header Transparent', 'customify' ),
+				    'type'        => 'select',
+				    'tab'         => 'header_transparent',
+				    'name'        => 'header_transparent_display',
+				    'choices'     => array(
+					    'default' => __( 'Default', 'customify' ),
+					    'hide'    => __( 'Disable', 'customify' ),
+					    'show'    => __( 'Enable', 'customify' ),
+				    ),
+				    'description' => ''
+			    ) );
+		    }
+	    }
+
+    }
+
+    function scripts( $hook ){
         if($hook != 'post.php' && $hook !='post-new.php' ) {
             return;
         }
@@ -72,14 +203,10 @@ class Customify_MetaBox {
                 __( 'Customify Settings', 'customify' ),
                 array( $this, 'render_meta_box_content' ),
                 $post_type,
-                'side',
-                'low'
+                'normal',
+                'high'
             );
         }
-    }
-
-    function get_fields(){
-        return apply_filters( 'customify/metabox/fields', $this->fields );
     }
 
     /**
@@ -126,8 +253,10 @@ class Customify_MetaBox {
             }
         }
 
-        $settings = isset( $_POST['customify_page_settings'] ) ? wp_unslash( $_POST['customify_page_settings'] ) : array();
-        $settings = wp_parse_args( $settings, $this->get_fields() );
+	    /**
+	     * @since 0.2.2
+	     */
+        $settings = $this->field_builder->get_submitted_values();
 
         foreach( $settings as $key => $value ) {
             if ( ! is_array( $value ) ) {
@@ -151,88 +280,20 @@ class Customify_MetaBox {
 
         // Add an nonce field so we can check for it later.
         wp_nonce_field( 'customify_page_settings', 'customify_page_settings_nonce' );
-        $values = $this->get_fields();
-        foreach( $values as $key => $value ) {
-            $values[ $key ] = get_post_meta( $post->ID, '_customify_'.$key, true );
+        $values = array();
+        foreach( $this->field_builder->get_all_fields() as $key => $f ) {
+        	if ( $f['type']  == 'multiple_checkbox' ) {
+		        foreach ( ( array ) $f['choices'] as $_key => $label ) {
+			        $value = get_post_meta( $post->ID, '_customify_'.$_key, true );
+			        $values[ $_key ] = $value;
+		        }
+	        }elseif ( $f['name'] ) {
+		        $values[ $f['name'] ] = get_post_meta( $post->ID, '_customify_'.$f['name'], true );
+	        }
         }
-        ?>
-        <div class="customify_metabox_section">
-            <label for="customify_page_layout"><strong><?php _e( 'Sidebar', 'customify' ); ?></strong></label>
-            <select id="customify_page_layout" name="customify_page_settings[sidebar]">
-                <option value=""><?php _e( 'Inherit from customize settings', 'customify' ); ?></option>
-                <?php foreach( customify_get_config_sidebar_layouts() as $k => $label ) { ?>
-                <option <?php selected( $values['sidebar'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
-                <?php } ?>
-            </select>
-        </div>
-        <div class="customify_metabox_section">
-            <label for="customify_content_layout"><strong><?php _e( 'Content Layout', 'customify' ); ?></strong></label>
-            <select id="customify_content_layout" name="customify_page_settings[content_layout]">
-                <option value=""><?php _e( 'Default', 'customify' ); ?></option>
-                <?php foreach( array(
-                        'full-width' => __( 'Full Width', 'customify' ),
-                        'full-stretched' => __( 'Full Width - Stretched', 'customify' ),
-                       ) as $k => $label ) { ?>
-                    <option <?php selected( $values['content_layout'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
-                <?php } ?>
-            </select>
-        </div>
-        <div class="customify_metabox_section">
-            <label><strong><?php _e( 'Disable Elements', 'customify' ); ?></strong></label>
 
-            <div class="checkbox_input">
-                <input type="checkbox" name="customify_page_settings[disable_header]" <?php checked( $values['disable_header'], 1 ); ?> value="1"> <?php _e( 'Disable Header', 'customify' ); ?>
-            </div>
-
-            <div class="checkbox_input">
-                <input type="checkbox" name="customify_page_settings[disable_page_title]" <?php checked( $values['disable_page_title'], 1 ); ?> value="1"> <?php _e( 'Disable Title', 'customify' ); ?>
-            </div>
-
-            <div class="checkbox_input">
-                <input type="checkbox" name="customify_page_settings[disable_footer_main]" <?php checked( $values['disable_footer_main'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Main', 'customify' ); ?>
-            </div>
-
-            <div class="checkbox_input">
-                <input type="checkbox" name="customify_page_settings[disable_footer_bottom]" <?php checked( $values['disable_footer_bottom'], 1 ); ?> value="1"> <?php _e( 'Disable Footer Bottom', 'customify' ); ?>
-            </div>
-
-        </div>
-
-        <div class="customify_metabox_section">
-            <label for="customify_page_header_display"><strong><?php _e( 'Page Header Display', 'customify' ); ?></strong></label>
-            <select id="customify_page_header_display" name="customify_page_settings[page_header_display]">
-            <?php
-            foreach(
-                array(
-                   'default' => __( 'Inherit from customize settings', 'customify' ),
-                   'cover' => __( 'Cover', 'customify' ),
-                   'titlebar' => __( 'Titlebar', 'customify' ),
-                   'none' => __( 'Hide', 'customify' ),
-                ) as $k => $label ) { ?>
-                <option <?php selected( $values['page_header_display'],  $k ); ?> value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
-            <?php } ?>
-            </select>
-        </div>
-        <?php
-
-        do_action('customify/metabox/settings', $post );
-
-        if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) { ?>
-        <div class="customify_metabox_section">
-            <label for="customify_page_breadcrumb_display"><strong><?php _e('Breadcrumb Display', 'customify'); ?></strong></label>
-            <select id="customify_page_breadcrumb_display" name="customify_page_settings[breadcrumb_display]">
-                <?php
-                foreach (array(
-                             'default' => __('Inherit from customize settings', 'customify'),
-                             'hide' => __('Hide', 'customify'),
-                             'show' => __('Show', 'customify'),
-                         ) as $k => $label) { ?>
-                    <option <?php selected($values['breadcrumb_display'], $k); ?> value="<?php echo esc_attr($k); ?>"><?php echo esc_html($label); ?></option>
-                <?php } ?>
-            </select>
-        </div>
-        <?php
-        }
+        $this->field_builder->set_values( $values );
+        $this->field_builder->render();
 
     }
 }

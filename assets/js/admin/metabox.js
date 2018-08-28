@@ -1,5 +1,20 @@
 jQuery( document ).ready( function( $ ){
 
+    // Metabox tabs
+    $( document ).on( 'click', '.customify-mt-tabs-list a', function(e){
+        e.preventDefault();
+        var wrapper = $( this ).closest( '.customify-mt-tabs' );
+        var layout = $( this ).attr( 'data-tab-id' ) || false;
+        if ( layout ) {
+            $( '.customify-mt-tab-cont', wrapper ).removeClass('active');
+            $( '.customify-mt-tab-cont[data-tab-id="'+layout+'"]', wrapper ).addClass('active');
+
+            $( '.customify-mt-tabs-list li', wrapper ).removeClass( 'active' );
+            $( this ).closest('li').addClass( 'active' );
+        }
+    } );
+
+
     var CustomifyMedia =  {
         setAttachment: function( attachment ){
             this.attachment = attachment;
