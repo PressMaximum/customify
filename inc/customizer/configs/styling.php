@@ -178,7 +178,9 @@ blockquote,
 .site-content .widget-area .menu li.current-menu-item > a,
 .posts-layout .entry-inner,
 .post-navigation .nav-links,
-article.comment .comment-meta
+article.comment .comment-meta,
+.widget-area .widget_pages li a, .widget-area .widget_categories li a, .widget-area .widget_archive li a, .widget-area .widget_meta li a, .widget-area .widget_nav_menu li a, .widget-area .widget_product_categories li a, .widget-area .widget_recent_entries li a, .widget-area .widget_rss li a,
+.widget-area .widget_recent_comments li
 {
     border-color: {{value}};
 }
