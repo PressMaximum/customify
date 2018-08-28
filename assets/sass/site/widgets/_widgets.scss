@@ -29,7 +29,8 @@
             li {
                 margin: 0px 0px 0.6em;
                 // cat item
-                &.cat-item {
+                &.cat-item, &.woocommerce-widget-layered-nav-list__item {
+                    position: relative;
                     .count {
                         right: 0;
                         background: #eaecee;
