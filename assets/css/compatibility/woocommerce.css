@@ -1930,10 +1930,28 @@ a.remove {
   font-size: 16px !important;
   font-weight: normal;
   line-height: 16px !important;
-  display: block;
+  display: inline-block;
   text-align: center;
 }
 a.remove:hover {
+  color: red;
+  border-color: red;
+}
+
+a.remove2x {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ccc;
+  color: #ccc;
+  border-radius: 100px;
+  font-family: sans-serif !important;
+  font-size: 18px !important;
+  font-weight: normal;
+  line-height: 31px;
+  display: inline-block;
+  text-align: center;
+}
+a.remove2x:hover {
   color: red;
   border-color: red;
 }
