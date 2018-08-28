@@ -134,5 +134,4 @@ jQuery( document ).ready( function ( $ ) {
         $( 'input.qty[type="number"]' )._wc_plus_minus();
     } );
 
-
 } );

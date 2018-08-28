@@ -1264,12 +1264,6 @@ p.demo_store a,
   text-decoration: none;
   color: #c6c7ce;
 }
-.woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item .count {
-  float: right;
-  background: #ededed;
-  padding: 0px 0.5em;
-  border-radius: 0.9em;
-}
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item--chosen a::before {
   font-family: 'WooCommerce';
   speak: none;
@@ -1936,10 +1930,28 @@ a.remove {
   font-size: 16px !important;
   font-weight: normal;
   line-height: 16px !important;
-  display: block;
+  display: inline-block;
   text-align: center;
 }
 a.remove:hover {
+  color: red;
+  border-color: red;
+}
+
+a.remove2x {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ccc;
+  color: #ccc;
+  border-radius: 100px;
+  font-family: sans-serif !important;
+  font-size: 18px !important;
+  font-weight: normal;
+  line-height: 31px;
+  display: inline-block;
+  text-align: center;
+}
+a.remove2x:hover {
   color: red;
   border-color: red;
 }
