@@ -1,13 +1,42 @@
 <?php
 
+/**
+ * A Simple Metabox Fields Class
+ *
+ * Class Customify_Form_Fields
+ *
+ * @since 0.2.2
+ */
 class Customify_Form_Fields {
 
+	/**
+	 * @var array List fields
+	 */
     private $fields = array();
+	/**
+	 * @var array Input Tabs
+	 */
     private $tabs = array();
+	/**
+	 * @var array Values of fields
+	 */
     private $values = array();
+	/**
+	 * @var bool Using tabs or not
+	 */
     private $using_tabs = true;
+	/**
+	 * @var string Group input name
+	 */
     private $group_name = 'customify_page_settings';
 
+	/**
+     * Parse field args
+     *
+	 * @param $args
+	 *
+	 * @return array
+	 */
 	function parse_args( $args ){
 		if ( ! is_array( $args ) ) {
 			$args = array();
@@ -28,22 +57,47 @@ class Customify_Form_Fields {
 		return $args;
 	}
 
+	/**
+     * Get all registered fields
+     *
+	 * @return array
+	 */
 	function get_all_fields(){
 	    return $this->fields;
     }
 
+	/**
+     * Get all registered tabs
+     *
+	 * @return array
+	 */
 	function get_all_tabs(){
 		return $this->tabs;
 	}
 
+	/**
+     * Set using tabs or not
+     *
+	 * @param $using
+	 */
 	function using_tabs( $using ){
 		$this->using_tabs = $using;
 	}
 
+	/**
+     * Set values for fields
+     *
+	 * @param $values
+	 */
 	function set_values( $values ){
         $this->values = $values;
     }
 
+	/**
+     * Get data from submitted form
+     *
+	 * @return array
+	 */
     function get_submitted_values(){
 	    $data = $this->group_name && isset( $_REQUEST[ $this->group_name ] ) ? $_REQUEST[ $this->group_name  ] : $_REQUEST;
 	    $data = wp_unslash( $data );
@@ -64,6 +118,12 @@ class Customify_Form_Fields {
         return $submitted_data;
     }
 
+	/**
+     * Add a tab
+     *
+	 * @param $tab_id
+	 * @param $args
+	 */
     function add_tab( $tab_id, $args ){
 	    $args = wp_parse_args( $args, array(
             'title' => '',
@@ -74,10 +134,20 @@ class Customify_Form_Fields {
 	    $this->tabs[ $tab_id ] = $args;
     }
 
+	/**
+     * Add field
+     *
+	 * @param $args
+	 */
 	function add_field( $args ){
 		$this->fields[] = $this->parse_args( $args );
     }
 
+	/**
+     * Render input fields
+     *
+	 * @param bool $tab_id
+	 */
     private function render_fields( $tab_id  = false ){
 	    foreach ( $this->fields as $field ) {
 	        if( $tab_id ) {
@@ -106,14 +176,24 @@ class Customify_Form_Fields {
 		    if ( $content ) {
 			    $this->before_field( $field );
 			    if ( $_in_class ) {
-				    $this->field_label( $field );
+				    $this->label( $field );
                 }
-			    echo '<div class="customify-mt-field-inner">'.$content.'</div>'; // WPCS: XSS OK.
+			    echo '<div class="customify-mt-field-inner">';
+			    echo $content; // WPCS: XSS OK.
+                $this->description( $field );
+			    echo '</div>';
 			    $this->after_field( $field );
 		    }
 	    }
     }
 
+	/**
+     * Check string is url ?
+     *
+	 * @param $url
+	 *
+	 * @return bool
+	 */
 	function is_valid_url( $url ) {
 
 		// Must start with http:// or https://.
@@ -129,6 +209,9 @@ class Customify_Form_Fields {
 		return true;
 	}
 
+	/**
+	 * Render tabs and inputs inside
+	 */
     private function render_tabs(){
 	    if ( $this->using_tabs && ! empty( $this->tabs ) ) {
             echo '<div class="customify-mt-tabs">';
@@ -170,18 +253,38 @@ class Customify_Form_Fields {
         }
     }
 
+	/**
+	 * Render content
+	 */
     function render(){
         $this->render_tabs();
     }
 
+	/**
+     * Before field
+     *
+	 * @param $args
+	 */
     function before_field( $args ){
         echo "<div class=\"customify-mt-field field-type-{$args['type']}\">";
     }
 
+	/**
+     * After field
+     *
+	 * @param $args
+	 */
     function after_field( $args ){
         echo '</div>';
     }
 
+	/**
+     * Get field name
+     *
+	 * @param $args string|array Field settings or field name
+	 *
+	 * @return string
+	 */
     function get_name( $args ){
 	    $key = is_array( $args ) ? $args['name'] : $args;
         if ( $this->group_name ) {
@@ -190,6 +293,13 @@ class Customify_Form_Fields {
         return $args['name'];
     }
 
+	/**
+     * Get field value
+     *
+	 * @param $args string|array Field setting or input name
+	 *
+	 * @return mixed|null
+	 */
     function get_value( $args ){
 	    $key = is_array( $args ) ? $args['name'] : $args;
         if ( isset( $this->values[ $key ] ) ) {
@@ -198,12 +308,24 @@ class Customify_Form_Fields {
         return is_array( $args ) ?  $args['default'] : null;
     }
 
+	/**
+     * Get field id
+     *
+	 * @param $args string|array Field setting or input name
+	 *
+	 * @return string
+	 */
     private function get_filed_id( $args ){
 	    $key = is_array( $args ) ? $args['name'] : $args;
         return 'customify-mt-field-'. $key;
     }
 
-    function field_label( $args ){
+	/**
+     * Display field label
+     *
+	 * @param $args
+	 */
+    function label( $args ){
 	    if ( $args['title'] ) {
 		    ?>
             <label class="customify-mt-field-label" for="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>"><?php echo $args['title']; // WPCS: XSS OK. ?></label>
@@ -211,17 +333,46 @@ class Customify_Form_Fields {
 	    }
     }
 
+	/**
+	 * Display field description
+	 *
+	 * @param $args
+	 */
+	function description( $args ){
+		if ( $args['description'] ) {
+			?>
+            <p class="description"><?php echo $args['description']; // WPCS: XSS OK. ?></p>
+			<?php
+		}
+	}
+
+	/**
+     * Field Text
+     *
+	 * @param $args
+	 */
 	private function field_text( $args ){
 		?>
         <input type="text" id="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>" value="<?php echo esc_attr( $this->get_value( $args ) ); ?>" class="widefat">
 		<?php
 	}
+
+	/**
+     * Field textarea
+     *
+	 * @param $args
+	 */
 	private function field_textarea( $args ){
 		?>
         <textarea rows="5" id="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>" class="widefat"><?php echo esc_textarea( $this->get_value( $args ) ); ?></textarea>
 		<?php
 	}
 
+	/**
+     * Field text select
+     *
+	 * @param $args
+	 */
 	private function field_select( $args ){
 		?>
         <select id="customify-met-field-<?php echo esc_attr( $args['name'] ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>">
@@ -234,6 +385,12 @@ class Customify_Form_Fields {
         </select>
 		<?php
 	}
+
+	/**
+     * Field text multiple checkbox
+     *
+	 * @param $args
+	 */
 	private function field_multiple_checkbox( $args ){
 		?>
         <?php foreach( $args['choices'] as $k => $label ) { ?>
@@ -242,6 +399,10 @@ class Customify_Form_Fields {
 		<?php
 	}
 
+	/**
+     * Field Checkbox
+	 * @param $args
+	 */
 	private function field_checkbox( $args ){
 		$args = wp_parse_args( $args, array(
             'checkbox_label' => ''
@@ -251,6 +412,11 @@ class Customify_Form_Fields {
 		<?php
 	}
 
+	/**
+     * Field Image
+     *
+	 * @param $args
+	 */
 	function field_image( $args ){
 	    $value = $this->get_value( $args );
 		$image = wp_parse_args( $value, array(
@@ -278,6 +444,4 @@ class Customify_Form_Fields {
         </span>
         <?php
     }
-
-
 }

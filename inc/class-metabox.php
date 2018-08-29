@@ -117,58 +117,6 @@ class Customify_MetaBox {
 		    ) );
 	    }
 
-	    // If Customify Pro activated
-	    if ( function_exists('Customify_Pro'  ) ) {
-
-		    $this->field_builder->add_field( array(
-			    'title' => __( 'Custom Title', 'customify' ),
-			    'type'  => 'text',
-			    'tab'   => 'page_header',
-			    'name'  => 'page_header_title'
-		    ) );
-
-		    $this->field_builder->add_field( array(
-			    'title' => __( 'Custom Tagline', 'customify' ),
-			    'type'  => 'text',
-			    'tab'   => 'page_header',
-			    'name'  => 'page_header_tagline'
-		    ) );
-
-		    $this->field_builder->add_field( array(
-			    'title' => __( 'Custom Image', 'customify' ),
-			    'type'  => 'image',
-			    'tab'   => 'page_header',
-			    'name'  => 'page_header_image'
-		    ) );
-
-		    $this->field_builder->add_field( array(
-			    'title'       => __( 'Custom Shortcode', 'customify' ),
-			    'type'        => 'textarea',
-			    'tab'         => 'page_header',
-			    'name'        => 'page_header_shortcode',
-			    'description' => __( 'If this field is set the page header cover will replace by this content. Arbitrary HTML code or Shortcode.', 'customify' )
-		    ) );
-
-		    if ( Customify_Pro()->is_enabled_module( 'Customify_Pro_Module_Header_Transparent' ) ) {
-			    $this->field_builder->add_tab( 'header_transparent', array(
-				    'title' => __( 'Header Transparent', 'customify' ),
-				    'icon' => 'dashicons dashicons-admin-page'
-			    ) );
-			    $this->field_builder->add_field( array(
-				    'title'       => __( 'Header Transparent', 'customify' ),
-				    'type'        => 'select',
-				    'tab'         => 'header_transparent',
-				    'name'        => 'header_transparent_display',
-				    'choices'     => array(
-					    'default' => __( 'Default', 'customify' ),
-					    'hide'    => __( 'Disable', 'customify' ),
-					    'show'    => __( 'Enable', 'customify' ),
-				    ),
-				    'description' => ''
-			    ) );
-		    }
-	    }
-
     }
 
     function scripts( $hook ){
