@@ -38,8 +38,13 @@
   display: inline-block;
 }
 
+.customify-mt-box-inner {
+  width: 100%;
+}
+
 .customify-mt-tabs {
   display: flex;
+  width: 100%;
 }
 .customify-mt-tabs .customify-mt-tabs-list {
   flex-basis: 20%;
@@ -84,28 +89,29 @@
 .customify-mt-tabs .customify-mt-tab-contents .customify-mt-tab-cont.active {
   display: block;
 }
-.customify-mt-tabs .customify-mt-field {
+
+.customify-mt-field {
   display: flex;
   padding: 15px 20px;
   align-items: start;
   border-bottom: 1px solid #eee;
 }
-.customify-mt-tabs .customify-mt-field:last-child {
+.customify-mt-field:last-child {
   border-bottom: 0px;
 }
-.customify-mt-tabs .customify-mt-field .customify-mt-field-label {
+.customify-mt-field .customify-mt-field-label {
   flex-basis: 25%;
 }
-.customify-mt-tabs .customify-mt-field .customify-mt-field-inner {
+.customify-mt-field .customify-mt-field-inner {
   flex-basis: 75%;
 }
-.customify-mt-tabs .customify-mt-field .customify-mt-field-inner p.field-p:first-child {
+.customify-mt-field .customify-mt-field-inner p.field-p:first-child {
   margin-top: 0px;
 }
-.customify-mt-tabs .customify-mt-field .customify-mt-field-inner p.field-p:last-child {
+.customify-mt-field .customify-mt-field-inner p.field-p:last-child {
   margin-bottom: 0px;
 }
-.customify-mt-tabs .customify-mt-field .customify-image-preview {
+.customify-mt-field .customify-image-preview {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -114,10 +120,15 @@
   background: #eee;
   border: 1px solid #eee;
 }
-.customify-mt-tabs .customify-mt-field .customify-image-preview img {
+.customify-mt-field .customify-image-preview img {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.cd-box .customify-mt-box .customify-mt-field {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 /*# sourceMappingURL=metabox.css.map */

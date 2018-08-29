@@ -43,16 +43,35 @@ class Customify_Form_Fields {
 		}
 		$args = wp_parse_args( $args, array(
 			'title' => '',
+			'label' => '', // alias of title
 			'type' => 'text',
 			'tab' => 'text',
 			'name' => '',
 			'description' => '',
+			'desc' => '', // alias of description
+			'content' => '', // For html content
 			'default' => null,
 			'show_default' => false,
 			'default_label' => false,
 			'placeholder' => '',
-			'choices' => array()
+			'choices' => array(),
+			'options' => array() // alias of options
 		) );
+
+		if ( empty( $args['choices'] ) ) {
+			$args['choices'] = $args['options'];
+        }
+
+		if ( empty( $args['description'] ) ) {
+			$args['description'] = $args['desc'];
+		}
+
+		if ( empty( $args['title'] ) ) {
+			$args['title'] = $args['label'];
+		}
+
+		unset( $args['label'], $args['options'], $args['desc'] );
+
 		$args['type'] = sanitize_text_field( $args['type'] );
 		return $args;
 	}
@@ -92,6 +111,15 @@ class Customify_Form_Fields {
 	function set_values( $values ){
         $this->values = $values;
     }
+
+	/**
+	 * Set Group name
+	 *
+	 * @param $name string
+	 */
+	function set_group_name( $name ){
+		$this->group_name = $name;
+	}
 
 	/**
      * Get data from submitted form
@@ -141,6 +169,21 @@ class Customify_Form_Fields {
 	 */
 	function add_field( $args ){
 		$this->fields[] = $this->parse_args( $args );
+    }
+
+    /**
+    * Add fields
+    *
+    * @param $args
+    */
+	function add_fields( $fields ){
+	    foreach ( $fields as $field ) {
+	        $this->add_field( $field );
+        }
+	}
+
+	function reset_fields(){
+	    $this->fields = array();
     }
 
 	/**
@@ -257,7 +300,16 @@ class Customify_Form_Fields {
 	 * Render content
 	 */
     function render(){
-        $this->render_tabs();
+        if ( $this->using_tabs ) {
+	        $this->render_tabs();
+        } else {
+            $class = 'customify-mt-tabs customify-mt-box';
+            echo '<div class="'.$class.'">';
+                echo '<div class="customify-mt-box-inner">';
+                $this->render_fields();
+                echo '</div>';
+            echo '</div>';
+        }
     }
 
 	/**
@@ -410,6 +462,14 @@ class Customify_Form_Fields {
 		?>
         <label><input type="checkbox" id="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>" <?php checked( $this->get_value( $args ),  1 ); ?> value="1"/> <?php echo $args['checkbox_label']; // WPCS: XSS OK.  ?></label>
 		<?php
+	}
+
+	/**
+     * Field Checkbox
+	 * @param $args
+	 */
+	private function field_html( $args ){
+		echo $args['content']; // WPCS: XSS OK
 	}
 
 	/**

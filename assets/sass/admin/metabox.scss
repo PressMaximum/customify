@@ -44,9 +44,12 @@
         }
     }
 }
-
+.customify-mt-box-inner {
+    width: 100%;
+}
 .customify-mt-tabs {
     display: flex;
+    width: 100%;
     .customify-mt-tabs-list {
         flex-basis: 20%;
         margin: 0;
@@ -92,41 +95,51 @@
             }
         }
     }
-    .customify-mt-field {
+
+}
+
+.customify-mt-field {
+    display: flex;
+    padding: 15px 20px;
+    align-items: start;
+    border-bottom: 1px solid #eee;
+    &:last-child {
+        border-bottom: 0px;
+    }
+    .customify-mt-field-label {
+        flex-basis: 25%;
+    }
+    .customify-mt-field-inner {
+        flex-basis: 75%;
+        p.field-p {
+            &:first-child {
+                margin-top: 0px;
+            }
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+    .customify-image-preview {
         display: flex;
-        padding: 15px 20px;
-        align-items: start;
-        border-bottom: 1px solid #eee;
-        &:last-child {
-            border-bottom: 0px;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        background: #eee;
+        border: 1px solid #eee;
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
         }
-        .customify-mt-field-label {
-            flex-basis: 25%;
-        }
-        .customify-mt-field-inner {
-            flex-basis: 75%;
-            p.field-p {
-                &:first-child {
-                    margin-top: 0px;
-                }
-                &:last-child {
-                    margin-bottom: 0px;
-                }
-            }
-        }
-        .customify-image-preview  {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100px;
-            height: 100px;
-            background: #eee;
-            border: 1px solid #eee;
-            img {
-                object-fit: cover;
-                width: 100%;
-                height: 100%;
-            }
+    }
+}
+.cd-box {
+    .customify-mt-box {
+        .customify-mt-field {
+            padding-left: 0px;
+            padding-right: 0px;
         }
     }
 }

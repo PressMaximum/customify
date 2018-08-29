@@ -519,7 +519,7 @@ class Customify_Post_Entry {
 	    if ( ! is_singular( 'post' ) ) {
 		    return;
 	    }
-	    
+
         if (is_single()) {
             global $post;
             // Detect if it is a single post with a post author
