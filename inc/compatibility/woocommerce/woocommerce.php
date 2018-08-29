@@ -558,11 +558,17 @@ class Customify_WC {
         }
 
         if ( is_product() ) {
-            $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
-            if ( $product_custom && $product_custom != 'default' ) {
-                $layout = $product_custom;
+	        $product_sidebar = get_post_meta( get_the_ID(), '_customify_sidebar', true );
+	        if ( ! $product_sidebar ) {
+		        $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
+		        if ( $product_custom && $product_custom != 'default' ) {
+			        $layout = $product_custom;
+		        }
+            } else {
+		        $layout = $product_sidebar;
             }
         }
+
         return $layout;
     }
 }
