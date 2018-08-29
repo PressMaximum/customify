@@ -4765,8 +4765,8 @@ body.menu_sidebar_dropdown:before {
 
 /* Hiding Menu Sidebar animation. */
 .hiding-header-menu-sidebar {
-  overflow: hidden;
-  position: fixed;
+  overflow-x: hidden;
+  position: relative;
   width: 100%;
   display: block;
 }

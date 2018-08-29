@@ -136,6 +136,7 @@ jQuery( document ).ready( function( $ ){
 
     // close icon
     var close_menu_sidebar = function(){
+
         $( 'body' ).addClass( 'hiding-header-menu-sidebar' );
         $( 'body' ).removeClass( 'is-menu-sidebar' );
         $('.menu-mobile-toggle, .menu-mobile-toggle .hamburger').removeClass( 'is-active' );
@@ -155,6 +156,7 @@ jQuery( document ).ready( function( $ ){
                 $( 'body' ).removeClass( 'hiding-header-menu-sidebar' );
             }, 1000 );
         }
+
     };
 
     $document.on( 'click',  '.menu-mobile-toggle', function( e ){
