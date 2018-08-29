@@ -107,21 +107,24 @@ $gl-devices-list: (
   margin-bottom: 0.5em;
 }
 
-.wc-view-mod {
+.wc-svg-btn {
   cursor: pointer;
   padding: 5px 5px 4px 5px;
   border: 1px solid #eaecee;
   border-radius: 1px;
   line-height: 1;
+  height: 2em;
+  display: inline-flex;
+  align-items: center;
   margin-left: 10px;
 }
-.wc-view-mod svg {
+.wc-svg-btn svg {
   width: 1.2em;
   height: 1.2em;
   display: inline-block;
   fill: currentColor;
 }
-.wc-view-mod.active {
+.wc-svg-btn.active {
   color: #235787;
   border-color: #235787;
 }
@@ -960,6 +963,9 @@ p.demo_store a,
   flex-direction: column;
   height: 100%;
 }
+.wc-product-inner:last-child:first-child {
+  height: auto;
+}
 .wc-product-inner > div {
   flex: 1;
   flex-grow: 1;
@@ -998,6 +1004,7 @@ p.demo_store a,
 .wc-product-inner .wc-product-media img {
   transition: all .3s ease;
   margin-bottom: 0px;
+  object-fit: cover;
 }
 .wc-product-inner .wc-product-media .secondary-image {
   position: absolute;
@@ -1241,6 +1248,19 @@ p.demo_store a,
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item span {
   padding: 1px 0;
 }
+.woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item a:before {
+  font-family: 'WooCommerce';
+  speak: none;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  margin-left: 0.618em;
+  content: "";
+  text-decoration: none;
+  color: #c6c7ce;
+}
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item--chosen a::before {
   font-family: 'WooCommerce';
   speak: none;
@@ -1250,9 +1270,9 @@ p.demo_store a,
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.618em;
-  content: "";
+  content: "";
   text-decoration: none;
-  color: #a00;
+  color: #c6c7ce;
 }
 
 .woocommerce-widget-layered-nav-dropdown__submit {
@@ -1906,10 +1926,28 @@ a.remove {
   font-size: 16px !important;
   font-weight: normal;
   line-height: 16px !important;
-  display: block;
+  display: inline-block;
   text-align: center;
 }
 a.remove:hover {
+  color: red;
+  border-color: red;
+}
+
+a.remove2x {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ccc;
+  color: #ccc;
+  border-radius: 100px;
+  font-family: sans-serif !important;
+  font-size: 18px !important;
+  font-weight: normal;
+  line-height: 31px;
+  display: inline-block;
+  text-align: center;
+}
+a.remove2x:hover {
   color: red;
   border-color: red;
 }

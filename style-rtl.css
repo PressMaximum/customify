@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify
 Author URI: https://wpcustomify.com/about
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com
-Version: 0.2.1
+Version: 0.2.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -4925,8 +4925,8 @@ body.menu_sidebar_dropdown:before {
 
 /* Hiding Menu Sidebar animation. */
 .hiding-header-menu-sidebar {
-  overflow: hidden;
-  position: fixed;
+  overflow-x: hidden;
+  position: relative;
   width: 100%;
   display: block;
 }
@@ -5829,7 +5829,27 @@ body.menu_sidebar_dropdown:before {
   visibility: hidden;
 }
 .widget-area .widget ul li {
-  margin: 0px 0px 0.5407911001em;
+  margin: 0px 0px 0.6em;
+}
+.widget-area .widget ul li.cat-item, .widget-area .widget ul li.woocommerce-widget-layered-nav-list__item {
+  position: relative;
+}
+.widget-area .widget ul li.cat-item .count, .widget-area .widget ul li.woocommerce-widget-layered-nav-list__item .count {
+  left: 0;
+  background: #eaecee;
+  color: #999999;
+  padding: 0px 0.5em;
+  border-radius: 0.9em;
+  font-size: 12px;
+  position: absolute;
+  top: 4px;
+}
+.widget-area .widget ul li.cat-item:after:before, .widget-area .widget ul li.cat-item:after:after, .widget-area .widget ul li.woocommerce-widget-layered-nav-list__item:after:before, .widget-area .widget ul li.woocommerce-widget-layered-nav-list__item:after:after {
+  content: "";
+  display: table;
+}
+.widget-area .widget ul li.cat-item:after:after, .widget-area .widget ul li.woocommerce-widget-layered-nav-list__item:after:after {
+  clear: both;
 }
 .widget-area .widget a.button:hover {
   text-decoration: none;
@@ -5884,6 +5904,90 @@ body.menu_sidebar_dropdown:before {
   margin-right: 1.41575em;
   margin-bottom: -0.3819820591em;
 }
+.widget-area .widget_categories .menu-item-has-children > a, .widget-area .widget_nav_menu .menu-item-has-children > a, .widget-area .widget_pages .menu-item-has-children > a, .widget-area .widget_product_categories .menu-item-has-children > a {
+  margin-bottom: 0px;
+}
+.widget-area .widget_pages li,
+.widget-area .widget_categories li,
+.widget-area .widget_archive li,
+.widget-area .widget_meta li,
+.widget-area .widget_nav_menu li,
+.widget-area .widget_product_categories li,
+.widget-area .widget_recent_entries li,
+.widget-area .widget_rss li {
+  display: block;
+  position: relative;
+}
+.widget-area .widget_pages li:last-child,
+.widget-area .widget_categories li:last-child,
+.widget-area .widget_archive li:last-child,
+.widget-area .widget_meta li:last-child,
+.widget-area .widget_nav_menu li:last-child,
+.widget-area .widget_product_categories li:last-child,
+.widget-area .widget_recent_entries li:last-child,
+.widget-area .widget_rss li:last-child {
+  border: none;
+}
+.widget-area .widget_pages li a,
+.widget-area .widget_categories li a,
+.widget-area .widget_archive li a,
+.widget-area .widget_meta li a,
+.widget-area .widget_nav_menu li a,
+.widget-area .widget_product_categories li a,
+.widget-area .widget_recent_entries li a,
+.widget-area .widget_rss li a {
+  display: block;
+  width: 100%;
+  padding-bottom: 0.6em;
+  margin-bottom: 0.6em;
+  border-bottom: 1px solid #eaecee;
+  position: relative;
+}
+.widget-area .widget_pages li ul li::before,
+.widget-area .widget_categories li ul li::before,
+.widget-area .widget_archive li ul li::before,
+.widget-area .widget_meta li ul li::before,
+.widget-area .widget_nav_menu li ul li::before,
+.widget-area .widget_product_categories li ul li::before,
+.widget-area .widget_recent_entries li ul li::before,
+.widget-area .widget_rss li ul li::before {
+  right: 15px;
+}
+.widget-area .widget_pages li ul a,
+.widget-area .widget_categories li ul a,
+.widget-area .widget_archive li ul a,
+.widget-area .widget_meta li ul a,
+.widget-area .widget_nav_menu li ul a,
+.widget-area .widget_product_categories li ul a,
+.widget-area .widget_recent_entries li ul a,
+.widget-area .widget_rss li ul a {
+  padding-right: 30px;
+}
+.widget-area .widget_pages li ul ul li::before,
+.widget-area .widget_categories li ul ul li::before,
+.widget-area .widget_archive li ul ul li::before,
+.widget-area .widget_meta li ul ul li::before,
+.widget-area .widget_nav_menu li ul ul li::before,
+.widget-area .widget_product_categories li ul ul li::before,
+.widget-area .widget_recent_entries li ul ul li::before,
+.widget-area .widget_rss li ul ul li::before {
+  right: 30px;
+}
+.widget-area .widget_pages li ul ul a,
+.widget-area .widget_categories li ul ul a,
+.widget-area .widget_archive li ul ul a,
+.widget-area .widget_meta li ul ul a,
+.widget-area .widget_nav_menu li ul ul a,
+.widget-area .widget_product_categories li ul ul a,
+.widget-area .widget_recent_entries li ul ul a,
+.widget-area .widget_rss li ul ul a {
+  padding-right: 45px;
+}
+.widget-area .widget_recent_comments li {
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid #eaecee;
+  position: relative;
+}
 .widget-area .widget_rss ul li {
   margin-bottom: 1.41575em;
 }
@@ -5903,7 +6007,7 @@ body.menu_sidebar_dropdown:before {
 }
 .site-content .widget-area .menu li a {
   display: block;
-  padding: 6px 0px 8px;
+  padding: 0.6em 0px 0.6em;
 }
 .site-content .widget-area .menu li ul {
   margin: 0px;

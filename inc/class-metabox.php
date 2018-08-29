@@ -102,7 +102,7 @@ class Customify_MetaBox {
 
 	    if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) {
 		    $this->field_builder ->add_tab('breadcrumb', array(
-			    'title' => __( 'Breadcrumb', 'Customify' ),
+			    'title' => __( 'Breadcrumb', 'customify' ),
 			    'icon' => 'dashicons dashicons-admin-links'
 		    ));
 		    $this->field_builder->add_field( array(

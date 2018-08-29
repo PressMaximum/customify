@@ -269,17 +269,25 @@ class Customify {
             'jquery.fitvids.js' => array(
                 'url' => esc_url( get_template_directory_uri() ) . '/assets/js/jquery.fitvids'.$suffix.'.js',
                 'deps' => array( 'jquery' ),
-                'ver' => '1.1'
+                'ver' => Customify::$version
             ),
             'customify-themejs' => array(
                 'url' => esc_url( get_template_directory_uri() ) . '/assets/js/theme'.$suffix.'.js',
-                'deps' => array( 'jquery', 'jquery.fitvids.js' )
+                'deps' => array( 'jquery', 'jquery.fitvids.js' ),
+                'ver' => Customify::$version
             ),
         ) );
 
         foreach( $css_files as $id => $url ) {
             $deps = array();
-            if ( $url ) {
+            if ( is_array( $url ) ) {
+	            $arg = wp_parse_args( $url, array(
+		            'deps' => array(),
+		            'url' => '',
+		            'ver' => self::$version
+	            ) );
+	            wp_enqueue_style('customify-' . $id, $arg['url'], $arg['deps'], $arg['ver'] );
+            } elseif ( $url ) {
                 wp_enqueue_style('customify-' . $id, $url, $deps, self::$version);
             }
         }

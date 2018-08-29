@@ -425,8 +425,8 @@ class Customify_Form_Fields {
 		) );
 
 		$args =  wp_parse_args( $args, array(
-            'select_label' => __( 'Select image', 'customify-pro' ),
-            'remove_label' => __( 'Remove', 'customify-pro' ),
+            'select_label' => __( 'Select image', 'customify' ),
+            'remove_label' => __( 'Remove', 'customify' ),
         ) );
 
 		$img = Customify()->get_media( $image );
