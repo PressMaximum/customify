@@ -319,6 +319,10 @@ class Customify_Post_Entry {
      */
     function post_meta( $post = null, $meta_fields = array(), $args = array() ){
 
+	    if ( ! is_singular( 'post' ) ) {
+		    return;
+	    }
+
         if ( empty( $meta_fields ) ) {
             $meta_fields =  $this->config['meta_config'];
         }
@@ -512,6 +516,10 @@ class Customify_Post_Entry {
 
     function post_author_bio()
     {
+	    if ( ! is_singular( 'post' ) ) {
+		    return;
+	    }
+	    
         if (is_single()) {
             global $post;
             // Detect if it is a single post with a post author
