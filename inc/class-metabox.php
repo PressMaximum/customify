@@ -174,7 +174,6 @@ class Customify_MetaBox {
             return $post_id;
         }
 
-
         $nonce = sanitize_text_field( wp_unslash( $_POST['customify_page_settings_nonce'] ) );
 
         // Verify that the nonce is valid.
