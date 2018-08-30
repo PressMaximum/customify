@@ -55,7 +55,7 @@ class Customify_MetaBox {
 
 	    $this->field_builder->add_field( array(
 		    'title' => __( 'Content Layout', 'customify' ),
-		    'name' => 'sidebar',
+		    'name' => 'content_layout',
 		    'tab' => 'layout',
 		    'type' => 'select',
 		    'choices' =>  array(
@@ -90,6 +90,7 @@ class Customify_MetaBox {
 
 	    $this->field_builder->add_field( array(
 		    'title' => __( 'Display', 'customify' ),
+		    'name' => 'page_header_display',
 		    'tab' => 'page_header',
 		    'type' => 'select',
 		    'choices' => array(
@@ -108,6 +109,7 @@ class Customify_MetaBox {
 		    $this->field_builder->add_field( array(
 			    'title' => __( 'Breadcrumb', 'customify' ),
 			    'tab' => 'breadcrumb',
+			    'name' => 'breadcrumb_display',
 			    'type' => 'select',
 			    'choices' => array(
 				    'default' => __('Inherit from customize settings', 'customify'),
