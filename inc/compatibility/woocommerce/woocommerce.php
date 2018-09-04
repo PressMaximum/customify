@@ -90,6 +90,7 @@ class Customify_WC {
         }
     }
 
+
 	/**
      *
      * Overwrite Categories Walker

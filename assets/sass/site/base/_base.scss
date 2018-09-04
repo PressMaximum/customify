@@ -687,6 +687,58 @@ article.comment {
 ## Helper
 --------------------------------------------------------------*/
 
+// Direction Nav
+.nav-btn {
+    margin: auto;
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    overflow: hidden;
+    fill: currentColor;
+    line-height: 1em;
+    font-size: 1em;
+    position: relative;
+    padding: 0px;
+    border-radius: 50%;
+    box-shadow: 0 7px 15px rgba(0,0,0,.2);
+    background-color: #fff;
+    color: #757575;
+    opacity: 0.6;
+    display: inline-block;
+    transition: all 0.3s linear;
+    &.x2 {
+        width: 48px;
+        height: 48px;
+        min-height: 48px;
+        font-size: 1.2em;
+    }
+    &:hover, &:focus {
+        color: #333;
+        opacity: 1;
+        box-shadow: 0 7px 15px rgba(0,0,0,.2);
+    }
+    &.nav-next {
+        &:before {
+            content: "\f105";
+        }
+    }
+    &.nav-prev {
+        &:before {
+            content: "\f104";
+        }
+    }
+    &:before {
+        font-family: "FontAwesome";
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate( -50%, -50%);
+        line-height: 1;
+    }
+}
+
 // Shape
 .shape-rounded {
     border-radius: 10%;
