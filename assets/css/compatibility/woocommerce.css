@@ -1736,57 +1736,6 @@ Product Slider
   visibility: hidden;
 }
 
-.flex-control-nav {
-  position: absolute;
-  bottom: 25px;
-  list-style: none;
-  display: block;
-  text-align: center;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  z-index: 30;
-}
-.flex-control-nav li {
-  position: relative;
-  display: inline-block;
-  text-align: center;
-  height: 15px;
-  width: 15px;
-  margin: 0 5px;
-  padding: 0;
-  cursor: pointer;
-}
-.flex-control-nav li a {
-  border: 0;
-  background: #333333;
-  display: inline-block;
-  text-decoration: none !important;
-  height: 10px;
-  width: 10px;
-  outline: none;
-  line-height: 0px;
-  font-size: 0px;
-  color: transparent;
-  padding: 5px;
-  cursor: pointer;
-  box-shadow: none;
-  border-radius: 50%;
-  opacity: 0.5;
-  transition: all 0.3s linear;
-}
-.flex-control-nav li a:hover, .flex-control-nav li a:focus {
-  outline: none;
-  background: none;
-  box-shadow: none;
-  opacity: 1;
-  background: #333333;
-}
-.flex-control-nav li .slick-active {
-  opacity: 1;
-  background: #333333;
-}
-
 /**
 * Product meta
  */
