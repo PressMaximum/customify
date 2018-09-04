@@ -177,7 +177,15 @@ div.product {
             background: #fff;
             text-indent: -9999px;
             border-radius: 100%;
+            box-shadow: 0 7px 15px rgba(0,0,0,.2);
+            color: #757575;
+            opacity: 0.6;
+            display: inline-block;
+            transition: all 0.3s linear;
             box-sizing: content-box;
+            &:hover, &:focus {
+                opacity: 1;
+            }
 
             &:before {
                 content: "";
