@@ -2865,6 +2865,14 @@ article.comment .comment-post-author {
   min-height: 48px;
   font-size: 1.2em;
 }
+@media screen and (max-width: 568px) {
+  .nav-btn.x2 {
+    width: 30px;
+    height: 30px;
+    min-height: 30px;
+    font-size: 1.2em;
+  }
+}
 .nav-btn:hover, .nav-btn:focus {
   color: #333;
   opacity: 1;

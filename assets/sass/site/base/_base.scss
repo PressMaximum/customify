@@ -711,6 +711,12 @@ article.comment {
         height: 48px;
         min-height: 48px;
         font-size: 1.2em;
+        @include for_device(mobile) {
+            width: 30px;
+            height: 30px;
+            min-height: 30px;
+            font-size: 1.2em;
+        }
     }
     &:hover, &:focus {
         color: #333;
