@@ -822,7 +822,11 @@ class Customify_Page_Header {
 			// If has custom field custom title
 			$post_display = get_post_meta( $post_id, '_customify_page_header_display', true );
 			if ( $post_display && $post_display != 'default' ) {
-				$args['display'] = $post_display;
+			    if( $post_display == 'normal' ) {
+				    $args['display'] = 'default';
+                } else{
+				    $args['display'] = $post_display;
+                }
 			}
 
 			// If has custom field custom title
@@ -858,7 +862,9 @@ class Customify_Page_Header {
 			$args['display'] = 'default';
 		}
 
-		self::$_settings = $args;
+
+
+		self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
 
 		return $args;
 	}

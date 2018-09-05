@@ -17,7 +17,17 @@ class Customify_WC {
     function __construct()
     {
         if ( $this->is_active() ) {
-            add_filter('customify_get_layout', array($this, 'shop_layout'));
+	        /**
+	         * Filter shop layout
+             * @see Customify_WC::shop_layout
+	         */
+            add_filter('customify_get_layout', array( $this, 'shop_layout'));
+	        /**
+	         * Filter special meta values for shop pages
+             * @see Customify_WC::get_post_metadata
+	         */
+            add_filter('get_post_metadata', array($this, 'get_post_metadata'), 999, 4 );
+
             add_action('widgets_init', array($this, 'register_sidebars'));
             add_filter('customify/customizer/config', array($this, 'customize_shop_sidebars'));
             add_filter('customify/sidebar-id', array($this, 'shop_sidebar_id'), 15, 2);
@@ -131,7 +141,7 @@ class Customify_WC {
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-        } elseif ( $name == 'related' || $name == 'up-sells' ) {
+        } elseif ( $name == 'related' || $name == 'up-sells' ||  $name == 'cross-sells' ) {
 
             if ( $name == 'up-sells' ) {
                 $columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
@@ -250,6 +260,7 @@ class Customify_WC {
 
         if ( isset(  $enqueue_styles['woocommerce-smallscreen'] ) ) {
             $enqueue_styles['woocommerce-smallscreen']['deps'] = '';
+            $enqueue_styles['woocommerce-smallscreen']['src'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce-smallscreen'.$suffix.'.css';
             $b = $enqueue_styles['woocommerce-smallscreen'];
             unset($enqueue_styles['woocommerce-smallscreen']);
             $enqueue_styles['woocommerce-smallscreen'] = $b;
@@ -543,6 +554,80 @@ class Customify_WC {
         ) );
     }
 
+
+	/**
+     * Filter meta key for shop pages
+     *
+	 * @param $value
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 *
+	 * @return mixed
+	 */
+    function get_post_metadata( $value, $object_id, $meta_key, $single ){
+        $meta_keys= array(
+            '_customify_page_header_display' => '',
+            '_customify_breadcrumb_display' => ''
+        );
+
+        if ( ! isset( $meta_keys[ $meta_key ] ) ) {
+            return $value;
+        }
+
+
+        if( $object_id == wc_get_page_id( 'cart' ) || $object_id == wc_get_page_id('checkout' ) ) {
+
+	        $meta_type = 'post';
+
+	        $meta_cache = wp_cache_get($object_id, $meta_type . '_meta');
+
+	        if ( !$meta_cache ) {
+		        $meta_cache = update_meta_cache( $meta_type, array( $object_id ) );
+		        $meta_cache = $meta_cache[$object_id];
+	        }
+
+	        if ( ! $meta_key ) {
+		        return $value;
+	        }
+
+	        if ( isset($meta_cache[$meta_key]) ) {
+		        if ( $single )
+			        $value = maybe_unserialize( $meta_cache[$meta_key][0] );
+		        else
+			        $value = array_map('maybe_unserialize', $meta_cache[$meta_key]);
+	        }
+
+	        if ( ! is_array( $value ) ) {
+		        $value = array( $value );
+            }
+
+	        switch ( $meta_key ) {
+                case '_customify_page_header_display':
+                    if ( empty( $value ) || $value[0] == 'default' || $value[0] == 'normal' || ! $value[0]  ) {
+	                    $value[0] = 'normal';
+                    }
+                    break;
+		        case '_customify_breadcrumb_display':
+			        if ( empty( $value ) ||  $value[0] == 'default' || ! $value[ 0] ) {
+				        $value[0] = 'hide';
+			        }
+			        break;
+
+	        }
+        }
+
+
+        return $value;
+    }
+
+	/**
+     * Special shop layout
+     *
+	 * @param bool $layout
+	 *
+	 * @return array|bool|mixed|null|string|void
+	 */
     function shop_layout( $layout = false ){
         if ( $this->is_shop_pages() ) {
             $default    = Customify()->get_setting('sidebar_layout');

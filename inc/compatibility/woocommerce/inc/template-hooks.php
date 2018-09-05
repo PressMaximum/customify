@@ -3,7 +3,7 @@
 /**
  * Remove default WC action hooks
  */
-function customify_wc_remove_default_hook (){
+function customify_wc_remove_default_hooks(){
 	remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
 
 	remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
@@ -16,7 +16,7 @@ function customify_wc_remove_default_hook (){
 	remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 }
 
-add_action( 'wp', 'customify_wc_remove_default_hook' );
+add_action( 'wp', 'customify_wc_remove_default_hooks' );
 
 
 /**
@@ -38,13 +38,15 @@ function customify_wc_secondary_product_thumbnail() {
 }
 
 
-
 /**
  * Change before shop loop
  */
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_result_count', 20 );
 remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 
+/**
+ * Add view mod buttons to before shop loop
+ */
 add_action( 'woocommerce_before_shop_loop', 'customify_wc_catalog_header', 15 );
 
 /**
@@ -100,7 +102,6 @@ function customify_wc_catalog_view_mod(){
 /**
  * Loop Layout
  */
-
 add_action( 'woocommerce_before_subcategory', 'customify_wc_before_shop_loop_item', 1 );
 add_action( 'woocommerce_after_subcategory', 'customify_wc_after_shop_loop_item', 9999 );
 add_filter( 'woocommerce_after_output_product_categories', 'customify_wc_after_output_product_categories' );
@@ -109,9 +110,13 @@ function customify_wc_before_shop_loop_item(){
     echo '<div class="wc-product-inner">';
 }
 
+/**
+ * After loop layout
+ */
 function customify_wc_after_shop_loop_item(){
     echo '</div>';
 }
+
 /**
  * Add separator between product categories and products
  *
@@ -126,3 +131,10 @@ function customify_wc_after_output_product_categories( $html ){
 }
 
 
+/**
+ * Cart page
+ */
+
+
+remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
+add_action( 'woocommerce_after_cart_table', 'woocommerce_cross_sell_display');

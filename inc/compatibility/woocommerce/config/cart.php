@@ -23,6 +23,7 @@ class Customify_WC_Cart{
 		$hide_cross_sell = Customify()->get_setting('wc_cart_page_hide_cross_sells');
 		if ( $hide_cross_sell ) {
 			remove_action('woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+			remove_action('woocommerce_after_cart_table', 'woocommerce_cross_sell_display' );
 		}
 
 	}

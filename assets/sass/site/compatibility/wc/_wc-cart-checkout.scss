@@ -6,10 +6,13 @@
 #add_payment_method {
     table.cart {
         .product-thumbnail {
-            min-width: 32px;
+            min-width: 90px;
+        }
+        .product-quantity {
+            min-width: 8em;
         }
         img {
-            width: 32px;
+            width: 90px;
             box-shadow: none;
         }
         th,
@@ -33,8 +36,8 @@
 
     .wc-proceed-to-checkout {
         @include clearfix;
+        @include clearfix;
         padding: 1em 0;
-
         a.checkout-button {
             display: block;
             text-align: center;
@@ -63,47 +66,11 @@
                 font-size: 0.83em;
             }
 
-            table {
-                border-collapse: separate;
-                margin: 0 0 6px;
-                padding: 0;
-
-                tr:first-child {
-                    th,
-                    td {
-                        border-top: 0;
-                    }
-                }
-
-                th {
-                    width: 40%;
-                }
-
-                td,
-                th {
-                    vertical-align: top;
-                    border-left: 0;
-                    border-right: 0;
-                    line-height: 1.5em;
-                }
-
-                small {
-                    color: $subtext;
-                }
-
-                select {
-                    width: 100%;
-                }
-            }
 
             .discount td {
                 color: $highlight;
             }
 
-            tr td,
-            tr th {
-                border-top: 1px solid $secondary;
-            }
         }
 
         .cross-sells ul.products li.product {
@@ -317,6 +284,37 @@
             img {
                 max-height: 52px;
                 vertical-align: middle;
+            }
+        }
+    }
+}
+
+
+/* NEW STYLE */
+
+#ship-to-different-address {
+    font-size: 1em;
+    margin-top: 1em;
+}
+
+.cart-collaterals {
+    background: #f2f2f2;
+    > div {
+        padding: 3em;
+        @include for_device(tablet) {
+            padding: 1em;
+        }
+    }
+    table {
+        &.shop_table {
+            background: none;
+            border: none;
+            tr, td, th {
+                background: none;
+                border: none;
+            }
+            th {
+                padding-left: 0px;
             }
         }
     }

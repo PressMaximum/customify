@@ -95,6 +95,7 @@ class Customify_MetaBox {
 		    'type' => 'select',
 		    'choices' => array(
 			    'default' => __( 'Inherit from customize settings', 'customify' ),
+			    'normal' => __( 'Default', 'customify' ),
 			    'cover' => __( 'Cover', 'customify' ),
 			    'titlebar' => __( 'Titlebar', 'customify' ),
 			    'none' => __( 'Hide', 'customify' ),

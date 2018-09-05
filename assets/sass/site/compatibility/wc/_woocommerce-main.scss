@@ -125,7 +125,7 @@ p.demo_store,
     }
 
     .quantity .qty {
-        width: 3.631em;
+        width: 3em;
         text-align: center;
     }
 
@@ -173,158 +173,6 @@ p.demo_store,
         }
     }
 
-
-    /**
-     * Tables
-     */
-    table.shop_attributes {
-        border: 0;
-        border-top: 1px dotted rgba(0, 0, 0, 0.1);
-        margin-bottom: 1.618em;
-        width: 100%;
-
-        th {
-            width: 150px;
-            font-weight: 600;
-            padding: 1em;
-            border-top: 0;
-            border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        td {
-            font-style: italic;
-            padding: 1em;
-            border-top: 0;
-            border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
-            margin: 0;
-            line-height: 1.5;
-
-            p {
-                margin: 0;
-                padding: 0px 0 10px 0px;
-                &:last-child {
-                    padding-bottom: 0;
-                }
-            }
-        }
-
-        tr:nth-child(even) td,
-        tr:nth-child(even) th {
-            background: rgba(0, 0, 0, 0.025);
-        }
-    }
-
-    table.shop_table {
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        margin: 0 -1px 24px 0;
-        text-align: left;
-        width: 100%;
-        border-collapse: separate;
-        border-radius: 1px;
-
-        th {
-            font-weight: 600;
-            padding: 9px 12px;
-        }
-
-        td {
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-            padding: 6px 12px;
-            vertical-align: middle;
-
-            small {
-                font-weight: normal;
-            }
-        }
-
-        tbody:first-child tr:first-child {
-            th,
-            td {
-                border-top: 0;
-            }
-        }
-
-        tfoot td,
-        tfoot th,
-        tbody th {
-            font-weight: 600;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
-        }
-    }
-
-    table.my_account_orders {
-        font-size: 0.85em;
-
-        th,
-        td {
-            padding: 4px 8px;
-            vertical-align: middle;
-        }
-
-        .button {
-            white-space: nowrap;
-        }
-
-        .order-actions {
-            text-align: right;
-
-            .button {
-                margin: 0.125em 0 0.125em 0.25em;
-            }
-        }
-    }
-
-    table.woocommerce-MyAccount-downloads {
-        td,
-        th {
-            vertical-align: top;
-            text-align: center;
-
-            &:first-child {
-                text-align: left;
-            }
-            &:last-child {
-                text-align: left;
-            }
-            .woocommerce-MyAccount-downloads-file::before {
-                content: '\2193';
-                display: inline-block;
-            }
-        }
-    }
-
-    td.product-name {
-        dl.variation, .wc-item-meta {
-            list-style: none outside;
-
-            dt, .wc-item-meta-label {
-                float: left;
-                clear: both;
-                margin-right: .25em;
-                display: inline-block;
-                list-style: none outside;
-            }
-
-            dd {
-                margin: 0;
-            }
-
-            p,
-            &:last-child {
-                margin-bottom: 0;
-            }
-        }
-
-        p.backorder_notification {
-            font-size: 0.83em;
-        }
-    }
-
-    td.product-quantity {
-        min-width: 80px;
-    }
 
     p.woocommerce-shipping-contents {
         margin: 0;
@@ -376,6 +224,158 @@ p.demo_store,
         padding-left: 0 !important; // Required for default theme compatibility
         margin-left: 0 !important; // Required for default theme compatibility
     }
+}
+
+/**
+ * Tables
+ */
+table.shop_attributes {
+    border: 0;
+    border-top: 1px dotted rgba(0, 0, 0, 0.1);
+    margin-bottom: 1.618em;
+    width: 100%;
+
+    th {
+        width: 150px;
+        font-weight: 600;
+        padding: 1em;
+        border-top: 0;
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    td {
+        font-style: italic;
+        padding: 1em;
+        border-top: 0;
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.1);
+        margin: 0;
+        line-height: 1.5;
+
+        p {
+            margin: 0;
+            padding: 0px 0 10px 0px;
+            &:last-child {
+                padding-bottom: 0;
+            }
+        }
+    }
+
+    tr:nth-child(even) td,
+    tr:nth-child(even) th {
+        background: rgba(0, 0, 0, 0.025);
+    }
+}
+
+table.shop_table {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin: 0 -1px 24px 0;
+    text-align: left;
+    width: 100%;
+    border-collapse: separate;
+    border-radius: 1px;
+    border-collapse: collapse;
+    th {
+        font-weight: 600;
+        padding: 9px 12px;
+    }
+
+    td {
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        padding: 6px 12px;
+        vertical-align: middle;
+
+        small {
+            font-weight: normal;
+        }
+    }
+
+    tbody:first-child tr:first-child {
+        th,
+        td {
+            border-top: 0;
+        }
+    }
+
+    tfoot td,
+    tfoot th,
+    tbody th {
+        font-weight: 600;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+}
+
+table.my_account_orders {
+    font-size: 0.85em;
+
+    th,
+    td {
+        padding: 4px 8px;
+        vertical-align: middle;
+    }
+
+    .button {
+        white-space: nowrap;
+    }
+
+    .order-actions {
+        text-align: right;
+
+        .button {
+            margin: 0.125em 0 0.125em 0.25em;
+        }
+    }
+}
+
+table.woocommerce-MyAccount-downloads {
+    td,
+    th {
+        vertical-align: top;
+        text-align: center;
+
+        &:first-child {
+            text-align: left;
+        }
+        &:last-child {
+            text-align: left;
+        }
+        .woocommerce-MyAccount-downloads-file::before {
+            content: '\2193';
+            display: inline-block;
+        }
+    }
+}
+
+td.product-name {
+    dl.variation, .wc-item-meta {
+        list-style: none outside;
+
+        dt, .wc-item-meta-label {
+            float: left;
+            clear: both;
+            margin-right: .25em;
+            display: inline-block;
+            list-style: none outside;
+        }
+
+        dd {
+            margin: 0;
+        }
+
+        p,
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    p.backorder_notification {
+        font-size: 0.83em;
+    }
+}
+
+td.product-quantity {
+    min-width: 80px;
 }
 
 /**

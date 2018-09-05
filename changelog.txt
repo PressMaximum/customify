@@ -1,6 +1,7 @@
 = 0.2.2 =
 * NEW: Update theme screenshot.
 * NEW: Add theme hooks.
+* NEW: Add Arial standard font.
 * IMPROVED: Improved post type metabox.
 * IMPROVED: Improved primary navigation style.
 * IMPROVED: Improved WooCommerce product media styling.

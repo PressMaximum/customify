@@ -2,6 +2,17 @@
  * Applies layout to the default WooCommerce frontend design
  */
 
+.woocommerce-cart, .woocommerce-checkout {
+    .entry-header {
+        text-align: center;
+        .entry-title {
+            font-size: 2.618em;
+        }
+        margin-bottom: 2em;
+    }
+}
+
+
 // Before listing Products
 .wc-catalog-header {
     display: flex;
@@ -31,9 +42,6 @@
     }
 }
 
-.wc-view-mod {
-
-}
 
 .wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
     margin-bottom: 0;
@@ -109,6 +117,23 @@
     /**
      * Cart page
      */
+    .woocommerce-cart-form {
+        width: 55%;
+        float: left;
+        @include for_device( mobile ) {
+            width: 100%;
+            float: none;
+        }
+    }
+    .cart-collaterals {
+        width: 40%;
+        float: right;
+        @include for_device( mobile ) {
+            width: 100%;
+            float: none;
+        }
+    }
+
     table.cart,
     #content table.cart {
         img {
@@ -132,47 +157,37 @@
         }
     }
 
-    .cart-collaterals {
-        @include clearfix();
-        width: 100%;
-
-        .related {
-            width: 30.75%;
-            float: left;
-        }
-
-        .cross-sells {
-            width: 48%;
-            float: left;
-
-            ul.products {
+    /**
+   * Checkout Page
+   */
+    .woocommerce-checkout {
+        .col2-set {
+            .col-1,  .col-2 {
                 float: none;
-
-                li {
-                    width: 48%;
-                }
+                width: 100%;
             }
         }
-
-        .shipping_calculator {
-            width: 48%;
-            @include clearfix();
-            clear: right;
-            float: right;
-
-            .col2-set {
-                .col-1,
-                .col-2 {
-                    width: 47%;
-                }
+        #order_review_heading {
+            display: none;
+        }
+        #customer_details {
+            width: 55%;
+            float: left;
+            @include for_device( mobile ) {
+                width: 100%;
+                float: none;
             }
         }
-
-        .cart_totals {
+        .woocommerce-checkout-review-order {
+            width: 40%;
             float: right;
-            width: 48%;
+            @include for_device( mobile ) {
+                width: 100%;
+                float: none;
+            }
         }
     }
+
 
     /**
      * Forms
@@ -233,10 +248,6 @@
             text-align: left;
             padding: 0 1em 0 0;
             float: left;
-        }
-
-        #place_order {
-            float: right;
         }
     }
 
