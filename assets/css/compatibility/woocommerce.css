@@ -484,6 +484,7 @@ p.demo_store a,
 
 .woocommerce .blockUI.blockOverlay {
   position: relative;
+  z-index: 35 !important;
 }
 .woocommerce .blockUI.blockOverlay::before {
   height: 1em;

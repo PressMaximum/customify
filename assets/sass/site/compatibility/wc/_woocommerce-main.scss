@@ -98,6 +98,7 @@ p.demo_store,
 .woocommerce {
     .blockUI.blockOverlay {
         position: relative;
+        z-index: 35 !important;
         @include loader();
     }
 
