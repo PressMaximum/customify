@@ -22,6 +22,8 @@ Product Slider
         border: none;
         outline: none;
         z-index: 15;
+        opacity: 0;
+        transition: opacity 0.3s linear;
     }
     .flex-prev {
         left: 15px;
@@ -36,7 +38,14 @@ Product Slider
         }
     }
 }
-
+.woocommerce-product-gallery:hover {
+    .flex-direction-nav {
+        .flex-prev,
+        .flex-next {
+            opacity: 1;
+        }
+    }
+}
 /**
 * Product meta
  */

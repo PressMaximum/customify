@@ -1739,6 +1739,8 @@ Product Slider
   border: none;
   outline: none;
   z-index: 15;
+  opacity: 0;
+  transition: opacity 0.3s linear;
 }
 .flex-direction-nav .flex-prev {
   left: 15px;
@@ -1748,6 +1750,11 @@ Product Slider
 }
 .flex-direction-nav .flex-disabled .nav-btn {
   visibility: hidden;
+}
+
+.woocommerce-product-gallery:hover .flex-direction-nav .flex-prev,
+.woocommerce-product-gallery:hover .flex-direction-nav .flex-next {
+  opacity: 1;
 }
 
 /**
