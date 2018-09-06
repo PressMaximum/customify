@@ -309,6 +309,9 @@
         &.shop_table {
             background: none;
             border: none;
+            th {
+                width: 30%;
+            }
             tr, td, th {
                 background: none;
                 border: none;
