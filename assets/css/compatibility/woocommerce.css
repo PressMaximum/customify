@@ -3419,6 +3419,20 @@ p.stars.selected a:not(.active)::before {
     padding: 1em;
   }
 }
+.cart-collaterals table.shop_table {
+  background: none;
+  border: none;
+}
+.cart-collaterals table.shop_table th {
+  width: 30%;
+}
+.cart-collaterals table.shop_table tr, .cart-collaterals table.shop_table td, .cart-collaterals table.shop_table th {
+  background: none;
+  border: none;
+}
+.cart-collaterals table.shop_table th {
+  padding-left: 0px;
+}
 
 /* Coupon Input */
 .woocommerce-cart-form .coupon .input-text {

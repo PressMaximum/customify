@@ -310,6 +310,21 @@
         @include for_device(tablet) {
             padding: 1em;
         }
-
+    }
+    table {
+        &.shop_table {
+            background: none;
+            border: none;
+            th {
+                width: 30%;
+            }
+            tr, td, th {
+                background: none;
+                border: none;
+            }
+            th {
+                padding-left: 0px;
+            }
+        }
     }
 }
