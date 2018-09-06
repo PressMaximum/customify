@@ -135,6 +135,27 @@ function customify_wc_after_output_product_categories( $html ){
  * Cart page
  */
 
-
 remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display');
 add_action( 'woocommerce_after_cart_table', 'woocommerce_cross_sell_display');
+
+/**
+ * Checkout Page
+ * @param $html
+ *
+ * @return null|string|string[]
+ */
+
+function customify_your_order_heading(){
+    ?>
+    <h3 class="order_review_heading"><?php _e( 'Your order', 'customify' ); ?></h3>
+    <?php
+}
+add_action( 'woocommerce_checkout_order_review', 'customify_your_order_heading', 1 );
+
+
+
+function customify_wc_add_to_cart_message_html( $html ){
+	$html=preg_replace('/class=".*?"/', '', $html);
+    return $html;
+}
+add_filter( 'wc_add_to_cart_message_html', 'customify_wc_add_to_cart_message_html' );
