@@ -3370,10 +3370,8 @@ p.stars.selected a:not(.active)::before {
 
 /* NEW STYLE */
 .woocommerce-cart .woocommerce-message,
-.woocommerce-cart .woocommerce-error,
 .woocommerce-cart .woocommerce-info,
 .woocommerce-checkout .woocommerce-message,
-.woocommerce-checkout .woocommerce-error,
 .woocommerce-checkout .woocommerce-info {
   max-width: 600px;
   margin: 1em auto 2em;
@@ -3383,10 +3381,8 @@ p.stars.selected a:not(.active)::before {
   text-align: center;
 }
 .woocommerce-cart .woocommerce-message:before,
-.woocommerce-cart .woocommerce-error:before,
 .woocommerce-cart .woocommerce-info:before,
 .woocommerce-checkout .woocommerce-message:before,
-.woocommerce-checkout .woocommerce-error:before,
 .woocommerce-checkout .woocommerce-info:before {
   display: inline-block;
   position: relative;
