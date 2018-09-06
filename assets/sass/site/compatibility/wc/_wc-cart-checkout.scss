@@ -14,6 +14,7 @@
         img {
             width: 90px;
             box-shadow: none;
+            display: block;
         }
         th,
         td {
@@ -298,24 +299,17 @@
 }
 
 .cart-collaterals {
-    background: #f2f2f2;
+    //background: #f2f2f2;
+    border: 1px solid #eaecee;
+    background: #ffffff;
+    box-shadow: 0 3px 20px rgba(25, 30, 35, 0.05);
+    position: relative;
+    border-radius: 2px;
     > div {
-        padding: 3em;
+        padding: 2em;
         @include for_device(tablet) {
             padding: 1em;
         }
-    }
-    table {
-        &.shop_table {
-            background: none;
-            border: none;
-            tr, td, th {
-                background: none;
-                border: none;
-            }
-            th {
-                padding-left: 0px;
-            }
-        }
+
     }
 }
