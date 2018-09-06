@@ -295,25 +295,39 @@ table.shop_attributes {
 }
 
 table.shop_table {
-    border: 1px solid rgba(0, 0, 0, 0.1);
     margin: 0 -1px 24px 0;
     text-align: left;
     width: 100%;
     border-collapse: separate;
-    border-radius: 1px;
     border-collapse: collapse;
+
+    thead {
+        tr {
+            th {
+                border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
+
     th {
         font-weight: 600;
         padding: 9px 12px;
+        background: transparent;
     }
 
     td {
         border-top: 1px solid rgba(0, 0, 0, 0.1);
-        padding: 6px 12px;
+        padding: 10px 10px;
         vertical-align: middle;
-
+        background: transparent;
         small {
             font-weight: normal;
+        }
+    }
+
+    tr:nth-child(2n) {
+        td {
+            background: transparent;
         }
     }
 
