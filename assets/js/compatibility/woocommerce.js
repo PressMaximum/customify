@@ -16,6 +16,10 @@ jQuery( document ).ready( function ( $ ) {
         $( '.item--wc_cart' ).addClass( 'cart-active' );
     });
 
+    if ( Customify_JS.wc_open_cart ) {
+        $( document.body ).trigger( 'added_to_cart' );
+    }
+
     $( document.body ).on( 'wc_cart_button_updated', function ( e, button ) {
         var p = button.parent();
         if( ! button.hasClass( 'single_add_to_cart_button' ) ) {

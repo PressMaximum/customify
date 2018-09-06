@@ -61,6 +61,7 @@ class Customify_WC {
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
+            add_filter( 'Customify_JS', array($this, 'Customify_JS') );
 
             add_filter( 'woocommerce_get_script_data', array($this, 'woocommerce_get_script_data'), 15, 2 );
 
@@ -267,6 +268,21 @@ class Customify_WC {
         }
 
         return $enqueue_styles;
+    }
+
+	/**
+     * Add more settings to Customify JS
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+    function Customify_JS( $args ){
+	    $args['wc_open_cart'] = false;
+	    if ( isset(  $_REQUEST['add-to-cart'] ) && ! empty(  $_REQUEST['add-to-cart'] ) ) {
+		    $args['wc_open_cart'] =  true;
+	    }
+
+	    return $args;
     }
 
     /**

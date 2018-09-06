@@ -321,9 +321,9 @@ class Customify {
         }
 
         wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
-        wp_localize_script( 'customify-themejs', 'Customify_JS', array(
-            'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries
-        ) );
+        wp_localize_script( 'customify-themejs', 'Customify_JS', apply_filters( 'Customify_JS', array(
+	        'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries
+        ) ) );
 
         do_action( 'customify/theme/scripts' );
     }
