@@ -151,11 +151,3 @@ function customify_your_order_heading(){
     <?php
 }
 add_action( 'woocommerce_checkout_order_review', 'customify_your_order_heading', 1 );
-
-
-
-function customify_wc_add_to_cart_message_html( $html ){
-	$html=preg_replace('/class=".*?"/', '', $html);
-    return $html;
-}
-add_filter( 'wc_add_to_cart_message_html', 'customify_wc_add_to_cart_message_html' );

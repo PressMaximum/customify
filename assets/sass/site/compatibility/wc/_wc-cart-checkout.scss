@@ -20,14 +20,6 @@
         td {
             vertical-align: middle;
         }
-        td.actions .coupon .input-text {
-            float: left;
-            box-sizing: border-box;
-            border: 1px solid darken( $secondary, 10% );
-            padding: 6px 6px 5px;
-            margin: 0 4px 0 0;
-            outline: 0;
-        }
 
         input {
             margin: 0;
@@ -293,6 +285,45 @@
 
 /* NEW STYLE */
 
+// Messages
+.woocommerce-cart,
+.woocommerce-checkout {
+    .woocommerce-message,
+    .woocommerce-error,
+    .woocommerce-info {
+        max-width: 600px;
+        margin: 1em auto 2em;
+        border: 0px none;
+        padding: 0px;
+        background: none;
+        text-align: center;
+        &:before {
+            display: inline-block;
+            position: relative;
+            top: auto;
+            left: auto;
+            font-size: 0.8em;
+            margin-right: 0.4em;
+        }
+    }
+}
+.woocommerce-checkout {
+    .woocommerce-form-login-toggle {
+        .woocommerce-info {
+            &:before {
+                content: '\e03a';
+            }
+        }
+    }
+    .woocommerce-form-coupon-toggle {
+        .woocommerce-info {
+            &:before {
+                content: '\e600';
+            }
+        }
+    }
+}
+
 #ship-to-different-address {
     font-size: 1em;
     margin-top: 1em;
@@ -328,3 +359,81 @@
         }
     }
 }
+
+// Login form
+.woocommerce-page {
+
+    .woocommerce-form-login {
+        max-width: 600px;
+        margin: 2em auto;
+        .form-row {
+            width: 100%;
+            float: none;
+            .button {
+                width: 100%;
+                text-align: center;
+                display: block;
+            }
+        }
+        .woocommerce-form__label-for-checkbox {
+            display: inline-block;
+            margin-top: 12px;
+            input[type="checkbox"] {
+                position: relative;
+                margin-top: -1px;
+            }
+        }
+        .lost_password {
+            float: right;
+            margin: -37px 0px 0px;
+        }
+    }
+
+    // Coupon Form
+    .actions {
+        .button[type="submit"] {
+            float: right;
+        }
+         .coupon {
+             float: left;
+             width: 50%;
+         }
+    }
+    .woocommerce-form-coupon {
+        max-width: 600px;
+        margin: 2em auto;
+    }
+    .input-group-text-button, .coupon {
+        position: relative;
+        min-width: 50%;
+        label {
+            display: none;
+        }
+        .input-text {
+            padding-right: 3em;
+            width: 100%;
+        }
+        .button {
+            position: absolute;
+            top: 0px;
+            right: 0px;
+            width: 3em;
+            height: 2.6em;
+            overflow: hidden;
+            display: block;
+            background: transparent;
+            border-color: transparent;
+            &:hover {
+                box-shadow: none;
+            }
+            &:before {
+                font-family: "WooCommerce";
+                content: "\e008";
+                color: #333333;
+                margin-right: 2em;
+            }
+        }
+    }
+
+}
+

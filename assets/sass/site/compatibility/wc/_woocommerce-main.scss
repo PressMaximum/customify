@@ -199,8 +199,8 @@ p.demo_store,
     padding: 1em 2em 1em 3.5em;
     margin: 0 auto 2em;
     position: relative;
-    max-width: 600px;
-   // background-color: lighten($secondary, 5%);
+    background-color: lighten($secondary, 5%);
+    border-top: 3px solid $primary;
     color: $secondarytext;
     list-style: none outside;
     @include clearfix();
@@ -228,8 +228,8 @@ p.demo_store,
 
 }
 
-
 .woocommerce-message {
+    border-top-color: #8fae1b;
     &::before {
         content: '\e015';
         color: #8fae1b;
@@ -237,19 +237,21 @@ p.demo_store,
 }
 
 .woocommerce-info {
-
+    border-top-color: #1e85be;
     &::before {
         color: #1e85be;
     }
 }
 
 .woocommerce-error {
-
+    border-top-color: #b81c23;
     &::before {
         content: '\e016';
         color: #b81c23;
     }
 }
+
+
 
 
 /**
