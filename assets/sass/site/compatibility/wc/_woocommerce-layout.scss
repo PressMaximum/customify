@@ -6,8 +6,11 @@
     .entry-header {
         text-align: center;
         .entry-title {
-            font-size: 2.2em;
+            font-size: 2em;
             text-transform: uppercase;
+            @include for_device( mobile ) {
+                font-size: 1.7em;
+            }
         }
         margin: 1em 0 4em;
     }
@@ -121,7 +124,7 @@
     .woocommerce-cart-form {
         width: 60%;
         float: left;
-        @include for_device( mobile ) {
+        @include for_device( tablet ) {
             width: 100%;
             float: none;
         }
@@ -129,7 +132,7 @@
     .cart-collaterals {
         width: 35%;
         float: right;
-        @include for_device( mobile ) {
+        @include for_device( tablet ) {
             width: 100%;
             float: none;
         }
@@ -158,7 +161,7 @@
         #customer_details {
             width: 55%;
             float: left;
-            @include for_device( mobile ) {
+            @include for_device( tablet ) {
                 width: 100%;
                 float: none;
             }
@@ -166,7 +169,7 @@
         .woocommerce-checkout-review-order {
             width: 40%;
             float: right;
-            @include for_device( mobile ) {
+            @include for_device( tablet ) {
                 width: 100%;
                 float: none;
             }
