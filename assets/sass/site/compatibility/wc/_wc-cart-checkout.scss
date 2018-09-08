@@ -375,8 +375,8 @@
 /* Minimal style for cart/checkout page */
 
 // Messages
-.woocommerce-cart,
-.woocommerce-checkout {
+.woocommerce-form-coupon-toggle,
+.woocommerce-form-login-toggle {
     .woocommerce-message,
     .woocommerce-info {
         max-width: 600px;
@@ -395,22 +395,23 @@
         }
     }
 }
-.woocommerce-checkout {
-    .woocommerce-form-login-toggle {
-        .woocommerce-info {
-            &:before {
-                content: '\e03a';
-            }
-        }
-    }
-    .woocommerce-form-coupon-toggle {
-        .woocommerce-info {
-            &:before {
-                content: '\e600';
-            }
+
+
+.woocommerce-form-login-toggle {
+    .woocommerce-info {
+        &:before {
+            content: '\e03a';
         }
     }
 }
+.woocommerce-form-coupon-toggle {
+    .woocommerce-info {
+        &:before {
+            content: '\e600';
+        }
+    }
+}
+
 
 // Cart Collaterals Box.
 .cart-collaterals {

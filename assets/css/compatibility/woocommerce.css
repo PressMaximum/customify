@@ -3499,10 +3499,10 @@ p.stars.selected a:not(.active)::before {
 }
 
 /* Minimal style for cart/checkout page */
-.woocommerce-cart .woocommerce-message,
-.woocommerce-cart .woocommerce-info,
-.woocommerce-checkout .woocommerce-message,
-.woocommerce-checkout .woocommerce-info {
+.woocommerce-form-coupon-toggle .woocommerce-message,
+.woocommerce-form-coupon-toggle .woocommerce-info,
+.woocommerce-form-login-toggle .woocommerce-message,
+.woocommerce-form-login-toggle .woocommerce-info {
   max-width: 600px;
   margin: 1em auto 1em;
   border: 0px none;
@@ -3510,10 +3510,10 @@ p.stars.selected a:not(.active)::before {
   background: none;
   text-align: center;
 }
-.woocommerce-cart .woocommerce-message:before,
-.woocommerce-cart .woocommerce-info:before,
-.woocommerce-checkout .woocommerce-message:before,
-.woocommerce-checkout .woocommerce-info:before {
+.woocommerce-form-coupon-toggle .woocommerce-message:before,
+.woocommerce-form-coupon-toggle .woocommerce-info:before,
+.woocommerce-form-login-toggle .woocommerce-message:before,
+.woocommerce-form-login-toggle .woocommerce-info:before {
   display: inline-block;
   position: relative;
   top: auto;
@@ -3522,10 +3522,11 @@ p.stars.selected a:not(.active)::before {
   margin-right: 0.4em;
 }
 
-.woocommerce-checkout .woocommerce-form-login-toggle .woocommerce-info:before {
+.woocommerce-form-login-toggle .woocommerce-info:before {
   content: '\e03a';
 }
-.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info:before {
+
+.woocommerce-form-coupon-toggle .woocommerce-info:before {
   content: '\e600';
 }
 
