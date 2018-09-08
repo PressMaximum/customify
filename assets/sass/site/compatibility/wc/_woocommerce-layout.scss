@@ -6,13 +6,13 @@
     .entry-header {
         text-align: center;
         .entry-title {
-            font-size: 2em;
+            font-size: 1.9em;
             text-transform: uppercase;
             @include for_device( mobile ) {
                 font-size: 1.7em;
             }
         }
-        margin: 1em 0 4em;
+        margin: 0em 0 2em;
     }
 }
 

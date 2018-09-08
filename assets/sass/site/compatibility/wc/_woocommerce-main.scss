@@ -306,7 +306,16 @@ table.shop_table {
     thead {
         tr {
             th {
-                border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+                border-bottom: 2px solid $color_border;
+                color: #252525;
+            }
+        }
+    }
+
+    tfoot {
+        tr {
+            th {
+                color: #252525;
             }
         }
     }
@@ -318,7 +327,7 @@ table.shop_table {
     }
 
     td {
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+        border-top: 1px solid $color_border;
         padding: 10px 10px;
         vertical-align: middle;
         background: transparent;
@@ -340,11 +349,17 @@ table.shop_table {
         }
     }
 
-    tfoot td,
-    tfoot th,
-    tbody th {
-        font-weight: 600;
-        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    tfoot {
+
+        td,th {
+            border-top: 1px solid $color_border;
+            vertical-align: middle;
+        }
+        tr:first-of-type {
+            td, th {
+                border-width: 2px;
+            }
+        }
     }
 }
 

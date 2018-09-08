@@ -2358,6 +2358,7 @@ table td {
   padding: 1em 1.618em;
   vertical-align: top;
   text-align: left;
+  font-size: 0.9em;
 }
 table thead th {
   vertical-align: middle;
@@ -2459,14 +2460,14 @@ select {
 
 .select2-container--default .select2-selection--single {
   box-shadow: none;
-  background-color: #f8f8f8;
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-  line-height: 2.6em;
+  line-height: 2.4em;
+  min-height: 2.6em;
   padding-left: 0px;
 }
 .select2-container--default .select2-selection--single .select2-selection__arrow {
-  top: 50%;
+  top: 46%;
   right: 1px;
   transform: translateY(-38%);
   background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
@@ -3003,7 +3004,7 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
 }
 .dark-mode .header-search_box-item .search-field {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.79);
 }

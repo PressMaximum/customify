@@ -93,7 +93,10 @@ a.remove2x {
     line-height: 1;
 }
 
-span.amount, .price {
-    font-weight: 500;
-    color: #252525;
+.site-content, .cart-dropdown-box {
+    span.amount, .price {
+        font-weight: 500;
+        color: #252525;
+    }
 }
+
