@@ -135,7 +135,6 @@ form .form-row {
 form.login,
 form.checkout_coupon,
 form.register {
-    border: 1px solid darken( $secondary, 10% );
     padding: 20px;
     margin: 2em 0;
     text-align: left;

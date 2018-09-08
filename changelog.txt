@@ -1,15 +1,16 @@
 = 0.2.2 =
-* NEW: Update theme screenshot.
-* NEW: Add theme hooks.
+* NEW: Add more theme hooks.
 * NEW: Add Arial standard font.
-* IMPROVED: Improved post type metabox.
-* IMPROVED: Improved primary navigation style.
+* IMPROVED: Improved WooCommerce cart page.
+* IMPROVED: Improved WooCommerce checkout page.
 * IMPROVED: Improved WooCommerce product media styling.
 * IMPROVED: Improved WooCommerce widgets.
+* IMPROVED: Improved post type meta-box.
+* IMPROVED: Improved primary navigation style.
 * IMPROVED: Improved Default widgets.
 * IMPROVED: Improved single post #173.
 * IMPROVED: Improved admin dashboard and add changelog menu.
-* FIXED: An issue incorrect single product layout.
+* FIXED: Incorrect single product layout.
 * FIXED: Menu item scroll to section on mobile #172.
 
 = 0.2.1 =
