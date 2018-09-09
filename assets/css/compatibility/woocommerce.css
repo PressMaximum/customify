@@ -3649,6 +3649,10 @@ form.woocommerce-checkout::after {
 .woocommerce-checkout-review-order table.shop_table tfoot .order-total .amount {
   font-size: 1.5em;
 }
+.woocommerce-checkout-review-order #place_order {
+  display: block;
+  width: 100%;
+}
 
 /* Sale on badge */
 .woocommerce span.onsale {

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-08-29 04:31:59+00:00\n"
+"POT-Creation-Date: 2018-09-09 10:41:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -290,37 +290,37 @@ msgstr ""
 msgid "1 Comment"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:489
+#: inc/blog/class-post-entry.php:493
 #. translators: used between list items, there is a space after the comma
 msgid "Read more &rarr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:491
+#: inc/blog/class-post-entry.php:495
 msgid "Read more &larr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:496 template-parts/content.php:49
+#: inc/blog/class-post-entry.php:500 template-parts/content.php:49
 #. Translators: %s: Name of current post. Only visible to screen readers.
 msgid "Continue reading %s"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:535
+#: inc/blog/class-post-entry.php:543
 msgid "About the Author: <span>%s</span>"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:574
+#: inc/blog/class-post-entry.php:582
 msgid "Next"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:575
+#: inc/blog/class-post-entry.php:583
 msgid "Next post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:577
+#: inc/blog/class-post-entry.php:585
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:578
+#: inc/blog/class-post-entry.php:586
 msgid "Previous post:"
 msgstr ""
 
@@ -344,8 +344,8 @@ msgstr ""
 
 #: inc/class-customify.php:180 inc/class-customify.php:189
 #: inc/class-customify.php:201
-#: inc/compatibility/woocommerce/woocommerce.php:528
-#: inc/compatibility/woocommerce/woocommerce.php:537
+#: inc/compatibility/woocommerce/woocommerce.php:556
+#: inc/compatibility/woocommerce/woocommerce.php:565
 msgid "Add widgets here."
 msgstr ""
 
@@ -358,7 +358,8 @@ msgstr ""
 msgid "Footer Sidebar %d"
 msgstr ""
 
-#: inc/class-metabox-fields.php:380 inc/customizer/class-customizer.php:344
+#: inc/class-metabox-fields.php:432 inc/class-metabox.php:98
+#: inc/customizer/class-customizer.php:344
 #: inc/customizer/class-customizer.php:355
 #: inc/customizer/class-customizer.php:367
 #: inc/customizer/class-customizer.php:453
@@ -381,11 +382,11 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: inc/class-metabox-fields.php:428
+#: inc/class-metabox-fields.php:488
 msgid "Select image"
 msgstr ""
 
-#: inc/class-metabox-fields.php:429
+#: inc/class-metabox-fields.php:489
 #: inc/customizer/configs/footer/templates.php:37
 #: inc/customizer/configs/header/templates.php:36
 #: inc/customizer/controls/class-control-icon.php:24
@@ -430,7 +431,7 @@ msgstr ""
 msgid "Sidebar"
 msgstr ""
 
-#: inc/class-metabox.php:75 inc/class-metabox.php:96 inc/class-metabox.php:113
+#: inc/class-metabox.php:75 inc/class-metabox.php:97 inc/class-metabox.php:116
 msgid "Inherit from customize settings"
 msgstr ""
 
@@ -461,32 +462,32 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#: inc/class-metabox.php:97 inc/customizer/class-customizer.php:455
+#: inc/class-metabox.php:99 inc/customizer/class-customizer.php:455
 #: inc/customizer/configs/page-header.php:36
 #: inc/customizer/configs/page-header.php:440
 msgid "Cover"
 msgstr ""
 
-#: inc/class-metabox.php:98 inc/customizer/configs/page-header.php:37
+#: inc/class-metabox.php:100 inc/customizer/configs/page-header.php:37
 msgid "Titlebar"
 msgstr ""
 
-#: inc/class-metabox.php:99 inc/class-metabox.php:114
+#: inc/class-metabox.php:101 inc/class-metabox.php:117
 #: inc/customizer/configs/page-header.php:38
 msgid "Hide"
 msgstr ""
 
-#: inc/class-metabox.php:105 inc/class-metabox.php:109
+#: inc/class-metabox.php:107 inc/class-metabox.php:111
 #: inc/compatibility/breadcrumb.php:78
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-metabox.php:115
+#: inc/class-metabox.php:118
 #: inc/customizer/controls/class-control-repeater.php:19
 msgid "Show"
 msgstr ""
 
-#: inc/class-metabox.php:151
+#: inc/class-metabox.php:154
 msgid "Customify Settings"
 msgstr ""
 
@@ -572,12 +573,12 @@ msgstr ""
 msgid "Styling for breadcrumb"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/cart.php:42
+#: inc/compatibility/woocommerce/config/cart.php:43
 #: inc/compatibility/woocommerce/config/header/cart.php:61
 msgid "Cart"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/cart.php:50
+#: inc/compatibility/woocommerce/config/cart.php:51
 msgid "Hide cross-sells"
 msgstr ""
 
@@ -633,6 +634,7 @@ msgid "Rating"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:191
+#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:94
 msgid "Price"
 msgstr ""
 
@@ -809,6 +811,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:146
 #: inc/compatibility/woocommerce/config/header/cart.php:248
+#: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:100
 msgid "Quantity"
 msgstr ""
 
@@ -926,19 +929,23 @@ msgstr ""
 msgid "Related products per row"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:482
+#: inc/compatibility/woocommerce/inc/template-hooks.php:150
+msgid "Your order"
+msgstr ""
+
+#: inc/compatibility/woocommerce/woocommerce.php:510
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:490
+#: inc/compatibility/woocommerce/woocommerce.php:518
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:526
+#: inc/compatibility/woocommerce/woocommerce.php:554
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:535
+#: inc/compatibility/woocommerce/woocommerce.php:563
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -2623,11 +2630,10 @@ msgstr ""
 
 #: inc/panel-builder/class-customize-layout-builder.php:438
 msgid ""
-"Upgrade to <a target=\"_blank\" "
+"Enjoy building? Upgrade to <a target=\"_blank\" "
 "href=\"https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_"
-"medium=links&utm_campaign=customizer_top\">Customify Pro</a> to get more <a "
-"href=\"https://wpcustomify.com/help/documentation/customify-pro-modules/"
-"advanced-header-footer-builder/\" target=\"_blank\">builder items</a>."
+"medium=links&utm_campaign=panel_text\">Customify Pro</a> to get more "
+"builder items and other premium features</a>."
 msgstr ""
 
 #: inc/template-functions.php:11
@@ -2704,8 +2710,36 @@ msgstr ""
 msgid "Pages:"
 msgstr ""
 
-#: woocommerce/cart/mini-cart.php:35
+#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:74
+msgid "Product"
+msgstr ""
+
+#: woocommerce/cart/cart.php:33 woocommerce/cart/cart.php:118
+msgid "Total"
+msgstr ""
+
+#: woocommerce/cart/cart.php:55 woocommerce/cart/mini-cart.php:35
 msgid "Remove this item"
+msgstr ""
+
+#: woocommerce/cart/cart.php:89
+msgid "Available on backorder"
+msgstr ""
+
+#: woocommerce/cart/cart.php:136
+msgid "Coupon:"
+msgstr ""
+
+#: woocommerce/cart/cart.php:136 woocommerce/checkout/form-coupon.php:26
+msgid "Coupon code"
+msgstr ""
+
+#: woocommerce/cart/cart.php:136 woocommerce/checkout/form-coupon.php:27
+msgid "Apply coupon"
+msgstr ""
+
+#: woocommerce/cart/cart.php:141
+msgid "Update cart"
 msgstr ""
 
 #: woocommerce/cart/mini-cart.php:62
@@ -2714,6 +2748,18 @@ msgstr ""
 
 #: woocommerce/cart/mini-cart.php:68
 msgid "No products in the cart."
+msgstr ""
+
+#: woocommerce/checkout/form-coupon.php:18
+msgid "Have a coupon?"
+msgstr ""
+
+#: woocommerce/checkout/form-coupon.php:18
+msgid "Click here to enter your code"
+msgstr ""
+
+#: woocommerce/checkout/form-coupon.php:23
+msgid "If you have a coupon code, please apply it below."
 msgstr ""
 
 #: woocommerce/loop/result-count.php:29
