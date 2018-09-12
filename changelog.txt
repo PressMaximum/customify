@@ -1,3 +1,7 @@
+= 0.2.3 =
+* NEW: Apply the product category thumbnail as page cover image.
+
+
 = 0.2.2 =
 * NEW: Add more theme hooks.
 * NEW: Add Arial standard font.

@@ -40,6 +40,8 @@ class Customify_WC {
             add_filter('customify/titlebar/args', array($this, 'titlebar_args'));
             add_filter('customify/titlebar/config', array($this, 'titlebar_config'), 15, 2);
             add_filter('customify/titlebar/is-showing', array($this, 'titlebar_is_showing'), 15);
+	        //self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
+            add_filter( 'customify/page-header/get-settings', array( $this, 'get_page_header_settings') );
 
             add_filter('customify/theme/js', array($this, 'add_js'));
            // add_filter('customify/theme/css', array($this, 'add_css'));
@@ -462,6 +464,29 @@ class Customify_WC {
         }
 
         return apply_filters( 'customify_is_shop_title_display', $show );
+    }
+
+	/**
+     * Filter header settings pargs
+     *
+     * @TODO display category thumbnail as header cover if set.
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+    function get_page_header_settings( $args ){
+	    if (is_product_taxonomy()) {
+            global $wp_query;
+            $cat = $wp_query->get_queried_object();
+            $thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
+            $image = Customify()->get_media( $thumbnail_id, 'full' );
+            if ( $image ) {
+                $args['image'] = $image;
+            }
+        }
+
+        return $args;
     }
 
     function titlebar_is_showing( $show = true ){
