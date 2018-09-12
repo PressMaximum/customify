@@ -1,5 +1,6 @@
 = 0.2.3 =
 * NEW: Apply the product category thumbnail as page cover image.
+* FIXED: Blog meta post is hidden on posts listing page.
 
 
 = 0.2.2 =

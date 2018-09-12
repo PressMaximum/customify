@@ -310,6 +310,17 @@ class Customify_Post_Entry {
         return '<span class="meta-item byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
+	/**
+     * Check if show post meta for this post
+     *
+	 * @param $post object|integer
+	 *
+	 * @return boolean
+	 */
+    private function show_post_meta( $post ){
+        return apply_filters( 'customify/show/post_meta', get_post_type( $post ) == 'post'  );
+    }
+
     /**
      * Get post meta markup
      *
@@ -319,7 +330,7 @@ class Customify_Post_Entry {
      */
     function post_meta( $post = null, $meta_fields = array(), $args = array() ){
 
-	    if ( ! is_singular( 'post' ) ) {
+	    if ( ! $this->show_post_meta( $post )) {
 		    return;
 	    }
 
