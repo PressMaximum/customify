@@ -109,7 +109,7 @@
     .widget_categories, .widget_nav_menu, .widget_pages, .widget_product_categories {
         ul ul {
             margin-top: ms(-4);
-            margin-left: ms(1);
+            margin-left: 0;
             margin-bottom: -(ms(-4));
         }
         .menu-item-has-children {

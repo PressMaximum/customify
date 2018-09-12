@@ -131,6 +131,10 @@ class Customify_Posts_Layout {
         );
         $this->args['media_fields'] = array();
 
+        if ( isset( $this->customizer_args['_overwrite'] ) ) {
+	        $this->args = array_merge( $this->args, $this->customizer_args['_overwrite'] );
+        }
+
         /*
         Customify_Post_Entry()->set_config( array(
             'thumbnail_size' => $this->args['thumbnail_size'],
