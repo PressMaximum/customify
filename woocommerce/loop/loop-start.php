@@ -33,6 +33,11 @@ if ( $mobile >= $tablet  && $tablet > 1) {
 if ( ! $mobile ) {
 	$mobile = 1;
 }
+if ( ! $columns ) {
+	$columns = 4;
+	$tablet = 2;
+	$mobile = 1;
+}
 
 $view = customify_get_default_catalog_view_mod();
 $class = sprintf( "customify-grid-{$columns}_md-{$columns}_sm-{$tablet}_xs-{$mobile}" );
