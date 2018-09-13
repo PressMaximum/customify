@@ -290,9 +290,13 @@ table.shop_attributes {
         }
     }
 
-    tr:nth-child(even) td,
-    tr:nth-child(even) th {
-        background: rgba(0, 0, 0, 0.025);
+    //tr:nth-child(even) td,
+    //tr:nth-child(even) th {
+    //    background: rgba(0, 0, 0, 0.025);
+    //}
+
+    tbody tr:nth-child(2n) td {
+        background: #fafafa;
     }
 }
 

@@ -3336,6 +3336,9 @@ article.comment .comment-post-author {
 .page-cover .page-breadcrumb-list a, .page-cover .page-breadcrumb-list li:after {
   color: inherit;
 }
+.page-cover .page-breadcrumb-list a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
 
 .page-cover-title {
   margin-bottom: 0px;
