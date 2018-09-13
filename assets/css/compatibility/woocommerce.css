@@ -1544,7 +1544,7 @@ td.product-quantity {
   display: flex;
   align-items: center;
   font-weight: 600;
-  font-size: 0.82em;
+  font-size: 0.85em;
 }
 .item--wc_cart .cart-item-link > span {
   margin: 0 2px;
@@ -1565,7 +1565,7 @@ td.product-quantity {
   height: 1.3em;
   display: block;
   position: relative;
-  top: -2px;
+  top: -1px;
 }
 .item--wc_cart .cart-icon i:before {
   position: absolute;
