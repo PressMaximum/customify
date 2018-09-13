@@ -3693,4 +3693,26 @@ form.woocommerce-checkout::after {
   width: 72%;
 }
 
+.footer_payment_methods {
+  display: inline-block;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  font-size: 25px;
+  line-height: 0px;
+}
+.footer_payment_methods li {
+  line-height: 0px;
+  display: inline-block;
+}
+.footer_payment_methods li i:before {
+  line-height: 0px;
+}
+.footer_payment_methods li:last-child {
+  margin-right: 0px;
+}
+.footer_payment_methods li:first-child {
+  margin-left: 0px;
+}
+
 /*# sourceMappingURL=woocommerce.css.map */

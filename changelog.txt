@@ -1,4 +1,5 @@
 = 0.2.3 =
+* NEW: Footer builder item payment methods.
 * NEW: Apply the product category thumbnail as page cover image.
 * IMPROVED: Footer widget border color on dark mode.
 * IMPROVED: Default sub-navigation font size.
