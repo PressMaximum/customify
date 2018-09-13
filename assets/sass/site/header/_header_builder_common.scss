@@ -218,6 +218,10 @@
         a, li:after {
             color: inherit;
         }
+
+        a:hover {
+            color: rgba(255, 255, 255, .8);
+        }
     }
 }
 .page-cover-title {

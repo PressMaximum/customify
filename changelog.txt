@@ -2,6 +2,7 @@
 * NEW: Apply the product category thumbnail as page cover image.
 * IMPROVED: Footer widget border color on dark mode.
 * IMPROVED: Default sub-navigation font size.
+* IMPROVED: Shop attributes table style.
 * FIXED: Blog meta post is hidden on posts listing page.
 
 
