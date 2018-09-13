@@ -4,7 +4,7 @@
     text-transform: uppercase;
     font-weight: 500;
     color: currentColor;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
 
 .widget-area {
@@ -180,6 +180,37 @@
     }
 
 }
+
+.dark-mode {
+    .widget_pages li,
+    .widget_categories li,
+    .widget_archive li,
+    .widget_meta li,
+    .widget_nav_menu li,
+    .widget_product_categories li,
+    .widget_recent_entries li,
+    .widget_rss li {
+        a {
+            border-color: $light_color_border;
+        }
+    }
+
+    .widget_recent_comments li {
+        border-color: $light_color_border;
+    }
+
+
+    .widget ul li.cat-item .count,
+    .widget ul li.woocommerce-widget-layered-nav-list__item .count {
+        background: black(0.2);
+    }
+
+    .widget-area .widget select {
+        border-color: $light_color_border;
+    }
+}
+
+
 .site-content .widget-area {
     .menu {
         li {

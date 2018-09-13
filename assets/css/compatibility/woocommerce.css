@@ -1565,6 +1565,7 @@ td.product-quantity {
   height: 1.3em;
   display: block;
   position: relative;
+  top: -2px;
 }
 .item--wc_cart .cart-icon i:before {
   position: absolute;

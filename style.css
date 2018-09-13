@@ -5669,7 +5669,7 @@ body.menu_sidebar_dropdown:before {
   text-transform: uppercase;
   font-weight: 500;
   color: currentColor;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .widget-area .widget {
@@ -5863,6 +5863,27 @@ body.menu_sidebar_dropdown:before {
   display: block;
   margin: 0.5407911001em 0px;
   font-size: 85%;
+}
+
+.dark-mode .widget_pages li a,
+.dark-mode .widget_categories li a,
+.dark-mode .widget_archive li a,
+.dark-mode .widget_meta li a,
+.dark-mode .widget_nav_menu li a,
+.dark-mode .widget_product_categories li a,
+.dark-mode .widget_recent_entries li a,
+.dark-mode .widget_rss li a {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dark-mode .widget_recent_comments li {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.dark-mode .widget ul li.cat-item .count,
+.dark-mode .widget ul li.woocommerce-widget-layered-nav-list__item .count {
+  background: rgba(0, 0, 0, 0.2);
+}
+.dark-mode .widget-area .widget select {
+  border-color: rgba(255, 255, 255, 0.08);
 }
 
 .site-content .widget-area .menu li {
