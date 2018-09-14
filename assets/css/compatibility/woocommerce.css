@@ -2012,96 +2012,58 @@ a.remove2x:hover {
 /**
 * Product page
 */
-div.product div.images,
-#content div.product div.images {
-  float: left;
-  width: 48%;
-}
 @media screen and (max-width: 568px) {
-  div.product div.images,
-  #content div.product div.images {
-    width: 100%;
-    float: none;
+  div.product div.images {
     order: 5;
   }
 }
-div.product div.thumbnails,
-#content div.product div.thumbnails {
+div.product div.thumbnails {
   *zoom: 1;
 }
-div.product div.thumbnails::before, div.product div.thumbnails::after,
-#content div.product div.thumbnails::before,
-#content div.product div.thumbnails::after {
+div.product div.thumbnails::before, div.product div.thumbnails::after {
   content: ' ';
   display: table;
 }
-div.product div.thumbnails::after,
-#content div.product div.thumbnails::after {
+div.product div.thumbnails::after {
   clear: both;
 }
-div.product div.thumbnails a,
-#content div.product div.thumbnails a {
+div.product div.thumbnails a {
   float: left;
   width: 30.75%;
   margin-right: 3.8%;
   margin-bottom: 1em;
 }
-div.product div.thumbnails a.last,
-#content div.product div.thumbnails a.last {
+div.product div.thumbnails a.last {
   margin-right: 0;
 }
-div.product div.thumbnails a.first,
-#content div.product div.thumbnails a.first {
+div.product div.thumbnails a.first {
   clear: both;
 }
-div.product div.thumbnails.columns-1 a,
-#content div.product div.thumbnails.columns-1 a {
+div.product div.thumbnails.columns-1 a {
   width: 100%;
   margin-right: 0;
   float: none;
 }
-div.product div.thumbnails.columns-2 a,
-#content div.product div.thumbnails.columns-2 a {
+div.product div.thumbnails.columns-2 a {
   width: 48%;
 }
-div.product div.thumbnails.columns-4 a,
-#content div.product div.thumbnails.columns-4 a {
+div.product div.thumbnails.columns-4 a {
   width: 22.05%;
 }
-div.product div.thumbnails.columns-5 a,
-#content div.product div.thumbnails.columns-5 a {
+div.product div.thumbnails.columns-5 a {
   width: 16.9%;
 }
-div.product div.summary,
-#content div.product div.summary {
-  float: right;
-  width: 48%;
-  clear: none;
-}
-@media screen and (max-width: 568px) {
-  div.product div.summary,
-  #content div.product div.summary {
-    order: 1;
-    width: 100%;
-    float: none;
-  }
-}
-div.product #reviews .comment,
-#content div.product #reviews .comment {
+div.product #reviews .comment {
   *zoom: 1;
 }
-div.product #reviews .comment::before, div.product #reviews .comment::after,
-#content div.product #reviews .comment::before,
-#content div.product #reviews .comment::after {
+div.product #reviews .comment::before, div.product #reviews .comment::after {
   content: ' ';
   display: table;
 }
-div.product #reviews .comment::after,
-#content div.product #reviews .comment::after {
+div.product #reviews .comment::after {
   clear: both;
 }
-div.product #reviews .comment img,
-#content div.product #reviews .comment img {
+div.product #reviews .comment img {
   float: right;
   height: auto;
 }
@@ -2169,6 +2131,9 @@ div.product .woocommerce-product-rating {
 div.product .woocommerce-product-rating .woocommerce-review-link {
   display: none;
 }
+div.product .wc-product-images {
+  position: relative;
+}
 div.product div.images {
   margin-bottom: 2em;
 }
@@ -2218,7 +2183,7 @@ div.product div.images .woocommerce-product-gallery__trigger:hover, div.product 
   opacity: 1;
 }
 div.product div.images .woocommerce-product-gallery__trigger:before {
-  content: "\e005";
+  content: "\e035";
   font-family: "WooCommerce";
   display: flex;
   height: 100%;
@@ -2228,7 +2193,7 @@ div.product div.images .woocommerce-product-gallery__trigger:before {
   position: absolute;
   top: 50%;
   left: 50%;
-  font-size: 1.3em;
+  font-size: 1em;
   line-height: 0;
   transform: translate(-50%, -50%);
   box-sizing: content-box;

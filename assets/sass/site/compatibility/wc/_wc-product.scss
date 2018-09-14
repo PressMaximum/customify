@@ -1,14 +1,9 @@
 /**
 * Product page
 */
-div.product,
-#content div.product {
+div.product {
     div.images {
-        float: left;
-        width: 48%;
         @include for_device(mobile) {
-            width: 100%;
-            float: none;
             order: 5;
         }
     }
@@ -58,17 +53,6 @@ div.product,
         }
     }
 
-    div.summary {
-        float: right;
-        width: 48%;
-        clear: none;
-
-        @include for_device(mobile) {
-            order: 1;
-            width: 100%;
-            float: none;
-        }
-    }
 
     #reviews {
         .comment {
@@ -131,6 +115,9 @@ div.product {
             display: none;
         }
     }
+    .wc-product-images {
+        position: relative;
+    }
 
     div.images {
         margin-bottom: 2em;
@@ -187,7 +174,7 @@ div.product {
             }
 
             &:before {
-                content: "\e005";
+                content: "\e035";
                 font-family: "WooCommerce";
                 display: flex;
                 height: 100%;
@@ -197,7 +184,7 @@ div.product {
                 position: absolute;
                 top: 50%;
                 left: 50%;
-                font-size: 1.3em;
+                font-size: 1em;
                 line-height: 0;
                 transform: translate( -50%, -50%);
                 box-sizing: content-box;

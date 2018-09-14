@@ -103,6 +103,20 @@ class Customify_WC {
 	        // Overwrite Categories Walker
 	        add_filter( 'woocommerce_product_categories_widget_args', array( $this, 'customify_wc_cat_list_args' ) );
 
+	        /**
+	         * Move sale flash to new hook wc_product_images_after
+             * @since 0.2.3
+	         */
+	        remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash'  );
+	        add_action( 'wc_product_images_after', 'woocommerce_show_product_sale_flash' );
+
+	        /**
+	         * Move WC Product images to new hook woocommerce_single_product_media
+             * This hook created from theme..
+	         */
+	        remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+	        add_action('woocommerce_single_product_media', 'woocommerce_show_product_images', 20 );
+
         }
     }
 

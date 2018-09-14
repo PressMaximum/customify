@@ -60,13 +60,15 @@ class Customify_WC_Single_Product {
 
 		$configs[] = array(
 			'name'    => "{$section}_tab",
-			'type'    => 'radio_group',
+			'type'    => 'select',
 			'default' => 'horizontal',
 			'section' => $section,
 			'label'   => __( 'Tab Layout', 'customify' ),
 			'choices' => array(
 				'horizontal' => __( 'Horizontal', 'customify' ),
-				'vertical'   => __( 'Vertical', 'customify' )
+				'vertical'   => __( 'Vertical', 'customify' ),
+				//'toggle'   => __( 'Toggle', 'customify' ),
+				'sections'   => __( 'Sections', 'customify' ),
 			)
 		);
 
