@@ -2985,6 +2985,11 @@ p.stars.selected a:not(.active)::before {
   cursor: pointer;
 }
 
+.cart-empty,
+.return-to-shop {
+  text-align: center;
+}
+
 .cart-collaterals,
 .woocommerce-checkout-review-order {
   background: rgba(84, 84, 84, 0.055);
