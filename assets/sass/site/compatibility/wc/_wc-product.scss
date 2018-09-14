@@ -170,12 +170,11 @@ div.product {
             position: absolute;
             top: .5em;
             right: .5em;
-            font-size: 2em;
+            font-size: 1em;
             z-index: 9;
             width: 36px;
             height: 36px;
             background: #fff;
-            text-indent: -9999px;
             border-radius: 100%;
             box-shadow: 0 7px 15px rgba(0,0,0,.2);
             color: #757575;
@@ -188,30 +187,24 @@ div.product {
             }
 
             &:before {
-                content: "";
-                display: block;
-                width: 10px;
-                height: 10px;
-                border: 2px solid #000;
-                border-radius: 100%;
+                content: "\e005";
+                font-family: "WooCommerce";
+                display: flex;
+                height: 100%;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
                 position: absolute;
-                top: 9px;
-                left: 9px;
+                top: 50%;
+                left: 50%;
+                font-size: 1.3em;
+                line-height: 0;
+                transform: translate( -50%, -50%);
                 box-sizing: content-box;
             }
 
-            &:after {
-                content: "";
-                display: block;
-                width: 2px;
-                height: 8px;
-                background: #000;
-                border-radius: 6px;
-                position: absolute;
-                top: 19px;
-                left: 22px;
-                transform: rotate(-45deg);
-                box-sizing: content-box;
+            img {
+                display: none !important;
             }
         }
 

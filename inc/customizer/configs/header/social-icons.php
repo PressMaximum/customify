@@ -383,8 +383,9 @@ class Customify_Builder_Item_Social_Icons {
 					if ( $item['url'] ) {
 						echo '</a>';
 					}
+					echo '</li>';
 				}
-				echo '</li>';
+
 			}
 
 			echo '</ul>';
