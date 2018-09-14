@@ -864,7 +864,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
 }
@@ -1269,10 +1269,12 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #c6c7ce;
+  position: relative;
+  top: 2px;
 }
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item--chosen a::before {
   font-family: 'WooCommerce';
@@ -1282,7 +1284,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #c6c7ce;
@@ -1316,7 +1318,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #a00;
@@ -1429,7 +1431,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #a00;
@@ -2463,7 +2465,7 @@ ul.order_details li:last-of-type {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   margin-left: -1.5em;
@@ -2478,7 +2480,7 @@ ul.order_details li:last-of-type {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   margin-left: -1.5em;
@@ -2950,9 +2952,15 @@ p.stars.selected a:not(.active)::before {
   cursor: pointer;
 }
 
+.cart-empty,
+.return-to-shop {
+  text-align: center;
+}
+
 .cart-collaterals,
 .woocommerce-checkout-review-order {
-  background: rgba(84, 84, 84, 0.055);
+  background: #f9f9f9;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   padding: 1.8em 2em 2em 2em;
   border-radius: 2px;
   margin-top: 1em;

@@ -3333,7 +3333,7 @@ article.comment .comment-post-author {
 }
 
 .page-cover-tagline {
-  margin-bottom: 1em;
+  margin-bottom: 1.2em;
 }
 
 .page-cover-title, .page-cover-tagline {
@@ -5255,6 +5255,7 @@ body.menu_sidebar_dropdown:before {
 
 .entry-meta > span {
   display: inline-block;
+  padding: 5px 0;
 }
 .entry-meta .sep {
   margin-left: 8px;
@@ -5814,7 +5815,7 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget_product_categories li ul a,
 .widget-area .widget_recent_entries li ul a,
 .widget-area .widget_rss li ul a {
-  padding-left: 30px;
+  padding-left: 20px;
 }
 .widget-area .widget_pages li ul ul li::before,
 .widget-area .widget_categories li ul ul li::before,
@@ -5834,7 +5835,7 @@ body.menu_sidebar_dropdown:before {
 .widget-area .widget_product_categories li ul ul a,
 .widget-area .widget_recent_entries li ul ul a,
 .widget-area .widget_rss li ul ul a {
-  padding-left: 45px;
+  padding-left: 40px;
 }
 .widget-area .widget_recent_comments li {
   padding-bottom: 0.6em;
