@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.2.2\n"
+"Project-Id-Version: Customify 0.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-09-09 10:41:54+00:00\n"
+"POT-Creation-Date: 2018-09-14 03:30:27+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -290,41 +290,41 @@ msgstr ""
 msgid "1 Comment"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:493
+#: inc/blog/class-post-entry.php:504
 #. translators: used between list items, there is a space after the comma
 msgid "Read more &rarr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:495
+#: inc/blog/class-post-entry.php:506
 msgid "Read more &larr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:500 template-parts/content.php:49
+#: inc/blog/class-post-entry.php:511 template-parts/content.php:49
 #. Translators: %s: Name of current post. Only visible to screen readers.
 msgid "Continue reading %s"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:543
+#: inc/blog/class-post-entry.php:554
 msgid "About the Author: <span>%s</span>"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:582
+#: inc/blog/class-post-entry.php:593
 msgid "Next"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:583
+#: inc/blog/class-post-entry.php:594
 msgid "Next post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:585
+#: inc/blog/class-post-entry.php:596
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:586
+#: inc/blog/class-post-entry.php:597
 msgid "Previous post:"
 msgstr ""
 
-#: inc/blog/functions-posts-layout.php:19
+#: inc/blog/functions-posts-layout.php:29
 #: inc/customizer/configs/page-header.php:732
 #. translators: 1: Search query name
 msgid "Search Results for: %s"
@@ -344,8 +344,8 @@ msgstr ""
 
 #: inc/class-customify.php:180 inc/class-customify.php:189
 #: inc/class-customify.php:201
-#: inc/compatibility/woocommerce/woocommerce.php:556
-#: inc/compatibility/woocommerce/woocommerce.php:565
+#: inc/compatibility/woocommerce/woocommerce.php:581
+#: inc/compatibility/woocommerce/woocommerce.php:590
 msgid "Add widgets here."
 msgstr ""
 
@@ -933,19 +933,19 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:510
+#: inc/compatibility/woocommerce/woocommerce.php:535
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:518
+#: inc/compatibility/woocommerce/woocommerce.php:543
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:554
+#: inc/compatibility/woocommerce/woocommerce.php:579
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:563
+#: inc/compatibility/woocommerce/woocommerce.php:588
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -2850,12 +2850,12 @@ msgid_plural "%1$s Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/blog/class-posts-layout.php:428 woocommerce/loop/pagination.php:32
+#: inc/blog/class-posts-layout.php:432 woocommerce/loop/pagination.php:32
 msgctxt "previous set of posts"
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-posts-layout.php:431 woocommerce/loop/pagination.php:33
+#: inc/blog/class-posts-layout.php:435 woocommerce/loop/pagination.php:33
 msgctxt "next set of posts"
 msgid "Next"
 msgstr ""
