@@ -739,16 +739,10 @@ article.comment {
     display: inline-block;
     transition: all 0.3s linear;
     &.x2 {
-        width: 40px;
-        height: 40px;
-        min-height: 40px;
-        font-size: 1.2em;
-        @include for_device(mobile) {
-            width: 30px;
-            height: 30px;
-            min-height: 30px;
-            font-size: 1.2em;
-        }
+        width: 30px;
+        height: 30px;
+        min-height: 30px;
+        font-size: 1.1em;
     }
     svg {
         width: 50%;
