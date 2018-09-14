@@ -766,6 +766,9 @@ class Customify_Page_Header {
 				$args['title']   = $titles['product'];
 				$args['tagline'] = $taglines['product'];
 				$args['_page']   = 'product';
+				if ( $args['title'] || $args['tagline'] ) {
+					$post_id = 0;
+                }
 
 			} elseif ( is_product_category() ) {
 				$post_id         = 0;
@@ -861,7 +864,6 @@ class Customify_Page_Header {
 		if ( ! $args['display'] ) {
 			$args['display'] = 'default';
 		}
-
 
 
 		self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
