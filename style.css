@@ -2904,26 +2904,20 @@ article.comment .comment-post-author {
     font-size: 1.2em;
   }
 }
+.nav-btn svg {
+  width: 50%;
+  height: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  fill: currentColor;
+  color: currentColor;
+  transform: translate(-50%, -50%);
+}
 .nav-btn:hover, .nav-btn:focus {
   color: #333;
   opacity: 1;
   box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
-}
-.nav-btn.nav-next:before {
-  content: "\f105";
-}
-.nav-btn.nav-prev:before {
-  content: "\f104";
-}
-.nav-btn:before {
-  font-family: "FontAwesome";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  line-height: 1;
 }
 
 .shape-rounded {

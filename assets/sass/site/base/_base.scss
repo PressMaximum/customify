@@ -735,7 +735,7 @@ article.comment {
     box-shadow: 0 7px 15px rgba(0,0,0,.2);
     background-color: #fff;
     color: #757575;
-    opacity: 0.6;
+    opacity:  0.6;
     display: inline-block;
     transition: all 0.3s linear;
     &.x2 {
@@ -750,6 +750,16 @@ article.comment {
             font-size: 1.2em;
         }
     }
+    svg {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        fill: currentColor;
+        color: currentColor;
+        transform: translate( -50%, -50%);
+    }
     &:hover, &:focus {
         color: #333;
         opacity: 1;
@@ -757,23 +767,28 @@ article.comment {
     }
     &.nav-next {
         &:before {
-            content: "\f105";
+            //content: "\f105";
+           // transform: translate( -50%, -50%) rotate( 45deg );
+        }
+        &:after{
+            //transform: translate( -50%, -50%) rotate( -45deg );
         }
     }
     &.nav-prev {
         &:before {
-            content: "\f104";
+            //content: "\f104";
         }
     }
+    &:before, &:after {
+
+    }
+
     &:before {
-        font-family: "FontAwesome";
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate( -50%, -50%);
-        line-height: 1;
+
+    }
+
+    &:after {
+
     }
 }
 
