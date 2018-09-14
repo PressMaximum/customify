@@ -691,9 +691,8 @@ table.shop_attributes td p {
 table.shop_attributes td p:last-child {
   padding-bottom: 0;
 }
-table.shop_attributes tr:nth-child(even) td,
-table.shop_attributes tr:nth-child(even) th {
-  background: rgba(0, 0, 0, 0.025);
+table.shop_attributes tbody tr:nth-child(2n) td {
+  background: #fafafa;
 }
 
 table.shop_table {

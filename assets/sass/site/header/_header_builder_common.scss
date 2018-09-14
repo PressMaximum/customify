@@ -203,11 +203,13 @@
         flex-direction: column;
         justify-content: center;
         z-index: 5;
+        padding: 1em 30px;
         @include for_device( desktop ){
             min-height: 300px;
         }
         @include for_device( tablet ){
             min-height: 250px;
+            padding: 1em 15px;
         }
         @include for_device( mobile ){
             min-height: 200px;
@@ -225,11 +227,10 @@
     }
 }
 .page-cover-title {
-    margin-bottom: 0px;
+    margin-bottom: 0.5em;
 }
 .page-cover-tagline {
-    margin-top: 0.5em;
-    margin-bottom: 1.5em;
+    margin-bottom: 1em;
 }
 .page-cover-title, .page-cover-tagline {
     display: inline-block;
