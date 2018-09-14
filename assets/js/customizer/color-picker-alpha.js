@@ -226,7 +226,7 @@
             self._addListeners();
 
             var placeholderColor = el.attr( 'placeholder') || '';
-            if ( placeholderColor ) {
+            if ( placeholderColor && ! self.initialValue ) {
                 self._placeholderColor = placeholderColor;
                 if ( self.options.alpha ) {
                     self.toggler.find( 'span.color-alpha' ).css( {
