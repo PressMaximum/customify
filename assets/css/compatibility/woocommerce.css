@@ -864,7 +864,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
 }
@@ -1269,7 +1269,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #c6c7ce;
@@ -1282,10 +1282,12 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #c6c7ce;
+  position: relative;
+  top: 2px;
 }
 
 .woocommerce-widget-layered-nav-dropdown__submit {
@@ -1316,7 +1318,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #a00;
@@ -1429,7 +1431,7 @@ td.product-quantity {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   color: #a00;
@@ -2498,7 +2500,7 @@ ul.order_details li:last-of-type {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   margin-left: -1.5em;
@@ -2513,7 +2515,7 @@ ul.order_details li:last-of-type {
   text-transform: none;
   line-height: 1;
   -webkit-font-smoothing: antialiased;
-  margin-right: 0.618em;
+  margin-right: 0.418em;
   content: "";
   text-decoration: none;
   margin-left: -1.5em;

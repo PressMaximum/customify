@@ -166,6 +166,8 @@
     .woocommerce-widget-layered-nav-list__item--chosen a::before {
         @include iconbefore( '\e015' );
         color: #c6c7ce;
+        position: relative;
+        top: 2px;
     }
 }
 .woocommerce-widget-layered-nav-dropdown__submit {
