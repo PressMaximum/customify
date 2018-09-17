@@ -47,14 +47,17 @@ if ( ! empty( $tabs ) ) :
 		<?php endforeach; ?>
         </div>
         <?php } else {
+            $index = 0;
             foreach ( $tabs as $key => $tab ) : ?>
-                <section class="tab-section <?php echo esc_attr( $key ); ?>_tab" id="tab-title-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
-                    <h2 class="tab-section-heading"><?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', esc_html( $tab['title'] ), $key ); ?></h2>
+                <section class="tab-section <?php echo esc_attr( $key ); ?>_tab <?php echo ( $index == 0 ) ? 'active' : ''; ?>" id="tab-title-<?php echo esc_attr( $key ); ?>" role="tab" aria-controls="tab-<?php echo esc_attr( $key ); ?>">
+                    <h2 class="tab-section-heading"><a href="#tab-<?php echo esc_attr( $key ); ?>"><?php echo apply_filters( 'woocommerce_product_' . $key . '_tab_title', esc_html( $tab['title'] ), $key ); ?></a></h2>
                     <div class="tab-section-content" id="tab-<?php echo esc_attr( $key ); ?>" role="tabpanel" aria-labelledby="tab-title-<?php echo esc_attr( $key ); ?>">
 		                <?php if ( isset( $tab['callback'] ) ) { call_user_func( $tab['callback'], $key, $tab ); } ?>
                     </div>
                 </section>
-            <?php endforeach;
+            <?php
+	            $index ++ ;
+            endforeach;
         } ?>
 	</div>
 

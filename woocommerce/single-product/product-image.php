@@ -30,7 +30,7 @@ $wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_cl
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
 	<div class="wc-product--images">
         <?php do_action( 'wc_product_images_before' ); ?>
-        <figure class="woocommerce-product-gallery__wrapper">
+        <figure class="woocommerce-product-gallery__wrapper <?php echo esc_attr( apply_filters( 'woocommerce-product-gallery-classes', '' ) ); ?>">
 			<?php
 			if ( has_post_thumbnail() ) {
 				$html  = wc_get_gallery_image_html( $post_thumbnail_id, true );

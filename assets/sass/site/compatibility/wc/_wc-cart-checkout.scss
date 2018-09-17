@@ -39,7 +39,7 @@
 
 // Sidebar Box style
 .cart-collaterals,
-.woocommerce-checkout-review-order {
+.woocommerce-checkout-review-order, .group-highlight-box {
     background: #f9f9f9;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
     padding: 1.8em 2em 2em 2em;
@@ -47,6 +47,11 @@
     margin-top: 1em;
     @include for_device(mobile) {
         padding: 1em;
+    }
+    > * {
+        &:last-child {
+            margin-bottom: 0px;
+        }
     }
 }
 

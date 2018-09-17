@@ -23,6 +23,13 @@ class Customify_WC_Single_Product {
 			add_filter( 'woocommerce_product_additional_information_heading', '__return_false', 999 );
 		}
 
+		$tab_type = Customify()->get_setting('wc_single_product_tab');
+
+		if ( $tab_type == 'section'  || $tab_type == 'toggle ') {
+			add_filter( 'woocommerce_product_description_heading', '__return_false', 999 );
+			add_filter( 'woocommerce_product_additional_information_heading', '__return_false', 999 );
+		}
+
 	}
 
 	function add_product_url( $args ) {
@@ -56,6 +63,7 @@ class Customify_WC_Single_Product {
 			'type'    => 'heading',
 			'section' => $section,
 			'title'   => __( 'Product Tabs', 'customify' ),
+			'priority' => 40,
 		);
 
 		$configs[] = array(
@@ -67,9 +75,10 @@ class Customify_WC_Single_Product {
 			'choices' => array(
 				'horizontal' => __( 'Horizontal', 'customify' ),
 				'vertical'   => __( 'Vertical', 'customify' ),
-				//'toggle'   => __( 'Toggle', 'customify' ),
+				'toggle'   => __( 'Toggle', 'customify' ),
 				'sections'   => __( 'Sections', 'customify' ),
-			)
+			),
+			'priority' => 45,
 		);
 
 		$configs[] = array(
@@ -78,6 +87,7 @@ class Customify_WC_Single_Product {
 			'default' => 1,
 			'section' =>  $section,
 			'checkbox_label' => __( 'Hide product description heading', 'customify' ),
+			'priority' => 46,
 		);
 
 		$configs[] = array(
@@ -86,6 +96,7 @@ class Customify_WC_Single_Product {
 			'default' => 1,
 			'section' =>  $section,
 			'checkbox_label' => __( 'Hide product additional information heading', 'customify' ),
+			'priority' => 47,
 		);
 
 		$configs[] = array(
@@ -96,6 +107,7 @@ class Customify_WC_Single_Product {
 			'checkbox_label' => __( 'Hide product review heading', 'customify' ),
 			'selector'       => '.woocommerce-Reviews-title',
 			'css_format'     => 'display: none;',
+			'priority' => 48,
 		);
 
 		$configs[] = array(
@@ -103,6 +115,7 @@ class Customify_WC_Single_Product {
 			'type'    => 'heading',
 			'section' => $section,
 			'title'   => __( 'Upsell Products', 'customify' ),
+			'priority' => 60,
 		);
 
         $configs[] = array(
@@ -111,6 +124,7 @@ class Customify_WC_Single_Product {
             'default' => 3,
             'section' => $section,
             'label'   => __( 'Number of upsell products', 'customify' ),
+            'priority' => 65,
         );
 
         $configs[] = array(
@@ -119,6 +133,7 @@ class Customify_WC_Single_Product {
             'device_settings' => true,
             'section'         => $section,
             'label'           => __( 'Upsell products per row', 'customify' ),
+            'priority'      => 66,
         );
 
 		$configs[] = array(
@@ -126,6 +141,7 @@ class Customify_WC_Single_Product {
 			'type'    => 'heading',
 			'section' => $section,
 			'title'   => __( 'Related Products', 'customify' ),
+			'priority'      => 70,
 		);
 
 		$configs[] = array(
@@ -134,6 +150,7 @@ class Customify_WC_Single_Product {
 			'default' => 3,
 			'section' => $section,
 			'label'   => __( 'Number of related products', 'customify' ),
+			'priority'      => 75,
 		);
 
 		$configs[] = array(
@@ -142,6 +159,7 @@ class Customify_WC_Single_Product {
 			'device_settings' => true,
 			'section'         => $section,
 			'label'           => __( 'Related products per row', 'customify' ),
+			'priority'      => 76,
 		);
 
 		return $configs;

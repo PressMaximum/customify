@@ -35,8 +35,10 @@ if ( post_password_required() ) {
 		 */
 		do_action( 'woocommerce_before_single_product_summary' );
 	?>
-
 	<?php
+
+    // Single product class
+
     $has_col = 0;
     if ( has_action( 'woocommerce_single_product_media' ) || has_action( 'woocommerce_single_product_summary' ) ) {
 	    $has_col = 1;
@@ -49,7 +51,7 @@ if ( post_password_required() ) {
 
     if ( $has_col == 2 ) {
 	    $class = 'customify-col-6_md-6_sm-12_xs-12';
-        echo '<div class="customify-grid">';
+        echo '<div class="customify-grid wc-layout-columns">';
     }
 
     if ( has_action( 'woocommerce_single_product_media' ) ) { ?>
@@ -68,21 +70,39 @@ if ( post_password_required() ) {
 
     <?php if ( has_action( 'woocommerce_single_product_summary' ) ) { ?>
 	<div class="summary entry-summary  <?php echo esc_attr( $class ); ?>">
-		<?php
-			/**
-			 * Hook: woocommerce_single_product_summary.
-			 *
-			 * @hooked woocommerce_template_single_title - 5
-			 * @hooked woocommerce_template_single_rating - 10
-			 * @hooked woocommerce_template_single_price - 10
-			 * @hooked woocommerce_template_single_excerpt - 20
-			 * @hooked woocommerce_template_single_add_to_cart - 30
-			 * @hooked woocommerce_template_single_meta - 40
-			 * @hooked woocommerce_template_single_sharing - 50
-			 * @hooked WC_Structured_Data::generate_product_data() - 60
-			 */
-			do_action( 'woocommerce_single_product_summary' );
-		?>
+        <div class="entry-summary-inner">
+            <div class="entry-summary-box <?php echo esc_attr( apply_filters(  'woocommerce_single_product_summary_classes', '' ) ); ?>">
+                <?php
+                /**
+                 * Hook: woocommerce_single_product_summary.
+                 *
+                 * @hooked woocommerce_template_single_title - 5
+                 * @hooked woocommerce_template_single_rating - 10
+                 * @hooked woocommerce_template_single_price - 10
+                 * @hooked woocommerce_template_single_excerpt - 20
+                 * @hooked woocommerce_template_single_add_to_cart - 30
+                 * @hooked woocommerce_template_single_meta - 40
+                 * @hooked woocommerce_template_single_sharing - 50
+                 * @hooked WC_Structured_Data::generate_product_data() - 60
+                 */
+                do_action( 'woocommerce_single_product_summary' );
+                ?>
+            </div>
+            <?php
+
+            if ( has_action( 'woocommerce_after_single_product_summary_inner' ) ) {
+                echo '<div class="entry-summary-after">';
+                /**
+                 * Hook: woocommerce_after_single_product_summary.
+                 *
+                 * This is new Hook fromt theme
+                 *
+                 */
+                do_action( 'woocommerce_after_single_product_summary_inner' );
+                echo '</div>';
+            }
+            ?>
+        </div>
 	</div>
     <?php } ?>
 

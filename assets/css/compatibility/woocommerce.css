@@ -1878,6 +1878,62 @@ Product Slider
   margin-bottom: 0px;
 }
 
+/**
+Section and Toogle
+ */
+.tab-section-heading {
+  border-bottom: 1px solid #eaecee;
+  font-size: 1em;
+  font-weight: normal;
+  border-top: 1px solid #eaecee;
+  display: block;
+  padding: 0;
+}
+.tab-section-heading a {
+  color: currentColor;
+  display: block;
+  padding: 0.72em 0px;
+  position: relative;
+}
+
+.wc-tabs-sections .woocommerce-Reviews-title, .wc-tabs-toggle .woocommerce-Reviews-title {
+  display: none;
+}
+
+.wc-tabs-toggle .tab-section-heading a:before, .wc-tabs-toggle .tab-section-heading a:after {
+  content: "";
+  display: block;
+  background-color: currentColor;
+  position: absolute;
+  top: 50%;
+  right: 0px;
+  opacity: 1;
+  transition: opacity 0.3s linear;
+}
+.wc-tabs-toggle .tab-section-heading a:before {
+  width: 1em;
+  height: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.wc-tabs-toggle .tab-section-heading a:after {
+  width: 2px;
+  height: 1em;
+  top: 50%;
+  right: 0.5em;
+  transform: translate(1px, -50%);
+}
+.wc-tabs-toggle .tab-section-heading a.active:after {
+  opacity: 0;
+}
+.wc-tabs-toggle .tab-section.active .tab-section-heading a:after {
+  opacity: 0;
+}
+
+.tab-section-content {
+  padding-top: 1em;
+}
+
 /* Upsell + Related products section */
 .related.products, .upsells.products {
   margin-bottom: 2em;
@@ -2958,7 +3014,7 @@ p.stars.selected a:not(.active)::before {
 }
 
 .cart-collaterals,
-.woocommerce-checkout-review-order {
+.woocommerce-checkout-review-order, .group-highlight-box {
   background: #f9f9f9;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
   padding: 1.8em 2em 2em 2em;
@@ -2967,9 +3023,13 @@ p.stars.selected a:not(.active)::before {
 }
 @media screen and (max-width: 568px) {
   .cart-collaterals,
-  .woocommerce-checkout-review-order {
+  .woocommerce-checkout-review-order, .group-highlight-box {
     padding: 1em;
   }
+}
+.cart-collaterals > *:last-child,
+.woocommerce-checkout-review-order > *:last-child, .group-highlight-box > *:last-child {
+  margin-bottom: 0px;
 }
 
 form.woocommerce-checkout {

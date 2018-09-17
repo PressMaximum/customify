@@ -180,6 +180,83 @@ Product Slider
     }
 }
 
+/**
+Section and Toogle
+ */
+.tab-section-heading {
+    border-bottom: 1px solid $color_border;
+    font-size: 1em;
+    font-weight: normal;
+    border-top: 1px solid $color_border;
+    display: block;
+    padding: 0;
+    a {
+        color: currentColor;
+        display: block;
+        padding: 0.72em 0px;
+        position: relative;
+    }
+}
+.wc-tabs-sections, .wc-tabs-toggle {
+    .woocommerce-Reviews-title {
+        display: none;
+    }
+}
+
+.wc-tabs-toggle {
+    .tab-section-heading {
+        a {
+            &:before, &:after {
+                content: "";
+                display: block;
+                background-color: currentColor;
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                opacity: 1;
+                transition: opacity 0.3s linear;
+            }
+
+            &:before{
+                width: 1em;
+                height: 2px;
+                top: 50%;
+                transform: translateY( - 50% );
+            }
+
+            &:after {
+                width: 2px;
+                height: 1em;
+                top: 50%;
+                right: 0.5em;
+                transform: translate( 1px, -50% );
+            }
+
+            &.active {
+                &:after{
+                    opacity: 0;
+                }
+            }
+
+        }
+    }
+
+    .tab-section.active {
+        .tab-section-heading {
+            a {
+                &:after {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+.tab-section-content {
+    padding-top: 1em;
+}
+
+
+
 /* Upsell + Related products section */
 .related.products, .upsells.products {
     margin-bottom: 2em;
