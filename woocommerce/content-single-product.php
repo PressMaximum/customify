@@ -71,6 +71,21 @@ if ( post_password_required() ) {
     <?php if ( has_action( 'woocommerce_single_product_summary' ) ) { ?>
 	<div class="summary entry-summary  <?php echo esc_attr( $class ); ?>">
         <div class="entry-summary-inner">
+
+            <?php
+            if ( has_action( 'woocommerce_after_single_product_summary_after' ) ) {
+	            echo '<div class="entry-summary-before">';
+	            /**
+	             * Hook: woocommerce_after_single_product_summary_before.
+	             *
+	             * This is new Hook from theme
+	             *
+	             */
+	            do_action( 'woocommerce_after_single_product_summary_before' );
+	            echo '</div>';
+            }
+            ?>
+
             <div class="entry-summary-box <?php echo esc_attr( apply_filters(  'woocommerce_single_product_summary_classes', '' ) ); ?>">
                 <?php
                 /**
@@ -90,15 +105,15 @@ if ( post_password_required() ) {
             </div>
             <?php
 
-            if ( has_action( 'woocommerce_after_single_product_summary_inner' ) ) {
+            if ( has_action( 'woocommerce_after_single_product_summary_after' ) ) {
                 echo '<div class="entry-summary-after">';
                 /**
-                 * Hook: woocommerce_after_single_product_summary.
+                 * Hook: woocommerce_after_single_product_summary_after.
                  *
-                 * This is new Hook fromt theme
+                 * This is new Hook from theme
                  *
                  */
-                do_action( 'woocommerce_after_single_product_summary_inner' );
+                do_action( 'woocommerce_after_single_product_summary_after' );
                 echo '</div>';
             }
             ?>
