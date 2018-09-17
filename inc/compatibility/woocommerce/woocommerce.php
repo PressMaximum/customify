@@ -234,7 +234,9 @@ class Customify_WC {
         $classes[] = 'customify-col';
         return $classes;
     }
+
     function post_class( $classes, $class, $post_id ){
+
 	    if ( ! $post_id || get_post_type( $post_id ) !== 'product' ) {
 		    return $classes;
 	    }
@@ -338,7 +340,8 @@ class Customify_WC {
         }
         
         .wc-view-mod.active,
-        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
+        .wc-single-tabs ul.tabs li.active a,
+        .wc-single-tabs .tab-section.active .tab-section-heading a {
             color: {{value}};
         }';
 

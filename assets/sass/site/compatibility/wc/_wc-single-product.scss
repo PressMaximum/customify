@@ -149,13 +149,11 @@ Product Slider
                 a {
                     display: block;
                     padding: 0.72em 0px;
+                    color: currentColor;
                 }
                 &.active {
                     &:after {
                         opacity: 1;
-                    }
-                    a {
-                        color: inherit;
                     }
                 }
 

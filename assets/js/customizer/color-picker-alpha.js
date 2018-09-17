@@ -333,12 +333,9 @@
                 if ( $( this ).hasClass( 'wp-picker-clear' ) ) {
                     self.element.val( '' );
 
-
                     if ( $.isFunction( self.options.clear ) ) {
                         self.options.clear.call(this, event);
                     }
-
-                    console.log( 'self._placeholderColor', self._placeholderColor );
 
                     if ( self.options.alpha ) {
                         if ( _deprecated ) {

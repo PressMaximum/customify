@@ -1855,12 +1855,10 @@ Product Slider
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li a {
   display: block;
   padding: 0.72em 0px;
+  color: currentColor;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active:after {
   opacity: 1;
-}
-.woocommerce-tabs.wc-tabs-vertical .wc-tabs li.active a {
-  color: inherit;
 }
 .woocommerce-tabs.wc-tabs-vertical .wc-tabs-contents {
   width: 70%;
