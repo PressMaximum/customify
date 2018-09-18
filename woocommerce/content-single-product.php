@@ -47,15 +47,21 @@ if ( post_password_required() ) {
         }
     }
 
-    $class = '';
+    $class = array(
+        'left' => '',
+        'right' => ''
+    );
 
     if ( $has_col == 2 ) {
-	    $class = 'customify-col-6_md-6_sm-12_xs-12';
+	    $class = apply_filters( 'customify/wc_single_layout_size', array(
+		    'left' => 'customify-col-6_md-6_sm-12_xs-12',
+		    'right' => 'customify-col-6_md-6_sm-12_xs-12'
+	    ) );
         echo '<div class="customify-grid wc-layout-columns">';
     }
 
     if ( has_action( 'woocommerce_single_product_media' ) ) { ?>
-    <div class="media-product-media <?php echo esc_attr( $class ); ?>">
+    <div class="media-product-media <?php echo esc_attr( $class['left'] ); ?>">
         <?php
         /**
          * Hook woocommerce_single_product_media
@@ -69,7 +75,7 @@ if ( post_password_required() ) {
 	<?php } ?>
 
     <?php if ( has_action( 'woocommerce_single_product_summary' ) ) { ?>
-	<div class="summary entry-summary  <?php echo esc_attr( $class ); ?>">
+	<div class="summary entry-summary  <?php echo esc_attr( $class['right'] ); ?>">
         <div class="entry-summary-inner">
 
             <?php

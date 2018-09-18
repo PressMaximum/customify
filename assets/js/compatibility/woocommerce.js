@@ -140,14 +140,17 @@ jQuery( document ).ready( function ( $ ) {
 
 
     // Product tabs
+    function _slideDeneCallback(){
+        $( document.body ).trigger( 'wc_toggle_done' );
+    }
     var tabs = $( '.wc-tabs-toggle' );
-    $( '.tab-section', tabs ).not(":eq(0)").removeClass( 'active' ).find( '.tab-section-content' ).slideUp() ;
+    $( '.tab-section', tabs ).not(":eq(0)").removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
     tabs.on( 'click','.tab-section-heading', function( e ){
         e.preventDefault();
         var section = $( this ).closest( '.tab-section' );
         if ( ! section.hasClass( 'active' ) ) {
-            $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp() ;
-            section.toggleClass( 'active' ).find( '.tab-section-content' ).slideDown();
+            $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
+            section.toggleClass( 'active' ).find( '.tab-section-content' ).slideDown( _slideDeneCallback );
         }
 
     } );
