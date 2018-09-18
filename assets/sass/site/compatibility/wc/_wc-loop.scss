@@ -52,13 +52,12 @@
         }
     }
 
-    .products ul,
     ul.products {
         margin: 0 -1em 0;
         padding: 0;
         list-style: none outside;
         clear: both;
-        li {
+        li.product, > li{
             list-style: none outside;
             margin: 1em 0px;
         }

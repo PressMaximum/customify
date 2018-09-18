@@ -956,15 +956,13 @@ td.product-quantity {
   text-transform: uppercase;
   color: rgba(132, 132, 132, 0.5);
 }
-.woocommerce .products ul,
 .woocommerce ul.products {
   margin: 0 -1em 0;
   padding: 0;
   list-style: none outside;
   clear: both;
 }
-.woocommerce .products ul li,
-.woocommerce ul.products li {
+.woocommerce ul.products li.product, .woocommerce ul.products > li {
   list-style: none outside;
   margin: 1em 0px;
 }

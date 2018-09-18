@@ -1,6 +1,9 @@
 <?php
 
 class Customify_WC_Catalog_Designer {
+
+	private $configs = array();
+
 	function __construct() {
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 100 );
 		if ( is_admin() || is_customize_preview() ) {
@@ -9,12 +12,16 @@ class Customify_WC_Catalog_Designer {
 
 		// Loop
 		add_action( 'customify_wc_product_loop', array( $this, 'render' ) );
-
 	}
 
-	function render() {
+	function render(  ) {
 
 		$items = Customify()->get_setting( 'wc_cd_positions' );
+
+		$this->configs['excerpt_type'] = Customify()->get_setting( 'wc_cd_excerpt_type' );
+		$this->configs['excerpt_length'] = Customify()->get_setting( 'wc_cd_excerpt_length' );
+
+		$this->configs = apply_filters( 'customify_wc_catalog_designer/configs', $this->configs );
 
 		$this->product__media();
 
@@ -241,6 +248,27 @@ class Customify_WC_Catalog_Designer {
 			'css_format'      => 'margin-top: {{value}}'
 		);
 
+		$configs[] = array(
+			'name'            => 'wc_cd_excerpt_type',
+			'type'            => 'select',
+			'section'         => $section,
+			'title'           => __( 'List view excerpt type', 'customify' ),
+			'choices'      => array(
+				'excerpt' => __( 'Product short description', 'customify' ),
+				'content' => __( 'Full content', 'customify' ),
+				'more' => __( 'Strip by more tag', 'customify' ),
+				'custom' => __( 'Custom', 'customify' ),
+			)
+		);
+
+		$configs[] = array(
+			'name'            => 'wc_cd_excerpt_length',
+			'type'            => 'text',
+			'section'         => $section,
+			'title'           => __( 'Custom list view excerpt length', 'customify' ),
+			'required'        => array( 'wc_cd_excerpt_type', '=', 'custom' )
+		);
+
 		// Product Media
 		$configs[] = array(
 			'name'    => 'wc_cd_memdia_h',
@@ -362,9 +390,66 @@ class Customify_WC_Catalog_Designer {
 
 	}
 
+	/**
+	 * Trim the excerpt with custom length
+	 *
+	 * @see wp_trim_excerpt
+	 * @param $text
+	 * @param null $excerpt_length
+	 * @return mixed|string|void
+	 */
+	function trim_excerpt( $text, $excerpt_length = null ){
+		$text = strip_shortcodes( $text );
+		/** This filter is documented in wp-includes/post-template.php */
+		$text = apply_filters( 'the_content', $text );
+		$text = str_replace(']]>', ']]&gt;', $text);
+
+		if ( ! $excerpt_length ) {
+			/**
+			 * Filters the number of words in an excerpt.
+			 *
+			 * @since 2.7.0
+			 *
+			 * @param int $number The number of words. Default 55.
+			 */
+			$excerpt_length = apply_filters('excerpt_length', 55 );
+		}
+
+
+		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '&hellip;' );
+
+		$text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+		return $text;
+	}
+
 	function product__description() {
 		echo '<div class="woocommerce-loop-product__desc">';
-		the_excerpt();
+
+		if ( $this->configs['excerpt_type']  == 'excerpt' ) {
+			the_excerpt();
+		} elseif( $this->configs['excerpt_type']  == 'more_tag' ) {
+			the_content('',  true );
+		} elseif( $this->configs['excerpt_type']  == 'content' ) {
+			the_content( '', false );
+		} else {
+			$text= '';
+			global $post;
+			if ( $post ) {
+				if ( $post->post_excerpt ) {
+					$text = $post->post_excerpt;
+				} else {
+					$text = $post->post_content;
+				}
+			}
+			$excerpt = $this->trim_excerpt( $text, $this->configs['excerpt_length'] );
+			if ( $excerpt ) {
+				// WPCS: XSS OK.
+				echo apply_filters( 'the_excerpt', $excerpt );
+			} else {
+				the_excerpt();
+			}
+		}
+
 		echo '</div>';
 
 	}
