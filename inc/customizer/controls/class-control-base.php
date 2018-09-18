@@ -246,7 +246,8 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	            'devices' => Customify()->customizer->devices,
 	            // Auto redirect to url when section open
 	            'section_urls' => array(
-		            'section_single_blog_post' => $single_post_url
+		            'section_single_blog_post' => $single_post_url,
+		            'section_search_results' => home_url('/?s=a') // search page
                 ),
 	            // Auto redirect to url when section panel
                 'panel_urls' => array(

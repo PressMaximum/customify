@@ -388,6 +388,7 @@ class Customify {
             'layouts',
             'blogs',
             'single-blog-post',
+	        'search',
             'styling',
             'typography',
             'page-header',

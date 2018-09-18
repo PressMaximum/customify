@@ -197,7 +197,6 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                 'required' => array($args['id'].'_author_avatar', '==', '1')
             ),
 
-
         );
 
         return array_merge( $configs, $config );

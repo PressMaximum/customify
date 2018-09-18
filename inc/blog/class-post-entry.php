@@ -160,7 +160,7 @@ class Customify_Post_Entry {
      * @param $id
      * @param $taxonomy
      * @param bool $icon_first
-     * @return array|bool|false|string|WP_Error
+     * @return array|bool|WP_Error
      */
     function get_terms_list( $id, $taxonomy, $icon_first = false ){
         $terms = get_the_terms( $id, $taxonomy );
@@ -318,7 +318,7 @@ class Customify_Post_Entry {
 	 * @return boolean
 	 */
     private function show_post_meta( $post ){
-        return apply_filters( 'customify/show/post_meta', get_post_type( $post ) == 'post'  );
+        return apply_filters( 'customify/show/post_meta', get_post_type( $post ) == 'post' && ! is_search()  );
     }
 
     /**
