@@ -5,6 +5,51 @@
 */
 
 /**
+* Nav Product - next - prev button
+*/
+.product_title-wrapper {
+    position: relative;
+}
+.wc-product-nav {
+    position: absolute;
+    top: 0.5em; right: -5px;
+    > a {
+        margin: 0px 5px;
+        display: inline-block;
+        &:hover {
+            .nav-thumbnail {
+                z-index: 100;
+                left: 50%;
+                opacity: 1;
+            }
+        }
+    }
+    .nav-thumbnail {
+        position: absolute;
+        top: 100%;
+        left: -999999px;
+        width: 100px;
+        display: block;
+        transform: translateX( - 50% );
+        transition: opacity .25s ease-in-out;
+        z-index: -1;
+        opacity: 0;
+        img {
+            display: block;
+            margin-top: 10px;
+            box-shadow: 1px 1px 10px rgba(0,0,0,.06);
+        }
+    }
+}
+
+.nav-in-title {
+    .product_title {
+        margin-right: 70px;
+    }
+}
+
+
+/**
 Product Slider
  */
 

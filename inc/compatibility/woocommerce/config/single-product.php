@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Class Customify_WC_Single_Product
+ *
+ * Single product settings
+ *
+ */
 class Customify_WC_Single_Product {
 	function __construct() {
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 100 );
@@ -10,10 +16,87 @@ class Customify_WC_Single_Product {
 		add_action( 'wp', array( $this, 'single_product_hooks' ) );
 	}
 
+	/**
+     * Add more class if nav showing
+     *
+	 * @param $classes
+	 *
+	 * @return array
+	 */
+	function post_class( $classes ){
+		if ( Customify()->get_setting( 'wc_single_product_nav_show' ) ) {
+			$classes[] = 'nav-in-title';
+		}
+        return $classes;
+	}
+
+	/**
+     * Get adjacent product
+     *
+	 * @param bool $in_same_term
+	 * @param string $excluded_terms
+	 * @param bool $previous
+	 * @param string $taxonomy
+	 *
+	 * @return null|string|WP_Post
+	 */
+	function get_adjacent_product(  $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'product_cat' ) {
+		return get_adjacent_post( $in_same_term, $excluded_terms, $previous, $taxonomy );
+	}
+
+	/**
+	 * Display prev - next button
+	 */
+	function product_prev_next(){
+	    if ( ! Customify()->get_setting( 'wc_single_product_nav_show' ) ) {
+	        return ;
+        }
+		$prev_post =  $this->get_adjacent_product();
+		$next_post = $this->get_adjacent_product( false,  '', false );
+		if ( $prev_post  || $next_post ) {
+			?>
+			<div class="wc-product-nav">
+				<?php if ( $prev_post ) { ?>
+					<a href="<?php echo esc_url( get_permalink( $prev_post ) ); ?>" title="<?php the_title_attribute( array( 'post' => $prev_post ) ); ?>" class="prev-link">
+						<span class="nav-btn nav-next"><?php echo apply_filters( 'customify_nav_prev_icon', '' ); ?></span>
+						<?php if ( has_post_thumbnail( $prev_post ) ) { ?>
+							<span class="nav-thumbnail">
+			                    <?php
+			                    echo get_the_post_thumbnail( $prev_post, 'woocommerce_thumbnail' );
+			                    ?>
+			                </span>
+						<?php } ?>
+					</a>
+				<?php } ?>
+				<?php if ( $next_post ) { ?>
+					<a href="<?php echo esc_url( get_permalink( $next_post ) ); ?>" title="<?php the_title_attribute( array( 'post' => $next_post ) ); ?>" class="next-link">
+		                <span class="nav-btn nav-next">
+		                <?php echo apply_filters( 'customify_nav_next_icon', '' ); ?>
+		                </span>
+						<?php if ( has_post_thumbnail( $next_post ) ) { ?>
+							<span class="nav-thumbnail">
+			                    <?php
+			                    echo get_the_post_thumbnail( $next_post, 'woocommerce_thumbnail' );
+			                    ?>
+			                </span>
+						<?php } ?>
+					</a>
+				<?php } ?>
+			</div>
+			<?php
+		}
+	}
+
+	/**
+	 * Hooks for single product
+	 */
 	function single_product_hooks() {
 		if ( ! is_product() ) {
 			return;
 		}
+
+		add_action( 'wc_after_single_product_title', array( $this, 'product_prev_next' ), 2 );
+		add_filter( 'post_class', array( $this, 'post_class' ) );
 
 		if ( Customify()->get_setting('wc_single_product_tab_hide_description') ) {
 			add_filter( 'woocommerce_product_description_heading', '__return_false', 999 );
@@ -32,6 +115,13 @@ class Customify_WC_Single_Product {
 
 	}
 
+	/**
+     * Add url to customize preview when section open
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
 	function add_product_url( $args ) {
 
 		$query = new WP_Query( array(
@@ -48,6 +138,13 @@ class Customify_WC_Single_Product {
 		return $args;
 	}
 
+	/**
+     * Customize config
+     * 
+	 * @param $configs
+	 *
+	 * @return array
+	 */
 	function config( $configs ) {
 		$section = 'wc_single_product';
 
@@ -56,6 +153,23 @@ class Customify_WC_Single_Product {
 			'type'  => 'section',
 			'panel' => 'woocommerce',
 			'title' => __( 'Single Product', 'customify' ),
+		);
+
+		$configs[] = array(
+			'name'    => "{$section}_nav_heading",
+			'type'    => 'heading',
+			'section' => $section,
+			'title'   => __( 'Product Navigation', 'customify' ),
+			'priority' => 39,
+		);
+
+		$configs[] = array(
+			'name' => "{$section}_nav_show",
+			'type' => 'checkbox',
+			'default' => 1,
+			'section' =>  $section,
+			'checkbox_label' => __( 'Show Product Navigation', 'customify' ),
+			'priority' => 39,
 		);
 
 		$configs[] = array(
