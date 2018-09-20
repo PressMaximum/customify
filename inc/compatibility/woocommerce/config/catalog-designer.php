@@ -348,6 +348,30 @@ class Customify_WC_Catalog_Designer {
 			'label'           => __( 'Display Type', 'customify' ),
 		);
 
+		$configs[] = array(
+			'name'            => 'wc_cd_sale_bubble_styling',
+			'type'            => 'styling',
+			'section'         => $section,
+			'title'           => __( 'Styling', 'customify' ),
+			'selector'    => array(
+				'normal' =>'.woocommerce span.onsale',
+			),
+			'css_format'  => 'styling',
+			'default'     => array(),
+			'fields'      => array(
+				'normal_fields' => array(
+					'link_color'    => false, // disable for special field.
+					'margin'        => false,
+					'bg_image'      => false,
+					'bg_cover'      => false,
+					'bg_position'   => false,
+					'bg_repeat'     => false,
+					'bg_attachment' => false,
+				),
+				'hover_fields'  => false
+			),
+		);
+
 		return $configs;
 	}
 

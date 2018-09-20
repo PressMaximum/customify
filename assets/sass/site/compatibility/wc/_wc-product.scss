@@ -410,4 +410,7 @@ span.onsale {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: bold;
+    .amount {
+        color: inherit !important;
+    }
 }

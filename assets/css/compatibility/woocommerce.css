@@ -2449,6 +2449,9 @@ span.onsale {
   letter-spacing: 0.5px;
   font-weight: bold;
 }
+span.onsale .amount {
+  color: inherit !important;
+}
 
 /**
 * Order page
