@@ -1921,6 +1921,9 @@ Section and Toggle
 .wc-tabs-sections .woocommerce-Reviews-title, .wc-tabs-toggle .woocommerce-Reviews-title {
   display: none;
 }
+.wc-tabs-sections .tab-section-content, .wc-tabs-toggle .tab-section-content {
+  margin-bottom: 3em;
+}
 
 .wc-tabs-sections .tab-section-heading {
   font-size: 1.4em;
@@ -1934,12 +1937,12 @@ Section and Toggle
 }
 
 .wc-tabs-toggle .tab-section-heading {
-  border-bottom: 1px solid #6d6d6d;
+  border-bottom: 1px solid #eaecee;
   font-size: 1em;
   font-weight: normal;
-  border-top: 1px solid #6d6d6d;
   display: block;
   padding: 0;
+  margin: 0px;
 }
 .wc-tabs-toggle .tab-section-heading a {
   color: currentColor;
@@ -1950,7 +1953,7 @@ Section and Toggle
 .wc-tabs-toggle .tab-section-heading a:before, .wc-tabs-toggle .tab-section-heading a:after {
   content: "";
   display: block;
-  background-color: #6d6d6d;
+  background-color: #eaecee;
   position: absolute;
   top: 50%;
   right: 0px;

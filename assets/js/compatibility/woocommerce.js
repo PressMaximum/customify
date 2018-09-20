@@ -151,6 +151,8 @@ jQuery( document ).ready( function ( $ ) {
         if ( ! section.hasClass( 'active' ) ) {
             $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
             section.toggleClass( 'active' ).find( '.tab-section-content' ).slideDown( _slideDeneCallback );
+        } else {
+            $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
         }
 
     } );
