@@ -181,10 +181,12 @@ class  Customify_Customizer
                                 }
                             }
                         }
+
                         $config['setting|' . $f['name']] = $f;
 
                 }
             }
+
             self::$config = $config;
         }
         return self::$config;

@@ -1514,13 +1514,14 @@
         getValue: function (save) {
             var control = this;
             var value = '';
-            var field = {
-                type: control.params.setting_type,
-                name: control.id,
-                value: control.params.value,
-                default: control.params.default,
-                devices: control.params.devices,
-            };
+
+            var field = _.clone( control.params );
+
+            field.type = control.params.setting_type;
+            field.name = control.id;
+            field.value = control.value;
+            field.default = control.params.default;
+            field.devices = control.params.devices;
 
             if ( field.type === 'slider') {
                 field.min = control.params.min;
@@ -2950,9 +2951,22 @@
         } );
 
         /**
+         * Image Select disable click
+         */
+        /*
+        $document.on( 'click', '.customify-radio-list p', function( e ){
+            var p = $( this ).closest( '.customify-field-settings-inner' );
+            if ( $( this ).hasClass( 'input-disabled' ) ) {
+                $( '.disable_click_msg', p ).removeClass( 'customify--hide' );
+            } else {
+                $( '.disable_click_msg', p ).addClass( 'customify--hide' );
+            }
+        } );
+        */
+
+        /**
          * When panel open
          */
-
         _.each( Customify_Control_Args.panel_urls, function( url, id ) {
             if ( url ) {
                 wp.customize.panel( id, function (panel) {

@@ -140,7 +140,7 @@ class Customify_WC_Single_Product {
 
 	/**
      * Customize config
-     * 
+     *
 	 * @param $configs
 	 *
 	 * @return array
@@ -154,6 +154,63 @@ class Customify_WC_Single_Product {
 			'panel' => 'woocommerce',
 			'title' => __( 'Single Product', 'customify' ),
 		);
+
+
+		$configs[] = array(
+			'name'    => 'wc_single_layout_h',
+			'type'    => 'heading',
+			'section' => $section,
+			'label'   => __( 'Layout', 'customify' ),
+		);
+
+		/*
+		$configs[] = array(
+			'name'    => 'wc_single_layout',
+			'type'    => 'select',
+			'section' => $section,
+			'default' => 'default',
+			'label'   => __( 'Layout', 'customify' ),
+			'choices' => array(
+				'default'    => __( 'Default', 'customify' ),
+				'top-medium' => __( 'Top Gallery Boxed', 'customify' ),
+				'top-full'   => __( 'Top Gallery Full Width', 'customify' ),
+				'left-grid'  => __( 'Left Gallery Grid', 'customify' ),
+			)
+		);
+		*/
+
+		$configs[] = array(
+			'name'            => 'wc_single_layout',
+			'type'            => 'image_select',
+			'section'         => $section,
+			'title'           => __('Layout', 'customify'),
+			'default'         => 'default',
+			'choices'         => array(
+				'default'         => array(
+					'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/menu_style_1.svg',
+					'label' => __( 'Default', 'customify' ),
+				),
+				'top-medium'   => array(
+					'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/wc-layout-top-medium.png',
+					'label' =>__( 'Top Gallery Boxed', 'customify' ),
+                    'disable' => 1,
+                    'bubble' => __( 'Pro', 'customify' ),
+				),
+				'top-full' => array(
+					'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/wc-layout-top-full.png',
+					'label' => __( 'Top Gallery Full Width', 'customify' ),
+					'disable' => 1,
+					'bubble' => __( 'Pro', 'customify' ),
+				),
+				'left-grid'    => array(
+					'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/wc-layout-left-grid.png',
+					'label' => __( 'Left Gallery Grid', 'customify' ),
+					'disable' => 1,
+					'bubble' => __( 'Pro', 'customify' ),
+				),
+			),
+		);
+
 
 		$configs[] = array(
 			'name'    => "{$section}_nav_heading",
