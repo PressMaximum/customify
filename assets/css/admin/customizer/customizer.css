@@ -991,7 +991,7 @@ html[dir="rtl"] .custom-control-radio_group .customify-radio-list p:first-child 
 }
 .custom-control-image_select .customify-radio-list span.label {
   display: inline-block;
-  padding: 3px;
+  padding: 4px;
   max-width: 80px;
   border-radius: 5px;
 }
@@ -1002,6 +1002,7 @@ html[dir="rtl"] .custom-control-radio_group .customify-radio-list p:first-child 
 .custom-control-image_select .customify-radio-list input:checked + span.label {
   border-color: #3068af;
   box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+  background: #FFF;
 }
 
 /*Background field*/

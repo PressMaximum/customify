@@ -516,7 +516,7 @@ p.demo_store a,
 }
 .woocommerce .woocommerce-breadcrumb {
   *zoom: 1;
-  margin: 0 0 1em;
+  margin: 0 0 1.5em;
   padding: 0;
   color: #777;
 }
@@ -1266,7 +1266,7 @@ td.product-quantity {
   text-decoration: none;
   color: #c6c7ce;
   position: relative;
-  top: 2px;
+  top: 1px;
 }
 .woocommerce-widget-layered-nav-list .woocommerce-widget-layered-nav-list__item--chosen a::before {
   font-family: 'WooCommerce';

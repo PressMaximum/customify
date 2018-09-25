@@ -1011,7 +1011,7 @@ $text_color: #555d66;
         }
         span.label {
             display: inline-block;
-            padding: 3px;
+            padding: 4px;
             max-width: 80px;
             border-radius: 5px;
             span {
@@ -1022,7 +1022,7 @@ $text_color: #555d66;
         input:checked + span.label {
             border-color: #3068af;
             box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
-
+            background: #FFF;
         }
     }
 }
