@@ -166,7 +166,7 @@ class Customify_Page_Header {
 
                 $taxonomy_filter_args['object_type'] = [$pt];
                 $taxonomies = get_taxonomies($taxonomy_filter_args, 'objects');
-                $options = [];
+                $options = array();
 
                 foreach ($taxonomies as $taxonomy => $object) {
                     $options[ $taxonomy ] = $object->label;
@@ -989,4 +989,3 @@ class Customify_Page_Header {
 }
 
 Customify_Page_Header::get_instance();
-

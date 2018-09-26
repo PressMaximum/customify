@@ -377,7 +377,7 @@ class Customify_Builder_Item_Social_Icons {
 					}
 
 					if ( $icon['icon'] ) {
-						echo '<i class="icon ' . esc_attr( $icon['icon'] ) . '"></i>';
+						echo '<i class="icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
 					}
 
 					if ( $item['url'] ) {
@@ -396,4 +396,3 @@ class Customify_Builder_Item_Social_Icons {
 }
 
 Customify_Customize_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Social_Icons() );
-
