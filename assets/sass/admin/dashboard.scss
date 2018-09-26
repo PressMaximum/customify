@@ -202,6 +202,7 @@ $dashboard_border_color: #e5e5e5;
 // OnOff Button
 .onoffswitch {
     position: relative; width: 25px;
+    display: inline-block;
     -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
 }
 .onoffswitch-checkbox {

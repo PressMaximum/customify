@@ -206,6 +206,7 @@
 .onoffswitch {
   position: relative;
   width: 25px;
+  display: inline-block;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
