@@ -2956,7 +2956,7 @@
         $document.on( 'click', '.customify-radio-list p', function( e ){
             var id =  $( this ).find( 'input' ).attr( 'data-name' ) ||  false;
             var disabled =  $( this ).hasClass( 'input-disabled' );
-            
+
             if ( id ){
                 var setting = wp.customize( id );
                 var control = wp.customize.control( id );
