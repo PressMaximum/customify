@@ -43,8 +43,6 @@ if (!function_exists('customify_customizer_blog_config')) {
                     ),
                     'blog_column' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
-                        'disable' => 1,
-                        'bubble' => __( 'Pro', 'customify' ),
                     ),
                     'blog_masonry' => array(
 	                    'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_masonry.svg',
