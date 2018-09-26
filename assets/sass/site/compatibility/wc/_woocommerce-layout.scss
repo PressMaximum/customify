@@ -16,6 +16,24 @@
     }
 }
 
+/* Breadcrumb */
+.woocommerce-breadcrumb {
+    a {
+        &:after {
+            border-top: 1px solid currentColor;
+            border-left: 1px solid currentColor;
+            content: "";
+            width: 5px;
+            height: 5px;
+            display: inline-block;
+            transform: rotate(135deg);
+            left: auto;
+            position: relative;
+            top: -1px;
+            margin: 0px 10px;
+        }
+    }
+}
 
 // Before listing Products
 .wc-catalog-header {

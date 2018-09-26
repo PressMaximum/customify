@@ -2953,16 +2953,43 @@
         /**
          * Image Select disable click
          */
-        /*
         $document.on( 'click', '.customify-radio-list p', function( e ){
             var p = $( this ).closest( '.customify-field-settings-inner' );
-            if ( $( this ).hasClass( 'input-disabled' ) ) {
-                $( '.disable_click_msg', p ).removeClass( 'customify--hide' );
+            var id =  $( this ).find( 'input' ).attr( 'data-name' ) ||  false;
+            var disabled =  $( this ).hasClass( 'input-disabled' );
+            if ( disabled ) {
+                $( '.disable-notice', p ).removeClass( 'customify--hide' );
             } else {
-                $( '.disable_click_msg', p ).addClass( 'customify--hide' );
+                $( '.disable-notice', p ).addClass( 'customify--hide' );
             }
+
+            if ( id ){
+                var setting = wp.customize( id );
+                var control = wp.customize.control( id );
+                var code = 'noti_'+id;
+                var msg = '';
+                if ( control.params._pro && control.params.disabled_pro_msg ) {
+                    msg = control.params.disabled_pro_msg;
+                } else if ( control.params.disabled_msg ) {
+                    msg = control.params.disabled_msg;
+                }
+                if ( msg ) {
+                    if ( disabled ) {
+                        setting.notifications.add(code, new wp.customize.Notification(
+                            code,
+                            {
+                                type: 'warning',
+                                message: msg
+                            }
+                        ));
+                    } else {
+                        setting.notifications.remove( code );
+                    }
+                }
+            }
+
         } );
-        */
+
 
         /**
          * When panel open

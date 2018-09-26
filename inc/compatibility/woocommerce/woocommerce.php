@@ -92,9 +92,11 @@ class Customify_WC {
 	        // Product catalog designer
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
-	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/cart.php';
-	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+
+	        // Single product config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/cart.php';
+
 	        // Single colors config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
 	        // Template Hooks
@@ -117,8 +119,19 @@ class Customify_WC {
 	        remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 	        add_action('woocommerce_single_product_media', 'woocommerce_show_product_images', 20 );
 
+
+	        // New breadcrumb position
+	        add_filter( 'woocommerce_breadcrumb_defaults', array( $this, 'woocommerce_breadcrumb_args' ) );
+
         }
     }
+
+	function woocommerce_breadcrumb_args( $args ){
+		$args['delimiter'] = '';
+		$args['wrap_before'] = '<nav class="woocommerce-breadcrumb text-uppercase text-xsmall link-meta">';
+		$args['wrap_after'] = '</nav>';
+		return $args;
+	}
 
 
 	/**

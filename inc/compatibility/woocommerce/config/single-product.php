@@ -153,6 +153,7 @@ class Customify_WC_Single_Product {
 			'type'  => 'section',
 			'panel' => 'woocommerce',
 			'title' => __( 'Single Product', 'customify' ),
+			'priority' => 10,
 		);
 
 
@@ -185,6 +186,10 @@ class Customify_WC_Single_Product {
 			'section'         => $section,
 			'title'           => __('Layout', 'customify'),
 			'default'         => 'default',
+
+			'disabled_msg' => __( 'This option available on Customify Pro plugin only.', 'customify' ),
+			'disabled_pro_msg' => __( 'Please activate module Single Product Layouts to use this layout.', 'customify' ),
+
 			'choices'         => array(
 				'default'         => array(
 					'img' => esc_url(get_template_directory_uri()) . '/assets/images/customizer/wc-layout-default.svg',
@@ -207,6 +212,7 @@ class Customify_WC_Single_Product {
 					'label' => __( 'Left Gallery Grid', 'customify' ),
 					'disable' => 1,
 					'bubble' => __( 'Pro', 'customify' ),
+
 				),
 			),
 		);
@@ -331,6 +337,14 @@ class Customify_WC_Single_Product {
 			'section'         => $section,
 			'label'           => __( 'Related products per row', 'customify' ),
 			'priority'      => 76,
+		);
+
+		$configs[] = array(
+			'name'    => 'wc_single_layout_breadcrumb',
+			'type'    => 'checkbox',
+			'section' => $section,
+			'default' => 1,
+			'checkbox_label'   => __( 'Show shop breadcrumb', 'customify-pro' ),
 		);
 
 		return $configs;

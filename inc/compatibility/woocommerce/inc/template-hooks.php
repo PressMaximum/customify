@@ -1,9 +1,8 @@
 <?php
-
 /**
- * Remove default WC action hooks
+ * Reset default WC action hooks
  */
-function customify_wc_remove_default_hooks(){
+function customify_wc_reset_default_hooks(){
 	remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
 
 	remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
@@ -14,9 +13,14 @@ function customify_wc_remove_default_hooks(){
 
 	remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
 	remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+
+	if( Customify()->get_setting( 'wc_single_layout_breadcrumb' ) ) {
+		add_action( 'woocommerce_single_product_summary_before', 'woocommerce_breadcrumb', 5 );
+    }
+
 }
 
-add_action( 'wp', 'customify_wc_remove_default_hooks' );
+add_action( 'wp', 'customify_wc_reset_default_hooks' );
 
 
 /**
