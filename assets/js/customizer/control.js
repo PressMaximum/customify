@@ -2954,15 +2954,9 @@
          * Image Select disable click
          */
         $document.on( 'click', '.customify-radio-list p', function( e ){
-            var p = $( this ).closest( '.customify-field-settings-inner' );
             var id =  $( this ).find( 'input' ).attr( 'data-name' ) ||  false;
             var disabled =  $( this ).hasClass( 'input-disabled' );
-            if ( disabled ) {
-                $( '.disable-notice', p ).removeClass( 'customify--hide' );
-            } else {
-                $( '.disable-notice', p ).addClass( 'customify--hide' );
-            }
-
+            
             if ( id ){
                 var setting = wp.customize( id );
                 var control = wp.customize.control( id );
