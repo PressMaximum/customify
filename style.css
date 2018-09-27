@@ -2883,17 +2883,17 @@ article.comment .comment-post-author {
   position: relative;
   padding: 0px;
   border-radius: 50%;
-  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
-  background-color: #fff;
-  color: #757575;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  background-color: rgba(255, 255, 255, 0.5);
+  color: #888888;
   opacity: 0.6;
   display: inline-block;
   transition: all 0.3s linear;
 }
 .nav-btn.x2 {
-  width: 30px;
-  height: 30px;
-  min-height: 30px;
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
   font-size: 1.1em;
 }
 .nav-btn svg {
@@ -2909,7 +2909,8 @@ article.comment .comment-post-author {
 .nav-btn:hover, .nav-btn:focus {
   color: #333;
   opacity: 1;
-  box-shadow: 0 7px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+  background-color: rgba(255, 255, 255, 0.99);
 }
 
 .shape-rounded {

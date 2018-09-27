@@ -155,22 +155,24 @@ div.product {
 
         .woocommerce-product-gallery__trigger {
             position: absolute;
-            top: .5em;
-            right: .5em;
+            top: 15px;
+            right: 15px;
             font-size: 1em;
             z-index: 9;
             width: 36px;
             height: 36px;
-            background: #fff;
+            background: rgba(255,255,255,0.5);
             border-radius: 100%;
-            box-shadow: 0 7px 15px rgba(0,0,0,.2);
-            color: #757575;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            color: #888888;
             opacity: 0.6;
             display: inline-block;
             transition: all 0.3s linear;
             box-sizing: content-box;
             &:hover, &:focus {
                 opacity: 1;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+                background-color: rgba(255,255,255,0.99);
             }
 
             &:before {

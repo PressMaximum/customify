@@ -14,7 +14,7 @@
     position: absolute;
     top: 0.5em; right: -5px;
     > a {
-        margin: 0px 5px;
+        margin: 0px 3px;
         display: inline-block;
         &:hover {
             .nav-thumbnail {
@@ -230,10 +230,8 @@ Section and Toggle
     .woocommerce-Reviews-title {
         display: none;
     }
-    .tab-section-content {
-        margin-bottom: 3em;
-    }
 }
+
 .wc-tabs-sections {
     .tab-section-heading {
         font-size: 1.4em;
@@ -244,13 +242,14 @@ Section and Toggle
     .tab-section-content {
         margin-top: 0px;
         padding-top: 0px;
+        margin-bottom: 2em;
     }
 }
 
 .wc-tabs-toggle {
     .tab-section-heading {
         border-bottom: 1px solid $color_border;
-        font-size: 1em;
+        font-size: 1.1em;
         font-weight: normal;
         display: block;
         padding: 0;
@@ -258,7 +257,7 @@ Section and Toggle
         a {
             color: currentColor;
             display: block;
-            padding: 0.72em 0px;
+            padding: 0.9em 0px;
             position: relative;
         }
 
