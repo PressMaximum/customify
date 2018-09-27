@@ -2082,37 +2082,45 @@ Section and Toggle
 a.remove {
   width: 20px;
   height: 20px;
-  border: 1px solid #ccc;
-  color: #ccc;
+  color: #888888;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 100px;
   font-family: sans-serif !important;
   font-size: 16px !important;
   font-weight: normal;
-  line-height: 16px !important;
+  line-height: 18px !important;
   display: inline-block;
   text-align: center;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  opacity: 0.7;
 }
 a.remove:hover {
-  color: red;
-  border-color: red;
+  color: #333;
+  opacity: 1;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+  background-color: rgba(255, 255, 255, 0.99);
 }
 
 a.remove2x {
-  width: 36px;
-  height: 36px;
-  border: 1px solid #ccc;
-  color: #ccc;
+  width: 30px;
+  height: 30px;
+  color: #888888;
+  background: rgba(255, 255, 255, 0.5);
   border-radius: 100px;
   font-family: sans-serif !important;
-  font-size: 18px !important;
+  font-size: 24px !important;
   font-weight: normal;
-  line-height: 31px;
+  line-height: 26px !important;
   display: inline-block;
   text-align: center;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+  opacity: 0.7;
 }
 a.remove2x:hover {
-  color: red;
-  border-color: red;
+  color: #333;
+  opacity: 1;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+  background-color: rgba(255, 255, 255, 0.99);
 }
 
 /* Price */
@@ -3166,7 +3174,7 @@ form.woocommerce-checkout::after {
 .woocommerce-cart table.cart tr td:first-of-type,
 .woocommerce-checkout table.cart tr td:first-of-type,
 #add_payment_method table.cart tr td:first-of-type {
-  padding-left: 0px;
+  padding-left: 1px;
 }
 .woocommerce-cart table.cart tr td:last-of-type,
 .woocommerce-checkout table.cart tr td:last-of-type,
