@@ -47,6 +47,9 @@
     margin-top: 1em;
     @include for_device(mobile) {
         padding: 1em;
+        form.cart .group_table td {
+            padding-right: 0.5em;
+        }
     }
     > * {
         &:last-child {

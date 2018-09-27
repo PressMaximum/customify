@@ -3089,6 +3089,10 @@ p.stars.selected a:not(.active)::before {
   .woocommerce-checkout-review-order, .group-highlight-box {
     padding: 1em;
   }
+  .cart-collaterals form.cart .group_table td,
+  .woocommerce-checkout-review-order form.cart .group_table td, .group-highlight-box form.cart .group_table td {
+    padding-right: 0.5em;
+  }
 }
 .cart-collaterals > *:last-child,
 .woocommerce-checkout-review-order > *:last-child, .group-highlight-box > *:last-child {
