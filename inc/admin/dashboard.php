@@ -525,6 +525,60 @@ class Customify_Dashboard {
 		        'desc' => __( 'WPML multilingual plugin support, plus a fully customized language switcher header builder item.', 'customify' ),
                 'url'  => ''
 	        ),
+	        array(
+		        'name' => __( 'Custom Fonts', 'customify' ),
+		        'desc' => __( 'Custom Fonts module allows you to add your self-hosted fonts and use them on your Customify powered websites.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+            array(
+		        'name' => __( 'Typekit', 'customify' ),
+		        'desc' => __( 'Typekit module allows you to add Typekit fonts and use them on your Customify powered websites.', 'customify' ),
+		        'url'  => ''
+	        ),
+	        array(
+		        'name' => __( 'Customify Hooks', 'customify' ),
+		        'desc' => __( 'Add custom hook scripts.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+	        array(
+		        'name' => __( 'WooCommerce Booster', 'customify' ),
+		        'desc' => __( 'Gives you creative control of style and layout options for your shop.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+                array(
+                    'name' => __( 'Single Product Layouts', 'customify' ),
+                    'desc' => __( 'More beautiful layouts for your single product.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Off Canvas Filter', 'customify' ),
+                    'desc' => __( 'Add off canvas products filter for shop and product archive pages.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Product Gallery Slider', 'customify' ),
+                    'desc' => __( 'Add slider for product gallery.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Quick View', 'customify' ),
+                    'desc' => __( 'Add product quick view modal for product listing..', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+            
+            array(
+		        'name' => __( 'Infinity Scroll.', 'customify' ),
+		        'desc' => __( 'Loads the next posts, products automatically when the reader approaches the bottom of the page.', 'customify' ),
+		        'url'  => ''
+	        ),
+
         );
 
         ?>
@@ -533,7 +587,7 @@ class Customify_Dashboard {
                 <a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
-                <div class="cd-module-item">
+                <div class="cd-module-item <?php echo isset( $m['sub'] ) && $m['sub'] ? 'cd-sub-module' : ''; ?>">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
                         <?php if ( isset( $m['desc'] ) ) { ?>
