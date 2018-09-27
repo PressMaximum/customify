@@ -346,13 +346,13 @@ class Customify_WC {
     function styling_primary( $selector ){
         $selector .= ' 
         
-        .wc-view-mod.active,
+        .wc-svg-btn.active,
         .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active,
         #review_form {
             border-color: {{value}};
         }
         
-        .wc-view-mod.active,
+        .wc-svg-btn.active,
         .wc-single-tabs ul.tabs li.active a,
         .wc-single-tabs .tab-section.active .tab-section-heading a {
             color: {{value}};
