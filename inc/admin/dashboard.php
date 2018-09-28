@@ -572,7 +572,7 @@ class Customify_Dashboard {
                     'url'  => '',
                     'sub' => true,
                 ),
-            
+
             array(
 		        'name' => __( 'Infinity Scroll.', 'customify' ),
 		        'desc' => __( 'Loads the next posts, products automatically when the reader approaches the bottom of the page.', 'customify' ),

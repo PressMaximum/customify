@@ -75,7 +75,7 @@ class Customify_WC {
 
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
-            add_filter( 'post_class',  array( $this, 'post_class' ), 15, 3 );
+            add_filter( 'post_class',  array( $this, 'post_class' ), 190, 3 );
             //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
             add_filter( 'product_cat_class',  array( $this, 'post_cat_class' ), 15 );
 
@@ -250,7 +250,14 @@ class Customify_WC {
 
     function post_class( $classes, $class, $post_id ){
 
-	    if ( ! $post_id || get_post_type( $post_id ) !== 'product' ) {
+        global $post;
+        if ( ! $post_id ) {
+            if ( is_object( $post )  && property_exists( $post, 'ID' ) ) {
+	            $post_id = $post->ID;
+            }
+        }
+
+	    if ( ! $post_id || get_post_type( $post ) !== 'product' ) {
 		    return $classes;
 	    }
 
@@ -260,6 +267,7 @@ class Customify_WC {
 
 		    if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
 		        $classes[] = 'customify-col';
+
 	        }
 
 		    $setting = wc_get_loop_prop( 'media_secondary' );
