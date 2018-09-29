@@ -259,14 +259,22 @@ class Customify_WC {
 	    }
 
 	    global $product;
+	    
 
-	    if ( is_object( $product ) ) {
+	    if ( is_object( $product )  ) { // Do not add class if is single product
 
 		    if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
-		        $classes[] = 'customify-col';
-
+			    if ( is_product() ) {
+			        if (  $GLOBALS['woocommerce_loop']['name'] ) {
+				        $classes[] = 'customify-col';
+                    }
+			    } else {
+				    $classes[] = 'customify-col';
+			    }
 	        }
+	    }
 
+	    if ( is_object( $product )  ) {
 		    $setting = wc_get_loop_prop( 'media_secondary' );
 		    if ( $setting != 'none' ) {
 			    $image_ids = $product->get_gallery_image_ids( );
@@ -274,7 +282,6 @@ class Customify_WC {
 				    $classes[] = 'product-has-gallery';
 			    }
             }
-
 	    }
 
         return $classes;
