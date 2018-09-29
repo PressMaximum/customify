@@ -1376,6 +1376,34 @@ html[dir="rtl"] .customify-modal-settings:before {
   text-align: center;
 }
 
+.customify-pro-teaser {
+  color: #856404;
+  background-color: #fff3cd;
+  margin: 1em 0px;
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-radius: .25rem;
+}
+.customify-pro-teaser ul {
+  margin-bottom: 1em;
+}
+.customify-pro-teaser .button {
+  display: block;
+  text-align: center;
+}
+
+.customize-control.customize-control-pro {
+  float: none;
+  padding-top: 1em;
+}
+.customize-control .customify-pro-teaser {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
 .customify--hide {
   display: none !important;
 }

@@ -259,7 +259,7 @@ class Customify_WC {
 	    }
 
 	    global $product;
-	    
+
 
 	    if ( is_object( $product )  ) { // Do not add class if is single product
 
