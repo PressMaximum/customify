@@ -60,9 +60,6 @@ class Customify_WC {
             add_filter('customify/styling/color-border', array($this, 'styling_border_color'));
             add_filter('customify/styling/color-meta', array($this, 'styling_meta_color'));
 
-	        // Payment methods widget
-	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/footer/payment-methods.php';
-
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
