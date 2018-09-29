@@ -42,7 +42,7 @@ if (is_admin() || is_customize_preview()) {
 			'section'     => 'header_menu_primary',
 			'type'      => 'pro',
 			'priority' => 99999,
-			'title'    => __( 'Header PRo Primary menu', 'customify' ),
+			'title'    => __( 'More Options on Customify Pro', 'customify' ),
 			'pro_url'  => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top',
 			'features' => array(
 				__( 'Submenu Styling', 'customify' ),
