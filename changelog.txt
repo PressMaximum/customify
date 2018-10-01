@@ -1,5 +1,4 @@
 = 0.2.3 =
-* NEW: Footer builder item payment methods.
 * NEW: Apply the product category thumbnail as page cover image.
 * NEW: WooCommerce product onsale bubble styling.
 * NEW: WooCommerce custom short description length when shop page is list view.
