@@ -11,7 +11,13 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * @var $product WC_Product
+ */
 global $product;
+if ( ! is_object( $product ) ) {
+    return;
+}
 
 $has_thumbnail = has_post_thumbnail( $product->get_id() );
 
