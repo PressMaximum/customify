@@ -5070,8 +5070,8 @@ body.menu_sidebar_dropdown:before {
 
 .customify-container {
   position: relative;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 2em;
+  padding-right: 2em;
 }
 .customify-container:before, .customify-container:after {
   content: "";
@@ -5082,8 +5082,8 @@ body.menu_sidebar_dropdown:before {
 }
 @media screen and (max-width: 48em) {
   .customify-container {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 }
 
