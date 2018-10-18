@@ -25,7 +25,6 @@ class Customify_Page_Header {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
-
 		return self::$_instance;
 	}
 
@@ -167,7 +166,7 @@ class Customify_Page_Header {
 
                 $taxonomy_filter_args['object_type'] = [$pt];
                 $taxonomies = get_taxonomies($taxonomy_filter_args, 'objects');
-                $options = [];
+                $options = array();
 
                 foreach ($taxonomies as $taxonomy => $object) {
                     $options[ $taxonomy ] = $object->label;
@@ -767,6 +766,9 @@ class Customify_Page_Header {
 				$args['title']   = $titles['product'];
 				$args['tagline'] = $taglines['product'];
 				$args['_page']   = 'product';
+				if ( $args['title'] || $args['tagline'] ) {
+					$post_id = 0;
+                }
 
 			} elseif ( is_product_category() ) {
 				$post_id         = 0;
@@ -823,7 +825,11 @@ class Customify_Page_Header {
 			// If has custom field custom title
 			$post_display = get_post_meta( $post_id, '_customify_page_header_display', true );
 			if ( $post_display && $post_display != 'default' ) {
-				$args['display'] = $post_display;
+			    if( $post_display == 'normal' ) {
+				    $args['display'] = 'default';
+                } else{
+				    $args['display'] = $post_display;
+                }
 			}
 
 			// If has custom field custom title
@@ -859,7 +865,8 @@ class Customify_Page_Header {
 			$args['display'] = 'default';
 		}
 
-		self::$_settings = $args;
+
+		self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
 
 		return $args;
 	}
@@ -893,7 +900,6 @@ class Customify_Page_Header {
 			$args['title_tag'] = 'h2';
 		}
 
-
         $layout  = Customify()->get_setting_tab(  'page_header_layout' );
         $classes = array( 'page-header--item page-cover' );
         $classes[] = $layout;
@@ -902,6 +908,8 @@ class Customify_Page_Header {
         <div id="page-cover" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $style; ?>>
             <div class="page-cover-inner customify-container">
 				<?php
+				do_action( 'customify/page-cover/before' );
+
                 if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
                     if ($args['title']) {
                         // WPCS: XSS ok.
@@ -914,6 +922,7 @@ class Customify_Page_Header {
 						echo '<div class="page-cover-tagline-wrapper"><div class="page-cover-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div></div>';
 					}
 				}
+
 				do_action( 'customify/page-cover/after' );
 				?>
             </div>
@@ -930,6 +939,11 @@ class Customify_Page_Header {
         <div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
             <div class="page-titlebar-inner customify-container">
 				<?php
+				/**
+				 * Hook titlebar before
+				 */
+				do_action( 'customify/titlebar/before' );
+
 				// WPCS: XSS ok.
                 if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
                     if ( $args['title'] ) {
@@ -942,8 +956,11 @@ class Customify_Page_Header {
 						echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
 					}
 				}
+				/**
+				 * Hook titlebar after
+				 */
+				do_action( 'customify/titlebar/after' );
 				?>
-				<?php do_action( 'customify/titlebar/after' ); ?>
             </div>
         </div>
 		<?php
@@ -954,6 +971,7 @@ class Customify_Page_Header {
 		if ( $args['display'] == 'none' ) {
 			return '';
 		}
+
 		switch ( $args['display'] ) {
 			case  'cover':
 				$this->render_cover( $args );
@@ -971,4 +989,3 @@ class Customify_Page_Header {
 }
 
 Customify_Page_Header::get_instance();
-

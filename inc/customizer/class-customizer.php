@@ -181,10 +181,12 @@ class  Customify_Customizer
                                 }
                             }
                         }
+
                         $config['setting|' . $f['name']] = $f;
 
                 }
             }
+
             self::$config = $config;
         }
         return self::$config;
@@ -812,7 +814,9 @@ class  Customify_Customizer
             'styling',
             'hr',
 
-            'repeater'
+            'repeater',
+
+            'pro'
             // custom_key => full_file_path
         );
 
@@ -856,13 +860,19 @@ class  Customify_Customizer
     {
 
         //Custom panel
-        require_once get_template_directory() . '/inc/customizer/class-customify-wp-customize-panel.php';
+        require_once get_template_directory() . '/inc/customizer/class-customify-panel.php';
         // Load custom section
-        require_once get_template_directory() . '/inc/customizer/class-customify-wp-customize-section.php';
+        require_once get_template_directory() . '/inc/customizer/class-customify-section.php';
+
+	    // Load custom section pro
+	    require_once get_template_directory() . '/inc/customizer/class-customify-section-pro.php';
 
         // Register new panel and section type
         $wp_customize->register_panel_type('Customify_WP_Customize_Panel');
         $wp_customize->register_section_type('Customify_WP_Customize_Section');
+
+	    // Register section type.
+	    $wp_customize->register_section_type( 'Customify_WP_Customize_Section_Pro' );
 
         $this->load_controls();
 
@@ -893,7 +903,12 @@ class  Customify_Customizer
                     }
                     unset($args['name']);
                     unset($args['type']);
-                    $wp_customize->add_section(new Customify_WP_Customize_Section($wp_customize, $name, $args));
+                    if( isset( $args['section_class'] ) && class_exists( $args['section_class']  ) ) { // allow custom class
+	                    $wp_customize->add_section(new $args['section_class'] ($wp_customize, $name, $args) );
+                    } else {
+	                    $wp_customize->add_section(new Customify_WP_Customize_Section($wp_customize, $name, $args));
+                    }
+
                     break;
                 default:
 
@@ -992,7 +1007,6 @@ class  Customify_Customizer
                                 'container_inclusive' => (strpos($__id, 'Customify_Customizer_Auto_CSS') === false) ? true : false,
                                 'render_callback'     => $s_id,
                             );
-
                         }
 
                         $this->selective_settings[$__id]['settings'][] = $name;

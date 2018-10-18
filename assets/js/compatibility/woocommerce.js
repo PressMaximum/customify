@@ -16,6 +16,10 @@ jQuery( document ).ready( function ( $ ) {
         $( '.item--wc_cart' ).addClass( 'cart-active' );
     });
 
+    if ( Customify_JS.wc_open_cart ) {
+        $( document.body ).trigger( 'added_to_cart' );
+    }
+
     $( document.body ).on( 'wc_cart_button_updated', function ( e, button ) {
         var p = button.parent();
         if( ! button.hasClass( 'single_add_to_cart_button' ) ) {
@@ -134,5 +138,23 @@ jQuery( document ).ready( function ( $ ) {
         $( 'input.qty[type="number"]' )._wc_plus_minus();
     } );
 
+
+    // Product tabs
+    function _slideDeneCallback(){
+        $( document.body ).trigger( 'wc_toggle_done' );
+    }
+    var tabs = $( '.wc-tabs-toggle' );
+    $( '.tab-section', tabs ).not(":eq(0)").removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
+    tabs.on( 'click','.tab-section-heading', function( e ){
+        e.preventDefault();
+        var section = $( this ).closest( '.tab-section' );
+        if ( ! section.hasClass( 'active' ) ) {
+            $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
+            section.toggleClass( 'active' ).find( '.tab-section-content' ).slideDown( _slideDeneCallback );
+        } else {
+            $( '.tab-section', tabs ).removeClass( 'active' ).find( '.tab-section-content' ).slideUp( _slideDeneCallback ) ;
+        }
+
+    } );
 
 } );

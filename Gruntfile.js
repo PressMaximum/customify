@@ -191,7 +191,7 @@ module.exports = function( grunt ) {
                     'assets/sass/admin/**/*.scss'
                 ],
                 tasks: [
-                    'sass',
+                    //'sass',
                     'css'
                 ]
             }

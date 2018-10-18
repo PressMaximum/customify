@@ -49,12 +49,12 @@
 
 .customify-container {
     position: relative;
-    padding-left: 30px;
-    padding-right: 30px;
+    padding-left: 2em;
+    padding-right: 2em;
     @include clearfix;
     @include mq(max-sm) {
-        padding-left: 15px;
-        padding-right: 15px;
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }
 .customify-container, .layout-contained{

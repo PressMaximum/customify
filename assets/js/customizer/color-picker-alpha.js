@@ -81,6 +81,8 @@
 
             self.initialValue = el.val();
 
+            self._placeholderColor = el.attr( 'placeholder' ) || '';
+
             // Add a CSS class to the input field.
             el.addClass( 'wp-color-picker' );
 
@@ -160,7 +162,6 @@
                 self.inputWrapper = el.closest( '.wp-picker-input-wrap' );
             }
 
-            self._placeholderColor = '';
 
 
             el.iris( {
@@ -226,7 +227,7 @@
             self._addListeners();
 
             var placeholderColor = el.attr( 'placeholder') || '';
-            if ( placeholderColor ) {
+            if ( placeholderColor && ! self.initialValue ) {
                 self._placeholderColor = placeholderColor;
                 if ( self.options.alpha ) {
                     self.toggler.find( 'span.color-alpha' ).css( {
@@ -331,6 +332,11 @@
             self.button.on( 'click', function( event ) {
                 if ( $( this ).hasClass( 'wp-picker-clear' ) ) {
                     self.element.val( '' );
+
+                    if ( $.isFunction( self.options.clear ) ) {
+                        self.options.clear.call(this, event);
+                    }
+
                     if ( self.options.alpha ) {
                         if ( _deprecated ) {
                             self.toggler.removeAttr( 'style' );
@@ -339,9 +345,6 @@
                     } else {
                         self.toggler.css( 'backgroundColor', self._placeholderColor );
                     }
-
-                    if ( $.isFunction( self.options.clear ) )
-                        self.options.clear.call( this, event );
 
                 } else if ( $( this ).hasClass( 'wp-picker-default' ) ) {
                     self.element.val( self.options.defaultColor ).change();

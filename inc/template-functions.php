@@ -143,7 +143,7 @@ if ( ! function_exists( 'customify_get_sidebars' ) ) {
 
 	}
 }
-add_action( 'customify_sidebars', 'customify_get_sidebars' );
+add_action( 'customify/sidebars', 'customify_get_sidebars' );
 
 if ( ! function_exists( 'customify_pingback_header' ) ) {
     /**

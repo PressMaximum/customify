@@ -9,6 +9,25 @@ function Customify_Post_Entry(){
     return Customify_Post_Entry::get_instance();
 }
 
+/**
+ * Filter to search results
+ *
+ * @TOTO: do not apply for WooCommerce results page.
+ *
+ * @param $classes
+ *
+ * @return array
+ */
+function customify_post_classes( $classes ){
+    if ( is_search() && get_query_var( 'post_type' ) != 'product' ) {
+        return array( 'entry', 'hentry', 'search-article' );
+    }
+    return $classes;
+}
+add_filter( 'post_class', 'customify_post_classes', 999 );
+
+
+
 if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
     function customify_blog_posts_heading (){
         if (customify_is_post_title_display()) {

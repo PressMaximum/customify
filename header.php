@@ -28,18 +28,26 @@
         /**
          * Site start
          *
-         * @hooked customify_customize_render_header - 10
+         * Hooked
          *
-         * @see customify_customize_render_header
+         * @see customify_customize_render_header - 10
+         * @see Customify_Page_Header::render - 35
          */
         do_action( 'customify/site-start' );
     }
     do_action( 'customify/site-start/after' );
 
+    /**
+     * Hook before main content
+     *
+     * @since 0.2.1
+     */
+    do_action( 'customify/before-site-content' );
     ?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>
         <div <?php customify_site_content_container_class(); ?>>
             <div <?php customify_site_content_grid_class(); ?>>
                 <main id="main" <?php customify_main_content_class(); ?>>
+                    <?php do_action('customify/main/before'); ?>
 
 

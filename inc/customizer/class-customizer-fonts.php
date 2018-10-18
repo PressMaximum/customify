@@ -49,6 +49,10 @@ class Customify_Fonts
     function get_normal_fonts()
     {
         $fonts = array(
+	        'Arial' => array(
+		        'family' => 'Arial',
+		        'category' => ' sans-serif',
+	        ),
             'Baskerville' => array(
                 'family' => 'Baskerville',
                 'category' => 'serif',

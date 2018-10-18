@@ -14,6 +14,8 @@ if ( ! is_active_sidebar( $sidebar_id ) ) {
 
 <aside id="sidebar-secondary" <?php customify_sidebar_secondary_class(); ?>>
     <div class="sidebar-secondary-inner sidebar-inner widget-area">
-        <?php dynamic_sidebar( $sidebar_id ); ?>
+	    <?php do_action('customify/sidebar-secondary/before'); ?>
+	    <?php dynamic_sidebar( $sidebar_id ); ?>
+	    <?php do_action('customify/sidebar-secondary/after'); ?>
     </div>
 </aside><!-- #sidebar-secondary -->

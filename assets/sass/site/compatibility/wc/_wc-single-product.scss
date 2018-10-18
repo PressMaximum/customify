@@ -4,7 +4,93 @@
 # Upsell + Related products section
 */
 
+/**
+* Nav Product - next - prev button
+*/
+.product_title-wrapper {
+    position: relative;
+}
+.wc-product-nav {
+    position: absolute;
+    top: 0.5em; right: -5px;
+    > a {
+        margin: 0px 3px;
+        display: inline-block;
+        &:hover {
+            .nav-thumbnail {
+                z-index: 100;
+                left: 50%;
+                opacity: 1;
+            }
+        }
+    }
+    .nav-thumbnail {
+        position: absolute;
+        top: 100%;
+        left: -999999px;
+        width: 100px;
+        display: block;
+        transform: translateX( - 50% );
+        transition: opacity .25s ease-in-out;
+        z-index: -1;
+        opacity: 0;
+        img {
+            display: block;
+            margin-top: 10px;
+            box-shadow: 1px 1px 10px rgba(0,0,0,.06);
+        }
+    }
+}
 
+.nav-in-title {
+    .product_title {
+        margin-right: 70px;
+    }
+}
+
+
+/**
+Product Slider
+ */
+
+.flex-direction-nav {
+    list-style: none;
+    margin: 0px !important;
+    padding: 0px !important;
+    .flex-prev,
+    .flex-next {
+        position: absolute;
+        display: block;
+        top: 50%;
+        transform: translate(0, -50%);
+        padding: 0;
+        border: none;
+        outline: none;
+        z-index: 15;
+        opacity: 0;
+        transition: opacity 0.3s linear;
+    }
+    .flex-prev {
+        left: 15px;
+    }
+
+    .flex-next {
+        right: 15px;
+    }
+    .flex-disabled {
+        .nav-btn {
+            visibility: hidden;
+        }
+    }
+}
+.woocommerce-product-gallery:hover {
+    .flex-direction-nav {
+        .flex-prev,
+        .flex-next {
+            opacity: 1;
+        }
+    }
+}
 /**
 * Product meta
  */
@@ -108,13 +194,11 @@
                 a {
                     display: block;
                     padding: 0.72em 0px;
+                    color: currentColor;
                 }
                 &.active {
                     &:after {
                         opacity: 1;
-                    }
-                    a {
-                        color: inherit;
                     }
                 }
 
@@ -138,6 +222,96 @@
         }
     }
 }
+
+/**
+Section and Toggle
+ */
+.wc-tabs-sections, .wc-tabs-toggle {
+    .woocommerce-Reviews-title {
+        display: none;
+    }
+}
+
+.wc-tabs-sections {
+    .tab-section-heading {
+        font-size: 1.4em;
+        a {
+            color: currentColor;
+        }
+    }
+    .tab-section-content {
+        margin-top: 0px;
+        padding-top: 0px;
+        margin-bottom: 2em;
+    }
+}
+
+.wc-tabs-toggle {
+    .tab-section-heading {
+        border-bottom: 1px solid $color_border;
+        font-size: 1.1em;
+        font-weight: normal;
+        display: block;
+        padding: 0;
+        margin: 0px;
+        a {
+            color: currentColor;
+            display: block;
+            padding: 0.9em 0px;
+            position: relative;
+        }
+
+        a {
+            &:before, &:after {
+                content: "";
+                display: block;
+                background-color: $color_border;
+                position: absolute;
+                top: 50%;
+                right: 0px;
+                opacity: 1;
+                transition: opacity 0.3s linear;
+            }
+
+            &:before{
+                width: 13px;
+                height: 2px;
+                top: 50%;
+                transform: translateY( - 50% );
+            }
+
+            &:after {
+                width: 2px;
+                height: 13px;
+                top: 50%;
+                right: 6px;
+                transform: translate( 1px, -50% );
+            }
+
+            &.active {
+                &:after{
+                    opacity: 0;
+                }
+            }
+
+        }
+    }
+
+    .tab-section.active {
+        .tab-section-heading {
+            a {
+                &:after {
+                    opacity: 0;
+                }
+            }
+        }
+    }
+}
+.tab-section-content {
+    padding-top: 1em;
+}
+
+
 
 /* Upsell + Related products section */
 .related.products, .upsells.products {

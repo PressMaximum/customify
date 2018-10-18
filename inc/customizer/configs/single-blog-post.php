@@ -65,7 +65,7 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                     ),
 	                array(
 		                '_key' => 'author_bio',
-		                '_visibility' => '',
+		                '_visibility' => 'hidden',
 		                'title' => __('Author Biography', 'customify'),
 	                ),
                     array(
@@ -196,7 +196,6 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                 'label' => __('Avatar Size', 'customify'),
                 'required' => array($args['id'].'_author_avatar', '==', '1')
             ),
-
 
         );
 

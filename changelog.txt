@@ -1,3 +1,30 @@
+= 0.2.3 =
+* NEW: Apply the product category thumbnail as page cover image.
+* NEW: WooCommerce product onsale bubble styling.
+* NEW: WooCommerce custom short description length when shop page is list view.
+* IMPROVED: Improved blog posts page.
+* IMPROVED: Improved search results page.
+* IMPROVED: Footer widget border color on dark mode.
+* IMPROVED: Default sub-navigation font size.
+* IMPROVED: Shop attributes table style.
+* FIXED: Blog meta post is hidden on posts listing page.
+
+
+= 0.2.2 =
+* NEW: Add more theme hooks.
+* NEW: Add Arial standard font.
+* IMPROVED: Improved WooCommerce cart page.
+* IMPROVED: Improved WooCommerce checkout page.
+* IMPROVED: Improved WooCommerce product media styling.
+* IMPROVED: Improved WooCommerce widgets.
+* IMPROVED: Improved post type meta-box.
+* IMPROVED: Improved primary navigation style.
+* IMPROVED: Improved Default widgets.
+* IMPROVED: Improved single post #173.
+* IMPROVED: Improved admin dashboard and add changelog menu.
+* FIXED: Incorrect single product layout.
+* FIXED: Menu item scroll to section on mobile #172.
+
 = 0.2.1 =
 * IMPROVED: Revert styling settings for header rows.
 * IMPROVED: Improve toggle mobile menu.

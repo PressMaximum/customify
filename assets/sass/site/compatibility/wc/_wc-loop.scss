@@ -52,13 +52,12 @@
         }
     }
 
-    .products ul,
     ul.products {
         margin: 0 -1em 0;
         padding: 0;
         list-style: none outside;
         clear: both;
-        li {
+        li.product, > li{
             list-style: none outside;
             margin: 1em 0px;
         }
@@ -71,6 +70,11 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    &:last-child{ // only have child
+        &:first-child {
+            height: auto;
+        }
+    }
     > div {
         flex: 1;
         flex-grow: 1;
@@ -115,6 +119,7 @@
         img {
             transition: all .3s ease;
             margin-bottom: 0px;
+            object-fit: cover;
         }
         .secondary-image {
             position: absolute;

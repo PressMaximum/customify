@@ -21,7 +21,9 @@ get_header(); ?>
             <?php } ?>
             <div class="page-content widget-area">
                 <p><?php esc_html_e( 'It looks like nothing was found at this location. Maybe try one of the links below or a search?', 'customify' ); ?></p>
-                <?php get_search_form(); ?>
+                <div class="widget">
+	                <?php get_search_form(); ?>
+                </div>
             </div><!-- .page-content -->
         </section><!-- .error-404 -->
         <?php

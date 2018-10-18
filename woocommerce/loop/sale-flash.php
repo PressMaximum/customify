@@ -33,9 +33,11 @@ if ( $product->is_on_sale() ) {
 				   // $sales_price       = $variable_product1->sale_price;
 				    $regular_price     = $variable_product1->get_regular_price();
 				    $sales_price       = $variable_product1->get_sale_price();
-				    $p = $regular_price - $sales_price;
-				    if ( $p > $maximumper ) {
-					    $maximumper = $p;
+				    if ( is_numeric( $regular_price ) && is_numeric( $sales_price ) ) {
+					    $p = $regular_price - $sales_price;
+					    if ( $p > $maximumper ) {
+						    $maximumper = $p;
+					    }
 				    }
 			    }
 			    $text = wc_price(  - $maximumper );
@@ -54,9 +56,11 @@ if ( $product->is_on_sale() ) {
 		            $variable_product1 = new WC_Product_Variation( $variation_id );
                     $regular_price     = $variable_product1->get_regular_price();
                     $sales_price       = $variable_product1->get_sale_price();
-		            $percentage        = round( ( ( ( $regular_price - $sales_price ) / $regular_price ) * 100 ), 1 );
-		            if ( $percentage > $maximumper ) {
-			            $maximumper = $percentage;
+		            if ( is_numeric( $regular_price ) && is_numeric( $sales_price ) ) {
+			            $percentage = round( ( ( ( $regular_price - $sales_price ) / $regular_price ) * 100 ), 1 );
+			            if ( $percentage > $maximumper ) {
+				            $maximumper = $percentage;
+			            }
 		            }
 	            }
 	            $text = sprintf( __( '%s','customify' ), - $maximumper . '%' );

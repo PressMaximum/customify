@@ -17,7 +17,17 @@ class Customify_WC {
     function __construct()
     {
         if ( $this->is_active() ) {
-            add_filter('customify_get_layout', array($this, 'shop_layout'));
+	        /**
+	         * Filter shop layout
+             * @see Customify_WC::shop_layout
+	         */
+            add_filter('customify_get_layout', array( $this, 'shop_layout'));
+	        /**
+	         * Filter special meta values for shop pages
+             * @see Customify_WC::get_post_metadata
+	         */
+            add_filter('get_post_metadata', array($this, 'get_post_metadata'), 999, 4 );
+
             add_action('widgets_init', array($this, 'register_sidebars'));
             add_filter('customify/customizer/config', array($this, 'customize_shop_sidebars'));
             add_filter('customify/sidebar-id', array($this, 'shop_sidebar_id'), 15, 2);
@@ -30,6 +40,8 @@ class Customify_WC {
             add_filter('customify/titlebar/args', array($this, 'titlebar_args'));
             add_filter('customify/titlebar/config', array($this, 'titlebar_config'), 15, 2);
             add_filter('customify/titlebar/is-showing', array($this, 'titlebar_is_showing'), 15);
+	        //self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
+            add_filter( 'customify/page-header/get-settings', array( $this, 'get_page_header_settings') );
 
             add_filter('customify/theme/js', array($this, 'add_js'));
            // add_filter('customify/theme/css', array($this, 'add_css'));
@@ -51,6 +63,7 @@ class Customify_WC {
             // Shopping Cart
             require_once get_template_directory().'/inc/compatibility/woocommerce/config/header/cart.php';
             add_filter( 'woocommerce_add_to_cart_fragments', array($this, 'cart_fragments') );
+            add_filter( 'Customify_JS', array($this, 'Customify_JS') );
 
             add_filter( 'woocommerce_get_script_data', array($this, 'woocommerce_get_script_data'), 15, 2 );
 
@@ -59,7 +72,7 @@ class Customify_WC {
 
            // Add body class
             add_filter( 'body_class',  array( $this, 'body_class' ) );
-            add_filter( 'post_class',  array( $this, 'post_class' ), 15, 3 );
+            add_filter( 'post_class',  array( $this, 'post_class' ), 190, 3 );
             //  $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
             add_filter( 'product_cat_class',  array( $this, 'post_cat_class' ), 15 );
 
@@ -77,13 +90,62 @@ class Customify_WC {
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/catalog-designer.php';
 	        // Single product config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/single-product.php';
+
+	        // Single product config
+	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/cart.php';
+
 	        // Single colors config
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/config/colors.php';
 	        // Template Hooks
 	        require_once get_template_directory().'/inc/compatibility/woocommerce/inc/template-hooks.php';
 
+	        // Overwrite Categories Walker
+	        add_filter( 'woocommerce_product_categories_widget_args', array( $this, 'customify_wc_cat_list_args' ) );
+
+	        /**
+	         * Move sale flash to new hook wc_product_images_after
+             * @since 0.2.3
+	         */
+	        remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_sale_flash'  );
+	        add_action( 'wc_product_images_after', 'woocommerce_show_product_sale_flash' );
+
+	        /**
+	         * Move WC Product images to new hook woocommerce_single_product_media
+             * This hook created from theme..
+	         */
+	        remove_action('woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
+	        add_action('woocommerce_single_product_media', 'woocommerce_show_product_images', 20 );
+
+
+	        // New breadcrumb position
+	        add_filter( 'woocommerce_breadcrumb_defaults', array( $this, 'woocommerce_breadcrumb_args' ) );
+
         }
     }
+
+	function woocommerce_breadcrumb_args( $args ){
+		$args['delimiter'] = '';
+		$args['wrap_before'] = '<nav class="woocommerce-breadcrumb text-uppercase text-xsmall link-meta">';
+		$args['wrap_after'] = '</nav>';
+		return $args;
+	}
+
+
+	/**
+     *
+     * Overwrite Categories Walker
+     *
+     * @see WC_Product_Cat_List_Walker
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	function customify_wc_cat_list_args( $args ){
+		require_once get_template_directory().'/inc/compatibility/woocommerce/inc/class-wc-product-cat-list-walker.php';
+		$args['walker'] = new Customify_WC_Product_Cat_List_Walker;
+		return $args;
+	}
 
     function woocommerce_get_script_data( $data, $handle ){
         if ( $handle == 'woocommerce' ) {
@@ -109,7 +171,7 @@ class Customify_WC {
             wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
             wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-        } elseif ( $name == 'related' || $name == 'up-sells' ) {
+        } elseif ( $name == 'related' || $name == 'up-sells' ||  $name == 'cross-sells' ) {
 
             if ( $name == 'up-sells' ) {
                 $columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
@@ -182,19 +244,37 @@ class Customify_WC {
         $classes[] = 'customify-col';
         return $classes;
     }
+
     function post_class( $classes, $class, $post_id ){
-	    if ( ! $post_id || get_post_type( $post_id ) !== 'product' ) {
+
+        global $post;
+        if ( ! $post_id ) {
+            if ( is_object( $post )  && property_exists( $post, 'ID' ) ) {
+	            $post_id = $post->ID;
+            }
+        }
+
+	    if ( ! $post_id || get_post_type( $post ) !== 'product' ) {
 		    return $classes;
 	    }
 
 	    global $product;
 
-	    if ( is_object( $product ) ) {
+
+	    if ( is_object( $product )  ) { // Do not add class if is single product
 
 		    if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
-		        $classes[] = 'customify-col';
+			    if ( is_product() ) {
+			        if (  $GLOBALS['woocommerce_loop']['name'] ) {
+				        $classes[] = 'customify-col';
+                    }
+			    } else {
+				    $classes[] = 'customify-col';
+			    }
 	        }
+	    }
 
+	    if ( is_object( $product )  ) {
 		    $setting = wc_get_loop_prop( 'media_secondary' );
 		    if ( $setting != 'none' ) {
 			    $image_ids = $product->get_gallery_image_ids( );
@@ -202,7 +282,6 @@ class Customify_WC {
 				    $classes[] = 'product-has-gallery';
 			    }
             }
-
 	    }
 
         return $classes;
@@ -228,12 +307,28 @@ class Customify_WC {
 
         if ( isset(  $enqueue_styles['woocommerce-smallscreen'] ) ) {
             $enqueue_styles['woocommerce-smallscreen']['deps'] = '';
+            $enqueue_styles['woocommerce-smallscreen']['src'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce-smallscreen'.$suffix.'.css';
             $b = $enqueue_styles['woocommerce-smallscreen'];
             unset($enqueue_styles['woocommerce-smallscreen']);
             $enqueue_styles['woocommerce-smallscreen'] = $b;
         }
 
         return $enqueue_styles;
+    }
+
+	/**
+     * Add more settings to Customify JS
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+    function Customify_JS( $args ){
+	    $args['wc_open_cart'] = false;
+	    if ( isset(  $_REQUEST['add-to-cart'] ) && ! empty(  $_REQUEST['add-to-cart'] ) ) {
+		    $args['wc_open_cart'] =  true;
+	    }
+
+	    return $args;
     }
 
     /**
@@ -263,14 +358,15 @@ class Customify_WC {
     function styling_primary( $selector ){
         $selector .= ' 
         
-        .wc-view-mod.active,
+        .wc-svg-btn.active,
         .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active,
         #review_form {
             border-color: {{value}};
         }
         
-        .wc-view-mod.active,
-        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active a {
+        .wc-svg-btn.active,
+        .wc-single-tabs ul.tabs li.active a,
+        .wc-single-tabs .tab-section.active .tab-section-heading a {
             color: {{value}};
         }';
 
@@ -415,6 +511,29 @@ class Customify_WC {
         return apply_filters( 'customify_is_shop_title_display', $show );
     }
 
+	/**
+     * Filter header settings pargs
+     *
+     * @TODO display category thumbnail as header cover if set.
+     *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+    function get_page_header_settings( $args ){
+	    if (is_product_taxonomy()) {
+            global $wp_query;
+            $cat = $wp_query->get_queried_object();
+            $thumbnail_id = get_term_meta( $cat->term_id, 'thumbnail_id', true );
+            $image = Customify()->get_media( $thumbnail_id, 'full' );
+            if ( $image ) {
+                $args['image'] = $image;
+            }
+        }
+
+        return $args;
+    }
+
     function titlebar_is_showing( $show = true ){
 
         if ( is_shop() ) {
@@ -521,6 +640,80 @@ class Customify_WC {
         ) );
     }
 
+
+	/**
+     * Filter meta key for shop pages
+     *
+	 * @param $value
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 *
+	 * @return mixed
+	 */
+    function get_post_metadata( $value, $object_id, $meta_key, $single ){
+        $meta_keys= array(
+            '_customify_page_header_display' => '',
+            '_customify_breadcrumb_display' => ''
+        );
+
+        if ( ! isset( $meta_keys[ $meta_key ] ) ) {
+            return $value;
+        }
+
+
+        if( $object_id == wc_get_page_id( 'cart' ) || $object_id == wc_get_page_id('checkout' ) ) {
+
+	        $meta_type = 'post';
+
+	        $meta_cache = wp_cache_get($object_id, $meta_type . '_meta');
+
+	        if ( !$meta_cache ) {
+		        $meta_cache = update_meta_cache( $meta_type, array( $object_id ) );
+		        $meta_cache = $meta_cache[$object_id];
+	        }
+
+	        if ( ! $meta_key ) {
+		        return $value;
+	        }
+
+	        if ( isset($meta_cache[$meta_key]) ) {
+		        if ( $single )
+			        $value = maybe_unserialize( $meta_cache[$meta_key][0] );
+		        else
+			        $value = array_map('maybe_unserialize', $meta_cache[$meta_key]);
+	        }
+
+	        if ( ! is_array( $value ) ) {
+		        $value = array( $value );
+            }
+
+	        switch ( $meta_key ) {
+                case '_customify_page_header_display':
+                    if ( empty( $value ) || $value[0] == 'default' || $value[0] == 'normal' || ! $value[0]  ) {
+	                    $value[0] = 'normal';
+                    }
+                    break;
+		        case '_customify_breadcrumb_display':
+			        if ( empty( $value ) ||  $value[0] == 'default' || ! $value[ 0] ) {
+				        $value[0] = 'hide';
+			        }
+			        break;
+
+	        }
+        }
+
+
+        return $value;
+    }
+
+	/**
+     * Special shop layout
+     *
+	 * @param bool $layout
+	 *
+	 * @return array|bool|mixed|null|string|void
+	 */
     function shop_layout( $layout = false ){
         if ( $this->is_shop_pages() ) {
             $default    = Customify()->get_setting('sidebar_layout');
@@ -537,11 +730,17 @@ class Customify_WC {
         }
 
         if ( is_product() ) {
-            $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
-            if ( $product_custom && $product_custom != 'default' ) {
-                $layout = $product_custom;
+	        $product_sidebar = get_post_meta( get_the_ID(), '_customify_sidebar', true );
+	        if ( ! $product_sidebar ) {
+		        $product_custom = Customify()->get_setting( 'product_sidebar_layout' );
+		        if ( $product_custom && $product_custom != 'default' ) {
+			        $layout = $product_custom;
+		        }
+            } else {
+		        $layout = $product_sidebar;
             }
         }
+
         return $layout;
     }
 }

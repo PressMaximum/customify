@@ -15,7 +15,7 @@
 get_header(); ?>
     <div class="content-inner">
         <?php
-
+        do_action('customify/content/before');
         if ( is_singular() ) {
             if ( ! customify_is_e_theme_location( 'single' ) ) {
                 customify_blog_posts_heading();
@@ -31,8 +31,7 @@ get_header(); ?>
                 get_template_part('template-parts/404');
             }
         }
-
-
+        do_action('customify/content/after');
         ?>
     </div><!-- #.content-inner -->
 <?php

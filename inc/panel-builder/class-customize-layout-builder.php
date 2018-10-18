@@ -393,7 +393,6 @@ class Customify_Customize_Layout_Builder {
                         </div>
                     </div>
                 <#  } #>
-
             </div>
 
 
@@ -433,7 +432,13 @@ class Customify_Customize_Layout_Builder {
                 </div>
             </div>
         </script>
-		<?php
+
+        <?php if ( ! apply_filters( 'customify/is_pro_activated', false )  ) { ?>
+            <script type="text/html" id="customify-upsell-tmpl">
+                <p class="customify-upsell-panel"><?php _e( 'Enjoy building? Upgrade to <a target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=panel_text">Customify Pro</a> to get more builder items and other premium features</a>.', 'customify' ); ?></p>
+            </script>
+			<?php
+		}
 	}
 
 }

@@ -35,6 +35,8 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'default' => 'blog_column',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
+                'disabled_msg' => __( 'This option available on Customify Pro plugin only.', 'customify' ),
+                'disabled_pro_msg' => __( 'Please activate module Blog Posts to use this layout.', 'customify' ),
                 'choices' => array(
                     'blog_classic' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_classic.svg',
@@ -42,6 +44,17 @@ if (!function_exists('customify_customizer_blog_config')) {
                     'blog_column' => array(
                         'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
                     ),
+                    'blog_masonry' => array(
+	                    'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_masonry.svg',
+	                    'disable' => 1,
+	                    'bubble' => __( 'Pro', 'customify' ),
+                    ),
+                    'blog_lateral' => array(
+	                    'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_lateral.svg',
+	                    'disable' => 1,
+	                    'bubble' => __( 'Pro', 'customify' ),
+                    ),
+
                 ),
                 'reset_controls' => array(
                     $args['id'].'_media_ratio',

@@ -1514,13 +1514,14 @@
         getValue: function (save) {
             var control = this;
             var value = '';
-            var field = {
-                type: control.params.setting_type,
-                name: control.id,
-                value: control.params.value,
-                default: control.params.default,
-                devices: control.params.devices,
-            };
+
+            var field = _.clone( control.params );
+
+            field.type = control.params.setting_type;
+            field.name = control.id;
+            field.value = control.value;
+            field.default = control.params.default;
+            field.devices = control.params.devices;
 
             if ( field.type === 'slider') {
                 field.min = control.params.min;
@@ -2950,9 +2951,43 @@
         } );
 
         /**
+         * Image Select disable click
+         */
+        $document.on( 'click', '.customify-radio-list p', function( e ){
+            var id =  $( this ).find( 'input' ).attr( 'data-name' ) ||  false;
+            var disabled =  $( this ).hasClass( 'input-disabled' );
+
+            if ( id ){
+                var setting = wp.customize( id );
+                var control = wp.customize.control( id );
+                var code = 'noti_'+id;
+                var msg = '';
+                if ( control.params._pro && control.params.disabled_pro_msg ) {
+                    msg = control.params.disabled_pro_msg;
+                } else if ( control.params.disabled_msg ) {
+                    msg = control.params.disabled_msg;
+                }
+                if ( msg ) {
+                    if ( disabled ) {
+                        setting.notifications.add(code, new wp.customize.Notification(
+                            code,
+                            {
+                                type: 'warning',
+                                message: msg
+                            }
+                        ));
+                    } else {
+                        setting.notifications.remove( code );
+                    }
+                }
+            }
+
+        } );
+
+
+        /**
          * When panel open
          */
-
         _.each( Customify_Control_Args.panel_urls, function( url, id ) {
             if ( url ) {
                 wp.customize.panel( id, function (panel) {
