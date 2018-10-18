@@ -75,7 +75,9 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 		}
 
 		$selector           = '.header--row.' . str_replace( '_', '-', $section );
-		$skin_mode_selector = '.header-inner.' . str_replace( '_', '-', $section ) . '-inner';
+		$skin_selector      = '.header--row.' . str_replace( '_', '-', $section );
+		$skin_selector      = '.header--row:not(.header--transparent).' . str_replace( '_', '-', $section );
+		$skin_mode_selector = '.header--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
 		$fn           = 'customify_customize_render_header';
 		$selector_all = '#masthead';
@@ -153,7 +155,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'type'       => 'color',
 				'section'    => $section,
 				'title'      => __( 'Background Color', 'customify' ),
-				'selector'   => "{$selector} .header-inner",
+				'selector'   => "{$selector} .header--row-inner",
 				'css_format' => 'background-color: {{value}}',
 			),
 
@@ -165,43 +167,19 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description'      => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal'               => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
-					'normal_box_shadow'    => "{$selector} .customify-container, {$selector}.layout-full-contained, {$selector}.layout-fullwidth",
-					'normal_text_color'    => "{$selector} .header-inner, {$selector} .site-branding a",
-					'normal_link_color'    => "{$selector} a:not(.customify-builder-btn)",
-					'hover_link_color'     => "{$selector} a:not(.customify-builder-btn):hover",
-					'normal_bg_color'      => "",
-					'normal_bg_image'      => "{$selector} .header-inner",
-					'normal_bg_attachment' => "{$selector} .header-inner",
-					'normal_bg_cover'      => "{$selector} .header-inner",
-					'normal_bg_repeat'     => "{$selector} .header-inner",
-					'normal_bg_position'   => "{$selector} .header-inner"
+					'normal' => "{$skin_selector} .header--row-inner"
 				),
-				'css_format'       => 'styling', // styling
+				'css_format'       => 'styling',
 				'fields'           => array(
 					'normal_fields' => array(
-						//'text_color' => false, // disable for special field.
-						//'link_color' => false, // disable for special field.
-						'padding'  => false, // disable for special field.
-						'bg_color' => false
+						'text_color' => false,
+						'link_color' => false,
+						'padding'    => false,
+						'bg_color'   => false,
+						'margin'     => false,
 					),
-					'hover_fields'  => array(
-						'text_color'     => false,
-						//'link_color' => false,
-						'padding'        => false,
-						'bg_color'       => false,
-						'bg_heading'     => false,
-						'bg_cover'       => false,
-						'bg_image'       => false,
-						'bg_repeat'      => false,
-						'border_heading' => false,
-						'border_color'   => false,
-						'border_radius'  => false,
-						'border_width'   => false,
-						'border_style'   => false,
-						'box_shadow'     => false,
-					), // disable hover tab and all fields inside.
-				)
+					'hover_fields'  => false,
+				), // disable hover tab and all fields inside.
 			),
 
 		);
@@ -320,16 +298,16 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'        => 1,
 			),
 
-            array(
-                'name'            => $section . '_align',
-                'type'            => 'text_align_no_justify',
-                'section'         => $section,
-                'priority'        => 820,
-                'device_settings' => true,
-                'selector'        => ".header-menu-sidebar-inner",
-                'css_format'      => 'text-align: {{value}};',
-                'title'           => __( 'Align', 'customify' ),
-            ),
+			array(
+				'name'            => $section . '_align',
+				'type'            => 'text_align_no_justify',
+				'section'         => $section,
+				'priority'        => 820,
+				'device_settings' => true,
+				'selector'        => ".header-menu-sidebar-inner",
+				'css_format'      => 'text-align: {{value}};',
+				'title'           => __( 'Align', 'customify' ),
+			),
 
 		);
 

@@ -121,6 +121,7 @@
     border-bottom: 1px solid $color_border;
     color: $color_meta;
     line-height: 1.6;
+    background: #FFF;
     .page-breadcrumb-inner {
         width: 100%;
     }
@@ -169,6 +170,7 @@
     .page-breadcrumb {
         border-bottom: none;
         padding-bottom: 0px;
+        background: transparent;
     }
 }
 

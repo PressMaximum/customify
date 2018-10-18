@@ -30,7 +30,7 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-weight: 400;
     font-family: $font_main;
     margin: 0 0 ms(-3);
-    color: darken($color_text, 10%);
+    color: $color_heading;
     clear: both;
 }
 

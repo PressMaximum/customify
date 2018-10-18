@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify
 Author URI: https://wpcustomify.com/about
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com
-Version: 0.1.2
+Version: 0.2.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -2139,7 +2139,7 @@ template {
 # Typography
 --------------------------------------------------------------*/
 body {
-  color: #444444;
+  color: #686868;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   line-height: 1.618;
@@ -2241,7 +2241,7 @@ code, kbd, tt, var {
 }
 
 abbr, acronym {
-  border-bottom: 1px dotted #444444;
+  border-bottom: 1px dotted #686868;
   cursor: help;
 }
 
@@ -2298,7 +2298,7 @@ a.plain_color {
 }
 
 a {
-  color: #097799;
+  color: #1e4b75;
   text-decoration: none;
   transition: all 0.14s ease-out;
 }
@@ -2498,7 +2498,7 @@ input[type="button"],
 input[type="reset"],
 input[type="submit"] {
   color: #FFFFFF;
-  background: #097799;
+  background: #235787;
 }
 .button:focus,
 input[type="button"]:focus,
@@ -2899,7 +2899,7 @@ article.comment .comment-post-author {
 .dark-mode .menu-mobile-toggle,
 .dark-mode .nav-menu > li > a,
 .dark-mode .item--html a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .customify-builder-social-icons.color-custom li a:hover,
 .dark-mode .search-icon:hover,
@@ -2909,7 +2909,7 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
 }
 .dark-mode .cart-item-link {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .cart-item-link .cart-icon {
   color: rgba(255, 255, 255, 0.99);
@@ -2920,13 +2920,13 @@ article.comment .comment-post-author {
 .dark-mode .header-search_box-item .search-field {
   background: rgba(255, 255, 255, 0.3);
   border-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .header-search_box-item .search-field::placeholder {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .header-search_box-item .search-submit {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .header-search_box-item .search-submit:hover {
   color: rgba(255, 255, 255, 0.99);
@@ -3030,7 +3030,7 @@ article.comment .comment-post-author {
   background: #f0f0f0;
 }
 .header-top .dark-mode {
-  background: #097799;
+  background: #235787;
 }
 
 .header-main {
@@ -3151,6 +3151,7 @@ article.comment .comment-post-author {
   border-bottom: 1px solid #eaecee;
   color: #6d6d6d;
   line-height: 1.6;
+  background: #FFF;
 }
 .page-breadcrumb .page-breadcrumb-inner {
   width: 100%;
@@ -3196,6 +3197,7 @@ article.comment .comment-post-author {
 .page-titlebar .page-breadcrumb, .page-cover .page-breadcrumb {
   border-bottom: none;
   padding-bottom: 0px;
+  background: transparent;
 }
 
 .page-cover {
@@ -3485,6 +3487,14 @@ article.comment .comment-post-author {
   background: #ffffff;
   box-shadow: 0 3px 30px rgba(25, 30, 35, 0.1);
   text-align: left;
+}
+.nav-menu-desktop .sub-menu:before {
+  position: absolute;
+  content: "";
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
   border: 1px solid #eaecee;
 }
 .nav-menu-desktop .sub-menu .link-before {
@@ -3551,11 +3561,11 @@ article.comment .comment-post-author {
 }
 .nav-menu-desktop.style-full-height .nav-menu > li > a:hover {
   color: #FFFFFF;
-  background-color: #097799;
+  background-color: #1e4b75;
 }
 .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-item > a, .nav-menu-desktop.style-full-height .nav-menu > li.current-menu-ancestor > a {
   color: #ffffff;
-  background-color: #097799;
+  background-color: #1e4b75;
 }
 .nav-menu-desktop.style-border-bottom .nav-menu > li > a .link-before {
   position: relative;
@@ -3758,7 +3768,7 @@ article.comment .comment-post-author {
 .header-search-form .search-submit:hover {
   box-shadow: none;
   background-color: transparent;
-  color: #444444;
+  color: #686868;
 }
 .header-search-form .search-submit svg {
   width: 18px;
@@ -4566,7 +4576,7 @@ body.menu_sidebar_dropdown:before {
 .header-menu-sidebar.dark-mode .cart-item-link,
 .header-menu-sidebar.dark-mode .item--html a,
 .header-menu-sidebar.dark-mode .nav-menu a {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.79);
 }
 .header-menu-sidebar.dark-mode .sub-menu a:hover,
 .header-menu-sidebar.dark-mode .cart-item-link:hover,
@@ -4825,6 +4835,7 @@ body.menu_sidebar_dropdown:before {
 .is-menu-sidebar.menu_sidebar_slide_right .header-menu-sidebar {
   z-index: 999900;
   height: 100%;
+  max-width: 100vh;
   transform: translate3d(0, 0, 0);
   right: 0;
   visibility: visible;
@@ -5282,8 +5293,8 @@ body.menu_sidebar_dropdown:before {
 .posts-layout .readmore-button {
   display: inline-block;
   line-height: 1;
-  border: 1px solid #097799;
-  color: #097799;
+  border: 1px solid #235787;
+  color: #235787;
   border-radius: 2px;
   cursor: pointer;
   padding: 7px 17px;
@@ -5294,9 +5305,9 @@ body.menu_sidebar_dropdown:before {
   font-weight: 500;
 }
 .posts-layout .readmore-button:hover {
-  background: #097799;
+  background: #235787;
   color: #FFFFFF;
-  border-color: #097799;
+  border-color: #235787;
 }
 .posts-layout .entry-content-data {
   display: flex;
@@ -5431,13 +5442,13 @@ body.menu_sidebar_dropdown:before {
   display: inline-block;
 }
 .pagination .nav-links > *:hover {
-  border-color: #097799;
-  background: #097799;
+  border-color: #235787;
+  background: #235787;
   color: #FFFFFF;
 }
 .pagination .nav-links span {
-  border-color: #097799;
-  background: #097799;
+  border-color: #235787;
+  background: #235787;
   color: #FFFFFF;
 }
 
@@ -5457,7 +5468,7 @@ body.menu_sidebar_dropdown:before {
   border: 1px solid #eaecee;
   padding: 5px 12px 5px;
   text-transform: uppercase;
-  color: #444444;
+  color: #686868;
   margin: 0px 2px;
 }
 .entry-content .table-wrapper {
@@ -5569,14 +5580,14 @@ body.menu_sidebar_dropdown:before {
 .search .content-area .entry-title {
   font-size: 1.4em;
   font-weight: 400;
-  color: #444444;
+  color: #686868;
   word-wrap: break-word;
 }
 .search .content-area .entry-title a {
   color: inherit;
 }
 .search .content-area .entry-title a:hover {
-  color: #097799;
+  color: #1e4b75;
 }
 .search .content-area .entry-summary p:last-child {
   margin-bottom: 0px;
@@ -5737,7 +5748,6 @@ body.menu_sidebar_dropdown:before {
 
 /* Site Footer */
 .site-footer {
-  background: #f5f5f6;
   position: relative;
   z-index: 10;
 }
@@ -5746,8 +5756,68 @@ body.menu_sidebar_dropdown:before {
   max-width: 100%;
 }
 
-.footer-bottom {
+.footer-top .footer--row-inner {
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+.footer-top .light-mode {
+  background: #f0f0f0;
+}
+.footer-top .dark-mode {
+  background: #292929;
+}
+
+.footer-main .footer--row-inner {
+  padding-top: 2.5em;
+  padding-bottom: 2.5em;
+}
+.footer-main .light-mode {
+  background: #f9f9f9;
+}
+.footer-main .dark-mode {
+  background: #303030;
+}
+
+.footer-bottom .footer--row-inner {
+  padding-top: 1.5em;
+  padding-bottom: 1.5em;
+}
+@media screen and (max-width: 568px) {
+  .footer-bottom .builder-item {
+    margin-bottom: 1em;
+  }
+  .footer-bottom .builder-item:last-child {
+    margin-bottom: 0;
+  }
+}
+.footer-bottom .light-mode {
   background: #ededed;
+}
+.footer-bottom .dark-mode {
+  background: #1a1a1a;
+}
+
+.footer--row-inner.light-mode {
+  color: rgba(0, 0, 0, 0.6);
+}
+.footer--row-inner.light-mode .product_list_widget li {
+  border-color: rgba(0, 0, 0, 0.08);
+}
+.footer--row-inner.dark-mode {
+  color: rgba(255, 255, 255, 0.99);
+}
+.footer--row-inner.dark-mode a:not(.button) {
+  color: rgba(255, 255, 255, 0.79);
+}
+.footer--row-inner.dark-mode a:not(.button):hover {
+  color: rgba(255, 255, 255, 0.99);
+}
+.footer--row-inner.dark-mode .product_list_widget li {
+  border-color: rgba(255, 255, 255, 0.08);
+}
+.footer--row-inner.dark-mode table tbody td,
+.footer--row-inner.dark-mode table th {
+  background: rgba(0, 0, 0, 0.08);
 }
 
 .footer--row.layout-fullwidth .customify-container {
@@ -5784,24 +5854,6 @@ body.menu_sidebar_dropdown:before {
   }
 }
 
-.footer-top .customify-container, .footer-main .customify-container {
-  padding-top: 3em;
-  padding-bottom: 3em;
-}
-
-.footer-bottom .customify-container {
-  padding-top: 2em;
-  padding-bottom: 2em;
-}
-@media screen and (max-width: 568px) {
-  .footer-bottom .builder-item {
-    margin-bottom: 1.618em;
-  }
-  .footer-bottom .builder-item:last-child {
-    margin-bottom: 0;
-  }
-}
-
 @media screen and (max-width: 48em) {
   .site-footer .builder-item {
     margin-bottom: 2em;
@@ -5819,8 +5871,7 @@ body.menu_sidebar_dropdown:before {
 }
 
 .footer-copyright {
-  font-size: 0.95em;
-  font-weight: 500;
+  font-size: 0.875em;
 }
 
 /*# sourceMappingURL=style.css.map */

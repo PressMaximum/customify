@@ -439,13 +439,13 @@ class Customify_Dashboard {
             ),
             array(
                 'name' => __( 'Advanced Styling', 'customify' ),
-                'desc' => __( 'Control the layout and typography setting for sub navigation, page header cover and more to come soon.', 'customify' ),
+                'desc' => __( 'Control the layout and typography setting for page header title, page header cover and more.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
             ),
-            array(
-                'name' => __( 'WooCommerce Booster', 'customify' ),
-                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/woocommerce-booster/',
-            ),
+//            array(
+//                'name' => __( 'WooCommerce Booster', 'customify' ),
+//                'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/woocommerce-booster/',
+//            ),
             array(
                 'name' => __( 'Portfolio', 'customify' ),
                 'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
@@ -461,6 +461,11 @@ class Customify_Dashboard {
                 'desc' => __( 'Create mega menu for your sites that need more space for navigation.', 'customify' ),
                 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/mega-menu/',
             ),
+	        array(
+		        'name' => __( 'Multilingual Integration', 'customify' ),
+		        'desc' => __( 'WPML multilingual plugin support, plus a fully customized language switcher header builder item.', 'customify' ),
+                'url'  => ''
+	        ),
         );
 
         ?>

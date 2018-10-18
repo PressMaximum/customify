@@ -380,13 +380,18 @@ div.product {
 
             td {
                 vertical-align: top;
-                padding-bottom: 0.5em;
+                //padding-bottom: 0.5em;
                 border: 0;
             }
 
             td:first-child {
-                width: 4em;
+                width: 11em;
                 text-align: center;
+                .button.product_type_variable {
+                    font-size: 0.7em;
+                    min-height: auto;
+                    margin-left: 1em;
+                }
             }
 
             .wc-grouped-product-add-to-cart-checkbox {

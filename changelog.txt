@@ -1,18 +1,27 @@
 = 0.2.0 =
+* NOTES: This is a major update with new features and Customizer settings re-structure, if you see any visual
+changes on the site front-end please go to the Customizer to update options.
+* NEW: Skin modes for header and footer rows.
+* NEW: [Header Builder] New shopping cart builder item.
+* NEW: WooCommerce integration.
+* NEW: WooCommerce: Product Catalog Designer.
+* NEW: WooCommerce: Single product settings.
+* NEW: Add Select2 for typography font families.
+* NEW: Add layout setting for Title-bar and Breadcrumb.
 * NEW: Add Biography item for single blog post.
-* NEW: Add option setting to always load font awesome.
-* NEW: Add product catalog designer settings.
-* NEW: Add Single product settings.
-* NEW: Header builder item shopping cart.
-* NEW: Add secondary product thumbnail when hover.
+* NEW: Add option to always load font awesome.
+* NEW: Add filter for header inner class.
 * NEW: Add option to change preview url when section/panel open.
-* IMPROVED: WooCommerce Support.
+* NEW: Add alignment settings for mobile sidebar.
 * IMPROVED: Default styling.
 * IMPROVED: Header search form and search modal form.
 * IMPROVED: Primary navigation style.
-* IMPROVED: Remove Menu Icon default padding.
+* IMPROVED: Nav menu icon.
+* IMPROVED: Update color picker support placeholder.
+* IMPROVED: Auto CSS - Do not use background settings if no background image selected.
 * FIXED: Issue menu item does not jump to that section ID on mobile #117
 * FIXED:  Default metabox value for special pages #135
+* REMOVED:  Menu Icon default padding.
 
 = 0.1.2 =
 * NEW: Support Elementor 2.0
