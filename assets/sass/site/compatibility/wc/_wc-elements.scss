@@ -3,105 +3,6 @@
 # Price amount
 */
 
-/**
- * Buttons
- */
-//.woocommerce {
-//    a.button,
-//    button.button,
-//    input.button,
-//    #respond input#submit {
-//        font-size: 100%;
-//        line-height: 1;
-//        cursor: pointer;
-//        position: relative;
-//        text-decoration: none;
-//        overflow: visible;
-//        padding: 0.618em 1em;
-//        font-weight: 700;
-//        border-radius: 3px;
-//        left: auto;
-//        border: 0;
-//        display: inline-block;
-//        background-image: none;
-//        box-shadow: none;
-//        text-shadow: none;
-//        &.loading {
-//            opacity: 0.25;
-//            padding-right: 2.618em;
-//
-//            &::after {
-//                font-family: 'WooCommerce';
-//                content: '\e01c';
-//                vertical-align: top;
-//                font-weight: 400;
-//                position: absolute;
-//                top: 0.618em;
-//                right: 1em;
-//                animation: spin 2s linear infinite;
-//            }
-//        }
-//
-//        &.added::after {
-//            font-family: 'WooCommerce';
-//            content: '\e017';
-//            margin-left: 0.53em;
-//            vertical-align: bottom;
-//        }
-//
-//        &:hover {
-//            text-decoration: none;
-//            background-image: none;
-//        }
-//
-//        &.alt {
-//            -webkit-font-smoothing: antialiased;
-//
-//            &:hover {
-//            }
-//
-//            &.disabled,
-//            &:disabled,
-//            &:disabled[disabled],
-//            &.disabled:hover,
-//            &:disabled:hover,
-//            &:disabled[disabled]:hover {
-//
-//            }
-//        }
-//
-//        &:disabled,
-//        &.disabled,
-//        &:disabled[disabled] {
-//            color: inherit;
-//            cursor: not-allowed;
-//            opacity: 0.5;
-//            padding: 0.618em 1em;
-//
-//            &:hover {
-//                color: inherit;
-//            }
-//        }
-//    }
-//
-//    .cart .button,
-//    .cart input.button {
-//        float: none;
-//    }
-//
-//    a.added_to_cart {
-//        padding-top: 0.5em;
-//        display: inline-block;
-//    }
-//    .summary {
-//        a.added_to_cart {
-//            clear: both;
-//            margin-left: 15px;
-//        }
-//    }
-//}
-
-
 .button.add_to_cart_button,
 .button.alt,
 .button.added_to_cart,
@@ -153,26 +54,57 @@
 a.remove {
     width: 20px;
     height: 20px;
-    border: 1px solid #ccc;
-    color: #ccc;
+    color: #888888;
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 100px;
     font-family: sans-serif !important;
     font-size: 16px !important;
     font-weight: normal;
-    line-height: 16px !important;
-    display: block;
+    line-height: 18px !important;
+    display: inline-block;
     text-align: center;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    opacity: 0.7;
     &:hover {
-        color: red;
-        border-color: red;
+        color: #333;
+        opacity: 1;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+        background-color: rgba(255,255,255,0.99);
     }
 }
+
+a.remove2x {
+    width: 30px;
+    height: 30px;
+    color: #888888;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 100px;
+    font-family: sans-serif !important;
+    font-size: 24px !important;
+    font-weight: normal;
+    line-height: 26px !important;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    opacity: 0.7;
+    &:hover {
+        color: #333;
+        opacity: 1;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+        background-color: rgba(255,255,255,0.99);
+    }
+}
+
 
 /* Price */
 .price {
     line-height: 1;
 }
 
-span.amount, .price {
-    font-weight: 600;
+.site-content, .cart-dropdown-box {
+    span.amount, .price {
+        font-weight: 500;
+        color: #252525;
+    }
 }
+

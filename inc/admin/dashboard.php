@@ -4,12 +4,17 @@ class Customify_Dashboard {
     static $_instance;
     public $title;
     public $config;
+    public $current_tab = '';
+    public $url = ''; // current page url
+
     static function get_instance() {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
+            self::$_instance->url = admin_url( 'admin.php' );
+	        self::$_instance->url = add_query_arg( array( 'page' => 'customify' ), self::$_instance->url );
 
             self::$_instance->title = __( 'Customify Options', 'customify' );
-            add_action( 'admin_menu', array( self::$_instance, 'add_menu' ) );
+            add_action( 'admin_menu', array( self::$_instance, 'add_menu' ), 5 );
             add_action( 'admin_enqueue_scripts', array(  self::$_instance, 'scripts' ) );
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'box_links' ), 10 );
             add_action( 'customify/dashboard/main', array(  self::$_instance, 'pro_modules_box' ), 15 );
@@ -19,8 +24,15 @@ class Customify_Dashboard {
 
             add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
 
+            // Tabs
+            add_action( 'customify/dashboard/tab/changelog', array( self::$_instance, 'tab_changelog' ) );
+
         }
         return self::$_instance;
+    }
+
+    function add_url_args( $args = array() ){
+	    return add_query_arg( $args, self::$_instance->url );
     }
 
     /**
@@ -57,6 +69,11 @@ class Customify_Dashboard {
         );
     }
 
+	/**
+     * Register scripts
+     *
+	 * @param $id
+	 */
     function scripts($id)
     {
         if ( $id != 'appearance_page_customify' && $id != 'themes.php' ) {
@@ -82,6 +99,8 @@ class Customify_Dashboard {
             'author_uri' => $theme->get('AuthorURI'),
             'version' => $theme->get('Version'),
         );
+
+        $this->current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
     }
 
     function page(){
@@ -109,14 +128,41 @@ class Customify_Dashboard {
                         <img src="<?php echo esc_url( get_template_directory_uri() ) .'/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
                     </a>
                     <span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
+                    <a class="cd-top-link" href="<?php echo esc_url( $this->add_url_args( array( 'tab' => 'changelog' ) ) ); ?>"><?php _e( 'Changelog', 'customify' ); ?></a>
                 </div>
             </div>
         </div>
         <?php
     }
 
+    function tab_changelog(){
+	    global $wp_filesystem;
+	    WP_Filesystem();
+	    $file = get_template_directory().'/changelog.txt';
+	    if ( file_exists( $file ) ) {
+		    $file_contents = $wp_filesystem->get_contents( $file );
+	    }
+        ?>
+        <p>
+            <a class="button button-secondary" href="<?php echo esc_url( $this->url ); ?>"><?php _e( 'Back', 'customify' ); ?></a>
+        </p>
+
+        <?php
+	    do_action( 'customify/dashboard/changelog/before' );
+        ?>
+        <div class="cd-box theme-changelog">
+            <div class="cd-box-top"><?php _e( 'Changelog', 'customify' ); ?></div>
+            <div class="cd-box-content">
+                <pre style="width: 100%; max-height: 60vh; overflow: auto"><?php echo esc_textarea( $file_contents ); ?></pre>
+            </div>
+        </div>
+        <?php
+        do_action( 'customify/dashboard/changelog/after' );
+
+    }
+
     function box_links(){
-        $url = admin_url( 'customize.php' ); //
+        $url = admin_url( 'customize.php' );
 
         $links = array(
             array(
@@ -179,6 +225,9 @@ class Customify_Dashboard {
         <?php
     }
 
+	/**
+	 * Display community info
+	 */
     function box_community() {
         ?>
         <div class="cd-box">
@@ -191,6 +240,9 @@ class Customify_Dashboard {
         <?php
     }
 
+	/**
+	 * Display recommend plugins
+	 */
     function box_plugins(){
 
         ?>
@@ -387,7 +439,6 @@ class Customify_Dashboard {
                         'TB_iframe' => 'true',
                         'width'     => '772',
                         'height'    => '349',
-
                     ),
                     network_admin_url('plugin-install.php')
                 );
@@ -474,6 +525,60 @@ class Customify_Dashboard {
 		        'desc' => __( 'WPML multilingual plugin support, plus a fully customized language switcher header builder item.', 'customify' ),
                 'url'  => ''
 	        ),
+	        array(
+		        'name' => __( 'Custom Fonts', 'customify' ),
+		        'desc' => __( 'Custom Fonts module allows you to add your self-hosted fonts and use them on your Customify powered websites.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+            array(
+		        'name' => __( 'Typekit', 'customify' ),
+		        'desc' => __( 'Typekit module allows you to add Typekit fonts and use them on your Customify powered websites.', 'customify' ),
+		        'url'  => ''
+	        ),
+	        array(
+		        'name' => __( 'Customify Hooks', 'customify' ),
+		        'desc' => __( 'Add custom hook scripts.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+	        array(
+		        'name' => __( 'WooCommerce Booster', 'customify' ),
+		        'desc' => __( 'Gives you creative control of style and layout options for your shop.', 'customify' ),
+		        'url'  => ''
+	        ),
+
+                array(
+                    'name' => __( 'Single Product Layouts', 'customify' ),
+                    'desc' => __( 'More beautiful layouts for your single product.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Off Canvas Filter', 'customify' ),
+                    'desc' => __( 'Add off canvas products filter for shop and product archive pages.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Product Gallery Slider', 'customify' ),
+                    'desc' => __( 'Add slider for product gallery.', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+                array(
+                    'name' => __( 'Quick View', 'customify' ),
+                    'desc' => __( 'Add product quick view modal for product listing..', 'customify' ),
+                    'url'  => '',
+                    'sub' => true,
+                ),
+
+            array(
+		        'name' => __( 'Infinity Scroll.', 'customify' ),
+		        'desc' => __( 'Loads the next posts, products automatically when the reader approaches the bottom of the page.', 'customify' ),
+		        'url'  => ''
+	        ),
+
         );
 
         ?>
@@ -482,7 +587,7 @@ class Customify_Dashboard {
                 <a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Learn more &rarr;', 'customify' ); ?></a></div>
             <div class="cd-box-content cd-modules">
                 <?php foreach( $modules as $m ) { ?>
-                <div class="cd-module-item">
+                <div class="cd-module-item <?php echo isset( $m['sub'] ) && $m['sub'] ? 'cd-sub-module' : ''; ?>">
                     <div class="cd-module-info">
                         <div class="cd-module-name"><?php echo esc_html( $m['name'] ); ?></div>
                         <?php if ( isset( $m['desc'] ) ) { ?>
@@ -500,12 +605,26 @@ class Customify_Dashboard {
         ?>
         <div id="plugin-filter" class="cd-row metabox-holder">
             <hr class="wp-header-end">
-            <div class="cd-main">
-                <?php do_action( 'customify/dashboard/main', $this ); ?>
-            </div>
-            <div class="cd-sidebar">
-                <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
-            </div>
+            <?php
+
+            do_action( 'customify/dashboard/start', $this );
+
+            if ( $this->current_tab && has_action( 'customify/dashboard/tab/'.$this->current_tab ) ){
+                do_action( 'customify/dashboard/tab/'.$this->current_tab, $this );
+            } else {
+	            ?>
+                <div class="cd-main">
+		            <?php do_action( 'customify/dashboard/main', $this ); ?>
+                </div>
+                <div class="cd-sidebar">
+		            <?php do_action( 'customify/dashboard/sidebar', $this ); ?>
+                </div>
+	            <?php
+            }
+
+            do_action( 'customify/dashboard/end', $this );
+
+            ?>
         </div>
     <?php
     }

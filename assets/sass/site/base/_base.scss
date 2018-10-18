@@ -224,6 +224,7 @@ table {
         padding: ms(0) ms(2);
         vertical-align: top;
         text-align: left;
+        font-size: 0.9em;
     }
 
     thead th {
@@ -283,7 +284,8 @@ input[type="datetime"],
 input[type="datetime-local"],
 input[type="color"],
 select,
-textarea {
+textarea,
+.select2-container .select2-selection--single {
     color: #282828;
     border: 1px solid #E5E5E5;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
@@ -308,6 +310,32 @@ select {
     background-repeat: no-repeat;
     padding-right: 1.5em;
     cursor: pointer;
+}
+.select2-container--default {
+    .select2-selection--single {
+        box-shadow: none;
+        .select2-selection__rendered {
+            line-height: 2.4em;
+            min-height: 2.6em;
+            padding-left: 0px;
+        }
+        .select2-selection__arrow {
+            top: 46%;
+            right: 1px;
+            transform: translateY(-38%);
+            background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
+            background-position: center right 8px;
+            background-repeat: no-repeat;
+            b {
+                display: none;
+            }
+        }
+    }
+
+    .select2-dropdown {
+        border: 1px solid #E5E5E5;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+    }
 }
 
 .button,
@@ -375,6 +403,10 @@ fieldset {
         margin-bottom: ms(-3);
         font-weight: 600;
     }
+}
+
+label {
+    color: #252525;
 }
 
 /*--------------------------------------------------------------
@@ -687,6 +719,74 @@ article.comment {
 ## Helper
 --------------------------------------------------------------*/
 
+// Direction Nav
+.nav-btn {
+    margin: auto;
+    width: 24px;
+    height: 24px;
+    min-height: 24px;
+    overflow: hidden;
+    fill: currentColor;
+    line-height: 1em;
+    font-size: 1em;
+    position: relative;
+    padding: 0px;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+    background-color: rgba(255,255,255,0.5);
+    color: #888888;
+    opacity:  0.6;
+    display: inline-block;
+    transition: all 0.3s linear;
+    &.x2 {
+        width: 36px;
+        height: 36px;
+        min-height: 36px;
+        font-size: 1.1em;
+    }
+    svg {
+        width: 50%;
+        height: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        fill: currentColor;
+        color: currentColor;
+        transform: translate( -50%, -50%);
+    }
+    &:hover, &:focus {
+        color: #333;
+        opacity: 1;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+        background-color: rgba(255,255,255,0.99);
+    }
+    &.nav-next {
+        &:before {
+            //content: "\f105";
+           // transform: translate( -50%, -50%) rotate( 45deg );
+        }
+        &:after{
+            //transform: translate( -50%, -50%) rotate( -45deg );
+        }
+    }
+    &.nav-prev {
+        &:before {
+            //content: "\f104";
+        }
+    }
+    &:before, &:after {
+
+    }
+
+    &:before {
+
+    }
+
+    &:after {
+
+    }
+}
+
 // Shape
 .shape-rounded {
     border-radius: 10%;
@@ -789,7 +889,7 @@ article.comment {
     // Only for dark mode
     .header-search_box-item {
         .search-field {
-            background: white(0.3);
+            background: white(0.03);
             border-color: $light_color_border;
             color: $light_color_link;
             &::placeholder {

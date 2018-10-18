@@ -160,7 +160,7 @@ class Customify_Post_Entry {
      * @param $id
      * @param $taxonomy
      * @param bool $icon_first
-     * @return array|bool|false|string|WP_Error
+     * @return array|bool|WP_Error
      */
     function get_terms_list( $id, $taxonomy, $icon_first = false ){
         $terms = get_the_terms( $id, $taxonomy );
@@ -310,6 +310,17 @@ class Customify_Post_Entry {
         return '<span class="meta-item byline"> ' . $byline . '</span>'; // WPCS: XSS OK.
     }
 
+	/**
+     * Check if show post meta for this post
+     *
+	 * @param $post object|integer
+	 *
+	 * @return boolean
+	 */
+    private function show_post_meta( $post ){
+        return apply_filters( 'customify/show/post_meta', get_post_type( $post ) == 'post' && ! is_search()  );
+    }
+
     /**
      * Get post meta markup
      *
@@ -318,6 +329,10 @@ class Customify_Post_Entry {
      * @param array $args
      */
     function post_meta( $post = null, $meta_fields = array(), $args = array() ){
+
+	    if ( ! $this->show_post_meta( $post )) {
+		    return;
+	    }
 
         if ( empty( $meta_fields ) ) {
             $meta_fields =  $this->config['meta_config'];
@@ -512,6 +527,10 @@ class Customify_Post_Entry {
 
     function post_author_bio()
     {
+	    if ( ! is_singular( 'post' ) ) {
+		    return;
+	    }
+
         if (is_single()) {
             global $post;
             // Detect if it is a single post with a post author
@@ -591,9 +610,29 @@ class Customify_Post_Entry {
      * @param array     $args
      */
     function build( $field , $post = null, $fields = null, $args = array() ){
-        if ( method_exists( $this, 'post_'.$field ) ) {
-            call_user_func_array( array( $this, 'post_'.$field ), array( $post, $fields, $args ) );
+        // Allowed 3rd party hook to this
+        $cb = apply_filters( 'customify/single/build_field_callback', false, $field );
+        if ( ! is_callable( $cb ) ) {
+	        if ( method_exists( $this, 'post_' . $field ) ) {
+		        $cb = array( $this, 'post_' . $field );
+	        }
         }
+        $type = is_single() ? 'single' :  'loop';
+	    /**
+	     * Hook before post item part
+         *
+         * @since 0.2.2
+	     */
+        do_action("customify/{$type}/field_{$field}/before", $post, $fields, $args, $this );
+	    if ( is_callable( $cb ) ) {
+		    call_user_func_array( $cb, array( $post, $fields, $args ) );
+	    }
+	    /**
+	     * Hook after post item part
+	     *
+	     * @since 0.2.2
+	     */
+	    do_action("customify/{$type}/field_{$field}/after", $post, $fields, $args, $this );
     }
 
     /**

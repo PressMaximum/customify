@@ -9,13 +9,19 @@
  * @package customify
  */
 
-?>
+?>              <?php do_action('customify/main/after'); ?>
             </main><!-- #main -->
-            <?php do_action( 'customify_sidebars' ); ?>
+            <?php do_action( 'customify/sidebars' ); ?>
         </div><!-- #.customify-grid -->
     </div><!-- #.customify-container -->
 </div><!-- #content -->
 <?php
+/**
+ * Hook before site content
+ * @since 0.2.2
+ */
+do_action( 'customify/after-site-content' );
+
 do_action( 'customify/site-end/before' );
 if ( ! customify_is_e_theme_location( 'footer' ) ) {
     /**

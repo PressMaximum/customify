@@ -893,10 +893,42 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   display: none;
 }
 .custom-control-image_select .customify-radio-list p, .custom-control-radio_group .customify-radio-list p {
-  margin: 0 0 10px;
+  margin: 0px 0 10px;
 }
 .custom-control-image_select .customify-radio-list p, .custom-control-image_select .customify-radio-list label, .custom-control-radio_group .customify-radio-list p, .custom-control-radio_group .customify-radio-list label {
   display: inline-block;
+}
+
+.custom-control-image_select .customify-radio-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.custom-control-image_select .customify-radio-list > p {
+  flex-basis: 33.333%;
+}
+.custom-control-image_select .customify-radio-list > p label {
+  position: relative;
+}
+.custom-control-image_select .customify-radio-list > p .label {
+  display: inline-block;
+  margin-top: 3px;
+  position: relative;
+}
+.custom-control-image_select .customify-radio-list > p .bubble {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 6px 3px;
+  border: 1px solid #ca4a1f;
+  background: #fff;
+  font-size: 9px;
+  line-height: 12px;
+  text-transform: uppercase;
+  border-radius: 20px;
+  transform: translate(9px, -6px);
+}
+.custom-control-image_select .customify-radio-list > p.input-disabled img {
+  opacity: 0.5;
 }
 
 /**
@@ -959,13 +991,18 @@ html[dir="rtl"] .custom-control-radio_group .customify-radio-list p:first-child 
 }
 .custom-control-image_select .customify-radio-list span.label {
   display: inline-block;
-  padding: 3px;
+  padding: 4px;
   max-width: 80px;
   border-radius: 5px;
+}
+.custom-control-image_select .customify-radio-list span.label span {
+  display: inline-block;
+  margin-top: 3px;
 }
 .custom-control-image_select .customify-radio-list input:checked + span.label {
   border-color: #3068af;
   box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+  background: #FFF;
 }
 
 /*Background field*/
@@ -1339,6 +1376,34 @@ html[dir="rtl"] .customify-modal-settings:before {
   text-align: center;
 }
 
+.customify-pro-teaser {
+  color: #856404;
+  background-color: #fff3cd;
+  margin: 1em 0px;
+  position: relative;
+  padding: .75rem 1.25rem;
+  margin-bottom: 1rem;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+  border-radius: .25rem;
+}
+.customify-pro-teaser ul {
+  margin-bottom: 1em;
+}
+.customify-pro-teaser .button {
+  display: block;
+  text-align: center;
+}
+
+.customize-control.customize-control-pro {
+  float: none;
+  padding-top: 1em;
+}
+.customize-control .customify-pro-teaser {
+  margin-left: -12px;
+  margin-right: -12px;
+}
+
 .customify--hide {
   display: none !important;
 }
@@ -1416,7 +1481,7 @@ html[dir="rtl"] .customify--customize-builder .customify--cb-inner {
   margin-right: 300px;
 }
 .customify--customize-builder .customify--cb-body {
-  height: 280px;
+  height: 295px;
   overflow: auto;
   display: block;
 }
@@ -3173,6 +3238,17 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 .list-boxed li.no_template {
   padding: 15px 0;
   font-style: italic;
+}
+
+/**
+* Upsell panel
+ */
+.customify-upsell-panel {
+  margin-bottom: 0px;
+  margin-top: 0px;
+  float: left;
+  display: block;
+  padding-top: 8px;
 }
 
 :root .grid-stack-item > .ui-resizable-handle {

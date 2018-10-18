@@ -260,7 +260,7 @@ class Customify {
 
         do_action('customify/load-scripts');
 
-        $css_files = apply_filters(  'customify/theme/css', array(
+        $css_files = apply_filters(  'customify/theme/css', array (
             'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
             'style' => $this->get_style_uri()
         ) );
@@ -269,17 +269,25 @@ class Customify {
             'jquery.fitvids.js' => array(
                 'url' => esc_url( get_template_directory_uri() ) . '/assets/js/jquery.fitvids'.$suffix.'.js',
                 'deps' => array( 'jquery' ),
-                'ver' => '1.1'
+                'ver' => Customify::$version
             ),
             'customify-themejs' => array(
                 'url' => esc_url( get_template_directory_uri() ) . '/assets/js/theme'.$suffix.'.js',
-                'deps' => array( 'jquery', 'jquery.fitvids.js' )
+                'deps' => array( 'jquery', 'jquery.fitvids.js' ),
+                'ver' => Customify::$version
             ),
         ) );
 
         foreach( $css_files as $id => $url ) {
             $deps = array();
-            if ( $url ) {
+            if ( is_array( $url ) ) {
+	            $arg = wp_parse_args( $url, array(
+		            'deps' => array(),
+		            'url' => '',
+		            'ver' => self::$version
+	            ) );
+	            wp_enqueue_style('customify-' . $id, $arg['url'], $arg['deps'], $arg['ver'] );
+            } elseif ( $url ) {
                 wp_enqueue_style('customify-' . $id, $url, $deps, self::$version);
             }
         }
@@ -313,9 +321,9 @@ class Customify {
         }
 
         wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
-        wp_localize_script( 'customify-themejs', 'Customify_JS', array(
-            'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries
-        ) );
+        wp_localize_script( 'customify-themejs', 'Customify_JS', apply_filters( 'Customify_JS', array(
+	        'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries
+        ) ) );
 
         do_action( 'customify/theme/scripts' );
     }
@@ -347,6 +355,10 @@ class Customify {
         $this->load_configs();
         $this->load_compatibility();
         $this->admin_includes();
+        // Custom categories walker class
+        if ( ! is_admin() ) {
+	        require_once self::$path.'/inc/class-categories-walker.php';
+        }
     }
 
     private function admin_includes(){
@@ -376,6 +388,7 @@ class Customify {
             'layouts',
             'blogs',
             'single-blog-post',
+	        'search',
             'styling',
             'typography',
             'page-header',
@@ -438,8 +451,15 @@ class Customify {
         }
     }
 
+	/**
+	 * Check if WooCommerce plugin activated
+	 * @see WooCommerce
+	 * @see wc
+	 *
+	 * @return bool
+	 */
     function is_woocommerce_active(){
-        return class_exists('WooCommerce');
+        return class_exists('WooCommerce') || function_exists('wc');
     }
 
     function is_using_post(){

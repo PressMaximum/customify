@@ -34,7 +34,11 @@ function customify_customize_render_header() {
 		return;
 	}
 	echo Customify_Customize_Layout_Builder_Frontend()->close_icon( ' close-panel close-sidebar-panel' );
-    do_action( 'customizer/render_header/before' );
+	/**
+	 * Hook before header
+	 * @since 0.2.2
+	 */
+    do_action( 'customizer/before-header' );
 	echo '<header id="masthead" class="site-header">';
         echo '<div id="masthead-inner" class="site-header-inner">';
             $list_items = Customify_Customize_Layout_Builder()->get_builder_items( 'header' );
@@ -43,7 +47,11 @@ function customify_customize_render_header() {
             Customify_Customize_Layout_Builder_Frontend()->render_mobile_sidebar();
         echo '</div>';
 	echo '</header>';
-    do_action( 'customizer/render_header/after' );
+	/**
+	 * Hook after header
+	 * @since 0.2.2
+	 */
+	do_action( 'customizer/after-header' );
 }
 
 /**
@@ -53,6 +61,11 @@ function customify_customize_render_footer() {
 	if ( ! customify_is_footer_display() ) {
 		return;
 	}
+	/**
+	 * Hook before footer
+	 * @since 0.2.2
+	 */
+	do_action('customify/before-footer');
 	echo '<footer class="site-footer" id="site-footer">';
 	Customify_Customize_Layout_Builder_Frontend()->set_id( 'footer' );
 	Customify_Customize_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );
@@ -60,6 +73,11 @@ function customify_customize_render_footer() {
 	Customify_Customize_Layout_Builder_Frontend()->set_config_items( $list_items );
 	Customify_Customize_Layout_Builder_Frontend()->render();
 	echo '</footer>';
+	/**
+	 * Hook before footer
+	 * @since 0.2.2
+	 */
+	do_action('customify/after-footer');
 }
 
 /**

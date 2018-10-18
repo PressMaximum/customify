@@ -54,6 +54,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'render_callback'     => $fn,
 				'container_inclusive' => true
 			),
+
 		);
 
 		return $config;

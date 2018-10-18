@@ -901,12 +901,46 @@ $text_color: #555d66;
             display: none;
         }
         p {
-            margin: 0 0 10px;
+            margin: 0px 0 10px;
         }
         p, label {
             display: inline-block;
         }
+
     }
+}
+.custom-control-image_select .customify-radio-list{
+    display: flex;
+    flex-wrap: wrap;
+     > p {
+         label {
+             position: relative;
+         }
+         .label {
+             display: inline-block;
+             margin-top: 3px;
+             position: relative;
+         }
+         flex-basis: 33.333%;
+         .bubble {
+            position: absolute;
+             top: 0px;
+             right: 0px;
+             padding: 6px 3px;
+             border: 1px solid #ca4a1f;
+             background: #fff;
+             font-size: 9px;
+             line-height: 12px;
+             text-transform: uppercase;
+             border-radius: 20px;
+             transform: translate(9px, -6px);
+         }
+         &.input-disabled {
+             img {
+                 opacity: 0.5;
+             }
+         }
+     }
 }
 
 /**
@@ -977,14 +1011,18 @@ $text_color: #555d66;
         }
         span.label {
             display: inline-block;
-            padding: 3px;
+            padding: 4px;
             max-width: 80px;
             border-radius: 5px;
+            span {
+                display: inline-block;
+                margin-top: 3px;
+            }
         }
         input:checked + span.label {
             border-color: #3068af;
             box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
-
+            background: #FFF;
         }
     }
 }
@@ -1380,4 +1418,34 @@ $text_color: #555d66;
     padding: 0;
     text-indent: 0;
     text-align: center;
+}
+
+.customify-pro-teaser {
+    color: #856404;
+    background-color: #fff3cd;
+    margin: 1em 0px;
+    position: relative;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-radius: .25rem;
+    ul {
+        margin-bottom: 1em;
+    }
+    .button {
+        display: block;
+        text-align: center;
+    }
+}
+.customize-control {
+    &.customize-control-pro {
+        float: none;
+        padding-top: 1em;
+    }
+    .customify-pro-teaser {
+        margin-left: -12px;
+        margin-right: -12px;
+
+    }
 }

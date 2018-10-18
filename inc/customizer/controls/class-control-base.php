@@ -44,6 +44,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     public $_selective_refresh;
     public $device_settings = false;
     public $no_setup = false;
+    public $_pro = false;
 
     /**
      * Provide the parent, comparison operator, and value which affects the field’s visibility
@@ -111,6 +112,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
         }
         $this->json['value']        = $value;
 
+        $this->json['_pro']         = class_exists( 'Customify_Pro' );
         $this->json['default']      = $this->defaultValue;
         $this->json['placeholder']  = $this->placeholder;
         $this->json['fields']       = $this->fields;
@@ -246,7 +248,8 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	            'devices' => Customify()->customizer->devices,
 	            // Auto redirect to url when section open
 	            'section_urls' => array(
-		            'section_single_blog_post' => $single_post_url
+		            'section_single_blog_post' => $single_post_url,
+		            'section_search_results' => home_url('/?s=a') // search page
                 ),
 	            // Auto redirect to url when section panel
                 'panel_urls' => array(

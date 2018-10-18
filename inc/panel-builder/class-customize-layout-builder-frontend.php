@@ -131,8 +131,16 @@ class Customify_Customize_Layout_Builder_Frontend {
                         }
 
                         if ( ! $items[ $item['id'] ] ['render_content'] ) {
+                            // START render builder item
                             ob_start();
                             $has_cb      = false;
+
+	                        /**
+                             * Hook before builder item
+                             *
+	                         * @since 0.2.1
+	                         */
+                            do_action('customify/builder/'.$this->id.'/before-item/'.$item['id'] );
                             $object_item = Customify_Customize_Layout_Builder()->get_builder_item( $this->id, $item['id'] );
                             // Call render in registered class
                             if ( $object_item ) {
@@ -167,8 +175,17 @@ class Customify_Customize_Layout_Builder_Frontend {
                                     //printf( __( 'Callback function <strong>%s</strong> do not exists.', 'customify' ), $fn );
                                 }
                             }
+
+	                        /**
+	                         * Hook after builder item
+	                         *
+	                         * @since 0.2.1
+	                         */
+	                        do_action('customify/builder/'.$this->id.'/after-item/'.$item['id'] );
+
                             // Get item output
                             $ob_render = ob_get_clean();
+	                        // END render builder item
 
                             if ( ! $return_render ) {
                                 if ( $ob_render ) {
@@ -520,8 +537,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 
                         if ( $html_mobile || $html_desktop ) {
                             ?>
-                            <div <?php echo $string_atts; ?>
-                                    data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
+                            <div <?php echo $string_atts; ?> data-show-on="<?php echo esc_attr(join(" ", $show_on_devices)); ?>">
                                 <div class="<?php echo join( ' ', $inner_class ); ?>">
                                     <div class="customify-container">
                                         <?php

@@ -17,10 +17,6 @@
 @import "wc/wc-reviews";
 @import "wc/wc-cart-checkout";
 
-/* Coupon Input */
-.woocommerce-cart-form .coupon .input-text{
-    min-width: 120px;
-}
 
 /* Sale on badge */
 .woocommerce span.onsale {
@@ -62,5 +58,27 @@
     }
     .woocommerce-MyAccount-content {
         width: 72%;
+    }
+}
+
+.footer_payment_methods {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font-size: 25px;
+    line-height: 0px;
+    li {
+         i:before {
+             line-height: 0px;
+         }
+        line-height: 0px;
+        &:last-child {
+            margin-right: 0px;
+        }
+        &:first-child {
+            margin-left: 0px;
+        }
+        display: inline-block;
     }
 }

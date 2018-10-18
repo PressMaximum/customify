@@ -10,6 +10,7 @@
 get_header(); ?>
     <div class="content-inner">
         <?php
+        do_action('customify/content/before');
         if ( ! customify_is_e_theme_location( 'single' ) ) {
             while (have_posts()) :
                 $post_type = get_post_type();
@@ -20,6 +21,7 @@ get_header(); ?>
                 }
             endwhile; // End of the loop.
         }
+        do_action('customify/content/after');
         ?>
     </div><!-- #.content-inner -->
 <?php

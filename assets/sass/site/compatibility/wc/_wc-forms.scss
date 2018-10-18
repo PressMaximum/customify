@@ -135,11 +135,14 @@ form .form-row {
 form.login,
 form.checkout_coupon,
 form.register {
-    border: 1px solid darken( $secondary, 10% );
     padding: 20px;
     margin: 2em 0;
     text-align: left;
     border-radius: 1px;
+}
+
+form.checkout_coupon {
+    border: 2px dashed #eaeaea;
 }
 
 ul#shipping_method {
@@ -149,7 +152,7 @@ ul#shipping_method {
 
     li {
         margin: 0;
-        padding: 0.25em 0 0.25em 22px;
+        padding: 4px 0px;
         text-indent: -22px;
         list-style: none outside;
         input {
@@ -158,14 +161,49 @@ ul#shipping_method {
         label {
             display: inline;
         }
+        &:first-child {
+            padding-top: 0px;
+        }
     }
 
     .amount {
-        font-weight: 700;
+        //font-weight: 700;
     }
 }
 
 /* Checkout form */
 #customer_details {
     margin-bottom: 2em;
+}
+
+/* Shipping calculator form */
+.woocommerce-shipping-calculator {
+    margin-bottom: 0;
+
+    .shipping-calculator-form {
+        margin: 15px 0px;
+    }
+
+    p {
+        margin-bottom: 0px;
+    }
+
+    .form-row {
+        padding: 0;
+        margin: 0 0 10px;
+        font-size: 0.85em;
+    }
+    #calc_shipping_country_field {
+        margin-bottom: 13px;
+        text-align: left;
+    }
+    select {
+        text-align: left;
+    }
+    button {
+        font-size: 0.85em;
+        display: block;
+        width: 100%;
+        min-height: auto;
+    }
 }

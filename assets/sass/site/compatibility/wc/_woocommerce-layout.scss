@@ -2,6 +2,39 @@
  * Applies layout to the default WooCommerce frontend design
  */
 
+.woocommerce-cart, .woocommerce-checkout {
+    .entry-header {
+        text-align: center;
+        .entry-title {
+            font-size: 1.9em;
+            text-transform: uppercase;
+            @include for_device( mobile ) {
+                font-size: 1.7em;
+            }
+        }
+        margin: 0em 0 3em;
+    }
+}
+
+/* Breadcrumb */
+.woocommerce-breadcrumb {
+    a {
+        &:after {
+            border-top: 1px solid currentColor;
+            border-left: 1px solid currentColor;
+            content: "";
+            width: 5px;
+            height: 5px;
+            display: inline-block;
+            transform: rotate(135deg);
+            left: auto;
+            position: relative;
+            top: -1px;
+            margin: 0px 10px;
+        }
+    }
+}
+
 // Before listing Products
 .wc-catalog-header {
     display: flex;
@@ -9,12 +42,15 @@
     margin-bottom: 0.5em;
 }
 
-.wc-view-mod {
+.wc-svg-btn {
     cursor: pointer;
     padding: 5px 5px 4px 5px;
     border: 1px solid $color_border;
     border-radius: 1px;
     line-height: 1;
+    height: 2em;
+    display: inline-flex;
+    align-items: center;
     margin-right: 10px;
     svg {
         width: 1.2em;
@@ -27,6 +63,7 @@
         border-color: $color_primary;
     }
 }
+
 
 .wc-view-switcher, .woocommerce-ordering, .woocommerce-result-count {
     margin-bottom: 0;
@@ -102,70 +139,61 @@
     /**
      * Cart page
      */
+    .woocommerce-cart-form {
+        width: 60%;
+        float: left;
+        @include for_device( tablet ) {
+            width: 100%;
+            float: none;
+        }
+    }
+    .cart-collaterals {
+        width: 35%;
+        float: right;
+        @include for_device( tablet ) {
+            width: 100%;
+            float: none;
+        }
+    }
+
     table.cart,
     #content table.cart {
         img {
             height: auto;
         }
-
-        td.actions {
-            text-align: right;
-
-            .input-text {
-                width: 80px;
-            }
-
-            .coupon {
-                float: left;
-
-                label {
-                    display: none;
-                }
-            }
-        }
     }
 
-    .cart-collaterals {
-        @include clearfix();
-        width: 100%;
-
-        .related {
-            width: 30.75%;
-            float: left;
-        }
-
-        .cross-sells {
-            width: 48%;
-            float: left;
-
-            ul.products {
+    /**
+   * Checkout Page
+   */
+    .woocommerce-checkout {
+        .col2-set {
+            .col-1,  .col-2 {
                 float: none;
-
-                li {
-                    width: 48%;
-                }
+                width: 100%;
             }
         }
-
-        .shipping_calculator {
-            width: 48%;
-            @include clearfix();
-            clear: right;
-            float: right;
-
-            .col2-set {
-                .col-1,
-                .col-2 {
-                    width: 47%;
-                }
+        #order_review_heading {
+            display: none;
+        }
+        #customer_details {
+            width: 55%;
+            float: left;
+            @include for_device( tablet ) {
+                width: 100%;
+                float: none;
             }
         }
-
-        .cart_totals {
+        .woocommerce-checkout-review-order {
+            width: 40%;
             float: right;
-            width: 48%;
+            @include for_device( tablet ) {
+                width: 100%;
+                float: none;
+            }
         }
     }
+
 
     /**
      * Forms
@@ -226,10 +254,6 @@
             text-align: left;
             padding: 0 1em 0 0;
             float: left;
-        }
-
-        #place_order {
-            float: right;
         }
     }
 

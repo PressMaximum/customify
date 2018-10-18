@@ -1,14 +1,9 @@
 /**
 * Product page
 */
-div.product,
-#content div.product {
+div.product {
     div.images {
-        float: left;
-        width: 48%;
         @include for_device(mobile) {
-            width: 100%;
-            float: none;
             order: 5;
         }
     }
@@ -58,17 +53,6 @@ div.product,
         }
     }
 
-    div.summary {
-        float: right;
-        width: 48%;
-        clear: none;
-
-        @include for_device(mobile) {
-            order: 1;
-            width: 100%;
-            float: none;
-        }
-    }
 
     #reviews {
         .comment {
@@ -131,6 +115,9 @@ div.product {
             display: none;
         }
     }
+    .wc-product-images {
+        position: relative;
+    }
 
     div.images {
         margin-bottom: 2em;
@@ -168,42 +155,45 @@ div.product {
 
         .woocommerce-product-gallery__trigger {
             position: absolute;
-            top: .5em;
-            right: .5em;
-            font-size: 2em;
+            top: 15px;
+            right: 15px;
+            font-size: 1em;
             z-index: 9;
             width: 36px;
             height: 36px;
-            background: #fff;
-            text-indent: -9999px;
+            background: rgba(255,255,255,0.5);
             border-radius: 100%;
+            box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.16), 0 0 0 1px rgba(0, 0, 0, 0.08);
+            color: #888888;
+            opacity: 0.6;
+            display: inline-block;
+            transition: all 0.3s linear;
             box-sizing: content-box;
+            &:hover, &:focus {
+                opacity: 1;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
+                background-color: rgba(255,255,255,0.99);
+            }
 
             &:before {
-                content: "";
-                display: block;
-                width: 10px;
-                height: 10px;
-                border: 2px solid #000;
-                border-radius: 100%;
+                content: "\e035";
+                font-family: "WooCommerce";
+                display: flex;
+                height: 100%;
+                width: 100%;
+                justify-content: center;
+                align-items: center;
                 position: absolute;
-                top: 9px;
-                left: 9px;
+                top: 50%;
+                left: 50%;
+                font-size: 1em;
+                line-height: 0;
+                transform: translate( -50%, -50%);
                 box-sizing: content-box;
             }
 
-            &:after {
-                content: "";
-                display: block;
-                width: 2px;
-                height: 8px;
-                background: #000;
-                border-radius: 6px;
-                position: absolute;
-                top: 19px;
-                left: 22px;
-                transform: rotate(-45deg);
-                box-sizing: content-box;
+            img {
+                display: none !important;
             }
         }
 
@@ -422,4 +412,7 @@ span.onsale {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: bold;
+    .amount {
+        color: inherit !important;
+    }
 }
