@@ -152,8 +152,8 @@ class Customify_WC_Single_Product {
 			'name'  => $section,
 			'type'  => 'section',
 			'panel' => 'woocommerce',
-			'title' => __( 'Single Product', 'customify' ),
-			'priority' => 10,
+			'title' => __( 'Single Product Page', 'customify' ),
+			'priority' => 19,
 		);
 
 
