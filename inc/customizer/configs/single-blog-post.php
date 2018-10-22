@@ -74,6 +74,12 @@ if (!function_exists('customify_customizer_single_blog_config')) {
                         'title' => __('Post Navigation', 'customify'),
                     ),
 
+	                array(
+		                '_key' => 'related',
+		                '_visibility' => '',
+		                'title' => __('Related Posts', 'customify'),
+	                ),
+
                     array(
                         '_key' => 'comment_form',
                         '_visibility' => '',
@@ -205,3 +211,4 @@ if (!function_exists('customify_customizer_single_blog_config')) {
 }
 
 add_filter('customify/customizer/config', 'customify_customizer_single_blog_config' );
+

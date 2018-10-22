@@ -1,3 +1,6 @@
+= 0.2.4 =
+* NEW: Add related posts for single post.
+
 = 0.2.3 =
 * NEW: Apply the product category thumbnail as page cover image.
 * NEW: WooCommerce product onsale bubble styling.

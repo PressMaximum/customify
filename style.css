@@ -5634,6 +5634,52 @@ body.menu_sidebar_dropdown:before {
   text-align: right;
 }
 
+.related-post-title {
+  margin-bottom: 0.41575em;
+}
+
+.related-post {
+  margin-bottom: 1em;
+  margin-top: 1em;
+}
+.related-post .entry-title {
+  font-size: 1.1em;
+}
+
+.img-pos-left .related-post, .img-pos-right .related-post {
+  display: flex;
+}
+.img-pos-left .related-thumbnail, .img-pos-right .related-thumbnail {
+  flex-basis: 160px;
+  position: relative;
+}
+.img-pos-left .related-thumbnail img, .img-pos-right .related-thumbnail img {
+  width: 100%;
+  object-fit: cover;
+}
+.img-pos-left .related-body, .img-pos-right .related-body {
+  flex-basis: calc( 100% - 160px );
+}
+.img-pos-left .related-body p, .img-pos-right .related-body p {
+  margin-bottom: 0px;
+}
+
+.img-pos-left .related-body {
+  padding-left: 1em;
+}
+
+.img-pos-right .related-body {
+  order: 1;
+  padding-right: 1em;
+}
+.img-pos-right .related-thumbnail {
+  order: 2;
+}
+
+.img-pos-top .related-thumbnail img {
+  width: 100%;
+}
+
 /* Page Mics */
 .archive .page-title, .search .page-title {
   margin-bottom: 35px;

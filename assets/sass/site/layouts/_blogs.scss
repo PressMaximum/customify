@@ -446,3 +446,63 @@ $blog_gutter: $gl-gutter;
         text-align: right;
     }
 }
+
+// Related Posts
+.related-post-title {
+    margin-bottom: 0.41575em;
+}
+.related-post {
+    margin-bottom: 1em;
+    margin-top: 1em;
+    .entry-title {
+        font-size: 1.1em;
+    }
+}
+
+.img-pos-left , .img-pos-right {
+    .related-post {
+        display: flex;
+    }
+    .related-thumbnail {
+        flex-basis: 160px;
+        position: relative;
+        a {
+
+        }
+        img {
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+    .related-body {
+        flex-basis: calc( 100% - 160px );
+        p {
+            margin-bottom: 0px;
+        }
+    }
+}
+
+.img-pos-left {
+    .related-body {
+        padding-left: 1em;
+    }
+}
+
+.img-pos-right {
+    .related-body {
+        order: 1;
+        padding-right: 1em;
+    }
+    .related-thumbnail {
+        order: 2;
+    }
+}
+
+.img-pos-top {
+    .related-thumbnail {
+        img {
+            width: 100%;
+        }
+    }
+}
+
