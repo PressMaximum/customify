@@ -52,8 +52,8 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'type' => 'select',
 				'section' => $level_2_panel,
 				'default' => array(
-					'desktop' => 2,
-					'tablet' => 2,
+					'desktop' => 3,
+					'tablet' => 3,
 					'mobile' => 1,
 				),
 				'max' => 150,
@@ -76,7 +76,7 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'type' => 'text',
 				'section' => $level_2_panel,
 				'selector' => $args['selector'],
-				'default' => 4,
+				'default' => 3,
 				'render_callback' => $args['cb'],
 				'label' => __('Number posts to show', 'customify'),
 				'description' => __('Enter 0 to disable related posts.', 'customify'),
@@ -86,7 +86,7 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'name' => $args['id'].'_related_img_pos',
 				'type' => 'select',
 				'section' => $level_2_panel,
-				'default' => 'left',
+				'default' => 'top',
 				'selector' => $args['selector'],
 				'render_callback' => $args['cb'],
 				'label' => __('Image Position', 'customify'),
@@ -120,7 +120,8 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'default' => '',
 				'label' => __('Thumbnail Width', 'customify'),
 				'device_settings' => true,
-				'css_format' => '.img-pos-left .related-thumbnail, .img-pos-right .related-thumbnail { flex-basis: {{value_no_unit}}%; } .img-pos-left .related-body, .img-pos-right .related-body { flex-basis: calc( 100% - {{value_no_unit}}%; ); }',
+				'devices' => array( 'desktop' , 'tablet' ),
+				'css_format' => '.img-pos-left .related-thumbnail, .img-pos-right .related-thumbnail { flex-basis: {{value_no_unit}}%; } .img-pos-left .related-body, .img-pos-right .related-body { flex-basis: calc( 100% - {{value_no_unit}}% ); }',
 				'required' => array($args['id'].'_related_img_pos', 'in', array( 'left', 'right' ))
 			),
 
@@ -155,7 +156,6 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 					'asc' => __('Asc', 'customify'),
 				)
 			),
-
 
 			array(
 				'name' => $args['id']. '_related_meta',
@@ -207,13 +207,11 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'type' => 'text',
 				'section' => $level_2_panel,
 				'selector' => $args['selector'],
-				'default' => 15,
+				'default' => 0,
 				'render_callback' => $args['cb'],
 				'label' => __('Excerpt length', 'customify'),
 				'description' => __('Custom excerpt length. Enter 0 to hide the excerpt.', 'customify'),
 			),
-
-
 
 		);
 

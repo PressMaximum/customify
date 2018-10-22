@@ -450,6 +450,9 @@ $blog_gutter: $gl-gutter;
 // Related Posts
 .related-post-title {
     margin-bottom: 0.41575em;
+    @include for_device( mobile ){
+        margin-bottom: 0;
+    }
 }
 .related-post {
     margin-bottom: 1em;
@@ -462,12 +465,15 @@ $blog_gutter: $gl-gutter;
 .img-pos-left , .img-pos-right {
     .related-post {
         display: flex;
+        @include for_device( mobile ){
+            display: block;
+        }
     }
     .related-thumbnail {
         flex-basis: 160px;
         position: relative;
-        a {
-
+        @include for_device( mobile ){
+            margin-bottom: 1em;
         }
         img {
             width: 100%;
@@ -485,6 +491,9 @@ $blog_gutter: $gl-gutter;
 .img-pos-left {
     .related-body {
         padding-left: 1em;
+        @include for_device( mobile ){
+            padding-left: 0em;
+        }
     }
 }
 
@@ -492,6 +501,9 @@ $blog_gutter: $gl-gutter;
     .related-body {
         order: 1;
         padding-right: 1em;
+        @include for_device( mobile ){
+            padding-right: 0em;
+        }
     }
     .related-thumbnail {
         order: 2;
@@ -500,6 +512,7 @@ $blog_gutter: $gl-gutter;
 
 .img-pos-top {
     .related-thumbnail {
+        margin-bottom: 1em;
         img {
             width: 100%;
         }
