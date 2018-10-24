@@ -616,9 +616,12 @@ class Customify_Post_Entry {
 	 * Display related post
 	 */
     function post_related(){
-	    if ( ! is_single() ) {
+	    if ( ! is_single( ) ) {
 		    return '';
 	    }
+	    if ( get_post_type( ) != 'post' ) {
+	        return '';
+        }
 
 	    Customify_Related_Posts::get_instance()->display();
     }

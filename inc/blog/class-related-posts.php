@@ -145,6 +145,10 @@ class Customify_Related_Posts {
 
 			$layout_class = "customify-grid-{$cols['desktop']}_sm-{$cols['tablet']}}_xs-{$cols['mobile']}}";
 
+			if ( ! $query_posts->have_posts() ) {
+			    return '';
+            }
+
 			global $post;
 
 			echo '<div class="'.esc_attr( join(' ', $wrapper_classes ) ).' ">';
