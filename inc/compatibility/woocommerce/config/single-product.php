@@ -344,7 +344,7 @@ class Customify_WC_Single_Product {
 			'type'    => 'checkbox',
 			'section' => $section,
 			'default' => 1,
-			'checkbox_label'   => __( 'Show shop breadcrumb', 'customify-pro', 'customify' ),
+			'checkbox_label'   => __( 'Show shop breadcrumb', 'customify' ),
 		);
 
 		return $configs;
