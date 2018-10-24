@@ -1,5 +1,21 @@
 <?php
 class Customify_Customizer_Control_Checkbox extends Customify_Customizer_Control_Base {
+
+    static function before_field(){
+        ?>
+        <#
+        var required = '';
+        if ( ! _.isUndefined( field.required ) ) {
+            required = JSON.stringify( field.required  );
+        }
+
+
+        #>
+        <div class="customify--field dadsa customify--field-{{ field.type }} {{ field.class }} customify--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
+        <?php
+    }
+
+
     static function field_template(){
         ?>
         <script type="text/html" id="tmpl-field-customify-checkbox">
@@ -18,7 +34,9 @@ class Customify_Customizer_Control_Checkbox extends Customify_Customizer_Control
                     </span>
                 </span>
 
-                {{{ field.checkbox_label }}}
+                <span class="checkbox-field-text">
+                    {{{ field.checkbox_label }}}
+                </span>
             </label>
         </div>
         <?php

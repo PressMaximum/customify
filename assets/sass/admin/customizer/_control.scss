@@ -1398,6 +1398,23 @@ $text_color: #555d66;
     }
 }
 
+.customize-control-customify-checkbox {
+    .has-title-desc {
+        .customify--settings-fields {
+            position: absolute;
+            top: -6px;
+            right: 0px;
+        }
+        .customify-control-field-header {
+            cursor: pointer;
+            margin-right: 30px;
+        }
+        .checkbox-field-text {
+            display: none !important;
+        }
+    }
+}
+
 /* OnOff Button */
 .onoffswitch {
     position: relative; width: 25px;
