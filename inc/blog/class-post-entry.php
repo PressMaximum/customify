@@ -592,6 +592,11 @@ class Customify_Post_Entry {
         if ( ! is_single() ) {
             return '';
         }
+
+	    if ( get_post_type( ) != 'post' ) {
+		    return '';
+	    }
+
 //        the_post_navigation( array(
 //            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
 //            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
@@ -619,6 +624,7 @@ class Customify_Post_Entry {
 	    if ( ! is_single( ) ) {
 		    return '';
 	    }
+
 	    if ( get_post_type( ) != 'post' ) {
 	        return '';
         }
