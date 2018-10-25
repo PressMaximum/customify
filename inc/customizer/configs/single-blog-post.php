@@ -76,7 +76,7 @@ if (!function_exists('customify_customizer_single_blog_config')) {
 
 	                array(
 		                '_key' => 'related',
-		                '_visibility' => '',
+		                '_visibility' => 'hidden',
 		                'title' => __('Related Posts', 'customify'),
 	                ),
 
