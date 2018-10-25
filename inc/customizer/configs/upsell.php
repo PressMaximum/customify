@@ -38,19 +38,21 @@ if (is_admin() || is_customize_preview()) {
 		);
 
 		$configs[] = array(
-			'name'     => 'header_menu_primary_pro',
-			'section'     => 'header_menu_primary',
-			'type'      => 'pro',
+			'name'     => 'footer_settings_pro',
+			'panel'     => 'footer_settings',
+			'type'      => 'section',
 			'priority' => 99999,
+			'section_class' => 'Customify_WP_Customize_Section_Pro',
 			'title'    => __( 'More Options on Customify Pro', 'customify' ),
 			'pro_url'  => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top',
+			'teaser'    => true,
 			'features' => array(
-				__( 'Submenu Styling', 'customify' ),
-				__( 'Submenu Typography', 'customify' ),
+				__( 'Horizontal menu', 'customify' ),
+				__( 'More HTML items', 'customify' ),
+				__( 'Icon Box', 'customify' ),
+				__( 'Contact Info', 'customify' )
 			)
 		);
-
-
 
 		return $configs;
 	}

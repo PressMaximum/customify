@@ -46,7 +46,7 @@ class Customify_Customizer_Control_Pro extends WP_Customize_Control {
 						<?php endforeach; ?>
                     </ul>
 				<?php endif; ?>
-                <a href="<?php echo esc_url( $this->url ); ?>" class="button button-secondary" target="_blank" rel="noopener"><?php echo esc_html_x( 'Learn More', 'Customify Pro upsell', 'customify' ); ?></a>
+                <a href="<?php echo esc_url( $this->pro_url ); ?>" class="button button-secondary" target="_blank" rel="noopener"><?php echo esc_html_x( 'Learn More', 'Customify Pro upsell', 'customify' ); ?></a>
             </div>
 		<?php endif;
 	}
