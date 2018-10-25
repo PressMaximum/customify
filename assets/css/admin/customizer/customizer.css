@@ -1415,7 +1415,7 @@ html[dir="rtl"] .customify-modal-settings:before {
 .onoffswitch-inner:after {
   content: "";
   padding-right: 10px;
-  background-color: #a8bece;
+  background-color: #CCCCCC;
   text-align: right;
 }
 
@@ -3361,6 +3361,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   float: left;
   display: block;
   padding-top: 8px;
+  color: #888888;
 }
 
 :root .grid-stack-item > .ui-resizable-handle {

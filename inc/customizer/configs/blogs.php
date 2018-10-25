@@ -35,7 +35,7 @@ if (!function_exists('customify_customizer_blog_config')) {
                 'default' => 'blog_column',
                 'selector' => $args['selector'],
                 'render_callback' => $args['cb'],
-                'disabled_msg' => __( 'This option available on Customify Pro plugin only.', 'customify' ),
+                'disabled_msg' => __( 'This option is available in Customify Pro plugin only.', 'customify' ),
                 'disabled_pro_msg' => __( 'Please activate module Blog Posts to use this layout.', 'customify' ),
                 'choices' => array(
                     'blog_classic' => array(

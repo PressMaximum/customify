@@ -369,6 +369,9 @@ $blog_gutter: $gl-gutter;
             margin-bottom: 0px;
         }
     }
+    .entry--item.entry-related {
+        margin-bottom: 0.41575em;
+    }
     .tags-links, .cats-links {
         &:before {
             font: normal normal normal 16px/1 FontAwesome;
@@ -456,9 +459,9 @@ $blog_gutter: $gl-gutter;
 }
 .related-post {
     margin-bottom: 1em;
-    margin-top: 1em;
     .entry-title {
         font-size: 1.1em;
+        line-height: 1.3;
     }
 }
 
@@ -478,6 +481,7 @@ $blog_gutter: $gl-gutter;
         img {
             width: 100%;
             object-fit: cover;
+            display: block;
         }
     }
     .related-body {
@@ -512,7 +516,7 @@ $blog_gutter: $gl-gutter;
 
 .img-pos-top {
     .related-thumbnail {
-        margin-bottom: 1em;
+        margin-bottom: 0.5em;
         img {
             width: 100%;
         }

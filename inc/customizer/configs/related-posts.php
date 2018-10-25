@@ -186,6 +186,7 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 					array(
 						'_key' => 'comment',
 						'title' => __('Comment', 'customify'),
+						'_visibility' => 'hidden'
 					),
 
 				),

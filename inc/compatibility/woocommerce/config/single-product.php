@@ -187,7 +187,7 @@ class Customify_WC_Single_Product {
 			'title'           => __('Layout', 'customify'),
 			'default'         => 'default',
 
-			'disabled_msg' => __( 'This option available on Customify Pro plugin only.', 'customify' ),
+			'disabled_msg' => __( 'This option is available in Customify Pro plugin only.', 'customify' ),
 			'disabled_pro_msg' => __( 'Please activate module Single Product Layouts to use this layout.', 'customify' ),
 
 			'choices'         => array(
