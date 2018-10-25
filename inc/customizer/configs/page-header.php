@@ -788,7 +788,7 @@ class Customify_Page_Header {
 				$args['_page']   = 'shop';
                 $args['tagline'] = '';
 			}
-			
+
 		}
 
 

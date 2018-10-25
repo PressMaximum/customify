@@ -3232,7 +3232,7 @@ article.comment .comment-post-author {
 
 .page-breadcrumb-list {
   list-style: none;
-  margin: 0px;
+  margin: 0px 1em;
   padding: 0px;
 }
 .page-breadcrumb-list li {
