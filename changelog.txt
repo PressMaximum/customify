@@ -8,6 +8,7 @@
 * IMPROVED: Footer widget border color on dark mode.
 * IMPROVED: Default sub-navigation font size.
 * IMPROVED: Shop attributes table style.
+* FIXED: Fix issue site title HTML tag name.
 * FIXED: Blog meta post is hidden on posts listing page.
 
 = 0.2.2 =

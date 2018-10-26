@@ -258,6 +258,13 @@ class Customify_Customize_Layout_Builder_Frontend {
     function setup_item_content( $content, $id, $device ) {
         $content = str_replace( '__id__', $id, $content );
         $content = str_replace( '__device__', $device, $content );
+	    /**
+         *
+         * Ensure only one H! tag for the site title
+         *
+	     * @since 0.2.3
+	     */
+        $content = str_replace( '__site_device_tag__', $device == 'desktop' ? 'h1' : 'h2', $content );
 
         return $content;
     }
@@ -613,8 +620,9 @@ class Customify_Customize_Layout_Builder_Frontend {
                     $inner_classes = $inner_classes . ' builder-item-focus ';
                 }
 
-                $content = str_replace( '__id__', $id, $content );
-                $content = str_replace( '__device__', 'mobile', $content );
+	            $content = $this->setup_item_content( $content, $id, 'mobile' );
+                //$content = str_replace( '__id__', $id, $content );
+                //$content = str_replace( '__device__', 'mobile', $content );
 
                 echo '<div class="' . esc_attr( $classes ) . '">';
                 echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';
