@@ -109,6 +109,20 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 			),
 
 			array(
+				'name' => $args['id'].'_related_thumbnail_height',
+				'type' => 'slider',
+				'section' => $level_2_panel,
+				'selector' => 'format',
+				'unit' => '%',
+				'max' => '200',
+				'default' => '',
+				'label' => __('Custom Thumbnail Height', 'customify'),
+				'device_settings' => true,
+				'devices' => array( 'desktop' , 'tablet' ),
+				'css_format' => '.related-post .related-thumbnail a { padding-top: {{value_no_unit}}%; } .related-post .related-thumbnail img { width: 100%;position: absolute; top: 0px; right: 0px; display: block; height: 100%; object-fit: cover; }',
+			),
+
+			array(
 				'name' => $args['id'].'_related_thumbnail_width',
 				'type' => 'slider',
 				'section' => $level_2_panel,
@@ -118,7 +132,7 @@ if (!function_exists('customify_customizer_single_related_posts_config')) {
 				'max' => '100',
 				//'render_callback' => $args['cb'],
 				'default' => '',
-				'label' => __('Thumbnail Width', 'customify'),
+				'label' => __('Custom Thumbnail Width', 'customify'),
 				'device_settings' => true,
 				'devices' => array( 'desktop' , 'tablet' ),
 				'css_format' => '.img-pos-left .related-thumbnail, .img-pos-right .related-thumbnail { flex-basis: {{value_no_unit}}%; } .img-pos-left .related-body, .img-pos-right .related-body { flex-basis: calc( 100% - {{value_no_unit}}% ); }',

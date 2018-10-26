@@ -465,6 +465,14 @@ $blog_gutter: $gl-gutter;
     }
 }
 
+.related-thumbnail {
+    a {
+        display: block;
+        line-height: 0px;
+        position: relative;
+    }
+}
+
 .img-pos-left , .img-pos-right {
     .related-post {
         display: flex;
@@ -475,6 +483,7 @@ $blog_gutter: $gl-gutter;
     .related-thumbnail {
         flex-basis: 160px;
         position: relative;
+
         @include for_device( mobile ){
             margin-bottom: 1em;
         }

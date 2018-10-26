@@ -5654,6 +5654,12 @@ body.menu_sidebar_dropdown:before {
   line-height: 1.3;
 }
 
+.related-thumbnail a {
+  display: block;
+  line-height: 0px;
+  position: relative;
+}
+
 .img-pos-left .related-post, .img-pos-right .related-post {
   display: flex;
 }
