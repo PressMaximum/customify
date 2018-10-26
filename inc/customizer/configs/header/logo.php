@@ -131,7 +131,7 @@ class Customify_Builder_Item_Logo {
                 echo '<div class="site-name-desc">';
                 if ($show_name !== 'no') {
                     if (is_front_page() && is_home()) : ?>
-                        <h1 class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></h1>
+                        <__site_device_tag__ class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></__site_device_tag__>
                     <?php else : ?>
                         <p class="site-title"><a href="<?php echo esc_url(home_url('/')); ?>" rel="home"><?php bloginfo('name'); ?></a></p>
                         <?php

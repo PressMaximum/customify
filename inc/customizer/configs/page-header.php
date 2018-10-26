@@ -782,12 +782,13 @@ class Customify_Page_Header {
 				$args['title']   = get_the_archive_title();
 				$args['tagline'] = get_the_archive_description();
 				$args['_page']   = 'product_tag';
-			} elseif ( is_shop() ) {
+			} elseif ( is_shop() && ! is_search() ) {
 				$args['display'] = $display['page'];
 				$post_id         = wc_get_page_id( 'shop' );
 				$args['_page']   = 'shop';
                 $args['tagline'] = '';
 			}
+
 		}
 
 

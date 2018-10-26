@@ -3,7 +3,7 @@
  * Mini-cart
  *
  * @package WooCommerce/Templates
- * @version 3.3.0
+ * @version 3.5.0
  */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -58,14 +58,14 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 					<?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity text-xsmall">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
                     </span><?php
 
-                    echo apply_filters( 'woocommerce_cart_item_remove_link', sprintf(
-	                    '<a href="%s" class="remove remove_from_cart_button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">&times;</a>',
-	                    esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-	                    __( 'Remove this item', 'customify' ),
-	                    esc_attr( $product_id ),
-	                    esc_attr( $cart_item_key ),
-	                    esc_attr( $_product->get_sku() )
-                    ), $cart_item_key );
+	                echo apply_filters( 'woocommerce_cart_item_remove_link', sprintf(
+		                '<a href="%s" class="remove remove_from_cart_button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s">&times;</a>',
+		                esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
+		                __( 'Remove this item', 'customify' ),
+		                esc_attr( $product_id ),
+		                esc_attr( $cart_item_key ),
+		                esc_attr( $_product->get_sku() )
+	                ), $cart_item_key );
 
                     ?>
                 </li>

@@ -343,6 +343,7 @@ class Customify {
             '/inc/customizer/class-customizer.php',     // Customizer additions.
             '/inc/panel-builder/panel-builder.php',     // Panel builder additions.
 
+            '/inc/blog/class-related-posts.php',           // Blog entry builder
             '/inc/blog/class-post-entry.php',           // Blog entry builder
             '/inc/blog/class-posts-layout.php',         // Blog posts layout
             '/inc/blog/functions-posts-layout.php',     // Posts layout functions
@@ -388,6 +389,8 @@ class Customify {
             'layouts',
             'blogs',
             'single-blog-post',
+            'related-posts',
+
 	        'search',
             'styling',
             'typography',

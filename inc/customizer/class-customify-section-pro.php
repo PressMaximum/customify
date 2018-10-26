@@ -88,7 +88,7 @@ if ( class_exists( 'WP_Customize_Section' ) && ! class_exists( 'Customify_WP_Cus
                         <# }); #>
                     </ul>
                     <# } #>
-                    <a href="{{ data.url }}" class="button button-secondary" target="_blank" rel="noopener"><?php echo esc_html_x( 'Learn More', 'Customify Pro upsell', 'customify' ); ?></a>
+                    <a href="{{ data.pro_url }}" class="button button-secondary" target="_blank" rel="noopener"><?php echo esc_html_x( 'Learn More', 'Customify Pro upsell', 'customify' ); ?></a>
                 </div>
             </li>
             <# } else { #>

@@ -1379,6 +1379,101 @@ $text_color: #555d66;
     }
 }
 
+/* Checkbox */
+.customify--field-checkbox {
+    .customify-field-settings-inner {
+        padding-right: 30px;
+        position: relative;
+        display: block;
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        .onoffswitch {
+            float: right;
+            position: absolute;
+            top: 3px;
+            right: 0px;
+        }
+    }
+}
+
+.customize-control-customify-checkbox {
+    .has-title-desc {
+        .customify--settings-fields {
+            position: absolute;
+            top: -6px;
+            right: 0px;
+        }
+        .customify-control-field-header {
+            cursor: pointer;
+            margin-right: 30px;
+        }
+        .checkbox-field-text {
+            display: none !important;
+        }
+    }
+}
+
+/* OnOff Button */
+.onoffswitch {
+    position: relative; width: 25px;
+    display: inline-block;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none !important;
+}
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0px none;
+    border-radius: 10px;
+    position: relative;
+    top: 3px;
+    transition: all 0.3s ease-in 0s;
+    opacity: 1;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left;
+    width: 50%; height: 15px; padding: 0;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "";
+    padding-left: 10px;
+    background-color: #00aadc; color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "";
+    padding-right: 10px;
+    background-color: #CCCCCC;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 11px; margin: 0px 3px 0px 1px;
+    background: #FFFFFF;
+    position: absolute; top: 2px; bottom: 2px;
+    right: 8px;
+    border-radius: 10px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
+}
+.onoffswitch-checkbox:disabled + .onoffswitch-label {
+    opacity: 0.4;
+    cursor: default;
+}
+
 
 
 /* Customify Pro section */

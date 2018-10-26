@@ -5,7 +5,7 @@
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @author  WooThemes
  * @package WooCommerce/Templates
- * @version 3.3.0
+ * @version 3.5.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
+
+if ( ! is_a( $product, 'WC_Product' ) ) {
+	return;
+}
 
 $has_thumbnail = has_post_thumbnail( $product->get_id() );
 

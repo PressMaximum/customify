@@ -1,4 +1,5 @@
 = 0.2.3 =
+* NEW: Add related posts for single post.
 * NEW: Apply the product category thumbnail as page cover image.
 * NEW: WooCommerce product onsale bubble styling.
 * NEW: WooCommerce custom short description length when shop page is list view.
@@ -7,8 +8,8 @@
 * IMPROVED: Footer widget border color on dark mode.
 * IMPROVED: Default sub-navigation font size.
 * IMPROVED: Shop attributes table style.
+* FIXED: Fix issue site title HTML tag name.
 * FIXED: Blog meta post is hidden on posts listing page.
-
 
 = 0.2.2 =
 * NEW: Add more theme hooks.

@@ -372,8 +372,8 @@ class Customify_Post_Entry {
      *
      * @param null $post
      */
-    function post_title( $post = null ){
-        if ( is_singular() ) {
+    function post_title( $post = null, $force_link = false ){
+        if ( is_singular() && ! $force_link ) {
             if ( customify_is_post_title_display() ) {
                 the_title('<h1 class="entry-title entry--item h2">', '</h1>');
             }
@@ -446,13 +446,22 @@ class Customify_Post_Entry {
     /**
      * Post excerpt markup
      */
-    function post_excerpt(){
+    function post_excerpt( $type = '', $length = false ){
+        if ( ! $type ) {
+	        $type = $this->config['excerpt_type'];
+        }
+
+        if ( ! $length ) {
+            $length = $this->config['excerpt_length'];
+        }
+
+
         echo '<div class="entry-excerpt entry--item">';
-        if ( $this->config['excerpt_type']  == 'excerpt' ) {
+        if ( $type  == 'excerpt' ) {
             the_excerpt();
-        } elseif( $this->config['excerpt_type']  == 'more_tag' ) {
+        } elseif( $type  == 'more_tag' ) {
             the_content('',  true );
-        } elseif( $this->config['excerpt_type']  == 'content' ) {
+        } elseif( $type == 'content' ) {
             the_content( '', false );
         } else {
             $text= '';
@@ -463,7 +472,7 @@ class Customify_Post_Entry {
                     $text = $this->post->post_content;
                 }
             }
-            $excerpt = $this->trim_excerpt( $text, $this->config['excerpt_length'] );
+            $excerpt = $this->trim_excerpt( $text, $length );
             if ( $excerpt ) {
                 // WPCS: XSS OK.
                 echo apply_filters( 'the_excerpt', $excerpt );
@@ -583,6 +592,11 @@ class Customify_Post_Entry {
         if ( ! is_single() ) {
             return '';
         }
+
+	    if ( get_post_type( ) != 'post' ) {
+		    return '';
+	    }
+
 //        the_post_navigation( array(
 //            'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
 //            'next_text' => __( '<span>Next post</span> %title', 'customify' ),
@@ -599,6 +613,23 @@ class Customify_Post_Entry {
 		    )
 	    );
 	    echo '</div>';
+    }
+
+
+
+	/**
+	 * Display related post
+	 */
+    function post_related(){
+	    if ( ! is_single( ) ) {
+		    return '';
+	    }
+
+	    if ( get_post_type( ) != 'post' ) {
+	        return '';
+        }
+
+	    Customify_Related_Posts::get_instance()->display();
     }
 
     /**
