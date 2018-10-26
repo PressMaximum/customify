@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-10-24 01:37:53+00:00\n"
+"POT-Creation-Date: 2018-10-26 04:35:06+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -353,7 +353,7 @@ msgid "Customify Pro Modules"
 msgstr ""
 
 #: inc/admin/dashboard.php:587
-msgid "Learn more &rarr;"
+msgid "Upgrade Now &rarr;"
 msgstr ""
 
 #: inc/blog/class-post-entry.php:243
@@ -387,19 +387,19 @@ msgstr ""
 msgid "About the Author: <span>%s</span>"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:602
+#: inc/blog/class-post-entry.php:607
 msgid "Next"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:603
+#: inc/blog/class-post-entry.php:608
 msgid "Next post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:605
+#: inc/blog/class-post-entry.php:610
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:606
+#: inc/blog/class-post-entry.php:611
 msgid "Previous post:"
 msgstr ""
 
@@ -707,7 +707,7 @@ msgstr ""
 #: inc/customizer/configs/page-header.php:290
 #: inc/customizer/configs/related-posts.php:32
 #: inc/customizer/configs/related-posts.php:139
-#: inc/customizer/configs/related-posts.php:200
+#: inc/customizer/configs/related-posts.php:201
 #: inc/customizer/configs/single-blog-post.php:38
 #: inc/customizer/configs/single-blog-post.php:98
 #: inc/customizer/configs/single-blog-post.php:179
@@ -719,7 +719,7 @@ msgid "Rating"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:198
-#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:94
+#: woocommerce/cart/cart.php:29 woocommerce/cart/cart.php:92
 msgid "Price"
 msgstr ""
 
@@ -924,7 +924,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:146
 #: inc/compatibility/woocommerce/config/header/cart.php:248
-#: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:100
+#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:98
 msgid "Quantity"
 msgstr ""
 
@@ -994,7 +994,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/single-product.php:190
 #: inc/customizer/configs/blogs.php:38
-msgid "This option available on Customify Pro plugin only."
+msgid "This option is available in Customify Pro plugin only."
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/single-product.php:191
@@ -2556,11 +2556,11 @@ msgstr ""
 msgid "Related post meta"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:212
+#: inc/customizer/configs/related-posts.php:213
 msgid "Excerpt length"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:213
+#: inc/customizer/configs/related-posts.php:214
 msgid "Custom excerpt length. Enter 0 to hide the excerpt."
 msgstr ""
 
@@ -2697,8 +2697,8 @@ msgstr ""
 msgid "Customify Pro modules available"
 msgstr ""
 
-#: inc/customizer/configs/upsell.php:27 inc/customizer/configs/upsell.php:45
-msgid "More Options on Customify Pro"
+#: inc/customizer/configs/upsell.php:27
+msgid "Header options in Customify Pro"
 msgstr ""
 
 #: inc/customizer/configs/upsell.php:33
@@ -2709,20 +2709,36 @@ msgstr ""
 msgid "Secondary Menu"
 msgstr ""
 
-#: inc/customizer/configs/upsell.php:35
+#: inc/customizer/configs/upsell.php:35 inc/customizer/configs/upsell.php:54
 msgid "Icon Box"
 msgstr ""
 
-#: inc/customizer/configs/upsell.php:36
+#: inc/customizer/configs/upsell.php:36 inc/customizer/configs/upsell.php:55
 msgid "Contact Info"
 msgstr ""
 
-#: inc/customizer/configs/upsell.php:48
-msgid "Submenu Styling"
+#: inc/customizer/configs/upsell.php:37
+msgid "And more header settings"
 msgstr ""
 
-#: inc/customizer/configs/upsell.php:49
-msgid "Submenu Typography"
+#: inc/customizer/configs/upsell.php:47
+msgid "More Footer options in Customify Pro"
+msgstr ""
+
+#: inc/customizer/configs/upsell.php:51
+msgid "Footer Top Area"
+msgstr ""
+
+#: inc/customizer/configs/upsell.php:52
+msgid "Horizontal Menu"
+msgstr ""
+
+#: inc/customizer/configs/upsell.php:53
+msgid "More HTML items"
+msgstr ""
+
+#: inc/customizer/configs/upsell.php:56
+msgid "Payment Methods"
 msgstr ""
 
 #: inc/customizer/controls/class-control-base.php:237
@@ -2982,35 +2998,35 @@ msgstr ""
 msgid "Pages:"
 msgstr ""
 
-#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:74
+#: woocommerce/cart/cart.php:28 woocommerce/cart/cart.php:72
 msgid "Product"
 msgstr ""
 
-#: woocommerce/cart/cart.php:33 woocommerce/cart/cart.php:118
+#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:116
 msgid "Total"
 msgstr ""
 
-#: woocommerce/cart/cart.php:55 woocommerce/cart/mini-cart.php:64
+#: woocommerce/cart/cart.php:53 woocommerce/cart/mini-cart.php:64
 msgid "Remove this item"
 msgstr ""
 
-#: woocommerce/cart/cart.php:89
+#: woocommerce/cart/cart.php:87
 msgid "Available on backorder"
 msgstr ""
 
-#: woocommerce/cart/cart.php:136
+#: woocommerce/cart/cart.php:134
 msgid "Coupon:"
 msgstr ""
 
-#: woocommerce/cart/cart.php:136 woocommerce/checkout/form-coupon.php:26
+#: woocommerce/cart/cart.php:134 woocommerce/checkout/form-coupon.php:26
 msgid "Coupon code"
 msgstr ""
 
-#: woocommerce/cart/cart.php:136 woocommerce/checkout/form-coupon.php:27
+#: woocommerce/cart/cart.php:134 woocommerce/checkout/form-coupon.php:27
 msgid "Apply coupon"
 msgstr ""
 
-#: woocommerce/cart/cart.php:141
+#: woocommerce/cart/cart.php:139
 msgid "Update cart"
 msgstr ""
 
