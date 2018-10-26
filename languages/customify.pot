@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.2.3\n"
+"Project-Id-Version: Customify 0.2.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-10-26 04:35:06+00:00\n"
+"POT-Creation-Date: 2018-10-26 04:43:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -706,8 +706,8 @@ msgstr ""
 #: inc/customizer/configs/header/social-icons.php:99
 #: inc/customizer/configs/page-header.php:290
 #: inc/customizer/configs/related-posts.php:32
-#: inc/customizer/configs/related-posts.php:139
-#: inc/customizer/configs/related-posts.php:201
+#: inc/customizer/configs/related-posts.php:153
+#: inc/customizer/configs/related-posts.php:215
 #: inc/customizer/configs/single-blog-post.php:38
 #: inc/customizer/configs/single-blog-post.php:98
 #: inc/customizer/configs/single-blog-post.php:179
@@ -1530,27 +1530,27 @@ msgid "Drag to reorder the meta item."
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:262
-#: inc/customizer/configs/related-posts.php:174
+#: inc/customizer/configs/related-posts.php:188
 #: inc/customizer/configs/single-blog-post.php:155
 msgid "Author"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:266
-#: inc/customizer/configs/related-posts.php:138
-#: inc/customizer/configs/related-posts.php:179
+#: inc/customizer/configs/related-posts.php:152
+#: inc/customizer/configs/related-posts.php:193
 #: inc/customizer/configs/single-blog-post.php:159
 msgid "Date"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:270
-#: inc/customizer/configs/related-posts.php:183
+#: inc/customizer/configs/related-posts.php:197
 #: inc/customizer/configs/single-blog-post.php:59
 #: inc/customizer/configs/single-blog-post.php:163
 msgid "Categories"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:274
-#: inc/customizer/configs/related-posts.php:188
+#: inc/customizer/configs/related-posts.php:202
 #: inc/customizer/configs/single-blog-post.php:167
 msgid "Comment"
 msgstr ""
@@ -1919,7 +1919,7 @@ msgid "Menu Icon"
 msgstr ""
 
 #: inc/customizer/configs/header/nav-icon.php:35
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:645
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:653
 msgid "Menu"
 msgstr ""
 
@@ -2520,47 +2520,51 @@ msgstr ""
 msgid "Image Position"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:121
-msgid "Thumbnail Width"
+#: inc/customizer/configs/related-posts.php:119
+msgid "Custom Thumbnail Height"
 msgstr ""
 
 #: inc/customizer/configs/related-posts.php:135
+msgid "Custom Thumbnail Width"
+msgstr ""
+
+#: inc/customizer/configs/related-posts.php:149
 msgid "Order by"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:140
+#: inc/customizer/configs/related-posts.php:154
 msgid "Post order"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:141
+#: inc/customizer/configs/related-posts.php:155
 msgid "Random"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:142
+#: inc/customizer/configs/related-posts.php:156
 msgid "Comment count"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:153
+#: inc/customizer/configs/related-posts.php:167
 msgid "Order"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:155
+#: inc/customizer/configs/related-posts.php:169
 msgid "Desc"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:156
+#: inc/customizer/configs/related-posts.php:170
 msgid "Asc"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:164
+#: inc/customizer/configs/related-posts.php:178
 msgid "Related post meta"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:213
+#: inc/customizer/configs/related-posts.php:227
 msgid "Excerpt length"
 msgstr ""
 
-#: inc/customizer/configs/related-posts.php:214
+#: inc/customizer/configs/related-posts.php:228
 msgid "Custom excerpt length. Enter 0 to hide the excerpt."
 msgstr ""
 
@@ -2871,7 +2875,7 @@ msgid "Move Up"
 msgstr ""
 
 #: inc/customizer/controls/class-control-repeater.php:25
-#: inc/panel-builder/class-customize-layout-builder-frontend.php:648
+#: inc/panel-builder/class-customize-layout-builder-frontend.php:656
 #: inc/panel-builder/class-customize-layout-builder.php:337
 msgid "Close"
 msgstr ""
