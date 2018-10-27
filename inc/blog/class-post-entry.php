@@ -446,7 +446,7 @@ class Customify_Post_Entry {
     /**
      * Post excerpt markup
      */
-    function post_excerpt( $type = '', $length = false ){
+    function post_excerpt( $post = null, $type = '', $length = false ){
         if ( ! $type ) {
 	        $type = $this->config['excerpt_type'];
         }
@@ -454,7 +454,6 @@ class Customify_Post_Entry {
         if ( ! $length ) {
             $length = $this->config['excerpt_length'];
         }
-
 
         echo '<div class="entry-excerpt entry--item">';
         if ( $type  == 'excerpt' ) {

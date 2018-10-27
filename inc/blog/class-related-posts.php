@@ -169,7 +169,7 @@ class Customify_Related_Posts {
                         the_title('<h2 class="entry-title entry--item">'.$link, '</a></h2>');
                         Customify_Post_Entry::get_instance()->post_meta( $post, $meta_config, $meta_args );
                         if ( $excerpt_length > 0 ) {
-                            Customify_Post_Entry::get_instance()->post_excerpt( 'custom', $excerpt_length );
+                            Customify_Post_Entry::get_instance()->post_excerpt( $post, 'custom', $excerpt_length );
                         }
                         ?>
                     </div>

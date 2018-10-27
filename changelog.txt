@@ -1,3 +1,7 @@
+= 0.2.5 =
+* FIXED: Full blog post content for post excerpt type.
+
+
 = 0.2.4 =
 * NEW: Add related posts for single post.
 * NEW: WooCommerce product onsale bubble styling.
