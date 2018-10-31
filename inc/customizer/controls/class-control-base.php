@@ -147,9 +147,14 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
                 if( empty( $this->json['value'] ) ) {
                     $this->json['value'] = $this->defaultValue;
                 }
+
+	            $this->json['value'] = $this->merge_items( $this->json['value'], $this->defaultValue );
+
             } else {
                 $this->json['addable'] = true;
             }
+
+
 
             // Just make live title file translate able.
             if ( $this->title_only && $this->live_title_field ) {
@@ -186,7 +191,39 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
             $this->json['checkbox_label'] = $this->checkbox_label;
         }
 
+    }
 
+	/**
+     * Merge 2 array width `_key` is key of each item
+     *
+     * @since 0.2.5
+     *
+	 * @param array $destination
+	 * @param array $new_array
+	 *
+	 * @return array
+	 */
+    function merge_items( $destination = array(), $new_array = array() ){
+
+        $keys = array();
+        foreach ( $destination as $item ){
+            if ( isset( $item['_key'] ) ) {
+	            $keys[ $item['_key'] ] = $item['_key'];
+            }
+        }
+        if ( empty( $keys ) ) {
+            return $destination;
+        }
+
+        foreach ( $new_array as $new_item ) {
+            if ( isset( $new_item['_key'] ) ) {
+                if ( ! isset( $keys[ $new_item['_key']  ] ) ) {
+	                $destination[] = $new_item;
+                }
+            }
+        }
+
+        return $destination;
     }
 
 

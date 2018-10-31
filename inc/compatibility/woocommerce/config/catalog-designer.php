@@ -14,7 +14,25 @@ class Customify_WC_Catalog_Designer {
 		add_action( 'customify_wc_product_loop', array( $this, 'render' ) );
 	}
 
-	function render(  ) {
+	/**
+	 * Get callback function for item part
+	 *
+	 * @param $item
+	 *
+	 * @return string|object|boolean
+	 */
+	function callback( $item_id ){
+		$cb = apply_filters( 'customify/product-designer/part', false, $item_id, $this );
+		if ( ! is_callable( $cb ) ) {
+			$cb = array( $this, 'product__' . $item_id );
+		}
+		if ( is_callable( $cb ) ) {
+			return $cb;
+		}
+		return false;
+	}
+
+	function render( ) {
 
 		$items = Customify()->get_setting( 'wc_cd_positions' );
 
@@ -23,7 +41,11 @@ class Customify_WC_Catalog_Designer {
 
 		$this->configs = apply_filters( 'customify_wc_catalog_designer/configs', $this->configs );
 
-		$this->product__media();
+		$cb = $this->callback( 'media' );
+		if ( $cb ) {
+			// $this->product__media();
+			call_user_func( $cb, array( null, $this ) );
+		}
 
 		echo '<div class="wc-product-contents">';
 
@@ -33,50 +55,59 @@ class Customify_WC_Catalog_Designer {
 		 */
 		do_action( 'woocommerce_before_shop_loop_item' );
 
-		foreach ( ( array ) $items as $item ) {
-			$item = wp_parse_args( $item, array(
-				'_key'         => '',
-				'_visibility'  => '',
-				'show_in_grid' => 1,
-				'show_in_list' => 1,
-			) );
-			if ( $item['_visibility'] !== 'hidden' ) {
-				$cb = apply_filters( 'customify/product-designer/part', false, $item['_key'] );
-				if ( ! is_callable( $cb ) ) {
-					$cb = array( $this, 'product__' . $item['_key'] );
-				}
+		$html = '';
 
-				if ( is_callable( $cb ) ) {
-					$classes   = array();
-					$classes[] = 'wc-product__part';
-					$classes[] = 'wc-product__' . $item['_key'];
+		/**
+		 * Allow 3rg party to render items html
+		 */
+		$html = apply_filters( 'customify/product-designer/render_html', $html, $items, $this );
 
-					if ( $item['show_in_grid'] ) {
-						$classes[] = 'show-in-grid';
-					} else {
-						$classes[] = 'hide-in-grid';
+		if ( ! $html ) {
+			foreach ( ( array ) $items as $item ) {
+				$item = wp_parse_args( $item, array(
+					'_key'         => '',
+					'_visibility'  => '',
+					'show_in_grid' => 1,
+					'show_in_list' => 1,
+				) );
+				if ( $item['_visibility'] !== 'hidden' ) {
+
+					$cb = $this->callback( $item['_key'] );
+
+					if ( is_callable( $cb ) ) {
+						$classes   = array();
+						$classes[] = 'wc-product__part';
+						$classes[] = 'wc-product__' . $item['_key'];
+
+						if ( $item['show_in_grid'] ) {
+							$classes[] = 'show-in-grid';
+						} else {
+							$classes[] = 'hide-in-grid';
+						}
+						if ( $item['show_in_list'] ) {
+							$classes[] = 'show-in-list';
+						} else {
+							$classes[] = 'hide-in-list';
+						}
+
+						$item_html = '';
+						ob_start();
+						call_user_func( $cb, array( $item, $this ) );
+						$item_html = ob_get_contents();
+						ob_end_clean();
+
+						if ( trim( $item_html ) != '' ) {
+							$html .= '<div class="' . esc_attr( join( ' ', $classes ) ) . '">';
+							$html .= $item_html;
+							$html .= '</div>';
+						}
+
 					}
-					if ( $item['show_in_list'] ) {
-						$classes[] = 'show-in-list';
-					} else {
-						$classes[] = 'hide-in-list';
-					}
-
-					$item_html = '';
-					ob_start();
-					call_user_func( $cb, array() );
-					$item_html = ob_get_contents();
-					ob_end_clean();
-
-					if ( trim( $item_html ) != '' ) {
-						echo '<div class="' . esc_attr( join( ' ', $classes ) ) . '">';
-						echo $item_html;
-						echo '</div>';
-					}
-
 				}
 			}
 		}
+
+		 echo $html; //  WPCS: XSS OK.
 
 		/**
 		 * Hook: woocommerce_after_shop_loop_item.
@@ -101,6 +132,64 @@ class Customify_WC_Catalog_Designer {
 		return $args;
 	}
 
+	/**
+	 * Get Default builder items for product designer
+	 *
+	 * @since 2.0.5
+	 *
+	 * @return array
+	 */
+	function get_default_items(){
+		$items = array(
+			array(
+				'_key'         => 'category',
+				'_visibility'  => '',
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
+				'title'        => __( 'Category', 'customify' ),
+			),
+			array(
+				'_visibility'  => '',
+				'_key'         => 'title',
+				'title'        => __( 'Title', 'customify' ),
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
+			),
+			array(
+				'_key'         => 'rating',
+				'_visibility'  => '',
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
+				'title'        => __( 'Rating', 'customify' ),
+			),
+
+			array(
+				'_key'         => 'price',
+				'_visibility'  => '',
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
+				'title'        => __( 'Price', 'customify' ),
+			),
+			array(
+				'_key'         => 'description',
+				'_visibility'  => '',
+				'show_in_grid' => 0,
+				'show_in_list' => 1,
+				'title'        => __( 'Short Description', 'customify' ),
+			),
+			array(
+				'_key'         => 'add_to_cart',
+				'_visibility'  => '',
+				'show_in_grid' => 1,
+				'show_in_list' => 1,
+				'title'        => __( 'Add To Cart', 'customify' ),
+			),
+		);
+
+		return apply_filters( 'customify/product-designer/body-items', $items );
+	}
+
+
 	function config( $configs ) {
 
 		$section = 'wc_catalog_designer';
@@ -119,6 +208,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'checkbox',
 			'section'         => $section,
 			'default'         => 1,
+			'priority'        => 10,
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'checkbox_label'  => __( 'Show Catalog Filtering Bar', 'customify' ),
@@ -133,6 +223,7 @@ class Customify_WC_Catalog_Designer {
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'checkbox_label'  => __( 'Show Grid/List View Buttons', 'customify' ),
+			'priority'        => 11,
 			//'required'        => array( 'wc_cd_show_catalog_header', '=', 1 ),
 		);
 
@@ -141,6 +232,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'select',
 			'section'         => $section,
 			'default'         => 'grid',
+			'priority'        => 12,
 			'choices'         => array(
 				'grid' => __( 'Grid', 'customify' ),
 				'list' => __( 'List', 'customify' ),
@@ -161,77 +253,34 @@ class Customify_WC_Catalog_Designer {
 			'section'          => $section,
 			'label'            => __( 'Item Positions', 'customify' ),
 			'type'             => 'repeater',
-			'title'            => __( 'Body', 'customify' ),
 			'live_title_field' => 'title',
-			'limit'            => 4,
 			'addable'          => false,
+			'priority'        => 15,
 			'selector'         => '.wc-product-listing',
 			'render_callback'  => 'woocommerce_content',
-			'default'          => array(
+			'default'          => $this->get_default_items(),
+			'fields'           => apply_filters( 'customify/product-designer/body-field-config',
 				array(
-					'_key'         => 'category',
-					'_visibility'  => '',
-					'show_in_grid' => 1,
-					'show_in_list' => 1,
-					'title'        => __( 'Category', 'customify' ),
-				),
-				array(
-					'_visibility'  => '',
-					'_key'         => 'title',
-					'title'        => __( 'Title', 'customify' ),
-					'show_in_grid' => 1,
-					'show_in_list' => 1,
-				),
-				array(
-					'_key'         => 'rating',
-					'_visibility'  => '',
-					'show_in_grid' => 1,
-					'show_in_list' => 1,
-					'title'        => __( 'Rating', 'customify' ),
-				),
-
-				array(
-					'_key'         => 'price',
-					'_visibility'  => '',
-					'show_in_grid' => 1,
-					'show_in_list' => 1,
-					'title'        => __( 'Price', 'customify' ),
-				),
-				array(
-					'_key'         => 'description',
-					'_visibility'  => '',
-					'show_in_grid' => 0,
-					'show_in_list' => 1,
-					'title'        => __( 'Short Description', 'customify' ),
-				),
-				array(
-					'_key'         => 'add_to_cart',
-					'_visibility'  => '',
-					'show_in_grid' => 1,
-					'show_in_list' => 1,
-					'title'        => __( 'Add To Cart', 'customify' ),
-				),
-			),
-			'fields'           => array(
-				array(
-					'name' => '_key',
-					'type' => 'hidden',
-				),
-				array(
-					'name'  => 'title',
-					'type'  => 'hidden',
-					'label' => __( 'Title', 'customify' ),
-				),
-				array(
-					'name'           => 'show_in_grid',
-					'type'           => 'checkbox',
-					'checkbox_label' => __( 'Show in grid view', 'customify' ),
-				),
-				array(
-					'name'           => 'show_in_list',
-					'type'           => 'checkbox',
-					'checkbox_label' => __( 'Show in list view', 'customify' ),
-				),
+					array(
+						'name' => '_key',
+						'type' => 'hidden',
+					),
+					array(
+						'name'  => 'title',
+						'type'  => 'hidden',
+						'label' => __( 'Title', 'customify' ),
+					),
+					array(
+						'name'           => 'show_in_grid',
+						'type'           => 'checkbox',
+						'checkbox_label' => __( 'Show in grid view', 'customify' ),
+					),
+					array(
+						'name'           => 'show_in_list',
+						'type'           => 'checkbox',
+						'checkbox_label' => __( 'Show in list view', 'customify' ),
+					),
+				)
 			)
 		);
 
@@ -242,6 +291,7 @@ class Customify_WC_Catalog_Designer {
 			'min'             => 0,
 			'step'            => 1,
 			'max'             => 100,
+			'priority'        => 16,
 			'section'         => $section,
 			'title'           => __( 'Item Spacing', 'customify' ),
 			'selector'        => '.wc-product-inner .wc-product-contents > *',
@@ -252,6 +302,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_excerpt_type',
 			'type'            => 'select',
 			'section'         => $section,
+			'priority'        => 17,
 			'title'           => __( 'List view excerpt type', 'customify' ),
 			'choices'      => array(
 				'excerpt' => __( 'Product short description', 'customify' ),
@@ -265,6 +316,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_excerpt_length',
 			'type'            => 'text',
 			'section'         => $section,
+			'priority'        => 18,
 			'title'           => __( 'Custom list view excerpt length', 'customify' ),
 			'required'        => array( 'wc_cd_excerpt_type', '=', 'custom' )
 		);
@@ -274,6 +326,7 @@ class Customify_WC_Catalog_Designer {
 			'name'    => 'wc_cd_memdia_h',
 			'type'    => 'heading',
 			'section' => $section,
+			'priority'   => 19,
 			'label'   => __( 'Product Media & Alignment', 'customify' ),
 		);
 
@@ -284,6 +337,7 @@ class Customify_WC_Catalog_Designer {
 			'unit'            => '%',
 			'max'             => 100,
 			'device_settings' => true,
+			'priority'   => 20,
 			'selector'        => 'format',
 			'css_format'      => '.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media { flex-basis: {{value_no_unit}}%; } .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents{ flex-basis: calc(100% - {{value_no_unit}}%); }',
 			'title'           => __( 'List View Media Width', 'customify' ),
@@ -299,6 +353,7 @@ class Customify_WC_Catalog_Designer {
 			),
 			'section'         => $section,
 			'default'         => 'first',
+			'priority'   => 21,
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'description'     => __( 'This setting adds a hover effect that will reveal a secondary product thumbnail to product images on your product listings. This is ideal for displaying front and back images of products.', 'customify' ),
@@ -310,6 +365,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'text_align_no_justify',
 			'section'         => $section,
 			'device_settings' => true,
+			'priority'   => 22,
 			'selector'        => '.wc-grid-view .wc-product-contents',
 			'css_format'      => 'text-align: {{value}};',
 			'title'           => __( 'Grid View - Content Alignment', 'customify' ),
@@ -320,6 +376,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'text_align_no_justify',
 			'section'         => $section,
 			'device_settings' => true,
+			'priority'   => 23,
 			'selector'        => '.wc-list-view .wc-product-contents',
 			'css_format'      => 'text-align: {{value}};',
 			'title'           => __( 'List View - Content Alignment', 'customify' ),
@@ -330,6 +387,7 @@ class Customify_WC_Catalog_Designer {
 			'name'    => 'wc_cd_sale_bubble_h',
 			'type'    => 'heading',
 			'section' => $section,
+			'priority'   => 24,
 			'label'   => __( 'Product Onsale Bubble', 'customify' ),
 		);
 
@@ -337,6 +395,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_sale_bubble_type',
 			'type'            => 'select',
 			'default'         => 'text',
+			'priority'   => 25,
 			'choices'         => array(
 				'text'    => __( 'Text', 'customify' ),
 				'percent' => __( 'Discount percent', 'customify' ),
@@ -352,6 +411,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_sale_bubble_styling',
 			'type'            => 'styling',
 			'section'         => $section,
+			'priority'   => 26,
 			'title'           => __( 'Styling', 'customify' ),
 			'selector'    => array(
 				'normal' =>'.woocommerce span.onsale',

@@ -169,6 +169,8 @@ div.product {
             display: inline-block;
             transition: all 0.3s linear;
             box-sizing: content-box;
+            overflow: hidden;
+            line-height: 10em;
             &:hover, &:focus {
                 opacity: 1;
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
