@@ -286,24 +286,10 @@ class Customify_WC_Catalog_Designer {
 		);
 
 		$configs[] = array(
-			'name'            => 'wc_cd_item_spacing',
-			'type'            => 'slider',
-			'device_settings' => false,
-			'min'             => 0,
-			'step'            => 1,
-			'max'             => 100,
-			'priority'        => 16,
-			'section'         => $section,
-			'title'           => __( 'Item Spacing', 'customify' ),
-			'selector'        => '.wc-product-inner .wc-product-contents > *',
-			'css_format'      => 'margin-top: {{value}}'
-		);
-
-		$configs[] = array(
 			'name'            => 'wc_cd_excerpt_type',
 			'type'            => 'select',
 			'section'         => $section,
-			'priority'        => 17,
+			'priority'        => 15,
 			'title'           => __( 'List view excerpt type', 'customify' ),
 			'choices'      => array(
 				'excerpt' => __( 'Product short description', 'customify' ),
@@ -317,10 +303,11 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_excerpt_length',
 			'type'            => 'text',
 			'section'         => $section,
-			'priority'        => 18,
+			'priority'        => 15,
 			'title'           => __( 'Custom list view excerpt length', 'customify' ),
 			'required'        => array( 'wc_cd_excerpt_type', '=', 'custom' )
 		);
+
 
 		// Product Media
 		$configs[] = array(
