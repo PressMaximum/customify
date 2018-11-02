@@ -206,24 +206,44 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
     function merge_items( $destination = array(), $new_array = array() ){
 
         $keys = array();
-        foreach ( $destination as $item ){
-            if ( isset( $item['_key'] ) ) {
-	            $keys[ $item['_key'] ] = $item['_key'];
-            }
-        }
+        $new_keys = array();
+
+	    foreach ( $destination as $item ){
+		    if ( isset( $item['_key'] ) ) {
+			    $keys[ $item['_key'] ] = $item['_key'];
+		    }
+	    }
+
         if ( empty( $keys ) ) {
             return $destination;
         }
 
-        foreach ( $new_array as $new_item ) {
-            if ( isset( $new_item['_key'] ) ) {
-                if ( ! isset( $keys[ $new_item['_key']  ] ) ) {
-	                $destination[] = $new_item;
+        // Add item if it not in saved list
+        foreach ( $new_array as $item ) {
+            if ( isset( $item['_key'] ) ) {
+	            $new_keys[ $item['_key'] ] = $item['_key'];
+                if ( ! isset( $keys[ $item['_key']  ] ) ) {
+	                $destination[] = $item;
                 }
             }
         }
 
-        return $destination;
+        // Remove the item not in the defined list
+        $new_destination = array();
+	    foreach ( $destination as $_dk => $item ) {
+		    if ( isset( $item['_key'] ) ) {
+			    if ( ! isset( $new_keys[ $item['_key'] ] ) ) {
+				   // print_r( $_dk );
+				  // unset( $destination[ $_dk ] );
+			    } else {
+				    $new_destination[] = $item;
+                }
+            } else {
+			    $new_destination[] = $item;
+            }
+	    }
+
+        return $new_destination;
     }
 
 
