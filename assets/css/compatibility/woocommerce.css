@@ -2320,6 +2320,8 @@ div.product div.images .woocommerce-product-gallery__trigger {
   display: inline-block;
   transition: all 0.3s linear;
   box-sizing: content-box;
+  overflow: hidden;
+  line-height: 10em;
 }
 div.product div.images .woocommerce-product-gallery__trigger:hover, div.product div.images .woocommerce-product-gallery__trigger:focus {
   opacity: 1;

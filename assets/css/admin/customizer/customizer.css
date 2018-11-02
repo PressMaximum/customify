@@ -1337,7 +1337,6 @@ html[dir="rtl"] .customify-modal-settings:before {
 .customify--field-checkbox .customify-field-settings-inner {
   padding-right: 30px;
   position: relative;
-  display: block;
   font-size: 14px;
   line-height: 24px;
   font-weight: 600;
@@ -1361,6 +1360,21 @@ html[dir="rtl"] .customify-modal-settings:before {
 }
 .customize-control-customify-checkbox .has-title-desc .checkbox-field-text {
   display: none !important;
+}
+
+.preview-desktop .customify--field-checkbox .customify--for-tablet,
+.preview-desktop .customify--field-checkbox .customify--for-mobile {
+  display: none;
+}
+
+.preview-tablet .customify--field-checkbox .customify--for-desktop,
+.preview-tablet .customify--field-checkbox .customify--for-mobile {
+  display: none;
+}
+
+.preview-mobile .customify--field-checkbox .customify--for-desktop,
+.preview-mobile .customify--field-checkbox .customify--for-tablet {
+  display: none;
 }
 
 /* OnOff Button */

@@ -1384,7 +1384,6 @@ $text_color: #555d66;
     .customify-field-settings-inner {
         padding-right: 30px;
         position: relative;
-        display: block;
         font-size: 14px;
         line-height: 24px;
         font-weight: 600;
@@ -1414,6 +1413,34 @@ $text_color: #555d66;
         }
     }
 }
+
+.preview-desktop {
+    .customify--field-checkbox {
+        .customify--for-tablet,
+        .customify--for-mobile {
+            display: none;
+        }
+    }
+}
+
+.preview-tablet {
+    .customify--field-checkbox {
+        .customify--for-desktop,
+        .customify--for-mobile {
+            display: none;
+        }
+    }
+}
+
+.preview-mobile {
+    .customify--field-checkbox {
+        .customify--for-desktop,
+        .customify--for-tablet {
+            display: none;
+        }
+    }
+}
+
 
 /* OnOff Button */
 .onoffswitch {
