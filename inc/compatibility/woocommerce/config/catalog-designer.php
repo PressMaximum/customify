@@ -211,7 +211,8 @@ class Customify_WC_Catalog_Designer {
 			'priority'        => 10,
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
-			'checkbox_label'  => __( 'Show Catalog Filtering Bar', 'customify' ),
+			'label'  => __( 'Show Catalog Filtering Bar', 'customify' ),
+			'description'  => sprintf( __( 'Filtering Bar only show if the sidebar <code>WooCommerce Off Canvas Filter</code> has widget items. Click <a href="%1$s" target="_blank">here</a> to add widgets', 'customify' ), admin_url( 'widgets.php' ) ),
 		);
 
 		// Show view mod
@@ -251,7 +252,7 @@ class Customify_WC_Catalog_Designer {
 		$configs[] = array(
 			'name'             => "wc_cd_positions",
 			'section'          => $section,
-			'label'            => __( 'Item Positions', 'customify' ),
+			'label'            => __( 'Outer Media Items & Positions', 'customify' ),
 			'type'             => 'repeater',
 			'live_title_field' => 'title',
 			'addable'          => false,
