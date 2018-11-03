@@ -289,7 +289,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_excerpt_type',
 			'type'            => 'select',
 			'section'         => $section,
-			'priority'        => 15,
+			'priority'        => 17,
 			'title'           => __( 'List view excerpt type', 'customify' ),
 			'choices'      => array(
 				'excerpt' => __( 'Product short description', 'customify' ),
@@ -303,18 +303,17 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_excerpt_length',
 			'type'            => 'text',
 			'section'         => $section,
-			'priority'        => 15,
+			'priority'        => 17,
 			'title'           => __( 'Custom list view excerpt length', 'customify' ),
 			'required'        => array( 'wc_cd_excerpt_type', '=', 'custom' )
 		);
-
 
 		// Product Media
 		$configs[] = array(
 			'name'    => 'wc_cd_memdia_h',
 			'type'    => 'heading',
 			'section' => $section,
-			'priority'   => 19,
+			'priority'   => 25,
 			'label'   => __( 'Product Media & Alignment', 'customify' ),
 		);
 
@@ -325,7 +324,7 @@ class Customify_WC_Catalog_Designer {
 			'unit'            => '%',
 			'max'             => 100,
 			'device_settings' => true,
-			'priority'   => 20,
+			'priority'        => 26,
 			'selector'        => 'format',
 			'css_format'      => '.woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-media { flex-basis: {{value_no_unit}}%; } .woocommerce-listing.wc-list-view .product.customify-col:not(.product-category) .wc-product-inner .wc-product-contents{ flex-basis: calc(100% - {{value_no_unit}}%); }',
 			'title'           => __( 'List View Media Width', 'customify' ),
@@ -341,7 +340,7 @@ class Customify_WC_Catalog_Designer {
 			),
 			'section'         => $section,
 			'default'         => 'first',
-			'priority'   => 21,
+			'priority'        => 27,
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'description'     => __( 'This setting adds a hover effect that will reveal a secondary product thumbnail to product images on your product listings. This is ideal for displaying front and back images of products.', 'customify' ),
@@ -353,7 +352,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'text_align_no_justify',
 			'section'         => $section,
 			'device_settings' => true,
-			'priority'   => 22,
+			'priority'        => 28,
 			'selector'        => '.wc-grid-view .wc-product-contents',
 			'css_format'      => 'text-align: {{value}};',
 			'title'           => __( 'Grid View - Content Alignment', 'customify' ),
@@ -364,7 +363,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'text_align_no_justify',
 			'section'         => $section,
 			'device_settings' => true,
-			'priority'   => 23,
+			'priority'        => 29,
 			'selector'        => '.wc-list-view .wc-product-contents',
 			'css_format'      => 'text-align: {{value}};',
 			'title'           => __( 'List View - Content Alignment', 'customify' ),
@@ -375,7 +374,7 @@ class Customify_WC_Catalog_Designer {
 			'name'    => 'wc_cd_sale_bubble_h',
 			'type'    => 'heading',
 			'section' => $section,
-			'priority'   => 24,
+			'priority'   => 30,
 			'label'   => __( 'Product Onsale Bubble', 'customify' ),
 		);
 
@@ -383,7 +382,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_sale_bubble_type',
 			'type'            => 'select',
 			'default'         => 'text',
-			'priority'   => 25,
+			'priority'        => 31,
 			'choices'         => array(
 				'text'    => __( 'Text', 'customify' ),
 				'percent' => __( 'Discount percent', 'customify' ),
@@ -399,7 +398,7 @@ class Customify_WC_Catalog_Designer {
 			'name'            => 'wc_cd_sale_bubble_styling',
 			'type'            => 'styling',
 			'section'         => $section,
-			'priority'   => 26,
+			'priority'        => 32,
 			'title'           => __( 'Styling', 'customify' ),
 			'selector'    => array(
 				'normal' =>'.woocommerce span.onsale',
@@ -568,7 +567,6 @@ class Customify_WC_Catalog_Designer {
 	function product__add_to_cart() {
 		woocommerce_template_loop_add_to_cart();
 	}
-
 
 }
 
