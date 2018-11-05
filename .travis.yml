@@ -12,6 +12,12 @@ language: php
 # https://blog.travis-ci.com/2017-07-11-trusty-as-default-linux-is-coming
 dist: precise
 
+notifications:
+  email:
+    on_success: never
+    on_failure: change
+  slack: pressmaximum:WaFytA2hT7wKIFnc3mSOJSTy
+
 # Declare versions of PHP to use. Use one decimal max.
 matrix:
   fast_finish: true

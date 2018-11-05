@@ -57,7 +57,7 @@ add_filter( 'customify_the_title', 'do_shortcode' );
 add_filter( 'customify_the_title', 'convert_smilies' );
 
 // Include the main Customify class.
-require_once get_template_directory().'/inc/class-customify.php';
+require_once get_template_directory() . '/inc/class-customify.php';
 
 /**
  * Main instance of Customify.
@@ -66,8 +66,9 @@ require_once get_template_directory().'/inc/class-customify.php';
  *
  * @return Customify
  */
-function Customify(){
-    return Customify::get_instance();
+function Customify() {
+	return Customify::get_instance();
 }
+
 Customify();
 
