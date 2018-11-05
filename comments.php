@@ -24,40 +24,40 @@ if ( post_password_required() ) {
 	<?php
 	// You can start editing here -- including this comment!
 	if ( have_comments() ) : ?>
-		<h4 class="comments-title">
+        <h4 class="comments-title">
 			<?php
 			$comment_count = get_comments_number();
 			if ( 1 === $comment_count ) {
 				printf(
-					/* translators: 1: title. */
+				/* translators: 1: title. */
 					esc_html__( 'One thought on &ldquo;%1$s&rdquo;', 'customify' ),
 					'<span>' . get_the_title() . '</span>'
 				);
 			} else {
 				printf( // WPCS: XSS OK.
-					/* translators: 1: comment count number, 2: title. */
+				/* translators: 1: comment count number, 2: title. */
 					esc_html( _nx( '%1$s Comment', '%1$s Comments', $comment_count, 'comments title', 'customify' ) ),
 					number_format_i18n( $comment_count )
 				);
 			}
 			?>
-		</h4><!-- .comments-title -->
+        </h4><!-- .comments-title -->
 
 		<?php the_comments_navigation(); ?>
 
-		<ol class="comment-list">
+        <ol class="comment-list">
 			<?php
-				wp_list_comments( array(
-					'callback' => 'customify_comment'
-				) );
+			wp_list_comments( array(
+				'callback' => 'customify_comment'
+			) );
 			?>
-		</ol><!-- .comment-list -->
+        </ol><!-- .comment-list -->
 
 		<?php the_comments_navigation();
 
 		// If comments are closed and there are comments, let's leave a little note, shall we?
 		if ( ! comments_open() ) : ?>
-			<p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'customify' ); ?></p>
+            <p class="no-comments"><?php esc_html_e( 'Comments are closed.', 'customify' ); ?></p>
 		<?php
 		endif;
 
