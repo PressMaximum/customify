@@ -1,11 +1,17 @@
 <?php
 if ( ! function_exists( 'customify_customizer_compatibility_config' ) ) {
+	/**
+	 * Add compatibility panel.
+	 *
+	 * @param array $configs List customize settings.
+	 *
+	 * @return array
+	 */
 	function customify_customizer_compatibility_config( $configs ) {
 
 		$panel  = 'compatibility';
 		$config = array(
-
-			// Layout panel
+			// Layout panel.
 			array(
 				'name'     => $panel . '_panel',
 				'type'     => 'panel',

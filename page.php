@@ -13,12 +13,13 @@
  */
 
 get_header(); ?>
-    <div class="content-inner">
+	<div class="content-inner">
 		<?php
 		do_action( 'customify/content/before' );
 
 		if ( ! customify_is_e_theme_location( 'single' ) ) {
-			while ( have_posts() ) : the_post();
+			while ( have_posts() ) :
+				the_post();
 				get_template_part( 'template-parts/content', 'page' );
 
 				// If comments are open or we have at least one comment, load up the comment template.
@@ -29,6 +30,6 @@ get_header(); ?>
 		}
 		do_action( 'customify/content/after' );
 		?>
-    </div><!-- #.content-inner -->
+	</div><!-- #.content-inner -->
 <?php
 get_footer();

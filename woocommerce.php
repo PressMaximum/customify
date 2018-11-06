@@ -13,12 +13,12 @@
  */
 
 get_header(); ?>
-    <div class="content-inner">
-        <?php
-        do_action('customify/content/before');
-        woocommerce_content();
-        do_action('customify/content/after');
-        ?>
-    </div><!-- #.content-inner -->
+	<div class="content-inner">
+		<?php
+		do_action( 'customify/content/before' );
+		woocommerce_content();
+		do_action( 'customify/content/after' );
+		?>
+	</div><!-- #.content-inner -->
 <?php
 get_footer();

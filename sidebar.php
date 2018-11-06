@@ -13,9 +13,9 @@ if ( ! is_active_sidebar( $sidebar_id ) ) {
 }
 ?>
 <aside id="sidebar-primary" <?php customify_sidebar_primary_class(); ?>>
-    <div class="sidebar-primary-inner sidebar-inner widget-area">
+	<div class="sidebar-primary-inner sidebar-inner widget-area">
 		<?php do_action( 'customify/sidebar-primary/before' ); ?>
 		<?php dynamic_sidebar( $sidebar_id ); ?>
 		<?php do_action( 'customify/sidebar-primary/after' ); ?>
-    </div>
+	</div>
 </aside><!-- #sidebar-primary -->

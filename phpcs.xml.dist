@@ -8,16 +8,15 @@
 
 	<!-- Include the WordPress ruleset, with space for exclusions if necessary. -->
 	<rule ref="WordPress-Core">
-		<exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
-		<exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
-
-		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-
-		<exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
-		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
-		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
-		<exclude name="Squiz.Commenting.InlineComment.NotCapital" />
-	</rule>
+            <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect" />
+            <exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact" />
+            <exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
+            <exclude name="Squiz.Commenting.FileComment.SpacingAfterComment" />
+            <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
+            <exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+            <exclude name="Squiz.Commenting.InlineComment.NotCapital" />
+            <exclude name="WordPress.NamingConventions.ValidFunctionName" />
+        </rule>
 	<rule ref="WordPress-Docs">
 
 	</rule>
@@ -25,4 +24,11 @@
 	<rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
 		<severity>0</severity>
 	</rule>
+
+	<rule ref="WordPress.NamingConventions.ValidHookName">
+		<properties>
+			<property name="additionalWordDelimiters" value="/-" />
+		</properties>
+	</rule>
+
 </ruleset>

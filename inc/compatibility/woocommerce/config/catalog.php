@@ -10,13 +10,13 @@ class Customify_WC_Products {
 		$section = 'woocommerce_product_catalog';
 
 		$configs[] = array(
-			'name'    => "woocommerce_catalog_tablet_columns",
+			'name'    => 'woocommerce_catalog_tablet_columns',
 			'type'    => 'text',
 			'section' => $section,
 			'label'   => __( 'Products per row on tablet', 'customify' ),
 		);
 		$configs[] = array(
-			'name'    => "woocommerce_catalog_mobile_columns",
+			'name'    => 'woocommerce_catalog_mobile_columns',
 			'type'    => 'text',
 			'section' => $section,
 			'default' => 1,

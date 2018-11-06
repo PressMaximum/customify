@@ -13,7 +13,7 @@
  */
 
 get_header(); ?>
-    <div class="content-inner">
+	<div class="content-inner">
 		<?php
 		do_action( 'customify/content/before' );
 		if ( is_singular() ) {
@@ -33,6 +33,6 @@ get_header(); ?>
 		}
 		do_action( 'customify/content/after' );
 		?>
-    </div><!-- #.content-inner -->
+	</div><!-- #.content-inner -->
 <?php
 get_footer();

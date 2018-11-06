@@ -1,8 +1,8 @@
 <?php
 
-require_once get_template_directory().'/inc/panel-builder/class-customize-builder-panel.php';
-require_once get_template_directory().'/inc/panel-builder/class-customize-layout-builder.php';
-require_once get_template_directory().'/inc/panel-builder/class-customize-layout-builder-frontend.php';
+require_once get_template_directory() . '/inc/panel-builder/class-customize-builder-panel.php';
+require_once get_template_directory() . '/inc/panel-builder/class-customize-layout-builder.php';
+require_once get_template_directory() . '/inc/panel-builder/class-customize-layout-builder-frontend.php';
 
 /**
  * Alias of class Customify_Customize_Layout_Builder
@@ -36,19 +36,21 @@ function customify_customize_render_header() {
 	echo Customify_Customize_Layout_Builder_Frontend()->close_icon( ' close-panel close-sidebar-panel' );
 	/**
 	 * Hook before header
+	 *
 	 * @since 0.2.2
 	 */
-    do_action( 'customizer/before-header' );
+	do_action( 'customizer/before-header' );
 	echo '<header id="masthead" class="site-header">';
-        echo '<div id="masthead-inner" class="site-header-inner">';
-            $list_items = Customify_Customize_Layout_Builder()->get_builder_items( 'header' );
-            Customify_Customize_Layout_Builder_Frontend()->set_config_items( $list_items );
-            Customify_Customize_Layout_Builder_Frontend()->render();
-            Customify_Customize_Layout_Builder_Frontend()->render_mobile_sidebar();
-        echo '</div>';
+		echo '<div id="masthead-inner" class="site-header-inner">';
+			$list_items = Customify_Customize_Layout_Builder()->get_builder_items( 'header' );
+			Customify_Customize_Layout_Builder_Frontend()->set_config_items( $list_items );
+			Customify_Customize_Layout_Builder_Frontend()->render();
+			Customify_Customize_Layout_Builder_Frontend()->render_mobile_sidebar();
+		echo '</div>';
 	echo '</header>';
 	/**
 	 * Hook after header
+	 *
 	 * @since 0.2.2
 	 */
 	do_action( 'customizer/after-header' );
@@ -63,9 +65,10 @@ function customify_customize_render_footer() {
 	}
 	/**
 	 * Hook before footer
+	 *
 	 * @since 0.2.2
 	 */
-	do_action('customify/before-footer');
+	do_action( 'customify/before-footer' );
 	echo '<footer class="site-footer" id="site-footer">';
 	Customify_Customize_Layout_Builder_Frontend()->set_id( 'footer' );
 	Customify_Customize_Layout_Builder_Frontend()->set_control_id( 'footer_builder_panel' );
@@ -75,9 +78,10 @@ function customify_customize_render_footer() {
 	echo '</footer>';
 	/**
 	 * Hook before footer
+	 *
 	 * @since 0.2.2
 	 */
-	do_action('customify/after-footer');
+	do_action( 'customify/after-footer' );
 }
 
 /**
