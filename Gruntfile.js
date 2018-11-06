@@ -318,10 +318,27 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
+        },
+
+
+        phpcbf: {
+            files: {
+                src: ['**/*.php', '*.php']
+            },
+            options: {
+                callback: phpcbf_log,
+                bin:'~/.composer/vendor/bin/phpcbf',
+                noPatch: false,
+            }
         }
 
-
     });
+
+    function phpcbf_log(err, stdout, stderr, callback)
+    {
+        console.log(stdout);
+        callback();
+    }
 
     // Load NPM tasks to be used here
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
@@ -338,6 +355,9 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks('grunt-wp-i18n');
     grunt.loadNpmTasks('grunt-bumpup');
     grunt.loadNpmTasks('grunt-text-replace');
+
+    grunt.loadNpmTasks('grunt-phpcs');
+    grunt.loadNpmTasks('grunt-phpcbf');
 
 
     // Register tasks
@@ -406,6 +426,8 @@ module.exports = function( grunt ) {
     grunt.registerTask('re-css', function (ver) {
         grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
     });
+
+
 
 
 };

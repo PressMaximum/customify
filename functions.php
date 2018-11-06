@@ -9,6 +9,7 @@
 
 /**
  *  Same hook for the_content
+ *
  * @TODO: do not effect content by plugins
  *
  * 8 WP_Embed:run_shortcode
@@ -35,6 +36,7 @@ add_filter( 'customify_the_content', 'convert_smilies' );
 
 /**
  *  Same hook for the_content but not auto P
+ *
  * @TODO: do not effect content by plugins
  *
  * 8 WP_Embed:run_shortcode
@@ -67,6 +69,7 @@ require_once get_template_directory() . '/inc/class-customify.php';
  * @return Customify
  */
 function Customify() {
+	// phpc:ignore WordPress.NamingConventions.ValidFunctionName
 	return Customify::get_instance();
 }
 
