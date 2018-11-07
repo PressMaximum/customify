@@ -10,14 +10,14 @@ class Customify_WC_Catalog_Designer {
 			add_filter( 'Customify_Control_Args', array( $this, 'add_catalog_url' ), 35 );
 		}
 
-		// Loop
+		// Loop.
 		add_action( 'customify_wc_product_loop', array( $this, 'render' ) );
 	}
 
 	/**
 	 * Get callback function for item part
 	 *
-	 * @param $item
+	 * @param string $item_id ID of builder item.
 	 *
 	 * @return string|object|boolean
 	 */
@@ -107,23 +107,23 @@ class Customify_WC_Catalog_Designer {
 			}
 		}
 
-		 echo $html; // WPCS: XSS OK.
+		echo $html; // WPCS: XSS OK.
 
 		/**
 		 * Hook: woocommerce_after_shop_loop_item.
 		 */
 		do_action( 'woocommerce_after_shop_loop_item' );
 
-		echo '</div>'; // end .wc-product-contents
+		echo '</div>'; // End .wc-product-contents.
 
 	}
 
 	/**
 	 * Preview url when section open
 	 *
-	 * @param $args
+	 * @param array $args The section urls config.
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	function add_catalog_url( $args ) {
 		$args['section_urls']['wc_catalog_designer'] = get_permalink( wc_get_page_id( 'shop' ) );
