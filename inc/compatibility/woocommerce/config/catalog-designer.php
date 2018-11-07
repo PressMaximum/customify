@@ -356,7 +356,7 @@ class Customify_WC_Catalog_Designer {
 			'type'            => 'text_align_no_justify',
 			'section'         => $section,
 			'device_settings' => true,
-			'priority'        => 29,
+			'priority'        => 28,
 			'selector'        => '.wc-list-view .wc-product-contents',
 			'css_format'      => 'text-align: {{value}};',
 			'title'           => __( 'List View - Content Alignment', 'customify' ),
