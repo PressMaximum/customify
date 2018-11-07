@@ -43,7 +43,6 @@ class Customify_WC_Catalog_Designer {
 
 		$cb = $this->callback( 'media' );
 		if ( $cb ) {
-			// $this->product__media();
 			call_user_func( $cb, array( null, $this ) );
 		}
 
@@ -215,7 +214,7 @@ class Customify_WC_Catalog_Designer {
 			'description'     => sprintf( __( 'Filtering Bar only show if the sidebar <code>WooCommerce Off Canvas Filter</code> has widget items. Click <a href="%1$s" target="_blank">here</a> to add widgets', 'customify' ), admin_url( 'widgets.php' ) ),
 		);
 
-		// Show view mod
+		// Show view mod.
 		$configs[] = array(
 			'name'            => 'wc_cd_show_view_mod',
 			'type'            => 'checkbox',
@@ -225,7 +224,6 @@ class Customify_WC_Catalog_Designer {
 			'render_callback' => 'woocommerce_content',
 			'checkbox_label'  => __( 'Show Grid/List View Buttons', 'customify' ),
 			'priority'        => 11,
-			// 'required'        => array( 'wc_cd_show_catalog_header', '=', 1 ),
 		);
 
 		$configs[] = array(
@@ -240,12 +238,6 @@ class Customify_WC_Catalog_Designer {
 			),
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
-			/*
-			'required'        => array(
-				array( 'wc_cd_show_view_mod', '=', 1 ),
-				array( 'wc_cd_show_catalog_header', '=', 1 ),
-			),
-			*/
 			'label'           => __( 'Default View Mod', 'customify' ),
 		);
 
@@ -309,7 +301,7 @@ class Customify_WC_Catalog_Designer {
 			'required' => array( 'wc_cd_excerpt_type', '=', 'custom' ),
 		);
 
-		// Product Media
+		// Product Media.
 		$configs[] = array(
 			'name'     => 'wc_cd_memdia_h',
 			'type'     => 'heading',
@@ -370,7 +362,7 @@ class Customify_WC_Catalog_Designer {
 			'title'           => __( 'List View - Content Alignment', 'customify' ),
 		);
 
-		// Product Sale Bubble
+		// Product Sale Bubble.
 		$configs[] = array(
 			'name'     => 'wc_cd_sale_bubble_h',
 			'type'     => 'heading',
@@ -462,12 +454,12 @@ class Customify_WC_Catalog_Designer {
 	}
 
 	/**
-	 * Trim the excerpt with custom length
+	 * Trim the excerpt with custom length.
 	 *
 	 * @see wp_trim_excerpt
-	 * @param $text
-	 * @param null $excerpt_length
-	 * @return mixed|string|void
+	 * @param string $text Text to trim.
+	 * @param null   $excerpt_length Number word to trim
+	 * @return mixed|string
 	 */
 	function trim_excerpt( $text, $excerpt_length = null ) {
 		$text = strip_shortcodes( $text );
@@ -485,8 +477,8 @@ class Customify_WC_Catalog_Designer {
 			 */
 			$excerpt_length = apply_filters( 'excerpt_length', 55 );
 		}
-
-		$excerpt_more = apply_filters( 'excerpt_more', ' ' . '&hellip;' );
+		$more_text = ' &hellip;';
+		$excerpt_more = apply_filters( 'excerpt_more', $more_text );
 
 		$text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
 		return $text;
@@ -495,11 +487,11 @@ class Customify_WC_Catalog_Designer {
 	function product__description() {
 		echo '<div class="woocommerce-loop-product__desc">';
 
-		if ( $this->configs['excerpt_type'] == 'excerpt' ) {
+		if ( 'excerpt' == $this->configs['excerpt_type'] ) {
 			the_excerpt();
-		} elseif ( $this->configs['excerpt_type'] == 'more_tag' ) {
+		} elseif ( 'more' == $this->configs['excerpt_type'] ) {
 			the_content( '', true );
-		} elseif ( $this->configs['excerpt_type'] == 'content' ) {
+		} elseif ( 'content' == $this->configs['excerpt_type'] ) {
 			the_content( '', false );
 		} else {
 			$text = '';
