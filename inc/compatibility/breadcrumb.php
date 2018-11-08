@@ -1,11 +1,11 @@
 <?php
 
 class Customify_Breadcrumb {
-	static $is_transparent = null;
-	static $_instance      = null;
-	static $_settings      = null;
+	public static $is_transparent = null;
+	public static $_instance = null;
+	public static $_settings = null;
 
-	static function get_instance() {
+	public static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 			add_filter( 'customify/customizer/config', array( self::$_instance, 'config' ) );
@@ -15,6 +15,7 @@ class Customify_Breadcrumb {
 				add_action( 'wp_head', array( self::$_instance, 'display' ) );
 			}
 		}
+
 		return self::$_instance;
 	}
 
@@ -22,11 +23,11 @@ class Customify_Breadcrumb {
 		return '<li>' . $link . '</li>';
 	}
 
-	function display() {
-		// Display position
+	public function display() {
+		// Display position.
 		$display_pos = Customify()->get_setting( 'breadcrumb_display_pos' );
 		switch ( $display_pos ) {
-			case 'after_header': // below header
+			case 'after_header': // Below header.
 				add_action( 'customify/site-start', array( self::$_instance, 'render' ), 15 );
 				break;
 			case 'before_content':
@@ -49,7 +50,7 @@ class Customify_Breadcrumb {
 	 *
 	 * @return bool
 	 */
-	function support_plugins_active() {
+	public function support_plugins_active() {
 		$activated = false;
 		if ( function_exists( 'bcn_display' ) ) {
 			$activated = true;
@@ -65,7 +66,7 @@ class Customify_Breadcrumb {
 		return $activated;
 	}
 
-	function config( $configs ) {
+	public function config( $configs ) {
 		$section  = 'breadcrumb';
 		$selector = '#page-breadcrumb';
 		$panel    = 'compatibility_panel';
@@ -206,14 +207,13 @@ class Customify_Breadcrumb {
 					'normal_link_color' => "{$selector} a, #page-titlebar {$selector} .page-breadcrumb-list a, #page-cover {$selector} .page-breadcrumb-list a",
 					'hover_link_color'  => "{$selector} a:hover, #page-titlebar {$selector} .page-breadcrumb-list a:hover, #page-cover {$selector} .page-breadcrumb-list a:hover",
 				),
-				'css_format'  => 'styling', // styling
+				'css_format'  => 'styling',
 				'fields'      => array(
 					'normal_fields' => array(
-						'margin' => false, // disable for special field.
+						'margin' => false, // Disable for special field.
 					),
 					'hover_fields'  => array(
 						'text_color'     => false,
-						// 'link_color' => false,
 						'padding'        => false,
 						'bg_color'       => false,
 						'bg_heading'     => false,
@@ -226,7 +226,7 @@ class Customify_Breadcrumb {
 						'border_width'   => false,
 						'border_style'   => false,
 						'box_shadow'     => false,
-					), // disable hover tab and all fields inside.
+					), // Disable hover tab and all fields inside.
 				),
 			);
 		}
@@ -234,7 +234,7 @@ class Customify_Breadcrumb {
 		return array_merge( $configs, $config );
 	}
 
-	function is_showing() {
+	public function is_showing() {
 		if ( ! $this->support_plugins_active() ) {
 			return false;
 		}
@@ -259,38 +259,38 @@ class Customify_Breadcrumb {
 
 		$hide = false;
 
-		if ( is_front_page() && is_home() ) { // index page
-			// Default homepage
+		if ( is_front_page() && is_home() ) { // Index page.
+			// Default homepage.
 			$hide = $display['index'];
 		} elseif ( is_front_page() ) {
-			// static homepage
+			// Static homepage.
 			$hide = $display['page'];
 		} elseif ( is_home() ) {
-			// blog page
+			// Blog page.
 			$hide = $display['page'];
 		} elseif ( is_category() ) {
-			// category
+			// Category.
 			$hide = $display['category'];
 		} elseif ( is_page() ) {
-			// single page
+			// Single page.
 			$hide = $display['page'];
 		} elseif ( is_single() ) {
-			// single post
+			// Single post.
 			$hide = $display['post'];
 		} elseif ( is_singular() ) {
-			// single custom post type
+			// Single custom post type.
 			$hide = $display['singular'];
 		} elseif ( is_404() ) {
-			// page not found
+			// Page not found.
 			$hide = $display['page_404'];
 		} elseif ( is_search() ) {
-			// Search result
+			// Search result.
 			$hide = $display['search'];
 		} elseif ( is_archive() ) {
 			$hide = $display['archive'];
 		}
 
-		// WooCommerce Settings
+		// WooCommerce Settings.
 		if ( Customify()->is_woocommerce_active() ) {
 			if ( is_product() ) {
 				$hide = $display['product'];
@@ -306,8 +306,8 @@ class Customify_Breadcrumb {
 		if ( Customify()->is_using_post() ) {
 			$post_id            = Customify()->get_current_post_id();
 			$breadcrumb_display = get_post_meta( $post_id, '_customify_breadcrumb_display', true );
-			if ( $breadcrumb_display && $breadcrumb_display != 'default' ) {
-				if ( $breadcrumb_display == 'hide' ) {
+			if ( $breadcrumb_display && 'default' != $breadcrumb_display ) {
+				if ( 'hide' == $breadcrumb_display ) {
 					$hide = 1;
 				} else {
 					$hide = 0;
@@ -323,7 +323,7 @@ class Customify_Breadcrumb {
 	 *
 	 * @return bool|string
 	 */
-	function render() {
+	public function render() {
 		if ( ! $this->is_showing() ) {
 			return '';
 		}
@@ -358,4 +358,5 @@ class Customify_Breadcrumb {
 	}
 
 }
+
 Customify_Breadcrumb::get_instance();

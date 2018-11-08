@@ -358,7 +358,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 			$prev_item            = $item;
 			$prev_item['__merge'] = $merge;
 
-			if ( $index == 0 && ( ! $merge || 'prev' == $merge ) && ( ! $merge_next || 'next' == $merge_next ) ) {
+			if ( 0 == $index && ( ! $merge || 'prev' == $merge ) && ( ! $merge_next || 'next' == $merge_next ) ) {
 				$gi ++;
 			}
 
