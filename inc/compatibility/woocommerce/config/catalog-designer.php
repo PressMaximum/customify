@@ -244,7 +244,7 @@ class Customify_WC_Catalog_Designer {
 		$configs[] = array(
 			'name'             => 'wc_cd_positions',
 			'section'          => $section,
-			'label'            => __( 'Outer Media Items & Positions', 'customify' ),
+			'label'            => __( 'Outside Media Items & Positions', 'customify' ),
 			'type'             => 'repeater',
 			'live_title_field' => 'title',
 			'addable'          => false,
