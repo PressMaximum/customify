@@ -31,12 +31,12 @@ class Customify_Customize_Layout_Builder {
 	 *
 	 * @see Customify_Customize_Builder_Panel
 	 *
-	 * @param $id    string                                ID of panel.
-	 * @param $class Customify_Customize_Builder_Panel  Panel class name.
+	 * @param string                            $id    ID of panel.
+	 * @param Customify_Customize_Builder_Panel $class Panel class name.
 	 *
 	 * @return bool
 	 */
-	function register_builder( $id, $class ) {
+	public function register_builder( $id, $class ) {
 		if ( ! isset( $id ) ) {
 			return false;
 		}
@@ -124,7 +124,7 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get all customize settings of all items for builder panel
 	 *
-	 * @param   string               $builder_id   Id of panel.
+	 * @param   string             $builder_id   Id of panel.
 	 * @param WP_Customize_Manager $wp_customize WP Customize.
 	 *
 	 * @return array|bool
@@ -154,8 +154,8 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get a builder item for builder panel
 	 *
-	 * @param string $builder_id           Id of panel.
-	 * @param string $item_id              Builder item id.
+	 * @param string $builder_id Id of panel.
+	 * @param string $item_id    Builder item id.
 	 *
 	 * @return bool
 	 */
@@ -218,7 +218,7 @@ class Customify_Customize_Layout_Builder {
 		$new_template_data = array();
 
 		foreach ( $config as $k => $field ) {
-			if ( $field['type'] != 'panel' && $field['type'] != 'section' ) {
+			if ( 'panel' != $field['type']  && 'section' != $field['type'] ) {
 				$name  = $field['name'];
 				$value = get_theme_mod( $name );
 				if ( is_array( $value ) ) {
@@ -286,7 +286,7 @@ class Customify_Customize_Layout_Builder {
 	 *
 	 * @return array
 	 */
-	function get_builders() {
+	public function get_builders() {
 		$builders = array();
 		foreach ( $this->registered_builders as $id => $builder ) {
 			$config          = $builder->get_config();
@@ -431,15 +431,15 @@ class Customify_Customize_Layout_Builder {
 
 		<script type="text/html" id="tmpl-customify--cb-item">
 			<div class="grid-stack-item item-from-list for-s-{{ data.section }}"
-				title="{{ data.name }}"
-				data-id="{{ data.id }}"
-				data-section="{{ data.section }}"
-				data-control="{{ data.control }}"
-				data-gs-x="{{ data.x }}"
-				data-gs-y="{{ data.y }}"
-				data-gs-width="{{ data.width }}"
-				data-df-width="{{ data.width }}"
-				data-gs-height="1"
+				 title="{{ data.name }}"
+				 data-id="{{ data.id }}"
+				 data-section="{{ data.section }}"
+				 data-control="{{ data.control }}"
+				 data-gs-x="{{ data.x }}"
+				 data-gs-y="{{ data.y }}"
+				 data-gs-width="{{ data.width }}"
+				 data-df-width="{{ data.width }}"
+				 data-gs-height="1"
 			>
 				<div class="item-tooltip" data-section="{{ data.section }}">{{ data.name }}</div>
 				<div class="grid-stack-item-content">
@@ -450,7 +450,9 @@ class Customify_Customize_Layout_Builder {
 			</div>
 		</script>
 
-		<?php if ( ! apply_filters( 'customify/is_pro_activated', false ) ) { ?>
+		<?php
+		if ( ! apply_filters( 'customify/is_pro_activated', false ) ) {
+			?>
 			<script type="text/html" id="customify-upsell-tmpl">
 				<p class="customify-upsell-panel"><?php _e( 'Enjoy building? Upgrade to <a target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=panel_text">Customify Pro</a> to get more builder items and other premium features</a>.', 'customify' ); ?></p>
 			</script>
