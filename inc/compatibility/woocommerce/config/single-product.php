@@ -18,7 +18,7 @@ class Customify_WC_Single_Product {
 	/**
 	 * Add more class if nav showing
 	 *
-	 * @param $classes
+	 * @param array $classes HTML classes.
 	 *
 	 * @return array
 	 */
@@ -32,21 +32,21 @@ class Customify_WC_Single_Product {
 	/**
 	 * Get adjacent product
 	 *
-	 * @param bool   $in_same_term
-	 * @param string $excluded_terms
-	 * @param bool   $previous
-	 * @param string $taxonomy
+	 * @param bool   $in_same_term In same term.
+	 * @param string $excluded_terms Exlclude terms.
+	 * @param bool   $previous Previous.
+	 * @param string $taxonomy Taxonomy.
 	 *
 	 * @return null|string|WP_Post
 	 */
-	function get_adjacent_product( $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'product_cat' ) {
+	public function get_adjacent_product( $in_same_term = false, $excluded_terms = '', $previous = true, $taxonomy = 'product_cat' ) {
 		return get_adjacent_post( $in_same_term, $excluded_terms, $previous, $taxonomy );
 	}
 
 	/**
 	 * Display prev - next button
 	 */
-	function product_prev_next() {
+	public function product_prev_next() {
 		if ( ! Customify()->get_setting( 'wc_single_product_nav_show' ) ) {
 			return;
 		}
@@ -107,7 +107,7 @@ class Customify_WC_Single_Product {
 
 		$tab_type = Customify()->get_setting( 'wc_single_product_tab' );
 
-		if ( $tab_type == 'section' || $tab_type == 'toggle ' ) {
+		if ( 'section' == $tab_type || 'toggle' == $tab_type ) {
 			add_filter( 'woocommerce_product_description_heading', '__return_false', 999 );
 			add_filter( 'woocommerce_product_additional_information_heading', '__return_false', 999 );
 		}
@@ -117,11 +117,11 @@ class Customify_WC_Single_Product {
 	/**
 	 * Add url to customize preview when section open
 	 *
-	 * @param $args
+	 * @param array $args Args to add.
 	 *
 	 * @return mixed
 	 */
-	function add_product_url( $args ) {
+	public function add_product_url( $args ) {
 
 		$query = new WP_Query(
 			array(
@@ -142,11 +142,11 @@ class Customify_WC_Single_Product {
 	/**
 	 * Customize config
 	 *
-	 * @param $configs
+	 * @param array $configs Config args.
 	 *
 	 * @return array
 	 */
-	function config( $configs ) {
+	public function config( $configs ) {
 		$section = 'wc_single_product';
 
 		$configs[] = array(

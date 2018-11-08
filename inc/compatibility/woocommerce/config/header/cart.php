@@ -1,20 +1,37 @@
 <?php
 
 class Customify_Builder_Item_WC_Cart {
-
-	public $id       = 'wc_cart'; // Required
-	public $section  = 'wc_cart'; // Optional
-	public $name     = 'wc_cart'; // Optional
-	public $label    = ''; // Optional
+	/**
+	 * @var string Item Id.
+	 */
+	public $id = 'wc_cart'; // Required.
+	/**
+	 * @var string Section ID.
+	 */
+	public $section = 'wc_cart'; // Optional.
+	/**
+	 * @var string Item Name.
+	 */
+	public $name = 'wc_cart'; // Optional.
+	/**
+	 * @var string|void Item label.
+	 */
+	public $label = ''; // Optional.
+	/**
+	 * @var int Priority.
+	 */
 	public $priority = 200;
-	public $panel    = 'header_settings';
+	/**
+	 * @var string Panel ID.
+	 */
+	public $panel = 'header_settings';
 
 	/**
 	 * Optional construct
 	 *
 	 * Customify_Builder_Item_HTML constructor.
 	 */
-	function __construct() {
+	public function __construct() {
 		$this->label = __( 'Shopping Cart', 'customify' );
 	}
 
@@ -23,13 +40,13 @@ class Customify_Builder_Item_WC_Cart {
 	 *
 	 * @return array
 	 */
-	function item() {
+	public function item() {
 		return array(
 			'name'    => $this->label,
 			'id'      => $this->id,
 			'col'     => 0,
 			'width'   => '4',
-			'section' => $this->section, // Customizer section to focus when click settings
+			'section' => $this->section, // Customizer section to focus when click settings.
 		);
 	}
 
@@ -226,7 +243,6 @@ class Customify_Builder_Item_WC_Cart {
 				'fields'      => array(
 					'normal_fields' => array(
 						'link_color'    => false, // disable for special field.
-						// 'margin' => false,
 						'bg_image'      => false,
 						'bg_cover'      => false,
 						'bg_position'   => false,
@@ -254,7 +270,6 @@ class Customify_Builder_Item_WC_Cart {
 				'fields'      => array(
 					'normal_fields' => array(
 						'link_color'    => false, // disable for special field.
-						// 'margin' => false,
 						'bg_image'      => false,
 						'bg_cover'      => false,
 						'bg_position'   => false,
@@ -303,7 +318,7 @@ class Customify_Builder_Item_WC_Cart {
 
 		);
 
-		// Item Layout
+		// Item Layout.
 		return array_merge( $config, customify_header_layout_settings( $this->id, $this->section ) );
 	}
 
@@ -314,9 +329,9 @@ class Customify_Builder_Item_WC_Cart {
 		$classes = array();
 		$array   = array_reverse( $array );
 		foreach ( $array as $k => $v ) {
-			if ( $v == 1 ) {
+			if ( 1 == $v ) {
 				$v = 'show';
-			} elseif ( $v == 0 ) {
+			} elseif ( 0 == $v ) {
 				$v = 'hide';
 			}
 			$classes[] = "{$prefix}-{$k}-{$v}";
@@ -328,8 +343,8 @@ class Customify_Builder_Item_WC_Cart {
 	/**
 	 * Optional. Render item content
 	 */
-	function render() {
-		 $icon         = Customify()->get_setting( "{$this->name}_icon" );
+	public function render() {
+		$icon          = Customify()->get_setting( "{$this->name}_icon" );
 		$icon_position = Customify()->get_setting( "{$this->name}_icon_position" );
 		$text          = Customify()->get_setting( "{$this->name}_text" );
 
@@ -362,7 +377,7 @@ class Customify_Builder_Item_WC_Cart {
 		if ( $icon['icon'] ) {
 			$icon_html = '<i class="' . esc_attr( $icon['icon'] ) . '"></i> ';
 		}
-		// $classes[] = 'is-icon-' . $icon_position;
+
 		if ( $text ) {
 			$text = '<span class="cart-text cart-label ' . esc_attr( $label_classes ) . '">' . sanitize_text_field( $text ) . '</span>';
 		}
@@ -391,7 +406,7 @@ class Customify_Builder_Item_WC_Cart {
 			$icon_html .= '</span>';
 		}
 
-		if ( $icon_position == 'before' ) {
+		if ( 'before' == $icon_position ) {
 			$html = $icon_html . $html;
 		} else {
 			$html = $html . $icon_html;
@@ -401,7 +416,7 @@ class Customify_Builder_Item_WC_Cart {
 		$classes[] = 'item--' . $this->id;
 
 		$link = '';
-		if ( $link_to == 'checkout' ) {
+		if ( 'checkout' == $link_to ) {
 			$link = get_permalink( wc_get_page_id( 'checkout' ) );
 		} else {
 			$link = get_permalink( wc_get_page_id( 'cart' ) );

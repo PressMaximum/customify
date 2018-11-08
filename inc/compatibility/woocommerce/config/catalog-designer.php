@@ -29,6 +29,7 @@ class Customify_WC_Catalog_Designer {
 		if ( is_callable( $cb ) ) {
 			return $cb;
 		}
+
 		return false;
 	}
 
@@ -71,7 +72,7 @@ class Customify_WC_Catalog_Designer {
 						'show_in_list' => 1,
 					)
 				);
-				if ( $item['_visibility'] !== 'hidden' ) {
+				if ( 'hidden' !== $item['_visibility'] ) {
 
 					$cb = $this->callback( $item['_key'] );
 
@@ -201,7 +202,7 @@ class Customify_WC_Catalog_Designer {
 			'label'    => __( 'Product Catalog Designer', 'customify' ),
 		);
 
-		// catalog header
+		// Catalog header.
 		$configs[] = array(
 			'name'            => 'wc_cd_show_catalog_header',
 			'type'            => 'checkbox',
@@ -437,7 +438,7 @@ class Customify_WC_Catalog_Designer {
 		do_action( 'woocommerce_before_shop_loop_item_title' );
 
 		/**
-		 * @see woocommerce_shop_loop_item_title.
+		 * @see    woocommerce_shop_loop_item_title.
 		 *
 		 * @hooked woocommerce_template_loop_product_title - 10
 		 */
@@ -457,8 +458,10 @@ class Customify_WC_Catalog_Designer {
 	 * Trim the excerpt with custom length.
 	 *
 	 * @see wp_trim_excerpt
-	 * @param string $text Text to trim.
-	 * @param null   $excerpt_length Number word to trim
+	 *
+	 * @param string  $text           Text to trim.
+	 * @param integer $excerpt_length Number word to trim.
+	 *
 	 * @return mixed|string
 	 */
 	function trim_excerpt( $text, $excerpt_length = null ) {
@@ -477,10 +480,11 @@ class Customify_WC_Catalog_Designer {
 			 */
 			$excerpt_length = apply_filters( 'excerpt_length', 55 );
 		}
-		$more_text = ' &hellip;';
+		$more_text    = ' &hellip;';
 		$excerpt_more = apply_filters( 'excerpt_more', $more_text );
 
 		$text = wp_trim_words( $text, $excerpt_length, $excerpt_more );
+
 		return $text;
 	}
 
