@@ -124,12 +124,12 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get all customize settings of all items for builder panel
 	 *
-	 * @param   string             $builder_id   Id of panel.
+	 * @param string               $builder_id   Id of panel.
 	 * @param WP_Customize_Manager $wp_customize WP Customize.
 	 *
 	 * @return array|bool
 	 */
-	function get_items_customize( $builder_id, $wp_customize = null ) {
+	public function get_items_customize( $builder_id, $wp_customize = null ) {
 		if ( ! $builder_id ) {
 			return false;
 		}
@@ -218,7 +218,7 @@ class Customify_Customize_Layout_Builder {
 		$new_template_data = array();
 
 		foreach ( $config as $k => $field ) {
-			if ( 'panel' != $field['type']  && 'section' != $field['type'] ) {
+			if ( 'panel' != $field['type'] && 'section' != $field['type'] ) {
 				$name  = $field['name'];
 				$value = get_theme_mod( $name );
 				if ( is_array( $value ) ) {
