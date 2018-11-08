@@ -1,7 +1,7 @@
 <?php
 
 class Customify_Customize_Layout_Builder_Frontend {
-	static $_instance;
+	public static $_instance;
 	private $control_id = 'header_builder_panel';
 	public $id = 'header';
 	private $render_items = array();
@@ -13,7 +13,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 
 	}
 
-	static function get_instance() {
+	public static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
@@ -21,12 +21,12 @@ class Customify_Customize_Layout_Builder_Frontend {
 		return self::$_instance;
 	}
 
-	function set_id( $id ) {
+	public function set_id( $id ) {
 		$this->id   = $id;
 		$this->data = null;
 	}
 
-	function set_control_id( $id ) {
+	public function set_control_id( $id ) {
 		$this->control_id = $id;
 		$this->data       = null;
 	}
@@ -34,9 +34,9 @@ class Customify_Customize_Layout_Builder_Frontend {
 	/**
 	 * Set config items
 	 *
-	 * @param $config_items
+	 * @param array $config_items Config items.
 	 */
-	function set_config_items( $config_items ) {
+	public function set_config_items( $config_items ) {
 		$this->config_items = $config_items;
 	}
 
@@ -74,12 +74,12 @@ class Customify_Customize_Layout_Builder_Frontend {
 	/**
 	 * Get settings for row
 	 *
-	 * @param  string      $row_id Row ID.
+	 * @param string $row_id Row ID.
 	 * @param string $device Device ID.
 	 *
 	 * @return bool
 	 */
-	function get_row_settings( $row_id, $device = 'desktop' ) {
+	public function get_row_settings( $row_id, $device = 'desktop' ) {
 		$data = $this->get_settings();
 		if ( isset( $data[ $device ] ) ) {
 			if ( isset( $data[ $device ][ $row_id ] ) ) {
@@ -182,7 +182,6 @@ class Customify_Customize_Layout_Builder_Frontend {
 								}
 							}
 
-
 							/**
 							 * Hook after builder item
 							 *
@@ -234,8 +233,8 @@ class Customify_Customize_Layout_Builder_Frontend {
 	/**
 	 * Sort items by their position on the grid.
 	 *
-	 * @param array $items Items Settings.
-	 * @access  private
+	 * @param array $items List item to sort.
+	 *
 	 * @return  array
 	 */
 	private function _sort_items_by_position( $items = array() ) {
@@ -255,13 +254,13 @@ class Customify_Customize_Layout_Builder_Frontend {
 	 *
 	 * @todo Ensure item have not duplicate id
 	 *
-	 * @param $content
-	 * @param $id
-	 * @param $device
+	 * @param string $content Content.
+	 * @param string $id      ID.
+	 * @param string $device  Device ID.
 	 *
 	 * @return mixed
 	 */
-	function setup_item_content( $content, $id, $device ) {
+	public function setup_item_content( $content, $id, $device ) {
 		$content = str_replace( '__id__', $id, $content );
 		$content = str_replace( '__device__', $device, $content );
 		/**
@@ -270,12 +269,12 @@ class Customify_Customize_Layout_Builder_Frontend {
 		 *
 		 * @since 0.2.3
 		 */
-		$content = str_replace( '__site_device_tag__', $device == 'desktop' ? 'h1' : 'h2', $content );
+		$content = str_replace( '__site_device_tag__', 'desktop' == $device ? 'h1' : 'h2', $content );
 
 		return $content;
 	}
 
-	function render_row( $items, $id = '', $device = 'desktop' ) {
+	public function render_row( $items, $id = '', $device = 'desktop' ) {
 		$row_html    = '';
 		$max_columns = 12;
 		$items       = $this->_sort_items_by_position( array_values( $items ) );
@@ -305,7 +304,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 			$merge      = Customify()->get_setting( $merge_key, $device );
 			$merge_next = false;
 			$merge_prev = false;
-			if ( $merge == 'no' || $merge == '0' ) {
+			if ( 'no' == $merge || '0' == $merge ) {
 				$merge = false;
 			}
 
@@ -314,7 +313,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 				$merge_next     = Customify()->get_setting( $merge_key_next, $device );
 			}
 
-			if ( $merge_next == 'no' || $merge_next == '0' ) {
+			if ( 'no' == $merge_next || '0' == $merge_next ) {
 				$merge_next = false;
 			}
 
@@ -334,15 +333,15 @@ class Customify_Customize_Layout_Builder_Frontend {
 				n+1 = prev || no
 			*/
 			if (
-				( ! $merge_prev || $merge_prev == 'prev' )
-				&& ( ! $merge || $merge == 'next' )
-				&& ( ! $merge_next || $merge_next == 'next' )
+				( ! $merge_prev || 'prev' == $merge_prev )
+				&& ( ! $merge || 'next' == $merge )
+				&& ( ! $merge_next || 'next' == $merge_next )
 			) {
 				$gi ++;
 			} elseif (
-				( ! $merge_prev || $merge_prev == 'prev' )
-				&& ( $merge == 'next' )
-				&& ( ! $merge_next || $merge_next == 'prev' )
+				( ! $merge_prev || 'prev' == $merge_prev )
+				&& ( 'next' == $merge )
+				&& ( ! $merge_next || 'prev' == $merge_next )
 			) {
 				$gi ++;
 			}
@@ -359,7 +358,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 			$prev_item            = $item;
 			$prev_item['__merge'] = $merge;
 
-			if ( $index == 0 && ( ! $merge || $merge == 'prev' ) && ( ! $merge_next || $merge_next == 'next' ) ) {
+			if ( $index == 0 && ( ! $merge || 'prev' == $merge ) && ( ! $merge_next || 'next' == $merge_next ) ) {
 				$gi ++;
 			}
 
@@ -390,7 +389,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 
 			$number_item = count( $item['items'] );
 
-			if ( $this->id != 'footer' ) {
+			if ( 'footer' != $this->id ) {
 				$classes[] = "customify-col-{$width}_md-{$width}_sm-{$width}";
 			} else {
 				if ( $number_group_item > 1 ) {
@@ -411,7 +410,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 				}
 			}
 
-			if ( $this->id == 'footer' ) {
+			if ( 'footer' == $this->id ) {
 				$atts[] = '_sm-0';
 			}
 
@@ -421,7 +420,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 			}
 
 			$classes = apply_filters( 'customify/builder/item-wrapper-classes', $classes, $item );
-			$classes = join( ' ', $classes ); // customify-grid-middle
+			$classes = join( ' ', $classes );
 
 			$row_items_html = '';
 			foreach ( $item['items'] as $_it ) {
@@ -442,7 +441,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 						$item_classes[] = ' builder-item-focus';
 					}
 
-					$item_classes   = join( ' ', $item_classes ); // customify-grid-middle
+					$item_classes   = join( ' ', $item_classes );
 					$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr( $item_id ) . '" >';
 					$row_items_html .= $this->setup_item_content( $content, $id, $device );
 					if ( is_customize_preview() ) {
@@ -460,16 +459,16 @@ class Customify_Customize_Layout_Builder_Frontend {
 			$last_item = $item;
 			$index ++;
 
-		} // end loop items
+		} // End loop items.
 
-		// Get item output
+		// Get item output.
 		$row_html = ob_get_clean();
 
 		return $row_html;
 
 	}
 
-	function render( $row_ids = array( 'top', 'main', 'bottom' ) ) {
+	public function render( $row_ids = array( 'top', 'main', 'bottom' ) ) {
 		$setting = $this->get_settings();
 		$items   = $this->render_items();
 		foreach ( $row_ids as $row_id ) {
@@ -488,7 +487,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 					if ( ! empty( $desktop_items ) || ! empty( $mobile_items ) ) {
 
 						$align_classes = 'customify-grid-middle';
-						if ( $this->id != 'footer' ) {
+						if ( 'footer' != $this->id ) {
 							if ( empty( $desktop_items ) ) {
 								$classes[] = 'hide-on-desktop';
 							}
@@ -514,7 +513,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 						$string_atts         = '';
 						foreach ( $atts as $k => $s ) {
 							if ( is_array( $s ) ) {
-								$s = json_encode( $s );
+								$s = wp_json_encode( $s );
 							}
 							$string_atts .= ' ' . sanitize_text_field( $k ) . '="' . esc_attr( $s ) . '" ';
 						}
@@ -529,10 +528,10 @@ class Customify_Customize_Layout_Builder_Frontend {
 							$html_mobile = false;
 						}
 
-						// Row inner class
+						// Row inner class.
 						// Check if the row is header or footer.
 						$inner_class = array();
-						if ( $this->id == 'header' ) {
+						if ( 'header' == $this->id ) {
 							$inner_class[] = 'header--row-inner';
 						} else {
 							$inner_class[] = 'footer--row-inner';
@@ -577,13 +576,13 @@ class Customify_Customize_Layout_Builder_Frontend {
 					}
 				}
 			}
-		} // end for each row_ids
+		} // end for each row_ids.
 	}
 
 	/**
 	 * Render sidebar row
 	 */
-	function render_mobile_sidebar() {
+	public function render_mobile_sidebar() {
 		$id                = 'sidebar';
 		$mobile_items      = $this->get_row_settings( $id, 'mobile' );
 		$menu_sidebar_skin = Customify()->get_setting( 'header_sidebar_skin_mode' );
@@ -595,7 +594,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 		if ( ! empty( $mobile_items ) || is_customize_preview() ) {
 
 			$classes = array( 'header-menu-sidebar menu-sidebar-panel' );
-			if ( $menu_sidebar_skin != '' ) {
+			if ( '' != $menu_sidebar_skin ) {
 				$classes[] = $menu_sidebar_skin;
 			}
 
@@ -625,8 +624,7 @@ class Customify_Customize_Layout_Builder_Frontend {
 				}
 
 				$content = $this->setup_item_content( $content, $id, 'mobile' );
-				// $content = str_replace( '__id__', $id, $content );
-				// $content = str_replace( '__device__', 'mobile', $content );
+
 				echo '<div class="' . esc_attr( $classes ) . '">';
 				echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';
 				echo $content;
@@ -645,11 +643,11 @@ class Customify_Customize_Layout_Builder_Frontend {
 	/**
 	 * Close item HTML markup
 	 *
-	 * @param string $class
+	 * @param string $class Icon class.
 	 *
 	 * @return string
 	 */
-	function close_icon( $class = '' ) {
+	public function close_icon( $class = '' ) {
 		$menu_sidebar_skin = Customify()->get_setting( 'header_sidebar_text_mode' );
 		$close             = '<a class="close is-size-medium ' . $menu_sidebar_skin . esc_attr( $class ) . '" href="#">
         <span class="hamburger hamburger--squeeze is-active">
