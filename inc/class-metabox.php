@@ -142,8 +142,8 @@ class Customify_MetaBox {
 
 	}
 
-	function scripts( $hook ) {
-		if ( $hook != 'post.php' && $hook != 'post-new.php' ) {
+	public function scripts( $hook ) {
+		if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
 			return;
 		}
 		$suffix = Customify()->get_asset_suffix();
@@ -151,13 +151,13 @@ class Customify_MetaBox {
 		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/css/admin/metabox' . $suffix . '.css', false, Customify::$version );
 	}
 
-	function get_support_post_types() {
+	public function get_support_post_types() {
 		$args = array(
 			'public' => true,
 		);
 
-		$output     = 'names'; // names or objects, note names is the default
-		$operator   = 'and'; // 'and' or 'or'
+		$output     = 'names'; // Names or objects, note names is the default.
+		$operator   = 'and'; // Can use 'and' or 'or'.
 		$post_types = get_post_types( $args, $output, $operator );
 
 		return array_values( $post_types );
@@ -165,6 +165,8 @@ class Customify_MetaBox {
 
 	/**
 	 * Adds the meta box container.
+	 *
+	 * @param string $post_type Post Type.
 	 */
 	public function add_meta_box( $post_type ) {
 		// Limit meta box to certain post types.
@@ -185,6 +187,7 @@ class Customify_MetaBox {
 	 * Save the meta when the post is saved.
 	 *
 	 * @param int $post_id The ID of the post being saved.
+	 * @return int|bool
 	 */
 	public function save( $post_id ) {
 
@@ -253,7 +256,7 @@ class Customify_MetaBox {
 		wp_nonce_field( 'customify_page_settings', 'customify_page_settings_nonce' );
 		$values = array();
 		foreach ( $this->field_builder->get_all_fields() as $key => $f ) {
-			if ( $f['type'] == 'multiple_checkbox' ) {
+			if ( 'multiple_checkbox' == $f['type'] ) {
 				foreach ( (array) $f['choices'] as $_key => $label ) {
 					$value           = get_post_meta( $post->ID, '_customify_' . $_key, true );
 					$values[ $_key ] = $value;

@@ -2,7 +2,7 @@
 /**
  * Customify functions and definitions
  *
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ * @link    https://developer.wordpress.org/themes/basics/theme-functions/
  *
  * @package customify
  */
@@ -69,7 +69,7 @@ require_once get_template_directory() . '/inc/class-customify.php';
  * @return Customify
  */
 function Customify() {
-	// phpc:ignore WordPress.NamingConventions.ValidFunctionName
+	// phpc:ignore WordPress.NamingConventions.ValidFunctionName.
 	return Customify::get_instance();
 }
 
