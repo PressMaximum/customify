@@ -7,7 +7,7 @@
  */
 class Customify_Customize_Layout_Builder {
 	static $_instance;
-	private $registered_items    = array();
+	private $registered_items = array();
 	private $registered_builders = array();
 
 	/**
@@ -31,8 +31,9 @@ class Customify_Customize_Layout_Builder {
 	 *
 	 * @see Customify_Customize_Builder_Panel
 	 *
-	 * @param $id string                                ID of panel
-	 * @param $class Customify_Customize_Builder_Panel  Panel class name
+	 * @param $id    string                                ID of panel.
+	 * @param $class Customify_Customize_Builder_Panel  Panel class name.
+	 *
 	 * @return bool
 	 */
 	function register_builder( $id, $class ) {
@@ -51,6 +52,7 @@ class Customify_Customize_Layout_Builder {
 		if ( ! $class instanceof Customify_Customize_Builder_Panel ) {
 			$name = get_class( $class );
 			_doing_it_wrong( $name, sprintf( __( 'Class <strong>%s</strong> do not extends class <strong>Customify_Customize_Builder_Panel</strong>.', 'customify' ), $name ), '1.0.0' );
+
 			return false;
 		}
 
@@ -64,8 +66,9 @@ class Customify_Customize_Layout_Builder {
 	 *
 	 * @see Customify_Customize_Layout_Builder::register_builder();
 	 *
-	 * @param $builder_id string        Id of panel
-	 * @param $class      object        Class to handle this item
+	 * @param string $builder_id Id of panel.
+	 * @param object $class      Class to handle this item.
+	 *
 	 * @return bool
 	 */
 	function register_item( $builder_id, $class ) {
@@ -95,8 +98,9 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get all items for builder panel
 	 *
-	 * @param $builder_id string        Id of panel
-	 * @return array|mixed|void
+	 * @param string $builder_id Id of panel.
+	 *
+	 * @return array|mixed
 	 */
 	function get_builder_items( $builder_id ) {
 		if ( ! $builder_id ) {
@@ -120,8 +124,9 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get all customize settings of all items for builder panel
 	 *
-	 * @param $builder_id string        Id of panel
-	 * @param null                                 $wp_customize        WP Customize
+	 * @param   string               $builder_id   Id of panel.
+	 * @param WP_Customize_Manager $wp_customize WP Customize.
+	 *
 	 * @return array|bool
 	 */
 	function get_items_customize( $builder_id, $wp_customize = null ) {
@@ -136,7 +141,6 @@ class Customify_Customize_Layout_Builder {
 			if ( method_exists( $obj, 'customize' ) ) {
 				$item = $obj->customize( $wp_customize );
 				if ( is_array( $item ) ) {
-					// $items = array_merge( $items, $item );
 					foreach ( $item as $it ) {
 						$items[] = $it;
 					}
@@ -150,8 +154,9 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get a builder item for builder panel
 	 *
-	 * @param $builder_id   string        Id of panel
-	 * @param $item_id      string        Builder item id
+	 * @param string $builder_id           Id of panel.
+	 * @param string $item_id              Builder item id.
+	 *
 	 * @return bool
 	 */
 	function get_builder_item( $builder_id, $item_id ) {
@@ -239,7 +244,7 @@ class Customify_Customize_Layout_Builder {
 		);
 
 		update_option( $option_name, $saved_templates );
-		$html = '<li class="saved_template" data-control-id="' . esc_attr( $control ) . '" data-id="' . esc_attr( $key_id ) . '" data-data="' . esc_attr( json_encode( $new_template_data ) ) . '">' . esc_html( $save_name ) . ' <a href="#" class="load-tpl">' . __( 'Load', 'customify' ) . '</a><a href="#" class="remove-tpl">' . __( 'Remove', 'customify' ) . '</a></li>';
+		$html = '<li class="saved_template" data-control-id="' . esc_attr( $control ) . '" data-id="' . esc_attr( $key_id ) . '" data-data="' . esc_attr( wp_json_encode( $new_template_data ) ) . '">' . esc_html( $save_name ) . ' <a href="#" class="load-tpl">' . __( 'Load', 'customify' ) . '</a><a href="#" class="remove-tpl">' . __( 'Remove', 'customify' ) . '</a></li>'; // WPCS: XSS OK.
 		wp_send_json_success(
 			array(
 				'key_id' => $key_id,
@@ -257,8 +262,8 @@ class Customify_Customize_Layout_Builder {
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			wp_send_json_error( __( 'Access denied', 'customify' ) );
 		}
-		$id   = isset( $_GET['id'] ) ? sanitize_text_field( $_GET['id'] ) : false;
-		$name = isset( $_GET['name'] ) ? sanitize_text_field( $_GET['name'] ) : false;
+		$id   = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : false;
+		$name = isset( $_GET['name'] ) ? sanitize_text_field( wp_unslash( $_GET['name'] ) ) : false;
 
 		$theme_name  = wp_get_theme()->get( 'Name' );
 		$option_name = "{$theme_name}_{$id}_saved_templates";
@@ -273,8 +278,6 @@ class Customify_Customize_Layout_Builder {
 			$var = $data;
 		}
 		var_export( $var );
-
-		// remove_theme_mods();
 		die();
 	}
 
@@ -344,8 +347,7 @@ class Customify_Customize_Layout_Builder {
 						</div>
 						<div class="customify--cb-actions">
 							<?php do_action( 'customify/builder-panel/actions-buttons' ); ?>
-							<a data-id="{{ data.id }}_templates" class="focus-section button button-secondary"
-							   href="#"><?php _e( 'Templates', 'customify' ); ?></a>
+							<a data-id="{{ data.id }}_templates" class="focus-section button button-secondary" href="#"><?php _e( 'Templates', 'customify' ); ?></a>
 							<a class="button button-secondary customify--panel-close" href="#">
 								<span class="close-text"><?php _e( 'Close', 'customify' ); ?></span>
 								<span class="panel-name-text">{{ data.title }}</span>
@@ -357,91 +359,87 @@ class Customify_Customize_Layout_Builder {
 			</div>
 		</script>
 
-
 		<script type="text/html" id="tmpl-customify--cb-panel">
 			<div class="customify--cp-rows">
 
 				<# if ( ! _.isUndefined( data.rows.top ) ) { #>
-					<div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top">
-						<a class="customify--cb-row-settings" title="{{ data.rows.top }}" data-id="top" href="#"></a>
-						<div class="customify--row-inner">
-							<div class="row--grid">
-								<?php
-								for ( $i = 1; $i <= 12; $i ++ ) {
-									echo '<div></div>';
-								}
-								?>
-							</div>
-							<div class="customify--cb-items grid-stack gridster" data-id="top"></div>
+				<div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top">
+					<a class="customify--cb-row-settings" title="{{ data.rows.top }}" data-id="top" href="#"></a>
+					<div class="customify--row-inner">
+						<div class="row--grid">
+							<?php
+							for ( $i = 1; $i <= 12; $i ++ ) {
+								echo '<div></div>';
+							}
+							?>
 						</div>
+						<div class="customify--cb-items grid-stack gridster" data-id="top"></div>
 					</div>
-				<#  } #>
+				</div>
+				<# } #>
 
 				<# if ( ! _.isUndefined( data.rows.main ) ) { #>
-					<div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main">
-						<a class="customify--cb-row-settings" title="{{ data.rows.main }}" data-id="main"
-						   href="#"></a>
+				<div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main">
+					<a class="customify--cb-row-settings" title="{{ data.rows.main }}" data-id="main" href="#"></a>
 
-						<div class="customify--row-inner">
-							<div class="row--grid">
-								<?php
-								for ( $i = 1; $i <= 12; $i ++ ) {
-									echo '<div></div>';
-								}
-								?>
-							</div>
-							<div class="customify--cb-items grid-stack gridster" data-id="main"></div>
+					<div class="customify--row-inner">
+						<div class="row--grid">
+							<?php
+							for ( $i = 1; $i <= 12; $i ++ ) {
+								echo '<div></div>';
+							}
+							?>
 						</div>
+						<div class="customify--cb-items grid-stack gridster" data-id="main"></div>
 					</div>
-				<#  } #>
+				</div>
+				<# } #>
 
 
 				<# if ( ! _.isUndefined( data.rows.bottom ) ) { #>
-					<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom">
-						<a class="customify--cb-row-settings" title="{{ data.rows.bottom }}"
-						   data-id="bottom" href="#"></a>
-						<div class="customify--row-inner">
-							<div class="row--grid">
-								<?php
-								for ( $i = 1; $i <= 12; $i ++ ) {
-									echo '<div></div>';
-								}
-								?>
-							</div>
-							<div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
+				<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom">
+					<a class="customify--cb-row-settings" title="{{ data.rows.bottom }}" data-id="bottom" href="#"></a>
+					<div class="customify--row-inner">
+						<div class="row--grid">
+							<?php
+							for ( $i = 1; $i <= 12; $i ++ ) {
+								echo '<div></div>';
+							}
+							?>
 						</div>
+						<div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
 					</div>
-				<#  } #>
+				</div>
+				<# } #>
 			</div>
 
 
 			<# if ( data.device != 'desktop' ) { #>
-				<# if ( ! _.isUndefined( data.rows.sidebar ) ) { #>
-					<div class="customify--cp-sidebar">
-						<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
-							<a class="customify--cb-row-settings" title="{{ data.rows.sidebar }}" data-id="sidebar"
-							   href="#"></a>
-							<div class="customify--row-inner">
-								<div class="customify--cb-items customify--sidebar-items" data-id="sidebar"></div>
-							</div>
-						</div>
-						<div>
-				<# } #>
-			<# } #>
+			<# if ( ! _.isUndefined( data.rows.sidebar ) ) { #>
+			<div class="customify--cp-sidebar">
+				<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
+					<a class="customify--cb-row-settings" title="{{ data.rows.sidebar }}" data-id="sidebar" href="#"></a>
+					<div class="customify--row-inner">
+						<div class="customify--cb-items customify--sidebar-items" data-id="sidebar"></div>
+					</div>
+				</div>
+				<div>
+					<# } #>
+					<# } #>
 
 		</script>
 
 		<script type="text/html" id="tmpl-customify--cb-item">
 			<div class="grid-stack-item item-from-list for-s-{{ data.section }}"
-				 title="{{ data.name }}"
-				 data-id="{{ data.id }}"
-				 data-section="{{ data.section }}"
-				 data-control="{{ data.control }}"
-				 data-gs-x="{{ data.x }}"
-				 data-gs-y="{{ data.y }}"
-				 data-gs-width="{{ data.width }}"
-				 data-df-width="{{ data.width }}"
-				 data-gs-height="1"
+				title="{{ data.name }}"
+				data-id="{{ data.id }}"
+				data-section="{{ data.section }}"
+				data-control="{{ data.control }}"
+				data-gs-x="{{ data.x }}"
+				data-gs-y="{{ data.y }}"
+				data-gs-width="{{ data.width }}"
+				data-df-width="{{ data.width }}"
+				data-gs-height="1"
 			>
 				<div class="item-tooltip" data-section="{{ data.section }}">{{ data.name }}</div>
 				<div class="grid-stack-item-content">
@@ -457,7 +455,7 @@ class Customify_Customize_Layout_Builder {
 				<p class="customify-upsell-panel"><?php _e( 'Enjoy building? Upgrade to <a target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=panel_text">Customify Pro</a> to get more builder items and other premium features</a>.', 'customify' ); ?></p>
 			</script>
 			<?php
-}
+		}
 	}
 
 }

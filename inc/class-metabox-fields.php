@@ -33,7 +33,7 @@ class Customify_Form_Fields {
 	/**
 	 * Parse field args
 	 *
-	 * @param array $args Setting arguments
+	 * @param array $args Setting arguments.
 	 *
 	 * @return array
 	 */
@@ -151,7 +151,7 @@ class Customify_Form_Fields {
 	/**
 	 * Add a tab
 	 *
-	 * @param string $tab_id Tab ID
+	 * @param string $tab_id Tab ID.
 	 * @param array  $args   Settings.
 	 */
 	public function add_tab( $tab_id, $args ) {
@@ -271,7 +271,7 @@ class Customify_Form_Fields {
 			foreach ( $this->tabs as $id => $tab ) {
 				$icon  = '';
 				$class = ' customify-mt-tab-cont';
-				if ( $i == 0 ) {
+				if ( 0 == $i ) {
 					$class .= ' active ';
 				}
 				if ( $this->is_valid_url( $tab['icon'] ) ) {
@@ -476,8 +476,9 @@ class Customify_Form_Fields {
 			)
 		)
 		?>
-		<label><input type="checkbox" id="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>" <?php checked( $this->get_value( $args ), 1 ); ?> value="1" /> <?php echo $args['checkbox_label']; // WPCS: XSS OK.
-			?></label>
+		<label>
+			<input type="checkbox" id="<?php echo esc_attr( $this->get_filed_id( $args ) ); ?>" name="<?php echo esc_attr( $this->get_name( $args ) ); ?>" <?php checked( $this->get_value( $args ), 1 ); ?> value="1" /> <?php echo $args['checkbox_label']; // WPCS: XSS OK. ?>
+		</label>
 		<?php
 	}
 

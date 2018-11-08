@@ -14,14 +14,14 @@ if ( is_admin() ) {
  */
 class Customify_MetaBox {
 
-	static $_instance = null;
+	public static $_instance = null;
 	/**
 	 * @see Customify_Form_Fields
 	 * @var Customify_Form_Fields null
 	 */
 	public $field_builder = null;
 
-	static function get_instance() {
+	public static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 			add_action( 'add_meta_boxes', array( self::$_instance, 'add_meta_box' ) );
