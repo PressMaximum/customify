@@ -19,9 +19,9 @@ if ( empty( $product ) || ! $product->is_visible() ) {
 <li 
 <?php
 if ( function_exists( 'wc_product_class' ) ) {
-wc_product_class();
+	wc_product_class();
 } else {
-echo 'class="product customify-col"';
+	echo 'class="product customify-col"';
 };
 ?>
 >

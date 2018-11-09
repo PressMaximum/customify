@@ -1,4 +1,5 @@
 <?php
+
 class Customify {
 
 	static $_instance;
@@ -33,6 +34,7 @@ class Customify {
 	 * Filter the excerpt "read more" string.
 	 *
 	 * @param string $more "Read more" excerpt string.
+	 *
 	 * @return string (Maybe) modified "read more" excerpt string.
 	 */
 	function excerpt_more( $more ) {
@@ -58,6 +60,7 @@ class Customify {
 
 			self::$_instance->init();
 		}
+
 		return self::$_instance;
 	}
 
@@ -65,14 +68,16 @@ class Customify {
 	 * Get data from method of property
 	 *
 	 * @param $key
+	 *
 	 * @return bool|mixed
 	 */
 	function get( $key ) {
 		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func_array( array( $this, 'get_' . $key ), array() );
 		} elseif ( property_exists( $this, $key ) ) {
-			return $this->{ $key };
+			return $this->{$key};
 		}
+
 		return false;
 	}
 
@@ -205,7 +210,7 @@ class Customify {
 			)
 		);
 
-		for ( $i = 1; $i <= 6; $i++ ) {
+		for ( $i = 1; $i <= 6; $i ++ ) {
 			register_sidebar(
 				array(
 					/* translators: 1: Widget number. */
@@ -232,6 +237,7 @@ class Customify {
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			$suffix = '';
 		}
+
 		return $suffix;
 	}
 
@@ -257,6 +263,7 @@ class Customify {
 		if ( ! $css_file ) {
 			$css_file = get_stylesheet_uri();
 		}
+
 		return $css_file;
 	}
 
@@ -367,19 +374,29 @@ class Customify {
 
 	private function includes() {
 		$files = array(
-			'/inc/class-metabox.php',                   // Metabox settings.
-			'/inc/template-class.php',                  // Template element classes.
-			'/inc/extras.php',                          // Custom functions that act independently of the theme templates.
-			'/inc/element-classes.php',                 // Functions which enhance the theme by hooking into WordPress and itself (huh?).
-			'/inc/template-tags.php',                   // Custom template tags for this theme.
-			'/inc/template-functions.php',              // Functions which enhance the theme by hooking into WordPress.
-			'/inc/customizer/class-customizer.php',     // Customizer additions.
-			'/inc/panel-builder/panel-builder.php',     // Panel builder additions.
-
-			'/inc/blog/class-related-posts.php',           // Blog entry builder
-			'/inc/blog/class-post-entry.php',           // Blog entry builder
-			'/inc/blog/class-posts-layout.php',         // Blog posts layout
-			'/inc/blog/functions-posts-layout.php',     // Posts layout functions
+			'/inc/class-metabox.php',
+			// Metabox settings.
+			'/inc/template-class.php',
+			// Template element classes.
+			'/inc/extras.php',
+			// Custom functions that act independently of the theme templates.
+			'/inc/element-classes.php',
+			// Functions which enhance the theme by hooking into WordPress and itself (huh?).
+			'/inc/template-tags.php',
+			// Custom template tags for this theme.
+			'/inc/template-functions.php',
+			// Functions which enhance the theme by hooking into WordPress.
+			'/inc/customizer/class-customizer.php',
+			// Customizer additions.
+			'/inc/panel-builder/panel-builder.php',
+			// Panel builder additions.
+			'/inc/blog/class-related-posts.php',
+			// Blog entry builder.
+			'/inc/blog/class-post-entry.php',
+			// Blog entry builder
+			'/inc/blog/class-posts-layout.php',
+			// Blog posts layout.
+			'/inc/blog/functions-posts-layout.php',
 		);
 
 		foreach ( $files as $file ) {
@@ -389,7 +406,7 @@ class Customify {
 		$this->load_configs();
 		$this->load_compatibility();
 		$this->admin_includes();
-		// Custom categories walker class
+		// Custom categories walker class.
 		if ( ! is_admin() ) {
 			require_once self::$path . '/inc/class-categories-walker.php';
 		}
@@ -417,7 +434,7 @@ class Customify {
 	private function load_configs() {
 
 		$config_files = array(
-			// Site Settings
+			// Site Settings.
 			'upsell',
 			'layouts',
 			'blogs',
@@ -430,7 +447,7 @@ class Customify {
 			'page-header',
 			'background',
 			'compatibility',
-			// Header Builder Panel
+			// Header Builder Panel.
 			'header/panel',
 			'header/html',
 			'header/logo',
@@ -445,7 +462,7 @@ class Customify {
 			'header/nav-icon',
 			'header/button',
 			'header/social-icons',
-			// Footer Builder Panel
+			// Footer Builder Panel.
 			'footer/panel',
 			'footer/widgets',
 			'footer/templates',
@@ -456,11 +473,11 @@ class Customify {
 		);
 
 		$path = get_template_directory();
-		// Load default config values
+		// Load default config values.
 		require_once $path . '/inc/customizer/configs/config-default.php';
 
-		// Load site configs
-		foreach ( $config_files as  $f ) {
+		// Load site configs.
+		foreach ( $config_files as $f ) {
 			$file = $path . "/inc/customizer/configs/{$f}.php";
 			if ( file_exists( $file ) ) {
 				require_once $file;
@@ -475,11 +492,11 @@ class Customify {
 	private function load_compatibility() {
 
 		$compatibility_config_files = array(
-			'elementor',         // Plugin breadcrumb-navxt & Yoat Seo
-			'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo
-			'woocommerce/woocommerce',  // Plugin WooCommerce
+			'elementor',         // Plugin breadcrumb-navxt & Yoat Seo.
+			'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo.
+			'woocommerce/woocommerce',  // Plugin WooCommerce.
 		);
-		foreach ( $compatibility_config_files as  $f ) {
+		foreach ( $compatibility_config_files as $f ) {
 			$file = self::$path . "/inc/compatibility/{$f}.php";
 			if ( file_exists( $file ) ) {
 				require_once $file;
@@ -507,10 +524,10 @@ class Customify {
 			if ( is_front_page() && is_home() ) {
 				$use = false;
 			} elseif ( is_front_page() ) {
-				// static homepage
+				// static homepage.
 				$use = true;
 			} elseif ( is_home() ) {
-				// blog page
+				// blog page.
 				$use = true;
 			} else {
 				if ( $this->is_woocommerce_active() ) {
@@ -520,6 +537,7 @@ class Customify {
 				}
 			}
 		}
+
 		return $use;
 	}
 
@@ -527,11 +545,12 @@ class Customify {
 		$is_blog = false;
 		if ( is_front_page() && is_home() ) {
 			$is_blog = true;
-		} elseif ( is_front_page() ) {
-			// static homepage
+		} elseif ( is_front_page() ) { //phpcs:ignore
+			// static homepage.
 		} elseif ( is_home() ) {
 			$is_blog = true;
 		}
+
 		return $is_blog;
 	}
 
@@ -540,10 +559,10 @@ class Customify {
 		if ( is_front_page() && is_home() ) {
 			$id = false;
 		} elseif ( is_front_page() ) {
-			// static homepage
+			// Static homepage.
 			$id = get_option( 'page_on_front' );
 		} elseif ( is_home() ) {
-			// blog page
+			// Blog page.
 			$id = get_option( 'page_for_posts' );
 		} else {
 			if ( $this->is_woocommerce_active() ) {
@@ -552,6 +571,7 @@ class Customify {
 				}
 			}
 		}
+
 		return $id;
 	}
 
@@ -576,7 +596,7 @@ class Customify {
 	}
 
 	function get_post_types( $_builtin = true ) {
-		if ( $_builtin === 'all' ) {
+		if ( 'all' === $_builtin ) {
 			$post_type_args = array(
 				'publicly_queryable' => true,
 			);

@@ -52,8 +52,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 							esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
 							__( 'Remove this item', 'customify' ),
 							esc_attr( $product_id ),
-							esc_attr( $_product->get_sku() )
-						),
+							esc_attr( $_product->get_sku() ) ),
 							$cart_item_key
 						);
 						?>

@@ -37,7 +37,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 					if ( $thumbnail ) {
 						if ( ! empty( $product_permalink ) ) {
 							echo '<a class="mini_cart_item__thumb" href="' . esc_url( $product_permalink ) . '">';
-								echo $thumbnail; // WPCS: XSS OK.
+							echo $thumbnail; // WPCS: XSS OK.
 							echo '</a>';
 						} else {
 							echo '<span class="mini_cart_item__thumb">';
@@ -48,16 +48,17 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 					?>
 					<span class="mini_cart_item__info">
 					<?php
-						if ( empty( $product_permalink ) ) :
+					if ( empty( $product_permalink ) ) :
 						?>
-						<?php echo $product_name; // WPCS: XSS OK. ?>
+						<?php echo $product_name; // WPCS: XSS OK.
+						?>
 					<?php else : ?>
 						<a href="<?php echo esc_url( $product_permalink ); ?>">
 							<?php echo $product_name; // // WPCS: XSS OK. ?>
 						</a>
 					<?php endif; ?>
-					<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
-					<?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity text-xsmall">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
+						<?php echo wc_get_formatted_cart_item_data( $cart_item ); ?>
+						<?php echo apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity text-xsmall">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ); ?>
 					</span>
 					<?php
 
@@ -72,7 +73,7 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 							esc_attr( $_product->get_sku() )
 						),
 						$cart_item_key
-						);
+					);
 
 					?>
 				</li>

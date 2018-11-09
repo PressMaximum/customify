@@ -71,8 +71,8 @@ if ( ! function_exists( 'customify_comment' ) ) :
 	 * Used as a callback by wp_list_comments() for displaying the comments.
 	 *
 	 * @param object $comment Comment item.
-	 * @param array  $args Comment settings.
-	 * @param int    $depth Current depth.
+	 * @param array  $args    Comment settings.
+	 * @param int    $depth   Current depth.
 	 *
 	 * @return void
 	 */

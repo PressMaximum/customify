@@ -30,9 +30,9 @@ $has_thumbnail = has_post_thumbnail( $product->get_id() );
 		</a>
 		<?php } ?>
 		<span class="tex-info">
-			 <a class="media-info" href="<?php echo esc_url( $product->get_permalink() ); ?>">
+			<a class="media-info" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 				<span class="product-title"><?php echo $product->get_name(); ?></span>
-			 </a>
+			</a>
 			<?php if ( ! empty( $show_rating ) ) : ?>
 				<?php echo wc_get_rating_html( $product->get_average_rating() ); ?>
 			<?php endif; ?>

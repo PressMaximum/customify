@@ -1,7 +1,5 @@
 <?php
-
-// Prevent direct access.
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! defined( 'ABSPATH' ) ) { // Prevent direct access.
 	exit;
 }
 

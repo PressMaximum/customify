@@ -20,7 +20,7 @@ class Customify_Customizer_Control_Pro extends WP_Customize_Control {
 	/**
 	 * Provide the parent, comparison operator, and value which affects the field’s visibility.
 	 *
-	 * @var
+	 * @var array
 	 */
 	public $features = array();
 	public $pro_url = array();

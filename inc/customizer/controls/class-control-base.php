@@ -28,9 +28,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	public $reset_controls = array();
 	public $limit;
 
-	/**
-	 * For slider.
-	 */
+
 	public $min = 0;
 	public $max = 700;
 	public $step = 1;
@@ -51,10 +49,8 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	public $no_setup = false;
 	public $_pro = false;
 
-	/**
-	 * Provide the parent, comparison operator, and value which affects the field’s visibility.
-	 */
-	public $required;
+	public $required; // Provide the parent, comparison operator, and value which affects the field’s visibility.
+
 	public $field_class = '';
 	public static $_js_template_added;
 	public static $_args_loaded;
@@ -137,7 +133,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			$this->json['limit']            = $this->limit;
 			$this->json['limit_msg']        = $this->limit_msg;
 			$this->json['title_only']       = $this->title_only;
-			if ( $this->addable === false ) {
+			if ( false === $this->addable ) {
 				$this->json['addable'] = false;
 				if ( empty( $this->json['value'] ) ) {
 					$this->json['value'] = $this->default_value;
@@ -207,7 +203,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 		wp_enqueue_media();
-		if ( 'repeater' ==  $this->setting_type ) {
+		if ( 'repeater' == $this->setting_type ) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 		}
 
@@ -311,7 +307,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	 * @access protected
 	 */
 	protected function render_content() {
-		if ( 'js_raw' == $this->setting_type  ) {
+		if ( 'js_raw' == $this->setting_type ) {
 			return '';
 		}
 
@@ -357,7 +353,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			<?php } ?>
 
 			<?php if ( 'custom_html' != $this->setting_type ) { ?>
-				<div class="customify--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' customify--repeater-items' : ''; ?>"></div>
+				<div class="customify--settings-fields<?php echo ( 'repeater' == $this->setting_type ) ? ' customify--repeater-items' : ''; ?>"></div>
 				<?php if ( 'repeater' == $this->setting_type ) { ?>
 					<div class="customify--repeater-actions">
 						<a href="#" class="customify--repeater-reorder" data-text="<?php esc_attr_e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>

@@ -4,7 +4,6 @@
  *
  * @package customify
  */
-
 class  Customify_Customizer {
 	static $config;
 	static $_instance;

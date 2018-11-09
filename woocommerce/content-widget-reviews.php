@@ -31,9 +31,9 @@ $has_thumbnail = has_post_thumbnail( $product->get_id() );
 			</a>
 		<?php } ?>
 		<span class="tex-info">
-			 <a class="media-info" href="<?php echo esc_url( $product->get_permalink() ); ?>">
+			<a class="media-info" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 				<span class="product-title"><?php echo $product->get_name(); ?></span>
-			 </a>
+			</a>
 			<?php echo wc_get_rating_html( intval( get_comment_meta( $comment->comment_ID, 'rating', true ) ) ); ?>
 			<span class="reviewer"><?php echo sprintf( esc_html__( 'by %s', 'customify' ), get_comment_author( $comment->comment_ID ) ); ?></span>
 		</span>
