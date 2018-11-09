@@ -5,7 +5,6 @@ class Customify_WC_Products {
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 100 );
 	}
 
-
 	function config( $configs ) {
 		$section = 'woocommerce_product_catalog';
 

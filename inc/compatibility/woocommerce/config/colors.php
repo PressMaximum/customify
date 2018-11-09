@@ -5,7 +5,6 @@ class Customify_WC_Colors {
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 100 );
 	}
 
-
 	function config( $configs ) {
 		$section = 'global_styling';
 

@@ -7,6 +7,7 @@ class Customify_WC {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
+
 		return self::$_instance;
 	}
 
@@ -23,7 +24,7 @@ class Customify_WC {
 			 */
 			add_filter( 'customify_get_layout', array( $this, 'shop_layout' ) );
 			/**
-			 * Filter special meta values for shop pages
+			 * Filter special meta values for shop pages.
 			 *
 			 * @see Customify_WC::get_post_metadata
 			 */
@@ -41,66 +42,62 @@ class Customify_WC {
 			add_filter( 'customify/titlebar/args', array( $this, 'titlebar_args' ) );
 			add_filter( 'customify/titlebar/config', array( $this, 'titlebar_config' ), 15, 2 );
 			add_filter( 'customify/titlebar/is-showing', array( $this, 'titlebar_is_showing' ), 15 );
-			// self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
 			add_filter( 'customify/page-header/get-settings', array( $this, 'get_page_header_settings' ) );
 
 			add_filter( 'customify/theme/js', array( $this, 'add_js' ) );
-			// add_filter('customify/theme/css', array($this, 'add_css'));
 
 			/**
-			 * woocommerce_sidebar hook.
+			 * Woocommerce_sidebar hook.
 			 *
 			 * @hooked woocommerce_get_sidebar - 10
 			 */
 			add_action( 'wp', array( $this, 'wp' ) );
 
-			// Custom styling
+			// Custom styling.
 			add_filter( 'customify/styling/primary-color', array( $this, 'styling_primary' ) );
 			add_filter( 'customify/styling/secondary-color', array( $this, 'styling_secondary' ) );
 			add_filter( 'customify/styling/link-color', array( $this, 'styling_linkcolor' ) );
 			add_filter( 'customify/styling/color-border', array( $this, 'styling_border_color' ) );
 			add_filter( 'customify/styling/color-meta', array( $this, 'styling_meta_color' ) );
 
-			// Shopping Cart
+			// Shopping Cart.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/cart.php';
 			add_filter( 'woocommerce_add_to_cart_fragments', array( $this, 'cart_fragments' ) );
 			add_filter( 'Customify_JS', array( $this, 'Customify_JS' ) );
 
 			add_filter( 'woocommerce_get_script_data', array( $this, 'woocommerce_get_script_data' ), 15, 2 );
 
-			// Load theme style
+			// Load theme style.
 			add_filter( 'woocommerce_enqueue_styles', array( $this, 'custom_styles' ) );
 
-			// Add body class
+			// Add body class.
 			add_filter( 'body_class', array( $this, 'body_class' ) );
 			add_filter( 'post_class', array( $this, 'post_class' ), 190, 3 );
-			// $classes   = apply_filters( 'product_cat_class', $classes, $class, $category );
 			add_filter( 'product_cat_class', array( $this, 'post_cat_class' ), 15 );
 
-			// Change number repleate product
-			// wc_set_loop_prop( 'name', 'related' );
+			// Change number repleate product.
 			add_action( 'customify_wc_loop_start', array( $this, 'loop_start' ) );
 			add_filter( 'woocommerce_output_related_products_args', array( $this, 'related_products_args' ) );
 			add_filter( 'woocommerce_upsell_display_args', array( $this, 'updsell_products_args' ) );
 			add_action( 'woocommerce_before_single_product', array( $this, 'maybe_disable_upsell' ), 1 );
 			add_action( 'woocommerce_before_single_product', array( $this, 'maybe_disable_related' ), 1 );
 
-			// Catalog config
+			// Catalog config.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/catalog.php';
-			// Product catalog designer
+			// Product catalog designer.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/catalog-designer.php';
-			// Single product config
+			// Single product config.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/single-product.php';
 
-			// Single product config
+			// Single product config.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/cart.php';
 
-			// Single colors config
+			// Single colors config.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/colors.php';
-			// Template Hooks
+			// Template Hooks.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/inc/template-hooks.php';
 
-			// Overwrite Categories Walker
+			// Overwrite Categories Walker.
 			add_filter( 'woocommerce_product_categories_widget_args', array( $this, 'customify_wc_cat_list_args' ) );
 
 			/**
@@ -113,12 +110,12 @@ class Customify_WC {
 
 			/**
 			 * Move WC Product images to new hook woocommerce_single_product_media
-			 * This hook created from theme..
+			 * This hook created from theme.
 			 */
 			remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
 			add_action( 'woocommerce_single_product_media', 'woocommerce_show_product_images', 20 );
 
-			// New breadcrumb position
+			// New breadcrumb position.
 			add_filter( 'woocommerce_breadcrumb_defaults', array( $this, 'woocommerce_breadcrumb_args' ) );
 
 		}
@@ -128,30 +125,32 @@ class Customify_WC {
 		$args['delimiter']   = '';
 		$args['wrap_before'] = '<nav class="woocommerce-breadcrumb text-uppercase text-xsmall link-meta">';
 		$args['wrap_after']  = '</nav>';
+
 		return $args;
 	}
 
 
 	/**
-	 *
 	 * Overwrite Categories Walker
 	 *
 	 * @see WC_Product_Cat_List_Walker
 	 *
-	 * @param $args
+	 * @param array $args List args.
 	 *
 	 * @return mixed
 	 */
 	function customify_wc_cat_list_args( $args ) {
 		require_once get_template_directory() . '/inc/compatibility/woocommerce/inc/class-wc-product-cat-list-walker.php';
 		$args['walker'] = new Customify_WC_Product_Cat_List_Walker();
+
 		return $args;
 	}
 
 	function woocommerce_get_script_data( $data, $handle ) {
-		if ( $handle == 'woocommerce' ) {
+		if ( 'woocommerce' == $handle ) {
 			$data['qty_pm'] = apply_filters( 'customify_qty_add_plus_minus', 1 );
 		}
+
 		return $data;
 	}
 
@@ -167,14 +166,14 @@ class Customify_WC {
 
 		wc_set_loop_prop( 'media_secondary', Customify()->get_setting( 'wc_cd_media_secondary' ) );
 
-		if ( ! $name ) { // main loop
+		if ( ! $name ) { // Main loop.
 			wc_set_loop_prop( 'columns', get_option( 'woocommerce_catalog_columns' ) );
 			wc_set_loop_prop( 'tablet_columns', get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
 			wc_set_loop_prop( 'mobile_columns', Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-		} elseif ( $name == 'related' || $name == 'up-sells' || $name == 'cross-sells' ) {
+		} elseif ( 'related' == $name || 'up-sells' == $name || 'cross-sells' == $name ) {
 
-			if ( $name == 'up-sells' ) {
+			if ( 'up-sells' == $name ) {
 				$columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
 			} else {
 				$columns = Customify()->get_setting( 'wc_single_product_related_columns', 'all' );
@@ -204,25 +203,26 @@ class Customify_WC {
 	/**
 	 * Custom number related products
 	 *
-	 * @param $args
+	 * @param array $args Query args.
 	 *
 	 * @return mixed
 	 */
 	function related_products_args( $args ) {
 		$args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_related_number' );
+
 		return $args;
 	}
 
 	function maybe_disable_related() {
 		$n = Customify()->get_setting( 'wc_single_product_related_number' );
-		if ( $n == 0 ) {
+		if ( 0 == $n ) {
 			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 		}
 	}
 
 	function maybe_disable_upsell() {
 		$n = Customify()->get_setting( 'wc_single_product_upsell_number' );
-		if ( $n == 0 ) {
+		if ( 0 == $n ) {
 			remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 		}
 	}
@@ -230,15 +230,15 @@ class Customify_WC {
 	/**
 	 * Custom number related products
 	 *
-	 * @param $args
+	 * @param array $args WP Query args.
 	 *
 	 * @return mixed
 	 */
 	function updsell_products_args( $args ) {
 		$args['posts_per_page'] = Customify()->get_setting( 'wc_single_product_upsell_number' );
+
 		return $args;
 	}
-
 
 	function related_products_columns() {
 		return 3;
@@ -246,6 +246,7 @@ class Customify_WC {
 
 	function post_cat_class( $classes ) {
 		$classes[] = 'customify-col';
+
 		return $classes;
 	}
 
@@ -264,7 +265,7 @@ class Customify_WC {
 
 		global $product;
 
-		if ( is_object( $product ) ) { // Do not add class if is single product
+		if ( is_object( $product ) ) { // Do not add class if is single product.
 
 			if ( isset( $GLOBALS['woocommerce_loop'] ) && ! empty( $GLOBALS['woocommerce_loop'] ) ) {
 				if ( is_product() ) {
@@ -279,7 +280,7 @@ class Customify_WC {
 
 		if ( is_object( $product ) ) {
 			$setting = wc_get_loop_prop( 'media_secondary' );
-			if ( $setting != 'none' ) {
+			if ( 'none' != $setting ) {
 				$image_ids = $product->get_gallery_image_ids();
 				if ( $image_ids ) {
 					$classes[] = 'product-has-gallery';
@@ -292,6 +293,7 @@ class Customify_WC {
 
 	function body_class( $classes ) {
 		$classes['woocommerce'] = 'woocommerce';
+
 		return $classes;
 	}
 
@@ -303,15 +305,14 @@ class Customify_WC {
 		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce' . $suffix . '.css';
 		$enqueue_styles['woocommerce-general']['deps'] = 'customify-style';
 
-		// unset( $enqueue_styles['woocommerce-general'] );  // Remove the gloss
 		if ( isset( $enqueue_styles['woocommerce-layout'] ) ) {
-			unset( $enqueue_styles['woocommerce-layout'] );        // Remove the layout
+			unset( $enqueue_styles['woocommerce-layout'] ); // Remove the layout.
 		}
 
 		if ( isset( $enqueue_styles['woocommerce-smallscreen'] ) ) {
 			$enqueue_styles['woocommerce-smallscreen']['deps'] = '';
 			$enqueue_styles['woocommerce-smallscreen']['src']  = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce-smallscreen' . $suffix . '.css';
-			$b = $enqueue_styles['woocommerce-smallscreen'];
+			$b                                                 = $enqueue_styles['woocommerce-smallscreen'];
 			unset( $enqueue_styles['woocommerce-smallscreen'] );
 			$enqueue_styles['woocommerce-smallscreen'] = $b;
 		}
@@ -322,7 +323,7 @@ class Customify_WC {
 	/**
 	 * Add more settings to Customify JS
 	 *
-	 * @param $args
+	 * @param array $args JS settings.
 	 *
 	 * @return mixed
 	 */
@@ -341,6 +342,7 @@ class Customify_WC {
 	 * @see WC_AJAX::get_refreshed_fragments();
 	 *
 	 * @param array $cart_fragments
+	 *
 	 * @return array
 	 */
 	function cart_fragments( $cart_fragments = array() ) {
@@ -440,12 +442,14 @@ class Customify_WC {
 	function add_css( $css_files ) {
 		$suffix                          = Customify()->get_asset_suffix();
 		$css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce' . $suffix . '.css';
+
 		return $css_files;
 	}
 
 	function add_js( $js_files ) {
 		$suffix                         = Customify()->get_asset_suffix();
 		$js_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js';
+
 		return $js_files;
 	}
 
@@ -461,6 +465,7 @@ class Customify_WC {
 		if ( $this->is_shop_pages() ) {
 			$id = wc_get_page_id( 'shop' );
 		}
+
 		return $id;
 	}
 
@@ -471,6 +476,7 @@ class Customify_WC {
 				$classes['content_layout'] = 'content-' . sanitize_text_field( $page_layout );
 			}
 		}
+
 		return $classes;
 	}
 
@@ -481,6 +487,7 @@ class Customify_WC {
 				$show = false;
 			}
 		}
+
 		return $show;
 	}
 
@@ -498,6 +505,7 @@ class Customify_WC {
 				$show = false;
 			}
 		}
+
 		return $show;
 	}
 
@@ -521,7 +529,7 @@ class Customify_WC {
 	 *
 	 * @TODO display category thumbnail as header cover if set.
 	 *
-	 * @param $args
+	 * @param array $args
 	 *
 	 * @return mixed
 	 */
@@ -542,7 +550,7 @@ class Customify_WC {
 	function titlebar_is_showing( $show = true ) {
 
 		if ( is_shop() ) {
-			// Do not show if page settings disable page title
+			// Do not show if page settings disable page title.
 			if ( Customify_Breadcrumb::get_instance()->support_plugins_active() && ! Customify()->get_setting( 'titlebar_display_product' ) ) {
 				$show = false;
 			} else {
@@ -550,9 +558,9 @@ class Customify_WC {
 			}
 			if ( Customify()->is_using_post() ) {
 				$breadcrumb_display = get_post_meta( wc_get_page_id( 'shop' ), '_customify_breadcrumb_display', true );
-				if ( $breadcrumb_display == 'hide' ) {
+				if ( 'hide' == $breadcrumb_display ) {
 					$show = false;
-				} elseif ( $breadcrumb_display == 'show' ) {
+				} elseif ( 'show' == $breadcrumb_display ) {
 					$show = true;
 				}
 			}
@@ -603,6 +611,7 @@ class Customify_WC {
 			$args['title'] = get_the_title( wc_get_page_id( 'shop' ) );
 			$args['tag']   = 'h2';
 		}
+
 		return $args;
 	}
 
@@ -611,11 +620,11 @@ class Customify_WC {
 			switch ( $sidebar_type ) {
 				case 'secondary':
 					return 'shop-sidebar-2';
-					break;
 				default:
 					return 'shop-sidebar-1';
 			}
 		}
+
 		return $id;
 	}
 
@@ -652,10 +661,10 @@ class Customify_WC {
 	/**
 	 * Filter meta key for shop pages
 	 *
-	 * @param $value
-	 * @param $object_id
-	 * @param $meta_key
-	 * @param $single
+	 * @param string $value
+	 * @param string $object_id
+	 * @param string $meta_key
+	 * @param bool   $single
 	 *
 	 * @return mixed
 	 */
@@ -669,7 +678,7 @@ class Customify_WC {
 			return $value;
 		}
 
-		if ( $object_id == wc_get_page_id( 'cart' ) || $object_id == wc_get_page_id( 'checkout' ) ) {
+		if ( wc_get_page_id( 'cart' ) == $object_id || wc_get_page_id( 'checkout' ) == $object_id ) {
 
 			$meta_type = 'post';
 
@@ -698,12 +707,12 @@ class Customify_WC {
 
 			switch ( $meta_key ) {
 				case '_customify_page_header_display':
-					if ( empty( $value ) || $value[0] == 'default' || $value[0] == 'normal' || ! $value[0] ) {
+					if ( empty( $value ) || 'default' == $value[0] || 'normal' == $value[0] || ! $value[0] ) {
 						$value[0] = 'normal';
 					}
 					break;
 				case '_customify_breadcrumb_display':
-					if ( empty( $value ) || $value[0] == 'default' || ! $value[0] ) {
+					if ( empty( $value ) || 'default' == $value[0] || ! $value[0] ) {
 						$value[0] = 'hide';
 					}
 					break;
@@ -719,7 +728,7 @@ class Customify_WC {
 	 *
 	 * @param bool $layout
 	 *
-	 * @return array|bool|mixed|null|string|void
+	 * @return string
 	 */
 	function shop_layout( $layout = false ) {
 		if ( $this->is_shop_pages() ) {
@@ -740,7 +749,7 @@ class Customify_WC {
 			$product_sidebar = get_post_meta( get_the_ID(), '_customify_sidebar', true );
 			if ( ! $product_sidebar ) {
 				$product_custom = Customify()->get_setting( 'product_sidebar_layout' );
-				if ( $product_custom && $product_custom != 'default' ) {
+				if ( $product_custom && 'default' != $product_custom ) {
 					$layout = $product_custom;
 				}
 			} else {
@@ -781,10 +790,11 @@ function customify_get_default_catalog_view_mod() {
 		$use_cookies = false;
 	}
 
-	if ( $use_cookies ) { // do not use cookie in customize
-		if ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) && $_COOKIE['customify_wc_pl_view_mod'] ) {
-			if ( $_COOKIE['customify_wc_pl_view_mod'] == 'grid' || $_COOKIE['customify_wc_pl_view_mod'] == 'list' ) {
-				$default = $_COOKIE['customify_wc_pl_view_mod'];
+	if ( $use_cookies ) { // Do not use cookie in customize.
+		$cookie_mod = ( isset( $_COOKIE['customify_wc_pl_view_mod'] ) && $_COOKIE['customify_wc_pl_view_mod'] ) ? sanitize_text_field( $_COOKIE['customify_wc_pl_view_mod'] ) : false; // WPCS: sanitization ok.
+		if ( $cookie_mod ) {
+			if ( 'grid' == $cookie_mod || 'list' == $cookie_mod ) {
+				$default = $cookie_mod;
 			}
 		}
 	}
@@ -800,6 +810,8 @@ function customify_get_default_catalog_view_mod() {
 if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 	/**
 	 * Insert the opening anchor tag for products in the loop.
+	 *
+	 * @param string $classs
 	 */
 	function woocommerce_template_loop_product_link_open( $classs = '' ) {
 		global $product;
@@ -812,16 +824,14 @@ if ( ! function_exists( 'woocommerce_template_loop_product_link_open' ) ) {
 
 if ( ! function_exists( 'woocommerce_shop_loop_item_title' ) ) {
 	/**
-	 * overridden function woocommerce_shop_loop_item_title
-	 */
-	/**
 	 * Show the product title in the product loop. By default this is an H2.
+	 * Overridden function `woocommerce_shop_loop_item_title`
 	 */
 	function woocommerce_template_loop_product_title() {
 		echo '<h2 class="woocommerce-loop-product__title">';
-			woocommerce_template_loop_product_link_open();
-			echo get_the_title();
-			woocommerce_template_loop_product_link_close();
+		woocommerce_template_loop_product_link_open();
+		echo get_the_title();
+		woocommerce_template_loop_product_link_close();
 		echo '</h2>';
 	}
 }
@@ -856,44 +866,44 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 			?>
 			<div class="woocommerce-listing wc-product-listing <?php echo esc_attr( 'wc-' . $view . '-view' ); ?>">
 
-			<?php if ( Customify_WC()->show_shop_title() ) { ?>
-				<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-					<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
-				<?php endif; ?>
-				<?php do_action( 'woocommerce_archive_description' ); ?>
-			<?php } ?>
-
-			<?php if ( have_posts() ) : ?>
-
-				<?php do_action( 'woocommerce_before_shop_loop' ); ?>
-
-				<?php woocommerce_product_loop_start(); ?>
+				<?php if ( Customify_WC()->show_shop_title() ) { ?>
+					<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
+						<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
+					<?php endif; ?>
+					<?php do_action( 'woocommerce_archive_description' ); ?>
+				<?php } ?>
 
 				<?php
-				while ( have_posts() ) :
-					the_post();
+				if ( have_posts() ) :
 					?>
 
-					<?php wc_get_template_part( 'content', 'product' ); ?>
+					<?php do_action( 'woocommerce_before_shop_loop' ); ?>
 
-				<?php endwhile; // end of the loop. ?>
+					<?php woocommerce_product_loop_start(); ?>
 
-				<?php woocommerce_product_loop_end(); ?>
+					<?php
+					while ( have_posts() ) :
+						the_post();
+						?>
 
-				<?php do_action( 'woocommerce_after_shop_loop' ); ?>
+						<?php wc_get_template_part( 'content', 'product' ); ?>
 
-				<?php
-			elseif ( ! woocommerce_product_subcategories(
-				array(
-					'before' => woocommerce_product_loop_start( false ),
-					'after'  => woocommerce_product_loop_end( false ),
-				)
-			) ) :
+					<?php endwhile; // end of the loop. ?>
+
+					<?php woocommerce_product_loop_end(); ?>
+
+					<?php do_action( 'woocommerce_after_shop_loop' ); ?>
+
+					<?php
+				elseif ( ! woocommerce_product_subcategories(
+					array(
+						'before' => woocommerce_product_loop_start( false ),
+						'after'  => woocommerce_product_loop_end( false ),
+					)
+				) ) :
 				?>
-
-				<?php do_action( 'woocommerce_no_products_found' ); ?>
-
-			<?php endif; ?>
+					<?php do_action( 'woocommerce_no_products_found' ); ?>
+				<?php endif; ?>
 			</div>
 			<?php
 
