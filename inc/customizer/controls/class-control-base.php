@@ -42,9 +42,9 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	public $fields_disabled = array();
 
 	public $limit_msg = '';
-	public $live_title_field; // for repeater.
-	public $addable = null; // for repeater.
-	public $title_only = null; // for repeater.
+	public $live_title_field;
+	public $addable = null;
+	public $title_only = null;
 	public $_settings;
 	public $_selective_refresh;
 	public $device_settings = false;
@@ -52,7 +52,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	public $_pro = false;
 
 	/**
-	 * Provide the parent, comparison operator, and value which affects the field’s visibility
+	 * Provide the parent, comparison operator, and value which affects the field’s visibility.
 	 */
 	public $required;
 	public $field_class = '';
@@ -69,7 +69,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 
 		// Add something here.
 		$value = $this->value();
-		if ( $this->setting_type == 'group' ) {
+		if ( 'group' == $this->setting_type ) {
 			if ( ! is_array( $value ) ) {
 				$value = array();
 			}
@@ -82,7 +82,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			if ( ! is_array( $this->default ) ) {
 				$this->default = array();
 			}
-		} elseif ( $this->setting_type == 'repeater' ) {
+		} elseif ( 'repeater' == $this->setting_type ) {
 			if ( ! is_array( $value ) ) {
 				$value = array();
 			}
@@ -91,10 +91,10 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			}
 		}
 
-		// Devices switcher settings = true;
+		// Devices switcher settings = true;.
 		$this->json['device_settings'] = $this->device_settings;
-		if ( ! $this->device_settings && $this->setting_type != 'js_raw' ) {
-			// Fallback value when device_settings from true to false
+		if ( ! $this->device_settings && 'js_raw' != $this->setting_type ) {
+			// Fallback value when device_settings from true to false.
 			if ( is_array( $value ) && isset( $value['desktop'] ) ) {
 				$value = $value['desktop'];
 			}
@@ -129,7 +129,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			$this->json['fields_disabled'] = $this->fields_disabled;
 		}
 
-		if ( $this->setting_type == 'repeater' ) {
+		if ( 'repeater' == $this->setting_type ) {
 			$this->json['l10n']             = array(
 				'untitled' => __( 'Untitled', 'customify' ),
 			);
@@ -176,10 +176,10 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			}
 		}
 
-		if ( $this->setting_type == 'select' || $this->setting_type == 'radio' ) {
+		if ( 'select' == $this->setting_type || 'radio' == $this->setting_type ) {
 			$this->json['choices'] = $this->choices;
 		}
-		if ( $this->setting_type == 'checkbox' ) {
+		if ( 'checkbox' == $this->setting_type ) {
 			$this->json['checkbox_label'] = $this->checkbox_label;
 		}
 
@@ -207,7 +207,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	 */
 	public function enqueue() {
 		wp_enqueue_media();
-		if ( $this->setting_type == 'repeater' ) {
+		if ( 'repeater' ==  $this->setting_type ) {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 		}
 
@@ -215,11 +215,11 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery-ui-slider' );
-		wp_enqueue_style( 'customify-customizer-control', esc_url( get_template_directory_uri() ) . '/assets/css/admin/customizer/customizer' . $suffix . '.css' );
-		wp_enqueue_style( 'select2', esc_url( get_template_directory_uri() ) . '/assets/css/admin/select2' . $suffix . '.css' );
-		wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/color-picker-alpha' . $suffix . '.js', array( 'wp-color-picker' ), false, true );
-		wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ) . '/assets/js/select2' . $suffix . '.js', array( 'jquery' ), false, true );
-		wp_enqueue_script(
+		wp_enqueue_style( 'customify-customizer-control', esc_url( get_template_directory_uri() ) . '/assets/css/admin/customizer/customizer' . $suffix . '.css' ); // phpcs:ignore
+		wp_enqueue_style( 'select2', esc_url( get_template_directory_uri() ) . '/assets/css/admin/select2' . $suffix . '.css' ); // phpcs:ignore
+		wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/color-picker-alpha' . $suffix . '.js', array( 'wp-color-picker' ), false, true ); // phpcs:ignore
+		wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ) . '/assets/js/select2' . $suffix . '.js', array( 'jquery' ), false, true ); // phpcs:ignore
+		wp_enqueue_script( // phpcs:ignore
 			'customify-customizer-control',
 			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/control' . $suffix . '.js',
 			array(
@@ -269,18 +269,18 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				'typo_fields'      => Customify()->customizer->get_typo_fields(),
 				'styling_config'   => Customify()->customizer->get_styling_config(),
 				'devices'          => Customify()->customizer->devices,
-				// Auto redirect to url when section open
+				// Auto redirect to url when section open.
 				'section_urls'     => array(
 					'section_single_blog_post' => $single_post_url,
-					'section_search_results'   => home_url( '/?s=a' ), // search page
+					'section_search_results'   => home_url( '/?s=a' ), // search page.
 				),
-				// Auto redirect to url when section panel
+				// Auto redirect to url when section panel.
 				'panel_urls'       => array(
 					'panel_blog_post' => $blog_url,
 				),
 			);
 
-			wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', apply_filters( 'Customify_Control_Args', $args ) );
+			wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', apply_filters( 'Customify_Control_Args', $args ) ); // phpcs:ignore
 			self::$_args_loaded = true;
 		}
 	}
@@ -297,9 +297,10 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		}
 
 		?>
-	<li id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?><?php echo ( $this->device ) ? '  customify--device-show customify--device-' . esc_attr( $this->device ) : ''; ?>">
+		<li id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?><?php echo ( $this->device ) ? '  customify--device-show customify--device-' . esc_attr( $this->device ) : ''; ?>">
 		<?php $this->render_content(); ?>
-		</li><?php
+		</li>
+		<?php
 	}
 
 
@@ -310,11 +311,11 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	 * @access protected
 	 */
 	protected function render_content() {
-		if ( $this->setting_type == 'js_raw' ) {
+		if ( 'js_raw' == $this->setting_type  ) {
 			return '';
 		}
 
-		if ( $this->setting_type == 'heading' ) {
+		if ( 'heading' == $this->setting_type ) {
 			?>
 			<div class="customify-control--heading">
 				<label>
@@ -342,11 +343,11 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				</div>
 			<?php } ?>
 			<?php
-			if ( $this->setting_type == 'custom_html' ) {
+			if ( 'custom_html' == $this->setting_type ) {
 				?>
 				<div class="custom_html"><?php
 					echo $this->description;  // WPCS: XSS OK.
-					?></div>
+				?></div>
 				<?php
 			} else {
 				?>
@@ -355,12 +356,12 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				<?php endif; ?>
 			<?php } ?>
 
-			<?php if ( $this->setting_type != 'custom_html' ) { ?>
+			<?php if ( 'custom_html' != $this->setting_type ) { ?>
 				<div class="customify--settings-fields<?php echo ( $this->setting_type == 'repeater' ) ? ' customify--repeater-items' : ''; ?>"></div>
-				<?php if ( $this->setting_type == 'repeater' ) { ?>
+				<?php if ( 'repeater' == $this->setting_type ) { ?>
 					<div class="customify--repeater-actions">
 						<a href="#" class="customify--repeater-reorder" data-text="<?php esc_attr_e( 'Reorder', 'customify' ); ?>" data-done="<?php _e( 'Done', 'customify' ); ?>"><?php _e( 'Reorder', 'customify' ); ?></a>
-						<?php if ( $this->addable !== false ) { ?>
+						<?php if ( false !== $this->addable ) { ?>
 							<button type="button" class="button customify--repeater-add-new"><?php _e( 'Add an item', 'customify' ); ?></button>
 						<?php } ?>
 					</div>
@@ -370,23 +371,23 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		<?php
 	}
 
-static function before_field() {
-	?>
-	<#
-	var required = '';
-	if ( ! _.isUndefined( field.required ) ) {
-	required = JSON.stringify( field.required  );
-	}
-	#>
-	<div class="customify--field customify--field-{{ field.type }} {{ field.class }} customify--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
-		<?php
-		}
-
-		static function after_field() {
+	static function before_field() {
 		?>
-	</div>
-	<?php
-}
+		<#
+		var required = '';
+		if ( ! _.isUndefined( field.required ) ) {
+		required = JSON.stringify( field.required  );
+		}
+		#>
+		<div class="customify--field customify--field-{{ field.type }} {{ field.class }} customify--field-name-{{ field.original_name }}" data-required="{{ required }}" data-field-name="{{ field.name }}">
+		<?php
+	}
+
+	static function after_field() {
+		?>
+		</div>
+		<?php
+	}
 
 	static function field_header() {
 		?>

@@ -1,7 +1,4 @@
 <?php
-/**
- * Customizer custom section: Pro
- */
 
 // Prevent direct access.
 if ( ! defined( 'ABSPATH' ) ) {
