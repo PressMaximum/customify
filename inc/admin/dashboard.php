@@ -40,7 +40,6 @@ class Customify_Dashboard {
 
 	/**
 	 * Add admin notice when active theme.
-	 *
 	 */
 	function admin_notice() {
 		global $pagenow;

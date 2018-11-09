@@ -274,7 +274,7 @@ class Customify_Posts_Layout {
 					$this->item_part( 'footer', $post );
 					?>
 				</div>
-			<?php
+				<?php
 
 		}
 
