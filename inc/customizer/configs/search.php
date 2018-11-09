@@ -45,7 +45,7 @@ if ( ! function_exists( 'customify_customizer_search_config' ) ) {
 				'selector'        => $args['selector'],
 				'render_callback' => $args['cb'],
 				'label'           => __( 'Excerpt Length', 'customify' ),
-				'required'        => array( $args['id'] . '_excerpt_type', '=', 'custom' )
+				'required'        => array( $args['id'] . '_excerpt_type', '=', 'custom' ),
 			),
 			array(
 				'name'            => $args['id'] . '_excerpt_more',

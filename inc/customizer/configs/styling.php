@@ -6,7 +6,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 
 		$config = array(
 
-			// Styling panel
+			// Styling panel.
 			array(
 				'name'     => 'styling_panel',
 				'type'     => 'panel',
@@ -14,7 +14,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'title'    => __( 'Styling', 'customify' ),
 			),
 
-			// Styling Global Section
+			// Styling Global Section.
 			array(
 				'name'     => "{$section}",
 				'type'     => 'section',
@@ -36,8 +36,9 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'placeholder' => '#235787',
 				'title'       => __( 'Primary Color', 'customify' ),
-				'css_format'  => apply_filters( 'customify/styling/primary-color', '
-				
+				'css_format'  => apply_filters(
+					'customify/styling/primary-color',
+					'
 					.header-top .header--row-inner,
 					.button,
 					button,
@@ -75,13 +76,14 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'placeholder' => '#c3512f',
 				'title'       => __( 'Secondary Color', 'customify' ),
-				'css_format'  => apply_filters( 'customify/styling/secondary-color', '
+				'css_format'  => apply_filters(
+					'customify/styling/secondary-color',
+					'
 				
 					.customify-builder-btn
 					{
 					    background-color: {{value}};
 					}'
-
 				),
 				'selector'    => 'format',
 			),
@@ -92,7 +94,9 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Text Color', 'customify' ),
 				'placeholder' => '#686868',
-				'css_format'  => apply_filters( 'customify/styling/text-color', '
+				'css_format'  => apply_filters(
+					'customify/styling/text-color',
+					'
 					body
 					{
 					    color: {{value}};
@@ -110,7 +114,9 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Link Color', 'customify' ),
 				'placeholder' => '#1e4b75',
-				'css_format'  => apply_filters( 'customify/styling/link-color', '
+				'css_format'  => apply_filters(
+					'customify/styling/link-color',
+					'
 	                a   
 	                {
 	                    color: {{value}};
@@ -125,13 +131,16 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Link Hover Color', 'customify' ),
 				'placeholder' => '#111111',
-				'css_format'  => apply_filters( 'customify/styling/link-color-hover', '
+				'css_format'  => apply_filters(
+					'customify/styling/link-color-hover',
+					'
 a:hover, 
 a:focus,
 .link-meta:hover, .link-meta a:hover
 {
     color: {{value}};
-}' ),
+}'
+				),
 				'selector'    => 'format',
 			),
 
@@ -141,7 +150,9 @@ a:focus,
 				'section'     => $section,
 				'title'       => __( 'Border Color', 'customify' ),
 				'placeholder' => '#eaecee',
-				'css_format'  => apply_filters( 'customify/styling/color-border', '
+				'css_format'  => apply_filters(
+					'customify/styling/color-border',
+					'
 h2 + h3, 
 .comments-area h2 + .comments-title, 
 .h2 + h3, 
@@ -218,7 +229,8 @@ article.comment .comment-meta,
         border-right-color: {{value}};
     }
 }
-' ),
+'
+				),
 				'selector'    => 'format',
 			),
 
@@ -228,7 +240,9 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'title'       => __( 'Meta Color', 'customify' ),
 				'placeholder' => '#6d6d6d',
-				'css_format'  => apply_filters( 'customify/styling/color-meta', '
+				'css_format'  => apply_filters(
+					'customify/styling/color-meta',
+					'
 					article.comment .comment-post-author {
 						background: {{value}};				
 					}

@@ -17,7 +17,8 @@ if ( ! function_exists( 'customify_posted_on' ) ) :
 			$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
 		}
 
-		$time_string = sprintf( $time_string,
+		$time_string = sprintf(
+			$time_string,
 			esc_attr( get_the_date( 'c' ) ),
 			esc_html( get_the_date() ),
 			esc_attr( get_the_modified_date( 'c' ) ),
@@ -69,20 +70,23 @@ if ( ! function_exists( 'customify_comment' ) ) :
 	 *
 	 * Used as a callback by wp_list_comments() for displaying the comments.
 	 *
+	 * @param object $comment Comment item.
+	 * @param array  $args Comment settings.
+	 * @param int    $depth Current depth.
+	 *
 	 * @return void
 	 */
 	function customify_comment( $comment, $args, $depth ) {
-		//$GLOBALS['comment'] = $comment;
-		switch ( $comment->comment_type ) :
-			case 'pingback' :
-			case 'trackback' :
+		switch ( $comment->comment_type ) {
+			case 'pingback':
+			case 'trackback':
 				// Display trackbacks differently than normal comments.
 				?>
 				<li <?php comment_class(); ?> id="comment-<?php comment_ID(); ?>">
-				<p><?php _e( 'Pingback:', 'customify' ); ?> <?php comment_author_link(); ?> <?php edit_comment_link( __( '(Edit)', 'customify' ), '<span class="edit-link">', '</span>' ); ?></p>
+				<p><?php _e( 'Pingback:', 'customify' ); ?><?php comment_author_link(); ?><?php edit_comment_link( __( '(Edit)', 'customify' ), '<span class="edit-link">', '</span>' ); ?></p>
 				<?php
 				break;
-			default :
+			default:
 				// Proceed with normal comments.
 				global $post;
 				?>
@@ -97,22 +101,33 @@ if ( ! function_exists( 'customify_comment' ) ) :
 					<div class="comment-wrap">
 						<header class="comment-header">
 							<?php
-							printf( '<cite class="comment-author fn vcard">%1$s %2$s</cite>',
+							printf(
+								'<cite class="comment-author fn vcard">%1$s %2$s</cite>',
 								get_comment_author_link(),
 								// If current post author is also comment author, make it known visually.
 								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author text-uppercase text-xsmall">' . __( 'Post author', 'customify' ) . '</span>' : ''
 							);
 							?>
 							<div class="comment-meta text-uppercase text-xsmall link-meta">
-                                <a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
-                                    <time datetime="<?php comment_time( 'c' ); ?>">
-                                        <?php printf( _x( '%1$s at %2$s', '1: date, 2: time', 'customify' ), get_comment_date(), get_comment_time() ); ?>
-                                    </time>
-                                </a>
-                                <?php edit_comment_link( __( 'Edit', 'customify' ) ); ?>
-                                <div class="comment-reply pull-right">
-                                    <?php comment_reply_link( array_merge( $args, array( 'reply_text' => __( 'Reply', 'customify' ), 'after' => '', 'depth' => $depth, 'max_depth' => $args['max_depth'] ) ) ); ?>
-                                </div>
+								<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
+									<time datetime="<?php comment_time( 'c' ); ?>">
+										<?php printf( _x( '%1$s at %2$s', '1: date, 2: time', 'customify' ), get_comment_date(), get_comment_time() ); ?>
+									</time>
+								</a>
+								<?php edit_comment_link( __( 'Edit', 'customify' ) ); ?>
+								<div class="comment-reply pull-right">
+									<?php comment_reply_link(
+										array_merge(
+											$args,
+											array(
+												'reply_text' => __( 'Reply', 'customify' ),
+												'after'      => '',
+												'depth'      => $depth,
+												'max_depth'  => $args['max_depth'],
+											)
+										)
+									); ?>
+								</div>
 							</div>
 
 						</header><!-- .comment-meta -->
@@ -123,7 +138,6 @@ if ( ! function_exists( 'customify_comment' ) ) :
 
 						<div class="comment-content entry-content">
 							<?php comment_text(); ?>
-							<?php  ?>
 						</div><!-- .comment-content -->
 
 					</div><!--/comment-wrapper-->
@@ -131,12 +145,12 @@ if ( ! function_exists( 'customify_comment' ) ) :
 				</article><!-- #comment-## -->
 				<?php
 				break;
-		endswitch; // end comment_type check
+		} // End comment_type check.
 	}
 endif;
 
 if ( ! function_exists( 'customify_nav_next_icon' ) ) {
-	function customify_nav_next_icon(){
+	function customify_nav_next_icon() {
 		return '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129"><g><path d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"/></g></svg>';
 	}
 }
@@ -145,7 +159,7 @@ add_filter( 'customify_nav_next_icon', 'customify_nav_next_icon' );
 
 
 if ( ! function_exists( 'customify_nav_prev_icon' ) ) {
-	function customify_nav_prev_icon(){
+	function customify_nav_prev_icon() {
 		return '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129"><g><path d="m88.6,121.3c0.8,0.8 1.8,1.2 2.9,1.2s2.1-0.4 2.9-1.2c1.6-1.6 1.6-4.2 0-5.8l-51-51 51-51c1.6-1.6 1.6-4.2 0-5.8s-4.2-1.6-5.8,0l-54,53.9c-1.6,1.6-1.6,4.2 0,5.8l54,53.9z"/></g></svg>';
 	}
 }

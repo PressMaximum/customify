@@ -34,6 +34,7 @@
         <exclude name="WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet" />
         <exclude name="WordPress.PHP.StrictComparisons" />
         <exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
+        <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
 
     </rule>
     <rule ref="WordPress-Docs">

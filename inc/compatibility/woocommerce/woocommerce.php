@@ -299,6 +299,10 @@ class Customify_WC {
 
 	/**
 	 * Load load theme styling instead.
+	 *
+	 * @param array $enqueue_styles List enqueue styles.
+	 *
+	 * @return mixed
 	 */
 	function custom_styles( $enqueue_styles ) {
 		$suffix                                        = Customify()->get_asset_suffix();

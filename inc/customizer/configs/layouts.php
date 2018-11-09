@@ -88,7 +88,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'css_format'      => 'max-width: {{value}}',
 			),
 
-			// Site content layout
+			// Site content layout.
 			array(
 				'name'       => 'site_content_layout',
 				'type'       => 'radio_group',
@@ -120,7 +120,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'selector'        => '#sidebar-secondary, #sidebar-primary, #main',
 			),
 
-			// Page layout
+			// Page layout.
 			array(
 				'name'           => 'sidebar_layout_section',
 				'type'           => 'section',
@@ -128,7 +128,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'theme_supports' => '',
 				'title'          => __( 'Sidebars', 'customify' ),
 			),
-			// Global sidebar layout
+			// Global sidebar layout.
 			array(
 				'name'    => 'sidebar_layout',
 				'type'    => 'select',
@@ -152,7 +152,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'selector'   => 'body',
 			),
 
-			// Page sidebar layout
+			// Page sidebar layout.
 			array(
 				'name'    => 'page_sidebar_layout',
 				'type'    => 'select',
@@ -161,7 +161,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'title'   => __( 'Pages', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
 			),
-			// Blog Posts sidebar layout
+			// Blog Posts sidebar layout.
 			array(
 				'name'    => 'posts_sidebar_layout',
 				'type'    => 'select',
@@ -170,7 +170,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'title'   => __( 'Blog posts', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
 			),
-			// Blog Posts sidebar layout
+			// Blog Posts sidebar layout.
 			array(
 				'name'    => 'posts_archives_sidebar_layout',
 				'type'    => 'select',
@@ -179,7 +179,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'title'   => __( 'Blog Archive Page', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
 			),
-			// Search
+			// Search.
 			array(
 				'name'    => 'search_sidebar_layout',
 				'type'    => 'select',
@@ -188,7 +188,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'title'   => __( 'Search Page', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
 			),
-			// 404
+			// 404.
 			array(
 				'name'    => '404_sidebar_layout',
 				'type'    => 'select',

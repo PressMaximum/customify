@@ -34,7 +34,7 @@ function customify_wc_secondary_product_thumbnail() {
 	global $product;
 	$image_ids = $product->get_gallery_image_ids();
 	if ( count( $image_ids ) ) {
-		$secondary_img_id = $setting == 'last' ? end( $image_ids ) : reset( $image_ids );
+		$secondary_img_id = 'last' == $setting ? end( $image_ids ) : reset( $image_ids );
 		$size             = 'shop_catalog';
 		$classes          = 'attachment-' . $size . ' secondary-image image-transition';
 		echo wp_get_attachment_image( $secondary_img_id, $size, false, array( 'class' => $classes ) );

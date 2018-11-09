@@ -2,12 +2,15 @@
 if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 	function customify_customizer_blog_config( $args = array() ) {
 
-		$args          = wp_parse_args( $args, array(
-			'name'     => __( 'Blog Posts', 'customify' ),
-			'id'       => 'blog_post',
-			'selector' => '#blog-posts',
-			'cb'       => 'customify_blog_posts',
-		) );
+		$args          = wp_parse_args(
+			$args,
+			array(
+				'name'     => __( 'Blog Posts', 'customify' ),
+				'id'       => 'blog_post',
+				'selector' => '#blog-posts',
+				'cb'       => 'customify_blog_posts',
+			)
+		);
 		$top_panel     = 'blog_panel';
 		$level_2_panel = 'panel_' . $args['id'];
 
@@ -89,10 +92,9 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 						'bg_attachment' => false,
 					),
 					'hover_fields'  => array(
-						'link_color' => false
+						'link_color' => false,
 					),
 				),
-				//'required' => array($args['id'].'_more_display', '==', '1')
 			),
 
 			array(
@@ -122,7 +124,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'min'             => 0,
 				'device_settings' => true,
 				'unit'            => '%',
-				'required'        => array( $args['id'] . '_media_hide', '!=', '1' )
+				'required'        => array( $args['id'] . '_media_hide', '!=', '1' ),
 			),
 			array(
 				'name'            => $args['id'] . '_media_width',
@@ -136,7 +138,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'unit'            => '%',
 				'selector'        => "{$args['selector']} .posts-layout .entry-media, {$args['selector']} .posts-layout.layout--blog_classic .entry-media",
 				'css_format'      => 'flex-basis: {{value_no_unit}}%; width: {{value_no_unit}}%;',
-				'required'        => array( $args['id'] . '_media_hide', '!=', '1' )
+				'required'        => array( $args['id'] . '_media_hide', '!=', '1' ),
 			),
 
 			array(
@@ -148,7 +150,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'min'        => 0,
 				'selector'   => "{$args['selector']} .posts-layout .entry-media",
 				'css_format' => 'border-radius: {{value}};',
-				'required'   => array( $args['id'] . '_media_hide', '!=', '1' )
+				'required'   => array( $args['id'] . '_media_hide', '!=', '1' ),
 			),
 
 			array(
@@ -160,7 +162,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'default'         => 'medium',
 				'label'           => __( 'Thumbnail Size', 'customify' ),
 				'choices'         => customify_get_all_image_sizes(),
-				'required'        => array( $args['id'] . '_media_hide', '!=', '1' )
+				'required'        => array( $args['id'] . '_media_hide', '!=', '1' ),
 			),
 			array(
 				'name'            => $args['id'] . '_hide_thumb_if_empty',
@@ -170,10 +172,10 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'selector'        => $args['selector'],
 				'render_callback' => $args['cb'],
 				'checkbox_label'  => __( 'Hide featured image if empty.', 'customify' ),
-				'required'        => array( $args['id'] . '_media_hide', '!=', '1' )
+				'required'        => array( $args['id'] . '_media_hide', '!=', '1' ),
 			),
 
-			// Article Excerpt ---------------------------------------------------------------------------------
+			// Article Excerpt ---------------------------------------------------------------------------------.
 			array(
 				'name'  => $level_2_panel . '_excerpt',
 				'type'  => 'section',
@@ -205,7 +207,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'selector'        => $args['selector'],
 				'render_callback' => $args['cb'],
 				'label'           => __( 'Excerpt Length', 'customify' ),
-				'required'        => array( $args['id'] . '_excerpt_type', '=', 'custom' )
+				'required'        => array( $args['id'] . '_excerpt_type', '=', 'custom' ),
 			),
 			array(
 				'name'            => $args['id'] . '_excerpt_more',
@@ -284,7 +286,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 						'type'  => 'hidden',
 						'label' => __( 'Title', 'customify' ),
 					),
-				)
+				),
 			),
 
 			array(
@@ -306,7 +308,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'selector'        => $args['selector'],
 				'render_callback' => $args['cb'],
 				'label'           => __( 'Avatar Size', 'customify' ),
-				'required'        => array( $args['id'] . '_author_avatar', '==', '1' )
+				'required'        => array( $args['id'] . '_author_avatar', '==', '1' ),
 			),
 
 			array(
@@ -330,11 +332,10 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'name'            => $args['id'] . '_more_text',
 				'type'            => 'text',
 				'section'         => $level_2_panel . '_readmore',
-				//'default' => ! is_rtl() ? _x( 'Read More &#8594;', 'readmore LTR', 'customify' ) : _x( 'Read More &#8594;', 'readmore RTL' , 'customify' ),
 				'selector'        => $args['selector'],
 				'render_callback' => $args['cb'],
 				'label'           => __( 'Read More Text', 'customify' ),
-				'required'        => array( $args['id'] . '_more_display', '==', '1' )
+				'required'        => array( $args['id'] . '_more_display', '==', '1' ),
 			),
 			array(
 				'name'       => $args['id'] . '_more_typography',
@@ -343,7 +344,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'section'    => $level_2_panel . '_readmore',
 				'selector'   => "{$args['selector'] } .entry-readmore a",
 				'label'      => __( 'Typography', 'customify' ),
-				'required'   => array( $args['id'] . '_more_display', '==', '1' )
+				'required'   => array( $args['id'] . '_more_display', '==', '1' ),
 			),
 
 			array(
@@ -359,7 +360,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'label'      => __( 'Styling', 'customify' ),
 				'fields'     => array(
 					'normal_fields' => array(
-						'link_color'    => false, // disable for special field.
+						'link_color'    => false, // Disable for special field.
 						'bg_image'      => false,
 						'bg_cover'      => false,
 						'bg_position'   => false,
@@ -367,10 +368,10 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 						'bg_attachment' => false,
 					),
 					'hover_fields'  => array(
-						'link_color' => false, // disable for special field.
-					)
+						'link_color' => false, // Disable for special field.
+					),
 				),
-				'required'   => array( $args['id'] . '_more_display', '==', '1' )
+				'required'   => array( $args['id'] . '_more_display', '==', '1' ),
 			),
 
 			array(
@@ -397,7 +398,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'type'            => 'checkbox',
 				'default'         => 1,
 				'checkbox_label'  => __( 'Show Next, Previous Label', 'customify' ),
-				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' )
+				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' ),
 			),
 			array(
 				'name'            => $args['id'] . '_pg_prev_text',
@@ -406,7 +407,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'render_callback' => $args['cb'],
 				'type'            => 'text',
 				'label'           => __( 'Previous Label', 'customify' ),
-				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' )
+				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' ),
 			),
 			array(
 				'name'            => $args['id'] . '_pg_next_text',
@@ -415,7 +416,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'render_callback' => $args['cb'],
 				'type'            => 'text',
 				'label'           => __( 'Next Label', 'customify' ),
-				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' )
+				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' ),
 			),
 
 			array(
@@ -426,7 +427,7 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'type'            => 'text',
 				'default'         => 3,
 				'label'           => __( 'How many numbers to either side of the current pages', 'customify' ),
-				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' )
+				'required'        => array( $args['id'] . '_pg_show_paging', '==', '1' ),
 			),
 
 		);

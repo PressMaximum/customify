@@ -3,8 +3,8 @@ add_filter( 'customify/customize/settings-default', 'customify_layout_builder_co
 /**
  * Default theme customize settings data.
  *
- * @param $val
- * @param $name
+ * @param string $val
+ * @param string $name
  *
  * @return mixed
  */
@@ -93,14 +93,32 @@ function customify_layout_builder_config_default( $val, $name ) {
 					),
 			),
 			'header_main_height'        => array(
-				'desktop' => array( 'unit' => 'px', 'value' => '90', ),
-				'tablet'  => array( 'unit' => 'px', 'value' => '', ),
-				'mobile'  => array( 'unit' => 'px', 'value' => '', ),
+				'desktop' => array(
+					'unit' => 'px',
+					'value' => '90',
+				),
+				'tablet'  => array(
+					'unit' => 'px',
+					'value' => '',
+				),
+				'mobile'  => array(
+					'unit' => 'px',
+					'value' => '',
+				),
 			),
 			'header_bottom_height'      => array(
-				'desktop' => array( 'unit' => 'px', 'value' => '55', ),
-				'tablet'  => array( 'unit' => 'px', 'value' => '', ),
-				'mobile'  => array( 'unit' => 'px', 'value' => '', ),
+				'desktop' => array(
+					'unit' => 'px',
+					'value' => '55',
+				),
+				'tablet'  => array(
+					'unit' => 'px',
+					'value' => '',
+				),
+				'mobile'  => array(
+					'unit' => 'px',
+					'value' => '',
+				),
 			),
 			'header_sidebar_animate'    => 'menu_sidebar_dropdown',
 			'header_nav-icon_align'     => array(
