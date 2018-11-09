@@ -1,9 +1,7 @@
 <?php
 
-/**
- * Calls the class on the post edit screen.
- */
 if ( is_admin() ) {
+	// Calls the class on the post edit screen.
 	add_action( 'load-post.php', array( 'Customify_MetaBox', 'get_instance' ) );
 	add_action( 'load-post-new.php', array( 'Customify_MetaBox', 'get_instance' ) );
 }

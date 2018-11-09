@@ -49,7 +49,12 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	public $no_setup = false;
 	public $_pro = false;
 
-	public $required; // Provide the parent, comparison operator, and value which affects the field’s visibility.
+	/**
+	 * Provide the parent, comparison operator, and value which affects the field’s visibility.
+	 *
+	 * @var array
+	 */
+	public $required;
 
 	public $field_class = '';
 	public static $_js_template_added;

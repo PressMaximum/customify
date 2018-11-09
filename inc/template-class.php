@@ -197,7 +197,7 @@ if ( ! function_exists( 'customify_site_content_grid_class' ) ) :
 	 * @param string|array $class One or more classes to add to the class list.
 	 */
 	function customify_site_content_grid_class( $class = '' ) {
-		// Separates classes with a single space, collates classes for body element
+		// Separates classes with a single space, collates classes for body element.
 		echo 'class="' . join( ' ', customify_get_site_content_grid_class( $class ) ) . '"';
 	}
 endif;

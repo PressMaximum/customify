@@ -41,7 +41,6 @@ class Customify_Dashboard {
 	/**
 	 * Add admin notice when active theme.
 	 *
-	 * @return bool|null
 	 */
 	function admin_notice() {
 		global $pagenow;

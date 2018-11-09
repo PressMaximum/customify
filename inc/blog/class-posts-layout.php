@@ -274,7 +274,7 @@ class Customify_Posts_Layout {
 					$this->item_part( 'footer', $post );
 					?>
 				</div>
-				<?php
+			<?php
 
 		}
 
@@ -397,7 +397,7 @@ class Customify_Posts_Layout {
 		<div class="posts-layout-wrapper">
 			<div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $s_atts; // WPCS: XSS OK. ?>>
 				<?php
-				if ( 'blog_timeline' == $this->args['layout']  ) {
+				if ( 'blog_timeline' == $this->args['layout'] ) {
 					echo '<div class="time-line"></div>';
 				}
 				?>

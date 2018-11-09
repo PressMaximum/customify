@@ -6,11 +6,11 @@ new WP_Widget_Categories();
  *
  * @see wp_list_categories
  *
- * @param $args
+ * @param array $args
  *
  * @return mixed
  */
-function customify_widget_categories_args( $args ){
+function customify_widget_categories_args( $args ) {
 	$args['walker'] = new Customify_Walker_Category();
 	return $args;
 }
@@ -70,7 +70,7 @@ class Customify_Walker_Category extends Walker_Category {
 			$link .= '<a href="' . esc_url( get_term_feed_link( $category->term_id, $category->taxonomy, $args['feed_type'] ) ) . '"';
 
 			if ( empty( $args['feed'] ) ) {
-				$alt = ' alt="' . sprintf(__( 'Feed for all posts filed under %s', 'customify' ), $cat_name ) . '"';
+				$alt = ' alt="' . sprintf( __( 'Feed for all posts filed under %s', 'customify' ), $cat_name ) . '"';
 			} else {
 				$alt = ' alt="' . $args['feed'] . '"';
 				$name = $args['feed'];
@@ -107,10 +107,13 @@ class Customify_Walker_Category extends Walker_Category {
 
 			if ( ! empty( $args['current_category'] ) ) {
 				// 'current_category' can be an array, so we use `get_terms()`.
-				$_current_terms = get_terms( $category->taxonomy, array(
-					'include' => $args['current_category'],
-					'hide_empty' => false,
-				) );
+				$_current_terms = get_terms(
+					$category->taxonomy,
+					array(
+						'include' => $args['current_category'],
+						'hide_empty' => false,
+					)
+				);
 
 				foreach ( $_current_terms as $_current_term ) {
 					if ( $category->term_id == $_current_term->term_id ) {
@@ -120,7 +123,7 @@ class Customify_Walker_Category extends Walker_Category {
 					}
 					while ( $_current_term->parent ) {
 						if ( $category->term_id == $_current_term->parent ) {
-							$css_classes[] =  'current-cat-ancestor';
+							$css_classes[] = 'current-cat-ancestor';
 							break;
 						}
 						$_current_term = get_term( $_current_term->parent, $category->taxonomy );
@@ -142,7 +145,7 @@ class Customify_Walker_Category extends Walker_Category {
 			 */
 			$css_classes = implode( ' ', apply_filters( 'category_css_class', $css_classes, $category, $depth, $args ) );
 
-			$output .=  ' class="' . $css_classes . '"';
+			$output .= ' class="' . $css_classes . '"';
 			$output .= ">$link\n";
 		} elseif ( isset( $args['separator'] ) ) {
 			$output .= "\t$link" . $args['separator'] . "\n";

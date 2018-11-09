@@ -137,7 +137,7 @@ if ( ! function_exists( 'customify_get_sidebars' ) ) {
 			get_sidebar();
 		}
 
-		// Show both sidebar for 3 column layout
+		// Show both sidebar for 3 column layout.
 		if ( in_array( $layout, $layout_3_columns ) ) { // phpcs:ignore
 			get_sidebar();
 			get_sidebar( 'secondary' );
@@ -276,6 +276,8 @@ if ( ! function_exists( 'customify_show_post_title' ) ) {
 
 /**
  * Retrieve the archive title based on the queried object.
+ *
+ * @param string $title
  *
  * @return string Archive title.
  */

@@ -183,7 +183,7 @@ class Customify_Post_Entry {
 				return $link;
 			}
 
-			if ( $icon_first && $index == 0 ) {
+			if ( $icon_first && 0 == $index ) { // phpcs:ignore
 
 			} else {
 				$icon = '';
@@ -367,10 +367,12 @@ class Customify_Post_Entry {
 		}
 	}
 
+
 	/**
 	 * Post title markup
 	 *
-	 * @param null|object|int $post
+	 * @param null|WP_Post|int $post
+	 * @param bool             $force_link
 	 */
 	function post_title( $post = null, $force_link = false ) {
 		if ( is_singular() && ! $force_link ) {
@@ -400,6 +402,8 @@ class Customify_Post_Entry {
 
 	/**
 	 * Get first category markup
+	 *
+	 * @param null|WP_Post|int $post
 	 */
 	function post_category( $post = null ) {
 		$html = '';
@@ -420,7 +424,7 @@ class Customify_Post_Entry {
 	/**
 	 *  Post thumbnail markup
 	 *
-	 * @param null $post
+	 * @param null|WP_Post|int $post
 	 */
 	function post_thumbnail( $post = null ) {
 		if ( is_single() && ! is_front_page() && ! is_home() ) {
@@ -442,6 +446,10 @@ class Customify_Post_Entry {
 
 	/**
 	 * Post excerpt markup
+	 *
+	 * @param null|WP_Post|int $post
+	 * @param string           $type
+	 * @param int|bool         $length
 	 */
 	function post_excerpt( $post = null, $type = '', $length = false ) {
 		if ( ! $type ) {
