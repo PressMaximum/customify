@@ -394,6 +394,7 @@ class Customify_WC_Catalog_Designer {
 			'section'    => $section,
 			'priority'   => 32,
 			'title'      => __( 'Styling', 'customify' ),
+			'description'=> __( 'Advanced styling for onsale button', 'customify' ),
 			'selector'   => array(
 				'normal' => '.woocommerce span.onsale',
 			),
