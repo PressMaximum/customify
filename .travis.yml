@@ -1,7 +1,9 @@
 # Travis CI configuration file.
 # @link https://travis-ci.org/
 
-# For use with the Twenty Nineteen WordPress theme
+# For use with the customify WordPress theme
+# This base on Twenty Nineteen WordPress theme
+# @link https://github.com/WordPress/twentynineteen
 # @link https://github.com/PressMaximum/customify/
 
 # Declare project language and PHP versions to test against.
@@ -15,25 +17,15 @@ dist: precise
 notifications:
   email:
     on_success: never
-    on_failure: change
+    on_failure: never
   slack: pressmaximum:WaFytA2hT7wKIFnc3mSOJSTy
 
-# Declare versions of PHP to use. Use one decimal max.
-matrix:
-  fast_finish: true
-
-  include:
-  - php: "7.3"
-  #- php: "7.2"
-  #- php: "7.1"
-  #- php: "7.0"
-  #- php: "5.6"
-  #- php: "5.5"
-  #- php: "5.4"
-  # - php: "5.3"
-  # Current $required_php_version for WordPress: 5.2.4
-  #- php: "5.2"
-  #  env: LINT=1
+# Test main supported versions of PHP against latest WP.
+php:
+- 5.6
+- 7.0
+- 7.1
+- 7.3
 
 # Ditch sudo and use containers.
 # @link http://docs.travis-ci.com/user/migrating-from-legacy/#Why-migrate-to-container-based-infrastructure%3F
@@ -44,10 +36,28 @@ sudo: false
 # Also declare whether or not to test in Multisite.
 env:
   global:
-  # Current version in development is 5.0.
+  # Check on latest version.
   # @link https://github.com/WordPress/WordPress
-  - WP_VERSION=5.0
-  - WP_MULTISITE=0
+  - WP_VERSION=latest WP_MULTISITE=0
+
+# Additional tests against stable PHP (min recommended version is 5.6) and past supported versions of WP
+# and code coverage report.
+matrix:
+  fast_finish: true
+
+  include:
+  - php: 5.3
+    dist: precise
+  - php: 5.2
+    dist: precise
+  - php: 7.2
+    env: WP_VERSION=latest WP_MULTISITE=0 RUN_PHPCS=1 RUN_E2E=1
+  - php: 7.1
+    env: WP_VERSION=latest WP_MULTISITE=0 RUN_CODE_COVERAGE=1
+  allow_failures:
+    - env: WP_VERSION=latest WP_MULTISITE=0 RUN_CODE_COVERAGE=1
+    - php: 7.3
+
 
 # Use this to prepare your build for testing.
 # e.g. copy database configurations, environment variables, etc.
