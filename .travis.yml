@@ -32,13 +32,11 @@ php:
 # @link http://docs.travis-ci.com/user/workers/container-based-infrastructure/#Routing-your-build-to-container-based-infrastructure
 sudo: false
 
-# Declare which versions of WordPress to test against.
-# Also declare whether or not to test in Multisite.
+# Check on latest version.
+# @link https://github.com/WordPress/WordPress
 env:
-  global:
-  # Check on latest version.
-  # @link https://github.com/WordPress/WordPress
-  - WP_VERSION=latest WP_MULTISITE=0
+- WP_VERSION=latest WP_MULTISITE=0
+
 
 # Additional tests against stable PHP (min recommended version is 5.6) and past supported versions of WP
 # and code coverage report.
