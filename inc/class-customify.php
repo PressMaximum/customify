@@ -67,7 +67,7 @@ class Customify {
 	/**
 	 * Get data from method of property
 	 *
-	 * @param $key
+	 * @param string $key
 	 *
 	 * @return bool|mixed
 	 */
@@ -170,13 +170,13 @@ class Customify {
 			)
 		);
 
-		// WooCommerce support
+		// WooCommerce support.
 		add_theme_support( 'woocommerce' );
 		add_theme_support( 'wc-product-gallery-zoom' );
 		add_theme_support( 'wc-product-gallery-lightbox' );
 		add_theme_support( 'wc-product-gallery-slider' );
 
-		// Add editor style
+		// Add editor style.
 		add_editor_style( 'assets/css/admin/editor-style.min.css' );
 
 	}
@@ -357,7 +357,7 @@ class Customify {
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
-			apply_filters(
+			apply_filters( // phpcs:ignore
 				'Customify_JS',
 				array(
 					'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries,
@@ -393,7 +393,7 @@ class Customify {
 			'/inc/blog/class-related-posts.php',
 			// Blog entry builder.
 			'/inc/blog/class-post-entry.php',
-			// Blog entry builder
+			// Blog entry builder.
 			'/inc/blog/class-posts-layout.php',
 			// Blog posts layout.
 			'/inc/blog/functions-posts-layout.php',
@@ -486,7 +486,7 @@ class Customify {
 
 	}
 
-	/*
+	/**
 	 * Load site compatibility supports
 	 */
 	private function load_compatibility() {

@@ -9,7 +9,8 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly.
+	// Exit if accessed directly ?
+	exit;
 }
 
 global $post, $product;
@@ -62,12 +63,19 @@ if ( $product->is_on_sale() ) {
 						}
 					}
 				}
-				$text = sprintf( __( '%s', 'customify' ), - $maximumper . '%' );
+
+				$text = sprintf(
+					'%s',
+					- $maximumper . '%'
+				);
 
 			} elseif ( 'simple' == $product_type ) {
 				$percentage = round( ( ( $product->get_regular_price() - $product->get_sale_price() ) / $product->get_regular_price() ) * 100 );
-				/*Translators: 1: Admin URL2: Customize URL 3: Footer ID */
-				$text = sprintf( __( '%s', 'customify' ), - $percentage . '%' );
+
+				$text = sprintf(
+					'%s',
+					- $percentage . '%'
+				);
 			}
 			break;
 		default:

@@ -3,7 +3,6 @@
 /**
  * Calls the class on the post edit screen.
  */
-
 if ( is_admin() ) {
 	add_action( 'load-post.php', array( 'Customify_MetaBox', 'get_instance' ) );
 	add_action( 'load-post-new.php', array( 'Customify_MetaBox', 'get_instance' ) );
@@ -191,13 +190,11 @@ class Customify_MetaBox {
 	 */
 	public function save( $post_id ) {
 
-		/*
+		/**
 		 * We need to verify this came from the our screen and with proper authorization,
 		 * because save_post can be triggered at other times.
 		 */
-
-		// Check if our nonce is set.
-		if ( ! isset( $_POST['customify_page_settings_nonce'] ) ) {
+		if ( ! isset( $_POST['customify_page_settings_nonce'] ) ) { // Check if our nonce is set.
 			return $post_id;
 		}
 

@@ -131,6 +131,7 @@ if ( post_password_required() ) {
 	if ( 2 == $has_col ) {
 		echo '</div>';
 	}
+
 	?>
 
 	<?php
