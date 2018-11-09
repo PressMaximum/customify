@@ -51,13 +51,15 @@ class Customify_Customizer_Auto_CSS {
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
-			self::$code = self::$_instance->auto_css();
+			self::$code      = self::$_instance->auto_css();
 		}
+
 		return self::$_instance;
 	}
 
 	private function replace_value( $value, $format, $value_no_unit = null ) {
 		$s = str_replace( '{{value}}', $value, $format );
+
 		return str_replace( '{{value_no_unit}}', $value_no_unit, $s );
 	}
 
@@ -91,8 +93,8 @@ class Customify_Customizer_Auto_CSS {
 		foreach ( $format as $pos => $string ) {
 			$v = $value[ $pos ];
 			if ( $string ) {
-				if ( ! is_null( $v ) && $v !== '' ) {
-					$v = $v . $value['unit'];
+				if ( ! is_null( $v ) && '' !== $v ) {
+					$v            = $v . $value['unit'];
 					$code[ $pos ] = $this->replace_value( $v, $string );
 				}
 			}
@@ -107,8 +109,9 @@ class Customify_Customizer_Auto_CSS {
 			return '';
 		}
 
-		$p = wp_parse_args( $value, $this->box_shadow_fields );
-		$color = $value = Customify_Sanitize_Input::sanitize_color( $p['color'] );
+		$p        = wp_parse_args( $value, $this->box_shadow_fields );
+		$value    = Customify_Sanitize_Input::sanitize_color( $p['color'] );
+		$color    = $value;
 		$position = $p['inset'] ? 'inset' : '';
 		if ( ! $color ) {
 			return '';
@@ -127,15 +130,14 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		$style = $p['x'] . 'px'
-				. ' ' . $p['y'] . 'px'
-				. ' ' . $p['blur'] . 'px'
-				. ' ' . $p['spread'] . 'px'
-				. ' ' . $color
-				. ' ' . $position
-				. ';';
+				 . ' ' . $p['y'] . 'px'
+				 . ' ' . $p['blur'] . 'px'
+				 . ' ' . $p['spread'] . 'px'
+				 . ' ' . $color
+				 . ' ' . $position
+				 . ';';
 
-		/*
-		 offset-x | offset-y | blur-radius | spread-radius | color */
+		// offset-x | offset-y | blur-radius | spread-radius | color.
 		// box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);.
 		return $this->replace_value( $style, $format );
 	}
@@ -154,9 +156,10 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		if ( $format ) {
-			if ( ! is_null( $value['value'] ) && $value['value'] !== '' ) {
+			if ( ! is_null( $value['value'] ) && '' !== $value['value'] ) {
 				$v = $value['value'] . $value['unit'];
 				$c = $this->replace_value( $v, $format, $value['value'] );
+
 				return $c;
 			}
 		}
@@ -167,10 +170,11 @@ class Customify_Customizer_Auto_CSS {
 	function setup_color( $value, $format ) {
 		$value = Customify_Sanitize_Input::sanitize_color( $value );
 		if ( $format ) {
-			if ( ! is_null( $value ) && $value !== '' ) {
+			if ( ! is_null( $value ) && '' !== $value ) {
 				return $this->replace_value( $value, $format );
 			}
 		}
+
 		return false;
 	}
 
@@ -180,6 +184,7 @@ class Customify_Customizer_Auto_CSS {
 				return $format;
 			}
 		}
+
 		return false;
 	}
 
@@ -190,36 +195,42 @@ class Customify_Customizer_Auto_CSS {
 				return $this->replace_value( $image, $format ) . '';
 			}
 		}
+
 		return false;
 	}
 
 	function setup_text_align( $value, $format ) {
 		$value = sanitize_text_field( $value );
 		if ( $format ) {
-			if ( ! is_null( $value ) && $value !== '' ) {
+			if ( ! is_null( $value ) && '' !== $value ) {
 				return $this->replace_value( $value, $format ) . ';';
 			}
 		}
+
 		return false;
 	}
 
 	function css_ruler( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_css_ruler', $values, $no_selector );
+
 		return $code;
 	}
 
 	function slider( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_slider', $values, $no_selector );
+
 		return $code;
 	}
 
 	function color( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_color', $values, $no_selector );
+
 		return $code;
 	}
 
 	function shadow( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_shadow', $values, $no_selector );
+
 		return $code;
 	}
 
@@ -229,15 +240,17 @@ class Customify_Customizer_Auto_CSS {
 
 	function image( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_image', $values, $no_selector );
+
 		return $code;
 	}
 
 	function text_align( $field, $values = null, $no_selector = null ) {
 		$code = $this->maybe_devices_setup( $field, 'setup_default', $values, $no_selector );
+
 		return $code;
 	}
 
-	function _join( $lists, $codeList, &$selectorCSSAll = array(), &$selectorCSSDevices = array() ) {
+	function _join( $lists, $codeList, &$selectorCSSAll = array(), &$selectorCSSDevices = array() ) { //phpcs:ignore
 		if ( ! is_array( $selectorCSSAll ) ) {
 			$selectorCSSAll = array();
 		}
@@ -288,7 +301,7 @@ class Customify_Customizer_Auto_CSS {
 		if ( ! is_array( $selectors ) ) {
 			$selectors = array();
 		}
-		if ( $fields === false ) {
+		if ( false === $fields ) {
 			$newList = null;
 		} else {
 
@@ -297,7 +310,7 @@ class Customify_Customizer_Auto_CSS {
 			}
 
 			$newfs = array();
-			$i = 0;
+			$i     = 0;
 			foreach ( $list as $f ) {
 				$key = $f['name'];
 				if ( ! isset( $fields[ $key ] ) || $fields[ $key ] ) {
@@ -307,10 +320,11 @@ class Customify_Customizer_Auto_CSS {
 					} else {
 						$newfs[ $key ]['selector'] = $selectors[ $type ];
 					}
-					$i++;
+					$i ++;
 				}
 			}
 			$newList = $newfs;
+
 			return $newList;
 		}
 	}
@@ -327,11 +341,11 @@ class Customify_Customizer_Auto_CSS {
 		);
 
 		$new_fields = array();
-		$selectors = array();
+		$selectors  = array();
 
 		if ( is_string( $field['selector'] ) ) {
 			$selectors['normal'] = $field['selector'];
-			$selectors['hover'] = $field['selector'];
+			$selectors['hover']  = $field['selector'];
 		} else {
 			$selectors = wp_parse_args(
 				$field['selector'],
@@ -341,9 +355,9 @@ class Customify_Customizer_Auto_CSS {
 				)
 			);
 		}
-		$tabs = null;
-		$normal_fields = -1;
-		$hover_fields = -1;
+		$tabs          = null;
+		$normal_fields = - 1;
+		$hover_fields  = - 1;
 		if ( isset( $field['fields'] ) && is_array( $field['fields'] ) ) {
 			if ( isset( $field['fields']['tabs'] ) ) {
 				$tabs = $field['fields']['tabs'];
@@ -356,21 +370,21 @@ class Customify_Customizer_Auto_CSS {
 			}
 		}
 
-		$styling_config = Customify()->customizer->get_styling_config();
-		$selectorCSSAll = array();
+		$styling_config     = Customify()->customizer->get_styling_config();
+		$selectorCSSAll     = array();
 		$selectorCSSDevices = array();
-		$listNormalFields = $this->setup_styling_fields( $normal_fields, $styling_config['normal_fields'], $selectors, 'normal' );
-		$listHoverFields = $this->setup_styling_fields( $hover_fields, $styling_config['hover_fields'], $selectors, 'hover' );
+		$listNormalFields   = $this->setup_styling_fields( $normal_fields, $styling_config['normal_fields'], $selectors, 'normal' );
+		$listHoverFields    = $this->setup_styling_fields( $hover_fields, $styling_config['hover_fields'], $selectors, 'hover' );
 
 		$listTabs = $styling_config['tabs'];
 
-		if ( $tabs === false ) {
+		if ( false === $tabs ) {
 			$listTabs['hover'] = false;
 		} elseif ( is_array( $tabs ) ) {
 			$listTabs = $tabs;
 		}
 
-		// Do no use bg settings if no bg
+		// Do no use bg settings if no bg.
 		if ( isset( $values['normal']['bg_image'] ) ) {
 			$image = Customify()->get_media( $values['normal']['bg_image'] );
 			if ( ! $image ) {
@@ -382,7 +396,7 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		$normal_style = $this->loop_fields( $listNormalFields, $values['normal'], true, true );
-		$hover_style = $this->loop_fields( $listHoverFields, $values['hover'], true, true );
+		$hover_style  = $this->loop_fields( $listHoverFields, $values['hover'], true, true );
 
 		$this->_join( $listNormalFields, $normal_style, $selectorCSSAll, $selectorCSSDevices );
 		$this->_join( $listHoverFields, $hover_style, $selectorCSSAll, $selectorCSSDevices );
@@ -440,14 +454,15 @@ class Customify_Customizer_Auto_CSS {
 				return $this->replace_value( $value, $format );
 			}
 		}
+
 		return false;
 	}
 
 	function maybe_devices_setup( $field, $call_back, $values = null, $no_selector = false ) {
-		$code = '';
+		$code       = '';
 		$code_array = array();
 		$has_device = false;
-		$format = isset( $field['css_format'] ) ? $field['css_format'] : false;
+		$format     = isset( $field['css_format'] ) ? $field['css_format'] : false;
 		if ( isset( $field['device_settings'] ) && $field['device_settings'] ) {
 			$has_device = true;
 			foreach ( Customify()->customizer->devices as $device ) {
@@ -496,7 +511,7 @@ class Customify_Customizer_Auto_CSS {
 					if ( isset( $code_array[ $device ] ) ) {
 						$_c = $code_array[ $device ];
 						if ( $_c && trim( $_c ) ) {
-							if ( $field['selector'] == 'format' ) {
+							if ( 'format' == $field['selector'] ) {
 								$this->css[ $device ] .= "\r\n{$_c}\r\n";
 							} else {
 								$this->css[ $device ] .= "\r\n{$field['selector']} {\r\n\t{$_c}\r\n}\r\n";
@@ -506,7 +521,7 @@ class Customify_Customizer_Auto_CSS {
 				}
 			} else {
 				if ( isset( $code_array['no_devices'] ) && $code_array['no_devices'] ) {
-					if ( $field['selector'] == 'format' ) {
+					if ( 'format' == $field['selector'] ) {
 						$this->css['all'] .= "\r\n{$code_array['no_devices']}\r\n";
 					} else {
 						$this->css['all'] .= "\r\n{$field['selector']} {\r\n\t{$code_array['no_devices']}\r\n}\r\n";
@@ -534,7 +549,7 @@ class Customify_Customizer_Auto_CSS {
 			return '';
 		}
 
-		if ( $value['type'] == 'google' ) {
+		if ( 'google' == $value['type'] ) {
 			$this->fonts[ $value['font'] ] = $value['font'];
 			if ( $value['variant'] ) {
 				if ( ! isset( $this->variants[ $value['font'] ] ) ) {
@@ -585,9 +600,9 @@ class Customify_Customizer_Auto_CSS {
 			if ( is_null( $values ) ) {
 				$values = Customify()->get_setting( $field['name'] );
 			}
-			$code = $this->setup_font( $values );
+			$code             = $this->setup_font( $values );
 			$this->css['all'] .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
-			$code .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
+			$code             .= "{$field['selector']} {\r\n\t{$code}\r\n}\r\n";
 		}
 
 		return $code;
@@ -604,7 +619,7 @@ class Customify_Customizer_Auto_CSS {
 				't' => null,
 			)
 		);
-		$css = array();
+		$css   = array();
 		if ( $value['b'] ) {
 			$css['b'] = 'font-weight: bold;';
 		}
@@ -649,12 +664,12 @@ class Customify_Customizer_Auto_CSS {
 				'font_weight'     => null,
 				'text_decoration' => null,
 				'text_transform'  => null,
-				'variant'  => null,
+				'variant'         => null,
 			)
 		);
-		$code = array();
+		$code   = array();
 
-		$fields = array();
+		$fields      = array();
 		$devices_css = array();
 		foreach ( Customify()->customizer->get_typo_fields() as $f ) {
 			$fields[ $f['name'] ] = $f;
@@ -672,42 +687,42 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		if ( isset( $values['style'] ) && $values['style'] ) {
-			// $code['font_style'] = $this->setup_font_style($values['font_style']);
-			if ( $values['style'] && $values['style'] !== 'default' ) {
+
+			if ( $values['style'] && 'default' !== $values['style'] ) {
 				$code['style'] = 'font-style: ' . $values['style'] . ';';
 			}
 		}
 
-		// Font Weight
-		if ( $values['font_weight'] == 'default' ) {
+		// Font Weight.
+		if ( 'default' == $values['font_weight'] ) {
 			$values['font_weight'] = '';
 		}
 		if ( isset( $fields['font_weight'] ) && $values['font_weight'] ) {
-			if ( $values['font_weight'] == 'regular' ) {
+			if ( 'regular' == $values['font_weight'] ) {
 				$values['font_weight'] = 'normal';
 			}
 			$code['font_weight'] = 'font-weight: ' . sanitize_text_field( $values['font_weight'] ) . ';';
 		}
 
-		// Text Decoration
+		// Text Decoration.
 		if ( isset( $fields['text_decoration'] ) && $values['text_decoration'] ) {
 			$code['text_decoration'] = 'text-decoration: ' . sanitize_text_field( $values['text_decoration'] ) . ';';
 		}
 
-		// Text Transform
+		// Text Transform.
 		if ( isset( $fields['text_transform'] ) && $values['text_transform'] ) {
 			$code['text_transform'] = 'text-transform: ' . sanitize_text_field( $values['text_transform'] ) . ';';
 		}
 
 		if ( isset( $fields['font_size'] ) ) {
 			$fields['font_size']['css_format'] = 'font-size: {{value}};';
-			$font_size_css = $this->maybe_devices_setup( $fields['font_size'], 'setup_slider', $values['font_size'], true );
+			$font_size_css                     = $this->maybe_devices_setup( $fields['font_size'], 'setup_slider', $values['font_size'], true );
 			if ( $font_size_css ) {
 				if ( isset( $font_size_css['no_devices'] ) ) {
 					$code['font_size'] = $font_size_css['no_devices'];
 				} else {
 					foreach ( $font_size_css as $device => $_c ) {
-						if ( $device == 'desktop' ) {
+						if ( 'desktop' == $device ) {
 							$code['font_size'] = $_c;
 						} else {
 							if ( ! isset( $devices_css[ $device ] ) ) {
@@ -722,13 +737,13 @@ class Customify_Customizer_Auto_CSS {
 
 		if ( isset( $fields['line_height'] ) ) {
 			$fields['line_height']['css_format'] = 'line-height: {{value}};';
-			$font_size_css = $this->maybe_devices_setup( $fields['line_height'], 'setup_slider', $values['line_height'], true );
+			$font_size_css                       = $this->maybe_devices_setup( $fields['line_height'], 'setup_slider', $values['line_height'], true );
 			if ( $font_size_css ) {
 				if ( isset( $font_size_css['no_devices'] ) ) {
 					$code['line_height'] = $font_size_css['no_devices'];
 				} else {
 					foreach ( $font_size_css as $device => $_c ) {
-						if ( $device == 'desktop' ) {
+						if ( 'desktop' == $device ) {
 							$code['line_height'] = $_c;
 						} else {
 							if ( ! isset( $devices_css[ $device ] ) ) {
@@ -743,13 +758,13 @@ class Customify_Customizer_Auto_CSS {
 
 		if ( isset( $fields['letter_spacing'] ) ) {
 			$fields['letter_spacing']['css_format'] = 'letter-spacing: {{value}};';
-			$font_size_css = $this->maybe_devices_setup( $fields['letter_spacing'], 'setup_slider', $values['letter_spacing'], true );
+			$font_size_css                          = $this->maybe_devices_setup( $fields['letter_spacing'], 'setup_slider', $values['letter_spacing'], true );
 			if ( $font_size_css ) {
 				if ( isset( $font_size_css['no_devices'] ) && ! empty( $font_size_css['no_devices'] ) ) {
 					$code['letter_spacing'] = $font_size_css['no_devices'];
 				} else {
 					foreach ( (array) $font_size_css as $device => $_c ) {
-						if ( $device == 'desktop' ) {
+						if ( 'desktop' == $device ) {
 							$code['letter_spacing'] = $_c;
 						} else {
 							if ( ! isset( $devices_css[ $device ] ) ) {
@@ -778,7 +793,7 @@ class Customify_Customizer_Auto_CSS {
 
 	function get_google_fonts_url() {
 		$url = '//fonts.googleapis.com/css?family=';
-		$s = '';
+		$s   = '';
 		if ( empty( $this->fonts ) ) {
 			return false;
 		}
@@ -791,7 +806,7 @@ class Customify_Customizer_Auto_CSS {
 			$v = array();
 			if ( isset( $this->variants[ $font_name ] ) ) {
 				foreach ( $this->variants[ $font_name ] as $_v ) {
-					if ( $_v != 'regular' ) {
+					if ( 'regular' != $_v ) {
 						switch ( $_v ) {
 							case 'italic':
 								$v[ $_v ] = '400i';
@@ -815,6 +830,7 @@ class Customify_Customizer_Auto_CSS {
 		if ( ! empty( $this->subsets ) ) {
 			$url .= '&subset=' . join( ',', $this->subsets );
 		}
+
 		return $url;
 	}
 
@@ -839,7 +855,7 @@ class Customify_Customizer_Auto_CSS {
 
 			$v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
 			if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
-				if ( ( $field['selector'] && $field['css_format'] ) || $field['type'] == 'modal' ) {
+				if ( ( $field['selector'] && $field['css_format'] ) || 'modal' == $field['type'] ) {
 					switch ( $field['type'] ) {
 						case 'css_ruler':
 							$listcss[ $key ] = $this->css_ruler( $field, $v, $no_selector );
@@ -857,7 +873,7 @@ class Customify_Customizer_Auto_CSS {
 							$listcss[ $key ] = $this->image( $field, $v, $no_selector );
 							break;
 						case 'checkbox':
-							if ( $field['css_format'] !== 'html_class' ) {
+							if ( 'html_class' !== $field['css_format'] ) {
 								$listcss[ $key ] = $this->checkbox( $field, $v, $no_selector );
 							}
 							break;
@@ -904,9 +920,9 @@ class Customify_Customizer_Auto_CSS {
 		}
 		$css = preg_replace(
 			array(
-				// Remove comment(s)
+				// Remove comment(s).
 				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
-				// Remove unused white-space(s)
+				// Remove unused white-space(s).
 				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
 			),
 			array(
@@ -915,6 +931,7 @@ class Customify_Customizer_Auto_CSS {
 			),
 			$css
 		);
+
 		return $css;
 	}
 
@@ -925,19 +942,19 @@ class Customify_Customizer_Auto_CSS {
 		$config_fields = Customify()->customizer->get_config();
 		$this->loop_fields( $config_fields );
 		$css_code = '';
-		$i = 0;
+		$i        = 0;
 		foreach ( $this->css as $device => $code ) {
 			$new_line = '';
 			if ( $i > 0 ) {
 				$new_line = "\r\n/* CSS for {$device} */\r\n";
 			}
 			$css_code .= $new_line . sprintf( $this->media_queries[ $device ], $code ) . "\r\n";
-			$i++;
+			$i ++;
 		}
 
 		$css_code = apply_filters( 'customify/auto-css', $css_code, $this );
 
-		$url = $this->get_google_fonts_url();
+		$url            = $this->get_google_fonts_url();
 		self::$font_url = $url;
 		if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
 			return $css_code;
