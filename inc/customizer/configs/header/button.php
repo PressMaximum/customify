@@ -19,7 +19,7 @@ class Customify_Builder_Item_Button {
 			'id'      => 'button',
 			'col'     => 0,
 			'width'   => '4',
-			'section' => 'header_button' // Customizer section to focus when click settings
+			'section' => 'header_button', // Customizer section to focus when click settings.
 		);
 	}
 
@@ -27,7 +27,7 @@ class Customify_Builder_Item_Button {
 		$section  = 'header_button';
 		$prefix   = 'header_button';
 		$fn       = array( $this, 'render' );
-		$selector = 'a.item--'.$this->id;
+		$selector = 'a.item--' . $this->id;
 		$config   = array(
 			array(
 				'name'  => $section,
@@ -68,7 +68,7 @@ class Customify_Builder_Item_Button {
 				'choices'         => array(
 					'before' => __( 'Before', 'customify' ),
 					'after'  => __( 'After', 'customify' ),
-				)
+				),
 			),
 
 			array(
@@ -124,13 +124,13 @@ class Customify_Builder_Item_Button {
 					),
 					'hover_fields'  => array(
 						'link_color' => false, // disable for special field.
-					)
+					),
 				),
 			),
 
 		);
 
-		// Item Layout
+		// Item Layout.
 		return array_merge( $config, customify_header_layout_settings( $this->id, $section ) );
 	}
 
@@ -141,15 +141,18 @@ class Customify_Builder_Item_Button {
 		$new_window    = Customify()->get_setting( 'header_button_target' );
 		$link          = Customify()->get_setting( 'header_button_link' );
 		$icon_position = Customify()->get_setting( 'header_button_position' );
-		$classes       = array( 'item--'.$this->id, 'customify-btn customify-builder-btn' );
+		$classes       = array( 'item--' . $this->id, 'customify-btn customify-builder-btn' );
 
-		$icon = wp_parse_args( $icon, array(
-			'type' => '',
-			'icon' => ''
-		) );
+		$icon = wp_parse_args(
+			$icon,
+			array(
+				'type' => '',
+				'icon' => '',
+			)
+		);
 
 		$target = '';
-		if ( $new_window == 1 ) {
+		if ( 1 == $new_window ) {
 			$target = ' target="_blank" ';
 		}
 
@@ -162,8 +165,8 @@ class Customify_Builder_Item_Button {
 			$text = __( 'Button', 'customify' );
 		}
 
-		echo '<a' . $target . ' href="' . esc_url( $link ) . '" class="' . esc_attr( join( " ", $classes ) ) . '">';
-		if ( $icon_position != 'after' ) {
+		echo '<a' . $target . ' href="' . esc_url( $link ) . '" class="' . esc_attr( join( ' ', $classes ) ) . '">';
+		if ( 'after' != $icon_position ) {
 			echo $icon_html . esc_html( $text );
 		} else {
 			echo esc_html( $text ) . $icon_html;

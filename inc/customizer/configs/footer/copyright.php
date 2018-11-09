@@ -1,14 +1,13 @@
 <?php
 
 class Customify_Builder_Footer_Item_Copyright {
-	public $id = 'footer_copyright'; // Required
-	public $section = 'footer_copyright'; // Optional
-	public $name = 'footer_copyright'; // Optional
-	public $label = ''; // Optional
+	public $id = 'footer_copyright';
+	public $section = 'footer_copyright';
+	public $name = 'footer_copyright';
+	public $label = '';
 
 	/**
 	 * Optional construct
-	 *
 	 */
 	function __construct() {
 		$this->label = __( 'Copyright', 'customify' );
@@ -16,6 +15,7 @@ class Customify_Builder_Footer_Item_Copyright {
 
 	/**
 	 * Register Builder item
+	 *
 	 * @return array
 	 */
 	function item() {
@@ -24,7 +24,7 @@ class Customify_Builder_Footer_Item_Copyright {
 			'id'      => $this->id,
 			'col'     => 0,
 			'width'   => '6',
-			'section' => $this->section // Customizer section to focus when click settings
+			'section' => $this->section, // Customizer section to focus when click settings.
 		);
 	}
 
@@ -36,7 +36,7 @@ class Customify_Builder_Footer_Item_Copyright {
 	function customize() {
 		$fn = array( $this, 'render' );
 
-        $config = array(
+		$config = array(
 			array(
 				'name'  => $this->section,
 				'type'  => 'section',
@@ -77,7 +77,7 @@ class Customify_Builder_Footer_Item_Copyright {
 		$tags = array(
 			'current_year' => date_i18n( 'Y' ),
 			'site_title'   => get_bloginfo( 'name' ),
-			'theme_author' => sprintf( '<a href="https://wpcustomify.com">%1$s</a>','Customify' ), // Brand name
+			'theme_author' => sprintf( '<a href="https://wpcustomify.com">%1$s</a>', 'Customify' ), // Brand name.
 		);
 
 		$content = Customify()->get_setting( $this->name );

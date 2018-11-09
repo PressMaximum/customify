@@ -24,9 +24,9 @@ class Customify_Advanced_Styling_Background {
 				'section'    => 'background',
 				'title'      => __( 'Site Background', 'customify' ),
 				'selector'   => array(
-					'normal' => "body",
+					'normal' => 'body',
 				),
-				'css_format' => 'styling', // styling
+				'css_format' => 'styling', // styling.
 				'fields'     => array(
 					'normal_fields' => array(
 						'text_color'     => false,
@@ -38,10 +38,10 @@ class Customify_Advanced_Styling_Background {
 						'border_color'   => false,
 						'border_radius'  => false,
 						'box_shadow'     => false,
-						'border_style'   => false
+						'border_style'   => false,
 					),
 					'hover_fields'  => false,
-				)
+				),
 			),
 
 			array(
@@ -58,9 +58,9 @@ class Customify_Advanced_Styling_Background {
 				'section'    => 'background',
 				'title'      => __( 'Content Area Background', 'customify' ),
 				'selector'   => array(
-					'normal' => ".site-content",
+					'normal' => '.site-content',
 				),
-				'css_format' => 'styling', // styling
+				'css_format' => 'styling', // styling.
 				'fields'     => array(
 					'normal_fields' => array(
 						'text_color'     => false,
@@ -72,12 +72,11 @@ class Customify_Advanced_Styling_Background {
 						'border_color'   => false,
 						'border_radius'  => false,
 						'box_shadow'     => false,
-						'border_style'   => false
+						'border_style'   => false,
 					),
 					'hover_fields'  => false,
-				)
+				),
 			),
-
 
 		);
 
