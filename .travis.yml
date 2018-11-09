@@ -28,7 +28,9 @@ sudo: false
 # Declare which versions of WordPress to test against.
 # Also declare whether or not to test in Multisite.
 env:
-- WP_VERSION=latest WP_MULTISITE=0
+  global:
+  - WP_VERSION=4.9
+  - WP_MULTISITE=0
 
 
 # Declare versions of PHP to use. Use one decimal max.
