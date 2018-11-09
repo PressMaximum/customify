@@ -1,28 +1,38 @@
 <?php
-class Customify_WP_Customize_Section extends WP_Customize_Section
-{
 
-    public $section;
-    public $type = 'customify_section';
+class Customify_WP_Customize_Section extends WP_Customize_Section {
 
-    public function json()
-    {
+	public $section;
+	public $type = 'customify_section';
 
-        $array = wp_array_slice_assoc((array)$this, array('id', 'description', 'priority', 'panel', 'type', 'description_hidden', 'section',));
-        $array['title'] = html_entity_decode($this->title, ENT_QUOTES, get_bloginfo('charset'));
-        $array['content'] = $this->get_content();
-        $array['active'] = $this->active();
-        $array['instanceNumber'] = $this->instance_number;
+	public function json() {
 
-        if ($this->panel) {
-            $array['customizeAction'] = sprintf(__('Customizing &#9656; %s', 'customify'), esc_html($this->manager->get_panel($this->panel)->title));
+		$array = wp_array_slice_assoc(
+			(array) $this,
+			array(
+				'id',
+				'description',
+				'priority',
+				'panel',
+				'type',
+				'description_hidden',
+				'section',
+			)
+		);
+		$array['title']          = html_entity_decode( $this->title, ENT_QUOTES, get_bloginfo( 'charset' ) );
+		$array['content']        = $this->get_content();
+		$array['active']         = $this->active();
+		$array['instanceNumber'] = $this->instance_number;
 
-        } else {
-            $array['customizeAction'] = __('Customizing', 'customify');
-        }
+		if ( $this->panel ) {
+			$array['customizeAction'] = sprintf( __( 'Customizing &#9656; %s', 'customify' ), esc_html( $this->manager->get_panel( $this->panel )->title ) );
 
-        return $array;
+		} else {
+			$array['customizeAction'] = __( 'Customizing', 'customify' );
+		}
 
-    }
+		return $array;
+
+	}
 
 }

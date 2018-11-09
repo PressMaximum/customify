@@ -71,7 +71,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 
 		// Text skin.
 		$color_mode = 'light-mode';
-		if ( $section == 'header_top' ) {
+		if ( 'header_top' == $section ) {
 			$color_mode = 'dark-mode';
 		}
 

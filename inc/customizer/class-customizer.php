@@ -53,7 +53,7 @@ class  Customify_Customizer {
 			wp_send_json_error();
 		}
 
-		$settings = isset( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array();
+		$settings = isset( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array(); // phpcs:ignore
 
 		foreach ( $settings as $k ) {
 			$k = sanitize_text_field( $k );
@@ -112,7 +112,7 @@ class  Customify_Customizer {
 	 *
 	 *  Ensure you call this method after all config files loaded
 	 *
-	 * @param null $wp_customize
+	 * @param WP_Customize_Manager $wp_customize
 	 *
 	 * @return array
 	 */
@@ -174,22 +174,22 @@ class  Customify_Customizer {
 						$config[ 'section|' . $f['name'] ] = $f;
 						break;
 					default:
-						if ( $f['type'] == 'icon' ) {
+						if ( 'icon' == $f['type'] ) {
 							self::$has_icon = true;
 						}
 
-						if ( $f['type'] == 'font' ) {
+						if ( 'font' == $f['type'] ) {
 							self::$has_font = true;
 						}
 
 						if ( isset( $f['fields'] ) ) {
-							if ( ! in_array( $f['type'], array( 'typography', 'styling', 'modal' ) ) ) {
+							if ( ! in_array( $f['type'], array( 'typography', 'styling', 'modal' ) ) ) { //phpcs:ignore
 								$types = wp_list_pluck( $f['fields'], 'type' );
-								if ( in_array( 'icon', $types ) ) {
+								if ( in_array( 'icon', $types ) ) { //phpcs:ignore
 									self::$has_icon = true;
 								}
 
-								if ( in_array( 'font', $types ) ) {
+								if ( in_array( 'font', $types ) ) { //phpcs:ignore
 									self::$has_font = true;
 								}
 							}
@@ -227,9 +227,9 @@ class  Customify_Customizer {
 	/**
 	 *  Get Customizer setting.
 	 *
-	 * @param string $name   Customize setting id.
-	 * @param string $device Device type for settings.
-	 * @param bool   $key    Value of this array key that you want to get.
+	 * @param string      $name   Customize setting id.
+	 * @param string      $device Device type for settings.
+	 * @param string|bool $key    Value of this array key that you want to get.
 	 *
 	 * @return array|bool|string
 	 */
@@ -342,8 +342,8 @@ class  Customify_Customizer {
 	/**
 	 * Get customizer setting data when the field type is `modal`
 	 *
-	 * @param string $name Setting name
-	 * @param string $tab  String tab name
+	 * @param string      $name Setting name.
+	 * @param string|bool $tab  String tab name.
 	 *
 	 * @return array|bool
 	 */
@@ -457,8 +457,8 @@ class  Customify_Customizer {
 	function get_styling_config() {
 		$fields = array(
 			'tabs'          => array(
-				'normal' => __( 'Normal', 'customify' ),  // null or false to disable
-				'hover'  => __( 'Hover', 'customify' ), // null or false to disable
+				'normal' => __( 'Normal', 'customify' ),  // null or false to disable.
+				'hover'  => __( 'Hover', 'customify' ), // null or false to disable.
 			),
 			'normal_fields' => array(
 				array(
@@ -750,7 +750,7 @@ class  Customify_Customizer {
 	/**
 	 * Setup icon args
 	 *
-	 * @param $icon
+	 * @param array $icon
 	 *
 	 * @return array
 	 */
@@ -771,7 +771,7 @@ class  Customify_Customizer {
 	/**
 	 * Get customize setting data
 	 *
-	 * @param string $key Setting name
+	 * @param string $key Setting name.
 	 *
 	 * @return bool|mixed
 	 */
@@ -787,10 +787,10 @@ class  Customify_Customizer {
 	/**
 	 * Get Media url from data
 	 *
-	 * @param string/array $value   media data
-	 * @param null $size WordPress image size name
+	 * @param string/array $value   media data.
+	 * @param null|string  $size WordPress image size name.
 	 *
-	 * @return array|false          Media url or empty
+	 * @return string|false Media url or empty
 	 */
 	function get_media( $value, $size = null ) {
 
@@ -801,7 +801,7 @@ class  Customify_Customizer {
 		if ( ! $size ) {
 			$size = 'full';
 		}
-		// attachment_url_to_postid
+
 		if ( is_numeric( $value ) ) {
 			$image_attributes = wp_get_attachment_image_src( $value, $size );
 			if ( $image_attributes ) {
@@ -897,13 +897,12 @@ class  Customify_Customizer {
 			'repeater',
 
 			'pro',
-			// custom_key => full_file_path
 		);
 
 		$fields = apply_filters( 'customify/customize/register-controls', $fields );
 
 		foreach ( $fields as $k => $f ) {
-			// $field_type
+
 			if ( is_numeric( $k ) ) {
 				$field_type = $f;
 				$file       = get_template_directory() . '/inc/customizer/controls/class-control-' . str_replace( '_', '-', $field_type ) . '.php';
@@ -940,19 +939,19 @@ class  Customify_Customizer {
 	/**
 	 * Register Customize Settings
 	 *
-	 * @param WP_Customize_Manager $wp_customize Customize manager
+	 * @param WP_Customize_Manager $wp_customize Customize manager.
 	 */
 	function register( $wp_customize ) {
 
-		// Custom panel
+		// Custom panel.
 		require_once get_template_directory() . '/inc/customizer/class-customify-panel.php';
-		// Load custom section
+		// Load custom section.
 		require_once get_template_directory() . '/inc/customizer/class-customify-section.php';
 
-		// Load custom section pro
+		// Load custom section pro.
 		require_once get_template_directory() . '/inc/customizer/class-customify-section-pro.php';
 
-		// Register new panel and section type
+		// Register new panel and section type.
 		$wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
 		$wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
 
@@ -988,7 +987,7 @@ class  Customify_Customizer {
 					}
 					unset( $args['name'] );
 					unset( $args['type'] );
-					if ( isset( $args['section_class'] ) && class_exists( $args['section_class'] ) ) { // allow custom class
+					if ( isset( $args['section_class'] ) && class_exists( $args['section_class'] ) ) { // Allow custom class.
 						$wp_customize->add_section( new $args['section_class']( $wp_customize, $name, $args ) );
 					} else {
 						$wp_customize->add_section( new Customify_WP_Customize_Section( $wp_customize, $name, $args ) );
@@ -1047,8 +1046,6 @@ class  Customify_Customizer {
 						);
 
 						if ( $args['css_format'] ) {
-							// $selective_refresh['selector'] = '#customify-style-inline-css';
-							// $selective_refresh['render_callback'] = 'Customify_Customizer_Auto_CSS';
 							$settings_args['transport'] = 'postMessage';
 							$selective_refresh          = null;
 						} else {
@@ -1075,7 +1072,7 @@ class  Customify_Customizer {
 					$tpl_type           = str_replace( ' ', '_', ucfirst( $tpl_type ) );
 					$control_class_name .= $tpl_type;
 
-					if ( $settings_args['type'] != 'js_raw' ) {
+					if ( 'js_raw' != $settings_args['type'] ) {
 						if ( class_exists( $control_class_name ) ) {
 							$wp_customize->add_control( new $control_class_name( $wp_customize, $name, $args ) );
 						} else {
@@ -1107,23 +1104,23 @@ class  Customify_Customizer {
 					}
 
 					break;
-			}// end switch
-		} // End loop config
+			}// end switch.
+		} // End loop config.
 
-		// Remove partial for default custom logo and add this by theme custom
+		// Remove partial for default custom logo and add this by theme custom.
 		$wp_customize->selective_refresh->remove_partial( 'custom_logo' );
 
 		$wp_customize->get_section( 'title_tagline' )->panel        = 'header_settings';
 		$wp_customize->get_section( 'title_tagline' )->title        = __( 'Logo & Site Identity', 'customify' );
 		$wp_customize->get_setting( 'header_textcolor' )->transport = 'postMessage';
-		// add selective refresh
+		// Add selective refresh.
 		$wp_customize->get_setting( 'custom_logo' )->transport     = 'postMessage';
 		$wp_customize->get_setting( 'blogname' )->transport        = 'postMessage';
 		$wp_customize->get_setting( 'blogdescription' )->transport = 'postMessage';
 
 		foreach ( $this->selective_settings as $cb => $settings ) {
 			reset( $settings['settings'] );
-			if ( $cb == 'Customify_Builder_Item_Logo__render' ) {
+			if ( 'Customify_Builder_Item_Logo__render' == $cb ) {
 				$settings['settings'][] = 'custom_logo';
 				$settings['settings'][] = 'blogname';
 				$settings['settings'][] = 'blogdescription';
@@ -1132,7 +1129,7 @@ class  Customify_Customizer {
 			$wp_customize->selective_refresh->add_partial( $cb, $settings );
 		}
 
-		// For live CSS
+		// For live CSS.
 		$wp_customize->add_setting(
 			'customify__css',
 			array(

@@ -285,12 +285,12 @@ class Customify_Builder_Item_Primary_Menu {
  *
  * @param string $string_id
  * @param object $item
- * @param array  $args An object of wp_nav_menu() arguments.
+ * @param object $args An object of wp_nav_menu() arguments.
  *
  * @return mixed
  */
 function customify_change_nav_menu_item_id( $string_id, $item, $args ) {
-	if ( $args->theme_location == 'menu-1' || $args->theme_location == 'menu-2' ) {
+	if ( 'menu-1' == $args->theme_location || 'menu-2' == $args->theme_location ) {
 		$string_id = 'menu-item--__id__-__device__-' . $item->ID;
 	}
 
