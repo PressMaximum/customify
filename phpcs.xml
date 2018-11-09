@@ -35,6 +35,7 @@
         <exclude name="WordPress.PHP.StrictComparisons" />
         <exclude name="WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid" />
         <exclude name="WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid" />
+        <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCase" />
 
     </rule>
     <rule ref="WordPress-Docs">
