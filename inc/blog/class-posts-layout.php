@@ -1,9 +1,9 @@
 <?php
 
 class Customify_Posts_Layout {
-	public $args            = array();
+	public $args = array();
 	public $customizer_args = array();
-	public $entry_class     = '';
+	public $entry_class = '';
 
 	function set_args( $customizer_args = array() ) {
 		$args = array(
@@ -81,11 +81,11 @@ class Customify_Posts_Layout {
 		if ( $_args['columns'] < 1 ) {
 			$_args['columns'] = 1;
 		}
-		if ( ( ! isset( $args['columns'] ) || ! $args['columns'] ) && $_args['layout'] == 'blog_masonry' ) {
+		if ( ( ! isset( $args['columns'] ) || ! $args['columns'] ) && 'blog_masonry' == $_args['layout'] ) {
 			$_args['columns'] = 3;
 		}
 
-		if ( in_array( $_args['layout'], array( 'blog_lateral', 'blog_classic' ) ) ) {
+		if ( in_array( $_args['layout'], array( 'blog_lateral', 'blog_classic' ) ) ) { // phpcs:ignore
 			$_args['columns'] = 1;
 		}
 
@@ -139,19 +139,6 @@ class Customify_Posts_Layout {
 			$this->args = array_merge( $this->args, $this->customizer_args['_overwrite'] );
 		}
 
-		/*
-		Customify_Post_Entry()->set_config( array(
-			'thumbnail_size' => $this->args['thumbnail_size'],
-			'excerpt_length' => $this->args['excerpt_length'],
-			'excerpt_more' => $this->args['excerpt_more'],
-			'more_text' => $this->args['more_text'],
-			'more_display' => $this->args['more_display'],
-			'meta_config' => $this->args['meta_config'],
-			'meta_sep' => $this->args['meta_sep'],
-		) );
-		*/
-
-		// $this->args
 		Customify_Post_Entry()->set_config( $this->args );
 	}
 
@@ -168,7 +155,7 @@ class Customify_Posts_Layout {
 					'_visibility' => '',
 				)
 			);
-			if ( $item['_visibility'] !== 'hidden' ) {
+			if ( 'hidden' !== $item['_visibility'] ) {
 				$n ++;
 				if ( $item['_key'] == $field ) {
 					$c = true;
@@ -195,10 +182,11 @@ class Customify_Posts_Layout {
 					'_visibility' => '',
 				)
 			);
-			if ( $item['_visibility'] !== 'hidden' ) {
+			if ( 'hidden' !== $item['_visibility'] ) {
 				$n ++;
 			}
 		}
+
 		return $n;
 	}
 
@@ -207,7 +195,7 @@ class Customify_Posts_Layout {
 		$n = $this->count_item_visibility( $this->args[ $part . '_fields' ] );
 
 		if ( isset( $this->args[ $part . '_fields' ] ) && $n > 0 ) {
-			if ( $part == 'media' && $this->has_only_field( $this->args[ $part . '_fields' ] ) ) {
+			if ( 'media' == $part && $this->has_only_field( $this->args[ $part . '_fields' ] ) ) {
 				Customify_Post_Entry()->build_fields( $this->args[ $part . '_fields' ], $post );
 			} else {
 				$only_more = $this->has_only_field( $this->args[ $part . '_fields' ], 'readmore' );
@@ -326,7 +314,7 @@ class Customify_Posts_Layout {
 				$this->layout( $post );
 				?>
 			</div>
-		</article><!-- /.entry post --> 
+		</article><!-- /.entry post -->
 		<?php
 		/**
 		 * Hook after each post
@@ -351,7 +339,7 @@ class Customify_Posts_Layout {
 				'pagination' => array(),
 			),
 
-			'blog_boxed'   => array(
+			'blog_boxed' => array(
 				'columns'    => 2,
 				'pagination' => array(),
 			),
@@ -409,7 +397,7 @@ class Customify_Posts_Layout {
 		<div class="posts-layout-wrapper">
 			<div class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $s_atts; // WPCS: XSS OK. ?>>
 				<?php
-				if ( $this->args['layout'] == 'blog_timeline' ) {
+				if ( 'blog_timeline' == $this->args['layout']  ) {
 					echo '<div class="time-line"></div>';
 				}
 				?>
@@ -420,8 +408,8 @@ class Customify_Posts_Layout {
 					$i = 1;
 					while ( have_posts() ) {
 						the_post();
-						$this->blog_item( $post, $i % 2 == 0 ? 'even' : 'odd' );
-						$i++;
+						$this->blog_item( $post, ( 0 == $i % 2 ) ? 'even' : 'odd' );
+						$i ++;
 					}
 				} else {
 					get_template_part( 'template-parts/content', 'none' );

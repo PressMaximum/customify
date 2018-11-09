@@ -20,6 +20,7 @@ if ( ! defined( 'ELEMENTOR_PARTNER_ID' ) ) {
 function customify_bb_upgrade_link() {
 	return 'https://www.wpbeaverbuilder.com/pricing/?fla=2294';
 }
+
 add_filter( 'fl_builder_upgrade_url', 'customify_bb_upgrade_link' );
 
 /**
@@ -35,6 +36,7 @@ if ( ! defined( 'WPFORMS_SHAREASALE_ID' ) ) {
 function customify_remove_of_sdk_suggestions() {
 	__return_empty_string();
 }
+
 add_filter( 'themeisle_sdk_recommend_plugin_or_theme', 'customify_remove_of_sdk_suggestions', 100 );
 
 /**
@@ -44,13 +46,14 @@ if ( ! function_exists( 'customify_get_archives_link' ) ) {
 	/**
 	 * @see get_archives_link
 	 *
-	 * @param $url
-	 * @param $text
+	 * @param string $link_html
+	 * @param string $url
+	 * @param string $text
 	 * @param string $format
 	 * @param string $before
 	 * @param string $after
 	 *
-	 * @return mixed|void
+	 * @return string
 	 */
 	function customify_get_archives_link( $link_html, $url, $text, $format = 'html', $before = '', $after = '' ) {
 		if ( 'link' == $format ) {
@@ -59,7 +62,7 @@ if ( ! function_exists( 'customify_get_archives_link' ) ) {
 			$link_html = "\t<option value='$url'>$before $text $after</option>\n";
 		} elseif ( 'html' == $format ) {
 			$link_html = "\t<li><a href='$url'>{$before}{$text}{$after}</a></li>\n";
-		} else // custom
+		} else // custom.
 		{
 			$link_html = "\t<a href='$url'>{$before}{$text}{$after}</a>\n";
 		}

@@ -6,7 +6,7 @@ class Customify_Post_Entry {
 	public $config    = array();
 	public $post_type = 'post';
 	function __construct( $_post = null ) {
-		 $this->set_post( $_post );
+		$this->set_post( $_post );
 		$this->set_config();
 	}
 
@@ -90,9 +90,10 @@ class Customify_Post_Entry {
 	 * Trim the excerpt with custom length
 	 *
 	 * @see wp_trim_excerpt
-	 * @param $text
-	 * @param null $excerpt_length
-	 * @return mixed|string|void
+	 *
+	 * @param string   $text
+	 * @param int|bool $excerpt_length
+	 * @return string
 	 */
 	function trim_excerpt( $text, $excerpt_length = null ) {
 		$text = strip_shortcodes( $text );
@@ -156,9 +157,9 @@ class Customify_Post_Entry {
 	/**
 	 * Get terms array
 	 *
-	 * @param $id
-	 * @param $taxonomy
-	 * @param bool     $icon_first
+	 * @param string $id
+	 * @param string $taxonomy
+	 * @param bool   $icon_first
 	 * @return array|bool|WP_Error
 	 */
 	function get_terms_list( $id, $taxonomy, $icon_first = false ) {
@@ -201,7 +202,7 @@ class Customify_Post_Entry {
 	 */
 	function meta_categories() {
 		$html = '';
-		if ( $this->post_type === get_post_type() ) {
+		if ( get_post_type() === $this->post_type ) {
 			/* translators: used between list items, there is a space after the comma */
 			$categories_list = $this->get_terms_list( $this->get_post_id(), $this->config['tax'], true );
 			if ( is_array( $categories_list ) && $this->config['term_count'] > 0 ) {
@@ -232,8 +233,6 @@ class Customify_Post_Entry {
 
 	/**
 	 * Get tags list markup
-	 *
-	 * @return string
 	 */
 	function post_tags() {
 		$html = '';
@@ -248,8 +247,6 @@ class Customify_Post_Entry {
 	}
 	/**
 	 * Get categories list markup
-	 *
-	 * @return string
 	 */
 	function post_categories() {
 		$html = '';
@@ -313,7 +310,7 @@ class Customify_Post_Entry {
 	/**
 	 * Check if show post meta for this post
 	 *
-	 * @param $post object|integer
+	 * @param object|integer $post
 	 *
 	 * @return boolean
 	 */
@@ -324,9 +321,9 @@ class Customify_Post_Entry {
 	/**
 	 * Get post meta markup
 	 *
-	 * @param null  $post
-	 * @param array $meta_fields
-	 * @param array $args
+	 * @param object|integer $post
+	 * @param array          $meta_fields
+	 * @param array          $args
 	 */
 	function post_meta( $post = null, $meta_fields = array(), $args = array() ) {
 
@@ -348,7 +345,7 @@ class Customify_Post_Entry {
 				)
 			);
 
-			if ( $item['_visibility'] !== 'hidden' ) {
+			if ( 'hidden' !== $item['_visibility'] ) {
 				if ( method_exists( $this, 'meta_' . $item['_key'] ) ) {
 					$s = call_user_func_array( array( $this, 'meta_' . $item['_key'] ), array( $this->post, $args ) );
 					if ( $s ) {
@@ -373,7 +370,7 @@ class Customify_Post_Entry {
 	/**
 	 * Post title markup
 	 *
-	 * @param null $post
+	 * @param null|object|int $post
 	 */
 	function post_title( $post = null, $force_link = false ) {
 		if ( is_singular() && ! $force_link ) {
@@ -403,15 +400,11 @@ class Customify_Post_Entry {
 
 	/**
 	 * Get first category markup
-	 *
-	 * @return string
 	 */
 	function post_category( $post = null ) {
 		$html = '';
-		if ( $this->post_type === get_post_type() ) {
-			/*
-			 translators: used between list items, there is a space after the comma */
-			// $categories_list = get_the_category_list( '__cate_sep__' );
+		if ( get_post_type() === $this->post_type ) {
+			/* translators: used between list items, there is a space after the comma */
 			$categories_list = get_the_term_list( $this->get_post_id( $post ), $this->config['tax'], '', '__cate_sep__' );
 			if ( $categories_list && ! is_wp_error( $categories_list ) ) {
 				$categories_list = explode( '__cate_sep__', $categories_list );
@@ -460,11 +453,11 @@ class Customify_Post_Entry {
 		}
 
 		echo '<div class="entry-excerpt entry--item">';
-		if ( $type == 'excerpt' ) {
+		if ( 'excerpt' == $type ) {
 			the_excerpt();
-		} elseif ( $type == 'more_tag' ) {
+		} elseif ( 'more_tag' == $type ) {
 			the_content( '', true );
-		} elseif ( $type == 'content' ) {
+		} elseif ( 'content' == $type ) {
 			the_content( '', false );
 		} else {
 			$text = '';
@@ -542,7 +535,7 @@ class Customify_Post_Entry {
 
 		if ( is_single() ) {
 			global $post;
-			// Detect if it is a single post with a post author
+			// Detect if it is a single post with a post author.
 			if ( is_single() && isset( $post->post_author ) ) {
 
 				$user = get_user_by( 'ID', $post->post_author );
@@ -551,12 +544,12 @@ class Customify_Post_Entry {
 				}
 
 				$display_name = $user->display_name ? $user->display_name : $user->user_login;
-				// Get author's biographical information or description
+				// Get author's biographical information or description.
 				$user_description = get_the_author_meta( 'user_description', $user->ID );
-				// Get author's website URL
+				// Get author's website URL.
 				$user_website = get_the_author_meta( 'url', $user->ID );
 
-				// Get link to the author archive page
+				// Get link to the author archive page.
 				$user_posts = get_author_posts_url( get_the_author_meta( 'ID', $user->ID ) );
 
 				if ( ! empty( $display_name ) ) {
@@ -569,18 +562,18 @@ class Customify_Post_Entry {
 
 				$author_links = '<p class="author_links text-uppercase text-xsmall link-meta"><a href="' . $user_posts . '">' . sprintf( 'View all post by %s', $display_name ) . '</a>';
 
-				// Check if author has a website in their profile
+				// Check if author has a website in their profile.
 				if ( ! empty( $user_website ) ) {
-					// Display author website link
+					// Display author website link.
 					$author_links .= ' | <a href="' . $user_website . '" target="_blank" rel="nofollow">Website</a></p>';
 				} else {
-					// if there is no author website then just close the paragraph
+					// if there is no author website then just close the paragraph.
 					$author_links .= '</p>';
 				}
 
-				$author_details .= '<div class="author-bio"><div class="author-bio-avatar">' . get_avatar( get_the_author_meta( 'user_email' ), 80 ) . '</div><div class="author-bio-details">' . '<div class="author-bio-desc">' . $user_description . '</div>' . $author_links . '</div></div>';
+				$author_details .= '<div class="author-bio"><div class="author-bio-avatar">' . get_avatar( get_the_author_meta( 'user_email' ), 80 ) . '</div><div class="author-bio-details"><div class="author-bio-desc">' . $user_description . '</div>' . $author_links . '</div></div>';
 
-				// Pass all this info to post content
+				// Pass all this info to post content.
 				$content = '<div class="entry-author-bio entry--item" >' . $author_details . '</div>';
 			}
 
@@ -597,19 +590,17 @@ class Customify_Post_Entry {
 			return '';
 		}
 
-		// the_post_navigation( array(
-		// 'prev_text' => __( '<span>Prev post</span> %title', 'customify' ),
-		// 'next_text' => __( '<span>Next post</span> %title', 'customify' ),
-		// ) );
 		echo '<div class="entry-post-navigation entry--item">';
 		the_post_navigation(
 			array(
-				'next_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Next', 'customify' ) . '</span> ' .
-							   '<span class="screen-reader-text">' . __( 'Next post:', 'customify' ) . '</span> ' .
-							   '<span class="post-title text-large">%title</span>',
-				'prev_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">' . __( 'Previous', 'customify' ) . '</span> ' .
-							   '<span class="screen-reader-text">' . __( 'Previous post:', 'customify' ) . '</span> ' .
-							   '<span class="post-title text-large">%title</span>',
+				'next_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">'
+								. __( 'Next', 'customify' ) . '</span> '
+								. '<span class="screen-reader-text">' . __( 'Next post:', 'customify' ) . '</span> '
+								. '<span class="post-title text-large">%title</span>',
+				'prev_text' => '<span class="meta-nav text-uppercase text-xsmall color-meta" aria-hidden="true">'
+								. __( 'Previous', 'customify' ) . '</span> '
+								. '<span class="screen-reader-text">' . __( 'Previous post:', 'customify' ) . '</span> '
+								. '<span class="post-title text-large">%title</span>',
 			)
 		);
 		echo '</div>';
@@ -635,13 +626,13 @@ class Customify_Post_Entry {
 	/**
 	 * Build item markup width field config
 	 *
-	 * @param string $field               ame of method to render element content
-	 * @param object $post                WP_Post
-	 * @param array  $fields
-	 * @param array  $args
+	 * @param string           $field               Field settings.
+	 * @param WP_Post|null|int $post
+	 * @param array            $fields
+	 * @param array            $args
 	 */
 	function build( $field, $post = null, $fields = null, $args = array() ) {
-		// Allowed 3rd party hook to this
+		// Allowed 3rd party hook to this.
 		$cb = apply_filters( 'customify/single/build_field_callback', false, $field );
 		if ( ! is_callable( $cb ) ) {
 			if ( method_exists( $this, 'post_' . $field ) ) {
@@ -669,9 +660,9 @@ class Customify_Post_Entry {
 	/**
 	 * Build item markup width fields config
 	 *
-	 * @param $fields
-	 * @param null   $post
-	 * @param array  $args
+	 * @param array            $fields
+	 * @param WP_Post|null|int $post
+	 * @param array            $args
 	 */
 	function build_fields( $fields, $post = null, $args = array() ) {
 		foreach ( (array) $fields as $item ) {
@@ -683,7 +674,7 @@ class Customify_Post_Entry {
 					'fields'      => null,
 				)
 			);
-			if ( $item['_visibility'] !== 'hidden' ) {
+			if ( 'hidden' !== $item['_visibility'] ) {
 				$this->build( $item['_key'], $post, $item['fields'], $args );
 			}
 		}

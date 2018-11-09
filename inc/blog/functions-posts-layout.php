@@ -14,7 +14,7 @@ function Customify_Post_Entry() {
  *
  * @TOTO: do not apply for WooCommerce results page.
  *
- * @param $classes
+ * @param array $classes
  *
  * @return array
  */
@@ -22,10 +22,11 @@ function customify_post_classes( $classes ) {
 	if ( is_search() && get_query_var( 'post_type' ) != 'product' ) {
 		return array( 'entry', 'hentry', 'search-article' );
 	}
+
 	return $classes;
 }
-add_filter( 'post_class', 'customify_post_classes', 999 );
 
+add_filter( 'post_class', 'customify_post_classes', 999 );
 
 
 if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
@@ -35,13 +36,13 @@ if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
 				?>
 				<header class="blog-posts-heading">
 					<h1 class="page-title">
-					<?php
-					printf( // WPCS: XSS ok.
+						<?php
+						printf( // WPCS: XSS ok.
 							__( 'Search Results for: %s', 'customify' ),
-						'<span>' . get_search_query() . '</span>'
-					);
-					?>
-						</h1>
+							'<span>' . get_search_query() . '</span>'
+						);
+						?>
+					</h1>
 				</header>
 				<?php
 			} elseif ( is_archive() ) {

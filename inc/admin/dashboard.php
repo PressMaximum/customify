@@ -5,7 +5,7 @@ class Customify_Dashboard {
 	public $title;
 	public $config;
 	public $current_tab = '';
-	public $url         = ''; // current page url
+	public $url         = '';
 
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
@@ -27,7 +27,7 @@ class Customify_Dashboard {
 
 			add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
 
-			// Tabs
+			// Tabs.
 			add_action( 'customify/dashboard/tab/changelog', array( self::$_instance, 'tab_changelog' ) );
 
 		}
@@ -75,15 +75,15 @@ class Customify_Dashboard {
 	/**
 	 * Register scripts
 	 *
-	 * @param $id
+	 * @param string $id
 	 */
 	function scripts( $id ) {
-		if ( $id != 'appearance_page_customify' && $id != 'themes.php' ) {
+		if ( 'appearance_page_customify' != $id && 'themes.php' != $id ) {
 			return;
 		}
 		$suffix = Customify()->get_asset_suffix();
 		wp_enqueue_style( 'customify-admin', esc_url( get_template_directory_uri() ) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version );
-		if ( $id != 'themes' ) {
+		if ( 'themes' != $id ) {
 			wp_enqueue_style( 'plugin-install' );
 			wp_enqueue_script( 'plugin-install' );
 			wp_enqueue_script( 'updates' );
@@ -102,7 +102,7 @@ class Customify_Dashboard {
 			'version'    => $theme->get( 'Version' ),
 		);
 
-		$this->current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : '';
+		$this->current_tab = isset( $_GET['tab'] ) ? sanitize_text_field( $_GET['tab'] ) : ''; // phpcs:ignore
 	}
 
 	function page() {
@@ -340,8 +340,8 @@ class Customify_Dashboard {
 				?>
 				<script type="text/javascript">
 					jQuery( document ).ready( function($){
-						var  sites_url = <?php echo json_encode( $sites_url ); ?>;
-						var  view_sites = <?php echo json_encode( $view_site_txt ); ?>;
+						var  sites_url = <?php echo json_encode( $sites_url ); // phpcs:ignore ?>;
+						var  view_sites = <?php echo json_encode( $view_site_txt ); // phpcs:ignore ?>;
 						$( '#plugin-filter .box-plugins' ).on( 'click', '.activate-now', function( e ){
 							e.preventDefault();
 							var button = $( this );
@@ -399,7 +399,7 @@ class Customify_Dashboard {
 		);
 
 		$list_plugins = apply_filters( 'customify/recommend-plugins', $list_plugins );
-		$key          = 'customify_plugins_info_' . wp_hash( json_encode( $list_plugins ) );
+		$key          = 'customify_plugins_info_' . wp_hash( json_encode( $list_plugins ) ); // phpcs:ignore
 		$plugins_info = get_transient( $key );
 		if ( false === $plugins_info ) {
 			$plugins_info = array();
@@ -425,7 +425,7 @@ class Customify_Dashboard {
 				if ( $status ) {
 					$button_class = 'activate-now';
 					$button_txt   = esc_html__( 'Activate', 'customify' );
-					$url          = wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file );
+					$url          = wp_nonce_url( 'plugins.php?action=activate&amp;plugin=' . urlencode( $plugin_file ), 'activate-plugin_' . $plugin_file ); // phpcs:ignore
 				} else {
 					$button_class = 'install-now';
 					$button_txt   = esc_html__( 'Install Now', 'customify' );
@@ -510,15 +510,11 @@ class Customify_Dashboard {
 				'desc' => __( 'Control the layout and typography setting for page header title, page header cover and more.', 'customify' ),
 				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
 			),
-			// array(
-			// 'name' => __( 'WooCommerce Booster', 'customify' ),
-			// 'url' => 'https://wpcustomify.com/help/documentation/customify-pro-modules/woocommerce-booster/',
-			// ),
-				array(
-					'name' => __( 'Portfolio', 'customify' ),
-					'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
-					'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
-				),
+			array(
+				'name' => __( 'Portfolio', 'customify' ),
+				'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
+			),
 			array(
 				'name' => __( 'Multiple Headers', 'customify' ),
 				'desc' => __( 'Create unique header for each page, post, archive or WooCommerce pages.', 'customify' ),

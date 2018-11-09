@@ -232,7 +232,7 @@ class Customify_Sanitize_Input {
 			$device_settings = $this->control->device_settings;
 		}
 
-		if ( $type != 'js_raw' ) {
+		if ( 'js_raw' != $type ) {
 			if ( ! $device_settings ) {
 				// Fallback value when device_settings from tru to false.
 				if ( is_array( $value ) && isset( $value['desktop'] ) ) {

@@ -17,17 +17,18 @@ class Customify_Related_Posts {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
+
 		return self::$_instance;
 	}
 
 	/**
 	 * Get related posts
 	 *
-	 * @param $post
-	 * @param string $by
-	 * @param int    $number
-	 * @param string $orderby
-	 * @param string $order
+	 * @param WP_Post|null|int $post
+	 * @param string           $by
+	 * @param int              $number
+	 * @param string           $orderby
+	 * @param string           $order
 	 *
 	 * @return WP_Query|bool
 	 */
@@ -47,7 +48,7 @@ class Customify_Related_Posts {
 			'order'          => $order,
 		);
 
-		if ( $by == 'tag' ) {
+		if ( 'tag' == $by ) {
 			$terms    = get_the_tags( $post->ID );
 			$term_ids = array();
 
@@ -67,7 +68,7 @@ class Customify_Related_Posts {
 			$query_args['category__in'] = $term_ids;
 		}
 
-		// Try get related by hand pick
+		// Try get related by hand pick.
 		$post__in = get_post_meta( $post->ID, '_customify_related_posts' );
 		if ( ! empty( $post__in ) && is_array( $post__in ) ) {
 			unset( $query_args['category__in'] );
@@ -85,16 +86,18 @@ class Customify_Related_Posts {
 
 	/**
 	 * Display related post
+	 *
+	 * @return bool
 	 */
 	function display() {
 		if ( ! is_single() ) {
-			return '';
+			return false;
 		}
 
 		$number = Customify()->get_setting( 'single_blog_post_related_number' );
 		$number = absint( $number );
 		if ( $number <= 0 ) {
-			return;
+			return false;
 		}
 
 		$layout  = 'grid';
@@ -104,7 +107,7 @@ class Customify_Related_Posts {
 		$orderby = Customify()->get_setting( 'single_blog_post_related_orderby' );
 		$order   = Customify()->get_setting( 'single_blog_post_related_order' );
 
-		// get related posts
+		// Get related posts.
 		$query_posts = $this->get_related_post( null, $by, $number, $orderby, $order );
 
 		if ( $query_posts ) {
@@ -158,17 +161,18 @@ class Customify_Related_Posts {
 			echo '<div class="' . esc_attr( join( ' ', $wrapper_classes ) ) . ' ">';
 
 			echo '<h4 class="related-post-title">' . wp_kses_post( $title ) . '</h4>';
-				echo '<div class="related-posts ' . esc_attr( $layout_class ) . '">';
+			echo '<div class="related-posts ' . esc_attr( $layout_class ) . '">';
 			while ( $query_posts->have_posts() ) {
 				$query_posts->the_post();
 				$link = '<a href="' . esc_url( get_permalink( $post ) ) . '" title="' . the_title_attribute( array( 'echo' => false ) ) . '" rel="bookmark" class="plain_color">';
-				?><article <?php post_class( 'related-post customify-col' ); ?>>
-					<div class="related-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb' : 'no-thumb'; ?>">
+				?>
+				<article <?php post_class( 'related-post customify-col' ); ?>>
+				<div class="related-thumbnail <?php echo ( has_post_thumbnail() ) ? 'has-thumb' : 'no-thumb'; ?>">
 					<?php echo $link; ?>
 					<?php the_post_thumbnail( $thumbnail_size ); ?>
-						</a>
-					</div>
-					<div class="related-body">
+					</a>
+				</div>
+				<div class="related-body">
 					<?php
 					the_title( '<h2 class="entry-title entry--item">' . $link, '</a></h2>' );
 					Customify_Post_Entry::get_instance()->post_meta( $post, $meta_config, $meta_args );
@@ -176,12 +180,12 @@ class Customify_Related_Posts {
 						Customify_Post_Entry::get_instance()->post_excerpt( $post, 'custom', $excerpt_length );
 					}
 					?>
-					</div>
-					<?php
-					echo '</article>';
+				</div>
+				<?php
+				echo '</article>';
 			}
-				wp_reset_postdata();
-				echo '</div>';
+			wp_reset_postdata();
+			echo '</div>';
 			echo '</div>';
 		}
 
