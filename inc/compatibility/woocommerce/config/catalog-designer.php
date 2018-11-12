@@ -212,7 +212,6 @@ class Customify_WC_Catalog_Designer {
 			'selector'        => '.wc-product-listing',
 			'render_callback' => 'woocommerce_content',
 			'label'           => __( 'Show Catalog Filtering Bar', 'customify' ),
-			'description'     => sprintf( __( 'Filtering Bar only show if the sidebar <code>WooCommerce Off Canvas Filter</code> has widget items. Click <a href="%1$s" target="_blank">here</a> to add widgets', 'customify' ), admin_url( 'widgets.php' ) ),
 		);
 
 		// Show view mod.
