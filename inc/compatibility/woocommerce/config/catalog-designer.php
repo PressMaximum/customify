@@ -389,18 +389,18 @@ class Customify_WC_Catalog_Designer {
 		);
 
 		$configs[] = array(
-			'name'       => 'wc_cd_sale_bubble_styling',
-			'type'       => 'styling',
-			'section'    => $section,
-			'priority'   => 32,
-			'title'      => __( 'Styling', 'customify' ),
-			'description'=> __( 'Advanced styling for onsale button', 'customify' ),
-			'selector'   => array(
+			'name'        => 'wc_cd_sale_bubble_styling',
+			'type'        => 'styling',
+			'section'     => $section,
+			'priority'    => 32,
+			'title'       => __( 'Styling', 'customify' ),
+			'description' => __( 'Advanced styling for onsale button', 'customify' ),
+			'selector'    => array(
 				'normal' => '.woocommerce span.onsale',
 			),
-			'css_format' => 'styling',
-			'default'    => array(),
-			'fields'     => array(
+			'css_format'  => 'styling',
+			'default'     => array(),
+			'fields'      => array(
 				'normal_fields' => array(
 					'link_color'    => false, // disable for special field.
 					'margin'        => false,
