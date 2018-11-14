@@ -52,7 +52,7 @@ We try to answer all questions - free or premium - within 24 hours.
 >If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](http://docs.famethemes.com/).
 
 ## Change log
-We'll keep track of each release in the [CHANGELOG](CHANGELOG.md)
+We'll keep track of each release in the [changelog.txt](changelog.txt).
 
 ## Copyright & Licensing
 
