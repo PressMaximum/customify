@@ -14,10 +14,10 @@ if ( ! is_active_sidebar( $sidebar_id ) ) {
 ?>
 <aside id="sidebar-secondary" <?php customify_sidebar_secondary_class(); ?>>
 	<div class="sidebar-secondary-inner sidebar-inner widget-area">
-		<?php 
+		<?php
 		do_action( 'customify/sidebar-secondary/before' );
 		dynamic_sidebar( $sidebar_id );
-		do_action( 'customify/sidebar-secondary/after' ); 
+		do_action( 'customify/sidebar-secondary/after' );
 		?>
 	</div>
 </aside><!-- #sidebar-secondary -->
