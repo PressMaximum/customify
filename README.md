@@ -80,11 +80,7 @@ Theme Screenshot
  ### Other
  
  - [Font Awesome](http://fontawesome.io) &copy; Dave Gandy, License: http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
- 
  - [normalize.css](https://necolas.github.io/normalize.css/) &copy; 2012-2016 Nicolas Gallagher and Jonathan Neal, License: MIT.
-
  - [Gridlex](https://github.com/devlint/gridlex) &copy; Devlint, License: MIT.
-
  - [FitVids](https://github.com/davatron5000/FitVids.js) &copy; [Chris Coyier](http://css-tricks.com) & [Dave Rupert](http://daverupert.com/), License: [WTFPL](http://sam.zoy.org/wtfpl/).
-
  - [WP Color Picker Alpha](https://github.com/kallookoo/wp-color-picker-alpha) &copy; kallookoo, License: GPLv2.
