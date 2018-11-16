@@ -2519,6 +2519,55 @@ input[type="submit"]:active,
 input[type="submit"]:focus {
   outline: none;
 }
+.button.loading,
+button.loading,
+input[type="button"].loading,
+input[type="reset"].loading,
+input[type="submit"].loading {
+  position: relative;
+}
+.button.loading i, .button.loading svg, .button.loading .icon-label, .button.loading .hide-on-loading, .button.loading .button-label,
+button.loading i,
+button.loading svg,
+button.loading .icon-label,
+button.loading .hide-on-loading,
+button.loading .button-label,
+input[type="button"].loading i,
+input[type="button"].loading svg,
+input[type="button"].loading .icon-label,
+input[type="button"].loading .hide-on-loading,
+input[type="button"].loading .button-label,
+input[type="reset"].loading i,
+input[type="reset"].loading svg,
+input[type="reset"].loading .icon-label,
+input[type="reset"].loading .hide-on-loading,
+input[type="reset"].loading .button-label,
+input[type="submit"].loading i,
+input[type="submit"].loading svg,
+input[type="submit"].loading .icon-label,
+input[type="submit"].loading .hide-on-loading,
+input[type="submit"].loading .button-label {
+  visibility: hidden;
+}
+.button.loading:after,
+button.loading:after,
+input[type="button"].loading:after,
+input[type="reset"].loading:after,
+input[type="submit"].loading:after {
+  content: "" !important;
+  height: 1em;
+  width: 1em;
+  animation: c_spinner 0.6s linear infinite;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  border-left-color: currentColor;
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -0.5em;
+  margin-left: -0.5em;
+}
 
 .button,
 input[type="button"],
