@@ -34,6 +34,7 @@ add_filter( 'customify_the_content', 'capital_P_dangit' );
 add_filter( 'customify_the_content', 'do_shortcode' );
 add_filter( 'customify_the_content', 'convert_smilies' );
 
+
 /**
  *  Same hook for the_content but not auto P
  *
