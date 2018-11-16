@@ -2558,7 +2558,7 @@ input[type="submit"].loading:after {
   height: 1em;
   width: 1em;
   animation: c_spinner 0.6s linear infinite;
-  border: 1px solid rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.5);
   border-left-color: currentColor;
   border-radius: 50%;
   display: block;
