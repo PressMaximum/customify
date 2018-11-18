@@ -497,6 +497,7 @@ class Customify_Post_Entry {
 		<div class="entry-content entry--item">
 			<?php
 			the_content();
+			$this->post_pagination();
 			?>
 		</div><!-- .entry-content -->
 		<?php
@@ -614,7 +615,21 @@ class Customify_Post_Entry {
 		echo '</div>';
 	}
 
+	/**
+	 * Post pagination markup
+	 */
+	function post_pagination() {
+		if ( ! is_single() ) {
+			return '';
+		}
 
+		wp_link_pages(
+			array(
+				'before' => '<div class="page-links">' . esc_html__( 'Pages:', 'customify' ),
+				'after'  => '</div>',
+			)
+		);
+	}
 
 	/**
 	 * Display related post
