@@ -176,8 +176,12 @@ class Customify {
 		add_theme_support( 'wc-product-gallery-lightbox' );
 		add_theme_support( 'wc-product-gallery-slider' );
 
-		// Add editor style.
-		add_editor_style( 'assets/css/admin/editor-style.min.css' );
+		/**
+		 * Add editor style
+		 */
+		add_theme_support( 'editor-styles' );
+		$suffix = Customify()->get_asset_suffix();
+		add_editor_style( 'assets/css/admin/editor' . $suffix . '.css' );
 
 	}
 

@@ -1,6 +1,6 @@
 {
     "name": "customify",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
@@ -16,7 +16,7 @@
         "grunt-contrib-cssmin": "^2.2.1",
         "grunt-contrib-jshint": "^2.0.0",
         "grunt-contrib-sass": "*",
-        "grunt-contrib-uglify": "*",
+        "grunt-contrib-uglify": "^4.0.0",
         "grunt-contrib-watch": "^1.1.0",
         "grunt-phpcbf": "^0.1.1",
         "grunt-phpcs": "^0.4.0",

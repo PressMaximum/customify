@@ -84,6 +84,7 @@ module.exports = function( grunt ) {
                     'style.css': 'assets/sass/site/style.scss',
                     'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
                     'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
+                    'assets/css/admin/editor.css': 'assets/sass/admin/editor.scss',
                     'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
                     },
                     {
