@@ -124,6 +124,7 @@ class Customify_Builder_Item_Logo {
 		$logo_classes   = array( 'site-branding' );
 		$logo_classes[] = 'logo-' . $image_position;
 		$logo_classes   = apply_filters( 'customify/logo-classes', $logo_classes );
+		$tag = is_customize_preview() ? 'h2' : '__site_device_tag__';
 		?>
 		<div class="<?php echo esc_attr( join( ' ', $logo_classes ) ); ?>">
 			<?php
@@ -133,9 +134,9 @@ class Customify_Builder_Item_Logo {
 				echo '<div class="site-name-desc">';
 				if ( 'no' !== $show_name ) {
 					if ( is_front_page() && is_home() ) : ?>
-						<__site_device_tag__ class="site-title">
+						<<?php echo $tag; // WPCS: XSS ok. ?> class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-						</__site_device_tag__>
+						</<?php echo $tag; // WPCS: XSS ok. ?>>
 					<?php else : ?>
 						<p class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
