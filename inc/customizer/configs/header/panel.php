@@ -52,7 +52,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'title'               => __( 'Header Builder', 'customify' ),
 				'selector'            => '#masthead',
 				'render_callback'     => $fn,
-				'container_inclusive' => true
+				'container_inclusive' => true,
 			),
 
 		);
@@ -69,9 +69,9 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			$section_name = __( 'Header Top', 'customify' );
 		}
 
-		// Text skin
+		// Text skin.
 		$color_mode = 'light-mode';
-		if ( $section == 'header_top' ) {
+		if ( 'header_top' == $section ) {
 			$color_mode = 'dark-mode';
 		}
 
@@ -105,7 +105,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'layout-full-contained' => __( 'Full width - Contained', 'customify' ),
 					'layout-fullwidth'      => __( 'Full Width', 'customify' ),
 					'layout-contained'      => __( 'Contained', 'customify' ),
-				)
+				),
 			),
 
 			array(
@@ -116,7 +116,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description' => __( "Layout <code>Full width - Contained</code> and <code>Full Width</code> will not fit browser width because you've selected <a class='focus-control' data-id='site_layout' href='#'>Site Layout</a> as <code>Boxed</code> or <code>Framed</code>", 'customify' ),
 				'required'    => array(
 					array( 'site_layout', '=', array( 'site-boxed', 'site-framed' ) ),
-				)
+				),
 			),
 
 			array(
@@ -142,13 +142,13 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'choices'    => array(
 					'dark-mode'  => array(
 						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
-						'label' => 'Dark'
+						'label' => 'Dark',
 					),
 					'light-mode' => array(
 						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
-						'label' => 'Light'
+						'label' => 'Light',
 					),
-				)
+				),
 			),
 
 			array(
@@ -159,7 +159,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'description'      => sprintf( __( 'Advanced styling for %s', 'customify' ), $section_name ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => "{$skin_selector} .header--row-inner"
+					'normal' => "{$skin_selector} .header--row-inner",
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(
@@ -180,7 +180,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 	}
 
 	function row_sidebar_config( $section, $section_name ) {
-		//$selector = '#header-menu-sidebar-inner';
 		$selector = '#header-menu-sidebar-bg';
 
 		$config = array(
@@ -206,9 +205,8 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'menu_sidebar_slide_right'   => __( 'Slide From Right', 'customify' ),
 					'menu_sidebar_slide_overlay' => __( 'Full-screen Overlay', 'customify' ),
 					'menu_sidebar_dropdown'      => __( 'Toggle Dropdown', 'customify' ),
-				)
+				),
 			),
-
 
 			array(
 				'name'       => $section . '_skin_mode',
@@ -221,15 +219,14 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'choices'    => array(
 					'dark-mode'  => array(
 						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
-						'label' => 'Dark'
+						'label' => 'Dark',
 					),
 					'light-mode' => array(
 						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
-						'label' => 'Light'
+						'label' => 'Light',
 					),
-				)
+				),
 			),
-
 
 			array(
 				'name'             => $section . '_styling',
@@ -242,20 +239,17 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'normal'               => $selector,
 					'normal_link_color'    => "{$selector} .menu li a, {$selector} .item--html a, {$selector} .cart-item-link, {$selector} .nav-toggle-icon",
 					'hover_link_color'     => "{$selector} .menu li a:hover, {$selector} .item--html a:hover, {$selector} .cart-item-link:hover, {$selector} li.open-sub .nav-toggle-icon",
-					'normal_bg_color'      => "#header-menu-sidebar-bg:before",
-					'normal_bg_image'      => "#header-menu-sidebar-bg:before",
-					'normal_bg_attachment' => "#header-menu-sidebar-bg:before",
-					'normal_bg_cover'      => "#header-menu-sidebar-bg:before",
-					'normal_bg_repeat'     => "#header-menu-sidebar-bg:before",
-					'normal_bg_position'   => "#header-menu-sidebar-bg:before",
-					'normal_box_shadow'    => "#header-menu-sidebar",
+					'normal_bg_color'      => '#header-menu-sidebar-bg:before',
+					'normal_bg_image'      => '#header-menu-sidebar-bg:before',
+					'normal_bg_attachment' => '#header-menu-sidebar-bg:before',
+					'normal_bg_cover'      => '#header-menu-sidebar-bg:before',
+					'normal_bg_repeat'     => '#header-menu-sidebar-bg:before',
+					'normal_bg_position'   => '#header-menu-sidebar-bg:before',
+					'normal_box_shadow'    => '#header-menu-sidebar',
 				),
-				'css_format'       => 'styling', // styling
+				'css_format'       => 'styling', // styling.
 				'fields'           => array(
 					'normal_fields' => array(
-						//'link_color' => false, // disable for special field.
-						//'padding' => false // disable for special field.
-						//'border_heading' => false,
 						'border_color'  => false,
 						'border_radius' => false,
 						'border_width'  => false,
@@ -276,7 +270,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 						'border_style'   => false,
 						'box_shadow'     => false,
 					), // disable hover tab and all fields inside.
-				)
+				),
 			),
 
 			array(
@@ -295,7 +289,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'section'         => $section,
 				'priority'        => 820,
 				'device_settings' => true,
-				'selector'        => ".header-menu-sidebar-inner",
+				'selector'        => '.header-menu-sidebar-inner',
 				'css_format'      => 'text-align: {{value}};',
 				'title'           => __( 'Align', 'customify' ),
 			),
@@ -326,14 +320,13 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 			}
 		}
 
-
 		$layout = array(
 			array(
 				'name'     => $name_prefix . $item_id . '_l_heading',
 				'type'     => 'heading',
 				'priority' => 800,
 				'section'  => $section,
-				'title'    => __( 'Item Layout', 'customify' )
+				'title'    => __( 'Item Layout', 'customify' ),
 			),
 
 			array(
@@ -378,8 +371,8 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 					0      => __( 'No', 'customify' ),
 					'prev' => __( 'Merge with left item', 'customify' ),
 					'next' => __( 'Merge with right item', 'customify' ),
-				)
-			)
+				),
+			),
 		);
 
 		return $layout;

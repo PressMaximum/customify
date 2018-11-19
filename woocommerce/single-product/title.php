@@ -14,5 +14,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 echo '<div class="product_title-wrapper">';
 the_title( '<h1 class="product_title entry-title">', '</h1>' );
-do_action('wc_after_single_product_title');
+do_action( 'wc_after_single_product_title' );
 echo '</div>';

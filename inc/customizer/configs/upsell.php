@@ -15,7 +15,7 @@ if ( is_admin() || is_customize_preview() ) {
 			'section_class' => 'Customify_WP_Customize_Section_Pro',
 			'priority'      => 0,
 			'pro_text'      => __( 'Customify Pro modules available', 'customify' ),
-			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top'
+			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top',
 		);
 
 		$configs[] = array(
@@ -35,7 +35,7 @@ if ( is_admin() || is_customize_preview() ) {
 				__( 'Icon Box', 'customify' ),
 				__( 'Contact Info', 'customify' ),
 				__( 'And more header settings', 'customify' ),
-			)
+			),
 		);
 
 		$configs[] = array(
@@ -48,13 +48,13 @@ if ( is_admin() || is_customize_preview() ) {
 			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_footer_side',
 			'teaser'        => true,
 			'features'      => array(
-				__( 'Footer Top Area', 'customify' ),
-				__( 'Horizontal Menu', 'customify' ),
-				__( 'More HTML items', 'customify' ),
-				__( 'Icon Box', 'customify' ),
-				__( 'Contact Info', 'customify' ),
-				__( 'Payment Methods', 'customify' )
-			)
+				__( 'Footer Top Row', 'customify' ),
+				__( 'Horizontal Menu Item', 'customify' ),
+				__( 'More HTML Items', 'customify' ),
+				__( 'Icon Box Item', 'customify' ),
+				__( 'Contact Info Item', 'customify' ),
+				__( 'Payment Methods Item', 'customify' ),
+			),
 		);
 
 		return $configs;

@@ -1,3 +1,10 @@
+if ("ontouchstart" in document.documentElement)
+{
+	document.body.classList.add("ontouch-screen");
+} else {
+	document.body.classList.add("not-touch-screen");
+}
+
 function customify_is_mobile() {
     if( navigator.userAgent.match(/Android/i)
         || navigator.userAgent.match(/webOS/i)

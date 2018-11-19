@@ -2,6 +2,7 @@
 .sass-cache
 
 # Grunt
+/vendor/
 /node_modules/
 /releases/
 npm-debug.log

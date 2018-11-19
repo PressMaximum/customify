@@ -5,7 +5,6 @@ class Customify_WC_Colors {
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 100 );
 	}
 
-
 	function config( $configs ) {
 		$section = 'global_styling';
 
@@ -23,7 +22,9 @@ class Customify_WC_Colors {
 			'title'       => __( 'Shop Buttons', 'customify' ),
 			'placeholder' => '#c3512f',
 			'description' => __( 'Color for add to cart, checkout buttons. Default is Secondary Color.', 'customify' ),
-			'css_format'  => apply_filters( 'customify/styling/shop-buttons', '
+			'css_format'  => apply_filters(
+				'customify/styling/shop-buttons',
+				'
 					.button.add_to_cart_button, 
 					.button.alt, .button.added_to_cart, 
 					.button.checkout, 
@@ -43,7 +44,9 @@ class Customify_WC_Colors {
 			'title'       => __( 'Rating Stars', 'customify' ),
 			'description' => __( 'Color for rating stars, default is Secondary Color.', 'customify' ),
 			'placeholder' => '#c3512f',
-			'css_format'  => apply_filters( 'customify/styling/shop-rating-stars', '
+			'css_format'  => apply_filters(
+				'customify/styling/shop-rating-stars',
+				'
 					.comment-form-rating a, 
 					.star-rating,
 					.comment-form-rating a:hover, 
@@ -63,7 +66,9 @@ class Customify_WC_Colors {
 			'section'     => $section,
 			'title'       => __( 'On Sale', 'customify' ),
 			'placeholder' => '#77a464',
-			'css_format'  => apply_filters( 'customify/styling/shop-onsale', '
+			'css_format'  => apply_filters(
+				'customify/styling/shop-onsale',
+				'
 					span.onsale
 					{
 					    background-color: {{value}};

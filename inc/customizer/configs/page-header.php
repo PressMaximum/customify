@@ -25,6 +25,7 @@ class Customify_Page_Header {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
 		}
+
 		return self::$_instance;
 	}
 
@@ -41,82 +42,82 @@ class Customify_Page_Header {
 
 		$display_fields = array(
 			array(
-				'name'        => "page",
+				'name'        => 'page',
 				'type'        => 'select',
 				'label'       => __( 'Display on single page', 'customify' ),
 				'description' => __( 'Apply when viewing single page', 'customify' ),
 				'default'     => 'titlebar',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 			array(
-				'name'        => "post",
+				'name'        => 'post',
 				'type'        => 'select',
 				'label'       => __( 'Display on single post', 'customify' ),
 				'description' => __( 'Apply when viewing single post', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 
 			array(
-				'name'        => "category",
+				'name'        => 'category',
 				'type'        => 'select',
 				'label'       => __( 'Display on categories', 'customify' ),
 				'description' => __( 'Apply when viewing a category page', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 			array(
-				'name'        => "index",
+				'name'        => 'index',
 				'type'        => 'select',
 				'label'       => __( 'Display on index', 'customify' ),
 				'description' => __( 'Apply when your homepage displays as latest posts', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 			array(
-				'name'        => "search",
+				'name'        => 'search',
 				'type'        => 'select',
 				'label'       => __( 'Display on search', 'customify' ),
 				'description' => __( 'Apply when viewing search results page', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 			array(
-				'name'        => "archive",
+				'name'        => 'archive',
 				'type'        => 'select',
 				'label'       => __( 'Display on archive', 'customify' ),
 				'description' => __( 'Apply when viewing archive pages, e.g. Tag, Author, Date, Custom Post Type or Custom Taxonomy', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 			array(
-				'name'        => "page_404",
+				'name'        => 'page_404',
 				'type'        => 'select',
 				'label'       => __( 'Display on 404 page', 'customify' ),
 				'description' => __( 'Apply when the page not found', 'customify' ),
 				'default'     => '',
-				'choices'     => $choices
+				'choices'     => $choices,
 			),
 
 		);
 
 		$title_fields = array(
 			array(
-				'name'        => "index",
+				'name'        => 'index',
 				'type'        => 'text',
 				'label'       => __( 'Title for index page', 'customify' ),
 				'description' => __( 'Apply when your homepage displays as latest posts', 'customify' ),
 				'default'     => '',
 			),
 			array(
-				'name'        => "post",
+				'name'        => 'post',
 				'type'        => 'text',
 				'label'       => __( 'Title for single post', 'customify' ),
 				'description' => __( 'Apply when viewing single post', 'customify' ),
 				'default'     => '',
 			),
 			array(
-				'name'        => "page_404",
+				'name'        => 'page_404',
 				'type'        => 'text',
 				'label'       => __( 'Title for 404 page', 'customify' ),
 				'description' => __( 'Apply when the page not found', 'customify' ),
@@ -126,21 +127,21 @@ class Customify_Page_Header {
 
 		$tagline_fields = array(
 			array(
-				'name'        => "index",
+				'name'        => 'index',
 				'type'        => 'textarea',
 				'label'       => __( 'Tagline for index page', 'customify' ),
 				'description' => __( 'Apply when your homepage displays as latest posts', 'customify' ),
 				'default'     => '',
 			),
 			array(
-				'name'        => "post",
+				'name'        => 'post',
 				'type'        => 'textarea',
 				'label'       => __( 'Tagline for single post', 'customify' ),
 				'description' => __( 'Apply when viewing single post', 'customify' ),
 				'default'     => '',
 			),
 			array(
-				'name'        => "page_404",
+				'name'        => 'page_404',
 				'type'        => 'textarea',
 				'label'       => __( 'Tagline for 404 page', 'customify' ),
 				'description' => __( 'Apply when the page not found', 'customify' ),
@@ -150,53 +151,53 @@ class Customify_Page_Header {
 
 		$post_types = Customify()->get_post_types( false );
 		if ( count( $post_types ) > 0 ) {
-		    foreach ( $post_types as $pt => $label ) {
-                $display_fields[] = array(
-                    'name'        => $pt,
-                    'type'        => 'select',
-                    'label'       => sprintf( __( 'Display on %s page', 'customify' ), $label['singular_name'] ),
-                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
-                    'default'     => '',
-                    'choices'     => $choices
-                );
+			foreach ( $post_types as $pt => $label ) {
+				$display_fields[] = array(
+					'name'        => $pt,
+					'type'        => 'select',
+					'label'       => sprintf( __( 'Display on %s page', 'customify' ), $label['singular_name'] ),
+					'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+					'default'     => '',
+					'choices'     => $choices,
+				);
 
-                $taxonomy_filter_args = [
-                    'show_in_nav_menus' => true,
-                ];
+				$taxonomy_filter_args = [
+					'show_in_nav_menus' => true,
+				];
 
-                $taxonomy_filter_args['object_type'] = [$pt];
-                $taxonomies = get_taxonomies($taxonomy_filter_args, 'objects');
-                $options = array();
+				$taxonomy_filter_args['object_type'] = [ $pt ];
+				$taxonomies                          = get_taxonomies( $taxonomy_filter_args, 'objects' );
+				$options                             = array();
 
-                foreach ($taxonomies as $taxonomy => $object) {
-                    $options[ $taxonomy ] = $object->label;
-                    $display_fields[] = array(
-                        'name'        => $taxonomy ,
-                        'type'        => 'select',
-                        'label'       => sprintf( __( 'Display on %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
-                        'description' => sprintf( __( 'Apply when viewing %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
-                        'default'     => '',
-                        'choices'     => $choices
-                    );
-                }
+				foreach ( $taxonomies as $taxonomy => $object ) {
+					$options[ $taxonomy ] = $object->label;
+					$display_fields[]     = array(
+						'name'        => $taxonomy,
+						'type'        => 'select',
+						'label'       => sprintf( __( 'Display on %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
+						'description' => sprintf( __( 'Apply when viewing %1$s %2$s', 'customify' ), $label['singular_name'], $object->labels->singular_name ),
+						'default'     => '',
+						'choices'     => $choices,
+					);
+				}
 
-                $title_fields[] = array(
-                    'name'        => $pt,
-                    'type'        => 'text',
-                    'label'       => sprintf( __( 'Title for %s', 'customify' ), $label['singular_name'] ),
-                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
-                    'default'     => '',
-                );
+				$title_fields[] = array(
+					'name'        => $pt,
+					'type'        => 'text',
+					'label'       => sprintf( __( 'Title for %s', 'customify' ), $label['singular_name'] ),
+					'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+					'default'     => '',
+				);
 
-                $tagline_fields[] = array(
-                    'name'        => $pt,
-                    'type'        => 'textarea',
-                    'label'       => sprintf( __( 'Tagline for %s', 'customify' ), $label['singular_name'] ),
-                    'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
-                    'default'     => '',
-                );
-            }
-        }
+				$tagline_fields[] = array(
+					'name'        => $pt,
+					'type'        => 'textarea',
+					'label'       => sprintf( __( 'Tagline for %s', 'customify' ), $label['singular_name'] ),
+					'description' => sprintf( __( 'Apply when viewing single %s', 'customify' ), $label['singular_name'] ),
+					'default'     => '',
+				);
+			}
+		}
 
 		$config = array(
 			array(
@@ -206,27 +207,27 @@ class Customify_Page_Header {
 				'title' => __( 'Page Header', 'customify' ),
 			),
 
-            array(
-                'name'            => $section . '_layout',
-                'type'            => 'select',
-                'section'         => $section,
-                'title'           => __( 'Layout', 'customify' ),
-                'selector'        => '.page-header--item',
-                'css_format'      => 'html_class',
-                'default'         => '',
-                'choices'         => array(
-                    '' => __( 'Default', 'customify' ),
-                    'layout-full-contained' => __( 'Full width - Contained', 'customify' ),
-                    'layout-fullwidth'      => __( 'Full Width', 'customify' ),
-                    'layout-contained'      => __( 'Contained', 'customify' ),
-                )
-            ),
+			array(
+				'name'       => $section . '_layout',
+				'type'       => 'select',
+				'section'    => $section,
+				'title'      => __( 'Layout', 'customify' ),
+				'selector'   => '.page-header--item',
+				'css_format' => 'html_class',
+				'default'    => '',
+				'choices'    => array(
+					''                      => __( 'Default', 'customify' ),
+					'layout-full-contained' => __( 'Full width - Contained', 'customify' ),
+					'layout-fullwidth'      => __( 'Full Width', 'customify' ),
+					'layout-contained'      => __( 'Contained', 'customify' ),
+				),
+			),
 
 			array(
 				'name'    => "{$name}_display_h",
 				'type'    => 'heading',
 				'section' => $section,
-				'title'   => __( 'Display Settings', 'customify' )
+				'title'   => __( 'Display Settings', 'customify' ),
 			),
 
 			array(
@@ -237,10 +238,10 @@ class Customify_Page_Header {
 				'description' => __( 'Settings display for special pages.', 'customify' ),
 				'default'     => array(
 					'display' => array(
-						'page'    => 'titlebar',
-						'archive' => 'titlebar',
-                        'category' => 'titlebar',
-					)
+						'page'     => 'titlebar',
+						'archive'  => 'titlebar',
+						'category' => 'titlebar',
+					),
 				),
 				'fields'      => array(
 					'tabs'            => array(
@@ -250,7 +251,7 @@ class Customify_Page_Header {
 					'display_fields'  => $display_fields,
 					'advanced_fields' => array(
 						array(
-							'name'        => "post_bg",
+							'name'        => 'post_bg',
 							'type'        => 'select',
 							'label'       => __( 'Post Header Background Cover', 'customify' ),
 							'description' => __( 'Apply when viewing single post and page header setting displays as cover.', 'customify' ),
@@ -259,10 +260,10 @@ class Customify_Page_Header {
 								'default'   => __( 'Default', 'customify' ),
 								'blog_page' => __( 'Use featured image from blog page', 'customify' ),
 								'featured'  => __( 'Use featured image of current post', 'customify' ),
-							)
+							),
 						),
 						array(
-							'name'    => "post_title_tagline",
+							'name'    => 'post_title_tagline',
 							'type'    => 'select',
 							'label'   => __( 'Single Post Title & Tagline', 'customify' ),
 							'default' => '',
@@ -270,12 +271,10 @@ class Customify_Page_Header {
 								'default'   => __( 'Default', 'customify' ),
 								'blog_page' => __( 'Use title & tagline from blog page', 'customify' ),
 								'current'   => __( 'Use title & tagline of current post', 'customify' ),
-							)
+							),
 						),
-					)
+					),
 				),
-				//'selector' => '.page-header--item',
-				//'render_callback' => $render_cb_el,
 			),
 
 			array(
@@ -330,37 +329,37 @@ class Customify_Page_Header {
 				'name'    => "{$name}_styling_h_tb",
 				'type'    => 'heading',
 				'section' => 'page_header',
-				'title'   => __( 'Titlebar Settings', 'customify' )
+				'title'   => __( 'Titlebar Settings', 'customify' ),
 			),
-
-            array(
-                'name'            => $name . '_show_title',
-                'type'            => 'checkbox',
-                'section'         => $section,
-                'label'           => __( 'Show Title', 'customify' ),
-                'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
-                'checkbox_label'  => __( 'Enable', 'customify' ),
-                'default'         => 1,
-            ),
 
 			array(
-				'name'            => $name . '_show_tagline',
-				'type'            => 'checkbox',
-				'section'         => $section,
-				'label'           => __( 'Show Tagline', 'customify' ),
-				'description'     => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
-				'checkbox_label'  => __( 'Enable', 'customify' ),
-				'default'         => 1,
+				'name'           => $name . '_show_title',
+				'type'           => 'checkbox',
+				'section'        => $section,
+				'label'          => __( 'Show Title', 'customify' ),
+				'description'    => __( 'Title is pull from post title, archive title.', 'customify' ),
+				'checkbox_label' => __( 'Enable', 'customify' ),
+				'default'        => 1,
 			),
-            array(
-                'name'            => "{$name}_align",
-                'type'            => 'text_align_no_justify',
-                'section'         => $section,
-                'device_settings' => true,
-                'selector'        => "$selector",
-                'css_format'      => 'text-align: {{value}};',
-                'title'           => __( 'Text Align', 'customify' ),
-            ),
+
+			array(
+				'name'           => $name . '_show_tagline',
+				'type'           => 'checkbox',
+				'section'        => $section,
+				'label'          => __( 'Show Tagline', 'customify' ),
+				'description'    => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
+				'checkbox_label' => __( 'Enable', 'customify' ),
+				'default'        => 1,
+			),
+			array(
+				'name'            => "{$name}_align",
+				'type'            => 'text_align_no_justify',
+				'section'         => $section,
+				'device_settings' => true,
+				'selector'        => "$selector",
+				'css_format'      => 'text-align: {{value}};',
+				'title'           => __( 'Text Align', 'customify' ),
+			),
 
 		);
 
@@ -381,27 +380,27 @@ class Customify_Page_Header {
 				'name'    => "{$name}_settings_h",
 				'type'    => 'heading',
 				'section' => $section,
-				'title'   => __( 'Cover Settings', 'customify' )
+				'title'   => __( 'Cover Settings', 'customify' ),
 			),
 
-            array(
-                'name'            => $name . '_show_title',
-                'type'            => 'checkbox',
-                'section'         => $section,
-                'label'           => __( 'Show Title', 'customify' ),
-                'description'     => __( 'Title is pull from post title, archive title.', 'customify' ),
-                'checkbox_label'  => __( 'Enable', 'customify' ),
-                'default'         => 1,
-            ),
+			array(
+				'name'           => $name . '_show_title',
+				'type'           => 'checkbox',
+				'section'        => $section,
+				'label'          => __( 'Show Title', 'customify' ),
+				'description'    => __( 'Title is pull from post title, archive title.', 'customify' ),
+				'checkbox_label' => __( 'Enable', 'customify' ),
+				'default'        => 1,
+			),
 
 			array(
-				'name'            => $name . '_show_tagline',
-				'type'            => 'checkbox',
-				'section'         => $section,
-				'label'           => __( 'Show Tagline', 'customify' ),
-				'description'     => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
-				'checkbox_label'  => __( 'Enable', 'customify' ),
-				'default'         => 1,
+				'name'           => $name . '_show_tagline',
+				'type'           => 'checkbox',
+				'section'        => $section,
+				'label'          => __( 'Show Tagline', 'customify' ),
+				'description'    => __( 'Tagline is pull from post excerpt, archive description.', 'customify' ),
+				'checkbox_label' => __( 'Enable', 'customify' ),
+				'default'        => 1,
 			),
 
 			array(
@@ -410,18 +409,18 @@ class Customify_Page_Header {
 				'section'    => $section,
 				'title'      => __( 'Cover Background', 'customify' ),
 				'selector'   => $selector,
-				'css_format' => 'styling', // styling
+				'css_format' => 'styling', // Styling.
 				'default'    => array(
 					'normal' => array(
 						'bg_image' => array(
 							'id'  => '',
 							'url' => esc_url( get_template_directory_uri() ) . '/assets/images/default-cover.jpg',
-						)
-					)
+						),
+					),
 				),
 				'fields'     => array(
 					'tabs'          => array(
-						'normal' => '_'
+						'normal' => '_',
 					),
 					'normal_fields' => array(
 						array(
@@ -429,7 +428,7 @@ class Customify_Page_Header {
 							'type'       => 'image',
 							'label'      => __( 'Background Image', 'customify' ),
 							'selector'   => "$selector",
-							'css_format' => 'background-image: url("{{value}}");'
+							'css_format' => 'background-image: url("{{value}}");',
 						),
 						array(
 							'name'       => 'bg_cover',
@@ -444,7 +443,7 @@ class Customify_Page_Header {
 							'label'      => __( 'Size', 'customify' ),
 							'class'      => 'field-half-left',
 							'selector'   => "$selector",
-							'css_format' => '-webkit-background-size: {{value}}; -moz-background-size: {{value}}; -o-background-size: {{value}}; background-size: {{value}};'
+							'css_format' => '-webkit-background-size: {{value}}; -moz-background-size: {{value}}; -o-background-size: {{value}}; background-size: {{value}};',
 						),
 						array(
 							'name'       => 'bg_position',
@@ -463,7 +462,7 @@ class Customify_Page_Header {
 								'bottom right'  => __( 'Bottom Right', 'customify' ),
 							),
 							'selector'   => "$selector",
-							'css_format' => 'background-position: {{value}};'
+							'css_format' => 'background-position: {{value}};',
 						),
 						array(
 							'name'       => 'bg_repeat',
@@ -480,7 +479,7 @@ class Customify_Page_Header {
 								'repeat-y'  => __( 'Repeat vertical', 'customify' ),
 							),
 							'selector'   => "$selector",
-							'css_format' => 'background-repeat: {{value}};'
+							'css_format' => 'background-repeat: {{value}};',
 						),
 
 						array(
@@ -489,19 +488,19 @@ class Customify_Page_Header {
 							'label'      => __( 'Attachment', 'customify' ),
 							'class'      => 'field-half-right',
 							'required'   => array(
-								array( 'bg_image', 'not_empty', '' )
+								array( 'bg_image', 'not_empty', '' ),
 							),
 							'choices'    => array(
 								''       => __( 'Default', 'customify' ),
 								'scroll' => __( 'Scroll', 'customify' ),
-								'fixed'  => __( 'Fixed', 'customify' )
+								'fixed'  => __( 'Fixed', 'customify' ),
 							),
 							'selector'   => "$selector",
-							'css_format' => 'background-attachment: {{value}};'
+							'css_format' => 'background-attachment: {{value}};',
 						),
 
 						array(
-							'name'            => "overlay",
+							'name'            => 'overlay',
 							'type'            => 'color',
 							'section'         => $section,
 							'class'           => 'customify--clear',
@@ -512,8 +511,8 @@ class Customify_Page_Header {
 						),
 
 					),
-					'hover_fields'  => false
-				)
+					'hover_fields'  => false,
+				),
 			),
 
 			array(
@@ -526,37 +525,37 @@ class Customify_Page_Header {
 				'title'           => __( 'Cover Text Align', 'customify' ),
 			),
 
-            array(
-                'name'            => "{$name}_height",
-                'type'            => 'slider',
-                'section'         => $section,
-                'device_settings' => true,
-                'max'             => 1000,
-                'title'           => __( 'Cover Height', 'customify' ),
-                'selector'        => "{$selector} .page-cover-inner",
-                'css_format'      => 'min-height: {{value}};',
-                'default'         => array(
-                    'desktop' => array(
-                        'value' => '300',
-                    ),
-                    'tablet'  => array(
-                        'value' => '250',
-                    ),
-                    'mobile'  => array(
-                        'value' => '200',
-                    ),
-                ),
-            ),
+			array(
+				'name'            => "{$name}_height",
+				'type'            => 'slider',
+				'section'         => $section,
+				'device_settings' => true,
+				'max'             => 1000,
+				'title'           => __( 'Cover Height', 'customify' ),
+				'selector'        => "{$selector} .page-cover-inner",
+				'css_format'      => 'min-height: {{value}};',
+				'default'         => array(
+					'desktop' => array(
+						'value' => '300',
+					),
+					'tablet'  => array(
+						'value' => '250',
+					),
+					'mobile'  => array(
+						'value' => '200',
+					),
+				),
+			),
 
-            array(
-                'name'            => "{$name}_align",
-                'type'            => 'text_align_no_justify',
-                'section'         => $section,
-                'device_settings' => true,
-                'selector'        => "$selector",
-                'css_format'      => 'text-align: {{value}};',
-                'title'           => __( 'Cover Text Align', 'customify' ),
-            ),
+			array(
+				'name'            => "{$name}_align",
+				'type'            => 'text_align_no_justify',
+				'section'         => $section,
+				'device_settings' => true,
+				'selector'        => "$selector",
+				'css_format'      => 'text-align: {{value}};',
+				'title'           => __( 'Cover Text Align', 'customify' ),
+			),
 
 		);
 		$config       = apply_filters( 'customify/cover/config', $config, $this );
@@ -577,11 +576,11 @@ class Customify_Page_Header {
 			'tagline'                    => '',
 			'image'                      => '',
 			'title_tag'                  => 'h1',
-			'force_display_single_title' => '', //show || or hide
-			'show_title'                 => false, // force show post title
-			'shortcode'                  => false, // force show post title
-			'cover_tagline'              => 1, // Display tagline in cover
-			'titlebar_tagline'           => 1, // Display tagline in titlbar
+			'force_display_single_title' => '', // Show || or hide.
+			'show_title'                 => false, // force show post title.
+			'shortcode'                  => false, // force show post title.
+			'cover_tagline'              => 1, // Display tagline in cover.
+			'titlebar_tagline'           => 1, // Display tagline in titlbar.
 		);
 		$name = 'page_header';
 
@@ -594,80 +593,92 @@ class Customify_Page_Header {
 		$args['cover_tagline']    = Customify()->get_setting( 'header_cover_show_tagline' );
 		$args['titlebar_tagline'] = Customify()->get_setting( 'titlebar_show_tagline' );
 
-		$display = wp_parse_args( $display, array(
-			'index'       => '',
-			'category'    => '',
-			'search'      => '',
-			'archive'     => '',
-			'page'        => '',
-			'post'        => '',
-			'singular'    => '',
-			'product'     => '',
-			'product_cat' => '',
-			'product_tag' => '',
-			'page_404'    => '',
-		) );
+		$display = wp_parse_args(
+			$display,
+			array(
+				'index'       => '',
+				'category'    => '',
+				'search'      => '',
+				'archive'     => '',
+				'page'        => '',
+				'post'        => '',
+				'singular'    => '',
+				'product'     => '',
+				'product_cat' => '',
+				'product_tag' => '',
+				'page_404'    => '',
+			)
+		);
 
-		$advanced = wp_parse_args( $advanced, array(
-			'post_bg'            => '',
-			'post_title_tagline' => '',
-		) );
+		$advanced = wp_parse_args(
+			$advanced,
+			array(
+				'post_bg'            => '',
+				'post_title_tagline' => '',
+			)
+		);
 
-		$titles = wp_parse_args( $titles, array(
-			'index'    => '',
-			'post'     => '',
-			'product'  => '',
-			'page_404' => '',
-		) );
+		$titles = wp_parse_args(
+			$titles,
+			array(
+				'index'    => '',
+				'post'     => '',
+				'product'  => '',
+				'page_404' => '',
+			)
+		);
 
-		$taglines = wp_parse_args( $taglines, array(
-			'index'    => '',
-			'post'     => '',
-			'product'  => '',
-			'page_404' => '',
-		) );
+		$taglines = wp_parse_args(
+			$taglines,
+			array(
+				'index'    => '',
+				'post'     => '',
+				'product'  => '',
+				'page_404' => '',
+			)
+		);
 
 		$post_thumbnail_id = false;
 
 		$post_id = 0;
-		if ( is_front_page() && is_home() ) { // index page
-			// Default homepage
+		if ( is_front_page() && is_home() ) { // index page.
+			// Default homepage.
 			$args['display'] = $display['index'];
 			$args['title']   = $titles['index'];
 			$args['tagline'] = $taglines['index'];
 			$args['_page']   = 'index';
 		} elseif ( is_front_page() ) {
-			// static homepage
+			// static homepage.
 			$args['display'] = $display['page'];
 			$post_id         = get_the_ID();
 			$args['_page']   = 'page';
 		} elseif ( is_home() ) {
-			// blog page
+			// blog page.
 			$args['display'] = $display['page'];
 			$post_id         = get_option( 'page_for_posts' );
 			$args['_page']   = 'page';
 		} elseif ( is_category() ) {
-			//category
+			// category.
 			$args['display'] = $display['category'];
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'category';
-            $post_id = 0;
+			$post_id         = 0;
 		} elseif ( is_page() ) {
-			// single page
+			// single page.
 			$args['display'] = $display['page'];
 			$post_id         = get_the_ID();
 			$args['_page']   = 'page';
 		} elseif ( is_singular( 'post' ) ) {
-			// single post
+			// single post.
 			$args['display']   = $display['post'];
 			$args['title_tag'] = 'h2';
 
-			// Setup single post bg for cover
-			if ( $advanced['post_bg'] == 'blog_page' ) {
+			// Setup single post bg for cover.
+			if ( 'blog_page' == $advanced['post_bg'] ) {
 				$post_id           = get_option( 'page_for_posts' );
 				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
-			} elseif ( $advanced['post_bg'] == 'featured' ) {
+			} elseif ( 'featured' == $advanced['post_bg'] ) {
 				$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
 			} else {
 				$post_id = get_option( 'page_for_posts' );
@@ -676,47 +687,45 @@ class Customify_Page_Header {
 				}
 			}
 
-			if ( $args['display'] != 'none' ) {
-                if ($advanced['post_title_tagline'] == 'blog_page') {
-                    $post_id = get_option('page_for_posts');
-                    $args['force_display_single_title'] = 'show';
-                } elseif ($advanced['post_title_tagline'] == 'current') {
-                    $post_id = get_the_ID();
-                    if( $args['display'] != 'default' ) {
-                        $args['force_display_single_title'] = 'hide';
-                    } else {
-                        $args['force_display_single_title'] = 'show';
-                    }
-                    $args['title_tag'] = 'h1';
-                } else {
-                    $post_id = get_option('page_for_posts');
-                    $args['force_display_single_title'] = 'show';
-                    if (!$post_id) {
-                        $args['force_display_single_title'] = 'show';
-                        if ($titles['post'] || $taglines['post']) {
-                            $args['title'] = $titles['post'];
-                            $args['tagline'] = $taglines['post'];
-                        }
-                    }
-                }
-            }
+			if ( 'none' != $args['display'] ) {
+				if ( 'blog_page' == $advanced['post_title_tagline'] ) {
+					$post_id                            = get_option( 'page_for_posts' );
+					$args['force_display_single_title'] = 'show';
+				} elseif ( 'current' == $advanced['post_title_tagline'] ) {
+					$post_id = get_the_ID();
+					if ( 'default' != $args['display'] ) {
+						$args['force_display_single_title'] = 'hide';
+					} else {
+						$args['force_display_single_title'] = 'show';
+					}
+					$args['title_tag'] = 'h1';
+				} else {
+					$post_id                            = get_option( 'page_for_posts' );
+					$args['force_display_single_title'] = 'show';
+					if ( ! $post_id ) {
+						$args['force_display_single_title'] = 'show';
+						if ( $titles['post'] || $taglines['post'] ) {
+							$args['title']   = $titles['post'];
+							$args['tagline'] = $taglines['post'];
+						}
+					}
+				}
+			}
 
 			$args['_page'] = 'post';
 		} elseif ( is_singular() ) {
-			// single custom post type
-
-            $post_id         = get_the_ID();
+			// single custom post type.
+			$post_id   = get_the_ID();
 			$post_type = get_post_type();
 			if ( isset( $display[ $post_type ] ) ) {
-                $args['display'] = $display[ $post_type ];
-                $args['_page']   = 'singular_'.$post_type;
-            } elseif ( isset( $display['singular'] ) ) {
-                $args['display'] = $display['singular'];
-                $args['_page']   = 'singular';
-            }
-
+				$args['display'] = $display[ $post_type ];
+				$args['_page']   = 'singular_' . $post_type;
+			} elseif ( isset( $display['singular'] ) ) {
+				$args['display'] = $display['singular'];
+				$args['_page']   = 'singular';
+			}
 		} elseif ( is_404() ) {
-			// page not found
+			// page not found.
 			$args['display'] = $display['page_404'];
 			$args['_page']   = '404';
 			$args['title']   = $titles['page_404'];
@@ -725,51 +734,49 @@ class Customify_Page_Header {
 				$args['title'] = __( "Oops! That page can't be found.", 'customify' );
 			}
 		} elseif ( is_search() ) {
-			// Search result
+			// Search result.
 			$args['display'] = $display['search'];
 			$args['title']   = sprintf( // WPCS: XSS ok.
-			/* translators: 1: Search query name */
+				/* translators: 1: Search query name */
 				__( 'Search Results for: %s', 'customify' ),
 				'<span>' . get_search_query() . '</span>'
 			);
 			$args['tagline'] = '';
 			$args['_page']   = 'search';
-            $post_id = 0;
+			$post_id         = 0;
 		} elseif ( is_archive() ) {
 			$args['display'] = $display['archive'];
 			$args['title']   = get_the_archive_title();
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'archive';
-            $post_id = 0;
+			$post_id         = 0;
 		}
 
-        if ( is_tax() ) {
-            $queried_object = get_queried_object();
-            if ( isset( $display[ $queried_object->taxonomy ] ) ) {
-                $args['display'] = $display['product_tag'];
-            }
-            if ( isset( $titles[ $queried_object->taxonomy ] ) ) {
-                $args['display'] = $titles[ $queried_object->taxonomy ];
-            }
-            if ( isset( $taglines[ $queried_object->taxonomy ] ) ) {
-                $args['tagline'] = $taglines[ $queried_object->taxonomy ];
-            }
-            $args['_page']   = 'tax_'.$queried_object->taxonomy;
-        }
+		if ( is_tax() ) {
+			$queried_object = get_queried_object();
+			if ( isset( $display[ $queried_object->taxonomy ] ) ) {
+				$args['display'] = $display['product_tag'];
+			}
+			if ( isset( $titles[ $queried_object->taxonomy ] ) ) {
+				$args['display'] = $titles[ $queried_object->taxonomy ];
+			}
+			if ( isset( $taglines[ $queried_object->taxonomy ] ) ) {
+				$args['tagline'] = $taglines[ $queried_object->taxonomy ];
+			}
+			$args['_page'] = 'tax_' . $queried_object->taxonomy;
+		}
 
-
-		// WooCommerce Settings
+		// WooCommerce Settings.
 		if ( Customify()->is_woocommerce_active() ) {
 			if ( is_product() ) {
-                $post_id         = wc_get_page_id( 'shop' );
+				$post_id         = wc_get_page_id( 'shop' );
 				$args['display'] = $display['product'];
 				$args['title']   = $titles['product'];
 				$args['tagline'] = $taglines['product'];
 				$args['_page']   = 'product';
 				if ( $args['title'] || $args['tagline'] ) {
 					$post_id = 0;
-                }
-
+				}
 			} elseif ( is_product_category() ) {
 				$post_id         = 0;
 				$args['display'] = $display['product_cat'];
@@ -786,66 +793,62 @@ class Customify_Page_Header {
 				$args['display'] = $display['page'];
 				$post_id         = wc_get_page_id( 'shop' );
 				$args['_page']   = 'shop';
-                $args['tagline'] = '';
+				$args['tagline'] = '';
 			}
-
 		}
 
-
-
 		if ( $post_id > 0 ) {
-            $post = get_post($post_id);
-            if ($post) {
-                $args['title'] = get_the_title($post_id);
-                if ($post->post_excerpt) {
-                    $args['tagline'] = get_the_excerpt($post);
-                }
-                if (!$post_thumbnail_id) {
-                    $post_thumbnail_id = get_post_thumbnail_id($post_id);
-                }
+			$post = get_post( $post_id );
+			if ( $post ) {
+				$args['title'] = get_the_title( $post_id );
+				if ( $post->post_excerpt ) {
+					$args['tagline'] = get_the_excerpt( $post );
+				}
+				if ( ! $post_thumbnail_id ) {
+					$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+				}
+			}
+		}
 
-            }
-        }
-
-        if (!$args['image'] && $post_thumbnail_id) {
-            $_i = Customify()->get_media($post_thumbnail_id);
-            if ($_i) {
-                $args['image'] = $_i;
-            }
-        }
+		if ( ! $args['image'] && $post_thumbnail_id ) {
+			$_i = Customify()->get_media( $post_thumbnail_id );
+			if ( $_i ) {
+				$args['image'] = $_i;
+			}
+		}
 
 		if ( Customify()->is_using_post() ) {
 			$post_id = Customify()->get_current_post_id();
 
-			// if Disable page title
+			// If Disable page title.
 			$disable = get_post_meta( $post_id, '_customify_disable_page_title', true );
 			if ( $disable ) {
 				$args['force_display_single_title'] = 'hide';
 			}
 
-			// If has custom field custom title
+			// If has custom field custom title.
 			$post_display = get_post_meta( $post_id, '_customify_page_header_display', true );
-			if ( $post_display && $post_display != 'default' ) {
-			    if( $post_display == 'normal' ) {
-				    $args['display'] = 'default';
-                } else{
-				    $args['display'] = $post_display;
-                }
+			if ( $post_display && 'default' != $post_display ) {
+				if ( 'normal' == $post_display ) {
+					$args['display'] = 'default';
+				} else {
+					$args['display'] = $post_display;
+				}
 			}
 
-			// If has custom field custom title
+			// If has custom field custom title.
 			$title = get_post_meta( $post_id, '_customify_page_header_title', true );
 			if ( $title ) {
 				$args['title'] = $title;
 			}
 
-			// If has custom field custom tagline
+			// If has custom field custom tagline.
 			$tagline = trim( get_post_meta( $post_id, '_customify_page_header_tagline', true ) );
 			if ( $tagline ) {
 				$args['tagline'] = $tagline;
 			}
 
-			// If has custom field header media
+			// If has custom field header media.
 			$media = get_post_meta( $post_id, '_customify_page_header_image', true );
 			if ( ! empty( $media ) ) {
 				$image = Customify()->get_media( $media );
@@ -854,18 +857,16 @@ class Customify_Page_Header {
 				}
 			}
 
-			//Has custom shortcode
+			// Has custom shortcode.
 			$args['shortcode'] = trim( get_post_meta( $post_id, '_customify_page_header_shortcode', true ) );
 			if ( $args['shortcode'] ) {
 				$args['display'] = 'shortcode';
 			}
-
 		}
 
 		if ( ! $args['display'] ) {
 			$args['display'] = 'default';
 		}
-
 
 		self::$_settings = apply_filters( 'customify/page-header/get-settings', $args );
 
@@ -874,14 +875,14 @@ class Customify_Page_Header {
 
 	function display_page_title( $show ) {
 		$args = $this->get_settings();
-		if ( ! $args['display'] || $args['display'] == 'default' ) {
+		if ( ! $args['display'] || 'default' == $args['display'] ) {
 			$show = true;
-		} elseif ( $args['display'] == 'cover' || $args['display'] == 'titlebar' || $args['display'] == 'none' ) {
+		} elseif ( 'cover' == $args['display'] || 'titlebar' == $args['display'] || 'none' == $args['display'] ) {
 			$show = false;
 		}
-		if ( $args['force_display_single_title'] == 'hide' ) {
+		if ( 'hide' == $args['force_display_single_title'] ) {
 			$show = false;
-		} elseif ( $args['force_display_single_title'] == 'show' ) {
+		} elseif ( 'show' == $args['force_display_single_title'] ) {
 			$show = true;
 		}
 
@@ -890,7 +891,7 @@ class Customify_Page_Header {
 
 	function render_cover( $args = array() ) {
 		$args = $this->get_settings();
-		extract( $args, EXTR_SKIP );
+		extract( $args, EXTR_SKIP ); // phpcs:ignore
 
 		$style = '';
 		if ( $args['image'] ) {
@@ -901,22 +902,22 @@ class Customify_Page_Header {
 			$args['title_tag'] = 'h2';
 		}
 
-        $layout  = Customify()->get_setting_tab(  'page_header_layout' );
-        $classes = array( 'page-header--item page-cover' );
-        $classes[] = $layout;
+		$layout    = Customify()->get_setting_tab( 'page_header_layout' );
+		$classes   = array( 'page-header--item page-cover' );
+		$classes[] = $layout;
 
 		?>
-        <div id="page-cover" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $style; ?>>
-            <div class="page-cover-inner customify-container">
+		<div id="page-cover" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>"<?php echo $style; ?>>
+			<div class="page-cover-inner customify-container">
 				<?php
 				do_action( 'customify/page-cover/before' );
 
-                if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
-                    if ($args['title']) {
-                        // WPCS: XSS ok.
-                        echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters('customify_the_title', wp_kses_post($args['title'])) . '</' . $args['title_tag'] . '>';
-                    }
-                }
+				if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
+					if ( $args['title'] ) {
+						// WPCS: XSS ok.
+						echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+					}
+				}
 				if ( $args['cover_tagline'] ) {
 					if ( $args['tagline'] ) {
 						// WPCS: XSS ok.
@@ -926,19 +927,19 @@ class Customify_Page_Header {
 
 				do_action( 'customify/page-cover/after' );
 				?>
-            </div>
-        </div>
+			</div>
+		</div>
 		<?php
 	}
 
 	function render_titlebar( $args = array() ) {
 
-        $classes = array( 'page-header--item page-titlebar' );
-        $layout  = Customify()->get_setting_tab(  'page_header_layout' );
-        $classes[] = $layout;
+		$classes   = array( 'page-header--item page-titlebar' );
+		$layout    = Customify()->get_setting_tab( 'page_header_layout' );
+		$classes[] = $layout;
 		?>
-        <div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
-            <div class="page-titlebar-inner customify-container">
+		<div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
+			<div class="page-titlebar-inner customify-container">
 				<?php
 				/**
 				 * Hook titlebar before
@@ -946,11 +947,11 @@ class Customify_Page_Header {
 				do_action( 'customify/titlebar/before' );
 
 				// WPCS: XSS ok.
-                if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
-                    if ( $args['title'] ) {
-                        echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters('customify_the_title', wp_kses_post($args['title'])) . '</' . $args['title_tag'] . '>';
-                    }
-                }
+				if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
+					if ( $args['title'] ) {
+						echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+					}
+				}
 				if ( $args['titlebar_tagline'] ) {
 					if ( $args['tagline'] ) {
 						// WPCS: XSS ok.
@@ -962,19 +963,19 @@ class Customify_Page_Header {
 				 */
 				do_action( 'customify/titlebar/after' );
 				?>
-            </div>
-        </div>
+			</div>
+		</div>
 		<?php
 	}
 
 	function render() {
 		$args = $this->get_settings();
-		if ( $args['display'] == 'none' ) {
+		if ( 'none' == $args['display'] ) {
 			return '';
 		}
 
 		switch ( $args['display'] ) {
-			case  'cover':
+			case 'cover':
 				$this->render_cover( $args );
 				break;
 			case 'titlebar':

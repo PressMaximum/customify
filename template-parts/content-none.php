@@ -13,9 +13,11 @@
 
 	<div class="page-content widget-area">
 		<?php
-		if ( is_home() && current_user_can( 'publish_posts' ) ) : ?>
+		if ( is_home() && current_user_can( 'publish_posts' ) ) :
+			?>
 
-			<p><?php
+			<p>
+			<?php
 				printf(
 					wp_kses(
 						/* translators: 1: link to WP admin new post page. */
@@ -28,7 +30,8 @@
 					),
 					esc_url( admin_url( 'post-new.php' ) )
 				);
-			?></p>
+			?>
+				</p>
 
 		<?php elseif ( is_search() ) : ?>
 
@@ -38,15 +41,17 @@
 			get_search_form();
 			echo '</div>';
 
-		else : ?>
+		else :
+			?>
 
 			<p><?php esc_html_e( 'It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help.', 'customify' ); ?></p>
 			<?php
 
-                echo '<div class="widget">';
-				get_search_form();
-				echo '</div>';
+			echo '<div class="widget">';
+			get_search_form();
+			echo '</div>';
 
-		endif; ?>
+		endif;
+		?>
 	</div><!-- .page-content -->
 </section><!-- .no-results -->

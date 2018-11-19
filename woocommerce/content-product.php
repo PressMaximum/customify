@@ -16,16 +16,25 @@ if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
 ?>
-<li <?php if ( function_exists('wc_product_class') ) { wc_product_class(); } else {  echo 'class="product customify-col"'; }; ?>>
-    <div class="wc-product-inner">
-    <?php
+<li 
+<?php
+if ( function_exists( 'wc_product_class' ) ) {
+	wc_product_class();
+} else {
+	echo 'class="product customify-col"';
+};
+?>
+>
+	<div class="wc-product-inner">
+	<?php
 
-    /**
-     * All hooks moved to catalog designer
-     * @see Customify_WC_Catalog_Designer::render();
-     */
-    do_action('customify_wc_product_loop' );
+	/**
+	 * All hooks moved to catalog designer
+	 *
+	 * @see Customify_WC_Catalog_Designer::render();
+	 */
+	do_action( 'customify_wc_product_loop' );
 
 	?>
-    </div>
+	</div>
 </li>

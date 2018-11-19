@@ -11,14 +11,15 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Product cat list walker class.
+ *
  * @see WC_Product_Cat_List_Walker
  */
-class Customify_WC_Product_Cat_List_Walker extends WC_Product_Cat_List_Walker{
+class Customify_WC_Product_Cat_List_Walker extends WC_Product_Cat_List_Walker {
 
 	/**
 	 * Start the element output.
 	 *
-	 * @see Walker::start_el()
+	 * @see   Walker::start_el()
 	 * @since 2.1.0
 	 *
 	 * @param string  $output            Passed by reference. Used to append additional content.

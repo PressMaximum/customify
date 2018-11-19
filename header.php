@@ -14,7 +14,7 @@
 <html <?php language_attributes(); ?>>
 <head>
 	<meta charset="<?php bloginfo( 'charset' ); ?>">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no">
 	<link rel="profile" href="http://gmpg.org/xfn/11">
 	<?php wp_head(); ?>
 </head>
@@ -22,32 +22,30 @@
 <body <?php body_class(); ?>>
 <div id="page" <?php customify_site_classes(); ?>>
 	<a class="skip-link screen-reader-text" href="#site-content"><?php esc_html_e( 'Skip to content', 'customify' ); ?></a>
-    <?php
-    do_action( 'customify/site-start/before' );
-    if ( ! customify_is_e_theme_location( 'header' ) ) {
-        /**
-         * Site start
-         *
-         * Hooked
-         *
-         * @see customify_customize_render_header - 10
-         * @see Customify_Page_Header::render - 35
-         */
-        do_action( 'customify/site-start' );
-    }
-    do_action( 'customify/site-start/after' );
+	<?php
+	do_action( 'customify/site-start/before' );
+	if ( ! customify_is_e_theme_location( 'header' ) ) {
+		/**
+		 * Site start
+		 *
+		 * Hooked
+		 *
+		 * @see customify_customize_render_header - 10
+		 * @see Customify_Page_Header::render - 35
+		 */
+		do_action( 'customify/site-start' );
+	}
+	do_action( 'customify/site-start/after' );
 
-    /**
-     * Hook before main content
-     *
-     * @since 0.2.1
-     */
-    do_action( 'customify/before-site-content' );
-    ?>
+	/**
+	 * Hook before main content
+	 *
+	 * @since 0.2.1
+	 */
+	do_action( 'customify/before-site-content' );
+	?>
 	<div id="site-content" <?php customify_site_content_class(); ?>>
-        <div <?php customify_site_content_container_class(); ?>>
-            <div <?php customify_site_content_grid_class(); ?>>
-                <main id="main" <?php customify_main_content_class(); ?>>
-                    <?php do_action('customify/main/before'); ?>
-
-
+		<div <?php customify_site_content_container_class(); ?>>
+			<div <?php customify_site_content_grid_class(); ?>>
+				<main id="main" <?php customify_main_content_class(); ?>>
+					<?php do_action( 'customify/main/before' ); ?>

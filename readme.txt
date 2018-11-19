@@ -51,7 +51,7 @@ All of our options can be found in the Customizer in 'Appearance > Customize'.
 Customify has up to 6 widget areas which you can add widgets to in Appearance > Widgets.
 
 = How can I make my site look like your screenshot? =
-If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](http://docs.famethemes.com/).
+If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://wpcustomify.com/help/documentation/).
 
 == Copyright ==
 

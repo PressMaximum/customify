@@ -21,16 +21,18 @@ if ( $total <= 1 ) {
 <nav class="woocommerce-pagination">
 	<?php
 
-	the_posts_pagination( array(
-		'format'       => $format,
-		'base'         => $base,
-		'add_args'     => false,
-		'total'        => $total,
-		'current'      => max( 1, $current ),
-		'end_size'     => 3,
-		'mid_size'     => 3,
-		'prev_text'=> _x( 'Previous', 'previous set of posts', 'customify' ),
-		'next_text' =>  _x( 'Next', 'next set of posts', 'customify' ),
-	) );
+	the_posts_pagination(
+		array(
+			'format'       => $format,
+			'base'         => $base,
+			'add_args'     => false,
+			'total'        => $total,
+			'current'      => max( 1, $current ),
+			'end_size'     => 3,
+			'mid_size'     => 3,
+			'prev_text' => _x( 'Previous', 'previous set of posts', 'customify' ),
+			'next_text' => _x( 'Next', 'next set of posts', 'customify' ),
+		)
+	);
 	?>
 </nav>

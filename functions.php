@@ -2,13 +2,14 @@
 /**
  * Customify functions and definitions
  *
- * @link https://developer.wordpress.org/themes/basics/theme-functions/
+ * @link    https://developer.wordpress.org/themes/basics/theme-functions/
  *
  * @package customify
  */
 
 /**
  *  Same hook for the_content
+ *
  * @TODO: do not effect content by plugins
  *
  * 8 WP_Embed:run_shortcode
@@ -33,8 +34,10 @@ add_filter( 'customify_the_content', 'capital_P_dangit' );
 add_filter( 'customify_the_content', 'do_shortcode' );
 add_filter( 'customify_the_content', 'convert_smilies' );
 
+
 /**
  *  Same hook for the_content but not auto P
+ *
  * @TODO: do not effect content by plugins
  *
  * 8 WP_Embed:run_shortcode
@@ -57,7 +60,7 @@ add_filter( 'customify_the_title', 'do_shortcode' );
 add_filter( 'customify_the_title', 'convert_smilies' );
 
 // Include the main Customify class.
-require_once get_template_directory().'/inc/class-customify.php';
+require_once get_template_directory() . '/inc/class-customify.php';
 
 /**
  * Main instance of Customify.
@@ -66,8 +69,10 @@ require_once get_template_directory().'/inc/class-customify.php';
  *
  * @return Customify
  */
-function Customify(){
-    return Customify::get_instance();
+function Customify() {
+	// phpc:ignore WordPress.NamingConventions.ValidFunctionName.
+	return Customify::get_instance();
 }
+
 Customify();
 
