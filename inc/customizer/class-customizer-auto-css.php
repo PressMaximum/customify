@@ -48,6 +48,11 @@ class Customify_Customizer_Auto_CSS {
 		'inset'  => null,
 	);
 
+	/**
+	 * Get intance.
+	 *
+	 * @return Customify_Customizer_Auto_CSS
+	 */
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
@@ -935,12 +940,16 @@ class Customify_Customizer_Auto_CSS {
 		return $css;
 	}
 
-	function auto_css( $partial = false ) {
-		if ( ! is_null( self::$code ) ) {
-			return self::$code;
-		}
-		$config_fields = Customify()->customizer->get_config();
-		$this->loop_fields( $config_fields );
+	/**
+	 * Render CSS content from array customize configs.
+	 *
+	 * @since 0.2.5
+	 *
+	 * @param array $fields
+	 * @return string
+	 */
+	public function render_css( $fields = array() ) {
+		$this->loop_fields( $fields );
 		$css_code = '';
 		$i        = 0;
 		foreach ( $this->css as $device => $code ) {
@@ -953,6 +962,29 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		$css_code = apply_filters( 'customify/auto-css', $css_code, $this );
+		return $css_code;
+	}
+
+	/**
+	 * Auto render CSS code.
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.6
+	 *
+	 * @param boolean $partial
+	 * @return string
+	 */
+	function auto_css( $partial = false ) {
+		if ( ! is_null( self::$code ) ) {
+			return self::$code;
+		}
+		$config_fields = Customify()->customizer->get_config();
+		/**
+		 * Render CSS from customize configs
+		 *
+		 * @since  0.2.6
+		 */
+		$css_code = $this->render_css( $config_fields );
 
 		$url            = $this->get_google_fonts_url();
 		self::$font_url = $url;

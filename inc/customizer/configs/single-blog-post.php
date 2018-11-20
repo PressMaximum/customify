@@ -21,6 +21,16 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 			),
 
 			array(
+				'name'       => $args['id'] . '_content_width',
+				'section'    => $level_2_panel,
+				'type'       => 'slider',
+				'max'        => 1200,
+				'label'      => __( 'Content Max Width', 'customify' ),
+				'selector'   => '.single-post .content-inner',
+				'css_format' => 'max-width: {{value}};',
+			),
+
+			array(
 				'name'             => $args['id'] . '_items',
 				'section'          => $level_2_panel,
 				'type'             => 'repeater',
@@ -36,7 +46,6 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 						'_key'        => 'title',
 						'title'       => __( 'Title', 'customify' ),
 					),
-
 					array(
 						'_key'        => 'meta',
 						'_visibility' => '',

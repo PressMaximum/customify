@@ -46,7 +46,7 @@ class Customify {
 	 *
 	 * Ensures only one instance of Customify is loaded or can be loaded.
 	 *
-	 * @return Customify - Main instance.
+	 * @return Customify Main instance.
 	 */
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
@@ -170,18 +170,25 @@ class Customify {
 			)
 		);
 
-		// WooCommerce support.
+		/**
+		 * WooCommerce support.
+		 */
 		add_theme_support( 'woocommerce' );
 		add_theme_support( 'wc-product-gallery-zoom' );
 		add_theme_support( 'wc-product-gallery-lightbox' );
 		add_theme_support( 'wc-product-gallery-slider' );
 
 		/**
-		 * Add editor style
+		 * Support Gutenberg.
+		 *
+		 * @since 0.2.6
+		 */
+		add_theme_support( 'align-wide' );
+
+		/**
+		 * Add editor style support.
 		 */
 		add_theme_support( 'editor-styles' );
-		$suffix = Customify()->get_asset_suffix();
-		add_editor_style( 'assets/css/admin/editor' . $suffix . '.css' );
 
 	}
 
@@ -416,12 +423,21 @@ class Customify {
 		}
 	}
 
+	/**
+	 * Load admin files
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.6 Load editor style.
+	 *
+	 * @return void
+	 */
 	private function admin_includes() {
 		if ( ! is_admin() ) {
 			return;
 		}
 
 		$files = array(
+			'/inc/admin/editor.php',  // Metabox settings.
 			'/inc/admin/dashboard.php',  // Metabox settings.
 		);
 

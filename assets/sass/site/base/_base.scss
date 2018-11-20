@@ -365,11 +365,11 @@ select {
 	}
 }
 
-.button:not(.components-button),
-button:not(.components-button),
-input[type="button"]:not(.components-button),
-input[type="reset"]:not(.components-button),
-input[type="submit"]:not(.components-button) {
+.button:not(.components-button):not(.customize-partial-edit-shortcut-button),
+button:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
 	border: none;
 	cursor: pointer;
 	padding: 0px 1.3em;
@@ -421,10 +421,10 @@ input[type="submit"]:not(.components-button) {
 	}
 }
 
-.button:not(.components-button),
-input[type="button"]:not(.components-button),
-input[type="reset"]:not(.components-button),
-input[type="submit"]:not(.components-button) {
+.button:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
 	color: #ffffff;
 	background: $color_primary;
 	&:focus {
@@ -432,10 +432,10 @@ input[type="submit"]:not(.components-button) {
 	}
 }
 
-.button[disabled]:not(.components-button),
-button[disabled]:not(.components-button),
-button.disabled:not(.components-button),
-.button.disabled:not(.components-button) {
+.button[disabled]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+button[disabled]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+button.disabled:not(.components-button):not(.customize-partial-edit-shortcut-button),
+.button.disabled:not(.components-button):not(.customize-partial-edit-shortcut-button) {
 	opacity: 0.5;
 }
 
