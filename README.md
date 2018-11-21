@@ -18,7 +18,7 @@ Tags: `custom-background` `custom-logo` `custom-menu` `custom-logo` `featured-im
 ## Requirements
 PHP: 5.6.2+
 
-WordPress: 4.9.0
+WordPress: 4.9.0+
 
 ## Installation from within WordPress
 
