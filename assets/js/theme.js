@@ -8,55 +8,416 @@
 
 "use strict";
 
-; var Customify = function() {
-	
+/**
+ * Polyfill
+ */
+// 1. String.prototype.trim polyfill
+if (!"".trim)
+	String.prototype.trim = function() {
+		return this.replace(/^[\s﻿]+|[\s﻿]+$/g, "");
+	};
+(function(window) {
+	"use strict"; // prevent global namespace pollution
+	function checkIfValidClassListEntry(O, V) {
+		if (V === "")
+			throw new DOMException(
+				"Failed to execute '" +
+					O +
+					"' on 'DOMTokenList': The token provided must not be empty."
+			);
+		if ((wsI = V.search(wsRE)) !== -1)
+			throw new DOMException(
+				"Failed to execute '" +
+					O +
+					"' on 'DOMTokenList': " +
+					"The token provided ('" +
+					V[wsI] +
+					"') contains HTML space characters, which are not valid in tokens."
+			);
+	}
+	// 2. Implement the barebones DOMTokenList livelyness polyfill
+	if (typeof DOMTokenList !== "function")
+		(function(window) {
+			var document = window.document,
+				Object = window.Object,
+				hasOwnProp = Object.prototype.hasOwnProperty;
+			var defineProperty = Object.defineProperty,
+				allowTokenListConstruction = 0,
+				skipPropChange = 0;
+			var Element = window.Element,
+				wsI = 0,
+				wsRE = /[\11\12\14\15\40]/; // WhiteSpace Regular Expression
+			function DOMTokenList() {
+				if (!allowTokenListConstruction)
+					throw TypeError("Illegal constructor"); // internally let it through
+			}
+			DOMTokenList.prototype.toString = DOMTokenList.prototype.toLocaleString = function() {
+				return this.value;
+			};
+			DOMTokenList.prototype.add = function() {
+				a: for (
+					var v = 0,
+						argLen = arguments.length,
+						val = "",
+						ele = this["uCL"],
+						proto = ele[" uCLp"];
+					v !== argLen;
+					++v
+				) {
+					(val = arguments[v] + ""),
+						checkIfValidClassListEntry("add", val);
+					for (
+						var i = 0, Len = proto.length, resStr = val;
+						i !== Len;
+						++i
+					)
+						if (this[i] === val) continue a;
+						else resStr += " " + this[i];
+					(this[Len] = val),
+						(proto.length += 1),
+						(proto.value = resStr);
+				}
+				(skipPropChange = 1),
+					(ele.className = proto.value),
+					(skipPropChange = 0);
+			};
+			DOMTokenList.prototype.remove = function() {
+				for (
+					var v = 0,
+						argLen = arguments.length,
+						val = "",
+						ele = this["uCL"],
+						proto = ele[" uCLp"];
+					v !== argLen;
+					++v
+				) {
+					(val = arguments[v] + ""),
+						checkIfValidClassListEntry("remove", val);
+					for (
+						var i = 0, Len = proto.length, resStr = "", is = 0;
+						i !== Len;
+						++i
+					)
+						if (is) {
+							this[i - 1] = this[i];
+						} else {
+							if (this[i] !== val) {
+								resStr += this[i] + " ";
+							} else {
+								is = 1;
+							}
+						}
+					if (!is) continue;
+					delete this[Len],
+						(proto.length -= 1),
+						(proto.value = resStr);
+				}
+				(skipPropChange = 1),
+					(ele.className = proto.value),
+					(skipPropChange = 0);
+			};
+			window.DOMTokenList = DOMTokenList;
+			function whenPropChanges() {
+				var evt = window.event,
+					prop = evt.propertyName;
+				if (
+					!skipPropChange &&
+					(prop === "className" ||
+						(prop === "classList" && !defineProperty))
+				) {
+					var target = evt.srcElement,
+						protoObjProto = target[" uCLp"],
+						strval = "" + target[prop];
+					var tokens = strval.trim().split(wsRE),
+						resTokenList =
+							target[prop === "classList" ? " uCL" : "classList"];
+					var oldLen = protoObjProto.length;
+					a: for (
+						var cI = 0,
+							cLen = (protoObjProto.length = tokens.length),
+							sub = 0;
+						cI !== cLen;
+						++cI
+					) {
+						for (var innerI = 0; innerI !== cI; ++innerI)
+							if (tokens[innerI] === tokens[cI]) {
+								sub++;
+								continue a;
+							}
+						resTokenList[cI - sub] = tokens[cI];
+					}
+					for (var i = cLen - sub; i < oldLen; ++i)
+						delete resTokenList[i]; //remove trailing indexs
+					if (prop !== "classList") return;
+					(skipPropChange = 1),
+						(target.classList = resTokenList),
+						(target.className = strval);
+					(skipPropChange = 0),
+						(resTokenList.length = tokens.length - sub);
+				}
+			}
+			function polyfillClassList(ele) {
+				if (!ele || !("innerHTML" in ele))
+					throw TypeError("Illegal invocation");
+				srcEle.detachEvent("onpropertychange", whenPropChanges); // prevent duplicate handler infinite loop
+				allowTokenListConstruction = 1;
+				try {
+					function protoObj() {}
+					protoObj.prototype = new DOMTokenList();
+				} finally {
+					allowTokenListConstruction = 0;
+				}
+				var protoObjProto = protoObj.prototype,
+					resTokenList = new protoObj();
+				a: for (
+					var toks = ele.className.trim().split(wsRE),
+						cI = 0,
+						cLen = toks.length,
+						sub = 0;
+					cI !== cLen;
+					++cI
+				) {
+					for (var innerI = 0; innerI !== cI; ++innerI)
+						if (toks[innerI] === toks[cI]) {
+							sub++;
+							continue a;
+						}
+					this[cI - sub] = toks[cI];
+				}
+				(protoObjProto.length = Len - sub),
+					(protoObjProto.value = ele.className),
+					(protoObjProto[" uCL"] = ele);
+				if (defineProperty) {
+					defineProperty(ele, "classList", {
+						// IE8 & IE9 allow defineProperty on the DOM
+						enumerable: 1,
+						get: function() {
+							return resTokenList;
+						},
+						configurable: 0,
+						set: function(newVal) {
+							(skipPropChange = 1),
+								(ele.className = protoObjProto.value = newVal +=
+									""),
+								(skipPropChange = 0);
+							var toks = newVal.trim().split(wsRE),
+								oldLen = protoObjProto.length;
+							a: for (
+								var cI = 0,
+									cLen = (protoObjProto.length = toks.length),
+									sub = 0;
+								cI !== cLen;
+								++cI
+							) {
+								for (var innerI = 0; innerI !== cI; ++innerI)
+									if (toks[innerI] === toks[cI]) {
+										sub++;
+										continue a;
+									}
+								resTokenList[cI - sub] = toks[cI];
+							}
+							for (var i = cLen - sub; i < oldLen; ++i)
+								delete resTokenList[i]; //remove trailing indexs
+						}
+					});
+					defineProperty(ele, " uCLp", {
+						// for accessing the hidden prototype
+						enumerable: 0,
+						configurable: 0,
+						writeable: 0,
+						value: protoObj.prototype
+					});
+					defineProperty(protoObjProto, " uCL", {
+						enumerable: 0,
+						configurable: 0,
+						writeable: 0,
+						value: ele
+					});
+				} else {
+					(ele.classList = resTokenList),
+						(ele[" uCL"] = resTokenList),
+						(ele[" uCLp"] = protoObj.prototype);
+				}
+				srcEle.attachEvent("onpropertychange", whenPropChanges);
+			}
+			try {
+				// Much faster & cleaner version for IE8 & IE9:
+				// Should work in IE8 because Element.prototype instanceof Node is true according to the specs
+				window.Object.defineProperty(
+					window.Element.prototype,
+					"classList",
+					{
+						enumerable: 1,
+						get: function(val) {
+							if (!hasOwnProp.call(ele, "classList"))
+								polyfillClassList(this);
+							return this.classList;
+						},
+						configurable: 0,
+						set: function(val) {
+							this.className = val;
+						}
+					}
+				);
+			} catch (e) {
+				// Less performant fallback for older browsers (IE 6-8):
+				window[" uCL"] = polyfillClassList;
+				// the below code ensures polyfillClassList is applied to all current and future elements in the doc.
+				document.documentElement.firstChild.appendChild(
+					document.createElement("style")
+				).styleSheet.cssText =
+					'_*{x-uCLp:expression(!this.hasOwnProperty("classList")&&window[" uCL"](this))}' + //  IE6
+					'[class]{x-uCLp/**/:expression(!this.hasOwnProperty("classList")&&window[" uCL"](this))}'; //IE7-8
+			}
+		})();
+	// 3. Patch in unsupported methods in DOMTokenList
+	(function(DOMTokenListProto, testClass) {
+		if (!DOMTokenListProto.item)
+			DOMTokenListProto.item = function(i) {
+				function NullCheck(n) {
+					return n === void 0 ? null : n;
+				}
+				return NullCheck(this[i]);
+			};
+		if (!DOMTokenListProto.toggle || testClass.toggle("a", 0) !== false)
+			DOMTokenListProto.toggle = function(val) {
+				if (arguments.length > 1)
+					return (
+						this[arguments[1] ? "add" : "remove"](val),
+						!!arguments[1]
+					);
+				var oldValue = this.value;
+				return (
+					this.remove(oldToken),
+					oldValue === this.value &&
+						(this.add(val), true) /*|| false*/
+				);
+			};
+		if (
+			!DOMTokenListProto.replace ||
+			typeof testClass.replace("a", "b") !== "boolean"
+		)
+			DOMTokenListProto.replace = function(oldToken, newToken) {
+				checkIfValidClassListEntry("replace", oldToken),
+					checkIfValidClassListEntry("replace", newToken);
+				var oldValue = this.value;
+				return (
+					this.remove(oldToken),
+					this.value !== oldValue && (this.add(newToken), true)
+				);
+			};
+		if (!DOMTokenListProto.contains)
+			DOMTokenListProto.contains = function(value) {
+				for (var i = 0, Len = this.length; i !== Len; ++i)
+					if (this[i] === value) return true;
+				return false;
+			};
+		if (!DOMTokenListProto.forEach)
+			DOMTokenListProto.forEach = function(f) {
+				if (arguments.length === 1)
+					for (var i = 0, Len = this.length; i !== Len; ++i)
+						f(this[i], i, this);
+				else
+					for (
+						var i = 0, Len = this.length, tArg = arguments[1];
+						i !== Len;
+						++i
+					)
+						f.call(tArg, this[i], i, this);
+			};
+		if (!DOMTokenListProto.entries)
+			DOMTokenListProto.entries = function() {
+				var nextIndex = 0,
+					that = this;
+				return {
+					next: function() {
+						return nextIndex < that.length
+							? {
+									value: [nextIndex, that[nextIndex]],
+									done: false
+							  }
+							: { done: true };
+					}
+				};
+			};
+		if (!DOMTokenListProto.values)
+			DOMTokenListProto.values = function() {
+				var nextIndex = 0,
+					that = this;
+				return {
+					next: function() {
+						return nextIndex < that.length
+							? { value: that[nextIndex], done: false }
+							: { done: true };
+					}
+				};
+			};
+		if (!DOMTokenListProto.keys)
+			DOMTokenListProto.keys = function() {
+				var nextIndex = 0,
+					that = this;
+				return {
+					next: function() {
+						return nextIndex < that.length
+							? { value: nextIndex, done: false }
+							: { done: true };
+					}
+				};
+			};
+	})(
+		window.DOMTokenList.prototype,
+		window.document.createElement("div").classList
+	);
+})(window);
+
+
+
+/**
+ * matches() pollyfil
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+ */
+if (!Element.prototype.matches) {
+	Element.prototype.matches =
+		Element.prototype.msMatchesSelector ||
+		Element.prototype.webkitMatchesSelector;
+}
+
+/**
+ * closest() pollyfil
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+ */
+if (!Element.prototype.closest) {
+	Element.prototype.closest = function(s) {
+		var el = this;
+		if (!document.documentElement.contains(el)) {
+			return null;
+		}
+		do {
+			if (el.matches(s)) {
+				return el;
+			}
+			el = el.parentElement || el.parentNode;
+		} while (el !== null && el.nodeType === 1);
+		return null;
+	};
+}
+
+
+
+
+var Customify = function() {
 	this.options = {
 		menuToggleDuration: 300
 	};
-	
+
 	this.menuSidebarState = "closed";
 	this.isPreviewing = document.body.classList.contains(
 		"customize-previewing"
 	);
 
 	this.init();
-
 };
 
-/**
- * Closest Pollyfil.
- */
-Customify.prototype.initClosest = function() {
-	/**
-	 * matches() pollyfil
-	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
-	 */
-	if (!Element.prototype.matches) {
-		Element.prototype.matches =
-			Element.prototype.msMatchesSelector ||
-			Element.prototype.webkitMatchesSelector;
-	}
-
-	/**
-	 * closest() pollyfil
-	 * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
-	 */
-	if (!Element.prototype.closest) {
-		Element.prototype.closest = function(s) {
-			var el = this;
-			if (!document.documentElement.contains(el)) {
-				return null;
-			}
-			do {
-				if (el.matches(s)) {
-					return el;
-				}
-				el = el.parentElement || el.parentNode;
-			} while (el !== null && el.nodeType === 1);
-			return null;
-		};
-	}
-};
 
 /**
  * Add body class to check touch screen.
@@ -68,7 +429,6 @@ Customify.prototype.checkTouchScreen = function() {
 		document.body.classList.add("not-touch-screen");
 	}
 };
-
 
 /**
  * Check if current mobile viewing.
@@ -89,8 +449,7 @@ Customify.prototype.isMobile = function() {
 	} else {
 		return false;
 	}
-}
-
+};
 
 /**
  * Init mobile sidebar.
@@ -159,9 +518,7 @@ Customify.prototype.initMenuSidebar = function() {
 				let menuSidebar = document.getElementById(
 					"header-menu-sidebar"
 				);
-				var buttons = document.querySelectorAll(
-					".menu-mobile-toggle"
-				);
+				var buttons = document.querySelectorAll(".menu-mobile-toggle");
 				let outside = false;
 				// If the click happened inside the the container, bail
 				if (
@@ -220,14 +577,11 @@ Customify.prototype.initMobieSearchForm = function() {
 	}
 };
 
-
 Customify.prototype.toggleMobileSubmenu = function(e) {
 	e.preventDefault();
 	var that = this;
 	let li = e.target.closest("li");
-	let firstSubmenu = li.querySelectorAll(
-		":scope  > .sub-menu, .sub-lv-0"
-	);
+	let firstSubmenu = li.querySelectorAll(":scope  > .sub-menu, .sub-lv-0");
 
 	if (!li.classList.contains("open-sub")) {
 		// Show the sub menu.
@@ -259,20 +613,14 @@ Customify.prototype.toggleMobileSubmenu = function(e) {
 	}
 };
 
-
 /**
  * Add events listener for mobile toggle button.
  *
  * @param Element toggleIcon
  */
 Customify.prototype.toggleMobileSubmenuEvents = function(toggleIcon) {
-	toggleIcon.addEventListener(
-		"click",
-		this.toggleMobileSubmenu.bind(this)
-	);
-}
-
-
+	toggleIcon.addEventListener("click", this.toggleMobileSubmenu.bind(this));
+};
 
 /**
  * Inital mobile submenu.
@@ -321,7 +669,6 @@ Customify.prototype.initMobileSubMenu = function() {
 	}
 };
 
-
 /**
  * SideUp
  *
@@ -329,7 +676,7 @@ Customify.prototype.initMobileSubMenu = function() {
  * @param number duration
  * @param function callBack
  */
-Customify.prototype.slideUp = function (element, duration, callBack) {
+Customify.prototype.slideUp = function(element, duration, callBack) {
 	if (typeof duration !== "number") {
 		duration = 0;
 	}
@@ -360,8 +707,7 @@ Customify.prototype.slideUp = function (element, duration, callBack) {
 			callBack.call(this);
 		}
 	}, duration + 20);
-}
-
+};
 
 /**
  *
@@ -408,20 +754,16 @@ Customify.prototype.slideDown = function(element, duration, callBack) {
 	}, duration);
 };
 
-
 Customify.prototype.insertMenuOverlayClass = function() {
 	var navMobile = document.querySelector(".nav-menu-mobile");
 	if (navMobile) {
-		if (
-			document.body.classList.contains("menu_sidebar_slide_overlay")
-		) {
+		if (document.body.classList.contains("menu_sidebar_slide_overlay")) {
 			navMobile.classList.add("nav-menu-overlay");
 		} else {
 			navMobile.classList.remove("nav-menu-overlay");
 		}
 	}
 };
-
 
 Customify.prototype.setupMobileItemAnimations = function(element) {
 	let h = window.height;
@@ -438,8 +780,7 @@ Customify.prototype.setupMobileItemAnimations = function(element) {
 			itemsInner[i].style.transitionDelay = index * t + "s";
 		}
 	}
-}
-
+};
 
 /**
  * Toogle Element class name.
@@ -464,7 +805,6 @@ Customify.prototype.toggleClass = function(element, className) {
 		}
 	}
 };
-
 
 /**
  * Add class to element.
@@ -504,7 +844,6 @@ Customify.prototype.removeClass = function(element, className) {
 	}
 };
 
-
 /**
  * Add event handle to elements.
  *
@@ -521,7 +860,6 @@ Customify.prototype.addEvent = function(element, event, callBack) {
 		element.addEventListener(event, callBack);
 	}
 };
-
 
 /**
  * Close menu sidebar.
@@ -558,23 +896,19 @@ Customify.prototype.closeMenuSidebar = function() {
 		// Else slide sidebar.
 		setTimeout(
 			function() {
-				this.removeClass(
-					document.body,
-					"hiding-header-menu-sidebar"
-				);
+				this.removeClass(document.body, "hiding-header-menu-sidebar");
 			}.bind(this),
 			1000
 		);
 	}
 };
 
-
 /**
  * Toggle menu sidebar.
  *
  * @param bool open use animation or not.
  */
-Customify.prototype.toggleMenuSidebar = function (toggle) {
+Customify.prototype.toggleMenuSidebar = function(toggle) {
 	if (typeof toggle === "undefined") {
 		toggle = true;
 	}
@@ -598,9 +932,7 @@ Customify.prototype.toggleMenuSidebar = function (toggle) {
 		}
 
 		if (document.body.classList.contains("is-menu-sidebar")) {
-			let menuSidebar = document.getElementById(
-				"header-menu-sidebar"
-			);
+			let menuSidebar = document.getElementById("header-menu-sidebar");
 			let menuSidebarInner = document.getElementById(
 				"header-menu-sidebar-inner"
 			);
@@ -617,7 +949,6 @@ Customify.prototype.toggleMenuSidebar = function (toggle) {
 		}
 	}
 };
-
 
 /**
  * Auto align search form.
@@ -640,7 +971,6 @@ Customify.prototype.searchFormAutoAlign = function() {
 		}
 	}
 };
-
 
 /**
  * Search form.
@@ -691,7 +1021,6 @@ Customify.prototype.initSearchForm = function() {
 	this.searchFormAutoAlign();
 };
 
-
 /**
  * Wrapper element
  *
@@ -710,7 +1039,6 @@ Customify.prototype.wrapper = function(element, tag) {
 	return wrapper;
 };
 
-
 /**
  * Responsive table.
  */
@@ -726,7 +1054,6 @@ Customify.prototype.responsiveTable = function() {
 		}
 	}
 };
-
 
 /**
  * Reponsive video style.
@@ -755,8 +1082,21 @@ Customify.prototype.responsiveVideos = function() {
 			let videoWrapper = this.wrapper(video, "div");
 			videoWrapper.classList.add("video-responsive");
 			let offset = video.getBoundingClientRect();
-			if (offset.height > 0 && offset.width) {
-				let p = (offset.height / offset.width) * 100;
+			var h = video.getAttribute( 'height' ) || 0;
+			var w = video.getAttribute( 'width' ) || 0;
+			
+			w = parseInt( w );
+			h = parseInt( h );
+			if ( isNaN( w ) || w <= 0 ) {
+				w = offset.width;
+			}
+
+			if ( isNaN( h ) || h <= 0 ) {
+				h = offset.height;
+			}
+			
+			if ( h > 0 && w > 0) {
+				let p = (h / w) * 100;
 				// Add relative postion and ratio to wrapper.
 				videoWrapper.style.position = "relative";
 				videoWrapper.style.display = "block";
@@ -776,12 +1116,11 @@ Customify.prototype.responsiveVideos = function() {
 	}
 };
 
-
 /**
  * Inittial
  */
 Customify.prototype.init = function() {
-	this.initClosest();
+
 	this.checkTouchScreen();
 	this.initMobieSearchForm();
 	this.initMobileSubMenu();
@@ -832,11 +1171,10 @@ Customify.prototype.init = function() {
 	);
 };
 
-
 /**
  * Check is mobile.
  * This may use in plugins.
- * 
+ *
  * @deprecated 0.2.6
  */
 function customify_is_mobile() {
@@ -846,10 +1184,9 @@ function customify_is_mobile() {
 /**
  * Call Customify class.
  */
-(function(){
+(function() {
 	new Customify();
 })();
-
 
 /**
  *
