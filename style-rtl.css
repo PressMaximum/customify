@@ -5153,7 +5153,7 @@ body.menu_sidebar_dropdown:before {
 }
 .is-menu-sidebar.menu_sidebar_slide_left .header-menu-sidebar {
   z-index: 999900;
-  height: 100%;
+  height: 100vh;
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
   right: 0;
@@ -5170,8 +5170,8 @@ body.menu_sidebar_dropdown:before {
 }
 .is-menu-sidebar.menu_sidebar_slide_right .header-menu-sidebar {
   z-index: 999900;
-  height: 100%;
-  max-width: 100vh;
+  height: 100vh;
+  max-width: 100vw;
   -webkit-transform: translate3d(0, 0, 0);
           transform: translate3d(0, 0, 0);
   left: 0;
