@@ -1198,8 +1198,8 @@ if (!Element.prototype.closest) {
 	}
 
 	window.customify_is_mobile = customify_is_mobile;
-
-	new Customify();
+	window.Customify = new Customify();
+	
 })();
 
 /**
