@@ -2041,43 +2041,15 @@ Section and Toggle
   position: relative;
   cursor: pointer;
 }
-.button.add_to_cart_button.loading,
-.button.alt.loading,
-.button.added_to_cart.loading,
-.button.checkout.loading,
-.button.product_type_grouped.loading,
-.button.product_type_external.loading,
-.button.product_type_variable.loading {
-  opacity: 0.5;
-  padding-left: 2.618em;
-}
-.button.add_to_cart_button.loading:after,
-.button.alt.loading:after,
-.button.added_to_cart.loading:after,
-.button.checkout.loading:after,
-.button.product_type_grouped.loading:after,
-.button.product_type_external.loading:after,
-.button.product_type_variable.loading:after {
-  font-family: 'WooCommerce';
-  content: '\e01c';
-  vertical-align: top;
-  font-weight: 400;
-  position: absolute;
-  top: 0.02em;
-  left: 1em;
-  animation: spin 2s linear infinite;
-}
-.button.add_to_cart_button.loading.added:after,
-.button.alt.loading.added:after,
-.button.added_to_cart.loading.added:after,
-.button.checkout.loading.added:after,
-.button.product_type_grouped.loading.added:after,
-.button.product_type_external.loading.added:after,
-.button.product_type_variable.loading.added:after {
-  font-family: 'WooCommerce';
-  content: '\e017';
-  margin-right: 0.53em;
-  vertical-align: bottom;
+.button.add_to_cart_button.added i::before,
+.button.alt.added i::before,
+.button.added_to_cart.added i::before,
+.button.checkout.added i::before,
+.button.product_type_grouped.added i::before,
+.button.product_type_external.added i::before,
+.button.product_type_variable.added i::before {
+  font-family: "FontAwesome";
+  content: "\f00c";
 }
 
 .products .button.add_to_cart_button,
@@ -2142,7 +2114,10 @@ a.remove2x:hover {
   line-height: 1;
 }
 
-.site-content span.amount, .site-content .price, .cart-dropdown-box span.amount, .cart-dropdown-box .price {
+.site-content span.amount,
+.site-content .price,
+.cart-dropdown-box span.amount,
+.cart-dropdown-box .price {
   font-weight: 500;
   color: #252525;
 }
@@ -2316,6 +2291,8 @@ div.product div.images .woocommerce-product-gallery__trigger {
   display: inline-block;
   transition: all 0.3s linear;
   box-sizing: content-box;
+  overflow: hidden;
+  line-height: 10em;
 }
 div.product div.images .woocommerce-product-gallery__trigger:hover, div.product div.images .woocommerce-product-gallery__trigger:focus {
   opacity: 1;

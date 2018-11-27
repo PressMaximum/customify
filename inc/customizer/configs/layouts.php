@@ -95,7 +95,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'section'         => 'global_layout_section',
 				'title'           => __( 'Container width', 'customify' ),
 				'selector'        => 'format',
-				'css_format'      => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site { max-width: {{value}}; } .main-layout-content .entry-content > .alignwide { width: calc( {{value}} - 4em );  }',
+				'css_format'      => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site { max-width: {{value}}; } .main-layout-content .entry-content > .alignwide { width: calc( {{value}} - 4em ); max-width: 100vw;  }',
 			),
 
 			// Site content layout.

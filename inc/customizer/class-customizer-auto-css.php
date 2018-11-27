@@ -919,23 +919,24 @@ class Customify_Customizer_Auto_CSS {
 		return self::$font_url;
 	}
 
+	/**
+	 * Remove space of css code.
+	 *
+	 * @since 1.0.0
+	 * @since 0.2.6
+	 *
+	 * @param string $css
+	 * @return tring
+	 */
 	function min_css( $css ) {
+
 		if ( trim( $css ) == '' ) {
 			return;
 		}
-		$css = preg_replace(
-			array(
-				// Remove comment(s).
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
-				// Remove unused white-space(s).
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
-			),
-			array(
-				'$1',
-				'$1$2$3$4$5$6$7',
-			),
-			$css
-		);
+
+		$css = str_replace( array( "\r\n", "\r", "\n", "\t" ), '', $css );
+		$css = preg_replace( ' {2,}', ' ', $css );
+		return $css;
 
 		return $css;
 	}

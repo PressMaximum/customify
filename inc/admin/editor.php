@@ -39,6 +39,7 @@ class Customify_Editor {
 			'background',
 			'site_content_styling',
 			'container_width',
+			'single_blog_post_content_width',
 			'global_typography_heading_h1',
 			'global_typography_base_heading',
 		);
@@ -48,8 +49,13 @@ class Customify_Editor {
 		}
 
 		if ( $fields['container_width'] ) {
-			$fields['container_width']['selector'] = '.editor-styles-wrapper .wp-block:not([data-align="full"])';
-			$fields['container_width']['css_format'] = 'width: calc( {{value}} - 4em ); max-width: calc( {{value}} - 4em );';
+			$fields['container_width']['selector'] = '.editor-styles-wrapper .wp-block[data-align="wide"]';
+			$fields['container_width']['css_format'] = 'width: calc( {{value}} - 4em ); max-width: 100%;';
+		}
+
+		if ( $fields['single_blog_post_content_width'] ) {
+			$fields['single_blog_post_content_width']['selector'] = '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"])';
+			$fields['single_blog_post_content_width']['css_format'] = 'max-width: {{value}};';
 		}
 
 		if ( $fields['background'] ) {
