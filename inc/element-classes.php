@@ -9,6 +9,9 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 	/**
 	 * Adds custom classes to the array of body classes.
 	 *
+	 * @since 0.0.1
+	 * @since 0.2.6
+	 *
 	 * @param array $classes Classes for the body element.
 	 *
 	 * @return array
@@ -23,6 +26,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 		$layout = customify_get_layout();
 		if ( '' != $layout ) {
 			$classes[] = $layout;
+			/**
+			 * Add more layout classs
+			 *
+			 * @since 0.2.6
+			 */
+			$classes[] = 'main-layout-' . $layout;
 		}
 
 		$sidebar_vertical_border = Customify()->get_setting( 'sidebar_vertical_border' );
@@ -35,9 +44,9 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 		}
 
 		// Site layout mode.
-		$site_layout = Customify()->get_setting( 'site_layout' );
+		$site_layout = sanitize_text_field( Customify()->get_setting( 'site_layout' ) );
 		if ( $site_layout ) {
-			$classes[] = sanitize_text_field( $site_layout );
+			$classes[] = $site_layout;
 		}
 
 		$animate = Customify()->get_setting( 'header_sidebar_animate' );
