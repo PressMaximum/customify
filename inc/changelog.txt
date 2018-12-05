@@ -2,6 +2,7 @@
 = 0.2.6 =
 * NEW: Support Gutenberg.
 * NEW: Remove jQuery.
+* NEW: Add support for yoast primary term.
 * FIXED: Fix Shopping cart in header not including tax in amount #204.
 
 = 0.2.5 =
