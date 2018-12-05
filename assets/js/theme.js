@@ -1151,7 +1151,7 @@ if (!Element.prototype.closest) {
 	 * Fix viewport units on Mobile.
 	 */
 	(function() {
-		if ( Customify.isMobile() ) {
+		if ( window.Customify.isMobile() ) {
 			/**
 			 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
 			 */
