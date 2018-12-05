@@ -157,8 +157,8 @@ class Customify_Post_Entry {
 	/**
 	 * Get terms array
 	 *
-	 * @param string $id
-	 * @param string $taxonomy
+	 * @param string $id         Post ID.
+	 * @param string $taxonomy   Name of taxonomy.
 	 * @param bool   $icon_first
 	 * @return array|bool|WP_Error
 	 */
@@ -171,6 +171,21 @@ class Customify_Post_Entry {
 
 		if ( empty( $terms ) ) {
 			return false;
+		}
+
+		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+			$prm_term_id    = $this->get_primary_term_id( $id, $taxonomy );
+			$prm_term       = get_term( $prm_term_id, $taxonomy );
+			$prm_term_arr[] = $prm_term;
+
+			// Make the primary term be the first term in the terms array.
+			foreach ( $terms as $index => $term ) {
+				if ( $prm_term_id == $term->term_id ) {
+					unset( $terms[ $index ] );
+					break;
+				}
+			}
+			$terms = array_merge( $prm_term_arr, $terms );
 		}
 
 		$links = array();
@@ -193,6 +208,32 @@ class Customify_Post_Entry {
 		}
 
 		return $links;
+	}
+
+	/**
+	 * Get primary term ID.
+	 *
+	 * The primary term is either the first term or the primary term set via YOAST SEO Plugin.
+	 *
+	 * @param int    $post_id  Post ID.
+	 * @param string $taxonomy Name of taxonomy.
+	 * @return int|false Primary or first term ID. False if no term is set.
+	 */
+	function get_primary_term_id( $post_id, $taxonomy ) {
+		$prm_term = '';
+		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+			$wpseo_primary_term = new WPSEO_Primary_Term( $taxonomy, $post_id );
+			$prm_term           = $wpseo_primary_term->get_primary_term();
+		}
+		if ( ! is_object( $wpseo_primary_term ) || empty( $prm_term ) ) {
+			$term = wp_get_post_terms( $post_id, $taxonomy );
+			if ( isset( $term ) && ! empty( $term ) ) {
+				return $term[0]->term_id;
+			} else {
+				return '';
+			}
+		}
+		return $wpseo_primary_term->get_primary_term();
 	}
 
 	/**
