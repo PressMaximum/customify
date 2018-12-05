@@ -382,7 +382,7 @@ class Customify_Builder_Item_WC_Cart {
 			$text = '<span class="cart-text cart-label ' . esc_attr( $label_classes ) . '">' . sanitize_text_field( $text ) . '</span>';
 		}
 
-		$sub_total  = WC()->cart->get_subtotal();
+		$sub_total  = WC()->cart->get_cart_subtotal();
 		$quantities = WC()->cart->get_cart_item_quantities();
 
 		$html = $text;
@@ -390,7 +390,7 @@ class Customify_Builder_Item_WC_Cart {
 		if ( $sep && $html ) {
 			$html .= '<span class="cart-sep cart-label ' . esc_attr( $label_classes ) . '">' . sanitize_text_field( $sep ) . '</span>';
 		}
-		$html .= '<span class="cart-subtotal cart-label ' . esc_attr( $subtotal_classes ) . '"><span class="customify-wc-sub-total">' . wc_price( $sub_total ) . '</span></span>';
+		$html .= '<span class="cart-subtotal cart-label ' . esc_attr( $subtotal_classes ) . '"><span class="customify-wc-sub-total">' . $sub_total . '</span></span>';
 
 		$qty   = array_sum( $quantities );
 		$class = 'customify-wc-total-qty';

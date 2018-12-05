@@ -1,3 +1,9 @@
+
+= 0.2.6 =
+* NEW: Support Gutenberg.
+* NEW: Remove jQuery.
+* FIXED: Fix Shopping cart in header not including tax in amount #204.
+
 = 0.2.5 =
 * NEW: Add class to check touch screen.
 * NEW: Add license file.
@@ -6,7 +12,6 @@
 * FIXED: Fix issue wrong trim product content by more tag.
 * FIXED: Fix missing single post pagination.
 * FIXED: Full blog post content for post excerpt type.
-
 
 
 = 0.2.4 =
