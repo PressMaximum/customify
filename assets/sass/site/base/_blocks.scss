@@ -11,7 +11,8 @@
 // Layout no sidebar.
 .main-layout-content {
 	.entry-content > .alignwide {
-		max-width: 1200px;
+		max-width: 100vw;
+		max-width: calc(var(--vw, 1vw) * 100);
 		width: 1200px;
 		transform: translateX(-50%);
 		left: 50%;
@@ -21,7 +22,9 @@
 	.entry-content > .alignfull {
 		margin: 1.5em 0;
 		max-width: 100vw;
+		max-width: calc(var(--vw, 1vw) * 100);
 		width: 100vw;
+		width: calc(var(--vw, 1vw) * 100);
 		transform: translateX(-50%);
 		left: 50%;
 		position: relative;
@@ -67,6 +70,7 @@
 
 .wp-block-image.alignfull img {
 	width: 100vw;
+	width: calc(var(--vw, 1vw) * 100);
 }
 
 .wp-block-gallery:not(.components-placeholder) {

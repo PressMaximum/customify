@@ -402,6 +402,30 @@ if (!Element.prototype.closest) {
 }
 
 /**
+ * Fix viewport units on Mobile.
+ */
+(function() {
+	if (isMobile.any()) {
+		/**
+		 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+		 */
+		// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+		let vh = window.innerHeight * 0.01;
+		let vw = window.innerWidth * 0.01;
+		// Then we set the value in the --vh, --vw custom property to the root of the document
+		document.documentElement.style.setProperty("--vh", `${vh}px`);
+		document.documentElement.style.setProperty("--vw", `${vw}px`);
+
+		window.addEventListener("resize", function() {
+			let vh = window.innerHeight * 0.01;
+			let vw = window.innerWidth * 0.01;
+			document.documentElement.style.setProperty("--vh", `${vh}px`);
+			document.documentElement.style.setProperty("--vw", `${vw}px`);
+		});
+	}
+})();
+
+/**
  * Main Customify Scripts
  */
 (function() {
