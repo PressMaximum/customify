@@ -1,0 +1,20 @@
+# Sass cache
+.sass-cache
+
+# Grunt
+/vendor/
+/node_modules/
+/releases/
+npm-debug.log
+
+# PhpStorm
+.idea
+
+# macOS
+.DS_Store
+
+# SASS Source Map
+*.css.map
+
+# Zip file
+*.zip

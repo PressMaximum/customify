@@ -1,0 +1,111 @@
+= 0.2.5 =
+* NEW: Add class to check touch screen.
+* NEW: Add license file.
+* IMPROVED: Improved customize controls.
+* IMPROVED: Coding standards.
+* FIXED: Fix issue wrong trim product content by more tag.
+* FIXED: Fix missing single post pagination.
+* FIXED: Full blog post content for post excerpt type.
+
+
+
+= 0.2.4 =
+* NEW: Add related posts for single post.
+* NEW: WooCommerce product onsale bubble styling.
+* NEW: WooCommerce custom short description length when shop page is list view.
+* IMPROVED: Improved blog posts page.
+* IMPROVED: Improved search results page.
+* FIXED: Fix issue site title HTML tag name.
+
+= 0.2.3 =
+* NEW: Apply the product category thumbnail as page cover image.
+* IMPROVED: Footer widget border color on dark mode.
+* IMPROVED: Default sub-navigation font size.
+* IMPROVED: Shop attributes table style.
+* FIXED: Blog meta post is hidden on posts listing page.
+
+= 0.2.2 =
+* NEW: Add more theme hooks.
+* NEW: Add Arial standard font.
+* IMPROVED: Improved WooCommerce cart page.
+* IMPROVED: Improved WooCommerce checkout page.
+* IMPROVED: Improved WooCommerce product media styling.
+* IMPROVED: Improved WooCommerce widgets.
+* IMPROVED: Improved post type meta-box.
+* IMPROVED: Improved primary navigation style.
+* IMPROVED: Improved Default widgets.
+* IMPROVED: Improved single post #173.
+* IMPROVED: Improved admin dashboard and add changelog menu.
+* FIXED: Incorrect single product layout.
+* FIXED: Menu item scroll to section on mobile #172.
+
+= 0.2.1 =
+* IMPROVED: Revert styling settings for header rows.
+* IMPROVED: Improve toggle mobile menu.
+* FIXED: Fix issue header row background image not showing.
+
+= 0.2.0 =
+* NOTES: This is a major update with new features and Customizer settings re-structure, if you see any visual
+changes on the site front-end please go to the Customizer to update options.
+* NEW: Skin modes for header and footer rows.
+* NEW: [Header Builder] New shopping cart builder item.
+* NEW: WooCommerce integration.
+* NEW: WooCommerce: Product Catalog Designer.
+* NEW: WooCommerce: Single product settings.
+* NEW: Add Select2 for typography font families.
+* NEW: Add layout setting for Title-bar and Breadcrumb.
+* NEW: Add Biography item for single blog post.
+* NEW: Add option to always load font awesome.
+* NEW: Add filter for header inner class.
+* NEW: Add option to change preview url when section/panel open.
+* NEW: Add alignment settings for mobile sidebar.
+* IMPROVED: Default styling.
+* IMPROVED: Header search form and search modal form.
+* IMPROVED: Primary navigation style.
+* IMPROVED: Nav menu icon.
+* IMPROVED: Update color picker support placeholder.
+* IMPROVED: Auto CSS - Do not use background settings if no background image selected.
+* FIXED: Issue menu item does not jump to that section ID on mobile #117
+* FIXED:  Default metabox value for special pages #135
+* REMOVED:  Menu Icon default padding.
+
+= 0.1.2 =
+* NEW: Support Elementor 2.0
+* IMPROVED: Improve typography selectors.
+* IMPROVED: Menu navigation.
+* FIXED: Error on PHP version under 5.6.20 #116
+* FIXED: Mobile menu can't click #108
+
+= 0.1.1 =
+ * NEW: Option sidebar settings for custom post types.
+ * NEW: Body background settings.
+ * NEW: Hook for singular post type content.
+ * NEW: Option settings to hide the page title in header cover and tagline.
+ * NEW: Add content styling.
+ * IMPROVED: Increase the submenu z-index to 99.
+ * IMPROVED: Improve core api.
+ * FIXED: Single post cover image didn't show when homepage displays as latest posts.
+ * FIXED: Single post title issue.
+ * FIXED: Duplicate Menu ID in W3C Validate.
+
+= 0.1.0 =
+ * NEW: Option to display post excerpt.
+ * NEW: Option to hide post media.
+ * NEW: Layout settings for footer items.
+ * NEW: Body background settings.
+ * IMPROVED: Styling config.
+ * IMPROVED: Styling sidebar search form.
+ * FIXED: post type layout issue.
+
+= 0.0.9 =
+ * IMPROVED: Improve dashboard CSS style.
+ * IMPROVED: Update new primary color.
+ * IMPROVED: Update theme screenshot to matching the default setting.
+ * FIXED: Mobile menu icon color issue.
+ * ADD: Recommend plugins.
+
+= 0.0.8 =
+* UPDATED: Improve theme setting copy, ready for translation.
+
+= 0.0.7 =
+* Release!
