@@ -303,14 +303,8 @@ class Customify {
 		$js_files = apply_filters(
 			'customify/theme/js',
 			array(
-				'jquery.fitvids.js' => array(
-					'url'  => esc_url( get_template_directory_uri() ) . '/assets/js/jquery.fitvids' . $suffix . '.js',
-					'deps' => array( 'jquery' ),
-					'ver'  => self::$version,
-				),
 				'customify-themejs' => array(
 					'url'  => esc_url( get_template_directory_uri() ) . '/assets/js/theme' . $suffix . '.js',
-					'deps' => array( 'jquery', 'jquery.fitvids.js' ),
 					'ver'  => self::$version,
 				),
 			)
