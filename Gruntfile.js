@@ -318,27 +318,10 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
-        },
-
-
-        phpcbf: {
-            files: {
-                src: ['**/*.php', '*.php']
-            },
-            options: {
-                callback: phpcbf_log,
-                bin:'~/.composer/vendor/bin/phpcbf',
-                noPatch: false,
-            }
         }
 
     });
 
-    function phpcbf_log(err, stdout, stderr, callback)
-    {
-        console.log(stdout);
-        callback();
-    }
 
     // Load NPM tasks to be used here
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
