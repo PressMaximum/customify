@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify	
 Author URI: https://wpcustomify.com/about	
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com	
-Version: 0.2.5	
+Version: 0.2.6	
 License: GNU General Public License v2 or later	
 License URI: http://www.gnu.org/licenses/gpl-2.0.html	
 Text Domain: customify	
@@ -4338,20 +4338,20 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .header-search_icon-item .header-search-modal-wrapper {
   position: absolute;
   top: 100%;
-  left: -.9em;
+  left: -0.9em;
   height: 0px;
   overflow: hidden;
   display: block;
   margin-top: -1px;
-  -webkit-transition: all .2s linear;
-  transition: all .2s linear;
+  -webkit-transition: all 0.2s linear;
+  transition: all 0.2s linear;
   -webkit-transform: translateY(40px);
       -ms-transform: translateY(40px);
           transform: translateY(40px);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
   left: auto;
-  right: -.9em;
+  right: -0.9em;
 }
 .header-search_icon-item.search-left .header-search-modal::before {
   left: auto;
@@ -4407,7 +4407,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 
 .header-search-modal {
   border: 1px solid #eaecee;
-  padding: 1.250em;
+  padding: 1.25em;
   background: #fff;
   width: 280px;
   position: relative;

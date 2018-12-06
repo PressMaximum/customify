@@ -935,7 +935,6 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		$css = str_replace( array( "\r\n", "\r", "\n", "\t" ), '', $css );
-		$css = preg_replace( ' {2,}', ' ', $css );
 		return $css;
 
 	}
