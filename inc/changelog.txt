@@ -4,6 +4,7 @@
 * NEW: Remove jQuery.
 * NEW: Add support for yoast primary term.
 * FIXED: Fix Shopping cart in header not including tax in amount #204.
+* FIXED: Disabling zooming is problematic for users with low vision.
 
 = 0.2.5 =
 * NEW: Add class to check touch screen.

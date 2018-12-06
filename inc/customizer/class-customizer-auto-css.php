@@ -938,7 +938,6 @@ class Customify_Customizer_Auto_CSS {
 		$css = preg_replace( ' {2,}', ' ', $css );
 		return $css;
 
-		return $css;
 	}
 
 	/**
