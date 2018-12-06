@@ -401,29 +401,6 @@ if (!Element.prototype.closest) {
 	};
 }
 
-/**
- * Fix viewport units on Mobile.
- */
-(function() {
-	if (isMobile.any()) {
-		/**
-		 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-		 */
-		// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
-		let vh = window.innerHeight * 0.01;
-		let vw = window.innerWidth * 0.01;
-		// Then we set the value in the --vh, --vw custom property to the root of the document
-		document.documentElement.style.setProperty("--vh", `${vh}px`);
-		document.documentElement.style.setProperty("--vw", `${vw}px`);
-
-		window.addEventListener("resize", function() {
-			let vh = window.innerHeight * 0.01;
-			let vw = window.innerWidth * 0.01;
-			document.documentElement.style.setProperty("--vh", `${vh}px`);
-			document.documentElement.style.setProperty("--vw", `${vw}px`);
-		});
-	}
-})();
 
 /**
  * Main Customify Scripts
@@ -1100,61 +1077,7 @@ if (!Element.prototype.closest) {
 	 * Reponsive video style.
 	 */
 	Customify.prototype.responsiveVideos = function() {
-		var page = document.getElementById("page");
-
-		var selectors = [
-			'iframe[src*="player.vimeo.com"]',
-			'iframe[src*="youtube.com"]',
-			'iframe[src*="youtube-nocookie.com"]',
-			'iframe[src*="kickstarter.com"][src*="video.html"]',
-			"object",
-			"embed"
-		];
-		var ignoreList = ".fitvidsignore";
-		for (var i = 0; i < selectors.length; i++) {
-			selectors[i] += ":not(" + ignoreList + ")";
-		}
-
-		var allVideos = page.querySelectorAll(selectors.join(","));
-
-		for (var i = 0; i < allVideos.length; i++) {
-			var video = allVideos[i];
-			if (!video.closest(".video-responsive")) {
-				var videoWrapper = this.wrapper(video, "div");
-				videoWrapper.classList.add("video-responsive");
-				var offset = video.getBoundingClientRect();
-				var h = video.getAttribute("height") || 0;
-				var w = video.getAttribute("width") || 0;
-
-				w = parseInt(w);
-				h = parseInt(h);
-				if (isNaN(w) || w <= 0) {
-					w = offset.width;
-				}
-
-				if (isNaN(h) || h <= 0) {
-					h = offset.height;
-				}
-
-				if (h > 0 && w > 0) {
-					var p = (h / w) * 100;
-					// Add relative postion and ratio to wrapper.
-					videoWrapper.style.position = "relative";
-					videoWrapper.style.display = "block";
-					videoWrapper.style.height = "0px";
-					videoWrapper.style.paddingTop = p + "%";
-
-					// Make the video fit the parent.
-					video.classList.add("fitvidsignore");
-					video.style.display = "block";
-					video.style.position = "absolute";
-					video.style.top = "0";
-					video.style.left = "0";
-					video.style.width = "100%";
-					video.style.height = "100%";
-				}
-			}
-		}
+		
 	};
 
 	/**
@@ -1223,8 +1146,33 @@ if (!Element.prototype.closest) {
 
 	window.customify_is_mobile = customify_is_mobile;
 	window.Customify = new Customify();
+
+	/**
+	 * Fix viewport units on Mobile.
+	 */
+	(function() {
+		if ( window.Customify.isMobile() ) {
+			/**
+			 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+			 */
+			// First we get the viewport height and we multiple it by 1% to get a value for a vh unit
+			var vh = window.innerHeight * 0.01;
+			var vw = window.innerWidth * 0.01;
+			// Then we set the value in the --vh, --vw custom property to the root of the document
+			document.documentElement.style.setProperty("--vh", vh+'px');
+			document.documentElement.style.setProperty("--vw", vw+'px');
+
+			window.addEventListener("resize", function() {
+				var vh = window.innerHeight * 0.01;
+				var vw = window.innerWidth * 0.01;
+				document.documentElement.style.setProperty("--vh", vh+'px');
+				document.documentElement.style.setProperty("--vw", vw+'px');
+			});
+		}
+	})();
 	
 })();
+
 
 /**
  *

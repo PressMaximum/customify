@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.2.6\n"
+"Project-Id-Version: Customify 0.2.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-12-06 08:05:16+00:00\n"
+"POT-Creation-Date: 2018-12-06 02:39:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3171,7 +3171,7 @@ msgstr ""
 #: inc/customizer/configs/header/search-box.php:221
 #: inc/customizer/configs/header/search-icon.php:331
 #: inc/customizer/configs/header/search-icon.php:332
-#: inc/template-functions.php:315 inc/template-functions.php:316
+#: inc/template-functions.php:319 inc/template-functions.php:320
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
@@ -3186,17 +3186,17 @@ msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:294
+#: inc/template-functions.php:298
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:296
+#: inc/template-functions.php:300
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:298
+#: inc/template-functions.php:302
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
