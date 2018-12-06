@@ -1,11 +1,19 @@
 <?php
 if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
+	/**
+	 * Add typograhy settings.
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.6
+	 *
+	 * @param array $configs
+	 * @return array
+	 */
 	function customify_customizer_typography_config( $configs ) {
 
 		$section = 'global_typography';
 
 		$config = array(
-
 			array(
 				'name'     => 'typography_panel',
 				'type'     => 'panel',
@@ -86,7 +94,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H1', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h1',
+				'selector'   => '.entry-content h1, .wp-block h1',
 			),
 
 			array(
@@ -95,7 +103,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H2', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h2',
+				'selector'   => '.entry-content h2, .wp-block h2',
 			),
 
 			array(
@@ -104,7 +112,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H3', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h3',
+				'selector'   => '.entry-content h3, .wp-block h3',
 			),
 
 			array(
@@ -113,7 +121,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H4', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h4',
+				'selector'   => '.entry-content h4, .wp-block h4',
 			),
 
 			array(
@@ -122,7 +130,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H5', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h5',
+				'selector'   => '.entry-content h5, .wp-block h5',
 			),
 
 			array(
@@ -131,7 +139,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H6', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h6',
+				'selector'   => '.entry-content h6, .wp-block h6',
 			),
 
 		);

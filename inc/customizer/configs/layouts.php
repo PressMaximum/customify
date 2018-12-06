@@ -1,7 +1,15 @@
 <?php
 if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
+	/**
+	 * Add layout settings.
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.6
+	 *
+	 * @param array $configs
+	 * @return array
+	 */
 	function customify_customizer_layouts_config( $configs ) {
-
 		$config = array(
 
 			// Layout panel.
@@ -73,7 +81,9 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					array( 'site_layout', '=', 'site-framed' ),
 				),
 			),
-
+			/**
+			 * @since 0.2.6 Change css_format and selector.
+			 */
 			array(
 				'name'            => 'container_width',
 				'type'            => 'slider',
@@ -84,8 +94,8 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'max'             => 2000,
 				'section'         => 'global_layout_section',
 				'title'           => __( 'Container width', 'customify' ),
-				'selector'        => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site',
-				'css_format'      => 'max-width: {{value}}',
+				'selector'        => 'format',
+				'css_format'      => '.customify-container, .layout-contained, .site-framed .site, .site-boxed .site { max-width: {{value}}; } .main-layout-content .entry-content > .alignwide { width: calc( {{value}} - 4em ); max-width: 100vw;  }',
 			),
 
 			// Site content layout.

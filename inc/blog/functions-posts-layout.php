@@ -98,7 +98,7 @@ if ( ! function_exists( 'customify_blog_posts' ) ) {
 	}
 }
 
-if ( ! class_exists( 'customify_single_post' ) ) {
+if ( ! function_exists( 'customify_single_post' ) ) {
 	function customify_single_post() {
 		the_post();
 		$fields = Customify()->get_setting( 'single_blog_post_items' );

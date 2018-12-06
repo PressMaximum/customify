@@ -452,7 +452,10 @@ class Customify_WC {
 
 	function add_js( $js_files ) {
 		$suffix                         = Customify()->get_asset_suffix();
-		$js_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js';
+		$js_files['plugin-woocommerce'] = array(
+			'url' => esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js',
+			'deps' => array( 'jquery' ),
+		);
 
 		return $js_files;
 	}

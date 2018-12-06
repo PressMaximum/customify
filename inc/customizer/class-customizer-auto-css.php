@@ -48,6 +48,11 @@ class Customify_Customizer_Auto_CSS {
 		'inset'  => null,
 	);
 
+	/**
+	 * Get intance.
+	 *
+	 * @return Customify_Customizer_Auto_CSS
+	 */
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
@@ -914,33 +919,38 @@ class Customify_Customizer_Auto_CSS {
 		return self::$font_url;
 	}
 
+	/**
+	 * Remove space of css code.
+	 *
+	 * @since 1.0.0
+	 * @since 0.2.6
+	 *
+	 * @param string $css
+	 * @return tring
+	 */
 	function min_css( $css ) {
+
 		if ( trim( $css ) == '' ) {
 			return;
 		}
-		$css = preg_replace(
-			array(
-				// Remove comment(s).
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')|\/\*(?!\!)(?>.*?\*\/)|^\s*|\s*$#s',
-				// Remove unused white-space(s).
-				'#("(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\'|\/\*(?>.*?\*\/))|\s*+;\s*+(})\s*+|\s*+([*$~^|]?+=|[{};,>~+]|\s*+-(?![0-9\.])|!important\b)\s*+|([[(:])\s++|\s++([])])|\s++(:)\s*+(?!(?>[^{}"\']++|"(?:[^"\\\]++|\\\.)*+"|\'(?:[^\'\\\\]++|\\\.)*+\')*+{)|^\s++|\s++\z|(\s)\s+#si',
-			),
-			array(
-				'$1',
-				'$1$2$3$4$5$6$7',
-			),
-			$css
-		);
+
+		$css = str_replace( array( "\r\n", "\r", "\n", "\t" ), '', $css );
+		$css = preg_replace( ' {2,}', ' ', $css );
+		return $css;
 
 		return $css;
 	}
 
-	function auto_css( $partial = false ) {
-		if ( ! is_null( self::$code ) ) {
-			return self::$code;
-		}
-		$config_fields = Customify()->customizer->get_config();
-		$this->loop_fields( $config_fields );
+	/**
+	 * Render CSS content from array customize configs.
+	 *
+	 * @since 0.2.5
+	 *
+	 * @param array $fields
+	 * @return string
+	 */
+	public function render_css( $fields = array() ) {
+		$this->loop_fields( $fields );
 		$css_code = '';
 		$i        = 0;
 		foreach ( $this->css as $device => $code ) {
@@ -953,6 +963,29 @@ class Customify_Customizer_Auto_CSS {
 		}
 
 		$css_code = apply_filters( 'customify/auto-css', $css_code, $this );
+		return $css_code;
+	}
+
+	/**
+	 * Auto render CSS code.
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.6
+	 *
+	 * @param boolean $partial
+	 * @return string
+	 */
+	function auto_css( $partial = false ) {
+		if ( ! is_null( self::$code ) ) {
+			return self::$code;
+		}
+		$config_fields = Customify()->customizer->get_config();
+		/**
+		 * Render CSS from customize configs
+		 *
+		 * @since  0.2.6
+		 */
+		$css_code = $this->render_css( $config_fields );
 
 		$url            = $this->get_google_fonts_url();
 		self::$font_url = $url;

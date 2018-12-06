@@ -399,7 +399,7 @@ body {
         display: block;
         .header-menu-sidebar {
             z-index: $menu_sidebar_active_z_index;
-            height: 100%;
+            height: 100vh;
             transform: translate3d(0, 0, 0);
             left: 0;
             visibility: visible;
@@ -415,8 +415,8 @@ body {
         display: block;
         .header-menu-sidebar {
             z-index: $menu_sidebar_active_z_index;
-            height: 100%;
-            max-width: 100vh;
+            height: 100vh;
+            max-width: 100vw;
             transform: translate3d(0, 0, 0);
             right: 0;
             visibility: visible;

@@ -36,6 +36,11 @@ class  Customify_Customizer {
 		add_action( 'wp_ajax_customify__reset_section', array( 'Customify_Customizer', 'reset_customize_section' ) );
 	}
 
+	/**
+	 * Instance.
+	 *
+	 * @return Customify_Customizer
+	 */
 	static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
