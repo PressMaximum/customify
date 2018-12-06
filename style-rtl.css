@@ -3456,14 +3456,13 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   margin-right: 0;
 }
 
-.wp-block-embed.type-video > .wp-block-embed__wrapper {
+.wp-block-embed.is-type-video > .wp-block-embed__wrapper {
   position: relative;
   width: 100%;
   height: 0;
   padding-top: 56.25%;
 }
-
-.wp-block-embed.type-video > .wp-block-embed__wrapper > iframe {
+.wp-block-embed.is-type-video > .wp-block-embed__wrapper iframe, .wp-block-embed.is-type-video > .wp-block-embed__wrapper > object {
   position: absolute;
   width: 100%;
   height: 100%;

@@ -1173,6 +1173,7 @@ if (!Element.prototype.closest) {
 	
 })();
 
+
 /**
  *
  * Handles toggling the navigation menu for small screens and enables TAB key
