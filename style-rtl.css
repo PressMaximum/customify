@@ -3534,11 +3534,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   .wp-block-cover-text p {
     padding: 1.5em 0;
   }
-
-  .entry-content > * {
-    padding-right: 0px;
-    padding-left: 0px;
-  }
 }
 /*--------------------------------------------------------------
   # Block Color Palette Colors
