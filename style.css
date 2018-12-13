@@ -3656,6 +3656,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .page-breadcrumb .page-breadcrumb-inner {
   width: 100%;
 }
+.page-breadcrumb.breadcrumb--inside .page-breadcrumb-list {
+  margin-left: 0;
+  margin-right: 0;
+}
 
 .page-breadcrumb-list {
   list-style: none;
