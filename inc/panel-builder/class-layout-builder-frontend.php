@@ -1,6 +1,10 @@
 <?php
-
-class Customify_Customize_Layout_Builder_Frontend {
+/**
+ * Builder frontemd class
+ *
+ * @since 0.2.7
+ */
+class Customify_Layout_Builder_Frontend {
 	public static $_instance;
 	private $control_id = 'header_builder_panel';
 	public $id = 'header';
@@ -660,4 +664,36 @@ class Customify_Customize_Layout_Builder_Frontend {
 
 		return $close;
 	}
+}
+
+
+/**
+ * Deprecated class name
+ *
+ * @deprecated 0.2.7
+ */
+class Customify_Customize_Layout_Builder_Frontend extends Customify_Layout_Builder_Frontend {}
+
+/**
+ * Alias of class Customify_Layout_Builder_Frontend
+ *
+ * @see Customify_Layout_Builder_Frontend
+ *
+ * @return Customify_Layout_Builder_Frontend
+ */
+function Customify_Layout_Builder_Frontend() {
+	return Customify_Layout_Builder_Frontend::get_instance();
+}
+
+
+/**
+ * Alias of class Customify_Layout_Builder_Frontend
+ *
+ * @see Customify_Layout_Builder_Frontend
+ * @deprecated 2.0.7
+ *
+ * @return Customify_Layout_Builder_Frontend
+ */
+function Customify_Customize_Layout_Builder_Frontend() {
+	return Customify_Layout_Builder_Frontend();
 }

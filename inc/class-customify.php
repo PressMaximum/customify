@@ -393,7 +393,7 @@ class Customify {
 			// Functions which enhance the theme by hooking into WordPress.
 			'/inc/customizer/class-customizer.php',
 			// Customizer additions.
-			'/inc/panel-builder/panel-builder.php',
+			'/inc/panel-builder/class-panel-builder.php',
 			// Panel builder additions.
 			'/inc/blog/class-related-posts.php',
 			// Blog entry builder.
