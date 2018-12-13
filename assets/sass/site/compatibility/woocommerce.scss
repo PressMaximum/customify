@@ -82,3 +82,14 @@
         display: inline-block;
     }
 }
+.woocommerce-pagination{
+	.customify-infinity-loader{
+		.customify-infinity-button{
+			&.loading{
+				&::after{
+					content: none!important;
+				}
+			}
+		}
+	}
+}

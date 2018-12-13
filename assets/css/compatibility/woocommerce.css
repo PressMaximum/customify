@@ -3814,4 +3814,8 @@ form.woocommerce-checkout::after {
   margin-left: 0px;
 }
 
+.woocommerce-pagination .customify-infinity-loader .customify-infinity-button.loading::after {
+  content: none !important;
+}
+
 /*# sourceMappingURL=woocommerce.css.map */
