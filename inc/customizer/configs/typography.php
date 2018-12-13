@@ -94,7 +94,7 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'section'    => "{$section}_content",
 				'title'      => __( 'Heading H1', 'customify' ),
 				'css_format' => 'typography',
-				'selector'   => '.entry-content h1, .wp-block h1',
+				'selector'   => '.entry-content h1, .wp-block h1, .entry-single .entry-title',
 			),
 
 			array(
