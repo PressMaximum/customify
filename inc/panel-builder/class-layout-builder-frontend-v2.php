@@ -300,38 +300,38 @@ class Customify_Layout_Builder_Frontend_V2 {
 			echo '<div id="header-menu-sidebar-bg" class="header-menu-sidebar-bg">';
 			echo '<div id="header-menu-sidebar-inner" class="header-menu-sidebar-inner">';
 
-			foreach ( $mobile_items as $item ) {
-				$item_id     = $item['id'];
-				$content     = $this->render_items[ $item['id'] ]['render_content'];
-				$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
-				$item_config = wp_parse_args(
-					$item_config,
-					array(
-						'section' => '',
-						'name'    => '',
-					)
-				);
+			// foreach ( $mobile_items as $item ) {
+			// 	$item_id     = $item['id'];
+			// 	$content     = $this->render_items[ $item['id'] ]['render_content'];
+			// 	$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+			// 	$item_config = wp_parse_args(
+			// 		$item_config,
+			// 		array(
+			// 			'section' => '',
+			// 			'name'    => '',
+			// 		)
+			// 	);
 
-				$classes = 'builder-item-sidebar mobile-item--' . $item_id;
-				if ( strpos( $item_id, 'menu' ) ) {
-					$classes = $classes . ' mobile-item--menu ';
-				}
-				$inner_classes = 'item--inner';
-				if ( is_customize_preview() ) {
-					$inner_classes = $inner_classes . ' builder-item-focus ';
-				}
+			// 	$classes = 'builder-item-sidebar mobile-item--' . $item_id;
+			// 	if ( strpos( $item_id, 'menu' ) ) {
+			// 		$classes = $classes . ' mobile-item--menu ';
+			// 	}
+			// 	$inner_classes = 'item--inner';
+			// 	if ( is_customize_preview() ) {
+			// 		$inner_classes = $inner_classes . ' builder-item-focus ';
+			// 	}
 
-				$content = $this->setup_item_content( $content, $id, 'mobile' );
+			// 	$content = $this->setup_item_content( $content, $id, 'mobile' );
 
-				echo '<div class="' . esc_attr( $classes ) . '">';
-				echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';
-				echo $content;
-				if ( is_customize_preview() ) {
-					echo '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
-				}
-				echo '</div>';
-				echo '</div>';
-			}
+			// 	echo '<div class="' . esc_attr( $classes ) . '">';
+			// 	echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';
+			// 	echo $content;
+			// 	if ( is_customize_preview() ) {
+			// 		echo '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
+			// 	}
+			// 	echo '</div>';
+			// 	echo '</div>';
+			// }
 
 
 
