@@ -3809,3 +3809,7 @@ form.woocommerce-checkout::after {
 .footer_payment_methods li:first-child {
   margin-right: 0px;
 }
+
+.woocommerce-pagination .customify-infinity-loader .customify-infinity-button.loading::after {
+  content: none !important;
+}

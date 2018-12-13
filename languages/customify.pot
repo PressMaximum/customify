@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.2.6\n"
+"Project-Id-Version: Customify 0.2.7\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-12-07 03:27:58+00:00\n"
+"POT-Creation-Date: 2018-12-13 10:01:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:185 inc/compatibility/breadcrumb.php:201
+#: inc/admin/dashboard.php:185 inc/compatibility/breadcrumb.php:205
 #: inc/compatibility/woocommerce/config/catalog-designer.php:395
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:189 inc/compatibility/breadcrumb.php:191
+#: inc/admin/dashboard.php:189 inc/compatibility/breadcrumb.php:195
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:346
 #: inc/customizer/configs/header/button.php:96
@@ -542,8 +542,8 @@ msgstr ""
 msgid "Disable Footer Bottom"
 msgstr ""
 
-#: inc/class-metabox.php:103 inc/compatibility/breadcrumb.php:176
-#: inc/compatibility/breadcrumb.php:181
+#: inc/class-metabox.php:103 inc/compatibility/breadcrumb.php:180
+#: inc/compatibility/breadcrumb.php:185
 #: inc/customizer/configs/page-header.php:237
 #: inc/customizer/configs/page-header.php:248
 msgid "Display"
@@ -565,7 +565,7 @@ msgid "Hide"
 msgstr ""
 
 #: inc/class-metabox.php:121 inc/class-metabox.php:127
-#: inc/compatibility/breadcrumb.php:78
+#: inc/compatibility/breadcrumb.php:82
 msgid "Breadcrumb"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Customify Settings"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:83
+#: inc/compatibility/breadcrumb.php:87
 msgid ""
 "Customify theme support <a target=\"_blank\" "
 "href=\"https://wordpress.org/plugins/breadcrumb-navxt/\">Breadcrumb "
@@ -587,76 +587,76 @@ msgid ""
 "displayed after you installed and activated it."
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:98
+#: inc/compatibility/breadcrumb.php:102
 msgid "Display Position"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:102
+#: inc/compatibility/breadcrumb.php:106
 msgid "After header"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:103
+#: inc/compatibility/breadcrumb.php:107
 msgid "Inside cover/titlebar"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:104
+#: inc/compatibility/breadcrumb.php:108
 msgid "Before site main"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:113
+#: inc/compatibility/breadcrumb.php:117
 msgid "Hide on index"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:118
+#: inc/compatibility/breadcrumb.php:122
 msgid "Hide on categories"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:123
+#: inc/compatibility/breadcrumb.php:127
 msgid "Hide on search"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:128
+#: inc/compatibility/breadcrumb.php:132
 msgid "Hide on archive"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:133
+#: inc/compatibility/breadcrumb.php:137
 msgid "Hide on single page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:138
+#: inc/compatibility/breadcrumb.php:142
 msgid "Hide on single post"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:143
+#: inc/compatibility/breadcrumb.php:147
 msgid "Hide on singular"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:148
+#: inc/compatibility/breadcrumb.php:152
 msgid "Hide on 404 page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:157
+#: inc/compatibility/breadcrumb.php:161
 msgid "Hide on product page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:162
+#: inc/compatibility/breadcrumb.php:166
 msgid "Hide on product category"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:167
+#: inc/compatibility/breadcrumb.php:171
 msgid "Hide on product tag"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:177
+#: inc/compatibility/breadcrumb.php:181
 #: inc/customizer/configs/page-header.php:238
 msgid "Settings display for special pages."
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:192
+#: inc/compatibility/breadcrumb.php:196
 msgid "Typography for breadcrumb"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:202
+#: inc/compatibility/breadcrumb.php:206
 msgid "Styling for breadcrumb"
 msgstr ""
 
