@@ -1,0 +1,117 @@
+/*--------------------------------------------------------------
+## Comments
+--------------------------------------------------------------*/
+.comments-area {
+	.comment-reply-title {
+		@extend h4;
+	}
+	.comment-form-comment,
+	.comment-form-author,
+	.comment-form-email,
+	.comment-form-url {
+		label {
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-size: 0.85em;
+		}
+	}
+}
+.comment-list {
+	list-style: none;
+	margin: 0;
+	article.comment {
+		margin-bottom: 0px;
+	}
+	ul {
+		list-style: none;
+		margin: 0;
+	}
+	.children li.comment {
+		padding-left: 30px;
+		@include mq(min-md) {
+			padding-left: 85px;
+			border-left: 1px solid $color_border;
+			position: relative;
+			width: 100%;
+			&:after {
+				content: "";
+				display: block;
+				position: absolute;
+				float: left;
+				top: ms(2);
+				left: 0;
+				width: ms(2);
+				height: 1px;
+				background-color: $color_border;
+			}
+		}
+		@include mq(max-sm) {
+			li.comment li.comment li.comment {
+				padding-left: 0px;
+			}
+		}
+	}
+}
+article.comment {
+	padding: ms(2) 0;
+	margin-bottom: ms(2);
+	.comment-content {
+		p:last-of-type {
+			margin-bottom: 0px;
+		}
+	}
+	.comment-image {
+		float: left;
+	}
+	.comment-wrap {
+		margin-left: 85px;
+	}
+	.comment-meta {
+		display: block;
+		margin: 12px 0px 12px;
+		padding-bottom: 4px;
+		border-bottom: 1px solid $color_border;
+		.comment-edit-link {
+			margin-left: 10px;
+		}
+	}
+	.comment-author {
+		font-weight: 500;
+		text-transform: uppercase;
+		line-height: 1;
+		font-style: normal;
+	}
+	.comment-post-author {
+		background: $color_meta;
+		padding: 1px 6px 1px;
+		border-radius: 2px;
+		color: #ffffff;
+		position: relative;
+		top: -2px;
+		margin-left: 4px;
+	}
+}
+#respond {
+	.comment-form-author,
+	.comment-form-email,
+	.comment-form-url {
+		@include mq(min-md) {
+			width: 29.4117647059%;
+			margin-right: 5.8823529412%;
+			float: left;
+		}
+		input {
+			width: 100%;
+		}
+	}
+	.comment-form-url {
+		margin-right: 0px;
+	}
+	.comment-form-cookies-consent {
+		#wp-comment-cookies-consent {
+			position: relative;
+			top: -1px;
+			margin-right: 5px;
+		}
+	}
+}

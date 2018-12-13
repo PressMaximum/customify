@@ -60,6 +60,11 @@ class Customify_Advanced_Styling_Background {
 				'selector'   => array(
 					'normal' => '.site-content',
 				),
+				'default'   => array(
+					'normal' => array(
+						'bg_color' => '#FFFFFF',
+					),
+				),
 				'css_format' => 'styling', // styling.
 				'fields'     => array(
 					'normal_fields' => array(

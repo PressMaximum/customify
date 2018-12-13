@@ -56,12 +56,14 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 	 * Get the layout for the current page from Customizer setting or individual page/post.
 	 *
 	 * @since 0.0.1
+	 * @since 0.2.6
 	 */
 	function customify_get_layout() {
 		$default = Customify()->get_setting( 'sidebar_layout' );
 		$layout  = apply_filters( 'customify_get_layout', null );
 		if ( ! $layout ) {
 			$page = Customify()->get_setting( 'page_sidebar_layout' );
+
 			if ( is_home() && is_front_page() || ( is_home() && ! is_front_page() ) ) { // Blog page.
 				$blog_posts = Customify()->get_setting( 'posts_sidebar_layout' );
 				$layout     = $blog_posts;
@@ -82,7 +84,9 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 				$layout = Customify()->get_setting( get_post_type() . '_sidebar_layout' );
 			}
 
-			if ( is_singular() && customify_is_support_meta() ) {
+			// Support for all posts that using meta settings.
+			if ( Customify()->is_using_post() && customify_is_support_meta() ) {
+
 				$post_type   = get_post_type();
 				$page_custom = get_post_meta( customify_get_support_meta_id(), '_customify_sidebar', true );
 

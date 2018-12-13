@@ -350,9 +350,9 @@ class Customify_WC {
 	 * @return array
 	 */
 	function cart_fragments( $cart_fragments = array() ) {
-		$sub_total = WC()->cart->get_subtotal();
+		$sub_total = WC()->cart->get_cart_subtotal();
 
-		$cart_fragments['.customify-wc-sub-total'] = '<span class="customify-wc-sub-total">' . wc_price( $sub_total ) . '</span>';
+		$cart_fragments['.customify-wc-sub-total'] = '<span class="customify-wc-sub-total">' . $sub_total . '</span>';
 		$quantities                                = WC()->cart->get_cart_item_quantities();
 
 		$qty   = array_sum( $quantities );
@@ -452,7 +452,10 @@ class Customify_WC {
 
 	function add_js( $js_files ) {
 		$suffix                         = Customify()->get_asset_suffix();
-		$js_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js';
+		$js_files['plugin-woocommerce'] = array(
+			'url' => esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js',
+			'deps' => array( 'jquery' ),
+		);
 
 		return $js_files;
 	}
