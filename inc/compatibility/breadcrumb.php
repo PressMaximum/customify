@@ -29,7 +29,11 @@ class Customify_Breadcrumb {
 		switch ( $display_pos ) {
 			case 'after_header': // Below header.
 				if ( function_exists( 'Customify_Pro' ) && Customify_Pro()->is_enabled_module( 'Customify_Pro_Module_Header_Transparent' ) ) {
-					add_action( 'customify/page-cover/before', array( self::$_instance, 'render' ), 10 );
+					if ( has_action( 'customify/page-cover/before' ) ) {
+						add_action( 'customify/page-cover/before', array( self::$_instance, 'render' ), 10 );
+					} else {
+						add_action( 'customify/site-start', array( self::$_instance, 'render' ), 10 );
+					}
 				} else {
 					add_action( 'customify/site-start', array( self::$_instance, 'render' ), 15 );
 				}
