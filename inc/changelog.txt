@@ -1,5 +1,6 @@
 = 0.2.7 =
-* FIXED: Issue do not copy parent menu to submenu
+* FIXED: Issue do not copy parent menu to submenu.
+* FIXED: Issue Heading H1 does not apply for entry post title.
 
 = 0.2.6 =
 * NEW: Support Gutenberg.
