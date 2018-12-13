@@ -4,7 +4,7 @@ Theme URI: https://wpcustomify.com
 Author: WPCustomify	
 Author URI: https://wpcustomify.com/about	
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://wpcustomify.com	
-Version: 0.2.6	
+Version: 0.2.7	
 License: GNU General Public License v2 or later	
 License URI: http://www.gnu.org/licenses/gpl-2.0.html	
 Text Domain: customify	
@@ -3070,8 +3070,7 @@ article.comment .comment-post-author {
   border-bottom-right-radius: 2px;
 }
 .customize-previewing .builder-item-focus:hover.item--inner {
-  -webkit-transition-delay: 0s !important;
-          transition-delay: 0s !important;
+  transition-delay: 0s !important;
   outline: 1px solid #0073aa;
   outline-offset: -1px;
 }
@@ -3304,9 +3303,7 @@ article.comment .comment-post-author {
   max-width: 100vw;
   max-width: calc(var(--vw, 1vw) * 100);
   width: 1200px;
-  -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
   left: 50%;
   position: relative;
 }
@@ -3316,9 +3313,7 @@ article.comment .comment-post-author {
   max-width: calc(var(--vw, 1vw) * 100);
   width: 100vw;
   width: calc(var(--vw, 1vw) * 100);
-  -webkit-transform: translateX(-50%);
-      -ms-transform: translateX(-50%);
-          transform: translateX(-50%);
+  transform: translateX(-50%);
   left: 50%;
   position: relative;
 }
@@ -3333,10 +3328,10 @@ article.comment .comment-post-author {
   margin-right: 0px;
 }
 
-.customize-previewing .builder-item-focus:hover.item--inner {
-  transition-delay: 0s !important;
-  outline: 1px solid #0073aa;
-  outline-offset: -1px;
+.entry-content ul,
+.entry-content ol {
+  margin: 1.5em auto;
+  list-style-position: outside;
 }
 
 .wp-block-video video {
@@ -4223,7 +4218,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   overflow: hidden;
   display: block;
   margin-top: -1px;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
   transform: translateY(40px);
 }
 .header-search_icon-item.search-left .header-search-modal-wrapper {
@@ -5319,8 +5314,7 @@ body.menu_sidebar_dropdown:before {
 }
 .is-menu-sidebar.menu_sidebar_slide_left .header-menu-sidebar {
   z-index: 999900;
-
-  height: 100%;
+  height: 100vh;
   transform: translate3d(0, 0, 0);
   left: 0;
   visibility: visible;
@@ -5336,9 +5330,8 @@ body.menu_sidebar_dropdown:before {
 }
 .is-menu-sidebar.menu_sidebar_slide_right .header-menu-sidebar {
   z-index: 999900;
-
-  height: 100%;
-  max-width: 100vh;
+  height: 100vh;
+  max-width: 100vw;
   transform: translate3d(0, 0, 0);
   right: 0;
   visibility: visible;

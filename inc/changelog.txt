@@ -1,3 +1,5 @@
+= 0.2.7 =
+* FIXED: Issue do not copy parent menu to submenu
 
 = 0.2.6 =
 * NEW: Support Gutenberg.
