@@ -659,8 +659,9 @@ if (!Element.prototype.closest) {
 
 					fistLink.parentNode.insertBefore(toggleButton, fistLink);
 					var submenu = child.querySelector(":scope > .sub-menu");
-					submenu.prepend(d);
-
+					if( '1' !== Customify_JS.sidebar_menu_no_duplicator ){
+						submenu.prepend(d);
+					}
 					var firstSubmenu = child.querySelectorAll(
 						":scope  > .sub-menu, .sub-lv-0"
 					);
@@ -669,11 +670,11 @@ if (!Element.prototype.closest) {
 							this.slideUp(firstSubmenu[j], 0);
 						}
 					}
-
-					var dWrapper = document.createElement("li");
-					d.parentNode.appendChild(dWrapper);
-					dWrapper.appendChild(d);
-
+					if( '1' !== Customify_JS.sidebar_menu_no_duplicator ){
+						var dWrapper = document.createElement("li");
+						d.parentNode.prepend(dWrapper);
+						dWrapper.appendChild(d);
+					}
 					this.toggleMobileSubmenuEvents(toggleButton);
 				}
 			}

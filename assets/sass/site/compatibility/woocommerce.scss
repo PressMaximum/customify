@@ -84,7 +84,7 @@
 }
 .woocommerce-pagination{
 	.customify-infinity-loader{
-		.customify-infinity-button{
+		.customify-infinity-button.button{
 			&.loading{
 				&::after{
 					content: none!important;

@@ -3810,6 +3810,6 @@ form.woocommerce-checkout::after {
   margin-right: 0px;
 }
 
-.woocommerce-pagination .customify-infinity-loader .customify-infinity-button.loading::after {
+.woocommerce-pagination .customify-infinity-loader .customify-infinity-button.button.loading::after {
   content: none !important;
 }
