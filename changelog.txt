@@ -1,3 +1,8 @@
+= 0.2.8 =
+* FIXED: Issue Breadcrumb alignment.
+* FIXED: Issue Gutenberg button compatible.
+
+
 = 0.2.7 =
 * FIXED: Issue do not copy parent menu to submenu.
 * FIXED: Issue Heading H1 does not apply for entry post title.
