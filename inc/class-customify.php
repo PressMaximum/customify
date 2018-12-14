@@ -473,6 +473,7 @@ class Customify {
 			'header/logo',
 			'header/search-icon',
 			'header/search-box',
+			'header/woo-search-box',
 			'header/menus',
 			'header/nav-icon',
 			'header/button',
