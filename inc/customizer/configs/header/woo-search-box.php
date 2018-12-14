@@ -51,7 +51,7 @@ class Customify_Builder_Item_Woo_Search_Box {
 				'name'        => $this->section . '_show_cats',
 				'type'        => 'checkbox',
 				'section'     => $this->section,
-				'default'     => true,
+				'default'     => false,
 				'selector'        => "$selector",
 				'render_callback' => $fn,
 				'label'       => __( 'Enable product categories', 'customify' ),
@@ -160,9 +160,9 @@ class Customify_Builder_Item_Woo_Search_Box {
 				'title'       => __( 'Input Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
-					'normal'            => "{$selector} .search-field, $selector .has_cats_select .search-field, $selector .has_cats_select .search_product_cats",
-					'hover'             => "{$selector} .search-field:focus, $selector .has_cats_select .search_product_cats:focus",
-					'normal_text_color' => "{$selector} .search-field, {$selector} input.search-field::placeholder, $selector .has_cats_select .search_product_cats",
+					'normal'            => "{$selector} .woo-header-search-form.no_cats_select .search-field,{$selector} .woo-header-search-form.has_cats_select",
+					'hover'             => "{$selector} .woo-header-search-form.no_cats_select .search-field:focus",
+					'normal_text_color' => "{$selector} .woo-header-search-form.no_cats_select .search-field, {$selector} .woo-header-search-form.no_cats_select input.search-field::placeholder",
 				),
 				'default'     => array(
 					'normal' => array(
