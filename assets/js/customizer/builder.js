@@ -49,9 +49,10 @@
 						customifyPanels[id + newVer] = _builder;
 					}
 					
-					wpcustomize
-						.control(opts.version_id)
-						.setting.set( newVer );
+					var control = wpcustomize.control(opts.version_id);
+					control.setting.set( newVer );
+					// Dispacth to conditional
+					$document.trigger("customify/customizer/value_changed" );
 					
 					if ( customifyPanels[id + newVer] ) {
 						customifyPanels[id + newVer].container.show();

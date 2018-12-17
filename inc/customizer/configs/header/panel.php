@@ -391,6 +391,11 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 				'label'           => __( 'Margin', 'customify' ),
 			),
 
+			/**
+			 * Apply for version 1 only
+			 *
+			 * @since 0.2.7
+			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_align',
 				'type'            => 'text_align_no_justify',
@@ -400,8 +405,14 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 				'selector'        => "{$class} .builder-first--" . $item_id,
 				'css_format'      => 'text-align: {{value}};',
 				'title'           => __( 'Align', 'customify' ),
+				'required' => array( 'header_builder_version', '!=', 'v2' ),
 			),
 
+			/**
+			 * Apply for version 1 only
+			 *
+			 * @since 0.2.7
+			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_merge',
 				'type'            => 'select',
@@ -418,6 +429,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 					'prev' => __( 'Merge with left item', 'customify' ),
 					'next' => __( 'Merge with right item', 'customify' ),
 				),
+				'required' => array( 'header_builder_version', '!=', 'v2' ),
 			),
 		);
 
