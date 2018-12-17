@@ -4237,19 +4237,43 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 .header-search-form {
-  display: flex;
   margin-bottom: 0px;
   width: 100%;
   max-width: 100%;
+  display: flex;
+  border: 1px solid;
+  border-color: rgba(127, 127, 127, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  border-radius: 2px;
+  background-color: #fff;
+  height: 2.4em;
+  line-height: 2.4em;
 }
-.header-search-form label {
+.header-search-form .search-form-fields {
+  background-color: transparent;
+  min-height: auto;
+  -ms-flex-preferred-size: 100%;
   flex-basis: 100%;
+  display: flex;
 }
 .header-search-form .search-field {
-  display: block;
-  width: 100%;
-  border-radius: 2px;
-  height: 2.4em;
+  border-color: transparent;
+  height: auto;
+  background-color: transparent;
+  border: 0;
+  border-style: none;
+  box-shadow: none;
+  flex: 0 0 auto;
+}
+.header-search-form .search-field:focus {
+  background: transparent;
+}
+.header-search-form .search_product_cats {
+  height: auto;
+  border: 0;
+  background-color: transparent;
+  flex: 1 1 auto;
+  width: auto;
 }
 .header-search-form button.search-submit {
   overflow: hidden;
@@ -4258,7 +4282,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   background: transparent;
   color: #6d6d6d;
   line-height: 0px;
-  padding: 0px 0.7em;
   min-height: auto;
 }
 .header-search-form button.search-submit:hover {
