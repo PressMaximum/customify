@@ -1340,7 +1340,12 @@ $text_color: #555d66;
         background: #fff;
         transform: rotate(45deg);
         border-radius: 3px;
-    }
+	}
+	&::after{
+		content: '';
+		display: table;
+		clear: both;
+	}
     .wp-color-result-text {
         line-height: 23px;
     }

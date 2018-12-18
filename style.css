@@ -3251,6 +3251,17 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
 }
 
+.woo_bootster_search .dark-mode .header-search_box-item .header-search-form .search_product_cats {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.79);
+}
+.woo_bootster_search .dark-mode .header-search_box-item .header-search-form .search-field {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.79);
+}
+
 .header--row .light-mode {
   color: rgba(0, 0, 0, 0.6);
   background: rgba(255, 255, 255, 0.9);
@@ -4349,6 +4360,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   background-color: transparent;
   flex: 1 1 auto;
   width: auto;
+  padding-right: 2em;
   position: relative;
   border-right: 1px solid rgba(127, 127, 127, 0.2);
   color: #6d6d6d;

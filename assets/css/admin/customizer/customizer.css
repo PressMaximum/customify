@@ -1297,6 +1297,11 @@ html[dir="rtl"] .customify-modal-settings:before {
   right: auto;
   left: 5px;
 }
+.customify-modal-settings::after {
+  content: '';
+  display: table;
+  clear: both;
+}
 .customify-modal-settings .wp-color-result-text {
   line-height: 23px;
 }

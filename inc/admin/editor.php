@@ -84,9 +84,6 @@ class Customify_Editor {
 		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
 		.editor-styles-wrapper textarea.editor-post-title__input:focus,
 		.block-editor-page .editor-styles-wrapper button { background: none; }
-		.edit-post-visual-editor .editor-post-title__block,
-		.edit-post-visual-editor .editor-block-list__block,
-		.editor-block-list__layout .editor-block-list__block[data-type="core/freeform"] .editor-block-list__block-edit::before{ background: #fff; }
 		';
 		return $css;
 	}

@@ -3251,6 +3251,17 @@ article.comment .comment-post-author {
   color: rgba(255, 255, 255, 0.99);
 }
 
+.woo_bootster_search .dark-mode .header-search_box-item .header-search-form .search_product_cats {
+  background-color: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.79);
+}
+.woo_bootster_search .dark-mode .header-search_box-item .header-search-form .search-field {
+  background: rgba(255, 255, 255, 0.03) !important;
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.79);
+}
+
 .header--row .light-mode {
   color: rgba(0, 0, 0, 0.6);
   background: rgba(255, 255, 255, 0.9);
@@ -4182,10 +4193,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   line-height: 0px;
   cursor: pointer;
 }
-.item--search_icon .header-search-form {
-  height: auto;
-  line-height: inherit;
-}
 
 .search-icon {
   line-height: 0px;
@@ -4241,51 +4248,19 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 .header-search-form {
+  display: flex;
   margin-bottom: 0px;
   width: 100%;
   max-width: 100%;
-  display: flex;
-  border: 1px solid;
-  border-color: rgba(127, 127, 127, 0.2);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-  border-radius: 2px;
-  background-color: #fff;
-  height: 2.4em;
-  line-height: 2.4em;
-  overflow: hidden;
 }
-.header-search-form .search-form-fields {
-  background-color: transparent;
-  min-height: auto;
-  -ms-flex-preferred-size: 100%;
+.header-search-form label {
   flex-basis: 100%;
-  display: flex;
-  border-style: none;
 }
 .header-search-form .search-field {
-  border-color: transparent;
-  height: auto;
-  background-color: transparent;
-  border: 0;
-  border-style: none;
-  box-shadow: none;
-  flex: 0 0 auto;
-}
-.header-search-form .search-field:focus {
-  background: transparent;
-}
-.header-search-form .search_product_cats {
-  height: auto;
-  border: 0;
-  background-color: transparent;
-  flex: 1 1 auto;
-  width: auto;
-  position: relative;
-  border-left: 1px solid #eee;
-  color: #6d6d6d;
-  border-top: 0 !important;
-  border-right: 0 !important;
-  border-bottom: 0 !important;
+  display: block;
+  width: 100%;
+  border-radius: 2px;
+  height: 2.4em;
 }
 .header-search-form button.search-submit {
   overflow: hidden;
@@ -4294,6 +4269,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   background: transparent;
   color: #6d6d6d;
   line-height: 0px;
+  padding: 0px 0.7em;
   min-height: auto;
 }
 .header-search-form button.search-submit:hover {
@@ -4339,6 +4315,58 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   height: 15px;
   transform: rotate(-45deg);
   z-index: 27;
+}
+
+.site-header .header--row .header-search_box-item .search-form-fields {
+  border-style: inherit;
+}
+
+.woo_bootster_search .header-search_box-item .header-search-form {
+  margin-bottom: 0px;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  border: 1px solid;
+  border-color: rgba(127, 127, 127, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  border-radius: 2px;
+  height: 2.4em;
+  line-height: 2.4em;
+  overflow: hidden;
+}
+.woo_bootster_search .header-search_box-item .header-search-form .search-form-fields {
+  background-color: transparent;
+  min-height: auto;
+  -ms-flex-preferred-size: 100%;
+  flex-basis: 100%;
+  display: flex;
+  border-style: none;
+}
+.woo_bootster_search .header-search_box-item .header-search-form .search-field {
+  border-color: transparent;
+  height: auto;
+  background-color: transparent;
+  border: 0;
+  border-style: none;
+  box-shadow: none;
+  flex: 0 0 auto;
+}
+.woo_bootster_search .header-search_box-item .header-search-form .search-field:focus {
+  background: transparent;
+}
+.woo_bootster_search .header-search_box-item .header-search-form .search_product_cats {
+  height: auto;
+  border: 0;
+  background-color: transparent;
+  flex: 1 1 auto;
+  width: auto;
+  padding-left: 2em;
+  position: relative;
+  border-left: 1px solid rgba(127, 127, 127, 0.2);
+  color: #6d6d6d;
+  border-top: 0 !important;
+  border-right: 0 !important;
+  border-bottom: 0 !important;
 }
 
 /* Social Icons */

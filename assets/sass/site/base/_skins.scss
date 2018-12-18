@@ -76,6 +76,25 @@
 	}
 }
 
+.woo_bootster_search {
+	.dark-mode{
+		.header-search_box-item {
+			.header-search-form {
+				.search_product_cats{
+					background-color: white(0.03);
+					border-color: $light_color_border;
+					color: $light_color_link;
+				}
+				.search-field{
+					background-color: white(0.03)!important;
+					border-color: $light_color_border;
+					color: $light_color_link;
+				}
+			}
+		}
+	}
+}
+
 .light-mode {
 	.header--row & {
 		color: $dark_color;
