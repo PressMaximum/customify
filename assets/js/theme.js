@@ -996,33 +996,36 @@ if (!Element.prototype.closest) {
 	 */
 	Customify.prototype.initSearchForm = function() {
 		var searchItems = document.querySelectorAll(".header-search_icon-item");
-		for (var i = 0; i < searchItems.length; i++) {
-			var container = searchItems[i];
-			this.removeClass(container, "active");
+		var that = this;
+
+		searchItems.forEach( function( container ){
+			//let container = searchItems[i];
+			that.removeClass(container, "active");
 			var icon = container.querySelector(".search-icon");
 
 			/**
 			 * Add event handle when click to icon.
 			 */
-			this.addEvent(
+			that.addEvent(
 				icon,
 				"click",
 				function(e) {
 					e.preventDefault();
-					this.toggleClass(container, "active");
+					this.toggleClass( container, "active");
 					var inputField = container.querySelector(".search-field");
+				
 					if (!container.classList.contains("active")) {
 						inputField.blur();
 					} else {
 						inputField.focus();
 					}
-				}.bind(this)
+				}.bind(that)
 			);
 
 			/**
 			 * When click outside search form.
 			 */
-			this.addEvent(
+			that.addEvent(
 				document,
 				"click",
 				function(e) {
@@ -1031,13 +1034,16 @@ if (!Element.prototype.closest) {
 						!(container === e.target) &&
 						!container.contains(e.target)
 					) {
-						this.removeClass(container, "active");
+						that.removeClass(container, "active");
 					}
-				}.bind(this)
+				}.bind(that)
 			);
-		}
 
-		this.searchFormAutoAlign();
+
+		} );
+		
+
+		that.searchFormAutoAlign();
 	};
 
 	/**

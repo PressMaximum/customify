@@ -1,7 +1,7 @@
 = 0.2.8 =
 * FIXED: Issue Breadcrumb alignment.
 * FIXED: Issue Gutenberg button compatible.
-
+* FIXED: Seach icon box issue.
 
 = 0.2.7 =
 * FIXED: Issue do not copy parent menu to submenu.
