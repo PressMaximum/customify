@@ -40,9 +40,9 @@ class Customify_Builder_Item_Search_Box {
 		$fn       = array( $this, 'render' );
 		$selector = ".header--row .header-{$this->id}-item";
 
-		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};}";
+		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};}";
 		if ( is_rtl() ) {
-			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;}";
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;}";
 		}
 		$config   = array(
 			array(
