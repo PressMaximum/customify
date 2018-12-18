@@ -122,7 +122,7 @@
 			 */
 			dispatchEvent(document, "customize_section_opened", {
 				bubbles: true,
-				detail: header_sidebar
+				detail: 'header_sidebar'
 			});
 
 			if (to.indexOf("menu_sidebar_dropdown") > 1) {
