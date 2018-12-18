@@ -28,7 +28,6 @@
 		</div>
 		<# } #>
 
-
 		<# if ( ! _.isUndefined( data.rows.bottom ) ) { #>
 		<div class="customify--row-bottom customify--cb-row" data-row-id="bottom" data-id="{{ data.id }}_bottom">
 			<a class="customify--cb-row-settings" title="{{ data.rows.bottom }}" data-id="bottom" href="#"></a>

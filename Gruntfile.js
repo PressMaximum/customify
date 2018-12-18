@@ -319,7 +319,39 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
-        }
+		},
+		
+		phpcs: {
+			application: {
+				src: [
+					'*.php',
+					'**/*.php',
+					'!node_modules/**',
+					'!php-tests/**',
+					'!bin/**',
+				]
+			},
+			options: {
+				bin: "phpcs",
+				standard: 'phpcs.xml'
+				//standard: 'WordPress'
+			}
+		},
+
+		phpcbf: {
+			options: {
+			  	bin:'phpcbf'
+			},
+			files: {
+				src: [
+					'*.php',
+					'**/*.php',
+					'!node_modules/**',
+					'!php-tests/**',
+					'!bin/**',
+				]
+			},
+		  },
 
     });
 
