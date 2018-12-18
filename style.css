@@ -4248,6 +4248,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   background-color: #fff;
   height: 2.4em;
   line-height: 2.4em;
+  overflow: hidden;
 }
 .header-search-form .search-form-fields {
   background-color: transparent;
@@ -4255,6 +4256,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   -ms-flex-preferred-size: 100%;
   flex-basis: 100%;
   display: flex;
+  border-style: none;
 }
 .header-search-form .search-field {
   border-color: transparent;
@@ -4274,6 +4276,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   background-color: transparent;
   flex: 1 1 auto;
   width: auto;
+  position: relative;
+  border-right: 1px solid #eee;
+  color: #6d6d6d;
 }
 .header-search-form button.search-submit {
   overflow: hidden;

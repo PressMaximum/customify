@@ -70,7 +70,10 @@
 	}
 }
 
+
+
 // Apply for all search form at header
+
 .header-search-form {
 	margin-bottom: 0px;
 	width: 100%;
@@ -83,12 +86,14 @@
 	background-color: #fff;
 	height: 2.4em;
 	line-height: 2.4em;
+	overflow:hidden;
 	.search-form-fields {
 		background-color: transparent;
 		min-height: auto;
 		-ms-flex-preferred-size: 100%;
 		flex-basis: 100%;
 		display: flex;
+		border-style:none;
 	}
 	.search-field {
 		border-color: transparent;
@@ -108,6 +113,9 @@
 		background-color: transparent;
 		flex: 1 1 auto;
 		width: auto;
+		position: relative;
+		border-right: 1px solid #eee;
+		color: #6d6d6d;
 	}
 	button.search-submit {
 		overflow: hidden;
