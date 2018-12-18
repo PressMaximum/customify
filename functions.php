@@ -8,7 +8,7 @@
  */
 
 /**
- *  Same hook for the_content
+ *  Same the hook `the_content`
  *
  * @TODO: do not effect content by plugins
  *
@@ -36,7 +36,7 @@ add_filter( 'customify_the_content', 'convert_smilies' );
 
 
 /**
- *  Same hook for the_content but not auto P
+ *  Same the hook `the_content` but not auto P
  *
  * @TODO: do not effect content by plugins
  *
