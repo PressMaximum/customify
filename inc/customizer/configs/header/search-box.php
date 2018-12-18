@@ -39,6 +39,11 @@ class Customify_Builder_Item_Search_Box {
 		// Render callback function.
 		$fn       = array( $this, 'render' );
 		$selector = ".header--row .header-{$this->id}-item";
+
+		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};}";
+		if ( is_rtl() ) {
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;}";
+		}
 		$config   = array(
 			array(
 				'name'  => $this->section,
@@ -55,6 +60,7 @@ class Customify_Builder_Item_Search_Box {
 				'render_callback' => $fn,
 				'label'           => __( 'Placeholder', 'customify' ),
 				'default'         => __( 'Search ...', 'customify' ),
+				'priority'        => 10,
 			),
 
 			array(
@@ -62,10 +68,11 @@ class Customify_Builder_Item_Search_Box {
 				'type'            => 'slider',
 				'device_settings' => true,
 				'section'         => $this->section,
-				'selector'        => "$selector .header-search-form",
+				'selector'        => "$selector .search-form-fields",
 				'css_format'      => 'width: {{value}};',
 				'label'           => __( 'Search Form Width', 'customify' ),
 				'description'     => __( 'Note: The width can not greater than grid width.', 'customify' ),
+				'priority'        => 15,
 			),
 
 			array(
@@ -76,9 +83,10 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 25,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .header-search-form .search-field",
+				'selector'        => "$selector .search-form-fields",
 				'css_format'      => 'height: {{value}};',
 				'label'           => __( 'Input Height', 'customify' ),
+				'priority'        => 20,
 			),
 
 			array(
@@ -92,6 +100,7 @@ class Customify_Builder_Item_Search_Box {
 				'selector'        => "$selector .search-submit svg",
 				'css_format'      => 'height: {{value}}; width: {{value}};',
 				'label'           => __( 'Icon Size', 'customify' ),
+				'priority'        => 25,
 			),
 
 			array(
@@ -116,19 +125,21 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => - 150,
 				'step'            => 1,
 				'max'             => 90,
-				'selector'        => "$selector .search-submit",
-				'css_format'      => 'margin-left: {{value}}; ',
+				'selector'        => 'format',
+				'css_format'      => $icon_postion_css,
 				'label'           => __( 'Icon Position', 'customify' ),
+				'priority'        => 30,
 			),
 
 			array(
 				'name'        => $this->section . '_font_size',
 				'type'        => 'typography',
 				'section'     => $this->section,
-				'selector'    => "$selector .header-search-form .search-field",
+				'selector'    => "$selector .search-form-fields",
 				'css_format'  => 'typography',
 				'label'       => __( 'Input Text Typography', 'customify' ),
 				'description' => __( 'Typography for search input', 'customify' ),
+				'priority'        => 35,
 			),
 
 			array(
@@ -139,9 +150,9 @@ class Customify_Builder_Item_Search_Box {
 				'title'       => __( 'Input Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
-					'normal'            => "{$selector} .search-field",
-					'hover'             => "{$selector} .search-field:focus",
-					'normal_text_color' => "{$selector} .search-field, {$selector} input.search-field::placeholder",
+					'normal'            => "{$selector} .search-form-fields",
+					'hover'             => "{$selector} .search-form-fields",
+					'normal_text_color' => "{$selector} .search-form-fields, {$selector} .search-form-fields input.search-field::placeholder",
 				),
 				'default'     => array(
 					'normal' => array(
@@ -166,6 +177,7 @@ class Customify_Builder_Item_Search_Box {
 						'border_radius' => false,
 					), // disable hover tab and all fields inside.
 				),
+				'priority'        => 40,
 			),
 
 			array(
@@ -198,6 +210,7 @@ class Customify_Builder_Item_Search_Box {
 						'border_radius' => false,
 					), // disable hover tab and all fields inside.
 				),
+				'priority'        => 45,
 			),
 
 		);
@@ -210,16 +223,41 @@ class Customify_Builder_Item_Search_Box {
 	 * Optional. Render item content
 	 */
 	function render() {
-
+		$form_extra_class = apply_filters( 'customify/builder_item/search-box/form_extra_class', array() );
 		$placeholder = Customify()->get_setting( $this->section . '_placeholder' );
 		$placeholder = sanitize_text_field( $placeholder );
+		/**
+		 * Hook: customify/builder_item/search-box/before_html
+		 *
+		 * @since 0.2.8
+		 */
+		do_action( 'customify/builder_item/search-box/before_html' );
+
 		echo '<div class="header-' . esc_attr( $this->id ) . '-item item--' . esc_attr( $this->id ) . '">';
 		?>
-		<form role="search" class="header-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
-			<label>
+		<form role="search" class="header-search-form <?php echo esc_attr( implode( ' ', $form_extra_class ) ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<div class="search-form-fields">
 				<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ); ?></span>
+				<?php
+				/**
+				 * Hook: customify/builder_item/search-box/html_content/before_input
+				 *
+				 * @since 0.2.8
+				 */
+				do_action( 'customify/builder_item/search-box/html_content/before_input' );
+				?>
+
 				<input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query(); ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ); ?>" />
-			</label>
+
+				<?php
+				/**
+				 * Hook: customify/builder_item/search-box/html_content/after_input
+				 *
+				 * @since 0.2.8
+				 */
+				do_action( 'customify/builder_item/search-box/html_content/after_input' );
+				?>
+			</div>
 			<button type="submit" class="search-submit">
 				<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
 					<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
@@ -228,6 +266,13 @@ class Customify_Builder_Item_Search_Box {
 		</form>
 		<?php
 		echo '</div>';
+
+		/**
+		 * Hook: customify/builder_item/search-box/after_html
+		 *
+		 * @since 0.2.8
+		 */
+		do_action( 'customify/builder_item/search-box/after_html' );
 	}
 }
 

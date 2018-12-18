@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.8\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-12-18 08:49:32+00:00\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
+"POT-Creation-Date: 2018-12-18 08:55:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -892,7 +892,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:103
 #: inc/customizer/configs/header/button.php:67
-#: inc/customizer/configs/header/search-box.php:121
+#: inc/customizer/configs/header/search-box.php:130
 #: inc/customizer/configs/header/search-icon.php:229
 msgid "Icon Position"
 msgstr ""
@@ -949,7 +949,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:225
 #: inc/customizer/configs/header/nav-icon.php:61
-#: inc/customizer/configs/header/search-box.php:94
+#: inc/customizer/configs/header/search-box.php:102
 #: inc/customizer/configs/header/search-icon.php:60
 #: inc/customizer/configs/header/search-icon.php:202
 msgid "Icon Size"
@@ -2032,52 +2032,52 @@ msgstr ""
 msgid "Search Box"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:56
+#: inc/customizer/configs/header/search-box.php:61
 #: inc/customizer/configs/header/search-icon.php:124
 msgid "Placeholder"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:57
+#: inc/customizer/configs/header/search-box.php:62
 #: inc/customizer/configs/header/search-icon.php:125
 msgid "Search ..."
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:67
+#: inc/customizer/configs/header/search-box.php:73
 msgid "Search Form Width"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:68
+#: inc/customizer/configs/header/search-box.php:74
 msgid "Note: The width can not greater than grid width."
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:81
+#: inc/customizer/configs/header/search-box.php:88
 #: inc/customizer/configs/header/search-icon.php:169
 msgid "Input Height"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:130
+#: inc/customizer/configs/header/search-box.php:140
 #: inc/customizer/configs/header/search-icon.php:188
 msgid "Input Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:131
+#: inc/customizer/configs/header/search-box.php:141
 #: inc/customizer/configs/header/search-icon.php:189
 msgid "Typography for search input"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:139
+#: inc/customizer/configs/header/search-box.php:150
 #: inc/customizer/configs/header/search-icon.php:237
 msgid "Input Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:140
-#: inc/customizer/configs/header/search-box.php:177
+#: inc/customizer/configs/header/search-box.php:151
+#: inc/customizer/configs/header/search-box.php:189
 #: inc/customizer/configs/header/search-icon.php:238
 #: inc/customizer/configs/header/search-icon.php:275
 msgid "Search input styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:176
+#: inc/customizer/configs/header/search-box.php:188
 #: inc/customizer/configs/header/search-icon.php:81
 #: inc/customizer/configs/header/search-icon.php:274
 msgid "Icon Styling"
@@ -3167,8 +3167,8 @@ msgctxt "Customify Pro upsell"
 msgid "Learn More"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:220
-#: inc/customizer/configs/header/search-box.php:221
+#: inc/customizer/configs/header/search-box.php:240
+#: inc/customizer/configs/header/search-box.php:250
 #: inc/customizer/configs/header/search-icon.php:331
 #: inc/customizer/configs/header/search-icon.php:332
 #: inc/template-functions.php:319 inc/template-functions.php:320
