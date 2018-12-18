@@ -384,9 +384,6 @@ var CustomizeBuilder_V2;
 					} );
 				} );
 
-				console.log( 'V2_that.controlId', that.controlId ); 
-				console.log( 'V2_saved', data ); 
-
 				wpcustomize
 					.control(that.controlId)
 					.setting.set(that.encodeValue(data));
@@ -482,7 +479,6 @@ var CustomizeBuilder_V2;
 				that.addExistingRowsItems();
 
 				if (wpcustomize.panel(options.panel).expanded()) {
-					console.log("open-builder:", options.panel);
 					that.showPanel();
 				} else {
 					that.hidePanel();
