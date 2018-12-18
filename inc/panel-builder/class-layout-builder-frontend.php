@@ -4,14 +4,14 @@
  *
  * @since 0.2.7
  */
-class Customify_Layout_Builder_Frontend {
+class Customify_Layout_Builder_Frontend extends Customify_Abstract_Layout_Frontend {
 	public static $_instance;
-	private $control_id = 'header_builder_panel';
-	public $id = 'header';
-	private $render_items = array();
-	private $rows = array();
-	private $data = false;
-	private $config_items = false;
+	protected $control_id = 'header_builder_panel';
+	protected $id = 'header';
+	protected $render_items = array();
+	protected $rows = array();
+	protected $data = false;
+	protected $config_items = false;
 
 	public function __construct() {
 
@@ -23,75 +23,6 @@ class Customify_Layout_Builder_Frontend {
 		}
 
 		return self::$_instance;
-	}
-
-	public function set_id( $id ) {
-		$this->id   = $id;
-		$this->data = null;
-	}
-
-	public function set_control_id( $id ) {
-		$this->control_id = $id;
-		$this->data       = null;
-	}
-
-	/**
-	 * Set config items
-	 *
-	 * @param array $config_items Config items.
-	 */
-	public function set_config_items( $config_items ) {
-		$this->config_items = $config_items;
-	}
-
-	/**
-	 * Get Panel Settings Data
-	 *
-	 * @return array|bool
-	 */
-	function get_settings() {
-		if ( $this->data ) {
-			return $this->data;
-		}
-		$data = Customify()->get_setting( $this->control_id );
-		$data = wp_parse_args(
-			$data,
-			array(
-				'desktop' => '',
-				'tablet'  => '',
-				'mobile'  => '',
-			)
-		);
-
-		foreach ( $data as $k => $v ) {
-			if ( ! is_array( $v ) ) {
-				$v = array();
-			}
-			$data[ $k ] = $v;
-		}
-
-		$this->data = $data;
-
-		return $data;
-	}
-
-	/**
-	 * Get settings for row
-	 *
-	 * @param string $row_id Row ID.
-	 * @param string $device Device ID.
-	 *
-	 * @return bool
-	 */
-	public function get_row_settings( $row_id, $device = 'desktop' ) {
-		$data = $this->get_settings();
-		if ( isset( $data[ $device ] ) ) {
-			if ( isset( $data[ $device ][ $row_id ] ) ) {
-				return ! empty( $data[ $device ][ $row_id ] ) ? $data[ $device ][ $row_id ] : false;
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -251,31 +182,6 @@ class Customify_Layout_Builder_Frontend {
 		array_multisort( $ordered_items, SORT_ASC, $items );
 
 		return $items;
-	}
-
-	/**
-	 * Setup Item content
-	 *
-	 * @todo Ensure item have not duplicate id
-	 *
-	 * @param string $content Content.
-	 * @param string $id      ID.
-	 * @param string $device  Device ID.
-	 *
-	 * @return mixed
-	 */
-	public function setup_item_content( $content, $id, $device ) {
-		$content = str_replace( '__id__', $id, $content );
-		$content = str_replace( '__device__', $device, $content );
-		/**
-		 *
-		 * Ensure only one H! tag for the site title
-		 *
-		 * @since 0.2.3
-		 */
-		$content = str_replace( '__site_device_tag__', 'desktop' == $device ? 'h1' : 'h2', $content );
-
-		return $content;
 	}
 
 	public function render_row( $items, $id = '', $device = 'desktop' ) {
@@ -644,26 +550,6 @@ class Customify_Layout_Builder_Frontend {
 		}
 	}
 
-	/**
-	 * Close item HTML markup
-	 *
-	 * @param string $class Icon class.
-	 *
-	 * @return string
-	 */
-	public function close_icon( $class = '' ) {
-		$menu_sidebar_skin = Customify()->get_setting( 'header_sidebar_text_mode' );
-		$close             = '<a class="close is-size-medium ' . $menu_sidebar_skin . esc_attr( $class ) . '" href="#">
-        <span class="hamburger hamburger--squeeze is-active">
-            <span class="hamburger-box">
-              <span class="hamburger-inner"><span class="screen-reader-text">' . __( 'Menu', 'customify' ) . '</span></span>
-            </span>
-        </span>
-        <span class="screen-reader-text">' . __( 'Close', 'customify' ) . '</span>
-        </a>';
-
-		return $close;
-	}
 }
 
 

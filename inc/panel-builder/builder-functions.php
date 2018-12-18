@@ -46,15 +46,11 @@ function customify_customize_render_header() {
 	do_action( 'customizer/before-header' );
 	echo '<header id="masthead" class="site-header">';
 		echo '<div id="masthead-inner" class="site-header-inner">';
-			// echo '<pre>';
-			// echo json_encode( get_theme_mod( $control_id ), JSON_PRETTY_PRINT );
-			// echo '</pre>';
 			$builder->set_id( 'header' );
 			$builder->set_control_id( $control_id );
 			$builder->set_config_items( $list_items );
 			$builder->render();
 			$builder->render_mobile_sidebar();
-
 		echo '</div>';
 	echo '</header>';
 	/**
