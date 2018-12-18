@@ -82,7 +82,8 @@ class Customify_Editor {
 		$css .= '.edit-post-layout__content .edit-post-layout__metaboxes { background: #FFF; }
 		.edit-post-layout__metaboxes:not(:empty) { margin-top: 0px; }
 		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
-		.editor-styles-wrapper textarea.editor-post-title__input:focus { background: none; }
+		.editor-styles-wrapper textarea.editor-post-title__input:focus,
+		.block-editor-page .editor-styles-wrapper button { background: none; }
 		';
 		return $css;
 	}

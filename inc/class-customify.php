@@ -366,6 +366,7 @@ class Customify {
 				'Customify_JS',
 				array(
 					'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries,
+					'sidebar_menu_no_duplicator' => Customify()->get_setting( 'header_sidebar_menu_no_duplicator' ),
 				)
 			)
 		);

@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.2.6\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/style\n"
-"POT-Creation-Date: 2018-12-07 03:27:58+00:00\n"
+"Project-Id-Version: Customify 0.2.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
+"POT-Creation-Date: 2018-12-18 09:07:58+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -97,7 +97,7 @@ msgstr ""
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:185 inc/compatibility/breadcrumb.php:201
+#: inc/admin/dashboard.php:185 inc/compatibility/breadcrumb.php:209
 #: inc/compatibility/woocommerce/config/catalog-designer.php:395
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
@@ -108,7 +108,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:189 inc/compatibility/breadcrumb.php:191
+#: inc/admin/dashboard.php:189 inc/compatibility/breadcrumb.php:199
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:346
 #: inc/customizer/configs/header/button.php:96
@@ -542,8 +542,8 @@ msgstr ""
 msgid "Disable Footer Bottom"
 msgstr ""
 
-#: inc/class-metabox.php:103 inc/compatibility/breadcrumb.php:176
-#: inc/compatibility/breadcrumb.php:181
+#: inc/class-metabox.php:103 inc/compatibility/breadcrumb.php:184
+#: inc/compatibility/breadcrumb.php:189
 #: inc/customizer/configs/page-header.php:237
 #: inc/customizer/configs/page-header.php:248
 msgid "Display"
@@ -565,7 +565,7 @@ msgid "Hide"
 msgstr ""
 
 #: inc/class-metabox.php:121 inc/class-metabox.php:127
-#: inc/compatibility/breadcrumb.php:78
+#: inc/compatibility/breadcrumb.php:86
 msgid "Breadcrumb"
 msgstr ""
 
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Customify Settings"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:83
+#: inc/compatibility/breadcrumb.php:91
 msgid ""
 "Customify theme support <a target=\"_blank\" "
 "href=\"https://wordpress.org/plugins/breadcrumb-navxt/\">Breadcrumb "
@@ -587,76 +587,76 @@ msgid ""
 "displayed after you installed and activated it."
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:98
+#: inc/compatibility/breadcrumb.php:106
 msgid "Display Position"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:102
+#: inc/compatibility/breadcrumb.php:110
 msgid "After header"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:103
+#: inc/compatibility/breadcrumb.php:111
 msgid "Inside cover/titlebar"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:104
+#: inc/compatibility/breadcrumb.php:112
 msgid "Before site main"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:113
+#: inc/compatibility/breadcrumb.php:121
 msgid "Hide on index"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:118
+#: inc/compatibility/breadcrumb.php:126
 msgid "Hide on categories"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:123
+#: inc/compatibility/breadcrumb.php:131
 msgid "Hide on search"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:128
+#: inc/compatibility/breadcrumb.php:136
 msgid "Hide on archive"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:133
+#: inc/compatibility/breadcrumb.php:141
 msgid "Hide on single page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:138
+#: inc/compatibility/breadcrumb.php:146
 msgid "Hide on single post"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:143
+#: inc/compatibility/breadcrumb.php:151
 msgid "Hide on singular"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:148
+#: inc/compatibility/breadcrumb.php:156
 msgid "Hide on 404 page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:157
+#: inc/compatibility/breadcrumb.php:165
 msgid "Hide on product page"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:162
+#: inc/compatibility/breadcrumb.php:170
 msgid "Hide on product category"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:167
+#: inc/compatibility/breadcrumb.php:175
 msgid "Hide on product tag"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:177
+#: inc/compatibility/breadcrumb.php:185
 #: inc/customizer/configs/page-header.php:238
 msgid "Settings display for special pages."
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:192
+#: inc/compatibility/breadcrumb.php:200
 msgid "Typography for breadcrumb"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:202
+#: inc/compatibility/breadcrumb.php:210
 msgid "Styling for breadcrumb"
 msgstr ""
 
@@ -892,7 +892,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:103
 #: inc/customizer/configs/header/button.php:67
-#: inc/customizer/configs/header/search-box.php:121
+#: inc/customizer/configs/header/search-box.php:130
 #: inc/customizer/configs/header/search-icon.php:229
 msgid "Icon Position"
 msgstr ""
@@ -949,7 +949,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:225
 #: inc/customizer/configs/header/nav-icon.php:61
-#: inc/customizer/configs/header/search-box.php:94
+#: inc/customizer/configs/header/search-box.php:102
 #: inc/customizer/configs/header/search-icon.php:60
 #: inc/customizer/configs/header/search-icon.php:202
 msgid "Icon Size"
@@ -2032,52 +2032,52 @@ msgstr ""
 msgid "Search Box"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:56
+#: inc/customizer/configs/header/search-box.php:61
 #: inc/customizer/configs/header/search-icon.php:124
 msgid "Placeholder"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:57
+#: inc/customizer/configs/header/search-box.php:62
 #: inc/customizer/configs/header/search-icon.php:125
 msgid "Search ..."
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:67
+#: inc/customizer/configs/header/search-box.php:73
 msgid "Search Form Width"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:68
+#: inc/customizer/configs/header/search-box.php:74
 msgid "Note: The width can not greater than grid width."
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:81
+#: inc/customizer/configs/header/search-box.php:88
 #: inc/customizer/configs/header/search-icon.php:169
 msgid "Input Height"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:130
+#: inc/customizer/configs/header/search-box.php:140
 #: inc/customizer/configs/header/search-icon.php:188
 msgid "Input Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:131
+#: inc/customizer/configs/header/search-box.php:141
 #: inc/customizer/configs/header/search-icon.php:189
 msgid "Typography for search input"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:139
+#: inc/customizer/configs/header/search-box.php:150
 #: inc/customizer/configs/header/search-icon.php:237
 msgid "Input Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:140
-#: inc/customizer/configs/header/search-box.php:177
+#: inc/customizer/configs/header/search-box.php:151
+#: inc/customizer/configs/header/search-box.php:189
 #: inc/customizer/configs/header/search-icon.php:238
 #: inc/customizer/configs/header/search-icon.php:275
 msgid "Search input styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:176
+#: inc/customizer/configs/header/search-box.php:188
 #: inc/customizer/configs/header/search-icon.php:81
 #: inc/customizer/configs/header/search-icon.php:274
 msgid "Icon Styling"
@@ -3167,8 +3167,8 @@ msgctxt "Customify Pro upsell"
 msgid "Learn More"
 msgstr ""
 
-#: inc/customizer/configs/header/search-box.php:220
-#: inc/customizer/configs/header/search-box.php:221
+#: inc/customizer/configs/header/search-box.php:240
+#: inc/customizer/configs/header/search-box.php:250
 #: inc/customizer/configs/header/search-icon.php:331
 #: inc/customizer/configs/header/search-icon.php:332
 #: inc/template-functions.php:319 inc/template-functions.php:320

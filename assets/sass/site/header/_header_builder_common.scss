@@ -319,6 +319,17 @@
 	}
 }
 
+#masthead{
+    > .customize-partial-edit-shortcut {
+        &.customize-partial-edit-shortcut-header_builder_panel {
+            display: none;
+        }
+        button {
+            left: 0px;
+        }
+    }
+}
+
 .col-v2-left {
 	.item--inner {
 		margin-right: 1em;
@@ -327,4 +338,3 @@
 		}
 	}
 }
-

@@ -1,3 +1,15 @@
+= 0.2.8 =
+* FIXED: Breadcrumb alignment.
+* FIXED: Gutenberg compatible.
+* FIXED: Update WooCommerce outdate templates.
+* FIXED: Can't zoom on Chrome mobile browser.
+* FIXED: Seach icon box issue.
+
+
+= 0.2.7 =
+* FIXED: Issue do not copy parent menu to submenu.
+* FIXED: Issue Heading H1 does not apply for entry post title.
+
 = 0.2.6 =
 * NEW: Support WordPress 5.0.
 * NEW: Support Gutenberg.
