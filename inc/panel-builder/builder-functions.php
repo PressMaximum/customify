@@ -1,4 +1,24 @@
 <?php
+/**
+ * Maybe Header builder version.
+ * Beacause the version 2 easier to use than version 1.
+ * You can swicth to version whenever you want by manual.
+ *
+ * @TODO: Change header builder to version 2
+ *
+ * @since 0.2.7
+ */
+function customify_maybe_change_header_version() {
+	$current_ver = get_theme_mod( 'header_builder_version' );
+	if ( 'v2' == $current_ver ) {
+		return;
+	}
+	$ver1_data = get_theme_mod( 'header_builder_panel' );
+	// If data of version 1 do not exists.
+	if ( ! $ver1_data || empty( $ver1_data ) ) {
+		set_theme_mod( 'header_builder_version', 'v2' );
+	}
+}
 
 /**
  * Display Header Layout
@@ -11,6 +31,7 @@ function customify_customize_render_header() {
 	/**
 	 * @since 0.2.7
 	 */
+	customify_maybe_change_header_version();
 	$config = Customify_Customize_Layout_Builder()->get_builder( 'header' )->get_config();
 	$control_id = 'header_builder_panel';
 	$version = false;

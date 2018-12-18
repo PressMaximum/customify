@@ -251,7 +251,6 @@ var CustomizeBuilder_V2;
 				col = $( '.col-items.col-'+col_id, row );
 
 				var $item = $( '.customify-available-items .grid-stack-item[data-id="'+node.id+'"]', panel );
-				console.log( $item );
 
 				col.append($item);
 			},
@@ -262,17 +261,16 @@ var CustomizeBuilder_V2;
 				if (!_.isObject(data)) {
 					data = {};
 				}
-				console.log( 'V2_saved_data', data );
-
+				
 				_.each( that.devices, function( device_label, device ){
 					var device_data = {};
 					if (_.isObject(data[device])) {
 						device_data = data[device];
 					}
-					console.log( 'device_data', device_data );
+				
 					_.each(device_data, function(cols, row_id) {
 						if (!_.isUndefined(cols)) {
-							console.log( 'cols', cols );
+						
 							_.each(cols, function( items, col_id ) {
 								_.each( items, function(node, index ){
 									that.addNewWidget( device, row_id, col_id, node, index );
