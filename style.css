@@ -4182,6 +4182,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   line-height: 0px;
   cursor: pointer;
 }
+.item--search_icon .header-search-form {
+  height: auto;
+  line-height: inherit;
+}
 
 .search-icon {
   line-height: 0px;
@@ -4279,6 +4283,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   position: relative;
   border-right: 1px solid #eee;
   color: #6d6d6d;
+  border-top: 0 !important;
+  border-left: 0 !important;
+  border-bottom: 0 !important;
 }
 .header-search-form button.search-submit {
   overflow: hidden;

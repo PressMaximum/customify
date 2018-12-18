@@ -5,6 +5,11 @@
 .item--search_icon {
 	line-height: 0px;
 	cursor: pointer;
+
+	.header-search-form{
+		height: auto;
+		line-height: inherit;
+	}
 }
 .search-icon {
 	line-height: 0px;
@@ -116,6 +121,9 @@
 		position: relative;
 		border-right: 1px solid #eee;
 		color: #6d6d6d;
+		border-top:0!important;
+		border-left:0!important;
+		border-bottom:0!important;
 	}
 	button.search-submit {
 		overflow: hidden;

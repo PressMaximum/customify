@@ -39,6 +39,11 @@ class Customify_Builder_Item_Search_Box {
 		// Render callback function.
 		$fn       = array( $this, 'render' );
 		$selector = ".header--row .header-{$this->id}-item";
+
+		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};}";
+		if ( is_rtl() ) {
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;}";
+		}
 		$config   = array(
 			array(
 				'name'  => $this->section,
@@ -120,8 +125,8 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => - 150,
 				'step'            => 1,
 				'max'             => 90,
-				'selector'        => "$selector .search-submit",
-				'css_format'      => 'margin-left: {{value}}; ',
+				'selector'        => 'format',
+				'css_format'      => $icon_postion_css,
 				'label'           => __( 'Icon Position', 'customify' ),
 				'priority'        => 30,
 			),
