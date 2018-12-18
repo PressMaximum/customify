@@ -1,6 +1,8 @@
 = 0.2.8 =
 * FIXED: Issue Breadcrumb alignment.
 * FIXED: Issue Gutenberg button compatible.
+* FIXED: Update WooCommerce outdate templates.
+* FIXED: Issue can't zoom on Chrome mobile browser.
 
 
 = 0.2.7 =
