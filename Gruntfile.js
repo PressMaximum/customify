@@ -180,8 +180,8 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
-        },
-
+		},
+		
         // Watch changes for assets.
         watch: {
             css: {
@@ -328,10 +328,9 @@ module.exports = function( grunt ) {
     grunt.loadNpmTasks( 'grunt-contrib-watch' );
     grunt.loadNpmTasks( 'grunt-postcss' );
     grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
+	grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rtlcss');
-
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');

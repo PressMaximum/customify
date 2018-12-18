@@ -3,6 +3,7 @@
 * FIXED: Issue Gutenberg button compatible.
 * FIXED: Update WooCommerce outdate templates.
 * FIXED: Issue can't zoom on Chrome mobile browser.
+* FIXED: Seach icon box issue.
 
 
 = 0.2.7 =
