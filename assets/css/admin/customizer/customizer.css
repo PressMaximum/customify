@@ -542,6 +542,7 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 
 .customify--gr-inputs {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
   margin-left: -2px;
   margin-right: -2px;
@@ -565,6 +566,7 @@ html[dir="rtl"] .customify--css-unit label:first-child {
   cursor: pointer;
   width: 25px;
   -webkit-box-flex: 0;
+  -webkit-flex: none;
           flex: none;
   position: relative;
 }
@@ -712,10 +714,12 @@ html[dir="rtl"] .customify-input-slider .ui-slider-range {
 
 .customify--icon-picker {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
 }
 .customify--icon-picker .customify--icon-preview {
   -webkit-box-flex: 1;
+  -webkit-flex: 1;
           flex: 1;
   border: 1px solid #ddd;
   border-right: 0px;
@@ -751,6 +755,7 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-preview {
 .customify--icon-picker .customify--icon-remove {
   cursor: pointer;
   -webkit-box-flex: 1;
+  -webkit-flex: 1;
           flex: 1;
   border: 1px solid #ddd;
   border-left: 0px;
@@ -907,11 +912,14 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
 
 .custom-control-image_select .customify-radio-list {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
-  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+          flex-wrap: wrap;
 }
 .custom-control-image_select .customify-radio-list > p {
-  flex-basis: 33.333%;
+  -webkit-flex-basis: 33.333%;
+          flex-basis: 33.333%;
 }
 .custom-control-image_select .customify-radio-list > p label {
   position: relative;
@@ -945,10 +953,12 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
  */
 .custom-control-radio_group .customify-radio-list {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
 }
 .custom-control-radio_group .customify-radio-list p {
   -webkit-box-flex: 1;
+  -webkit-flex: 1;
           flex: 1;
 }
 .custom-control-radio_group .customify-radio-list p:last-child span.label {
@@ -1170,6 +1180,7 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
 
 .modal--tabs {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
   margin-left: -12px;
   margin-right: -12px;
@@ -1177,7 +1188,8 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
   margin-bottom: 15px;
 }
 .modal--tabs div {
-  flex-basis: 100%;
+  -webkit-flex-basis: 100%;
+          flex-basis: 100%;
   max-width: 100%;
   text-align: center;
   padding: 5px 5px 0px;
@@ -1842,13 +1854,15 @@ html[dir="rtl"] .customify--cb-row .customify--cb-row-settings {
   width: 100%;
   z-index: 1;
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
   bottom: 0px;
 }
 .customify--cb-row .customify--row-inner .row--grid div {
   border-right: 1px dashed #dddddd;
   width: 8.3333333333%;
-  flex-basis: 8.3333333333%;
+  -webkit-flex-basis: 8.3333333333%;
+          flex-basis: 8.3333333333%;
   max-width: 8.3333333333%;
   display: block;
 }
@@ -3359,6 +3373,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 /* Saved templates */
 .save-template-form, .flex-form {
   display: -webkit-box;
+  display: -webkit-flex;
   display: flex;
   margin-bottom: 15px;
 }
