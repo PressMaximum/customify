@@ -23,7 +23,7 @@
 				
 				if (select_options) {
 					var $select_options = $(
-						'<select class="builder-version-change button-secondary">' +
+						'<select class="builder-version-change button-primary">' +
 							select_options +
 							"</select>"
 					);
