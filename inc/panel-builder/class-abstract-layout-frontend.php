@@ -6,7 +6,7 @@
  */
 abstract class Customify_Abstract_Layout_Frontend {
 	protected $control_id = 'header_builder_panel';
-	protected $id = 'header';
+	public $id = 'header';
 	protected $render_items = array();
 	protected $rows = array();
 	protected $data = false;

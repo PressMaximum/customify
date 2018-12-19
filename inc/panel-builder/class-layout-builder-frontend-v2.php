@@ -7,7 +7,7 @@
 class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Frontend {
 	public static $_instance;
 	protected $control_id = 'header_builder_panel_v2';
-	protected $id = 'header';
+	public $id = 'header';
 	protected $render_items = null;
 	protected $rows = array();
 	protected $flag_cols = array();

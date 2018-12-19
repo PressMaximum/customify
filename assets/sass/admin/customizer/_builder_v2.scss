@@ -16,12 +16,13 @@
 
 	.col-items {
 		background: #ffffff;
-		min-height: 37px;
+		min-height: 34px;
 		height: 100%;
 		display: inline-block;
 		border: 1px solid #ddd;
 		text-align: left;
 		display: block;
+		padding: 0 0 2px;
 		&.col-center {
 			text-align: center; 
 		}
@@ -31,7 +32,7 @@
 	}
 
 	.grid-stack-item {
-		height: 36px;
+		height: 25px;
 		padding: 3px;
 		.customify--cb-item-setting {
 			display: none;
@@ -39,18 +40,20 @@
 		.customify--cb-item-remove {
 			right: 4px;
 			padding: 0px 3px;
-			margin-top: 3px;
+			margin-top: 1px;
+			max-height: 100%;
 			&::before {
 				font-size: 16px;
+				line-height: 22px;
 			}
 		}
 	}
 	
 	.customify--cb-row {
 		.customify--cb-item-name {
-			line-height: 26px;
+			line-height: 22px;
 			text-align: left;
-			padding-right: 15px;
+			padding-right: 12px;
 		}
 	}
 
@@ -65,9 +68,9 @@
 		.grid-stack-item {
 			display: block;
 			width: 100%;
-			margin: 2px 0px 4px;
+			margin: 2px 0px 2px;
 			&:last-child {
-				margin-bottom: 8px;
+				margin-bottom: 2px;
 			}
 			&.sortable-placeholder { 
 				margin-left: 4px;
@@ -82,7 +85,7 @@
 
 	.sortable-placeholder {
 		background: #f5f5f5;
-		height: 27px;
+		height: 22px;
 		display: inline-block;
 		width: 50px;
 		margin-top: 4px;
