@@ -3708,8 +3708,14 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
   display: none;
 }
 
+.customify--panel-v2 .customify-available-items .grid-stack-item-content {
+  margin-right: 2px;
+}
 .customify--panel-v2 .customify--cb-row .customify--cb-row-settings {
-  top: -2px;
+  top: 0px;
+}
+.customify--panel-v2 .customify--cb-row .customify--cb-row-settings:before {
+  top: -7px;
 }
 .customify--panel-v2 .customify--row-inner {
   display: flex;
