@@ -26,6 +26,9 @@
 		display: inline-block;
 		border: 1px solid #ddd;
 		text-align: left;
+		@include rtl(){
+			text-align: right;
+		}
 		display: block;
 		padding: 0 0 2px;
 		&.col-center {
@@ -33,6 +36,9 @@
 		}
 		&.col-right {
 			text-align: right; 
+			@include rtl(){
+				text-align: left;
+			}
 		}
 	}
 	.grid-stack-item {
@@ -50,6 +56,9 @@
 				font-size: 16px;
 				line-height: 22px;
 			}
+			@include rtl(){
+				left: 4px;
+			}
 		}
 	}
 	.customify--cb-row {
@@ -57,6 +66,11 @@
 			line-height: 22px;
 			text-align: left;
 			padding-right: 12px;
+			@include rtl(){
+				text-align: right;
+				padding-left: 13px;
+				padding-right: 0px;
+			}
 		}
 	}
 	.grid-stack-item {

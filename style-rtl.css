@@ -4118,7 +4118,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .col-v2-left .item--inner {
   margin-left: 1em;
 }
-.col-v2-left .item--inner:first-child {
+.col-v2-left .item--inner:last-child {
   margin-left: 0px;
 }
 

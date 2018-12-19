@@ -167,7 +167,7 @@ $cb_padding: 20px;
 			float: left;
 		}
 		margin-top: -1px;
-		a {
+		> * {
 			display: inline-block;
 			margin-left: 10px;
 		}
@@ -383,6 +383,9 @@ $cb_padding: 20px;
 	}
 	.grid-stack-item {
 		float: left;
+		@include rtl(){
+			float: right;
+		}
 		width: auto !important;
 		.item-tooltip {
 			display: none;
