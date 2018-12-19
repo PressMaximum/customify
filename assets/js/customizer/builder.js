@@ -328,7 +328,7 @@
 		}
 	);
 
-	$document.on("mouseover", ".customify--cb-row .grid-stack-item", function(
+	$document.on("mouseover", ".customify--cb-row .grid-stack-item:not(.no-tooltip)", function(
 		e
 	) {
 		var item = $(this);
@@ -341,9 +341,10 @@
 		}
 	});
 
-	$document.on("mouseleave", ".customify--cb-row .grid-stack-item", function(
+	$document.on("mouseleave", ".customify--cb-row .grid-stack-item:not(.no-tooltip)", function(
 		e
 	) {
 		$(this).removeClass("show-tooltip");
 	});
+
 })(jQuery, wp.customize || null);
