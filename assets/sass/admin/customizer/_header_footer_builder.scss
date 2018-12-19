@@ -170,6 +170,9 @@ $cb_padding: 20px;
 		> * {
 			display: inline-block;
 			margin-left: 10px;
+			&:last-child {
+				margin-left: 0px;
+			}
 		}
 		.builder-version-change {
 			text-transform: uppercase;

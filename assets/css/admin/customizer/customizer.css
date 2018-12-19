@@ -1744,6 +1744,9 @@ html[dir="rtl"] .customify--cb-header .customify--cb-actions {
   display: inline-block;
   margin-left: 10px;
 }
+.customify--cb-header .customify--cb-actions > *:last-child {
+  margin-left: 0px;
+}
 .customify--cb-header .customify--cb-actions .builder-version-change {
   text-transform: uppercase;
 }
