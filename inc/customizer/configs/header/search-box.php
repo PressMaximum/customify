@@ -40,9 +40,9 @@ class Customify_Builder_Item_Search_Box {
 		$fn       = array( $this, 'render' );
 		$selector = ".header-{$this->id}-item";
 
-		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};}";
+		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};} $selector .header-search-form button.search-submit{margin-left:{{value}};}";
 		if ( is_rtl() ) {
-			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;}";
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;} .rtl $selector .header-search-form button.search-submit{margin-left: {{value}};margin-left:auto;}";
 		}
 		$config   = array(
 			array(
@@ -83,7 +83,7 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 25,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .search-form-fields",
+				'selector'        => "$selector .search-form-fields, $selector .search-form-fields .search-field",
 				'css_format'      => 'height: {{value}};',
 				'label'           => __( 'Input Height', 'customify' ),
 				'priority'        => 20,
@@ -97,7 +97,7 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 5,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .search-submit svg",
+				'selector'        => "$selector .search-submit svg,$selector .header-search-form button.search-submit svg",
 				'css_format'      => 'height: {{value}}; width: {{value}};',
 				'label'           => __( 'Icon Size', 'customify' ),
 				'priority'        => 25,
@@ -156,7 +156,7 @@ class Customify_Builder_Item_Search_Box {
 				),
 				'default'     => array(
 					'normal' => array(
-						'border_style' => 'solid',
+						'border_style' => 'none',
 					),
 				),
 				'fields'      => array(

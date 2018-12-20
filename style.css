@@ -5526,6 +5526,10 @@ body.menu_sidebar_dropdown:before {
   transform: translateY(0);
 }
 
+.mobile-item--search_box .search-form-fields {
+  width: 100%;
+}
+
 .cb-row--mobile {
   padding: 0 0.5em 0;
 }
