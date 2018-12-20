@@ -196,7 +196,6 @@
 		wp.customize.selectiveRefresh.bind("partial-content-rendered", function(
 			settings
 		) {
-			console.log("settings.partial.id", settings.partial.id);
 			$document.trigger("selective-refresh-content-rendered", [
 				settings.partial.id
 			]);
