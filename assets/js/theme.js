@@ -771,7 +771,12 @@ if (!Element.prototype.closest) {
 		document.addEventListener(
 			"selective-refresh-content-rendered",
 			function(e) {
-				if (e.detail === "customify_customize_render_header") {
+				if ( 'customify_customize_render_header' === e.detail ) {
+					this.initMobieSearchForm();
+					this.initMobileSubMenu();
+					this.insertMenuOverlayClass();
+					this.setupMobileItemAnimations();
+					this.initMenuSidebar();
 					this.initSearchForm();
 				}
 			}.bind(this)
