@@ -5,7 +5,7 @@
 	wpcustomize.bind("ready", function(e, b) {
 		var addVersionChange = function(opts, builder, id, version) {
 			if (typeof opts.versions === "object") {
-				var select_options = "";
+				var select_options = '';
 				$.each(opts.versions, function(key, _opts) {
 					var seleced = "";
 					if (key === version) {
@@ -23,16 +23,16 @@
 				
 				if (select_options) {
 					var $select_options = $(
-						'<select class="builder-version-change button-primary">' +
+						'<span class="customify-swicth-version button-primary"><span>'+Customify_Layout_Builder.swicth_version+'</span><select class="builder-version-change ">' +
 							select_options +
-							"</select>"
+							"</select></span>"
 					);
 					$(".customify--cb-actions", builder.container).prepend(
 						$select_options
 					);
 				}
 
-				$select_options.on("change", function() {
+				$select_options.on("change", 'select', function() {
 					var newVer = $(this).val();
 					if ( customifyPanels[id + version] ) {
 						customifyPanels[id + version].container.hide();
@@ -51,7 +51,7 @@
 					
 					var control = wpcustomize.control(opts.version_id);
 					control.setting.set( newVer );
-					// Dispacth to conditional
+					// Dispacth to conditional.
 					$document.trigger("customify/customizer/value_changed" );
 					
 					if ( customifyPanels[id + newVer] ) {

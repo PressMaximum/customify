@@ -356,6 +356,7 @@ class Customify_Customize_Layout_Builder {
 				'builders'                  => $this->get_builders(),
 				'is_rtl'                    => is_rtl(),
 				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
+				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
 			)
 		);
 	}
