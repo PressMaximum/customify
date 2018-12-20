@@ -2,7 +2,7 @@
 /**
  * Builder frontemd class
  *
- * @since 0.2.7
+ * @since 0.2.9
  */
 class Customify_Layout_Builder_Frontend extends Customify_Abstract_Layout_Frontend {
 	public static $_instance;

@@ -6,7 +6,7 @@
  *
  * @TODO: Change header builder to version 2
  *
- * @since 0.2.7
+ * @since 0.2.9
  */
 function customify_maybe_change_header_version() {
 	$current_ver = get_theme_mod( 'header_builder_version' );
@@ -29,7 +29,7 @@ function customify_customize_render_header() {
 	}
 
 	/**
-	 * @since 0.2.7
+	 * @since 0.2.9
 	 */
 	customify_maybe_change_header_version();
 	$config = Customify_Customize_Layout_Builder()->get_builder( 'header' )->get_config();

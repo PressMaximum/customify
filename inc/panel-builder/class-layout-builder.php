@@ -62,7 +62,7 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get builder class
 	 *
-	 * @since 0.2.7
+	 * @since 0.2.9
 	 *
 	 * @param string $builder_id
 	 * @return object|bool

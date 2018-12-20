@@ -2,7 +2,7 @@
 /**
  * Customify builder init
  *
- * @since 0.2.7
+ * @since 0.2.9
  * @package customify
  */
 class Customify_Panel_Builder {

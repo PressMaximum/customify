@@ -2,7 +2,7 @@
 /**
  * Builder frontemd class
  *
- * @since 0.2.7
+ * @since 0.2.9
  */
 class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Frontend {
 	public static $_instance;
@@ -29,7 +29,7 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 	/**
 	 * Render builder items.
 	 *
-	 * @since 0.2.7
+	 * @since 0.2.9
 	 *
 	 * @param string $item_id
 	 * @param string $col_id

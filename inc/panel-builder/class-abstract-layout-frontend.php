@@ -2,7 +2,7 @@
 /**
  * Abstract class builder frontend
  *
- * @since 0.2.7
+ * @since 0.2.9
  */
 abstract class Customify_Abstract_Layout_Frontend {
 	protected $control_id = 'header_builder_panel';

@@ -7,7 +7,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 	 * Panel builder configs.
 	 *
 	 * @since 0.0.1
-	 * @since 0.2.7
+	 * @since 0.2.9
 	 *
 	 * @return array
 	 */
@@ -394,7 +394,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 			/**
 			 * Apply for version 1 only
 			 *
-			 * @since 0.2.7
+			 * @since 0.2.9
 			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_align',
@@ -411,7 +411,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 			/**
 			 * Apply for version 1 only
 			 *
-			 * @since 0.2.7
+			 * @since 0.2.9
 			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_merge',
