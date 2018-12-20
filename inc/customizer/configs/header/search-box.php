@@ -44,6 +44,12 @@ class Customify_Builder_Item_Search_Box {
 		if ( is_rtl() ) {
 			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;} .rtl $selector .header-search-form button.search-submit{margin-left: {{value}};margin-left:auto;}";
 		}
+
+		$_font_size_default_border = 'none';
+		if ( function_exists( 'Customify_Pro' ) && Customify_Pro()->is_enabled_module( 'Customify_Pro_Module_WooCommerce_Booster' ) ) {
+			$_font_size_default_border = 'solid';
+		}
+
 		$config   = array(
 			array(
 				'name'  => $this->section,
@@ -156,7 +162,7 @@ class Customify_Builder_Item_Search_Box {
 				),
 				'default'     => array(
 					'normal' => array(
-						'border_style' => 'none',
+						'border_style' => $_font_size_default_border,
 					),
 				),
 				'fields'      => array(
