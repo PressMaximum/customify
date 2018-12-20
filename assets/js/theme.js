@@ -619,11 +619,23 @@ if (!Element.prototype.closest) {
 			var buttonOffset = button.getBoundingClientRect();
 			this.removeClass(container, "search-right search-left");
 			if (buttonOffset.left > w / 2) {
-				this.removeClass(container, "search-right");
-				this.addClass(container, "search-left");
+				if ( Customify_JS.is_rtl ) {
+					this.removeClass(container, "search-left");
+					this.addClass(container, "search-right");
+				} else {
+					this.removeClass(container, "search-right");
+					this.addClass(container, "search-left");
+				}
+				
 			} else {
-				this.removeClass(container, "search-left");
-				this.addClass(container, "search-right");
+				if ( Customify_JS.is_rtl ) {
+					this.removeClass(container, "search-right");
+					this.addClass(container, "search-left");
+				} else {
+					this.removeClass(container, "search-left");
+					this.addClass(container, "search-right");
+				}
+				
 			}
 		}
 	};
@@ -676,9 +688,7 @@ if (!Element.prototype.closest) {
 				}.bind(that)
 			);
 
-
 		} );
-		
 
 		that.searchFormAutoAlign();
 	};
