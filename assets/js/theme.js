@@ -780,12 +780,15 @@ if (!Element.prototype.closest) {
 				console.log("e.detail", e.detail);
 
 				if ("customify_customize_render_header" === e.detail) {
+					var oldMenu =  document.querySelector( 'body > .header-menu-sidebar' );
+					oldMenu.remove();
 					this.initMobieSearchForm();
 					this.initMobileSubMenu();
 					this.insertMenuOverlayClass();
 					this.setupMobileItemAnimations();
 					this.initMenuSidebar();
 					this.initSearchForm();
+					console.log( 'header_change' );
 				}
 
 				if ("Customify_Builder_Item_Search_Icon__render" === e.detail) {

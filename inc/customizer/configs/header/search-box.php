@@ -38,7 +38,7 @@ class Customify_Builder_Item_Search_Box {
 	function customize() {
 		// Render callback function.
 		$fn       = array( $this, 'render' );
-		$selector = ".header--row .header-{$this->id}-item";
+		$selector = ".header-{$this->id}-item";
 
 		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};}";
 		if ( is_rtl() ) {
