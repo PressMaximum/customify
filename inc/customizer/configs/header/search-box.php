@@ -153,8 +153,14 @@ class Customify_Builder_Item_Search_Box {
 				'selector'    => array(
 					'normal'            => "{$selector} .search-form-fields",
 					'hover'             => "{$selector} .search-form-fields",
-					'normal_text_color' => "{$selector} .search-form-fields, {$selector} .search-form-fields input.search-field::placeholder, .dark-mode {$selector} .search-form-fields .search-field, .dark-mode {$selector} .search-form-fields .search-field::placeholder",
-
+					'normal_text_color' => "{$selector} .search-form-fields,
+											{$selector} .search-form-fields input.search-field::placeholder,
+											.dark-mode {$selector} .search-form-fields .search-field,
+											.dark-mode {$selector} .search-form-fields .search-field::placeholder,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields input.search-field,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields input.search-field::placeholder,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields .search_product_cats
+											",
 					'normal_bg_color' => ".dark-mode {$selector} .search-form-fields",
 					'normal_border_style' => ".dark-mode {$selector} .search-form-fields",
 					'normal_border_width' => ".dark-mode {$selector} .search-form-fields",
