@@ -4341,7 +4341,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   height: 2.4em;
   border: 0;
   box-shadow: none;
-  background: transparent;
+  background-color: transparent;
 }
 .header-search-form .search-field:focus {
   background-color: transparent;

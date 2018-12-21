@@ -7,11 +7,11 @@
  */
 class Customify_Panel_Builder {
 	public function __construct() {
-		$this->include();
+		$this->includes();
 		$this->init();
 	}
 
-	public function include() {
+	public function includes() {
 		$path = get_template_directory();
 		require_once $path . '/inc/panel-builder/class-abstract-layout-frontend.php';
 		require_once $path . '/inc/panel-builder/class-builder-panel.php';

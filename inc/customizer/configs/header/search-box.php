@@ -161,12 +161,12 @@ class Customify_Builder_Item_Search_Box {
 											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields input.search-field::placeholder,
 											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields .search_product_cats
 											",
-					'normal_bg_color' => ".dark-mode {$selector} .search-form-fields",
-					'normal_border_style' => ".dark-mode {$selector} .search-form-fields",
-					'normal_border_width' => ".dark-mode {$selector} .search-form-fields",
-					'normal_border_color' => ".dark-mode {$selector} .search-form-fields",
-					'normal_border_radius' => ".dark-mode {$selector} .search-form-fields",
-					'normal_box_shadow' => ".dark-mode {$selector} .search-form-fields",
+					'normal_bg_color' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_style' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_width' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_color' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_radius' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_box_shadow' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
 				),
 				'default'     => array(
 					'normal' => array(
@@ -202,9 +202,9 @@ class Customify_Builder_Item_Search_Box {
 				'title'       => __( 'Icon Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
-					'normal' => "{$selector} .search-submit",
-					'hover'  => "{$selector} .search-submit:hover",
-					'normal_text_color' => ".dark-mode {$selector} .search-submit",
+					'normal' => "{$selector} .header-search-form button.search-submit",
+					'hover'  => "{$selector} .header-search-form button.search-submit",
+					'normal_text_color' => ".dark-mode {$selector} .header-search-form button.search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
