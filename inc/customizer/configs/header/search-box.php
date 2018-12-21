@@ -153,7 +153,14 @@ class Customify_Builder_Item_Search_Box {
 				'selector'    => array(
 					'normal'            => "{$selector} .search-form-fields",
 					'hover'             => "{$selector} .search-form-fields",
-					'normal_text_color' => "{$selector} .search-form-fields, {$selector} .search-form-fields input.search-field::placeholder",
+					'normal_text_color' => "{$selector} .search-form-fields, {$selector} .search-form-fields input.search-field::placeholder, .dark-mode {$selector} .search-form-fields .search-field, .dark-mode {$selector} .search-form-fields .search-field::placeholder",
+
+					'normal_bg_color' => ".dark-mode {$selector} .search-form-fields",
+					'normal_border_style' => ".dark-mode {$selector} .search-form-fields",
+					'normal_border_width' => ".dark-mode {$selector} .search-form-fields",
+					'normal_border_color' => ".dark-mode {$selector} .search-form-fields",
+					'normal_border_radius' => ".dark-mode {$selector} .search-form-fields",
+					'normal_box_shadow' => ".dark-mode {$selector} .search-form-fields",
 				),
 				'default'     => array(
 					'normal' => array(
@@ -191,6 +198,7 @@ class Customify_Builder_Item_Search_Box {
 				'selector'    => array(
 					'normal' => "{$selector} .search-submit",
 					'hover'  => "{$selector} .search-submit:hover",
+					'normal_text_color' => ".dark-mode {$selector} .search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
