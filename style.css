@@ -4339,9 +4339,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   width: 100%;
   border-radius: 2px;
   height: 2.4em;
-  border: 0;
-  box-shadow: none;
-  background-color: transparent;
 }
 .header-search-form .search-field:focus {
   background-color: transparent;
@@ -4367,6 +4364,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 .header-search-form input[type="submit"] {
   min-height: auto;
+}
+
+.header-search_box-item .header-search-form .search-field {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 .header-search-modal {

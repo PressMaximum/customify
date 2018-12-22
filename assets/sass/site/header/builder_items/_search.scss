@@ -92,10 +92,6 @@
 		border-radius: 2px;
 		height: 2.4em;
 
-
-		border: 0;
-		box-shadow:none;
-		background-color: transparent;
 		&:focus{
 			background-color: transparent;
 		}
@@ -121,6 +117,16 @@
 	}
 	input[type="submit"] {
 		min-height: auto;
+	}
+}
+
+.header-search_box-item {
+	.header-search-form {
+		.search-field {
+			border: 0;
+			box-shadow:none;
+			background-color: transparent;
+		}
 	}
 }
 
