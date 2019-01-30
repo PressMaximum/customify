@@ -190,7 +190,7 @@ class Customify_Builder_Item_Primary_Menu {
 				'section'     => $section,
 				'title'       => __( 'Top Menu Items Typography', 'customify' ),
 				'description' => __( 'Typography for menu', 'customify' ),
-				'selector'    => "{$this->selector} > li > a",
+				'selector'    => "{$this->selector} > li > a,.builder-item-sidebar .primary-menu-sidebar .primary-menu-ul > li > a",
 				'css_format'  => 'typography',
 			),
 
