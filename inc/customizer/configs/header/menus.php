@@ -343,4 +343,3 @@ add_filter( 'nav_menu_submenu_css_class', 'customify_add_sub_menu_classes', 35, 
 
 // Register header item.
 Customify_Customize_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Primary_Menu() );
-
