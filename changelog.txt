@@ -1,3 +1,8 @@
+= 0.2.9 =
+* FIXED: The Primary Menu typography does not work with menu in Menu Sidebar.
+* FIXED: Change the logo alt text.
+* FIXED: Shop button color setting does not work.
+
 = 0.2.8 =
 * FIXED: Breadcrumb alignment.
 * FIXED: Gutenberg compatible.
