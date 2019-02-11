@@ -134,9 +134,9 @@ class Customify_Builder_Item_Logo {
 				echo '<div class="site-name-desc">';
 				if ( 'no' !== $show_name ) {
 					if ( is_front_page() && is_home() ) : ?>
-						<<?php echo $tag; // WPCS: XSS ok. ?> class="site-title">
+						<<?php echo $tag; /* WPCS: xss ok. */ ?> class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-						</<?php echo $tag; // WPCS: XSS ok. ?>>
+						</<?php echo $tag; /* WPCS: xss ok. */ ?>>
 					<?php else : ?>
 						<p class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
