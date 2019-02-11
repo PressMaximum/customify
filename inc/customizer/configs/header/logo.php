@@ -134,9 +134,9 @@ class Customify_Builder_Item_Logo {
 				echo '<div class="site-name-desc">';
 				if ( 'no' !== $show_name ) {
 					if ( is_front_page() && is_home() ) : ?>
-						<<?php echo $tag; /* WPCS: xss ok. */ ?> class="site-title">
+						<<?php echo $tag; ?> class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-						</<?php echo $tag; /* WPCS: xss ok. */ ?>>
+						</<?php echo $tag; ?>>
 					<?php else : ?>
 						<p class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
@@ -148,7 +148,7 @@ class Customify_Builder_Item_Logo {
 				if ( 'no' !== $show_desc ) {
 					$description = get_bloginfo( 'description', 'display' );
 					if ( $description || is_customize_preview() ) { ?>
-						<p class="site-description text-uppercase text-xsmall"><?php echo $description; /* WPCS: xss ok. */ ?></p>
+						<p class="site-description text-uppercase text-xsmall"><?php echo $description; ?></p>
 						<?php
 					};
 				}
