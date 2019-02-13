@@ -19,6 +19,7 @@ class Customify_Dashboard {
 			self::$_instance->title = __( 'Customify Options', 'customify' );
 			add_action( 'admin_menu', array( self::$_instance, 'add_menu' ), 5 );
 			add_action( 'admin_enqueue_scripts', array( self::$_instance, 'scripts' ) );
+			add_action( 'customify/dashboard/main', array( self::$_instance, 'copy_theme_settings' ), 5 );
 			add_action( 'customify/dashboard/main', array( self::$_instance, 'box_links' ), 10 );
 			add_action( 'customify/dashboard/main', array( self::$_instance, 'pro_modules_box' ), 15 );
 			add_action( 'customify/dashboard/sidebar', array( self::$_instance, 'box_plugins' ), 10 );
@@ -26,6 +27,7 @@ class Customify_Dashboard {
 			add_action( 'customify/dashboard/sidebar', array( self::$_instance, 'box_community' ), 25 );
 
 			add_action( 'admin_notices', array( self::$_instance, 'admin_notice' ) );
+			add_action( 'admin_init', array( self::$_instance, 'admin_init' ) );
 
 			// Tabs.
 			add_action( 'customify/dashboard/tab/changelog', array( self::$_instance, 'tab_changelog' ) );
@@ -158,7 +160,61 @@ class Customify_Dashboard {
 		</div>
 		<?php
 		do_action( 'customify/dashboard/changelog/after' );
+	}
 
+	function admin_init() {
+		// Action for copy options.
+		if ( isset( $_POST['copy_from'] ) && isset( $_POST['copy_to'] ) ) {
+			$from = sanitize_text_field( $_POST['copy_from'] );
+			$to = sanitize_text_field( $_POST['copy_to'] );
+			if ( $from && $to ) {
+				$mods = get_option( 'theme_mods_' . $from );
+				update_option( 'theme_mods_' . $to, $mods );
+				$url = wp_unslash( $_SERVER['REQUEST_URI'] );
+				$url = add_query_arg( array( 'copied' => 1 ), $url );
+				wp_redirect( $url );
+				die();
+			}
+		}
+	}
+
+	function copy_theme_settings() {
+		if ( is_child_theme() ) {
+			$child_theme = wp_get_theme();
+			$current_action_link = admin_url( 'themes.php?page=customify' );
+			?>
+			<div class="cd-box">
+				<div class="cd-box-top"><?php _e( 'Copy Settings', 'customify' ); ?></div>
+				<div class="cd-box-content">
+					<form method="post" action="<?php echo esc_attr( $current_action_link ); ?>" class="demo-import-boxed copy-settings-form">
+						<p>
+							<strong> <?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of Customify', 'customify' ), $child_theme->Name ); // phpcs:ignore ?></strong>
+						</p>
+						<p><?php printf( esc_html__( "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'customify' ) ); ?></p>
+						<p>
+							<?php
+							$select = '<select name="copy_from">';
+								$select .= '<option value="">' . esc_html__( 'From Theme', 'customify' ) . '</option>';
+								$select .= '<option value="customify">Customify</option>';
+								$select .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+							$select .= '</select>';
+							$select_2 = '<select name="copy_to">';
+								$select_2 .= '<option value="">' . esc_html__( 'To Theme', 'customify' ) . '</option>';
+								$select_2 .= '<option value="customify">Customify</option>';
+								$select_2 .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+							$select_2 .= '</select>';
+							echo sprintf( '%1$s %2$s %3$s', $select, esc_html__( 'to', 'customify' ), $select_2 );
+							?>
+							<input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
+						</p>
+						<?php if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) { ?>
+							<p style="padding: 6px 20px 6px 5px;background-color: #ecf7ed;border-left: 4px solid #47B45D;"><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your settings were copied.', 'customify' ); ?></strong></p>
+						<?php } ?>
+					</form>
+				</div>
+			</div>
+			<?php
+		}
 	}
 
 	function box_links() {
