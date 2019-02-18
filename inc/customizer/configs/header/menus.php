@@ -190,7 +190,7 @@ class Customify_Builder_Item_Primary_Menu {
 				'section'     => $section,
 				'title'       => __( 'Top Menu Items Typography', 'customify' ),
 				'description' => __( 'Typography for menu', 'customify' ),
-				'selector'    => "{$this->selector} > li > a",
+				'selector'    => "{$this->selector} > li > a,.builder-item-sidebar .primary-menu-sidebar .primary-menu-ul > li > a",
 				'css_format'  => 'typography',
 			),
 
@@ -343,4 +343,3 @@ add_filter( 'nav_menu_submenu_css_class', 'customify_add_sub_menu_classes', 35, 
 
 // Register header item.
 Customify_Customize_Layout_Builder()->register_item( 'header', new Customify_Builder_Item_Primary_Menu() );
-

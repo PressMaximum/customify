@@ -11,17 +11,17 @@ global $post;
 ?>
 
 <article id="post-<?php the_ID(); ?>" <?php post_class( 'entry' ); ?>>
-	<?php if ( customify_is_post_title_display() ) { ?>
-		<header class="entry-header">
-			<?php
-			if ( is_singular() ) :
-				the_title( '<h1 class="entry-title">', '</h1>' );
-			else :
-				the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
-			endif;
-			?>
-		</header><!-- .entry-header -->
+<?php if ( customify_is_post_title_display() ) { ?>
+	<header class="entry-header">
 		<?php
+		if ( is_singular() ) :
+			the_title( '<h1 class="entry-title">', '</h1>' );
+		else :
+			the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+		endif;
+		?>
+	</header><!-- .entry-header -->
+	<?php
 }
 
 if ( 'post' === get_post_type() ) :
@@ -43,7 +43,7 @@ if ( 'post' === get_post_type() ) :
 		)
 	);
 
-	endif;
+		endif;
 ?>
 
 	<div class="entry-content">

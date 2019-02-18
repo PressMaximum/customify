@@ -104,7 +104,7 @@ class Customify_Builder_Item_Logo {
 		if ( $logo_image ) {
 			?>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="logo-link" rel="home" itemprop="url">
-				<img class="site-img-logo" src="<?php echo esc_url( $logo_image ); ?>" alt="<?php esc_attr_e( 'Logo', 'customify' ); ?>"<?php if ( $logo_retina_image ) {
+				<img class="site-img-logo" src="<?php echo esc_url( $logo_image ); ?>" alt="<?php bloginfo( 'name' ); ?>"<?php if ( $logo_retina_image ) {
 					?> srcset="<?php echo esc_url( $logo_retina_image ); ?> 2x"<?php } ?>>
 				<?php do_action( 'customizer/after-logo-img' ); ?>
 			</a>
@@ -134,14 +134,14 @@ class Customify_Builder_Item_Logo {
 				echo '<div class="site-name-desc">';
 				if ( 'no' !== $show_name ) {
 					if ( is_front_page() && is_home() ) : ?>
-						<<?php echo $tag; // WPCS: XSS ok. ?> class="site-title">
+						<<?php echo $tag; /* WPCS: xss ok. */ ?> class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
-						</<?php echo $tag; // WPCS: XSS ok. ?>>
+						</<?php echo $tag; /* WPCS: xss ok. */ ?>>
 					<?php else : ?>
 						<p class="site-title">
 							<a href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
 						</p>
-					<?php
+						<?php
 					endif;
 				}
 
