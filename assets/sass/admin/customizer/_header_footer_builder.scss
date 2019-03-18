@@ -167,9 +167,25 @@ $cb_padding: 20px;
 			float: left;
 		}
 		margin-top: -1px;
-		a {
+		> * {
 			display: inline-block;
-			margin-left: 10px;
+			margin-left: 5px;
+			&:last-child {
+				margin-left: 0px;
+			}
+		}
+		.customify-swicth-version {
+			position: relative;
+			select {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+				bottom: 0px;
+				display: block;
+				width: 100%;
+				opacity: 0;
+			}
 		}
 		.builder-version-change {
 			text-transform: uppercase;
@@ -383,6 +399,9 @@ $cb_padding: 20px;
 	}
 	.grid-stack-item {
 		float: left;
+		@include rtl(){
+			float: right;
+		}
 		width: auto !important;
 		.item-tooltip {
 			display: none;
@@ -743,8 +762,7 @@ $animation_speed: 0.3s !default;
 }
 
 /* Saved templates */
-.save-template-form,
-.flex-form {
+.save-template-form, .flex-form {
 	display: flex;
 	margin-bottom: 15px;
 	.button {

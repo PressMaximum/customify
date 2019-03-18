@@ -3236,12 +3236,15 @@ article.comment .comment-post-author {
 .dark-mode .cart-item-link:hover {
   color: rgba(255, 255, 255, 0.99);
 }
-.dark-mode .header-search_box-item .search-field {
+.dark-mode .header-search_box-item .search-form-fields {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.08);
   color: rgba(255, 255, 255, 0.79);
 }
-.dark-mode .header-search_box-item .search-field::placeholder {
+.dark-mode .header-search_box-item .search-form-fields .search-field {
+  color: rgba(255, 255, 255, 0.79);
+}
+.dark-mode .header-search_box-item .search-form-fields .search-field::placeholder {
   color: rgba(255, 255, 255, 0.79);
 }
 .dark-mode .header-search_box-item .search-submit {
@@ -3862,7 +3865,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .col-v2-left .item--inner {
   margin-right: 1em;
 }
-.col-v2-left .item--inner:first-child {
+.col-v2-left .item--inner:last-child {
   margin-right: 0px;
 }
 
@@ -4325,11 +4328,20 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .header-search-form label {
   flex-basis: 100%;
 }
+.header-search-form .search-form-fields {
+  border: 1px solid;
+  border-color: rgba(127, 127, 127, 0.2);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+  border-radius: 2px;
+}
 .header-search-form .search-field {
   display: block;
   width: 100%;
   border-radius: 2px;
   height: 2.4em;
+}
+.header-search-form .search-field:focus {
+  background-color: transparent;
 }
 .header-search-form button.search-submit {
   overflow: hidden;
@@ -4352,6 +4364,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 .header-search-form input[type="submit"] {
   min-height: auto;
+}
+
+.header-search_box-item .header-search-form .search-field {
+  border: 0;
+  box-shadow: none;
+  background-color: transparent;
 }
 
 .header-search-modal {
@@ -4386,10 +4404,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   z-index: 27;
 }
 
-.site-header .header--row .header-search_box-item .search-form-fields {
-  border-style: inherit;
-}
-
 .woo_bootster_search .header-search_box-item .header-search-form {
   margin-bottom: 0px;
   width: 100%;
@@ -4410,6 +4424,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   flex-basis: 100%;
   display: flex;
   border-style: none;
+  border: none;
+  box-shadow: none;
 }
 .woo_bootster_search .header-search_box-item .header-search-form .search-field {
   border-color: transparent;
@@ -5524,6 +5540,10 @@ body.menu_sidebar_dropdown:before {
 .is-menu-sidebar .header-menu-sidebar .item--inner, .is-mobile-form-panel .header-menu-sidebar .item--inner {
   opacity: 1;
   transform: translateY(0);
+}
+
+.mobile-item--search_box .search-form-fields {
+  width: 100%;
 }
 
 .cb-row--mobile {

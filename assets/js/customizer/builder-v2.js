@@ -518,6 +518,10 @@ var CustomizeBuilder_V2;
 				);
 
 				$document.trigger("customify_builder_panel_loaded", [id, that]);
+
+				// No tooltip.
+				$( '.grid-stack-item', that.container ).addClass( 'no-tooltip' ).removeAttr( 'title' );
+				
 			}
 		};
 

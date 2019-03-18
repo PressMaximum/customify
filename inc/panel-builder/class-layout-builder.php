@@ -62,7 +62,7 @@ class Customify_Customize_Layout_Builder {
 	/**
 	 * Get builder class
 	 *
-	 * @since 0.2.7
+	 * @since 0.2.9
 	 *
 	 * @param string $builder_id
 	 * @return object|bool
@@ -356,6 +356,7 @@ class Customify_Customize_Layout_Builder {
 				'builders'                  => $this->get_builders(),
 				'is_rtl'                    => is_rtl(),
 				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
+				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
 			)
 		);
 	}

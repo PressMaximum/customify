@@ -1701,9 +1701,25 @@ html[dir="rtl"] .customify--cb-header .customify--cb-devices-switcher {
 html[dir="rtl"] .customify--cb-header .customify--cb-actions {
   float: left;
 }
-.customify--cb-header .customify--cb-actions a {
+.customify--cb-header .customify--cb-actions > * {
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 5px;
+}
+.customify--cb-header .customify--cb-actions > *:last-child {
+  margin-left: 0px;
+}
+.customify--cb-header .customify--cb-actions .customify-swicth-version {
+  position: relative;
+}
+.customify--cb-header .customify--cb-actions .customify-swicth-version select {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  display: block;
+  width: 100%;
+  opacity: 0;
 }
 .customify--cb-header .customify--cb-actions .builder-version-change {
   text-transform: uppercase;
@@ -1926,6 +1942,9 @@ html[dir="rtl"] .customify--cb-row .customify--cb-item-name {
 .customify-available-items .grid-stack-item {
   float: left;
   width: auto !important;
+}
+html[dir="rtl"] .customify-available-items .grid-stack-item {
+  float: right;
 }
 .customify-available-items .grid-stack-item .item-tooltip {
   display: none;
@@ -3337,13 +3356,11 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 /* Saved templates */
-.save-template-form,
-.flex-form {
+.save-template-form, .flex-form {
   display: flex;
   margin-bottom: 15px;
 }
-.save-template-form .button,
-.flex-form .button {
+.save-template-form .button, .flex-form .button {
   margin-left: 10px;
 }
 
@@ -3708,8 +3725,14 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
   display: none;
 }
 
+.customify--panel-v2 .customify-available-items .grid-stack-item-content {
+  margin-right: 2px;
+}
 .customify--panel-v2 .customify--cb-row .customify--cb-row-settings {
-  top: -2px;
+  top: 0px;
+}
+.customify--panel-v2 .customify--cb-row .customify--cb-row-settings:before {
+  top: -7px;
 }
 .customify--panel-v2 .customify--row-inner {
   display: flex;
@@ -3724,12 +3747,16 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 }
 .customify--panel-v2 .col-items {
   background: #ffffff;
-  min-height: 37px;
+  min-height: 34px;
   height: 100%;
   display: inline-block;
   border: 1px solid #ddd;
   text-align: left;
   display: block;
+  padding: 0 0 2px;
+}
+html[dir="rtl"] .customify--panel-v2 .col-items {
+  text-align: right;
 }
 .customify--panel-v2 .col-items.col-center {
   text-align: center;
@@ -3737,8 +3764,11 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 .customify--panel-v2 .col-items.col-right {
   text-align: right;
 }
+html[dir="rtl"] .customify--panel-v2 .col-items.col-right {
+  text-align: left;
+}
 .customify--panel-v2 .grid-stack-item {
-  height: 36px;
+  height: 25px;
   padding: 3px;
 }
 .customify--panel-v2 .grid-stack-item .customify--cb-item-setting {
@@ -3747,15 +3777,25 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 .customify--panel-v2 .grid-stack-item .customify--cb-item-remove {
   right: 4px;
   padding: 0px 3px;
-  margin-top: 3px;
+  margin-top: 1px;
+  max-height: 100%;
 }
 .customify--panel-v2 .grid-stack-item .customify--cb-item-remove::before {
   font-size: 16px;
+  line-height: 22px;
+}
+html[dir="rtl"] .customify--panel-v2 .grid-stack-item .customify--cb-item-remove {
+  left: 4px;
 }
 .customify--panel-v2 .customify--cb-row .customify--cb-item-name {
-  line-height: 26px;
+  line-height: 22px;
   text-align: left;
-  padding-right: 15px;
+  padding-right: 12px;
+}
+html[dir="rtl"] .customify--panel-v2 .customify--cb-row .customify--cb-item-name {
+  text-align: right;
+  padding-left: 13px;
+  padding-right: 0px;
 }
 .customify--panel-v2 .grid-stack-item {
   height: 30px;
@@ -3766,10 +3806,10 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 .customify--panel-v2 .customify--cp-sidebar .grid-stack-item {
   display: block;
   width: 100%;
-  margin: 2px 0px 4px;
+  margin: 2px 0px 2px;
 }
 .customify--panel-v2 .customify--cp-sidebar .grid-stack-item:last-child {
-  margin-bottom: 8px;
+  margin-bottom: 2px;
 }
 .customify--panel-v2 .customify--cp-sidebar .grid-stack-item.sortable-placeholder {
   margin-left: 4px;
@@ -3780,7 +3820,7 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 }
 .customify--panel-v2 .sortable-placeholder {
   background: #f5f5f5;
-  height: 27px;
+  height: 22px;
   display: inline-block;
   width: 50px;
   margin-top: 4px;

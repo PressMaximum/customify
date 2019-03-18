@@ -2,12 +2,12 @@
 /**
  * Builder frontemd class
  *
- * @since 0.2.9
+ * @since 0.2.7
  */
 class Customify_Layout_Builder_Frontend extends Customify_Abstract_Layout_Frontend {
 	public static $_instance;
 	protected $control_id = 'header_builder_panel';
-	public $id = 'header';
+	protected $id = 'header';
 	protected $render_items = array();
 	protected $rows = array();
 	protected $data = false;
@@ -29,74 +29,6 @@ class Customify_Layout_Builder_Frontend extends Customify_Abstract_Layout_Fronte
 		return $this->id;
 	}
 
-	public function set_id( $id ) {
-		$this->id   = $id;
-		$this->data = null;
-	}
-
-	public function set_control_id( $id ) {
-		$this->control_id = $id;
-		$this->data       = null;
-	}
-
-	/**
-	 * Set config items
-	 *
-	 * @param array $config_items Config items.
-	 */
-	public function set_config_items( $config_items ) {
-		$this->config_items = $config_items;
-	}
-
-	/**
-	 * Get Panel Settings Data
-	 *
-	 * @return array|bool
-	 */
-	function get_settings() {
-		if ( $this->data ) {
-			return $this->data;
-		}
-		$data = Customify()->get_setting( $this->control_id );
-		$data = wp_parse_args(
-			$data,
-			array(
-				'desktop' => '',
-				'tablet'  => '',
-				'mobile'  => '',
-			)
-		);
-
-		foreach ( $data as $k => $v ) {
-			if ( ! is_array( $v ) ) {
-				$v = array();
-			}
-			$data[ $k ] = $v;
-		}
-
-		$this->data = $data;
-
-		return $data;
-	}
-
-	/**
-	 * Get settings for row
-	 *
-	 * @param string $row_id Row ID.
-	 * @param string $device Device ID.
-	 *
-	 * @return bool
-	 */
-	public function get_row_settings( $row_id, $device = 'desktop' ) {
-		$data = $this->get_settings();
-		if ( isset( $data[ $device ] ) ) {
-			if ( isset( $data[ $device ][ $row_id ] ) ) {
-				return ! empty( $data[ $device ][ $row_id ] ) ? $data[ $device ][ $row_id ] : false;
-			}
-		}
-
-		return false;
-	}
 	/**
 	 * Render items to HTML
 	 *

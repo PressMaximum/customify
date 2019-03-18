@@ -59,12 +59,16 @@
 
 	// Only for dark mode
 	.header-search_box-item {
-		.search-field {
+		.search-form-fields {
 			background: white(0.03);
 			border-color: $light_color_border;
 			color: $light_color_link;
-			&::placeholder {
+			
+			.search-field{
 				color: $light_color_link;
+				&::placeholder {
+					color: $light_color_link;
+				}
 			}
 		}
 		.search-submit {
