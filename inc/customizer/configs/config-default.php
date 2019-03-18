@@ -11,6 +11,7 @@ add_filter( 'customify/customize/settings-default', 'customify_layout_builder_co
 function customify_layout_builder_config_default( $val, $name ) {
 	$defaults =
 		array(
+			// Start header builder layout version 1.
 			'header_builder_panel'      => array(
 				'desktop' =>
 					array(
@@ -74,7 +75,101 @@ function customify_layout_builder_config_default( $val, $name ) {
 								),
 							),
 					),
-			),
+			), // End header builder layout version 1.
+			'header_builder_version' => '',
+			// Start header builder layout version 2.
+			'header_builder_panel_v2' => array(
+				'desktop' => array(
+					'top' => array(
+						'left' => array(
+							array(
+								'id' => 'html',
+							),
+						),
+						'center' => array(),
+						'right' => array(
+							array(
+								'id' => 'social-icons',
+							),
+						),
+					),
+					'main' => array(
+						'left' => array(
+							array(
+								'id' => 'logo',
+							),
+							array(
+								'id' => 'primary-menu',
+							),
+						),
+						'center' => array(),
+						'right' => array(
+							array(
+								'id' => 'search_icon',
+							),
+							array(
+								'id' => 'nav-icon',
+							),
+							array(
+								'id' => 'button',
+							),
+						),
+					),
+					'bottom' => array(
+						'left' => array(),
+						'center' => array(),
+						'right' => array(),
+					),
+				),
+				'mobile' => array(
+					'top' => array(
+						'left' => array(),
+						'center' => array(),
+						'right' => array(),
+					),
+					'main' => array(
+						'left' => array(
+							array(
+								'id' => 'logo',
+							),
+						),
+						'center' => array(),
+						'right' => array(
+							array(
+								'id' => 'search_icon',
+							),
+							array(
+								'id' => 'nav-icon',
+							),
+						),
+					),
+					'bottom' => array(
+						'left'   => array(),
+						'center' => array(),
+						'right'  => array(),
+					),
+					'sidebar' => array(
+						'sidebar' => array(
+							array(
+								'id' => 'html',
+							),
+							array(
+								'id' => 'search_box',
+							),
+							array(
+								'id' => 'primary-menu',
+							),
+							array(
+								'id' => 'social-icons',
+							),
+							array(
+								'id' => 'button',
+							),
+						),
+					),
+				),
+			), // End header builder layout version 2.
+
 			'header_top_height'         => array(
 				'desktop' =>
 					array(

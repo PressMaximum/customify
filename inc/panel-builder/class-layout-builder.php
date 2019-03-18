@@ -52,12 +52,23 @@ class Customify_Customize_Layout_Builder {
 		if ( ! $class instanceof Customify_Customize_Builder_Panel ) {
 			$name = get_class( $class );
 			_doing_it_wrong( $name, sprintf( __( 'Class <strong>%s</strong> do not extends class <strong>Customify_Customize_Builder_Panel</strong>.', 'customify' ), $name ), '1.0.0' );
-
 			return false;
 		}
 
 		add_filter( 'customify/customizer/config', array( $class, '_customize' ), 35, 2 );
 		$this->registered_builders[ $id ] = $class;
+	}
+
+	/**
+	 * Get builder class
+	 *
+	 * @since 0.2.9
+	 *
+	 * @param string $builder_id
+	 * @return object|bool
+	 */
+	public function get_builder( $builder_id ) {
+		return isset( $this->registered_builders[ $builder_id ] ) ? $this->registered_builders[ $builder_id ] : false;
 	}
 
 
@@ -244,7 +255,7 @@ class Customify_Customize_Layout_Builder {
 		);
 
 		update_option( $option_name, $saved_templates );
-		$html = '<li class="saved_template" data-control-id="' . esc_attr( $control ) . '" data-id="' . esc_attr( $key_id ) . '" data-data="' . esc_attr( wp_json_encode( $new_template_data ) ) . '">' . esc_html( $save_name ) . ' <a href="#" class="load-tpl">' . __( 'Load', 'customify' ) . '</a><a href="#" class="remove-tpl">' . __( 'Remove', 'customify' ) . '</a></li>'; // WPCS: XSS OK.
+		$html = '<li class="saved_template li-boxed" data-control-id="' . esc_attr( $control ) . '" data-id="' . esc_attr( $key_id ) . '" data-data="' . esc_attr( wp_json_encode( $new_template_data ) ) . '">' . esc_html( $save_name ) . ' <a href="#" class="load-tpl">' . __( 'Load', 'customify' ) . '</a><a href="#" class="remove-tpl">' . __( 'Remove', 'customify' ) . '</a></li>'; // WPCS: XSS OK.
 		wp_send_json_success(
 			array(
 				'key_id' => $key_id,
@@ -277,7 +288,7 @@ class Customify_Customize_Layout_Builder {
 		} else {
 			$var = $data;
 		}
-		var_export( $var );
+		var_export( $var ); // phpcs:ignore
 		die();
 	}
 
@@ -304,8 +315,8 @@ class Customify_Customize_Layout_Builder {
 	function scripts() {
 		$suffix = Customify()->get_asset_suffix();
 		wp_enqueue_script(
-			'customify-layout-builder',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder' . $suffix . '.js',
+			'customify-builder-v1',
+			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v1' . $suffix . '.js',
 			array(
 				'customize-controls',
 				'jquery-ui-resizable',
@@ -315,13 +326,37 @@ class Customify_Customize_Layout_Builder {
 			false,
 			true
 		);
-		wp_localize_script(
+		wp_enqueue_script(
+			'customify-builder-v2',
+			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v2' . $suffix . '.js',
+			array(
+				'customize-controls',
+				'jquery-ui-resizable',
+				'jquery-ui-droppable',
+				'jquery-ui-draggable',
+			),
+			false,
+			true
+		);
+		wp_enqueue_script(
 			'customify-layout-builder',
+			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder' . $suffix . '.js',
+			array(
+				'customify-builder-v1',
+				'customify-builder-v2',
+			),
+			false,
+			true
+		);
+		wp_localize_script(
+			'jquery',
 			'Customify_Layout_Builder',
 			array(
 				'footer_moved_widgets_text' => '',
 				'builders'                  => $this->get_builders(),
 				'is_rtl'                    => is_rtl(),
+				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
+				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
 			)
 		);
 	}
@@ -338,6 +373,8 @@ class Customify_Customize_Layout_Builder {
 	 * Panel Builder Template
 	 */
 	function template() {
+		require_once get_template_directory() . '/inc/panel-builder/v1/templates/rows.php';
+		require_once get_template_directory() . '/inc/panel-builder/v2/templates/rows.php';
 		?>
 		<script type="text/html" id="tmpl-customify--builder-panel">
 			<div class="customify--customize-builder">
@@ -359,87 +396,18 @@ class Customify_Customize_Layout_Builder {
 			</div>
 		</script>
 
-		<script type="text/html" id="tmpl-customify--cb-panel">
-			<div class="customify--cp-rows">
-
-				<# if ( ! _.isUndefined( data.rows.top ) ) { #>
-				<div class="customify--row-top customify--cb-row" data-id="{{ data.id }}_top">
-					<a class="customify--cb-row-settings" title="{{ data.rows.top }}" data-id="top" href="#"></a>
-					<div class="customify--row-inner">
-						<div class="row--grid">
-							<?php
-							for ( $i = 1; $i <= 12; $i ++ ) {
-								echo '<div></div>';
-							}
-							?>
-						</div>
-						<div class="customify--cb-items grid-stack gridster" data-id="top"></div>
-					</div>
-				</div>
-				<# } #>
-
-				<# if ( ! _.isUndefined( data.rows.main ) ) { #>
-				<div class="customify--row-main customify--cb-row" data-id="{{ data.id }}_main">
-					<a class="customify--cb-row-settings" title="{{ data.rows.main }}" data-id="main" href="#"></a>
-
-					<div class="customify--row-inner">
-						<div class="row--grid">
-							<?php
-							for ( $i = 1; $i <= 12; $i ++ ) {
-								echo '<div></div>';
-							}
-							?>
-						</div>
-						<div class="customify--cb-items grid-stack gridster" data-id="main"></div>
-					</div>
-				</div>
-				<# } #>
-
-
-				<# if ( ! _.isUndefined( data.rows.bottom ) ) { #>
-				<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_bottom">
-					<a class="customify--cb-row-settings" title="{{ data.rows.bottom }}" data-id="bottom" href="#"></a>
-					<div class="customify--row-inner">
-						<div class="row--grid">
-							<?php
-							for ( $i = 1; $i <= 12; $i ++ ) {
-								echo '<div></div>';
-							}
-							?>
-						</div>
-						<div class="customify--cb-items grid-stack gridster" data-id="bottom"></div>
-					</div>
-				</div>
-				<# } #>
-			</div>
-
-
-			<# if ( data.device != 'desktop' ) { #>
-			<# if ( ! _.isUndefined( data.rows.sidebar ) ) { #>
-			<div class="customify--cp-sidebar">
-				<div class="customify--row-bottom customify--cb-row" data-id="{{ data.id }}_sidebar">
-					<a class="customify--cb-row-settings" title="{{ data.rows.sidebar }}" data-id="sidebar" href="#"></a>
-					<div class="customify--row-inner">
-						<div class="customify--cb-items customify--sidebar-items" data-id="sidebar"></div>
-					</div>
-				</div>
-				<div>
-					<# } #>
-					<# } #>
-
-		</script>
 
 		<script type="text/html" id="tmpl-customify--cb-item">
 			<div class="grid-stack-item item-from-list for-s-{{ data.section }}"
-				 title="{{ data.name }}"
-				 data-id="{{ data.id }}"
-				 data-section="{{ data.section }}"
-				 data-control="{{ data.control }}"
-				 data-gs-x="{{ data.x }}"
-				 data-gs-y="{{ data.y }}"
-				 data-gs-width="{{ data.width }}"
-				 data-df-width="{{ data.width }}"
-				 data-gs-height="1"
+				title="{{ data.name }}"
+				data-id="{{ data.id }}"
+				data-section="{{ data.section }}"
+				data-control="{{ data.control }}"
+				data-gs-x="{{ data.x }}"
+				data-gs-y="{{ data.y }}"
+				data-gs-width="{{ data.width }}"
+				data-df-width="{{ data.width }}"
+				data-gs-height="1"
 			>
 				<div class="item-tooltip" data-section="{{ data.section }}">{{ data.name }}</div>
 				<div class="grid-stack-item-content">
@@ -460,4 +428,15 @@ class Customify_Customize_Layout_Builder {
 		}
 	}
 
+}
+
+/**
+ * Alias of class Customify_Customize_Layout_Builder
+ *
+ * @see Customify_Customize_Layout_Builder
+ *
+ * @return Customify_Customize_Layout_Builder
+ */
+function Customify_Customize_Layout_Builder() {
+	return Customify_Customize_Layout_Builder::get_instance();
 }

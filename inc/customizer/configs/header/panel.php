@@ -3,16 +3,36 @@
 class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 	public $id = 'header';
 
+	/**
+	 * Panel builder configs.
+	 *
+	 * @since 0.0.1
+	 * @since 0.2.9
+	 *
+	 * @return array
+	 */
 	function get_config() {
 		return array(
-			'id'         => $this->id,
-			'title'      => __( 'Header Builder', 'customify' ),
-			'control_id' => 'header_builder_panel',
-			'panel'      => 'header_settings',
-			'section'    => 'header_builder_panel',
-			'devices'    => array(
-				'desktop' => __( 'Desktop', 'customify' ),
-				'mobile'  => __( 'Mobile/Tablet', 'customify' ),
+			'id'            => $this->id,
+			'title'         => __( 'Header Builder', 'customify' ),
+			'control_id'    => 'header_builder_panel', // Control ID for ver 1.
+			'version_id'    => 'header_builder_version', // The control id where store version.
+			'panel'         => 'header_settings',
+			'section'       => 'header_builder_panel',
+			// Versions support, can choice v1 or v2.
+			'versions'      => array(
+				'v1' => array(
+					'control_id' => 'header_builder_panel',
+					'label' => __( 'Version 1', 'customify' ),
+				),
+				'v2' => array(
+					'control_id' => 'header_builder_panel_v2',
+					'label' => __( 'Version 2', 'customify' ),
+				),
+			),
+			'devices'       => array(
+				'desktop'      => __( 'Desktop', 'customify' ),
+				'mobile'       => __( 'Mobile/Tablet', 'customify' ),
 			),
 		);
 	}
@@ -44,6 +64,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'title' => __( 'Header Builder', 'customify' ),
 			),
 
+			// Header Builder v1 store data key.
 			array(
 				'name'                => 'header_builder_panel',
 				'type'                => 'js_raw',
@@ -51,6 +72,31 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'theme_supports'      => '',
 				'title'               => __( 'Header Builder', 'customify' ),
 				'selector'            => '#masthead',
+				'render_callback'     => $fn,
+				'container_inclusive' => true,
+			),
+
+			// Header Builder v2 store data key.
+			array(
+				'name'                => 'header_builder_panel_v2',
+				'type'                => 'js_raw',
+				'section'             => 'header_builder_panel',
+				'theme_supports'      => '',
+				'title'               => '',
+				'selector'            => '#masthead',
+				'render_callback'     => $fn,
+				'container_inclusive' => true,
+			),
+
+			// Header Builder v2 store data key.
+			array(
+				'name'                => 'header_builder_version',
+				'type'                => 'js_raw',
+				'section'             => 'header_builder_panel',
+				'theme_supports'      => '',
+				'title'               => '',
+				'selector'            => '#masthead',
+				'sanitize_callback'   => 'sanitize_text_field',
 				'render_callback'     => $fn,
 				'container_inclusive' => true,
 			),
@@ -345,6 +391,11 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 				'label'           => __( 'Margin', 'customify' ),
 			),
 
+			/**
+			 * Apply for version 1 only
+			 *
+			 * @since 0.2.9
+			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_align',
 				'type'            => 'text_align_no_justify',
@@ -354,8 +405,14 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 				'selector'        => "{$class} .builder-first--" . $item_id,
 				'css_format'      => 'text-align: {{value}};',
 				'title'           => __( 'Align', 'customify' ),
+				'required' => array( 'header_builder_version', '!=', 'v2' ),
 			),
 
+			/**
+			 * Apply for version 1 only
+			 *
+			 * @since 0.2.9
+			 */
 			array(
 				'name'            => $name_prefix . $item_id . '_merge',
 				'type'            => 'select',
@@ -372,6 +429,7 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 					'prev' => __( 'Merge with left item', 'customify' ),
 					'next' => __( 'Merge with right item', 'customify' ),
 				),
+				'required' => array( 'header_builder_version', '!=', 'v2' ),
 			),
 		);
 

@@ -38,12 +38,13 @@ class Customify_Builder_Item_Search_Box {
 	function customize() {
 		// Render callback function.
 		$fn       = array( $this, 'render' );
-		$selector = ".header--row .header-{$this->id}-item";
+		$selector = ".header-{$this->id}-item";
 
-		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};}";
+		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};} $selector .header-search-form button.search-submit{margin-left:{{value}};}";
 		if ( is_rtl() ) {
-			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;}";
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;} .rtl $selector .header-search-form button.search-submit{margin-left: {{value}};margin-left:auto;}";
 		}
+
 		$config   = array(
 			array(
 				'name'  => $this->section,
@@ -83,7 +84,7 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 25,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .search-form-fields",
+				'selector'        => "$selector .search-form-fields, $selector .search-form-fields .search-field",
 				'css_format'      => 'height: {{value}};',
 				'label'           => __( 'Input Height', 'customify' ),
 				'priority'        => 20,
@@ -97,7 +98,7 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 5,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .search-submit svg",
+				'selector'        => "$selector .search-submit svg,$selector .header-search-form button.search-submit svg",
 				'css_format'      => 'height: {{value}}; width: {{value}};',
 				'label'           => __( 'Icon Size', 'customify' ),
 				'priority'        => 25,
@@ -152,7 +153,20 @@ class Customify_Builder_Item_Search_Box {
 				'selector'    => array(
 					'normal'            => "{$selector} .search-form-fields",
 					'hover'             => "{$selector} .search-form-fields",
-					'normal_text_color' => "{$selector} .search-form-fields, {$selector} .search-form-fields input.search-field::placeholder",
+					'normal_text_color' => "{$selector} .search-form-fields,
+											{$selector} .search-form-fields input.search-field::placeholder,
+											.dark-mode {$selector} .search-form-fields .search-field,
+											.dark-mode {$selector} .search-form-fields .search-field::placeholder,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields input.search-field,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields input.search-field::placeholder,
+											.woo_bootster_search .dark-mode {$selector} .header-search-form .search-form-fields .search_product_cats
+											",
+					'normal_bg_color' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_style' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_width' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_color' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_border_radius' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
+					'normal_box_shadow' => ".dark-mode {$selector} .search-form-fields, {$selector} .search-form-fields",
 				),
 				'default'     => array(
 					'normal' => array(
@@ -188,8 +202,9 @@ class Customify_Builder_Item_Search_Box {
 				'title'       => __( 'Icon Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
-					'normal' => "{$selector} .search-submit",
-					'hover'  => "{$selector} .search-submit:hover",
+					'normal' => "{$selector} .header-search-form button.search-submit",
+					'hover'  => "{$selector} .header-search-form button.search-submit",
+					'normal_text_color' => ".dark-mode {$selector} .header-search-form button.search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(

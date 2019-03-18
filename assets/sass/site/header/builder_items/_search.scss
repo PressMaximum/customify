@@ -80,11 +80,21 @@
 		flex-basis: 100%;
 	}
 
+	.search-form-fields{
+		border: 1px solid;
+		border-color: rgba(127, 127, 127, 0.2);
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+		border-radius: 2px;
+	}
 	.search-field {
 		display: block;
 		width: 100%;
 		border-radius: 2px;
 		height: 2.4em;
+
+		&:focus{
+			background-color: transparent;
+		}
 	}
 	button.search-submit {
 		overflow: hidden;
@@ -107,6 +117,16 @@
 	}
 	input[type="submit"] {
 		min-height: auto;
+	}
+}
+
+.header-search_box-item {
+	.header-search-form {
+		.search-field {
+			border: 0;
+			box-shadow:none;
+			background-color: transparent;
+		}
 	}
 }
 
@@ -139,15 +159,6 @@
 		z-index: 27;
 	}
 }
-.site-header {
-	.header--row {
-		.header-search_box-item {
-			.search-form-fields {
-				border-style: inherit;
-			}
-		}
-	}
-}
 
 .woo_bootster_search {
 	.header-search_box-item {
@@ -170,6 +181,8 @@
 				flex-basis: 100%;
 				display: flex;
 				border-style: none;
+				border: none;
+				box-shadow:none;
 			}
 			.search-field {
 				border-color: transparent;

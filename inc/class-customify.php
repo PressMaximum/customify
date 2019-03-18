@@ -365,6 +365,7 @@ class Customify {
 			apply_filters( // phpcs:ignore
 				'Customify_JS',
 				array(
+					'is_rtl' => is_rtl(),
 					'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries,
 					'sidebar_menu_no_duplicator' => Customify()->get_setting( 'header_sidebar_menu_no_duplicator' ),
 				)
@@ -394,7 +395,7 @@ class Customify {
 			// Functions which enhance the theme by hooking into WordPress.
 			'/inc/customizer/class-customizer.php',
 			// Customizer additions.
-			'/inc/panel-builder/panel-builder.php',
+			'/inc/panel-builder/class-panel-builder.php',
 			// Panel builder additions.
 			'/inc/blog/class-related-posts.php',
 			// Blog entry builder.
