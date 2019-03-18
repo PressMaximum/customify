@@ -3356,13 +3356,11 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 /* Saved templates */
-.save-template-form,
-.flex-form {
+.save-template-form, .flex-form {
   display: flex;
   margin-bottom: 15px;
 }
-.save-template-form .button,
-.flex-form .button {
+.save-template-form .button, .flex-form .button {
   margin-left: 10px;
 }
 

@@ -25,10 +25,11 @@ class Customify_WC_Colors {
 			'css_format'  => apply_filters(
 				'customify/styling/shop-buttons',
 				'
-					.button.add_to_cart_button, 
-					.button.alt, .button.added_to_cart, 
-					.button.checkout, 
-					.button.product_type_variable,
+					.woocommerce .button.add_to_cart_button, 
+					.woocommerce .button.alt,
+					.woocommerce .button.added_to_cart, 
+					.woocommerce .button.checkout, 
+					.woocommerce .button.product_type_variable,
 					.item--wc_cart .cart-icon .cart-qty .customify-wc-total-qty
 					{
 					    background-color: {{value}};
