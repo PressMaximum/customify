@@ -27,6 +27,7 @@
     },
     "dependencies": {
         "copy": "latest",
+        "element-qsa-scope": "^1.1.0",
         "rtlcss": "latest"
     }
 }

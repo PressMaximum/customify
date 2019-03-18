@@ -7,6 +7,87 @@
  */
 
 "use strict"; // prevent global namespace pollution
+(function(elmPrototype, docPrototype) {
+	var scopeRegex = /:scope\b/gi;
+
+	function patchElement(method) {
+		var native = elmPrototype[method];
+
+		elmPrototype[method] = function(selector) {
+			var element = this;
+			var id = element.id || "qsid" + new Date().getTime();
+			var needsId = !element.id;
+			var hasScope = scopeRegex.test(selector);
+
+			try {
+				if (hasScope) {
+					if (needsId) {
+						element.id = id;
+					}
+
+					selector = selector.replace(scopeRegex, "#" + id);
+				}
+
+				return native.call(this, selector);
+			} finally {
+				if (needsId) {
+					element.id = null;
+				}
+			}
+		};
+	}
+
+	function patchDocument(method) {
+		var native = docPrototype[method];
+		docPrototype[method] = function(selector) {
+			// In context of document, :scope is the same
+			// as :root so can just be stripped
+			// https://www.w3.org/TR/selectors4/#scope-pseudo
+			return native.call(this, selector.replace(scopeRegex, ""));
+		};
+	}
+
+	try {
+		document.querySelector(":scope");
+	} catch (err) {
+		patchElement("querySelector");
+		patchElement("querySelectorAll");
+		patchDocument("querySelector");
+		patchDocument("querySelectorAll");
+	}
+})(Element.prototype, Document.prototype);
+
+(function(arr) {
+	arr.forEach(function(item) {
+		if (item.hasOwnProperty("append")) {
+			return;
+		}
+		Object.defineProperty(item, "append", {
+			configurable: true,
+			enumerable: true,
+			writable: true,
+			value: function append() {
+				var argArr = Array.prototype.slice.call(arguments),
+					docFrag = document.createDocumentFragment();
+
+				argArr.forEach(function(argItem) {
+					var isNode = argItem instanceof Node;
+					docFrag.appendChild(
+						isNode
+							? argItem
+							: document.createTextNode(String(argItem))
+					);
+				});
+
+				this.appendChild(docFrag);
+			}
+		});
+	});
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+(function () {
+    if ( typeof NodeList.prototype.forEach === "function" ) return false;
+    NodeList.prototype.forEach = Array.prototype.forEach;
+})();
 
 /**
  * matches() pollyfil

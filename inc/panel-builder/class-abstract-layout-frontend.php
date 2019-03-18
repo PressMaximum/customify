@@ -12,6 +12,9 @@ abstract class Customify_Abstract_Layout_Frontend {
 	protected $data = false;
 	protected $config_items = false;
 
+	public function get_id() {
+		return $this->id;
+	} 
 	public function set_id( $id ) {
 		$this->id   = $id;
 		$this->data = null;

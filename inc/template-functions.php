@@ -317,7 +317,7 @@ function customify_search_form( $form ) {
 		<form role="search" class="sidebar-search-form" action="' . esc_url( home_url( '/' ) ) . '">
             <label>
                 <span class="screen-reader-text">' . _x( 'Search for:', 'label', 'customify' ) . '</span>
-                <input type="search" class="search-field" placeholder="' . esc_attr( 'Search &hellip;', 'customify' ) . '" value="' . get_search_query() . '" name="s" title="' . esc_attr_x( 'Search for:', 'label', 'customify' ) . '" />
+                <input type="search" class="search-field" placeholder="' . esc_attr__( 'Search &hellip;', 'customify' ) . '" value="' . get_search_query() . '" name="s" title="' . esc_attr_x( 'Search for:', 'label', 'customify' ) . '" />
             </label>
             <button type="submit" class="search-submit" >
                 <svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
