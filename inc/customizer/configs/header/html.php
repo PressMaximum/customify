@@ -94,8 +94,7 @@ class Customify_Builder_Item_HTML {
 	function render() {
 		$content = Customify()->get_setting( $this->name );
 		echo '<div class="builder-header-' . esc_attr( $this->id ) . '-item item--html">';
-		//echo apply_filters( 'customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
-		echo apply_filters( 'customify_the_content', wp_kses_post( do_shortcode( $content ) ) );
+		echo apply_filters( 'customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
 		echo '</div>';
 	}
 }
