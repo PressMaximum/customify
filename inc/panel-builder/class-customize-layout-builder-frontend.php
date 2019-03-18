@@ -21,6 +21,10 @@ class Customify_Customize_Layout_Builder_Frontend {
 		return self::$_instance;
 	}
 
+	public function get_id() {
+		return $this->id;
+	}
+
 	public function set_id( $id ) {
 		$this->id   = $id;
 		$this->data = null;
