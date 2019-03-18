@@ -762,8 +762,7 @@ $animation_speed: 0.3s !default;
 }
 
 /* Saved templates */
-.save-template-form,
-.flex-form {
+.save-template-form, .flex-form {
 	display: flex;
 	margin-bottom: 15px;
 	.button {
