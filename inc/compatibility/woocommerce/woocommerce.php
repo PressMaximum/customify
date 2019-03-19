@@ -882,12 +882,12 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 						endwhile; // end of the loop.
 					woocommerce_product_loop_end();
 					do_action( 'woocommerce_after_shop_loop' );
-					elseif ( ! woocommerce_product_subcategories(
-						array(
-							'before' => woocommerce_product_loop_start( false ),
-							'after'  => woocommerce_product_loop_end( false ),
-						)
-					) ) :
+				elseif ( ! woocommerce_product_subcategories(
+					array(
+						'before' => woocommerce_product_loop_start( false ),
+						'after'  => woocommerce_product_loop_end( false ),
+					)
+				) ) :
 					do_action( 'woocommerce_no_products_found' );
 				endif; ?>
 			</div>
