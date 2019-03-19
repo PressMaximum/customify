@@ -8,6 +8,7 @@
 * FIXED: Multiple header does not work with shortcode has arguments.
 * FIXED: Hamburger/mobile icon menu not working iOS9.
 * FIXED: Menu burger not working with IE11/Edge.
+* FIXED: Escape input placeholder attribute.
 * IMPROVED: Better RTL support.
 * IMPROVED: Rename builder item `Logo & Site Identity` to `Logo`.
 
