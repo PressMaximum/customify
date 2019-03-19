@@ -901,7 +901,7 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 
 					<?php do_action( 'woocommerce_after_shop_loop' ); ?>
 
-					<?php
+				<?php // @codingStandardsIgnoreLine .
 				elseif ( ! woocommerce_product_subcategories(
 					array(
 						'before' => woocommerce_product_loop_start( false ),
