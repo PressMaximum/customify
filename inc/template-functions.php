@@ -215,6 +215,9 @@ if ( ! function_exists( 'customify_is_footer_display' ) ) {
 		$show = true;
 		if ( customify_is_support_meta() ) {
 			$rows  = array( 'main', 'bottom' );
+			if ( class_exists( 'Customify_Pro' ) ) {
+				$rows[] = 'top';
+			}
 			$count = 0;
 			foreach ( $rows as $row_id ) {
 				if ( ! customify_is_builder_row_display( 'footer', $row_id ) ) {
