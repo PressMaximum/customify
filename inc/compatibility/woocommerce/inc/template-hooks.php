@@ -17,7 +17,8 @@ function customify_wc_reset_default_hooks() {
 	if ( Customify()->get_setting( 'wc_single_layout_breadcrumb' ) ) {
 		add_action( 'woocommerce_single_product_summary_before', 'woocommerce_breadcrumb', 5 );
 	}
-
+	add_action( 'customify/wc-product/before-media', 'woocommerce_template_loop_product_link_open', 10 );
+	add_action( 'customify/wc-product/after-media', 'woocommerce_template_loop_product_link_close', 10 );
 }
 
 add_action( 'wp', 'customify_wc_reset_default_hooks' );
