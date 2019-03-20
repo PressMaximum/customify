@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-03-20 01:47:24+00:00\n"
+"POT-Creation-Date: 2019-03-20 03:34:05+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1130,7 +1130,7 @@ msgstr ""
 msgid "Show shop breadcrumb"
 msgstr ""
 
-#: inc/compatibility/woocommerce/inc/template-hooks.php:153
+#: inc/compatibility/woocommerce/inc/template-hooks.php:154
 msgid "Your order"
 msgstr ""
 
