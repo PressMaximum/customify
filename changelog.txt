@@ -1,7 +1,7 @@
 = 0.2.9 =
 
-* NEW: Option copy settings from parent to child theme.
-* NEW: Header builder version 2.
+* NEW: Child theme copy the Customizer settings.
+* NEW: Header Builder version 2.
 * FIXED: The Primary Menu typography does not work with menu in Menu Sidebar.
 * FIXED: Change the logo alt text.
 * FIXED: Shop button color setting does not work.
