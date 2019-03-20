@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.2.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-03-20 03:34:05+00:00\n"
+"POT-Creation-Date: 2019-03-20 07:25:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -496,7 +496,7 @@ msgstr ""
 #: inc/customizer/configs/page-header.php:455
 #: inc/customizer/configs/page-header.php:476
 #: inc/customizer/configs/page-header.php:494
-#: inc/customizer/controls/class-control-base.php:266
+#: inc/customizer/controls/class-control-base.php:267
 msgid "Default"
 msgstr ""
 
@@ -1725,7 +1725,7 @@ msgstr ""
 #: inc/customizer/configs/footer/templates.php:36
 #: inc/customizer/configs/header/templates.php:36
 #: inc/customizer/controls/class-control-base.php:135
-#: inc/customizer/controls/class-control-base.php:263
+#: inc/customizer/controls/class-control-base.php:264
 msgid "Untitled"
 msgstr ""
 
@@ -2798,30 +2798,30 @@ msgstr ""
 msgid "Payment Methods Item"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:261
+#: inc/customizer/controls/class-control-base.php:262
 msgid "Theme Default"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:262
+#: inc/customizer/controls/class-control-base.php:263
 msgid "Reset this section settings"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:264
+#: inc/customizer/controls/class-control-base.php:265
 msgid "Do you want to reset this section settings?"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:364
+#: inc/customizer/controls/class-control-base.php:365
 #: inc/customizer/controls/class-control-repeater.php:50
 #: inc/customizer/controls/class-control-repeater.php:51
 msgid "Reorder"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:364
+#: inc/customizer/controls/class-control-base.php:365
 #: inc/customizer/controls/class-control-repeater.php:51
 msgid "Done"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:366
+#: inc/customizer/controls/class-control-base.php:367
 #: inc/customizer/controls/class-control-repeater.php:54
 msgid "Add an item"
 msgstr ""
@@ -3229,12 +3229,12 @@ msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:267
+#: inc/customizer/controls/class-control-base.php:268
 msgctxt "customify-font-weight"
 msgid "Normal"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:268
+#: inc/customizer/controls/class-control-base.php:269
 msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""

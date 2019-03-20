@@ -250,6 +250,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			);
 
 			$posts = $query->get_posts();
+			$single_post_url = home_url( '/' );
 			if ( count( $posts ) ) {
 				$single_post_url = get_permalink( $posts[0] );
 			}
