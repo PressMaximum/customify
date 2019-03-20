@@ -46,7 +46,6 @@ class Customify_Sanitize_Input {
 		$control = $setting->manager->get_control( $setting->id );
 		$s       = new Customify_Sanitize_Input( $control, $setting );
 		$input   = $s->sanitize( $input );
-
 		return $input;
 	}
 
@@ -443,7 +442,7 @@ class Customify_Sanitize_Input {
 				$value = $this->sanitize_text_field_deep( $value );
 				break;
 			case 'textarea':
-				$value = $this->sanitize_text_field_deep( $value, true );
+				$value = wp_filter_post_kses( $value );
 				break;
 			default:
 				$has_device = false;

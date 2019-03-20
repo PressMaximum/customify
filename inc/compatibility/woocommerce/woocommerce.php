@@ -848,7 +848,6 @@ if ( ! function_exists( 'woocommerce_shop_loop_item_title' ) ) {
  */
 
 if ( ! function_exists( 'woocommerce_content' ) ) {
-
 	/**
 	 * Output WooCommerce content.
 	 *
@@ -857,63 +856,42 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 	 * without hooks or modifying core templates.
 	 */
 	function woocommerce_content() {
-
 		if ( is_singular( 'product' ) ) {
-
 			while ( have_posts() ) :
 				the_post();
-
 				wc_get_template_part( 'content', 'single-product' );
-
 			endwhile;
-
 		} else {
 			$view = customify_get_default_catalog_view_mod();
-
 			?>
 			<div class="woocommerce-listing wc-product-listing <?php echo esc_attr( 'wc-' . $view . '-view' ); ?>">
-
-				<?php if ( Customify_WC()->show_shop_title() ) { ?>
-					<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-						<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
-					<?php endif; ?>
-					<?php do_action( 'woocommerce_archive_description' ); ?>
-				<?php } ?>
-
 				<?php
+				if ( Customify_WC()->show_shop_title() ) {
+					if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
+						<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
+						<?php
+					endif;
+					do_action( 'woocommerce_archive_description' );
+				}
 				if ( have_posts() ) :
-					?>
-
-					<?php do_action( 'woocommerce_before_shop_loop' ); ?>
-
-					<?php woocommerce_product_loop_start(); ?>
-
-					<?php
+					do_action( 'woocommerce_before_shop_loop' );
+					woocommerce_product_loop_start();
 					while ( have_posts() ) :
 						the_post();
-						?>
-
-						<?php wc_get_template_part( 'content', 'product' ); ?>
-
-					<?php endwhile; // end of the loop. ?>
-
-					<?php woocommerce_product_loop_end(); ?>
-
-					<?php do_action( 'woocommerce_after_shop_loop' ); ?>
-
-					<?php
+						wc_get_template_part( 'content', 'product' );
+						endwhile; // end of the loop.
+					woocommerce_product_loop_end();
+					do_action( 'woocommerce_after_shop_loop' );
 				elseif ( ! woocommerce_product_subcategories(
 					array(
 						'before' => woocommerce_product_loop_start( false ),
 						'after'  => woocommerce_product_loop_end( false ),
 					)
 				) ) :
-				?>
-					<?php do_action( 'woocommerce_no_products_found' ); ?>
-				<?php endif; ?>
+					do_action( 'woocommerce_no_products_found' );
+				endif; ?>
 			</div>
 			<?php
-
 		}
 	}
 }
