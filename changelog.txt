@@ -1,13 +1,15 @@
 = 0.2.9 =
-
-* NEW: Option copy settings from parent to child theme.
-* NEW: Header builder version 2.
+* NEW: Header Builder version 2.
+* NEW: Child theme copy the Customizer settings.
+* IMPROVED: Better RTL support.
+* IMPROVED: Rename builder item `Logo & Site Identity` to `Logo`.
 * FIXED: The Primary Menu typography does not work with menu in Menu Sidebar.
 * FIXED: Change the logo alt text.
 * FIXED: Shop button color setting does not work.
-* IMPROVED: Better RTL support.
-* IMPROVED: Rename builder item `Logo & Site Identity` to `Logo`.
-
+* FIXED: Multiple header does not work with shortcode has arguments.
+* FIXED: Hamburger/mobile icon menu not working iOS9.
+* FIXED: Menu burger not working with IE11/Edge.
+* FIXED: Escape input placeholder attribute.
 
 = 0.2.8 =
 * FIXED: Breadcrumb alignment.
@@ -35,7 +37,6 @@
 * FIXED: Fix issue wrong trim product content by more tag.
 * FIXED: Fix missing single post pagination.
 * FIXED: Full blog post content for post excerpt type.
-
 
 = 0.2.4 =
 * NEW: Add related posts for single post.

@@ -418,12 +418,20 @@ class Customify_WC_Catalog_Designer {
 
 	function product__media() {
 		echo '<div class="wc-product-media">';
-		woocommerce_template_loop_product_link_open();
+		/**
+		 * Hook: customify/wc-product/before-media
+		 * hooked: woocommerce_template_loop_product_link_open - 10
+		 */
+		do_action( 'customify/wc-product/before-media' );
 		woocommerce_show_product_loop_sale_flash();
 		woocommerce_template_loop_product_thumbnail();
 		customify_wc_secondary_product_thumbnail();
 		do_action( 'customify_after_loop_product_media' );
-		woocommerce_template_loop_product_link_close();
+		/**
+		 * Hook: customify/wc-product/after-media
+		 * hooked: woocommerce_template_loop_product_link_close - 10
+		 */
+		do_action( 'customify/wc-product/after-media' );
 		echo '</div>';
 	}
 
