@@ -58,14 +58,17 @@ function customify_customize_render_header() {
 	 */
 	$builder = call_user_func_array( $fn, array() );
 
+	$header_classes = array( 'site-header', 'header-' . $version );
+
 	echo $builder->close_icon( ' close-panel close-sidebar-panel' );
 	/**
 	 * Hook before header
 	 *
 	 * @since 0.2.2
+	 * @since 0.2.9
 	 */
 	do_action( 'customizer/before-header' );
-	echo '<header id="masthead" class="site-header">';
+	echo '<header id="masthead" class="' . join( ' ', $header_classes ) . '">';
 		echo '<div id="masthead-inner" class="site-header-inner">';
 			$builder->set_id( 'header' );
 			$builder->set_control_id( $control_id );
