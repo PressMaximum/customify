@@ -17,6 +17,7 @@ function customify_maybe_change_header_version() {
 	// If data of version 1 do not exists.
 	if ( ! $ver1_data || empty( $ver1_data ) ) {
 		set_theme_mod( 'header_builder_version', 'v2' );
+		set_theme_mod( 'hide_header_builder_switcher', 'yes' );
 	}
 }
 

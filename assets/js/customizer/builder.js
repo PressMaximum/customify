@@ -4,6 +4,10 @@
 
 	wpcustomize.bind("ready", function(e, b) {
 		var addVersionChange = function(opts, builder, id, version) {
+			if ( Customify_Layout_Builder.hide_switcher === 'yes' ) {
+				return ;
+			}
+
 			if (typeof opts.versions === "object") {
 				var select_options = '';
 				$.each(opts.versions, function(key, _opts) {
