@@ -68,7 +68,7 @@ function customify_customize_render_header() {
 	 * @since 0.2.2
 	 * @since 0.2.9
 	 */
-	do_action( 'customizer/before-header' );
+	do_action( 'customify/before-header' );
 	echo '<header id="masthead" class="' . join( ' ', $header_classes ) . '">';
 		echo '<div id="masthead-inner" class="site-header-inner">';
 			$builder->set_id( 'header' );
@@ -83,7 +83,7 @@ function customify_customize_render_header() {
 	 *
 	 * @since 0.2.2
 	 */
-	do_action( 'customizer/after-header' );
+	do_action( 'customify/after-header' );
 }
 
 /**
