@@ -2,7 +2,11 @@
 * FIXED: Fix break layout for WooCommerce v3.6.1.
 * FIXED: Incorrect hook name.
 * FIXED: Row space need to be the same as content.
+* FIXED: Menu burger not working with IE11/Edge.
 * FIXED: Button color issue.
+* FIXED: Hamburger/mobile icon menu not working iOS9.
+* FIXED: Header v2 does not work with Header Sticky & Transparent.
+* FIXED: Missing margin left for sub-ul in post/page content.
 
 = 0.2.9 =
 * NEW: Header Builder version 2.

@@ -3405,7 +3405,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .entry-content ol ol,
 .entry-content ul ol,
 .entry-content ol ul {
-  margin: 0 auto;
+  margin-bottom: 0px;
+  margin-top: 0px;
+  margin-left: 2.5em;
 }
 
 .entry-content ul ul li,
