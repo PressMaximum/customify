@@ -272,11 +272,21 @@
 	.item--inner {
 		display: inline-flex;
 		align-items: center;
+		margin-left: 0.5em;
+		margin-right: 0.5em;
+		&:first-child {
+			margin-left: 0;
+		}
+		&::last-child {
+			margin-right: 0;
+		}
 	}
 	.col-v2 {
 		display: flex;
 		&.col-v2-center {
 			justify-content: center;
+			margin-left: 1em;
+			margin-right: 1em;
 		}
 		&.col-v2-left {
 			justify-content: flex-start;
@@ -310,14 +320,6 @@
 	}
 }
 
-.col-v2-right {
-	.item--inner {
-		margin-left: 1em;
-		&:first-child {
-			margin-left: 0px;
-		}
-	}
-}
 
 #masthead{
     > .customize-partial-edit-shortcut {
@@ -328,13 +330,4 @@
             left: 0px;
         }
     }
-}
-
-.col-v2-left {
-	.item--inner {
-		margin-right: 1em;
-		&:last-child {
-			margin-right: 0px;
-		}
-	}
 }

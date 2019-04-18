@@ -17,6 +17,7 @@ function customify_maybe_change_header_version() {
 	// If data of version 1 do not exists.
 	if ( ! $ver1_data || empty( $ver1_data ) ) {
 		set_theme_mod( 'header_builder_version', 'v2' );
+		set_theme_mod( 'hide_header_builder_switcher', 'yes' );
 	}
 }
 
@@ -58,14 +59,17 @@ function customify_customize_render_header() {
 	 */
 	$builder = call_user_func_array( $fn, array() );
 
+	$header_classes = array( 'site-header', 'header-' . $version );
+
 	echo $builder->close_icon( ' close-panel close-sidebar-panel' );
 	/**
 	 * Hook before header
 	 *
 	 * @since 0.2.2
+	 * @since 0.2.9
 	 */
-	do_action( 'customizer/before-header' );
-	echo '<header id="masthead" class="site-header">';
+	do_action( 'customify/before-header' );
+	echo '<header id="masthead" class="' . join( ' ', $header_classes ) . '">';
 		echo '<div id="masthead-inner" class="site-header-inner">';
 			$builder->set_id( 'header' );
 			$builder->set_control_id( $control_id );
@@ -79,7 +83,7 @@ function customify_customize_render_header() {
 	 *
 	 * @since 0.2.2
 	 */
-	do_action( 'customizer/after-header' );
+	do_action( 'customify/after-header' );
 }
 
 /**

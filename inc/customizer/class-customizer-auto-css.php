@@ -856,59 +856,62 @@ class Customify_Customizer_Auto_CSS {
 				$key_name = 'name';
 			}
 
-			$key = $field[ $key_name ];
+			if ( isset( $field[ $key_name ] ) ) {
 
-			$v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
-			if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
-				if ( ( $field['selector'] && $field['css_format'] ) || 'modal' == $field['type'] ) {
-					switch ( $field['type'] ) {
-						case 'css_ruler':
-							$listcss[ $key ] = $this->css_ruler( $field, $v, $no_selector );
-							break;
-						case 'slider':
-							$listcss[ $key ] = $this->slider( $field, $v, $no_selector );
-							break;
-						case 'color':
-							$listcss[ $key ] = $this->color( $field, $v, $no_selector );
-							break;
-						case 'shadow':
-							$listcss[ $key ] = $this->shadow( $field, $v, $no_selector );
-							break;
-						case 'image':
-							$listcss[ $key ] = $this->image( $field, $v, $no_selector );
-							break;
-						case 'checkbox':
-							if ( 'html_class' !== $field['css_format'] ) {
-								$listcss[ $key ] = $this->checkbox( $field, $v, $no_selector );
-							}
-							break;
-						case 'text_align':
-						case 'text_align_no_justify':
-							$listcss[ $key ] = $this->text_align( $field, $v, $no_selector );
-							break;
-						case 'font':
-							$this->font( $field, $v );
-							break;
-						case 'styling':
-							$this->styling( $field, $v );
-							break;
-						case 'modal':
-							$this->modal( $field, $v );
-							break;
-						default:
-							switch ( $field['css_format'] ) {
-								case 'typography':
-									$this->typography( $field );
-									break;
-								case 'html_class':
-									break;
-								default:
-									$listcss[ $key ] = $this->maybe_devices_setup( $field, 'setup_default', $v, $no_selector );
+				$key = $field[ $key_name ];
 
-							}
+				$v = isset( $values[ $field['name'] ] ) ? $values[ $field['name'] ] : null;
+				if ( ! ( is_null( $v ) && $skip_if_val_null ) ) {
+					if ( ( $field['selector'] && $field['css_format'] ) || 'modal' == $field['type'] ) {
+						switch ( $field['type'] ) {
+							case 'css_ruler':
+								$listcss[ $key ] = $this->css_ruler( $field, $v, $no_selector );
+								break;
+							case 'slider':
+								$listcss[ $key ] = $this->slider( $field, $v, $no_selector );
+								break;
+							case 'color':
+								$listcss[ $key ] = $this->color( $field, $v, $no_selector );
+								break;
+							case 'shadow':
+								$listcss[ $key ] = $this->shadow( $field, $v, $no_selector );
+								break;
+							case 'image':
+								$listcss[ $key ] = $this->image( $field, $v, $no_selector );
+								break;
+							case 'checkbox':
+								if ( 'html_class' !== $field['css_format'] ) {
+									$listcss[ $key ] = $this->checkbox( $field, $v, $no_selector );
+								}
+								break;
+							case 'text_align':
+							case 'text_align_no_justify':
+								$listcss[ $key ] = $this->text_align( $field, $v, $no_selector );
+								break;
+							case 'font':
+								$this->font( $field, $v );
+								break;
+							case 'styling':
+								$this->styling( $field, $v );
+								break;
+							case 'modal':
+								$this->modal( $field, $v );
+								break;
+							default:
+								switch ( $field['css_format'] ) {
+									case 'typography':
+										$this->typography( $field );
+										break;
+									case 'html_class':
+										break;
+									default:
+										$listcss[ $key ] = $this->maybe_devices_setup( $field, 'setup_default', $v, $no_selector );
+
+								}
+						}
 					}
 				}
-			}
+			} // End check field exists.
 		} // end for each fields
 
 		return $listcss;

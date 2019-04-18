@@ -873,7 +873,7 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 					endif;
 					do_action( 'woocommerce_archive_description' );
 				}
-				if ( have_posts() ) :
+				if ( have_posts() ) {
 					do_action( 'woocommerce_before_shop_loop' );
 					woocommerce_product_loop_start();
 					while ( have_posts() ) :
@@ -882,14 +882,15 @@ if ( ! function_exists( 'woocommerce_content' ) ) {
 						endwhile; // end of the loop.
 					woocommerce_product_loop_end();
 					do_action( 'woocommerce_after_shop_loop' );
-				elseif ( ! woocommerce_product_subcategories(
+				} elseif ( ! woocommerce_product_subcategories(
 					array(
 						'before' => woocommerce_product_loop_start( false ),
 						'after'  => woocommerce_product_loop_end( false ),
 					)
-				) ) :
+				) ) {
 					do_action( 'woocommerce_no_products_found' );
-				endif; ?>
+				}
+				?>
 			</div>
 			<?php
 		}
