@@ -160,7 +160,6 @@ class Customify_Editor {
 		 * @since 0.3.0
 		 */
 		$config_fields = Customify()->customizer->get_config();
-		// unset( $config_fields['setting|background'] );
 		$c = new Customify_Customizer_Auto_CSS();
 		$css_code = $c->render_css( $config_fields );
 
