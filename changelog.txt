@@ -1,5 +1,8 @@
 = 0.3.0 =
 * FIXED: Fix break layout for WooCommerce v3.6.1.
+* FIXED: Incorrect hook name.
+* FIXED: Row space need to be the same as content.
+* FIXED: Hide switch builder item option for new installs.
 
 = 0.2.9 =
 * NEW: Header Builder version 2.
