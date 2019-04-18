@@ -378,7 +378,7 @@ class Customify {
 	}
 
 	public function customify_style() {
-		
+
 	}
 
 	function admin_scripts() {

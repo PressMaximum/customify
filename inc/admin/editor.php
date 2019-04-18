@@ -88,7 +88,7 @@ class Customify_Editor {
 
 		$c = new Customify_Customizer_Auto_CSS();
 		$css = $c->render_css( $fields );
-		
+
 		$css .= '.edit-post-layout__content .edit-post-layout__metaboxes { background: #FFF; }
 		.edit-post-layout__metaboxes:not(:empty) { margin-top: 0px; }
 		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
@@ -160,8 +160,7 @@ class Customify_Editor {
 		 * @since 0.3.0
 		 */
 		$config_fields = Customify()->customizer->get_config();
-		//unset( $config_fields['setting|background'] );
-
+		// unset( $config_fields['setting|background'] );
 		$c = new Customify_Customizer_Auto_CSS();
 		$css_code = $c->render_css( $config_fields );
 
