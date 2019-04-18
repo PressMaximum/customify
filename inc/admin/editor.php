@@ -37,13 +37,24 @@ class Customify_Editor {
 		$fields = array();
 		$keys = array(
 			'container_width',
+			'site_content_styling',
+			'content_background',
 			'single_blog_post_content_width',
 			'global_typography_heading_h1',
 			'global_typography_base_heading',
+			'global_styling_color_heading',
 		);
 
 		foreach ( $keys as $k ) {
-			$fields[ $k ] = Customify()->customizer->get_field_setting( $k );
+			$f  = Customify()->customizer->get_field_setting( $k );
+			if ( $f ) {
+				$fields[ $k ] = $f;
+			}
+		}
+
+		if ( $fields['global_styling_color_heading'] ) {
+			$fields['global_styling_color_heading']['selector'] = '.editor-styles-wrapper .editor-post-title .editor-post-title__input';
+			$fields['global_styling_color_heading']['css_format'] = 'color: {{value}};';
 		}
 
 		if ( $fields['container_width'] ) {
@@ -57,14 +68,27 @@ class Customify_Editor {
 		}
 
 		if ( $fields['global_typography_base_heading'] ) {
-			$fields['global_typography_base_heading']['selector'] = '.editor-styles-wrapper .editor-post-title__block .editor-post-title__input';
+			$fields['global_typography_base_heading']['selector'] = '.editor-post-title__block .editor-post-title__input';
 		}
 		if ( $fields['global_typography_heading_h1'] ) {
-			$fields['global_typography_heading_h1']['selector'] = '.editor-styles-wrapper .editor-post-title__block texarea.editor-post-title__input';
+			$fields['global_typography_heading_h1']['selector'] = ' .editor-post-title__block texarea.editor-post-title__input';
+		}
+
+		if ( $fields['site_content_styling'] ) {
+			$fields['site_content_styling']['selector'] = array(
+				'normal' => '.edit-post-visual-editor.editor-styles-wrapper',
+			);
+		}
+
+		if ( isset( $fields['content_background'] ) && $fields['content_background'] ) {
+			$fields['content_background']['selector'] = array(
+				'normal' => '.edit-post-layout__content',
+			);
 		}
 
 		$c = new Customify_Customizer_Auto_CSS();
 		$css = $c->render_css( $fields );
+		
 		$css .= '.edit-post-layout__content .edit-post-layout__metaboxes { background: #FFF; }
 		.edit-post-layout__metaboxes:not(:empty) { margin-top: 0px; }
 		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
@@ -136,7 +160,7 @@ class Customify_Editor {
 		 * @since 0.3.0
 		 */
 		$config_fields = Customify()->customizer->get_config();
-		unset( $config_fields['setting|background'] );
+		//unset( $config_fields['setting|background'] );
 
 		$c = new Customify_Customizer_Auto_CSS();
 		$css_code = $c->render_css( $config_fields );
