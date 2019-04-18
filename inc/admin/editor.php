@@ -38,6 +38,7 @@ class Customify_Editor {
 		$keys = array(
 			'background',
 			'site_content_styling',
+			'content_background',
 			'container_width',
 			'single_blog_post_content_width',
 			'global_typography_heading_h1',
@@ -58,8 +59,14 @@ class Customify_Editor {
 			$fields['single_blog_post_content_width']['css_format'] = 'max-width: {{value}};';
 		}
 
-		if ( $fields['background'] ) {
-			$fields['background']['selector'] = array(
+		if ( $fields['site_content_styling'] ) {
+			$fields['site_content_styling']['selector'] = array(
+				'normal' => '.edit-post-visual-editor.editor-styles-wrapper',
+			);
+		}
+
+		if ( $fields['content_background'] ) {
+			$fields['content_background']['selector'] = array(
 				'normal' => '.edit-post-layout__content',
 			);
 		}

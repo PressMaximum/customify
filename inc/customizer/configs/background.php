@@ -58,7 +58,7 @@ class Customify_Advanced_Styling_Background {
 				'section'    => 'background',
 				'title'      => __( 'Content Area Background', 'customify' ),
 				'selector'   => array(
-					'normal' => '.site-content',
+					'normal' => '.site-content .content-area',
 				),
 				'default'   => array(
 					'normal' => array(
