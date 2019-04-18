@@ -2,7 +2,7 @@
 * FIXED: Fix break layout for WooCommerce v3.6.1.
 * FIXED: Incorrect hook name.
 * FIXED: Row space need to be the same as content.
-* FIXED: Hide switch builder item option for new installs.
+* FIXED: Button color issue.
 
 = 0.2.9 =
 * NEW: Header Builder version 2.
@@ -18,6 +18,7 @@
 * FIXED: Escape input placeholder attribute.
 
 = 0.2.8 =
+* FIXED: Breadcrumb alignment.
 * FIXED: Breadcrumb alignment.
 * FIXED: Gutenberg compatible.
 * FIXED: Update WooCommerce outdate templates.
