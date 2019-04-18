@@ -7,6 +7,7 @@
 * FIXED: Hamburger/mobile icon menu not working iOS9.
 * FIXED: Header v2 does not work with Header Sticky & Transparent.
 * FIXED: Missing margin left for sub-ul in post/page content.
+* FIXED: Remove compatible Gutenberg background.
 
 = 0.2.9 =
 * NEW: Header Builder version 2.

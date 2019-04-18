@@ -64,12 +64,6 @@ class Customify_Editor {
 			);
 		}
 
-		if ( $fields['site_content_styling'] ) {
-			$fields['site_content_styling']['selector'] = array(
-				'normal' => '.edit-post-visual-editor.editor-styles-wrapper',
-			);
-		}
-
 		if ( $fields['global_typography_base_heading'] ) {
 			$fields['global_typography_base_heading']['selector'] = '.editor-styles-wrapper .editor-post-title__block .editor-post-title__input';
 		}
