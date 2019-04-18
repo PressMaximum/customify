@@ -36,9 +36,6 @@ class Customify_Editor {
 	public function css() {
 		$fields = array();
 		$keys = array(
-			'background',
-			'site_content_styling',
-			'content_background',
 			'container_width',
 			'single_blog_post_content_width',
 			'global_typography_heading_h1',
@@ -57,18 +54,6 @@ class Customify_Editor {
 		if ( $fields['single_blog_post_content_width'] ) {
 			$fields['single_blog_post_content_width']['selector'] = '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"])';
 			$fields['single_blog_post_content_width']['css_format'] = 'max-width: {{value}};';
-		}
-
-		if ( $fields['site_content_styling'] ) {
-			$fields['site_content_styling']['selector'] = array(
-				'normal' => '.edit-post-visual-editor.editor-styles-wrapper',
-			);
-		}
-
-		if ( $fields['content_background'] ) {
-			$fields['content_background']['selector'] = array(
-				'normal' => '.edit-post-layout__content',
-			);
 		}
 
 		if ( $fields['global_typography_base_heading'] ) {
@@ -144,7 +129,19 @@ class Customify_Editor {
 		if ( file_exists( $file ) ) {
 			$file_contents .= $wp_filesystem->get_contents( $file );
 		}
-		$file_contents .= Customify_Customizer_Auto_CSS::get_instance()->auto_css();
+
+		/**
+		 * Remove editor background
+		 *
+		 * @since 0.3.0
+		 */
+		$config_fields = Customify()->customizer->get_config();
+		unset( $config_fields['setting|background'] );
+
+		$c = new Customify_Customizer_Auto_CSS();
+		$css_code = $c->render_css( $config_fields );
+
+		$file_contents .= $css_code;
 		return $file_contents;
 	}
 
