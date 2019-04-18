@@ -1,3 +1,6 @@
+= 0.3.0 =
+* FIXED: Fix break layout for WooCommerce v3.6.1.
+
 = 0.2.9 =
 * NEW: Header Builder version 2.
 * NEW: Child theme copy the Customizer settings.
