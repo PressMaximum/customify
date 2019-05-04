@@ -442,7 +442,7 @@ class Customify_Sanitize_Input {
 				$value = $this->sanitize_text_field_deep( $value );
 				break;
 			case 'textarea':
-				$value = wp_filter_post_kses( $value );
+				$value = wp_kses_post( $value );
 				break;
 			default:
 				$has_device = false;

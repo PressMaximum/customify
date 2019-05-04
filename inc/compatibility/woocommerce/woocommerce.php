@@ -293,6 +293,9 @@ class Customify_WC {
 
 	function body_class( $classes ) {
 		$classes['woocommerce'] = 'woocommerce';
+		if ( version_compare( WC()->version, '3.6.0' ) >= 0 ) {
+			$classes[] = 'later-wc-version';
+		}
 
 		return $classes;
 	}

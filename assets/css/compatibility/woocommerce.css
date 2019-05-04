@@ -3727,6 +3727,14 @@ form.woocommerce-checkout::after {
   margin-right: 2em;
 }
 
+.later-wc-version .woocommerce-form-login .lost_password {
+  float: none;
+  clear: both;
+  text-align: right;
+  margin-top: 0;
+  padding: 0 3px;
+}
+
 .woocommerce-checkout-review-order table.shop_table tr, .woocommerce-checkout-review-order table.shop_table td, .woocommerce-checkout-review-order table.shop_table th {
   padding-left: 0px;
 }
