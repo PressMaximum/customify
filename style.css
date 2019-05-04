@@ -3576,6 +3576,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 /* Header Builder Common */
 .site-header {
   position: relative;
+  z-index: 10;
 }
 .site-header .customify-container {
   display: flex;

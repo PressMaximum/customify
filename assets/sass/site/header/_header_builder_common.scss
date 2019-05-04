@@ -2,6 +2,7 @@
 
 .site-header {
 	position: relative;
+	z-index: 10;
 	.customify-container {
 		display: flex;
 		flex-direction: column;
