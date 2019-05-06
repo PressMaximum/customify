@@ -60,11 +60,11 @@ class Customify_Dashboard {
 						<?php $child_theme = wp_get_theme(); ?>
 						<?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify' ), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__( 'Customify', 'customify' ). '</strong>' ); // phpcs:ignore ?>
 						<?php
-							$copy_link_args = array(
-								'page' => 'customify',
-								'action' => 'show_copy_settings',
-							);
-							$copy_link = add_query_arg( $copy_link_args, admin_url( 'themes.php' ) );
+						$copy_link_args = array(
+							'page' => 'customify',
+							'action' => 'show_copy_settings',
+						);
+						$copy_link = add_query_arg( $copy_link_args, admin_url( 'themes.php' ) );
 						?>
 						<?php printf( '%s <a href="%s" class="go-to-setting">%s</a>', esc_html__( 'Now you can copy setting data from parent theme to this child theme', 'customify' ), esc_url( $copy_link ), esc_html__( 'Copy Settings', 'customify' ) ); ?>
 					<?php } ?>
