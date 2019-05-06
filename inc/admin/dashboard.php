@@ -195,22 +195,26 @@ class Customify_Dashboard {
 							<strong> <?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of Customify', 'customify' ), $child_theme->Name ); // phpcs:ignore ?></strong>
 						</p>
 						<p><?php printf( esc_html__( "Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'customify' ) ); ?></p>
-						<p>
-							<?php
-							$select = '<select name="copy_from">';
-								$select .= '<option value="">' . esc_html__( 'From Theme', 'customify' ) . '</option>';
-								$select .= '<option value="customify">Customify</option>';
-								$select .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
-							$select .= '</select>';
-							$select_2 = '<select name="copy_to">';
-								$select_2 .= '<option value="">' . esc_html__( 'To Theme', 'customify' ) . '</option>';
-								$select_2 .= '<option value="customify">Customify</option>';
-								$select_2 .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
-							$select_2 .= '</select>';
-							echo sprintf( '%1$s %2$s %3$s', $select, esc_html__( 'to', 'customify' ), $select_2 );
-							?>
-							<input type="submit" class="button button-secondary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
-						</p>
+						<div class="form-fields">
+							<div class="select-theme-fields">
+								<?php
+								$select = '<select name="copy_from">';
+									$select .= '<option value="">' . esc_html__( 'From Theme', 'customify' ) . '</option>';
+									$select .= '<option value="customify">Customify</option>';
+									$select .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+								$select .= '</select>';
+								$select_2 = '<select name="copy_to">';
+									$select_2 .= '<option value="">' . esc_html__( 'To Theme', 'customify' ) . '</option>';
+									$select_2 .= '<option value="customify">Customify</option>';
+									$select_2 .= '<option value="' . esc_attr( $child_theme->get_stylesheet() ) . '">' . ( $child_theme->Name ) . '</option>'; // phpcs:ignore
+								$select_2 .= '</select>';
+								echo sprintf( '%1$s <span>%2$s</span> %3$s', $select, esc_html__( 'To', 'customify' ), $select_2 );
+								?>
+							</div>
+							<div class="submit-field">
+								<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
+							</div>
+						</div>
 						<?php if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) { ?>
 							<p style="padding: 6px 20px 6px 5px;background-color: #ecf7ed;border-left: 4px solid #47B45D;"><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your settings were copied.', 'customify' ); ?></strong></p>
 						<?php } ?>

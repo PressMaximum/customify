@@ -140,8 +140,31 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'selector'   => "{$selector} .footer--row-inner",
 				'css_format' => 'background-color: {{value}}',
 			),
+			array(
+				'name'       => "{$section}_heading_color",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Heading Color', 'customify' ),
+				'selector'   => "{$selector} .footer--row-inner h1,
+								{$selector} .footer--row-inner h1,
+								{$selector} .footer--row-inner h2,
+								{$selector} .footer--row-inner h3,
+								{$selector} .footer--row-inner h4,
+								{$selector} .footer--row-inner h5,
+								{$selector} .footer--row-inner h6
+								",
+				'css_format' => 'color: {{value}}',
+			),
+			array(
+				'name'       => "{$section}_content_color",
+				'type'       => 'color',
+				'section'    => $section,
+				'title'      => __( 'Content Color', 'customify' ),
+				'selector'   => "{$skin_mode_selector} .builder-item, {$skin_mode_selector} .builder-item a",
+				'css_format' => 'color: {{value}}',
+			),
 		);
-
+		$config = apply_filters( 'customify/builder/' . $this->id . '/rows/section_configs', $config, $section, $section_name );
 		return $config;
 	}
 }
