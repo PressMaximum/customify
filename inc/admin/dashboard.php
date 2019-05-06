@@ -94,6 +94,9 @@ class Customify_Dashboard {
 
 	function setup() {
 		$theme        = wp_get_theme();
+		if ( is_child_theme() ) {
+			$theme = $theme->parent();
+		}
 		$this->config = array(
 			'name'       => $theme->get( 'Name' ),
 			'theme_uri'  => $theme->get( 'ThemeURI' ),
