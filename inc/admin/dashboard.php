@@ -56,9 +56,28 @@ class Customify_Dashboard {
 				<div class="customify-notice-content">
 					<div class="customify-notice-heading"><?php _e( 'Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify' ); ?></div>
 					<p><?php printf( __( 'To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify' ), esc_url( admin_url( 'themes.php?page=customify' ) ) ); ?></p>
+					<?php if ( is_child_theme() ) { ?>
+						<?php $child_theme = wp_get_theme(); ?>
+						<?php printf( esc_html__( 'You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify' ), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__( 'Customify', 'customify' ). '</strong>' ); // phpcs:ignore ?>
+						<?php
+							$copy_link_args = array(
+								'page' => 'customify',
+								'action' => 'show_copy_settings',
+							);
+							$copy_link = add_query_arg( $copy_link_args, admin_url( 'themes.php' ) );
+						?>
+						<?php printf( '%s <a href="%s" class="go-to-setting">%s</a>', esc_html__( 'Now you can copy setting data from parent theme to this child theme', 'customify' ), esc_url( $copy_link ), esc_html__( 'Copy Settings', 'customify' ) ); ?>
+					<?php } ?>
 				</div>
 			</div>
 		</div>
+			<?php
+		}
+		if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) {
+			?>
+			<div class="notice notice-success is-dismissible">
+				<p><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your theme settings were copied.', 'customify' ); ?></strong></p>
+			</div>
 			<?php
 		}
 	}
@@ -183,12 +202,15 @@ class Customify_Dashboard {
 	}
 
 	function copy_theme_settings() {
-		if ( is_child_theme() ) {
+		if ( is_child_theme() && isset( $_GET['action'] ) && 'show_copy_settings' == $_GET['action'] ) {
 			$child_theme = wp_get_theme();
 			$current_action_link = admin_url( 'themes.php?page=customify' );
 			?>
-			<div class="cd-box">
-				<div class="cd-box-top"><?php _e( 'Copy Settings', 'customify' ); ?></div>
+			<div class="cd-box copy-theme-settings">
+				<div class="cd-box-top">
+					<?php _e( 'Copy Settings', 'customify' ); ?>
+					<button type="button" class="notice-dismiss js-dismiss-notice" data-base_url="<?php echo esc_url( admin_url( 'themes.php?page=customify' ) ); ?>"></button>
+				</div>
 				<div class="cd-box-content">
 					<form method="post" action="<?php echo esc_attr( $current_action_link ); ?>" class="demo-import-boxed copy-settings-form">
 						<p>
@@ -215,9 +237,6 @@ class Customify_Dashboard {
 								<input type="submit" class="button button-primary" value="<?php esc_attr_e( 'Copy now', 'customify' ); ?>">
 							</div>
 						</div>
-						<?php if ( isset( $_GET['copied'] ) && 1 == $_GET['copied'] ) { ?>
-							<p style="padding: 6px 20px 6px 5px;background-color: #ecf7ed;border-left: 4px solid #47B45D;"><strong><span class="dashicons dashicons-yes" style="color: #79ba49;"></span>&nbsp;<?php esc_html_e( 'Your settings were copied.', 'customify' ); ?></strong></p>
-						<?php } ?>
 					</form>
 				</div>
 			</div>
