@@ -2,7 +2,8 @@
 * NEW: Add typography widget setting.
 * NEW: Footer widget title color.
 * NEW: Footer Widget Content Color.
-* FIXED: Incorrect hook name.
+* IMPROVED: Dismiss link for copy settings from parent theme to child theme box.
+* FIXED: Position of the text Lost your password - WooCommerce My account page.
 
 = 0.3.0 =
 * FIXED: Fix break layout for WooCommerce v3.6.1.
