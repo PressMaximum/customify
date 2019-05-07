@@ -3734,6 +3734,10 @@ form.woocommerce-checkout::after {
   margin-top: 0;
   padding: 0 3px;
 }
+.later-wc-version .woocommerce-form-login .woocommerce-form-login__rememberme {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}
 
 .woocommerce-checkout-review-order table.shop_table tr, .woocommerce-checkout-review-order table.shop_table td, .woocommerce-checkout-review-order table.shop_table th {
   padding-left: 0px;

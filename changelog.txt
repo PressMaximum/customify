@@ -1,3 +1,9 @@
+= 0.3.1 =
+* NEW: Add typography widget setting.
+* NEW: Footer widget title color.
+* NEW: Footer Widget Content Color.
+* FIXED: Incorrect hook name.
+
 = 0.3.0 =
 * FIXED: Fix break layout for WooCommerce v3.6.1.
 * FIXED: Incorrect hook name.
