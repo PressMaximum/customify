@@ -280,7 +280,7 @@ class Customify_Form_Fields {
 					$icon = '<i class="' . esc_attr( $tab['icon'] ) . '"></i>';
 				}
 
-				echo '<li class="li-' . esc_attr( $id ) . $class . '"><a href="#" data-tab-id="' . esc_attr( $id ) . '">' . $icon . esc_html( $tab['title'] ) . '</a></li>';
+				echo '<li class="li-' . esc_attr( $id ) . $class . '"><a href="#" data-tab-id="' . esc_attr( $id ) . '" data-title="' . esc_attr( $tab['title'] ) . '">' . $icon . esc_html( $tab['title'] ) . '</a></li>';
 				$i ++;
 			}
 			echo '</ul>';

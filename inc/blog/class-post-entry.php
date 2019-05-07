@@ -511,7 +511,9 @@ class Customify_Post_Entry {
 		} else {
 			$text = '';
 			if ( $this->post ) {
-				if ( $this->post->post_excerpt ) {
+				if ( '' != get_the_excerpt() ) {
+					$text = get_the_excerpt();
+				} elseif ( $this->post->post_excerpt ) {
 					$text = $this->post->post_excerpt;
 				} else {
 					$text = $this->post->post_content;

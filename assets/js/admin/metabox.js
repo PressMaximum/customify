@@ -1,5 +1,13 @@
 jQuery( document ).ready( function( $ ){
-
+	$( document ).on( 'click', '.copy-theme-settings .js-dismiss-notice', function(e) {
+		e.preventDefault();
+		var boxWrap = $(this).closest('.copy-theme-settings');
+		boxWrap.slideUp('medium').remove();
+		var baseUrl = $(this).attr('data-base_url');
+		if ( 'undefined' !== baseUrl && '' !== baseUrl ) {
+			history.pushState({}, '', baseUrl);
+		}
+	});
     // Metabox tabs
     $( document ).on( 'click', '.customify-mt-tabs-list a', function(e){
         e.preventDefault();

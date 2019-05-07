@@ -1739,6 +1739,10 @@ td.product-quantity {
   }
 }
 
+.site-header .builder-header-wc_cart-item .widget_shopping_cart .widgettitle {
+  display: none;
+}
+
 /*
 # Product meta
 # Product tabs
@@ -3721,6 +3725,18 @@ form.woocommerce-checkout::after {
   color: #CCCCCC;
   font-size: 17px;
   margin-left: 2em;
+}
+
+.later-wc-version .woocommerce-form-login .lost_password {
+  float: none;
+  clear: both;
+  text-align: left;
+  margin-top: 0;
+  padding: 0 3px;
+}
+.later-wc-version .woocommerce-form-login .woocommerce-form-login__rememberme {
+  margin-top: 5px;
+  margin-bottom: 15px;
 }
 
 .woocommerce-checkout-review-order table.shop_table tr, .woocommerce-checkout-review-order table.shop_table td, .woocommerce-checkout-review-order table.shop_table th {

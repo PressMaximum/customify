@@ -2,6 +2,7 @@
 
 .site-header {
 	position: relative;
+	z-index: 10;
 	.customify-container {
 		display: flex;
 		flex-direction: column;
@@ -274,12 +275,6 @@
 		align-items: center;
 		margin-left: 0.5em;
 		margin-right: 0.5em;
-		&:first-child {
-			margin-left: 0;
-		}
-		&::last-child {
-			margin-right: 0;
-		}
 	}
 	.col-v2 {
 		display: flex;
@@ -299,9 +294,9 @@
 			flex: 1 1 0;
 		}
 	}
-	
+
 	&.no-left.no-right {
-		.col-v2 { 
+		.col-v2 {
 			&.col-v2-center {
 				flex-basis: 100%;
 			}
@@ -320,14 +315,13 @@
 	}
 }
 
-
-#masthead{
-    > .customize-partial-edit-shortcut {
-        &.customize-partial-edit-shortcut-header_builder_panel {
-            display: none;
-        }
-        button {
-            left: 0px;
-        }
-    }
+#masthead {
+	> .customize-partial-edit-shortcut {
+		&.customize-partial-edit-shortcut-header_builder_panel {
+			display: none;
+		}
+		button {
+			left: 0px;
+		}
+	}
 }

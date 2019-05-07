@@ -543,6 +543,21 @@ form.woocommerce-checkout {
     }
 }
 
+.later-wc-version {
+	.woocommerce-form-login {
+		.lost_password {
+			float: none;
+			clear: both;
+			text-align:right;
+			margin-top: 0;
+			padding: 0 3px;
+		}
+		.woocommerce-form-login__rememberme{
+			margin-top: 5px;
+			margin-bottom: 15px;
+		}
+	}
+}
 // Checkout Review Order Box.
 .woocommerce-checkout-review-order {
 
