@@ -7,7 +7,7 @@
     },
     "devDependencies": {
         "autoprefixer": "latest",
-        "grunt": "^1.0.3",
+        "grunt": "^1.0.4",
         "grunt-bumpup": "latest",
         "grunt-contrib-clean": "latest",
         "grunt-contrib-compress": "latest",

@@ -3782,6 +3782,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 /* Header Builder Common */
 .site-header {
   position: relative;
+  z-index: 10;
 }
 .site-header .customify-container {
   display: -webkit-box;
@@ -4064,12 +4065,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
           align-items: center;
   margin-right: 0.5em;
   margin-left: 0.5em;
-}
-.row-v2 .item--inner:first-child {
-  margin-right: 0;
-}
-.row-v2 .item--inner::last-child {
-  margin-left: 0;
 }
 .row-v2 .col-v2 {
   display: -webkit-box;

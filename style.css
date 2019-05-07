@@ -3313,6 +3313,10 @@ article.comment .comment-post-author {
   margin-right: auto;
 }
 
+.entry-content .alignleft {
+  margin-right: 1.41575em;
+}
+
 .main-layout-content .entry-content > .alignwide {
   max-width: 100vw;
   max-width: calc(var(--vw, 1vw) * 100);

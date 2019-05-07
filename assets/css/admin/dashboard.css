@@ -511,4 +511,12 @@
   color: #46b450;
 }
 
+.copy-settings-form .submit-field {
+  margin-top: 10px;
+}
+
+.copy-theme-settings {
+  position: relative;
+}
+
 /*# sourceMappingURL=dashboard.css.map */
