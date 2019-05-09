@@ -1,3 +1,7 @@
+= 0.3.2 =
+* REMOVED: Footer Heading color in Customize => Footer => Footer Row setting.
+* REMOVED: Footer Content color in Customize => Footer => Footer Row setting.
+
 = 0.3.1 =
 * NEW: Add Widget Title typography. See in Customize => Typography => Base.
 * NEW: Footer Widget Title color. See in Customize => Footer => Footer Row setting.
