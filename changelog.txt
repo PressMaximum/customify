@@ -1,12 +1,8 @@
 = 0.3.2 =
 * IMPROVED: Site content widget title color.
-* REMOVED: Footer Heading color in Customize => Footer => Footer Row setting.
-* REMOVED: Footer Content color in Customize => Footer => Footer Row setting.
 
 = 0.3.1 =
 * NEW: Add Widget Title typography. See in Customize => Typography => Base.
-* NEW: Footer Widget Title color. See in Customize => Footer => Footer Row setting.
-* NEW: Footer Widget Content color. See in Customize => Footer => Footer Row setting.
 * IMPROVED: Dismiss link for copy settings from parent theme to child theme box.
 * FIXED: Position of the 'Lost your password' link on WooCommerce Account page.
 * FIXED: The Related Posts excerpt.
