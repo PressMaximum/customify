@@ -1958,7 +1958,7 @@ msgstr ""
 msgid ""
 "Submenu settings is a part of Advanced Header & Footer builder modules "
 "which only available in Customify Pro. <a target=\"_blank\" "
-"href=\"https://wpcustomify.com/help/documentation/customify-pro-modules/"
+"href=\"https://pressmaximum.com/docs/customify/customify-pro-modules/"
 "advanced-header-footer-builder/\">Learn more about it here</a>."
 msgstr ""
 
@@ -3005,7 +3005,7 @@ msgstr ""
 #: inc/panel-builder/class-layout-builder.php:426
 msgid ""
 "Enjoy building? Upgrade to <a target=\"_blank\" "
-"href=\"https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_"
+"href=\"https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_"
 "medium=links&utm_campaign=panel_text\">Customify Pro</a> to get more "
 "builder items and other premium features</a>."
 msgstr ""
@@ -3160,7 +3160,7 @@ msgid "Awaiting product image"
 msgstr ""
 
 #. Theme URI of the plugin/theme
-msgid "https://wpcustomify.com"
+msgid "https://pressmaximum.com"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -3176,7 +3176,7 @@ msgid ""
 "portal, consulting, church, restaurant, medical and so on. Customify is "
 "compatible with all well-coded plugins, including major ones like "
 "WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about "
-"the theme and ready to import demo sites at https://wpcustomify.com"
+"the theme and ready to import demo sites at https://pressmaximum.com"
 msgstr ""
 
 #. Author of the plugin/theme
@@ -3184,7 +3184,7 @@ msgid "WPCustomify"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://wpcustomify.com/about"
+msgid "https://pressmaximum.com/about"
 msgstr ""
 
 #: comments.php:40
