@@ -1,3 +1,6 @@
+= 0.3.3 =
+* UPDATED: API address URL.
+
 = 0.3.2 =
 * IMPROVED: Site content widget title color.
 
