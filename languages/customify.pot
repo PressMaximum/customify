@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.3.1\n"
+"Project-Id-Version: Customify 0.3.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-05-07 10:12:49+00:00\n"
+"POT-Creation-Date: 2019-05-09 04:26:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1729,15 +1729,6 @@ msgstr ""
 msgid "Skin Mode"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:147
-#: inc/customizer/configs/styling.php:271
-msgid "Heading Color"
-msgstr ""
-
-#: inc/customizer/configs/footer/panel.php:162
-msgid "Content Color"
-msgstr ""
-
 #: inc/customizer/configs/footer/templates.php:24
 #: inc/customizer/configs/header/templates.php:24
 msgid "Saved Templates"
@@ -2707,6 +2698,10 @@ msgstr ""
 msgid "Meta Color"
 msgstr ""
 
+#: inc/customizer/configs/styling.php:271
+msgid "Heading Color"
+msgstr ""
+
 #: inc/customizer/configs/styling.php:281
 msgid "Widget Title Color"
 msgstr ""
@@ -2736,7 +2731,7 @@ msgid "Widget Title"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:61
-msgid "Apply to all widget title in sidebar."
+msgid "Apply to all widget title in site content."
 msgstr ""
 
 #: inc/customizer/configs/typography.php:71
