@@ -1,5 +1,5 @@
 = 0.3.3 =
-* UPDATED: Author URL.
+* UPDATED: Author & Documentation URL.
 
 = 0.3.2 =
 * IMPROVED: Site content widget title color.
