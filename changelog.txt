@@ -1,12 +1,8 @@
-= 0.3.2 =
-* IMPROVED: Site content widget title color.
-
 = 0.3.1 =
-* NEW: Add Widget Title typography. See in Customize => Typography => Base.
-* IMPROVED: Dismiss link for copy settings from parent theme to child theme box.
-* FIXED: Position of the 'Lost your password' link on WooCommerce Account page.
-* FIXED: The Related Posts excerpt.
-* FIXED: The image alignment in post/page content.
+* NEW: Add typography widget setting.
+* NEW: Footer widget title color.
+* NEW: Footer Widget Content Color.
+* FIXED: Incorrect hook name.
 
 = 0.3.0 =
 * FIXED: Fix break layout for WooCommerce v3.6.1.
