@@ -11,7 +11,7 @@ The theme works great with any of your favorite page builder like Elementor, Bea
 Combined with the Header & Footer builder, you can build any type of website like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on.
 Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc.
 
-Learn more about the theme and ready to import demo sites at [https://pressmaximum.com](https://pressmaximum.com/)
+Learn more about the theme and ready to import demo sites at [https://pressmaximum.com/customify/](https://pressmaximum.com/customify/)
 
 Tags: `custom-background` `custom-logo` `custom-menu` `custom-logo` `featured-images` `flexible-header` `footer-widgets` `full-width-template` `sticky-post` `theme-options` `threaded-comments` `translation-ready` `one-column` `two-columns` `three-columns` `left-sidebar` `right-sidebar` `e-commerce` `blog`
 

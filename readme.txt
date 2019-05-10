@@ -15,7 +15,7 @@ Unleash the power of your imagination with a true WYSIWYG Header & Footer builde
 The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc.
 Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on.
 Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc.
-Learn more about the theme and ready to import demo sites at https://pressmaximum.com
+Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify/
 
 == Installation ==
 
