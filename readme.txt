@@ -32,10 +32,10 @@ Yes! Customify is a free theme, and always will be.
 = Does Customify have a pro version? =
 It does! Customify has a premium plugin which extends the available options in the theme.
 
-You can learn more about [here](https://pressmaximum.com/).
+You can learn more about [here](https://pressmaximum.com/customify/pro-upgrade/).
 
 = Where can I find documentation? =
-Customify has extensive documentation you can find [here](https://pressmaximum.com/).
+Customify has extensive documentation you can find [here](https://pressmaximum.com/docs/customify/).
 
 = Do you offer support? =
 Definitely. We offer support for the free theme in the [WordPress.org forums](https://wordpress.org/support/theme/customify).
@@ -51,7 +51,7 @@ All of our options can be found in the Customizer in 'Appearance > Customize'.
 Customify has up to 6 widget areas which you can add widgets to in Appearance > Widgets.
 
 = How can I make my site look like your screenshot? =
-If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://pressmaximum.com/help/documentation/).
+If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://pressmaximum.com/docs/customify/).
 
 == Copyright ==
 

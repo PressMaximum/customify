@@ -32,10 +32,10 @@ WordPress: 4.9.0+
 >Yes! Customify is a free theme, and always will be.
 
 **Does Customify have a pro version?**
-> It does! Customify has a premium plugin which extends the available options in the theme. You can learn more about [here]([https://pressmaximum.com/](https://pressmaximum.com/)).
+> It does! Customify has a premium plugin which extends the available options in the theme. You can learn more about [here](https://pressmaximum.com/customify/pro-upgrade/).
 
 **Where can I find the documentation?**
-> Customify has an extensive documentation. You can find it at [https://pressmaximum.com/](https://pressmaximum.com/).
+> Customify has an extensive documentation. You can find it at [https://pressmaximum.com/docs/customify/](https://pressmaximum.com/docs/customify/).
 
 **Do you offer support?**
 >Definitely. We offer support for the free theme in the [WordPress.org forums](https://wordpress.org/support/theme/customify).
@@ -49,7 +49,7 @@ We try to answer all questions - free or premium - within 24 hours.
 >Customify has up to 6 widget areas which you can add widgets to in Appearance > Widgets.
 
 **How can I make my site look like your screenshot?**
->If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](http://docs.famethemes.com/).
+>If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://pressmaximum.com/docs/customify/).
 
 ## Change log
 We'll keep track of each release in the [changelog.txt](changelog.txt).
