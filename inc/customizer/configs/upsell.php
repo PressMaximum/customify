@@ -15,7 +15,7 @@ if ( is_admin() || is_customize_preview() ) {
 			'section_class' => 'Customify_WP_Customize_Section_Pro',
 			'priority'      => 0,
 			'pro_text'      => __( 'Customify Pro modules available', 'customify' ),
-			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top',
+			'pro_url'       => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_top',
 		);
 
 		$configs[] = array(
@@ -26,7 +26,7 @@ if ( is_admin() || is_customize_preview() ) {
 			'priority'      => 99999,
 			'title'         => __( 'Header options in Customify Pro', 'customify' ),
 			'teaser'        => true,
-			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_header_side',
+			'pro_url'       => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_header_side',
 			'features'      => array(
 				__( 'Header Sticky', 'customify' ),
 				__( 'Header Transparent', 'customify' ),
@@ -45,7 +45,7 @@ if ( is_admin() || is_customize_preview() ) {
 			'priority'      => 99999,
 			'section_class' => 'Customify_WP_Customize_Section_Pro',
 			'title'         => __( 'More Footer options in Customify Pro', 'customify' ),
-			'pro_url'       => 'https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_footer_side',
+			'pro_url'       => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_footer_side',
 			'teaser'        => true,
 			'features'      => array(
 				__( 'Footer Top Row', 'customify' ),
