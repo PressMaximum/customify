@@ -149,7 +149,7 @@ class Customify_Dashboard {
 		<div class="cd-header">
 			<div class="cd-row">
 				<div class="cd-header-inner">
-					<a href="https://pressmaximum.com" target="_blank" class="cd-branding">
+					<a href="https://wpcustomify.com" target="_blank" class="cd-branding">
 						<img src="<?php echo esc_url( get_template_directory_uri() ) . '/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e( 'logo', 'customify' ); ?>">
 					</a>
 					<span class="cd-version"><?php echo esc_html( $this->config['version'] ); ?></span>
@@ -564,47 +564,47 @@ class Customify_Dashboard {
 			array(
 				'name' => __( 'Header Transparent', 'customify' ),
 				'desc' => __( 'Make your website stand out with transparent header modules.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/header-transparent/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-transparent/',
 			),
 			array(
 				'name' => __( 'Header Sticky', 'customify' ),
 				'desc' => __( 'Let your header accessible when users scroll up or down in unique style.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/header-sticky/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/header-sticky/',
 			),
 			array(
 				'name' => __( 'Header and Footer Builder Booster', 'customify' ),
 				'desc' => __( 'Get more header and footer builder items, plus advanced styling options.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/advanced-header-footer-builder/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/',
 			),
 			array(
 				'name' => __( 'Scroll To Top', 'customify' ),
 				'desc' => __( 'Get a better user experience with a scroll to top button with beautiful animation.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/scroll-to-top/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/scroll-to-top/',
 			),
 			array(
 				'name' => __( 'Blog Pro', 'customify' ),
 				'desc' => __( 'Take advantage of the Blog Pro module to show off your posts in any layouts.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/blog-pro/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/blog-pro/',
 			),
 			array(
 				'name' => __( 'Advanced Styling', 'customify' ),
 				'desc' => __( 'Control the layout and typography setting for page header title, page header cover and more.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/advanced-styling/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-styling/',
 			),
 			array(
 				'name' => __( 'Portfolio', 'customify' ),
 				'desc' => __( 'Show off your best project in a beautiful way.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/portfolio/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/portfolio/',
 			),
 			array(
 				'name' => __( 'Multiple Headers', 'customify' ),
 				'desc' => __( 'Create unique header for each page, post, archive or WooCommerce pages.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/multiple-headers/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/multiple-headers/',
 			),
 			array(
 				'name' => __( 'Mega Menu', 'customify' ),
 				'desc' => __( 'Create mega menu for your sites that need more space for navigation.', 'customify' ),
-				'url'  => 'https://pressmaximum.com/docs/customify/customify-pro-modules/mega-menu/',
+				'url'  => 'https://wpcustomify.com/help/documentation/customify-pro-modules/mega-menu/',
 			),
 			array(
 				'name' => __( 'Multilingual Integration', 'customify' ),
@@ -670,7 +670,7 @@ class Customify_Dashboard {
 		?>
 		<div class="cd-box">
 			<div class="cd-box-top"><?php _e( 'Customify Pro Modules', 'customify' ); ?>
-				<a class="cd-upgrade" target="_blank" href="https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Upgrade Now &rarr;', 'customify' ); ?></a></div>
+				<a class="cd-upgrade" target="_blank" href="https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules"><?php _e( 'Upgrade Now &rarr;', 'customify' ); ?></a></div>
 			<div class="cd-box-content cd-modules">
 				<?php foreach ( $modules as $m ) { ?>
 				<div class="cd-module-item <?php echo isset( $m['sub'] ) && $m['sub'] ? 'cd-sub-module' : ''; ?>">

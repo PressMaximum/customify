@@ -280,7 +280,7 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'title'       => __( 'Widget Title Color', 'customify' ),
 				'placeholder' => '#444444',
-				'css_format'  => '.site-content .widget-title { color: {{value}};}',
+				'css_format'  => '.widget-title { color: {{value}};}',
 				'selector'    => 'format',
 			),
 

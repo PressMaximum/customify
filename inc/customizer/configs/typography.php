@@ -58,9 +58,9 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'type'        => 'typography',
 				'section'     => "{$section}_base",
 				'title'       => __( 'Widget Title', 'customify' ),
-				'description' => __( 'Apply to all widget title in site content.', 'customify' ),
+				'description' => __( 'Apply to all widget title in sidebar.', 'customify' ),
 				'css_format'  => 'typography',
-				'selector'    => '.site-content .widget-title',
+				'selector'    => '.widget-area .widget-title',
 			),
 
 			// Site Title and Tagline.

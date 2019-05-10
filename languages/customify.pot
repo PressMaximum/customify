@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.3.3\n"
+"Project-Id-Version: Customify 0.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-05-10 09:02:00+00:00\n"
+"POT-Creation-Date: 2019-04-18 11:40:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
-"X-Generator: grunt-wp-i18n 1.0.3\n"
+"X-Generator: grunt-wp-i18n1.0.2\n"
 
 #: 404.php:19
 msgid "Oops! That page can&rsquo;t be found."
@@ -51,7 +51,7 @@ msgstr ""
 msgid "Customify Options"
 msgstr ""
 
-#: inc/admin/dashboard.php:54 inc/admin/dashboard.php:153
+#: inc/admin/dashboard.php:54 inc/admin/dashboard.php:131
 msgid "logo"
 msgstr ""
 
@@ -68,81 +68,69 @@ msgid ""
 "you visit our <a href=\"%1$s\">Customify options page</a>."
 msgstr ""
 
-#: inc/admin/dashboard.php:61
-msgid "You're using %1$s theme, It's a child theme of %2$s."
-msgstr ""
-
-#. Theme Name of the plugin/theme
-msgid "Customify"
-msgstr ""
-
-#: inc/admin/dashboard.php:69
-msgid "Now you can copy setting data from parent theme to this child theme"
-msgstr ""
-
-#: inc/admin/dashboard.php:69 inc/admin/dashboard.php:211
-msgid "Copy Settings"
-msgstr ""
-
-#: inc/admin/dashboard.php:79
-msgid "Your theme settings were copied."
-msgstr ""
-
-#: inc/admin/dashboard.php:156 inc/admin/dashboard.php:179
+#: inc/admin/dashboard.php:134 inc/admin/dashboard.php:157
 msgid "Changelog"
 msgstr ""
 
-#: inc/admin/dashboard.php:172
+#: inc/admin/dashboard.php:150
 msgid "Back"
 msgstr ""
 
-#: inc/admin/dashboard.php:217
+#: inc/admin/dashboard.php:188
+msgid "Copy Settings"
+msgstr ""
+
+#: inc/admin/dashboard.php:192
 msgid "You're using %1$s theme, It's a child theme of Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:219
+#: inc/admin/dashboard.php:194
 msgid ""
 "Child theme uses it's own theme setting name, would you like to copy "
 "setting data from parent theme to this child theme?"
 msgstr ""
 
-#: inc/admin/dashboard.php:224
+#: inc/admin/dashboard.php:198
 msgid "From Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:229
+#: inc/admin/dashboard.php:203
 msgid "To Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:233
-msgid "To"
+#: inc/admin/dashboard.php:207
+msgid "to"
 msgstr ""
 
-#: inc/admin/dashboard.php:237
+#: inc/admin/dashboard.php:209
 msgid "Copy now"
 msgstr ""
 
-#: inc/admin/dashboard.php:252 inc/customizer/class-customizer.php:1118
+#: inc/admin/dashboard.php:212
+msgid "Your settings were copied."
+msgstr ""
+
+#: inc/admin/dashboard.php:226 inc/customizer/class-customizer.php:1118
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:256
+#: inc/admin/dashboard.php:230
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:260 inc/customizer/configs/header/panel.php:17
+#: inc/admin/dashboard.php:234 inc/customizer/configs/header/panel.php:17
 #: inc/customizer/configs/header/panel.php:64
 #: inc/customizer/configs/header/panel.php:73
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:264 inc/customizer/configs/footer/panel.php:9
+#: inc/admin/dashboard.php:238 inc/customizer/configs/footer/panel.php:9
 #: inc/customizer/configs/footer/panel.php:40
 #: inc/customizer/configs/footer/panel.php:48
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:268 inc/compatibility/breadcrumb.php:209
+#: inc/admin/dashboard.php:242 inc/compatibility/breadcrumb.php:209
 #: inc/compatibility/woocommerce/config/catalog-designer.php:395
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
@@ -153,7 +141,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:272 inc/compatibility/breadcrumb.php:199
+#: inc/admin/dashboard.php:246 inc/compatibility/breadcrumb.php:199
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:346
 #: inc/customizer/configs/header/button.php:96
@@ -161,243 +149,243 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:276
+#: inc/admin/dashboard.php:250
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:280 inc/customizer/configs/page-header.php:332
+#: inc/admin/dashboard.php:254 inc/customizer/configs/page-header.php:332
 msgid "Titlebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:285 inc/customizer/configs/blogs.php:8
+#: inc/admin/dashboard.php:259 inc/customizer/configs/blogs.php:8
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:289
+#: inc/admin/dashboard.php:263
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:297
+#: inc/admin/dashboard.php:271
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:317
+#: inc/admin/dashboard.php:291
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:319
+#: inc/admin/dashboard.php:293
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:320
+#: inc/admin/dashboard.php:294
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:333
+#: inc/admin/dashboard.php:307
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:338
+#: inc/admin/dashboard.php:312
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:368
+#: inc/admin/dashboard.php:342
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:371 inc/admin/dashboard.php:512
+#: inc/admin/dashboard.php:345 inc/admin/dashboard.php:486
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:396
+#: inc/admin/dashboard.php:370
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:413 inc/admin/dashboard.php:540
+#: inc/admin/dashboard.php:387 inc/admin/dashboard.php:514
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:508
+#: inc/admin/dashboard.php:482
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:550
+#: inc/admin/dashboard.php:524
 msgid "Recommend Plugins"
 msgstr ""
 
-#: inc/admin/dashboard.php:565 inc/customizer/configs/upsell.php:32
+#: inc/admin/dashboard.php:539 inc/customizer/configs/upsell.php:32
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:566
+#: inc/admin/dashboard.php:540
 msgid "Make your website stand out with transparent header modules."
 msgstr ""
 
-#: inc/admin/dashboard.php:570 inc/customizer/configs/upsell.php:31
+#: inc/admin/dashboard.php:544 inc/customizer/configs/upsell.php:31
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:571
+#: inc/admin/dashboard.php:545
 msgid "Let your header accessible when users scroll up or down in unique style."
 msgstr ""
 
-#: inc/admin/dashboard.php:575
+#: inc/admin/dashboard.php:549
 msgid "Header and Footer Builder Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:576
+#: inc/admin/dashboard.php:550
 msgid "Get more header and footer builder items, plus advanced styling options."
 msgstr ""
 
-#: inc/admin/dashboard.php:580
+#: inc/admin/dashboard.php:554
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:581
+#: inc/admin/dashboard.php:555
 msgid ""
 "Get a better user experience with a scroll to top button with beautiful "
 "animation."
 msgstr ""
 
-#: inc/admin/dashboard.php:585
+#: inc/admin/dashboard.php:559
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:586
+#: inc/admin/dashboard.php:560
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:590 inc/customizer/configs/header/panel.php:204
+#: inc/admin/dashboard.php:564 inc/customizer/configs/header/panel.php:204
 msgid "Advanced Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:591
+#: inc/admin/dashboard.php:565
 msgid ""
 "Control the layout and typography setting for page header title, page "
 "header cover and more."
 msgstr ""
 
-#: inc/admin/dashboard.php:595
+#: inc/admin/dashboard.php:569
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:596
+#: inc/admin/dashboard.php:570
 msgid "Show off your best project in a beautiful way."
 msgstr ""
 
-#: inc/admin/dashboard.php:600
+#: inc/admin/dashboard.php:574
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:601
+#: inc/admin/dashboard.php:575
 msgid "Create unique header for each page, post, archive or WooCommerce pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:605
+#: inc/admin/dashboard.php:579
 msgid "Mega Menu"
 msgstr ""
 
-#: inc/admin/dashboard.php:606
+#: inc/admin/dashboard.php:580
 msgid "Create mega menu for your sites that need more space for navigation."
 msgstr ""
 
-#: inc/admin/dashboard.php:610
+#: inc/admin/dashboard.php:584
 msgid "Multilingual Integration"
 msgstr ""
 
-#: inc/admin/dashboard.php:611
+#: inc/admin/dashboard.php:585
 msgid ""
 "WPML multilingual plugin support, plus a fully customized language switcher "
 "header builder item."
 msgstr ""
 
-#: inc/admin/dashboard.php:615
+#: inc/admin/dashboard.php:589
 msgid "Custom Fonts"
 msgstr ""
 
-#: inc/admin/dashboard.php:616
+#: inc/admin/dashboard.php:590
 msgid ""
 "Custom Fonts module allows you to add your self-hosted fonts and use them "
 "on your Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:621
+#: inc/admin/dashboard.php:595
 msgid "Typekit"
 msgstr ""
 
-#: inc/admin/dashboard.php:622
+#: inc/admin/dashboard.php:596
 msgid ""
 "Typekit module allows you to add Typekit fonts and use them on your "
 "Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:626
+#: inc/admin/dashboard.php:600
 msgid "Customify Hooks"
 msgstr ""
 
-#: inc/admin/dashboard.php:627
+#: inc/admin/dashboard.php:601
 msgid "Add custom hook scripts."
 msgstr ""
 
-#: inc/admin/dashboard.php:632
+#: inc/admin/dashboard.php:606
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:633
+#: inc/admin/dashboard.php:607
 msgid "Gives you creative control of style and layout options for your shop."
 msgstr ""
 
-#: inc/admin/dashboard.php:638
+#: inc/admin/dashboard.php:612
 msgid "Single Product Layouts"
 msgstr ""
 
-#: inc/admin/dashboard.php:639
+#: inc/admin/dashboard.php:613
 msgid "More beautiful layouts for your single product."
 msgstr ""
 
-#: inc/admin/dashboard.php:644
+#: inc/admin/dashboard.php:618
 msgid "Off Canvas Filter"
 msgstr ""
 
-#: inc/admin/dashboard.php:645
+#: inc/admin/dashboard.php:619
 msgid "Add off canvas products filter for shop and product archive pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:650
+#: inc/admin/dashboard.php:624
 msgid "Product Gallery Slider"
 msgstr ""
 
-#: inc/admin/dashboard.php:651
+#: inc/admin/dashboard.php:625
 msgid "Add slider for product gallery."
 msgstr ""
 
-#: inc/admin/dashboard.php:656
+#: inc/admin/dashboard.php:630
 msgid "Quick View"
 msgstr ""
 
-#: inc/admin/dashboard.php:657
+#: inc/admin/dashboard.php:631
 msgid "Add product quick view modal for product listing.."
 msgstr ""
 
-#: inc/admin/dashboard.php:663
+#: inc/admin/dashboard.php:637
 msgid "Infinity Scroll."
 msgstr ""
 
-#: inc/admin/dashboard.php:664
+#: inc/admin/dashboard.php:638
 msgid ""
 "Loads the next posts, products automatically when the reader approaches the "
 "bottom of the page."
 msgstr ""
 
-#: inc/admin/dashboard.php:672
+#: inc/admin/dashboard.php:646
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:673
+#: inc/admin/dashboard.php:647
 msgid "Upgrade Now &rarr;"
 msgstr ""
 
@@ -414,41 +402,41 @@ msgstr ""
 msgid "1 Comment"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:559
+#: inc/blog/class-post-entry.php:557
 #. translators: used between list items, there is a space after the comma
 msgid "Read more &rarr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:561
+#: inc/blog/class-post-entry.php:559
 msgid "Read more &larr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:566 template-parts/content.php:53
+#: inc/blog/class-post-entry.php:564 template-parts/content.php:53
 #. Translators: %s: Name of current post. Only visible to screen readers.
 msgid "Continue reading %s"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:608
+#: inc/blog/class-post-entry.php:606
 msgid "About the Author: <span>%s</span>"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:649
+#: inc/blog/class-post-entry.php:647
 msgid "Next"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:650
+#: inc/blog/class-post-entry.php:648
 msgid "Next post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:653
+#: inc/blog/class-post-entry.php:651
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:654
+#: inc/blog/class-post-entry.php:652
 msgid "Previous post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:671 template-parts/content-page.php:23
+#: inc/blog/class-post-entry.php:669 template-parts/content-page.php:23
 #: template-parts/content.php:58
 msgid "Pages:"
 msgstr ""
@@ -473,8 +461,8 @@ msgstr ""
 
 #: inc/class-customify.php:207 inc/class-customify.php:218
 #: inc/class-customify.php:232
-#: inc/compatibility/woocommerce/woocommerce.php:650
-#: inc/compatibility/woocommerce/woocommerce.php:661
+#: inc/compatibility/woocommerce/woocommerce.php:647
+#: inc/compatibility/woocommerce/woocommerce.php:658
 msgid "Add widgets here."
 msgstr ""
 
@@ -1146,19 +1134,19 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:602
+#: inc/compatibility/woocommerce/woocommerce.php:599
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:610
+#: inc/compatibility/woocommerce/woocommerce.php:607
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:648
+#: inc/compatibility/woocommerce/woocommerce.php:645
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:659
+#: inc/compatibility/woocommerce/woocommerce.php:656
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -1958,7 +1946,7 @@ msgstr ""
 msgid ""
 "Submenu settings is a part of Advanced Header & Footer builder modules "
 "which only available in Customify Pro. <a target=\"_blank\" "
-"href=\"https://pressmaximum.com/docs/customify/customify-pro-modules/"
+"href=\"https://wpcustomify.com/help/documentation/customify-pro-modules/"
 "advanced-header-footer-builder/\">Learn more about it here</a>."
 msgstr ""
 
@@ -2469,7 +2457,7 @@ msgid "Title & tagline for special pages."
 msgstr ""
 
 #: inc/customizer/configs/page-header.php:290
-#: inc/customizer/configs/typography.php:87
+#: inc/customizer/configs/typography.php:78
 msgid "Tagline"
 msgstr ""
 
@@ -2646,7 +2634,7 @@ msgid "Thumbnail"
 msgstr ""
 
 #: inc/customizer/configs/single-blog-post.php:62
-#: inc/customizer/configs/typography.php:97
+#: inc/customizer/configs/typography.php:88
 msgid "Content"
 msgstr ""
 
@@ -2726,43 +2714,35 @@ msgstr ""
 msgid "Apply to all heading elements."
 msgstr ""
 
-#: inc/customizer/configs/typography.php:60
-msgid "Widget Title"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:61
-msgid "Apply to all widget title in site content."
-msgstr ""
-
-#: inc/customizer/configs/typography.php:71
+#: inc/customizer/configs/typography.php:62
 msgid "Site Title & Tagline"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:78
+#: inc/customizer/configs/typography.php:69
 msgid "Site Title"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:104
+#: inc/customizer/configs/typography.php:95
 msgid "Heading H1"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:113
+#: inc/customizer/configs/typography.php:104
 msgid "Heading H2"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:122
+#: inc/customizer/configs/typography.php:113
 msgid "Heading H3"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:131
+#: inc/customizer/configs/typography.php:122
 msgid "Heading H4"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:140
+#: inc/customizer/configs/typography.php:131
 msgid "Heading H5"
 msgstr ""
 
-#: inc/customizer/configs/typography.php:149
+#: inc/customizer/configs/typography.php:140
 msgid "Heading H6"
 msgstr ""
 
@@ -3005,9 +2985,9 @@ msgstr ""
 #: inc/panel-builder/class-layout-builder.php:426
 msgid ""
 "Enjoy building? Upgrade to <a target=\"_blank\" "
-"href=\"https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_"
-"dashboard&utm_medium=links&utm_campaign=panel_text\">Customify Pro</a> to "
-"get more builder items and other premium features</a>."
+"href=\"https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_"
+"medium=links&utm_campaign=panel_text\">Customify Pro</a> to get more "
+"builder items and other premium features</a>."
 msgstr ""
 
 #: inc/template-functions.php:11
@@ -3159,8 +3139,12 @@ msgstr ""
 msgid "Awaiting product image"
 msgstr ""
 
+#. Theme Name of the plugin/theme
+msgid "Customify"
+msgstr ""
+
 #. Theme URI of the plugin/theme
-msgid "https://pressmaximum.com/customify"
+msgid "https://wpcustomify.com"
 msgstr ""
 
 #. Description of the plugin/theme
@@ -3176,8 +3160,7 @@ msgid ""
 "portal, consulting, church, restaurant, medical and so on. Customify is "
 "compatible with all well-coded plugins, including major ones like "
 "WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about "
-"the theme and ready to import demo sites at "
-"https://pressmaximum.com/customify"
+"the theme and ready to import demo sites at https://wpcustomify.com"
 msgstr ""
 
 #. Author of the plugin/theme
@@ -3185,7 +3168,7 @@ msgid "WPCustomify"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://pressmaximum.com"
+msgid "https://wpcustomify.com/about"
 msgstr ""
 
 #: comments.php:40
