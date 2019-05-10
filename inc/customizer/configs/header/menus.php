@@ -207,7 +207,7 @@ class Customify_Builder_Item_Primary_Menu {
 				'name'        => $this->prefix . '_typography_submenu',
 				'type'        => 'custom_html',
 				'section'     => $section,
-				'description' => sprintf( __( 'Submenu settings is a part of Advanced Header & Footer builder modules which only available in Customify Pro. <a target="_blank" href="https://wpcustomify.com/help/documentation/customify-pro-modules/advanced-header-footer-builder/">Learn more about it here</a>.', 'customify' ) ),
+				'description' => sprintf( __( 'Submenu settings is a part of Advanced Header & Footer builder modules which only available in Customify Pro. <a target="_blank" href="https://pressmaximum.com/docs/customify/customify-pro-modules/advanced-header-footer-builder/">Learn more about it here</a>.', 'customify' ) ),
 				'selector'    => "{$this->selector} .sub-menu li a",
 			);
 		}

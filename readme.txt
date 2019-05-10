@@ -1,6 +1,6 @@
 === Customify ===
-Contributors: WPCustomify
-Donate link: https://www.wpcustomify.com/
+Contributors: PressMaximum
+Donate link: https://pressmaximum.com/customify/
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-background, custom-logo, custom-menu, custom-logo, featured-images, flexible-header, footer-widgets, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, one-column, two-columns, three-columns, left-sidebar, right-sidebar, e-commerce, blog
@@ -15,7 +15,7 @@ Unleash the power of your imagination with a true WYSIWYG Header & Footer builde
 The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc.
 Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on.
 Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc.
-Learn more about the theme and ready to import demo sites at https://wpcustomify.com
+Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify/
 
 == Installation ==
 
@@ -32,15 +32,15 @@ Yes! Customify is a free theme, and always will be.
 = Does Customify have a pro version? =
 It does! Customify has a premium plugin which extends the available options in the theme.
 
-You can learn more about [here](https://wpcustomify.com/).
+You can learn more about [here](https://pressmaximum.com/customify/pro-upgrade/).
 
 = Where can I find documentation? =
-Customify has extensive documentation you can find [here](https://wpcustomify.com/).
+Customify has extensive documentation you can find [here](https://pressmaximum.com/docs/customify/).
 
 = Do you offer support? =
 Definitely. We offer support for the free theme in the [WordPress.org forums](https://wordpress.org/support/theme/customify).
 
-Premium customers have access to our very own [ticket](https://wpcustomify.com/contact).
+Premium customers have access to our very own [ticket](https://pressmaximum.com/contact).
 
 We try to answer all questions - free or premium - within 24 hours.
 
@@ -51,11 +51,11 @@ All of our options can be found in the Customizer in 'Appearance > Customize'.
 Customify has up to 6 widget areas which you can add widgets to in Appearance > Widgets.
 
 = How can I make my site look like your screenshot? =
-If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://wpcustomify.com/help/documentation/).
+If you want to replicate the screenshot you see on WordPress.org, please refer to [this article](https://pressmaximum.com/docs/customify/).
 
 == Copyright ==
 
-Customify WordPress Theme, Copyright 2018 WPCustomify.com
+Customify WordPress Theme, Copyright 2018 PressMaximum.com/customify
 Customify is distributed under the terms of the GNU GPL
 
 Customify bundles the following third-party resources:

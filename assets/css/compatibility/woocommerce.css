@@ -1743,6 +1743,10 @@ td.product-quantity {
   }
 }
 
+.site-header .builder-header-wc_cart-item .widget_shopping_cart .widgettitle {
+  display: none;
+}
+
 /*
 # Product meta
 # Product tabs
