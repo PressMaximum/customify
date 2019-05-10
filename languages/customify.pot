@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.3.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-05-10 09:02:00+00:00\n"
+"POT-Creation-Date: 2019-05-10 09:44:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1754,7 +1754,7 @@ msgstr ""
 
 #: inc/customizer/configs/footer/templates.php:55
 #: inc/customizer/configs/header/templates.php:55
-#: inc/panel-builder/class-layout-builder.php:388
+#: inc/panel-builder/class-layout-builder.php:389
 msgid "Templates"
 msgstr ""
 
@@ -2950,7 +2950,7 @@ msgstr ""
 
 #: inc/customizer/controls/class-control-repeater.php:33
 #: inc/panel-builder/class-abstract-layout-frontend.php:122
-#: inc/panel-builder/class-layout-builder.php:390
+#: inc/panel-builder/class-layout-builder.php:391
 msgid "Close"
 msgstr ""
 
@@ -3002,7 +3002,7 @@ msgstr ""
 msgid "Switch Builder Version"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:426
+#: inc/panel-builder/class-layout-builder.php:427
 msgid ""
 "Enjoy building? Upgrade to <a target=\"_blank\" "
 "href=\"https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_"
