@@ -344,6 +344,11 @@ class Customify_Builder_Item_WC_Cart {
 	 * Optional. Render item content
 	 */
 	public function render() {
+
+		if ( ! function_exists( 'WC' ) ) {
+			return;
+		}
+
 		$icon          = Customify()->get_setting( "{$this->name}_icon" );
 		$icon_position = Customify()->get_setting( "{$this->name}_icon_position" );
 		$text          = Customify()->get_setting( "{$this->name}_text" );

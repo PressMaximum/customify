@@ -86,6 +86,11 @@ class Customify_MetaBox {
 			'disable_header'        => __( 'Disable Header', 'customify' ),
 			'disable_page_title'    => __( 'Disable Title', 'customify' ),
 		);
+
+		$disable_elements_choices['disable_header_top'] = __( 'Disable Header Top', 'customify' );
+		$disable_elements_choices['disable_header_main'] = __( 'Disable Header Main', 'customify' );
+		$disable_elements_choices['disable_header_bottom'] = __( 'Disable Header Bottom', 'customify' );
+
 		if ( class_exists( 'Customify_Pro' ) ) {
 			$disable_elements_choices['disable_footer_top'] = __( 'Disable Footer Top', 'customify' );
 		}

@@ -352,6 +352,24 @@ class Customify_Page_Header {
 				'default'        => 1,
 			),
 			array(
+				'name'       => $name . '_title_color',
+				'type'       => 'color',
+				'section'         => $section,
+				'label'      => __( 'Title Color', 'customify' ),
+				'selector'   => "$selector .titlebar-title",
+				'css_format' => 'color: {{value}};',
+			),
+
+			array(
+				'name'       => $name . '_tagline_color',
+				'type'       => 'color',
+				'section'         => $section,
+				'label'      => __( 'Tagline Color', 'customify' ),
+				'selector'   => "$selector .titlebar-tagline",
+				'css_format' => 'color: {{value}};',
+			),
+
+			array(
 				'name'            => "{$name}_align",
 				'type'            => 'text_align_no_justify',
 				'section'         => $section,
@@ -407,7 +425,7 @@ class Customify_Page_Header {
 				'name'       => $name . '_bg',
 				'type'       => 'modal',
 				'section'    => $section,
-				'title'      => __( 'Cover Background', 'customify' ),
+				'title'      => __( 'Color & Background', 'customify' ),
 				'selector'   => $selector,
 				'css_format' => 'styling', // Styling.
 				'default'    => array(
@@ -423,6 +441,22 @@ class Customify_Page_Header {
 						'normal' => '_',
 					),
 					'normal_fields' => array(
+						array(
+							'name'       => 'title_color',
+							'type'       => 'color',
+							'label'      => __( 'Title Color', 'customify' ),
+							'selector'   => "$selector .page-cover-title",
+							'css_format' => 'color: {{value}};',
+						),
+
+						array(
+							'name'       => 'tagline_color',
+							'type'       => 'color',
+							'label'      => __( 'Tagline Color', 'customify' ),
+							'selector'   => "$selector .page-cover-tagline",
+							'css_format' => 'color: {{value}};',
+						),
+
 						array(
 							'name'       => 'bg_image',
 							'type'       => 'image',

@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.3.3\n"
+"Project-Id-Version: Customify 0.3.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2019-05-10 09:44:18+00:00\n"
+"POT-Creation-Date: 2019-11-26 09:27:22+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,53 +22,54 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
-"X-Generator: grunt-wp-i18n 1.0.3\n"
+"X-Generator: grunt-wp-i18n1.0.2\n"
 
-#: 404.php:19
+#: .git/404.php:19 404.php:19
 msgid "Oops! That page can&rsquo;t be found."
 msgstr ""
 
-#: 404.php:23
+#: .git/404.php:23 404.php:23
 msgid ""
 "It looks like nothing was found at this location. Maybe try one of the "
 "links below or a search?"
 msgstr ""
 
-#: comments.php:34
+#: .git/comments.php:34 comments.php:34
 #. translators: 1: title.
 msgid "One thought on &ldquo;%1$s&rdquo;"
 msgstr ""
 
-#: comments.php:65
+#: .git/comments.php:65 comments.php:65
 msgid "Comments are closed."
 msgstr ""
 
-#: header.php:24
+#: .git/header.php:24 header.php:24
 msgid "Skip to content"
 msgstr ""
 
-#: inc/admin/dashboard.php:19
+#: .git/inc/admin/dashboard.php:19 inc/admin/dashboard.php:19
 msgid "Customify Options"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:54 .git/inc/admin/dashboard.php:153
 #: inc/admin/dashboard.php:54 inc/admin/dashboard.php:153
 msgid "logo"
 msgstr ""
 
-#: inc/admin/dashboard.php:57
+#: .git/inc/admin/dashboard.php:57 inc/admin/dashboard.php:57
 msgid ""
 "Thanks for installing Customify, you rock! <img draggable=\"false\" "
 "class=\"emoji\" alt=\"\" "
 "src=\"https://s.w.org/images/core/emoji/2.4/svg/1f918.svg\">"
 msgstr ""
 
-#: inc/admin/dashboard.php:58
+#: .git/inc/admin/dashboard.php:58 inc/admin/dashboard.php:58
 msgid ""
 "To fully take advantage of the best our theme can offer please make sure "
 "you visit our <a href=\"%1$s\">Customify options page</a>."
 msgstr ""
 
-#: inc/admin/dashboard.php:61
+#: .git/inc/admin/dashboard.php:61 inc/admin/dashboard.php:61
 msgid "You're using %1$s theme, It's a child theme of %2$s."
 msgstr ""
 
@@ -76,73 +77,93 @@ msgstr ""
 msgid "Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:69
+#: .git/inc/admin/dashboard.php:69 inc/admin/dashboard.php:69
 msgid "Now you can copy setting data from parent theme to this child theme"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:69 .git/inc/admin/dashboard.php:211
 #: inc/admin/dashboard.php:69 inc/admin/dashboard.php:211
 msgid "Copy Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:79
+#: .git/inc/admin/dashboard.php:79 inc/admin/dashboard.php:79
 msgid "Your theme settings were copied."
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:156 .git/inc/admin/dashboard.php:179
 #: inc/admin/dashboard.php:156 inc/admin/dashboard.php:179
 msgid "Changelog"
 msgstr ""
 
-#: inc/admin/dashboard.php:172
+#: .git/inc/admin/dashboard.php:172 inc/admin/dashboard.php:172
 msgid "Back"
 msgstr ""
 
-#: inc/admin/dashboard.php:217
+#: .git/inc/admin/dashboard.php:217 inc/admin/dashboard.php:217
 msgid "You're using %1$s theme, It's a child theme of Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:219
+#: .git/inc/admin/dashboard.php:219 inc/admin/dashboard.php:219
 msgid ""
 "Child theme uses it's own theme setting name, would you like to copy "
 "setting data from parent theme to this child theme?"
 msgstr ""
 
-#: inc/admin/dashboard.php:224
+#: .git/inc/admin/dashboard.php:224 inc/admin/dashboard.php:224
 msgid "From Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:229
+#: .git/inc/admin/dashboard.php:229 inc/admin/dashboard.php:229
 msgid "To Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:233
+#: .git/inc/admin/dashboard.php:233 inc/admin/dashboard.php:233
 msgid "To"
 msgstr ""
 
-#: inc/admin/dashboard.php:237
+#: .git/inc/admin/dashboard.php:237 inc/admin/dashboard.php:237
 msgid "Copy now"
 msgstr ""
 
-#: inc/admin/dashboard.php:252 inc/customizer/class-customizer.php:1118
+#: .git/inc/admin/dashboard.php:252
+#: .git/inc/customizer/class-customizer.php:1118 inc/admin/dashboard.php:252
+#: inc/customizer/class-customizer.php:1118
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:256
+#: .git/inc/admin/dashboard.php:256 inc/admin/dashboard.php:256
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:260 inc/customizer/configs/header/panel.php:17
+#: .git/inc/admin/dashboard.php:260
+#: .git/inc/customizer/configs/header/panel.php:17
+#: .git/inc/customizer/configs/header/panel.php:64
+#: .git/inc/customizer/configs/header/panel.php:73 inc/admin/dashboard.php:260
+#: inc/customizer/configs/header/panel.php:17
 #: inc/customizer/configs/header/panel.php:64
 #: inc/customizer/configs/header/panel.php:73
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:264 inc/customizer/configs/footer/panel.php:9
+#: .git/inc/admin/dashboard.php:264
+#: .git/inc/customizer/configs/footer/panel.php:9
+#: .git/inc/customizer/configs/footer/panel.php:40
+#: .git/inc/customizer/configs/footer/panel.php:48 inc/admin/dashboard.php:264
+#: inc/customizer/configs/footer/panel.php:9
 #: inc/customizer/configs/footer/panel.php:40
 #: inc/customizer/configs/footer/panel.php:48
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:268 inc/compatibility/breadcrumb.php:209
+#: .git/inc/admin/dashboard.php:268 .git/inc/compatibility/breadcrumb.php:209
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:395
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:179
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:235
+#: .git/inc/customizer/configs/blogs.php:360
+#: .git/inc/customizer/configs/header/button.php:107
+#: .git/inc/customizer/configs/header/panel.php:281
+#: .git/inc/customizer/configs/styling.php:14 inc/admin/dashboard.php:268
+#: inc/compatibility/breadcrumb.php:209
 #: inc/compatibility/woocommerce/config/catalog-designer.php:395
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
@@ -153,7 +174,12 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:272 inc/compatibility/breadcrumb.php:199
+#: .git/inc/admin/dashboard.php:272 .git/inc/compatibility/breadcrumb.php:199
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:206
+#: .git/inc/customizer/configs/blogs.php:346
+#: .git/inc/customizer/configs/header/button.php:96
+#: .git/inc/customizer/configs/typography.php:21 inc/admin/dashboard.php:272
+#: inc/compatibility/breadcrumb.php:199
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:346
 #: inc/customizer/configs/header/button.php:96
@@ -161,316 +187,334 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:276
+#: .git/inc/admin/dashboard.php:276 inc/admin/dashboard.php:276
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:280 inc/customizer/configs/page-header.php:332
+#: .git/inc/admin/dashboard.php:280
+#: .git/inc/customizer/configs/page-header.php:332 inc/admin/dashboard.php:280
+#: inc/customizer/configs/page-header.php:332
 msgid "Titlebar Settings"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:285 .git/inc/customizer/configs/blogs.php:8
 #: inc/admin/dashboard.php:285 inc/customizer/configs/blogs.php:8
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:289
+#: .git/inc/admin/dashboard.php:289 inc/admin/dashboard.php:289
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:297
+#: .git/inc/admin/dashboard.php:297 inc/admin/dashboard.php:297
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:317
+#: .git/inc/admin/dashboard.php:317 inc/admin/dashboard.php:317
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:319
+#: .git/inc/admin/dashboard.php:319 inc/admin/dashboard.php:319
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:320
+#: .git/inc/admin/dashboard.php:320 inc/admin/dashboard.php:320
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:333
+#: .git/inc/admin/dashboard.php:333 inc/admin/dashboard.php:333
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:338
+#: .git/inc/admin/dashboard.php:338 inc/admin/dashboard.php:338
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:368
+#: .git/inc/admin/dashboard.php:368 inc/admin/dashboard.php:368
 msgid "View Site Library"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:371 .git/inc/admin/dashboard.php:512
 #: inc/admin/dashboard.php:371 inc/admin/dashboard.php:512
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:396
+#: .git/inc/admin/dashboard.php:396 inc/admin/dashboard.php:396
 msgid "Active Now"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:413 .git/inc/admin/dashboard.php:540
 #: inc/admin/dashboard.php:413 inc/admin/dashboard.php:540
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:508
+#: .git/inc/admin/dashboard.php:508 inc/admin/dashboard.php:508
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:550
+#: .git/inc/admin/dashboard.php:550 inc/admin/dashboard.php:550
 msgid "Recommend Plugins"
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:565 .git/inc/customizer/configs/upsell.php:32
 #: inc/admin/dashboard.php:565 inc/customizer/configs/upsell.php:32
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:566
+#: .git/inc/admin/dashboard.php:566 inc/admin/dashboard.php:566
 msgid "Make your website stand out with transparent header modules."
 msgstr ""
 
+#: .git/inc/admin/dashboard.php:570 .git/inc/customizer/configs/upsell.php:31
 #: inc/admin/dashboard.php:570 inc/customizer/configs/upsell.php:31
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:571
+#: .git/inc/admin/dashboard.php:571 inc/admin/dashboard.php:571
 msgid "Let your header accessible when users scroll up or down in unique style."
 msgstr ""
 
-#: inc/admin/dashboard.php:575
+#: .git/inc/admin/dashboard.php:575 inc/admin/dashboard.php:575
 msgid "Header and Footer Builder Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:576
+#: .git/inc/admin/dashboard.php:576 inc/admin/dashboard.php:576
 msgid "Get more header and footer builder items, plus advanced styling options."
 msgstr ""
 
-#: inc/admin/dashboard.php:580
+#: .git/inc/admin/dashboard.php:580 inc/admin/dashboard.php:580
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:581
+#: .git/inc/admin/dashboard.php:581 inc/admin/dashboard.php:581
 msgid ""
 "Get a better user experience with a scroll to top button with beautiful "
 "animation."
 msgstr ""
 
-#: inc/admin/dashboard.php:585
+#: .git/inc/admin/dashboard.php:585 inc/admin/dashboard.php:585
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:586
+#: .git/inc/admin/dashboard.php:586 inc/admin/dashboard.php:586
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:590 inc/customizer/configs/header/panel.php:204
+#: .git/inc/admin/dashboard.php:590
+#: .git/inc/customizer/configs/header/panel.php:204 inc/admin/dashboard.php:590
+#: inc/customizer/configs/header/panel.php:204
 msgid "Advanced Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:591
+#: .git/inc/admin/dashboard.php:591 inc/admin/dashboard.php:591
 msgid ""
 "Control the layout and typography setting for page header title, page "
 "header cover and more."
 msgstr ""
 
-#: inc/admin/dashboard.php:595
+#: .git/inc/admin/dashboard.php:595 inc/admin/dashboard.php:595
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:596
+#: .git/inc/admin/dashboard.php:596 inc/admin/dashboard.php:596
 msgid "Show off your best project in a beautiful way."
 msgstr ""
 
-#: inc/admin/dashboard.php:600
+#: .git/inc/admin/dashboard.php:600 inc/admin/dashboard.php:600
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:601
+#: .git/inc/admin/dashboard.php:601 inc/admin/dashboard.php:601
 msgid "Create unique header for each page, post, archive or WooCommerce pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:605
+#: .git/inc/admin/dashboard.php:605 inc/admin/dashboard.php:605
 msgid "Mega Menu"
 msgstr ""
 
-#: inc/admin/dashboard.php:606
+#: .git/inc/admin/dashboard.php:606 inc/admin/dashboard.php:606
 msgid "Create mega menu for your sites that need more space for navigation."
 msgstr ""
 
-#: inc/admin/dashboard.php:610
+#: .git/inc/admin/dashboard.php:610 inc/admin/dashboard.php:610
 msgid "Multilingual Integration"
 msgstr ""
 
-#: inc/admin/dashboard.php:611
+#: .git/inc/admin/dashboard.php:611 inc/admin/dashboard.php:611
 msgid ""
 "WPML multilingual plugin support, plus a fully customized language switcher "
 "header builder item."
 msgstr ""
 
-#: inc/admin/dashboard.php:615
+#: .git/inc/admin/dashboard.php:615 inc/admin/dashboard.php:615
 msgid "Custom Fonts"
 msgstr ""
 
-#: inc/admin/dashboard.php:616
+#: .git/inc/admin/dashboard.php:616 inc/admin/dashboard.php:616
 msgid ""
 "Custom Fonts module allows you to add your self-hosted fonts and use them "
 "on your Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:621
+#: .git/inc/admin/dashboard.php:621 inc/admin/dashboard.php:621
 msgid "Typekit"
 msgstr ""
 
-#: inc/admin/dashboard.php:622
+#: .git/inc/admin/dashboard.php:622 inc/admin/dashboard.php:622
 msgid ""
 "Typekit module allows you to add Typekit fonts and use them on your "
 "Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:626
+#: .git/inc/admin/dashboard.php:626 inc/admin/dashboard.php:626
 msgid "Customify Hooks"
 msgstr ""
 
-#: inc/admin/dashboard.php:627
+#: .git/inc/admin/dashboard.php:627 inc/admin/dashboard.php:627
 msgid "Add custom hook scripts."
 msgstr ""
 
-#: inc/admin/dashboard.php:632
+#: .git/inc/admin/dashboard.php:632 inc/admin/dashboard.php:632
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:633
+#: .git/inc/admin/dashboard.php:633 inc/admin/dashboard.php:633
 msgid "Gives you creative control of style and layout options for your shop."
 msgstr ""
 
-#: inc/admin/dashboard.php:638
+#: .git/inc/admin/dashboard.php:638 inc/admin/dashboard.php:638
 msgid "Single Product Layouts"
 msgstr ""
 
-#: inc/admin/dashboard.php:639
+#: .git/inc/admin/dashboard.php:639 inc/admin/dashboard.php:639
 msgid "More beautiful layouts for your single product."
 msgstr ""
 
-#: inc/admin/dashboard.php:644
+#: .git/inc/admin/dashboard.php:644 inc/admin/dashboard.php:644
 msgid "Off Canvas Filter"
 msgstr ""
 
-#: inc/admin/dashboard.php:645
+#: .git/inc/admin/dashboard.php:645 inc/admin/dashboard.php:645
 msgid "Add off canvas products filter for shop and product archive pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:650
+#: .git/inc/admin/dashboard.php:650 inc/admin/dashboard.php:650
 msgid "Product Gallery Slider"
 msgstr ""
 
-#: inc/admin/dashboard.php:651
+#: .git/inc/admin/dashboard.php:651 inc/admin/dashboard.php:651
 msgid "Add slider for product gallery."
 msgstr ""
 
-#: inc/admin/dashboard.php:656
+#: .git/inc/admin/dashboard.php:656 inc/admin/dashboard.php:656
 msgid "Quick View"
 msgstr ""
 
-#: inc/admin/dashboard.php:657
+#: .git/inc/admin/dashboard.php:657 inc/admin/dashboard.php:657
 msgid "Add product quick view modal for product listing.."
 msgstr ""
 
-#: inc/admin/dashboard.php:663
+#: .git/inc/admin/dashboard.php:663 inc/admin/dashboard.php:663
 msgid "Infinity Scroll."
 msgstr ""
 
-#: inc/admin/dashboard.php:664
+#: .git/inc/admin/dashboard.php:664 inc/admin/dashboard.php:664
 msgid ""
 "Loads the next posts, products automatically when the reader approaches the "
 "bottom of the page."
 msgstr ""
 
-#: inc/admin/dashboard.php:672
+#: .git/inc/admin/dashboard.php:672 inc/admin/dashboard.php:672
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:673
+#: .git/inc/admin/dashboard.php:673 inc/admin/dashboard.php:673
 msgid "Upgrade Now &rarr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:284
+#: .git/inc/blog/class-post-entry.php:284 inc/blog/class-post-entry.php:284
 msgid "Tagged "
 msgstr ""
 
-#: inc/blog/class-post-entry.php:298
+#: .git/inc/blog/class-post-entry.php:298 inc/blog/class-post-entry.php:298
 msgid "Posted in "
 msgstr ""
 
-#: inc/blog/class-post-entry.php:318
+#: .git/inc/blog/class-post-entry.php:318 inc/blog/class-post-entry.php:318
 #. translators: 1: title.
 msgid "1 Comment"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:559
+#: .git/inc/blog/class-post-entry.php:557 inc/blog/class-post-entry.php:559
 #. translators: used between list items, there is a space after the comma
 msgid "Read more &rarr;"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:561
+#: .git/inc/blog/class-post-entry.php:559 inc/blog/class-post-entry.php:561
 msgid "Read more &larr;"
 msgstr ""
 
+#: .git/inc/blog/class-post-entry.php:564 .git/template-parts/content.php:53
 #: inc/blog/class-post-entry.php:566 template-parts/content.php:53
 #. Translators: %s: Name of current post. Only visible to screen readers.
 msgid "Continue reading %s"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:608
+#: .git/inc/blog/class-post-entry.php:606 inc/blog/class-post-entry.php:608
 msgid "About the Author: <span>%s</span>"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:649
+#: .git/inc/blog/class-post-entry.php:647 inc/blog/class-post-entry.php:649
 msgid "Next"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:650
+#: .git/inc/blog/class-post-entry.php:648 inc/blog/class-post-entry.php:650
 msgid "Next post:"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:653
+#: .git/inc/blog/class-post-entry.php:651 inc/blog/class-post-entry.php:653
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:654
+#: .git/inc/blog/class-post-entry.php:652 inc/blog/class-post-entry.php:654
 msgid "Previous post:"
 msgstr ""
 
+#: .git/inc/blog/class-post-entry.php:669
+#: .git/template-parts/content-page.php:23 .git/template-parts/content.php:58
 #: inc/blog/class-post-entry.php:671 template-parts/content-page.php:23
 #: template-parts/content.php:58
 msgid "Pages:"
 msgstr ""
 
+#: .git/inc/blog/functions-posts-layout.php:41
+#: .git/inc/customizer/configs/page-header.php:741
 #: inc/blog/functions-posts-layout.php:41
-#: inc/customizer/configs/page-header.php:741
+#: inc/customizer/configs/page-header.php:775
 #. translators: 1: Search query name
 msgid "Search Results for: %s"
 msgstr ""
 
-#: inc/class-categories-walker.php:73
+#: .git/inc/class-categories-walker.php:73 inc/class-categories-walker.php:73
 msgid "Feed for all posts filed under %s"
 msgstr ""
 
-#: inc/class-customify.php:135
+#: .git/inc/class-customify.php:135 inc/class-customify.php:135
 msgid "Primary"
 msgstr ""
 
-#: inc/class-customify.php:205
+#: .git/inc/class-customify.php:205 inc/class-customify.php:205
 msgid "Primary Sidebar"
 msgstr ""
 
+#: .git/inc/class-customify.php:207 .git/inc/class-customify.php:218
+#: .git/inc/class-customify.php:232
+#: .git/inc/compatibility/woocommerce/woocommerce.php:650
+#: .git/inc/compatibility/woocommerce/woocommerce.php:661
 #: inc/class-customify.php:207 inc/class-customify.php:218
 #: inc/class-customify.php:232
 #: inc/compatibility/woocommerce/woocommerce.php:650
@@ -478,16 +522,38 @@ msgstr ""
 msgid "Add widgets here."
 msgstr ""
 
-#: inc/class-customify.php:216
+#: .git/inc/class-customify.php:216 inc/class-customify.php:216
 msgid "Secondary Sidebar"
 msgstr ""
 
-#: inc/class-customify.php:230
+#: .git/inc/class-customify.php:230 inc/class-customify.php:230
 #. translators: 1: Widget number.
 msgid "Footer Sidebar %d"
 msgstr ""
 
-#: inc/class-metabox-fields.php:442 inc/class-metabox.php:112
+#: .git/inc/class-metabox-fields.php:442 .git/inc/class-metabox.php:112
+#: .git/inc/compatibility/woocommerce/config/single-product.php:196
+#: .git/inc/customizer/class-customizer.php:421
+#: .git/inc/customizer/class-customizer.php:432
+#: .git/inc/customizer/class-customizer.php:444
+#: .git/inc/customizer/class-customizer.php:529
+#: .git/inc/customizer/class-customizer.php:546
+#: .git/inc/customizer/class-customizer.php:566
+#: .git/inc/customizer/class-customizer.php:583
+#: .git/inc/customizer/class-customizer.php:603
+#: .git/inc/customizer/class-customizer.php:698
+#: .git/inc/customizer/configs/header/social-icons.php:271
+#: .git/inc/customizer/configs/layouts.php:230
+#: .git/inc/customizer/configs/page-header.php:36
+#: .git/inc/customizer/configs/page-header.php:219
+#: .git/inc/customizer/configs/page-header.php:260
+#: .git/inc/customizer/configs/page-header.php:271
+#: .git/inc/customizer/configs/page-header.php:437
+#: .git/inc/customizer/configs/page-header.php:455
+#: .git/inc/customizer/configs/page-header.php:476
+#: .git/inc/customizer/configs/page-header.php:494
+#: .git/inc/customizer/controls/class-control-base.php:267
+#: inc/class-metabox-fields.php:442 inc/class-metabox.php:117
 #: inc/compatibility/woocommerce/config/single-product.php:196
 #: inc/customizer/class-customizer.php:421
 #: inc/customizer/class-customizer.php:432
@@ -504,18 +570,29 @@ msgstr ""
 #: inc/customizer/configs/page-header.php:219
 #: inc/customizer/configs/page-header.php:260
 #: inc/customizer/configs/page-header.php:271
-#: inc/customizer/configs/page-header.php:437
-#: inc/customizer/configs/page-header.php:455
-#: inc/customizer/configs/page-header.php:476
-#: inc/customizer/configs/page-header.php:494
+#: inc/customizer/configs/page-header.php:471
+#: inc/customizer/configs/page-header.php:489
+#: inc/customizer/configs/page-header.php:510
+#: inc/customizer/configs/page-header.php:528
 #: inc/customizer/controls/class-control-base.php:267
 msgid "Default"
 msgstr ""
 
-#: inc/class-metabox-fields.php:512
+#: .git/inc/class-metabox-fields.php:512 inc/class-metabox-fields.php:512
 msgid "Select image"
 msgstr ""
 
+#: .git/inc/class-metabox-fields.php:513
+#: .git/inc/customizer/configs/footer/templates.php:40
+#: .git/inc/customizer/configs/header/templates.php:40
+#: .git/inc/customizer/controls/class-control-icon.php:24
+#: .git/inc/customizer/controls/class-control-icon.php:27
+#: .git/inc/customizer/controls/class-control-image.php:44
+#: .git/inc/customizer/controls/class-control-media.php:44
+#: .git/inc/customizer/controls/class-control-repeater.php:39
+#: .git/inc/customizer/controls/class-control-upload.php:44
+#: .git/inc/customizer/controls/class-control-video.php:44
+#: .git/inc/panel-builder/class-layout-builder.php:258
 #: inc/class-metabox-fields.php:513
 #: inc/customizer/configs/footer/templates.php:40
 #: inc/customizer/configs/header/templates.php:40
@@ -530,7 +607,14 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: inc/class-metabox.php:47
+#: .git/inc/class-metabox.php:47
+#: .git/inc/compatibility/woocommerce/config/single-product.php:164
+#: .git/inc/compatibility/woocommerce/config/single-product.php:187
+#: .git/inc/customizer/configs/blogs.php:29
+#: .git/inc/customizer/configs/blogs.php:36
+#: .git/inc/customizer/configs/footer/panel.php:92
+#: .git/inc/customizer/configs/header/panel.php:145
+#: .git/inc/customizer/configs/page-header.php:214 inc/class-metabox.php:47
 #: inc/compatibility/woocommerce/config/single-product.php:164
 #: inc/compatibility/woocommerce/config/single-product.php:187
 #: inc/customizer/configs/blogs.php:29 inc/customizer/configs/blogs.php:36
@@ -540,94 +624,115 @@ msgstr ""
 msgid "Layout"
 msgstr ""
 
-#: inc/class-metabox.php:55 inc/customizer/configs/page-header.php:207
+#: .git/inc/class-metabox.php:55
+#: .git/inc/customizer/configs/page-header.php:207 inc/class-metabox.php:55
+#: inc/customizer/configs/page-header.php:207
 msgid "Page Header"
 msgstr ""
 
-#: inc/class-metabox.php:62
+#: .git/inc/class-metabox.php:62 inc/class-metabox.php:62
 msgid "Content Layout"
 msgstr ""
 
-#: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:99
+#: .git/inc/class-metabox.php:67
+#: .git/inc/customizer/configs/footer/panel.php:99
+#: .git/inc/customizer/configs/header/panel.php:152
+#: .git/inc/customizer/configs/layouts.php:42
+#: .git/inc/customizer/configs/page-header.php:221 inc/class-metabox.php:67
+#: inc/customizer/configs/footer/panel.php:99
 #: inc/customizer/configs/header/panel.php:152
 #: inc/customizer/configs/layouts.php:42
 #: inc/customizer/configs/page-header.php:221
 msgid "Full Width"
 msgstr ""
 
-#: inc/class-metabox.php:68
+#: .git/inc/class-metabox.php:68 inc/class-metabox.php:68
 msgid "Full Width - Stretched"
 msgstr ""
 
-#: inc/class-metabox.php:76
+#: .git/inc/class-metabox.php:76 inc/class-metabox.php:76
 msgid "Sidebar"
 msgstr ""
 
-#: inc/class-metabox.php:82 inc/class-metabox.php:111 inc/class-metabox.php:135
+#: .git/inc/class-metabox.php:82 .git/inc/class-metabox.php:111
+#: .git/inc/class-metabox.php:135 inc/class-metabox.php:82
+#: inc/class-metabox.php:116 inc/class-metabox.php:140
 msgid "Inherit from customize settings"
 msgstr ""
 
-#: inc/class-metabox.php:86
+#: .git/inc/class-metabox.php:86 inc/class-metabox.php:86
 msgid "Disable Header"
 msgstr ""
 
-#: inc/class-metabox.php:87
+#: .git/inc/class-metabox.php:87 inc/class-metabox.php:87
 msgid "Disable Title"
 msgstr ""
 
-#: inc/class-metabox.php:90
+#: .git/inc/class-metabox.php:90 inc/class-metabox.php:95
 msgid "Disable Footer Top"
 msgstr ""
 
-#: inc/class-metabox.php:92
+#: .git/inc/class-metabox.php:92 inc/class-metabox.php:97
 msgid "Disable Footer Main"
 msgstr ""
 
-#: inc/class-metabox.php:93
+#: .git/inc/class-metabox.php:93 inc/class-metabox.php:98
 msgid "Disable Footer Bottom"
 msgstr ""
 
-#: inc/class-metabox.php:96
+#: .git/inc/class-metabox.php:96 inc/class-metabox.php:101
 msgid "Disable Elements"
 msgstr ""
 
-#: inc/class-metabox.php:106 inc/compatibility/breadcrumb.php:184
-#: inc/compatibility/breadcrumb.php:189
+#: .git/inc/class-metabox.php:106 .git/inc/compatibility/breadcrumb.php:184
+#: .git/inc/compatibility/breadcrumb.php:189
+#: .git/inc/customizer/configs/page-header.php:237
+#: .git/inc/customizer/configs/page-header.php:248 inc/class-metabox.php:111
+#: inc/compatibility/breadcrumb.php:184 inc/compatibility/breadcrumb.php:189
 #: inc/customizer/configs/page-header.php:237
 #: inc/customizer/configs/page-header.php:248
 msgid "Display"
 msgstr ""
 
-#: inc/class-metabox.php:113 inc/customizer/class-customizer.php:531
+#: .git/inc/class-metabox.php:113 .git/inc/customizer/class-customizer.php:531
+#: .git/inc/customizer/configs/page-header.php:37
+#: .git/inc/customizer/configs/page-header.php:439 inc/class-metabox.php:118
+#: inc/customizer/class-customizer.php:531
 #: inc/customizer/configs/page-header.php:37
-#: inc/customizer/configs/page-header.php:439
+#: inc/customizer/configs/page-header.php:473
 msgid "Cover"
 msgstr ""
 
-#: inc/class-metabox.php:114 inc/customizer/configs/page-header.php:38
+#: .git/inc/class-metabox.php:114
+#: .git/inc/customizer/configs/page-header.php:38 inc/class-metabox.php:119
+#: inc/customizer/configs/page-header.php:38
 msgid "Titlebar"
 msgstr ""
 
-#: inc/class-metabox.php:115 inc/class-metabox.php:136
-#: inc/customizer/configs/page-header.php:39
+#: .git/inc/class-metabox.php:115 .git/inc/class-metabox.php:136
+#: .git/inc/customizer/configs/page-header.php:39 inc/class-metabox.php:120
+#: inc/class-metabox.php:141 inc/customizer/configs/page-header.php:39
 msgid "Hide"
 msgstr ""
 
-#: inc/class-metabox.php:124 inc/class-metabox.php:130
-#: inc/compatibility/breadcrumb.php:86
+#: .git/inc/class-metabox.php:124 .git/inc/class-metabox.php:130
+#: .git/inc/compatibility/breadcrumb.php:86 inc/class-metabox.php:129
+#: inc/class-metabox.php:135 inc/compatibility/breadcrumb.php:86
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-metabox.php:137
+#: .git/inc/class-metabox.php:137
+#: .git/inc/customizer/controls/class-control-repeater.php:23
+#: inc/class-metabox.php:142
 #: inc/customizer/controls/class-control-repeater.php:23
 msgid "Show"
 msgstr ""
 
-#: inc/class-metabox.php:177
+#: .git/inc/class-metabox.php:177 inc/class-metabox.php:182
 msgid "Customify Settings"
 msgstr ""
 
-#: inc/compatibility/breadcrumb.php:91
+#: .git/inc/compatibility/breadcrumb.php:91 inc/compatibility/breadcrumb.php:91
 msgid ""
 "Customify theme support <a target=\"_blank\" "
 "href=\"https://wordpress.org/plugins/breadcrumb-navxt/\">Breadcrumb "
@@ -636,92 +741,126 @@ msgid ""
 "displayed after you installed and activated it."
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:106
 #: inc/compatibility/breadcrumb.php:106
 msgid "Display Position"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:110
 #: inc/compatibility/breadcrumb.php:110
 msgid "After header"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:111
 #: inc/compatibility/breadcrumb.php:111
 msgid "Inside cover/titlebar"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:112
 #: inc/compatibility/breadcrumb.php:112
 msgid "Before site main"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:121
 #: inc/compatibility/breadcrumb.php:121
 msgid "Hide on index"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:126
 #: inc/compatibility/breadcrumb.php:126
 msgid "Hide on categories"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:131
 #: inc/compatibility/breadcrumb.php:131
 msgid "Hide on search"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:136
 #: inc/compatibility/breadcrumb.php:136
 msgid "Hide on archive"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:141
 #: inc/compatibility/breadcrumb.php:141
 msgid "Hide on single page"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:146
 #: inc/compatibility/breadcrumb.php:146
 msgid "Hide on single post"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:151
 #: inc/compatibility/breadcrumb.php:151
 msgid "Hide on singular"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:156
 #: inc/compatibility/breadcrumb.php:156
 msgid "Hide on 404 page"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:165
 #: inc/compatibility/breadcrumb.php:165
 msgid "Hide on product page"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:170
 #: inc/compatibility/breadcrumb.php:170
 msgid "Hide on product category"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:175
 #: inc/compatibility/breadcrumb.php:175
 msgid "Hide on product tag"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:185
+#: .git/inc/customizer/configs/page-header.php:238
 #: inc/compatibility/breadcrumb.php:185
 #: inc/customizer/configs/page-header.php:238
 msgid "Settings display for special pages."
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:200
 #: inc/compatibility/breadcrumb.php:200
 msgid "Typography for breadcrumb"
 msgstr ""
 
+#: .git/inc/compatibility/breadcrumb.php:210
 #: inc/compatibility/breadcrumb.php:210
 msgid "Styling for breadcrumb"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/cart.php:46
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:76
 #: inc/compatibility/woocommerce/config/cart.php:46
 #: inc/compatibility/woocommerce/config/header/cart.php:76
 msgid "Cart"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/cart.php:54
 #: inc/compatibility/woocommerce/config/cart.php:54
 msgid "Hide cross-sells"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:149
 #: inc/compatibility/woocommerce/config/catalog-designer.php:149
 msgid "Category"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:154
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:265
+#: .git/inc/customizer/configs/blogs.php:287
+#: .git/inc/customizer/configs/header/social-icons.php:99
+#: .git/inc/customizer/configs/page-header.php:289
+#: .git/inc/customizer/configs/related-posts.php:31
+#: .git/inc/customizer/configs/related-posts.php:149
+#: .git/inc/customizer/configs/related-posts.php:211
+#: .git/inc/customizer/configs/single-blog-post.php:47
+#: .git/inc/customizer/configs/single-blog-post.php:106
+#: .git/inc/customizer/configs/single-blog-post.php:187
 #: inc/compatibility/woocommerce/config/catalog-designer.php:154
 #: inc/compatibility/woocommerce/config/catalog-designer.php:265
 #: inc/customizer/configs/blogs.php:287
@@ -736,76 +875,100 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:163
 #: inc/compatibility/woocommerce/config/catalog-designer.php:163
 msgid "Rating"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:171
+#: .git/woocommerce/cart/cart.php:29 .git/woocommerce/cart/cart.php:96
 #: inc/compatibility/woocommerce/config/catalog-designer.php:171
-#: woocommerce/cart/cart.php:29 woocommerce/cart/cart.php:96
+#: woocommerce/cart/cart.php:21 woocommerce/cart/cart.php:88
 msgid "Price"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:178
 #: inc/compatibility/woocommerce/config/catalog-designer.php:178
 msgid "Short Description"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:185
 #: inc/compatibility/woocommerce/config/catalog-designer.php:185
 msgid "Add To Cart"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:202
 #: inc/compatibility/woocommerce/config/catalog-designer.php:202
 msgid "Product Catalog Designer"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:214
 #: inc/compatibility/woocommerce/config/catalog-designer.php:214
 msgid "Show Catalog Filtering Bar"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:225
 #: inc/compatibility/woocommerce/config/catalog-designer.php:225
 msgid "Show Grid/List View Buttons"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:236
 #: inc/compatibility/woocommerce/config/catalog-designer.php:236
 msgid "Grid"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:237
 #: inc/compatibility/woocommerce/config/catalog-designer.php:237
 msgid "List"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:241
 #: inc/compatibility/woocommerce/config/catalog-designer.php:241
 msgid "Default View Mod"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:247
 #: inc/compatibility/woocommerce/config/catalog-designer.php:247
 msgid "Outside Media Items & Positions"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:270
 #: inc/compatibility/woocommerce/config/catalog-designer.php:270
 msgid "Show in grid view"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:275
 #: inc/compatibility/woocommerce/config/catalog-designer.php:275
 msgid "Show in list view"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:286
 #: inc/compatibility/woocommerce/config/catalog-designer.php:286
 msgid "List view excerpt type"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:288
 #: inc/compatibility/woocommerce/config/catalog-designer.php:288
 msgid "Product short description"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:289
+#: .git/inc/customizer/configs/blogs.php:195
+#: .git/inc/customizer/configs/search.php:33
 #: inc/compatibility/woocommerce/config/catalog-designer.php:289
 #: inc/customizer/configs/blogs.php:195 inc/customizer/configs/search.php:33
 msgid "Full content"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:290
 #: inc/compatibility/woocommerce/config/catalog-designer.php:290
 msgid "Strip by more tag"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:291
+#: .git/inc/customizer/configs/blogs.php:192
+#: .git/inc/customizer/configs/header/social-icons.php:199
+#: .git/inc/customizer/configs/search.php:30
 #: inc/compatibility/woocommerce/config/catalog-designer.php:291
 #: inc/customizer/configs/blogs.php:192
 #: inc/customizer/configs/header/social-icons.php:199
@@ -813,30 +976,37 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:300
 #: inc/compatibility/woocommerce/config/catalog-designer.php:300
 msgid "Custom list view excerpt length"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:310
 #: inc/compatibility/woocommerce/config/catalog-designer.php:310
 msgid "Product Media & Alignment"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:323
 #: inc/compatibility/woocommerce/config/catalog-designer.php:323
 msgid "List View Media Width"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:330
 #: inc/compatibility/woocommerce/config/catalog-designer.php:330
 msgid "Use first image of product gallery"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:331
 #: inc/compatibility/woocommerce/config/catalog-designer.php:331
 msgid "Use last image of product gallery"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:332
 #: inc/compatibility/woocommerce/config/catalog-designer.php:332
 msgid "Disable"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:339
 #: inc/compatibility/woocommerce/config/catalog-designer.php:339
 msgid ""
 "This setting adds a hover effect that will reveal a secondary product "
@@ -844,101 +1014,134 @@ msgid ""
 "displaying front and back images of products."
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:340
 #: inc/compatibility/woocommerce/config/catalog-designer.php:340
 msgid "Secondary Thumbnail"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:351
 #: inc/compatibility/woocommerce/config/catalog-designer.php:351
 msgid "Grid View - Content Alignment"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:362
 #: inc/compatibility/woocommerce/config/catalog-designer.php:362
 msgid "List View - Content Alignment"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:371
 #: inc/compatibility/woocommerce/config/catalog-designer.php:371
 msgid "Product Onsale Bubble"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:380
+#: .git/inc/customizer/configs/header/button.php:46
 #: inc/compatibility/woocommerce/config/catalog-designer.php:380
 #: inc/customizer/configs/header/button.php:46
 msgid "Text"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:381
 #: inc/compatibility/woocommerce/config/catalog-designer.php:381
 msgid "Discount percent"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:382
 #: inc/compatibility/woocommerce/config/catalog-designer.php:382
 msgid "Discount value"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:387
+#: .git/inc/customizer/configs/header/panel.php:247
 #: inc/compatibility/woocommerce/config/catalog-designer.php:387
 #: inc/customizer/configs/header/panel.php:247
 msgid "Display Type"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog-designer.php:396
 #: inc/compatibility/woocommerce/config/catalog-designer.php:396
 msgid "Advanced styling for onsale button"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog.php:15
 #: inc/compatibility/woocommerce/config/catalog.php:15
 msgid "Products per row on tablet"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/catalog.php:22
 #: inc/compatibility/woocommerce/config/catalog.php:22
 msgid "Products per row on mobile"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:15
 #: inc/compatibility/woocommerce/config/colors.php:15
 msgid "Shop Colors"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:22
 #: inc/compatibility/woocommerce/config/colors.php:22
 msgid "Shop Buttons"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:24
 #: inc/compatibility/woocommerce/config/colors.php:24
 msgid "Color for add to cart, checkout buttons. Default is Secondary Color."
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:45
 #: inc/compatibility/woocommerce/config/colors.php:45
 msgid "Rating Stars"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:46
 #: inc/compatibility/woocommerce/config/colors.php:46
 msgid "Color for rating stars, default is Secondary Color."
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/colors.php:68
 #: inc/compatibility/woocommerce/config/colors.php:68
 msgid "On Sale"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:35
 #: inc/compatibility/woocommerce/config/header/cart.php:35
 msgid "Shopping Cart"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:75
+#: .git/inc/customizer/configs/header/nav-icon.php:36
 #: inc/compatibility/woocommerce/config/header/cart.php:75
 #: inc/customizer/configs/header/nav-icon.php:36
 msgid "Label"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:89
+#: .git/inc/customizer/configs/header/button.php:57
+#: .git/inc/customizer/configs/header/social-icons.php:104
 #: inc/compatibility/woocommerce/config/header/cart.php:89
 #: inc/customizer/configs/header/button.php:57
 #: inc/customizer/configs/header/social-icons.php:104
 msgid "Icon"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:100
+#: .git/inc/customizer/configs/header/button.php:69
 #: inc/compatibility/woocommerce/config/header/cart.php:100
 #: inc/customizer/configs/header/button.php:69
 msgid "Before"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:101
+#: .git/inc/customizer/configs/header/button.php:70
 #: inc/compatibility/woocommerce/config/header/cart.php:101
 #: inc/customizer/configs/header/button.php:70
 msgid "After"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:103
+#: .git/inc/customizer/configs/header/button.php:67
+#: .git/inc/customizer/configs/header/search-box.php:131
+#: .git/inc/customizer/configs/header/search-icon.php:229
 #: inc/compatibility/woocommerce/config/header/cart.php:103
 #: inc/customizer/configs/header/button.php:67
 #: inc/customizer/configs/header/search-box.php:131
@@ -946,56 +1149,78 @@ msgstr ""
 msgid "Icon Position"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:114
 #: inc/compatibility/woocommerce/config/header/cart.php:114
 msgid "Cart Page"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:115
 #: inc/compatibility/woocommerce/config/header/cart.php:115
 msgid "Checkout"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:117
 #: inc/compatibility/woocommerce/config/header/cart.php:117
 msgid "Link To"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:132
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:133
+#: .git/inc/customizer/configs/header/nav-icon.php:52
 #: inc/compatibility/woocommerce/config/header/cart.php:132
 #: inc/compatibility/woocommerce/config/header/cart.php:133
 #: inc/customizer/configs/header/nav-icon.php:52
 msgid "Show Label"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:144
 #: inc/compatibility/woocommerce/config/header/cart.php:144
 msgid "Sub Total"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:145
 #: inc/compatibility/woocommerce/config/header/cart.php:145
 msgid "Show Sub Total"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:161
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:262
+#: .git/woocommerce/cart/cart.php:30 .git/woocommerce/cart/cart.php:102
 #: inc/compatibility/woocommerce/config/header/cart.php:161
 #: inc/compatibility/woocommerce/config/header/cart.php:262
-#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:102
+#: woocommerce/cart/cart.php:22 woocommerce/cart/cart.php:94
 msgid "Quantity"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:162
 #: inc/compatibility/woocommerce/config/header/cart.php:162
 msgid "Show Quantity"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:171
+#: .git/inc/customizer/configs/blogs.php:234
+#: .git/inc/customizer/configs/single-blog-post.php:134
 #: inc/compatibility/woocommerce/config/header/cart.php:171
 #: inc/customizer/configs/blogs.php:234
 #: inc/customizer/configs/single-blog-post.php:134
 msgid "Separator"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:172
 #: inc/compatibility/woocommerce/config/header/cart.php:172
 msgid "/"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:216
 #: inc/compatibility/woocommerce/config/header/cart.php:216
 msgid "Icon Settings"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:225
+#: .git/inc/customizer/configs/header/nav-icon.php:61
+#: .git/inc/customizer/configs/header/search-box.php:103
+#: .git/inc/customizer/configs/header/search-icon.php:60
+#: .git/inc/customizer/configs/header/search-icon.php:202
 #: inc/compatibility/woocommerce/config/header/cart.php:225
 #: inc/customizer/configs/header/nav-icon.php:61
 #: inc/customizer/configs/header/search-box.php:103
@@ -1004,22 +1229,30 @@ msgstr ""
 msgid "Icon Size"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:236
 #: inc/compatibility/woocommerce/config/header/cart.php:236
 msgid "Advanced styling for cart icon"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:263
 #: inc/compatibility/woocommerce/config/header/cart.php:263
 msgid "Advanced styling for cart quantity"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:289
 #: inc/compatibility/woocommerce/config/header/cart.php:289
 msgid "Dropdown Settings"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:296
 #: inc/compatibility/woocommerce/config/header/cart.php:296
 msgid "Dropdown Alignment"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:301
+#: .git/inc/customizer/configs/header/logo.php:84
+#: .git/inc/customizer/configs/related-posts.php:93
+#: .git/inc/customizer/controls/class-control-css-ruler.php:70
 #: inc/compatibility/woocommerce/config/header/cart.php:301
 #: inc/customizer/configs/header/logo.php:84
 #: inc/customizer/configs/related-posts.php:93
@@ -1027,6 +1260,10 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:302
+#: .git/inc/customizer/configs/header/logo.php:85
+#: .git/inc/customizer/configs/related-posts.php:94
+#: .git/inc/customizer/controls/class-control-css-ruler.php:62
 #: inc/compatibility/woocommerce/config/header/cart.php:302
 #: inc/customizer/configs/header/logo.php:85
 #: inc/customizer/configs/related-posts.php:94
@@ -1034,27 +1271,38 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/header/cart.php:313
 #: inc/compatibility/woocommerce/config/header/cart.php:313
 msgid "Dropdown Width"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:156
 #: inc/compatibility/woocommerce/config/single-product.php:156
 msgid "Single Product Page"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:190
+#: .git/inc/customizer/configs/blogs.php:40
 #: inc/compatibility/woocommerce/config/single-product.php:190
 #: inc/customizer/configs/blogs.php:40
 msgid "This option is available in Customify Pro plugin only."
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:191
 #: inc/compatibility/woocommerce/config/single-product.php:191
 msgid "Please activate module Single Product Layouts to use this layout."
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:200
 #: inc/compatibility/woocommerce/config/single-product.php:200
 msgid "Top Gallery Boxed"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:202
+#: .git/inc/compatibility/woocommerce/config/single-product.php:208
+#: .git/inc/compatibility/woocommerce/config/single-product.php:214
+#: .git/inc/customizer/configs/blogs.php:52
+#: .git/inc/customizer/configs/blogs.php:57
 #: inc/compatibility/woocommerce/config/single-product.php:202
 #: inc/compatibility/woocommerce/config/single-product.php:208
 #: inc/compatibility/woocommerce/config/single-product.php:214
@@ -1062,154 +1310,195 @@ msgstr ""
 msgid "Pro"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:206
 #: inc/compatibility/woocommerce/config/single-product.php:206
 msgid "Top Gallery Full Width"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:212
 #: inc/compatibility/woocommerce/config/single-product.php:212
 msgid "Left Gallery Grid"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:224
 #: inc/compatibility/woocommerce/config/single-product.php:224
 msgid "Product Navigation"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:233
 #: inc/compatibility/woocommerce/config/single-product.php:233
 msgid "Show Product Navigation"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:241
 #: inc/compatibility/woocommerce/config/single-product.php:241
 msgid "Product Tabs"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:250
 #: inc/compatibility/woocommerce/config/single-product.php:250
 msgid "Tab Layout"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:252
 #: inc/compatibility/woocommerce/config/single-product.php:252
 msgid "Horizontal"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:253
 #: inc/compatibility/woocommerce/config/single-product.php:253
 msgid "Vertical"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:254
 #: inc/compatibility/woocommerce/config/single-product.php:254
 msgid "Toggle"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:255
 #: inc/compatibility/woocommerce/config/single-product.php:255
 msgid "Sections"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:265
 #: inc/compatibility/woocommerce/config/single-product.php:265
 msgid "Hide product description heading"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:274
 #: inc/compatibility/woocommerce/config/single-product.php:274
 msgid "Hide product additional information heading"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:283
 #: inc/compatibility/woocommerce/config/single-product.php:283
 msgid "Hide product review heading"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:293
 #: inc/compatibility/woocommerce/config/single-product.php:293
 msgid "Upsell Products"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:302
 #: inc/compatibility/woocommerce/config/single-product.php:302
 msgid "Number of upsell products"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:311
 #: inc/compatibility/woocommerce/config/single-product.php:311
 msgid "Upsell products per row"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:319
 #: inc/compatibility/woocommerce/config/single-product.php:319
 msgid "Related Products"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:328
 #: inc/compatibility/woocommerce/config/single-product.php:328
 msgid "Number of related products"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:337
 #: inc/compatibility/woocommerce/config/single-product.php:337
 msgid "Related products per row"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/config/single-product.php:346
 #: inc/compatibility/woocommerce/config/single-product.php:346
 msgid "Show shop breadcrumb"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/inc/template-hooks.php:154
 #: inc/compatibility/woocommerce/inc/template-hooks.php:154
 msgid "Your order"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/woocommerce.php:602
 #: inc/compatibility/woocommerce/woocommerce.php:602
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/woocommerce.php:610
 #: inc/compatibility/woocommerce/woocommerce.php:610
 msgid "Display on single product"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/woocommerce.php:648
 #: inc/compatibility/woocommerce/woocommerce.php:648
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
+#: .git/inc/compatibility/woocommerce/woocommerce.php:659
 #: inc/compatibility/woocommerce/woocommerce.php:659
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
+#: .git/inc/customizer/class-customify-section.php:28
 #: inc/customizer/class-customify-section.php:28
 msgid "Customizing &#9656; %s"
 msgstr ""
 
+#: .git/inc/customizer/class-customify-section.php:31
 #: inc/customizer/class-customify-section.php:31
 msgid "Customizing"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer-fonts.php:16
 #: inc/customizer/class-customizer-fonts.php:16
 msgid "Default Web Fonts"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer-fonts.php:20
 #: inc/customizer/class-customizer-fonts.php:20
 msgid "Google Web Fonts"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer-icons.php:26
 #: inc/customizer/class-customizer-icons.php:26
 msgid "FontAwesome"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:376
 #: inc/customizer/class-customizer.php:376
 msgid "Font Family"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:382
 #: inc/customizer/class-customizer.php:382
 msgid "Font Weight"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:388
 #: inc/customizer/class-customizer.php:388
 msgid "Font Languages"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:393
 #: inc/customizer/class-customizer.php:393
 msgid "Font Size"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:402
 #: inc/customizer/class-customizer.php:402
 msgid "Line Height"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:411
 #: inc/customizer/class-customizer.php:411
 msgid "Letter Spacing"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:419
 #: inc/customizer/class-customizer.php:419
 msgid "Font Style"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:422
+#: .git/inc/customizer/class-customizer.php:464
+#: .git/inc/customizer/configs/header/menus.php:165
+#: .git/inc/customizer/configs/header/social-icons.php:213
 #: inc/customizer/class-customizer.php:422
 #: inc/customizer/class-customizer.php:464
 #: inc/customizer/configs/header/menus.php:165
@@ -1217,32 +1506,46 @@ msgstr ""
 msgid "Normal"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:423
+#: .git/inc/customizer/controls/class-control-font-style.php:17
 #: inc/customizer/class-customizer.php:423
 #: inc/customizer/controls/class-control-font-style.php:17
 msgid "Italic"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:424
 #: inc/customizer/class-customizer.php:424
 msgid "Oblique"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:430
 #: inc/customizer/class-customizer.php:430
 msgid "Text Decoration"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:433
+#: .git/inc/customizer/controls/class-control-font-style.php:18
 #: inc/customizer/class-customizer.php:433
 #: inc/customizer/controls/class-control-font-style.php:18
 msgid "Underline"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:434
 #: inc/customizer/class-customizer.php:434
 msgid "Overline"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:435
 #: inc/customizer/class-customizer.php:435
 msgid "Line through"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:436
+#: .git/inc/customizer/class-customizer.php:448
+#: .git/inc/customizer/class-customizer.php:604
+#: .git/inc/customizer/class-customizer.php:699
+#: .git/inc/customizer/configs/header/social-icons.php:185
+#: .git/inc/customizer/configs/header/social-icons.php:272
 #: inc/customizer/class-customizer.php:436
 #: inc/customizer/class-customizer.php:448
 #: inc/customizer/class-customizer.php:604
@@ -1252,28 +1555,39 @@ msgstr ""
 msgid "None"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:442
 #: inc/customizer/class-customizer.php:442
 msgid "Text Transform"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:445
+#: .git/inc/customizer/controls/class-control-font-style.php:20
 #: inc/customizer/class-customizer.php:445
 #: inc/customizer/controls/class-control-font-style.php:20
 msgid "Uppercase"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:446
 #: inc/customizer/class-customizer.php:446
 msgid "Lowercase"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:447
 #: inc/customizer/class-customizer.php:447
 msgid "Capitalize"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:465
+#: .git/inc/customizer/configs/header/social-icons.php:214
 #: inc/customizer/class-customizer.php:465
 #: inc/customizer/configs/header/social-icons.php:214
 msgid "Hover"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:471
+#: .git/inc/customizer/class-customizer.php:667
+#: .git/inc/customizer/configs/header/nav-icon.php:79
+#: .git/inc/customizer/configs/header/social-icons.php:196
 #: inc/customizer/class-customizer.php:471
 #: inc/customizer/class-customizer.php:667
 #: inc/customizer/configs/header/nav-icon.php:79
@@ -1281,28 +1595,43 @@ msgstr ""
 msgid "Color"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:477
+#: .git/inc/customizer/class-customizer.php:673
+#: .git/inc/customizer/configs/styling.php:120
 #: inc/customizer/class-customizer.php:477
 #: inc/customizer/class-customizer.php:673
 #: inc/customizer/configs/styling.php:120
 msgid "Link Color"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:491
+#: .git/inc/customizer/configs/header/panel.php:391
 #: inc/customizer/class-customizer.php:491
 #: inc/customizer/configs/header/panel.php:391
 msgid "Margin"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:504
+#: .git/inc/customizer/configs/header/social-icons.php:158
 #: inc/customizer/class-customizer.php:504
 #: inc/customizer/configs/header/social-icons.php:158
 msgid "Padding"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:510
+#: .git/inc/customizer/class-customizer.php:679
+#: .git/inc/customizer/configs/background.php:18
 #: inc/customizer/class-customizer.php:510
 #: inc/customizer/class-customizer.php:679
 #: inc/customizer/configs/background.php:18
 msgid "Background"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:516
+#: .git/inc/customizer/class-customizer.php:684
+#: .git/inc/customizer/configs/footer/panel.php:139
+#: .git/inc/customizer/configs/header/social-icons.php:220
+#: .git/inc/customizer/configs/header/social-icons.php:236
 #: inc/customizer/class-customizer.php:516
 #: inc/customizer/class-customizer.php:684
 #: inc/customizer/configs/footer/panel.php:139
@@ -1311,163 +1640,238 @@ msgstr ""
 msgid "Background Color"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:522
+#: .git/inc/customizer/configs/page-header.php:429
 #: inc/customizer/class-customizer.php:522
-#: inc/customizer/configs/page-header.php:429
+#: inc/customizer/configs/page-header.php:463
 msgid "Background Image"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:530
+#: .git/inc/customizer/configs/page-header.php:438
+#: .git/inc/customizer/controls/class-control-css-ruler.php:21
 #: inc/customizer/class-customizer.php:530
-#: inc/customizer/configs/page-header.php:438
+#: inc/customizer/configs/page-header.php:472
 #: inc/customizer/controls/class-control-css-ruler.php:21
 msgid "Auto"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:532
+#: .git/inc/customizer/configs/page-header.php:440
 #: inc/customizer/class-customizer.php:532
-#: inc/customizer/configs/page-header.php:440
+#: inc/customizer/configs/page-header.php:474
 msgid "Contain"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:535
+#: .git/inc/customizer/configs/header/social-icons.php:144
+#: .git/inc/customizer/configs/page-header.php:443
 #: inc/customizer/class-customizer.php:535
 #: inc/customizer/configs/header/social-icons.php:144
-#: inc/customizer/configs/page-header.php:443
+#: inc/customizer/configs/page-header.php:477
 msgid "Size"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:542
+#: .git/inc/customizer/configs/page-header.php:451
 #: inc/customizer/class-customizer.php:542
-#: inc/customizer/configs/page-header.php:451
+#: inc/customizer/configs/page-header.php:485
 msgid "Position"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:547
+#: .git/inc/customizer/configs/page-header.php:456
 #: inc/customizer/class-customizer.php:547
-#: inc/customizer/configs/page-header.php:456
+#: inc/customizer/configs/page-header.php:490
 msgid "Center"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:548
+#: .git/inc/customizer/configs/page-header.php:457
 #: inc/customizer/class-customizer.php:548
-#: inc/customizer/configs/page-header.php:457
+#: inc/customizer/configs/page-header.php:491
 msgid "Top Left"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:549
+#: .git/inc/customizer/configs/page-header.php:458
 #: inc/customizer/class-customizer.php:549
-#: inc/customizer/configs/page-header.php:458
+#: inc/customizer/configs/page-header.php:492
 msgid "Top Right"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:550
+#: .git/inc/customizer/configs/page-header.php:459
 #: inc/customizer/class-customizer.php:550
-#: inc/customizer/configs/page-header.php:459
+#: inc/customizer/configs/page-header.php:493
 msgid "Top Center"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:551
+#: .git/inc/customizer/configs/page-header.php:460
 #: inc/customizer/class-customizer.php:551
-#: inc/customizer/configs/page-header.php:460
+#: inc/customizer/configs/page-header.php:494
 msgid "Bottom Left"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:552
+#: .git/inc/customizer/configs/page-header.php:461
 #: inc/customizer/class-customizer.php:552
-#: inc/customizer/configs/page-header.php:461
+#: inc/customizer/configs/page-header.php:495
 msgid "Bottom Center"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:553
+#: .git/inc/customizer/configs/page-header.php:462
 #: inc/customizer/class-customizer.php:553
-#: inc/customizer/configs/page-header.php:462
+#: inc/customizer/configs/page-header.php:496
 msgid "Bottom Right"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:560
+#: .git/inc/customizer/configs/page-header.php:470
 #: inc/customizer/class-customizer.php:560
-#: inc/customizer/configs/page-header.php:470
+#: inc/customizer/configs/page-header.php:504
 msgid "Repeat"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:567
+#: .git/inc/customizer/configs/page-header.php:477
 #: inc/customizer/class-customizer.php:567
-#: inc/customizer/configs/page-header.php:477
+#: inc/customizer/configs/page-header.php:511
 msgid "No repeat"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:568
+#: .git/inc/customizer/configs/page-header.php:478
 #: inc/customizer/class-customizer.php:568
-#: inc/customizer/configs/page-header.php:478
+#: inc/customizer/configs/page-header.php:512
 msgid "Repeat horizontal"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:569
+#: .git/inc/customizer/configs/page-header.php:479
 #: inc/customizer/class-customizer.php:569
-#: inc/customizer/configs/page-header.php:479
+#: inc/customizer/configs/page-header.php:513
 msgid "Repeat vertical"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:577
+#: .git/inc/customizer/configs/page-header.php:488
 #: inc/customizer/class-customizer.php:577
-#: inc/customizer/configs/page-header.php:488
+#: inc/customizer/configs/page-header.php:522
 msgid "Attachment"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:584
+#: .git/inc/customizer/configs/page-header.php:495
 #: inc/customizer/class-customizer.php:584
-#: inc/customizer/configs/page-header.php:495
+#: inc/customizer/configs/page-header.php:529
 msgid "Scroll"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:585
+#: .git/inc/customizer/configs/page-header.php:496
 #: inc/customizer/class-customizer.php:585
-#: inc/customizer/configs/page-header.php:496
+#: inc/customizer/configs/page-header.php:530
 msgid "Fixed"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:593
+#: .git/inc/customizer/class-customizer.php:690
+#: .git/inc/customizer/configs/header/social-icons.php:257
 #: inc/customizer/class-customizer.php:593
 #: inc/customizer/class-customizer.php:690
 #: inc/customizer/configs/header/social-icons.php:257
 msgid "Border"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:600
+#: .git/inc/customizer/class-customizer.php:695
+#: .git/inc/customizer/configs/header/social-icons.php:268
 #: inc/customizer/class-customizer.php:600
 #: inc/customizer/class-customizer.php:695
 #: inc/customizer/configs/header/social-icons.php:268
 msgid "Border Style"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:605
+#: .git/inc/customizer/class-customizer.php:700
+#: .git/inc/customizer/configs/header/social-icons.php:273
 #: inc/customizer/class-customizer.php:605
 #: inc/customizer/class-customizer.php:700
 #: inc/customizer/configs/header/social-icons.php:273
 msgid "Solid"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:606
+#: .git/inc/customizer/class-customizer.php:701
+#: .git/inc/customizer/configs/header/social-icons.php:274
 #: inc/customizer/class-customizer.php:606
 #: inc/customizer/class-customizer.php:701
 #: inc/customizer/configs/header/social-icons.php:274
 msgid "Dotted"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:607
+#: .git/inc/customizer/class-customizer.php:702
+#: .git/inc/customizer/configs/header/social-icons.php:275
 #: inc/customizer/class-customizer.php:607
 #: inc/customizer/class-customizer.php:702
 #: inc/customizer/configs/header/social-icons.php:275
 msgid "Dashed"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:608
+#: .git/inc/customizer/class-customizer.php:703
+#: .git/inc/customizer/configs/header/social-icons.php:276
 #: inc/customizer/class-customizer.php:608
 #: inc/customizer/class-customizer.php:703
 #: inc/customizer/configs/header/social-icons.php:276
 msgid "Double"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:609
+#: .git/inc/customizer/class-customizer.php:704
+#: .git/inc/customizer/configs/header/social-icons.php:277
 #: inc/customizer/class-customizer.php:609
 #: inc/customizer/class-customizer.php:704
 #: inc/customizer/configs/header/social-icons.php:277
 msgid "Ridge"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:610
+#: .git/inc/customizer/class-customizer.php:705
+#: .git/inc/customizer/configs/header/social-icons.php:278
 #: inc/customizer/class-customizer.php:610
 #: inc/customizer/class-customizer.php:705
 #: inc/customizer/configs/header/social-icons.php:278
 msgid "Inset"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:611
+#: .git/inc/customizer/class-customizer.php:706
+#: .git/inc/customizer/configs/header/social-icons.php:279
 #: inc/customizer/class-customizer.php:611
 #: inc/customizer/class-customizer.php:706
 #: inc/customizer/configs/header/social-icons.php:279
 msgid "Outset"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:619
+#: .git/inc/customizer/class-customizer.php:713
+#: .git/inc/customizer/configs/header/social-icons.php:288
 #: inc/customizer/class-customizer.php:619
 #: inc/customizer/class-customizer.php:713
 #: inc/customizer/configs/header/social-icons.php:288
 msgid "Border Width"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:634
+#: .git/inc/customizer/class-customizer.php:725
+#: .git/inc/customizer/configs/header/menus.php:108
+#: .git/inc/customizer/configs/header/social-icons.php:301
+#: .git/inc/customizer/configs/styling.php:156
 #: inc/customizer/class-customizer.php:634
 #: inc/customizer/class-customizer.php:725
 #: inc/customizer/configs/header/menus.php:108
@@ -1476,115 +1880,155 @@ msgstr ""
 msgid "Border Color"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:645
+#: .git/inc/customizer/class-customizer.php:732
+#: .git/inc/customizer/configs/header/social-icons.php:310
 #: inc/customizer/class-customizer.php:645
 #: inc/customizer/class-customizer.php:732
 #: inc/customizer/configs/header/social-icons.php:310
 msgid "Border Radius"
 msgstr ""
 
+#: .git/inc/customizer/class-customizer.php:657
+#: .git/inc/customizer/class-customizer.php:743
 #: inc/customizer/class-customizer.php:657
 #: inc/customizer/class-customizer.php:743
 msgid "Box Shadow"
 msgstr ""
 
+#: .git/inc/customizer/configs/background.php:25
 #: inc/customizer/configs/background.php:25
 msgid "Site Background"
 msgstr ""
 
+#: .git/inc/customizer/configs/background.php:52
 #: inc/customizer/configs/background.php:52
 msgid "Site Content"
 msgstr ""
 
+#: .git/inc/customizer/configs/background.php:59
 #: inc/customizer/configs/background.php:59
 msgid "Content Area Background"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:41
+#: .git/inc/customizer/configs/blogs.php:41 inc/customizer/configs/blogs.php:41
 msgid "Please activate module Blog Posts to use this layout."
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:71
+#: .git/inc/customizer/configs/blogs.php:71 inc/customizer/configs/blogs.php:71
 msgid "Article Styling"
 msgstr ""
 
-#: inc/customizer/configs/blogs.php:84
+#: .git/inc/customizer/configs/blogs.php:84 inc/customizer/configs/blogs.php:84
 msgid "Article Wrapper"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:104
 #: inc/customizer/configs/blogs.php:104
 msgid "Media"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:111
 #: inc/customizer/configs/blogs.php:111
 msgid "Hide Media"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:120
 #: inc/customizer/configs/blogs.php:120
 msgid "Media Ratio"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:133
 #: inc/customizer/configs/blogs.php:133
 msgid "Media Width"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:148
 #: inc/customizer/configs/blogs.php:148
 msgid "Media Radius"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:163
+#: .git/inc/customizer/configs/related-posts.php:106
+#: .git/inc/customizer/configs/single-blog-post.php:118
 #: inc/customizer/configs/blogs.php:163
 #: inc/customizer/configs/related-posts.php:106
 #: inc/customizer/configs/single-blog-post.php:118
 msgid "Thumbnail Size"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:174
 #: inc/customizer/configs/blogs.php:174
 msgid "Hide featured image if empty."
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:183
 #: inc/customizer/configs/blogs.php:183
 msgid "Excerpt"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:193
+#: .git/inc/customizer/configs/search.php:31
 #: inc/customizer/configs/blogs.php:193 inc/customizer/configs/search.php:31
 msgid "Use excerpt metabox"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:194
+#: .git/inc/customizer/configs/search.php:32
 #: inc/customizer/configs/blogs.php:194 inc/customizer/configs/search.php:32
 msgid "Strip excerpt by more tag"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:199
+#: .git/inc/customizer/configs/search.php:37
 #: inc/customizer/configs/blogs.php:199 inc/customizer/configs/search.php:37
 msgid "Excerpt Type"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:209
+#: .git/inc/customizer/configs/search.php:47
 #: inc/customizer/configs/blogs.php:209 inc/customizer/configs/search.php:47
 msgid "Excerpt Length"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:219
+#: .git/inc/customizer/configs/search.php:57
 #: inc/customizer/configs/blogs.php:219 inc/customizer/configs/search.php:57
 msgid "Excerpt More"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:226
 #: inc/customizer/configs/blogs.php:226
 msgid "Metas"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:244
+#: .git/inc/customizer/configs/single-blog-post.php:144
 #: inc/customizer/configs/blogs.php:244
 #: inc/customizer/configs/single-blog-post.php:144
 msgid "Separator Width"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:253
+#: .git/inc/customizer/configs/single-blog-post.php:153
 #: inc/customizer/configs/blogs.php:253
 #: inc/customizer/configs/single-blog-post.php:153
 msgid "Drag to reorder the meta item."
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:263
+#: .git/inc/customizer/configs/related-posts.php:184
+#: .git/inc/customizer/configs/single-blog-post.php:163
 #: inc/customizer/configs/blogs.php:263
 #: inc/customizer/configs/related-posts.php:184
 #: inc/customizer/configs/single-blog-post.php:163
 msgid "Author"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:267
+#: .git/inc/customizer/configs/related-posts.php:148
+#: .git/inc/customizer/configs/related-posts.php:189
+#: .git/inc/customizer/configs/single-blog-post.php:167
 #: inc/customizer/configs/blogs.php:267
 #: inc/customizer/configs/related-posts.php:148
 #: inc/customizer/configs/related-posts.php:189
@@ -1592,6 +2036,10 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:271
+#: .git/inc/customizer/configs/related-posts.php:193
+#: .git/inc/customizer/configs/single-blog-post.php:67
+#: .git/inc/customizer/configs/single-blog-post.php:171
 #: inc/customizer/configs/blogs.php:271
 #: inc/customizer/configs/related-posts.php:193
 #: inc/customizer/configs/single-blog-post.php:67
@@ -1599,121 +2047,158 @@ msgstr ""
 msgid "Categories"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:275
+#: .git/inc/customizer/configs/related-posts.php:198
+#: .git/inc/customizer/configs/single-blog-post.php:175
 #: inc/customizer/configs/blogs.php:275
 #: inc/customizer/configs/related-posts.php:198
 #: inc/customizer/configs/single-blog-post.php:175
 msgid "Comment"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:299
+#: .git/inc/customizer/configs/single-blog-post.php:199
 #: inc/customizer/configs/blogs.php:299
 #: inc/customizer/configs/single-blog-post.php:199
 msgid "Show author avatar"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:310
+#: .git/inc/customizer/configs/single-blog-post.php:210
 #: inc/customizer/configs/blogs.php:310
 #: inc/customizer/configs/single-blog-post.php:210
 msgid "Avatar Size"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:318
 #: inc/customizer/configs/blogs.php:318
 msgid "Read More"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:328
 #: inc/customizer/configs/blogs.php:328
 msgid "Show Read More Button"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:337
 #: inc/customizer/configs/blogs.php:337
 msgid "Read More Text"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:381
 #: inc/customizer/configs/blogs.php:381
 msgid "Pagination"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:391
 #: inc/customizer/configs/blogs.php:391
 msgid "Show Pagination"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:400
 #: inc/customizer/configs/blogs.php:400
 msgid "Show Next, Previous Label"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:409
 #: inc/customizer/configs/blogs.php:409
 msgid "Previous Label"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:418
 #: inc/customizer/configs/blogs.php:418
 msgid "Next Label"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:429
 #: inc/customizer/configs/blogs.php:429
 msgid "How many numbers to either side of the current pages"
 msgstr ""
 
+#: .git/inc/customizer/configs/blogs.php:448
 #: inc/customizer/configs/blogs.php:448
 msgid "Blog"
 msgstr ""
 
+#: .git/inc/customizer/configs/compatibility.php:19
 #: inc/customizer/configs/compatibility.php:19
 msgid "Compatibility"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/copyright.php:13
+#: .git/inc/customizer/configs/footer/copyright.php:23
 #: inc/customizer/configs/footer/copyright.php:13
 #: inc/customizer/configs/footer/copyright.php:23
 msgid "Copyright"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/copyright.php:54
 #: inc/customizer/configs/footer/copyright.php:54
 msgid "Copyright &copy; {current_year} {site_title} - Powered by {theme_author}."
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/copyright.php:55
 #: inc/customizer/configs/footer/copyright.php:55
 msgid "Copyright Text"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/copyright.php:56
 #: inc/customizer/configs/footer/copyright.php:56
 msgid ""
 "Arbitrary HTML code or shortcode. Available tags: {current_year}, "
 "{site_title}, {theme_author}"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/copyright.php:63
 #: inc/customizer/configs/footer/copyright.php:63
 msgid "Copyright Text Typography"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:14
 #: inc/customizer/configs/footer/panel.php:14
 msgid "Footer Layout"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:21
 #: inc/customizer/configs/footer/panel.php:21
 msgid "Footer Main"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:22
 #: inc/customizer/configs/footer/panel.php:22
 msgid "Footer Bottom"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:33
 #: inc/customizer/configs/footer/panel.php:33
 msgid "Footer"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:65
 #: inc/customizer/configs/footer/panel.php:65
 msgid "Footer Top"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:98
+#: .git/inc/customizer/configs/header/panel.php:151
+#: .git/inc/customizer/configs/page-header.php:220
 #: inc/customizer/configs/footer/panel.php:98
 #: inc/customizer/configs/header/panel.php:151
 #: inc/customizer/configs/page-header.php:220
 msgid "Full width - Contained"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:100
+#: .git/inc/customizer/configs/header/panel.php:153
+#: .git/inc/customizer/configs/page-header.php:222
 #: inc/customizer/configs/footer/panel.php:100
 #: inc/customizer/configs/header/panel.php:153
 #: inc/customizer/configs/page-header.php:222
 msgid "Contained"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:109
+#: .git/inc/customizer/configs/header/panel.php:162
 #: inc/customizer/configs/footer/panel.php:109
 #: inc/customizer/configs/header/panel.php:162
 msgid ""
@@ -1723,17 +2208,36 @@ msgid ""
 "<code>Framed</code>"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:121
+#: .git/inc/customizer/configs/header/panel.php:186
+#: .git/inc/customizer/configs/header/panel.php:263
 #: inc/customizer/configs/footer/panel.php:121
 #: inc/customizer/configs/header/panel.php:186
 #: inc/customizer/configs/header/panel.php:263
 msgid "Skin Mode"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/panel.php:147
+#: .git/inc/customizer/configs/styling.php:271
+#: inc/customizer/configs/styling.php:271
+msgid "Heading Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/footer/panel.php:162
+msgid "Content Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/footer/templates.php:24
+#: .git/inc/customizer/configs/header/templates.php:24
 #: inc/customizer/configs/footer/templates.php:24
 #: inc/customizer/configs/header/templates.php:24
 msgid "Saved Templates"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:36
+#: .git/inc/customizer/configs/header/templates.php:36
+#: .git/inc/customizer/controls/class-control-base.php:135
+#: .git/inc/customizer/controls/class-control-base.php:264
 #: inc/customizer/configs/footer/templates.php:36
 #: inc/customizer/configs/header/templates.php:36
 #: inc/customizer/controls/class-control-base.php:135
@@ -1741,61 +2245,81 @@ msgstr ""
 msgid "Untitled"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:40
+#: .git/inc/customizer/configs/header/templates.php:40
+#: .git/inc/panel-builder/class-layout-builder.php:258
 #: inc/customizer/configs/footer/templates.php:40
 #: inc/customizer/configs/header/templates.php:40
 #: inc/panel-builder/class-layout-builder.php:258
 msgid "Load"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:44
+#: .git/inc/customizer/configs/header/templates.php:44
 #: inc/customizer/configs/footer/templates.php:44
 #: inc/customizer/configs/header/templates.php:44
 msgid "No saved templates."
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:55
+#: .git/inc/customizer/configs/header/templates.php:55
+#: .git/inc/panel-builder/class-layout-builder.php:389
 #: inc/customizer/configs/footer/templates.php:55
 #: inc/customizer/configs/header/templates.php:55
-#: inc/panel-builder/class-layout-builder.php:389
+#: inc/panel-builder/class-layout-builder.php:392
 msgid "Templates"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:63
+#: .git/inc/customizer/configs/header/templates.php:63
 #: inc/customizer/configs/footer/templates.php:63
 #: inc/customizer/configs/header/templates.php:63
 msgid "Save Template"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/templates.php:64
+#: .git/inc/customizer/configs/header/templates.php:64
 #: inc/customizer/configs/footer/templates.php:64
 #: inc/customizer/configs/header/templates.php:64
 msgid "Save"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:8
 #: inc/customizer/configs/footer/widgets.php:8
 msgid "Footer Sidebar 1"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:25
 #: inc/customizer/configs/footer/widgets.php:25
 msgid "Footer Sidebar 2"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:42
 #: inc/customizer/configs/footer/widgets.php:42
 msgid "Footer Sidebar 3"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:59
 #: inc/customizer/configs/footer/widgets.php:59
 msgid "Footer Sidebar 4"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:76
 #: inc/customizer/configs/footer/widgets.php:76
 msgid "Footer Sidebar 5"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:93
 #: inc/customizer/configs/footer/widgets.php:93
 msgid "Footer Sidebar 6"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:158
 #: inc/customizer/configs/footer/widgets.php:158
 msgid "Footer Widget %s"
 msgstr ""
 
+#: .git/inc/customizer/configs/footer/widgets.php:161
 #: inc/customizer/configs/footer/widgets.php:161
 #. Translators: 1: Admin URL2: Customize URL 3: Footer ID
 msgid ""
@@ -1804,6 +2328,10 @@ msgid ""
 "Footer %2$s</strong></a> and adding widgets into this widget area.</p>"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/button.php:18
+#: .git/inc/customizer/configs/header/button.php:36
+#: .git/inc/customizer/configs/header/button.php:47
+#: .git/inc/customizer/configs/header/button.php:165
 #: inc/customizer/configs/header/button.php:18
 #: inc/customizer/configs/header/button.php:36
 #: inc/customizer/configs/header/button.php:47
@@ -1811,65 +2339,88 @@ msgstr ""
 msgid "Button"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/button.php:80
 #: inc/customizer/configs/header/button.php:80
 msgid "Link"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/button.php:89
+#: .git/inc/customizer/configs/header/social-icons.php:123
 #: inc/customizer/configs/header/button.php:89
 #: inc/customizer/configs/header/social-icons.php:123
 msgid "Open link in a new tab."
 msgstr ""
 
+#: .git/inc/customizer/configs/header/button.php:97
 #: inc/customizer/configs/header/button.php:97
 msgid "Advanced typography for button"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/button.php:108
 #: inc/customizer/configs/header/button.php:108
 msgid "Advanced styling for button"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/html.php:29
 #: inc/customizer/configs/header/html.php:29
 msgid "HTML 1"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/html.php:71
 #: inc/customizer/configs/header/html.php:71
 msgid "Add custom text here or remove it"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/html.php:72
 #: inc/customizer/configs/header/html.php:72
 msgid "HTML"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/html.php:73
 #: inc/customizer/configs/header/html.php:73
 msgid "Arbitrary HTML code."
 msgstr ""
 
+#: .git/inc/customizer/configs/header/html.php:82
 #: inc/customizer/configs/header/html.php:82
 msgid "Typography Setting"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:8
 #: inc/customizer/configs/header/logo.php:8
 msgid "Logo"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:30
 #: inc/customizer/configs/header/logo.php:30
 msgid "Logo Max Width"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:43
 #: inc/customizer/configs/header/logo.php:43
 msgid "Logo Retina"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:52
 #: inc/customizer/configs/header/logo.php:52
 msgid "Show Site Title"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:55
+#: .git/inc/customizer/configs/header/logo.php:69
+#: .git/inc/customizer/configs/layouts.php:54
+#: .git/inc/customizer/configs/layouts.php:157
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
 #: inc/customizer/configs/layouts.php:54 inc/customizer/configs/layouts.php:157
 msgid "Yes"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:56
+#: .git/inc/customizer/configs/header/logo.php:70
+#: .git/inc/customizer/configs/header/panel.php:428
+#: .git/inc/customizer/configs/layouts.php:55
+#: .git/inc/customizer/configs/layouts.php:158
 #: inc/customizer/configs/header/logo.php:56
 #: inc/customizer/configs/header/logo.php:70
 #: inc/customizer/configs/header/panel.php:428
@@ -1877,81 +2428,1674 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:66
 #: inc/customizer/configs/header/logo.php:66
 msgid "Show Site Tagline"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:80
 #: inc/customizer/configs/header/logo.php:80
 msgid "Logo Position"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:83
+#: .git/inc/customizer/configs/related-posts.php:95
+#: .git/inc/customizer/controls/class-control-css-ruler.php:58
 #: inc/customizer/configs/header/logo.php:83
 #: inc/customizer/configs/related-posts.php:95
 #: inc/customizer/controls/class-control-css-ruler.php:58
 msgid "Top"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/logo.php:86
+#: .git/inc/customizer/controls/class-control-css-ruler.php:66
 #: inc/customizer/configs/header/logo.php:86
 #: inc/customizer/controls/class-control-css-ruler.php:66
 msgid "Bottom"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:18
 #: inc/customizer/configs/header/menus.php:18
 msgid "Primary Menu"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:44
 #: inc/customizer/configs/header/menus.php:44
 msgid ""
 "Assign <a href=\"#menu_locations\"  class=\"focus-section\">Menu "
 "Location</a> for %1$s"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:53
 #: inc/customizer/configs/header/menus.php:53
 msgid "Menu Preset"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:78
 #: inc/customizer/configs/header/menus.php:78
 msgid "Border Height"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:94
 #: inc/customizer/configs/header/menus.php:94
 msgid "Border Position"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:128
 #: inc/customizer/configs/header/menus.php:128
 msgid "Hide menu dropdown arrow"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:139
 #: inc/customizer/configs/header/menus.php:139
 msgid "Arrow icon size"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:148
 #: inc/customizer/configs/header/menus.php:148
 msgid "Top Menu"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:155
 #: inc/customizer/configs/header/menus.php:155
 msgid "Top Menu Items Styling"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:156
 #: inc/customizer/configs/header/menus.php:156
 msgid "Styling for top level menu items"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:166
 #: inc/customizer/configs/header/menus.php:166
 msgid "Hover/Active"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:191
 #: inc/customizer/configs/header/menus.php:191
 msgid "Top Menu Items Typography"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:192
 #: inc/customizer/configs/header/menus.php:192
 msgid "Typography for menu"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/menus.php:204
 #: inc/customizer/configs/header/menus.php:204
 msgid "Submenu"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/menus.php:210
+msgid ""
+"Submenu settings is a part of Advanced Header & Footer builder modules "
+"which only available in Customify Pro. <a target=\"_blank\" "
+"href=\"https://wpcustomify.com/help/documentation/customify-pro-modules/"
+"advanced-header-footer-builder/\">Learn more about it here</a>."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:9
+#: .git/inc/customizer/configs/header/nav-icon.php:26
+#: inc/customizer/configs/header/nav-icon.php:9
+#: inc/customizer/configs/header/nav-icon.php:26
+msgid "Menu Icon"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:35
+#: .git/inc/panel-builder/class-abstract-layout-frontend.php:119
+#: inc/customizer/configs/header/nav-icon.php:35
+#: inc/panel-builder/class-abstract-layout-frontend.php:119
+msgid "Menu"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:45
+#: inc/customizer/configs/header/nav-icon.php:45
+msgid "Label Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:69
+#: inc/customizer/configs/header/nav-icon.php:69
+msgid "Small"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:70
+#: inc/customizer/configs/header/nav-icon.php:70
+msgid "Medium"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:71
+#: inc/customizer/configs/header/nav-icon.php:71
+msgid "Large"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/nav-icon.php:91
+#: inc/customizer/configs/header/nav-icon.php:91
+msgid "Color Hover"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:26
+#: inc/customizer/configs/header/panel.php:26
+msgid "Version 1"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:30
+#: inc/customizer/configs/header/panel.php:30
+msgid "Version 2"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:34
+#: inc/customizer/configs/header/panel.php:34
+msgid "Desktop"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:35
+#: inc/customizer/configs/header/panel.php:35
+msgid "Mobile/Tablet"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:42
+#: .git/inc/customizer/configs/header/panel.php:115
+#: inc/customizer/configs/header/panel.php:42
+#: inc/customizer/configs/header/panel.php:115
+msgid "Header Top"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:43
+#: inc/customizer/configs/header/panel.php:43
+msgid "Header Main"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:44
+#: inc/customizer/configs/header/panel.php:44
+msgid "Header Bottom"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:45
+#: inc/customizer/configs/header/panel.php:45
+msgid "Menu Sidebar"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:57
+#: inc/customizer/configs/header/panel.php:57
+msgid "Header"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:177
+#: inc/customizer/configs/header/panel.php:177
+msgid "Height"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:205
+#: .git/inc/customizer/configs/header/panel.php:282
+#: inc/customizer/configs/header/panel.php:205
+#: inc/customizer/configs/header/panel.php:282
+msgid "Advanced styling for %s"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:250
+#: inc/customizer/configs/header/panel.php:250
+msgid "Slide From Left"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:251
+#: inc/customizer/configs/header/panel.php:251
+msgid "Slide From Right"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:252
+#: inc/customizer/configs/header/panel.php:252
+msgid "Full-screen Overlay"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:253
+#: inc/customizer/configs/header/panel.php:253
+msgid "Toggle Dropdown"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:328
+#: inc/customizer/configs/header/panel.php:328
+msgid "Do not copy parent menu to submenu."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:340
+#: .git/inc/customizer/configs/header/panel.php:407
+#: inc/customizer/configs/header/panel.php:340
+#: inc/customizer/configs/header/panel.php:407
+msgid "Align"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:375
+#: inc/customizer/configs/header/panel.php:375
+msgid "Item Layout"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:425
+#: inc/customizer/configs/header/panel.php:425
+msgid "Merge Item"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:426
+#: inc/customizer/configs/header/panel.php:426
+msgid ""
+"If you choose to merge this item, the alignment setting will inherit from "
+"the item you are merging."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:429
+#: inc/customizer/configs/header/panel.php:429
+msgid "Merge with left item"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/panel.php:430
+#: inc/customizer/configs/header/panel.php:430
+msgid "Merge with right item"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:15
+#: inc/customizer/configs/header/search-box.php:15
+msgid "Search Box"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:62
+#: .git/inc/customizer/configs/header/search-icon.php:124
+#: inc/customizer/configs/header/search-box.php:62
+#: inc/customizer/configs/header/search-icon.php:124
+msgid "Placeholder"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:63
+#: .git/inc/customizer/configs/header/search-icon.php:125
+#: inc/customizer/configs/header/search-box.php:63
+#: inc/customizer/configs/header/search-icon.php:125
+msgid "Search ..."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:74
+#: inc/customizer/configs/header/search-box.php:74
+msgid "Search Form Width"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:75
+#: inc/customizer/configs/header/search-box.php:75
+msgid "Note: The width can not greater than grid width."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:89
+#: .git/inc/customizer/configs/header/search-icon.php:169
+#: inc/customizer/configs/header/search-box.php:89
+#: inc/customizer/configs/header/search-icon.php:169
+msgid "Input Height"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:141
+#: .git/inc/customizer/configs/header/search-icon.php:188
+#: inc/customizer/configs/header/search-box.php:141
+#: inc/customizer/configs/header/search-icon.php:188
+msgid "Input Text Typography"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:142
+#: .git/inc/customizer/configs/header/search-icon.php:189
+#: inc/customizer/configs/header/search-box.php:142
+#: inc/customizer/configs/header/search-icon.php:189
+msgid "Typography for search input"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:151
+#: .git/inc/customizer/configs/header/search-icon.php:237
+#: inc/customizer/configs/header/search-box.php:151
+#: inc/customizer/configs/header/search-icon.php:237
+msgid "Input Styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:152
+#: .git/inc/customizer/configs/header/search-box.php:203
+#: .git/inc/customizer/configs/header/search-icon.php:238
+#: .git/inc/customizer/configs/header/search-icon.php:275
+#: inc/customizer/configs/header/search-box.php:152
+#: inc/customizer/configs/header/search-box.php:203
+#: inc/customizer/configs/header/search-icon.php:238
+#: inc/customizer/configs/header/search-icon.php:275
+msgid "Search input styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-box.php:202
+#: .git/inc/customizer/configs/header/search-icon.php:81
+#: .git/inc/customizer/configs/header/search-icon.php:274
+#: inc/customizer/configs/header/search-box.php:202
+#: inc/customizer/configs/header/search-icon.php:81
+#: inc/customizer/configs/header/search-icon.php:274
+msgid "Icon Styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:15
+#: inc/customizer/configs/header/search-icon.php:15
+msgid "Search Icon"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:73
+#: inc/customizer/configs/header/search-icon.php:73
+msgid "Icon Padding"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:82
+#: inc/customizer/configs/header/search-icon.php:82
+msgid "Search icon styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:115
+#: inc/customizer/configs/header/search-icon.php:115
+msgid "Modal Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:133
+#: inc/customizer/configs/header/search-icon.php:133
+msgid "Form Styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:134
+#: inc/customizer/configs/header/search-icon.php:134
+msgid "Form modal styling"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/search-icon.php:179
+#: inc/customizer/configs/header/search-icon.php:179
+msgid "Search Modal Width"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:23
+#: .git/inc/customizer/configs/header/social-icons.php:42
+#: inc/customizer/configs/header/social-icons.php:23
+#: inc/customizer/configs/header/social-icons.php:42
+msgid "Social Icons"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:51
+#: inc/customizer/configs/header/social-icons.php:51
+msgid "Social Profiles"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:110
+#: inc/customizer/configs/header/social-icons.php:110
+msgid "URL"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:131
+#: inc/customizer/configs/header/social-icons.php:131
+msgid "Adding rel=\"nofollow\" for social links."
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:170
+#: inc/customizer/configs/header/social-icons.php:170
+msgid "Icon Spacing"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:180
+#: inc/customizer/configs/header/social-icons.php:180
+msgid "Shape"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:182
+#: inc/customizer/configs/header/social-icons.php:182
+msgid "Rounded"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:183
+#: inc/customizer/configs/header/social-icons.php:183
+msgid "Square"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:184
+#: inc/customizer/configs/header/social-icons.php:184
+msgid "Circle"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:198
+#: inc/customizer/configs/header/social-icons.php:198
+msgid "Official Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:210
+#: inc/customizer/configs/header/social-icons.php:210
+msgid "Custom Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:227
+#: .git/inc/customizer/configs/header/social-icons.php:243
+#: inc/customizer/configs/header/social-icons.php:227
+#: inc/customizer/configs/header/social-icons.php:243
+msgid "Icon Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/header/social-icons.php:258
+#: inc/customizer/configs/header/social-icons.php:258
+msgid "Border & border radius"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:21
+#: inc/customizer/configs/layouts.php:21
+msgid "Layouts"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:30
+#: inc/customizer/configs/layouts.php:30
+msgid "Global"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:36
+#: inc/customizer/configs/layouts.php:36
+msgid "Site layout"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:37
+#: inc/customizer/configs/layouts.php:37
+msgid "Select global site layout."
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:43
+#: .git/inc/customizer/configs/layouts.php:109
+#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:109
+msgid "Boxed"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:44
+#: inc/customizer/configs/layouts.php:44
+msgid "Framed"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:52
+#: inc/customizer/configs/layouts.php:52
+msgid "Site boxed/framed shadow"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:69
+#: inc/customizer/configs/layouts.php:69
+msgid "Site framed margin"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:96
+#: inc/customizer/configs/layouts.php:96
+msgid "Container width"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:106
+#: inc/customizer/configs/layouts.php:106
+msgid "Site content layout"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:108
+#: inc/customizer/configs/layouts.php:108
+msgid "Full width"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:120
+#: inc/customizer/configs/layouts.php:120
+msgid "Site content padding"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:139
+#: inc/customizer/configs/layouts.php:139
+msgid "Sidebars"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:147
+#: inc/customizer/configs/layouts.php:147
+msgid "Default Sidebar Layout"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:155
+#: inc/customizer/configs/layouts.php:155
+msgid "Sidebar with vertical border"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:171
+#: inc/customizer/configs/layouts.php:171
+msgid "Pages"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:180
+#: inc/customizer/configs/layouts.php:180
+msgid "Blog posts"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:189
+#: inc/customizer/configs/layouts.php:189
+msgid "Blog Archive Page"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:198
+#: inc/customizer/configs/layouts.php:198
+msgid "Search Page"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:207
+#: inc/customizer/configs/layouts.php:207
+msgid "404 Page"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:219
+#: inc/customizer/configs/layouts.php:219
+msgid "Post Type Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/layouts.php:228
+#: inc/customizer/configs/layouts.php:228
+msgid "Single %s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:47
+#: inc/customizer/configs/page-header.php:47
+msgid "Display on single page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:48
+#: inc/customizer/configs/page-header.php:48
+msgid "Apply when viewing single page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:55
+#: inc/customizer/configs/page-header.php:55
+msgid "Display on single post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:56
+#: .git/inc/customizer/configs/page-header.php:116
+#: .git/inc/customizer/configs/page-header.php:140
+#: inc/customizer/configs/page-header.php:56
+#: inc/customizer/configs/page-header.php:116
+#: inc/customizer/configs/page-header.php:140
+msgid "Apply when viewing single post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:64
+#: inc/customizer/configs/page-header.php:64
+msgid "Display on categories"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:65
+#: inc/customizer/configs/page-header.php:65
+msgid "Apply when viewing a category page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:72
+#: inc/customizer/configs/page-header.php:72
+msgid "Display on index"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:73
+#: .git/inc/customizer/configs/page-header.php:109
+#: .git/inc/customizer/configs/page-header.php:133
+#: inc/customizer/configs/page-header.php:73
+#: inc/customizer/configs/page-header.php:109
+#: inc/customizer/configs/page-header.php:133
+msgid "Apply when your homepage displays as latest posts"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:80
+#: inc/customizer/configs/page-header.php:80
+msgid "Display on search"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:81
+#: inc/customizer/configs/page-header.php:81
+msgid "Apply when viewing search results page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:88
+#: inc/customizer/configs/page-header.php:88
+msgid "Display on archive"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:89
+#: inc/customizer/configs/page-header.php:89
+msgid ""
+"Apply when viewing archive pages, e.g. Tag, Author, Date, Custom Post Type "
+"or Custom Taxonomy"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:96
+#: inc/customizer/configs/page-header.php:96
+msgid "Display on 404 page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:97
+#: .git/inc/customizer/configs/page-header.php:123
+#: .git/inc/customizer/configs/page-header.php:147
+#: inc/customizer/configs/page-header.php:97
+#: inc/customizer/configs/page-header.php:123
+#: inc/customizer/configs/page-header.php:147
+msgid "Apply when the page not found"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:108
+#: inc/customizer/configs/page-header.php:108
+msgid "Title for index page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:115
+#: inc/customizer/configs/page-header.php:115
+msgid "Title for single post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:122
+#: inc/customizer/configs/page-header.php:122
+msgid "Title for 404 page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:132
+#: inc/customizer/configs/page-header.php:132
+msgid "Tagline for index page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:139
+#: inc/customizer/configs/page-header.php:139
+msgid "Tagline for single post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:146
+#: inc/customizer/configs/page-header.php:146
+msgid "Tagline for 404 page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:158
+#: inc/customizer/configs/page-header.php:158
+msgid "Display on %s page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:159
+#: .git/inc/customizer/configs/page-header.php:188
+#: .git/inc/customizer/configs/page-header.php:196
+#: inc/customizer/configs/page-header.php:159
+#: inc/customizer/configs/page-header.php:188
+#: inc/customizer/configs/page-header.php:196
+msgid "Apply when viewing single %s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:177
+#: inc/customizer/configs/page-header.php:177
+msgid "Display on %1$s %2$s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:178
+#: inc/customizer/configs/page-header.php:178
+msgid "Apply when viewing %1$s %2$s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:187
+#: inc/customizer/configs/page-header.php:187
+msgid "Title for %s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:195
+#: inc/customizer/configs/page-header.php:195
+msgid "Tagline for %s"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:230
+#: inc/customizer/configs/page-header.php:230
+msgid "Display Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:249
+#: inc/customizer/configs/page-header.php:249
+msgid "Advanced"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:256
+#: inc/customizer/configs/page-header.php:256
+msgid "Post Header Background Cover"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:257
+#: inc/customizer/configs/page-header.php:257
+msgid "Apply when viewing single post and page header setting displays as cover."
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:261
+#: inc/customizer/configs/page-header.php:261
+msgid "Use featured image from blog page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:262
+#: inc/customizer/configs/page-header.php:262
+msgid "Use featured image of current post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:268
+#: inc/customizer/configs/page-header.php:268
+msgid "Single Post Title & Tagline"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:272
+#: inc/customizer/configs/page-header.php:272
+msgid "Use title & tagline from blog page"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:273
+#: inc/customizer/configs/page-header.php:273
+msgid "Use title & tagline of current post"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:284
+#: inc/customizer/configs/page-header.php:284
+msgid "Title & Tagline"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:285
+#: inc/customizer/configs/page-header.php:285
+msgid "Title & tagline for special pages."
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:290
+#: .git/inc/customizer/configs/typography.php:87
+#: inc/customizer/configs/page-header.php:290
+#: inc/customizer/configs/typography.php:87
+msgid "Tagline"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:303
+#: inc/customizer/configs/page-header.php:303
+msgid "Archive Prefix"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:304
+#: inc/customizer/configs/page-header.php:304
+msgid "Enable or disable archive prefix on category, date, tag page."
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:305
+#: .git/inc/customizer/configs/page-header.php:341
+#: .git/inc/customizer/configs/page-header.php:351
+#: .git/inc/customizer/configs/page-header.php:392
+#: .git/inc/customizer/configs/page-header.php:402
+#: inc/customizer/configs/page-header.php:305
+#: inc/customizer/configs/page-header.php:341
+#: inc/customizer/configs/page-header.php:351
+#: inc/customizer/configs/page-header.php:410
+#: inc/customizer/configs/page-header.php:420
+msgid "Enable"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:339
+#: .git/inc/customizer/configs/page-header.php:390
+#: inc/customizer/configs/page-header.php:339
+#: inc/customizer/configs/page-header.php:408
+msgid "Show Title"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:340
+#: .git/inc/customizer/configs/page-header.php:391
+#: inc/customizer/configs/page-header.php:340
+#: inc/customizer/configs/page-header.php:409
+msgid "Title is pull from post title, archive title."
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:349
+#: .git/inc/customizer/configs/page-header.php:400
+#: inc/customizer/configs/page-header.php:349
+#: inc/customizer/configs/page-header.php:418
+msgid "Show Tagline"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:350
+#: .git/inc/customizer/configs/page-header.php:401
+#: inc/customizer/configs/page-header.php:350
+#: inc/customizer/configs/page-header.php:419
+msgid "Tagline is pull from post excerpt, archive description."
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:361
+#: inc/customizer/configs/page-header.php:379
+msgid "Text Align"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:383
+#: inc/customizer/configs/page-header.php:401
+msgid "Cover Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:410
+msgid "Cover Background"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:509
+#: inc/customizer/configs/page-header.php:543
+msgid "Cover Overlay"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:525
+#: .git/inc/customizer/configs/page-header.php:557
+#: inc/customizer/configs/page-header.php:559
+#: inc/customizer/configs/page-header.php:591
+msgid "Cover Text Align"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:534
+#: inc/customizer/configs/page-header.php:568
+msgid "Cover Height"
+msgstr ""
+
+#: .git/inc/customizer/configs/page-header.php:734
+#: inc/customizer/configs/page-header.php:768
+msgid "Oops! That page can't be found."
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:6
+#: .git/inc/customizer/configs/single-blog-post.php:6
+#: inc/customizer/configs/related-posts.php:6
+#: inc/customizer/configs/single-blog-post.php:6
+msgid "Single Blog Post"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:21
+#: .git/inc/customizer/configs/related-posts.php:30
+#: .git/inc/customizer/configs/single-blog-post.php:88
+#: inc/customizer/configs/related-posts.php:21
+#: inc/customizer/configs/related-posts.php:30
+#: inc/customizer/configs/single-blog-post.php:88
+msgid "Related Posts"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:42
+#: inc/customizer/configs/related-posts.php:42
+msgid "Related posts by"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:44
+#: inc/customizer/configs/related-posts.php:44
+msgid "By categories"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:45
+#: inc/customizer/configs/related-posts.php:45
+msgid "By tags"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:62
+#: inc/customizer/configs/related-posts.php:62
+msgid "Number columns to show"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:80
+#: inc/customizer/configs/related-posts.php:80
+msgid "Number posts to show"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:81
+#: inc/customizer/configs/related-posts.php:81
+msgid "Enter 0 to disable related posts."
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:91
+#: inc/customizer/configs/related-posts.php:91
+msgid "Image Position"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:118
+#: inc/customizer/configs/related-posts.php:118
+msgid "Custom Thumbnail Height"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:132
+#: inc/customizer/configs/related-posts.php:132
+msgid "Custom Thumbnail Width"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:145
+#: inc/customizer/configs/related-posts.php:145
+msgid "Order by"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:150
+#: inc/customizer/configs/related-posts.php:150
+msgid "Post order"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:151
+#: inc/customizer/configs/related-posts.php:151
+msgid "Random"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:152
+#: inc/customizer/configs/related-posts.php:152
+msgid "Comment count"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:163
+#: inc/customizer/configs/related-posts.php:163
+msgid "Order"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:165
+#: inc/customizer/configs/related-posts.php:165
+msgid "Desc"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:166
+#: inc/customizer/configs/related-posts.php:166
+msgid "Asc"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:174
+#: inc/customizer/configs/related-posts.php:174
+msgid "Related post meta"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:223
+#: inc/customizer/configs/related-posts.php:223
+msgid "Excerpt length"
+msgstr ""
+
+#: .git/inc/customizer/configs/related-posts.php:224
+#: inc/customizer/configs/related-posts.php:224
+msgid "Custom excerpt length. Enter 0 to hide the excerpt."
+msgstr ""
+
+#: .git/inc/customizer/configs/search.php:6 inc/customizer/configs/search.php:6
+msgid "Search Results"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:28
+#: inc/customizer/configs/single-blog-post.php:28
+msgid "Content Max Width"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:37
+#: inc/customizer/configs/single-blog-post.php:37
+msgid "Items Display"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:52
+#: inc/customizer/configs/single-blog-post.php:52
+msgid "Meta"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:57
+#: inc/customizer/configs/single-blog-post.php:57
+msgid "Thumbnail"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:62
+#: .git/inc/customizer/configs/typography.php:97
+#: inc/customizer/configs/single-blog-post.php:62
+#: inc/customizer/configs/typography.php:97
+msgid "Content"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:72
+#: inc/customizer/configs/single-blog-post.php:72
+msgid "Tags"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:77
+#: inc/customizer/configs/single-blog-post.php:77
+msgid "Author Biography"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:82
+#: inc/customizer/configs/single-blog-post.php:82
+msgid "Post Navigation"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:94
+#: inc/customizer/configs/single-blog-post.php:94
+msgid "Comment Form"
+msgstr ""
+
+#: .git/inc/customizer/configs/single-blog-post.php:126
+#: inc/customizer/configs/single-blog-post.php:126
+msgid "Meta Settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:22
+#: inc/customizer/configs/styling.php:22
+msgid "Global Colors"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:30
+#: inc/customizer/configs/styling.php:30
+msgid "Theme Colors"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:38
+#: inc/customizer/configs/styling.php:38
+msgid "Primary Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:83
+#: inc/customizer/configs/styling.php:83
+msgid "Secondary Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:100
+#: inc/customizer/configs/styling.php:100
+msgid "Text Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:137
+#: inc/customizer/configs/styling.php:137
+msgid "Link Hover Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:246
+#: inc/customizer/configs/styling.php:246
+msgid "Meta Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/styling.php:281
+#: inc/customizer/configs/styling.php:281
+msgid "Widget Title Color"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:29
+#: inc/customizer/configs/typography.php:29
+msgid "Base"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:36
+#: inc/customizer/configs/typography.php:36
+msgid "Body & Paragraph"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:37
+#: inc/customizer/configs/typography.php:37
+msgid "Apply to body and paragraph text."
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:46
+#: inc/customizer/configs/typography.php:46
+msgid "Heading"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:47
+#: inc/customizer/configs/typography.php:47
+msgid "Apply to all heading elements."
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:60
+#: inc/customizer/configs/typography.php:60
+msgid "Widget Title"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:61
+msgid "Apply to all widget title in sidebar."
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:71
+#: inc/customizer/configs/typography.php:71
+msgid "Site Title & Tagline"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:78
+#: inc/customizer/configs/typography.php:78
+msgid "Site Title"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:104
+#: inc/customizer/configs/typography.php:104
+msgid "Heading H1"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:113
+#: inc/customizer/configs/typography.php:113
+msgid "Heading H2"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:122
+#: inc/customizer/configs/typography.php:122
+msgid "Heading H3"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:131
+#: inc/customizer/configs/typography.php:131
+msgid "Heading H4"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:140
+#: inc/customizer/configs/typography.php:140
+msgid "Heading H5"
+msgstr ""
+
+#: .git/inc/customizer/configs/typography.php:149
+#: inc/customizer/configs/typography.php:149
+msgid "Heading H6"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:17
+#: inc/customizer/configs/upsell.php:17
+msgid "Customify Pro modules available"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:27
+#: inc/customizer/configs/upsell.php:27
+msgid "Header options in Customify Pro"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:33
+#: .git/inc/customizer/configs/upsell.php:53
+#: inc/customizer/configs/upsell.php:33 inc/customizer/configs/upsell.php:53
+msgid "More HTML Items"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:34
+#: inc/customizer/configs/upsell.php:34
+msgid "Secondary Menu"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:35
+#: inc/customizer/configs/upsell.php:35
+msgid "Icon Box"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:36
+#: inc/customizer/configs/upsell.php:36
+msgid "Contact Info"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:37
+#: inc/customizer/configs/upsell.php:37
+msgid "And more header settings"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:47
+#: inc/customizer/configs/upsell.php:47
+msgid "More Footer options in Customify Pro"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:51
+#: inc/customizer/configs/upsell.php:51
+msgid "Footer Top Row"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:52
+#: inc/customizer/configs/upsell.php:52
+msgid "Horizontal Menu Item"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:54
+#: inc/customizer/configs/upsell.php:54
+msgid "Icon Box Item"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:55
+#: inc/customizer/configs/upsell.php:55
+msgid "Contact Info Item"
+msgstr ""
+
+#: .git/inc/customizer/configs/upsell.php:56
+#: inc/customizer/configs/upsell.php:56
+msgid "Payment Methods Item"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:262
+#: inc/customizer/controls/class-control-base.php:262
+msgid "Theme Default"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:263
+#: inc/customizer/controls/class-control-base.php:263
+msgid "Reset this section settings"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:265
+#: inc/customizer/controls/class-control-base.php:265
+msgid "Do you want to reset this section settings?"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:365
+#: .git/inc/customizer/controls/class-control-repeater.php:50
+#: .git/inc/customizer/controls/class-control-repeater.php:51
+#: inc/customizer/controls/class-control-base.php:365
+#: inc/customizer/controls/class-control-repeater.php:50
+#: inc/customizer/controls/class-control-repeater.php:51
+msgid "Reorder"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:365
+#: .git/inc/customizer/controls/class-control-repeater.php:51
+#: inc/customizer/controls/class-control-base.php:365
+#: inc/customizer/controls/class-control-repeater.php:51
+msgid "Done"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-base.php:367
+#: .git/inc/customizer/controls/class-control-repeater.php:54
+#: inc/customizer/controls/class-control-base.php:367
+#: inc/customizer/controls/class-control-repeater.php:54
+msgid "Add an item"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:37
+#: inc/customizer/controls/class-control-css-ruler.php:37
+msgid "Chose an unit"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:39
+#: .git/inc/customizer/controls/class-control-slider.php:54
+#: inc/customizer/controls/class-control-css-ruler.php:39
+#: inc/customizer/controls/class-control-slider.php:54
+msgid "px"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:43
+#: inc/customizer/controls/class-control-css-ruler.php:43
+msgid "rem"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:47
+#: inc/customizer/controls/class-control-css-ruler.php:47
+msgid "em"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:51
+#: inc/customizer/controls/class-control-css-ruler.php:51
+msgid "%"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-css-ruler.php:72
+#: inc/customizer/controls/class-control-css-ruler.php:72
+msgid "Toggle values together"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-font-style.php:16
+#: inc/customizer/controls/class-control-font-style.php:16
+msgid "Bold"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-font-style.php:19
+#: inc/customizer/controls/class-control-font-style.php:19
+msgid "Strikethrough"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-font.php:16
+#: inc/customizer/controls/class-control-font.php:16
+msgid "Variants"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-font.php:20
+#: inc/customizer/controls/class-control-font.php:20
+msgid "Languages"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-icon.php:23
+#: inc/customizer/controls/class-control-icon.php:23
+msgid "Pick an icon"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-icon.php:38
+#: inc/customizer/controls/class-control-icon.php:38
+msgid "Cancel"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-icon.php:42
+#: inc/customizer/controls/class-control-icon.php:42
+msgid "All Icon Types"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-icon.php:47
+#: inc/customizer/controls/class-control-icon.php:47
+msgid "Type icon name"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-image.php:19
+#: .git/inc/customizer/controls/class-control-media.php:19
+#: .git/inc/customizer/controls/class-control-upload.php:19
+#: .git/inc/customizer/controls/class-control-video.php:19
+#: inc/customizer/controls/class-control-image.php:19
+#: inc/customizer/controls/class-control-media.php:19
+#: inc/customizer/controls/class-control-upload.php:19
+#: inc/customizer/controls/class-control-video.php:19
+msgid "No file selected"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-image.php:42
+#: .git/inc/customizer/controls/class-control-media.php:42
+#: .git/inc/customizer/controls/class-control-upload.php:42
+#: .git/inc/customizer/controls/class-control-video.php:42
+#: inc/customizer/controls/class-control-image.php:42
+#: inc/customizer/controls/class-control-media.php:42
+#: inc/customizer/controls/class-control-upload.php:42
+#: inc/customizer/controls/class-control-video.php:42
+msgid "Add"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-image.php:43
+#: .git/inc/customizer/controls/class-control-media.php:43
+#: .git/inc/customizer/controls/class-control-upload.php:43
+#: .git/inc/customizer/controls/class-control-video.php:43
+#: inc/customizer/controls/class-control-image.php:43
+#: inc/customizer/controls/class-control-media.php:43
+#: inc/customizer/controls/class-control-upload.php:43
+#: inc/customizer/controls/class-control-video.php:43
+msgid "Change"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-modal.php:9
+#: .git/inc/customizer/controls/class-control-styling.php:9
+#: .git/inc/customizer/controls/class-control-typography.php:9
+#: inc/customizer/controls/class-control-modal.php:9
+#: inc/customizer/controls/class-control-styling.php:9
+#: inc/customizer/controls/class-control-typography.php:9
+msgid "Reset to default"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-modal.php:10
+#: .git/inc/customizer/controls/class-control-styling.php:10
+#: .git/inc/customizer/controls/class-control-typography.php:10
+#: inc/customizer/controls/class-control-modal.php:10
+#: inc/customizer/controls/class-control-styling.php:10
+#: inc/customizer/controls/class-control-typography.php:10
+msgid "Toggle edit panel"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-repeater.php:20
+#: inc/customizer/controls/class-control-repeater.php:20
+msgid "Toggle item visible"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-repeater.php:27
+#: inc/customizer/controls/class-control-repeater.php:27
+msgid "Move Down"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-repeater.php:29
+#: inc/customizer/controls/class-control-repeater.php:29
+msgid "Move Up"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-repeater.php:33
+#: .git/inc/panel-builder/class-abstract-layout-frontend.php:122
+#: .git/inc/panel-builder/class-layout-builder.php:391
+#: inc/customizer/controls/class-control-repeater.php:33
+#: inc/panel-builder/class-abstract-layout-frontend.php:122
+#: inc/panel-builder/class-layout-builder.php:394
+msgid "Close"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-shadow.php:25
+#: inc/customizer/controls/class-control-shadow.php:25
+msgid "X"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-shadow.php:29
+#: inc/customizer/controls/class-control-shadow.php:29
+msgid "Y"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-shadow.php:33
+#: inc/customizer/controls/class-control-shadow.php:33
+msgid "Blur"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-shadow.php:37
+#: inc/customizer/controls/class-control-shadow.php:37
+msgid "Spread"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-shadow.php:43
+#: inc/customizer/controls/class-control-shadow.php:43
+msgid "inset"
+msgstr ""
+
+#: .git/inc/customizer/controls/class-control-slider.php:58
+#: inc/customizer/controls/class-control-slider.php:58
+msgid "Reset"
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:54
+#: inc/panel-builder/class-layout-builder.php:54
+msgid ""
+"Class <strong>%s</strong> do not extends class "
+"<strong>Customify_Customize_Builder_Panel</strong>."
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:194
+#: .git/inc/panel-builder/class-layout-builder.php:274
+#: inc/panel-builder/class-layout-builder.php:194
+#: inc/panel-builder/class-layout-builder.php:274
+msgid "Access denied"
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:201
+#: .git/inc/panel-builder/class-layout-builder.php:246
+#: inc/panel-builder/class-layout-builder.php:201
+#: inc/panel-builder/class-layout-builder.php:246
+msgid "Saved %s"
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:205
+#: inc/panel-builder/class-layout-builder.php:205
+msgid "No Support"
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:359
+#: inc/panel-builder/class-layout-builder.php:362
+msgid "Switch Builder Version"
+msgstr ""
+
+#: .git/inc/panel-builder/class-layout-builder.php:427
+msgid ""
+"Enjoy building? Upgrade to <a target=\"_blank\" "
+"href=\"https://wpcustomify.com/pricing/?utm_source=theme_dashboard&utm_"
+"medium=links&utm_campaign=panel_text\">Customify Pro</a> to get more "
+"builder items and other premium features</a>."
+msgstr ""
+
+#: .git/inc/template-functions.php:11 inc/template-functions.php:11
+msgid "Content / Sidebar"
+msgstr ""
+
+#: .git/inc/template-functions.php:12 inc/template-functions.php:12
+msgid "Sidebar / Content"
+msgstr ""
+
+#: .git/inc/template-functions.php:13 inc/template-functions.php:13
+msgid "Content (no sidebars)"
+msgstr ""
+
+#: .git/inc/template-functions.php:14 inc/template-functions.php:14
+msgid "Sidebar / Content / Sidebar"
+msgstr ""
+
+#: .git/inc/template-functions.php:15 inc/template-functions.php:15
+msgid "Sidebar / Sidebar / Content"
+msgstr ""
+
+#: .git/inc/template-functions.php:16 inc/template-functions.php:16
+msgid "Content / Sidebar / Sidebar"
+msgstr ""
+
+#: .git/inc/template-functions.php:323 inc/template-functions.php:323
+msgid "Search &hellip;"
+msgstr ""
+
+#: .git/inc/template-tags.php:86 inc/template-tags.php:86
+#. translators: 1: list of tags.
+msgid "Pingback:"
+msgstr ""
+
+#: .git/inc/template-tags.php:86 inc/template-tags.php:86
+msgid "(Edit)"
+msgstr ""
+
+#: .git/inc/template-tags.php:108 inc/template-tags.php:108
+msgid "Post author"
+msgstr ""
+
+#: .git/inc/template-tags.php:117 inc/template-tags.php:117
+msgid "Edit"
+msgstr ""
+
+#: .git/inc/template-tags.php:123 inc/template-tags.php:123
+msgid "Reply"
+msgstr ""
+
+#: .git/inc/template-tags.php:136 inc/template-tags.php:136
+msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/basic-theme/exclude/file.php:3
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/plugin-include/plugin-include.php:6
+msgid "Exclude"
+msgstr ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/plugin-include/include/file.php:2
+#: .git/node_modules/node-wp-i18n/test/fixtures/makepot/nested-theme/include/include.php:2
+msgid "Include"
+msgstr ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/add-domain.php:2
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:2
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:3
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:4
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-domains.php:2
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-domains.php:3
+msgid "String"
+msgstr ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:9
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:10
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:11
+msgid "1 Star"
+msgid_plural "%s Stars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/translator-comments/translator-comments.php:7
+#. translators: A single line translators comment.
+msgid "A"
+msgstr ""
+
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/translator-comments/translator-comments.php:15
+#. translators: A multiline translators comment.
+msgid "B"
+msgstr ""
+
+#: .git/node_modules/node-wp-i18n/test/fixtures/makepot/nested-theme/subdir/index.php:2
+msgid "Index"
+msgstr ""
+
+#: .git/template-parts/content-none.php:24 template-parts/content-none.php:24
+#. translators: 1: link to WP admin new post page.
+msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: .git/template-parts/content-none.php:38 template-parts/content-none.php:38
+msgid ""
+"Sorry, but nothing matched your search terms. Please try again with some "
+"different keywords."
+msgstr ""
+
+#: .git/template-parts/content-none.php:47 template-parts/content-none.php:47
+msgid ""
+"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
+"searching can help."
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:28 .git/woocommerce/cart/cart.php:76
+#: woocommerce/cart/cart.php:20 woocommerce/cart/cart.php:68
+msgid "Product"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:31 .git/woocommerce/cart/cart.php:124
+#: woocommerce/cart/cart.php:23 woocommerce/cart/cart.php:116
+msgid "Total"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:55 .git/woocommerce/cart/mini-cart.php:71
+#: woocommerce/cart/cart.php:47 woocommerce/cart/mini-cart.php:71
+msgid "Remove this item"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:91 woocommerce/cart/cart.php:83
+msgid "Available on backorder"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:142 woocommerce/cart/cart.php:134
+msgid "Coupon:"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:143
+#: .git/woocommerce/checkout/form-coupon.php:26 woocommerce/cart/cart.php:135
+#: woocommerce/checkout/form-coupon.php:26
+msgid "Coupon code"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:144
+#: .git/woocommerce/checkout/form-coupon.php:27 woocommerce/cart/cart.php:136
+#: woocommerce/checkout/form-coupon.php:27
+msgid "Apply coupon"
+msgstr ""
+
+#: .git/woocommerce/cart/cart.php:149 woocommerce/cart/cart.php:141
+msgid "Update cart"
+msgstr ""
+
+#: .git/woocommerce/cart/mini-cart.php:91 woocommerce/cart/mini-cart.php:91
+msgid "Subtotal"
+msgstr ""
+
+#: .git/woocommerce/cart/mini-cart.php:97 woocommerce/cart/mini-cart.php:97
+msgid "No products in the cart."
+msgstr ""
+
+#: .git/woocommerce/checkout/form-coupon.php:18
+#: woocommerce/checkout/form-coupon.php:18
+msgid "Have a coupon?"
+msgstr ""
+
+#: .git/woocommerce/checkout/form-coupon.php:18
+#: woocommerce/checkout/form-coupon.php:18
+msgid "Click here to enter your code"
+msgstr ""
+
+#: .git/woocommerce/checkout/form-coupon.php:23
+#: woocommerce/checkout/form-coupon.php:23
+msgid "If you have a coupon code, please apply it below."
+msgstr ""
+
+#: .git/woocommerce/content-widget-reviews.php:38
+#: woocommerce/content-widget-reviews.php:38
+msgid "by %s"
+msgstr ""
+
+#: .git/woocommerce/loop/result-count.php:29
+#: woocommerce/loop/result-count.php:29
+#. translators: %d: total results
+msgid "Showing the single result"
+msgid_plural "Showing all %d results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .git/woocommerce/loop/sale-flash.php:85 woocommerce/loop/sale-flash.php:85
+msgid "Sale!"
+msgstr ""
+
+#: .git/woocommerce/product-searchform.php:16
+#: woocommerce/product-searchform.php:16
+msgid "Search for:"
+msgstr ""
+
+#: .git/woocommerce/product-searchform.php:17
+#: woocommerce/product-searchform.php:17
+msgid "Search products&hellip;"
+msgstr ""
+
+#: .git/woocommerce/single-product/product-image.php:41
+#: woocommerce/single-product/product-image.php:41
+msgid "Awaiting product image"
+msgstr ""
+
+#: inc/class-metabox.php:90
+msgid "Disable Header Top"
+msgstr ""
+
+#: inc/class-metabox.php:91
+msgid "Disable Header Main"
+msgstr ""
+
+#: inc/class-metabox.php:92
+msgid "Disable Header Bottom"
 msgstr ""
 
 #: inc/customizer/configs/header/menus.php:210
@@ -1962,1047 +4106,25 @@ msgid ""
 "advanced-header-footer-builder/\">Learn more about it here</a>."
 msgstr ""
 
-#: inc/customizer/configs/header/nav-icon.php:9
-#: inc/customizer/configs/header/nav-icon.php:26
-msgid "Menu Icon"
+#: inc/customizer/configs/page-header.php:358
+#: inc/customizer/configs/page-header.php:447
+msgid "Title Color"
 msgstr ""
 
-#: inc/customizer/configs/header/nav-icon.php:35
-#: inc/panel-builder/class-abstract-layout-frontend.php:119
-msgid "Menu"
+#: inc/customizer/configs/page-header.php:367
+#: inc/customizer/configs/page-header.php:455
+msgid "Tagline Color"
 msgstr ""
 
-#: inc/customizer/configs/header/nav-icon.php:45
-msgid "Label Settings"
-msgstr ""
-
-#: inc/customizer/configs/header/nav-icon.php:69
-msgid "Small"
-msgstr ""
-
-#: inc/customizer/configs/header/nav-icon.php:70
-msgid "Medium"
-msgstr ""
-
-#: inc/customizer/configs/header/nav-icon.php:71
-msgid "Large"
-msgstr ""
-
-#: inc/customizer/configs/header/nav-icon.php:91
-msgid "Color Hover"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:26
-msgid "Version 1"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:30
-msgid "Version 2"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:34
-msgid "Desktop"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:35
-msgid "Mobile/Tablet"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:42
-#: inc/customizer/configs/header/panel.php:115
-msgid "Header Top"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:43
-msgid "Header Main"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:44
-msgid "Header Bottom"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:45
-msgid "Menu Sidebar"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:57
-msgid "Header"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:177
-msgid "Height"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:205
-#: inc/customizer/configs/header/panel.php:282
-msgid "Advanced styling for %s"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:250
-msgid "Slide From Left"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:251
-msgid "Slide From Right"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:252
-msgid "Full-screen Overlay"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:253
-msgid "Toggle Dropdown"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:328
-msgid "Do not copy parent menu to submenu."
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:340
-#: inc/customizer/configs/header/panel.php:407
-msgid "Align"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:375
-msgid "Item Layout"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:425
-msgid "Merge Item"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:426
-msgid ""
-"If you choose to merge this item, the alignment setting will inherit from "
-"the item you are merging."
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:429
-msgid "Merge with left item"
-msgstr ""
-
-#: inc/customizer/configs/header/panel.php:430
-msgid "Merge with right item"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:15
-msgid "Search Box"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:62
-#: inc/customizer/configs/header/search-icon.php:124
-msgid "Placeholder"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:63
-#: inc/customizer/configs/header/search-icon.php:125
-msgid "Search ..."
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:74
-msgid "Search Form Width"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:75
-msgid "Note: The width can not greater than grid width."
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:89
-#: inc/customizer/configs/header/search-icon.php:169
-msgid "Input Height"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:141
-#: inc/customizer/configs/header/search-icon.php:188
-msgid "Input Text Typography"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:142
-#: inc/customizer/configs/header/search-icon.php:189
-msgid "Typography for search input"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:151
-#: inc/customizer/configs/header/search-icon.php:237
-msgid "Input Styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:152
-#: inc/customizer/configs/header/search-box.php:203
-#: inc/customizer/configs/header/search-icon.php:238
-#: inc/customizer/configs/header/search-icon.php:275
-msgid "Search input styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-box.php:202
-#: inc/customizer/configs/header/search-icon.php:81
-#: inc/customizer/configs/header/search-icon.php:274
-msgid "Icon Styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:15
-msgid "Search Icon"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:73
-msgid "Icon Padding"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:82
-msgid "Search icon styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:115
-msgid "Modal Settings"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:133
-msgid "Form Styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:134
-msgid "Form modal styling"
-msgstr ""
-
-#: inc/customizer/configs/header/search-icon.php:179
-msgid "Search Modal Width"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:23
-#: inc/customizer/configs/header/social-icons.php:42
-msgid "Social Icons"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:51
-msgid "Social Profiles"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:110
-msgid "URL"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:131
-msgid "Adding rel=\"nofollow\" for social links."
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:170
-msgid "Icon Spacing"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:180
-msgid "Shape"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:182
-msgid "Rounded"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:183
-msgid "Square"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:184
-msgid "Circle"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:198
-msgid "Official Color"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:210
-msgid "Custom Color"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:227
-#: inc/customizer/configs/header/social-icons.php:243
-msgid "Icon Color"
-msgstr ""
-
-#: inc/customizer/configs/header/social-icons.php:258
-msgid "Border & border radius"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:21
-msgid "Layouts"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:30
-msgid "Global"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:36
-msgid "Site layout"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:37
-msgid "Select global site layout."
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:109
-msgid "Boxed"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:44
-msgid "Framed"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:52
-msgid "Site boxed/framed shadow"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:69
-msgid "Site framed margin"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:96
-msgid "Container width"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:106
-msgid "Site content layout"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:108
-msgid "Full width"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:120
-msgid "Site content padding"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:139
-msgid "Sidebars"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:147
-msgid "Default Sidebar Layout"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:155
-msgid "Sidebar with vertical border"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:171
-msgid "Pages"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:180
-msgid "Blog posts"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:189
-msgid "Blog Archive Page"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:198
-msgid "Search Page"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:207
-msgid "404 Page"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:219
-msgid "Post Type Settings"
-msgstr ""
-
-#: inc/customizer/configs/layouts.php:228
-msgid "Single %s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:47
-msgid "Display on single page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:48
-msgid "Apply when viewing single page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:55
-msgid "Display on single post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:56
-#: inc/customizer/configs/page-header.php:116
-#: inc/customizer/configs/page-header.php:140
-msgid "Apply when viewing single post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:64
-msgid "Display on categories"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:65
-msgid "Apply when viewing a category page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:72
-msgid "Display on index"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:73
-#: inc/customizer/configs/page-header.php:109
-#: inc/customizer/configs/page-header.php:133
-msgid "Apply when your homepage displays as latest posts"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:80
-msgid "Display on search"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:81
-msgid "Apply when viewing search results page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:88
-msgid "Display on archive"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:89
-msgid ""
-"Apply when viewing archive pages, e.g. Tag, Author, Date, Custom Post Type "
-"or Custom Taxonomy"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:96
-msgid "Display on 404 page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:97
-#: inc/customizer/configs/page-header.php:123
-#: inc/customizer/configs/page-header.php:147
-msgid "Apply when the page not found"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:108
-msgid "Title for index page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:115
-msgid "Title for single post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:122
-msgid "Title for 404 page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:132
-msgid "Tagline for index page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:139
-msgid "Tagline for single post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:146
-msgid "Tagline for 404 page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:158
-msgid "Display on %s page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:159
-#: inc/customizer/configs/page-header.php:188
-#: inc/customizer/configs/page-header.php:196
-msgid "Apply when viewing single %s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:177
-msgid "Display on %1$s %2$s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:178
-msgid "Apply when viewing %1$s %2$s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:187
-msgid "Title for %s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:195
-msgid "Tagline for %s"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:230
-msgid "Display Settings"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:249
-msgid "Advanced"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:256
-msgid "Post Header Background Cover"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:257
-msgid "Apply when viewing single post and page header setting displays as cover."
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:261
-msgid "Use featured image from blog page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:262
-msgid "Use featured image of current post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:268
-msgid "Single Post Title & Tagline"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:272
-msgid "Use title & tagline from blog page"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:273
-msgid "Use title & tagline of current post"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:284
-msgid "Title & Tagline"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:285
-msgid "Title & tagline for special pages."
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:290
-#: inc/customizer/configs/typography.php:87
-msgid "Tagline"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:303
-msgid "Archive Prefix"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:304
-msgid "Enable or disable archive prefix on category, date, tag page."
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:305
-#: inc/customizer/configs/page-header.php:341
-#: inc/customizer/configs/page-header.php:351
-#: inc/customizer/configs/page-header.php:392
-#: inc/customizer/configs/page-header.php:402
-msgid "Enable"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:339
-#: inc/customizer/configs/page-header.php:390
-msgid "Show Title"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:340
-#: inc/customizer/configs/page-header.php:391
-msgid "Title is pull from post title, archive title."
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:349
-#: inc/customizer/configs/page-header.php:400
-msgid "Show Tagline"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:350
-#: inc/customizer/configs/page-header.php:401
-msgid "Tagline is pull from post excerpt, archive description."
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:361
-msgid "Text Align"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:383
-msgid "Cover Settings"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:410
-msgid "Cover Background"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:509
-msgid "Cover Overlay"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:525
-#: inc/customizer/configs/page-header.php:557
-msgid "Cover Text Align"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:534
-msgid "Cover Height"
-msgstr ""
-
-#: inc/customizer/configs/page-header.php:734
-msgid "Oops! That page can't be found."
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:6
-#: inc/customizer/configs/single-blog-post.php:6
-msgid "Single Blog Post"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:21
-#: inc/customizer/configs/related-posts.php:30
-#: inc/customizer/configs/single-blog-post.php:88
-msgid "Related Posts"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:42
-msgid "Related posts by"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:44
-msgid "By categories"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:45
-msgid "By tags"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:62
-msgid "Number columns to show"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:80
-msgid "Number posts to show"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:81
-msgid "Enter 0 to disable related posts."
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:91
-msgid "Image Position"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:118
-msgid "Custom Thumbnail Height"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:132
-msgid "Custom Thumbnail Width"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:145
-msgid "Order by"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:150
-msgid "Post order"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:151
-msgid "Random"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:152
-msgid "Comment count"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:163
-msgid "Order"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:165
-msgid "Desc"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:166
-msgid "Asc"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:174
-msgid "Related post meta"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:223
-msgid "Excerpt length"
-msgstr ""
-
-#: inc/customizer/configs/related-posts.php:224
-msgid "Custom excerpt length. Enter 0 to hide the excerpt."
-msgstr ""
-
-#: inc/customizer/configs/search.php:6
-msgid "Search Results"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:28
-msgid "Content Max Width"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:37
-msgid "Items Display"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:52
-msgid "Meta"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:57
-msgid "Thumbnail"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:62
-#: inc/customizer/configs/typography.php:97
-msgid "Content"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:72
-msgid "Tags"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:77
-msgid "Author Biography"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:82
-msgid "Post Navigation"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:94
-msgid "Comment Form"
-msgstr ""
-
-#: inc/customizer/configs/single-blog-post.php:126
-msgid "Meta Settings"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:22
-msgid "Global Colors"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:30
-msgid "Theme Colors"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:38
-msgid "Primary Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:83
-msgid "Secondary Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:100
-msgid "Text Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:137
-msgid "Link Hover Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:246
-msgid "Meta Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:271
-msgid "Heading Color"
-msgstr ""
-
-#: inc/customizer/configs/styling.php:281
-msgid "Widget Title Color"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:29
-msgid "Base"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:36
-msgid "Body & Paragraph"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:37
-msgid "Apply to body and paragraph text."
-msgstr ""
-
-#: inc/customizer/configs/typography.php:46
-msgid "Heading"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:47
-msgid "Apply to all heading elements."
-msgstr ""
-
-#: inc/customizer/configs/typography.php:60
-msgid "Widget Title"
+#: inc/customizer/configs/page-header.php:428
+msgid "Color & Background"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:61
 msgid "Apply to all widget title in site content."
 msgstr ""
 
-#: inc/customizer/configs/typography.php:71
-msgid "Site Title & Tagline"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:78
-msgid "Site Title"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:104
-msgid "Heading H1"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:113
-msgid "Heading H2"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:122
-msgid "Heading H3"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:131
-msgid "Heading H4"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:140
-msgid "Heading H5"
-msgstr ""
-
-#: inc/customizer/configs/typography.php:149
-msgid "Heading H6"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:17
-msgid "Customify Pro modules available"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:27
-msgid "Header options in Customify Pro"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:33 inc/customizer/configs/upsell.php:53
-msgid "More HTML Items"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:34
-msgid "Secondary Menu"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:35
-msgid "Icon Box"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:36
-msgid "Contact Info"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:37
-msgid "And more header settings"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:47
-msgid "More Footer options in Customify Pro"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:51
-msgid "Footer Top Row"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:52
-msgid "Horizontal Menu Item"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:54
-msgid "Icon Box Item"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:55
-msgid "Contact Info Item"
-msgstr ""
-
-#: inc/customizer/configs/upsell.php:56
-msgid "Payment Methods Item"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:262
-msgid "Theme Default"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:263
-msgid "Reset this section settings"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:265
-msgid "Do you want to reset this section settings?"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:365
-#: inc/customizer/controls/class-control-repeater.php:50
-#: inc/customizer/controls/class-control-repeater.php:51
-msgid "Reorder"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:365
-#: inc/customizer/controls/class-control-repeater.php:51
-msgid "Done"
-msgstr ""
-
-#: inc/customizer/controls/class-control-base.php:367
-#: inc/customizer/controls/class-control-repeater.php:54
-msgid "Add an item"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:37
-msgid "Chose an unit"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:39
-#: inc/customizer/controls/class-control-slider.php:54
-msgid "px"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:43
-msgid "rem"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:47
-msgid "em"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:51
-msgid "%"
-msgstr ""
-
-#: inc/customizer/controls/class-control-css-ruler.php:72
-msgid "Toggle values together"
-msgstr ""
-
-#: inc/customizer/controls/class-control-font-style.php:16
-msgid "Bold"
-msgstr ""
-
-#: inc/customizer/controls/class-control-font-style.php:19
-msgid "Strikethrough"
-msgstr ""
-
-#: inc/customizer/controls/class-control-font.php:16
-msgid "Variants"
-msgstr ""
-
-#: inc/customizer/controls/class-control-font.php:20
-msgid "Languages"
-msgstr ""
-
-#: inc/customizer/controls/class-control-icon.php:23
-msgid "Pick an icon"
-msgstr ""
-
-#: inc/customizer/controls/class-control-icon.php:38
-msgid "Cancel"
-msgstr ""
-
-#: inc/customizer/controls/class-control-icon.php:42
-msgid "All Icon Types"
-msgstr ""
-
-#: inc/customizer/controls/class-control-icon.php:47
-msgid "Type icon name"
-msgstr ""
-
-#: inc/customizer/controls/class-control-image.php:19
-#: inc/customizer/controls/class-control-media.php:19
-#: inc/customizer/controls/class-control-upload.php:19
-#: inc/customizer/controls/class-control-video.php:19
-msgid "No file selected"
-msgstr ""
-
-#: inc/customizer/controls/class-control-image.php:42
-#: inc/customizer/controls/class-control-media.php:42
-#: inc/customizer/controls/class-control-upload.php:42
-#: inc/customizer/controls/class-control-video.php:42
-msgid "Add"
-msgstr ""
-
-#: inc/customizer/controls/class-control-image.php:43
-#: inc/customizer/controls/class-control-media.php:43
-#: inc/customizer/controls/class-control-upload.php:43
-#: inc/customizer/controls/class-control-video.php:43
-msgid "Change"
-msgstr ""
-
-#: inc/customizer/controls/class-control-modal.php:9
-#: inc/customizer/controls/class-control-styling.php:9
-#: inc/customizer/controls/class-control-typography.php:9
-msgid "Reset to default"
-msgstr ""
-
-#: inc/customizer/controls/class-control-modal.php:10
-#: inc/customizer/controls/class-control-styling.php:10
-#: inc/customizer/controls/class-control-typography.php:10
-msgid "Toggle edit panel"
-msgstr ""
-
-#: inc/customizer/controls/class-control-repeater.php:20
-msgid "Toggle item visible"
-msgstr ""
-
-#: inc/customizer/controls/class-control-repeater.php:27
-msgid "Move Down"
-msgstr ""
-
-#: inc/customizer/controls/class-control-repeater.php:29
-msgid "Move Up"
-msgstr ""
-
-#: inc/customizer/controls/class-control-repeater.php:33
-#: inc/panel-builder/class-abstract-layout-frontend.php:122
-#: inc/panel-builder/class-layout-builder.php:391
-msgid "Close"
-msgstr ""
-
-#: inc/customizer/controls/class-control-shadow.php:25
-msgid "X"
-msgstr ""
-
-#: inc/customizer/controls/class-control-shadow.php:29
-msgid "Y"
-msgstr ""
-
-#: inc/customizer/controls/class-control-shadow.php:33
-msgid "Blur"
-msgstr ""
-
-#: inc/customizer/controls/class-control-shadow.php:37
-msgid "Spread"
-msgstr ""
-
-#: inc/customizer/controls/class-control-shadow.php:43
-msgid "inset"
-msgstr ""
-
-#: inc/customizer/controls/class-control-slider.php:58
-msgid "Reset"
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:54
-msgid ""
-"Class <strong>%s</strong> do not extends class "
-"<strong>Customify_Customize_Builder_Panel</strong>."
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:194
-#: inc/panel-builder/class-layout-builder.php:274
-msgid "Access denied"
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:201
-#: inc/panel-builder/class-layout-builder.php:246
-msgid "Saved %s"
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:205
-msgid "No Support"
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:359
-msgid "Switch Builder Version"
-msgstr ""
-
-#: inc/panel-builder/class-layout-builder.php:427
+#: inc/panel-builder/class-layout-builder.php:430
 msgid ""
 "Enjoy building? Upgrade to <a target=\"_blank\" "
 "href=\"https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_"
@@ -3010,154 +4132,12 @@ msgid ""
 "get more builder items and other premium features</a>."
 msgstr ""
 
-#: inc/template-functions.php:11
-msgid "Content / Sidebar"
-msgstr ""
-
-#: inc/template-functions.php:12
-msgid "Sidebar / Content"
-msgstr ""
-
-#: inc/template-functions.php:13
-msgid "Content (no sidebars)"
-msgstr ""
-
-#: inc/template-functions.php:14
-msgid "Sidebar / Content / Sidebar"
-msgstr ""
-
-#: inc/template-functions.php:15
-msgid "Sidebar / Sidebar / Content"
-msgstr ""
-
-#: inc/template-functions.php:16
-msgid "Content / Sidebar / Sidebar"
-msgstr ""
-
-#: inc/template-functions.php:323
-msgid "Search &hellip;"
-msgstr ""
-
-#: inc/template-tags.php:86
-#. translators: 1: list of tags.
-msgid "Pingback:"
-msgstr ""
-
-#: inc/template-tags.php:86
-msgid "(Edit)"
-msgstr ""
-
-#: inc/template-tags.php:108
-msgid "Post author"
-msgstr ""
-
-#: inc/template-tags.php:117
-msgid "Edit"
-msgstr ""
-
-#: inc/template-tags.php:123
-msgid "Reply"
-msgstr ""
-
-#: inc/template-tags.php:136
-msgid "Your comment is awaiting moderation."
-msgstr ""
-
-#: template-parts/content-none.php:24
-#. translators: 1: link to WP admin new post page.
-msgid "Ready to publish your first post? <a href=\"%1$s\">Get started here</a>."
-msgstr ""
-
-#: template-parts/content-none.php:38
-msgid ""
-"Sorry, but nothing matched your search terms. Please try again with some "
-"different keywords."
-msgstr ""
-
-#: template-parts/content-none.php:47
-msgid ""
-"It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps "
-"searching can help."
-msgstr ""
-
-#: woocommerce/cart/cart.php:28 woocommerce/cart/cart.php:76
-msgid "Product"
-msgstr ""
-
-#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:124
-msgid "Total"
-msgstr ""
-
-#: woocommerce/cart/cart.php:55 woocommerce/cart/mini-cart.php:71
-msgid "Remove this item"
-msgstr ""
-
-#: woocommerce/cart/cart.php:91
-msgid "Available on backorder"
-msgstr ""
-
-#: woocommerce/cart/cart.php:142
-msgid "Coupon:"
-msgstr ""
-
-#: woocommerce/cart/cart.php:143 woocommerce/checkout/form-coupon.php:26
-msgid "Coupon code"
-msgstr ""
-
-#: woocommerce/cart/cart.php:144 woocommerce/checkout/form-coupon.php:27
-msgid "Apply coupon"
-msgstr ""
-
-#: woocommerce/cart/cart.php:149
-msgid "Update cart"
-msgstr ""
-
-#: woocommerce/cart/mini-cart.php:91
-msgid "Subtotal"
-msgstr ""
-
-#: woocommerce/cart/mini-cart.php:97
-msgid "No products in the cart."
-msgstr ""
-
-#: woocommerce/checkout/form-coupon.php:18
-msgid "Have a coupon?"
-msgstr ""
-
-#: woocommerce/checkout/form-coupon.php:18
-msgid "Click here to enter your code"
-msgstr ""
-
-#: woocommerce/checkout/form-coupon.php:23
-msgid "If you have a coupon code, please apply it below."
-msgstr ""
-
-#: woocommerce/content-widget-reviews.php:38
-msgid "by %s"
-msgstr ""
-
-#: woocommerce/loop/result-count.php:29
+#: woocommerce/loop/result-count.php:32
 #. translators: %d: total results
-msgid "Showing the single result"
+msgid "Showing all %d result"
 msgid_plural "Showing all %d results"
 msgstr[0] ""
 msgstr[1] ""
-
-#: woocommerce/loop/sale-flash.php:85
-msgid "Sale!"
-msgstr ""
-
-#: woocommerce/product-searchform.php:16
-msgid "Search for:"
-msgstr ""
-
-#: woocommerce/product-searchform.php:17
-msgid "Search products&hellip;"
-msgstr ""
-
-#: woocommerce/single-product/product-image.php:41
-msgid "Awaiting product image"
-msgstr ""
 
 #. Theme URI of the plugin/theme
 msgid "https://pressmaximum.com/customify"
@@ -3188,7 +4168,7 @@ msgstr ""
 msgid "https://pressmaximum.com"
 msgstr ""
 
-#: comments.php:40
+#: .git/comments.php:40 comments.php:40
 #. translators: 1: comment count number, 2: title.
 msgctxt "comments title"
 msgid "%1$s Comment"
@@ -3196,24 +4176,26 @@ msgid_plural "%1$s Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/blog/class-post-entry.php:20
+#: .git/inc/blog/class-post-entry.php:20 inc/blog/class-post-entry.php:20
 msgctxt "post meta separator"
 msgid "-"
 msgstr ""
 
-#: inc/blog/class-post-entry.php:23
+#: .git/inc/blog/class-post-entry.php:23 inc/blog/class-post-entry.php:23
 msgctxt "post term separator"
 msgid ","
 msgstr ""
 
-#: inc/blog/class-post-entry.php:266 inc/blog/class-post-entry.php:282
-#: inc/blog/class-post-entry.php:296
+#: .git/inc/blog/class-post-entry.php:266
+#: .git/inc/blog/class-post-entry.php:282
+#: .git/inc/blog/class-post-entry.php:296 inc/blog/class-post-entry.php:266
+#: inc/blog/class-post-entry.php:282 inc/blog/class-post-entry.php:296
 #. translators: used between list items, there is a space after the comma
 msgctxt "list item separator"
 msgid ", "
 msgstr ""
 
-#: inc/blog/class-post-entry.php:324
+#: .git/inc/blog/class-post-entry.php:324 inc/blog/class-post-entry.php:324
 #. translators: 1: comment count number, 2: title.
 msgctxt "comments number"
 msgid "%1$s Comment"
@@ -3221,22 +4203,33 @@ msgid_plural "%1$s Comments"
 msgstr[0] ""
 msgstr[1] ""
 
-#: inc/blog/class-posts-layout.php:436 woocommerce/loop/pagination.php:33
+#: .git/inc/blog/class-posts-layout.php:436
+#: .git/woocommerce/loop/pagination.php:33 inc/blog/class-posts-layout.php:436
+#: woocommerce/loop/pagination.php:33
 msgctxt "previous set of posts"
 msgid "Previous"
 msgstr ""
 
-#: inc/blog/class-posts-layout.php:439 woocommerce/loop/pagination.php:34
+#: .git/inc/blog/class-posts-layout.php:439
+#: .git/woocommerce/loop/pagination.php:34 inc/blog/class-posts-layout.php:439
+#: woocommerce/loop/pagination.php:34
 msgctxt "next set of posts"
 msgid "Next"
 msgstr ""
 
+#: .git/inc/customizer/class-customify-section-pro.php:85
+#: .git/inc/customizer/controls/class-control-pro.php:49
 #: inc/customizer/class-customify-section-pro.php:85
 #: inc/customizer/controls/class-control-pro.php:49
 msgctxt "Customify Pro upsell"
 msgid "Learn More"
 msgstr ""
 
+#: .git/inc/customizer/configs/header/search-box.php:255
+#: .git/inc/customizer/configs/header/search-box.php:265
+#: .git/inc/customizer/configs/header/search-icon.php:331
+#: .git/inc/customizer/configs/header/search-icon.php:332
+#: .git/inc/template-functions.php:322 .git/inc/template-functions.php:323
 #: inc/customizer/configs/header/search-box.php:255
 #: inc/customizer/configs/header/search-box.php:265
 #: inc/customizer/configs/header/search-icon.php:331
@@ -3246,49 +4239,58 @@ msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
+#: .git/inc/customizer/controls/class-control-base.php:268
 #: inc/customizer/controls/class-control-base.php:268
 msgctxt "customify-font-weight"
 msgid "Normal"
 msgstr ""
 
+#: .git/inc/customizer/controls/class-control-base.php:269
 #: inc/customizer/controls/class-control-base.php:269
 msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:301
+#: .git/inc/template-functions.php:301 inc/template-functions.php:301
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:303
+#: .git/inc/template-functions.php:303 inc/template-functions.php:303
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:305
+#: .git/inc/template-functions.php:305 inc/template-functions.php:305
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
 
-#: inc/template-tags.php:30
+#: .git/inc/template-tags.php:30 inc/template-tags.php:30
 #. translators: %s: post date.
 msgctxt "post date"
 msgid "Posted on %s"
 msgstr ""
 
-#: inc/template-tags.php:36
+#: .git/inc/template-tags.php:36 inc/template-tags.php:36
 #. translators: %s: post author.
 msgctxt "post author"
 msgid "by %s"
 msgstr ""
 
-#: inc/template-tags.php:114
+#: .git/inc/template-tags.php:114 inc/template-tags.php:114
 msgctxt "1: date, 2: time"
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: woocommerce/loop/result-count.php:34
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:6
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:7
+#: .git/node_modules/grunt-wp-i18n/test/fixtures/text-domains/update-all-domains.php:8
+msgctxt "a string"
+msgid "String"
+msgstr ""
+
+#: .git/woocommerce/loop/result-count.php:34
 #. translators: 1: first result 2: last result 3: total results
 msgctxt "with first and last result"
 msgid "Showing the single result"
@@ -3296,6 +4298,15 @@ msgid_plural "Showing %1$d&ndash;%2$d of %3$d results"
 msgstr[0] ""
 msgstr[1] ""
 
+#: woocommerce/loop/result-count.php:37
+#. translators: 1: first result 2: last result 3: total results
+msgctxt "with first and last result"
+msgid "Showing %1$d&ndash;%2$d of %3$d result"
+msgid_plural "Showing %1$d&ndash;%2$d of %3$d results"
+msgstr[0] ""
+msgstr[1] ""
+
+#: .git/woocommerce/product-searchform.php:18
 #: woocommerce/product-searchform.php:18
 msgctxt "submit button"
 msgid "Search"
