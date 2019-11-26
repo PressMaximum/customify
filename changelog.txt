@@ -1,3 +1,10 @@
+= 0.3.4 =
+* NEW: Add site title & tagline color.
+* NEW: Add the options Disable Header Top, Main, Bottom.
+* IMPROVED: Color picker.
+* FIXED: Out of date templates for WooCommerce
+* FIXED: Header Menu Sidebar not close when click outside on iOS.
+
 = 0.3.3 =
 * UPDATED: Author & Documentation URL.
 
