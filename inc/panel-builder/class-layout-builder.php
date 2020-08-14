@@ -352,7 +352,7 @@ class Customify_Customize_Layout_Builder {
 		$hide_sw = get_theme_mod( 'hide_header_builder_switcher' );
 
 		wp_localize_script(
-			'jquery',
+			'customify-layout-builder',
 			'Customify_Layout_Builder',
 			array(
 				'footer_moved_widgets_text' => '',

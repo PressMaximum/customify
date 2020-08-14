@@ -283,6 +283,16 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			);
 
 			wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', apply_filters( 'Customify_Control_Args', $args ) ); // phpcs:ignore
+
+			$color_picker_l10n_args = array(
+				'clear'            => __( 'Clear', 'customify' ),
+				'clearAriaLabel'   => __( 'Clear color', 'customify' ),
+				'defaultString'    => __( 'Default', 'customify' ),
+				'defaultAriaLabel' => __( 'Select default color', 'customify' ),
+				'pick'             => __( 'Select Color', 'customify' ),
+				'defaultLabel'     => __( 'Color value', 'customify' ),
+			);
+			wp_localize_script( 'wp-color-picker', 'Customify_ColorPicker_L10n', apply_filters( 'Customify_Control_Color_Picker_L10n_Args', $color_picker_l10n_args ) ); // phpcs:ignore
 			self::$_args_loaded = true;
 		}
 	}
