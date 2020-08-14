@@ -1,6 +1,6 @@
 {
     "name": "customify",
-    "version": "0.3.4",
+    "version": "0.3.5",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
@@ -29,5 +29,8 @@
         "copy": "latest",
         "element-qsa-scope": "^1.1.0",
         "rtlcss": "latest"
-    }
+    },
+    "browserslist": [
+        "defaults"
+    ]
 }

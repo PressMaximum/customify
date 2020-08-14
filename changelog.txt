@@ -1,3 +1,7 @@
+= 0.3.5 =
+* UPDATED: Remove deprecated functions.
+* UPDATED: WooCommerce template files.
+
 = 0.3.4 =
 * NEW: Add site title & tagline color.
 * NEW: Add the options Disable Header Top, Main, Bottom.

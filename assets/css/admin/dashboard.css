@@ -65,14 +65,11 @@
 }
 .cd-header .cd-header-inner {
   display: -webkit-box;
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-wrap: wrap;
-          flex-wrap: wrap;
+  flex-wrap: wrap;
   margin: 0 auto;
   width: 100%;
   -webkit-box-align: center;
-  -webkit-align-items: center;
           align-items: center;
 }
 
@@ -170,7 +167,6 @@
 }
 .cd-modules .cd-module-item {
   display: -webkit-box;
-  display: -webkit-flex;
   display: flex;
   padding: 16px 15px;
   border-bottom: 1px solid #eee;
@@ -182,14 +178,12 @@
   margin-bottom: 0px;
 }
 .cd-modules .cd-module-toggle {
-  -webkit-flex-basis: 40px;
-          flex-basis: 40px;
+  flex-basis: 40px;
   display: block;
   float: left;
 }
 .cd-modules .cd-module-info {
-  -webkit-flex-basis: 100%;
-          flex-basis: 100%;
+  flex-basis: 100%;
   position: relative;
   padding-right: 100px;
 }
@@ -476,10 +470,8 @@
 
 .customify-notice {
   display: -webkit-box;
-  display: -webkit-flex;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
           align-items: center;
   background: #fff8E5;
   padding: 20px;
@@ -496,8 +488,7 @@
   max-width: 140px;
 }
 .customify-notice .customify-notice-content {
-  -webkit-flex-basis: 100%;
-          flex-basis: 100%;
+  flex-basis: 100%;
 }
 .customify-notice .customify-notice-heading {
   font-size: 18px;
