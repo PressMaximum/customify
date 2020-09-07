@@ -379,7 +379,9 @@
 				var emptyWidth   = ( self.picker.width() - self.controls.square.width() - 20 ),
 					stripsMargin = Math.floor( emptyWidth / 6 ),
 					stripsWidth  = ( ( emptyWidth / 2 ) - stripsMargin );
-
+				if ( stripsMargin > 0 ) {
+					stripsMargin--;
+				}
 				$.each( [ 'aContainer', 'strip' ], function( k, v ) {
 					self.controls[v].width( stripsWidth ).css( { 'margin-left' : stripsMargin + 'px' } );
 				} );
