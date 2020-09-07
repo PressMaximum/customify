@@ -64,13 +64,12 @@
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
 }
 .cd-header .cd-header-inner {
-  display: -webkit-box;
   display: flex;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
   margin: 0 auto;
   width: 100%;
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
 }
 
 .cd-main {
@@ -166,7 +165,6 @@
   padding: 0px;
 }
 .cd-modules .cd-module-item {
-  display: -webkit-box;
   display: flex;
   padding: 16px 15px;
   border-bottom: 1px solid #eee;
@@ -226,7 +224,6 @@
   border-radius: 10px;
   position: relative;
   top: 3px;
-  -webkit-transition: all 0.3s ease-in 0s;
   transition: all 0.3s ease-in 0s;
   opacity: 1;
 }
@@ -235,7 +232,6 @@
   display: block;
   width: 200%;
   margin-left: -100%;
-  -webkit-transition: margin 0.3s ease-in 0s;
   transition: margin 0.3s ease-in 0s;
 }
 
@@ -272,7 +268,6 @@
   bottom: 2px;
   right: 8px;
   border-radius: 10px;
-  -webkit-transition: all 0.3s ease-in 0s;
   transition: all 0.3s ease-in 0s;
 }
 
@@ -347,6 +342,8 @@
 }
 
 #toast-container * {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -358,15 +355,21 @@
   line-height: 24px;
   background-size: 16px 16px;
   width: 260px;
+  -moz-border-radius: 3px 3px 3px 3px;
+  -webkit-border-radius: 3px 3px 3px 3px;
   border-radius: 3px 3px 3px 3px;
   background-position: 15px center;
   background-repeat: no-repeat;
+  -moz-box-shadow: 0 0 12px #999999;
+  -webkit-box-shadow: 0 0 12px #999999;
   box-shadow: 0 0 12px #999999;
   color: #ffffff;
   filter: alpha(opacity=80);
 }
 
 #toast-container > div:hover {
+  -moz-box-shadow: 0 0 12px #000000;
+  -webkit-box-shadow: 0 0 12px #000000;
   box-shadow: 0 0 12px #000000;
   opacity: 1;
   cursor: pointer;
@@ -469,10 +472,8 @@
 }
 
 .customify-notice {
-  display: -webkit-box;
   display: flex;
-  -webkit-box-align: center;
-          align-items: center;
+  align-items: center;
   background: #fff8E5;
   padding: 20px;
 }
@@ -517,3 +518,5 @@
 .copy-theme-settings {
   position: relative;
 }
+
+/*# sourceMappingURL=dashboard.css.map */
