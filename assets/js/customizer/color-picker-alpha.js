@@ -377,7 +377,7 @@
 				// Change size strip and add margin for sliders
 				self.controls.square.css( { 'margin-right': '0' } );
 				var emptyWidth   = ( self.picker.width() - self.controls.square.width() - 20 ),
-					stripsMargin = ( emptyWidth / 6 ),
+					stripsMargin = Math.floor( emptyWidth / 6 ),
 					stripsWidth  = ( ( emptyWidth / 2 ) - stripsMargin );
 
 				$.each( [ 'aContainer', 'strip' ], function( k, v ) {
