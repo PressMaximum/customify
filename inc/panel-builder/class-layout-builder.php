@@ -7,7 +7,7 @@
  */
 class Customify_Customize_Layout_Builder {
 	static $_instance;
-	private $registered_items = array();
+	private $registered_items    = array();
 	private $registered_builders = array();
 
 	/**
@@ -352,7 +352,7 @@ class Customify_Customize_Layout_Builder {
 		$hide_sw = get_theme_mod( 'hide_header_builder_switcher' );
 
 		wp_localize_script(
-			'customify-layout-builder',
+			'jquery',
 			'Customify_Layout_Builder',
 			array(
 				'footer_moved_widgets_text' => '',
