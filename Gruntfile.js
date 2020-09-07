@@ -69,9 +69,9 @@ module.exports = function( grunt ) {
         sass: {
             options: {
                 precision: 10,
-                unixNewlines: true
+                unixNewlines: true,
                 //noCache: true
-                //sourcemap: 'auto'
+                sourcemap: false
             },
             dist: {
                 options: {
@@ -227,6 +227,7 @@ module.exports = function( grunt ) {
                     '!phpunit.xml.dist',
                     '!*.sh',
                     '!*.map',
+                    '!*.css.map',
                     '!Gruntfile.js',
                     '!package.json',
                     '!.gitignore',
@@ -238,7 +239,8 @@ module.exports = function( grunt ) {
                     '!composer.json',
                     '!composer.lock',
                     '!package-lock.json',
-                    '!phpcs.xml.dist'
+                    '!phpcs.xml.dist',
+                    '!phpcs.xml'
                 ],
                 dest: 'customify/'
             }
