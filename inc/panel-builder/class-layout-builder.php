@@ -7,7 +7,7 @@
  */
 class Customify_Customize_Layout_Builder {
 	static $_instance;
-	private $registered_items = array();
+	private $registered_items    = array();
 	private $registered_builders = array();
 
 	/**
@@ -313,6 +313,7 @@ class Customify_Customize_Layout_Builder {
 	 * Add script to Customize
 	 */
 	function scripts() {
+		global $wp_version;
 		$suffix = Customify()->get_asset_suffix();
 		wp_enqueue_script(
 			'customify-builder-v1',
@@ -351,8 +352,12 @@ class Customify_Customize_Layout_Builder {
 
 		$hide_sw = get_theme_mod( 'hide_header_builder_switcher' );
 
+		$handle = 'jquery';
+		if ( '5.5' == $wp_version ) {
+			$handle = 'customify-layout-builder';
+		}
 		wp_localize_script(
-			'jquery',
+			$handle,
 			'Customify_Layout_Builder',
 			array(
 				'footer_moved_widgets_text' => '',

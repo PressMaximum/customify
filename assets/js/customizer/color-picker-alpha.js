@@ -14,6 +14,9 @@
 		return;
 	}
 
+	if ( 'undefined' == typeof wpColorPickerL10n && 'undefined' !== typeof Customify_ColorPicker_L10n ) {
+		var wpColorPickerL10n = Customify_ColorPicker_L10n;
+	}
 		// Variable for some backgrounds ( grid )
 	var image   = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAAHnlligAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAHJJREFUeNpi+P///4EDBxiAGMgCCCAGFB5AADGCRBgYDh48CCRZIJS9vT2QBAggFBkmBiSAogxFBiCAoHogAKIKAlBUYTELAiAmEtABEECk20G6BOmuIl0CIMBQ/IEMkO0myiSSraaaBhZcbkUOs0HuBwDplz5uFJ3Z4gAAAABJRU5ErkJggg==',
 		// html stuff for wpColorPicker copy of the original color-picker.js
@@ -21,7 +24,7 @@
 		_wrap = '<div class="wp-picker-container" />',
 		_button = '<input type="button" class="button button-small" />',
 		// Prevent CSS issues in < WordPress 4.9
-		_deprecated = ( wpColorPickerL10n.current !== undefined );
+		_deprecated = ( 'undefined' !== typeof wpColorPickerL10n && wpColorPickerL10n.current !== undefined );
 		// Declare some global variables when is deprecated or not
 		if ( _deprecated ) {
 			var _before = '<a tabindex="0" class="wp-color-result" />';
@@ -374,9 +377,11 @@
 				// Change size strip and add margin for sliders
 				self.controls.square.css( { 'margin-right': '0' } );
 				var emptyWidth   = ( self.picker.width() - self.controls.square.width() - 20 ),
-					stripsMargin = ( emptyWidth / 6 ),
+					stripsMargin = Math.floor( emptyWidth / 6 ),
 					stripsWidth  = ( ( emptyWidth / 2 ) - stripsMargin );
-
+				if ( stripsMargin > 0 ) {
+					stripsMargin--;
+				}
 				$.each( [ 'aContainer', 'strip' ], function( k, v ) {
 					self.controls[v].width( stripsWidth ).css( { 'margin-left' : stripsMargin + 'px' } );
 				} );
