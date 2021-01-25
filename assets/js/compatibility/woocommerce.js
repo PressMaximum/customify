@@ -15,6 +15,9 @@ jQuery(document).ready(function($) {
 
 	$(document.body).on("added_to_cart", function(event, fragments, cart_hash) {
 		$(".item--wc_cart").addClass("cart-active");
+		setTimeout(function() {
+			$(".item--wc_cart").removeClass("cart-active");
+		}, 4000);
 	});
 
 	if (Customify_JS.wc_open_cart) {
