@@ -1,3 +1,6 @@
+= 0.3.7 =
+* FIXED: Icons not showing when using Elementor.
+
 = 0.3.6 =
 * FIXED: WooCommerce minicart stay opened above the page.
 

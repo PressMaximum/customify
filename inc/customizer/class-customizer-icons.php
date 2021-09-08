@@ -75,6 +75,13 @@ class Customify_Font_Icons {
 				}
 				self::$enqueued = true;
 			}
+
+			if ( did_action( 'elementor/loaded' ) ) {
+				$load_shim = get_option( 'elementor_load_fa4_shim', false );
+				if ( 'yes' != $load_shim ) {
+					update_option( 'elementor_load_fa4_shim', 'yes' );
+				}
+			}
 		}
 	}
 

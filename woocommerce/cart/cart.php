@@ -133,7 +133,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 					<div class="coupon">
 						<label for="coupon_code"><?php esc_html_e( 'Coupon:', 'customify' ); ?></label>
 						<input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'customify' ); ?>" />
-						<button type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'customify' ); ?>"><?php esc_attr_e( 'Apply coupon', 'customify' ); ?></button>
+						<button type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'customify' ); ?>"><?php esc_html_e( 'Apply coupon', 'customify' ); ?></button>
 						<?php do_action( 'woocommerce_cart_coupon' ); ?>
 					</div>
 				<?php } ?>

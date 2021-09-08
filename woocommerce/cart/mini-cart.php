@@ -3,7 +3,7 @@
  * Mini-cart
  *
  * @package WooCommerce/Templates
- * @version 3.7.0
+ * @version 5.2.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -51,7 +51,8 @@ do_action( 'woocommerce_before_mini_cart' ); ?>
 					<?php
 					if ( empty( $product_permalink ) ) :
 						?>
-						<?php echo $product_name; // WPCS: XSS OK.
+						<?php
+						echo $product_name; // WPCS: XSS OK.
 						?>
 					<?php else : ?>
 						<a href="<?php echo esc_url( $product_permalink ); ?>">
