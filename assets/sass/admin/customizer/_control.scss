@@ -617,8 +617,8 @@ $text_color: #555d66;
         margin-bottom: 0px;
     }
     .customify--slider-input {
-        width: 60px;
-        max-width: 60px;
+        width: 65px;
+        max-width: 65px;
         position: absolute;
         top: -9px;
         right: 41px;
@@ -627,6 +627,10 @@ $text_color: #555d66;
         }
         height: 24px;
         line-height: 18px;
+		min-height: auto;
+		border: 1px solid #ddd;
+		background: #fff;
+		border-radius: 0;
         &.no-unit {
             right: 18px;
         }

@@ -621,13 +621,17 @@ html[dir="rtl"] .customify--css-unit label:first-child {
   margin-bottom: 0px;
 }
 .customify-input-slider-wrapper .customify--slider-input {
-  width: 60px;
-  max-width: 60px;
+  width: 65px;
+  max-width: 65px;
   position: absolute;
   top: -9px;
   right: 41px;
   height: 24px;
   line-height: 18px;
+  min-height: auto;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 0;
 }
 html[dir="rtl"] .customify-input-slider-wrapper .customify--slider-input {
   left: 41px;
