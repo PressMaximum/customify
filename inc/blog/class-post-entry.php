@@ -249,7 +249,9 @@ class Customify_Post_Entry {
 			if ( is_array( $categories_list ) && $this->config['term_count'] > 0 ) {
 				$categories_list = array_slice( $categories_list, 0, $this->config['term_count'] );
 			}
-			$html .= sprintf( '<span class="meta-item meta-cat">%1$s</span>', join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+			if ( is_array( $categories_list ) && ! empty( $categories_list ) ) {
+				$html .= sprintf( '<span class="meta-item meta-cat">%1$s</span>', join( $this->config['term_sep'], $categories_list ) ); // WPCS: XSS OK.
+			}
 		}
 		return $html;
 	}
