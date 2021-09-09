@@ -76,6 +76,10 @@ html[dir="rtl"] .customize--reset-section {
   -ms-animation-timing-function: linear;
 }
 
+.customize-control .wp-color-result .color-alpha {
+  height: 100% !important;
+}
+
 .customify--hide {
   display: none !important;
 }
@@ -1303,7 +1307,7 @@ html[dir="rtl"] .customify-modal-settings:before {
   clear: both;
 }
 .customify-modal-settings .wp-color-result-text {
-  line-height: 23px;
+  line-height: 28px;
 }
 .customify-modal-settings .customify--field-heading h3.customify-field--heading {
   font-size: 11px;
