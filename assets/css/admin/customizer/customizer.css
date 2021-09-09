@@ -79,10 +79,12 @@ html[dir="rtl"] .customize--reset-section {
 .customize-control .wp-color-result .color-alpha {
   height: 100% !important;
 }
-.customize-control .customify-input {
+.customize-control .select2-search__field,
+.customize-control .customify-input,
+.customize-control .customify-modal-input,
+.customize-control .customify--field-select select,
+.customize-control .customify--field-select .select2-selection {
   font-size: 14px;
-  height: 28px;
-  min-height: 28px;
   border-radius: 0;
   border: 1px solid #ddd;
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
@@ -90,11 +92,24 @@ html[dir="rtl"] .customize--reset-section {
   background-color: #fff;
   color: #32373c;
 }
-.customize-control .customify-input:disabled {
+.customize-control .select2-search__field:disabled,
+.customize-control .customify-input:disabled,
+.customize-control .customify-modal-input:disabled,
+.customize-control .customify--field-select select:disabled,
+.customize-control .customify--field-select .select2-selection:disabled {
   background: rgba(255, 255, 255, 0.5);
   border-color: rgba(222, 222, 222, 0.75);
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.0004);
   color: rgba(51, 51, 51, 0.5);
+}
+.customize-control .select2-search__field,
+.customize-control select.customify-modal-input,
+.customize-control input[type="number"].customify-modal-input,
+.customize-control input[type="text"].customify-modal-input,
+.customize-control .customify--field-select select,
+.customize-control .customify--field-select .select2-selection {
+  height: 28px;
+  min-height: 28px;
 }
 
 .customify--hide {
@@ -638,8 +653,9 @@ html[dir="rtl"] .customify--css-unit label:first-child {
   margin-bottom: 0px;
 }
 .customify-input-slider-wrapper .customify--slider-input {
-  width: 65px;
-  max-width: 65px;
+  width: 60px;
+  max-width: 60px;
+  padding-right: 0;
   position: absolute;
   top: -9px;
   right: 41px;
@@ -1179,6 +1195,10 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
 }
 .modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f335";
+}
+.customify--settings-wrapper .customify--field-typography .customify-actions,
+.customify--settings-wrapper .customify--field-styling .customify-actions {
+  margin-top: -3.5px;
 }
 
 .modal--tabs {

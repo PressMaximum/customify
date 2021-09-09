@@ -617,8 +617,9 @@ $text_color: #555d66;
         margin-bottom: 0px;
     }
     .customify--slider-input {
-        width: 65px;
-        max-width: 65px;
+        width: 60px;
+        max-width: 60px;
+		padding-right: 0;
         position: absolute;
         top: -9px;
         right: 41px;
@@ -1203,6 +1204,13 @@ $text_color: #555d66;
             }
         }
     }
+
+	.customify--field-typography,
+	.customify--field-styling {
+		.customify-actions {
+			margin-top: -3.5px;
+		}
+	}
 }
 
 .modal--tabs {
