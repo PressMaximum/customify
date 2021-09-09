@@ -11,6 +11,7 @@
 function customify_maybe_change_header_version() {
 	$current_ver = get_theme_mod( 'header_builder_version' );
 	if ( 'v2' == $current_ver ) {
+		set_theme_mod( 'hide_header_builder_switcher', 'yes' );
 		return;
 	}
 	$ver1_data = get_theme_mod( 'header_builder_panel' );

@@ -365,7 +365,7 @@ class Customify_Customize_Layout_Builder {
 				'is_rtl'                    => is_rtl(),
 				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
 				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
-				'hide_switcher'             => apply_filters( 'customify_hide_header_builder_switcher', 'no' ), // Use get theme mod `hide_header_builder_switcher` for hide switcher.
+				'hide_switcher'             => apply_filters( 'customify_hide_header_builder_switcher', get_theme_mod( 'hide_header_builder_switcher', 'no' ) ), // Use get theme mod `hide_header_builder_switcher` for hide switcher.
 				'header_builder_version'    => get_theme_mod( 'header_builder_version', $hide_sw ? 'v2' : '' ),
 			)
 		);
