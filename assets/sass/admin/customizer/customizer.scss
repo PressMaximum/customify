@@ -159,8 +159,15 @@ $builder_active_color: #0073aa;
 			border-top: 0;
 		}
 	}
-	
+		
+	.wp-block-table {
+		width: 100%;
+		table {
+			width: 100%!important;
+		}
+	}
 }
+
 @import "control";
 @import "header_footer_builder";
 @import "_builder_v1";
