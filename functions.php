@@ -68,6 +68,11 @@ add_filter( 'customify_the_title', 'capital_P_dangit' );
 add_filter( 'customify_the_title', 'do_shortcode' );
 add_filter( 'customify_the_title', 'convert_smilies' );
 
+// Disables the block editor from managing widgets in the Gutenberg plugin.
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
+// Disables the block editor from managing widgets.
+add_filter( 'use_widgets_block_editor', '__return_false' );
+
 // Include the main Customify class.
 require_once get_template_directory() . '/inc/class-customify.php';
 
