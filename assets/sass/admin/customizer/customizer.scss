@@ -96,7 +96,7 @@ $builder_active_color: #0073aa;
 			height: 100%!important;
 		}
 	}
-	.select2-search__field,
+
 	.customify-input,
 	.customify-modal-input,
 	.customify--field-select select,
@@ -116,7 +116,7 @@ $builder_active_color: #0073aa;
 		}
 	}
 
-	.select2-search__field,
+	
 	select.customify-modal-input,
 	input[type="number"].customify-modal-input,
 	input[type="text"].customify-modal-input,
@@ -127,6 +127,40 @@ $builder_active_color: #0073aa;
 	}
 }
 
+.wp-customizer {
+	.select2-search__field {
+		height: 28px;
+		min-height: 28px;
+	}
+	ul.select2-results__options {
+		.select2-results__option {
+			padding-left: 10px;
+			margin-bottom: 0;
+		}
+		li.select2-results__option[role="list"] {
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	.select2-container--default {
+		.select2-results > .select2-results__options {
+			overflow-x: hidden;
+		}
+	}
+	.select2-container {
+		.select2-dropdown {
+			border: 1px solid #ddd;
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+			padding-right: 0;
+			background-color: #fff;
+			color: #32373c;
+			border-radius: 0;
+			border-top: 0;
+		}
+	}
+	
+}
 @import "control";
 @import "header_footer_builder";
 @import "_builder_v1";

@@ -79,7 +79,6 @@ html[dir="rtl"] .customize--reset-section {
 .customize-control .wp-color-result .color-alpha {
   height: 100% !important;
 }
-.customize-control .select2-search__field,
 .customize-control .customify-input,
 .customize-control .customify-modal-input,
 .customize-control .customify--field-select select,
@@ -92,7 +91,6 @@ html[dir="rtl"] .customize--reset-section {
   background-color: #fff;
   color: #32373c;
 }
-.customize-control .select2-search__field:disabled,
 .customize-control .customify-input:disabled,
 .customize-control .customify-modal-input:disabled,
 .customize-control .customify--field-select select:disabled,
@@ -102,7 +100,6 @@ html[dir="rtl"] .customize--reset-section {
   box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.0004);
   color: rgba(51, 51, 51, 0.5);
 }
-.customize-control .select2-search__field,
 .customize-control select.customify-modal-input,
 .customize-control input[type="number"].customify-modal-input,
 .customize-control input[type="text"].customify-modal-input,
@@ -110,6 +107,31 @@ html[dir="rtl"] .customize--reset-section {
 .customize-control .customify--field-select .select2-selection {
   height: 28px;
   min-height: 28px;
+}
+
+.wp-customizer .select2-search__field {
+  height: 28px;
+  min-height: 28px;
+}
+.wp-customizer ul.select2-results__options .select2-results__option {
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+.wp-customizer ul.select2-results__options li.select2-results__option[role="list"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+.wp-customizer .select2-container--default .select2-results > .select2-results__options {
+  overflow-x: hidden;
+}
+.wp-customizer .select2-container .select2-dropdown {
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+  padding-right: 0;
+  background-color: #fff;
+  color: #32373c;
+  border-radius: 0;
+  border-top: 0;
 }
 
 .customify--hide {
@@ -1196,8 +1218,8 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
 .modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f335";
 }
-.customify--settings-wrapper .customify--field-typography .customify-actions,
-.customify--settings-wrapper .customify--field-styling .customify-actions {
+.customify--settings-wrapper:not(.show-short-desc) .customify--field-typography .customify-actions,
+.customify--settings-wrapper:not(.show-short-desc) .customify--field-styling .customify-actions {
   margin-top: -3.5px;
 }
 
