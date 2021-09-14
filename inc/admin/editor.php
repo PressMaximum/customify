@@ -164,6 +164,9 @@ class Customify_Editor {
 			margin: 0 2.5em 1em 1.41575em;
 		}
 
+		#editor .editor-styles-wrapper .wp-block-separator.is-style-dots {
+			max-width: 205px;
+		}
 		';
 		return $css;
 	}
