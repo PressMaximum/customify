@@ -72,7 +72,14 @@
 .wp-block-image.alignright {
 	width: 100%;
 }
-
+.alignleft,
+.wp-block-pullquote.alignleft {
+	text-align: left;
+}
+.alignright,
+.wp-block-pullquote.alignright{
+	text-align: right;
+}
 .wp-block-image.alignfull img {
 	width: 100vw;
 	width: calc(var(--vw, 1vw) * 100);

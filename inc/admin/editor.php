@@ -100,6 +100,71 @@ class Customify_Editor {
 		.editor-styles-wrapper textarea.editor-post-title__input:focus,
 		.block-editor-page .editor-styles-wrapper button { background: none; }
 		';
+
+		$css .= 'pre{
+			background: #f2f2f2;
+			font-family: "Courier 10 Pitch", Courier, monospace;
+			margin-bottom: 2.2906835em;
+			padding: 1.618em;
+			overflow: auto;
+			
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.wp-block-preformatted {
+			white-space: pre-wrap;
+		}
+		#editor .editor-styles-wrapper pre{
+			max-width: 840px;
+		}
+
+		#editor ul, #editor ol {
+			margin: 1.5em auto;
+			list-style-position: outside;
+		}
+
+		#editor .wp-block-list,
+		#editor .wp-block-categories__list,
+		#editor .wp-block-archives-list {
+			padding-left: 2.5em;
+		}
+		#editor ul ul, #editor ol ol, #editor ul ol, #editor ol ul {
+			margin-bottom: 0px;
+			margin-top: 0px;
+			margin-left: 2.5em;
+		}
+
+		#editor table, #editor table tr, #editor table th, #editor table  td {
+			border: 0;
+		}
+
+		#editor .editor-styles-wrapper blockquote.wp-block-quote {
+			border-left-width: 3px;
+			border-left-style: solid;
+		}
+
+		#editor .has-text-align-left .rich-text {
+			text-align: left;
+		}
+
+		#editor .wp-block-quote.is-large cite {
+			font-size: 1.125em;
+		}
+
+		#editor .editor-styles-wrapper .wp-block-pullquote {
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+		#editor .wp-block-pullquote.alignleft {
+			margin: 0 1.41575em 1em 2.5em;
+		}
+
+		#editor .wp-block-pullquote.alignright {
+			margin: 0 2.5em 1em 1.41575em;
+		}
+
+		';
 		return $css;
 	}
 
