@@ -10,6 +10,9 @@
 }
 
 /* NEW meta box */
+#customify_page_settings {
+  margin-bottom: 50px;
+}
 #customify_page_settings .inside {
   padding: 0px;
   margin-top: 0px;
@@ -92,7 +95,7 @@
 
 .customify-mt-field {
   display: flex;
-  padding: 15px 20px;
+  padding: 15px;
   align-items: start;
   border-bottom: 1px solid #eee;
 }
@@ -138,10 +141,11 @@
   display: flex;
   float: none;
   border-bottom: 1px solid #eee;
-  padding: 0 15px;
+  padding: 0;
+  margin-top: 0 !important;
 }
 .edit-post-meta-boxes-area.is-side .customify-mt-tabs-list .customify-mt-tab-cont a {
-  font-size: 0;
+  font-size: 13px;
   border-bottom: 0;
   position: relative;
 }
@@ -180,11 +184,13 @@
 .edit-post-meta-boxes-area.is-side .customify-mt-tabs-list .customify-mt-tab-cont .dashicons {
   font-size: 16px;
   margin-top: 0;
-  margin-right: 0;
+  margin-right: 5px;
+  line-height: 20px;
 }
 .edit-post-meta-boxes-area.is-side .customify-mt-tab-contents {
   display: block;
   float: none;
+  margin-bottom: 30px;
 }
 .edit-post-meta-boxes-area.is-side .customify-mt-tab-contents .customify-mt-field {
   display: block;
@@ -199,6 +205,9 @@
 }
 .edit-post-meta-boxes-area.is-side .customify-mt-tab-contents .customify-mt-field .customify-mt-field-inner > * {
   width: 100%;
+}
+.edit-post-meta-boxes-area.is-side .customify-mt-tab-contents .customify-mt-field .customify-mt-field-inner > select {
+  width: 85%;
 }
 
 /*# sourceMappingURL=metabox.css.map */

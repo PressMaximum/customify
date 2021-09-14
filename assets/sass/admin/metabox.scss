@@ -12,6 +12,7 @@
 
 /* NEW meta box */
 #customify_page_settings {
+	margin-bottom: 50px;
     .inside {
         padding: 0px;
         margin-top: 0px;
@@ -100,7 +101,7 @@
 
 .customify-mt-field {
     display: flex;
-    padding: 15px 20px;
+    padding: 15px;
     align-items: start;
     border-bottom: 1px solid #eee;
     &:last-child {
@@ -152,10 +153,11 @@
 			display: flex;
 			float: none;
 			border-bottom: 1px solid #eee;
-			padding: 0 15px;
+			padding: 0;
+			margin-top:0 !important;
 			.customify-mt-tab-cont{
 				a{
-					font-size: 0;
+					font-size: 13px;
 					border-bottom: 0;
 					position: relative;
 					&::before, &::after{
@@ -195,13 +197,15 @@
 				.dashicons{
 					font-size: 16px;
 					margin-top: 0;
-					margin-right: 0;
+					margin-right: 5px;
+					line-height: 20px;
 				}
 			}
 		}
 		.customify-mt-tab-contents{
 			display: block;
 			float: none;
+			margin-bottom: 30px;
 			.customify-mt-field {
 				display: block;
 				.customify-mt-field-label{
@@ -213,6 +217,9 @@
 					width: 100%;
 					> * {
 						width: 100%;
+					}
+					> select {
+						width: 85%;
 					}
 				}
 				
