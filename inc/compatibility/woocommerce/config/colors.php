@@ -21,6 +21,7 @@ class Customify_WC_Colors {
 			'section'     => $section,
 			'title'       => __( 'Shop Buttons', 'customify' ),
 			'placeholder' => '#c3512f',
+			'default'     => '#c3512f',
 			'description' => __( 'Color for add to cart, checkout buttons. Default is Secondary Color.', 'customify' ),
 			'css_format'  => apply_filters(
 				'customify/styling/shop-buttons',
@@ -45,6 +46,7 @@ class Customify_WC_Colors {
 			'title'       => __( 'Rating Stars', 'customify' ),
 			'description' => __( 'Color for rating stars, default is Secondary Color.', 'customify' ),
 			'placeholder' => '#c3512f',
+			'default'     => '#c3512f',
 			'css_format'  => apply_filters(
 				'customify/styling/shop-rating-stars',
 				'
@@ -67,6 +69,7 @@ class Customify_WC_Colors {
 			'section'     => $section,
 			'title'       => __( 'On Sale', 'customify' ),
 			'placeholder' => '#77a464',
+			'default'     => '#77a464',
 			'css_format'  => apply_filters(
 				'customify/styling/shop-onsale',
 				'
