@@ -183,7 +183,7 @@ class Customify_MetaBox {
 				array( $this, 'render_meta_box_content' ),
 				$post_type,
 				'side',
-				'high'
+				'low'
 			);
 		}
 	}

@@ -22,6 +22,11 @@ jQuery( document ).ready( function( $ ){
         }
     } );
 
+	// Change style.
+	if ( $('.customify-mt-tabs li.customify-mt-tab-cont').length > 2 ) {
+		$('.customify-mt-tabs li.customify-mt-tab-cont a').css({'font-size': '0'});
+	}
+
     if ( wp  && wp.media ) {
 
 
