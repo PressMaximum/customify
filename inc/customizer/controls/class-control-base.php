@@ -344,7 +344,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		}
 
 		?>
-		<div class="customify--settings-wrapper <?php echo ( $this->label || $this->description ) ? 'has-title-desc' : 'no-title-desc'; ?>">
+		<div class="customify--settings-wrapper <?php echo ( isset( $this->description ) && ! empty( $this->description ) ) ? 'show-short-desc' : ''; ?> <?php echo ( $this->label || $this->description ) ? 'has-title-desc' : 'no-title-desc'; ?>">
 			<?php if ( $this->label ) { ?>
 				<div data-control="<?php echo esc_attr( $this->id ); ?>" class="customify-control-field-header customify-field-heading">
 					<label>

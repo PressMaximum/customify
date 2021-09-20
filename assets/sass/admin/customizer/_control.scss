@@ -619,6 +619,7 @@ $text_color: #555d66;
     .customify--slider-input {
         width: 60px;
         max-width: 60px;
+		padding-right: 0;
         position: absolute;
         top: -9px;
         right: 41px;
@@ -627,6 +628,10 @@ $text_color: #555d66;
         }
         height: 24px;
         line-height: 18px;
+		min-height: auto;
+		border: 1px solid #ddd;
+		background: #fff;
+		border-radius: 0;
         &.no-unit {
             right: 18px;
         }
@@ -1199,6 +1204,15 @@ $text_color: #555d66;
             }
         }
     }
+
+	&:not(.show-short-desc) {
+		.customify--field-typography,
+		.customify--field-styling {
+			.customify-actions {
+				margin-top: -3.5px;
+			}
+		}
+	}
 }
 
 .modal--tabs {
@@ -1347,7 +1361,7 @@ $text_color: #555d66;
 		clear: both;
 	}
     .wp-color-result-text {
-        line-height: 23px;
+        line-height: 28px;
     }
     .customify--field-heading{
         h3.customify-field--heading {

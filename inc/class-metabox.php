@@ -83,18 +83,18 @@ class Customify_MetaBox {
 			)
 		);
 		$disable_elements_choices = array(
-			'disable_header'        => __( 'Disable Header', 'customify' ),
-			'disable_page_title'    => __( 'Disable Title', 'customify' ),
+			'disable_header'     => __( 'Disable Header', 'customify' ),
+			'disable_page_title' => __( 'Disable Title', 'customify' ),
 		);
 
-		$disable_elements_choices['disable_header_top'] = __( 'Disable Header Top', 'customify' );
-		$disable_elements_choices['disable_header_main'] = __( 'Disable Header Main', 'customify' );
+		$disable_elements_choices['disable_header_top']    = __( 'Disable Header Top', 'customify' );
+		$disable_elements_choices['disable_header_main']   = __( 'Disable Header Main', 'customify' );
 		$disable_elements_choices['disable_header_bottom'] = __( 'Disable Header Bottom', 'customify' );
 
 		if ( class_exists( 'Customify_Pro' ) ) {
 			$disable_elements_choices['disable_footer_top'] = __( 'Disable Footer Top', 'customify' );
 		}
-		$disable_elements_choices['disable_footer_main'] = __( 'Disable Footer Main', 'customify' );
+		$disable_elements_choices['disable_footer_main']   = __( 'Disable Footer Main', 'customify' );
 		$disable_elements_choices['disable_footer_bottom'] = __( 'Disable Footer Bottom', 'customify' );
 		$this->field_builder->add_field(
 			array(
@@ -182,8 +182,8 @@ class Customify_MetaBox {
 				__( 'Customify Settings', 'customify' ),
 				array( $this, 'render_meta_box_content' ),
 				$post_type,
-				'normal',
-				'high'
+				'side',
+				'low'
 			);
 		}
 	}

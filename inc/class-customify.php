@@ -306,8 +306,8 @@ class Customify {
 			'customify/theme/js',
 			array(
 				'customify-themejs' => array(
-					'url'  => esc_url( get_template_directory_uri() ) . '/assets/js/theme' . $suffix . '.js',
-					'ver'  => self::$version,
+					'url' => esc_url( get_template_directory_uri() ) . '/assets/js/theme' . $suffix . '.js',
+					'ver' => self::$version,
 				),
 			)
 		);
@@ -367,8 +367,8 @@ class Customify {
 			apply_filters( // phpcs:ignore
 				'Customify_JS',
 				array(
-					'is_rtl' => is_rtl(),
-					'css_media_queries' => Customify_Customizer_Auto_CSS::get_instance()->media_queries,
+					'is_rtl'                     => is_rtl(),
+					'css_media_queries'          => Customify_Customizer_Auto_CSS::get_instance()->media_queries,
 					'sidebar_menu_no_duplicator' => Customify()->get_setting( 'header_sidebar_menu_no_duplicator' ),
 				)
 			)

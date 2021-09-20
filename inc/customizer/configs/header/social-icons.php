@@ -330,13 +330,20 @@ class Customify_Builder_Item_Social_Icons {
 		$target_blank = Customify()->get_setting( $this->section . '_target' );
 
 		$rel = '';
+		$rel_val = array();
 		if ( 1 == $nofollow ) {
-			$rel = 'rel="nofollow" ';
+			//$rel = 'rel="nofollow" ';
+			$rel_val[] = 'nofollow';
 		}
 
 		$target = '_self';
 		if ( 1 == $target_blank ) {
 			$target = '_blank';
+			$rel_val[] = 'noopener';
+		}
+
+		if ( ! empty( $rel_val ) ) {
+			$rel = 'rel="' . implode( ' ', $rel_val ) . '" ';
 		}
 
 		if ( ! empty( $items ) ) {

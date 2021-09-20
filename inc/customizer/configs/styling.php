@@ -35,6 +35,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'        => 'color',
 				'section'     => $section,
 				'placeholder' => '#235787',
+				'default'     => '#235787',
 				'title'       => __( 'Primary Color', 'customify' ),
 				'css_format'  => apply_filters(
 					'customify/styling/primary-color',
@@ -80,6 +81,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'type'        => 'color',
 				'section'     => $section,
 				'placeholder' => '#c3512f',
+				'default'     => '#c3512f',
 				'title'       => __( 'Secondary Color', 'customify' ),
 				'css_format'  => apply_filters(
 					'customify/styling/secondary-color',
@@ -99,6 +101,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Text Color', 'customify' ),
 				'placeholder' => '#686868',
+				'default'     => '#686868',
 				'css_format'  => apply_filters(
 					'customify/styling/text-color',
 					'
@@ -119,6 +122,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Link Color', 'customify' ),
 				'placeholder' => '#1e4b75',
+				'default'     => '#1e4b75',
 				'css_format'  => apply_filters(
 					'customify/styling/link-color',
 					'
@@ -136,6 +140,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'title'       => __( 'Link Hover Color', 'customify' ),
 				'placeholder' => '#111111',
+				'default'     => '#111111',
 				'css_format'  => apply_filters(
 					'customify/styling/link-color-hover',
 					'
@@ -155,6 +160,7 @@ a:focus,
 				'section'     => $section,
 				'title'       => __( 'Border Color', 'customify' ),
 				'placeholder' => '#eaecee',
+				'default'     => '#eaecee',
 				'css_format'  => apply_filters(
 					'customify/styling/color-border',
 					'
@@ -245,6 +251,7 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'title'       => __( 'Meta Color', 'customify' ),
 				'placeholder' => '#6d6d6d',
+				'default'     => '#6d6d6d',
 				'css_format'  => apply_filters(
 					'customify/styling/color-meta',
 					'
@@ -270,6 +277,7 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'title'       => __( 'Heading Color', 'customify' ),
 				'placeholder' => '#2b2b2b',
+				'default'     => '#2b2b2b',
 				'css_format'  => apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
 				'selector'    => 'format',
 			),
@@ -280,6 +288,7 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'title'       => __( 'Widget Title Color', 'customify' ),
 				'placeholder' => '#444444',
+				'default'     => '#444444',
 				'css_format'  => '.site-content .widget-title { color: {{value}};}',
 				'selector'    => 'format',
 			),

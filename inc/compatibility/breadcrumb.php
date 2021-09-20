@@ -71,6 +71,10 @@ class Customify_Breadcrumb {
 			}
 		}
 
+		if ( ! $activated && function_exists( 'rank_math_get_breadcrumbs' ) ) {
+			$activated = true;
+		}
+
 		return $activated;
 	}
 
@@ -88,7 +92,7 @@ class Customify_Breadcrumb {
 		);
 
 		if ( ! $this->support_plugins_active() ) {
-			$desc     = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> or <a href="https://wordpress.org/plugins/wordpress-seo/" target="_blank">Yoast SEO</a> breadcrumb plugin. All settings will be displayed after you installed and activated it.', 'customify' );
+			$desc     = __( 'Customify theme support <a target="_blank" href="https://wordpress.org/plugins/breadcrumb-navxt/">Breadcrumb NavXT</a> or <a href="https://wordpress.org/plugins/wordpress-seo/" target="_blank">Yoast SEO</a> or <a href="hhttps://wordpress.org/plugins/seo-by-rank-math/" target="_blank">Rank Math SEO</a> breadcrumb plugin. All settings will be displayed after you installed and activated it.', 'customify' );
 			$config[] = array(
 				'name'        => "{$section}_display_pos",
 				'type'        => 'custom_html',
@@ -340,6 +344,8 @@ class Customify_Breadcrumb {
 			$list = bcn_display_list( true );
 		} elseif ( function_exists( 'yoast_breadcrumb' ) ) {
 			$list = yoast_breadcrumb( '', '', false );
+		} elseif ( function_exists( 'rank_math_get_breadcrumbs' ) ) {
+			$list = rank_math_get_breadcrumbs();
 		}
 
 		if ( $list ) {

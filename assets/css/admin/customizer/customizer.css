@@ -13,6 +13,22 @@
     -webkit-transform: rotate(-360deg);
   }
 }
+@-moz-keyframes spinnerRotate {
+  from {
+    -moz-transform: rotate(0deg);
+  }
+  to {
+    -moz-transform: rotate(-360deg);
+  }
+}
+@-ms-keyframes spinnerRotate {
+  from {
+    -ms-transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(-360deg);
+  }
+}
 .customize--reset-section {
   background: 0 0;
   border: none;
@@ -58,6 +74,70 @@ html[dir="rtl"] .customize--reset-section {
   -ms-animation-duration: 2s;
   -ms-animation-iteration-count: infinite;
   -ms-animation-timing-function: linear;
+}
+
+.customize-control .wp-color-result .color-alpha {
+  height: 100% !important;
+}
+.customize-control .customify-input,
+.customize-control .customify-modal-input,
+.customize-control .customify--field-select select,
+.customize-control .customify--field-select .select2-selection {
+  font-size: 14px;
+  border-radius: 0;
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+  padding-right: 0;
+  background-color: #fff;
+  color: #32373c;
+}
+.customize-control .customify-input:disabled,
+.customize-control .customify-modal-input:disabled,
+.customize-control .customify--field-select select:disabled,
+.customize-control .customify--field-select .select2-selection:disabled {
+  background: rgba(255, 255, 255, 0.5);
+  border-color: rgba(222, 222, 222, 0.75);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.0004);
+  color: rgba(51, 51, 51, 0.5);
+}
+.customize-control select.customify-modal-input,
+.customize-control input[type="number"].customify-modal-input,
+.customize-control input[type="text"].customify-modal-input,
+.customize-control .customify--field-select select,
+.customize-control .customify--field-select .select2-selection {
+  height: 28px;
+  min-height: 28px;
+}
+
+.wp-customizer .select2-search__field {
+  height: 28px;
+  min-height: 28px;
+}
+.wp-customizer ul.select2-results__options .select2-results__option {
+  padding-left: 10px;
+  margin-bottom: 0;
+}
+.wp-customizer ul.select2-results__options li.select2-results__option[role="list"] {
+  padding-left: 0;
+  padding-right: 0;
+}
+.wp-customizer .select2-container--default .select2-results > .select2-results__options {
+  overflow-x: hidden;
+}
+.wp-customizer .select2-container .select2-dropdown {
+  border: 1px solid #ddd;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+  padding-right: 0;
+  background-color: #fff;
+  color: #32373c;
+  border-radius: 0;
+  border-top: 0;
+}
+.wp-customizer .wp-block-table {
+  width: 100%;
+}
+.wp-customizer .wp-block-table table {
+  width: 100% !important;
 }
 
 .customify--hide {
@@ -149,11 +229,8 @@ html[dir="rtl"] .customize--reset-section {
   box-shadow: none;
 }
 .customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span {
-  -webkit-transition: all .2s linear;
   transition: all .2s linear;
-  -webkit-transform: rotate(-90deg);
-      -ms-transform: rotate(-90deg);
-          transform: rotate(-90deg);
+  transform: rotate(-90deg);
 }
 .customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f347";
@@ -176,9 +253,7 @@ html[dir="rtl"] .customize--reset-section {
   border-bottom-color: #eee;
 }
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span {
-  -webkit-transform: rotate(-180deg);
-      -ms-transform: rotate(-180deg);
-          transform: rotate(-180deg);
+  transform: rotate(-180deg);
 }
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f347";
@@ -207,9 +282,9 @@ html[dir="rtl"] .customify-field-heading .customify-devices {
   height: 23px;
   padding: 0 0px;
   margin: 0 0 0 1px;
+  -webkit-box-shadow: none;
   box-shadow: none;
   outline: none !important;
-  -webkit-transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
   transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
   color: #bbbbbb;
 }
@@ -290,7 +365,6 @@ html[dir="rtl"] .customify-field-heading .customify-devices {
   top: -1px;
   font: 400 20px/1 dashicons;
   vertical-align: middle;
-  -webkit-transition: all .2s;
   transition: all .2s;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -541,7 +615,6 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 }
 
 .customify--gr-inputs {
-  display: -webkit-box;
   display: flex;
   margin-left: -2px;
   margin-right: -2px;
@@ -564,8 +637,7 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 .customify--gr-inputs label {
   cursor: pointer;
   width: 25px;
-  -webkit-box-flex: 0;
-          flex: none;
+  flex: none;
   position: relative;
 }
 .customify--gr-inputs label input {
@@ -611,11 +683,16 @@ html[dir="rtl"] .customify--css-unit label:first-child {
 .customify-input-slider-wrapper .customify--slider-input {
   width: 60px;
   max-width: 60px;
+  padding-right: 0;
   position: absolute;
   top: -9px;
   right: 41px;
   height: 24px;
   line-height: 18px;
+  min-height: auto;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 0;
 }
 html[dir="rtl"] .customify-input-slider-wrapper .customify--slider-input {
   left: 41px;
@@ -701,9 +778,7 @@ html[dir="rtl"] .customify-input-slider .ui-slider-range {
   border: 1px solid #CCCCCC;
   border-radius: 50%;
   cursor: pointer;
-  -webkit-transform: translateX(-5px);
-      -ms-transform: translateX(-5px);
-          transform: translateX(-5px);
+  transform: translateX(-5px);
 }
 
 .customify--field-shadow .customify--gr-inputs {
@@ -711,12 +786,10 @@ html[dir="rtl"] .customify-input-slider .ui-slider-range {
 }
 
 .customify--icon-picker {
-  display: -webkit-box;
   display: flex;
 }
 .customify--icon-picker .customify--icon-preview {
-  -webkit-box-flex: 1;
-          flex: 1;
+  flex: 1;
   border: 1px solid #ddd;
   border-right: 0px;
   cursor: pointer;
@@ -739,9 +812,7 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-preview {
   position: absolute;
   top: 50%;
   left: 13px;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 .customify--icon-picker input {
   box-shadow: none !important;
@@ -750,8 +821,7 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-preview {
 }
 .customify--icon-picker .customify--icon-remove {
   cursor: pointer;
-  -webkit-box-flex: 1;
-          flex: 1;
+  flex: 1;
   border: 1px solid #ddd;
   border-left: 0px;
   font-size: 18px;
@@ -763,16 +833,13 @@ html[dir="rtl"] .customify--icon-picker .customify--icon-remove {
 .customify--icon-picker .customify--icon-remove .dashicons {
   width: 30px;
   display: block;
-  -webkit-transform: translateY(2px);
-      -ms-transform: translateY(2px);
-          transform: translateY(2px);
+  transform: translateY(2px);
 }
 
 #customify--sidebar-icons {
   position: fixed;
   left: -300px;
   border-right: 1px solid #ddd;
-  -webkit-transition: all .5s ease;
   transition: all .5s ease;
   width: 300px;
   bottom: 0px;
@@ -821,7 +888,6 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   color: #444;
   text-align: left;
   cursor: pointer;
-  -webkit-transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
   transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
   box-sizing: content-box;
   text-decoration: none;
@@ -862,13 +928,10 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   padding: 10px 10px;
   overflow: hidden;
   cursor: pointer;
-  -webkit-transition: all 0.3s ease;
   transition: all 0.3s ease;
 }
 #customify--sidebar-icons .customify--list-icons li:hover {
-  -webkit-transform: scale(1.5);
-      -ms-transform: scale(1.5);
-          transform: scale(1.5);
+  transform: scale(1.5);
 }
 #customify--sidebar-icons .customify--list-icons:after {
   clear: both;
@@ -906,7 +969,6 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
 }
 
 .custom-control-image_select .customify-radio-list {
-  display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
 }
@@ -932,9 +994,7 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
   line-height: 12px;
   text-transform: uppercase;
   border-radius: 20px;
-  -webkit-transform: translate(9px, -6px);
-      -ms-transform: translate(9px, -6px);
-          transform: translate(9px, -6px);
+  transform: translate(9px, -6px);
 }
 .custom-control-image_select .customify-radio-list > p.input-disabled img {
   opacity: 0.5;
@@ -944,12 +1004,10 @@ html[dir="rtl"] #customify--sidebar-icons.customify--active {
  Radio Group
  */
 .custom-control-radio_group .customify-radio-list {
-  display: -webkit-box;
   display: flex;
 }
 .custom-control-radio_group .customify-radio-list p {
-  -webkit-box-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 .custom-control-radio_group .customify-radio-list p:last-child span.label {
   border-right: 1px solid #ccc;
@@ -1087,8 +1145,7 @@ html[dir="rtl"] .custom-control-radio_group .customify-radio-list p:first-child 
   width: 115px;
   height: 115px;
   display: block;
-  -o-object-fit: cover;
-     object-fit: cover;
+  object-fit: cover;
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-position {
   position: absolute;
@@ -1167,9 +1224,12 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
 .modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
   content: "\f335";
 }
+.customify--settings-wrapper:not(.show-short-desc) .customify--field-typography .customify-actions,
+.customify--settings-wrapper:not(.show-short-desc) .customify--field-styling .customify-actions {
+  margin-top: -3.5px;
+}
 
 .modal--tabs {
-  display: -webkit-box;
   display: flex;
   margin-left: -12px;
   margin-right: -12px;
@@ -1303,9 +1363,7 @@ html[dir="rtl"] .customify--settings-wrapper .customify-actions {
   width: 15px;
   height: 15px;
   background: #fff;
-  -webkit-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-          transform: rotate(45deg);
+  transform: rotate(45deg);
   border-radius: 3px;
 }
 html[dir="rtl"] .customify-modal-settings:before {
@@ -1318,7 +1376,7 @@ html[dir="rtl"] .customify-modal-settings:before {
   clear: both;
 }
 .customify-modal-settings .wp-color-result-text {
-  line-height: 23px;
+  line-height: 28px;
 }
 .customify-modal-settings .customify--field-heading h3.customify-field--heading {
   font-size: 11px;
@@ -1419,7 +1477,6 @@ html[dir="rtl"] .customify-modal-settings:before {
   border-radius: 10px;
   position: relative;
   top: 3px;
-  -webkit-transition: all 0.3s ease-in 0s;
   transition: all 0.3s ease-in 0s;
   opacity: 1;
 }
@@ -1428,7 +1485,6 @@ html[dir="rtl"] .customify-modal-settings:before {
   display: block;
   width: 200%;
   margin-left: -100%;
-  -webkit-transition: margin 0.3s ease-in 0s;
   transition: margin 0.3s ease-in 0s;
 }
 
@@ -1465,7 +1521,6 @@ html[dir="rtl"] .customify-modal-settings:before {
   bottom: 2px;
   right: 8px;
   border-radius: 10px;
-  -webkit-transition: all 0.3s ease-in 0s;
   transition: all 0.3s ease-in 0s;
 }
 
@@ -1558,7 +1613,6 @@ html[dir="rtl"] .customify-modal-settings:before {
 }
 
 #customize-preview {
-  -webkit-transition: all 500ms;
   transition: all 500ms;
 }
 #customize-preview.cb--preview-panel-show {
@@ -1586,24 +1640,17 @@ html[dir="rtl"] .customify-modal-settings:before {
   display: block;
   background: #f1f1f1;
   border-top: 1px solid #ddd;
-  -webkit-transition: all 500ms;
   transition: all 500ms;
-  -webkit-transform: translateY(100%);
-      -ms-transform: translateY(100%);
-          transform: translateY(100%);
+  transform: translateY(100%);
 }
 .customify--customize-builder .panel-name-text {
   display: none;
 }
 .customify--customize-builder.customify--builder-show {
-  -webkit-transform: translateY(0);
-      -ms-transform: translateY(0);
-          transform: translateY(0);
+  transform: translateY(0);
 }
 .customify--customize-builder.customify--builder-show.customify--builder--hide {
-  -webkit-transform: translateY(100%);
-      -ms-transform: translateY(100%);
-          transform: translateY(100%);
+  transform: translateY(100%);
 }
 .customify--customize-builder.customify--builder-show.customify--builder--hide .close-text {
   display: none;
@@ -1626,7 +1673,6 @@ html[dir="rtl"] .customify--customize-builder.customify--builder-show.customify-
   box-sizing: border-box;
 }
 .customify--customize-builder .customify--cb-inner {
-  -webkit-transition: all 500ms;
   transition: all 500ms;
   margin-left: 300px;
   margin-right: 0px;
@@ -1860,7 +1906,6 @@ html[dir="rtl"] .customify--cb-row .customify--cb-row-settings {
   left: 0px;
   width: 100%;
   z-index: 1;
-  display: -webkit-box;
   display: flex;
   bottom: 0px;
 }
@@ -2046,9 +2091,7 @@ html[dir="rtl"] .customify-available-items .grid-stack-item {
 .grid-stack-item .customify--cb-item-add {
   top: 50%;
   right: 10px;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 .grid-stack-item .customify--cb-item-add:before {
   content: "\f132";
@@ -2058,9 +2101,7 @@ html[dir="rtl"] .customify-available-items .grid-stack-item {
   background: inherit;
   padding: 5px 3px;
   right: 0px;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   cursor: pointer;
 }
 html[dir="rtl"] .grid-stack-item .customify--cb-item-remove {
@@ -2078,9 +2119,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-remove {
   top: 50%;
   right: 22px;
   padding: 5px 3px;
-  -webkit-transform: translateY(-50%);
-      -ms-transform: translateY(-50%);
-          transform: translateY(-50%);
+  transform: translateY(-50%);
   cursor: pointer;
 }
 html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
@@ -3080,8 +3119,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 :root .grid-stack-item > .ui-resizable-handle {
-  -webkit-filter: none;
-          filter: none;
+  filter: none;
 }
 
 .grid-stack {
@@ -3125,6 +3163,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   position: absolute;
   font-size: 0.1px;
   display: block;
+  -ms-touch-action: none;
   touch-action: none;
 }
 .grid-stack > .grid-stack-item.ui-resizable-disabled > .ui-resizable-handle, .grid-stack > .grid-stack-item.ui-resizable-autohide > .ui-resizable-handle {
@@ -3145,12 +3184,16 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   background-repeat: no-repeat;
   background-position: center;
   -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-se {
   -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-nw {
@@ -3358,10 +3401,16 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 .grid-stack.grid-stack-animate, .grid-stack.grid-stack-animate .grid-stack-item {
   -webkit-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -moz-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -ms-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -o-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
   transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
 }
 .grid-stack.grid-stack-animate .grid-stack-item.ui-draggable-dragging, .grid-stack.grid-stack-animate .grid-stack-item.ui-resizable-resizing, .grid-stack.grid-stack-animate .grid-stack-item.grid-stack-placeholder {
   -webkit-transition: left 0s, top 0s, height 0s, width 0s;
+  -moz-transition: left 0s, top 0s, height 0s, width 0s;
+  -ms-transition: left 0s, top 0s, height 0s, width 0s;
+  -o-transition: left 0s, top 0s, height 0s, width 0s;
   transition: left 0s, top 0s, height 0s, width 0s;
 }
 .grid-stack.grid-stack-one-column-mode {
@@ -3381,7 +3430,6 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 
 /* Saved templates */
 .save-template-form, .flex-form {
-  display: -webkit-box;
   display: flex;
   margin-bottom: 15px;
 }
@@ -3432,8 +3480,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
 }
 
 :root .grid-stack-item > .ui-resizable-handle {
-  -webkit-filter: none;
-          filter: none;
+  filter: none;
 }
 
 .grid-stack {
@@ -3478,6 +3525,7 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   position: absolute;
   font-size: 0.1px;
   display: block;
+  -ms-touch-action: none;
   touch-action: none;
 }
 .grid-stack > .grid-stack-item.ui-resizable-disabled > .ui-resizable-handle, .grid-stack > .grid-stack-item.ui-resizable-autohide > .ui-resizable-handle {
@@ -3498,12 +3546,16 @@ html[dir="rtl"] .grid-stack-item .customify--cb-item-setting {
   background-repeat: no-repeat;
   background-position: center;
   -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
   -ms-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
   transform: rotate(45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-se {
   -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
   -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
   transform: rotate(-45deg);
 }
 .grid-stack > .grid-stack-item > .ui-resizable-e {
@@ -3719,10 +3771,16 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
 }
 .grid-stack.grid-stack-animate, .grid-stack.grid-stack-animate .grid-stack-item {
   -webkit-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -moz-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -ms-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
+  -o-transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
   transition: left 0.3s, top 0.3s, height 0.3s, width 0.3s;
 }
 .grid-stack.grid-stack-animate .grid-stack-item.ui-draggable-dragging, .grid-stack.grid-stack-animate .grid-stack-item.ui-resizable-resizing, .grid-stack.grid-stack-animate .grid-stack-item.grid-stack-placeholder {
   -webkit-transition: left 0s, top 0s, height 0s, width 0s;
+  -moz-transition: left 0s, top 0s, height 0s, width 0s;
+  -ms-transition: left 0s, top 0s, height 0s, width 0s;
+  -o-transition: left 0s, top 0s, height 0s, width 0s;
   transition: left 0s, top 0s, height 0s, width 0s;
 }
 .grid-stack.grid-stack-one-column-mode {
@@ -3750,17 +3808,14 @@ html[dir="rtl"] .grid-stack > .grid-stack-item[data-gs-x='12'] {
   top: -7px;
 }
 .customify--panel-v2 .customify--row-inner {
-  display: -webkit-box;
   display: flex;
   padding: 2px 3px;
   background: transparent;
-  -webkit-box-flex: 1;
-          flex-grow: 1;
+  flex-grow: 1;
 }
 .customify--panel-v2 .col-items-wrapper {
   flex-basis: 33.333333%;
-  -webkit-box-flex: 1;
-          flex-grow: 1;
+  flex-grow: 1;
   margin: 2px;
 }
 .customify--panel-v2 .col-items {
@@ -3846,3 +3901,5 @@ html[dir="rtl"] .customify--panel-v2 .customify--cb-row .customify--cb-item-name
   margin-right: 4px;
   margin-bottom: 0px;
 }
+
+/*# sourceMappingURL=customizer.css.map */

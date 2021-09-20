@@ -77,7 +77,7 @@ class Customify_Builder_Footer_Item_Copyright {
 		$tags = array(
 			'current_year' => date_i18n( 'Y' ),
 			'site_title'   => get_bloginfo( 'name' ),
-			'theme_author' => sprintf( '<a href="https://pressmaximum.com/customify">%1$s</a>', 'Customify' ), // Brand name.
+			'theme_author' => sprintf( '<a rel="nofollow" href="https://pressmaximum.com/customify">%1$s</a>', 'Customify' ), // Brand name.
 		);
 
 		$content = Customify()->get_setting( $this->name );
