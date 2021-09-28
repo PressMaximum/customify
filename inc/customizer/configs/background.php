@@ -92,7 +92,7 @@ class Customify_Advanced_Styling_Background {
 				'name'       => 'content_background',
 				'type'       => 'styling',
 				'section'    => 'background',
-				'title'      => __( 'Site Content Background', 'customify-pro' ),
+				'title'      => __( 'Site Content Background', 'customify-pro', 'customify' ),
 				'selector'   => array(
 					'normal'            => '.site-content',
 				),
