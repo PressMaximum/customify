@@ -1,4 +1,4 @@
-module.exports = function( grunt ) {
+module.exports = function (grunt) {
     'use strict';
     var pkgInfo = grunt.file.readJSON('package.json');
     grunt.initConfig({
@@ -6,16 +6,8 @@ module.exports = function( grunt ) {
 
         // Autoprefixer.
         postcss: {
-            options: {
-                processors: [
-                    require( 'autoprefixer' )({
-                        browsers: [
-                            '> 0.1%',
-                            'ie 8',
-                            'ie 9'
-                        ]
-                    })
-                ]
+            options: {                       // Target options
+                style: 'expanded',
             },
             dist: {
                 src: [
@@ -69,23 +61,23 @@ module.exports = function( grunt ) {
         sass: {
             options: {
                 precision: 10,
-                unixNewlines: true,
-                //noCache: true
+                // unixNewlines: true,
+                // //noCache: true
                 sourcemap: false
             },
             dist: {
                 options: {
                     style: 'expanded',
-                   // sourcemap: 'auto'
+                    // sourcemap: 'auto'
                 },
 
                 files: [
                     {
-                    'style.css': 'assets/sass/site/style.scss',
-                    'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
-                    'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
-                    'assets/css/admin/editor.css': 'assets/sass/admin/editor.scss',
-                    'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
+                        'style.css': 'assets/sass/site/style.scss',
+                        'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
+                        'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
+                        'assets/css/admin/editor.css': 'assets/sass/admin/editor.scss',
+                        'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
                     },
                     {
                         expand: true,
@@ -180,8 +172,8 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
-		},
-		
+        },
+
         // Watch changes for assets.
         watch: {
             css: {
@@ -324,49 +316,49 @@ module.exports = function( grunt ) {
                     }
                 ]
             }
-		},
-		
-		phpcs: {
-			application: {
-				src: [
-					'*.php',
-					'**/*.php',
-					'!node_modules/**',
-					'!php-tests/**',
-					'!bin/**',
-				]
-			},
-			options: {
-				bin: "phpcs",
-				standard: 'phpcs.xml'
-				//standard: 'WordPress'
-			}
-		},
+        },
 
-		phpcbf: {
-			options: {
-			  	bin:'phpcbf'
-			},
-			files: {
-				src: [
-					'*.php',
-					'**/*.php',
-					'!node_modules/**',
-					'!php-tests/**',
-					'!bin/**',
-				]
-			},
-		  },
+        phpcs: {
+            application: {
+                src: [
+                    '*.php',
+                    '**/*.php',
+                    '!node_modules/**',
+                    '!php-tests/**',
+                    '!bin/**',
+                ]
+            },
+            options: {
+                bin: "phpcs",
+                standard: 'phpcs.xml'
+                //standard: 'WordPress'
+            }
+        },
+
+        phpcbf: {
+            options: {
+                bin: 'phpcbf'
+            },
+            files: {
+                src: [
+                    '*.php',
+                    '**/*.php',
+                    '!node_modules/**',
+                    '!php-tests/**',
+                    '!bin/**',
+                ]
+            },
+        },
 
     });
 
 
     // Load NPM tasks to be used here
-    grunt.loadNpmTasks( 'grunt-contrib-watch' );
-    grunt.loadNpmTasks( 'grunt-postcss' );
+    grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks( 'grunt-contrib-cssmin' );
-	grunt.loadNpmTasks('grunt-contrib-uglify');
+    grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-rtlcss');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
@@ -385,7 +377,7 @@ module.exports = function( grunt ) {
         'watch',
         'css'
     ]);
-    grunt.registerTask( 'css', [
+    grunt.registerTask('css', [
         'sass'
         //'rtlcss'
         //'postcss',
@@ -403,17 +395,17 @@ module.exports = function( grunt ) {
             if (response && response.statusCode == 200) {
 
                 var fonts = {};
-                JSON.parse(body).items.forEach( function( font ){
-                    fonts[font.family] =  {
+                JSON.parse(body).items.forEach(function (font) {
+                    fonts[font.family] = {
                         family: font.family,
                         category: font.category,
                         variants: font.variants,
                         subsets: font.subsets
                     };
-                } );
+                });
 
                 fs.writeFile('assets/fonts/google-fonts.json', JSON.stringify(fonts, undefined, 4), function (err) {
-                    if (! err ) {
+                    if (!err) {
                         console.log("Google Fonts Updated!");
                     }
                 });
@@ -439,12 +431,12 @@ module.exports = function( grunt ) {
             // i18n
             grunt.task.run(['addtextdomain', 'makepot']);
             // re create css file and min
-            grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
+            grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
         }
     });
 
     grunt.registerTask('re-css', function (ver) {
-        grunt.task.run([ 'css', 'postcss', 'uglify', 'rtlcss', 'cssmin' ]);
+        grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
     });
 
 

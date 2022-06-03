@@ -161,12 +161,12 @@
   border-width: 1em 0.75em 0 0.75em;
   border-color: #3E474F transparent transparent transparent;
   bottom: 100%;
-  content: '';
+  content: "";
   transform: translateX(-50%);
 }
 #side-sortables .customify-mt-tabs-list .customify-mt-tab-cont a::after {
   background: #3E474F;
-  border-radius: .25em;
+  border-radius: 0.25em;
   bottom: calc( 100% + 0.75em );
   color: #EDEFF0;
   display: block;

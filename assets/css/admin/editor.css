@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*
 $gl-devices-list: (
     desktop: "screen and (min-width: 64em)", // up 1024px
@@ -63,13 +64,13 @@ h1,
 }
 @media screen and (max-width: 1024px) {
   h1,
-  .h1 {
+.h1 {
     font-size: 2.1em;
   }
 }
 @media screen and (max-width: 568px) {
   h1,
-  .h1 {
+.h1 {
     font-size: 1.8em;
   }
 }
@@ -86,13 +87,13 @@ h2 + h3,
 }
 @media screen and (max-width: 1024px) {
   h2,
-  .h2 {
+.h2 {
     font-size: 1.9em;
   }
 }
 @media screen and (max-width: 568px) {
   h2,
-  .h2 {
+.h2 {
     font-size: 1.7em;
   }
 }
@@ -316,21 +317,21 @@ form {
   margin-bottom: 2em;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-input[type="tel"],
-input[type="range"],
-input[type="date"],
-input[type="month"],
-input[type="week"],
-input[type="time"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="color"],
+input[type=text],
+input[type=email],
+input[type=url],
+input[type=password],
+input[type=search],
+input[type=number],
+input[type=tel],
+input[type=range],
+input[type=date],
+input[type=month],
+input[type=week],
+input[type=time],
+input[type=datetime],
+input[type=datetime-local],
+input[type=color],
 select,
 textarea,
 .select2-container .select2-selection--single {
@@ -346,21 +347,21 @@ textarea,
   -moz-appearance: none;
   -webkit-appearance: none;
 }
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="password"]:focus,
-input[type="search"]:focus,
-input[type="number"]:focus,
-input[type="tel"]:focus,
-input[type="range"]:focus,
-input[type="date"]:focus,
-input[type="month"]:focus,
-input[type="week"]:focus,
-input[type="time"]:focus,
-input[type="datetime"]:focus,
-input[type="datetime-local"]:focus,
-input[type="color"]:focus,
+input[type=text]:focus,
+input[type=email]:focus,
+input[type=url]:focus,
+input[type=password]:focus,
+input[type=search]:focus,
+input[type=number]:focus,
+input[type=tel]:focus,
+input[type=range]:focus,
+input[type=date]:focus,
+input[type=month]:focus,
+input[type=week]:focus,
+input[type=time]:focus,
+input[type=datetime]:focus,
+input[type=datetime-local]:focus,
+input[type=color]:focus,
 select:focus,
 textarea:focus,
 .select2-container .select2-selection--single:focus {
@@ -404,9 +405,9 @@ select {
 
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button),
 button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
   border: none;
   cursor: pointer;
   padding: 0px 1.3em;
@@ -421,9 +422,9 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 }
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
   color: #ffffff;
   outline: none;
@@ -431,19 +432,19 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button):active, .button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
   outline: none;
 }
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading {
   position: relative;
 }
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
@@ -456,28 +457,28 @@ button:not(.components-button):not(.customize-partial-edit-shortcut-button).load
 button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label {
   visibility: hidden;
 }
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
 button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after {
   content: "" !important;
   height: 16px;
   width: 16px;
@@ -496,16 +497,16 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 }
 
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
   color: #ffffff;
   background: #235787;
 }
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
+input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
+input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
+input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
   color: #ffffff;
 }
 
@@ -659,7 +660,7 @@ object {
   max-width: 100%;
 }
 
-.wp-caption img[class*="wp-image-"] {
+.wp-caption img[class*=wp-image-] {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -825,8 +826,8 @@ article.comment .comment-post-author {
 
 @media screen and (min-width: 64em) {
   #respond .comment-form-author,
-  #respond .comment-form-email,
-  #respond .comment-form-url {
+#respond .comment-form-email,
+#respond .comment-form-url {
     width: 29.4117647059%;
     margin-right: 5.8823529412%;
     float: left;
@@ -890,7 +891,6 @@ article.comment .comment-post-author {
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.26), 0 0 0 1px rgba(0, 0, 0, 0.18);
   background-color: rgba(255, 255, 255, 0.99);
 }
-
 .shape-rounded {
   border-radius: 10%;
 }
@@ -1353,7 +1353,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   font-size: 13px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  transition: transform .18s, border .18s, background .18s, box-shadow .18s, opacity .18s, color .18s;
+  transition: transform 0.18s, border 0.18s, background 0.18s, box-shadow 0.18s, opacity 0.18s, color 0.18s;
   font-weight: 500;
 }
 .posts-layout .readmore-button:hover {
@@ -1399,13 +1399,13 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   display: inline-block;
 }
 .posts-layout .entry-thumbnail {
-  transition: all .3s linear;
+  transition: all 0.3s linear;
 }
 .posts-layout .entry-thumbnail img {
-  transition: all .3s linear;
+  transition: all 0.3s linear;
 }
 .posts-layout .entry-thumbnail:before {
-  transition: all .3s linear;
+  transition: all 0.3s linear;
   content: "";
   display: block;
   position: absolute;
@@ -1550,10 +1550,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   color: #6d6d6d;
 }
 .entry-single .cats-links:before {
-  content: "\f115";
+  content: "";
 }
 .entry-single .tags-links:before {
-  content: "\f02c";
+  content: "";
 }
 .entry-single .edit-link {
   display: block;
