@@ -26,7 +26,7 @@
         "grunt-wp-i18n": "latest"
     },
     "dependencies": {
-        "copy": "latest",
+        "copy": "^0.0.1",
         "element-qsa-scope": "^1.1.0",
         "rtlcss": "latest"
     },
