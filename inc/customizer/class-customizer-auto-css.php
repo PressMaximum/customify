@@ -836,7 +836,7 @@ class Customify_Customizer_Auto_CSS {
 			$url .= '&subset=' . join( ',', $this->subsets );
 		}
 
-		return $url;
+		return $url.'&display=swap';
 	}
 
 	function loop_fields( $fields, $values = null, $skip_if_val_null = false, $no_selector = false, $key_name = 'name' ) {
