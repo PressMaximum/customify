@@ -7,13 +7,13 @@
  */
 
 'use strict'; // prevent global namespace pollution
-(function(elmPrototype, docPrototype) {
+(function (elmPrototype, docPrototype) {
     var scopeRegex = /:scope\b/gi;
 
     function patchElement(method) {
         var native = elmPrototype[method];
 
-        elmPrototype[method] = function(selector) {
+        elmPrototype[method] = function (selector) {
             var element = this;
             var id = element.id || 'qsid' + new Date().getTime();
             var needsId = !element.id;
@@ -39,7 +39,7 @@
 
     function patchDocument(method) {
         var native = docPrototype[method];
-        docPrototype[method] = function(selector) {
+        docPrototype[method] = function (selector) {
             // In context of document, :scope is the same
             // as :root so can just be stripped
             // https://www.w3.org/TR/selectors4/#scope-pseudo
@@ -57,8 +57,8 @@
     }
 })(Element.prototype, Document.prototype);
 
-(function(arr) {
-    arr.forEach(function(item) {
+(function (arr) {
+    arr.forEach(function (item) {
         if (item.hasOwnProperty('append')) {
             return;
         }
@@ -70,7 +70,7 @@
                 var argArr = Array.prototype.slice.call(arguments),
                     docFrag = document.createDocumentFragment();
 
-                argArr.forEach(function(argItem) {
+                argArr.forEach(function (argItem) {
                     var isNode = argItem instanceof Node;
                     docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
                 });
@@ -79,8 +79,8 @@
             }
         });
     });
-})([ Element.prototype, Document.prototype, DocumentFragment.prototype ]);
-(function() {
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+(function () {
     if (typeof NodeList.prototype.forEach === 'function') return false;
     NodeList.prototype.forEach = Array.prototype.forEach;
 })();
@@ -98,7 +98,7 @@ if (!Element.prototype.matches) {
  * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
  */
 if (!Element.prototype.closest) {
-    Element.prototype.closest = function(s) {
+    Element.prototype.closest = function (s) {
         var el = this;
         if (!document.documentElement.contains(el)) {
             return null;
@@ -116,8 +116,8 @@ if (!Element.prototype.closest) {
 /**
  * Main Customify Scripts
  */
-(function() {
-    var Customify = function() {
+(function () {
+    var Customify = function () {
         this.options = {
             menuToggleDuration: 300
         };
@@ -129,9 +129,9 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Add body class to check touch screen.
-	 */
-    Customify.prototype.checkTouchScreen = function() {
+     * Add body class to check touch screen.
+     */
+    Customify.prototype.checkTouchScreen = function () {
         if ('ontouchstart' in document.documentElement) {
             document.body.classList.add('ontouch-screen');
         } else {
@@ -140,11 +140,11 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Check if current mobile viewing.
-	 *
-	 * @return bool
-	 */
-    Customify.prototype.isMobile = function() {
+     * Check if current mobile viewing.
+     *
+     * @return bool
+     */
+    Customify.prototype.isMobile = function () {
         if (
             navigator.userAgent.match(/Android/i) ||
             navigator.userAgent.match(/webOS/i) ||
@@ -161,13 +161,14 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Init mobile sidebar.
-	 *
-	 * @todo Move menu sidebar to body.
-	 * @todo Add events to menu buttons.
-	 */
-    Customify.prototype.initMenuSidebar = function() {
-        var themeMenuSidebar;
+     * Init mobile sidebar.
+     *
+     * @todo Move menu sidebar to body.
+     * @todo Add events to menu buttons.
+     */
+    Customify.prototype.initMenuSidebar = function () {
+        var themeMenuSidebar; 
+        const that = this;
         if (document.body.classList.contains('menu_sidebar_dropdown')) {
             // $( '#header-menu-sidebar' ).insertAfter( "#masthead" );
         } else {
@@ -179,7 +180,7 @@ if (!Element.prototype.closest) {
 
         document.addEventListener(
             'customize_section_opened',
-            function(e) {
+            function (e) {
                 if (e.detail === 'header_sidebar') {
                     this.toggleMenuSidebar(false);
                 }
@@ -188,38 +189,40 @@ if (!Element.prototype.closest) {
 
         var menuMobileToggleButtons = document.querySelectorAll('.menu-mobile-toggle');
         /**
-		 * When click to toggle buttons.
-		 */
+         * When click to toggle buttons.
+         */
         this.addEvent(
             menuMobileToggleButtons,
             'click',
-            function(e) {
+            function (e) {
                 e.preventDefault();
                 this.toggleMenuSidebar();
             }.bind(this)
         );
 
+
+
         var closeButtons = document.querySelectorAll('#header-menu-sidebar .close-panel, .close-sidebar-panel');
 
         /**
-		 * When click close buttons.
-		 */
+         * When click close buttons.
+         */
         this.addEvent(
             closeButtons,
             'click',
-            function(e) {
+            function (e) {
                 e.preventDefault();
                 this.closeMenuSidebar();
             }.bind(this)
         );
 
         /**
-		 * When click to ouside of menu sidebar.
-		 */
+         * When click to ouside of menu sidebar.
+         */
         this.addEvent(
             document,
             'click',
-            function(e) {
+            function (e) {
                 if (document.body.classList.contains('is-menu-sidebar')) {
                     var menuSidebar = document.getElementById('header-menu-sidebar');
                     var buttons = document.querySelectorAll('.menu-mobile-toggle');
@@ -257,20 +260,50 @@ if (!Element.prototype.closest) {
         this.addEvent(
             document,
             'keyup',
-            function(e) {
+            function (e) {
                 if (e.keyCode === 27) {
                     this.closeMenuSidebar();
                 }
             }.bind(this)
         );
+
+
+        /**
+         * When click to anchor links.
+         * @since 0.3.9
+         */
+        this.addEvent(
+            document.querySelectorAll('.menu a[href*="#"]'),
+            'click',
+            function (e) {
+                let el = e.target.tagName === 'A' ? e.target : e.target.closest('a');
+                let url = new URL(el.href);
+                if (url.pathname != window.location.pathname) {
+                    return true;
+                } else {
+                    let elTo = document.querySelector(url.hash);
+                    if (elTo) {
+                        e.preventDefault();
+                        that.closeMenuSidebar();
+                        window.scrollTo({
+                            top: elTo.getBoundingClientRect().y,
+                            left: 0,
+                            behavior: 'smooth'
+                        })
+                        e.preventDefault();
+                    }
+                }
+                return true;
+            }
+        );
     };
 
     /**
-	 * Init mobile search form
-	 *
-	 * @todo Need check
-	 */
-    Customify.prototype.initMobieSearchForm = function() {
+     * Init mobile search form
+     *
+     * @todo Need check
+     */
+    Customify.prototype.initMobieSearchForm = function () {
         var mobileSearchForm = document.querySelector('.search-form--mobile');
         if (mobileSearchForm) {
             mobileSearchForm.classList.add('mobile-search-form-sidebar menu-sidebar-panel');
@@ -279,7 +312,7 @@ if (!Element.prototype.closest) {
         }
     };
 
-    Customify.prototype.toggleMobileSubmenu = function(e) {
+    Customify.prototype.toggleMobileSubmenu = function (e) {
         e.preventDefault();
         var that = this;
         var li = e.target.closest('li');
@@ -290,7 +323,7 @@ if (!Element.prototype.closest) {
             li.classList.add('open-sub');
             if (firstSubmenu.length) {
                 for (var i = 0; i < firstSubmenu.length; i++) {
-                    that.slideDown(firstSubmenu[i], this.options.menuToggleDuration, function() {
+                    that.slideDown(firstSubmenu[i], this.options.menuToggleDuration, function () {
                         li.classList.add('open-sub');
                     });
                 }
@@ -299,7 +332,7 @@ if (!Element.prototype.closest) {
             // Hide the sub menu.
             if (firstSubmenu.length) {
                 for (var i = 0; i < firstSubmenu.length; i++) {
-                    that.slideUp(firstSubmenu[i], this.options.menuToggleDuration, function() {
+                    that.slideUp(firstSubmenu[i], this.options.menuToggleDuration, function () {
                         li.classList.remove('open-sub');
                     });
                 }
@@ -308,18 +341,18 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Add events listener for mobile toggle button.
-	 *
-	 * @param Element toggleIcon
-	 */
-    Customify.prototype.toggleMobileSubmenuEvents = function(toggleIcon) {
+     * Add events listener for mobile toggle button.
+     *
+     * @param Element toggleIcon
+     */
+    Customify.prototype.toggleMobileSubmenuEvents = function (toggleIcon) {
         toggleIcon.addEventListener('click', this.toggleMobileSubmenu.bind(this));
     };
 
     /**
-	 * Inital mobile submenu.
-	 */
-    Customify.prototype.initMobileSubMenu = function() {
+     * Inital mobile submenu.
+     */
+    Customify.prototype.initMobileSubMenu = function () {
         var menuChildren = document.querySelectorAll('#header-menu-sidebar .nav-menu-mobile .menu-item-has-children');
 
         if (menuChildren.length) {
@@ -362,13 +395,13 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * SideUp
-	 *
-	 * @param Element element
-	 * @param number duration
-	 * @param function callBack
-	 */
-    Customify.prototype.slideUp = function(element, duration, callBack) {
+     * SideUp
+     *
+     * @param Element element
+     * @param number duration
+     * @param function callBack
+     */
+    Customify.prototype.slideUp = function (element, duration, callBack) {
         if (typeof duration !== 'number') {
             duration = 0;
         }
@@ -389,11 +422,11 @@ if (!Element.prototype.closest) {
         element.style.overflow = 'hidden';
         element.style.height = offset.height + 'px';
         element.style.transition = 'height ' + duration + 'ms linear';
-        setTimeout(function() {
+        setTimeout(function () {
             element.style.height = '0px';
         }, 20);
 
-        element._sideUpTimeOut = setTimeout(function() {
+        element._sideUpTimeOut = setTimeout(function () {
             element.style.transition = '';
             if (typeof callBack === 'function') {
                 callBack.call(this);
@@ -402,12 +435,12 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 *
-	 * @param Element element
-	 * @param number duration
-	 * @param function callBack
-	 */
-    Customify.prototype.slideDown = function(element, duration, callBack) {
+     *
+     * @param Element element
+     * @param number duration
+     * @param function callBack
+     */
+    Customify.prototype.slideDown = function (element, duration, callBack) {
         if (typeof duration !== 'number') {
             duration = 0;
         }
@@ -432,11 +465,11 @@ if (!Element.prototype.closest) {
         element.style.height = '0px';
         element.style.overflow = 'hidden';
         element.style.transition = 'height ' + duration + 'ms linear';
-        setTimeout(function() {
+        setTimeout(function () {
             element.style.height = offset.height + 'px';
         }, 50);
 
-        element._sideUpTimeOut = setTimeout(function() {
+        element._sideUpTimeOut = setTimeout(function () {
             element.style.height = '';
             element.style.overflow = '';
             element.style.transition = '';
@@ -446,7 +479,7 @@ if (!Element.prototype.closest) {
         }, duration);
     };
 
-    Customify.prototype.insertMenuOverlayClass = function() {
+    Customify.prototype.insertMenuOverlayClass = function () {
         var navMobile = document.querySelector('.nav-menu-mobile');
         if (navMobile) {
             if (document.body.classList.contains('menu_sidebar_slide_overlay')) {
@@ -457,7 +490,7 @@ if (!Element.prototype.closest) {
         }
     };
 
-    Customify.prototype.setupMobileItemAnimations = function(element) {
+    Customify.prototype.setupMobileItemAnimations = function (element) {
         var h = window.height;
         if (typeof element === 'undefined') {
             element = document.getElementById('header-menu-sidebar');
@@ -475,12 +508,12 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Toogle Element class name.
-	 *
-	 * @param Element element
-	 * @param string className
-	 */
-    Customify.prototype.toggleClass = function(element, className) {
+     * Toogle Element class name.
+     *
+     * @param Element element
+     * @param string className
+     */
+    Customify.prototype.toggleClass = function (element, className) {
         if (element instanceof NodeList) {
             for (var i = 0; i < element.length; i++) {
                 if (element[i].classList.contains(className)) {
@@ -499,12 +532,12 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Add class to element.
-	 *
-	 * @param Element element
-	 * @param string className
-	 */
-    Customify.prototype.addClass = function(element, className) {
+     * Add class to element.
+     *
+     * @param Element element
+     * @param string className
+     */
+    Customify.prototype.addClass = function (element, className) {
         if (element instanceof NodeList) {
             for (var i = 0; i < element.length; i++) {
                 element[i].classList.add(className);
@@ -515,12 +548,12 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Remove class name from element.
-	 *
-	 * @param Element element
-	 * @param string className
-	 */
-    Customify.prototype.removeClass = function(element, className) {
+     * Remove class name from element.
+     *
+     * @param Element element
+     * @param string className
+     */
+    Customify.prototype.removeClass = function (element, className) {
         // Split each class by space.
         var classes = className.split(' ');
         if (element instanceof NodeList) {
@@ -537,13 +570,13 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Add event handle to elements.
-	 *
-	 * @param Element element
-	 * @param string event
-	 * @param function callBack
-	 */
-    Customify.prototype.addEvent = function(element, event, callBack) {
+     * Add event handle to elements.
+     *
+     * @param Element element
+     * @param string event
+     * @param function callBack
+     */
+    Customify.prototype.addEvent = function (element, event, callBack) {
         if (element instanceof NodeList) {
             for (var i = 0; i < element.length; i++) {
                 element[i].addEventListener(event, callBack);
@@ -554,17 +587,17 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Close menu sidebar.
-	 */
-    Customify.prototype.closeMenuSidebar = function() {
+     * Close menu sidebar.
+     */
+    Customify.prototype.closeMenuSidebar = function () {
         document.body.classList.add('hiding-header-menu-sidebar');
         document.body.classList.remove('is-menu-sidebar');
         var toggleButtons = document.querySelectorAll('.menu-mobile-toggle, .menu-mobile-toggle .hamburger');
         this.removeClass(toggleButtons, 'is-active');
 
         /**
-		 * For dropdown sidebar.
-		 */
+         * For dropdown sidebar.
+         */
         if (document.body.classList.contains('menu_sidebar_dropdown')) {
             this.removeClass(document.body, 'hiding-header-menu-sidebar');
             var menuSidebar = document.getElementById('header-menu-sidebar');
@@ -575,7 +608,7 @@ if (!Element.prototype.closest) {
             this.slideUp(
                 menuSidebar,
                 300,
-                function() {
+                function () {
                     menuSidebar.style.height = 0;
                     menuSidebar.style.display = 'block';
                 }.bind(this)
@@ -583,7 +616,7 @@ if (!Element.prototype.closest) {
         } else {
             // Else slide sidebar.
             setTimeout(
-                function() {
+                function () {
                     this.removeClass(document.body, 'hiding-header-menu-sidebar');
                 }.bind(this),
                 1000
@@ -592,11 +625,11 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Toggle menu sidebar.
-	 *
-	 * @param bool open use animation or not.
-	 */
-    Customify.prototype.toggleMenuSidebar = function(toggle) {
+     * Toggle menu sidebar.
+     *
+     * @param bool open use animation or not.
+     */
+    Customify.prototype.toggleMenuSidebar = function (toggle) {
         if (typeof toggle === 'undefined') {
             toggle = true;
         }
@@ -623,7 +656,7 @@ if (!Element.prototype.closest) {
                 var offset = menuSidebarInner.getBoundingClientRect();
                 var h = offset.height;
 
-                this.slideDown(menuSidebar, 300, function() {
+                this.slideDown(menuSidebar, 300, function () {
                     menuSidebar.style.height = h + 'px';
                 });
             } else {
@@ -635,9 +668,9 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Auto align search form.
-	 */
-    Customify.prototype.searchFormAutoAlign = function() {
+     * Auto align search form.
+     */
+    Customify.prototype.searchFormAutoAlign = function () {
         var searchItems = document.querySelectorAll('.header-search_icon-item');
         var w = window.innerWidth;
 
@@ -667,18 +700,18 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Search form.
-	 */
-    Customify.prototype.initSearchForm = function() {
+     * Search form.
+     */
+    Customify.prototype.initSearchForm = function () {
         var searchItems = document.querySelectorAll('.header-search_icon-item');
         var that = this;
-        searchItems.forEach(function(container) {
+        searchItems.forEach(function (container) {
             if (!container.classList.contains('js-added')) {
                 that.addClass(container, 'js-added');
                 that.removeClass(container, 'active');
                 var icon = container.querySelector('.search-icon');
 
-                var iconSearchClick = function(e) {
+                var iconSearchClick = function (e) {
                     e.preventDefault();
                     var inputField = container.querySelector('.search-field');
                     if (!container.classList.contains('active')) {
@@ -690,7 +723,7 @@ if (!Element.prototype.closest) {
                     }
                 };
 
-                var clickOutSideSearchIcon = function(e) {
+                var clickOutSideSearchIcon = function (e) {
                     // if the target of the click isn't the container nor a descendant of the container
                     if (!(container === e.target) && !container.contains(e.target)) {
                         that.removeClass(container, 'active');
@@ -700,13 +733,13 @@ if (!Element.prototype.closest) {
                 icon.removeEventListener('click', iconSearchClick);
                 //document.removeEventListener("click", clickOutSideSearchIcon);
                 /**
-				 * Add event handle when click to icon.
-				 */
+                 * Add event handle when click to icon.
+                 */
                 that.addEvent(icon, 'click', iconSearchClick.bind(that));
 
                 /**
-				 * When click outside search form.
-				 */
+                 * When click outside search form.
+                 */
                 that.addEvent(document, 'click', clickOutSideSearchIcon.bind(that));
             }
         });
@@ -715,14 +748,14 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Wrapper element
-	 *
-	 * @param Element element
-	 * @param strig tag Tag name.
-	 *
-	 * @return Element
-	 */
-    Customify.prototype.wrapper = function(element, tag) {
+     * Wrapper element
+     *
+     * @param Element element
+     * @param strig tag Tag name.
+     *
+     * @return Element
+     */
+    Customify.prototype.wrapper = function (element, tag) {
         if (typeof tag === 'undefined') {
             tag = 'div';
         }
@@ -733,9 +766,9 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Responsive table.
-	 */
-    Customify.prototype.responsiveTable = function() {
+     * Responsive table.
+     */
+    Customify.prototype.responsiveTable = function () {
         var tables = document.querySelectorAll('.entry-content table');
         for (var i = 0; i < tables.length; i++) {
             if (!tables[i].parentNode.classList.contains('table-wrapper')) {
@@ -749,14 +782,14 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Reponsive video style.
-	 */
-    Customify.prototype.responsiveVideos = function() {};
+     * Reponsive video style.
+     */
+    Customify.prototype.responsiveVideos = function () { };
 
     /**
-	 * Inittial
-	 */
-    Customify.prototype.init = function() {
+     * Inittial
+     */
+    Customify.prototype.init = function () {
         this.checkTouchScreen();
         this.initMobieSearchForm();
         this.initMobileSubMenu();
@@ -768,11 +801,11 @@ if (!Element.prototype.closest) {
         this.responsiveVideos();
 
         /**
-		 * Add action when Header Panel rendered by customizer.
-		 */
+         * Add action when Header Panel rendered by customizer.
+         */
         document.addEventListener(
             'header_builder_panel_changed',
-            function() {
+            function () {
                 this.initMobileSubMenu();
                 this.insertMenuOverlayClass();
             }.bind(this)
@@ -781,7 +814,7 @@ if (!Element.prototype.closest) {
         var tf;
         window.addEventListener(
             'resize',
-            function() {
+            function () {
                 // Resetup mobile animations
                 this.setupMobileItemAnimations();
 
@@ -796,14 +829,14 @@ if (!Element.prototype.closest) {
 
         document.addEventListener(
             'selective-refresh-content-rendered',
-            function(e) {
+            function (e) {
                 console.log('e.detail', e.detail);
 
                 if ('customify_customize_render_header' === e.detail) {
-					var oldMenu = document.querySelector('body > .header-menu-sidebar');
-					if ( null !== oldMenu ) {
-						oldMenu.remove();
-					}
+                    var oldMenu = document.querySelector('body > .header-menu-sidebar');
+                    if (null !== oldMenu) {
+                        oldMenu.remove();
+                    }
                     this.initMobieSearchForm();
                     this.initMobileSubMenu();
                     this.insertMenuOverlayClass();
@@ -823,11 +856,11 @@ if (!Element.prototype.closest) {
     };
 
     /**
-	 * Check is mobile.
-	 * This may use in plugins.
-	 *
-	 * @deprecated 0.2.6
-	 */
+     * Check is mobile.
+     * This may use in plugins.
+     *
+     * @deprecated 0.2.6
+     */
     function customify_is_mobile() {
         return Customify.isMobile();
     }
@@ -836,13 +869,13 @@ if (!Element.prototype.closest) {
     window.Customify = new Customify();
 
     /**
-	 * Fix viewport units on Mobile.
-	 */
-    (function() {
+     * Fix viewport units on Mobile.
+     */
+    (function () {
         if (window.Customify.isMobile()) {
             /**
-			 * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
-			 */
+             * https://css-tricks.com/the-trick-to-viewport-units-on-mobile/
+             */
             // First we get the viewport height and we multiple it by 1% to get a value for a vh unit
             var vh = window.innerHeight * 0.01;
             var vw = window.innerWidth * 0.01;
@@ -850,7 +883,7 @@ if (!Element.prototype.closest) {
             document.documentElement.style.setProperty('--vh', vh + 'px');
             document.documentElement.style.setProperty('--vw', vw + 'px');
 
-            window.addEventListener('resize', function() {
+            window.addEventListener('resize', function () {
                 var vh = window.innerHeight * 0.01;
                 var vw = window.innerWidth * 0.01;
                 document.documentElement.style.setProperty('--vh', vh + 'px');
@@ -865,7 +898,7 @@ if (!Element.prototype.closest) {
  * Handles toggling the navigation menu for small screens and enables TAB key
  * navigation support for dropdown menus.
  */
-(function() {
+(function () {
     var container, button, menu, links, i, len;
 
     container = document.getElementById('site-navigation-main-desktop');
@@ -894,8 +927,8 @@ if (!Element.prototype.closest) {
     }
 
     /**
-	 * Sets or removes .focus class on an element.
-	 */
+     * Sets or removes .focus class on an element.
+     */
     function toggleFocus() {
         var self = this;
 
@@ -915,15 +948,15 @@ if (!Element.prototype.closest) {
     }
 
     /**
-	 * Toggles `focus` class to allow submenu access on tablets.
-	 */
-    (function(container) {
+     * Toggles `focus` class to allow submenu access on tablets.
+     */
+    (function (container) {
         var touchStartFn,
             i,
             parentLink = container.querySelectorAll('.menu-item-has-children > a, .page_item_has_children > a');
 
         if ('ontouchstart' in window) {
-            touchStartFn = function(e) {
+            touchStartFn = function (e) {
                 var menuItem = this.parentNode,
                     i;
 
@@ -954,13 +987,13 @@ if (!Element.prototype.closest) {
  *
  * Learn more: https://git.io/vWdr2
  */
-(function() {
+(function () {
     var isIe = /(trident|msie)/i.test(navigator.userAgent);
 
     if (isIe && document.getElementById && window.addEventListener) {
         window.addEventListener(
             'hashchange',
-            function() {
+            function () {
                 var id = location.hash.substring(1),
                     element;
 
