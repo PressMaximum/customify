@@ -1,23 +1,23 @@
-(function(api) {
+(function (api) {
 	// Extends our custom "example-1" section.
 	api.sectionConstructor["customify-pro"] = api.Section.extend({
 		// No events for this type of section.
-		attachEvents: function() {},
+		attachEvents: function () { },
 
 		// Always make the section active.
-		isContextuallyActive: function() {
+		isContextuallyActive: function () {
 			return true;
 		}
 	});
 })(wp.customize);
 
-(function($) {
+(function ($) {
 	var api = wp.customize;
 
-	api.bind("pane-contents-reflowed", function() {
+	api.bind("pane-contents-reflowed", function () {
 		// Reflow sections
 		var sections = [];
-		api.section.each(function(section) {
+		api.section.each(function (section) {
 			if (
 				"customify_section" !== section.params.type ||
 				"undefined" === typeof section.params.section
@@ -29,7 +29,7 @@
 		});
 
 		sections.sort(api.utils.prioritySort).reverse();
-		$.each(sections, function(i, section) {
+		$.each(sections, function (i, section) {
 			var parentContainer = $(
 				"#sub-accordion-section-" + section.params.section
 			);
@@ -40,7 +40,7 @@
 
 		// Reflow panels
 		var panels = [];
-		api.panel.each(function(panel) {
+		api.panel.each(function (panel) {
 			if (
 				"customify_panel" !== panel.params.type ||
 				"undefined" === typeof panel.params.panel
@@ -51,7 +51,7 @@
 			panels.push(panel);
 		});
 		panels.sort(api.utils.prioritySort).reverse();
-		$.each(panels, function(i, panel) {
+		$.each(panels, function (i, panel) {
 			var parentContainer = $(
 				"#sub-accordion-panel-" + panel.params.panel
 			);
@@ -66,7 +66,7 @@
 	var _panelAttachEvents = wp.customize.Panel.prototype.attachEvents;
 
 	wp.customize.Panel = wp.customize.Panel.extend({
-		attachEvents: function() {
+		attachEvents: function () {
 			if (
 				"customify_panel" !== this.params.type ||
 				"undefined" === typeof this.params.panel
@@ -77,7 +77,7 @@
 
 			_panelAttachEvents.call(this);
 			var panel = this;
-			panel.expanded.bind(function(expanded) {
+			panel.expanded.bind(function (expanded) {
 				var parent = api.panel(panel.params.panel);
 				if (expanded) {
 					parent.contentContainer.addClass("current-panel-parent");
@@ -89,7 +89,7 @@
 			panel.container
 				.find(".customize-panel-back")
 				.off("click keydown")
-				.on("click keydown", function(event) {
+				.on("click keydown", function (event) {
 					if (api.utils.isKeydownButNotEnterEvent(event)) {
 						return;
 					}
@@ -99,7 +99,7 @@
 					}
 				});
 		},
-		embed: function() {
+		embed: function () {
 			if (
 				"customify_panel" !== this.params.type ||
 				"undefined" === typeof this.params.panel
@@ -114,14 +114,14 @@
 			);
 			parentContainer.append(panel.headContainer);
 		},
-		isContextuallyActive: function() {
+		isContextuallyActive: function () {
 			if ("customify_panel" !== this.params.type) {
 				return _panelIsContextuallyActive.call(this);
 			}
 
 			var panel = this;
 			var children = this._children("panel", "section");
-			api.panel.each(function(child) {
+			api.panel.each(function (child) {
 				if (!child.params.panel) {
 					return;
 				}
@@ -133,7 +133,7 @@
 
 			children.sort(api.utils.prioritySort);
 			var activeCount = 0;
-			_(children).each(function(child) {
+			_(children).each(function (child) {
 				if (child.active() && child.isContextuallyActive()) {
 					activeCount += 1;
 				}
@@ -149,7 +149,7 @@
 	var _sectionAttachEvents = wp.customize.Section.prototype.attachEvents;
 
 	wp.customize.Section = wp.customize.Section.extend({
-		attachEvents: function() {
+		attachEvents: function () {
 			if (
 				"customify_section" !== this.params.type ||
 				"undefined" === typeof this.params.section
@@ -159,7 +159,7 @@
 			}
 			_sectionAttachEvents.call(this);
 			var section = this;
-			section.expanded.bind(function(expanded) {
+			section.expanded.bind(function (expanded) {
 				var parent = api.section(section.params.section);
 				if (expanded) {
 					parent.contentContainer.addClass("current-section-parent");
@@ -173,7 +173,7 @@
 			section.container
 				.find(".customize-section-back")
 				.off("click keydown")
-				.on("click keydown", function(event) {
+				.on("click keydown", function (event) {
 					if (api.utils.isKeydownButNotEnterEvent(event)) {
 						return;
 					}
@@ -183,7 +183,7 @@
 					}
 				});
 		},
-		embed: function() {
+		embed: function () {
 			if (
 				"customify_section" !== this.params.type ||
 				"undefined" === typeof this.params.section
@@ -199,14 +199,14 @@
 			);
 			parentContainer.append(section.headContainer);
 		},
-		isContextuallyActive: function() {
+		isContextuallyActive: function () {
 			if ("customify_section" !== this.params.type) {
 				return _sectionIsContextuallyActive.call(this);
 			}
 
 			var section = this;
 			var children = this._children("section", "control");
-			api.section.each(function(child) {
+			api.section.each(function (child) {
 				if (!child.params.section) {
 					return;
 				}
@@ -219,7 +219,7 @@
 
 			children.sort(api.utils.prioritySort);
 			var activeCount = 0;
-			_(children).each(function(child) {
+			_(children).each(function (child) {
 				if ("undefined" !== typeof child.isContextuallyActive) {
 					if (child.active() && child.isContextuallyActive()) {
 						activeCount += 1;
@@ -235,23 +235,23 @@
 	});
 })(jQuery);
 
-(function($, wpcustomize) {
+(function ($, wpcustomize) {
 	"use strict";
 
 	var $document = $(document);
 	var is_rtl = Customify_Control_Args.is_rtl;
 
 	var CustomifyMedia = {
-		setAttachment: function(attachment) {
+		setAttachment: function (attachment) {
 			this.attachment = attachment;
 		},
-		addParamsURL: function(url, data) {
+		addParamsURL: function (url, data) {
 			if (!$.isEmptyObject(data)) {
 				url += (url.indexOf("?") >= 0 ? "&" : "?") + $.param(data);
 			}
 			return url;
 		},
-		getThumb: function(attachment) {
+		getThumb: function (attachment) {
 			var control = this;
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
@@ -267,26 +267,26 @@
 			}
 			return control.addParamsURL(this.attachment.url, { t: t });
 		},
-		getURL: function(attachment) {
+		getURL: function (attachment) {
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
 			}
 			var t = new Date().getTime();
 			return this.addParamsURL(this.attachment.url, { t: t });
 		},
-		getID: function(attachment) {
+		getID: function (attachment) {
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
 			}
 			return this.attachment.id;
 		},
-		getInputID: function(attachment) {
+		getInputID: function (attachment) {
 			$(".attachment-id", this.preview).val();
 		},
-		setPreview: function($el) {
+		setPreview: function ($el) {
 			this.preview = $el;
 		},
-		insertImage: function(attachment) {
+		insertImage: function (attachment) {
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
 			}
@@ -305,11 +305,11 @@
 			this.preview.addClass("attachment-added");
 			this.showChangeBtn();
 		},
-		toRelativeUrl: function(url) {
+		toRelativeUrl: function (url) {
 			return url;
 			//return url.replace( Customify_Control_Args.home_url, '' );
 		},
-		showChangeBtn: function() {
+		showChangeBtn: function () {
 			$(".customify--add", this.preview).addClass("customify--hide");
 			$(".customify--change", this.preview).removeClass(
 				"customify--hide"
@@ -318,7 +318,7 @@
 				"customify--hide"
 			);
 		},
-		insertVideo: function(attachment) {
+		insertVideo: function (attachment) {
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
 			}
@@ -343,7 +343,7 @@
 			this.preview.addClass("attachment-added");
 			this.showChangeBtn();
 		},
-		insertFile: function(attachment) {
+		insertFile: function (attachment) {
 			if (typeof attachment !== "undefined") {
 				this.attachment = attachment;
 			}
@@ -355,10 +355,10 @@
 				.addClass("customify--has-file")
 				.html(
 					'<a href="' +
-						url +
-						'" class="attachment-file" target="_blank">' +
-						basename +
-						"</a>"
+					url +
+					'" class="attachment-file" target="_blank">' +
+					basename +
+					"</a>"
 				);
 			$(".attachment-url", this.preview).val(this.toRelativeUrl(url));
 			$(".attachment-mime", this.preview).val(mime);
@@ -368,7 +368,7 @@
 			this.preview.addClass("attachment-added");
 			this.showChangeBtn();
 		},
-		remove: function($el) {
+		remove: function ($el) {
 			if (typeof $el !== "undefined") {
 				this.preview = $el;
 			}
@@ -395,7 +395,7 @@
 		library: { type: "image" }
 	});
 
-	CustomifyMedia.controlMediaImage.on("select", function() {
+	CustomifyMedia.controlMediaImage.on("select", function () {
 		var attachment = CustomifyMedia.controlMediaImage
 			.state()
 			.get("selection")
@@ -410,7 +410,7 @@
 		library: { type: "video" }
 	});
 
-	CustomifyMedia.controlMediaVideo.on("select", function() {
+	CustomifyMedia.controlMediaVideo.on("select", function () {
 		var attachment = CustomifyMedia.controlMediaVideo
 			.state()
 			.get("selection")
@@ -424,7 +424,7 @@
 		multiple: false
 	});
 
-	CustomifyMedia.controlMediaFile.on("select", function() {
+	CustomifyMedia.controlMediaFile.on("select", function () {
 		var attachment = CustomifyMedia.controlMediaFile
 			.state()
 			.get("selection")
@@ -440,7 +440,7 @@
 		devices: ["desktop", "tablet", "mobile"],
 		allDevices: ["desktop", "tablet", "mobile"],
 		type: "customify",
-		getTemplate: _.memoize(function() {
+		getTemplate: _.memoize(function () {
 			var field = this;
 			var compiled,
 				/*
@@ -456,7 +456,7 @@
 					variable: "data"
 				};
 
-			return function(data, id, data_variable_name) {
+			return function (data, id, data_variable_name) {
 				if (_.isUndefined(id)) {
 					//id = 'tmpl-customize-control-' + field.type;
 					id = "tmpl-field-customify-" + field.type;
@@ -474,7 +474,7 @@
 			};
 		}),
 
-		getFieldValue: function(name, fieldSetting, $field) {
+		getFieldValue: function (name, fieldSetting, $field) {
 			var control = this;
 			var type = undefined;
 			var support_devices = false;
@@ -493,7 +493,7 @@
 				case "audio":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								id: $(
@@ -531,13 +531,13 @@
 				case "css_ruler":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								unit: $(
 									'input[data-name="' +
-										_name +
-										'-unit"]:checked',
+									_name +
+									'-unit"]:checked',
 									$field
 								).val(),
 								top: $(
@@ -599,7 +599,7 @@
 				case "shadow":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								color: $(
@@ -665,7 +665,7 @@
 				case "font_style":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								b: $(
@@ -739,15 +739,15 @@
 				case "font":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							var subsets = {};
 							$(
 								'.list-subsets[data-name="' +
-									_name +
-									'-subsets"] input',
+								_name +
+								'-subsets"] input',
 								$field
-							).each(function() {
+							).each(function () {
 								if ($(this).is(":checked")) {
 									var _v = $(this).val();
 									subsets[_v] = _v;
@@ -773,10 +773,10 @@
 						var subsets = {};
 						$(
 							'.list-subsets[data-name="' +
-								name +
-								'-subsets"] input',
+							name +
+							'-subsets"] input',
 							$field
-						).each(function() {
+						).each(function () {
 							if ($(this).is(":checked")) {
 								var _v = $(this).val();
 								subsets[_v] = _v;
@@ -803,13 +803,13 @@
 				case "slider":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								unit: $(
 									'input[data-name="' +
-										_name +
-										'-unit"]:checked',
+									_name +
+									'-unit"]:checked',
 									$field
 								).val(),
 								value: $(
@@ -835,7 +835,7 @@
 				case "icon":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								type: $(
@@ -866,13 +866,13 @@
 				case "text_align_no_justify":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var input = $(
 								'input[data-name="' +
-									name +
-									"-" +
-									device +
-									'"]:checked',
+								name +
+								"-" +
+								device +
+								'"]:checked',
 								$field
 							);
 							value[device] = input.length ? input.val() : "";
@@ -888,13 +888,13 @@
 				case "checkbox":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							value[device] = $(
 								'input[data-name="' +
-									name +
-									"-" +
-									device +
-									'"]',
+								name +
+								"-" +
+								device +
+								'"]',
 								$field
 							).is(":checked")
 								? 1
@@ -913,16 +913,16 @@
 				case "checkboxes":
 					value = {};
 					if (support_devices) {
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							value[device] = {};
 							$(
 								'input[data-name="' +
-									name +
-									"-" +
-									device +
-									'"]',
+								name +
+								"-" +
+								device +
+								'"]',
 								$field
-							).each(function() {
+							).each(function () {
 								var v = $(this).val();
 								if ($(this).is(":checked")) {
 									value[v] = v;
@@ -931,7 +931,7 @@
 						});
 					} else {
 						$('input[data-name="' + name + '"]', $field).each(
-							function() {
+							function () {
 								var v = $(this).val();
 								if ($(this).is(":checked")) {
 									value[v] = v;
@@ -946,7 +946,7 @@
 				case "styling":
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							value[device] = $(
 								'[data-name="' + name + "-" + device + '"]',
 								$field
@@ -958,12 +958,12 @@
 
 					try {
 						value = JSON.parse(value);
-					} catch (e) {}
+					} catch (e) { }
 					break;
 				default:
 					if (support_devices) {
 						value = {};
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							value[device] = $(
 								'[data-name="' + name + "-" + device + '"]',
 								$field
@@ -977,7 +977,7 @@
 
 			return value;
 		},
-		getValue: function(field, container) {
+		getValue: function (field, container) {
 			var control = this;
 			var value = "";
 
@@ -986,19 +986,19 @@
 					value = {};
 
 					if (field.device_settings) {
-						_.each(control.allDevices, function(device) {
+						_.each(control.allDevices, function (device) {
 							var $area = $(
 								".customify-group-device-fields.customify--for-" +
-									device,
+								device,
 								container
 							);
 							value[device] = {};
 							var _value = {};
-							_.each(field.fields, function(f) {
+							_.each(field.fields, function (f) {
 								var $_field = $(
 									'.customify--group-field[data-field-name="' +
-										f.name +
-										'"]',
+									f.name +
+									'"]',
 									$area
 								);
 								_value[f.name] = control.getFieldValue(
@@ -1011,11 +1011,11 @@
 							control.initConditional($area, _value);
 						});
 					} else {
-						_.each(field.fields, function(f) {
+						_.each(field.fields, function (f) {
 							var $_field = $(
 								'.customify--group-field[data-field-name="' +
-									f.name +
-									'"]',
+								f.name +
+								'"]',
 								container
 							);
 							value[f.name] = control.getFieldValue(
@@ -1030,12 +1030,12 @@
 					break;
 				case "repeater":
 					value = [];
-					$(".customify--repeater-item", container).each(function(
+					$(".customify--repeater-item", container).each(function (
 						index
 					) {
 						var $item = $(this);
 						var _v = {};
-						_.each(field.fields, function(f) {
+						_.each(field.fields, function (f) {
 							var inputField = $(
 								'[data-field-name="' + f.name + '"]',
 								$item
@@ -1081,16 +1081,16 @@
 
 			return value;
 		},
-		encodeValue: function(value) {
+		encodeValue: function (value) {
 			return encodeURI(JSON.stringify(value));
 		},
-		decodeValue: function(value) {
+		decodeValue: function (value) {
 			return JSON.parse(decodeURI(value));
 		},
-		updateRepeaterLiveTitle: function(value, $item, field) {
+		updateRepeaterLiveTitle: function (value, $item, field) {
 			$(".customify--repeater-live-title", $item).text(value);
 		},
-		compare: function(value1, cond, value2) {
+		compare: function (value1, cond, value2) {
 			var equal = false;
 			switch (cond) {
 				case "===":
@@ -1108,7 +1108,7 @@
 				case "empty":
 					var _v = _.clone(value1);
 					if (_.isObject(_v) || _.isArray(_v)) {
-						_.each(_v, function(v, i) {
+						_.each(_v, function (v, i) {
 							if (_.isEmpty(v)) {
 								delete _v[i];
 							}
@@ -1122,7 +1122,7 @@
 				case "not_empty":
 					var _v = _.clone(value1);
 					if (_.isObject(_v) || _.isArray(_v)) {
-						_.each(_v, function(v, i) {
+						_.each(_v, function (v, i) {
 							if (_.isEmpty(v)) {
 								delete _v[i];
 							}
@@ -1144,7 +1144,7 @@
 
 			return equal;
 		},
-		multiple_compare: function(list, values, decodeValue) {
+		multiple_compare: function (list, values, decodeValue) {
 			if (_.isUndefined(decodeValue)) {
 				decodeValue = false;
 			}
@@ -1177,14 +1177,14 @@
 							if (decodeValue) {
 								value = control.decodeValue(value);
 							}
-						} catch (e) {}
+						} catch (e) { }
 
 						check = control.compare(value, cond, cond_val);
 					}
 				} else if (_.isArray(test)) {
 					check = true;
 					//console.log( '___', list );
-					_.each(list, function(req) {
+					_.each(list, function (req) {
 						var cond_key = req[0];
 						var cond_cond = req[1];
 						var cond_val = req[2];
@@ -1201,7 +1201,7 @@
 						if (decodeValue && _.isString(t_val)) {
 							try {
 								t_val = control.decodeValue(t_val);
-							} catch (e) {}
+							} catch (e) { }
 						}
 
 						//console.log( '___t_val', t_val );
@@ -1225,10 +1225,10 @@
 
 			return check;
 		},
-		initConditional: function($el, values) {
+		initConditional: function ($el, values) {
 			var control = this;
 			var $fields = $(".customify--field", $el);
-			$fields.each(function() {
+			$fields.each(function () {
 				var $field = $(this);
 				var check = true;
 				var req = $field.attr("data-required") || false;
@@ -1244,14 +1244,14 @@
 			});
 		},
 
-		addDeviceSwitchers: function($el) {
+		addDeviceSwitchers: function ($el) {
 			var field = this;
 			if (_.isUndefined($el)) {
 				$el = field.container;
 			}
 			var clone = $("#customize-footer-actions .devices").clone();
 			clone.addClass("customify-devices");
-			$("button", clone).each(function() {
+			$("button", clone).each(function () {
 				var d = $(this).attr("data-device");
 				if (_.indexOf(field.devices, d) < 0) {
 					$(this).remove();
@@ -1262,7 +1262,7 @@
 				.addClass("customify-devices-added");
 		},
 
-		addRepeaterItem: function(field, value, $container, cb) {
+		addRepeaterItem: function (field, value, $container, cb) {
 			if (!_.isObject(value)) {
 				value = {};
 			}
@@ -1280,7 +1280,7 @@
 				template(field, "tmpl-customize-control-repeater-layout")
 			);
 			$container.find(".customify--settings-fields").append($itemWrapper);
-			_.each(fields, function(f, index) {
+			_.each(fields, function (f, index) {
 				f.value = "";
 				f.addable = addable;
 				if (!_.isUndefined(value[f.name])) {
@@ -1291,7 +1291,7 @@
 				$(".customify--repeater-item-inner", $itemWrapper).append(
 					$fieldArea
 				);
-				control.add(f, $fieldArea, function() {
+				control.add(f, $fieldArea, function () {
 					if (_.isFunction(cb)) {
 						cb();
 					}
@@ -1340,7 +1340,7 @@
 			]);
 			return $itemWrapper;
 		},
-		limitRepeaterItems: function(field, $container) {
+		limitRepeaterItems: function (field, $container) {
 			return;
 			var control = this;
 			var addButton = $(".customify--repeater-add-new", $container);
@@ -1359,8 +1359,8 @@
 						) {
 							$(
 								'<p class="customify--limit-item-msg">' +
-									control.params.limit_msg +
-									"</p>"
+								control.params.limit_msg +
+								"</p>"
 							).insertBefore(addButton);
 						} else {
 							$(
@@ -1388,7 +1388,7 @@
 				);
 			}
 		},
-		initRepeater: function(field, $container, cb) {
+		initRepeater: function (field, $container, cb) {
 			var control = this;
 			field = _.defaults(field, {
 				addable: null,
@@ -1406,7 +1406,7 @@
 			$container.find(".customify--settings-fields").sortable({
 				handle: ".customify--repeater-item-heading",
 				containment: "parent",
-				update: function(event, ui) {
+				update: function (event, ui) {
 					// control.getValue();
 					if (_.isFunction(cb)) {
 						cb();
@@ -1415,7 +1415,7 @@
 			});
 
 			// Toggle Move
-			$container.on("click", ".customify--repeater-reorder", function(e) {
+			$container.on("click", ".customify--repeater-reorder", function (e) {
 				e.preventDefault();
 				$(".customify--repeater-items", $container).toggleClass(
 					"reorder-active"
@@ -1438,7 +1438,7 @@
 			$container.on(
 				"click",
 				".customify--repeater-item .customify--up",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var i = $(this).closest(".customify--repeater-item");
 					var index = i.index();
@@ -1456,7 +1456,7 @@
 			$container.on(
 				"click",
 				".customify--repeater-item .customify--down",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var n = $(
 						".customify--repeater-items .customify--repeater-item",
@@ -1476,7 +1476,7 @@
 
 			// Add item when customizer loaded
 			if (_.isArray(field.value)) {
-				_.each(field.value, function(itemValue) {
+				_.each(field.value, function (itemValue) {
 					control.addRepeaterItem(field, itemValue, $container, cb);
 				});
 				//control.getValue(false);
@@ -1487,7 +1487,7 @@
 			$container.on(
 				"change",
 				".customify--repeater-item .r-visible-input",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var p = $(this).closest(".customify--repeater-item");
 					if ($(this).is(":checked")) {
@@ -1503,7 +1503,7 @@
 				$container.on(
 					"click",
 					".customify--repeater-item-toggle, .customify--repeater-live-title",
-					function(e) {
+					function (e) {
 						e.preventDefault();
 						var p = $(this).closest(".customify--repeater-item");
 						p.toggleClass("customify--open");
@@ -1512,7 +1512,7 @@
 			}
 
 			// Remove
-			$container.on("click", ".customify--remove", function(e) {
+			$container.on("click", ".customify--remove", function (e) {
 				e.preventDefault();
 				var p = $(this).closest(".customify--repeater-item");
 				p.remove();
@@ -1526,7 +1526,7 @@
 			});
 
 			var defaultValue = {};
-			_.each(field.fields, function(f, k) {
+			_.each(field.fields, function (f, k) {
 				defaultValue[f.name] = null;
 				if (!_.isUndefined(f.default)) {
 					defaultValue[f.name] = f.default;
@@ -1534,7 +1534,7 @@
 			});
 
 			// Add Item
-			$container.on("click", ".customify--repeater-add-new", function(e) {
+			$container.on("click", ".customify--repeater-add-new", function (e) {
 				e.preventDefault();
 				if (!$(this).hasClass("disabled")) {
 					control.addRepeaterItem(
@@ -1551,7 +1551,7 @@
 			});
 		},
 
-		add: function(field, $fieldsArea, cb) {
+		add: function (field, $fieldsArea, cb) {
 			var control = this;
 			var template = control.getTemplate();
 			var template_id = "tmpl-field-" + control.type + "-" + field.type;
@@ -1561,7 +1561,7 @@
 
 			if (field.device_settings) {
 				var fieldItem = null;
-				_.each(control.devices, function(device, index) {
+				_.each(control.devices, function (device, index) {
 					var _field = _.clone(field);
 					_field.original_name = field.name;
 					if (_.isObject(field.value)) {
@@ -1660,23 +1660,23 @@
 			}
 		},
 
-		addFields: function(fields, values, $fieldsArea, cb) {
+		addFields: function (fields, values, $fieldsArea, cb) {
 			var control = this;
 			if (!_.isObject(values)) {
 				values = {};
 			}
-			_.each(fields, function(f, index) {
+			_.each(fields, function (f, index) {
 				if (_.isUndefined(f.class)) {
 					f.class = "";
 				}
 				var $fieldArea = $(
 					'<div class="customify--group-field ft--' +
-						f.type +
-						" " +
-						f.class +
-						'" data-field-name="' +
-						f.name +
-						'"></div>'
+					f.type +
+					" " +
+					f.class +
+					'" data-field-name="' +
+					f.name +
+					'"></div>'
 				);
 				$fieldsArea.append($fieldArea);
 				f.original_name = f.name;
@@ -1691,9 +1691,9 @@
 			});
 		},
 
-		initSlider: function($el) {
+		initSlider: function ($el) {
 			if ($(".customify-input-slider", $el).length > 0) {
-				$(".customify-input-slider", $el).each(function() {
+				$(".customify-input-slider", $el).each(function () {
 					var slider = $(this);
 					var p = slider.parent();
 					var input = $(".customify--slider-input", p);
@@ -1719,12 +1719,12 @@
 						step: step,
 						min: min,
 						max: max,
-						slide: function(event, ui) {
+						slide: function (event, ui) {
 							input.val(ui.value).trigger("data-change");
 						}
 					});
 
-					input.on("change", function() {
+					input.on("change", function () {
 						slider.slider("value", $(this).val());
 					});
 
@@ -1732,7 +1732,7 @@
 					var wrapper = slider.closest(
 						".customify-input-slider-wrapper"
 					);
-					wrapper.on("click", ".reset", function(e) {
+					wrapper.on("click", ".reset", function (e) {
 						e.preventDefault();
 						var d = slider.data("default");
 						if (!_.isObject(d)) {
@@ -1746,8 +1746,8 @@
 						slider.slider("option", "value", d.value);
 						$(
 							'.customify--css-unit input.customify-input[value="' +
-								d.unit +
-								'"]',
+							d.unit +
+							'"]',
 							wrapper
 						).trigger("click");
 						$(".customify--slider-input", wrapper).trigger(
@@ -1758,12 +1758,12 @@
 			}
 		},
 
-		initMedia: function($el) {
+		initMedia: function ($el) {
 			// When add/Change
 			$el.on(
 				"click",
 				".customify--media .customify--add, .customify--media .customify--change, .customify--media .customify-image-preview",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var p = $(this).closest(".customify--media");
 					CustomifyMedia.setPreview(p);
@@ -1772,7 +1772,7 @@
 			);
 
 			// When add/Change
-			$el.on("click", ".customify--media .customify--remove", function(
+			$el.on("click", ".customify--media .customify--remove", function (
 				e
 			) {
 				e.preventDefault();
@@ -1781,9 +1781,9 @@
 			});
 		},
 
-		initCSSRuler: function($el, change_cb) {
+		initCSSRuler: function ($el, change_cb) {
 			// When toggle value change
-			$el.on("change", ".customify--label-parent", function() {
+			$el.on("change", ".customify--label-parent", function () {
 				if ($(this).attr("type") == "radio") {
 					var name = $(this).attr("name");
 					$('input[name="' + name + '"]', $el)
@@ -1808,7 +1808,7 @@
 			$el.on(
 				"change keyup",
 				".customify--css-ruler .customify-input-css",
-				function() {
+				function () {
 					var p = $(this).closest(".customify--css-ruler");
 					var link_checked = $(
 						".customify--css-ruler-link input",
@@ -1818,7 +1818,7 @@
 						var v = $(this).val();
 						$(".customify-input-css", p)
 							.not($(this))
-							.each(function() {
+							.each(function () {
 								if (!$(this).is(":disabled")) {
 									$(this).val(v);
 								}
@@ -1831,8 +1831,8 @@
 			);
 		},
 
-		initColor: function($el) {
-			$(".customify-input-color", $el).each(function() {
+		initColor: function ($el) {
+			$(".customify-input-color", $el).each(function () {
 				var colorInput = $(this);
 				var df = colorInput.data("default") || "";
 				var current_val = $(
@@ -1846,7 +1846,7 @@
 				);
 				$(".customify--color-panel", colorInput).wpColorPicker({
 					defaultColor: df,
-					change: function(event, ui) {
+					change: function (event, ui) {
 						var new_color = ui.color.toString();
 						$(".customify-input--color", colorInput).val(new_color);
 						if (ui.color.toString() !== current_val) {
@@ -1856,7 +1856,7 @@
 							);
 						}
 					},
-					clear: function(event, ui) {
+					clear: function (event, ui) {
 						$(".customify-input--color", colorInput).val("");
 						$(".customify-input--color", colorInput).trigger(
 							"data-change"
@@ -1875,7 +1875,7 @@
 		type: "customify",
 		settingField: null,
 
-		getTemplate: _.memoize(function() {
+		getTemplate: _.memoize(function () {
 			var control = this;
 			var compiled,
 				/*
@@ -1891,7 +1891,7 @@
 					variable: "data"
 				};
 
-			return function(data, id, data_variable_name) {
+			return function (data, id, data_variable_name) {
 				if (_.isUndefined(id)) {
 					id = "tmpl-field-customify-" + control.type;
 				}
@@ -1909,7 +1909,7 @@
 			};
 		}),
 		addDeviceSwitchers: customifyField.addDeviceSwitchers,
-		init: function() {
+		init: function () {
 			var control = this;
 
 			if (
@@ -1939,12 +1939,12 @@
 			control.container.on(
 				"change keyup data-change",
 				"input:not(.change-by-js), select:not(.change-by-js), textarea:not(.change-by-js)",
-				function() {
+				function () {
 					control.getValue();
 				}
 			);
 		},
-		addParamsURL: function(url, data) {
+		addParamsURL: function (url, data) {
 			if (!$.isEmptyObject(data)) {
 				url += (url.indexOf("?") >= 0 ? "&" : "?") + $.param(data);
 			}
@@ -1955,7 +1955,7 @@
 		multiple_compare: customifyField.multiple_compare,
 		initConditional: customifyField.initConditional,
 
-		getValue: function(save) {
+		getValue: function (save) {
 			var control = this;
 			var value = "";
 
@@ -2005,13 +2005,13 @@
 
 				// Need improve next version
 				if (_.isArray(control.params.reset_controls)) {
-					_.each(control.params.reset_controls, function(_cid) {
+					_.each(control.params.reset_controls, function (_cid) {
 						try {
 							var c = wpcustomize.control(_cid);
 							c.setting.set(
 								control.encodeValue(c.params.default)
 							);
-						} catch (e) {}
+						} catch (e) { }
 					});
 				}
 
@@ -2025,16 +2025,16 @@
 
 			return value;
 		},
-		encodeValue: function(value) {
+		encodeValue: function (value) {
 			return encodeURI(JSON.stringify(value));
 		},
-		decodeValue: function(value) {
+		decodeValue: function (value) {
 			return JSON.parse(decodeURI(value));
 		},
-		updateRepeaterLiveTitle: function(value, $item, field) {
+		updateRepeaterLiveTitle: function (value, $item, field) {
 			$(".customify--repeater-live-title", $item).text(value);
 		},
-		initGroup: function() {
+		initGroup: function () {
 			var control = this;
 			if (control.params.device_settings) {
 				control.container
@@ -2044,11 +2044,11 @@
 					control.params.value = {};
 				}
 
-				_.each(control.devices, function(device, device_index) {
+				_.each(control.devices, function (device, device_index) {
 					var $group_device = $(
 						'<div class="customify-group-device-fields customify-field-settings-inner customify--for-' +
-							device +
-							'"></div>'
+						device +
+						'"></div>'
 					);
 					control.container
 						.find(".customify--settings-fields")
@@ -2065,7 +2065,7 @@
 						control.params.fields,
 						device_value,
 						$group_device,
-						function() {
+						function () {
 							control.getValue();
 						}
 					);
@@ -2075,7 +2075,7 @@
 					control.params.fields,
 					control.params.value,
 					control.container.find(".customify--settings-fields"),
-					function() {
+					function () {
 						control.getValue();
 					}
 				);
@@ -2083,11 +2083,11 @@
 
 			control.getValue(false);
 		},
-		addField: function(field, $fieldsArea, cb) {
+		addField: function (field, $fieldsArea, cb) {
 			customifyField.devices = _.clone(this.devices);
 			customifyField.add(field, $fieldsArea, cb);
 		},
-		initField: function() {
+		initField: function () {
 			var control = this;
 			var field = _.clone(control.params);
 
@@ -2128,7 +2128,7 @@
 				".customify--settings-fields"
 			);
 
-			control.addField(field, $fieldsArea, function() {
+			control.addField(field, $fieldsArea, function () {
 				control.getValue();
 			});
 			if (field.type !== "hidden") {
@@ -2140,7 +2140,7 @@
 				}
 			}
 		},
-		addRepeaterItem: function(value) {
+		addRepeaterItem: function (value) {
 			if (!_.isObject(value)) {
 				value = {};
 			}
@@ -2160,7 +2160,7 @@
 			control.container
 				.find(".customify--settings-fields")
 				.append($itemWrapper);
-			_.each(fields, function(f, index) {
+			_.each(fields, function (f, index) {
 				f.value = "";
 				f.addable = addable;
 				if (!_.isUndefined(value[f.name])) {
@@ -2171,7 +2171,7 @@
 				$(".customify--repeater-item-inner", $itemWrapper).append(
 					$fieldArea
 				);
-				control.addField(f, $fieldArea, function() {
+				control.addField(f, $fieldArea, function () {
 					control.getValue();
 				});
 			});
@@ -2203,7 +2203,7 @@
 			]);
 			return $itemWrapper;
 		},
-		limitRepeaterItems: function() {
+		limitRepeaterItems: function () {
 			var control = this;
 
 			var addButton = $(
@@ -2225,8 +2225,8 @@
 						) {
 							$(
 								'<p class="customify--limit-item-msg">' +
-									control.params.limit_msg +
-									"</p>"
+								control.params.limit_msg +
+								"</p>"
 							).insertBefore(addButton);
 						} else {
 							$(
@@ -2254,7 +2254,7 @@
 				);
 			}
 		},
-		initRepeater: function() {
+		initRepeater: function () {
 			var control = this;
 			control.params.limit = parseInt(control.params.limit);
 			if (isNaN(control.params.limit)) {
@@ -2265,7 +2265,7 @@
 			control.container.find(".customify--settings-fields").sortable({
 				handle: ".customify--repeater-item-heading",
 				containment: "parent",
-				update: function(event, ui) {
+				update: function (event, ui) {
 					control.getValue();
 				}
 			});
@@ -2274,7 +2274,7 @@
 			control.container.on(
 				"click",
 				".customify--repeater-reorder",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					$(
 						".customify--repeater-items",
@@ -2301,7 +2301,7 @@
 			control.container.on(
 				"click",
 				".customify--repeater-item .customify--up",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var i = $(this).closest(".customify--repeater-item");
 					var index = i.index();
@@ -2317,7 +2317,7 @@
 			control.container.on(
 				"click",
 				".customify--repeater-item .customify--down",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var n = $(
 						".customify--repeater-items .customify--repeater-item",
@@ -2339,7 +2339,7 @@
 			if (!control.params.addable) {
 				if (control.params.live_title_field) {
 					var _titles = {};
-					_.each(control.params.default, function(_value) {
+					_.each(control.params.default, function (_value) {
 						if (
 							!_.isUndefined(_value._key) &&
 							!_.isUndefined(
@@ -2351,7 +2351,7 @@
 						}
 					});
 
-					_.each(control.params.value, function(_value, index) {
+					_.each(control.params.value, function (_value, index) {
 						if (!_.isUndefined(_titles[_value._key])) {
 							control.params.value[index][
 								control.params.live_title_field
@@ -2363,7 +2363,7 @@
 
 			// Add item when customizer loaded
 			if (_.isArray(control.params.value)) {
-				_.each(control.params.value, function(itemValue) {
+				_.each(control.params.value, function (itemValue) {
 					control.addRepeaterItem(itemValue);
 				});
 				control.getValue(false);
@@ -2374,7 +2374,7 @@
 			control.container.on(
 				"change",
 				".customify--repeater-item .r-visible-input",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var p = $(this).closest(".customify--repeater-item");
 					if ($(this).is(":checked")) {
@@ -2390,7 +2390,7 @@
 				control.container.on(
 					"click",
 					".customify--repeater-item-toggle, .customify--repeater-live-title",
-					function(e) {
+					function (e) {
 						e.preventDefault();
 						var p = $(this).closest(".customify--repeater-item");
 						p.toggleClass("customify--open");
@@ -2399,7 +2399,7 @@
 			}
 
 			// Remove
-			control.container.on("click", ".customify--remove", function(e) {
+			control.container.on("click", ".customify--remove", function (e) {
 				e.preventDefault();
 				var p = $(this).closest(".customify--repeater-item");
 				p.remove();
@@ -2411,7 +2411,7 @@
 			});
 
 			var defaultValue = {};
-			_.each(control.params.fields, function(f, k) {
+			_.each(control.params.fields, function (f, k) {
 				defaultValue[f.name] = null;
 				if (!_.isUndefined(f.default)) {
 					defaultValue[f.name] = f.default;
@@ -2422,7 +2422,7 @@
 			control.container.on(
 				"click",
 				".customify--repeater-add-new",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					if (!$(this).hasClass("disabled")) {
 						control.addRepeaterItem(defaultValue);
@@ -2434,14 +2434,14 @@
 		}
 	};
 
-	var customify_control = function(control) {
+	var customify_control = function (control) {
 		control = _.extend(control, customify_controlConstructor);
 		control.init();
 	};
 	//---------------------------------------------------------------------------
 
 	wp.customize.controlConstructor.customify = wp.customize.Control.extend({
-		ready: function() {
+		ready: function () {
 			customify_controls_list[this.id] = this;
 		}
 	});
@@ -2449,16 +2449,16 @@
 	var IconPicker = {
 		pickingEl: null,
 		listIcons: null,
-		render: function(list_icons) {
+		render: function (list_icons) {
 			var that = this;
 			if (!_.isUndefined(list_icons) && !_.isEmpty(list_icons)) {
-				_.each(list_icons, function(icon_config, font_type) {
+				_.each(list_icons, function (icon_config, font_type) {
 					$("#customify--sidebar-icon-type").append(
 						' <option value="' +
-							font_type +
-							'">' +
-							icon_config.name +
-							"</option>"
+						font_type +
+						'">' +
+						icon_config.name +
+						"</option>"
 					);
 					that.addCSS(icon_config, font_type);
 					that.addIcons(icon_config, font_type);
@@ -2466,24 +2466,44 @@
 			}
 		},
 
-		addCSS: function(icon_config, font_type) {
-			$("head").append(
-				"<link rel='stylesheet' id='font-icon-" +
-					font_type +
-					"'  href='" +
-					icon_config.url +
-					"' type='text/css' media='all' />"
-			);
+		addCSS: function (icon_config, font_type) {
+
+			if (typeof (icon_config.url) === 'object') {
+
+				$.each(icon_config.url, function (index, value) {
+					if (!$("#font-icon-" + index).length) {
+						$("head").append(
+							"<link rel='stylesheet' id='font-icon-" +
+							index +
+							"'  href='" +
+							value +
+							"' type='text/css' media='all' />"
+						);
+					}
+				});
+			} else {
+				if (!$("#font-icon-" + font_type).length) {
+					$("head").append(
+						"<link rel='stylesheet' id='font-icon-" +
+						font_type +
+						"'  href='" +
+						icon_config.url +
+						"' type='text/css' media='all' />"
+					);
+				}
+
+			}
+
 		},
 
-		addIcons: function(icon_config, font_type) {
+		addIcons: function (icon_config, font_type) {
 			var icon_html =
 				'<ul class="customify--list-icons icon-' +
 				font_type +
 				'" data-type="' +
 				font_type +
 				'">';
-			_.each(icon_config.icons, function(icon_class, i) {
+			_.each(icon_config.icons, function (icon_class, i) {
 				var class_name = "";
 				if (icon_config.class_config) {
 					class_name = icon_config.class_config.replace(
@@ -2509,8 +2529,8 @@
 
 			$("#customify--icon-browser").append(icon_html);
 		},
-		changeType: function() {
-			$document.on("change", "#customify--sidebar-icon-type", function() {
+		changeType: function () {
+			$document.on("change", "#customify--sidebar-icon-type", function () {
 				var type = $(this).val();
 				if (!type || type == "all") {
 					$("#customify--icon-browser .customify--list-icons").show();
@@ -2518,12 +2538,12 @@
 					$("#customify--icon-browser .customify--list-icons").hide();
 					$(
 						"#customify--icon-browser .customify--list-icons.icon-" +
-							type
+						type
 					).show();
 				}
 			});
 		},
-		show: function() {
+		show: function () {
 			var controlWidth = $("#customize-controls").width();
 			if (!is_rtl) {
 				$("#customify--sidebar-icons")
@@ -2535,7 +2555,7 @@
 					.addClass("customify--active");
 			}
 		},
-		close: function() {
+		close: function () {
 			if (!is_rtl) {
 				$("#customify--sidebar-icons")
 					.css("left", -300)
@@ -2548,9 +2568,9 @@
 			$(".customify--icon-picker").removeClass("customify--icon-picking");
 			this.pickingEl = null;
 		},
-		autoClose: function() {
+		autoClose: function () {
 			var that = this;
-			$document.on("click", function(event) {
+			$document.on("click", function (event) {
 				if (
 					!$(event.target).closest(".customify--icon-picker").length
 				) {
@@ -2565,21 +2585,21 @@
 
 			$("#customify--sidebar-icons .customize-controls-icon-close").on(
 				"click",
-				function() {
+				function () {
 					that.close();
 				}
 			);
 
-			$document.on("keyup", function(event) {
+			$document.on("keyup", function (event) {
 				if (event.keyCode === 27) {
 					that.close();
 				}
 			});
 		},
-		picker: function() {
+		picker: function () {
 			var that = this;
 
-			var open = function($el) {
+			var open = function ($el) {
 				if (that.pickingEl) {
 					that.pickingEl.removeClass("customify--icon-picking");
 				}
@@ -2591,11 +2611,11 @@
 			$document.on(
 				"click",
 				".customify--icon-picker .customify--pick-icon",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					var button = $(this);
 					if (_.isNull(that.listIcons)) {
-						that.ajaxLoad(function() {
+						that.ajaxLoad(function () {
 							open(button);
 						});
 					} else {
@@ -2604,7 +2624,7 @@
 				}
 			);
 
-			$document.on("click", "#customify--icon-browser li", function(e) {
+			$document.on("click", "#customify--icon-browser li", function (e) {
 				e.preventDefault();
 				var li = $(this);
 				var icon_preview = li.find("i").clone();
@@ -2626,7 +2646,7 @@
 			$document.on(
 				"click",
 				".customify--icon-picker .customify--icon-remove",
-				function(e) {
+				function (e) {
 					e.preventDefault();
 					if (that.pickingEl) {
 						that.pickingEl.removeClass("customify--icon-picking");
@@ -2643,7 +2663,7 @@
 			);
 		},
 
-		ajaxLoad: function(cb) {
+		ajaxLoad: function (cb) {
 			var that = this;
 			$.get(
 				Customify_Control_Args.ajax,
@@ -2653,7 +2673,7 @@
 					_nonce: _wpCustomizeSettings.nonce.preview,
 					customize_theme: _wpCustomizeSettings.theme.stylesheet
 				},
-				function(res) {
+				function (res) {
 					if (res.success) {
 						that.listIcons = res.data;
 						that.render(res.data);
@@ -2666,12 +2686,12 @@
 				}
 			);
 		},
-		init: function() {
+		init: function () {
 			var that = this;
 			that.ajaxLoad();
 			that.picker();
 			// Search icon
-			$document.on("keyup", "#customify--icon-search", function(e) {
+			$document.on("keyup", "#customify--icon-search", function (e) {
 				var v = $(this).val();
 				v = v.trim();
 				if (v) {
@@ -2694,7 +2714,7 @@
 		config: {}, // Config to disable fields
 		container: null,
 		fields: {},
-		load: function() {
+		load: function () {
 			var that = this;
 			$.get(
 				Customify_Control_Args.ajax,
@@ -2704,21 +2724,21 @@
 					_nonce: _wpCustomizeSettings.nonce.preview,
 					customize_theme: _wpCustomizeSettings.theme.stylesheet
 				},
-				function(res) {
+				function (res) {
 					if (res.success) {
 						that.fonts = res.data;
 					}
 				}
 			);
 		},
-		toSelectOptions: function(options, v, type) {
+		toSelectOptions: function (options, v, type) {
 			var html = "";
 			if (_.isUndefined(v)) {
 				v = "";
 			}
 
 			if (type === "google") {
-				_.each(options, function(value) {
+				_.each(options, function (value) {
 					var selected = "";
 					if (value === v) {
 						selected = ' selected="selected" ';
@@ -2733,7 +2753,7 @@
 						"</option>";
 				});
 			} else {
-				_.each(Customify_Control_Args.list_font_weight, function(
+				_.each(Customify_Control_Args.list_font_weight, function (
 					value,
 					key
 				) {
@@ -2772,12 +2792,12 @@
 
 			return html;
 		},
-		toCheckboxes: function(options, v) {
+		toCheckboxes: function (options, v) {
 			var html = '<div class="list-subsets">';
 			if (!_.isObject(v)) {
 				v = {};
 			}
-			_.each(options, function(value) {
+			_.each(options, function (value) {
 				var checked = "";
 				if (!_.isUndefined(v[value])) {
 					checked = ' checked="checked" ';
@@ -2796,7 +2816,7 @@
 			html += "</div>";
 			return html;
 		},
-		ready: function() {
+		ready: function () {
 			var that = this;
 			customifyField.devices = _.clone(customifyField.allDevices);
 			if (!_.isObject(that.values)) {
@@ -2807,7 +2827,7 @@
 
 			//Customify_Control_Args.typo_fields
 			if (!_.isEmpty(that.config)) {
-				_.each(Customify_Control_Args.typo_fields, function(_f, _key) {
+				_.each(Customify_Control_Args.typo_fields, function (_f, _key) {
 					var show = true;
 					if (!_.isUndefined(that.config[_f.name])) {
 						if (that.config[_f.name] === false) {
@@ -2830,7 +2850,7 @@
 				that.fields,
 				that.values,
 				$(".customify-modal-settings--fields", that.container),
-				function() {
+				function () {
 					that.get();
 				}
 			);
@@ -2842,9 +2862,9 @@
 				'<option value="">' +
 				Customify_Control_Args.theme_default +
 				"</option>";
-			_.each(that.fonts, function(group, type) {
+			_.each(that.fonts, function (group, type) {
 				that.optionHtml += '<optgroup label="' + group.title + '">';
-				_.each(group.fonts, function(font, font_name) {
+				_.each(group.fonts, function (font, font_name) {
 					var label = _.isString(font) ? font : font_name;
 					that.optionHtml +=
 						'<option value="' +
@@ -2866,8 +2886,8 @@
 			) {
 				$(
 					'.customify-typo-input[data-name="font"] option[value="' +
-						that.values["font"] +
-						'"]',
+					that.values["font"] +
+					'"]',
 					that.container
 				).attr("selected", "selected");
 			}
@@ -2875,7 +2895,7 @@
 			that.container.on(
 				"change init-change",
 				'.customify-typo-input[data-name="font"]',
-				function() {
+				function () {
 					var font = $(this).val();
 					that.setUpFont(font);
 				}
@@ -2895,7 +2915,7 @@
 			that.container.on(
 				"change data-change",
 				"input, select",
-				function() {
+				function () {
 					that.get();
 				}
 			);
@@ -2903,7 +2923,7 @@
 			// Bind event on container
 			that.container.on(
 				"container-data-change",
-				function() {
+				function () {
 					that.get();
 				}
 			);
@@ -2911,7 +2931,7 @@
 
 		},
 
-		setUpFont: function(font) {
+		setUpFont: function (font) {
 			var that = this;
 			var font_settings, variants, subsets, type;
 
@@ -2990,7 +3010,7 @@
 			}
 		},
 
-		open: function() {
+		open: function () {
 			//this.$el = $el;
 			var that = this;
 			var $el = that.$el;
@@ -3011,12 +3031,12 @@
 					that.container = $(".customify-modal-settings", $el);
 					that.container.hide();
 				}
-				that.container.slideDown(300, function() {
+				that.container.slideDown(300, function () {
 					that.$el.addClass("modal--opening");
 					$(".action--reset", that.$el).show();
 				});
 			} else {
-				$(".customify-modal-settings", $el).slideUp(300, function() {
+				$(".customify-modal-settings", $el).slideUp(300, function () {
 					$el.attr("data-opening", "");
 					$el.removeClass("modal--opening");
 					$(".action--reset", $el).hide();
@@ -3024,7 +3044,7 @@
 			}
 		},
 
-		reset: function() {
+		reset: function () {
 			//this.$el = $el;
 			var that = this;
 			var $el = that.$el;
@@ -3036,7 +3056,7 @@
 				) || "{}";
 			try {
 				that.values = JSON.parse(that.values);
-			} catch (e) {}
+			} catch (e) { }
 
 			$el.addClass("customify-modal--inside");
 			if (!$(".customify-modal-settings", $el).length) {
@@ -3050,10 +3070,10 @@
 			that.get();
 		},
 
-		get: function() {
+		get: function () {
 			var data = {};
 			var that = this;
-			_.each(this.fields, function(f) {
+			_.each(this.fields, function (f) {
 				if (f.name === "languages") {
 					f.type = "checkboxes";
 				}
@@ -3061,8 +3081,8 @@
 					f,
 					$(
 						'.customify--group-field[data-field-name="' +
-							f.name +
-							'"]',
+						f.name +
+						'"]',
 						that.container
 					)
 				);
@@ -3082,17 +3102,17 @@
 			return data;
 		},
 
-		init: function() {
+		init: function () {
 			this.load();
 		}
 	};
 
 	var intTypoControls = {};
-	var intTypos = function() {
+	var intTypos = function () {
 		$document.on(
 			"click",
 			".customize-control-customify-typography .action--edit, .customize-control-customify-typography .action--reset",
-			function() {
+			function () {
 				var controlID = $(this).attr("data-control") || "";
 				if (_.isUndefined(intTypoControls[controlID])) {
 					var c = wpcustomize.control(controlID);
@@ -3127,7 +3147,7 @@
 		$el: null,
 		container: null,
 		controlID: "",
-		addFields: function(values) {
+		addFields: function (values) {
 			var that = this;
 			if (!_.isObject(that.values)) {
 				that.values = {};
@@ -3145,17 +3165,17 @@
 
 			var tabsHTML = $('<div class="modal--tabs"></div>');
 			var c = 0;
-			_.each(that.config.tabs, function(label, key) {
+			_.each(that.config.tabs, function (label, key) {
 				if (label && _.isObject(that.config[key + "_fields"])) {
 					c++;
 					tabsHTML.append(
 						'<div><span data-tab="' +
-							key +
-							'" class="modal--tab modal-tab--' +
-							key +
-							'">' +
-							label +
-							"</span></div>"
+						key +
+						'" class="modal--tab modal-tab--' +
+						key +
+						'">' +
+						label +
+						"</span></div>"
 					);
 				}
 			});
@@ -3165,22 +3185,22 @@
 				tabsHTML.addClass("customify--hide");
 			}
 			customifyField.devices = Customify_Control_Args.devices;
-			_.each(that.config.tabs, function(label, key) {
+			_.each(that.config.tabs, function (label, key) {
 				if (
 					_.isObject(that.config[key + "_fields"]) &&
 					!_.isEmpty(key + "_fields")
 				) {
 					var content = $(
 						'<div class="modal-tab-content modal-tab--' +
-							key +
-							'"></div>'
+						key +
+						'"></div>'
 					);
 					fieldsArea.append(content);
 					customifyField.addFields(
 						that.config[key + "_fields"],
 						that.values[key],
 						content,
-						function() {
+						function () {
 							that.get(_.clone(that.config));
 						}
 					);
@@ -3190,7 +3210,7 @@
 						_.isEmpty(that.values[key])
 					) {
 						fv = {};
-						_.each(that.config[key + "_fields"], function(f) {
+						_.each(that.config[key + "_fields"], function (f) {
 							fv[f.name] = _.isUndefined(f.default)
 								? null
 								: f.default;
@@ -3208,12 +3228,12 @@
 			fieldsArea.on(
 				"change data-change",
 				"input, select, textarea",
-				function() {
+				function () {
 					that.get(_.clone(that.config));
 				}
 			);
 
-			that.container.on("click", ".modal--tab", function() {
+			that.container.on("click", ".modal--tab", function () {
 				var id = $(this).attr("data-tab") || "";
 				$(".modal--tabs .modal--tab", that.container).removeClass(
 					"tab--active"
@@ -3234,16 +3254,16 @@
 			this.container.slideUp(0);
 		},
 
-		close: function() {
+		close: function () {
 			var that = this;
-			that.container.slideUp(300, function() {
+			that.container.slideUp(300, function () {
 				that.$el.removeClass("modal--opening");
 				that.$el.attr("data-opening", "");
 				$(".action--reset", that.$el).hide();
 			});
 		},
 
-		reset: function() {
+		reset: function () {
 			var that = this;
 			$(".customify-modal-settings", that.$el).remove();
 			try {
@@ -3270,24 +3290,24 @@
 				.trigger("change");
 		},
 
-		get: function(config) {
+		get: function (config) {
 			var data = {};
 			var that = this;
 			that.config = config;
-			_.each(that.config.tabs, function(label, key) {
+			_.each(that.config.tabs, function (label, key) {
 				var subdata = {};
 				var content = $(
 					".modal-tab-content.modal-tab--" + key,
 					that.container
 				);
 				if (_.isObject(that.config[key + "_fields"])) {
-					_.each(that.config[key + "_fields"], function(f) {
+					_.each(that.config[key + "_fields"], function (f) {
 						subdata[f.name] = customifyField.getValue(
 							f,
 							$(
 								'.customify--group-field[data-field-name="' +
-									f.name +
-									'"]',
+								f.name +
+								'"]',
 								content
 							)
 						);
@@ -3302,7 +3322,7 @@
 			return data;
 		},
 
-		open: function() {
+		open: function () {
 			var that = this;
 			var status = that.$el.attr("data-opening") || false;
 			if (status !== "opening") {
@@ -3313,7 +3333,7 @@
 				).val();
 				try {
 					that.values = JSON.parse(that.values);
-				} catch (e) {}
+				} catch (e) { }
 				that.$el.addClass("customify-modal--inside");
 				if (!$(".customify-modal-settings", that.$el).length) {
 					var $wrap = $($("#tmpl-customify-modal-settings").html());
@@ -3329,7 +3349,7 @@
 				this.$el.addClass("modal--opening");
 				$(".action--reset", this.$el).show();
 			} else {
-				this.container.slideUp(300, function() {
+				this.container.slideUp(300, function () {
 					that.$el.attr("data-opening", "");
 					$(".customify-modal-settings", that.$el).hide();
 					that.$el.removeClass("modal--opening");
@@ -3340,11 +3360,11 @@
 	};
 
 	var initModalControls = {};
-	var initModal = function() {
+	var initModal = function () {
 		$document.on(
 			"click",
 			".customize-control-customify-modal .action--edit, .customize-control-customify-modal .action--reset, .customize-control-customify-modal .customify-control-field-header",
-			function(e) {
+			function (e) {
 				e.preventDefault();
 				var controlID = $(this).attr("data-control") || "";
 				if (_.isUndefined(initModalControls[controlID])) {
@@ -3383,7 +3403,7 @@
 		controlID: "",
 		$el: "",
 		contailner: "",
-		setupFields: function(fields, list) {
+		setupFields: function (fields, list) {
 			var newfs;
 			var i;
 			var newList = [];
@@ -3395,7 +3415,7 @@
 				if (_.isObject(fields)) {
 					newfs = {};
 					i = 0;
-					_.each(list, function(f) {
+					_.each(list, function (f) {
 						if (_.isUndefined(fields[f.name]) || fields[f.name]) {
 							newfs[i] = f;
 							i++;
@@ -3407,7 +3427,7 @@
 			}
 			return newList;
 		},
-		setupConfig: function(tabs, normal_fields, hover_fields) {
+		setupConfig: function (tabs, normal_fields, hover_fields) {
 			var that = this;
 			that.tabs = {};
 			that.normal_fields = {};
@@ -3429,7 +3449,7 @@
 				Customify_Control_Args.styling_config.hover_fields
 			);
 		},
-		addFields: function(values) {
+		addFields: function (values) {
 			var that = this;
 			if (!_.isObject(that.values)) {
 				that.values = {};
@@ -3446,17 +3466,17 @@
 
 			var tabsHTML = $('<div class="modal--tabs"></div>');
 			var c = 0;
-			_.each(that.tabs, function(label, key) {
+			_.each(that.tabs, function (label, key) {
 				if (label && !_.isEmpty(that[key + "_fields"])) {
 					c++;
 					tabsHTML.append(
 						'<div><span data-tab="' +
-							key +
-							'" class="modal--tab modal-tab--' +
-							key +
-							'">' +
-							label +
-							"</span></div>"
+						key +
+						'" class="modal--tab modal-tab--' +
+						key +
+						'">' +
+						label +
+						"</span></div>"
 					);
 				}
 			});
@@ -3466,22 +3486,22 @@
 				tabsHTML.addClass("customify--hide");
 			}
 			customifyField.devices = Customify_Control_Args.devices;
-			_.each(that.tabs, function(label, key) {
+			_.each(that.tabs, function (label, key) {
 				if (
 					_.isObject(that[key + "_fields"]) &&
 					!_.isEmpty(key + "_fields")
 				) {
 					var content = $(
 						'<div class="modal-tab-content modal-tab--' +
-							key +
-							'"></div>'
+						key +
+						'"></div>'
 					);
 					fieldsArea.append(content);
 					customifyField.addFields(
 						that[key + "_fields"],
 						that.values[key],
 						content,
-						function() {
+						function () {
 							that.get();
 						}
 					);
@@ -3496,12 +3516,12 @@
 			fieldsArea.on(
 				"change data-change",
 				"input, select, textarea",
-				function() {
+				function () {
 					that.get();
 				}
 			);
 
-			that.container.on("click", ".modal--tab", function() {
+			that.container.on("click", ".modal--tab", function () {
 				var id = $(this).attr("data-tab") || "";
 				$(".modal--tabs .modal--tab", that.container).removeClass(
 					"tab--active"
@@ -3522,16 +3542,16 @@
 			this.container.slideUp(0);
 		},
 
-		close: function() {
+		close: function () {
 			var that = this;
-			that.container.slideUp(300, function() {
+			that.container.slideUp(300, function () {
 				that.$el.removeClass("modal--opening");
 				that.$el.attr("data-opening", "");
 				$(".action--reset", that.$el).hide();
 			});
 		},
 
-		reset: function() {
+		reset: function () {
 			var that = this;
 
 			$(".customify-modal-settings", that.$el).remove();
@@ -3559,23 +3579,23 @@
 				.trigger("change");
 		},
 
-		get: function() {
+		get: function () {
 			var data = {};
 			var that = this;
-			_.each(that.tabs, function(label, key) {
+			_.each(that.tabs, function (label, key) {
 				var subdata = {};
 				var content = $(
 					".modal-tab-content.modal-tab--" + key,
 					that.container
 				);
 				if (_.isObject(that[key + "_fields"])) {
-					_.each(that[key + "_fields"], function(f) {
+					_.each(that[key + "_fields"], function (f) {
 						subdata[f.name] = customifyField.getValue(
 							f,
 							$(
 								'.customify--group-field[data-field-name="' +
-									f.name +
-									'"]',
+								f.name +
+								'"]',
 								content
 							)
 						);
@@ -3591,7 +3611,7 @@
 			return data;
 		},
 
-		open: function() {
+		open: function () {
 			var that = this;
 			var status = that.$el.attr("data-opening") || false;
 			if (status !== "opening") {
@@ -3603,7 +3623,7 @@
 				).val();
 				try {
 					that.values = JSON.parse(that.values);
-				} catch (e) {}
+				} catch (e) { }
 				that.$el.addClass("customify-modal--inside");
 				if (!$(".customify-modal-settings", that.$el).length) {
 					var $wrap = $($("#tmpl-customify-modal-settings").html());
@@ -3619,7 +3639,7 @@
 				that.$el.addClass("modal--opening");
 				$(".action--reset", that.$el).show();
 			} else {
-				that.container.slideUp(300, function() {
+				that.container.slideUp(300, function () {
 					that.$el.attr("data-opening", "");
 					$(".customify-modal-settings", that.$el).hide();
 					that.$el.removeClass("modal--opening");
@@ -3630,11 +3650,11 @@
 	};
 
 	var initStylingControls = {};
-	var initStyling = function() {
+	var initStyling = function () {
 		$document.on(
 			"click",
 			".customize-control-customify-styling .action--edit, .customize-control-customify-styling .action--reset",
-			function(e) {
+			function (e) {
 				e.preventDefault();
 				var controlID = $(this).attr("data-control") || "";
 				if (_.isUndefined(initStylingControls[controlID])) {
@@ -3680,8 +3700,8 @@
 
 	//---------------------------------------------------------------------------
 
-	wpcustomize.bind("ready", function(e, b) {
-		$document.on("customify/customizer/device/change", function(e, device) {
+	wpcustomize.bind("ready", function (e, b) {
+		$document.on("customify/customizer/device/change", function (e, device) {
 			$(".customify--device-select a").removeClass("customify--active");
 			if (device != "mobile") {
 				$(".customify--device-mobile").addClass("customify--hide");
@@ -3698,38 +3718,38 @@
 			}
 		});
 
-		$document.on("click", ".customify--tab-device-mobile", function(e) {
+		$document.on("click", ".customify--tab-device-mobile", function (e) {
 			e.preventDefault();
 			$document.trigger("customify/customizer/device/change", ["mobile"]);
 		});
 
-		$document.on("click", ".customify--tab-device-general", function(e) {
+		$document.on("click", ".customify--tab-device-general", function (e) {
 			e.preventDefault();
 			$document.trigger("customify/customizer/device/change", [
 				"general"
 			]);
 		});
 
-		$(".accordion-section").each(function() {
+		$(".accordion-section").each(function () {
 			var s = $(this);
 			var t = $(".customify--device-select", s).first();
 			$(".customize-section-title", s).append(t);
 		});
 
 		// Devices Switcher
-		$document.on("click", ".customify-devices button", function(e) {
+		$document.on("click", ".customify-devices button", function (e) {
 			e.preventDefault();
 			var device = $(this).attr("data-device") || "";
 			//console.log('Device', device);
 			$(
 				'#customize-footer-actions .devices button[data-device="' +
-					device +
-					'"]'
+				device +
+				'"]'
 			).trigger("click");
 		});
 
 		// Devices Switcher
-		$document.on("change", ".customify--field input:checkbox", function(e) {
+		$document.on("change", ".customify--field input:checkbox", function (e) {
 			if ($(this).is(":checked")) {
 				$(this)
 					.parent()
@@ -3742,13 +3762,13 @@
 		});
 
 		// Setup conditional
-		var ControlConditional = function(decodeValue) {
+		var ControlConditional = function (decodeValue) {
 			if (_.isUndefined(decodeValue)) {
 				decodeValue = false;
 			}
 			var allValues = wpcustomize.get();
 			// console.log( 'ALL Control Values', allValues );
-			_.each(allValues, function(value, id) {
+			_.each(allValues, function (value, id) {
 				var control = wpcustomize.control(id);
 				if (!_.isUndefined(control)) {
 					if (control.params.type == "customify") {
@@ -3772,13 +3792,13 @@
 			});
 		};
 
-		$document.ready(function() {
-			_.each(customify_controls_list, function(c, k) {
+		$document.ready(function () {
+			_.each(customify_controls_list, function (c, k) {
 				new customify_control(c);
 			});
 
 			ControlConditional(false);
-			$document.on("customify/customizer/value_changed", function() {
+			$document.on("customify/customizer/value_changed", function () {
 				ControlConditional(true);
 			});
 
@@ -3790,7 +3810,7 @@
 		});
 
 		// Add reset button to sections
-		wpcustomize.section.each(function(section) {
+		wpcustomize.section.each(function (section) {
 			if (
 				section.params.type == "section" ||
 				section.params.type == "customify_section"
@@ -3801,18 +3821,18 @@
 					)
 					.append(
 						'<button data-section="' +
-							section.id +
-							'" type="button" title="' +
-							Customify_Control_Args.reset +
-							'" class="customize--reset-section" aria-expanded="false"><span class="screen-reader-text">' +
-							Customify_Control_Args.reset +
-							"</span></button>"
+						section.id +
+						'" type="button" title="' +
+						Customify_Control_Args.reset +
+						'" class="customize--reset-section" aria-expanded="false"><span class="screen-reader-text">' +
+						Customify_Control_Args.reset +
+						"</span></button>"
 					);
 			}
 		});
 
 		// Remove checked align
-		$document.on("dblclick", ".customify-text-align label", function(e) {
+		$document.on("dblclick", ".customify-text-align label", function (e) {
 			var input = $(this).find('input[type="radio"]');
 			if (input.length) {
 				if (input.is(":checked")) {
@@ -3822,7 +3842,7 @@
 			}
 		});
 
-		$document.on("click", ".customize--reset-section", function(e) {
+		$document.on("click", ".customize--reset-section", function (e) {
 			e.preventDefault();
 			if ($(this).hasClass("loading")) {
 				return;
@@ -3839,7 +3859,7 @@
 			if (section) {
 				var setting_keys = [];
 				var controls = wp.customize.section(section).controls();
-				_.each(controls, function(c, index) {
+				_.each(controls, function (c, index) {
 					wpcustomize(c.id).set("");
 					setting_keys[index] = c.id;
 				});
@@ -3851,7 +3871,7 @@
 						section: section,
 						settings: setting_keys
 					},
-					function() {
+					function () {
 						$(window).off("beforeunload.customize-confirm");
 						top.location.href =
 							urlParser.origin +
@@ -3870,7 +3890,7 @@
 		/**
 		 * Image Select disable click
 		 */
-		$document.on("click", ".customify-radio-list p", function(e) {
+		$document.on("click", ".customify-radio-list p", function (e) {
 			var id =
 				$(this)
 					.find("input")
@@ -3906,10 +3926,10 @@
 		/**
 		 * When panel open
 		 */
-		_.each(Customify_Control_Args.panel_urls, function(url, id) {
+		_.each(Customify_Control_Args.panel_urls, function (url, id) {
 			if (url) {
-				wp.customize.panel(id, function(panel) {
-					panel.expanded.bind(function(isExpanded) {
+				wp.customize.panel(id, function (panel) {
+					panel.expanded.bind(function (isExpanded) {
 						if (isExpanded) {
 							wp.customize.previewer.previewUrl.set(url);
 						}
@@ -3918,10 +3938,10 @@
 			}
 		});
 
-		_.each(Customify_Control_Args.section_urls, function(url, id) {
+		_.each(Customify_Control_Args.section_urls, function (url, id) {
 			if (url) {
-				wp.customize.section(id, function(section) {
-					section.expanded.bind(function(isExpanded) {
+				wp.customize.section(id, function (section) {
+					section.expanded.bind(function (isExpanded) {
 						if (isExpanded) {
 							wp.customize.previewer.previewUrl.set(url);
 						}

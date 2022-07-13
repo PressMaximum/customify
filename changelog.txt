@@ -1,5 +1,7 @@
 = 0.3.9 =
+* NEW: Support Font Awesome 6.
 * FIXED: Duplicates product item in shop page when use ajax filter.
+* UPDATED: Support widgets block editor.
 
 
 = 0.3.7 =

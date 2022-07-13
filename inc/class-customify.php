@@ -24,7 +24,6 @@ class Customify {
 		add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 95 );
 		add_filter( 'excerpt_more', array( $this, 'excerpt_more' ) );
 		add_filter( 'excerpt_length', array( $this, 'excerpt_length' ) );
-
 		add_action( 'wp_head', array( $this, 'customify_style' ), 2 );
 	}
 

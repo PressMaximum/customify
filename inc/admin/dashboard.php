@@ -10,6 +10,7 @@ class Customify_Dashboard
 
 	static function get_instance()
 	{
+		add_action('wp_ajax_customify_dashboard_settings', array(__CLASS__, 'ajax'));
 		if (is_null(self::$_instance)) {
 			self::$_instance      = new self();
 			self::$_instance->url = admin_url('admin.php');
@@ -23,6 +24,7 @@ class Customify_Dashboard
 			add_action('admin_enqueue_scripts', array(self::$_instance, 'scripts'));
 			add_action('customify/dashboard/main', array(self::$_instance, 'copy_theme_settings'), 5);
 			add_action('customify/dashboard/main', array(self::$_instance, 'box_links'), 10);
+			add_action('customify/dashboard/main', array(self::$_instance, 'box_font_icons'), 10);
 			add_action('customify/dashboard/main', array(self::$_instance, 'pro_modules_box'), 15);
 			add_action('customify/dashboard/sidebar', array(self::$_instance, 'box_plugins'), 10);
 			add_action('customify/dashboard/sidebar', array(self::$_instance, 'box_recommend_plugins'), 20);
@@ -109,12 +111,36 @@ class Customify_Dashboard
 		}
 		$suffix = Customify()->get_asset_suffix();
 		wp_enqueue_style('customify-admin', esc_url(get_template_directory_uri()) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
+		wp_enqueue_script('customify-admin', esc_url(get_template_directory_uri()) . '/assets/js/admin/dashboard.js', array('jquery'), Customify::$version);
 		if ('themes' != $id) {
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
 			wp_enqueue_script('updates');
 			add_thickbox();
 		}
+		wp_localize_script('customify-admin', 'Customify_Dashboard', array(
+			'_nonce'          => wp_create_nonce('customify_customify_dashboard'),
+			'updating'        => __('Updating settings...', 'customify'),
+			'updated'         => __('Updated settings.', 'customify'),
+			'error'           => __('Error updating settings.', 'customify'),
+		));
+	}
+
+	static function ajax()
+	{
+		check_admin_referer('customify_customify_dashboard', '_nonce');
+		$option = isset($_REQUEST['option']) ? sanitize_text_field($_REQUEST['option']) : '';
+		$value      = isset($_REQUEST['value']) ? sanitize_text_field($_REQUEST['value']) : '';
+		$args       = array(
+			'success' => false,
+		);
+
+		if ($option) {
+			update_option($option, $value);
+			$args['success'] = true;
+		}
+
+		wp_send_json($args);
 	}
 
 	function setup()
@@ -317,6 +343,31 @@ class Customify_Dashboard
 						</li>
 					<?php } ?>
 				</ul>
+			</div>
+		</div>
+	<?php
+	}
+
+	function box_font_icons()
+	{
+
+		$ver = get_option('customify_fa_ver', 'v4');
+		
+	?>
+		<div class="cd-box">
+			<div class="cd-box-top"><?php _e('Font Icons Settings', 'customify'); ?></div>
+			<div class="cd-box-content cd-fa">
+
+				<p>
+					<label><input type="radio" name="customify_fa_ver" value="v4" class="auto-save" <?php checked($ver, 'v4'); ?>><?php _e('Font Awesome version 4', 'customify') ?></label>
+				</p>
+				<p>
+					<label><input type="radio" name="customify_fa_ver" value="v6" class="auto-save" <?php checked($ver, 'v6'); ?>><?php _e('Font Awesome version 6', 'customify'); ?></label>
+				</p>
+				<p>
+					<label><input type="radio" name="customify_fa_ver" value="v456" class="auto-save" <?php checked($ver, 'v456'); ?>><?php _e('Font Awesome version 6 and support version 4&5', 'customify'); ?></label>
+				</p>
+
 			</div>
 		</div>
 	<?php
@@ -540,7 +591,7 @@ class Customify_Dashboard
 				if ($icon) {
 					$html .= '<img class="cd-list-icon" src="' . $icon . '" alt=""/>';
 				}
-				$html.='<div class="cd-list-b">';
+				$html .= '<div class="cd-list-b">';
 				$html .= '<p class="cd-list-name">' . esc_html($info->name) . '</p>';
 				if ($status) {
 					$button_class = 'activate-now';
