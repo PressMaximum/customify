@@ -35,6 +35,11 @@ class Customify_WC_Catalog_Designer {
 
 	function render() {
 
+		/**
+		 * @since 0.3.9
+		 */
+		do_action('customify/before_render_woocommerce_product');
+
 		$items = Customify()->get_setting( 'wc_cd_positions' );
 
 		$this->configs['excerpt_type']   = Customify()->get_setting( 'wc_cd_excerpt_type' );
@@ -46,6 +51,8 @@ class Customify_WC_Catalog_Designer {
 		if ( $cb ) {
 			call_user_func( $cb, array( null, $this ) );
 		}
+		
+		
 
 		echo '<div class="wc-product-contents">';
 
@@ -116,6 +123,12 @@ class Customify_WC_Catalog_Designer {
 		do_action( 'woocommerce_after_shop_loop_item' );
 
 		echo '</div>'; // End .wc-product-contents.
+
+		/**
+		 * @since 0.3.9
+		 */
+		do_action('customify/after_render_woocommerce_product');
+
 
 	}
 
@@ -436,6 +449,7 @@ class Customify_WC_Catalog_Designer {
 	}
 
 	function product__title() {
+	
 
 		/**
 		 * Hook: woocommerce_before_shop_loop_item_title.
