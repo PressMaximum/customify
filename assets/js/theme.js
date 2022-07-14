@@ -167,7 +167,7 @@ if (!Element.prototype.closest) {
      * @todo Add events to menu buttons.
      */
     Customify.prototype.initMenuSidebar = function () {
-        var themeMenuSidebar; 
+        var themeMenuSidebar;
         const that = this;
         if (document.body.classList.contains('menu_sidebar_dropdown')) {
             // $( '#header-menu-sidebar' ).insertAfter( "#masthead" );
@@ -278,9 +278,7 @@ if (!Element.prototype.closest) {
             function (e) {
                 let el = e.target.tagName === 'A' ? e.target : e.target.closest('a');
                 let url = new URL(el.href);
-                if (url.pathname != window.location.pathname) {
-                    return true;
-                } else {
+                if (url.origin + url.pathname === window.location.origin + window.location.pathname) {
                     let elTo = document.querySelector(url.hash);
                     if (elTo) {
                         e.preventDefault();
@@ -290,10 +288,9 @@ if (!Element.prototype.closest) {
                             left: 0,
                             behavior: 'smooth'
                         })
-                        e.preventDefault();
+                        window.history.pushState({}, null, url.href);
                     }
                 }
-                return true;
             }
         );
     };
