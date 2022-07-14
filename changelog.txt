@@ -4,6 +4,7 @@
 * NEW: Support font display swap for google font.
 * FIXED: Duplicates product item in shop page when use ajax filter.
 * UPDATED: Support widgets block editor.
+* IMPROVED: Security check.
 
 
 = 0.3.7 =
