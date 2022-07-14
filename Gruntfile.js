@@ -420,8 +420,8 @@ module.exports = function (grunt) {
     // Zip file installable: grunt zipfile
 
     grunt.registerTask('zipfile', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
-    grunt.registerTask('release', function (ver) {
-        var newVersion = grunt.option('ver');
+    grunt.registerTask('release', function () {
+        var newVersion = pkgInfo.version
         if (newVersion) {
             // Replace new version
             newVersion = newVersion ? newVersion : 'patch';
@@ -438,8 +438,5 @@ module.exports = function (grunt) {
     grunt.registerTask('re-css', function (ver) {
         grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
     });
-
-
-
 
 };
