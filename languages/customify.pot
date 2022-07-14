@@ -1,14 +1,14 @@
-# <!=Copyright (C) 2021 WPCustomify
+# <!=Copyright (C) 2022 WPCustomify
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.3.7\n"
+"Project-Id-Version: Customify 0.3.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2021-09-28 02:21:24+00:00\n"
+"POT-Creation-Date: 2022-07-14 06:02:07+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2022-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -47,28 +47,28 @@ msgstr ""
 msgid "Skip to content"
 msgstr ""
 
-#: inc/admin/dashboard.php:19
+#: inc/admin/dashboard.php:22
 msgid "Customify Options"
 msgstr ""
 
-#: inc/admin/dashboard.php:54 inc/admin/dashboard.php:153
+#: inc/admin/dashboard.php:59 inc/admin/dashboard.php:191
 msgid "logo"
 msgstr ""
 
-#: inc/admin/dashboard.php:57
+#: inc/admin/dashboard.php:62
 msgid ""
 "Thanks for installing Customify, you rock! <img draggable=\"false\" "
 "class=\"emoji\" alt=\"\" "
 "src=\"https://s.w.org/images/core/emoji/2.4/svg/1f918.svg\">"
 msgstr ""
 
-#: inc/admin/dashboard.php:58
+#: inc/admin/dashboard.php:63
 msgid ""
 "To fully take advantage of the best our theme can offer please make sure "
 "you visit our <a href=\"%1$s\">Customify options page</a>."
 msgstr ""
 
-#: inc/admin/dashboard.php:61
+#: inc/admin/dashboard.php:66
 msgid "You're using %1$s theme, It's a child theme of %2$s."
 msgstr ""
 
@@ -76,74 +76,86 @@ msgstr ""
 msgid "Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:69
+#: inc/admin/dashboard.php:75
 msgid "Now you can copy setting data from parent theme to this child theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:69 inc/admin/dashboard.php:211
+#: inc/admin/dashboard.php:75 inc/admin/dashboard.php:252
 msgid "Copy Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:79
+#: inc/admin/dashboard.php:85
 msgid "Your theme settings were copied."
 msgstr ""
 
-#: inc/admin/dashboard.php:156 inc/admin/dashboard.php:179
+#: inc/admin/dashboard.php:123
+msgid "Updating settings..."
+msgstr ""
+
+#: inc/admin/dashboard.php:124
+msgid "Updated settings."
+msgstr ""
+
+#: inc/admin/dashboard.php:125
+msgid "Error updating settings."
+msgstr ""
+
+#: inc/admin/dashboard.php:194 inc/admin/dashboard.php:218
 msgid "Changelog"
 msgstr ""
 
-#: inc/admin/dashboard.php:172
+#: inc/admin/dashboard.php:211
 msgid "Back"
 msgstr ""
 
-#: inc/admin/dashboard.php:217
+#: inc/admin/dashboard.php:258
 msgid "You're using %1$s theme, It's a child theme of Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:219
+#: inc/admin/dashboard.php:261
 msgid ""
 "Child theme uses it's own theme setting name, would you like to copy "
 "setting data from parent theme to this child theme?"
 msgstr ""
 
-#: inc/admin/dashboard.php:224
+#: inc/admin/dashboard.php:266
 msgid "From Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:229
+#: inc/admin/dashboard.php:271
 msgid "To Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:233
+#: inc/admin/dashboard.php:275
 msgid "To"
 msgstr ""
 
-#: inc/admin/dashboard.php:237
+#: inc/admin/dashboard.php:279
 msgid "Copy now"
 msgstr ""
 
-#: inc/admin/dashboard.php:252 inc/customizer/class-customizer.php:1118
+#: inc/admin/dashboard.php:295 inc/customizer/class-customizer.php:1118
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:256
+#: inc/admin/dashboard.php:299
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:260 inc/customizer/configs/header/panel.php:17
+#: inc/admin/dashboard.php:303 inc/customizer/configs/header/panel.php:17
 #: inc/customizer/configs/header/panel.php:64
 #: inc/customizer/configs/header/panel.php:73
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:264 inc/customizer/configs/footer/panel.php:9
+#: inc/admin/dashboard.php:307 inc/customizer/configs/footer/panel.php:9
 #: inc/customizer/configs/footer/panel.php:40
 #: inc/customizer/configs/footer/panel.php:48
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:268 inc/compatibility/breadcrumb.php:213
-#: inc/compatibility/woocommerce/config/catalog-designer.php:395
+#: inc/admin/dashboard.php:311 inc/compatibility/breadcrumb.php:213
+#: inc/compatibility/woocommerce/config/catalog-designer.php:408
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
 #: inc/customizer/configs/blogs.php:360
@@ -153,7 +165,7 @@ msgstr ""
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:272 inc/compatibility/breadcrumb.php:203
+#: inc/admin/dashboard.php:315 inc/compatibility/breadcrumb.php:203
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:346
 #: inc/customizer/configs/header/button.php:96
@@ -161,243 +173,259 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:276
+#: inc/admin/dashboard.php:319
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:280 inc/customizer/configs/page-header.php:332
+#: inc/admin/dashboard.php:323 inc/customizer/configs/page-header.php:332
 msgid "Titlebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:285 inc/customizer/configs/blogs.php:8
+#: inc/admin/dashboard.php:328 inc/customizer/configs/blogs.php:8
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:289
+#: inc/admin/dashboard.php:332
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:297
+#: inc/admin/dashboard.php:340
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:317
+#: inc/admin/dashboard.php:361
+msgid "Font Icons Settings"
+msgstr ""
+
+#: inc/admin/dashboard.php:365
+msgid "Font Awesome version 4"
+msgstr ""
+
+#: inc/admin/dashboard.php:368
+msgid "Font Awesome version 6"
+msgstr ""
+
+#: inc/admin/dashboard.php:371
+msgid "Font Awesome version 6 and support version 4&5"
+msgstr ""
+
+#: inc/admin/dashboard.php:386
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:319
+#: inc/admin/dashboard.php:388
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:320
+#: inc/admin/dashboard.php:389
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:333
+#: inc/admin/dashboard.php:403
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:338
+#: inc/admin/dashboard.php:408
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:368
+#: inc/admin/dashboard.php:439
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:371 inc/admin/dashboard.php:510
+#: inc/admin/dashboard.php:442 inc/admin/dashboard.php:605
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:396
+#: inc/admin/dashboard.php:466
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:413 inc/admin/dashboard.php:538
+#: inc/admin/dashboard.php:483 inc/admin/dashboard.php:633
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:506
+#: inc/admin/dashboard.php:601
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:548
+#: inc/admin/dashboard.php:644
 msgid "Recommend Plugins"
 msgstr ""
 
-#: inc/admin/dashboard.php:563 inc/customizer/configs/upsell.php:32
+#: inc/admin/dashboard.php:660 inc/customizer/configs/upsell.php:32
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:564
+#: inc/admin/dashboard.php:661
 msgid "Make your website stand out with transparent header modules."
 msgstr ""
 
-#: inc/admin/dashboard.php:568 inc/customizer/configs/upsell.php:31
+#: inc/admin/dashboard.php:665 inc/customizer/configs/upsell.php:31
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:569
+#: inc/admin/dashboard.php:666
 msgid "Let your header accessible when users scroll up or down in unique style."
 msgstr ""
 
-#: inc/admin/dashboard.php:573
+#: inc/admin/dashboard.php:670
 msgid "Header and Footer Builder Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:574
+#: inc/admin/dashboard.php:671
 msgid "Get more header and footer builder items, plus advanced styling options."
 msgstr ""
 
-#: inc/admin/dashboard.php:578
+#: inc/admin/dashboard.php:675
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:579
+#: inc/admin/dashboard.php:676
 msgid ""
 "Get a better user experience with a scroll to top button with beautiful "
 "animation."
 msgstr ""
 
-#: inc/admin/dashboard.php:583
+#: inc/admin/dashboard.php:680
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:584
+#: inc/admin/dashboard.php:681
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:588 inc/customizer/configs/header/panel.php:204
+#: inc/admin/dashboard.php:685 inc/customizer/configs/header/panel.php:204
 msgid "Advanced Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:589
+#: inc/admin/dashboard.php:686
 msgid ""
 "Control the layout and typography setting for page header title, page "
 "header cover and more."
 msgstr ""
 
-#: inc/admin/dashboard.php:593
+#: inc/admin/dashboard.php:690
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:594
+#: inc/admin/dashboard.php:691
 msgid "Show off your best project in a beautiful way."
 msgstr ""
 
-#: inc/admin/dashboard.php:598
+#: inc/admin/dashboard.php:695
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:599
+#: inc/admin/dashboard.php:696
 msgid "Create unique header for each page, post, archive or WooCommerce pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:603
+#: inc/admin/dashboard.php:700
 msgid "Mega Menu"
 msgstr ""
 
-#: inc/admin/dashboard.php:604
+#: inc/admin/dashboard.php:701
 msgid "Create mega menu for your sites that need more space for navigation."
 msgstr ""
 
-#: inc/admin/dashboard.php:608
+#: inc/admin/dashboard.php:705
 msgid "Multilingual Integration"
 msgstr ""
 
-#: inc/admin/dashboard.php:609
+#: inc/admin/dashboard.php:706
 msgid ""
 "WPML multilingual plugin support, plus a fully customized language switcher "
 "header builder item."
 msgstr ""
 
-#: inc/admin/dashboard.php:613
+#: inc/admin/dashboard.php:710
 msgid "Custom Fonts"
 msgstr ""
 
-#: inc/admin/dashboard.php:614
+#: inc/admin/dashboard.php:711
 msgid ""
 "Custom Fonts module allows you to add your self-hosted fonts and use them "
 "on your Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:619
+#: inc/admin/dashboard.php:716
 msgid "Typekit"
 msgstr ""
 
-#: inc/admin/dashboard.php:620
+#: inc/admin/dashboard.php:717
 msgid ""
 "Typekit module allows you to add Typekit fonts and use them on your "
 "Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:624
+#: inc/admin/dashboard.php:721
 msgid "Customify Hooks"
 msgstr ""
 
-#: inc/admin/dashboard.php:625
+#: inc/admin/dashboard.php:722
 msgid "Add custom hook scripts."
 msgstr ""
 
-#: inc/admin/dashboard.php:630
+#: inc/admin/dashboard.php:727
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:631
+#: inc/admin/dashboard.php:728
 msgid "Gives you creative control of style and layout options for your shop."
 msgstr ""
 
-#: inc/admin/dashboard.php:636
+#: inc/admin/dashboard.php:733
 msgid "Single Product Layouts"
 msgstr ""
 
-#: inc/admin/dashboard.php:637
+#: inc/admin/dashboard.php:734
 msgid "More beautiful layouts for your single product."
 msgstr ""
 
-#: inc/admin/dashboard.php:642
+#: inc/admin/dashboard.php:739
 msgid "Off Canvas Filter"
 msgstr ""
 
-#: inc/admin/dashboard.php:643
+#: inc/admin/dashboard.php:740
 msgid "Add off canvas products filter for shop and product archive pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:648
+#: inc/admin/dashboard.php:745
 msgid "Product Gallery Slider"
 msgstr ""
 
-#: inc/admin/dashboard.php:649
+#: inc/admin/dashboard.php:746
 msgid "Add slider for product gallery."
 msgstr ""
 
-#: inc/admin/dashboard.php:654
+#: inc/admin/dashboard.php:751
 msgid "Quick View"
 msgstr ""
 
-#: inc/admin/dashboard.php:655
+#: inc/admin/dashboard.php:752
 msgid "Add product quick view modal for product listing.."
 msgstr ""
 
-#: inc/admin/dashboard.php:661
+#: inc/admin/dashboard.php:758
 msgid "Infinity Scroll."
 msgstr ""
 
-#: inc/admin/dashboard.php:662
+#: inc/admin/dashboard.php:759
 msgid ""
 "Loads the next posts, products automatically when the reader approaches the "
 "bottom of the page."
 msgstr ""
 
-#: inc/admin/dashboard.php:670
+#: inc/admin/dashboard.php:767
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:671
+#: inc/admin/dashboard.php:768
 msgid "Upgrade Now &rarr;"
 msgstr ""
 
@@ -463,26 +491,26 @@ msgstr ""
 msgid "Feed for all posts filed under %s"
 msgstr ""
 
-#: inc/class-customify.php:135
+#: inc/class-customify.php:134
 msgid "Primary"
 msgstr ""
 
-#: inc/class-customify.php:205
+#: inc/class-customify.php:204
 msgid "Primary Sidebar"
 msgstr ""
 
-#: inc/class-customify.php:207 inc/class-customify.php:218
-#: inc/class-customify.php:232
+#: inc/class-customify.php:206 inc/class-customify.php:217
+#: inc/class-customify.php:231
 #: inc/compatibility/woocommerce/woocommerce.php:650
 #: inc/compatibility/woocommerce/woocommerce.php:661
 msgid "Add widgets here."
 msgstr ""
 
-#: inc/class-customify.php:216
+#: inc/class-customify.php:215
 msgid "Secondary Sidebar"
 msgstr ""
 
-#: inc/class-customify.php:230
+#: inc/class-customify.php:229
 #. translators: 1: Widget number.
 msgid "Footer Sidebar %d"
 msgstr ""
@@ -733,12 +761,12 @@ msgstr ""
 msgid "Hide cross-sells"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:149
+#: inc/compatibility/woocommerce/config/catalog-designer.php:162
 msgid "Category"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:154
-#: inc/compatibility/woocommerce/config/catalog-designer.php:265
+#: inc/compatibility/woocommerce/config/catalog-designer.php:167
+#: inc/compatibility/woocommerce/config/catalog-designer.php:278
 #: inc/customizer/configs/blogs.php:287
 #: inc/customizer/configs/header/social-icons.php:99
 #: inc/customizer/configs/page-header.php:289
@@ -751,149 +779,149 @@ msgstr ""
 msgid "Title"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:163
+#: inc/compatibility/woocommerce/config/catalog-designer.php:176
 msgid "Rating"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:171
+#: inc/compatibility/woocommerce/config/catalog-designer.php:184
 #: woocommerce/cart/cart.php:21 woocommerce/cart/cart.php:88
 msgid "Price"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:178
+#: inc/compatibility/woocommerce/config/catalog-designer.php:191
 msgid "Short Description"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:185
+#: inc/compatibility/woocommerce/config/catalog-designer.php:198
 msgid "Add To Cart"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:202
+#: inc/compatibility/woocommerce/config/catalog-designer.php:215
 msgid "Product Catalog Designer"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:214
+#: inc/compatibility/woocommerce/config/catalog-designer.php:227
 msgid "Show Catalog Filtering Bar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:225
+#: inc/compatibility/woocommerce/config/catalog-designer.php:238
 msgid "Show Grid/List View Buttons"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:236
+#: inc/compatibility/woocommerce/config/catalog-designer.php:249
 msgid "Grid"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:237
+#: inc/compatibility/woocommerce/config/catalog-designer.php:250
 msgid "List"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:241
+#: inc/compatibility/woocommerce/config/catalog-designer.php:254
 msgid "Default View Mod"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:247
+#: inc/compatibility/woocommerce/config/catalog-designer.php:260
 msgid "Outside Media Items & Positions"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:270
+#: inc/compatibility/woocommerce/config/catalog-designer.php:283
 msgid "Show in grid view"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:275
+#: inc/compatibility/woocommerce/config/catalog-designer.php:288
 msgid "Show in list view"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:286
+#: inc/compatibility/woocommerce/config/catalog-designer.php:299
 msgid "List view excerpt type"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:288
+#: inc/compatibility/woocommerce/config/catalog-designer.php:301
 msgid "Product short description"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:289
+#: inc/compatibility/woocommerce/config/catalog-designer.php:302
 #: inc/customizer/configs/blogs.php:195 inc/customizer/configs/search.php:33
 msgid "Full content"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:290
+#: inc/compatibility/woocommerce/config/catalog-designer.php:303
 msgid "Strip by more tag"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:291
+#: inc/compatibility/woocommerce/config/catalog-designer.php:304
 #: inc/customizer/configs/blogs.php:192
 #: inc/customizer/configs/header/social-icons.php:199
 #: inc/customizer/configs/search.php:30
 msgid "Custom"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:300
+#: inc/compatibility/woocommerce/config/catalog-designer.php:313
 msgid "Custom list view excerpt length"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:310
+#: inc/compatibility/woocommerce/config/catalog-designer.php:323
 msgid "Product Media & Alignment"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:323
+#: inc/compatibility/woocommerce/config/catalog-designer.php:336
 msgid "List View Media Width"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:330
+#: inc/compatibility/woocommerce/config/catalog-designer.php:343
 msgid "Use first image of product gallery"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:331
+#: inc/compatibility/woocommerce/config/catalog-designer.php:344
 msgid "Use last image of product gallery"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:332
+#: inc/compatibility/woocommerce/config/catalog-designer.php:345
 msgid "Disable"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:339
+#: inc/compatibility/woocommerce/config/catalog-designer.php:352
 msgid ""
 "This setting adds a hover effect that will reveal a secondary product "
 "thumbnail to product images on your product listings. This is ideal for "
 "displaying front and back images of products."
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:340
+#: inc/compatibility/woocommerce/config/catalog-designer.php:353
 msgid "Secondary Thumbnail"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:351
+#: inc/compatibility/woocommerce/config/catalog-designer.php:364
 msgid "Grid View - Content Alignment"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:362
+#: inc/compatibility/woocommerce/config/catalog-designer.php:375
 msgid "List View - Content Alignment"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:371
+#: inc/compatibility/woocommerce/config/catalog-designer.php:384
 msgid "Product Onsale Bubble"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:380
+#: inc/compatibility/woocommerce/config/catalog-designer.php:393
 #: inc/customizer/configs/header/button.php:46
 msgid "Text"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:381
+#: inc/compatibility/woocommerce/config/catalog-designer.php:394
 msgid "Discount percent"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:382
+#: inc/compatibility/woocommerce/config/catalog-designer.php:395
 msgid "Discount value"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:387
+#: inc/compatibility/woocommerce/config/catalog-designer.php:400
 #: inc/customizer/configs/header/panel.php:247
 msgid "Display Type"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:396
+#: inc/compatibility/woocommerce/config/catalog-designer.php:409
 msgid "Advanced styling for onsale button"
 msgstr ""
 
@@ -1157,7 +1185,7 @@ msgstr ""
 msgid "Show shop breadcrumb"
 msgstr ""
 
-#: inc/compatibility/woocommerce/inc/template-hooks.php:154
+#: inc/compatibility/woocommerce/inc/template-hooks.php:239
 msgid "Your order"
 msgstr ""
 
@@ -1193,8 +1221,13 @@ msgstr ""
 msgid "Google Web Fonts"
 msgstr ""
 
-#: inc/customizer/class-customizer-icons.php:26
-msgid "FontAwesome"
+#: inc/customizer/class-customizer-icons.php:32
+msgid "Font Awesome v4"
+msgstr ""
+
+#: inc/customizer/class-customizer-icons.php:43
+#: inc/customizer/class-customizer-icons.php:54
+msgid "Font Awesome v6"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:376
@@ -2159,6 +2192,10 @@ msgstr ""
 msgid "Icon Styling"
 msgstr ""
 
+#: inc/customizer/configs/header/search-box.php:276
+msgid "Submit Search"
+msgstr ""
+
 #: inc/customizer/configs/header/search-icon.php:15
 msgid "Search Icon"
 msgstr ""
@@ -2185,6 +2222,14 @@ msgstr ""
 
 #: inc/customizer/configs/header/search-icon.php:179
 msgid "Search Modal Width"
+msgstr ""
+
+#: inc/customizer/configs/header/search-icon.php:317
+msgid "open search tool"
+msgstr ""
+
+#: inc/customizer/configs/header/search-icon.php:334
+msgid "submit search"
 msgstr ""
 
 #: inc/customizer/configs/header/social-icons.php:23

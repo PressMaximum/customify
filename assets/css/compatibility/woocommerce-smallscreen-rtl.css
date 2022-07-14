@@ -95,15 +95,15 @@ $gl-devices-list: (
   float: none;
   width: 100%;
 }
-.woocommerce ul.products[class*='columns-'] li.product,
-.woocommerce-page ul.products[class*='columns-'] li.product {
+.woocommerce ul.products[class*=columns-] li.product,
+.woocommerce-page ul.products[class*=columns-] li.product {
   width: 48%;
   float: right;
   clear: both;
   margin: 0 0 2.992em;
 }
-.woocommerce ul.products[class*='columns-'] li.product:nth-child(2n),
-.woocommerce-page ul.products[class*='columns-'] li.product:nth-child(2n) {
+.woocommerce ul.products[class*=columns-] li.product:nth-child(2n),
+.woocommerce-page ul.products[class*=columns-] li.product:nth-child(2n) {
   float: left;
   clear: none !important;
 }
