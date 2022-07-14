@@ -129,6 +129,9 @@ class Customify_Dashboard
 	static function ajax()
 	{
 		check_admin_referer('customify_customify_dashboard', '_nonce');
+		if (!current_user_can('manage_options')) {
+			die(-1);
+		}
 		$option = isset($_REQUEST['option']) ? sanitize_text_field($_REQUEST['option']) : '';
 		$value      = isset($_REQUEST['value']) ? sanitize_text_field($_REQUEST['value']) : '';
 		$args       = array(
@@ -352,7 +355,7 @@ class Customify_Dashboard
 	{
 
 		$ver = get_option('customify_fa_ver', 'v4');
-		
+
 	?>
 		<div class="cd-box">
 			<div class="cd-box-top"><?php _e('Font Icons Settings', 'customify'); ?></div>
