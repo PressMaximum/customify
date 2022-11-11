@@ -555,7 +555,7 @@ class Customify_Post_Entry {
 		if ( ! $this->config['more_display'] ) {
 			return;
 		}
-		$more = $this->config['more_text'];
+		$more = isset( $this->config['more_text'] ) ? $this->config['more_text'] : false;
 		if ( ! $more ) {
 			if ( ! is_rtl() ) {
 				$more = __( 'Read more &rarr;', 'customify' );

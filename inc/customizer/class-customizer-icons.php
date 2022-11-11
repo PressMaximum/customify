@@ -54,7 +54,7 @@ class Customify_Font_Icons
 					'name'         => __('Font Awesome v6', 'customify'),
 					'icons'        => $this->get_font_awesome_icons6(),
 					'url'          => array(
-						'font-awesome' => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/all.min.css',
+						'font-awesome-v6' => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/all.min.css',
 						'font-awesome-4-shim' => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/v4-shims.min.css',
 					),
 					'class_config' => '__icon_name__', // __icon_name__ will replace by icon class name
@@ -108,12 +108,12 @@ class Customify_Font_Icons
 				wp_dequeue_style('awf-fontawesome');
 				foreach ($this->get_icons() as $icon_id => $icon) {
 					if (!is_array($icon['url'])) {
-						wp_dequeue_style($icon_id);
-						wp_enqueue_style($icon_id, $icon['url'], array(), '5.0.0');
+						wp_register_style($icon_id, $icon['url'], array(), '5.0.0');
+						wp_enqueue_style($icon_id);
 					} else {
 						foreach ($icon['url'] as $id => $url) {
-							wp_dequeue_style($id);
-							wp_enqueue_style($id, $url, array(), '5.0.0');
+							wp_register_style($id, $url, array(), '5.0.0');
+							wp_enqueue_style($id);
 						}
 					}
 				}
@@ -121,7 +121,7 @@ class Customify_Font_Icons
 			}
 
 			/**
-			 * 
+			 *
 			 */
 			if (did_action('elementor/loaded')) {
 				$load_shim = get_option('elementor_load_fa4_shim', false);
@@ -134,7 +134,7 @@ class Customify_Font_Icons
 
 	/**
 	 * Get FontAwesome icons
-	 * 
+	 *
 	 * @version 5
 	 *
 	 * @return array
