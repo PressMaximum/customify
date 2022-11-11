@@ -1,3 +1,7 @@
+= 0.4.0 =
+* FIXED: Out of date WooCommerce templates
+* FIXED: Font Awesome version 6 missing icons.
+
 = 0.3.9 =
 * NEW: Support Font Awesome 6.
 * NEW: Mobile menu close after clicking when using link anchor.

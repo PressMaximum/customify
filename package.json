@@ -1,6 +1,6 @@
 {
     "name": "customify",
-    "version": "0.3.9",
+    "version": "0.4.0",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
