@@ -23,7 +23,8 @@
         "grunt-postcss": "latest",
         "grunt-rtlcss": "latest",
         "grunt-text-replace": "latest",
-        "grunt-wp-i18n": "latest"
+        "grunt-wp-i18n": "latest",
+        "request": "^2.88.2"
     },
     "dependencies": {
         "copy": "^0.0.1",

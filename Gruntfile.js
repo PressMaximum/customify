@@ -386,9 +386,9 @@ module.exports = function (grunt) {
 
     // Update google Fonts
     grunt.registerTask('google-fonts', function () {
-        var done = this.async();
-        var request = require('request');
-        var fs = require('fs');
+        const done = this.async();
+        const request = require('request');
+        const fs = require('fs');
 
         request('https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyDN4eR6IPflX0QhU1UOOHjv71-2KY3BQwA', function (error, response, body) {
 
