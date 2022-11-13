@@ -49,9 +49,11 @@ h1,
 .h1 {
 	font-size: 2.42em;
 	line-height: 1.216;
+
 	@include for_device(tablet) {
 		font-size: 2.1em;
 	}
+
 	@include for_device(mobile) {
 		font-size: 1.8em;
 	}
@@ -61,13 +63,16 @@ h2,
 .h2 {
 	font-size: 2.1em;
 	line-height: 1.216;
-	& + h3 {
+
+	&+h3 {
 		border-top: 1px solid $color_border;
 		padding-top: ms(-3);
 	}
+
 	@include for_device(tablet) {
 		font-size: 1.9em;
 	}
+
 	@include for_device(mobile) {
 		font-size: 1.7em;
 	}
@@ -102,6 +107,7 @@ blockquote {
 	font-style: italic;
 	font-weight: 200;
 	font-size: 1.2em;
+
 	p:last-of-type {
 		margin-bottom: 0px;
 	}
@@ -161,7 +167,8 @@ html {
 }
 
 body {
-	background: $background_body; /* Fallback for when there is no custom background color defined. */
+	background: $background_body;
+	/* Fallback for when there is no custom background color defined. */
 }
 
 hr {
@@ -172,26 +179,32 @@ hr {
 }
 
 img {
-	height: auto; /* Make sure images are scaled correctly. */
-	max-width: 100%; /* Adhere to container width. */
+	height: auto;
+	/* Make sure images are scaled correctly. */
+	max-width: 100%;
+	/* Adhere to container width. */
 }
 
 figure {
-	margin: ms(0) 0; /* Extra wide images within figure tags don't overflow the content area. */
+	margin: ms(0) 0;
+	/* Extra wide images within figure tags don't overflow the content area. */
 }
 
 /* Links */
 a.plain_color {
 	color: currentColor;
 }
+
 a {
 	color: $color_link;
 	text-decoration: none;
 	transition: all 0.14s ease-out;
+
 	&:hover,
 	&:focus {
 		color: $color_link_hover;
 	}
+
 	&:hover,
 	&:active {
 		outline: 0;
@@ -214,8 +227,8 @@ ol {
 	list-style: decimal;
 }
 
-li > ul,
-li > ol {
+li>ul,
+li>ol {
 	margin-bottom: 0;
 	margin-left: ms(4);
 }
@@ -240,6 +253,7 @@ table {
 		padding: ms(1);
 		font-weight: 600;
 	}
+
 	th {
 		background: darken($background_body, 5%);
 		font-weight: 500;
@@ -261,23 +275,28 @@ table {
 		td {
 			background: darken($background_body, 2%);
 		}
+
 		tr:nth-child(2n) td {
 			background: darken($background_body, 3%);
 		}
 	}
 }
+
 /* Float + Clear */
 .clearfix,
 .clear {
+
 	&:before,
 	&:after {
 		content: "";
 		display: table;
 	}
+
 	&:after {
 		clear: both;
 	}
 }
+
 .pull-right {
 	float: right;
 	margin-right: 0px;
@@ -324,12 +343,14 @@ textarea,
 	border-radius: 1px;
 	-moz-appearance: none;
 	-webkit-appearance: none;
+
 	&:focus {
 		border-color: rgba(0, 0, 0, 0.1);
 		outline: none;
 		background-color: #f9f9f9;
 	}
 }
+
 select {
 	box-shadow: none;
 	background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
@@ -338,14 +359,17 @@ select {
 	padding-right: 1.5em;
 	cursor: pointer;
 }
+
 .select2-container--default {
 	.select2-selection--single {
 		box-shadow: none;
+
 		.select2-selection__rendered {
 			line-height: 2.4em;
 			min-height: 2.6em;
 			padding-left: 0px;
 		}
+
 		.select2-selection__arrow {
 			top: 46%;
 			right: 1px;
@@ -353,6 +377,7 @@ select {
 			background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
 			background-position: center right 8px;
 			background-repeat: no-repeat;
+
 			b {
 				display: none;
 			}
@@ -365,11 +390,11 @@ select {
 	}
 }
 
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+.button:not(.components-button, .customize-partial-edit-shortcut-button),
+button:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type="button"]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button) {
 	border: none;
 	cursor: pointer;
 	padding: 0px 1.3em;
@@ -382,11 +407,16 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 		opacity 0.3s, color 0.3s;
 	border-radius: 1px;
 	display: inline-block;
-	&:hover {
+
+	&:not(.menu-mobile-toggle):hover {
 		box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+	}
+
+	&:hover {
 		color: #ffffff;
 		outline: none;
 	}
+
 	&:active,
 	&:focus {
 		outline: none;
@@ -394,6 +424,7 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 
 	&.loading {
 		position: relative;
+
 		i,
 		svg,
 		.icon-label,
@@ -401,6 +432,7 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
 		.button-label {
 			visibility: hidden;
 		}
+
 		&:after {
 			content: "" !important;
 			height: 16px;
@@ -427,6 +459,7 @@ input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut
 input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
 	color: #ffffff;
 	background: $color_primary;
+
 	&:focus {
 		color: #ffffff;
 	}
@@ -458,6 +491,7 @@ fieldset {
 	border: none;
 	margin: ms(3) 0;
 	padding: 0;
+
 	legend {
 		margin-bottom: ms(-3);
 		font-weight: 600;
@@ -478,7 +512,8 @@ label {
 	height: 1px;
 	width: 1px;
 	overflow: hidden;
-	word-wrap: normal !important; /* Many screen reader and browser combinations announce broken words as they would appear visually. */
+	word-wrap: normal !important;
+	/* Many screen reader and browser combinations announce broken words as they would appear visually. */
 
 	&:focus {
 		background-color: #f1f1f1;
@@ -494,7 +529,8 @@ label {
 		text-decoration: none;
 		top: 0px;
 		width: auto;
-		z-index: 100000; /* Above WP toolbar. */
+		z-index: 100000;
+		/* Above WP toolbar. */
 	}
 }
 
@@ -661,6 +697,7 @@ object {
 	.comment-reply-title {
 		@extend h4;
 	}
+
 	.comment-form-comment,
 	.comment-form-author,
 	.comment-form-email,
@@ -672,23 +709,29 @@ object {
 		}
 	}
 }
+
 .comment-list {
 	list-style: none;
 	margin: 0;
+
 	article.comment {
 		margin-bottom: 0px;
 	}
+
 	ul {
 		list-style: none;
 		margin: 0;
 	}
+
 	.children li.comment {
 		padding-left: 30px;
+
 		@include mq(min-md) {
 			padding-left: 85px;
 			border-left: 1px solid $color_border;
 			position: relative;
 			width: 100%;
+
 			&:after {
 				content: "";
 				display: block;
@@ -701,6 +744,7 @@ object {
 				background-color: $color_border;
 			}
 		}
+
 		@include mq(max-sm) {
 			li.comment li.comment li.comment {
 				padding-left: 0px;
@@ -708,35 +752,43 @@ object {
 		}
 	}
 }
+
 article.comment {
 	padding: ms(2) 0;
 	margin-bottom: ms(2);
+
 	.comment-content {
 		p:last-of-type {
 			margin-bottom: 0px;
 		}
 	}
+
 	.comment-image {
 		float: left;
 	}
+
 	.comment-wrap {
 		margin-left: 85px;
 	}
+
 	.comment-meta {
 		display: block;
 		margin: 12px 0px 12px;
 		padding-bottom: 4px;
 		border-bottom: 1px solid $color_border;
+
 		.comment-edit-link {
 			margin-left: 10px;
 		}
 	}
+
 	.comment-author {
 		font-weight: 500;
 		text-transform: uppercase;
 		line-height: 1;
 		font-style: normal;
 	}
+
 	.comment-post-author {
 		background: $color_meta;
 		padding: 1px 6px 1px;
@@ -747,7 +799,9 @@ article.comment {
 		margin-left: 4px;
 	}
 }
+
 #respond {
+
 	.comment-form-author,
 	.comment-form-email,
 	.comment-form-url {
@@ -756,13 +810,16 @@ article.comment {
 			margin-right: 5.8823529412%;
 			float: left;
 		}
+
 		input {
 			width: 100%;
 		}
 	}
+
 	.comment-form-url {
 		margin-right: 0px;
 	}
+
 	.comment-form-cookies-consent {
 		#wp-comment-cookies-consent {
 			position: relative;
@@ -795,12 +852,14 @@ article.comment {
 	opacity: 0.6;
 	display: inline-block;
 	transition: all 0.3s linear;
+
 	&.x2 {
 		width: 36px;
 		height: 36px;
 		min-height: 36px;
 		font-size: 1.1em;
 	}
+
 	svg {
 		width: 50%;
 		height: 50%;
@@ -811,6 +870,7 @@ article.comment {
 		color: currentColor;
 		transform: translate(-50%, -50%);
 	}
+
 	&:hover,
 	&:focus {
 		color: #333;
@@ -819,29 +879,30 @@ article.comment {
 			0 0 0 1px rgba(0, 0, 0, 0.18);
 		background-color: rgba(255, 255, 255, 0.99);
 	}
+
 	&.nav-next {
 		&:before {
 			//content: "\f105";
 			// transform: translate( -50%, -50%) rotate( 45deg );
 		}
+
 		&:after {
 			//transform: translate( -50%, -50%) rotate( -45deg );
 		}
 	}
+
 	&.nav-prev {
 		&:before {
 			//content: "\f104";
 		}
 	}
+
 	&:before,
-	&:after {
-	}
+	&:after {}
 
-	&:before {
-	}
+	&:before {}
 
-	&:after {
-	}
+	&:after {}
 }
 
 // Shape
@@ -869,6 +930,7 @@ article.comment {
 .text-uppercase {
 	text-transform: uppercase;
 	line-height: 1.2;
+
 	&.text-xsmall {
 		letter-spacing: 0.5px;
 	}
@@ -895,13 +957,16 @@ article.comment {
 	.builder-item-focus {
 		&.item--inner {
 			position: relative;
+
 			&.has_menu {
 				position: initial;
+
 				.item--preview-name {
 					left: auto;
 				}
 			}
 		}
+
 		.item--preview-name {
 			position: absolute;
 			top: 100%;
@@ -917,11 +982,13 @@ article.comment {
 			border-bottom-left-radius: 2px;
 			border-bottom-right-radius: 2px;
 		}
+
 		&:hover {
 			&.item--inner {
 				transition-delay: 0s !important;
 				outline: 1px solid #0073aa;
 				outline-offset: -1px;
+
 				.item--preview-name {
 					display: block;
 					z-index: 9999999;
@@ -935,9 +1002,10 @@ article.comment {
 		.customize-partial-edit-shortcut {
 			display: none;
 		}
-		.builder-item-focus {
-		}
+
+		.builder-item-focus {}
 	}
+
 	.footer--row {
 		.builder-item-focus {
 			&:hover {

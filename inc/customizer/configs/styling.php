@@ -1,6 +1,7 @@
 <?php
-if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
-	function customify_customizer_styling_config( $configs ) {
+if (!function_exists('customify_customizer_styling_config')) {
+	function customify_customizer_styling_config($configs)
+	{
 
 		$section = 'global_styling';
 
@@ -11,7 +12,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'     => 'styling_panel',
 				'type'     => 'panel',
 				'priority' => 22,
-				'title'    => __( 'Styling', 'customify' ),
+				'title'    => __('Styling', 'customify'),
 			),
 
 			// Styling Global Section.
@@ -19,7 +20,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'     => "{$section}",
 				'type'     => 'section',
 				'panel'    => 'styling_panel',
-				'title'    => __( 'Global Colors', 'customify' ),
+				'title'    => __('Global Colors', 'customify'),
 				'priority' => 10,
 			),
 
@@ -27,7 +28,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'    => "{$section}_color_theme_heading",
 				'type'    => 'heading',
 				'section' => $section,
-				'title'   => __( 'Theme Colors', 'customify' ),
+				'title'   => __('Theme Colors', 'customify'),
 			),
 
 			array(
@@ -36,24 +37,20 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'placeholder' => '#235787',
 				'default'     => '#235787',
-				'title'       => __( 'Primary Color', 'customify' ),
+				'title'       => __('Primary Color', 'customify'),
 				'css_format'  => apply_filters(
 					'customify/styling/primary-color',
 					'
 					.header-top .header--row-inner,
 					.button,
-					button,
+					button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
 					button.button,
-					input[type="button"],
-					input[type="reset"],
-					input[type="submit"],
-					.button:not(.components-button):not(.customize-partial-edit-shortcut-button), 
-					input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-					input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button), 
-					input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+					input[type="button"]:not(.components-button, .customize-partial-edit-shortcut-button),
+					input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
+					input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button),
 					.pagination .nav-links > *:hover,
 					.pagination .nav-links span,
-					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a, 
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a,
 					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
 					.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
 					.posts-layout .readmore-button:hover
@@ -65,7 +62,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 					}
 					.pagination .nav-links > *:hover,
 					.pagination .nav-links span,
-					.entry-single .tags-links a:hover, 
+					.entry-single .tags-links a:hover,
 					.entry-single .cat-links a:hover,
 					.posts-layout .readmore-button,
 					.posts-layout .readmore-button:hover
@@ -82,11 +79,11 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'section'     => $section,
 				'placeholder' => '#c3512f',
 				'default'     => '#c3512f',
-				'title'       => __( 'Secondary Color', 'customify' ),
+				'title'       => __('Secondary Color', 'customify'),
 				'css_format'  => apply_filters(
 					'customify/styling/secondary-color',
 					'
-				
+
 					.customify-builder-btn
 					{
 					    background-color: {{value}};
@@ -99,7 +96,7 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'        => "{$section}_color_text",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Text Color', 'customify' ),
+				'title'       => __('Text Color', 'customify'),
 				'placeholder' => '#686868',
 				'default'     => '#686868',
 				'css_format'  => apply_filters(
@@ -120,13 +117,13 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'        => "{$section}_color_link",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Link Color', 'customify' ),
+				'title'       => __('Link Color', 'customify'),
 				'placeholder' => '#1e4b75',
 				'default'     => '#1e4b75',
 				'css_format'  => apply_filters(
 					'customify/styling/link-color',
 					'
-	                a   
+	                a
 	                {
 	                    color: {{value}};
 					}'
@@ -138,13 +135,13 @@ if ( ! function_exists( 'customify_customizer_styling_config' ) ) {
 				'name'        => "{$section}_color_link_hover",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Link Hover Color', 'customify' ),
+				'title'       => __('Link Hover Color', 'customify'),
 				'placeholder' => '#111111',
 				'default'     => '#111111',
 				'css_format'  => apply_filters(
 					'customify/styling/link-color-hover',
 					'
-a:hover, 
+a:hover,
 a:focus,
 .link-meta:hover, .link-meta a:hover
 {
@@ -158,16 +155,16 @@ a:focus,
 				'name'        => "{$section}_color_border",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Border Color', 'customify' ),
+				'title'       => __('Border Color', 'customify'),
 				'placeholder' => '#eaecee',
 				'default'     => '#eaecee',
 				'css_format'  => apply_filters(
 					'customify/styling/color-border',
 					'
-h2 + h3, 
-.comments-area h2 + .comments-title, 
-.h2 + h3, 
-.comments-area .h2 + .comments-title, 
+h2 + h3,
+.comments-area h2 + .comments-title,
+.h2 + h3,
+.comments-area .h2 + .comments-title,
 .page-breadcrumb {
     border-top-color: {{value}};
 }
@@ -249,20 +246,20 @@ article.comment .comment-meta,
 				'name'        => "{$section}_color_meta",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Meta Color', 'customify' ),
+				'title'       => __('Meta Color', 'customify'),
 				'placeholder' => '#6d6d6d',
 				'default'     => '#6d6d6d',
 				'css_format'  => apply_filters(
 					'customify/styling/color-meta',
 					'
 					article.comment .comment-post-author {
-						background: {{value}};				
+						background: {{value}};
 					}
 					.pagination .nav-links > *,
-					.link-meta, 
+					.link-meta,
 					.link-meta a,
 					.color-meta,
-					.entry-single .tags-links:before, 
+					.entry-single .tags-links:before,
 					.entry-single .cats-links:before
 					{
 					    color: {{value}};
@@ -275,10 +272,10 @@ article.comment .comment-meta,
 				'name'        => "{$section}_color_heading",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Heading Color', 'customify' ),
+				'title'       => __('Heading Color', 'customify'),
 				'placeholder' => '#2b2b2b',
 				'default'     => '#2b2b2b',
-				'css_format'  => apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' ),
+				'css_format'  => apply_filters('customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}'),
 				'selector'    => 'format',
 			),
 
@@ -286,7 +283,7 @@ article.comment .comment-meta,
 				'name'        => "{$section}_color_w_title",
 				'type'        => 'color',
 				'section'     => $section,
-				'title'       => __( 'Widget Title Color', 'customify' ),
+				'title'       => __('Widget Title Color', 'customify'),
 				'placeholder' => '#444444',
 				'default'     => '#444444',
 				'css_format'  => '.site-content .widget-title { color: {{value}};}',
@@ -295,8 +292,8 @@ article.comment .comment-meta,
 
 		);
 
-		return array_merge( $configs, $config );
+		return array_merge($configs, $config);
 	}
 }
 
-add_filter( 'customify/customizer/config', 'customify_customizer_styling_config' );
+add_filter('customify/customizer/config', 'customify_customizer_styling_config');

@@ -1,4 +1,5 @@
 = 0.4.0 =
+* IMPROVED: Change menu icon HTML tag from a to button.
 * FIXED: Out of date WooCommerce templates
 * FIXED: Font Awesome version 6 missing icons.
 
