@@ -21,7 +21,7 @@ class Customify_Posts_Layout
 			'meta_sep'            => Customify()->get_setting($customizer_args['prefix'] . '_meta_sep'),
 			'author_avatar'       => Customify()->get_setting($customizer_args['prefix'] . '_author_avatar'),
 			'media_hide'          => Customify()->get_setting($customizer_args['prefix'] . '_media_hide'),
-			'use_ratio'           => Customify()->get_setting($customizer_args['prefix'] . '_use_ratio', true),
+			'use_ratio'          => Customify()->get_setting($customizer_args['prefix'] . '_use_ratio', true),
 		);
 
 		$size = Customify()->get_setting($customizer_args['prefix'] . '_avatar_size');
@@ -44,7 +44,7 @@ class Customify_Posts_Layout
 			$args,
 			array(
 				'layout'              => '',
-				'columns'             => '',`
+				'columns'             => '',
 				'excerpt_length'      => '',
 				'excerpt_more'        => '',
 				'more_text'           => '',
