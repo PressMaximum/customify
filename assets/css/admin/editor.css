@@ -1285,6 +1285,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
     padding-top: 56.25%;
   }
 }
+.posts-layout .entry-media.no-ratio .entry-thumbnail {
+  position: relative;
+}
 .posts-layout .entry-thumbnail {
   position: absolute;
   top: 0px;

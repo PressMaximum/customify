@@ -1,4 +1,5 @@
 = 0.4.0 =
+* NEW: Option to disable featured image ratio (Customizer -> Blog Posts -> Media -> Use media ratio).
 * IMPROVED: Change menu icon HTML tag from a to button.
 * IMPROVED: Updated google fonts
 * FIXED: Out of date WooCommerce templates
