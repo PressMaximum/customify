@@ -5,7 +5,7 @@ Theme URI: https://pressmaximum.com/customify
 Author: WPCustomify
 Author URI: https://pressmaximum.com
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify
-Version: 0.3.9
+Version: 0.4.0
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -2514,11 +2514,11 @@ select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 }
 
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+.button:not(.components-button, .customize-partial-edit-shortcut-button),
+button:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button) {
   border: none;
   cursor: pointer;
   padding: 0px 1.3em;
@@ -2531,65 +2531,71 @@ input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-
   border-radius: 1px;
   display: inline-block;
 }
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):hover {
+.button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+}
+.button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):hover {
   color: #ffffff;
   outline: none;
 }
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button):active, .button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):active,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
+.button:not(.components-button, .customize-partial-edit-shortcut-button):active, .button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+button:not(.components-button, .customize-partial-edit-shortcut-button):active,
+button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):active,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):active,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):active,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):focus {
   outline: none;
 }
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading {
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading {
   position: relative;
 }
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading i,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading svg,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .icon-label,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading .button-label {
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label {
   visibility: hidden;
 }
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-button:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after,
-input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button).loading:after {
+.button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after {
   content: "" !important;
   height: 16px;
   width: 16px;
@@ -5891,6 +5897,9 @@ body.menu_sidebar_dropdown:before {
     width: 100% !important;
     padding-top: 56.25%;
   }
+}
+.posts-layout .entry-media.no-ratio .entry-thumbnail {
+  position: relative;
 }
 .posts-layout .entry-thumbnail {
   position: absolute;
