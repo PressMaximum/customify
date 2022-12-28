@@ -134,7 +134,7 @@ class Customify_Builder_Item_Nav_Icon {
 			$classes[] = $style;
 		}
 		?>
-		<button type="button" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
+		<button type="button" aria-label="<?php echo $label; ?>" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
 			<span class="hamburger hamburger--squeeze">
 				<span class="hamburger-box">
 					<span class="hamburger-inner"></span>
