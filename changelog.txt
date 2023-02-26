@@ -1,3 +1,6 @@
+= 0.4.1 =
+* IMPROVED: Footer border in dark mode.
+
 = 0.4.0 =
 * NEW: Option to disable featured image ratio (Customizer -> Blog Posts -> Media -> Use media ratio).
 * IMPROVED: Change menu icon HTML tag from a to button.
