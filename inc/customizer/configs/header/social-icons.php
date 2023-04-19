@@ -395,7 +395,7 @@ class Customify_Builder_Item_Social_Icons {
 					}
 
 					if ( $icon['icon'] ) {
-						echo '<i class="icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
+						echo '<i class="social-icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
 					}
 
 					if ( $item['url'] ) {
