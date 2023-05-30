@@ -1,16 +1,15 @@
-@charset "UTF-8";
 /*!
 Theme Name: Customify
 Theme URI: https://pressmaximum.com/customify
 Author: WPCustomify
 Author URI: https://pressmaximum.com
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify
-Version: 0.4.1
+Version: 0.4.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
 Domain Path: /languages
-Tested up to: 5.5.1
+Tested up to: 6.1.1
 Requires PHP: 5.6
 Tags: custom-background, custom-logo, custom-menu, featured-images, flexible-header, footer-widgets, full-width-template, sticky-post, theme-options, threaded-comments, translation-ready, one-column, two-columns, three-columns, left-sidebar, right-sidebar, e-commerce, blog
  This theme, like WordPress, is licensed under the GPL.
@@ -2514,9 +2513,12 @@ select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 }
 
+body:not(.fl-builder-edit) .button,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 .button:not(.components-button, .customize-partial-edit-shortcut-button),
 button:not(.components-button, .customize-partial-edit-shortcut-button),
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button),
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button) {
   border: none;
@@ -2531,39 +2533,69 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   border-radius: 1px;
   display: inline-block;
 }
+body:not(.fl-builder-edit) .button:not(.menu-mobile-toggle):hover,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button):not(.menu-mobile-toggle):hover,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
+body:not(.fl-builder-edit) .button:hover,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):hover,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button):hover,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
 button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):hover {
   color: #ffffff;
   outline: none;
 }
-.button:not(.components-button, .customize-partial-edit-shortcut-button):active, .button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+body:not(.fl-builder-edit) .button:active, body:not(.fl-builder-edit) .button:focus,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):active,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):focus,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button):active,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button):focus,
+.button:not(.components-button, .customize-partial-edit-shortcut-button):active,
+.button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
 button:not(.components-button, .customize-partial-edit-shortcut-button):active,
 button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):active,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):active,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):focus,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):focus {
   outline: none;
 }
+body:not(.fl-builder-edit) .button.loading,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading {
   position: relative;
 }
+body:not(.fl-builder-edit) .button.loading i,
+body:not(.fl-builder-edit) .button.loading svg,
+body:not(.fl-builder-edit) .button.loading .icon-label,
+body:not(.fl-builder-edit) .button.loading .hide-on-loading,
+body:not(.fl-builder-edit) .button.loading .button-label,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading i,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading svg,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading i,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading svg,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading .icon-label,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading .hide-on-loading,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading .button-label,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
@@ -2574,11 +2606,11 @@ button:not(.components-button, .customize-partial-edit-shortcut-button).loading 
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading i,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading svg,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading .button-label,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
@@ -2591,9 +2623,12 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label {
   visibility: hidden;
 }
+body:not(.fl-builder-edit) .button.loading:after,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading:after,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading:after,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
-input[type=button]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after {
   content: "" !important;
@@ -6172,10 +6207,10 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .entry-single .cats-links:before {
-  content: "";
+  content: "\f115";
 }
 .entry-single .tags-links:before {
-  content: "";
+  content: "\f02c";
 }
 .entry-single .edit-link {
   display: block;
@@ -6201,12 +6236,12 @@ body.menu_sidebar_dropdown:before {
   }
 }
 .author-bio .author-bio-details {
-  flex-basis: calc( 100% - 90px );
+  flex-basis: calc(100% - 90px);
   margin-left: 1.5em;
 }
 @media screen and (max-width: 568px) {
   .author-bio .author-bio-details {
-    flex-basis: calc( 100% - 50px );
+    flex-basis: calc(100% - 50px);
   }
 }
 .author-bio .author-bio-desc p:last-child {
@@ -6287,7 +6322,7 @@ body.menu_sidebar_dropdown:before {
   display: block;
 }
 .img-pos-left .related-body, .img-pos-right .related-body {
-  flex-basis: calc( 100% - 160px );
+  flex-basis: calc(100% - 160px);
 }
 .img-pos-left .related-body p, .img-pos-right .related-body p {
   margin-bottom: 0px;
@@ -6849,3 +6884,5 @@ body.menu_sidebar_dropdown:before {
 .footer-copyright {
   font-size: 0.875em;
 }
+
+/*# sourceMappingURL=style.css.map */

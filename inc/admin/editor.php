@@ -98,7 +98,7 @@ class Customify_Editor {
 		.edit-post-layout__metaboxes:not(:empty) { margin-top: 0px; }
 		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
 		.editor-styles-wrapper textarea.editor-post-title__input:focus,
-		.block-editor-page .editor-styles-wrapper button { background: none; }
+		.block-editor-page .editor-styles-wrapper button:not(.components-button) { background: none; }
 		';
 
 		$css .= 'pre{
