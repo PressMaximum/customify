@@ -1,3 +1,7 @@
+= 0.4.2 =
+* NEW: Option to show/hide WooCommerce page title and description (Customizer -> WooCommerce ->  Product Catalog  -> Show Woocommerce Page title and description).
+* FIXED: Customify is affecting buttons style on Beaver Builder Plugin.
+
 = 0.4.1 =
 * IMPROVED: Footer border in dark mode.
 
