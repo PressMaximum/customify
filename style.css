@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*!
 Theme Name: Customify
 Theme URI: https://pressmaximum.com/customify
@@ -2648,14 +2649,22 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   line-height: 0px;
 }
 
+body:not(.fl-builder-edit) .button,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button),
+input[type=button]:not(.ed_button),
 input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
   color: #ffffff;
   background: #235787;
 }
+body:not(.fl-builder-edit) .button:focus,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):focus,
+body:not(.fl-builder-edit) input[type=button]:not(.ed_button):focus,
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
+input[type=button]:not(.ed_button):focus,
 input[type=button]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
 input[type=reset]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
 input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-button):focus {
@@ -6207,10 +6216,10 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .entry-single .cats-links:before {
-  content: "\f115";
+  content: "";
 }
 .entry-single .tags-links:before {
-  content: "\f02c";
+  content: "";
 }
 .entry-single .edit-link {
   display: block;
@@ -6236,12 +6245,12 @@ body.menu_sidebar_dropdown:before {
   }
 }
 .author-bio .author-bio-details {
-  flex-basis: calc(100% - 90px);
+  flex-basis: calc( 100% - 90px );
   margin-left: 1.5em;
 }
 @media screen and (max-width: 568px) {
   .author-bio .author-bio-details {
-    flex-basis: calc(100% - 50px);
+    flex-basis: calc( 100% - 50px );
   }
 }
 .author-bio .author-bio-desc p:last-child {
@@ -6322,7 +6331,7 @@ body.menu_sidebar_dropdown:before {
   display: block;
 }
 .img-pos-left .related-body, .img-pos-right .related-body {
-  flex-basis: calc(100% - 160px);
+  flex-basis: calc( 100% - 160px );
 }
 .img-pos-left .related-body p, .img-pos-right .related-body p {
   margin-bottom: 0px;
@@ -6884,5 +6893,3 @@ body.menu_sidebar_dropdown:before {
 .footer-copyright {
   font-size: 0.875em;
 }
-
-/*# sourceMappingURL=style.css.map */

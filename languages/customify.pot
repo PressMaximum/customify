@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.1\n"
+"Project-Id-Version: Customify 0.4.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2023-03-11 08:48:30+00:00\n"
+"POT-Creation-Date: 2023-06-02 07:07:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -501,8 +501,8 @@ msgstr ""
 
 #: inc/class-customify.php:206 inc/class-customify.php:217
 #: inc/class-customify.php:231
-#: inc/compatibility/woocommerce/woocommerce.php:650
-#: inc/compatibility/woocommerce/woocommerce.php:661
+#: inc/compatibility/woocommerce/woocommerce.php:649
+#: inc/compatibility/woocommerce/woocommerce.php:660
 msgid "Add widgets here."
 msgstr ""
 
@@ -925,11 +925,15 @@ msgstr ""
 msgid "Advanced styling for onsale button"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog.php:15
+#: inc/compatibility/woocommerce/config/catalog.php:17
+msgid "Show Woocommerce Page title and description"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/catalog.php:24
 msgid "Products per row on tablet"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog.php:22
+#: inc/compatibility/woocommerce/config/catalog.php:31
 msgid "Products per row on mobile"
 msgstr ""
 
@@ -1189,19 +1193,19 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:602
+#: inc/compatibility/woocommerce/woocommerce.php:601
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:610
+#: inc/compatibility/woocommerce/woocommerce.php:609
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:648
+#: inc/compatibility/woocommerce/woocommerce.php:647
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:659
+#: inc/compatibility/woocommerce/woocommerce.php:658
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -1331,7 +1335,7 @@ msgstr ""
 
 #: inc/customizer/class-customizer.php:477
 #: inc/customizer/class-customizer.php:673
-#: inc/customizer/configs/styling.php:120
+#: inc/customizer/configs/styling.php:121
 msgid "Link Color"
 msgstr ""
 
@@ -1520,7 +1524,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:725
 #: inc/customizer/configs/header/menus.php:108
 #: inc/customizer/configs/header/social-icons.php:301
-#: inc/customizer/configs/styling.php:158
+#: inc/customizer/configs/styling.php:159
 msgid "Border Color"
 msgstr ""
 
@@ -2760,27 +2764,27 @@ msgstr ""
 msgid "Primary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:82
+#: inc/customizer/configs/styling.php:83
 msgid "Secondary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:99
+#: inc/customizer/configs/styling.php:100
 msgid "Text Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:138
+#: inc/customizer/configs/styling.php:139
 msgid "Link Hover Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:249
+#: inc/customizer/configs/styling.php:250
 msgid "Meta Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:275
+#: inc/customizer/configs/styling.php:276
 msgid "Heading Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:286
+#: inc/customizer/configs/styling.php:287
 msgid "Widget Title Color"
 msgstr ""
 
