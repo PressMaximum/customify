@@ -1,11 +1,10 @@
-@charset "UTF-8";
 /*!
 Theme Name: Customify
 Theme URI: https://pressmaximum.com/customify
 Author: WPCustomify
 Author URI: https://pressmaximum.com
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify
-Version: 0.4.2
+Version: 0.4.4
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -6216,10 +6215,10 @@ body.menu_sidebar_dropdown:before {
   color: #6d6d6d;
 }
 .entry-single .cats-links:before {
-  content: "";
+  content: "\f115";
 }
 .entry-single .tags-links:before {
-  content: "";
+  content: "\f02c";
 }
 .entry-single .edit-link {
   display: block;
@@ -6245,12 +6244,12 @@ body.menu_sidebar_dropdown:before {
   }
 }
 .author-bio .author-bio-details {
-  flex-basis: calc( 100% - 90px );
+  flex-basis: calc(100% - 90px);
   margin-right: 1.5em;
 }
 @media screen and (max-width: 568px) {
   .author-bio .author-bio-details {
-    flex-basis: calc( 100% - 50px );
+    flex-basis: calc(100% - 50px);
   }
 }
 .author-bio .author-bio-desc p:last-child {
@@ -6331,7 +6330,7 @@ body.menu_sidebar_dropdown:before {
   display: block;
 }
 .img-pos-left .related-body, .img-pos-right .related-body {
-  flex-basis: calc( 100% - 160px );
+  flex-basis: calc(100% - 160px);
 }
 .img-pos-left .related-body p, .img-pos-right .related-body p {
   margin-bottom: 0px;

@@ -2948,6 +2948,7 @@ class Customify_Font_Icons
 				2006 => 'fa-brands fa-youtube-square',
 				2007 => 'fa-solid fa-z',
 				2008 => 'fa-brands fa-zhihu',
+				2009 => 'fa-brands fa-x-twitter',
 			);
 	}
 }

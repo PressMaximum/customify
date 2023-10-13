@@ -630,7 +630,7 @@ p.demo_store a,
 .woocommerce-error::before,
 .woocommerce-info::before {
   font-family: "WooCommerce";
-  content: "";
+  content: "\e028";
   display: inline-block;
   position: absolute;
   top: 1em;
@@ -653,7 +653,7 @@ p.demo_store a,
   border-top-color: #8fae1b;
 }
 .woocommerce-message::before {
-  content: "";
+  content: "\e015";
   color: #8fae1b;
 }
 
@@ -668,7 +668,7 @@ p.demo_store a,
   border-top-color: #b81c23;
 }
 .woocommerce-error::before {
-  content: "";
+  content: "\e016";
   color: #b81c23;
 }
 
@@ -876,7 +876,7 @@ td.product-quantity {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e00a";
   text-decoration: none;
 }
 .woocommerce-account ul.digital-downloads li .count {
@@ -1140,7 +1140,7 @@ td.product-quantity {
   flex-basis: 60px;
 }
 .product_list_widget li.has_thumbnail .tex-info {
-  flex-basis: calc( 100% - 60px );
+  flex-basis: calc(100% - 60px);
   padding-right: 15px;
 }
 .product_list_widget li a {
@@ -1274,7 +1274,7 @@ td.product-quantity {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e039";
   text-decoration: none;
   color: #c6c7ce;
   position: relative;
@@ -1289,7 +1289,7 @@ td.product-quantity {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e015";
   text-decoration: none;
   color: #c6c7ce;
 }
@@ -1323,7 +1323,7 @@ td.product-quantity {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e013";
   text-decoration: none;
   color: #a00;
   vertical-align: inherit;
@@ -1435,7 +1435,7 @@ td.product-quantity {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e013";
   text-decoration: none;
   color: #a00;
 }
@@ -2057,7 +2057,7 @@ Section and Toggle
 .button.product_type_external.added i::before,
 .button.product_type_variable.added i::before {
   font-family: "FontAwesome";
-  content: "";
+  content: "\f00c";
 }
 
 .products .button.add_to_cart_button,
@@ -2308,7 +2308,7 @@ div.product div.images .woocommerce-product-gallery__trigger:hover, div.product 
   background-color: rgba(255, 255, 255, 0.99);
 }
 div.product div.images .woocommerce-product-gallery__trigger:before {
-  content: "";
+  content: "\e035";
   font-family: "WooCommerce";
   display: flex;
   height: 100%;
@@ -2592,7 +2592,7 @@ ul.order_details li:last-of-type {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e037";
   text-decoration: none;
   margin-right: -1.5em;
   line-height: 1.75;
@@ -2607,7 +2607,7 @@ ul.order_details li:last-of-type {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-left: 0.418em;
-  content: "";
+  content: "\e02d";
   text-decoration: none;
   margin-right: -1.5em;
   line-height: 1.75;
@@ -3027,23 +3027,23 @@ p.stars a::before {
   height: 1em;
   line-height: 1;
   font-family: "WooCommerce";
-  content: "";
+  content: "\e021";
   text-indent: 0;
 }
 p.stars a:hover ~ a::before {
-  content: "";
+  content: "\e021";
 }
 p.stars:hover a::before {
-  content: "";
+  content: "\e020";
 }
 p.stars.selected a.active::before {
-  content: "";
+  content: "\e020";
 }
 p.stars.selected a.active ~ a::before {
-  content: "";
+  content: "\e021";
 }
 p.stars.selected a:not(.active)::before {
-  content: "";
+  content: "\e020";
 }
 
 /**
@@ -3223,7 +3223,7 @@ form.woocommerce-checkout::after {
   line-height: 1;
   -webkit-font-smoothing: antialiased;
   margin-right: 0.618em;
-  content: "";
+  content: "\e019";
   text-decoration: none;
 }
 .woocommerce-cart .cart-collaterals .cart_totals p small,
@@ -3630,11 +3630,11 @@ form.woocommerce-checkout::after {
 }
 
 .woocommerce-form-login-toggle .woocommerce-info:before {
-  content: "";
+  content: "\e03a";
 }
 
 .woocommerce-form-coupon-toggle .woocommerce-info:before {
-  content: "";
+  content: "\e600";
 }
 
 .cart-collaterals table.shop_table {
@@ -3720,7 +3720,7 @@ form.woocommerce-checkout::after {
 }
 .woocommerce-page .input-group-text-button .button:before, .woocommerce-page .coupon .button:before {
   font-family: "WooCommerce";
-  content: "";
+  content: "\e008";
   color: #CCCCCC;
   font-size: 17px;
   margin-left: 2em;

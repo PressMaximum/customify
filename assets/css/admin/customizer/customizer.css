@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .in-sub-panel #customize-theme-controls .customize-pane-child.current-panel-parent,
 #customize-theme-controls .customize-pane-child.current-section-parent {
   -webkit-transform: translateX(-100%);
@@ -51,7 +50,7 @@ html[dir=rtl] .customize--reset-section {
 .customize--reset-section:before {
   -moz-osx-font-smoothing: grayscale;
   border: none;
-  content: "";
+  content: "\f531";
   display: block;
   font: 18px/1 dashicons;
   padding: 5px;
@@ -234,7 +233,7 @@ html[dir=rtl] .customize--reset-section {
   transform: rotate(-90deg);
 }
 .customize-control.control--bg .customify--settings-wrapper .customify-actions .action--edit span:before {
-  content: "";
+  content: "\f347";
 }
 .customize-control.control--bg .customify-modal-settings {
   margin-left: -12px;
@@ -257,7 +256,7 @@ html[dir=rtl] .customize--reset-section {
   transform: rotate(-180deg);
 }
 .customize-control.control--bg.modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
-  content: "";
+  content: "\f347";
 }
 
 .customify-field-heading::after {
@@ -298,13 +297,13 @@ html[dir=rtl] .customify-field-heading .customify-devices {
   padding: 5px 0px 3px;
 }
 .customify-field-heading .customify-devices button.preview-desktop:before {
-  content: "";
+  content: "\f472";
 }
 .customify-field-heading .customify-devices button.preview-tablet:before {
-  content: "";
+  content: "\f471";
 }
 .customify-field-heading .customify-devices button.preview-mobile:before {
-  content: "";
+  content: "\f470";
 }
 
 /**
@@ -359,7 +358,7 @@ html[dir=rtl] .customify-field-heading .customify-devices {
   margin-left: 15px;
 }
 .customify--repeater-actions .customify--repeater-add-new:before {
-  content: "";
+  content: "\f132";
   display: inline-block;
   position: relative;
   left: -2px;
@@ -406,7 +405,7 @@ html[dir=rtl] .customify--repeater-items .customify--repeater-visible {
 .customify--repeater-items .customify--repeater-visible .r-visible-icon:before {
   -moz-osx-font-smoothing: grayscale;
   border: none;
-  content: "";
+  content: "\f530";
   display: block;
   font: 14px/34px dashicons;
   padding: 5px;
@@ -414,7 +413,7 @@ html[dir=rtl] .customify--repeater-items .customify--repeater-visible {
   text-indent: 0;
 }
 .customify--repeater-items .customify--repeater-visible input:checked + span.r-visible-icon:before {
-  content: "";
+  content: "\f177";
 }
 .customify--repeater-items .customify--repeater-visible input {
   display: none;
@@ -488,10 +487,10 @@ html[dir=rtl] .customify--repeater-items .customify--repeater-live-title {
   -moz-osx-font-smoothing: grayscale;
 }
 .customify--repeater-items .customify-nav-reorder .customify--down:before {
-  content: "";
+  content: "\f347";
 }
 .customify--repeater-items .customify-nav-reorder .customify--up:before {
-  content: "";
+  content: "\f343";
 }
 .customify--repeater-items.reorder-active .customify-nav-reorder {
   display: block;
@@ -531,7 +530,7 @@ html[dir=rtl] .customify--repeater-items .customify--repeater-item .customify--r
 }
 .customify--repeater-items .customify--repeater-item .customify--repeater-item-toggle:before {
   font: 400 20px/2 dashicons;
-  content: "";
+  content: "\f140";
 }
 .customify--repeater-items .customify--repeater-item .customify--repeater-item-settings {
   display: none;
@@ -543,7 +542,7 @@ html[dir=rtl] .customify--repeater-items .customify--repeater-item .customify--r
   display: block;
 }
 .customify--repeater-items .customify--repeater-item.customify--open .customify--repeater-item-toggle:before {
-  content: "";
+  content: "\f142";
 }
 
 .customify--group-field.ft--hr {
@@ -646,14 +645,14 @@ html[dir=rtl] .customify--css-unit label:first-child {
 }
 .customify--gr-inputs label:before {
   font: 400 18px/37px dashicons;
-  content: "";
+  content: "\f225";
   position: absolute;
   top: -3px;
   left: 5px;
   display: block;
 }
 .customify--gr-inputs label.customify--label-active:before {
-  content: "";
+  content: "\f103";
 }
 
 .customify-image-preview {
@@ -741,7 +740,7 @@ html[dir=rtl] .customify-input-slider-wrapper .reset {
 .customify-input-slider-wrapper .reset:before {
   -moz-osx-font-smoothing: grayscale;
   border: none;
-  content: "";
+  content: "\f531";
   display: block;
   font: 12px/1 dashicons;
   padding: 5px;
@@ -895,7 +894,7 @@ html[dir=rtl] #customify--sidebar-icons.customify--active {
 }
 #customify--sidebar-icons .customize-controls-icon-close:before {
   font: 400 22px/45px dashicons;
-  content: "";
+  content: "\f335";
   position: relative;
   top: -3px;
   left: 13px;
@@ -1128,10 +1127,10 @@ html[dir=rtl] .custom-control-radio_group .customify-radio-list p:first-child sp
   display: inline-block;
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--change:before, .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--add:before {
-  content: "";
+  content: "\f317";
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .button.customify--remove:before {
-  content: "";
+  content: "\f335";
 }
 .customize-control.customify-background-control--- .customify--settings-fields .customify--field.customify--field-name-image .customify-image-preview {
   margin: 0px 0px 10px;
@@ -1222,7 +1221,7 @@ html[dir=rtl] .customify--settings-wrapper .customify-actions {
   padding: 5px;
 }
 .modal--opening .customify--settings-wrapper .customify-actions .action--edit span:before {
-  content: "";
+  content: "\f335";
 }
 .customify--settings-wrapper:not(.show-short-desc) .customify--field-typography .customify-actions,
 .customify--settings-wrapper:not(.show-short-desc) .customify--field-styling .customify-actions {
@@ -1563,7 +1562,7 @@ html[dir=rtl] .customify-modal-settings:before {
 }
 
 #customize-controls #accordion-section-customify-pro h3 a:after {
-  content: "";
+  content: "\f345";
   position: absolute;
   color: #ca4a1f;
   top: 11px;
@@ -1863,7 +1862,7 @@ html[dir=rtl] .customify--cb-row .customify--cb-row-settings {
 .customify--cb-row .customify--cb-row-settings:before {
   -webkit-font-smoothing: antialiased;
   font: 400 18px/54px dashicons;
-  content: "";
+  content: "\f111";
   position: relative;
   top: -2.5px;
 }
@@ -2094,7 +2093,7 @@ html[dir=rtl] .customify-available-items .grid-stack-item {
   transform: translateY(-50%);
 }
 .grid-stack-item .customify--cb-item-add:before {
-  content: "";
+  content: "\f132";
 }
 .grid-stack-item .customify--cb-item-remove {
   top: 50%;
@@ -2109,7 +2108,7 @@ html[dir=rtl] .grid-stack-item .customify--cb-item-remove {
   left: 0px;
 }
 .grid-stack-item .customify--cb-item-remove:before {
-  content: "";
+  content: "\f335";
 }
 .grid-stack-item .customify--cb-item-remove:hover {
   color: #0073aa;
@@ -2127,7 +2126,7 @@ html[dir=rtl] .grid-stack-item .customify--cb-item-setting {
   left: 22px;
 }
 .grid-stack-item .customify--cb-item-setting:before {
-  content: "";
+  content: "\f111";
   font-size: 15px;
 }
 .grid-stack-item .customify--cb-item-setting:hover {

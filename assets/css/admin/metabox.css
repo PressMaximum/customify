@@ -167,7 +167,7 @@
 #side-sortables .customify-mt-tabs-list .customify-mt-tab-cont a::after {
   background: #3E474F;
   border-radius: 0.25em;
-  bottom: calc( 100% + 0.75em );
+  bottom: calc(100% + 0.75em);
   color: #EDEFF0;
   display: block;
   content: attr(data-title);
