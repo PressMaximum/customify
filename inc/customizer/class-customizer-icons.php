@@ -929,6 +929,7 @@ class Customify_Font_Icons
 				783 => 'fa fa-superpowers',
 				784 => 'fa fa-wpexplorer',
 				785 => 'fa fa-meetup',
+				786 => 'fa fa-x-twitter',
 			);
 
 		return apply_filters('customify/customizer/font_icons/font_awesome_icons', $icons);
