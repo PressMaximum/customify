@@ -614,7 +614,7 @@ class Customify_Post_Entry {
 				$user_description = wpautop( $user_description );
 				$user_description = convert_smilies( $user_description );
 
-				$author_links = '<p class="author_links text-uppercase text-xsmall link-meta"><a href="' . $user_posts . '">' . sprintf( 'View all post by %s', $display_name ) . '</a>';
+				$author_links = '<p class="author_links text-uppercase text-xsmall link-meta"><a href="' . $user_posts . '">' . sprintf(__( 'View all posts by %s', 'customify' ), $display_name ) . '</a>';
 
 				// Check if author has a website in their profile.
 				if ( ! empty( $user_website ) ) {
