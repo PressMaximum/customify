@@ -1,3 +1,35 @@
+= 0.4.4 =
+* UPDATED: WooCommerce template files.
+* UPDATED: Update version of fontawesome
+
+= 0.4.3 =
+* UPDATED: WooCommerce template files.
+
+= 0.4.2 =
+* NEW: Option to show/hide WooCommerce page title and description (Customizer -> WooCommerce ->  Product Catalog  -> Show Woocommerce Page title and description).
+* FIXED: Customify is affecting buttons style on Beaver Builder Plugin.
+
+= 0.4.1 =
+* IMPROVED: Footer border in dark mode.
+* FIXED: WooCommerce outdate.
+* FIXED: Header cover condition issues.
+
+= 0.4.0 =
+* NEW: Option to disable featured image ratio (Customizer -> Blog Posts -> Media -> Use media ratio).
+* IMPROVED: Change menu icon HTML tag from a to button.
+* IMPROVED: Updated google fonts
+* FIXED: Out of date WooCommerce templates
+* FIXED: Font Awesome version 6 missing icons.
+
+= 0.3.9 =
+* NEW: Support Font Awesome 6.
+* NEW: Mobile menu close after clicking when using link anchor.
+* NEW: Support font display swap for google font.
+* FIXED: Duplicates product item in shop page when use ajax filter.
+* UPDATED: Support widgets block editor.
+* IMPROVED: Security check.
+
+
 = 0.3.7 =
 * FIXED: Setting disable page title does not work.
 * FIXED: Customizer styling.

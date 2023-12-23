@@ -520,15 +520,14 @@ class Customify_WC {
 	}
 
 	function show_shop_title( $show = true ) {
-		if ( $this->is_shop_pages() ) {
-			$disable = $this->get_shop_page_meta( '_customify_disable_page_title' );
-			if ( $disable ) {
-				$show = false;
-			}
-		}
 
-		if ( $this->titlebar_is_showing() ) {
-			$show = false;
+		if ( $this->is_shop_pages()  || is_product_category()) {
+			$disable = get_theme_mod( '_customify_wc_show_page_title' );
+			if ( !$disable ) {
+				$show = false;
+			} else {
+				$show = true;
+			}
 		}
 
 		return apply_filters( 'customify_is_shop_title_display', $show );

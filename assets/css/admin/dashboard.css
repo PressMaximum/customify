@@ -50,7 +50,7 @@
   box-sizing: border-box;
 }
 .cd-row:after {
-  content: '';
+  content: "";
   clear: both;
   display: block;
 }
@@ -133,7 +133,7 @@
   margin: -15px;
 }
 .cd-list-flex:after {
-  content: '';
+  content: "";
   clear: both;
   display: block;
 }
@@ -440,6 +440,17 @@
   margin: 0 -15px;
   padding: 15px 15px 15px;
   border-bottom: 1px solid #eee;
+  display: flex;
+  align-items: center;
+}
+.cd-list-item .cd-list-icon {
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  display: flex;
+}
+.cd-list-item .cd-list-b {
+  padding-left: 0.8em;
 }
 .cd-list-item:first-child {
   padding-top: 0px;
@@ -495,11 +506,11 @@
   font-size: 18px;
 }
 
-.cd-box-content input[type="text"],
-.cd-box-content input[type="number"],
-.cd-box-content input[type="password"],
-.cd-box-content input[type="email"],
-.cd-box-content input[type="email"] {
+.cd-box-content input[type=text],
+.cd-box-content input[type=number],
+.cd-box-content input[type=password],
+.cd-box-content input[type=email],
+.cd-box-content input[type=email] {
   display: block;
   max-width: 100%;
 }
@@ -518,5 +529,3 @@
 .copy-theme-settings {
   position: relative;
 }
-
-/*# sourceMappingURL=dashboard.css.map */

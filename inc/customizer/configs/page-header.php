@@ -722,6 +722,7 @@ class Customify_Page_Header {
 			}
 
 			if ( 'none' != $args['display'] ) {
+
 				if ( 'blog_page' == $advanced['post_title_tagline'] ) {
 					$post_id                            = get_option( 'page_for_posts' );
 					$args['force_display_single_title'] = 'show';
@@ -909,6 +910,7 @@ class Customify_Page_Header {
 
 	function display_page_title( $show ) {
 		$args = $this->get_settings();
+
 		if ( ! $args['display'] || 'default' == $args['display'] ) {
 			$show = true;
 		} elseif ( 'cover' == $args['display'] || 'titlebar' == $args['display'] || 'none' == $args['display'] ) {
@@ -925,6 +927,7 @@ class Customify_Page_Header {
 
 	function render_cover( $args = array() ) {
 		$args = $this->get_settings();
+
 		extract( $args, EXTR_SKIP ); // phpcs:ignore
 
 		$style = '';
@@ -968,7 +971,8 @@ class Customify_Page_Header {
 
 	function render_titlebar( $args = array() ) {
 		$args = $this->get_settings();
-		if ( is_array( $args ) && isset( $args['force_display_single_title'] ) && 'hide' == trim( $args['force_display_single_title'] ) ) {
+
+		if ( is_array( $args ) && isset( $args['force_display_single_title'] ) && $args['force_display_single_title'] != '' && 'hide' != trim( $args['force_display_single_title'] ) ) {
 			return;
 		}
 

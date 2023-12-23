@@ -391,11 +391,11 @@ class Customify_Builder_Item_Social_Icons {
 								'icon',
 							),
 							esc_attr( $icon['icon'] )
-						) . $shape . '" ' . $rel . 'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '">';
+						) . $shape . '" ' . $rel . 'target="' . esc_attr( $target ) . '" href="' . esc_url( $item['url'] ) . '" aria-label="' . esc_attr( $item['title']) . '">';
 					}
 
 					if ( $icon['icon'] ) {
-						echo '<i class="icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
+						echo '<i class="social-icon ' . esc_attr( $icon['icon'] ) . '" title="' . esc_attr( $item['title'] ) . '"></i>';
 					}
 
 					if ( $item['url'] ) {

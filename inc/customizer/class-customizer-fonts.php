@@ -36,7 +36,6 @@ class Customify_Fonts {
 		$file = get_template_directory() . '/assets/fonts/google-fonts.json';
 		if ( file_exists( $file ) ) {
 			$file_contents = $wp_filesystem->get_contents( $file );
-
 			return json_decode( $file_contents, true );
 		}
 

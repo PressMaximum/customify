@@ -3,7 +3,7 @@
  * Mini-cart
  *
  * @package WooCommerce/Templates
- * @version 5.2.0
+ * @version 7.9.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

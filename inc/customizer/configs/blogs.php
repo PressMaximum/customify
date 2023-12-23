@@ -114,11 +114,22 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 			),
 
 			array(
+				'name'            => $args['id'] . '_use_ratio',
+				'default'         => true,
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel . '_media',
+				'checkbox_label'  => __( 'Use media ratio', 'customify' ),
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'required'        => array( $args['id'] . '_media_hide', '!=', '1' ),
+			),
+
+			array(
 				'name'            => $args['id'] . '_media_ratio',
 				'type'            => 'slider',
 				'section'         => $level_2_panel . '_media',
 				'label'           => __( 'Media Ratio', 'customify' ),
-				'selector'        => "{$args['selector']} .posts-layout .entry .entry-media",
+				'selector'        => "{$args['selector']} .posts-layout .entry .entry-media:not(.no-ratio)",
 				'css_format'      => 'padding-top: {{value_no_unit}}%;',
 				'max'             => 200,
 				'min'             => 0,
