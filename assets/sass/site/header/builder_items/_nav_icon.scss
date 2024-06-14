@@ -1,4 +1,6 @@
 /* Nav Icon */
+@use "sass:math";
+
 .menu-mobile-toggle {
     cursor: pointer;
     text-align: center;
@@ -117,7 +119,7 @@ $hamburger-hover-filter    : opacity(50%) !default;
                     width: map-get($settings, width);
                 }
                 .hamburger-inner {
-                    margin-top: map-get($settings, height) / -2;
+                    margin-top: math.div(map-get($settings, height), -2);
                     &,
                     &::before,
                     &::after {
@@ -146,7 +148,7 @@ $hamburger-hover-filter    : opacity(50%) !default;
                             width: map-get($settings, width);
                         }
                         .hamburger-inner {
-                            margin-top: map-get($settings, height) / -2;
+                            margin-top: math.div(map-get($settings, height), -2);
                             &,
                             &::before,
                             &::after {

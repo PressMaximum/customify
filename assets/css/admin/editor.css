@@ -63,13 +63,13 @@ h1,
 }
 @media screen and (max-width: 1024px) {
   h1,
-.h1 {
+  .h1 {
     font-size: 2.1em;
   }
 }
 @media screen and (max-width: 568px) {
   h1,
-.h1 {
+  .h1 {
     font-size: 1.8em;
   }
 }
@@ -86,13 +86,13 @@ h2 + h3,
 }
 @media screen and (max-width: 1024px) {
   h2,
-.h2 {
+  .h2 {
     font-size: 1.9em;
   }
 }
 @media screen and (max-width: 568px) {
   h2,
-.h2 {
+  .h2 {
     font-size: 1.7em;
   }
 }
@@ -875,8 +875,8 @@ article.comment .comment-post-author {
 
 @media screen and (min-width: 64em) {
   #respond .comment-form-author,
-#respond .comment-form-email,
-#respond .comment-form-url {
+  #respond .comment-form-email,
+  #respond .comment-form-url {
     width: 29.4117647059%;
     margin-right: 5.8823529412%;
     float: left;

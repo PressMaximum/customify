@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $cb_padding: 20px;
 .customify--hide {
 	display: none !important;
@@ -535,20 +537,20 @@ $animation_speed: 0.3s !default;
 @mixin grid-stack-items($gridstack-columns) {
 	.grid-stack.grid-stack-#{$gridstack-columns} {
 		> .grid-stack-item {
-			min-width: 100% / $gridstack-columns;
+			min-width: math.div(100%, $gridstack-columns);
 
 			@for $i from 1 through $gridstack-columns {
 				&[data-gs-width="#{$i}"] {
-					width: (100% / $gridstack-columns) * $i;
+					width: math.div(100%, $gridstack-columns) * $i;
 				}
 				&[data-gs-x="#{$i}"] {
-					left: (100% / $gridstack-columns) * $i;
+					left: math.div(100%, $gridstack-columns) * $i;
 				}
 				&[data-gs-min-width="#{$i}"] {
-					min-width: (100% / $gridstack-columns) * $i;
+					min-width: math.div(100%, $gridstack-columns) * $i;
 				}
 				&[data-gs-max-width="#{$i}"] {
-					max-width: (100% / $gridstack-columns) * $i;
+					max-width: math.div(100%, $gridstack-columns) * $i;
 				}
 			}
 		}
@@ -587,8 +589,8 @@ $animation_speed: 0.3s !default;
 		margin: 0;
 		position: absolute;
 		top: 0;
-		left: $horizontal_padding / 2;
-		right: $horizontal_padding / 2;
+		left: $horizontal_padding * 0.5;
+		right: $horizontal_padding * 0.5;
 		bottom: 0;
 		width: auto;
 		z-index: 0 !important;
@@ -596,7 +598,7 @@ $animation_speed: 0.3s !default;
 	}
 
 	> .grid-stack-item {
-		min-width: 100% / $gridstack-columns;
+		min-width: math.div(100%, $gridstack-columns);
 		position: absolute;
 		padding: 0;
 
@@ -604,8 +606,8 @@ $animation_speed: 0.3s !default;
 			margin: 0;
 			position: absolute;
 			top: 0;
-			left: $horizontal_padding / 2;
-			right: $horizontal_padding / 2;
+			left: $horizontal_padding * 0.5;
+			right: $horizontal_padding * 0.5;
 			bottom: 0;
 			width: auto;
 			overflow-x: hidden;
@@ -672,7 +674,7 @@ $animation_speed: 0.3s !default;
 		> .ui-resizable-e {
 			cursor: col-resize;
 			width: 10px;
-			right: $horizontal_padding / 2;
+			right: $horizontal_padding * 0.5;
 			top: 0px;
 			bottom: 0px;
 		}
@@ -700,7 +702,7 @@ $animation_speed: 0.3s !default;
 		> .ui-resizable-w {
 			cursor: col-resize;
 			width: 10px;
-			left: $horizontal_padding / 2;
+			left: $horizontal_padding * 0.5;
 			top: 0px;
 			bottom: 0px;
 		}
@@ -713,16 +715,16 @@ $animation_speed: 0.3s !default;
 
 		@for $i from 1 through $gridstack-columns {
 			&[data-gs-width="#{$i}"] {
-				width: (100% / $gridstack-columns) * $i;
+				width: math.div(100%, $gridstack-columns) * $i;
 			}
 			&[data-gs-x="#{$i}"] {
-				left: (100% / $gridstack-columns) * $i;
+				left: math.div(100%, $gridstack-columns) * $i;
 			}
 			&[data-gs-min-width="#{$i}"] {
-				min-width: (100% / $gridstack-columns) * $i;
+				min-width: math.div(100%, $gridstack-columns) * $i;
 			}
 			&[data-gs-max-width="#{$i}"] {
-				max-width: (100% / $gridstack-columns) * $i;
+				max-width: math.div(100%, $gridstack-columns) * $i;
 			}
 		}
 	}
