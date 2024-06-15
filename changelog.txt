@@ -1,3 +1,7 @@
+= 0.4.5 =
+* CHANGE: Change import plugin information.
+* IMPROVED: Tested with WordPress 6.5.4
+
 = 0.4.4 =
 * UPDATED: WooCommerce template files.
 * UPDATED: Update version of fontawesome
