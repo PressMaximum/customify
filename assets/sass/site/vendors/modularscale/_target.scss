@@ -1,4 +1,6 @@
 // Convert number string to number
+@use "sass:math";
+
 @function ms-to-num($n) {
   $l: str-length($n);
   $r: 0;
@@ -45,5 +47,5 @@
   $t: ms-to-num(str-slice($t,$at + 2));
 
   // Solve the modular scale function for the ratio.
-  @return ms-pow(($v/$b),(1/$t));
+  @return ms-pow(math.div($v, $b),math.div(1, $t));
 }

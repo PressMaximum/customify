@@ -3096,11 +3096,11 @@ p.stars.selected a:not(.active)::before {
 }
 @media screen and (max-width: 568px) {
   .cart-collaterals,
-.woocommerce-checkout-review-order, .group-highlight-box {
+  .woocommerce-checkout-review-order, .group-highlight-box {
     padding: 1em;
   }
   .cart-collaterals form.cart .group_table td,
-.woocommerce-checkout-review-order form.cart .group_table td, .group-highlight-box form.cart .group_table td {
+  .woocommerce-checkout-review-order form.cart .group_table td, .group-highlight-box form.cart .group_table td {
     padding-right: 0.5em;
   }
 }

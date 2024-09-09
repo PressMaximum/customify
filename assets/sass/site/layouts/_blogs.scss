@@ -292,7 +292,7 @@ $blog_gutter: $gl-gutter;
 
         &blog_boxed {
             .entry-content-data {
-                padding: ( $blog_gutter /2 );
+                padding: ( $blog_gutter *0.5 );
             }
         }
 

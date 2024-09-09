@@ -1,14 +1,14 @@
-# <!=Copyright (C) 2023 WPCustomify
+# <!=Copyright (C) 2024 WPCustomify
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.2\n"
+"Project-Id-Version: Customify 0.4.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2023-06-02 07:07:36+00:00\n"
+"POT-Creation-Date: 2024-09-09 01:52:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2023-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -237,195 +237,199 @@ msgstr ""
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:442 inc/admin/dashboard.php:605
+#: inc/admin/dashboard.php:442 inc/admin/dashboard.php:610
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:466
+#: inc/admin/dashboard.php:455
+msgid "Download Plugin"
+msgstr ""
+
+#: inc/admin/dashboard.php:469
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:483 inc/admin/dashboard.php:633
+#: inc/admin/dashboard.php:488 inc/admin/dashboard.php:638
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:601
+#: inc/admin/dashboard.php:606
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:644
+#: inc/admin/dashboard.php:649
 msgid "Recommend Plugins"
 msgstr ""
 
-#: inc/admin/dashboard.php:660 inc/customizer/configs/upsell.php:32
+#: inc/admin/dashboard.php:665 inc/customizer/configs/upsell.php:32
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:661
+#: inc/admin/dashboard.php:666
 msgid "Make your website stand out with transparent header modules."
 msgstr ""
 
-#: inc/admin/dashboard.php:665 inc/customizer/configs/upsell.php:31
+#: inc/admin/dashboard.php:670 inc/customizer/configs/upsell.php:31
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:666
+#: inc/admin/dashboard.php:671
 msgid "Let your header accessible when users scroll up or down in unique style."
 msgstr ""
 
-#: inc/admin/dashboard.php:670
+#: inc/admin/dashboard.php:675
 msgid "Header and Footer Builder Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:671
+#: inc/admin/dashboard.php:676
 msgid "Get more header and footer builder items, plus advanced styling options."
 msgstr ""
 
-#: inc/admin/dashboard.php:675
+#: inc/admin/dashboard.php:680
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:676
+#: inc/admin/dashboard.php:681
 msgid ""
 "Get a better user experience with a scroll to top button with beautiful "
 "animation."
 msgstr ""
 
-#: inc/admin/dashboard.php:680
+#: inc/admin/dashboard.php:685
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:681
+#: inc/admin/dashboard.php:686
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:685 inc/customizer/configs/header/panel.php:204
+#: inc/admin/dashboard.php:690 inc/customizer/configs/header/panel.php:204
 msgid "Advanced Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:686
+#: inc/admin/dashboard.php:691
 msgid ""
 "Control the layout and typography setting for page header title, page "
 "header cover and more."
 msgstr ""
 
-#: inc/admin/dashboard.php:690
+#: inc/admin/dashboard.php:695
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:691
+#: inc/admin/dashboard.php:696
 msgid "Show off your best project in a beautiful way."
 msgstr ""
 
-#: inc/admin/dashboard.php:695
+#: inc/admin/dashboard.php:700
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:696
+#: inc/admin/dashboard.php:701
 msgid "Create unique header for each page, post, archive or WooCommerce pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:700
+#: inc/admin/dashboard.php:705
 msgid "Mega Menu"
 msgstr ""
 
-#: inc/admin/dashboard.php:701
+#: inc/admin/dashboard.php:706
 msgid "Create mega menu for your sites that need more space for navigation."
 msgstr ""
 
-#: inc/admin/dashboard.php:705
+#: inc/admin/dashboard.php:710
 msgid "Multilingual Integration"
 msgstr ""
 
-#: inc/admin/dashboard.php:706
+#: inc/admin/dashboard.php:711
 msgid ""
 "WPML multilingual plugin support, plus a fully customized language switcher "
 "header builder item."
 msgstr ""
 
-#: inc/admin/dashboard.php:710
+#: inc/admin/dashboard.php:715
 msgid "Custom Fonts"
 msgstr ""
 
-#: inc/admin/dashboard.php:711
+#: inc/admin/dashboard.php:716
 msgid ""
 "Custom Fonts module allows you to add your self-hosted fonts and use them "
 "on your Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:716
+#: inc/admin/dashboard.php:721
 msgid "Typekit"
 msgstr ""
 
-#: inc/admin/dashboard.php:717
+#: inc/admin/dashboard.php:722
 msgid ""
 "Typekit module allows you to add Typekit fonts and use them on your "
 "Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:721
+#: inc/admin/dashboard.php:726
 msgid "Customify Hooks"
 msgstr ""
 
-#: inc/admin/dashboard.php:722
+#: inc/admin/dashboard.php:727
 msgid "Add custom hook scripts."
 msgstr ""
 
-#: inc/admin/dashboard.php:727
+#: inc/admin/dashboard.php:732
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:728
+#: inc/admin/dashboard.php:733
 msgid "Gives you creative control of style and layout options for your shop."
 msgstr ""
 
-#: inc/admin/dashboard.php:733
+#: inc/admin/dashboard.php:738
 msgid "Single Product Layouts"
 msgstr ""
 
-#: inc/admin/dashboard.php:734
+#: inc/admin/dashboard.php:739
 msgid "More beautiful layouts for your single product."
 msgstr ""
 
-#: inc/admin/dashboard.php:739
+#: inc/admin/dashboard.php:744
 msgid "Off Canvas Filter"
 msgstr ""
 
-#: inc/admin/dashboard.php:740
+#: inc/admin/dashboard.php:745
 msgid "Add off canvas products filter for shop and product archive pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:745
+#: inc/admin/dashboard.php:750
 msgid "Product Gallery Slider"
 msgstr ""
 
-#: inc/admin/dashboard.php:746
+#: inc/admin/dashboard.php:751
 msgid "Add slider for product gallery."
 msgstr ""
 
-#: inc/admin/dashboard.php:751
+#: inc/admin/dashboard.php:756
 msgid "Quick View"
 msgstr ""
 
-#: inc/admin/dashboard.php:752
+#: inc/admin/dashboard.php:757
 msgid "Add product quick view modal for product listing.."
 msgstr ""
 
-#: inc/admin/dashboard.php:758
+#: inc/admin/dashboard.php:763
 msgid "Infinity Scroll."
 msgstr ""
 
-#: inc/admin/dashboard.php:759
+#: inc/admin/dashboard.php:764
 msgid ""
 "Loads the next posts, products automatically when the reader approaches the "
 "bottom of the page."
 msgstr ""
 
-#: inc/admin/dashboard.php:767
+#: inc/admin/dashboard.php:772
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:768
+#: inc/admin/dashboard.php:773
 msgid "Upgrade Now &rarr;"
 msgstr ""
 
@@ -458,6 +462,10 @@ msgstr ""
 
 #: inc/blog/class-post-entry.php:610
 msgid "About the Author: <span>%s</span>"
+msgstr ""
+
+#: inc/blog/class-post-entry.php:617
+msgid "View all posts by %s"
 msgstr ""
 
 #: inc/blog/class-post-entry.php:651

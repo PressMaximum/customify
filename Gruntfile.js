@@ -432,6 +432,7 @@ module.exports = function (grunt) {
             grunt.task.run(['addtextdomain', 'makepot']);
             // re create css file and min
             grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
+            grunt.task.run(['zipfile']);
         }
     });
 

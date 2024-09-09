@@ -1,6 +1,8 @@
 //************************
 //    VARIABLES
 //************************
+@use "sass:math";
+
 $gl-gridName:           customify-grid !default;
 $gl-colName:            customify-col !default;
 $gl-attributeName:      class !default;
@@ -15,7 +17,7 @@ $gl-mq-list: (
 ) !default;
 
 
-$glp_col-1: (100%/12);
+$glp_col-1: math.div(100%, 12);
 $glp_col-2: ($glp_col-1*2);
 $glp_col-3: ($glp_col-1*3);
 $glp_col-4: ($glp_col-1*4);
@@ -28,12 +30,12 @@ $glp_col-10: ($glp_col-1*10);
 $glp_col-11: ($glp_col-1*11);
 $glp_col-12: 100%;
 
-$glp_col-5-12: (100%/5);
-$glp_col-7-12: (100%/7);
-$glp_col-8-12: (100%/8);
-$glp_col-9-12: (100%/9);
-$glp_col-10-12: (100%/10);
-$glp_col-11-12: (100%/11);
+$glp_col-5-12: (100%*0.2);
+$glp_col-7-12: math.div(100%, 7);
+$glp_col-8-12: (100%*0.125);
+$glp_col-9-12: math.div(100%, 9);
+$glp_col-10-12: (100%*0.1);
+$glp_col-11-12: math.div(100%, 11);
 
 // Function to generate the grid by number
 @mixin makeGridByNumber($grid)

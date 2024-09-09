@@ -17,7 +17,7 @@
 	}
 	&.builder-item--group {
 		.item--inner {
-			margin-right: ($gl-gutter/2);
+			margin-right: ($gl-gutter*0.5);
 			@include for_device(tablet) {
 				margin-right: 1em;
 			}

@@ -63,7 +63,7 @@ class Customify_Dashboard
 						<p><?php printf(__('To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify'), esc_url(admin_url('themes.php?page=customify'))); ?></p>
 						<?php if (is_child_theme()) { ?>
 							<?php $child_theme = wp_get_theme(); ?>
-							<?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify'), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__('Customify', 'customify') . '</strong>'); // phpcs:ignore 
+							<?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify'), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__('Customify', 'customify') . '</strong>'); // phpcs:ignore
 							?>
 							<?php
 							$copy_link_args = array(
@@ -255,8 +255,8 @@ class Customify_Dashboard
 				<div class="cd-box-content">
 					<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
 						<p>
-							<strong> <?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of Customify', 'customify'), $child_theme->Name); // phpcs:ignore 
-										?></strong>
+							<strong> <?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of Customify', 'customify'), $child_theme->Name); // phpcs:ignore
+												?></strong>
 						</p>
 						<p><?php printf(esc_html__("Child theme uses it's own theme setting name, would you like to copy setting data from parent theme to this child theme?", 'customify')); ?></p>
 						<div class="form-fields">
@@ -408,10 +408,10 @@ class Customify_Dashboard
 				<p><?php _e('<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify'); ?></p>
 				<?php
 
-				$plugin_slug = 'customify-sites';
+				$plugin_slug = 'customify-sites-library';
 				$plugin_info = array(
-					'name'            => 'customify-sites',
-					'active_filename' => 'customify-sites/customify-sites.php',
+					'name'            => 'customify-sites-library',
+					'active_filename' => 'customify-sites-library/customify-sites-library.php',
 				);
 
 				$plugin_info  = wp_parse_args(
@@ -451,6 +451,9 @@ class Customify_Dashboard
 							),
 							'install-plugin_' . $plugin_slug
 						);
+
+						$button_txt = esc_html__('Download Plugin', 'customify');
+						$install_url = 'https://github.com/PressMaximum/customify-sites-library/releases/';
 					} else {
 						$install_url  = add_query_arg(
 							array(
@@ -478,9 +481,11 @@ class Customify_Dashboard
 						network_admin_url('plugin-install.php')
 					);
 
+					$detail_link = 'https://github.com/PressMaximum/customify-sites-library';
+
 					echo '<div class="rcp">';
 					echo '<p class="action-btn plugin-card-' . esc_attr($plugin_slug) . '"><a href="' . esc_url($install_url) . '" data-slug="' . esc_attr($plugin_slug) . '" class="' . esc_attr($button_class) . '">' . $button_txt . '</a></p>'; // WPCS: XSS OK.
-					echo '<a class="plugin-detail thickbox open-plugin-details-modal" href="' . esc_url($detail_link) . '">' . esc_html__('Details', 'customify') . '</a>';
+					echo '<a class="plugin-detail" target="_blank" href="' . esc_url($detail_link) . '">' . esc_html__('Details', 'customify') . '</a>';
 					echo '</div>';
 				} else {
 					echo '<div class="rcp">';
@@ -491,10 +496,10 @@ class Customify_Dashboard
 				?>
 				<script type="text/javascript">
 					jQuery(document).ready(function($) {
-						var sites_url = <?php echo json_encode($sites_url); // phpcs:ignore 
-										?>;
-						var view_sites = <?php echo json_encode($view_site_txt); // phpcs:ignore 
-											?>;
+						var sites_url = <?php echo json_encode($sites_url); // phpcs:ignore
+														?>;
+						var view_sites = <?php echo json_encode($view_site_txt); // phpcs:ignore
+															?>;
 						$('#plugin-filter .box-plugins').on('click', '.activate-now', function(e) {
 							e.preventDefault();
 							var button = $(this);

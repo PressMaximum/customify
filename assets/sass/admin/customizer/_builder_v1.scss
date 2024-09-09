@@ -1,3 +1,5 @@
+@use "sass:math";
+
 $gridstack-columns: 12 !default;
 $horizontal_padding: 20px !default;
 $vertical_padding: 20px !default;
@@ -7,16 +9,16 @@ $animation_speed: .3s !default;
     .grid-stack.grid-stack-#{$gridstack-columns} {
 
         > .grid-stack-item {
-            min-width: 100% / $gridstack-columns;
+            min-width: math.div(100%, $gridstack-columns);
 
             @for $i from 1 through $gridstack-columns {
-                &[data-gs-width='#{$i}'] { width: (100% / $gridstack-columns) * $i; }
-                &[data-gs-x='#{$i}'] { left: (100% / $gridstack-columns) * $i; }
-                &[data-gs-min-width='#{$i}'] { min-width: (100% / $gridstack-columns) * $i; }
-                &[data-gs-max-width='#{$i}'] { max-width: (100% / $gridstack-columns) * $i; }
+                &[data-gs-width='#{$i}'] { width: math.div(100%, $gridstack-columns) * $i; }
+                &[data-gs-x='#{$i}'] { left: math.div(100%, $gridstack-columns) * $i; }
+                &[data-gs-min-width='#{$i}'] { min-width: math.div(100%, $gridstack-columns) * $i; }
+                &[data-gs-max-width='#{$i}'] { max-width: math.div(100%, $gridstack-columns) * $i; }
 
                 @include rtl(){
-                    &[data-gs-x='#{$i}'] { right: (100% / $gridstack-columns) * $i; left: auto; }
+                    &[data-gs-x='#{$i}'] { right: math.div(100%, $gridstack-columns) * $i; left: auto; }
                 }
 
             }
@@ -59,8 +61,8 @@ $animation_speed: .3s !default;
         margin: 0;
         position: absolute;
         top: 0;
-        left: $horizontal_padding / 2;
-        right: $horizontal_padding / 2;
+        left: $horizontal_padding * 0.5;
+        right: $horizontal_padding * 0.5;
         bottom: 0;
         width: auto;
         z-index: 0 !important;
@@ -68,7 +70,7 @@ $animation_speed: .3s !default;
     }
 
     > .grid-stack-item {
-        min-width: 100% / $gridstack-columns;
+        min-width: math.div(100%, $gridstack-columns);
         position: absolute;
         padding: 0;
 
@@ -76,8 +78,8 @@ $animation_speed: .3s !default;
             margin: 0;
             position: absolute;
             top: 0;
-            left: $horizontal_padding / 2;
-            right: $horizontal_padding / 2;
+            left: $horizontal_padding * 0.5;
+            right: $horizontal_padding * 0.5;
             bottom: 0;
             width: auto;
             z-index: 0 !important;
@@ -119,8 +121,8 @@ $animation_speed: .3s !default;
             @include vendor(transform, rotate(-45deg));
         }
 
-        > .ui-resizable-e  { cursor: ew-resize;  width: 10px; right: $horizontal_padding / 2; left: auto; top: 0px; bottom: 0px; }
-        > .ui-resizable-w  { cursor: ew-resize;  width: 10px; left: $horizontal_padding / 2; right: auto; top: 0px; bottom: 0px; }
+        > .ui-resizable-e  { cursor: ew-resize;  width: 10px; right: $horizontal_padding * 0.5; left: auto; top: 0px; bottom: 0px; }
+        > .ui-resizable-w  { cursor: ew-resize;  width: 10px; left: $horizontal_padding * 0.5; right: auto; top: 0px; bottom: 0px; }
 
         &.ui-draggable-dragging {
             &> .ui-resizable-handle {
@@ -129,12 +131,12 @@ $animation_speed: .3s !default;
         }
 
         @for $i from 1 through $gridstack-columns {
-            &[data-gs-width='#{$i}'] { width: (100% / $gridstack-columns) * $i; }
-            &[data-gs-x='#{$i}'] { left: (100% / $gridstack-columns) * $i; }
-            &[data-gs-min-width='#{$i}'] { min-width: (100% / $gridstack-columns) * $i; }
-            &[data-gs-max-width='#{$i}'] { max-width: (100% / $gridstack-columns) * $i; }
+            &[data-gs-width='#{$i}'] { width: math.div(100%, $gridstack-columns) * $i; }
+            &[data-gs-x='#{$i}'] { left: math.div(100%, $gridstack-columns) * $i; }
+            &[data-gs-min-width='#{$i}'] { min-width: math.div(100%, $gridstack-columns) * $i; }
+            &[data-gs-max-width='#{$i}'] { max-width: math.div(100%, $gridstack-columns) * $i; }
             @include rtl(){
-                &[data-gs-x='#{$i}'] { right: (100% / $gridstack-columns) * $i; left: auto; }
+                &[data-gs-x='#{$i}'] { right: math.div(100%, $gridstack-columns) * $i; left: auto; }
             }
         }
     }
