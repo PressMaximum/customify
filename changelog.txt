@@ -1,3 +1,6 @@
+= 0.4.7 =
+* UPDATED: WooCommerce template files.
+
 = 0.4.6 =
 * IMPROVED: Tested with WordPress 6.5.4
 * UPDATED: update Select2
