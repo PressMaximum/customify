@@ -972,7 +972,7 @@ class Customify_Page_Header {
 	function render_titlebar( $args = array() ) {
 		$args = $this->get_settings();
 
-		if ( is_array( $args ) && isset( $args['force_display_single_title'] ) && $args['force_display_single_title'] != '' && 'hide' != trim( $args['force_display_single_title'] ) ) {
+		if ( is_array( $args ) && isset( $args['force_display_single_title'] ) && $args['force_display_single_title'] != '' && 'hide' == trim( $args['force_display_single_title'] ) ) {
 			return;
 		}
 
