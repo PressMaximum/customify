@@ -1,3 +1,6 @@
+= 0.4.9 =
+* UPDATED: WooCommerce template files.
+
 = 0.4.8 =
 * UPDATED: WooCommerce template files.
 

@@ -422,7 +422,7 @@ class Customify_Dashboard
 					)
 				);
 				$status       = is_dir(WP_PLUGIN_DIR . '/' . $plugin_slug);
-				$button_class = 'install-now button';
+				$button_class = 'install-now__ button';
 				if ($plugin_info['active_filename']) {
 					$active_file_name = $plugin_info['active_filename'];
 				} else {

@@ -61,6 +61,7 @@ module.exports = function (grunt) {
         sass: {
             options: {
                 precision: 10,
+                quiet: true,
                 // unixNewlines: true,
                 // //noCache: true
                 sourcemap: false
@@ -429,7 +430,7 @@ module.exports = function (grunt) {
             grunt.task.run('replace');
 
             // i18n
-            grunt.task.run(['addtextdomain', 'makepot']);
+            // grunt.task.run(['addtextdomain', 'makepot']);
             // re create css file and min
             grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
             grunt.task.run(['zipfile']);
