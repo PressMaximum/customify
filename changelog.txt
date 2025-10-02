@@ -1,5 +1,6 @@
 = 0.4.12 =
 * FIXED: Fix security issues.
+* FIXED: Invalid limit type passed to wc_get_related_products.
 
 = 0.4.11 =
 * UPDATED: WooCommerce template files.
