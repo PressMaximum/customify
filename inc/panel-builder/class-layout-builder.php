@@ -26,6 +26,15 @@ class Customify_Customize_Layout_Builder {
 
 	}
 
+
+	static function verify_nonce( ) {
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : '';
+		if ( ! $nonce ) {
+			$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( $_REQUEST['_nonce'] ) : '';
+		}
+		return wp_verify_nonce( $nonce, 'Customify_Layout_Builder' );
+	}
+
 	/**
 	 * Register builder panel
 	 *
@@ -190,6 +199,10 @@ class Customify_Customize_Layout_Builder {
 	 */
 	function ajax_save_template() {
 
+		if ( ! self::verify_nonce() ) {
+			wp_send_json_error( __( 'Access denied', 'customify' ) );
+		}
+
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			wp_send_json_error( __( 'Access denied', 'customify' ) );
 		}
@@ -270,6 +283,9 @@ class Customify_Customize_Layout_Builder {
 	 * Handle event export template
 	 */
 	function ajax_export_template() {
+		if ( ! self::verify_nonce() ) {
+			wp_send_json_error( __( 'Access denied', 'customify' ) );
+		}
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			wp_send_json_error( __( 'Access denied', 'customify' ) );
 		}
@@ -367,6 +383,7 @@ class Customify_Customize_Layout_Builder {
 				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
 				'hide_switcher'             => apply_filters( 'customify_hide_header_builder_switcher', get_theme_mod( 'hide_header_builder_switcher', 'no' ) ), // Use get theme mod `hide_header_builder_switcher` for hide switcher.
 				'header_builder_version'    => get_theme_mod( 'header_builder_version', $hide_sw ? 'v2' : '' ),
+				'nonce'                     => wp_create_nonce( 'Customify_Layout_Builder' ),
 			)
 		);
 	}

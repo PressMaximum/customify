@@ -16,6 +16,18 @@ class  Customify_Customizer {
 
 	}
 
+	static function verify_nonce( ) {
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( $_REQUEST['nonce'] ) : '';
+		if ( ! $nonce ) {
+			$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( $_REQUEST['_nonce'] ) : '';
+		}
+		return wp_verify_nonce( $nonce, 'customify_customizer_control' );
+	}
+
+	static function create_nonce() {
+		return wp_create_nonce( 'customify_customizer_control' );
+	}
+
 	/**
 	 * Main initial
 	 */
@@ -53,8 +65,11 @@ class  Customify_Customizer {
 	 * Reset Customize section
 	 */
 	static function reset_customize_section() {
+		if ( ! self::verify_nonce() ) {
+			return wp_send_json_error();
+		}
 		if ( ! current_user_can( 'customize' ) ) {
-			wp_send_json_error();
+			return wp_send_json_error();
 		}
 
 		$settings = isset( $_POST['settings'] ) ? wp_unslash( $_POST['settings'] ) : array(); // phpcs:ignore

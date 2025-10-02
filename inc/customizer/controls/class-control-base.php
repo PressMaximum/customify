@@ -280,6 +280,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				'panel_urls'       => array(
 					'panel_blog_post' => $blog_url,
 				),
+				'nonce' => wp_create_nonce( 'customify_customizer_control' ),
 			);
 
 			wp_localize_script( 'customify-customizer-control', 'Customify_Control_Args', apply_filters( 'Customify_Control_Args', $args ) ); // phpcs:ignore

@@ -3869,7 +3869,8 @@
 					{
 						action: "customify__reset_section",
 						section: section,
-						settings: setting_keys
+						settings: setting_keys,
+						nonce: Customify_Control_Args.nonce
 					},
 					function () {
 						$(window).off("beforeunload.customize-confirm");

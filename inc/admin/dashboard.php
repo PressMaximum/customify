@@ -230,6 +230,7 @@ class Customify_Dashboard
 		self::$_instance->title = __('Customify Options', 'customify');
 		// Action for copy options.
 		if (isset($_POST['copy_from']) && isset($_POST['copy_to'])) {
+			check_admin_referer('copy_theme_settings', '_nonce');
 			$from = sanitize_text_field($_POST['copy_from']);
 			$to = sanitize_text_field($_POST['copy_to']);
 			if ($from && $to) {
@@ -256,6 +257,7 @@ class Customify_Dashboard
 				</div>
 				<div class="cd-box-content">
 					<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
+						<?php wp_nonce_field('copy_theme_settings', '_nonce'); ?>
 						<p>
 							<strong> <?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of Customify', 'customify'), $child_theme->Name); // phpcs:ignore
 												?></strong>
