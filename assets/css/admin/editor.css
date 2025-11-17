@@ -420,7 +420,9 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   text-transform: uppercase;
   transition: transform 0.3s, border 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, color 0.3s;
   border-radius: 1px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 body:not(.fl-builder-edit) .button:not(.menu-mobile-toggle):hover,
 body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
