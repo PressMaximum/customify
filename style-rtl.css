@@ -4,7 +4,7 @@ Theme URI: https://pressmaximum.com/customify
 Author: WPCustomify
 Author URI: https://pressmaximum.com
 Description: Customify is fast, lightweight, responsive and super flexible multipurpose theme built with SEO, speed, and usability in mind. Unleash the power of your imagination with a true WYSIWYG Header & Footer builder (inside the WordPress Customizer) built exclusively for this theme. The theme works great with any of your favorite page builder likes Elementor, Beaver Builder, SiteOrigin, Thrive Architect, Divi, Visual Composer, etc. Combined with the Header & Footer builder, you can build any type of websites like shop, business agencies, corporate, portfolio, education, university portal, consulting, church, restaurant, medical and so on. Customify is compatible with all well-coded plugins, including major ones like WooCommerce, OrbitFox, Yoast, BuddyPress, bbPress, etc. Learn more about the theme and ready to import demo sites at https://pressmaximum.com/customify
-Version: 0.4.12
+Version: 0.4.13
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: customify
@@ -1955,9 +1955,9 @@ template {
   [class*=customify-grid-],
   [class*=customify-grid_] {
     /*
-          &:not([class*="_lg-0"]) {
-            display: flex;
-          }*/
+                   &:not([class*="_lg-0"]) {
+                     display: flex;
+                   }*/
   }
   [class~=customify-grid] > :not([class*=_lg-0]),
   [class*=customify-grid-] > :not([class*=_lg-0]),
@@ -1975,9 +1975,9 @@ template {
   [class*=customify-grid-],
   [class*=customify-grid_] {
     /*
-          &:not([class*="_md-0"]) {
-            display: flex;
-          }*/
+                   &:not([class*="_md-0"]) {
+                     display: flex;
+                   }*/
   }
   [class~=customify-grid] > :not([class*=_md-0]),
   [class*=customify-grid-] > :not([class*=_md-0]),
@@ -1995,9 +1995,9 @@ template {
   [class*=customify-grid-],
   [class*=customify-grid_] {
     /*
-          &:not([class*="_sm-0"]) {
-            display: flex;
-          }*/
+                   &:not([class*="_sm-0"]) {
+                     display: flex;
+                   }*/
   }
   [class~=customify-grid] > :not([class*=_sm-0]),
   [class*=customify-grid-] > :not([class*=_sm-0]),
@@ -2015,9 +2015,9 @@ template {
   [class*=customify-grid-],
   [class*=customify-grid_] {
     /*
-          &:not([class*="_xs-0"]) {
-            display: flex;
-          }*/
+                   &:not([class*="_xs-0"]) {
+                     display: flex;
+                   }*/
   }
   [class~=customify-grid] > :not([class*=_xs-0]),
   [class*=customify-grid-] > :not([class*=_xs-0]),
@@ -2431,6 +2431,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 button:not(.components-button, .customize-partial-edit-shortcut-button),
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button),
+.wc-block-cart__submit .wp-element-button,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button) {
   border: none;
   cursor: pointer;
@@ -2442,7 +2443,10 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   text-transform: uppercase;
   transition: transform 0.3s, border 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, color 0.3s;
   border-radius: 1px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
 }
 body:not(.fl-builder-edit) .button:not(.menu-mobile-toggle):hover,
 body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
@@ -2451,6 +2455,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button):not(.menu-mobile-t
 button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+.wc-block-cart__submit .wp-element-button:not(.menu-mobile-toggle):hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
@@ -2461,6 +2466,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button):hover,
 button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+.wc-block-cart__submit .wp-element-button:hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):hover {
   color: #ffffff;
   outline: none;
@@ -2478,6 +2484,8 @@ input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-s
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):focus,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+.wc-block-cart__submit .wp-element-button:active,
+.wc-block-cart__submit .wp-element-button:focus,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):focus {
   outline: none;
@@ -2489,6 +2497,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+.wc-block-cart__submit .wp-element-button.loading,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading {
   position: relative;
 }
@@ -2527,6 +2536,11 @@ input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-butto
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+.wc-block-cart__submit .wp-element-button.loading i,
+.wc-block-cart__submit .wp-element-button.loading svg,
+.wc-block-cart__submit .wp-element-button.loading .icon-label,
+.wc-block-cart__submit .wp-element-button.loading .hide-on-loading,
+.wc-block-cart__submit .wp-element-button.loading .button-label,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
@@ -2541,6 +2555,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading:after,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+.wc-block-cart__submit .wp-element-button.loading:after,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after {
   content: "" !important;
   height: 16px;

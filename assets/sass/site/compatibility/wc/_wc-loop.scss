@@ -61,6 +61,12 @@
             list-style: none outside;
             margin: 1em 0px;
         }
+        @media screen and (max-width: 48em) {
+            margin: 0 -0.5em 0;
+            li.product, > li{
+                padding: 0 0.25em 0;
+            }
+        }
     }
 }
 

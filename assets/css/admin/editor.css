@@ -409,6 +409,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 button:not(.components-button, .customize-partial-edit-shortcut-button),
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button),
+.wc-block-cart__submit .wp-element-button,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button) {
   border: none;
   cursor: pointer;
@@ -423,6 +424,7 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5em;
 }
 body:not(.fl-builder-edit) .button:not(.menu-mobile-toggle):hover,
 body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
@@ -431,6 +433,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button):not(.menu-mobile-t
 button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+.wc-block-cart__submit .wp-element-button:not(.menu-mobile-toggle):hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover {
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
@@ -441,6 +444,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button):hover,
 button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+.wc-block-cart__submit .wp-element-button:hover,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):hover {
   color: #ffffff;
   outline: none;
@@ -458,6 +462,8 @@ input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-s
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):focus,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+.wc-block-cart__submit .wp-element-button:active,
+.wc-block-cart__submit .wp-element-button:focus,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):active,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button):focus {
   outline: none;
@@ -469,6 +475,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+.wc-block-cart__submit .wp-element-button.loading,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading {
   position: relative;
 }
@@ -507,6 +514,11 @@ input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-butto
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+.wc-block-cart__submit .wp-element-button.loading i,
+.wc-block-cart__submit .wp-element-button.loading svg,
+.wc-block-cart__submit .wp-element-button.loading .icon-label,
+.wc-block-cart__submit .wp-element-button.loading .hide-on-loading,
+.wc-block-cart__submit .wp-element-button.loading .button-label,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
@@ -521,6 +533,7 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading:after,
 button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+.wc-block-cart__submit .wp-element-button.loading:after,
 input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after {
   content: "" !important;
   height: 16px;

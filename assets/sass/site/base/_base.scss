@@ -392,6 +392,7 @@ body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
 button:not(.components-button, .customize-partial-edit-shortcut-button),
 input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
+.wc-block-cart__submit .wp-element-button,
 input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button) {
     border: none;
     cursor: pointer;
@@ -406,6 +407,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5em;
     &:not(.menu-mobile-toggle):hover {
         box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
     }

@@ -981,6 +981,14 @@ td.product-quantity {
   list-style: none outside;
   margin: 1em 0px;
 }
+@media screen and (max-width: 48em) {
+  .woocommerce ul.products {
+    margin: 0 -0.5em 0;
+  }
+  .woocommerce ul.products li.product, .woocommerce ul.products > li {
+    padding: 0 0.25em 0;
+  }
+}
 
 .wc-product-inner {
   position: relative;

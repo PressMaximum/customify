@@ -1,3 +1,7 @@
+= 0.4.13 =
+* UPDATED: WooCommerce template files.
+* FIXED: Product grid mobile columns not changing. 
+
 = 0.4.12 =
 * FIXED: Fix security issues.
 * FIXED: Invalid limit type passed to wc_get_related_products.

@@ -165,13 +165,11 @@ class Customify_WC {
 		$name = wc_get_loop_prop( 'name' );
 
 		wc_set_loop_prop( 'media_secondary', Customify()->get_setting( 'wc_cd_media_secondary' ) );
+		wc_set_loop_prop( 'columns', (int) get_option( 'woocommerce_catalog_columns', 4 ));
+		wc_set_loop_prop( 'tablet_columns', (int) get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
+		wc_set_loop_prop( 'mobile_columns', (int) Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
 
-		if ( ! $name ) { // Main loop.
-			wc_set_loop_prop( 'columns', (int) get_option( 'woocommerce_catalog_columns' ) );
-			wc_set_loop_prop( 'tablet_columns', (int) get_theme_mod( 'woocommerce_catalog_tablet_columns' ) );
-			wc_set_loop_prop( 'mobile_columns', (int) Customify()->get_setting( 'woocommerce_catalog_mobile_columns' ) );
-
-		} elseif ( 'related' == $name || 'up-sells' == $name || 'cross-sells' == $name ) {
+		if ( 'related' == $name || 'up-sells' == $name || 'cross-sells' == $name ) {
 
 			if ( 'up-sells' == $name ) {
 				$columns = Customify()->get_setting( 'wc_single_product_upsell_columns', 'all' );
@@ -182,19 +180,24 @@ class Customify_WC {
 			$columns = wp_parse_args(
 				$columns,
 				array(
-					'desktop' => 3,
-					'tablet'  => 3,
-					'mobile'  => 1,
+					'desktop' => false,
+					'tablet'  => false,
+					'mobile'  => false,
 				)
 			);
 
-			if ( ! $columns ) {
-				$columns['desktop'] = 3;
+			if ( $columns['desktop'] ) {
+				wc_set_loop_prop( 'columns', $columns['desktop'] );
 			}
 
-			wc_set_loop_prop( 'columns', $columns['desktop'] );
-			wc_set_loop_prop( 'tablet_columns', $columns['tablet'] );
-			wc_set_loop_prop( 'mobile_columns', $columns['mobile'] );
+			if ( $columns['tablet'] ) {
+				wc_set_loop_prop( 'tablet_columns', $columns['tablet'] );
+			}
+
+			if ( $columns['mobile'] ) {
+				wc_set_loop_prop( 'mobile_columns', $columns['mobile'] );
+			}
+
 		}
 
 	}
