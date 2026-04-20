@@ -33,6 +33,7 @@ if ( $mobile >= $tablet && $tablet > 1 ) {
 if ( ! $mobile ) {
 	$mobile = 1;
 }
+
 if ( ! $columns ) {
 	$columns = 4;
 	$tablet = 2;

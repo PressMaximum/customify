@@ -296,7 +296,7 @@ class Customify_WC_Single_Product {
 
 		$configs[] = array(
 			'name'     => "{$section}_upsell_number",
-			'type'     => 'text',
+			'type'     => 'number',
 			'default'  => 3,
 			'section'  => $section,
 			'label'    => __( 'Number of upsell products', 'customify' ),
@@ -305,7 +305,7 @@ class Customify_WC_Single_Product {
 
 		$configs[] = array(
 			'name'            => "{$section}_upsell_columns",
-			'type'            => 'text',
+			'type'            => 'number',
 			'device_settings' => true,
 			'section'         => $section,
 			'label'           => __( 'Upsell products per row', 'customify' ),
@@ -322,7 +322,7 @@ class Customify_WC_Single_Product {
 
 		$configs[] = array(
 			'name'     => "{$section}_related_number",
-			'type'     => 'text',
+			'type'     => 'number',
 			'default'  => 3,
 			'section'  => $section,
 			'label'    => __( 'Number of related products', 'customify' ),
@@ -331,7 +331,7 @@ class Customify_WC_Single_Product {
 
 		$configs[] = array(
 			'name'            => "{$section}_related_columns",
-			'type'            => 'text',
+			'type'            => 'number',
 			'device_settings' => true,
 			'section'         => $section,
 			'label'           => __( 'Related products per row', 'customify' ),

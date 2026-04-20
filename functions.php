@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Customify functions and definitions
  *
@@ -24,20 +25,20 @@
  * 20 convert_smilies
  */
 global $wp_embed;
-add_filter( 'customify_the_content', array( $wp_embed, 'run_shortcode' ), 8 );
-add_filter( 'customify_the_content', array( $wp_embed, 'autoembed' ), 8 );
-add_filter( 'customify_the_content', 'wptexturize' );
-add_filter( 'customify_the_content', 'wpautop' );
-add_filter( 'customify_the_content', 'shortcode_unautop' );
-if ( function_exists( 'wp_filter_content_tags' ) ) {
-	add_filter( 'customify_the_content', 'wp_filter_content_tags' );
+add_filter('customify_the_content', array($wp_embed, 'run_shortcode'), 8);
+add_filter('customify_the_content', array($wp_embed, 'autoembed'), 8);
+add_filter('customify_the_content', 'wptexturize');
+add_filter('customify_the_content', 'wpautop');
+add_filter('customify_the_content', 'shortcode_unautop');
+if (function_exists('wp_filter_content_tags')) {
+	add_filter('customify_the_content', 'wp_filter_content_tags');
 } else {
-	add_filter( 'customify_the_content', 'wp_make_content_images_responsive' );
+	add_filter('customify_the_content', 'wp_make_content_images_responsive');
 }
 
-add_filter( 'customify_the_content', 'capital_P_dangit' );
-add_filter( 'customify_the_content', 'do_shortcode' );
-add_filter( 'customify_the_content', 'convert_smilies' );
+add_filter('customify_the_content', 'capital_P_dangit');
+add_filter('customify_the_content', 'do_shortcode');
+add_filter('customify_the_content', 'convert_smilies');
 
 
 /**
@@ -55,18 +56,18 @@ add_filter( 'customify_the_content', 'convert_smilies' );
  * 11 do_shortcode
  * 20 convert_smilies
  */
-add_filter( 'customify_the_title', array( $wp_embed, 'run_shortcode' ), 8 );
-add_filter( 'customify_the_title', array( $wp_embed, 'autoembed' ), 8 );
-add_filter( 'customify_the_title', 'wptexturize' );
-add_filter( 'customify_the_title', 'shortcode_unautop' );
-if ( function_exists( 'wp_filter_content_tags' ) ) {
-	add_filter( 'customify_the_title', 'wp_filter_content_tags' );
+add_filter('customify_the_title', array($wp_embed, 'run_shortcode'), 8);
+add_filter('customify_the_title', array($wp_embed, 'autoembed'), 8);
+add_filter('customify_the_title', 'wptexturize');
+add_filter('customify_the_title', 'shortcode_unautop');
+if (function_exists('wp_filter_content_tags')) {
+	add_filter('customify_the_title', 'wp_filter_content_tags');
 } else {
-	add_filter( 'customify_the_title', 'wp_make_content_images_responsive' );
+	add_filter('customify_the_title', 'wp_make_content_images_responsive');
 }
-add_filter( 'customify_the_title', 'capital_P_dangit' );
-add_filter( 'customify_the_title', 'do_shortcode' );
-add_filter( 'customify_the_title', 'convert_smilies' );
+add_filter('customify_the_title', 'capital_P_dangit');
+add_filter('customify_the_title', 'do_shortcode');
+add_filter('customify_the_title', 'convert_smilies');
 
 
 // Include the main Customify class.
@@ -79,10 +80,10 @@ require_once get_template_directory() . '/inc/class-customify.php';
  *
  * @return Customify
  */
-function Customify() {
+function Customify()
+{
 	// phpc:ignore WordPress.NamingConventions.ValidFunctionName.
 	return Customify::get_instance();
 }
 
 Customify();
-

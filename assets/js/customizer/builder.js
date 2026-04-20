@@ -203,7 +203,8 @@
 						name: input.val(),
 						id: input.attr("data-builder-id") || "",
 						control: input.attr("data-control-id") || "",
-						preview_data: wpcustomize.get()
+						preview_data: wpcustomize.get(),
+						nonce: Customify_Layout_Builder.nonce
 					},
 					function(res) {
 						if (res.success) {
@@ -240,7 +241,8 @@
 				{
 					action: "customify_builder_save_template",
 					id: input.attr("data-builder-id") || "",
-					remove: key
+					remove: key,
+					nonce: Customify_Layout_Builder.nonce
 				},
 				function(res) {
 					item.remove();

@@ -444,6 +444,9 @@ class Customify_Sanitize_Input {
 			case 'textarea':
 				$value = wp_kses_post( $value );
 				break;
+			case 'number':
+					$value = floatval($value);
+					break;
 			default:
 				$has_device = false;
 				if ( $device_settings && ! $this->skip_devices ) {
