@@ -13,27 +13,24 @@
 	}
 }
 
-// Layout no sidebar.
-.main-layout-content {
-	.entry-content > .alignwide {
-		max-width: 100vw;
-		max-width: calc(var(--vw, 1vw) * 100);
-		width: 1200px;
-		transform: translateX(-50%);
-		left: 50%;
-		position: relative;
-	}
+// alignwide / alignfull — modern margin-based approach (no transform hack).
+// Works for all layouts. Uses CSS vars from theme.json when available.
+.entry-content > .alignwide {
+	max-width: var(--wp--style--global--wide-size, 1200px);
+	width: 100%;
+	box-sizing: border-box;
+	// margin-left/right: auto is already inherited from `.entry-content > *` above.
+}
 
-	.entry-content > .alignfull {
-		margin: 1.5em 0;
-		max-width: 100vw;
-		max-width: calc(var(--vw, 1vw) * 100);
-		width: 100vw;
-		width: calc(var(--vw, 1vw) * 100);
-		transform: translateX(-50%);
-		left: 50%;
-		position: relative;
-	}
+.entry-content > .alignfull {
+	// Expand to full viewport width from a centered content area.
+	width: 100vw;
+	max-width: 100vw;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+	margin-left: calc(50% - 50vw) !important;
+	margin-right: calc(50% - 50vw) !important;
+	box-sizing: border-box;
 }
 
 
@@ -217,6 +214,56 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	.wp-block-cover-text p {
 		padding: 1.5em 0;
 	}
+}
+
+/*--------------------------------------------------------------
+  # Custom Block Styles (registered via register_block_style)
+  --------------------------------------------------------------*/
+
+// Button: Ghost
+.wp-block-button.is-style-ghost .wp-block-button__link {
+	background: transparent;
+	border: 2px solid currentColor;
+	color: inherit;
+	&:hover {
+		background: currentColor;
+	}
+}
+
+// Image: Rounded corners
+.wp-block-image.is-style-rounded img {
+	border-radius: 12px;
+}
+
+// Image: Shadow
+.wp-block-image.is-style-shadow img {
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+// Quote: Accent border
+.wp-block-quote.is-style-accent {
+	border-left: 4px solid #235787;
+	padding-left: 1.5em;
+	font-style: normal;
+}
+
+// Separator: Thick
+.wp-block-separator.is-style-thick {
+	border-bottom-width: 4px;
+}
+
+// Group: Card
+.wp-block-group.is-style-card {
+	background: #fff;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 2em;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+// Columns: No gap
+.wp-block-columns.is-style-no-gap {
+	gap: 0;
 }
 
 /*--------------------------------------------------------------

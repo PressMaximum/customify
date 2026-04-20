@@ -169,12 +169,26 @@ class Customify_MetaBox {
 	}
 
 	/**
+	 * Returns true when the current screen is the block editor.
+	 *
+	 * @return bool
+	 */
+	private function is_block_editor() {
+		$screen = get_current_screen();
+		return $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor();
+	}
+
+	/**
 	 * Adds the meta box container.
+	 * Only rendered in the classic editor; the block editor uses the React plugin instead.
 	 *
 	 * @param string $post_type Post Type.
 	 */
 	public function add_meta_box( $post_type ) {
-		// Limit meta box to certain post types.
+		if ( $this->is_block_editor() ) {
+			return;
+		}
+
 		$post_types = $this->get_support_post_types();
 		if ( in_array( $post_type, $post_types ) ) {
 			add_meta_box(

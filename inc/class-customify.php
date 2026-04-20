@@ -188,16 +188,50 @@ class Customify
 		add_theme_support('wc-product-gallery-slider');
 
 		/**
-		 * Support Gutenberg.
+		 * Support Gutenberg / Block Editor.
 		 *
 		 * @since 0.2.6
+		 * @since 0.4.14 Added responsive-embeds, block-template-parts, editor-color-palette.
 		 */
-		add_theme_support('align-wide');
-
-		/**
-		 * Add editor style support.
-		 */
-		add_theme_support('editor-styles');
+		add_theme_support( 'align-wide' );
+		add_theme_support( 'editor-styles' );
+		add_theme_support( 'responsive-embeds' );
+		add_theme_support( 'block-template-parts' );
+		add_theme_support( 'appearance-tools' );
+		add_theme_support( 'editor-color-palette',
+			array(
+				array(
+					'name'  => __( 'Primary', 'customify' ),
+					'slug'  => 'primary',
+					'color' => '#235787',
+				),
+				array(
+					'name'  => __( 'Secondary', 'customify' ),
+					'slug'  => 'secondary',
+					'color' => '#c3512f',
+				),
+				array(
+					'name'  => __( 'Text', 'customify' ),
+					'slug'  => 'text',
+					'color' => '#686868',
+				),
+				array(
+					'name'  => __( 'Link', 'customify' ),
+					'slug'  => 'link',
+					'color' => '#1e4b75',
+				),
+				array(
+					'name'  => __( 'Light Gray', 'customify' ),
+					'slug'  => 'light-gray',
+					'color' => '#f2f2f2',
+				),
+				array(
+					'name'  => __( 'Dark Gray', 'customify' ),
+					'slug'  => 'dark-gray',
+					'color' => '#444444',
+				),
+			)
+		);
 	}
 
 	/**
@@ -416,6 +450,10 @@ class Customify
 			'/inc/blog/class-posts-layout.php',
 			// Blog posts layout.
 			'/inc/blog/functions-posts-layout.php',
+			// Block editor enhancements (block styles, patterns category).
+			'/inc/admin/block-styles.php',
+			// Block editor Page Settings panel (also registers meta for REST API).
+			'/inc/admin/page-settings.php',
 		);
 
 		foreach ($files as $file) {
@@ -447,8 +485,8 @@ class Customify
 		}
 
 		$files = array(
-			'/inc/admin/editor.php',  // Metabox settings.
-			'/inc/admin/dashboard.php',  // Metabox settings.
+			'/inc/admin/editor.php',    // Block editor style integration.
+			'/inc/admin/dashboard.php', // Dashboard widgets.
 		);
 
 		foreach ($files as $file) {

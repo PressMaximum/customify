@@ -1016,6 +1016,14 @@ class Customify_Page_Header {
 			return '';
 		}
 
+		// Hide page cover/titlebar when the page title is disabled via per-post meta.
+		if ( is_singular() ) {
+			$disable = get_post_meta( get_the_ID(), '_customify_disable_page_title', true );
+			if ( '1' === $disable ) {
+				return '';
+			}
+		}
+
 		switch ( $args['display'] ) {
 			case 'cover':
 				$this->render_cover( $args );

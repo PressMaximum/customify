@@ -6,6 +6,7 @@
         "node": ">= 0.10.0"
     },
     "devDependencies": {
+        "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
         "grunt": "^1.6.1",
         "grunt-bumpup": "latest",
@@ -33,5 +34,10 @@
     },
     "browserslist": [
         "defaults"
-    ]
+    ],
+    "scripts": {
+        "build":   "wp-scripts build   --config webpack.config.js",
+        "start":   "wp-scripts start   --config webpack.config.js",
+        "lint:js": "wp-scripts lint-js src"
+    }
 }

@@ -29,8 +29,13 @@ class Customify_Editor {
 	 * @return void
 	 */
 	function assets() {
-		wp_enqueue_style( 'customify-editor-fonts', Customify_Customizer_Auto_CSS::get_instance()->get_font_url() );
-		wp_add_inline_style( 'wp-edit-post', $this->css() );
+		$font_url = Customify_Customizer_Auto_CSS::get_instance()->get_font_url();
+		if ( $font_url ) {
+			wp_enqueue_style( 'customify-editor-fonts', $font_url );
+		}
+		// wp-edit-post is deprecated in WP 6.2+; wp-edit-blocks is the modern handle.
+		$inline_handle = wp_style_is( 'wp-edit-blocks', 'registered' ) ? 'wp-edit-blocks' : 'wp-edit-post';
+		wp_add_inline_style( $inline_handle, $this->css() );
 	}
 
 	/**
@@ -58,113 +63,112 @@ class Customify_Editor {
 		}
 
 		if ( $fields['global_styling_color_heading'] ) {
-			$fields['global_styling_color_heading']['selector']   = '.editor-styles-wrapper .editor-post-title .editor-post-title__input';
+			// WP 6.0+: post title is now a block (.wp-block-post-title).
+			$fields['global_styling_color_heading']['selector']   = '.editor-styles-wrapper .wp-block-post-title';
 			$fields['global_styling_color_heading']['css_format'] = 'color: {{value}};';
 		}
 
 		if ( $fields['container_width'] ) {
-			$fields['container_width']['selector']   = '.editor-styles-wrapper .wp-block[data-align="wide"]';
-			$fields['container_width']['css_format'] = 'width: calc( {{value}} - 4em ); max-width: 100%;';
+			// Sync wide-size CSS var into editor so theme.json + customizer stay in sync.
+			$fields['container_width']['selector']   = ':root';
+			$fields['container_width']['css_format'] = '--wp--style--global--wide-size: {{value}};';
 		}
 
 		if ( $fields['single_blog_post_content_width'] ) {
-			$fields['single_blog_post_content_width']['selector']   = '.editor-styles-wrapper .wp-block:not([data-align="full"]):not([data-align="wide"])';
+			$fields['single_blog_post_content_width']['selector']   = '.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide)';
 			$fields['single_blog_post_content_width']['css_format'] = 'max-width: {{value}};';
 		}
 
 		if ( $fields['global_typography_base_heading'] ) {
-			$fields['global_typography_base_heading']['selector'] = '.editor-post-title__block .editor-post-title__input';
+			// WP 6.0+: post title is a dedicated block.
+			$fields['global_typography_base_heading']['selector'] = '.editor-styles-wrapper .wp-block-post-title';
 		}
 		if ( $fields['global_typography_heading_h1'] ) {
-			$fields['global_typography_heading_h1']['selector'] = ' .editor-post-title__block texarea.editor-post-title__input';
+			$fields['global_typography_heading_h1']['selector'] = '.editor-styles-wrapper .wp-block-post-title';
 		}
 
 		if ( $fields['site_content_styling'] ) {
+			// .editor-styles-wrapper is stable across WP 5.4+.
 			$fields['site_content_styling']['selector'] = array(
-				'normal' => '.edit-post-visual-editor.editor-styles-wrapper',
+				'normal' => '.editor-styles-wrapper',
 			);
 		}
 
 		if ( isset( $fields['content_background'] ) && $fields['content_background'] ) {
+			// WP 6.0+ uses .editor-visual-editor instead of .edit-post-layout__content.
 			$fields['content_background']['selector'] = array(
-				'normal' => '.edit-post-layout__content',
+				'normal' => '.editor-styles-wrapper',
 			);
 		}
 
 		$c   = new Customify_Customizer_Auto_CSS();
 		$css = $c->render_css( $fields );
 
-		$css .= '.edit-post-layout__content .edit-post-layout__metaboxes { background: #FFF; }
-		.edit-post-layout__metaboxes:not(:empty) { margin-top: 0px; }
-		.editor-styles-wrapper textarea.editor-post-title__input { min-height: 0; }
-		.editor-styles-wrapper textarea.editor-post-title__input:focus,
+		// Metabox compatibility (selectors stable in WP 6.x).
+		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
+		.editor-styles-wrapper .wp-block-post-title { min-height: 0; }
 		.block-editor-page .editor-styles-wrapper button:not(.components-button) { background: none; }
 		';
 
-		$css .= 'pre{
+		$css .= '.editor-styles-wrapper pre,
+		.editor-styles-wrapper .wp-block-code,
+		.editor-styles-wrapper .wp-block-preformatted {
 			background: #f2f2f2;
 			font-family: "Courier 10 Pitch", Courier, monospace;
-			margin-bottom: 2.2906835em;
 			padding: 1.618em;
 			overflow: auto;
-			
 			margin-left: auto;
 			margin-right: auto;
-		}
-		.wp-block-preformatted {
 			white-space: pre-wrap;
 		}
-		#editor .editor-styles-wrapper pre{
-			max-width: 840px;
-		}
 
-		#editor ul, #editor ol {
+		.editor-styles-wrapper ul,
+		.editor-styles-wrapper ol {
 			margin: 1.5em auto;
 			list-style-position: outside;
 		}
 
-		#editor .wp-block-list,
-		#editor .wp-block-categories__list,
-		#editor .wp-block-archives-list {
+		.editor-styles-wrapper .wp-block-list,
+		.editor-styles-wrapper .wp-block-categories__list,
+		.editor-styles-wrapper .wp-block-archives-list {
 			padding-left: 2.5em;
 		}
-		#editor ul ul, #editor ol ol, #editor ul ol, #editor ol ul {
-			margin-bottom: 0px;
-			margin-top: 0px;
+
+		.editor-styles-wrapper ul ul,
+		.editor-styles-wrapper ol ol,
+		.editor-styles-wrapper ul ol,
+		.editor-styles-wrapper ol ul {
+			margin-bottom: 0;
+			margin-top: 0;
 			margin-left: 2.5em;
 		}
 
-		#editor table, #editor table tr, #editor table th, #editor table  td {
+		.editor-styles-wrapper .wp-block-table table,
+		.editor-styles-wrapper .wp-block-table tr,
+		.editor-styles-wrapper .wp-block-table th,
+		.editor-styles-wrapper .wp-block-table td {
 			border: 0;
 		}
 
-		#editor .editor-styles-wrapper blockquote.wp-block-quote {
-			border-left-width: 3px;
+		.editor-styles-wrapper .wp-block-quote {
+			border-left-width: 4px;
 			border-left-style: solid;
 		}
 
-		#editor .has-text-align-left .rich-text {
-			text-align: left;
-		}
-
-		#editor .wp-block-quote.is-large cite {
-			font-size: 1.125em;
-		}
-
-		#editor .editor-styles-wrapper .wp-block-pullquote {
+		.editor-styles-wrapper .wp-block-pullquote {
 			margin-left: auto;
 			margin-right: auto;
 		}
 
-		#editor .wp-block-pullquote.alignleft {
+		.editor-styles-wrapper .wp-block-pullquote.alignleft {
 			margin: 0 1.41575em 1em 2.5em;
 		}
 
-		#editor .wp-block-pullquote.alignright {
+		.editor-styles-wrapper .wp-block-pullquote.alignright {
 			margin: 0 2.5em 1em 1.41575em;
 		}
 
-		#editor .editor-styles-wrapper .wp-block-separator.is-style-dots {
+		.editor-styles-wrapper .wp-block-separator.is-style-dots {
 			max-width: 205px;
 		}
 		';
