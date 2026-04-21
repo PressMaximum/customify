@@ -102,10 +102,10 @@ class  Customify_Customizer {
 		if ( is_customize_preview() ) {
 			$suffix = Customify()->get_asset_suffix();
 
-			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/auto-css' . $suffix . '.js', array( 'customize-preview' ), '20151215', true );
+			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/auto-css.js', array( 'customize-preview' ), '20151215', true );
 			wp_enqueue_script(
 				'customify-customizer',
-				esc_url( get_template_directory_uri() ) . '/assets/js/customizer/customizer' . $suffix . '.js',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/customizer.js',
 				array(
 					'customize-preview',
 					'customize-selective-refresh',

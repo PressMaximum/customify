@@ -56,7 +56,7 @@ class Customify_Dashboard
 			<div class="customify-notice-wrapper notice is-dismissible">
 				<div class="customify-notice">
 					<div class="customify-notice-img">
-						<img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/admin/customify_logo@2x.png'); ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
+						<img src="<?php echo esc_url(get_template_directory_uri() . '/build/images/admin/customify_logo@2x.png'); ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
 					</div>
 					<div class="customify-notice-content">
 						<div class="customify-notice-heading"><?php _e('Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify'); ?></div>
@@ -110,9 +110,8 @@ class Customify_Dashboard
 		if ('appearance_page_customify' != $id && 'themes.php' != $id) {
 			return;
 		}
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_style('customify-admin', esc_url(get_template_directory_uri()) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
-		wp_enqueue_script('customify-admin', esc_url(get_template_directory_uri()) . '/assets/js/admin/dashboard.js', array('jquery'), Customify::$version);
+		wp_enqueue_style('customify-admin', esc_url(get_template_directory_uri()) . '/build/css/backend/admin/dashboard.css', false, Customify::$version);
+		wp_enqueue_script('customify-admin', esc_url(get_template_directory_uri()) . '/build/js/backend/admin/dashboard.js', array('jquery'), Customify::$version);
 		if ('themes' != $id) {
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
@@ -189,7 +188,7 @@ class Customify_Dashboard
 			<div class="cd-row">
 				<div class="cd-header-inner">
 					<a href="https://pressmaximum.com" target="_blank" class="cd-branding">
-						<img src="<?php echo esc_url(get_template_directory_uri()) . '/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
+						<img src="<?php echo esc_url(get_template_directory_uri()) . '/build/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
 					</a>
 					<span class="cd-version"><?php echo esc_html($this->config['version']); ?></span>
 					<a class="cd-top-link" href="<?php echo esc_url($this->add_url_args(array('tab' => 'changelog'))); ?>"><?php _e('Changelog', 'customify'); ?></a>
@@ -406,7 +405,7 @@ class Customify_Dashboard
 		<div class="cd-box box-plugins">
 			<div class="cd-box-top"><?php _e('Customify ready to import sites', 'customify'); ?></div>
 			<div class="cd-sites-thumb">
-				<img src="<?php echo esc_url(get_template_directory_uri()) . '/assets/images/admin/sites_thumbnail.jpg'; ?>">
+				<img src="<?php echo esc_url(get_template_directory_uri()) . '/build/images/admin/sites_thumbnail.jpg'; ?>">
 			</div>
 			<div class="cd-box-content">
 				<p><?php _e('<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify'); ?></p>

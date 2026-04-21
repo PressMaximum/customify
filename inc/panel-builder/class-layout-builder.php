@@ -382,19 +382,19 @@ class Customify_Customize_Layout_Builder {
 		);
 
 		// Header builder.
-		$header_asset_file = get_template_directory() . '/assets/build/header-builder/index.asset.php';
+		$header_asset_file = get_template_directory() . '/build/js/backend/header-builder.asset.php';
 		if ( file_exists( $header_asset_file ) ) {
 			$asset = require $header_asset_file;
 			wp_enqueue_script(
 				'customify-header-builder',
-				esc_url( get_template_directory_uri() ) . '/assets/build/header-builder/index.js',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/header-builder.js',
 				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
 				$asset['version'],
 				true
 			);
 			wp_enqueue_style(
 				'customify-header-builder',
-				esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
+				esc_url( get_template_directory_uri() ) . '/build/css/backend/style-header-builder.css',
 				array( 'dashicons', 'wp-components' ),
 				$asset['version']
 			);
@@ -403,28 +403,20 @@ class Customify_Customize_Layout_Builder {
 		}
 
 		// Footer builder.
-		$footer_asset_file = get_template_directory() . '/assets/build/footer-builder/index.asset.php';
+		$footer_asset_file = get_template_directory() . '/build/js/backend/footer-builder.asset.php';
 		if ( file_exists( $footer_asset_file ) ) {
 			$asset = require $footer_asset_file;
 			wp_enqueue_script(
 				'customify-footer-builder',
-				esc_url( get_template_directory_uri() ) . '/assets/build/footer-builder/index.js',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/footer-builder.js',
 				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
 				$asset['version'],
 				true
 			);
-			// Footer shares the same compiled CSS as header-builder (same SCSS source).
 			wp_enqueue_style(
 				'customify-footer-builder',
-				esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
+				esc_url( get_template_directory_uri() ) . '/build/css/backend/style-footer-builder.css',
 				array( 'dashicons', 'wp-components' ),
-				$asset['version']
-			);
-			// Row layout control styles (compiled separately from footer-row-layout/style.scss).
-			wp_enqueue_style(
-				'customify-footer-row-layout',
-				esc_url( get_template_directory_uri() ) . '/assets/build/style-footer-builder.css',
-				array( 'dashicons' ),
 				$asset['version']
 			);
 			// Reuse the same global; footer builder reads from it too.

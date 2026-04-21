@@ -13,11 +13,13 @@ npm-debug.log
 # macOS
 .DS_Store
 
-# SASS Source Map
+# Source maps
 *.css.map
+*.js.map
 
 # Zip file
 *.zip
 
-# Webpack build artifacts (regenerated via npm run build)
-/assets/build/
+# Webpack build output — fully regenerated via npm run build
+# Static assets (fonts, images, vendor) live in src/ and are copied here by webpack.
+/build/

@@ -164,11 +164,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'    => $color_mode,
 				'choices'    => array(
 					'dark-mode'  => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_light.svg',
 						'label' => 'Dark',
 					),
 					'light-mode' => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_dark.svg',
 						'label' => 'Light',
 					),
 				),
@@ -241,11 +241,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'    => 'dark-mode',
 				'choices'    => array(
 					'dark-mode'  => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_light.svg',
 						'label' => 'Dark',
 					),
 					'light-mode' => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_dark.svg',
 						'label' => 'Light',
 					),
 				),

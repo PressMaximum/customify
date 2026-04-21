@@ -80,7 +80,7 @@ class Customify_Page_Settings {
 	 * exact dependency list and content hash for cache busting.
 	 */
 	public function enqueue_assets() {
-		$asset_file = get_template_directory() . '/assets/build/page-settings/index.asset.php';
+		$asset_file = get_template_directory() . '/build/js/backend/page-settings.asset.php';
 
 		if ( ! file_exists( $asset_file ) ) {
 			return;
@@ -90,7 +90,7 @@ class Customify_Page_Settings {
 
 		wp_enqueue_script(
 			'customify-page-settings',
-			esc_url( get_template_directory_uri() ) . '/assets/build/page-settings/index.js',
+			esc_url( get_template_directory_uri() ) . '/build/js/backend/page-settings.js',
 			$asset['dependencies'],
 			$asset['version'],
 			true
@@ -98,7 +98,7 @@ class Customify_Page_Settings {
 
 		wp_enqueue_style(
 			'customify-page-settings',
-			esc_url( get_template_directory_uri() ) . '/assets/build/style-page-settings.css',
+			esc_url( get_template_directory_uri() ) . '/build/css/backend/style-page-settings.css',
 			array( 'wp-components' ),
 			$asset['version']
 		);

@@ -151,9 +151,8 @@ class Customify_MetaBox {
 		if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
 			return;
 		}
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/js/admin/metabox' . $suffix . '.js', array( 'jquery' ), Customify::$version, true );
-		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/css/admin/metabox' . $suffix . '.css', false, Customify::$version );
+		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/js/backend/admin/metabox.js', array( 'jquery' ), Customify::$version, true );
+		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/css/backend/admin/metabox.css', false, Customify::$version );
 	}
 
 	public function get_support_post_types() {

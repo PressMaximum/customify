@@ -432,7 +432,7 @@ class Customify_Page_Header {
 					'normal' => array(
 						'bg_image' => array(
 							'id'  => '',
-							'url' => esc_url( get_template_directory_uri() ) . '/assets/images/default-cover.jpg',
+							'url' => esc_url( get_template_directory_uri() ) . '/build/images/default-cover.jpg',
 						),
 					),
 				),

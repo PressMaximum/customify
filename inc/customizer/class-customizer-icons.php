@@ -31,7 +31,7 @@ class Customify_Font_Icons
 				$icons['font-awesome'] = array(
 					'name'         => __('Font Awesome v4', 'customify'),
 					'icons'        => $this->get_font_awesome_icons(),
-					'url'          => esc_url(get_template_directory_uri()) . '/assets/fonts/font-awesome/css/font-awesome.min.css',
+					'url'          => esc_url(get_template_directory_uri()) . '/build/fonts/font-awesome/css/font-awesome.min.css',
 					'class_config' => '__icon_name__', // __icon_name__ will replace by icon class name
 				);
 			}
@@ -42,7 +42,7 @@ class Customify_Font_Icons
 				$icons['font-awesome-v6'] = array(
 					'name'         => __('Font Awesome v6', 'customify'),
 					'icons'        => $this->get_font_awesome_icons6(),
-					'url'          => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/all.min.css',
+					'url'          => esc_url(get_template_directory_uri()) . '/build/fonts/fontawesome-v6/css/all.min.css',
 					'class_config' => '__icon_name__', // __icon_name__ will replace by icon class name
 				);
 			}
@@ -54,8 +54,8 @@ class Customify_Font_Icons
 					'name'         => __('Font Awesome v6', 'customify'),
 					'icons'        => $this->get_font_awesome_icons6(),
 					'url'          => array(
-						'font-awesome-v6' => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/all.min.css',
-						'font-awesome-4-shim' => esc_url(get_template_directory_uri()) . '/assets/fonts/fontawesome-v6/css/v4-shims.min.css',
+						'font-awesome-v6' => esc_url(get_template_directory_uri()) . '/build/fonts/fontawesome-v6/css/all.min.css',
+						'font-awesome-4-shim' => esc_url(get_template_directory_uri()) . '/build/fonts/fontawesome-v6/css/v4-shims.min.css',
 					),
 					'class_config' => '__icon_name__', // __icon_name__ will replace by icon class name
 				);

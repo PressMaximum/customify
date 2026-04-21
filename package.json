@@ -10,6 +10,7 @@
         "@wordpress/icons": "^12.2.0",
         "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
+        "copy-webpack-plugin": "^14.0.0",
         "grunt": "^1.6.1",
         "grunt-bumpup": "latest",
         "grunt-contrib-clean": "latest",
@@ -27,12 +28,12 @@
         "grunt-rtlcss": "latest",
         "grunt-text-replace": "latest",
         "grunt-wp-i18n": "latest",
-        "request": "^2.88.2"
+        "request": "^2.88.2",
+        "rtlcss": "^4.3.0"
     },
     "dependencies": {
         "copy": "^0.0.1",
-        "element-qsa-scope": "^1.1.0",
-        "rtlcss": "latest"
+        "element-qsa-scope": "^1.1.0"
     },
     "browserslist": [
         "defaults"

@@ -6,7 +6,7 @@
  */
 class Customify_Editor {
 	private $action      = 'customify_load_editor_style';
-	private $editor_file = 'assets/css/admin/editor.css';
+	private $editor_file = 'build/css/backend/admin/editor.css';
 	public function __construct() {
 		$current_wp_version = $GLOBALS['wp_version'];
 		if ( version_compare( $current_wp_version, '5.8', '>=' ) ) {

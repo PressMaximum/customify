@@ -11,7 +11,7 @@
 <!-- wp:media-text {"align":"wide","mediaPosition":"left","verticalAlignment":"center"} -->
 <div class="wp-block-media-text alignwide is-stacked-on-mobile is-vertically-aligned-center">
 	<figure class="wp-block-media-text__media">
-		<img src="<?php echo esc_url( get_template_directory_uri() . '/assets/images/placeholder.png' ); ?>" alt="<?php esc_attr_e( 'Placeholder image', 'customify' ); ?>" />
+		<img src="<?php echo esc_url( get_template_directory_uri() . '/build/images/placeholder.png' ); ?>" alt="<?php esc_attr_e( 'Placeholder image', 'customify' ); ?>" />
 	</figure>
 	<div class="wp-block-media-text__content">
 		<!-- wp:heading {"level":2} -->

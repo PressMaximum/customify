@@ -311,20 +311,17 @@ class Customify_WC {
 	 * @return mixed
 	 */
 	function custom_styles( $enqueue_styles ) {
-		$suffix                                        = Customify()->get_asset_suffix();
-		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce' . $suffix . '.css';
-		$enqueue_styles['woocommerce-general']['deps'] = 'customify-style';
+		// Both woocommerce.scss and woocommerce-smallscreen.scss are bundled
+		// into a single build/css/frontend/woocommerce.css by webpack.
+		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce.css';
+		$enqueue_styles['woocommerce-general']['deps'] = '';
 
 		if ( isset( $enqueue_styles['woocommerce-layout'] ) ) {
-			unset( $enqueue_styles['woocommerce-layout'] ); // Remove the layout.
+			unset( $enqueue_styles['woocommerce-layout'] );
 		}
 
 		if ( isset( $enqueue_styles['woocommerce-smallscreen'] ) ) {
-			$enqueue_styles['woocommerce-smallscreen']['deps'] = '';
-			$enqueue_styles['woocommerce-smallscreen']['src']  = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce-smallscreen' . $suffix . '.css';
-			$b                                                 = $enqueue_styles['woocommerce-smallscreen'];
 			unset( $enqueue_styles['woocommerce-smallscreen'] );
-			$enqueue_styles['woocommerce-smallscreen'] = $b;
 		}
 
 		return $enqueue_styles;
@@ -450,16 +447,14 @@ class Customify_WC {
 	}
 
 	function add_css( $css_files ) {
-		$suffix                          = Customify()->get_asset_suffix();
-		$css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/assets/css/compatibility/woocommerce' . $suffix . '.css';
+		$css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce.css';
 
 		return $css_files;
 	}
 
 	function add_js( $js_files ) {
-		$suffix                         = Customify()->get_asset_suffix();
 		$js_files['plugin-woocommerce'] = array(
-			'url' => esc_url( get_template_directory_uri() ) . '/assets/js/compatibility/woocommerce' . $suffix . '.js',
+			'url'  => esc_url( get_template_directory_uri() ) . '/build/js/frontend/woocommerce.js',
 			'deps' => array( 'jquery' ),
 		);
 
