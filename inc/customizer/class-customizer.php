@@ -972,6 +972,7 @@ class  Customify_Customizer {
 
 		// Register new panel and section type.
 		$wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Header_Builder_Panel' );
 		$wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
 
 		// Register section type.
@@ -992,7 +993,8 @@ class  Customify_Customizer {
 					}
 					unset( $args['name'] );
 					unset( $args['type'] );
-					$panel = new Customify_WP_Customize_Panel( $wp_customize, $name, $args );
+					$panel_class = ( 'header_settings' === $name ) ? 'Customify_Header_Builder_Panel' : 'Customify_WP_Customize_Panel';
+					$panel = new $panel_class( $wp_customize, $name, $args );
 					$wp_customize->add_panel( $panel );
 					break;
 				case 'section':

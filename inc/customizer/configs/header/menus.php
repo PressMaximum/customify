@@ -36,12 +36,13 @@ class Customify_Builder_Item_Primary_Menu {
 		$fn      = array( $this, 'render' );
 		$config  = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => 'header_settings',
-				'theme_supports' => '',
-				'title'          => $this->label,
-				'description'    => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label ),
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'theme_supports'  => '',
+				'title'           => $this->label,
+				'description'     => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label ),
+				'active_callback' => '__return_false',
 			),
 
 			array(

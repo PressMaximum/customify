@@ -30,10 +30,11 @@ class Customify_Builder_Item_Button {
 		$selector = 'a.item--' . $this->id;
 		$config   = array(
 			array(
-				'name'  => $section,
-				'type'  => 'section',
-				'panel' => 'header_settings',
-				'title' => __( 'Button', 'customify' ),
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'title'           => __( 'Button', 'customify' ),
+				'active_callback' => '__return_false',
 			),
 
 			array(

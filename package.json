@@ -6,6 +6,8 @@
         "node": ">= 0.10.0"
     },
     "devDependencies": {
+        "@wordpress/components": "^32.6.0",
+        "@wordpress/icons": "^12.2.0",
         "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
         "grunt": "^1.6.1",
@@ -36,8 +38,8 @@
         "defaults"
     ],
     "scripts": {
-        "build":   "wp-scripts build   --config webpack.config.js",
-        "start":   "wp-scripts start   --config webpack.config.js",
+        "build": "wp-scripts build   --config webpack.config.js",
+        "start": "wp-scripts start   --config webpack.config.js",
         "lint:js": "wp-scripts lint-js src"
     }
 }

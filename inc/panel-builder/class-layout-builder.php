@@ -19,7 +19,6 @@ class Customify_Customize_Layout_Builder {
 
 		if ( is_admin() ) {
 			add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
-			add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
 			add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
 			add_action( 'wp_ajax_customify_builder_export_template', array( $this, 'ajax_export_template' ) );
 		}
@@ -326,66 +325,43 @@ class Customify_Customize_Layout_Builder {
 	}
 
 	/**
-	 * Add script to Customize
+	 * Enqueue the React header builder and pass builder config to JS.
 	 */
 	function scripts() {
-		global $wp_version;
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_script(
-			'customify-builder-v1',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v1' . $suffix . '.js',
-			array(
-				'customize-controls',
-				'jquery-ui-resizable',
-				'jquery-ui-droppable',
-				'jquery-ui-draggable',
-			),
-			false,
-			true
-		);
-		wp_enqueue_script(
-			'customify-builder-v2',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v2' . $suffix . '.js',
-			array(
-				'customize-controls',
-				'jquery-ui-resizable',
-				'jquery-ui-droppable',
-				'jquery-ui-draggable',
-			),
-			false,
-			true
-		);
-		wp_enqueue_script(
-			'customify-layout-builder',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder' . $suffix . '.js',
-			array(
-				'customify-builder-v1',
-				'customify-builder-v2',
-			),
-			false,
-			true
-		);
+		$asset_file = get_template_directory() . '/assets/build/header-builder/index.asset.php';
 
-		$hide_sw = get_theme_mod( 'hide_header_builder_switcher' );
-
-		$handle = 'jquery';
-		if ( '5.5' == $wp_version ) {
-			$handle = 'customify-layout-builder';
+		if ( ! file_exists( $asset_file ) ) {
+			return;
 		}
+
+		$asset = require $asset_file;
+
+		wp_enqueue_script(
+			'customify-header-builder',
+			esc_url( get_template_directory_uri() ) . '/assets/build/header-builder/index.js',
+			$asset['dependencies'],
+			$asset['version'],
+			true
+		);
+
+		wp_enqueue_style(
+			'customify-header-builder',
+			esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
+			array( 'dashicons', 'wp-components' ),
+			$asset['version']
+		);
+
 		wp_localize_script(
-			$handle,
+			'customify-header-builder',
 			'Customify_Layout_Builder',
 			array(
-				'footer_moved_widgets_text' => '',
-				'builders'                  => $this->get_builders(),
-				'is_rtl'                    => is_rtl(),
-				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
-				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
-				'hide_switcher'             => apply_filters( 'customify_hide_header_builder_switcher', get_theme_mod( 'hide_header_builder_switcher', 'no' ) ), // Use get theme mod `hide_header_builder_switcher` for hide switcher.
-				'header_builder_version'    => get_theme_mod( 'header_builder_version', $hide_sw ? 'v2' : '' ),
-				'nonce'                     => wp_create_nonce( 'Customify_Layout_Builder' ),
+				'builders' => $this->get_builders(),
+				'is_rtl'   => is_rtl(),
+				'nonce'    => wp_create_nonce( 'Customify_Layout_Builder' ),
 			)
 		);
+
+		wp_set_script_translations( 'customify-header-builder', 'customify' );
 	}
 
 	static function get_instance() {
