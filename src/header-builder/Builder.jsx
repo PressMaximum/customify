@@ -1,13 +1,13 @@
 /**
- * Customify Header Builder — main React component tree.
+ * Customify Layout Builder — generic React component tree (header & footer).
  *
  * Data flow:
  *   wp.customize Setting  ←read/write→  React state (normalizeData shape)
  *
- * JSON schema (header_builder_panel_v2):
+ * JSON schema (stored in the builder's react_control_id setting):
  * {
- *   desktop: { top: {left:[{id}], center:[{id}], right:[{id}]}, main:{…}, bottom:{…} },
- *   mobile:  { top:{…}, main:{…}, bottom:{…}, sidebar:{sidebar:[{id}]} }
+ *   desktop: { <row>: { left:[{id}], center:[{id}], right:[{id}] }, … },
+ *   mobile:  { <row>: {…}, sidebar: { sidebar:[{id}] } }   // header only
  * }
  * The setting value is stored as encodeURIComponent(JSON.stringify(data)).
  */
@@ -21,30 +21,12 @@ import { dragHandle, settings, close, plus } from '@wordpress/icons';
 // Constants
 // ---------------------------------------------------------------------------
 
-const ROWS   = [ 'top', 'main', 'bottom' ];
-const COLS   = [ 'left', 'center', 'right' ];
-const DEVICES = [
-	{ id: 'desktop', label: __( 'Desktop', 'customify' ) },
-	{ id: 'mobile',  label: __( 'Mobile / Tablet', 'customify' ) },
-];
-
-// Sections always visible in WP Customizer — never hide these.
-// title_tagline (Logo & Site Identity) is intentionally NOT included: we hide
-// it by default and only show it when the user clicks the logo settings icon,
-// matching the same hide/show behaviour as all other builder element sections.
-const ALWAYS_VISIBLE_SECTIONS = new Set( [ 'header_templates' ] );
-
-// Builder infrastructure sections — always hidden (rows + panel).
-const BUILDER_INFRA_SECTIONS = new Set( [
-	'header_builder_panel',
-	'header_top', 'header_main', 'header_bottom', 'header_sidebar',
-] );
+const COLS     = [ 'left', 'center', 'right' ];
+const ALL_COLS = [ 'left', 'center', 'right', 'col4', 'col5' ];
 
 // ---------------------------------------------------------------------------
 // wp.customize bridge
 // ---------------------------------------------------------------------------
-
-const CONTROL_ID = 'header_builder_panel_v2';
 
 function parseValue( raw ) {
 	if ( ! raw ) return {};
@@ -54,18 +36,18 @@ function parseValue( raw ) {
 	return {};
 }
 
-function readSetting() {
+function readSetting( controlId ) {
 	try {
-		const setting = wp.customize( CONTROL_ID );
+		const setting = wp.customize( controlId );
 		return setting ? parseValue( setting.get() ) : {};
 	} catch ( _ ) {
 		return {};
 	}
 }
 
-function writeSetting( data ) {
+function writeSetting( data, controlId ) {
 	try {
-		const setting = wp.customize( CONTROL_ID );
+		const setting = wp.customize( controlId );
 		if ( setting ) {
 			setting.set( encodeURIComponent( JSON.stringify( data ) ) );
 		}
@@ -76,19 +58,21 @@ function writeSetting( data ) {
 // Data helpers
 // ---------------------------------------------------------------------------
 
-function normalizeData( raw ) {
+function normalizeData( raw, deviceIds, rows, hasSidebar ) {
 	const data = {};
-	for ( const { id: dev } of DEVICES ) {
+	for ( const dev of deviceIds ) {
 		data[ dev ] = {};
-		for ( const row of ROWS ) {
+		for ( const row of rows ) {
 			data[ dev ][ row ] = {};
-			for ( const col of COLS ) {
+			for ( const col of ALL_COLS ) {
 				data[ dev ][ row ][ col ] = ( raw?.[ dev ]?.[ row ]?.[ col ] ) || [];
 			}
 		}
 	}
-	// Sidebar only exists on mobile.
-	data.mobile.sidebar = { sidebar: ( raw?.mobile?.sidebar?.sidebar ) || [] };
+	if ( hasSidebar ) {
+		data.mobile = data.mobile || {};
+		data.mobile.sidebar = { sidebar: ( raw?.mobile?.sidebar?.sidebar ) || [] };
+	}
 	return data;
 }
 
@@ -121,7 +105,6 @@ function getDevicePlacedIds( data, device ) {
 function permanentlyHideSection( section ) {
 	if ( ! section ) return;
 	section.active.set( false );
-	// Re-hide if WP Customizer tries to re-activate (e.g. on scroll repaint).
 	// Store the handler on the section object so openSection can unbind it by reference.
 	if ( ! section._customifyForceHide ) {
 		section._customifyForceHide = function( active ) {
@@ -131,15 +114,17 @@ function permanentlyHideSection( section ) {
 	section.active.bind( section._customifyForceHide );
 }
 
-function hideAllBuilderSections( allItems ) {
+function hideAllBuilderSections( allItems, infraSections, alwaysVisibleSections ) {
 	if ( ! wp?.customize?.section ) return;
-	// Hide infrastructure sections (rows, builder panel).
-	for ( const id of BUILDER_INFRA_SECTIONS ) {
+	for ( const id of infraSections ) {
 		permanentlyHideSection( wp.customize.section( id ) );
 	}
-	// Hide item element sections.
 	for ( const item of Object.values( allItems ) ) {
-		if ( ! item.section || ALWAYS_VISIBLE_SECTIONS.has( item.section ) ) continue;
+		// Hide the dedicated layout section (margin/padding/etc.) if present.
+		if ( item.layout_section ) {
+			permanentlyHideSection( wp.customize.section( item.layout_section ) );
+		}
+		if ( ! item.section || alwaysVisibleSections.has( item.section ) ) continue;
 		permanentlyHideSection( wp.customize.section( item.section ) );
 	}
 }
@@ -149,43 +134,60 @@ function hideAllBuilderSections( allItems ) {
 // ---------------------------------------------------------------------------
 
 export default function Builder( { config } ) {
-	const panelId  = config?.panel || 'header_settings';
-	const allItems = config?.items || {};
-	const rowLabels = config?.rows  || {
-		top:     __( 'Header Top', 'customify' ),
-		main:    __( 'Header Main', 'customify' ),
-		bottom:  __( 'Header Bottom', 'customify' ),
-		sidebar: __( 'Menu Sidebar', 'customify' ),
-	};
+	const builderId    = config?.id     || 'header';
+	const panelId      = config?.panel  || 'header_settings';
+	const controlId    = config?.react_control_id || config?.control_id || 'header_builder_panel_v2';
+	const allItems       = config?.items  || {};
+	const rowLabels      = config?.rows   || {};
+	const rowLayoutKeys  = config?.row_layout_keys || {};
+	const deviceMap    = config?.devices || { desktop: __( 'Desktop', 'customify' ), mobile: __( 'Mobile / Tablet', 'customify' ) };
+	const deviceIds    = Object.keys( deviceMap );
+	const hasMobile    = deviceIds.includes( 'mobile' );
+	const hasSidebar   = hasMobile && Object.keys( rowLabels ).includes( 'sidebar' );
+	const rows         = Object.keys( rowLabels ).filter( ( r ) => r !== 'sidebar' );
+	const DEVICES_LIST = deviceIds.map( ( id ) => ( { id, label: deviceMap[ id ] } ) );
+	const panelItemsContainerId = config?.panel_items_container || ( `customify-${ builderId.charAt( 0 ) }b-panel-items` );
 
-	const initialData = normalizeData( readSetting() );
+	// Sections that belong to the builder infrastructure — always hidden.
+	const infraSections = new Set(
+		[ config?.section, ...Object.keys( rowLabels ).map( ( r ) => `${ builderId }_${ r }` ) ]
+			.filter( Boolean )
+	);
+	// Sections that are always visible in WP Customizer (e.g. templates panel).
+	const alwaysVisibleSections = new Set( [ `${ builderId }_templates` ] );
 
-	const [ visible,   setVisible   ] = useState( false );
-	const [ device,    setDevice    ] = useState( 'desktop' );
-	const [ data,      setData      ] = useState( initialData );
-	const [ innerLeft, setInnerLeft ] = useState( 0 );
-	const [ popover,   setPopover   ] = useState( null ); // { location, anchorRect }
+	const initialData = normalizeData( readSetting( controlId ), deviceIds, rows, hasSidebar );
+
+	const [ panelExpanded, setPanelExpanded ] = useState( false );
+	const [ builderOpen,   setBuilderOpen   ] = useState( false );
+	const [ device,        setDevice        ] = useState( deviceIds[ 0 ] || 'desktop' );
+	const [ data,          setData          ] = useState( initialData );
+	const [ innerLeft,     setInnerLeft     ] = useState( 0 );
+	const [ popover,       setPopover       ] = useState( null );
 	const lastSaved  = useRef( initialData );
 	const dragRef    = useRef( null );
 
-	// Show/hide when the Header panel expands.
+	// Show/hide when the panel expands.
 	useEffect( () => {
 		const panel = wp.customize?.panel?.( panelId );
 		if ( ! panel ) return;
-		// Check current state (handles deep-link / URL hash cases).
-		if ( panel.expanded.get() ) setVisible( true );
-		const handler = ( expanded ) => setVisible( expanded );
+		if ( panel.expanded.get() ) { setPanelExpanded( true ); setBuilderOpen( true ); }
+		const handler = ( expanded ) => {
+			setPanelExpanded( expanded );
+			if ( expanded ) setBuilderOpen( true );
+			else setBuilderOpen( false );
+		};
 		panel.expanded.bind( handler );
 		return () => panel.expanded.unbind( handler );
 	}, [ panelId ] );
 
-	// Stay in sync with the WP device switcher.
+	// Stay in sync with the WP device switcher (header / mobile only).
 	useEffect( () => {
-		if ( ! wp?.customize?.previewedDevice ) return;
+		if ( ! hasMobile || ! wp?.customize?.previewedDevice ) return;
 		const handler = ( d ) => setDevice( d === 'desktop' ? 'desktop' : 'mobile' );
 		wp.customize.previewedDevice.bind( handler );
 		return () => wp.customize.previewedDevice.unbind( handler );
-	}, [] );
+	}, [ hasMobile ] );
 
 	// Track Customizer sidebar width to offset the builder inner panel.
 	useEffect( () => {
@@ -211,23 +213,42 @@ export default function Builder( { config } ) {
 		};
 	}, [] );
 
-	// Adjust preview iframe height when builder shows/hides.
+	// Adjust preview iframe bottom to match builder height, updated live via ResizeObserver.
 	useEffect( () => {
 		const preview = document.getElementById( 'customize-preview' );
 		if ( ! preview ) return;
-		preview.classList.toggle( 'cb--preview-panel-show', visible );
-	}, [ visible ] );
+
+		if ( ! builderOpen ) {
+			preview.classList.remove( 'cb--preview-panel-show' );
+			preview.style.bottom = '';
+			return;
+		}
+
+		const root = document.getElementById( `customify-${ builderId }-builder-root` );
+		// .customify-hb is position:fixed so root.offsetHeight is 0 — watch the inner panel instead.
+		const panel = root?.querySelector( '.customify-hb' );
+		const updateBottom = () => {
+			if ( panel ) preview.style.bottom = panel.offsetHeight + 'px';
+		};
+
+		preview.classList.add( 'cb--preview-panel-show' );
+		updateBottom();
+
+		const observer = new ResizeObserver( updateBottom );
+		if ( panel ) observer.observe( panel );
+		return () => observer.disconnect();
+	}, [ builderOpen, builderId ] );
 
 	// Permanently hide all builder sections on mount.
 	useEffect( () => {
-		hideAllBuilderSections( allItems );
+		hideAllBuilderSections( allItems, infraSections, alwaysVisibleSections );
 	}, [] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	// Persist data when user changes layout.
 	useEffect( () => {
 		if ( data === lastSaved.current ) return;
 		lastSaved.current = data;
-		writeSetting( data );
+		writeSetting( data, controlId );
 	}, [ data ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const switchDevice = useCallback( ( d ) => {
@@ -242,18 +263,15 @@ export default function Builder( { config } ) {
 		setData( ( prev ) => {
 			const next = JSON.parse( JSON.stringify( prev ) );
 
-			// Remove from source location.
 			if ( from !== 'available' ) {
 				const { device: fd, row: fr, col: fc } = from;
 				next[ fd ][ fr ][ fc ] = next[ fd ][ fr ][ fc ].filter( ( i ) => i.id !== itemId );
 			}
 
 			if ( to === 'available' ) {
-				// Item returned to pool — already removed from source above.
 				return next;
 			}
 
-			// Remove from any existing placement in the target device (one placement per device).
 			const { device: td, row: tr, col: tc } = to;
 			for ( const row of Object.keys( next[ td ] ) ) {
 				for ( const col of Object.keys( next[ td ][ row ] ) ) {
@@ -271,19 +289,16 @@ export default function Builder( { config } ) {
 		const section = wp.customize?.section?.( sectionId );
 		if ( ! section ) return;
 
-		// Remove the stored force-hide handler (by reference) so active.set(true) sticks.
 		if ( section._customifyForceHide ) {
 			section.active.unbind( section._customifyForceHide );
 		}
 		section.active.set( true );
 		section.focus();
 
-		// Re-hide when the section collapses (user navigates back).
 		function onExpandChange( expanded ) {
 			if ( ! expanded ) {
 				section.expanded.unbind( onExpandChange );
 				section.active.set( false );
-				// Re-bind the stored forceHide so it stays hidden until next click.
 				if ( section._customifyForceHide ) {
 					section.active.bind( section._customifyForceHide );
 				}
@@ -293,7 +308,15 @@ export default function Builder( { config } ) {
 	}, [] );
 
 	const openRowSection = useCallback( ( rowId ) => {
-		openSection( 'header_' + rowId );
+		openSection( builderId + '_' + rowId );
+	}, [ openSection, builderId ] );
+
+	// Expose openSection globally so the preview iframe's JS can call it
+	// when the user clicks item--preview-name (bypasses section.focus() which
+	// fails because _customifyForceHide prevents active.set(true)).
+	useEffect( () => {
+		window.customifyBuilderOpenSection = openSection;
+		return () => { delete window.customifyBuilderOpenSection; };
 	}, [ openSection ] );
 
 	const openPopover = useCallback( ( location, anchorRect ) => {
@@ -308,8 +331,6 @@ export default function Builder( { config } ) {
 		setPopover( null );
 	}, [ popover, moveItem ] );
 
-	if ( ! visible ) return null;
-
 	const placedInDevice = getDevicePlacedIds( data, device );
 	const availableItems = Object.values( allItems )
 		.filter( ( i ) => ! placedInDevice.has( i.id ) )
@@ -321,13 +342,13 @@ export default function Builder( { config } ) {
 
 	return (
 		<>
-		<div className="customify-hb customify--panel-v2" style={ { left: innerLeft } }>
+		{ builderOpen && <div className="customify-hb customify--panel-v2" style={ { left: innerLeft } }>
 			<div className="customify-hb__inner">
 
 				{ /* Header bar: device tabs + close */ }
 				<div className="customify-hb__header">
 					<div className="customify-hb__devices">
-						{ DEVICES.map( ( d ) => (
+						{ DEVICES_LIST.length > 1 && DEVICES_LIST.map( ( d ) => (
 							<button
 								key={ d.id }
 								className={ `customify-hb__device-btn${ device === d.id ? ' is-active' : '' }` }
@@ -342,7 +363,7 @@ export default function Builder( { config } ) {
 						) ) }
 					</div>
 					<div className="customify-hb__actions">
-						<button className="customify-hb__close button button-secondary" onClick={ () => setVisible( false ) }>
+						<button type="button" className="customify-hb__close button button-secondary" onClick={ () => setBuilderOpen( false ) }>
 							{ __( 'Close', 'customify' ) }
 						</button>
 					</div>
@@ -352,7 +373,7 @@ export default function Builder( { config } ) {
 				<div className="customify-hb__body">
 					<div className={ `customify-hb__grid${ device === 'mobile' ? ' customify-hb__grid--mobile' : '' }` }>
 
-						{ device === 'mobile' && (
+						{ hasSidebar && device === 'mobile' && (
 							<OffCanvasRow
 								items={ data.mobile.sidebar.sidebar }
 								allItems={ allItems }
@@ -365,7 +386,7 @@ export default function Builder( { config } ) {
 						) }
 
 						<div className="customify-hb__rows">
-							{ ROWS.map( ( rowId ) => (
+							{ rows.map( ( rowId ) => (
 								<BuilderRow
 									key={ rowId }
 									rowId={ rowId }
@@ -378,6 +399,7 @@ export default function Builder( { config } ) {
 									onOpenSection={ openSection }
 									onOpenRowSection={ openRowSection }
 									onOpenPopover={ openPopover }
+									colLayoutKey={ rowLayoutKeys[ rowId ] || null }
 								/>
 							) ) }
 						</div>
@@ -395,19 +417,25 @@ export default function Builder( { config } ) {
 				) }
 
 			</div>
-		</div>
+		</div> }
 
-		{ /* Portal: items list injected into the panel header */ }
-		<PanelItemsListPortal
-			data={ data }
-			device={ device }
-			allItems={ allItems }
-			availableItems={ availableItems }
-			dragRef={ dragRef }
-			onOpenSection={ openSection }
-			onRemove={ ( itemId ) => moveItem( itemId, findItemLocation( data, device, itemId ), 'available' ) }
-			onAdd={ ( itemId ) => moveItem( itemId, 'available', { device, row: 'main', col: 'center' } ) }
-		/>
+		{ /* Portal: items list injected into the panel header — always visible when panel is open */ }
+		{ panelExpanded && (
+			<PanelItemsListPortal
+				data={ data }
+				device={ device }
+				allItems={ allItems }
+				availableItems={ availableItems }
+				dragRef={ dragRef }
+				containerId={ panelItemsContainerId }
+				builderTitle={ config?.title || builderId }
+				builderOpen={ builderOpen }
+				onOpenBuilder={ () => setBuilderOpen( true ) }
+				onOpenSection={ openSection }
+				onRemove={ ( itemId ) => moveItem( itemId, findItemLocation( data, device, itemId ), 'available' ) }
+				onAdd={ ( itemId ) => moveItem( itemId, 'available', { device, row: rows[ 1 ] || rows[ 0 ], col: 'center' } ) }
+			/>
+		) }
 
 		{ /* Slot for Popover components (tooltips, etc.) */ }
 		<Popover.Slot />
@@ -431,24 +459,22 @@ function findItemLocation( data, device, itemId ) {
 }
 
 // ---------------------------------------------------------------------------
-// PanelItemsListPortal — renders into #customify-hb-panel-items via portal
+// PanelItemsListPortal — renders into the builder panel items container
 // ---------------------------------------------------------------------------
 
-function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef, onOpenSection, onRemove, onAdd } ) {
-	// Track the portal container with state so React re-renders when it appears.
-	// The container lives inside a WP Customizer Underscore.js template that is
-	// rendered lazily (only when the panel first opens), so it may not exist on
-	// the initial React render — we watch for it via MutationObserver.
-	const [ container, setContainer ] = useState( () => document.getElementById( 'customify-hb-panel-items' ) );
+function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef, containerId, builderTitle, builderOpen, onOpenBuilder, onOpenSection, onRemove, onAdd } ) {
+	// The container lives inside a WP Customizer Underscore.js template rendered
+	// lazily (only when the panel first opens) — watch for it via MutationObserver.
+	const [ container, setContainer ] = useState( () => document.getElementById( containerId ) );
 
 	useEffect( () => {
-		const el = document.getElementById( 'customify-hb-panel-items' );
+		const el = document.getElementById( containerId );
 		if ( el ) {
 			setContainer( el );
 			return;
 		}
 		const observer = new MutationObserver( () => {
-			const found = document.getElementById( 'customify-hb-panel-items' );
+			const found = document.getElementById( containerId );
 			if ( found ) {
 				setContainer( found );
 				observer.disconnect();
@@ -456,13 +482,11 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 		} );
 		observer.observe( document.body, { childList: true, subtree: true } );
 		return () => observer.disconnect();
-	}, [] );
+	}, [ containerId ] );
 
 	if ( ! container ) return null;
 
 	const placedIds = getDevicePlacedIds( data, device );
-	// Map each placed id → allItems entry; fall back to a minimal object so items
-	// always appear even if allItems is stale or incomplete.
 	const placed    = [ ...placedIds ]
 		.map( ( id ) => allItems[ id ] || { id, name: id, section: '' } )
 		.sort( ( a, b ) => {
@@ -473,24 +497,44 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 
 	return createPortal(
 		<>
-			{ /* Placed items — no label */ }
+			{ ! builderOpen && (
+				<button
+					type="button"
+					className="customify-hb__open-builder button button-primary"
+					onClick={ onOpenBuilder }
+				>
+					{ __( 'Open Builder', 'customify' ) }
+				</button>
+			) }
+
+			{ /* Placed items */ }
 			<div className="customify-hb__panel-section">
 				<div className="customify-hb__panel-items">
 					{ placed.length === 0 ? (
 						<span className="customify-hb__panel-items-empty">
 							{ __( 'No items placed yet.', 'customify' ) }
 						</span>
-					) : placed.map( ( item ) => (
+					) : placed.map( ( item ) => {
+						const settingsSection = item.layout_section || item.section;
+						return (
 						<div
 							key={ item.id }
 							className={ `customify-hb__panel-item${ item.section ? ' is-clickable' : '' }` }
 							onClick={ () => item.section && onOpenSection( item.section ) }
 						>
 							<span className="customify-hb__panel-item-name">{ item.name }</span>
-							{ item.section && (
-								<Icon icon={ settings } className="customify-hb__panel-item-icon" />
+							{ settingsSection && (
+								<button
+									type="button"
+									className="customify-hb__panel-item-btn customify-hb__panel-item-settings"
+									title={ __( 'Item Layout', 'customify' ) }
+									onClick={ ( e ) => { e.stopPropagation(); onOpenSection( settingsSection ); } }
+								>
+									<Icon icon={ settings } />
+								</button>
 							) }
 							<button
+								type="button"
 								className="customify-hb__panel-item-btn customify-hb__panel-item-remove"
 								title={ __( 'Remove', 'customify' ) }
 								onClick={ ( e ) => { e.stopPropagation(); onRemove( item.id ); } }
@@ -498,11 +542,12 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 								<Icon icon={ close } />
 							</button>
 						</div>
-					) ) }
+						);
+					} ) }
 				</div>
 			</div>
 
-			{ /* Available items — drag-only, displayed as compact chips */ }
+			{ /* Available items — drag-only */ }
 			{ availableItems.length > 0 && (
 				<div className="customify-hb__panel-section">
 					<div className="customify-hb__panel-section-label">
@@ -514,7 +559,7 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 								key={ item.id }
 								className="customify-hb__panel-item customify-hb__panel-item--available"
 								draggable
-								title={ __( 'Drag to add to header', 'customify' ) }
+								title={ __( 'Drag to add to builder', 'customify' ) }
 								onDragStart={ ( e ) => {
 									dragRef.current = { id: item.id, from: 'available' };
 									e.dataTransfer.effectAllowed = 'move';
@@ -537,9 +582,44 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 // BuilderRow
 // ---------------------------------------------------------------------------
 
-function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove, onOpenSection, onOpenRowSection, onOpenPopover } ) {
+function parseColLayout( raw ) {
+	if ( ! raw ) return null;
+	try {
+		return typeof raw === 'string' ? JSON.parse( raw ) : raw;
+	} catch ( _ ) {
+		return null;
+	}
+}
+
+function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove, onOpenSection, onOpenRowSection, onOpenPopover, colLayoutKey } ) {
 	const [ hovered, setHovered ] = useState( false );
 	const rowRef = useRef( null );
+
+	const [ colLayoutValue, setColLayoutValue ] = useState( () => {
+		if ( ! colLayoutKey ) return null;
+		return parseColLayout( window.wp?.customize?.( colLayoutKey )?.get?.() );
+	} );
+
+	useEffect( () => {
+		if ( ! colLayoutKey ) return;
+		const setting = window.wp?.customize?.( colLayoutKey );
+		if ( ! setting ) return;
+		const handler = ( val ) => setColLayoutValue( parseColLayout( val ) );
+		setting.bind( handler );
+		return () => setting.unbind( handler );
+	}, [ colLayoutKey ] );
+
+	// Derive active columns and grid proportions from col_layout (always use desktop for builder view).
+	let activeCols = COLS;
+	let colsStyle   = {};
+	if ( colLayoutValue ) {
+		// count is global; fr is per-device (fall back to desktop).
+		const count = Math.max( 1, Math.min( 5, colLayoutValue.count || colLayoutValue.desktop?.count || 3 ) );
+		const d     = colLayoutValue.desktop || {};
+		const fr    = Array.isArray( d.fr ) && d.fr.length === count ? d.fr : Array( count ).fill( 1 );
+		activeCols  = ALL_COLS.slice( 0, count );
+		colsStyle   = { display: 'grid', gridTemplateColumns: fr.map( ( v ) => `${ v }fr` ).join( ' ' ) };
+	}
 
 	return (
 		<div
@@ -562,14 +642,15 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove,
 				</Popover>
 			) }
 			<button
+				type="button"
 				className="customify-hb__row-label"
 				title={ rowLabel }
 				onClick={ () => onOpenRowSection( rowId ) }
 			>
 				<Icon icon={ settings } />
 			</button>
-			<div className="customify-hb__cols">
-				{ COLS.map( ( colId ) => (
+			<div className="customify-hb__cols" style={ colsStyle }>
+				{ activeCols.map( ( colId ) => (
 					<DropZone
 						key={ colId }
 						colId={ colId }
@@ -589,7 +670,7 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove,
 }
 
 // ---------------------------------------------------------------------------
-// OffCanvasRow (mobile sidebar)
+// OffCanvasRow (mobile sidebar — header only)
 // ---------------------------------------------------------------------------
 
 function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpenRowSection, onOpenPopover } ) {
@@ -600,6 +681,7 @@ function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpen
 		<div className="customify-hb__row customify-hb__row--sidebar">
 			<div className="customify-hb__row-header">
 				<button
+					type="button"
 					className="customify-hb__row-label"
 					title={ __( 'Off Canvas Settings', 'customify' ) }
 					onClick={ () => onOpenRowSection( 'sidebar' ) }
@@ -633,6 +715,7 @@ function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpen
 							id={ item.id }
 							name={ info.name }
 							section={ info.section }
+							layoutSection={ info.layout_section }
 							from={ location }
 							dragRef={ dragRef }
 							onRemove={ ( id ) => onMove( id, location, 'available' ) }
@@ -684,6 +767,7 @@ function DropZone( { colId, rowId, device, items, allItems, dragRef, onMove, onO
 						id={ item.id }
 						name={ info.name }
 						section={ info.section }
+						layoutSection={ info.layout_section }
 						from={ location }
 						dragRef={ dragRef }
 						onRemove={ ( id ) => onMove( id, location, 'available' ) }
@@ -702,7 +786,8 @@ function DropZone( { colId, rowId, device, items, allItems, dragRef, onMove, onO
 // ItemChip
 // ---------------------------------------------------------------------------
 
-function ItemChip( { id, name, section, from, dragRef, onRemove, onOpenSection } ) {
+function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, onOpenSection } ) {
+	const settingsTarget = layoutSection || section;
 	return (
 		<div
 			className="customify-hb__item"
@@ -714,17 +799,17 @@ function ItemChip( { id, name, section, from, dragRef, onRemove, onOpenSection }
 		>
 			<Icon icon={ dragHandle } className="customify-hb__item-handle" />
 			<span className="customify-hb__item-name">{ name }</span>
-			{ section && (
+			{ settingsTarget && (
 				<button
-					className="customify-hb__item-btn customify-hb__item-settings"
+					type="button" className="customify-hb__item-btn customify-hb__item-settings"
 					title={ __( 'Settings', 'customify' ) }
-					onClick={ ( e ) => { e.stopPropagation(); onOpenSection( section ); } }
+					onClick={ ( e ) => { e.stopPropagation(); onOpenSection( settingsTarget ); } }
 				>
 					<Icon icon={ settings } />
 				</button>
 			) }
 			<button
-				className="customify-hb__item-btn customify-hb__item-remove"
+				type="button" className="customify-hb__item-btn customify-hb__item-remove"
 				title={ __( 'Remove', 'customify' ) }
 				onClick={ ( e ) => { e.stopPropagation(); onRemove( id ); } }
 			>
@@ -745,7 +830,6 @@ const POPOVER_H    = 240;
 function ItemPickerPopover( { items, anchorRect, onAdd, onClose } ) {
 	const ref = useRef( null );
 
-	// Close on click outside.
 	useEffect( () => {
 		function handler( e ) {
 			if ( ref.current && ! ref.current.contains( e.target ) ) {
@@ -756,16 +840,13 @@ function ItemPickerPopover( { items, anchorRect, onAdd, onClose } ) {
 		return () => document.removeEventListener( 'mousedown', handler );
 	}, [ onClose ] );
 
-	// Center popover over anchor, clamp to viewport edges.
 	const anchorCenterX = anchorRect.left + anchorRect.width / 2;
 	const effectiveW    = Math.min( POPOVER_W, window.innerWidth - 8 );
 	const rawLeft       = anchorCenterX - effectiveW / 2;
 	const popoverLeft   = Math.max( 4, Math.min( rawLeft, window.innerWidth - effectiveW - 4 ) );
 
-	// Arrow horizontal offset inside popover (points at anchor center).
 	const arrowLeft = Math.max( 12, Math.min( anchorCenterX - popoverLeft - ARROW_SIZE, effectiveW - 12 - ARROW_SIZE * 2 ) );
 
-	// Flip: prefer above, fall back to below.
 	const isAbove = anchorRect.top >= POPOVER_H + ARROW_SIZE + 8;
 
 	const popoverStyle = {

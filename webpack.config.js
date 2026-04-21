@@ -20,8 +20,9 @@ const { getWebpackEntryPoints } = require( '@wordpress/scripts/utils/config' );
  * Add a new line here whenever you create a new block or admin script.
  */
 const entries = {
-	'page-settings':   path.resolve( __dirname, 'src/page-settings/index.js' ),
-	'header-builder':  path.resolve( __dirname, 'src/header-builder/index.js' ),
+	'page-settings':  path.resolve( __dirname, 'src/page-settings/index.js' ),
+	'header-builder': path.resolve( __dirname, 'src/header-builder/index.js' ),
+	'footer-builder': path.resolve( __dirname, 'src/footer-builder/index.js' ),
 };
 
 module.exports = {

@@ -22,9 +22,11 @@ $hb-transition:  0.12s ease;
 $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 
 
-// ─── Panel sidebar items (portal → #customify-hb-panel-items) ────────────────
+// ─── Panel sidebar items (shared between header & footer builder panels) ─────
+// Applied via .customify-builder-panel-items on both #customify-hb-panel-items
+// and #customify-fb-panel-items divs.
 
-#customify-hb-panel-items {
+.customify-builder-panel-items {
 	padding: 8px 12px 12px;
 	border-top: 1px solid $hb-border;
 	display: flex;
@@ -33,6 +35,13 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	box-sizing: border-box;
 
 	*, *::before, *::after { box-sizing: border-box; }
+}
+
+.customify-hb__open-builder {
+	display: block;
+	width: 100%;
+	margin-bottom: 12px;
+	text-align: center;
 }
 
 .customify-hb__panel-section {
@@ -179,93 +188,100 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 }
 
 
-// ─── Panel sections inside header_settings (e.g. Templates) ─────────────────
-// Correct selector confirmed via DevTools: sections live inside
-// ul.control-panel-customify_header_builder_panel as direct children.
+// ─── Shared mixin: WP Customizer accordion sections inside builder panels ────
+// Applied to both header_settings and footer_settings panel section lists.
 
-ul.control-panel-customify_header_builder_panel > .accordion-section:not( .control-section-customify-pro ):not( .cannot-expand ) {
-	margin: 0 12px 4px !important;
-	padding: 0 !important;
+@mixin builder-panel-accordion-sections {
+	> .accordion-section:not( .control-section-customify-pro ):not( .cannot-expand ) {
+		margin: 0 12px 4px !important;
+		padding: 0 !important;
 
-	// Section title — the clickable h3 row
-	> h3.accordion-section-title,
-	> .accordion-section-title {
-		display: flex !important;
-		align-items: center !important;
-		min-height: 34px !important;
-		padding: 0 8px !important;
-		background: $hb-item-bg !important;
-		border: 1px solid $hb-item-border !important;
-		border-bottom: 1px solid $hb-item-border !important;
-		border-radius: $hb-radius !important;
-		font-family: $hb-font !important;
-		font-size: 13px !important;
-		font-weight: 400 !important;
-		color: $hb-text !important;
-		cursor: pointer !important;
-		box-sizing: border-box !important;
-		position: relative !important;
-		transition: border-color $hb-transition, color $hb-transition !important;
-
-		// Replace WP default arrow with our own styled chevron
-		&::after {
-			content: "\f345" !important; // dashicons-arrow-right-alt2
-			font-family: dashicons !important;
-			display: block !important;
-			font-size: 18px !important;
-			line-height: 1 !important;
-			color: $hb-text-muted !important;
-			flex-shrink: 0 !important;
-			position: static !important;
-			transform: none !important;
-			top: auto !important;
-			right: auto !important;
-			transition: color $hb-transition !important;
-		}
-
-		// The button / label text inside h3
-		button {
-			background: none !important;
-			border: none !important;
+		> h3.accordion-section-title,
+		> .accordion-section-title {
+			display: flex !important;
+			align-items: center !important;
+			min-height: 34px !important;
+			padding: 0 8px !important;
+			background: $hb-item-bg !important;
+			border: 1px solid $hb-item-border !important;
+			border-bottom: 1px solid $hb-item-border !important;
+			border-radius: $hb-radius !important;
 			font-family: $hb-font !important;
 			font-size: 13px !important;
 			font-weight: 400 !important;
-			color: inherit !important;
-			padding: 0 !important;
-			flex: 1 !important;
-			text-align: left !important;
-			float: none !important;
-			width: auto !important;
+			color: $hb-text !important;
 			cursor: pointer !important;
+			box-sizing: border-box !important;
+			position: relative !important;
+			transition: border-color $hb-transition, color $hb-transition !important;
+
+			&::after {
+				content: "\f345" !important; // dashicons-arrow-right-alt2
+				font-family: dashicons !important;
+				display: block !important;
+				font-size: 18px !important;
+				line-height: 1 !important;
+				color: $hb-text-muted !important;
+				flex-shrink: 0 !important;
+				position: static !important;
+				transform: none !important;
+				top: auto !important;
+				right: auto !important;
+				transition: color $hb-transition !important;
+			}
+
+			button {
+				background: none !important;
+				border: none !important;
+				font-family: $hb-font !important;
+				font-size: 13px !important;
+				font-weight: 400 !important;
+				color: inherit !important;
+				padding: 0 !important;
+				flex: 1 !important;
+				text-align: left !important;
+				float: none !important;
+				width: auto !important;
+				cursor: pointer !important;
+			}
+
+			&:hover {
+				border-color: $hb-accent !important;
+				color: $hb-accent !important;
+
+				&::after { color: $hb-accent !important; }
+			}
 		}
 
-		&:hover {
+		&.open > h3.accordion-section-title,
+		&.open > .accordion-section-title {
 			border-color: $hb-accent !important;
 			color: $hb-accent !important;
 
 			&::after { color: $hb-accent !important; }
 		}
 	}
-
-	// Keep accent border when expanded
-	&.open > h3.accordion-section-title,
-	&.open > .accordion-section-title {
-		border-color: $hb-accent !important;
-		color: $hb-accent !important;
-
-		&::after { color: $hb-accent !important; }
-	}
 }
+
+// Apply to both header and footer builder panel section lists.
+ul.control-panel-customify_header_builder_panel { @include builder-panel-accordion-sections; }
+ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; }
 
 
 // ─── Builder panel (fixed bottom bar) ────────────────────────────────────────
+
+#customify-header-builder-root,
+#customify-footer-builder-root {
+	z-index: 100;
+	position: relative;
+}
 
 .customify-hb {
 	position: fixed;
 	bottom: 0;
 	left: 0;
 	right: 0;
-	z-index: 100001;
+	z-index: 99986;
 	background: $hb-bg;
 	border-top: 1px solid $hb-border;
 	box-shadow: 0 -2px 12px rgba( 0, 0, 0, 0.08 );

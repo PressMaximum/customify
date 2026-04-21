@@ -34,7 +34,6 @@ class Customify_Builder_Item_Button {
 				'type'            => 'section',
 				'panel'           => 'header_settings',
 				'title'           => __( 'Button', 'customify' ),
-				'active_callback' => '__return_false',
 			),
 
 			array(

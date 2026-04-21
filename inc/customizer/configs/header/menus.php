@@ -42,7 +42,6 @@ class Customify_Builder_Item_Primary_Menu {
 				'theme_supports'  => '',
 				'title'           => $this->label,
 				'description'     => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label ),
-				'active_callback' => '__return_false',
 			),
 
 			array(

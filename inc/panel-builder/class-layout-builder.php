@@ -21,6 +21,7 @@ class Customify_Customize_Layout_Builder {
 			add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
 			add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
 			add_action( 'wp_ajax_customify_builder_export_template', array( $this, 'ajax_export_template' ) );
+			add_filter( 'customize_section_active', array( $this, 'hide_builder_item_sections' ), 20, 2 );
 		}
 
 	}
@@ -194,6 +195,52 @@ class Customify_Customize_Layout_Builder {
 	}
 
 	/**
+	 * Collect every section ID that belongs to a builder item across all registered builders.
+	 *
+	 * @return array<string,true>  Section ID → true map for fast lookup.
+	 */
+	public function get_all_item_sections() {
+		$sections = array();
+		foreach ( $this->registered_items as $builder_id => $items ) {
+			foreach ( $items as $obj ) {
+				if ( ! method_exists( $obj, 'item' ) ) {
+					continue;
+				}
+				$item = $obj->item();
+				foreach ( array( 'section', 'layout_section' ) as $key ) {
+					if ( ! empty( $item[ $key ] ) ) {
+						$sections[ $item[ $key ] ] = true;
+					}
+				}
+			}
+		}
+		return $sections;
+	}
+
+	/**
+	 * Hide all builder item sections from the Customizer panel navigation.
+	 * They are only accessible via the builder UI (gear icon on placed items).
+	 *
+	 * @param bool                 $active
+	 * @param WP_Customize_Section $section
+	 * @return bool
+	 */
+	public function hide_builder_item_sections( $active, $section ) {
+		// Never override WP sidebar section active state via PHP.
+		// Sidebar sections (type 'sidebar') control widget rendering and data sync in the
+		// Customizer preview — forcing them inactive breaks widget display and causes reloads.
+		// JS handles hiding them from the UI via permanentlyHideSection instead.
+		if ( $section instanceof WP_Customize_Sidebar_Section ) {
+			return $active;
+		}
+		$item_sections = $this->get_all_item_sections();
+		if ( isset( $item_sections[ $section->id ] ) ) {
+			return false;
+		}
+		return $active;
+	}
+
+	/**
 	 * Handle event save template
 	 */
 	function ajax_save_template() {
@@ -325,43 +372,66 @@ class Customify_Customize_Layout_Builder {
 	}
 
 	/**
-	 * Enqueue the React header builder and pass builder config to JS.
+	 * Enqueue the React header and footer builders and pass builder config to JS.
 	 */
 	function scripts() {
-		$asset_file = get_template_directory() . '/assets/build/header-builder/index.asset.php';
+		$builders_data = array(
+			'builders' => $this->get_builders(),
+			'is_rtl'   => is_rtl(),
+			'nonce'    => wp_create_nonce( 'Customify_Layout_Builder' ),
+		);
 
-		if ( ! file_exists( $asset_file ) ) {
-			return;
+		// Header builder.
+		$header_asset_file = get_template_directory() . '/assets/build/header-builder/index.asset.php';
+		if ( file_exists( $header_asset_file ) ) {
+			$asset = require $header_asset_file;
+			wp_enqueue_script(
+				'customify-header-builder',
+				esc_url( get_template_directory_uri() ) . '/assets/build/header-builder/index.js',
+				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
+				$asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'customify-header-builder',
+				esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
+				array( 'dashicons', 'wp-components' ),
+				$asset['version']
+			);
+			wp_localize_script( 'customify-header-builder', 'Customify_Layout_Builder', $builders_data );
+			wp_set_script_translations( 'customify-header-builder', 'customify' );
 		}
 
-		$asset = require $asset_file;
+		// Footer builder.
+		$footer_asset_file = get_template_directory() . '/assets/build/footer-builder/index.asset.php';
+		if ( file_exists( $footer_asset_file ) ) {
+			$asset = require $footer_asset_file;
+			wp_enqueue_script(
+				'customify-footer-builder',
+				esc_url( get_template_directory_uri() ) . '/assets/build/footer-builder/index.js',
+				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
+				$asset['version'],
+				true
+			);
+			// Footer shares the same compiled CSS as header-builder (same SCSS source).
+			wp_enqueue_style(
+				'customify-footer-builder',
+				esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
+				array( 'dashicons', 'wp-components' ),
+				$asset['version']
+			);
+			// Row layout control styles (compiled separately from footer-row-layout/style.scss).
+			wp_enqueue_style(
+				'customify-footer-row-layout',
+				esc_url( get_template_directory_uri() ) . '/assets/build/style-footer-builder.css',
+				array( 'dashicons' ),
+				$asset['version']
+			);
+			// Reuse the same global; footer builder reads from it too.
+			wp_localize_script( 'customify-footer-builder', 'Customify_Layout_Builder', $builders_data );
+			wp_set_script_translations( 'customify-footer-builder', 'customify' );
+		}
 
-		wp_enqueue_script(
-			'customify-header-builder',
-			esc_url( get_template_directory_uri() ) . '/assets/build/header-builder/index.js',
-			$asset['dependencies'],
-			$asset['version'],
-			true
-		);
-
-		wp_enqueue_style(
-			'customify-header-builder',
-			esc_url( get_template_directory_uri() ) . '/assets/build/style-header-builder.css',
-			array( 'dashicons', 'wp-components' ),
-			$asset['version']
-		);
-
-		wp_localize_script(
-			'customify-header-builder',
-			'Customify_Layout_Builder',
-			array(
-				'builders' => $this->get_builders(),
-				'is_rtl'   => is_rtl(),
-				'nonce'    => wp_create_nonce( 'Customify_Layout_Builder' ),
-			)
-		);
-
-		wp_set_script_translations( 'customify-header-builder', 'customify' );
 	}
 
 	static function get_instance() {

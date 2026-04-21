@@ -51,7 +51,6 @@ class Customify_Builder_Item_Search_Box {
 				'type'            => 'section',
 				'panel'           => 'header_settings',
 				'title'           => $this->label,
-				'active_callback' => '__return_false',
 			),
 
 			array(

@@ -1614,9 +1614,6 @@ html[dir=rtl] .customify-modal-settings:before {
 #customize-preview {
   transition: all 500ms;
 }
-#customize-preview.cb--preview-panel-show {
-  bottom: 330px;
-}
 
 .preview-desktop #customize-preview.cb--preview-panel-show {
   height: auto;

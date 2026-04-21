@@ -8,6 +8,13 @@
     }
 }
 
+.footer--row {
+    .col-v2 {
+        flex-direction: column;
+        display: flex;
+    }
+}
+
 // Footer Top
 .footer-top {
     .footer--row-inner {
@@ -161,4 +168,45 @@
 
 .footer-copyright {
     font-size: 0.875em;
+}
+
+// Footer grid layout.
+// .row-v2 normally uses display:flex (from header builder common).
+// For footer we switch to CSS Grid so that col_layout settings control widths.
+// Dynamic grid-template-columns values are injected via PHP (customify_footer_row_layout_css).
+// These styles use 2-class specificity (.footer--row .row-v2) which beats the 1-class
+// specificity of .row-v2 { display:flex !important } from the header builder, so grid wins.
+.footer--row {
+    .row-v2 {
+        display: grid !important;
+        height: auto;          // header builder sets height:100%, not needed for footer
+        align-items: start;
+
+        > .col-v2 {
+            min-width: 0;      // prevent grid blowout
+            // Reset auto-margins added by header builder col positioning
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+// Responsive fallbacks — used when the PHP col_layout CSS is absent (e.g. old saved data).
+// PHP-generated CSS (id+class specificity) overrides these when col_layout is configured.
+@media (max-width: 1024px) {
+    #cb-row--footer-main,
+    #cb-row--footer-bottom {
+        .row-v2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    #cb-row--footer-main,
+    #cb-row--footer-bottom {
+        .row-v2 {
+            grid-template-columns: 1fr;
+        }
+    }
 }

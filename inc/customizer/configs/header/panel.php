@@ -30,10 +30,12 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'label' => __( 'Version 2', 'customify' ),
 				),
 			),
-			'devices'       => array(
+			'devices'               => array(
 				'desktop'      => __( 'Desktop', 'customify' ),
 				'mobile'       => __( 'Mobile/Tablet', 'customify' ),
 			),
+			'react_control_id'      => 'header_builder_panel_v2',
+			'panel_items_container' => 'customify-hb-panel-items',
 		);
 	}
 
@@ -62,7 +64,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'type'            => 'section',
 				'panel'           => 'header_settings',
 				'title'           => __( 'Header Builder', 'customify' ),
-				'active_callback' => '__return_false',
 			),
 
 			// V2 layout data — the only active builder setting.
@@ -112,7 +113,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'panel'           => 'header_settings',
 				'theme_supports'  => '',
 				'title'           => $section_name,
-				'active_callback' => '__return_false',
 			),
 
 			array(
@@ -212,7 +212,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'panel'           => 'header_settings',
 				'theme_supports'  => '',
 				'title'           => $section_name,
-				'active_callback' => '__return_false',
 			),
 
 			array(

@@ -973,6 +973,7 @@ class  Customify_Customizer {
 		// Register new panel and section type.
 		$wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
 		$wp_customize->register_panel_type( 'Customify_Header_Builder_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Footer_Builder_Panel' );
 		$wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
 
 		// Register section type.
@@ -993,7 +994,13 @@ class  Customify_Customizer {
 					}
 					unset( $args['name'] );
 					unset( $args['type'] );
-					$panel_class = ( 'header_settings' === $name ) ? 'Customify_Header_Builder_Panel' : 'Customify_WP_Customize_Panel';
+					if ( 'header_settings' === $name ) {
+						$panel_class = 'Customify_Header_Builder_Panel';
+					} elseif ( 'footer_settings' === $name ) {
+						$panel_class = 'Customify_Footer_Builder_Panel';
+					} else {
+						$panel_class = 'Customify_WP_Customize_Panel';
+					}
 					$panel = new $panel_class( $wp_customize, $name, $args );
 					$wp_customize->add_panel( $panel );
 					break;

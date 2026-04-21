@@ -40,7 +40,6 @@ class Customify_Builder_Item_Social_Icons {
 				'panel'           => $this->panel,
 				'theme_supports'  => '',
 				'title'           => __( 'Social Icons', 'customify' ),
-				'active_callback' => '__return_false',
 			),
 
 			array(

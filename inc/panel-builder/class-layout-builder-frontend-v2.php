@@ -19,6 +19,23 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 
 	}
 
+	public function set_id( $id ) {
+		parent::set_id( $id );
+		$this->reset_render_cache();
+	}
+
+	public function set_control_id( $id ) {
+		parent::set_control_id( $id );
+		$this->reset_render_cache();
+	}
+
+	protected function reset_render_cache() {
+		$this->render_items = null;
+		$this->rows         = array();
+		$this->flag_cols    = array();
+		$this->flag_rows    = array();
+	}
+
 	public static function get_instance() {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self();
@@ -189,6 +206,30 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		return false;
 	}
 
+	/**
+	 * Returns ordered column keys for a footer row based on the col_layout setting.
+	 * Returns null when the setting is absent (triggers old column-hiding behaviour).
+	 *
+	 * @param string $row_id  Row identifier, e.g. 'main' or 'bottom'.
+	 * @return array|null
+	 */
+	protected function get_footer_col_keys( $row_id ) {
+		static $all_cols = array( 'left', 'center', 'right', 'col4', 'col5' );
+
+		$raw = Customify()->get_setting( 'footer_' . $row_id . '_col_layout' );
+		if ( ! $raw ) {
+			return null;
+		}
+
+		$data = is_array( $raw ) ? $raw : json_decode( $raw, true );
+		if ( ! is_array( $data ) || empty( $data['count'] ) ) {
+			return null;
+		}
+
+		$count = max( 1, min( 5, intval( $data['count'] ) ) );
+		return array_slice( $all_cols, 0, $count );
+	}
+
 	public function render_row( $row_settings, $id = '', $device = 'desktop' ) {
 		$flag_key_row = $id . '-' . $device;
 
@@ -198,63 +239,76 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		}
 
 		ob_start();
-		$count = 0;
-		$no_cols = array();
+		$count      = 0;
+		$no_cols    = array();
 		$row_clases = array( 'row-v2', 'row-v2-' . $id );
 		$has_center = false;
 
-		foreach ( $row_settings as $col_id => $col_items ) {
+		// For footer rows use col_layout to get the correct ordered column keys,
+		// and always render all defined columns (even empty ones) so that the
+		// CSS grid-template-columns applied by customify_footer_row_layout_css()
+		// maps onto the right number of grid cells.
+		$footer_col_keys = 'footer' === $this->id ? $this->get_footer_col_keys( $id ) : null;
+		$force_all_cols  = null !== $footer_col_keys;
+		$ordered_cols    = $force_all_cols ? $footer_col_keys : array_keys( $row_settings );
+
+		foreach ( $ordered_cols as $col_id ) {
+			$col_items    = isset( $row_settings[ $col_id ] ) ? $row_settings[ $col_id ] : array();
 			$flag_key_col = $col_id . '-' . $id . '-' . $device;
-			// Check if current column has items.
-			if ( isset( $this->flag_cols[ $flag_key_col ] ) ) {
-				$count ++;
-				if ( 'center' == $col_id ) {
-					$has_center = true;
-				}
-				echo '<div class="col-v2 col-v2-' . $col_id . '">';
-				foreach ( $col_items as $item_index => $col_item ) {
+			$has_items    = isset( $this->flag_cols[ $flag_key_col ] );
 
-					$item = $this->get_render_item( $col_item['id'] );
-					if ( $item ) {
-						$item_id = $col_item['id'];
-						$content = $item['content'];
-						if ( $content ) {
-							$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
-							if ( ! isset( $item_config['section'] ) ) {
-								$item_config['section'] = '';
-							}
-							$item_classes   = array();
-							$item_classes[] = 'item--inner';
-							$item_classes[] = 'builder-item--' . $item_id;
-							if ( strpos( $item_id, '-menu' ) ) {
-								$item_classes[] = 'has_menu';
-							}
-							if ( is_customize_preview() ) {
-								$item_classes[] = ' builder-item-focus';
-							}
+			// Skip empty columns for header; always render for footer (grid needs them).
+			if ( ! $force_all_cols && ! $has_items ) {
+				$no_key             = 'no-' . $col_id;
+				$no_cols[ $no_key ] = $no_key;
+				continue;
+			}
 
-							$item_classes   = join( ' ', $item_classes );
-							$row_items_html = '';
-							$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr( $item_id ) . '" >';
-							$row_items_html .= $this->setup_item_content( $content, $id, $device );
-							if ( is_customize_preview() ) {
-								$row_items_html .= '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
-							}
-							$row_items_html .= '</div>';
-							echo $row_items_html;
+			$count ++;
+			if ( 'center' === $col_id ) {
+				$has_center = true;
+			}
+
+			echo '<div class="col-v2 col-v2-' . esc_attr( $col_id ) . '">';
+			foreach ( $col_items as $item_index => $col_item ) {
+				$item = $this->get_render_item( $col_item['id'] );
+				if ( $item ) {
+					$item_id = $col_item['id'];
+					$content = $item['content'];
+					if ( $content ) {
+						$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+						if ( ! isset( $item_config['section'] ) ) {
+							$item_config['section'] = '';
 						}
+						$item_classes   = array();
+						$item_classes[] = 'item--inner';
+						$item_classes[] = 'builder-item--' . $item_id;
+						if ( strpos( $item_id, '-menu' ) ) {
+							$item_classes[] = 'has_menu';
+						}
+						if ( is_customize_preview() ) {
+							$item_classes[] = ' builder-item-focus';
+						}
+
+						$item_classes   = join( ' ', $item_classes );
+						$row_items_html = '';
+						$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr( $item_id ) . '" >';
+						$row_items_html .= $this->setup_item_content( $content, $id, $device );
+						if ( is_customize_preview() ) {
+							$row_items_html .= '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
+						}
+						$row_items_html .= '</div>';
+						echo $row_items_html;
 					}
 				}
-				echo '</div>';
-			} else {
-				$no_key = 'no-' . $col_id;
-				$no_cols[ $no_key ] = $no_key;
-			} // End check show col.
-		} // and loop cols
+			}
+			echo '</div>';
+		}
 
 		$row_innner_html = ob_get_clean();
 
-		if ( $has_center ) {
+		// For header only: pad center with empty left/right placeholders so flex alignment works.
+		if ( ! $force_all_cols && $has_center ) {
 			if ( isset( $no_cols['no-left'] ) ) {
 				$row_innner_html = '<div class="col-v2 col-v2-left"></div>' . $row_innner_html;
 			}
@@ -297,11 +351,14 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 					if ( ! empty( $desktop_row ) || ! empty( $mobile_row ) ) {
 
 						$align_classes = 'customify-grid-middle';
-						if ( empty( $desktop_row ) ) {
-							$classes[] = 'hide-on-desktop';
-						}
-						if ( empty( $mobile_row ) ) {
-							$classes[] = 'hide-on-mobile hide-on-tablet';
+						if ( 'footer' !== $this->id ) {
+							// Header: add visibility classes based on which device data exists.
+							if ( empty( $desktop_row ) ) {
+								$classes[] = 'hide-on-desktop';
+							}
+							if ( empty( $mobile_row ) ) {
+								$classes[] = 'hide-on-mobile hide-on-tablet';
+							}
 						}
 
 						$row_layout    = Customify()->get_setting( $this->id . '_' . $row_id . '_layout' );
@@ -355,17 +412,29 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 								<div class="<?php echo join( ' ', $inner_class ); ?>">
 									<div class="customify-container">
 										<?php
-										if ( $html_desktop ) {
-											$c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
-											echo '<div class="customify-grid  ' . esc_attr( $c . ' ' . $align_classes ) . '">';
-											echo $html_desktop;
-											echo '</div>';
-										}
+										if ( 'footer' === $this->id ) {
+											// Footer uses a single responsive grid for all viewports.
+											// CSS grid-template-columns media queries (from col_layout)
+											// handle tablet/mobile layout — no need for separate HTML grids.
+											$html_footer = $html_desktop ?: $html_mobile;
+											if ( $html_footer ) {
+												echo '<div class="customify-grid ' . esc_attr( $align_classes ) . '">';
+												echo $html_footer;
+												echo '</div>';
+											}
+										} else {
+											if ( $html_desktop ) {
+												$c = 'cb-row--desktop hide-on-mobile hide-on-tablet';
+												echo '<div class="customify-grid  ' . esc_attr( $c . ' ' . $align_classes ) . '">';
+												echo $html_desktop;
+												echo '</div>';
+											}
 
-										if ( $html_mobile ) {
-											echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr( $align_classes ) . '">';
-											echo $html_mobile;
-											echo '</div>';
+											if ( $html_mobile ) {
+												echo '<div class="cb-row--mobile hide-on-desktop customify-grid ' . esc_attr( $align_classes ) . '">';
+												echo $html_mobile;
+												echo '</div>';
+											}
 										}
 										?>
 									</div>

@@ -24,7 +24,6 @@ class Customify_Builder_Item_Nav_Icon {
 				'panel'           => 'header_settings',
 				'theme_supports'  => '',
 				'title'           => __( 'Menu Icon', 'customify' ),
-				'active_callback' => '__return_false',
 			),
 
 			array(

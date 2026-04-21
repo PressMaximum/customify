@@ -13,7 +13,10 @@ class Customify_Builder_Item_Footer_Widget_1 {
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-1', 'sidebar-widgets-footer-1' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-1', 'sidebar-widgets-footer-1', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -30,7 +33,10 @@ class Customify_Builder_Item_Footer_Widget_2 { //phpcs:ignore
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-2', 'sidebar-widgets-footer-2' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-2', 'sidebar-widgets-footer-2', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -47,7 +53,10 @@ class Customify_Builder_Item_Footer_Widget_3 { //phpcs:ignore
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-3', 'sidebar-widgets-footer-3' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-3', 'sidebar-widgets-footer-3', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -64,7 +73,10 @@ class Customify_Builder_Item_Footer_Widget_4 { //phpcs:ignore
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-4', 'sidebar-widgets-footer-4' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-4', 'sidebar-widgets-footer-4', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -81,7 +93,10 @@ class Customify_Builder_Item_Footer_Widget_5 { //phpcs:ignore
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-5', 'sidebar-widgets-footer-5' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-5', 'sidebar-widgets-footer-5', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -98,7 +113,10 @@ class Customify_Builder_Item_Footer_Widget_6 { //phpcs:ignore
 	}
 
 	function customize() {
-		return customify_footer_layout_settings( 'footer-6', 'sidebar-widgets-footer-6' );
+		if ( function_exists( 'customify_header_layout_settings' ) ) {
+			return customify_header_layout_settings( 'footer-6', 'sidebar-widgets-footer-6', 'customify_customize_render_footer', 'footer_' );
+		}
+		return array();
 	}
 }
 
@@ -115,23 +133,21 @@ function customify_change_footer_widgets_location( $wp_customize ) {
 add_action( 'customize_register', 'customify_change_footer_widgets_location', 999 );
 
 /**
- * Always show footer widgets for customize builder
+ * Always keep footer widget sections active from PHP's perspective.
+ * WP uses sidebar section active state to sync widget data to the preview —
+ * forcing inactive breaks widget rendering. JS handles hiding them from the UI.
  *
- * @param bool   $active
- * @param string $section
- *
+ * @param bool                 $active
+ * @param WP_Customize_Section $section
  * @return bool
  */
 function customify_customize_footer_widgets_show( $active, $section ) {
-	if ( strpos( $section->id, 'widgets-footer-' ) ) {
-		$active = true;
+	if ( preg_match( '/widgets-footer-\d+$/', $section->id ) ) {
+		return true;
 	}
-
 	return $active;
 }
-
 add_filter( 'customize_section_active', 'customify_customize_footer_widgets_show', 15, 2 );
-
 
 /**
  * Display Footer widget

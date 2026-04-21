@@ -185,7 +185,11 @@
 				var p = $(this).closest(".builder-item-focus");
 				var section_id = p.attr("data-section") || "";
 				if (section_id) {
-					if (defaultTarget.wp.customize.section(section_id)) {
+					// Use builder's openSection if available — it properly unbinds
+					// permanentlyHideSection before activating the section.
+					if (typeof defaultTarget.customifyBuilderOpenSection === "function") {
+						defaultTarget.customifyBuilderOpenSection(section_id);
+					} else if (defaultTarget.wp.customize.section(section_id)) {
 						defaultTarget.wp.customize.section(section_id).focus();
 					}
 				}
@@ -266,4 +270,48 @@
 			});
 		}
 	};
+	// Live preview for footer row col_layout (postMessage transport).
+	function applyFooterColLayout(rowSelector, valueStr) {
+		var data;
+		try {
+			data = typeof valueStr === 'string' ? JSON.parse(valueStr) : valueStr;
+		} catch (e) { return; }
+		if (!data || typeof data !== 'object') { return; }
+
+		var styleId = 'customify-footer-col-layout-' + rowSelector.replace(/[^a-z0-9]/g, '-');
+		var styleEl = document.getElementById(styleId);
+		if (!styleEl) {
+			styleEl = document.createElement('style');
+			styleEl.id = styleId;
+			document.head.appendChild(styleEl);
+		}
+
+		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 767px)' };
+		var css = '';
+		Object.keys(breakpoints).forEach(function(device) {
+			var d = data[device];
+			if (!d || !Array.isArray(d.fr) || !d.fr.length) { return; }
+			var cols    = d.fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
+			var gap     = parseInt(d.gap, 10) || 0;
+			var padding = parseInt(d.padding, 10) || 0;
+			var rules   = rowSelector + ' .row-v2 { display: grid !important; grid-template-columns: ' + cols + '; column-gap: ' + gap + 'px; }';
+			rules      += ' ' + rowSelector + ' .col-v2 { padding-left: ' + padding + 'px; padding-right: ' + padding + 'px; }';
+			css += breakpoints[device]
+				? '@media ' + breakpoints[device] + ' { ' + rules + ' } '
+				: rules + ' ';
+		});
+		styleEl.textContent = css;
+	}
+
+	wp.customize('footer_main_col_layout', function(setting) {
+		setting.bind(function(value) {
+			applyFooterColLayout('#cb-row--footer-main', value);
+		});
+	});
+
+	wp.customize('footer_bottom_col_layout', function(setting) {
+		setting.bind(function(value) {
+			applyFooterColLayout('#cb-row--footer-bottom', value);
+		});
+	});
 })(jQuery, wp.customize);

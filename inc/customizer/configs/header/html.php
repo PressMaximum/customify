@@ -60,7 +60,6 @@ class Customify_Builder_Item_HTML {
 				'panel'           => $this->panel,
 				'priority'        => $this->priority,
 				'title'           => $this->label,
-				'active_callback' => '__return_false',
 			),
 
 			array(
