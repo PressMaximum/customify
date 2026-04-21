@@ -26,45 +26,9 @@ function customify_customize_render_header() {
 }
 
 /**
- * Fallback footer render: one equal-width column per active sidebar item.
- * Used when footer_builder_panel_v2 has no saved data yet.
- *
- * @param array $list_items Registered footer builder items.
- */
-function customify_render_footer_fallback( $list_items ) {
-	$active = array();
-	foreach ( $list_items as $id => $item ) {
-		if ( strpos( $id, 'footer-' ) === 0 && is_active_sidebar( $id ) ) {
-			$active[] = $id;
-		}
-	}
-
-	if ( empty( $active ) ) {
-		return;
-	}
-
-	$col_width = floor( 12 / count( $active ) );
-	$gridlex   = 'col-md-' . $col_width;
-
-	echo '<div id="cb-row--footer-main" class="footer-main footer--row layout-full-contained">';
-	echo '<div class="footer--row-inner footer-main-inner">';
-	echo '<div class="customify-container">';
-	echo '<div class="customify-grid">';
-
-	foreach ( $active as $sidebar_id ) {
-		$fn = 'customify_builder_' . str_replace( '-', '_', $sidebar_id ) . '_item';
-		echo '<div class="' . esc_attr( $gridlex ) . ' builder-item--' . esc_attr( $sidebar_id ) . '">';
-		if ( function_exists( $fn ) ) {
-			call_user_func( $fn );
-		}
-		echo '</div>';
-	}
-
-	echo '</div></div></div></div>';
-}
-
-/**
- * Display Footer Layout — uses v2 React builder data when available, falls back to v1.
+ * Display Footer Layout.
+ * V2 data is used when saved; falls back to migrated V1 data or config defaults.
+ * Migration logic lives in Customify_Layout_Builder_Frontend_V2::get_settings().
  */
 function customify_customize_render_footer() {
 	if ( ! customify_is_footer_display() ) {
@@ -74,18 +38,12 @@ function customify_customize_render_footer() {
 	do_action( 'customify/before-footer' );
 	echo '<footer class="site-footer" id="site-footer">';
 
-	$v2_data    = Customify()->get_setting( 'footer_builder_panel_v2' );
 	$list_items = Customify_Customize_Layout_Builder()->get_builder_items( 'footer' );
 	$builder    = Customify_Layout_Builder_Frontend_V2();
 	$builder->set_id( 'footer' );
 	$builder->set_control_id( 'footer_builder_panel_v2' );
 	$builder->set_config_items( $list_items );
-
-	if ( ! empty( $v2_data ) ) {
-		$builder->render( array( 'main', 'bottom' ) );
-	} else {
-		customify_render_footer_fallback( $list_items );
-	}
+	$builder->render( array( 'main', 'bottom' ) );
 
 	echo '</footer>';
 	do_action( 'customify/after-footer' );

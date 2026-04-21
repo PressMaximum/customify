@@ -44,6 +44,153 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 	}
 
 	/**
+	 * Override the abstract get_settings() to handle the V2 storage format
+	 * (URL-encoded JSON written by the React builder) and to transparently
+	 * migrate V1 layout data when no V2 data has been saved yet.
+	 *
+	 * Priority order:
+	 *   1. Explicitly saved V2 data  (decoded from URL-encoded JSON or plain array)
+	 *   2. V1 data migrated to V2 column structure
+	 *   3. Configured default (from config-default.php via Customify()->get_setting)
+	 */
+	function get_settings() {
+		if ( $this->data ) {
+			return $this->data;
+		}
+
+		// Use get_theme_mod without a default so we can distinguish "never saved"
+		// from "saved as the default value".
+		$saved = get_theme_mod( $this->control_id );
+
+		if ( ! empty( $saved ) ) {
+			$data = $this->parse_raw_setting( $saved );
+		} else {
+			// No V2 data saved — try migrating from V1.
+			$data = $this->migrate_v1_data();
+
+			if ( empty( $data ) ) {
+				// Nothing in V1 either — fall back to the configured default.
+				$data = $this->parse_raw_setting(
+					Customify()->get_setting( $this->control_id )
+				);
+			}
+		}
+
+		$this->data = is_array( $data ) ? $data : array();
+		return $this->data;
+	}
+
+	/**
+	 * Decode a raw setting value into a PHP array.
+	 * Handles: PHP arrays, URL-encoded JSON strings, plain JSON strings.
+	 *
+	 * @param mixed $raw
+	 * @return array
+	 */
+	private function parse_raw_setting( $raw ) {
+		if ( empty( $raw ) ) {
+			return array();
+		}
+		if ( is_array( $raw ) ) {
+			return $raw;
+		}
+		$decoded = json_decode( urldecode( (string) $raw ), true );
+		if ( is_array( $decoded ) ) {
+			return $decoded;
+		}
+		$decoded = json_decode( (string) $raw, true );
+		return is_array( $decoded ) ? $decoded : array();
+	}
+
+	/**
+	 * Convert saved V1 builder data into the V2 column-based structure.
+	 *
+	 * V1 format: { device: { row: [ {id, x, width, ...}, ... ] } }
+	 * V2 format: { device: { row: { left:[{id}], center:[{id}], right:[{id}], col4:[{id}], col5:[{id}] } } }
+	 *
+	 * Mapping rules (after sorting items by x):
+	 *   - 1 item  → center
+	 *   - 2 items → left, right
+	 *   - 3+ items → left, center, right, col4, col5  (in order, max 5)
+	 *
+	 * The special "sidebar" row (header mobile) is converted to the flat
+	 * V2 sidebar structure: { sidebar: [ {id}, ... ] }
+	 *
+	 * @return array  V2-format data, or empty array when no V1 data exists.
+	 */
+	private function migrate_v1_data() {
+		$v1_control = $this->id . '_builder_panel';
+		$v1_raw     = get_theme_mod( $v1_control );
+
+		if ( ! is_array( $v1_raw ) || empty( $v1_raw ) ) {
+			return array();
+		}
+
+		$all_cols = array( 'left', 'center', 'right', 'col4', 'col5' );
+		$v2       = array();
+
+		foreach ( $v1_raw as $device => $device_rows ) {
+			if ( ! is_array( $device_rows ) ) {
+				continue;
+			}
+			$v2[ $device ] = array();
+
+			foreach ( $device_rows as $row_id => $row_items ) {
+				if ( ! is_array( $row_items ) ) {
+					continue;
+				}
+
+				// Header mobile sidebar — flat list becomes V2 sidebar column.
+				if ( 'sidebar' === $row_id ) {
+					$v2[ $device ]['sidebar'] = array(
+						'sidebar' => array_values(
+							array_map(
+								function ( $item ) {
+									return array( 'id' => $item['id'] );
+								},
+								array_filter( $row_items, function ( $item ) {
+									return ! empty( $item['id'] );
+								} )
+							)
+						),
+					);
+					continue;
+				}
+
+				// Filter out items without an id, then sort by x position.
+				$items = array_values(
+					array_filter( $row_items, function ( $item ) {
+						return ! empty( $item['id'] );
+					} )
+				);
+				usort( $items, function ( $a, $b ) {
+					return (int) ( $a['x'] ?? 0 ) - (int) ( $b['x'] ?? 0 );
+				} );
+
+				$v2_row = array_fill_keys( $all_cols, array() );
+				$count  = count( $items );
+
+				if ( 1 === $count ) {
+					$v2_row['center'] = array( array( 'id' => $items[0]['id'] ) );
+				} elseif ( 2 === $count ) {
+					$v2_row['left']  = array( array( 'id' => $items[0]['id'] ) );
+					$v2_row['right'] = array( array( 'id' => $items[1]['id'] ) );
+				} else {
+					foreach ( $items as $i => $item ) {
+						if ( $i < 5 ) {
+							$v2_row[ $all_cols[ $i ] ] = array( array( 'id' => $item['id'] ) );
+						}
+					}
+				}
+
+				$v2[ $device ][ $row_id ] = $v2_row;
+			}
+		}
+
+		return $v2;
+	}
+
+	/**
 	 * Render builder items.
 	 *
 	 * @since 0.2.9

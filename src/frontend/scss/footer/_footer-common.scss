@@ -197,6 +197,14 @@
                 align-items: center;
             }
         }
+
+        // When col4/col5 are absent (no-col4, no-col5), only a subset of
+        // columns is rendered. Distribute them equally across the available
+        // width without relying on a PHP-generated grid-template-columns.
+        &[class*="no-col"] {
+            grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+            gap: 1.5em;
+        }
     }
 }
 
@@ -209,6 +217,11 @@
             grid-template-columns: repeat(2, 1fr);
         }
     }
+
+    // Class-based tablet fallback: 2 equal columns.
+    .footer--row .row-v2[class*="no-col"] {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 767px) {
@@ -217,5 +230,10 @@
         .row-v2 {
             grid-template-columns: 1fr;
         }
+    }
+
+    // Class-based mobile fallback: single column.
+    .footer--row .row-v2[class*="no-col"] {
+        grid-template-columns: 1fr;
     }
 }
