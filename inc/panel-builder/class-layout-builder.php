@@ -335,23 +335,29 @@ class Customify_Customize_Layout_Builder {
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			wp_send_json_error( __( 'Access denied', 'customify' ) );
 		}
-		$id   = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : false;
-		$name = isset( $_GET['name'] ) ? sanitize_text_field( wp_unslash( $_GET['name'] ) ) : false;
+
+		// Accept id/name from POST (safer than GET for state-reading admin actions).
+		$id   = isset( $_REQUEST['id'] )   ? sanitize_key( wp_unslash( $_REQUEST['id'] ) )   : false;
+		$name = isset( $_REQUEST['name'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['name'] ) ) : false;
+
+		// Validate $id against registered builders to prevent arbitrary option probing.
+		if ( ! $id || ! array_key_exists( $id, $this->registered_builders ) ) {
+			wp_send_json_error( __( 'Invalid builder id', 'customify' ) );
+		}
 
 		$theme_name  = wp_get_theme()->get( 'Name' );
 		$option_name = "{$theme_name}_{$id}_saved_templates";
 		$data        = get_option( $option_name );
-		$var         = null;
+		$payload     = null;
 		if ( $name ) {
-			if ( isset( $data[ $name ] ) ) {
-				$var = $data[ $name ]['data'];
-				$var = array_filter( $var );
+			if ( is_array( $data ) && isset( $data[ $name ] ) ) {
+				$payload = array_filter( (array) $data[ $name ]['data'] );
 			}
 		} else {
-			$var = $data;
+			$payload = $data;
 		}
-		var_export( $var ); // phpcs:ignore
-		die();
+
+		wp_send_json_success( $payload );
 	}
 
 	/**

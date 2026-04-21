@@ -439,7 +439,7 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 
 						$item_classes   = join( ' ', $item_classes );
 						$row_items_html = '';
-						$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . $item_config['section'] . '" data-item-id="' . esc_attr( $item_id ) . '" >';
+						$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . esc_attr( $item_config['section'] ) . '" data-item-id="' . esc_attr( $item_id ) . '" >';
 						$row_items_html .= $this->setup_item_content( $content, $id, $device );
 						if ( is_customize_preview() ) {
 							$row_items_html .= '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
@@ -641,7 +641,7 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 					}
 					$content = $this->setup_item_content( $content, $id, 'mobile' );
 					echo '<div class="' . esc_attr( $classes ) . '">';
-					echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . $item_config['section'] . '">';
+					echo '<div class="' . esc_attr( $inner_classes ) . '" data-item-id="' . esc_attr( $item_id ) . '" data-section="' . esc_attr( $item_config['section'] ) . '">';
 					echo $content;
 					if ( is_customize_preview() ) {
 						echo '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';

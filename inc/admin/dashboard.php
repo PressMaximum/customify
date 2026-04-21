@@ -138,7 +138,13 @@ class Customify_Dashboard
 			'success' => false,
 		);
 
-		if ($option) {
+		// Allowlist: only permit known Customify dashboard options to prevent
+		// arbitrary option overwrites via this AJAX endpoint.
+		$allowed_options = array(
+			'customify_fa_ver',
+		);
+
+		if ( $option && in_array( $option, $allowed_options, true ) ) {
 			update_option($option, $value);
 			$args['success'] = true;
 		}
