@@ -502,7 +502,7 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 				</div>
 			</div>
 
-			{ /* Available items */ }
+			{ /* Available items — drag-only, displayed as compact chips */ }
 			{ availableItems.length > 0 && (
 				<div className="customify-hb__panel-section">
 					<div className="customify-hb__panel-section-label">
@@ -514,16 +514,15 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 								key={ item.id }
 								className="customify-hb__panel-item customify-hb__panel-item--available"
 								draggable
-								title={ __( 'Drag to place or click to add to main row', 'customify' ) }
+								title={ __( 'Drag to add to header', 'customify' ) }
 								onDragStart={ ( e ) => {
 									dragRef.current = { id: item.id, from: 'available' };
 									e.dataTransfer.effectAllowed = 'move';
 								} }
 								onDragEnd={ () => { dragRef.current = null; } }
-								onClick={ () => onAdd( item.id ) }
 							>
 								<Icon icon={ dragHandle } className="customify-hb__drag-handle" />
-								{ item.name }
+								<span className="customify-hb__panel-item-name">{ item.name }</span>
 							</div>
 						) ) }
 					</div>

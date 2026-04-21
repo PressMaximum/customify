@@ -5,6 +5,11 @@
 
 // ─── Tokens (mirror WP admin) ────────────────────────────────────────────────
 $hb-accent:      var( --wp-admin-theme-color, #3858e9 );
+$hb-accent-hover: color-mix(
+	in srgb,
+	var(--wp-admin-theme-color, #3858e9) 15%,
+	transparent
+);
 $hb-bg:          #f0f0f1;           // WP controls pane bg
 $hb-bg-row:      #f6f7f7;
 $hb-border:      #dcdcde;           // WP control border
@@ -50,7 +55,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 .customify-hb__panel-items {
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 8px;
 	padding: 0;
 	border: none;
 }
@@ -202,8 +207,21 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 		position: relative !important;
 		transition: border-color $hb-transition, color $hb-transition !important;
 
-		// Hide WP default right-arrow pseudo-element
-		&::after { display: none !important; }
+		// Replace WP default arrow with our own styled chevron
+		&::after {
+			content: "\f345" !important; // dashicons-arrow-right-alt2
+			font-family: dashicons !important;
+			display: block !important;
+			font-size: 18px !important;
+			line-height: 1 !important;
+			color: $hb-text-muted !important;
+			flex-shrink: 0 !important;
+			position: static !important;
+			transform: none !important;
+			top: auto !important;
+			right: auto !important;
+			transition: color $hb-transition !important;
+		}
 
 		// The button / label text inside h3
 		button {
@@ -224,6 +242,8 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 		&:hover {
 			border-color: $hb-accent !important;
 			color: $hb-accent !important;
+
+			&::after { color: $hb-accent !important; }
 		}
 	}
 
@@ -232,6 +252,8 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 	&.open > .accordion-section-title {
 		border-color: $hb-accent !important;
 		color: $hb-accent !important;
+
+		&::after { color: $hb-accent !important; }
 	}
 }
 
@@ -341,12 +363,12 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 // ── Row ──
 .customify-hb__row {
 	display: flex;
-	align-items: stretch;
+	align-items: center;
 	gap: 4px;
 	background: $hb-bg-row;
 	border: 1px solid $hb-border;
 	border-radius: $hb-radius;
-	padding: 3px;
+	padding: 0;
 	position: relative;
 	transition: border-color $hb-transition;
 
@@ -398,6 +420,7 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 	width: 24px;
 	min-width: 24px;
 	height: 24px;
+	margin-left: 4px;
 	color: $hb-text-muted;
 	background: none;
 	border: 1px solid transparent;
@@ -415,28 +438,45 @@ ul.control-panel-customify_header_builder_panel > .accordion-section:not( .contr
 }
 
 // ── Columns ──
-.customify-hb__cols { flex: 1; display: flex; gap: 4px; }
+.customify-hb__cols { flex: 1; display: flex; gap: 0px; }
 
 .customify-hb__col {
 	flex: 1;
 	min-height: 38px;
-	border: 1px dashed $hb-border;
-	border-radius: $hb-radius;
+	border: none;
+	border-left: 1px solid $hb-border;
+	
+	border-radius: 0;
 	padding: 3px;
-	background: #fff;
+	background: transparent;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 3px;
-	align-content: flex-start;
+	// align-content: flex-start;
+	align-items: center;
 	cursor: pointer;
 	transition: border-color $hb-transition, background $hb-transition;
 
-	&:hover { border-color: $hb-text-muted; }
+	&:last-child {
+		border-right: 1px solid $hb-border;
+	
+	}
+
+	&--left   { justify-content: flex-start; }
+	&--center { justify-content: center; }
+	&--right  { justify-content: flex-end; }
+
+	&:hover, &.is-drag-over {
+		// border-left-color: $hb-text-muted;
+		// border-right-color: $hb-text-muted;
+		background-color: $hb-accent-hover;
+		// border-color: $hb-accent;
+	}
 
 	&.is-drag-over {
-		border-color: $hb-accent;
-		background: #f0f4ff;
-		border-style: solid;
+		// border-left-color: $hb-accent;
+		// border-right-color: $hb-accent;
+		// background: #f0f4ff;
 	}
 }
 
