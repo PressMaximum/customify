@@ -296,33 +296,6 @@ class Customify
 	}
 
 	/**
-	 * Get theme style.css url
-	 *
-	 * @return string
-	 */
-	function get_style_uri()
-	{
-		$suffix     = $this->get_asset_suffix();
-		$style_dir  = get_template_directory();
-		$suffix_css = $suffix;
-		$css_file   = false;
-		if (is_rtl()) {
-			$suffix_css = '-rtl' . $suffix;
-		}
-
-		$min_file = $style_dir . '/style' . $suffix_css . '.css';
-		if (file_exists($min_file)) {
-			$css_file = esc_url(get_template_directory_uri()) . '/style' . $suffix_css . '.css';
-		}
-
-		if (! $css_file) {
-			$css_file = get_stylesheet_uri();
-		}
-
-		return $css_file;
-	}
-
-	/**
 	 * Enqueue scripts and styles.
 	 */
 	function scripts()
@@ -341,7 +314,7 @@ class Customify
 			'customify/theme/css',
 			array(
 				'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
-				'style'       => $this->get_style_uri(),
+				'style'       => esc_url(get_template_directory_uri()) . '/build/css/frontend/style-theme.css',
 			)
 		);
 
@@ -349,7 +322,7 @@ class Customify
 			'customify/theme/js',
 			array(
 				'customify-themejs' => array(
-					'url' => esc_url(get_template_directory_uri()) . '/assets/js/theme' . $suffix . '.js',
+					'url' => esc_url(get_template_directory_uri()) . '/build/js/frontend/theme.js',
 					'ver' => self::$version,
 				),
 			)
@@ -403,7 +376,7 @@ class Customify
 			wp_enqueue_script('comment-reply');
 		}
 
-		wp_add_inline_style('customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css());
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
