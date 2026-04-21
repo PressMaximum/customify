@@ -152,11 +152,11 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'default'    => $color_mode,
 				'choices'    => array(
 					'dark-mode'  => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_light.svg',
 						'label' => 'Dark',
 					),
 					'light-mode' => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_dark.svg',
 						'label' => 'Light',
 					),
 				),
@@ -178,6 +178,31 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'title'             => __( 'Columns Layout', 'customify' ),
 				'sanitize_callback' => 'customify_sanitize_row_layout',
 			),
+
+			array(
+				'name'       => "{$section}_col_gap",
+				'type'       => 'slider',
+				'section'    => $section,
+				'title'      => __( 'Columns Gap', 'customify' ),
+				'selector'   => $selector . ' .row-v2, ' . $selector . ' .col-v2',
+				'css_format' => 'column-gap: {{value}}; gap: {{value}}',
+				'min'        => 0,
+				'max'        => 100,
+				'default'    => 20,
+			),
+
+			array(
+				'name'       => "{$section}_col_padding",
+				'type'       => 'slider',
+				'section'    => $section,
+				'title'      => __( 'Columns Padding', 'customify' ),
+				'selector'   => $selector . ' .col-v2 .item--inner',
+				'css_format' => 'padding: {{value}};',
+				'min'        => 0,
+				'max'        => 100,
+				'default'    => 10,
+			),
+
 		);
 		$config = apply_filters( 'customify/builder/' . $this->id . '/rows/section_configs', $config, $section, $section_name );
 		return $config;
@@ -278,17 +303,14 @@ function customify_footer_row_layout_css() {
 				continue;
 			}
 			$device_data = $data[ $device ];
-			$fr_parts    = array_map(
+			$fr_parts  = array_map(
 				function ( $v ) { return absint( $v ) . 'fr'; },
 				$device_data['fr']
 			);
 			$grid_cols = implode( ' ', $fr_parts );
-			$gap       = isset( $device_data['gap'] ) ? absint( $device_data['gap'] ) : 0;
-			$padding   = isset( $device_data['padding'] ) ? absint( $device_data['padding'] ) : 0;
 
-			$rules  = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; column-gap: ' . $gap . 'px; }';
-			$rules .= ' ' . $selector . ' .col-v2 { padding-left: ' . $padding . 'px; padding-right: ' . $padding . 'px; }';
-			$css   .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
+			$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; }';
+			$css  .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
 		}
 	}
 
