@@ -522,24 +522,24 @@ form.woocommerce-checkout {
             position: absolute;
             top: 0px;
             right: 0px;
-            width: 3em;
+            min-width: 3em;
             height: 2.6em;
             overflow: hidden;
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: transparent;
             border-color: transparent;
+            gap: 1em;
             &:hover {
                 box-shadow: none;
-                &:before {
-                    color: #252525;
-                }
             }
             &:before {
                 font-family: "WooCommerce";
                 content: "\e008";
                 color: #CCCCCC;
                 font-size: 17px;
-                margin-right: 2em;
+                
             }
         }
     }
