@@ -26,8 +26,12 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 				'type'       => 'slider',
 				'max'        => 1200,
 				'label'      => __( 'Content Max Width', 'customify' ),
-				'selector'   => '.single-post .content-inner',
-				'css_format' => 'max-width: {{value}};',
+				// Scope to `body.single-post` so pages/archives keep theme.json's default
+				// contentSize — only single blog posts consume this override.
+				// Also skip `.content-inner` constraint when .site-content has
+				// `content-full-stretched` (page-level override disables content-width).
+				'selector'   => 'format',
+				'css_format' => 'body.single-post { --wp--style--global--content-size: {{value}}; } .single-post .site-content:not(.content-full-stretched) .content-inner { max-width: {{value}}; }',
 			),
 
 			array(

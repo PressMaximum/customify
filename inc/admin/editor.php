@@ -75,8 +75,16 @@ class Customify_Editor {
 		}
 
 		if ( $fields['single_blog_post_content_width'] ) {
-			$fields['single_blog_post_content_width']['selector']   = '.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide)';
-			$fields['single_blog_post_content_width']['css_format'] = 'max-width: {{value}};';
+			// Sync content-size CSS var only when editing a post (setting is single-post scoped);
+			// pages and other post types keep theme.json's default to match frontend behavior.
+			$screen            = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+			$editing_post_type = $screen ? $screen->post_type : '';
+			if ( 'post' === $editing_post_type ) {
+				$fields['single_blog_post_content_width']['selector']   = ':root';
+				$fields['single_blog_post_content_width']['css_format'] = '--wp--style--global--content-size: {{value}};';
+			} else {
+				unset( $fields['single_blog_post_content_width'] );
+			}
 		}
 
 		if ( $fields['global_typography_base_heading'] ) {
@@ -108,7 +116,23 @@ class Customify_Editor {
 		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
 		.editor-styles-wrapper .wp-block-post-title { min-height: 0; }
 		.block-editor-page .editor-styles-wrapper button:not(.components-button) { background: none; }
+		.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) {
+			max-width: var(--wp--style--global--content-size, 780px);
+		}
 		';
+
+		// Full-stretched page layout: release block max-width in editor to match frontend.
+		// Per-post meta (_customify_content_layout = full-stretched) — same source the
+		// frontend reads in inc/template-class.php. Not live-reactive: user must save the
+		// dropdown + reload to see the change reflected.
+		$post_id             = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
+		if ( ! $post_id ) {
+			$maybe_post = get_post();
+			$post_id    = $maybe_post ? $maybe_post->ID : 0;
+		}
+		if ( $post_id && 'full-stretched' === get_post_meta( $post_id, '_customify_content_layout', true ) ) {
+			$css .= '.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) { max-width: none; }';
+		}
 
 		$css .= '.editor-styles-wrapper pre,
 		.editor-styles-wrapper .wp-block-code,

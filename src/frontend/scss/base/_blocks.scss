@@ -7,6 +7,14 @@
 	margin-left: auto;
 	margin-right: auto;
 }
+// Default blocks are constrained to theme.json's contentSize (classic-theme parity with FSE).
+// The CSS var is set by WP globally on body from theme.json, and can be overridden live by
+// the single_blog_post_content_width Customizer setting.
+// Skip when `.site-content.content-full-stretched` is the context — stretched mode
+// disables content-width constraints so blocks tràn theo container.
+.site-content:not(.content-full-stretched) .entry-content > *:not(.alignwide):not(.alignfull) {
+	max-width: var(--wp--style--global--content-size, 780px);
+}
 .entry-content {
 	.alignleft{
 		margin-right: 1.41575em;
