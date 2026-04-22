@@ -374,6 +374,19 @@ $blog_gutter: $gl-gutter;
             margin-bottom: 0px;
         }
     }
+}
+
+// Align single-post article siblings (title, meta, thumbnail, tags, navigation, etc.)
+// with .entry-content's block column so the whole article reads as one column.
+// `.entry-content` itself stays unconstrained so .alignwide and .alignfull inside
+// can still reach --wide-size / 100vw. Skipped on full-stretched page layouts.
+.site-content:not(.content-full-stretched) .entry-single > .entry--item:not(.entry-content) {
+    max-width: var(--wp--style--global--content-size, 780px);
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.entry-single {
     .entry--item.entry-related {
         margin-bottom: 0.41575em;
     }
