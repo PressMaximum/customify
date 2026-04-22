@@ -570,13 +570,15 @@
 }
 
 // Categories block
-// The block version outputs .wp-block-categories, different markup from .widget_categories
-.wp-block-categories {
+// List variant wrapper: .wp-block-categories-list
+// Dropdown variant wrapper: .wp-block-categories-dropdown
+// Inner items come from wp_list_categories() → class="cat-item cat-item-{id}"
+.wp-block-categories-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
 
-	> li {
+	.cat-item {
 		display: block;
 		position: relative;
 		padding-bottom: 0.6em;
@@ -593,26 +595,19 @@
 			display: block;
 		}
 	}
+}
 
-	// Inline post count badge
-	.wp-block-categories__post-count {
-		float: right;
-		background: $color_border;
-		color: $color_meta;
-		padding: 0 0.5em;
-		border-radius: 0.9em;
-		font-size: 12px;
-	}
-
-	// Dropdown variant
+// Dropdown variant
+.wp-block-categories-dropdown {
 	select {
 		max-width: 100%;
 	}
 }
 
 // Archives block
-// Block version outputs .wp-block-archives, different markup from .widget_archive
-.wp-block-archives {
+// List variant:    <ul class="wp-block-archives-list">
+// Dropdown variant: wrapper div contains .wp-block-archives__label + <select>
+.wp-block-archives-list {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -633,8 +628,10 @@
 			display: block;
 		}
 	}
+}
 
-	// Dropdown variant
+// Dropdown variant — label + select are inside a wrapping div
+.wp-block-archives-dropdown {
 	select {
 		max-width: 100%;
 	}
@@ -700,19 +697,19 @@
 		}
 	}
 
-	tfoot {
-		td {
-			border: none;
-			padding-top: 0.4em;
-			font-size: 0.9em;
+	// Navigation rendered as <nav class="wp-calendar-nav"> outside the table
+	+ .wp-calendar-nav {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.9em;
+		padding-top: 0.4em;
 
-			&#prev {
-				text-align: left;
-			}
+		.wp-calendar-nav-prev {
+			text-align: left;
+		}
 
-			&#next {
-				text-align: right;
-			}
+		.wp-calendar-nav-next {
+			text-align: right;
 		}
 	}
 }
@@ -778,8 +775,8 @@
 .dark-mode {
 	.wp-block-latest-posts > li,
 	.wp-block-latest-comments__comment,
-	.wp-block-categories > li,
-	.wp-block-archives > li,
+	.wp-block-categories-list .cat-item,
+	.wp-block-archives-list > li,
 	.wp-block-rss__item {
 		border-color: $light_color_border;
 	}
@@ -809,8 +806,7 @@
 		border-color: $light_color_border;
 	}
 
-	.wp-block-categories__post-count {
-		background: rgba(255, 255, 255, 0.1);
+	.wp-block-calendar + .wp-calendar-nav {
 		color: $light_color_link;
 	}
 }
