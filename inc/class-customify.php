@@ -314,7 +314,7 @@ class Customify
 			'customify/theme/css',
 			array(
 				'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
-				'style'       => esc_url(get_template_directory_uri()) . '/build/css/frontend/style-theme.css',
+				'style'       => esc_url(get_template_directory_uri()) . '/build/css/frontend/style-theme' . $suffix . '.css',
 			)
 		);
 
@@ -322,7 +322,7 @@ class Customify
 			'customify/theme/js',
 			array(
 				'customify-themejs' => array(
-					'url' => esc_url(get_template_directory_uri()) . '/build/js/frontend/theme.js',
+					'url' => esc_url(get_template_directory_uri()) . '/build/js/frontend/theme' . $suffix . '.js',
 					'ver' => self::$version,
 				),
 			)

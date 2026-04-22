@@ -20,6 +20,9 @@
 const path                 = require( 'path' );
 const webpack              = require( 'webpack' );
 const rtlcss               = require( 'rtlcss' );
+const Terser               = require( 'terser' );
+const postcss              = require( 'postcss' );
+const cssnano              = require( 'cssnano' );
 const defaultConfig        = require( '@wordpress/scripts/config/webpack.config' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const CopyPlugin           = require( 'copy-webpack-plugin' );
@@ -65,6 +68,49 @@ const filteredPlugins = defaultConfig.plugins.filter(
 		plugin.constructor.name !== 'RtlCssPlugin'
 );
 
+// ── Emit .min siblings alongside every JS/CSS output ─────────────────────────
+// Runs in BOTH dev (`npm run start`) and prod (`npm run build`) so the two
+// variants always exist. PHP picks whichever based on WP_DEBUG via
+// Customify::get_asset_suffix(). Staged after OPTIMIZE so RTL output is
+// minified too.
+class EmitMinifiedAssetsPlugin {
+	apply( compiler ) {
+		compiler.hooks.compilation.tap( 'EmitMinifiedAssetsPlugin', ( compilation ) => {
+			compilation.hooks.processAssets.tapPromise(
+				{
+					name:  'EmitMinifiedAssetsPlugin',
+					stage: compilation.PROCESS_ASSETS_STAGE_OPTIMIZE_SIZE,
+				},
+				async () => {
+					const filenames = Object.keys( compilation.assets );
+					await Promise.all( filenames.map( async ( filename ) => {
+						if ( /\.min\.(js|css)$/.test( filename ) ) return;
+						// Skip static-copied assets (fonts/images/vendor) — those
+						// often ship their own .min siblings via CopyPlugin.
+						if ( /^(?:fonts|images|vendor)\//.test( filename ) ) return;
+						const source = compilation.assets[ filename ].source().toString();
+						try {
+							if ( filename.endsWith( '.js' ) ) {
+								const result = await Terser.minify( source );
+								if ( result.code ) {
+									const minName = filename.replace( /\.js$/, '.min.js' );
+									compilation.emitAsset( minName, new webpack.sources.RawSource( result.code ) );
+								}
+							} else if ( filename.endsWith( '.css' ) ) {
+								const result = await postcss( [ cssnano( { preset: 'default' } ) ] ).process( source, { from: undefined } );
+								const minName = filename.replace( /\.css$/, '.min.css' );
+								compilation.emitAsset( minName, new webpack.sources.RawSource( result.css ) );
+							}
+						} catch ( err ) {
+							compilation.errors.push( new Error( `EmitMinifiedAssetsPlugin failed for ${ filename }: ${ err.message }` ) );
+						}
+					} ) );
+				}
+			);
+		} );
+	}
+}
+
 // ── Patch css-loader / sass-loader ───────────────────────────────────────────
 // css-loader: disable URL resolution — fonts/images live beside the output CSS
 // and are resolved correctly by the browser at runtime.
@@ -103,6 +149,10 @@ const patchedRules = defaultConfig.module.rules.map( ( rule ) => {
 						sassOptions: {
 							...( loader.options?.sassOptions || {} ),
 							silenceDeprecations: [ 'import' ],
+							// Force expanded output so the non-min CSS stays
+							// readable; the .min.css sibling is minified via
+							// EmitMinifiedAssetsPlugin below.
+							outputStyle: 'expanded',
 						},
 					},
 				};
@@ -155,12 +205,21 @@ module.exports = {
 		rules: patchedRules,
 	},
 
+	// Always emit unminified outputs. EmitMinifiedAssetsPlugin below produces
+	// the `.min.js` / `.min.css` siblings. Runtime picks one based on WP_DEBUG.
+	optimization: {
+		...defaultConfig.optimization,
+		minimize: false,
+	},
+
 	plugins: [
 		...filteredPlugins,
 
 		new MiniCssExtractPlugin( { filename: 'css/[name].css' } ),
 
 		new RtlCssPlugin(),
+
+		new EmitMinifiedAssetsPlugin(),
 
 		new CopyPlugin( {
 			patterns: [

@@ -313,7 +313,8 @@ class Customify_WC {
 	function custom_styles( $enqueue_styles ) {
 		// Both woocommerce.scss and woocommerce-smallscreen.scss are bundled
 		// into a single build/css/frontend/woocommerce.css by webpack.
-		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce.css';
+		$suffix = Customify()->get_asset_suffix();
+		$enqueue_styles['woocommerce-general']['src']  = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce' . $suffix . '.css';
 		$enqueue_styles['woocommerce-general']['deps'] = '';
 
 		if ( isset( $enqueue_styles['woocommerce-layout'] ) ) {
@@ -447,14 +448,16 @@ class Customify_WC {
 	}
 
 	function add_css( $css_files ) {
-		$css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce.css';
+		$suffix                          = Customify()->get_asset_suffix();
+		$css_files['plugin-woocommerce'] = esc_url( get_template_directory_uri() ) . '/build/css/frontend/woocommerce' . $suffix . '.css';
 
 		return $css_files;
 	}
 
 	function add_js( $js_files ) {
+		$suffix                         = Customify()->get_asset_suffix();
 		$js_files['plugin-woocommerce'] = array(
-			'url'  => esc_url( get_template_directory_uri() ) . '/build/js/frontend/woocommerce.js',
+			'url'  => esc_url( get_template_directory_uri() ) . '/build/js/frontend/woocommerce' . $suffix . '.js',
 			'deps' => array( 'jquery' ),
 		);
 
