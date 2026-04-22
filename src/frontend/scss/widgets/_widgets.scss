@@ -335,8 +335,8 @@
 
 		&__button {
 			padding: 0.5407911001em 1em;
-			background: #c3512f;
-			color: #FFFFFF;
+			background: $color_primary;
+			color: #ffffff;
 			border-radius: 2px;
 			display: inline-block;
 			position: relative;
@@ -446,7 +446,7 @@
 	}
 }
 
-/* Tagcloud widget */
+/* Tagcloud widget (classic) */
 .tagcloud {
 	a {
 		border: 1px solid currentColor;
@@ -455,5 +455,362 @@
 		font-size: 0.875em !important;
 		margin-bottom: 5px;
 		padding: 1px 10px 1px;
+	}
+}
+
+// ---------------------------------------------------------------
+// Block Widgets — global styles (widget areas + post content)
+// ---------------------------------------------------------------
+
+// Latest Posts block
+.wp-block-latest-posts {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__post-title {
+		display: block;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	&__post-date {
+		display: block;
+		font-size: 0.8em;
+		color: $color_meta;
+		margin-top: 0.25em;
+	}
+
+	&__post-excerpt {
+		margin-top: 0.4em;
+		font-size: 0.9em;
+		color: $color_meta;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__featured-image {
+		margin-bottom: 0.5em;
+
+		img {
+			display: block;
+			max-width: 100%;
+			height: auto;
+		}
+	}
+
+	// Grid layout variant
+	&.is-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em;
+
+		> li {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+	}
+}
+
+// Latest Comments block
+.wp-block-latest-comments {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&__comment {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__comment-meta {
+		font-size: 0.85em;
+		color: $color_meta;
+	}
+
+	&__comment-author {
+		font-weight: 500;
+	}
+
+	&__comment-date {
+		margin-left: 0.4em;
+	}
+
+	&__comment-excerpt {
+		margin-top: 0.25em;
+		font-size: 0.9em;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+// Categories block
+// The block version outputs .wp-block-categories, different markup from .widget_categories
+.wp-block-categories {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		display: block;
+		position: relative;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		a {
+			display: block;
+		}
+	}
+
+	// Inline post count badge
+	.wp-block-categories__post-count {
+		float: right;
+		background: $color_border;
+		color: $color_meta;
+		padding: 0 0.5em;
+		border-radius: 0.9em;
+		font-size: 12px;
+	}
+
+	// Dropdown variant
+	select {
+		max-width: 100%;
+	}
+}
+
+// Archives block
+// Block version outputs .wp-block-archives, different markup from .widget_archive
+.wp-block-archives {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		a {
+			display: block;
+		}
+	}
+
+	// Dropdown variant
+	select {
+		max-width: 100%;
+	}
+}
+
+// Tag Cloud block
+// Block version outputs .wp-block-tag-cloud with direct <a> children
+.wp-block-tag-cloud {
+	a {
+		display: inline-block;
+		border: 1px solid $color_border;
+		border-radius: 2px;
+		padding: 1px 10px;
+		margin-bottom: 5px;
+		margin-right: 2px;
+		font-size: 0.875em !important; // neutralise WP inline font-size scaling
+		text-decoration: none;
+		line-height: 1.8;
+		transition: border-color 0.14s ease-out, color 0.14s ease-out;
+
+		&:hover {
+			border-color: currentColor;
+		}
+	}
+}
+
+// Calendar block
+.wp-block-calendar {
+	width: 100%;
+
+	caption {
+		font-size: 0.9em;
+		font-weight: 500;
+		text-align: center;
+		margin-bottom: 0.4em;
+		caption-side: top;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.85em;
+
+		th,
+		td {
+			padding: ms(-6);
+			text-align: center;
+			border: 1px solid $color_border;
+		}
+
+		th {
+			font-weight: 500;
+		}
+
+		#today {
+			font-weight: 700;
+			background: $color_border;
+		}
+
+		a {
+			display: block;
+			font-weight: 500;
+		}
+	}
+
+	tfoot {
+		td {
+			border: none;
+			padding-top: 0.4em;
+			font-size: 0.9em;
+
+			&#prev {
+				text-align: left;
+			}
+
+			&#next {
+				text-align: right;
+			}
+		}
+	}
+}
+
+// RSS block
+// Block version outputs .wp-block-rss, different markup from .widget_rss
+.wp-block-rss {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&__item {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__item-title {
+		display: block;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	&__item-publish-date {
+		display: block;
+		font-size: 0.8em;
+		color: $color_meta;
+		margin-top: 0.25em;
+	}
+
+	&__item-excerpt {
+		margin-top: 0.4em;
+		font-size: 0.9em;
+		color: $color_meta;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+// Social Links block inside widget areas
+.widget-area .wp-block-social-links {
+	margin: 0;
+	padding: 0;
+	gap: 0.5em;
+
+	.wp-block-social-link a {
+		padding: 0.3em;
+	}
+}
+
+// ---------------------------------------------------------------
+// Dark mode overrides for block widgets
+// ---------------------------------------------------------------
+.dark-mode {
+	.wp-block-latest-posts > li,
+	.wp-block-latest-comments__comment,
+	.wp-block-categories > li,
+	.wp-block-archives > li,
+	.wp-block-rss__item {
+		border-color: $light_color_border;
+	}
+
+	.wp-block-latest-posts__post-date,
+	.wp-block-latest-posts__post-excerpt,
+	.wp-block-latest-comments__comment-meta,
+	.wp-block-rss__item-publish-date,
+	.wp-block-rss__item-excerpt {
+		color: $light_color_link;
+	}
+
+	.wp-block-calendar {
+		table {
+			th,
+			td {
+				border-color: $light_color_border;
+			}
+		}
+
+		#today {
+			background: rgba(255, 255, 255, 0.1);
+		}
+	}
+
+	.wp-block-tag-cloud a {
+		border-color: $light_color_border;
+	}
+
+	.wp-block-categories__post-count {
+		background: rgba(255, 255, 255, 0.1);
+		color: $light_color_link;
 	}
 }
