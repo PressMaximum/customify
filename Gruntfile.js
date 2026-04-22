@@ -4,204 +4,6 @@ module.exports = function (grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        // Autoprefixer.
-        postcss: {
-            options: {                       // Target options
-                style: 'expanded',
-            },
-            dist: {
-                src: [
-                    'style.css',
-                    'assets/css/admin/customizer/customizer.css',
-                    'assets/css/admin/admin.css',
-                    'assets/css/admin/dashboard.css'
-                ]
-            }
-        },
-
-        rtlcss: {
-            options: {
-                // rtlcss options
-                config: {
-                    preserveComments: true,
-                    greedy: true
-                },
-                // generate source maps
-                map: false
-            },
-            dist: {
-                files: [
-                    { // Front end compatibility
-                        expand: true,
-                        cwd: '',
-                        src: [
-                            '*.css',
-                            '!*.min.css',
-                            '!*-rtl.css'
-                        ],
-                        dest: '',
-                        ext: '-rtl.css'
-                    },
-                    { // Front end compatibility
-                        expand: true,
-                        cwd: 'assets/css/compatibility',
-                        src: [
-                            '*.css',
-                            '!*.min.css',
-                            '!*-rtl.css'
-                        ],
-                        dest: 'assets/css/compatibility',
-                        ext: '-rtl.css'
-                    }
-                ]
-            }
-        },
-
-        // SASS
-        sass: {
-            options: {
-                precision: 10,
-                quiet: true,
-                // unixNewlines: true,
-                // //noCache: true
-                sourcemap: false
-            },
-            dist: {
-                options: {
-                    style: 'expanded',
-                    // sourcemap: 'auto'
-                },
-
-                files: [
-                    {
-                        'style.css': 'assets/sass/site/style.scss',
-                        'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
-                        'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
-                        'assets/css/admin/editor.css': 'assets/sass/admin/editor.scss',
-                        'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
-                    },
-                    {
-                        expand: true,
-                        cwd: 'assets/sass/site/compatibility',
-                        src: '*.scss',
-                        dest: 'assets/css/compatibility',
-                        ext: '.css'
-                    }
-                ]
-            }
-        },
-
-        // Minified all css files.
-        cssmin: {
-            target: {
-                files: [
-                    // Base style
-                    {
-                        expand: true,
-                        cwd: '',
-                        src: ['*.css', '!*.min.css'],
-                        dest: '',
-                        ext: '.min.css'
-                    },
-
-                    // Customizer style
-                    {
-                        expand: true,
-                        cwd: 'assets/css/admin/customizer',
-                        src: ['*.css', '!*.min.css'],
-                        dest: 'assets/css/admin/customizer',
-                        ext: '.min.css'
-                    },
-
-                    // Compatibility style
-                    {
-                        expand: true,
-                        cwd: 'assets/css/compatibility',
-                        src: ['*.css', '!*.min.css'],
-                        dest: 'assets/css/compatibility',
-                        ext: '.min.css'
-                    },
-                    // Editor style
-                    {
-                        expand: true,
-                        cwd: 'assets/css/admin',
-                        src: ['*.css', '!*.min.css'],
-                        dest: 'assets/css/admin',
-                        ext: '.min.css'
-                    }
-                ]
-            }
-        },
-
-        uglify: {
-            my_target: {
-                files: [
-                    {
-                        'assets/js/theme.min.js': ['assets/js/theme.js'],
-                        'assets/js/select2.min.js': ['assets/js/select2.js'],
-                        'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js']
-                    },
-                    {
-                        expand: true,
-                        cwd: '.',
-                        src: ['assets/js/compatibility/*.js', '!assets/js/compatibility/*.min.js'],
-                        dest: '.',
-                        rename: function (dst, src) {
-                            // To keep the source js files and make new files as `*.min.js`:
-                            return dst + '/' + src.replace('.js', '.min.js');
-                        }
-                    },
-                    {
-                        expand: true,
-                        cwd: '.',
-                        src: ['assets/js/customizer/*.js', '!assets/js/customizer/*.min.js'],
-                        dest: '.',
-                        rename: function (dst, src) {
-                            // To keep the source js files and make new files as `*.min.js`:
-                            return dst + '/' + src.replace('.js', '.min.js');
-                        }
-                    },
-                    {
-                        expand: true,
-                        cwd: '.',
-                        src: ['assets/js/admin/*.js', '!assets/js/admin/*.min.js'],
-                        dest: '.',
-                        rename: function (dst, src) {
-                            // To keep the source js files and make new files as `*.min.js`:
-                            return dst + '/' + src.replace('.js', '.min.js');
-                        }
-                    }
-                ]
-            }
-        },
-
-        // Watch changes for assets.
-        watch: {
-            css: {
-                files: [
-                    'assets/sass/site/*.scss',
-                    'assets/sass/site/**/*.scss',
-                    'assets/sass/admin/*.scss',
-                    'assets/sass/admin/**/*.scss'
-                ],
-                tasks: [
-                    //'sass',
-                    'css'
-                ]
-            }
-            /*
-            ,
-            scripts: {
-                files: [
-                    'assets/js/*.js',
-                    'assets/js/compatibility/*.js',
-                    'assets/js/customizer/*.js'
-                ],
-                tasks: ['uglify']
-            }
-            */
-        },
-
         copy: {
             main: {
                 options: {
@@ -210,12 +12,13 @@ module.exports = function (grunt) {
                 src: [
                     '**',
                     '!node_modules/**',
-                    '!build/**',
+                    '!src/**',
                     '!css/sourcemap/**',
                     '!css/admin/*.map',
                     '!css/admin/customizer/*.map',
                     '!css/compatibility/*.map',
                     '!.git/**',
+                    '!.claude/**',
                     '!bin/**',
                     '!.gitlab-ci.yml',
                     '!bin/**',
@@ -225,6 +28,7 @@ module.exports = function (grunt) {
                     '!*.map',
                     '!*.css.map',
                     '!Gruntfile.js',
+                    '!webpack.config.js',
                     '!package.json',
                     '!.gitignore',
                     '!phpunit.xml',
@@ -308,7 +112,7 @@ module.exports = function (grunt) {
 
         replace: {
             theme_main: {
-                src: ['style.css', 'assets/sass/site/style.scss'],
+                src: ['style.css'],
                 overwrite: true,
                 replacements: [
                     {
@@ -356,11 +160,11 @@ module.exports = function (grunt) {
 
     // Load NPM tasks to be used here
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-postcss');
-    grunt.loadNpmTasks('grunt-contrib-sass');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-rtlcss');
+    // grunt.loadNpmTasks('grunt-postcss');
+    // grunt.loadNpmTasks('grunt-contrib-sass');
+    // grunt.loadNpmTasks('grunt-contrib-cssmin');
+    // grunt.loadNpmTasks('grunt-contrib-uglify');
+    // grunt.loadNpmTasks('grunt-rtlcss');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-compress');
@@ -376,13 +180,7 @@ module.exports = function (grunt) {
     // Register tasks
     grunt.registerTask('default', [
         'watch',
-        'css'
-    ]);
-    grunt.registerTask('css', [
-        'sass'
-        //'rtlcss'
-        //'postcss',
-        //'cssmin'
+        // 'css'
     ]);
 
     // Update google Fonts
@@ -416,11 +214,26 @@ module.exports = function (grunt) {
 
     });
 
+    // Run `npm run build` from within grunt so the shipped zip always contains
+    // a fresh build/ directory (both .min and non-min assets).
+    grunt.registerTask('npm-build', 'Run `npm run build` to rebuild webpack assets.', function () {
+        var done = this.async();
+        var execSync = require('child_process').execSync;
+        grunt.log.writeln('Running: npm run build');
+        try {
+            execSync('npm run build', { stdio: 'inherit' });
+            done();
+        } catch (err) {
+            grunt.log.error('npm run build failed: ' + err.message);
+            done(false);
+        }
+    });
+
     // To release new version just runt 2 commands below
     // Re create everything: grunt release --ver=<version_number>
     // Zip file installable: grunt zipfile
 
-    grunt.registerTask('zipfile', ['clean:zip', 'copy:main', 'compress:main', 'clean:main']);
+    grunt.registerTask('zipfile', ['clean:zip', 'npm-build', 'copy:main', 'compress:main', 'clean:main']);
     grunt.registerTask('release', function () {
         var newVersion = pkgInfo.version
         if (newVersion) {
@@ -430,15 +243,10 @@ module.exports = function (grunt) {
             grunt.task.run('replace');
 
             // i18n
-            // grunt.task.run(['addtextdomain', 'makepot']);
-            // re create css file and min
-            grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
             grunt.task.run(['zipfile']);
         }
     });
 
-    grunt.registerTask('re-css', function (ver) {
-        grunt.task.run(['css', 'postcss', 'uglify', 'rtlcss', 'cssmin']);
-    });
+    
 
 };
