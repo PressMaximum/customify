@@ -51,12 +51,14 @@
 					"color": "#444444"
 				}
 			],
+			"defaultGradients": false,
 			"gradients": [],
 			"duotone": []
 		},
 		"typography": {
 			"customFontSize": true,
 			"dropCap": false,
+			"defaultFontSizes": false,
 			"fontSizes": [
 				{
 					"slug": "small",
@@ -134,6 +136,17 @@
 			"blockGap": "1.5rem"
 		},
 		"blocks": {
+			"core/search": {
+				"border": {
+					"radius": "2px"
+				},
+				"spacing": {
+					"padding": {
+						"top": "0",
+						"bottom": "0"
+					}
+				}
+			},
 			"core/separator": {
 				"border": {
 					"color": "currentColor",
