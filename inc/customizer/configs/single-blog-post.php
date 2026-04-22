@@ -21,17 +21,22 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 			),
 
 			array(
-				'name'       => $args['id'] . '_content_width',
-				'section'    => $level_2_panel,
-				'type'       => 'slider',
-				'max'        => 1200,
-				'label'      => __( 'Content Max Width', 'customify' ),
-				// Scope to `body.single-post` so pages/archives keep theme.json's default
-				// contentSize — only single blog posts consume this override.
-				// Also skip `.content-inner` constraint when .site-content has
-				// `content-full-stretched` (page-level override disables content-width).
-				'selector'   => 'format',
-				'css_format' => 'body.single-post { --wp--style--global--content-size: {{value}}; } .single-post .site-content:not(.content-full-stretched) .content-inner { max-width: {{value}}; }',
+				'name'        => $args['id'] . '_content_width',
+				'section'     => $level_2_panel,
+				'type'        => 'slider',
+				'min'         => 400,
+				'step'        => 10,
+				'max'         => 1200,
+				'default'     => 780,
+				'label'       => __( 'Post Content Max Width', 'customify' ),
+				'description' => __( 'Max width of default blocks and aligned siblings inside post content. Drives --wp--style--global--content-size. Keep this value BELOW Container Width so .alignwide blocks can break out to the wider column.', 'customify' ),
+				// Set only the CSS var — no wrapper max-width. `.content-inner` stays at
+				// container_width so .alignwide (wide-size) inside .entry-content can reach
+				// its intended size. Block max-width is applied in _blocks.scss via
+				// .site-content:not(.content-full-stretched) .entry-content > *:not(...).
+				// Scoped to `body.single-post` so pages/archives keep theme.json default.
+				'selector'    => 'format',
+				'css_format'  => 'body.single-post { --wp--style--global--content-size: {{value}}; }',
 			),
 
 			array(
