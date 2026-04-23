@@ -51,9 +51,7 @@ class Customify_Dashboard
 	{
 		global $pagenow;
 		if (is_admin() && ('themes.php' == $pagenow) && isset($_GET['activated'])) {
-			if ( function_exists( 'customify_maybe_change_header_version' ) ) {
-				customify_maybe_change_header_version();
-			}
+			customify_maybe_change_header_version();
 ?>
 			<div class="customify-notice-wrapper notice is-dismissible">
 				<div class="customify-notice">
