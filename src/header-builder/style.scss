@@ -64,7 +64,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 .customify-hb__panel-items {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 12px;
 	padding: 0;
 	border: none;
 }
@@ -486,9 +486,9 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	
 	}
 
-	&--left   { justify-content: flex-start; }
-	&--center { justify-content: center; }
-	&--right  { justify-content: flex-end; }
+	&--left   { flex: 1; justify-content: flex-start; }
+	&--center { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
+	&--right  { flex: 1; justify-content: flex-end; }
 
 	&:hover, &.is-drag-over {
 		// border-left-color: $hb-text-muted;
