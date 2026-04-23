@@ -201,6 +201,7 @@ function Builder({
     label: deviceMap[id]
   }));
   const panelItemsContainerId = config?.panel_items_container || `customify-${builderId.charAt(0)}b-panel-items`;
+  const builderTitle = config?.title || builderId;
 
   // Sections that belong to the builder infrastructure — always hidden.
   const infraSections = new Set([config?.section, ...Object.keys(rowLabels).map(r => `${builderId}_${r}`)].filter(Boolean));
@@ -390,7 +391,10 @@ function Builder({
         className: "customify-hb__inner",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
           className: "customify-hb__header",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          children: [builderTitle && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: "customify-hb__title",
+            children: builderTitle
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
             className: "customify-hb__devices",
             children: DEVICES_LIST.length > 1 && DEVICES_LIST.map(d => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
               className: `customify-hb__device-btn${device === d.id ? ' is-active' : ''}`,
@@ -925,7 +929,7 @@ function ItemChip({
 // ---------------------------------------------------------------------------
 
 const ARROW_SIZE = 8;
-const POPOVER_W = 220;
+const POPOVER_W = 300;
 const POPOVER_H = 240;
 function ItemPickerPopover({
   items,

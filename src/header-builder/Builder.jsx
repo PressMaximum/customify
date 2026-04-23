@@ -824,7 +824,7 @@ function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, 
 // ---------------------------------------------------------------------------
 
 const ARROW_SIZE   = 8;
-const POPOVER_W    = 220;
+const POPOVER_W    = 300;
 const POPOVER_H    = 240;
 
 function ItemPickerPopover( { items, anchorRect, onAdd, onClose } ) {

@@ -83,7 +83,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	align-items: center;
 	width: 100%;
 	padding: 0 8px;
-	min-height: 34px;
+	min-height: 35px;
 	gap: 6px;
 	background: $hb-item-bg;
 	border: 1px solid $hb-item-border;
@@ -156,7 +156,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	display: flex;
 	width: 100%;
 	padding: 0 8px;
-	min-height: 34px;
+	min-height: 35px;
 	gap: 8px;
 	align-items: center;
 	background: $hb-item-bg;
@@ -200,7 +200,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 		> .accordion-section-title {
 			display: flex !important;
 			align-items: center !important;
-			min-height: 34px !important;
+			min-height: 35px !important;
 			padding: 0 8px !important;
 			background: $hb-item-bg !important;
 			border: 1px solid $hb-item-border !important;
@@ -265,7 +265,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 
 // Apply to both header and footer builder panel section lists.
 ul.control-panel-customify_header_builder_panel { @include builder-panel-accordion-sections; }
-ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; }
+ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; padding-bottom: 35px; }
 
 
 // ─── Builder panel (fixed bottom bar) ────────────────────────────────────────
@@ -302,6 +302,14 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	background: #fff;
 	border-bottom: 1px solid $hb-border;
 	min-height: 40px;
+}
+
+.customify-hb__title {
+	font-weight: 600;
+	font-size: 13px;
+	color: $hb-text;
+	white-space: nowrap;
+	margin-right: 8px;
 }
 
 .customify-hb__devices { display: flex; gap: 2px; }
@@ -551,7 +559,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	border: 1px solid $hb-item-border;
 	border-radius: $hb-radius;
 	padding: 3px 4px;
-	font-size: 11px;
+	min-height: 35px;
 	font-weight: 500;
 	color: $hb-text;
 	cursor: grab;
@@ -582,7 +590,6 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
-	font-size: 11px;
 }
 
 .customify-hb__item-btn {
@@ -675,14 +682,16 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	gap: 4px;
 	max-height: 200px;
 	overflow-y: auto;
-	padding: 8px;
+	padding: 12px;
 }
 
 .customify-hb__popover-item {
 	display: inline-flex;
+	align-items: center;
 	width: auto;
 	text-align: left;
 	padding: 4px 10px;
+	min-height: 35px;
 	background: $hb-bg;
 	border: 1px solid $hb-border;
 	border-radius: $hb-radius;

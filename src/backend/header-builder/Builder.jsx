@@ -147,6 +147,7 @@ export default function Builder( { config } ) {
 	const rows         = Object.keys( rowLabels ).filter( ( r ) => r !== 'sidebar' );
 	const DEVICES_LIST = deviceIds.map( ( id ) => ( { id, label: deviceMap[ id ] } ) );
 	const panelItemsContainerId = config?.panel_items_container || ( `customify-${ builderId.charAt( 0 ) }b-panel-items` );
+	const builderTitle         = config?.title || builderId;
 
 	// Sections that belong to the builder infrastructure — always hidden.
 	const infraSections = new Set(
@@ -345,8 +346,9 @@ export default function Builder( { config } ) {
 		{ builderOpen && <div className="customify-hb customify--panel-v2" style={ { left: innerLeft } }>
 			<div className="customify-hb__inner">
 
-				{ /* Header bar: device tabs + close */ }
+				{ /* Header bar: title + device tabs + close */ }
 				<div className="customify-hb__header">
+					{ builderTitle && <div className="customify-hb__title">{ builderTitle }</div> }
 					<div className="customify-hb__devices">
 						{ DEVICES_LIST.length > 1 && DEVICES_LIST.map( ( d ) => (
 							<button
@@ -824,7 +826,7 @@ function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, 
 // ---------------------------------------------------------------------------
 
 const ARROW_SIZE   = 8;
-const POPOVER_W    = 220;
+const POPOVER_W    = 300;
 const POPOVER_H    = 240;
 
 function ItemPickerPopover( { items, anchorRect, onAdd, onClose } ) {

@@ -18,7 +18,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 	function get_config() {
 		return array(
 			'id'         => $this->id,
-			'title'      => __( 'Footer Builder', 'customify' ),
+			'title'      => __( 'Footer Layout', 'customify' ),
 			'control_id' => 'footer_builder_panel',
 			'panel'      => 'footer_settings',
 			'section'    => 'footer_builder_panel',
