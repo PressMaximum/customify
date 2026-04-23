@@ -391,7 +391,7 @@ function Builder({
         className: "customify-hb__inner",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
           className: "customify-hb__header",
-          children: [builderTitle && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          children: [builderTitle && builderId !== 'header' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
             className: "customify-hb__title",
             children: builderTitle
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {

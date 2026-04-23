@@ -348,7 +348,7 @@ export default function Builder( { config } ) {
 
 				{ /* Header bar: title + device tabs + close */ }
 				<div className="customify-hb__header">
-					{ builderTitle && <div className="customify-hb__title">{ builderTitle }</div> }
+					{ builderTitle && builderId !== 'header' && <div className="customify-hb__title">{ builderTitle }</div> }
 					<div className="customify-hb__devices">
 						{ DEVICES_LIST.length > 1 && DEVICES_LIST.map( ( d ) => (
 							<button
