@@ -350,7 +350,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 }
 
 // ── Body ──
-.customify-hb__body { padding: 8px 12px 10px; }
+.customify-hb__body { padding: 25px 12px; }
 
 // ── Grid ──
 .customify-hb__grid {
@@ -381,7 +381,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	flex: 1;
 	display: flex;
 	flex-direction: column;
-	gap: 4px;
+	gap: 12px;
 }
 
 // ── Row ──
@@ -409,7 +409,10 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	.components-popover__content {
 		background: var( --wp-admin-theme-color, #3858e9 ) !important;
 		border: none !important;
-		border-radius: $hb-radius !important;
+		border-top-left-radius: $hb-radius !important;
+		border-top-right-radius: $hb-radius !important;
+		border-bottom-left-radius: $hb-radius !important;
+		border-bottom-right-radius: 0 !important;
 		box-shadow: none !important;
 		min-width: 0 !important;
 		padding: 4px 10px !important;
