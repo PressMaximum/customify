@@ -44,6 +44,7 @@ class Customify_Page_Settings {
 			'disable_footer_main',
 			'disable_footer_bottom',
 			'breadcrumb_display',
+			'header_transparent_display',
 		);
 	}
 

@@ -725,6 +725,30 @@ if (!Element.prototype.closest) {
   /**
    * Inittial
    */
+  /**
+   * Transparent header — offset page content by the header height so content
+   * is not hidden behind the absolutely-positioned masthead.
+   */
+  Customify.prototype.initTransparentHeader = function () {
+    var masthead = document.getElementById('masthead');
+    if (!masthead) {
+      return;
+    }
+    if (!document.body.classList.contains('is-header-transparent')) {
+      return;
+    }
+    var apply = function () {
+      var h = masthead.getBoundingClientRect().height;
+      document.body.style.setProperty('--transparent-header-height', Math.round(h) + 'px');
+      document.body.classList.add('has-transparent-offset');
+    };
+    apply();
+    var tth;
+    window.addEventListener('resize', function () {
+      clearTimeout(tth);
+      tth = setTimeout(apply, 100);
+    });
+  };
   Customify.prototype.init = function () {
     this.checkTouchScreen();
     this.initMobieSearchForm();
@@ -735,6 +759,7 @@ if (!Element.prototype.closest) {
     this.initSearchForm();
     this.responsiveTable();
     this.responsiveVideos();
+    this.initTransparentHeader();
 
     /**
      * Add action when Header Panel rendered by customizer.

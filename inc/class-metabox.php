@@ -122,6 +122,20 @@ class Customify_MetaBox {
 			)
 		);
 
+		$this->field_builder->add_field(
+			array(
+				'title'   => __( 'Transparent Header', 'customify' ),
+				'name'    => 'header_transparent_display',
+				'tab'     => 'page_header',
+				'type'    => 'select',
+				'choices' => array(
+					'default' => __( 'Inherit from Customizer settings', 'customify' ),
+					'show'    => __( 'Force transparent', 'customify' ),
+					'hide'    => __( 'Force opaque', 'customify' ),
+				),
+			)
+		);
+
 		if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) {
 			$this->field_builder->add_tab(
 				'breadcrumb',

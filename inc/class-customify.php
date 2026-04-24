@@ -490,6 +490,7 @@ class Customify
 			'background',
 			'compatibility',
 			// Header Builder Panel.
+			'header/transparent',
 			'header/panel',
 			'header/html',
 			'header/logo',
