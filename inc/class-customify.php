@@ -535,6 +535,7 @@ class Customify
 	{
 
 		$compatibility_config_files = array(
+			'customify-pro',     // Disable Pro modules implemented natively by the theme.
 			'elementor',         // Plugin breadcrumb-navxt & Yoat Seo.
 			'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo.
 			'woocommerce/woocommerce',  // Plugin WooCommerce.
