@@ -31,6 +31,10 @@ class Customify_Preview_Colors_Customizer
 		// before our control attaches, so register at a later priority.
 		add_action('customize_register', array(__CLASS__, 'register'), 700);
 		add_action('customize_controls_enqueue_scripts', array(__CLASS__, 'enqueue_controls'));
+		// Preview-iframe bundle: rewrites the :root vars block on every
+		// setting change so `transport: 'postMessage'` updates land without
+		// reloading the iframe.
+		add_action('customize_preview_init', array(__CLASS__, 'enqueue_preview'));
 	}
 
 	/**
@@ -64,7 +68,7 @@ class Customify_Preview_Colors_Customizer
 			'type'              => 'option',
 			'capability'        => Customify_Preview_Colors_Ajax::CAPABILITY,
 			'default'           => '',
-			'transport'         => 'refresh',
+			'transport'         => 'postMessage',
 			'sanitize_callback' => array('Customify_Preview_Colors_Ajax', 'sanitize_active_id'),
 		));
 
@@ -73,7 +77,7 @@ class Customify_Preview_Colors_Customizer
 			'type'              => 'option',
 			'capability'        => Customify_Preview_Colors_Ajax::CAPABILITY,
 			'default'           => array(),
-			'transport'         => 'refresh',
+			'transport'         => 'postMessage',
 			'sanitize_callback' => array('Customify_Preview_Colors_Ajax', 'sanitize_palettes'),
 		));
 
@@ -103,24 +107,30 @@ class Customify_Preview_Colors_Customizer
 			return;
 		}
 
-		$suffix = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
-		$base   = get_template_directory_uri();
-		$ver    = Customify::$version ?: '0.4.13';
+		$suffix   = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
+		$base_uri = get_template_directory_uri();
+		$base_dir = get_template_directory();
+		$css_path = '/build/css/backend/customizer/preview-colors' . $suffix . '.css';
+		$js_path  = '/build/js/backend/customizer/preview-colors' . $suffix . '.js';
+		// File mtime as cache buster so any rebuild invalidates the browser
+		// cache without a manual theme-version bump.
+		$css_ver  = file_exists($base_dir . $css_path) ? filemtime($base_dir . $css_path) : (Customify::$version ?: '0.4.13');
+		$js_ver   = file_exists($base_dir . $js_path)  ? filemtime($base_dir . $js_path)  : (Customify::$version ?: '0.4.13');
 
 		// Light-DOM panel — enqueue CSS directly into the Customizer controls
 		// page so WP can manage it via wp_register_style/wp_enqueue_style.
 		wp_enqueue_style(
 			self::HANDLE,
-			$base . '/build/css/backend/customizer/preview-colors' . $suffix . '.css',
+			$base_uri . $css_path,
 			array(),
-			$ver
+			$css_ver
 		);
 
 		wp_enqueue_script(
 			self::HANDLE,
-			$base . '/build/js/backend/customizer/preview-colors' . $suffix . '.js',
+			$base_uri . $js_path,
 			array('customize-controls'),
-			$ver,
+			$js_ver,
 			true
 		);
 
@@ -134,12 +144,43 @@ class Customify_Preview_Colors_Customizer
 				'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
 				'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
 			),
-			'slots'         => Customify_Preview_Colors_Config::SLOTS,
+			'slots'         => Customify_Preview_Colors_Config::slots(),
 			'slotDesc'      => Customify_Preview_Colors_Config::slot_descriptions(),
 			'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
 			'settingsRows'  => Customify_Preview_Colors_Config::settings_rows(),
 			'userPalettes'  => Customify_Preview_Colors_Ajax::get_user_palettes(),
 			'activeId'      => Customify_Preview_Colors_Ajax::get_active_id(),
+		));
+	}
+
+	/**
+	 * Enqueue the preview-iframe bundle. Listens for postMessage updates from
+	 * the controls pane and rewrites `<style id="customify-preview-colors-vars">`
+	 * inside the iframe — same shape as `output_root_vars()` so the override
+	 * layer in style-theme.css picks up changes without an iframe refresh.
+	 */
+	public static function enqueue_preview()
+	{
+		$suffix = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
+		$base   = get_template_directory_uri();
+		$ver    = Customify::$version ?: '0.4.13';
+
+		wp_enqueue_script(
+			self::HANDLE . '-preview',
+			$base . '/build/js/backend/customizer/preview-colors-preview' . $suffix . '.js',
+			array('customize-preview'),
+			$ver,
+			true
+		);
+
+		wp_localize_script(self::HANDLE . '-preview', 'CustomifyPreviewColorsPreview', array(
+			'styleId'      => Customify_Preview_Colors::HANDLE . '-vars',
+			'settingIds'   => array(
+				'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
+				'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
+			),
+			'slots'        => Customify_Preview_Colors_Config::slots(),
+			'themePresets' => Customify_Preview_Colors_Config::theme_presets(),
 		));
 	}
 }

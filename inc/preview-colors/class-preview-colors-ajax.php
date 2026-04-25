@@ -114,6 +114,10 @@ class Customify_Preview_Colors_Ajax
 			if ('' === $id || '' === $name) {
 				continue;
 			}
+			// Sanitize against the FULL six-slot vocabulary (not the filtered
+			// active set) so palettes saved while a slot is hidden still
+			// validate when the slot is re-enabled later. Missing slot values
+			// are rejected — the panel JS always writes all six.
 			$colors = array();
 			foreach (Customify_Preview_Colors_Config::SLOTS as $slot) {
 				$val = isset($cols[$slot]) ? trim((string) $cols[$slot]) : '';

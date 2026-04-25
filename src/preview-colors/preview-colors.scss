@@ -563,6 +563,36 @@
 
   .divider-soft { border-top: 1px solid var(--border); margin: 12px 0 14px; }
 
+  /* === AUTO-COMPUTED (read-only) ============================================
+   * Theme-derived companion vars. Shown last in the panel, marked read-only by
+   * the diagonal stripe pattern on the swatch. */
+  .auto-computed-hint {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin: -2px 2px 8px;
+    line-height: 1.4;
+  }
+  .auto-computed-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 2px;
+    font-size: 12px;
+  }
+  .auto-computed-swatch {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.12);
+    background-image: linear-gradient(45deg, transparent 47%, rgba(0,0,0,0.18) 47% 53%, transparent 53%);
+    background-color: transparent;
+    flex-shrink: 0;
+  }
+  .auto-computed-label { flex: 1; color: var(--text-primary); }
+  .auto-computed-slot {
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 10px;
+  }
+
   /* === POPOVER (anchored inside .hero-card) === */
   .popover {
     position: absolute;

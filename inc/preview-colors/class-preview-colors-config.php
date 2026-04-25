@@ -11,7 +11,32 @@ if (! defined('ABSPATH')) {
 
 class Customify_Preview_Colors_Config
 {
+	// Default 6-slot vocabulary (Style Pack). Themes / demos can hide any of
+	// `secondary` / `accent` via the filter — `base`, `text`, `primary`,
+	// `surface` are mandatory per the matrix and never removed.
 	const SLOTS = array('base', 'text', 'primary', 'secondary', 'accent', 'surface');
+	const MANDATORY_SLOTS = array('base', 'text', 'primary', 'surface');
+
+	/**
+	 * Active slots for the current request, filtered through
+	 * `customify_preview_colors/active_slots`. Always preserves the four
+	 * mandatory slots; only `secondary` / `accent` can be opted out.
+	 *
+	 * @return array
+	 */
+	public static function slots()
+	{
+		$filtered = apply_filters('customify_preview_colors/active_slots', self::SLOTS);
+		if (! is_array($filtered) || empty($filtered)) {
+			return self::SLOTS;
+		}
+		// Make sure mandatory slots stay even if a filter forgets them.
+		$out = array_values(array_unique(array_merge(self::MANDATORY_SLOTS, $filtered)));
+		// Preserve canonical ordering so JS deck lays out predictably.
+		return array_values(array_filter(self::SLOTS, function ($s) use ($out) {
+			return in_array($s, $out, true);
+		}));
+	}
 
 	public static function slot_descriptions()
 	{

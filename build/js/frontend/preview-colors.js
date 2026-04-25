@@ -1,10 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/preview-colors/preview-colors.js":
-/*!**********************************************!*\
-  !*** ./src/preview-colors/preview-colors.js ***!
-  \**********************************************/
+/***/ 919:
 /***/ (function() {
 
 /*
@@ -122,29 +119,57 @@
     });
   }
 
-  // Convert "#RRGGBB" / "#RGB" to the comma-separated R, G, B integer string
-  // expected by `rgba(var(--customify-color-X-rgb), <alpha>)` calls in the
-  // override stylesheet. Returns null on malformed input.
-  function hexToRgb(hex) {
+  // Parse "#RRGGBB" / "#RGB" → array [r, g, b] of integers, or null.
+  function hexToRgbArray(hex) {
     var c = String(hex || '').replace('#', '');
     if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
     if (!/^[0-9A-Fa-f]{6}$/.test(c)) return null;
-    var r = parseInt(c.substr(0, 2), 16);
-    var g = parseInt(c.substr(2, 2), 16);
-    var b = parseInt(c.substr(4, 2), 16);
-    return r + ', ' + g + ', ' + b;
+    return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)];
   }
 
-  // Mirror the active palette onto the document root as CSS custom properties:
+  // "r, g, b" string for `rgba(var(--customify-color-X-rgb), <alpha>)` consumers.
+  function hexToRgb(hex) {
+    var rgb = hexToRgbArray(hex);
+    return rgb ? rgb.join(', ') : null;
+  }
+
+  // WCAG relative luminance.
+  function luminance(rgb) {
+    var f = function (v) {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+  }
+
+  // Threshold 0.45 — slightly nudged from the WCAG 0.5 default toward white,
+  // which reads better on warm tones (terracotta, amber). Per Style Pack note.
+  function pickOn(hex) {
+    var rgb = hexToRgbArray(hex);
+    if (!rgb) return '#FFFFFF';
+    return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+  }
+
+  // Mirror the active palette onto :root as CSS custom properties.
+  //
+  // Six user-picked slots (Style Pack vocabulary):
   //   --customify-color-<slot>      (hex)
-  //   --customify-color-<slot>-rgb  ("r, g, b")
-  // The hex form drives most overrides; the -rgb triplet feeds rgba() calls
-  // (divider borders, color-tinted shadows, footer text) without needing
-  // color-mix browser support.
+  //   --customify-color-<slot>-rgb  ("r, g, b" — feeds rgba() consumers)
+  //
+  // Auto-computed companion vars (theme-derived; user never picks):
+  //   --customify-color-on-primary / on-secondary / on-surface
+  //       JS WCAG luminance → "#1A1A1A" or "#FFFFFF" for max contrast.
+  //   --customify-color-text-muted    rgba(text-rgb, 0.55)   meta / breadcrumbs
+  //   --customify-color-text-subtle   rgba(text-rgb, 0.35)   disabled state
+  //   --customify-color-border-default rgba(text-rgb, 0.12)  dividers
+  //   --customify-color-primary-hover  color-mix(primary, #000 15%)  link/btn hover
+  //   --customify-color-primary-subtle color-mix(primary, base 92%)  primary wash
   function applyColorVars() {
     var pal = getActive();
     if (!pal) return;
     var docRoot = document.documentElement;
+
+    // 1) Six user-picked slots.
     for (var i = 0; i < SLOTS.length; i++) {
       var slot = SLOTS[i];
       var val = pal.colors[slot];
@@ -152,6 +177,33 @@
       docRoot.style.setProperty('--customify-color-' + slot, val);
       var rgb = hexToRgb(val);
       if (rgb) docRoot.style.setProperty('--customify-color-' + slot + '-rgb', rgb);
+    }
+
+    // 2) Contrast-aware on-* companions for slots used as backgrounds.
+    var onSlots = ['primary', 'secondary', 'surface'];
+    for (var k = 0; k < onSlots.length; k++) {
+      var s = onSlots[k];
+      if (pal.colors[s]) {
+        docRoot.style.setProperty('--customify-color-on-' + s, pickOn(pal.colors[s]));
+      }
+    }
+
+    // 3) Text + border alpha derivatives — universal browser support.
+    var textRgb = hexToRgb(pal.colors.text);
+    if (textRgb) {
+      docRoot.style.setProperty('--customify-color-text-muted', 'rgba(' + textRgb + ', 0.55)');
+      docRoot.style.setProperty('--customify-color-text-subtle', 'rgba(' + textRgb + ', 0.35)');
+      docRoot.style.setProperty('--customify-color-border-default', 'rgba(' + textRgb + ', 0.12)');
+    }
+
+    // 4) Primary hover / subtle — color-mix (Chrome 111+ / FF 113+ / Safari 16.2+).
+    // Browsers that lack `color-mix` resolve the var to the value below; the
+    // override stylesheet supplies a per-rule hex fallback.
+    if (pal.colors.primary) {
+      docRoot.style.setProperty('--customify-color-primary-hover', 'color-mix(in srgb, ' + pal.colors.primary + ', #000 15%)');
+      if (pal.colors.base) {
+        docRoot.style.setProperty('--customify-color-primary-subtle', 'color-mix(in srgb, ' + pal.colors.primary + ', ' + pal.colors.base + ' 92%)');
+      }
     }
   }
 
@@ -200,7 +252,7 @@
   // ------------------------------------------------------ initial markup
 
   // CSS link goes first so styles apply before the panel paints.
-  root.innerHTML = [cfg.cssUrl ? '<link rel="stylesheet" href="' + cfg.cssUrl + '">' : '', '<div class="sidebar">', '  <div class="sb-header">', '    <button class="sb-back" aria-label="Back" type="button">', '      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 11L4.5 7l4-4"/></svg>', '    </button>', '    <div class="sb-crumb">', '      <small>Customizing › Colors</small>', '      <strong>Colors</strong>', '    </div>', '    <span class="sb-help">?</span>', '  </div>', '  <div class="section">', '    <div class="sec-row"><h3>Current palette</h3></div>', '    <div class="hero-card">', '      <div class="deck-wrap" data-deck></div>', '      <div class="deck-footer">', '        <span class="deck-name"><span data-active-name></span> <span class="tag-theme" data-active-tag>theme</span></span>', '        <span class="deck-sub" data-active-meta>6 slots</span>', '      </div>', '      <div class="deck-hint">Click a card to edit that slot</div>', '      <div class="popover" data-popover>', '        <div class="popover-head">', '          <span data-pop-slot></span>', '          <button class="modal-close" data-pop-close type="button" style="width:20px;height:20px;">', '            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l8 8M11 3l-8 8"/></svg>', '          </button>', '        </div>', '        <label class="popover-preview" data-pop-preview>', '          <input type="color" data-pop-picker value="#000000">', '        </label>', '        <div class="popover-hex" data-pop-hex></div>', '        <div class="popover-desc" data-pop-desc></div>', '        <div class="popover-copy-hint" data-pop-note style="display:none;">Editing creates a copy in Custom palettes</div>', '      </div>', '    </div>', '  </div>', '  <div class="section">', '    <div class="sec-row">', '      <h3>Theme presets</h3>', '      <button class="icon-btn" data-open-modal type="button" aria-label="Browse all palettes" title="Browse all palettes">', '        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="4" height="4"/><rect x="8" y="2" width="4" height="4"/><rect x="2" y="8" width="4" height="4"/><rect x="8" y="8" width="4" height="4"/></svg>', '      </button>', '    </div>', '    <div class="preset-grid" data-theme-grid></div>', '  </div>', '  <div class="section">', '    <div class="sec-row">', '      <h3>Custom palettes <span class="badge-count" data-user-count>0</span></h3>', '      <div style="display:flex;gap:4px;">', '        <button class="icon-btn" data-toggle-export type="button" aria-label="Export palettes" title="Export JSON">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V5M4 8l3-3 3 3M2.5 2.5h9"/></svg>', '        </button>', '        <button class="icon-btn" data-toggle-import type="button" aria-label="Import palette" title="Import JSON">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7M4 6l3 3 3-3M2.5 11.5h9"/></svg>', '        </button>', '        <button class="icon-btn" data-toggle-add type="button" aria-label="Add palette" title="Add new palette">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 3v8M3 7h8"/></svg>', '        </button>', '      </div>', '    </div>', '    <div data-user-grid-wrap>', '      <div class="preset-grid" data-user-grid></div>', '      <div class="empty-user" data-empty-user style="display:none;">', '        No custom palettes yet.<br>Click <strong>+</strong> to create one, or <strong>↓</strong> to import JSON.', '      </div>', '    </div>', '    <div class="add-form" data-add-form>', '      <div class="form-title">Create new palette</div>', '      <div class="form-field">', '        <label data-for-new-name>Palette title</label>', '        <input type="text" data-new-name placeholder="e.g. My brand" autocomplete="off">', '      </div>', '      <div class="form-field">', '        <label data-for-extend>Extend from</label>', '        <select data-extend-from></select>', '      </div>', '      <div class="form-actions">', '        <button class="btn-cancel" data-cancel-add type="button">Cancel</button>', '        <button class="btn-add" data-confirm-add type="button">', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 3v8M3 7h8"/></svg> Add', '        </button>', '      </div>', '    </div>', '    <div class="add-form" data-import-form>', '      <div class="form-title">Import palette(s) from JSON', '        <button class="paste-example" data-paste-example type="button">Use example</button>', '      </div>', '      <div class="form-field">', '        <label data-for-json>Paste JSON</label>', '        <textarea data-json-input spellcheck="false"></textarea>', '        <p class="form-hint">Accepts a single palette object or an array. Requires <code>name</code> + all 6 slots.</p>', '        <div class="form-error" data-json-error></div>', '      </div>', '      <div class="form-actions">', '        <button class="btn-cancel" data-cancel-import type="button">Cancel</button>', '        <button class="btn-add" data-confirm-import type="button">', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7M4 6l3 3 3-3"/></svg> Import', '        </button>', '      </div>', '    </div>', '    <div class="add-form" data-export-form>', '      <div class="form-title">Export custom palettes</div>', '      <div class="form-field" data-export-select-field></div>', '      <div class="form-field" data-export-output-field style="display:none;">', '        <label>JSON output</label>', '        <div class="export-output" data-export-output>//  No palettes selected</div>', '        <p class="form-hint">Re-importable via the <code>↓</code> button above or on another site.</p>', '      </div>', '      <div class="form-actions">', '        <span class="copied-flash" data-copied-flash>✓ Copied</span>', '        <button class="btn-cancel" data-cancel-export type="button">Close</button>', '        <button class="btn-ghost" data-download-export type="button" disabled>', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M7 2v7M4 6l3 3 3-3M2.5 11.5h9"/></svg> Download', '        </button>', '        <button class="btn-add" data-copy-export type="button" disabled>', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M10 4V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg> Copy', '        </button>', '      </div>', '    </div>', '  </div>', '  <div class="section">', '    <div class="group-title">', '      <h4>Theme color</h4>', '      <button class="reset" type="button" aria-label="Reset all colors" title="Reset to defaults">', '        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5V2m0 3.5h3.5M2 5.5A5 5 0 1 1 3 10"/></svg>', '      </button>', '    </div>', '    <div data-theme-settings></div>', '  </div>', '</div>', '<div class="modal-overlay" data-modal-overlay>', '  <div class="modal" role="dialog">', '    <div class="modal-head">', '      <h3>Choose a palette</h3>', '      <button class="modal-close" data-close-modal type="button" aria-label="Close">', '        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg>', '      </button>', '    </div>', '    <div class="modal-body" data-modal-body></div>', '  </div>', '</div>', '<button class="cpc-reopen" data-cpc-reopen type="button" aria-label="Open color panel" title="Open color panel">', '  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3l4 4-4 4"/></svg>', '</button>'].join('\n');
+  root.innerHTML = [cfg.cssUrl ? '<link rel="stylesheet" href="' + cfg.cssUrl + '">' : '', '<div class="sidebar">', '  <div class="sb-header">', '    <button class="sb-back" aria-label="Back" type="button">', '      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 11L4.5 7l4-4"/></svg>', '    </button>', '    <div class="sb-crumb">', '      <small>Customizing › Colors</small>', '      <strong>Colors</strong>', '    </div>', '    <span class="sb-help">?</span>', '  </div>', '  <div class="section">', '    <div class="sec-row"><h3>Current palette</h3></div>', '    <div class="hero-card">', '      <div class="deck-wrap" data-deck></div>', '      <div class="deck-footer">', '        <span class="deck-name"><span data-active-name></span> <span class="tag-theme" data-active-tag>theme</span></span>', '        <span class="deck-sub" data-active-meta>6 slots</span>', '      </div>', '      <div class="deck-hint">Click a card to edit that slot</div>', '      <div class="popover" data-popover>', '        <div class="popover-head">', '          <span data-pop-slot></span>', '          <button class="modal-close" data-pop-close type="button" style="width:20px;height:20px;">', '            <svg width="10" height="10" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 3l8 8M11 3l-8 8"/></svg>', '          </button>', '        </div>', '        <label class="popover-preview" data-pop-preview>', '          <input type="color" data-pop-picker value="#000000">', '        </label>', '        <div class="popover-hex" data-pop-hex></div>', '        <div class="popover-desc" data-pop-desc></div>', '        <div class="popover-copy-hint" data-pop-note style="display:none;">Editing creates a copy in Custom palettes</div>', '      </div>', '    </div>', '  </div>', '  <div class="section">', '    <div class="sec-row">', '      <h3>Theme presets</h3>', '      <button class="icon-btn" data-open-modal type="button" aria-label="Browse all palettes" title="Browse all palettes">', '        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="4" height="4"/><rect x="8" y="2" width="4" height="4"/><rect x="2" y="8" width="4" height="4"/><rect x="8" y="8" width="4" height="4"/></svg>', '      </button>', '    </div>', '    <div class="preset-grid" data-theme-grid></div>', '  </div>', '  <div class="section">', '    <div class="sec-row">', '      <h3>Custom palettes <span class="badge-count" data-user-count>0</span></h3>', '      <div style="display:flex;gap:4px;">', '        <button class="icon-btn" data-toggle-export type="button" aria-label="Export palettes" title="Export JSON">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 12V5M4 8l3-3 3 3M2.5 2.5h9"/></svg>', '        </button>', '        <button class="icon-btn" data-toggle-import type="button" aria-label="Import palette" title="Import JSON">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7M4 6l3 3 3-3M2.5 11.5h9"/></svg>', '        </button>', '        <button class="icon-btn" data-toggle-add type="button" aria-label="Add palette" title="Add new palette">', '          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 3v8M3 7h8"/></svg>', '        </button>', '      </div>', '    </div>', '    <div data-user-grid-wrap>', '      <div class="preset-grid" data-user-grid></div>', '      <div class="empty-user" data-empty-user style="display:none;">', '        No custom palettes yet.<br>Click <strong>+</strong> to create one, or <strong>↓</strong> to import JSON.', '      </div>', '    </div>', '    <div class="add-form" data-add-form>', '      <div class="form-title">Create new palette</div>', '      <div class="form-field">', '        <label data-for-new-name>Palette title</label>', '        <input type="text" data-new-name placeholder="e.g. My brand" autocomplete="off">', '      </div>', '      <div class="form-field">', '        <label data-for-extend>Extend from</label>', '        <select data-extend-from></select>', '      </div>', '      <div class="form-actions">', '        <button class="btn-cancel" data-cancel-add type="button">Cancel</button>', '        <button class="btn-add" data-confirm-add type="button">', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 3v8M3 7h8"/></svg> Add', '        </button>', '      </div>', '    </div>', '    <div class="add-form" data-import-form>', '      <div class="form-title">Import palette(s) from JSON', '        <button class="paste-example" data-paste-example type="button">Use example</button>', '      </div>', '      <div class="form-field">', '        <label data-for-json>Paste JSON</label>', '        <textarea data-json-input spellcheck="false"></textarea>', '        <p class="form-hint">Accepts a single palette object or an array. Requires <code>name</code> + all 6 slots.</p>', '        <div class="form-error" data-json-error></div>', '      </div>', '      <div class="form-actions">', '        <button class="btn-cancel" data-cancel-import type="button">Cancel</button>', '        <button class="btn-add" data-confirm-import type="button">', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 2v7M4 6l3 3 3-3"/></svg> Import', '        </button>', '      </div>', '    </div>', '    <div class="add-form" data-export-form>', '      <div class="form-title">Export custom palettes</div>', '      <div class="form-field" data-export-select-field></div>', '      <div class="form-field" data-export-output-field style="display:none;">', '        <label>JSON output</label>', '        <div class="export-output" data-export-output>//  No palettes selected</div>', '        <p class="form-hint">Re-importable via the <code>↓</code> button above or on another site.</p>', '      </div>', '      <div class="form-actions">', '        <span class="copied-flash" data-copied-flash>✓ Copied</span>', '        <button class="btn-cancel" data-cancel-export type="button">Close</button>', '        <button class="btn-ghost" data-download-export type="button" disabled>', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:4px;"><path d="M7 2v7M4 6l3 3 3-3M2.5 11.5h9"/></svg> Download', '        </button>', '        <button class="btn-add" data-copy-export type="button" disabled>', '          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M10 4V3a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h1"/></svg> Copy', '        </button>', '      </div>', '    </div>', '  </div>', '  <div class="section">', '    <div class="group-title">', '      <h4>Theme color</h4>', '      <button class="reset" type="button" aria-label="Reset all colors" title="Reset to defaults">', '        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 5.5V2m0 3.5h3.5M2 5.5A5 5 0 1 1 3 10"/></svg>', '      </button>', '    </div>', '    <div data-theme-settings></div>', '  </div>', '  <div class="section">', '    <div class="group-title">', '      <h4>Auto-computed</h4>', '    </div>', '    <div class="auto-computed-hint">Theme generates these from the 6 slots above.</div>', '    <div data-auto-computed></div>', '  </div>', '</div>', '<div class="modal-overlay" data-modal-overlay>', '  <div class="modal" role="dialog">', '    <div class="modal-head">', '      <h3>Choose a palette</h3>', '      <button class="modal-close" data-close-modal type="button" aria-label="Close">', '        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 3l8 8M11 3l-8 8"/></svg>', '      </button>', '    </div>', '    <div class="modal-body" data-modal-body></div>', '  </div>', '</div>', '<button class="cpc-reopen" data-cpc-reopen type="button" aria-label="Open color panel" title="Open color panel">', '  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3l4 4-4 4"/></svg>', '</button>'].join('\n');
 
   // Element refs.
   var deck = $('[data-deck]');
@@ -212,6 +264,7 @@
   var emptyUser = $('[data-empty-user]');
   var userCount = $('[data-user-count]');
   var themeSettings = $('[data-theme-settings]');
+  var autoComputed = $('[data-auto-computed]');
   var modalOverlay = $('[data-modal-overlay]');
   var modalBody = $('[data-modal-body]');
   var popover = $('[data-popover]');
@@ -364,6 +417,52 @@
     });
   }
 
+  // ------------------------------------------------------ auto-computed group
+
+  // Read-only chips listing the eight Style-Pack-derived companion vars the
+  // theme synthesises from the six user-picked slots. Updated whenever the
+  // active palette / a slot changes (via the same callbacks that re-emit
+  // applyColorVars()).
+  var AUTO_COMPUTED_ROWS = [{
+    slot: 'on-primary',
+    label: 'Text on primary'
+  }, {
+    slot: 'on-secondary',
+    label: 'Text on secondary'
+  }, {
+    slot: 'on-surface',
+    label: 'Text on surface'
+  }, {
+    slot: 'text-muted',
+    label: 'Muted text'
+  }, {
+    slot: 'text-subtle',
+    label: 'Subtle text'
+  }, {
+    slot: 'border-default',
+    label: 'Default border'
+  }, {
+    slot: 'primary-hover',
+    label: 'Primary hover'
+  }, {
+    slot: 'primary-subtle',
+    label: 'Primary subtle'
+  }];
+  function buildAutoComputed() {
+    if (!autoComputed) return;
+    var rootStyle = getComputedStyle(document.documentElement);
+    autoComputed.innerHTML = '';
+    AUTO_COMPUTED_ROWS.forEach(function (row) {
+      var resolved = rootStyle.getPropertyValue('--customify-color-' + row.slot).trim() || '—';
+      var chip = el('div', {
+        'class': 'auto-computed-row',
+        'title': row.slot + ' · ' + resolved
+      });
+      chip.innerHTML = '<span class="auto-computed-swatch" style="background:' + resolved + ';"></span>' + '<span class="auto-computed-label">' + escHtml(row.label) + '</span>' + '<span class="auto-computed-slot">' + escHtml(row.slot) + '</span>';
+      autoComputed.appendChild(chip);
+    });
+  }
+
   // ------------------------------------------------------ active
 
   function setActive(id) {
@@ -379,6 +478,7 @@
     buildModalList();
     persistActive();
     applyColorVars();
+    buildAutoComputed();
     logActive();
   }
 
@@ -776,6 +876,7 @@
     buildModalList();
     persistPalettes();
     applyColorVars();
+    buildAutoComputed();
     logActive();
   });
 
@@ -871,21 +972,9 @@
   buildSettings();
   buildModalList();
   applyColorVars();
+  buildAutoComputed();
   logActive();
 })();
-
-/***/ }),
-
-/***/ "./src/preview-colors/preview-colors.scss":
-/*!************************************************!*\
-  !*** ./src/preview-colors/preview-colors.scss ***!
-  \************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
 
 /***/ })
 
@@ -909,12 +998,6 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -951,29 +1034,12 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/*!*************************************!*\
-  !*** ./src/preview-colors/index.js ***!
-  \*************************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _preview_colors_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./preview-colors.scss */ "./src/preview-colors/preview-colors.scss");
-/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./preview-colors.js */ "./src/preview-colors/preview-colors.js");
-/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(919);
+/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_js__WEBPACK_IMPORTED_MODULE_0__);
 /*
  * Webpack entry for the Preview Colors module.
  *
@@ -986,4 +1052,3 @@ __webpack_require__.r(__webpack_exports__);
 }();
 /******/ })()
 ;
-//# sourceMappingURL=preview-colors.js.map

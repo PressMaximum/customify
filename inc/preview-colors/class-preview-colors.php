@@ -15,6 +15,8 @@ if (! defined('ABSPATH')) {
 require_once __DIR__ . '/class-preview-colors-config.php';
 require_once __DIR__ . '/class-preview-colors-ajax.php';
 require_once __DIR__ . '/class-preview-colors-customizer.php';
+require_once __DIR__ . '/class-preview-colors-demo-import.php';
+require_once __DIR__ . '/class-preview-colors-compat.php';
 
 class Customify_Preview_Colors
 {
@@ -29,6 +31,11 @@ class Customify_Preview_Colors
 		// AJAX endpoints registered above are reachable from both contexts
 		// (frontend overlay + Customizer controls page).
 		Customify_Preview_Colors_Customizer::init();
+		Customify_Preview_Colors_Demo_Import::init();
+		// One-time bootstrap: if styling.php has user-saved values and no
+		// custom palette exists yet, materialise a "Theme custom" palette
+		// from those values + activate it. See class for the full guard.
+		Customify_Preview_Colors_Compat::init();
 
 		if (! is_admin()) {
 			// Always-on (every visitor, every page):
@@ -77,19 +84,46 @@ class Customify_Preview_Colors
 	}
 
 	/**
-	 * Convert "#RRGGBB" / "#RGB" to "r, g, b" (decimal integers, comma-separated).
-	 * Returns empty string on malformed input.
+	 * Parse "#RRGGBB" / "#RGB" → array [r, g, b] of integers, or null.
 	 */
-	private static function hex_to_rgb_string($hex)
+	private static function hex_to_rgb_array($hex)
 	{
 		$h = ltrim((string) $hex, '#');
 		if (3 === strlen($h)) {
 			$h = $h[0] . $h[0] . $h[1] . $h[1] . $h[2] . $h[2];
 		}
 		if (! preg_match('/^[0-9A-Fa-f]{6}$/', $h)) {
-			return '';
+			return null;
 		}
-		return hexdec(substr($h, 0, 2)) . ', ' . hexdec(substr($h, 2, 2)) . ', ' . hexdec(substr($h, 4, 2));
+		return array(hexdec(substr($h, 0, 2)), hexdec(substr($h, 2, 2)), hexdec(substr($h, 4, 2)));
+	}
+
+	/**
+	 * Comma-separated "r, g, b" string for `rgba(var(--…-rgb), <alpha>)` consumers.
+	 */
+	private static function hex_to_rgb_string($hex)
+	{
+		$rgb = self::hex_to_rgb_array($hex);
+		return null === $rgb ? '' : implode(', ', $rgb);
+	}
+
+	/**
+	 * Pick a contrast-aware foreground (#1A1A1A or #FFFFFF) for the given hex
+	 * background. WCAG-style relative luminance with the threshold nudged to
+	 * 0.45 (Style Pack) so warm tones still round to white.
+	 */
+	private static function pick_on($hex)
+	{
+		$rgb = self::hex_to_rgb_array($hex);
+		if (null === $rgb) {
+			return '#FFFFFF';
+		}
+		$f = function ($v) {
+			$v /= 255;
+			return $v <= 0.03928 ? $v / 12.92 : pow(($v + 0.055) / 1.055, 2.4);
+		};
+		$lum = 0.2126 * $f($rgb[0]) + 0.7152 * $f($rgb[1]) + 0.0722 * $f($rgb[2]);
+		return $lum > 0.45 ? '#1A1A1A' : '#FFFFFF';
 	}
 
 	/**
@@ -107,8 +141,9 @@ class Customify_Preview_Colors
 			return;
 		}
 
+		// 1) Six user-picked slots — hex + RGB triplet.
 		$decls = '';
-		foreach (Customify_Preview_Colors_Config::SLOTS as $slot) {
+		foreach (Customify_Preview_Colors_Config::slots() as $slot) {
 			if (empty($pal['colors'][$slot])) {
 				continue;
 			}
@@ -125,6 +160,36 @@ class Customify_Preview_Colors
 
 		if ('' === $decls) {
 			return;
+		}
+
+		// 2) Auto-computed companions — must mirror src/preview-colors/preview-colors.js
+		// `applyColorVars()` so visitors and admins (pre-JS-bootstrap) see the
+		// same values.
+		$primary   = isset($pal['colors']['primary'])   ? $pal['colors']['primary']   : '';
+		$secondary = isset($pal['colors']['secondary']) ? $pal['colors']['secondary'] : '';
+		$surface   = isset($pal['colors']['surface'])   ? $pal['colors']['surface']   : '';
+		$text      = isset($pal['colors']['text'])      ? $pal['colors']['text']      : '';
+		$base      = isset($pal['colors']['base'])      ? $pal['colors']['base']      : '';
+
+		// 2a) Contrast-aware on-*.
+		if ('' !== $primary)   { $decls .= '--customify-color-on-primary:'   . self::pick_on($primary)   . ';'; }
+		if ('' !== $secondary) { $decls .= '--customify-color-on-secondary:' . self::pick_on($secondary) . ';'; }
+		if ('' !== $surface)   { $decls .= '--customify-color-on-surface:'   . self::pick_on($surface)   . ';'; }
+
+		// 2b) Text alpha derivatives + border (universal browser support).
+		$text_rgb = self::hex_to_rgb_string($text);
+		if ('' !== $text_rgb) {
+			$decls .= '--customify-color-text-muted:rgba('     . $text_rgb . ', 0.55);';
+			$decls .= '--customify-color-text-subtle:rgba('    . $text_rgb . ', 0.35);';
+			$decls .= '--customify-color-border-default:rgba(' . $text_rgb . ', 0.12);';
+		}
+
+		// 2c) Primary hover / subtle via color-mix (modern browsers).
+		if ('' !== $primary) {
+			$decls .= '--customify-color-primary-hover:color-mix(in srgb, ' . $primary . ', #000 15%);';
+			if ('' !== $base) {
+				$decls .= '--customify-color-primary-subtle:color-mix(in srgb, ' . $primary . ', ' . $base . ' 92%);';
+			}
 		}
 
 		echo "\n<style id=\"" . esc_attr(self::HANDLE) . "-vars\">:root{" . $decls . "}</style>\n";
@@ -176,7 +241,7 @@ class Customify_Preview_Colors
 			'cssUrl'        => $css_url,
 			'ajaxUrl'       => admin_url('admin-ajax.php'),
 			'nonce'         => wp_create_nonce(Customify_Preview_Colors_Ajax::NONCE_ACTION),
-			'slots'         => Customify_Preview_Colors_Config::SLOTS,
+			'slots'         => Customify_Preview_Colors_Config::slots(),
 			'slotDesc'      => Customify_Preview_Colors_Config::slot_descriptions(),
 			'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
 			'settingsRows'  => Customify_Preview_Colors_Config::settings_rows(),

@@ -304,6 +304,28 @@ font-weight: 500;
     color: var(--text-tertiary);
     letter-spacing: 0.06em;
   }
+  .preset-name-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .preset-name-text.editable { cursor: text; }
+  .preset-name-text.editable:hover { color: var(--text-primary); }
+  // Inline rename input — inherits typography so the swap is invisible.
+  .preset-name-edit {
+    flex: 1;
+    min-width: 0;
+    margin: -2px 0;
+    padding: 1px 4px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    outline: none;
+  }
 
   .empty-user {
     padding: 16px 12px;
@@ -568,7 +590,11 @@ font-weight: 600;
     display: inline-flex; align-items: center;
     transition: color .15s ease;
   }
-  .reset-mini:hover { color: var(--text-primary); }
+  .reset-mini:hover:not(:disabled) { color: var(--text-primary); }
+  .reset-mini:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
   .color-dot {
     width: 22px; height: 22px;
     border-radius: 50%;
@@ -584,8 +610,42 @@ font-weight: 600;
     color: rgba(255,255,255,0.92);
   }
   .color-dot.light .globe { color: rgba(0,0,0,0.55); }
+  // Native <input type="color"> overlaid on the dot — clicking anywhere on
+  // the dot opens the browser picker. Keep the input transparent + clipped
+  // to the dot bounds so the visual stays the dot itself.
+  .color-dot input[type=color] {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    border: 0; padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
 
   .divider-soft { border-top: 1px solid var(--border); margin: 12px 0 14px; }
+
+  /* Auto-computed (read-only) — Customizer flavour. */
+  .auto-computed-hint {
+    color: var(--text-tertiary);
+    margin: -2px 2px 8px;
+  }
+  .auto-computed-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 6px 2px;
+  }
+  .auto-computed-swatch {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.18);
+    background-image: linear-gradient(45deg, transparent 47%, rgba(0,0,0,0.22) 47% 53%, transparent 53%);
+    background-color: transparent;
+    flex-shrink: 0;
+  }
+  .auto-computed-label { flex: 1; color: var(--text-primary); }
+  .auto-computed-slot {
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+  }
 
   /* === POPOVER (anchored inside .hero-card) === */
   .popover {

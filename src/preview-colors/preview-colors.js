@@ -102,29 +102,57 @@
 		});
 	}
 
-	// Convert "#RRGGBB" / "#RGB" to the comma-separated R, G, B integer string
-	// expected by `rgba(var(--customify-color-X-rgb), <alpha>)` calls in the
-	// override stylesheet. Returns null on malformed input.
-	function hexToRgb(hex) {
+	// Parse "#RRGGBB" / "#RGB" → array [r, g, b] of integers, or null.
+	function hexToRgbArray(hex) {
 		var c = String(hex || '').replace('#', '');
 		if (c.length === 3) c = c[0]+c[0]+c[1]+c[1]+c[2]+c[2];
 		if (!/^[0-9A-Fa-f]{6}$/.test(c)) return null;
-		var r = parseInt(c.substr(0, 2), 16);
-		var g = parseInt(c.substr(2, 2), 16);
-		var b = parseInt(c.substr(4, 2), 16);
-		return r + ', ' + g + ', ' + b;
+		return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)];
 	}
 
-	// Mirror the active palette onto the document root as CSS custom properties:
+	// "r, g, b" string for `rgba(var(--customify-color-X-rgb), <alpha>)` consumers.
+	function hexToRgb(hex) {
+		var rgb = hexToRgbArray(hex);
+		return rgb ? rgb.join(', ') : null;
+	}
+
+	// WCAG relative luminance.
+	function luminance(rgb) {
+		var f = function (v) {
+			v /= 255;
+			return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+		};
+		return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+	}
+
+	// Threshold 0.45 — slightly nudged from the WCAG 0.5 default toward white,
+	// which reads better on warm tones (terracotta, amber). Per Style Pack note.
+	function pickOn(hex) {
+		var rgb = hexToRgbArray(hex);
+		if (!rgb) return '#FFFFFF';
+		return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+	}
+
+	// Mirror the active palette onto :root as CSS custom properties.
+	//
+	// Six user-picked slots (Style Pack vocabulary):
 	//   --customify-color-<slot>      (hex)
-	//   --customify-color-<slot>-rgb  ("r, g, b")
-	// The hex form drives most overrides; the -rgb triplet feeds rgba() calls
-	// (divider borders, color-tinted shadows, footer text) without needing
-	// color-mix browser support.
+	//   --customify-color-<slot>-rgb  ("r, g, b" — feeds rgba() consumers)
+	//
+	// Auto-computed companion vars (theme-derived; user never picks):
+	//   --customify-color-on-primary / on-secondary / on-surface
+	//       JS WCAG luminance → "#1A1A1A" or "#FFFFFF" for max contrast.
+	//   --customify-color-text-muted    rgba(text-rgb, 0.55)   meta / breadcrumbs
+	//   --customify-color-text-subtle   rgba(text-rgb, 0.35)   disabled state
+	//   --customify-color-border-default rgba(text-rgb, 0.12)  dividers
+	//   --customify-color-primary-hover  color-mix(primary, #000 15%)  link/btn hover
+	//   --customify-color-primary-subtle color-mix(primary, base 92%)  primary wash
 	function applyColorVars() {
 		var pal = getActive();
 		if (!pal) return;
 		var docRoot = document.documentElement;
+
+		// 1) Six user-picked slots.
 		for (var i = 0; i < SLOTS.length; i++) {
 			var slot = SLOTS[i];
 			var val = pal.colors[slot];
@@ -132,6 +160,35 @@
 			docRoot.style.setProperty('--customify-color-' + slot, val);
 			var rgb = hexToRgb(val);
 			if (rgb) docRoot.style.setProperty('--customify-color-' + slot + '-rgb', rgb);
+		}
+
+		// 2) Contrast-aware on-* companions for slots used as backgrounds.
+		var onSlots = ['primary', 'secondary', 'surface'];
+		for (var k = 0; k < onSlots.length; k++) {
+			var s = onSlots[k];
+			if (pal.colors[s]) {
+				docRoot.style.setProperty('--customify-color-on-' + s, pickOn(pal.colors[s]));
+			}
+		}
+
+		// 3) Text + border alpha derivatives — universal browser support.
+		var textRgb = hexToRgb(pal.colors.text);
+		if (textRgb) {
+			docRoot.style.setProperty('--customify-color-text-muted',     'rgba(' + textRgb + ', 0.55)');
+			docRoot.style.setProperty('--customify-color-text-subtle',    'rgba(' + textRgb + ', 0.35)');
+			docRoot.style.setProperty('--customify-color-border-default', 'rgba(' + textRgb + ', 0.12)');
+		}
+
+		// 4) Primary hover / subtle — color-mix (Chrome 111+ / FF 113+ / Safari 16.2+).
+		// Browsers that lack `color-mix` resolve the var to the value below; the
+		// override stylesheet supplies a per-rule hex fallback.
+		if (pal.colors.primary) {
+			docRoot.style.setProperty('--customify-color-primary-hover',
+				'color-mix(in srgb, ' + pal.colors.primary + ', #000 15%)');
+			if (pal.colors.base) {
+				docRoot.style.setProperty('--customify-color-primary-subtle',
+					'color-mix(in srgb, ' + pal.colors.primary + ', ' + pal.colors.base + ' 92%)');
+			}
 		}
 	}
 
@@ -301,6 +358,13 @@
 		'    </div>',
 		'    <div data-theme-settings></div>',
 		'  </div>',
+		'  <div class="section">',
+		'    <div class="group-title">',
+		'      <h4>Auto-computed</h4>',
+		'    </div>',
+		'    <div class="auto-computed-hint">Theme generates these from the 6 slots above.</div>',
+		'    <div data-auto-computed></div>',
+		'  </div>',
 		'</div>',
 		'<div class="modal-overlay" data-modal-overlay>',
 		'  <div class="modal" role="dialog">',
@@ -328,6 +392,7 @@
 	var emptyUser = $('[data-empty-user]');
 	var userCount = $('[data-user-count]');
 	var themeSettings = $('[data-theme-settings]');
+	var autoComputed = $('[data-auto-computed]');
 	var modalOverlay = $('[data-modal-overlay]');
 	var modalBody = $('[data-modal-body]');
 
@@ -483,6 +548,38 @@
 		});
 	}
 
+	// ------------------------------------------------------ auto-computed group
+
+	// Read-only chips listing the eight Style-Pack-derived companion vars the
+	// theme synthesises from the six user-picked slots. Updated whenever the
+	// active palette / a slot changes (via the same callbacks that re-emit
+	// applyColorVars()).
+	var AUTO_COMPUTED_ROWS = [
+		{ slot: 'on-primary',     label: 'Text on primary' },
+		{ slot: 'on-secondary',   label: 'Text on secondary' },
+		{ slot: 'on-surface',     label: 'Text on surface' },
+		{ slot: 'text-muted',     label: 'Muted text' },
+		{ slot: 'text-subtle',    label: 'Subtle text' },
+		{ slot: 'border-default', label: 'Default border' },
+		{ slot: 'primary-hover',  label: 'Primary hover' },
+		{ slot: 'primary-subtle', label: 'Primary subtle' }
+	];
+
+	function buildAutoComputed() {
+		if (!autoComputed) return;
+		var rootStyle = getComputedStyle(document.documentElement);
+		autoComputed.innerHTML = '';
+		AUTO_COMPUTED_ROWS.forEach(function (row) {
+			var resolved = rootStyle.getPropertyValue('--customify-color-' + row.slot).trim() || '—';
+			var chip = el('div', { 'class': 'auto-computed-row', 'title': row.slot + ' · ' + resolved });
+			chip.innerHTML =
+				'<span class="auto-computed-swatch" style="background:' + resolved + ';"></span>' +
+				'<span class="auto-computed-label">' + escHtml(row.label) + '</span>' +
+				'<span class="auto-computed-slot">' + escHtml(row.slot) + '</span>';
+			autoComputed.appendChild(chip);
+		});
+	}
+
 	// ------------------------------------------------------ active
 
 	function setActive(id) {
@@ -498,6 +595,7 @@
 		buildModalList();
 		persistActive();
 		applyColorVars();
+		buildAutoComputed();
 		logActive();
 	}
 
@@ -814,6 +912,7 @@
 		buildModalList();
 		persistPalettes();
 		applyColorVars();
+		buildAutoComputed();
 		logActive();
 	});
 
@@ -896,5 +995,6 @@
 	buildSettings();
 	buildModalList();
 	applyColorVars();
+	buildAutoComputed();
 	logActive();
 })();

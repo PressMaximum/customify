@@ -23,9 +23,16 @@
  * window before output_root_vars() runs (or for a logged-out user with no
  * saved palette yet).
  *
- * Direct slot for everything except:
- *   - border-color (divider intent) → rgba(text-rgb, 0.12)
- *   - box-shadow  (color-tinted)    → rgba(text-rgb, 0.08)
+ * Phase 3 (Style Pack alignment) introduces auto-computed companion vars
+ * which most rules below now consume directly:
+ *   --customify-color-on-primary / on-secondary / on-surface  (contrast pick)
+ *   --customify-color-text-muted / text-subtle                (alpha-reduced)
+ *   --customify-color-border-default                          (text @ 12%)
+ *   --customify-color-primary-hover / primary-subtle          (color-mix)
+ *
+ * `box-shadow` (color-tinted) still uses inline `rgba(text-rgb, 0.08)` —
+ * shadow tint is a different alpha than border-default and not worth a
+ * dedicated companion var for two rules in the entire theme.
  */
 
 html {
@@ -49,6 +56,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
 .nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
 .posts-layout .readmore-button:hover {
   background-color: var(--customify-color-primary, #235787);
+  color: var(--customify-color-on-primary, #ffffff);
 }
 
 .posts-layout .readmore-button {
@@ -71,6 +79,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
 
 .customify-builder-btn {
   background-color: var(--customify-color-secondary, #c3512f);
+  color: var(--customify-color-on-secondary, #ffffff);
 }
 
 /* =========================================================================
@@ -97,15 +106,15 @@ a {
 
 /* =========================================================================
  * Group LH — `global_styling_color_link_hover` (default #111111)
- * Direct slot — same `primary` as resting links. Hover affordance comes from
- * the theme's underline / cursor styles which we do not override.
+ * Pulls the `primary` slot 15% toward black via `color-mix()`. Browsers that
+ * lack `color-mix` resolve the var to the literal fallback hex below.
  * ========================================================================= */
 
 a:hover,
 a:focus,
 .link-meta:hover,
 .link-meta a:hover {
-  color: var(--customify-color-primary, #111111);
+  color: var(--customify-color-primary-hover, #111111);
 }
 
 /* =========================================================================
@@ -146,7 +155,7 @@ article.comment .comment-post-author {
 .color-meta,
 .entry-single .tags-links:before,
 .entry-single .cats-links:before {
-  color: var(--customify-color-text, #6d6d6d);
+  color: var(--customify-color-text-muted, #6d6d6d);
 }
 
 /* =========================================================================
@@ -159,27 +168,27 @@ h2 + h3,
 .h2 + h3,
 .comments-area .h2 + .comments-title,
 .page-breadcrumb {
-  border-top-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-top-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
 }
 
 blockquote,
 .site-content .widget-area .menu li.current-menu-item > a:before {
-  border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
 }
 
 @media screen and (min-width: 64em) {
   .comment-list .children li.comment {
-    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
   .comment-list .children li.comment:after {
-    background-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    background-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
 }
 
 .page-titlebar,
 .page-breadcrumb,
 .posts-layout .entry-inner {
-  border-bottom-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-bottom-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
 }
 
 .header-search-form .search-field,
@@ -202,32 +211,32 @@ article.comment .comment-meta,
 .widget-area .widget_recent_entries li a,
 .widget-area .widget_rss li a,
 .widget-area .widget_recent_comments li {
-  border-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
 }
 
 .header-search-modal::before {
-  border-top-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
-  border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-top-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
+  border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
 }
 
 @media screen and (min-width: 48em) {
   .content-sidebar.sidebar_vertical_border .content-area {
-    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-right-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
   .sidebar-content.sidebar_vertical_border .content-area {
-    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
   .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary,
   .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
-    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-right-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
   .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary,
   .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
-    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
   .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
-    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-left-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
+    border-right-color: var(--customify-color-border-default, rgba(234, 236, 238, 0.12));
   }
 }
 
@@ -263,10 +272,12 @@ body {
   background: var(--customify-color-secondary, #1c2147);
 }
 
+// Footer text sits on the secondary slot — use the contrast-aware companion
+// so light-secondary palettes (Midnight inversion) still read.
 .site-footer,
 .site-footer p,
 .site-footer a {
-  color: var(--customify-color-base, #ffffff);
+  color: var(--customify-color-on-secondary, #ffffff);
 }
 
 /* =========================================================================
@@ -305,11 +316,22 @@ ins {
 
 // Already nested inside `html { … }` from the file's opening wrap, so these
 // declarations land directly on the html element — equivalent to `:root` in
-// normal HTML documents.
---wp--preset--color--primary: var(--customify-color-primary, #235787);
---wp--preset--color--secondary: var(--customify-color-secondary, #c3512f);
---wp--preset--color--text: var(--customify-color-text, #686868);
---wp--preset--color--link: var(--customify-color-primary, #1e4b75);
+// normal HTML documents. The auto-computed companions are also exposed as WP
+// preset slugs so block authors / theme.json variations can `var(--wp--…)`
+// them, but they are NOT registered in `editor-color-palette` (would pollute
+// the block colour picker — Style Pack §"Bridge Gutenberg block CSS").
+--wp--preset--color--primary:        var(--customify-color-primary, #235787);
+--wp--preset--color--secondary:      var(--customify-color-secondary, #c3512f);
+--wp--preset--color--text:           var(--customify-color-text, #686868);
+--wp--preset--color--link:           var(--customify-color-primary, #1e4b75);
+--wp--preset--color--on-primary:     var(--customify-color-on-primary, #ffffff);
+--wp--preset--color--on-secondary:   var(--customify-color-on-secondary, #ffffff);
+--wp--preset--color--on-surface:     var(--customify-color-on-surface, #1d2327);
+--wp--preset--color--text-muted:     var(--customify-color-text-muted, rgba(0,0,0,0.55));
+--wp--preset--color--text-subtle:    var(--customify-color-text-subtle, rgba(0,0,0,0.35));
+--wp--preset--color--border-default: var(--customify-color-border-default, rgba(0,0,0,0.12));
+--wp--preset--color--primary-hover:  var(--customify-color-primary-hover, #185f94);
+--wp--preset--color--primary-subtle: var(--customify-color-primary-subtle, rgba(34,113,177,0.08));
 
 /* =========================================================================
  * WooCommerce — selectors driven by `_woocommerce-vars.scss` (`$primary`,
@@ -325,12 +347,12 @@ ins {
 .woocommerce p.demo_store,
 .woocommerce-store-notice {
   background-color: var(--customify-color-primary, #a46497);
-  color: #ffffff;
+  color: var(--customify-color-on-primary, #ffffff);
 }
 
 .woocommerce-store-notice a,
 .woocommerce p.demo_store a {
-  color: #ffffff;
+  color: var(--customify-color-on-primary, #ffffff);
 }
 
 .woocommerce small.note,
@@ -350,7 +372,7 @@ ins {
 .woocommerce nav.woocommerce-pagination ul li a:hover,
 .woocommerce nav.woocommerce-pagination ul li a:focus {
   background: var(--customify-color-secondary, #c3512f);
-  color: #ffffff;
+  color: var(--customify-color-on-secondary, #ffffff);
 }
 
 /* Notice strips — primary border-top */
