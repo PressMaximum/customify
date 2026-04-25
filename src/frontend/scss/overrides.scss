@@ -285,8 +285,8 @@ body {
  * Theme default is white-ish; here we use `surface` slot directly.
  * ========================================================================= */
 
-.widget-area .widget,
-.site-content .widget-area .widget,
+// .widget-area .widget,
+// .site-content .widget-area .widget,
 .dropdown-menu,
 .header-search-modal {
   background-color: var(--customify-color-surface, #ffffff);
