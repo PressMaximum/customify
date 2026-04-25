@@ -1,12 +1,14 @@
 /*
  * Customify Preview Colors — frontend sidebar (`?preview-colors=1`).
  *
- * Renders into the empty `#customify-preview-colors-root` div printed by PHP.
- * State (user palettes, active id) is loaded from window.CustomifyPreviewColors
- * (localized by PHP) and persisted via wp_ajax endpoints.
+ * Mounts inside a Shadow DOM attached to `#customify-preview-colors-root` so
+ * theme styles cannot bleed in. The CSS bundle is loaded as a <link> *inside*
+ * the shadow root (URL passed via `cfg.cssUrl`); the host gets only the empty
+ * div from PHP.
  *
- * No live-preview-into-page in this phase — color edits only affect the sidebar
- * UI itself. Live page preview lands in phase 2.
+ * State (user palettes, active id) is loaded from window.CustomifyPreviewColors
+ * and persisted via wp_ajax endpoints. Edits affect only the panel UI in this
+ * phase — live page preview lands in phase 2.
  */
 (function () {
 	'use strict';
@@ -14,8 +16,12 @@
 	var cfg = window.CustomifyPreviewColors;
 	if (!cfg) return;
 
-	var root = document.getElementById(cfg.rootId);
-	if (!root) return;
+	var host = document.getElementById(cfg.rootId);
+	if (!host) return;
+
+	// Attach (or reuse) shadow root.
+	var shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
+	var root = shadow; // queries below scope to the shadow tree.
 
 	var SLOTS = cfg.slots;
 	var SLOT_DESC = cfg.slotDesc || {};
@@ -118,7 +124,9 @@
 
 	// ------------------------------------------------------ initial markup
 
+	// CSS link goes first so styles apply before the panel paints.
 	root.innerHTML = [
+		cfg.cssUrl ? '<link rel="stylesheet" href="' + cfg.cssUrl + '">' : '',
 		'<div class="sidebar">',
 		'  <div class="sb-header">',
 		'    <button class="sb-back" aria-label="Back" type="button">',
@@ -259,7 +267,10 @@
 		'    </div>',
 		'    <div class="modal-body" data-modal-body></div>',
 		'  </div>',
-		'</div>'
+		'</div>',
+		'<button class="cpc-reopen" data-cpc-reopen type="button" aria-label="Open color panel" title="Open color panel">',
+		'  <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 3l4 4-4 4"/></svg>',
+		'</button>'
 	].join('\n');
 
 	// Element refs.
@@ -795,14 +806,37 @@
 			closeModal(); closePopover(); closeAddForm(); closeImportForm(); closeExportForm();
 		}
 	});
+	// Document-level click → close popover when clicking outside it.
+	// e.target is retargeted to the host element for clicks inside shadow DOM,
+	// so we use composedPath() to inspect the real path through the shadow
+	// boundary and look for popover / deck-card / color-dot ancestors.
 	document.addEventListener('click', function (e) {
-		if (popover.classList.contains('open') &&
-			!popover.contains(e.target) &&
-			!e.target.closest('.deck-card') &&
-			!e.target.closest('.color-dot')) {
-			closePopover();
+		if (!popover.classList.contains('open')) return;
+		var path = (typeof e.composedPath === 'function') ? e.composedPath() : [];
+		var hit = false;
+		for (var i = 0; i < path.length; i++) {
+			var n = path[i];
+			if (n === popover) { hit = true; break; }
+			if (n.classList && (n.classList.contains('deck-card') || n.classList.contains('color-dot'))) {
+				hit = true; break;
+			}
 		}
+		if (!hit) closePopover();
 	});
+
+	// Collapse / reopen — `.sb-back` hides the sidebar and reveals a small
+	// floating button; clicking that re-expands it. State persists per-browser
+	// via localStorage so the choice survives reloads.
+	var COLLAPSE_KEY = 'customify_preview_colors_collapsed';
+	function setCollapsed(v) {
+		host.classList.toggle('cpc-closed', !!v);
+		try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch (e) {}
+	}
+	try {
+		if (localStorage.getItem(COLLAPSE_KEY) === '1') host.classList.add('cpc-closed');
+	} catch (e) {}
+	$('.sb-back').addEventListener('click', function () { setCollapsed(true); closePopover(); });
+	$('[data-cpc-reopen]').addEventListener('click', function () { setCollapsed(false); });
 
 	// ------------------------------------------------------ init
 

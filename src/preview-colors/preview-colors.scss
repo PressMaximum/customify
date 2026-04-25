@@ -1,11 +1,13 @@
 /*
  * Customify Preview Colors — sidebar overlay.
- * All rules are scoped under #customify-preview-colors-root to avoid bleeding
- * onto theme styles. Class names are kept identical to the source mock
- * (Blocksify 6-slot palette) for easy diffing.
+ * Loaded inside the panel's Shadow DOM (`#customify-preview-colors-root`'s
+ * shadow root), so theme styles cannot bleed in and these rules cannot bleed
+ * out. The :host block targets the shadow host (the empty div in the page);
+ * everything else lives at the shadow-tree top level.
+ * Class names match the source mock (Blocksify 6-slot palette) verbatim.
  */
 
-#customify-preview-colors-root {
+:host {
   --bg-page: #F3F4F6;
   --bg-sidebar: #FFFFFF;
   --bg-subtle: #F9FAFB;
@@ -34,7 +36,14 @@
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  button { font-family: inherit; }
+  // Reset UA button padding (Chrome: 1px 6px, FF: 0 8px) — otherwise it eats
+  // into the icon-btn 26×26 content area and crops nested SVGs. Buttons that
+  // need padding (.btn-add, .btn-cancel, ...) declare their own explicitly.
+  button {
+    font-family: inherit;
+    padding: 0;
+    margin: 0;
+  }
 
   .sidebar {
     width: 280px;
@@ -45,7 +54,32 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
     max-height: calc(100vh - 40px);
     overflow-y: auto;
+    transform-origin: top right;
+    transition: transform .25s cubic-bezier(.22,1.2,.36,1), opacity .2s ease;
   }
+
+  // Floating "reopen" button — only visible when the panel is collapsed.
+  .cpc-reopen {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0;
+    transition: transform .15s ease, box-shadow .15s ease, color .15s ease;
+  }
+  .cpc-reopen:hover {
+    transform: scale(1.06);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+    color: var(--text-primary);
+  }
+  .cpc-reopen svg { width: 16px; height: 16px; }
 
   .sb-header {
     display: flex;
@@ -638,8 +672,18 @@
   .export-output::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 }
 
+/* === Collapsed state — `.sb-back` toggles `cpc-closed` on the host. === */
+:host(.cpc-closed) .sidebar {
+  transform: translateX(calc(100% + 40px));
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
+}
+:host(.cpc-closed) .cpc-reopen { display: inline-flex; }
+:host(.cpc-closed) .modal-overlay { display: none; }
+
 /* === MODAL — rendered as sibling of .sidebar so the overlay covers the page === */
-#customify-preview-colors-root .modal-overlay {
+.modal-overlay {
   position: fixed; inset: 0;
   background: rgba(17, 24, 39, 0.45);
   display: flex; align-items: center; justify-content: center;
@@ -649,8 +693,8 @@
   z-index: 1000000;
   backdrop-filter: blur(2px);
 }
-#customify-preview-colors-root .modal-overlay.open { opacity: 1; pointer-events: auto; }
-#customify-preview-colors-root .modal {
+.modal-overlay.open { opacity: 1; pointer-events: auto; }
+.modal {
   background: #fff;
   border-radius: 12px;
   width: 100%;
@@ -662,20 +706,20 @@
   transition: transform .25s cubic-bezier(.22,1.2,.36,1);
   box-shadow: 0 24px 64px rgba(0,0,0,0.22);
 }
-#customify-preview-colors-root .modal-overlay.open .modal { transform: translateY(0) scale(1); }
-#customify-preview-colors-root .modal-head {
+.modal-overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-head {
   display: flex; align-items: center; justify-content: space-between;
   padding: 14px 18px;
   border-bottom: 1px solid #E5E7EB;
 }
-#customify-preview-colors-root .modal-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #111827; }
-#customify-preview-colors-root .modal-body {
+.modal-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #111827; }
+.modal-body {
   padding: 10px 14px 16px;
   overflow-y: auto;
   display: flex; flex-direction: column; gap: 6px;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
-#customify-preview-colors-root .modal-group-title {
+.modal-group-title {
   font: 600 10px/1 ui-monospace, Menlo, monospace;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -683,7 +727,7 @@
   padding: 8px 6px 4px;
   margin-top: 4px;
 }
-#customify-preview-colors-root .palette-row {
+.palette-row {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px;
   border: 1px solid #E5E7EB;
@@ -691,42 +735,42 @@
   cursor: pointer;
   transition: all .2s ease;
 }
-#customify-preview-colors-root .palette-row:hover {
+.palette-row:hover {
   border-color: #D1D5DB;
   background: #F9FAFB;
 }
-#customify-preview-colors-root .palette-row.active {
+.palette-row.active {
   border-color: #2271B1;
   background: #E7F1F9;
 }
-#customify-preview-colors-root .palette-row-name {
+.palette-row-name {
   width: 84px;
   font-size: 13px;
   font-weight: 500;
   color: #111827;
   display: flex; flex-direction: column; gap: 2px;
 }
-#customify-preview-colors-root .palette-row-name small {
+.palette-row-name small {
   font: 500 9px/1 ui-monospace, Menlo, monospace;
   color: #9CA3AF;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-#customify-preview-colors-root .palette-row-swatches {
+.palette-row-swatches {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 6px;
 }
-#customify-preview-colors-root .palette-row-swatches .swatch {
+.palette-row-swatches .swatch {
   height: 24px; width: 24px;
   border-radius: 50%;
   justify-self: center;
   border: 1px solid rgba(0,0,0,0.08);
   transition: transform .2s ease;
 }
-#customify-preview-colors-root .palette-row:hover .swatch { transform: scale(1.08); }
-#customify-preview-colors-root .palette-row-empty {
+.palette-row:hover .swatch { transform: scale(1.08); }
+.palette-row-empty {
   text-align: center;
   padding: 14px;
   font-size: 12px;
@@ -747,6 +791,6 @@
   40%  { transform: var(--base-transform) scale(1.1); }
   100% { transform: var(--base-transform) scale(1); }
 }
-#customify-preview-colors-root .deck-card.animating {
+.deck-card.animating {
   animation: cpcCardPulse .5s cubic-bezier(.22,1.2,.36,1) both;
 }
