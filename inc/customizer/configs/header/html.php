@@ -51,14 +51,15 @@ class Customify_Builder_Item_HTML {
 	 */
 	function customize() {
 		// Render callback function.
-		$fn     = array( $this, 'render' );
-		$config = array(
+		$fn      = array( $this, 'render' );
+		$item_id = $this->id;
+		$config  = array(
 			array(
-				'name'     => $this->section,
-				'type'     => 'section',
-				'panel'    => $this->panel,
-				'priority' => $this->priority,
-				'title'    => $this->label,
+				'name'            => $this->section,
+				'type'            => 'section',
+				'panel'           => $this->panel,
+				'priority'        => $this->priority,
+				'title'           => $this->label,
 			),
 
 			array(

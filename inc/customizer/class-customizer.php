@@ -102,10 +102,10 @@ class  Customify_Customizer {
 		if ( is_customize_preview() ) {
 			$suffix = Customify()->get_asset_suffix();
 
-			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/auto-css' . $suffix . '.js', array( 'customize-preview' ), '20151215', true );
+			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/auto-css.js', array( 'customize-preview' ), '20151215', true );
 			wp_enqueue_script(
 				'customify-customizer',
-				esc_url( get_template_directory_uri() ) . '/assets/js/customizer/customizer' . $suffix . '.js',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/customizer.js',
 				array(
 					'customize-preview',
 					'customize-selective-refresh',
@@ -972,6 +972,8 @@ class  Customify_Customizer {
 
 		// Register new panel and section type.
 		$wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Header_Builder_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Footer_Builder_Panel' );
 		$wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
 
 		// Register section type.
@@ -992,7 +994,14 @@ class  Customify_Customizer {
 					}
 					unset( $args['name'] );
 					unset( $args['type'] );
-					$panel = new Customify_WP_Customize_Panel( $wp_customize, $name, $args );
+					if ( 'header_settings' === $name ) {
+						$panel_class = 'Customify_Header_Builder_Panel';
+					} elseif ( 'footer_settings' === $name ) {
+						$panel_class = 'Customify_Footer_Builder_Panel';
+					} else {
+						$panel_class = 'Customify_WP_Customize_Panel';
+					}
+					$panel = new $panel_class( $wp_customize, $name, $args );
 					$wp_customize->add_panel( $panel );
 					break;
 				case 'section':

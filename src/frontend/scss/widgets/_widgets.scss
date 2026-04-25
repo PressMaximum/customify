@@ -1,0 +1,812 @@
+/* Widget Common */
+.widget-title {
+	font-size: 16px;
+	text-transform: uppercase;
+	font-weight: 500;
+	color: currentColor;
+	margin-bottom: 20px;
+}
+
+.widget_block {
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-transform: uppercase;
+		font-weight: 500;
+		color: currentColor;
+		margin-bottom: 20px;
+	}
+
+	h1 {
+		font-size: 18px;
+	}
+
+	h2 {
+		font-size: 16px;
+	}
+
+	h3 {
+		font-size: 15px;
+	}
+
+	h4,
+	h5,
+	h6 {
+		font-size: 14px;
+	}
+
+	ol {
+		margin-left: 18px;
+		padding: 0;
+	}
+
+	.wp-block-quote {
+		margin: 0;
+
+		>* {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	}
+
+	.wp-block-pullquote {
+
+		blockquote {
+			margin: 0;
+		}
+	}
+
+	.wp-block-table {
+		table {
+			border-collapse: collapse;
+
+			td {
+				text-align: left !important;
+			}
+		}
+
+		table,
+		th,
+		td {
+			border: 1px solid #eaecee;
+		}
+
+		&.aligncenter {
+			width: 100%;
+
+			table {
+				td {
+					text-align: center !important;
+				}
+			}
+		}
+
+		&.alignright {
+			width: 100%;
+
+			table {
+				td {
+					text-align: right !important;
+				}
+			}
+		}
+	}
+
+}
+
+.widget-area {
+	.widget {
+		margin-bottom: 2em;
+
+		@include for_device(desktop) {
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+		}
+
+		ul {
+			list-style: none;
+			padding: 0px;
+			margin: 0px;
+
+			&:after {
+				clear: both;
+				content: ".";
+				display: block;
+				height: 0;
+				visibility: hidden;
+			}
+
+			li {
+				margin: 0px 0px 0.6em;
+
+				// cat item
+				&.cat-item,
+				&.woocommerce-widget-layered-nav-list__item {
+					position: relative;
+
+					.count {
+						right: 0;
+						background: #eaecee;
+						color: #999999;
+						padding: 0px 0.5em;
+						border-radius: 0.9em;
+						font-size: 12px;
+						position: absolute;
+						top: 4px;
+					}
+
+					&:after {
+						@include clearfix();
+					}
+				}
+			}
+		}
+
+		//a:not(.wc-forward) {
+		//    color: $color_meta;
+		//    &:hover {
+		//        color: $color_link_hover;
+		//    }
+		//}
+		a.button {
+			&:hover {
+				text-decoration: none;
+			}
+		}
+
+		select {
+			max-width: 100%;
+		}
+
+		table {
+			font-size: 85%;
+
+			th,
+			td {
+				padding: ms(-6);
+				text-align: center;
+			}
+
+			tfoot td {
+				text-align: left;
+			}
+		}
+
+		*:last-child {
+			margin-bottom: 0px;
+		}
+
+		.sidebar-search-form {
+			display: flex;
+			width: 100%;
+			max-width: 100%;
+
+			label {
+				width: 100%;
+			}
+
+			.search-field {
+				width: 100%;
+				display: block;
+			}
+
+			.search-submit {
+				padding: 9px 14px;
+				margin-left: -46px;
+				overflow: hidden;
+				box-shadow: none;
+				background: transparent;
+				color: #aaaaaa;
+				line-height: 0px;
+
+				&:hover {
+					svg #svg-search {
+						fill: #444444;
+					}
+				}
+
+				svg {
+					width: 18px;
+					height: 18px;
+				}
+
+			}
+		}
+	}
+
+	.widget_categories,
+	.widget_nav_menu,
+	.widget_pages,
+	.widget_product_categories {
+		ul ul {
+			margin-top: ms(-4);
+			margin-left: 0;
+			margin-bottom: -(ms(-4));
+		}
+
+		.menu-item-has-children {
+			>a {
+				margin-bottom: 0px;
+			}
+		}
+	}
+
+	.widget_pages li,
+	.widget_categories li,
+	.widget_archive li,
+	.widget_meta li,
+	.widget_nav_menu li,
+	.widget_product_categories li,
+	.widget_recent_entries li,
+	.widget_rss li {
+		display: block;
+		position: relative;
+
+		&:last-child {
+			border: none;
+		}
+
+		a {
+			display: block;
+			width: 100%;
+			padding-bottom: 0.6em;
+			margin-bottom: 0.6em;
+			border-bottom: 1px solid $color_border;
+			position: relative;
+		}
+
+		ul {
+			li::before {
+				left: 15px;
+			}
+
+			a {
+				padding-left: 20px;
+			}
+
+			ul {
+				li::before {
+					left: 30px;
+				}
+
+				a {
+					padding-left: 40px;
+				}
+			}
+		}
+	}
+
+	.widget_recent_comments {
+		li {
+			padding-bottom: 0.6em;
+			border-bottom: 1px solid $color_border;
+			position: relative;
+		}
+	}
+
+	.widget_rss ul li {
+		margin-bottom: ms(1);
+
+		.rsswidget {
+			font-weight: 400;
+			font-size: 1.2em;
+			line-height: 1.28;
+		}
+
+		.rss-date {
+			display: block;
+			margin: ms(-3) 0px;
+			font-size: 85%;
+		}
+	}
+
+	.wp-block-search {
+		&__label {
+			clip: rect(1px, 1px, 1px, 1px);
+			position: absolute !important;
+			height: 1px;
+			width: 1px;
+			overflow: hidden;
+			word-wrap: normal !important;
+		}
+
+		&__input {
+			color: #282828;
+			border: 1px solid #e5e5e5;
+			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
+			padding: 0 .75em;
+			height: 2.6em;
+			width: 100%;
+			max-width: 100%;
+			vertical-align: middle;
+			border-radius: 1px;
+			-moz-appearance: none;
+			-webkit-appearance: none;
+
+			&:focus {
+				background-color: #fff;
+			}
+		}
+
+		&__button {
+			padding: 0.5407911001em 1em;
+			background: $color_primary;
+			color: #ffffff;
+			border-radius: 2px;
+			display: inline-block;
+			position: relative;
+			text-decoration: none;
+			font-size: 0.85em;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			font-weight: 600;
+			line-height: 1.618;
+		}
+	}
+}
+
+.dark-mode {
+	.widget-area {
+
+		.widget_pages li,
+		.widget_categories li,
+		.widget_archive li,
+		.widget_meta li,
+		.widget_nav_menu li,
+		.widget_product_categories li,
+		.widget_recent_entries li,
+		.widget_rss li {
+			a {
+				border-color: $light_color_border;
+			}
+		}
+
+		.widget_recent_comments li {
+			border-color: $light_color_border;
+		}
+
+		.widget ul li.cat-item .count,
+		.widget ul li.woocommerce-widget-layered-nav-list__item .count {
+			background: black(0.2);
+		}
+	}
+
+
+
+	.widget-area .widget select {
+		border-color: $light_color_border;
+	}
+}
+
+
+.site-content .widget-area {
+	.menu {
+		li {
+			margin: 0px;
+
+			a {
+				display: block;
+				padding: 0.6em 0px 0.6em;
+				//border-bottom: 1px solid $color_border;
+			}
+
+			ul {
+				margin: 0px;
+
+				li {
+					a {
+						padding-left: 15px;
+					}
+
+					li {
+						a {
+							padding-left: 30px;
+						}
+					}
+				}
+			}
+
+			&.current-menu-item {
+				>a {
+					position: relative;
+					border: 1px solid $color_border;
+					border-left: none;
+					border-right: none;
+					font-size: 110%;
+
+					&:before {
+						border-bottom: 6px solid transparent;
+						border-left: 6px solid $color_border;
+						border-top: 6px solid transparent;
+						content: "";
+						display: inline-block;
+						position: absolute;
+						right: 5px;
+						top: 13px;
+					}
+
+					&:after {
+						border-bottom: 6px solid transparent;
+						border-left: 6px solid #fff;
+						border-top: 6px solid transparent;
+						content: "";
+						display: inline-block;
+						position: absolute;
+						right: 6px;
+						top: 13px;
+					}
+				}
+			}
+		}
+	}
+}
+
+/* Tagcloud widget (classic) */
+.tagcloud {
+	a {
+		border: 1px solid currentColor;
+		border-radius: 2px;
+		display: inline-block;
+		font-size: 0.875em !important;
+		margin-bottom: 5px;
+		padding: 1px 10px 1px;
+	}
+}
+
+// ---------------------------------------------------------------
+// Block Widgets — global styles (widget areas + post content)
+// ---------------------------------------------------------------
+
+// Latest Posts block
+.wp-block-latest-posts {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__post-title {
+		display: block;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	&__post-date {
+		display: block;
+		font-size: 0.8em;
+		color: $color_meta;
+		margin-top: 0.25em;
+	}
+
+	&__post-excerpt {
+		margin-top: 0.4em;
+		font-size: 0.9em;
+		color: $color_meta;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__featured-image {
+		margin-bottom: 0.5em;
+
+		img {
+			display: block;
+			max-width: 100%;
+			height: auto;
+		}
+	}
+
+	// Grid layout variant
+	&.is-grid {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1em;
+
+		> li {
+			border-bottom: none;
+			padding-bottom: 0;
+		}
+	}
+}
+
+// Latest Comments block
+.wp-block-latest-comments {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&__comment {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__comment-meta {
+		font-size: 0.85em;
+		color: $color_meta;
+	}
+
+	&__comment-author {
+		font-weight: 500;
+	}
+
+	&__comment-date {
+		margin-left: 0.4em;
+	}
+
+	&__comment-excerpt {
+		margin-top: 0.25em;
+		font-size: 0.9em;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+// Categories block
+// List variant wrapper: .wp-block-categories-list
+// Dropdown variant wrapper: .wp-block-categories-dropdown
+// Inner items come from wp_list_categories() → class="cat-item cat-item-{id}"
+.wp-block-categories-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	.cat-item {
+		display: block;
+		position: relative;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		a {
+			display: block;
+		}
+	}
+}
+
+// Dropdown variant
+.wp-block-categories-dropdown {
+	select {
+		max-width: 100%;
+	}
+}
+
+// Archives block
+// List variant:    <ul class="wp-block-archives-list">
+// Dropdown variant: wrapper div contains .wp-block-archives__label + <select>
+.wp-block-archives-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	> li {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+
+		a {
+			display: block;
+		}
+	}
+}
+
+// Dropdown variant — label + select are inside a wrapping div
+.wp-block-archives-dropdown {
+	select {
+		max-width: 100%;
+	}
+}
+
+// Tag Cloud block
+// Block version outputs .wp-block-tag-cloud with direct <a> children
+.wp-block-tag-cloud {
+	a {
+		display: inline-block;
+		border: 1px solid $color_border;
+		border-radius: 2px;
+		padding: 1px 10px;
+		margin-bottom: 5px;
+		margin-right: 2px;
+		font-size: 0.875em !important; // neutralise WP inline font-size scaling
+		text-decoration: none;
+		line-height: 1.8;
+		transition: border-color 0.14s ease-out, color 0.14s ease-out;
+
+		&:hover {
+			border-color: currentColor;
+		}
+	}
+}
+
+// Calendar block
+.wp-block-calendar {
+	width: 100%;
+
+	caption {
+		font-size: 0.9em;
+		font-weight: 500;
+		text-align: center;
+		margin-bottom: 0.4em;
+		caption-side: top;
+	}
+
+	table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: 0.85em;
+
+		th,
+		td {
+			padding: ms(-6);
+			text-align: center;
+			border: 1px solid $color_border;
+		}
+
+		th {
+			font-weight: 500;
+		}
+
+		#today {
+			font-weight: 700;
+			background: $color_border;
+		}
+
+		a {
+			display: block;
+			font-weight: 500;
+		}
+	}
+
+	// Navigation rendered as <nav class="wp-calendar-nav"> outside the table
+	+ .wp-calendar-nav {
+		display: flex;
+		justify-content: space-between;
+		font-size: 0.9em;
+		padding-top: 0.4em;
+
+		.wp-calendar-nav-prev {
+			text-align: left;
+		}
+
+		.wp-calendar-nav-next {
+			text-align: right;
+		}
+	}
+}
+
+// RSS block
+// Block version outputs .wp-block-rss, different markup from .widget_rss
+.wp-block-rss {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+
+	&__item {
+		display: block;
+		padding-bottom: 0.6em;
+		margin-bottom: 0.6em;
+		border-bottom: 1px solid $color_border;
+
+		&:last-child {
+			border-bottom: none;
+			padding-bottom: 0;
+			margin-bottom: 0;
+		}
+	}
+
+	&__item-title {
+		display: block;
+		font-weight: 500;
+		line-height: 1.4;
+	}
+
+	&__item-publish-date {
+		display: block;
+		font-size: 0.8em;
+		color: $color_meta;
+		margin-top: 0.25em;
+	}
+
+	&__item-excerpt {
+		margin-top: 0.4em;
+		font-size: 0.9em;
+		color: $color_meta;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+// Social Links block inside widget areas
+.widget-area .wp-block-social-links {
+	margin: 0;
+	padding: 0;
+	gap: 0.5em;
+
+	.wp-block-social-link a {
+		padding: 0.3em;
+	}
+}
+
+// ---------------------------------------------------------------
+// Dark mode overrides for block widgets
+// ---------------------------------------------------------------
+.dark-mode {
+	.wp-block-latest-posts > li,
+	.wp-block-latest-comments__comment,
+	.wp-block-categories-list .cat-item,
+	.wp-block-archives-list > li,
+	.wp-block-rss__item {
+		border-color: $light_color_border;
+	}
+
+	.wp-block-latest-posts__post-date,
+	.wp-block-latest-posts__post-excerpt,
+	.wp-block-latest-comments__comment-meta,
+	.wp-block-rss__item-publish-date,
+	.wp-block-rss__item-excerpt {
+		color: $light_color_link;
+	}
+
+	.wp-block-calendar {
+		table {
+			th,
+			td {
+				border-color: $light_color_border;
+			}
+		}
+
+		#today {
+			background: rgba(255, 255, 255, 0.1);
+		}
+	}
+
+	.wp-block-tag-cloud a {
+		border-color: $light_color_border;
+	}
+
+	.wp-block-calendar + .wp-calendar-nav {
+		color: $light_color_link;
+	}
+}

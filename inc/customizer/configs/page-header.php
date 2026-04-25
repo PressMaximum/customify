@@ -432,7 +432,7 @@ class Customify_Page_Header {
 					'normal' => array(
 						'bg_image' => array(
 							'id'  => '',
-							'url' => esc_url( get_template_directory_uri() ) . '/assets/images/default-cover.jpg',
+							'url' => esc_url( get_template_directory_uri() ) . '/build/images/default-cover.jpg',
 						),
 					),
 				),
@@ -1014,6 +1014,14 @@ class Customify_Page_Header {
 		$args = $this->get_settings();
 		if ( 'none' == $args['display'] ) {
 			return '';
+		}
+
+		// Hide page cover/titlebar when the page title is disabled via per-post meta.
+		if ( is_singular() ) {
+			$disable = get_post_meta( get_the_ID(), '_customify_disable_page_title', true );
+			if ( '1' === $disable ) {
+				return '';
+			}
 		}
 
 		switch ( $args['display'] ) {

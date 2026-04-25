@@ -47,10 +47,10 @@ class Customify_Builder_Item_Search_Box {
 
 		$config   = array(
 			array(
-				'name'  => $this->section,
-				'type'  => 'section',
-				'panel' => 'header_settings',
-				'title' => $this->label,
+				'name'            => $this->section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'title'           => $this->label,
 			),
 
 			array(

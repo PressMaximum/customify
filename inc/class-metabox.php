@@ -122,6 +122,20 @@ class Customify_MetaBox {
 			)
 		);
 
+		$this->field_builder->add_field(
+			array(
+				'title'   => __( 'Transparent Header', 'customify' ),
+				'name'    => 'header_transparent_display',
+				'tab'     => 'page_header',
+				'type'    => 'select',
+				'choices' => array(
+					'default' => __( 'Inherit from Customizer settings', 'customify' ),
+					'show'    => __( 'Force transparent', 'customify' ),
+					'hide'    => __( 'Force opaque', 'customify' ),
+				),
+			)
+		);
+
 		if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) {
 			$this->field_builder->add_tab(
 				'breadcrumb',
@@ -151,9 +165,8 @@ class Customify_MetaBox {
 		if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
 			return;
 		}
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/js/admin/metabox' . $suffix . '.js', array( 'jquery' ), Customify::$version, true );
-		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/css/admin/metabox' . $suffix . '.css', false, Customify::$version );
+		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/js/backend/admin/metabox.js', array( 'jquery' ), Customify::$version, true );
+		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/css/backend/admin/metabox.css', false, Customify::$version );
 	}
 
 	public function get_support_post_types() {
@@ -169,12 +182,26 @@ class Customify_MetaBox {
 	}
 
 	/**
+	 * Returns true when the current screen is the block editor.
+	 *
+	 * @return bool
+	 */
+	private function is_block_editor() {
+		$screen = get_current_screen();
+		return $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor();
+	}
+
+	/**
 	 * Adds the meta box container.
+	 * Only rendered in the classic editor; the block editor uses the React plugin instead.
 	 *
 	 * @param string $post_type Post Type.
 	 */
 	public function add_meta_box( $post_type ) {
-		// Limit meta box to certain post types.
+		if ( $this->is_block_editor() ) {
+			return;
+		}
+
 		$post_types = $this->get_support_post_types();
 		if ( in_array( $post_type, $post_types ) ) {
 			add_meta_box(

@@ -30,10 +30,12 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 					'label' => __( 'Version 2', 'customify' ),
 				),
 			),
-			'devices'       => array(
+			'devices'               => array(
 				'desktop'      => __( 'Desktop', 'customify' ),
 				'mobile'       => __( 'Mobile/Tablet', 'customify' ),
 			),
+			'react_control_id'      => 'header_builder_panel_v2',
+			'panel_items_container' => 'customify-hb-panel-items',
 		);
 	}
 
@@ -58,25 +60,13 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			),
 
 			array(
-				'name'  => 'header_builder_panel',
-				'type'  => 'section',
-				'panel' => 'header_settings',
-				'title' => __( 'Header Builder', 'customify' ),
+				'name'            => 'header_builder_panel',
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'title'           => __( 'Header Builder', 'customify' ),
 			),
 
-			// Header Builder v1 store data key.
-			array(
-				'name'                => 'header_builder_panel',
-				'type'                => 'js_raw',
-				'section'             => 'header_builder_panel',
-				'theme_supports'      => '',
-				'title'               => __( 'Header Builder', 'customify' ),
-				'selector'            => '#masthead',
-				'render_callback'     => $fn,
-				'container_inclusive' => true,
-			),
-
-			// Header Builder v2 store data key.
+			// V2 layout data — the only active builder setting.
 			array(
 				'name'                => 'header_builder_panel_v2',
 				'type'                => 'js_raw',
@@ -84,19 +74,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'theme_supports'      => '',
 				'title'               => '',
 				'selector'            => '#masthead',
-				'render_callback'     => $fn,
-				'container_inclusive' => true,
-			),
-
-			// Header Builder v2 store data key.
-			array(
-				'name'                => 'header_builder_version',
-				'type'                => 'js_raw',
-				'section'             => 'header_builder_panel',
-				'theme_supports'      => '',
-				'title'               => '',
-				'selector'            => '#masthead',
-				'sanitize_callback'   => 'sanitize_text_field',
 				'render_callback'     => $fn,
 				'container_inclusive' => true,
 			),
@@ -131,11 +108,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 
 		$config = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => 'header_settings',
-				'theme_supports' => '',
-				'title'          => $section_name,
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'theme_supports'  => '',
+				'title'           => $section_name,
 			),
 
 			array(
@@ -187,11 +164,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'    => $color_mode,
 				'choices'    => array(
 					'dark-mode'  => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_light.svg',
 						'label' => 'Dark',
 					),
 					'light-mode' => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_dark.svg',
 						'label' => 'Light',
 					),
 				),
@@ -230,11 +207,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 
 		$config = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => 'header_settings',
-				'theme_supports' => '',
-				'title'          => $section_name,
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'theme_supports'  => '',
+				'title'           => $section_name,
 			),
 
 			array(
@@ -264,11 +241,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'default'    => 'dark-mode',
 				'choices'    => array(
 					'dark-mode'  => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_light.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_light.svg',
 						'label' => 'Dark',
 					),
 					'light-mode' => array(
-						'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/text_mode_dark.svg',
+						'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/text_mode_dark.svg',
 						'label' => 'Light',
 					),
 				),
@@ -438,3 +415,54 @@ if ( ! function_exists( 'customify_header_layout_settings' ) ) {
 }
 
 Customify_Customize_Layout_Builder()->register_builder( 'header', new Customify_Builder_Header() );
+
+/**
+ * Check whether a specific item ID is present anywhere in the v2 header builder layout.
+ *
+ * Used as active_callback for element sections so they only appear in the
+ * Customizer panel when the element has been placed in the header.
+ *
+ * @param string $item_id Builder item ID (e.g. 'logo', 'primary-menu').
+ * @return bool
+ */
+function customify_header_builder_has_item( $item_id ) {
+	$raw = get_theme_mod( 'header_builder_panel_v2', '' );
+	if ( ! $raw ) {
+		return false;
+	}
+
+	// The sanitize callback stores the value as a decoded PHP array.
+	// Fall back to JSON-decoding if it somehow arrives as a string.
+	if ( is_array( $raw ) ) {
+		$data = $raw;
+	} else {
+		$data = json_decode( urldecode( (string) $raw ), true );
+	}
+
+	if ( ! is_array( $data ) ) {
+		return false;
+	}
+
+	foreach ( $data as $device_data ) {
+		if ( ! is_array( $device_data ) ) {
+			continue;
+		}
+		foreach ( $device_data as $row_data ) {
+			if ( ! is_array( $row_data ) ) {
+				continue;
+			}
+			foreach ( $row_data as $col_items ) {
+				if ( ! is_array( $col_items ) ) {
+					continue;
+				}
+				foreach ( $col_items as $item ) {
+					if ( isset( $item['id'] ) && $item['id'] === $item_id ) {
+						return true;
+					}
+				}
+			}
+		}
+	}
+
+	return false;
+}

@@ -35,11 +35,11 @@ class Customify_Builder_Item_Social_Icons {
 		$selector = "{$this->selector}.customify-builder-social-icons";
 		$config   = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => $this->panel,
-				'theme_supports' => '',
-				'title'          => __( 'Social Icons', 'customify' ),
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => $this->panel,
+				'theme_supports'  => '',
+				'title'           => __( 'Social Icons', 'customify' ),
 			),
 
 			array(

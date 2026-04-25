@@ -36,12 +36,12 @@ class Customify_Builder_Item_Primary_Menu {
 		$fn      = array( $this, 'render' );
 		$config  = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => 'header_settings',
-				'theme_supports' => '',
-				'title'          => $this->label,
-				'description'    => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label ),
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'theme_supports'  => '',
+				'title'           => $this->label,
+				'description'     => sprintf( __( 'Assign <a href="#menu_locations"  class="focus-section">Menu Location</a> for %1$s', 'customify' ), $this->label ),
 			),
 
 			array(
@@ -55,16 +55,16 @@ class Customify_Builder_Item_Primary_Menu {
 				'css_format'      => 'html_class',
 				'choices'         => array(
 					'style-plain'         => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_1.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/menu_style_1.svg',
 					),
 					'style-full-height'   => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_2.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/menu_style_2.svg',
 					),
 					'style-border-bottom' => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_3.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/menu_style_3.svg',
 					),
 					'style-border-top'    => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/menu_style_4.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/menu_style_4.svg',
 					),
 				),
 			),

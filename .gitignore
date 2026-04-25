@@ -13,8 +13,9 @@ npm-debug.log
 # macOS
 .DS_Store
 
-# SASS Source Map
+# Source maps
 *.css.map
+*.js.map
 
 # Zip file
 *.zip

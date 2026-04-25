@@ -41,18 +41,18 @@ if ( ! function_exists( 'customify_customizer_blog_config' ) ) {
 				'disabled_pro_msg' => __( 'Please activate module Blog Posts to use this layout.', 'customify' ),
 				'choices'          => array(
 					'blog_classic' => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_classic.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/blog_classic.svg',
 					),
 					'blog_column'  => array(
-						'img' => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_column.svg',
+						'img' => esc_url( get_template_directory_uri() ) . '/build/images/customizer/blog_column.svg',
 					),
 					'blog_masonry' => array(
-						'img'     => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_masonry.svg',
+						'img'     => esc_url( get_template_directory_uri() ) . '/build/images/customizer/blog_masonry.svg',
 						'disable' => 1,
 						'bubble'  => __( 'Pro', 'customify' ),
 					),
 					'blog_lateral' => array(
-						'img'     => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/blog_lateral.svg',
+						'img'     => esc_url( get_template_directory_uri() ) . '/build/images/customizer/blog_lateral.svg',
 						'disable' => 1,
 						'bubble'  => __( 'Pro', 'customify' ),
 					),

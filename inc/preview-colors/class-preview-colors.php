@@ -57,14 +57,14 @@ class Customify_Preview_Colors
 
 		wp_enqueue_style(
 			self::HANDLE,
-			$base . '/assets/css/preview-colors' . $suffix . '.css',
+			$base . '/build/css/frontend/preview-colors' . $suffix . '.css',
 			array(),
 			$ver
 		);
 
 		wp_enqueue_script(
 			self::HANDLE,
-			$base . '/assets/js/preview-colors' . $suffix . '.js',
+			$base . '/build/js/frontend/preview-colors' . $suffix . '.js',
 			array(),
 			$ver,
 			true

@@ -192,23 +192,23 @@ class Customify_WC_Single_Product {
 
 			'choices'          => array(
 				'default'    => array(
-					'img'   => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/wc-layout-default.svg',
+					'img'   => esc_url( get_template_directory_uri() ) . '/build/images/customizer/wc-layout-default.svg',
 					'label' => __( 'Default', 'customify' ),
 				),
 				'top-medium' => array(
-					'img'     => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/wc-layout-top-medium.svg',
+					'img'     => esc_url( get_template_directory_uri() ) . '/build/images/customizer/wc-layout-top-medium.svg',
 					'label'   => __( 'Top Gallery Boxed', 'customify' ),
 					'disable' => 1,
 					'bubble'  => __( 'Pro', 'customify' ),
 				),
 				'top-full'   => array(
-					'img'     => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/wc-layout-top-full.svg',
+					'img'     => esc_url( get_template_directory_uri() ) . '/build/images/customizer/wc-layout-top-full.svg',
 					'label'   => __( 'Top Gallery Full Width', 'customify' ),
 					'disable' => 1,
 					'bubble'  => __( 'Pro', 'customify' ),
 				),
 				'left-grid'  => array(
-					'img'     => esc_url( get_template_directory_uri() ) . '/assets/images/customizer/wc-layout-left-grid.svg',
+					'img'     => esc_url( get_template_directory_uri() ) . '/build/images/customizer/wc-layout-left-grid.svg',
 					'label'   => __( 'Left Gallery Grid', 'customify' ),
 					'disable' => 1,
 					'bubble'  => __( 'Pro', 'customify' ),

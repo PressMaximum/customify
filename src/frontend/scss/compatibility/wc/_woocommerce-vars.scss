@@ -1,0 +1,23 @@
+@use 'sass:color';
+
+/**
+ * WooCommerce CSS Variables
+ */
+
+$woocommerce:   	#a46497;
+$green:         	#7ad03a;
+$red:           	#a00;
+$orange:        	#ffba00;
+$blue:          	#2ea2cc;
+
+$primary:           #a46497;                                                                                    // Primary color for buttons (alt)
+$primarytext:       color.adjust(color.adjust($primary, $lightness: 50%), $saturation: -18%);                  // Text on primary color bg
+
+$secondary:         color.adjust(color.adjust($primary, $lightness: 40%), $saturation: -21%);                  // Secondary buttons
+$secondarytext:     color.adjust(color.adjust($secondary, $lightness: -60%), $saturation: -21%);               // Text on secondary color bg
+
+$highlight:         color.adjust($primary, $hue: 150deg);                                                      // Prices, In stock labels, sales flash
+$highlightext:      color.adjust(color.adjust($highlight, $lightness: 50%), $saturation: -18%);                // Text on highlight color bg
+
+$contentbg:         #fff;                                       // Content BG - Tabs (active state)
+$subtext:           #777;                                       // small, breadcrumbs etc
