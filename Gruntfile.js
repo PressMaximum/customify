@@ -78,7 +78,8 @@ module.exports = function (grunt) {
                         'assets/css/admin/customizer/customizer.css': 'assets/sass/admin/customizer/customizer.scss',
                         'assets/css/admin/metabox.css': 'assets/sass/admin/metabox.scss',
                         'assets/css/admin/editor.css': 'assets/sass/admin/editor.scss',
-                        'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss'
+                        'assets/css/admin/dashboard.css': 'assets/sass/admin/dashboard.scss',
+                        'assets/css/preview-colors.css': 'src/preview-colors/preview-colors.scss'
                     },
                     {
                         expand: true,
@@ -128,6 +129,14 @@ module.exports = function (grunt) {
                         src: ['*.css', '!*.min.css'],
                         dest: 'assets/css/admin',
                         ext: '.min.css'
+                    },
+                    // Preview Colors module
+                    {
+                        expand: true,
+                        cwd: 'assets/css',
+                        src: ['preview-colors.css'],
+                        dest: 'assets/css',
+                        ext: '.min.css'
                     }
                 ]
             }
@@ -139,7 +148,8 @@ module.exports = function (grunt) {
                     {
                         'assets/js/theme.min.js': ['assets/js/theme.js'],
                         'assets/js/select2.min.js': ['assets/js/select2.js'],
-                        'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js']
+                        'assets/js/jquery.fitvids.min.js': ['assets/js/jquery.fitvids.js'],
+                        'assets/js/preview-colors.min.js': ['src/preview-colors/preview-colors.js']
                     },
                     {
                         expand: true,
@@ -203,6 +213,10 @@ module.exports = function (grunt) {
         },
 
         copy: {
+            preview_colors_js: {
+                src: 'src/preview-colors/preview-colors.js',
+                dest: 'assets/js/preview-colors.js'
+            },
             main: {
                 options: {
                     mode: true
@@ -383,6 +397,14 @@ module.exports = function (grunt) {
         //'rtlcss'
         //'postcss',
         //'cssmin'
+    ]);
+
+    // Build the Preview Colors module: SASS + copy unminified JS + uglify + cssmin.
+    grunt.registerTask('preview-colors', [
+        'sass',
+        'copy:preview_colors_js',
+        'uglify',
+        'cssmin'
     ]);
 
     // Update google Fonts

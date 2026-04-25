@@ -416,6 +416,8 @@ class Customify
 			'/inc/blog/class-posts-layout.php',
 			// Blog posts layout.
 			'/inc/blog/functions-posts-layout.php',
+			// Frontend color preview sidebar (`?preview-colors=1`).
+			'/inc/preview-colors/class-preview-colors.php',
 		);
 
 		foreach ($files as $file) {
