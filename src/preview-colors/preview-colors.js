@@ -90,6 +90,32 @@
 	}
 	function getActive() { return findById(activeId); }
 
+	// Emit the active palette in the export-friendly shape ({name, colors}).
+	// Called whenever the Current palette content changes — preset switch or
+	// per-slot edit.
+	function logActive() {
+		var pal = getActive();
+		if (!pal) return;
+		console.log('[Customify Preview Colors] Current palette:', {
+			name: pal.name,
+			colors: assign({}, pal.colors)
+		});
+	}
+
+	// Mirror the active palette onto the document root as CSS custom properties
+	// (`--customify-color-<slot>`), so theme stylesheets / inline styles can
+	// pick them up via `var(--customify-color-primary)` etc.
+	function applyColorVars() {
+		var pal = getActive();
+		if (!pal) return;
+		var docRoot = document.documentElement;
+		for (var i = 0; i < SLOTS.length; i++) {
+			var slot = SLOTS[i];
+			var val = pal.colors[slot];
+			if (val) docRoot.style.setProperty('--customify-color-' + slot, val);
+		}
+	}
+
 	// --------------------------------------------------------------- ajax I/O
 
 	function ajaxPost(action, data) {
@@ -452,6 +478,8 @@
 		buildSettings();
 		buildModalList();
 		persistActive();
+		applyColorVars();
+		logActive();
 	}
 
 	// ------------------------------------------------------ modal
@@ -766,6 +794,8 @@
 		buildSettings();
 		buildModalList();
 		persistPalettes();
+		applyColorVars();
+		logActive();
 	});
 
 	// ------------------------------------------------------ wiring
@@ -846,4 +876,6 @@
 	buildUserGrid();
 	buildSettings();
 	buildModalList();
+	applyColorVars();
+	logActive();
 })();
