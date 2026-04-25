@@ -1,62 +1,57 @@
-/*!***************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/preview-colors/preview-colors.scss ***!
-  \***************************************************************************************************************************************************************************************************************************************************************/
+/*!**********************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/preview-colors/customizer/customizer.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************/
 @charset "UTF-8";
 /*
- * Customify Preview Colors — sidebar overlay.
- * Loaded inside the panel's Shadow DOM (`#customify-preview-colors-root`'s
- * shadow root), so theme styles cannot bleed in and these rules cannot bleed
- * out. The :host block targets the shadow host (the empty div in the page);
- * everything else lives at the shadow-tree top level.
- * Class names match the source mock (Blocksify 6-slot palette) verbatim.
+ * Customify Preview Colors — Customizer-control variant.
+ *
+ * Mounted in light DOM directly inside a WP_Customize_Control container.
+ * No shadow root — WP admin styles (form inputs, .button, .customize-control-
+ * title, color tones) flow in naturally, giving the panel a native feel.
+ * Custom rules below are all scoped under `#customify-preview-colors-root`
+ * so they cannot leak elsewhere on the Customizer page.
  */
-:host {
-  --bg-page: #F3F4F6;
-  --bg-sidebar: #FFFFFF;
-  --bg-subtle: #F9FAFB;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --border: #E5E7EB;
-  --border-strong: #D1D5DB;
-  --accent: #2271B1;
-  --accent-soft: #E7F1F9;
-  --danger: #B32D2E;
-  --danger-soft: #FDE7E7;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  z-index: 999999;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+#customify-preview-colors-root {
+  --bg-page: #f0f0f1;
+  --bg-sidebar: #ffffff;
+  --bg-subtle: #f6f7f7;
+  --text-primary: #1d2327;
+  --text-secondary: #50575e;
+  --text-tertiary: #8c8f94;
+  --border: #dcdcde;
+  --border-strong: #c3c4c7;
+  --accent: #2271b1;
+  --accent-soft: #e9f1f8;
+  --danger: #b32d2e;
+  --danger-soft: #fde7e7;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  display: block;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  font-size: 13px;
-  line-height: 1.4;
+  line-height: 1.5;
 }
-:host *, :host *::before, :host *::after {
+#customify-preview-colors-root *, #customify-preview-colors-root *::before, #customify-preview-colors-root *::after {
   box-sizing: border-box;
 }
-:host button {
-  font-family: inherit;
+#customify-preview-colors-root button {
   padding: 0;
   margin: 0;
 }
-:host .sidebar {
-  width: 280px;
-  background: var(--bg-sidebar);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border);
+#customify-preview-colors-root .sidebar {
+  width: auto;
+  margin-left: -12px;
+  margin-right: -12px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
   overflow: visible;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(0, 0, 0, 0.04);
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-  transform-origin: top left;
-  transition: transform 0.25s cubic-bezier(0.22, 1.2, 0.36, 1), opacity 0.2s ease;
+  max-height: none;
+  overflow-y: visible;
 }
-:host .cpc-reopen {
+#customify-preview-colors-root .cpc-reopen {
   display: none;
   align-items: center;
   justify-content: center;
@@ -71,23 +66,23 @@
   padding: 0;
   transition: transform 0.15s ease, box-shadow 0.15s ease, color 0.15s ease;
 }
-:host .cpc-reopen:hover {
+#customify-preview-colors-root .cpc-reopen:hover {
   transform: scale(1.06);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   color: var(--text-primary);
 }
-:host .cpc-reopen svg {
+#customify-preview-colors-root .cpc-reopen svg {
   width: 16px;
   height: 16px;
 }
-:host .sb-header {
+#customify-preview-colors-root .sb-header {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
 }
-:host .sb-back {
+#customify-preview-colors-root .sb-back {
   width: 28px;
   height: 28px;
   border: none;
@@ -99,68 +94,79 @@
   color: var(--text-secondary);
   border-radius: var(--radius-sm);
 }
-:host .sb-back:hover {
+#customify-preview-colors-root .sb-back:hover {
   background: var(--bg-subtle);
   color: var(--text-primary);
 }
-:host .sb-crumb {
+#customify-preview-colors-root .sb-crumb {
   flex: 1;
   line-height: 1.35;
 }
-:host .sb-crumb small {
-  font-size: 11px;
+#customify-preview-colors-root .sb-crumb small {
   color: var(--text-tertiary);
   letter-spacing: 0.02em;
   display: block;
 }
-:host .sb-crumb strong {
-  font-size: 15px;
+#customify-preview-colors-root .sb-crumb strong {
   font-weight: 600;
   color: var(--text-primary);
   display: block;
 }
-:host .sb-help {
+#customify-preview-colors-root .sb-help {
   width: 20px;
   height: 20px;
   border-radius: 50%;
   background: #4B5563;
   color: #fff;
-  font-size: 11px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
 }
-:host .section {
-  padding: 16px 14px;
+#customify-preview-colors-root .section {
+  padding: 0px 12px 12px;
 }
-:host .section + .section {
-  border-top: 1px solid var(--border);
+#customify-preview-colors-root .section + .section {
+  border-top: 0;
 }
-:host .sec-row {
+#customify-preview-colors-root .sec-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 10px;
+  margin: 10px -12px 12px;
+  padding: 5px 12px;
+  background-color: #bbb;
 }
-:host .sec-row h3 {
-  font-size: 13px;
-  font-weight: 600;
+#customify-preview-colors-root .sec-row h3 {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
   margin: 0;
-  color: var(--text-primary);
+  text-transform: uppercase;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-:host .badge-count {
-  font: 600 10px/1 ui-monospace, Menlo, monospace;
-  color: var(--text-tertiary);
-  letter-spacing: 0.02em;
-  background: var(--bg-subtle);
-  padding: 3px 6px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
+#customify-preview-colors-root .sec-row .icon-btn {
+  color: rgba(255, 255, 255, 0.85);
+  border-color: transparent;
 }
-:host .icon-btn {
+#customify-preview-colors-root .sec-row .icon-btn:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+#customify-preview-colors-root .badge-count {
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  letter-spacing: 0;
+  background: rgba(255, 255, 255, 0.22);
+  padding: 3px 7px;
+  border-radius: 999px;
+  border: 0;
+}
+#customify-preview-colors-root .icon-btn {
   width: 26px;
   height: 26px;
   border-radius: var(--radius-sm);
@@ -173,26 +179,26 @@
   color: var(--text-secondary);
   transition: all 0.15s ease;
 }
-:host .icon-btn:hover {
+#customify-preview-colors-root .icon-btn:hover {
   border-color: var(--border-strong);
   background: var(--bg-subtle);
   color: var(--text-primary);
 }
-:host .icon-btn svg {
+#customify-preview-colors-root .icon-btn svg {
   width: 14px;
   height: 14px;
 }
-:host {
+#customify-preview-colors-root {
   /* === CURRENT PALETTE (FANNED DECK) === */
 }
-:host .hero-card {
-  background: linear-gradient(-180deg, var(--bg-subtle) 0%, #ffffff 100%);
+#customify-preview-colors-root .hero-card {
+  background: linear-gradient(180deg, var(--bg-subtle) 0%, #ffffff 100%);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
   padding: 20px 18px 16px;
   position: relative;
 }
-:host .deck-wrap {
+#customify-preview-colors-root .deck-wrap {
   position: relative;
   height: 124px;
   display: flex;
@@ -200,7 +206,7 @@
   justify-content: center;
   margin-bottom: 14px;
 }
-:host .deck-card {
+#customify-preview-colors-root .deck-card {
   position: absolute;
   width: 48px;
   height: 82px;
@@ -211,17 +217,18 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   cursor: pointer;
 }
-:host .deck-card:hover {
-  transform: translate(var(--tx), 10px) rotate(var(--r)) scale(1.06) !important;
+#customify-preview-colors-root .deck-card:hover {
+  transform: translate(var(--tx), -10px) rotate(var(--r)) scale(1.06) !important;
   z-index: 20 !important;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
 }
-:host .deck-card .slot-chip {
+#customify-preview-colors-root .deck-card .slot-chip {
   position: absolute;
   bottom: 6px;
-  right: 50%;
-  transform: translateX(50%);
-  font: 600 8px/1 ui-monospace, Menlo, monospace;
+  left: 50%;
+  transform: translateX(-50%);
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.08em;
   padding: 3px 5px;
   border-radius: 3px;
@@ -231,29 +238,29 @@
   transition: opacity 0.2s ease;
   pointer-events: none;
 }
-:host .deck-card:hover .slot-chip {
+#customify-preview-colors-root .deck-card:hover .slot-chip {
   opacity: 1;
 }
-:host .deck-card.is-dark .slot-chip {
+#customify-preview-colors-root .deck-card.is-dark .slot-chip {
   background: rgba(20, 20, 20, 0.82);
   color: #fff;
 }
-:host .deck-footer {
+#customify-preview-colors-root .deck-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 2px;
 }
-:host .deck-name {
-  font-size: 14px;
+#customify-preview-colors-root .deck-name {
   font-weight: 600;
   color: var(--text-primary);
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-:host .deck-name .tag-theme {
-  font: 600 9px/1 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .deck-name .tag-theme {
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-tertiary);
@@ -262,32 +269,30 @@
   border-radius: 3px;
   border: 1px solid var(--border);
 }
-:host .deck-name .tag-user {
+#customify-preview-colors-root .deck-name .tag-user {
   color: var(--accent);
   background: var(--accent-soft);
   border-color: transparent;
 }
-:host .deck-sub {
-  font-size: 11px;
+#customify-preview-colors-root .deck-sub {
   color: var(--text-tertiary);
   font-variant-numeric: tabular-nums;
 }
-:host .deck-hint {
+#customify-preview-colors-root .deck-hint {
   margin-top: 8px;
-  font-size: 10.5px;
   color: var(--text-tertiary);
   text-align: center;
   font-style: italic;
 }
-:host {
+#customify-preview-colors-root {
   /* === PRESET LIST (HORIZONTAL STRIPS) === */
 }
-:host .preset-grid {
+#customify-preview-colors-root .preset-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-:host .preset-card {
+#customify-preview-colors-root .preset-card {
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -296,19 +301,19 @@
   transition: all 0.2s ease;
   position: relative;
 }
-:host .preset-card:hover {
+#customify-preview-colors-root .preset-card:hover {
   border-color: var(--border-strong);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
-:host .preset-card.active {
+#customify-preview-colors-root .preset-card.active {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px var(--accent-soft);
 }
-:host .preset-card.active::after {
+#customify-preview-colors-root .preset-card.active::after {
   content: "";
   position: absolute;
   top: 6px;
-  left: 6px;
+  right: 6px;
   width: 10px;
   height: 10px;
   background: var(--accent);
@@ -316,10 +321,10 @@
   border: 2px solid #fff;
   z-index: 2;
 }
-:host .preset-card .del {
+#customify-preview-colors-root .preset-card .del {
   position: absolute;
   top: 4px;
-  left: 4px;
+  right: 4px;
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -332,33 +337,32 @@
   cursor: pointer;
   z-index: 3;
 }
-:host .preset-card.is-user:hover .del {
+#customify-preview-colors-root .preset-card.is-user:hover .del {
   display: inline-flex;
 }
-:host .preset-card .del:hover {
+#customify-preview-colors-root .preset-card .del:hover {
   background: var(--danger-soft);
   color: var(--danger);
   border-color: var(--danger);
 }
-:host .preset-card.active.is-user .del {
+#customify-preview-colors-root .preset-card.active.is-user .del {
   display: none;
 }
-:host .palette-strip {
+#customify-preview-colors-root .palette-strip {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 4px;
   height: 28px;
 }
-:host .palette-strip .chip {
+#customify-preview-colors-root .palette-strip .chip {
   border-radius: 4px;
   border: 0.5px solid rgba(0, 0, 0, 0.08);
   transition: transform 0.15s ease;
 }
-:host .preset-card:hover .palette-strip .chip {
+#customify-preview-colors-root .preset-card:hover .palette-strip .chip {
   transform: scale(1.02);
 }
-:host .preset-name {
-  font-size: 11px;
+#customify-preview-colors-root .preset-name {
   font-weight: 500;
   color: var(--text-secondary);
   margin: 0 0 6px;
@@ -366,24 +370,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-left: 18px;
+  padding-right: 18px;
 }
-:host .preset-name .slot-count {
-  font: 500 9px/1 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .preset-name .slot-count {
+  font-weight: 500;
+  line-height: 1;
   color: var(--text-tertiary);
   letter-spacing: 0.06em;
 }
-:host .empty-user {
+#customify-preview-colors-root .empty-user {
   padding: 16px 12px;
   background: var(--bg-subtle);
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius-md);
   text-align: center;
-  font-size: 12px;
   color: var(--text-secondary);
   line-height: 1.55;
 }
-:host .add-form {
+#customify-preview-colors-root .add-form {
   margin-top: 12px;
   background: var(--bg-subtle);
   border: 1px solid var(--border);
@@ -392,79 +396,75 @@
   display: none;
   animation: cpcSlideDown 0.25s ease;
 }
-:host .add-form.open {
+#customify-preview-colors-root .add-form.open {
   display: block;
 }
-:host .form-field {
+#customify-preview-colors-root .form-field {
   margin-bottom: 14px;
 }
-:host .form-field:last-of-type {
+#customify-preview-colors-root .form-field:last-of-type {
   margin-bottom: 0;
 }
-:host .add-form label {
+#customify-preview-colors-root .add-form label {
   display: block;
-  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 6px;
   letter-spacing: 0.02em;
 }
-:host .add-form input[type=text],
-:host .add-form select,
-:host .add-form textarea {
+#customify-preview-colors-root .add-form input[type=text],
+#customify-preview-colors-root .add-form select,
+#customify-preview-colors-root .add-form textarea {
   width: 100%;
   padding: 9px 12px;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-sm);
-  font-size: 13px;
-  font-family: inherit;
   background: #fff;
   color: var(--text-primary);
   line-height: 1.4;
 }
-:host .add-form textarea {
+#customify-preview-colors-root .add-form textarea {
   resize: vertical;
   min-height: 110px;
   max-height: 240px;
-  font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace;
+  line-height: 1.5;
   padding: 10px 12px;
 }
-:host .add-form input[type=text]:focus,
-:host .add-form select:focus,
-:host .add-form textarea:focus {
+#customify-preview-colors-root .add-form input[type=text]:focus,
+#customify-preview-colors-root .add-form select:focus,
+#customify-preview-colors-root .add-form textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
 }
-:host .form-hint {
-  font-size: 10.5px;
+#customify-preview-colors-root .form-hint {
   color: var(--text-tertiary);
   margin-top: 6px;
   line-height: 1.45;
 }
-:host .form-hint code {
-  font: 500 10px/1 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .form-hint code {
+  font-weight: 500;
+  line-height: 1;
   background: #fff;
   color: var(--text-primary);
   padding: 1px 4px;
   border-radius: 3px;
   border: 1px solid var(--border);
 }
-:host .form-error {
+#customify-preview-colors-root .form-error {
   display: none;
   margin-top: 8px;
   padding: 8px 10px;
   background: var(--danger-soft);
   border: 1px solid rgba(179, 45, 46, 0.24);
   border-radius: var(--radius-sm);
-  font-size: 11.5px;
   color: var(--danger);
   line-height: 1.4;
 }
-:host .form-error.show {
+#customify-preview-colors-root .form-error.show {
   display: block;
 }
-:host .form-actions {
+#customify-preview-colors-root .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 6px;
@@ -472,11 +472,10 @@
   flex-wrap: wrap;
   align-items: center;
 }
-:host .form-actions button {
+#customify-preview-colors-root .form-actions button {
   white-space: nowrap;
 }
-:host .form-actions button {
-  font-size: 12px;
+#customify-preview-colors-root .form-actions button {
   font-weight: 500;
   padding: 7px 14px;
   border-radius: var(--radius-sm);
@@ -484,30 +483,29 @@
   border: 1px solid transparent;
   transition: all 0.15s ease;
 }
-:host .btn-cancel {
+#customify-preview-colors-root .btn-cancel {
   background: transparent;
   color: var(--danger);
   border-color: var(--danger);
 }
-:host .btn-cancel:hover {
+#customify-preview-colors-root .btn-cancel:hover {
   background: var(--danger-soft);
 }
-:host .btn-add {
+#customify-preview-colors-root .btn-add {
   background: var(--accent);
   color: #fff;
   display: inline-flex;
   align-items: center;
   gap: 5px;
 }
-:host .btn-add:hover {
+#customify-preview-colors-root .btn-add:hover {
   background: #185F94;
 }
-:host .btn-add:disabled {
+#customify-preview-colors-root .btn-add:disabled {
   background: var(--border-strong);
   cursor: not-allowed;
 }
-:host .form-title {
-  font-size: 12px;
+#customify-preview-colors-root .form-title {
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 12px;
@@ -515,8 +513,9 @@
   align-items: center;
   justify-content: space-between;
 }
-:host .form-title .paste-example {
-  font: 500 10px/1 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .form-title .paste-example {
+  font-weight: 500;
+  line-height: 1;
   color: var(--accent);
   background: transparent;
   border: none;
@@ -524,10 +523,10 @@
   padding: 3px 6px;
   border-radius: 3px;
 }
-:host .form-title .paste-example:hover {
+#customify-preview-colors-root .form-title .paste-example:hover {
   background: var(--accent-soft);
 }
-:host .export-list {
+#customify-preview-colors-root .export-list {
   max-height: 160px;
   overflow-y: auto;
   background: #fff;
@@ -535,7 +534,7 @@
   border-radius: var(--radius-sm);
   padding: 4px;
 }
-:host .export-item {
+#customify-preview-colors-root .export-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -544,16 +543,16 @@
   cursor: pointer;
   transition: background 0.15s ease;
 }
-:host .export-item:hover {
+#customify-preview-colors-root .export-item:hover {
   background: var(--bg-subtle);
 }
-:host .export-item input[type=checkbox] {
+#customify-preview-colors-root .export-item input[type=checkbox] {
   width: 14px;
   height: 14px;
   accent-color: var(--accent);
   cursor: pointer;
 }
-:host .export-item .mini-strip {
+#customify-preview-colors-root .export-item .mini-strip {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 1px;
@@ -562,37 +561,35 @@
   border-radius: 2px;
   overflow: hidden;
 }
-:host .export-item .mini-strip span {
+#customify-preview-colors-root .export-item .mini-strip span {
   display: block;
 }
-:host .export-item .ex-name {
-  font-size: 12px;
+#customify-preview-colors-root .export-item .ex-name {
   color: var(--text-primary);
   min-width: 70px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-:host .select-all-row {
+#customify-preview-colors-root .select-all-row {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 8px 10px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 4px;
-  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
-:host .select-all-row input[type=checkbox] {
+#customify-preview-colors-root .select-all-row input[type=checkbox] {
   width: 14px;
   height: 14px;
   accent-color: var(--accent);
 }
-:host .export-output {
-  font: 11px/1.4 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .export-output {
+  line-height: 1.4;
   background: #fff;
   color: var(--text-primary);
   border: 1px solid var(--border-strong);
@@ -603,27 +600,25 @@
   white-space: pre;
   word-break: break-all;
 }
-:host .export-empty {
+#customify-preview-colors-root .export-empty {
   padding: 12px;
   text-align: center;
-  font-size: 11.5px;
   color: var(--text-tertiary);
   font-style: italic;
 }
-:host .btn-ghost {
+#customify-preview-colors-root .btn-ghost {
   background: transparent;
   color: var(--text-primary);
   border-color: var(--border-strong);
 }
-:host .btn-ghost:hover {
+#customify-preview-colors-root .btn-ghost:hover {
   background: var(--bg-subtle);
   border-color: var(--text-secondary);
 }
-:host .copied-flash {
+#customify-preview-colors-root .copied-flash {
   display: inline-block;
-  font-size: 11px;
   color: #1F7A32;
-  margin-left: auto;
+  margin-right: auto;
   padding: 4px 8px;
   background: #EAF3DE;
   border-radius: 3px;
@@ -631,32 +626,34 @@
   transform: translateY(2px);
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
-:host .copied-flash.show {
+#customify-preview-colors-root .copied-flash.show {
   opacity: 1;
   transform: translateY(0);
 }
-:host {
+#customify-preview-colors-root {
   /* === SETTINGS === */
 }
-:host .group-title {
+#customify-preview-colors-root .group-title {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin: 0 0 4px;
+  margin: 10px -12px 12px;
+  padding: 5px 12px;
+  background-color: #bbb;
 }
-:host .group-title h4 {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-primary);
+#customify-preview-colors-root .group-title h4 {
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
   margin: 0;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
   display: inline-flex;
   align-items: center;
   gap: 6px;
 }
-:host .group-title .reset {
-  color: var(--accent);
+#customify-preview-colors-root .group-title .reset {
+  color: rgba(255, 255, 255, 0.85);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -665,36 +662,36 @@
   display: inline-flex;
   align-items: center;
 }
-:host .group-title .reset:hover {
-  background: var(--accent-soft);
+#customify-preview-colors-root .group-title .reset:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
-:host .setting-row {
+#customify-preview-colors-root .setting-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 7px 2px;
-  font-size: 13px;
 }
-:host .setting-row .label-wrap {
+#customify-preview-colors-root .setting-row .label-wrap {
   display: flex;
   flex-direction: column;
   gap: 1px;
 }
-:host .setting-row .label {
+#customify-preview-colors-root .setting-row .label {
   color: var(--text-primary);
-  font-size: 13px;
 }
-:host .setting-row .sublabel {
-  font: 500 10px/1.2 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .setting-row .sublabel {
+  font-weight: 500;
+  line-height: 1.2;
   color: var(--text-tertiary);
   letter-spacing: 0.04em;
 }
-:host .setting-row .right {
+#customify-preview-colors-root .setting-row .right {
   display: flex;
   align-items: center;
   gap: 6px;
 }
-:host .reset-mini {
+#customify-preview-colors-root .reset-mini {
   color: var(--text-tertiary);
   cursor: pointer;
   background: transparent;
@@ -704,10 +701,10 @@
   align-items: center;
   transition: color 0.15s ease;
 }
-:host .reset-mini:hover {
+#customify-preview-colors-root .reset-mini:hover {
   color: var(--text-primary);
 }
-:host .color-dot {
+#customify-preview-colors-root .color-dot {
   width: 22px;
   height: 22px;
   border-radius: 50%;
@@ -719,29 +716,29 @@
   position: relative;
   transition: transform 0.15s ease;
 }
-:host .color-dot:hover {
+#customify-preview-colors-root .color-dot:hover {
   transform: scale(1.1);
 }
-:host .color-dot .globe {
+#customify-preview-colors-root .color-dot .globe {
   width: 11px;
   height: 11px;
   color: rgba(255, 255, 255, 0.92);
 }
-:host .color-dot.light .globe {
+#customify-preview-colors-root .color-dot.light .globe {
   color: rgba(0, 0, 0, 0.55);
 }
-:host .divider-soft {
+#customify-preview-colors-root .divider-soft {
   border-top: 1px solid var(--border);
   margin: 12px 0 14px;
 }
-:host {
+#customify-preview-colors-root {
   /* === POPOVER (anchored inside .hero-card) === */
 }
-:host .popover {
+#customify-preview-colors-root .popover {
   position: absolute;
   top: calc(100% + 10px);
-  right: 50%;
-  transform: translateX(50%);
+  left: 50%;
+  transform: translateX(-50%);
   background: #fff;
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
@@ -751,35 +748,36 @@
   display: none;
   width: 200px;
 }
-:host .popover::before {
+#customify-preview-colors-root .popover::before {
   content: "";
   position: absolute;
   top: -6px;
-  right: 50%;
-  transform: translateX(50%) rotate(-45deg);
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
   width: 10px;
   height: 10px;
   background: #fff;
   border-top: 1px solid var(--border);
-  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
 }
-:host .popover.open {
+#customify-preview-colors-root .popover.open {
   display: block;
   animation: cpcPopFade 0.18s ease;
 }
-:host .popover-head {
+#customify-preview-colors-root .popover-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 8px;
 }
-:host .popover-head span {
-  font: 600 10px/1 ui-monospace, Menlo, monospace;
+#customify-preview-colors-root .popover-head span {
+  font-weight: 600;
+  line-height: 1;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }
-:host .popover-preview {
+#customify-preview-colors-root .popover-preview {
   display: block;
   position: relative;
   cursor: pointer;
@@ -791,11 +789,11 @@
   transition: transform 0.15s ease, box-shadow 0.15s ease;
   background: #B35932;
 }
-:host .popover-preview:hover {
+#customify-preview-colors-root .popover-preview:hover {
   transform: translateY(-1px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.14), inset 0 0 0 1px rgba(0, 0, 0, 0.08);
 }
-:host .popover-preview input[type=color] {
+#customify-preview-colors-root .popover-preview input[type=color] {
   position: absolute;
   inset: 0;
   opacity: 0;
@@ -806,36 +804,35 @@
   padding: 0;
   background: transparent;
 }
-:host .popover-hex {
+#customify-preview-colors-root .popover-hex {
   margin-top: 8px;
-  font: 600 11px/1 ui-monospace, Menlo, monospace;
+  font-weight: 600;
+  line-height: 1;
   color: var(--text-secondary);
   text-align: center;
   letter-spacing: 0.04em;
 }
-:host .popover-desc {
+#customify-preview-colors-root .popover-desc {
   margin-top: 10px;
   padding: 8px 10px;
   background: var(--bg-subtle);
   border-radius: var(--radius-sm);
-  font-size: 11px;
   color: var(--text-secondary);
   line-height: 1.5;
-  text-align: right;
+  text-align: left;
 }
-:host .popover-desc strong {
+#customify-preview-colors-root .popover-desc strong {
   color: var(--text-primary);
   font-weight: 600;
 }
-:host .popover-copy-hint {
+#customify-preview-colors-root .popover-copy-hint {
   margin-top: 6px;
-  font-size: 10px;
   color: var(--accent);
   text-align: center;
   line-height: 1.4;
   font-style: italic;
 }
-:host .modal-close {
+#customify-preview-colors-root .modal-close {
   width: 28px;
   height: 28px;
   border-radius: 50%;
@@ -847,159 +844,30 @@
   align-items: center;
   justify-content: center;
 }
-:host .modal-close:hover {
+#customify-preview-colors-root .modal-close:hover {
   background: var(--border);
   color: var(--text-primary);
 }
-:host {
+#customify-preview-colors-root {
   /* Webkit scrollbars inside the sidebar */
 }
-:host .sidebar::-webkit-scrollbar,
-:host .modal-body::-webkit-scrollbar,
-:host .export-list::-webkit-scrollbar,
-:host .export-output::-webkit-scrollbar {
+#customify-preview-colors-root .sidebar::-webkit-scrollbar,
+#customify-preview-colors-root .modal-body::-webkit-scrollbar,
+#customify-preview-colors-root .export-list::-webkit-scrollbar,
+#customify-preview-colors-root .export-output::-webkit-scrollbar {
   width: 6px;
 }
-:host .sidebar::-webkit-scrollbar-thumb,
-:host .modal-body::-webkit-scrollbar-thumb,
-:host .export-list::-webkit-scrollbar-thumb,
-:host .export-output::-webkit-scrollbar-thumb {
+#customify-preview-colors-root .sidebar::-webkit-scrollbar-thumb,
+#customify-preview-colors-root .modal-body::-webkit-scrollbar-thumb,
+#customify-preview-colors-root .export-list::-webkit-scrollbar-thumb,
+#customify-preview-colors-root .export-output::-webkit-scrollbar-thumb {
   background: var(--border-strong);
   border-radius: 3px;
 }
-/* === Collapsed state — `.sb-back` toggles `cpc-closed` on the host. === */
-:host(.cpc-closed) .sidebar {
-  transform: translateX(calc(-1*(100% + 40px)));
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-}
-:host(.cpc-closed) .cpc-reopen {
-  display: inline-flex;
-}
-:host(.cpc-closed) .modal-overlay {
+/* The browse-all-palettes modal is unused inside the Customizer; markup is
+ * still emitted by the JS bundle but kept off-screen here. */
+#customify-preview-colors-root .modal-overlay {
   display: none;
-}
-/* === MODAL — rendered as sibling of .sidebar so the overlay covers the page === */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(17, 24, 39, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s ease;
-  z-index: 1000000;
-  backdrop-filter: blur(2px);
-}
-.modal-overlay.open {
-  opacity: 1;
-  pointer-events: auto;
-}
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 82vh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(10px) scale(0.98);
-  transition: transform 0.25s cubic-bezier(0.22, 1.2, 0.36, 1);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.22);
-}
-.modal-overlay.open .modal {
-  transform: translateY(0) scale(1);
-}
-.modal-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 1px solid #E5E7EB;
-}
-.modal-head h3 {
-  margin: 0;
-  font-size: 15px;
-  font-weight: 600;
-  color: #111827;
-}
-.modal-body {
-  padding: 10px 14px 16px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-}
-.modal-group-title {
-  font: 600 10px/1 ui-monospace, Menlo, monospace;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #9CA3AF;
-  padding: 8px 6px 4px;
-  margin-top: 4px;
-}
-.palette-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-.palette-row:hover {
-  border-color: #D1D5DB;
-  background: #F9FAFB;
-}
-.palette-row.active {
-  border-color: #2271B1;
-  background: #E7F1F9;
-}
-.palette-row-name {
-  width: 84px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #111827;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-.palette-row-name small {
-  font: 500 9px/1 ui-monospace, Menlo, monospace;
-  color: #9CA3AF;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.palette-row-swatches {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
-}
-.palette-row-swatches .swatch {
-  height: 24px;
-  width: 24px;
-  border-radius: 50%;
-  justify-self: center;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
-}
-.palette-row:hover .swatch {
-  transform: scale(1.08);
-}
-.palette-row-empty {
-  text-align: center;
-  padding: 14px;
-  font-size: 12px;
-  color: #9CA3AF;
-  font-style: italic;
 }
 @keyframes cpcSlideDown {
   from {
@@ -1014,11 +882,11 @@
 @keyframes cpcPopFade {
   from {
     opacity: 0;
-    transform: translateX(50%) translateY(-4px);
+    transform: translateX(-50%) translateY(-4px);
   }
   to {
     opacity: 1;
-    transform: translateX(50%) translateY(0);
+    transform: translateX(-50%) translateY(0);
   }
 }
 @keyframes cpcCardPulse {
@@ -1032,6 +900,17 @@
     transform: var(--base-transform) scale(1);
   }
 }
-.deck-card.animating {
+#customify-preview-colors-root .deck-card.animating {
   animation: cpcCardPulse 0.5s cubic-bezier(0.22, 1.2, 0.36, 1) both;
 }
+/* === Final cascade overrides (must beat the styling blocks declared earlier) ===
+ * `.sb-header` (back/crumb/help) and `.cpc-reopen` are markup that the panel
+ * JS still emits — needed for the frontend overlay's collapse mechanism — but
+ * irrelevant in the inline Customizer layout. Hidden here, last in the file
+ * so SCSS compilation order keeps these declarations winning. */
+#customify-preview-colors-root .sb-header,
+#customify-preview-colors-root .cpc-reopen {
+  display: none;
+}
+
+/*# sourceMappingURL=preview-colors.css.map*/

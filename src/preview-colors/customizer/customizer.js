@@ -1,14 +1,20 @@
 /*
- * Customify Preview Colors — frontend sidebar (`?preview-colors=1`).
+ * Customify Preview Colors — Customizer control bundle.
  *
- * Mounts inside a Shadow DOM attached to `#customify-preview-colors-root` so
- * theme styles cannot bleed in. The CSS bundle is loaded as a <link> *inside*
- * the shadow root (URL passed via `cfg.cssUrl`); the host gets only the empty
- * div from PHP.
+ * Independent clone of the frontend overlay's bundle (preview-colors.js).
+ * Differences from the frontend version:
+ *   - Mounted inline inside a WP_Customize_Control container (no fixed
+ *     positioning, collapse, reopen, or browse-all-modal chrome).
+ *   - State changes go through `wp.customize(setting).set(value)` and are
+ *     committed by the user clicking Customizer's Publish button — no AJAX
+ *     round-trip per edit.
+ *   - The host <div> is rendered lazily (only when the section is expanded),
+ *     so we wait for it via MutationObserver before mounting.
  *
- * State (user palettes, active id) is loaded from window.CustomifyPreviewColors
- * and persisted via wp_ajax endpoints. Edits affect only the panel UI in this
- * phase — live page preview lands in phase 2.
+ * Shares everything else with the frontend version (data shape, slot config,
+ * hex→rgb conversion, applyColorVars output to :root). Storage keys are also
+ * shared — Customizer Publish writes the same wp_options that the frontend
+ * AJAX endpoints write, so both panels stay consistent.
  */
 (function () {
 	'use strict';
@@ -16,12 +22,37 @@
 	var cfg = window.CustomifyPreviewColors;
 	if (!cfg) return;
 
-	var host = document.getElementById(cfg.rootId);
-	if (!host) return;
+	// In Customizer context the host <div> is rendered lazily — it only
+	// appears when the user expands the section that owns our control. The
+	// IIFE may run earlier than that, so if we don't find the host on first
+	// pass, watch the DOM and boot when it shows up.
+	var booted = false;
+	function tryBoot() {
+		if (booted) return true;
+		var host = document.getElementById(cfg.rootId);
+		if (!host) return false;
+		booted = true;
+		boot(host);
+		return true;
+	}
+	if (!tryBoot() && typeof MutationObserver === 'function') {
+		var hostObserver = new MutationObserver(function () {
+			if (tryBoot()) hostObserver.disconnect();
+		});
+		hostObserver.observe(document.body || document.documentElement, {
+			childList: true,
+			subtree: true,
+		});
+	}
 
-	// Attach (or reuse) shadow root.
-	var shadow = host.shadowRoot || host.attachShadow({ mode: 'open' });
-	var root = shadow; // queries below scope to the shadow tree.
+	function boot(host) {
+
+	// No shadow DOM in this version — the panel renders in light DOM so the
+	// Customizer's native admin styles (form inputs, .button, .customize-
+	// control-title, color tones) bleed in and we inherit the wp-admin look.
+	// CSS isolation is handled by scoping every rule under
+	// `#customify-preview-colors-root` in customizer.scss.
+	var root = host;
 
 	var SLOTS = cfg.slots;
 	var SLOT_DESC = cfg.slotDesc || {};
@@ -137,14 +168,15 @@
 
 	// --------------------------------------------------------------- ajax I/O
 
-	function ajaxPost(action, data) {
-		var body = new FormData();
-		body.append('action', action);
-		body.append('nonce', cfg.nonce);
-		Object.keys(data || {}).forEach(function (k) { body.append(k, data[k]); });
-		return fetch(cfg.ajaxUrl, { method: 'POST', credentials: 'same-origin', body: body })
-			.then(function (r) { return r.json(); })
-			.catch(function () { return { success: false }; });
+	// Persist via wp.customize: every edit marks the bound setting dirty and
+	// the user commits the change with the Customizer's Publish button. The
+	// sanitize_callback registered on the PHP side validates and saves to the
+	// shared wp_options keys (so the frontend AJAX endpoints see the value too).
+	function customizeSet(idKey, value) {
+		var id = cfg.settingIds && cfg.settingIds[idKey];
+		if (!id || !window.wp || !wp.customize) return;
+		var setting = wp.customize(id);
+		if (setting && typeof setting.set === 'function') setting.set(value);
 	}
 
 	var savePalettesPending = null;
@@ -152,9 +184,10 @@
 		if (savePalettesPending) clearTimeout(savePalettesPending);
 		savePalettesPending = setTimeout(function () {
 			savePalettesPending = null;
-			ajaxPost('customify_preview_colors_save_palettes', {
-				palettes: JSON.stringify(userPalettes)
-			});
+			// Pass the array directly — Customizer JSON-encodes for transport.
+			customizeSet('palettes', userPalettes.map(function (p) {
+				return { id: p.id, name: p.name, colors: assign({}, p.colors) };
+			}));
 		}, 350);
 	}
 
@@ -163,15 +196,17 @@
 		if (saveActivePending) clearTimeout(saveActivePending);
 		saveActivePending = setTimeout(function () {
 			saveActivePending = null;
-			ajaxPost('customify_preview_colors_set_active', { id: activeId });
+			customizeSet('active', activeId);
 		}, 200);
 	}
 
 	// ------------------------------------------------------ initial markup
 
 	// CSS link goes first so styles apply before the panel paints.
+	// CSS is enqueued by PHP via wp_enqueue_style — no need to inject a <link>
+	// from JS in light DOM. (Frontend overlay does inject because its CSS lives
+	// inside a shadow root that wp_enqueue_style cannot reach.)
 	root.innerHTML = [
-		cfg.cssUrl ? '<link rel="stylesheet" href="' + cfg.cssUrl + '">' : '',
 		'<div class="sidebar">',
 		'  <div class="sb-header">',
 		'    <button class="sb-back" aria-label="Back" type="button">',
@@ -897,4 +932,6 @@
 	buildModalList();
 	applyColorVars();
 	logActive();
+
+	} // close boot()
 })();

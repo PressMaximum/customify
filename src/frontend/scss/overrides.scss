@@ -1,0 +1,388 @@
+/*
+ * Customify Preview Colors — theme + WooCommerce overrides.
+ *
+ * Compiled into the main theme stylesheet (style-theme.css) via
+ * `@import "overrides"` from src/frontend/scss/style.scss. Loaded for every
+ * frontend visitor. Consumes the `--customify-color-<slot>` and
+ * `--customify-color-<slot>-rgb` custom properties rendered to
+ * `document.documentElement` by class-preview-colors.php (`output_root_vars`).
+ *
+ * Cascade strategy: every rule below is wrapped in `html { … }` (or already
+ * uses `:root` / nests under one). That adds one element to specificity so we
+ * beat the Customizer-derived inline `<style id="customify-style-inline-css">`
+ * block — which prints AFTER the theme stylesheet and would otherwise tie our
+ * rules and win on document order. **No `!important` anywhere.**
+ *
+ * Specificity examples (Customizer auto_css → ours):
+ *   body                       (0,0,1)  →  html body                       (0,0,2)
+ *   a                          (0,0,1)  →  html a                          (0,0,2)
+ *   .foo .bar                  (0,2,0)  →  html .foo .bar                  (0,2,1)
+ *
+ * Fallback hex inside each `var(--customify-color-<slot>, <hex>)` matches the
+ * Customizer setting's `default` so the rule remains correct in the brief
+ * window before output_root_vars() runs (or for a logged-out user with no
+ * saved palette yet).
+ *
+ * Direct slot for everything except:
+ *   - border-color (divider intent) → rgba(text-rgb, 0.12)
+ *   - box-shadow  (color-tinted)    → rgba(text-rgb, 0.08)
+ */
+
+html {
+
+/* =========================================================================
+ * Group P — `global_styling_color_primary` (default #235787)
+ * ========================================================================= */
+
+.header-top .header--row-inner,
+body:not(.fl-builder-edit) .button,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
+body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
+button.button,
+input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button),
+.pagination .nav-links > *:hover,
+.pagination .nav-links span,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
+.posts-layout .readmore-button:hover {
+  background-color: var(--customify-color-primary, #235787);
+}
+
+.posts-layout .readmore-button {
+  color: var(--customify-color-primary, #235787);
+}
+
+/* Accent borders — kept primary, NOT muted via the divider derivation. */
+.pagination .nav-links > *:hover,
+.pagination .nav-links span,
+.entry-single .tags-links a:hover,
+.entry-single .cat-links a:hover,
+.posts-layout .readmore-button,
+.posts-layout .readmore-button:hover {
+  border-color: var(--customify-color-primary, #235787);
+}
+
+/* =========================================================================
+ * Group S — `global_styling_color_secondary` (default #c3512f)
+ * ========================================================================= */
+
+.customify-builder-btn {
+  background-color: var(--customify-color-secondary, #c3512f);
+}
+
+/* =========================================================================
+ * Group T — `global_styling_color_text` (default #686868)
+ *           + `abbr/acronym` underline tied to text colour
+ * ========================================================================= */
+
+body {
+  color: var(--customify-color-text, #686868);
+}
+
+abbr,
+acronym {
+  border-bottom-color: var(--customify-color-text, #686868);
+}
+
+/* =========================================================================
+ * Group L — `global_styling_color_link` (default #1e4b75)
+ * ========================================================================= */
+
+a {
+  color: var(--customify-color-primary, #1e4b75);
+}
+
+/* =========================================================================
+ * Group LH — `global_styling_color_link_hover` (default #111111)
+ * Direct slot — same `primary` as resting links. Hover affordance comes from
+ * the theme's underline / cursor styles which we do not override.
+ * ========================================================================= */
+
+a:hover,
+a:focus,
+.link-meta:hover,
+.link-meta a:hover {
+  color: var(--customify-color-primary, #111111);
+}
+
+/* =========================================================================
+ * Group H — `global_styling_color_heading` (default #2b2b2b)
+ * Collapsed to text slot. Visual hierarchy comes from font-weight, not colour.
+ * ========================================================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--customify-color-text, #2b2b2b);
+}
+
+/* =========================================================================
+ * Group WT — `global_styling_color_w_title` (default #444444)
+ * Collapsed to text slot.
+ * ========================================================================= */
+
+.site-content .widget-title {
+  color: var(--customify-color-text, #444444);
+}
+
+/* =========================================================================
+ * Meta — `global_styling_color_meta` (default #6d6d6d)
+ * Collapsed to text slot (no opacity reduction).
+ * ========================================================================= */
+
+article.comment .comment-post-author {
+  background: var(--customify-color-text, #6d6d6d);
+}
+
+.pagination .nav-links > *,
+.link-meta,
+.link-meta a,
+.color-meta,
+.entry-single .tags-links:before,
+.entry-single .cats-links:before {
+  color: var(--customify-color-text, #6d6d6d);
+}
+
+/* =========================================================================
+ * Border — derived from `text` slot at low alpha.
+ * Selector list copied verbatim from styling.php `color_border` `css_format`.
+ * ========================================================================= */
+
+h2 + h3,
+.comments-area h2 + .comments-title,
+.h2 + h3,
+.comments-area .h2 + .comments-title,
+.page-breadcrumb {
+  border-top-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+}
+
+blockquote,
+.site-content .widget-area .menu li.current-menu-item > a:before {
+  border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+}
+
+@media screen and (min-width: 64em) {
+  .comment-list .children li.comment {
+    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+  .comment-list .children li.comment:after {
+    background-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+}
+
+.page-titlebar,
+.page-breadcrumb,
+.posts-layout .entry-inner {
+  border-bottom-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+}
+
+.header-search-form .search-field,
+.entry-content .page-links a,
+.header-search-modal,
+.pagination .nav-links > *,
+.entry-footer .tags-links a,
+.entry-footer .cat-links a,
+.search .content-area article,
+.site-content .widget-area .menu li.current-menu-item > a,
+.posts-layout .entry-inner,
+.post-navigation .nav-links,
+article.comment .comment-meta,
+.widget-area .widget_pages li a,
+.widget-area .widget_categories li a,
+.widget-area .widget_archive li a,
+.widget-area .widget_meta li a,
+.widget-area .widget_nav_menu li a,
+.widget-area .widget_product_categories li a,
+.widget-area .widget_recent_entries li a,
+.widget-area .widget_rss li a,
+.widget-area .widget_recent_comments li {
+  border-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+}
+
+.header-search-modal::before {
+  border-top-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+}
+
+@media screen and (min-width: 48em) {
+  .content-sidebar.sidebar_vertical_border .content-area {
+    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+  .sidebar-content.sidebar_vertical_border .content-area {
+    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+  .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary,
+  .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
+    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+  .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary,
+  .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
+    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+  .sidebar-content-sidebar.sidebar_vertical_border .content-area {
+    border-left-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+    border-right-color: rgba(var(--customify-color-text-rgb, 234, 236, 238), 0.12);
+  }
+}
+
+/* =========================================================================
+ * Shadow — only the two color-tinted shadows in the theme. The other ~60
+ * `box-shadow` rules in the theme use `rgba(0, 0, 0, X)` neutrals and are
+ * untouched.
+ *
+ * Source: src/frontend/scss/header/_header_main.scss:7,
+ *         src/frontend/scss/header/_header_bottom.scss:8
+ * Original: `box-shadow: 0 1px 2px 0 #e1e5ea`
+ * ========================================================================= */
+
+.site-header.style-1 .header--main,
+.site-header.style-1 .header--bottom {
+  box-shadow: 0 1px 2px 0 rgba(var(--customify-color-text-rgb, 225, 229, 234), 0.08);
+}
+
+/* =========================================================================
+ * Body / canvas — not declared in styling.php; covered by SCSS `_base.scss`
+ * via `body { background: $background_body; }`. Theme default #ffffff.
+ * ========================================================================= */
+
+body {
+  background: var(--customify-color-base, #ffffff);
+}
+
+/* =========================================================================
+ * Footer — collapsed: secondary slot bg + base slot for footer text.
+ * ========================================================================= */
+
+.site-footer {
+  background: var(--customify-color-secondary, #1c2147);
+}
+
+.site-footer,
+.site-footer p,
+.site-footer a {
+  color: var(--customify-color-base, #ffffff);
+}
+
+/* =========================================================================
+ * Surface — widget container, sidebar widgets, dropdown / popover surfaces.
+ * Theme default is white-ish; here we use `surface` slot directly.
+ * ========================================================================= */
+
+.widget-area .widget,
+.site-content .widget-area .widget,
+.dropdown-menu,
+.header-search-modal {
+  background-color: var(--customify-color-surface, #ffffff);
+}
+
+/* =========================================================================
+ * Accent decorations — `mark`, `ins`, sticky-tag UI.
+ * SCSS source `base/_base.scss` line 147 keeps mark transparent; we re-paint
+ * it with the accent slot so admins see a colour-pop in preview mode.
+ * ========================================================================= */
+
+mark,
+ins {
+  background: var(--customify-color-accent, #f5de9a);
+  color: var(--customify-color-text, #1A3A28);
+  text-decoration: none;
+}
+
+/* =========================================================================
+ * Block editor utility classes — redirect Gutenberg's preset CSS vars to our
+ * slots. Safer than redeclaring `.has-<slug>-color` rules (those use
+ * `!important` in WP core, which our cascade strategy won't beat).
+ *
+ * Note: light-gray and dark-gray stay theme-fixed neutrals; the theme's
+ * `editor-color-palette` registration keeps them as literal hex.
+ * ========================================================================= */
+
+// Already nested inside `html { … }` from the file's opening wrap, so these
+// declarations land directly on the html element — equivalent to `:root` in
+// normal HTML documents.
+--wp--preset--color--primary: var(--customify-color-primary, #235787);
+--wp--preset--color--secondary: var(--customify-color-secondary, #c3512f);
+--wp--preset--color--text: var(--customify-color-text, #686868);
+--wp--preset--color--link: var(--customify-color-primary, #1e4b75);
+
+/* =========================================================================
+ * WooCommerce — selectors driven by `_woocommerce-vars.scss` (`$primary`,
+ * `$secondary`, `$highlight`, `$subtext`).
+ *
+ * Slot mapping decisions (from PHASE-2-PLAN.md row 25–35):
+ *   $primary    → primary slot (store notice, message border, etc.)
+ *   $secondary  → secondary slot (pagination, dark callouts)
+ *   $highlight  → accent slot (sale badge)
+ *   $subtext    → text slot (breadcrumbs, small notes)
+ * ========================================================================= */
+
+.woocommerce p.demo_store,
+.woocommerce-store-notice {
+  background-color: var(--customify-color-primary, #a46497);
+  color: #ffffff;
+}
+
+.woocommerce-store-notice a,
+.woocommerce p.demo_store a {
+  color: #ffffff;
+}
+
+.woocommerce small.note,
+.woocommerce .woocommerce-breadcrumb,
+.woocommerce .woocommerce-breadcrumb a {
+  color: var(--customify-color-text, #777777);
+}
+
+/* Pagination borders + hover */
+.woocommerce nav.woocommerce-pagination ul {
+  border-color: var(--customify-color-secondary, #c3512f);
+}
+.woocommerce nav.woocommerce-pagination ul li {
+  border-right-color: var(--customify-color-secondary, #c3512f);
+}
+.woocommerce nav.woocommerce-pagination ul li span.current,
+.woocommerce nav.woocommerce-pagination ul li a:hover,
+.woocommerce nav.woocommerce-pagination ul li a:focus {
+  background: var(--customify-color-secondary, #c3512f);
+  color: #ffffff;
+}
+
+/* Notice strips — primary border-top */
+.woocommerce-message,
+.woocommerce-error,
+.woocommerce-info {
+  border-top-color: var(--customify-color-primary, #a46497);
+}
+
+/* Sale badge — accent */
+.woocommerce span.onsale,
+span.onsale {
+  background-color: var(--customify-color-accent, #ffd36a);
+  color: var(--customify-color-text, #1c1f26);
+}
+
+/* Star rating — secondary slot (theme uses $color_secondary literal) */
+.comment-form-rating a,
+.star-rating,
+.star-rating::before {
+  color: var(--customify-color-secondary, #c3512f);
+}
+.star-rating::before {
+  /* Empty stars dimmed via alpha, derived from secondary slot. */
+  color: rgba(var(--customify-color-secondary-rgb, 195, 81, 47), 0.4);
+}
+
+/* Prices — primary tint */
+.woocommerce .price,
+.woocommerce-Price-amount.amount,
+.woocommerce ins .amount {
+  color: var(--customify-color-primary, #a46497);
+}
+
+} // close `html { … }` wrap

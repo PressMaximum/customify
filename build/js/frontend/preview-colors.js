@@ -1,7 +1,10 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 919:
+/***/ "./src/preview-colors/preview-colors.js":
+/*!**********************************************!*\
+  !*** ./src/preview-colors/preview-colors.js ***!
+  \**********************************************/
 /***/ (function() {
 
 /*
@@ -119,9 +122,25 @@
     });
   }
 
-  // Mirror the active palette onto the document root as CSS custom properties
-  // (`--customify-color-<slot>`), so theme stylesheets / inline styles can
-  // pick them up via `var(--customify-color-primary)` etc.
+  // Convert "#RRGGBB" / "#RGB" to the comma-separated R, G, B integer string
+  // expected by `rgba(var(--customify-color-X-rgb), <alpha>)` calls in the
+  // override stylesheet. Returns null on malformed input.
+  function hexToRgb(hex) {
+    var c = String(hex || '').replace('#', '');
+    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+    if (!/^[0-9A-Fa-f]{6}$/.test(c)) return null;
+    var r = parseInt(c.substr(0, 2), 16);
+    var g = parseInt(c.substr(2, 2), 16);
+    var b = parseInt(c.substr(4, 2), 16);
+    return r + ', ' + g + ', ' + b;
+  }
+
+  // Mirror the active palette onto the document root as CSS custom properties:
+  //   --customify-color-<slot>      (hex)
+  //   --customify-color-<slot>-rgb  ("r, g, b")
+  // The hex form drives most overrides; the -rgb triplet feeds rgba() calls
+  // (divider borders, color-tinted shadows, footer text) without needing
+  // color-mix browser support.
   function applyColorVars() {
     var pal = getActive();
     if (!pal) return;
@@ -129,7 +148,10 @@
     for (var i = 0; i < SLOTS.length; i++) {
       var slot = SLOTS[i];
       var val = pal.colors[slot];
-      if (val) docRoot.style.setProperty('--customify-color-' + slot, val);
+      if (!val) continue;
+      docRoot.style.setProperty('--customify-color-' + slot, val);
+      var rgb = hexToRgb(val);
+      if (rgb) docRoot.style.setProperty('--customify-color-' + slot + '-rgb', rgb);
     }
   }
 
@@ -852,6 +874,19 @@
   logActive();
 })();
 
+/***/ }),
+
+/***/ "./src/preview-colors/preview-colors.scss":
+/*!************************************************!*\
+  !*** ./src/preview-colors/preview-colors.scss ***!
+  \************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -874,6 +909,12 @@
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -910,12 +951,29 @@
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(919);
-/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_js__WEBPACK_IMPORTED_MODULE_0__);
+/*!*************************************!*\
+  !*** ./src/preview-colors/index.js ***!
+  \*************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _preview_colors_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./preview-colors.scss */ "./src/preview-colors/preview-colors.scss");
+/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./preview-colors.js */ "./src/preview-colors/preview-colors.js");
+/* harmony import */ var _preview_colors_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_js__WEBPACK_IMPORTED_MODULE_1__);
 /*
  * Webpack entry for the Preview Colors module.
  *
@@ -928,3 +986,4 @@
 }();
 /******/ })()
 ;
+//# sourceMappingURL=preview-colors.js.map

@@ -18,7 +18,10 @@ class Customify_Preview_Colors_Ajax
 	const NONCE_ACTION   = 'customify_preview_colors';
 	const OPTION_PALETTES = 'customify_preview_user_palettes';
 	const OPTION_ACTIVE   = 'customify_preview_active_palette';
-	const CAPABILITY      = 'edit_theme_options';
+	// Saving + viewing the panel both require `manage_options` (Administrator
+	// role only — Editor's `edit_theme_options` is no longer enough). Used by
+	// both the AJAX save endpoints and the frontend gate (`is_active()`).
+	const CAPABILITY      = 'manage_options';
 
 	public static function init()
 	{
@@ -46,6 +49,18 @@ class Customify_Preview_Colors_Ajax
 	public static function get_active_id()
 	{
 		$id = get_option(self::OPTION_ACTIVE, '');
+		return is_string($id) ? sanitize_key($id) : '';
+	}
+
+	/**
+	 * Sanitize a palette id (used as the active-palette setting value).
+	 * Public for reuse by the Customizer setting's sanitize_callback.
+	 *
+	 * @param mixed $id
+	 * @return string
+	 */
+	public static function sanitize_active_id($id)
+	{
 		return is_string($id) ? sanitize_key($id) : '';
 	}
 
@@ -78,7 +93,15 @@ class Customify_Preview_Colors_Ajax
 		wp_send_json_success(array('id' => $id));
 	}
 
-	private static function sanitize_palettes($items)
+	/**
+	 * Sanitize the user palettes array. Public so the Customizer setting's
+	 * `sanitize_callback` can reuse the exact same validation as the AJAX
+	 * save endpoint — both write the same option key.
+	 *
+	 * @param mixed $items
+	 * @return array
+	 */
+	public static function sanitize_palettes($items)
 	{
 		$out = array();
 		foreach ($items as $item) {
