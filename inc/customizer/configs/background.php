@@ -24,7 +24,7 @@ class Customify_Advanced_Styling_Background {
 				'section'    => 'background',
 				'title'      => __( 'Site Background', 'customify' ),
 				'selector'   => array(
-					'normal' => 'body',
+					'normal' => 'html body',
 				),
 				// Default `bg_color` removed so auto_css does not emit a
 				// `body { background-color: #FFFFFF }` rule when user has
