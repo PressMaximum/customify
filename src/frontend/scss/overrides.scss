@@ -256,13 +256,12 @@ article.comment .comment-meta,
 }
 
 /* =========================================================================
- * Body / canvas — not declared in styling.php; covered by SCSS `_base.scss`
- * via `body { background: $background_body; }`. Theme default #ffffff.
+ * Body / canvas — slot-bound at the source (`_base.scss`) with specificity
+ * (0,0,1) so Customizer auto_css for the `background` setting (also `body`,
+ * specificity 0,0,1) wins via source order when user picks a colour.
+ * Previously this file had `html body { background: ... }` (0,0,2) which
+ * blocked user customizations.
  * ========================================================================= */
-
-body {
-  background: var(--customify-color-base, #ffffff);
-}
 
 /* =========================================================================
  * Footer — collapsed: secondary slot bg + base slot for footer text.

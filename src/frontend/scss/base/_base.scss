@@ -170,8 +170,11 @@ html {
 }
 
 body {
-    background: $background_body;
-    /* Fallback for when there is no custom background color defined. */
+    /* Slot-bound to palette `base`; SCSS literal demoted to `var()` fallback
+     * so sites without an active palette stay visually identical. Specificity
+     * (0,0,1) matches Customizer auto_css for the `background` setting, so
+     * user-picked colours win via source order when set. */
+    background: var(--customify-color-base, #{$background_body});
 }
 
 hr {
