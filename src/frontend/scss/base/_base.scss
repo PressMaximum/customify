@@ -458,10 +458,10 @@ input[type="button"]:not(.ed_button),
 input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
-    color: #ffffff;
-    background: $color_primary;
+    color: var(--customify-color-on-primary, #ffffff);
+    background: var(--customify-color-primary, #{$color_primary});
     &:focus {
-        color: #ffffff;
+        color: var(--customify-color-on-primary, #ffffff);
     }
 }
 
