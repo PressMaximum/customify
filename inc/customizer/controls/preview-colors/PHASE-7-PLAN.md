@@ -702,7 +702,122 @@ dark / palette switches.
 | Add a lint check for "literal bg + slot-bound text" combination? | Out of scope. Future improvement: a small `npm run lint:dark-mode` script that greps SCSS for literal `background:` paired with same selector inside `.dark-mode`, warns if no matching local `--customify-color-on-*` override. |
 | Do existing block patterns (`patterns/*.php`) carry inline `style="background:…"` that could exhibit the same bug? | Probably yes — block patterns hardcode styles via `wp:cover` etc. Out of scope for Phase 7.6 (block-level fix is a separate Gutenberg-specific phase). |
 
-## 17 — Out of scope (this plan)
+## 17 — Palette-driven `.dark-mode` / `.light-mode` bands (Phase 7.7)
+
+### 17.1 — Scope
+
+Phase 7.6 already works correctly today — text contrast is safe, sections
+look right. **Don't change any of that.** The only thing this phase does:
+swap each hardcoded literal bg with a slot-bound `var()` that falls back
+to the same literal. Nothing else moves.
+
+```scss
+// Before (Phase 7.6 — current, working)
+.footer-main .dark-mode {
+    background: #303030;
+    --customify-color-on-secondary: var(--customify-color-on-dark-bg);
+}
+
+// After (Phase 7.7 — minimal)
+.footer-main .dark-mode {
+    background: var(--customify-color-secondary, #303030);  /* ONLY change */
+    --customify-color-on-secondary: var(--customify-color-on-dark-bg);
+}
+```
+
+The on-* override stays. The literal hex stays as fallback. Active palette
+becomes the source of truth when present; everything else carries on.
+
+### 17.2 — Slot mapping per class
+
+| Class | bg slot | Rationale |
+|---|---|---|
+| `.dark-mode` | `secondary` | Style Pack canonical "dark sectional band" — header / footer / dark CTA all paint `secondary` (§9 mapping) |
+| `.light-mode` | `surface` | `surface` is the cleanest light-tone in every palette; sits naturally under `.light-mode` semantics |
+
+Both slots auto-rebind to `-dark` companions inside the `.dark-mode`
+trigger via the §6 cascade — no extra rule needed.
+
+### 17.3 — Migration table (one-line diff per rule)
+
+| File | Selector | Phase 7.6 (current) | Phase 7.7 (one line edit) |
+|---|---|---|---|
+| `_footer-common.scss` | `.footer-top .light-mode` | `bg: #f0f0f0` | `bg: var(--customify-color-surface, #f0f0f0)` |
+| `_footer-common.scss` | `.footer-top .dark-mode` | `bg: #292929` | `bg: var(--customify-color-secondary, #292929)` |
+| `_footer-common.scss` | `.footer-main .light-mode` | `bg: #f9f9f9` | `bg: var(--customify-color-surface, #f9f9f9)` |
+| `_footer-common.scss` | `.footer-main .dark-mode` | `bg: #303030` | `bg: var(--customify-color-secondary, #303030)` |
+| `_footer-common.scss` | `.footer-bottom .light-mode` | `bg: #ededed` | `bg: var(--customify-color-surface, #ededed)` |
+| `_footer-common.scss` | `.footer-bottom .dark-mode` | `bg: #1a1a1a` | `bg: var(--customify-color-secondary, #1a1a1a)` |
+| `_header_main.scss` | `.dark-mode` | `bg: #1a1a1a` | `bg: var(--customify-color-secondary, #1a1a1a)` |
+| `_header_main.scss` | `.light-mode` | `bg: #FFFFFF` | `bg: var(--customify-color-surface, #FFFFFF)` |
+| `_header_top.scss` | `.light-mode` | `bg: #f0f0f0` | `bg: var(--customify-color-surface, #f0f0f0)` |
+| `_header_top.scss` | `.dark-mode` | `bg: $color_primary` | `bg: var(--customify-color-secondary, $color_primary)` |
+| `_header_bottom.scss` | `.light-mode` | `bg: #f0f0f0` | `bg: var(--customify-color-surface, #f0f0f0)` |
+| `_header_bottom.scss` | `.dark-mode` | `bg: #303030` | `bg: var(--customify-color-secondary, #303030)` |
+
+12 lines changed across 4 files. **No other lines touched** — Phase 7.6
+local `--customify-color-on-*` overrides stay; section structure stays;
+SCSS vars (`$color_primary`, etc.) stay in their existing roles (now as
+the var() fallback argument).
+
+`_skins.scss`, `_widgets.scss`, `_header_mobile_sidebar.scss` — no change
+(Pattern B from §16.2: bg + text painted together via SCSS greyscale
+vars; already self-consistent).
+
+### 17.4 — Independence from per-section settings
+
+Same as Phase 7.6 — slot binding sits at the bottom of the cascade. Any
+existing override path keeps winning:
+
+- `skin_mode` setting (header / footer builder) — only toggles the class;
+  not touched.
+- Customizer auto_css per-section bg pickers — selector specificity stays
+  the same, behaviour unchanged.
+- Block-pattern inline `style="…"` — `(1,0,0,0)` always wins.
+
+The Phase 7.6 on-* overrides stay too — they catch the case where a
+slot-bound bg auto-flips inside the dark trigger (e.g. Ashwood
+`secondary-dark` → light cream) but are mostly redundant when bg follows
+the palette correctly. Cost of keeping them is zero, removing them isn't
+on the table per user instruction.
+
+### 17.5 — Behaviour per palette
+
+| Palette state | `.dark-mode` band bg | Notes |
+|---|---|---|
+| No palette (fresh install / disabled module) | `#303030` (or matching literal) | `var()` falls through to the second arg — visual identical to today |
+| Active light palette (e.g. Ashwood) | `secondary` slot value (e.g. `#1C2147` navy) | Band now follows brand |
+| Active palette + `.dark-mode` trigger on `<html>` | `secondary-dark` companion | Band auto-flips to a light cream (Ashwood) — see §17.6 |
+| Midnight palette | `#FFFFFF` (Midnight's `secondary` IS white) | Inversion semantic of dark palette |
+
+### 17.6 — Edge case: bg auto-flip + on-* override
+
+In palettes where `secondary-dark` auto-derives to a LIGHT colour (Ashwood
+cream, Ocean white, Moss cream), the chain inside the `.dark-mode`
+trigger is:
+
+- bg = `secondary-dark` = light hex
+- `--customify-color-on-secondary` (Phase 7.6 override) = `--customify-color-on-dark-bg` = `#FCFCFC` light text
+- Light text on light bg — **lower contrast** in this combination
+
+Mitigation options if this matters:
+
+1. Accept it (unlikely in production — requires both palette active AND
+   site-wide `.dark-mode` trigger, which is a Phase 7.4 deferred feature)
+2. Future Phase 7.7.b: drop the Phase 7.6 on-* override on the
+   slot-bound rules (since bg + text now move together via slot rebinding)
+
+Phase 7.7 ship as described — keep the override per user instruction. If
+the edge case manifests, address in a follow-up.
+
+### 17.7 — Phasing
+
+| Phase | Deliverable |
+|---|---|
+| **7.7.1** | Apply the 12 one-line edits per §17.3. Build, smoke test footer/header on each preset, no other changes. |
+| **7.7.2** | Optional: tightening pass per §17.6 if the auto-flip edge case becomes a real issue. |
+
+## 18 — Out of scope (this plan)
 
 - **Per-block dark variant** (e.g. a Cover block with `.is-style-dark`)
   beyond what the §6 trigger list already covers — those automatically

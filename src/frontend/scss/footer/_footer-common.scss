@@ -21,18 +21,11 @@
         padding-top: 2em;
         padding-bottom: 2em;
     }
-    // PHASE-7-PLAN §16: literal-bg .light-mode / .dark-mode pair locally
-    // override `--customify-color-on-secondary` so the footer text rule in
-    // overrides.scss (`.site-footer p { color: var(--…on-secondary…) }`)
-    // resolves to the contrast-safe semantic token, not the slot-derived
-    // `pickOn(secondary)` which can flip wrong on auto-flipped palettes.
     .light-mode {
-        background: #f0f0f0;
-        --customify-color-on-secondary: var(--customify-color-on-light-bg);
+        background: var(--customify-color-surface, #f0f0f0);
     }
     .dark-mode {
-        background: #292929;
-        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
+        background: var(--customify-color-secondary, #292929);
     }
 }
 
@@ -44,12 +37,10 @@
     }
 
     .light-mode {
-        background: #f9f9f9;
-        --customify-color-on-secondary: var(--customify-color-on-light-bg);
+        background: var(--customify-color-surface, #f9f9f9);
     }
     .dark-mode {
-        background: #303030;
-        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
+        background: var(--customify-color-secondary, #303030);
     }
 }
 
@@ -68,19 +59,20 @@
         }
     }
     .light-mode {
-        background: #ededed;
-        --customify-color-on-secondary: var(--customify-color-on-light-bg);
+        background: var(--customify-color-surface, #ededed);
     }
     .dark-mode {
-        background: #1a1a1a;
-        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
+        background: var(--customify-color-secondary, #1a1a1a);
     }
 }
 
 // General footer skin mode colors.
+// PHASE-7.7.2: text / link / border literals slot-bound to palette
+// `on-*` companions; existing SCSS alpha vars demoted to `var()` fallback
+// so sites without an active palette stay visually identical.
 .footer--row-inner {
     &.light-mode {
-        color: $dark_color;
+        color: var(--customify-color-on-surface, #{$dark_color});
         //a:not(.button) {
         //    color: $dark_color_link;
         //    &:hover {
@@ -88,19 +80,19 @@
         //    }
         //}
         .product_list_widget li {
-            border-color: $dark_color_border;
+            border-color: var(--customify-color-border-default, #{$dark_color_border});
         }
     }
     &.dark-mode {
-        color: $light_color;
+        color: var(--customify-color-on-secondary, #{$light_color});
         a:not(.button) {
-            color: $light_color_link;
+            color: var(--customify-color-primary, #{$light_color_link});
             &:hover {
-                color: $light_color_link_hover;
+                color: var(--customify-color-primary-hover, #{$light_color_link_hover});
             }
         }
         .product_list_widget li {
-            border-color: $light_color_border;
+            border-color: var(--customify-color-border-default, #{$light_color_border});
         }
         table tbody td,
         table th {
