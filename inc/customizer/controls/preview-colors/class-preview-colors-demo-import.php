@@ -4,15 +4,15 @@
  *
  * When a Customify demo is imported, seed the panel with the demo's curated
  * palette set + active palette. Reads palette data from
- * `inc/preview-colors/demo-palettes/<demo-slug>.json` and writes through the
- * same wp_options the panel + Customizer control share. Importing twice
- * (e.g. switching demos) overwrites both options cleanly.
+ * `inc/customizer/controls/preview-colors/demo-palettes/<demo-slug>.php` and
+ * writes through the same wp_options the panel + Customizer control share.
+ * Importing twice (e.g. switching demos) overwrites both options cleanly.
  *
  * Activation hooks:
  *   - `customify/demo_imported`  (Customify's own demo importer)
  *   - `pt-ocdi/after_import`     (One Click Demo Import compat)
  *
- * Pass the demo slug as the action argument; if the matching JSON file does
+ * Pass the demo slug as the action argument; if the matching PHP file does
  * not exist this method is a no-op (fail-quiet).
  *
  * @package customify
@@ -50,16 +50,16 @@ class Customify_Preview_Colors_Demo_Import
 	}
 
 	/**
-	 * Read demo-palettes/<slug>.json and seed both panel options.
+	 * Read demo-palettes/<slug>.php and seed both panel options.
 	 *
-	 * Expected file shape:
-	 *   {
-	 *     "active": "ashwood-original",
-	 *     "palettes": [
-	 *       {"id":"…","name":"…","colors":{"base":"#…", … six slots …}},
+	 * Expected file shape (returned array):
+	 *   array(
+	 *     'active'   => 'ashwood-original',
+	 *     'palettes' => array(
+	 *       array('id'=>'…','name'=>'…','colors'=>array('base'=>'#…', … six slots …)),
 	 *       …
-	 *     ]
-	 *   }
+	 *     ),
+	 *   )
 	 *
 	 * Anything that fails sanitize is dropped; an empty result aborts the
 	 * preload so we never overwrite a working palette set with garbage.
@@ -74,17 +74,12 @@ class Customify_Preview_Colors_Demo_Import
 			return;
 		}
 
-		$file = __DIR__ . '/' . self::PALETTES_DIR . '/' . $slug . '.json';
+		$file = __DIR__ . '/' . self::PALETTES_DIR . '/' . $slug . '.php';
 		if (! is_readable($file)) {
 			return;
 		}
 
-		$raw = file_get_contents($file);
-		if (false === $raw) {
-			return;
-		}
-
-		$data = json_decode($raw, true);
+		$data = include $file;
 		if (! is_array($data) || empty($data['palettes']) || ! is_array($data['palettes'])) {
 			return;
 		}

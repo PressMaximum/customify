@@ -1,10 +1,12 @@
 <?php
 /**
- * Preview Colors — AJAX handlers.
+ * Preview Colors — option storage + sanitiser helpers.
  *
- * Endpoints (all `wp_ajax_*` only — no nopriv):
- *   - customify_preview_colors_save_palettes
- *   - customify_preview_colors_set_active
+ * Persistence layer for the panel-managed colour palettes. Constants here
+ * are referenced from compat / demo-import / Customizer setting registration.
+ * The class kept its `_Ajax` suffix for backward-compat after the frontend
+ * overlay (which originally used these as AJAX endpoints) was removed —
+ * persistence now flows entirely through the Customizer Publish pipeline.
  *
  * @package customify
  */
@@ -15,27 +17,12 @@ if (! defined('ABSPATH')) {
 
 class Customify_Preview_Colors_Ajax
 {
-	const NONCE_ACTION   = 'customify_preview_colors';
 	const OPTION_PALETTES = 'customify_preview_user_palettes';
 	const OPTION_ACTIVE   = 'customify_preview_active_palette';
-	// Saving + viewing the panel both require `manage_options` (Administrator
-	// role only — Editor's `edit_theme_options` is no longer enough). Used by
-	// both the AJAX save endpoints and the frontend gate (`is_active()`).
+	// Reading + writing the palette options both require `manage_options`
+	// (Administrator only — Editor's `edit_theme_options` is not enough).
+	// Applied to the Customizer setting `capability` field.
 	const CAPABILITY      = 'manage_options';
-
-	public static function init()
-	{
-		add_action('wp_ajax_customify_preview_colors_save_palettes', array(__CLASS__, 'save_palettes'));
-		add_action('wp_ajax_customify_preview_colors_set_active', array(__CLASS__, 'set_active'));
-	}
-
-	private static function guard()
-	{
-		if (! current_user_can(self::CAPABILITY)) {
-			wp_send_json_error(array('message' => 'forbidden'), 403);
-		}
-		check_ajax_referer(self::NONCE_ACTION, 'nonce');
-	}
 
 	public static function get_user_palettes()
 	{
@@ -49,7 +36,14 @@ class Customify_Preview_Colors_Ajax
 	public static function get_active_id()
 	{
 		$id = get_option(self::OPTION_ACTIVE, '');
-		return is_string($id) ? sanitize_key($id) : '';
+		$id = is_string($id) ? sanitize_key($id) : '';
+		// Empty option (fresh install, never saved) → default to the first
+		// theme preset (`'ashwood'`) so the React panel can highlight a
+		// card and the visitor-side `:root` block always paints something.
+		if ('' === $id) {
+			$id = Customify_Preview_Colors_Config::default_active_id();
+		}
+		return $id;
 	}
 
 	/**
@@ -64,39 +58,10 @@ class Customify_Preview_Colors_Ajax
 		return is_string($id) ? sanitize_key($id) : '';
 	}
 
-	public static function save_palettes()
-	{
-		self::guard();
-
-		$raw = isset($_POST['palettes']) ? wp_unslash($_POST['palettes']) : '';
-		$decoded = json_decode($raw, true);
-		if (! is_array($decoded)) {
-			wp_send_json_error(array('message' => 'invalid_payload'), 400);
-		}
-
-		$clean = self::sanitize_palettes($decoded);
-		update_option(self::OPTION_PALETTES, $clean, false);
-
-		wp_send_json_success(array('palettes' => $clean));
-	}
-
-	public static function set_active()
-	{
-		self::guard();
-
-		$id = isset($_POST['id']) ? sanitize_key(wp_unslash($_POST['id'])) : '';
-		if ('' === $id) {
-			wp_send_json_error(array('message' => 'invalid_id'), 400);
-		}
-
-		update_option(self::OPTION_ACTIVE, $id, false);
-		wp_send_json_success(array('id' => $id));
-	}
-
 	/**
-	 * Sanitize the user palettes array. Public so the Customizer setting's
-	 * `sanitize_callback` can reuse the exact same validation as the AJAX
-	 * save endpoint — both write the same option key.
+	 * Sanitise the user palettes array. Public so it can be reused as the
+	 * Customizer setting's `sanitize_callback` (which writes the same option
+	 * key) and by the demo-import preloader.
 	 *
 	 * @param mixed $items
 	 * @return array

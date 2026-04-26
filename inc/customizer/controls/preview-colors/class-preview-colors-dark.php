@@ -196,15 +196,15 @@ class Customify_Preview_Colors_Dark
 			return self::$baselines;
 		}
 
-		$path = __DIR__ . '/dark-baselines.json';
-		$json = is_readable($path) ? file_get_contents($path) : '';
-		$decoded = $json ? json_decode($json, true) : null;
+		$path = __DIR__ . '/dark-baselines.php';
+		$loaded = is_readable($path) ? include $path : null;
 
-		if (! is_array($decoded) || empty($decoded['hex'])) {
-			// Last-resort hardcoded baseline — used only if the JSON file
-			// is missing/corrupt. Mirror the values in dark-baselines.json
-			// so removing this fallback would not change behaviour.
-			$decoded = array(
+		self::$baselines = (is_array($loaded) && ! empty($loaded['hex']))
+			? $loaded
+			// Last-resort baseline — used only if the file is missing or
+			// returns garbage. Mirror dark-baselines.php so removing this
+			// fallback would not change behaviour.
+			: array(
 				'scss' => array(
 					'base' => '#1A1A1A', 'text' => '#FCFCFC',
 					'primary' => '#FCFCFC', 'secondary' => null,
@@ -216,9 +216,7 @@ class Customify_Preview_Colors_Dark
 					'accent' => '#FFD36A', 'surface' => '#1C1F26',
 				),
 			);
-		}
 
-		self::$baselines = $decoded;
 		return self::$baselines;
 	}
 

@@ -123,6 +123,28 @@ class  Customify_Customizer {
 					'styling_config' => $this->get_styling_config(),
 				)
 			);
+
+			// Preview-colors live update (panel → iframe). Bundled into the
+			// `customify-customizer` script via webpack so the iframe loads
+			// one combined asset instead of a second handle. Localize the
+			// data payload onto the same handle.
+			if ( class_exists( 'Customify_Preview_Colors' ) ) {
+				wp_localize_script(
+					'customify-customizer',
+					'CustomifyPreviewColorsPreview',
+					array(
+						'styleId'       => Customify_Preview_Colors::HANDLE . '-vars',
+						'settingIds'    => array(
+							'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
+							'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
+						),
+						'slots'         => Customify_Preview_Colors_Config::slots(),
+						'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
+						'darkBaselines' => Customify_Preview_Colors_Dark::baselines(),
+						'legacyMods'    => Customify_Preview_Colors_Customizer::collect_legacy_mods(),
+					)
+				);
+			}
 		}
 	}
 

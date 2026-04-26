@@ -1,62 +1,63 @@
 /*
- * Customify Preview Colors — sidebar overlay.
- * Loaded inside the panel's Shadow DOM (`#customify-preview-colors-root`'s
- * shadow root), so theme styles cannot bleed in and these rules cannot bleed
- * out. The :host block targets the shadow host (the empty div in the page);
- * everything else lives at the shadow-tree top level.
- * Class names match the source mock (Blocksify 6-slot palette) verbatim.
+ * Customify Preview Colors — Customizer-control variant.
+ *
+ * Mounted in light DOM directly inside a WP_Customize_Control container.
+ * No shadow root — WP admin styles (form inputs, .button, .customize-control-
+ * title, color tones) flow in naturally, giving the panel a native feel.
+ * Custom rules below are all scoped under `#customify-preview-colors-root`
+ * so they cannot leak elsewhere on the Customizer page.
  */
 
-:host {
-  --bg-page: #F3F4F6;
-  --bg-sidebar: #FFFFFF;
-  --bg-subtle: #F9FAFB;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --text-tertiary: #9CA3AF;
-  --border: #E5E7EB;
-  --border-strong: #D1D5DB;
-  --accent: #2271B1;
-  --accent-soft: #E7F1F9;
-  --danger: #B32D2E;
-  --danger-soft: #FDE7E7;
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+#customify-preview-colors-root {
+  // WP-admin-aligned palette. The accent stays #2271b1 (WP blue), text/border
+  // tones nudged toward the wp-admin defaults (#1d2327, #50575e, #c3c4c7).
+  --bg-page: #f0f0f1;
+  --bg-sidebar: #ffffff;
+  --bg-subtle: #f6f7f7;
+  --text-primary: #1d2327;
+  --text-secondary: #50575e;
+  --text-tertiary: #8c8f94;
+  --border: #dcdcde;
+  --border-strong: #c3c4c7;
+  --accent: #2271b1;
+  --accent-soft: #e9f1f8;
+  --danger: #b32d2e;
+  --danger-soft: #fde7e7;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
 
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 999999;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  display: block;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-  font-size: 13px;
-  line-height: 1.4;
+
+  line-height: 1.5;
 
   *, *::before, *::after { box-sizing: border-box; }
 
-  // Reset UA button padding (Chrome: 1px 6px, FF: 0 8px) — otherwise it eats
-  // into the icon-btn 26×26 content area and crops nested SVGs. Buttons that
-  // need padding (.btn-add, .btn-cancel, ...) declare their own explicitly.
+  // Reset UA button padding so SVG icons keep their declared 14×14.
   button {
-    font-family: inherit;
     padding: 0;
     margin: 0;
   }
 
   .sidebar {
-    width: 280px;
-    background: var(--bg-sidebar);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--border);
+    width: auto;
+    // Negative margins pull the panel out to the edges of the Customizer
+    // control container, which has 12px horizontal padding by default.
+    margin-left: -12px;
+    margin-right: -12px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
     overflow: visible;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.06), 0 2px 8px rgba(0,0,0,0.04);
-    max-height: calc(100vh - 40px);
-    overflow-y: auto;
-    transform-origin: top right;
-    transition: transform .25s cubic-bezier(.22,1.2,.36,1), opacity .2s ease;
+    max-height: none;
+    overflow-y: visible;
   }
+
+  // (Hide rules for `.sb-header` and `.cpc-reopen` are declared at the end
+  // of this file so they beat the original styling blocks on cascade order.)
 
   // Floating "reopen" button — only visible when the panel is collapsed.
   .cpc-reopen {
@@ -97,35 +98,53 @@
   }
   .sb-back:hover { background: var(--bg-subtle); color: var(--text-primary); }
   .sb-crumb { flex: 1; line-height: 1.35; }
-  .sb-crumb small { font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.02em; display: block; }
-  .sb-crumb strong { font-size: 15px; font-weight: 600; color: var(--text-primary); display: block; }
+  .sb-crumb small {color: var(--text-tertiary); letter-spacing: 0.02em; display: block; }
+  .sb-crumb strong {font-weight: 600; color: var(--text-primary); display: block; }
   .sb-help {
     width: 20px; height: 20px;
     border-radius: 50%;
     background: #4B5563; color: #fff;
-    font-size: 11px; display: inline-flex; align-items: center; justify-content: center;
+display: inline-flex; align-items: center; justify-content: center;
   }
 
-  .section { padding: 16px 14px; }
-  .section + .section { border-top: 1px solid var(--border); }
+  .section { padding: 0px 12px 12px; }
+  .section + .section { border-top: 0; }
 
+  // Section heading bar — gray strip with uppercase white text.
+  // Negative margins cancel the .section padding so it runs edge-to-edge.
   .sec-row {
     display: flex; align-items: center; justify-content: space-between;
-    margin: 0 0 10px;
+    margin: 10px -12px 12px;
+    padding: 5px 12px;
+    background-color: #bbb;
   }
   .sec-row h3 {
-    font-size: 13px; font-weight: 600; margin: 0;
-    color: var(--text-primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
     display: inline-flex; align-items: center; gap: 6px;
   }
+  // Icon buttons living on the gray heading bar — light icons on the bar.
+  .sec-row .icon-btn {
+    color: rgba(255,255,255,0.85);
+    border-color: transparent;
+  }
+  .sec-row .icon-btn:hover {
+    background: rgba(255,255,255,0.18);
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+  }
   .badge-count {
-    font: 600 10px/1 ui-monospace, Menlo, monospace;
-    color: var(--text-tertiary);
-    letter-spacing: 0.02em;
-    background: var(--bg-subtle);
-    padding: 3px 6px;
+    font-weight: 600; line-height: 1; 
+    color: #fff;
+    letter-spacing: 0;
+    background: rgba(255,255,255,0.22);
+    padding: 3px 7px;
     border-radius: 999px;
-    border: 1px solid var(--border);
+    border: 0;
   }
   .icon-btn {
     width: 26px; height: 26px; border-radius: var(--radius-sm);
@@ -136,33 +155,6 @@
   }
   .icon-btn:hover { border-color: var(--border-strong); background: var(--bg-subtle); color: var(--text-primary); }
   .icon-btn svg { width: 14px; height: 14px; }
-
-  // Dark/light preview toggle — pill of two segmented buttons.
-  .dark-mode-toggle {
-    display: inline-flex;
-    align-items: center;
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: 999px;
-    padding: 2px;
-  }
-  .dm-btn {
-    width: 22px; height: 22px;
-    border-radius: 999px;
-    background: transparent;
-    border: 0;
-    color: var(--text-tertiary);
-    cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center;
-    transition: background .15s ease, color .15s ease;
-  }
-  .dm-btn:hover { color: var(--text-primary); }
-  .dm-btn.active {
-    background: var(--bg-sidebar);
-    color: var(--text-primary);
-    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-  }
-  .dm-btn svg { width: 12px; height: 12px; }
 
   /* === CURRENT PALETTE (FANNED DECK) === */
   .hero-card {
@@ -200,7 +192,7 @@
     position: absolute;
     bottom: 6px; left: 50%;
     transform: translateX(-50%);
-    font: 600 8px/1 ui-monospace, Menlo, monospace;
+    font-weight: 600; line-height: 1;
     letter-spacing: 0.08em;
     padding: 3px 5px;
     border-radius: 3px;
@@ -217,9 +209,9 @@
     display: flex; align-items: center; justify-content: space-between;
     padding: 0 2px;
   }
-  .deck-name { font-size: 14px; font-weight: 600; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px; }
+  .deck-name {font-weight: 600; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px; }
   .deck-name .tag-theme {
-    font: 600 9px/1 ui-monospace, Menlo, monospace;
+    font-weight: 600; line-height: 1;
     letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--text-tertiary);
     background: var(--bg-subtle);
@@ -229,10 +221,10 @@
   .deck-name .tag-user {
     color: var(--accent); background: var(--accent-soft); border-color: transparent;
   }
-  .deck-sub { font-size: 11px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .deck-sub {color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
   .deck-hint {
     margin-top: 8px;
-    font-size: 10.5px;
+
     color: var(--text-tertiary);
     text-align: center;
     font-style: italic;
@@ -300,7 +292,7 @@
   }
   .preset-card:hover .palette-strip .chip { transform: scale(1.02); }
   .preset-name {
-    font-size: 11px; font-weight: 500;
+font-weight: 500;
     color: var(--text-secondary);
     margin: 0 0 6px;
     letter-spacing: 0.01em;
@@ -308,9 +300,31 @@
     padding-right: 18px;
   }
   .preset-name .slot-count {
-    font: 500 9px/1 ui-monospace, Menlo, monospace;
+    font-weight: 500; line-height: 1;
     color: var(--text-tertiary);
     letter-spacing: 0.06em;
+  }
+  .preset-name-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .preset-name-text.editable { cursor: text; }
+  .preset-name-text.editable:hover { color: var(--text-primary); }
+  // Inline rename input — inherits typography so the swap is invisible.
+  .preset-name-edit {
+    flex: 1;
+    min-width: 0;
+    margin: -2px 0;
+    padding: 1px 4px;
+    background: var(--bg-sidebar);
+    border: 1px solid var(--accent);
+    border-radius: var(--radius-sm);
+    color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--accent-soft);
+    outline: none;
   }
 
   .empty-user {
@@ -319,7 +333,7 @@
     border: 1px dashed var(--border-strong);
     border-radius: var(--radius-md);
     text-align: center;
-    font-size: 12px;
+
     color: var(--text-secondary);
     line-height: 1.55;
   }
@@ -339,7 +353,7 @@
   .form-field:last-of-type { margin-bottom: 0; }
   .add-form label {
     display: block;
-    font-size: 11px; font-weight: 600;
+font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 6px;
     letter-spacing: 0.02em;
@@ -351,8 +365,7 @@
     padding: 9px 12px;
     border: 1px solid var(--border-strong);
     border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-family: inherit;
+
     background: #fff;
     color: var(--text-primary);
     line-height: 1.4;
@@ -361,7 +374,7 @@
     resize: vertical;
     min-height: 110px;
     max-height: 240px;
-    font: 12px/1.5 ui-monospace, Menlo, Consolas, monospace;
+    line-height: 1.5;
     padding: 10px 12px;
   }
   .add-form input[type="text"]:focus,
@@ -372,13 +385,13 @@
     box-shadow: 0 0 0 3px var(--accent-soft);
   }
   .form-hint {
-    font-size: 10.5px;
+
     color: var(--text-tertiary);
     margin-top: 6px;
     line-height: 1.45;
   }
   .form-hint code {
-    font: 500 10px/1 ui-monospace, Menlo, monospace;
+    font-weight: 500; line-height: 1;
     background: #fff;
     color: var(--text-primary);
     padding: 1px 4px;
@@ -392,7 +405,7 @@
     background: var(--danger-soft);
     border: 1px solid rgba(179, 45, 46, 0.24);
     border-radius: var(--radius-sm);
-    font-size: 11.5px;
+
     color: var(--danger);
     line-height: 1.4;
   }
@@ -405,7 +418,7 @@
   }
   .form-actions button { white-space: nowrap; }
   .form-actions button {
-    font-size: 12px; font-weight: 500;
+font-weight: 500;
     padding: 7px 14px;
     border-radius: var(--radius-sm);
     cursor: pointer;
@@ -426,13 +439,13 @@
   .btn-add:hover { background: #185F94; }
   .btn-add:disabled { background: var(--border-strong); cursor: not-allowed; }
   .form-title {
-    font-size: 12px; font-weight: 600;
+font-weight: 600;
     color: var(--text-primary);
     margin: 0 0 12px;
     display: flex; align-items: center; justify-content: space-between;
   }
   .form-title .paste-example {
-    font: 500 10px/1 ui-monospace, Menlo, monospace;
+    font-weight: 500; line-height: 1;
     color: var(--accent);
     background: transparent;
     border: none; cursor: pointer;
@@ -473,7 +486,7 @@
   }
   .export-item .mini-strip span { display: block; }
   .export-item .ex-name {
-    font-size: 12px;
+
     color: var(--text-primary);
     min-width: 70px;
     white-space: nowrap;
@@ -485,7 +498,7 @@
     padding: 6px 8px 10px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 4px;
-    font-size: 11px; font-weight: 600;
+font-weight: 600;
     color: var(--text-primary);
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -495,7 +508,7 @@
     accent-color: var(--accent);
   }
   .export-output {
-    font: 11px/1.4 ui-monospace, Menlo, monospace;
+    line-height: 1.4;
     background: #fff;
     color: var(--text-primary);
     border: 1px solid var(--border-strong);
@@ -509,7 +522,7 @@
   .export-empty {
     padding: 12px;
     text-align: center;
-    font-size: 11.5px;
+
     color: var(--text-tertiary);
     font-style: italic;
   }
@@ -522,7 +535,7 @@
 
   .copied-flash {
     display: inline-block;
-    font-size: 11px;
+
     color: #1F7A32;
     margin-right: auto;
     padding: 4px 8px;
@@ -535,32 +548,38 @@
   .copied-flash.show { opacity: 1; transform: translateY(0); }
 
   /* === SETTINGS === */
+  // Same gray heading bar treatment as `.sec-row` so `Theme color` matches.
   .group-title {
     display: flex; align-items: center; justify-content: space-between;
-    margin: 0 0 4px;
+    margin: 10px -12px 12px;
+    padding: 5px 12px;
+    background-color: #bbb;
   }
   .group-title h4 {
-    font-size: 11px; font-weight: 600;
-    color: var(--text-primary); margin: 0;
-    text-transform: uppercase; letter-spacing: 0.06em;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    margin: 0;
+    text-transform: uppercase;
     display: inline-flex; align-items: center; gap: 6px;
   }
   .group-title .reset {
-    color: var(--accent); background: transparent; border: none;
+    color: rgba(255,255,255,0.85); background: transparent; border: none;
     cursor: pointer; padding: 4px; border-radius: var(--radius-sm);
     display: inline-flex; align-items: center;
   }
-  .group-title .reset:hover { background: var(--accent-soft); }
+  .group-title .reset:hover { background: rgba(255,255,255,0.18); color: #fff; }
 
   .setting-row {
     display: flex; align-items: center; justify-content: space-between;
     padding: 7px 2px;
-    font-size: 13px;
+
   }
   .setting-row .label-wrap { display: flex; flex-direction: column; gap: 1px; }
-  .setting-row .label { color: var(--text-primary); font-size: 13px; }
+  .setting-row .label { color: var(--text-primary);}
   .setting-row .sublabel {
-    font: 500 10px/1.2 ui-monospace, Menlo, monospace;
+    font-weight: 500; line-height: 1.2;
     color: var(--text-tertiary);
     letter-spacing: 0.04em;
   }
@@ -571,7 +590,11 @@
     display: inline-flex; align-items: center;
     transition: color .15s ease;
   }
-  .reset-mini:hover { color: var(--text-primary); }
+  .reset-mini:hover:not(:disabled) { color: var(--text-primary); }
+  .reset-mini:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
   .color-dot {
     width: 22px; height: 22px;
     border-radius: 50%;
@@ -587,28 +610,34 @@
     color: rgba(255,255,255,0.92);
   }
   .color-dot.light .globe { color: rgba(0,0,0,0.55); }
+  // Native <input type="color"> overlaid on the dot — clicking anywhere on
+  // the dot opens the browser picker. Keep the input transparent + clipped
+  // to the dot bounds so the visual stays the dot itself.
+  .color-dot input[type=color] {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    border: 0; padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
 
   .divider-soft { border-top: 1px solid var(--border); margin: 12px 0 14px; }
 
-  /* === AUTO-COMPUTED (read-only) ============================================
-   * Theme-derived companion vars. Shown last in the panel, marked read-only by
-   * the diagonal stripe pattern on the swatch. */
+  /* Auto-computed (read-only) — Customizer flavour. */
   .auto-computed-hint {
-    font-size: 11px;
     color: var(--text-tertiary);
     margin: -2px 2px 8px;
-    line-height: 1.4;
   }
   .auto-computed-row {
     display: flex; align-items: center; gap: 10px;
     padding: 6px 2px;
-    font-size: 12px;
   }
   .auto-computed-swatch {
-    width: 22px; height: 22px;
+    width: 20px; height: 20px;
     border-radius: 50%;
-    border: 1px solid rgba(0,0,0,0.12);
-    background-image: linear-gradient(45deg, transparent 47%, rgba(0,0,0,0.18) 47% 53%, transparent 53%);
+    border: 1px solid rgba(0,0,0,0.18);
+    background-image: linear-gradient(45deg, transparent 47%, rgba(0,0,0,0.22) 47% 53%, transparent 53%);
     background-color: transparent;
     flex-shrink: 0;
   }
@@ -616,8 +645,6 @@
   .auto-computed-slot {
     color: var(--text-tertiary);
     letter-spacing: 0.04em;
-    font-family: ui-monospace, Menlo, monospace;
-    font-size: 10px;
   }
 
   /* === POPOVER (anchored inside .hero-card) === */
@@ -651,7 +678,7 @@
     margin-bottom: 8px;
   }
   .popover-head span {
-    font: 600 10px/1 ui-monospace, Menlo, monospace;
+    font-weight: 600; line-height: 1;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--text-secondary);
@@ -683,7 +710,7 @@
   }
   .popover-hex {
     margin-top: 8px;
-    font: 600 11px/1 ui-monospace, Menlo, monospace;
+    font-weight: 600; line-height: 1;
     color: var(--text-secondary);
     text-align: center;
     letter-spacing: 0.04em;
@@ -693,7 +720,7 @@
     padding: 8px 10px;
     background: var(--bg-subtle);
     border-radius: var(--radius-sm);
-    font-size: 11px;
+
     color: var(--text-secondary);
     line-height: 1.5;
     text-align: left;
@@ -704,7 +731,7 @@
   }
   .popover-copy-hint {
     margin-top: 6px;
-    font-size: 10px;
+
     color: var(--accent);
     text-align: center;
     line-height: 1.4;
@@ -729,111 +756,9 @@
   .export-output::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 }
 
-/* === Collapsed state — `.sb-back` toggles `cpc-closed` on the host. === */
-:host(.cpc-closed) .sidebar {
-  transform: translateX(calc(100% + 40px));
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-}
-:host(.cpc-closed) .cpc-reopen { display: inline-flex; }
-:host(.cpc-closed) .modal-overlay { display: none; }
-
-/* === MODAL — rendered as sibling of .sidebar so the overlay covers the page === */
-.modal-overlay {
-  position: fixed; inset: 0;
-  background: rgba(17, 24, 39, 0.45);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  opacity: 0; pointer-events: none;
-  transition: opacity .2s ease;
-  z-index: 1000000;
-  backdrop-filter: blur(2px);
-}
-.modal-overlay.open { opacity: 1; pointer-events: auto; }
-.modal {
-  background: #fff;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 82vh;
-  overflow: hidden;
-  display: flex; flex-direction: column;
-  transform: translateY(10px) scale(.98);
-  transition: transform .25s cubic-bezier(.22,1.2,.36,1);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.22);
-}
-.modal-overlay.open .modal { transform: translateY(0) scale(1); }
-.modal-head {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 14px 18px;
-  border-bottom: 1px solid #E5E7EB;
-}
-.modal-head h3 { margin: 0; font-size: 15px; font-weight: 600; color: #111827; }
-.modal-body {
-  padding: 10px 14px 16px;
-  overflow-y: auto;
-  display: flex; flex-direction: column; gap: 6px;
-  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-}
-.modal-group-title {
-  font: 600 10px/1 ui-monospace, Menlo, monospace;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #9CA3AF;
-  padding: 8px 6px 4px;
-  margin-top: 4px;
-}
-.palette-row {
-  display: flex; align-items: center; gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid #E5E7EB;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all .2s ease;
-}
-.palette-row:hover {
-  border-color: #D1D5DB;
-  background: #F9FAFB;
-}
-.palette-row.active {
-  border-color: #2271B1;
-  background: #E7F1F9;
-}
-.palette-row-name {
-  width: 84px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #111827;
-  display: flex; flex-direction: column; gap: 2px;
-}
-.palette-row-name small {
-  font: 500 9px/1 ui-monospace, Menlo, monospace;
-  color: #9CA3AF;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-}
-.palette-row-swatches {
-  flex: 1;
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 6px;
-}
-.palette-row-swatches .swatch {
-  height: 24px; width: 24px;
-  border-radius: 50%;
-  justify-self: center;
-  border: 1px solid rgba(0,0,0,0.08);
-  transition: transform .2s ease;
-}
-.palette-row:hover .swatch { transform: scale(1.08); }
-.palette-row-empty {
-  text-align: center;
-  padding: 14px;
-  font-size: 12px;
-  color: #9CA3AF;
-  font-style: italic;
-}
+/* The browse-all-palettes modal is unused inside the Customizer; markup is
+ * still emitted by the JS bundle but kept off-screen here. */
+#customify-preview-colors-root .modal-overlay { display: none; }
 
 @keyframes cpcSlideDown {
   from { opacity: 0; transform: translateY(-6px); }
@@ -848,6 +773,14 @@
   40%  { transform: var(--base-transform) scale(1.1); }
   100% { transform: var(--base-transform) scale(1); }
 }
-.deck-card.animating {
+#customify-preview-colors-root .deck-card.animating {
   animation: cpcCardPulse .5s cubic-bezier(.22,1.2,.36,1) both;
 }
+
+/* === Final cascade overrides (must beat the styling blocks declared earlier) ===
+ * `.sb-header` (back/crumb/help) and `.cpc-reopen` are markup that the panel
+ * JS still emits — needed for the frontend overlay's collapse mechanism — but
+ * irrelevant in the inline Customizer layout. Hidden here, last in the file
+ * so SCSS compilation order keeps these declarations winning. */
+#customify-preview-colors-root .sb-header,
+#customify-preview-colors-root .cpc-reopen { display: none; }

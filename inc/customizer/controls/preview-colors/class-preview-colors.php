@@ -2,8 +2,10 @@
 /**
  * Preview Colors — bootstrap.
  *
- * Frontend-only sidebar that appears when `?preview-colors=1` is in the URL
- * AND the current user has the `edit_theme_options` capability.
+ * Color-palette system surfaced exclusively as a Customizer control. Visitors
+ * never see a panel; they receive the saved active palette as `:root` CSS
+ * vars consumed by overrides.scss. Admins edit through the "Color palette"
+ * control under Customizer → Global Colors.
  *
  * @package customify
  */
@@ -21,16 +23,12 @@ require_once __DIR__ . '/class-preview-colors-compat.php';
 
 class Customify_Preview_Colors
 {
-	const QUERY_PARAM = 'preview-colors';
-	const HANDLE      = 'customify-preview-colors';
-	const ROOT_ID     = 'customify-preview-colors-root';
+	// Style id for the inline `:root { … }` block emitted on every page load.
+	const HANDLE = 'customify-preview-colors';
 
 	public static function init()
 	{
-		Customify_Preview_Colors_Ajax::init();
-		// Customizer integration — registers the "Color palette" control.
-		// AJAX endpoints registered above are reachable from both contexts
-		// (frontend overlay + Customizer controls page).
+		// Customizer "Color palette" control — registers settings + control.
 		Customify_Preview_Colors_Customizer::init();
 		Customify_Preview_Colors_Demo_Import::init();
 		// One-time bootstrap: if styling.php has user-saved values and no
@@ -39,23 +37,12 @@ class Customify_Preview_Colors
 		Customify_Preview_Colors_Compat::init();
 
 		if (! is_admin()) {
-			// Always-on (every visitor, every page):
-			//   <style>:root { --customify-color-*: … }</style> with the saved
-			//   active palette so the override layer compiled into the main
-			//   theme stylesheet (style-theme.css, via @import "overrides" in
-			//   src/frontend/scss/style.scss) has values to consume.
+			// Visitor-side: emit `<style>:root { --customify-color-*: … }</style>`
+			// with the saved active palette + dark companions + trigger block,
+			// so the override layer compiled into style-theme.css (via
+			// @import "overrides" in src/frontend/scss/style.scss) has values
+			// to consume.
 			add_action('wp_head', array(__CLASS__, 'output_root_vars'), 1);
-
-			// Admin-in-preview-mode only (gated by is_active()):
-			//   - Panel sidebar JS bundle + localized data
-			//   - Empty root <div> for the shadow DOM mount
-			//   - Hide the WP admin bar
-			add_action('wp_enqueue_scripts', array(__CLASS__, 'enqueue'), 100);
-			// Priority 5 so the root <div> is emitted BEFORE wp_print_footer_scripts
-			// (which fires at priority 20). Otherwise the bundle's IIFE runs first
-			// and bails because document.getElementById(rootId) is null.
-			add_action('wp_footer', array(__CLASS__, 'render_root'), 5);
-			add_filter('show_admin_bar', array(__CLASS__, 'maybe_hide_admin_bar'), 100);
 		}
 	}
 
@@ -272,72 +259,6 @@ class Customify_Preview_Colors
 		echo $out;
 	}
 
-	public static function maybe_hide_admin_bar($show)
-	{
-		return self::is_active() ? false : $show;
-	}
-
-	private static function is_active()
-	{
-		if (is_admin() || wp_doing_ajax()) {
-			return false;
-		}
-		if (! isset($_GET[self::QUERY_PARAM])) {
-			return false;
-		}
-		if (! current_user_can(Customify_Preview_Colors_Ajax::CAPABILITY)) {
-			return false;
-		}
-		return true;
-	}
-
-	public static function enqueue()
-	{
-		if (! self::is_active()) {
-			return;
-		}
-
-		$suffix = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
-		$base   = get_template_directory_uri();
-		$ver    = Customify::$version ?: '0.4.13';
-
-		// CSS is NOT enqueued via wp_enqueue_style — it lives inside the panel's
-		// shadow DOM, loaded as <link> by the JS bundle. We just pass the URL.
-		$css_url = $base . '/build/css/frontend/preview-colors' . $suffix . '.css?ver=' . rawurlencode($ver);
-
-		wp_enqueue_script(
-			self::HANDLE,
-			$base . '/build/js/frontend/preview-colors' . $suffix . '.js',
-			array(),
-			$ver,
-			true
-		);
-
-		wp_localize_script(self::HANDLE, 'CustomifyPreviewColors', array(
-			'rootId'        => self::ROOT_ID,
-			'cssUrl'        => $css_url,
-			'ajaxUrl'       => admin_url('admin-ajax.php'),
-			'nonce'         => wp_create_nonce(Customify_Preview_Colors_Ajax::NONCE_ACTION),
-			'slots'         => Customify_Preview_Colors_Config::slots(),
-			'slotDesc'      => Customify_Preview_Colors_Config::slot_descriptions(),
-			'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
-			'settingsRows'  => Customify_Preview_Colors_Config::settings_rows(),
-			'userPalettes'  => Customify_Preview_Colors_Ajax::get_user_palettes(),
-			'activeId'      => Customify_Preview_Colors_Ajax::get_active_id(),
-			// Same dark-mode blobs as the Customizer control bundle — keeps
-			// the resolve chain consistent across both panel hosts.
-			'darkBaselines' => Customify_Preview_Colors_Dark::baselines(),
-			'legacyMods'    => Customify_Preview_Colors_Customizer::collect_legacy_mods(),
-		));
-	}
-
-	public static function render_root()
-	{
-		if (! self::is_active()) {
-			return;
-		}
-		echo '<div id="' . esc_attr(self::ROOT_ID) . '"></div>';
-	}
 }
 
 Customify_Preview_Colors::init();

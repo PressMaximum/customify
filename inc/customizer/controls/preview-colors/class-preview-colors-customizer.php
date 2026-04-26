@@ -3,9 +3,10 @@
  * Preview Colors — WP Customizer integration.
  *
  * Adds a "Color palette" control inside the Customizer's Global Colors
- * section. The control hosts the same panel UI that the standalone
- * `?preview-colors=1` overlay uses (shadow-DOM mount, same JS bundle, same
- * AJAX endpoints, same option storage). Only the host context differs.
+ * section. The control mounts a React app (light DOM) on a host div whose id
+ * is reused as the SCSS scope (`#customify-preview-colors-root`). Settings
+ * write through the Customizer Publish pipeline (`transport: 'postMessage'`),
+ * with the preview iframe rebroadcasting the `:root` vars on every change.
  *
  * @package customify
  */
@@ -31,10 +32,10 @@ class Customify_Preview_Colors_Customizer
 		// before our control attaches, so register at a later priority.
 		add_action('customize_register', array(__CLASS__, 'register'), 700);
 		add_action('customize_controls_enqueue_scripts', array(__CLASS__, 'enqueue_controls'));
-		// Preview-iframe bundle: rewrites the :root vars block on every
-		// setting change so `transport: 'postMessage'` updates land without
-		// reloading the iframe.
-		add_action('customize_preview_init', array(__CLASS__, 'enqueue_preview'));
+		// Preview-iframe live update is bundled into the `customify-customizer`
+		// script (see src/backend/customizer/customizer.js + the localize block
+		// in inc/customizer/class-customizer.php::preview_js()) — one combined
+		// iframe asset instead of two.
 	}
 
 	/**
@@ -63,11 +64,14 @@ class Customify_Preview_Colors_Customizer
 			return;
 		}
 
-		// Active palette id — string keyed slug.
+		// Active palette id — string keyed slug. Default = first entry in
+		// the filtered theme_presets list (`'ashwood'` out of the box) so
+		// the Customizer reverts here on "Reset to defaults" / publishes a
+		// sensible value on first save.
 		$wp_customize->add_setting(Customify_Preview_Colors_Ajax::OPTION_ACTIVE, array(
 			'type'              => 'option',
 			'capability'        => Customify_Preview_Colors_Ajax::CAPABILITY,
-			'default'           => '',
+			'default'           => Customify_Preview_Colors_Config::default_active_id(),
 			'transport'         => 'postMessage',
 			'sanitize_callback' => array('Customify_Preview_Colors_Ajax', 'sanitize_active_id'),
 		));
@@ -179,40 +183,5 @@ class Customify_Preview_Colors_Customizer
 			}
 		}
 		return $out;
-	}
-
-	/**
-	 * Enqueue the preview-iframe bundle. Listens for postMessage updates from
-	 * the controls pane and rewrites `<style id="customify-preview-colors-vars">`
-	 * inside the iframe — same shape as `output_root_vars()` so the override
-	 * layer in style-theme.css picks up changes without an iframe refresh.
-	 */
-	public static function enqueue_preview()
-	{
-		$suffix = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
-		$base   = get_template_directory_uri();
-		$ver    = Customify::$version ?: '0.4.13';
-
-		wp_enqueue_script(
-			self::HANDLE . '-preview',
-			$base . '/build/js/backend/customizer/preview-colors-preview' . $suffix . '.js',
-			array('customize-preview'),
-			$ver,
-			true
-		);
-
-		wp_localize_script(self::HANDLE . '-preview', 'CustomifyPreviewColorsPreview', array(
-			'styleId'      => Customify_Preview_Colors::HANDLE . '-vars',
-			'settingIds'   => array(
-				'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
-				'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
-			),
-			'slots'        => Customify_Preview_Colors_Config::slots(),
-			'themePresets' => Customify_Preview_Colors_Config::theme_presets(),
-			// Preview iframe needs the same dark resolve fixtures as the
-			// controls bundle so live previews match the published render.
-			'darkBaselines' => Customify_Preview_Colors_Dark::baselines(),
-			'legacyMods'    => self::collect_legacy_mods(),
-		));
 	}
 }

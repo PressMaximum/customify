@@ -218,16 +218,14 @@ function useCustomizeSetting(settingId, defaultValue) {
  * Mirror the active palette onto :root as the Style-Pack-aligned token set.
  *
  * Emits BOTH the light and dark var sets every render so the trigger block
- * in the override CSS (`.dark-mode { … }`) can rebind without an extra round
- * trip. When `mode === 'dark'`, the active `--customify-color-<slot>` vars
- * are also overridden inline with the dark companion so admin previews
- * match what visitors see in `.dark-mode` subtrees.
+ * in the override CSS (`.dark-mode { … }`) can rebind elements that opt in
+ * via the trigger class without an extra round trip from the iframe.
  *
  * Six user-picked slots (hex + rgb triplet) plus eight auto-computed
  * companions per mode (on-*, text-muted/subtle, border-default,
  * primary-hover/subtle).
  */
-function useColorVars(palette, slots, mode) {
+function useColorVars(palette, slots) {
 	useEffect(() => {
 		if (!palette || !palette.colors) return;
 		const root = document.documentElement;
@@ -295,16 +293,7 @@ function useColorVars(palette, slots, mode) {
 					`color-mix(in srgb, ${dark.primary}, ${dark.base} 92%)`);
 			}
 		}
-
-		// 3) Apply / remove the `.dark-mode` class on <html> so the trigger
-		// block in overrides.scss (and the CSS in output_root_vars()) takes
-		// effect for the entire admin preview.
-		if (mode === 'dark') {
-			root.classList.add('dark-mode');
-		} else {
-			root.classList.remove('dark-mode');
-		}
-	}, [palette, slots, mode]);
+	}, [palette, slots]);
 }
 
 // ─────────────────────────────────────────────────────────────── icons
@@ -854,40 +843,6 @@ function AutoComputed({ trigger }) {
 	);
 }
 
-// ─────────────────────────────────────────────────────────── DarkModeToggle
-
-/**
- * Two-state pill — switches the preview between light and dark companions of
- * the active palette. State is preview-only (not persisted to options); the
- * site-wide default for visitors lives in a future Customizer setting.
- */
-function DarkModeToggle({ mode, onChange }) {
-	return (
-		<div className="dark-mode-toggle" role="radiogroup" aria-label={__('Preview mode', 'customify')}>
-			<button
-				type="button"
-				role="radio"
-				aria-checked={mode === 'light'}
-				className={'dm-btn' + (mode === 'light' ? ' active' : '')}
-				onClick={() => onChange('light')}
-				title={__('Preview light mode', 'customify')}
-			>
-				<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round"><circle cx="7" cy="7" r="2.5" /><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.6 2.6l1 1M10.4 10.4l1 1M11.4 2.6l-1 1M3.6 10.4l-1 1" /></svg>
-			</button>
-			<button
-				type="button"
-				role="radio"
-				aria-checked={mode === 'dark'}
-				className={'dm-btn' + (mode === 'dark' ? ' active' : '')}
-				onClick={() => onChange('dark')}
-				title={__('Preview dark mode', 'customify')}
-			>
-				<svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"><path d="M11.5 8.5A4.5 4.5 0 1 1 5.5 2.5a3.5 3.5 0 0 0 6 6Z" /></svg>
-			</button>
-		</div>
-	);
-}
-
 // ─────────────────────────────────────────────────────────── App
 
 function App({ cfg }) {
@@ -895,12 +850,6 @@ function App({ cfg }) {
 	const [activeId, setActiveId] = useCustomizeSetting(cfg.settingIds.active, '');
 	const [editSlot, setEditSlot] = useState(null);
 	const [openForm, setOpenForm] = useState(null); // 'add' | 'import' | 'export' | null
-	// Light/dark mode is preview-only — never persisted. Default to whatever
-	// the document is already in (e.g. honour an existing `<html class="dark-mode">`
-	// applied by a child theme, plugin, or the saved site-wide setting).
-	const [mode, setMode] = useState(() =>
-		document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light'
-	);
 
 	const slots = cfg.slots;
 	const themePresets = cfg.themePresets || [];
@@ -917,7 +866,7 @@ function App({ cfg }) {
 		[themePresets, activePalette]
 	);
 
-	useColorVars(activePalette, slots, mode);
+	useColorVars(activePalette, slots);
 
 	useEffect(() => {
 		if (activePalette) {
@@ -1034,10 +983,7 @@ function App({ cfg }) {
 	return (
 		<div className="sidebar">
 			<div className="section">
-				<div className="sec-row">
-					<h3>{__('Current palette', 'customify')}</h3>
-					<DarkModeToggle mode={mode} onChange={setMode} />
-				</div>
+				<div className="sec-row"><h3>{__('Current palette', 'customify')}</h3></div>
 				<div className="hero-card">
 					<HeroDeck
 						key={activePalette.id /* re-mount to retrigger animation on switch */}
