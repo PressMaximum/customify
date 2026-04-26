@@ -3,11 +3,14 @@
     border-left: none;
     border-right: none;
     //background: #f0f0f0;
+    // PHASE-7-PLAN §16: see _header_main.scss for the rationale.
     .light-mode {
         background: #f0f0f0;
         box-shadow: 0 1px 2px 0 #e1e5ea;
+        --customify-color-on-secondary: var(--customify-color-on-light-bg);
     }
     .dark-mode {
         background: #303030;
+        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
     }
  }

@@ -133,6 +133,103 @@
 		return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
 	}
 
+	// ───── HSL helpers + dark-slot derivation (PHASE-7-PLAN §5) ──────────
+	// Mirror customizer.js + PHP `Customify_Preview_Colors_Dark`.
+
+	function rgbToHsl(rgb) {
+		var r = rgb[0]/255, g = rgb[1]/255, b = rgb[2]/255;
+		var max = Math.max(r, g, b), min = Math.min(r, g, b);
+		var l = (max + min) / 2;
+		if (max === min) return [0, 0, l * 100];
+		var d = max - min;
+		var s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+		var h;
+		if (max === r) h = (g - b) / d + (g < b ? 6 : 0);
+		else if (max === g) h = (b - r) / d + 2;
+		else h = (r - g) / d + 4;
+		return [h * 60, s * 100, l * 100];
+	}
+	function hslToRgb(hsl) {
+		var h = hsl[0]/360, s = hsl[1]/100, l = hsl[2]/100;
+		if (s === 0) return [l*255, l*255, l*255];
+		var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		var p = 2 * l - q;
+		var hue = function (t) {
+			if (t < 0) t += 1; if (t > 1) t -= 1;
+			if (t < 1/6) return p + (q - p) * 6 * t;
+			if (t < 1/2) return q;
+			if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+			return p;
+		};
+		return [hue(h + 1/3) * 255, hue(h) * 255, hue(h - 1/3) * 255];
+	}
+	function rgbArrToHex(rgb) {
+		var c = function (v) {
+			var n = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+			return (n.length === 1 ? '0' + n : n).toUpperCase();
+		};
+		return '#' + c(rgb[0]) + c(rgb[1]) + c(rgb[2]);
+	}
+	function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+	function deriveDarkSlot(slot, srcHex, palette) {
+		var rgb = hexToRgbArray(srcHex);
+		if (!rgb) return srcHex;
+		var hsl = rgbToHsl(rgb), h = hsl[0], s = hsl[1], l = hsl[2];
+		switch (slot) {
+			case 'base':
+				l = clamp(100 - l, 5, 12);
+				break;
+			case 'text':
+				l = clamp(100 - l, 88, 96);
+				s = Math.min(s, 30);
+				break;
+			case 'surface':
+				var baseSrc = palette && palette.colors && palette.colors.base;
+				var baseDark = baseSrc ? deriveDarkSlot('base', baseSrc, palette) : '#0B0D10';
+				var bRgb = hexToRgbArray(baseDark);
+				var bHsl = rgbToHsl(bRgb);
+				h = bHsl[0]; s = bHsl[1]; l = Math.min(bHsl[2] + 6, 18);
+				break;
+			case 'primary':
+				l = clamp(l, 55, 70);
+				break;
+			case 'secondary':
+				var surfHex = (palette && palette.colors && palette.colors.surface) || '#FFFFFF';
+				var surfRgb = hexToRgbArray(surfHex);
+				var lumSrc = luminance(rgb);
+				var lumSurf = surfRgb ? luminance(surfRgb) : 1;
+				if (lumSrc < lumSurf) {
+					l = clamp(100 - l, 80, 95);
+					s = Math.max(s - 10, 0);
+				} else {
+					l = Math.max(l - 10, 20);
+				}
+				break;
+			case 'accent':
+				s = Math.min(s + 10, 95);
+				l = clamp(l, 55, 80);
+				break;
+		}
+		return rgbArrToHex(hslToRgb([h, s, l]));
+	}
+
+	function resolveDarkSlot(slot, palette) {
+		if (palette && palette.dark && palette.dark[slot]) return palette.dark[slot];
+		if (palette && palette.colors && palette.colors[slot]) {
+			return deriveDarkSlot(slot, palette.colors[slot], palette);
+		}
+		var legacyMap = { text: 'text', primary: 'primary', secondary: 'secondary' };
+		var lk = legacyMap[slot];
+		if (lk && cfg.legacyMods && cfg.legacyMods[lk]) {
+			return deriveDarkSlot(slot, cfg.legacyMods[lk], palette);
+		}
+		var bl = cfg.darkBaselines || {};
+		if (bl.scss && bl.scss[slot]) return bl.scss[slot];
+		if (bl.hex && bl.hex[slot]) return bl.hex[slot];
+		return '#000000';
+	}
+
 	// Mirror the active palette onto :root as CSS custom properties.
 	//
 	// Six user-picked slots (Style Pack vocabulary):
@@ -152,17 +249,30 @@
 		if (!pal) return;
 		var docRoot = document.documentElement;
 
-		// 1) Six user-picked slots.
+		// 0) Resolve the dark companion via the shared 5-tier chain.
+		var dark = {};
+		for (var di = 0; di < SLOTS.length; di++) {
+			dark[SLOTS[di]] = resolveDarkSlot(SLOTS[di], pal);
+		}
+
+		// 1) Six user-picked slots — light + dark hex / rgb pairs.
 		for (var i = 0; i < SLOTS.length; i++) {
 			var slot = SLOTS[i];
 			var val = pal.colors[slot];
-			if (!val) continue;
-			docRoot.style.setProperty('--customify-color-' + slot, val);
-			var rgb = hexToRgb(val);
-			if (rgb) docRoot.style.setProperty('--customify-color-' + slot + '-rgb', rgb);
+			if (val) {
+				docRoot.style.setProperty('--customify-color-' + slot, val);
+				var rgb = hexToRgb(val);
+				if (rgb) docRoot.style.setProperty('--customify-color-' + slot + '-rgb', rgb);
+			}
+			var dval = dark[slot];
+			if (dval) {
+				docRoot.style.setProperty('--customify-color-' + slot + '-dark', dval);
+				var drgb = hexToRgb(dval);
+				if (drgb) docRoot.style.setProperty('--customify-color-' + slot + '-dark-rgb', drgb);
+			}
 		}
 
-		// 2) Contrast-aware on-* companions for slots used as backgrounds.
+		// 2) Light auto-computed (on-*, text-muted/subtle, border-default).
 		var onSlots = ['primary', 'secondary', 'surface'];
 		for (var k = 0; k < onSlots.length; k++) {
 			var s = onSlots[k];
@@ -170,18 +280,12 @@
 				docRoot.style.setProperty('--customify-color-on-' + s, pickOn(pal.colors[s]));
 			}
 		}
-
-		// 3) Text + border alpha derivatives — universal browser support.
 		var textRgb = hexToRgb(pal.colors.text);
 		if (textRgb) {
 			docRoot.style.setProperty('--customify-color-text-muted',     'rgba(' + textRgb + ', 0.55)');
 			docRoot.style.setProperty('--customify-color-text-subtle',    'rgba(' + textRgb + ', 0.35)');
 			docRoot.style.setProperty('--customify-color-border-default', 'rgba(' + textRgb + ', 0.12)');
 		}
-
-		// 4) Primary hover / subtle — color-mix (Chrome 111+ / FF 113+ / Safari 16.2+).
-		// Browsers that lack `color-mix` resolve the var to the value below; the
-		// override stylesheet supplies a per-rule hex fallback.
 		if (pal.colors.primary) {
 			docRoot.style.setProperty('--customify-color-primary-hover',
 				'color-mix(in srgb, ' + pal.colors.primary + ', #000 15%)');
@@ -189,6 +293,55 @@
 				docRoot.style.setProperty('--customify-color-primary-subtle',
 					'color-mix(in srgb, ' + pal.colors.primary + ', ' + pal.colors.base + ' 92%)');
 			}
+		}
+
+		// 2b) Dark auto-computed — same algos against resolved dark slots.
+		for (var k2 = 0; k2 < onSlots.length; k2++) {
+			var s2 = onSlots[k2];
+			if (dark[s2]) {
+				docRoot.style.setProperty('--customify-color-on-' + s2 + '-dark', pickOn(dark[s2]));
+			}
+		}
+		var dTextRgb = hexToRgb(dark.text);
+		if (dTextRgb) {
+			docRoot.style.setProperty('--customify-color-text-muted-dark',     'rgba(' + dTextRgb + ', 0.55)');
+			docRoot.style.setProperty('--customify-color-text-subtle-dark',    'rgba(' + dTextRgb + ', 0.35)');
+			docRoot.style.setProperty('--customify-color-border-default-dark', 'rgba(' + dTextRgb + ', 0.12)');
+		}
+		if (dark.primary) {
+			// Direction flip: blend toward white in dark mode so hover stays visible.
+			docRoot.style.setProperty('--customify-color-primary-hover-dark',
+				'color-mix(in srgb, ' + dark.primary + ', #fff 12%)');
+			if (dark.base) {
+				docRoot.style.setProperty('--customify-color-primary-subtle-dark',
+					'color-mix(in srgb, ' + dark.primary + ', ' + dark.base + ' 92%)');
+			}
+		}
+
+		// 3) Apply / remove the `.dark-mode` class on <html> based on the
+		// preview-only mode state. The trigger block (compiled into the
+		// `<style>` emitted by output_root_vars()) does the rebinding for
+		// non-admin contexts; for admin previews we mirror the active vars.
+		if (currentMode === 'dark') {
+			docRoot.classList.add('dark-mode');
+		} else {
+			docRoot.classList.remove('dark-mode');
+		}
+	}
+
+	// Light/dark mode is preview-only — never persisted. Initial value mirrors
+	// any pre-existing `<html class="dark-mode">` (e.g. set by a site-wide
+	// setting, child theme, or saved customizer state).
+	var currentMode = document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light';
+	function setMode(m) {
+		if (m !== 'light' && m !== 'dark') return;
+		currentMode = m;
+		applyColorVars();
+		var btns = $$('.dm-btn');
+		for (var i = 0; i < btns.length; i++) {
+			var on = btns[i].dataset.mode === m;
+			btns[i].classList.toggle('active', on);
+			btns[i].setAttribute('aria-checked', on ? 'true' : 'false');
 		}
 	}
 
@@ -241,7 +394,17 @@
 		'    <span class="sb-help">?</span>',
 		'  </div>',
 		'  <div class="section">',
-		'    <div class="sec-row"><h3>Current palette</h3></div>',
+		'    <div class="sec-row">',
+		'      <h3>Current palette</h3>',
+		'      <div class="dark-mode-toggle" role="radiogroup" aria-label="Preview mode">',
+		'        <button type="button" class="dm-btn active" role="radio" aria-checked="true" data-mode="light" title="Preview light mode">',
+		'          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="7" r="2.5"/><path d="M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.6 2.6l1 1M10.4 10.4l1 1M11.4 2.6l-1 1M3.6 10.4l-1 1"/></svg>',
+		'        </button>',
+		'        <button type="button" class="dm-btn" role="radio" aria-checked="false" data-mode="dark" title="Preview dark mode">',
+		'          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M11.5 8.5A4.5 4.5 0 1 1 5.5 2.5a3.5 3.5 0 0 0 6 6Z"/></svg>',
+		'        </button>',
+		'      </div>',
+		'    </div>',
 		'    <div class="hero-card">',
 		'      <div class="deck-wrap" data-deck></div>',
 		'      <div class="deck-footer">',
@@ -986,6 +1149,14 @@
 	$('.sb-back').addEventListener('click', function () { setCollapsed(true); closePopover(); });
 	$('[data-cpc-reopen]').addEventListener('click', function () { setCollapsed(false); });
 
+	// Mode toggle (light / dark preview). Event delegation against the
+	// shadow root so future re-renders inside the section don't need rebinding.
+	root.addEventListener('click', function (e) {
+		var btn = e.target.closest && e.target.closest('.dm-btn');
+		if (!btn) return;
+		setMode(btn.dataset.mode);
+	});
+
 	// ------------------------------------------------------ init
 
 	var initPal = getActive();
@@ -995,6 +1166,9 @@
 	buildSettings();
 	buildModalList();
 	applyColorVars();
+	// Sync the dark-mode toggle UI with whatever state we read off <html>
+	// at script load. This emits the var set + paints the active button.
+	setMode(currentMode);
 	buildAutoComputed();
 	logActive();
 })();

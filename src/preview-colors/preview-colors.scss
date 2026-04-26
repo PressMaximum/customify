@@ -137,6 +137,33 @@
   .icon-btn:hover { border-color: var(--border-strong); background: var(--bg-subtle); color: var(--text-primary); }
   .icon-btn svg { width: 14px; height: 14px; }
 
+  // Dark/light preview toggle — pill of two segmented buttons.
+  .dark-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px;
+  }
+  .dm-btn {
+    width: 22px; height: 22px;
+    border-radius: 999px;
+    background: transparent;
+    border: 0;
+    color: var(--text-tertiary);
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: background .15s ease, color .15s ease;
+  }
+  .dm-btn:hover { color: var(--text-primary); }
+  .dm-btn.active {
+    background: var(--bg-sidebar);
+    color: var(--text-primary);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  }
+  .dm-btn svg { width: 12px; height: 12px; }
+
   /* === CURRENT PALETTE (FANNED DECK) === */
   .hero-card {
     background: linear-gradient(180deg, var(--bg-subtle) 0%, #ffffff 100%);

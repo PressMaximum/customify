@@ -60,11 +60,22 @@ class Customify_Preview_Colors_Config
 					'base' => '#F9F3E4', 'text' => '#1A3A28', 'primary' => '#B35932',
 					'secondary' => '#1C2147', 'accent' => '#F5DE9A', 'surface' => '#FFFFFF',
 				),
+				'dark' => array(
+					'base' => '#1A1410', 'text' => '#F2EAD8', 'primary' => '#E07A4F',
+					'secondary' => '#E8DCC4', 'accent' => '#FFD56B', 'surface' => '#28201A',
+				),
 			),
 			array(
 				'id'     => 'midnight',
 				'name'   => 'Midnight',
 				'colors' => array(
+					'base' => '#0B0D10', 'text' => '#F2F0EB', 'primary' => '#FF7A45',
+					'secondary' => '#FFFFFF', 'accent' => '#FFD36A', 'surface' => '#1C1F26',
+				),
+				// Already a dark design — `dark` mirrors `colors` so toggling
+				// the trigger class produces no visual change (correct for
+				// palettes that ARE dark).
+				'dark' => array(
 					'base' => '#0B0D10', 'text' => '#F2F0EB', 'primary' => '#FF7A45',
 					'secondary' => '#FFFFFF', 'accent' => '#FFD36A', 'surface' => '#1C1F26',
 				),
@@ -76,6 +87,10 @@ class Customify_Preview_Colors_Config
 					'base' => '#F5F6F4', 'text' => '#0F1C33', 'primary' => '#0055FF',
 					'secondary' => '#001D4A', 'accent' => '#B8E6FF', 'surface' => '#FFFFFF',
 				),
+				'dark' => array(
+					'base' => '#0A1124', 'text' => '#E5ECF7', 'primary' => '#3D8BFF',
+					'secondary' => '#FFFFFF', 'accent' => '#7AB8FF', 'surface' => '#152043',
+				),
 			),
 			array(
 				'id'     => 'moss',
@@ -83,6 +98,10 @@ class Customify_Preview_Colors_Config
 				'colors' => array(
 					'base' => '#F4FAF5', 'text' => '#0F2616', 'primary' => '#2B9348',
 					'secondary' => '#2B3D28', 'accent' => '#D9F0B5', 'surface' => '#FFFFFF',
+				),
+				'dark' => array(
+					'base' => '#0B1A11', 'text' => '#E7F3EB', 'primary' => '#52B86C',
+					'secondary' => '#E0EAD9', 'accent' => '#A8D87E', 'surface' => '#162619',
 				),
 			),
 		));

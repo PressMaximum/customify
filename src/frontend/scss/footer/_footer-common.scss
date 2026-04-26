@@ -21,11 +21,18 @@
         padding-top: 2em;
         padding-bottom: 2em;
     }
+    // PHASE-7-PLAN §16: literal-bg .light-mode / .dark-mode pair locally
+    // override `--customify-color-on-secondary` so the footer text rule in
+    // overrides.scss (`.site-footer p { color: var(--…on-secondary…) }`)
+    // resolves to the contrast-safe semantic token, not the slot-derived
+    // `pickOn(secondary)` which can flip wrong on auto-flipped palettes.
     .light-mode {
         background: #f0f0f0;
+        --customify-color-on-secondary: var(--customify-color-on-light-bg);
     }
     .dark-mode {
         background: #292929;
+        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
     }
 }
 
@@ -38,9 +45,11 @@
 
     .light-mode {
         background: #f9f9f9;
+        --customify-color-on-secondary: var(--customify-color-on-light-bg);
     }
     .dark-mode {
         background: #303030;
+        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
     }
 }
 
@@ -60,9 +69,11 @@
     }
     .light-mode {
         background: #ededed;
+        --customify-color-on-secondary: var(--customify-color-on-light-bg);
     }
     .dark-mode {
         background: #1a1a1a;
+        --customify-color-on-secondary: var(--customify-color-on-dark-bg);
     }
 }
 

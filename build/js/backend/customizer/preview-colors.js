@@ -65,6 +65,138 @@ function isLight(hex) {
   return (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255 > 0.7;
 }
 
+// ─────────────────────── HSL helpers (for dark-mode auto-derivation) ───
+//
+// Mirrors PHP `Customify_Preview_Colors_Dark::rgb_to_hsl` / `hsl_to_rgb`
+// so the live preview picks the same hex the server would render.
+
+function rgbToHsl(rgb) {
+  const r = rgb[0] / 255,
+    g = rgb[1] / 255,
+    b = rgb[2] / 255;
+  const max = Math.max(r, g, b),
+    min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return [0, 0, l * 100];
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h;
+  switch (max) {
+    case r:
+      h = (g - b) / d + (g < b ? 6 : 0);
+      break;
+    case g:
+      h = (b - r) / d + 2;
+      break;
+    default:
+      h = (r - g) / d + 4;
+  }
+  h *= 60;
+  return [h, s * 100, l * 100];
+}
+function hslToRgb(hsl) {
+  const h = hsl[0] / 360,
+    s = hsl[1] / 100,
+    l = hsl[2] / 100;
+  if (s === 0) return [l * 255, l * 255, l * 255];
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const hue = t => {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
+  };
+  return [hue(h + 1 / 3) * 255, hue(h) * 255, hue(h - 1 / 3) * 255];
+}
+function rgbArrToHex(rgb) {
+  const c = v => {
+    const n = Math.max(0, Math.min(255, Math.round(v))).toString(16);
+    return n.length === 1 ? '0' + n : n;
+  };
+  return '#' + c(rgb[0]).toUpperCase() + c(rgb[1]).toUpperCase() + c(rgb[2]).toUpperCase();
+}
+const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+
+/**
+ * HSL-based per-slot derivation. Matches PHP `derive_slot()` (PHASE-7 §5).
+ * `palette` is passed for slots that need cross-slot context (`surface`
+ * looks at `base`; `secondary` compares luminance against `surface`).
+ */
+function deriveDarkSlot(slot, srcHex, palette) {
+  const rgb = hexToRgbArray(srcHex);
+  if (!rgb) return srcHex;
+  let [h, s, l] = rgbToHsl(rgb);
+  switch (slot) {
+    case 'base':
+      l = clamp(100 - l, 5, 12);
+      break;
+    case 'text':
+      l = clamp(100 - l, 88, 96);
+      s = Math.min(s, 30);
+      break;
+    case 'surface':
+      {
+        const baseSrc = palette?.colors?.base;
+        const baseDark = baseSrc ? deriveDarkSlot('base', baseSrc, palette) : '#0B0D10';
+        const baseRgb = hexToRgbArray(baseDark);
+        const [bh, bs, bl] = rgbToHsl(baseRgb);
+        h = bh;
+        s = bs;
+        l = Math.min(bl + 6, 18);
+        break;
+      }
+    case 'primary':
+      l = clamp(l, 55, 70);
+      break;
+    case 'secondary':
+      {
+        const surfHex = palette?.colors?.surface || '#FFFFFF';
+        const surfRgb = hexToRgbArray(surfHex);
+        const lumSrc = luminance(rgb);
+        const lumSurf = surfRgb ? luminance(surfRgb) : 1;
+        if (lumSrc < lumSurf) {
+          l = clamp(100 - l, 80, 95);
+          s = Math.max(s - 10, 0);
+        } else {
+          l = Math.max(l - 10, 20);
+        }
+        break;
+      }
+    case 'accent':
+      s = Math.min(s + 10, 95);
+      l = clamp(l, 55, 80);
+      break;
+  }
+  return rgbArrToHex(hslToRgb([h, s, l]));
+}
+
+/**
+ * 5-tier resolve chain (PHASE-7 §10). Mirrors PHP `resolve_slot()`.
+ * `cfg` is `window.CustomifyPreviewColors` — shipped via wp_localize_script.
+ */
+function resolveDarkSlot(slot, palette, cfg) {
+  if (palette?.dark?.[slot]) return palette.dark[slot];
+  if (palette?.colors?.[slot]) {
+    return deriveDarkSlot(slot, palette.colors[slot], palette);
+  }
+  const legacyMap = {
+    text: 'text',
+    primary: 'primary',
+    secondary: 'secondary'
+  };
+  const legacyKey = legacyMap[slot];
+  if (legacyKey && cfg?.legacyMods?.[legacyKey]) {
+    return deriveDarkSlot(slot, cfg.legacyMods[legacyKey], palette);
+  }
+  const baselines = cfg?.darkBaselines || {};
+  if (baselines.scss?.[slot]) return baselines.scss[slot];
+  if (baselines.hex?.[slot]) return baselines.hex[slot];
+  return '#000000';
+}
+
 // ────────────────────────────────────────────────────────────────── hooks
 
 /**
@@ -97,23 +229,46 @@ function useCustomizeSetting(settingId, defaultValue) {
 
 /**
  * Mirror the active palette onto :root as the Style-Pack-aligned token set.
+ *
+ * Emits BOTH the light and dark var sets every render so the trigger block
+ * in the override CSS (`.dark-mode { … }`) can rebind without an extra round
+ * trip. When `mode === 'dark'`, the active `--customify-color-<slot>` vars
+ * are also overridden inline with the dark companion so admin previews
+ * match what visitors see in `.dark-mode` subtrees.
+ *
  * Six user-picked slots (hex + rgb triplet) plus eight auto-computed
- * companions: on-primary / on-secondary / on-surface (luminance pick),
- * text-muted / text-subtle / border-default (text @ alpha), primary-hover /
- * primary-subtle (color-mix). Rewrites every render that the active palette
- * shape changes.
+ * companions per mode (on-*, text-muted/subtle, border-default,
+ * primary-hover/subtle).
  */
-function useColorVars(palette, slots) {
+function useColorVars(palette, slots, mode) {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!palette || !palette.colors) return;
     const root = document.documentElement;
+    const cfg = window.CustomifyPreviewColors || {};
+
+    // Resolve dark companion via the shared 5-tier chain.
+    const dark = {};
     slots.forEach(slot => {
-      const hex = palette.colors[slot];
-      if (!hex) return;
-      root.style.setProperty(`--customify-color-${slot}`, hex);
-      const rgb = hexToRgb(hex);
-      if (rgb) root.style.setProperty(`--customify-color-${slot}-rgb`, rgb);
+      dark[slot] = resolveDarkSlot(slot, palette, cfg);
     });
+
+    // 1) Light + dark slot vars — always emit both, regardless of mode.
+    slots.forEach(slot => {
+      const lightHex = palette.colors[slot];
+      if (lightHex) {
+        root.style.setProperty(`--customify-color-${slot}`, lightHex);
+        const lightRgb = hexToRgb(lightHex);
+        if (lightRgb) root.style.setProperty(`--customify-color-${slot}-rgb`, lightRgb);
+      }
+      const darkHex = dark[slot];
+      if (darkHex) {
+        root.style.setProperty(`--customify-color-${slot}-dark`, darkHex);
+        const darkRgb = hexToRgb(darkHex);
+        if (darkRgb) root.style.setProperty(`--customify-color-${slot}-dark-rgb`, darkRgb);
+      }
+    });
+
+    // 2) Auto-computed (light).
     ['primary', 'secondary', 'surface'].forEach(s => {
       if (palette.colors[s]) {
         root.style.setProperty(`--customify-color-on-${s}`, pickOn(palette.colors[s]));
@@ -131,7 +286,34 @@ function useColorVars(palette, slots) {
         root.style.setProperty('--customify-color-primary-subtle', `color-mix(in srgb, ${palette.colors.primary}, ${palette.colors.base} 92%)`);
       }
     }
-  }, [palette, slots]);
+
+    // 2b) Auto-computed (dark) — same algos against resolved dark slots.
+    ['primary', 'secondary', 'surface'].forEach(s => {
+      if (dark[s]) root.style.setProperty(`--customify-color-on-${s}-dark`, pickOn(dark[s]));
+    });
+    const dTextRgb = hexToRgb(dark.text);
+    if (dTextRgb) {
+      root.style.setProperty('--customify-color-text-muted-dark', `rgba(${dTextRgb}, 0.55)`);
+      root.style.setProperty('--customify-color-text-subtle-dark', `rgba(${dTextRgb}, 0.35)`);
+      root.style.setProperty('--customify-color-border-default-dark', `rgba(${dTextRgb}, 0.12)`);
+    }
+    if (dark.primary) {
+      // Note the direction flip: blend toward white in dark mode.
+      root.style.setProperty('--customify-color-primary-hover-dark', `color-mix(in srgb, ${dark.primary}, #fff 12%)`);
+      if (dark.base) {
+        root.style.setProperty('--customify-color-primary-subtle-dark', `color-mix(in srgb, ${dark.primary}, ${dark.base} 92%)`);
+      }
+    }
+
+    // 3) Apply / remove the `.dark-mode` class on <html> so the trigger
+    // block in overrides.scss (and the CSS in output_root_vars()) takes
+    // effect for the entire admin preview.
+    if (mode === 'dark') {
+      root.classList.add('dark-mode');
+    } else {
+      root.classList.remove('dark-mode');
+    }
+  }, [palette, slots, mode]);
 }
 
 // ─────────────────────────────────────────────────────────────── icons
@@ -929,6 +1111,68 @@ function AutoComputed({
   });
 }
 
+// ─────────────────────────────────────────────────────────── DarkModeToggle
+
+/**
+ * Two-state pill — switches the preview between light and dark companions of
+ * the active palette. State is preview-only (not persisted to options); the
+ * site-wide default for visitors lives in a future Customizer setting.
+ */
+function DarkModeToggle({
+  mode,
+  onChange
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "dark-mode-toggle",
+    role: "radiogroup",
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Preview mode', 'customify'),
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      type: "button",
+      role: "radio",
+      "aria-checked": mode === 'light',
+      className: 'dm-btn' + (mode === 'light' ? ' active' : ''),
+      onClick: () => onChange('light'),
+      title: (0,external_wp_i18n_namespaceObject.__)('Preview light mode', 'customify'),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("svg", {
+        width: "12",
+        height: "12",
+        viewBox: "0 0 14 14",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.4",
+        strokeLinecap: "round",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("circle", {
+          cx: "7",
+          cy: "7",
+          r: "2.5"
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+          d: "M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.6 2.6l1 1M10.4 10.4l1 1M11.4 2.6l-1 1M3.6 10.4l-1 1"
+        })]
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      type: "button",
+      role: "radio",
+      "aria-checked": mode === 'dark',
+      className: 'dm-btn' + (mode === 'dark' ? ' active' : ''),
+      onClick: () => onChange('dark'),
+      title: (0,external_wp_i18n_namespaceObject.__)('Preview dark mode', 'customify'),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+        width: "12",
+        height: "12",
+        viewBox: "0 0 14 14",
+        fill: "none",
+        stroke: "currentColor",
+        strokeWidth: "1.4",
+        strokeLinecap: "round",
+        strokeLinejoin: "round",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+          d: "M11.5 8.5A4.5 4.5 0 1 1 5.5 2.5a3.5 3.5 0 0 0 6 6Z"
+        })
+      })
+    })]
+  });
+}
+
 // ─────────────────────────────────────────────────────────── App
 
 function App({
@@ -938,7 +1182,10 @@ function App({
   const [activeId, setActiveId] = useCustomizeSetting(cfg.settingIds.active, '');
   const [editSlot, setEditSlot] = (0,external_wp_element_namespaceObject.useState)(null);
   const [openForm, setOpenForm] = (0,external_wp_element_namespaceObject.useState)(null); // 'add' | 'import' | 'export' | null
-
+  // Light/dark mode is preview-only — never persisted. Default to whatever
+  // the document is already in (e.g. honour an existing `<html class="dark-mode">`
+  // applied by a child theme, plugin, or the saved site-wide setting).
+  const [mode, setMode] = (0,external_wp_element_namespaceObject.useState)(() => document.documentElement.classList.contains('dark-mode') ? 'dark' : 'light');
   const slots = cfg.slots;
   const themePresets = cfg.themePresets || [];
   const userArr = Array.isArray(userPalettes) ? userPalettes : [];
@@ -947,7 +1194,7 @@ function App({
     return allPalettes.find(p => p.id === activeId) || allPalettes[0] || null;
   }, [allPalettes, activeId]);
   const activeKind = (0,external_wp_element_namespaceObject.useMemo)(() => themePresets.some(p => p.id === activePalette?.id) ? 'theme' : 'user', [themePresets, activePalette]);
-  useColorVars(activePalette, slots);
+  useColorVars(activePalette, slots, mode);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (activePalette) {
       console.log('[Customify Preview Colors] Current palette:', {
@@ -1056,11 +1303,14 @@ function App({
     className: "sidebar",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "sec-row",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
           children: (0,external_wp_i18n_namespaceObject.__)('Current palette', 'customify')
-        })
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DarkModeToggle, {
+          mode: mode,
+          onChange: setMode
+        })]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "hero-card",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeroDeck, {

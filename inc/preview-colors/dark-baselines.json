@@ -1,0 +1,19 @@
+{
+  "_doc": "Phase 7 dark mode fallback fixtures. Read by both PHP (Customify_Preview_Colors_Dark::baselines()) and JS (CustomifyPreviewColors.scssBaseline / hexBaseline). L4 mirrors _skins.scss greyscale literals so unconfigured sites match today's header/footer dark sections; L5 is the last-resort hex (Midnight preset values).",
+  "scss": {
+    "base":      "#1A1A1A",
+    "text":      "#FCFCFC",
+    "primary":   "#FCFCFC",
+    "secondary": null,
+    "accent":    null,
+    "surface":   "#1F1F1F"
+  },
+  "hex": {
+    "base":      "#0B0D10",
+    "text":      "#F2F0EB",
+    "primary":   "#FF7A45",
+    "secondary": "#FFFFFF",
+    "accent":    "#FFD36A",
+    "surface":   "#1C1F26"
+  }
+}
