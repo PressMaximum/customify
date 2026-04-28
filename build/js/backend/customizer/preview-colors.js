@@ -352,7 +352,7 @@ const IconClose = ({
   })
 });
 const IconGlobe = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("svg", {
-  className: "globe",
+  className: "customify-globe",
   viewBox: "0 0 12 12",
   fill: "none",
   stroke: "currentColor",
@@ -377,7 +377,7 @@ function HeroDeck({
 }) {
   const colors = palette.colors;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    className: "deck-wrap",
+    className: "customify-deck-wrap",
     children: slots.map((slot, i) => {
       const c = colors[slot];
       if (!c) return null;
@@ -393,7 +393,7 @@ function HeroDeck({
         animationDelay: `${i * 40}ms`
       };
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: 'deck-card animating' + (!isLight(c) ? ' is-dark' : ''),
+        className: 'customify-deck-card is-animating' + (!isLight(c) ? ' is-dark' : ''),
         style: style,
         title: `${slot} · ${c.toUpperCase()}`,
         onClick: e => {
@@ -401,7 +401,7 @@ function HeroDeck({
           onSlotClick(slot);
         },
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-          className: "slot-chip",
+          className: "customify-slot-chip",
           children: slot
         })
       }, slot);
@@ -421,13 +421,13 @@ function Popover({
 }) {
   const hex = palette.colors[slot] || '#000000';
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "popover open",
+    className: "customify-popover is-open",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "popover-head",
+      className: "customify-popover-head",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         children: slot
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "modal-close",
+        className: "customify-modal-close",
         type: "button",
         style: {
           width: 20,
@@ -437,7 +437,7 @@ function Popover({
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconClose, {})
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-      className: "popover-preview",
+      className: "customify-popover-preview",
       style: {
         background: hex
       },
@@ -447,15 +447,15 @@ function Popover({
         onChange: e => onChange(e.target.value.toUpperCase())
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "popover-hex",
+      className: "customify-popover-hex",
       children: hex.toUpperCase()
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "popover-desc",
+      className: "customify-popover-desc",
       dangerouslySetInnerHTML: {
         __html: slotDesc[slot] || ''
       }
     }), kind === 'theme' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "popover-copy-hint",
+      className: "customify-popover-copy-hint",
       children: (0,external_wp_i18n_namespaceObject.__)('Editing creates a copy in Custom palettes', 'customify')
     })]
   });
@@ -500,19 +500,19 @@ function PresetCard({
     setDraft(palette.name);
     setEditing(false);
   };
-  const className = 'preset-card' + (isActive ? ' active' : '') + (isUser ? ' is-user' : '');
+  const className = 'customify-preset-card' + (isActive ? ' is-active' : '') + (isUser ? ' is-user' : '');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: className,
     onClick: e => {
-      if (e.target.closest('.del')) return;
-      if (e.target.closest('.preset-name-edit')) return;
+      if (e.target.closest('.customify-del')) return;
+      if (e.target.closest('.customify-preset-name-edit')) return;
       onPick(palette.id);
     },
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
-      className: "preset-name",
+      className: "customify-preset-name",
       children: [editing ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
         ref: inputRef,
-        className: "preset-name-edit",
+        className: "customify-preset-name-edit",
         type: "text",
         value: draft,
         maxLength: 60,
@@ -529,25 +529,25 @@ function PresetCard({
         },
         onClick: e => e.stopPropagation()
       }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        className: isUser && onRename ? 'preset-name-text editable' : 'preset-name-text',
+        className: isUser && onRename ? 'customify-preset-name-text is-editable' : 'customify-preset-name-text',
         title: isUser && onRename ? (0,external_wp_i18n_namespaceObject.__)('Click to rename', 'customify') : undefined,
         onClick: startEdit,
         children: palette.name
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        className: "slot-count",
+        className: "customify-slot-count",
         children: slots.length
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "palette-strip",
+      className: "customify-palette-strip",
       children: slots.map(s => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "chip",
+        className: "customify-chip",
         style: {
           background: c[s]
         },
         title: s
       }, s))
     }), isUser && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-      className: "del",
+      className: "customify-del",
       type: "button",
       "aria-label": (0,external_wp_i18n_namespaceObject.__)('Delete palette', 'customify'),
       title: (0,external_wp_i18n_namespaceObject.__)('Delete', 'customify'),
@@ -569,7 +569,7 @@ function PresetGrid({
   onRename
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    className: "preset-grid",
+    className: "customify-preset-grid",
     children: palettes.map(p => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetCard, {
       palette: p,
       kind: kind,
@@ -604,12 +604,12 @@ function AddForm({
     onConfirm(finalName, extendFrom);
   };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "add-form open",
+    className: "customify-add-form is-open",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "form-title",
+      className: "customify-form-title",
       children: (0,external_wp_i18n_namespaceObject.__)('Create new palette', 'customify')
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-field",
+      className: "customify-form-field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
         children: (0,external_wp_i18n_namespaceObject.__)('Palette title', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
@@ -624,7 +624,7 @@ function AddForm({
         }
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-field",
+      className: "customify-form-field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
         children: (0,external_wp_i18n_namespaceObject.__)('Extend from', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("select", {
@@ -640,14 +640,14 @@ function AddForm({
         })
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-actions",
+      className: "customify-form-actions",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "btn-cancel",
+        className: "customify-btn--cancel",
         type: "button",
         onClick: onCancel,
         children: (0,external_wp_i18n_namespaceObject.__)('Cancel', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
-        className: "btn-add",
+        className: "customify-btn--add",
         type: "button",
         onClick: submit,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconAdd, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Add', 'customify')]
@@ -733,11 +733,11 @@ function ImportForm({
     onConfirm(validated);
   };
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "add-form open",
+    className: "customify-add-form is-open",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-title",
+      className: "customify-form-title",
       children: [(0,external_wp_i18n_namespaceObject.__)('Import palette(s) from JSON', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "paste-example",
+        className: "customify-paste-example",
         type: "button",
         onClick: () => {
           setText(EXAMPLE_JSON);
@@ -746,7 +746,7 @@ function ImportForm({
         children: (0,external_wp_i18n_namespaceObject.__)('Use example', 'customify')
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-field",
+      className: "customify-form-field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
         children: (0,external_wp_i18n_namespaceObject.__)('Paste JSON', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("textarea", {
@@ -755,21 +755,21 @@ function ImportForm({
         spellCheck: false,
         onChange: e => setText(e.target.value)
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        className: "form-hint",
+        className: "customify-form-hint",
         children: (0,external_wp_i18n_namespaceObject.__)('Accepts a single palette object or an array. Requires "name" + all 6 slots.', 'customify')
       }), error && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "form-error show",
+        className: "customify-form-error is-show",
         children: error
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-actions",
+      className: "customify-form-actions",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "btn-cancel",
+        className: "customify-btn--cancel",
         type: "button",
         onClick: onCancel,
         children: (0,external_wp_i18n_namespaceObject.__)('Cancel', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
-        className: "btn-add",
+        className: "customify-btn--add",
         type: "button",
         onClick: submit,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconImport, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Import', 'customify')]
@@ -848,22 +848,22 @@ function ExportForm({
   };
   if (palettes.length === 0) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "add-form open",
+      className: "customify-add-form is-open",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "form-title",
+        className: "customify-form-title",
         children: (0,external_wp_i18n_namespaceObject.__)('Export custom palettes', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "form-field",
+        className: "customify-form-field",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
           children: (0,external_wp_i18n_namespaceObject.__)('Select palettes', 'customify')
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-          className: "export-empty",
+          className: "customify-export-empty",
           children: (0,external_wp_i18n_namespaceObject.__)('No custom palettes to export yet. Create or import one first.', 'customify')
         })]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "form-actions",
+        className: "customify-form-actions",
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-          className: "btn-cancel",
+          className: "customify-btn--cancel",
           type: "button",
           onClick: onClose,
           children: (0,external_wp_i18n_namespaceObject.__)('Close', 'customify')
@@ -874,18 +874,18 @@ function ExportForm({
   const allChecked = selected.size === palettes.length;
   const someChecked = selected.size > 0 && selected.size < palettes.length;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "add-form open",
+    className: "customify-add-form is-open",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "form-title",
+      className: "customify-form-title",
       children: (0,external_wp_i18n_namespaceObject.__)('Export custom palettes', 'customify')
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-field",
+      className: "customify-form-field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
         children: (0,external_wp_i18n_namespaceObject.__)('Select palettes', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "export-list",
+        className: "customify-export-list",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "select-all-row",
+          className: "customify-select-all",
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
             type: "checkbox",
             checked: allChecked,
@@ -898,16 +898,16 @@ function ExportForm({
           })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
           children: palettes.map(p => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
-            className: "export-item",
+            className: "customify-export-item",
             children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
               type: "checkbox",
               checked: selected.has(p.id),
               onChange: () => toggle(p.id)
             }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-              className: "ex-name",
+              className: "customify-ex-name",
               children: p.name
             }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-              className: "mini-strip",
+              className: "customify-mini-strip",
               children: slots.map(s => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
                 style: {
                   background: p.colors[s]
@@ -918,34 +918,34 @@ function ExportForm({
         })]
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-field",
+      className: "customify-form-field",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
         children: (0,external_wp_i18n_namespaceObject.__)('JSON output', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "export-output",
+        className: "customify-export-output",
         children: json || (0,external_wp_i18n_namespaceObject.__)('//  No palettes selected', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        className: "form-hint",
+        className: "customify-form-hint",
         children: (0,external_wp_i18n_namespaceObject.__)('Re-importable via the ↓ button above or on another site.', 'customify')
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "form-actions",
+      className: "customify-form-actions",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-        className: 'copied-flash' + (copied ? ' show' : ''),
+        className: 'customify-copied-flash' + (copied ? ' is-show' : ''),
         children: (0,external_wp_i18n_namespaceObject.__)('✓ Copied', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "btn-cancel",
+        className: "customify-btn--cancel",
         type: "button",
         onClick: onClose,
         children: (0,external_wp_i18n_namespaceObject.__)('Close', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
-        className: "btn-ghost",
+        className: "customify-btn--ghost",
         type: "button",
         disabled: !json,
         onClick: doDownload,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconExport, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Download', 'customify')]
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-        className: "btn-add",
+        className: "customify-btn--add",
         type: "button",
         disabled: !json,
         onClick: doCopy,
@@ -979,20 +979,20 @@ function SettingsRows({
       const slotsArr = cfg.slots || [];
       const isAtDefault = slotsArr.every(s => palette.colors[s] === defaults[s]);
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "setting-row",
+        className: "customify-setting-row",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "label-wrap",
+          className: "customify-label-wrap",
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            className: "label",
+            className: "customify-label",
             children: cfg.label
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            className: "sublabel",
+            className: "customify-sublabel",
             children: cfg.sublabel
           })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "right",
+          className: "customify-right",
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-            className: "reset-mini",
+            className: "customify-reset-mini",
             type: "button",
             onClick: () => resetRow(slotsArr),
             title: (0,external_wp_i18n_namespaceObject.__)('Reset to default', 'customify'),
@@ -1012,7 +1012,7 @@ function SettingsRows({
               // top, fully transparent). The label keeps the
               // existing dot visual + globe icon.
               (0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
-                className: 'color-dot' + (isLight(col) ? ' light' : ''),
+                className: 'customify-color-dot' + (isLight(col) ? ' is-light' : ''),
                 style: {
                   background: col
                 },
@@ -1077,22 +1077,22 @@ function AutoComputed({
   }, [trigger]);
   return /*#__PURE__*/_jsxs(Fragment, {
     children: [/*#__PURE__*/_jsx("div", {
-      className: "auto-computed-hint",
+      className: "customify-auto-hint",
       children: __('Theme generates these from the 6 slots above.', 'customify')
     }), /*#__PURE__*/_jsx("div", {
       children: rows.map(r => /*#__PURE__*/_jsxs("div", {
-        className: "auto-computed-row",
+        className: "customify-auto-row",
         title: `${r.slot} · ${r.value}`,
         children: [/*#__PURE__*/_jsx("span", {
-          className: "auto-computed-swatch",
+          className: "customify-auto-swatch",
           style: {
             background: r.value
           }
         }), /*#__PURE__*/_jsx("span", {
-          className: "auto-computed-label",
+          className: "customify-auto-label",
           children: r.label
         }), /*#__PURE__*/_jsx("span", {
-          className: "auto-computed-slot",
+          className: "customify-auto-slot",
           children: r.slot
         })]
       }, r.slot))
@@ -1149,9 +1149,9 @@ function App({
       const path = e.composedPath ? e.composedPath() : [];
       for (const n of path) {
         if (!n || !n.classList) continue;
-        if (n.classList.contains('popover')) return;
-        if (n.classList.contains('deck-card')) return;
-        if (n.classList.contains('color-dot')) return;
+        if (n.classList.contains('customify-popover')) return;
+        if (n.classList.contains('customify-deck-card')) return;
+        if (n.classList.contains('customify-color-dot')) return;
       }
       setEditSlot(null);
     };
@@ -1224,37 +1224,35 @@ function App({
   if (!activePalette) return null;
   const triggerKey = activePalette.id + '|' + slots.map(s => activePalette.colors[s]).join(',');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "sidebar",
+    className: "customify-sidebar",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "sec-row",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
-          children: (0,external_wp_i18n_namespaceObject.__)('Current palette', 'customify')
-        })
+      className: "customify-section",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+        className: "customify-control--heading",
+        children: (0,external_wp_i18n_namespaceObject.__)('Current palette', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "hero-card",
+        className: "customify-hero-card",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeroDeck, {
           palette: activePalette,
           slots: slots,
           onSlotClick: setEditSlot
         }, activePalette.id /* re-mount to retrigger animation on switch */), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "deck-footer",
+          className: "customify-deck-footer",
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
-            className: "deck-name",
+            className: "customify-deck-name",
             children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
               children: activePalette.name
             }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-              className: 'tag-theme' + (activeKind === 'user' ? ' tag-user' : ''),
+              className: 'customify-tag' + (activeKind === 'user' ? ' customify-tag--user' : ''),
               children: activeKind === 'theme' ? (0,external_wp_i18n_namespaceObject.__)('theme', 'customify') : (0,external_wp_i18n_namespaceObject.__)('user', 'customify')
             })]
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            className: "deck-sub",
+            className: "customify-deck-sub",
             children: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d is the number of color slots in a palette */
             (0,external_wp_i18n_namespaceObject.__)('%d slots', 'customify'), slots.length)
           })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-          className: "deck-hint",
+          className: "customify-deck-hint",
           children: (0,external_wp_i18n_namespaceObject.__)('Click a card to edit that slot', 'customify')
         }), editSlot && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Popover, {
           slot: editSlot,
@@ -1266,12 +1264,10 @@ function App({
         })]
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "sec-row",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
-          children: (0,external_wp_i18n_namespaceObject.__)('Theme presets', 'customify')
-        })
+      className: "customify-section",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+        className: "customify-control--heading",
+        children: (0,external_wp_i18n_namespaceObject.__)('Theme presets', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetGrid, {
         palettes: themePresets,
         kind: "theme",
@@ -1280,35 +1276,35 @@ function App({
         onPick: setActiveId
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "sec-row",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h3", {
+      className: "customify-section",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h3", {
+        className: "customify-control--heading",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
           children: [(0,external_wp_i18n_namespaceObject.__)('Custom palettes', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            className: "badge-count",
+            className: "customify-badge",
             children: userArr.length
           })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
           style: {
             display: 'flex',
             gap: 4
           },
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-            className: "icon-btn",
+            className: "customify-icon-btn",
             type: "button",
             "aria-label": (0,external_wp_i18n_namespaceObject.__)('Export palettes', 'customify'),
             title: (0,external_wp_i18n_namespaceObject.__)('Export JSON', 'customify'),
             onClick: () => setOpenForm(openForm === 'export' ? null : 'export'),
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconExport, {})
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-            className: "icon-btn",
+            className: "customify-icon-btn",
             type: "button",
             "aria-label": (0,external_wp_i18n_namespaceObject.__)('Import palette', 'customify'),
             title: (0,external_wp_i18n_namespaceObject.__)('Import JSON', 'customify'),
             onClick: () => setOpenForm(openForm === 'import' ? null : 'import'),
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconImport, {})
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
-            className: "icon-btn",
+            className: "customify-icon-btn",
             type: "button",
             "aria-label": (0,external_wp_i18n_namespaceObject.__)('Add palette', 'customify'),
             title: (0,external_wp_i18n_namespaceObject.__)('Add new palette', 'customify'),
@@ -1317,7 +1313,7 @@ function App({
           })]
         })]
       }), userArr.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "empty-user",
+        className: "customify-empty",
         children: [(0,external_wp_i18n_namespaceObject.__)('No custom palettes yet.', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("br", {}), (0,external_wp_i18n_namespaceObject.__)('Click + to create one, or ↓ to import JSON.', 'customify')]
       }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetGrid, {
         palettes: userArr,
@@ -1344,12 +1340,10 @@ function App({
         onClose: () => setOpenForm(null)
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-      className: "section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "group-title",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
-          children: (0,external_wp_i18n_namespaceObject.__)('Theme color', 'customify')
-        })
+      className: "customify-section",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+        className: "customify-control--heading",
+        children: (0,external_wp_i18n_namespaceObject.__)('Theme color', 'customify')
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SettingsRows, {
         palette: activePalette,
         settings: cfg.settingsRows || [],

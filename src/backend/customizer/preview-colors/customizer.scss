@@ -1,764 +1,397 @@
 /*
  * Customify Preview Colors — Customizer-control variant.
- *
- * Mounted in light DOM directly inside a WP_Customize_Control container.
- * No shadow root — WP admin styles (form inputs, .button, .customize-control-
- * title, color tones) flow in naturally, giving the panel a native feel.
- * Custom rules below are all scoped under `#customify-preview-colors-root`
- * so they cannot leak elsewhere on the Customizer page.
+ * Scoped under #customify-preview-colors-root. No shadow root.
+ * Class prefix: `customify-`. State modifiers: `is-*` (BEM modifier, no prefix).
  */
 
 #customify-preview-colors-root {
-  // WP-admin-aligned palette. The accent stays #2271b1 (WP blue), text/border
-  // tones nudged toward the wp-admin defaults (#1d2327, #50575e, #c3c4c7).
-  --bg-page: #f0f0f1;
-  --bg-sidebar: #ffffff;
-  --bg-subtle: #f6f7f7;
-  --text-primary: #1d2327;
-  --text-secondary: #50575e;
-  --text-tertiary: #8c8f94;
-  --border: #dcdcde;
-  --border-strong: #c3c4c7;
-  --accent: #2271b1;
-  --accent-soft: #e9f1f8;
-  --danger: #b32d2e;
-  --danger-soft: #fde7e7;
-  --radius-sm: 2px;
-  --radius-md: 3px;
-  --radius-lg: 4px;
+  --bg-subtle:       #f6f7f7;
+  --bg-sidebar:      #ffffff;
+  --text-primary:    #1d2327;
+  --text-secondary:  #50575e;
+  --text-tertiary:   #8c8f94;
+  --border:          #dcdcde;
+  --border-strong:   #c3c4c7;
+  --accent:          #2271b1;
+  --accent-soft:     #e9f1f8;
+  --danger:          #b32d2e;
+  --danger-soft:     #fde7e7;
+  --radius-sm:       2px;
+  --radius-md:       3px;
+  --radius-lg:       4px;
 
   display: block;
   color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
-
   line-height: 1.5;
 
   *, *::before, *::after { box-sizing: border-box; }
+  button { padding: 0; margin: 0; }
 
-  // Reset UA button padding so SVG icons keep their declared 14×14.
-  button {
-    padding: 0;
-    margin: 0;
-  }
+  // ─── Sidebar / section ───────────────────────────────────────────────────
 
-  .sidebar {
+  .customify-sidebar {
     width: auto;
-    // Negative margins pull the panel out to the edges of the Customizer
-    // control container, which has 12px horizontal padding by default.
-    margin-left: -12px;
-    margin-right: -12px;
+    margin-inline: -12px;
     background: transparent;
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-    overflow: visible;
-    max-height: none;
-    overflow-y: visible;
+    border: 0; border-radius: 0; box-shadow: none;
+    overflow: visible; max-height: none;
   }
 
-  // (Hide rules for `.sb-header` and `.cpc-reopen` are declared at the end
-  // of this file so they beat the original styling blocks on cascade order.)
-
-  // Floating "reopen" button — only visible when the panel is collapsed.
-  .cpc-reopen {
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    color: var(--text-secondary);
-    cursor: pointer;
-    padding: 0;
-    transition: transform .15s ease, box-shadow .15s ease, color .15s ease;
-  }
-  .cpc-reopen:hover {
-    transform: scale(1.06);
-    box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    color: var(--text-primary);
-  }
-  .cpc-reopen svg { width: 16px; height: 16px; }
-
-  .sb-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border);
-  }
-  .sb-back {
-    width: 28px; height: 28px;
-    border: none; background: transparent; cursor: pointer;
-    display: inline-flex; align-items: center; justify-content: center;
-    color: var(--text-secondary);
-    border-radius: var(--radius-sm);
-  }
-  .sb-back:hover { background: var(--bg-subtle); color: var(--text-primary); }
-  .sb-crumb { flex: 1; line-height: 1.35; }
-  .sb-crumb small {color: var(--text-tertiary); letter-spacing: 0.02em; display: block; }
-  .sb-crumb strong {font-weight: 600; color: var(--text-primary); display: block; }
-  .sb-help {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: #4B5563; color: #fff;
-display: inline-flex; align-items: center; justify-content: center;
+  .customify-section {
+    padding: 0 12px 12px;
+    & + .customify-section { border-top: 0; }
   }
 
-  .section { padding: 0px 12px 12px; }
-  .section + .section { border-top: 0; }
+  // ─── Heading bar — applied directly to h3/h4 element ─────────────────────
 
-  // Section heading bar — gray strip with uppercase white text.
-  // Negative margins cancel the .section padding so it runs edge-to-edge.
-  .sec-row {
-    display: flex; align-items: center; justify-content: space-between;
+  .customify-control--heading {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between;
     margin: 10px -12px 12px;
     padding: 5px 12px;
     background-color: #bbb;
-  }
-  .sec-row h3 {
     color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
-    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    gap: 6px;
+
+    .customify-icon-btn {
+      color: rgba(255,255,255,0.85); border-color: transparent;
+      &:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.35); color: #fff; }
+    }
   }
-  // Icon buttons living on the gray heading bar — light icons on the bar.
-  .sec-row .icon-btn {
-    color: rgba(255,255,255,0.85);
-    border-color: transparent;
-  }
-  .sec-row .icon-btn:hover {
-    background: rgba(255,255,255,0.18);
-    border-color: rgba(255,255,255,0.35);
-    color: #fff;
-  }
-  .badge-count {
-    font-weight: 600; line-height: 1; 
-    color: #fff;
-    letter-spacing: 0;
-    background: rgba(255,255,255,0.22);
-    padding: 3px 7px;
-    border-radius: 999px;
-    border: 0;
-  }
-  .icon-btn {
-    width: 26px; height: 26px; border-radius: var(--radius-sm);
-    border: 1px solid transparent; background: transparent; cursor: pointer;
+
+  // ─── Icon button & badge ──────────────────────────────────────────────────
+
+  .customify-icon-btn {
+    width: 26px; height: 26px;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent; background: transparent;
+    cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     color: var(--text-secondary);
     transition: all .15s ease;
+    &:hover { border-color: var(--border-strong); background: var(--bg-subtle); color: var(--text-primary); }
+    svg { width: 14px; height: 14px; }
   }
-  .icon-btn:hover { border-color: var(--border-strong); background: var(--bg-subtle); color: var(--text-primary); }
-  .icon-btn svg { width: 14px; height: 14px; }
 
-  /* === CURRENT PALETTE (FANNED DECK) === */
-  .hero-card {
-    background: linear-gradient(180deg, var(--bg-subtle) 0%, #ffffff 100%);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px 18px 16px;
-    position: relative;
+  .customify-badge {
+    font-weight: 600; line-height: 1; letter-spacing: 0;
+    color: #fff; background: rgba(255,255,255,0.22);
+    padding: 3px 7px; border-radius: 999px; border: 0;
   }
-  .deck-wrap {
-    position: relative;
-    height: 124px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+  // ─── Hero card / deck ─────────────────────────────────────────────────────
+
+  .customify-hero-card {
+    background: linear-gradient(180deg, var(--bg-subtle) 0%, #fff 100%);
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 20px 18px 16px; position: relative;
+  }
+
+  .customify-deck-wrap {
+    position: relative; height: 124px;
+    display: flex; align-items: center; justify-content: center;
     margin-bottom: 14px;
   }
-  .deck-card {
-    position: absolute;
-    width: 48px;
-    height: 82px;
-    border-radius: 9px;
-    border: 1px solid rgba(0,0,0,0.08);
+
+  .customify-deck-card {
+    position: absolute; width: 48px; height: 82px;
+    border-radius: 9px; border: 1px solid rgba(0,0,0,0.08);
     transform-origin: bottom center;
     transition: transform .45s cubic-bezier(.22,1.2,.36,1), box-shadow .3s ease;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer;
+    &:hover {
+      transform: translate(var(--tx), -10px) rotate(var(--r)) scale(1.06) !important;
+      z-index: 20 !important; box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+    }
+    &.is-animating { animation: cpcCardPulse .5s cubic-bezier(.22,1.2,.36,1) both; }
   }
-  .deck-card:hover {
-    transform: translate(var(--tx), -10px) rotate(var(--r)) scale(1.06) !important;
-    z-index: 20 !important;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
-  }
-  .deck-card .slot-chip {
-    position: absolute;
-    bottom: 6px; left: 50%;
-    transform: translateX(-50%);
-    font-weight: 600; line-height: 1;
-    letter-spacing: 0.08em;
-    padding: 3px 5px;
-    border-radius: 3px;
-    background: rgba(255,255,255,0.88);
-    color: #111;
-    opacity: 0;
-    transition: opacity .2s ease;
-    pointer-events: none;
-  }
-  .deck-card:hover .slot-chip { opacity: 1; }
-  .deck-card.is-dark .slot-chip { background: rgba(20,20,20,0.82); color: #fff; }
 
-  .deck-footer {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 2px;
-  }
-  .deck-name {font-weight: 600; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px; }
-  .deck-name .tag-theme {
-    font-weight: 600; line-height: 1;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--text-tertiary);
-    background: var(--bg-subtle);
+  .customify-slot-chip {
+    position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+    font-weight: 600; line-height: 1; letter-spacing: 0.08em;
     padding: 3px 5px; border-radius: 3px;
-    border: 1px solid var(--border);
-  }
-  .deck-name .tag-user {
-    color: var(--accent); background: var(--accent-soft); border-color: transparent;
-  }
-  .deck-sub {color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
-  .deck-hint {
-    margin-top: 8px;
-
-    color: var(--text-tertiary);
-    text-align: center;
-    font-style: italic;
+    background: rgba(255,255,255,0.88); color: #111;
+    opacity: 0; transition: opacity .2s ease; pointer-events: none;
+    .customify-deck-card:hover & { opacity: 1; }
+    .customify-deck-card.is-dark & { background: rgba(20,20,20,0.82); color: #fff; }
   }
 
-  /* === PRESET LIST (HORIZONTAL STRIPS) === */
-  .preset-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  .customify-deck-footer {
+    display: flex; align-items: center; justify-content: space-between; padding: 0 2px;
   }
-  .preset-card {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 8px 10px;
-    cursor: pointer;
-    transition: all .2s ease;
-    position: relative;
+  .customify-deck-name { font-weight: 600; color: var(--text-primary); display: inline-flex; align-items: center; gap: 6px; }
+  .customify-deck-sub  { color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .customify-deck-hint { margin-top: 8px; color: var(--text-tertiary); text-align: center; font-style: italic; }
+
+  .customify-tag {
+    font-weight: 600; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--text-tertiary); background: var(--bg-subtle);
+    padding: 3px 5px; border-radius: 3px; border: 1px solid var(--border);
+    &.customify-tag--user { color: var(--accent); background: var(--accent-soft); border-color: transparent; }
   }
-  .preset-card:hover {
-    border-color: var(--border-strong);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+
+  // ─── Preset grid ──────────────────────────────────────────────────────────
+
+  .customify-preset-grid { display: flex; flex-direction: column; gap: 6px; }
+
+  .customify-preset-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 8px 10px;
+    cursor: pointer; transition: all .2s ease; position: relative;
+    &:hover { border-color: var(--border-strong); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+    &.is-active {
+      border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft);
+      &::after {
+        content: ""; position: absolute; top: 6px; right: 6px;
+        width: 10px; height: 10px; background: var(--accent);
+        border-radius: 50%; border: 2px solid #fff; z-index: 2;
+      }
+    }
+    &.is-user:hover .customify-del { display: inline-flex; }
+    &.is-active.is-user .customify-del { display: none; }
+    &:hover .customify-palette-strip .customify-chip { transform: scale(1.02); }
   }
-  .preset-card.active {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 2px var(--accent-soft);
-  }
-  .preset-card.active::after {
-    content: "";
-    position: absolute;
-    top: 6px; right: 6px;
-    width: 10px; height: 10px;
-    background: var(--accent);
-    border-radius: 50%;
-    border: 2px solid #fff;
-    z-index: 2;
-  }
-  .preset-card .del {
-    position: absolute;
-    top: 4px; right: 4px;
+
+  .customify-del {
+    position: absolute; top: 4px; right: 4px;
     width: 18px; height: 18px; border-radius: 50%;
-    background: #fff;
-    border: 1px solid var(--border-strong);
-    color: var(--text-secondary);
-    display: none;
-    align-items: center; justify-content: center;
-    cursor: pointer;
-    z-index: 3;
+    background: #fff; border: 1px solid var(--border-strong);
+    color: var(--text-secondary); display: none;
+    align-items: center; justify-content: center; cursor: pointer; z-index: 3;
+    &:hover { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
   }
-  .preset-card.is-user:hover .del { display: inline-flex; }
-  .preset-card .del:hover { background: var(--danger-soft); color: var(--danger); border-color: var(--danger); }
-  .preset-card.active.is-user .del { display: none; }
 
-  .palette-strip {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 4px;
-    height: 28px;
+  .customify-palette-strip {
+    display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; height: 28px;
   }
-  .palette-strip .chip {
-    border-radius: 4px;
-    border: 0.5px solid rgba(0,0,0,0.08);
-    transition: transform .15s ease;
-  }
-  .preset-card:hover .palette-strip .chip { transform: scale(1.02); }
-  .preset-name {
-font-weight: 500;
-    color: var(--text-secondary);
-    margin: 0 0 6px;
-    letter-spacing: 0.01em;
-    display: flex; align-items: center; justify-content: space-between;
+  .customify-chip { border-radius: 4px; border: 0.5px solid rgba(0,0,0,0.08); transition: transform .15s ease; }
+
+  .customify-preset-name {
+    font-weight: 500; color: var(--text-secondary); margin: 0 0 6px;
+    letter-spacing: 0.01em; display: flex; align-items: center; justify-content: space-between;
     padding-right: 18px;
   }
-  .preset-name .slot-count {
-    font-weight: 500; line-height: 1;
-    color: var(--text-tertiary);
-    letter-spacing: 0.06em;
+  .customify-slot-count { font-weight: 500; line-height: 1; color: var(--text-tertiary); letter-spacing: 0.06em; }
+  .customify-preset-name-text {
+    flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    &.is-editable { cursor: text; &:hover { color: var(--text-primary); } }
   }
-  .preset-name-text {
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .preset-name-text.editable { cursor: text; }
-  .preset-name-text.editable:hover { color: var(--text-primary); }
-  // Inline rename input — inherits typography so the swap is invisible.
-  .preset-name-edit {
-    flex: 1;
-    min-width: 0;
-    margin: -2px 0;
-    padding: 1px 4px;
-    background: var(--bg-sidebar);
-    border: 1px solid var(--accent);
-    border-radius: var(--radius-sm);
-    color: var(--text-primary);
-    box-shadow: 0 0 0 2px var(--accent-soft);
-    outline: none;
+  .customify-preset-name-edit {
+    flex: 1; min-width: 0; margin: -2px 0; padding: 1px 4px;
+    background: var(--bg-sidebar); border: 1px solid var(--accent);
+    border-radius: var(--radius-sm); color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--accent-soft); outline: none;
   }
 
-  .empty-user {
-    padding: 16px 12px;
-    background: var(--bg-subtle);
-    border: 1px dashed var(--border-strong);
-    border-radius: var(--radius-md);
-    text-align: center;
-
-    color: var(--text-secondary);
-    line-height: 1.55;
+  .customify-empty {
+    padding: 16px 12px; background: var(--bg-subtle);
+    border: 1px dashed var(--border-strong); border-radius: var(--radius-md);
+    text-align: center; color: var(--text-secondary); line-height: 1.55;
   }
 
-  .add-form {
-    margin-top: 12px;
-    background: var(--bg-subtle);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 16px;
-    display: none;
-    animation: cpcSlideDown .25s ease;
-  }
-  .add-form.open { display: block; }
+  // ─── Add / Import / Export form ───────────────────────────────────────────
 
-  .form-field { margin-bottom: 14px; }
-  .form-field:last-of-type { margin-bottom: 0; }
-  .add-form label {
-    display: block;
-font-weight: 600;
-    color: var(--text-primary);
-    margin: 0 0 6px;
-    letter-spacing: 0.02em;
-  }
-  .add-form input[type="text"],
-  .add-form select,
-  .add-form textarea {
-    width: 100%;
-    padding: 9px 12px;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
+  .customify-add-form {
+    margin-top: 12px; background: var(--bg-subtle);
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 16px; display: none; animation: cpcSlideDown .25s ease;
+    &.is-open { display: block; }
 
-    background: #fff;
-    color: var(--text-primary);
-    line-height: 1.4;
+    label { display: block; font-weight: 600; color: var(--text-primary); margin: 0 0 6px; letter-spacing: 0.02em; }
+    input[type="text"], select, textarea {
+      width: 100%; padding: 9px 12px;
+      border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+      background: #fff; color: var(--text-primary); line-height: 1.4;
+      &:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+    }
+    textarea { resize: vertical; min-height: 110px; max-height: 240px; line-height: 1.5; padding: 10px 12px; }
   }
-  .add-form textarea {
-    resize: vertical;
-    min-height: 110px;
-    max-height: 240px;
-    line-height: 1.5;
-    padding: 10px 12px;
-  }
-  .add-form input[type="text"]:focus,
-  .add-form select:focus,
-  .add-form textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-soft);
-  }
-  .form-hint {
 
-    color: var(--text-tertiary);
-    margin-top: 6px;
-    line-height: 1.45;
+  .customify-form-field { margin-bottom: 14px; &:last-of-type { margin-bottom: 0; } }
+  .customify-form-title {
+    font-weight: 600; color: var(--text-primary); margin: 0 0 12px;
+    display: flex; align-items: center; justify-content: space-between;
   }
-  .form-hint code {
-    font-weight: 500; line-height: 1;
-    background: #fff;
-    color: var(--text-primary);
-    padding: 1px 4px;
-    border-radius: 3px;
-    border: 1px solid var(--border);
+  .customify-paste-example {
+    font-weight: 500; line-height: 1; color: var(--accent);
+    background: transparent; border: none; cursor: pointer;
+    padding: 3px 6px; border-radius: 3px;
+    &:hover { background: var(--accent-soft); }
   }
-  .form-error {
-    display: none;
-    margin-top: 8px;
-    padding: 8px 10px;
-    background: var(--danger-soft);
-    border: 1px solid rgba(179, 45, 46, 0.24);
-    border-radius: var(--radius-sm);
-
-    color: var(--danger);
-    line-height: 1.4;
+  .customify-form-hint {
+    color: var(--text-tertiary); margin-top: 6px; line-height: 1.45;
+    code { font-weight: 500; line-height: 1; background: #fff; color: var(--text-primary); padding: 1px 4px; border-radius: 3px; border: 1px solid var(--border); }
   }
-  .form-error.show { display: block; }
-  .form-actions {
+  .customify-form-error {
+    display: none; margin-top: 8px; padding: 8px 10px;
+    background: var(--danger-soft); border: 1px solid rgba(179,45,46,0.24);
+    border-radius: var(--radius-sm); color: var(--danger); line-height: 1.4;
+    &.is-show { display: block; }
+  }
+  .customify-form-actions {
     display: flex; justify-content: flex-end; gap: 6px;
-    margin-top: 16px;
-    flex-wrap: wrap;
-    align-items: center;
+    margin-top: 16px; flex-wrap: wrap; align-items: center;
   }
-  .form-actions button { white-space: nowrap; }
-  .form-actions button {
-font-weight: 500;
-    padding: 7px 14px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    border: 1px solid transparent;
-    transition: all .15s ease;
-  }
-  .btn-cancel {
-    background: transparent;
-    color: var(--danger);
-    border-color: var(--danger);
-  }
-  .btn-cancel:hover { background: var(--danger-soft); }
-  .btn-add {
-    background: var(--accent);
-    color: #fff;
-    display: inline-flex; align-items: center; gap: 5px;
-  }
-  .btn-add:hover { background: #185F94; }
-  .btn-add:disabled { background: var(--border-strong); cursor: not-allowed; }
-  .form-title {
-font-weight: 600;
-    color: var(--text-primary);
-    margin: 0 0 12px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .form-title .paste-example {
-    font-weight: 500; line-height: 1;
-    color: var(--accent);
-    background: transparent;
-    border: none; cursor: pointer;
-    padding: 3px 6px;
-    border-radius: 3px;
-  }
-  .form-title .paste-example:hover { background: var(--accent-soft); }
 
-  .export-list {
-    max-height: 160px;
-    overflow-y: auto;
-    background: #fff;
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    padding: 4px;
+  // ─── Buttons ──────────────────────────────────────────────────────────────
+
+  .customify-btn--cancel,
+  .customify-btn--add,
+  .customify-btn--ghost {
+    font-weight: 500; padding: 7px 14px;
+    border-radius: var(--radius-sm); cursor: pointer;
+    border: 1px solid transparent; transition: all .15s ease; white-space: nowrap;
   }
-  .export-item {
+  .customify-btn--cancel { background: transparent; color: var(--danger); border-color: var(--danger); &:hover { background: var(--danger-soft); } }
+  .customify-btn--add {
+    background: var(--accent); color: #fff; display: inline-flex; align-items: center; gap: 5px;
+    &:hover { background: #185F94; }
+    &:disabled { background: var(--border-strong); cursor: not-allowed; }
+  }
+  .customify-btn--ghost { background: transparent; color: var(--text-primary); border-color: var(--border-strong); &:hover { background: var(--bg-subtle); border-color: var(--text-secondary); } }
+
+  // ─── Export ───────────────────────────────────────────────────────────────
+
+  .customify-export-list {
+    max-height: 160px; overflow-y: auto; background: #fff;
+    border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 4px;
+  }
+  .customify-export-item {
     display: flex; align-items: center; gap: 8px;
-    padding: 6px 8px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background .15s ease;
+    padding: 6px 8px; border-radius: 4px; cursor: pointer; transition: background .15s ease;
+    &:hover { background: var(--bg-subtle); }
+    input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); cursor: pointer; }
   }
-  .export-item:hover { background: var(--bg-subtle); }
-  .export-item input[type="checkbox"] {
-    width: 14px; height: 14px;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-  .export-item .mini-strip {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 1px;
-    flex: 1;
-    height: 12px;
-    border-radius: 2px;
-    overflow: hidden;
-  }
-  .export-item .mini-strip span { display: block; }
-  .export-item .ex-name {
-
-    color: var(--text-primary);
-    min-width: 70px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .select-all-row {
+  .customify-select-all {
     display: flex; align-items: center; gap: 8px;
-    padding: 6px 8px 10px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 4px;
-font-weight: 600;
-    color: var(--text-primary);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    padding: 6px 8px 10px; border-bottom: 1px solid var(--border); margin-bottom: 4px;
+    font-weight: 600; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.04em;
+    input[type="checkbox"] { width: 14px; height: 14px; accent-color: var(--accent); }
   }
-  .select-all-row input[type="checkbox"] {
-    width: 14px; height: 14px;
-    accent-color: var(--accent);
+  .customify-mini-strip {
+    display: grid; grid-template-columns: repeat(6, 1fr);
+    gap: 1px; flex: 1; height: 12px; border-radius: 2px; overflow: hidden;
+    span { display: block; }
   }
-  .export-output {
-    line-height: 1.4;
-    background: #fff;
-    color: var(--text-primary);
-    border: 1px solid var(--border-strong);
-    border-radius: var(--radius-sm);
-    padding: 8px 10px;
-    max-height: 140px;
-    overflow-y: auto;
-    white-space: pre;
-    word-break: break-all;
+  .customify-ex-name { color: var(--text-primary); min-width: 70px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .customify-export-output {
+    line-height: 1.4; background: #fff; color: var(--text-primary);
+    border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+    padding: 8px 10px; max-height: 140px; overflow-y: auto;
+    white-space: pre; word-break: break-all;
   }
-  .export-empty {
-    padding: 12px;
-    text-align: center;
+  .customify-export-empty { padding: 12px; text-align: center; color: var(--text-tertiary); font-style: italic; }
+  .customify-copied-flash {
+    display: inline-block; color: #1F7A32; margin-right: auto;
+    padding: 4px 8px; background: #EAF3DE; border-radius: 3px;
+    opacity: 0; transform: translateY(2px); transition: opacity .2s ease, transform .2s ease;
+    &.is-show { opacity: 1; transform: translateY(0); }
+  }
 
-    color: var(--text-tertiary);
-    font-style: italic;
-  }
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-primary);
-    border-color: var(--border-strong);
-  }
-  .btn-ghost:hover { background: var(--bg-subtle); border-color: var(--text-secondary); }
+  // ─── Settings rows ────────────────────────────────────────────────────────
 
-  .copied-flash {
-    display: inline-block;
+  .customify-setting-row { display: flex; align-items: center; justify-content: space-between; padding: 7px 2px; }
+  .customify-label-wrap { display: flex; flex-direction: column; gap: 1px; }
+  .customify-label     { color: var(--text-primary); }
+  .customify-sublabel  { font-weight: 500; line-height: 1.2; color: var(--text-tertiary); letter-spacing: 0.04em; }
+  .customify-right     { display: flex; align-items: center; gap: 6px; }
 
-    color: #1F7A32;
-    margin-right: auto;
-    padding: 4px 8px;
-    background: #EAF3DE;
-    border-radius: 3px;
-    opacity: 0;
-    transform: translateY(2px);
-    transition: opacity .2s ease, transform .2s ease;
-  }
-  .copied-flash.show { opacity: 1; transform: translateY(0); }
-
-  /* === SETTINGS === */
-  // Same gray heading bar treatment as `.sec-row` so `Theme color` matches.
-  .group-title {
-    display: flex; align-items: center; justify-content: space-between;
-    margin: 10px -12px 12px;
-    padding: 5px 12px;
-    background-color: #bbb;
-  }
-  .group-title h4 {
-    color: #fff;
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    margin: 0;
-    text-transform: uppercase;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .group-title .reset {
-    color: rgba(255,255,255,0.85); background: transparent; border: none;
-    cursor: pointer; padding: 4px; border-radius: var(--radius-sm);
-    display: inline-flex; align-items: center;
-  }
-  .group-title .reset:hover { background: rgba(255,255,255,0.18); color: #fff; }
-
-  .setting-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 7px 2px;
-
-  }
-  .setting-row .label-wrap { display: flex; flex-direction: column; gap: 1px; }
-  .setting-row .label { color: var(--text-primary);}
-  .setting-row .sublabel {
-    font-weight: 500; line-height: 1.2;
-    color: var(--text-tertiary);
-    letter-spacing: 0.04em;
-  }
-  .setting-row .right { display: flex; align-items: center; gap: 6px; }
-  .reset-mini {
+  .customify-reset-mini {
     color: var(--text-tertiary); cursor: pointer;
     background: transparent; border: none; padding: 2px;
-    display: inline-flex; align-items: center;
-    transition: color .15s ease;
+    display: inline-flex; align-items: center; transition: color .15s ease;
+    &:hover:not(:disabled) { color: var(--text-primary); }
+    &:disabled { cursor: default; opacity: 0.35; }
   }
-  .reset-mini:hover:not(:disabled) { color: var(--text-primary); }
-  .reset-mini:disabled {
-    cursor: default;
-    opacity: 0.35;
-  }
-  .color-dot {
-    width: 22px; height: 22px;
-    border-radius: 50%;
+
+  // ─── Color dot + globe icon ───────────────────────────────────────────────
+
+  .customify-color-dot {
+    width: 22px; height: 22px; border-radius: 50%;
     border: 1px solid rgba(0,0,0,0.1);
     display: inline-flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    position: relative;
-    transition: transform .15s ease;
+    cursor: pointer; position: relative; transition: transform .15s ease;
+    &:hover { transform: scale(1.1); }
+    &.is-light .customify-globe { color: rgba(0,0,0,0.55); }
   }
-  .color-dot:hover { transform: scale(1.1); }
-  .color-dot .globe {
-    width: 11px; height: 11px;
-    color: rgba(255,255,255,0.92);
-  }
-  .color-dot.light .globe { color: rgba(0,0,0,0.55); }
-  // Native <input type="color"> overlaid on the dot — clicking anywhere on
-  // the dot opens the browser picker. Keep the input transparent + clipped
-  // to the dot bounds so the visual stays the dot itself.
-  .color-dot input[type=color] {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%;
-    opacity: 0;
-    border: 0; padding: 0;
-    background: transparent;
-    cursor: pointer;
+  .customify-globe { width: 11px; height: 11px; color: rgba(255,255,255,0.92); }
+
+  // Shared transparent color-picker overlay (color-dot + popover-preview).
+  .customify-color-dot input[type=color],
+  .customify-popover-preview input[type=color] {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    opacity: 0; border: 0; padding: 0; background: transparent; cursor: pointer;
   }
 
-  .divider-soft { border-top: 1px solid var(--border); margin: 12px 0 14px; }
+  // ─── Auto-computed ────────────────────────────────────────────────────────
 
-  /* Auto-computed (read-only) — Customizer flavour. */
-  .auto-computed-hint {
-    color: var(--text-tertiary);
-    margin: -2px 2px 8px;
-  }
-  .auto-computed-row {
-    display: flex; align-items: center; gap: 10px;
-    padding: 6px 2px;
-  }
-  .auto-computed-swatch {
-    width: 20px; height: 20px;
-    border-radius: 50%;
+  .customify-auto-hint  { color: var(--text-tertiary); margin: -2px 2px 8px; }
+  .customify-auto-row   { display: flex; align-items: center; gap: 10px; padding: 6px 2px; }
+  .customify-auto-swatch {
+    width: 20px; height: 20px; border-radius: 50%;
     border: 1px solid rgba(0,0,0,0.18);
     background-image: linear-gradient(45deg, transparent 47%, rgba(0,0,0,0.22) 47% 53%, transparent 53%);
-    background-color: transparent;
     flex-shrink: 0;
   }
-  .auto-computed-label { flex: 1; color: var(--text-primary); }
-  .auto-computed-slot {
-    color: var(--text-tertiary);
-    letter-spacing: 0.04em;
-  }
+  .customify-auto-label { flex: 1; color: var(--text-primary); }
+  .customify-auto-slot  { color: var(--text-tertiary); letter-spacing: 0.04em; }
 
-  /* === POPOVER (anchored inside .hero-card) === */
-  .popover {
-    position: absolute;
-    top: calc(100% + 10px);
-    left: 50%;
+  // ─── Popover ──────────────────────────────────────────────────────────────
+
+  .customify-popover {
+    position: absolute; top: calc(100% + 10px); left: 50%;
     transform: translateX(-50%);
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 10px;
-    box-shadow: 0 12px 32px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06);
-    z-index: 50;
-    display: none;
-    width: 200px;
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md);
+    padding: 10px; box-shadow: 0 12px 32px rgba(0,0,0,0.16), 0 2px 8px rgba(0,0,0,0.06);
+    z-index: 50; display: none; width: 200px;
+    &::before {
+      content: ""; position: absolute; top: -6px; left: 50%;
+      transform: translateX(-50%) rotate(45deg); width: 10px; height: 10px;
+      background: #fff; border-top: 1px solid var(--border); border-left: 1px solid var(--border);
+    }
+    &.is-open { display: block; animation: cpcPopFade .18s ease; }
   }
-  .popover::before {
-    content: "";
-    position: absolute;
-    top: -6px; left: 50%;
-    transform: translateX(-50%) rotate(45deg);
-    width: 10px; height: 10px;
-    background: #fff;
-    border-top: 1px solid var(--border);
-    border-left: 1px solid var(--border);
+  .customify-popover-head {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+    span { font-weight: 600; line-height: 1; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-secondary); }
   }
-  .popover.open { display: block; animation: cpcPopFade .18s ease; }
-  .popover-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 8px;
-  }
-  .popover-head span {
-    font-weight: 600; line-height: 1;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-secondary);
-  }
-  .popover-preview {
-    display: block;
-    position: relative;
-    cursor: pointer;
-    border-radius: 6px;
-    height: 36px;
-    width: 100%;
+  .customify-popover-preview {
+    display: block; position: relative; cursor: pointer;
+    border-radius: 6px; height: 36px; width: 100%; background: #B35932;
     box-shadow: 0 1px 2px rgba(0,0,0,0.08), inset 0 0 0 1px rgba(0,0,0,0.08);
-    overflow: hidden;
-    transition: transform .15s ease, box-shadow .15s ease;
-    background: #B35932;
+    overflow: hidden; transition: transform .15s ease, box-shadow .15s ease;
+    &:hover { transform: translateY(-1px); box-shadow: 0 4px 10px rgba(0,0,0,0.14), inset 0 0 0 1px rgba(0,0,0,0.08); }
   }
-  .popover-preview:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.14), inset 0 0 0 1px rgba(0,0,0,0.08);
+  .customify-popover-hex { margin-top: 8px; font-weight: 600; line-height: 1; color: var(--text-secondary); text-align: center; letter-spacing: 0.04em; }
+  .customify-popover-desc {
+    margin-top: 10px; padding: 8px 10px; background: var(--bg-subtle);
+    border-radius: var(--radius-sm); color: var(--text-secondary); line-height: 1.5;
+    strong { color: var(--text-primary); font-weight: 600; }
   }
-  .popover-preview input[type=color] {
-    position: absolute; inset: 0;
-    opacity: 0;
-    width: 100%; height: 100%;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    background: transparent;
-  }
-  .popover-hex {
-    margin-top: 8px;
-    font-weight: 600; line-height: 1;
-    color: var(--text-secondary);
-    text-align: center;
-    letter-spacing: 0.04em;
-  }
-  .popover-desc {
-    margin-top: 10px;
-    padding: 8px 10px;
-    background: var(--bg-subtle);
-    border-radius: var(--radius-sm);
+  .customify-popover-copy-hint { margin-top: 6px; color: var(--accent); text-align: center; line-height: 1.4; font-style: italic; }
 
-    color: var(--text-secondary);
-    line-height: 1.5;
-    text-align: left;
-  }
-  .popover-desc strong {
-    color: var(--text-primary);
-    font-weight: 600;
-  }
-  .popover-copy-hint {
-    margin-top: 6px;
-
-    color: var(--accent);
-    text-align: center;
-    line-height: 1.4;
-    font-style: italic;
-  }
-
-  .modal-close {
+  .customify-modal-close {
     width: 28px; height: 28px; border-radius: 50%;
     border: none; background: var(--bg-subtle); cursor: pointer;
-    color: var(--text-secondary); display: inline-flex; align-items: center; justify-content: center;
+    color: var(--text-secondary);
+    display: inline-flex; align-items: center; justify-content: center;
+    &:hover { background: var(--border); color: var(--text-primary); }
   }
-  .modal-close:hover { background: var(--border); color: var(--text-primary); }
 
-  /* Webkit scrollbars inside the sidebar */
-  .sidebar::-webkit-scrollbar,
-  .modal-body::-webkit-scrollbar,
-  .export-list::-webkit-scrollbar,
-  .export-output::-webkit-scrollbar { width: 6px; }
-  .sidebar::-webkit-scrollbar-thumb,
-  .modal-body::-webkit-scrollbar-thumb,
-  .export-list::-webkit-scrollbar-thumb,
-  .export-output::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+  // ─── Scrollbars ───────────────────────────────────────────────────────────
+
+  .customify-sidebar::-webkit-scrollbar,
+  .customify-export-list::-webkit-scrollbar,
+  .customify-export-output::-webkit-scrollbar { width: 6px; }
+
+  .customify-sidebar::-webkit-scrollbar-thumb,
+  .customify-export-list::-webkit-scrollbar-thumb,
+  .customify-export-output::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
 }
-
-/* The browse-all-palettes modal is unused inside the Customizer; markup is
- * still emitted by the JS bundle but kept off-screen here. */
-#customify-preview-colors-root .modal-overlay { display: none; }
 
 @keyframes cpcSlideDown {
   from { opacity: 0; transform: translateY(-6px); }
@@ -773,14 +406,3 @@ font-weight: 600;
   40%  { transform: var(--base-transform) scale(1.1); }
   100% { transform: var(--base-transform) scale(1); }
 }
-#customify-preview-colors-root .deck-card.animating {
-  animation: cpcCardPulse .5s cubic-bezier(.22,1.2,.36,1) both;
-}
-
-/* === Final cascade overrides (must beat the styling blocks declared earlier) ===
- * `.sb-header` (back/crumb/help) and `.cpc-reopen` are markup that the panel
- * JS still emits — needed for the frontend overlay's collapse mechanism — but
- * irrelevant in the inline Customizer layout. Hidden here, last in the file
- * so SCSS compilation order keeps these declarations winning. */
-#customify-preview-colors-root .sb-header,
-#customify-preview-colors-root .cpc-reopen { display: none; }

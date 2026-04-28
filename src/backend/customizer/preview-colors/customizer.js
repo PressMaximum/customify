@@ -309,7 +309,7 @@ const IconClose = ({ size = 10 }) => (
 	<svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M3 3l8 8M11 3l-8 8" /></svg>
 );
 const IconGlobe = () => (
-	<svg className="globe" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="6" cy="6" r="4.5" /><path d="M1.5 6h9M6 1.5c1.5 1.5 2.2 3 2.2 4.5S7.5 9 6 10.5M6 1.5C4.5 3 3.8 4.5 3.8 6S4.5 9 6 10.5" /></svg>
+	<svg className="customify-globe" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="1.2"><circle cx="6" cy="6" r="4.5" /><path d="M1.5 6h9M6 1.5c1.5 1.5 2.2 3 2.2 4.5S7.5 9 6 10.5M6 1.5C4.5 3 3.8 4.5 3.8 6S4.5 9 6 10.5" /></svg>
 );
 
 // ─────────────────────────────────────────────────────────── HeroDeck
@@ -320,7 +320,7 @@ const OFFSETS = [-60, -36, -12, 12, 36, 60];
 function HeroDeck({ palette, slots, onSlotClick }) {
 	const colors = palette.colors;
 	return (
-		<div className="deck-wrap">
+		<div className="customify-deck-wrap">
 			{slots.map((slot, i) => {
 				const c = colors[slot];
 				if (!c) return null;
@@ -338,12 +338,12 @@ function HeroDeck({ palette, slots, onSlotClick }) {
 				return (
 					<div
 						key={slot}
-						className={'deck-card animating' + (!isLight(c) ? ' is-dark' : '')}
+						className={'customify-deck-card is-animating' + (!isLight(c) ? ' is-dark' : '')}
 						style={style}
 						title={`${slot} · ${c.toUpperCase()}`}
 						onClick={(e) => { e.stopPropagation(); onSlotClick(slot); }}
 					>
-						<span className="slot-chip">{slot}</span>
+						<span className="customify-slot-chip">{slot}</span>
 					</div>
 				);
 			})}
@@ -356,20 +356,20 @@ function HeroDeck({ palette, slots, onSlotClick }) {
 function Popover({ slot, palette, kind, slotDesc, onChange, onClose }) {
 	const hex = palette.colors[slot] || '#000000';
 	return (
-		<div className="popover open">
-			<div className="popover-head">
+		<div className="customify-popover is-open">
+			<div className="customify-popover-head">
 				<span>{slot}</span>
-				<button className="modal-close" type="button" style={{ width: 20, height: 20 }} onClick={onClose}>
+				<button className="customify-modal-close" type="button" style={{ width: 20, height: 20 }} onClick={onClose}>
 					<IconClose />
 				</button>
 			</div>
-			<label className="popover-preview" style={{ background: hex }}>
+			<label className="customify-popover-preview" style={{ background: hex }}>
 				<input type="color" value={hex} onChange={(e) => onChange(e.target.value.toUpperCase())} />
 			</label>
-			<div className="popover-hex">{hex.toUpperCase()}</div>
-			<div className="popover-desc" dangerouslySetInnerHTML={{ __html: slotDesc[slot] || '' }} />
+			<div className="customify-popover-hex">{hex.toUpperCase()}</div>
+			<div className="customify-popover-desc" dangerouslySetInnerHTML={{ __html: slotDesc[slot] || '' }} />
 			{kind === 'theme' && (
-				<div className="popover-copy-hint">{__('Editing creates a copy in Custom palettes', 'customify')}</div>
+				<div className="customify-popover-copy-hint">{__('Editing creates a copy in Custom palettes', 'customify')}</div>
 			)}
 		</div>
 	);
@@ -411,18 +411,18 @@ function PresetCard({ palette, kind, isActive, slots, onPick, onDelete, onRename
 		setEditing(false);
 	};
 
-	const className = 'preset-card' + (isActive ? ' active' : '') + (isUser ? ' is-user' : '');
+	const className = 'customify-preset-card' + (isActive ? ' is-active' : '') + (isUser ? ' is-user' : '');
 	return (
 		<div className={className} onClick={(e) => {
-			if (e.target.closest('.del')) return;
-			if (e.target.closest('.preset-name-edit')) return;
+			if (e.target.closest('.customify-del')) return;
+			if (e.target.closest('.customify-preset-name-edit')) return;
 			onPick(palette.id);
 		}}>
-			<p className="preset-name">
+			<p className="customify-preset-name">
 				{editing ? (
 					<input
 						ref={inputRef}
-						className="preset-name-edit"
+						className="customify-preset-name-edit"
 						type="text"
 						value={draft}
 						maxLength={60}
@@ -436,23 +436,23 @@ function PresetCard({ palette, kind, isActive, slots, onPick, onDelete, onRename
 					/>
 				) : (
 					<span
-						className={isUser && onRename ? 'preset-name-text editable' : 'preset-name-text'}
+						className={isUser && onRename ? 'customify-preset-name-text is-editable' : 'customify-preset-name-text'}
 						title={isUser && onRename ? __('Click to rename', 'customify') : undefined}
 						onClick={startEdit}
 					>
 						{palette.name}
 					</span>
 				)}
-				<span className="slot-count">{slots.length}</span>
+				<span className="customify-slot-count">{slots.length}</span>
 			</p>
-			<div className="palette-strip">
+			<div className="customify-palette-strip">
 				{slots.map((s) => (
-					<div key={s} className="chip" style={{ background: c[s] }} title={s} />
+					<div key={s} className="customify-chip" style={{ background: c[s] }} title={s} />
 				))}
 			</div>
 			{isUser && (
 				<button
-					className="del"
+					className="customify-del"
 					type="button"
 					aria-label={__('Delete palette', 'customify')}
 					title={__('Delete', 'customify')}
@@ -467,7 +467,7 @@ function PresetCard({ palette, kind, isActive, slots, onPick, onDelete, onRename
 
 function PresetGrid({ palettes, kind, activeId, slots, onPick, onDelete, onRename }) {
 	return (
-		<div className="preset-grid">
+		<div className="customify-preset-grid">
 			{palettes.map((p) => (
 				<PresetCard
 					key={p.id}
@@ -499,9 +499,9 @@ function AddForm({ allPalettes, themePresets, defaultExtendId, userCount, onConf
 		onConfirm(finalName, extendFrom);
 	};
 	return (
-		<div className="add-form open">
-			<div className="form-title">{__('Create new palette', 'customify')}</div>
-			<div className="form-field">
+		<div className="customify-add-form is-open">
+			<div className="customify-form-title">{__('Create new palette', 'customify')}</div>
+			<div className="customify-form-field">
 				<label>{__('Palette title', 'customify')}</label>
 				<input
 					ref={inputRef}
@@ -513,7 +513,7 @@ function AddForm({ allPalettes, themePresets, defaultExtendId, userCount, onConf
 					onKeyDown={(e) => { if (e.key === 'Enter') submit(); }}
 				/>
 			</div>
-			<div className="form-field">
+			<div className="customify-form-field">
 				<label>{__('Extend from', 'customify')}</label>
 				<select value={extendFrom} onChange={(e) => setExtendFrom(e.target.value)}>
 					{allPalettes.map((p) => {
@@ -523,9 +523,9 @@ function AddForm({ allPalettes, themePresets, defaultExtendId, userCount, onConf
 					})}
 				</select>
 			</div>
-			<div className="form-actions">
-				<button className="btn-cancel" type="button" onClick={onCancel}>{__('Cancel', 'customify')}</button>
-				<button className="btn-add" type="button" onClick={submit}>
+			<div className="customify-form-actions">
+				<button className="customify-btn--cancel" type="button" onClick={onCancel}>{__('Cancel', 'customify')}</button>
+				<button className="customify-btn--add" type="button" onClick={submit}>
 					<IconAdd /> {__('Add', 'customify')}
 				</button>
 			</div>
@@ -589,12 +589,12 @@ function ImportForm({ slots, onConfirm, onCancel }) {
 		onConfirm(validated);
 	};
 	return (
-		<div className="add-form open">
-			<div className="form-title">
+		<div className="customify-add-form is-open">
+			<div className="customify-form-title">
 				{__('Import palette(s) from JSON', 'customify')}
-				<button className="paste-example" type="button" onClick={() => { setText(EXAMPLE_JSON); setError(''); }}>{__('Use example', 'customify')}</button>
+				<button className="customify-paste-example" type="button" onClick={() => { setText(EXAMPLE_JSON); setError(''); }}>{__('Use example', 'customify')}</button>
 			</div>
-			<div className="form-field">
+			<div className="customify-form-field">
 				<label>{__('Paste JSON', 'customify')}</label>
 				<textarea
 					ref={inputRef}
@@ -602,12 +602,12 @@ function ImportForm({ slots, onConfirm, onCancel }) {
 					spellCheck={false}
 					onChange={(e) => setText(e.target.value)}
 				/>
-				<p className="form-hint">{__('Accepts a single palette object or an array. Requires "name" + all 6 slots.', 'customify')}</p>
-				{error && <div className="form-error show">{error}</div>}
+				<p className="customify-form-hint">{__('Accepts a single palette object or an array. Requires "name" + all 6 slots.', 'customify')}</p>
+				{error && <div className="customify-form-error is-show">{error}</div>}
 			</div>
-			<div className="form-actions">
-				<button className="btn-cancel" type="button" onClick={onCancel}>{__('Cancel', 'customify')}</button>
-				<button className="btn-add" type="button" onClick={submit}>
+			<div className="customify-form-actions">
+				<button className="customify-btn--cancel" type="button" onClick={onCancel}>{__('Cancel', 'customify')}</button>
+				<button className="customify-btn--add" type="button" onClick={submit}>
 					<IconImport /> {__('Import', 'customify')}
 				</button>
 			</div>
@@ -671,14 +671,14 @@ function ExportForm({ palettes, slots, onClose }) {
 
 	if (palettes.length === 0) {
 		return (
-			<div className="add-form open">
-				<div className="form-title">{__('Export custom palettes', 'customify')}</div>
-				<div className="form-field">
+			<div className="customify-add-form is-open">
+				<div className="customify-form-title">{__('Export custom palettes', 'customify')}</div>
+				<div className="customify-form-field">
 					<label>{__('Select palettes', 'customify')}</label>
-					<div className="export-empty">{__('No custom palettes to export yet. Create or import one first.', 'customify')}</div>
+					<div className="customify-export-empty">{__('No custom palettes to export yet. Create or import one first.', 'customify')}</div>
 				</div>
-				<div className="form-actions">
-					<button className="btn-cancel" type="button" onClick={onClose}>{__('Close', 'customify')}</button>
+				<div className="customify-form-actions">
+					<button className="customify-btn--cancel" type="button" onClick={onClose}>{__('Close', 'customify')}</button>
 				</div>
 			</div>
 		);
@@ -688,12 +688,12 @@ function ExportForm({ palettes, slots, onClose }) {
 	const someChecked = selected.size > 0 && selected.size < palettes.length;
 
 	return (
-		<div className="add-form open">
-			<div className="form-title">{__('Export custom palettes', 'customify')}</div>
-			<div className="form-field">
+		<div className="customify-add-form is-open">
+			<div className="customify-form-title">{__('Export custom palettes', 'customify')}</div>
+			<div className="customify-form-field">
 				<label>{__('Select palettes', 'customify')}</label>
-				<div className="export-list">
-					<div className="select-all-row">
+				<div className="customify-export-list">
+					<div className="customify-select-all">
 						<input
 							type="checkbox"
 							checked={allChecked}
@@ -704,10 +704,10 @@ function ExportForm({ palettes, slots, onClose }) {
 					</div>
 					<div>
 						{palettes.map((p) => (
-							<label key={p.id} className="export-item">
+							<label key={p.id} className="customify-export-item">
 								<input type="checkbox" checked={selected.has(p.id)} onChange={() => toggle(p.id)} />
-								<span className="ex-name">{p.name}</span>
-								<span className="mini-strip">
+								<span className="customify-ex-name">{p.name}</span>
+								<span className="customify-mini-strip">
 									{slots.map((s) => <span key={s} style={{ background: p.colors[s] }} />)}
 								</span>
 							</label>
@@ -715,18 +715,18 @@ function ExportForm({ palettes, slots, onClose }) {
 					</div>
 				</div>
 			</div>
-			<div className="form-field">
+			<div className="customify-form-field">
 				<label>{__('JSON output', 'customify')}</label>
-				<div className="export-output">{json || __('//  No palettes selected', 'customify')}</div>
-				<p className="form-hint">{__('Re-importable via the ↓ button above or on another site.', 'customify')}</p>
+				<div className="customify-export-output">{json || __('//  No palettes selected', 'customify')}</div>
+				<p className="customify-form-hint">{__('Re-importable via the ↓ button above or on another site.', 'customify')}</p>
 			</div>
-			<div className="form-actions">
-				<span className={'copied-flash' + (copied ? ' show' : '')}>{__('✓ Copied', 'customify')}</span>
-				<button className="btn-cancel" type="button" onClick={onClose}>{__('Close', 'customify')}</button>
-				<button className="btn-ghost" type="button" disabled={!json} onClick={doDownload}>
+			<div className="customify-form-actions">
+				<span className={'customify-copied-flash' + (copied ? ' is-show' : '')}>{__('✓ Copied', 'customify')}</span>
+				<button className="customify-btn--cancel" type="button" onClick={onClose}>{__('Close', 'customify')}</button>
+				<button className="customify-btn--ghost" type="button" disabled={!json} onClick={doDownload}>
 					<IconExport /> {__('Download', 'customify')}
 				</button>
-				<button className="btn-add" type="button" disabled={!json} onClick={doCopy}>{__('Copy', 'customify')}</button>
+				<button className="customify-btn--add" type="button" disabled={!json} onClick={doCopy}>{__('Copy', 'customify')}</button>
 			</div>
 		</div>
 	);
@@ -752,14 +752,14 @@ function SettingsRows({ palette, settings, defaults, onSlotChange }) {
 				const slotsArr = cfg.slots || [];
 				const isAtDefault = slotsArr.every((s) => palette.colors[s] === defaults[s]);
 				return (
-					<div key={i} className="setting-row">
-						<div className="label-wrap">
-							<span className="label">{cfg.label}</span>
-							<span className="sublabel">{cfg.sublabel}</span>
+					<div key={i} className="customify-setting-row">
+						<div className="customify-label-wrap">
+							<span className="customify-label">{cfg.label}</span>
+							<span className="customify-sublabel">{cfg.sublabel}</span>
 						</div>
-						<div className="right">
+						<div className="customify-right">
 							<button
-								className="reset-mini"
+								className="customify-reset-mini"
 								type="button"
 								onClick={() => resetRow(slotsArr)}
 								title={__('Reset to default', 'customify')}
@@ -778,7 +778,7 @@ function SettingsRows({ palette, settings, defaults, onSlotChange }) {
 									// existing dot visual + globe icon.
 									<label
 										key={slotName}
-										className={'color-dot' + (isLight(col) ? ' light' : '')}
+										className={'customify-color-dot' + (isLight(col) ? ' is-light' : '')}
 										style={{ background: col }}
 										title={`${slotName} · ${col.toUpperCase()}`}
 									>
@@ -829,13 +829,13 @@ function AutoComputed({ trigger }) {
 	}, [trigger]);
 	return (
 		<Fragment>
-			<div className="auto-computed-hint">{__('Theme generates these from the 6 slots above.', 'customify')}</div>
+			<div className="customify-auto-hint">{__('Theme generates these from the 6 slots above.', 'customify')}</div>
 			<div>
 				{rows.map((r) => (
-					<div key={r.slot} className="auto-computed-row" title={`${r.slot} · ${r.value}`}>
-						<span className="auto-computed-swatch" style={{ background: r.value }} />
-						<span className="auto-computed-label">{r.label}</span>
-						<span className="auto-computed-slot">{r.slot}</span>
+					<div key={r.slot} className="customify-auto-row" title={`${r.slot} · ${r.value}`}>
+						<span className="customify-auto-swatch" style={{ background: r.value }} />
+						<span className="customify-auto-label">{r.label}</span>
+						<span className="customify-auto-slot">{r.slot}</span>
 					</div>
 				))}
 			</div>
@@ -896,9 +896,9 @@ function App({ cfg }) {
 			const path = e.composedPath ? e.composedPath() : [];
 			for (const n of path) {
 				if (!n || !n.classList) continue;
-				if (n.classList.contains('popover')) return;
-				if (n.classList.contains('deck-card')) return;
-				if (n.classList.contains('color-dot')) return;
+				if (n.classList.contains('customify-popover')) return;
+				if (n.classList.contains('customify-deck-card')) return;
+				if (n.classList.contains('customify-color-dot')) return;
 			}
 			setEditSlot(null);
 		};
@@ -981,24 +981,24 @@ function App({ cfg }) {
 	const triggerKey = activePalette.id + '|' + slots.map((s) => activePalette.colors[s]).join(',');
 
 	return (
-		<div className="sidebar">
-			<div className="section">
-				<div className="sec-row"><h3>{__('Current palette', 'customify')}</h3></div>
-				<div className="hero-card">
+		<div className="customify-sidebar">
+			<div className="customify-section">
+				<h3 className="customify-control--heading">{__('Current palette', 'customify')}</h3>
+				<div className="customify-hero-card">
 					<HeroDeck
 						key={activePalette.id /* re-mount to retrigger animation on switch */}
 						palette={activePalette}
 						slots={slots}
 						onSlotClick={setEditSlot}
 					/>
-					<div className="deck-footer">
-						<span className="deck-name">
+					<div className="customify-deck-footer">
+						<span className="customify-deck-name">
 							<span>{activePalette.name}</span>
-							<span className={'tag-theme' + (activeKind === 'user' ? ' tag-user' : '')}>
+							<span className={'customify-tag' + (activeKind === 'user' ? ' customify-tag--user' : '')}>
 								{activeKind === 'theme' ? __('theme', 'customify') : __('user', 'customify')}
 							</span>
 						</span>
-						<span className="deck-sub">
+						<span className="customify-deck-sub">
 							{sprintf(
 								/* translators: %d is the number of color slots in a palette */
 								__('%d slots', 'customify'),
@@ -1006,7 +1006,7 @@ function App({ cfg }) {
 							)}
 						</span>
 					</div>
-					<div className="deck-hint">{__('Click a card to edit that slot', 'customify')}</div>
+					<div className="customify-deck-hint">{__('Click a card to edit that slot', 'customify')}</div>
 					{editSlot && (
 						<Popover
 							slot={editSlot}
@@ -1020,22 +1020,22 @@ function App({ cfg }) {
 				</div>
 			</div>
 
-			<div className="section">
-				<div className="sec-row"><h3>{__('Theme presets', 'customify')}</h3></div>
+			<div className="customify-section">
+				<h3 className="customify-control--heading">{__('Theme presets', 'customify')}</h3>
 				<PresetGrid palettes={themePresets} kind="theme" activeId={activeId} slots={slots} onPick={setActiveId} />
 			</div>
 
-			<div className="section">
-				<div className="sec-row">
-					<h3>{__('Custom palettes', 'customify')} <span className="badge-count">{userArr.length}</span></h3>
-					<div style={{ display: 'flex', gap: 4 }}>
-						<button className="icon-btn" type="button" aria-label={__('Export palettes', 'customify')} title={__('Export JSON', 'customify')} onClick={() => setOpenForm(openForm === 'export' ? null : 'export')}><IconExport /></button>
-						<button className="icon-btn" type="button" aria-label={__('Import palette', 'customify')} title={__('Import JSON', 'customify')} onClick={() => setOpenForm(openForm === 'import' ? null : 'import')}><IconImport /></button>
-						<button className="icon-btn" type="button" aria-label={__('Add palette', 'customify')} title={__('Add new palette', 'customify')} onClick={() => setOpenForm(openForm === 'add' ? null : 'add')}><IconAdd /></button>
-					</div>
-				</div>
+			<div className="customify-section">
+				<h3 className="customify-control--heading">
+					<span>{__('Custom palettes', 'customify')} <span className="customify-badge">{userArr.length}</span></span>
+					<span style={{ display: 'flex', gap: 4 }}>
+						<button className="customify-icon-btn" type="button" aria-label={__('Export palettes', 'customify')} title={__('Export JSON', 'customify')} onClick={() => setOpenForm(openForm === 'export' ? null : 'export')}><IconExport /></button>
+						<button className="customify-icon-btn" type="button" aria-label={__('Import palette', 'customify')} title={__('Import JSON', 'customify')} onClick={() => setOpenForm(openForm === 'import' ? null : 'import')}><IconImport /></button>
+						<button className="customify-icon-btn" type="button" aria-label={__('Add palette', 'customify')} title={__('Add new palette', 'customify')} onClick={() => setOpenForm(openForm === 'add' ? null : 'add')}><IconAdd /></button>
+					</span>
+				</h3>
 				{userArr.length === 0 ? (
-					<div className="empty-user">
+					<div className="customify-empty">
 						{__('No custom palettes yet.', 'customify')}<br />
 						{__('Click + to create one, or ↓ to import JSON.', 'customify')}
 					</div>
@@ -1068,8 +1068,8 @@ function App({ cfg }) {
 				)}
 			</div>
 
-			<div className="section">
-				<div className="group-title"><h4>{__('Theme color', 'customify')}</h4></div>
+			<div className="customify-section">
+				<h4 className="customify-control--heading">{__('Theme color', 'customify')}</h4>
 				<SettingsRows
 					palette={activePalette}
 					settings={cfg.settingsRows || []}
@@ -1083,8 +1083,8 @@ function App({ cfg }) {
 			primary-hover, …) are still emitted on :root by useColorVars; this
 			block only reflected them for debugging. Re-enable by uncommenting.
 
-			<div className="section">
-				<div className="group-title"><h4>{__('Auto-computed', 'customify')}</h4></div>
+			<div className="customify-section">
+				<h4 className="customify-control--heading">{__('Auto-computed', 'customify')}</h4>
 				<AutoComputed trigger={triggerKey} />
 			</div>
 			*/}
