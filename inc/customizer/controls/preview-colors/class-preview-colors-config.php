@@ -56,6 +56,26 @@ class Customify_Preview_Colors_Config
 	{
 		return apply_filters('customify_preview_colors/theme_presets', array(
 			array(
+				'id'     => 'signature',
+				'name'   => _x('Signature', 'palette name', 'customify'),
+				'colors' => array(
+					'base'      => '#FFFFFF',
+					'text'      => '#686868',
+					'primary'   => '#235787',
+					'secondary' => '#C3512F',
+					'accent'    => '#1E4B75',
+					'surface'   => '#FFFFFF',
+				),
+				'dark' => array(
+					'base'      => '#0D0F12',
+					'text'      => '#D4D8DD',
+					'primary'   => '#5A9FD4',
+					'secondary' => '#E07A5A',
+					'accent'    => '#4A7FAA',
+					'surface'   => '#1A1D22',
+				),
+			),
+			array(
 				'id'     => 'ashwood',
 				'name'   => _x('Ashwood', 'palette name', 'customify'),
 				'colors' => array(
@@ -112,7 +132,7 @@ class Customify_Preview_Colors_Config
 	// Hardcoded default. Override via the
 	// `customify_preview_colors/default_active_id` filter rather than
 	// editing this constant — see `default_active_id()` below.
-	const DEFAULT_ACTIVE_ID = 'ashwood';
+	const DEFAULT_ACTIVE_ID = 'signature';
 
 	/**
 	 * Default active palette id. Used by:
