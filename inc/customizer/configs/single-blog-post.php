@@ -27,7 +27,7 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 				'min'         => 400,
 				'step'        => 10,
 				'max'         => 1200,
-				'default'     => 780,
+				'default'     => 863,
 				'label'       => __( 'Post Content Max Width', 'customify' ),
 				'description' => __( 'Max width of default blocks and aligned siblings inside post content. Drives --wp--style--global--content-size. Keep this value BELOW Container Width so .alignwide blocks can break out to the wider column.', 'customify' ),
 				// Set only the CSS var — no wrapper max-width. `.content-inner` stays at

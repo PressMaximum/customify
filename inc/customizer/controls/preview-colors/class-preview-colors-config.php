@@ -64,7 +64,7 @@ class Customify_Preview_Colors_Config
 					'primary'   => '#235787',
 					'secondary' => '#C3512F',
 					'accent'    => '#1E4B75',
-					'surface'   => '#FFFFFF',
+					'surface'   => '#235787',
 				),
 				'dark' => array(
 					'base'      => '#0D0F12',
@@ -75,18 +75,7 @@ class Customify_Preview_Colors_Config
 					'surface'   => '#1A1D22',
 				),
 			),
-			array(
-				'id'     => 'ashwood',
-				'name'   => _x('Ashwood', 'palette name', 'customify'),
-				'colors' => array(
-					'base' => '#F9F3E4', 'text' => '#1A3A28', 'primary' => '#B35932',
-					'secondary' => '#1C2147', 'accent' => '#F5DE9A', 'surface' => '#FFFFFF',
-				),
-				'dark' => array(
-					'base' => '#1A1410', 'text' => '#F2EAD8', 'primary' => '#E07A4F',
-					'secondary' => '#E8DCC4', 'accent' => '#FFD56B', 'surface' => '#28201A',
-				),
-			),
+			
 			array(
 				'id'     => 'midnight',
 				'name'   => _x('Midnight', 'palette name', 'customify'),
@@ -103,8 +92,8 @@ class Customify_Preview_Colors_Config
 				),
 			),
 			array(
-				'id'     => 'ocean',
-				'name'   => _x('Ocean', 'palette name', 'customify'),
+				'id'     => 'sunrise',
+				'name'   => _x('Sunrise', 'palette name', 'customify'),
 				'colors' => array(
 					'base' => '#F5F6F4', 'text' => '#0F1C33', 'primary' => '#0055FF',
 					'secondary' => '#001D4A', 'accent' => '#B8E6FF', 'surface' => '#FFFFFF',
@@ -114,18 +103,7 @@ class Customify_Preview_Colors_Config
 					'secondary' => '#FFFFFF', 'accent' => '#7AB8FF', 'surface' => '#152043',
 				),
 			),
-			array(
-				'id'     => 'moss',
-				'name'   => _x('Moss', 'palette name', 'customify'),
-				'colors' => array(
-					'base' => '#F4FAF5', 'text' => '#0F2616', 'primary' => '#2B9348',
-					'secondary' => '#2B3D28', 'accent' => '#D9F0B5', 'surface' => '#FFFFFF',
-				),
-				'dark' => array(
-					'base' => '#0B1A11', 'text' => '#E7F3EB', 'primary' => '#52B86C',
-					'secondary' => '#E0EAD9', 'accent' => '#A8D87E', 'surface' => '#162619',
-				),
-			),
+			
 		));
 	}
 

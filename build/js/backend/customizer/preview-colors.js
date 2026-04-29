@@ -443,9 +443,6 @@ function Popover({
       dangerouslySetInnerHTML: {
         __html: slotDesc[slot] || ''
       }
-    }), kind === 'theme' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-      className: "customify-popover-copy-hint",
-      children: (0,external_wp_i18n_namespaceObject.__)('Editing creates a copy in Custom palettes', 'customify')
     })]
   });
 }
@@ -548,6 +545,7 @@ function PresetCard({
     })]
   });
 }
+const SHADOW_PREFIX_GRID = 'user_theme_';
 function PresetGrid({
   palettes,
   kind,
@@ -559,15 +557,20 @@ function PresetGrid({
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "customify-preset-grid",
-    children: palettes.map(p => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetCard, {
-      palette: p,
-      kind: kind,
-      isActive: p.id === activeId,
-      slots: slots,
-      onPick: onPick,
-      onDelete: onDelete,
-      onRename: onRename
-    }, p.id))
+    children: palettes.map(p => {
+      // A theme-preset card is considered active when either the preset
+      // itself or its shadow palette is the current active palette.
+      const isActive = kind === 'theme' ? p.id === activeId || SHADOW_PREFIX_GRID + p.id === activeId : p.id === activeId;
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetCard, {
+        palette: p,
+        kind: kind,
+        isActive: isActive,
+        slots: slots,
+        onPick: onPick,
+        onDelete: onDelete,
+        onRename: onRename
+      }, p.id);
+    })
   });
 }
 
@@ -1102,6 +1105,15 @@ function App({
   const slots = cfg.slots;
   const themePresets = cfg.themePresets || [];
   const userArr = Array.isArray(userPalettes) ? userPalettes : [];
+
+  // Shadow palettes are auto-created when the user edits a theme-preset slot.
+  // They use a stable ID prefix so edits accumulate on the same object instead
+  // of spawning a new "(copy)" each time. They are kept out of the visible
+  // Custom palettes grid — they're an implementation detail, not named palettes.
+  const SHADOW_PREFIX = 'user_theme_';
+  const visibleUserArr = (0,external_wp_element_namespaceObject.useMemo)(() => userArr.filter(p => !p.id.startsWith(SHADOW_PREFIX)), [userArr]);
+
+  // allPalettes includes shadows so activePalette lookup always finds them.
   const allPalettes = (0,external_wp_element_namespaceObject.useMemo)(() => [...themePresets, ...userArr], [themePresets, userArr]);
   const activePalette = (0,external_wp_element_namespaceObject.useMemo)(() => {
     return allPalettes.find(p => p.id === activeId) || allPalettes[0] || null;
@@ -1150,26 +1162,37 @@ function App({
   const editSlotColor = (0,external_wp_element_namespaceObject.useCallback)((slot, newHex) => {
     if (!activePalette) return;
     if (activeKind === 'theme') {
-      const id = 'user_' + Date.now();
-      const copy = {
-        id,
-        name: activePalette.name + ' (copy)',
-        colors: {
-          ...activePalette.colors,
-          [slot]: newHex
-        }
-      };
-      setUserPalettes([...userArr, copy]);
-      setActiveId(id);
+      // Use a stable shadow ID so repeated edits accumulate on the
+      // same user palette rather than spawning a new copy each time.
+      const shadowId = SHADOW_PREFIX + activePalette.id;
+      const shadowExists = userArr.some(p => p.id === shadowId);
+      if (shadowExists) {
+        setUserPalettes(userArr.map(p => p.id === shadowId ? {
+          ...p,
+          colors: {
+            ...p.colors,
+            [slot]: newHex
+          }
+        } : p));
+      } else {
+        setUserPalettes([...userArr, {
+          id: shadowId,
+          name: activePalette.name,
+          colors: {
+            ...activePalette.colors,
+            [slot]: newHex
+          }
+        }]);
+      }
+      setActiveId(shadowId);
     } else {
-      const updated = userArr.map(p => p.id === activePalette.id ? {
+      setUserPalettes(userArr.map(p => p.id === activePalette.id ? {
         ...p,
         colors: {
           ...p.colors,
           [slot]: newHex
         }
-      } : p);
-      setUserPalettes(updated);
+      } : p));
     }
   }, [activePalette, activeKind, userArr, setUserPalettes, setActiveId]);
   const addPalette = (0,external_wp_element_namespaceObject.useCallback)((name, sourceId) => {
@@ -1186,6 +1209,15 @@ function App({
     setActiveId(id);
     setOpenForm(null);
   }, [allPalettes, userArr, setUserPalettes, setActiveId]);
+
+  // When clicking a theme preset that already has a shadow (i.e. the user
+  // previously edited it), restore the shadow so edits are preserved instead
+  // of reverting to the unmodified preset.
+  const pickThemePreset = (0,external_wp_element_namespaceObject.useCallback)(themeId => {
+    const shadowId = SHADOW_PREFIX + themeId;
+    const hasShadow = userArr.some(p => p.id === shadowId);
+    setActiveId(hasShadow ? shadowId : themeId);
+  }, [userArr, setActiveId]);
   const deletePalette = (0,external_wp_element_namespaceObject.useCallback)(id => {
     setUserPalettes(userArr.filter(p => p.id !== id));
     if (activeId === id) {
@@ -1262,7 +1294,7 @@ function App({
         kind: "theme",
         activeId: activeId,
         slots: slots,
-        onPick: setActiveId
+        onPick: pickThemePreset
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "customify-section",
@@ -1271,7 +1303,7 @@ function App({
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
           children: [(0,external_wp_i18n_namespaceObject.__)('Custom palettes', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
             className: "customify-badge",
-            children: userArr.length
+            children: visibleUserArr.length
           })]
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
           style: {
@@ -1301,11 +1333,11 @@ function App({
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconAdd, {})
           })]
         })]
-      }), userArr.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      }), visibleUserArr.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "customify-empty",
         children: [(0,external_wp_i18n_namespaceObject.__)('No custom palettes yet.', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("br", {}), (0,external_wp_i18n_namespaceObject.__)('Click + to create one, or ↓ to import JSON.', 'customify')]
       }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetGrid, {
-        palettes: userArr,
+        palettes: visibleUserArr,
         kind: "user",
         activeId: activeId,
         slots: slots,
@@ -1313,10 +1345,10 @@ function App({
         onDelete: deletePalette,
         onRename: renamePalette
       }), openForm === 'add' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AddForm, {
-        allPalettes: allPalettes,
+        allPalettes: [...themePresets, ...visibleUserArr],
         themePresets: themePresets,
         defaultExtendId: activeId,
-        userCount: userArr.length,
+        userCount: visibleUserArr.length,
         onConfirm: addPalette,
         onCancel: () => setOpenForm(null)
       }), openForm === 'import' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ImportForm, {
@@ -1324,7 +1356,7 @@ function App({
         onConfirm: importPalettes,
         onCancel: () => setOpenForm(null)
       }), openForm === 'export' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ExportForm, {
-        palettes: userArr,
+        palettes: visibleUserArr,
         slots: slots,
         onClose: () => setOpenForm(null)
       })]

@@ -115,6 +115,8 @@ class Customify_Preview_Colors
 	 */
 	public static function output_root_vars()
 	{
+
+		return false;
 		// Slot-independent contrast tokens (PHASE-7-PLAN §16). FIXED values,
 		// never rebound by the trigger block. Used by hardcoded `.dark-mode`
 		// / `.light-mode` rules (footer / header bands with literal hex bg)
