@@ -22,6 +22,23 @@ class Customify_Preview_Colors_Customizer_Control extends WP_Customize_Control
 {
 	public $type = 'customify_color_palette';
 
+	/**
+	 * Setting IDs that must survive a "Reset section" action.
+	 * The JS reset handler reads c.params.reset_exclude and skips these.
+	 *
+	 * @var string[]
+	 */
+	public $reset_exclude = array();
+
+	/**
+	 * Expose reset_exclude to the JS control object via c.params.
+	 */
+	public function to_json()
+	{
+		parent::to_json();
+		$this->json['reset_exclude'] = $this->reset_exclude;
+	}
+
 	public function render_content()
 	{
 		?>

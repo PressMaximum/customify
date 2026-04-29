@@ -89,13 +89,15 @@ class Customify_Preview_Colors_Customizer
 			$wp_customize,
 			self::CONTROL_ID,
 			array(
-				'label'    => __('Color palette', 'customify'),
-				'section'  => self::SECTION_ID,
-				'priority' => 5, // Top of section, above the individual color rows.
-				'settings' => array(
+				'label'          => __('Color palette', 'customify'),
+				'section'        => self::SECTION_ID,
+				'priority'       => 5, // Top of section, above the individual color rows.
+				'settings'       => array(
 					'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
 					'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
 				),
+				// "Reset section" must not wipe the user's saved custom palettes.
+				'reset_exclude'  => array(Customify_Preview_Colors_Ajax::OPTION_PALETTES),
 			)
 		));
 	}
