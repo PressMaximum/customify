@@ -357,9 +357,6 @@ function Popover({ slot, palette, kind, slotDesc, onChange, onClose }) {
 			</label>
 			<div className="customify-popover-hex">{hex.toUpperCase()}</div>
 			<div className="customify-popover-desc" dangerouslySetInnerHTML={{ __html: slotDesc[slot] || '' }} />
-			{kind === 'theme' && (
-				<div className="customify-popover-copy-hint">{__('Editing creates a copy in Custom palettes', 'customify')}</div>
-			)}
 		</div>
 	);
 }
@@ -454,21 +451,30 @@ function PresetCard({ palette, kind, isActive, slots, onPick, onDelete, onRename
 	);
 }
 
+const SHADOW_PREFIX_GRID = 'user_theme_';
+
 function PresetGrid({ palettes, kind, activeId, slots, onPick, onDelete, onRename }) {
 	return (
 		<div className="customify-preset-grid">
-			{palettes.map((p) => (
-				<PresetCard
-					key={p.id}
-					palette={p}
-					kind={kind}
-					isActive={p.id === activeId}
-					slots={slots}
-					onPick={onPick}
-					onDelete={onDelete}
-					onRename={onRename}
-				/>
-			))}
+			{palettes.map((p) => {
+				// A theme-preset card is considered active when either the preset
+				// itself or its shadow palette is the current active palette.
+				const isActive = kind === 'theme'
+					? (p.id === activeId || SHADOW_PREFIX_GRID + p.id === activeId)
+					: p.id === activeId;
+				return (
+					<PresetCard
+						key={p.id}
+						palette={p}
+						kind={kind}
+						isActive={isActive}
+						slots={slots}
+						onPick={onPick}
+						onDelete={onDelete}
+						onRename={onRename}
+					/>
+				);
+			})}
 		</div>
 	);
 }
@@ -844,6 +850,17 @@ function App({ cfg }) {
 	const themePresets = cfg.themePresets || [];
 	const userArr = Array.isArray(userPalettes) ? userPalettes : [];
 
+	// Shadow palettes are auto-created when the user edits a theme-preset slot.
+	// They use a stable ID prefix so edits accumulate on the same object instead
+	// of spawning a new "(copy)" each time. They are kept out of the visible
+	// Custom palettes grid — they're an implementation detail, not named palettes.
+	const SHADOW_PREFIX = 'user_theme_';
+	const visibleUserArr = useMemo(
+		() => userArr.filter((p) => !p.id.startsWith(SHADOW_PREFIX)),
+		[userArr]
+	);
+
+	// allPalettes includes shadows so activePalette lookup always finds them.
 	const allPalettes = useMemo(() => [...themePresets, ...userArr], [themePresets, userArr]);
 
 	const activePalette = useMemo(() => {
@@ -899,21 +916,29 @@ function App({ cfg }) {
 		(slot, newHex) => {
 			if (!activePalette) return;
 			if (activeKind === 'theme') {
-				const id = 'user_' + Date.now();
-				const copy = {
-					id,
-					name: activePalette.name + ' (copy)',
-					colors: { ...activePalette.colors, [slot]: newHex },
-				};
-				setUserPalettes([...userArr, copy]);
-				setActiveId(id);
+				// Use a stable shadow ID so repeated edits accumulate on the
+				// same user palette rather than spawning a new copy each time.
+				const shadowId = SHADOW_PREFIX + activePalette.id;
+				const shadowExists = userArr.some((p) => p.id === shadowId);
+				if (shadowExists) {
+					setUserPalettes(userArr.map((p) =>
+						p.id === shadowId
+							? { ...p, colors: { ...p.colors, [slot]: newHex } }
+							: p
+					));
+				} else {
+					setUserPalettes([
+						...userArr,
+						{ id: shadowId, name: activePalette.name, colors: { ...activePalette.colors, [slot]: newHex } },
+					]);
+				}
+				setActiveId(shadowId);
 			} else {
-				const updated = userArr.map((p) =>
+				setUserPalettes(userArr.map((p) =>
 					p.id === activePalette.id
 						? { ...p, colors: { ...p.colors, [slot]: newHex } }
 						: p
-				);
-				setUserPalettes(updated);
+				));
 			}
 		},
 		[activePalette, activeKind, userArr, setUserPalettes, setActiveId]
@@ -932,6 +957,18 @@ function App({ cfg }) {
 			setOpenForm(null);
 		},
 		[allPalettes, userArr, setUserPalettes, setActiveId]
+	);
+
+	// When clicking a theme preset that already has a shadow (i.e. the user
+	// previously edited it), restore the shadow so edits are preserved instead
+	// of reverting to the unmodified preset.
+	const pickThemePreset = useCallback(
+		(themeId) => {
+			const shadowId = SHADOW_PREFIX + themeId;
+			const hasShadow = userArr.some((p) => p.id === shadowId);
+			setActiveId(hasShadow ? shadowId : themeId);
+		},
+		[userArr, setActiveId]
 	);
 
 	const deletePalette = useCallback(
@@ -1011,26 +1048,26 @@ function App({ cfg }) {
 
 			<div className="customify-section">
 				<h3 className="customify-control--heading">{__('Theme presets', 'customify')}</h3>
-				<PresetGrid palettes={themePresets} kind="theme" activeId={activeId} slots={slots} onPick={setActiveId} />
+				<PresetGrid palettes={themePresets} kind="theme" activeId={activeId} slots={slots} onPick={pickThemePreset} />
 			</div>
 
 			<div className="customify-section">
 				<h3 className="customify-control--heading">
-					<span>{__('Custom palettes', 'customify')} <span className="customify-badge">{userArr.length}</span></span>
+					<span>{__('Custom palettes', 'customify')} <span className="customify-badge">{visibleUserArr.length}</span></span>
 					<span style={{ display: 'flex', gap: 4 }}>
 						<button className="customify-icon-btn" type="button" aria-label={__('Export palettes', 'customify')} title={__('Export JSON', 'customify')} onClick={() => setOpenForm(openForm === 'export' ? null : 'export')}><IconExport /></button>
 						<button className="customify-icon-btn" type="button" aria-label={__('Import palette', 'customify')} title={__('Import JSON', 'customify')} onClick={() => setOpenForm(openForm === 'import' ? null : 'import')}><IconImport /></button>
 						<button className="customify-icon-btn" type="button" aria-label={__('Add palette', 'customify')} title={__('Add new palette', 'customify')} onClick={() => setOpenForm(openForm === 'add' ? null : 'add')}><IconAdd /></button>
 					</span>
 				</h3>
-				{userArr.length === 0 ? (
+				{visibleUserArr.length === 0 ? (
 					<div className="customify-empty">
 						{__('No custom palettes yet.', 'customify')}<br />
 						{__('Click + to create one, or ↓ to import JSON.', 'customify')}
 					</div>
 				) : (
 					<PresetGrid
-						palettes={userArr}
+						palettes={visibleUserArr}
 						kind="user"
 						activeId={activeId}
 						slots={slots}
@@ -1041,10 +1078,10 @@ function App({ cfg }) {
 				)}
 				{openForm === 'add' && (
 					<AddForm
-						allPalettes={allPalettes}
+						allPalettes={[...themePresets, ...visibleUserArr]}
 						themePresets={themePresets}
 						defaultExtendId={activeId}
-						userCount={userArr.length}
+						userCount={visibleUserArr.length}
 						onConfirm={addPalette}
 						onCancel={() => setOpenForm(null)}
 					/>
@@ -1053,7 +1090,7 @@ function App({ cfg }) {
 					<ImportForm slots={slots} onConfirm={importPalettes} onCancel={() => setOpenForm(null)} />
 				)}
 				{openForm === 'export' && (
-					<ExportForm palettes={userArr} slots={slots} onClose={() => setOpenForm(null)} />
+					<ExportForm palettes={visibleUserArr} slots={slots} onClose={() => setOpenForm(null)} />
 				)}
 			</div>
 
