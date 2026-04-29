@@ -250,33 +250,23 @@ function useColorVars(palette, slots) {
       dark[slot] = resolveDarkSlot(slot, palette, cfg);
     });
 
-    // 1) Light + dark slot vars — always emit both, regardless of mode.
+    // 1) Light + dark slot vars.
     slots.forEach(slot => {
       const lightHex = palette.colors[slot];
-      if (lightHex) {
-        root.style.setProperty(`--customify-color-${slot}`, lightHex);
-        const lightRgb = hexToRgb(lightHex);
-        if (lightRgb) root.style.setProperty(`--customify-color-${slot}-rgb`, lightRgb);
-      }
+      if (lightHex) root.style.setProperty(`--customify-color-${slot}`, lightHex);
       const darkHex = dark[slot];
-      if (darkHex) {
-        root.style.setProperty(`--customify-color-${slot}-dark`, darkHex);
-        const darkRgb = hexToRgb(darkHex);
-        if (darkRgb) root.style.setProperty(`--customify-color-${slot}-dark-rgb`, darkRgb);
-      }
+      if (darkHex) root.style.setProperty(`--customify-color-${slot}-dark`, darkHex);
     });
 
-    // 2) Auto-computed (light).
+    // 2) Auto-computed (light) — color-mix replaces rgba(rgb-triplet, alpha).
     ['primary', 'secondary', 'surface'].forEach(s => {
-      if (palette.colors[s]) {
-        root.style.setProperty(`--customify-color-on-${s}`, pickOn(palette.colors[s]));
-      }
+      if (palette.colors[s]) root.style.setProperty(`--customify-color-on-${s}`, pickOn(palette.colors[s]));
     });
-    const textRgb = hexToRgb(palette.colors.text);
-    if (textRgb) {
-      root.style.setProperty('--customify-color-text-muted', `rgba(${textRgb}, 0.55)`);
-      root.style.setProperty('--customify-color-text-subtle', `rgba(${textRgb}, 0.35)`);
-      root.style.setProperty('--customify-color-border-default', `rgba(${textRgb}, 0.12)`);
+    if (palette.colors.text) {
+      const t = palette.colors.text;
+      root.style.setProperty('--customify-color-text-muted', `color-mix(in srgb, ${t} 55%, transparent)`);
+      root.style.setProperty('--customify-color-text-subtle', `color-mix(in srgb, ${t} 35%, transparent)`);
+      root.style.setProperty('--customify-color-border-default', `color-mix(in srgb, ${t} 12%, transparent)`);
     }
     if (palette.colors.primary) {
       root.style.setProperty('--customify-color-primary-hover', `color-mix(in srgb, ${palette.colors.primary}, #000 15%)`);
@@ -285,18 +275,17 @@ function useColorVars(palette, slots) {
       }
     }
 
-    // 2b) Auto-computed (dark) — same algos against resolved dark slots.
+    // 2b) Auto-computed (dark).
     ['primary', 'secondary', 'surface'].forEach(s => {
       if (dark[s]) root.style.setProperty(`--customify-color-on-${s}-dark`, pickOn(dark[s]));
     });
-    const dTextRgb = hexToRgb(dark.text);
-    if (dTextRgb) {
-      root.style.setProperty('--customify-color-text-muted-dark', `rgba(${dTextRgb}, 0.55)`);
-      root.style.setProperty('--customify-color-text-subtle-dark', `rgba(${dTextRgb}, 0.35)`);
-      root.style.setProperty('--customify-color-border-default-dark', `rgba(${dTextRgb}, 0.12)`);
+    if (dark.text) {
+      const dt = dark.text;
+      root.style.setProperty('--customify-color-text-muted-dark', `color-mix(in srgb, ${dt} 55%, transparent)`);
+      root.style.setProperty('--customify-color-text-subtle-dark', `color-mix(in srgb, ${dt} 35%, transparent)`);
+      root.style.setProperty('--customify-color-border-default-dark', `color-mix(in srgb, ${dt} 12%, transparent)`);
     }
     if (dark.primary) {
-      // Note the direction flip: blend toward white in dark mode.
       root.style.setProperty('--customify-color-primary-hover-dark', `color-mix(in srgb, ${dark.primary}, #fff 12%)`);
       if (dark.base) {
         root.style.setProperty('--customify-color-primary-subtle-dark', `color-mix(in srgb, ${dark.primary}, ${dark.base} 92%)`);

@@ -87,15 +87,6 @@ class Customify_Preview_Colors
 	}
 
 	/**
-	 * Comma-separated "r, g, b" string for `rgba(var(--…-rgb), <alpha>)` consumers.
-	 */
-	private static function hex_to_rgb_string($hex)
-	{
-		$rgb = self::hex_to_rgb_array($hex);
-		return null === $rgb ? '' : implode(', ', $rgb);
-	}
-
-	/**
 	 * Pick a contrast-aware foreground (#1A1A1A or #FFFFFF) for the given hex
 	 * background. WCAG-style relative luminance with the threshold nudged to
 	 * 0.45 (Style Pack) so warm tones still round to white.
@@ -143,7 +134,7 @@ class Customify_Preview_Colors
 
 		if ($has_palette) {
 
-		// 1) Six user-picked slots — hex + RGB triplet.
+		// 1) Six user-picked slots — hex value only.
 		foreach (Customify_Preview_Colors_Config::slots() as $slot) {
 			if (empty($pal['colors'][$slot])) {
 				continue;
@@ -153,10 +144,6 @@ class Customify_Preview_Colors
 				continue;
 			}
 			$decls .= '--customify-color-' . $slot . ':' . $hex . ';';
-			$rgb = self::hex_to_rgb_string($hex);
-			if ('' !== $rgb) {
-				$decls .= '--customify-color-' . $slot . '-rgb:' . $rgb . ';';
-			}
 		}
 
 		// 2) Auto-computed companions — must mirror src/preview-colors/preview-colors.js
@@ -173,12 +160,11 @@ class Customify_Preview_Colors
 		if ('' !== $secondary) { $decls .= '--customify-color-on-secondary:' . self::pick_on($secondary) . ';'; }
 		if ('' !== $surface)   { $decls .= '--customify-color-on-surface:'   . self::pick_on($surface)   . ';'; }
 
-		// 2b) Text alpha derivatives + border (universal browser support).
-		$text_rgb = self::hex_to_rgb_string($text);
-		if ('' !== $text_rgb) {
-			$decls .= '--customify-color-text-muted:rgba('     . $text_rgb . ', 0.55);';
-			$decls .= '--customify-color-text-subtle:rgba('    . $text_rgb . ', 0.35);';
-			$decls .= '--customify-color-border-default:rgba(' . $text_rgb . ', 0.12);';
+		// 2b) Text alpha derivatives + border via color-mix.
+		if ('' !== $text) {
+			$decls .= '--customify-color-text-muted:color-mix(in srgb, '     . $text . ' 55%, transparent);';
+			$decls .= '--customify-color-text-subtle:color-mix(in srgb, '    . $text . ' 35%, transparent);';
+			$decls .= '--customify-color-border-default:color-mix(in srgb, ' . $text . ' 12%, transparent);';
 		}
 
 		// 2c) Primary hover / subtle via color-mix (modern browsers).
@@ -197,12 +183,7 @@ class Customify_Preview_Colors
 			if (empty($dark[$slot])) {
 				continue;
 			}
-			$hex = $dark[$slot];
-			$decls .= '--customify-color-' . $slot . '-dark:' . $hex . ';';
-			$rgb = self::hex_to_rgb_string($hex);
-			if ('' !== $rgb) {
-				$decls .= '--customify-color-' . $slot . '-dark-rgb:' . $rgb . ';';
-			}
+			$decls .= '--customify-color-' . $slot . '-dark:' . $dark[$slot] . ';';
 		}
 
 		// 3a) Auto-computed companions for dark — recompute against resolved
@@ -217,11 +198,10 @@ class Customify_Preview_Colors
 		if ('' !== $d_secondary) { $decls .= '--customify-color-on-secondary-dark:' . self::pick_on($d_secondary) . ';'; }
 		if ('' !== $d_surface)   { $decls .= '--customify-color-on-surface-dark:'   . self::pick_on($d_surface)   . ';'; }
 
-		$d_text_rgb = self::hex_to_rgb_string($d_text);
-		if ('' !== $d_text_rgb) {
-			$decls .= '--customify-color-text-muted-dark:rgba('     . $d_text_rgb . ', 0.55);';
-			$decls .= '--customify-color-text-subtle-dark:rgba('    . $d_text_rgb . ', 0.35);';
-			$decls .= '--customify-color-border-default-dark:rgba(' . $d_text_rgb . ', 0.12);';
+		if ('' !== $d_text) {
+			$decls .= '--customify-color-text-muted-dark:color-mix(in srgb, '     . $d_text . ' 55%, transparent);';
+			$decls .= '--customify-color-text-subtle-dark:color-mix(in srgb, '    . $d_text . ' 35%, transparent);';
+			$decls .= '--customify-color-border-default-dark:color-mix(in srgb, ' . $d_text . ' 12%, transparent);';
 		}
 
 		// Note the direction flip vs light mode: blend toward white (#fff)
@@ -247,7 +227,6 @@ class Customify_Preview_Colors
 			$trigger_decls = '';
 			foreach (Customify_Preview_Colors_Config::slots() as $slot) {
 				$trigger_decls .= '--customify-color-' . $slot . ':var(--customify-color-' . $slot . '-dark);';
-				$trigger_decls .= '--customify-color-' . $slot . '-rgb:var(--customify-color-' . $slot . '-dark-rgb);';
 			}
 			foreach (array('on-primary', 'on-secondary', 'on-surface', 'text-muted', 'text-subtle', 'border-default', 'primary-hover', 'primary-subtle') as $k) {
 				$trigger_decls .= '--customify-color-' . $k . ':var(--customify-color-' . $k . '-dark);';

@@ -147,17 +147,15 @@
 			var hex = palette.colors[slot];
 			if (!hex) continue;
 			decls += '--customify-color-' + slot + ':' + hex + ';';
-			var rgb = hexToRgb(hex);
-			if (rgb) decls += '--customify-color-' + slot + '-rgb:' + rgb + ';';
 		}
 		if (palette.colors.primary)   decls += '--customify-color-on-primary:'   + pickOn(palette.colors.primary)   + ';';
 		if (palette.colors.secondary) decls += '--customify-color-on-secondary:' + pickOn(palette.colors.secondary) + ';';
 		if (palette.colors.surface)   decls += '--customify-color-on-surface:'   + pickOn(palette.colors.surface)   + ';';
-		var textRgb = hexToRgb(palette.colors.text);
-		if (textRgb) {
-			decls += '--customify-color-text-muted:rgba('     + textRgb + ', 0.55);';
-			decls += '--customify-color-text-subtle:rgba('    + textRgb + ', 0.35);';
-			decls += '--customify-color-border-default:rgba(' + textRgb + ', 0.12);';
+		if (palette.colors.text) {
+			var t = palette.colors.text;
+			decls += '--customify-color-text-muted:color-mix(in srgb, '     + t + ' 55%, transparent);';
+			decls += '--customify-color-text-subtle:color-mix(in srgb, '    + t + ' 35%, transparent);';
+			decls += '--customify-color-border-default:color-mix(in srgb, ' + t + ' 12%, transparent);';
 		}
 		if (palette.colors.primary) {
 			decls += '--customify-color-primary-hover:color-mix(in srgb, ' + palette.colors.primary + ', #000 15%);';
@@ -175,17 +173,15 @@
 			var dslot = SLOTS[ds], dhex = dark[dslot];
 			if (!dhex) continue;
 			decls += '--customify-color-' + dslot + '-dark:' + dhex + ';';
-			var drgb = hexToRgb(dhex);
-			if (drgb) decls += '--customify-color-' + dslot + '-dark-rgb:' + drgb + ';';
 		}
 		if (dark.primary)   decls += '--customify-color-on-primary-dark:'   + pickOn(dark.primary)   + ';';
 		if (dark.secondary) decls += '--customify-color-on-secondary-dark:' + pickOn(dark.secondary) + ';';
 		if (dark.surface)   decls += '--customify-color-on-surface-dark:'   + pickOn(dark.surface)   + ';';
-		var dTextRgb = hexToRgb(dark.text);
-		if (dTextRgb) {
-			decls += '--customify-color-text-muted-dark:rgba('     + dTextRgb + ', 0.55);';
-			decls += '--customify-color-text-subtle-dark:rgba('    + dTextRgb + ', 0.35);';
-			decls += '--customify-color-border-default-dark:rgba(' + dTextRgb + ', 0.12);';
+		if (dark.text) {
+			var dt = dark.text;
+			decls += '--customify-color-text-muted-dark:color-mix(in srgb, '     + dt + ' 55%, transparent);';
+			decls += '--customify-color-text-subtle-dark:color-mix(in srgb, '    + dt + ' 35%, transparent);';
+			decls += '--customify-color-border-default-dark:color-mix(in srgb, ' + dt + ' 12%, transparent);';
 		}
 		if (dark.primary) {
 			// Direction flip vs light: blend toward white.
@@ -201,7 +197,6 @@
 		for (var ti = 0; ti < SLOTS.length; ti++) {
 			var ts = SLOTS[ti];
 			trigger += '--customify-color-' + ts + ':var(--customify-color-' + ts + '-dark);';
-			trigger += '--customify-color-' + ts + '-rgb:var(--customify-color-' + ts + '-dark-rgb);';
 		}
 		var autoKeys = ['on-primary','on-secondary','on-surface','text-muted','text-subtle','border-default','primary-hover','primary-subtle'];
 		for (var ai = 0; ai < autoKeys.length; ai++) {

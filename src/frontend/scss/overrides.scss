@@ -3,8 +3,7 @@
  *
  * Compiled into the main theme stylesheet (style-theme.css) via
  * `@import "overrides"` from src/frontend/scss/style.scss. Loaded for every
- * frontend visitor. Consumes the `--customify-color-<slot>` and
- * `--customify-color-<slot>-rgb` custom properties rendered to
+ * frontend visitor. Consumes the `--customify-color-<slot>` custom properties rendered to
  * `document.documentElement` by class-preview-colors.php (`output_root_vars`).
  *
  * Cascade strategy: every rule below is wrapped in `html { … }` (or already
@@ -30,9 +29,7 @@
  *   --customify-color-border-default                          (text @ 12%)
  *   --customify-color-primary-hover / primary-subtle          (color-mix)
  *
- * `box-shadow` (color-tinted) still uses inline `rgba(text-rgb, 0.08)` —
- * shadow tint is a different alpha than border-default and not worth a
- * dedicated companion var for two rules in the entire theme.
+ * 
  */
 
 html {
@@ -252,7 +249,7 @@ article.comment .comment-meta,
 
 .site-header.style-1 .header--main,
 .site-header.style-1 .header--bottom {
-  box-shadow: 0 1px 2px 0 rgba(var(--customify-color-text-rgb, 225, 229, 234), 0.08);
+  box-shadow: 0 1px 2px 0 color-mix(in srgb, var(--customify-color-text, #e1e5ea) 8%, transparent);
 }
 
 /* =========================================================================
@@ -396,7 +393,7 @@ span.onsale {
 }
 .star-rating::before {
   /* Empty stars dimmed via alpha, derived from secondary slot. */
-  color: rgba(var(--customify-color-secondary-rgb, 195, 81, 47), 0.4);
+  color: color-mix(in srgb, var(--customify-color-secondary, #c3512f) 40%, transparent);
 }
 
 /* Prices — primary tint */
