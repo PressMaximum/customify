@@ -76,7 +76,13 @@ class  Customify_Customizer {
 
 		foreach ( $settings as $k ) {
 			$k = sanitize_text_field( $k );
+			// theme_mod-type settings: remove from the theme's mod array.
 			remove_theme_mod( $k );
+			// option-type settings (e.g. preview-colors stores palettes in
+			// wp_options, not theme_mods). delete_option() is a no-op when the
+			// key doesn't exist as a standalone option, so it's safe to call
+			// unconditionally alongside remove_theme_mod().
+			delete_option( $k );
 		}
 
 		wp_send_json_success();
