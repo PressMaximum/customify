@@ -1,7 +1,10 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 296:
+/***/ "./src/backend/customizer/js/customizer.js":
+/*!*************************************************!*\
+  !*** ./src/backend/customizer/js/customizer.js ***!
+  \*************************************************/
 /***/ (function() {
 
 /**
@@ -277,7 +280,10 @@
 
 /***/ }),
 
-/***/ 623:
+/***/ "./src/backend/customizer/preview-colors/preview.js":
+/*!**********************************************************!*\
+  !*** ./src/backend/customizer/preview-colors/preview.js ***!
+  \**********************************************************/
 /***/ (function() {
 
 /*
@@ -305,11 +311,6 @@
   var SETTING_PALETTES = cfg.settingIds && cfg.settingIds.palettes || 'customify_preview_user_palettes';
   var SLOTS = cfg.slots || ['base', 'text', 'primary', 'secondary', 'accent', 'surface'];
   var THEME_PALETTES = cfg.themePresets || [];
-  var DARK_BASELINES = cfg.darkBaselines || {
-    scss: {},
-    hex: {}
-  };
-  var LEGACY_MODS = cfg.legacyMods || {};
 
   // ---------------------------------------------------------------- helpers
 
@@ -335,111 +336,6 @@
     if (!rgb) return '#FFFFFF';
     return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
   }
-
-  // HSL helpers + dark-slot derivation — mirrors customizer.js + PHP.
-  function rgbToHsl(rgb) {
-    var r = rgb[0] / 255,
-      g = rgb[1] / 255,
-      b = rgb[2] / 255;
-    var max = Math.max(r, g, b),
-      min = Math.min(r, g, b);
-    var l = (max + min) / 2;
-    if (max === min) return [0, 0, l * 100];
-    var d = max - min;
-    var s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    var h;
-    if (max === r) h = (g - b) / d + (g < b ? 6 : 0);else if (max === g) h = (b - r) / d + 2;else h = (r - g) / d + 4;
-    return [h * 60, s * 100, l * 100];
-  }
-  function hslToRgb(hsl) {
-    var h = hsl[0] / 360,
-      s = hsl[1] / 100,
-      l = hsl[2] / 100;
-    if (s === 0) return [l * 255, l * 255, l * 255];
-    var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    var p = 2 * l - q;
-    var hue = function (t) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-      return p;
-    };
-    return [hue(h + 1 / 3) * 255, hue(h) * 255, hue(h - 1 / 3) * 255];
-  }
-  function rgbToHex(rgb) {
-    var c = function (v) {
-      var n = Math.max(0, Math.min(255, Math.round(v))).toString(16);
-      return (n.length === 1 ? '0' + n : n).toUpperCase();
-    };
-    return '#' + c(rgb[0]) + c(rgb[1]) + c(rgb[2]);
-  }
-  function clamp(v, lo, hi) {
-    return Math.max(lo, Math.min(hi, v));
-  }
-  function deriveDarkSlot(slot, srcHex, palette) {
-    var rgb = hexToRgbArray(srcHex);
-    if (!rgb) return srcHex;
-    var hsl = rgbToHsl(rgb),
-      h = hsl[0],
-      s = hsl[1],
-      l = hsl[2];
-    switch (slot) {
-      case 'base':
-        l = clamp(100 - l, 5, 12);
-        break;
-      case 'text':
-        l = clamp(100 - l, 88, 96);
-        s = Math.min(s, 30);
-        break;
-      case 'surface':
-        var baseSrc = palette && palette.colors && palette.colors.base;
-        var baseDark = baseSrc ? deriveDarkSlot('base', baseSrc, palette) : '#0B0D10';
-        var bRgb = hexToRgbArray(baseDark),
-          bHsl = rgbToHsl(bRgb);
-        h = bHsl[0];
-        s = bHsl[1];
-        l = Math.min(bHsl[2] + 6, 18);
-        break;
-      case 'primary':
-        l = clamp(l, 55, 70);
-        break;
-      case 'secondary':
-        var surfHex = palette && palette.colors && palette.colors.surface || '#FFFFFF';
-        var surfRgb = hexToRgbArray(surfHex);
-        var lumSrc = luminance(rgb),
-          lumSurf = surfRgb ? luminance(surfRgb) : 1;
-        if (lumSrc < lumSurf) {
-          l = clamp(100 - l, 80, 95);
-          s = Math.max(s - 10, 0);
-        } else {
-          l = Math.max(l - 10, 20);
-        }
-        break;
-      case 'accent':
-        s = Math.min(s + 10, 95);
-        l = clamp(l, 55, 80);
-        break;
-    }
-    return rgbToHex(hslToRgb([h, s, l]));
-  }
-  function resolveDarkSlot(slot, palette) {
-    if (palette && palette.dark && palette.dark[slot]) return palette.dark[slot];
-    if (palette && palette.colors && palette.colors[slot]) {
-      return deriveDarkSlot(slot, palette.colors[slot], palette);
-    }
-    var legacyMap = {
-      text: 'text',
-      primary: 'primary',
-      secondary: 'secondary'
-    };
-    var lk = legacyMap[slot];
-    if (lk && LEGACY_MODS[lk]) return deriveDarkSlot(slot, LEGACY_MODS[lk], palette);
-    if (DARK_BASELINES.scss && DARK_BASELINES.scss[slot]) return DARK_BASELINES.scss[slot];
-    if (DARK_BASELINES.hex && DARK_BASELINES.hex[slot]) return DARK_BASELINES.hex[slot];
-    return '#000000';
-  }
   function ensureStyleEl() {
     var el = document.getElementById(STYLE_ID);
     if (el) return el;
@@ -449,12 +345,10 @@
     return el;
   }
 
-  // Build the `:root { … }` block + dark trigger. Mirrors output_root_vars() in PHP.
+  // Build the `:root { … }` block. Mirrors output_root_vars() in PHP.
   function buildCss(palette) {
     if (!palette || !palette.colors) return '';
     var decls = '';
-
-    // Light slots.
     for (var i = 0; i < SLOTS.length; i++) {
       var slot = SLOTS[i];
       var hex = palette.colors[slot];
@@ -476,47 +370,7 @@
         decls += '--customify-color-primary-subtle:color-mix(in srgb, ' + palette.colors.primary + ', ' + palette.colors.base + ' 92%);';
       }
     }
-
-    // Dark slots — full 5-tier resolve chain.
-    var dark = {};
-    for (var di = 0; di < SLOTS.length; di++) {
-      dark[SLOTS[di]] = resolveDarkSlot(SLOTS[di], palette);
-    }
-    for (var ds = 0; ds < SLOTS.length; ds++) {
-      var dslot = SLOTS[ds],
-        dhex = dark[dslot];
-      if (!dhex) continue;
-      decls += '--customify-color-' + dslot + '-dark:' + dhex + ';';
-    }
-    if (dark.primary) decls += '--customify-color-on-primary-dark:' + pickOn(dark.primary) + ';';
-    if (dark.secondary) decls += '--customify-color-on-secondary-dark:' + pickOn(dark.secondary) + ';';
-    if (dark.surface) decls += '--customify-color-on-surface-dark:' + pickOn(dark.surface) + ';';
-    if (dark.text) {
-      var dt = dark.text;
-      decls += '--customify-color-text-muted-dark:color-mix(in srgb, ' + dt + ' 55%, transparent);';
-      decls += '--customify-color-text-subtle-dark:color-mix(in srgb, ' + dt + ' 35%, transparent);';
-      decls += '--customify-color-border-default-dark:color-mix(in srgb, ' + dt + ' 12%, transparent);';
-    }
-    if (dark.primary) {
-      // Direction flip vs light: blend toward white.
-      decls += '--customify-color-primary-hover-dark:color-mix(in srgb, ' + dark.primary + ', #fff 12%);';
-      if (dark.base) {
-        decls += '--customify-color-primary-subtle-dark:color-mix(in srgb, ' + dark.primary + ', ' + dark.base + ' 92%);';
-      }
-    }
-
-    // Trigger block — rebind active vars to the -dark companions inside
-    // any subtree carrying one of the dark-mode trigger classes.
-    var trigger = '';
-    for (var ti = 0; ti < SLOTS.length; ti++) {
-      var ts = SLOTS[ti];
-      trigger += '--customify-color-' + ts + ':var(--customify-color-' + ts + '-dark);';
-    }
-    var autoKeys = ['on-primary', 'on-secondary', 'on-surface', 'text-muted', 'text-subtle', 'border-default', 'primary-hover', 'primary-subtle'];
-    for (var ai = 0; ai < autoKeys.length; ai++) {
-      trigger += '--customify-color-' + autoKeys[ai] + ':var(--customify-color-' + autoKeys[ai] + '-dark);';
-    }
-    return ':root{' + decls + '}.dark-mode,.is-dark-mode,[data-theme="dark"]{' + trigger + '}';
+    return ':root{' + decls + '}';
   }
   function getCurrentPalettes() {
     var raw = wp.customize(SETTING_PALETTES);
@@ -546,6 +400,19 @@
   });
 })();
 
+/***/ }),
+
+/***/ "./src/backend/customizer/scss/customizer.scss":
+/*!*****************************************************!*\
+  !*** ./src/backend/customizer/scss/customizer.scss ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -568,6 +435,12 @@
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -604,14 +477,31 @@
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(296);
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(623);
-/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_1__);
+/*!**********************************************!*\
+  !*** ./src/backend/customizer/customizer.js ***!
+  \**********************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _scss_customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/customizer.scss */ "./src/backend/customizer/scss/customizer.scss");
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/customizer.js */ "./src/backend/customizer/js/customizer.js");
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./preview-colors/preview.js */ "./src/backend/customizer/preview-colors/preview.js");
+/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2__);
 
 
 // Preview-colors live update — same iframe context (customize-preview),
@@ -620,3 +510,4 @@
 }();
 /******/ })()
 ;
+//# sourceMappingURL=customizer.js.map

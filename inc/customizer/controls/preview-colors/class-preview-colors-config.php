@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Preview Colors — config (slots, descriptions, theme presets, settings rows).
  *
@@ -66,44 +67,33 @@ class Customify_Preview_Colors_Config
 					'accent'    => '#1E4B75',
 					'surface'   => '#235787',
 				),
-				'dark' => array(
-					'base'      => '#0D0F12',
-					'text'      => '#D4D8DD',
-					'primary'   => '#5A9FD4',
-					'secondary' => '#E07A5A',
-					'accent'    => '#4A7FAA',
-					'surface'   => '#1A1D22',
-				),
 			),
-			
+
 			array(
 				'id'     => 'midnight',
 				'name'   => _x('Midnight', 'palette name', 'customify'),
 				'colors' => array(
-					'base' => '#0B0D10', 'text' => '#F2F0EB', 'primary' => '#FF7A45',
-					'secondary' => '#FFFFFF', 'accent' => '#FFD36A', 'surface' => '#1C1F26',
-				),
-				// Already a dark design — `dark` mirrors `colors` so toggling
-				// the trigger class produces no visual change (correct for
-				// palettes that ARE dark).
-				'dark' => array(
-					'base' => '#0B0D10', 'text' => '#F2F0EB', 'primary' => '#FF7A45',
-					'secondary' => '#FFFFFF', 'accent' => '#FFD36A', 'surface' => '#1C1F26',
+					'base' => '#0B0D10',
+					'text' => '#F2F0EB',
+					'primary' => '#FF7A45',
+					'secondary' => '#FFFFFF',
+					'accent' => '#FFD36A',
+					'surface' => '#1C1F26',
 				),
 			),
 			array(
 				'id'     => 'sunrise',
 				'name'   => _x('Sunrise', 'palette name', 'customify'),
 				'colors' => array(
-					'base' => '#F5F6F4', 'text' => '#0F1C33', 'primary' => '#0055FF',
-					'secondary' => '#001D4A', 'accent' => '#B8E6FF', 'surface' => '#FFFFFF',
-				),
-				'dark' => array(
-					'base' => '#0A1124', 'text' => '#E5ECF7', 'primary' => '#3D8BFF',
-					'secondary' => '#FFFFFF', 'accent' => '#7AB8FF', 'surface' => '#152043',
+					'base' => '#F5F6F4',
+					'text' => '#0F1C33',
+					'primary' => '#0055FF',
+					'secondary' => '#001D4A',
+					'accent' => '#B8E6FF',
+					'surface' => '#FFFFFF',
 				),
 			),
-			
+
 		));
 	}
 

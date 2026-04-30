@@ -156,34 +156,6 @@ class Customify_Preview_Colors_Customizer
 			'settingsRows'  => Customify_Preview_Colors_Config::settings_rows(),
 			'userPalettes'  => Customify_Preview_Colors_Ajax::get_user_palettes(),
 			'activeId'      => Customify_Preview_Colors_Ajax::get_active_id(),
-			// Dark-mode fallback blobs (PHASE-7-PLAN §10.6). JS uses these to
-			// resolve the same 5-tier chain that PHP runs server-side, so live
-			// panel preview matches what the visitor will see post-publish.
-			'darkBaselines' => Customify_Preview_Colors_Dark::baselines(),
-			'legacyMods'    => self::collect_legacy_mods(),
 		));
-	}
-
-	/**
-	 * Collect saved theme_mod values for the legacy slots used in the dark
-	 * resolve chain (Phase 6 compat carries them; this helper is just the
-	 * read side). Returns slot-keyed array — only slots with a saved value
-	 * are present.
-	 */
-	public static function collect_legacy_mods()
-	{
-		$out = array();
-		$map = array(
-			'text'      => 'global_styling_color_text',
-			'primary'   => 'global_styling_color_primary',
-			'secondary' => 'global_styling_color_secondary',
-		);
-		foreach ($map as $slot => $mod_key) {
-			$val = get_theme_mod($mod_key);
-			if (is_string($val) && preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/', $val)) {
-				$out[$slot] = strtoupper($val);
-			}
-		}
-		return $out;
 	}
 }

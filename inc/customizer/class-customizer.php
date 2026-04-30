@@ -146,8 +146,6 @@ class  Customify_Customizer {
 						),
 						'slots'         => Customify_Preview_Colors_Config::slots(),
 						'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
-						'darkBaselines' => Customify_Preview_Colors_Dark::baselines(),
-						'legacyMods'    => Customify_Preview_Colors_Customizer::collect_legacy_mods(),
 					)
 				);
 			}

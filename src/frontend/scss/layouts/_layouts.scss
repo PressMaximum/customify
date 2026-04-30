@@ -63,15 +63,8 @@
     margin: 0 auto;
 }
 
-.site-content,
-.site-content .content-area {
-    // Slot-bound to `base` (page canvas) so `.site-content` and its inner
-    // `.content-area` follow the active palette. Hex fallback preserves the
-    // pre-palette visual for sites without an active palette.
-    background: var(--customify-color-base, #fff);
-}
-
 .site-content {
+    background: #fff;
     &.content-full-width {
         .customify-container {
             max-width: 100%;

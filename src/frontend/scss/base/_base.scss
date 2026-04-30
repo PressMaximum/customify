@@ -170,11 +170,8 @@ html {
 }
 
 body {
-    /* Slot-bound to palette `base`; SCSS literal demoted to `var()` fallback
-     * so sites without an active palette stay visually identical. Specificity
-     * (0,0,1) matches Customizer auto_css for the `background` setting, so
-     * user-picked colours win via source order when set. */
-    background: var(--customify-color-base, #{$background_body});
+    background: $background_body;
+    /* Fallback for when there is no custom background color defined. */
 }
 
 hr {
@@ -461,10 +458,10 @@ input[type="button"]:not(.ed_button),
 input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
-    color: var(--customify-color-on-primary, #ffffff);
-    background: var(--customify-color-primary, #{$color_primary});
+    color: #ffffff;
+    background: $color_primary;
     &:focus {
-        color: var(--customify-color-on-primary, #ffffff);
+        color: #ffffff;
     }
 }
 

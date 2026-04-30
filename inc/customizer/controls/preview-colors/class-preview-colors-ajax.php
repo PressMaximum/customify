@@ -92,27 +92,7 @@ class Customify_Preview_Colors_Ajax
 				$colors[$slot] = strtoupper($val);
 			}
 
-			// Optional `dark` companion (PHASE-7-PLAN §3). Partial entries
-			// are allowed — slots without an explicit dark hex fall through
-			// to auto-derivation in Customify_Preview_Colors_Dark.
-			$dark = array();
-			if (isset($item['dark']) && is_array($item['dark'])) {
-				foreach (Customify_Preview_Colors_Config::SLOTS as $slot) {
-					$val = isset($item['dark'][$slot]) ? trim((string) $item['dark'][$slot]) : '';
-					if ('' === $val) {
-						continue;
-					}
-					if (preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/', $val)) {
-						$dark[$slot] = strtoupper($val);
-					}
-				}
-			}
-
-			$entry = array('id' => $id, 'name' => $name, 'colors' => $colors);
-			if (! empty($dark)) {
-				$entry['dark'] = $dark;
-			}
-			$out[] = $entry;
+			$out[] = array('id' => $id, 'name' => $name, 'colors' => $colors);
 		}
 		return $out;
 	}

@@ -9,9 +9,9 @@
         line-height: 1.3;
     }
     .light-mode {
-        background: var(--customify-color-surface, #f0f0f0);
+        background: #f0f0f0;
     }
     .dark-mode {
-        background: var(--customify-color-secondary, #{$color_primary});
+        background: $color_primary;
     }
 }
