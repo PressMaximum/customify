@@ -1,7 +1,4 @@
 /******/ (function() { // webpackBootstrap
-/*!***********************************************!*\
-  !*** ./src/backend/customizer/js/auto-css.js ***!
-  \***********************************************/
 var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 (function ($, api) {
   CustomifyAutoCSS = function () {
@@ -1029,4 +1026,3 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 })(jQuery, wp.customize);
 /******/ })()
 ;
-//# sourceMappingURL=auto-css.js.map

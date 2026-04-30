@@ -1,10 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/frontend/js/compatibility/woocommerce.js":
-/*!******************************************************!*\
-  !*** ./src/frontend/js/compatibility/woocommerce.js ***!
-  \******************************************************/
+/***/ 738:
 /***/ (function() {
 
 jQuery(document).ready(function ($) {
@@ -150,32 +147,6 @@ jQuery(document).ready(function ($) {
   });
 });
 
-/***/ }),
-
-/***/ "./src/frontend/scss/compatibility/woocommerce-smallscreen.scss":
-/*!**********************************************************************!*\
-  !*** ./src/frontend/scss/compatibility/woocommerce-smallscreen.scss ***!
-  \**********************************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
-/***/ "./src/frontend/scss/compatibility/woocommerce.scss":
-/*!**********************************************************!*\
-  !*** ./src/frontend/scss/compatibility/woocommerce.scss ***!
-  \**********************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
 /***/ })
 
 /******/ 	});
@@ -198,12 +169,6 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -240,34 +205,15 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/*!*************************************!*\
-  !*** ./src/frontend/woocommerce.js ***!
-  \*************************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _scss_compatibility_woocommerce_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/compatibility/woocommerce.scss */ "./src/frontend/scss/compatibility/woocommerce.scss");
-/* harmony import */ var _scss_compatibility_woocommerce_smallscreen_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scss/compatibility/woocommerce-smallscreen.scss */ "./src/frontend/scss/compatibility/woocommerce-smallscreen.scss");
-/* harmony import */ var _js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./js/compatibility/woocommerce.js */ "./src/frontend/js/compatibility/woocommerce.js");
-/* harmony import */ var _js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(738);
+/* harmony import */ var _js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_compatibility_woocommerce_js__WEBPACK_IMPORTED_MODULE_0__);
 
 
 
 }();
 /******/ })()
 ;
-//# sourceMappingURL=woocommerce.js.map

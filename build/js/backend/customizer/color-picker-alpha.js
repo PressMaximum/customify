@@ -1,7 +1,4 @@
 /******/ (function() { // webpackBootstrap
-/*!*********************************************************!*\
-  !*** ./src/backend/customizer/js/color-picker-alpha.js ***!
-  \*********************************************************/
 /**!
  * wp-color-picker-alpha
  *
@@ -473,4 +470,3 @@ jQuery(document).ready(function ($) {
 });
 /******/ })()
 ;
-//# sourceMappingURL=color-picker-alpha.js.map
