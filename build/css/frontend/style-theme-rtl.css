@@ -3119,7 +3119,7 @@ article.comment .comment-post-author {
   margin-left: auto;
 }
 .site-content:not(.content-full-stretched) .entry-content > *:not(.alignwide):not(.alignfull) {
-  max-width: var(--wp--style--global--content-size, 780px);
+  max-width: var(--wp--style--global--content-size, 863px);
 }
 .entry-content .alignleft {
   margin-left: 1.41575em;
@@ -5900,7 +5900,7 @@ body.menu_sidebar_dropdown:before {
   margin-bottom: 0px;
 }
 .site-content:not(.content-full-stretched) .entry-single > .entry--item:not(.entry-content) {
-  max-width: var(--wp--style--global--content-size, 780px);
+  max-width: var(--wp--style--global--content-size, 863px);
   margin-right: auto;
   margin-left: auto;
 }
@@ -6456,9 +6456,7 @@ body.menu_sidebar_dropdown:before {
 }
 .wp-block-latest-posts > li {
   display: block;
-  padding-bottom: 0.6em;
   margin-bottom: 0.6em;
-  border-bottom: 1px solid #eaecee;
 }
 .wp-block-latest-posts > li:last-child {
   border-bottom: none;

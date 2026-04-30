@@ -1,4 +1,7 @@
 /******/ (function() { // webpackBootstrap
+/*!**********************************************!*\
+  !*** ./src/backend/customizer/js/control.js ***!
+  \**********************************************/
 (function (api) {
   // Extends our custom "example-1" section.
   api.sectionConstructor["customify-pro"] = api.Section.extend({
@@ -2681,3 +2684,4 @@
 })(jQuery, wp.customize || null);
 /******/ })()
 ;
+//# sourceMappingURL=control.js.map

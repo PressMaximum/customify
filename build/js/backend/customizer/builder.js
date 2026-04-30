@@ -1,4 +1,7 @@
 /******/ (function() { // webpackBootstrap
+/*!**********************************************!*\
+  !*** ./src/backend/customizer/js/builder.js ***!
+  \**********************************************/
 (function ($, wpcustomize) {
   var $document = $(document);
   var customifyPanels = {};
@@ -248,3 +251,4 @@
 })(jQuery, wp.customize || null);
 /******/ })()
 ;
+//# sourceMappingURL=builder.js.map

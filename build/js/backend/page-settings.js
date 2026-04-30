@@ -2,25 +2,28 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 300:
-/***/ (function() {
+/***/ "./src/backend/page-settings/index.js":
+/*!********************************************!*\
+  !*** ./src/backend/page-settings/index.js ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-
-;// external ["wp","plugins"]
-var external_wp_plugins_namespaceObject = window["wp"]["plugins"];
-;// external ["wp","editor"]
-var external_wp_editor_namespaceObject = window["wp"]["editor"];
-;// external ["wp","coreData"]
-var external_wp_coreData_namespaceObject = window["wp"]["coreData"];
-;// external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
-;// external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// external ["wp","components"]
-var external_wp_components_namespaceObject = window["wp"]["components"];
-;// external "ReactJSXRuntime"
-var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./src/backend/page-settings/index.js
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./style.scss */ "./src/backend/page-settings/style.scss");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/editor */ "@wordpress/editor");
+/* harmony import */ var _wordpress_editor__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/core-data */ "@wordpress/core-data");
+/* harmony import */ var _wordpress_core_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/components */ "@wordpress/components");
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__);
 /**
  * Customify Page Settings — block editor plugin.
  *
@@ -48,46 +51,46 @@ const config = window.customifyPageSettings || {};
 // ---------------------------------------------------------------------------
 
 const CONTENT_LAYOUT_OPTIONS = [{
-  label: (0,external_wp_i18n_namespaceObject.__)('Default', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Default', 'customify'),
   value: ''
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Full Width', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Full Width', 'customify'),
   value: 'full-width'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Full Width – Stretched', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Full Width – Stretched', 'customify'),
   value: 'full-stretched'
 }];
 const SIDEBAR_OPTIONS = [{
-  label: (0,external_wp_i18n_namespaceObject.__)('Inherit from Customizer', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Inherit from Customizer', 'customify'),
   value: ''
 }, ...Object.entries(config.sidebarLayouts || {}).map(([value, label]) => ({
   label,
   value
 }))];
 const PAGE_HEADER_OPTIONS = [{
-  label: (0,external_wp_i18n_namespaceObject.__)('Inherit from Customizer', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Inherit from Customizer', 'customify'),
   value: 'default'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Default', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Default', 'customify'),
   value: 'normal'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Cover', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Cover', 'customify'),
   value: 'cover'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Titlebar', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Titlebar', 'customify'),
   value: 'titlebar'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Hide', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Hide', 'customify'),
   value: 'none'
 }];
 const BREADCRUMB_OPTIONS = [{
-  label: (0,external_wp_i18n_namespaceObject.__)('Inherit from Customizer', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Inherit from Customizer', 'customify'),
   value: 'default'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Hide', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Hide', 'customify'),
   value: 'hide'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Show', 'customify'),
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Show', 'customify'),
   value: 'show'
 }];
 
@@ -102,7 +105,7 @@ function MetaToggle({
   meta,
   setMeta
 }) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.ToggleControl, {
     label: label,
     checked: meta[`_customify_${metaKey}`] === '1',
     onChange: on => setMeta({
@@ -120,58 +123,58 @@ function LayoutTab({
   const set = (key, v) => setMeta({
     [`_customify_${key}`]: v
   });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "customify-ps-tab-content",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Content Layout', 'customify'),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.SelectControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Content Layout', 'customify'),
       value: get('content_layout'),
       options: CONTENT_LAYOUT_OPTIONS,
       onChange: v => set('content_layout', v)
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Sidebar', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.SelectControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Sidebar', 'customify'),
       value: get('sidebar'),
       options: SIDEBAR_OPTIONS,
       onChange: v => set('sidebar', v)
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)("p", {
       className: "customify-ps-section-label",
-      children: (0,external_wp_i18n_namespaceObject.__)('Disable Elements', 'customify')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Header', 'customify'),
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Disable Elements', 'customify')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Header', 'customify'),
       metaKey: "disable_header",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Page Title', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Page Title', 'customify'),
       metaKey: "disable_page_title",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Header Top', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Header Top', 'customify'),
       metaKey: "disable_header_top",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Header Main', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Header Main', 'customify'),
       metaKey: "disable_header_main",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Header Bottom', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Header Bottom', 'customify'),
       metaKey: "disable_header_bottom",
       meta: meta,
       setMeta: setMeta
-    }), config.hasProFeatures && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Footer Top', 'customify'),
+    }), config.hasProFeatures && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Footer Top', 'customify'),
       metaKey: "disable_footer_top",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Footer Main', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Footer Main', 'customify'),
       metaKey: "disable_footer_main",
       meta: meta,
       setMeta: setMeta
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MetaToggle, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Footer Bottom', 'customify'),
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(MetaToggle, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Footer Bottom', 'customify'),
       metaKey: "disable_footer_bottom",
       meta: meta,
       setMeta: setMeta
@@ -188,15 +191,15 @@ function PageHeaderTab({
   const set = (key, v) => setMeta({
     [`_customify_${key}`]: v
   });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsxs)("div", {
     className: "customify-ps-tab-content",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Display', 'customify'),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.SelectControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Display', 'customify'),
       value: get('page_header_display') || 'default',
       options: PAGE_HEADER_OPTIONS,
       onChange: v => set('page_header_display', v)
-    }), config.hasBreadcrumb && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      label: (0,external_wp_i18n_namespaceObject.__)('Breadcrumb', 'customify'),
+    }), config.hasBreadcrumb && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.SelectControl, {
+      label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Breadcrumb', 'customify'),
       value: get('breadcrumb_display') || 'default',
       options: BREADCRUMB_OPTIONS,
       onChange: v => set('breadcrumb_display', v)
@@ -209,27 +212,27 @@ function PageHeaderTab({
 // ---------------------------------------------------------------------------
 
 function CustomifyPageSettings() {
-  const postType = (0,external_wp_data_namespaceObject.useSelect)(select => select('core/editor').getCurrentPostType(), []);
-  const [meta, setMeta] = (0,external_wp_coreData_namespaceObject.useEntityProp)('postType', postType, 'meta');
+  const postType = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => select('core/editor').getCurrentPostType(), []);
+  const [meta, setMeta] = (0,_wordpress_core_data__WEBPACK_IMPORTED_MODULE_3__.useEntityProp)('postType', postType, 'meta');
   if (!meta) return null;
   const tabs = [{
     name: 'layout',
-    title: (0,external_wp_i18n_namespaceObject.__)('Layout', 'customify')
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Layout', 'customify')
   }, {
     name: 'page-header',
-    title: (0,external_wp_i18n_namespaceObject.__)('Page Header', 'customify')
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Page Header', 'customify')
   }];
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TabPanel, {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_6__.TabPanel, {
     className: "customify-ps-tabs",
     tabs: tabs,
     children: tab => {
       if (tab.name === 'layout') {
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LayoutTab, {
+        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(LayoutTab, {
           meta: meta,
           setMeta: setMeta
         });
       }
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PageHeaderTab, {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(PageHeaderTab, {
         meta: meta,
         setMeta: setMeta
       });
@@ -241,15 +244,97 @@ function CustomifyPageSettings() {
 // Register plugin
 // ---------------------------------------------------------------------------
 
-(0,external_wp_plugins_namespaceObject.registerPlugin)('customify-page-settings', {
-  render: () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_editor_namespaceObject.PluginDocumentSettingPanel, {
+(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_1__.registerPlugin)('customify-page-settings', {
+  render: () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(_wordpress_editor__WEBPACK_IMPORTED_MODULE_2__.PluginDocumentSettingPanel, {
     name: "customify-page-settings-panel",
-    title: (0,external_wp_i18n_namespaceObject.__)('Customify Page Settings', 'customify'),
+    title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__)('Customify Page Settings', 'customify'),
     className: "customify-page-settings-panel",
     icon: "admin-appearance",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomifyPageSettings, {})
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_7__.jsx)(CustomifyPageSettings, {})
   })
 });
+
+/***/ }),
+
+/***/ "./src/backend/page-settings/style.scss":
+/*!**********************************************!*\
+  !*** ./src/backend/page-settings/style.scss ***!
+  \**********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "react/jsx-runtime":
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["ReactJSXRuntime"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/core-data":
+/*!**********************************!*\
+  !*** external ["wp","coreData"] ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["coreData"];
+
+/***/ }),
+
+/***/ "@wordpress/data":
+/*!******************************!*\
+  !*** external ["wp","data"] ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["data"];
+
+/***/ }),
+
+/***/ "@wordpress/editor":
+/*!********************************!*\
+  !*** external ["wp","editor"] ***!
+  \********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["editor"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "@wordpress/plugins":
+/*!*********************************!*\
+  !*** external ["wp","plugins"] ***!
+  \*********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["plugins"];
 
 /***/ })
 
@@ -273,6 +358,12 @@ function CustomifyPageSettings() {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -317,9 +408,44 @@ function CustomifyPageSettings() {
 /******/ 		};
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	!function() {
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
 /******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/jsonp chunk loading */
@@ -330,8 +456,8 @@ function CustomifyPageSettings() {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			597: 0,
-/******/ 			549: 0
+/******/ 			"backend/page-settings": 0,
+/******/ 			"backend/style-page-settings": 0
 /******/ 		};
 /******/ 		
 /******/ 		// no chunk on demand loading
@@ -383,8 +509,9 @@ function CustomifyPageSettings() {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [549], function() { return __webpack_require__(300); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["backend/style-page-settings"], function() { return __webpack_require__("./src/backend/page-settings/index.js"); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
 ;
+//# sourceMappingURL=page-settings.js.map

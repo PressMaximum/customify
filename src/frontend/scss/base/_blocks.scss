@@ -13,7 +13,7 @@
 // Skip when `.site-content.content-full-stretched` is the context — stretched mode
 // disables content-width constraints so blocks tràn theo container.
 .site-content:not(.content-full-stretched) .entry-content > *:not(.alignwide):not(.alignfull) {
-	max-width: var(--wp--style--global--content-size, 780px);
+	max-width: var(--wp--style--global--content-size, 863px);
 }
 .entry-content {
 	.alignleft{

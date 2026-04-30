@@ -973,7 +973,7 @@ article.comment .comment-post-author {
   margin-left: auto;
 }
 .site-content:not(.content-full-stretched) .entry-content > *:not(.alignwide):not(.alignfull) {
-  max-width: var(--wp--style--global--content-size, 780px);
+  max-width: var(--wp--style--global--content-size, 863px);
 }
 .entry-content .alignleft {
   margin-left: 1.41575em;

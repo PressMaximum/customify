@@ -1,7 +1,10 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 223:
+/***/ "./src/backend/admin/js/dashboard.js":
+/*!*******************************************!*\
+  !*** ./src/backend/admin/js/dashboard.js ***!
+  \*******************************************/
 /***/ (function() {
 
 jQuery(document).ready(function ($) {
@@ -69,6 +72,19 @@ jQuery(document).ready(function ($) {
   });
 });
 
+/***/ }),
+
+/***/ "./src/backend/admin/scss/dashboard.scss":
+/*!***********************************************!*\
+  !*** ./src/backend/admin/scss/dashboard.scss ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -91,6 +107,12 @@ jQuery(document).ready(function ($) {
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -127,14 +149,32 @@ jQuery(document).ready(function ($) {
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(223);
-/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_dashboard_js__WEBPACK_IMPORTED_MODULE_0__);
+/*!****************************************!*\
+  !*** ./src/backend/admin/dashboard.js ***!
+  \****************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _scss_dashboard_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/dashboard.scss */ "./src/backend/admin/scss/dashboard.scss");
+/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/dashboard.js */ "./src/backend/admin/js/dashboard.js");
+/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_dashboard_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
 }();
 /******/ })()
 ;
+//# sourceMappingURL=dashboard.js.map
