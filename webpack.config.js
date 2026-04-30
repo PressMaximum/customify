@@ -167,7 +167,6 @@ const entries = {
 	// Frontend
 	'frontend/theme':          path.resolve( __dirname, 'src/frontend/index.js' ),
 	'frontend/woocommerce':    path.resolve( __dirname, 'src/frontend/woocommerce.js' ),
-	'frontend/preview-colors': path.resolve( __dirname, 'src/preview-colors/index.js' ),
 
 	// Backend — React apps
 	'backend/header-builder': path.resolve( __dirname, 'src/backend/header-builder/index.js' ),

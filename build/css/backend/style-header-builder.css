@@ -509,18 +509,18 @@ ul.control-panel-customify_footer_builder_panel {
 .customify-hb__col:last-child {
   border-right: 1px solid #dcdcde;
 }
-.customify-hb__col--left {
+.customify-hb__col:first-child:not(:last-child) {
   flex: 1;
   justify-content: flex-start;
 }
-.customify-hb__col--center {
+.customify-hb__col:not(:first-child):not(:last-child) {
   flex: 0 0 auto;
   min-width: 50px;
   justify-content: center;
   padding-left: 30px;
   padding-right: 30px;
 }
-.customify-hb__col--right {
+.customify-hb__col:last-child:not(:first-child) {
   flex: 1;
   justify-content: flex-end;
 }

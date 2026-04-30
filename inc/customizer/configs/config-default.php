@@ -274,6 +274,38 @@ function customify_layout_builder_config_default( $val, $name ) {
 							),
 					),
 			),
+
+			// V2 footer defaults — equivalent to the V1 default after migration.
+			'footer_builder_panel_v2' => array(
+				'desktop' => array(
+					'main'   => array(
+						'left'   => array( array( 'id' => 'footer-1' ) ),
+						'center' => array( array( 'id' => 'footer-2' ) ),
+						'right'  => array( array( 'id' => 'footer-3' ) ),
+						'col4'   => array( array( 'id' => 'footer-4' ) ),
+						'col5'   => array(),
+					),
+					'bottom' => array(
+						'left'   => array( array( 'id' => 'footer_copyright' ) ),
+						'center' => array(),
+						'right'  => array(),
+						'col4'   => array(),
+						'col5'   => array(),
+					),
+				),
+			),
+			'footer_main_col_layout' => array(
+				'count'   => 4,
+				'desktop' => array( 'fr' => array( 1, 1, 1, 1 ) ),
+				'tablet'  => array( 'fr' => array( 1, 1 ) ),
+				'mobile'  => array( 'fr' => array( 1 ) ),
+			),
+			'footer_bottom_col_layout' => array(
+				'count'   => 1,
+				'desktop' => array( 'fr' => array( 1 ) ),
+				'tablet'  => array( 'fr' => array( 1, 1 ) ),
+				'mobile'  => array( 'fr' => array( 1 ) ),
+			),
 		);
 
 	if ( ! $val && isset( $defaults[ $name ] ) ) {

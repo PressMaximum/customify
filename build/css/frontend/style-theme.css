@@ -6833,6 +6833,7 @@ body.menu_sidebar_dropdown:before {
   display: grid !important;
   height: auto;
   align-items: start;
+  gap: 30px;
 }
 .footer--row .row-v2 > .col-v2 {
   min-width: 0;

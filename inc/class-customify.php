@@ -427,8 +427,6 @@ class Customify
 			'/inc/admin/block-styles.php',
 			// Block editor Page Settings panel (also registers meta for REST API).
 			'/inc/admin/page-settings.php',
-			// Frontend color preview sidebar (`?preview-colors=1`).
-			'/inc/preview-colors/class-preview-colors.php',
 		);
 
 		foreach ($files as $file) {

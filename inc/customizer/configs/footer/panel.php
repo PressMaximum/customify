@@ -188,7 +188,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'css_format' => 'column-gap: {{value}}; gap: {{value}}',
 				'min'        => 0,
 				'max'        => 100,
-				'default'    => 20,
+				'default'    => 30,
 			),
 
 			array(

@@ -181,6 +181,7 @@
         display: grid !important;
         height: auto;          // header builder sets height:100%, not needed for footer
         align-items: start;
+        gap: 30px;
 
         > .col-v2 {
             min-width: 0;      // prevent grid blowout
