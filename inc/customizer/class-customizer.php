@@ -133,13 +133,11 @@ class  Customify_Customizer {
 			// Color-palette live update (panel → iframe). Bundled into the
 			// `customify-customizer` script via webpack so the iframe loads
 			// one combined asset instead of a second handle. Localize the
-			// data payload onto the same handle. The JS-facing window var
-			// name (`CustomifyPreviewColorsPreview`) is kept unchanged
-			// because the JS source folder is renamed independently.
+			// data payload onto the same handle.
 			if ( class_exists( 'Customify_Color_Palette' ) ) {
 				wp_localize_script(
 					'customify-customizer',
-					'CustomifyPreviewColorsPreview',
+					'CustomifyColorPalettePreview',
 					array(
 						'styleId'       => Customify_Color_Palette::HANDLE . '-vars',
 						'settingIds'    => array(

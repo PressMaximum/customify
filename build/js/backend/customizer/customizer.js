@@ -1,10 +1,126 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/backend/customizer/js/customizer.js":
-/*!*************************************************!*\
-  !*** ./src/backend/customizer/js/customizer.js ***!
-  \*************************************************/
+/***/ 513:
+/***/ (function() {
+
+/*
+ * Customify Color Palette — Customizer preview-iframe live update.
+ *
+ * Runs INSIDE the Customizer's preview iframe. With the bound settings on
+ * `transport: 'postMessage'`, every time the user touches the panel in the
+ * controls pane (preset switch / slot edit), wp.customize fires a `change`
+ * for the matching setting; this script catches it and rewrites the
+ * `<style id="customify-color-palette-vars">:root{ … }</style>` block —
+ * same shape as what PHP's `output_root_vars()` emits on a normal page load,
+ * so the override layer compiled into style-theme.css picks up the new vars
+ * without an iframe refresh.
+ *
+ * No persistence here. Saving still happens through the standard Customizer
+ * Publish flow on the controls side; this bundle only paints the preview.
+ */
+(function () {
+  'use strict';
+
+  if (!window.wp || !wp.customize) return;
+  var cfg = window.CustomifyColorPalettePreview || {};
+  var STYLE_ID = cfg.styleId || 'customify-color-palette-vars';
+  var SETTING_ACTIVE = cfg.settingIds && cfg.settingIds.active || 'customify_preview_active_palette';
+  var SETTING_PALETTES = cfg.settingIds && cfg.settingIds.palettes || 'customify_preview_user_palettes';
+  var SLOTS = cfg.slots || ['base', 'text', 'primary', 'secondary', 'accent', 'surface'];
+  var THEME_PALETTES = cfg.themePresets || [];
+
+  // ---------------------------------------------------------------- helpers
+
+  function hexToRgbArray(hex) {
+    var c = String(hex || '').replace('#', '');
+    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
+    if (!/^[0-9A-Fa-f]{6}$/.test(c)) return null;
+    return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)];
+  }
+  function hexToRgb(hex) {
+    var rgb = hexToRgbArray(hex);
+    return rgb ? rgb.join(', ') : null;
+  }
+  function luminance(rgb) {
+    var f = function (v) {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    };
+    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+  }
+  function pickOn(hex) {
+    var rgb = hexToRgbArray(hex);
+    if (!rgb) return '#FFFFFF';
+    return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+  }
+  function ensureStyleEl() {
+    var el = document.getElementById(STYLE_ID);
+    if (el) return el;
+    el = document.createElement('style');
+    el.id = STYLE_ID;
+    document.head.appendChild(el);
+    return el;
+  }
+
+  // Build the `:root { … }` block. Mirrors output_root_vars() in PHP.
+  function buildCss(palette) {
+    if (!palette || !palette.colors) return '';
+    var decls = '';
+    for (var i = 0; i < SLOTS.length; i++) {
+      var slot = SLOTS[i];
+      var hex = palette.colors[slot];
+      if (!hex) continue;
+      decls += '--customify-color-' + slot + ':' + hex + ';';
+    }
+    if (palette.colors.primary) decls += '--customify-color-on-primary:' + pickOn(palette.colors.primary) + ';';
+    if (palette.colors.secondary) decls += '--customify-color-on-secondary:' + pickOn(palette.colors.secondary) + ';';
+    if (palette.colors.surface) decls += '--customify-color-on-surface:' + pickOn(palette.colors.surface) + ';';
+    if (palette.colors.text) {
+      var t = palette.colors.text;
+      decls += '--customify-color-text-muted:color-mix(in srgb, ' + t + ' 55%, transparent);';
+      decls += '--customify-color-text-subtle:color-mix(in srgb, ' + t + ' 35%, transparent);';
+      decls += '--customify-color-border-default:color-mix(in srgb, ' + t + ' 12%, transparent);';
+    }
+    if (palette.colors.primary) {
+      decls += '--customify-color-primary-hover:color-mix(in srgb, ' + palette.colors.primary + ', #000 15%);';
+      if (palette.colors.base) {
+        decls += '--customify-color-primary-subtle:color-mix(in srgb, ' + palette.colors.primary + ', ' + palette.colors.base + ' 92%);';
+      }
+    }
+    return ':root{' + decls + '}';
+  }
+  function getCurrentPalettes() {
+    var raw = wp.customize(SETTING_PALETTES);
+    var userPalettes = raw && typeof raw.get === 'function' ? raw.get() : [];
+    if (!Array.isArray(userPalettes)) userPalettes = [];
+    return THEME_PALETTES.concat(userPalettes);
+  }
+  function getActivePalette() {
+    var activeSetting = wp.customize(SETTING_ACTIVE);
+    var activeId = activeSetting && typeof activeSetting.get === 'function' ? activeSetting.get() : '';
+    var all = getCurrentPalettes();
+    for (var i = 0; i < all.length; i++) {
+      if (all[i] && all[i].id === activeId) return all[i];
+    }
+    return all[0] || null;
+  }
+  function refresh() {
+    var pal = getActivePalette();
+    if (!pal) return;
+    ensureStyleEl().textContent = buildCss(pal);
+  }
+  wp.customize(SETTING_ACTIVE, function (setting) {
+    setting.bind(refresh);
+  });
+  wp.customize(SETTING_PALETTES, function (setting) {
+    setting.bind(refresh);
+  });
+})();
+
+/***/ }),
+
+/***/ 296:
 /***/ (function() {
 
 /**
@@ -278,141 +394,6 @@
   });
 })(jQuery, wp.customize);
 
-/***/ }),
-
-/***/ "./src/backend/customizer/preview-colors/preview.js":
-/*!**********************************************************!*\
-  !*** ./src/backend/customizer/preview-colors/preview.js ***!
-  \**********************************************************/
-/***/ (function() {
-
-/*
- * Customify Preview Colors — Customizer preview-iframe live update.
- *
- * Runs INSIDE the Customizer's preview iframe. With the bound settings on
- * `transport: 'postMessage'`, every time the user touches the panel in the
- * controls pane (preset switch / slot edit), wp.customize fires a `change`
- * for the matching setting; this script catches it and rewrites the
- * `<style id="customify-preview-colors-vars">:root{ … }</style>` block —
- * same shape as what PHP's `output_root_vars()` emits on a normal page load,
- * so the override layer compiled into style-theme.css picks up the new vars
- * without an iframe refresh.
- *
- * No persistence here. Saving still happens through the standard Customizer
- * Publish flow on the controls side; this bundle only paints the preview.
- */
-(function () {
-  'use strict';
-
-  if (!window.wp || !wp.customize) return;
-  var cfg = window.CustomifyPreviewColorsPreview || {};
-  var STYLE_ID = cfg.styleId || 'customify-preview-colors-vars';
-  var SETTING_ACTIVE = cfg.settingIds && cfg.settingIds.active || 'customify_preview_active_palette';
-  var SETTING_PALETTES = cfg.settingIds && cfg.settingIds.palettes || 'customify_preview_user_palettes';
-  var SLOTS = cfg.slots || ['base', 'text', 'primary', 'secondary', 'accent', 'surface'];
-  var THEME_PALETTES = cfg.themePresets || [];
-
-  // ---------------------------------------------------------------- helpers
-
-  function hexToRgbArray(hex) {
-    var c = String(hex || '').replace('#', '');
-    if (c.length === 3) c = c[0] + c[0] + c[1] + c[1] + c[2] + c[2];
-    if (!/^[0-9A-Fa-f]{6}$/.test(c)) return null;
-    return [parseInt(c.substr(0, 2), 16), parseInt(c.substr(2, 2), 16), parseInt(c.substr(4, 2), 16)];
-  }
-  function hexToRgb(hex) {
-    var rgb = hexToRgbArray(hex);
-    return rgb ? rgb.join(', ') : null;
-  }
-  function luminance(rgb) {
-    var f = function (v) {
-      v /= 255;
-      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
-    };
-    return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
-  }
-  function pickOn(hex) {
-    var rgb = hexToRgbArray(hex);
-    if (!rgb) return '#FFFFFF';
-    return luminance(rgb) > 0.45 ? '#1A1A1A' : '#FFFFFF';
-  }
-  function ensureStyleEl() {
-    var el = document.getElementById(STYLE_ID);
-    if (el) return el;
-    el = document.createElement('style');
-    el.id = STYLE_ID;
-    document.head.appendChild(el);
-    return el;
-  }
-
-  // Build the `:root { … }` block. Mirrors output_root_vars() in PHP.
-  function buildCss(palette) {
-    if (!palette || !palette.colors) return '';
-    var decls = '';
-    for (var i = 0; i < SLOTS.length; i++) {
-      var slot = SLOTS[i];
-      var hex = palette.colors[slot];
-      if (!hex) continue;
-      decls += '--customify-color-' + slot + ':' + hex + ';';
-    }
-    if (palette.colors.primary) decls += '--customify-color-on-primary:' + pickOn(palette.colors.primary) + ';';
-    if (palette.colors.secondary) decls += '--customify-color-on-secondary:' + pickOn(palette.colors.secondary) + ';';
-    if (palette.colors.surface) decls += '--customify-color-on-surface:' + pickOn(palette.colors.surface) + ';';
-    if (palette.colors.text) {
-      var t = palette.colors.text;
-      decls += '--customify-color-text-muted:color-mix(in srgb, ' + t + ' 55%, transparent);';
-      decls += '--customify-color-text-subtle:color-mix(in srgb, ' + t + ' 35%, transparent);';
-      decls += '--customify-color-border-default:color-mix(in srgb, ' + t + ' 12%, transparent);';
-    }
-    if (palette.colors.primary) {
-      decls += '--customify-color-primary-hover:color-mix(in srgb, ' + palette.colors.primary + ', #000 15%);';
-      if (palette.colors.base) {
-        decls += '--customify-color-primary-subtle:color-mix(in srgb, ' + palette.colors.primary + ', ' + palette.colors.base + ' 92%);';
-      }
-    }
-    return ':root{' + decls + '}';
-  }
-  function getCurrentPalettes() {
-    var raw = wp.customize(SETTING_PALETTES);
-    var userPalettes = raw && typeof raw.get === 'function' ? raw.get() : [];
-    if (!Array.isArray(userPalettes)) userPalettes = [];
-    return THEME_PALETTES.concat(userPalettes);
-  }
-  function getActivePalette() {
-    var activeSetting = wp.customize(SETTING_ACTIVE);
-    var activeId = activeSetting && typeof activeSetting.get === 'function' ? activeSetting.get() : '';
-    var all = getCurrentPalettes();
-    for (var i = 0; i < all.length; i++) {
-      if (all[i] && all[i].id === activeId) return all[i];
-    }
-    return all[0] || null;
-  }
-  function refresh() {
-    var pal = getActivePalette();
-    if (!pal) return;
-    ensureStyleEl().textContent = buildCss(pal);
-  }
-  wp.customize(SETTING_ACTIVE, function (setting) {
-    setting.bind(refresh);
-  });
-  wp.customize(SETTING_PALETTES, function (setting) {
-    setting.bind(refresh);
-  });
-})();
-
-/***/ }),
-
-/***/ "./src/backend/customizer/scss/customizer.scss":
-/*!*****************************************************!*\
-  !*** ./src/backend/customizer/scss/customizer.scss ***!
-  \*****************************************************/
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
 /***/ })
 
 /******/ 	});
@@ -435,12 +416,6 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		if (!(moduleId in __webpack_modules__)) {
-/******/ 			delete __webpack_module_cache__[moduleId];
-/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
-/******/ 			e.code = 'MODULE_NOT_FOUND';
-/******/ 			throw e;
-/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -477,37 +452,19 @@ __webpack_require__.r(__webpack_exports__);
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/*!**********************************************!*\
-  !*** ./src/backend/customizer/customizer.js ***!
-  \**********************************************/
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _scss_customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/customizer.scss */ "./src/backend/customizer/scss/customizer.scss");
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/customizer.js */ "./src/backend/customizer/js/customizer.js");
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./preview-colors/preview.js */ "./src/backend/customizer/preview-colors/preview.js");
-/* harmony import */ var _preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_preview_colors_preview_js__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(296);
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(513);
+/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1__);
 
 
-// Preview-colors live update — same iframe context (customize-preview),
+// Color-palette live update — same iframe context (customize-preview),
 // merged here so the iframe loads one combined bundle instead of two.
 
 }();
 /******/ })()
 ;
-//# sourceMappingURL=customizer.js.map

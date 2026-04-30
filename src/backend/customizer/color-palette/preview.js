@@ -1,11 +1,11 @@
 /*
- * Customify Preview Colors — Customizer preview-iframe live update.
+ * Customify Color Palette — Customizer preview-iframe live update.
  *
  * Runs INSIDE the Customizer's preview iframe. With the bound settings on
  * `transport: 'postMessage'`, every time the user touches the panel in the
  * controls pane (preset switch / slot edit), wp.customize fires a `change`
  * for the matching setting; this script catches it and rewrites the
- * `<style id="customify-preview-colors-vars">:root{ … }</style>` block —
+ * `<style id="customify-color-palette-vars">:root{ … }</style>` block —
  * same shape as what PHP's `output_root_vars()` emits on a normal page load,
  * so the override layer compiled into style-theme.css picks up the new vars
  * without an iframe refresh.
@@ -17,8 +17,8 @@
 	'use strict';
 
 	if (!window.wp || !wp.customize) return;
-	var cfg = window.CustomifyPreviewColorsPreview || {};
-	var STYLE_ID = (cfg.styleId) || 'customify-preview-colors-vars';
+	var cfg = window.CustomifyColorPalettePreview || {};
+	var STYLE_ID = (cfg.styleId) || 'customify-color-palette-vars';
 	var SETTING_ACTIVE   = (cfg.settingIds && cfg.settingIds.active)   || 'customify_preview_active_palette';
 	var SETTING_PALETTES = (cfg.settingIds && cfg.settingIds.palettes) || 'customify_preview_user_palettes';
 	var SLOTS            = cfg.slots || ['base', 'text', 'primary', 'secondary', 'accent', 'surface'];

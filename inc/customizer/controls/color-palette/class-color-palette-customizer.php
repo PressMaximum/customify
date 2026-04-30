@@ -4,7 +4,7 @@
  *
  * Adds a "Color palette" control inside the Customizer's Global Colors
  * section. The control mounts a React app (light DOM) on a host div whose id
- * is reused as the SCSS scope (`#customify-preview-colors-root`). Settings
+ * is reused as the SCSS scope (`#customify-color-palette-root`). Settings
  * write through the Customizer Publish pipeline (`transport: 'postMessage'`),
  * with the preview iframe rebroadcasting the `:root` vars on every change.
  *
@@ -19,11 +19,10 @@ class Customify_Color_Palette_Customizer
 {
 	const SECTION_ID = 'global_styling';
 	const CONTROL_ID = 'customify_color_palette';
-	// HOST_ID is the SCSS scope id — kept as `customify-preview-colors-root`
-	// because src/backend/customizer/preview-colors/customizer.scss scopes
-	// every panel rule under this selector. Renaming would require a coupled
-	// rename of the JS source folder + webpack entry + SCSS rebuild.
-	const HOST_ID    = 'customify-preview-colors-root';
+	// HOST_ID is also the SCSS scope id — every panel rule in
+	// src/backend/customizer/color-palette/customizer.scss is scoped under
+	// this selector, so the value must stay in sync between PHP + SCSS.
+	const HOST_ID    = 'customify-color-palette-root';
 	// Independent script handle — the Customizer bundle is a separate webpack
 	// entry from the frontend overlay so the two can evolve independently.
 	const HANDLE     = 'customify-color-palette-customizer';
@@ -120,8 +119,8 @@ class Customify_Color_Palette_Customizer
 		$suffix   = (defined('WP_DEBUG') && WP_DEBUG) ? '' : '.min';
 		$base_uri = get_template_directory_uri();
 		$base_dir = get_template_directory();
-		$css_path = '/build/css/backend/customizer/preview-colors' . $suffix . '.css';
-		$js_path  = '/build/js/backend/customizer/preview-colors' . $suffix . '.js';
+		$css_path = '/build/css/backend/customizer/color-palette' . $suffix . '.css';
+		$js_path  = '/build/js/backend/customizer/color-palette' . $suffix . '.js';
 		// File mtime as cache buster so any rebuild invalidates the browser
 		// cache without a manual theme-version bump.
 		$css_ver  = file_exists($base_dir . $css_path) ? filemtime($base_dir . $css_path) : (Customify::$version ?: '0.4.13');
@@ -144,7 +143,7 @@ class Customify_Color_Palette_Customizer
 			true
 		);
 
-		wp_localize_script(self::HANDLE, 'CustomifyPreviewColors', array(
+		wp_localize_script(self::HANDLE, 'CustomifyColorPalette', array(
 			'rootId'        => self::HOST_ID,
 			// Tells the bundle to use Customizer setting writes (deferred save
 			// on Publish) instead of immediate AJAX. Setting IDs match the

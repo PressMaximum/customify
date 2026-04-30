@@ -3860,7 +3860,7 @@
 				var setting_keys = [];
 				var controls = wp.customize.section(section).controls();
 				// Iterate each control's actual settings, not the control ID.
-				// Multi-setting controls (e.g. preview-colors) bind multiple
+				// Multi-setting controls (e.g. color-palette) bind multiple
 				// setting IDs that differ from the control ID — using c.id would
 				// silently miss them. Falls back to c.id for standard controls
 				// where the setting ID matches the control ID.

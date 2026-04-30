@@ -1,5 +1,5 @@
 /*
- * Customify Preview Colors — Customizer control bundle (React).
+ * Customify Color Palette — Customizer control bundle (React).
  *
  * Mounted in light DOM directly inside a WP_Customize_Control container.
  * Uses @wordpress/element (React) for declarative state management; the
@@ -10,11 +10,7 @@
  * (`customify_preview_user_palettes` + `customify_preview_active_palette`)
  * via `wp.customize(id).get()` / `.set()` / `.bind()`. `transport: 'postMessage'`
  * means the preview iframe receives the changes live (handled by
- * preview-colors-preview.js — that bundle rewrites :root CSS vars).
- *
- * Skipped vs the frontend overlay: no shadow DOM, no `.sb-header`, no
- * collapse / reopen chrome, no browse-all modal — the inline Customizer
- * layout doesn't use them.
+ * preview.js — that bundle rewrites :root CSS vars).
  */
 
 import {
@@ -959,7 +955,7 @@ function App({ cfg }) {
 // ─────────────────────────────────────────────────────────── Mount
 
 (function () {
-	const cfg = window.CustomifyPreviewColors;
+	const cfg = window.CustomifyColorPalette;
 	if (!cfg) return;
 
 	let mounted = false;

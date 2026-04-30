@@ -1,7 +1,4 @@
 /******/ (function() { // webpackBootstrap
-/*!*************************************************!*\
-  !*** ./src/backend/customizer/js/builder-v2.js ***!
-  \*************************************************/
 var CustomizeBuilder_V2;
 (function ($) {
   var $document = $(document);
@@ -409,4 +406,3 @@ var CustomizeBuilder_V2;
 })(jQuery);
 /******/ })()
 ;
-//# sourceMappingURL=builder-v2.js.map
