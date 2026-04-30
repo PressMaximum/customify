@@ -1,10 +1,10 @@
 <?php
 /**
- * Preview Colors — bootstrap.
+ * Color Palette — bootstrap.
  *
  * Color-palette system surfaced exclusively as a Customizer control. Visitors
  * never see a panel; they receive the saved active palette as `:root` CSS
- * vars consumed by overrides.scss. Admins edit through the "Color palette"
+ * vars consumed by the override layer. Admins edit through the "Color palette"
  * control under Customizer → Global Colors.
  *
  * @package customify
@@ -14,26 +14,26 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-require_once __DIR__ . '/class-preview-colors-config.php';
-require_once __DIR__ . '/class-preview-colors-ajax.php';
-require_once __DIR__ . '/class-preview-colors-customizer.php';
-require_once __DIR__ . '/class-preview-colors-demo-import.php';
-require_once __DIR__ . '/class-preview-colors-compat.php';
+require_once __DIR__ . '/class-color-palette-config.php';
+require_once __DIR__ . '/class-color-palette-ajax.php';
+require_once __DIR__ . '/class-color-palette-customizer.php';
+require_once __DIR__ . '/class-color-palette-import.php';
+require_once __DIR__ . '/class-color-palette-compat.php';
 
-class Customify_Preview_Colors
+class Customify_Color_Palette
 {
 	// Style id for the inline `:root { … }` block emitted on every page load.
-	const HANDLE = 'customify-preview-colors';
+	const HANDLE = 'customify-color-palette';
 
 	public static function init()
 	{
 		// Customizer "Color palette" control — registers settings + control.
-		Customify_Preview_Colors_Customizer::init();
-		Customify_Preview_Colors_Demo_Import::init();
+		Customify_Color_Palette_Customizer::init();
+		Customify_Color_Palette_Import::init();
 		// One-time bootstrap: if styling.php has user-saved values and no
 		// custom palette exists yet, materialise a "Theme custom" palette
 		// from those values + activate it. See class for the full guard.
-		Customify_Preview_Colors_Compat::init();
+		Customify_Color_Palette_Compat::init();
 
 		if (! is_admin()) {
 			// Visitor-side: emit `<style>:root { --customify-color-*: … }</style>`
@@ -50,8 +50,8 @@ class Customify_Preview_Colors
 	 */
 	private static function get_active_palette()
 	{
-		$active_id = Customify_Preview_Colors_Ajax::get_active_id();
-		$themes    = Customify_Preview_Colors_Config::theme_presets();
+		$active_id = Customify_Color_Palette_Ajax::get_active_id();
+		$themes    = Customify_Color_Palette_Config::theme_presets();
 
 		if ('' !== $active_id) {
 			foreach ($themes as $p) {
@@ -59,7 +59,7 @@ class Customify_Preview_Colors
 					return $p;
 				}
 			}
-			foreach (Customify_Preview_Colors_Ajax::get_user_palettes() as $p) {
+			foreach (Customify_Color_Palette_Ajax::get_user_palettes() as $p) {
 				if (isset($p['id']) && $p['id'] === $active_id) {
 					return $p;
 				}
@@ -128,7 +128,7 @@ class Customify_Preview_Colors
 		if ($has_palette) {
 
 		// 1) Six user-picked slots — hex value only.
-		foreach (Customify_Preview_Colors_Config::slots() as $slot) {
+		foreach (Customify_Color_Palette_Config::slots() as $slot) {
 			if (empty($pal['colors'][$slot])) {
 				continue;
 			}
@@ -139,7 +139,7 @@ class Customify_Preview_Colors
 			$decls .= '--customify-color-' . $slot . ':' . $hex . ';';
 		}
 
-		// 2) Auto-computed companions — must mirror src/preview-colors/preview-colors.js
+		// 2) Auto-computed companions — must mirror the JS panel's
 		// `applyColorVars()` so visitors and admins (pre-JS-bootstrap) see the
 		// same values.
 		$primary   = isset($pal['colors']['primary'])   ? $pal['colors']['primary']   : '';
@@ -176,4 +176,4 @@ class Customify_Preview_Colors
 
 }
 
-Customify_Preview_Colors::init();
+Customify_Color_Palette::init();

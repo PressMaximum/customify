@@ -721,15 +721,6 @@ function App({ cfg }) {
 
 	useColorVars(activePalette, slots);
 
-	useEffect(() => {
-		if (activePalette) {
-			console.log('[Customify Preview Colors] Current palette:', {
-				name: activePalette.name,
-				colors: { ...activePalette.colors },
-			});
-		}
-	}, [activePalette]);
-
 	// Esc closes popover / open form.
 	useEffect(() => {
 		const handler = (e) => {

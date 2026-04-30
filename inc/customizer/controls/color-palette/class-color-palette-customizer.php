@@ -1,6 +1,6 @@
 <?php
 /**
- * Preview Colors — WP Customizer integration.
+ * Color Palette — WP Customizer integration.
  *
  * Adds a "Color palette" control inside the Customizer's Global Colors
  * section. The control mounts a React app (light DOM) on a host div whose id
@@ -15,14 +15,18 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class Customify_Preview_Colors_Customizer
+class Customify_Color_Palette_Customizer
 {
 	const SECTION_ID = 'global_styling';
 	const CONTROL_ID = 'customify_color_palette';
+	// HOST_ID is the SCSS scope id — kept as `customify-preview-colors-root`
+	// because src/backend/customizer/preview-colors/customizer.scss scopes
+	// every panel rule under this selector. Renaming would require a coupled
+	// rename of the JS source folder + webpack entry + SCSS rebuild.
 	const HOST_ID    = 'customify-preview-colors-root';
 	// Independent script handle — the Customizer bundle is a separate webpack
 	// entry from the frontend overlay so the two can evolve independently.
-	const HANDLE     = 'customify-preview-colors-customizer';
+	const HANDLE     = 'customify-color-palette-customizer';
 
 	public static function init()
 	{
@@ -54,7 +58,7 @@ class Customify_Preview_Colors_Customizer
 			return;
 		}
 
-		require_once __DIR__ . '/class-preview-colors-customizer-control.php';
+		require_once __DIR__ . '/class-color-palette-customizer-control.php';
 
 		// The Global Colors section is registered through the theme's config
 		// filter pipeline (inc/customizer/configs/styling.php), which runs on
@@ -68,24 +72,24 @@ class Customify_Preview_Colors_Customizer
 		// the filtered theme_presets list (`'ashwood'` out of the box) so
 		// the Customizer reverts here on "Reset to defaults" / publishes a
 		// sensible value on first save.
-		$wp_customize->add_setting(Customify_Preview_Colors_Ajax::OPTION_ACTIVE, array(
+		$wp_customize->add_setting(Customify_Color_Palette_Ajax::OPTION_ACTIVE, array(
 			'type'              => 'option',
-			'capability'        => Customify_Preview_Colors_Ajax::CAPABILITY,
-			'default'           => Customify_Preview_Colors_Config::default_active_id(),
+			'capability'        => Customify_Color_Palette_Ajax::CAPABILITY,
+			'default'           => Customify_Color_Palette_Config::default_active_id(),
 			'transport'         => 'postMessage',
-			'sanitize_callback' => array('Customify_Preview_Colors_Ajax', 'sanitize_active_id'),
+			'sanitize_callback' => array('Customify_Color_Palette_Ajax', 'sanitize_active_id'),
 		));
 
 		// User palettes — array of `{id, name, colors{base,text,…}}` objects.
-		$wp_customize->add_setting(Customify_Preview_Colors_Ajax::OPTION_PALETTES, array(
+		$wp_customize->add_setting(Customify_Color_Palette_Ajax::OPTION_PALETTES, array(
 			'type'              => 'option',
-			'capability'        => Customify_Preview_Colors_Ajax::CAPABILITY,
+			'capability'        => Customify_Color_Palette_Ajax::CAPABILITY,
 			'default'           => array(),
 			'transport'         => 'postMessage',
-			'sanitize_callback' => array('Customify_Preview_Colors_Ajax', 'sanitize_palettes'),
+			'sanitize_callback' => array('Customify_Color_Palette_Ajax', 'sanitize_palettes'),
 		));
 
-		$wp_customize->add_control(new Customify_Preview_Colors_Customizer_Control(
+		$wp_customize->add_control(new Customify_Color_Palette_Customizer_Control(
 			$wp_customize,
 			self::CONTROL_ID,
 			array(
@@ -93,11 +97,11 @@ class Customify_Preview_Colors_Customizer
 				'section'        => self::SECTION_ID,
 				'priority'       => 5, // Top of section, above the individual color rows.
 				'settings'       => array(
-					'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
-					'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
+					'active'   => Customify_Color_Palette_Ajax::OPTION_ACTIVE,
+					'palettes' => Customify_Color_Palette_Ajax::OPTION_PALETTES,
 				),
 				// "Reset section" must not wipe the user's saved custom palettes.
-				'reset_exclude'  => array(Customify_Preview_Colors_Ajax::OPTION_PALETTES),
+				'reset_exclude'  => array(Customify_Color_Palette_Ajax::OPTION_PALETTES),
 			)
 		));
 	}
@@ -109,7 +113,7 @@ class Customify_Preview_Colors_Customizer
 	 */
 	public static function enqueue_controls()
 	{
-		if (! current_user_can(Customify_Preview_Colors_Ajax::CAPABILITY)) {
+		if (! current_user_can(Customify_Color_Palette_Ajax::CAPABILITY)) {
 			return;
 		}
 
@@ -147,15 +151,15 @@ class Customify_Preview_Colors_Customizer
 			// option keys; the bundle calls `wp.customize(id).set(value)`.
 			'context'       => 'customizer',
 			'settingIds'    => array(
-				'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
-				'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
+				'active'   => Customify_Color_Palette_Ajax::OPTION_ACTIVE,
+				'palettes' => Customify_Color_Palette_Ajax::OPTION_PALETTES,
 			),
-			'slots'         => Customify_Preview_Colors_Config::slots(),
-			'slotDesc'      => Customify_Preview_Colors_Config::slot_descriptions(),
-			'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
-			'settingsRows'  => Customify_Preview_Colors_Config::settings_rows(),
-			'userPalettes'  => Customify_Preview_Colors_Ajax::get_user_palettes(),
-			'activeId'      => Customify_Preview_Colors_Ajax::get_active_id(),
+			'slots'         => Customify_Color_Palette_Config::slots(),
+			'slotDesc'      => Customify_Color_Palette_Config::slot_descriptions(),
+			'themePresets'  => Customify_Color_Palette_Config::theme_presets(),
+			'settingsRows'  => Customify_Color_Palette_Config::settings_rows(),
+			'userPalettes'  => Customify_Color_Palette_Ajax::get_user_palettes(),
+			'activeId'      => Customify_Color_Palette_Ajax::get_active_id(),
 		));
 	}
 }

@@ -1,9 +1,9 @@
 <?php
 /**
- * Preview Colors — option storage + sanitiser helpers.
+ * Color Palette — option storage + sanitiser helpers.
  *
  * Persistence layer for the panel-managed colour palettes. Constants here
- * are referenced from compat / demo-import / Customizer setting registration.
+ * are referenced from compat / import / Customizer setting registration.
  * The class kept its `_Ajax` suffix for backward-compat after the frontend
  * overlay (which originally used these as AJAX endpoints) was removed —
  * persistence now flows entirely through the Customizer Publish pipeline.
@@ -15,7 +15,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class Customify_Preview_Colors_Ajax
+class Customify_Color_Palette_Ajax
 {
 	const OPTION_PALETTES = 'customify_preview_user_palettes';
 	const OPTION_ACTIVE   = 'customify_preview_active_palette';
@@ -41,7 +41,7 @@ class Customify_Preview_Colors_Ajax
 		// theme preset (`'ashwood'`) so the React panel can highlight a
 		// card and the visitor-side `:root` block always paints something.
 		if ('' === $id) {
-			$id = Customify_Preview_Colors_Config::default_active_id();
+			$id = Customify_Color_Palette_Config::default_active_id();
 		}
 		return $id;
 	}
@@ -84,7 +84,7 @@ class Customify_Preview_Colors_Ajax
 			// validate when the slot is re-enabled later. Missing slot values
 			// are rejected — the panel JS always writes all six.
 			$colors = array();
-			foreach (Customify_Preview_Colors_Config::SLOTS as $slot) {
+			foreach (Customify_Color_Palette_Config::SLOTS as $slot) {
 				$val = isset($cols[$slot]) ? trim((string) $cols[$slot]) : '';
 				if (! preg_match('/^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{6})$/', $val)) {
 					continue 2;

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Preview Colors — config (slots, descriptions, theme presets, settings rows).
+ * Color Palette — config (slots, descriptions, theme presets, settings rows).
  *
  * @package customify
  */
@@ -10,7 +10,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class Customify_Preview_Colors_Config
+class Customify_Color_Palette_Config
 {
 	// Default 6-slot vocabulary (Style Pack). Themes / demos can hide any of
 	// `secondary` / `accent` via the filter — `base`, `text`, `primary`,
@@ -20,14 +20,14 @@ class Customify_Preview_Colors_Config
 
 	/**
 	 * Active slots for the current request, filtered through
-	 * `customify_preview_colors/active_slots`. Always preserves the four
+	 * `customify_color_palette/active_slots`. Always preserves the four
 	 * mandatory slots; only `secondary` / `accent` can be opted out.
 	 *
 	 * @return array
 	 */
 	public static function slots()
 	{
-		$filtered = apply_filters('customify_preview_colors/active_slots', self::SLOTS);
+		$filtered = apply_filters('customify_color_palette/active_slots', self::SLOTS);
 		if (! is_array($filtered) || empty($filtered)) {
 			return self::SLOTS;
 		}
@@ -43,7 +43,7 @@ class Customify_Preview_Colors_Config
 	{
 		// Slot descriptions render as HTML inside the panel popover via
 		// `dangerouslySetInnerHTML` — translators must preserve the <strong> tags.
-		return apply_filters('customify_preview_colors/slot_descriptions', array(
+		return apply_filters('customify_color_palette/slot_descriptions', array(
 			'base'      => __('<strong>Page background.</strong> Default canvas for body, neutral sections, form wrappers.', 'customify'),
 			'text'      => __('<strong>Ink foreground.</strong> Body text, headings (H1-H6), labels, nav links at rest.', 'customify'),
 			'primary'   => __('<strong>Brand action.</strong> CTA buttons, links, focus rings, active tabs, accent words.', 'customify'),
@@ -55,7 +55,7 @@ class Customify_Preview_Colors_Config
 
 	public static function theme_presets()
 	{
-		return apply_filters('customify_preview_colors/theme_presets', array(
+		return apply_filters('customify_color_palette/theme_presets', array(
 			array(
 				'id'     => 'signature',
 				'name'   => _x('Signature', 'palette name', 'customify'),
@@ -98,26 +98,26 @@ class Customify_Preview_Colors_Config
 	}
 
 	// Hardcoded default. Override via the
-	// `customify_preview_colors/default_active_id` filter rather than
+	// `customify_color_palette/default_active_id` filter rather than
 	// editing this constant — see `default_active_id()` below.
 	const DEFAULT_ACTIVE_ID = 'signature';
 
 	/**
 	 * Default active palette id. Used by:
 	 *   - the Customizer setting's `'default'` value
-	 *   - `Customify_Preview_Colors_Ajax::get_active_id()` fallback
+	 *   - `Customify_Color_Palette_Ajax::get_active_id()` fallback
 	 * so React panel can highlight the right card on first load, and the
 	 * visitor-side `:root` block paints from the get-go.
 	 *
 	 * Resolution order:
-	 *   1. `customify_preview_colors/default_active_id` filter return —
+	 *   1. `customify_color_palette/default_active_id` filter return —
 	 *      validated against the available presets, dropped if unknown.
 	 *   2. `DEFAULT_ACTIVE_ID` constant (`'ashwood'`) — same validation.
 	 *   3. First entry in the theme_presets list (last-resort safety net
 	 *      so a child theme that renames `'ashwood'` doesn't break).
 	 *
 	 * Override example (in a child theme functions.php):
-	 *   add_filter('customify_preview_colors/default_active_id',
+	 *   add_filter('customify_color_palette/default_active_id',
 	 *       function () { return 'midnight'; });
 	 *
 	 * @return string
@@ -135,7 +135,7 @@ class Customify_Preview_Colors_Config
 			return '';
 		}
 
-		$candidate = apply_filters('customify_preview_colors/default_active_id', self::DEFAULT_ACTIVE_ID);
+		$candidate = apply_filters('customify_color_palette/default_active_id', self::DEFAULT_ACTIVE_ID);
 		if (is_string($candidate) && in_array($candidate, $ids, true)) {
 			return $candidate;
 		}
@@ -149,7 +149,7 @@ class Customify_Preview_Colors_Config
 	{
 		// `sublabel` mirrors the slot id and is rendered as-is in the panel
 		// (used as a small hint chip), so it stays untranslated.
-		return apply_filters('customify_preview_colors/settings_rows', array(
+		return apply_filters('customify_color_palette/settings_rows', array(
 			array('label' => __('Text & ink', 'customify'),      'sublabel' => 'text',      'slots' => array('text')),
 			array('label' => __('Primary action', 'customify'),  'sublabel' => 'primary',   'slots' => array('primary')),
 			array('label' => __('Page background', 'customify'), 'sublabel' => 'base',      'slots' => array('base')),

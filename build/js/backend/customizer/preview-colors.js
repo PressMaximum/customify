@@ -959,16 +959,6 @@ function App({
   }, [allPalettes, activeId]);
   const activeKind = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => themePresets.some(p => p.id === activePalette?.id) ? 'theme' : 'user', [themePresets, activePalette]);
   useColorVars(activePalette, slots);
-  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
-    if (activePalette) {
-      console.log('[Customify Preview Colors] Current palette:', {
-        name: activePalette.name,
-        colors: {
-          ...activePalette.colors
-        }
-      });
-    }
-  }, [activePalette]);
 
   // Esc closes popover / open form.
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {

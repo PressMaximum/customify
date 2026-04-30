@@ -1,6 +1,6 @@
 <?php
 /**
- * Preview Colors — backward-compatibility helpers.
+ * Color Palette — backward-compatibility helpers.
  *
  * On the first request after this code ships, if the site already has
  * customizer-saved values in the legacy `styling.php` color settings AND
@@ -18,7 +18,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class Customify_Preview_Colors_Compat
+class Customify_Color_Palette_Compat
 {
 	const SEEDED_PALETTE_ID = 'theme-custom';
 	const SEEDED_PALETTE_NAME = 'Theme custom';
@@ -60,7 +60,7 @@ class Customify_Preview_Colors_Compat
 	public static function maybe_seed_legacy_palette()
 	{
 		// Guard 1: panel options already exist? bail.
-		$existing = get_option(Customify_Preview_Colors_Ajax::OPTION_PALETTES, null);
+		$existing = get_option(Customify_Color_Palette_Ajax::OPTION_PALETTES, null);
 		if (null !== $existing) {
 			return;
 		}
@@ -89,13 +89,13 @@ class Customify_Preview_Colors_Compat
 		// Compose 6 slot colors. Slots without a legacy counterpart fall
 		// through to the first theme preset's colour (Ashwood by default)
 		// so the palette is always complete + valid.
-		$themes   = Customify_Preview_Colors_Config::theme_presets();
+		$themes   = Customify_Color_Palette_Config::theme_presets();
 		$fallback = ! empty($themes[0]['colors']) && is_array($themes[0]['colors'])
 			? $themes[0]['colors']
 			: array();
 
 		$colors = array();
-		foreach (Customify_Preview_Colors_Config::SLOTS as $slot) {
+		foreach (Customify_Color_Palette_Config::SLOTS as $slot) {
 			$hex = '';
 			switch ($slot) {
 				case 'primary':
@@ -133,13 +133,13 @@ class Customify_Preview_Colors_Compat
 			'colors' => $colors,
 		);
 
-		update_option(Customify_Preview_Colors_Ajax::OPTION_PALETTES, array($palette), false);
+		update_option(Customify_Color_Palette_Ajax::OPTION_PALETTES, array($palette), false);
 
 		// Only auto-activate if no active palette is set yet — respect any
 		// active id the site might already have.
-		$active = get_option(Customify_Preview_Colors_Ajax::OPTION_ACTIVE, '');
+		$active = get_option(Customify_Color_Palette_Ajax::OPTION_ACTIVE, '');
 		if ('' === $active) {
-			update_option(Customify_Preview_Colors_Ajax::OPTION_ACTIVE, self::SEEDED_PALETTE_ID, false);
+			update_option(Customify_Color_Palette_Ajax::OPTION_ACTIVE, self::SEEDED_PALETTE_ID, false);
 		}
 	}
 }

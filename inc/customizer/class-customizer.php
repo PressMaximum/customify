@@ -78,7 +78,7 @@ class  Customify_Customizer {
 			$k = sanitize_text_field( $k );
 			// theme_mod-type settings: remove from the theme's mod array.
 			remove_theme_mod( $k );
-			// option-type settings (e.g. preview-colors stores palettes in
+			// option-type settings (e.g. color-palette stores palettes in
 			// wp_options, not theme_mods). delete_option() is a no-op when the
 			// key doesn't exist as a standalone option, so it's safe to call
 			// unconditionally alongside remove_theme_mod().
@@ -130,22 +130,24 @@ class  Customify_Customizer {
 				)
 			);
 
-			// Preview-colors live update (panel → iframe). Bundled into the
+			// Color-palette live update (panel → iframe). Bundled into the
 			// `customify-customizer` script via webpack so the iframe loads
 			// one combined asset instead of a second handle. Localize the
-			// data payload onto the same handle.
-			if ( class_exists( 'Customify_Preview_Colors' ) ) {
+			// data payload onto the same handle. The JS-facing window var
+			// name (`CustomifyPreviewColorsPreview`) is kept unchanged
+			// because the JS source folder is renamed independently.
+			if ( class_exists( 'Customify_Color_Palette' ) ) {
 				wp_localize_script(
 					'customify-customizer',
 					'CustomifyPreviewColorsPreview',
 					array(
-						'styleId'       => Customify_Preview_Colors::HANDLE . '-vars',
+						'styleId'       => Customify_Color_Palette::HANDLE . '-vars',
 						'settingIds'    => array(
-							'active'   => Customify_Preview_Colors_Ajax::OPTION_ACTIVE,
-							'palettes' => Customify_Preview_Colors_Ajax::OPTION_PALETTES,
+							'active'   => Customify_Color_Palette_Ajax::OPTION_ACTIVE,
+							'palettes' => Customify_Color_Palette_Ajax::OPTION_PALETTES,
 						),
-						'slots'         => Customify_Preview_Colors_Config::slots(),
-						'themePresets'  => Customify_Preview_Colors_Config::theme_presets(),
+						'slots'         => Customify_Color_Palette_Config::slots(),
+						'themePresets'  => Customify_Color_Palette_Config::theme_presets(),
 					)
 				);
 			}

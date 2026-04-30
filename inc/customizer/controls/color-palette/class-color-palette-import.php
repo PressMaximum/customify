@@ -1,10 +1,10 @@
 <?php
 /**
- * Preview Colors — demo import preload.
+ * Color Palette — demo import preload.
  *
  * When a Customify demo is imported, seed the panel with the demo's curated
  * palette set + active palette. Reads palette data from
- * `inc/customizer/controls/preview-colors/demo-palettes/<demo-slug>.php` and
+ * `inc/customizer/controls/color-palette/demo-palettes/<demo-slug>.php` and
  * writes through the same wp_options the panel + Customizer control share.
  * Importing twice (e.g. switching demos) overwrites both options cleanly.
  *
@@ -22,7 +22,7 @@ if (! defined('ABSPATH')) {
 	exit;
 }
 
-class Customify_Preview_Colors_Demo_Import
+class Customify_Color_Palette_Import
 {
 	const PALETTES_DIR = 'demo-palettes';
 
@@ -84,14 +84,14 @@ class Customify_Preview_Colors_Demo_Import
 			return;
 		}
 
-		$clean = Customify_Preview_Colors_Ajax::sanitize_palettes($data['palettes']);
+		$clean = Customify_Color_Palette_Ajax::sanitize_palettes($data['palettes']);
 		if (empty($clean)) {
 			return;
 		}
 
-		update_option(Customify_Preview_Colors_Ajax::OPTION_PALETTES, $clean, false);
+		update_option(Customify_Color_Palette_Ajax::OPTION_PALETTES, $clean, false);
 
-		$active = isset($data['active']) ? Customify_Preview_Colors_Ajax::sanitize_active_id($data['active']) : '';
+		$active = isset($data['active']) ? Customify_Color_Palette_Ajax::sanitize_active_id($data['active']) : '';
 		if ('' === $active) {
 			$active = isset($clean[0]['id']) ? $clean[0]['id'] : '';
 		}
@@ -100,6 +100,6 @@ class Customify_Preview_Colors_Demo_Import
 		if (! in_array($active, $ids, true)) {
 			$active = $clean[0]['id'];
 		}
-		update_option(Customify_Preview_Colors_Ajax::OPTION_ACTIVE, $active, false);
+		update_option(Customify_Color_Palette_Ajax::OPTION_ACTIVE, $active, false);
 	}
 }

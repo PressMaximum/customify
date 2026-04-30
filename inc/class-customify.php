@@ -428,7 +428,7 @@ class Customify
 			// Block editor Page Settings panel (also registers meta for REST API).
 			'/inc/admin/page-settings.php',
 			// Color palette system (Customizer control + visitor :root vars).
-			'/inc/customizer/controls/preview-colors/class-preview-colors.php',
+			'/inc/customizer/controls/color-palette/class-color-palette.php',
 		);
 
 		foreach ($files as $file) {
