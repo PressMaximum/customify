@@ -206,6 +206,7 @@
 		flex-direction: column;
 		justify-content: center;
 		z-index: 5;
+		margin-top: var(--transparent-header-height, 50px);
 		padding: 1em 30px;
 		@include for_device(desktop) {
 			min-height: 300px;

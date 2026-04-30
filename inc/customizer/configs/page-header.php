@@ -1010,13 +1010,21 @@ class Customify_Page_Header {
 		<?php
 	}
 
-	function render() {
+	/**
+	 * Resolve which page-header element will render on the current request.
+	 *
+	 * Mirrors the gating logic of render() so callers (e.g. body_class filter)
+	 * can know the outcome without triggering output.
+	 *
+	 * @return string  One of 'cover', 'titlebar', 'shortcode', or '' when nothing renders.
+	 */
+	function will_render() {
 		$args = $this->get_settings();
-		if ( 'none' == $args['display'] ) {
+
+		if ( 'none' === $args['display'] ) {
 			return '';
 		}
 
-		// Hide page cover/titlebar when the page title is disabled via per-post meta.
 		if ( is_singular() ) {
 			$disable = get_post_meta( get_the_ID(), '_customify_disable_page_title', true );
 			if ( '1' === $disable ) {
@@ -1024,7 +1032,21 @@ class Customify_Page_Header {
 			}
 		}
 
-		switch ( $args['display'] ) {
+		if ( in_array( $args['display'], array( 'cover', 'titlebar', 'shortcode' ), true ) ) {
+			return $args['display'];
+		}
+
+		return '';
+	}
+
+	function render() {
+		$mode = $this->will_render();
+		if ( ! $mode ) {
+			return '';
+		}
+
+		$args = $this->get_settings();
+		switch ( $mode ) {
 			case 'cover':
 				$this->render_cover( $args );
 				break;

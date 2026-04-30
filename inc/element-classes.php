@@ -55,6 +55,14 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 		}
 		$classes[] = $animate;
 
+		// Mirror Customify_Page_Header::render() gating so the body class is in
+		// sync with whether <div id="page-cover"> will actually be output.
+		if ( class_exists( 'Customify_Page_Header' ) && did_action( 'wp' ) ) {
+			if ( 'cover' === Customify_Page_Header::get_instance()->will_render() ) {
+				$classes[] = 'has-page-cover';
+			}
+		}
+
 		return $classes;
 	}
 }

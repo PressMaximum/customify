@@ -3562,6 +3562,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   flex-direction: column;
   justify-content: center;
   z-index: 5;
+  margin-top: var(--transparent-header-height, 50px);
   padding: 1em 30px;
 }
 @media screen and (min-width: 1025px) {
@@ -5312,7 +5313,7 @@ body.menu_sidebar_dropdown:before {
 .mobile-item--search_box .search-form-fields {
   width: 100%;
 }
-.is-header-transparent #masthead {
+.is-header-transparent.has-page-cover #masthead, .is-header-transparent.home #masthead {
   position: absolute;
   top: 0;
   left: 0;
