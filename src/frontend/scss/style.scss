@@ -22,4 +22,4 @@
 // Consumes the `--customify-color-*` vars rendered by class-preview-colors.php
 // (`output_root_vars`) and optionally overridden via inline style on <html> by
 // the panel JS bundle when the admin preview is active.
-// @import "overrides";
+@import "overrides";
