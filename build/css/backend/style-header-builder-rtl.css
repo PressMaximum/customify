@@ -340,7 +340,7 @@ ul.control-panel-customify_footer_builder_panel {
 }
 .customify-hb__devices {
   display: flex;
-  gap: 2px;
+  gap: 8px;
 }
 .customify-hb__device-btn {
   display: inline-flex;
