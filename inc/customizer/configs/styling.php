@@ -42,17 +42,12 @@ if (!function_exists('customify_customizer_styling_config')) {
 					'customify/styling/primary-color',
 					'
 					.header-top .header--row-inner,
-					body:not(.fl-builder-edit) .button,
-					body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
-					body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
+					body:not(.fl-builder-edit) :is(.button, button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger), input[type="button"]:not(.ed_button)),
 					button.button,
-					input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
-					input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
-					input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button),
-					.pagination .nav-links > *:hover,
+					:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button),
 					.pagination .nav-links span,
-					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-item > a,
-					.nav-menu-desktop.style-full-height .primary-menu-ul > li.current-menu-ancestor > a,
+					.pagination .nav-links > *:hover,
+					.nav-menu-desktop.style-full-height .primary-menu-ul > li:is(.current-menu-item, .current-menu-ancestor) > a,
 					.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
 					.posts-layout .readmore-button:hover
 					{
@@ -61,10 +56,9 @@ if (!function_exists('customify_customizer_styling_config')) {
 					.posts-layout .readmore-button {
 						color: {{value}};
 					}
-					.pagination .nav-links > *:hover,
 					.pagination .nav-links span,
-					.entry-single .tags-links a:hover,
-					.entry-single .cat-links a:hover,
+					.pagination .nav-links > *:hover,
+					.entry-single :is(.tags-links, .cat-links) a:hover,
 					.posts-layout .readmore-button,
 					.posts-layout .readmore-button:hover
 					{
