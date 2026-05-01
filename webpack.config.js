@@ -126,6 +126,16 @@ const isSassLoader = ( loader ) =>
 	loader.loader &&
 	/\/sass-loader\//.test( loader.loader );
 
+const isPostcssLoader = ( loader ) =>
+	typeof loader === 'object' &&
+	loader.loader &&
+	/\/postcss-loader\//.test( loader.loader );
+
+// sourceMap on each loader must mirror the top-level `devtool` so the
+// chain reaches back to the original .scss files in dev and is fully
+// disabled in production (no map generation cost).
+const cssSourceMap = process.env.NODE_ENV !== 'production';
+
 const patchedRules = defaultConfig.module.rules.map( ( rule ) => {
 	if ( ! Array.isArray( rule.use ) ) {
 		return rule;
@@ -139,13 +149,14 @@ const patchedRules = defaultConfig.module.rules.map( ( rule ) => {
 		...rule,
 		use: rule.use.map( ( loader ) => {
 			if ( isCssLoader( loader ) ) {
-				return { ...loader, options: { ...loader.options, url: false } };
+				return { ...loader, options: { ...loader.options, url: false, sourceMap: cssSourceMap } };
 			}
 			if ( isSassLoader( loader ) ) {
 				return {
 					...loader,
 					options: {
 						...loader.options,
+						sourceMap: cssSourceMap,
 						sassOptions: {
 							...( loader.options?.sassOptions || {} ),
 							silenceDeprecations: [ 'import' ],
@@ -156,6 +167,9 @@ const patchedRules = defaultConfig.module.rules.map( ( rule ) => {
 						},
 					},
 				};
+			}
+			if ( isPostcssLoader( loader ) ) {
+				return { ...loader, options: { ...loader.options, sourceMap: cssSourceMap } };
 			}
 			return loader;
 		} ),
@@ -189,10 +203,17 @@ const entries = {
 };
 
 // ── Final config ─────────────────────────────────────────────────────────────
+// Source maps are emitted only in development mode (`npm run start`) so they
+// never ship to production via `npm run build`. wp-scripts sets NODE_ENV to
+// 'production' for build and 'development' for start.
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 module.exports = {
 	...defaultConfig,
 
 	entry: entries,
+
+	devtool: isDevelopment ? 'source-map' : false,
 
 	output: {
 		...defaultConfig.output,
