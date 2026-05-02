@@ -6747,6 +6747,12 @@ body.menu_sidebar_dropdown:before {
   flex-direction: column;
   display: flex;
 }
+@media screen and (max-width: 1024px) {
+  .footer--row-inner {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
 .footer-top .footer--row-inner {
   padding-top: 2em;
   padding-bottom: 2em;

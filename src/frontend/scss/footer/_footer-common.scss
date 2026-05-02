@@ -15,6 +15,12 @@
     }
 }
 
+.footer--row-inner {
+    @include for_device( tablet ) {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
 // Footer Top
 .footer-top {
     .footer--row-inner {
