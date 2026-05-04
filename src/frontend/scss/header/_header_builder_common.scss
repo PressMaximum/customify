@@ -206,6 +206,7 @@
 		flex-direction: column;
 		justify-content: center;
 		z-index: 5;
+		margin-top: var(--transparent-header-height, 50px);
 		padding: 1em 30px;
 		@include for_device(desktop) {
 			min-height: 300px;
@@ -278,25 +279,26 @@
 	.item--inner {
 		display: inline-flex;
 		align-items: center;
-		margin-left: 0.5em;
-		margin-right: 0.5em;
 	}
 	.col-v2 {
 		display: flex;
+		gap: 1em;
+		// Center grows to fill remaining space; side columns stay at their
+		// natural content width (auto, no grow, no shrink) so the logo/buttons
+		// don't claim free space that should belong to the menu.
 		&.col-v2-center {
 			justify-content: center;
 			margin-left: 1em;
 			margin-right: 1em;
+			flex: 1 0 auto;
 		}
 		&.col-v2-left {
 			justify-content: flex-start;
-			margin-right: auto;
-			flex: 1 1 0;
+			flex: 0 0 auto;
 		}
 		&.col-v2-right {
-			margin-left: auto;
 			justify-content: flex-end;
-			flex: 1 1 0;
+			flex: 0 0 auto;
 		}
 	}
 
@@ -315,39 +317,6 @@
 			}
 			&.col-v2-right {
 				flex: auto;
-			}
-		}
-	}
-
-	// When col4 / col5 are absent (classes no-col4, no-col5), the row only
-	// renders a subset of columns. Distribute them all at equal width and
-	// remove the auto-margins that create the left/center/right asymmetry.
-	&[class*="no-col"] {
-		gap: 1.5em;
-
-		> .col-v2 {
-			flex: 1 1 0;
-			margin-left: 0;
-			margin-right: 0;
-		}
-
-		// Tablet: 2 columns per row.
-		@media screen and (max-width: 1024px) {
-			flex-wrap: wrap;
-			height: auto;
-
-			> .col-v2 {
-				flex: 1 1 calc(50% - 0.75em);
-				min-width: calc(50% - 0.75em);
-			}
-		}
-
-		// Mobile: single column.
-		@media screen and (max-width: 767px) {
-			> .col-v2 {
-				flex: 1 1 100%;
-				min-width: 100%;
-				justify-content: center;
 			}
 		}
 	}

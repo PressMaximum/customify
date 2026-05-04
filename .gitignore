@@ -5,6 +5,7 @@
 /vendor/
 /node_modules/
 /releases/
+/tests/
 npm-debug.log
 
 # PhpStorm

@@ -15,6 +15,12 @@
     }
 }
 
+.footer--row-inner {
+    @include for_device( tablet ) {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
 // Footer Top
 .footer-top {
     .footer--row-inner {
@@ -181,6 +187,7 @@
         display: grid !important;
         height: auto;          // header builder sets height:100%, not needed for footer
         align-items: start;
+        gap: 30px;
 
         > .col-v2 {
             min-width: 0;      // prevent grid blowout
