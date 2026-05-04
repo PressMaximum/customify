@@ -1,7 +1,10 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 513:
+/***/ "./src/backend/customizer/color-palette/preview.js":
+/*!*********************************************************!*\
+  !*** ./src/backend/customizer/color-palette/preview.js ***!
+  \*********************************************************/
 /***/ (function() {
 
 /*
@@ -120,7 +123,10 @@
 
 /***/ }),
 
-/***/ 296:
+/***/ "./src/backend/customizer/js/customizer.js":
+/*!*************************************************!*\
+  !*** ./src/backend/customizer/js/customizer.js ***!
+  \*************************************************/
 /***/ (function() {
 
 /**
@@ -394,6 +400,19 @@
   });
 })(jQuery, wp.customize);
 
+/***/ }),
+
+/***/ "./src/backend/customizer/scss/customizer.scss":
+/*!*****************************************************!*\
+  !*** ./src/backend/customizer/scss/customizer.scss ***!
+  \*****************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
 /***/ })
 
 /******/ 	});
@@ -416,6 +435,12 @@
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
 /******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
@@ -452,14 +477,31 @@
 /******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /************************************************************************/
+var __webpack_exports__ = {};
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(296);
-/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(513);
-/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_color_palette_preview_js__WEBPACK_IMPORTED_MODULE_1__);
+/*!**********************************************!*\
+  !*** ./src/backend/customizer/customizer.js ***!
+  \**********************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _scss_customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./scss/customizer.scss */ "./src/backend/customizer/scss/customizer.scss");
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/customizer.js */ "./src/backend/customizer/js/customizer.js");
+/* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./color-palette/preview.js */ "./src/backend/customizer/color-palette/preview.js");
+/* harmony import */ var _color_palette_preview_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_color_palette_preview_js__WEBPACK_IMPORTED_MODULE_2__);
 
 
 // Color-palette live update — same iframe context (customize-preview),
@@ -468,3 +510,4 @@
 }();
 /******/ })()
 ;
+//# sourceMappingURL=customizer.js.map

@@ -1,18 +1,20 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
-;// external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
-;// external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// external "ReactJSXRuntime"
-var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./src/backend/customizer/color-palette/customizer.js
-/* unused harmony import specifier */ var useMemo;
-/* unused harmony import specifier */ var Fragment;
-/* unused harmony import specifier */ var __;
-/* unused harmony import specifier */ var _jsx;
-/* unused harmony import specifier */ var _jsxs;
+/***/ "./src/backend/customizer/color-palette/customizer.js":
+/*!************************************************************!*\
+  !*** ./src/backend/customizer/color-palette/customizer.js ***!
+  \************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ "@wordpress/element");
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react/jsx-runtime */ "react/jsx-runtime");
+/* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__);
 /*
  * Customify Color Palette — Customizer control bundle (React).
  *
@@ -70,12 +72,12 @@ function isLight(hex) {
  * with .set().
  */
 function useCustomizeSetting(settingId, defaultValue) {
-  const [value, setValue] = (0,external_wp_element_namespaceObject.useState)(() => {
+  const [value, setValue] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(() => {
     const s = window.wp?.customize?.(settingId);
     const v = s && typeof s.get === 'function' ? s.get() : undefined;
     return v === undefined || v === null ? defaultValue : v;
   });
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const s = window.wp?.customize?.(settingId);
     if (!s || typeof s.bind !== 'function') return undefined;
     const handler = newVal => setValue(newVal);
@@ -84,7 +86,7 @@ function useCustomizeSetting(settingId, defaultValue) {
       if (typeof s.unbind === 'function') s.unbind(handler);
     };
   }, [settingId]);
-  const set = (0,external_wp_element_namespaceObject.useCallback)(newVal => {
+  const set = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(newVal => {
     const s = window.wp?.customize?.(settingId);
     if (s && typeof s.set === 'function') s.set(newVal);
   }, [settingId]);
@@ -98,7 +100,7 @@ function useCustomizeSetting(settingId, defaultValue) {
  * text-muted/subtle, border-default, primary-hover/subtle).
  */
 function useColorVars(palette, slots) {
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!palette || !palette.colors) return;
     const root = document.documentElement;
 
@@ -133,7 +135,7 @@ const Icon = ({
   d,
   size = 14,
   sw = 1.5
-}) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
   width: size,
   height: size,
   viewBox: "0 0 14 14",
@@ -142,26 +144,26 @@ const Icon = ({
   strokeWidth: sw,
   strokeLinecap: "round",
   strokeLinejoin: "round",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
     d: d
   })
 });
-const IconExport = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+const IconExport = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
   d: "M7 12V5M4 8l3-3 3 3M2.5 2.5h9"
 });
-const IconImport = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+const IconImport = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
   d: "M7 2v7M4 6l3 3 3-3M2.5 11.5h9"
 });
-const IconAdd = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+const IconAdd = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
   d: "M7 3v8M3 7h8",
   sw: 1.6
 });
-const IconReset = () => /*#__PURE__*/_jsx(Icon, {
+const IconReset = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
   d: "M2 5.5V2m0 3.5h3.5M2 5.5A5 5 0 1 1 3 10"
 });
 const IconClose = ({
   size = 10
-}) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("svg", {
+}) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("svg", {
   width: size,
   height: size,
   viewBox: "0 0 14 14",
@@ -169,21 +171,21 @@ const IconClose = ({
   stroke: "currentColor",
   strokeWidth: "2",
   strokeLinecap: "round",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+  children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
     d: "M3 3l8 8M11 3l-8 8"
   })
 });
-const IconGlobe = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("svg", {
+const IconGlobe = () => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("svg", {
   className: "customify-globe",
   viewBox: "0 0 12 12",
   fill: "none",
   stroke: "currentColor",
   strokeWidth: "1.2",
-  children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("circle", {
+  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("circle", {
     cx: "6",
     cy: "6",
     r: "4.5"
-  }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("path", {
     d: "M1.5 6h9M6 1.5c1.5 1.5 2.2 3 2.2 4.5S7.5 9 6 10.5M6 1.5C4.5 3 3.8 4.5 3.8 6S4.5 9 6 10.5"
   })]
 });
@@ -198,7 +200,7 @@ function HeroDeck({
   onSlotClick
 }) {
   const colors = palette.colors;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     className: "customify-deck-wrap",
     children: slots.map((slot, i) => {
       const c = colors[slot];
@@ -214,7 +216,7 @@ function HeroDeck({
         background: c,
         animationDelay: `${i * 40}ms`
       };
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: 'customify-deck-card is-animating' + (!isLight(c) ? ' is-dark' : ''),
         style: style,
         title: `${slot} · ${c.toUpperCase()}`,
@@ -222,7 +224,7 @@ function HeroDeck({
           e.stopPropagation();
           onSlotClick(slot);
         },
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "customify-slot-chip",
           children: slot
         })
@@ -242,13 +244,13 @@ function Popover({
   onClose
 }) {
   const hex = palette.colors[slot] || '#000000';
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "customify-popover is-open",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-popover-head",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         children: slot
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-modal-close",
         type: "button",
         style: {
@@ -256,22 +258,22 @@ function Popover({
           height: 20
         },
         onClick: onClose,
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconClose, {})
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconClose, {})
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
       className: "customify-popover-preview",
       style: {
         background: hex
       },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
         type: "color",
         value: hex,
         onChange: e => onChange(e.target.value.toUpperCase())
       })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-popover-hex",
       children: hex.toUpperCase()
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-popover-desc",
       dangerouslySetInnerHTML: {
         __html: slotDesc[slot] || ''
@@ -293,15 +295,15 @@ function PresetCard({
 }) {
   const c = palette.colors;
   const isUser = kind === 'user';
-  const [editing, setEditing] = (0,external_wp_element_namespaceObject.useState)(false);
-  const [draft, setDraft] = (0,external_wp_element_namespaceObject.useState)(palette.name);
-  const inputRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  const [editing, setEditing] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const [draft, setDraft] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(palette.name);
+  const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (editing && inputRef.current) inputRef.current.select();
   }, [editing]);
 
   // Reset draft if the upstream name changes (e.g. import overwrites).
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!editing) setDraft(palette.name);
   }, [palette.name, editing]);
   const startEdit = e => {
@@ -320,16 +322,16 @@ function PresetCard({
     setEditing(false);
   };
   const className = 'customify-preset-card' + (isActive ? ' is-active' : '') + (isUser ? ' is-user' : '');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: className,
     onClick: e => {
       if (e.target.closest('.customify-del')) return;
       if (e.target.closest('.customify-preset-name-edit')) return;
       onPick(palette.id);
     },
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("p", {
       className: "customify-preset-name",
-      children: [editing ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      children: [editing ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
         ref: inputRef,
         className: "customify-preset-name-edit",
         type: "text",
@@ -347,34 +349,34 @@ function PresetCard({
           }
         },
         onClick: e => e.stopPropagation()
-      }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         className: isUser && onRename ? 'customify-preset-name-text is-editable' : 'customify-preset-name-text',
-        title: isUser && onRename ? (0,external_wp_i18n_namespaceObject.__)('Click to rename', 'customify') : undefined,
+        title: isUser && onRename ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Click to rename', 'customify') : undefined,
         onClick: startEdit,
         children: palette.name
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         className: "customify-slot-count",
         children: slots.length
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-palette-strip",
-      children: slots.map(s => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      children: slots.map(s => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "customify-chip",
         style: {
           background: c[s]
         },
         title: s
       }, s))
-    }), isUser && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+    }), isUser && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
       className: "customify-del",
       type: "button",
-      "aria-label": (0,external_wp_i18n_namespaceObject.__)('Delete palette', 'customify'),
-      title: (0,external_wp_i18n_namespaceObject.__)('Delete', 'customify'),
+      "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Delete palette', 'customify'),
+      title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Delete', 'customify'),
       onClick: e => {
         e.stopPropagation();
         onDelete(palette.id);
       },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconClose, {})
+      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconClose, {})
     })]
   });
 }
@@ -388,13 +390,13 @@ function PresetGrid({
   onDelete,
   onRename
 }) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     className: "customify-preset-grid",
     children: palettes.map(p => {
       // A theme-preset card is considered active when either the preset
       // itself or its shadow palette is the current active palette.
       const isActive = kind === 'theme' ? p.id === activeId || SHADOW_PREFIX_GRID + p.id === activeId : p.id === activeId;
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetCard, {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(PresetCard, {
         palette: p,
         kind: kind,
         isActive: isActive,
@@ -417,65 +419,65 @@ function AddForm({
   onConfirm,
   onCancel
 }) {
-  const [name, setName] = (0,external_wp_element_namespaceObject.useState)('');
-  const [extendFrom, setExtendFrom] = (0,external_wp_element_namespaceObject.useState)(defaultExtendId);
-  const inputRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  const [name, setName] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [extendFrom, setExtendFrom] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(defaultExtendId);
+  const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
   const submit = () => {
     // translators: %d is the next sequential number for the palette
-    const finalName = name.trim() || (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Palette %d', 'customify'), userCount + 1);
+    const finalName = name.trim() || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Palette %d', 'customify'), userCount + 1);
     onConfirm(finalName, extendFrom);
   };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "customify-add-form is-open",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-form-title",
-      children: (0,external_wp_i18n_namespaceObject.__)('Create new palette', 'customify')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Create new palette', 'customify')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-field",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Palette title', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Palette title', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
         ref: inputRef,
         type: "text",
         value: name,
-        placeholder: (0,external_wp_i18n_namespaceObject.__)('e.g. My brand', 'customify'),
+        placeholder: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('e.g. My brand', 'customify'),
         autoComplete: "off",
         onChange: e => setName(e.target.value),
         onKeyDown: e => {
           if (e.key === 'Enter') submit();
         }
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-field",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Extend from', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("select", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Extend from', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("select", {
         value: extendFrom,
         onChange: e => setExtendFrom(e.target.value),
         children: allPalettes.map(p => {
           const isTheme = themePresets.some(t => t.id === p.id);
-          const tag = isTheme ? (0,external_wp_i18n_namespaceObject.__)('theme', 'customify') : (0,external_wp_i18n_namespaceObject.__)('user', 'customify');
-          return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("option", {
+          const tag = isTheme ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('theme', 'customify') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('user', 'customify');
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("option", {
             value: p.id,
             children: `${p.name} (${tag})`
           }, p.id);
         })
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-actions",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-btn--cancel",
         type: "button",
         onClick: onCancel,
-        children: (0,external_wp_i18n_namespaceObject.__)('Cancel', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cancel', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
         className: "customify-btn--add",
         type: "button",
         onClick: submit,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconAdd, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Add', 'customify')]
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconAdd, {}), " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Add', 'customify')]
       })]
     })]
   });
@@ -509,23 +511,23 @@ function ImportForm({
   onConfirm,
   onCancel
 }) {
-  const [text, setText] = (0,external_wp_element_namespaceObject.useState)('');
-  const [error, setError] = (0,external_wp_element_namespaceObject.useState)('');
-  const inputRef = (0,external_wp_element_namespaceObject.useRef)(null);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  const [text, setText] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const [error, setError] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)('');
+  const inputRef = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
   const submit = () => {
     const raw = text.trim();
     if (!raw) {
-      setError((0,external_wp_i18n_namespaceObject.__)('Paste JSON code first.', 'customify'));
+      setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Paste JSON code first.', 'customify'));
       return;
     }
     let parsed;
     try {
       parsed = JSON.parse(raw);
     } catch (err) {
-      setError((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Invalid JSON: %s', 'customify'), err.message));
+      setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Invalid JSON: %s', 'customify'), err.message));
       return;
     }
     const items = Array.isArray(parsed) ? parsed : [parsed];
@@ -533,20 +535,20 @@ function ImportForm({
     for (let i = 0; i < items.length; i++) {
       const it = items[i];
       if (!it || typeof it !== 'object') {
-        return setError((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Item %d: must be an object.', 'customify'), i + 1));
+        return setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Item %d: must be an object.', 'customify'), i + 1));
       }
       if (!it.name || typeof it.name !== 'string') {
-        return setError((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Item %d: missing "name" field.', 'customify'), i + 1));
+        return setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Item %d: missing "name" field.', 'customify'), i + 1));
       }
       if (!it.colors || typeof it.colors !== 'object') {
-        return setError((0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Item %d: missing "colors" object.', 'customify'), i + 1));
+        return setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Item %d: missing "colors" object.', 'customify'), i + 1));
       }
       const colors = {};
       for (const slot of slots) {
         const v = it.colors[slot];
         if (!v || typeof v !== 'string' || !/^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(v.trim())) {
-          return setError((0,external_wp_i18n_namespaceObject.sprintf)(/* translators: 1: item index, 2: palette name, 3: slot key */
-          (0,external_wp_i18n_namespaceObject.__)('Item %1$d ("%2$s"): slot "%3$s" missing or not a valid hex.', 'customify'), i + 1, it.name, slot));
+          return setError((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)(/* translators: 1: item index, 2: palette name, 3: slot key */
+          (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Item %1$d ("%2$s"): slot "%3$s" missing or not a valid hex.', 'customify'), i + 1, it.name, slot));
         }
         colors[slot] = v.trim().toUpperCase();
       }
@@ -557,47 +559,47 @@ function ImportForm({
     }
     onConfirm(validated);
   };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "customify-add-form is-open",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-title",
-      children: [(0,external_wp_i18n_namespaceObject.__)('Import palette(s) from JSON', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Import palette(s) from JSON', 'customify'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-paste-example",
         type: "button",
         onClick: () => {
           setText(EXAMPLE_JSON);
           setError('');
         },
-        children: (0,external_wp_i18n_namespaceObject.__)('Use example', 'customify')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Use example', 'customify')
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-field",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Paste JSON', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("textarea", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Paste JSON', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("textarea", {
         ref: inputRef,
         value: text,
         spellCheck: false,
         onChange: e => setText(e.target.value)
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
         className: "customify-form-hint",
-        children: (0,external_wp_i18n_namespaceObject.__)('Accepts a single palette object or an array. Requires "name" + all 6 slots.', 'customify')
-      }), error && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Accepts a single palette object or an array. Requires "name" + all 6 slots.', 'customify')
+      }), error && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "customify-form-error is-show",
         children: error
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-actions",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-btn--cancel",
         type: "button",
         onClick: onCancel,
-        children: (0,external_wp_i18n_namespaceObject.__)('Cancel', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Cancel', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
         className: "customify-btn--add",
         type: "button",
         onClick: submit,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconImport, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Import', 'customify')]
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconImport, {}), " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Import', 'customify')]
       })]
     })]
   });
@@ -610,9 +612,9 @@ function ExportForm({
   slots,
   onClose
 }) {
-  const [selected, setSelected] = (0,external_wp_element_namespaceObject.useState)(() => new Set(palettes.map(p => p.id)));
-  const [copied, setCopied] = (0,external_wp_element_namespaceObject.useState)(false);
-  const json = (0,external_wp_element_namespaceObject.useMemo)(() => {
+  const [selected, setSelected] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(() => new Set(palettes.map(p => p.id)));
+  const [copied, setCopied] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const json = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const chosen = palettes.filter(p => selected.has(p.id));
     if (!chosen.length) return null;
     const payload = chosen.map(p => ({
@@ -672,68 +674,68 @@ function ExportForm({
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
   if (palettes.length === 0) {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-add-form is-open",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "customify-form-title",
-        children: (0,external_wp_i18n_namespaceObject.__)('Export custom palettes', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Export custom palettes', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-form-field",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-          children: (0,external_wp_i18n_namespaceObject.__)('Select palettes', 'customify')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select palettes', 'customify')
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "customify-export-empty",
-          children: (0,external_wp_i18n_namespaceObject.__)('No custom palettes to export yet. Create or import one first.', 'customify')
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('No custom palettes to export yet. Create or import one first.', 'customify')
         })]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "customify-form-actions",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+        children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
           className: "customify-btn--cancel",
           type: "button",
           onClick: onClose,
-          children: (0,external_wp_i18n_namespaceObject.__)('Close', 'customify')
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Close', 'customify')
         })
       })]
     });
   }
   const allChecked = selected.size === palettes.length;
   const someChecked = selected.size > 0 && selected.size < palettes.length;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "customify-add-form is-open",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-form-title",
-      children: (0,external_wp_i18n_namespaceObject.__)('Export custom palettes', 'customify')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Export custom palettes', 'customify')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-field",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Select palettes', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Select palettes', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-export-list",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "customify-select-all",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
             type: "checkbox",
             checked: allChecked,
             ref: el => {
               if (el) el.indeterminate = someChecked;
             },
             onChange: e => toggleAll(e.target.checked)
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            children: (0,external_wp_i18n_namespaceObject.__)('All custom palettes', 'customify')
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('All custom palettes', 'customify')
           })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-          children: palettes.map(p => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+          children: palettes.map(p => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
             className: "customify-export-item",
-            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
               type: "checkbox",
               checked: selected.has(p.id),
               onChange: () => toggle(p.id)
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               className: "customify-ex-name",
               children: p.name
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               className: "customify-mini-strip",
-              children: slots.map(s => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+              children: slots.map(s => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
                 style: {
                   background: p.colors[s]
                 }
@@ -742,39 +744,39 @@ function ExportForm({
           }, p.id))
         })]
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-field",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-        children: (0,external_wp_i18n_namespaceObject.__)('JSON output', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("label", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('JSON output', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
         className: "customify-export-output",
-        children: json || (0,external_wp_i18n_namespaceObject.__)('//  No palettes selected', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        children: json || (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('//  No palettes selected', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("p", {
         className: "customify-form-hint",
-        children: (0,external_wp_i18n_namespaceObject.__)('Re-importable via the ↓ button above or on another site.', 'customify')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Re-importable via the ↓ button above or on another site.', 'customify')
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-form-actions",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
         className: 'customify-copied-flash' + (copied ? ' is-show' : ''),
-        children: (0,external_wp_i18n_namespaceObject.__)('✓ Copied', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('✓ Copied', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-btn--cancel",
         type: "button",
         onClick: onClose,
-        children: (0,external_wp_i18n_namespaceObject.__)('Close', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Close', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("button", {
         className: "customify-btn--ghost",
         type: "button",
         disabled: !json,
         onClick: doDownload,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconExport, {}), " ", (0,external_wp_i18n_namespaceObject.__)('Download', 'customify')]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconExport, {}), " ", (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Download', 'customify')]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
         className: "customify-btn--add",
         type: "button",
         disabled: !json,
         onClick: doCopy,
-        children: (0,external_wp_i18n_namespaceObject.__)('Copy', 'customify')
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Copy', 'customify')
       })]
     })]
   });
@@ -799,31 +801,31 @@ function SettingsRows({
       onSlotChange(slot, defaultHex);
     });
   };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
     children: settings.map((cfg, i) => {
       const slotsArr = cfg.slots || [];
       const isAtDefault = slotsArr.every(s => palette.colors[s] === defaults[s]);
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-setting-row",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "customify-label-wrap",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
             className: "customify-label",
             children: cfg.label
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
             className: "customify-sublabel",
             children: cfg.sublabel
           })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "customify-right",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "customify-reset-mini",
             type: "button",
             onClick: () => resetRow(slotsArr),
-            title: (0,external_wp_i18n_namespaceObject.__)('Reset to default', 'customify'),
-            "aria-label": (0,external_wp_i18n_namespaceObject.__)('Reset to default', 'customify'),
+            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Reset to default', 'customify'),
+            "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Reset to default', 'customify'),
             disabled: isAtDefault,
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Icon, {
               d: "M2 5.5V2m0 3.5h3.5M2 5.5A5 5 0 1 1 3 10",
               size: 12
             })
@@ -836,18 +838,18 @@ function SettingsRows({
               // native colour picker (the input is layered on
               // top, fully transparent). The label keeps the
               // existing dot visual + globe icon.
-              (0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
+              (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("label", {
                 className: 'customify-color-dot' + (isLight(col) ? ' is-light' : ''),
                 style: {
                   background: col
                 },
                 title: `${slotName} · ${col.toUpperCase()}`,
-                children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("input", {
                   type: "color",
                   value: col,
                   onInput: e => onSlotChange(slotName, e.target.value.toUpperCase()),
                   onClick: e => e.stopPropagation()
-                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconGlobe, {})]
+                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconGlobe, {})]
               }, slotName)
             );
           })]
@@ -864,28 +866,28 @@ function SettingsRows({
 // render is just an uncomment.
 const AUTO_COMPUTED_ROWS = [{
   slot: 'on-primary',
-  label: (0,external_wp_i18n_namespaceObject.__)('Text on primary', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text on primary', 'customify')
 }, {
   slot: 'on-secondary',
-  label: (0,external_wp_i18n_namespaceObject.__)('Text on secondary', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text on secondary', 'customify')
 }, {
   slot: 'on-surface',
-  label: (0,external_wp_i18n_namespaceObject.__)('Text on surface', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Text on surface', 'customify')
 }, {
   slot: 'text-muted',
-  label: (0,external_wp_i18n_namespaceObject.__)('Muted text', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Muted text', 'customify')
 }, {
   slot: 'text-subtle',
-  label: (0,external_wp_i18n_namespaceObject.__)('Subtle text', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Subtle text', 'customify')
 }, {
   slot: 'border-default',
-  label: (0,external_wp_i18n_namespaceObject.__)('Default border', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Default border', 'customify')
 }, {
   slot: 'primary-hover',
-  label: (0,external_wp_i18n_namespaceObject.__)('Primary hover', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Primary hover', 'customify')
 }, {
   slot: 'primary-subtle',
-  label: (0,external_wp_i18n_namespaceObject.__)('Primary subtle', 'customify')
+  label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Primary subtle', 'customify')
 }];
 function AutoComputed({
   trigger
@@ -893,30 +895,30 @@ function AutoComputed({
   // Read computed values from :root each time `trigger` (the active palette
   // signature) changes — useColorVars has already updated those vars in a
   // sibling effect.
-  const rows = useMemo(() => {
+  const rows = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     const rs = getComputedStyle(document.documentElement);
     return AUTO_COMPUTED_ROWS.map(row => ({
       ...row,
       value: rs.getPropertyValue(`--customify-color-${row.slot}`).trim() || '—'
     }));
   }, [trigger]);
-  return /*#__PURE__*/_jsxs(Fragment, {
-    children: [/*#__PURE__*/_jsx("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
       className: "customify-auto-hint",
-      children: __('Theme generates these from the 6 slots above.', 'customify')
-    }), /*#__PURE__*/_jsx("div", {
-      children: rows.map(r => /*#__PURE__*/_jsxs("div", {
+      children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Theme generates these from the 6 slots above.', 'customify')
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
+      children: rows.map(r => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-auto-row",
         title: `${r.slot} · ${r.value}`,
-        children: [/*#__PURE__*/_jsx("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "customify-auto-swatch",
           style: {
             background: r.value
           }
-        }), /*#__PURE__*/_jsx("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "customify-auto-label",
           children: r.label
-        }), /*#__PURE__*/_jsx("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
           className: "customify-auto-slot",
           children: r.slot
         })]
@@ -932,8 +934,8 @@ function App({
 }) {
   const [userPalettes, setUserPalettes] = useCustomizeSetting(cfg.settingIds.palettes, []);
   const [activeId, setActiveId] = useCustomizeSetting(cfg.settingIds.active, '');
-  const [editSlot, setEditSlot] = (0,external_wp_element_namespaceObject.useState)(null);
-  const [openForm, setOpenForm] = (0,external_wp_element_namespaceObject.useState)(null); // 'add' | 'import' | 'export' | null
+  const [editSlot, setEditSlot] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);
+  const [openForm, setOpenForm] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null); // 'add' | 'import' | 'export' | null
 
   const slots = cfg.slots;
   const themePresets = cfg.themePresets || [];
@@ -944,18 +946,18 @@ function App({
   // of spawning a new "(copy)" each time. They are kept out of the visible
   // Custom palettes grid — they're an implementation detail, not named palettes.
   const SHADOW_PREFIX = 'user_theme_';
-  const visibleUserArr = (0,external_wp_element_namespaceObject.useMemo)(() => userArr.filter(p => !p.id.startsWith(SHADOW_PREFIX)), [userArr]);
+  const visibleUserArr = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => userArr.filter(p => !p.id.startsWith(SHADOW_PREFIX)), [userArr]);
 
   // allPalettes includes shadows so activePalette lookup always finds them.
-  const allPalettes = (0,external_wp_element_namespaceObject.useMemo)(() => [...themePresets, ...userArr], [themePresets, userArr]);
-  const activePalette = (0,external_wp_element_namespaceObject.useMemo)(() => {
+  const allPalettes = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => [...themePresets, ...userArr], [themePresets, userArr]);
+  const activePalette = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => {
     return allPalettes.find(p => p.id === activeId) || allPalettes[0] || null;
   }, [allPalettes, activeId]);
-  const activeKind = (0,external_wp_element_namespaceObject.useMemo)(() => themePresets.some(p => p.id === activePalette?.id) ? 'theme' : 'user', [themePresets, activePalette]);
+  const activeKind = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useMemo)(() => themePresets.some(p => p.id === activePalette?.id) ? 'theme' : 'user', [themePresets, activePalette]);
   useColorVars(activePalette, slots);
 
   // Esc closes popover / open form.
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     const handler = e => {
       if (e.key === 'Escape') {
         setEditSlot(null);
@@ -967,7 +969,7 @@ function App({
   }, []);
 
   // Click outside popover closes it.
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     if (!editSlot) return undefined;
     const handler = e => {
       const path = e.composedPath ? e.composedPath() : [];
@@ -982,7 +984,7 @@ function App({
     document.addEventListener('click', handler);
     return () => document.removeEventListener('click', handler);
   }, [editSlot]);
-  const editSlotColor = (0,external_wp_element_namespaceObject.useCallback)((slot, newHex) => {
+  const editSlotColor = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)((slot, newHex) => {
     if (!activePalette) return;
     if (activeKind === 'theme') {
       // Use a stable shadow ID so repeated edits accumulate on the
@@ -1018,7 +1020,7 @@ function App({
       } : p));
     }
   }, [activePalette, activeKind, userArr, setUserPalettes, setActiveId]);
-  const addPalette = (0,external_wp_element_namespaceObject.useCallback)((name, sourceId) => {
+  const addPalette = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)((name, sourceId) => {
     const source = allPalettes.find(p => p.id === sourceId);
     if (!source) return;
     const id = 'user_' + Date.now();
@@ -1036,24 +1038,24 @@ function App({
   // When clicking a theme preset that already has a shadow (i.e. the user
   // previously edited it), restore the shadow so edits are preserved instead
   // of reverting to the unmodified preset.
-  const pickThemePreset = (0,external_wp_element_namespaceObject.useCallback)(themeId => {
+  const pickThemePreset = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(themeId => {
     const shadowId = SHADOW_PREFIX + themeId;
     const hasShadow = userArr.some(p => p.id === shadowId);
     setActiveId(hasShadow ? shadowId : themeId);
   }, [userArr, setActiveId]);
-  const deletePalette = (0,external_wp_element_namespaceObject.useCallback)(id => {
+  const deletePalette = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(id => {
     setUserPalettes(userArr.filter(p => p.id !== id));
     if (activeId === id) {
       setActiveId(themePresets[0]?.id || '');
     }
   }, [userArr, setUserPalettes, activeId, setActiveId, themePresets]);
-  const renamePalette = (0,external_wp_element_namespaceObject.useCallback)((id, newName) => {
+  const renamePalette = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)((id, newName) => {
     setUserPalettes(userArr.map(p => p.id === id ? {
       ...p,
       name: newName
     } : p));
   }, [userArr, setUserPalettes]);
-  const importPalettes = (0,external_wp_element_namespaceObject.useCallback)(items => {
+  const importPalettes = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useCallback)(items => {
     const validated = items.map((item, i) => ({
       id: 'user_' + Date.now() + '_' + i,
       name: item.name,
@@ -1067,38 +1069,38 @@ function App({
   }, [userArr, setUserPalettes, setActiveId]);
   if (!activePalette) return null;
   const triggerKey = activePalette.id + '|' + slots.map(s => activePalette.colors[s]).join(',');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
     className: "customify-sidebar",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
         className: "customify-control--heading",
-        children: (0,external_wp_i18n_namespaceObject.__)('Current palette', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Current palette', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-hero-card",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeroDeck, {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(HeroDeck, {
           palette: activePalette,
           slots: slots,
           onSlotClick: setEditSlot
-        }, activePalette.id /* re-mount to retrigger animation on switch */), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        }, activePalette.id /* re-mount to retrigger animation on switch */), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
           className: "customify-deck-footer",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
             className: "customify-deck-name",
-            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+            children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               children: activePalette.name
-            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
               className: 'customify-tag' + (activeKind === 'user' ? ' customify-tag--user' : ''),
-              children: activeKind === 'theme' ? (0,external_wp_i18n_namespaceObject.__)('theme', 'customify') : (0,external_wp_i18n_namespaceObject.__)('user', 'customify')
+              children: activeKind === 'theme' ? (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('theme', 'customify') : (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('user', 'customify')
             })]
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
             className: "customify-deck-sub",
-            children: (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %d is the number of color slots in a palette */
-            (0,external_wp_i18n_namespaceObject.__)('%d slots', 'customify'), slots.length)
+            children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.sprintf)(/* translators: %d is the number of color slots in a palette */
+            (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('%d slots', 'customify'), slots.length)
           })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("div", {
           className: "customify-deck-hint",
-          children: (0,external_wp_i18n_namespaceObject.__)('Click a card to edit that slot', 'customify')
-        }), editSlot && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Popover, {
+          children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Click a card to edit that slot', 'customify')
+        }), editSlot && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(Popover, {
           slot: editSlot,
           palette: activePalette,
           kind: activeKind,
@@ -1107,59 +1109,59 @@ function App({
           onClose: () => setEditSlot(null)
         })]
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h3", {
         className: "customify-control--heading",
-        children: (0,external_wp_i18n_namespaceObject.__)('Theme presets', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetGrid, {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Theme presets', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(PresetGrid, {
         palettes: themePresets,
         kind: "theme",
         activeId: activeId,
         slots: slots,
         onPick: pickThemePreset
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h3", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("h3", {
         className: "customify-control--heading",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
-          children: [(0,external_wp_i18n_namespaceObject.__)('Custom palettes', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
+          children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Custom palettes', 'customify'), " ", /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("span", {
             className: "customify-badge",
             children: visibleUserArr.length
           })]
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("span", {
           style: {
             display: 'flex',
             gap: 4
           },
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "customify-icon-btn",
             type: "button",
-            "aria-label": (0,external_wp_i18n_namespaceObject.__)('Export palettes', 'customify'),
-            title: (0,external_wp_i18n_namespaceObject.__)('Export JSON', 'customify'),
+            "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Export palettes', 'customify'),
+            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Export JSON', 'customify'),
             onClick: () => setOpenForm(openForm === 'export' ? null : 'export'),
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconExport, {})
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconExport, {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "customify-icon-btn",
             type: "button",
-            "aria-label": (0,external_wp_i18n_namespaceObject.__)('Import palette', 'customify'),
-            title: (0,external_wp_i18n_namespaceObject.__)('Import JSON', 'customify'),
+            "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Import palette', 'customify'),
+            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Import JSON', 'customify'),
             onClick: () => setOpenForm(openForm === 'import' ? null : 'import'),
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconImport, {})
-          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconImport, {})
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("button", {
             className: "customify-icon-btn",
             type: "button",
-            "aria-label": (0,external_wp_i18n_namespaceObject.__)('Add palette', 'customify'),
-            title: (0,external_wp_i18n_namespaceObject.__)('Add new palette', 'customify'),
+            "aria-label": (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Add palette', 'customify'),
+            title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Add new palette', 'customify'),
             onClick: () => setOpenForm(openForm === 'add' ? null : 'add'),
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IconAdd, {})
+            children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(IconAdd, {})
           })]
         })]
-      }), visibleUserArr.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      }), visibleUserArr.length === 0 ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
         className: "customify-empty",
-        children: [(0,external_wp_i18n_namespaceObject.__)('No custom palettes yet.', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("br", {}), (0,external_wp_i18n_namespaceObject.__)('Click + to create one, or ↓ to import JSON.', 'customify')]
-      }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PresetGrid, {
+        children: [(0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('No custom palettes yet.', 'customify'), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("br", {}), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Click + to create one, or ↓ to import JSON.', 'customify')]
+      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(PresetGrid, {
         palettes: visibleUserArr,
         kind: "user",
         activeId: activeId,
@@ -1167,28 +1169,28 @@ function App({
         onPick: setActiveId,
         onDelete: deletePalette,
         onRename: renamePalette
-      }), openForm === 'add' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AddForm, {
+      }), openForm === 'add' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(AddForm, {
         allPalettes: [...themePresets, ...visibleUserArr],
         themePresets: themePresets,
         defaultExtendId: activeId,
         userCount: visibleUserArr.length,
         onConfirm: addPalette,
         onCancel: () => setOpenForm(null)
-      }), openForm === 'import' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ImportForm, {
+      }), openForm === 'import' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ImportForm, {
         slots: slots,
         onConfirm: importPalettes,
         onCancel: () => setOpenForm(null)
-      }), openForm === 'export' && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ExportForm, {
+      }), openForm === 'export' && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(ExportForm, {
         palettes: visibleUserArr,
         slots: slots,
         onClose: () => setOpenForm(null)
       })]
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsxs)("div", {
       className: "customify-section",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)("h4", {
         className: "customify-control--heading",
-        children: (0,external_wp_i18n_namespaceObject.__)('Theme color', 'customify')
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SettingsRows, {
+        children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Theme color', 'customify')
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(SettingsRows, {
         palette: activePalette,
         settings: cfg.settingsRows || [],
         defaults: themePresets[0]?.colors || {},
@@ -1209,8 +1211,8 @@ function App({
     const host = document.getElementById(cfg.rootId);
     if (!host) return false;
     mounted = true;
-    const root = (0,external_wp_element_namespaceObject.createRoot)(host);
-    root.render(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(App, {
+    const root = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createRoot)(host);
+    root.render(/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_2__.jsx)(App, {
       cfg: cfg
     }));
     return true;
@@ -1225,7 +1227,134 @@ function App({
     });
   }
 })();
-;// ./src/backend/customizer/color-palette/index.js
+
+/***/ }),
+
+/***/ "./src/backend/customizer/color-palette/customizer.scss":
+/*!**************************************************************!*\
+  !*** ./src/backend/customizer/color-palette/customizer.scss ***!
+  \**************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
+
+/***/ }),
+
+/***/ "react/jsx-runtime":
+/*!**********************************!*\
+  !*** external "ReactJSXRuntime" ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["ReactJSXRuntime"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		if (!(moduleId in __webpack_modules__)) {
+/******/ 			delete __webpack_module_cache__[moduleId];
+/******/ 			var e = new Error("Cannot find module '" + moduleId + "'");
+/******/ 			e.code = 'MODULE_NOT_FOUND';
+/******/ 			throw e;
+/******/ 		}
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+!function() {
+/*!*******************************************************!*\
+  !*** ./src/backend/customizer/color-palette/index.js ***!
+  \*******************************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _customizer_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./customizer.scss */ "./src/backend/customizer/color-palette/customizer.scss");
+/* harmony import */ var _customizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./customizer.js */ "./src/backend/customizer/color-palette/customizer.js");
 /*
  * Webpack entry for the Customizer-only Color palette control.
  *
@@ -1238,5 +1367,7 @@ function App({
  */
 
 
+}();
 /******/ })()
 ;
+//# sourceMappingURL=color-palette.js.map
