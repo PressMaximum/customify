@@ -379,6 +379,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./js/customizer.js */ "./src/backend/customizer/js/customizer.js");
 /* harmony import */ var _js_customizer_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_js_customizer_js__WEBPACK_IMPORTED_MODULE_1__);
 
+// Color-palette live update — same iframe context (customize-preview),
+// merged here so the iframe loads one combined bundle instead of two.
 
 }();
 /******/ })()

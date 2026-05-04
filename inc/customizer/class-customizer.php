@@ -76,7 +76,13 @@ class  Customify_Customizer {
 
 		foreach ( $settings as $k ) {
 			$k = sanitize_text_field( $k );
+			// theme_mod-type settings: remove from the theme's mod array.
 			remove_theme_mod( $k );
+			// option-type settings (e.g. color-palette stores palettes in
+			// wp_options, not theme_mods). delete_option() is a no-op when the
+			// key doesn't exist as a standalone option, so it's safe to call
+			// unconditionally alongside remove_theme_mod().
+			delete_option( $k );
 		}
 
 		wp_send_json_success();
@@ -123,6 +129,26 @@ class  Customify_Customizer {
 					'styling_config' => $this->get_styling_config(),
 				)
 			);
+
+			// Color-palette live update (panel → iframe). Bundled into the
+			// `customify-customizer` script via webpack so the iframe loads
+			// one combined asset instead of a second handle. Localize the
+			// data payload onto the same handle.
+			if ( class_exists( 'Customify_Color_Palette' ) ) {
+				wp_localize_script(
+					'customify-customizer',
+					'CustomifyColorPalettePreview',
+					array(
+						'styleId'       => Customify_Color_Palette::HANDLE . '-vars',
+						'settingIds'    => array(
+							'active'   => Customify_Color_Palette_Ajax::OPTION_ACTIVE,
+							'palettes' => Customify_Color_Palette_Ajax::OPTION_PALETTES,
+						),
+						'slots'         => Customify_Color_Palette_Config::slots(),
+						'themePresets'  => Customify_Color_Palette_Config::theme_presets(),
+					)
+				);
+			}
 		}
 	}
 

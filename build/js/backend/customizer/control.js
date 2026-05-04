@@ -2610,9 +2610,31 @@
       if (section) {
         var setting_keys = [];
         var controls = wp.customize.section(section).controls();
-        _.each(controls, function (c, index) {
-          wpcustomize(c.id).set("");
-          setting_keys[index] = c.id;
+        // Iterate each control's actual settings, not the control ID.
+        // Multi-setting controls (e.g. color-palette) bind multiple
+        // setting IDs that differ from the control ID — using c.id would
+        // silently miss them. Falls back to c.id for standard controls
+        // where the setting ID matches the control ID.
+        // Controls may declare c.params.reset_exclude (array of setting
+        // IDs) to protect specific settings from being wiped on reset.
+        _.each(controls, function (c) {
+          var exclude = c.params && _.isArray(c.params.reset_exclude) ? c.params.reset_exclude : [];
+          var bound = c.settings && _.size(c.settings) > 0;
+          if (bound) {
+            _.each(c.settings, function (setting) {
+              if (_.contains(exclude, setting.id)) return;
+              var s = wpcustomize(setting.id);
+              if (s) {
+                s.set("");
+                setting_keys.push(setting.id);
+              }
+            });
+          } else {
+            if (_.contains(exclude, c.id)) return;
+            var s = wpcustomize(c.id);
+            if (s) s.set("");
+            setting_keys.push(c.id);
+          }
         });
         $.post(ajaxurl, {
           action: "customify__reset_section",
