@@ -11,8 +11,6 @@ class Customify_WC_Colors {
 		$configs[] = array(
 			'name'    => "{$section}_shop_colors_heading",
 			'type'    => 'heading',
-
-			'active_callback' => '__return_false',
 			'section' => $section,
 			'title'   => __( 'Shop Colors', 'customify' ),
 		);
@@ -20,8 +18,6 @@ class Customify_WC_Colors {
 		$configs[] = array(
 			'name'        => "{$section}_shop_primary",
 			'type'        => 'color',
-
-			'active_callback' => '__return_false',
 			'section'     => $section,
 			'title'       => __( 'Shop Buttons', 'customify' ),
 			'placeholder' => '#c3512f',
@@ -46,8 +42,6 @@ class Customify_WC_Colors {
 		$configs[] = array(
 			'name'        => "{$section}_shop_rating_stars",
 			'type'        => 'color',
-
-			'active_callback' => '__return_false',
 			'section'     => $section,
 			'title'       => __( 'Rating Stars', 'customify' ),
 			'description' => __( 'Color for rating stars, default is Secondary Color.', 'customify' ),
@@ -72,8 +66,6 @@ class Customify_WC_Colors {
 		$configs[] = array(
 			'name'        => "{$section}_shop_onsale",
 			'type'        => 'color',
-
-			'active_callback' => '__return_false',
 			'section'     => $section,
 			'title'       => __( 'On Sale', 'customify' ),
 			'placeholder' => '#77a464',

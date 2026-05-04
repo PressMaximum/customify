@@ -27,8 +27,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'    => "{$section}_color_theme_heading",
 				'type'    => 'heading',
-
-				'active_callback' => '__return_false',
 				'section' => $section,
 				'title'   => __('Theme Colors', 'customify'),
 			),
@@ -36,8 +34,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'        => "{$section}_color_primary",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'placeholder' => '#235787',
 				'default'     => '#235787',
@@ -75,8 +71,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'        => "{$section}_color_secondary",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'placeholder' => '#c3512f',
 				'default'     => '#c3512f',
@@ -96,8 +90,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'        => "{$section}_color_text",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Text Color', 'customify'),
 				'placeholder' => '#686868',
@@ -119,8 +111,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'        => "{$section}_color_link",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Link Color', 'customify'),
 				'placeholder' => '#1e4b75',
@@ -139,8 +129,6 @@ if (!function_exists('customify_customizer_styling_config')) {
 			array(
 				'name'        => "{$section}_color_link_hover",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Link Hover Color', 'customify'),
 				'placeholder' => '#111111',
@@ -161,8 +149,6 @@ a:focus,
 			array(
 				'name'        => "{$section}_color_border",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Border Color', 'customify'),
 				'placeholder' => '#eaecee',
@@ -254,8 +240,6 @@ article.comment .comment-meta,
 			array(
 				'name'        => "{$section}_color_meta",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Meta Color', 'customify'),
 				'placeholder' => '#6d6d6d',
@@ -282,8 +266,6 @@ article.comment .comment-meta,
 			array(
 				'name'        => "{$section}_color_heading",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Heading Color', 'customify'),
 				'placeholder' => '#2b2b2b',
@@ -295,8 +277,6 @@ article.comment .comment-meta,
 			array(
 				'name'        => "{$section}_color_w_title",
 				'type'        => 'color',
-
-				'active_callback' => '__return_false',
 				'section'     => $section,
 				'title'       => __('Widget Title Color', 'customify'),
 				'placeholder' => '#444444',

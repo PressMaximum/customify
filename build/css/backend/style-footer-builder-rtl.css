@@ -1,1 +1,107 @@
-.cb-row-layout{padding:8px 0}.cb-row-layout__devices{display:flex;gap:0}.cb-row-layout__device-btn{align-items:center;background:transparent;border:none;border-radius:2px;color:#a7aaad;cursor:pointer;display:flex;height:26px;justify-content:center;padding:0;width:26px}.cb-row-layout__device-btn.is-active,.cb-row-layout__device-btn:hover{color:#1d2327}.cb-row-layout__device-btn .dashicons{font-size:18px;height:18px;width:18px}.cb-row-layout__label{color:#1d2327;font-size:13px;font-weight:600;min-width:0}.cb-row-layout__count-section{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}.cb-row-layout__count-buttons{display:flex;gap:3px}.cb-row-layout__count-btn{background:#fff;border:1px solid #8c8f94;border-radius:3px;color:#555;cursor:pointer;flex:1;font-size:12px;font-weight:600;height:30px;padding:0}.cb-row-layout__count-btn:hover{border-color:#1d2327;color:#1d2327}.cb-row-layout__count-btn.is-active{background:#2271b1;border-color:#2271b1;color:#fff}.cb-row-layout__field{margin-bottom:16px}.cb-row-layout__field-header{align-items:center;display:flex;margin-bottom:8px}.cb-row-layout__field-header .cb-row-layout__label{flex:1}.cb-row-layout__preset-grid{display:grid;gap:4px;grid-template-columns:repeat(4,1fr)}.cb-row-layout__preset-btn{align-items:center;background:#fff;border:1px solid #ddd;border-radius:3px;color:#aaa;cursor:pointer;display:flex;justify-content:center;padding:4px}.cb-row-layout__preset-btn:hover{border-color:#999;color:#666}.cb-row-layout__preset-btn.is-active{background:#e8f0fb;border-color:#2271b1;color:#2271b1}
+/*!*****************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/backend/footer-row-layout/style.scss ***!
+  \*****************************************************************************************************************************************************************************************************************************************************************/
+.cb-row-layout {
+  padding: 8px 0;
+}
+.cb-row-layout__devices {
+  display: flex;
+  gap: 0;
+}
+.cb-row-layout__device-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: transparent;
+  cursor: pointer;
+  color: #a7aaad;
+}
+.cb-row-layout__device-btn:hover {
+  color: #1d2327;
+}
+.cb-row-layout__device-btn.is-active {
+  color: #1d2327;
+}
+.cb-row-layout__device-btn .dashicons {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+}
+.cb-row-layout__label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1d2327;
+  min-width: 0;
+}
+.cb-row-layout__count-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.cb-row-layout__count-buttons {
+  display: flex;
+  gap: 3px;
+}
+.cb-row-layout__count-btn {
+  flex: 1;
+  height: 30px;
+  padding: 0;
+  border: 1px solid #8c8f94;
+  border-radius: 3px;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #555;
+}
+.cb-row-layout__count-btn:hover {
+  border-color: #1d2327;
+  color: #1d2327;
+}
+.cb-row-layout__count-btn.is-active {
+  border-color: #2271b1;
+  background: #2271b1;
+  color: #fff;
+}
+.cb-row-layout__field {
+  margin-bottom: 16px;
+}
+.cb-row-layout__field-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.cb-row-layout__field-header .cb-row-layout__label {
+  flex: 1;
+}
+.cb-row-layout__preset-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.cb-row-layout__preset-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  background: #fff;
+  cursor: pointer;
+  color: #aaa;
+}
+.cb-row-layout__preset-btn:hover {
+  border-color: #999;
+  color: #666;
+}
+.cb-row-layout__preset-btn.is-active {
+  border-color: #2271b1;
+  background: #e8f0fb;
+  color: #2271b1;
+}

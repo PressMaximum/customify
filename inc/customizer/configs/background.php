@@ -24,13 +24,13 @@ class Customify_Advanced_Styling_Background {
 				'section'    => 'background',
 				'title'      => __( 'Site Background', 'customify' ),
 				'selector'   => array(
-					'normal' => 'html body',
+					'normal' => 'body',
 				),
-				// Default `bg_color` removed so auto_css does not emit a
-				// `body { background-color: #FFFFFF }` rule when user has
-				// not picked a colour. The slot-bound rule in `_base.scss`
-				// then paints from the active palette. User-picked colours
-				// still win via cascade order.
+				'default'    => array(
+					'normal' => array(
+						'bg_color' => '#FFFFFF',
+					),
+				),
 				'css_format' => 'styling', // styling.
 				'fields'     => array(
 					'normal_fields' => array(
@@ -65,11 +65,11 @@ class Customify_Advanced_Styling_Background {
 				'selector'   => array(
 					'normal' => '.site-content .content-area',
 				),
-				// Default `bg_color` removed so auto_css does not emit a
-				// `background-color: #FFFFFF` rule when user has not picked
-				// a colour. The slot-bound rule in `_layouts.scss` then
-				// paints from the active palette. User-picked colours still
-				// win — auto_css emits their value as before.
+				'default'    => array(
+					'normal' => array(
+						'bg_color' => '#FFFFFF',
+					),
+				),
 				'css_format' => 'styling', // styling.
 				'fields'     => array(
 					'normal_fields' => array(
