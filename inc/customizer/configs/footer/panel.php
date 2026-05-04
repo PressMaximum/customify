@@ -188,19 +188,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'css_format' => 'column-gap: {{value}}; gap: {{value}}',
 				'min'        => 0,
 				'max'        => 100,
-				'default'    => 20,
-			),
-
-			array(
-				'name'       => "{$section}_col_padding",
-				'type'       => 'slider',
-				'section'    => $section,
-				'title'      => __( 'Columns Padding', 'customify' ),
-				'selector'   => $selector . ' .col-v2 .item--inner',
-				'css_format' => 'padding: {{value}};',
-				'min'        => 0,
-				'max'        => 100,
-				'default'    => 10,
+				'default'    => 30,
 			),
 
 		);

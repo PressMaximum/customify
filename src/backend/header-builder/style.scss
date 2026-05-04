@@ -312,7 +312,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	margin-right: 8px;
 }
 
-.customify-hb__devices { display: flex; gap: 2px; }
+.customify-hb__devices { display: flex; gap: 8px; }
 
 .customify-hb__device-btn {
 	display: inline-flex;
@@ -489,21 +489,19 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	
 	}
 
-	&--left   { flex: 1; justify-content: flex-start; }
-	&--center { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
-	&--right  { flex: 1; justify-content: flex-end; }
+	// &--left   { flex: 1; justify-content: flex-start; }
+	// &--center { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
+	// &--right  { flex: 1; justify-content: flex-end; }
+
+	&:first-child:not(:last-child)   { flex: 1; justify-content: flex-start; }
+	&:not(:first-child):not(:last-child) { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
+	&:last-child:not(:first-child)  { flex: 1; justify-content: flex-end; }
 
 	&:hover, &.is-drag-over {
 		// border-left-color: $hb-text-muted;
 		// border-right-color: $hb-text-muted;
 		background-color: $hb-accent-hover;
 		// border-color: $hb-accent;
-	}
-
-	&.is-drag-over {
-		// border-left-color: $hb-accent;
-		// border-right-color: $hb-accent;
-		// background: #f0f4ff;
 	}
 }
 

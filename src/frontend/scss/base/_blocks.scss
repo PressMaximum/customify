@@ -248,6 +248,71 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
+// Image: lightbox fallback.
+// Why: WP core's per-block stylesheet (wp-includes/blocks/image/style.css)
+// is loaded lazily on render_block and may be missing in Customizer preview
+// or selective-refresh contexts — leaving the trigger button visible inline
+// and the overlay markup as a visible block below the footer. Mirroring the
+// rules here is a no-op when the core stylesheet is present and a safety
+// net when it is not.
+.wp-lightbox-container {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+
+	img {
+		cursor: zoom-in;
+	}
+
+	img:hover + button {
+		opacity: 1;
+	}
+
+	button {
+		align-items: center;
+		backdrop-filter: blur(16px) saturate(180%);
+		background-color: #5a5a5a40;
+		border: none;
+		border-radius: 4px;
+		cursor: zoom-in;
+		display: flex;
+		height: 20px;
+		justify-content: center;
+		opacity: 0;
+		padding: 0;
+		position: absolute;
+		right: 16px;
+		text-align: center;
+		top: 16px;
+		width: 20px;
+		min-width: 35px;
+		min-height: 35px;
+		padding: 0;
+		z-index: 100;
+
+		&:hover,
+		&:focus {
+			opacity: 1;
+		}
+	}
+}
+
+.wp-lightbox-overlay {
+	box-sizing: border-box;
+	cursor: zoom-out;
+	height: 100vh;
+	left: 0;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	visibility: hidden;
+	width: 100%;
+	z-index: 100000;
+}
+.wp-lightbox-overlay.active {
+	visibility: visible;
+}
+
 // Quote: Accent border
 .wp-block-quote.is-style-accent {
 	border-left: 4px solid #235787;

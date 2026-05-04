@@ -2,44 +2,46 @@
 
 // Position the header absolutely so page content flows beneath it.
 .is-header-transparent {
-    #masthead {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 99;
-    }
+	&.has-page-cover, &.home {
+		#masthead {
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			z-index: 99;
+		}
+	}
 
-    // Push the first content block down so it isn't hidden behind the header.
-    // The exact offset is set via JS (initTransparentHeader) using the real header height.
-    &.has-transparent-offset {
-        #page-content {
-            padding-top: var(--transparent-header-height, 0px);
-        }
-    }
+	// Push the first content block down so it isn't hidden behind the header.
+	// The exact offset is set via JS (initTransparentHeader) using the real header height.
+	&.has-transparent-offset {
+		#page-content {
+			padding-top: var(--transparent-header-height, 0px);
+		}
+	}
 }
 
 // Make the row background transparent.
 .header--transparent {
-    .header--row-inner {
-        background: transparent !important;
-        box-shadow: none !important;
-    }
+	.header--row-inner {
+		background: transparent !important;
+		box-shadow: none !important;
+	}
 }
 
 // Default logo: shown normally; hidden when header is transparent and a tran-logo exists.
 .site-img-logo-tran {
-    display: none;
+	display: none;
 }
 
 .is-header-transparent {
-    .has-tran-logo {
-        .site-img-logo {
-            display: none;
-        }
+	.has-tran-logo {
+		.site-img-logo {
+			display: none;
+		}
 
-        .site-img-logo-tran {
-            display: block;
-        }
-    }
+		.site-img-logo-tran {
+			display: block;
+		}
+	}
 }
