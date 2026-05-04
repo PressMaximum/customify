@@ -2303,10 +2303,10 @@ select {
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 }
 body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 .button:not(.components-button, .customize-partial-edit-shortcut-button),
-button:not(.components-button, .customize-partial-edit-shortcut-button),
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button),
 .wc-block-cart__submit .wp-element-button,
@@ -2327,10 +2327,10 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   gap: 0.5em;
 }
 body:not(.fl-builder-edit) .button:not(.menu-mobile-toggle):hover,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):not(.menu-mobile-toggle):hover,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button):not(.menu-mobile-toggle):hover,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
-button:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):not(.menu-mobile-toggle):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):hover,
 .wc-block-cart__submit .wp-element-button:not(.menu-mobile-toggle):hover,
@@ -2338,10 +2338,10 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
 }
 body:not(.fl-builder-edit) .button:hover,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):hover,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):hover,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button):hover,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
-button:not(.components-button, .customize-partial-edit-shortcut-button):hover,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):hover,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):hover,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):hover,
 .wc-block-cart__submit .wp-element-button:hover,
@@ -2350,14 +2350,14 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   outline: none;
 }
 body:not(.fl-builder-edit) .button:active, body:not(.fl-builder-edit) .button:focus,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):active,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):focus,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):active,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):focus,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button):active,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button):focus,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):active,
 .button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
-button:not(.components-button, .customize-partial-edit-shortcut-button):active,
-button:not(.components-button, .customize-partial-edit-shortcut-button):focus,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):active,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):focus,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):active,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button):focus,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button):active,
@@ -2369,10 +2369,10 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   outline: none;
 }
 body:not(.fl-builder-edit) .button.loading,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading,
 .wc-block-cart__submit .wp-element-button.loading,
@@ -2384,11 +2384,11 @@ body:not(.fl-builder-edit) .button.loading svg,
 body:not(.fl-builder-edit) .button.loading .icon-label,
 body:not(.fl-builder-edit) .button.loading .hide-on-loading,
 body:not(.fl-builder-edit) .button.loading .button-label,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading i,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading svg,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading i,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading svg,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .icon-label,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .hide-on-loading,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .button-label,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading i,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading svg,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading .icon-label,
@@ -2399,11 +2399,11 @@ body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading .button-la
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading i,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading svg,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading .hide-on-loading,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading .button-label,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading i,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading svg,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .icon-label,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .hide-on-loading,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading .button-label,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading i,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading svg,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading .icon-label,
@@ -2427,10 +2427,10 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   visibility: hidden;
 }
 body:not(.fl-builder-edit) .button.loading:after,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button).loading:after,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading:after,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button).loading:after,
 .button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
-button:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger).loading:after,
 input[type=button]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button).loading:after,
 input[type=reset]:not(.components-button, .customize-partial-edit-shortcut-button).loading:after,
 .wc-block-cart__submit .wp-element-button.loading:after,
@@ -2452,7 +2452,7 @@ input[type=submit]:not(.components-button, .customize-partial-edit-shortcut-butt
   line-height: 0px;
 }
 body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button),
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button),
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type=button]:not(.ed_button),
@@ -2463,7 +2463,7 @@ input[type=submit]:not(.components-button):not(.customize-partial-edit-shortcut-
   background: #235787;
 }
 body:not(.fl-builder-edit) .button:focus,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button):focus,
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger):focus,
 body:not(.fl-builder-edit) input[type=button]:not(.ed_button):focus,
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button):focus,
 input[type=button]:not(.ed_button):focus,
@@ -3307,6 +3307,57 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .wp-block-image.is-style-shadow img {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
+.wp-lightbox-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.wp-lightbox-container img {
+  cursor: zoom-in;
+}
+.wp-lightbox-container img:hover + button {
+  opacity: 1;
+}
+.wp-lightbox-container button {
+  align-items: center;
+  backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(90, 90, 90, 0.2509803922);
+  border: none;
+  border-radius: 4px;
+  cursor: zoom-in;
+  display: flex;
+  height: 20px;
+  justify-content: center;
+  opacity: 0;
+  padding: 0;
+  position: absolute;
+  left: 16px;
+  text-align: center;
+  top: 16px;
+  width: 20px;
+  min-width: 35px;
+  min-height: 35px;
+  padding: 0;
+  z-index: 100;
+}
+.wp-lightbox-container button:hover, .wp-lightbox-container button:focus {
+  opacity: 1;
+}
+.wp-lightbox-overlay {
+  box-sizing: border-box;
+  cursor: zoom-out;
+  height: 100vh;
+  right: 0;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  visibility: hidden;
+  width: 100%;
+  z-index: 100000;
+}
+.wp-lightbox-overlay.active {
+  visibility: visible;
+}
 .wp-block-quote.is-style-accent {
   border-right: 4px solid #235787;
   padding-right: 1.5em;
@@ -3562,6 +3613,7 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   flex-direction: column;
   justify-content: center;
   z-index: 5;
+  margin-top: var(--transparent-header-height, 50px);
   padding: 1em 30px;
 }
 @media screen and (min-width: 1025px) {
@@ -3630,26 +3682,24 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .row-v2 .item--inner {
   display: inline-flex;
   align-items: center;
-  margin-right: 0.5em;
-  margin-left: 0.5em;
 }
 .row-v2 .col-v2 {
   display: flex;
+  gap: 1em;
 }
 .row-v2 .col-v2.col-v2-center {
   justify-content: center;
   margin-right: 1em;
   margin-left: 1em;
+  flex: 1 0 auto;
 }
 .row-v2 .col-v2.col-v2-left {
   justify-content: flex-start;
-  margin-left: auto;
-  flex: 1 1 0;
+  flex: 0 0 auto;
 }
 .row-v2 .col-v2.col-v2-right {
-  margin-right: auto;
   justify-content: flex-end;
-  flex: 1 1 0;
+  flex: 0 0 auto;
 }
 .row-v2.no-left.no-right .col-v2.col-v2-center {
   flex-basis: 100%;
@@ -3659,31 +3709,6 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 .row-v2.no-center .col-v2.col-v2-right {
   flex: auto;
-}
-.row-v2[class*=no-col] {
-  gap: 1.5em;
-}
-.row-v2[class*=no-col] > .col-v2 {
-  flex: 1 1 0;
-  margin-right: 0;
-  margin-left: 0;
-}
-@media screen and (max-width: 1024px) {
-  .row-v2[class*=no-col] {
-    flex-wrap: wrap;
-    height: auto;
-  }
-  .row-v2[class*=no-col] > .col-v2 {
-    flex: 1 1 calc(50% - 0.75em);
-    min-width: calc(50% - 0.75em);
-  }
-}
-@media screen and (max-width: 767px) {
-  .row-v2[class*=no-col] > .col-v2 {
-    flex: 1 1 100%;
-    min-width: 100%;
-    justify-content: center;
-  }
 }
 #masthead > .customize-partial-edit-shortcut.customize-partial-edit-shortcut-header_builder_panel {
   display: none;
@@ -4633,6 +4658,9 @@ ul.wp-block-latest-posts.is-grid.alignwide {
   color: currentColor;
   transition: transform 0.3s, border 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, color 0.3s;
 }
+.menu-mobile-toggle[type=button] {
+  padding: 0px;
+}
 .menu-mobile-toggle:hover {
   box-shadow: none;
   background: transparent;
@@ -5312,7 +5340,7 @@ body.menu_sidebar_dropdown:before {
 .mobile-item--search_box .search-form-fields {
   width: 100%;
 }
-.is-header-transparent #masthead {
+.is-header-transparent.has-page-cover #masthead, .is-header-transparent.home #masthead {
   position: absolute;
   top: 0;
   right: 0;
@@ -6456,9 +6484,7 @@ body.menu_sidebar_dropdown:before {
 }
 .wp-block-latest-posts > li {
   display: block;
-  padding-bottom: 0.6em;
   margin-bottom: 0.6em;
-  border-bottom: 1px solid #eaecee;
 }
 .wp-block-latest-posts > li:last-child {
   border-bottom: none;
@@ -6721,6 +6747,12 @@ body.menu_sidebar_dropdown:before {
   flex-direction: column;
   display: flex;
 }
+@media screen and (max-width: 1024px) {
+  .footer--row-inner {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+}
 .footer-top .footer--row-inner {
   padding-top: 2em;
   padding-bottom: 2em;
@@ -6835,6 +6867,7 @@ body.menu_sidebar_dropdown:before {
   display: grid !important;
   height: auto;
   align-items: start;
+  gap: 30px;
 }
 .footer--row .row-v2 > .col-v2 {
   min-width: 0;
