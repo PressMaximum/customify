@@ -43,6 +43,7 @@ class  Customify_Customizer {
 
 			require_once get_template_directory() . '/inc/customizer/class-customizer-fonts.php';
 			require_once get_template_directory() . '/inc/customizer/class-customizer.php';
+			require_once get_template_directory() . '/inc/customizer/controls/color-palette/class-color-palette.php';
 		}
 
 		add_action( 'wp_ajax_customify__reset_section', array( 'Customify_Customizer', 'reset_customize_section' ) );
