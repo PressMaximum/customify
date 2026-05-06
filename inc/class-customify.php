@@ -641,12 +641,12 @@ class Customify
 			return $data;
 		}
 
-		$legacy_url = admin_url('admin.php?page=customify-legacy');
-		$modules    = array();
+		$modules = array();
 		foreach ($pro->modules as $class_name => $args) {
-			// Pro renders a per-module Settings page only when the module
-			// class implements settings(). Today only Typekit does — but
-			// detection is generic so future modules light up automatically.
+			// React opens module settings via the `get_module_settings` /
+			// `set_module_settings` AJAX tasks. We only need to flag which
+			// modules expose a settings() method — generic check so future
+			// Pro modules light up the modal automatically.
 			$has_settings = class_exists($class_name) && method_exists($class_name, 'settings');
 			$modules[] = array(
 				'classKey'    => $class_name,
@@ -660,9 +660,6 @@ class Customify
 					? array_values($args['sub_modules'])
 					: array(),
 				'hasSettings' => $has_settings,
-				'settingsUrl' => $has_settings
-					? add_query_arg(array('module' => $class_name), $legacy_url)
-					: '',
 			);
 		}
 
