@@ -359,7 +359,7 @@ $blog_gutter: $gl-gutter;
 
 .single-post {
     .entry-content {
-        a {
+        a:not(.wp-block-button__link, .wp-element-button) {
             &:hover {
                 text-decoration: underline;
             }
@@ -381,7 +381,7 @@ $blog_gutter: $gl-gutter;
 // `.entry-content` itself stays unconstrained so .alignwide and .alignfull inside
 // can still reach --wide-size / 100vw. Skipped on full-stretched page layouts.
 .site-content:not(.content-full-stretched) .entry-single > .entry--item:not(.entry-content) {
-    max-width: var(--wp--style--global--content-size, 871px);
+    max-width: var(--wp--style--global--content-size, 863px);
     margin-left: auto;
     margin-right: auto;
 }

@@ -4,7 +4,7 @@
 	"settings": {
 		"appearanceTools": true,
 		"layout": {
-			"contentSize": "871px",
+			"contentSize": "863px",
 			"wideSize": "1200px"
 		},
 		"color": {
@@ -189,35 +189,6 @@
 				},
 				"typography": {
 					"textAlign": "center"
-				}
-			},
-			"core/code": {
-				"typography": {
-					"fontFamily": "\"Courier 10 Pitch\", Courier, monospace"
-				},
-				"color": {
-					"background": "#f2f2f2"
-				},
-				"spacing": {
-					"padding": {
-						"top": "1.618em",
-						"bottom": "1.618em",
-						"left": "1.618em",
-						"right": "1.618em"
-					}
-				}
-			},
-			"core/preformatted": {
-				"color": {
-					"background": "#f2f2f2"
-				},
-				"spacing": {
-					"padding": {
-						"top": "1.618em",
-						"bottom": "1.618em",
-						"left": "1.618em",
-						"right": "1.618em"
-					}
 				}
 			},
 			"core/table": {

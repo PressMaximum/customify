@@ -107,6 +107,19 @@ class Customify_Page_Settings {
 		$has_breadcrumb = class_exists( 'Customify_Breadcrumb' ) &&
 		                  Customify_Breadcrumb::get_instance()->support_plugins_active();
 
+		// Resolve the layout to use when the per-post sidebar meta is empty
+		// (i.e. "Inherit from Customizer"). Computed server-side because the
+		// JS panel doesn't have direct access to Customizer settings.
+		$post      = get_post();
+		$post_type = $post ? $post->post_type : '';
+		if ( ! $post_type && function_exists( 'get_current_screen' ) ) {
+			$screen    = get_current_screen();
+			$post_type = $screen ? $screen->post_type : '';
+		}
+		$fallback_layout = $post_type && class_exists( 'Customify_Editor' )
+			? Customify_Editor::customizer_sidebar_layout_for_post_type( $post_type )
+			: 'content-sidebar';
+
 		wp_localize_script(
 			'customify-page-settings',
 			'customifyPageSettings',
@@ -114,6 +127,8 @@ class Customify_Page_Settings {
 				'sidebarLayouts' => customify_get_config_sidebar_layouts(),
 				'hasProFeatures' => (bool) class_exists( 'Customify_Pro' ),
 				'hasBreadcrumb'  => (bool) $has_breadcrumb,
+				'fallbackLayout' => $fallback_layout,
+				'contentSizeMap' => customify_get_layout_content_sizes(),
 			)
 		);
 

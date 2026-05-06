@@ -42,7 +42,7 @@ if (!function_exists('customify_customizer_styling_config')) {
 					'customify/styling/primary-color',
 					'
 					.header-top .header--row-inner,
-					body:not(.fl-builder-edit) :is(.button, button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger), input[type="button"]:not(.ed_button)),
+					body:not(.fl-builder-edit) :is(.button, button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon), input[type="button"]:not(.ed_button)),
 					button.button,
 					:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button),
 					.pagination .nav-links span,

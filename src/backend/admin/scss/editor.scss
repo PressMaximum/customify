@@ -1,10 +1,18 @@
 
 @import "../../../frontend/scss/utils/vars";
 @import "../../../frontend/scss/utils/mixins";
+@import "../../../frontend/scss/vendors/vendors";
 @import "../../../frontend/scss/vendors/gridlex/gridlex-vars";
 
 @import "../../../frontend/scss/base/base";
 @import "../../../frontend/scss/base/blocks";
+
+// Block-widget styles (.wp-block-archives-list, .wp-block-categories-list,
+// .wp-block-tag-cloud, .wp-block-latest-posts, .wp-block-latest-comments,
+// .wp-block-rss, .wp-block-calendar, .wp-block-search) so the editor
+// preview matches the frontend. Sidebar-scoped rules (.widget_block,
+// .widget-area) inside the file are inert here without a parent class.
+@import "../../../frontend/scss/widgets/widgets";
 
 // _blogs.scss is intentionally excluded — it contains only frontend blog-listing
 // layout styles (.entry-title, .entry-meta, etc.) that are irrelevant in the editor.
@@ -40,15 +48,15 @@
         list-style-position: outside;
     }
 
-    li {
+    li:not(.wp-block-navigation li) {
         margin-left: 2.5em;
         margin-bottom: 6px;
     }
 
-    ul ul,
+    ul ul:not(.wp-block-navigation ul),
     ol ol,
     ul ol,
-    ol ul {
+    ol ul:not(.wp-block-navigation ul) {
         margin-bottom: 0;
         margin-top: 0;
         margin-left: 2.5em;

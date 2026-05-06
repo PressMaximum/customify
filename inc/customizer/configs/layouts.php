@@ -94,7 +94,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'max'             => 2000,
 				'section'         => 'global_layout_section',
 				'title'           => __( 'Container Width', 'customify' ),
-				'description'     => __( 'Max width of the site container and .alignwide blocks. Drives --wp--style--global--wide-size. Keep this value ABOVE Post Content Max Width so .alignwide has room to break out.', 'customify' ),
+				'description'     => __( 'Max width of the site container.', 'customify' ),
 				'selector'        => 'format',
 				'css_format'      => ':root { --wp--style--global--wide-size: {{value}}; } .customify-container, .layout-contained, .site-framed .site, .site-boxed .site { max-width: {{value}}; }',
 			),

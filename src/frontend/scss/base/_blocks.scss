@@ -1,22 +1,25 @@
 .single-post .content-inner {
 	margin-left: auto;
-	margin-right: auto; 
+	margin-right: auto;
 }
 
 .entry-content > * {
 	margin-left: auto;
 	margin-right: auto;
 }
-// Default blocks are constrained to theme.json's contentSize (classic-theme parity with FSE).
-// The CSS var is set by WP globally on body from theme.json, and can be overridden live by
-// the single_blog_post_content_width Customizer setting.
-// Skip when `.site-content.content-full-stretched` is the context — stretched mode
-// disables content-width constraints so blocks tràn theo container.
-.site-content:not(.content-full-stretched) .entry-content > *:not(.alignwide):not(.alignfull) {
+
+// Default blocks are constrained to --wp--style--global--content-size, which is set by
+// theme.json on body and overridden per layout via customify_layout_content_size_css()
+// (inc/template-functions.php). Skip when `.site-content.content-full-stretched` is
+// the context — stretched mode disables content-width constraints so blocks expand
+// to fit the container.
+.site-content:not(.content-full-stretched)
+	.entry-content
+	> *:not(.alignwide):not(.alignfull) {
 	max-width: var(--wp--style--global--content-size, 863px);
 }
 .entry-content {
-	.alignleft{
+	.alignleft {
 		margin-right: 1.41575em;
 	}
 }
@@ -41,7 +44,6 @@
 	box-sizing: border-box;
 }
 
-
 // Right sidebar(s)
 .main-layout-content-sidebar,
 .main-layout-content-sidebar-sidebar {
@@ -58,11 +60,19 @@
 	}
 }
 
-
-.entry-content ul,
-.entry-content ol {
+.entry-content ul:not(:is(ul, ol) ul),
+.entry-content ol:not(:is(ul, ol) ol) {
 	margin: 1.5em auto;
 	list-style-position: outside;
+}
+
+// Top-level block divs (wp-block-columns, group, buttons, cover, gallery,
+// media-text, etc.) lack default vertical rhythm — give them the same
+// bottom spacing that p/heading/list elements carry naturally.
+// Scoped to `.entry-content` so the rule is frontend-only; the editor canvas
+// uses .editor-styles-wrapper / .is-root-container scope instead.
+.entry-content > div[class*="wp-block-"] {
+	margin-bottom: 1.41575em;
 }
 
 .wp-block-video video {
@@ -82,7 +92,7 @@
 	text-align: left;
 }
 .alignright,
-.wp-block-pullquote.alignright{
+.wp-block-pullquote.alignright {
 	text-align: right;
 }
 .wp-block-image.alignfull img {
@@ -120,15 +130,15 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	padding: 0.5em;
 }
 
-.entry-content li {
+.entry-content li:not(.wp-block-navigation li) {
 	margin-left: 2.5em;
 	margin-bottom: 6px;
 }
 
-.entry-content ul ul,
+.entry-content ul ul:not(.wp-block-navigation ul),
 .entry-content ol ol,
 .entry-content ul ol,
-.entry-content ol ul {
+.entry-content ol ul:not(.wp-block-navigation ul) {
 	margin-bottom: 0px;
 	margin-top: 0px;
 	margin-left: 2.5em;
@@ -145,9 +155,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	> .wp-block-embed__wrapper {
 		position: relative;
 		width: 100%;
-		height: 0; 
+		height: 0;
 		padding-top: 56.25%;
-		iframe, > object {
+		iframe,
+		> object {
 			position: absolute;
 			width: 100%;
 			height: 100%;
@@ -156,9 +167,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 			bottom: 0;
 			right: 0;
 		}
-	} 
+	}
 }
-
 
 .wp-block-quote {
 	&.is-style-large {
@@ -167,8 +177,16 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 		}
 		padding: 0px;
 	}
-	border-left-width: 4px;
-	border-left-color: currentColor;
+	padding: 0px ms(1);
+	margin: ms(1) ms(2);
+	border-width: 0;
+	border-left: 3px solid $color_border;
+	font-style: italic;
+	font-weight: 200;
+	font-size: 1.2em;
+	p:last-of-type {
+			margin-bottom: 0px;
+	}
 	> * {
 		margin-left: 16px;
 		margin-right: 16px;
@@ -183,10 +201,8 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 
 .wp-block-pullquote {
 	border-bottom: 4px solid currentColor;
-    border-top: 4px solid currentColor;
-	margin-left: 0;
-    margin-right: 0;
-    padding: 3em 0;
+	border-top: 4px solid currentColor;
+	padding: 3em 0;
 	text-align: center;
 	> p:first-child {
 		margin-top: 0;

@@ -377,6 +377,7 @@ class Customify
 		}
 
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
+		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',

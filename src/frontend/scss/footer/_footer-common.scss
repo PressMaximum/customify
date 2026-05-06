@@ -5,6 +5,9 @@
 	.item--inner {
 		width: 100%;
 		max-width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
 	}
 }
 
@@ -17,7 +20,7 @@
 
 .footer--row-inner {
 	.customify-grid {
-		margin: 0 -0.5em;
+		margin: 0;
 	}
 	@include for_device(tablet) {
 		padding-left: 15px;

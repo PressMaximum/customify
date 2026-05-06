@@ -127,7 +127,7 @@ pre {
     max-width: 100%;
 }
 
-code,
+code:not(pre code),
 kbd,
 tt,
 var {
@@ -388,13 +388,15 @@ select {
 }
 
 body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
 body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
 .button:not(.components-button, .customize-partial-edit-shortcut-button),
-button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
 input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
 input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
 .wc-block-cart__submit .wp-element-button,
+.wp-block-button__link,
+.wp-element-button:not(.components-button),
 input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button) {
     border: none;
     cursor: pointer;
@@ -451,12 +453,14 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
 }
 
 body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger),
+body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
 body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
 .button:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="button"]:not(.ed_button),
 input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
 input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+.wp-block-button__link,
+.wp-element-button:not(.components-button),
 input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
     color: #ffffff;
     background: $color_primary;

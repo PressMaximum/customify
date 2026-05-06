@@ -31,16 +31,6 @@
 	}
 }
 
-//.customify-grid {
-//    &.cb-row--desktop {
-//        margin: 0 -0.5em;
-//        > [class*="customify-col-"] {
-//            padding-left: 0.5em;
-//            padding-right: 0.5em;
-//        }
-//    }
-//}
-
 .layout-fullwidth {
 	.customify-container {
 		max-width: initial;
@@ -50,7 +40,7 @@
 .header--row {
 	.customify-grid {
 		@include for_device(desktop) {
-			margin: 0 -0.5em;
+			margin: 0;
 			[class~="customify-col-"],
 			[class*="customify-col-"],
 			[class*="customify-col_"] {
@@ -60,8 +50,7 @@
 		}
 	}
 
-	.customify-grid {
-	}
+	
 	&.layout-full-contained {
 		.customify-container {
 			background: transparent !important;
@@ -104,8 +93,6 @@
 	}
 	.page-titlebar-inner {
 		width: 100%;
-		padding-left: 1.5em;
-		padding-right: 1.5em;
 	}
 	.titlebar-title {
 		margin-bottom: 0px;
