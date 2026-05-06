@@ -1,0 +1,67 @@
+/* Dropdown — port of .dropdown / .dropdown-menu / .dropdown-item / .menu-dots.
+ * Text-styling inherits WP admin defaults. */
+
+.pm-dropdown {
+	position: relative;
+	margin-left: auto;
+}
+
+.pm-dropdown__trigger {
+	width: 28px;
+	height: 28px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	cursor: pointer;
+	border: 0;
+	background: transparent;
+	padding: 0;
+}
+
+.pm-dropdown__trigger:hover,
+.pm-dropdown--open .pm-dropdown__trigger {
+	background: #f6f7f7;
+}
+
+.pm-dropdown__menu {
+	position: absolute;
+	top: calc( 100% + 4px );
+	min-width: 180px;
+	background: #fff;
+	border: 1px solid var( --pm-color-border-card );
+	border-radius: 6px;
+	box-shadow: 0 6px 20px rgba( 0, 0, 0, 0.08 );
+	padding: 4px;
+	z-index: 100;
+}
+
+.pm-dropdown__menu--right {
+	right: 0;
+}
+
+.pm-dropdown__menu--left {
+	left: 0;
+}
+
+.pm-dropdown__item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	width: 100%;
+	padding: 8px 12px;
+	background: transparent;
+	border: 0;
+	border-radius: 4px;
+	cursor: pointer;
+	text-align: left;
+	font-family: inherit;
+}
+
+.pm-dropdown__item:hover {
+	background: #f6f7f7;
+}
+
+.pm-dropdown__item svg {
+	flex-shrink: 0;
+}

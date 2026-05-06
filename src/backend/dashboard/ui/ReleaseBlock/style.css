@@ -1,0 +1,124 @@
+/* ReleaseBlock + ChangeTag + ChangeList — port of .release-block / .change-tag / .change-list.
+ * Text-styling inherits WP admin defaults; only the change-tag color tints
+ * (green/blue/yellow/purple/red per status) survive since they're semantic. */
+
+.pm-release {
+	border-top: 1px solid #ededef;
+	padding: 22px 24px;
+}
+
+.pm-release:first-of-type {
+	border-top: none;
+}
+
+.pm-release__version {
+	margin: 0 0 14px 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.pm-release__current {
+	background: var( --pm-color-primary-soft );
+	color: var( --pm-color-primary );
+	padding: 2px 8px;
+	border-radius: 3px;
+	text-transform: uppercase;
+}
+
+.pm-release__date {
+	margin-left: auto;
+}
+
+.pm-change-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.pm-change-list li {
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.pm-change-list code {
+	background: #f0f0f1;
+	padding: 1px 5px;
+	border-radius: 3px;
+}
+
+.pm-change-tag {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2px 8px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	flex-shrink: 0;
+	min-width: 70px;
+}
+
+.pm-change-tag--new,
+.pm-change-tag--added {
+	background: #ecfdf5;
+	color: #047857;
+}
+
+.pm-change-tag--updated,
+.pm-change-tag--improved {
+	background: var( --pm-color-primary-soft );
+	color: var( --pm-color-primary );
+}
+
+.pm-change-tag--fixed {
+	background: #fffbf0;
+	color: #92580a;
+}
+
+.pm-change-tag--changed,
+.pm-change-tag--change {
+	background: #f5f3ff;
+	color: #6d28d9;
+}
+
+.pm-change-tag--removed {
+	background: #fef2f2;
+	color: #b91c1c;
+}
+
+.pm-change-tag--notes {
+	background: #f3f4f6;
+	color: #4b5563;
+}
+
+.pm-change-tag--breaking {
+	background: #fef2f2;
+	color: #b91c1c;
+}
+
+/* Load-more wrapper — alignment only; the button is a WP Button. */
+.pm-changelog-more {
+	padding: 18px 24px;
+	border-top: 1px solid #ededef;
+	text-align: center;
+}
+
+@media ( max-width: 600px ) {
+	.pm-release {
+		padding: 18px 16px;
+	}
+	.pm-release__version {
+		flex-wrap: wrap;
+	}
+	.pm-release__date {
+		margin-left: 0;
+		flex-basis: 100%;
+	}
+	.pm-change-tag {
+		min-width: 60px;
+	}
+}

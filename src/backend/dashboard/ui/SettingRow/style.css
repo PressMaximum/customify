@@ -1,0 +1,46 @@
+/* SettingRow — port of .setting-row from sample.
+ * Text-styling inherits WP admin defaults. */
+
+.pm-setting-row {
+	padding: 22px 24px;
+	border-top: 1px solid #ededef;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.pm-setting-row:first-of-type {
+	border-top: none;
+}
+
+.pm-setting-row__info {
+	flex: 1;
+	min-width: 0;
+}
+
+.pm-setting-row__info h4 {
+	margin: 0 0 4px 0;
+}
+
+/* Bumped specificity (0,2,1) so the margin reset beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-setting-row__info p {
+	margin: 0;
+}
+
+.pm-setting-row__info p code {
+	background: #f0f0f1;
+	padding: 1px 5px;
+	border-radius: 3px;
+}
+
+.pm-setting-row__control {
+	flex-shrink: 0;
+}
+
+.pm-setting-row__warning {
+	display: inline-block;
+	margin-top: 4px;
+	color: #b91c1c;
+	font-style: italic;
+}

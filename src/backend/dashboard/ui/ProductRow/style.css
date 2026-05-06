@@ -1,0 +1,63 @@
+/* ProductRow — port of .side-row.product + .pic + .install-link.
+ * Text-styling inherits WP admin defaults. */
+
+.pm-product-row {
+	padding: 14px 22px;
+	border-top: 1px solid #ededef;
+	display: flex;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.pm-product-row:first-of-type {
+	border-top: none;
+}
+
+.pm-product-row__pic {
+	width: 36px;
+	height: 36px;
+	border-radius: 6px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	color: #fff;
+	margin-top: 1px;
+}
+
+.pm-product-row__pic--blue {
+	background: linear-gradient( 135deg, #0769e0, #0a2e54 );
+}
+
+.pm-product-row__pic--purple {
+	background: linear-gradient( 135deg, #7e22ce, #3b0764 );
+}
+
+.pm-product-row__info {
+	flex: 1;
+	min-width: 0;
+}
+
+.pm-product-row__info h5 {
+	margin: 0;
+}
+
+/* Bumped specificity (0,2,1) so the margin override beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-product-row__info p {
+	margin: 2px 0 0 0;
+}
+
+.pm-product-row__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 8px;
+	color: var( --pm-color-primary );
+	text-decoration: none;
+}
+
+.pm-product-row__cta:hover {
+	color: var( --pm-color-primary-dark );
+	text-decoration: none;
+}

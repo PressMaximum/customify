@@ -1,0 +1,19 @@
+/* SettingsLayout — port of .settings-layout from sample */
+
+.pm-settings {
+	display: grid;
+	grid-template-columns: 240px 1fr;
+	gap: 20px;
+	align-items: start;
+}
+
+.pm-settings__content {
+	min-width: 0;
+}
+
+@media ( max-width: 1100px ) {
+	.pm-settings {
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+}

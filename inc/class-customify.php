@@ -459,15 +459,741 @@ class Customify
 		}
 
 		$files = array(
-			'/inc/admin/editor.php',    // Block editor style integration.
-			'/inc/admin/dashboard.php', // Dashboard widgets.
+			'/inc/admin/editor.php',                // Block editor style integration.
+			'/inc/admin/dashboard.php',             // Legacy dashboard — kept for 3rd-party plugin compatibility (Customify_Dashboard class + customify/dashboard/* hooks).
+			'/inc/admin/class-theme-dashboard.php', // React-based top-level dashboard.
 		);
 
 		foreach ($files as $file) {
 			require_once self::$path . $file;
 		}
 
+		add_action('init', array($this, 'boot_theme_dashboard'));
 		add_action('admin_enqueue_scripts', array($this, 'admin_scripts'));
+	}
+
+	/**
+	 * Boot the React-based theme dashboard.
+	 *
+	 * Wrapped in `init` because the `name` config flows through `__()`. WP 6.7+
+	 * warns when translation functions run before text domains are loaded; `init`
+	 * fires after that, so it's the safe entry point.
+	 */
+	public function boot_theme_dashboard()
+	{
+		if (! class_exists('Customify_Theme_Dashboard')) {
+			return;
+		}
+		Customify_Theme_Dashboard::init(array(
+			'slug'        => 'customify',
+			'name'        => __('Customify', 'customify'),
+			'menu_title'  => __('Customify Options', 'customify'),
+			'menu_parent' => 'themes.php', // Nest under Appearance.
+			'version'     => self::$version,
+			'path'        => trailingslashit(self::$path),
+			'url'         => trailingslashit(get_template_directory_uri()),
+			// CSS sits at css/backend/dashboard/style-index.css because the React
+			// entry imports `./style.css`; wp-scripts prepends `style-` to entry-
+			// triggered stylesheet emits. JS + asset.php still use `index`.
+			'css_rel'     => 'build/css/backend/dashboard/style-index.css',
+			// Seed defaults + sanitize from this class so groups added by Pro
+			// (e.g. `pro.assets_compress`) round-trip correctly.
+			'defaults'    => array($this, 'theme_dashboard_defaults'),
+			'sanitize'    => array($this, 'theme_dashboard_sanitize'),
+		));
+
+		// Mirror new dashboard saves back to legacy single-option keys so
+		// downstream consumers (Customizer icon loader, etc.) keep working
+		// without a separate migration pass.
+		add_action('customify/dashboard/saved', array($this, 'theme_dashboard_mirror_to_legacy'));
+
+		// Surface Customify Pro module list + state to the React app and
+		// route the toggle AJAX task into Customify_Pro's enable/disable
+		// helpers. Both are no-ops when the Pro plugin isn't active.
+		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_pro_data'));
+		add_action('customify/dashboard/ajax_task', array($this, 'theme_dashboard_handle_pro_task'));
+
+		// Detect which Welcome > "Things to do" checklist items the user has
+		// already configured so the dashboard can pre-check them.
+		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_todo_status'));
+
+		// Surface the Customify Sites Library plugin's install/activate
+		// state so the Welcome sidebar can render the right CTA.
+		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_sites_plugin'));
+
+		// Per-user "hide Things to do" dismissal — bootstrap reads it,
+		// AJAX task `set_things_to_do_hidden` persists it.
+		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_todo_hidden'));
+		add_action('customify/dashboard/ajax_task', array($this, 'theme_dashboard_handle_todo_hidden'));
+
+		// Welcome sidebar — recommended free plugins from wordpress.org.
+		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_recommend_plugins'));
+	}
+
+	/**
+	 * Default settings shape for the React dashboard. Reads the legacy
+	 * stand-alone options so an upgrade from the old jQuery dashboard
+	 * preserves user choices.
+	 */
+	public function theme_dashboard_defaults()
+	{
+		return array(
+			'icons' => array(
+				'fa_version' => get_option('customify_fa_ver', 'v4'),
+			),
+			'pro' => array(
+				// Customify Pro stores this as 'on'/'off'; we expose it as a
+				// boolean to the React app and convert in the mirror.
+				'assets_compress' => get_option('customify_pro_assets_compress', 'on') === 'on',
+			),
+		);
+	}
+
+	/**
+	 * Sanitize the React dashboard's settings payload.
+	 *
+	 * @param array $incoming Raw settings posted from the client.
+	 * @return array
+	 */
+	public function theme_dashboard_sanitize($incoming)
+	{
+		if (! is_array($incoming)) {
+			$incoming = array();
+		}
+		$defaults = $this->theme_dashboard_defaults();
+		$out      = array();
+
+		// Icons group.
+		$icons_in     = isset($incoming['icons']) && is_array($incoming['icons']) ? $incoming['icons'] : array();
+		$out['icons'] = array(
+			'fa_version' => in_array(
+				isset($icons_in['fa_version']) ? $icons_in['fa_version'] : '',
+				array('v4', 'v6', 'v456'),
+				true
+			)
+				? $icons_in['fa_version']
+				: $defaults['icons']['fa_version'],
+		);
+
+		// Pro group.
+		$pro_in     = isset($incoming['pro']) && is_array($incoming['pro']) ? $incoming['pro'] : array();
+		$out['pro'] = array(
+			'assets_compress' => isset($pro_in['assets_compress'])
+				? (bool) $pro_in['assets_compress']
+				: $defaults['pro']['assets_compress'],
+		);
+
+		return $out;
+	}
+
+	/**
+	 * After the React dashboard saves, copy the relevant fields back to the
+	 * legacy single-key options the rest of the theme reads from.
+	 *
+	 * @param array $sanitized The sanitized settings just saved.
+	 */
+	public function theme_dashboard_mirror_to_legacy($sanitized)
+	{
+		if (! is_array($sanitized)) {
+			return;
+		}
+		if (isset($sanitized['icons']['fa_version'])) {
+			update_option('customify_fa_ver', $sanitized['icons']['fa_version']);
+		}
+		// Mirror Pro's "Combine module assets" toggle into the option key
+		// Customify Pro reads from ('on'|'off' — not bool). Then ask the Pro
+		// asset compiler to clear its cache so the new mode takes effect on
+		// next page load.
+		if (isset($sanitized['pro']['assets_compress'])) {
+			$flag = $sanitized['pro']['assets_compress'] ? 'on' : 'off';
+			update_option('customify_pro_assets_compress', $flag);
+			if (class_exists('Customify_Pro_Assets')
+				&& method_exists('Customify_Pro_Assets', 'get_instance')
+			) {
+				$assets = Customify_Pro_Assets::get_instance();
+				if (is_object($assets) && method_exists($assets, 'clear')) {
+					$assets->clear();
+				}
+			}
+		}
+	}
+
+	/**
+	 * Inject Customify Pro module list + on/off state into the React app's
+	 * bootstrap window object.
+	 *
+	 * Output shape (only present when the Pro plugin is loaded):
+	 *   proActive:  bool
+	 *   proModules: [
+	 *     { classKey, name, description, docHref, enabled, parent, subModules: [classKey] },
+	 *     ...
+	 *   ]
+	 *
+	 * @param array $data Existing bootstrap data.
+	 * @return array
+	 */
+	public function theme_dashboard_inject_pro_data($data)
+	{
+		$pro = $this->get_pro_instance();
+		if (! $pro) {
+			$data['proActive']  = false;
+			$data['proModules'] = array();
+			return $data;
+		}
+
+		$legacy_url = admin_url('admin.php?page=customify-legacy');
+		$modules    = array();
+		foreach ($pro->modules as $class_name => $args) {
+			// Pro renders a per-module Settings page only when the module
+			// class implements settings(). Today only Typekit does — but
+			// detection is generic so future modules light up automatically.
+			$has_settings = class_exists($class_name) && method_exists($class_name, 'settings');
+			$modules[] = array(
+				'classKey'    => $class_name,
+				'name'        => isset($args['name']) ? (string) $args['name'] : $class_name,
+				'description' => isset($args['desc']) ? (string) $args['desc'] : '',
+				'docHref'     => isset($args['doc_link']) ? (string) $args['doc_link'] : '',
+				'enabled'     => (bool) $pro->is_enabled_module($class_name),
+				'canToggle'   => isset($args['can_toggle']) ? (bool) $args['can_toggle'] : true,
+				'parent'      => isset($args['parent']) && $args['parent'] ? (string) $args['parent'] : null,
+				'subModules'  => isset($args['sub_modules']) && is_array($args['sub_modules'])
+					? array_values($args['sub_modules'])
+					: array(),
+				'hasSettings' => $has_settings,
+				'settingsUrl' => $has_settings
+					? add_query_arg(array('module' => $class_name), $legacy_url)
+					: '',
+			);
+		}
+
+		$data['proActive']  = true;
+		$data['proModules'] = $modules;
+
+		// Asset combiner status — disables the Performance toggle when the
+		// save dir isn't writable, matches the legacy Pro dashboard's UX.
+		if (class_exists('Customify_Pro_Assets')
+			&& method_exists('Customify_Pro_Assets', 'get_instance')
+		) {
+			$assets_instance = Customify_Pro_Assets::get_instance();
+			if (is_object($assets_instance) && property_exists($assets_instance, 'save_dir')) {
+				$data['proAssetsSavePath'] = (string) $assets_instance->save_dir;
+				$data['proAssetsWritable'] = (bool) is_writable($assets_instance->save_dir);
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Handle the `set_module_state` AJAX task from the React dashboard.
+	 *
+	 * Expects POST: class_name (string), enabled (truthy).
+	 * Calls into Customify_Pro::enable_module() / disable_module() then
+	 * responds with the refreshed flag. Other tasks fall through.
+	 *
+	 * @param string $task Sanitized task key from ajax_dispatch().
+	 */
+	public function theme_dashboard_handle_pro_task($task)
+	{
+		if (! in_array($task, array('set_module_state', 'get_module_settings', 'set_module_settings'), true)) {
+			return;
+		}
+		$pro = $this->get_pro_instance();
+		if (! $pro) {
+			wp_send_json_error('pro_inactive', 400);
+		}
+
+		$class_name = isset($_POST['class_name']) ? sanitize_text_field(wp_unslash($_POST['class_name'])) : '';
+		if (! $class_name || ! isset($pro->modules[$class_name])) {
+			wp_send_json_error('unknown_module', 400);
+		}
+
+		switch ($task) {
+			case 'set_module_state':
+				$enabled = isset($_POST['enabled']) ? rest_sanitize_boolean(wp_unslash($_POST['enabled'])) : false;
+				if ($enabled) {
+					$pro->enable_module($class_name);
+				} else {
+					$pro->disable_module($class_name);
+				}
+				wp_send_json_success(array(
+					'classKey' => $class_name,
+					'enabled'  => (bool) $pro->is_enabled_module($class_name),
+				));
+				break;
+
+			case 'get_module_settings':
+				$module = $this->resolve_pro_module_instance($pro, $class_name);
+				if (! $module || ! method_exists($module, 'settings')) {
+					wp_send_json_error('no_settings', 400);
+				}
+				wp_send_json_success(array(
+					'fields' => $this->normalize_pro_module_fields($module->settings()),
+					'values' => method_exists($module, 'get_settings') ? (array) $module->get_settings() : array(),
+				));
+				break;
+
+			case 'set_module_settings':
+				$module = $this->resolve_pro_module_instance($pro, $class_name);
+				if (! $module || ! method_exists($module, 'save')) {
+					wp_send_json_error('no_settings', 400);
+				}
+				$raw    = isset($_POST['payload']) ? wp_unslash($_POST['payload']) : '';
+				$values = is_string($raw) ? json_decode($raw, true) : array();
+				if (! is_array($values)) {
+					$values = array();
+				}
+				$module->save($this->sanitize_pro_module_values($module->settings(), $values));
+				if (method_exists($module, 'after_save')) {
+					$module->after_save($this);
+				}
+				do_action('customify-pro/after-module-saved', $this);
+				wp_send_json_success(array(
+					'values' => method_exists($module, 'get_settings') ? (array) $module->get_settings() : array(),
+				));
+				break;
+		}
+	}
+
+	/**
+	 * Resolve a Pro module instance — prefer the one Pro instantiated at
+	 * boot (active modules), fall back to a fresh `new $class_name()` so we
+	 * can read settings even on the first request after enabling.
+	 *
+	 * @param object $pro
+	 * @param string $class_name
+	 * @return object|null
+	 */
+	private function resolve_pro_module_instance($pro, $class_name)
+	{
+		if (method_exists($pro, 'get_module')) {
+			$module = $pro->get_module($class_name, true);
+			if (is_object($module)) {
+				return $module;
+			}
+		}
+		if (class_exists($class_name)) {
+			if (method_exists($class_name, 'get_instance')) {
+				return $class_name::get_instance();
+			}
+			return new $class_name();
+		}
+		return null;
+	}
+
+	/**
+	 * Convert Pro's settings() schema into a JSON-friendly shape for the
+	 * React modal: each select field's options array becomes a list of
+	 * `{value, label}` pairs.
+	 *
+	 * @param array $fields
+	 * @return array
+	 */
+	private function normalize_pro_module_fields($fields)
+	{
+		if (! is_array($fields)) {
+			return array();
+		}
+		$out = array();
+		foreach ($fields as $field) {
+			if (! is_array($field)) {
+				continue;
+			}
+			$normalized = array(
+				'type'    => isset($field['type']) ? (string) $field['type'] : 'text',
+				'name'    => isset($field['name']) ? (string) $field['name'] : '',
+				'label'   => $this->decode_pro_label(
+					isset($field['label']) ? $field['label'] : (isset($field['title']) ? $field['title'] : '')
+				),
+				// `desc` is allowed to carry simple HTML (e.g. an <a> link)
+				// because the React side parses it explicitly. Leave entities
+				// intact so URLs containing & survive.
+				'desc'    => isset($field['desc']) ? (string) $field['desc'] : '',
+				'content' => isset($field['content']) ? (string) $field['content'] : '',
+			);
+			if ('select' === $normalized['type'] && isset($field['options']) && is_array($field['options'])) {
+				$opts = array();
+				foreach ($field['options'] as $value => $label) {
+					$opts[] = array(
+						'value' => (string) $value,
+						// Pro hand-encodes select labels (e.g. "Use &lt;link&gt; tag")
+						// because the legacy form rendered them as HTML text.
+						// React's <option>{label}</option> writes JS text directly,
+						// so decode here to avoid `&lt;` showing up literally.
+						'label' => $this->decode_pro_label($label),
+					);
+				}
+				$normalized['options'] = $opts;
+			}
+			$out[] = $normalized;
+		}
+		return $out;
+	}
+
+	/**
+	 * Decode HTML entities in a Pro field label so they render correctly when
+	 * React writes them as plain text inside an <option> or <label>.
+	 *
+	 * No tag-stripping: React's text interpolation `{value}` escapes
+	 * angle brackets when it writes them into the DOM, so a decoded
+	 * `<link>` shows up as the literal characters the user expects rather
+	 * than executing as markup.
+	 *
+	 * @param mixed $value
+	 * @return string
+	 */
+	private function decode_pro_label($value)
+	{
+		return html_entity_decode((string) $value, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+	}
+
+	/**
+	 * Drop unknown keys + coerce incoming values to the type advertised by
+	 * the field schema. Pro module's save() trusts its caller, so we
+	 * sanitize at our boundary.
+	 *
+	 * @param array $fields
+	 * @param array $values
+	 * @return array
+	 */
+	private function sanitize_pro_module_values($fields, $values)
+	{
+		if (! is_array($fields) || ! is_array($values)) {
+			return array();
+		}
+		$out = array();
+		foreach ($fields as $field) {
+			if (empty($field['name']) || ! isset($values[$field['name']])) {
+				continue;
+			}
+			$type = isset($field['type']) ? $field['type'] : 'text';
+			$raw  = $values[$field['name']];
+			switch ($type) {
+				case 'select':
+					$allowed = array();
+					if (isset($field['options']) && is_array($field['options'])) {
+						$allowed = array_map('strval', array_keys($field['options']));
+					}
+					$value = sanitize_text_field((string) $raw);
+					if ($allowed && ! in_array($value, $allowed, true)) {
+						$value = isset($allowed[0]) ? $allowed[0] : '';
+					}
+					$out[$field['name']] = $value;
+					break;
+				case 'html':
+					// Display-only field, skip.
+					break;
+				default:
+					$out[$field['name']] = sanitize_text_field((string) $raw);
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Surface a per-item "done" map for the Welcome > Things-to-do checklist.
+	 *
+	 * Detection runs against persisted state (theme_mods + options), not
+	 * against runtime defaults — a setting that just returns the theme's
+	 * default value counts as untouched. Item IDs match the entries in
+	 * src/backend/dashboard/app/data/things-to-do.js.
+	 *
+	 * Filterable via `customify/dashboard/things_to_do_status` so a child
+	 * theme or plugin can override or add detection for custom items.
+	 *
+	 * @param array $data Bootstrap data passed through the filter chain.
+	 * @return array
+	 */
+	public function theme_dashboard_inject_todo_status($data)
+	{
+		$theme_mods    = get_option('theme_mods_' . get_stylesheet());
+		$theme_mods    = is_array($theme_mods) ? $theme_mods : array();
+		$primary_color = isset($theme_mods['global_styling_color_primary'])
+			? $theme_mods['global_styling_color_primary']
+			: '';
+
+		// "Header builder configured" if the user has saved any header_* key
+		// to theme_mods. Cheap because we only look at the persisted blob —
+		// no live get_theme_mod() calls (those would always return defaults).
+		$header_touched = false;
+		foreach (array_keys($theme_mods) as $mod_key) {
+			if (is_string($mod_key) && 0 === strpos($mod_key, 'header_')) {
+				$header_touched = true;
+				break;
+			}
+		}
+
+		$status = array(
+			'logo'           => isset($theme_mods['custom_logo']) && (int) $theme_mods['custom_logo'] > 0,
+			'header-builder' => $header_touched,
+			'styling'        => $primary_color !== '' && $primary_color !== '#235787',
+			'icons'          => false !== get_option('customify_fa_ver', false)
+				|| isset(get_option('customify_dashboard_settings', array())['icons']['fa_version']),
+		);
+
+		/**
+		 * Filter the things-to-do completion map before it ships to the
+		 * React app. Keys are item IDs from things-to-do.js; values are
+		 * boolean "done?" flags.
+		 *
+		 * @param array $status Default detection results.
+		 */
+		$data['thingsToDoStatus'] = (array) apply_filters('customify/dashboard/things_to_do_status', $status);
+
+		return $data;
+	}
+
+	/**
+	 * Bootstrap key for the user's "hide Things to do" dismissal. Per-user
+	 * (user_meta) so each admin can dismiss independently.
+	 *
+	 * @param array $data
+	 * @return array
+	 */
+	public function theme_dashboard_inject_todo_hidden($data)
+	{
+		$user_id                 = get_current_user_id();
+		$data['thingsToDoHidden'] = $user_id
+			? '1' === (string) get_user_meta($user_id, 'customify_things_to_do_hidden', true)
+			: false;
+		return $data;
+	}
+
+	/**
+	 * AJAX handler for `set_things_to_do_hidden` — persists the dismissal
+	 * to user_meta. Expects POST `hidden` (truthy/falsy).
+	 *
+	 * @param string $task
+	 */
+	public function theme_dashboard_handle_todo_hidden($task)
+	{
+		if ('set_things_to_do_hidden' !== $task) {
+			return;
+		}
+		$user_id = get_current_user_id();
+		if (! $user_id) {
+			wp_send_json_error('no_user', 400);
+		}
+		$hidden = isset($_POST['hidden']) ? rest_sanitize_boolean(wp_unslash($_POST['hidden'])) : false;
+		if ($hidden) {
+			update_user_meta($user_id, 'customify_things_to_do_hidden', '1');
+		} else {
+			delete_user_meta($user_id, 'customify_things_to_do_hidden');
+		}
+		wp_send_json_success(array('hidden' => (bool) $hidden));
+	}
+
+	/**
+	 * Build the Welcome sidebar "Recommend Plugins" list.
+	 *
+	 * Mirrors the legacy Customify_Dashboard::box_recommend_plugins(): fetch
+	 * plugin info from wordpress.org via plugins_api (cached 12h in a
+	 * transient), skip already-active plugins, return install/activate
+	 * action URLs for the rest. The plugin list itself stays filterable
+	 * via `customify/recommend-plugins` so the slug list matches the old
+	 * extension point.
+	 *
+	 * @param array $data
+	 * @return array
+	 */
+	public function theme_dashboard_inject_recommend_plugins($data)
+	{
+		$slugs = array(
+			'themeisle-companion',
+			'filebird',
+		);
+		if (function_exists('WC')) {
+			$slugs[] = 'currency-switcher-for-woocommerce';
+			$slugs[] = 'bulk-edit-for-woocommerce';
+		}
+		/** @see Customify_Dashboard::box_recommend_plugins() */
+		$slugs = (array) apply_filters('customify/recommend-plugins', $slugs);
+
+		// Cache key includes the resolved slug list so a filter change
+		// invalidates the transient automatically.
+		$cache_key = 'customify_plugins_info_' . wp_hash(wp_json_encode($slugs));
+		$infos     = get_transient($cache_key);
+		if (false === $infos) {
+			if (! function_exists('plugins_api')) {
+				require_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+			}
+			$infos = array();
+			foreach ($slugs as $slug) {
+				$info = plugins_api(
+					'plugin_information',
+					array('slug' => $slug, 'fields' => array('icons' => true))
+				);
+				if (! is_wp_error($info)) {
+					$infos[$slug] = $info;
+				}
+			}
+			set_transient($cache_key, $infos, 12 * HOUR_IN_SECONDS);
+		}
+
+		if (! function_exists('is_plugin_active')) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$installed_files = array_keys(get_plugins());
+
+		$plugins = array();
+		foreach ($infos as $slug => $info) {
+			if (! is_object($info)) {
+				continue;
+			}
+
+			$plugin_file = $this->resolve_plugin_file($installed_files, $slug);
+			$is_active   = $plugin_file && is_plugin_active($plugin_file);
+
+			// Match legacy behaviour: don't surface already-active plugins.
+			if ($is_active) {
+				continue;
+			}
+
+			$icons    = property_exists($info, 'icons') ? (array) $info->icons : array();
+			$icon_url = '';
+			if (isset($icons['1x'])) {
+				$icon_url = (string) $icons['1x'];
+			} elseif (! empty($icons)) {
+				$icon_url = (string) reset($icons);
+			}
+
+			if ($plugin_file) {
+				$state        = 'installed';
+				$action_url   = wp_nonce_url(
+					'plugins.php?action=activate&plugin=' . urlencode($plugin_file),
+					'activate-plugin_' . $plugin_file
+				);
+				$action_label = __('Activate', 'customify');
+			} else {
+				$state        = 'not-installed';
+				$action_url   = wp_nonce_url(
+					add_query_arg(
+						array('action' => 'install-plugin', 'plugin' => $slug),
+						network_admin_url('update.php')
+					),
+					'install-plugin_' . $slug
+				);
+				$action_label = __('Install Now', 'customify');
+			}
+
+			// wp.org plugin names ship HTML-encoded (e.g. "Plugin &#8211; Add-on",
+			// "Foo &amp; Bar") because the legacy admin UI rendered them as
+			// HTML. React's `{name}` interpolation writes JS text directly so
+			// the entities would show up literally — decode here.
+			$name = isset($info->name) ? (string) $info->name : $slug;
+			$name = html_entity_decode($name, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+
+			$plugins[] = array(
+				'slug'        => $slug,
+				'name'        => $name,
+				'iconUrl'     => $icon_url,
+				'state'       => $state,
+				'actionUrl'   => $action_url,
+				'actionLabel' => $action_label,
+				'detailsUrl'  => 'https://wordpress.org/plugins/' . $slug . '/',
+			);
+		}
+
+		$data['recommendPlugins'] = $plugins;
+		return $data;
+	}
+
+	/**
+	 * Match an installed plugin file (e.g. `slug/slug.php`) by its slug.
+	 *
+	 * @param string[] $installed_files
+	 * @param string   $slug
+	 * @return string|null
+	 */
+	private function resolve_plugin_file($installed_files, $slug)
+	{
+		$prefix = $slug . '/';
+		foreach ($installed_files as $file) {
+			if (0 === strpos($file, $prefix)) {
+				return $file;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Surface the Customify Sites Library plugin state for the Welcome
+	 * sidebar's "Customify ready to import sites" card. Three states:
+	 *
+	 *   - active:        plugin is loaded → CTA links straight to the library page.
+	 *   - installed:     plugin files exist but inactive → CTA activates it (nonce-signed).
+	 *   - not-installed: nothing on disk → CTA points at the GitHub releases page.
+	 *
+	 * @param array $data Bootstrap data passed through the filter chain.
+	 * @return array
+	 */
+	public function theme_dashboard_inject_sites_plugin($data)
+	{
+		if (! function_exists('is_plugin_active')) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
+		$plugin_slug = 'customify-sites-library';
+		$plugin_file = $plugin_slug . '/' . $plugin_slug . '.php';
+		$installed   = is_dir(WP_PLUGIN_DIR . '/' . $plugin_slug);
+		$active      = is_plugin_active($plugin_file);
+
+		$thumb_path = self::$path . '/build/images/admin/sites_thumbnail.jpg';
+		$thumb_url  = file_exists($thumb_path)
+			? trailingslashit(get_template_directory_uri()) . 'build/images/admin/sites_thumbnail.jpg'
+			: '';
+
+		if ($active) {
+			$state        = 'active';
+			$action_url   = add_query_arg(array('page' => 'customify-sites'), admin_url('themes.php'));
+			$action_label = __('View Site Library', 'customify');
+		} elseif ($installed) {
+			$state        = 'installed';
+			$action_url   = wp_nonce_url(
+				add_query_arg(
+					array(
+						'action'        => 'activate',
+						'plugin'        => rawurlencode($plugin_file),
+						'plugin_status' => 'all',
+						'paged'         => '1',
+					),
+					network_admin_url('plugins.php')
+				),
+				'activate-plugin_' . $plugin_file
+			);
+			$action_label = __('Activate Plugin', 'customify');
+		} else {
+			$state        = 'not-installed';
+			$action_url   = 'https://github.com/PressMaximum/customify-sites-library/releases/';
+			$action_label = __('Download Plugin', 'customify');
+		}
+
+		$data['sitesPlugin'] = array(
+			'state'        => $state,
+			'actionUrl'    => $action_url,
+			'actionLabel'  => $action_label,
+			'detailsUrl'   => 'https://github.com/PressMaximum/customify-sites-library',
+			'thumbnailUrl' => $thumb_url,
+		);
+
+		return $data;
+	}
+
+	/**
+	 * Resolve the Customify_Pro singleton if the plugin is loaded.
+	 *
+	 * @return Customify_Pro|null
+	 */
+	private function get_pro_instance()
+	{
+		if (! function_exists('Customify_Pro')) {
+			return null;
+		}
+		$pro = Customify_Pro();
+		if (! $pro || ! is_object($pro) || empty($pro->modules) || ! is_array($pro->modules)) {
+			return null;
+		}
+		return $pro;
 	}
 
 	/**

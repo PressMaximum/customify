@@ -1,0 +1,66 @@
+/* ToggleSwitch — port of .toggle / .slider from sample */
+
+.pm-toggle {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 22px;
+	cursor: pointer;
+}
+
+/* Visually hide the underlying checkbox AND neutralize WP admin's default
+ * `input[type=checkbox]:checked::before` checkmark, which otherwise leaks
+ * through and renders a misaligned tick on top of the toggle slider. */
+.pm-toggle input[type="checkbox"] {
+	position: absolute;
+	width: 0;
+	height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	opacity: 0;
+	appearance: none;
+	-webkit-appearance: none;
+	pointer-events: none;
+}
+
+.pm-toggle input[type="checkbox"]::before,
+.pm-toggle input[type="checkbox"]:checked::before,
+.pm-toggle input[type="checkbox"]:indeterminate::before {
+	content: none !important;
+	display: none !important;
+}
+
+.pm-toggle__slider {
+	position: absolute;
+	inset: 0;
+	background: #c3c4c7;
+	border-radius: 11px;
+	transition: background 0.2s;
+}
+
+.pm-toggle__slider::before {
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	left: 3px;
+	top: 3px;
+	background: #fff;
+	border-radius: 50%;
+	transition: transform 0.2s;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.18 );
+}
+
+.pm-toggle input:checked + .pm-toggle__slider {
+	background: var( --pm-color-primary );
+}
+
+.pm-toggle input:checked + .pm-toggle__slider::before {
+	transform: translateX( 18px );
+}
+
+.pm-toggle input:disabled + .pm-toggle__slider {
+	opacity: 0.55;
+	cursor: not-allowed;
+}

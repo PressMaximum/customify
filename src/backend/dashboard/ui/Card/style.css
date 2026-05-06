@@ -1,0 +1,40 @@
+/* Card — port of .card / .card-header / .card-header h3 from samples */
+
+.pm-card {
+	background: #fff;
+	border: 1px solid var( --pm-color-border-card );
+	border-radius: 8px;
+	/* Clip children to the rounded corners — otherwise child hover/active bgs
+	 * (e.g. .pm-resource-list__row, .pm-product-row, .pm-theme-grid__item)
+	 * paint outside the corner radius. */
+	overflow: hidden;
+}
+
+.pm-card__header {
+	padding: 18px 24px;
+	border-bottom: 1px solid #ededef;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+/* Card title — text-styling (font-size/weight/color/line-height) inherits
+ * from WP admin so this card matches the rest of WP's admin chrome. We
+ * only own the margin reset + inline-flex layout for icon/badge slots. */
+.pm-card__title {
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	margin: 0;
+}
+
+.pm-card__header-right {
+	margin-left: auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.pm-card__body--padded {
+	padding: 18px 24px;
+}

@@ -1,0 +1,160 @@
+/* Hero — port of .welcome-hero / .welcome-hero-left / .welcome-hero-right.
+ * Text-styling on greeting/title/desc inherits WP admin defaults. */
+
+.pm-hero {
+	background: linear-gradient(
+		90deg,
+		#fff 0%,
+		#fff 35%,
+		rgba( 56, 88, 233, 0.06 ) 75%,
+		rgba( 56, 88, 233, 0.14 ) 100%
+	);
+	border: 1px solid var( --pm-color-border-card );
+	border-radius: 8px;
+	overflow: hidden;
+	display: grid;
+	grid-template-columns: 1.1fr 1fr;
+	align-items: stretch;
+	min-height: 320px;
+}
+
+.pm-hero__left {
+	padding: 44px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+/* Bumped specificity (0,2,0) so the margins beat WP admin's default
+ * h1/p rules without !important. Sample: 6px below greeting, 18px below
+ * title. */
+.pm-hero .pm-hero__greeting {
+	margin: 0 0 6px 0;
+}
+
+.pm-hero .pm-hero__title {
+	margin: 0 0 18px 0;
+}
+
+/* Parent-scoped to bump specificity to (0,2,0) so it beats WP admin's
+ * `.form-wrap p, p.description` rule (0,1,1) without needing !important. */
+.pm-hero .pm-hero__desc {
+	margin: 0 0 28px 0;
+	max-width: 480px;
+}
+
+.pm-hero__actions {
+	display: flex;
+	align-items: center;
+	gap: 24px;
+}
+
+.pm-hero__right {
+	padding: 40px;
+	position: relative;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+}
+
+@media ( max-width: 1100px ) {
+	.pm-hero {
+		background: linear-gradient(
+			180deg,
+			#fff 0%,
+			#fff 35%,
+			rgba( 56, 88, 233, 0.08 ) 100%
+		);
+		grid-template-columns: 1fr;
+		min-height: auto;
+	}
+}
+
+@media ( max-width: 600px ) {
+	.pm-hero__left {
+		padding: 28px 24px 0;
+	}
+	.pm-hero__right {
+		padding: 24px;
+	}
+}
+
+/* Preview mock card — used as the default Hero preview */
+.pm-hero-preview {
+	position: relative;
+	z-index: 1;
+	width: 240px;
+	background: #fff;
+	border: 1px solid var( --pm-color-border-card );
+	border-radius: 8px;
+	padding: 14px;
+	box-shadow: 0 8px 24px rgba( 20, 30, 80, 0.06 );
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.pm-hero-preview__bar {
+	height: 6px;
+	border-radius: 3px;
+	background: #e7eaef;
+}
+.pm-hero-preview__bar--lg {
+	width: 70%;
+	background: var( --pm-color-primary );
+	height: 8px;
+}
+.pm-hero-preview__bar--md {
+	width: 90%;
+}
+.pm-hero-preview__bar--sm {
+	width: 60%;
+}
+
+.pm-hero-preview__img {
+	height: 56px;
+	border-radius: 4px;
+	background: linear-gradient( 135deg, #ecefff 0%, #c7d1ff 100% );
+	margin: 4px 0;
+	position: relative;
+	overflow: hidden;
+}
+
+.pm-hero-preview__img::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background:
+		radial-gradient(
+			circle at 30% 40%,
+			rgba( 56, 88, 233, 0.4 ) 0%,
+			transparent 35%
+		),
+		radial-gradient(
+			circle at 70% 60%,
+			rgba( 126, 34, 206, 0.25 ) 0%,
+			transparent 35%
+		);
+}
+
+.pm-hero-preview__row {
+	display: flex;
+	gap: 6px;
+	margin-top: 4px;
+}
+
+.pm-hero-preview__pill {
+	height: 18px;
+	border-radius: 4px;
+	background: var( --pm-color-primary );
+	flex: 0 0 60px;
+}
+
+.pm-hero-preview__pill--outline {
+	background: transparent;
+	border: 1px solid #d6d6da;
+	flex: 0 0 70px;
+}

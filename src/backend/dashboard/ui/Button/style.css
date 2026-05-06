@@ -1,0 +1,22 @@
+/*
+ * WP Button has no inline gap between children — give icon + text a 6px
+ * breathing space. Scoped to .pm-app so it doesn't affect WP admin UI
+ * outside the dashboard.
+ */
+.pm-app .components-button {
+	gap: 6px;
+	padding: 0 16px;
+}
+
+.pm-app .components-button.pm-button--lg {
+	height: 42px;
+	font-size: 14px;
+	font-weight: 700;
+	padding: 0 22px;
+}
+
+.pm-app .components-button.pm-fullwidth {
+	width: 100%;
+	display: inline-flex;
+	justify-content: center;
+}

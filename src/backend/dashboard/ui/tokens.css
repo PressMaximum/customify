@@ -1,0 +1,51 @@
+/*
+ * PressMaximum design tokens. All values scoped to .pm-app so the dashboard
+ * can live inside WP admin without leaking into other pages.
+ *
+ * Primary tones reference the WordPress admin color scheme variables (set
+ * by the user's selected admin color: Modern, Blue, Coffee, Light, etc.).
+ * Hardcoded fallbacks ensure the dashboard still looks correct outside
+ * an admin context (e.g. unit-testing the components in isolation).
+ *
+ * Neutrals (text, border, bg) stay hardcoded — WordPress doesn't expose
+ * runtime CSS vars for those.
+ */
+
+.pm-app {
+	/* WP admin neutrals (palette source: WP core colors-fresh.css) */
+	--pm-color-text: #1d2327;
+	--pm-color-text-muted: #50575e;
+	--pm-color-text-light: #8c8f94;
+	--pm-color-border: #c3c4c7;
+	--pm-color-border-light: #dcdcde;
+	--pm-color-border-card: #e0e0e3;
+	--pm-color-bg: #fff;
+	--pm-color-bg-muted: #f0f0f1;
+
+	/* Link colors (WP blue) */
+	--pm-color-link: rgba(var(--wp-admin-theme-color--rgb), 0.8);
+	--pm-color-link-hover: rgba(var(--wp-admin-theme-color--rgb), 1);
+
+	/* Primary — follows the user's WP admin color scheme via the runtime
+	 * --wp-admin-theme-color* vars. Fallbacks match the Modern scheme. */
+	--pm-color-primary: var( --wp-admin-theme-color, #3858e9 );
+	--pm-color-primary-dark: var( --wp-admin-theme-color-darker-10, #2145e6 );
+	--pm-color-primary-darker: var( --wp-admin-theme-color-darker-20, #183ad6 );
+	--pm-color-primary-rgb: var(
+		--wp-admin-theme-color--rgb,
+		56,
+		88,
+		233
+	);
+	/* 8% tint over white — replaces the legacy hardcoded #ecefff so the soft
+	 * surface follows the user's admin color scheme too. */
+	--pm-color-primary-soft: rgba( var( --pm-color-primary-rgb ), 0.08 );
+
+	/* Status accents */
+	--pm-color-warning: #f0b849;
+	--pm-color-success: #00a32a;
+	--pm-color-danger: #d63638;
+
+	/* WP admin focus ring width — exposed so primitives apply it consistently. */
+	--pm-focus-width: var( --wp-admin-border-width-focus, 2px );
+}

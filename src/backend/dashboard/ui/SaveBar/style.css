@@ -1,0 +1,24 @@
+/* SaveBar — port of .save-bar from sample. Text inherits WP admin defaults. */
+
+.pm-save-bar {
+	background: #fff;
+	border-top: 1px solid var( --pm-color-border-card );
+	padding: 14px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 10px;
+	border-radius: 0 0 8px 8px;
+	margin-top: -1px;
+}
+
+.pm-save-bar__status {
+	margin-right: auto;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.pm-save-bar--error .pm-save-bar__status {
+	color: var( --pm-color-danger );
+}

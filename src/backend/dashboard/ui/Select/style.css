@@ -1,0 +1,26 @@
+/* Select — port of .select from sample (native select with custom chevron) */
+
+.pm-select {
+	height: 36px;
+	padding: 0 30px 0 12px;
+	/* Hardcoded WP admin form-border so the control still looks right when
+	 * rendered inside Modal (portal mounted on document.body, outside the
+	 * .pm-app token scope where --pm-color-border is declared). */
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	font-size: 13px;
+	color: #1d2327;
+	cursor: pointer;
+	appearance: none;
+	background-image: url( "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%2350575e' d='M6 8L2 4h8z'/></svg>" );
+	background-repeat: no-repeat;
+	background-position: right 10px center;
+	min-width: 140px;
+	font-family: inherit;
+}
+
+.pm-select:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}

@@ -1,0 +1,55 @@
+/* Pro module settings modal — field rows + form controls.
+ *
+ * Modal mounts via createPortal to document.body, OUTSIDE the .pm-app token
+ * scope, so the design tokens declared in ui/tokens.css don't reach this
+ * subtree. All colors are hardcoded to the WP admin neutrals palette
+ * (mirroring the values from tokens.css) so the control reads correctly
+ * regardless of where it renders.
+ */
+
+.pm-module-modal__field {
+	margin-bottom: 18px;
+}
+
+.pm-module-modal__field:last-child {
+	margin-bottom: 0;
+}
+
+.pm-module-modal__label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 6px;
+	color: #1d2327;
+}
+
+.pm-module-modal__input {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	font-size: 14px;
+	line-height: 1.4;
+	background: #fff;
+	color: #1d2327;
+	box-sizing: border-box;
+}
+
+.pm-module-modal__input:focus {
+	outline: none;
+	border-color: #2271b1;
+	box-shadow: 0 0 0 2px rgba( 34, 113, 177, 0.18 );
+}
+
+.pm-module-modal__html {
+	padding: 8px 12px;
+	background: #f6f7f7;
+	border: 1px solid #dcdcde;
+	border-radius: 4px;
+	font-size: 13px;
+	color: #1d2327;
+}
+
+.pm-module-modal__html ul {
+	margin: 0;
+	padding-left: 18px;
+}

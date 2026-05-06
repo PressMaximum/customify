@@ -1,0 +1,21 @@
+/* Pill — port of .brand-pill / .brand-pill.free from samples/Dashboard.html.
+ * Text-styling inherits WP admin defaults; only the colored backgrounds
+ * (neutral / green / blue) survive since they encode status. */
+
+.pm-pill {
+	background: #f0f0f1;
+	padding: 3px 7px;
+	border-radius: 3px;
+	display: inline-flex;
+	align-items: center;
+}
+
+.pm-pill--free {
+	background: #e7f5ed;
+	color: #055d20;
+}
+
+.pm-pill--pro {
+	background: #e6f0fc;
+	color: #1e40af;
+}

@@ -1,0 +1,61 @@
+/* Tabs — port of .bsify-tabs / .bsify-tab from samples/Dashboard.html.
+ * Text-styling inherits WP admin defaults; only the active-state border
+ * + transition survive. */
+
+.pm-tabs {
+	display: flex;
+	align-items: stretch;
+	margin: 0 auto;
+	gap: 0;
+}
+
+.pm-tabs__item {
+	padding: 0 4px;
+	margin: 0 14px;
+	display: inline-flex;
+	align-items: center;
+	cursor: pointer;
+	border-bottom: 2px solid transparent;
+	margin-bottom: -1px;
+	text-decoration: none;
+	transition: color 0.12s, border-color 0.12s;
+	/* Tabs are <a> elements but read as nav, not links — use the regular WP
+	 * admin text color instead of the theme blue applied to <a> in base.css. */
+	color: var( --pm-color-text );
+}
+
+.pm-tabs__item:hover {
+	color: var( --pm-color-text );
+	text-decoration: none;
+}
+
+/* Override WP admin's default a:focus ring (box-shadow 2px blue + outline).
+ * The tabs have their own visual focus signal via border-bottom on the active
+ * state, so the WP ring would just look like noise. Specificity (0,2,0) beats
+ * WP's a:focus rule (0,1,1); we still set both properties to none explicitly
+ * because some color schemes set them at higher specificity. */
+.pm-tabs__item:focus,
+.pm-tabs__item:focus-visible {
+	box-shadow: none;
+	outline: none;
+}
+
+.pm-tabs__item--active {
+	border-bottom-color: var( --pm-color-primary );
+	font-weight: 600;
+}
+
+.pm-tabs__item:first-child {
+	margin-left: 0;
+}
+
+.pm-tabs__item:last-child {
+	margin-right: 0;
+}
+
+@media ( max-width: 600px ) {
+	.pm-tabs__item {
+		margin: 0 12px;
+		min-height: 44px;
+	}
+}

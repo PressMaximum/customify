@@ -1,0 +1,42 @@
+/* ResourceList — port of .side-row. Text-styling inherits WP admin defaults. */
+
+.pm-resource-list__row {
+	padding: 12px 22px;
+	border-top: 1px solid #ededef;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.pm-resource-list__row:first-of-type {
+	border-top: none;
+}
+
+.pm-resource-list__row:hover {
+	background: #fafbfc;
+	text-decoration: none;
+	color: var( --pm-color-primary );
+}
+
+.pm-resource-list__icon {
+	width: 18px;
+	height: 18px;
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pm-resource-list__label {
+	flex: 1;
+}
+
+.pm-resource-list__ext {
+	margin-left: auto;
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}

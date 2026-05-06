@@ -1,0 +1,19 @@
+/* ReviewCard — port of .side-review-body + .stars.
+ * Text-styling inherits WP admin defaults. */
+
+.pm-review {
+	padding: 18px 22px;
+}
+
+.pm-review__stars {
+	display: flex;
+	gap: 2px;
+	margin-bottom: 10px;
+	color: var( --pm-color-warning );
+}
+
+/* Bumped specificity (0,2,1) so the margin override beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-review p {
+	margin: 0 0 12px 0;
+}

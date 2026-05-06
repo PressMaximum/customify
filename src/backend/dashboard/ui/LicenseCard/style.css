@@ -1,0 +1,61 @@
+/* LicenseCard — port of .side-license + .price-line.
+ * Text-styling inherits WP admin defaults; only the brand container colors
+ * (yellow tones) survive since they're functional not typographic. */
+
+.pm-license {
+	background: #fffbf0;
+	border: 1px solid #f0d57c;
+	border-radius: 8px;
+	padding: 22px;
+}
+
+.pm-license__title {
+	margin: 0 0 6px 0;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+/* Bumped specificity (0,2,0) so margins beat WP's `p.description` rule
+ * (0,1,1) without !important. Same pattern for __footnote below. */
+.pm-app .pm-license__tagline {
+	margin: 0 0 14px 0;
+}
+
+.pm-license__features {
+	list-style: none;
+	margin: 0 0 18px 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 9px;
+}
+
+.pm-license__features li {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.pm-license__features li svg {
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+.pm-license__price-line {
+	display: flex;
+	align-items: baseline;
+	gap: 6px;
+	margin-bottom: 4px;
+}
+
+.pm-app .pm-license__footnote {
+	margin: 0 0 14px 0;
+}
+
+/* The CTA renders as a WP Button — stretch full width and center its label
+ * to match the sample's .side-license .btn rule. */
+.pm-license .components-button {
+	width: 100%;
+	justify-content: center;
+}

@@ -1,0 +1,28 @@
+/*
+ * Base resets scoped to .pm-app. Font-family, font-size, line-height, and
+ * text color all inherit from WP admin's body — the dashboard reads as a
+ * native admin page. Only the box-sizing reset survives here.
+ */
+
+.pm-app,
+.pm-app * {
+	box-sizing: border-box;
+}
+
+/*
+ * Use :where() to give the scope wrapper zero specificity contribution.
+ * Effective specificity becomes (0,0,1) — identical to a plain `a {}` rule —
+ * so any class-styled anchor (.pm-btn--primary, .pm-hero-cta, .pm-setup-btn,
+ * .pm-license__cta, .pm-tabs__item, .pm-resource-list__row, etc.) trumps
+ * this default with its own (0,1,0)+ class. Mirrors how the sample's plain
+ * `a { color: var(--wp-blue) }` works alongside `.btn-primary { color: #fff }`.
+ */
+:where( .pm-app ) a {
+	color: var( --pm-color-link );
+	text-decoration: none;
+}
+
+:where( .pm-app ) a:hover {
+	color: var( --pm-color-link-hover );
+	text-decoration: underline;
+}
