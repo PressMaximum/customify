@@ -5,14 +5,11 @@
  */
 .pm-app .components-button {
 	gap: 6px;
-	padding: 0 16px;
 }
 
 .pm-app .components-button.pm-button--lg {
 	height: 42px;
 	font-size: 14px;
-	font-weight: 700;
-	padding: 0 22px;
 }
 
 .pm-app .components-button.pm-fullwidth {
