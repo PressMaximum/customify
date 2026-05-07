@@ -19,6 +19,9 @@
 	cursor: pointer;
 	text-decoration: none;
 	margin-bottom: 2px;
+	/* Match the top Tabs strip: inactive items use the WP admin text color
+	 * instead of inheriting the theme blue applied to <a> in base.css. */
+	color: var( --pm-color-text );
 }
 
 .pm-subnav__item:hover {
