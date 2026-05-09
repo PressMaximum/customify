@@ -7,7 +7,7 @@ Tags: custom-background, custom-logo, custom-menu, featured-images, flexible-hea
 Requires at least: 4.9
 Tested up to: 6.7.1
 Requires PHP: 5.6
-Stable tag: 0.4.14
+Stable tag: 0.4.15
 
 == Description ==
 
@@ -118,6 +118,20 @@ License: GPLv3, https://github.com/woocommerce/woocommerce/blob/trunk/LICENSE.md
 Source: https://github.com/woocommerce/woocommerce
 
 == Changelog ==
+
+= 0.4.15 =
+* NEW: Pro modules can be configured directly from the Customify dashboard — Typekit settings open inline; other modules deep-link to the matching Customizer panel or CPT screen.
+* NEW: Dashboard recognises module dependencies — Pro modules that need WooCommerce now lock off automatically and show a clear "Requires WooCommerce" hint when the plugin is missing.
+* NEW: Auto-recovery for WooCommerce-dependent Pro modules: if WooCommerce is deactivated while a WC module is enabled, the theme silently disables the module on the next admin page load and surfaces a one-time admin notice.
+* IMPROVED: Settings modal in the dashboard now refreshes dynamic field content after save and surfaces server-side notices (e.g. Typekit "Could not load font file") inline instead of swallowing them.
+* IMPROVED: Settings modal renders many more field types (checkbox / number / color / textarea / radio group / image select / heading) so future Pro module schemas light up automatically.
+* IMPROVED: .select2 dropdowns inside Customizer field rows now span the full row width.
+* FIXED: Three Customizer AJAX endpoints (get_icons, fonts, editor CSS) now require a valid nonce + capability — closes vulnerabilities surfaced by the WordPress.org theme review audit.
+* FIXED: Eliminated a fatal that occurred on the frontend when a WooCommerce-dependent Pro module was enabled but WooCommerce was inactive (wc_get_page_id undefined).
+* FIXED: readme.txt — bump Stable tag, add Requires PHP, merge full changelog history, credit Select2 / Font Awesome 6 / WooCommerce icons.
+* FIXED: style.css — add the missing "Requires at least" header.
+* FIXED: Release zip now excludes .DS_Store / Thumbs.db / desktop.ini.
+* FIXED: Vendor minified assets (Select2, FitVids) now ship with their non-minified source counterparts as required by WordPress.org theme review.
 
 = 0.4.14 =
 * NEW: Transparent header feature.
