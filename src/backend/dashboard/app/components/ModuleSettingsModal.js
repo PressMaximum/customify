@@ -14,43 +14,235 @@ import { __, sprintf } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
-import { Modal, Button, Select } from '../../ui';
-import {
-	getModuleSettings,
-	setModuleSettings,
-} from '../api/pro-modules';
+import { Modal, Button, Select, ToggleSwitch } from '../../ui';
+import { getModuleSettings, setModuleSettings } from '../api/pro-modules';
 
 function FieldControl( { field, value, onChange } ) {
-	if ( field.type === 'select' ) {
+	const type = field.type || 'text';
+
+	// Display-only types render their content/title and have no input.
+	if ( type === 'html' ) {
+		return (
+			<div
+				className="pm-module-modal__html"
+				dangerouslySetInnerHTML={ { __html: field.content || '' } }
+			/>
+		);
+	}
+	if ( type === 'heading' || type === 'section' || type === 'panel' ) {
+		return (
+			<div className="pm-module-modal__heading">
+				{ field.label || field.content || '' }
+			</div>
+		);
+	}
+
+	if ( type === 'select' ) {
 		const options = field.options || [];
 		const fallback = options.length ? options[ 0 ].value : '';
 		return (
 			<Select
-				value={ value != null ? String( value ) : fallback }
+				value={
+					value !== null && value !== undefined
+						? String( value )
+						: fallback
+				}
 				onChange={ onChange }
 				options={ options }
 				ariaLabel={ field.label }
 			/>
 		);
 	}
-	if ( field.type === 'html' ) {
-		// Display-only block — Typekit uses this to surface the loaded
-		// fonts list. Trust the server-side content (sanitized by Pro
-		// before it ever reaches us).
+
+	if (
+		type === 'radio_group' ||
+		type === 'text_align' ||
+		type === 'text_align_no_justify'
+	) {
+		const options = field.options || [];
+		const current =
+			value !== null && value !== undefined ? String( value ) : '';
 		return (
-			<div
-				className="pm-module-modal__html"
-				// eslint-disable-next-line react/no-danger
-				dangerouslySetInnerHTML={ { __html: field.content || '' } }
+			<div className="pm-module-modal__radio-group" role="radiogroup">
+				{ options.map( ( opt ) => (
+					<label
+						key={ opt.value }
+						className={
+							'pm-module-modal__radio' +
+							( current === String( opt.value )
+								? ' is-active'
+								: '' )
+						}
+					>
+						<input
+							type="radio"
+							name={ field.name }
+							value={ opt.value }
+							checked={ current === String( opt.value ) }
+							onChange={ () => onChange( opt.value ) }
+						/>
+						<span>{ opt.label }</span>
+					</label>
+				) ) }
+			</div>
+		);
+	}
+
+	if ( type === 'image_select' ) {
+		const options = field.options || [];
+		const current =
+			value !== null && value !== undefined ? String( value ) : '';
+		return (
+			<div className="pm-module-modal__image-select">
+				{ options.map( ( opt ) => (
+					<button
+						type="button"
+						key={ opt.value }
+						className={
+							'pm-module-modal__image-option' +
+							( current === String( opt.value )
+								? ' is-active'
+								: '' )
+						}
+						onClick={ () => onChange( opt.value ) }
+						aria-pressed={ current === String( opt.value ) }
+						aria-label={ opt.label }
+					>
+						{ opt.image && (
+							<img src={ opt.image } alt={ opt.label } />
+						) }
+						<span>{ opt.label }</span>
+					</button>
+				) ) }
+			</div>
+		);
+	}
+
+	if ( type === 'checkbox' ) {
+		const checked =
+			value === true ||
+			value === 1 ||
+			value === '1' ||
+			value === 'on' ||
+			value === 'true';
+		return (
+			<div className="pm-module-modal__toggle">
+				<ToggleSwitch
+					checked={ checked }
+					onChange={ ( next ) => onChange( next ? 1 : 0 ) }
+					ariaLabel={ field.label }
+				/>
+				{ field.checkbox_label && (
+					<span className="pm-module-modal__toggle-label">
+						{ field.checkbox_label }
+					</span>
+				) }
+			</div>
+		);
+	}
+
+	if ( type === 'number' || type === 'slider' ) {
+		const min = field.min !== undefined ? Number( field.min ) : undefined;
+		const max = field.max !== undefined ? Number( field.max ) : undefined;
+		const step = field.step !== undefined ? Number( field.step ) : 1;
+		return (
+			<input
+				type="number"
+				className="pm-module-modal__input"
+				value={
+					value !== null && value !== undefined && value !== ''
+						? Number( value )
+						: ''
+				}
+				min={ min }
+				max={ max }
+				step={ step }
+				placeholder={ field.placeholder }
+				onChange={ ( e ) => onChange( e.target.value ) }
+				aria-label={ field.label }
 			/>
 		);
 	}
-	// text + unknown types
+
+	if ( type === 'color' ) {
+		const current =
+			typeof value === 'string' && value !== '' ? value : '#000000';
+		return (
+			<div className="pm-module-modal__color">
+				<input
+					type="color"
+					value={ current.startsWith( '#' ) ? current : '#000000' }
+					onChange={ ( e ) => onChange( e.target.value ) }
+					aria-label={ field.label }
+				/>
+				<input
+					type="text"
+					className="pm-module-modal__input"
+					value={ typeof value === 'string' ? value : '' }
+					placeholder="#rrggbb / rgba(...)"
+					onChange={ ( e ) => onChange( e.target.value ) }
+				/>
+			</div>
+		);
+	}
+
+	if (
+		type === 'textarea' ||
+		type === 'custom_html' ||
+		type === 'text/html'
+	) {
+		return (
+			<textarea
+				className="pm-module-modal__textarea"
+				rows={ field.rows ? Number( field.rows ) : 5 }
+				value={
+					value !== null && value !== undefined ? String( value ) : ''
+				}
+				placeholder={ field.placeholder }
+				onChange={ ( e ) => onChange( e.target.value ) }
+				aria-label={ field.label }
+			/>
+		);
+	}
+
+	if ( type === 'email' ) {
+		return (
+			<input
+				type="email"
+				className="pm-module-modal__input"
+				value={
+					value !== null && value !== undefined ? String( value ) : ''
+				}
+				placeholder={ field.placeholder }
+				onChange={ ( e ) => onChange( e.target.value ) }
+				aria-label={ field.label }
+			/>
+		);
+	}
+
+	if ( type === 'hidden' ) {
+		return (
+			<input
+				type="hidden"
+				value={
+					value !== null && value !== undefined ? String( value ) : ''
+				}
+				readOnly
+			/>
+		);
+	}
+
+	// `text` and any unknown future type fall through to a text input so
+	// new schema additions don't blank out the row before the modal learns
+	// how to render them.
 	return (
 		<input
 			type="text"
 			className="pm-module-modal__input"
-			value={ value != null ? String( value ) : '' }
+			value={
+				value !== null && value !== undefined ? String( value ) : ''
+			}
+			placeholder={ field.placeholder }
 			onChange={ ( e ) => onChange( e.target.value ) }
 			aria-label={ field.label }
 		/>
@@ -61,6 +253,8 @@ function FieldControl( { field, value, onChange } ) {
  * Render Pro's `desc` string. Pro stores some descs with inline HTML (e.g.
  * Typekit's link to fonts.adobe.com), so let `<a>` tags through but not
  * arbitrary markup.
+ * @param root0
+ * @param root0.html
  */
 function FieldDescription( { html } ) {
 	if ( ! html ) {
@@ -109,7 +303,9 @@ export default function ModuleSettingsModal( {
 		setStatus( 'loading' );
 		getModuleSettings( moduleKey )
 			.then( ( res ) => {
-				if ( ! alive ) return;
+				if ( ! alive ) {
+					return;
+				}
 				setFields( Array.isArray( res?.fields ) ? res.fields : [] );
 				setValues(
 					res?.values && typeof res.values === 'object'
@@ -119,7 +315,9 @@ export default function ModuleSettingsModal( {
 				setStatus( 'ready' );
 			} )
 			.catch( () => {
-				if ( alive ) setStatus( 'error' );
+				if ( alive ) {
+					setStatus( 'error' );
+				}
 			} );
 		return () => {
 			alive = false;
@@ -134,22 +332,65 @@ export default function ModuleSettingsModal( {
 		setStatus( 'saving' );
 		setModuleSettings( moduleKey, values )
 			.then( ( res ) => {
-				const noticeId = `pm-modal-${ Date.now() }`;
-				createNotice(
-					'success',
-					sprintf(
-						/* translators: %s: module name */
-						__( '"%s" settings saved.', 'customify' ),
-						moduleName
-					),
-					{ type: 'snackbar', id: noticeId }
-				);
-				setTimeout( () => removeNotice( noticeId ), 3000 );
+				// Pro modules can return server-rendered notices from
+				// after_save() (e.g. Typekit's "Could not load font file"
+				// when the kit_id is wrong). Surface each one as a snackbar
+				// and keep the modal open if any are errors so the user
+				// has a chance to fix the input.
+				const notices = Array.isArray( res?.notices )
+					? res.notices
+					: [];
+				let hasError = false;
+				notices.forEach( ( n ) => {
+					if ( ! n || ! n.message ) {
+						return;
+					}
+					const type = [
+						'success',
+						'error',
+						'warning',
+						'info',
+					].includes( n.type )
+						? n.type
+						: 'info';
+					if ( type === 'error' ) {
+						hasError = true;
+					}
+					const id = `pm-modal-after-save-${ Date.now() }-${ Math.random() }`;
+					createNotice( type, n.message, {
+						type: 'snackbar',
+						id,
+					} );
+					setTimeout( () => removeNotice( id ), 4000 );
+				} );
+
+				if ( ! hasError ) {
+					const okId = `pm-modal-${ Date.now() }`;
+					createNotice(
+						'success',
+						sprintf(
+							/* translators: %s: module name */
+							__( '"%s" settings saved.', 'customify' ),
+							moduleName
+						),
+						{ type: 'snackbar', id: okId }
+					);
+					setTimeout( () => removeNotice( okId ), 3000 );
+				}
+
 				if ( res?.values && typeof res.values === 'object' ) {
 					setValues( res.values );
 				}
+				// Pro modules with dynamic schemas (Typekit's loaded fonts
+				// `html` field) re-derive their field list inside settings()
+				// after each save. Refresh the schema if the server sent one.
+				if ( Array.isArray( res?.fields ) && res.fields.length ) {
+					setFields( res.fields );
+				}
 				setStatus( 'ready' );
-				onClose();
+				if ( ! hasError ) {
+					onClose();
+				}
 			} )
 			.catch( () => {
 				setStatus( 'error' );
@@ -179,7 +420,12 @@ export default function ModuleSettingsModal( {
 	);
 
 	return (
-		<Modal isOpen={ isOpen } onClose={ onClose } size="md" ariaLabel={ title }>
+		<Modal
+			isOpen={ isOpen }
+			onClose={ onClose }
+			size="md"
+			ariaLabel={ title }
+		>
 			<Modal.Header title={ title } onClose={ onClose } />
 			<Modal.Body>
 				{ status === 'loading' && (
@@ -194,23 +440,32 @@ export default function ModuleSettingsModal( {
 					</p>
 				) }
 				{ ( status === 'ready' || status === 'saving' ) &&
-					fields.map( ( field, i ) => (
-						<div className="pm-module-modal__field" key={ i }>
-							{ field.label && field.type !== 'html' && (
-								<label className="pm-module-modal__label">
-									{ field.label }
-								</label>
-							) }
-							<FieldControl
-								field={ field }
-								value={ values[ field.name ] }
-								onChange={ ( next ) =>
-									onFieldChange( field.name, next )
-								}
-							/>
-							<FieldDescription html={ field.desc } />
-						</div>
-					) ) }
+					fields.map( ( field, i ) => {
+						const isDisplay = [
+							'html',
+							'heading',
+							'section',
+							'panel',
+							'hidden',
+						].includes( field.type );
+						return (
+							<div className="pm-module-modal__field" key={ i }>
+								{ field.label && ! isDisplay && (
+									<label className="pm-module-modal__label">
+										{ field.label }
+									</label>
+								) }
+								<FieldControl
+									field={ field }
+									value={ values[ field.name ] }
+									onChange={ ( next ) =>
+										onFieldChange( field.name, next )
+									}
+								/>
+								<FieldDescription html={ field.desc } />
+							</div>
+						);
+					} ) }
 				{ status === 'ready' && fields.length === 0 && (
 					<p>
 						{ __(

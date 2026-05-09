@@ -53,3 +53,138 @@
 	margin: 0;
 	padding-left: 18px;
 }
+
+/* Heading / section / panel — display-only divider used by Pro modules to
+ * group related fields in the legacy admin form. */
+.pm-module-modal__heading {
+	margin: 4px 0 8px;
+	padding: 8px 0;
+	border-bottom: 1px solid #dcdcde;
+	font-weight: 600;
+	font-size: 14px;
+	color: #1d2327;
+}
+
+/* Toggle row — checkbox-typed Pro fields render via the dashboard's
+ * ToggleSwitch primitive, with an optional inline label.  */
+.pm-module-modal__toggle {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.pm-module-modal__toggle-label {
+	font-size: 14px;
+	color: #1d2327;
+}
+
+/* Radio group — Pro `radio_group`/text_align typed fields. Renders as a
+ * pill-style segmented control. */
+.pm-module-modal__radio-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.pm-module-modal__radio {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+	font-size: 13px;
+	cursor: pointer;
+	user-select: none;
+}
+
+.pm-module-modal__radio.is-active {
+	border-color: #2271b1;
+	background: rgba( 34, 113, 177, 0.08 );
+	color: #2271b1;
+}
+
+.pm-module-modal__radio input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+
+/* Image select — same idea as radio group but with thumbnails. */
+.pm-module-modal__image-select {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 100px, 1fr ) );
+	gap: 8px;
+}
+
+.pm-module-modal__image-option {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	padding: 8px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+	font-size: 12px;
+	cursor: pointer;
+}
+
+.pm-module-modal__image-option.is-active {
+	border-color: #2271b1;
+	background: rgba( 34, 113, 177, 0.08 );
+}
+
+.pm-module-modal__image-option img {
+	width: 100%;
+	height: auto;
+	max-height: 70px;
+	object-fit: contain;
+}
+
+/* Color picker — native color input + hex/rgba input side-by-side. */
+.pm-module-modal__color {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.pm-module-modal__color input[type="color"] {
+	flex-shrink: 0;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	background: transparent;
+	cursor: pointer;
+}
+
+.pm-module-modal__color .pm-module-modal__input {
+	flex: 1;
+}
+
+/* Textarea — for textarea/custom_html field types. */
+.pm-module-modal__textarea {
+	width: 100%;
+	padding: 8px 12px;
+	border: 1px solid #8c8f94;
+	border-radius: 4px;
+	font-family: Menlo, Consolas, monospace;
+	font-size: 13px;
+	line-height: 1.5;
+	background: #fff;
+	color: #1d2327;
+	box-sizing: border-box;
+	resize: vertical;
+	min-height: 80px;
+}
+
+.pm-module-modal__textarea:focus {
+	outline: none;
+	border-color: #2271b1;
+	box-shadow: 0 0 0 2px rgba( 34, 113, 177, 0.18 );
+}

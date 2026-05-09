@@ -27,6 +27,106 @@ class Customify
 		add_filter('excerpt_more', array($this, 'excerpt_more'));
 		add_filter('excerpt_length', array($this, 'excerpt_length'));
 		add_action('wp_head', array($this, 'customify_style'), 2);
+
+		// Force-disable WC-dependent Pro modules when WooCommerce isn't
+		// active. Runs at after_setup_theme:25 — before Customify_Pro's
+		// own load() at after_setup_theme:30 — so the disabled state is
+		// in effect by the time Pro's load_modules() iterates and would
+		// otherwise instantiate a module whose constructor calls into
+		// undefined WooCommerce functions (fatal on frontend).
+		add_action('after_setup_theme', array($this, 'guard_pro_module_dependencies'), 25);
+		add_action('admin_notices', array($this, 'render_pro_dependency_notice'));
+	}
+
+	/**
+	 * Class names of Pro modules that hard-depend on the WooCommerce plugin.
+	 * If WC isn't loaded, these can't be safely instantiated — their
+	 * constructors hook into actions that call wc_get_page_id() etc.
+	 *
+	 * Filterable via `customify/dashboard/wc_pro_modules` so child themes or
+	 * future Pro releases can extend the list without editing the theme.
+	 *
+	 * @return array
+	 */
+	public function get_woocommerce_pro_modules()
+	{
+		$modules = array(
+			'Customify_Pro_Module_WooCommerce_Booster',
+			'Customify_Pro_Module_WC_Off_Canvas_Filter',
+			'Customify_Pro_Module_WC_Quick_View',
+			'Customify_Pro_Module_WC_Gallery_Slider',
+			'Customify_Pro_Module_WC_Single_Product_Layout',
+		);
+		return apply_filters('customify/dashboard/wc_pro_modules', $modules);
+	}
+
+	/**
+	 * Defensive shim: when WooCommerce is missing but a WC-dependent Pro
+	 * module is enabled in the persisted modules option, flip it back to
+	 * disabled in-place. Stash the list of forced-off modules in a transient
+	 * so we can surface a one-time admin notice explaining what happened.
+	 *
+	 * Pre-existing Pro plugin bug: `Customify_Pro::load_modules()` does not
+	 * gate WC sub-modules on WC being active, so calling their constructors
+	 * registers hooks that ultimately invoke `wc_get_page_id()` and crash
+	 * the whole frontend with a fatal error. This method makes the same
+	 * decision Pro should be making, but from the theme side so we don't
+	 * have to fork the plugin.
+	 */
+	public function guard_pro_module_dependencies()
+	{
+		if (! function_exists('Customify_Pro')) {
+			return;
+		}
+		if ($this->is_woocommerce_active()) {
+			return;
+		}
+		$option_key = 'customify_modules';
+		$modules    = get_option($option_key);
+		if (! is_array($modules) || empty($modules)) {
+			return;
+		}
+		$wc_modules     = $this->get_woocommerce_pro_modules();
+		$turned_off     = array();
+		$updated_option = $modules;
+		foreach ($wc_modules as $class_name) {
+			if (! empty($updated_option[$class_name])) {
+				$updated_option[$class_name] = 0;
+				$turned_off[]                = $class_name;
+			}
+		}
+		if (! empty($turned_off)) {
+			update_option($option_key, $updated_option);
+			set_transient(
+				'customify_pro_modules_disabled_for_wc',
+				$turned_off,
+				HOUR_IN_SECONDS
+			);
+		}
+	}
+
+	/**
+	 * Surface the auto-disable explanation as a dismissible admin notice.
+	 * The transient is cleared on first read so the message doesn't repeat
+	 * indefinitely after the user installs WooCommerce.
+	 */
+	public function render_pro_dependency_notice()
+	{
+		$turned_off = get_transient('customify_pro_modules_disabled_for_wc');
+		if (! is_array($turned_off) || empty($turned_off)) {
+			return;
+		}
+		delete_transient('customify_pro_modules_disabled_for_wc');
+		echo '<div class="notice notice-warning is-dismissible"><p>';
+		printf(
+			/* translators: %s: comma-separated module class names */
+			esc_html__(
+				'Customify auto-disabled these Pro modules because WooCommerce is not active: %s. Install and activate WooCommerce, then re-enable them from the Customify dashboard.',
+				'customify'
+			),
+			'<code>' . esc_html(implode(', ', $turned_off)) . '</code>'
+		);
+		echo '</p></div>';
 	}
 
 	function excerpt_length($length)
@@ -641,25 +741,43 @@ class Customify
 			return $data;
 		}
 
-		$modules = array();
+		$wc_modules    = $this->get_woocommerce_pro_modules();
+		$wc_active     = $this->is_woocommerce_active();
+		$modules       = array();
 		foreach ($pro->modules as $class_name => $args) {
 			// React opens module settings via the `get_module_settings` /
 			// `set_module_settings` AJAX tasks. We only need to flag which
 			// modules expose a settings() method — generic check so future
 			// Pro modules light up the modal automatically.
 			$has_settings = class_exists($class_name) && method_exists($class_name, 'settings');
+			$meta         = $this->resolve_pro_module_meta($pro, $class_name, $args, $has_settings);
+			$can_toggle   = isset($args['can_toggle']) ? (bool) $args['can_toggle'] : true;
+
+			// Surface the WooCommerce requirement so the dashboard can show
+			// a "Requires WooCommerce" warning and lock the toggle off. Lets
+			// users self-diagnose instead of toggling on a broken module.
+			$requires = '';
+			if (in_array($class_name, $wc_modules, true) && ! $wc_active) {
+				$requires   = 'woocommerce';
+				$can_toggle = false;
+			}
+
 			$modules[] = array(
 				'classKey'    => $class_name,
 				'name'        => isset($args['name']) ? (string) $args['name'] : $class_name,
 				'description' => isset($args['desc']) ? (string) $args['desc'] : '',
 				'docHref'     => isset($args['doc_link']) ? (string) $args['doc_link'] : '',
 				'enabled'     => (bool) $pro->is_enabled_module($class_name),
-				'canToggle'   => isset($args['can_toggle']) ? (bool) $args['can_toggle'] : true,
+				'canToggle'   => $can_toggle,
 				'parent'      => isset($args['parent']) && $args['parent'] ? (string) $args['parent'] : null,
 				'subModules'  => isset($args['sub_modules']) && is_array($args['sub_modules'])
 					? array_values($args['sub_modules'])
 					: array(),
-				'hasSettings' => $has_settings,
+				'hasSettings'        => $has_settings,
+				'settingsScope'      => $meta['scope'],
+				'settingsHref'       => $meta['href'],
+				'settingsLabel'      => $meta['label'],
+				'requirementMissing' => $requires,
 			);
 		}
 
@@ -708,6 +826,17 @@ class Customify
 		switch ($task) {
 			case 'set_module_state':
 				$enabled = isset($_POST['enabled']) ? rest_sanitize_boolean(wp_unslash($_POST['enabled'])) : false;
+				// Reject enabling a WC-dependent module when WooCommerce is
+				// not active. Same guard as guard_pro_module_dependencies()
+				// but at the AJAX boundary, so the dashboard surfaces the
+				// reason instead of letting the toggle persist and then
+				// crash the frontend.
+				if ($enabled
+					&& in_array($class_name, $this->get_woocommerce_pro_modules(), true)
+					&& ! $this->is_woocommerce_active()
+				) {
+					wp_send_json_error('woocommerce_required', 400);
+				}
 				if ($enabled) {
 					$pro->enable_module($class_name);
 				} else {
@@ -741,15 +870,133 @@ class Customify
 					$values = array();
 				}
 				$module->save($this->sanitize_pro_module_values($module->settings(), $values));
+
+				// Pro modules echo `<div class="notice ...">` markup from
+				// after_save() (the legacy admin page rendered them inline).
+				// Capture that buffer so the React modal can surface them as
+				// snackbar notices instead of swallowing the output.
+				$notices = array();
 				if (method_exists($module, 'after_save')) {
+					ob_start();
 					$module->after_save($this);
+					$buffered = ob_get_clean();
+					$notices  = $this->parse_pro_admin_notices($buffered);
 				}
 				do_action('customify-pro/after-module-saved', $this);
+
+				// Re-derive the schema after save — Pro modules like Typekit
+				// generate dynamic html fields (loaded fonts list) that reflect
+				// the just-fetched data. Returning fresh `fields` lets the
+				// modal refresh its UI without a full reopen.
+				$fresh_fields = method_exists($module, 'settings')
+					? $this->normalize_pro_module_fields($module->settings())
+					: array();
+
 				wp_send_json_success(array(
-					'values' => method_exists($module, 'get_settings') ? (array) $module->get_settings() : array(),
+					'values'  => method_exists($module, 'get_settings') ? (array) $module->get_settings() : array(),
+					'fields'  => $fresh_fields,
+					'notices' => $notices,
 				));
 				break;
 		}
+	}
+
+	/**
+	 * Decide where a Pro module exposes its settings so the React dashboard
+	 * can render the right action: an inline modal, a Customizer deep-link,
+	 * a CPT admin screen, or no action at all.
+	 *
+	 * Returns shape: `[ 'scope' => 'inline'|'customizer'|'cpt'|'none',
+	 *                  'href'  => string|null,
+	 *                  'label' => string|null ]`.
+	 *
+	 * Scopes:
+	 *   - `inline`     — module's settings() returns a non-empty schema; the
+	 *                    modal can render it.
+	 *   - `customizer` — module is style-only; deep-link to the right panel.
+	 *   - `cpt`        — module manages content via a custom post type.
+	 *   - `none`       — toggle-only, no per-module settings to expose.
+	 *
+	 * Filterable via `customify/dashboard/pro_module_meta` so child themes
+	 * or future Pro modules can override without forking.
+	 *
+	 * @param object $pro
+	 * @param string $class_name
+	 * @param array  $args         Pro registry args for this module.
+	 * @param bool   $has_settings Whether the module exposes settings().
+	 * @return array
+	 */
+	private function resolve_pro_module_meta($pro, $class_name, $args, $has_settings)
+	{
+		$meta = array(
+			'scope' => 'none',
+			'href'  => null,
+			'label' => null,
+		);
+
+		// Static map of well-known modules whose UI lives elsewhere. Listed
+		// here (not in the Pro plugin) so we don't have to edit Pro to teach
+		// the dashboard new tricks. Extendable via the filter below.
+		$customizer_panels = array(
+			'Customify_Pro_Module_Header_Sticky'             => 'panel_header',
+			'Customify_Pro_Module_Header_Transparent'        => 'panel_header',
+			'Customify_Pro_Module_Header_Footer_Items'       => 'panel_header',
+			'Customify_Pro_Module_Multiple_Headers'          => 'panel_header',
+			'Customify_Pro_Module_Mega_Menu'                 => 'panel_header',
+			'Customify_Pro_Module_Scrolltop'                 => 'general',
+			'Customify_Pro_Module_Cookie_Notice'             => 'general',
+			'Customify_Pro_Module_Blog'                      => 'panel_blog',
+			'Customify_Pro_Module_Advanced_Styling'          => 'styling',
+			'Customify_Pro_Module_Infinity'                  => 'panel_blog',
+			'Customify_Pro_Module_Woo_Booster'               => 'woocommerce',
+		);
+		$cpt_slugs = array(
+			'Customify_Pro_Module_Custom_Fonts'      => 'font',
+			'Customify_Pro_Module_Hooks'             => 'customify_hook',
+			'Customify_Pro_Module_Multiple_Headers'  => 'customify_ms',
+			'Customify_Pro_Module_Portfolio'         => 'portfolio',
+		);
+
+		if ($has_settings) {
+			$meta['scope'] = 'inline';
+			$meta['label'] = __('Settings', 'customify');
+		} elseif (isset($cpt_slugs[$class_name])) {
+			$meta['scope'] = 'cpt';
+			$meta['href']  = admin_url('edit.php?post_type=' . $cpt_slugs[$class_name]);
+			$meta['label'] = __('Manage', 'customify');
+		} elseif (isset($customizer_panels[$class_name])) {
+			$meta['scope'] = 'customizer';
+			$meta['href']  = add_query_arg(
+				'autofocus[panel]',
+				$customizer_panels[$class_name],
+				admin_url('customize.php')
+			);
+			$meta['label'] = __('Open Customizer', 'customify');
+		}
+
+		/**
+		 * Filter the resolved settings UI metadata for a Pro module.
+		 *
+		 * @param array  $meta       { scope, href, label }
+		 * @param string $class_name Pro module class.
+		 * @param array  $args       Pro registry args.
+		 * @param object $pro        Customify_Pro instance.
+		 */
+		$meta = apply_filters(
+			'customify/dashboard/pro_module_meta',
+			$meta,
+			$class_name,
+			$args,
+			$pro
+		);
+
+		// Defensive: filter callers may return a partial array.
+		$meta = wp_parse_args(
+			is_array($meta) ? $meta : array(),
+			array('scope' => 'none', 'href' => null, 'label' => null)
+		);
+
+		return $meta;
 	}
 
 	/**
@@ -796,8 +1043,9 @@ class Customify
 			if (! is_array($field)) {
 				continue;
 			}
+			$type = isset($field['type']) ? (string) $field['type'] : 'text';
 			$normalized = array(
-				'type'    => isset($field['type']) ? (string) $field['type'] : 'text',
+				'type'    => $type,
 				'name'    => isset($field['name']) ? (string) $field['name'] : '',
 				'label'   => $this->decode_pro_label(
 					isset($field['label']) ? $field['label'] : (isset($field['title']) ? $field['title'] : '')
@@ -808,21 +1056,83 @@ class Customify
 				'desc'    => isset($field['desc']) ? (string) $field['desc'] : '',
 				'content' => isset($field['content']) ? (string) $field['content'] : '',
 			);
-			if ('select' === $normalized['type'] && isset($field['options']) && is_array($field['options'])) {
+
+			// Pass through extra metadata used by the corresponding React
+			// renderer. Pro already encodes these per field type (e.g. min/max
+			// on `slider`, `placeholder` on text fields). Unknown keys are
+			// dropped — the React side gracefully falls back to a text input
+			// for types it doesn't recognize, so adding fields here is purely
+			// additive.
+			$passthrough = array(
+				'placeholder',
+				'default',
+				'min',
+				'max',
+				'step',
+				'rows',
+				'checkbox_label',
+				'description',
+			);
+			foreach ($passthrough as $key) {
+				if (isset($field[$key])) {
+					$normalized[$key] = is_scalar($field[$key])
+						? (string) $field[$key]
+						: $field[$key];
+				}
+			}
+
+			// `select` and `radio_group` advertise their options under
+			// `options`; some Pro fields use the Customizer-style `choices`
+			// key. Normalize both shapes into a list of {value,label} pairs.
+			$opt_source = null;
+			if (isset($field['options']) && is_array($field['options'])) {
+				$opt_source = $field['options'];
+			} elseif (isset($field['choices']) && is_array($field['choices'])) {
+				$opt_source = $field['choices'];
+			}
+			if (in_array($type, array('select', 'radio_group', 'image_select', 'text_align', 'text_align_no_justify'), true)
+				&& is_array($opt_source)
+			) {
 				$opts = array();
-				foreach ($field['options'] as $value => $label) {
-					$opts[] = array(
-						'value' => (string) $value,
-						// Pro hand-encodes select labels (e.g. "Use &lt;link&gt; tag")
-						// because the legacy form rendered them as HTML text.
-						// React's <option>{label}</option> writes JS text directly,
-						// so decode here to avoid `&lt;` showing up literally.
-						'label' => $this->decode_pro_label($label),
-					);
+				foreach ($opt_source as $value => $label) {
+					if (is_array($label)) {
+						// `image_select` uses `[value => ['img' => ..., 'label' => ...]]`.
+						$opts[] = array(
+							'value' => (string) $value,
+							'label' => $this->decode_pro_label(
+								isset($label['label']) ? $label['label'] : $value
+							),
+							'image' => isset($label['img']) ? (string) $label['img'] : '',
+						);
+					} else {
+						$opts[] = array(
+							'value' => (string) $value,
+							// Pro hand-encodes select labels (e.g. "Use &lt;link&gt; tag")
+							// because the legacy form rendered them as HTML text.
+							// React's <option>{label}</option> writes JS text directly,
+							// so decode here to avoid `&lt;` showing up literally.
+							'label' => $this->decode_pro_label($label),
+						);
+					}
 				}
 				$normalized['options'] = $opts;
 			}
-			$out[] = $normalized;
+
+			/**
+			 * Per-field hook so a child theme or future Pro module can attach
+			 * extra metadata (e.g. icon list, font preview URL) without
+			 * editing the theme.
+			 *
+			 * @param array $normalized The serializable schema row.
+			 * @param array $field      Original schema row from settings().
+			 */
+			$normalized = apply_filters(
+				'customify/dashboard/pro_field_normalize',
+				$normalized,
+				$field
+			);
+
+			$out[] = is_array($normalized) ? $normalized : array();
 		}
 		return $out;
 	}
@@ -867,24 +1177,141 @@ class Customify
 			$raw  = $values[$field['name']];
 			switch ($type) {
 				case 'select':
-					$allowed = array();
-					if (isset($field['options']) && is_array($field['options'])) {
-						$allowed = array_map('strval', array_keys($field['options']));
-					}
-					$value = sanitize_text_field((string) $raw);
+				case 'radio_group':
+				case 'image_select':
+				case 'text_align':
+				case 'text_align_no_justify':
+					$allowed = $this->collect_field_options($field);
+					$value   = sanitize_text_field((string) $raw);
 					if ($allowed && ! in_array($value, $allowed, true)) {
 						$value = isset($allowed[0]) ? $allowed[0] : '';
 					}
 					$out[$field['name']] = $value;
 					break;
+				case 'checkbox':
+					$out[$field['name']] = rest_sanitize_boolean($raw) ? 1 : 0;
+					break;
+				case 'number':
+				case 'slider':
+					if ('' === $raw || null === $raw) {
+						break; // leave unset so default applies
+					}
+					$num = is_numeric($raw) ? floatval($raw) : 0;
+					if (isset($field['min']) && is_numeric($field['min'])) {
+						$num = max(floatval($field['min']), $num);
+					}
+					if (isset($field['max']) && is_numeric($field['max'])) {
+						$num = min(floatval($field['max']), $num);
+					}
+					$out[$field['name']] = $num;
+					break;
+				case 'color':
+					$value = is_string($raw) ? trim($raw) : '';
+					// Allow common forms: #rgb, #rrggbb, #rrggbbaa, rgb()/rgba().
+					if ($value === '' || preg_match('/^(#([0-9a-f]{3,8})|rgba?\([0-9,\s.\/%-]+\))$/i', $value)) {
+						$out[$field['name']] = $value;
+					}
+					break;
+				case 'textarea':
+				case 'custom_html':
+				case 'text/html':
+					// Same boundary as wp_kses_post: keep common HTML, strip
+					// scripts/iframes. Pro modules that genuinely need raw
+					// markup (Hooks PHP/HTML) live in CPT, not in this modal.
+					$out[$field['name']] = wp_kses_post((string) $raw);
+					break;
+				case 'email':
+					$value = sanitize_email((string) $raw);
+					$out[$field['name']] = $value;
+					break;
+				case 'phone':
+					$out[$field['name']] = preg_replace('/[^0-9+\-\s().]/', '', (string) $raw);
+					break;
+				case 'image':
+				case 'icon':
+					$out[$field['name']] = sanitize_text_field((string) $raw);
+					break;
+				case 'hidden':
+					$out[$field['name']] = sanitize_text_field((string) $raw);
+					break;
 				case 'html':
-					// Display-only field, skip.
+				case 'heading':
+				case 'section':
+				case 'panel':
+					// Display-only fields, no persisted value.
 					break;
 				default:
+					// `text` and any unknown future type — fall back to plain
+					// text. Future-proof: if Pro adds a new type before this
+					// theme catches up, the modal renders a text input and we
+					// store the string verbatim.
 					$out[$field['name']] = sanitize_text_field((string) $raw);
 			}
 		}
 		return $out;
+	}
+
+	/**
+	 * Read the allowed value list off a normalized field schema, supporting
+	 * both the new {value,label} list shape and the legacy associative array.
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	private function collect_field_options($field)
+	{
+		$allowed = array();
+		if (isset($field['options']) && is_array($field['options'])) {
+			foreach ($field['options'] as $key => $val) {
+				if (is_array($val) && isset($val['value'])) {
+					$allowed[] = (string) $val['value'];
+				} else {
+					$allowed[] = (string) $key;
+				}
+			}
+		}
+		if (! $allowed && isset($field['choices']) && is_array($field['choices'])) {
+			$allowed = array_map('strval', array_keys($field['choices']));
+		}
+		return $allowed;
+	}
+
+	/**
+	 * Extract `<div class="notice notice-{type}">…</div>` blocks from a Pro
+	 * module's after_save() output. The legacy admin page rendered these
+	 * inline; the new dashboard turns them into snackbar notices.
+	 *
+	 * Returns an array of `{ type: 'success'|'error'|'warning'|'info', message }`.
+	 *
+	 * @param string $html Buffered output from the module's after_save().
+	 * @return array
+	 */
+	private function parse_pro_admin_notices($html)
+	{
+		if (! is_string($html) || '' === trim($html)) {
+			return array();
+		}
+		$notices = array();
+		if (! preg_match_all('/<div[^>]*class="[^"]*notice[^"]*"[^>]*>([\s\S]*?)<\/div>/i', $html, $matches, PREG_SET_ORDER)) {
+			return array();
+		}
+		foreach ($matches as $match) {
+			$full = isset($match[0]) ? $match[0] : '';
+			$body = isset($match[1]) ? $match[1] : '';
+			$type = 'info';
+			if (preg_match('/notice-(success|error|warning|info)/i', $full, $tm)) {
+				$type = strtolower($tm[1]);
+			}
+			$message = trim(wp_strip_all_tags($body));
+			if ('' === $message) {
+				continue;
+			}
+			$notices[] = array(
+				'type'    => $type,
+				'message' => $message,
+			);
+		}
+		return $notices;
 	}
 
 	/**

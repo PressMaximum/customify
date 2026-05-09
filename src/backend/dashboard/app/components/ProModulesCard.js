@@ -17,7 +17,14 @@ import { __, sprintf } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
-import { Card, Icon, ModuleList, ModuleRow, Pill, ToggleSwitch } from '../../ui';
+import {
+	Card,
+	Icon,
+	ModuleList,
+	ModuleRow,
+	Pill,
+	ToggleSwitch,
+} from '../../ui';
 import { PRO_ACTIVE, PRO_MODULES_BOOT } from '../config';
 import { PRO_MODULES } from '../data/pro-modules';
 import { setModuleState } from '../api/pro-modules';
@@ -25,6 +32,19 @@ import ModuleSettingsModal from './ModuleSettingsModal';
 
 const UPGRADE_URL =
 	'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=welcome&utm_campaign=pro_modules';
+
+function labelForScope( scope ) {
+	switch ( scope ) {
+		case 'inline':
+			return __( 'Settings', 'customify' );
+		case 'cpt':
+			return __( 'Manage', 'customify' );
+		case 'customizer':
+			return __( 'Open Customizer', 'customify' );
+		default:
+			return '';
+	}
+}
 
 function DocsLink( { href } ) {
 	if ( ! href ) {
@@ -68,7 +88,9 @@ function MarketingList() {
 									key={ j }
 									title={ sub.title }
 									description={ sub.description }
-									trailing={ <DocsLink href={ sub.docHref } /> }
+									trailing={
+										<DocsLink href={ sub.docHref } />
+									}
 								/>
 							) ) }
 						</div>
@@ -177,14 +199,63 @@ function ProList() {
 	const renderRow = ( mod, isSub = false ) => {
 		const checked = !! enabledMap[ mod.classKey ];
 		const pending = !! pendingMap[ mod.classKey ];
-		// Show "Settings" trigger beside Docs when the Pro module exposes a
-		// settings() page AND it's currently enabled.
-		const showSettings = mod.hasSettings && checked && ! pending;
+		// `settingsScope` (PHP: Customify::resolve_pro_module_meta) decides
+		// the affordance. Older Pro builds that don't ship the field still
+		// fall back to the legacy hasSettings path.
+		const scope =
+			mod.settingsScope || ( mod.hasSettings ? 'inline' : 'none' );
+		const canShowAction = checked && ! pending;
+		const actionLabel = mod.settingsLabel || labelForScope( scope );
+		// `requirementMissing` is set by PHP when a hard dependency (e.g.
+		// WooCommerce) is not active. We still show the row so the user
+		// can see what's available, but the toggle is locked off and a
+		// note is appended to the description.
+		const requirement = mod.requirementMissing || '';
+		const requirementLabel =
+			requirement === 'woocommerce'
+				? __( 'Requires WooCommerce plugin', 'customify' )
+				: requirement
+				? sprintf(
+					/* translators: %s: requirement name (plugin slug). */
+					__( 'Requires %s', 'customify' ),
+					requirement
+				  )
+				: '';
+		const description = requirementLabel
+			? `${ mod.description } — ${ requirementLabel }`
+			: mod.description;
+		let action = null;
+		if ( canShowAction && scope === 'inline' ) {
+			action = (
+				<button
+					type="button"
+					className="pm-module-link pm-module-link--settings"
+					onClick={ () => setSettingsModule( mod ) }
+				>
+					{ actionLabel }
+					<Icon name="chevron-right" size={ 12 } />
+				</button>
+			);
+		} else if (
+			canShowAction &&
+			mod.settingsHref &&
+			( scope === 'customizer' || scope === 'cpt' )
+		) {
+			action = (
+				<a
+					className="pm-module-link pm-module-link--settings"
+					href={ mod.settingsHref }
+				>
+					{ actionLabel }
+					<Icon name="chevron-right" size={ 12 } />
+				</a>
+			);
+		}
 		return (
 			<ModuleRow
 				key={ mod.classKey }
 				title={ mod.name }
-				description={ mod.description }
+				description={ description }
 				className={
 					! isSub && mod.subModules && mod.subModules.length
 						? 'pm-module-row--has-subs'
@@ -202,16 +273,7 @@ function ProList() {
 				}
 				trailing={
 					<>
-						{ showSettings && (
-							<button
-								type="button"
-								className="pm-module-link pm-module-link--settings"
-								onClick={ () => setSettingsModule( mod ) }
-							>
-								{ __( 'Settings', 'customify' ) }
-								<Icon name="chevron-right" size={ 12 } />
-							</button>
-						) }
+						{ action }
 						<DocsLink href={ mod.docHref } />
 					</>
 				}
@@ -229,7 +291,9 @@ function ProList() {
 							<div className="pm-module-submodules">
 								{ mod.subModules.map( ( subKey ) => {
 									const sub = moduleByKey[ subKey ];
-									if ( ! sub ) return null;
+									if ( ! sub ) {
+										return null;
+									}
 									return renderRow( sub, true );
 								} ) }
 							</div>
