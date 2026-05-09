@@ -1,0 +1,171 @@
+/* ModuleRow / ModuleList — port of .modules-list / .module-row + nth-child borders.
+ * Text-styling inherits WP admin defaults. */
+
+.pm-module-list {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+}
+
+.pm-module-list .pm-module-row {
+	border-left: 1px solid #ededef;
+}
+
+.pm-module-list .pm-module-row:nth-child( odd ) {
+	border-left: none;
+}
+
+.pm-module-list .pm-module-row:nth-child( 1 ),
+.pm-module-list .pm-module-row:nth-child( 2 ) {
+	border-top: none;
+}
+
+@media ( max-width: 1100px ) {
+	.pm-module-list {
+		grid-template-columns: 1fr;
+	}
+	.pm-module-list .pm-module-row {
+		border-left: none !important;
+	}
+	.pm-module-list .pm-module-row:nth-child( 2 ) {
+		border-top: 1px solid #ededef;
+	}
+}
+
+.pm-module-row {
+	padding: 16px 24px;
+	border-top: 1px solid #ededef;
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+}
+
+.pm-module-row:first-of-type {
+	border-top: none;
+}
+
+.pm-module-row__leading {
+	flex-shrink: 0;
+	margin-top: 2px;
+}
+
+.pm-module-row__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.pm-module-row__title-row {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 4px;
+	flex-wrap: wrap;
+}
+
+.pm-module-row__title-row h4 {
+	margin: 0;
+}
+
+.pm-module-row__status {
+	background: #f0f0f1;
+	padding: 2px 7px;
+	border-radius: 3px;
+}
+
+/* Bumped specificity (0,2,1) so the margin reset beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-module-row__body p {
+	margin: 0;
+}
+
+.pm-module-row__trailing {
+	flex-shrink: 0;
+	margin-top: 1px;
+}
+
+/* Module link helper (used in trailing slot) — works for <a> and <button>. */
+.pm-module-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	color: var( --pm-color-primary );
+	text-decoration: none;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+}
+
+.pm-module-link:hover {
+	color: var( --pm-color-primary-dark );
+	text-decoration: none;
+}
+
+.pm-module-link--settings + .pm-module-link {
+	margin-left: 12px;
+}
+
+/* Header link (used in card headerRight slot) */
+.pm-header-link {
+	color: var( --pm-color-primary );
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.pm-header-link:hover {
+	color: var( --pm-color-primary-dark );
+	text-decoration: none;
+}
+
+/* Sub-module group: parent row + nested children container both span the
+ * full grid width (port of .module-row.has-subs / .module-submodules). */
+.pm-module-list .pm-module-row--has-subs,
+.pm-module-list .pm-module-submodules {
+	grid-column: 1 / -1;
+	border-left: none;
+}
+
+.pm-module-submodules {
+	background: #fafbfc;
+	border-top: 1px solid #ededef;
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+}
+
+.pm-module-submodules .pm-module-row {
+	padding-left: 60px;
+	padding-top: 14px;
+	padding-bottom: 14px;
+	border-top: 1px solid #ededef;
+	border-left: 1px solid #ededef;
+}
+
+.pm-module-submodules .pm-module-row:nth-child( odd ) {
+	border-left: none;
+}
+
+.pm-module-submodules .pm-module-row:nth-child( 1 ),
+.pm-module-submodules .pm-module-row:nth-child( 2 ) {
+	border-top: none;
+}
+
+@media ( max-width: 1100px ) {
+	.pm-module-submodules {
+		grid-template-columns: 1fr;
+	}
+	.pm-module-submodules .pm-module-row {
+		border-left: none !important;
+	}
+	.pm-module-submodules .pm-module-row:nth-child( 2 ) {
+		border-top: 1px solid #ededef;
+	}
+}
+
+/* Sub-modules use a smaller toggle so they read as secondary to the parent
+ * row (port of sample's .module-row.is-sub .module-toggle scale 0.85). */
+.pm-module-submodules .pm-module-row .pm-toggle {
+	transform: scale( 0.85 );
+	transform-origin: left center;
+}

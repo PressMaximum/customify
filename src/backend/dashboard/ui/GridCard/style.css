@@ -1,0 +1,127 @@
+/* GridCard — port of .theme-grid / .theme-grid-item + .blocks-grid / .block-card
+ * Text-styling (font-size/weight/color) inherits WP admin defaults. */
+
+/* Theme customizer 2-col grid */
+.pm-theme-grid {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+}
+
+.pm-theme-grid__item {
+	padding: 18px 24px;
+	border-top: 1px solid #ededef;
+	border-left: 1px solid #ededef;
+	cursor: pointer;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	text-decoration: none;
+	color: inherit;
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.pm-theme-grid__item:nth-child( odd ) {
+	border-left: none;
+}
+
+.pm-theme-grid__item:nth-child( 1 ),
+.pm-theme-grid__item:nth-child( 2 ) {
+	border-top: none;
+}
+
+.pm-theme-grid__item:hover {
+	text-decoration: none;
+}
+
+.pm-theme-grid__item h4 {
+	margin: 0;
+	transition: color 0.12s;
+}
+
+.pm-theme-grid__item:hover h4 {
+	color: var( --pm-color-primary );
+}
+
+/* Bumped specificity (0,2,1) so the margin reset beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-theme-grid__item p {
+	margin: 0;
+}
+
+/* Free blocks responsive grid (5 → 4 → 3 → 2 columns) */
+.pm-blocks-grid {
+	padding: 18px;
+	display: grid;
+	grid-template-columns: repeat( 5, 1fr );
+	gap: 10px;
+}
+
+@media ( max-width: 1500px ) {
+	.pm-blocks-grid {
+		grid-template-columns: repeat( 4, 1fr );
+	}
+}
+
+@media ( max-width: 1100px ) {
+	.pm-blocks-grid {
+		grid-template-columns: repeat( 3, 1fr );
+	}
+}
+
+@media ( max-width: 720px ) {
+	.pm-blocks-grid {
+		grid-template-columns: repeat( 2, 1fr );
+	}
+}
+
+.pm-block-card {
+	background: #fff;
+	border: 1px solid var( --pm-color-border-card );
+	border-radius: 6px;
+	padding: 14px 14px 12px;
+	transition: border-color 0.12s, box-shadow 0.12s;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	color: inherit;
+	position: relative;
+}
+
+.pm-block-card:hover {
+	border-color: var( --pm-color-primary );
+	box-shadow: 0 4px 12px rgba( 56, 88, 233, 0.08 );
+}
+
+.pm-block-card__icon {
+	width: 24px;
+	height: 24px;
+	color: var( --pm-color-primary );
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pm-block-card__icon svg {
+	display: block;
+	width: 24px;
+	height: 24px;
+}
+
+.pm-block-card h4 {
+	margin: 0;
+}
+
+/* WP's `.description` rule colors p.description but not a.description, so
+ * apply the muted tone explicitly here. Specificity (0,1,1) beats the
+ * :where(.pm-app) a link color (0,0,1). */
+.pm-block-card__meta a {
+	color: #646970;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.pm-block-card__meta a:hover {
+	color: var( --pm-color-primary );
+	text-decoration: none;
+}

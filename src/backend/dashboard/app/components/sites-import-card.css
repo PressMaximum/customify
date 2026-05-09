@@ -1,0 +1,50 @@
+/* Welcome sidebar card promoting Customify Sites Library — port of the
+ * legacy .cd-sites-thumb / .box-plugins box.
+ *
+ * <Card> ships an unpadded body, mirroring how other sidebar cards
+ * (Resources, More from PressMaximum, Loving Customify) let their
+ * content component own padding. Match the same 18px/22px rhythm so all
+ * cards in the rail look uniform.
+ */
+
+.pm-sites-card__thumb {
+	/* Full-bleed against the Card edges. Card has overflow:hidden so the
+	 * image is clipped to the card's rounded corners automatically. */
+	display: block;
+	border-bottom: 1px solid #ededef;
+}
+
+.pm-sites-card__thumb img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.pm-sites-card__body {
+	padding: 18px 22px;
+}
+
+.pm-sites-card__body p {
+	margin: 0 0 14px;
+	color: #1d2327;
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.pm-sites-card__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-wrap: wrap;
+}
+
+.pm-sites-card__details {
+	color: #2271b1;
+	text-decoration: none;
+	font-size: 13px;
+}
+
+.pm-sites-card__details:hover {
+	color: #135e96;
+	text-decoration: underline;
+}

@@ -1,0 +1,127 @@
+/* Modal — generic sticky-header / sticky-footer dialog (port of .popover-* layout).
+ * Title text inherits WP admin defaults. */
+
+.pm-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba( 15, 20, 30, 0.45 );
+	z-index: 100050;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+}
+
+.pm-modal {
+	background: #fff;
+	border-radius: 4px;
+	box-shadow: 0 24px 70px rgba( 0, 0, 0, 0.28 );
+	width: 100%;
+	max-height: calc( 100vh - 48px );
+	overflow: hidden;
+	position: relative;
+	animation: pm-modal-in 0.18s ease-out;
+	display: flex;
+	flex-direction: column;
+	outline: none;
+}
+
+@keyframes pm-modal-in {
+	from {
+		opacity: 0;
+		transform: translateY( 8px ) scale( 0.97 );
+	}
+	to {
+		opacity: 1;
+		transform: translateY( 0 ) scale( 1 );
+	}
+}
+
+/* Sizes */
+.pm-modal--sm {
+	max-width: 420px;
+}
+.pm-modal--md {
+	max-width: 560px;
+}
+.pm-modal--lg {
+	max-width: 720px;
+}
+.pm-modal--xl {
+	max-width: 960px;
+}
+.pm-modal--full {
+	max-width: 95vw;
+	max-height: 90vh;
+}
+
+/* Header — sticky, no border by default; --scrolled adds bottom shadow */
+.pm-modal__header {
+	flex-shrink: 0;
+	position: relative;
+	padding: 0;
+}
+
+.pm-modal__title {
+	margin: 0;
+	padding: 24px 36px 0 36px;
+}
+
+.pm-modal__subtitle {
+	margin: 4px 0 0 0;
+	padding: 0 36px;
+}
+
+.pm-modal__close {
+	position: absolute;
+	top: 8px;
+	right: 8px;
+	width: 32px;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 4px;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	z-index: 2;
+	padding: 0;
+}
+
+.pm-modal__close:hover {
+	background: rgba( 0, 0, 0, 0.06 );
+}
+
+/* Body — scrollable */
+.pm-modal__body {
+	flex: 1;
+	overflow-y: auto;
+	padding: 24px 36px;
+}
+
+.pm-modal__body--scrolled {
+	box-shadow: inset 0 1px 0 0 rgba( 0, 0, 0, 0.04 );
+}
+
+/* Footer — sticky bottom */
+.pm-modal__footer {
+	padding: 24px 36px 30px 36px;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-shrink: 0;
+}
+
+.pm-modal__footer--end {
+	justify-content: flex-end;
+}
+.pm-modal__footer--start {
+	justify-content: flex-start;
+}
+.pm-modal__footer--center {
+	justify-content: center;
+}
+.pm-modal__footer--between {
+	justify-content: space-between;
+}

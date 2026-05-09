@@ -1,0 +1,105 @@
+/* ChecklistRow — port of .qstart-row + nested check/body/actions */
+
+.pm-qstart {
+	padding: 20px 24px;
+	border-top: 1px solid #ededef;
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+.pm-qstart:first-of-type {
+	border-top: none;
+}
+
+.pm-qstart__check {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	border: 1.5px solid #d6d6da;
+	flex-shrink: 0;
+	cursor: pointer;
+	transition: background 0.15s, border-color 0.15s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: #fff;
+	background: transparent;
+	padding: 0;
+}
+
+.pm-qstart__check:hover {
+	border-color: var( --pm-color-success );
+}
+
+.pm-qstart__check svg {
+	opacity: 0;
+	transition: opacity 0.15s;
+}
+
+.pm-qstart--checked .pm-qstart__check {
+	background: var( --pm-color-success );
+	border-color: var( --pm-color-success );
+}
+
+.pm-qstart--checked .pm-qstart__check svg {
+	opacity: 1;
+}
+
+.pm-qstart--checked .pm-qstart__title {
+	text-decoration: line-through;
+	opacity: 0.55;
+}
+
+.pm-qstart--checked .pm-qstart__desc {
+	opacity: 0.55;
+}
+
+.pm-qstart__body {
+	flex: 1;
+	min-width: 0;
+}
+
+.pm-qstart__title {
+	margin: 0 0 3px 0;
+}
+
+/* Bumped specificity (0,2,0) so it beats WP `p.description` (0,1,1)
+ * without !important. Same pattern used across description-classed text. */
+.pm-app .pm-qstart__desc {
+	margin: 0;
+}
+
+.pm-qstart__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	flex-shrink: 0;
+}
+
+/* Info-tooltip button — port of .info-tooltip from sample. Used with
+ * <Button variant="unstyled"> so WP doesn't add a variant class; we own
+ * the full visual here (28×28 round primary-tinted icon button with soft
+ * hover). WP Button's base .components-button still gives us the focus
+ * ring + accessibility behaviors. */
+.pm-app .pm-info-btn {
+	width: 28px;
+	height: 28px;
+	min-width: 28px;
+	padding: 0;
+	justify-content: center;
+	border-radius: 50%;
+	color: var( --pm-color-primary );
+	background: transparent;
+}
+.pm-app .pm-info-btn:hover:not( :disabled ) {
+	background: var( --pm-color-primary-soft );
+	color: var( --pm-color-primary );
+}
+
+/* The @wordpress/icons "info" icon is a filled-path SVG (no built-in stroke).
+ * Add a thin stroke matching the fill so the icon reads heavier at small sizes. */
+.pm-app .pm-info-btn svg path {
+	stroke: currentColor;
+	stroke-width: 0.4;
+}

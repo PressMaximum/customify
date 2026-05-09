@@ -1,0 +1,65 @@
+/*
+ * GuidePopover — Customify-specific Modal extras (gradient hero + page dots).
+ * Text-styling on title/body inherits WP admin defaults.
+ */
+
+.pm-guide__hero {
+	aspect-ratio: 1.55 / 1;
+	background: linear-gradient( 135deg, #c9d3ff 0%, #6b85e0 50%, #fff7e0 100% );
+	position: relative;
+	overflow: hidden;
+	flex-shrink: 0;
+	margin: 52px 36px 0 36px;
+	border-radius: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pm-guide__hero svg {
+	width: 240px;
+	max-width: 60%;
+	height: auto;
+	color: rgba( 255, 255, 255, 0.95 );
+	filter: drop-shadow( 0 8px 20px rgba( 0, 0, 0, 0.18 ) );
+}
+
+.pm-guide__pagination {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 8px;
+	padding: 24px 36px 0 36px;
+	flex-shrink: 0;
+}
+
+.pm-guide__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: #d6d6da;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+	transition: background 0.15s, transform 0.15s;
+}
+
+.pm-guide__dot:hover {
+	background: #a8a8ad;
+}
+
+.pm-guide__dot--active {
+	background: var( --pm-color-primary );
+}
+
+.pm-guide__title {
+	margin: 0 0 14px 0;
+}
+
+.pm-guide__body p {
+	margin: 0 0 14px 0;
+}
+
+.pm-guide__body p:last-child {
+	margin-bottom: 0;
+}

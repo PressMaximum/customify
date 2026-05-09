@@ -199,9 +199,11 @@ const entries = {
 	'backend/customizer/builder-v2':         path.resolve( __dirname, 'src/backend/customizer/js/builder-v2.js' ),
 
 	// Backend — Admin
-	'backend/admin/dashboard': path.resolve( __dirname, 'src/backend/admin/dashboard.js' ),
 	'backend/admin/metabox':   path.resolve( __dirname, 'src/backend/admin/metabox.js' ),
 	'backend/admin/editor':    path.resolve( __dirname, 'src/backend/admin/editor.js' ),
+
+	// Backend — Theme Dashboard (React app, top-level admin page)
+	'backend/dashboard/index': path.resolve( __dirname, 'src/backend/dashboard/index.js' ),
 };
 
 // ── Final config ─────────────────────────────────────────────────────────────

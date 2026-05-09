@@ -1,0 +1,214 @@
+/*
+ * Page chrome — neutralizes WP admin defaults around the React mount node
+ * and rebuilds the rounded #wpbody container from samples/Dashboard.html.
+ *
+ * Selector scope is body.customify-dashboard-page so nothing leaks to other
+ * admin screens. The body class is added in
+ * Customify_Theme_Dashboard::body_class() (PHP).
+ */
+
+/* ---- Neutralize WP admin chrome on the dashboard screen ----
+ *
+ * Body bg fills the gutter behind the rounded panel — must match the user's
+ * WP admin color scheme menu background (same color WP paints on #wpadminbar
+ * / #adminmenu). WP only exposes --wp-admin-theme-color as a CSS var; the
+ * menu bg is hardcoded per scheme's colors.css. We mirror those values via
+ * the admin-color-{scheme} body class WP itself adds.
+ *
+ * Default (no admin-color-* match) = fresh #1d2327. Values sourced from
+ * each scheme's $base-color in wp-admin/css/colors/{name}/colors.scss.
+ */
+body.customify-dashboard-page {
+	background: #1d2327; /* fresh (default) */
+}
+body.customify-dashboard-page.admin-color-modern {
+	background: #1e1e1e;
+}
+body.customify-dashboard-page.admin-color-blue {
+	background: #52accc;
+}
+body.customify-dashboard-page.admin-color-coffee {
+	background: #59524c;
+}
+body.customify-dashboard-page.admin-color-ectoplasm {
+	background: #523f6d;
+}
+body.customify-dashboard-page.admin-color-light {
+	background: #e5e5e5;
+}
+body.customify-dashboard-page.admin-color-midnight {
+	background: #363b3f;
+}
+body.customify-dashboard-page.admin-color-ocean {
+	background: #738e96;
+}
+body.customify-dashboard-page.admin-color-sunrise {
+	background: #cf4944;
+}
+body.customify-dashboard-page #wpcontent {
+	padding-left: 0 !important;
+
+}
+body.customify-dashboard-page #wpbody {
+	padding-top: 0 !important;
+}
+body.customify-dashboard-page #wpbody-content {
+	padding-bottom: 8px;
+	float: none !important;
+}
+body.customify-dashboard-page #wpbody-content > .clear {
+	display: none;
+}
+body.customify-dashboard-page #wpfooter {
+	display: none;
+}
+body.customify-dashboard-page #wpbody-content > .notice,
+body.customify-dashboard-page #wpbody-content > .update-nag {
+	margin: 0;
+	display: none;
+}
+
+/* ---- The mount node (#customify-dashboard.pm-app) is the white panel ---- */
+body .pm-app {
+	background: #fff;
+	overflow: hidden;
+	min-height: calc(100vh - 32px - 24px);
+	margin-top: 8px;
+	display: flex;
+	flex-direction: column;
+}
+
+@media (min-width: 782px) {
+	body .pm-app {
+		border-radius: 8px;
+		margin: 8px 8px 0px 0px;
+		display: flex;
+		flex-direction: column;
+		overflow: auto;
+	}
+}
+
+/* ---- App header (port of .bsify-app-header) ---- */
+.pm-app-header {
+	padding: 0 35px;
+	border-bottom: 1px solid var(--pm-color-border-card);
+	background: #fff;
+	display: flex;
+	align-items: stretch;
+	gap: 32px;
+	min-height: 64px;
+}
+
+.pm-app-header__brand {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	flex-shrink: 0;
+}
+
+.pm-app-header__logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.pm-app-header__logo img {
+	display: block;
+	height: 28px;
+	width: auto;
+	max-width: 160px;
+}
+
+.pm-app-header__version {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin-left: auto;
+	flex-shrink: 0;
+}
+
+@media (max-width: 1280px) {
+	.pm-app-header {
+		padding: 0 28px;
+		gap: 24px;
+	}
+}
+
+@media (max-width: 960px) {
+	.pm-app-header {
+		padding: 0 20px;
+		gap: 16px;
+		min-height: 56px;
+	}
+	.pm-app-header .pm-tabs {
+		margin-left: auto;
+		margin-right: 0;
+	}
+	.pm-app-header__version {
+		display: none;
+	}
+}
+
+@media (max-width: 600px) {
+	.pm-app-header {
+		padding: 0 16px;
+		flex-wrap: wrap;
+		min-height: auto;
+	}
+	.pm-app-header__brand {
+		padding: 12px 0;
+		flex: 1 1 auto;
+	}
+	.pm-app-header .pm-tabs {
+		flex: 1 1 100%;
+		margin: 0 -16px;
+		padding: 0 16px;
+		border-top: 1px solid var(--pm-color-border-card);
+		overflow-x: auto;
+		scrollbar-width: none;
+	}
+	.pm-app-header .pm-tabs::-webkit-scrollbar {
+		display: none;
+	}
+}
+
+/* ---- Tab content area (port of .bsify-tab-pane) ---- */
+.pm-tab-pane {
+	flex: 1;
+	background: var(--pm-color-bg-muted);
+	padding: 20px;
+}
+
+@media (max-width: 1280px) {
+	.pm-tab-pane {
+		padding: 28px;
+	}
+}
+
+@media (max-width: 960px) {
+	.pm-tab-pane {
+		padding: 24px 20px;
+	}
+}
+
+@media (max-width: 600px) {
+	.pm-tab-pane {
+		padding: 16px;
+	}
+}
+
+/* ---- App footer (port of .bsify-app-footer) ---- */
+.pm-app-footer {
+	padding: 16px 32px;
+	border-top: 1px solid var(--pm-color-border-card);
+	background: #fff;
+	color: var(--pm-color-text-muted);
+	font-size: 12px;
+	display: flex;
+	align-items: center;
+}
+
+.pm-app-footer__right {
+	margin-left: auto;
+}

@@ -1,0 +1,120 @@
+/* CompareTable — port of .compare-card / .compare-section-header / .compare-row / .compare-cta.
+ * Text-styling (font-size/weight/color) inherits WP admin defaults except
+ * for the "PRO" label tint and the yellow CTA banner colors which carry
+ * design intent. */
+
+.pm-compare {
+	overflow: hidden;
+}
+
+.pm-compare__section {
+	display: grid;
+	grid-template-columns: 1fr 120px 120px;
+	gap: 24px;
+	padding: 14px 24px;
+	background: #fafbfc;
+	border-bottom: 1px solid #ededef;
+	align-items: center;
+}
+
+.pm-compare__section:not( :first-of-type ) {
+	border-top: 1px solid #ededef;
+}
+
+.pm-compare__section > div:first-child {
+	text-transform: uppercase;
+}
+
+.pm-compare__col-label {
+	text-align: center;
+}
+
+.pm-compare__col-label--pro {
+	color: var( --pm-color-primary );
+}
+
+.pm-compare__row {
+	display: grid;
+	grid-template-columns: 1fr 120px 120px;
+	gap: 24px;
+	padding: 14px 24px;
+	border-top: 1px solid #ededef;
+	align-items: center;
+}
+
+.pm-compare__section + .pm-compare__row {
+	border-top: none;
+}
+
+/* Detail under feature name renders as <p class="description"> so it
+ * picks up WP's muted-italic styling automatically. We only own the
+ * margin reset — bumped to (0,2,1) so it beats WP's `p.description`
+ * margin rule (0,1,1) without !important. */
+.pm-app .pm-compare__name p {
+	margin: 2px 0 0 0;
+}
+
+.pm-compare__col {
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pm-compare__check-yes {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: var( --pm-color-success );
+	color: #fff;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pm-compare__check-no {
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: #f0f0f1;
+	color: #a8a8ad;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+@media ( max-width: 720px ) {
+	.pm-compare__section,
+	.pm-compare__row {
+		grid-template-columns: 1fr 70px 70px;
+		gap: 12px;
+		padding: 14px 16px;
+	}
+}
+
+/* CTA row at the bottom of the compare card */
+.pm-compare__cta {
+	padding: 28px 24px;
+	background: #fffbf0;
+	border-top: 1px solid #f0d57c;
+	display: flex;
+	align-items: center;
+	gap: 24px;
+	flex-wrap: wrap;
+}
+
+.pm-compare__cta-text {
+	flex: 1;
+	min-width: 240px;
+}
+
+.pm-compare__cta h4 {
+	margin: 0 0 4px 0;
+}
+
+/* Bumped specificity (0,2,1) so the margin reset beats WP's
+ * `p.description` rule (0,1,1) without !important. */
+.pm-app .pm-compare__cta p {
+	margin: 0;
+}

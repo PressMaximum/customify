@@ -1,0 +1,43 @@
+/*
+ * Dashboard CSS entry — single file consumed by wp-scripts.
+ *
+ * Layer order:
+ *   tokens  — design token declarations (--pm-*)
+ *   base    — resets + typography scoped to .pm-app
+ *   ui/*    — reusable component styles
+ *   app     — Customify-specific composition (page chrome, brand, guide popover)
+ */
+
+@import "./ui/tokens.css";
+@import "./ui/base.css";
+
+@import "./ui/Pill/style.css";
+@import "./ui/Tabs/style.css";
+@import "./ui/Card/style.css";
+@import "./ui/Button/style.css";
+@import "./ui/Modal/style.css";
+@import "./ui/Dropdown/style.css";
+@import "./ui/Hero/style.css";
+@import "./ui/ChecklistRow/style.css";
+@import "./ui/GridCard/style.css";
+@import "./ui/ModuleRow/style.css";
+@import "./ui/LicenseCard/style.css";
+@import "./ui/ResourceList/style.css";
+@import "./ui/ProductRow/style.css";
+@import "./ui/ReviewCard/style.css";
+@import "./ui/Sidebar/style.css";
+@import "./ui/CompareTable/style.css";
+@import "./ui/ReleaseBlock/style.css";
+@import "./ui/ToggleSwitch/style.css";
+@import "./ui/Select/style.css";
+@import "./ui/SubNav/style.css";
+@import "./ui/SettingRow/style.css";
+@import "./ui/SaveBar/style.css";
+@import "./ui/SettingsLayout/style.css";
+
+@import "./app/app.css";
+@import "./app/components/guide-popover.css";
+@import "./app/components/notices.css";
+@import "./app/components/module-settings-modal.css";
+@import "./app/components/sites-import-card.css";
+@import "./app/components/recommend-plugins-card.css";
