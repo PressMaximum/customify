@@ -2670,7 +2670,7 @@
 				{
 					action: "customify/customizer/ajax/get_icons",
 					wp_customize: "on",
-					_nonce: _wpCustomizeSettings.nonce.preview,
+					nonce: Customify_Control_Args.nonce,
 					customize_theme: _wpCustomizeSettings.theme.stylesheet
 				},
 				function (res) {
@@ -2721,7 +2721,7 @@
 				{
 					action: "customify/customizer/ajax/fonts",
 					wp_customize: "on",
-					_nonce: _wpCustomizeSettings.nonce.preview,
+					nonce: Customify_Control_Args.nonce,
 					customize_theme: _wpCustomizeSettings.theme.stylesheet
 				},
 				function (res) {

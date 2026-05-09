@@ -77,6 +77,9 @@ module.exports = function ( grunt ) {
 		'!*.sh',
 		'!*.zip',
 		'!*.log',
+		'!**/.DS_Store',
+		'!**/Thumbs.db',
+		'!**/desktop.ini',
 
 		// Source maps
 		'!**/*.map',

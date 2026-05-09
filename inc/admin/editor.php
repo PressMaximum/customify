@@ -307,9 +307,18 @@ class Customify_Editor {
 	/**
 	 * Render dynamic CSS content.
 	 *
+	 * Gated by the same nonce baked into editor_style_url() and a capability
+	 * check so the endpoint is not freely callable. wp_ajax_ (no _nopriv_)
+	 * already restricts to authenticated requests; these add CSRF + role
+	 * gating per WordPress.org theme review guidelines.
+	 *
 	 * @return void
 	 */
 	public function css_file() {
+		check_ajax_referer( $this->action, 'nonce' );
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( '', '', array( 'response' => 403 ) );
+		}
 		header( 'Content-type: text/css; charset: UTF-8' );
 		echo $this->load_style();
 	}

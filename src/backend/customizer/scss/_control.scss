@@ -214,6 +214,16 @@ $text_color: #555d66;
     }
 }
 
+.customify--field {
+    .customify-field-settings-inner {
+        // display: inline-flex;
+        // flex-direction: column;
+        .select2 {
+            width: 100% !important;
+        }
+    }
+}
+
 .customify--multiple-devices .customify-field-settings-inner {
     display: none;
     .customify-field-settings-inner {

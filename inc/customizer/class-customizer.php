@@ -86,6 +86,9 @@ class  Customify_Customizer {
 	 * Reset Customize section
 	 */
 	function get_icons() {
+		if ( ! self::verify_nonce() ) {
+			wp_send_json_error();
+		}
 		if ( ! current_user_can( 'customize' ) ) {
 			wp_send_json_error();
 		}

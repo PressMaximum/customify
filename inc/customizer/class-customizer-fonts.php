@@ -11,6 +11,13 @@ class Customify_Fonts {
 	 * Ajax fonts
 	 */
 	function ajax_fonts() {
+		if ( ! Customify_Customizer::verify_nonce() ) {
+			wp_send_json_error();
+		}
+		if ( ! current_user_can( 'customize' ) ) {
+			wp_send_json_error();
+		}
+
 		$fonts = array(
 			'normal' => array(
 				'title' => __( 'Default Web Fonts', 'customify' ),
