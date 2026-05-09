@@ -1,8 +1,6 @@
 # Sass cache
 .sass-cache
 
-build/
-
 # Grunt
 /vendor/
 /node_modules/

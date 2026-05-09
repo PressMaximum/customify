@@ -16,6 +16,7 @@ import { useState, useEffect, useRef, useCallback, createPortal } from '@wordpre
 import { __ } from '@wordpress/i18n';
 import { Icon, Popover } from '@wordpress/components';
 import { dragHandle, settings, close, plus } from '@wordpress/icons';
+import TemplatesPanel from './TemplatesPanel';
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -199,7 +200,7 @@ export default function Builder( { config } ) {
 		}
 
 		function update() {
-			setInnerLeft( getSidebarWidth() );
+			setInnerLeft( getSidebarWidth() -1 );
 		}
 
 		update();
@@ -251,6 +252,23 @@ export default function Builder( { config } ) {
 		lastSaved.current = data;
 		writeSetting( data, controlId );
 	}, [ data ] ); // eslint-disable-line react-hooks/exhaustive-deps
+
+	// Sync React state from external wp.customize setting changes (e.g. Load Template).
+	// When something outside this component mutates the layout setting, mirror the new
+	// value into local state so the builder UI stays in sync without a page reload.
+	useEffect( () => {
+		const setting = wp.customize?.( controlId );
+		if ( ! setting ) return;
+		const handler = ( newRaw ) => {
+			const newData = normalizeData( parseValue( newRaw ), deviceIds, rows, hasSidebar );
+			// Skip if the change originated from our own writeSetting call.
+			if ( JSON.stringify( newData ) === JSON.stringify( lastSaved.current ) ) return;
+			lastSaved.current = newData;
+			setData( newData );
+		};
+		setting.bind( handler );
+		return () => setting.unbind( handler );
+	}, [ controlId ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const switchDevice = useCallback( ( d ) => {
 		setDevice( d );
@@ -438,6 +456,19 @@ export default function Builder( { config } ) {
 				onAdd={ ( itemId ) => moveItem( itemId, 'available', { device, row: rows[ 1 ] || rows[ 0 ], col: 'center' } ) }
 			/>
 		) }
+
+		{ /* Templates panel — Save / Load / Remove inside the {builderId}_templates section */ }
+		<TemplatesPanel
+			builderId={ builderId }
+			controlId={ `${ builderId }_templates_save` }
+			mountId={ `customify-${ builderId }-templates-mount` }
+			layoutSettingKey={ controlId }
+			onApplyLayout={ ( raw ) => {
+				const newData = normalizeData( parseValue( raw ), deviceIds, rows, hasSidebar );
+				lastSaved.current = newData;
+				setData( newData );
+			} }
+		/>
 
 		{ /* Slot for Popover components (tooltips, etc.) */ }
 		<Popover.Slot />
