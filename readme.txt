@@ -7,7 +7,7 @@ Tags: custom-background, custom-logo, custom-menu, featured-images, flexible-hea
 Requires at least: 4.9
 Tested up to: 6.7.1
 Requires PHP: 5.6
-Stable tag: 0.4.15
+Stable tag: 0.4.14
 
 == Description ==
 
@@ -119,30 +119,22 @@ Source: https://github.com/woocommerce/woocommerce
 
 == Changelog ==
 
-= 0.4.15 =
-* NEW: Pro modules can be configured directly from the Customify dashboard — Typekit settings open inline; other modules deep-link to the matching Customizer panel or CPT screen.
-* NEW: Dashboard recognises module dependencies — Pro modules that need WooCommerce now lock off automatically and show a clear "Requires WooCommerce" hint when the plugin is missing.
-* NEW: Auto-recovery for WooCommerce-dependent Pro modules: if WooCommerce is deactivated while a WC module is enabled, the theme silently disables the module on the next admin page load and surfaces a one-time admin notice.
-* IMPROVED: Settings modal in the dashboard now refreshes dynamic field content after save and surfaces server-side notices (e.g. Typekit "Could not load font file") inline instead of swallowing them.
-* IMPROVED: Settings modal renders many more field types (checkbox / number / color / textarea / radio group / image select / heading) so future Pro module schemas light up automatically.
-* IMPROVED: .select2 dropdowns inside Customizer field rows now span the full row width.
-* FIXED: Three Customizer AJAX endpoints (get_icons, fonts, editor CSS) now require a valid nonce + capability — closes vulnerabilities surfaced by the WordPress.org theme review audit.
-* FIXED: Eliminated a fatal that occurred on the frontend when a WooCommerce-dependent Pro module was enabled but WooCommerce was inactive (wc_get_page_id undefined).
-* FIXED: readme.txt — bump Stable tag, add Requires PHP, merge full changelog history, credit Select2 / Font Awesome 6 / WooCommerce icons.
-* FIXED: style.css — add the missing "Requires at least" header.
-* FIXED: Release zip now excludes .DS_Store / Thumbs.db / desktop.ini.
-* FIXED: Vendor minified assets (Select2, FitVids) now ship with their non-minified source counterparts as required by WordPress.org theme review.
-
 = 0.4.14 =
 * NEW: Transparent header feature.
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
 * NEW: has-page-cover body class; scope transparent header styles.
+* NEW: Pro modules can be configured directly from the Customify dashboard — Typekit settings open inline; other modules deep-link to the matching Customizer panel or CPT screen.
+* NEW: Dashboard recognises module dependencies — Pro modules that need WooCommerce now lock off automatically and show a clear "Requires WooCommerce" hint when the plugin is missing.
+* NEW: Auto-recovery for WooCommerce-dependent Pro modules: if WooCommerce is deactivated while a WC module is enabled, the theme silently disables the module on the next admin page load and surfaces a one-time admin notice.
 * IMPROVED: Header/footer builder UI — sizing, title display, popover width and column layout.
 * IMPROVED: Header layout.
 * IMPROVED: Decouple Post Content Max Width from .content-inner wrapper; apply theme.json contentSize to frontend .entry-content.
 * IMPROVED: Block widget styles and theme.json cleanup for block widget support.
 * IMPROVED: Emit .min and unminified assets side-by-side; load per WP_DEBUG. Source maps only in development mode.
+* IMPROVED: Pro settings modal in the dashboard refreshes dynamic field content after save and surfaces server-side notices (e.g. Typekit "Could not load font file") inline instead of swallowing them.
+* IMPROVED: Pro settings modal renders many more field types (checkbox / number / color / textarea / radio group / image select / heading) so future Pro module schemas light up automatically.
+* IMPROVED: .select2 dropdowns inside Customizer field rows now span the full row width.
 * FIXED: Reset section not working for option-type / multi-setting controls.
 * FIXED: core/image lightbox styling.
 * FIXED: Duplicate border for Latest Posts widget.
@@ -150,6 +142,12 @@ Source: https://github.com/woocommerce/woocommerce
 * FIXED: Three security vulnerabilities found in security review.
 * FIXED: Sass deprecation warnings and customify-style CSS handle.
 * FIXED: Out of date WooCommerce templates #379.
+* FIXED: Three Customizer AJAX endpoints (get_icons, fonts, editor CSS) now require a valid nonce + capability — closes vulnerabilities surfaced by the WordPress.org theme review audit.
+* FIXED: Eliminated a fatal that occurred on the frontend when a WooCommerce-dependent Pro module was enabled but WooCommerce was inactive (wc_get_page_id undefined).
+* FIXED: readme.txt — bump Stable tag, add Requires PHP, merge full changelog history, credit Select2 / Font Awesome 6 / WooCommerce icons.
+* FIXED: style.css — add the missing "Requires at least" header.
+* FIXED: Release zip now excludes .DS_Store / Thumbs.db / desktop.ini.
+* FIXED: Vendor minified assets (Select2, FitVids) now ship with their non-minified source counterparts as required by WordPress.org theme review.
 
 = 0.4.13 =
 * UPDATED: WooCommerce template files.
