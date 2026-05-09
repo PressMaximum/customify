@@ -5,8 +5,22 @@
 /vendor/
 /node_modules/
 /releases/
-/tests/
 npm-debug.log
+
+# Composer dev tooling
+/composer
+.phpunit.result.cache
+.phpcs-cache
+
+# Test artifacts
+/coverage/
+/tests/e2e/.auth/
+/tests/e2e/.results/
+/tests/e2e/playwright-report/
+/playwright-report/
+
+# Local env (Playwright reads admin credentials from here)
+.env
 
 # PhpStorm
 .idea

@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<ruleset name="Customify">
+    <description>WordPress.org theme review coding standards for Customify.</description>
+
+    <!-- Files to scan -->
+    <file>functions.php</file>
+    <file>inc</file>
+    <file>template-parts</file>
+    <file>404.php</file>
+    <file>archive.php</file>
+    <file>comments.php</file>
+    <file>footer.php</file>
+    <file>header.php</file>
+    <file>index.php</file>
+    <file>page.php</file>
+    <file>search.php</file>
+    <file>searchform.php</file>
+    <file>single.php</file>
+    <file>sidebar.php</file>
+
+    <!-- Exclusions -->
+    <exclude-pattern>*/build/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/tests/*</exclude-pattern>
+    <exclude-pattern>*/inc/customizer/configs/*</exclude-pattern>
+    <exclude-pattern>*/inc/panel-builder/*/items/*</exclude-pattern>
+    <exclude-pattern>*/woocommerce/*</exclude-pattern>
+
+    <!-- Run per-file in parallel for speed -->
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="8"/>
+    <arg name="colors"/>
+    <arg value="ps"/>
+
+    <!-- Show progress + summary -->
+    <arg value="ps"/>
+
+    <!-- WPCS 3 removed the rolled-up WordPress-Theme ruleset; use Core+Docs+Extra. -->
+    <rule ref="WordPress-Core">
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+    </rule>
+    <rule ref="WordPress-Docs"/>
+    <rule ref="WordPress-Extra">
+        <exclude name="WordPress.Files.FileName.NotHyphenatedLowercase"/>
+        <exclude name="WordPress.Files.FileName.InvalidClassFileName"/>
+        <exclude name="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned"/>
+    </rule>
+
+    <!-- PHP version compatibility — match composer.json minimum -->
+    <rule ref="PHPCompatibilityWP"/>
+    <config name="testVersion" value="5.6-"/>
+    <config name="minimum_supported_wp_version" value="4.9"/>
+
+    <!-- Theme namespace prefix enforcement -->
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="customify"/>
+                <element value="Customify"/>
+                <element value="CUSTOMIFY"/>
+            </property>
+        </properties>
+    </rule>
+
+    <!-- Text domain check -->
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="customify"/>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

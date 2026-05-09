@@ -6,11 +6,17 @@
         "node": ">= 0.10.0"
     },
     "devDependencies": {
+        "@playwright/test": "^1.59.1",
+        "@testing-library/jest-dom": "^6.9.1",
+        "@testing-library/react": "^16.3.2",
+        "@testing-library/user-event": "^14.6.1",
         "@wordpress/components": "^32.6.0",
         "@wordpress/icons": "^12.2.0",
+        "@wordpress/jest-preset-default": "^12.45.0",
         "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
         "copy-webpack-plugin": "^14.0.0",
+        "dotenv": "^17.4.2",
         "grunt": "^1.6.1",
         "grunt-bumpup": "latest",
         "grunt-contrib-clean": "latest",
@@ -43,6 +49,16 @@
         "build": "wp-scripts build --config webpack.config.js",
         "makepot": "node ./bin/makepot.js",
         "release:assets": "npm run build && npm run makepot",
-        "lint:js": "wp-scripts lint-js src"
+        "lint:js": "wp-scripts lint-js src",
+        "test": "wp-scripts test-unit-js --config jest.config.js",
+        "test:watch": "wp-scripts test-unit-js --config jest.config.js --watch",
+        "test:coverage": "wp-scripts test-unit-js --config jest.config.js --coverage",
+        "test:php": "vendor/bin/phpunit --testsuite unit",
+        "test:e2e": "playwright test",
+        "test:e2e:headed": "playwright test --headed",
+        "test:e2e:debug": "playwright test --debug",
+        "test:e2e:ui": "playwright test --ui",
+        "test:e2e:report": "playwright show-report tests/e2e/playwright-report",
+        "test:all": "npm run test:php && npm run test"
     }
 }

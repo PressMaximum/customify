@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="tests/php/bootstrap.php"
+    backupGlobals="false"
+    colors="true"
+    convertErrorsToExceptions="true"
+    convertNoticesToExceptions="true"
+    convertWarningsToExceptions="true"
+    convertDeprecationsToExceptions="true"
+    failOnWarning="true"
+    failOnRisky="true"
+    beStrictAboutOutputDuringTests="true"
+    beStrictAboutTestsThatDoNotTestAnything="true"
+    cacheResultFile=".phpunit.result.cache"
+    >
+    <testsuites>
+        <testsuite name="unit">
+            <directory>tests/php/unit</directory>
+            <directory>tests/php/schema</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>tests/php/integration</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <include>
+            <directory suffix=".php">inc</directory>
+            <file>functions.php</file>
+        </include>
+        <exclude>
+            <directory>inc/customizer/configs</directory>
+            <directory>inc/compatibility</directory>
+            <directory>inc/panel-builder/footer-builder/items</directory>
+            <directory>inc/panel-builder/header-builder/items</directory>
+        </exclude>
+    </coverage>
+
+    <php>
+        <const name="CUSTOMIFY_TESTING" value="true"/>
+        <ini name="error_reporting" value="E_ALL"/>
+    </php>
+</phpunit>

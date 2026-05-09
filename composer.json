@@ -1,0 +1,35 @@
+{
+    "name": "presmaximum/customify",
+    "description": "Customify WordPress theme — dev-only composer for tooling.",
+    "type": "wordpress-theme",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.6",
+        "brain/monkey": "^2.6",
+        "yoast/phpunit-polyfills": "^2.0",
+        "wp-coding-standards/wpcs": "^3.0",
+        "phpcompatibility/phpcompatibility-wp": "^2.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^1.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        },
+        "sort-packages": true
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Customify\\Tests\\": "tests/php/src/"
+        }
+    },
+    "scripts": {
+        "test:unit":        "phpunit --testsuite unit",
+        "test:integration": "phpunit --testsuite integration",
+        "test":             "phpunit",
+        "lint:php":         "phpcs --standard=phpcs.xml.dist",
+        "lint:php:fix":     "phpcbf --standard=phpcs.xml.dist"
+    }
+}
