@@ -69,10 +69,12 @@ const filteredPlugins = defaultConfig.plugins.filter(
 );
 
 // ── Emit .min siblings alongside every JS/CSS output ─────────────────────────
-// Runs in BOTH dev (`npm run start`) and prod (`npm run build`) so the two
-// variants always exist. PHP picks whichever based on WP_DEBUG via
-// Customify::get_asset_suffix(). Staged after OPTIMIZE so RTL output is
-// minified too.
+// Runs in production only (`npm run build`). `npm start` (development /
+// watch) skips minification so the watch loop stays fast and only emits
+// readable bundles. PHP's Customify::get_asset_suffix() picks `.min` when
+// WP_DEBUG is off and falls back to the unminified file otherwise — this
+// keeps `npm start` usable without setting WP_DEBUG. Staged after OPTIMIZE
+// so RTL output is minified too.
 class EmitMinifiedAssetsPlugin {
 	apply( compiler ) {
 		compiler.hooks.compilation.tap( 'EmitMinifiedAssetsPlugin', ( compilation ) => {
@@ -240,7 +242,8 @@ module.exports = {
 
 		new RtlCssPlugin(),
 
-		new EmitMinifiedAssetsPlugin(),
+		// Only minify in production — `npm start` produces readable bundles only.
+		...( isDevelopment ? [] : [ new EmitMinifiedAssetsPlugin() ] ),
 
 		new CopyPlugin( {
 			patterns: [

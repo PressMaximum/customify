@@ -1,14 +1,14 @@
-# <!=Copyright (C) 2024 WPCustomify
+# <!=Copyright (C) 2026 WPCustomify
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.7\n"
+"Project-Id-Version: Customify 0.4.14\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2024-09-12 00:56:38+00:00\n"
+"POT-Creation-Date: 2026-05-09 06:30:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2026-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -47,11 +47,36 @@ msgstr ""
 msgid "Skip to content"
 msgstr ""
 
-#: inc/admin/dashboard.php:22
-msgid "Customify Options"
+#: inc/admin/block-styles.php:15
+msgid "Ghost"
 msgstr ""
 
-#: inc/admin/dashboard.php:59 inc/admin/dashboard.php:191
+#: inc/admin/block-styles.php:24
+#: inc/customizer/configs/header/social-icons.php:182
+msgid "Rounded"
+msgstr ""
+
+#: inc/admin/block-styles.php:33
+msgid "Shadow"
+msgstr ""
+
+#: inc/admin/block-styles.php:42
+msgid "Accent Border"
+msgstr ""
+
+#: inc/admin/block-styles.php:51
+msgid "Thick"
+msgstr ""
+
+#: inc/admin/block-styles.php:60
+msgid "Card"
+msgstr ""
+
+#: inc/admin/block-styles.php:69
+msgid "No Gap"
+msgstr ""
+
+#: inc/admin/dashboard.php:59 inc/admin/dashboard.php:197
 msgid "logo"
 msgstr ""
 
@@ -80,12 +105,16 @@ msgstr ""
 msgid "Now you can copy setting data from parent theme to this child theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:75 inc/admin/dashboard.php:252
+#: inc/admin/dashboard.php:75 inc/admin/dashboard.php:260
 msgid "Copy Settings"
 msgstr ""
 
 #: inc/admin/dashboard.php:85
 msgid "Your theme settings were copied."
+msgstr ""
+
+#: inc/admin/dashboard.php:93 inc/admin/dashboard.php:235
+msgid "Customify Options"
 msgstr ""
 
 #: inc/admin/dashboard.php:123
@@ -100,72 +129,72 @@ msgstr ""
 msgid "Error updating settings."
 msgstr ""
 
-#: inc/admin/dashboard.php:194 inc/admin/dashboard.php:218
+#: inc/admin/dashboard.php:200 inc/admin/dashboard.php:224
 msgid "Changelog"
 msgstr ""
 
-#: inc/admin/dashboard.php:211
+#: inc/admin/dashboard.php:217 inc/customizer/class-customify-panel.php:25
+#: inc/customizer/class-customify-panel.php:68
 msgid "Back"
 msgstr ""
 
-#: inc/admin/dashboard.php:258
+#: inc/admin/dashboard.php:267
 msgid "You're using %1$s theme, It's a child theme of Customify"
 msgstr ""
 
-#: inc/admin/dashboard.php:261
+#: inc/admin/dashboard.php:270
 msgid ""
 "Child theme uses it's own theme setting name, would you like to copy "
 "setting data from parent theme to this child theme?"
 msgstr ""
 
-#: inc/admin/dashboard.php:266
+#: inc/admin/dashboard.php:275
 msgid "From Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:271
+#: inc/admin/dashboard.php:280
 msgid "To Theme"
 msgstr ""
 
-#: inc/admin/dashboard.php:275
+#: inc/admin/dashboard.php:284
 msgid "To"
 msgstr ""
 
-#: inc/admin/dashboard.php:279
+#: inc/admin/dashboard.php:288
 msgid "Copy now"
 msgstr ""
 
-#: inc/admin/dashboard.php:295 inc/customizer/class-customizer.php:1118
+#: inc/admin/dashboard.php:304 inc/customizer/class-customizer.php:1142
 msgid "Logo & Site Identity"
 msgstr ""
 
-#: inc/admin/dashboard.php:299
+#: inc/admin/dashboard.php:308
 msgid "Layout Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:303 inc/customizer/configs/header/panel.php:17
-#: inc/customizer/configs/header/panel.php:64
-#: inc/customizer/configs/header/panel.php:73
+#: inc/admin/dashboard.php:312 inc/customizer/configs/header/panel.php:17
+#: inc/customizer/configs/header/panel.php:66
 msgid "Header Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:307 inc/customizer/configs/footer/panel.php:9
-#: inc/customizer/configs/footer/panel.php:40
-#: inc/customizer/configs/footer/panel.php:48
+#: inc/admin/dashboard.php:316 inc/customizer/configs/footer/panel.php:58
+#: inc/customizer/configs/footer/panel.php:66
 msgid "Footer Builder"
 msgstr ""
 
-#: inc/admin/dashboard.php:311 inc/compatibility/breadcrumb.php:213
+#: inc/admin/dashboard.php:320 inc/compatibility/breadcrumb.php:213
 #: inc/compatibility/woocommerce/config/catalog-designer.php:408
 #: inc/compatibility/woocommerce/config/header/cart.php:179
 #: inc/compatibility/woocommerce/config/header/cart.php:235
 #: inc/customizer/configs/blogs.php:371
 #: inc/customizer/configs/header/button.php:107
-#: inc/customizer/configs/header/panel.php:281
+#: inc/customizer/configs/header/panel.php:258
+#: inc/customizer/configs/header/transparent.php:69
 #: inc/customizer/configs/styling.php:15
 msgid "Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:315 inc/compatibility/breadcrumb.php:203
+#: inc/admin/dashboard.php:324 inc/compatibility/breadcrumb.php:203
 #: inc/compatibility/woocommerce/config/header/cart.php:206
 #: inc/customizer/configs/blogs.php:357
 #: inc/customizer/configs/header/button.php:96
@@ -173,263 +202,263 @@ msgstr ""
 msgid "Typography"
 msgstr ""
 
-#: inc/admin/dashboard.php:319
+#: inc/admin/dashboard.php:328
 msgid "Sidebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:323 inc/customizer/configs/page-header.php:332
+#: inc/admin/dashboard.php:332 inc/customizer/configs/page-header.php:332
 msgid "Titlebar Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:328 inc/customizer/configs/blogs.php:8
+#: inc/admin/dashboard.php:337 inc/customizer/configs/blogs.php:8
 msgid "Blog Posts"
 msgstr ""
 
-#: inc/admin/dashboard.php:332
+#: inc/admin/dashboard.php:341
 msgid "Homepage Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:340
+#: inc/admin/dashboard.php:349
 msgid "Links to Customizer Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:361
+#: inc/admin/dashboard.php:370
 msgid "Font Icons Settings"
 msgstr ""
 
-#: inc/admin/dashboard.php:365
+#: inc/admin/dashboard.php:374
 msgid "Font Awesome version 4"
 msgstr ""
 
-#: inc/admin/dashboard.php:368
+#: inc/admin/dashboard.php:377
 msgid "Font Awesome version 6"
 msgstr ""
 
-#: inc/admin/dashboard.php:371
+#: inc/admin/dashboard.php:380
 msgid "Font Awesome version 6 and support version 4&5"
 msgstr ""
 
-#: inc/admin/dashboard.php:386
+#: inc/admin/dashboard.php:395
 msgid "Join the community!"
 msgstr ""
 
-#: inc/admin/dashboard.php:388
+#: inc/admin/dashboard.php:397
 msgid ""
 "Join the Facebook group for updates, discussions, chat with other Customify "
 "lovers."
 msgstr ""
 
-#: inc/admin/dashboard.php:389
+#: inc/admin/dashboard.php:398
 msgid "Join Our Facebook Group &rarr;\t"
 msgstr ""
 
-#: inc/admin/dashboard.php:403
+#: inc/admin/dashboard.php:412
 msgid "Customify ready to import sites"
 msgstr ""
 
-#: inc/admin/dashboard.php:408
+#: inc/admin/dashboard.php:417
 msgid ""
 "<strong>Customify Sites</strong> is a free add-on for the Customify theme "
 "which help you browse and import ready made websites with few clicks."
 msgstr ""
 
-#: inc/admin/dashboard.php:439
+#: inc/admin/dashboard.php:448
 msgid "View Site Library"
 msgstr ""
 
-#: inc/admin/dashboard.php:442 inc/admin/dashboard.php:610
+#: inc/admin/dashboard.php:451 inc/admin/dashboard.php:619
 msgid "Install Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:455
+#: inc/admin/dashboard.php:464
 msgid "Download Plugin"
 msgstr ""
 
-#: inc/admin/dashboard.php:469
+#: inc/admin/dashboard.php:478
 msgid "Active Now"
 msgstr ""
 
-#: inc/admin/dashboard.php:488 inc/admin/dashboard.php:638
+#: inc/admin/dashboard.php:497 inc/admin/dashboard.php:647
 msgid "Details"
 msgstr ""
 
-#: inc/admin/dashboard.php:606
+#: inc/admin/dashboard.php:615
 msgid "Activate"
 msgstr ""
 
-#: inc/admin/dashboard.php:649
+#: inc/admin/dashboard.php:658
 msgid "Recommend Plugins"
 msgstr ""
 
-#: inc/admin/dashboard.php:665 inc/customizer/configs/upsell.php:32
+#: inc/admin/dashboard.php:674 inc/customizer/configs/upsell.php:32
 msgid "Header Transparent"
 msgstr ""
 
-#: inc/admin/dashboard.php:666
+#: inc/admin/dashboard.php:675
 msgid "Make your website stand out with transparent header modules."
 msgstr ""
 
-#: inc/admin/dashboard.php:670 inc/customizer/configs/upsell.php:31
+#: inc/admin/dashboard.php:679 inc/customizer/configs/upsell.php:31
 msgid "Header Sticky"
 msgstr ""
 
-#: inc/admin/dashboard.php:671
+#: inc/admin/dashboard.php:680
 msgid "Let your header accessible when users scroll up or down in unique style."
 msgstr ""
 
-#: inc/admin/dashboard.php:675
+#: inc/admin/dashboard.php:684
 msgid "Header and Footer Builder Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:676
+#: inc/admin/dashboard.php:685
 msgid "Get more header and footer builder items, plus advanced styling options."
 msgstr ""
 
-#: inc/admin/dashboard.php:680
+#: inc/admin/dashboard.php:689
 msgid "Scroll To Top"
 msgstr ""
 
-#: inc/admin/dashboard.php:681
+#: inc/admin/dashboard.php:690
 msgid ""
 "Get a better user experience with a scroll to top button with beautiful "
 "animation."
 msgstr ""
 
-#: inc/admin/dashboard.php:685
+#: inc/admin/dashboard.php:694
 msgid "Blog Pro"
 msgstr ""
 
-#: inc/admin/dashboard.php:686
+#: inc/admin/dashboard.php:695
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:690 inc/customizer/configs/header/panel.php:204
+#: inc/admin/dashboard.php:699 inc/customizer/configs/header/panel.php:181
 msgid "Advanced Styling"
 msgstr ""
 
-#: inc/admin/dashboard.php:691
+#: inc/admin/dashboard.php:700
 msgid ""
 "Control the layout and typography setting for page header title, page "
 "header cover and more."
 msgstr ""
 
-#: inc/admin/dashboard.php:695
+#: inc/admin/dashboard.php:704
 msgid "Portfolio"
 msgstr ""
 
-#: inc/admin/dashboard.php:696
+#: inc/admin/dashboard.php:705
 msgid "Show off your best project in a beautiful way."
 msgstr ""
 
-#: inc/admin/dashboard.php:700
+#: inc/admin/dashboard.php:709
 msgid "Multiple Headers"
 msgstr ""
 
-#: inc/admin/dashboard.php:701
+#: inc/admin/dashboard.php:710
 msgid "Create unique header for each page, post, archive or WooCommerce pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:705
+#: inc/admin/dashboard.php:714
 msgid "Mega Menu"
 msgstr ""
 
-#: inc/admin/dashboard.php:706
+#: inc/admin/dashboard.php:715
 msgid "Create mega menu for your sites that need more space for navigation."
 msgstr ""
 
-#: inc/admin/dashboard.php:710
+#: inc/admin/dashboard.php:719
 msgid "Multilingual Integration"
 msgstr ""
 
-#: inc/admin/dashboard.php:711
+#: inc/admin/dashboard.php:720
 msgid ""
 "WPML multilingual plugin support, plus a fully customized language switcher "
 "header builder item."
 msgstr ""
 
-#: inc/admin/dashboard.php:715
+#: inc/admin/dashboard.php:724
 msgid "Custom Fonts"
 msgstr ""
 
-#: inc/admin/dashboard.php:716
+#: inc/admin/dashboard.php:725
 msgid ""
 "Custom Fonts module allows you to add your self-hosted fonts and use them "
 "on your Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:721
+#: inc/admin/dashboard.php:730
 msgid "Typekit"
 msgstr ""
 
-#: inc/admin/dashboard.php:722
+#: inc/admin/dashboard.php:731
 msgid ""
 "Typekit module allows you to add Typekit fonts and use them on your "
 "Customify powered websites."
 msgstr ""
 
-#: inc/admin/dashboard.php:726
+#: inc/admin/dashboard.php:735
 msgid "Customify Hooks"
 msgstr ""
 
-#: inc/admin/dashboard.php:727
+#: inc/admin/dashboard.php:736
 msgid "Add custom hook scripts."
 msgstr ""
 
-#: inc/admin/dashboard.php:732
+#: inc/admin/dashboard.php:741
 msgid "WooCommerce Booster"
 msgstr ""
 
-#: inc/admin/dashboard.php:733
+#: inc/admin/dashboard.php:742
 msgid "Gives you creative control of style and layout options for your shop."
 msgstr ""
 
-#: inc/admin/dashboard.php:738
+#: inc/admin/dashboard.php:747
 msgid "Single Product Layouts"
 msgstr ""
 
-#: inc/admin/dashboard.php:739
+#: inc/admin/dashboard.php:748
 msgid "More beautiful layouts for your single product."
 msgstr ""
 
-#: inc/admin/dashboard.php:744
+#: inc/admin/dashboard.php:753
 msgid "Off Canvas Filter"
 msgstr ""
 
-#: inc/admin/dashboard.php:745
+#: inc/admin/dashboard.php:754
 msgid "Add off canvas products filter for shop and product archive pages."
 msgstr ""
 
-#: inc/admin/dashboard.php:750
+#: inc/admin/dashboard.php:759
 msgid "Product Gallery Slider"
 msgstr ""
 
-#: inc/admin/dashboard.php:751
+#: inc/admin/dashboard.php:760
 msgid "Add slider for product gallery."
 msgstr ""
 
-#: inc/admin/dashboard.php:756
+#: inc/admin/dashboard.php:765
 msgid "Quick View"
 msgstr ""
 
-#: inc/admin/dashboard.php:757
+#: inc/admin/dashboard.php:766
 msgid "Add product quick view modal for product listing.."
 msgstr ""
 
-#: inc/admin/dashboard.php:763
+#: inc/admin/dashboard.php:772
 msgid "Infinity Scroll."
 msgstr ""
 
-#: inc/admin/dashboard.php:764
+#: inc/admin/dashboard.php:773
 msgid ""
 "Loads the next posts, products automatically when the reader approaches the "
 "bottom of the page."
 msgstr ""
 
-#: inc/admin/dashboard.php:772
+#: inc/admin/dashboard.php:781
 msgid "Customify Pro Modules"
 msgstr ""
 
-#: inc/admin/dashboard.php:773
+#: inc/admin/dashboard.php:782
 msgid "Upgrade Now &rarr;"
 msgstr ""
 
@@ -499,43 +528,65 @@ msgstr ""
 msgid "Feed for all posts filed under %s"
 msgstr ""
 
-#: inc/class-customify.php:134
+#: inc/class-customify.php:142 inc/class-customify.php:204
 msgid "Primary"
 msgstr ""
 
-#: inc/class-customify.php:204
-msgid "Primary Sidebar"
+#: inc/class-customify.php:209
+msgid "Secondary"
 msgstr ""
 
-#: inc/class-customify.php:206 inc/class-customify.php:217
-#: inc/class-customify.php:231
-#: inc/compatibility/woocommerce/woocommerce.php:649
-#: inc/compatibility/woocommerce/woocommerce.php:660
-msgid "Add widgets here."
+#: inc/class-customify.php:214
+#: inc/compatibility/woocommerce/config/catalog-designer.php:393
+#: inc/customizer/configs/header/button.php:46
+msgid "Text"
 msgstr ""
 
-#: inc/class-customify.php:215
-msgid "Secondary Sidebar"
+#: inc/class-customify.php:219 inc/customizer/configs/header/button.php:80
+msgid "Link"
+msgstr ""
+
+#: inc/class-customify.php:224
+msgid "Light Gray"
 msgstr ""
 
 #: inc/class-customify.php:229
+msgid "Dark Gray"
+msgstr ""
+
+#: inc/class-customify.php:246
+msgid "Primary Sidebar"
+msgstr ""
+
+#: inc/class-customify.php:248 inc/class-customify.php:259
+#: inc/class-customify.php:273
+#: inc/compatibility/woocommerce/woocommerce.php:650
+#: inc/compatibility/woocommerce/woocommerce.php:661
+msgid "Add widgets here."
+msgstr ""
+
+#: inc/class-customify.php:257
+msgid "Secondary Sidebar"
+msgstr ""
+
+#: inc/class-customify.php:271
 #. translators: 1: Widget number.
 msgid "Footer Sidebar %d"
 msgstr ""
 
 #: inc/class-metabox-fields.php:442 inc/class-metabox.php:117
 #: inc/compatibility/woocommerce/config/single-product.php:196
-#: inc/customizer/class-customizer.php:421
-#: inc/customizer/class-customizer.php:432
-#: inc/customizer/class-customizer.php:444
-#: inc/customizer/class-customizer.php:529
-#: inc/customizer/class-customizer.php:546
-#: inc/customizer/class-customizer.php:566
-#: inc/customizer/class-customizer.php:583
-#: inc/customizer/class-customizer.php:603
-#: inc/customizer/class-customizer.php:698
+#: inc/customizer/class-customizer.php:436
+#: inc/customizer/class-customizer.php:447
+#: inc/customizer/class-customizer.php:459
+#: inc/customizer/class-customizer.php:544
+#: inc/customizer/class-customizer.php:561
+#: inc/customizer/class-customizer.php:581
+#: inc/customizer/class-customizer.php:598
+#: inc/customizer/class-customizer.php:618
+#: inc/customizer/class-customizer.php:713
 #: inc/customizer/configs/header/social-icons.php:271
-#: inc/customizer/configs/layouts.php:230
+#: inc/customizer/configs/layouts.php:231
 #: inc/customizer/configs/page-header.php:36
 #: inc/customizer/configs/page-header.php:219
 #: inc/customizer/configs/page-header.php:260
@@ -544,7 +595,7 @@ msgstr ""
 #: inc/customizer/configs/page-header.php:489
 #: inc/customizer/configs/page-header.php:510
 #: inc/customizer/configs/page-header.php:528
-#: inc/customizer/controls/class-control-base.php:267
+#: inc/customizer/controls/class-control-base.php:266
 #: inc/customizer/controls/class-control-base.php:290
 msgid "Default"
 msgstr ""
@@ -554,8 +605,6 @@ msgid "Select image"
 msgstr ""
 
 #: inc/class-metabox-fields.php:513
-#: inc/customizer/configs/footer/templates.php:40
-#: inc/customizer/configs/header/templates.php:40
 #: inc/customizer/controls/class-control-icon.php:24
 #: inc/customizer/controls/class-control-icon.php:27
 #: inc/customizer/controls/class-control-image.php:44
@@ -563,7 +612,6 @@ msgstr ""
 #: inc/customizer/controls/class-control-repeater.php:39
 #: inc/customizer/controls/class-control-upload.php:44
 #: inc/customizer/controls/class-control-video.php:44
-#: inc/panel-builder/class-layout-builder.php:258
 msgid "Remove"
 msgstr ""
 
@@ -571,8 +619,9 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/single-product.php:164
 #: inc/compatibility/woocommerce/config/single-product.php:187
 #: inc/customizer/configs/blogs.php:29 inc/customizer/configs/blogs.php:36
-#: inc/customizer/configs/footer/panel.php:92
-#: inc/customizer/configs/header/panel.php:145
+#: inc/customizer/configs/footer/panel.php:122
+#: inc/customizer/configs/footer/panel.php:372
+#: inc/customizer/configs/header/panel.php:122
 #: inc/customizer/configs/page-header.php:214
 msgid "Layout"
 msgstr ""
@@ -585,8 +634,8 @@ msgstr ""
 msgid "Content Layout"
 msgstr ""
 
-#: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:99
-#: inc/customizer/configs/header/panel.php:152
+#: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:129
+#: inc/customizer/configs/header/panel.php:129
 #: inc/customizer/configs/layouts.php:42
 #: inc/customizer/configs/page-header.php:221
 msgid "Full Width"
@@ -600,7 +649,7 @@ msgstr ""
 msgid "Sidebar"
 msgstr ""
 
-#: inc/class-metabox.php:82 inc/class-metabox.php:116 inc/class-metabox.php:140
+#: inc/class-metabox.php:82 inc/class-metabox.php:116 inc/class-metabox.php:154
 msgid "Inherit from customize settings"
 msgstr ""
 
@@ -642,12 +691,14 @@ msgstr ""
 
 #: inc/class-metabox.php:111 inc/compatibility/breadcrumb.php:188
 #: inc/compatibility/breadcrumb.php:193
+#: inc/customizer/configs/header/transparent.php:180
+#: inc/customizer/configs/header/transparent.php:185
 #: inc/customizer/configs/page-header.php:237
 #: inc/customizer/configs/page-header.php:248
 msgid "Display"
 msgstr ""
 
-#: inc/class-metabox.php:118 inc/customizer/class-customizer.php:531
+#: inc/class-metabox.php:118 inc/customizer/class-customizer.php:546
 #: inc/customizer/configs/page-header.php:37
 #: inc/customizer/configs/page-header.php:473
 msgid "Cover"
@@ -657,22 +708,38 @@ msgstr ""
 msgid "Titlebar"
 msgstr ""
 
-#: inc/class-metabox.php:120 inc/class-metabox.php:141
+#: inc/class-metabox.php:120 inc/class-metabox.php:155
 #: inc/customizer/configs/page-header.php:39
 msgid "Hide"
 msgstr ""
 
-#: inc/class-metabox.php:129 inc/class-metabox.php:135
+#: inc/class-metabox.php:127 inc/customizer/configs/header/transparent.php:168
+msgid "Transparent Header"
+msgstr ""
+
+#: inc/class-metabox.php:132
+msgid "Inherit from Customizer settings"
+msgstr ""
+
+#: inc/class-metabox.php:133
+msgid "Force transparent"
+msgstr ""
+
+#: inc/class-metabox.php:134
+msgid "Force opaque"
+msgstr ""
+
+#: inc/class-metabox.php:143 inc/class-metabox.php:149
 #: inc/compatibility/breadcrumb.php:90
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-metabox.php:142
+#: inc/class-metabox.php:156
 #: inc/customizer/controls/class-control-repeater.php:23
 msgid "Show"
 msgstr ""
 
-#: inc/class-metabox.php:182
+#: inc/class-metabox.php:209
 msgid "Customify Settings"
 msgstr ""
 
@@ -748,6 +815,7 @@ msgid "Hide on product tag"
 msgstr ""
 
 #: inc/compatibility/breadcrumb.php:189
+#: inc/customizer/configs/header/transparent.php:181
 #: inc/customizer/configs/page-header.php:238
 msgid "Settings display for special pages."
 msgstr ""
@@ -781,9 +849,9 @@ msgstr ""
 #: inc/customizer/configs/related-posts.php:31
 #: inc/customizer/configs/related-posts.php:149
 #: inc/customizer/configs/related-posts.php:211
-#: inc/customizer/configs/single-blog-post.php:47
-#: inc/customizer/configs/single-blog-post.php:106
-#: inc/customizer/configs/single-blog-post.php:187
+#: inc/customizer/configs/single-blog-post.php:56
+#: inc/customizer/configs/single-blog-post.php:115
+#: inc/customizer/configs/single-blog-post.php:196
 msgid "Title"
 msgstr ""
 
@@ -911,11 +979,6 @@ msgstr ""
 msgid "Product Onsale Bubble"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/catalog-designer.php:393
-#: inc/customizer/configs/header/button.php:46
-msgid "Text"
-msgstr ""
-
 #: inc/compatibility/woocommerce/config/catalog-designer.php:394
 msgid "Discount percent"
 msgstr ""
@@ -925,7 +988,7 @@ msgid "Discount value"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:400
-#: inc/customizer/configs/header/panel.php:247
+#: inc/customizer/configs/header/panel.php:224
 msgid "Display Type"
 msgstr ""
 
@@ -1039,7 +1102,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:171
 #: inc/customizer/configs/blogs.php:245
-#: inc/customizer/configs/single-blog-post.php:134
+#: inc/customizer/configs/single-blog-post.php:143
 msgid "Separator"
 msgstr ""
 
@@ -1201,20 +1264,31 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:601
+#: inc/compatibility/woocommerce/woocommerce.php:602
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:609
+#: inc/compatibility/woocommerce/woocommerce.php:610
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:647
+#: inc/compatibility/woocommerce/woocommerce.php:648
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:658
+#: inc/compatibility/woocommerce/woocommerce.php:659
 msgid "WooCommerce Secondary Sidebar"
+msgstr ""
+
+#: inc/customizer/class-customify-panel.php:31
+#: inc/customizer/class-customify-panel.php:74
+#. translators: %s: panel title
+msgid "You are customizing %s"
+msgstr ""
+
+#: inc/customizer/class-customify-panel.php:37
+#: inc/customizer/class-customify-panel.php:80
+msgid "Help"
 msgstr ""
 
 #: inc/customizer/class-customify-section.php:28
@@ -1242,308 +1316,308 @@ msgstr ""
 msgid "Font Awesome v6"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:376
+#: inc/customizer/class-customizer.php:391
 msgid "Font Family"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:382
+#: inc/customizer/class-customizer.php:397
 msgid "Font Weight"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:388
+#: inc/customizer/class-customizer.php:403
 msgid "Font Languages"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:393
+#: inc/customizer/class-customizer.php:408
 msgid "Font Size"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:402
+#: inc/customizer/class-customizer.php:417
 msgid "Line Height"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:411
+#: inc/customizer/class-customizer.php:426
 msgid "Letter Spacing"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:419
+#: inc/customizer/class-customizer.php:434
 msgid "Font Style"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:422
-#: inc/customizer/class-customizer.php:464
+#: inc/customizer/class-customizer.php:437
+#: inc/customizer/class-customizer.php:479
 #: inc/customizer/configs/header/menus.php:165
 #: inc/customizer/configs/header/social-icons.php:213
 msgid "Normal"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:423
+#: inc/customizer/class-customizer.php:438
 #: inc/customizer/controls/class-control-font-style.php:17
 msgid "Italic"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:424
+#: inc/customizer/class-customizer.php:439
 msgid "Oblique"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:430
+#: inc/customizer/class-customizer.php:445
 msgid "Text Decoration"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:433
+#: inc/customizer/class-customizer.php:448
 #: inc/customizer/controls/class-control-font-style.php:18
 msgid "Underline"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:434
+#: inc/customizer/class-customizer.php:449
 msgid "Overline"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:435
+#: inc/customizer/class-customizer.php:450
 msgid "Line through"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:436
-#: inc/customizer/class-customizer.php:448
-#: inc/customizer/class-customizer.php:604
-#: inc/customizer/class-customizer.php:699
+#: inc/customizer/class-customizer.php:451
+#: inc/customizer/class-customizer.php:463
+#: inc/customizer/class-customizer.php:619
+#: inc/customizer/class-customizer.php:714
 #: inc/customizer/configs/header/social-icons.php:185
 #: inc/customizer/configs/header/social-icons.php:272
 msgid "None"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:442
+#: inc/customizer/class-customizer.php:457
 msgid "Text Transform"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:445
+#: inc/customizer/class-customizer.php:460
 #: inc/customizer/controls/class-control-font-style.php:20
 msgid "Uppercase"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:446
+#: inc/customizer/class-customizer.php:461
 msgid "Lowercase"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:447
+#: inc/customizer/class-customizer.php:462
 msgid "Capitalize"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:465
+#: inc/customizer/class-customizer.php:480
 #: inc/customizer/configs/header/social-icons.php:214
 msgid "Hover"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:471
-#: inc/customizer/class-customizer.php:667
+#: inc/customizer/class-customizer.php:486
+#: inc/customizer/class-customizer.php:682
 #: inc/customizer/configs/header/nav-icon.php:79
 #: inc/customizer/configs/header/social-icons.php:196
 msgid "Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:477
-#: inc/customizer/class-customizer.php:673
-#: inc/customizer/configs/styling.php:121
+#: inc/customizer/class-customizer.php:492
+#: inc/customizer/class-customizer.php:688
+#: inc/customizer/configs/styling.php:115
 msgid "Link Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:491
-#: inc/customizer/configs/header/panel.php:391
+#: inc/customizer/class-customizer.php:506
+#: inc/customizer/configs/header/panel.php:368
 msgid "Margin"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:504
+#: inc/customizer/class-customizer.php:519
 #: inc/customizer/configs/header/social-icons.php:158
 msgid "Padding"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:510
-#: inc/customizer/class-customizer.php:679
+#: inc/customizer/class-customizer.php:525
+#: inc/customizer/class-customizer.php:694
 #: inc/customizer/configs/background.php:18
 msgid "Background"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:516
-#: inc/customizer/class-customizer.php:684
-#: inc/customizer/configs/footer/panel.php:139
+#: inc/customizer/class-customizer.php:531
+#: inc/customizer/class-customizer.php:699
+#: inc/customizer/configs/footer/panel.php:169
 #: inc/customizer/configs/header/social-icons.php:220
 #: inc/customizer/configs/header/social-icons.php:236
 msgid "Background Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:522
+#: inc/customizer/class-customizer.php:537
 #: inc/customizer/configs/page-header.php:463
 msgid "Background Image"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:530
+#: inc/customizer/class-customizer.php:545
 #: inc/customizer/configs/page-header.php:472
 #: inc/customizer/controls/class-control-css-ruler.php:21
 msgid "Auto"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:532
+#: inc/customizer/class-customizer.php:547
 #: inc/customizer/configs/page-header.php:474
 msgid "Contain"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:535
+#: inc/customizer/class-customizer.php:550
 #: inc/customizer/configs/header/social-icons.php:144
 #: inc/customizer/configs/page-header.php:477
 msgid "Size"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:542
+#: inc/customizer/class-customizer.php:557
 #: inc/customizer/configs/page-header.php:485
 msgid "Position"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:547
+#: inc/customizer/class-customizer.php:562
 #: inc/customizer/configs/page-header.php:490
 msgid "Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:548
+#: inc/customizer/class-customizer.php:563
 #: inc/customizer/configs/page-header.php:491
 msgid "Top Left"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:549
+#: inc/customizer/class-customizer.php:564
 #: inc/customizer/configs/page-header.php:492
 msgid "Top Right"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:550
+#: inc/customizer/class-customizer.php:565
 #: inc/customizer/configs/page-header.php:493
 msgid "Top Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:551
+#: inc/customizer/class-customizer.php:566
 #: inc/customizer/configs/page-header.php:494
 msgid "Bottom Left"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:552
+#: inc/customizer/class-customizer.php:567
 #: inc/customizer/configs/page-header.php:495
 msgid "Bottom Center"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:553
+#: inc/customizer/class-customizer.php:568
 #: inc/customizer/configs/page-header.php:496
 msgid "Bottom Right"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:560
+#: inc/customizer/class-customizer.php:575
 #: inc/customizer/configs/page-header.php:504
 msgid "Repeat"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:567
+#: inc/customizer/class-customizer.php:582
 #: inc/customizer/configs/page-header.php:511
 msgid "No repeat"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:568
+#: inc/customizer/class-customizer.php:583
 #: inc/customizer/configs/page-header.php:512
 msgid "Repeat horizontal"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:569
+#: inc/customizer/class-customizer.php:584
 #: inc/customizer/configs/page-header.php:513
 msgid "Repeat vertical"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:577
+#: inc/customizer/class-customizer.php:592
 #: inc/customizer/configs/page-header.php:522
 msgid "Attachment"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:584
+#: inc/customizer/class-customizer.php:599
 #: inc/customizer/configs/page-header.php:529
 msgid "Scroll"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:585
+#: inc/customizer/class-customizer.php:600
 #: inc/customizer/configs/page-header.php:530
 msgid "Fixed"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:593
-#: inc/customizer/class-customizer.php:690
+#: inc/customizer/class-customizer.php:608
+#: inc/customizer/class-customizer.php:705
 #: inc/customizer/configs/header/social-icons.php:257
 msgid "Border"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:600
-#: inc/customizer/class-customizer.php:695
+#: inc/customizer/class-customizer.php:615
+#: inc/customizer/class-customizer.php:710
 #: inc/customizer/configs/header/social-icons.php:268
 msgid "Border Style"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:605
-#: inc/customizer/class-customizer.php:700
+#: inc/customizer/class-customizer.php:620
+#: inc/customizer/class-customizer.php:715
 #: inc/customizer/configs/header/social-icons.php:273
 msgid "Solid"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:606
-#: inc/customizer/class-customizer.php:701
+#: inc/customizer/class-customizer.php:621
+#: inc/customizer/class-customizer.php:716
 #: inc/customizer/configs/header/social-icons.php:274
 msgid "Dotted"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:607
-#: inc/customizer/class-customizer.php:702
+#: inc/customizer/class-customizer.php:622
+#: inc/customizer/class-customizer.php:717
 #: inc/customizer/configs/header/social-icons.php:275
 msgid "Dashed"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:608
-#: inc/customizer/class-customizer.php:703
+#: inc/customizer/class-customizer.php:623
+#: inc/customizer/class-customizer.php:718
 #: inc/customizer/configs/header/social-icons.php:276
 msgid "Double"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:609
-#: inc/customizer/class-customizer.php:704
+#: inc/customizer/class-customizer.php:624
+#: inc/customizer/class-customizer.php:719
 #: inc/customizer/configs/header/social-icons.php:277
 msgid "Ridge"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:610
-#: inc/customizer/class-customizer.php:705
+#: inc/customizer/class-customizer.php:625
+#: inc/customizer/class-customizer.php:720
 #: inc/customizer/configs/header/social-icons.php:278
 msgid "Inset"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:611
-#: inc/customizer/class-customizer.php:706
+#: inc/customizer/class-customizer.php:626
+#: inc/customizer/class-customizer.php:721
 #: inc/customizer/configs/header/social-icons.php:279
 msgid "Outset"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:619
-#: inc/customizer/class-customizer.php:713
+#: inc/customizer/class-customizer.php:634
+#: inc/customizer/class-customizer.php:728
 #: inc/customizer/configs/header/social-icons.php:288
 msgid "Border Width"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:634
-#: inc/customizer/class-customizer.php:725
+#: inc/customizer/class-customizer.php:649
+#: inc/customizer/class-customizer.php:740
 #: inc/customizer/configs/header/menus.php:108
 #: inc/customizer/configs/header/social-icons.php:301
-#: inc/customizer/configs/styling.php:159
+#: inc/customizer/configs/styling.php:153
 msgid "Border Color"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:645
-#: inc/customizer/class-customizer.php:732
+#: inc/customizer/class-customizer.php:660
+#: inc/customizer/class-customizer.php:747
 #: inc/customizer/configs/header/social-icons.php:310
 msgid "Border Radius"
 msgstr ""
 
-#: inc/customizer/class-customizer.php:657
-#: inc/customizer/class-customizer.php:743
+#: inc/customizer/class-customizer.php:672
+#: inc/customizer/class-customizer.php:758
 msgid "Box Shadow"
 msgstr ""
 
@@ -1601,7 +1675,7 @@ msgstr ""
 
 #: inc/customizer/configs/blogs.php:174
 #: inc/customizer/configs/related-posts.php:106
-#: inc/customizer/configs/single-blog-post.php:118
+#: inc/customizer/configs/single-blog-post.php:127
 msgid "Thumbnail Size"
 msgstr ""
 
@@ -1638,48 +1712,48 @@ msgid "Metas"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:255
-#: inc/customizer/configs/single-blog-post.php:144
+#: inc/customizer/configs/single-blog-post.php:153
 msgid "Separator Width"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:264
-#: inc/customizer/configs/single-blog-post.php:153
+#: inc/customizer/configs/single-blog-post.php:162
 msgid "Drag to reorder the meta item."
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:274
 #: inc/customizer/configs/related-posts.php:184
-#: inc/customizer/configs/single-blog-post.php:163
+#: inc/customizer/configs/single-blog-post.php:172
 msgid "Author"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:278
 #: inc/customizer/configs/related-posts.php:148
 #: inc/customizer/configs/related-posts.php:189
-#: inc/customizer/configs/single-blog-post.php:167
+#: inc/customizer/configs/single-blog-post.php:176
 msgid "Date"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:282
 #: inc/customizer/configs/related-posts.php:193
-#: inc/customizer/configs/single-blog-post.php:67
-#: inc/customizer/configs/single-blog-post.php:171
+#: inc/customizer/configs/single-blog-post.php:76
+#: inc/customizer/configs/single-blog-post.php:180
 msgid "Categories"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:286
 #: inc/customizer/configs/related-posts.php:198
-#: inc/customizer/configs/single-blog-post.php:175
+#: inc/customizer/configs/single-blog-post.php:184
 msgid "Comment"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:310
-#: inc/customizer/configs/single-blog-post.php:199
+#: inc/customizer/configs/single-blog-post.php:208
 msgid "Show author avatar"
 msgstr ""
 
 #: inc/customizer/configs/blogs.php:321
-#: inc/customizer/configs/single-blog-post.php:210
+#: inc/customizer/configs/single-blog-post.php:219
 msgid "Avatar Size"
 msgstr ""
 
@@ -1750,40 +1824,41 @@ msgstr ""
 msgid "Copyright Text Typography"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:14
+#: inc/customizer/configs/footer/panel.php:21
+#: inc/customizer/configs/footer/panel.php:26
 msgid "Footer Layout"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:21
+#: inc/customizer/configs/footer/panel.php:39
 msgid "Footer Main"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:22
+#: inc/customizer/configs/footer/panel.php:40
 msgid "Footer Bottom"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:33
+#: inc/customizer/configs/footer/panel.php:51
 msgid "Footer"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:65
+#: inc/customizer/configs/footer/panel.php:95
 msgid "Footer Top"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:98
-#: inc/customizer/configs/header/panel.php:151
+#: inc/customizer/configs/footer/panel.php:128
+#: inc/customizer/configs/header/panel.php:128
 #: inc/customizer/configs/page-header.php:220
 msgid "Full width - Contained"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:100
-#: inc/customizer/configs/header/panel.php:153
+#: inc/customizer/configs/footer/panel.php:130
+#: inc/customizer/configs/header/panel.php:130
 #: inc/customizer/configs/page-header.php:222
 msgid "Contained"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:109
-#: inc/customizer/configs/header/panel.php:162
+#: inc/customizer/configs/footer/panel.php:139
+#: inc/customizer/configs/header/panel.php:139
 msgid ""
 "Layout <code>Full width - Contained</code> and <code>Full Width</code> will "
 "not fit browser width because you've selected <a class='focus-control' "
@@ -1791,80 +1866,55 @@ msgid ""
 "<code>Framed</code>"
 msgstr ""
 
-#: inc/customizer/configs/footer/panel.php:121
-#: inc/customizer/configs/header/panel.php:186
-#: inc/customizer/configs/header/panel.php:263
+#: inc/customizer/configs/footer/panel.php:151
+#: inc/customizer/configs/header/panel.php:163
+#: inc/customizer/configs/header/panel.php:240
 msgid "Skin Mode"
 msgstr ""
 
-#: inc/customizer/configs/footer/templates.php:24
-#: inc/customizer/configs/header/templates.php:24
-msgid "Saved Templates"
+#: inc/customizer/configs/footer/panel.php:178
+msgid "Columns Layout"
 msgstr ""
 
-#: inc/customizer/configs/footer/templates.php:36
-#: inc/customizer/configs/header/templates.php:36
-#: inc/customizer/controls/class-control-base.php:135
-#: inc/customizer/controls/class-control-base.php:264
-msgid "Untitled"
+#: inc/customizer/configs/footer/panel.php:186
+msgid "Columns Gap"
 msgstr ""
 
-#: inc/customizer/configs/footer/templates.php:40
-#: inc/customizer/configs/header/templates.php:40
-#: inc/panel-builder/class-layout-builder.php:258
-msgid "Load"
-msgstr ""
-
-#: inc/customizer/configs/footer/templates.php:44
-#: inc/customizer/configs/header/templates.php:44
-msgid "No saved templates."
-msgstr ""
-
-#: inc/customizer/configs/footer/templates.php:55
-#: inc/customizer/configs/header/templates.php:55
-#: inc/panel-builder/class-layout-builder.php:397
+#: inc/customizer/configs/footer/templates.php:16
+#: inc/customizer/configs/header/templates.php:16
+#: inc/panel-builder/class-layout-builder.php:563
 msgid "Templates"
-msgstr ""
-
-#: inc/customizer/configs/footer/templates.php:63
-#: inc/customizer/configs/header/templates.php:63
-msgid "Save Template"
-msgstr ""
-
-#: inc/customizer/configs/footer/templates.php:64
-#: inc/customizer/configs/header/templates.php:64
-msgid "Save"
 msgstr ""
 
 #: inc/customizer/configs/footer/widgets.php:8
 msgid "Footer Sidebar 1"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:25
+#: inc/customizer/configs/footer/widgets.php:28
 msgid "Footer Sidebar 2"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:42
+#: inc/customizer/configs/footer/widgets.php:48
 msgid "Footer Sidebar 3"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:59
+#: inc/customizer/configs/footer/widgets.php:68
 msgid "Footer Sidebar 4"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:76
+#: inc/customizer/configs/footer/widgets.php:88
 msgid "Footer Sidebar 5"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:93
+#: inc/customizer/configs/footer/widgets.php:108
 msgid "Footer Sidebar 6"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:158
+#: inc/customizer/configs/footer/widgets.php:174
 msgid "Footer Widget %s"
 msgstr ""
 
-#: inc/customizer/configs/footer/widgets.php:161
+#: inc/customizer/configs/footer/widgets.php:177
 #. Translators: 1: Admin URL2: Customize URL 3: Footer ID
 msgid ""
 "<p>Replace this widget content by going to <a "
@@ -1877,10 +1927,6 @@ msgstr ""
 #: inc/customizer/configs/header/button.php:47
 #: inc/customizer/configs/header/button.php:165
 msgid "Button"
-msgstr ""
-
-#: inc/customizer/configs/header/button.php:80
-msgid "Link"
 msgstr ""
 
 #: inc/customizer/configs/header/button.php:89
@@ -1900,19 +1946,19 @@ msgstr ""
 msgid "HTML 1"
 msgstr ""
 
-#: inc/customizer/configs/header/html.php:71
+#: inc/customizer/configs/header/html.php:72
 msgid "Add custom text here or remove it"
 msgstr ""
 
-#: inc/customizer/configs/header/html.php:72
+#: inc/customizer/configs/header/html.php:73
 msgid "HTML"
 msgstr ""
 
-#: inc/customizer/configs/header/html.php:73
+#: inc/customizer/configs/header/html.php:74
 msgid "Arbitrary HTML code."
 msgstr ""
 
-#: inc/customizer/configs/header/html.php:82
+#: inc/customizer/configs/header/html.php:83
 msgid "Typography Setting"
 msgstr ""
 
@@ -1934,14 +1980,14 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
-#: inc/customizer/configs/layouts.php:54 inc/customizer/configs/layouts.php:157
+#: inc/customizer/configs/layouts.php:54 inc/customizer/configs/layouts.php:158
 msgid "Yes"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:56
 #: inc/customizer/configs/header/logo.php:70
-#: inc/customizer/configs/header/panel.php:428
-#: inc/customizer/configs/layouts.php:55 inc/customizer/configs/layouts.php:158
+#: inc/customizer/configs/header/panel.php:405
+#: inc/customizer/configs/layouts.php:55 inc/customizer/configs/layouts.php:159
 msgid "No"
 msgstr ""
 
@@ -2076,80 +2122,83 @@ msgstr ""
 msgid "Mobile/Tablet"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:42
-#: inc/customizer/configs/header/panel.php:115
+#: inc/customizer/configs/header/panel.php:44
+#: inc/customizer/configs/header/panel.php:92
+#: inc/customizer/configs/header/transparent.php:194
 msgid "Header Top"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:43
+#: inc/customizer/configs/header/panel.php:45
+#: inc/customizer/configs/header/transparent.php:195
 msgid "Header Main"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:44
+#: inc/customizer/configs/header/panel.php:46
+#: inc/customizer/configs/header/transparent.php:196
 msgid "Header Bottom"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:45
+#: inc/customizer/configs/header/panel.php:47
 msgid "Menu Sidebar"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:57
+#: inc/customizer/configs/header/panel.php:59
 msgid "Header"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:177
+#: inc/customizer/configs/header/panel.php:154
 msgid "Height"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:205
-#: inc/customizer/configs/header/panel.php:282
+#: inc/customizer/configs/header/panel.php:182
+#: inc/customizer/configs/header/panel.php:259
 msgid "Advanced styling for %s"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:250
+#: inc/customizer/configs/header/panel.php:227
 msgid "Slide From Left"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:251
+#: inc/customizer/configs/header/panel.php:228
 msgid "Slide From Right"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:252
+#: inc/customizer/configs/header/panel.php:229
 msgid "Full-screen Overlay"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:253
+#: inc/customizer/configs/header/panel.php:230
 msgid "Toggle Dropdown"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:328
+#: inc/customizer/configs/header/panel.php:305
 msgid "Do not copy parent menu to submenu."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:340
-#: inc/customizer/configs/header/panel.php:407
+#: inc/customizer/configs/header/panel.php:317
+#: inc/customizer/configs/header/panel.php:384
 msgid "Align"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:375
+#: inc/customizer/configs/header/panel.php:352
 msgid "Item Layout"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:425
+#: inc/customizer/configs/header/panel.php:402
 msgid "Merge Item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:426
+#: inc/customizer/configs/header/panel.php:403
 msgid ""
 "If you choose to merge this item, the alignment setting will inherit from "
 "the item you are merging."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:429
+#: inc/customizer/configs/header/panel.php:406
 msgid "Merge with left item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:430
+#: inc/customizer/configs/header/panel.php:407
 msgid "Merge with right item"
 msgstr ""
 
@@ -2273,10 +2322,6 @@ msgstr ""
 msgid "Shape"
 msgstr ""
 
-#: inc/customizer/configs/header/social-icons.php:182
-msgid "Rounded"
-msgstr ""
-
 #: inc/customizer/configs/header/social-icons.php:183
 msgid "Square"
 msgstr ""
@@ -2302,6 +2347,74 @@ msgstr ""
 msgid "Border & border radius"
 msgstr ""
 
+#: inc/customizer/configs/header/transparent.php:63
+msgid "Transparent %s"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:70
+msgid "Transparent styling for %s"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:106
+msgid "Disable on index"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:111
+msgid "Disable on categories"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:116
+msgid "Disable on search"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:121
+msgid "Disable on archive"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:126
+msgid "Disable on single page"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:131
+msgid "Disable on single post"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:136
+msgid "Disable on singular"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:141
+msgid "Disable on 404 page"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:149
+msgid "Disable on product page"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:154
+msgid "Disable on product category"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:159
+msgid "Disable on product tag"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:174
+msgid "Advanced Settings"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:219
+msgid "Transparent Logo"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:230
+msgid "Transparent Logo Retina"
+msgstr ""
+
+#: inc/customizer/configs/header/transparent.php:241
+msgid "Transparent Logo Max Width"
+msgstr ""
+
 #: inc/customizer/configs/layouts.php:21
 msgid "Layouts"
 msgstr ""
@@ -2318,7 +2431,7 @@ msgstr ""
 msgid "Select global site layout."
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:109
+#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:110
 msgid "Boxed"
 msgstr ""
 
@@ -2335,58 +2448,62 @@ msgid "Site framed margin"
 msgstr ""
 
 #: inc/customizer/configs/layouts.php:96
-msgid "Container width"
+msgid "Container Width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:106
+#: inc/customizer/configs/layouts.php:97
+msgid "Max width of the site container."
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:107
 msgid "Site content layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:108
+#: inc/customizer/configs/layouts.php:109
 msgid "Full width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:120
+#: inc/customizer/configs/layouts.php:121
 msgid "Site content padding"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:139
+#: inc/customizer/configs/layouts.php:140
 msgid "Sidebars"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:147
+#: inc/customizer/configs/layouts.php:148
 msgid "Default Sidebar Layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:155
+#: inc/customizer/configs/layouts.php:156
 msgid "Sidebar with vertical border"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:171
+#: inc/customizer/configs/layouts.php:172
 msgid "Pages"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:180
+#: inc/customizer/configs/layouts.php:181
 msgid "Blog posts"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:189
+#: inc/customizer/configs/layouts.php:190
 msgid "Blog Archive Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:198
+#: inc/customizer/configs/layouts.php:199
 msgid "Search Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:207
+#: inc/customizer/configs/layouts.php:208
 msgid "404 Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:219
+#: inc/customizer/configs/layouts.php:220
 msgid "Post Type Settings"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:228
+#: inc/customizer/configs/layouts.php:229
 msgid "Single %s"
 msgstr ""
 
@@ -2635,7 +2752,7 @@ msgstr ""
 
 #: inc/customizer/configs/related-posts.php:21
 #: inc/customizer/configs/related-posts.php:30
-#: inc/customizer/configs/single-blog-post.php:88
+#: inc/customizer/configs/single-blog-post.php:97
 msgid "Related Posts"
 msgstr ""
 
@@ -2719,44 +2836,51 @@ msgstr ""
 msgid "Search Results"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:28
-msgid "Content Max Width"
+#: inc/customizer/configs/single-blog-post.php:31
+msgid "Post Content Max Width"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:37
+#: inc/customizer/configs/single-blog-post.php:32
+msgid ""
+"Max width of default blocks and aligned siblings inside post content. "
+"Drives --wp--style--global--content-size. Keep this value BELOW Container "
+"Width so .alignwide blocks can break out to the wider column."
+msgstr ""
+
+#: inc/customizer/configs/single-blog-post.php:46
 msgid "Items Display"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:52
+#: inc/customizer/configs/single-blog-post.php:61
 msgid "Meta"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:57
+#: inc/customizer/configs/single-blog-post.php:66
 msgid "Thumbnail"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:62
+#: inc/customizer/configs/single-blog-post.php:71
 #: inc/customizer/configs/typography.php:97
 msgid "Content"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:72
+#: inc/customizer/configs/single-blog-post.php:81
 msgid "Tags"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:77
+#: inc/customizer/configs/single-blog-post.php:86
 msgid "Author Biography"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:82
+#: inc/customizer/configs/single-blog-post.php:91
 msgid "Post Navigation"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:94
+#: inc/customizer/configs/single-blog-post.php:103
 msgid "Comment Form"
 msgstr ""
 
-#: inc/customizer/configs/single-blog-post.php:126
+#: inc/customizer/configs/single-blog-post.php:135
 msgid "Meta Settings"
 msgstr ""
 
@@ -2772,27 +2896,27 @@ msgstr ""
 msgid "Primary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:83
+#: inc/customizer/configs/styling.php:77
 msgid "Secondary Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:100
+#: inc/customizer/configs/styling.php:94
 msgid "Text Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:139
+#: inc/customizer/configs/styling.php:133
 msgid "Link Hover Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:250
+#: inc/customizer/configs/styling.php:244
 msgid "Meta Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:276
+#: inc/customizer/configs/styling.php:270
 msgid "Heading Color"
 msgstr ""
 
-#: inc/customizer/configs/styling.php:287
+#: inc/customizer/configs/styling.php:281
 msgid "Widget Title Color"
 msgstr ""
 
@@ -2908,15 +3032,20 @@ msgstr ""
 msgid "Payment Methods Item"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:262
+#: inc/customizer/controls/class-control-base.php:135
+#: inc/customizer/controls/class-control-base.php:263
+msgid "Untitled"
+msgstr ""
+
+#: inc/customizer/controls/class-control-base.php:261
 msgid "Theme Default"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:263
+#: inc/customizer/controls/class-control-base.php:262
 msgid "Reset this section settings"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:265
+#: inc/customizer/controls/class-control-base.php:264
 msgid "Do you want to reset this section settings?"
 msgstr ""
 
@@ -3060,7 +3189,7 @@ msgstr ""
 
 #: inc/customizer/controls/class-control-repeater.php:33
 #: inc/panel-builder/class-abstract-layout-frontend.php:122
-#: inc/panel-builder/class-layout-builder.php:399
+#: inc/panel-builder/class-layout-builder.php:565
 msgid "Close"
 msgstr ""
 
@@ -3088,31 +3217,33 @@ msgstr ""
 msgid "Reset"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:54
+#: inc/panel-builder/class-layout-builder.php:63
 msgid ""
 "Class <strong>%s</strong> do not extends class "
 "<strong>Customify_Customize_Builder_Panel</strong>."
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:194
-#: inc/panel-builder/class-layout-builder.php:274
+#: inc/panel-builder/class-layout-builder.php:249
+#: inc/panel-builder/class-layout-builder.php:253
+#: inc/panel-builder/class-layout-builder.php:356
+#: inc/panel-builder/class-layout-builder.php:359
 msgid "Access denied"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:201
-#: inc/panel-builder/class-layout-builder.php:246
+#: inc/panel-builder/class-layout-builder.php:260
+#: inc/panel-builder/class-layout-builder.php:329
 msgid "Saved %s"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:205
+#: inc/panel-builder/class-layout-builder.php:264
 msgid "No Support"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:367
-msgid "Switch Builder Version"
+#: inc/panel-builder/class-layout-builder.php:368
+msgid "Invalid builder id"
 msgstr ""
 
-#: inc/panel-builder/class-layout-builder.php:435
+#: inc/panel-builder/class-layout-builder.php:601
 msgid ""
 "Enjoy building? Upgrade to <a target=\"_blank\" "
 "href=\"https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_"
@@ -3144,7 +3275,7 @@ msgstr ""
 msgid "Content / Sidebar / Sidebar"
 msgstr ""
 
-#: inc/template-functions.php:323
+#: inc/template-functions.php:437
 msgid "Search &hellip;"
 msgstr ""
 
@@ -3171,6 +3302,10 @@ msgstr ""
 
 #: inc/template-tags.php:136
 msgid "Your comment is awaiting moderation."
+msgstr ""
+
+#: patterns/media-text-left.php:14
+msgid "Placeholder image"
 msgstr ""
 
 #: template-parts/content-none.php:24
@@ -3360,32 +3495,32 @@ msgstr ""
 #: inc/customizer/configs/header/search-box.php:265
 #: inc/customizer/configs/header/search-icon.php:331
 #: inc/customizer/configs/header/search-icon.php:332
-#: inc/template-functions.php:322 inc/template-functions.php:323
+#: inc/template-functions.php:436 inc/template-functions.php:437
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:268
+#: inc/customizer/controls/class-control-base.php:267
 msgctxt "customify-font-weight"
 msgid "Normal"
 msgstr ""
 
-#: inc/customizer/controls/class-control-base.php:269
+#: inc/customizer/controls/class-control-base.php:268
 msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:301
+#: inc/template-functions.php:415
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:303
+#: inc/template-functions.php:417
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:305
+#: inc/template-functions.php:419
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
@@ -3405,6 +3540,113 @@ msgstr ""
 #: inc/template-tags.php:114
 msgctxt "1: date, 2: time"
 msgid "%1$s at %2$s"
+msgstr ""
+
+#: patterns/cta-banner.php:15
+msgctxt "Pattern placeholder"
+msgid "Ready to Get Started?"
+msgstr ""
+
+#: patterns/cta-banner.php:19
+msgctxt "Pattern placeholder"
+msgid "Join thousands of satisfied customers. No credit card required."
+msgstr ""
+
+#: patterns/cta-banner.php:26
+msgctxt "Pattern placeholder"
+msgid "Start Free Trial"
+msgstr ""
+
+#: patterns/features-three-columns.php:15
+msgctxt "Pattern placeholder"
+msgid "Our Features"
+msgstr ""
+
+#: patterns/features-three-columns.php:19
+msgctxt "Pattern placeholder"
+msgid "Everything you need to build a great website."
+msgstr ""
+
+#: patterns/features-three-columns.php:28
+msgctxt "Pattern placeholder"
+msgid "Feature One"
+msgstr ""
+
+#: patterns/features-three-columns.php:31
+msgctxt "Pattern placeholder"
+msgid "Describe your first key feature or benefit here. Keep it short and focused."
+msgstr ""
+
+#: patterns/features-three-columns.php:39
+msgctxt "Pattern placeholder"
+msgid "Feature Two"
+msgstr ""
+
+#: patterns/features-three-columns.php:42
+msgctxt "Pattern placeholder"
+msgid "Describe your second key feature or benefit here. Keep it short and focused."
+msgstr ""
+
+#: patterns/features-three-columns.php:50
+msgctxt "Pattern placeholder"
+msgid "Feature Three"
+msgstr ""
+
+#: patterns/features-three-columns.php:53
+msgctxt "Pattern placeholder"
+msgid "Describe your third key feature or benefit here. Keep it short and focused."
+msgstr ""
+
+#: patterns/hero-centered.php:18
+msgctxt "Pattern placeholder"
+msgid "Welcome to Our Site"
+msgstr ""
+
+#: patterns/hero-centered.php:22
+msgctxt "Pattern placeholder"
+msgid ""
+"A short description of your business or product. Write something compelling "
+"that makes visitors want to learn more."
+msgstr ""
+
+#: patterns/hero-centered.php:29
+msgctxt "Pattern placeholder"
+msgid "Get Started"
+msgstr ""
+
+#: patterns/hero-centered.php:35
+msgctxt "Pattern placeholder"
+msgid "Learn More"
+msgstr ""
+
+#: patterns/media-text-left.php:18
+msgctxt "Pattern placeholder"
+msgid "Your Story Starts Here"
+msgstr ""
+
+#: patterns/media-text-left.php:22
+msgctxt "Pattern placeholder"
+msgid ""
+"Use this space to tell your story, explain your product, or highlight what "
+"makes you unique. Great content creates connections."
+msgstr ""
+
+#: patterns/media-text-left.php:29
+msgctxt "Pattern placeholder"
+msgid "Read More"
+msgstr ""
+
+#: patterns/testimonial.php:17
+msgctxt "Pattern placeholder"
+msgid ""
+"This product completely changed the way we work. We saved countless hours "
+"and our team is more productive than ever. I highly recommend it to anyone "
+"looking to level up their workflow."
+msgstr ""
+
+#: patterns/testimonial.php:18
+msgctxt "Pattern placeholder"
+msgid "Jane Doe, CEO at Example Co."
 msgstr ""
 
 #: woocommerce/loop/result-count.php:37

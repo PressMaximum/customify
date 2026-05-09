@@ -39,8 +39,10 @@
         "defaults"
     ],
     "scripts": {
-        "build": "wp-scripts build   --config webpack.config.js",
-        "start": "wp-scripts start   --config webpack.config.js",
+        "start": "wp-scripts start --config webpack.config.js",
+        "build": "wp-scripts build --config webpack.config.js",
+        "makepot": "node ./bin/makepot.js",
+        "release:assets": "npm run build && npm run makepot",
         "lint:js": "wp-scripts lint-js src"
     }
 }
