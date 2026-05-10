@@ -3099,7 +3099,12 @@ function ProList() {
     const requirement = mod.requirementMissing || '';
     const requirementLabel = requirement === 'woocommerce' ? (0,external_wp_i18n_namespaceObject.__)('Requires WooCommerce plugin', 'customify') : requirement ? (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: requirement name (plugin slug). */
     (0,external_wp_i18n_namespaceObject.__)('Requires %s', 'customify'), requirement) : '';
-    const description = requirementLabel ? `${mod.description} — ${requirementLabel}` : mod.description;
+    // `ownedNote` is set when the theme implements the same feature
+    // natively — the Pro module is force-disabled by the compatibility
+    // filter, so the toggle would no-op without a visible reason.
+    const ownedNote = mod.ownedNote || '';
+    const annotation = ownedNote || requirementLabel;
+    const description = annotation ? `${mod.description} — ${annotation}` : mod.description;
     let action = null;
     if (canShowAction && scope === 'inline') {
       action = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {

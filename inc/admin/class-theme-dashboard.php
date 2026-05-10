@@ -179,10 +179,26 @@ class Customify_Theme_Dashboard {
 		}
 		$asset = require $asset_path;
 
+		// Defensive dep injection: some installs (Elementor + WP 6.9.x in
+		// particular) leave window.wp.hooks unset by the time wp-i18n.min.js
+		// runs, which makes i18n abort BEFORE it can attach window.wp.i18n.
+		// That cascades into "Cannot read properties of undefined (reading
+		// 'sprintf')" inside our React bundle and the dashboard renders
+		// blank. Force `wp-hooks` to the dep list so WP enqueues it ahead
+		// of i18n regardless of what other plugins did to the registry.
+		$dependencies = isset( $asset['dependencies'] ) && is_array( $asset['dependencies'] )
+			? $asset['dependencies']
+			: array();
+		foreach ( array( 'wp-hooks', 'wp-i18n', 'wp-element', 'wp-data' ) as $required_handle ) {
+			if ( ! in_array( $required_handle, $dependencies, true ) ) {
+				$dependencies[] = $required_handle;
+			}
+		}
+
 		wp_enqueue_script(
 			$cfg['asset_handle'],
 			$cfg['url'] . $cfg['js_rel'],
-			$asset['dependencies'],
+			$dependencies,
 			$asset['version'],
 			true
 		);

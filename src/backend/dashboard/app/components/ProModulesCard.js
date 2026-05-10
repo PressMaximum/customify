@@ -221,8 +221,13 @@ function ProList() {
 					requirement
 				  )
 				: '';
-		const description = requirementLabel
-			? `${ mod.description } — ${ requirementLabel }`
+		// `ownedNote` is set when the theme implements the same feature
+		// natively — the Pro module is force-disabled by the compatibility
+		// filter, so the toggle would no-op without a visible reason.
+		const ownedNote = mod.ownedNote || '';
+		const annotation = ownedNote || requirementLabel;
+		const description = annotation
+			? `${ mod.description } — ${ annotation }`
 			: mod.description;
 		let action = null;
 		if ( canShowAction && scope === 'inline' ) {

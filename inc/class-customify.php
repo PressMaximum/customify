@@ -743,6 +743,9 @@ class Customify
 
 		$wc_modules    = $this->get_woocommerce_pro_modules();
 		$wc_active     = $this->is_woocommerce_active();
+		$theme_owned   = function_exists('customify_pro_modules_owned_by_theme')
+			? customify_pro_modules_owned_by_theme()
+			: array();
 		$modules       = array();
 		foreach ($pro->modules as $class_name => $args) {
 			// React opens module settings via the `get_module_settings` /
@@ -762,6 +765,17 @@ class Customify
 				$can_toggle = false;
 			}
 
+			// Theme-owned modules: the compatibility layer at
+			// inc/compatibility/customify-pro.php force-disables the Pro
+			// option so the duplicated feature doesn't load. Lock the toggle
+			// off here too and surface the reason — otherwise the user
+			// flips the switch and nothing happens (silent no-op).
+			$owned_note = '';
+			if (isset($theme_owned[$class_name])) {
+				$owned_note = (string) $theme_owned[$class_name];
+				$can_toggle = false;
+			}
+
 			$modules[] = array(
 				'classKey'    => $class_name,
 				'name'        => isset($args['name']) ? (string) $args['name'] : $class_name,
@@ -778,6 +792,7 @@ class Customify
 				'settingsHref'       => $meta['href'],
 				'settingsLabel'      => $meta['label'],
 				'requirementMissing' => $requires,
+				'ownedNote'          => $owned_note,
 			);
 		}
 
@@ -836,6 +851,17 @@ class Customify
 					&& ! $this->is_woocommerce_active()
 				) {
 					wp_send_json_error('woocommerce_required', 400);
+				}
+				// Reject enabling a Pro module the theme already implements
+				// natively — the compatibility filter would mask it back to
+				// 0 on the next read anyway, so the toggle would silently
+				// no-op. Returning an explicit error lets the dashboard
+				// surface the reason inline.
+				if ($enabled && function_exists('customify_pro_modules_owned_by_theme')) {
+					$owned = customify_pro_modules_owned_by_theme();
+					if (isset($owned[$class_name])) {
+						wp_send_json_error('owned_by_theme', 400);
+					}
 				}
 				if ($enabled) {
 					$pro->enable_module($class_name);
