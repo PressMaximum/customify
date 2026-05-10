@@ -628,9 +628,6 @@ class Customify
 
 		// Welcome sidebar — recommended free plugins from wordpress.org.
 		add_filter('customify/dashboard/bootstrap_data', array($this, 'theme_dashboard_inject_recommend_plugins'));
-		// Inline activate handler used by the Recommend Plugins card so the
-		// React UI can flip Install -> Activate -> Active without reloading.
-		add_action('customify/dashboard/ajax_task', array($this, 'theme_dashboard_handle_recommend_plugin_task'));
 	}
 
 	/**
@@ -928,70 +925,6 @@ class Customify
 				));
 				break;
 		}
-	}
-
-	/**
-	 * Handle the `activate_recommend_plugin` AJAX task from the React
-	 * Recommend Plugins card.
-	 *
-	 * Install is driven by WP's own `wp.updates.installPlugin()` (which uses
-	 * the core `install-plugin` AJAX action and the standard updates nonce).
-	 * Activation, however, has no first-class AJAX endpoint in core — so we
-	 * expose this thin one. Looks up the installed plugin file by slug,
-	 * verifies capability + nonce, calls `activate_plugin()`, and returns
-	 * the new state so the React card can swap to a no-op "Active" pill
-	 * without a redirect.
-	 *
-	 * Expected POST: slug (string), nonce (verified by ajax_dispatch via
-	 * the dashboard's shared nonce field).
-	 *
-	 * @param string $task
-	 */
-	public function theme_dashboard_handle_recommend_plugin_task($task)
-	{
-		if ('activate_recommend_plugin' !== $task) {
-			return;
-		}
-		if (! current_user_can('activate_plugins')) {
-			wp_send_json_error('forbidden', 403);
-		}
-
-		// Secondary nonce: the shared `customify_dashboard` nonce already
-		// gates AJAX entry, but treat plugin activation as a higher-risk
-		// action that deserves its own nonce so a leaked dashboard nonce
-		// can't be repurposed for plugin state changes.
-		$secondary_nonce = isset($_POST['plugin_nonce']) ? sanitize_text_field(wp_unslash($_POST['plugin_nonce'])) : '';
-		if (! wp_verify_nonce($secondary_nonce, 'customify_recommend_plugin')) {
-			wp_send_json_error('invalid_plugin_nonce', 400);
-		}
-
-		$slug = isset($_POST['slug']) ? sanitize_key(wp_unslash($_POST['slug'])) : '';
-		if ('' === $slug) {
-			wp_send_json_error('missing_slug', 400);
-		}
-
-		if (! function_exists('get_plugins')) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		$plugin_file = $this->resolve_plugin_file(array_keys(get_plugins()), $slug);
-		if (! $plugin_file) {
-			wp_send_json_error('plugin_not_installed', 400);
-		}
-
-		// activate_plugin() returns null on success, WP_Error otherwise.
-		$result = activate_plugin($plugin_file, '', false, true);
-		if (is_wp_error($result)) {
-			wp_send_json_error(array(
-				'code'    => $result->get_error_code(),
-				'message' => $result->get_error_message(),
-			), 500);
-		}
-
-		wp_send_json_success(array(
-			'slug'       => $slug,
-			'pluginFile' => $plugin_file,
-			'isActive'   => is_plugin_active($plugin_file),
-		));
 	}
 
 	/**
@@ -1613,20 +1546,13 @@ class Customify
 				'name'        => $name,
 				'iconUrl'     => $icon_url,
 				'state'       => $state,
-				'pluginFile'  => $plugin_file ? (string) $plugin_file : '',
 				'actionUrl'   => $action_url,
 				'actionLabel' => $action_label,
 				'detailsUrl'  => 'https://wordpress.org/plugins/' . $slug . '/',
 			);
 		}
 
-		$data['recommendPlugins']      = $plugins;
-		$data['canInstallPlugins']     = current_user_can( 'install_plugins' );
-		$data['canActivatePlugins']    = current_user_can( 'activate_plugins' );
-		// Lets the React app drive WP's wp.updates.installPlugin() flow
-		// — that helper expects the install nonce on its own settings blob,
-		// but we also forward it for our custom activate AJAX task.
-		$data['recommendPluginsNonce'] = wp_create_nonce( 'customify_recommend_plugin' );
+		$data['recommendPlugins'] = $plugins;
 		return $data;
 	}
 

@@ -1,20 +1,24 @@
 /**
  * Welcome sidebar — recommended free plugins from wordpress.org.
  *
- * Server (Customify::theme_dashboard_inject_recommend_plugins) fetches
- * plugin metadata via plugins_api with a 12h transient cache, filters out
- * already-active plugins, and ships only rows worth surfacing.
+ * Server (Customify::theme_dashboard_inject_recommend_plugins) ships each
+ * row with a ready-to-use `actionUrl`:
  *
- * Each row drives a per-plugin state machine:
+ *   not-installed → /wp-admin/update.php?action=install-plugin&plugin=…&_wpnonce=…
+ *   installed     → /wp-admin/plugins.php?action=activate&plugin=…&_wpnonce=…
+ *
+ * Both URLs are full wp-admin pages with valid nonces. We fetch them
+ * directly with `credentials: 'same-origin'` so the user's auth cookies
+ * gate the action, parse the HTML response for the relevant outcome
+ * markers, and drive a per-row state machine — no PHP-side AJAX handler,
+ * no tab switch, no redirect.
  *
  *   not-installed → installing → installed → activating → active
- *                                                 ↘ error
+ *                                                ↘ error
  *
- * No tab switch, no redirect — install via wp.updates.installPlugin()
- * (WP core Updater) and activate via our dashboard AJAX dispatcher. If
- * `wp.updates` is missing (page is older / unprivileged user / JS error),
- * we fall back to the original `actionUrl` redirect so the button is never
- * dead.
+ * If `fetch` is unavailable (legacy browser, blocked by extension) the
+ * Button still has the original `href`, so the click falls through to a
+ * normal browser navigation as a graceful fallback.
  */
 
 import { useState } from '@wordpress/element';
@@ -23,20 +27,9 @@ import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
 import { Card, Button } from '../../ui';
-import {
-	RECOMMEND_PLUGINS,
-	CAN_INSTALL_PLUGINS,
-	CAN_ACTIVATE_PLUGINS,
-} from '../config';
-import {
-	installPlugin,
-	activatePlugin,
-} from '../api/recommend-plugins';
+import { RECOMMEND_PLUGINS } from '../config';
+import { runInstall, runActivate } from '../api/recommend-plugins';
 
-/**
- * Resolve the visual + behavioral params for one row given its current
- * client-side state. Keeps the JSX below readable.
- */
 function actionFor( state, plugin ) {
 	switch ( state ) {
 		case 'installing':
@@ -75,33 +68,44 @@ function actionFor( state, plugin ) {
 
 export default function RecommendPluginsCard() {
 	const { createNotice } = useDispatch( noticesStore );
+
 	// Per-slug client state — server-provided state is the initial seed.
-	const [ states, setStates ] = useState( () => {
+	const [ rows, setRows ] = useState( () => {
 		const seed = {};
 		RECOMMEND_PLUGINS.forEach( ( p ) => {
-			seed[ p.slug ] = p.state || 'not-installed';
+			seed[ p.slug ] = {
+				state: p.state || 'not-installed',
+				// Server only sends an activate URL for already-installed
+				// rows. After we install fresh, we extract it from the
+				// response HTML and stash it here for the next click.
+				activateUrl:
+					p.state === 'installed' ? p.actionUrl : '',
+			};
 		} );
 		return seed;
 	} );
 
-	if ( ! RECOMMEND_PLUGINS.length ) {
-		return null;
-	}
+	if ( ! RECOMMEND_PLUGINS.length ) return null;
 
 	function notify( type, message ) {
 		createNotice( type, message, { type: 'snackbar' } );
 	}
 
-	function setState( slug, next ) {
-		setStates( ( prev ) => ( { ...prev, [ slug ]: next } ) );
+	function patch( slug, next ) {
+		setRows( ( prev ) => ( {
+			...prev,
+			[ slug ]: { ...prev[ slug ], ...next },
+		} ) );
 	}
 
 	async function handleInstall( plugin ) {
-		if ( ! CAN_INSTALL_PLUGINS ) return; // capability gate; href fallback handles redirect
-		setState( plugin.slug, 'installing' );
+		patch( plugin.slug, { state: 'installing' } );
 		try {
-			await installPlugin( plugin.slug );
-			setState( plugin.slug, 'installed' );
+			const { activateUrl } = await runInstall(
+				plugin.actionUrl,
+				plugin.name
+			);
+			patch( plugin.slug, { state: 'installed', activateUrl } );
 			notify(
 				'success',
 				sprintf(
@@ -111,26 +115,24 @@ export default function RecommendPluginsCard() {
 				)
 			);
 		} catch ( err ) {
-			setState( plugin.slug, 'not-installed' );
+			patch( plugin.slug, { state: 'not-installed' } );
 			notify(
 				'error',
-				err && err.message
-					? err.message
-					: sprintf(
+				( err && err.message ) ||
+					sprintf(
 						/* translators: %s: plugin name */
 						__( 'Could not install "%s".', 'customify' ),
 						plugin.name
-					  )
+					)
 			);
 		}
 	}
 
-	async function handleActivate( plugin ) {
-		if ( ! CAN_ACTIVATE_PLUGINS ) return;
-		setState( plugin.slug, 'activating' );
+	async function handleActivate( plugin, activateUrl ) {
+		patch( plugin.slug, { state: 'activating' } );
 		try {
-			await activatePlugin( plugin.slug );
-			setState( plugin.slug, 'active' );
+			await runActivate( activateUrl, plugin.name );
+			patch( plugin.slug, { state: 'active' } );
 			notify(
 				'success',
 				sprintf(
@@ -140,36 +142,37 @@ export default function RecommendPluginsCard() {
 				)
 			);
 		} catch ( err ) {
-			setState( plugin.slug, 'installed' );
+			patch( plugin.slug, { state: 'installed' } );
 			notify(
 				'error',
-				err && err.message
-					? err.message
-					: sprintf(
+				( err && err.message ) ||
+					sprintf(
 						/* translators: %s: plugin name */
 						__( 'Could not activate "%s".', 'customify' ),
 						plugin.name
-					  )
+					)
 			);
 		}
 	}
 
-	function onClick( plugin, state, e ) {
-		// Capability check has the same gate server-side; without the cap
-		// the bootstrap doesn't ship a working flow either way. Let the
-		// browser follow the legacy `href` so the unprivileged user still
-		// sees the standard wp-admin "Sorry, you are not allowed" screen.
-		const canDoAjax = state === 'not-installed'
-			? CAN_INSTALL_PLUGINS && !! window.wp?.updates?.installPlugin
-			: CAN_ACTIVATE_PLUGINS;
-		if ( ! canDoAjax ) {
-			return; // let the anchor follow plugin.actionUrl
-		}
-		e.preventDefault();
+	function onClick( plugin, e ) {
+		const row = rows[ plugin.slug ] || {};
+		const state = row.state || 'not-installed';
+
+		// Fail-open: if fetch isn't available let the anchor follow href.
+		if ( typeof fetch !== 'function' ) return;
+
 		if ( state === 'not-installed' ) {
+			e.preventDefault();
 			handleInstall( plugin );
 		} else if ( state === 'installed' ) {
-			handleActivate( plugin );
+			e.preventDefault();
+			handleActivate( plugin, row.activateUrl || plugin.actionUrl );
+		} else {
+			// installing / activating / active — disabled button shouldn't
+			// fire onClick, but if a screen reader or assistive tech does,
+			// just block.
+			e.preventDefault();
 		}
 	}
 
@@ -177,7 +180,8 @@ export default function RecommendPluginsCard() {
 		<Card title={ __( 'Recommend Plugins', 'customify' ) }>
 			<ul className="pm-recommend-plugins">
 				{ RECOMMEND_PLUGINS.map( ( plugin ) => {
-					const state = states[ plugin.slug ];
+					const row = rows[ plugin.slug ] || {};
+					const state = row.state || 'not-installed';
 					const action = actionFor( state, plugin );
 					const isFinal = state === 'active';
 					return (
@@ -211,9 +215,7 @@ export default function RecommendPluginsCard() {
 										}
 										disabled={ action.disabled }
 										isBusy={ action.busy }
-										onClick={ ( e ) =>
-											onClick( plugin, state, e )
-										}
+										onClick={ ( e ) => onClick( plugin, e ) }
 									>
 										{ action.label }
 									</Button>

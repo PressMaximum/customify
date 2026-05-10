@@ -204,19 +204,6 @@ class Customify_Theme_Dashboard {
 		);
 		wp_set_script_translations( $cfg['asset_handle'], $cfg['text_domain'] );
 
-		// Enqueue WP's plugin install machinery so the React dashboard can
-		// drive `wp.updates.installPlugin()` for the Recommend Plugins card —
-		// no full-page redirect needed. WP's localized `_wpUpdatesSettings`
-		// blob is the single source of truth for the install nonce + state
-		// strings; we reuse it instead of duplicating server-side.
-		if ( current_user_can( 'install_plugins' ) ) {
-			wp_enqueue_script( 'plugin-install' );
-			wp_enqueue_script( 'updates' );
-			if ( function_exists( 'wp_print_admin_notice_templates' ) ) {
-				add_action( 'admin_print_footer_scripts', 'wp_print_admin_notice_templates' );
-			}
-		}
-
 		/**
 		 * Filter the bootstrap data exposed to the dashboard React app.
 		 *

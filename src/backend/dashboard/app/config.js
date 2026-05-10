@@ -41,24 +41,16 @@ export const SITES_PLUGIN =
 /**
  * Recommended free plugins surfaced in the Welcome sidebar. Server has
  * already filtered out plugins the site already has active, so this list
- * only contains rows the user may want to install/activate.
+ * only contains rows the user may want to install/activate. `actionUrl`
+ * is the standard wp-admin install/activate URL with a valid nonce; the
+ * React card fetches it directly to drive an inline state machine.
  *
  *   { slug, name, iconUrl, state: 'installed'|'not-installed',
- *     pluginFile, actionUrl, actionLabel, detailsUrl }
+ *     actionUrl, actionLabel, detailsUrl }
  */
 export const RECOMMEND_PLUGINS = Array.isArray( config.recommendPlugins )
 	? config.recommendPlugins
 	: [];
-
-/**
- * Capability + nonce flags for the Recommend Plugins card to drive the
- * AJAX install/activate flow. When `canInstallPlugins` / `canActivatePlugins`
- * is false, the React UI falls back to the legacy redirect URL so unprivileged
- * users can still see (but not act on) the cards.
- */
-export const CAN_INSTALL_PLUGINS = !! config.canInstallPlugins;
-export const CAN_ACTIVATE_PLUGINS = !! config.canActivatePlugins;
-export const RECOMMEND_PLUGINS_NONCE = config.recommendPluginsNonce || '';
 
 /**
  * Per-user dismissal flag for the Welcome > "Things to do" card. Persisted
