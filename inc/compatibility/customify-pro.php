@@ -19,22 +19,17 @@
  * Map of Pro module class names → reason the theme has disabled them.
  * Reason is shown in the dashboard tooltip when canToggle is false.
  *
+ * Currently empty — Header Transparent used to be forced off here, but
+ * that broke the toggle when the Pro plugin was active and gave the user
+ * no way to opt into Pro's richer version of the feature. The theme's
+ * native Customify_Header_Transparent now defers at runtime when the Pro
+ * module is enabled (see inc/customizer/configs/header/transparent.php).
+ *
+ * Kept as a filterable shim so future Pro/theme overlap can re-use it
+ * without reintroducing the read-time option mask.
+ *
  * @return array<string,string>
  */
 function customify_pro_modules_owned_by_theme() {
-	$owned = array(
-		'Customify_Pro_Module_Header_Transparent' =>
-			__( 'Built into Customify since 0.4.14 — configure under Customizer → Header → Transparent.', 'customify' ),
-	);
-	return apply_filters( 'customify/compat/pro_modules_owned_by_theme', $owned );
+	return apply_filters( 'customify/compat/pro_modules_owned_by_theme', array() );
 }
-
-add_filter( 'option_customify_modules', function ( $modules ) {
-	if ( ! is_array( $modules ) ) {
-		$modules = array();
-	}
-	foreach ( array_keys( customify_pro_modules_owned_by_theme() ) as $class_name ) {
-		$modules[ $class_name ] = 0;
-	}
-	return $modules;
-} );

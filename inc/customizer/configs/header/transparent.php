@@ -24,6 +24,29 @@ class Customify_Header_Transparent {
 	}
 
 	private function __construct() {
+		// Defer hook registration to `init` so we can decide whether to
+		// take ownership of the feature based on whether the user enabled
+		// the Customify Pro Header Transparent module. Pro plugin loads
+		// at after_setup_theme:30 and its module list is reliable from
+		// then on; init (default priority 10) is comfortably after.
+		add_action( 'init', array( $this, 'register' ) );
+	}
+
+	/**
+	 * Register hooks unless the Pro plugin's matching module is enabled.
+	 * That way:
+	 *   - Pro inactive                 → theme native runs (current default).
+	 *   - Pro active, module disabled  → theme native runs (user opted out
+	 *                                    of Pro's richer version).
+	 *   - Pro active, module enabled   → theme native bows out, Pro handles
+	 *                                    the feature without duplicate
+	 *                                    Customizer settings or hooks.
+	 */
+	public function register() {
+		if ( $this->pro_module_active() ) {
+			return;
+		}
+
 		add_filter( 'customify/customizer/config', array( $this, 'config' ), 6 );
 
 		if ( ! is_admin() ) {
@@ -32,6 +55,22 @@ class Customify_Header_Transparent {
 			add_action( 'customizer/after-logo-img', array( $this, 'transparent_logo' ) );
 			add_filter( 'customify/logo-classes', array( $this, 'logo_classes' ) );
 		}
+	}
+
+	/**
+	 * Is Customify Pro present AND has its Header Transparent module turned on?
+	 *
+	 * @return bool
+	 */
+	private function pro_module_active() {
+		if ( ! function_exists( 'Customify_Pro' ) ) {
+			return false;
+		}
+		$pro = Customify_Pro();
+		if ( ! is_object( $pro ) || ! method_exists( $pro, 'is_enabled_module' ) ) {
+			return false;
+		}
+		return (bool) $pro->is_enabled_module( 'Customify_Pro_Module_Header_Transparent' );
 	}
 
 	/**
