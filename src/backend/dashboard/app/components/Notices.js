@@ -1,83 +1,69 @@
 /**
  * Snackbar host — renders any notice dispatched into the @wordpress/notices
- * store with `type: 'snackbar'`.
+ * store with `type: 'snackbar'`. Same primitive the block editor uses, so
+ * dashboard toasts inherit Gutenberg's auto-dismiss timing + visual style.
  *
- * We render a custom list (instead of @wordpress/components SnackbarList) so
- * we can prefix each toast with a status icon — green check for success, an
- * amber/red warning triangle for warning/error, info circle for info — and
- * match the iconography the "Next things to do" checklist uses.
+ * On top of the native Gutenberg snackbar we prefix each notice's content
+ * with a status icon — green check for success (matching the
+ * "Next things to do" checklist), warning triangle in amber/red for
+ * warning/error, info circle for info. Status detection runs over each
+ * notice's `status` field; everything else is left to SnackbarList.
  *
- * Auto-dismiss timing mirrors WP's SnackbarList default: we set a 4-second
- * timeout when a notice is mounted; user can still close it manually via
- * the close button or by clicking the body. Mount once at the root
- * (App.js); any component can dispatch via:
+ * Mounted via a portal to document.body so the fixed-position snackbar
+ * host escapes the dashboard's #customify-dashboard scroll context.
  *
+ * Mount once at the root (App.js); any component can dispatch via:
  *   const { createNotice } = useDispatch( noticesStore );
  *   createNotice( 'success' | 'error' | 'warning' | 'info', message,
  *                 { type: 'snackbar' } );
  */
 
-import { useEffect } from '@wordpress/element';
+import { SnackbarList } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 import { createPortal } from 'react-dom';
 
 import Icon from '../../ui/Icon';
 
-const AUTO_DISMISS_MS = 4000;
-
 /**
- * Map a notice's `status` to the icon name + the variant class that drives
- * its color (green / amber / red / blue). Falls back to info for any
- * status we don't explicitly recognise.
+ * Map a notice's `status` to the icon + variant class that drives its
+ * colour. Falls back to info for any status we don't explicitly recognise.
  */
-function mapStatus( status ) {
+function statusGlyph( status ) {
 	switch ( status ) {
 		case 'success':
-			return { icon: 'check', variant: 'success' };
+			return { name: 'check', variant: 'success', size: 12 };
 		case 'warning':
-			return { icon: 'warning', variant: 'warning' };
+			return { name: 'warning', variant: 'warning', size: 14 };
 		case 'error':
-			return { icon: 'warning', variant: 'error' };
+			return { name: 'warning', variant: 'error', size: 14 };
 		case 'info':
 		default:
-			return { icon: 'info', variant: 'info' };
+			return { name: 'info', variant: 'info', size: 14 };
 	}
 }
 
-function ToastItem( { notice, onRemove } ) {
-	const { icon, variant } = mapStatus( notice.status );
-
-	useEffect( () => {
-		if ( ! notice.explicitDismiss ) {
-			const timer = setTimeout( () => onRemove( notice.id ), AUTO_DISMISS_MS );
-			return () => clearTimeout( timer );
-		}
-		return undefined;
-	}, [ notice.id, notice.explicitDismiss, onRemove ] );
-
-	return (
-		<div
-			className={ `pm-toast pm-toast--${ variant }` }
-			role={ variant === 'error' ? 'alert' : 'status' }
-		>
-			<span className={ `pm-toast__icon pm-toast__icon--${ variant }` }>
-				<Icon
-					name={ icon }
-					size={ variant === 'success' ? 12 : 16 }
-				/>
-			</span>
-			<div className="pm-toast__body">{ notice.content }</div>
-			<button
-				type="button"
-				className="pm-toast__close"
-				aria-label="Dismiss"
-				onClick={ () => onRemove( notice.id ) }
-			>
-				<Icon name="close" size={ 14 } />
-			</button>
-		</div>
-	);
+/**
+ * Wrap a notice's content so the snackbar renders `[icon] message` in a
+ * single inline row. We only mutate `content`; everything else
+ * (`actions`, `explicitDismiss`, etc.) is passed through untouched.
+ */
+function decorateNotice( notice ) {
+	const { name, variant, size } = statusGlyph( notice.status );
+	return {
+		...notice,
+		content: (
+			<>
+				<span
+					className={ `pm-toast-icon pm-toast-icon--${ variant }` }
+					aria-hidden="true"
+				>
+					<Icon name={ name } size={ size } />
+				</span>
+				<span className="pm-toast-text">{ notice.content }</span>
+			</>
+		),
+	};
 }
 
 export default function Notices() {
@@ -86,21 +72,21 @@ export default function Notices() {
 		[]
 	);
 	const { removeNotice } = useDispatch( noticesStore );
-	const snackbarNotices = notices.filter( ( n ) => n.type === 'snackbar' );
+	const snackbarNotices = notices
+		.filter( ( n ) => n.type === 'snackbar' )
+		.map( decorateNotice );
 
 	if ( ! snackbarNotices.length ) {
 		return null;
 	}
 
 	return createPortal(
-		<div className="pm-snackbar-host" aria-live="polite">
-			<ul className="pm-toast-list">
-				{ snackbarNotices.map( ( notice ) => (
-					<li key={ notice.id }>
-						<ToastItem notice={ notice } onRemove={ removeNotice } />
-					</li>
-				) ) }
-			</ul>
+		<div className="pm-snackbar-host">
+			<SnackbarList
+				notices={ snackbarNotices }
+				className="pm-snackbar-list"
+				onRemove={ removeNotice }
+			/>
 		</div>,
 		document.body
 	);

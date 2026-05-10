@@ -1,14 +1,11 @@
 /*
- * Snackbar host — fixed bottom-right of the viewport.
+ * Snackbar host — fixed bottom-right of the viewport. We position our own
+ * wrapper instead of fighting WP's SnackbarList CSS so the placement works
+ * regardless of which @wordpress/components version is shipped.
  *
- * Uses our own toast components (not @wordpress/components SnackbarList)
- * so each toast can show a status icon (green check / amber warning / red
- * error / blue info) that matches the iconography used by the "Next things
- * to do" checklist on the Welcome tab.
- *
- * Colors are hardcoded (not via --pm-color-* tokens) because the host is
- * portal'd to document.body — it lives OUTSIDE the .pm-app scope where
- * those tokens are declared. Values mirror tokens.css.
+ * Inside the host, neutralize the SnackbarList's own positioning so the
+ * container hugs our wrapper (top-left of the host = bottom-right of the
+ * viewport) and stacks toasts naturally.
  */
 .pm-snackbar-host {
 	position: fixed;
@@ -16,93 +13,67 @@
 	bottom: 30px;
 	z-index: 100050;
 	pointer-events: none;
-	max-width: min( 420px, calc( 100vw - 60px ) );
 }
 
-.pm-toast-list {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-	display: flex;
-	flex-direction: column-reverse; /* newest toast on top of the stack */
-	gap: 10px;
+.pm-snackbar-host .components-snackbar-list,
+.pm-snackbar-host .pm-snackbar-list {
+	position: static !important;
+	top: auto !important;
+	right: auto !important;
+	bottom: auto !important;
+	left: auto !important;
+	width: auto !important;
+	padding: 0 !important;
 	pointer-events: auto;
 }
 
-.pm-toast-list > li {
-	margin: 0;
-}
-
-.pm-toast {
-	display: flex;
-	align-items: flex-start;
-	gap: 12px;
-	padding: 12px 14px;
-	background: #fff;
-	border-radius: 6px;
-	box-shadow:
-		0 1px 0 rgba( 0, 0, 0, 0.04 ),
-		0 6px 20px rgba( 0, 0, 0, 0.12 );
-	border-left: 4px solid #d6d6da;
-	color: #1d2327;
-	font-size: 13px;
-	line-height: 1.45;
-}
-
-.pm-toast--success { border-left-color: #00a32a; }
-.pm-toast--warning { border-left-color: #f0b849; }
-.pm-toast--error   { border-left-color: #d63638; }
-.pm-toast--info    { border-left-color: #2271b1; }
-
-.pm-toast__icon {
-	flex-shrink: 0;
-	width: 22px;
-	height: 22px;
-	border-radius: 50%;
-	display: flex;
+/*
+ * Status icon prefix injected into each notice's content (see Notices.js
+ * decorateNotice). The host is portal'd to document.body — outside the
+ * .pm-app token scope — so we hardcode the colour values here. Numbers
+ * mirror tokens.css.
+ *
+ *   success → solid green circle + white check  (matches ChecklistRow checked state)
+ *   warning → amber tinted circle + amber triangle
+ *   error   → red tinted circle + red triangle
+ *   info    → blue tinted circle + blue info glyph
+ */
+.pm-toast-icon {
+	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	margin-top: 1px;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	margin-right: 8px;
+	vertical-align: middle;
+	flex-shrink: 0;
 }
 
-/* Success uses the same filled-circle treatment as the checklist row. */
-.pm-toast__icon--success {
+.pm-toast-icon--success {
 	background: #00a32a;
 	color: #fff;
 }
-.pm-toast__icon--success svg {
+.pm-toast-icon--success svg {
 	stroke: #fff;
 }
 
-/* Warning + error: tinted soft circle behind the warning triangle. */
-.pm-toast__icon--warning {
+.pm-toast-icon--warning {
 	background: rgba( 240, 184, 73, 0.22 );
 	color: #b97c10;
 }
-.pm-toast__icon--error {
+
+.pm-toast-icon--error {
 	background: rgba( 214, 54, 56, 0.14 );
 	color: #d63638;
 }
-.pm-toast__icon--info {
+
+.pm-toast-icon--info {
 	background: rgba( 34, 113, 177, 0.10 );
 	color: #2271b1;
 }
 
-.pm-toast__body {
-	flex: 1;
-	min-width: 0;
-	word-wrap: break-word;
+/* Keep the message text aligned to the icon's baseline. */
+.pm-toast-text {
+	vertical-align: middle;
 }
-
-.pm-toast__close {
-	flex-shrink: 0;
-	background: transparent;
-	border: 0;
-	padding: 2px;
-	margin: -2px -4px -2px 0;
-	color: #757882;
-	cursor: pointer;
-	border-radius: 3px;
-}
-.pm-toast__close:hover { color: #1d2327; background: #f0f0f1; }
-.pm-toast__close:focus { outline: 2px solid var( --pm-color-primary ); outline-offset: 1px; }
