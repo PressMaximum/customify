@@ -84,6 +84,26 @@ export const ICONS = {
 			</>
 		),
 	},
+	warning: {
+		// Triangle with exclamation mark — used by toast notices for errors
+		// and warnings. Stroke + fill set by callers via CSS color so the
+		// same SVG works in both yellow (warning) and red (error) variants.
+		viewBox: '0 0 18 18',
+		stroke: 'currentColor',
+		strokeWidth: 1.5,
+		fill: 'none',
+		paths: (
+			<>
+				<path
+					d="M9 2.2L16.5 15.3H1.5z"
+					strokeLinecap="round"
+					strokeLinejoin="round"
+				/>
+				<path d="M9 7v4" strokeLinecap="round" />
+				<circle cx="9" cy="13" r="0.7" fill="currentColor" />
+			</>
+		),
+	},
 	'arrow-up-right': {
 		viewBox: '0 0 13 13',
 		stroke: 'currentColor',

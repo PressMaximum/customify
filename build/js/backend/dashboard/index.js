@@ -111,6 +111,30 @@ const ICONS = {
       })]
     })
   },
+  warning: {
+    // Triangle with exclamation mark — used by toast notices for errors
+    // and warnings. Stroke + fill set by callers via CSS color so the
+    // same SVG works in both yellow (warning) and red (error) variants.
+    viewBox: '0 0 18 18',
+    stroke: 'currentColor',
+    strokeWidth: 1.5,
+    fill: 'none',
+    paths: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+        d: "M9 2.2L16.5 15.3H1.5z",
+        strokeLinecap: "round",
+        strokeLinejoin: "round"
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("path", {
+        d: "M9 7v4",
+        strokeLinecap: "round"
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("circle", {
+        cx: "9",
+        cy: "13",
+        r: "0.7",
+        fill: "currentColor"
+      })]
+    })
+  },
   'arrow-up-right': {
     viewBox: '0 0 13 13',
     stroke: 'currentColor',
@@ -2036,17 +2060,18 @@ var external_wp_notices_namespaceObject = window["wp"]["notices"];
 ;// ./src/backend/dashboard/app/components/Notices.js
 /**
  * Snackbar host — renders any notice dispatched into the @wordpress/notices
- * store with `type: 'snackbar'`. Same primitive the block editor uses, so
- * dashboard toasts inherit Gutenberg's auto-dismiss timing + visual style.
+ * store with `type: 'snackbar'`.
  *
- * Mounted via a portal to document.body so the fixed-position snackbar
- * host escapes the dashboard's #customify-dashboard scroll context. The
- * wrapper div is what we position (bottom-right) — newer
- * @wordpress/components versions sometimes ship the SnackbarList without a
- * fixed-position rule of its own, which is why CSS targeting
- * .components-snackbar-list directly doesn't always reach the toast.
+ * We render a custom list (instead of @wordpress/components SnackbarList) so
+ * we can prefix each toast with a status icon — green check for success, an
+ * amber/red warning triangle for warning/error, info circle for info — and
+ * match the iconography the "Next things to do" checklist uses.
  *
- * Mount once at the root (App.js); any component can dispatch via
+ * Auto-dismiss timing mirrors WP's SnackbarList default: we set a 4-second
+ * timeout when a notice is mounted; user can still close it manually via
+ * the close button or by clicking the body. Mount once at the root
+ * (App.js); any component can dispatch via:
+ *
  *   const { createNotice } = useDispatch( noticesStore );
  *   createNotice( 'success' | 'error' | 'warning' | 'info', message,
  *                 { type: 'snackbar' } );
@@ -2057,6 +2082,78 @@ var external_wp_notices_namespaceObject = window["wp"]["notices"];
 
 
 
+
+const AUTO_DISMISS_MS = 4000;
+
+/**
+ * Map a notice's `status` to the icon name + the variant class that drives
+ * its color (green / amber / red / blue). Falls back to info for any
+ * status we don't explicitly recognise.
+ */
+function mapStatus(status) {
+  switch (status) {
+    case 'success':
+      return {
+        icon: 'check',
+        variant: 'success'
+      };
+    case 'warning':
+      return {
+        icon: 'warning',
+        variant: 'warning'
+      };
+    case 'error':
+      return {
+        icon: 'warning',
+        variant: 'error'
+      };
+    case 'info':
+    default:
+      return {
+        icon: 'info',
+        variant: 'info'
+      };
+  }
+}
+function ToastItem({
+  notice,
+  onRemove
+}) {
+  const {
+    icon,
+    variant
+  } = mapStatus(notice.status);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!notice.explicitDismiss) {
+      const timer = setTimeout(() => onRemove(notice.id), AUTO_DISMISS_MS);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [notice.id, notice.explicitDismiss, onRemove]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: `pm-toast pm-toast--${variant}`,
+    role: variant === 'error' ? 'alert' : 'status',
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: `pm-toast__icon pm-toast__icon--${variant}`,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+        name: icon,
+        size: variant === 'success' ? 12 : 16
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "pm-toast__body",
+      children: notice.content
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      type: "button",
+      className: "pm-toast__close",
+      "aria-label": "Dismiss",
+      onClick: () => onRemove(notice.id),
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Icon, {
+        name: "close",
+        size: 14
+      })
+    })]
+  });
+}
 function Notices() {
   const notices = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_notices_namespaceObject.store).getNotices(), []);
   const {
@@ -2068,10 +2165,15 @@ function Notices() {
   }
   return (0,external_ReactDOM_namespaceObject.createPortal)(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "pm-snackbar-host",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SnackbarList, {
-      notices: snackbarNotices,
-      className: "pm-snackbar-list",
-      onRemove: removeNotice
+    "aria-live": "polite",
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+      className: "pm-toast-list",
+      children: snackbarNotices.map(notice => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ToastItem, {
+          notice: notice,
+          onRemove: removeNotice
+        })
+      }, notice.id))
     })
   }), document.body);
 }
