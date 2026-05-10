@@ -44,11 +44,21 @@ export const SITES_PLUGIN =
  * only contains rows the user may want to install/activate.
  *
  *   { slug, name, iconUrl, state: 'installed'|'not-installed',
- *     actionUrl, actionLabel, detailsUrl }
+ *     pluginFile, actionUrl, actionLabel, detailsUrl }
  */
 export const RECOMMEND_PLUGINS = Array.isArray( config.recommendPlugins )
 	? config.recommendPlugins
 	: [];
+
+/**
+ * Capability + nonce flags for the Recommend Plugins card to drive the
+ * AJAX install/activate flow. When `canInstallPlugins` / `canActivatePlugins`
+ * is false, the React UI falls back to the legacy redirect URL so unprivileged
+ * users can still see (but not act on) the cards.
+ */
+export const CAN_INSTALL_PLUGINS = !! config.canInstallPlugins;
+export const CAN_ACTIVATE_PLUGINS = !! config.canActivatePlugins;
+export const RECOMMEND_PLUGINS_NONCE = config.recommendPluginsNonce || '';
 
 /**
  * Per-user dismissal flag for the Welcome > "Things to do" card. Persisted

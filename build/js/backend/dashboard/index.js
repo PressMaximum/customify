@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 925:
+/***/ 739:
 /***/ (function() {
 
 
@@ -1902,9 +1902,19 @@ const SITES_PLUGIN = config.sitesPlugin && typeof config.sitesPlugin === 'object
  * only contains rows the user may want to install/activate.
  *
  *   { slug, name, iconUrl, state: 'installed'|'not-installed',
- *     actionUrl, actionLabel, detailsUrl }
+ *     pluginFile, actionUrl, actionLabel, detailsUrl }
  */
 const RECOMMEND_PLUGINS = Array.isArray(config.recommendPlugins) ? config.recommendPlugins : [];
+
+/**
+ * Capability + nonce flags for the Recommend Plugins card to drive the
+ * AJAX install/activate flow. When `canInstallPlugins` / `canActivatePlugins`
+ * is false, the React UI falls back to the legacy redirect URL so unprivileged
+ * users can still see (but not act on) the cards.
+ */
+const CAN_INSTALL_PLUGINS = !!config.canInstallPlugins;
+const CAN_ACTIVATE_PLUGINS = !!config.canActivatePlugins;
+const RECOMMEND_PLUGINS_NONCE = config.recommendPluginsNonce || '';
 
 /**
  * Per-user dismissal flag for the Welcome > "Things to do" card. Persisted
@@ -3252,58 +3262,256 @@ function SitesImportCard() {
     })]
   });
 }
+;// ./src/backend/dashboard/app/api/recommend-plugins.js
+/**
+ * Inline install/activate flow for the Recommend Plugins card.
+ *
+ * Install: delegates to WP core's `wp.updates.installPlugin()` so the
+ * Customizer dashboard reuses the same Updater plumbing the wp-admin
+ * Plugins screen does (filesystem credentials prompt, error handling,
+ * nonce rotation, etc.). Returns a Promise that resolves with the
+ * installed plugin file path on success.
+ *
+ * Activate: hits the dashboard's shared `customify_dashboard` admin-ajax
+ * action with the `activate_recommend_plugin` task. The handler verifies
+ * a secondary `customify_recommend_plugin` nonce, looks up the plugin
+ * file by slug, and calls `activate_plugin()`. Returns a Promise that
+ * resolves with `{ slug, pluginFile, isActive }`.
+ *
+ * Both paths refuse to run unless `wp.updates` is on the page (install)
+ * or capability + nonce flags are present (activate); the caller can fall
+ * back to the redirect URL the bootstrap already ships.
+ */
+
+
+
+
+/**
+ * Install a wp.org plugin via WP core's Updates API.
+ *
+ * @param {string} slug Plugin slug (e.g. 'filebird').
+ * @returns {Promise<{slug:string, pluginFile:string, activateUrl?:string}>}
+ */
+function installPlugin(slug) {
+  return new Promise((resolve, reject) => {
+    const updates = typeof window !== 'undefined' && window.wp && window.wp.updates;
+    if (!updates || typeof updates.installPlugin !== 'function') {
+      reject(new Error('wp.updates.installPlugin is not available on this page.'));
+      return;
+    }
+    // Auto-respond to filesystem-credentials prompts when WP can write
+    // directly. If creds are required, surface the WP modal — the user
+    // can fill it, hit "Proceed", and our success/error callbacks fire.
+    updates.installPlugin({
+      slug,
+      success(response) {
+        resolve({
+          slug: response.slug || slug,
+          pluginFile: response.plugin || '',
+          activateUrl: response.activateUrl || ''
+        });
+      },
+      error(response) {
+        const msg = response && response.errorMessage || response && response.errorCode || 'Install failed';
+        const err = new Error(msg);
+        err.detail = response;
+        reject(err);
+      }
+    });
+  });
+}
+
+/**
+ * Activate an installed plugin via the theme's AJAX dispatcher.
+ *
+ * @param {string} slug Plugin slug.
+ * @returns {Promise<{slug:string, pluginFile:string, isActive:boolean}>}
+ */
+function activatePlugin(slug) {
+  return ajaxCall('activate_recommend_plugin', {
+    slug,
+    plugin_nonce: RECOMMEND_PLUGINS_NONCE
+  });
+}
 ;// ./src/backend/dashboard/app/components/RecommendPluginsCard.js
 /**
  * Welcome sidebar — recommended free plugins from wordpress.org.
  *
  * Server (Customify::theme_dashboard_inject_recommend_plugins) fetches
  * plugin metadata via plugins_api with a 12h transient cache, filters out
- * already-active plugins, and ships only rows worth surfacing. Each row
- * shows the plugin's wp.org icon + name + Install/Activate button +
- * Details link to its wp.org page.
+ * already-active plugins, and ships only rows worth surfacing.
+ *
+ * Each row drives a per-plugin state machine:
+ *
+ *   not-installed → installing → installed → activating → active
+ *                                                 ↘ error
+ *
+ * No tab switch, no redirect — install via wp.updates.installPlugin()
+ * (WP core Updater) and activate via our dashboard AJAX dispatcher. If
+ * `wp.updates` is missing (page is older / unprivileged user / JS error),
+ * we fall back to the original `actionUrl` redirect so the button is never
+ * dead.
  */
 
 
 
 
 
+
+
+
+
+/**
+ * Resolve the visual + behavioral params for one row given its current
+ * client-side state. Keeps the JSX below readable.
+ */
+
+function actionFor(state, plugin) {
+  switch (state) {
+    case 'installing':
+      return {
+        label: (0,external_wp_i18n_namespaceObject.__)('Installing…', 'customify'),
+        busy: true,
+        variant: 'secondary',
+        disabled: true
+      };
+    case 'installed':
+      return {
+        label: (0,external_wp_i18n_namespaceObject.__)('Activate', 'customify'),
+        variant: 'primary'
+      };
+    case 'activating':
+      return {
+        label: (0,external_wp_i18n_namespaceObject.__)('Activating…', 'customify'),
+        busy: true,
+        variant: 'primary',
+        disabled: true
+      };
+    case 'active':
+      return {
+        label: (0,external_wp_i18n_namespaceObject.__)('Active', 'customify'),
+        variant: 'tertiary',
+        disabled: true
+      };
+    case 'not-installed':
+    default:
+      return {
+        label: plugin.actionLabel || (0,external_wp_i18n_namespaceObject.__)('Install Now', 'customify'),
+        variant: 'secondary'
+      };
+  }
+}
 function RecommendPluginsCard() {
+  const {
+    createNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  // Per-slug client state — server-provided state is the initial seed.
+  const [states, setStates] = (0,external_wp_element_namespaceObject.useState)(() => {
+    const seed = {};
+    RECOMMEND_PLUGINS.forEach(p => {
+      seed[p.slug] = p.state || 'not-installed';
+    });
+    return seed;
+  });
   if (!RECOMMEND_PLUGINS.length) {
     return null;
+  }
+  function notify(type, message) {
+    createNotice(type, message, {
+      type: 'snackbar'
+    });
+  }
+  function setState(slug, next) {
+    setStates(prev => ({
+      ...prev,
+      [slug]: next
+    }));
+  }
+  async function handleInstall(plugin) {
+    if (!CAN_INSTALL_PLUGINS) return; // capability gate; href fallback handles redirect
+    setState(plugin.slug, 'installing');
+    try {
+      await installPlugin(plugin.slug);
+      setState(plugin.slug, 'installed');
+      notify('success', (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: plugin name */
+      (0,external_wp_i18n_namespaceObject.__)('"%s" installed.', 'customify'), plugin.name));
+    } catch (err) {
+      setState(plugin.slug, 'not-installed');
+      notify('error', err && err.message ? err.message : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: plugin name */
+      (0,external_wp_i18n_namespaceObject.__)('Could not install "%s".', 'customify'), plugin.name));
+    }
+  }
+  async function handleActivate(plugin) {
+    if (!CAN_ACTIVATE_PLUGINS) return;
+    setState(plugin.slug, 'activating');
+    try {
+      await activatePlugin(plugin.slug);
+      setState(plugin.slug, 'active');
+      notify('success', (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: plugin name */
+      (0,external_wp_i18n_namespaceObject.__)('"%s" activated.', 'customify'), plugin.name));
+    } catch (err) {
+      setState(plugin.slug, 'installed');
+      notify('error', err && err.message ? err.message : (0,external_wp_i18n_namespaceObject.sprintf)(/* translators: %s: plugin name */
+      (0,external_wp_i18n_namespaceObject.__)('Could not activate "%s".', 'customify'), plugin.name));
+    }
+  }
+  function onClick(plugin, state, e) {
+    // Capability check has the same gate server-side; without the cap
+    // the bootstrap doesn't ship a working flow either way. Let the
+    // browser follow the legacy `href` so the unprivileged user still
+    // sees the standard wp-admin "Sorry, you are not allowed" screen.
+    const canDoAjax = state === 'not-installed' ? CAN_INSTALL_PLUGINS && !!window.wp?.updates?.installPlugin : CAN_ACTIVATE_PLUGINS;
+    if (!canDoAjax) {
+      return; // let the anchor follow plugin.actionUrl
+    }
+    e.preventDefault();
+    if (state === 'not-installed') {
+      handleInstall(plugin);
+    } else if (state === 'installed') {
+      handleActivate(plugin);
+    }
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Card, {
     title: (0,external_wp_i18n_namespaceObject.__)('Recommend Plugins', 'customify'),
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
       className: "pm-recommend-plugins",
-      children: RECOMMEND_PLUGINS.map(plugin => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-        className: "pm-recommend-plugins__item",
-        children: [plugin.iconUrl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("img", {
-          className: "pm-recommend-plugins__icon",
-          src: plugin.iconUrl,
-          alt: "",
-          loading: "lazy"
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-          className: "pm-recommend-plugins__body",
-          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-            className: "pm-recommend-plugins__name",
-            children: plugin.name
+      children: RECOMMEND_PLUGINS.map(plugin => {
+        const state = states[plugin.slug];
+        const action = actionFor(state, plugin);
+        const isFinal = state === 'active';
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+          className: 'pm-recommend-plugins__item' + (isFinal ? ' pm-recommend-plugins__item--active' : ''),
+          children: [plugin.iconUrl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("img", {
+            className: "pm-recommend-plugins__icon",
+            src: plugin.iconUrl,
+            alt: "",
+            loading: "lazy"
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-            className: "pm-recommend-plugins__actions",
-            children: [plugin.actionUrl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Button, {
-              variant: plugin.state === 'installed' ? 'primary' : 'secondary',
-              size: "small",
-              href: plugin.actionUrl,
-              children: plugin.actionLabel
-            }), plugin.detailsUrl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
-              className: "pm-recommend-plugins__details",
-              href: plugin.detailsUrl,
-              target: "_blank",
-              rel: "noreferrer",
-              children: (0,external_wp_i18n_namespaceObject.__)('Details', 'customify')
+            className: "pm-recommend-plugins__body",
+            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+              className: "pm-recommend-plugins__name",
+              children: plugin.name
+            }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+              className: "pm-recommend-plugins__actions",
+              children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Button, {
+                variant: action.variant,
+                size: "small",
+                href: isFinal ? undefined : plugin.actionUrl,
+                disabled: action.disabled,
+                isBusy: action.busy,
+                onClick: e => onClick(plugin, state, e),
+                children: action.label
+              }), plugin.detailsUrl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+                className: "pm-recommend-plugins__details",
+                href: plugin.detailsUrl,
+                target: "_blank",
+                rel: "noreferrer",
+                children: (0,external_wp_i18n_namespaceObject.__)('Details', 'customify')
+              })]
             })]
           })]
-        })]
-      }, plugin.slug))
+        }, plugin.slug);
+      })
     })
   });
 }
@@ -4616,7 +4824,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [57], function() { return __webpack_require__(925); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [57], function() { return __webpack_require__(739); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
