@@ -1526,6 +1526,14 @@ class Customify
 				$action_label = __('Install Now', 'customify');
 			}
 
+			// `wp_nonce_url()` + `add_query_arg()` HTML-escape `&` to `&amp;`
+			// because they are designed for direct HTML output. React's
+			// `{href}` interpolation writes the string verbatim — the browser
+			// then sees `?action=install-plugin&amp;plugin=foo&amp;_wpnonce=...`
+			// and parses bogus param names like `amp;plugin`. Decode here
+			// so the URL ships in raw form to the JSON bootstrap.
+			$action_url = wp_specialchars_decode($action_url, ENT_QUOTES);
+
 			// wp.org plugin names ship HTML-encoded (e.g. "Plugin &#8211; Add-on",
 			// "Foo &amp; Bar") because the legacy admin UI rendered them as
 			// HTML. React's `{name}` interpolation writes JS text directly so
@@ -1611,6 +1619,8 @@ class Customify
 				),
 				'activate-plugin_' . $plugin_file
 			);
+			// Same &amp; entity-escape issue as theme_dashboard_inject_recommend_plugins.
+			$action_url   = wp_specialchars_decode($action_url, ENT_QUOTES);
 			$action_label = __('Activate Plugin', 'customify');
 		} else {
 			$state        = 'not-installed';
