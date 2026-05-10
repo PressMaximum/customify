@@ -27,6 +27,7 @@ import {
 } from '../../ui';
 import { fetchChangelog } from '../api/changelog';
 import { LICENSE_DATA, RESOURCES } from '../data/sidebar';
+import { PRO_ACTIVE } from '../config';
 
 const INITIAL_VISIBLE = 5;
 
@@ -257,7 +258,8 @@ export default function Changelog() {
 
 	const sidebar = (
 		<>
-			<LicenseCard { ...LICENSE_DATA } />
+			{ /* Hide the upgrade pitch once the Pro plugin is active. */ }
+			{ ! PRO_ACTIVE && <LicenseCard { ...LICENSE_DATA } /> }
 			<Card title={ __( 'Resources', 'customify' ) }>
 				<ResourceList items={ RESOURCES } />
 			</Card>

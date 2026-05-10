@@ -4011,7 +4011,7 @@ function Welcome() {
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ProModulesCard, {})]
   });
   const sidebar = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicenseCard, {
+    children: [!PRO_ACTIVE && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicenseCard, {
       ...LICENSE_DATA
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SitesImportCard, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Card, {
       title: (0,external_wp_i18n_namespaceObject.__)('Resources', 'customify'),
@@ -4566,6 +4566,7 @@ function fetchChangelog() {
 
 
 
+
 const INITIAL_VISIBLE = 5;
 
 // Module-level memo — survives unmount/remount when switching tabs.
@@ -4778,7 +4779,7 @@ function Changelog() {
     })]
   });
   const sidebar = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicenseCard, {
+    children: [!PRO_ACTIVE && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicenseCard, {
       ...LICENSE_DATA
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Card, {
       title: (0,external_wp_i18n_namespaceObject.__)('Resources', 'customify'),

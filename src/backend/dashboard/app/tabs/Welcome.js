@@ -35,6 +35,7 @@ import { THEME_CUSTOMIZER_ITEMS } from '../data/theme-customizer';
 import { LICENSE_DATA, RESOURCES, REVIEW } from '../data/sidebar';
 import {
 	CUSTOMIZER_URL,
+	PRO_ACTIVE,
 	THINGS_TO_DO_STATUS,
 	THINGS_TO_DO_HIDDEN,
 } from '../config';
@@ -180,7 +181,8 @@ export default function Welcome() {
 
 	const sidebar = (
 		<>
-			<LicenseCard { ...LICENSE_DATA } />
+			{ /* Hide the upgrade pitch once the Pro plugin is active. */ }
+			{ ! PRO_ACTIVE && <LicenseCard { ...LICENSE_DATA } /> }
 			<SitesImportCard />
 			<Card title={ __( 'Resources', 'customify' ) }>
 				<ResourceList items={ RESOURCES } />
