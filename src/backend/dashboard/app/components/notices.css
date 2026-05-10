@@ -38,6 +38,18 @@
  *   error   → red tinted circle + red triangle
  *   info    → blue tinted circle + blue info glyph
  */
+
+/*
+ * WP's .components-snackbar pads its content `12px 20px`, which leaves a
+ * 20px gap between our icon bubble and the snackbar's left edge. With a
+ * dedicated icon prefix that gap reads like an alignment bug. Tighten the
+ * left side so the icon visually hugs the edge while keeping breathing
+ * room on the right for the close button.
+ */
+.pm-snackbar-host .components-snackbar {
+	padding-left: 12px !important;
+}
+
 .pm-toast-icon {
 	display: inline-flex;
 	align-items: center;
