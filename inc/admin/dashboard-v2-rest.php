@@ -40,7 +40,7 @@ const CUSTOMIFY_DASHBOARD_V2_REST_NS = 'customify/v1';
  */
 function customify_dashboard_v2_schema(): SchemaBuilder {
 	$schema = SchemaBuilder::create()
-		->panel( 'general', __( 'General', 'customify' ) )
+		->panel( 'general', __( 'Theme settings', 'customify' ) )
 		->description( __( 'Theme-wide settings that change how Customify renders the front-end.', 'customify' ) )
 		->radioField(
 			'fontAwesomeVersion',
