@@ -2863,49 +2863,152 @@ function Settings() {
 }
 ;// ./src/backend/admin/dashboard-v2/tabs/Changelog.jsx
 /**
- * Changelog tab — wraps a list of ReleaseBlocks in a Card so it
- * visually matches the other dashboard pages (which use Card + header
- * chrome). Releases are parsed PHP-side and shipped on
- * `boot.changelog`.
+ * Changelog tab — multi-source releases timeline.
+ *
+ * Free ships a single source (Customify theme releases parsed PHP-side
+ * from changelog.txt and shipped on `boot.changelog`). Customify Pro
+ * adds itself as a second source via the kit's filter:
+ *
+ *   addFilter( 'customify.dashboard.changelog.sources', 'customify-pro/changelog',
+ *     ( sources ) => sources.concat( [ {
+ *       id: 'customify-pro',
+ *       label: __( 'Customify Pro', 'customify-pro' ),
+ *       fetch: () => apiFetch( { path: '/customify-pro/v1/changelog' } ),
+ *     } ] )
+ *   );
+ *
+ * When only one source is registered (Free default), the SubNav rail
+ * is hidden — a 1-item rail adds chrome without information. The kit's
+ * <ReleaseBlock> ships its own card chrome (background + border +
+ * radius), so this file does NOT wrap them in another <Card>.
  */
 
 
 
 
 
-function Changelog() {
-  const boot = ce();
-  const releases = Array.isArray(boot?.changelog) ? boot.changelog : [];
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-    className: "customify-dashboard-changelog",
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-      className: "customify-dashboard-changelog__card",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-          className: "customify-dashboard-welcome__checklist-title",
-          children: (0,external_wp_i18n_namespaceObject.__)('Changelog', 'customify')
-        })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-        children: releases.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-          children: (0,external_wp_i18n_namespaceObject.__)('No changelog entries available.', 'customify')
-        }) : releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
-          release: release,
-          labels: {
-            currentBadge: (0,external_wp_i18n_namespaceObject.__)('Current', 'customify')
-          },
-          categoryLabels: {
-            new: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
-            improved: (0,external_wp_i18n_namespaceObject.__)('Improved', 'customify'),
-            fixed: (0,external_wp_i18n_namespaceObject.__)('Fixed', 'customify'),
-            updated: (0,external_wp_i18n_namespaceObject.__)('Updated', 'customify'),
-            removed: (0,external_wp_i18n_namespaceObject.__)('Removed', 'customify'),
-            security: (0,external_wp_i18n_namespaceObject.__)('Security', 'customify'),
-            deprecated: (0,external_wp_i18n_namespaceObject.__)('Deprecated', 'customify'),
-            neutral: (0,external_wp_i18n_namespaceObject.__)('Note', 'customify')
-          }
-        }, release.version))
+
+
+const RELEASE_LABELS = {
+  currentBadge: (0,external_wp_i18n_namespaceObject.__)('Current', 'customify')
+};
+const CATEGORY_LABELS = {
+  new: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
+  added: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
+  improved: (0,external_wp_i18n_namespaceObject.__)('Improved', 'customify'),
+  fixed: (0,external_wp_i18n_namespaceObject.__)('Fixed', 'customify'),
+  updated: (0,external_wp_i18n_namespaceObject.__)('Updated', 'customify'),
+  removed: (0,external_wp_i18n_namespaceObject.__)('Removed', 'customify'),
+  security: (0,external_wp_i18n_namespaceObject.__)('Security', 'customify'),
+  deprecated: (0,external_wp_i18n_namespaceObject.__)('Deprecated', 'customify'),
+  neutral: (0,external_wp_i18n_namespaceObject.__)('Note', 'customify')
+};
+function SourceReleases({
+  source
+}) {
+  const [releases, setReleases] = (0,external_wp_element_namespaceObject.useState)(null);
+  const [error, setError] = (0,external_wp_element_namespaceObject.useState)(null);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    let cancelled = false;
+    setReleases(null);
+    setError(null);
+    Promise.resolve(source.fetch()).then(data => {
+      if (cancelled) {
+        return;
+      }
+      setReleases(Array.isArray(data) ? data : []);
+    }).catch(err => {
+      if (cancelled) {
+        return;
+      }
+      setError(err);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [source]);
+  if (error) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+      status: "error",
+      isDismissible: false,
+      children: (0,external_wp_i18n_namespaceObject.__)('Could not load the changelog.', 'customify')
+    });
+  }
+  if (releases === null) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "customify-dashboard-changelog__loading",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        children: (0,external_wp_i18n_namespaceObject.__)('Loading changelog…', 'customify')
       })]
-    })
+    });
+  }
+  if (releases.length === 0) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+      status: "info",
+      isDismissible: false,
+      children: (0,external_wp_i18n_namespaceObject.__)('No releases yet.', 'customify')
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "customify-dashboard-changelog__releases",
+    children: releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
+      release: release,
+      labels: RELEASE_LABELS,
+      categoryLabels: CATEGORY_LABELS
+    }, release.version))
+  });
+}
+function Changelog({
+  params
+}) {
+  const boot = ce();
+  const sources = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    const base = [{
+      id: 'customify',
+      label: (0,external_wp_i18n_namespaceObject.__)('Customify', 'customify'),
+      fetch: () => Promise.resolve(Array.isArray(boot?.changelog) ? boot.changelog : [])
+    }];
+    const filtered = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.changelog.sources', base);
+    return Array.isArray(filtered) && filtered.length > 0 ? filtered : base;
+  }, [boot]);
+  const activeId = params?.sourceId || sources[0]?.id;
+  const activeSource = sources.find(s => s.id === activeId) || sources[0];
+
+  // Redirect bare `#changelog` to the canonical multi-source path so
+  // SubNav has a resolved active row. Skipped when there's only one
+  // source — bare `#changelog` is fine for the single-source case.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!params?.sourceId && sources.length > 1 && activeSource) {
+      M(`#changelog/${activeSource.id}`);
+    }
+  }, [params, sources, activeSource]);
+  if (!activeSource) {
+    return null;
+  }
+  if (sources.length < 2) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-changelog",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SourceReleases, {
+        source: activeSource
+      })
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "customify-dashboard-changelog customify-dashboard-changelog--multi",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Pe, {
+      items: sources.map(s => ({
+        id: s.id,
+        label: s.label,
+        hash: `#changelog/${s.id}`
+      })),
+      activeId: activeId,
+      ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Changelog sources', 'customify')
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-changelog__pane",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SourceReleases, {
+        source: activeSource
+      })
+    })]
   });
 }
 ;// ./src/backend/admin/dashboard-v2/brand-icon.js
@@ -3043,6 +3146,10 @@ if (document.getElementById('customify-dashboard')) {
         type: 'page'
       },
       '#changelog': {
+        component: Changelog,
+        type: 'page'
+      },
+      '#changelog/:sourceId': {
         component: Changelog,
         type: 'page'
       }

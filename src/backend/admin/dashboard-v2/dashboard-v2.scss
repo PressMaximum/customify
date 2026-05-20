@@ -25,11 +25,26 @@ body.customify-dashboard-page {
 	cursor: pointer;
 }
 
-.customify-dashboard-settings,
-.customify-dashboard-changelog {
+.customify-dashboard-settings {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+}
+
+.customify-dashboard-changelog {
+	&__loading {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		color: var( --pmdk-color-text-muted, #50575e );
+	}
+
+	&--multi {
+		display: grid;
+		grid-template-columns: 240px 1fr;
+		gap: 24px;
+		align-items: start;
+	}
 }
 
 .customify-dashboard-settings {

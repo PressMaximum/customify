@@ -80,6 +80,7 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 			'#welcome': { component: Welcome, type: 'page' },
 			'#settings': { component: Settings, type: 'page' },
 			'#changelog': { component: Changelog, type: 'page' },
+			'#changelog/:sourceId': { component: Changelog, type: 'page' },
 		},
 		initialRoute: '#welcome',
 	} );
