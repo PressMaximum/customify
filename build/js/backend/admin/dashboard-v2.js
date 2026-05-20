@@ -2341,21 +2341,20 @@ function Welcome() {
         href: boot?.urls?.customize || '#'
       }
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-      className: "customify-dashboard-welcome__card",
+      className: "customify-dashboard-welcome__checklist",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          className: "customify-dashboard-welcome__checklist-title",
           children: (0,external_wp_i18n_namespaceObject.__)('Get started', 'customify')
         })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(or, {
-          items: checklistItems,
-          ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify onboarding checklist', 'customify'),
-          itemLabels: {
-            checking: (0,external_wp_i18n_namespaceObject.__)('Checking…', 'customify'),
-            completed: (0,external_wp_i18n_namespaceObject.__)('Completed', 'customify'),
-            pending: (0,external_wp_i18n_namespaceObject.__)('Pending', 'customify')
-          }
-        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(or, {
+        items: checklistItems,
+        ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify onboarding checklist', 'customify'),
+        itemLabels: {
+          checking: (0,external_wp_i18n_namespaceObject.__)('Checking…', 'customify'),
+          completed: (0,external_wp_i18n_namespaceObject.__)('Completed', 'customify'),
+          pending: (0,external_wp_i18n_namespaceObject.__)('Pending', 'customify')
+        }
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
       className: "customify-dashboard-welcome__card",

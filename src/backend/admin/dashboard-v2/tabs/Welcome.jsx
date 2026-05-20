@@ -54,21 +54,26 @@ export default function Welcome() {
 				} }
 			/>
 
-			<Card className="customify-dashboard-welcome__card">
+			<Card className="customify-dashboard-welcome__checklist">
 				<CardHeader>
-					<h2>{ __( 'Get started', 'customify' ) }</h2>
+					<h2 className="customify-dashboard-welcome__checklist-title">
+						{ __( 'Get started', 'customify' ) }
+					</h2>
 				</CardHeader>
-				<CardBody>
-					<Checklist
-						items={ checklistItems }
-						ariaLabel={ __( 'Customify onboarding checklist', 'customify' ) }
-						itemLabels={ {
-							checking: __( 'Checking…', 'customify' ),
-							completed: __( 'Completed', 'customify' ),
-							pending: __( 'Pending', 'customify' ),
-						} }
-					/>
-				</CardBody>
+				{ /* Checklist renders directly inside Card (no CardBody) so
+				     item dividers span edge-to-edge and item content aligns
+				     at the same 24px gutter as the CardHeader heading. Kit's
+				     pmdk-checklist__item carries its own padding via the
+				     K-007 token surface. */ }
+				<Checklist
+					items={ checklistItems }
+					ariaLabel={ __( 'Customify onboarding checklist', 'customify' ) }
+					itemLabels={ {
+						checking: __( 'Checking…', 'customify' ),
+						completed: __( 'Completed', 'customify' ),
+						pending: __( 'Pending', 'customify' ),
+					} }
+				/>
 			</Card>
 
 			<Card className="customify-dashboard-welcome__card">
