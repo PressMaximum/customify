@@ -1,7 +1,7 @@
 /**
  * Welcome tab — single-page scroll with Hero + Checklist + Customizer
  * quick-link grid + Pro module grid. Composes kit primitives + small
- * theme-owned UI components (`ModuleList`, `ThemeGridCard`, `ToggleSwitch`).
+ * theme-owned UI components (`ModuleList`, `ThemeGridCard`).
  */
 
 import { applyFilters } from '@wordpress/hooks';
@@ -13,6 +13,11 @@ import { useCustomizerLinks } from '../data/customizerLinks.js';
 import { useChecklist } from '../data/checklist.js';
 import ThemeGridCard from '../ui/ThemeGridCard.jsx';
 import ProModulesSection from '../sections/ProModulesSection.jsx';
+
+// Onboarding checklist is hidden until each item's `check()` ships real
+// detection (logo set, header configured, etc.). The card + data hook
+// stay intact; flip this back to `true` once the detection lands.
+const SHOW_CHECKLIST = false;
 
 export default function Welcome() {
 	const boot = useBoot();
@@ -43,25 +48,27 @@ export default function Welcome() {
 				} }
 			/>
 
-			<Card className="customify-dashboard-welcome__checklist">
-				<CardHeader>
-					<h2 className="customify-dashboard-welcome__checklist-title">
-						{ __( 'Get started', 'customify' ) }
-					</h2>
-				</CardHeader>
-				{ /* Checklist renders directly inside Card (no CardBody) so
-				     item dividers span edge-to-edge — kit's
-				     pmdk-checklist__item carries its own padding. */ }
-				<Checklist
-					items={ checklistItems }
-					ariaLabel={ __( 'Customify onboarding checklist', 'customify' ) }
-					itemLabels={ {
-						checking: __( 'Checking…', 'customify' ),
-						completed: __( 'Completed', 'customify' ),
-						pending: __( 'Pending', 'customify' ),
-					} }
-				/>
-			</Card>
+			{ SHOW_CHECKLIST && (
+				<Card className="customify-dashboard-welcome__checklist">
+					<CardHeader>
+						<h2 className="customify-dashboard-welcome__checklist-title">
+							{ __( 'Get started', 'customify' ) }
+						</h2>
+					</CardHeader>
+					{ /* Checklist renders directly inside Card (no CardBody)
+					     so item dividers span edge-to-edge — kit's
+					     pmdk-checklist__item carries its own padding. */ }
+					<Checklist
+						items={ checklistItems }
+						ariaLabel={ __( 'Customify onboarding checklist', 'customify' ) }
+						itemLabels={ {
+							checking: __( 'Checking…', 'customify' ),
+							completed: __( 'Completed', 'customify' ),
+							pending: __( 'Pending', 'customify' ),
+						} }
+					/>
+				</Card>
+			) }
 
 			<Card className="customify-dashboard-welcome__theme-customizer">
 				<CardHeader>
