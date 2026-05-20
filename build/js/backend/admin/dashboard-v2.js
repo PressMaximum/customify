@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 989:
+/***/ 685:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -231,7 +231,7 @@ function U(e, r) {
   }
   return null;
 }
-function q(e) {
+function W(e) {
   var r = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : R,
     t = H(r),
     n = (0,external_wp_element_namespaceObject.useMemo)(() => U(r, e) || {
@@ -245,7 +245,7 @@ function q(e) {
     a || t === n.route || M(n.route);
   }, [t, a, n.route]), s;
 }
-function W(e) {
+function q(e) {
   return B(e).split("/")[0] || "";
 }
 var z = () => !0,
@@ -474,14 +474,14 @@ function ie(e) {
     v = e.notFoundComponent,
     b = e.fallback,
     y = e.snackbar,
-    g = q(a, o),
+    g = W(a, o),
     j = g.route,
     _ = g.entry,
     x = g.params,
     k = V(),
     w = G(j),
     O = null == _ ? void 0 : _.component,
-    N = W(j),
+    N = q(j),
     S = null == r ? void 0 : r.name,
     P = null == r ? void 0 : r.icon,
     A = null == r ? void 0 : r.href,
@@ -993,8 +993,8 @@ var Ie = "START_LOAD",
   Be = "START_SAVE",
   He = "SAVE_SUCCESS",
   Ue = "SAVE_ERROR",
-  qe = "CLEAR_DIRTY";
-function We(e, r, t) {
+  We = "CLEAR_DIRTY";
+function qe(e, r, t) {
   var n = String(r || "").split(".").filter(Boolean);
   if (0 === n.length) return e;
   var a,
@@ -1016,7 +1016,7 @@ function We(e, r, t) {
   if (0 === s.length) return De(De({}, e), {}, {
     [o]: t
   });
-  var l = We(e && "object" == typeof e[o] ? e[o] : {}, s.join("."), t);
+  var l = qe(e && "object" == typeof e[o] ? e[o] : {}, s.join("."), t);
   return De(De({}, e), {}, {
     [o]: l
   });
@@ -1137,7 +1137,7 @@ function $e() {
         };
       }(),
       clearDirty: () => ({
-        type: qe
+        type: We
       })
     },
     l = (0,external_wp_data_namespaceObject.createReduxStore)(r, {
@@ -1163,7 +1163,7 @@ function $e() {
             });
           case Me:
             return De(De({}, e), {}, {
-              dirty: We(e.dirty, r.path, r.value)
+              dirty: qe(e.dirty, r.path, r.value)
             });
           case Be:
             return De(De({}, e), {}, {
@@ -1182,7 +1182,7 @@ function $e() {
               saving: !1,
               error: r.error
             });
-          case qe:
+          case We:
             return De(De({}, e), {}, {
               dirty: {}
             });
@@ -1264,7 +1264,7 @@ var Ke = {
   saveLabel: "Save changes",
   savingLabel: "Saving…",
   resetLabel: "Reset to defaults",
-  statusSaved: "All changes saved",
+  statusSaved: "No pending changes",
   statusDirty: "Unsaved changes",
   statusSaving: "Saving…"
 };
@@ -1296,11 +1296,14 @@ function Xe(e) {
     n = e.onSave,
     a = e.onReset,
     i = e.labels,
-    o = Z(Ke, i);
+    o = e.resetDisabledWhenNotDirty,
+    s = void 0 !== o && o,
+    l = Z(Ke, i),
+    c = t || s && !r;
   return (0, L.jsx)("div", {
     className: "pmdk-save-bar",
     role: "region",
-    "aria-label": o.regionLabel,
+    "aria-label": l.regionLabel,
     children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
       justify: "space-between",
       align: "center",
@@ -1309,7 +1312,7 @@ function Xe(e) {
         children: (0, L.jsx)(Qe, {
           isDirty: r,
           isSaving: t,
-          labels: o
+          labels: l
         })
       }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
         children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
@@ -1320,15 +1323,15 @@ function Xe(e) {
               variant: "tertiary",
               isDestructive: !0,
               onClick: a,
-              disabled: t,
-              children: o.resetLabel
+              disabled: c,
+              children: l.resetLabel
             })
           }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
             children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
               variant: "primary",
               onClick: n,
               disabled: !r || t,
-              children: t ? o.savingLabel : o.saveLabel
+              children: t ? l.savingLabel : l.saveLabel
             })
           })]
         })
@@ -2249,6 +2252,14 @@ var check_check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceO
 
 //# sourceMappingURL=check.mjs.map
 
+;// ./node_modules/@wordpress/icons/build-module/library/external.mjs
+// packages/icons/src/library/external.tsx
+
+
+var external_external_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z" }) });
+
+//# sourceMappingURL=external.mjs.map
+
 ;// ./src/backend/admin/dashboard-v2/data/proModules.js
 
 
@@ -2373,12 +2384,17 @@ function useProModules() {
  * Ported from the theme-dashboard branch `pm-module-list` pattern.
  *
  *   <ModuleList>
- *     <ModuleRow leading={ <ToggleSwitch ... /> } title="..." description="..." trailing={ ... } />
+ *     <ModuleRow leading={ <FormToggle ... /> } title="..." description="..." trailing={ ... } />
  *     ...
  *   </ModuleList>
  *
  * Rows with `has-subs` class span the full width and their sub-module
  * group renders inside `.customify-dashboard-module-list__subs` below.
+ *
+ * `notice` (optional) renders inline beside the title as a small dimmed
+ * label — used by the Pro dashboard to flag gated modules (e.g. the
+ * WooCommerce Booster row showing "WooCommerce not activated" when
+ * WooCommerce isn't installed).
  */
 
 function ModuleList({
@@ -2399,6 +2415,7 @@ function ModuleRow({
   description,
   leading,
   trailing,
+  notice,
   hasSubs,
   className
 }) {
@@ -2416,9 +2433,12 @@ function ModuleRow({
       children: leading
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "customify-dashboard-module-row__body",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h4", {
         className: "customify-dashboard-module-row__title",
-        children: title
+        children: [title, notice && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "customify-dashboard-module-row__notice",
+          children: notice
+        })]
       }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
         className: "customify-dashboard-module-row__description",
         children: description
@@ -2437,56 +2457,33 @@ function ModuleSubmodules({
     children: children
   });
 }
-;// ./src/backend/admin/dashboard-v2/ui/ToggleSwitch.jsx
-
-/**
- * Pill-shaped on/off switch. Controlled — parent owns state.
- *
- * Visually neutralizes the WP-admin checkbox `:checked::before` glyph
- * which would otherwise paint a misaligned tick on top of the slider.
- */
-
-function ToggleSwitch({
-  checked,
-  onChange,
-  disabled,
-  ariaLabel
-}) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
-    className: "customify-dashboard-toggle",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
-      type: "checkbox",
-      checked: !!checked,
-      onChange: event => onChange(event.target.checked),
-      disabled: !!disabled,
-      "aria-label": ariaLabel
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-      className: "customify-dashboard-toggle__slider"
-    })]
-  });
-}
 ;// ./src/backend/admin/dashboard-v2/sections/ProModulesSection.jsx
 /**
  * Pro Modules card section on the Welcome tab.
  *
  * Two render paths:
- *   1. Pro plugin NOT active (`boot.proActive === false`) → marketing list.
- *      Each row shows title + description + optional "Docs" trailing link.
- *      Header CTA is "Upgrade Now".
+ *   1. Pro plugin NOT active (`boot.proActive === false`) → marketing
+ *      list. Each row shows title + description + a *disabled* FormToggle
+ *      in the leading slot wrapped in a Tooltip ("Available in Pro
+ *      version") so the row reads as "something you can flip — in Pro"
+ *      while keeping the upsell story tight. Header CTA stays "Upgrade
+ *      Now".
  *   2. Pro plugin active → same list (overridden via the
  *      `customify.dashboard.pro.modules` filter from Pro's bundle) plus a
- *      ToggleSwitch leading slot per row + Settings trailing link when the
- *      module has settings + is enabled. Toggling calls a handler Pro
- *      supplies via the `customify.dashboard.pro.toggle` filter; the kit
- *      ships a no-op + reject so the marketing path can't accidentally
- *      flip server state.
+ *      live `@wordpress/components` FormToggle in the leading slot +
+ *      Settings trailing link when the module has settings + is enabled.
+ *      Toggling calls a handler Pro supplies via the
+ *      `customify.dashboard.pro.toggle` filter; the kit ships a no-op +
+ *      reject so the marketing path can't accidentally flip server state.
+ *      When a module has `canToggle: false` (e.g. WooCommerce Booster
+ *      without WooCommerce active) the toggle renders disabled + the row
+ *      shows `toggleDisableNotice` inline beside the name.
  *
  * Pro extension surface:
  *   - `customify.dashboard.pro.modules`  — replaces the module catalogue.
  *   - `customify.dashboard.pro.toggle`   — toggle handler `(classKey,
  *                                            nextEnabled) => Promise<{ enabled }>`.
  */
-
 
 
 
@@ -2557,6 +2554,13 @@ function ProModulesSection({
     if (typeof proToggle !== 'function') {
       return;
     }
+    // Safety net: the disabled FormToggle suppresses onChange in the
+    // browser, but a programmatic dispatch here would otherwise let a
+    // gated module (e.g. WooCommerce Booster without WooCommerce
+    // active) flip its state on the server.
+    if (byId[id] && byId[id].canToggle === false) {
+      return;
+    }
     const current = !!enabledMap[id];
     const next = !current;
     const moduleName = byId[id]?.name || id;
@@ -2607,19 +2611,46 @@ function ProModulesSection({
   const renderRow = (mod, isSub = false) => {
     const checked = !!enabledMap[mod.id];
     const pending = !!pendingMap[mod.id];
-    const canToggle = proActive && mod.canToggle !== false && typeof proToggle === 'function';
-    const showSettings = canToggle && checked && mod.hasSettings && !pending;
+    // `proAvailable` flips when the runtime is wired up (Pro plugin
+    // active + bridge toggle handler registered). Free path keeps the
+    // toggle visible but disabled so the row still reads as
+    // "something you can flip — in Pro" and the upgrade CTA above
+    // the list has visible context.
+    const proAvailable = proActive && typeof proToggle === 'function';
+    // `canToggle: false` arrives from Pro when a runtime dependency is
+    // missing (WooCommerce Booster + its sub-modules when WooCommerce
+    // isn't active). Render the toggle disabled instead of hiding it
+    // so the user sees the row state + its notice.
+    const allowed = mod.canToggle !== false;
+    const toggleDisabled = !proAvailable || pending || !allowed;
+    const showSettings = proAvailable && allowed && checked && mod.hasSettings && !pending;
     const showsSubs = !isSub && mod.subModules && mod.subModules.length > 0;
+    const notice = proAvailable && !allowed && mod.toggleDisableNotice ? mod.toggleDisableNotice : null;
+    const toggle = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FormToggle, {
+      checked: proAvailable && checked,
+      onChange: () => handleToggle(mod.id),
+      disabled: toggleDisabled,
+      "aria-label": mod.name
+    });
+
+    // Free path: wrap the disabled toggle in a Tooltip so hovering
+    // surfaces the "Available in Pro version" hint. The wrap span
+    // catches pointer events that the disabled <input> doesn't fire
+    // itself.
+    const leading = proAvailable ? toggle : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Tooltip, {
+      text: (0,external_wp_i18n_namespaceObject.__)('Available in Pro version', 'customify'),
+      placement: "top",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        className: "customify-dashboard-module-row__toggle-wrap",
+        children: toggle
+      })
+    });
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModuleRow, {
       title: mod.name,
       description: mod.description,
+      notice: notice,
       hasSubs: showsSubs,
-      leading: canToggle ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ToggleSwitch, {
-        checked: checked,
-        onChange: () => handleToggle(mod.id),
-        disabled: pending,
-        ariaLabel: mod.name
-      }) : null,
+      leading: leading,
       trailing: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
         children: [showSettings && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
           type: "button",
@@ -2643,6 +2674,8 @@ function ProModulesSection({
         href: boot?.urls?.proUpgrade || '#',
         target: "_blank",
         rel: "noopener noreferrer",
+        icon: external_external_default,
+        iconPosition: "right",
         children: (0,external_wp_i18n_namespaceObject.__)('Upgrade now', 'customify')
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModuleList, {
@@ -2661,7 +2694,7 @@ function ProModulesSection({
 /**
  * Welcome tab — single-page scroll with Hero + Checklist + Customizer
  * quick-link grid + Pro module grid. Composes kit primitives + small
- * theme-owned UI components (`ModuleList`, `ThemeGridCard`, `ToggleSwitch`).
+ * theme-owned UI components (`ModuleList`, `ThemeGridCard`).
  */
 
 
@@ -2673,6 +2706,11 @@ function ProModulesSection({
 
 
 
+// Onboarding checklist is hidden until each item's `check()` ships real
+// detection (logo set, header configured, etc.). The card + data hook
+// stay intact; flip this back to `true` once the detection lands.
+
+const SHOW_CHECKLIST = false;
 function Welcome() {
   const boot = ce();
   const links = useCustomizerLinks(boot);
@@ -2689,7 +2727,7 @@ function Welcome() {
         label: (0,external_wp_i18n_namespaceObject.__)('Open the Customizer', 'customify'),
         href: boot?.urls?.customize || '#'
       }
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    }), SHOW_CHECKLIST && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
       className: "customify-dashboard-welcome__checklist",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
@@ -2803,6 +2841,71 @@ const ProModuleSettingsPanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRu
 });
 
 /**
+ * One section-level action button (e.g. "Regenerate assets"). Each
+ * descriptor in `panel.actions[]` ships its own endpoint + labels; the
+ * button owns its own busy state so multiple actions in the same panel
+ * stay independent. POSTs use `{}` as the body so Pro REST handlers
+ * that read `get_json_params()` always see an array.
+ */
+function PanelActionButton({
+  action,
+  nonce
+}) {
+  const [busy, setBusy] = (0,external_wp_element_namespaceObject.useState)(false);
+  const handleClick = async () => {
+    if (busy) {
+      return;
+    }
+    setBusy(true);
+    const method = (action.method || 'POST').toUpperCase();
+    const headers = method === 'POST' ? {
+      'Content-Type': 'application/json'
+    } : {};
+    if (nonce) {
+      headers['X-WP-Nonce'] = nonce;
+    }
+    try {
+      const res = await fetch(action.endpoint, {
+        method,
+        credentials: 'same-origin',
+        headers,
+        body: method === 'POST' ? '{}' : undefined
+      });
+      if (!res.ok) {
+        let message = `HTTP ${res.status}`;
+        try {
+          const data = await res.json();
+          if (data?.message) {
+            message = data.message;
+          }
+        } catch (_) {
+          // Non-JSON error body; fall through with HTTP status.
+        }
+        throw new Error(message);
+      }
+      (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createSuccessNotice(action.successMessage || (0,external_wp_i18n_namespaceObject.__)('Done.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true,
+        icon: ProModuleSettingsPanel_SUCCESS_GLYPH
+      });
+    } catch (err) {
+      (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Action failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+    variant: action.variant === 'primary' ? 'primary' : 'secondary',
+    onClick: handleClick,
+    disabled: busy,
+    children: busy ? action.busyLabel || (0,external_wp_i18n_namespaceObject.__)('Working…', 'customify') : action.label
+  });
+}
+
+/**
  * @param {object} props
  * @param {object} props.panel    Panel descriptor — { id, label, description?,
  *                                fields[], endpoint, seedValues?, nonce? }.
@@ -2880,8 +2983,16 @@ function ProModuleSettingsPanel({
     }
   };
   const handleDiscard = () => {
+    // The kit's SaveBar disables this action via
+    // `resetDisabledWhenNotDirty` when the form is clean, so a click
+    // arriving here always has something to throw away.
     setValues(savedValues);
     setError(null);
+    (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Changes discarded.', 'customify'), {
+      type: 'snackbar',
+      isDismissible: true,
+      icon: ProModuleSettingsPanel_SUCCESS_GLYPH
+    });
   };
   if (!panel) {
     return null;
@@ -2917,6 +3028,12 @@ function ProModuleSettingsPanel({
           isDismissible: false,
           className: "customify-dashboard-settings__pro-panel-error",
           children: error.message
+        }), Array.isArray(panel.actions) && panel.actions.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "customify-dashboard-settings__panel-actions-inline",
+          children: panel.actions.map(action => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PanelActionButton, {
+            action: action,
+            nonce: panel.nonce
+          }, action.id))
         })]
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
@@ -2925,7 +3042,12 @@ function ProModuleSettingsPanel({
         isDirty: isDirty,
         isSaving: saving,
         onSave: handleSave,
-        onReset: handleDiscard,
+        onReset: handleDiscard
+        // Pro module storage uses revert-to-last-saved semantics
+        // (no factory-defaults endpoint), so Discard should only
+        // fire when there's something dirty to throw away.
+        ,
+        resetDisabledWhenNotDirty: true,
         labels: {
           regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
           saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
@@ -2935,7 +3057,10 @@ function ProModuleSettingsPanel({
           // last server-confirmed snapshot. Label accordingly so
           // users don't expect a real wipe.
           resetLabel: (0,external_wp_i18n_namespaceObject.__)('Discard changes', 'customify'),
-          statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+          // Mirror the kit's neutral default through the
+          // `customify` text domain so the string lands in the
+          // theme POT for translation.
+          statusSaved: (0,external_wp_i18n_namespaceObject.__)('No pending changes', 'customify'),
           statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
           statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
         }
@@ -3295,7 +3420,10 @@ function ThemePanelCard({
           saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
           savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
           resetLabel: (0,external_wp_i18n_namespaceObject.__)('Reset to defaults', 'customify'),
-          statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+          // Mirror the kit's neutral default ("No pending
+          // changes") through the `customify` text domain so
+          // the string lands in the theme POT for translation.
+          statusSaved: (0,external_wp_i18n_namespaceObject.__)('No pending changes', 'customify'),
           statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
           statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
         }
@@ -3704,7 +3832,7 @@ function mount() {
     }, {
       id: 'support',
       label: (0,external_wp_i18n_namespaceObject.__)('Contact support', 'customify'),
-      href: 'https://wordpress.org/support/theme/customify/'
+      href: 'https://pressmaximum.com/contact/'
     }, {
       id: 'pro',
       label: (0,external_wp_i18n_namespaceObject.__)('Upgrade to Pro', 'customify'),
@@ -3958,7 +4086,7 @@ if (document.readyState === 'loading') {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(989); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(685); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

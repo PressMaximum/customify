@@ -307,14 +307,6 @@ add_action( 'wp_ajax_my_action', function () {
 } );
 ```
 
-**Known gaps** — these handlers are missing nonce checks and must be fixed before shipping a security-sensitive release:
-
-| Handler | File | Missing |
-|---|---|---|
-| `customify/customizer/ajax/get_icons` | `inc/customizer/class-customizer.php` | nonce |
-| `customify/customizer/ajax/fonts` | `inc/customizer/class-customizer-fonts.php` | nonce + capability |
-| `wp_ajax_{editor->action}` (`css_file`) | `inc/admin/editor.php` | nonce + capability |
-
 ---
 
 ### Always null-check DOM queries before using the result

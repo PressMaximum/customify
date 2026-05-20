@@ -84,7 +84,10 @@ function ThemePanelCard( { panel, values, fieldTypes, isDirty, isSaving, edit, o
 						saveLabel: __( 'Save changes', 'customify' ),
 						savingLabel: __( 'Saving…', 'customify' ),
 						resetLabel: __( 'Reset to defaults', 'customify' ),
-						statusSaved: __( 'All changes saved', 'customify' ),
+						// Mirror the kit's neutral default ("No pending
+						// changes") through the `customify` text domain so
+						// the string lands in the theme POT for translation.
+						statusSaved: __( 'No pending changes', 'customify' ),
 						statusDirty: __( 'Unsaved changes', 'customify' ),
 						statusSaving: __( 'Saving…', 'customify' ),
 					} }

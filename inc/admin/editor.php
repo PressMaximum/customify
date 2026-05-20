@@ -305,13 +305,31 @@ class Customify_Editor {
 	}
 
 	/**
-	 * Render dynamic CSS content.
+	 * Render dynamic CSS content. Endpoint is the URL produced by
+	 * `editor_style_url()` and consumed by the block editor's iframe
+	 * via the `editor_settings['styles']` URL slot — the browser
+	 * fetches it during editor boot.
+	 *
+	 * Auth: the URL carries a `nonce` query arg minted by
+	 * `editor_style_url()`. Verify it server-side and require the same
+	 * capability the block editor itself gates on (`edit_posts`) so
+	 * subscriber-level users can't pull the stylesheet directly.
 	 *
 	 * @return void
 	 */
 	public function css_file() {
+		$nonce = isset( $_REQUEST['nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( ! wp_verify_nonce( $nonce, $this->action ) ) {
+			status_header( 403 );
+			exit;
+		}
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			status_header( 403 );
+			exit;
+		}
 		header( 'Content-type: text/css; charset: UTF-8' );
 		echo $this->load_style();
+		exit;
 	}
 
 	/**

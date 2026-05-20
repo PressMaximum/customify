@@ -18,7 +18,14 @@
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { Card, CardBody, CardHeader, Notice, Icon } from '@wordpress/components';
+import {
+	Button,
+	Card,
+	CardBody,
+	CardHeader,
+	Notice,
+	Icon,
+} from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
 import {
 	SchemaField,
@@ -34,6 +41,76 @@ const SUCCESS_GLYPH = (
 		<Icon icon={ checkIcon } size={ 14 } />
 	</span>
 );
+
+/**
+ * One section-level action button (e.g. "Regenerate assets"). Each
+ * descriptor in `panel.actions[]` ships its own endpoint + labels; the
+ * button owns its own busy state so multiple actions in the same panel
+ * stay independent. POSTs use `{}` as the body so Pro REST handlers
+ * that read `get_json_params()` always see an array.
+ */
+function PanelActionButton( { action, nonce } ) {
+	const [ busy, setBusy ] = useState( false );
+
+	const handleClick = async () => {
+		if ( busy ) {
+			return;
+		}
+		setBusy( true );
+		const method = ( action.method || 'POST' ).toUpperCase();
+		const headers = method === 'POST' ? { 'Content-Type': 'application/json' } : {};
+		if ( nonce ) {
+			headers[ 'X-WP-Nonce' ] = nonce;
+		}
+		try {
+			const res = await fetch( action.endpoint, {
+				method,
+				credentials: 'same-origin',
+				headers,
+				body: method === 'POST' ? '{}' : undefined,
+			} );
+			if ( ! res.ok ) {
+				let message = `HTTP ${ res.status }`;
+				try {
+					const data = await res.json();
+					if ( data?.message ) {
+						message = data.message;
+					}
+				} catch ( _ ) {
+					// Non-JSON error body; fall through with HTTP status.
+				}
+				throw new Error( message );
+			}
+			dispatch( NOTICES_STORE ).createSuccessNotice(
+				action.successMessage || __( 'Done.', 'customify' ),
+				{
+					type: 'snackbar',
+					isDismissible: true,
+					icon: SUCCESS_GLYPH,
+				},
+			);
+		} catch ( err ) {
+			dispatch( NOTICES_STORE ).createErrorNotice(
+				err?.message || __( 'Action failed. Try again.', 'customify' ),
+				{ type: 'snackbar', isDismissible: true },
+			);
+		} finally {
+			setBusy( false );
+		}
+	};
+
+	return (
+		<Button
+			variant={ action.variant === 'primary' ? 'primary' : 'secondary' }
+			onClick={ handleClick }
+			disabled={ busy }
+		>
+			{ busy
+				? action.busyLabel || __( 'Working…', 'customify' )
+				: action.label }
+		</Button>
+	);
+}
 
 /**
  * @param {object} props
@@ -121,8 +198,15 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 	};
 
 	const handleDiscard = () => {
+		// The kit's SaveBar disables this action via
+		// `resetDisabledWhenNotDirty` when the form is clean, so a click
+		// arriving here always has something to throw away.
 		setValues( savedValues );
 		setError( null );
+		dispatch( NOTICES_STORE ).createSuccessNotice(
+			__( 'Changes discarded.', 'customify' ),
+			{ type: 'snackbar', isDismissible: true, icon: SUCCESS_GLYPH },
+		);
 	};
 
 	if ( ! panel ) {
@@ -168,6 +252,17 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 							{ error.message }
 						</Notice>
 					) }
+					{ Array.isArray( panel.actions ) && panel.actions.length > 0 && (
+						<div className="customify-dashboard-settings__panel-actions-inline">
+							{ panel.actions.map( ( action ) => (
+								<PanelActionButton
+									key={ action.id }
+									action={ action }
+									nonce={ panel.nonce }
+								/>
+							) ) }
+						</div>
+					) }
 				</CardBody>
 			</Card>
 			<div className="customify-dashboard-settings__panel-actions">
@@ -176,6 +271,10 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 					isSaving={ saving }
 					onSave={ handleSave }
 					onReset={ handleDiscard }
+					// Pro module storage uses revert-to-last-saved semantics
+					// (no factory-defaults endpoint), so Discard should only
+					// fire when there's something dirty to throw away.
+					resetDisabledWhenNotDirty
 					labels={ {
 						regionLabel: __( 'Settings actions', 'customify' ),
 						saveLabel: __( 'Save changes', 'customify' ),
@@ -185,7 +284,10 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 						// last server-confirmed snapshot. Label accordingly so
 						// users don't expect a real wipe.
 						resetLabel: __( 'Discard changes', 'customify' ),
-						statusSaved: __( 'All changes saved', 'customify' ),
+						// Mirror the kit's neutral default through the
+						// `customify` text domain so the string lands in the
+						// theme POT for translation.
+						statusSaved: __( 'No pending changes', 'customify' ),
 						statusDirty: __( 'Unsaved changes', 'customify' ),
 						statusSaving: __( 'Saving…', 'customify' ),
 					} }
