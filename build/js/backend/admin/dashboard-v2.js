@@ -2149,11 +2149,6 @@ function useCustomizerLinks(boot) {
     title: (0,external_wp_i18n_namespaceObject.__)('Sidebar settings', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Sidebar layout per context.', 'customify'),
     href: urls.sidebar
-  }, {
-    id: 'blog',
-    title: (0,external_wp_i18n_namespaceObject.__)('Blog posts', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Blog listing & single post.', 'customify'),
-    href: urls.blog
   }].filter(l => Boolean(l.href));
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.links', base, boot);
 }
@@ -2653,9 +2648,7 @@ function Welcome() {
   const boot = ce();
   const links = useCustomizerLinks(boot);
   const checklistItems = useChecklist(boot);
-  const greeting = boot?.user?.displayName ? (0,external_wp_i18n_namespaceObject.sprintf)(
-  // translators: %s is the current user's display name.
-  (0,external_wp_i18n_namespaceObject.__)('Welcome, %s', 'customify'), boot.user.displayName) : (0,external_wp_i18n_namespaceObject.__)('Welcome to Customify', 'customify');
+  const greeting = (0,external_wp_i18n_namespaceObject.__)('Welcome to Customify', 'customify');
   const tagline = (0,external_wp_i18n_namespaceObject.__)('Lightweight, SEO-optimized, multipurpose WordPress theme. Set up your site identity, header, footer, and styling — all from the Customizer.', 'customify');
   const extraSections = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.sections', [], boot);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
@@ -2880,12 +2873,10 @@ function Settings() {
 }
 ;// ./src/backend/admin/dashboard-v2/tabs/Changelog.jsx
 /**
- * Changelog tab — renders releases parsed from changelog.txt
- * (PHP-side, shipped in boot data) via the kit's ReleaseBlock.
- *
- * Pro / child theme adds more streams via
- * `customify.dashboard.changelog.sources`. For now Customify Free has
- * a single source so the array indirection isn't necessary on screen.
+ * Changelog tab — wraps a list of ReleaseBlocks in a Card so it
+ * visually matches the other dashboard pages (which use Card + header
+ * chrome). Releases are parsed PHP-side and shipped on
+ * `boot.changelog`.
  */
 
 
@@ -2895,33 +2886,36 @@ function Settings() {
 function Changelog() {
   const boot = ce();
   const releases = Array.isArray(boot?.changelog) ? boot.changelog : [];
-  if (!releases.length) {
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-          children: (0,external_wp_i18n_namespaceObject.__)('No changelog entries available.', 'customify')
-        })
-      })
-    });
-  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "customify-dashboard-changelog",
-    children: releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
-      release: release,
-      labels: {
-        currentBadge: (0,external_wp_i18n_namespaceObject.__)('Current', 'customify')
-      },
-      categoryLabels: {
-        new: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
-        improved: (0,external_wp_i18n_namespaceObject.__)('Improved', 'customify'),
-        fixed: (0,external_wp_i18n_namespaceObject.__)('Fixed', 'customify'),
-        updated: (0,external_wp_i18n_namespaceObject.__)('Updated', 'customify'),
-        removed: (0,external_wp_i18n_namespaceObject.__)('Removed', 'customify'),
-        security: (0,external_wp_i18n_namespaceObject.__)('Security', 'customify'),
-        deprecated: (0,external_wp_i18n_namespaceObject.__)('Deprecated', 'customify'),
-        neutral: (0,external_wp_i18n_namespaceObject.__)('Note', 'customify')
-      }
-    }, release.version))
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+      className: "customify-dashboard-changelog__card",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          className: "customify-dashboard-welcome__checklist-title",
+          children: (0,external_wp_i18n_namespaceObject.__)('Changelog', 'customify')
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+        children: releases.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          children: (0,external_wp_i18n_namespaceObject.__)('No changelog entries available.', 'customify')
+        }) : releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
+          release: release,
+          labels: {
+            currentBadge: (0,external_wp_i18n_namespaceObject.__)('Current', 'customify')
+          },
+          categoryLabels: {
+            new: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
+            improved: (0,external_wp_i18n_namespaceObject.__)('Improved', 'customify'),
+            fixed: (0,external_wp_i18n_namespaceObject.__)('Fixed', 'customify'),
+            updated: (0,external_wp_i18n_namespaceObject.__)('Updated', 'customify'),
+            removed: (0,external_wp_i18n_namespaceObject.__)('Removed', 'customify'),
+            security: (0,external_wp_i18n_namespaceObject.__)('Security', 'customify'),
+            deprecated: (0,external_wp_i18n_namespaceObject.__)('Deprecated', 'customify'),
+            neutral: (0,external_wp_i18n_namespaceObject.__)('Note', 'customify')
+          }
+        }, release.version))
+      })]
+    })
   });
 }
 ;// ./src/backend/admin/dashboard-v2/brand-icon.js
@@ -3002,7 +2996,9 @@ function wireBrandClick(targetHash) {
 
 if (document.getElementById('customify-dashboard')) {
   const boot = window.customifyDashboard || {};
-  const themeVersion = boot.themeVersion ? `v${boot.themeVersion}` : '';
+  const versionLabel = boot.themeVersion ? (0,external_wp_i18n_namespaceObject.sprintf)(
+  // translators: %s is the theme version (e.g. "0.4.14").
+  (0,external_wp_i18n_namespaceObject.__)('v%s — Free version', 'customify'), boot.themeVersion) : (0,external_wp_i18n_namespaceObject.__)('Free version', 'customify');
   ke({
     rootEl: '#customify-dashboard',
     bootGlobal: 'customifyDashboard',
@@ -3013,9 +3009,9 @@ if (document.getElementById('customify-dashboard')) {
       icon: brand_icon
     },
     tabsAriaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify dashboard tabs', 'customify'),
-    versionLabel: themeVersion,
+    versionLabel,
     versionHref: '#changelog',
-    versionAriaLabel: (0,external_wp_i18n_namespaceObject.__)('View changelog', 'customify'),
+    versionAriaLabel: (0,external_wp_i18n_namespaceObject.__)('Theme version — view changelog', 'customify'),
     helpItems: [{
       id: 'documentation',
       label: (0,external_wp_i18n_namespaceObject.__)('Documentation', 'customify'),

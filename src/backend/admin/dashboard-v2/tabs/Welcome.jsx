@@ -6,7 +6,7 @@
 
 import { applyFilters } from '@wordpress/hooks';
 import { Card, CardHeader } from '@wordpress/components';
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { Hero, Checklist, useBoot } from '@pressmaximum/dashboard-kit';
 
 import { useCustomizerLinks } from '../data/customizerLinks.js';
@@ -19,13 +19,7 @@ export default function Welcome() {
 	const links = useCustomizerLinks( boot );
 	const checklistItems = useChecklist( boot );
 
-	const greeting = boot?.user?.displayName
-		? sprintf(
-			// translators: %s is the current user's display name.
-			__( 'Welcome, %s', 'customify' ),
-			boot.user.displayName,
-		)
-		: __( 'Welcome to Customify', 'customify' );
+	const greeting = __( 'Welcome to Customify', 'customify' );
 
 	const tagline = __(
 		'Lightweight, SEO-optimized, multipurpose WordPress theme. Set up your site identity, header, footer, and styling — all from the Customizer.',

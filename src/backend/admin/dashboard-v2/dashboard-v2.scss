@@ -64,6 +64,19 @@ body.customify-dashboard-page {
 	}
 }
 
+// `@wordpress/components` Card emits emotion-css rules with a `:last-of-type`
+// pseudo (e.g. `.css-1qdoksv:last-of-type`) that rounds the header's
+// BOTTOM corners — fires whenever the CardHeader has no following sibling
+// of the same type-class. Our checklist + module-list bodies aren't
+// CardBody elements, so the kit's CardHeader always satisfies
+// `:last-of-type` and gets a stray rounded bottom that visually clashes
+// with the straight first content row. !important needed because
+// emotion-css styles load after our stylesheet and tie on specificity.
+.customify-dashboard-root .components-card__header {
+	border-bottom-left-radius: 0 !important;
+	border-bottom-right-radius: 0 !important;
+}
+
 .customify-dashboard-welcome {
 	display: flex;
 	flex-direction: column;
@@ -110,11 +123,12 @@ body.customify-dashboard-page {
 
 }
 
-// Customizer quick links — 2-col grid with internal hairline borders.
-// Ported from theme-dashboard branch `pm-theme-grid`.
+// Customizer quick links — 3-col grid with internal hairline borders.
+// Ported from theme-dashboard branch `pm-theme-grid` (originally 2-col;
+// 3-col fits more rows in the same vertical space).
 .customify-dashboard-theme-grid {
 	display: grid;
-	grid-template-columns: repeat( 2, 1fr );
+	grid-template-columns: repeat( 3, 1fr );
 
 	&__item {
 		display: flex;
@@ -128,12 +142,18 @@ body.customify-dashboard-page {
 		outline: none !important;
 		box-shadow: none !important;
 
+		// Reset borders the 2-col rules would have set.
 		&:nth-child( odd ) {
+			border-left: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+
+		// First column has no left border.
+		&:nth-child( 3n + 1 ) {
 			border-left: none;
 		}
 
-		&:nth-child( 1 ),
-		&:nth-child( 2 ) {
+		// First row has no top border.
+		&:nth-child( -n + 3 ) {
 			border-top: none;
 		}
 
@@ -162,14 +182,32 @@ body.customify-dashboard-page {
 	}
 
 	@media ( max-width: 1100px ) {
+		grid-template-columns: repeat( 2, 1fr );
+
+		&__item {
+			border-left: 1px solid var( --pmdk-color-border-subtle, #ededef );
+			border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+		&__item:nth-child( odd ) {
+			border-left: none;
+		}
+		&__item:nth-child( -n + 2 ) {
+			border-top: none;
+		}
+		&__item:nth-child( 3n + 1 ):nth-child( n + 4 ) {
+			border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+	}
+
+	@media ( max-width: 782px ) {
 		grid-template-columns: 1fr;
 
 		&__item {
 			border-left: none !important;
-		}
-
-		&__item:nth-child( 2 ) {
 			border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+		&__item:first-child {
+			border-top: none;
 		}
 	}
 }

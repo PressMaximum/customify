@@ -56,12 +56,6 @@ export function useCustomizerLinks( boot ) {
 			description: __( 'Sidebar layout per context.', 'customify' ),
 			href: urls.sidebar,
 		},
-		{
-			id: 'blog',
-			title: __( 'Blog posts', 'customify' ),
-			description: __( 'Blog listing & single post.', 'customify' ),
-			href: urls.blog,
-		},
 	].filter( ( l ) => Boolean( l.href ) );
 
 	return applyFilters( 'customify.dashboard.welcome.links', base, boot );

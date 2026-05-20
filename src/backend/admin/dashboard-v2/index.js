@@ -13,7 +13,7 @@
 
 import { mountDashboard } from '@pressmaximum/dashboard-kit';
 import '@pressmaximum/dashboard-kit/style.css';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 import Welcome from './tabs/Welcome.jsx';
 import Settings from './tabs/Settings.jsx';
@@ -25,7 +25,13 @@ import { wireBrandClick } from './brand-click.js';
 
 if ( document.getElementById( 'customify-dashboard' ) ) {
 	const boot = window.customifyDashboard || {};
-	const themeVersion = boot.themeVersion ? `v${ boot.themeVersion }` : '';
+	const versionLabel = boot.themeVersion
+		? sprintf(
+			// translators: %s is the theme version (e.g. "0.4.14").
+			__( 'v%s — Free version', 'customify' ),
+			boot.themeVersion,
+		)
+		: __( 'Free version', 'customify' );
 	mountDashboard( {
 		rootEl: '#customify-dashboard',
 		bootGlobal: 'customifyDashboard',
@@ -36,9 +42,9 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 			icon: brandIcon,
 		},
 		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
-		versionLabel: themeVersion,
+		versionLabel,
 		versionHref: '#changelog',
-		versionAriaLabel: __( 'View changelog', 'customify' ),
+		versionAriaLabel: __( 'Theme version — view changelog', 'customify' ),
 		helpItems: [
 			{
 				id: 'documentation',
