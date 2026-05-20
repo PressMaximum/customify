@@ -103,6 +103,24 @@ function customify_dashboard_v2_register_submenu(): void {
 add_action( 'admin_menu', 'customify_dashboard_v2_register_submenu', 20 );
 
 /**
+ * Constrain the WP admin sidebar icon size. The data:image/svg+xml URI
+ * carries no intrinsic width/height (viewBox only), so WP falls back to
+ * a too-large rendering. Pin to 18×18, the visual weight matches the
+ * other admin-menu icons.
+ */
+function customify_dashboard_v2_menu_icon_css(): void {
+	?>
+<style>
+#adminmenu #toplevel_page_<?php echo esc_html( CUSTOMIFY_DASHBOARD_V2_SLUG ); ?> .wp-menu-image {
+	background-size: 18px auto;
+	background-position: center center;
+}
+</style>
+	<?php
+}
+add_action( 'admin_head', 'customify_dashboard_v2_menu_icon_css' );
+
+/**
  * Sync the WP submenu `current` highlight to the active hash route.
  * WP only checks `?page=` server-side, so we re-derive client-side on
  * `hashchange`.
