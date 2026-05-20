@@ -1,3 +1,18 @@
+// Strip the WP admin chrome paddings so the dashboard sits flush
+// against the admin sidebar + extends to the viewport bottom. Pattern
+// mirrors Blocksify's dashboard (style.css lines 14-20). The body
+// class `customify-dashboard-page` is added by the
+// `admin_body_class` filter in inc/admin/dashboard-v2.php.
+body.customify-dashboard-page {
+	#wpcontent {
+		padding-left: 0;
+	}
+
+	#wpbody-content {
+		padding-bottom: 0;
+	}
+}
+
 .customify-dashboard-root {
 	min-height: 200px;
 }

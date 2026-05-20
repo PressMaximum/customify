@@ -76,6 +76,23 @@ function customify_dashboard_v2_render(): void {
 }
 
 /**
+ * Mark the admin body when we're on the dashboard page. The class is
+ * the CSS hook that zeroes out WP's `#wpcontent` / `#wpbody-content`
+ * paddings so the dashboard sits flush against the admin sidebar.
+ *
+ * @param string $classes Existing admin body classes.
+ * @return string
+ */
+function customify_dashboard_v2_admin_body_class( string $classes ): string {
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+	if ( $screen && 'toplevel_page_' . CUSTOMIFY_DASHBOARD_V2_SLUG === $screen->id ) {
+		$classes .= ' customify-dashboard-page';
+	}
+	return $classes;
+}
+add_filter( 'admin_body_class', 'customify_dashboard_v2_admin_body_class' );
+
+/**
  * Build the boot data payload localized to window.customifyDashboard.
  *
  * @return array<string, mixed>

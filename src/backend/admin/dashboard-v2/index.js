@@ -36,7 +36,6 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 			href: 'https://pressmaximum.com',
 		},
 		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
-		containerWidth: 'wide',
 		versionLabel: themeVersion,
 		versionHref: '#changelog',
 		versionAriaLabel: __( 'View changelog', 'customify' ),
