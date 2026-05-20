@@ -1,0 +1,26 @@
+{
+    "name": "pressmaximum/customify",
+    "description": "Customify — lightweight, SEO-optimized, multipurpose WordPress classic theme.",
+    "type": "wordpress-theme",
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "/Users/kientrong/Studio/dashboard-kit",
+            "options": { "symlink": true }
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "pressmaximum/dashboard-kit": "*"
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true,
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

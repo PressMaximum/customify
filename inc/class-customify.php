@@ -459,8 +459,9 @@ class Customify
 		}
 
 		$files = array(
-			'/inc/admin/editor.php',    // Block editor style integration.
-			'/inc/admin/dashboard.php', // Dashboard widgets.
+			'/inc/admin/editor.php',       // Block editor style integration.
+			'/inc/admin/dashboard.php',    // Legacy PHP dashboard (Appearance → Customify Options (Legacy)).
+			'/inc/admin/dashboard-v2.php', // New SPA dashboard (top-level Customify) — @pressmaximum/dashboard-kit.
 		);
 
 		foreach ($files as $file) {
