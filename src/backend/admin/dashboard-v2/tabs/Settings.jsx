@@ -4,11 +4,10 @@
  * and the panel list via `customify.dashboard.settings.panels`.
  */
 
-import { useSelect, useDispatch } from '@wordpress/data';
-import { useState } from '@wordpress/element';
+import { useSelect, useDispatch, dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { Card, CardBody, CardHeader, Notice } from '@wordpress/components';
+import { Card, CardBody, CardHeader } from '@wordpress/components';
 import {
 	SchemaForm,
 	SaveBar,
@@ -19,10 +18,11 @@ import {
 
 import { CUSTOMIFY_SETTINGS_STORE } from '../data/settingsStore.js';
 
+const NOTICES_STORE = 'core/notices';
+
 export default function Settings() {
 	const boot = useBoot();
 	const schema = boot?.settings?.schema || { panels: [] };
-	const [ message, setMessage ] = useState( null );
 
 	const values = useSelect(
 		( select ) => select( CUSTOMIFY_SETTINGS_STORE ).getSettings(),
@@ -53,23 +53,21 @@ export default function Settings() {
 	const handleSave = async () => {
 		try {
 			await save();
-			setMessage( {
-				status: 'success',
-				text: __( 'Settings saved.', 'customify' ),
-			} );
+			dispatch( NOTICES_STORE ).createSuccessNotice(
+				__( 'Settings saved.', 'customify' ),
+				{ type: 'snackbar', isDismissible: true },
+			);
 		} catch ( err ) {
-			setMessage( {
-				status: 'error',
-				text:
-					err?.message ||
+			dispatch( NOTICES_STORE ).createErrorNotice(
+				err?.message ||
 					__( 'Saving settings failed. Try again.', 'customify' ),
-			} );
+				{ type: 'snackbar', isDismissible: true },
+			);
 		}
 	};
 
 	const handleReset = () => {
 		clearDirty();
-		setMessage( null );
 	};
 
 	if ( ! panels.length ) {
@@ -89,16 +87,6 @@ export default function Settings() {
 
 	return (
 		<div className="customify-dashboard-settings">
-			{ message && (
-				<Notice
-					status={ message.status }
-					onRemove={ () => setMessage( null ) }
-					isDismissible
-				>
-					{ message.text }
-				</Notice>
-			) }
-
 			{ panels.map( ( panel ) => (
 				<Card
 					key={ panel.id }

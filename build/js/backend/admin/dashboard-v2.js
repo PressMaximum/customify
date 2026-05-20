@@ -2456,13 +2456,12 @@ const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
 
 
 
-
+const NOTICES_STORE = 'core/notices';
 function Settings() {
   const boot = ce();
   const schema = boot?.settings?.schema || {
     panels: []
   };
-  const [message, setMessage] = (0,external_wp_element_namespaceObject.useState)(null);
   const values = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).getSettings(), []);
   const isDirty = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isDirty(), []);
   const isSaving = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isSaving(), []);
@@ -2476,20 +2475,19 @@ function Settings() {
   const handleSave = async () => {
     try {
       await save();
-      setMessage({
-        status: 'success',
-        text: (0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify')
+      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
       });
     } catch (err) {
-      setMessage({
-        status: 'error',
-        text: err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify')
+      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
       });
     }
   };
   const handleReset = () => {
     clearDirty();
-    setMessage(null);
   };
   if (!panels.length) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
@@ -2502,12 +2500,7 @@ function Settings() {
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-settings",
-    children: [message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
-      status: message.status,
-      onRemove: () => setMessage(null),
-      isDismissible: true,
-      children: message.text
-    }), panels.map(panel => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    children: [panels.map(panel => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
       className: "customify-dashboard-settings__panel",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
