@@ -69,6 +69,74 @@ function customify_dashboard_v2_add_menu(): void {
 add_action( 'admin_menu', 'customify_dashboard_v2_add_menu' );
 
 /**
+ * Mirror the in-page tabs as WP admin sidebar submenu entries (Welcome /
+ * Settings / Changelog). WP's native active-state detection compares
+ * `?page=` query strings only and can't see the hash, so the live
+ * highlight is reapplied client-side by customify_dashboard_v2_sync_submenu().
+ * Mirrors Blocksify's pattern (class-blocksify-dashboard-surfaces-spike.php
+ * lines 70-86).
+ */
+function customify_dashboard_v2_register_submenu(): void {
+	$tabs = array(
+		array( 'hash' => '#welcome',  'label' => __( 'Welcome', 'customify' ) ),
+		array( 'hash' => '#settings', 'label' => __( 'Settings', 'customify' ) ),
+		array( 'hash' => '#changelog', 'label' => __( 'Changelog', 'customify' ) ),
+	);
+	foreach ( $tabs as $tab ) {
+		add_submenu_page(
+			CUSTOMIFY_DASHBOARD_V2_SLUG,
+			$tab['label'],
+			$tab['label'],
+			'manage_options',
+			'admin.php?page=' . CUSTOMIFY_DASHBOARD_V2_SLUG . $tab['hash'],
+			''
+		);
+	}
+	// `add_submenu_page` auto-creates the parent mirror entry at index 0
+	// using the parent label ("Customify"). Hide it so the list reads as
+	// just the tab labels.
+	global $submenu;
+	if ( isset( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ][0] ) ) {
+		unset( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ][0] );
+	}
+}
+add_action( 'admin_menu', 'customify_dashboard_v2_register_submenu', 20 );
+
+/**
+ * Sync the WP submenu `current` highlight to the active hash route.
+ * WP only checks `?page=` server-side, so we re-derive client-side on
+ * `hashchange`.
+ */
+function customify_dashboard_v2_sync_submenu(): void {
+	?>
+<script>
+( function () {
+	var menu = document.querySelector( '#toplevel_page_<?php echo esc_js( CUSTOMIFY_DASHBOARD_V2_SLUG ); ?> .wp-submenu' );
+	if ( ! menu ) { return; }
+	var items = Array.prototype.slice.call( menu.querySelectorAll( 'li' ) );
+	function sync () {
+		var hash = window.location.hash || '#welcome';
+		items.forEach( function ( li ) {
+			var a = li.querySelector( 'a' );
+			if ( ! a ) { return; }
+			var href = a.getAttribute( 'href' ) || '';
+			var match = href.indexOf( hash ) !== -1;
+			li.classList.toggle( 'current', match );
+			a.classList.toggle( 'current', match );
+		} );
+	}
+	sync();
+	window.addEventListener( 'hashchange', sync );
+} )();
+</script>
+	<?php
+}
+add_action(
+	'admin_footer-toplevel_page_' . CUSTOMIFY_DASHBOARD_V2_SLUG,
+	'customify_dashboard_v2_sync_submenu'
+);
+
+/**
  * Print the SPA root div. JS takes over from there.
  */
 function customify_dashboard_v2_render(): void {

@@ -62,12 +62,6 @@ export function useCustomizerLinks( boot ) {
 			description: __( 'Blog listing & single post.', 'customify' ),
 			href: urls.blog,
 		},
-		{
-			id: 'homepage',
-			title: __( 'Homepage settings', 'customify' ),
-			description: __( 'Static front page setup.', 'customify' ),
-			href: urls.homepage,
-		},
 	].filter( ( l ) => Boolean( l.href ) );
 
 	return applyFilters( 'customify.dashboard.welcome.links', base, boot );

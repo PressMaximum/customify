@@ -39,6 +39,32 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		versionLabel: themeVersion,
 		versionHref: '#changelog',
 		versionAriaLabel: __( 'View changelog', 'customify' ),
+		helpItems: [
+			{
+				id: 'documentation',
+				label: __( 'Documentation', 'customify' ),
+				href: 'https://pressmaximum.com/docs/customify/',
+			},
+			{
+				id: 'changelog',
+				label: __( 'Changelog', 'customify' ),
+				href: '#changelog',
+			},
+			{
+				id: 'support',
+				label: __( 'Contact support', 'customify' ),
+				href: 'https://wordpress.org/support/theme/customify/',
+			},
+			{
+				id: 'pro',
+				label: __( 'Upgrade to Pro', 'customify' ),
+				href: 'https://pressmaximum.com/customify/pro-upgrade/',
+			},
+		],
+		helpLabels: {
+			triggerLabel: __( 'Open help panel', 'customify' ),
+			heading: __( 'Help', 'customify' ),
+		},
 		baseTabs: [
 			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
 			{ id: 'settings', label: __( 'Settings', 'customify' ) },

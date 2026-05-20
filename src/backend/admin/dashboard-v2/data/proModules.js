@@ -76,26 +76,31 @@ export function useProModules() {
 			id: 'multilingual',
 			name: __( 'Multilingual Integration', 'customify' ),
 			description: __( 'WPML support plus a built-in language-switcher header item.', 'customify' ),
+			docHref: DOCS_BASE,
 		},
 		{
 			id: 'custom-fonts',
 			name: __( 'Custom Fonts', 'customify' ),
 			description: __( 'Upload and use self-hosted fonts across your site.', 'customify' ),
+			docHref: DOCS_BASE + 'custom-fonts/',
 		},
 		{
 			id: 'typekit',
 			name: __( 'Typekit', 'customify' ),
 			description: __( 'Use Adobe Typekit fonts on your Customify site.', 'customify' ),
+			docHref: DOCS_BASE + 'typekit-fonts/',
 		},
 		{
 			id: 'hooks',
 			name: __( 'Customify Hooks', 'customify' ),
 			description: __( 'Add custom hook scripts without touching theme files.', 'customify' ),
+			docHref: DOCS_BASE + 'customify-hooks/',
 		},
 		{
 			id: 'woocommerce-booster',
 			name: __( 'WooCommerce Booster', 'customify' ),
 			description: __( 'Creative control of style + layout options for your shop.', 'customify' ),
+			docHref: DOCS_BASE + 'woocommerce-booster/',
 			subModules: [
 				'single-product-layouts',
 				'off-canvas-filter',
@@ -107,30 +112,35 @@ export function useProModules() {
 			id: 'single-product-layouts',
 			name: __( 'Single Product Layouts', 'customify' ),
 			description: __( 'Multiple beautiful single-product layouts.', 'customify' ),
+			docHref: DOCS_BASE + 'woocommerce-single-product-layouts/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'off-canvas-filter',
 			name: __( 'Off Canvas Filter', 'customify' ),
 			description: __( 'Off-canvas product filter for shop and archive pages.', 'customify' ),
+			docHref: DOCS_BASE + 'woocommerce-off-canvas-filter/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'gallery-slider',
 			name: __( 'Product Gallery Slider', 'customify' ),
 			description: __( 'Slider for the WooCommerce product gallery.', 'customify' ),
+			docHref: DOCS_BASE + 'woocommerce-product-gallery-slider/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'quick-view',
 			name: __( 'Quick View', 'customify' ),
 			description: __( 'Modal quick-view for product listings.', 'customify' ),
+			docHref: DOCS_BASE + 'woocommerce-quick-view/',
 			parent: 'woocommerce-booster',
 		},
 		{
 			id: 'infinity-scroll',
 			name: __( 'Infinity Scroll', 'customify' ),
 			description: __( 'Auto-load the next posts/products as the reader nears the bottom.', 'customify' ),
+			docHref: DOCS_BASE + 'infinity-scroll/',
 		},
 	];
 

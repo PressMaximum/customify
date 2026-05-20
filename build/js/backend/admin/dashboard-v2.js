@@ -2154,11 +2154,6 @@ function useCustomizerLinks(boot) {
     title: (0,external_wp_i18n_namespaceObject.__)('Blog posts', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Blog listing & single post.', 'customify'),
     href: urls.blog
-  }, {
-    id: 'homepage',
-    title: (0,external_wp_i18n_namespaceObject.__)('Homepage settings', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Static front page setup.', 'customify'),
-    href: urls.homepage
   }].filter(l => Boolean(l.href));
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.links', base, boot);
 }
@@ -2311,48 +2306,58 @@ function useProModules() {
   }, {
     id: 'multilingual',
     name: (0,external_wp_i18n_namespaceObject.__)('Multilingual Integration', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('WPML support plus a built-in language-switcher header item.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('WPML support plus a built-in language-switcher header item.', 'customify'),
+    docHref: DOCS_BASE
   }, {
     id: 'custom-fonts',
     name: (0,external_wp_i18n_namespaceObject.__)('Custom Fonts', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Upload and use self-hosted fonts across your site.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Upload and use self-hosted fonts across your site.', 'customify'),
+    docHref: DOCS_BASE + 'custom-fonts/'
   }, {
     id: 'typekit',
     name: (0,external_wp_i18n_namespaceObject.__)('Typekit', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Use Adobe Typekit fonts on your Customify site.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Use Adobe Typekit fonts on your Customify site.', 'customify'),
+    docHref: DOCS_BASE + 'typekit-fonts/'
   }, {
     id: 'hooks',
     name: (0,external_wp_i18n_namespaceObject.__)('Customify Hooks', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Add custom hook scripts without touching theme files.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Add custom hook scripts without touching theme files.', 'customify'),
+    docHref: DOCS_BASE + 'customify-hooks/'
   }, {
     id: 'woocommerce-booster',
     name: (0,external_wp_i18n_namespaceObject.__)('WooCommerce Booster', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Creative control of style + layout options for your shop.', 'customify'),
+    docHref: DOCS_BASE + 'woocommerce-booster/',
     subModules: ['single-product-layouts', 'off-canvas-filter', 'gallery-slider', 'quick-view']
   }, {
     id: 'single-product-layouts',
     name: (0,external_wp_i18n_namespaceObject.__)('Single Product Layouts', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Multiple beautiful single-product layouts.', 'customify'),
+    docHref: DOCS_BASE + 'woocommerce-single-product-layouts/',
     parent: 'woocommerce-booster'
   }, {
     id: 'off-canvas-filter',
     name: (0,external_wp_i18n_namespaceObject.__)('Off Canvas Filter', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Off-canvas product filter for shop and archive pages.', 'customify'),
+    docHref: DOCS_BASE + 'woocommerce-off-canvas-filter/',
     parent: 'woocommerce-booster'
   }, {
     id: 'gallery-slider',
     name: (0,external_wp_i18n_namespaceObject.__)('Product Gallery Slider', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Slider for the WooCommerce product gallery.', 'customify'),
+    docHref: DOCS_BASE + 'woocommerce-product-gallery-slider/',
     parent: 'woocommerce-booster'
   }, {
     id: 'quick-view',
     name: (0,external_wp_i18n_namespaceObject.__)('Quick View', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Modal quick-view for product listings.', 'customify'),
+    docHref: DOCS_BASE + 'woocommerce-quick-view/',
     parent: 'woocommerce-booster'
   }, {
     id: 'infinity-scroll',
     name: (0,external_wp_i18n_namespaceObject.__)('Infinity Scroll', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Auto-load the next posts/products as the reader nears the bottom.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Auto-load the next posts/products as the reader nears the bottom.', 'customify'),
+    docHref: DOCS_BASE + 'infinity-scroll/'
   }];
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.modules', base);
 }
@@ -2969,6 +2974,27 @@ if (document.getElementById('customify-dashboard')) {
     versionLabel: themeVersion,
     versionHref: '#changelog',
     versionAriaLabel: (0,external_wp_i18n_namespaceObject.__)('View changelog', 'customify'),
+    helpItems: [{
+      id: 'documentation',
+      label: (0,external_wp_i18n_namespaceObject.__)('Documentation', 'customify'),
+      href: 'https://pressmaximum.com/docs/customify/'
+    }, {
+      id: 'changelog',
+      label: (0,external_wp_i18n_namespaceObject.__)('Changelog', 'customify'),
+      href: '#changelog'
+    }, {
+      id: 'support',
+      label: (0,external_wp_i18n_namespaceObject.__)('Contact support', 'customify'),
+      href: 'https://wordpress.org/support/theme/customify/'
+    }, {
+      id: 'pro',
+      label: (0,external_wp_i18n_namespaceObject.__)('Upgrade to Pro', 'customify'),
+      href: 'https://pressmaximum.com/customify/pro-upgrade/'
+    }],
+    helpLabels: {
+      triggerLabel: (0,external_wp_i18n_namespaceObject.__)('Open help panel', 'customify'),
+      heading: (0,external_wp_i18n_namespaceObject.__)('Help', 'customify')
+    },
     baseTabs: [{
       id: 'welcome',
       label: (0,external_wp_i18n_namespaceObject.__)('Welcome', 'customify')
