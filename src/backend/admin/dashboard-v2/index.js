@@ -21,7 +21,14 @@ import Changelog from './tabs/Changelog.jsx';
 
 import './dashboard-v2.scss';
 
+// Inline brand mark — drawn with currentColor so the kit's tokens
+// (header foreground) cascade through it. ~600 bytes; cheaper than an
+// HTTP round-trip for a brand icon this small.
+const BRAND_ICON_SVG = `<svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect x="2" y="2" width="18" height="18" rx="4" fill="currentColor" opacity="0.12"/><path d="M6 7.5h10M6 11h10M6 14.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
+
 if ( document.getElementById( 'customify-dashboard' ) ) {
+	const boot = window.customifyDashboard || {};
+	const themeVersion = boot.themeVersion ? `v${ boot.themeVersion }` : '';
 	mountDashboard( {
 		rootEl: '#customify-dashboard',
 		bootGlobal: 'customifyDashboard',
@@ -29,9 +36,13 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		__: ( text ) => __( text, 'customify' ),
 		brand: {
 			name: __( 'Customify', 'customify' ),
+			icon: BRAND_ICON_SVG,
 			href: 'https://pressmaximum.com',
 		},
 		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
+		versionLabel: themeVersion,
+		versionHref: '#changelog',
+		versionAriaLabel: __( 'View changelog', 'customify' ),
 		baseTabs: [
 			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
 			{ id: 'settings', label: __( 'Settings', 'customify' ) },

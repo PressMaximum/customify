@@ -115,9 +115,9 @@ export default function Settings() {
 						) }
 						<SchemaForm
 							panel={ panel }
-							values={ values?.[ panel.id ] || {} }
-							onFieldChange={ ( field, next ) =>
-								edit( `${ panel.id }.${ field }`, next )
+							values={ values || {} }
+							onFieldChange={ ( panelId, fieldId, next ) =>
+								edit( `${ panelId }.${ fieldId }`, next )
 							}
 							fieldTypes={ fieldTypes }
 						/>
