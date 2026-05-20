@@ -24,13 +24,31 @@ import brandIcon from './brand-icon.js';
 
 if ( document.getElementById( 'customify-dashboard' ) ) {
 	const boot = window.customifyDashboard || {};
-	const versionLabel = boot.themeVersion
-		? sprintf(
-			// translators: %s is the theme version (e.g. "0.4.14").
+	// When Customify Pro is active it filters `customify_dashboard_localize`
+	// to inject `proVersion`; the header label switches to that version +
+	// "Pro version" suffix. Falls back to the theme's own version label
+	// for the Free path.
+	const proActive    = !! boot.proActive;
+	const proVersion   = ( boot.proVersion || '' ) + '';
+	const themeVersion = ( boot.themeVersion || '' ) + '';
+	let versionLabel;
+	if ( proActive && proVersion ) {
+		versionLabel = sprintf(
+			// translators: %s is the Customify Pro plugin version (e.g. "0.4.16").
+			__( 'v%s — Pro version', 'customify' ),
+			proVersion,
+		);
+	} else if ( proActive ) {
+		versionLabel = __( 'Pro version', 'customify' );
+	} else if ( themeVersion ) {
+		versionLabel = sprintf(
+			// translators: %s is the Customify theme version (e.g. "0.4.14").
 			__( 'v%s — Free version', 'customify' ),
-			boot.themeVersion,
-		)
-		: __( 'Free version', 'customify' );
+			themeVersion,
+		);
+	} else {
+		versionLabel = __( 'Free version', 'customify' );
+	}
 	mountDashboard( {
 		rootEl: '#customify-dashboard',
 		bootGlobal: 'customifyDashboard',

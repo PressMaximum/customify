@@ -3074,9 +3074,27 @@ const brandIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24
 
 if (document.getElementById('customify-dashboard')) {
   const boot = window.customifyDashboard || {};
-  const versionLabel = boot.themeVersion ? (0,external_wp_i18n_namespaceObject.sprintf)(
-  // translators: %s is the theme version (e.g. "0.4.14").
-  (0,external_wp_i18n_namespaceObject.__)('v%s — Free version', 'customify'), boot.themeVersion) : (0,external_wp_i18n_namespaceObject.__)('Free version', 'customify');
+  // When Customify Pro is active it filters `customify_dashboard_localize`
+  // to inject `proVersion`; the header label switches to that version +
+  // "Pro version" suffix. Falls back to the theme's own version label
+  // for the Free path.
+  const proActive = !!boot.proActive;
+  const proVersion = (boot.proVersion || '') + '';
+  const themeVersion = (boot.themeVersion || '') + '';
+  let versionLabel;
+  if (proActive && proVersion) {
+    versionLabel = (0,external_wp_i18n_namespaceObject.sprintf)(
+    // translators: %s is the Customify Pro plugin version (e.g. "0.4.16").
+    (0,external_wp_i18n_namespaceObject.__)('v%s — Pro version', 'customify'), proVersion);
+  } else if (proActive) {
+    versionLabel = (0,external_wp_i18n_namespaceObject.__)('Pro version', 'customify');
+  } else if (themeVersion) {
+    versionLabel = (0,external_wp_i18n_namespaceObject.sprintf)(
+    // translators: %s is the Customify theme version (e.g. "0.4.14").
+    (0,external_wp_i18n_namespaceObject.__)('v%s — Free version', 'customify'), themeVersion);
+  } else {
+    versionLabel = (0,external_wp_i18n_namespaceObject.__)('Free version', 'customify');
+  }
   ke({
     rootEl: '#customify-dashboard',
     bootGlobal: 'customifyDashboard',
