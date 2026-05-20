@@ -41,6 +41,19 @@ body.customify-dashboard-page {
 }
 
 .customify-dashboard-settings {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	// Tabbed layout — 240px SubNav rail + 1fr pane. Mirrors the
+	// Changelog tab's multi-source layout.
+	&--tabbed {
+		display: grid;
+		grid-template-columns: 240px 1fr;
+		gap: 24px;
+		align-items: start;
+	}
+
 	&__panel {
 		.components-card__header h2 {
 			margin: 0;
@@ -54,9 +67,21 @@ body.customify-dashboard-page {
 		margin: 0 0 16px 0;
 	}
 
+	// Theme panel: SchemaForm sits above the SaveBar; both inside the
+	// CardBody so the panel "owns" its save cluster (no page-level bar).
+	&__panel-actions {
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid var( --pmdk-color-border-subtle, #f0f0f1 );
+
+		.pmdk-save-bar {
+			min-height: 0;
+			padding: 0;
+		}
+	}
+
 	// Per-Pro-panel save / discard cluster. Pro panels own their state +
-	// hit their own REST endpoint, so the cluster lives inside the panel
-	// body instead of relying on the page-level SaveBar.
+	// hit their own REST endpoint.
 	&__pro-panel-actions {
 		display: flex;
 		justify-content: flex-end;
