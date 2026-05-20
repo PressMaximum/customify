@@ -1,3 +1,6 @@
+// React modules bundled into this control bundle.
+import { observeAndMount as observeAndMountColumnsSettings } from './controls/columns-settings';
+
 (function (api) {
 	// Extends our custom "example-1" section.
 	api.sectionConstructor["customify-pro"] = api.Section.extend({
@@ -3885,6 +3888,10 @@
 			initStyling();
 			initModal();
 			intTypos();
+			// Expose helpers used by React-based controls (e.g. Column Settings)
+			// to drive the jQuery slider + css_ruler renderers.
+			window.customifyField = customifyField;
+			observeAndMountColumnsSettings();
 		});
 
 		// Add reset button to sections

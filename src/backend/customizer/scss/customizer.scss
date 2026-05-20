@@ -174,3 +174,244 @@ $builder_active_color: #0073aa;
 @import "header_footer_builder";
 @import "_builder_v1";
 @import "_builder_v2";
+
+// Columns Settings modal — accordion toggles (multi-open), one per active column.
+.customify-cs__device-note {
+	font-size: 11px;
+	color: #777;
+	padding: 6px 10px;
+	background: #f6f7f7;
+	border-left: 3px solid #2271b1;
+	margin-bottom: 8px;
+}
+
+.customify-cs__accordion {
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+	.customify-cs__item {
+		border: 1px solid #ddd;
+		background: #fff;
+		margin-bottom: 10px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.customify-cs__head {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px;
+		background: #fff;
+		cursor: pointer;
+		user-select: none;
+		font-size: 1em;
+		font-weight: 600;
+		line-height: 1;
+		color: #555d66;
+		text-align: left;
+	}
+
+	.customify-cs__head-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: #555d66;
+		transition: transform 0.2s;
+		transform: rotate(0deg);
+
+		svg {
+			fill: currentColor;
+		}
+	}
+
+	.customify-cs__item.is-open {
+		.customify-cs__head {
+			border-bottom: 1px solid #ddd;
+		}
+		.customify-cs__head-toggle {
+			transform: rotate(180deg);
+		}
+		.customify-cs__body {
+			display: block;
+		}
+	}
+
+	.customify-cs__body {
+		display: none;
+		padding: 8px;
+		background: #fff;
+
+		.customify--group-field {
+			margin-bottom: 15px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+// Gap slider — override default absolute layout so the em/px unit picker
+// can sit beside the value input without overlapping it.
+.customify-cs__body {
+	.customify-input-slider-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: 8px;
+		position: relative;
+
+		.customify-input-slider {
+			flex: 1 1 auto;
+			margin: 0;
+			min-width: 60px;
+		}
+
+		.customify--slider-input {
+			position: static;
+			top: auto;
+			right: auto;
+			flex: 0 0 50px;
+			width: 50px;
+			max-width: 50px;
+			height: 28px;
+			padding: 0 4px;
+		}
+
+		.customify--css-unit {
+			position: static;
+			top: auto;
+			right: auto;
+			margin: 0;
+			display: inline-flex;
+			gap: 0;
+			border: 1px solid #ddd;
+			border-radius: 3px;
+			overflow: hidden;
+			background: #fff;
+			text-align: left;
+
+			label {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				position: static;
+				top: auto;
+				right: auto;
+				min-width: 26px;
+				height: 28px;
+				padding: 0 6px;
+				margin: 0;
+				border: 0;
+				background: transparent;
+				color: #1d2327;
+				font-size: 11px;
+				font-weight: 500;
+				text-transform: uppercase;
+				cursor: pointer;
+				box-shadow: none;
+				border-right: 1px solid #ddd;
+
+				&:last-of-type {
+					border-right: 0;
+				}
+
+				&.customify--label-active {
+					display: inline-flex;
+					background: #2271b1;
+					color: #fff;
+					border-color: #2271b1;
+					font-weight: 600;
+				}
+			}
+
+			.reset {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				position: static;
+				top: auto;
+				right: auto;
+				width: 28px;
+				height: 28px;
+				border: 0;
+				border-left: 1px solid #ddd;
+				background: #fff;
+			}
+		}
+	}
+}
+
+// Layout button group — compact icon buttons styled like @wordpress/components ButtonGroup.
+.customify-cs__layout-wrap {
+	.customify-cs__field-label {
+		display: block;
+		font-size: 12px;
+		font-weight: 600;
+		color: #1d2327;
+		margin-bottom: 4px;
+	}
+}
+
+.customify-cs__btn-group {
+	display: inline-flex;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	overflow: hidden;
+	background: #fff;
+
+	.customify-cs__layout-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		min-width: 28px;
+		padding: 0;
+		margin: 0;
+		background: #fff;
+		border: 0;
+		border-right: 1px solid #ddd;
+		color: #1d2327;
+		cursor: pointer;
+		line-height: 1;
+		transition: background 0.1s ease;
+
+		&:last-child {
+			border-right: 0;
+		}
+
+		.customify-cs__layout-btn-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 20px;
+			height: 20px;
+			line-height: 0;
+			pointer-events: none;
+		}
+
+		svg {
+			display: block;
+			width: 20px;
+			height: 20px;
+			fill: currentColor;
+			pointer-events: none;
+		}
+
+		&:hover {
+			background: #f0f0f0;
+		}
+
+		&.is-pressed,
+		&.is-primary {
+			background: #2271b1;
+			color: #fff;
+		}
+	}
+}
+

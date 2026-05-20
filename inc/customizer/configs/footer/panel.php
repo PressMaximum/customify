@@ -191,6 +191,19 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'default'    => 30,
 			),
 
+			array(
+				'name'               => "{$section}_columns_settings",
+				'type'               => 'columns_settings',
+				'section'            => $section,
+				'priority'           => 999,
+				'title'              => __( 'Column Settings', 'customify' ),
+				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
+				'col_layout_setting' => $section . '_col_layout',
+				'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
+				'selector'           => $selector,
+				'css_format'         => 'columns_settings',
+			),
+
 		);
 		$config = apply_filters( 'customify/builder/' . $this->id . '/rows/section_configs', $config, $section, $section_name );
 		return $config;
@@ -254,6 +267,12 @@ add_action(
 			$setting = $wp_customize->get_setting( $key );
 			if ( $setting ) {
 				$setting->transport = 'postMessage';
+			}
+		}
+		foreach ( array( 'footer_main_columns_settings', 'footer_bottom_columns_settings' ) as $key ) {
+			$setting = $wp_customize->get_setting( $key );
+			if ( $setting ) {
+				$setting->transport = 'refresh';
 			}
 		}
 	},

@@ -370,9 +370,16 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 			min-width: 260px;
 			flex-shrink: 0;
 			align-items: flex-start;
-
+			align-items: center;
+			gap: 0px;
 			.customify-hb__row-label { writing-mode: horizontal-tb; }
 			.customify-hb__offcanvas { flex: 1; width: 100%; min-height: 80px; }
+			.customify-hb__row-header {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				padding: 5px 0px;
+			}
 		}
 	}
 }
@@ -521,7 +528,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 .customify-hb__offcanvas {
 	flex: 1;
 	min-height: 42px;
-	border: 1px dashed $hb-border;
+	// border: 1px dashed $hb-border;
 	border-radius: $hb-radius;
 	padding: 3px;
 	background: #fff;
@@ -726,4 +733,12 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	color: $hb-text-muted;
 	font-style: italic;
 	padding: 8px 10px;
+}
+
+
+.customize-control-customify-columns_settings {
+	.customify-field-heading, 
+	.description {
+		padding-right: 40px;
+	}
 }

@@ -36,6 +36,11 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			),
 			'react_control_id'      => 'header_builder_panel_v2',
 			'panel_items_container' => 'customify-hb-panel-items',
+			'row_layout_keys'       => array(
+				'top'    => 'header_top_col_layout',
+				'main'   => 'header_main_col_layout',
+				'bottom' => 'header_bottom_col_layout',
+			),
 		);
 	}
 
@@ -196,6 +201,27 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				), // disable hover tab and all fields inside.
 			),
 
+			array(
+				'name'              => $section . '_col_layout',
+				'type'              => 'row_layout',
+				'section'           => $section,
+				'title'             => __( 'Columns Layout', 'customify' ),
+				'sanitize_callback' => 'customify_sanitize_row_layout',
+			),
+
+			array(
+				'name'               => $section . '_columns_settings',
+				'type'               => 'columns_settings',
+				'section'            => $section,
+				'priority'           => 999,
+				'title'              => __( 'Column Settings', 'customify' ),
+				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
+				'col_layout_setting' => $section . '_col_layout',
+				'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
+				'selector'           => '.header--row.' . str_replace( '_', '-', $section ),
+				'css_format'         => 'columns_settings',
+			),
+
 		);
 
 		return $config;
@@ -315,6 +341,24 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'selector'        => '.header-menu-sidebar-inner',
 				'css_format'      => 'text-align: {{value}};',
 				'title'           => __( 'Align', 'customify' ),
+			),
+
+			array(
+				'name'               => $section . '_columns_settings',
+				'type'               => 'columns_settings',
+				'section'            => $section,
+				'priority'           => 999,
+				'title'              => __( 'Off-canvas Settings', 'customify' ),
+				'description'        => __( 'Layout, gap and padding for the off-canvas.', 'customify' ),
+				'col_layout_setting' => '',
+				'column_keys'        => array( 'sidebar' ),
+				'hide_layout'        => true,
+				'forced_layout'      => 'stack',
+				'col_selectors'      => array(
+					'sidebar' => '#header-menu-sidebar-inner',
+				),
+				'selector'           => '#header-menu-sidebar-inner',
+				'css_format'         => 'columns_settings',
 			),
 
 		);
@@ -466,3 +510,93 @@ function customify_header_builder_has_item( $item_id ) {
 
 	return false;
 }
+
+/**
+ * Register the row_layout control type so load_controls() includes the class file.
+ */
+add_filter(
+	'customify/customize/register-controls',
+	function ( $fields ) {
+		if ( ! in_array( 'row_layout', $fields, true ) ) {
+			$fields[] = 'row_layout';
+		}
+		if ( ! in_array( 'columns_settings', $fields, true ) ) {
+			$fields[] = 'columns_settings';
+		}
+		return $fields;
+	}
+);
+
+/**
+ * Force postMessage transport for header row col_layout settings so the
+ * preview JS binding can apply grid-template-columns live, and refresh
+ * transport for columns_settings (no JS auto-CSS handler yet).
+ */
+add_action(
+	'customize_register',
+	function ( $wp_customize ) {
+		foreach ( array( 'header_top_col_layout', 'header_main_col_layout', 'header_bottom_col_layout' ) as $key ) {
+			$setting = $wp_customize->get_setting( $key );
+			if ( $setting ) {
+				$setting->transport = 'postMessage';
+			}
+		}
+		foreach ( array( 'header_top_columns_settings', 'header_main_columns_settings', 'header_bottom_columns_settings', 'header_sidebar_columns_settings' ) as $key ) {
+			$setting = $wp_customize->get_setting( $key );
+			if ( $setting ) {
+				$setting->transport = 'refresh';
+			}
+		}
+	},
+	700
+);
+
+/**
+ * Output grid-template-columns CSS for header rows based on saved col_layout values.
+ */
+function customify_header_row_layout_css() {
+	$rows = array(
+		'header_top'    => '.header--row.header-top',
+		'header_main'   => '.header--row.header-main',
+		'header_bottom' => '.header--row.header-bottom',
+	);
+
+	$css = '';
+	foreach ( $rows as $key => $selector ) {
+		$raw = Customify()->get_setting( $key . '_col_layout' );
+		if ( ! $raw ) {
+			continue;
+		}
+		$data = is_array( $raw ) ? $raw : json_decode( $raw, true );
+		if ( ! is_array( $data ) ) {
+			continue;
+		}
+
+		$devices = array(
+			'desktop' => '',
+			'tablet'  => '@media (max-width: 1024px)',
+			'mobile'  => '@media (max-width: 767px)',
+		);
+
+		foreach ( $devices as $device => $media ) {
+			if ( empty( $data[ $device ]['fr'] ) || ! is_array( $data[ $device ]['fr'] ) ) {
+				continue;
+			}
+			$fr_parts = array_map(
+				function ( $v ) {
+					return absint( $v ) . 'fr';
+				},
+				$data[ $device ]['fr']
+			);
+			$grid_cols = implode( ' ', $fr_parts );
+
+			$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; }';
+			$css  .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
+		}
+	}
+
+	if ( $css ) {
+		echo '<style id="customify-header-col-layout">' . $css . "</style>\n";
+	}
+}
+add_action( 'wp_head', 'customify_header_row_layout_css', 99 );

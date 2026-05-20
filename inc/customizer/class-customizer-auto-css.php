@@ -361,6 +361,147 @@ class Customify_Customizer_Auto_CSS
 		}
 	}
 
+	/**
+	 * Emit CSS for a `columns_settings` field.
+	 *
+	 * Saved value:
+	 *   { desktop: { <colKey>: { layout, gap, padding: { top, right, bottom, left, unit } }, ... },
+	 *     mobile:  { <colKey>: { ... }, ... } }
+	 *
+	 * Selector: `{$field['selector']} .col-v2-<colKey>`
+	 *
+	 * @since 0.5.0
+	 */
+	function columns_settings($field, $values = null)
+	{
+		$values = Customify()->get_setting($field['name']);
+		if (!is_array($values)) {
+			$values = array();
+		}
+
+		$row_selector = isset($field['selector']) ? $field['selector'] : '';
+		if (!$row_selector) {
+			return;
+		}
+
+		$col_selectors = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
+		$forced_layout = isset($field['forced_layout']) ? (string) $field['forced_layout'] : '';
+		$column_keys   = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+
+		$device_map = array(
+			'desktop' => 'desktop',
+			'mobile'  => 'mobile',
+		);
+
+		foreach ($device_map as $device_key => $css_bucket) {
+			$device_values = (isset($values[$device_key]) && is_array($values[$device_key])) ? $values[$device_key] : array();
+
+			// When forced_layout is set, the layout CSS must always emit even
+			// without a saved value. Seed the loop with empty per-column entries.
+			if ('' !== $forced_layout) {
+				foreach ($column_keys as $ck) {
+					if (!isset($device_values[$ck])) {
+						$device_values[$ck] = array();
+					}
+				}
+			}
+
+			if (empty($device_values)) {
+				continue;
+			}
+
+			foreach ($device_values as $col_key => $col_value) {
+				if (!is_array($col_value)) {
+					$col_value = array();
+				}
+
+				$selector = isset($col_selectors[$col_key]) && $col_selectors[$col_key]
+					? $col_selectors[$col_key]
+					: trim($row_selector) . ' .col-v2-' . sanitize_html_class($col_key);
+				$rules    = array();
+
+				// Layout — forced_layout (from field config) overrides whatever
+				// is in the saved value, so a row that's always vertical (e.g.
+				// the off-canvas sidebar) emits stack CSS even with empty value.
+				$layout = $forced_layout !== ''
+					? $forced_layout
+					: ( isset($col_value['layout']) ? $col_value['layout'] : '' );
+				switch ($layout) {
+					case 'flex-center':
+						$rules[] = 'display: flex;';
+						$rules[] = 'justify-content: center;';
+						$rules[] = 'align-items: center;';
+						break;
+					case 'flex-end':
+						$rules[] = 'display: flex;';
+						$rules[] = 'justify-content: flex-end;';
+						$rules[] = 'align-items: center;';
+						break;
+					case 'stack':
+						$rules[] = 'display: flex;';
+						$rules[] = 'flex-direction: column;';
+						break;
+					case 'flex-start':
+					default:
+						if ('' !== $layout) {
+							$rules[] = 'display: flex;';
+							$rules[] = 'justify-content: flex-start;';
+							$rules[] = 'align-items: center;';
+						}
+				}
+
+				// Gap — value shape: { unit, value } or scalar (legacy).
+				if (isset($col_value['gap'])) {
+					$gap_val  = $col_value['gap'];
+					$gap_num  = null;
+					$gap_unit = 'em';
+					if (is_array($gap_val)) {
+						if (isset($gap_val['value']) && '' !== $gap_val['value'] && null !== $gap_val['value']) {
+							$gap_num  = $gap_val['value'];
+							$gap_unit = isset($gap_val['unit']) && $gap_val['unit'] ? $gap_val['unit'] : 'em';
+						}
+					} elseif ('' !== $gap_val && null !== $gap_val) {
+						$gap_num = $gap_val;
+					}
+					if (null !== $gap_num) {
+						$rules[] = 'gap: ' . floatval($gap_num) . sanitize_text_field($gap_unit) . ';';
+					}
+				}
+
+				// Padding.
+				if (isset($col_value['padding']) && is_array($col_value['padding'])) {
+					$padding = wp_parse_args(
+						$col_value['padding'],
+						array(
+							'top'    => null,
+							'right'  => null,
+							'bottom' => null,
+							'left'   => null,
+							'unit'   => 'px',
+						)
+					);
+					$unit  = $padding['unit'] ? $padding['unit'] : 'px';
+					$sides = array();
+					foreach (array('top', 'right', 'bottom', 'left') as $side) {
+						if (null === $padding[$side] || '' === $padding[$side]) {
+							continue;
+						}
+						$sides[$side] = 'padding-' . $side . ': ' . floatval($padding[$side]) . $unit . ';';
+					}
+					if ($sides) {
+						$rules = array_merge($rules, array_values($sides));
+					}
+				}
+
+				if (empty($rules)) {
+					continue;
+				}
+
+				$this->css[$css_bucket] .= "{$selector} {\r\n\t" . join("\r\n\t", $rules) . "\r\n}\r\n";
+			}
+		}
+	}
+
 	function styling($field, $values = null)
 	{
 		$values = Customify()->get_setting($field['name'], 'all');
@@ -926,6 +1067,9 @@ class Customify_Customizer_Auto_CSS
 								break;
 							case 'styling':
 								$this->styling($field, $v);
+								break;
+							case 'columns_settings':
+								$this->columns_settings($field, $v);
 								break;
 							case 'modal':
 								$this->modal($field, $v);
