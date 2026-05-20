@@ -36,6 +36,23 @@ const CUSTOMIFY_DASHBOARD_V2_SLUG = 'customify';
 const CUSTOMIFY_DASHBOARD_V2_HANDLE = 'customify-dashboard';
 
 /**
+ * Build a data: URI for the Customify logo to use as the WP admin menu
+ * icon. WP recolors data-URI SVGs to match the user's admin colour
+ * scheme as long as the fill is `currentColor` / `#a7aaad` / etc.
+ */
+function customify_dashboard_v2_menu_icon(): string {
+	$svg = get_template_directory() . '/src/images/admin/customify-logo.svg';
+	if ( ! file_exists( $svg ) ) {
+		return 'dashicons-admin-customizer';
+	}
+	$contents = file_get_contents( $svg );
+	if ( ! $contents ) {
+		return 'dashicons-admin-customizer';
+	}
+	return 'data:image/svg+xml;base64,' . base64_encode( $contents );
+}
+
+/**
  * Register the top-level menu.
  */
 function customify_dashboard_v2_add_menu(): void {
@@ -45,7 +62,7 @@ function customify_dashboard_v2_add_menu(): void {
 		'manage_options',
 		CUSTOMIFY_DASHBOARD_V2_SLUG,
 		'customify_dashboard_v2_render',
-		'dashicons-admin-customizer',
+		customify_dashboard_v2_menu_icon(),
 		59
 	);
 }

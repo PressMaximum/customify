@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 974:
+/***/ 4:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -2585,6 +2585,20 @@ function Changelog() {
     }, release.version))
   });
 }
+;// ./src/backend/admin/dashboard-v2/brand-icon.js
+/**
+ * Customify brand mark — `fill="currentColor"` so the kit's header
+ * foreground token cascades through (matches whatever scheme the user
+ * picks in WP Profile).
+ *
+ * Source SVG lives at src/images/admin/customify-logo.svg; inlined here
+ * because wp-scripts processes .svg imports through @svgr/webpack /
+ * url-loader rather than as raw text, and the kit's `brand.icon` config
+ * expects a string of SVG markup.
+ */
+
+const brandIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 3101.46 3275.86" aria-hidden="true" focusable="false">' + '<path fill="currentColor" d="M3549.93,2031c-355.92,238.77-700.38,469.86-1044.87,700.92q-54.73,36.72-109.72,73.1c-109.57,72.46-221.25,72.94-329.28.76Q1304.75,2297,545.42,1785.36c-124.62-89.8-131-256.37-2.19-344.87q762.21-513.76,1527.1-1023.56c92.36-61.7,195.32-77.51,290.13-15.4,396,253.87,788,523,1190.27,790.89-133.38,89.73-279.23,186.54-403.51,271.64h0c-272-181.72-643.72-430.53-914.94-613.34h0c-353.43,240.06-754.8,505.31-1109.42,743.63-7.64,5.14-26.95,18.29-26.95,18.29,311.13,208.64,621.7,418.61,930.58,624,68.56,45.59,213.66,134.89,213.66,134.89s835.92-571.54,902.77-616.37l23.19,17.1h0Z" transform="translate(-449.27 -362.07)"/>' + '<path fill="currentColor" d="M2206.39,3140.47c-391.57-262-1151.43-748-1552.3-1014.5h0c-229.5,154.07-260.26,342-72.82,467.51q733.38,491.26,1466.53,982.87c119.14,80,241.87,83.06,361.18,3.17q380.4-254.71,760.29-510.19c119.19-80,235.16-157.59,364.83-244.48l-379.57-260.3h0c-275.37,184.37-923.63,591-923.63,591h0l-24.51-15Z" transform="translate(-449.27 -362.07)"/>' + '<path fill="currentColor" d="M2581.46,1872.51s29.25-19.93,46-31.8c93.5-66.37,241-164.45,337.7-226.13l3.15-2.15-2.6-1.6c-196.2-128-442.59-293.58-636.46-425.09-66.32-45-129.77-46.18-195.69-1.25-66.56,45.37-134.08,89.32-200.93,134.27-143.26,96.34-286.36,192.92-436.33,294,122.49,82.22,268.13,179.34,382.27,258.16h0s29.19-19.89,42.1-28.64c84.87-57.54,143.16-99,254.24-173,20.8-15.64,54.8-36.49,54.8-36.49Z" transform="translate(-449.27 -362.07)"/>' + '</svg>';
+/* harmony default export */ var brand_icon = (brandIcon);
 ;// ./src/backend/admin/dashboard-v2/index.js
 /**
  * Customify Dashboard (v2) — SPA entry.
@@ -2607,10 +2621,6 @@ function Changelog() {
 
 
 
-// Inline brand mark — drawn with currentColor so the kit's tokens
-// (header foreground) cascade through it. ~600 bytes; cheaper than an
-// HTTP round-trip for a brand icon this small.
-const BRAND_ICON_SVG = `<svg width="22" height="22" viewBox="0 0 22 22" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><rect x="2" y="2" width="18" height="18" rx="4" fill="currentColor" opacity="0.12"/><path d="M6 7.5h10M6 11h10M6 14.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>`;
 if (document.getElementById('customify-dashboard')) {
   const boot = window.customifyDashboard || {};
   const themeVersion = boot.themeVersion ? `v${boot.themeVersion}` : '';
@@ -2621,10 +2631,11 @@ if (document.getElementById('customify-dashboard')) {
     __: text => (0,external_wp_i18n_namespaceObject.__)(text, 'customify'),
     brand: {
       name: (0,external_wp_i18n_namespaceObject.__)('Customify', 'customify'),
-      icon: BRAND_ICON_SVG,
+      icon: brand_icon,
       href: 'https://pressmaximum.com'
     },
     tabsAriaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify dashboard tabs', 'customify'),
+    containerWidth: 'wide',
     versionLabel: themeVersion,
     versionHref: '#changelog',
     versionAriaLabel: (0,external_wp_i18n_namespaceObject.__)('View changelog', 'customify'),
@@ -2853,7 +2864,7 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(974); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(4); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
