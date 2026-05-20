@@ -2,14 +2,17 @@
  * Pro Modules card section on the Welcome tab.
  *
  * Two render paths:
- *   1. Pro plugin NOT active (`boot.proActive === false`) → marketing list.
- *      Each row shows title + description + optional "Docs" trailing link.
- *      Header CTA is "Upgrade Now".
+ *   1. Pro plugin NOT active (`boot.proActive === false`) → marketing
+ *      list. Each row shows title + description + a *disabled* FormToggle
+ *      in the leading slot wrapped in a Tooltip ("Available in Pro
+ *      version") so the row reads as "something you can flip — in Pro"
+ *      while keeping the upsell story tight. Header CTA stays "Upgrade
+ *      Now".
  *   2. Pro plugin active → same list (overridden via the
  *      `customify.dashboard.pro.modules` filter from Pro's bundle) plus a
- *      `@wordpress/components` FormToggle leading slot per row + Settings
- *      trailing link when the module has settings + is enabled. Toggling
- *      calls a handler Pro supplies via the
+ *      live `@wordpress/components` FormToggle in the leading slot +
+ *      Settings trailing link when the module has settings + is enabled.
+ *      Toggling calls a handler Pro supplies via the
  *      `customify.dashboard.pro.toggle` filter; the kit ships a no-op +
  *      reject so the marketing path can't accidentally flip server state.
  *      When a module has `canToggle: false` (e.g. WooCommerce Booster
@@ -32,6 +35,7 @@ import {
 	Button,
 	FormToggle,
 	Icon,
+	Tooltip,
 } from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
 import { navigate } from '@pressmaximum/dashboard-kit';
@@ -158,22 +162,51 @@ export default function ProModulesSection( { boot } ) {
 	const renderRow = ( mod, isSub = false ) => {
 		const checked = !! enabledMap[ mod.id ];
 		const pending = !! pendingMap[ mod.id ];
-		// The toggle is part of the Pro path only; Free renders the row
-		// without a toggle at all.
-		const showToggle = proActive && typeof proToggle === 'function';
+		// `proAvailable` flips when the runtime is wired up (Pro plugin
+		// active + bridge toggle handler registered). Free path keeps the
+		// toggle visible but disabled so the row still reads as
+		// "something you can flip — in Pro" and the upgrade CTA above
+		// the list has visible context.
+		const proAvailable = proActive && typeof proToggle === 'function';
 		// `canToggle: false` arrives from Pro when a runtime dependency is
 		// missing (WooCommerce Booster + its sub-modules when WooCommerce
 		// isn't active). Render the toggle disabled instead of hiding it
 		// so the user sees the row state + its notice.
 		const allowed = mod.canToggle !== false;
-		const toggleDisabled = pending || ! allowed;
+		const toggleDisabled = ! proAvailable || pending || ! allowed;
 		const showSettings =
-			showToggle && allowed && checked && mod.hasSettings && ! pending;
+			proAvailable && allowed && checked && mod.hasSettings && ! pending;
 		const showsSubs = ! isSub && mod.subModules && mod.subModules.length > 0;
 		const notice =
-			showToggle && ! allowed && mod.toggleDisableNotice
+			proAvailable && ! allowed && mod.toggleDisableNotice
 				? mod.toggleDisableNotice
 				: null;
+
+		const toggle = (
+			<FormToggle
+				checked={ proAvailable && checked }
+				onChange={ () => handleToggle( mod.id ) }
+				disabled={ toggleDisabled }
+				aria-label={ mod.name }
+			/>
+		);
+
+		// Free path: wrap the disabled toggle in a Tooltip so hovering
+		// surfaces the "Available in Pro version" hint. The wrap span
+		// catches pointer events that the disabled <input> doesn't fire
+		// itself.
+		const leading = proAvailable ? (
+			toggle
+		) : (
+			<Tooltip
+				text={ __( 'Available in Pro version', 'customify' ) }
+				placement="top"
+			>
+				<span className="customify-dashboard-module-row__toggle-wrap">
+					{ toggle }
+				</span>
+			</Tooltip>
+		);
 
 		return (
 			<ModuleRow
@@ -182,16 +215,7 @@ export default function ProModulesSection( { boot } ) {
 				description={ mod.description }
 				notice={ notice }
 				hasSubs={ showsSubs }
-				leading={
-					showToggle ? (
-						<FormToggle
-							checked={ checked }
-							onChange={ () => handleToggle( mod.id ) }
-							disabled={ toggleDisabled }
-							aria-label={ mod.name }
-						/>
-					) : null
-				}
+				leading={ leading }
 				trailing={
 					<>
 						{ showSettings && (

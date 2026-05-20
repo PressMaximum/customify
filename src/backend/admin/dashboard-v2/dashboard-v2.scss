@@ -531,3 +531,13 @@ body.customify-dashboard-page {
 		cursor: not-allowed;
 	}
 }
+
+// Tooltip wrap on the Free path — disabled <input> doesn't fire
+// pointer events on its own, so the inline-flex wrapper catches the
+// hover for `@wordpress/components` Tooltip. `not-allowed` cursor here
+// matches the disabled FormToggle's own cursor for a single visual.
+.customify-dashboard-module-row__toggle-wrap {
+	display: inline-flex;
+	align-items: center;
+	cursor: not-allowed;
+}
