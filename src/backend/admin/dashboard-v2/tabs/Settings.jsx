@@ -7,7 +7,8 @@
 import { useSelect, useDispatch, dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
-import { Card, CardBody, CardHeader } from '@wordpress/components';
+import { Card, CardBody, CardHeader, Icon } from '@wordpress/components';
+import { check as checkIcon } from '@wordpress/icons';
 import {
 	SchemaForm,
 	SaveBar,
@@ -19,6 +20,15 @@ import {
 import { CUSTOMIFY_SETTINGS_STORE } from '../data/settingsStore.js';
 
 const NOTICES_STORE = 'core/notices';
+
+// Green-circle check glyph passed as `icon` to success snackbars so the
+// "Settings saved." toast carries a positive visual cue (mirrors
+// Blocksify's pattern; kit ships no opinionated snackbar icon).
+const SUCCESS_GLYPH = (
+	<span className="customify-dashboard-snackbar__check">
+		<Icon icon={ checkIcon } size={ 14 } />
+	</span>
+);
 
 export default function Settings() {
 	const boot = useBoot();
@@ -37,7 +47,7 @@ export default function Settings() {
 		[],
 	);
 
-	const { edit, save, clearDirty } = useDispatch( CUSTOMIFY_SETTINGS_STORE );
+	const { edit, save, reset } = useDispatch( CUSTOMIFY_SETTINGS_STORE );
 
 	const fieldTypes = applyFilters(
 		'customify.dashboard.settings.field-types',
@@ -55,7 +65,11 @@ export default function Settings() {
 			await save();
 			dispatch( NOTICES_STORE ).createSuccessNotice(
 				__( 'Settings saved.', 'customify' ),
-				{ type: 'snackbar', isDismissible: true },
+				{
+					type: 'snackbar',
+					isDismissible: true,
+					icon: SUCCESS_GLYPH,
+				},
 			);
 		} catch ( err ) {
 			dispatch( NOTICES_STORE ).createErrorNotice(
@@ -66,8 +80,35 @@ export default function Settings() {
 		}
 	};
 
-	const handleReset = () => {
-		clearDirty();
+	const handleReset = async () => {
+		// Kit's SaveBar docstring (SPEC §5.10b) places the confirmation
+		// prompt on the consumer so kit doesn't own the translated copy.
+		const confirmed = window.confirm(
+			__(
+				'Reset all settings to their defaults? This cannot be undone.',
+				'customify',
+			),
+		);
+		if ( ! confirmed ) {
+			return;
+		}
+		try {
+			await reset();
+			dispatch( NOTICES_STORE ).createSuccessNotice(
+				__( 'Settings reset to defaults.', 'customify' ),
+				{
+					type: 'snackbar',
+					isDismissible: true,
+					icon: SUCCESS_GLYPH,
+				},
+			);
+		} catch ( err ) {
+			dispatch( NOTICES_STORE ).createErrorNotice(
+				err?.message ||
+					__( 'Reset failed. Try again.', 'customify' ),
+				{ type: 'snackbar', isDismissible: true },
+			);
+		}
 	};
 
 	if ( ! panels.length ) {
@@ -119,10 +160,13 @@ export default function Settings() {
 				onSave={ handleSave }
 				onReset={ handleReset }
 				labels={ {
-					saveButton: __( 'Save changes', 'customify' ),
-					resetButton: __( 'Discard', 'customify' ),
-					unsavedNotice: __( 'You have unsaved changes.', 'customify' ),
-					savingNotice: __( 'Saving…', 'customify' ),
+					regionLabel: __( 'Settings actions', 'customify' ),
+					saveLabel: __( 'Save changes', 'customify' ),
+					savingLabel: __( 'Saving…', 'customify' ),
+					resetLabel: __( 'Reset to defaults', 'customify' ),
+					statusSaved: __( 'All changes saved', 'customify' ),
+					statusDirty: __( 'Unsaved changes', 'customify' ),
+					statusSaving: __( 'Saving…', 'customify' ),
 				} }
 			/>
 		</div>

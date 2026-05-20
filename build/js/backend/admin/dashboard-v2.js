@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 956:
+/***/ 839:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -2714,6 +2714,14 @@ function Welcome() {
     })]
   });
 }
+;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
+// packages/icons/src/library/check.tsx
+
+
+var check_check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+
+//# sourceMappingURL=check.mjs.map
+
 ;// external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
@@ -2760,7 +2768,19 @@ const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
 
 
 
+
 const Settings_NOTICES_STORE = 'core/notices';
+
+// Green-circle check glyph passed as `icon` to success snackbars so the
+// "Settings saved." toast carries a positive visual cue (mirrors
+// Blocksify's pattern; kit ships no opinionated snackbar icon).
+const SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+  className: "customify-dashboard-snackbar__check",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+    icon: check_check_default,
+    size: 14
+  })
+});
 function Settings() {
   const boot = ce();
   const schema = boot?.settings?.schema || {
@@ -2772,7 +2792,7 @@ function Settings() {
   const {
     edit,
     save,
-    clearDirty
+    reset
   } = (0,external_wp_data_namespaceObject.useDispatch)(CUSTOMIFY_SETTINGS_STORE);
   const fieldTypes = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.field-types', Ze);
   const panels = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.panels', schema.panels || [], boot);
@@ -2781,7 +2801,8 @@ function Settings() {
       await save();
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
         type: 'snackbar',
-        isDismissible: true
+        isDismissible: true,
+        icon: SUCCESS_GLYPH
       });
     } catch (err) {
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
@@ -2790,8 +2811,26 @@ function Settings() {
       });
     }
   };
-  const handleReset = () => {
-    clearDirty();
+  const handleReset = async () => {
+    // Kit's SaveBar docstring (SPEC §5.10b) places the confirmation
+    // prompt on the consumer so kit doesn't own the translated copy.
+    const confirmed = window.confirm((0,external_wp_i18n_namespaceObject.__)('Reset all settings to their defaults? This cannot be undone.', 'customify'));
+    if (!confirmed) {
+      return;
+    }
+    try {
+      await reset();
+      (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings reset to defaults.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true,
+        icon: SUCCESS_GLYPH
+      });
+    } catch (err) {
+      (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Reset failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    }
   };
   if (!panels.length) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
@@ -2828,10 +2867,13 @@ function Settings() {
       onSave: handleSave,
       onReset: handleReset,
       labels: {
-        saveButton: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
-        resetButton: (0,external_wp_i18n_namespaceObject.__)('Discard', 'customify'),
-        unsavedNotice: (0,external_wp_i18n_namespaceObject.__)('You have unsaved changes.', 'customify'),
-        savingNotice: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
+        regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
+        saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
+        savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
+        resetLabel: (0,external_wp_i18n_namespaceObject.__)('Reset to defaults', 'customify'),
+        statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+        statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
+        statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
       }
     })]
   });
@@ -3224,7 +3266,7 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(956); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(839); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
