@@ -40,6 +40,28 @@ const SUCCESS_GLYPH = (
 );
 
 /**
+ * REST error messages from WP fatal-error catchers arrive as HTML
+ * blobs ("<p>There has been a critical error…</p><p><a …>Learn more…
+ * </a></p>"). The notice + snackbar render text content literally, so
+ * the raw markup ends up in the user's face. Strip tags + decode
+ * entities so the human-readable bit comes through (and trim to keep
+ * the snackbar tidy).
+ */
+function readableErrorMessage( raw, fallback ) {
+	if ( ! raw || typeof raw !== 'string' ) {
+		return fallback;
+	}
+	const stripped = raw.replace( /<[^>]*>/g, ' ' ).replace( /\s+/g, ' ' ).trim();
+	if ( ! stripped ) {
+		return fallback;
+	}
+	const txt = document.createElement( 'textarea' );
+	txt.innerHTML = stripped;
+	const decoded = txt.value.trim();
+	return decoded.length > 240 ? decoded.slice( 0, 237 ) + '…' : decoded;
+}
+
+/**
  * Map EDD status strings → tone for the status pill.
  *
  * EDD returns: 'valid', 'invalid', 'expired', 'inactive',
@@ -115,6 +137,7 @@ export default function LicensePanel( { panel } ) {
 		}
 		setBusy( true );
 		setError( null );
+		const fallback = __( 'License activation failed. Try again.', 'customify' );
 		try {
 			const res = await fetch( panel.endpoints.activate, {
 				method:      'POST',
@@ -122,11 +145,21 @@ export default function LicensePanel( { panel } ) {
 				headers:     headers( 'POST' ),
 				body:        JSON.stringify( { key: trimmed } ),
 			} );
-			const data = await res.json();
-			if ( ! res.ok ) {
-				throw new Error( data?.message || `HTTP ${ res.status }` );
+			let data = null;
+			try {
+				data = await res.json();
+			} catch ( _ ) {
+				// Non-JSON body (PHP fatal HTML, gateway timeout, etc.).
 			}
-			const next = data.license || {};
+			if ( ! res.ok ) {
+				throw new Error(
+					readableErrorMessage(
+						data?.message,
+						`${ fallback } (HTTP ${ res.status })`,
+					),
+				);
+			}
+			const next = data?.license || {};
 			setSnapshot( next );
 			setKey( next.key || trimmed );
 			dispatch( NOTICES_STORE ).createSuccessNotice(
@@ -140,12 +173,12 @@ export default function LicensePanel( { panel } ) {
 				},
 			);
 		} catch ( err ) {
-			setError( err );
-			dispatch( NOTICES_STORE ).createErrorNotice(
-				err?.message ||
-					__( 'License activation failed. Try again.', 'customify' ),
-				{ type: 'snackbar', isDismissible: true },
-			);
+			const message = readableErrorMessage( err?.message, fallback );
+			setError( new Error( message ) );
+			dispatch( NOTICES_STORE ).createErrorNotice( message, {
+				type:          'snackbar',
+				isDismissible: true,
+			} );
 		} finally {
 			setBusy( false );
 		}
@@ -154,6 +187,7 @@ export default function LicensePanel( { panel } ) {
 	const handleDeactivate = async () => {
 		setBusy( true );
 		setError( null );
+		const fallback = __( 'Deactivation failed. Try again.', 'customify' );
 		try {
 			const res = await fetch( panel.endpoints.deactivate, {
 				method:      'POST',
@@ -161,11 +195,21 @@ export default function LicensePanel( { panel } ) {
 				headers:     headers( 'POST' ),
 				body:        '{}',
 			} );
-			const data = await res.json();
-			if ( ! res.ok ) {
-				throw new Error( data?.message || `HTTP ${ res.status }` );
+			let data = null;
+			try {
+				data = await res.json();
+			} catch ( _ ) {
+				// Non-JSON body (PHP fatal HTML, gateway timeout, etc.).
 			}
-			const next = data.license || {};
+			if ( ! res.ok ) {
+				throw new Error(
+					readableErrorMessage(
+						data?.message,
+						`${ fallback } (HTTP ${ res.status })`,
+					),
+				);
+			}
+			const next = data?.license || {};
 			setSnapshot( next );
 			setKey( '' );
 			dispatch( NOTICES_STORE ).createSuccessNotice(
@@ -177,12 +221,12 @@ export default function LicensePanel( { panel } ) {
 				},
 			);
 		} catch ( err ) {
-			setError( err );
-			dispatch( NOTICES_STORE ).createErrorNotice(
-				err?.message ||
-					__( 'Deactivation failed. Try again.', 'customify' ),
-				{ type: 'snackbar', isDismissible: true },
-			);
+			const message = readableErrorMessage( err?.message, fallback );
+			setError( new Error( message ) );
+			dispatch( NOTICES_STORE ).createErrorNotice( message, {
+				type:          'snackbar',
+				isDismissible: true,
+			} );
 		} finally {
 			setBusy( false );
 		}
