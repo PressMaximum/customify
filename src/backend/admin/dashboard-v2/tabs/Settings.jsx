@@ -18,6 +18,7 @@ import {
 } from '@pressmaximum/dashboard-kit';
 
 import { CUSTOMIFY_SETTINGS_STORE } from '../data/settingsStore.js';
+import ProModuleSettingsPanel from '../sections/ProModuleSettingsPanel.jsx';
 
 const NOTICES_STORE = 'core/notices';
 
@@ -30,9 +31,10 @@ const SUCCESS_GLYPH = (
 	</span>
 );
 
-export default function Settings() {
+export default function Settings( { params } ) {
 	const boot = useBoot();
 	const schema = boot?.settings?.schema || { panels: [] };
+	const activePanelId = params?.panelId || null;
 
 	const values = useSelect(
 		( select ) => select( CUSTOMIFY_SETTINGS_STORE ).getSettings(),
@@ -126,35 +128,49 @@ export default function Settings() {
 		);
 	}
 
+	const themePanels = panels.filter( ( p ) => ! p.proPanel );
+	const hasThemePanels = themePanels.length > 0;
+
 	return (
 		<div className="customify-dashboard-settings">
-			{ panels.map( ( panel ) => (
-				<Card
-					key={ panel.id }
-					className="customify-dashboard-settings__panel"
-				>
-					<CardHeader>
-						<h2 id={ panelHeadingId( panel.id ) }>{ panel.label }</h2>
-					</CardHeader>
-					<CardBody>
-						{ panel.description && (
-							<p className="customify-dashboard-settings__description">
-								{ panel.description }
-							</p>
-						) }
-						<SchemaForm
+			{ panels.map( ( panel ) => {
+				if ( panel.proPanel ) {
+					return (
+						<ProModuleSettingsPanel
+							key={ panel.id }
 							panel={ panel }
-							values={ values || {} }
-							onFieldChange={ ( panelId, fieldId, next ) =>
-								edit( `${ panelId }.${ fieldId }`, next )
-							}
-							fieldTypes={ fieldTypes }
+							scrollIntoView={ panel.id === activePanelId }
 						/>
-					</CardBody>
-				</Card>
-			) ) }
+					);
+				}
+				return (
+					<Card
+						key={ panel.id }
+						className="customify-dashboard-settings__panel"
+					>
+						<CardHeader>
+							<h2 id={ panelHeadingId( panel.id ) }>{ panel.label }</h2>
+						</CardHeader>
+						<CardBody>
+							{ panel.description && (
+								<p className="customify-dashboard-settings__description">
+									{ panel.description }
+								</p>
+							) }
+							<SchemaForm
+								panel={ panel }
+								values={ values || {} }
+								onFieldChange={ ( panelId, fieldId, next ) =>
+									edit( `${ panelId }.${ fieldId }`, next )
+								}
+								fieldTypes={ fieldTypes }
+							/>
+						</CardBody>
+					</Card>
+				);
+			} ) }
 
-			<SaveBar
+			{ hasThemePanels && <SaveBar
 				isDirty={ isDirty }
 				isSaving={ isSaving }
 				onSave={ handleSave }
@@ -168,7 +184,7 @@ export default function Settings() {
 					statusDirty: __( 'Unsaved changes', 'customify' ),
 					statusSaving: __( 'Saving…', 'customify' ),
 				} }
-			/>
+			/> }
 		</div>
 	);
 }

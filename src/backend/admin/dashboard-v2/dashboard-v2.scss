@@ -53,6 +53,22 @@ body.customify-dashboard-page {
 		color: var( --pmdk-color-text-muted, #50575e );
 		margin: 0 0 16px 0;
 	}
+
+	// Per-Pro-panel save / discard cluster. Pro panels own their state +
+	// hit their own REST endpoint, so the cluster lives inside the panel
+	// body instead of relying on the page-level SaveBar.
+	&__pro-panel-actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+		margin-top: 16px;
+		padding-top: 16px;
+		border-top: 1px solid var( --pmdk-color-border-subtle, #f0f0f1 );
+	}
+
+	&__pro-panel-error {
+		margin: 16px 0 0;
+	}
 }
 
 // Green-circle check glyph used as `icon` on success snackbars.

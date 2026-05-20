@@ -25,6 +25,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
 import { Card, CardHeader, Button, Icon } from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
+import { navigate } from '@pressmaximum/dashboard-kit';
 
 import { useProModules } from '../data/proModules.js';
 import { ModuleList, ModuleRow, ModuleSubmodules } from '../ui/ModuleList.jsx';
@@ -173,13 +174,7 @@ export default function ProModulesSection( { boot } ) {
 							<button
 								type="button"
 								className="customify-dashboard-module-link customify-dashboard-module-link--settings"
-								onClick={ () =>
-									applyFilters(
-										'customify.dashboard.pro.openSettings',
-										null,
-										mod,
-									)
-								}
+								onClick={ () => navigate( `#settings/${ mod.id }` ) }
 							>
 								{ __( 'Settings', 'customify' ) }
 							</button>

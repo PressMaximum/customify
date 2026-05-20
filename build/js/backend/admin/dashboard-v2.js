@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 205:
+/***/ 980:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -2497,6 +2497,7 @@ function ToggleSwitch({
 
 
 
+
 // Same green-circle check glyph used by the Settings tab snackbar so
 // module activate / deactivate toasts visually match the Save Settings
 // success cue. SnackbarList drops this inside .components-snackbar__icon.
@@ -2618,7 +2619,7 @@ function ProModulesSection({
         children: [showSettings && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
           type: "button",
           className: "customify-dashboard-module-link customify-dashboard-module-link--settings",
-          onClick: () => (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.openSettings', null, mod),
+          onClick: () => M(`#settings/${mod.id}`),
           children: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DocsLink, {
           href: mod.docHref
@@ -2762,12 +2763,179 @@ const {
 });
 (0,external_wp_data_namespaceObject.register)(store);
 const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
+;// ./src/backend/admin/dashboard-v2/sections/ProModuleSettingsPanel.jsx
+/**
+ * Generic Pro-module settings panel.
+ *
+ * Customify Pro registers per-module panels via the
+ * `customify.dashboard.settings.panels` JS filter with a
+ * `proPanel: true` flag + their own `fields`, `endpoint`,
+ * `seedValues`, and (optionally) `nonce`. The new dashboard's
+ * Settings tab detects the flag and routes those panels through
+ * this component instead of the standard kit pipeline so the
+ * panel can read / write Pro's existing per-module storage
+ * (`customify_modules[ClassName]`) without going through the
+ * theme's `/customify/v1/settings` endpoint.
+ *
+ * Owns its own form state + Save button; the global SaveBar at
+ * the bottom of the Settings tab only reflects theme-side panels.
+ */
+
+
+
+
+
+
+
+
+
+const ProModuleSettingsPanel_NOTICES_STORE = 'core/notices';
+const ProModuleSettingsPanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+  className: "customify-dashboard-snackbar__check",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+    icon: check_check_default,
+    size: 14
+  })
+});
+
+/**
+ * @param {object} props
+ * @param {object} props.panel    Panel descriptor — { id, label, description?,
+ *                                fields[], endpoint, seedValues?, nonce? }.
+ * @param {boolean} [props.scrollIntoView] When true the card scrolls itself
+ *                                into view on mount (used when the route
+ *                                deep-links to this panel via
+ *                                #settings/<panelId>).
+ */
+function ProModuleSettingsPanel({
+  panel,
+  scrollIntoView
+}) {
+  const initialValues = (0,external_wp_element_namespaceObject.useMemo)(() => panel?.seedValues ? {
+    ...panel.seedValues
+  } : {}, [panel]);
+  const [values, setValues] = (0,external_wp_element_namespaceObject.useState)(initialValues);
+  const [savedValues, setSavedValues] = (0,external_wp_element_namespaceObject.useState)(initialValues);
+  const [saving, setSaving] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [error, setError] = (0,external_wp_element_namespaceObject.useState)(null);
+  const cardRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (scrollIntoView && cardRef.current) {
+      cardRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }, [scrollIntoView]);
+  const isDirty = (0,external_wp_element_namespaceObject.useMemo)(() => JSON.stringify(values) !== JSON.stringify(savedValues), [values, savedValues]);
+  const handleChange = (fieldId, next) => {
+    setValues(prev => ({
+      ...prev,
+      [fieldId]: next
+    }));
+  };
+  const handleSave = async () => {
+    if (!panel?.endpoint || saving) {
+      return;
+    }
+    setSaving(true);
+    setError(null);
+    try {
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+      if (panel.nonce) {
+        headers['X-WP-Nonce'] = panel.nonce;
+      }
+      const res = await fetch(panel.endpoint, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers,
+        body: JSON.stringify(values)
+      });
+      if (!res.ok) {
+        throw new Error('HTTP ' + res.status);
+      }
+      const data = await res.json();
+      const nextValues = data && typeof data === 'object' && data.values ? data.values : values;
+      setSavedValues(nextValues);
+      setValues(nextValues);
+      (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true,
+        icon: ProModuleSettingsPanel_SUCCESS_GLYPH
+      });
+    } catch (err) {
+      setError(err);
+      (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    } finally {
+      setSaving(false);
+    }
+  };
+  const handleDiscard = () => {
+    setValues(savedValues);
+    setError(null);
+  };
+  if (!panel) {
+    return null;
+  }
+  const headingId = Ge(panel.id);
+  const fields = Array.isArray(panel.fields) ? panel.fields : [];
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    ref: cardRef,
+    className: "customify-dashboard-settings__panel customify-dashboard-settings__pro-panel",
+    "data-panel-id": panel.id,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        id: headingId,
+        children: panel.label
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+      children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "customify-dashboard-settings__description",
+        children: panel.description
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "pmdk-schema-form",
+        role: "group",
+        "aria-labelledby": headingId,
+        children: fields.map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Ye, {
+          field: field,
+          value: values[field.id],
+          onChange: next => handleChange(field.id, next),
+          fieldTypes: Ze
+        }, field.id))
+      }), error && error.message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+        status: "error",
+        isDismissible: false,
+        className: "customify-dashboard-settings__pro-panel-error",
+        children: error.message
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "customify-dashboard-settings__pro-panel-actions",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          variant: "tertiary",
+          onClick: handleDiscard,
+          disabled: saving || !isDirty,
+          children: (0,external_wp_i18n_namespaceObject.__)('Discard', 'customify')
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          variant: "primary",
+          onClick: handleSave,
+          disabled: saving || !isDirty,
+          children: saving ? (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify')
+        })]
+      })]
+    })]
+  });
+}
 ;// ./src/backend/admin/dashboard-v2/tabs/Settings.jsx
 /**
  * Settings tab — schema-driven panels rendered via the kit's SchemaForm.
  * Pro extends the field-type map via `customify.dashboard.settings.field-types`
  * and the panel list via `customify.dashboard.settings.panels`.
  */
+
 
 
 
@@ -2789,11 +2957,14 @@ const Settings_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespac
     size: 14
   })
 });
-function Settings() {
+function Settings({
+  params
+}) {
   const boot = ce();
   const schema = boot?.settings?.schema || {
     panels: []
   };
+  const activePanelId = params?.panelId || null;
   const values = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).getSettings(), []);
   const isDirty = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isDirty(), []);
   const isSaving = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isSaving(), []);
@@ -2849,27 +3020,37 @@ function Settings() {
       })
     });
   }
+  const themePanels = panels.filter(p => !p.proPanel);
+  const hasThemePanels = themePanels.length > 0;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-settings",
-    children: [panels.map(panel => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-      className: "customify-dashboard-settings__panel",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-          id: Ge(panel.id),
-          children: panel.label
-        })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
-        children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-          className: "customify-dashboard-settings__description",
-          children: panel.description
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
+    children: [panels.map(panel => {
+      if (panel.proPanel) {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ProModuleSettingsPanel, {
           panel: panel,
-          values: values || {},
-          onFieldChange: (panelId, fieldId, next) => edit(`${panelId}.${fieldId}`, next),
-          fieldTypes: fieldTypes
+          scrollIntoView: panel.id === activePanelId
+        }, panel.id);
+      }
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+        className: "customify-dashboard-settings__panel",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+            id: Ge(panel.id),
+            children: panel.label
+          })
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+          children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+            className: "customify-dashboard-settings__description",
+            children: panel.description
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
+            panel: panel,
+            values: values || {},
+            onFieldChange: (panelId, fieldId, next) => edit(`${panelId}.${fieldId}`, next),
+            fieldTypes: fieldTypes
+          })]
         })]
-      })]
-    }, panel.id)), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+      }, panel.id);
+    }), hasThemePanels && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
       isDirty: isDirty,
       isSaving: isSaving,
       onSave: handleSave,
@@ -3150,6 +3331,10 @@ if (document.getElementById('customify-dashboard')) {
         component: Settings,
         type: 'page'
       },
+      '#settings/:panelId': {
+        component: Settings,
+        type: 'page'
+      },
       '#changelog': {
         component: Changelog,
         type: 'page'
@@ -3360,7 +3545,7 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(205); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(980); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

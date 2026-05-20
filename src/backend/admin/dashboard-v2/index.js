@@ -98,6 +98,7 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		baseRoutes: {
 			'#welcome': { component: Welcome, type: 'page' },
 			'#settings': { component: Settings, type: 'page' },
+			'#settings/:panelId': { component: Settings, type: 'page' },
 			'#changelog': { component: Changelog, type: 'page' },
 			'#changelog/:sourceId': { component: Changelog, type: 'page' },
 		},
