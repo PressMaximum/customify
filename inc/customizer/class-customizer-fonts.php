@@ -8,9 +8,23 @@ class Customify_Fonts {
 	}
 
 	/**
-	 * Ajax fonts
+	 * AJAX: return the registered font catalogue (default + Google Web
+	 * Fonts) for the Customizer's typography picker. Gated by the
+	 * Customizer preview nonce + `customize` capability — the picker
+	 * only runs inside the Customizer iframe.
 	 */
 	function ajax_fonts() {
+		// The customize-preview iframe ships its WP-issued preview nonce
+		// as `_nonce` (see _wpCustomizeSettings.nonce.preview). Match the
+		// stylesheet-bound action WP_Customize_Manager registers.
+		$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( ! wp_verify_nonce( $nonce, 'preview-customize_' . get_stylesheet() ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
+		if ( ! current_user_can( 'customize' ) ) {
+			wp_send_json_error( 'forbidden', 403 );
+		}
+
 		$fonts = array(
 			'normal' => array(
 				'title' => __( 'Default Web Fonts', 'customify' ),

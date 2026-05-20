@@ -83,11 +83,20 @@ class  Customify_Customizer {
 	}
 
 	/**
-	 * Reset Customize section
+	 * AJAX: return the registered icon library for the Customizer's
+	 * font-icon picker. Gated by the Customizer preview nonce because
+	 * the picker only runs inside that iframe.
 	 */
 	function get_icons() {
+		// The customize-preview iframe ships its WP-issued preview nonce
+		// as `_nonce` (see _wpCustomizeSettings.nonce.preview). Match the
+		// stylesheet-bound action WP_Customize_Manager registers.
+		$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( ! wp_verify_nonce( $nonce, 'preview-customize_' . get_stylesheet() ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
 		if ( ! current_user_can( 'customize' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( 'forbidden', 403 );
 		}
 
 		require_once get_template_directory() . '/inc/customizer/class-customizer-icons.php';
