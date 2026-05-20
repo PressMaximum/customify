@@ -971,7 +971,8 @@ function ItemPickerPopover( { items, anchorRect, onAdd, onClose } ) {
 						className="customify-hb__popover-item"
 						onClick={ () => onAdd( item.id ) }
 					>
-						{ item.name }
+						<Icon icon={ plus } className="customify-hb__popover-item-icon" />
+						<span className="customify-hb__popover-item-label">{ item.name }</span>
 					</button>
 				) ) }
 			</div>
