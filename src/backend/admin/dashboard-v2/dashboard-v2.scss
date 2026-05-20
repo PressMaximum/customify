@@ -84,6 +84,107 @@ body.customify-dashboard-page {
 	}
 }
 
+// LicensePanel — Automatic updates tab. Self-contained activation flow
+// (no shared SaveBar). Status pill in the header right slot follows EDD
+// tone semantics.
+.customify-dashboard-license {
+	.components-card__header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 16px;
+	}
+
+	&__status {
+		display: inline-flex;
+		align-items: center;
+		padding: 4px 12px;
+		border-radius: 9999px;
+		font-size: 11px;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		line-height: 1;
+
+		&--active {
+			background: color-mix(
+				in srgb,
+				var( --pmdk-color-success, #00a32a ) 16%,
+				transparent
+			);
+			color: var( --pmdk-color-success, #00a32a );
+		}
+		&--expired {
+			background: #fef3c7;
+			color: #854d0e;
+		}
+		&--error {
+			background: color-mix(
+				in srgb,
+				var( --pmdk-color-error, #b91c1c ) 14%,
+				transparent
+			);
+			color: var( --pmdk-color-error, #b91c1c );
+		}
+		&--inactive {
+			background: var( --pmdk-color-bg-subtle, #f6f7f7 );
+			color: var( --pmdk-color-text-muted, #50575e );
+		}
+	}
+
+	&__form {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		margin: 8px 0 16px;
+	}
+
+	&__label {
+		font-weight: 600;
+		font-size: 13px;
+	}
+
+	&__input {
+		padding: 8px 12px;
+		font-size: 14px;
+		border: 1px solid var( --pmdk-color-border, #e0e0e0 );
+		border-radius: var( --pmdk-radius-small, 4px );
+		background: var( --pmdk-color-bg, #fff );
+
+		&:focus {
+			border-color: var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+			outline: none;
+			box-shadow: 0 0 0 1px var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+		}
+
+		&:disabled {
+			background: var( --pmdk-color-bg-subtle, #f6f7f7 );
+			color: var( --pmdk-color-text-muted, #50575e );
+		}
+	}
+
+	&__meta {
+		margin: 4px 0;
+		color: var( --pmdk-color-text-muted, #50575e );
+		font-size: 13px;
+
+		strong {
+			color: var( --pmdk-color-text, #1e1e1e );
+		}
+	}
+
+	&__error {
+		margin: 16px 0;
+	}
+
+	&__actions {
+		display: flex;
+		justify-content: flex-end;
+		gap: 8px;
+		margin-top: 16px;
+	}
+}
+
 // Green-circle check glyph used as `icon` on success snackbars.
 // Sits inside WP's `.components-snackbar__icon` slot.
 .customify-dashboard-snackbar__check {

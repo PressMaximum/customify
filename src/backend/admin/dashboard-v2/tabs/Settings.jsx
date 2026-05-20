@@ -31,6 +31,7 @@ import {
 
 import { CUSTOMIFY_SETTINGS_STORE } from '../data/settingsStore.js';
 import ProModuleSettingsPanel from '../sections/ProModuleSettingsPanel.jsx';
+import LicensePanel from '../sections/LicensePanel.jsx';
 
 const NOTICES_STORE = 'core/notices';
 
@@ -208,6 +209,10 @@ export default function Settings( { params } ) {
 	const renderActivePanel = () => {
 		if ( ! activePanel ) {
 			return null;
+		}
+		// License panel handles its own activation flow + no SaveBar.
+		if ( 'license' === activePanel.kind ) {
+			return <LicensePanel panel={ activePanel } />;
 		}
 		if ( activePanel.proPanel ) {
 			return (

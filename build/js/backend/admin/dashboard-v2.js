@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 980:
+/***/ 989:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -2943,6 +2943,242 @@ function ProModuleSettingsPanel({
     })]
   });
 }
+;// ./src/backend/admin/dashboard-v2/sections/LicensePanel.jsx
+/**
+ * License panel for the new dashboard's Settings tab. Specialised
+ * renderer for the Customify Pro "Automatic updates" panel — the form
+ * runs independently of the page-level SaveBar (no Save button), with
+ * dedicated Activate / Deactivate actions that round-trip through
+ * Pro's EDD updater via the panel.endpoints map.
+ *
+ * Panel shape consumed:
+ *   {
+ *     id, kind: 'license', label, description, nonce,
+ *     endpoints: { status, activate, deactivate },
+ *     seedValues: { key, status, expires?, customerName?, errorCode? },
+ *   }
+ *
+ * Settings.jsx detects panel.kind === 'license' and renders this
+ * component in place of ProModuleSettingsPanel.
+ */
+
+
+
+
+
+
+
+
+const LicensePanel_NOTICES_STORE = 'core/notices';
+const LicensePanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+  className: "customify-dashboard-snackbar__check",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+    icon: check_check_default,
+    size: 14
+  })
+});
+
+/**
+ * Map EDD status strings → tone for the status pill.
+ *
+ * EDD returns: 'valid', 'invalid', 'expired', 'inactive',
+ * 'disabled', 'site_inactive', 'item_name_mismatch', 'no_activations_left',
+ * 'revoked'. We collapse the long tail into 4 visible tones.
+ */
+function statusTone(status) {
+  if ('valid' === status) {
+    return 'active';
+  }
+  if ('expired' === status) {
+    return 'expired';
+  }
+  if (!status || 'inactive' === status || 'site_inactive' === status) {
+    return 'inactive';
+  }
+  return 'error';
+}
+function statusLabel(status) {
+  switch (status) {
+    case 'valid':
+      return (0,external_wp_i18n_namespaceObject.__)('Active', 'customify');
+    case 'expired':
+      return (0,external_wp_i18n_namespaceObject.__)('Expired', 'customify');
+    case 'invalid':
+      return (0,external_wp_i18n_namespaceObject.__)('Invalid', 'customify');
+    case 'inactive':
+    case '':
+      return (0,external_wp_i18n_namespaceObject.__)('Inactive', 'customify');
+    case 'site_inactive':
+      return (0,external_wp_i18n_namespaceObject.__)('Not active on this site', 'customify');
+    case 'no_activations_left':
+      return (0,external_wp_i18n_namespaceObject.__)('No activations left', 'customify');
+    case 'disabled':
+    case 'revoked':
+      return (0,external_wp_i18n_namespaceObject.__)('Disabled', 'customify');
+    case 'item_name_mismatch':
+      return (0,external_wp_i18n_namespaceObject.__)('Wrong product key', 'customify');
+    default:
+      return status || (0,external_wp_i18n_namespaceObject.__)('Unknown', 'customify');
+  }
+}
+function LicensePanel({
+  panel
+}) {
+  const initial = panel?.seedValues || {};
+  const [key, setKey] = (0,external_wp_element_namespaceObject.useState)(initial.key || '');
+  const [snapshot, setSnapshot] = (0,external_wp_element_namespaceObject.useState)(initial);
+  const [busy, setBusy] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [error, setError] = (0,external_wp_element_namespaceObject.useState)(null);
+  const isActive = 'valid' === snapshot?.status;
+  const headingId = Ge(panel?.id || 'license');
+  const headers = method => {
+    const out = method ? {
+      'Content-Type': 'application/json'
+    } : {};
+    if (panel?.nonce) {
+      out['X-WP-Nonce'] = panel.nonce;
+    }
+    return out;
+  };
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    setKey(initial.key || '');
+    setSnapshot(initial);
+  }, [panel?.id]);
+  const handleActivate = async () => {
+    const trimmed = (key || '').trim();
+    if (!trimmed) {
+      setError(new Error((0,external_wp_i18n_namespaceObject.__)('Please enter your license key.', 'customify')));
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(panel.endpoints.activate, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: headers('POST'),
+        body: JSON.stringify({
+          key: trimmed
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.message || `HTTP ${res.status}`);
+      }
+      const next = data.license || {};
+      setSnapshot(next);
+      setKey(next.key || trimmed);
+      (0,external_wp_data_namespaceObject.dispatch)(LicensePanel_NOTICES_STORE).createSuccessNotice('valid' === next.status ? (0,external_wp_i18n_namespaceObject.__)('License activated.', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Activation returned a non-active status — check the badge below.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true,
+        icon: 'valid' === next.status ? LicensePanel_SUCCESS_GLYPH : undefined
+      });
+    } catch (err) {
+      setError(err);
+      (0,external_wp_data_namespaceObject.dispatch)(LicensePanel_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('License activation failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+  const handleDeactivate = async () => {
+    setBusy(true);
+    setError(null);
+    try {
+      const res = await fetch(panel.endpoints.deactivate, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: headers('POST'),
+        body: '{}'
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data?.message || `HTTP ${res.status}`);
+      }
+      const next = data.license || {};
+      setSnapshot(next);
+      setKey('');
+      (0,external_wp_data_namespaceObject.dispatch)(LicensePanel_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('License deactivated.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true,
+        icon: LicensePanel_SUCCESS_GLYPH
+      });
+    } catch (err) {
+      setError(err);
+      (0,external_wp_data_namespaceObject.dispatch)(LicensePanel_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Deactivation failed. Try again.', 'customify'), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    } finally {
+      setBusy(false);
+    }
+  };
+  const tone = statusTone(snapshot.status);
+  const label = statusLabel(snapshot.status);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    className: "customify-dashboard-settings__panel customify-dashboard-license",
+    "data-panel-id": panel.id,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardHeader, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        id: headingId,
+        children: panel.label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        className: `customify-dashboard-license__status customify-dashboard-license__status--${tone}`,
+        children: label
+      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+      children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "customify-dashboard-settings__description",
+        children: panel.description
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "customify-dashboard-license__form",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
+          htmlFor: "customify-dashboard-license-key",
+          className: "customify-dashboard-license__label",
+          children: (0,external_wp_i18n_namespaceObject.__)('License key', 'customify')
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+          id: "customify-dashboard-license-key",
+          type: "text",
+          className: "customify-dashboard-license__input",
+          value: key,
+          onChange: e => setKey(e.target.value),
+          disabled: busy || isActive,
+          placeholder: (0,external_wp_i18n_namespaceObject.__)('Enter your license key', 'customify')
+        })]
+      }), snapshot.expires && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
+        className: "customify-dashboard-license__meta",
+        children: [(0,external_wp_i18n_namespaceObject.__)('Expires:', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
+          children: snapshot.expires
+        })]
+      }), snapshot.customerName && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
+        className: "customify-dashboard-license__meta",
+        children: [(0,external_wp_i18n_namespaceObject.__)('Customer:', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
+          children: snapshot.customerName
+        })]
+      }), error && error.message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+        status: "error",
+        isDismissible: false,
+        className: "customify-dashboard-license__error",
+        children: error.message
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "customify-dashboard-license__actions",
+        children: isActive ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          variant: "secondary",
+          onClick: handleDeactivate,
+          disabled: busy,
+          children: busy ? (0,external_wp_i18n_namespaceObject.__)('Deactivating…', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Deactivate', 'customify')
+        }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+          variant: "primary",
+          onClick: handleActivate,
+          disabled: busy || !key.trim(),
+          children: busy ? (0,external_wp_i18n_namespaceObject.__)('Activating…', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Activate', 'customify')
+        })
+      })]
+    })]
+  });
+}
 ;// ./src/backend/admin/dashboard-v2/tabs/Settings.jsx
 /**
  * Settings tab — SubNav layout. Each panel renders as its own sub-tab
@@ -2958,6 +3194,7 @@ function ProModuleSettingsPanel({
  *
  * Single-panel case: SubNav hides; the lone panel renders full-width.
  */
+
 
 
 
@@ -3115,6 +3352,12 @@ function Settings({
   const renderActivePanel = () => {
     if (!activePanel) {
       return null;
+    }
+    // License panel handles its own activation flow + no SaveBar.
+    if ('license' === activePanel.kind) {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicensePanel, {
+        panel: activePanel
+      });
     }
     if (activePanel.proPanel) {
       return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ProModuleSettingsPanel, {
@@ -3651,7 +3894,7 @@ if (document.readyState === 'loading') {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(980); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(989); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
