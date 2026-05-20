@@ -231,7 +231,7 @@ function U(e, r) {
   }
   return null;
 }
-function q(e) {
+function W(e) {
   var r = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : R,
     t = H(r),
     n = (0,external_wp_element_namespaceObject.useMemo)(() => U(r, e) || {
@@ -245,7 +245,7 @@ function q(e) {
     a || t === n.route || M(n.route);
   }, [t, a, n.route]), s;
 }
-function W(e) {
+function q(e) {
   return B(e).split("/")[0] || "";
 }
 var z = () => !0,
@@ -474,14 +474,14 @@ function ie(e) {
     v = e.notFoundComponent,
     b = e.fallback,
     y = e.snackbar,
-    g = q(a, o),
+    g = W(a, o),
     j = g.route,
     _ = g.entry,
     x = g.params,
     k = V(),
     w = G(j),
     O = null == _ ? void 0 : _.component,
-    N = W(j),
+    N = q(j),
     S = null == r ? void 0 : r.name,
     P = null == r ? void 0 : r.icon,
     A = null == r ? void 0 : r.href,
@@ -993,8 +993,8 @@ var Ie = "START_LOAD",
   Be = "START_SAVE",
   He = "SAVE_SUCCESS",
   Ue = "SAVE_ERROR",
-  qe = "CLEAR_DIRTY";
-function We(e, r, t) {
+  We = "CLEAR_DIRTY";
+function qe(e, r, t) {
   var n = String(r || "").split(".").filter(Boolean);
   if (0 === n.length) return e;
   var a,
@@ -1016,7 +1016,7 @@ function We(e, r, t) {
   if (0 === s.length) return De(De({}, e), {}, {
     [o]: t
   });
-  var l = We(e && "object" == typeof e[o] ? e[o] : {}, s.join("."), t);
+  var l = qe(e && "object" == typeof e[o] ? e[o] : {}, s.join("."), t);
   return De(De({}, e), {}, {
     [o]: l
   });
@@ -1137,7 +1137,7 @@ function $e() {
         };
       }(),
       clearDirty: () => ({
-        type: qe
+        type: We
       })
     },
     l = (0,external_wp_data_namespaceObject.createReduxStore)(r, {
@@ -1163,7 +1163,7 @@ function $e() {
             });
           case Me:
             return De(De({}, e), {}, {
-              dirty: We(e.dirty, r.path, r.value)
+              dirty: qe(e.dirty, r.path, r.value)
             });
           case Be:
             return De(De({}, e), {}, {
@@ -1182,7 +1182,7 @@ function $e() {
               saving: !1,
               error: r.error
             });
-          case qe:
+          case We:
             return De(De({}, e), {}, {
               dirty: {}
             });
@@ -1264,7 +1264,7 @@ var Ke = {
   saveLabel: "Save changes",
   savingLabel: "Saving…",
   resetLabel: "Reset to defaults",
-  statusSaved: "All changes saved",
+  statusSaved: "No pending changes",
   statusDirty: "Unsaved changes",
   statusSaving: "Saving…"
 };
@@ -1296,11 +1296,14 @@ function Xe(e) {
     n = e.onSave,
     a = e.onReset,
     i = e.labels,
-    o = Z(Ke, i);
+    o = e.resetDisabledWhenNotDirty,
+    s = void 0 !== o && o,
+    l = Z(Ke, i),
+    c = t || s && !r;
   return (0, L.jsx)("div", {
     className: "pmdk-save-bar",
     role: "region",
-    "aria-label": o.regionLabel,
+    "aria-label": l.regionLabel,
     children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
       justify: "space-between",
       align: "center",
@@ -1309,7 +1312,7 @@ function Xe(e) {
         children: (0, L.jsx)(Qe, {
           isDirty: r,
           isSaving: t,
-          labels: o
+          labels: l
         })
       }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
         children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
@@ -1320,15 +1323,15 @@ function Xe(e) {
               variant: "tertiary",
               isDestructive: !0,
               onClick: a,
-              disabled: t,
-              children: o.resetLabel
+              disabled: c,
+              children: l.resetLabel
             })
           }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
             children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
               variant: "primary",
               onClick: n,
               disabled: !r || t,
-              children: t ? o.savingLabel : o.saveLabel
+              children: t ? l.savingLabel : l.saveLabel
             })
           })]
         })
@@ -2950,15 +2953,9 @@ function ProModuleSettingsPanel({
     }
   };
   const handleDiscard = () => {
-    // No edits to throw away — confirm with the user so the click
-    // isn't lost into the void.
-    if (JSON.stringify(values) === JSON.stringify(savedValues)) {
-      (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createInfoNotice((0,external_wp_i18n_namespaceObject.__)('No changes to discard.', 'customify'), {
-        type: 'snackbar',
-        isDismissible: true
-      });
-      return;
-    }
+    // The kit's SaveBar disables this action via
+    // `resetDisabledWhenNotDirty` when the form is clean, so a click
+    // arriving here always has something to throw away.
     setValues(savedValues);
     setError(null);
     (0,external_wp_data_namespaceObject.dispatch)(ProModuleSettingsPanel_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Changes discarded.', 'customify'), {
@@ -3015,7 +3012,12 @@ function ProModuleSettingsPanel({
         isDirty: isDirty,
         isSaving: saving,
         onSave: handleSave,
-        onReset: handleDiscard,
+        onReset: handleDiscard
+        // Pro module storage uses revert-to-last-saved semantics
+        // (no factory-defaults endpoint), so Discard should only
+        // fire when there's something dirty to throw away.
+        ,
+        resetDisabledWhenNotDirty: true,
         labels: {
           regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
           saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
@@ -3025,8 +3027,9 @@ function ProModuleSettingsPanel({
           // last server-confirmed snapshot. Label accordingly so
           // users don't expect a real wipe.
           resetLabel: (0,external_wp_i18n_namespaceObject.__)('Discard changes', 'customify'),
-          // WORKAROUND for kit issue K-011 — see Settings.jsx
-          // ThemePanelCard for the rationale.
+          // Mirror the kit's neutral default through the
+          // `customify` text domain so the string lands in the
+          // theme POT for translation.
           statusSaved: (0,external_wp_i18n_namespaceObject.__)('No pending changes', 'customify'),
           statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
           statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
@@ -3387,12 +3390,9 @@ function ThemePanelCard({
           saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
           savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
           resetLabel: (0,external_wp_i18n_namespaceObject.__)('Reset to defaults', 'customify'),
-          // WORKAROUND for kit issue K-011 — kit ships
-          // "All changes saved" as the idle-status label which
-          // reads as a freshly-saved confirmation on first
-          // page load. Neutral "No pending changes" describes
-          // the state without implying a recent save. REMOVE
-          // when the kit ships a separate idle status.
+          // Mirror the kit's neutral default ("No pending
+          // changes") through the `customify` text domain so
+          // the string lands in the theme POT for translation.
           statusSaved: (0,external_wp_i18n_namespaceObject.__)('No pending changes', 'customify'),
           statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
           statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
