@@ -88,7 +88,7 @@ function mount() {
 			{
 				id: 'support',
 				label: __( 'Contact support', 'customify' ),
-				href: 'https://wordpress.org/support/theme/customify/',
+				href: 'https://pressmaximum.com/contact/',
 			},
 			{
 				id: 'pro',
