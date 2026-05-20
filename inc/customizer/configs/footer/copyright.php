@@ -80,7 +80,7 @@ class Customify_Builder_Footer_Item_Copyright {
 			'theme_author' => sprintf( '<a rel="nofollow" href="https://pressmaximum.com/customify">%1$s</a>', 'Customify' ), // Brand name.
 		);
 
-		$content = Customify()->get_setting( $this->name );
+		$content = (string) Customify()->get_setting( $this->name );
 
 		foreach ( $tags as $k => $v ) {
 			$content = str_replace( '{' . $k . '}', $v, $content );

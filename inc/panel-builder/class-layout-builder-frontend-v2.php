@@ -76,8 +76,97 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 			}
 		}
 
-		$this->data = is_array( $data ) ? $data : array();
+		// Run the loaded data through the canonical-shape normalizer before
+		// handing it to anything else. Every downstream consumer (render_items,
+		// get_render_item, …) can then assume:
+		//   - top level is array with only 'desktop' / 'mobile' keys
+		//   - each row is array, each col is array of `{id: non-empty string}`
+		// Stray keys (extension metadata, test markers, schema-version stamps)
+		// and malformed entries are dropped here — once.
+		$this->data = self::normalize_layout_data( $data );
 		return $this->data;
+	}
+
+	/**
+	 * Coerce arbitrary layout data into the canonical V2 shape.
+	 *
+	 * Canonical shape:
+	 * {
+	 *   desktop: { <row>: { left:[{id}], center:[{id}], right:[{id}], col4:[{id}], col5:[{id}] } },
+	 *   mobile:  { <row>: { … }, sidebar: { sidebar: [{id}] } }
+	 * }
+	 *
+	 * Anything that doesn't fit this shape is dropped silently. The function
+	 * is intentionally permissive so legacy / extension data never produces
+	 * a PHP warning or fatal at render time — `render_items()` already has
+	 * defensive guards but a single normalize call here keeps the rest of
+	 * the codebase free of repeated `is_array` checks.
+	 *
+	 * @param mixed $data
+	 * @return array
+	 */
+	public static function normalize_layout_data( $data ) {
+		$valid_devices = array( 'desktop', 'mobile' );
+		$valid_cols    = array( 'left', 'center', 'right', 'col4', 'col5' );
+		$out           = array();
+
+		if ( ! is_array( $data ) ) {
+			return $out;
+		}
+
+		foreach ( $valid_devices as $device ) {
+			$out[ $device ] = array();
+			if ( ! isset( $data[ $device ] ) || ! is_array( $data[ $device ] ) ) {
+				continue;
+			}
+			foreach ( $data[ $device ] as $row_id => $row_cols ) {
+				// Row id must be a non-empty string and the value must be an
+				// array of columns. Sidebar (mobile only) is shaped differently
+				// — handle it below.
+				if ( ! is_string( $row_id ) || '' === $row_id || ! is_array( $row_cols ) ) {
+					continue;
+				}
+				if ( 'sidebar' === $row_id && 'mobile' === $device ) {
+					$sidebar_items = isset( $row_cols['sidebar'] ) && is_array( $row_cols['sidebar'] )
+						? $row_cols['sidebar']
+						: array();
+					$out[ $device ]['sidebar'] = array(
+						'sidebar' => self::normalize_layout_items( $sidebar_items ),
+					);
+					continue;
+				}
+				$normalized_row = array();
+				foreach ( $valid_cols as $col_id ) {
+					$col_items                = isset( $row_cols[ $col_id ] ) && is_array( $row_cols[ $col_id ] )
+						? $row_cols[ $col_id ]
+						: array();
+					$normalized_row[ $col_id ] = self::normalize_layout_items( $col_items );
+				}
+				$out[ $device ][ $row_id ] = $normalized_row;
+			}
+		}
+
+		return $out;
+	}
+
+	/**
+	 * Strip an items array down to entries with a non-empty string `id`.
+	 *
+	 * @param array $items
+	 * @return array
+	 */
+	private static function normalize_layout_items( $items ) {
+		$clean = array();
+		foreach ( $items as $item ) {
+			if ( ! is_array( $item ) || empty( $item['id'] ) || ! is_string( $item['id'] ) ) {
+				continue;
+			}
+			// Drop any keys we don't expect on an item entry. The current
+			// schema only uses `id`; keeping the entry as `['id' => ...]`
+			// guarantees a single shape across the codebase.
+			$clean[] = array( 'id' => $item['id'] );
+		}
+		return $clean;
 	}
 
 	/**
@@ -316,15 +405,35 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		$setting = $this->get_settings();
 		$items   = array();
 
-		// Loop devices.
+		// Loop devices. Each top-level entry is expected to be a device
+		// container shaped like `{ row_id: { col_id: [ {id}, … ] } }`. Defend
+		// against scalar entries that can sneak in via:
+		//   - Stray keys persisted by extensions (e.g. diagnostic markers,
+		//     metadata fields written by a custom React panel).
+		//   - Settings imported from a different schema version.
+		// Skipping non-array entries keeps render_items() crash-safe — without
+		// these guards, a single string value at any nesting depth triggers
+		// `foreach() argument must be of type array|object`.
+		if ( ! is_array( $setting ) ) {
+			$setting = array();
+		}
 		foreach ( $setting as $device => $device_settings ) {
+			if ( ! is_array( $device_settings ) ) {
+				continue;
+			}
 			foreach ( $device_settings as $row_id => $row_cols ) {
-
-				if ( is_array( $row_cols ) && ! empty( $row_cols ) ) {
-					foreach ( $row_cols as $col_id => $col_items ) {
-						foreach ( $col_items as $index => $item ) {
-							$this->render_item( $item['id'], $col_id, $row_id, $device );
+				if ( ! is_array( $row_cols ) || empty( $row_cols ) ) {
+					continue;
+				}
+				foreach ( $row_cols as $col_id => $col_items ) {
+					if ( ! is_array( $col_items ) ) {
+						continue;
+					}
+					foreach ( $col_items as $index => $item ) {
+						if ( ! is_array( $item ) || empty( $item['id'] ) ) {
+							continue;
 						}
+						$this->render_item( $item['id'], $col_id, $row_id, $device );
 					}
 				}
 			}
