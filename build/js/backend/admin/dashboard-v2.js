@@ -84,31 +84,32 @@ var C = {
     20(e, r, t) {
       var n = t(649),
         a = Symbol.for("react.element"),
-        i = (Symbol.for("react.fragment"), Object.prototype.hasOwnProperty),
-        o = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
-        s = {
+        i = Symbol.for("react.fragment"),
+        o = Object.prototype.hasOwnProperty,
+        s = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
+        l = {
           key: !0,
           ref: !0,
           __self: !0,
           __source: !0
         };
-      function l(e, r, t) {
+      function c(e, r, t) {
         var n,
-          l = {},
+          i = {},
           c = null,
           d = null;
-        for (n in void 0 !== t && (c = "" + t), void 0 !== r.key && (c = "" + r.key), void 0 !== r.ref && (d = r.ref), r) i.call(r, n) && !s.hasOwnProperty(n) && (l[n] = r[n]);
-        if (e && e.defaultProps) for (n in r = e.defaultProps) void 0 === l[n] && (l[n] = r[n]);
+        for (n in void 0 !== t && (c = "" + t), void 0 !== r.key && (c = "" + r.key), void 0 !== r.ref && (d = r.ref), r) o.call(r, n) && !l.hasOwnProperty(n) && (i[n] = r[n]);
+        if (e && e.defaultProps) for (n in r = e.defaultProps) void 0 === i[n] && (i[n] = r[n]);
         return {
           $$typeof: a,
           type: e,
           key: c,
           ref: d,
-          props: l,
-          _owner: o.current
+          props: i,
+          _owner: s.current
         };
       }
-      r.jsx = l, r.jsxs = l;
+      r.Fragment = i, r.jsx = c, r.jsxs = c;
     },
     848(e, r, t) {
       e.exports = t(20);
@@ -471,8 +472,8 @@ function ie(e) {
     f = e.helpIcon,
     h = e.helpItemIcon,
     v = e.notFoundComponent,
-    y = e.fallback,
-    b = e.snackbar,
+    b = e.fallback,
+    y = e.snackbar,
     g = q(a, o),
     j = g.route,
     _ = g.entry,
@@ -483,23 +484,34 @@ function ie(e) {
     N = W(j),
     S = null == r ? void 0 : r.name,
     P = null == r ? void 0 : r.icon,
-    A = "wide" === l ? "wide" : "narrow";
+    A = null == r ? void 0 : r.href,
+    C = null == r ? void 0 : r.ariaLabel,
+    E = "wide" === l ? "wide" : "narrow",
+    D = (0, L.jsxs)(L.Fragment, {
+      children: [P && (0, L.jsx)("span", {
+        className: "pmdk-dashboard__brand-icon",
+        dangerouslySetInnerHTML: {
+          __html: P
+        }
+      }), S && (0, L.jsx)("span", {
+        className: "pmdk-dashboard__brand-text",
+        children: S
+      })]
+    });
   return (0, L.jsxs)("div", {
     className: "pmdk-dashboard",
-    "data-container-width": A,
+    "data-container-width": E,
     children: [(0, L.jsxs)("header", {
       className: "pmdk-dashboard__header",
-      children: [(0, L.jsxs)("h1", {
+      children: [(0, L.jsx)("h1", {
         className: "pmdk-dashboard__brand",
-        children: [P && (0, L.jsx)("span", {
-          className: "pmdk-dashboard__brand-icon",
-          dangerouslySetInnerHTML: {
-            __html: P
-          }
-        }), S && (0, L.jsx)("span", {
-          className: "pmdk-dashboard__brand-text",
-          children: S
-        })]
+        children: A ? (0, L.jsx)("a", {
+          className: "pmdk-dashboard__brand-link",
+          href: A,
+          "aria-label": C,
+          onClick: k(A),
+          children: D
+        }) : D
       }), (0, L.jsx)(J, {
         items: t,
         activeId: N,
@@ -534,9 +546,9 @@ function ie(e) {
         route: j,
         params: x,
         entry: _,
-        fallback: y
+        fallback: b
       })
-    }), void 0 !== b ? b : (0, L.jsx)(ne, {})]
+    }), void 0 !== y ? y : (0, L.jsx)(ne, {})]
   });
 }
 var oe = (0,external_wp_element_namespaceObject.createContext)({});
@@ -666,12 +678,12 @@ function ve(e) {
     confirmDiscard: f
   };
 }
-function ye() {
+function be() {
   for (var e of pe.values()) if (e) return !0;
   return !1;
 }
-function be() {
-  if (!ye()) return !0;
+function ye() {
+  if (!be()) return !0;
   var e = he;
   for (var r of pe.keys()) if (pe.get(r) && fe.has(r)) {
     e = fe.get(r);
@@ -751,8 +763,8 @@ const ke = function (e) {
     f = e.versionLabel,
     h = e.versionHref,
     v = e.versionAriaLabel,
-    y = e.initialRoute,
-    b = void 0 === y ? "#welcome" : y,
+    b = e.initialRoute,
+    y = void 0 === b ? "#welcome" : b,
     g = e.notFoundComponent,
     j = e.fallback,
     _ = e.containerWidth,
@@ -769,13 +781,13 @@ const ke = function (e) {
   return A.render((0, L.jsx)(le, {
     boot: w,
     children: (0, L.jsx)(Y, {
-      guard: be,
+      guard: ye,
       children: (0, L.jsx)(ie, {
         brand: i,
         tabs: N,
         tabsAriaLabel: l,
         routes: S,
-        initialRoute: b,
+        initialRoute: y,
         containerWidth: x,
         versionLabel: P,
         versionHref: h,
@@ -1503,8 +1515,8 @@ function ir(e) {
     m = p[0],
     h = p[1],
     v = rr((0,external_wp_element_namespaceObject.useState)(!u), 2),
-    y = v[0],
-    b = v[1];
+    b = v[0],
+    y = v[1];
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     var e = !1;
     try {
@@ -1512,13 +1524,13 @@ function ir(e) {
       Promise.resolve(r).then(r => {
         if (!e) {
           var t = Boolean(r);
-          ar.set(a, t), h(t), b(!1);
+          ar.set(a, t), h(t), y(!1);
         }
       }).catch(() => {
-        e || b(!1);
+        e || y(!1);
       });
     } catch (e) {
-      b(!1);
+      y(!1);
     }
     return () => {
       e = !0;
@@ -1527,13 +1539,13 @@ function ir(e) {
   var j,
     _ = V(),
     k = "string" == typeof (j = r.ctaHref) && j.startsWith("#"),
-    w = "pmdk-checklist__item" + (m ? " is-complete" : "") + (y ? " is-checking" : ""),
+    w = "pmdk-checklist__item" + (m ? " is-complete" : "") + (b ? " is-checking" : ""),
     O = n.pending;
-  y ? O = n.checking : m && (O = n.completed);
+  b ? O = n.checking : m && (O = n.completed);
   var N = (0, L.jsx)("span", {
     className: "pmdk-checklist__bullet"
   });
-  return y ? N = (0, L.jsx)(external_wp_components_namespaceObject.Spinner, {}) : m && (N = (0, L.jsx)(external_wp_components_namespaceObject.Icon, {
+  return b ? N = (0, L.jsx)(external_wp_components_namespaceObject.Spinner, {}) : m && (N = (0, L.jsx)(external_wp_components_namespaceObject.Icon, {
     icon: check_default
   })), (0, L.jsxs)("li", {
     className: w,
@@ -1658,8 +1670,8 @@ var pr = {
   fr = "LOAD_SUCCESS",
   hr = "LOAD_ERROR",
   vr = "SET_COMPLETED",
-  yr = "SET_DISMISSED",
-  br = "PATCH_ERROR";
+  br = "SET_DISMISSED",
+  yr = "PATCH_ERROR";
 function gr() {
   var e,
     r,
@@ -1680,7 +1692,7 @@ function gr() {
         error: null
       });
     case hr:
-    case br:
+    case yr:
       return dr(dr({}, t), {}, {
         loading: !1,
         error: n.error
@@ -1689,7 +1701,7 @@ function gr() {
       return dr(dr({}, t), {}, {
         completed: n.payload
       });
-    case yr:
+    case br:
       return dr(dr({}, t), {}, {
         dismissed: n.payload
       });
@@ -1776,7 +1788,7 @@ function _r() {
             type: vr,
             payload: n
           }), t({
-            type: br,
+            type: yr,
             error: e
           }), e;
         }
@@ -1808,7 +1820,7 @@ function _r() {
             type: vr,
             payload: n
           }), t({
-            type: br,
+            type: yr,
             error: e
           }), e;
         }
@@ -1825,7 +1837,7 @@ function _r() {
           o = n.isDismissed();
         if (o === i) return o;
         t({
-          type: yr,
+          type: br,
           payload: i
         });
         try {
@@ -1838,10 +1850,10 @@ function _r() {
           }), s.dismissed;
         } catch (e) {
           throw t({
-            type: yr,
+            type: br,
             payload: o
           }), t({
-            type: br,
+            type: yr,
             error: e
           }), e;
         }
@@ -2229,6 +2241,14 @@ function ThemeGridCard({
     })]
   });
 }
+;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
+// packages/icons/src/library/check.tsx
+
+
+var check_check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
+
+//# sourceMappingURL=check.mjs.map
+
 ;// ./src/backend/admin/dashboard-v2/data/proModules.js
 
 
@@ -2476,6 +2496,18 @@ function ToggleSwitch({
 
 
 
+
+// Same green-circle check glyph used by the Settings tab snackbar so
+// module activate / deactivate toasts visually match the Save Settings
+// success cue. SnackbarList drops this inside .components-snackbar__icon.
+
+const SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+  className: "customify-dashboard-snackbar__check",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+    icon: check_check_default,
+    size: 14
+  })
+});
 const NOTICES_STORE = 'core/notices';
 function DocsLink({
   href
@@ -2542,7 +2574,8 @@ function ProModulesSection({
       // translators: %s module name.
       (0,external_wp_i18n_namespaceObject.__)('"%s" deactivated.', 'customify'), moduleName), {
         type: 'snackbar',
-        isDismissible: true
+        isDismissible: true,
+        icon: SUCCESS_GLYPH
       });
     }).catch(() => {
       setEnabledMap(prev => ({
@@ -2697,14 +2730,6 @@ function Welcome() {
     })]
   });
 }
-;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
-// packages/icons/src/library/check.tsx
-
-
-var check_check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
-
-//# sourceMappingURL=check.mjs.map
-
 ;// external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
@@ -2757,7 +2782,7 @@ const Settings_NOTICES_STORE = 'core/notices';
 // Green-circle check glyph passed as `icon` to success snackbars so the
 // "Settings saved." toast carries a positive visual cue (mirrors
 // Blocksify's pattern; kit ships no opinionated snackbar icon).
-const SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+const Settings_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
     icon: check_check_default,
@@ -2785,7 +2810,7 @@ function Settings() {
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
         type: 'snackbar',
         isDismissible: true,
-        icon: SUCCESS_GLYPH
+        icon: Settings_SUCCESS_GLYPH
       });
     } catch (err) {
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
@@ -2806,7 +2831,7 @@ function Settings() {
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings reset to defaults.', 'customify'), {
         type: 'snackbar',
         isDismissible: true,
-        icon: SUCCESS_GLYPH
+        icon: Settings_SUCCESS_GLYPH
       });
     } catch (err) {
       (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Reset failed. Try again.', 'customify'), {

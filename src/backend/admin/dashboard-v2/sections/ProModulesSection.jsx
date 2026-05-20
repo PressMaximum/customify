@@ -23,11 +23,21 @@ import { Fragment, useCallback, useMemo, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { Card, CardHeader, Button } from '@wordpress/components';
+import { Card, CardHeader, Button, Icon } from '@wordpress/components';
+import { check as checkIcon } from '@wordpress/icons';
 
 import { useProModules } from '../data/proModules.js';
 import { ModuleList, ModuleRow, ModuleSubmodules } from '../ui/ModuleList.jsx';
 import ToggleSwitch from '../ui/ToggleSwitch.jsx';
+
+// Same green-circle check glyph used by the Settings tab snackbar so
+// module activate / deactivate toasts visually match the Save Settings
+// success cue. SnackbarList drops this inside .components-snackbar__icon.
+const SUCCESS_GLYPH = (
+	<span className="customify-dashboard-snackbar__check">
+		<Icon icon={ checkIcon } size={ 14 } />
+	</span>
+);
 
 const NOTICES_STORE = 'core/notices';
 
@@ -104,7 +114,11 @@ export default function ProModulesSection( { boot } ) {
 								  __( '"%s" deactivated.', 'customify' ),
 							moduleName,
 						),
-						{ type: 'snackbar', isDismissible: true },
+						{
+							type: 'snackbar',
+							isDismissible: true,
+							icon: SUCCESS_GLYPH,
+						},
 					);
 				} )
 				.catch( () => {
