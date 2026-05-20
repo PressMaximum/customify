@@ -121,9 +121,22 @@ function customify_dashboard_v2_boot_data(): array {
 			'docs'           => 'https://pressmaximum.com/docs/customify/',
 			'proUpgrade'     => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules',
 		),
+		'rest'         => array(
+			'root'        => esc_url_raw( rest_url() ),
+			'nonce'       => wp_create_nonce( 'wp_rest' ),
+			'settingsEndpoint' => esc_url_raw( rest_url( 'customify/v1/settings' ) ),
+			'schemaEndpoint'   => esc_url_raw( rest_url( 'customify/v1/settings/schema' ) ),
+		),
 		'settings'     => array(
 			'faVersion' => (string) get_option( 'customify_fa_ver', 'v4' ),
+			'values'    => function_exists( 'customify_dashboard_v2_get_settings' )
+				? customify_dashboard_v2_get_settings()
+				: array(),
+			'schema'    => function_exists( 'customify_dashboard_v2_schema' )
+				? customify_dashboard_v2_schema()->buildSchema()
+				: array( 'panels' => array() ),
 		),
+		'changelog'    => customify_dashboard_v2_changelog( (string) $theme->get( 'Version' ) ),
 	);
 
 	/**
@@ -133,6 +146,81 @@ function customify_dashboard_v2_boot_data(): array {
 	 * @param string $context Context (currently always 'dashboard').
 	 */
 	return (array) apply_filters( 'customify_dashboard_localize', $boot, 'dashboard' );
+}
+
+/**
+ * Parse the changelog.txt file into a list of releases consumable by
+ * the kit's `ReleaseBlock`.
+ *
+ * @param string $current_version Current theme version (marks the
+ *                                matching release with the Current pill).
+ * @return array<int, array<string, mixed>>
+ */
+function customify_dashboard_v2_changelog( string $current_version ): array {
+	$file = get_template_directory() . '/changelog.txt';
+	if ( ! file_exists( $file ) ) {
+		return array();
+	}
+	$contents = file_get_contents( $file );
+	if ( ! $contents ) {
+		return array();
+	}
+
+	$releases = array();
+	$current  = null;
+	$category_map = array(
+		'new'      => 'new',
+		'added'    => 'new',
+		'improved' => 'improved',
+		'improve'  => 'improved',
+		'fixed'    => 'fixed',
+		'fix'      => 'fixed',
+		'updated'  => 'updated',
+		'update'   => 'updated',
+		'removed'  => 'removed',
+		'remove'   => 'removed',
+		'security' => 'security',
+	);
+
+	foreach ( preg_split( '/\r?\n/', $contents ) as $line ) {
+		$line = trim( $line );
+		if ( '' === $line ) {
+			continue;
+		}
+		if ( preg_match( '/^=\s*([0-9][0-9A-Za-z\.\-]*)\s*=$/', $line, $m ) ) {
+			if ( $current ) {
+				$releases[] = $current;
+			}
+			$version = $m[1];
+			$current = array(
+				'version' => $version,
+				'current' => version_compare( $version, $current_version, '==' ),
+				'items'   => array(),
+			);
+			continue;
+		}
+		if ( ! $current ) {
+			continue;
+		}
+		if ( preg_match( '/^\*\s*([A-Za-z]+)\s*:\s*(.+)$/', $line, $m ) ) {
+			$tag = strtolower( $m[1] );
+			$tone = $category_map[ $tag ] ?? 'neutral';
+			$current['items'][] = array(
+				'category' => $tone,
+				'text'     => $m[2],
+			);
+		} elseif ( preg_match( '/^\*\s*(.+)$/', $line, $m ) ) {
+			$current['items'][] = array(
+				'category' => 'neutral',
+				'text'     => $m[1],
+			);
+		}
+	}
+	if ( $current ) {
+		$releases[] = $current;
+	}
+
+	return $releases;
 }
 
 /**

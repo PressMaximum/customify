@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 824:
+/***/ 974:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -69,10 +69,7 @@ var external_wp_data_namespaceObject = window["wp"]["data"];
 /* unused harmony import specifier */ var s;
 /* unused harmony import specifier */ var i;
 /* unused harmony import specifier */ var n;
-/* unused harmony import specifier */ var g;
 /* unused harmony import specifier */ var f;
-/* unused harmony import specifier */ var p;
-/* unused harmony import specifier */ var m;
 /* unused harmony import specifier */ var d;
 /* unused harmony import specifier */ var x;
 /* unused harmony import specifier */ var S;
@@ -1131,7 +1128,7 @@ function $e() {
         type: qe
       })
     },
-    l = S(r, {
+    l = (0,external_wp_data_namespaceObject.createReduxStore)(r, {
       reducer: function () {
         var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : o,
           r = arguments.length > 1 ? arguments[1] : void 0;
@@ -1265,7 +1262,7 @@ function Qe(e) {
     n = e.labels;
   return t ? (0, L.jsxs)("span", {
     className: "pmdk-save-bar__status is-saving",
-    children: [(0, L.jsx)(g, {}), (0, L.jsx)("span", {
+    children: [(0, L.jsx)(external_wp_components_namespaceObject.Spinner, {}), (0, L.jsx)("span", {
       children: n.statusSaving
     })]
   }) : r ? (0, L.jsx)("span", {
@@ -1273,8 +1270,8 @@ function Qe(e) {
     children: n.statusDirty
   }) : (0, L.jsxs)("span", {
     className: "pmdk-save-bar__status is-saved",
-    children: [(0, L.jsx)(f, {
-      icon: x,
+    children: [(0, L.jsx)(external_wp_components_namespaceObject.Icon, {
+      icon: check_default,
       size: 16
     }), (0, L.jsx)("span", {
       children: n.statusSaved
@@ -1292,30 +1289,30 @@ function Xe(e) {
     className: "pmdk-save-bar",
     role: "region",
     "aria-label": o.regionLabel,
-    children: (0, L.jsxs)(p, {
+    children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
       justify: "space-between",
       align: "center",
       gap: 3,
-      children: [(0, L.jsx)(m, {
+      children: [(0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
         children: (0, L.jsx)(Qe, {
           isDirty: r,
           isSaving: t,
           labels: o
         })
-      }), (0, L.jsx)(m, {
-        children: (0, L.jsxs)(p, {
+      }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
+        children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
           align: "center",
           gap: 2,
-          children: [(0, L.jsx)(m, {
-            children: (0, L.jsx)(d, {
+          children: [(0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
+            children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
               variant: "tertiary",
               isDestructive: !0,
               onClick: a,
               disabled: t,
               children: o.resetLabel
             })
-          }), (0, L.jsx)(m, {
-            children: (0, L.jsx)(d, {
+          }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
+            children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
               variant: "primary",
               onClick: n,
               disabled: !r || t,
@@ -2413,38 +2410,179 @@ function Welcome() {
     })]
   });
 }
+;// external ["wp","apiFetch"]
+var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
+var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
+;// ./src/backend/admin/dashboard-v2/data/settingsStore.js
+
+
+
+const boot = window.customifyDashboard || {};
+const restRoot = boot?.rest?.root || '';
+const nonce = boot?.rest?.nonce;
+
+// Wire the wp.apiFetch middleware so REST writes carry the nonce. The
+// API-fetch middleware is global to wp.data; setting it once on boot
+// covers every call the kit's store makes.
+if (restRoot) {
+  external_wp_apiFetch_default().use(external_wp_apiFetch_default().createRootURLMiddleware(restRoot));
+}
+if (nonce) {
+  external_wp_apiFetch_default().use(external_wp_apiFetch_default().createNonceMiddleware(nonce));
+}
+const seedSaved = boot?.settings?.values || {};
+const {
+  STORE_NAME,
+  store
+} = $e({
+  storeName: 'customify/dashboard-settings',
+  endpoint: '/customify/v1/settings',
+  fetch: args => external_wp_apiFetch_default()(args),
+  seedSaved
+});
+(0,external_wp_data_namespaceObject.register)(store);
+const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
 ;// ./src/backend/admin/dashboard-v2/tabs/Settings.jsx
 /**
- * Settings tab — P2 stub. Real form lands in the next phase.
+ * Settings tab — schema-driven panels rendered via the kit's SchemaForm.
+ * Pro extends the field-type map via `customify.dashboard.settings.field-types`
+ * and the panel list via `customify.dashboard.settings.panels`.
  */
+
+
+
+
+
 
 
 
 
 function Settings() {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Settings UI lands in the next phase.', 'customify')
+  const boot = ce();
+  const schema = boot?.settings?.schema || {
+    panels: []
+  };
+  const [message, setMessage] = (0,external_wp_element_namespaceObject.useState)(null);
+  const values = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).getSettings(), []);
+  const isDirty = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isDirty(), []);
+  const isSaving = (0,external_wp_data_namespaceObject.useSelect)(select => select(CUSTOMIFY_SETTINGS_STORE).isSaving(), []);
+  const {
+    edit,
+    save,
+    clearDirty
+  } = (0,external_wp_data_namespaceObject.useDispatch)(CUSTOMIFY_SETTINGS_STORE);
+  const fieldTypes = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.field-types', Ze);
+  const panels = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.panels', schema.panels || [], boot);
+  const handleSave = async () => {
+    try {
+      await save();
+      setMessage({
+        status: 'success',
+        text: (0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify')
+      });
+    } catch (err) {
+      setMessage({
+        status: 'error',
+        text: err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify')
+      });
+    }
+  };
+  const handleReset = () => {
+    clearDirty();
+    setMessage(null);
+  };
+  if (!panels.length) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          children: (0,external_wp_i18n_namespaceObject.__)('No settings registered yet. Pro and child theme add-ons can extend this tab via the customify.dashboard.settings.panels filter.', 'customify')
+        })
       })
-    })
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "customify-dashboard-settings",
+    children: [message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+      status: message.status,
+      onRemove: () => setMessage(null),
+      isDismissible: true,
+      children: message.text
+    }), panels.map(panel => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+      className: "customify-dashboard-settings__panel",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          id: Ge(panel.id),
+          children: panel.label
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+        children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          className: "customify-dashboard-settings__description",
+          children: panel.description
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
+          panel: panel,
+          values: values?.[panel.id] || {},
+          onFieldChange: (field, next) => edit(`${panel.id}.${field}`, next),
+          fieldTypes: fieldTypes
+        })]
+      })]
+    }, panel.id)), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+      isDirty: isDirty,
+      isSaving: isSaving,
+      onSave: handleSave,
+      onReset: handleReset,
+      labels: {
+        saveButton: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
+        resetButton: (0,external_wp_i18n_namespaceObject.__)('Discard', 'customify'),
+        unsavedNotice: (0,external_wp_i18n_namespaceObject.__)('You have unsaved changes.', 'customify'),
+        savingNotice: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
+      }
+    })]
   });
 }
 ;// ./src/backend/admin/dashboard-v2/tabs/Changelog.jsx
 /**
- * Changelog tab — P2 stub. Real rendering lands in the next phase.
+ * Changelog tab — renders releases parsed from changelog.txt
+ * (PHP-side, shipped in boot data) via the kit's ReleaseBlock.
+ *
+ * Pro / child theme adds more streams via
+ * `customify.dashboard.changelog.sources`. For now Customify Free has
+ * a single source so the array indirection isn't necessary on screen.
  */
 
 
 
 
+
 function Changelog() {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        children: (0,external_wp_i18n_namespaceObject.__)('Changelog lands in the next phase.', 'customify')
+  const boot = ce();
+  const releases = Array.isArray(boot?.changelog) ? boot.changelog : [];
+  if (!releases.length) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Card, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          children: (0,external_wp_i18n_namespaceObject.__)('No changelog entries available.', 'customify')
+        })
       })
-    })
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "customify-dashboard-changelog",
+    children: releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
+      release: release,
+      labels: {
+        currentBadge: (0,external_wp_i18n_namespaceObject.__)('Current', 'customify')
+      },
+      categoryLabels: {
+        new: (0,external_wp_i18n_namespaceObject.__)('New', 'customify'),
+        improved: (0,external_wp_i18n_namespaceObject.__)('Improved', 'customify'),
+        fixed: (0,external_wp_i18n_namespaceObject.__)('Fixed', 'customify'),
+        updated: (0,external_wp_i18n_namespaceObject.__)('Updated', 'customify'),
+        removed: (0,external_wp_i18n_namespaceObject.__)('Removed', 'customify'),
+        security: (0,external_wp_i18n_namespaceObject.__)('Security', 'customify'),
+        deprecated: (0,external_wp_i18n_namespaceObject.__)('Deprecated', 'customify'),
+        neutral: (0,external_wp_i18n_namespaceObject.__)('Note', 'customify')
+      }
+    }, release.version))
   });
 }
 ;// ./src/backend/admin/dashboard-v2/index.js
@@ -2573,6 +2711,18 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 		};
 /******/ 	}();
 /******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
 /******/ 	/* webpack/runtime/create fake namespace object */
 /******/ 	!function() {
 /******/ 		var getProto = Object.getPrototypeOf ? function(obj) { return Object.getPrototypeOf(obj); } : function(obj) { return obj.__proto__; };
@@ -2692,7 +2842,7 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(824); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(974); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -2,6 +2,28 @@
 	min-height: 200px;
 }
 
+.customify-dashboard-settings,
+.customify-dashboard-changelog {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+}
+
+.customify-dashboard-settings {
+	&__panel {
+		.components-card__header h2 {
+			margin: 0;
+			font-size: 16px;
+			font-weight: 600;
+		}
+	}
+
+	&__description {
+		color: var( --pmdk-color-text-muted, #50575e );
+		margin: 0 0 16px 0;
+	}
+}
+
 .customify-dashboard-welcome {
 	display: flex;
 	flex-direction: column;
