@@ -2788,7 +2788,6 @@ const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
 
 
 
-
 const ProModuleSettingsPanel_NOTICES_STORE = 'core/notices';
 const ProModuleSettingsPanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
@@ -2912,19 +2911,27 @@ function ProModuleSettingsPanel({
         isDismissible: false,
         className: "customify-dashboard-settings__pro-panel-error",
         children: error.message
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-        className: "customify-dashboard-settings__pro-panel-actions",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-          variant: "tertiary",
-          onClick: handleDiscard,
-          disabled: saving || !isDirty,
-          children: (0,external_wp_i18n_namespaceObject.__)('Discard', 'customify')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-          variant: "primary",
-          onClick: handleSave,
-          disabled: saving || !isDirty,
-          children: saving ? (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify')
-        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "customify-dashboard-settings__panel-actions",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+          isDirty: isDirty,
+          isSaving: saving,
+          onSave: handleSave,
+          onReset: handleDiscard,
+          labels: {
+            regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
+            saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
+            savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
+            // Pro module storage doesn't expose a factory-defaults
+            // endpoint today; "Reset" here reverts the form to the
+            // last server-confirmed snapshot. Label accordingly so
+            // users don't expect a real wipe.
+            resetLabel: (0,external_wp_i18n_namespaceObject.__)('Discard changes', 'customify'),
+            statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+            statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
+            statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
+          }
+        })
       })]
     })]
   });

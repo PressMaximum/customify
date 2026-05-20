@@ -18,11 +18,11 @@
 import { useEffect, useMemo, useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { Card, CardBody, CardHeader, Button, Notice } from '@wordpress/components';
-import { Icon } from '@wordpress/components';
+import { Card, CardBody, CardHeader, Notice, Icon } from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
 import {
 	SchemaField,
+	SaveBar,
 	BASE_FIELD_TYPES,
 	panelHeadingId,
 } from '@pressmaximum/dashboard-kit';
@@ -167,23 +167,26 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 						{ error.message }
 					</Notice>
 				) }
-				<div className="customify-dashboard-settings__pro-panel-actions">
-					<Button
-						variant="tertiary"
-						onClick={ handleDiscard }
-						disabled={ saving || ! isDirty }
-					>
-						{ __( 'Discard', 'customify' ) }
-					</Button>
-					<Button
-						variant="primary"
-						onClick={ handleSave }
-						disabled={ saving || ! isDirty }
-					>
-						{ saving
-							? __( 'Saving…', 'customify' )
-							: __( 'Save changes', 'customify' ) }
-					</Button>
+				<div className="customify-dashboard-settings__panel-actions">
+					<SaveBar
+						isDirty={ isDirty }
+						isSaving={ saving }
+						onSave={ handleSave }
+						onReset={ handleDiscard }
+						labels={ {
+							regionLabel: __( 'Settings actions', 'customify' ),
+							saveLabel: __( 'Save changes', 'customify' ),
+							savingLabel: __( 'Saving…', 'customify' ),
+							// Pro module storage doesn't expose a factory-defaults
+							// endpoint today; "Reset" here reverts the form to the
+							// last server-confirmed snapshot. Label accordingly so
+							// users don't expect a real wipe.
+							resetLabel: __( 'Discard changes', 'customify' ),
+							statusSaved: __( 'All changes saved', 'customify' ),
+							statusDirty: __( 'Unsaved changes', 'customify' ),
+							statusSaving: __( 'Saving…', 'customify' ),
+						} }
+					/>
 				</div>
 			</CardBody>
 		</Card>
