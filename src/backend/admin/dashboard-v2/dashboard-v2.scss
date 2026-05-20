@@ -18,12 +18,6 @@ body.customify-dashboard-page {
 }
 
 
-.customify-dashboard-settings {
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-}
-
 .customify-dashboard-changelog {
 	&__loading {
 		display: inline-flex;
@@ -44,6 +38,13 @@ body.customify-dashboard-page {
 	display: flex;
 	flex-direction: column;
 	gap: 24px;
+
+	// Composite panel — stacks multiple sections in the active sub-tab.
+	&__sections {
+		display: flex;
+		flex-direction: column;
+		gap: 24px;
+	}
 
 	// Tabbed layout — 240px SubNav rail + 1fr pane. Mirrors the
 	// Changelog tab's multi-source layout.

@@ -3381,9 +3381,38 @@ function Settings({
       })
     });
   }
+
+  // Render a single section (schema / license / future kinds). Used
+  // both directly (single-section panels) and by the composite branch
+  // (multiple sections stacked in the same panel pane).
+  const renderSection = section => {
+    if (!section) {
+      return null;
+    }
+    if ('license' === section.kind) {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LicensePanel, {
+        panel: section
+      }, section.id);
+    }
+    // Default: schema-shaped section → ProModuleSettingsPanel.
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ProModuleSettingsPanel, {
+      panel: section,
+      scrollIntoView: section.id === requestedPanelId
+    }, section.id);
+  };
   const renderActivePanel = () => {
     if (!activePanel) {
       return null;
+    }
+    // Composite panel: stack each section vertically inside the
+    // same SubNav sub-tab. Sections live independently (each owns
+    // its own state + save semantics), the parent just provides
+    // the visual grouping.
+    if ('composite' === activePanel.kind) {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "customify-dashboard-settings__sections",
+        children: (activePanel.sections || []).map(renderSection)
+      });
     }
     // License panel handles its own activation flow + no SaveBar.
     if ('license' === activePanel.kind) {
@@ -3659,8 +3688,11 @@ function mount() {
     },
     tabsAriaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify dashboard tabs', 'customify'),
     versionLabel,
-    versionHref: '#changelog',
-    versionAriaLabel: (0,external_wp_i18n_namespaceObject.__)('Theme version — view changelog', 'customify'),
+    // Land on the Pro changelog source when Pro is active so the
+    // `v{pro} — Pro version` anchor points at the matching releases
+    // stream. Falls back to the free Customify source otherwise.
+    versionHref: proActive ? '#changelog/customify-pro' : '#changelog',
+    versionAriaLabel: proActive ? (0,external_wp_i18n_namespaceObject.__)('Customify Pro version — view changelog', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Theme version — view changelog', 'customify'),
     helpItems: [{
       id: 'documentation',
       label: (0,external_wp_i18n_namespaceObject.__)('Documentation', 'customify'),

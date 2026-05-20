@@ -206,9 +206,40 @@ export default function Settings( { params } ) {
 		);
 	}
 
+	// Render a single section (schema / license / future kinds). Used
+	// both directly (single-section panels) and by the composite branch
+	// (multiple sections stacked in the same panel pane).
+	const renderSection = ( section ) => {
+		if ( ! section ) {
+			return null;
+		}
+		if ( 'license' === section.kind ) {
+			return <LicensePanel key={ section.id } panel={ section } />;
+		}
+		// Default: schema-shaped section → ProModuleSettingsPanel.
+		return (
+			<ProModuleSettingsPanel
+				key={ section.id }
+				panel={ section }
+				scrollIntoView={ section.id === requestedPanelId }
+			/>
+		);
+	};
+
 	const renderActivePanel = () => {
 		if ( ! activePanel ) {
 			return null;
+		}
+		// Composite panel: stack each section vertically inside the
+		// same SubNav sub-tab. Sections live independently (each owns
+		// its own state + save semantics), the parent just provides
+		// the visual grouping.
+		if ( 'composite' === activePanel.kind ) {
+			return (
+				<div className="customify-dashboard-settings__sections">
+					{ ( activePanel.sections || [] ).map( renderSection ) }
+				</div>
+			);
 		}
 		// License panel handles its own activation flow + no SaveBar.
 		if ( 'license' === activePanel.kind ) {

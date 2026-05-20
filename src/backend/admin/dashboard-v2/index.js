@@ -65,8 +65,15 @@ function mount() {
 		},
 		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
 		versionLabel,
-		versionHref: '#changelog',
-		versionAriaLabel: __( 'Theme version — view changelog', 'customify' ),
+		// Land on the Pro changelog source when Pro is active so the
+		// `v{pro} — Pro version` anchor points at the matching releases
+		// stream. Falls back to the free Customify source otherwise.
+		versionHref: proActive
+			? '#changelog/customify-pro'
+			: '#changelog',
+		versionAriaLabel: proActive
+			? __( 'Customify Pro version — view changelog', 'customify' )
+			: __( 'Theme version — view changelog', 'customify' ),
 		helpItems: [
 			{
 				id: 'documentation',
