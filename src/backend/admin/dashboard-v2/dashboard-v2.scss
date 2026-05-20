@@ -59,11 +59,8 @@ body.customify-dashboard-page {
 		.components-card__header h2 {
 			margin: 0;
 			font-size: 16px;
-			// WORKAROUND for kit issue K-010 — card-title hierarchy.
-			// Pin to 500 (one step below the hero/h1, one step above the
-			// 400-weighted item titles inside the card body). REMOVE when
-			// the kit ships font-weight tokens.
-			font-weight: 500;
+			// Card-title hierarchy via the kit's K-010 token tier.
+			font-weight: var( --pmdk-font-weight-heading, 500 );
 		}
 	}
 
@@ -220,8 +217,7 @@ body.customify-dashboard-page {
 			h2 {
 				margin: 0;
 				font-size: 16px;
-				// WORKAROUND for kit issue K-010 — see settings__panel h2.
-				font-weight: 500;
+				font-weight: var( --pmdk-font-weight-heading, 500 );
 			}
 		}
 	}
@@ -229,11 +225,10 @@ body.customify-dashboard-page {
 	&__checklist-title {
 		margin: 0;
 		font-size: 16px;
-		// WORKAROUND for kit issue K-010 — card-title hierarchy.
-		// 500 so "Get started", "Customizer quick links", "Customify Pro
-		// modules" headers sit one step above the 400-weighted items
-		// inside each card. REMOVE when the kit ships font-weight tokens.
-		font-weight: 500;
+		// Card head — heading-tier weight so "Get started", "Customizer
+		// quick links", "Customify Pro modules" sit one step above the
+		// item titles inside each card.
+		font-weight: var( --pmdk-font-weight-heading, 500 );
 	}
 
 	&__links {
@@ -254,15 +249,6 @@ body.customify-dashboard-page {
 		}
 	}
 
-}
-
-// WORKAROUND for kit issue K-010 — kit's checklist row labels
-// (`.pmdk-checklist__label`) ship at h3/600 which reads as heavier than
-// the surrounding card head. Drop to 400 so the row labels match the
-// item-level weight (one step below the 500-weight card title). REMOVE
-// when the kit ships font-weight tokens.
-.customify-dashboard-root .pmdk-checklist__label {
-	font-weight: 400;
 }
 
 // THEME OVERRIDE — align the kit's `.pmdk-hero` chrome with the
@@ -287,21 +273,6 @@ body.customify-dashboard-page {
 	box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.1 );
 }
 
-// WORKAROUND for kit issue K-011 — the kit applies the success token
-// (`--pmdk-color-success`, green) to `.pmdk-save-bar__status.is-saved`
-// for BOTH "idle / never-edited" and "just-saved-successfully" states.
-// Combined with our K-011 wording override ("No pending changes"), the
-// green check ends up reading as a celebratory cue under neutral text.
-// Pin the idle status to the muted token so colour matches the wording.
-// The transient `core/notices` snackbar already fires "Settings saved."
-// after an actual save, so the persistent green isn't needed for
-// success feedback. REMOVE when the kit ships a third idle status that
-// the consumer can target without overriding the success state.
-.customify-dashboard-root .pmdk-save-bar__status.is-saved,
-.customify-dashboard-root .pmdk-save-bar__status.is-saved svg {
-	color: var( --pmdk-color-text-muted, #50575e );
-	fill: currentColor;
-}
 
 // Customizer quick links — 3-col grid with internal hairline borders.
 // Ported from theme-dashboard branch `pm-theme-grid` (originally 2-col;
@@ -349,10 +320,9 @@ body.customify-dashboard-page {
 	&__title {
 		margin: 0;
 		font-size: 14px;
-		// WORKAROUND for kit issue K-010 — Customizer quick-link tile title;
-		// sits inside the card body so it follows the item-level weight
-		// (400), one step below the card head (500).
-		font-weight: 400;
+		// Customizer quick-link tile title — body-item weight, one step
+		// below the card head.
+		font-weight: var( --pmdk-font-weight-label, 400 );
 		color: var( --pmdk-color-text, #1e1e1e );
 		transition: color 0.12s;
 	}
@@ -437,10 +407,8 @@ body.customify-dashboard-page {
 	&__title {
 		margin: 0 0 4px 0;
 		font-size: 14px;
-		// WORKAROUND for kit issue K-010 — Pro module row title; lives
-		// inside the Customify Pro modules card body so it follows the
-		// 400-weight item rule, one step below the 500-weight card head.
-		font-weight: 400;
+		// Pro module row title — body-item weight inside the card.
+		font-weight: var( --pmdk-font-weight-label, 400 );
 		color: var( --pmdk-color-text, #1e1e1e );
 	}
 

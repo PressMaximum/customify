@@ -198,15 +198,9 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 	};
 
 	const handleDiscard = () => {
-		// No edits to throw away — confirm with the user so the click
-		// isn't lost into the void.
-		if ( JSON.stringify( values ) === JSON.stringify( savedValues ) ) {
-			dispatch( NOTICES_STORE ).createInfoNotice(
-				__( 'No changes to discard.', 'customify' ),
-				{ type: 'snackbar', isDismissible: true },
-			);
-			return;
-		}
+		// The kit's SaveBar disables this action via
+		// `resetDisabledWhenNotDirty` when the form is clean, so a click
+		// arriving here always has something to throw away.
 		setValues( savedValues );
 		setError( null );
 		dispatch( NOTICES_STORE ).createSuccessNotice(
@@ -277,6 +271,10 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 					isSaving={ saving }
 					onSave={ handleSave }
 					onReset={ handleDiscard }
+					// Pro module storage uses revert-to-last-saved semantics
+					// (no factory-defaults endpoint), so Discard should only
+					// fire when there's something dirty to throw away.
+					resetDisabledWhenNotDirty
 					labels={ {
 						regionLabel: __( 'Settings actions', 'customify' ),
 						saveLabel: __( 'Save changes', 'customify' ),
@@ -286,8 +284,9 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 						// last server-confirmed snapshot. Label accordingly so
 						// users don't expect a real wipe.
 						resetLabel: __( 'Discard changes', 'customify' ),
-						// WORKAROUND for kit issue K-011 — see Settings.jsx
-						// ThemePanelCard for the rationale.
+						// Mirror the kit's neutral default through the
+						// `customify` text domain so the string lands in the
+						// theme POT for translation.
 						statusSaved: __( 'No pending changes', 'customify' ),
 						statusDirty: __( 'Unsaved changes', 'customify' ),
 						statusSaving: __( 'Saving…', 'customify' ),
