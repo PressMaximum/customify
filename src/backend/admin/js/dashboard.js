@@ -50,7 +50,6 @@ jQuery(document).ready(function ($) {
 
 
 
-			console.log('Type', value);
 
 
 			toast(Customify_Dashboard.updating, 'info');

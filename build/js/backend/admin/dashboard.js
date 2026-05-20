@@ -47,7 +47,6 @@ jQuery(document).ready(function ($) {
         default:
           value = input.val();
       }
-      console.log('Type', value);
       toast(Customify_Dashboard.updating, 'info');
       $.ajax({
         url: ajaxurl,

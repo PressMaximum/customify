@@ -518,15 +518,8 @@ var CustomizeBuilder_V1;
               if (_x < 0) {
                 _x = 0;
               }
-              console.log("_re", _re);
-              console.log("_le", _le);
-              console.log("__x", _x);
               while (_w >= 1) {
                 if (checkEnoughSpaceFromX(_x, _w)) {
-                  console.log({
-                    x: _x,
-                    w: _w
-                  });
                   node.x = _x;
                   node.w = _w;
                   addItemToFlag(node);
@@ -545,8 +538,6 @@ var CustomizeBuilder_V1;
                 if (x > prev.x + Math.floor(prev.w / 2) && x > prev.x) {
                   _x = prev.x + prev.w;
                   _re = getRightEmptySlotFromX(_x, true);
-                  console.log("__re", _re);
-                  console.log("__re_X", _x);
                   if (_re >= w) {
                     addItemToFlag({
                       el: node.el,
@@ -564,28 +555,22 @@ var CustomizeBuilder_V1;
           var remain = 0;
 
           // -------------------------
-          console.log("--------------------------------------------------------");
           var _move_to_swap = function (node, _x) {
             var _block_prev;
             var _block_next;
             var _empty_slots = 0;
             var found = false;
             var i, el, er;
-            console.log("insert at x", _x);
-            console.log("insert node", node);
             if (isEmptyX(_x)) {
               // if insert at empty x
-              console.log("empty_at_X", _x);
               _block_prev = getPrevBlock(_x);
               _block_next = getNextBlock(_x);
               if (_block_prev.x > -1) {
                 // if drop item at position that have item before
-                console.log("found_item_left", _block_prev);
                 _empty_slots = getRightEmptySlotFromX(_block_prev.x); // find number empty slots from x top when have item
                 if (_empty_slots >= node.w) {
                   // If enough slot for this item
                   if (checkEnoughSpaceFromX(_x, node.w)) {
-                    console.log("found", node);
                     x = _x;
                     found = true;
                   } else if (node.ox > _x) {
@@ -599,11 +584,9 @@ var CustomizeBuilder_V1;
                     }
                     moveAllItemsFromXToRight(i + 1, el);
                     _empty_slots = getRightEmptySlotFromX(i);
-                    console.log("loop_start_i", i);
                     found = false;
                     while (i > _block_prev.x + _block_prev.w && !found) {
                       if (checkEnoughSpaceFromX(i, node.w)) {
-                        console.log("found_in_loop__i", i);
                         x = i;
                         found = true;
                       }
@@ -614,17 +597,13 @@ var CustomizeBuilder_V1;
                 if (!found && node.ox < _x) {
                   // move item from left to right
                   // try move item to the left
-                  console.log("try_move_items_to_left", _block_prev);
                   i = _block_prev.x + _block_prev.w - 1;
                   el = getLeftEmptySlotFromX(_block_prev.x);
-                  console.log("el", el);
                   if (el > node.w) {
                     el = node.w;
                   }
                   el -= 2;
                   moveAllItemsFromXToLeft(_block_prev.x, el);
-                  console.log("try_move_items_to_left_flag", flag);
-                  console.log("el2", el);
                   _empty_slots = getRightEmptySlotFromX(i);
                   i -= _empty_slots;
                   _block_next = getNextBlock(_x);
@@ -632,10 +611,8 @@ var CustomizeBuilder_V1;
                   if (_block_next.x > -1) {
                     max = _block_next.x;
                   }
-                  console.log("loop_start 2_i", i);
                   while (i < max && !found) {
                     if (checkEnoughSpaceFromX(i, node.w)) {
-                      console.log("found_in_loop__@__i", i);
                       x = i;
                       found = true;
                     }
@@ -647,25 +624,19 @@ var CustomizeBuilder_V1;
                   x = _block_prev.x + _block_prev.w;
                   node.w = _empty_slots;
                   node.x = x;
-                  console.log("resize_new_w", _empty_slots);
-                  console.log("resize_new_x", x);
                 }
               } else if (_block_next.x > -1) {
                 // try to get right item form x
-                console.log("found_item_right", _block_next);
                 _block_next = getNextBlock(_x);
                 _empty_slots = getRightEmptySlotFromX(_x, false);
-                console.log("move_all_item_to Right");
                 var n_move = _empty_slots >= node.w ? node.w : _empty_slots;
                 moveAllItemsFromXToRight(_x, n_move);
                 i = _block_next.x;
-                console.log("loop_start Right", i);
                 while (i >= 0 && !found) {
                   if (checkEnoughSpaceFromX(i, node.w)) {
                     x = i;
                     node.x = x;
                     found = true;
-                    console.log("found_in_while_r", i);
                   }
                   i--;
                 }
@@ -674,8 +645,6 @@ var CustomizeBuilder_V1;
                   x = _x;
                   node.w = _empty_slots;
                   node.x = x;
-                  console.log("resize_r_new_w", _empty_slots);
-                  console.log("resize_r_new_x", x);
                 }
               } else {
                 // the row is empty
@@ -684,12 +653,10 @@ var CustomizeBuilder_V1;
             } else {
               // if x is not empty
               // insert before item, that drop in
-              console.log("x is not empty");
               _block_prev = getPrevBlock(_x);
               if (node.ox < _block_prev.x) {
                 // drop from left to right
                 moveAllItemsFromXToLeft(_x, node.w);
-                console.log("Move All items to left");
                 if (isEmptyX(_x)) {
                   x = _x;
                 } else {
@@ -700,7 +667,6 @@ var CustomizeBuilder_V1;
                 }
               } else {
                 moveAllItemsFromXToRight(_x, node.w);
-                console.log("Move All items to right");
                 if (isEmptyX(_x)) {
                   x = _x;
                 } else {
@@ -715,7 +681,6 @@ var CustomizeBuilder_V1;
               x = that.cols - 1;
             }
             node.x = x;
-            console.log("new node x", x);
           };
           _move_to_swap(node, _.clone(x));
 
@@ -730,10 +695,7 @@ var CustomizeBuilder_V1;
           //console.log( 'in_the_end_w', w );
           if (x + w > that.cols - 1) {
             le = getLeftEmptySlotFromX(x, true);
-            console.log("le", le);
-            if (le > 0) {
-              console.log("move_Left", x + w - that.cols - 1);
-            }
+            if (le > 0) {}
           }
           updateItemsPositions();
           //console.log( 'Flag update', flag );
@@ -743,10 +705,6 @@ var CustomizeBuilder_V1;
             if (emptySlots >= w) {
               // Nếu tại vị trí hiện tại mà đủ chỗ trống
               if (checkEnoughSpaceFromX(x, w)) {
-                console.log("", {
-                  x: x,
-                  w: w
-                });
                 node.w = w;
                 addItemToFlag(node);
                 node.el.attr("data-gs-x", x);
@@ -758,14 +716,9 @@ var CustomizeBuilder_V1;
               // Nếu trỗ trông bên trái nhiều hơn bên phải
               newX = x - le;
               // tìm kiếm từ vị trí trống từ new sang bên phải xem có chỗ nào chèn dc ko ?
-              console.log("newX", newX);
               i = newX;
               while (i < maxCol && !found) {
                 if (checkEnoughSpaceFromX(i, w)) {
-                  console.log("Insert in While", {
-                    x: i,
-                    w: w
-                  });
                   node.w = w;
                   addItemToFlag({
                     el: node.el,
@@ -790,10 +743,6 @@ var CustomizeBuilder_V1;
             i = 0;
             while (i < maxCol && !found) {
               if (checkEnoughSpaceFromX(i, w)) {
-                console.log("Insert in While 2", {
-                  x: i,
-                  w: w
-                });
                 addItemToFlag({
                   el: node.el,
                   x: i,
@@ -808,10 +757,6 @@ var CustomizeBuilder_V1;
             }
             w--;
           }
-          console.log("Insert END While", {
-            x: i,
-            w: w
-          });
           return false;
         };
 
@@ -824,8 +769,6 @@ var CustomizeBuilder_V1;
           var x = node.x;
           var w = node.w;
           removeNode(node);
-          console.log("Swap newX", newX);
-          console.log("Before Swap FLAG", flag);
           var block2 = getPrevBlock(newX);
           var block2_right = 0;
           if (block2.x > -1) {
@@ -897,8 +840,6 @@ var CustomizeBuilder_V1;
         cw = that.getW(ui.draggable, false);
         w = that.getW(ui.draggable, true);
         itemWidth = ui.draggable.width();
-        console.log("DROP ITEM WIDTH", w);
-        console.log("DROP ITEM cw WIDTH", cw);
         var ox = that.getX(ui.draggable);
         if (is_rtl) {
           removeNode({
@@ -912,13 +853,11 @@ var CustomizeBuilder_V1;
           found = false;
         if (!ui.draggable.parent().is($wrapper)) {
           in_this_row = false;
-          console.log("Not in this row");
           if (w < cw) {
             w = cw;
           }
         } else {
           in_this_row = true;
-          console.log("Item in this row");
           w = cw;
         }
 
@@ -1004,15 +943,10 @@ var CustomizeBuilder_V1;
             } else {
               _i--;
             }
-            console.log("loop_i", _i);
           }
-          console.log("Find new _i, w: " + w, _i);
           x = _i;
         }
         found = null;
-        console.log("DROP Cursor", xc);
-        console.log("DROP row x cacl", x);
-        console.log("DROP item w", w);
         var node = {
           el: ui.draggable,
           x: x,
@@ -1027,12 +961,10 @@ var CustomizeBuilder_V1;
         if (in_this_row) {
           node.x = parseInt(ui.draggable.attr("data-gs-x") || 0);
           node.w = parseInt(ui.draggable.attr("data-gs-width") || 1);
-          console.log("swap node", node);
           swap(node, x);
           did = true;
         } else {
           did = insertToFlag(node);
-          console.log("Insert node");
         }
 
         // console.log( 'Drop on X: ' + x + ', width: '+ w );
@@ -1040,14 +972,12 @@ var CustomizeBuilder_V1;
 
         if (!did) {
           ui.draggable.removeAttr("style");
-          console.log("Can not insert");
           flag = backupFlag; // rollback;
         } else {
           // Add drop item from somewhere to current row
           ui.draggable.removeClass("item-from-list");
           $wrapper.append(ui.draggable);
           ui.draggable.removeAttr("style");
-          console.log("DID Flag: ", flag);
           //ui.draggable.attr( 'data-gs-x', x );
           //ui.draggable.attr( 'data-gs-y', y );
           that.draggingItem = null;
@@ -1146,7 +1076,6 @@ var CustomizeBuilder_V1;
               if (newX <= 0) {
                 newX = 0;
               }
-              console.log("diffRight_RTL_COL_New __left");
             } else {
               // Nếu resize ở mép phải của Item
               // Ok
@@ -1480,7 +1409,6 @@ var CustomizeBuilder_V1;
         wpcustomize.state("expandedPanel").bind(function (paneVisible) {
           if (wpcustomize.panel(options.panel).expanded()) {
             $document.trigger("customify_panel_builder_open", [options.panel]);
-            console.log("open-builder:", options.panel);
             top._current_builder_panel = id;
             that.showPanel();
           } else {
@@ -1535,7 +1463,6 @@ var CustomizeBuilder_V1;
         that.remove();
         that.addExistingRowsItems();
         if (wpcustomize.panel(options.panel).expanded()) {
-          console.log("open-builder:", options.panel);
           that.showPanel();
         } else {
           that.hidePanel();

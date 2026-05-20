@@ -89,11 +89,8 @@
      */
     /*
           wpcustomize.state( 'paneVisible' ).bind( function( paneVisible ) {
-              console.log( 'paneVisible state', paneVisible );
           });
             wpcustomize.state( 'expandedPanel' ).bind( function( paneVisible ) {
-              console.log( 'expandedPanel state', paneVisible );
-              console.log( 'expandedPanel state Builder', wpcustomize.state( 'expandedPanel' ).get() );
           });
           */
   });

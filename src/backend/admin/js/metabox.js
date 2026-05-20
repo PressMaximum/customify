@@ -180,7 +180,6 @@ jQuery( document ).ready( function( $ ){
         $('.customify-mt-media').on('click', '.customify--add', function (e) {
             e.preventDefault();
             var p = $(this).closest('.customify-mt-media');
-            console.log(p);
             CustomifyMedia.setPreview(p);
             CustomifyMedia.controlMediaImage.open();
         });

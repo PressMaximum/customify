@@ -782,7 +782,6 @@ if (!Element.prototype.closest) {
       tf = setTimeout(this.searchFormAutoAlign.bind(this), 100);
     }.bind(this));
     document.addEventListener('selective-refresh-content-rendered', function (e) {
-      console.log('e.detail', e.detail);
       if ('customify_customize_render_header' === e.detail) {
         var oldMenu = document.querySelector('body > .header-menu-sidebar');
         if (null !== oldMenu) {
@@ -794,7 +793,6 @@ if (!Element.prototype.closest) {
         this.setupMobileItemAnimations();
         this.initMenuSidebar();
         this.initSearchForm();
-        console.log('header_change');
       }
       if ('Customify_Builder_Item_Search_Icon__render' === e.detail) {
         this.initMobieSearchForm();
