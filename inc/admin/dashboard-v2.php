@@ -156,5 +156,21 @@ function customify_dashboard_v2_enqueue( string $hook ): void {
 			'text_domain' => 'customify',
 		)
 	);
+
+	// wp-scripts splits any `import 'pkg/style.css'` into a `style-`
+	// prefixed sibling output (its block-style convention). The kit ships
+	// its tokens + component CSS through this path, so we enqueue the
+	// sibling chunk alongside the main bundle so kit components render
+	// styled.
+	$kit_css_path = get_template_directory() . '/build/css/backend/admin/style-dashboard-v2.css';
+	if ( file_exists( $kit_css_path ) ) {
+		$theme_version = wp_get_theme()->get( 'Version' );
+		wp_enqueue_style(
+			CUSTOMIFY_DASHBOARD_V2_HANDLE . '-kit',
+			get_template_directory_uri() . '/build/css/backend/admin/style-dashboard-v2.css',
+			array(),
+			$theme_version . '-' . filemtime( $kit_css_path )
+		);
+	}
 }
 add_action( 'admin_enqueue_scripts', 'customify_dashboard_v2_enqueue' );

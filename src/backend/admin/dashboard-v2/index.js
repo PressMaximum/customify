@@ -1,16 +1,47 @@
 /**
- * Customify Dashboard (v2) entry — bootstraps the kit-powered admin SPA
- * at top-level menu slug `customify`. Page is registered in
- * inc/admin/dashboard-v2.php; this file mounts React into the
- * #customify-dashboard root the PHP renderer emits.
+ * Customify Dashboard (v2) — SPA entry.
+ *
+ * Mounts the @pressmaximum/dashboard-kit shell into #customify-dashboard
+ * (rendered by inc/admin/dashboard-v2.php). Pro extends via these
+ * filters (hooked BEFORE this script runs):
+ *
+ *   customify.dashboard.tabs    — append/reorder tabs
+ *   customify.dashboard.routes  — register tab routes
+ *   customify.dashboard.welcome.checklist — onboarding tasks
+ *   customify.dashboard.welcome.sections  — sections below the checklist
  */
+
+import { mountDashboard } from '@pressmaximum/dashboard-kit';
+import '@pressmaximum/dashboard-kit/style.css';
+import { __ } from '@wordpress/i18n';
+
+import Welcome from './tabs/Welcome.jsx';
+import Settings from './tabs/Settings.jsx';
+import Changelog from './tabs/Changelog.jsx';
 
 import './dashboard-v2.scss';
 
-// Stub mount — P1 wires the real config + tab components.
-// This existence-check keeps the file safe to load on any admin page in
-// case the script ever enqueues outside its dashboard hook.
 if ( document.getElementById( 'customify-dashboard' ) ) {
-	// eslint-disable-next-line no-console
-	console.log( 'customify dashboard v2: P0 stub loaded' );
+	mountDashboard( {
+		rootEl: '#customify-dashboard',
+		bootGlobal: 'customifyDashboard',
+		filterNamespace: 'customify',
+		__: ( text ) => __( text, 'customify' ),
+		brand: {
+			name: __( 'Customify', 'customify' ),
+			href: 'https://pressmaximum.com',
+		},
+		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
+		baseTabs: [
+			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
+			{ id: 'settings', label: __( 'Settings', 'customify' ) },
+			{ id: 'changelog', label: __( 'Changelog', 'customify' ) },
+		],
+		baseRoutes: {
+			'#welcome': { component: Welcome, type: 'page' },
+			'#settings': { component: Settings, type: 'page' },
+			'#changelog': { component: Changelog, type: 'page' },
+		},
+		initialRoute: '#welcome',
+	} );
 }

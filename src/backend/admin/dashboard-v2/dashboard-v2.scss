@@ -1,3 +1,76 @@
 .customify-dashboard-root {
 	min-height: 200px;
 }
+
+.customify-dashboard-welcome {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+
+	&__card {
+		.components-card__header {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+
+			h2 {
+				margin: 0;
+				font-size: 16px;
+				font-weight: 600;
+			}
+		}
+	}
+
+	&__links {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat( auto-fill, minmax( 200px, 1fr ) );
+		gap: 8px;
+
+		li {
+			margin: 0;
+		}
+
+		.components-button {
+			width: 100%;
+			justify-content: flex-start;
+		}
+	}
+
+	&__pro-grid {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: repeat( auto-fill, minmax( 240px, 1fr ) );
+		gap: 12px;
+	}
+
+	&__pro-item {
+		margin: 0;
+		padding: 12px 14px;
+		border: 1px solid var( --pmdk-color-border, #e0e0e0 );
+		border-radius: var( --pmdk-radius-small, 4px );
+		background: var( --pmdk-color-bg, #fff );
+
+		h3 {
+			margin: 0 0 4px 0;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+		p {
+			margin: 0;
+			color: var( --pmdk-color-text-muted, #50575e );
+			font-size: 12px;
+			line-height: 1.4;
+		}
+
+		&.is-sub {
+			margin-left: 16px;
+		}
+	}
+}
