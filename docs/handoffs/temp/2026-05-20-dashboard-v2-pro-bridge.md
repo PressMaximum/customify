@@ -2,7 +2,12 @@
 
 **Date**: 2026-05-20
 **Outgoing**: previous Claude session
-**Status**: P0–P15 shipped on the theme worktree; PRO-1–PRO-15 shipped on `customify-pro-dashboard-compat`. Both repos clean except for the `.claude/` worktree dirs the harness owns.
+**Status**: P0–P16 shipped on the theme worktree (`claude/dazzling-villani-914d75`); 10 of the PRO-N phases (PRO-1, 2, 3, 4, 8, 9, 11, 12, 14, 15) also have commits on the Pro plugin (`customify-pro-dashboard-compat`). PRO-5, 6, 7, 7.1, 10, 13 are theme-only renderer / wiring fixes — no Pro-side change. Both repos clean except for the `.claude/` worktree dirs the harness owns.
+
+**PRs opened from this work**:
+- Theme: https://github.com/PressMaximum/customify/pull/387 (base `theme-dashboard-v2`)
+- Pro: https://github.com/PressMaximum/customify-pro/pull/13 (base `master`)
+- Both need to merge together for the Pro extension surface to light up.
 
 ---
 
@@ -46,7 +51,7 @@ Read these before touching anything:
 3. `assets/js/admin/dashboard-v2-bridge.js` — JS filters that hook into `customify.dashboard.{pro.modules, pro.toggle, settings.panels, changelog.sources}`.
 4. `inc/admin/class-dashboard.php` — legacy Pro dashboard hooks (`customify/dashboard/main`, `box_modules`, `box_assets`, AJAX `wp_ajax_customify_pro_module`). Bridge layers on top; legacy stays intact.
 5. `inc/class-module-base.php` — `get_settings()` / `set_key_value()` / `save()` storage helpers (option key `customify_pro_settings`).
-6. `inc/updater/updater.php` — `Customify_Pro_Updater::active($key)` / `deactivate_license()` / `get_save_data()`. EDD API at `pressmaximum.com`. **NB**: activation method is `active()` NOT `activate_license()` — that was a fatal in PRO-13 caught + fixed in PRO-14.
+6. `inc/updater/updater.php` — `Customify_Pro_Updater::active($key)` / `deactivate_license()` / `get_save_data()`. EDD API at `pressmaximum.com`. **NB**: activation method is `active()` NOT `activate_license()` — the `activate_license` string elsewhere in the file is the EDD action argument. Calling the wrong name fataled at first; fixed in PRO-14 (`fd02553`).
 7. `git log customify-pro-dashboard-compat` — commit messages.
 
 ### 2.3 Dashboard kit (`/Users/kientrong/Studio/dashboard-kit`)
@@ -241,7 +246,13 @@ studio wp --path /Users/kientrong/Studio/customify2 plugin list | grep customify
 #    [Customify, Customify Pro]; version anchor href is #changelog/customify-pro.
 ```
 
-If anything diverges from that smoke-state, the worktree got out of sync with what this handoff describes — `git log` should show the same head commit (`8cf862c1` on theme, `8d60c57` on Pro at handoff time).
+If anything diverges from that smoke-state, the worktree got out of sync with what this handoff describes.
+
+**Heads at handoff time**:
+- Theme `claude/dazzling-villani-914d75`: `8cf862c1` last code commit (PRO-15); `522dada9` adds this handoff + the `docs/handoffs/` convention on top.
+- Pro `customify-pro-dashboard-compat`: `8d60c57` (PRO-15).
+
+A clean pick-up should see those as the tip (or one or two further if the next session committed more before reading this). If you see materially different SHAs, scan the new commits for context before changing anything.
 
 ---
 
