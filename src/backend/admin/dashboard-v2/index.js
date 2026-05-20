@@ -21,6 +21,7 @@ import Changelog from './tabs/Changelog.jsx';
 
 import './dashboard-v2.scss';
 import brandIcon from './brand-icon.js';
+import { wireBrandClick } from './brand-click.js';
 
 if ( document.getElementById( 'customify-dashboard' ) ) {
 	const boot = window.customifyDashboard || {};
@@ -33,7 +34,6 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		brand: {
 			name: __( 'Customify', 'customify' ),
 			icon: brandIcon,
-			href: 'https://pressmaximum.com',
 		},
 		tabsAriaLabel: __( 'Customify dashboard tabs', 'customify' ),
 		versionLabel: themeVersion,
@@ -51,4 +51,8 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		},
 		initialRoute: '#welcome',
 	} );
+
+	// WORKAROUND for kit issue K-009 (see dashboard-kit/KIT_ISSUES.md)
+	// — REMOVE when kit lands brand.href support in 0.1.0.
+	wireBrandClick( '#welcome' );
 }

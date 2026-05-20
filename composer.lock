@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "/Users/kientrong/Studio/dashboard-kit",
-                "reference": "4a34d1b093234b875b8ac3581dea5e740afca1f0"
+                "reference": "6c14b5a843deb4a867504d6acae74145aab34104"
             },
             "require": {
                 "php": ">=7.4"

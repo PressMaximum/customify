@@ -17,6 +17,14 @@ body.customify-dashboard-page {
 	min-height: 200px;
 }
 
+// WORKAROUND for kit issue K-009 (see dashboard-kit/KIT_ISSUES.md) —
+// brand is wired as a clickable "home" target in brand-click.js; the
+// cursor affordance lives here so it survives React remounts that
+// would wipe an inline style.
+.pmdk-dashboard__brand {
+	cursor: pointer;
+}
+
 .customify-dashboard-settings,
 .customify-dashboard-changelog {
 	display: flex;
