@@ -72,7 +72,7 @@ body.customify-dashboard-page {
 	// so users see a single chrome (status text + reset/discard + save)
 	// no matter which panel is active.
 	&__panel-actions {
-		margin-top: -8px;
+		margin-top: 16px;
 
 		.pmdk-save-bar {
 			padding: 12px 0;
