@@ -84,7 +84,13 @@ function ThemePanelCard( { panel, values, fieldTypes, isDirty, isSaving, edit, o
 						saveLabel: __( 'Save changes', 'customify' ),
 						savingLabel: __( 'Saving…', 'customify' ),
 						resetLabel: __( 'Reset to defaults', 'customify' ),
-						statusSaved: __( 'All changes saved', 'customify' ),
+						// WORKAROUND for kit issue K-011 — kit ships
+						// "All changes saved" as the idle-status label which
+						// reads as a freshly-saved confirmation on first
+						// page load. Neutral "No pending changes" describes
+						// the state without implying a recent save. REMOVE
+						// when the kit ships a separate idle status.
+						statusSaved: __( 'No pending changes', 'customify' ),
 						statusDirty: __( 'Unsaved changes', 'customify' ),
 						statusSaving: __( 'Saving…', 'customify' ),
 					} }
