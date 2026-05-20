@@ -37,7 +37,7 @@ import {
 	Icon,
 	Tooltip,
 } from '@wordpress/components';
-import { check as checkIcon } from '@wordpress/icons';
+import { check as checkIcon, external as externalIcon } from '@wordpress/icons';
 import { navigate } from '@pressmaximum/dashboard-kit';
 
 import { useProModules } from '../data/proModules.js';
@@ -246,6 +246,8 @@ export default function ProModulesSection( { boot } ) {
 						href={ boot?.urls?.proUpgrade || '#' }
 						target="_blank"
 						rel="noopener noreferrer"
+						icon={ externalIcon }
+						iconPosition="right"
 					>
 						{ __( 'Upgrade now', 'customify' ) }
 					</Button>
