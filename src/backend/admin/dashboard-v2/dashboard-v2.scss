@@ -265,6 +265,22 @@ body.customify-dashboard-page {
 	font-weight: 400;
 }
 
+// WORKAROUND for kit issue K-011 — the kit applies the success token
+// (`--pmdk-color-success`, green) to `.pmdk-save-bar__status.is-saved`
+// for BOTH "idle / never-edited" and "just-saved-successfully" states.
+// Combined with our K-011 wording override ("No pending changes"), the
+// green check ends up reading as a celebratory cue under neutral text.
+// Pin the idle status to the muted token so colour matches the wording.
+// The transient `core/notices` snackbar already fires "Settings saved."
+// after an actual save, so the persistent green isn't needed for
+// success feedback. REMOVE when the kit ships a third idle status that
+// the consumer can target without overriding the success state.
+.customify-dashboard-root .pmdk-save-bar__status.is-saved,
+.customify-dashboard-root .pmdk-save-bar__status.is-saved svg {
+	color: var( --pmdk-color-text-muted, #50575e );
+	fill: currentColor;
+}
+
 // Customizer quick links — 3-col grid with internal hairline borders.
 // Ported from theme-dashboard branch `pm-theme-grid` (originally 2-col;
 // 3-col fits more rows in the same vertical space).
