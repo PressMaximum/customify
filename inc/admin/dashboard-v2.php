@@ -69,18 +69,26 @@ function customify_dashboard_v2_add_menu(): void {
 add_action( 'admin_menu', 'customify_dashboard_v2_add_menu' );
 
 /**
- * Mirror the in-page tabs as WP admin sidebar submenu entries (Welcome /
- * Settings / Changelog). WP's native active-state detection compares
- * `?page=` query strings only and can't see the hash, so the live
- * highlight is reapplied client-side by customify_dashboard_v2_sync_submenu().
- * Mirrors Blocksify's pattern (class-blocksify-dashboard-surfaces-spike.php
+ * Mirror the in-page tabs as WP admin sidebar submenu entries (Dashboard
+ * + Settings). The Changelog top tab stays available in-page but isn't
+ * mirrored to the sidebar — it sees less direct navigation than the
+ * Welcome / Settings flows and the sidebar prefers a tight surface.
+ *
+ * The "Dashboard" submenu entry points at `#welcome` so it still routes
+ * to the Welcome tab; the visible label diverges from the in-page tab
+ * label deliberately because the WP sidebar reads better as "Dashboard"
+ * than "Welcome" once the user is past first-run.
+ *
+ * WP's native active-state detection compares `?page=` query strings
+ * only and can't see the hash, so the live highlight is reapplied
+ * client-side by customify_dashboard_v2_sync_submenu(). Mirrors
+ * Blocksify's pattern (class-blocksify-dashboard-surfaces-spike.php
  * lines 70-86).
  */
 function customify_dashboard_v2_register_submenu(): void {
 	$tabs = array(
-		array( 'hash' => '#welcome',  'label' => __( 'Welcome', 'customify' ) ),
+		array( 'hash' => '#welcome',  'label' => __( 'Dashboard', 'customify' ) ),
 		array( 'hash' => '#settings', 'label' => __( 'Settings', 'customify' ) ),
-		array( 'hash' => '#changelog', 'label' => __( 'Changelog', 'customify' ) ),
 	);
 	foreach ( $tabs as $tab ) {
 		add_submenu_page(
