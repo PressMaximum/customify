@@ -265,6 +265,28 @@ body.customify-dashboard-page {
 	font-weight: 400;
 }
 
+// THEME OVERRIDE — align the kit's `.pmdk-hero` chrome with the
+// surrounding Card rows on the Welcome page. The kit ships:
+//
+//   * `margin: 0 0 24px` — bottom margin that adds to the parent
+//     flex `gap: 24px`, producing 48px of visual space between Hero
+//     and the next Card (twice the Card-to-Card spacing). Zero the
+//     margin so the flex gap is the single source of vertical
+//     rhythm.
+//   * No box-shadow / border — the Card primitive from
+//     `@wordpress/components` paints its hairline outline via
+//     `box-shadow: 0 0 0 1px rgba(0,0,0,0.1)` (not a CSS border).
+//     Apply the same shadow so the Hero reads as part of the
+//     stacked-card composition instead of floating background.
+//
+// Promote to kit tokens (`--pmdk-hero-margin-bottom`,
+// `--pmdk-hero-outline`) under K-010's typography-token roadmap when
+// the kit adds the visual-property surface; revert this rule then.
+.customify-dashboard-root .pmdk-hero {
+	margin-bottom: 0;
+	box-shadow: 0 0 0 1px rgba( 0, 0, 0, 0.1 );
+}
+
 // WORKAROUND for kit issue K-011 — the kit applies the success token
 // (`--pmdk-color-success`, green) to `.pmdk-save-bar__status.is-saved`
 // for BOTH "idle / never-edited" and "just-saved-successfully" states.
