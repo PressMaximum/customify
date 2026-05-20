@@ -7,11 +7,14 @@
  *      Header CTA is "Upgrade Now".
  *   2. Pro plugin active → same list (overridden via the
  *      `customify.dashboard.pro.modules` filter from Pro's bundle) plus a
- *      ToggleSwitch leading slot per row + Settings trailing link when the
- *      module has settings + is enabled. Toggling calls a handler Pro
- *      supplies via the `customify.dashboard.pro.toggle` filter; the kit
- *      ships a no-op + reject so the marketing path can't accidentally
- *      flip server state.
+ *      `@wordpress/components` FormToggle leading slot per row + Settings
+ *      trailing link when the module has settings + is enabled. Toggling
+ *      calls a handler Pro supplies via the
+ *      `customify.dashboard.pro.toggle` filter; the kit ships a no-op +
+ *      reject so the marketing path can't accidentally flip server state.
+ *      When a module has `canToggle: false` (e.g. WooCommerce Booster
+ *      without WooCommerce active) the toggle renders disabled + the row
+ *      shows `toggleDisableNotice` inline beside the name.
  *
  * Pro extension surface:
  *   - `customify.dashboard.pro.modules`  — replaces the module catalogue.
@@ -23,13 +26,18 @@ import { Fragment, useCallback, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { Card, CardHeader, Button, Icon } from '@wordpress/components';
+import {
+	Card,
+	CardHeader,
+	Button,
+	FormToggle,
+	Icon,
+} from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
 import { navigate } from '@pressmaximum/dashboard-kit';
 
 import { useProModules } from '../data/proModules.js';
 import { ModuleList, ModuleRow, ModuleSubmodules } from '../ui/ModuleList.jsx';
-import ToggleSwitch from '../ui/ToggleSwitch.jsx';
 
 // Same green-circle check glyph used by the Settings tab snackbar so
 // module activate / deactivate toasts visually match the Save Settings
@@ -91,6 +99,13 @@ export default function ProModulesSection( { boot } ) {
 			if ( typeof proToggle !== 'function' ) {
 				return;
 			}
+			// Safety net: the disabled FormToggle suppresses onChange in the
+			// browser, but a programmatic dispatch here would otherwise let a
+			// gated module (e.g. WooCommerce Booster without WooCommerce
+			// active) flip its state on the server.
+			if ( byId[ id ] && byId[ id ].canToggle === false ) {
+				return;
+			}
 			const current = !! enabledMap[ id ];
 			const next = ! current;
 			const moduleName = byId[ id ]?.name || id;
@@ -143,24 +158,37 @@ export default function ProModulesSection( { boot } ) {
 	const renderRow = ( mod, isSub = false ) => {
 		const checked = !! enabledMap[ mod.id ];
 		const pending = !! pendingMap[ mod.id ];
-		const canToggle =
-			proActive && mod.canToggle !== false && typeof proToggle === 'function';
-		const showSettings = canToggle && checked && mod.hasSettings && ! pending;
+		// The toggle is part of the Pro path only; Free renders the row
+		// without a toggle at all.
+		const showToggle = proActive && typeof proToggle === 'function';
+		// `canToggle: false` arrives from Pro when a runtime dependency is
+		// missing (WooCommerce Booster + its sub-modules when WooCommerce
+		// isn't active). Render the toggle disabled instead of hiding it
+		// so the user sees the row state + its notice.
+		const allowed = mod.canToggle !== false;
+		const toggleDisabled = pending || ! allowed;
+		const showSettings =
+			showToggle && allowed && checked && mod.hasSettings && ! pending;
 		const showsSubs = ! isSub && mod.subModules && mod.subModules.length > 0;
+		const notice =
+			showToggle && ! allowed && mod.toggleDisableNotice
+				? mod.toggleDisableNotice
+				: null;
 
 		return (
 			<ModuleRow
 				key={ mod.id }
 				title={ mod.name }
 				description={ mod.description }
+				notice={ notice }
 				hasSubs={ showsSubs }
 				leading={
-					canToggle ? (
-						<ToggleSwitch
+					showToggle ? (
+						<FormToggle
 							checked={ checked }
 							onChange={ () => handleToggle( mod.id ) }
-							disabled={ pending }
-							ariaLabel={ mod.name }
+							disabled={ toggleDisabled }
+							aria-label={ mod.name }
 						/>
 					) : null
 				}
