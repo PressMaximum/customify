@@ -48,46 +48,48 @@ const SUCCESS_GLYPH = (
  */
 function ThemePanelCard( { panel, values, fieldTypes, isDirty, isSaving, edit, onSave, onReset } ) {
 	return (
-		<Card
-			className="customify-dashboard-settings__panel"
-			data-panel-id={ panel.id }
-		>
-			<CardHeader>
-				<h2 id={ panelHeadingId( panel.id ) }>{ panel.label }</h2>
-			</CardHeader>
-			<CardBody>
-				{ panel.description && (
-					<p className="customify-dashboard-settings__description">
-						{ panel.description }
-					</p>
-				) }
-				<SchemaForm
-					panel={ panel }
-					values={ values || {} }
-					onFieldChange={ ( panelId, fieldId, next ) =>
-						edit( `${ panelId }.${ fieldId }`, next )
-					}
-					fieldTypes={ fieldTypes }
-				/>
-				<div className="customify-dashboard-settings__panel-actions">
-					<SaveBar
-						isDirty={ isDirty }
-						isSaving={ isSaving }
-						onSave={ onSave }
-						onReset={ onReset }
-						labels={ {
-							regionLabel: __( 'Settings actions', 'customify' ),
-							saveLabel: __( 'Save changes', 'customify' ),
-							savingLabel: __( 'Saving…', 'customify' ),
-							resetLabel: __( 'Reset to defaults', 'customify' ),
-							statusSaved: __( 'All changes saved', 'customify' ),
-							statusDirty: __( 'Unsaved changes', 'customify' ),
-							statusSaving: __( 'Saving…', 'customify' ),
-						} }
+		<>
+			<Card
+				className="customify-dashboard-settings__panel"
+				data-panel-id={ panel.id }
+			>
+				<CardHeader>
+					<h2 id={ panelHeadingId( panel.id ) }>{ panel.label }</h2>
+				</CardHeader>
+				<CardBody>
+					{ panel.description && (
+						<p className="customify-dashboard-settings__description">
+							{ panel.description }
+						</p>
+					) }
+					<SchemaForm
+						panel={ panel }
+						values={ values || {} }
+						onFieldChange={ ( panelId, fieldId, next ) =>
+							edit( `${ panelId }.${ fieldId }`, next )
+						}
+						fieldTypes={ fieldTypes }
 					/>
-				</div>
-			</CardBody>
-		</Card>
+				</CardBody>
+			</Card>
+			<div className="customify-dashboard-settings__panel-actions">
+				<SaveBar
+					isDirty={ isDirty }
+					isSaving={ isSaving }
+					onSave={ onSave }
+					onReset={ onReset }
+					labels={ {
+						regionLabel: __( 'Settings actions', 'customify' ),
+						saveLabel: __( 'Save changes', 'customify' ),
+						savingLabel: __( 'Saving…', 'customify' ),
+						resetLabel: __( 'Reset to defaults', 'customify' ),
+						statusSaved: __( 'All changes saved', 'customify' ),
+						statusDirty: __( 'Unsaved changes', 'customify' ),
+						statusSaving: __( 'Saving…', 'customify' ),
+					} }
+				/>
+			</div>
+		</>
 	);
 }
 

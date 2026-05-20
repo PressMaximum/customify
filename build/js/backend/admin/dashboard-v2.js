@@ -2883,56 +2883,58 @@ function ProModuleSettingsPanel({
   }
   const headingId = Ge(panel.id);
   const fields = Array.isArray(panel.fields) ? panel.fields : [];
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-    ref: cardRef,
-    className: "customify-dashboard-settings__panel customify-dashboard-settings__pro-panel",
-    "data-panel-id": panel.id,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-        id: headingId,
-        children: panel.label
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
-      children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        className: "customify-dashboard-settings__description",
-        children: panel.description
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "pmdk-schema-form",
-        role: "group",
-        "aria-labelledby": headingId,
-        children: fields.map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Ye, {
-          field: field,
-          value: values[field.id],
-          onChange: next => handleChange(field.id, next),
-          fieldTypes: Ze
-        }, field.id))
-      }), error && error.message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
-        status: "error",
-        isDismissible: false,
-        className: "customify-dashboard-settings__pro-panel-error",
-        children: error.message
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "customify-dashboard-settings__panel-actions",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
-          isDirty: isDirty,
-          isSaving: saving,
-          onSave: handleSave,
-          onReset: handleDiscard,
-          labels: {
-            regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
-            saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
-            savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
-            // Pro module storage doesn't expose a factory-defaults
-            // endpoint today; "Reset" here reverts the form to the
-            // last server-confirmed snapshot. Label accordingly so
-            // users don't expect a real wipe.
-            resetLabel: (0,external_wp_i18n_namespaceObject.__)('Discard changes', 'customify'),
-            statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
-            statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
-            statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
-          }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+      ref: cardRef,
+      className: "customify-dashboard-settings__panel customify-dashboard-settings__pro-panel",
+      "data-panel-id": panel.id,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          id: headingId,
+          children: panel.label
         })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+        children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          className: "customify-dashboard-settings__description",
+          children: panel.description
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "pmdk-schema-form",
+          role: "group",
+          "aria-labelledby": headingId,
+          children: fields.map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Ye, {
+            field: field,
+            value: values[field.id],
+            onChange: next => handleChange(field.id, next),
+            fieldTypes: Ze
+          }, field.id))
+        }), error && error.message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
+          status: "error",
+          isDismissible: false,
+          className: "customify-dashboard-settings__pro-panel-error",
+          children: error.message
+        })]
       })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-settings__panel-actions",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+        isDirty: isDirty,
+        isSaving: saving,
+        onSave: handleSave,
+        onReset: handleDiscard,
+        labels: {
+          regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
+          saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
+          savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
+          // Pro module storage doesn't expose a factory-defaults
+          // endpoint today; "Reset" here reverts the form to the
+          // last server-confirmed snapshot. Label accordingly so
+          // users don't expect a real wipe.
+          resetLabel: (0,external_wp_i18n_namespaceObject.__)('Discard changes', 'customify'),
+          statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+          statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
+          statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
+        }
+      })
     })]
   });
 }
@@ -2987,41 +2989,43 @@ function ThemePanelCard({
   onSave,
   onReset
 }) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-    className: "customify-dashboard-settings__panel",
-    "data-panel-id": panel.id,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-        id: Ge(panel.id),
-        children: panel.label
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
-      children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-        className: "customify-dashboard-settings__description",
-        children: panel.description
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
-        panel: panel,
-        values: values || {},
-        onFieldChange: (panelId, fieldId, next) => edit(`${panelId}.${fieldId}`, next),
-        fieldTypes: fieldTypes
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
-        className: "customify-dashboard-settings__panel-actions",
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
-          isDirty: isDirty,
-          isSaving: isSaving,
-          onSave: onSave,
-          onReset: onReset,
-          labels: {
-            regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
-            saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
-            savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
-            resetLabel: (0,external_wp_i18n_namespaceObject.__)('Reset to defaults', 'customify'),
-            statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
-            statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
-            statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
-          }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+      className: "customify-dashboard-settings__panel",
+      "data-panel-id": panel.id,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          id: Ge(panel.id),
+          children: panel.label
         })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
+        children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          className: "customify-dashboard-settings__description",
+          children: panel.description
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
+          panel: panel,
+          values: values || {},
+          onFieldChange: (panelId, fieldId, next) => edit(`${panelId}.${fieldId}`, next),
+          fieldTypes: fieldTypes
+        })]
       })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-settings__panel-actions",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+        isDirty: isDirty,
+        isSaving: isSaving,
+        onSave: onSave,
+        onReset: onReset,
+        labels: {
+          regionLabel: (0,external_wp_i18n_namespaceObject.__)('Settings actions', 'customify'),
+          saveLabel: (0,external_wp_i18n_namespaceObject.__)('Save changes', 'customify'),
+          savingLabel: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify'),
+          resetLabel: (0,external_wp_i18n_namespaceObject.__)('Reset to defaults', 'customify'),
+          statusSaved: (0,external_wp_i18n_namespaceObject.__)('All changes saved', 'customify'),
+          statusDirty: (0,external_wp_i18n_namespaceObject.__)('Unsaved changes', 'customify'),
+          statusSaving: (0,external_wp_i18n_namespaceObject.__)('Saving…', 'customify')
+        }
+      })
     })]
   });
 }

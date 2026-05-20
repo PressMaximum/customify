@@ -133,62 +133,64 @@ export default function ProModuleSettingsPanel( { panel, scrollIntoView } ) {
 	const fields = Array.isArray( panel.fields ) ? panel.fields : [];
 
 	return (
-		<Card
-			ref={ cardRef }
-			className="customify-dashboard-settings__panel customify-dashboard-settings__pro-panel"
-			data-panel-id={ panel.id }
-		>
-			<CardHeader>
-				<h2 id={ headingId }>{ panel.label }</h2>
-			</CardHeader>
-			<CardBody>
-				{ panel.description && (
-					<p className="customify-dashboard-settings__description">
-						{ panel.description }
-					</p>
-				) }
-				<div className="pmdk-schema-form" role="group" aria-labelledby={ headingId }>
-					{ fields.map( ( field ) => (
-						<SchemaField
-							key={ field.id }
-							field={ field }
-							value={ values[ field.id ] }
-							onChange={ ( next ) => handleChange( field.id, next ) }
-							fieldTypes={ BASE_FIELD_TYPES }
-						/>
-					) ) }
-				</div>
-				{ error && error.message && (
-					<Notice
-						status="error"
-						isDismissible={ false }
-						className="customify-dashboard-settings__pro-panel-error"
-					>
-						{ error.message }
-					</Notice>
-				) }
-				<div className="customify-dashboard-settings__panel-actions">
-					<SaveBar
-						isDirty={ isDirty }
-						isSaving={ saving }
-						onSave={ handleSave }
-						onReset={ handleDiscard }
-						labels={ {
-							regionLabel: __( 'Settings actions', 'customify' ),
-							saveLabel: __( 'Save changes', 'customify' ),
-							savingLabel: __( 'Saving…', 'customify' ),
-							// Pro module storage doesn't expose a factory-defaults
-							// endpoint today; "Reset" here reverts the form to the
-							// last server-confirmed snapshot. Label accordingly so
-							// users don't expect a real wipe.
-							resetLabel: __( 'Discard changes', 'customify' ),
-							statusSaved: __( 'All changes saved', 'customify' ),
-							statusDirty: __( 'Unsaved changes', 'customify' ),
-							statusSaving: __( 'Saving…', 'customify' ),
-						} }
-					/>
-				</div>
-			</CardBody>
-		</Card>
+		<>
+			<Card
+				ref={ cardRef }
+				className="customify-dashboard-settings__panel customify-dashboard-settings__pro-panel"
+				data-panel-id={ panel.id }
+			>
+				<CardHeader>
+					<h2 id={ headingId }>{ panel.label }</h2>
+				</CardHeader>
+				<CardBody>
+					{ panel.description && (
+						<p className="customify-dashboard-settings__description">
+							{ panel.description }
+						</p>
+					) }
+					<div className="pmdk-schema-form" role="group" aria-labelledby={ headingId }>
+						{ fields.map( ( field ) => (
+							<SchemaField
+								key={ field.id }
+								field={ field }
+								value={ values[ field.id ] }
+								onChange={ ( next ) => handleChange( field.id, next ) }
+								fieldTypes={ BASE_FIELD_TYPES }
+							/>
+						) ) }
+					</div>
+					{ error && error.message && (
+						<Notice
+							status="error"
+							isDismissible={ false }
+							className="customify-dashboard-settings__pro-panel-error"
+						>
+							{ error.message }
+						</Notice>
+					) }
+				</CardBody>
+			</Card>
+			<div className="customify-dashboard-settings__panel-actions">
+				<SaveBar
+					isDirty={ isDirty }
+					isSaving={ saving }
+					onSave={ handleSave }
+					onReset={ handleDiscard }
+					labels={ {
+						regionLabel: __( 'Settings actions', 'customify' ),
+						saveLabel: __( 'Save changes', 'customify' ),
+						savingLabel: __( 'Saving…', 'customify' ),
+						// Pro module storage doesn't expose a factory-defaults
+						// endpoint today; "Reset" here reverts the form to the
+						// last server-confirmed snapshot. Label accordingly so
+						// users don't expect a real wipe.
+						resetLabel: __( 'Discard changes', 'customify' ),
+						statusSaved: __( 'All changes saved', 'customify' ),
+						statusDirty: __( 'Unsaved changes', 'customify' ),
+						statusSaving: __( 'Saving…', 'customify' ),
+					} }
+				/>
+			</div>
+		</>
 	);
 }

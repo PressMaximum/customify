@@ -67,28 +67,16 @@ body.customify-dashboard-page {
 		margin: 0 0 16px 0;
 	}
 
-	// Theme panel: SchemaForm sits above the SaveBar; both inside the
-	// CardBody so the panel "owns" its save cluster (no page-level bar).
+	// SaveBar lives BELOW the active panel card (not inside CardBody).
+	// Theme + Pro panels render the kit's <SaveBar> through this wrapper
+	// so users see a single chrome (status text + reset/discard + save)
+	// no matter which panel is active.
 	&__panel-actions {
-		margin-top: 16px;
-		padding-top: 16px;
-		border-top: 1px solid var( --pmdk-color-border-subtle, #f0f0f1 );
+		margin-top: -8px;
 
 		.pmdk-save-bar {
-			min-height: 0;
-			padding: 0;
+			padding: 12px 0;
 		}
-	}
-
-	// Per-Pro-panel save / discard cluster. Pro panels own their state +
-	// hit their own REST endpoint.
-	&__pro-panel-actions {
-		display: flex;
-		justify-content: flex-end;
-		gap: 8px;
-		margin-top: 16px;
-		padding-top: 16px;
-		border-top: 1px solid var( --pmdk-color-border-subtle, #f0f0f1 );
 	}
 
 	&__pro-panel-error {
