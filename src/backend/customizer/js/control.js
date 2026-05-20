@@ -1943,6 +1943,77 @@
 					control.getValue();
 				}
 			);
+
+			// Sync the control DOM when the bound setting changes externally —
+			// e.g. Multiple Headers no-reload variant switch fires
+			// wp.customize(key).set(NEW_VALUE), and the control needs to
+			// repaint its fields to reflect the new value. Without this bind
+			// the control's DOM stays frozen on the value it rendered at mount
+			// time even though the underlying setting has changed.
+			//
+			// Echo guard: getValue() → encodeValue() → setting.set() will fire
+			// this same change handler. The `_customifyWriting` flag set
+			// around setting.set() in getValue() lets us short-circuit those
+			// self-triggered events.
+			if (control.setting && typeof control.setting.bind === "function") {
+				control.setting.bind(function () {
+					if (control._customifyWriting) {
+						return;
+					}
+					control.refreshFromSetting();
+				});
+			}
+		},
+
+		/**
+		 * Repaint the control's form fields from the bound setting's current
+		 * value. Called when an external actor (Multiple Headers variant
+		 * switch, programmatic theme-mod write) mutates the setting without
+		 * going through this control's UI.
+		 *
+		 * Strategy: clear the fields area, sync params.value from the setting,
+		 * then re-run the type-appropriate init (initGroup / initRepeater /
+		 * initField). The container-level "change keyup" delegate added in
+		 * init() is left intact — emptying the inner DOM detaches its inputs
+		 * but the delegation survives, so we do NOT re-bind it (rebinding
+		 * would double-fire getValue on every keystroke).
+		 */
+		refreshFromSetting: function () {
+			var control = this;
+			if (typeof control.decodeValue !== "function") {
+				return;
+			}
+			var raw = control.setting.get();
+			var decoded;
+			try {
+				decoded = control.decodeValue(raw);
+			} catch (e) {
+				decoded = raw;
+			}
+			control.params.value = decoded;
+
+			var $area = control.container.find(".customify--settings-fields");
+			if (!$area.length) {
+				return;
+			}
+			$area.empty();
+
+			control._customifyRefreshing = true;
+			try {
+				switch (control.params.setting_type) {
+					case "group":
+						control.initGroup();
+						break;
+					case "repeater":
+						control.initRepeater();
+						break;
+					default:
+						control.initField();
+						break;
+				}
+			} finally {
+				control._customifyRefreshing = false;
+			}
 		},
 		addParamsURL: function (url, data) {
 			if (!$.isEmptyObject(data)) {
@@ -2001,7 +2072,16 @@
 			);
 
 			if (_.isUndefined(save) || save) {
-				control.setting.set(control.encodeValue(value));
+				// Flag the write so the setting.bind handler installed in
+				// init() can distinguish self-triggered changes from external
+				// ones and skip refreshFromSetting() — otherwise every
+				// keystroke would empty/rebuild the field DOM mid-edit.
+				control._customifyWriting = true;
+				try {
+					control.setting.set(control.encodeValue(value));
+				} finally {
+					control._customifyWriting = false;
+				}
 
 				// Need improve next version
 				if (_.isArray(control.params.reset_controls)) {
@@ -2019,7 +2099,6 @@
 					control,
 					value
 				]);
-				// console.log( 'Save_Value: ', value );
 			} else {
 			}
 
@@ -2630,7 +2709,6 @@
 				var icon_preview = li.find("i").clone();
 				var icon = li.attr("data-icon") || "";
 				var type = li.attr("data-type") || "";
-				console.log("icon", icon);
 				$(".customify--input-icon-type", that.pickingEl).val(type);
 				$(".customify--input-icon-name", that.pickingEl)
 					.val(icon)

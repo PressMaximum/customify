@@ -59,20 +59,39 @@ function writeSetting( data, controlId ) {
 // Data helpers
 // ---------------------------------------------------------------------------
 
+// Strip a raw items collection down to entries shaped like `{id: <non-empty string>}`.
+// Mirrors `Customify_Layout_Builder_Frontend_V2::normalize_layout_items()` so the
+// JS and PHP renderers can never disagree on what counts as a valid layout entry.
+function normalizeItems( raw ) {
+	if ( ! Array.isArray( raw ) ) return [];
+	const out = [];
+	for ( const item of raw ) {
+		if ( item && typeof item === 'object' && typeof item.id === 'string' && item.id ) {
+			out.push( { id: item.id } );
+		}
+	}
+	return out;
+}
+
 function normalizeData( raw, deviceIds, rows, hasSidebar ) {
 	const data = {};
+	const safe = ( raw && typeof raw === 'object' && ! Array.isArray( raw ) ) ? raw : {};
 	for ( const dev of deviceIds ) {
 		data[ dev ] = {};
+		const devData = ( safe[ dev ] && typeof safe[ dev ] === 'object' ) ? safe[ dev ] : {};
 		for ( const row of rows ) {
 			data[ dev ][ row ] = {};
+			const rowData = ( devData[ row ] && typeof devData[ row ] === 'object' ) ? devData[ row ] : {};
 			for ( const col of ALL_COLS ) {
-				data[ dev ][ row ][ col ] = ( raw?.[ dev ]?.[ row ]?.[ col ] ) || [];
+				data[ dev ][ row ][ col ] = normalizeItems( rowData[ col ] );
 			}
 		}
 	}
 	if ( hasSidebar ) {
 		data.mobile = data.mobile || {};
-		data.mobile.sidebar = { sidebar: ( raw?.mobile?.sidebar?.sidebar ) || [] };
+		const sidebar = safe?.mobile?.sidebar;
+		const sidebarItems = ( sidebar && typeof sidebar === 'object' ) ? sidebar.sidebar : null;
+		data.mobile.sidebar = { sidebar: normalizeItems( sidebarItems ) };
 	}
 	return data;
 }
@@ -253,21 +272,49 @@ export default function Builder( { config } ) {
 		writeSetting( data, controlId );
 	}, [ data ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
-	// Sync React state from external wp.customize setting changes (e.g. Load Template).
-	// When something outside this component mutates the layout setting, mirror the new
-	// value into local state so the builder UI stays in sync without a page reload.
+	// Sync React state from external wp.customize setting changes (e.g. Load Template,
+	// Multiple Headers variant switch). Two sources are honoured:
+	//
+	//   1. `setting.bind(handler)` — fires when wp.customize.Setting.set() detects a
+	//      deep-unequal value. Echo-protected: skip when the new normalized data
+	//      matches the value we just wrote ourselves (otherwise writeSetting →
+	//      bind → setData → effect → writeSetting loops forever).
+	//
+	//   2. `customify/builder/external-update` window event — emitted by extensions
+	//      (e.g. Customify Pro's useVariantSwitcher) AFTER they have applied a batch
+	//      of set() calls. Carries the explicit intent "re-read this setting now,
+	//      do NOT consult the echo guard" because the extension already knows the
+	//      value changed at the source even if the local `lastSaved` cache happens
+	//      to look identical (variant switching can produce values that normalize
+	//      to the same shape as a prior state, e.g. when a variant has no override
+	//      and falls back to default).
 	useEffect( () => {
 		const setting = wp.customize?.( controlId );
 		if ( ! setting ) return;
-		const handler = ( newRaw ) => {
+
+		const applyRaw = ( newRaw, force ) => {
 			const newData = normalizeData( parseValue( newRaw ), deviceIds, rows, hasSidebar );
-			// Skip if the change originated from our own writeSetting call.
-			if ( JSON.stringify( newData ) === JSON.stringify( lastSaved.current ) ) return;
+			if ( ! force && JSON.stringify( newData ) === JSON.stringify( lastSaved.current ) ) {
+				return;
+			}
 			lastSaved.current = newData;
 			setData( newData );
 		};
-		setting.bind( handler );
-		return () => setting.unbind( handler );
+
+		const settingHandler = ( newRaw ) => applyRaw( newRaw, false );
+		setting.bind( settingHandler );
+
+		const eventHandler = ( e ) => {
+			const target = e?.detail?.controlId;
+			if ( target && target !== controlId ) return;
+			applyRaw( setting.get(), true );
+		};
+		window.addEventListener( 'customify/builder/external-update', eventHandler );
+
+		return () => {
+			setting.unbind( settingHandler );
+			window.removeEventListener( 'customify/builder/external-update', eventHandler );
+		};
 	}, [ controlId ] ); // eslint-disable-line react-hooks/exhaustive-deps
 
 	const switchDevice = useCallback( ( d ) => {
@@ -337,6 +384,21 @@ export default function Builder( { config } ) {
 		window.customifyBuilderOpenSection = openSection;
 		return () => { delete window.customifyBuilderOpenSection; };
 	}, [ openSection ] );
+
+	// Expose a global refresh helper for extensions that mutate the layout
+	// setting externally (Multiple Headers variant switch, programmatic
+	// template apply). Callers may pass a specific controlId to scope the
+	// refresh; omitting it refreshes every mounted builder via the event
+	// fan-out.
+	useEffect( () => {
+		const prev = window.customifyBuilderRefresh;
+		window.customifyBuilderRefresh = ( target ) => {
+			window.dispatchEvent( new CustomEvent( 'customify/builder/external-update', {
+				detail: { controlId: target || null },
+			} ) );
+		};
+		return () => { window.customifyBuilderRefresh = prev; };
+	}, [] );
 
 	const openPopover = useCallback( ( location, anchorRect ) => {
 		setPopover( { location, anchorRect } );
