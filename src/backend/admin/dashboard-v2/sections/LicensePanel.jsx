@@ -19,7 +19,15 @@
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
-import { Card, CardBody, CardHeader, Button, Notice, Icon } from '@wordpress/components';
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Button,
+	Notice,
+	Icon,
+	TextControl,
+} from '@wordpress/components';
 import { check as checkIcon } from '@wordpress/icons';
 import { panelHeadingId } from '@pressmaximum/dashboard-kit';
 
@@ -203,18 +211,12 @@ export default function LicensePanel( { panel } ) {
 					</p>
 				) }
 				<div className="customify-dashboard-license__form">
-					<label
-						htmlFor="customify-dashboard-license-key"
-						className="customify-dashboard-license__label"
-					>
-						{ __( 'License key', 'customify' ) }
-					</label>
-					<input
-						id="customify-dashboard-license-key"
-						type="text"
-						className="customify-dashboard-license__input"
+					<TextControl
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __( 'License key', 'customify' ) }
 						value={ key }
-						onChange={ ( e ) => setKey( e.target.value ) }
+						onChange={ ( next ) => setKey( next ) }
 						disabled={ busy || isActive }
 						placeholder={ __( 'Enter your license key', 'customify' ) }
 					/>

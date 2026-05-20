@@ -3132,21 +3132,17 @@ function LicensePanel({
       children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
         className: "customify-dashboard-settings__description",
         children: panel.description
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
         className: "customify-dashboard-license__form",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
-          htmlFor: "customify-dashboard-license-key",
-          className: "customify-dashboard-license__label",
-          children: (0,external_wp_i18n_namespaceObject.__)('License key', 'customify')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
-          id: "customify-dashboard-license-key",
-          type: "text",
-          className: "customify-dashboard-license__input",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TextControl, {
+          __nextHasNoMarginBottom: true,
+          __next40pxDefaultSize: true,
+          label: (0,external_wp_i18n_namespaceObject.__)('License key', 'customify'),
           value: key,
-          onChange: e => setKey(e.target.value),
+          onChange: next => setKey(next),
           disabled: busy || isActive,
           placeholder: (0,external_wp_i18n_namespaceObject.__)('Enter your license key', 'customify')
-        })]
+        })
       }), snapshot.expires && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("p", {
         className: "customify-dashboard-license__meta",
         children: [(0,external_wp_i18n_namespaceObject.__)('Expires:', 'customify'), " ", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
