@@ -2144,11 +2144,6 @@ function useCustomizerLinks(boot) {
     title: (0,external_wp_i18n_namespaceObject.__)('Typography', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Font family, size, line-height.', 'customify'),
     href: urls.typography
-  }, {
-    id: 'sidebar',
-    title: (0,external_wp_i18n_namespaceObject.__)('Sidebar settings', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Sidebar layout per context.', 'customify'),
-    href: urls.sidebar
   }].filter(l => Boolean(l.href));
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.links', base, boot);
 }
@@ -2254,11 +2249,6 @@ const DOCS_BASE = 'https://pressmaximum.com/docs/customify/customify-pro-modules
  */
 function useProModules() {
   const base = [{
-    id: 'header-transparent',
-    name: (0,external_wp_i18n_namespaceObject.__)('Header Transparent', 'customify'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Make your website stand out with transparent header modules.', 'customify'),
-    docHref: DOCS_BASE + 'header-transparent/'
-  }, {
     id: 'header-sticky',
     name: (0,external_wp_i18n_namespaceObject.__)('Header Sticky', 'customify'),
     description: (0,external_wp_i18n_namespaceObject.__)('Let your header stay accessible as users scroll.', 'customify'),

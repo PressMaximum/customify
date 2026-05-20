@@ -50,12 +50,6 @@ export function useCustomizerLinks( boot ) {
 			description: __( 'Font family, size, line-height.', 'customify' ),
 			href: urls.typography,
 		},
-		{
-			id: 'sidebar',
-			title: __( 'Sidebar settings', 'customify' ),
-			description: __( 'Sidebar layout per context.', 'customify' ),
-			href: urls.sidebar,
-		},
 	].filter( ( l ) => Boolean( l.href ) );
 
 	return applyFilters( 'customify.dashboard.welcome.links', base, boot );

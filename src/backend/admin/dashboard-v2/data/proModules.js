@@ -19,12 +19,6 @@ const DOCS_BASE = 'https://pressmaximum.com/docs/customify/customify-pro-modules
 export function useProModules() {
 	const base = [
 		{
-			id: 'header-transparent',
-			name: __( 'Header Transparent', 'customify' ),
-			description: __( 'Make your website stand out with transparent header modules.', 'customify' ),
-			docHref: DOCS_BASE + 'header-transparent/',
-		},
-		{
 			id: 'header-sticky',
 			name: __( 'Header Sticky', 'customify' ),
 			description: __( 'Let your header stay accessible as users scroll.', 'customify' ),
