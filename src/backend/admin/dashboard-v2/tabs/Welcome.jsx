@@ -1,23 +1,23 @@
 /**
  * Welcome tab — single-page scroll with Hero + Checklist + Customizer
- * quick-links + Pro module grid. Composes kit primitives; no list-page
- * or DataViews machinery (lightweight theme shape per SPEC §10.1).
+ * quick-link grid + Pro module grid. Composes kit primitives + small
+ * theme-owned UI components (`ModuleList`, `ThemeGridCard`, `ToggleSwitch`).
  */
 
 import { applyFilters } from '@wordpress/hooks';
-import { Card, CardBody, CardHeader, Button } from '@wordpress/components';
+import { Card, CardHeader } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 import { Hero, Checklist, useBoot } from '@pressmaximum/dashboard-kit';
 
 import { useCustomizerLinks } from '../data/customizerLinks.js';
 import { useChecklist } from '../data/checklist.js';
-import { useProModules } from '../data/proModules.js';
+import ThemeGridCard from '../ui/ThemeGridCard.jsx';
+import ProModulesSection from '../sections/ProModulesSection.jsx';
 
 export default function Welcome() {
 	const boot = useBoot();
 	const links = useCustomizerLinks( boot );
 	const checklistItems = useChecklist( boot );
-	const proModules = useProModules();
 
 	const greeting = boot?.user?.displayName
 		? sprintf(
@@ -32,11 +32,6 @@ export default function Welcome() {
 		'customify',
 	);
 
-	/**
-	 * Allow Pro / child themes to append sections below the checklist.
-	 *
-	 * Each section is rendered as `<section.render({ boot })>`.
-	 */
 	const extraSections = applyFilters(
 		'customify.dashboard.welcome.sections',
 		[],
@@ -61,10 +56,8 @@ export default function Welcome() {
 					</h2>
 				</CardHeader>
 				{ /* Checklist renders directly inside Card (no CardBody) so
-				     item dividers span edge-to-edge and item content aligns
-				     at the same 24px gutter as the CardHeader heading. Kit's
-				     pmdk-checklist__item carries its own padding via the
-				     K-007 token surface. */ }
+				     item dividers span edge-to-edge — kit's
+				     pmdk-checklist__item carries its own padding. */ }
 				<Checklist
 					items={ checklistItems }
 					ariaLabel={ __( 'Customify onboarding checklist', 'customify' ) }
@@ -76,26 +69,30 @@ export default function Welcome() {
 				/>
 			</Card>
 
-			<Card className="customify-dashboard-welcome__card">
+			<Card className="customify-dashboard-welcome__theme-customizer">
 				<CardHeader>
-					<h2>{ __( 'Customizer quick links', 'customify' ) }</h2>
+					<h2 className="customify-dashboard-welcome__checklist-title">
+						{ __( 'Customizer quick links', 'customify' ) }
+					</h2>
+					<a
+						className="customify-dashboard-header-link"
+						href={ boot?.urls?.customize || '#' }
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						{ __( 'Go to Customizer', 'customify' ) }
+					</a>
 				</CardHeader>
-				<CardBody>
-					<ul className="customify-dashboard-welcome__links">
-						{ links.map( ( link ) => (
-							<li key={ link.id }>
-								<Button
-									variant="tertiary"
-									href={ link.href }
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									{ link.label }
-								</Button>
-							</li>
-						) ) }
-					</ul>
-				</CardBody>
+				<div className="customify-dashboard-theme-grid">
+					{ links.map( ( link ) => (
+						<ThemeGridCard
+							key={ link.id }
+							title={ link.title }
+							description={ link.description }
+							href={ link.href }
+						/>
+					) ) }
+				</div>
 			</Card>
 
 			{ extraSections.map( ( section ) => {
@@ -105,35 +102,7 @@ export default function Welcome() {
 				) : null;
 			} ) }
 
-			<Card className="customify-dashboard-welcome__card customify-dashboard-welcome__pro">
-				<CardHeader>
-					<h2>{ __( 'Customify Pro modules', 'customify' ) }</h2>
-					<Button
-						variant="primary"
-						href={ boot?.urls?.proUpgrade || '#' }
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						{ __( 'Upgrade now', 'customify' ) } &rarr;
-					</Button>
-				</CardHeader>
-				<CardBody>
-					<ul className="customify-dashboard-welcome__pro-grid">
-						{ proModules.map( ( m ) => (
-							<li
-								key={ m.id }
-								className={
-									'customify-dashboard-welcome__pro-item' +
-									( m.sub ? ' is-sub' : '' )
-								}
-							>
-								<h3>{ m.name }</h3>
-								{ m.desc && <p>{ m.desc }</p> }
-							</li>
-						) ) }
-					</ul>
-				</CardBody>
-			</Card>
+			<ProModulesSection boot={ boot } />
 		</div>
 	);
 }

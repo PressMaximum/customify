@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 778:
+/***/ 956:
 /***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
 
 
@@ -2104,50 +2104,60 @@ var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 
 /**
  * Returns the Welcome-tab Customizer quick-link list, derived from the
- * PHP-localised boot payload.
+ * PHP-localised boot payload. Each item carries a short description so
+ * the 2-col grid renders title + description stacked.
  *
  * Pro / child theme extends via `customify.dashboard.welcome.links`.
  *
  * @param {object} boot Boot payload (from useBoot()).
- * @return {Array<{ id: string, label: string, href: string }>}
+ * @return {Array<{ id: string, title: string, description: string, href: string }>}
  */
 function useCustomizerLinks(boot) {
   const urls = boot?.urls || {};
   const base = [{
     id: 'logoIdentity',
-    label: (0,external_wp_i18n_namespaceObject.__)('Logo & site identity', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Logo & site identity', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Upload logo, site title, tagline.', 'customify'),
     href: urls.logoIdentity
   }, {
     id: 'layout',
-    label: (0,external_wp_i18n_namespaceObject.__)('Layout', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Layout settings', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Container width, content layout.', 'customify'),
     href: urls.layout
   }, {
     id: 'headerBuilder',
-    label: (0,external_wp_i18n_namespaceObject.__)('Header builder', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Header builder', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('WYSIWYG header drag-and-drop.', 'customify'),
     href: urls.headerBuilder
   }, {
     id: 'footerBuilder',
-    label: (0,external_wp_i18n_namespaceObject.__)('Footer builder', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Footer builder', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('WYSIWYG footer drag-and-drop.', 'customify'),
     href: urls.footerBuilder
   }, {
     id: 'styling',
-    label: (0,external_wp_i18n_namespaceObject.__)('Styling', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Styling', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Brand colors and site palette.', 'customify'),
     href: urls.styling
   }, {
     id: 'typography',
-    label: (0,external_wp_i18n_namespaceObject.__)('Typography', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Typography', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Font family, size, line-height.', 'customify'),
     href: urls.typography
   }, {
     id: 'sidebar',
-    label: (0,external_wp_i18n_namespaceObject.__)('Sidebar', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Sidebar settings', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Sidebar layout per context.', 'customify'),
     href: urls.sidebar
   }, {
     id: 'blog',
-    label: (0,external_wp_i18n_namespaceObject.__)('Blog posts', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Blog posts', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Blog listing & single post.', 'customify'),
     href: urls.blog
   }, {
     id: 'homepage',
-    label: (0,external_wp_i18n_namespaceObject.__)('Homepage', 'customify'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Homepage settings', 'customify'),
+    description: (0,external_wp_i18n_namespaceObject.__)('Static front page setup.', 'customify'),
     href: urls.homepage
   }].filter(l => Boolean(l.href));
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.links', base, boot);
@@ -2205,107 +2215,426 @@ function useChecklist(boot) {
   }];
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.checklist', base, boot);
 }
+;// ./src/backend/admin/dashboard-v2/ui/ThemeGridCard.jsx
+
+/**
+ * Clickable card used inside the Customizer quick-link grid. Whole row
+ * is the link surface (title + description stacked).
+ *
+ * Parent wraps a list of these in `.customify-dashboard-theme-grid` to
+ * get the 2-col layout with internal hairline borders.
+ */
+
+function ThemeGridCard({
+  title,
+  description,
+  href
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("a", {
+    className: "customify-dashboard-theme-grid__item",
+    href: href || '#',
+    target: "_blank",
+    rel: "noopener noreferrer",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+      className: "customify-dashboard-theme-grid__title",
+      children: title
+    }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+      className: "customify-dashboard-theme-grid__description",
+      children: description
+    })]
+  });
+}
 ;// ./src/backend/admin/dashboard-v2/data/proModules.js
 
 
+const DOCS_BASE = 'https://pressmaximum.com/docs/customify/customify-pro-modules/';
 
 /**
- * Pro module promo list — ported from the legacy dashboard's
- * `pro_modules_box()`. Pro/child theme extends via
- * `customify.dashboard.pro.modules`.
+ * Pro module catalogue rendered on the Welcome tab. Two shapes:
  *
- * @return {Array<{id: string, name: string, desc?: string, sub?: boolean}>}
+ *   FREE      — marketing list. `docHref` only; no toggle.
+ *   PRO       — same rows but with `classKey`, `enabled`, `hasSettings`,
+ *               `canToggle`, optional `subModules` (array of `classKey`s).
+ *
+ * Customify Pro replaces this list via `customify.dashboard.pro.modules`
+ * (returning the PRO shape sourced from window.customifyDashboard.proModules
+ * / a REST endpoint).
+ *
+ * @return {Array<object>}
  */
 function useProModules() {
   const base = [{
     id: 'header-transparent',
     name: (0,external_wp_i18n_namespaceObject.__)('Header Transparent', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Make your website stand out with transparent header modules.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Make your website stand out with transparent header modules.', 'customify'),
+    docHref: DOCS_BASE + 'header-transparent/'
   }, {
     id: 'header-sticky',
     name: (0,external_wp_i18n_namespaceObject.__)('Header Sticky', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Let your header stay accessible as users scroll.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Let your header stay accessible as users scroll.', 'customify'),
+    docHref: DOCS_BASE + 'header-sticky/'
   }, {
     id: 'header-footer-booster',
     name: (0,external_wp_i18n_namespaceObject.__)('Header & Footer Builder Booster', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('More header/footer builder items + advanced styling.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('More header/footer builder items + advanced styling.', 'customify'),
+    docHref: DOCS_BASE + 'advanced-header-footer-builder/'
   }, {
     id: 'scroll-to-top',
     name: (0,external_wp_i18n_namespaceObject.__)('Scroll to Top', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Animated scroll-to-top button for a better UX.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Animated scroll-to-top button for a better UX.', 'customify'),
+    docHref: DOCS_BASE + 'scroll-to-top/'
   }, {
     id: 'blog-pro',
     name: (0,external_wp_i18n_namespaceObject.__)('Blog Pro', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Multiple post layouts for richer blog presentations.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Multiple post layouts for richer blog presentations.', 'customify'),
+    docHref: DOCS_BASE + 'blog-pro/'
   }, {
     id: 'advanced-styling',
     name: (0,external_wp_i18n_namespaceObject.__)('Advanced Styling', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Layout + typography control for page header title and cover.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Layout + typography control for page header title and cover.', 'customify'),
+    docHref: DOCS_BASE + 'advanced-styling/'
   }, {
     id: 'portfolio',
     name: (0,external_wp_i18n_namespaceObject.__)('Portfolio', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Showcase your best projects in beautiful layouts.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Showcase your best projects in beautiful layouts.', 'customify'),
+    docHref: DOCS_BASE + 'portfolio/'
   }, {
     id: 'multiple-headers',
     name: (0,external_wp_i18n_namespaceObject.__)('Multiple Headers', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Unique headers per page, post, archive, or WooCommerce page.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Unique headers per page, post, archive, or WooCommerce page.', 'customify'),
+    docHref: DOCS_BASE + 'multiple-headers/'
   }, {
     id: 'mega-menu',
     name: (0,external_wp_i18n_namespaceObject.__)('Mega Menu', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Mega-menu navigation with more space and visual hierarchy.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Mega-menu navigation with more space and visual hierarchy.', 'customify'),
+    docHref: DOCS_BASE + 'mega-menu/'
   }, {
     id: 'multilingual',
     name: (0,external_wp_i18n_namespaceObject.__)('Multilingual Integration', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('WPML support plus a built-in language-switcher header item.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('WPML support plus a built-in language-switcher header item.', 'customify')
   }, {
     id: 'custom-fonts',
     name: (0,external_wp_i18n_namespaceObject.__)('Custom Fonts', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Upload and use self-hosted fonts across your site.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Upload and use self-hosted fonts across your site.', 'customify')
   }, {
     id: 'typekit',
     name: (0,external_wp_i18n_namespaceObject.__)('Typekit', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Use Adobe Typekit fonts on your Customify site.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Use Adobe Typekit fonts on your Customify site.', 'customify')
   }, {
     id: 'hooks',
     name: (0,external_wp_i18n_namespaceObject.__)('Customify Hooks', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Add custom hook scripts without touching theme files.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Add custom hook scripts without touching theme files.', 'customify')
   }, {
     id: 'woocommerce-booster',
     name: (0,external_wp_i18n_namespaceObject.__)('WooCommerce Booster', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Creative control of style + layout options for your shop.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Creative control of style + layout options for your shop.', 'customify'),
+    subModules: ['single-product-layouts', 'off-canvas-filter', 'gallery-slider', 'quick-view']
   }, {
     id: 'single-product-layouts',
     name: (0,external_wp_i18n_namespaceObject.__)('Single Product Layouts', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Multiple beautiful single-product layouts.', 'customify'),
-    sub: true
+    description: (0,external_wp_i18n_namespaceObject.__)('Multiple beautiful single-product layouts.', 'customify'),
+    parent: 'woocommerce-booster'
   }, {
     id: 'off-canvas-filter',
     name: (0,external_wp_i18n_namespaceObject.__)('Off Canvas Filter', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Off-canvas product filter for shop and archive pages.', 'customify'),
-    sub: true
+    description: (0,external_wp_i18n_namespaceObject.__)('Off-canvas product filter for shop and archive pages.', 'customify'),
+    parent: 'woocommerce-booster'
   }, {
     id: 'gallery-slider',
     name: (0,external_wp_i18n_namespaceObject.__)('Product Gallery Slider', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Slider for the WooCommerce product gallery.', 'customify'),
-    sub: true
+    description: (0,external_wp_i18n_namespaceObject.__)('Slider for the WooCommerce product gallery.', 'customify'),
+    parent: 'woocommerce-booster'
   }, {
     id: 'quick-view',
     name: (0,external_wp_i18n_namespaceObject.__)('Quick View', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Modal quick-view for product listings.', 'customify'),
-    sub: true
+    description: (0,external_wp_i18n_namespaceObject.__)('Modal quick-view for product listings.', 'customify'),
+    parent: 'woocommerce-booster'
   }, {
     id: 'infinity-scroll',
     name: (0,external_wp_i18n_namespaceObject.__)('Infinity Scroll', 'customify'),
-    desc: (0,external_wp_i18n_namespaceObject.__)('Auto-load the next posts/products as the reader nears the bottom.', 'customify')
+    description: (0,external_wp_i18n_namespaceObject.__)('Auto-load the next posts/products as the reader nears the bottom.', 'customify')
   }];
   return (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.modules', base);
+}
+;// ./src/backend/admin/dashboard-v2/ui/ModuleList.jsx
+
+/**
+ * Module list grid — 2-col layout with internal hairline borders.
+ * Ported from the theme-dashboard branch `pm-module-list` pattern.
+ *
+ *   <ModuleList>
+ *     <ModuleRow leading={ <ToggleSwitch ... /> } title="..." description="..." trailing={ ... } />
+ *     ...
+ *   </ModuleList>
+ *
+ * Rows with `has-subs` class span the full width and their sub-module
+ * group renders inside `.customify-dashboard-module-list__subs` below.
+ */
+
+function ModuleList({
+  children,
+  className
+}) {
+  const classes = ['customify-dashboard-module-list'];
+  if (className) {
+    classes.push(className);
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: classes.join(' '),
+    children: children
+  });
+}
+function ModuleRow({
+  title,
+  description,
+  leading,
+  trailing,
+  hasSubs,
+  className
+}) {
+  const classes = ['customify-dashboard-module-row'];
+  if (hasSubs) {
+    classes.push('has-subs');
+  }
+  if (className) {
+    classes.push(className);
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: classes.join(' '),
+    children: [leading && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-module-row__leading",
+      children: leading
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "customify-dashboard-module-row__body",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+        className: "customify-dashboard-module-row__title",
+        children: title
+      }), description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "customify-dashboard-module-row__description",
+        children: description
+      })]
+    }), trailing && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-dashboard-module-row__trailing",
+      children: trailing
+    })]
+  });
+}
+function ModuleSubmodules({
+  children
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "customify-dashboard-module-list__subs",
+    children: children
+  });
+}
+;// ./src/backend/admin/dashboard-v2/ui/ToggleSwitch.jsx
+
+/**
+ * Pill-shaped on/off switch. Controlled — parent owns state.
+ *
+ * Visually neutralizes the WP-admin checkbox `:checked::before` glyph
+ * which would otherwise paint a misaligned tick on top of the slider.
+ */
+
+function ToggleSwitch({
+  checked,
+  onChange,
+  disabled,
+  ariaLabel
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
+    className: "customify-dashboard-toggle",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+      type: "checkbox",
+      checked: !!checked,
+      onChange: event => onChange(event.target.checked),
+      disabled: !!disabled,
+      "aria-label": ariaLabel
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "customify-dashboard-toggle__slider"
+    })]
+  });
+}
+;// ./src/backend/admin/dashboard-v2/sections/ProModulesSection.jsx
+/**
+ * Pro Modules card section on the Welcome tab.
+ *
+ * Two render paths:
+ *   1. Pro plugin NOT active (`boot.proActive === false`) → marketing list.
+ *      Each row shows title + description + optional "Docs" trailing link.
+ *      Header CTA is "Upgrade Now".
+ *   2. Pro plugin active → same list (overridden via the
+ *      `customify.dashboard.pro.modules` filter from Pro's bundle) plus a
+ *      ToggleSwitch leading slot per row + Settings trailing link when the
+ *      module has settings + is enabled. Toggling calls a handler Pro
+ *      supplies via the `customify.dashboard.pro.toggle` filter; the kit
+ *      ships a no-op + reject so the marketing path can't accidentally
+ *      flip server state.
+ *
+ * Pro extension surface:
+ *   - `customify.dashboard.pro.modules`  — replaces the module catalogue.
+ *   - `customify.dashboard.pro.toggle`   — toggle handler `(classKey,
+ *                                            nextEnabled) => Promise<{ enabled }>`.
+ */
+
+
+
+
+
+
+
+
+
+
+const NOTICES_STORE = 'core/notices';
+function DocsLink({
+  href
+}) {
+  if (!href) {
+    return null;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+    className: "customify-dashboard-module-link",
+    href: href,
+    target: "_blank",
+    rel: "noopener noreferrer",
+    children: (0,external_wp_i18n_namespaceObject.__)('Docs', 'customify')
+  });
+}
+function ProModulesSection({
+  boot
+}) {
+  const modules = useProModules();
+  const proActive = Boolean(boot?.proActive);
+  const byId = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    const map = {};
+    modules.forEach(m => {
+      map[m.id] = m;
+    });
+    return map;
+  }, [modules]);
+  const topLevel = (0,external_wp_element_namespaceObject.useMemo)(() => modules.filter(m => !m.parent), [modules]);
+
+  // Local optimistic state; on mount seed from `enabled` flags Pro injects.
+  const [enabledMap, setEnabledMap] = (0,external_wp_element_namespaceObject.useState)(() => {
+    const map = {};
+    modules.forEach(m => {
+      map[m.id] = !!m.enabled;
+    });
+    return map;
+  });
+  const [pendingMap, setPendingMap] = (0,external_wp_element_namespaceObject.useState)({});
+  const proToggle = (0,external_wp_element_namespaceObject.useMemo)(() => (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.toggle', null), []);
+  const handleToggle = (0,external_wp_element_namespaceObject.useCallback)(id => {
+    if (typeof proToggle !== 'function') {
+      return;
+    }
+    const current = !!enabledMap[id];
+    const next = !current;
+    const moduleName = byId[id]?.name || id;
+    setEnabledMap(prev => ({
+      ...prev,
+      [id]: next
+    }));
+    setPendingMap(prev => ({
+      ...prev,
+      [id]: true
+    }));
+    Promise.resolve(proToggle(id, next)).then(res => {
+      const flag = !!(res && res.enabled);
+      setEnabledMap(prev => ({
+        ...prev,
+        [id]: flag
+      }));
+      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(next ?
+      // translators: %s module name.
+      (0,external_wp_i18n_namespaceObject.__)('"%s" activated.', 'customify') :
+      // translators: %s module name.
+      (0,external_wp_i18n_namespaceObject.__)('"%s" deactivated.', 'customify'), moduleName), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    }).catch(() => {
+      setEnabledMap(prev => ({
+        ...prev,
+        [id]: current
+      }));
+      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createErrorNotice((0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %s module name.
+      (0,external_wp_i18n_namespaceObject.__)('Could not update "%s". Please try again.', 'customify'), moduleName), {
+        type: 'snackbar',
+        isDismissible: true
+      });
+    }).finally(() => {
+      setPendingMap(prev => {
+        const copy = {
+          ...prev
+        };
+        delete copy[id];
+        return copy;
+      });
+    });
+  }, [proToggle, enabledMap, byId]);
+  const renderRow = (mod, isSub = false) => {
+    const checked = !!enabledMap[mod.id];
+    const pending = !!pendingMap[mod.id];
+    const canToggle = proActive && mod.canToggle !== false && typeof proToggle === 'function';
+    const showSettings = canToggle && checked && mod.hasSettings && !pending;
+    const showsSubs = !isSub && mod.subModules && mod.subModules.length > 0;
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModuleRow, {
+      title: mod.name,
+      description: mod.description,
+      hasSubs: showsSubs,
+      leading: canToggle ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ToggleSwitch, {
+        checked: checked,
+        onChange: () => handleToggle(mod.id),
+        disabled: pending,
+        ariaLabel: mod.name
+      }) : null,
+      trailing: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+        children: [showSettings && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+          type: "button",
+          className: "customify-dashboard-module-link customify-dashboard-module-link--settings",
+          onClick: () => (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.openSettings', null, mod),
+          children: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DocsLink, {
+          href: mod.docHref
+        })]
+      })
+    }, mod.id);
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
+    className: "customify-dashboard-welcome__pro",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardHeader, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        className: "customify-dashboard-welcome__checklist-title",
+        children: (0,external_wp_i18n_namespaceObject.__)('Customify Pro modules', 'customify')
+      }), !proActive && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: "primary",
+        href: boot?.urls?.proUpgrade || '#',
+        target: "_blank",
+        rel: "noopener noreferrer",
+        children: (0,external_wp_i18n_namespaceObject.__)('Upgrade now', 'customify')
+      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModuleList, {
+      children: topLevel.map(mod => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_element_namespaceObject.Fragment, {
+        children: [renderRow(mod, false), mod.subModules && mod.subModules.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ModuleSubmodules, {
+          children: mod.subModules.map(subId => {
+            const sub = byId[subId];
+            return sub ? renderRow(sub, true) : null;
+          })
+        })]
+      }, mod.id))
+    })]
+  });
 }
 ;// ./src/backend/admin/dashboard-v2/tabs/Welcome.jsx
 /**
  * Welcome tab — single-page scroll with Hero + Checklist + Customizer
- * quick-links + Pro module grid. Composes kit primitives; no list-page
- * or DataViews machinery (lightweight theme shape per SPEC §10.1).
+ * quick-link grid + Pro module grid. Composes kit primitives + small
+ * theme-owned UI components (`ModuleList`, `ThemeGridCard`, `ToggleSwitch`).
  */
+
 
 
 
@@ -2319,17 +2648,10 @@ function Welcome() {
   const boot = ce();
   const links = useCustomizerLinks(boot);
   const checklistItems = useChecklist(boot);
-  const proModules = useProModules();
   const greeting = boot?.user?.displayName ? (0,external_wp_i18n_namespaceObject.sprintf)(
   // translators: %s is the current user's display name.
   (0,external_wp_i18n_namespaceObject.__)('Welcome, %s', 'customify'), boot.user.displayName) : (0,external_wp_i18n_namespaceObject.__)('Welcome to Customify', 'customify');
   const tagline = (0,external_wp_i18n_namespaceObject.__)('Lightweight, SEO-optimized, multipurpose WordPress theme. Set up your site identity, header, footer, and styling — all from the Customizer.', 'customify');
-
-  /**
-   * Allow Pro / child themes to append sections below the checklist.
-   *
-   * Each section is rendered as `<section.render({ boot })>`.
-   */
   const extraSections = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.sections', [], boot);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-welcome",
@@ -2357,55 +2679,33 @@ function Welcome() {
         }
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-      className: "customify-dashboard-welcome__card",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+      className: "customify-dashboard-welcome__theme-customizer",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardHeader, {
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+          className: "customify-dashboard-welcome__checklist-title",
           children: (0,external_wp_i18n_namespaceObject.__)('Customizer quick links', 'customify')
-        })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
-          className: "customify-dashboard-welcome__links",
-          children: links.map(link => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
-              variant: "tertiary",
-              href: link.href,
-              target: "_blank",
-              rel: "noopener noreferrer",
-              children: link.label
-            })
-          }, link.id))
-        })
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+          className: "customify-dashboard-header-link",
+          href: boot?.urls?.customize || '#',
+          target: "_blank",
+          rel: "noopener noreferrer",
+          children: (0,external_wp_i18n_namespaceObject.__)('Go to Customizer', 'customify')
+        })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "customify-dashboard-theme-grid",
+        children: links.map(link => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ThemeGridCard, {
+          title: link.title,
+          description: link.description,
+          href: link.href
+        }, link.id))
       })]
     }), extraSections.map(section => {
       const Render = section.render;
       return Render ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Render, {
         boot: boot
       }, section.id) : null;
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
-      className: "customify-dashboard-welcome__card customify-dashboard-welcome__pro",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardHeader, {
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-          children: (0,external_wp_i18n_namespaceObject.__)('Customify Pro modules', 'customify')
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Button, {
-          variant: "primary",
-          href: boot?.urls?.proUpgrade || '#',
-          target: "_blank",
-          rel: "noopener noreferrer",
-          children: [(0,external_wp_i18n_namespaceObject.__)('Upgrade now', 'customify'), " \u2192"]
-        })]
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardBody, {
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
-          className: "customify-dashboard-welcome__pro-grid",
-          children: proModules.map(m => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
-            className: 'customify-dashboard-welcome__pro-item' + (m.sub ? ' is-sub' : ''),
-            children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
-              children: m.name
-            }), m.desc && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
-              children: m.desc
-            })]
-          }, m.id))
-        })
-      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ProModulesSection, {
+      boot: boot
     })]
   });
 }
@@ -2455,7 +2755,7 @@ const CUSTOMIFY_SETTINGS_STORE = STORE_NAME;
 
 
 
-const NOTICES_STORE = 'core/notices';
+const Settings_NOTICES_STORE = 'core/notices';
 function Settings() {
   const boot = ce();
   const schema = boot?.settings?.schema || {
@@ -2474,12 +2774,12 @@ function Settings() {
   const handleSave = async () => {
     try {
       await save();
-      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
+      (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Settings saved.', 'customify'), {
         type: 'snackbar',
         isDismissible: true
       });
     } catch (err) {
-      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
+      (0,external_wp_data_namespaceObject.dispatch)(Settings_NOTICES_STORE).createErrorNotice(err?.message || (0,external_wp_i18n_namespaceObject.__)('Saving settings failed. Try again.', 'customify'), {
         type: 'snackbar',
         isDismissible: true
       });
@@ -2898,7 +3198,7 @@ if (document.getElementById('customify-dashboard')) {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(778); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(956); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

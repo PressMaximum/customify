@@ -3,25 +3,71 @@ import { __ } from '@wordpress/i18n';
 
 /**
  * Returns the Welcome-tab Customizer quick-link list, derived from the
- * PHP-localised boot payload.
+ * PHP-localised boot payload. Each item carries a short description so
+ * the 2-col grid renders title + description stacked.
  *
  * Pro / child theme extends via `customify.dashboard.welcome.links`.
  *
  * @param {object} boot Boot payload (from useBoot()).
- * @return {Array<{ id: string, label: string, href: string }>}
+ * @return {Array<{ id: string, title: string, description: string, href: string }>}
  */
 export function useCustomizerLinks( boot ) {
 	const urls = boot?.urls || {};
 	const base = [
-		{ id: 'logoIdentity', label: __( 'Logo & site identity', 'customify' ), href: urls.logoIdentity },
-		{ id: 'layout', label: __( 'Layout', 'customify' ), href: urls.layout },
-		{ id: 'headerBuilder', label: __( 'Header builder', 'customify' ), href: urls.headerBuilder },
-		{ id: 'footerBuilder', label: __( 'Footer builder', 'customify' ), href: urls.footerBuilder },
-		{ id: 'styling', label: __( 'Styling', 'customify' ), href: urls.styling },
-		{ id: 'typography', label: __( 'Typography', 'customify' ), href: urls.typography },
-		{ id: 'sidebar', label: __( 'Sidebar', 'customify' ), href: urls.sidebar },
-		{ id: 'blog', label: __( 'Blog posts', 'customify' ), href: urls.blog },
-		{ id: 'homepage', label: __( 'Homepage', 'customify' ), href: urls.homepage },
+		{
+			id: 'logoIdentity',
+			title: __( 'Logo & site identity', 'customify' ),
+			description: __( 'Upload logo, site title, tagline.', 'customify' ),
+			href: urls.logoIdentity,
+		},
+		{
+			id: 'layout',
+			title: __( 'Layout settings', 'customify' ),
+			description: __( 'Container width, content layout.', 'customify' ),
+			href: urls.layout,
+		},
+		{
+			id: 'headerBuilder',
+			title: __( 'Header builder', 'customify' ),
+			description: __( 'WYSIWYG header drag-and-drop.', 'customify' ),
+			href: urls.headerBuilder,
+		},
+		{
+			id: 'footerBuilder',
+			title: __( 'Footer builder', 'customify' ),
+			description: __( 'WYSIWYG footer drag-and-drop.', 'customify' ),
+			href: urls.footerBuilder,
+		},
+		{
+			id: 'styling',
+			title: __( 'Styling', 'customify' ),
+			description: __( 'Brand colors and site palette.', 'customify' ),
+			href: urls.styling,
+		},
+		{
+			id: 'typography',
+			title: __( 'Typography', 'customify' ),
+			description: __( 'Font family, size, line-height.', 'customify' ),
+			href: urls.typography,
+		},
+		{
+			id: 'sidebar',
+			title: __( 'Sidebar settings', 'customify' ),
+			description: __( 'Sidebar layout per context.', 'customify' ),
+			href: urls.sidebar,
+		},
+		{
+			id: 'blog',
+			title: __( 'Blog posts', 'customify' ),
+			description: __( 'Blog listing & single post.', 'customify' ),
+			href: urls.blog,
+		},
+		{
+			id: 'homepage',
+			title: __( 'Homepage settings', 'customify' ),
+			description: __( 'Static front page setup.', 'customify' ),
+			href: urls.homepage,
+		},
 	].filter( ( l ) => Boolean( l.href ) );
 
 	return applyFilters( 'customify.dashboard.welcome.links', base, boot );

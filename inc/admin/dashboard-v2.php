@@ -171,6 +171,14 @@ function customify_dashboard_v2_boot_data(): array {
 				: array( 'panels' => array() ),
 		),
 		'changelog'    => customify_dashboard_v2_changelog( (string) $theme->get( 'Version' ) ),
+		/**
+		 * Toggle the Pro-aware module list in the Welcome tab.
+		 *
+		 * Customify Pro hooks this to `true` once activated; the JS side
+		 * reads `boot.proActive` and renders a ToggleSwitch + Settings
+		 * affordance per module instead of the marketing list.
+		 */
+		'proActive'    => (bool) apply_filters( 'customify_dashboard_pro_active', false ),
 	);
 
 	/**

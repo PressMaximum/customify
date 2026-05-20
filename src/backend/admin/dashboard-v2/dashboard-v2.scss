@@ -91,37 +91,267 @@ body.customify-dashboard-page {
 		}
 	}
 
-	&__pro-grid {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat( auto-fill, minmax( 240px, 1fr ) );
-		gap: 12px;
+}
+
+// Customizer quick links — 2-col grid with internal hairline borders.
+// Ported from theme-dashboard branch `pm-theme-grid`.
+.customify-dashboard-theme-grid {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+
+	&__item {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		padding: 18px 24px;
+		border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		border-left: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		color: inherit;
+		text-decoration: none;
+		outline: none !important;
+		box-shadow: none !important;
+
+		&:nth-child( odd ) {
+			border-left: none;
+		}
+
+		&:nth-child( 1 ),
+		&:nth-child( 2 ) {
+			border-top: none;
+		}
+
+		&:hover {
+			text-decoration: none;
+
+			.customify-dashboard-theme-grid__title {
+				color: var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+			}
+		}
 	}
 
-	&__pro-item {
+	&__title {
 		margin: 0;
-		padding: 12px 14px;
-		border: 1px solid var( --pmdk-color-border, #e0e0e0 );
-		border-radius: var( --pmdk-radius-small, 4px );
-		background: var( --pmdk-color-bg, #fff );
+		font-size: 14px;
+		font-weight: 600;
+		color: var( --pmdk-color-text, #1e1e1e );
+		transition: color 0.12s;
+	}
 
-		h3 {
-			margin: 0 0 4px 0;
-			font-size: 13px;
-			font-weight: 600;
+	&__description {
+		margin: 0;
+		color: var( --pmdk-color-text-muted, #50575e );
+		font-size: 13px;
+		line-height: 1.4;
+	}
+
+	@media ( max-width: 1100px ) {
+		grid-template-columns: 1fr;
+
+		&__item {
+			border-left: none !important;
 		}
 
-		p {
-			margin: 0;
-			color: var( --pmdk-color-text-muted, #50575e );
-			font-size: 12px;
-			line-height: 1.4;
+		&__item:nth-child( 2 ) {
+			border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+	}
+}
+
+.customify-dashboard-header-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+	text-decoration: none;
+	font-size: 13px;
+	font-weight: 500;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// Pro modules list — 2-col grid + sub-module group.
+// Ported from theme-dashboard branch `pm-module-list` / `pm-module-row`.
+.customify-dashboard-module-list {
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+}
+
+.customify-dashboard-module-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 16px 24px;
+	border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+	border-left: 1px solid var( --pmdk-color-border-subtle, #ededef );
+
+	&__leading {
+		flex-shrink: 0;
+		margin-top: 2px;
+	}
+
+	&__body {
+		flex: 1;
+		min-width: 0;
+	}
+
+	&__title {
+		margin: 0 0 4px 0;
+		font-size: 14px;
+		font-weight: 600;
+		color: var( --pmdk-color-text, #1e1e1e );
+	}
+
+	&__description {
+		margin: 0;
+		color: var( --pmdk-color-text-muted, #50575e );
+		font-size: 13px;
+		line-height: 1.45;
+	}
+
+	&__trailing {
+		flex-shrink: 0;
+		display: inline-flex;
+		align-items: center;
+		gap: 12px;
+		margin-top: 1px;
+	}
+}
+
+.customify-dashboard-module-list .customify-dashboard-module-row {
+	&:nth-child( odd ) {
+		border-left: none;
+	}
+
+	&:nth-child( 1 ),
+	&:nth-child( 2 ) {
+		border-top: none;
+	}
+
+	&.has-subs {
+		grid-column: 1 / -1;
+		border-left: none;
+	}
+}
+
+.customify-dashboard-module-list__subs {
+	grid-column: 1 / -1;
+	display: grid;
+	grid-template-columns: repeat( 2, 1fr );
+	background: var( --pmdk-color-bg-subtle, #f6f7f7 );
+	border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+
+	.customify-dashboard-module-row {
+		padding-left: 60px;
+		padding-top: 14px;
+		padding-bottom: 14px;
+		border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		border-left: 1px solid var( --pmdk-color-border-subtle, #ededef );
+
+		&:nth-child( odd ) {
+			border-left: none;
 		}
 
-		&.is-sub {
-			margin-left: 16px;
+		&:nth-child( 1 ),
+		&:nth-child( 2 ) {
+			border-top: none;
 		}
+	}
+}
+
+@media ( max-width: 1100px ) {
+	.customify-dashboard-module-list,
+	.customify-dashboard-module-list__subs {
+		grid-template-columns: 1fr;
+
+		.customify-dashboard-module-row {
+			border-left: none !important;
+		}
+
+		.customify-dashboard-module-row:nth-child( 2 ) {
+			border-top: 1px solid var( --pmdk-color-border-subtle, #ededef );
+		}
+	}
+}
+
+.customify-dashboard-module-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	color: var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+	text-decoration: none;
+	font: inherit;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+// ToggleSwitch — pill-shaped on/off control. Override WP-admin's
+// :checked::before glyph so the slider isn't drawn on top of it.
+.customify-dashboard-toggle {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: 22px;
+	cursor: pointer;
+
+	input[type="checkbox"] {
+		position: absolute;
+		width: 0;
+		height: 0;
+		margin: 0;
+		padding: 0;
+		border: 0;
+		opacity: 0;
+		appearance: none;
+		-webkit-appearance: none;
+		pointer-events: none;
+	}
+
+	input[type="checkbox"]::before,
+	input[type="checkbox"]:checked::before,
+	input[type="checkbox"]:indeterminate::before {
+		content: none !important;
+		display: none !important;
+	}
+
+	&__slider {
+		position: absolute;
+		inset: 0;
+		background: #c3c4c7;
+		border-radius: 11px;
+		transition: background 0.2s;
+
+		&::before {
+			content: '';
+			position: absolute;
+			width: 16px;
+			height: 16px;
+			left: 3px;
+			top: 3px;
+			background: #fff;
+			border-radius: 50%;
+			transition: transform 0.2s;
+			box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.18 );
+		}
+	}
+
+	input:checked + .customify-dashboard-toggle__slider {
+		background: var( --pmdk-color-accent, var( --wp-admin-theme-color, #2271b1 ) );
+
+		&::before {
+			transform: translateX( 18px );
+		}
+	}
+
+	input:disabled + .customify-dashboard-toggle__slider {
+		opacity: 0.5;
+		cursor: not-allowed;
 	}
 }
