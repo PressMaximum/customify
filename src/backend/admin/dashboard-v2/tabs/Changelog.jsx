@@ -19,12 +19,7 @@
  * radius), so this file does NOT wrap them in another <Card>.
  */
 
-import {
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
 import { Notice, Spinner } from '@wordpress/components';
@@ -119,25 +114,29 @@ function SourceReleases( { source } ) {
 export default function Changelog( { params } ) {
 	const boot = useBoot();
 
-	const sources = useMemo( () => {
-		const base = [
-			{
-				id: 'customify',
-				label: __( 'Customify', 'customify' ),
-				fetch: () =>
-					Promise.resolve(
-						Array.isArray( boot?.changelog ) ? boot.changelog : [],
-					),
-			},
-		];
-		const filtered = applyFilters(
-			'customify.dashboard.changelog.sources',
-			base,
-		);
-		return Array.isArray( filtered ) && filtered.length > 0
-			? filtered
-			: base;
-	}, [ boot ] );
+	// Recompute on every render — Pro bridge JS registers
+	// `customify.dashboard.changelog.sources` AFTER the theme bundle's
+	// mountDashboard mounts the React tree. A useMemo over `[boot]`
+	// (stable) captured before Pro's filter would never see the appended
+	// Pro source. applyFilters is cheap.
+	const sourcesBase = [
+		{
+			id: 'customify',
+			label: __( 'Customify', 'customify' ),
+			fetch: () =>
+				Promise.resolve(
+					Array.isArray( boot?.changelog ) ? boot.changelog : [],
+				),
+		},
+	];
+	const sourcesFiltered = applyFilters(
+		'customify.dashboard.changelog.sources',
+		sourcesBase,
+	);
+	const sources =
+		Array.isArray( sourcesFiltered ) && sourcesFiltered.length > 0
+			? sourcesFiltered
+			: sourcesBase;
 
 	const activeId = params?.sourceId || sources[ 0 ]?.id;
 	const activeSource =

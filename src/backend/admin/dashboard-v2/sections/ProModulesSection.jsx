@@ -19,7 +19,7 @@
  *                                            nextEnabled) => Promise<{ enabled }>`.
  */
 
-import { Fragment, useCallback, useMemo, useState } from '@wordpress/element';
+import { Fragment, useCallback, useState } from '@wordpress/element';
 import { applyFilters } from '@wordpress/hooks';
 import { __, sprintf } from '@wordpress/i18n';
 import { dispatch } from '@wordpress/data';
@@ -62,18 +62,13 @@ export default function ProModulesSection( { boot } ) {
 	const modules = useProModules();
 	const proActive = Boolean( boot?.proActive );
 
-	const byId = useMemo( () => {
-		const map = {};
-		modules.forEach( ( m ) => {
-			map[ m.id ] = m;
-		} );
-		return map;
-	}, [ modules ] );
-
-	const topLevel = useMemo(
-		() => modules.filter( ( m ) => ! m.parent ),
-		[ modules ],
-	);
+	// Recompute every render — `modules` comes from applyFilters which a
+	// later-loading bundle (Pro) may mutate after our first paint.
+	const byId = {};
+	modules.forEach( ( m ) => {
+		byId[ m.id ] = m;
+	} );
+	const topLevel = modules.filter( ( m ) => ! m.parent );
 
 	// Local optimistic state; on mount seed from `enabled` flags Pro injects.
 	const [ enabledMap, setEnabledMap ] = useState( () => {
@@ -85,10 +80,11 @@ export default function ProModulesSection( { boot } ) {
 	} );
 	const [ pendingMap, setPendingMap ] = useState( {} );
 
-	const proToggle = useMemo(
-		() => applyFilters( 'customify.dashboard.pro.toggle', null ),
-		[],
-	);
+	// Recompute every render — Pro bridge's toggle handler registers
+	// AFTER the theme's mountDashboard runs. A useMemo over [] would
+	// cache the pre-registration `null` value and silently disable
+	// the toggle flow.
+	const proToggle = applyFilters( 'customify.dashboard.pro.toggle', null );
 
 	const handleToggle = useCallback(
 		( id ) => {

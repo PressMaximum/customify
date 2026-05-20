@@ -13,7 +13,7 @@
  * Single-panel case: SubNav hides; the lone panel renders full-width.
  */
 
-import { useEffect, useMemo, useState } from '@wordpress/element';
+import { useEffect } from '@wordpress/element';
 import { useSelect, useDispatch, dispatch } from '@wordpress/data';
 import { applyFilters } from '@wordpress/hooks';
 import { __ } from '@wordpress/i18n';
@@ -117,14 +117,16 @@ export default function Settings( { params } ) {
 		BASE_FIELD_TYPES,
 	);
 
-	const panels = useMemo(
-		() =>
-			applyFilters(
-				'customify.dashboard.settings.panels',
-				schema.panels || [],
-				boot,
-			),
-		[ schema, boot ],
+	// NB: do NOT useMemo here — the panels filter list is mutated by
+	// Pro / child theme bundles that load *after* this script (theme
+	// bundle calls mountDashboard synchronously; Pro's bridge JS
+	// registers its filters once its own <script> executes). A memoised
+	// applyFilters call captured before Pro registered would never see
+	// the appended panels. Recomputing per render is cheap.
+	const panels = applyFilters(
+		'customify.dashboard.settings.panels',
+		schema.panels || [],
+		boot,
 	);
 
 	const requestedPanelId = params?.panelId || null;

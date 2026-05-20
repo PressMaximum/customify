@@ -22,7 +22,10 @@ import Changelog from './tabs/Changelog.jsx';
 import './dashboard-v2.scss';
 import brandIcon from './brand-icon.js';
 
-if ( document.getElementById( 'customify-dashboard' ) ) {
+function mount() {
+	if ( ! document.getElementById( 'customify-dashboard' ) ) {
+		return;
+	}
 	const boot = window.customifyDashboard || {};
 	// When Customify Pro is active it filters `customify_dashboard_localize`
 	// to inject `proVersion`; the header label switches to that version +
@@ -104,4 +107,15 @@ if ( document.getElementById( 'customify-dashboard' ) ) {
 		},
 		initialRoute: '#welcome',
 	} );
+}
+
+// Defer to DOMContentLoaded so any Pro / child theme JS that registers
+// extender filters (`customify.dashboard.settings.panels`,
+// `…changelog.sources`, `…pro.modules`, `…pro.toggle`) has run before
+// the React tree mounts and calls applyFilters() for the first time.
+// Mirrors Blocksify's bootstrap pattern.
+if ( document.readyState === 'loading' ) {
+	document.addEventListener( 'DOMContentLoaded', mount );
+} else {
+	mount();
 }

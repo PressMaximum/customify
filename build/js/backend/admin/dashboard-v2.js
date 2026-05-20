@@ -2529,14 +2529,14 @@ function ProModulesSection({
 }) {
   const modules = useProModules();
   const proActive = Boolean(boot?.proActive);
-  const byId = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    const map = {};
-    modules.forEach(m => {
-      map[m.id] = m;
-    });
-    return map;
-  }, [modules]);
-  const topLevel = (0,external_wp_element_namespaceObject.useMemo)(() => modules.filter(m => !m.parent), [modules]);
+
+  // Recompute every render — `modules` comes from applyFilters which a
+  // later-loading bundle (Pro) may mutate after our first paint.
+  const byId = {};
+  modules.forEach(m => {
+    byId[m.id] = m;
+  });
+  const topLevel = modules.filter(m => !m.parent);
 
   // Local optimistic state; on mount seed from `enabled` flags Pro injects.
   const [enabledMap, setEnabledMap] = (0,external_wp_element_namespaceObject.useState)(() => {
@@ -2547,7 +2547,12 @@ function ProModulesSection({
     return map;
   });
   const [pendingMap, setPendingMap] = (0,external_wp_element_namespaceObject.useState)({});
-  const proToggle = (0,external_wp_element_namespaceObject.useMemo)(() => (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.toggle', null), []);
+
+  // Recompute every render — Pro bridge's toggle handler registers
+  // AFTER the theme's mountDashboard runs. A useMemo over [] would
+  // cache the pre-registration `null` value and silently disable
+  // the toggle flow.
+  const proToggle = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.pro.toggle', null);
   const handleToggle = (0,external_wp_element_namespaceObject.useCallback)(id => {
     if (typeof proToggle !== 'function') {
       return;
@@ -3045,7 +3050,14 @@ function Settings({
     reset
   } = (0,external_wp_data_namespaceObject.useDispatch)(CUSTOMIFY_SETTINGS_STORE);
   const fieldTypes = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.field-types', Ze);
-  const panels = (0,external_wp_element_namespaceObject.useMemo)(() => (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.panels', schema.panels || [], boot), [schema, boot]);
+
+  // NB: do NOT useMemo here — the panels filter list is mutated by
+  // Pro / child theme bundles that load *after* this script (theme
+  // bundle calls mountDashboard synchronously; Pro's bridge JS
+  // registers its filters once its own <script> executes). A memoised
+  // applyFilters call captured before Pro registered would never see
+  // the appended panels. Recomputing per render is cheap.
+  const panels = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.panels', schema.panels || [], boot);
   const requestedPanelId = params?.panelId || null;
   const activePanel = panels.find(p => p.id === requestedPanelId) || panels[0] || null;
 
@@ -3244,15 +3256,19 @@ function Changelog({
   params
 }) {
   const boot = ce();
-  const sources = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    const base = [{
-      id: 'customify',
-      label: (0,external_wp_i18n_namespaceObject.__)('Customify', 'customify'),
-      fetch: () => Promise.resolve(Array.isArray(boot?.changelog) ? boot.changelog : [])
-    }];
-    const filtered = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.changelog.sources', base);
-    return Array.isArray(filtered) && filtered.length > 0 ? filtered : base;
-  }, [boot]);
+
+  // Recompute on every render — Pro bridge JS registers
+  // `customify.dashboard.changelog.sources` AFTER the theme bundle's
+  // mountDashboard mounts the React tree. A useMemo over `[boot]`
+  // (stable) captured before Pro's filter would never see the appended
+  // Pro source. applyFilters is cheap.
+  const sourcesBase = [{
+    id: 'customify',
+    label: (0,external_wp_i18n_namespaceObject.__)('Customify', 'customify'),
+    fetch: () => Promise.resolve(Array.isArray(boot?.changelog) ? boot.changelog : [])
+  }];
+  const sourcesFiltered = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.changelog.sources', sourcesBase);
+  const sources = Array.isArray(sourcesFiltered) && sourcesFiltered.length > 0 ? sourcesFiltered : sourcesBase;
   const activeId = params?.sourceId || sources[0]?.id;
   const activeSource = sources.find(s => s.id === activeId) || sources[0];
 
@@ -3329,7 +3345,10 @@ const brandIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24
 
 
 
-if (document.getElementById('customify-dashboard')) {
+function mount() {
+  if (!document.getElementById('customify-dashboard')) {
+    return;
+  }
   const boot = window.customifyDashboard || {};
   // When Customify Pro is active it filters `customify_dashboard_localize`
   // to inject `proVersion`; the header label switches to that version +
@@ -3422,6 +3441,17 @@ if (document.getElementById('customify-dashboard')) {
     },
     initialRoute: '#welcome'
   });
+}
+
+// Defer to DOMContentLoaded so any Pro / child theme JS that registers
+// extender filters (`customify.dashboard.settings.panels`,
+// `…changelog.sources`, `…pro.modules`, `…pro.toggle`) has run before
+// the React tree mounts and calls applyFilters() for the first time.
+// Mirrors Blocksify's bootstrap pattern.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', mount);
+} else {
+  mount();
 }
 
 /***/ })
