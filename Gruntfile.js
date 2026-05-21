@@ -12,14 +12,15 @@
  *
  * Primary entry points (one-shot, end-to-end):
  *   grunt release [--ver=<x.y.z>|patch|minor|major] [--no-publish]
- *     Pre-flight (clean tree + gh auth) → optional version bump → sync
- *     style.css header → `composer install --no-dev --optimize-autoloader`
- *     → `npm run release:assets` (production build emits both unminified
+ *     Pre-flight (clean tree + gh auth) → bump version IF --ver passed
+ *     (otherwise use whatever is in package.json) → sync style.css header
+ *     → `composer install --no-dev --optimize-autoloader` →
+ *     `npm run release:assets` (production build emits both unminified
  *     and .min.* siblings, plus .pot) → stage + zip → commit + tag + push
  *     + `gh release create --latest`. `--no-publish` stops after zipping.
  *
  *   grunt beta-release [--ver=<x.y.z-beta.N>] [--no-publish]
- *     Pre-release variant of `release`. Without --ver, auto-derives the
+ *     Auto-bumping pre-release variant. Without --ver, auto-derives the
  *     next beta tag: bumps `-beta.N` if already on a beta, otherwise
  *     patch-bumps the current stable and appends `-beta.1`. Publishes
  *     with `--prerelease` so GitHub does NOT mark it as latest.
@@ -565,7 +566,9 @@ module.exports = function ( grunt ) {
 	// ── Release ─────────────────────────────────────────────────────────────
 	// One-shot end-to-end pipeline. Steps:
 	//   1. Pre-flight (clean tree + gh auth)
-	//   2. Optional version bump (--ver=patch|minor|major|<x.y.z>)
+	//   2. Bump version ONLY if --ver=<x.y.z> is passed. Otherwise the
+	//      release uses whatever version is currently in package.json
+	//      (i.e. the dev bumped it manually before running).
 	//   3. Sync style.css header to package.json version
 	//   4. composer install --no-dev --optimize-autoloader  → vendor/ for ship
 	//   5. npm run release:assets  → production webpack (emits BOTH unminified
