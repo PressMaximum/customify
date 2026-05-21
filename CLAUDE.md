@@ -164,6 +164,46 @@ wp_enqueue_script( 'handle', '...assets/build/<entry>/index.js', $asset['depende
 
 ## Rules
 
+### Production scale — 30,000+ live sites
+
+Customify + Customify Pro are deployed on **30,000+ real user sites in production**. This is not a green-field project; every change ships to a live install base that:
+
+- Already has saved `theme_mod` data (Customizer settings), `wp_options` rows (`customify_pro_settings`, `customify_modules`, `customify_fa_ver`, etc.), and Pro module settings (`customify_pro_settings`).
+- Already has live header/footer builder layouts stored as URL-encoded JSON in `theme_mod 'header_builder_panel_v2'` / `'footer_builder_panel_v2'`.
+- Already has `customify_hook` CPT posts authored by users (Hooks module).
+- May be on older PHP / WP versions, older Pro versions, older child themes.
+- Cannot be expected to manually re-configure anything after an update.
+
+**Any change that touches persistent data — `theme_mod` keys, `wp_options` keys, `post_meta` keys, CPT slugs, sanitize callbacks, value shapes, default values — must explicitly plan for:**
+
+1. **Backward compatibility** — read both old AND new shapes; new code accepts existing data without throwing or silently dropping fields. Never assume a field exists; always provide a sensible default.
+2. **Migration** — if the storage shape genuinely needs to change, write a one-time migration that runs on `init` / `upgrader_process_complete` / a version-stamped option flag. Migration must be idempotent (safe to run twice), reversible-by-defaults (an aborted migration leaves the site usable), and logged so support can debug.
+3. **Renames are migrations** — changing a `theme_mod` key, an option name, or a sanitize callback signature is a data migration even if the code change looks small. Keep the old key as a read-only fallback for at least one minor version cycle.
+4. **Defaults must not change silently** — if a field's `default` value changes, existing sites with the old value still render correctly; sites with no saved value get the new default. Never assume "users will just re-save".
+5. **Pro ↔ theme contracts** — module class names (`Customify_Pro_Module_*`), filter names, action names, REST endpoints under `/customify/v1/` and `/customify-pro/v1/` are public API consumed by paid customers. Same rules as Never-Delete-Or-Rename below: deprecate, don't break.
+6. **Public selectors / classes / IDs** — frontend CSS classes (`.customify-header`, `.col-v2-left`, `#header-menu-sidebar`, etc.) are referenced by user custom CSS, page builders, and child theme overrides. Treat them as public API. Change at the cost of breaking thousands of customizations.
+
+Concrete pattern for any storage-touching change:
+
+```php
+// In a config file or migration callback, on init:
+$current = get_option( 'customify_pro_settings', array() );
+
+// 1. Read both old + new shape
+$value = isset( $current['new_key'] ) ? $current['new_key']
+       : ( isset( $current['old_key'] ) ? $current['old_key'] : $default );
+
+// 2. If migrating, stamp a version flag so the migration runs once
+$migrated_to = get_option( 'customify_migrations', array() );
+if ( ! isset( $migrated_to['feature_x_v2'] ) ) {
+    customify_migrate_feature_x( $current ); // idempotent
+    $migrated_to['feature_x_v2'] = time();
+    update_option( 'customify_migrations', $migrated_to );
+}
+```
+
+**When in doubt, ask before changing storage.** A 5-minute clarification is cheaper than a support escalation across 30,000 sites.
+
 ### Never delete or rename existing functions
 
 Existing PHP functions, methods, and hooks are part of the public API. Child themes, plugins, and third-party code may call them at any time. Deleting or renaming them causes fatal errors on sites that depend on the old names.
