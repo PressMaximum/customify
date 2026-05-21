@@ -170,7 +170,7 @@ function ButtonGroup( { fieldName, label, options, value, defaultValue, onChange
 						<button
 							key={ opt.value }
 							type="button"
-							className={ `customify-cs__btn components-button is-small${ isActive ? ' is-primary' : '' }` }
+							className={ `customify-cs__btn components-button ${ isActive ? ' is-primary' : '' }` }
 							data-value={ opt.value }
 							aria-label={ __( opt.label, 'customify' ) }
 							title={ __( opt.label, 'customify' ) }

@@ -231,7 +231,7 @@ $dashboard_border_color: #e5e5e5;
 .onoffswitch-inner:before {
     content: "";
     padding-left: 10px;
-    background-color: #00aadc; color: #FFFFFF;
+    background-color: var(--wp-admin-theme-color, #00aadc); color: #FFFFFF;
 }
 .onoffswitch-inner:after {
     content: "";

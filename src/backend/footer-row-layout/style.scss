@@ -71,8 +71,8 @@
 		}
 
 		&.is-active {
-			border-color: #2271b1;
-			background: #2271b1;
+			border-color: var(--wp-admin-theme-color, #2271b1);
+			background: var(--wp-admin-theme-color, #2271b1);
 			color: #fff;
 		}
 	}
@@ -114,9 +114,9 @@
 		}
 
 		&.is-active {
-			border-color: #2271b1;
+			border-color: var(--wp-admin-theme-color, #2271b1);
 			background: #e8f0fb;
-			color: #2271b1;
+			color: var(--wp-admin-theme-color, #2271b1);
 		}
 	}
 
