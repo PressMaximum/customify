@@ -38,6 +38,12 @@ class  Customify_Customizer {
 
 		if ( is_admin() || is_customize_preview() ) {
 			add_action( 'customize_register', array( $this, 'register' ), 666 );
+			// Run last so every panel (core, plugins, third-party) is already registered
+			// when we slot panels into groups and bump foreign items below the divider.
+			add_action( 'customize_register', array( $this, 'register_panel_groups' ), 99999 );
+			// Override JS section constructor for the divider type so WP customizer
+			// doesn't auto-hide it (default behaviour hides sections with no controls).
+			add_action( 'customize_controls_print_footer_scripts', array( $this, 'print_divider_section_constructor' ) );
 			add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
 			add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
 
@@ -1177,6 +1183,176 @@ class  Customify_Customizer {
 		);
 
 		do_action( 'customify/customize/register_completed', $this );
+	}
+
+	/**
+	 * Definition of panel groups shown in the Customizer side list.
+	 *
+	 * Each group renders a non-clickable divider section (see
+	 * Customify_WP_Customize_Section_Divider) at its `priority`, and every
+	 * panel/top-level-section named under `panels` is re-priorit­ised to sit
+	 * directly under that divider.
+	 *
+	 * Extend via the `customify/customizer/panel_groups` filter — e.g. a
+	 * companion plugin can append its own panels to the `post_types` group
+	 * without forking this list.
+	 *
+	 * Priority budget: each group has a 100-priority window for its panels
+	 * (`group_priority + 10, +20, +30, …`). The bump applied to foreign
+	 * panels (+2000) sits comfortably above this range.
+	 *
+	 * @return array<string, array{title:string, priority:int, panels:string[]}>
+	 */
+	public function get_panel_groups() {
+		$groups = array(
+			'general_options' => array(
+				'title'    => __( 'General Options', 'customify' ),
+				'priority' => 50,
+				'panels'   => array(
+					'styling_panel',
+					'typography_panel',
+				),
+			),
+			'layouts'         => array(
+				'title'    => __( 'Layouts', 'customify' ),
+				'priority' => 200,
+				'panels'   => array(
+					'layout_panel',
+					'header_settings',
+					'footer_settings',
+				),
+			),
+			'post_types'      => array(
+				'title'    => __( 'Post Types', 'customify' ),
+				'priority' => 350,
+				'panels'   => array(
+					'blog_panel',
+					// `portfolio_panel` is added by the Pro Portfolio module — if the module
+					// is inactive the panel won't exist and `get_panel()` returns null below.
+					'portfolio_panel',
+				),
+			),
+			'core_plugins'    => array(
+				'title'    => __( 'Core & Plugins', 'customify' ),
+				'priority' => 1000,
+				'panels'   => array(
+					// Compatibility is a theme panel but conceptually belongs with the
+					// plugin-integration settings, so it heads the Core & Plugins group.
+					'compatibility_panel',
+				),
+			),
+		);
+
+		/**
+		 * Filter the Customizer panel groups.
+		 *
+		 * @param array $groups Group definitions keyed by group slug.
+		 */
+		return apply_filters( 'customify/customizer/panel_groups', $groups );
+	}
+
+	/**
+	 * Insert group dividers in the Customizer panel list and push everything
+	 * not managed by Customify (WordPress core, plugins) into the bottom group.
+	 *
+	 * Runs at `customize_register` priority 99999 so every other extension has
+	 * already registered its panels and sections by the time we sweep.
+	 *
+	 * @param WP_Customize_Manager $wp_customize
+	 */
+	public function register_panel_groups( $wp_customize ) {
+		require_once get_template_directory() . '/inc/customizer/class-customify-section-divider.php';
+		$wp_customize->register_section_type( 'Customify_WP_Customize_Section_Divider' );
+
+		$groups = $this->get_panel_groups();
+
+		// 1. Add each divider section + re-priorit­ise its panels to follow it.
+		foreach ( $groups as $group_key => $group ) {
+			$divider_id = 'customify_divider_' . $group_key;
+
+			$wp_customize->add_section(
+				new Customify_WP_Customize_Section_Divider(
+					$wp_customize,
+					$divider_id,
+					array(
+						'title'    => $group['title'],
+						'priority' => $group['priority'],
+					)
+				)
+			);
+
+			$offset = 10;
+			foreach ( $group['panels'] as $name ) {
+				$obj = $wp_customize->get_panel( $name );
+				if ( ! $obj ) {
+					// Fall back to a top-level section with the same name (the upsell
+					// strip in upsell.php uses this shape — kept here for symmetry even
+					// though no current group references a top-level section).
+					$section = $wp_customize->get_section( $name );
+					if ( $section && empty( $section->panel ) ) {
+						$obj = $section;
+					}
+				}
+				if ( $obj ) {
+					$obj->priority = $group['priority'] + $offset;
+					$offset       += 10;
+				}
+			}
+		}
+
+		// 2. Bump anything not managed by Customify into the Core & Plugins zone.
+		$managed       = self::get_config();
+		$divider_token = 'customify_divider_';
+
+		foreach ( $wp_customize->panels() as $panel_id => $panel ) {
+			if ( isset( $managed[ 'panel|' . $panel_id ] ) ) {
+				continue;
+			}
+			$panel->priority = (int) $panel->priority + 2000;
+		}
+
+		foreach ( $wp_customize->sections() as $section_id => $section ) {
+			// Sections nested under a panel only appear when their parent is
+			// expanded; they have no effect on the top-level order.
+			if ( ! empty( $section->panel ) ) {
+				continue;
+			}
+			if ( isset( $managed[ 'section|' . $section_id ] ) ) {
+				continue;
+			}
+			// Skip the dividers we just registered.
+			if ( strpos( $section_id, $divider_token ) === 0 ) {
+				continue;
+			}
+			$section->priority = (int) $section->priority + 2000;
+		}
+	}
+
+	/**
+	 * Print the JS section constructor for the divider type.
+	 *
+	 * Why: by default WP's wp.customize.Section sets `display: none` on any
+	 * section whose `isContextuallyActive()` returns false — and a section with
+	 * zero controls is, by definition, not contextually active. The divider
+	 * carries no controls (it's purely visual), so the default constructor
+	 * would always hide it. We extend the prototype to force the section to
+	 * count as contextually active.
+	 */
+	public function print_divider_section_constructor() {
+		?>
+		<script>
+		( function () {
+			if ( typeof wp === 'undefined' || ! wp.customize || ! wp.customize.Section ) {
+				return;
+			}
+			wp.customize.sectionConstructor['customify-divider'] = wp.customize.Section.extend( {
+				isContextuallyActive: function () {
+					return true;
+				}
+			} );
+		} )();
+		</script>
+		<?php
 	}
 
 }
