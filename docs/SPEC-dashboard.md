@@ -157,10 +157,10 @@ Hash-based via kit's `HashRouter`. Declared in `mountDashboard.baseRoutes`:
 ```js
 {
   '#welcome':              { component: Welcome,    type: 'page' },
-  // Free-only — see §6.2.
-  '#free-vs-pro':          { component: FreeVsPro,  type: 'page' },
   '#settings':             { component: Settings,   type: 'page' },
   '#settings/:panelId':    { component: Settings,   type: 'page' },
+  // Free-only — see §6.2.
+  '#free-vs-pro':          { component: FreeVsPro,  type: 'page' },
   '#changelog':            { component: Changelog,  type: 'page' },
   '#changelog/:sourceId':  { component: Changelog,  type: 'page' },
 }
@@ -189,7 +189,7 @@ Extension surface: `customify.dashboard.welcome.sections` appends additional car
 
 Free-only upsell tab. Renders kit's `<CompareTable>` with a consumer-side heading + tagline above the matrix and a CTA banner attached via the table's `footer` prop.
 
-**Conditional registration** (in [`index.js`](../src/backend/admin/dashboard-v2/index.js)): inserted into `baseTabs` between Welcome and Settings, AND into `baseRoutes` under `#free-vs-pro`, only when `! boot.proActive`. When Pro is active both entries are dropped — kit's `HashRouter` falls back to `#welcome` for any leftover deep link. No runtime guard inside the component itself; visibility is purely a registration concern.
+**Conditional registration** (in [`index.js`](../src/backend/admin/dashboard-v2/index.js)): inserted into `baseTabs` immediately to the right of Settings (between Settings and Changelog), AND into `baseRoutes` under `#free-vs-pro`, only when `! boot.proActive`. The slot keeps the "settings-then-upsell" reading order. When Pro is active both entries are dropped — kit's `HashRouter` falls back to `#welcome` for any leftover deep link. No runtime guard inside the component itself; visibility is purely a registration concern.
 
 **Matrix data**: hand-curated in [`data/freeVsPro.js`](../src/backend/admin/dashboard-v2/data/freeVsPro.js) via `buildFreeVsProMatrix()`. Static copy — no REST, no boot dependency. The function form defers `__()` calls so they run after the `customify` text domain is hydrated. Module names + descriptions mirror legacy `Customify_Dashboard::pro_modules_box()` and the Welcome tab's [`data/proModules.js`](../src/backend/admin/dashboard-v2/data/proModules.js) so the three surfaces stay consistent.
 
@@ -450,7 +450,7 @@ For each PR touching dashboard-v2, smoke-test:
 | Surface | Expected |
 |---|---|
 | WP sidebar submenu | `[Dashboard, Settings]` (no Changelog) |
-| Top-bar tabs (Free) | `[Welcome, Free vs Pro, Settings, Changelog]` |
+| Top-bar tabs (Free) | `[Welcome, Settings, Free vs Pro, Changelog]` |
 | Top-bar tabs (Pro) | `[Welcome, Settings, Changelog]` (Free vs Pro hidden) |
 | Top-right header | `v{themeVersion} — Free version` (Free) / `v{proVersion} — Pro version` (Pro) |
 | Welcome → Hero | Card with hairline outline matching siblings; CTA "Open the Customizer" |
@@ -458,7 +458,7 @@ For each PR touching dashboard-v2, smoke-test:
 | Welcome → Pro modules (Free) | All rows show **disabled** FormToggle + Tooltip "Available in Pro version" on hover/focus; card head has "Upgrade now" button with external-link icon |
 | Welcome → Pro modules (Pro active, WC inactive) | WC Booster + 4 sub-modules disabled + "WooCommerce not activated" pill on parent |
 | Welcome → Pro modules (Pro active, WC active) | All toggles live; toggling fires snackbar + persists |
-| Free vs Pro (Pro inactive) | Tab present at position 2 (Welcome / **Free vs Pro** / Settings / Changelog); kit `<CompareTable>` renders 6 sections, ~30 rows, green checks + gray em-dashes + muted "Community" / literal "Priority" on support row; CTA banner links to `boot.urls.proUpgrade` |
+| Free vs Pro (Pro inactive) | Tab present at position 3 (Welcome / Settings / **Free vs Pro** / Changelog); kit `<CompareTable>` renders 6 sections, ~30 rows, green checks + gray em-dashes + muted "Community" / literal "Priority" on support row; CTA banner shows tight description with the upgrade button seated on the right (kit `flex-basis: auto` constraint per K-014 — keep description ≤ ~100 chars) and links to `boot.urls.proUpgrade` |
 | Free vs Pro (Pro active) | Tab strip entry absent; visiting `#free-vs-pro` directly → kit `HashRouter` rewrites to `#welcome` and renders the Welcome tab |
 | Card titles vs item titles | Card heads computed weight 500 (`--pmdk-font-weight-heading`); module row + grid tile titles 400 (`--pmdk-font-weight-label`) |
 | Settings → Theme settings | SaveBar idle: "No pending changes" muted gray; Reset to defaults always enabled |

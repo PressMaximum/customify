@@ -105,22 +105,24 @@ function mount() {
 		// pitches the Pro upgrade. When Pro is active the matrix becomes
 		// noise, so we drop both the tab strip entry AND the
 		// `#free-vs-pro` route — kit's HashRouter falls back to
-		// `#welcome` for any leftover deep link.
+		// `#welcome` for any leftover deep link. Slotted immediately to
+		// the right of Settings (between Settings and Changelog) so the
+		// "settings-then-upsell" reading order is preserved.
 		baseTabs: [
 			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
+			{ id: 'settings', label: __( 'Settings', 'customify' ) },
 			...( proActive
 				? []
 				: [ { id: 'free-vs-pro', label: __( 'Free vs Pro', 'customify' ) } ] ),
-			{ id: 'settings', label: __( 'Settings', 'customify' ) },
 			{ id: 'changelog', label: __( 'Changelog', 'customify' ) },
 		],
 		baseRoutes: {
 			'#welcome': { component: Welcome, type: 'page' },
+			'#settings': { component: Settings, type: 'page' },
+			'#settings/:panelId': { component: Settings, type: 'page' },
 			...( proActive
 				? {}
 				: { '#free-vs-pro': { component: FreeVsPro, type: 'page' } } ),
-			'#settings': { component: Settings, type: 'page' },
-			'#settings/:panelId': { component: Settings, type: 'page' },
 			'#changelog': { component: Changelog, type: 'page' },
 			'#changelog/:sourceId': { component: Changelog, type: 'page' },
 		},

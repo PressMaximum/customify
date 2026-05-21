@@ -2439,7 +2439,7 @@ function buildFreeVsProMatrix() {
     label: (0,external_wp_i18n_namespaceObject.__)('Workflow & support', 'customify'),
     rows: [{
       id: 'page-builders',
-      label: (0,external_wp_i18n_namespaceObject.__)('Page builder compatibility (Elementor, Beaver, Divi)', 'customify'),
+      label: (0,external_wp_i18n_namespaceObject.__)('Page builder compatibility (Gutenberg, Elementor, Beaver, Divi)', 'customify'),
       free: true,
       pro: true
     }, {
@@ -2515,7 +2515,12 @@ function FreeVsPro() {
       labels: labels,
       footer: {
         title: (0,external_wp_i18n_namespaceObject.__)('Ready to unlock every module?', 'customify'),
-        description: (0,external_wp_i18n_namespaceObject.__)('Get Customify Pro for sticky / multiple headers, WooCommerce Booster, Blog Pro, Portfolio, custom + Typekit fonts, mega menu, and priority support.', 'customify'),
+        // Description kept tight so kit's `.pmdk-compare__cta`
+        // flex layout doesn't wrap the button to a new line
+        // (`flex: 1 1 auto` on `.pmdk-compare__cta-text` —
+        // long descriptions force the button down; tracked as
+        // kit K-014).
+        description: (0,external_wp_i18n_namespaceObject.__)('Sticky headers, WooCommerce Booster, Blog Pro, custom fonts, and priority support.', 'customify'),
         ctaLabel: (0,external_wp_i18n_namespaceObject.__)('Upgrade to Customify Pro', 'customify'),
         ctaHref: boot?.urls?.proUpgrade || 'https://pressmaximum.com/customify/pro-upgrade/'
       }
@@ -4629,17 +4634,19 @@ function mount() {
     // pitches the Pro upgrade. When Pro is active the matrix becomes
     // noise, so we drop both the tab strip entry AND the
     // `#free-vs-pro` route — kit's HashRouter falls back to
-    // `#welcome` for any leftover deep link.
+    // `#welcome` for any leftover deep link. Slotted immediately to
+    // the right of Settings (between Settings and Changelog) so the
+    // "settings-then-upsell" reading order is preserved.
     baseTabs: [{
       id: 'welcome',
       label: (0,external_wp_i18n_namespaceObject.__)('Welcome', 'customify')
+    }, {
+      id: 'settings',
+      label: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
     }, ...(proActive ? [] : [{
       id: 'free-vs-pro',
       label: (0,external_wp_i18n_namespaceObject.__)('Free vs Pro', 'customify')
     }]), {
-      id: 'settings',
-      label: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
-    }, {
       id: 'changelog',
       label: (0,external_wp_i18n_namespaceObject.__)('Changelog', 'customify')
     }],
@@ -4648,12 +4655,6 @@ function mount() {
         component: Welcome,
         type: 'page'
       },
-      ...(proActive ? {} : {
-        '#free-vs-pro': {
-          component: FreeVsPro,
-          type: 'page'
-        }
-      }),
       '#settings': {
         component: Settings,
         type: 'page'
@@ -4662,6 +4663,12 @@ function mount() {
         component: Settings,
         type: 'page'
       },
+      ...(proActive ? {} : {
+        '#free-vs-pro': {
+          component: FreeVsPro,
+          type: 'page'
+        }
+      }),
       '#changelog': {
         component: Changelog,
         type: 'page'

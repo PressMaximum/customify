@@ -50,8 +50,13 @@ export default function FreeVsPro() {
 				labels={ labels }
 				footer={ {
 					title: __( 'Ready to unlock every module?', 'customify' ),
+					// Description kept tight so kit's `.pmdk-compare__cta`
+					// flex layout doesn't wrap the button to a new line
+					// (`flex: 1 1 auto` on `.pmdk-compare__cta-text` —
+					// long descriptions force the button down; tracked as
+					// kit K-014).
 					description: __(
-						'Get Customify Pro for sticky / multiple headers, WooCommerce Booster, Blog Pro, Portfolio, custom + Typekit fonts, mega menu, and priority support.',
+						'Sticky headers, WooCommerce Booster, Blog Pro, custom fonts, and priority support.',
 						'customify',
 					),
 					ctaLabel: __( 'Upgrade to Customify Pro', 'customify' ),

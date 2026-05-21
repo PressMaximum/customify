@@ -214,7 +214,7 @@ export function buildFreeVsProMatrix() {
 			rows: [
 				{
 					id: 'page-builders',
-					label: __( 'Page builder compatibility (Elementor, Beaver, Divi)', 'customify' ),
+					label: __( 'Page builder compatibility (Gutenberg, Elementor, Beaver, Divi)', 'customify' ),
 					free: true,
 					pro: true,
 				},
