@@ -409,7 +409,8 @@ $builder_active_color: #0073aa;
 			gap: 0;
 			border: 1px solid #ddd;
 
-			border-radius: 3px;
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
 			overflow: hidden;
 			background: #fff;
 			text-align: left;

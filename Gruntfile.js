@@ -25,6 +25,11 @@
  *     patch-bumps the current stable and appends `-beta.1`. Publishes
  *     with `--prerelease` so GitHub does NOT mark it as latest.
  *
+ *   grunt build-zip [--ver=<x.y.z>|patch|minor|major]
+ *     Same build pipeline as `release` but stops after producing the zip:
+ *     no preflight, no commit/tag/push, no GitHub Release. Use for local
+ *     QA, customer hand-off, or staging upload.
+ *
  *   grunt zipfile
  *     Stage and zip whatever build/ + vendor/ already contain (no rebuild,
  *     no composer install). The `stage:prepare` substep reads
@@ -588,6 +593,33 @@ module.exports = function ( grunt ) {
 		grunt.task.run( 'release:assets' );
 		grunt.task.run( 'zipfile' );
 		grunt.task.run( 'release:publish' );
+	} );
+
+	// ── Build zip (no git, no publish) ─────────────────────────────────────
+	// Same build pipeline as `release` but stops after producing the zip.
+	// No preflight (no clean-tree / gh-auth check), no commit, no tag, no
+	// push, no `gh release create`. Use this to produce a shippable zip
+	// locally — e.g. for manual QA, customer hand-off, or staging upload —
+	// without mutating git state.
+	//
+	// Steps:
+	//   1. Bump version ONLY if --ver=<x.y.z> is passed (same semantics as
+	//      `release`); otherwise use whatever is in package.json.
+	//   2. Sync style.css header to package.json version.
+	//   3. composer install --no-dev --optimize-autoloader  → vendor/ for ship.
+	//   4. npm run release:assets  → production webpack + makepot.
+	//   5. Stage (auto vendor strip from installed.json) + zip.
+	//
+	// Output: customify-<version>.zip in the repo root.
+	grunt.registerTask( 'build-zip', 'Build assets and produce the shippable zip without touching git.', function () {
+		const ver = grunt.option( 'ver' );
+		if ( ver ) {
+			grunt.task.run( 'bumpup:' + ver );
+		}
+		grunt.task.run( 'replace:theme_main' );
+		grunt.task.run( 'composer:install:prod' );
+		grunt.task.run( 'release:assets' );
+		grunt.task.run( 'zipfile' );
 	} );
 
 	// ── Beta release ────────────────────────────────────────────────────────

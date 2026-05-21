@@ -884,24 +884,34 @@ function DropZone( { colId, rowId, device, items, allItems, dragRef, onMove, onO
 function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, onOpenSection } ) {
 	const settingsTarget = layoutSection || section;
 	return (
-		<div
-			className="customify-hb__item"
-			draggable
-			onDragStart={ ( e ) => {
-				dragRef.current = { id, from };
-				e.dataTransfer.effectAllowed = 'move';
-			} }
-		>
-			<Icon icon={ dragHandle } className="customify-hb__item-handle" />
-			<span className="customify-hb__item-name">{ name }</span>
-			{ settingsTarget && (
+		<div className="customify-hb__item">
+			<span
+				className="customify-hb__item-handle"
+				draggable
+				onDragStart={ ( e ) => {
+					dragRef.current = { id, from };
+					e.dataTransfer.effectAllowed = 'move';
+					// Use the whole chip as the drag ghost instead of just the handle span.
+					const chip = e.currentTarget.closest( '.customify-hb__item' );
+					if ( chip ) {
+						const rect = chip.getBoundingClientRect();
+						e.dataTransfer.setDragImage( chip, e.clientX - rect.left, e.clientY - rect.top );
+					}
+				} }
+			>
+				<Icon icon={ dragHandle } />
+			</span>
+			{ settingsTarget ? (
 				<button
-					type="button" className="customify-hb__item-btn customify-hb__item-settings"
+					type="button"
+					className="customify-hb__item-name customify-hb__item-name--clickable"
 					title={ __( 'Settings', 'customify' ) }
 					onClick={ ( e ) => { e.stopPropagation(); onOpenSection( settingsTarget ); } }
 				>
-					<Icon icon={ settings } />
+					{ name }
 				</button>
+			) : (
+				<span className="customify-hb__item-name">{ name }</span>
 			) }
 			<button
 				type="button" className="customify-hb__item-btn customify-hb__item-remove"

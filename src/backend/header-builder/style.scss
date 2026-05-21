@@ -10,6 +10,8 @@ $hb-accent-hover: color-mix(
 	var(--wp-admin-theme-color, #3858e9) 15%,
 	transparent
 );
+$hb-item-size:   40px;           
+$hb-icon-size:   18px;           
 $hb-bg:          #f0f0f1;           // WP controls pane bg
 $hb-bg-row:      #f6f7f7;
 $hb-border:      #dcdcde;           // WP control border
@@ -20,6 +22,7 @@ $hb-item-border: #c3c4c7;
 $hb-radius:      2px;               // WP uses 2px mostly
 $hb-transition:  0.12s ease;
 $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
 
 
 // ─── Panel sidebar items (shared between header & footer builder panels) ─────
@@ -83,7 +86,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	align-items: center;
 	width: 100%;
 	padding: 0 8px;
-	min-height: 35px;
+	min-height: $hb-item-size;
 	gap: 6px;
 	background: $hb-item-bg;
 	border: 1px solid $hb-item-border;
@@ -120,13 +123,13 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 // Small gear icon shown on hover
 .customify-hb__panel-item-icon {
 	flex-shrink: 0;
-	width: 16px;
-	height: 16px;
+	width: $hb-icon-size;
+	height: $hb-icon-size;
 	opacity: 0.25;
 	color: $hb-text-muted;
 	transition: opacity $hb-transition, color $hb-transition;
 
-	svg { width: 16px; height: 16px; }
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
 }
 
 .customify-hb__panel-item-btn {
@@ -141,7 +144,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	border-radius: $hb-radius;
 	transition: color $hb-transition, background $hb-transition;
 
-	svg { width: 16px; height: 16px; }
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
 
 	&:hover {
 		color: $hb-accent;
@@ -149,14 +152,19 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	}
 }
 
-.customify-hb__panel-item-remove:hover { color: #cc1818; }
+.customify-hb__panel-item-remove {
+	svg {
+		fill: currentColor;
+	}
+	&:hover { color: #cc1818; }
+}
 
 // Available items — individual bordered rows, draggable
 .customify-hb__panel-item--available {
 	display: flex;
 	width: 100%;
 	padding: 0 8px;
-	min-height: 35px;
+	min-height: $hb-item-size;
 	gap: 8px;
 	align-items: center;
 	background: $hb-item-bg;
@@ -172,8 +180,8 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	&:active { cursor: grabbing; }
 
 	.customify-hb__drag-handle {
-		width: 16px;
-		height: 16px;
+		width: $hb-icon-size;
+		height: $hb-icon-size;
 		flex-shrink: 0;
 		color: #c3c4c7;
 	}
@@ -193,14 +201,14 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 
 @mixin builder-panel-accordion-sections {
 	> .accordion-section:not( .control-section-customify-pro ):not( .cannot-expand ) {
-		margin: 0 12px 4px !important;
+		margin: 0 12px 12px !important;
 		padding: 0 !important;
 
 		> h3.accordion-section-title,
 		> .accordion-section-title {
 			display: flex !important;
 			align-items: center !important;
-			min-height: 35px !important;
+			min-height: $hb-item-size !important;
 			padding: 0 8px !important;
 			background: $hb-item-bg !important;
 			border: 1px solid $hb-item-border !important;
@@ -243,6 +251,9 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 				float: none !important;
 				width: auto !important;
 				cursor: pointer !important;
+				outline: none !important;
+				box-shadow: none;
+				
 			}
 
 			&:hover {
@@ -265,7 +276,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 
 // Apply to both header and footer builder panel section lists.
 ul.control-panel-customify_header_builder_panel { @include builder-panel-accordion-sections; }
-ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; padding-bottom: 35px; }
+ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; padding-bottom: $hb-item-size; }
 
 
 // ─── Builder panel (fixed bottom bar) ────────────────────────────────────────
@@ -562,15 +573,14 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 .customify-hb__item {
 	display: inline-flex;
 	align-items: center;
-	gap: 2px;
+	gap: 3px;
 	background: $hb-item-bg;
 	border: 1px solid $hb-item-border;
 	border-radius: $hb-radius;
 	padding: 3px 4px;
-	min-height: 35px;
+	min-height: $hb-item-size;
 	font-weight: 500;
 	color: $hb-text;
-	cursor: grab;
 	user-select: none;
 	transition: border-color $hb-transition, box-shadow $hb-transition;
 
@@ -578,26 +588,52 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 		border-color: $hb-accent;
 		box-shadow: 0 0 0 1px $hb-accent;
 	}
-
-	&:active { cursor: grabbing; }
 }
 
-// dragHandle SVG icon in item chip
+// dragHandle span — the actual drag-initiating element
 .customify-hb__item-handle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	flex-shrink: 0;
-	color: $hb-text-muted;
 	opacity: 0.5;
-	width: 16px;
-	height: 16px;
+	width: $hb-icon-size;
+	height: $hb-icon-size;
+	cursor: grab;
 
-	svg { width: 16px; height: 16px; }
+	&:active { cursor: grabbing; }
+
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
 }
 
 .customify-hb__item-name {
 	flex: 1;
+	min-width: 0;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	line-height: 2;
+}
+
+// <button> variant — clickable name opens the item's settings section.
+button.customify-hb__item-name--clickable {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: color $hb-transition;
+
+	&:hover,
+	&:focus-visible {
+		color: $hb-accent;
+	}
+
+	&:focus { outline: none; }
+	&:focus-visible { outline: 1px solid $hb-accent; outline-offset: 1px; }
 }
 
 .customify-hb__item-btn {
@@ -621,12 +657,25 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 
 .customify-hb__item-remove:hover { color: #cc1818; }
 
+// Remove button: hidden by default, revealed on chip hover or keyboard focus.
+.customify-hb__item-remove {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $hb-transition, visibility $hb-transition, color $hb-transition, background $hb-transition;
+
+	.customify-hb__item:hover &,
+	&:focus-visible {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
 // dragHandle icon in available-items pool (panel sidebar)
 .customify-hb__drag-handle {
 	flex-shrink: 0;
-	width: 16px;
-	height: 16px;
-	svg { width: 16px; height: 16px; }
+	width: $hb-icon-size;
+	height: $hb-icon-size;
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
 }
 
 
@@ -700,7 +749,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	width: auto;
 	text-align: left;
 	padding: 4px 10px 4px 6px;
-	min-height: 35px;
+	min-height: $hb-item-size;
 	background: $hb-bg;
 	border: 1px solid $hb-border;
 	border-radius: $hb-radius;
@@ -717,8 +766,8 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	}
 
 	.customify-hb__popover-item-icon {
-		width: 16px;
-		height: 16px;
+		width: $hb-icon-size;
+		height:  $hb-icon-size;
 		flex-shrink: 0;
 		opacity: 0.7;
 	}
