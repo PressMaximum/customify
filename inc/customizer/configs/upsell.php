@@ -29,7 +29,6 @@ if ( is_admin() || is_customize_preview() ) {
 			'pro_url'       => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=customizer_header_side',
 			'features'      => array(
 				__( 'Header Sticky', 'customify' ),
-				__( 'Header Transparent', 'customify' ),
 				__( 'More HTML Items', 'customify' ),
 				__( 'Secondary Menu', 'customify' ),
 				__( 'Icon Box', 'customify' ),
