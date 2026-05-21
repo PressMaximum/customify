@@ -541,3 +541,39 @@ body.customify-dashboard-page {
 	align-items: center;
 	cursor: not-allowed;
 }
+
+
+// Free vs Pro tab — consumer-side header above kit's `<CompareTable>`.
+// Kit's `.pmdk-compare` ships its own chrome (head row, section tints,
+// CTA banner). We only own the tab heading + tagline that introduces the
+// matrix, mirroring the Welcome-tab heading rhythm. The kit doesn't
+// ship a "FreeVsPro page" wrapper — Blocksify uses an equivalent
+// `.bsy-dashboard-free-vs-pro` rule; this is the Customify counterpart.
+.customify-dashboard-free-vs-pro {
+	display: flex;
+	flex-direction: column;
+	// 24px gap to kit's `<CompareTable>` matches the Welcome tab's
+	// stack rhythm so the page-level heading + matrix breathing
+	// matches the rest of the dashboard.
+	gap: 24px;
+
+	&__header {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__title {
+		// 10px under the title gives the tagline its own line of air
+		// before the next block; matches the visual gap WP about.php
+		// uses between section heading and supporting copy.
+		margin: 0 0 10px;
+		font-size: 20px;
+		font-weight: var( --pmdk-font-weight-heading, 500 );
+	}
+
+	&__tagline {
+		margin: 0;
+		color: var( --pmdk-color-text-muted, #757575 );
+		max-width: 64ch;
+	}
+}
