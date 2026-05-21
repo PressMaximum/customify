@@ -397,4 +397,17 @@ class Customify_Header_Transparent {
 	}
 }
 
-Customify_Header_Transparent::get_instance();
+// Pro's Header Transparent module owns the feature when the plugin is
+// active so its dashboard toggle works normally (defaults ON, user can
+// turn off). Theme's port runs only as the Free fallback. Hook on
+// after_setup_theme so Pro has finished loading its module classes.
+add_action(
+	'after_setup_theme',
+	function () {
+		if ( class_exists( 'Customify_Pro_Module_Header_Transparent' ) ) {
+			return;
+		}
+		Customify_Header_Transparent::get_instance();
+	},
+	30
+);
