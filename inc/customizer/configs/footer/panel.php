@@ -252,6 +252,35 @@ function customify_footer_layout_settings( $item_id, $section ) {
 Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
 
 /**
+ * Enforce footer row ordering: Top → Main → Bottom.
+ *
+ * The theme's `get_rows_config()` declares only `main` and `bottom`.
+ * Customify Pro hooks `customify/builder/footer/rows` to append a `top`
+ * row, which would otherwise land at the end of the array (display
+ * order would become Main → Bottom → Top). This late filter runs after
+ * any extension has registered its rows and reorders them. Unknown row
+ * keys are preserved at the end so future extensions don't get dropped.
+ */
+add_filter(
+	'customify/builder/footer/rows',
+	function ( $rows ) {
+		if ( ! is_array( $rows ) ) {
+			return $rows;
+		}
+		$desired = array( 'top', 'main', 'bottom' );
+		$sorted  = array();
+		foreach ( $desired as $key ) {
+			if ( isset( $rows[ $key ] ) ) {
+				$sorted[ $key ] = $rows[ $key ];
+				unset( $rows[ $key ] );
+			}
+		}
+		return $sorted + $rows;
+	},
+	99
+);
+
+/**
  * Register the row_layout control type so load_controls() includes the class file.
  */
 add_filter(
