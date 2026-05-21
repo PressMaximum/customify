@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 485:
+/***/ 565:
 /***/ (function() {
 
 
@@ -16,7 +16,7 @@ var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// external "ReactJSXRuntime"
 var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/settings.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/settings.mjs
 // packages/icons/src/library/settings.tsx
 
 
@@ -27,7 +27,7 @@ var settings_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObje
 
 //# sourceMappingURL=settings.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/close.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/close.mjs
 // packages/icons/src/library/close.tsx
 
 
@@ -35,7 +35,7 @@ var close_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.
 
 //# sourceMappingURL=close.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/drag-handle.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/drag-handle.mjs
 // packages/icons/src/library/drag-handle.tsx
 
 
@@ -43,7 +43,7 @@ var drag_handle_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceO
 
 //# sourceMappingURL=drag-handle.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/plus.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/plus.mjs
 // packages/icons/src/library/plus.tsx
 
 
@@ -1814,7 +1814,7 @@ wp.customize.bind('ready', () => {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [733,207], function() { return __webpack_require__(485); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [733,207], function() { return __webpack_require__(565); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 316:
+/***/ 96:
 /***/ (function() {
 
 
@@ -507,7 +507,7 @@ function CustomifyPageSettings() {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [549], function() { return __webpack_require__(316); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [549], function() { return __webpack_require__(96); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()
