@@ -41,7 +41,7 @@ var external_wp_element_namespaceObject = window["wp"]["element"];
 var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 ;// external "ReactJSXRuntime"
 var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HashRouter.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HashRouter.jsx
 /**
  * Minimal hash router for the dashboard SPA.
  *
@@ -250,7 +250,7 @@ function useNavigate() {
   }, [guard]);
 }
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/useFocusOnRouteChange.js
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/useFocusOnRouteChange.js
 /**
  * useFocusOnRouteChange — SPA focus management.
  *
@@ -288,10 +288,10 @@ function useFocusOnRouteChange(route) {
   return ref;
 }
 /* harmony default export */ var core_useFocusOnRouteChange = ((/* unused pure expression or super */ null && (useFocusOnRouteChange)));
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.jsx
 /**
  * TabStrip — Tier-1 layout primitive (SPEC §5.13). Zero translatable
  * strings: every label and the `aria-label` arrive via props.
@@ -363,7 +363,7 @@ function TabStrip({
 var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// external ["wp","primitives"]
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/help.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/help.mjs
 // packages/icons/src/library/help.tsx
 
 
@@ -371,7 +371,7 @@ var help_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=help.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/page.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/page.mjs
 // packages/icons/src/library/page.tsx
 
 
@@ -382,7 +382,7 @@ var page_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=page.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
 // packages/icons/src/library/chevron-right.tsx
 
 
@@ -390,7 +390,7 @@ var chevron_right_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespac
 
 //# sourceMappingURL=chevron-right.mjs.map
 
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/external.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/external.mjs
 // packages/icons/src/library/external.tsx
 
 
@@ -398,7 +398,7 @@ var external_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObje
 
 //# sourceMappingURL=external.mjs.map
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createI18nBag.js
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/createI18nBag.js
 /**
  * createI18nBag — merge a component's English defaults with consumer
  * overrides. Tier-2 components call this once in their render bodies so
@@ -434,10 +434,10 @@ function createI18nBag(defaults, overrides) {
   };
 }
 /* harmony default export */ var core_createI18nBag = ((/* unused pure expression or super */ null && (createI18nBag)));
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.jsx
 /**
  * HelpPanel — Tier-2 page component (SPEC §5.13). Compact help popover
  * anchored to a `?` button. Consumers pass `items` (resource links) and
@@ -554,7 +554,7 @@ function HelpPanel({
 }
 ;// external ["wp","data"]
 var external_wp_data_namespaceObject = window["wp"]["data"];
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/SnackbarSlot.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/SnackbarSlot.jsx
 /**
  * SnackbarSlot — bottom-centered transient notices slot bound to WP's
  * `core/notices` data store. Renders snackbar-typed notices in a fixed
@@ -597,10 +597,10 @@ function SnackbarSlot({
     onRemove: removeNotice
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.jsx
 /**
  * DashboardShell — Tier-1 layout primitive (SPEC §5.13). Composes the
  * header (brand + tabs + version + help slot) + a focus-managed main
@@ -766,7 +766,7 @@ function DashboardShell({
     }), snackbar !== undefined ? snackbar : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SnackbarSlot, {})]
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/BootDataLoader.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/BootDataLoader.jsx
 /**
  * BootDataLoader — read the consumer's PHP-localized boot payload off
  * `window[ bootGlobal ]` and ship it down the component tree via React
@@ -821,7 +821,7 @@ function useBoot() {
   return (0,external_wp_element_namespaceObject.useContext)(BootContext);
 }
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createFilterNamespace.js
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/createFilterNamespace.js
 /**
  * Build the per-consumer filter channel-name map.
  *
@@ -863,7 +863,7 @@ function createFilterNamespace(prefix) {
   };
 }
 /* harmony default export */ var core_createFilterNamespace = ((/* unused pure expression or super */ null && (createFilterNamespace)));
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/useDirtyState.js
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/useDirtyState.js
 /* unused harmony import specifier */ var useState;
 /* unused harmony import specifier */ var useRef;
 /* unused harmony import specifier */ var useEffect;
@@ -1052,7 +1052,7 @@ function __resetDirtyRegistry() {
   DISCARD_MESSAGES.clear();
 }
 /* harmony default export */ var settings_useDirtyState = ((/* unused pure expression or super */ null && (useDirtyState)));
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/mountDashboard.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/core/mountDashboard.jsx
 /**
  * mountDashboard — bootstraps the dashboard SPA inside the consumer's
  * mount node. Called once per page load.
@@ -1179,10 +1179,10 @@ function mountDashboard(config) {
 /* harmony default export */ var core_mountDashboard = (mountDashboard);
 ;// external ["wp","i18n"]
 var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.jsx
 /**
  * Hero — Welcome page greeting + tagline + primary CTA + optional
  * illustration. SPEC §5.5 + §5.13 Tier-2 page component.
@@ -1236,7 +1236,7 @@ function Hero({
     })]
   });
 }
-;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/check.mjs
+;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
 // packages/icons/src/library/check.tsx
 
 
@@ -1244,7 +1244,7 @@ var check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.
 
 //# sourceMappingURL=check.mjs.map
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/ChecklistItem.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/ChecklistItem.jsx
 /**
  * ChecklistItem — single row in the Welcome onboarding checklist.
  * SPEC §5.5 + §5.10b. Tier-2 page component.
@@ -1406,10 +1406,10 @@ function ChecklistItem({
     })]
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.jsx
 /**
  * Checklist — Welcome page onboarding-tasks list. SPEC §5.5.
  *
@@ -2109,7 +2109,420 @@ function Welcome() {
     })]
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaField.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/compare/CompareTable.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/@pressmaximum/dashboard-kit/src/compare/CompareTable.jsx
+/**
+ * CompareTable — Free vs Pro matrix display component. SPEC §5.3b +
+ * §5.13 Tier-2.
+ *
+ * CSS-grid (not `<table>`) so the dashboard chassis doesn't inherit
+ * wp-admin's table baseline styles. Columns: feature label (2fr) +
+ * Free / Pro check cells (1fr each).
+ *
+ * Cell dispatch on shape:
+ *
+ *   true            → green-circle check badge
+ *   false / null    → gray-circle em-dash badge
+ *   string          → literal text
+ *   { value, muted } → muted-variant text
+ *
+ * SPEC §16.2 locked classes: `.pmdk-compare`, `.pmdk-compare__row`,
+ * `.pmdk-compare__check-yes`, `.pmdk-compare__check-no`.
+ *
+ * Optional `footer` renders an in-card CTA banner so the upgrade prompt
+ * sits attached to the matrix it summarizes.
+ *
+ * Labels (English fallbacks shipped):
+ *   headFeature  'Feature'
+ *   headFree     'Free'                (SPEC §5.10b: headColumnFree)
+ *   headPro      'Pro'                 (SPEC §5.10b: headColumnPro)
+ *   cellYes      'Included'            (sr-only)
+ *   cellNo       'Not included'        (sr-only)
+ */
+
+
+
+
+
+
+const CompareTable_DEFAULT_LABELS = {
+  headFeature: 'Feature',
+  headFree: 'Free',
+  headPro: 'Pro',
+  cellYes: 'Included',
+  cellNo: 'Not included'
+};
+function Cell({
+  value,
+  labels
+}) {
+  if (value === true) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-compare__check-yes",
+      "aria-label": labels.cellYes,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+        icon: check_default,
+        size: 16
+      })
+    });
+  }
+  if (value === false || value === null || value === undefined) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-compare__check-no",
+      "aria-label": labels.cellNo,
+      children: "\u2212"
+    });
+  }
+  if (typeof value === 'string') {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-compare__text",
+      children: value
+    });
+  }
+  if (value && typeof value === 'object' && 'value' in value) {
+    const className = 'pmdk-compare__text' + (value.muted ? ' is-muted' : '');
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: className,
+      children: value.value
+    });
+  }
+  return null;
+}
+function CompareTable({
+  sections,
+  footer,
+  labels: callerLabels
+}) {
+  if (!Array.isArray(sections) || sections.length === 0) {
+    return null;
+  }
+  const labels = createI18nBag(CompareTable_DEFAULT_LABELS, callerLabels);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "pmdk-compare",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "pmdk-compare__head",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "pmdk-compare__head-cell",
+        children: labels.headFeature
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "pmdk-compare__head-cell pmdk-compare__head-cell--center",
+        children: labels.headFree
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "pmdk-compare__head-cell pmdk-compare__head-cell--center pmdk-compare__head-cell--pro",
+        children: labels.headPro
+      })]
+    }), sections.map(section => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("section", {
+      className: "pmdk-compare__section",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
+        className: "pmdk-compare__section-title",
+        children: section.label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "pmdk-compare__rows",
+        children: section.rows.map(row => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+          className: "pmdk-compare__row",
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: "pmdk-compare__feature",
+            children: row.label
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: "pmdk-compare__cell-wrap",
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Cell, {
+              value: row.free,
+              labels: labels
+            })
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: "pmdk-compare__cell-wrap",
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Cell, {
+              value: row.pro,
+              labels: labels
+            })
+          })]
+        }, `${section.id}-${row.id}`))
+      })]
+    }, section.id)), footer && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "pmdk-compare__cta",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "pmdk-compare__cta-text",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h4", {
+          className: "pmdk-compare__cta-title",
+          children: footer.title
+        }), footer.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+          className: "pmdk-compare__cta-description",
+          children: footer.description
+        })]
+      }), footer.ctaHref && footer.ctaLabel && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: "primary",
+        href: footer.ctaHref,
+        target: "_blank",
+        rel: "noopener noreferrer",
+        children: footer.ctaLabel
+      })]
+    })]
+  });
+}
+;// ./src/backend/admin/dashboard-v2/data/freeVsPro.js
+/**
+ * Free vs Pro compare matrix — hand-curated; ships in Customify Free.
+ *
+ * No REST endpoint, no boot dependency: the matrix is static copy bundled
+ * into the dashboard JS. Module names + descriptions mirror the legacy
+ * `Customify_Dashboard::pro_modules_box()` upsell grid and the new
+ * `data/proModules.js` catalogue so the three surfaces stay consistent.
+ *
+ * Cell semantics (per kit `<CompareTable>` cell dispatch):
+ *
+ *   true            → green-circle check badge
+ *   false           → gray-circle em-dash badge
+ *   string          → literal text
+ *   { value, muted } → muted-variant text
+ *
+ * Returns a function so the `__()` calls run after WordPress i18n hydrates
+ * the `customify` text domain (mirrors Blocksify's `buildCompareMatrix()`
+ * pattern).
+ */
+
+
+function buildFreeVsProMatrix() {
+  return [{
+    id: 'site-composition',
+    label: (0,external_wp_i18n_namespaceObject.__)('Site composition', 'customify'),
+    rows: [{
+      id: 'header-builder',
+      label: (0,external_wp_i18n_namespaceObject.__)('Drag-and-drop header builder', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'footer-builder',
+      label: (0,external_wp_i18n_namespaceObject.__)('Drag-and-drop footer builder', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'layouts',
+      label: (0,external_wp_i18n_namespaceObject.__)('Container widths + sidebar layouts', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'block-editor',
+      label: (0,external_wp_i18n_namespaceObject.__)('Block editor patterns + alignwide / alignfull', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'multiple-headers',
+      label: (0,external_wp_i18n_namespaceObject.__)('Multiple headers per page / post / archive', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'mega-menu',
+      label: (0,external_wp_i18n_namespaceObject.__)('Mega menu', 'customify'),
+      free: false,
+      pro: true
+    }]
+  }, {
+    id: 'header-footer',
+    label: (0,external_wp_i18n_namespaceObject.__)('Header & footer', 'customify'),
+    rows: [{
+      id: 'standard-items',
+      label: (0,external_wp_i18n_namespaceObject.__)('Standard items: logo, menu, search, social, HTML', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'header-sticky',
+      label: (0,external_wp_i18n_namespaceObject.__)('Sticky header', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'header-footer-booster',
+      label: (0,external_wp_i18n_namespaceObject.__)('Header & Footer Builder Booster (extra items + styling)', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'multilingual',
+      label: (0,external_wp_i18n_namespaceObject.__)('WPML multilingual switcher header item', 'customify'),
+      free: false,
+      pro: true
+    }]
+  }, {
+    id: 'typography-styling',
+    label: (0,external_wp_i18n_namespaceObject.__)('Typography & styling', 'customify'),
+    rows: [{
+      id: 'google-fonts',
+      label: (0,external_wp_i18n_namespaceObject.__)('Google Fonts', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'typography-tokens',
+      label: (0,external_wp_i18n_namespaceObject.__)('Typography tokens (size, weight, line-height)', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'global-colors',
+      label: (0,external_wp_i18n_namespaceObject.__)('Global colors (primary, secondary, text, link, heading)', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'custom-fonts',
+      label: (0,external_wp_i18n_namespaceObject.__)('Self-hosted custom fonts', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'typekit',
+      label: (0,external_wp_i18n_namespaceObject.__)('Adobe Typekit fonts', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'advanced-styling',
+      label: (0,external_wp_i18n_namespaceObject.__)('Advanced page-header title + cover layouts', 'customify'),
+      free: false,
+      pro: true
+    }]
+  }, {
+    id: 'blog-portfolio',
+    label: (0,external_wp_i18n_namespaceObject.__)('Blog & portfolio', 'customify'),
+    rows: [{
+      id: 'blog-standard',
+      label: (0,external_wp_i18n_namespaceObject.__)('Blog listing + single-post layouts', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'blog-pro',
+      label: (0,external_wp_i18n_namespaceObject.__)('Blog Pro layouts (grid / masonry / mixed)', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'portfolio',
+      label: (0,external_wp_i18n_namespaceObject.__)('Portfolio post type + layouts', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'infinity-scroll',
+      label: (0,external_wp_i18n_namespaceObject.__)('Infinity scroll for posts and products', 'customify'),
+      free: false,
+      pro: true
+    }]
+  }, {
+    id: 'woocommerce',
+    label: (0,external_wp_i18n_namespaceObject.__)('WooCommerce', 'customify'),
+    rows: [{
+      id: 'wc-compat',
+      label: (0,external_wp_i18n_namespaceObject.__)('WooCommerce compatibility', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'wc-booster',
+      label: (0,external_wp_i18n_namespaceObject.__)('WooCommerce Booster (shop styling + layout)', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'single-product-layouts',
+      label: (0,external_wp_i18n_namespaceObject.__)('Single product layouts', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'off-canvas-filter',
+      label: (0,external_wp_i18n_namespaceObject.__)('Off-canvas product filter', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'gallery-slider',
+      label: (0,external_wp_i18n_namespaceObject.__)('Product gallery slider', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'quick-view',
+      label: (0,external_wp_i18n_namespaceObject.__)('Product quick-view modal', 'customify'),
+      free: false,
+      pro: true
+    }]
+  }, {
+    id: 'workflow-support',
+    label: (0,external_wp_i18n_namespaceObject.__)('Workflow & support', 'customify'),
+    rows: [{
+      id: 'page-builders',
+      label: (0,external_wp_i18n_namespaceObject.__)('Page builder compatibility (Elementor, Beaver, Divi)', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'updates',
+      label: (0,external_wp_i18n_namespaceObject.__)('Auto-updates', 'customify'),
+      free: true,
+      pro: true
+    }, {
+      id: 'scroll-to-top',
+      label: (0,external_wp_i18n_namespaceObject.__)('Scroll-to-top button', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'hooks',
+      label: (0,external_wp_i18n_namespaceObject.__)('Customify Hooks (custom code snippets)', 'customify'),
+      free: false,
+      pro: true
+    }, {
+      id: 'support',
+      label: (0,external_wp_i18n_namespaceObject.__)('Support', 'customify'),
+      free: {
+        value: (0,external_wp_i18n_namespaceObject.__)('Community', 'customify'),
+        muted: true
+      },
+      pro: (0,external_wp_i18n_namespaceObject.__)('Priority', 'customify')
+    }]
+  }];
+}
+;// ./src/backend/admin/dashboard-v2/tabs/FreeVsPro.jsx
+/**
+ * Free vs Pro tab — Customify Free upsell matrix.
+ *
+ * Tab visibility:
+ *   - When Pro inactive: `index.js` pushes `free-vs-pro` into baseTabs +
+ *     registers the `#free-vs-pro` route → this component renders.
+ *   - When Pro active: `index.js` drops both → kit's HashRouter falls back
+ *     to `#welcome` for any leftover deep link (no extra guard needed
+ *     here).
+ *
+ * Layout copies Blocksify Free's pattern (consumer-side heading + tagline
+ * above kit's `<CompareTable>`). Matrix data is hand-curated in
+ * `../data/freeVsPro.js`; kit's CompareTable handles cell dispatch + CTA
+ * banner from a single `footer` prop.
+ */
+
+
+
+
+
+function FreeVsPro() {
+  const boot = useBoot();
+  const sections = buildFreeVsProMatrix();
+  const labels = {
+    headFeature: (0,external_wp_i18n_namespaceObject.__)('Feature', 'customify'),
+    headFree: (0,external_wp_i18n_namespaceObject.__)('Free', 'customify'),
+    headPro: (0,external_wp_i18n_namespaceObject.__)('Pro', 'customify'),
+    cellYes: (0,external_wp_i18n_namespaceObject.__)('Included', 'customify'),
+    cellNo: (0,external_wp_i18n_namespaceObject.__)('Not included', 'customify')
+  };
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "customify-dashboard-free-vs-pro",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("header", {
+      className: "customify-dashboard-free-vs-pro__header",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        className: "customify-dashboard-free-vs-pro__title",
+        children: (0,external_wp_i18n_namespaceObject.__)('Free vs Pro', 'customify')
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "customify-dashboard-free-vs-pro__tagline",
+        children: (0,external_wp_i18n_namespaceObject.__)('Customify Free covers a complete site build. Pro unlocks the modules and workflow features power-users reach for.', 'customify')
+      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CompareTable, {
+      sections: sections,
+      labels: labels,
+      footer: {
+        title: (0,external_wp_i18n_namespaceObject.__)('Ready to unlock every module?', 'customify'),
+        description: (0,external_wp_i18n_namespaceObject.__)('Get Customify Pro for sticky / multiple headers, WooCommerce Booster, Blog Pro, Portfolio, custom + Typekit fonts, mega menu, and priority support.', 'customify'),
+        ctaLabel: (0,external_wp_i18n_namespaceObject.__)('Upgrade to Customify Pro', 'customify'),
+        ctaHref: boot?.urls?.proUpgrade || 'https://pressmaximum.com/customify/pro-upgrade/'
+      }
+    })]
+  });
+}
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaField.jsx
 
 /**
  * SchemaField — Tier-1 layout primitive (SPEC §5.13). Dispatches on
@@ -2151,10 +2564,10 @@ function SchemaField({
     onChange: onChange
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.jsx
 /**
  * SchemaForm — Tier-1 layout primitive (SPEC §5.13). Renders ONE panel
  * — the consumer resolves "which panel is active" externally (route
@@ -2246,10 +2659,10 @@ function SchemaForm({
     }, field.id))
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.jsx
 /**
  * SaveBar — Tier-2 page component (SPEC §5.13). Left-aligned status text
  * mirrors the store lifecycle (saving / dirty / saved); right cluster is
@@ -2377,7 +2790,7 @@ function SaveBar({
     })
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/fieldTypes.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/fieldTypes.jsx
 /**
  * BASE_FIELD_TYPES — the kit's built-in field renderers for SchemaField
  * dispatch. SPEC §5.4 + §9.1 `{ns}.dashboard.settings.field-types` filter.
@@ -2511,10 +2924,10 @@ const BASE_FIELD_TYPES = {
   number: NumberField
 };
 /* harmony default export */ var fieldTypes = ((/* unused pure expression or super */ null && (BASE_FIELD_TYPES)));
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/editor.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/editor.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/index.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/index.jsx
 /**
  * SubNav — Tier-1 vertical nav rail (SPEC §5.3). Two consumer
  * patterns documented in the spec:
@@ -2601,7 +3014,7 @@ function SubNav({
 ;// external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/createSettingsStore.js
+;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/createSettingsStore.js
 /**
  * createSettingsStore — `@wordpress/data` store factory for schema-driven
  * settings forms. SPEC §5.4.
@@ -3800,10 +4213,10 @@ function Settings({
     })]
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.jsx
 /**
  * CategoryBadge — small uppercase pill rendered next to each changelog
  * item. SPEC §5.3b. Tier-2 page component.
@@ -3880,10 +4293,10 @@ function CategoryBadge({
     children: label
   });
 }
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.css
+;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.jsx
+;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.jsx
 /**
  * ReleaseBlock — one release card. SPEC §5.3b + §5.10b. Tier-2 page
  * component.
@@ -4146,6 +4559,7 @@ const brandIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24
 
 
 
+
 function mount() {
   if (!document.getElementById('customify-dashboard')) {
     return;
@@ -4211,10 +4625,18 @@ function mount() {
       triggerLabel: (0,external_wp_i18n_namespaceObject.__)('Open help panel', 'customify'),
       heading: (0,external_wp_i18n_namespaceObject.__)('Help', 'customify')
     },
+    // Free vs Pro tab is Free-only: it ships the compare matrix that
+    // pitches the Pro upgrade. When Pro is active the matrix becomes
+    // noise, so we drop both the tab strip entry AND the
+    // `#free-vs-pro` route — kit's HashRouter falls back to
+    // `#welcome` for any leftover deep link.
     baseTabs: [{
       id: 'welcome',
       label: (0,external_wp_i18n_namespaceObject.__)('Welcome', 'customify')
-    }, {
+    }, ...(proActive ? [] : [{
+      id: 'free-vs-pro',
+      label: (0,external_wp_i18n_namespaceObject.__)('Free vs Pro', 'customify')
+    }]), {
       id: 'settings',
       label: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
     }, {
@@ -4226,6 +4648,12 @@ function mount() {
         component: Welcome,
         type: 'page'
       },
+      ...(proActive ? {} : {
+        '#free-vs-pro': {
+          component: FreeVsPro,
+          type: 'page'
+        }
+      }),
       '#settings': {
         component: Settings,
         type: 'page'

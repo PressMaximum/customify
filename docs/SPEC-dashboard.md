@@ -94,6 +94,7 @@ Legacy that stays intact (back-compat for child themes / future Pro hooks):
 | [`index.js`](../src/backend/admin/dashboard-v2/index.js) | `mountDashboard({...})` call; defers to `DOMContentLoaded`; builds `versionLabel` ("v0.4.x — Free version" / "Pro version") |
 | [`brand-icon.js`](../src/backend/admin/dashboard-v2/brand-icon.js) | Inlined Customify logo SVG with `fill="currentColor"` for kit's `brand.icon` config |
 | [`tabs/Welcome.jsx`](../src/backend/admin/dashboard-v2/tabs/Welcome.jsx) | Hero + Checklist (gated by `SHOW_CHECKLIST` flag) + Customizer quick links + Pro modules section |
+| [`tabs/FreeVsPro.jsx`](../src/backend/admin/dashboard-v2/tabs/FreeVsPro.jsx) | Free-only upsell tab. Heading + tagline + kit `<CompareTable>` matrix + CTA banner. Registered conditionally in `index.js` — dropped from `baseTabs` AND `baseRoutes` when Pro is active. |
 | [`tabs/Settings.jsx`](../src/backend/admin/dashboard-v2/tabs/Settings.jsx) | SubNav over panels; dispatch on `panel.kind` (`composite` / `license` / `proPanel` / default `ThemePanelCard`); shared SaveBar for the theme panel |
 | [`tabs/Changelog.jsx`](../src/backend/admin/dashboard-v2/tabs/Changelog.jsx) | SubNav over sources (`customify.dashboard.changelog.sources` filter); `<ReleaseBlock>` per release |
 | [`sections/ProModulesSection.jsx`](../src/backend/admin/dashboard-v2/sections/ProModulesSection.jsx) | Pro modules card. **Free path**: every row renders a disabled `@wordpress/components` FormToggle wrapped in `<Tooltip>` ("Available in Pro version") + Upgrade Now button with the `external` icon. **Pro path**: live toggle per row + cascade-gated WC modules show "WooCommerce not activated" notice. |
@@ -102,6 +103,7 @@ Legacy that stays intact (back-compat for child themes / future Pro hooks):
 | [`data/customizerLinks.js`](../src/backend/admin/dashboard-v2/data/customizerLinks.js) | Welcome tab's Customizer quick-link grid; filterable via `customify.dashboard.welcome.links` |
 | [`data/checklist.js`](../src/backend/admin/dashboard-v2/data/checklist.js) | Onboarding tasks (currently `check: () => false` placeholders) |
 | [`data/proModules.js`](../src/backend/admin/dashboard-v2/data/proModules.js) | Free path's marketing module list (Pro replaces via `customify.dashboard.pro.modules`) |
+| [`data/freeVsPro.js`](../src/backend/admin/dashboard-v2/data/freeVsPro.js) | `buildFreeVsProMatrix()` — hand-curated compare matrix (6 sections, ~30 rows). Mirrors the legacy `pro_modules_box()` module list. Static copy; no REST. |
 | [`data/settingsStore.js`](../src/backend/admin/dashboard-v2/data/settingsStore.js) | `createSettingsStore` register; wires `apiFetch` middleware with REST root + nonce |
 | [`ui/ModuleList.jsx`](../src/backend/admin/dashboard-v2/ui/ModuleList.jsx) | `ModuleList`, `ModuleRow` (with `notice` slot for K-011-style messaging), `ModuleSubmodules` group |
 | [`ui/ThemeGridCard.jsx`](../src/backend/admin/dashboard-v2/ui/ThemeGridCard.jsx) | Customizer quick-link tile (title + description + href) |
@@ -154,15 +156,19 @@ Hash-based via kit's `HashRouter`. Declared in `mountDashboard.baseRoutes`:
 
 ```js
 {
-  '#welcome':              { component: Welcome,   type: 'page' },
-  '#settings':             { component: Settings,  type: 'page' },
-  '#settings/:panelId':    { component: Settings,  type: 'page' },
-  '#changelog':            { component: Changelog, type: 'page' },
-  '#changelog/:sourceId':  { component: Changelog, type: 'page' },
+  '#welcome':              { component: Welcome,    type: 'page' },
+  // Free-only — see §6.2.
+  '#free-vs-pro':          { component: FreeVsPro,  type: 'page' },
+  '#settings':             { component: Settings,   type: 'page' },
+  '#settings/:panelId':    { component: Settings,   type: 'page' },
+  '#changelog':            { component: Changelog,  type: 'page' },
+  '#changelog/:sourceId':  { component: Changelog,  type: 'page' },
 }
 ```
 
 **Sub-route redirect**: bare `#settings` redirects to `#settings/<firstPanel.id>` when 2+ panels are registered (so SubNav has a resolved active row). Same for `#changelog`. See [`Settings.jsx`](../src/backend/admin/dashboard-v2/tabs/Settings.jsx) + [`Changelog.jsx`](../src/backend/admin/dashboard-v2/tabs/Changelog.jsx).
+
+**Conditional registration**: `#free-vs-pro` is registered ONLY when `boot.proActive === false`. When Pro is active `index.js` drops both the tab strip entry AND the route from `baseRoutes` — kit's `HashRouter` falls back to `#welcome` for any leftover deep link. Pattern mirrors Blocksify Free's FreeVsPro tab.
 
 ## 6. Tabs
 
@@ -179,7 +185,34 @@ Typography: card heads use `var(--pmdk-font-weight-heading, 500)`; in-body item 
 
 Extension surface: `customify.dashboard.welcome.sections` appends additional cards below; Hero/Checklist/Quick-links are not filterable as a group but each accepts kit-level filters per the kit SPEC.
 
-### 6.2 Settings
+### 6.2 Free vs Pro
+
+Free-only upsell tab. Renders kit's `<CompareTable>` with a consumer-side heading + tagline above the matrix and a CTA banner attached via the table's `footer` prop.
+
+**Conditional registration** (in [`index.js`](../src/backend/admin/dashboard-v2/index.js)): inserted into `baseTabs` between Welcome and Settings, AND into `baseRoutes` under `#free-vs-pro`, only when `! boot.proActive`. When Pro is active both entries are dropped — kit's `HashRouter` falls back to `#welcome` for any leftover deep link. No runtime guard inside the component itself; visibility is purely a registration concern.
+
+**Matrix data**: hand-curated in [`data/freeVsPro.js`](../src/backend/admin/dashboard-v2/data/freeVsPro.js) via `buildFreeVsProMatrix()`. Static copy — no REST, no boot dependency. The function form defers `__()` calls so they run after the `customify` text domain is hydrated. Module names + descriptions mirror legacy `Customify_Dashboard::pro_modules_box()` and the Welcome tab's [`data/proModules.js`](../src/backend/admin/dashboard-v2/data/proModules.js) so the three surfaces stay consistent.
+
+Section layout (6 sections, ~30 rows total):
+
+| Section | Coverage |
+|---|---|
+| Site composition | Header / footer builders, container widths + sidebar layouts, block editor, multiple headers, mega menu |
+| Header & footer | Standard items, sticky header, Header & Footer Builder Booster, WPML multilingual switcher |
+| Typography & styling | Google Fonts, typography tokens, global colors, custom fonts, Typekit, advanced styling |
+| Blog & portfolio | Blog listing + single post, Blog Pro layouts, Portfolio, Infinity scroll |
+| WooCommerce | WC compatibility, WC Booster, single product layouts, off-canvas filter, gallery slider, quick view |
+| Workflow & support | Page builder compat, auto-updates, scroll-to-top, Customify Hooks, Support tier |
+
+Cell shapes per kit's `<CompareTable>` dispatch:
+- `true` → green-circle check badge
+- `false` → gray-circle em-dash badge
+- `string` → literal text (e.g. `'Priority'` for support tier)
+- `{ value, muted: true }` → muted text (e.g. `'Community'` for free support tier)
+
+**CTA banner**: pulled from `boot.urls.proUpgrade` (the same EDD upgrade URL used by the Welcome help panel's "Upgrade to Pro" item and the Pro modules card's Upgrade button).
+
+### 6.3 Settings
 
 `<SubNav>` layout when 2+ panels registered, single-panel renders full-width without rail.
 
@@ -196,7 +229,7 @@ Extension surface: `customify.dashboard.welcome.sections` appends additional car
 
 **Filter**: `customify.dashboard.settings.panels` appends panels (Pro bridge ships `modules` composite + `customify-pro` composite).
 
-### 6.3 Changelog
+### 6.4 Changelog
 
 Multi-source `<SubNav>` when 2+ sources registered. Single source renders without rail.
 
@@ -417,13 +450,16 @@ For each PR touching dashboard-v2, smoke-test:
 | Surface | Expected |
 |---|---|
 | WP sidebar submenu | `[Dashboard, Settings]` (no Changelog) |
-| Top-bar tabs | `[Welcome, Settings, Changelog]` |
+| Top-bar tabs (Free) | `[Welcome, Free vs Pro, Settings, Changelog]` |
+| Top-bar tabs (Pro) | `[Welcome, Settings, Changelog]` (Free vs Pro hidden) |
 | Top-right header | `v{themeVersion} — Free version` (Free) / `v{proVersion} — Pro version` (Pro) |
 | Welcome → Hero | Card with hairline outline matching siblings; CTA "Open the Customizer" |
 | Welcome → Customizer quick links | 3-col grid, 6 tiles, opens Customizer in new tab |
 | Welcome → Pro modules (Free) | All rows show **disabled** FormToggle + Tooltip "Available in Pro version" on hover/focus; card head has "Upgrade now" button with external-link icon |
 | Welcome → Pro modules (Pro active, WC inactive) | WC Booster + 4 sub-modules disabled + "WooCommerce not activated" pill on parent |
 | Welcome → Pro modules (Pro active, WC active) | All toggles live; toggling fires snackbar + persists |
+| Free vs Pro (Pro inactive) | Tab present at position 2 (Welcome / **Free vs Pro** / Settings / Changelog); kit `<CompareTable>` renders 6 sections, ~30 rows, green checks + gray em-dashes + muted "Community" / literal "Priority" on support row; CTA banner links to `boot.urls.proUpgrade` |
+| Free vs Pro (Pro active) | Tab strip entry absent; visiting `#free-vs-pro` directly → kit `HashRouter` rewrites to `#welcome` and renders the Welcome tab |
 | Card titles vs item titles | Card heads computed weight 500 (`--pmdk-font-weight-heading`); module row + grid tile titles 400 (`--pmdk-font-weight-label`) |
 | Settings → Theme settings | SaveBar idle: "No pending changes" muted gray; Reset to defaults always enabled |
 | Settings → Module settings (Pro) | Typekit section schema fields + SaveBar |

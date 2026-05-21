@@ -541,3 +541,32 @@ body.customify-dashboard-page {
 	align-items: center;
 	cursor: not-allowed;
 }
+
+
+// Free vs Pro tab — consumer-side header above kit's `<CompareTable>`.
+// Kit's `.pmdk-compare` ships its own chrome (head row, section tints,
+// CTA banner). We only own the tab heading + tagline that introduces the
+// matrix, mirroring the Welcome-tab heading rhythm.
+.customify-dashboard-free-vs-pro {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+
+	&__header {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	&__title {
+		margin: 0;
+		font-size: 20px;
+		font-weight: var( --pmdk-font-weight-heading, 500 );
+	}
+
+	&__tagline {
+		margin: 0;
+		color: var( --pmdk-color-text-muted, #757575 );
+		max-width: 64ch;
+	}
+}
