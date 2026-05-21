@@ -80,7 +80,15 @@ function customify_dashboard_v2_add_menu(): void {
 		59
 	);
 }
-add_action( 'admin_menu', 'customify_dashboard_v2_add_menu' );
+// Priority 9 (one before default 10) ensures the `customify` parent
+// menu exists in $menu by the time WP core's `_add_post_type_submenus`
+// (admin_menu prio 10) iterates CPTs that declared `show_in_menu =>
+// 'customify'` (e.g. the Pro Hooks module's `customify_hook` CPT). If
+// the parent is missing at that moment, WP still appends the CPT entry
+// to $submenu['customify'][0] but the subsequent `add_submenu_page`
+// from this theme's submenu registration overwrites that index with
+// the parent-mirror auto-row — silently dropping the CPT entry.
+add_action( 'admin_menu', 'customify_dashboard_v2_add_menu', 9 );
 
 /**
  * Mirror the in-page tabs as WP admin sidebar submenu entries (Dashboard
@@ -118,9 +126,36 @@ function customify_dashboard_v2_register_submenu(): void {
 	// using the parent label ("Customify"). Hide it so the list reads as
 	// just the tab labels.
 	global $submenu;
+	if ( ! isset( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ] ) ) {
+		return;
+	}
 	if ( isset( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ][0] ) ) {
 		unset( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ][0] );
 	}
+
+	// Re-sort so theme tabs (Dashboard, Settings) sit at the top of the
+	// list and any extension submenu entries — e.g. the Customify Pro
+	// Hooks module's `customify_hook` CPT submenu, which auto-attaches
+	// to this parent via `show_in_menu => 'customify'` — follow in
+	// their original order. WP's `_add_post_type_submenus()` runs at
+	// admin_menu priority 10 (before this function at 20), so by the
+	// time we reach here the CPT entry is already interleaved with the
+	// theme entries. Without this sort the Hooks row can land above
+	// Settings, which reads as "the module owns the page" instead of
+	// "the theme's tabs + the module's extension".
+	$tab_slug_prefix = 'admin.php?page=' . CUSTOMIFY_DASHBOARD_V2_SLUG . '#';
+	$theme_entries   = array();
+	$other_entries   = array();
+	foreach ( $submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ] as $entry ) {
+		if ( isset( $entry[2] ) && strpos( $entry[2], $tab_slug_prefix ) === 0 ) {
+			$theme_entries[] = $entry;
+		} else {
+			$other_entries[] = $entry;
+		}
+	}
+	$submenu[ CUSTOMIFY_DASHBOARD_V2_SLUG ] = array_values(
+		array_merge( $theme_entries, $other_entries )
+	);
 }
 add_action( 'admin_menu', 'customify_dashboard_v2_register_submenu', 20 );
 

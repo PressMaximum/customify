@@ -23,7 +23,16 @@ class Customify_Dashboard
 			);
 
 
-			add_action('admin_menu', array(self::$_instance, 'add_menu'), 5);
+			// REMOVED: the "Customify Options (Legacy)" submenu under
+			// Appearance is no longer surfaced — the kit-powered top-level
+			// "Customify" menu (inc/admin/dashboard-v2.php) is the canonical
+			// entry. The Customify_Dashboard class + add_menu() method are
+			// kept intact (back-compat for any child theme / plugin that
+			// instantiates them directly); only the auto-registration is
+			// dropped here. Full class removal lands with the rest of the
+			// legacy-dashboard sweep — see docs/SPEC-dashboard.md §1
+			// "Replaces".
+			// add_action('admin_menu', array(self::$_instance, 'add_menu'), 5);
 			add_action('admin_enqueue_scripts', array(self::$_instance, 'scripts'));
 			add_action('customify/dashboard/main', array(self::$_instance, 'copy_theme_settings'), 5);
 			add_action('customify/dashboard/main', array(self::$_instance, 'box_links'), 10);
