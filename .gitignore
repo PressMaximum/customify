@@ -21,3 +21,11 @@ npm-debug.log
 # Zip file
 *.zip
 
+# Transient handoff docs — gitignored by default so day-to-day notes
+# don't pollute the repo. To share a specific handoff with co-workers,
+# commit it explicitly with `git add -f docs/handoffs/temp/<file>` on
+# the active branch (NOT on main). The branch is the shared surface;
+# the file gets dropped from the branch before merging to main.
+# See docs/handoffs/README.md for the convention.
+/docs/handoffs/temp/
+

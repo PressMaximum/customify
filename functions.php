@@ -70,6 +70,15 @@ add_filter('customify_the_title', 'do_shortcode');
 add_filter('customify_the_title', 'convert_smilies');
 
 
+// Composer autoload — exposes PressMaximum\DashboardKit\* used by the
+// new admin dashboard. Missing vendor/ is non-fatal so dev environments
+// without `composer install` can still boot the theme.
+$customify_autoload = get_template_directory() . '/vendor/autoload.php';
+if ( file_exists( $customify_autoload ) ) {
+	require_once $customify_autoload;
+}
+unset( $customify_autoload );
+
 // Include the main Customify class.
 require_once get_template_directory() . '/inc/class-customify.php';
 

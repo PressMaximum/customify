@@ -1,0 +1,5 @@
+/**
+ * Stub for `import '@pressmaximum/dashboard-kit/style.css'` when dashboard-kit is
+ * installed from Git without a `build/` folder. Real styles bundle through
+ * webpack from `src/` (tokens.css + component stylesheets).
+ */

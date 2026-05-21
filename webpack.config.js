@@ -18,6 +18,7 @@
  */
 
 const path                 = require( 'path' );
+const fs                   = require( 'fs' );
 const webpack              = require( 'webpack' );
 const rtlcss               = require( 'rtlcss' );
 const Terser               = require( 'terser' );
@@ -26,6 +27,64 @@ const cssnano              = require( 'cssnano' );
 const defaultConfig        = require( '@wordpress/scripts/config/webpack.config' );
 const MiniCssExtractPlugin = require( 'mini-css-extract-plugin' );
 const CopyPlugin           = require( 'copy-webpack-plugin' );
+
+/**
+ * Git installs omit `build/` (created by dashboard-kit prepublish/build).
+ * Alias to `src/` and stub `style.css` so webpack matches package exports rules.
+ */
+const dashboardKitRoot         = path.resolve(
+	__dirname,
+	'node_modules/@pressmaximum/dashboard-kit'
+);
+const dashboardKitBuildEntry   = path.join( dashboardKitRoot, 'build', 'index.mjs' );
+const dashboardKitSrcDir     = path.join( dashboardKitRoot, 'src' );
+const dashboardKitGitStyleNoopPath = path.resolve(
+	__dirname,
+	'src/backend/admin/dashboard-v2/dashboard-kit-git-style-noop.css'
+);
+
+const dashboardKitWebpackAliases =
+	! fs.existsSync( dashboardKitBuildEntry )
+		? {
+			'@pressmaximum/dashboard-kit': path.join( dashboardKitSrcDir, 'index.mjs' ),
+			'@pressmaximum/dashboard-kit/style.css': dashboardKitGitStyleNoopPath,
+		}
+		: {};
+const dashboardKitFromGitRepo =
+	Object.keys( dashboardKitWebpackAliases ).length > 0;
+
+/** Babel skips `node_modules` by default — allow dashboard-kit JSX when cloning from Git. */
+const babelExcludeLeavingDashboardKitGit = ( filepath ) =>
+	/node_modules[/\\]/.test( filepath ) &&
+	! /[/\\]@pressmaximum[/\\]dashboard-kit[/\\]/.test( filepath );
+
+/** pnpm links `node_modules/@pressmaximum`; webpack resolves the real `.pnpm/` path — include must match. */
+const dashboardKitSrcDirResolved = ( () => {
+	try {
+		return fs.existsSync( dashboardKitSrcDir )
+			? fs.realpathSync( dashboardKitSrcDir )
+			: dashboardKitSrcDir;
+	} catch ( _err ) {
+		return dashboardKitSrcDir;
+	}
+} )();
+
+/** Overrides webpack default `.mjs` rule (resolve.byDependency.esm.fullySpecified: true). */
+const dashboardKitMjsRelaxRule = dashboardKitFromGitRepo
+		? [
+			{
+				test:    /\.mjs$/i,
+				include: dashboardKitSrcDirResolved,
+				resolve: {
+					byDependency: {
+						esm: {
+							fullySpecified: false,
+						},
+					},
+				},
+			},
+		]
+		: [];
 
 // ── Custom RTL plugin ────────────────────────────────────────────────────────
 // Replaces the default RtlCssPlugin so RTL files also land in build/css/
@@ -178,6 +237,57 @@ const patchedRules = defaultConfig.module.rules.map( ( rule ) => {
 	};
 } );
 
+/** Let babel / source-map-loader process `@pressmaximum/dashboard-kit` when it has no compiled `build/`. */
+const patchWpNodeModulesExcludeForDashboardKitGit = ( rule ) => {
+	if ( ! dashboardKitFromGitRepo ) {
+		return rule;
+	}
+
+	let excludesNodeModulesBare = false;
+	if ( rule.exclude instanceof RegExp && rule.exclude.source === 'node_modules' ) {
+		excludesNodeModulesBare = true;
+	} else if (
+		Array.isArray( rule.exclude ) &&
+		rule.exclude.length === 1 &&
+		rule.exclude[ 0 ] instanceof RegExp &&
+		rule.exclude[ 0 ].source === 'node_modules'
+	) {
+		excludesNodeModulesBare = true;
+	}
+
+	if ( ! excludesNodeModulesBare ) {
+		return rule;
+	}
+
+	const babelLoaderConfigured =
+		Array.isArray( rule.use ) &&
+		rule.use.some( ( u ) => u?.loader?.includes?.( 'babel-loader' ) );
+	const sourceMapLoaderConfigured =
+		typeof rule.use === 'string'
+			? rule.use.includes( 'source-map-loader' )
+			: Array.isArray( rule.use )
+				? rule.use.some(
+					( u ) =>
+						( typeof u === 'string'
+							? u.includes( 'source-map-loader' )
+							: u?.loader?.includes?.( 'source-map-loader' ) )
+				  )
+				: false;
+
+	if ( ! babelLoaderConfigured && ! sourceMapLoaderConfigured ) {
+		return rule;
+	}
+
+	return {
+		...rule,
+		exclude: babelExcludeLeavingDashboardKitGit,
+	};
+};
+
+const patchedRulesIncludingDashboardKit = patchedRules.map(
+	patchWpNodeModulesExcludeForDashboardKitGit
+);
+
 // ── Entry points ─────────────────────────────────────────────────────────────
 const entries = {
 	// Frontend
@@ -199,9 +309,10 @@ const entries = {
 	'backend/customizer/builder-v2':         path.resolve( __dirname, 'src/backend/customizer/js/builder-v2.js' ),
 
 	// Backend — Admin
-	'backend/admin/dashboard': path.resolve( __dirname, 'src/backend/admin/dashboard.js' ),
-	'backend/admin/metabox':   path.resolve( __dirname, 'src/backend/admin/metabox.js' ),
-	'backend/admin/editor':    path.resolve( __dirname, 'src/backend/admin/editor.js' ),
+	'backend/admin/dashboard':    path.resolve( __dirname, 'src/backend/admin/dashboard.js' ),
+	'backend/admin/dashboard-v2': path.resolve( __dirname, 'src/backend/admin/dashboard-v2/index.js' ),
+	'backend/admin/metabox':      path.resolve( __dirname, 'src/backend/admin/metabox.js' ),
+	'backend/admin/editor':       path.resolve( __dirname, 'src/backend/admin/editor.js' ),
 };
 
 // ── Final config ─────────────────────────────────────────────────────────────
@@ -215,6 +326,26 @@ module.exports = {
 
 	entry: entries,
 
+	resolve: {
+		...defaultConfig.resolve,
+		// webpack defaultRules enforce fullySpecified on .mjs (see webpack/lib/config/defaults.js).
+		fullySpecified: false,
+		byDependency: {
+			...( defaultConfig.resolve?.byDependency || {} ),
+			esm: {
+				...( defaultConfig.resolve?.byDependency?.esm || {} ),
+				fullySpecified: false,
+			},
+		},
+		alias: {
+			...( typeof defaultConfig.resolve?.alias === 'object' &&
+			! Array.isArray( defaultConfig.resolve.alias )
+				? defaultConfig.resolve.alias
+				: {} ),
+			...dashboardKitWebpackAliases,
+		},
+	},
+
 	devtool: isDevelopment ? 'source-map' : false,
 
 	output: {
@@ -225,7 +356,7 @@ module.exports = {
 
 	module: {
 		...defaultConfig.module,
-		rules: patchedRules,
+		rules: [ ...dashboardKitMjsRelaxRule, ...patchedRulesIncludingDashboardKit ],
 	},
 
 	// Always emit unminified outputs. EmitMinifiedAssetsPlugin below produces
@@ -236,6 +367,15 @@ module.exports = {
 	},
 
 	plugins: [
+		...( dashboardKitFromGitRepo
+			? [
+				new webpack.NormalModuleReplacementPlugin(
+					/^@pressmaximum\/dashboard-kit\/style\.css$/,
+					dashboardKitGitStyleNoopPath
+				),
+			]
+			: [] ),
+
 		...filteredPlugins,
 
 		new MiniCssExtractPlugin( { filename: 'css/[name].css' } ),

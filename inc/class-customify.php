@@ -428,6 +428,9 @@ class Customify
 			'/inc/admin/block-styles.php',
 			// Block editor Page Settings panel (also registers meta for REST API).
 			'/inc/admin/page-settings.php',
+			'/inc/admin/dashboard-v2-rest.php',
+			// Dashboard v2 REST controller — loads on every request (REST
+			// handlers don't run in admin context).
 		);
 
 		foreach ($files as $file) {
@@ -459,8 +462,9 @@ class Customify
 		}
 
 		$files = array(
-			'/inc/admin/editor.php',    // Block editor style integration.
-			'/inc/admin/dashboard.php', // Dashboard widgets.
+			'/inc/admin/editor.php',       // Block editor style integration.
+			'/inc/admin/dashboard.php',    // Legacy PHP dashboard (Appearance → Customify Options (Legacy)).
+			'/inc/admin/dashboard-v2.php', // New SPA dashboard (top-level Customify) — @pressmaximum/dashboard-kit.
 		);
 
 		foreach ($files as $file) {
