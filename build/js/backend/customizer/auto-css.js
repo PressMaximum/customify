@@ -775,10 +775,10 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
    * inc/customizer/class-customizer-auto-css.php so the preview can
    * update live (postMessage) without the full refresh.
    *
-   * Resolves the layout per column as:
-   *   forced_layout (field config) > saved layout > default_layout (field
-   *   config) > position default.
-   * Position default: first → flex-start, last → flex-end,
+   * Resolves per column:
+   *   direction = forced_direction > saved.direction > default_direction > 'row'
+   *   align     = forced_align > saved.align > default_align > position default
+   * Position default for align: first → flex-start, last → flex-end,
    * single column → flex-start, otherwise → flex-center.
    */
   CustomifyAutoCSS.prototype.columns_settings = function (field) {
@@ -803,8 +803,10 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
     var rowSelector = field.selector || '';
     if (!rowSelector) return;
     var colSelectors = _.isObject(field.col_selectors) && !_.isArray(field.col_selectors) ? field.col_selectors : {};
-    var forcedLayout = _.isString(field.forced_layout) ? field.forced_layout : '';
-    var defaultLayout = _.isString(field.default_layout) ? field.default_layout : '';
+    var forcedDirection = _.isString(field.forced_direction) ? field.forced_direction : '';
+    var forcedAlign = _.isString(field.forced_align) ? field.forced_align : '';
+    var defaultDirection = _.isString(field.default_direction) ? field.default_direction : '';
+    var defaultAlign = _.isString(field.default_align) ? field.default_align : '';
     var columnKeys = _.isArray(field.column_keys) ? field.column_keys : [];
 
     // Legacy fallback — see matching PHP comment in
@@ -862,50 +864,80 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         var selector = colSelectors[colKey] ? colSelectors[colKey] : rowSelector.replace(/\s+$/, '') + ' .col-v2-' + colKey;
         var rules = [];
 
-        // Position-based default layout: first → flex-start, last → flex-end,
-        // single column → flex-start, otherwise → flex-center.
-        var colIndex = _.indexOf(activeColumns, colKey);
-        var positionDefault = 'flex-center';
-        if (colIndex < 0) {
-          positionDefault = '';
-        } else if (activeColumns.length === 1 || colIndex === 0) {
-          positionDefault = 'flex-start';
-        } else if (colIndex === activeColumns.length - 1) {
-          positionDefault = 'flex-end';
+        // Resolve direction: forced > saved > field default > 'row'.
+        var savedDirection = _.isString(colValue.direction) ? colValue.direction : '';
+        var direction;
+        if (forcedDirection !== '') {
+          direction = forcedDirection;
+        } else if (savedDirection !== '') {
+          direction = savedDirection;
+        } else if (defaultDirection !== '') {
+          direction = defaultDirection;
+        } else {
+          direction = 'row';
+        }
+        if (direction !== 'row' && direction !== 'column') {
+          direction = 'row';
         }
 
-        // Resolve order: forced_layout (locked) > saved layout (user)
-        // > default_layout (field-level override, e.g. footer = stack)
-        // > position default.
-        var savedLayout = _.isString(colValue.layout) ? colValue.layout : '';
-        var layout;
-        if (forcedLayout !== '') {
-          layout = forcedLayout;
-        } else if ('' !== savedLayout) {
-          layout = savedLayout;
-        } else if ('' !== defaultLayout) {
-          layout = defaultLayout;
-        } else {
-          layout = positionDefault;
+        // Position-based default align: first → flex-start, last → flex-end,
+        // single column → flex-start, otherwise → flex-center.
+        var colIndex = _.indexOf(activeColumns, colKey);
+        var positionAlign = 'flex-center';
+        if (colIndex < 0) {
+          positionAlign = '';
+        } else if (activeColumns.length === 1 || colIndex === 0) {
+          positionAlign = 'flex-start';
+        } else if (colIndex === activeColumns.length - 1) {
+          positionAlign = 'flex-end';
         }
-        switch (layout) {
+
+        // Resolve align: forced > saved > field default > position-based.
+        var savedAlign = _.isString(colValue.align) ? colValue.align : '';
+        var align;
+        if (forcedAlign !== '') {
+          align = forcedAlign;
+        } else if (savedAlign !== '') {
+          align = savedAlign;
+        } else if (defaultAlign !== '') {
+          align = defaultAlign;
+        } else {
+          align = positionAlign;
+        }
+
+        // Map align → justify-content keyword (shared between the
+        // column-slot rule and the per-item rule emitted below).
+        var justifyValue = '';
+        switch (align) {
+          case 'flex-start':
+            justifyValue = 'flex-start';
+            break;
           case 'flex-center':
-            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: center;', 'align-items: center;');
+            justifyValue = 'center';
             break;
           case 'flex-end':
-            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: flex-end;', 'align-items: center;');
+            justifyValue = 'flex-end';
             break;
           case 'space-between':
-            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: space-between;', 'align-items: center;');
+            justifyValue = 'space-between';
             break;
-          case 'stack':
-            rules.push('display: flex;', 'flex-direction: column;');
-            break;
-          case 'flex-start':
-            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: flex-start;', 'align-items: center;');
-            break;
-          default:
-            break;
+        }
+
+        // Emit flexbox rules on the column slot.
+        //
+        // Row direction: align → justify-content on the column so
+        // items distribute horizontally inside the slot.
+        //
+        // Column direction: align does NOT go on the column. It's
+        // applied below to each `.item--inner` so the chosen value
+        // aligns the item's own internal content horizontally.
+        rules.push('display: flex;');
+        rules.push('flex-direction: ' + direction + ';');
+        if (direction === 'row') {
+          if (justifyValue !== '') {
+            rules.push('justify-content: ' + justifyValue + ';');
+          }
+          rules.push('align-items: center;');
         }
 
         // Gap — { unit, value } or scalar.
@@ -939,10 +971,12 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         if (!rules.length) return;
         that.css[cssBucket] += selector + " {\r\n\t" + rules.join("\r\n\t") + "\r\n}\r\n";
 
-        // Stack layout: direct children take the full column width
-        // so each item lines up on its own row.
-        if (layout === 'stack') {
-          that.css[cssBucket] += selector + " > * {\r\n\twidth: 100%;\r\n}\r\n";
+        // Column direction: each `.item--inner` becomes its own
+        // flex container with the resolved `justify-content` so the
+        // user's align choice controls horizontal placement of the
+        // item's internal content.
+        if (direction === 'column' && justifyValue !== '') {
+          that.css[cssBucket] += selector + " .item--inner {\r\n\tdisplay: flex;\r\n\tjustify-content: " + justifyValue + ";\r\n}\r\n";
         }
       });
     });

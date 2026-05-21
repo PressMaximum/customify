@@ -5,8 +5,82 @@
 var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// external ["wp","i18n"]
 var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// external ["wp","primitives"]
+var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// external "ReactJSXRuntime"
 var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-right.mjs
+// packages/icons/src/library/arrow-right.tsx
+
+
+var arrow_right_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "m14.5 6.5-1 1 3.7 3.7H4v1.6h13.2l-3.7 3.7 1 1 5.6-5.5z" }) });
+
+//# sourceMappingURL=arrow-right.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/arrow-down.mjs
+// packages/icons/src/library/arrow-down.tsx
+
+
+var arrow_down_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "m16.5 13.5-3.7 3.7V4h-1.5v13.2l-3.8-3.7-1 1 5.5 5.6 5.5-5.6z" }) });
+
+//# sourceMappingURL=arrow-down.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/justify-left.mjs
+// packages/icons/src/library/justify-left.tsx
+
+
+var justify_left_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M9 9v6h11V9H9zM4 20h1.5V4H4v16z" }) });
+
+//# sourceMappingURL=justify-left.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/justify-center.mjs
+// packages/icons/src/library/justify-center.tsx
+
+
+var justify_center_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z" }) });
+
+//# sourceMappingURL=justify-center.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/justify-right.mjs
+// packages/icons/src/library/justify-right.tsx
+
+
+var justify_right_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z" }) });
+
+//# sourceMappingURL=justify-right.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/justify-space-between.mjs
+// packages/icons/src/library/justify-space-between.tsx
+
+
+var justify_space_between_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M9 15h6V9H9v6zm-5 5h1.5V4H4v16zM18.5 4v16H20V4h-1.5z" }) });
+
+//# sourceMappingURL=justify-space-between.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/icon/index.mjs
+// packages/icons/src/icon/index.ts
+
+var icon_default = (0,external_wp_element_namespaceObject.forwardRef)(
+  ({ icon, size = 24, ...props }, ref) => {
+    return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
+      width: size,
+      height: size,
+      ...props,
+      ref
+    });
+  }
+);
+
+//# sourceMappingURL=index.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/chevron-down.mjs
+// packages/icons/src/library/chevron-down.tsx
+
+
+var chevron_down_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z" }) });
+
+//# sourceMappingURL=chevron-down.mjs.map
+
 ;// ./src/backend/customizer/js/controls/columns-settings/index.jsx
 /**
  * Column Settings control — React port that keeps the exact pre-React markup.
@@ -15,18 +89,25 @@ var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
  *   slide-down panel.
  * - Inside the panel: `.customify-cs__device-note` + `.customify-cs__accordion`
  *   with `.customify-cs__item` heads/bodies.
- * - Layout field: custom `.customify-cs__btn-group` with inlined `@wordpress/icons` SVGs.
+ * - Direction field: 2-button group (row / column) using `@wordpress/icons`.
+ * - Align field: 4-button group (flex-start / flex-center / flex-end /
+ *   space-between) using `@wordpress/icons`.
  * - Gap field: jQuery-UI slider (via `customifyField.initSlider`) with em/px unit picker.
  * - Padding field: rendered by the existing `customifyField.addFields` css_ruler pipeline.
  *
  * React owns the data flow; the DOM remains visually identical to the jQuery version.
  *
  * Saved value shape:
- *   { desktop: { <colKey>: { layout, gap: { unit, value }, padding: { ... } } }, mobile: { ... } }
+ *   { desktop: { <colKey>: { direction, align, gap: { unit, value }, padding: { ... } } }, mobile: { ... } }
+ *
+ * `direction` is `'row'` or `'column'`. `align` is one of
+ * `flex-start | flex-center | flex-end | space-between` and maps to
+ * `justify-content` on the main axis defined by `direction`.
  *
  * Bundled into the existing backend/customizer/control webpack entry
  * (imported from src/backend/customizer/js/control.js).
  */
+
 
 
 
@@ -50,17 +131,6 @@ function parseRaw(raw) {
     }
   }
   if (!parsed || typeof parsed !== 'object') return {};
-
-  // Legacy fallback — old saves (pre sanitize-callback fix) had the
-  // device wrapper stripped. If the value looks like raw column data
-  // instead of { desktop, mobile }, wrap it as desktop.
-  const looksDeviceWrapped = 'desktop' in parsed || 'mobile' in parsed;
-  const looksColumnData = !looksDeviceWrapped && Object.keys(parsed).some(k => k === 'left' || k === 'center' || k === 'right' || k === 'col4' || k === 'col5' || k === 'sidebar');
-  if (looksColumnData) {
-    return {
-      desktop: parsed
-    };
-  }
   return parsed;
 }
 function useCustomizeSetting(controlId, defaultValue) {
@@ -153,62 +223,64 @@ function usePreviewedDevice() {
 }
 
 // ---------------------------------------------------------------------------
-// Inline SVG icons (same paths copied from @wordpress/icons CJS build)
-// ---------------------------------------------------------------------------
-
-const LAYOUT_OPTIONS = [{
-  value: 'flex-start',
-  label: 'Flex start',
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 9v6h11V9H9zM4 20h1.5V4H4v16z"/></svg>'
-}, {
-  value: 'flex-center',
-  label: 'Flex center',
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z"/></svg>'
-}, {
-  value: 'flex-end',
-  label: 'Flex end',
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z"/></svg>'
-}, {
-  value: 'space-between',
-  label: 'Space between',
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 15h6V9H9v6zm-5 5h1.5V4H4v16zM18.5 4v16H20V4h-1.5z"/></svg>'
-}, {
-  value: 'stack',
-  label: 'Stack',
-  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 4v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V4H8v5a.5.5 0 0 0 .5.5h7A.5.5 0 0 0 16 9V4h1.5Zm0 16v-5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v5H8v-5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v5h1.5Z"/></svg>'
-}];
-const CHEVRON_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>';
-
-// ---------------------------------------------------------------------------
 // Sub-controls
 // ---------------------------------------------------------------------------
 
-function LayoutButtons({
+const DIRECTION_OPTIONS = [{
+  value: 'row',
+  icon: arrow_right_default,
+  label: 'Row'
+}, {
+  value: 'column',
+  icon: arrow_down_default,
+  label: 'Column'
+}];
+const ALIGN_OPTIONS = [{
+  value: 'flex-start',
+  icon: justify_left_default,
+  label: 'Flex start'
+}, {
+  value: 'flex-center',
+  icon: justify_center_default,
+  label: 'Flex center'
+}, {
+  value: 'flex-end',
+  icon: justify_right_default,
+  label: 'Flex end'
+}, {
+  value: 'space-between',
+  icon: justify_space_between_default,
+  label: 'Space between'
+}];
+function ButtonGroup({
+  fieldName,
+  label,
+  options,
   value,
-  defaultLayout,
+  defaultValue,
   onChange
 }) {
-  const current = value || defaultLayout || 'flex-start';
+  const current = value || defaultValue || options[0].value;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
-    className: "customify--group-field ft--layout customify-cs__layout-wrap",
-    "data-field-name": "layout",
+    className: `customify--group-field ft--${fieldName} customify-cs__${fieldName}-wrap`,
+    "data-field-name": fieldName,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
       className: "customize-control-title customify-cs__field-label",
-      children: (0,external_wp_i18n_namespaceObject.__)('Layout', 'customify')
+      children: label
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "customify-cs__btn-group",
       role: "group",
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
         type: "hidden",
-        className: "customify-cs__layout-value change-by-js",
-        "data-name": "layout",
+        className: "customify-cs__btn-value change-by-js",
+        "data-name": fieldName,
         value: current,
         readOnly: true
-      }), LAYOUT_OPTIONS.map(opt => {
+      }), options.map(opt => {
         const isActive = current === opt.value;
         return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
           type: "button",
-          className: `customify-cs__layout-btn components-button is-small${isActive ? ' is-pressed is-primary' : ''}`,
+          className: `customify-cs__btn components-button is-small${isActive ? ' is-primary' : ''}`,
           "data-value": opt.value,
           "aria-label": (0,external_wp_i18n_namespaceObject.__)(opt.label, 'customify'),
           title: (0,external_wp_i18n_namespaceObject.__)(opt.label, 'customify'),
@@ -218,11 +290,9 @@ function LayoutButtons({
             e.stopPropagation();
             onChange(opt.value);
           },
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-            className: "customify-cs__layout-btn-icon",
-            dangerouslySetInnerHTML: {
-              __html: opt.svg
-            }
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icon_default, {
+            icon: opt.icon,
+            size: 20
           })
         }, opt.value);
       })]
@@ -415,9 +485,10 @@ function AccordionItem({
         children: label
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         className: "customify-cs__head-toggle",
-        dangerouslySetInnerHTML: {
-          __html: CHEVRON_DOWN_SVG
-        }
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icon_default, {
+          icon: chevron_down_default,
+          size: 20
+        })
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "customify-cs__body",
@@ -435,8 +506,12 @@ function App({
   colLayoutSetting,
   columnKeys,
   defaultValue,
-  hideLayout,
-  defaultLayout
+  hideDirection,
+  hideAlign,
+  forcedDirection,
+  forcedAlign,
+  defaultDirection,
+  defaultAlign
 }) {
   const [value, setValue] = useCustomizeSetting(controlId, defaultValue);
   const count = useColLayoutCount(colLayoutSetting, Math.min(3, columnKeys.length));
@@ -447,15 +522,23 @@ function App({
   const activeCols = columnKeys.slice(0, Math.max(1, Math.min(columnKeys.length, count)));
   const deviceData = value && value[device] || {};
 
-  // Resolve default layout for a given column index.
-  //
-  // If the field config sets `default_layout` (e.g. footer rows = 'stack'),
-  // every column inherits that value as its default. Otherwise fall back to
-  // the position-based default that mirrors the PHP CSS generator:
+  // Resolve default direction. Forced overrides everything, otherwise
+  // field-level default, otherwise the hardcoded `'row'` (mirrors PHP
+  // Customify_Customizer_Auto_CSS::columns_settings()).
+  function defaultDirectionFor() {
+    if (forcedDirection) return forcedDirection;
+    if (defaultDirection) return defaultDirection;
+    return 'row';
+  }
+
+  // Resolve default align for a given column index. Forced overrides
+  // everything, otherwise field-level default, otherwise the
+  // position-based default that mirrors the PHP CSS generator:
   //   first → flex-start, last → flex-end, middle → flex-center
   //   (single active column → flex-start).
-  function defaultLayoutFor(idx) {
-    if (defaultLayout) return defaultLayout;
+  function defaultAlignFor(idx) {
+    if (forcedAlign) return forcedAlign;
+    if (defaultAlign) return defaultAlign;
     if (activeCols.length === 1) return 'flex-start';
     if (idx === 0) return 'flex-start';
     if (idx === activeCols.length - 1) return 'flex-end';
@@ -563,31 +646,85 @@ function App({
           children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
             className: "customify-cs__device-note",
             children: [(0,external_wp_i18n_namespaceObject.__)('Editing for: ', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
-              children: device === 'mobile' ? (0,external_wp_i18n_namespaceObject.__)('Mobile', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Desktop', 'customify')
+              children: device === 'mobile' ? (0,external_wp_i18n_namespaceObject.__)('Mobile/Tablet', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Desktop', 'customify')
             })]
           }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
             className: "customify-cs__accordion",
-            children: activeCols.map((colKey, idx) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(AccordionItem, {
-              colKey: colKey,
-              label: `Column ${idx + 1}`,
-              children: [!hideLayout && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LayoutButtons, {
-                value: (deviceData[colKey] || {}).layout,
-                defaultLayout: defaultLayoutFor(idx),
-                onChange: v => updateColumn(colKey, {
-                  layout: v
-                })
-              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GapField, {
-                value: (deviceData[colKey] || {}).gap,
-                onChange: v => updateColumn(colKey, {
-                  gap: v
-                })
-              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PaddingField, {
-                value: (deviceData[colKey] || {}).padding,
-                onChange: v => updateColumn(colKey, {
-                  padding: v
-                })
-              })]
-            }, `${device}-${remountKey}-${colKey}`))
+            children: activeCols.map((colKey, idx) => {
+              const colData = deviceData[colKey] || {};
+
+              // Resolve the column's effective direction so the
+              // Align options can be tailored to it. Mirrors the
+              // PHP resolver: forced > saved > field default > 'row'.
+              const effectiveDirection = forcedDirection || colData.direction || defaultDirection || 'row';
+
+              // Column direction: hide `space-between`. With our
+              // CSS model the justify-content goes on `.item--inner`
+              // (default flex-direction: row) so space-between only
+              // affects items that have ≥2 internal children, which
+              // is rare. If the user picked it under row direction
+              // then switched to column, coerce the displayed value
+              // to fall through to the position-based default.
+              const alignOptions = effectiveDirection === 'column' ? ALIGN_OPTIONS.filter(opt => opt.value !== 'space-between') : ALIGN_OPTIONS;
+              let alignValue = colData.align;
+              if (effectiveDirection === 'column' && alignValue === 'space-between') {
+                alignValue = '';
+              }
+              const fields = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+                children: [!hideDirection && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ButtonGroup, {
+                  fieldName: "direction",
+                  label: (0,external_wp_i18n_namespaceObject.__)('Direction', 'customify'),
+                  options: DIRECTION_OPTIONS,
+                  value: colData.direction,
+                  defaultValue: defaultDirectionFor(),
+                  onChange: v => updateColumn(colKey, {
+                    direction: v
+                  })
+                }), !hideAlign && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ButtonGroup, {
+                  fieldName: "align",
+                  label: (0,external_wp_i18n_namespaceObject.__)('Align', 'customify'),
+                  options: alignOptions,
+                  value: alignValue,
+                  defaultValue: defaultAlignFor(idx),
+                  onChange: v => updateColumn(colKey, {
+                    align: v
+                  })
+                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GapField, {
+                  value: colData.gap,
+                  onChange: v => updateColumn(colKey, {
+                    gap: v
+                  })
+                }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PaddingField, {
+                  value: colData.padding,
+                  onChange: v => updateColumn(colKey, {
+                    padding: v
+                  })
+                })]
+              });
+
+              // Off-canvas sidebar (column key `'sidebar'` — a
+              // builder-wide convention used only by the
+              // header_sidebar_columns_settings field) renders
+              // inline without the accordion head. The
+              // `customify-cs__item` + `__body` wrapper nesting
+              // is preserved so SCSS that styles fields inside
+              // the accordion still applies.
+              if (colKey === 'sidebar') {
+                return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+                  className: "customify-cs__item is-open customify-cs__item--single",
+                  "data-col": colKey,
+                  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+                    className: "customify-cs__body",
+                    children: fields
+                  })
+                }, `${device}-${remountKey}-${colKey}`);
+              }
+              return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AccordionItem, {
+                colKey: colKey,
+                label: `Column ${idx + 1}`,
+                children: fields
+              }, `${device}-${remountKey}-${colKey}`);
+            })
           })]
         })
       })
@@ -613,16 +750,24 @@ function mountOne(node) {
   const colLayoutSetting = node.dataset.colLayout || '';
   const columnKeys = parseAttr(node.dataset.columnKeys, ['left', 'center', 'right', 'col4', 'col5']);
   const defaultValue = parseAttr(node.dataset.default, {});
-  const hideLayout = node.dataset.hideLayout === '1';
-  const defaultLayout = node.dataset.defaultLayout || '';
+  const hideDirection = node.dataset.hideDirection === '1';
+  const hideAlign = node.dataset.hideAlign === '1';
+  const forcedDirection = node.dataset.forcedDirection || '';
+  const forcedAlign = node.dataset.forcedAlign || '';
+  const defaultDirection = node.dataset.defaultDirection || '';
+  const defaultAlign = node.dataset.defaultAlign || '';
   if (!controlId) return;
   (0,external_wp_element_namespaceObject.render)(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(App, {
     controlId: controlId,
     colLayoutSetting: colLayoutSetting,
     columnKeys: columnKeys,
     defaultValue: defaultValue,
-    hideLayout: hideLayout,
-    defaultLayout: defaultLayout
+    hideDirection: hideDirection,
+    hideAlign: hideAlign,
+    forcedDirection: forcedDirection,
+    forcedAlign: forcedAlign,
+    defaultDirection: defaultDirection,
+    defaultAlign: defaultAlign
   }), node);
 }
 function mountColumnsSettings() {
