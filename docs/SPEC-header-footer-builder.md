@@ -111,7 +111,13 @@ Each row is divided into a fixed set of column slots. Items live inside a slot; 
 | **Header** | 3 | `left`, `center`, `right` |
 | **Footer** | 5 | `left`, `center`, `right`, `col4`, `col5` |
 
-The header is intentionally constrained to 3 slots — header content needs to remain scannable across viewport widths, and the React canvas surfaces a tighter 3-column drop target. The footer is wider and supports up to 5 columns for richer multi-column footer layouts (e.g. About / Quick Links / Categories / Newsletter / Contact).
+The header is **strictly** constrained to 3 slots — `left`, `center`, `right`. This is enforced at three layers so a misconfigured field or stray imported data can't widen the layout:
+
+1. **Customizer `columns_settings` field**: `'column_keys' => ['left', 'center', 'right']` — React UI exposes only the 3 accordion items.
+2. **React Header Builder canvas** (`Builder.jsx`): defaults `activeCols = ['left', 'center', 'right']` when no `col_layout` setting is present (header doesn't register one). The builder never offers `col4`/`col5` drop targets for header rows.
+3. **Frontend renderer** (`Customify_Layout_Builder_Frontend_V2::render_row()`): header branch hardcodes `['left', 'center', 'right']` and silently ignores any `col4`/`col5` keys that might exist in saved data. If all 3 valid slots are empty, the row is skipped entirely (no empty placeholder divs).
+
+The footer is wider and supports up to 5 columns for richer multi-column layouts (e.g. About / Quick Links / Categories / Newsletter / Contact).
 
 The mobile sidebar (header-only special row) does NOT use column slots — see §8.
 
@@ -209,7 +215,9 @@ function customify_customize_render_header() {
 
 1. `render()` loops the configured rows for the builder (header: `top`, `main`, `bottom`; footer: `main`, `bottom`).
 2. For each row, fetches both `desktop` and `mobile` settings via `get_row_settings( $row_id, $device )`.
-3. `render_row()` iterates the builder's column slots in order — 3 for header (`left`, `center`, `right`), 5 for footer (`left`, `center`, `right`, `col4`, `col5`).
+3. `render_row()` iterates the builder's column slots in a builder-specific way:
+   - **Header**: hardcoded `['left', 'center', 'right']` — exactly 3 slots, no more. Any `col4`/`col5` items in saved data are ignored. If all 3 slots end up empty, the entire row is skipped (no empty placeholder div).
+   - **Footer**: 1–5 slots driven by the `col_layout` setting (`['left', 'center', 'right', 'col4', 'col5']`, sliced to `col_layout.count`). All defined slots always render — even empty ones — so the grid template column count is consistent for `grid-template-columns` to map onto.
 4. For each item in each slot, calls `get_render_item( $item_id )` which dispatches to the registered item instance's `render()` method.
 5. Each item render is bracketed by:
    - `do_action( "customify/builder/<builder>/before-item/{$item_id}" )`
@@ -683,6 +691,8 @@ Items often expose their own filter for their settings array (e.g. `customify/bu
 | Mobile sidebar doesn't open | Nav Icon item not added to a mobile row, OR `theme.js` JS error (check `menuSidebar` null guard) |
 | Sidebar styling broken | `header_sidebar_styling` field's `selector` doesn't match `#header-menu-sidebar` or `#header-menu-sidebar-inner` |
 | Footer items in `col4` / `col5` not visible | Theme CSS expecting only 3 columns. Ensure the row's flex/grid rule sizes to 5 children. |
+| Header items in `col4` / `col5` not visible | **Expected — header is strictly 3 slots.** Items in `col4`/`col5` are stripped at render time. Move them to `left`/`center`/`right` via the React Header Builder canvas. |
+| Header row shows up with empty placeholder columns | All real items live in `col4`/`col5` (ignored by renderer) — `left`/`center`/`right` are empty. The row is now skipped entirely; check saved data has items in valid slots. |
 | New item's section not visible in Customizer | Missing `panel` key in the section config, or panel name typo (`header_settings`) |
 | Filter `customify/builder/header/items` doesn't filter anything | Hooked too late — must run before `customify/customize-builder/init` |
 | React canvas blank | `window.Customify_Layout_Builder` undefined → enqueue didn't fire. Check `Customify_Customize_Layout_Builder::scripts()` hooks. |

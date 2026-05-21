@@ -500,31 +500,57 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		$row_clases = array( 'row-v2', 'row-v2-' . $id );
 		$has_center = false;
 
-		// For footer rows use col_layout to get the correct ordered column keys,
-		// and always render all defined columns (even empty ones) so that the
-		// CSS grid-template-columns applied by customify_footer_row_layout_css()
-		// maps onto the right number of grid cells.
-		$footer_col_keys = 'footer' === $this->id ? $this->get_footer_col_keys( $id ) : null;
-		$force_all_cols  = null !== $footer_col_keys;
-		$ordered_cols    = $force_all_cols ? $footer_col_keys : array_keys( $row_settings );
+		// Column key list per builder:
+		//   - Footer: 1..5 keys driven by col_layout (left, center, right,
+		//     col4, col5), used by customify_footer_row_layout_css() to
+		//     emit grid-template-columns.
+		//   - Header: fixed 3 slots — left, center, right. Saved data may
+		//     accidentally contain stray col4/col5 keys; ignore them and
+		//     always render exactly the 3 header slots so flex alignment
+		//     stays predictable.
+		if ( 'footer' === $this->id ) {
+			$footer_col_keys = $this->get_footer_col_keys( $id );
+			$force_all_cols  = true;
+			$ordered_cols    = $footer_col_keys;
+			$col_count       = count( $footer_col_keys );
+		} else {
+			$force_all_cols = false;
+			$ordered_cols   = array( 'left', 'center', 'right' );
+			$col_count      = 3;
 
-		// Total visible column count, used as `cc-{N}` class on every col-v2
-		// so CSS can target a row's layout density (e.g. `.col-v2.cc-5`).
-		// Footer: from col_layout.count via $footer_col_keys.
-		// Header: 3 (left/center/right slots are always considered, even if
-		// some are empty placeholders to keep flex alignment).
-		$col_count = $force_all_cols ? count( $footer_col_keys ) : 3;
+			// Skip the whole row if NONE of the 3 valid header slots has
+			// items. The `render_items()` pre-pass sets `flag_rows` for
+			// any saved column key (including stray col4/col5 from a
+			// previous layout), so the row-level guard at the top of this
+			// method can return true even when every header slot is in
+			// fact empty. Without this check the row would emit 3 blank
+			// `col-v2` placeholder divs.
+			$header_has_item = false;
+			foreach ( $ordered_cols as $_check_col ) {
+				if ( isset( $this->flag_cols[ $_check_col . '-' . $id . '-' . $device ] ) ) {
+					$header_has_item = true;
+					break;
+				}
+			}
+			if ( ! $header_has_item ) {
+				ob_end_clean();
+				return false;
+			}
+		}
 
 		foreach ( $ordered_cols as $col_id ) {
 			$col_items    = isset( $row_settings[ $col_id ] ) ? $row_settings[ $col_id ] : array();
 			$flag_key_col = $col_id . '-' . $id . '-' . $device;
 			$has_items    = isset( $this->flag_cols[ $flag_key_col ] );
 
-			// Skip empty columns for header; always render for footer (grid needs them).
+			// Track `no-{col}` classes so CSS can target empty slots
+			// (e.g. expand center when both left and right are empty),
+			// but ALWAYS render the column div — both header and footer
+			// keep a consistent flex/grid slot structure regardless of
+			// which columns the user has filled.
 			if ( ! $force_all_cols && ! $has_items ) {
 				$no_key             = 'no-' . $col_id;
 				$no_cols[ $no_key ] = $no_key;
-				continue;
 			}
 
 			$count ++;
@@ -570,16 +596,9 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 
 		$row_innner_html = ob_get_clean();
 
-		// For header only: pad center with empty left/right placeholders so flex alignment works.
-		if ( ! $force_all_cols && $has_center ) {
-			if ( isset( $no_cols['no-left'] ) ) {
-				$row_innner_html = '<div class="col-v2 col-v2-left cc-' . (int) $col_count . '"></div>' . $row_innner_html;
-			}
-			if ( isset( $no_cols['no-right'] ) ) {
-				$row_innner_html .= '<div class="col-v2 col-v2-right cc-' . (int) $col_count . '"></div>';
-			}
-		}
-
+		// `no-{col}` classes added to row wrapper for CSS targeting of
+		// empty slots. The actual empty `<div class="col-v2 col-v2-X">`
+		// placeholders are emitted in the loop above unconditionally.
 		if ( ! empty( $no_cols ) ) {
 			$row_clases = array_merge( $row_clases, $no_cols );
 		} else {
