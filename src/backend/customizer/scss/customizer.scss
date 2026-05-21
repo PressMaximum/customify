@@ -251,6 +251,17 @@ $builder_active_color: #0073aa;
 			}
 		}
 	}
+
+	// Off-canvas (single-column) variant: no accordion head, no border,
+	// and zero padding so the inline body sits flush with the modal edges.
+	.customify-cs__item--single {
+		border: none;
+
+		.customify-cs__body {
+			padding: 0;
+			border: none;
+		}
+	}
 }
 
 // Gap slider — override default absolute layout so the em/px unit picker

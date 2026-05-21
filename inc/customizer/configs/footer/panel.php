@@ -198,13 +198,13 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'section'            => $section,
 				'priority'           => 999,
 				'title'              => __( 'Column Settings', 'customify' ),
-				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
+				'description'        => __( 'Per-column direction, align, gap and padding.', 'customify' ),
 				'col_layout_setting' => $section . '_col_layout',
 				'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
 				// Footer widgets typically stack vertically inside each column,
-				// so the default per-column layout is `stack`. Users can still
-				// switch any column to flex-start/center/end/space-between.
-				'default_layout'     => 'stack',
+				// so the default per-column direction is `column`. Users can
+				// still switch any column to row direction.
+				'default_direction'  => 'column',
 				'selector'           => $selector,
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',

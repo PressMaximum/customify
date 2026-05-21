@@ -202,9 +202,10 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'section'            => $section,
 				'priority'           => 999,
 				'title'              => __( 'Column Settings', 'customify' ),
-				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
+				'description'        => __( 'Per-column direction, align, gap and padding.', 'customify' ),
 				'col_layout_setting' => '',
 				'column_keys'        => array( 'left', 'center', 'right' ),
+				'default_direction'  => 'row',
 				'selector'           => '.header--row.' . str_replace( '_', '-', $section ),
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',
@@ -337,11 +338,14 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'section'            => $section,
 				'priority'           => 999,
 				'title'              => __( 'Off-canvas Settings', 'customify' ),
-				'description'        => __( 'Layout, gap and padding for the off-canvas.', 'customify' ),
+				'description'        => __( 'Align, gap and padding for the off-canvas.', 'customify' ),
 				'col_layout_setting' => '',
 				'column_keys'        => array( 'sidebar' ),
-				'hide_layout'        => true,
-				'forced_layout'      => 'stack',
+				// Direction is locked to `column` (sidebar always stacks
+				// vertically). Align is user-pickable so they can left /
+				// center / right align item content inside the off-canvas.
+				'hide_direction'     => true,
+				'forced_direction'   => 'column',
 				'col_selectors'      => array(
 					'sidebar' => '#header-menu-sidebar-inner',
 				),
@@ -518,20 +522,103 @@ add_filter(
 /**
  * Sanitize callback for columns_settings fields.
  *
- * Customify's generic sanitize_customizer_input() strips off the `desktop`
- * key whenever a setting has device_settings=false but its value contains
- * one (see class-customizer-sanitize.php:236). Our columns_settings shape
- * `{ desktop: {...}, mobile: {...} }` does include that key — without this
- * dedicated callback the structure gets flattened to `{ <colKey>: {...} }`
- * on Publish, so the frontend CSS generator can no longer find the saved
- * per-column gap/padding/layout values. Round-tripping via this callback
- * preserves both device buckets untouched.
+ * The canonical saved shape is:
+ *   { desktop: { <colKey>: { direction, align, gap, padding }, ... },
+ *     mobile:  { <colKey>: { ... }, ... } }
+ *
+ * Unknown top-level keys (anything other than desktop/mobile), unknown
+ * per-column keys (anything other than direction/align/gap/padding), and
+ * out-of-range enum values are stripped — keeps the stored shape narrow
+ * and forward-compatible.
+ *
+ * Customify's generic sanitize_customizer_input() would otherwise flatten
+ * the desktop/mobile envelope away (see class-customizer-sanitize.php:236
+ * — it drops a `desktop` key when the field has device_settings=false).
+ * Routing through this dedicated callback preserves both buckets.
  */
 if ( ! function_exists( 'customify_sanitize_columns_settings' ) ) {
 	function customify_sanitize_columns_settings( $input ) {
 		if ( is_string( $input ) ) {
 			$input = json_decode( urldecode_deep( wp_unslash( $input ) ), true );
 		}
-		return is_array( $input ) ? $input : array();
+		if ( ! is_array( $input ) ) {
+			return array();
+		}
+
+		$allowed_directions = array( 'row', 'column' );
+		$allowed_aligns     = array( 'flex-start', 'flex-center', 'flex-end', 'space-between' );
+		$allowed_units      = array( 'em', 'px' );
+		$out                = array();
+
+		foreach ( array( 'desktop', 'mobile' ) as $device ) {
+			if ( ! isset( $input[ $device ] ) || ! is_array( $input[ $device ] ) ) {
+				continue;
+			}
+			$device_out = array();
+			foreach ( $input[ $device ] as $col_key => $col_value ) {
+				if ( ! is_array( $col_value ) ) {
+					continue;
+				}
+				$col_out = array();
+
+				// Direction.
+				if ( isset( $col_value['direction'] ) && in_array( $col_value['direction'], $allowed_directions, true ) ) {
+					$col_out['direction'] = $col_value['direction'];
+				}
+
+				// Align.
+				if ( isset( $col_value['align'] ) && in_array( $col_value['align'], $allowed_aligns, true ) ) {
+					$col_out['align'] = $col_value['align'];
+				}
+
+				// Gap — { unit, value }.
+				if ( isset( $col_value['gap'] ) && is_array( $col_value['gap'] ) ) {
+					$gap   = array();
+					$gap_v = $col_value['gap']['value'] ?? '';
+					$gap_u = $col_value['gap']['unit']  ?? 'em';
+					if ( '' !== $gap_v && null !== $gap_v && is_numeric( $gap_v ) ) {
+						$gap['value'] = floatval( $gap_v );
+						$gap['unit']  = in_array( $gap_u, $allowed_units, true ) ? $gap_u : 'em';
+					}
+					if ( ! empty( $gap ) ) {
+						$col_out['gap'] = $gap;
+					}
+				}
+
+				// Padding — { top, right, bottom, left, unit, link }.
+				if ( isset( $col_value['padding'] ) && is_array( $col_value['padding'] ) ) {
+					$pad      = array();
+					$pad_unit = $col_value['padding']['unit'] ?? 'em';
+					$pad_link = isset( $col_value['padding']['link'] ) ? intval( $col_value['padding']['link'] ) : 0;
+					foreach ( array( 'top', 'right', 'bottom', 'left' ) as $side ) {
+						if ( ! isset( $col_value['padding'][ $side ] ) ) {
+							continue;
+						}
+						$v = $col_value['padding'][ $side ];
+						if ( '' === $v || null === $v ) {
+							$pad[ $side ] = '';
+							continue;
+						}
+						if ( is_numeric( $v ) ) {
+							$pad[ $side ] = floatval( $v );
+						}
+					}
+					if ( ! empty( $pad ) ) {
+						$pad['unit'] = in_array( $pad_unit, $allowed_units, true ) ? $pad_unit : 'em';
+						$pad['link'] = $pad_link ? 1 : 0;
+						$col_out['padding'] = $pad;
+					}
+				}
+
+				if ( ! empty( $col_out ) ) {
+					$device_out[ sanitize_key( $col_key ) ] = $col_out;
+				}
+			}
+			if ( ! empty( $device_out ) ) {
+				$out[ $device ] = $device_out;
+			}
+		}
+
+		return $out;
 	}
 }

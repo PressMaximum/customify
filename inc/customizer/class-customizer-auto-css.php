@@ -365,8 +365,12 @@ class Customify_Customizer_Auto_CSS
 	 * Emit CSS for a `columns_settings` field.
 	 *
 	 * Saved value:
-	 *   { desktop: { <colKey>: { layout, gap, padding: { top, right, bottom, left, unit } }, ... },
+	 *   { desktop: { <colKey>: { direction, align, gap, padding: { top, right, bottom, left, unit } }, ... },
 	 *     mobile:  { <colKey>: { ... }, ... } }
+	 *
+	 * `direction` is `'row'` or `'column'`. `align` is one of
+	 * `flex-start | flex-center | flex-end | space-between` and maps to
+	 * `justify-content` on the main axis defined by `direction`.
 	 *
 	 * Selector: `{$field['selector']} .col-v2-<colKey>`
 	 *
@@ -384,10 +388,12 @@ class Customify_Customizer_Auto_CSS
 			return;
 		}
 
-		$col_selectors  = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
-		$forced_layout  = isset($field['forced_layout']) ? (string) $field['forced_layout'] : '';
-		$default_layout = isset($field['default_layout']) ? (string) $field['default_layout'] : '';
-		$column_keys    = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+		$col_selectors     = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
+		$forced_direction  = isset($field['forced_direction']) ? (string) $field['forced_direction'] : '';
+		$forced_align      = isset($field['forced_align']) ? (string) $field['forced_align'] : '';
+		$default_direction = isset($field['default_direction']) ? (string) $field['default_direction'] : '';
+		$default_align     = isset($field['default_align']) ? (string) $field['default_align'] : '';
+		$column_keys       = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
 
 		// Legacy fallback — early builds of this control saved column data without
 		// a desktop/mobile wrapper (the generic sanitizer stripped it). When the
@@ -409,8 +415,8 @@ class Customify_Customizer_Auto_CSS
 
 		// Active column list — count from the linked col_layout setting if any,
 		// else fall back to the full column_keys list. Drives the position-based
-		// default layout (first=flex-start, last=flex-end, middle=flex-center)
-		// applied below when the user hasn't saved an explicit layout choice.
+		// default align (first=flex-start, last=flex-end, middle=flex-center)
+		// applied below when the user hasn't saved an explicit align choice.
 		$active_count = count($column_keys);
 		if (!empty($field['col_layout_setting'])) {
 			$cl_raw  = Customify()->get_setting($field['col_layout_setting']);
@@ -432,9 +438,9 @@ class Customify_Customizer_Auto_CSS
 		foreach ($device_map as $device_key => $css_bucket) {
 			$device_values = (isset($values[$device_key]) && is_array($values[$device_key])) ? $values[$device_key] : array();
 
-			// Always seed the active columns so the position-based default
-			// layout (and any forced_layout) emits even when the user hasn't
-			// saved a value. Padding/gap remain empty until the user sets them.
+			// Always seed the active columns so direction/align defaults emit
+			// even when the user hasn't saved a value. Padding/gap remain empty
+			// until the user sets them.
 			foreach ($active_columns as $ck) {
 				if (!isset($device_values[$ck])) {
 					$device_values[$ck] = array();
@@ -455,63 +461,73 @@ class Customify_Customizer_Auto_CSS
 					: trim($row_selector) . ' .col-v2-' . sanitize_html_class($col_key);
 				$rules    = array();
 
-				// Position-based default layout. First column → flex-start,
-				// last → flex-end, anything else → flex-center. A single
-				// active column resolves to flex-start.
-				$col_index       = array_search($col_key, $active_columns, true);
-				$position_default = 'flex-center';
-				if ($col_index === false) {
-					$position_default = '';
-				} elseif (count($active_columns) === 1 || $col_index === 0) {
-					$position_default = 'flex-start';
-				} elseif ($col_index === count($active_columns) - 1) {
-					$position_default = 'flex-end';
+				// Resolve direction. Order: forced > saved > field default > 'row'.
+				$saved_direction = isset($col_value['direction']) ? (string) $col_value['direction'] : '';
+				if ('' !== $forced_direction) {
+					$direction = $forced_direction;
+				} elseif ('' !== $saved_direction) {
+					$direction = $saved_direction;
+				} elseif ('' !== $default_direction) {
+					$direction = $default_direction;
+				} else {
+					$direction = 'row';
+				}
+				if ('row' !== $direction && 'column' !== $direction) {
+					$direction = 'row';
 				}
 
-				// Resolve order: forced_layout (locked) > saved_layout (user)
-				// > default_layout (field-level override) > position default.
-				$saved_layout = isset($col_value['layout']) ? (string) $col_value['layout'] : '';
-				if ($forced_layout !== '') {
-					$layout = $forced_layout;
-				} elseif ('' !== $saved_layout) {
-					$layout = $saved_layout;
-				} elseif ('' !== $default_layout) {
-					$layout = $default_layout;
-				} else {
-					$layout = $position_default;
+				// Position-based default align. First column → flex-start,
+				// last → flex-end, anything else → flex-center. A single
+				// active column resolves to flex-start.
+				$col_index    = array_search($col_key, $active_columns, true);
+				$position_align = 'flex-center';
+				if ($col_index === false) {
+					$position_align = '';
+				} elseif (count($active_columns) === 1 || $col_index === 0) {
+					$position_align = 'flex-start';
+				} elseif ($col_index === count($active_columns) - 1) {
+					$position_align = 'flex-end';
 				}
-				switch ($layout) {
-					case 'flex-center':
-						$rules[] = 'display: flex;';
-						$rules[] = 'flex-direction: row;';
-						$rules[] = 'justify-content: center;';
-						$rules[] = 'align-items: center;';
-						break;
-					case 'flex-end':
-						$rules[] = 'display: flex;';
-						$rules[] = 'flex-direction: row;';
-						$rules[] = 'justify-content: flex-end;';
-						$rules[] = 'align-items: center;';
-						break;
-					case 'space-between':
-						$rules[] = 'display: flex;';
-						$rules[] = 'flex-direction: row;';
-						$rules[] = 'justify-content: space-between;';
-						$rules[] = 'align-items: center;';
-						break;
-					case 'stack':
-						$rules[] = 'display: flex;';
-						$rules[] = 'flex-direction: column;';
-						break;
-					case 'flex-start':
-						$rules[] = 'display: flex;';
-						$rules[] = 'flex-direction: row;';
-						$rules[] = 'justify-content: flex-start;';
-						$rules[] = 'align-items: center;';
-						break;
-					default:
-						// No layout resolved — emit nothing for layout.
-						break;
+
+				// Resolve align. Order: forced > saved > field default > position-based.
+				$saved_align = isset($col_value['align']) ? (string) $col_value['align'] : '';
+				if ('' !== $forced_align) {
+					$align = $forced_align;
+				} elseif ('' !== $saved_align) {
+					$align = $saved_align;
+				} elseif ('' !== $default_align) {
+					$align = $default_align;
+				} else {
+					$align = $position_align;
+				}
+
+				// Map align → justify-content keyword (shared between the
+				// column-slot rule and the per-item rule below).
+				$justify_value = '';
+				switch ($align) {
+					case 'flex-start':    $justify_value = 'flex-start';    break;
+					case 'flex-center':   $justify_value = 'center';        break;
+					case 'flex-end':      $justify_value = 'flex-end';      break;
+					case 'space-between': $justify_value = 'space-between'; break;
+				}
+
+				// Emit flexbox rules on the column slot.
+				//
+				// Row direction: align maps to justify-content on the column
+				// so items distribute horizontally inside the slot.
+				//
+				// Column direction: align does NOT go on the column (items
+				// just stack vertically). Instead it's applied below to each
+				// `.item--inner` so the chosen value aligns the item's own
+				// internal content (icon vs label, image vs caption, …)
+				// along the horizontal axis.
+				$rules[] = 'display: flex;';
+				$rules[] = 'flex-direction: ' . $direction . ';';
+				if ('row' === $direction) {
+					if ('' !== $justify_value) {
+						$rules[] = 'justify-content: ' . $justify_value . ';';
+					}
+					$rules[] = 'align-items: center;';
 				}
 
 				// Gap — value shape: { unit, value } or scalar (legacy).
@@ -563,10 +579,18 @@ class Customify_Customizer_Auto_CSS
 
 				$this->css[$css_bucket] .= "{$selector} {\r\n\t" . join("\r\n\t", $rules) . "\r\n}\r\n";
 
-				// Stack layout: direct children take the full column width so
-				// each item lines up on its own row.
-				if ('stack' === $layout) {
+				// Column direction extras:
+				//   1. Each item takes the full column width so stacked
+				//      items line up on their own row.
+				//   2. Each `.item--inner` becomes its own flex container
+				//      with the resolved `justify-content`, so the user's
+				//      align choice controls horizontal placement of the
+				//      item's internal content.
+				if ('column' === $direction) {
 					$this->css[$css_bucket] .= "{$selector} > * {\r\n\twidth: 100%;\r\n}\r\n";
+					if ('' !== $justify_value) {
+						$this->css[$css_bucket] .= "{$selector} .item--inner {\r\n\tdisplay: flex;\r\n\tjustify-content: " . $justify_value . ";\r\n}\r\n";
+					}
 				}
 			}
 		}

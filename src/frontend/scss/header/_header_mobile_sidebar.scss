@@ -44,6 +44,12 @@ body {
     z-index: $menu_sidebar_active_z_index;
     visibility: hidden;
 
+    .item--inner {
+        > * {
+            max-width: 100%;
+        }
+    }
+
     .builder-item-sidebar {
         padding: 1.4em 1.5em;
         border-bottom: 1px solid transparent;

@@ -416,10 +416,10 @@ array(
     'section'            => 'footer_main',
     'priority'           => 999,
     'title'              => __( 'Column Settings', 'customify' ),
-    'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
+    'description'        => __( 'Per-column direction, align, gap and padding.', 'customify' ),
     'col_layout_setting' => 'footer_main_col_layout',          // optional — links to a row_layout
     'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
-    'default_layout'     => 'stack',                            // field-level default for all columns
+    'default_direction'  => 'column',                          // header = 'row', footer = 'column'
     'selector'           => '#cb-row--footer-main',
     'css_format'         => 'columns_settings',
     'sanitize_callback'  => 'customify_sanitize_columns_settings',
@@ -431,10 +431,13 @@ Extra keys specific to `columns_settings`:
 | Key | Type | Purpose |
 |---|---|---|
 | `column_keys` | array | Slot ids managed by this field. Header = 3, footer = 5, sidebar = 1. |
-| `col_layout_setting` | string | Optional — name of a `row_layout` setting that controls active column count (drives position-based defaults). |
-| `default_layout` | string | Field-level default layout applied to all columns when user hasn't saved a value. Overrides position-based default. |
-| `forced_layout` | string | Locks every column to this layout regardless of user input (used for sidebar = `'stack'`). |
-| `hide_layout` | bool | If true, the React UI hides the Layout button group entirely. Pair with `forced_layout`. |
+| `col_layout_setting` | string | Optional — name of a `row_layout` setting that controls active column count (drives position-based align defaults). |
+| `default_direction` | string | Field-level default for `direction` — `'row'` or `'column'`. Header rows set `'row'`, footer rows set `'column'`. Falls through to `'row'` if absent. |
+| `default_align` | string | Field-level default for `align` (one of `flex-start`/`flex-center`/`flex-end`/`space-between`). Overrides the position-based default. |
+| `forced_direction` | string | Locks every column to this direction regardless of user input (used for sidebar = `'column'`). |
+| `forced_align` | string | Locks every column to this align regardless of user input. |
+| `hide_direction` | bool | If true, the React UI hides the Direction button group entirely. Pair with `forced_direction`. |
+| `hide_align` | bool | If true, the React UI hides the Align button group entirely. Pair with `forced_align`. |
 | `col_selectors` | array | Per-column selector overrides when markup doesn't follow `.col-v2-{key}`. E.g. `array( 'sidebar' => '#header-menu-sidebar-inner' )`. |
 
 ### 9.4 Data shape (saved value)
@@ -445,9 +448,10 @@ Stored as URL-encoded JSON in the `theme_mod`. Decoded shape:
 array(
     'desktop' => array(
         'left' => array(
-            'layout'  => 'flex-start',                                                       // enum
-            'gap'     => array( 'unit' => 'em', 'value' => 1 ),
-            'padding' => array( 'unit' => 'em', 'top' => '', 'right' => '', 'bottom' => '', 'left' => '', 'link' => 1 ),
+            'direction' => 'row',                                                              // 'row' | 'column'
+            'align'     => 'flex-start',                                                       // enum (see §9.5)
+            'gap'       => array( 'unit' => 'em', 'value' => 1 ),
+            'padding'   => array( 'unit' => 'em', 'top' => '', 'right' => '', 'bottom' => '', 'left' => '', 'link' => 1 ),
         ),
         'center' => array( /* same shape */ ),
         'right'  => array( /* same shape */ ),
@@ -460,40 +464,61 @@ array(
 )
 ```
 
-**Empty-in-DB is normal.** Columns the user never touched are absent or have empty sub-fields. The render-time resolver (§9.6) fills them in.
+**Empty-in-DB is normal.** Columns the user never touched are absent or have empty sub-fields. The render-time resolver (§9.6) fills them in. The sanitize callback strips any unknown keys (including the legacy `layout` key from earlier theme versions) on save.
 
 ### 9.5 Per-column sub-fields
 
 | Sub-field | Type | Values | Default | Device-aware |
 |---|---|---|---|---|
-| `layout` | enum | `flex-start`, `flex-center`, `flex-end`, `space-between`, `stack` | position-based (§9.6) | ✓ |
+| `direction` | enum | `row`, `column` | header = `'row'`, footer = `'column'` (§9.6) | ✓ |
+| `align` | enum | `flex-start`, `flex-center`, `flex-end`, `space-between` | position-based (§9.6) | ✓ |
 | `gap` | slider + unit | `value`: 0–100 (em steps 0.1, px steps 1); `unit`: `em`, `px` | `1em` | ✓ |
 | `padding` | css_ruler (4-sided) | per side numeric; `unit`: `em`, `px`; `link`: 0/1 | all empty | ✓ |
 
-Layout → CSS mapping at render time:
+(`direction`, `align`) → CSS mapping at render time. Note that `align` lives on a different selector depending on direction:
 
-| Layout | Emitted CSS |
-|---|---|
-| `flex-start` | `display: flex; flex-direction: row; justify-content: flex-start; align-items: center;` |
-| `flex-center` | `display: flex; flex-direction: row; justify-content: center; align-items: center;` |
-| `flex-end` | `display: flex; flex-direction: row; justify-content: flex-end; align-items: center;` |
-| `space-between` | `display: flex; flex-direction: row; justify-content: space-between; align-items: center;` |
-| `stack` | `display: flex; flex-direction: column;` |
+| `direction` | `align` | Selector | Emitted CSS |
+|---|---|---|---|
+| `row` | `flex-start` | column slot | `display: flex; flex-direction: row; justify-content: flex-start; align-items: center;` |
+| `row` | `flex-center` | column slot | `display: flex; flex-direction: row; justify-content: center; align-items: center;` |
+| `row` | `flex-end` | column slot | `display: flex; flex-direction: row; justify-content: flex-end; align-items: center;` |
+| `row` | `space-between` | column slot | `display: flex; flex-direction: row; justify-content: space-between; align-items: center;` |
+| `column` | (any) | column slot | `display: flex; flex-direction: column;` |
+| `column` | `flex-start` | `.item--inner` | `display: flex; justify-content: flex-start;` |
+| `column` | `flex-center` | `.item--inner` | `display: flex; justify-content: center;` |
+| `column` | `flex-end` | `.item--inner` | `display: flex; justify-content: flex-end;` |
+| `column` | `space-between` | `.item--inner` | `display: flex; justify-content: space-between;` |
 
-### 9.6 Layout resolution order
+**Why split selectors for column direction?** With `flex-direction: row` the main axis is horizontal, so `justify-content` on the column slot distributes items left/center/right — that matches what the user picks for align. With `flex-direction: column` the main axis flips vertical; `justify-content` on the column would distribute items top/center/bottom, which is rarely the intended effect. Instead, the user's align choice is applied to each item's own `.item--inner` wrapper (default `flex-direction: row`), so it aligns the item's **internal content** horizontally.
 
-When generating CSS for a column, the resolver picks the layout from the first matching source:
+Additional rules per direction:
 
-1. `forced_layout` (field-level lock) → used regardless of anything else.
-2. Saved value `value[device][col].layout` → user's explicit choice.
-3. `default_layout` (field-level default) → falls back here if user hasn't chosen.
+- **Row**: `align-items: center;` is emitted on the column slot so item heights center within the row's height.
+- **Column**: a `> * { width: 100%; }` rule is emitted on the column slot so each stacked item takes the full column width (lines up on its own row).
+
+### 9.6 Resolution order
+
+Direction and align are resolved independently per column. Both use a 4-step priority.
+
+**Direction:**
+
+1. `forced_direction` (field-level lock) → used regardless of anything else.
+2. Saved value `value[device][col].direction` → user's explicit choice.
+3. `default_direction` (field-level default) → header rows set `'row'`, footer rows set `'column'`.
+4. Hardcoded fallback → `'row'`.
+
+**Align:**
+
+1. `forced_align` (field-level lock) → used regardless of anything else.
+2. Saved value `value[device][col].align` → user's explicit choice.
+3. `default_align` (field-level default).
 4. **Position-based default** (inferred from column position):
    - Single active column → `flex-start`
    - First column → `flex-start`
    - Last column → `flex-end`
    - Middle columns → `flex-center`
 
-This rule is implemented identically in BOTH places — PHP `class-customizer-auto-css.php::columns_settings()` AND React `index.jsx::defaultLayoutFor()`. **If you change one side, you MUST change the other** — otherwise the highlighted button in the Customizer UI won't match the actual rendered alignment.
+Both rules are implemented identically in THREE places — PHP `class-customizer-auto-css.php::columns_settings()`, JS `auto-css.js::columns_settings()`, and React `index.jsx::defaultDirectionFor()` / `defaultAlignFor()`. **If you change one side, you MUST change all three** — otherwise frontend / live preview / Customizer UI drift apart.
 
 ### 9.7 Active column count
 
@@ -554,10 +579,11 @@ add_filter( 'customify/customizer/config', function ( $items ) {
         'name'              => 'header_mynewrow_columns_settings',
         'type'              => 'columns_settings',
         'section'           => 'header_mynewrow',
-        'priority'           => 999,
+        'priority'          => 999,
         'title'             => __( 'Column Settings', 'customify' ),
-        'description'       => __( 'Per-column layout, gap and padding.', 'customify' ),
+        'description'       => __( 'Per-column direction, align, gap and padding.', 'customify' ),
         'column_keys'       => array( 'left', 'center', 'right' ),
+        'default_direction' => 'row',                                       // header default
         'selector'          => '.header--row.header-mynewrow',
         'css_format'        => 'columns_settings',
         'sanitize_callback' => 'customify_sanitize_columns_settings',
@@ -666,11 +692,12 @@ Items often expose their own filter for their settings array (e.g. `customify/bu
 | Symptom | Likely cause |
 |---|---|
 | Column has no flex container at all | Row missing a `columns_settings` field. Register one (§9.10). |
-| Highlighted layout button in Customizer differs from actual frontend alignment | Position-based default rule out of sync between PHP and React (§9.6). Verify `defaultLayoutFor()` and `columns_settings()` use the same logic. |
+| Highlighted button in Customizer differs from actual frontend rendering | Resolution rule out of sync across PHP / JS auto-CSS / React (§9.6). All three must agree on direction default + align default. |
 | Column gap or padding doesn't apply | Slot selector mismatch — auto-CSS emits `{row_selector} .col-v2-{key}` but markup uses different class. Provide `col_selectors` override. |
-| Sidebar column shows layout buttons in UI | Missing `hide_layout: true` on the sidebar `columns_settings` field. Pair with `forced_layout: 'stack'`. |
+| Sidebar column shows direction/align buttons in UI | Missing `hide_direction: true` + `hide_align: true` on the sidebar `columns_settings` field. Pair with `forced_direction: 'column'`. |
 | Footer columns ignore `col_layout_setting.count` | `col_layout_setting` value not a valid `row_layout` — must be a setting name that stores `{ count: N, ... }`. |
 | Saved column settings lost on next page load | Sanitize callback missing → raw value rejected by Customizer save flow. Always set `'sanitize_callback' => 'customify_sanitize_columns_settings'`. |
+| Existing saved layout from older theme version no longer applies | Earlier versions stored a single `layout` key per column. The current sanitize callback strips unknown keys on save; old DB values fall back to direction + align defaults. Re-pick the column setup in Customizer once. |
 
 ---
 
