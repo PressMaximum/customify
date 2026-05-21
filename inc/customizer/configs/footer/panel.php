@@ -218,6 +218,13 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				// so the default per-column direction is `column`. Users can
 				// still switch any column to row direction.
 				'default_direction'  => 'column',
+				// Footer columns default to `flex-start` for every slot so the
+				// content of each widget aligns to the leading edge by default.
+				// Header rows intentionally omit `default_align` to keep the
+				// position-based default (first → flex-start, last → flex-end,
+				// middle → flex-center) that gives the masthead its natural
+				// balanced look.
+				'default_align'      => 'flex-start',
 				'selector'           => $selector,
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',
