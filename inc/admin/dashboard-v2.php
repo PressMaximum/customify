@@ -36,20 +36,34 @@ const CUSTOMIFY_DASHBOARD_V2_SLUG = 'customify';
 const CUSTOMIFY_DASHBOARD_V2_HANDLE = 'customify-dashboard';
 
 /**
- * Build a data: URI for the Customify logo to use as the WP admin menu
- * icon. WP recolors data-URI SVGs to match the user's admin colour
- * scheme as long as the fill is `currentColor` / `#a7aaad` / etc.
+ * Resolve the WP admin menu icon for the Customify top-level entry.
+ *
+ * Returns a `data:image/svg+xml;base64,...` URI — the form documented by
+ * `add_menu_page()` that gets recolored to match the user's admin color
+ * scheme. WP's `setIconColor` (wp-admin/js/common.js) swaps the SVG's
+ * `#a7aaad` fill tokens with the active scheme's icon color; URL-based
+ * background-image icons are NOT recolored and also render at intrinsic
+ * size (which this SVG lacks, so it renders huge).
+ *
+ * The SVG bytes are read once per PHP process and cached in a static so
+ * repeat hook fires (e.g. network admin) don't re-stat or re-encode.
+ * Falls back to a dashicon if the build artifact is missing.
  */
 function customify_dashboard_v2_menu_icon(): string {
-	$svg = get_template_directory() . '/src/images/admin/customify-logo.svg';
-	if ( ! file_exists( $svg ) ) {
-		return 'dashicons-admin-customizer';
+	static $cached = null;
+	if ( null !== $cached ) {
+		return $cached;
 	}
-	$contents = file_get_contents( $svg );
-	if ( ! $contents ) {
-		return 'dashicons-admin-customizer';
+
+	$path = get_template_directory() . '/build/images/admin/customify-logo.svg';
+	$svg  = is_readable( $path ) ? file_get_contents( $path ) : false;
+	if ( false === $svg || '' === $svg ) {
+		$cached = 'dashicons-admin-customizer';
+		return $cached;
 	}
-	return 'data:image/svg+xml;base64,' . base64_encode( $contents );
+
+	$cached = 'data:image/svg+xml;base64,' . base64_encode( $svg );
+	return $cached;
 }
 
 /**
