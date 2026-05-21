@@ -396,7 +396,7 @@ module.exports = function ( grunt ) {
 			grunt.log.writeln( '  Manual publish later:' );
 			grunt.log.writeln( '    git add package.json style.css build/ languages/customify.pot composer.lock' );
 			grunt.log.writeln( '    git commit -m "Release version ' + v + '"' );
-			grunt.log.writeln( '    git tag ' + tag + ' && git push --follow-tags' );
+			grunt.log.writeln( '    git tag -a ' + tag + ' -m "Release ' + tag + '" && git push --follow-tags' );
 			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
 			return;
 		}
@@ -414,7 +414,10 @@ module.exports = function ( grunt ) {
 			shellSync( 'git commit -m "Release version ' + v + '"' );
 		}
 
-		shellSync( 'git tag ' + tag );
+		// Annotated tag (-a -m): required for `git push --follow-tags` to
+		// actually push the tag, plus carries author/date/message for the
+		// GitHub Release page.
+		shellSync( 'git tag -a ' + tag + ' -m "Release ' + tag + '"' );
 		shellSync( 'git push --follow-tags' );
 
 		const ghFlags = isPrerelease ? '--prerelease' : '--latest';
