@@ -533,3 +533,62 @@ $builder_active_color: #0073aa;
 		}
 	}
 }
+
+// ── Panel focus ring: keyboard-only ──────────────────────────────────────────
+// Default WP customizer paints a 2px blue box-shadow ring on every panel /
+// section button on `:focus`, which also fires on mouse-click. The lingering
+// ring after a click is visually noisy. `:focus-visible` lets us suppress it
+// for pointer focus while keeping the full ring for keyboard Tab navigation
+// (WCAG 2.4.7-compliant).
+#customize-controls .accordion-section-title button.accordion-trigger:focus:not(:focus-visible) {
+	box-shadow: none;
+	outline: none;
+}
+
+// ── Panel group divider ──────────────────────────────────────────────────────
+// Non-clickable section rendered as a visual heading in the Customizer panel
+// list. Used to separate top-level panels into logical groups (General
+// Options / Layouts / Post Types / Core & Plugins).
+//
+// Paired with Customify_WP_Customize_Section_Divider (PHP) and the priority
+// scheme in Customify_Customizer::register_panel_groups().
+//
+// Alignment & spacing reasoning:
+//   - padding-left: 18px → matches WP panel title text x-position
+//     (panel <h3><button class="accordion-trigger"> button has
+//     padding-left 14px sitting at LI x=4px; text-left therefore at x=18px).
+//   - padding-top: 14px → breathing room above the label.
+//   - padding-bottom: 6px → tight to the first panel of the group so the
+//     label visually attaches to "the items below me".
+//   - transparent bg + no border → reads as a gap-with-label between cards,
+//     not as another card row. Panel rows themselves are transparent <li>s
+//     with a white-bg <button> inside; matching that absence keeps the
+//     hierarchy clean.
+//   - colour #646970 + 11px / 600 / uppercase + 0.5px letter-spacing →
+//     standard WP-admin subordinate label (one tier below the panel title
+//     which is #50575e / 14px / 600 / sentence case).
+#customize-controls .customify-divider {
+	margin: 0;
+	padding: 14px 18px 13px;
+	background: transparent;
+	border: none;
+	// Match the panel row separator (same colour as the 1px line on every
+	// .accordion-section-title) so the divider sits in the same horizontal
+	// rule rhythm as the panels below.
+	border-bottom: 1px solid #dcdcde;
+	cursor: default;
+	pointer-events: none;
+
+	h3 {
+		margin: 0;
+		padding: 0;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: #646970;
+		border: none;
+		background: none;
+	}
+}
