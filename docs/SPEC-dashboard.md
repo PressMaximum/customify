@@ -96,8 +96,8 @@ Legacy that stays intact (back-compat for child themes / future Pro hooks):
 | [`tabs/Welcome.jsx`](../src/backend/admin/dashboard-v2/tabs/Welcome.jsx) | Hero + Checklist (gated by `SHOW_CHECKLIST` flag) + Customizer quick links + Pro modules section |
 | [`tabs/Settings.jsx`](../src/backend/admin/dashboard-v2/tabs/Settings.jsx) | SubNav over panels; dispatch on `panel.kind` (`composite` / `license` / `proPanel` / default `ThemePanelCard`); shared SaveBar for the theme panel |
 | [`tabs/Changelog.jsx`](../src/backend/admin/dashboard-v2/tabs/Changelog.jsx) | SubNav over sources (`customify.dashboard.changelog.sources` filter); `<ReleaseBlock>` per release |
-| [`sections/ProModulesSection.jsx`](../src/backend/admin/dashboard-v2/sections/ProModulesSection.jsx) | Pro modules card — Free path renders disabled FormToggle + Tooltip; Pro path renders live toggle + WC gating notice |
-| [`sections/ProModuleSettingsPanel.jsx`](../src/backend/admin/dashboard-v2/sections/ProModuleSettingsPanel.jsx) | Generic schema-driven Pro panel renderer + `PanelActionButton` for `section.actions[]` |
+| [`sections/ProModulesSection.jsx`](../src/backend/admin/dashboard-v2/sections/ProModulesSection.jsx) | Pro modules card. **Free path**: every row renders a disabled `@wordpress/components` FormToggle wrapped in `<Tooltip>` ("Available in Pro version") + Upgrade Now button with the `external` icon. **Pro path**: live toggle per row + cascade-gated WC modules show "WooCommerce not activated" notice. |
+| [`sections/ProModuleSettingsPanel.jsx`](../src/backend/admin/dashboard-v2/sections/ProModuleSettingsPanel.jsx) | Generic schema-driven Pro panel renderer + `PanelActionButton` for `section.actions[]`. SaveBar passes `resetDisabledWhenNotDirty` so the Discard button greys out when the form is clean (revert-dirty-edits semantic). |
 | [`sections/LicensePanel.jsx`](../src/backend/admin/dashboard-v2/sections/LicensePanel.jsx) | EDD activate/deactivate flow against the Pro bridge's REST routes |
 | [`data/customizerLinks.js`](../src/backend/admin/dashboard-v2/data/customizerLinks.js) | Welcome tab's Customizer quick-link grid; filterable via `customify.dashboard.welcome.links` |
 | [`data/checklist.js`](../src/backend/admin/dashboard-v2/data/checklist.js) | Onboarding tasks (currently `check: () => false` placeholders) |
@@ -173,7 +173,9 @@ Single-page scroll composition (no inner navigation):
 1. **Hero** — kit primitive, ships its own card chrome. Theme overrides `margin-bottom: 0` + box-shadow to match WP Card hairline.
 2. **Checklist** — kit primitive, currently hidden behind `const SHOW_CHECKLIST = false` in [`Welcome.jsx`](../src/backend/admin/dashboard-v2/tabs/Welcome.jsx). Flip to `true` once each item's `check()` callback wires real detection against boot data (logo set, header configured, etc.). Data hook in [`data/checklist.js`](../src/backend/admin/dashboard-v2/data/checklist.js) returns 5 placeholder items.
 3. **Customizer quick links** — 3-col grid of `<ThemeGridCard>` tiles. Data hook [`data/customizerLinks.js`](../src/backend/admin/dashboard-v2/data/customizerLinks.js). Each link uses `add_query_arg('autofocus', ...)` to deep-link into a Customizer section/panel. Filterable via `customify.dashboard.welcome.links`.
-4. **Pro modules** — 2-col grid of `<ModuleRow>` with FormToggle leading slot. See §7 for the dual-path rendering (Free vs Pro).
+4. **Pro modules** — 2-col grid of `<ModuleRow>` with FormToggle leading slot. **Free path** (Pro inactive): every row's toggle is disabled + wrapped in `<Tooltip text="Available in Pro version">`; card head shows an "Upgrade now" button with `external` icon (matches help-panel external items). **Pro path**: live toggle per row; WC Booster + sub-modules cascade-gate when WooCommerce isn't active (disabled toggle + "WooCommerce not activated" notice). See §7 for the toggle handler + module snapshot contract.
+
+Typography: card heads use `var(--pmdk-font-weight-heading, 500)`; in-body item titles use `var(--pmdk-font-weight-label, 400)` — both tokens land via the kit's K-010 fix, theme consumes them without per-class overrides.
 
 Extension surface: `customify.dashboard.welcome.sections` appends additional cards below; Hero/Checklist/Quick-links are not filterable as a group but each accepts kit-level filters per the kit SPEC.
 
@@ -190,7 +192,7 @@ Extension surface: `customify.dashboard.welcome.sections` appends additional car
 | `proPanel: true` (any kind) | `<ProModuleSettingsPanel>` | Schema-driven Pro panel; owns its own SaveBar + REST endpoint |
 | (default) | `<ThemePanelCard>` | Theme General panel; shares the dashboard-v2 settings store + global SaveBar |
 
-**Save UI principle**: one SaveBar per active panel pane. Theme panel uses the kit's global store SaveBar; Pro panels each render their own SaveBar inside `ProModuleSettingsPanel`. Composite panels stack sections, each carrying its own SaveBar (or no SaveBar for license).
+**Save UI principle**: one SaveBar per active panel pane. Theme panel uses the kit's global store SaveBar (Reset to defaults always enabled — factory-defaults semantic). Pro panels each render their own SaveBar inside `ProModuleSettingsPanel` and pass `resetDisabledWhenNotDirty` so the Discard button greys out when the form is clean (revert-dirty-edits semantic). Composite panels stack sections, each carrying its own SaveBar (or no SaveBar for license).
 
 **Filter**: `customify.dashboard.settings.panels` appends panels (Pro bridge ships `modules` composite + `customify-pro` composite).
 
@@ -419,9 +421,10 @@ For each PR touching dashboard-v2, smoke-test:
 | Top-right header | `v{themeVersion} — Free version` (Free) / `v{proVersion} — Pro version` (Pro) |
 | Welcome → Hero | Card with hairline outline matching siblings; CTA "Open the Customizer" |
 | Welcome → Customizer quick links | 3-col grid, 6 tiles, opens Customizer in new tab |
-| Welcome → Pro modules (Free) | All rows show **disabled** FormToggle + Tooltip "Available in Pro version" on hover/focus |
+| Welcome → Pro modules (Free) | All rows show **disabled** FormToggle + Tooltip "Available in Pro version" on hover/focus; card head has "Upgrade now" button with external-link icon |
 | Welcome → Pro modules (Pro active, WC inactive) | WC Booster + 4 sub-modules disabled + "WooCommerce not activated" pill on parent |
 | Welcome → Pro modules (Pro active, WC active) | All toggles live; toggling fires snackbar + persists |
+| Card titles vs item titles | Card heads computed weight 500 (`--pmdk-font-weight-heading`); module row + grid tile titles 400 (`--pmdk-font-weight-label`) |
 | Settings → Theme settings | SaveBar idle: "No pending changes" muted gray; Reset to defaults always enabled |
 | Settings → Module settings (Pro) | Typekit section schema fields + SaveBar |
 | Settings → Customify Pro (Pro composite) | License section (activate/deactivate, status pill) + Assets section (combineAssets toggle + "Regenerate assets" button) |
@@ -442,9 +445,9 @@ Browse to `http://customify2.wp.local/wp-admin/admin.php?page=customify` and wal
 
 ## 12. References
 
+- [`DEVELOPMENT.md`](DEVELOPMENT.md) — first-time setup (SSH, composer, npm), daily workflow, troubleshooting. New sessions / co-workers read this first.
 - [`@pressmaximum/dashboard-kit` SPEC](https://github.com/PressMaximum/dashboard-kit/blob/main/docs/SPEC.md) — kit public API surface (§5.1 mountDashboard, §5.4 settings building blocks, §5.10 SettingsControllerBase, §9 filter contracts, §16 theming)
-- [`@pressmaximum/dashboard-kit` KIT_ISSUES](https://github.com/PressMaximum/dashboard-kit/blob/main/KIT_ISSUES.md) — kit defect log (K-008/9/10/11 closed; relevant context for the workaround comments in theme code)
+- [`@pressmaximum/dashboard-kit` KIT_ISSUES](https://github.com/PressMaximum/dashboard-kit/blob/main/KIT_ISSUES.md) — kit defect log (K-001 … K-011 all closed; relevant context for legacy code comments)
 - [Session handoff](handoffs/temp/2026-05-20-dashboard-v2-pro-bridge.md) — narrative history of how the dashboard was built; pairs with the SPEC for "why" context
-- Theme PR [#388](https://github.com/PressMaximum/customify/pull/388) — current dashboard polish + AJAX security + kit-issue migration
 - Pro branch [`customify-pro-dashboard-compat`](https://github.com/PressMaximum/customify-pro/tree/customify-pro-dashboard-compat) — bridge implementation (no PR; merges directly into theme release flow)
 - Legacy dashboard: [`inc/admin/dashboard.php`](../inc/admin/dashboard.php) — `Customify_Dashboard` class at `themes.php?page=customify-legacy`; slated for full removal in this release
