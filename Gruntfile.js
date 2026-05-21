@@ -10,16 +10,30 @@
  *   - Grunt owns version bumping, style.css header sync, file staging
  *     and the wp.org-safe zip.
  *
- * Primary entry points:
- *   grunt release [--ver=<x.y.z>|patch|minor|major]
- *     Optionally bump version → sync style.css header →
- *     `composer install --no-dev --optimize-autoloader` → run
- *     `npm run release:assets` (production build emits both unminified
- *     and .min.* siblings, plus .pot) → stage and zip.
+ * Primary entry points (one-shot, end-to-end):
+ *   grunt release [--ver=<x.y.z>|patch|minor|major] [--no-publish]
+ *     Pre-flight (clean tree + gh auth) → optional version bump → sync
+ *     style.css header → `composer install --no-dev --optimize-autoloader`
+ *     → `npm run release:assets` (production build emits both unminified
+ *     and .min.* siblings, plus .pot) → stage + zip → commit + tag + push
+ *     + `gh release create --latest`. `--no-publish` stops after zipping.
+ *
+ *   grunt beta-release [--ver=<x.y.z-beta.N>] [--no-publish]
+ *     Pre-release variant of `release`. Without --ver, auto-derives the
+ *     next beta tag: bumps `-beta.N` if already on a beta, otherwise
+ *     patch-bumps the current stable and appends `-beta.1`. Publishes
+ *     with `--prerelease` so GitHub does NOT mark it as latest.
  *
  *   grunt zipfile
  *     Stage and zip whatever build/ + vendor/ already contain (no rebuild,
- *     no composer install). Use this when assets are already fresh.
+ *     no composer install). The `stage:prepare` substep reads
+ *     vendor/composer/installed.json and strips each package down to its
+ *     autoload paths + LICENSE — no per-package hand-maintenance needed.
+ *
+ *   grunt vendor:audit
+ *     Print every installed Composer package with the runtime sub-paths
+ *     the release pipeline will keep. Use before adding a new dep to
+ *     verify the package declares everything it needs in `autoload`.
  */
 
 module.exports = function ( grunt ) {
@@ -139,15 +153,22 @@ module.exports = function ( grunt ) {
 		copy: {
 			release: {
 				options: { mode: true },
-				src:     [ '**' ].concat( EXCLUDES ),
-				dest:    STAGE_PATH,
+				// Per-package vendor strip patterns are appended at task-run
+				// time by `stage:prepare` (reads vendor/composer/installed.json
+				// to derive the runtime "keep" set for each installed package
+				// + LICENSE files). Keep THIS list package-agnostic.
+				src:  [ '**' ].concat( EXCLUDES ),
+				dest: STAGE_PATH,
 			},
 		},
 
 		compress: {
 			release: {
 				options: {
-					archive: SLUG + '-' + pkgInfo.version + '.zip',
+					// `<%= pkg.version %>` resolves at task-run time after any
+					// `bumpup` step, so beta-release / release in the same
+					// grunt invocation produce a zip named for the new version.
+					archive: SLUG + '-<%= pkg.version %>.zip',
 					mode:    'zip',
 					pretty:  true,
 				},
@@ -309,6 +330,25 @@ module.exports = function ( grunt ) {
 		}
 	}
 
+	// Sync shell helpers used by tasks that need to chain multiple commands
+	// inside a single task body (e.g. release:publish). Unlike runShell,
+	// these do not call this.async() — execSync already blocks, so the
+	// async wrapper is unnecessary when we're not isolating one command
+	// per task.
+	function shellSync( cmd ) {
+		grunt.log.writeln( '▶ ' + cmd );
+		execSync( cmd, { stdio: 'inherit', cwd: path.resolve( __dirname ) } );
+	}
+
+	function shellOK( cmd ) {
+		try {
+			execSync( cmd, { stdio: 'pipe', cwd: path.resolve( __dirname ) } );
+			return true;
+		} catch ( e ) {
+			return false;
+		}
+	}
+
 	grunt.registerTask( 'release:assets', 'Run `npm run release:assets` (build + makepot).', function () {
 		runShell.call( this, 'npm run release:assets' );
 	} );
@@ -319,25 +359,220 @@ module.exports = function ( grunt ) {
 		runShell.call( this, 'composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist' );
 	} );
 
+	// ── Release publish helpers ─────────────────────────────────────────────
+	// Pre-flight aborts the pipeline BEFORE any file mutation if the
+	// environment can't complete a publish: dirty git tree, missing gh
+	// CLI, or gh not authenticated. Cheap to run, saves an aborted
+	// release halfway through.
+	grunt.registerTask( 'release:preflight', 'Validate git + gh environment before mutating anything.', function () {
+		if ( ! shellOK( 'git rev-parse --is-inside-work-tree' ) ) {
+			grunt.fail.fatal( 'Not inside a git repository.' );
+		}
+		if ( ! shellOK( 'git diff-index --quiet HEAD --' ) ) {
+			grunt.fail.fatal( 'Working tree has uncommitted changes. Commit or stash them, then re-run.' );
+		}
+		if ( ! shellOK( 'command -v gh' ) ) {
+			grunt.fail.fatal( 'GitHub CLI `gh` not found in PATH. Install with `brew install gh`, then `gh auth login`.' );
+		}
+		if ( ! shellOK( 'gh auth status' ) ) {
+			grunt.fail.fatal( '`gh` is installed but not authenticated. Run `gh auth login`.' );
+		}
+		grunt.log.ok( 'Pre-flight passed (clean tree, gh authenticated).' );
+	} );
+
+	// Commit the version bump + rebuilt assets, push, tag, and create the
+	// GitHub Release with the zip attached. Auto-detects pre-release from
+	// the SemVer suffix (`-beta.N`, `-rc.N`, etc.) and flags the release
+	// accordingly. Pass `--no-publish` to grunt to skip this step and
+	// keep everything local (useful for QA on the zip before shipping).
+	grunt.registerTask( 'release:publish', 'Commit, tag, push, and create the GitHub Release with the zip attached.', function () {
+		const v   = grunt.config.get( 'pkg.version' );
+		const zip = SLUG + '-' + v + '.zip';
+		const tag = 'v' + v;
+		const isPrerelease = /-/.test( v );
+
+		if ( grunt.option( 'no-publish' ) ) {
+			grunt.log.subhead( '⚠ Skipping publish (--no-publish set).' );
+			grunt.log.writeln( '  Manual publish later:' );
+			grunt.log.writeln( '    git add package.json style.css build/ languages/customify.pot composer.lock' );
+			grunt.log.writeln( '    git commit -m "Release version ' + v + '"' );
+			grunt.log.writeln( '    git tag ' + tag + ' && git push --follow-tags' );
+			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
+			return;
+		}
+
+		// Stage the canonical release-touched paths. `git add` on an
+		// unchanged tracked path is a no-op; new files inside build/ get
+		// picked up automatically.
+		shellSync( 'git add package.json style.css build/ languages/customify.pot composer.lock' );
+
+		// Commit only if there are actually staged changes. Rare edge
+		// case: re-running release with the same version + no asset diff.
+		if ( shellOK( 'git diff --cached --quiet' ) ) {
+			grunt.log.writeln( '  (no staged changes — skipping commit)' );
+		} else {
+			shellSync( 'git commit -m "Release version ' + v + '"' );
+		}
+
+		shellSync( 'git tag ' + tag );
+		shellSync( 'git push --follow-tags' );
+
+		const ghFlags = isPrerelease ? '--prerelease' : '--latest';
+		shellSync( 'gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ghFlags );
+
+		grunt.log.subhead( '✅ Release ' + tag + ' published.' );
+	} );
+
+	// ── Vendor strip helpers ────────────────────────────────────────────────
+	// Composer publishes the canonical list of installed packages along
+	// with each one's autoload declaration to
+	// `vendor/composer/installed.json`. That declaration tells us exactly
+	// which sub-paths inside the package contain runtime code; everything
+	// else (JS source, tests, docs, build configs) is dev junk we can
+	// safely strip from the wp.org-safe zip.
+
+	/** Read packages from installed.json (Composer 1 and 2 layouts). */
+	function readInstalledPackages() {
+		const file = path.join( __dirname, 'vendor/composer/installed.json' );
+		if ( ! grunt.file.exists( file ) ) {
+			return null;
+		}
+		const data = grunt.file.readJSON( file );
+		return Array.isArray( data ) ? data : ( data.packages || [] );
+	}
+
+	/** Flatten a package's autoload section into [{path, kind}] entries. */
+	function autoloadPathsFor( pkg ) {
+		const a   = pkg.autoload || {};
+		const out = [];
+		[ 'psr-4', 'psr-0' ].forEach( function ( k ) {
+			if ( ! a[ k ] ) { return; }
+			Object.keys( a[ k ] ).forEach( function ( ns ) {
+				const v = a[ k ][ ns ];
+				( Array.isArray( v ) ? v : [ v ] ).forEach( function ( p ) {
+					out.push( { path: p, kind: k } );
+				} );
+			} );
+		} );
+		( a.classmap || [] ).forEach( function ( p ) { out.push( { path: p, kind: 'classmap' } ); } );
+		( a.files    || [] ).forEach( function ( p ) { out.push( { path: p, kind: 'files'    } ); } );
+		return out;
+	}
+
+	/**
+	 * Build glob patterns that strip every vendor package down to its
+	 * runtime autoload paths + LICENSE file. Returns [] when installed.json
+	 * is missing (treat as "ship vendor/ as-is"), preserving the legacy
+	 * `grunt zipfile` behaviour for environments without composer install.
+	 */
+	function buildVendorPatterns() {
+		const packages = readInstalledPackages();
+		if ( ! packages ) {
+			grunt.log.warn( 'vendor/composer/installed.json missing — skipping per-package strip. Run `composer install` first for a leaner zip.' );
+			return [];
+		}
+		const patterns = [];
+		packages.forEach( function ( pkg ) {
+			const base     = 'vendor/' + pkg.name;
+			const autoload = autoloadPathsFor( pkg );
+			if ( autoload.length === 0 ) {
+				grunt.log.writeln( '  • ' + pkg.name + ': no autoload declared — keeping full package' );
+				return;
+			}
+			// Blanket exclude the package first; positive patterns below
+			// re-include the narrow runtime subset.
+			patterns.push( '!' + base + '/**' );
+			autoload.forEach( function ( item ) {
+				const cleaned = item.path.replace( /^\/+|\/+$/g, '' );
+				const prefix  = cleaned ? base + '/' + cleaned : base;
+				if ( item.kind === 'files' ) {
+					// autoload.files entries are always file paths.
+					patterns.push( prefix );
+				} else {
+					// psr-4 / psr-0 / classmap entries can be file or dir;
+					// emit both forms so glob matches whichever applies.
+					patterns.push( prefix );
+					patterns.push( prefix + '/**' );
+				}
+			} );
+			// Always preserve LICENSE for legal compliance (GPL/MIT/...
+			// redistribution). Cover common spelling + extension variants.
+			patterns.push( base + '/{LICENSE,LICENCE,License,Licence,license,licence}{,.md,.txt,.rst}' );
+		} );
+		return patterns;
+	}
+
+	// Inject the dynamic vendor patterns into copy.release.src right
+	// before staging. Glob processing is left-to-right, so these patterns
+	// — appended LAST — re-include runtime code that earlier blanket
+	// EXCLUDES patterns (`!vendor/<star><star>/<star>.md` etc) may have stripped.
+	grunt.registerTask( 'stage:prepare', 'Inject vendor-aware copy patterns from installed.json.', function () {
+		const dynamic = buildVendorPatterns();
+		if ( dynamic.length === 0 ) {
+			return;
+		}
+		const current = grunt.config.get( 'copy.release.src' );
+		grunt.config.set( 'copy.release.src', current.concat( dynamic ) );
+		grunt.log.ok( 'Vendor patterns applied: ' + dynamic.length + ' (per-package strip + LICENSE keep).' );
+	} );
+
+	/**
+	 * Standalone audit task — print a per-package report of what the
+	 * release pipeline will keep from vendor/. Use this before adding a
+	 * new Composer dep to validate the autoload declaration covers
+	 * everything the runtime needs.
+	 */
+	grunt.registerTask( 'vendor:audit', 'Show vendor packages and their runtime autoload paths.', function () {
+		const packages = readInstalledPackages();
+		if ( ! packages ) {
+			grunt.log.warn( 'vendor/composer/installed.json missing. Run `composer install` first.' );
+			return;
+		}
+		if ( packages.length === 0 ) {
+			grunt.log.writeln( 'No vendor packages installed.' );
+			return;
+		}
+		grunt.log.subhead( 'Vendor autoload audit (' + packages.length + ' package' + ( packages.length > 1 ? 's' : '' ) + ')' );
+		packages.forEach( function ( pkg ) {
+			const paths = autoloadPathsFor( pkg );
+			grunt.log.writeln( '' );
+			grunt.log.writeln( '  ' + pkg.name + '  [' + ( pkg.type || 'library' ) + ']' );
+			if ( paths.length === 0 ) {
+				grunt.log.writeln( '    (no autoload — whole package kept in zip)' );
+				return;
+			}
+			paths.forEach( function ( p ) {
+				grunt.log.writeln( '    keep: ' + ( p.path || '<package root>' ) + '  (' + p.kind + ')' );
+			} );
+			grunt.log.writeln( '    keep: LICENSE*  (legal compliance)' );
+		} );
+	} );
+
 	// ── Zip pipeline ────────────────────────────────────────────────────────
 	// Assumes build/ is fresh and languages/customify.pot is up to date.
 	grunt.registerTask( 'zipfile', [
 		'clean:zip',
 		'clean:stage',
+		'stage:prepare',
 		'copy:release',
 		'compress:release',
 		'clean:stage',
 	] );
 
 	// ── Release ─────────────────────────────────────────────────────────────
-	// Pipeline:
-	//   1. Optional version bump (--ver=patch|minor|major|<x.y.z>)
-	//   2. Sync style.css header to package.json version
-	//   3. composer install --no-dev --optimize-autoloader  → vendor/ for ship
-	//   4. npm run release:assets  → production webpack (emits BOTH unminified
+	// One-shot end-to-end pipeline. Steps:
+	//   1. Pre-flight (clean tree + gh auth)
+	//   2. Optional version bump (--ver=patch|minor|major|<x.y.z>)
+	//   3. Sync style.css header to package.json version
+	//   4. composer install --no-dev --optimize-autoloader  → vendor/ for ship
+	//   5. npm run release:assets  → production webpack (emits BOTH unminified
 	//      and .min.* via EmitMinifiedAssetsPlugin) + makepot
-	//   5. Stage + zip
-	grunt.registerTask( 'release', 'Build, package and zip the theme for distribution.', function () {
+	//   6. Stage (auto vendor strip from installed.json) + zip
+	//   7. Commit + tag + push + `gh release create --latest` (or skip with
+	//      --no-publish for local QA).
+	grunt.registerTask( 'release', 'Build, package, zip, and publish the theme to GitHub Releases.', function () {
+		grunt.task.run( 'release:preflight' );
+
 		const ver = grunt.option( 'ver' );
 		if ( ver ) {
 			grunt.task.run( 'bumpup:' + ver );
@@ -346,5 +581,56 @@ module.exports = function ( grunt ) {
 		grunt.task.run( 'composer:install:prod' );
 		grunt.task.run( 'release:assets' );
 		grunt.task.run( 'zipfile' );
+		grunt.task.run( 'release:publish' );
+	} );
+
+	// ── Beta release ────────────────────────────────────────────────────────
+	// Same pipeline as `release` but lands a pre-release (`X.Y.Z-beta.N`)
+	// version intended for GitHub Releases marked `--prerelease`.
+	//
+	// Version resolution:
+	//   --ver=<x.y.z-beta.N>    Use this exact version.
+	//   (no flag) + current pkg is `X.Y.Z-beta.N`  → bump beta counter to N+1.
+	//   (no flag) + current pkg is stable `X.Y.Z`  → patch-bump and start at
+	//                                                  `X.Y.(Z+1)-beta.1`.
+	//
+	// SemVer ordering: `0.4.14-beta.3 < 0.4.14`, so when the beta cycle
+	// stabilizes you run `grunt release --ver=0.4.14` to drop the suffix.
+	//
+	// Produces: customify-<X.Y.Z-beta.N>.zip in the repo root. Publish via:
+	//   gh release create v<X.Y.Z-beta.N> customify-<X.Y.Z-beta.N>.zip --prerelease
+	grunt.registerTask( 'beta-release', 'Build, package, zip, and publish a pre-release beta to GitHub Releases.', function () {
+		grunt.task.run( 'release:preflight' );
+
+		const explicit = grunt.option( 'ver' );
+		let target;
+
+		if ( explicit ) {
+			target = explicit;
+		} else {
+			const current   = pkgInfo.version;
+			const betaMatch = current.match( /^(\d+\.\d+\.\d+)-beta\.(\d+)$/ );
+
+			if ( betaMatch ) {
+				target = betaMatch[ 1 ] + '-beta.' + ( parseInt( betaMatch[ 2 ], 10 ) + 1 );
+			} else {
+				const stable = current.match( /^(\d+)\.(\d+)\.(\d+)$/ );
+				if ( ! stable ) {
+					grunt.fail.fatal(
+						'Cannot derive a beta version from current package.json version "' + current +
+						'". Pass --ver=X.Y.Z-beta.N explicitly.'
+					);
+				}
+				target = stable[ 1 ] + '.' + stable[ 2 ] + '.' + ( parseInt( stable[ 3 ], 10 ) + 1 ) + '-beta.1';
+			}
+		}
+
+		grunt.log.subhead( '▶ beta-release → version ' + target );
+		grunt.task.run( 'bumpup:' + target );
+		grunt.task.run( 'replace:theme_main' );
+		grunt.task.run( 'composer:install:prod' );
+		grunt.task.run( 'release:assets' );
+		grunt.task.run( 'zipfile' );
+		grunt.task.run( 'release:publish' );
 	} );
 };
