@@ -1597,3 +1597,168 @@ $text_color: #555d66;
 
     }
 }
+
+// ============================================================
+// Compact color picker UI for the top-level "Colors" section.
+// Scoped to #sub-accordion-section-customify_colors so the rest
+// of the Customizer keeps the existing wp-color-picker layout.
+//
+// Actual DOM structure rendered by Customify color control:
+//   LI.customize-control.customize-control-customify-color
+//     DIV.customify--settings-wrapper
+//       DIV.customify-control-field-header     ← title <label>
+//       SPAN.customize-control-description     ← description
+//       DIV.customify--settings-fields
+//         DIV.customify--field
+//           DIV.customify-field-settings-inner
+//             DIV.customify-input-color
+//               (wpColorPicker turns this into .wp-picker-container)
+// ============================================================
+#sub-accordion-section-customify_colors {
+
+    // Hide the wp-color-picker text input — only the circular swatch
+    // button remains as the trigger. Hex can still be entered in the
+    // expanded Iris picker.
+    .customify-input-color {
+        .wp-picker-input-wrap {
+            display: none !important;
+        }
+        .wp-picker-container {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .wp-picker-container .wp-color-result.button {
+            margin: 0;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            min-height: 28px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            // The .wp-color-result-text label inside the button is the
+            // "Select Color" / hex string text — hide it; only the bg colour
+            // remains.
+            .wp-color-result-text {
+                display: none;
+            }
+            &:after {
+                display: none; // remove arrow indicator
+            }
+        }
+    }
+
+    // Per-control compact layout via CSS grid:
+    // left column = title + description (stacked), right column = swatch.
+    .customize-control-customify-color {
+        padding: 6px 0;
+        .customify--settings-wrapper {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            column-gap: 12px;
+            align-items: center;
+        }
+        .customify-control-field-header {
+            grid-column: 1;
+            grid-row: 1;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            label {
+                margin: 0;
+            }
+            .customize-control-title {
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 1.3;
+                margin: 0;
+                text-transform: none;
+                letter-spacing: 0;
+            }
+        }
+        .customize-control-description,
+        > .customify--settings-wrapper > .description {
+            grid-column: 1;
+            grid-row: 2;
+            font-size: 11px;
+            margin: 2px 0 0;
+            color: #777;
+            line-height: 1.3;
+            font-style: normal;
+        }
+        .customify--settings-fields {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            align-self: center;
+            margin: 0;
+        }
+        .customify--field,
+        .customify-field-settings-inner {
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    // Heading dividers — slightly tighter so the compact layout breathes.
+    .customify-control--heading {
+        margin: 14px -12px 6px;
+        padding: 6px 12px;
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // Palette quick-pick row injected at bottom of wp-color-picker popups
+    // (rendered via JS in initColor patch — see control.js).
+    // ──────────────────────────────────────────────────────────
+    .customify-color-quickpick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 10px 6px 6px;
+        border-top: 1px solid #ddd;
+        margin-top: 8px;
+    }
+    .customify-color-quickpick__label {
+        flex: 1 1 100%;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #888;
+        margin: 0 0 4px;
+    }
+    .customify-color-quickpick__swatch {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        padding: 0;
+        background: transparent;
+        position: relative;
+        transition: transform 0.1s;
+        &:hover {
+            transform: scale(1.1);
+        }
+        &.is-active::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border: 2px solid #2271b1;
+            border-radius: 50%;
+        }
+    }
+}
+
+// The wp-color-picker popup container also lives outside the section li in
+// some cases; the .customify-color-quickpick element is always inside the
+// container so we scope from there too as a fallback.
+.wp-picker-container .customify-color-quickpick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 6px 6px;
+    border-top: 1px solid #ddd;
+    margin-top: 8px;
+}

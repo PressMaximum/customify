@@ -251,3 +251,87 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 // the Customizer, the :root var updates but theme.json palette default does
 // not — this matches existing Customify behavior (Customizer color changes
 // never propagated to the block editor palette before).
+
+// ──────────────────────────────────────────────────────────────────
+// Customizer-controls JS: inject a "From palette" quick-pick row at the
+// bottom of every wp-color-picker popup inside the Colors section.
+// Lets the user override any component color from the 6 brand slots in
+// one click, instead of typing a hex.
+// ──────────────────────────────────────────────────────────────────
+
+if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
+	function customify_color_palette_quickpick_js() {
+		$slots   = customify_color_get_slots();
+		$payload = wp_json_encode( array(
+			'slots' => array(
+				array( 'key' => 'base',      'label' => 'Base',      'color' => $slots['base'] ),
+				array( 'key' => 'surface',   'label' => 'Surface',   'color' => $slots['surface'] ),
+				array( 'key' => 'text',      'label' => 'Text',      'color' => $slots['text'] ),
+				array( 'key' => 'primary',   'label' => 'Primary',   'color' => $slots['primary'] ),
+				array( 'key' => 'secondary', 'label' => 'Secondary', 'color' => $slots['secondary'] ),
+				array( 'key' => 'accent',    'label' => 'Accent',    'color' => $slots['accent'] ),
+			),
+		) );
+
+		$script = "(function(\$){
+	var CFY_COLORS = {$payload};
+
+	function injectQuickPick(container) {
+		var \$container = \$(container);
+		if ( \$container.find('.customify-color-quickpick').length ) return;
+		var \$panel = \$container.find('.customify--color-panel');
+		if ( ! \$panel.length ) return;
+		var currentVal = (\$panel.val() || '').toLowerCase();
+
+		var \$row = \$('<div class=\"customify-color-quickpick\"></div>');
+		\$row.append('<span class=\"customify-color-quickpick__label\">From palette</span>');
+
+		CFY_COLORS.slots.forEach(function(s){
+			var color = (s.color || '').toLowerCase();
+			var \$sw = \$('<button type=\"button\" class=\"customify-color-quickpick__swatch\"></button>')
+				.css('background-color', color)
+				.attr('title', s.label + ' — ' + color)
+				.attr('data-color', color);
+			if (color === currentVal) \$sw.addClass('is-active');
+			\$sw.on('click', function(e){
+				e.preventDefault();
+				\$panel.wpColorPicker('color', color);
+				\$row.find('.customify-color-quickpick__swatch').removeClass('is-active');
+				\$sw.addClass('is-active');
+			});
+			\$row.append(\$sw);
+		});
+
+		\$container.find('.wp-picker-holder').append(\$row);
+	}
+
+	// Iris stops propagation on its own click handler, so jQuery delegation
+	// on document never sees the event. We watch for `.wp-picker-active`
+	// class additions on any wp-picker-container inside the Colors section
+	// and inject the quick-pick row at that moment.
+	function startObserver() {
+		var section = document.getElementById('sub-accordion-section-customify_colors');
+		if ( ! section ) {
+			// Section not in DOM yet — try again when Customizer renders it.
+			setTimeout( startObserver, 500 );
+			return;
+		}
+		var observer = new MutationObserver(function(mutations){
+			mutations.forEach(function(m){
+				if ( m.type !== 'attributes' || m.attributeName !== 'class' ) return;
+				var target = m.target;
+				if ( target.classList && target.classList.contains('wp-picker-container') && target.classList.contains('wp-picker-active') ) {
+					injectQuickPick(target);
+				}
+			});
+		});
+		observer.observe(section, { attributes: true, subtree: true, attributeFilter: ['class'] });
+	}
+
+	\$(startObserver);
+})(jQuery);";
+
+		wp_add_inline_script( 'customize-controls', $script );
+	}
+	add_action( 'customize_controls_enqueue_scripts', 'customify_color_palette_quickpick_js' );
+}
