@@ -7,9 +7,8 @@
     "prefer-stable": true,
     "repositories": [
         {
-            "type": "path",
-            "url": "/Users/kientrong/Studio/dashboard-kit",
-            "options": { "symlink": true }
+            "type": "vcs",
+            "url": "git@github.com:PressMaximum/dashboard-kit.git"
         }
     ],
     "require": {

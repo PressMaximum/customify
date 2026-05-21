@@ -32,7 +32,7 @@
         "rtlcss": "^4.3.0"
     },
     "dependencies": {
-        "@pressmaximum/dashboard-kit": "file:/Users/kientrong/Studio/dashboard-kit",
+        "@pressmaximum/dashboard-kit": "git+ssh://git@github.com/PressMaximum/dashboard-kit.git",
         "copy": "^0.0.1",
         "element-qsa-scope": "^1.1.0"
     },
