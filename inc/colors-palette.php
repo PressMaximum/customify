@@ -276,9 +276,17 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		$script = "(function(\$){
 	var CFY_COLORS = {$payload};
 
+	function removeQuickPick(container) {
+		var qp = container.querySelector ? container.querySelector('.customify-color-quickpick') : null;
+		if (qp) qp.parentNode.removeChild(qp);
+	}
+
 	function injectQuickPick(container) {
 		var \$container = \$(container);
-		if ( \$container.find('.customify-color-quickpick').length ) return;
+		// Always start fresh — strip any old row before adding a new one so
+		// the highlighted is-active swatch reflects the picker's current value.
+		removeQuickPick(container);
+
 		var \$panel = \$container.find('.customify--color-panel');
 		if ( ! \$panel.length ) return;
 		var currentVal = (\$panel.val() || '').toLowerCase();
@@ -295,6 +303,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			if (color === currentVal) \$sw.addClass('is-active');
 			\$sw.on('click', function(e){
 				e.preventDefault();
+				e.stopPropagation();
 				\$panel.wpColorPicker('color', color);
 				\$row.find('.customify-color-quickpick__swatch').removeClass('is-active');
 				\$sw.addClass('is-active');
@@ -302,17 +311,18 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			\$row.append(\$sw);
 		});
 
+		// Append inside the picker holder so wp-color-picker's own show/hide
+		// on .wp-picker-active also clips our row visually as a fallback.
 		\$container.find('.wp-picker-holder').append(\$row);
 	}
 
-	// Iris stops propagation on its own click handler, so jQuery delegation
-	// on document never sees the event. We watch for `.wp-picker-active`
-	// class additions on any wp-picker-container inside the Colors section
-	// and inject the quick-pick row at that moment.
+	// Iris stops propagation on its click handler, so jQuery delegation on
+	// document never sees the click. Instead we observe the .wp-picker-active
+	// class on each wp-picker-container inside the Colors section and add/
+	// remove the quick-pick row in lock-step with the picker open/close.
 	function startObserver() {
 		var section = document.getElementById('sub-accordion-section-customify_colors');
 		if ( ! section ) {
-			// Section not in DOM yet — try again when Customizer renders it.
 			setTimeout( startObserver, 500 );
 			return;
 		}
@@ -320,8 +330,11 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			mutations.forEach(function(m){
 				if ( m.type !== 'attributes' || m.attributeName !== 'class' ) return;
 				var target = m.target;
-				if ( target.classList && target.classList.contains('wp-picker-container') && target.classList.contains('wp-picker-active') ) {
+				if ( ! target.classList || ! target.classList.contains('wp-picker-container') ) return;
+				if ( target.classList.contains('wp-picker-active') ) {
 					injectQuickPick(target);
+				} else {
+					removeQuickPick(target);
 				}
 			});
 		});
