@@ -193,9 +193,25 @@ function customify_dashboard_v2_sync_submenu(): void {
 		var hash = window.location.hash || '#welcome';
 		items.forEach( function ( li ) {
 			var a = li.querySelector( 'a' );
-			if ( ! a ) { return; }
+			if ( ! a ) {
+				return;
+			}
 			var href = a.getAttribute( 'href' ) || '';
-			var match = href.indexOf( hash ) !== -1;
+			var hashIdx = href.indexOf( '#' );
+			var match = false;
+			if ( hashIdx !== -1 ) {
+				// Match the entry when the current hash is either an
+				// exact match OR a sub-route (`#settings/<panelId>`,
+				// `#changelog/<sourceId>`, …). Plain `indexOf` ran the
+				// wrong direction — the entry's href doesn't contain
+				// the longer current hash. The trailing-slash guard
+				// avoids matching unrelated hashes that happen to
+				// share a prefix (`#settings-extras` shouldn't paint
+				// the Settings submenu active).
+				var hrefHash = href.substring( hashIdx );
+				match = hash === hrefHash
+					|| hash.indexOf( hrefHash + '/' ) === 0;
+			}
 			li.classList.toggle( 'current', match );
 			a.classList.toggle( 'current', match );
 		} );
