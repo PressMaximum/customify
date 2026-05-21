@@ -1,5 +1,0 @@
-/******/ (function() { // webpackBootstrap
-/******/ 	"use strict";
-
-/******/ })()
-;
