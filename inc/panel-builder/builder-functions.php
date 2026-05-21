@@ -153,7 +153,12 @@ function customify_customize_render_footer() {
 	$builder->set_id( 'footer' );
 	$builder->set_control_id( 'footer_builder_panel_v2' );
 	$builder->set_config_items( $list_items );
-	$builder->render( array( 'main', 'bottom' ) );
+	// Row order must match the Customizer (top → main → bottom). `top` is
+	// registered by Customify Pro via the `customify/builder/footer/rows`
+	// filter; the renderer's own isset() guard silently skips it when no
+	// items have been placed in that row, so passing it here is safe in
+	// the Free theme too.
+	$builder->render( array( 'top', 'main', 'bottom' ) );
 
 	echo '</footer>';
 	do_action( 'customify/after-footer' );

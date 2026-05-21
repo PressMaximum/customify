@@ -27,17 +27,18 @@
 		padding-right: 15px;
 	}
 }
-// Footer Top
+// Footer Top — share the Footer Main skin colors so the Pro-registered
+// top row inherits the same default appearance as the main row.
 .footer-top {
 	.footer--row-inner {
 		padding-top: 2em;
 		padding-bottom: 2em;
 	}
 	.light-mode {
-		background: #f0f0f0;
+		background: #f9f9f9;
 	}
 	.dark-mode {
-		background: #292929;
+		background: #303030;
 	}
 }
 

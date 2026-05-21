@@ -95,16 +95,28 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 			$section_name = __( 'Footer Top', 'customify' );
 		}
 
-		// Text skin.
+		// Text skin — unified `dark-mode` default across all footer rows
+		// (top / main / bottom) so the Pro-registered Footer Top inherits
+		// the same background appearance as Footer Main out of the box.
 		$color_mode = 'dark-mode';
-		if ( 'footer_top' == $section ) {
-			$color_mode = 'light-mode';
-		}
 
 		$selector           = '#cb-row--' . str_replace( '_', '-', $section );
 		$skin_mode_selector = '.footer--row-inner.' . str_replace( '_', '-', $section ) . '-inner';
 
 		$fn = 'customify_customize_render_footer';
+
+		// Explicit per-section priorities so the Customizer sidebar always
+		// renders footer rows in Top → Main → Bottom order regardless of
+		// what order rows are registered. WP Customizer sorts sections
+		// inside a panel by ascending `priority`. The companion sort
+		// filter on `customify/builder/footer/rows` (below) also enforces
+		// array-key order so the React canvas matches.
+		$section_priorities = array(
+			'footer_top'    => 10,
+			'footer_main'   => 20,
+			'footer_bottom' => 30,
+		);
+		$section_priority   = isset( $section_priorities[ $section ] ) ? $section_priorities[ $section ] : 50;
 
 		$config = array(
 			array(
@@ -113,6 +125,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'panel'          => 'footer_settings',
 				'theme_supports' => '',
 				'title'          => $section_name,
+				'priority'       => $section_priority,
 			),
 
 			array(
@@ -257,9 +270,10 @@ Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_
  * The theme's `get_rows_config()` declares only `main` and `bottom`.
  * Customify Pro hooks `customify/builder/footer/rows` to append a `top`
  * row, which would otherwise land at the end of the array (display
- * order would become Main → Bottom → Top). This late filter runs after
- * any extension has registered its rows and reorders them. Unknown row
- * keys are preserved at the end so future extensions don't get dropped.
+ * order would become Main → Bottom → Top). This filter runs at
+ * `PHP_INT_MAX` so it executes AFTER any extension (including Pro)
+ * has registered its rows, then reorders them. Unknown row keys are
+ * preserved at the end so future extensions don't get dropped.
  */
 add_filter(
 	'customify/builder/footer/rows',
@@ -277,7 +291,7 @@ add_filter(
 		}
 		return $sorted + $rows;
 	},
-	99
+	PHP_INT_MAX
 );
 
 /**
