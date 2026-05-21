@@ -41,7 +41,7 @@ var external_wp_element_namespaceObject = window["wp"]["element"];
 var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 ;// external "ReactJSXRuntime"
 var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HashRouter.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HashRouter.jsx
 /**
  * Minimal hash router for the dashboard SPA.
  *
@@ -250,7 +250,7 @@ function useNavigate() {
   }, [guard]);
 }
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/useFocusOnRouteChange.js
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/useFocusOnRouteChange.js
 /**
  * useFocusOnRouteChange — SPA focus management.
  *
@@ -288,10 +288,10 @@ function useFocusOnRouteChange(route) {
   return ref;
 }
 /* harmony default export */ var core_useFocusOnRouteChange = ((/* unused pure expression or super */ null && (useFocusOnRouteChange)));
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.jsx
 /**
  * TabStrip — Tier-1 layout primitive (SPEC §5.13). Zero translatable
  * strings: every label and the `aria-label` arrive via props.
@@ -363,7 +363,7 @@ function TabStrip({
 var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// external ["wp","primitives"]
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// ./node_modules/@wordpress/icons/build-module/library/help.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/help.mjs
 // packages/icons/src/library/help.tsx
 
 
@@ -371,7 +371,7 @@ var help_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=help.mjs.map
 
-;// ./node_modules/@wordpress/icons/build-module/library/page.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/page.mjs
 // packages/icons/src/library/page.tsx
 
 
@@ -382,7 +382,7 @@ var page_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=page.mjs.map
 
-;// ./node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
 // packages/icons/src/library/chevron-right.tsx
 
 
@@ -390,7 +390,7 @@ var chevron_right_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespac
 
 //# sourceMappingURL=chevron-right.mjs.map
 
-;// ./node_modules/@wordpress/icons/build-module/library/external.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/external.mjs
 // packages/icons/src/library/external.tsx
 
 
@@ -398,7 +398,7 @@ var external_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObje
 
 //# sourceMappingURL=external.mjs.map
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/createI18nBag.js
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createI18nBag.js
 /**
  * createI18nBag — merge a component's English defaults with consumer
  * overrides. Tier-2 components call this once in their render bodies so
@@ -434,10 +434,10 @@ function createI18nBag(defaults, overrides) {
   };
 }
 /* harmony default export */ var core_createI18nBag = ((/* unused pure expression or super */ null && (createI18nBag)));
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.jsx
 /**
  * HelpPanel — Tier-2 page component (SPEC §5.13). Compact help popover
  * anchored to a `?` button. Consumers pass `items` (resource links) and
@@ -554,7 +554,7 @@ function HelpPanel({
 }
 ;// external ["wp","data"]
 var external_wp_data_namespaceObject = window["wp"]["data"];
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/SnackbarSlot.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/SnackbarSlot.jsx
 /**
  * SnackbarSlot — bottom-centered transient notices slot bound to WP's
  * `core/notices` data store. Renders snackbar-typed notices in a fixed
@@ -597,10 +597,10 @@ function SnackbarSlot({
     onRemove: removeNotice
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.jsx
 /**
  * DashboardShell — Tier-1 layout primitive (SPEC §5.13). Composes the
  * header (brand + tabs + version + help slot) + a focus-managed main
@@ -766,7 +766,7 @@ function DashboardShell({
     }), snackbar !== undefined ? snackbar : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SnackbarSlot, {})]
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/BootDataLoader.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/BootDataLoader.jsx
 /**
  * BootDataLoader — read the consumer's PHP-localized boot payload off
  * `window[ bootGlobal ]` and ship it down the component tree via React
@@ -821,7 +821,7 @@ function useBoot() {
   return (0,external_wp_element_namespaceObject.useContext)(BootContext);
 }
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/createFilterNamespace.js
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createFilterNamespace.js
 /**
  * Build the per-consumer filter channel-name map.
  *
@@ -863,7 +863,7 @@ function createFilterNamespace(prefix) {
   };
 }
 /* harmony default export */ var core_createFilterNamespace = ((/* unused pure expression or super */ null && (createFilterNamespace)));
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/useDirtyState.js
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/useDirtyState.js
 /* unused harmony import specifier */ var useState;
 /* unused harmony import specifier */ var useRef;
 /* unused harmony import specifier */ var useEffect;
@@ -1052,7 +1052,7 @@ function __resetDirtyRegistry() {
   DISCARD_MESSAGES.clear();
 }
 /* harmony default export */ var settings_useDirtyState = ((/* unused pure expression or super */ null && (useDirtyState)));
-;// ./node_modules/@pressmaximum/dashboard-kit/src/core/mountDashboard.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/mountDashboard.jsx
 /**
  * mountDashboard — bootstraps the dashboard SPA inside the consumer's
  * mount node. Called once per page load.
@@ -1179,10 +1179,10 @@ function mountDashboard(config) {
 /* harmony default export */ var core_mountDashboard = (mountDashboard);
 ;// external ["wp","i18n"]
 var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.jsx
 /**
  * Hero — Welcome page greeting + tagline + primary CTA + optional
  * illustration. SPEC §5.5 + §5.13 Tier-2 page component.
@@ -1236,7 +1236,7 @@ function Hero({
     })]
   });
 }
-;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/check.mjs
 // packages/icons/src/library/check.tsx
 
 
@@ -1244,7 +1244,7 @@ var check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.
 
 //# sourceMappingURL=check.mjs.map
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/ChecklistItem.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/ChecklistItem.jsx
 /**
  * ChecklistItem — single row in the Welcome onboarding checklist.
  * SPEC §5.5 + §5.10b. Tier-2 page component.
@@ -1406,10 +1406,10 @@ function ChecklistItem({
     })]
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.jsx
 /**
  * Checklist — Welcome page onboarding-tasks list. SPEC §5.5.
  *
@@ -2109,7 +2109,7 @@ function Welcome() {
     })]
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaField.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaField.jsx
 
 /**
  * SchemaField — Tier-1 layout primitive (SPEC §5.13). Dispatches on
@@ -2151,10 +2151,10 @@ function SchemaField({
     onChange: onChange
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.jsx
 /**
  * SchemaForm — Tier-1 layout primitive (SPEC §5.13). Renders ONE panel
  * — the consumer resolves "which panel is active" externally (route
@@ -2246,10 +2246,10 @@ function SchemaForm({
     }, field.id))
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.jsx
 /**
  * SaveBar — Tier-2 page component (SPEC §5.13). Left-aligned status text
  * mirrors the store lifecycle (saving / dirty / saved); right cluster is
@@ -2377,7 +2377,7 @@ function SaveBar({
     })
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/fieldTypes.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/fieldTypes.jsx
 /**
  * BASE_FIELD_TYPES — the kit's built-in field renderers for SchemaField
  * dispatch. SPEC §5.4 + §9.1 `{ns}.dashboard.settings.field-types` filter.
@@ -2511,10 +2511,10 @@ const BASE_FIELD_TYPES = {
   number: NumberField
 };
 /* harmony default export */ var fieldTypes = ((/* unused pure expression or super */ null && (BASE_FIELD_TYPES)));
-;// ./node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/editor.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/editor.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/index.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/index.jsx
 /**
  * SubNav — Tier-1 vertical nav rail (SPEC §5.3). Two consumer
  * patterns documented in the spec:
@@ -2601,7 +2601,7 @@ function SubNav({
 ;// external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
-;// ./node_modules/@pressmaximum/dashboard-kit/src/settings/createSettingsStore.js
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/createSettingsStore.js
 /**
  * createSettingsStore — `@wordpress/data` store factory for schema-driven
  * settings forms. SPEC §5.4.
@@ -3800,10 +3800,10 @@ function Settings({
     })]
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.jsx
 /**
  * CategoryBadge — small uppercase pill rendered next to each changelog
  * item. SPEC §5.3b. Tier-2 page component.
@@ -3880,10 +3880,10 @@ function CategoryBadge({
     children: label
   });
 }
-;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.css
 // extracted by mini-css-extract-plugin
 
-;// ./node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.jsx
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.jsx
 /**
  * ReleaseBlock — one release card. SPEC §5.3b + §5.10b. Tier-2 page
  * component.
