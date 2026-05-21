@@ -125,11 +125,20 @@ function useColLayoutCount( settingId, fallback ) {
 	return count;
 }
 
-function usePreviewedDevice() {
-	function normalize( d ) { return d === 'desktop' ? 'desktop' : 'mobile'; }
+// Subscribe to `wp.customize.previewedDevice`, normalising the raw value
+// against the field's enabled `devices` list. When the previewed device
+// isn't in the field's list (e.g. user picks Tablet on a header field
+// that only declares desktop + mobile), fall back to the closest match
+// — tablet collapses to mobile, anything unknown collapses to desktop.
+function usePreviewedDevice( devicesList ) {
+	function normalize( d ) {
+		if ( devicesList.indexOf( d ) !== -1 ) return d;
+		if ( d === 'tablet' && devicesList.indexOf( 'mobile' ) !== -1 ) return 'mobile';
+		return devicesList[ 0 ] || 'desktop';
+	}
 	const [ device, setDevice ] = useState( () => {
 		try { return normalize( wp.customize?.previewedDevice?.get?.() || 'desktop' ); }
-		catch ( _ ) { return 'desktop'; }
+		catch ( _ ) { return devicesList[ 0 ] || 'desktop'; }
 	} );
 	useEffect( () => {
 		const pd = wp.customize?.previewedDevice;
@@ -137,7 +146,8 @@ function usePreviewedDevice() {
 		const handler = ( d ) => setDevice( normalize( d ) );
 		pd.bind( handler );
 		return () => pd.unbind && pd.unbind( handler );
-	}, [] );
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [ devicesList.join( ',' ) ] );
 	return device;
 }
 
@@ -377,6 +387,7 @@ function App( {
 	defaultValue,
 	hideDirection,
 	hideAlign,
+	devices,
 	forcedDirection,
 	forcedAlign,
 	defaultDirection,
@@ -384,7 +395,8 @@ function App( {
 } ) {
 	const [ value, setValue ] = useCustomizeSetting( controlId, defaultValue );
 	const count    = useColLayoutCount( colLayoutSetting, Math.min( 3, columnKeys.length ) );
-	const device   = usePreviewedDevice();
+	const devicesList = devices && devices.length ? devices : [ 'desktop', 'mobile' ];
+	const device   = usePreviewedDevice( devicesList );
 	const [ open, setOpen ] = useState( false );
 	const [ remountKey, setRemountKey ] = useState( 0 );
 	const rootRef  = useRef( null );
@@ -509,10 +521,66 @@ function App( {
 				<div className="customify-modal-settings" key={ `${ device }-${ remountKey }` }>
 					<div className="customify-modal-settings--inner">
 						<div className="customify-modal-settings--fields">
-							<div className="customify-cs__device-note">
-								{ __( 'Editing for: ', 'customify' ) }
-								<strong>{ device === 'mobile' ? __( 'Mobile/Tablet', 'customify' ) : __( 'Desktop', 'customify' ) }</strong>
-							</div>
+							{ devicesList.length > 1 && (
+								<div className="customify-cs__device-note customify-cs__device-switcher">
+									{ /*
+									 * Two layout shapes share this slot:
+									 *
+									 *   Header context (devicesList = [desktop, mobile]) —
+									 *     header builder treats "mobile" as the
+									 *     combined mobile/tablet bucket, so we ship a
+									 *     2-button switcher prefixed with a "Layout"
+									 *     label and rename the mobile button's tooltip
+									 *     to "Mobile/Tablet".
+									 *
+									 *   Footer context (devicesList = [desktop, tablet, mobile]) —
+									 *     standard 3-device switcher, no prefix label;
+									 *     visual + interaction match the existing
+									 *     `.customify-devices` widget that
+									 *     addDeviceSwitchers() injects elsewhere.
+									 *
+									 * Both reuse the `.customify-devices` class so the
+									 * dashicons + active-state CSS in _control.scss
+									 * picks them up unchanged (the active button gets
+									 * its border/color from `body.preview-{device}`
+									 * set by WP customize when previewedDevice flips).
+									 */ }
+									{ devicesList.length === 2 && (
+										<span className="customify-cs__device-switcher-label">
+											{ __( 'Layout', 'customify' ) }
+										</span>
+									) }
+									<div className="customify-devices">
+										{ devicesList.map( ( d ) => {
+											const isCombinedMobile = devicesList.length === 2 && d === 'mobile';
+											const label = d === 'desktop'
+												? __( 'Desktop', 'customify' )
+												: d === 'tablet'
+													? __( 'Tablet', 'customify' )
+													: isCombinedMobile
+														? __( 'Mobile / Tablet', 'customify' )
+														: __( 'Mobile', 'customify' );
+											return (
+												<button
+													key={ d }
+													type="button"
+													className={ `preview-${ d }` }
+													data-device={ d }
+													title={ label }
+													aria-label={ label }
+													aria-pressed={ device === d ? 'true' : 'false' }
+													onClick={ ( e ) => {
+														e.preventDefault();
+														try {
+															wp.customize.previewedDevice.set( d );
+														} catch ( _ ) {}
+													} }
+												/>
+											);
+										} ) }
+									</div>
+								</div>
+							) }
 							<div className="customify-cs__accordion">
 								{ activeCols.map( ( colKey, idx ) => {
 									const colData = deviceData[ colKey ] || {};
@@ -633,6 +701,7 @@ function mountOne( node ) {
 	const defaultValue      = parseAttr( node.dataset.default, {} );
 	const hideDirection     = node.dataset.hideDirection === '1';
 	const hideAlign         = node.dataset.hideAlign === '1';
+	const devices           = parseAttr( node.dataset.devices, [ 'desktop', 'mobile' ] );
 	const forcedDirection   = node.dataset.forcedDirection || '';
 	const forcedAlign       = node.dataset.forcedAlign || '';
 	const defaultDirection  = node.dataset.defaultDirection || '';
@@ -646,6 +715,7 @@ function mountOne( node ) {
 			defaultValue={ defaultValue }
 			hideDirection={ hideDirection }
 			hideAlign={ hideAlign }
+			devices={ devices }
 			forcedDirection={ forcedDirection }
 			forcedAlign={ forcedAlign }
 			defaultDirection={ defaultDirection }

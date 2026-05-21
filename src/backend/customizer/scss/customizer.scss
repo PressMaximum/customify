@@ -209,14 +209,46 @@ $builder_active_color: #0073aa;
 @import "_builder_v1";
 @import "_builder_v2";
 
-// Columns Settings modal — accordion toggles (multi-open), one per active column.
+// Columns Settings modal — device switcher row.
+//
+// Replaces the old "Editing for: <Device>" static text. Now hosts a
+// real device switcher (`.customify-devices`) so the maintainer can
+// hop between previewed devices without reaching for the customizer's
+// footer-action bar. The 2-device (header builder) variant is
+// prefixed with a "Layout" label; the 3-device (footer builder)
+// variant is buttons only — see the JSX comment for the rationale.
 .customify-cs__device-note {
+	display: flex;
+	align-items: center;
+	gap: 8px;
 	font-size: 11px;
 	color: #777;
-	padding: 6px 10px;
+	padding: 4px 10px;
 	background: #f6f7f7;
 	border-left: 3px solid var(--wp-admin-theme-color, #2271b1);
 	margin-bottom: 8px;
+	min-height: 28px;
+
+	// Override `.customify-devices` defaults (which assume a
+	// float-right placement inside `.customify-field-heading`):
+	// inside this row the switcher fills the remaining space and
+	// right-aligns the icon buttons.
+	.customify-devices {
+		display: inline-flex;
+		float: none;
+		margin: 0 0 0 auto;
+
+		button {
+			height: 22px;
+		}
+	}
+}
+
+.customify-cs__device-switcher-label {
+	font-weight: 600;
+	color: #1d2327;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
 }
 
 .customify-cs__accordion {
