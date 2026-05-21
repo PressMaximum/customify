@@ -378,6 +378,9 @@ class Customify
 
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
 		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
+		if ( function_exists( 'customify_color_palette_root_css' ) ) {
+			wp_add_inline_style( 'customify-style', customify_color_palette_root_css() );
+		}
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
@@ -405,6 +408,8 @@ class Customify
 			// Metabox settings.
 			'/inc/template-class.php',
 			// Template element classes.
+			'/inc/colors-palette.php',
+			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',
@@ -493,6 +498,7 @@ class Customify
 			'typography',
 			'page-header',
 			'background',
+			'colors',
 			'compatibility',
 			// Header Builder Panel.
 			'header/transparent',
