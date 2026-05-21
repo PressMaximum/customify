@@ -217,6 +217,12 @@ $builder_active_color: #0073aa;
 // footer-action bar. The 2-device (header builder) variant is
 // prefixed with a "Layout" label; the 3-device (footer builder)
 // variant is buttons only — see the JSX comment for the rationale.
+//
+// The original `.customify-devices` rules in `_control.scss` are
+// scoped under three specific control classes (typography / styling /
+// modal); columns_settings doesn't match any of them, so the icon +
+// active-state CSS is replicated here to keep this block self-contained
+// instead of widening that scope.
 .customify-cs__device-note {
 	display: flex;
 	align-items: center;
@@ -229,17 +235,51 @@ $builder_active_color: #0073aa;
 	margin-bottom: 8px;
 	min-height: 28px;
 
-	// Override `.customify-devices` defaults (which assume a
-	// float-right placement inside `.customify-field-heading`):
-	// inside this row the switcher fills the remaining space and
-	// right-aligns the icon buttons.
 	.customify-devices {
 		display: inline-flex;
-		float: none;
 		margin: 0 0 0 auto;
+		gap: 1px;
 
 		button {
-			height: 22px;
+			cursor: pointer;
+			background: 0 0;
+			border: 1px solid transparent;
+			height: 24px;
+			width: 28px;
+			padding: 0;
+			margin: 0;
+			box-shadow: none;
+			outline: none !important;
+			color: #bbbbbb;
+			border-radius: 2px;
+			transition: color .15s ease-in-out, border-color .15s ease-in-out, background-color .15s ease-in-out;
+
+			// Dashicons font glyph for each device.
+			&::before {
+				display: inline-block;
+				-webkit-font-smoothing: antialiased;
+				font: 400 18px/1 dashicons;
+				vertical-align: middle;
+				margin: 0;
+			}
+
+			&.preview-desktop::before { content: "\f472"; }
+			&.preview-tablet::before  { content: "\f471"; }
+			&.preview-mobile::before  { content: "\f470"; }
+
+			&:hover,
+			&:focus {
+				color: var(--wp-admin-theme-color, #2271b1);
+			}
+
+			// Active state — when WP customize sets previewedDevice the
+			// button's own `aria-pressed="true"` flips. No need to rely
+			// on a parent `body.preview-{device}` class.
+			&[aria-pressed="true"] {
+				color: #1d2327;
+				border-color: #c3c4c7;
+				background: #fff;
+			}
 		}
 	}
 }
@@ -249,6 +289,7 @@ $builder_active_color: #0073aa;
 	color: #1d2327;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
+	font-size: 11px;
 }
 
 .customify-cs__accordion {
