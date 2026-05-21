@@ -1562,11 +1562,9 @@ $text_color: #555d66;
 }
 
 .customify-pro-teaser {
-    color: #856404;
-    background-color: #fff3cd;
     margin: 1em 0px;
     position: relative;
-    padding: .75rem 1.25rem;
+    padding: .75rem 1.25rem 1.5rem;
     margin-bottom: 1rem;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
@@ -1575,8 +1573,17 @@ $text_color: #555d66;
         margin-bottom: 1em;
     }
     .button {
-        display: block;
-        text-align: center;
+        // Flex container so the trailing external-link icon sits inline
+        // with the text and spaced consistently regardless of label length.
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .customify-pro-teaser__external-icon {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
     }
 }
 .customize-control {
