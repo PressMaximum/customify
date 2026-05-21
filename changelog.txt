@@ -1,7 +1,4 @@
 = 0.4.15 =
-* SECURITY: Add nonce + capability checks to three previously-unguarded AJAX endpoints: `customify/customizer/ajax/get_icons`, `customify/customizer/ajax/fonts`, and the dynamic editor stylesheet (`customify_load_editor_style`).
-
-= 0.4.14 =
 * NEW: Transparent header feature.
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
