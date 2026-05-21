@@ -930,6 +930,11 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         var defaultDirection  = _.isString( field.default_direction ) ? field.default_direction : '';
         var defaultAlign      = _.isString( field.default_align ) ? field.default_align : '';
         var columnKeys        = _.isArray( field.column_keys ) ? field.column_keys : [];
+        var devicesList       = _.isArray( field.devices ) && field.devices.length
+            ? field.devices
+            : [ 'desktop', 'mobile' ];
+        var deviceScope       = _.isObject( field.device_scope ) && ! _.isArray( field.device_scope )
+            ? field.device_scope : {};
 
         // Legacy fallback — see matching PHP comment in
         // Customify_Customizer_Auto_CSS::columns_settings().
@@ -961,7 +966,14 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         }
         var activeColumns = columnKeys.slice( 0, activeCount );
 
-        var deviceMap = { desktop: 'desktop', mobile: 'mobile' };
+        // Build deviceMap from field's `devices` config. Devices with a
+        // `device_scope` entry land in the unwrapped `all` bucket and
+        // inject the scope class into the selector below — see matching
+        // PHP comment.
+        var deviceMap = {};
+        _.each( devicesList, function ( d ) {
+            deviceMap[ d ] = deviceScope[ d ] ? 'all' : d;
+        } );
 
         _.each( deviceMap, function ( cssBucket, deviceKey ) {
             var src = ( _.isObject( values ) && _.isObject( values[ deviceKey ] ) && ! _.isArray( values[ deviceKey ] ) )
@@ -981,9 +993,13 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
                     colValue = {};
                 }
 
-                var selector = colSelectors[ colKey ]
-                    ? colSelectors[ colKey ]
-                    : rowSelector.replace(/\s+$/, '') + ' .col-v2-' + colKey;
+                var selector;
+                if ( colSelectors[ colKey ] ) {
+                    selector = colSelectors[ colKey ];
+                } else {
+                    var scope = deviceScope[ deviceKey ] ? ' ' + String( deviceScope[ deviceKey ] ).replace(/^\s+|\s+$/g, '') : '';
+                    selector  = rowSelector.replace(/\s+$/, '') + scope + ' .col-v2-' + colKey;
+                }
                 var rules = [];
 
                 // Resolve direction: forced > saved > field default > 'row'.

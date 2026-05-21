@@ -394,6 +394,19 @@ class Customify_Customizer_Auto_CSS
 		$default_direction = isset($field['default_direction']) ? (string) $field['default_direction'] : '';
 		$default_align     = isset($field['default_align']) ? (string) $field['default_align'] : '';
 		$column_keys       = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+		// Field-level device list — drives which buckets the CSS pipeline
+		// iterates. Header rows default to `[desktop, mobile]`; footer
+		// rows declare the full `[desktop, tablet, mobile]` set.
+		$devices_list      = isset($field['devices']) && is_array($field['devices']) && ! empty($field['devices'])
+			? $field['devices']
+			: array( 'desktop', 'mobile' );
+		// Optional per-device class-scoping. When a device maps to a class
+		// here, its CSS is scoped through that class (between the row
+		// selector and `.col-v2-{key}`) and lands in the unwrapped `all`
+		// bucket — used for builders that double-render markup per
+		// device, e.g. header wraps desktop items in `.cb-row--desktop`
+		// and mobile items in `.cb-row--mobile`.
+		$device_scope      = isset($field['device_scope']) && is_array($field['device_scope']) ? $field['device_scope'] : array();
 
 		// Legacy fallback — early builds of this control saved column data without
 		// a desktop/mobile wrapper (the generic sanitizer stripped it). When the
@@ -430,10 +443,16 @@ class Customify_Customizer_Auto_CSS
 		}
 		$active_columns = array_slice($column_keys, 0, $active_count);
 
-		$device_map = array(
-			'desktop' => 'desktop',
-			'mobile'  => 'mobile',
-		);
+		// Build device_map from field's `devices` config. Each device
+		// becomes the saved-value bucket key. The CSS bucket defaults to
+		// the same device name (wrapped by the matching media query at
+		// render time) — but for devices in `$device_scope`, we instead
+		// land in the unwrapped `all` bucket and inject the scope class
+		// into the selector below.
+		$device_map = array();
+		foreach ( $devices_list as $_d ) {
+			$device_map[ $_d ] = isset( $device_scope[ $_d ] ) && $device_scope[ $_d ] ? 'all' : $_d;
+		}
 
 		foreach ($device_map as $device_key => $css_bucket) {
 			$device_values = (isset($values[$device_key]) && is_array($values[$device_key])) ? $values[$device_key] : array();
@@ -456,9 +475,14 @@ class Customify_Customizer_Auto_CSS
 					$col_value = array();
 				}
 
-				$selector = isset($col_selectors[$col_key]) && $col_selectors[$col_key]
-					? $col_selectors[$col_key]
-					: trim($row_selector) . ' .col-v2-' . sanitize_html_class($col_key);
+				if ( isset( $col_selectors[ $col_key ] ) && $col_selectors[ $col_key ] ) {
+					$selector = $col_selectors[ $col_key ];
+				} else {
+					$scope    = isset( $device_scope[ $device_key ] ) && $device_scope[ $device_key ]
+						? ' ' . trim( $device_scope[ $device_key ] )
+						: '';
+					$selector = trim( $row_selector ) . $scope . ' .col-v2-' . sanitize_html_class( $col_key );
+				}
 				$rules    = array();
 
 				// Resolve direction. Order: forced > saved > field default > 'row'.

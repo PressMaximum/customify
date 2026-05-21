@@ -225,6 +225,12 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				// middle → flex-center) that gives the masthead its natural
 				// balanced look.
 				'default_align'      => 'flex-start',
+				// Footer renders one shared row grid (unlike the header
+				// which double-renders markup per device). Even so, each
+				// breakpoint may want a distinct flex layout / gap /
+				// padding tweak — expose desktop / tablet / mobile as
+				// separate buckets so users can tune each independently.
+				'devices'            => array( 'desktop', 'tablet', 'mobile' ),
 				'selector'           => $selector,
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',

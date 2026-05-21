@@ -154,6 +154,25 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'title'           => __( 'Height', 'customify' ),
 			),
 
+			// Spacing between the row's column slots (left/center/right).
+			// Targets the per-row grid container `.row-v2-{id}` (one per
+			// row, classes `row-v2 row-v2-top|main|bottom` emitted by
+			// Customify_Layout_Builder_Frontend_V2::render_row()). Scoped
+			// inside `.header--row.{section}` so footer rows that share
+			// the same row-v2 class name don't pick this up.
+			array(
+				'name'            => $section . '_column_gap',
+				'type'            => 'slider',
+				'section'         => $section,
+				'theme_supports'  => '',
+				'device_settings' => true,
+				'max'             => 100,
+				'selector'        => $selector . ' .row-v2-' . preg_replace( '/^' . preg_quote( $this->id, '/' ) . '_/', '', $section ),
+				'css_format'      => 'column-gap: {{value}};',
+				'title'           => __( 'Column Gap', 'customify' ),
+				'description'     => __( 'Spacing between header columns.', 'customify' ),
+			),
+
 			array(
 				'name'       => $section . '_text_mode',
 				'type'       => 'image_select',
@@ -206,6 +225,14 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				'col_layout_setting' => '',
 				'column_keys'        => array( 'left', 'center', 'right' ),
 				'default_direction'  => 'row',
+				// Header double-renders its items: desktop markup lives
+				// under `.cb-row--desktop`, mobile/tablet under
+				// `.cb-row--mobile`. Per-device CSS therefore scopes via
+				// these wrapper classes instead of media queries.
+				'device_scope'       => array(
+					'desktop' => '.cb-row--desktop',
+					'mobile'  => '.cb-row--mobile',
+				),
 				'selector'           => '.header--row.' . str_replace( '_', '-', $section ),
 				'css_format'         => 'columns_settings',
 				'sanitize_callback'  => 'customify_sanitize_columns_settings',
@@ -550,7 +577,7 @@ if ( ! function_exists( 'customify_sanitize_columns_settings' ) ) {
 		$allowed_units      = array( 'em', 'px' );
 		$out                = array();
 
-		foreach ( array( 'desktop', 'mobile' ) as $device ) {
+		foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
 			if ( ! isset( $input[ $device ] ) || ! is_array( $input[ $device ] ) ) {
 				continue;
 			}
