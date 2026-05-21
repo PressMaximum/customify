@@ -195,7 +195,7 @@
 // specificity of .row-v2 { display:flex !important } from the header builder, so grid wins.
 .footer--row {
 	.row-v2 {
-		display: grid !important;
+		display: grid;
 		height: auto; // header builder sets height:100%, not needed for footer
 		align-items: start;
 		gap: 30px;
