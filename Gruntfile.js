@@ -12,11 +12,14 @@
  *
  * Primary entry points:
  *   grunt release [--ver=<x.y.z>|patch|minor|major]
- *     Optionally bump version → sync style.css header → run
- *     `npm run release:assets` (production build + .pot) → stage and zip.
+ *     Optionally bump version → sync style.css header →
+ *     `composer install --no-dev --optimize-autoloader` → run
+ *     `npm run release:assets` (production build emits both unminified
+ *     and .min.* siblings, plus .pot) → stage and zip.
  *
  *   grunt zipfile
- *     Stage and zip whatever build/ already contains (no rebuild).
+ *     Stage and zip whatever build/ + vendor/ already contain (no rebuild,
+ *     no composer install). Use this when assets are already fresh.
  */
 
 module.exports = function ( grunt ) {
@@ -31,6 +34,12 @@ module.exports = function ( grunt ) {
 	const STAGE_PATH = STAGE_DIR + '/' + SLUG + '/';
 
 	// One canonical list of patterns the wp.org zip must NOT contain.
+	// NOTE: `vendor/` is intentionally KEPT — it is loaded at runtime via
+	// `vendor/autoload.php` (see functions.php) to expose
+	// PressMaximum\DashboardKit\* classes consumed by inc/admin/dashboard-v2*.
+	// Before running `grunt release`, vendor/ must be re-installed with
+	// `composer install --no-dev --optimize-autoloader` — handled by the
+	// `composer:install:prod` task wired into the `release` pipeline below.
 	const EXCLUDES = [
 		// Source / dev tooling
 		'!node_modules/**',
@@ -38,7 +47,7 @@ module.exports = function ( grunt ) {
 		'!tests/**',
 		'!php-tests/**',
 		'!bin/**',
-		'!vendor/**',
+		'!docs/**',
 		'!.git/**',
 		'!.github/**',
 		'!.gitlab/**',
@@ -47,12 +56,40 @@ module.exports = function ( grunt ) {
 		'!.claude/**',
 		'!' + STAGE_DIR + '/**',
 
+		// vendor/ runtime sub-tree — drop dev junk from each package
+		'!vendor/**/.git/**',
+		'!vendor/**/.github/**',
+		'!vendor/**/.gitlab/**',
+		'!vendor/**/tests/**',
+		'!vendor/**/test/**',
+		'!vendor/**/docs/**',
+		'!vendor/**/doc/**',
+		'!vendor/**/examples/**',
+		'!vendor/**/example/**',
+		'!vendor/**/*.md',
+		'!vendor/**/*.dist',
+		'!vendor/**/phpunit.xml*',
+		'!vendor/**/phpcs.xml*',
+		'!vendor/**/.editorconfig',
+		'!vendor/**/.gitignore',
+		'!vendor/**/.gitattributes',
+		'!vendor/**/composer.json',
+		'!vendor/**/composer.lock',
+		'!vendor/**/package.json',
+		'!vendor/**/package-lock.json',
+		'!vendor/**/webpack.config.js',
+		'!vendor/**/vitest.config.js',
+		'!vendor/**/.eslintrc*',
+		'!vendor/**/.prettierrc*',
+		'!vendor/**/.babelrc*',
+
 		// Build / package configs
 		'!Gruntfile.js',
 		'!webpack.config.js',
 		'!package.json',
 		'!package-lock.json',
 		'!yarn.lock',
+		'!pnpm-lock.yaml',
 		'!composer.json',
 		'!composer.lock',
 		'!phpcs.xml',
@@ -65,6 +102,7 @@ module.exports = function ( grunt ) {
 		'!.gitignore',
 		'!.gitattributes',
 		'!.gitlab-ci.yml',
+		'!.travis.yml',
 		'!.editorconfig',
 		'!.eslintrc*',
 		'!.prettierrc*',
@@ -72,6 +110,9 @@ module.exports = function ( grunt ) {
 		'!.npmrc',
 		'!.nvmrc',
 		'!.distignore',
+		'!.jscsrc',
+		'!.jshintignore',
+		'!**/.DS_Store',
 
 		// Miscellaneous
 		'!*.sh',
@@ -272,6 +313,12 @@ module.exports = function ( grunt ) {
 		runShell.call( this, 'npm run release:assets' );
 	} );
 
+	// Re-install Composer deps as production (no dev packages, optimized
+	// autoloader). The resulting vendor/ tree is what ships in the zip.
+	grunt.registerTask( 'composer:install:prod', 'Composer install (no-dev, optimized autoloader).', function () {
+		runShell.call( this, 'composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist' );
+	} );
+
 	// ── Zip pipeline ────────────────────────────────────────────────────────
 	// Assumes build/ is fresh and languages/customify.pot is up to date.
 	grunt.registerTask( 'zipfile', [
@@ -283,12 +330,20 @@ module.exports = function ( grunt ) {
 	] );
 
 	// ── Release ─────────────────────────────────────────────────────────────
+	// Pipeline:
+	//   1. Optional version bump (--ver=patch|minor|major|<x.y.z>)
+	//   2. Sync style.css header to package.json version
+	//   3. composer install --no-dev --optimize-autoloader  → vendor/ for ship
+	//   4. npm run release:assets  → production webpack (emits BOTH unminified
+	//      and .min.* via EmitMinifiedAssetsPlugin) + makepot
+	//   5. Stage + zip
 	grunt.registerTask( 'release', 'Build, package and zip the theme for distribution.', function () {
 		const ver = grunt.option( 'ver' );
 		if ( ver ) {
 			grunt.task.run( 'bumpup:' + ver );
 		}
 		grunt.task.run( 'replace:theme_main' );
+		grunt.task.run( 'composer:install:prod' );
 		grunt.task.run( 'release:assets' );
 		grunt.task.run( 'zipfile' );
 	} );
