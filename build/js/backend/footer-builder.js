@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 610:
+/***/ 485:
 /***/ (function() {
 
 
@@ -16,7 +16,7 @@ var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// external "ReactJSXRuntime"
 var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./node_modules/@wordpress/icons/build-module/library/settings.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/settings.mjs
 // packages/icons/src/library/settings.tsx
 
 
@@ -27,7 +27,7 @@ var settings_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObje
 
 //# sourceMappingURL=settings.mjs.map
 
-;// ./node_modules/@wordpress/icons/build-module/library/close.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/close.mjs
 // packages/icons/src/library/close.tsx
 
 
@@ -35,13 +35,21 @@ var close_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.
 
 //# sourceMappingURL=close.mjs.map
 
-;// ./node_modules/@wordpress/icons/build-module/library/drag-handle.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/drag-handle.mjs
 // packages/icons/src/library/drag-handle.tsx
 
 
 var drag_handle_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M8 7h2V5H8v2zm0 6h2v-2H8v2zm0 6h2v-2H8v2zm6-14v2h2V5h-2zm0 8h2v-2h-2v2zm0 6h2v-2h-2v2z" }) });
 
 //# sourceMappingURL=drag-handle.mjs.map
+
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/plus.mjs
+// packages/icons/src/library/plus.tsx
+
+
+var plus_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z" }) });
+
+//# sourceMappingURL=plus.mjs.map
 
 ;// ./src/backend/header-builder/TemplatesPanel.jsx
 /**
@@ -1310,10 +1318,16 @@ function ItemPickerPopover({
       children: items.length === 0 ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         className: "customify-hb__popover-empty",
         children: (0,external_wp_i18n_namespaceObject.__)('All items are placed in the layout', 'customify')
-      }) : items.map(item => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+      }) : items.map(item => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("button", {
         className: "customify-hb__popover-item",
         onClick: () => onAdd(item.id),
-        children: item.name
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+          icon: plus_default,
+          className: "customify-hb__popover-item-icon"
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "customify-hb__popover-item-label",
+          children: item.name
+        })]
       }, item.id))
     })]
   });
@@ -1800,7 +1814,7 @@ wp.customize.bind('ready', () => {
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [733,207], function() { return __webpack_require__(610); })
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [733,207], function() { return __webpack_require__(485); })
 /******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
 /******/ 	
 /******/ })()

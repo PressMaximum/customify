@@ -110,6 +110,9 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             case 'modal':
               that.modal(field, v);
               break;
+            case 'columns_settings':
+              that.columns_settings(field);
+              break;
             default:
               switch (field.css_format) {
                 case 'background':
@@ -765,6 +768,185 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
       });
     }
   };
+
+  /**
+   * Emit per-column CSS for a `columns_settings` field. Mirror of
+   * Customify_Customizer_Auto_CSS::columns_settings() in
+   * inc/customizer/class-customizer-auto-css.php so the preview can
+   * update live (postMessage) without the full refresh.
+   *
+   * Resolves the layout per column as:
+   *   forced_layout (field config) > saved layout > default_layout (field
+   *   config) > position default.
+   * Position default: first → flex-start, last → flex-end,
+   * single column → flex-start, otherwise → flex-center.
+   */
+  CustomifyAutoCSS.prototype.columns_settings = function (field) {
+    var that = this;
+    var values = this.get_setting(field.name, 'all');
+    // Robust decode — framework's get_setting uses `decodeURI` which leaves
+    // reserved chars (`:`, `,`, etc.) escaped, so JSON.parse fails when the
+    // value was URI-component-encoded by our React control. Fall back to
+    // decodeURIComponent so we always end up with a parsed object.
+    if (typeof values === 'string' && values.length) {
+      try {
+        values = JSON.parse(decodeURIComponent(values));
+      } catch (_) {
+        try {
+          values = JSON.parse(values);
+        } catch (__) {}
+      }
+    }
+    if (!_.isObject(values) || _.isArray(values)) {
+      values = {};
+    }
+    var rowSelector = field.selector || '';
+    if (!rowSelector) return;
+    var colSelectors = _.isObject(field.col_selectors) && !_.isArray(field.col_selectors) ? field.col_selectors : {};
+    var forcedLayout = _.isString(field.forced_layout) ? field.forced_layout : '';
+    var defaultLayout = _.isString(field.default_layout) ? field.default_layout : '';
+    var columnKeys = _.isArray(field.column_keys) ? field.column_keys : [];
+
+    // Legacy fallback — see matching PHP comment in
+    // Customify_Customizer_Auto_CSS::columns_settings().
+    if (!_.isEmpty(values) && _.isUndefined(values.desktop) && _.isUndefined(values.mobile)) {
+      var hasColKey = _.some(columnKeys, function (ck) {
+        return !_.isUndefined(values[ck]);
+      });
+      if (hasColKey) {
+        values = {
+          desktop: values
+        };
+      }
+    }
+    var activeCount = columnKeys.length;
+    if (field.col_layout_setting) {
+      var clRaw = this.get_setting(field.col_layout_setting, 'all');
+      var clData = null;
+      if (_.isObject(clRaw) && !_.isArray(clRaw)) {
+        clData = clRaw;
+      } else if (_.isString(clRaw)) {
+        try {
+          clData = JSON.parse(decodeURIComponent(clRaw));
+        } catch (e) {
+          try {
+            clData = JSON.parse(clRaw);
+          } catch (e2) {}
+        }
+      }
+      if (clData && clData.count) {
+        var cnt = parseInt(clData.count, 10);
+        if (!isNaN(cnt) && cnt >= 1) {
+          activeCount = Math.min(columnKeys.length, cnt);
+        }
+      }
+    }
+    var activeColumns = columnKeys.slice(0, activeCount);
+    var deviceMap = {
+      desktop: 'desktop',
+      mobile: 'mobile'
+    };
+    _.each(deviceMap, function (cssBucket, deviceKey) {
+      var src = _.isObject(values) && _.isObject(values[deviceKey]) && !_.isArray(values[deviceKey]) ? values[deviceKey] : {};
+      var deviceValues = _.clone(src);
+      _.each(activeColumns, function (ck) {
+        if (_.isUndefined(deviceValues[ck])) {
+          deviceValues[ck] = {};
+        }
+      });
+      if (_.isEmpty(deviceValues)) return;
+      _.each(deviceValues, function (colValue, colKey) {
+        if (!_.isObject(colValue) || _.isArray(colValue)) {
+          colValue = {};
+        }
+        var selector = colSelectors[colKey] ? colSelectors[colKey] : rowSelector.replace(/\s+$/, '') + ' .col-v2-' + colKey;
+        var rules = [];
+
+        // Position-based default layout: first → flex-start, last → flex-end,
+        // single column → flex-start, otherwise → flex-center.
+        var colIndex = _.indexOf(activeColumns, colKey);
+        var positionDefault = 'flex-center';
+        if (colIndex < 0) {
+          positionDefault = '';
+        } else if (activeColumns.length === 1 || colIndex === 0) {
+          positionDefault = 'flex-start';
+        } else if (colIndex === activeColumns.length - 1) {
+          positionDefault = 'flex-end';
+        }
+
+        // Resolve order: forced_layout (locked) > saved layout (user)
+        // > default_layout (field-level override, e.g. footer = stack)
+        // > position default.
+        var savedLayout = _.isString(colValue.layout) ? colValue.layout : '';
+        var layout;
+        if (forcedLayout !== '') {
+          layout = forcedLayout;
+        } else if ('' !== savedLayout) {
+          layout = savedLayout;
+        } else if ('' !== defaultLayout) {
+          layout = defaultLayout;
+        } else {
+          layout = positionDefault;
+        }
+        switch (layout) {
+          case 'flex-center':
+            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: center;', 'align-items: center;');
+            break;
+          case 'flex-end':
+            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: flex-end;', 'align-items: center;');
+            break;
+          case 'space-between':
+            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: space-between;', 'align-items: center;');
+            break;
+          case 'stack':
+            rules.push('display: flex;', 'flex-direction: column;');
+            break;
+          case 'flex-start':
+            rules.push('display: flex;', 'flex-direction: row;', 'justify-content: flex-start;', 'align-items: center;');
+            break;
+          default:
+            break;
+        }
+
+        // Gap — { unit, value } or scalar.
+        if (!_.isUndefined(colValue.gap)) {
+          var gapVal = colValue.gap;
+          var gapNum = null;
+          var gapUnit = 'em';
+          if (_.isObject(gapVal) && !_.isArray(gapVal)) {
+            if (!_.isUndefined(gapVal.value) && gapVal.value !== '' && gapVal.value !== null) {
+              gapNum = gapVal.value;
+              gapUnit = gapVal.unit ? gapVal.unit : 'em';
+            }
+          } else if (gapVal !== '' && gapVal !== null) {
+            gapNum = gapVal;
+          }
+          if (gapNum !== null) {
+            rules.push('gap: ' + parseFloat(gapNum) + gapUnit + ';');
+          }
+        }
+
+        // Padding — 4-side object with unit/link.
+        if (_.isObject(colValue.padding) && !_.isArray(colValue.padding)) {
+          var padding = colValue.padding;
+          var pUnit = padding.unit ? padding.unit : 'px';
+          _.each(['top', 'right', 'bottom', 'left'], function (side) {
+            var v = padding[side];
+            if (v === null || _.isUndefined(v) || v === '') return;
+            rules.push('padding-' + side + ': ' + parseFloat(v) + pUnit + ';');
+          });
+        }
+        if (!rules.length) return;
+        that.css[cssBucket] += selector + " {\r\n\t" + rules.join("\r\n\t") + "\r\n}\r\n";
+
+        // Stack layout: direct children take the full column width
+        // so each item lines up on its own row.
+        if (layout === 'stack') {
+          that.css[cssBucket] += selector + " > * {\r\n\twidth: 100%;\r\n}\r\n";
+        }
+      });
+    });
+  };
   CustomifyAutoCSS.prototype.setup_font_style = function (value) {
     if (!_.isObject(value)) {
       value = {};
@@ -1018,6 +1200,20 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
     if (field.selector && field.css_format || field.type === 'modal') {
       wp.customize(field.name, function (setting) {
         setting.bind(function (to) {
+          CustomifyAutoCSSInit.run(field.name);
+        });
+      });
+    }
+
+    // row_layout settings (e.g. footer_main_col_layout) carry no
+    // selector/css_format themselves, but the linked columns_settings
+    // field reads `count` from them to decide how many columns to emit
+    // CSS for. Without this bind, adding a column live in the preview
+    // shows no rule for the new col-v2-{key} until the user saves +
+    // reloads (PHP regen on page load).
+    if (field.type === 'row_layout') {
+      wp.customize(field.name, function (setting) {
+        setting.bind(function () {
           CustomifyAutoCSSInit.run(field.name);
         });
       });

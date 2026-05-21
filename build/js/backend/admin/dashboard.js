@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 223:
+/***/ 867:
 /***/ (function() {
 
 jQuery(document).ready(function ($) {
@@ -130,7 +130,7 @@ jQuery(document).ready(function ($) {
 // This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 !function() {
 "use strict";
-/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(223);
+/* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(867);
 /* harmony import */ var _js_dashboard_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_js_dashboard_js__WEBPACK_IMPORTED_MODULE_0__);
 
 

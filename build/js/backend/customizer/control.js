@@ -1,4 +1,645 @@
 /******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+
+;// external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
+;// external ["wp","i18n"]
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// external "ReactJSXRuntime"
+var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
+;// ./src/backend/customizer/js/controls/columns-settings/index.jsx
+/**
+ * Column Settings control — React port that keeps the exact pre-React markup.
+ *
+ * - Outer chrome: `.customify-actions` (edit/reset dashicons) + `.customify-modal-settings`
+ *   slide-down panel.
+ * - Inside the panel: `.customify-cs__device-note` + `.customify-cs__accordion`
+ *   with `.customify-cs__item` heads/bodies.
+ * - Layout field: custom `.customify-cs__btn-group` with inlined `@wordpress/icons` SVGs.
+ * - Gap field: jQuery-UI slider (via `customifyField.initSlider`) with em/px unit picker.
+ * - Padding field: rendered by the existing `customifyField.addFields` css_ruler pipeline.
+ *
+ * React owns the data flow; the DOM remains visually identical to the jQuery version.
+ *
+ * Saved value shape:
+ *   { desktop: { <colKey>: { layout, gap: { unit, value }, padding: { ... } } }, mobile: { ... } }
+ *
+ * Bundled into the existing backend/customizer/control webpack entry
+ * (imported from src/backend/customizer/js/control.js).
+ */
+
+
+
+
+// ---------------------------------------------------------------------------
+// Setting bridge
+// ---------------------------------------------------------------------------
+
+function parseRaw(raw) {
+  if (raw === null || raw === undefined || raw === '') return {};
+  let parsed = raw;
+  if (typeof raw !== 'object') {
+    try {
+      parsed = JSON.parse(decodeURIComponent(raw));
+    } catch (_) {
+      try {
+        parsed = JSON.parse(raw);
+      } catch (__) {
+        return {};
+      }
+    }
+  }
+  if (!parsed || typeof parsed !== 'object') return {};
+
+  // Legacy fallback — old saves (pre sanitize-callback fix) had the
+  // device wrapper stripped. If the value looks like raw column data
+  // instead of { desktop, mobile }, wrap it as desktop.
+  const looksDeviceWrapped = 'desktop' in parsed || 'mobile' in parsed;
+  const looksColumnData = !looksDeviceWrapped && Object.keys(parsed).some(k => k === 'left' || k === 'center' || k === 'right' || k === 'col4' || k === 'col5' || k === 'sidebar');
+  if (looksColumnData) {
+    return {
+      desktop: parsed
+    };
+  }
+  return parsed;
+}
+function useCustomizeSetting(controlId, defaultValue) {
+  const skipNext = (0,external_wp_element_namespaceObject.useRef)(false);
+  const [value, setLocal] = (0,external_wp_element_namespaceObject.useState)(() => {
+    const setting = wp.customize?.(controlId);
+    const raw = setting ? setting.get() : null;
+    const parsed = parseRaw(raw);
+    return parsed && Object.keys(parsed).length ? parsed : defaultValue || {};
+  });
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const setting = wp.customize?.(controlId);
+    if (!setting || !setting.bind) return;
+    const handler = raw => {
+      if (skipNext.current) {
+        skipNext.current = false;
+        return;
+      }
+      setLocal(parseRaw(raw));
+    };
+    setting.bind(handler);
+    return () => setting.unbind && setting.unbind(handler);
+  }, [controlId]);
+  function setValue(next) {
+    setLocal(prev => {
+      const resolved = typeof next === 'function' ? next(prev) : next;
+      const setting = wp.customize?.(controlId);
+      if (!setting) return resolved;
+
+      // Suppress the customify framework's refreshFromSetting() — without
+      // this flag, the framework's setting.bind handler treats our update
+      // as an external change and empties .customify--settings-fields,
+      // which would destroy this React mount node and reset our `open`
+      // state. The framework's own getValue() sets the same flag.
+      const control = wp.customize?.control?.(controlId);
+      skipNext.current = true;
+      if (control) control._customifyWriting = true;
+      try {
+        setting.set(encodeURIComponent(JSON.stringify(resolved)));
+      } catch (_) {} finally {
+        if (control) control._customifyWriting = false;
+      }
+      return resolved;
+    });
+  }
+  return [value, setValue];
+}
+function useColLayoutCount(settingId, fallback) {
+  function read() {
+    if (!settingId) return fallback;
+    const setting = wp.customize?.(settingId);
+    if (!setting) return fallback;
+    const data = parseRaw(setting.get());
+    if (data && data.count) {
+      const n = parseInt(data.count, 10);
+      if (!isNaN(n) && n >= 1) return n;
+    }
+    return fallback;
+  }
+  const [count, setCount] = (0,external_wp_element_namespaceObject.useState)(read);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!settingId) return;
+    const setting = wp.customize?.(settingId);
+    if (!setting || !setting.bind) return;
+    const handler = () => setCount(read());
+    setting.bind(handler);
+    return () => setting.unbind && setting.unbind(handler);
+  }, [settingId]);
+  return count;
+}
+function usePreviewedDevice() {
+  function normalize(d) {
+    return d === 'desktop' ? 'desktop' : 'mobile';
+  }
+  const [device, setDevice] = (0,external_wp_element_namespaceObject.useState)(() => {
+    try {
+      return normalize(wp.customize?.previewedDevice?.get?.() || 'desktop');
+    } catch (_) {
+      return 'desktop';
+    }
+  });
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const pd = wp.customize?.previewedDevice;
+    if (!pd || !pd.bind) return;
+    const handler = d => setDevice(normalize(d));
+    pd.bind(handler);
+    return () => pd.unbind && pd.unbind(handler);
+  }, []);
+  return device;
+}
+
+// ---------------------------------------------------------------------------
+// Inline SVG icons (same paths copied from @wordpress/icons CJS build)
+// ---------------------------------------------------------------------------
+
+const LAYOUT_OPTIONS = [{
+  value: 'flex-start',
+  label: 'Flex start',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 9v6h11V9H9zM4 20h1.5V4H4v16z"/></svg>'
+}, {
+  value: 'flex-center',
+  label: 'Flex center',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z"/></svg>'
+}, {
+  value: 'flex-end',
+  label: 'Flex end',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z"/></svg>'
+}, {
+  value: 'space-between',
+  label: 'Space between',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 15h6V9H9v6zm-5 5h1.5V4H4v16zM18.5 4v16H20V4h-1.5z"/></svg>'
+}, {
+  value: 'stack',
+  label: 'Stack',
+  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 4v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V4H8v5a.5.5 0 0 0 .5.5h7A.5.5 0 0 0 16 9V4h1.5Zm0 16v-5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v5H8v-5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v5h1.5Z"/></svg>'
+}];
+const CHEVRON_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>';
+
+// ---------------------------------------------------------------------------
+// Sub-controls
+// ---------------------------------------------------------------------------
+
+function LayoutButtons({
+  value,
+  defaultLayout,
+  onChange
+}) {
+  const current = value || defaultLayout || 'flex-start';
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "customify--group-field ft--layout customify-cs__layout-wrap",
+    "data-field-name": "layout",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
+      className: "customize-control-title customify-cs__field-label",
+      children: (0,external_wp_i18n_namespaceObject.__)('Layout', 'customify')
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "customify-cs__btn-group",
+      role: "group",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+        type: "hidden",
+        className: "customify-cs__layout-value change-by-js",
+        "data-name": "layout",
+        value: current,
+        readOnly: true
+      }), LAYOUT_OPTIONS.map(opt => {
+        const isActive = current === opt.value;
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
+          type: "button",
+          className: `customify-cs__layout-btn components-button is-small${isActive ? ' is-pressed is-primary' : ''}`,
+          "data-value": opt.value,
+          "aria-label": (0,external_wp_i18n_namespaceObject.__)(opt.label, 'customify'),
+          title: (0,external_wp_i18n_namespaceObject.__)(opt.label, 'customify'),
+          onMouseDown: e => e.preventDefault(),
+          onClick: e => {
+            e.preventDefault();
+            e.stopPropagation();
+            onChange(opt.value);
+          },
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+            className: "customify-cs__layout-btn-icon",
+            dangerouslySetInnerHTML: {
+              __html: opt.svg
+            }
+          })
+        }, opt.value);
+      })]
+    })]
+  });
+}
+function GapField({
+  value,
+  onChange
+}) {
+  const wrapRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const v = value && typeof value === 'object' ? value : {
+    unit: 'em',
+    value: 1
+  };
+  const uid = (0,external_wp_element_namespaceObject.useMemo)(() => `gap-${Date.now()}-${Math.floor(Math.random() * 1000)}`, []);
+  const def = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    unit: 'em',
+    value: 1
+  }), []);
+
+  // Step depends on the current unit — em uses fractional 0.1 steps,
+  // px uses whole-pixel 1 steps.
+  const stepFor = unit => unit === 'px' ? 1 : 0.1;
+  const step = stepFor(v.unit || 'em');
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!wrapRef.current || !window.customifyField || !window.jQuery) return;
+    const $wrap = window.jQuery(wrapRef.current);
+    window.customifyField.initSlider($wrap);
+    const fieldDef = {
+      name: 'gap',
+      type: 'slider',
+      default: def,
+      min: 0,
+      max: 100,
+      step: 1
+    };
+    const $group = $wrap.closest('.customify--group-field');
+    const handler = () => {
+      const next = window.customifyField.getValue(fieldDef, $group);
+      onChange(next);
+    };
+    $wrap.on('change.cs data-change.cs', 'input, select, textarea', handler);
+    return () => {
+      $wrap.off('change.cs data-change.cs');
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sync the jQuery-UI slider's step option whenever the unit changes —
+  // initSlider only reads data-step on first mount, so we have to call
+  // .slider('option', ...) for later updates. The HTML number input's
+  // step attribute is React-managed via the `step` prop below.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!wrapRef.current || !window.jQuery) return;
+    const $slider = window.jQuery('.customify-input-slider', wrapRef.current);
+    if (!$slider.length || !$slider.slider) return;
+    try {
+      if ($slider.hasClass('ui-slider')) {
+        $slider.slider('option', 'step', step);
+      }
+    } catch (_) {}
+  }, [step]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "customify--group-field ft--slider",
+    "data-field-name": "gap",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-field-header customify-field-heading",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("label", {
+        className: "customize-control-title",
+        children: (0,external_wp_i18n_namespaceObject.__)('Gap', 'customify')
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-field-settings-inner",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        ref: wrapRef,
+        className: "customify-input-slider-wrapper",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+          className: "customify-input-slider",
+          "data-min": "0",
+          "data-default": JSON.stringify(def),
+          "data-step": step,
+          "data-max": "100"
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+          type: "number",
+          min: "0",
+          step: step,
+          max: "100",
+          className: "customify--slider-input customify-input change-by-js",
+          "data-name": "gap-value",
+          defaultValue: v.value ?? '',
+          size: 4
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+          className: "customify--css-unit",
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
+            className: v.unit === 'em' ? 'customify--label-active' : '',
+            children: ["em", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+              type: "radio",
+              className: "customify-input customify--label-parent change-by-js",
+              "data-name": "gap-unit",
+              name: `r${uid}`,
+              value: "em",
+              defaultChecked: v.unit === 'em'
+            })]
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("label", {
+            className: v.unit === 'px' ? 'customify--label-active' : '',
+            children: ["px", /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
+              type: "radio",
+              className: "customify-input customify--label-parent change-by-js",
+              "data-name": "gap-unit",
+              name: `r${uid}`,
+              value: "px",
+              defaultChecked: v.unit === 'px'
+            })]
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+            href: "#",
+            className: "reset",
+            title: (0,external_wp_i18n_namespaceObject.__)('Reset', 'customify'),
+            onClick: e => e.preventDefault()
+          })]
+        })]
+      })
+    })]
+  });
+}
+function PaddingField({
+  value,
+  onChange
+}) {
+  const ref = (0,external_wp_element_namespaceObject.useRef)(null);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!ref.current || !window.customifyField || !window.jQuery) return;
+    const $el = window.jQuery(ref.current);
+    const fieldDef = {
+      name: 'padding',
+      type: 'css_ruler',
+      default: {
+        unit: 'em',
+        top: '',
+        right: '',
+        bottom: '',
+        left: '',
+        link: 1
+      },
+      label: (0,external_wp_i18n_namespaceObject.__)('Padding', 'customify')
+    };
+    window.customifyField.devices = ['desktop'];
+    window.customifyField.addFields([fieldDef], {
+      padding: value || {}
+    }, $el, () => {
+      const next = window.customifyField.getValue(fieldDef, $el.find('.customify--group-field[data-field-name="padding"]'));
+      onChange(next);
+    });
+    return () => {
+      $el.empty();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    ref: ref
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Accordion item
+// ---------------------------------------------------------------------------
+
+function AccordionItem({
+  colKey,
+  label,
+  children
+}) {
+  const [open, setOpen] = (0,external_wp_element_namespaceObject.useState)(false);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: `customify-cs__item${open ? ' is-open' : ''}`,
+    "data-col": colKey,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "customify-cs__head",
+      role: "button",
+      tabIndex: 0,
+      onClick: () => setOpen(v => !v),
+      onKeyDown: e => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          setOpen(v => !v);
+        }
+      },
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        className: "customify-cs__head-label",
+        children: label
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        className: "customify-cs__head-toggle",
+        dangerouslySetInnerHTML: {
+          __html: CHEVRON_DOWN_SVG
+        }
+      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-cs__body",
+      children: children
+    })]
+  });
+}
+
+// ---------------------------------------------------------------------------
+// App
+// ---------------------------------------------------------------------------
+
+function App({
+  controlId,
+  colLayoutSetting,
+  columnKeys,
+  defaultValue,
+  hideLayout,
+  defaultLayout
+}) {
+  const [value, setValue] = useCustomizeSetting(controlId, defaultValue);
+  const count = useColLayoutCount(colLayoutSetting, Math.min(3, columnKeys.length));
+  const device = usePreviewedDevice();
+  const [open, setOpen] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [remountKey, setRemountKey] = (0,external_wp_element_namespaceObject.useState)(0);
+  const rootRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const activeCols = columnKeys.slice(0, Math.max(1, Math.min(columnKeys.length, count)));
+  const deviceData = value && value[device] || {};
+
+  // Resolve default layout for a given column index.
+  //
+  // If the field config sets `default_layout` (e.g. footer rows = 'stack'),
+  // every column inherits that value as its default. Otherwise fall back to
+  // the position-based default that mirrors the PHP CSS generator:
+  //   first → flex-start, last → flex-end, middle → flex-center
+  //   (single active column → flex-start).
+  function defaultLayoutFor(idx) {
+    if (defaultLayout) return defaultLayout;
+    if (activeCols.length === 1) return 'flex-start';
+    if (idx === 0) return 'flex-start';
+    if (idx === activeCols.length - 1) return 'flex-end';
+    return 'flex-center';
+  }
+  function updateColumn(colKey, partial) {
+    setValue(prev => {
+      const next = {
+        ...(prev || {})
+      };
+      const cur = next[device] && typeof next[device] === 'object' ? next[device] : {};
+      next[device] = {
+        ...cur,
+        [colKey]: {
+          ...(cur[colKey] || {}),
+          ...partial
+        }
+      };
+      return next;
+    });
+  }
+  function reset(e) {
+    e.preventDefault();
+    setValue(defaultValue || {});
+    setRemountKey(k => k + 1);
+  }
+
+  // Close only when the press STARTED outside the wrapper.
+  //
+  // Record the press origin on `pointerdown` (the very first event of any
+  // click/tap, before any React state update or jQuery re-render). The
+  // later `click` event then just reads that flag — so even if the click
+  // target gets replaced/detached by a setting change in between, the
+  // "outside?" decision is the one we made at press time, not based on
+  // the (now possibly stale) click target.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!open) return;
+    let startedInside = false;
+    function pointerDown(e) {
+      const root = rootRef.current;
+      startedInside = !!(root && e.target && root.contains(e.target));
+    }
+    function maybeClose(e) {
+      if (startedInside) return;
+      const t = e.target;
+      // Be defensive: if for some reason pointerDown didn't fire (e.g.
+      // keyboard activation), fall back to checking via closest()
+      // against the live DOM.
+      if (t && t.closest && t.closest('.customify-cs') === rootRef.current) return;
+      if (t && t.closest && (t.closest('.wp-picker-container') || t.closest('.select2-container') || t.closest('.iris-picker') || t.closest('.components-popover') || t.closest('.ui-slider-handle'))) return;
+      setOpen(false);
+    }
+    document.addEventListener('pointerdown', pointerDown, true);
+    document.addEventListener('click', maybeClose);
+    return () => {
+      document.removeEventListener('pointerdown', pointerDown, true);
+      document.removeEventListener('click', maybeClose);
+    };
+  }, [open]);
+
+  // Add `modal--opening` to the outer wrapper that owns the `.customify-actions`
+  // absolute positioning context so the existing SCSS chevron/X icon swap fires.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    const wrapper = root.closest('.customify--settings-wrapper');
+    if (!wrapper) return;
+    wrapper.classList.toggle('modal--opening', open);
+    return () => wrapper.classList.remove('modal--opening');
+  }, [open]);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: `customify-cs${open ? ' modal--opening' : ''}`,
+    ref: rootRef,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "customify-actions",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+        href: "#",
+        className: "action--reset",
+        style: {
+          display: open ? 'inline-block' : 'none'
+        },
+        title: (0,external_wp_i18n_namespaceObject.__)('Reset to default', 'customify'),
+        onClick: reset,
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "dashicons dashicons-image-rotate"
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+        href: "#",
+        className: "action--edit",
+        title: (0,external_wp_i18n_namespaceObject.__)('Toggle edit panel', 'customify'),
+        onClick: e => {
+          e.preventDefault();
+          setOpen(v => !v);
+        },
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "dashicons dashicons-edit"
+        })
+      })]
+    }), open && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "customify-modal-settings",
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: "customify-modal-settings--inner",
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+          className: "customify-modal-settings--fields",
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+            className: "customify-cs__device-note",
+            children: [(0,external_wp_i18n_namespaceObject.__)('Editing for: ', 'customify'), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("strong", {
+              children: device === 'mobile' ? (0,external_wp_i18n_namespaceObject.__)('Mobile', 'customify') : (0,external_wp_i18n_namespaceObject.__)('Desktop', 'customify')
+            })]
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+            className: "customify-cs__accordion",
+            children: activeCols.map((colKey, idx) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(AccordionItem, {
+              colKey: colKey,
+              label: `Column ${idx + 1}`,
+              children: [!hideLayout && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LayoutButtons, {
+                value: (deviceData[colKey] || {}).layout,
+                defaultLayout: defaultLayoutFor(idx),
+                onChange: v => updateColumn(colKey, {
+                  layout: v
+                })
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(GapField, {
+                value: (deviceData[colKey] || {}).gap,
+                onChange: v => updateColumn(colKey, {
+                  gap: v
+                })
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PaddingField, {
+                value: (deviceData[colKey] || {}).padding,
+                onChange: v => updateColumn(colKey, {
+                  padding: v
+                })
+              })]
+            }, `${device}-${remountKey}-${colKey}`))
+          })]
+        })
+      })
+    }, `${device}-${remountKey}`)]
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Mount
+// ---------------------------------------------------------------------------
+
+function parseAttr(raw, fallback) {
+  if (!raw) return fallback;
+  try {
+    return JSON.parse(raw);
+  } catch (_) {}
+  return fallback;
+}
+function mountOne(node) {
+  if (node.dataset.csMounted === '1') return;
+  node.dataset.csMounted = '1';
+  const controlId = node.dataset.control || '';
+  const colLayoutSetting = node.dataset.colLayout || '';
+  const columnKeys = parseAttr(node.dataset.columnKeys, ['left', 'center', 'right', 'col4', 'col5']);
+  const defaultValue = parseAttr(node.dataset.default, {});
+  const hideLayout = node.dataset.hideLayout === '1';
+  const defaultLayout = node.dataset.defaultLayout || '';
+  if (!controlId) return;
+  (0,external_wp_element_namespaceObject.render)(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(App, {
+    controlId: controlId,
+    colLayoutSetting: colLayoutSetting,
+    columnKeys: columnKeys,
+    defaultValue: defaultValue,
+    hideLayout: hideLayout,
+    defaultLayout: defaultLayout
+  }), node);
+}
+function mountColumnsSettings() {
+  document.querySelectorAll('.customify-columns-settings-mount').forEach(mountOne);
+}
+function observeAndMount() {
+  mountColumnsSettings();
+  const target = document.querySelector('#customize-theme-controls');
+  if (!target || typeof MutationObserver === 'undefined') return;
+  new MutationObserver(() => mountColumnsSettings()).observe(target, {
+    childList: true,
+    subtree: true
+  });
+}
+;// ./src/backend/customizer/js/control.js
+// React modules bundled into this control bundle.
+
 (function (api) {
   // Extends our custom "example-1" section.
   api.sectionConstructor["customify-pro"] = api.Section.extend({
@@ -2649,6 +3290,10 @@
       initStyling();
       initModal();
       intTypos();
+      // Expose helpers used by React-based controls (e.g. Column Settings)
+      // to drive the jQuery slider + css_ruler renderers.
+      window.customifyField = customifyField;
+      observeAndMount();
     });
 
     // Add reset button to sections

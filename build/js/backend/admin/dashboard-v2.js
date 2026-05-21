@@ -1,25 +1,369 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
 
-/***/ 685:
-/***/ (function(__unused_webpack_module, __unused_webpack___webpack_exports__, __webpack_require__) {
-
-
-;// external "React"
-var external_React_namespaceObject = window["React"];
-var external_React_namespaceObject_0 = /*#__PURE__*/__webpack_require__.t(external_React_namespaceObject, 2);
 ;// external ["wp","element"]
 var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// external ["wp","hooks"]
 var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
+;// external "ReactJSXRuntime"
+var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HashRouter.jsx
+/**
+ * Minimal hash router for the dashboard SPA.
+ *
+ * Why not `@wordpress/router`? At time of extraction WP's package is
+ * query-param based (`?path=/welcome`); the kit's SPEC §6.2 commits to a
+ * hash-based URL scheme (`#welcome`) so deep links stay bookmark-stable
+ * across consumer plugins that don't own the page path. Rolling a thin
+ * `hashchange` listener keeps the contract simple.
+ *
+ * Route-table shape (locked, SPEC §5.1 + §6.3):
+ *
+ *   { '#welcome': { component, type: 'page' | 'list' | 'editor',
+ *                   label?, parent?, ...extra } }
+ *
+ * Hash format: `#route` or `#route/segment/:id`. `useRoute()` returns
+ * `{ route, entry, params }` where `route` is the matching template
+ * (e.g. `#conditions/:id`) and `params` resolves the id map.
+ *
+ * Dirty-state coupling lives behind `NavigationGuardContext` — P3's
+ * `useDirtyState` registers a guard via the provider; this module knows
+ * nothing about the dirty buffer.
+ */
+
+
+
+const HASH_PREFIX = '#';
+const DEFAULT_INITIAL_ROUTE = '#welcome';
+
+/* -------------------------------------------------------------------------
+ * Low-level location helpers
+ * ------------------------------------------------------------------------- */
+
+function readHash(fallback = DEFAULT_INITIAL_ROUTE) {
+  if (typeof window === 'undefined') {
+    return fallback;
+  }
+  const raw = window.location.hash || fallback;
+  return raw.startsWith(HASH_PREFIX) ? raw : HASH_PREFIX + raw;
+}
+function HashRouter_navigate(hash) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  const target = hash.startsWith(HASH_PREFIX) ? hash : HASH_PREFIX + hash;
+  if (window.location.hash !== target) {
+    window.location.hash = target;
+  }
+}
+function stripHash(value) {
+  return value && value.startsWith(HASH_PREFIX) ? value.slice(1) : value;
+}
+
+/* -------------------------------------------------------------------------
+ * Hooks — subscription + matching
+ * ------------------------------------------------------------------------- */
+
+/**
+ * Subscribe to `hashchange` and return the current hash.
+ *
+ * @param {string} [initialRoute='#welcome'] Default returned when no hash is set.
+ */
+function useHash(initialRoute = DEFAULT_INITIAL_ROUTE) {
+  const [hash, setHash] = (0,external_wp_element_namespaceObject.useState)(() => readHash(initialRoute));
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    const handler = () => setHash(readHash(initialRoute));
+    window.addEventListener('hashchange', handler);
+    return () => window.removeEventListener('hashchange', handler);
+  }, [initialRoute]);
+  return hash;
+}
+
+/**
+ * Match the current hash against a route table. Returns the matched
+ * entry + extracted `:param` values, or `null` when nothing matches.
+ *
+ * Pattern: `#conditions/:id` matches `#conditions/42` with
+ * `params: { id: '42' }`. Static segments take precedence over params.
+ *
+ * @param {string}                  hash   Current `#...` hash.
+ * @param {Record<string, unknown>} routes Hash → route-entry table.
+ * @return {{ route: string, entry: unknown, params: Record<string, string> } | null}
+ *         Matched entry + params, or `null` when no pattern matches.
+ */
+function matchRoute(hash, routes) {
+  if (!routes || typeof routes !== 'object') {
+    return null;
+  }
+  if (routes[hash]) {
+    return {
+      route: hash,
+      entry: routes[hash],
+      params: {}
+    };
+  }
+  const incoming = stripHash(hash).split('/').filter(Boolean);
+  for (const pattern of Object.keys(routes)) {
+    const patternSegs = stripHash(pattern).split('/').filter(Boolean);
+    if (patternSegs.length !== incoming.length) {
+      continue;
+    }
+    const params = {};
+    let ok = true;
+    for (let i = 0; i < patternSegs.length; i++) {
+      const seg = patternSegs[i];
+      if (seg.startsWith(':')) {
+        params[seg.slice(1)] = decodeURIComponent(incoming[i]);
+      } else if (seg !== incoming[i]) {
+        ok = false;
+        break;
+      }
+    }
+    if (ok) {
+      return {
+        route: pattern,
+        entry: routes[pattern],
+        params
+      };
+    }
+  }
+  return null;
+}
+
+/**
+ * High-level hook consumed by `DashboardShell`. Returns the resolved
+ * route or falls back to `initialRoute` when the hash is unknown / empty.
+ *
+ * @param {Object} routes                    Hash → route-entry table.
+ * @param {string} [initialRoute='#welcome'] Default route when nothing matches.
+ */
+function useRoute(routes, initialRoute = DEFAULT_INITIAL_ROUTE) {
+  const hash = useHash(initialRoute);
+  const fallback = (0,external_wp_element_namespaceObject.useMemo)(() => matchRoute(initialRoute, routes) || {
+    route: initialRoute,
+    entry: null,
+    params: {}
+  }, [routes, initialRoute]);
+  const matched = (0,external_wp_element_namespaceObject.useMemo)(() => matchRoute(hash, routes), [hash, routes]);
+  const result = matched || fallback;
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!matched && hash !== fallback.route) {
+      HashRouter_navigate(fallback.route);
+    }
+  }, [hash, matched, fallback.route]);
+  return result;
+}
+
+/**
+ * Top-level tab id for highlighting the tab strip.
+ *
+ *   activeTabId( '#conditions/42' ) === 'conditions'
+ *
+ * @param {string} route Hash route, with or without leading `#`.
+ * @return {string} First path segment (the tab id), or `''` when empty.
+ */
+function activeTabId(route) {
+  const stripped = stripHash(route);
+  return stripped.split('/')[0] || '';
+}
+
+/* -------------------------------------------------------------------------
+ * Navigation guard — pluggable predicate that vetoes navigation.
+ * P3's `useDirtyState` will register a guard via the provider; for P1
+ * the default is "always allow".
+ * ------------------------------------------------------------------------- */
+
+const ALWAYS_ALLOW = () => true;
+const NavigationGuardContext = (0,external_wp_element_namespaceObject.createContext)(ALWAYS_ALLOW);
+
+/**
+ * Wrap the dashboard tree with a navigation guard so dirty buffers,
+ * unsaved edits, or any other "can leave this route" predicate can
+ * intercept tab / link clicks. The guard receives no arguments and
+ * returns `true` to allow nav, `false` to cancel.
+ *
+ * @param {Object}                    props
+ * @param {() => boolean}             props.guard    Predicate, returns `true` to allow.
+ * @param {import('react').ReactNode} props.children
+ */
+function NavigationGuardProvider({
+  guard,
+  children
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NavigationGuardContext.Provider, {
+    value: typeof guard === 'function' ? guard : ALWAYS_ALLOW,
+    children: children
+  });
+}
+
+/**
+ * Click handler factory for tab strip / Link-style components.
+ * `onClick={ useNavigate()( '#welcome' ) }` is the call shape — curried
+ * to match the call sites extracted from Blocksify Free's App.js and
+ * SubNav. Calls `preventDefault` so the browser doesn't scroll to a
+ * named anchor; consults the navigation guard before navigating.
+ */
+function useNavigate() {
+  const guard = (0,external_wp_element_namespaceObject.useContext)(NavigationGuardContext);
+  return (0,external_wp_element_namespaceObject.useCallback)(hash => event => {
+    if (event) {
+      event.preventDefault();
+    }
+    if (!guard()) {
+      return;
+    }
+    HashRouter_navigate(hash);
+  }, [guard]);
+}
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/useFocusOnRouteChange.js
+/**
+ * useFocusOnRouteChange — SPA focus management.
+ *
+ * When the active route changes, move focus to the new view's main
+ * landmark so screen-reader users get a clear signal that content
+ * swapped. Without this, focus stays on the clicked tab anchor and AT
+ * users don't know the page advanced.
+ *
+ * The hook returns a ref to attach to the focus target — typically
+ * `<main tabIndex={ -1 }>`. The initial mount doesn't focus — we don't
+ * want to steal the user's normal browser focus on first paint, only
+ * on subsequent route transitions.
+ *
+ * `preventScroll: true` is critical: without it the browser scrolls the
+ * focused `<main>` into view on every route change, which yanks long
+ * content to the top of the viewport. AT users still get the landmark
+ * announcement because the focus moved.
+ */
+
+
+function useFocusOnRouteChange(route) {
+  const ref = (0,external_wp_element_namespaceObject.useRef)(null);
+  const initial = (0,external_wp_element_namespaceObject.useRef)(true);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (initial.current) {
+      initial.current = false;
+      return;
+    }
+    if (ref.current && typeof ref.current.focus === 'function') {
+      ref.current.focus({
+        preventScroll: true
+      });
+    }
+  }, [route]);
+  return ref;
+}
+/* harmony default export */ var core_useFocusOnRouteChange = ((/* unused pure expression or super */ null && (useFocusOnRouteChange)));
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/TabStrip.jsx
+/**
+ * TabStrip — Tier-1 layout primitive (SPEC §5.13). Zero translatable
+ * strings: every label and the `aria-label` arrive via props.
+ *
+ * Rendered inside `DashboardShell`'s header, but exported standalone so
+ * Pro plugins / future consumers can repurpose the visual. DOM uses the
+ * SPEC §16.2 locked class names (`pmdk-dashboard__tabs`,
+ * `pmdk-dashboard__tab`) — these classes are the kit's public CSS
+ * surface and consumers target them for hover / focus restyles.
+ *
+ * Slot shape:
+ *
+ *   <TabStrip
+ *     items={ [ { id, label, hash } ] }
+ *     activeId={ 'welcome' }
+ *     ariaLabel={ 'Dashboard sections' }   // already translated
+ *     onSelect={ ({ id, hash, event }) => void }  // optional override
+ *   />
+ *
+ * Default click behavior calls `useNavigate()`, which honors any active
+ * `NavigationGuardProvider` (P3's dirty-state hook wraps via this).
+ * Override `onSelect` to take full control (e.g. custom logging /
+ * preventDefault skip).
+ */
+
+
+
+
+function TabStrip({
+  items,
+  activeId,
+  ariaLabel,
+  onSelect,
+  className
+}) {
+  const onNavigate = useNavigate();
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+  const classes = 'pmdk-dashboard__tabs' + (className ? ' ' + className : '');
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("nav", {
+    className: classes,
+    "aria-label": ariaLabel,
+    children: items.map(item => {
+      const isActive = item.id === activeId;
+      const tabClass = 'pmdk-dashboard__tab' + (isActive ? ' is-active' : '');
+      const handleClick = event => {
+        if (typeof onSelect === 'function') {
+          onSelect({
+            id: item.id,
+            hash: item.hash,
+            event
+          });
+          return;
+        }
+        onNavigate(item.hash)(event);
+      };
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+        href: item.hash,
+        className: tabClass,
+        "aria-current": isActive ? 'page' : undefined,
+        onClick: handleClick,
+        children: item.label
+      }, item.id);
+    })
+  });
+}
 ;// external ["wp","components"]
 var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// external ["wp","primitives"]
 var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// external "ReactJSXRuntime"
-var external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ../../../../../../../dashboard-kit/node_modules/@wordpress/icons/build-module/library/help.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/help.mjs
 // packages/icons/src/library/help.tsx
 
 
@@ -27,7 +371,7 @@ var help_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=help.mjs.map
 
-;// ../../../../../../../dashboard-kit/node_modules/@wordpress/icons/build-module/library/page.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/page.mjs
 // packages/icons/src/library/page.tsx
 
 
@@ -38,7 +382,7 @@ var page_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.j
 
 //# sourceMappingURL=page.mjs.map
 
-;// ../../../../../../../dashboard-kit/node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/chevron-right.mjs
 // packages/icons/src/library/chevron-right.tsx
 
 
@@ -46,7 +390,7 @@ var chevron_right_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespac
 
 //# sourceMappingURL=chevron-right.mjs.map
 
-;// ../../../../../../../dashboard-kit/node_modules/@wordpress/icons/build-module/library/external.mjs
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/external.mjs
 // packages/icons/src/library/external.tsx
 
 
@@ -54,7 +398,845 @@ var external_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObje
 
 //# sourceMappingURL=external.mjs.map
 
-;// ../../../../../../../dashboard-kit/node_modules/@wordpress/icons/build-module/library/check.mjs
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createI18nBag.js
+/**
+ * createI18nBag — merge a component's English defaults with consumer
+ * overrides. Tier-2 components call this once in their render bodies so
+ * the labels prop becomes optional: consumers translate the strings they
+ * care about and inherit kit defaults for the rest.
+ *
+ * Companion to the per-component string templates in `templates/strings/`
+ * (kit-generated; see SPEC §5.13 + §6.2). The template files give the
+ * consumer something concrete to copy into their own `_kit-strings.js`;
+ * this helper is the runtime side.
+ *
+ * @example
+ *   const DEFAULTS = { loading: 'Loading…', noResults: 'No items.' };
+ *   function EntityListPage( { labels } ) {
+ *       const L = createI18nBag( DEFAULTS, labels );
+ *       return <p>{ L.loading }</p>;
+ *   }
+ *
+ * @template {Record<string, string>} T
+ * @param {T}          defaults    Kit's English fallback strings.
+ * @param {Partial<T>} [overrides] Consumer-supplied translated strings.
+ * @return {T} Merged labels.
+ */
+function createI18nBag(defaults, overrides) {
+  if (!overrides || typeof overrides !== 'object') {
+    return {
+      ...defaults
+    };
+  }
+  return {
+    ...defaults,
+    ...overrides
+  };
+}
+/* harmony default export */ var core_createI18nBag = ((/* unused pure expression or super */ null && (createI18nBag)));
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/HelpPanel.jsx
+/**
+ * HelpPanel — Tier-2 page component (SPEC §5.13). Compact help popover
+ * anchored to a `?` button. Consumers pass `items` (resource links) and
+ * optionally `labels` (English fallbacks shipped); the panel handles
+ * hash-vs-external link detection + SPA navigation for hash hrefs.
+ *
+ * Built on `<Dropdown>` from `@wordpress/components` (NOT `<Modal>`):
+ * a small anchored popover is right-sized for 4-6 resource links;
+ * Dropdown handles open / close + focus management + click-outside +
+ * Esc dismissal for free.
+ *
+ * SPEC §16.2 wraps the popover content in `.pmdk-help-panel`. The
+ * `<Dropdown>` toggle is not part of the locked class surface — the
+ * trigger lives inside `.pmdk-dashboard__help-trigger` for theme-level
+ * targeting consistent with `.pmdk-dashboard__brand` / `__tabs`.
+ *
+ * Items:
+ *
+ *   {
+ *     id: string,            // unique key for React
+ *     label: string,         // already-translated visible text
+ *     href: string,          // '#hash' OR 'https://…'
+ *     external?: boolean,    // override auto-detect (default: !href.startsWith('#'))
+ *   }
+ *
+ * Hash items navigate via the kit router (honors `NavigationGuardProvider`).
+ * External items open in a new tab with `rel="noopener noreferrer"`.
+ */
+
+
+
+
+
+
+
+const DEFAULT_LABELS = {
+  triggerLabel: 'Open help panel',
+  heading: 'Help'
+};
+function isHashHref(href) {
+  return typeof href === 'string' && href.startsWith('#');
+}
+function HelpPanel({
+  items,
+  labels,
+  icon = help_default,
+  itemIcon = page_default
+}) {
+  const onNavigate = useNavigate();
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+  const L = createI18nBag(DEFAULT_LABELS, labels);
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Dropdown, {
+    className: "pmdk-dashboard__help-trigger",
+    contentClassName: "pmdk-help-panel",
+    popoverProps: {
+      placement: 'bottom-end',
+      offset: 8
+    },
+    renderToggle: ({
+      isOpen,
+      onToggle
+    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      className: "pmdk-dashboard__help-trigger-button",
+      icon: icon,
+      label: L.triggerLabel,
+      onClick: onToggle,
+      "aria-expanded": isOpen
+    }),
+    renderContent: ({
+      onClose
+    }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "pmdk-help-panel__panel",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        className: "pmdk-help-panel__heading",
+        children: L.heading
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+        className: "pmdk-help-panel__list",
+        children: items.map(item => {
+          const isHash = isHashHref(item.href);
+          const isExternal = typeof item.external === 'boolean' ? item.external : !isHash;
+          return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
+            className: "pmdk-help-panel__item",
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("a", {
+              className: "pmdk-help-panel__link",
+              href: item.href,
+              target: isExternal ? '_blank' : undefined,
+              rel: isExternal ? 'noopener noreferrer' : undefined,
+              onClick: event => {
+                if (isHash) {
+                  onNavigate(item.href)(event);
+                }
+                onClose();
+              },
+              children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+                className: "pmdk-help-panel__icon",
+                icon: item.icon || itemIcon,
+                size: 18
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+                className: "pmdk-help-panel__label",
+                children: item.label
+              }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+                className: "pmdk-help-panel__chevron",
+                icon: isHash ? chevron_right_default : external_default,
+                size: 16
+              })]
+            })
+          }, item.id);
+        })
+      })]
+    })
+  });
+}
+;// external ["wp","data"]
+var external_wp_data_namespaceObject = window["wp"]["data"];
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/SnackbarSlot.jsx
+/**
+ * SnackbarSlot — bottom-centered transient notices slot bound to WP's
+ * `core/notices` data store. Renders snackbar-typed notices in a fixed
+ * overlay so they survive route changes without being inside the
+ * active page tree.
+ *
+ * Why the store name as a string instead of `import from
+ * '@wordpress/notices'`? Avoids adding a peer dep for what is really
+ * just a string handle into a globally-registered data store. WP admin
+ * registers `core/notices` on page load; the kit just consumes the
+ * descriptor.
+ *
+ * Consumers create snackbars via the standard WP idiom:
+ *
+ *   import { dispatch } from '@wordpress/data';
+ *   dispatch( 'core/notices' ).createSuccessNotice( __( 'Saved.', 'my-plugin' ), { type: 'snackbar' } );
+ *
+ * The kit just renders whatever has `type === 'snackbar'` in the store.
+ */
+
+
+
+
+const NOTICES_STORE = 'core/notices';
+function SnackbarSlot({
+  className
+}) {
+  const notices = (0,external_wp_data_namespaceObject.useSelect)(select => select(NOTICES_STORE)?.getNotices() ?? [], []);
+  // `useDispatch` against an unregistered store returns `null` in older
+  // WP data versions + in vitest/jsdom (no WP runtime). Default to a
+  // no-op so the kit doesn't crash when the consumer happens not to
+  // have @wordpress/notices registered (typical in unit tests).
+  const dispatchers = (0,external_wp_data_namespaceObject.useDispatch)(NOTICES_STORE) || {};
+  const removeNotice = dispatchers.removeNotice || (() => undefined);
+  const snackbarNotices = notices.filter(n => n.type === 'snackbar');
+  const classes = 'pmdk-dashboard__snackbar' + (className ? ' ' + className : '');
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SnackbarList, {
+    className: classes,
+    notices: snackbarNotices,
+    onRemove: removeNotice
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/DashboardShell.jsx
+/**
+ * DashboardShell — Tier-1 layout primitive (SPEC §5.13). Composes the
+ * header (brand + tabs + version + help slot) + a focus-managed main
+ * region + a fixed-position snackbar slot.
+ *
+ * Resolves the active route internally via `useRoute( routes,
+ * initialRoute )` so consumers don't have to thread the matched entry
+ * through props. Renders `entry.component` with `{ route, params,
+ * entry }` so consumer components can access arbitrary fields the
+ * consumer attached to the route entry (e.g. Blocksify's `proFeature`
+ * marker — consumer-specific; kit forwards without inspecting).
+ *
+ * Every visible string lives behind a prop. The shell renders zero
+ * translatable text on its own.
+ *
+ * SPEC §16.2 locked classes used here:
+ *   .pmdk-dashboard
+ *   .pmdk-dashboard__header
+ *   .pmdk-dashboard__brand
+ *   .pmdk-dashboard__main
+ * Plus non-locked styling hooks:
+ *   .pmdk-dashboard__brand-icon, __brand-text, __brand-link,
+ *   __header-right, .pmdk-dashboard__version
+ */
+
+
+
+
+
+
+
+
+function renderMain({
+  ActiveComponent,
+  NotFound,
+  route,
+  params,
+  entry,
+  fallback
+}) {
+  if (ActiveComponent) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ActiveComponent, {
+      route: route,
+      params: params,
+      entry: entry
+    });
+  }
+  if (NotFound) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NotFound, {
+      route: route,
+      params: params
+    });
+  }
+  return fallback || null;
+}
+function DashboardShell({
+  // Brand cluster
+  brand,
+  // Tabs
+  tabs,
+  tabsAriaLabel,
+  // Routes
+  routes,
+  initialRoute = '#welcome',
+  // Layout — `'narrow'` (default) caps the reading column at 1100px;
+  // `'wide'` removes the cap so DataViews-heavy pages can fill the
+  // viewport. SPEC §5.1 + §11 hack #3. See DashboardShell.css.
+  containerWidth = 'narrow',
+  // Optional version anchor
+  versionLabel,
+  versionHref,
+  versionAriaLabel,
+  // Optional help cluster
+  helpItems,
+  helpLabels,
+  helpIcon,
+  helpItemIcon,
+  // Fallbacks when route doesn't resolve a component
+  notFoundComponent: NotFound,
+  fallback,
+  // Optional snackbar override
+  snackbar
+}) {
+  const {
+    route,
+    entry,
+    params
+  } = useRoute(routes, initialRoute);
+  const onNavigate = useNavigate();
+  const mainRef = useFocusOnRouteChange(route);
+  const ActiveComponent = entry?.component;
+  const activeId = activeTabId(route);
+  const brandName = brand?.name;
+  const brandIcon = brand?.icon;
+  const brandHref = brand?.href;
+  const brandAriaLabel = brand?.ariaLabel;
+  const safeContainerWidth = containerWidth === 'wide' ? 'wide' : 'narrow';
+
+  // Inner content of the `<h1>` brand cluster. Reused twice so the
+  // linked + static variants don't duplicate the icon/text markup.
+  const brandContent = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: [brandIcon && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-dashboard__brand-icon"
+      /* eslint-disable-next-line react/no-danger -- SVG is consumer-controlled boot data, not user input. */,
+      dangerouslySetInnerHTML: {
+        __html: brandIcon
+      }
+    }), brandName && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-dashboard__brand-text",
+      children: brandName
+    })]
+  });
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    className: "pmdk-dashboard",
+    "data-container-width": safeContainerWidth,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("header", {
+      className: "pmdk-dashboard__header",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h1", {
+        className: "pmdk-dashboard__brand",
+        children: brandHref ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+          className: "pmdk-dashboard__brand-link",
+          href: brandHref,
+          "aria-label": brandAriaLabel,
+          onClick: onNavigate(brandHref),
+          children: brandContent
+        }) : brandContent
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TabStrip, {
+        items: tabs,
+        activeId: activeId,
+        ariaLabel: tabsAriaLabel
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+        className: "pmdk-dashboard__header-right",
+        children: [versionLabel && (versionHref ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+          className: "pmdk-dashboard__version",
+          href: versionHref,
+          "aria-label": versionAriaLabel,
+          onClick: onNavigate(versionHref),
+          children: versionLabel
+        }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "pmdk-dashboard__version",
+          "aria-label": versionAriaLabel,
+          children: versionLabel
+        })), Array.isArray(helpItems) && helpItems.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HelpPanel, {
+          items: helpItems,
+          labels: helpLabels,
+          icon: helpIcon,
+          itemIcon: helpItemIcon
+        })]
+      })]
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("main", {
+      ref: mainRef,
+      className: "pmdk-dashboard__main",
+      role: "main",
+      tabIndex: -1,
+      children: renderMain({
+        ActiveComponent,
+        NotFound,
+        route,
+        params,
+        entry,
+        fallback
+      })
+    }), snackbar !== undefined ? snackbar : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SnackbarSlot, {})]
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/BootDataLoader.jsx
+/**
+ * BootDataLoader — read the consumer's PHP-localized boot payload off
+ * `window[ bootGlobal ]` and ship it down the component tree via React
+ * context. Single accessor pattern keeps the rest of the kit ignorant of
+ * which `window` key any given consumer chose.
+ *
+ * Shape contract is consumer-defined (the kit imposes no required keys
+ * — that's the consumer's PHP). Components that need a value pull it
+ * via `useBoot()`; missing keys are the consumer's bug to surface.
+ */
+
+
+
+const BootContext = (0,external_wp_element_namespaceObject.createContext)({});
+
+/**
+ * Read the boot payload off `window`. Safe under SSR / module-eval —
+ * returns `{}` if `window` is undefined or the key isn't set.
+ *
+ * @param {string} bootGlobal Window key name, e.g. `'customifyDashboard'`.
+ * @return {Record<string, unknown>} Boot payload (empty object on miss).
+ */
+function readBoot(bootGlobal) {
+  if (typeof window === 'undefined' || !bootGlobal) {
+    return {};
+  }
+  const raw = window[bootGlobal];
+  return raw && typeof raw === 'object' ? raw : {};
+}
+
+/**
+ * Provider — wraps the dashboard tree with the resolved boot snapshot.
+ * `mountDashboard` does this once at the top; everything below reads via
+ * `useBoot()`.
+ *
+ * @param {Object}                    props
+ * @param {Record<string, unknown>}   props.boot     Resolved boot payload.
+ * @param {import('react').ReactNode} props.children
+ */
+function BootProvider({
+  boot,
+  children
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BootContext.Provider, {
+    value: boot || {},
+    children: children
+  });
+}
+
+/** Consume the boot snapshot from anywhere inside the dashboard tree. */
+function useBoot() {
+  return (0,external_wp_element_namespaceObject.useContext)(BootContext);
+}
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/createFilterNamespace.js
+/**
+ * Build the per-consumer filter channel-name map.
+ *
+ * Each consumer (Customify Theme, Blocksify Free, future plugins) calls
+ * this once with its own short prefix to mint a `{ tabs, routes,
+ * settingsPanels, ... }` map of fully-qualified channel names. The kit
+ * itself reaches for the channels via `applyFilters(ns.tabs, ...)` etc.
+ * — the kit never hardcodes `'blocksify.dashboard.tabs'`-style strings.
+ *
+ * Returned shape locked at SPEC §5.2. Adding a key here is a minor
+ * version bump pre-1.0; removing one is a major bump.
+ *
+ * @example
+ *   const FILTERS = createFilterNamespace( 'customify' );
+ *   FILTERS.tabs       // → 'customify.dashboard.tabs'
+ *   FILTERS.routes     // → 'customify.dashboard.routes'
+ *
+ * @param {string} prefix Consumer namespace prefix, e.g. `customify`.
+ *                        Must be non-empty. No trailing dot — kit adds
+ *                        `.dashboard` itself.
+ * @return {Record<string,string>} Channel-name map.
+ */
+function createFilterNamespace(prefix) {
+  if (!prefix || typeof prefix !== 'string') {
+    throw new TypeError('createFilterNamespace: `prefix` is required and must be a non-empty string.');
+  }
+  const base = `${prefix}.dashboard`;
+  return {
+    boot: `${base}.boot`,
+    tabs: `${base}.tabs`,
+    tabsLocked: `${base}.tabs.locked`,
+    routes: `${base}.routes`,
+    welcomeSections: `${base}.welcome.sections`,
+    welcomeChecklist: `${base}.welcome.checklist`,
+    settingsPanels: `${base}.settings.panels`,
+    settingsFieldTypes: `${base}.settings.field-types`,
+    changelogSources: `${base}.changelog.sources`,
+    versionLabel: `${base}.version-label`
+  };
+}
+/* harmony default export */ var core_createFilterNamespace = ((/* unused pure expression or super */ null && (createFilterNamespace)));
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/useDirtyState.js
+/* unused harmony import specifier */ var useState;
+/* unused harmony import specifier */ var useRef;
+/* unused harmony import specifier */ var useEffect;
+/* unused harmony import specifier */ var useCallback;
+/**
+ * useDirtyState — shared dirty-tracking hook for editor flows. SPEC §5.4.
+ *
+ * Pattern: consumer calls `setDirty(true)` on edit (typically wired off a
+ * settings store's `isDirty` selector via useEffect), `setDirty(false)`
+ * on save. The hook does three jobs:
+ *
+ *   1. Registers a `beforeunload` listener while dirty so the browser
+ *      surfaces its native "leave site?" confirm on accidental close /
+ *      reload. (Modern browsers ignore the message text but still
+ *      prompt when `event.returnValue` is set.)
+ *
+ *   2. Keeps a module-level registry so multiple consumers can declare
+ *      dirty state under different keys (e.g. `'settings'`,
+ *      `'pro/conditions/42'`) — exported `confirmDiscardAny()` walks
+ *      the registry once for the kit's `<NavigationGuardProvider>` to
+ *      gate cross-tab navigation.
+ *
+ *   3. Exposes `confirmDiscard()` for the consumer's own intra-tab
+ *      checks (e.g. a back button inside an editor that bypasses the
+ *      router guard).
+ *
+ * `options.onDiscard` runs when the user confirms abandoning the dirty
+ * buffer — consumers wire their store's `clearDirty` action here so the
+ * next mount reads a clean state. Held in a ref so callers don't have
+ * to memoize.
+ *
+ * `options.discardMessage` is the consumer-translated prompt text. The
+ * kit ships an English fallback for the case the consumer forgets to
+ * wire it. Last-registered message wins when multiple keys are dirty —
+ * fine in practice because the copy is generic across keys.
+ *
+ * @example
+ *   const { setDirty } = useDirtyState('settings', {
+ *       onDiscard: clearDirty,
+ *       discardMessage: __('You have unsaved changes. Discard them?', 'customify'),
+ *   });
+ *   useEffect(() => setDirty(isDirty), [isDirty, setDirty]);
+ */
+
+
+const REGISTRY = new Map();
+const DISCARD_CALLBACKS = new Map();
+const DISCARD_MESSAGES = new Map();
+
+// Tier-1 i18n discipline: kit imports no `__()`. English default acts
+// as a safety net so consumers that forget to wire `discardMessage`
+// still get a sensible prompt instead of `undefined`.
+const DEFAULT_DISCARD_MESSAGE = 'You have unsaved changes. Discard them?';
+function useDirtyState(key, options = {}) {
+  const [dirty, setDirtyState] = useState(() => Boolean(REGISTRY.get(key)));
+  const keyRef = useRef(key);
+  keyRef.current = key;
+
+  // Latest-callback ref so `confirmDiscardAny()` (called from outside
+  // React's render cycle by the navigation guard) always invokes the
+  // current closure without forcing consumers to memoize.
+  const onDiscardRef = useRef(options.onDiscard);
+  onDiscardRef.current = options.onDiscard;
+  if (options.discardMessage) {
+    DISCARD_MESSAGES.set(key, options.discardMessage);
+  }
+  useEffect(() => {
+    DISCARD_CALLBACKS.set(keyRef.current, () => {
+      const cb = onDiscardRef.current;
+      if (typeof cb === 'function') {
+        try {
+          cb();
+        } catch (_) {
+          // Discard callbacks are best-effort; a thrown store
+          // action shouldn't abort the navigation.
+        }
+      }
+    });
+    const cleanupKey = keyRef.current;
+    return () => {
+      DISCARD_CALLBACKS.delete(cleanupKey);
+      DISCARD_MESSAGES.delete(cleanupKey);
+    };
+  }, []);
+  const setDirty = useCallback(next => {
+    const flag = Boolean(next);
+    REGISTRY.set(keyRef.current, flag);
+    setDirtyState(flag);
+  }, []);
+  useEffect(() => {
+    if (!dirty) {
+      return undefined;
+    }
+    function onBeforeUnload(event) {
+      event.preventDefault();
+      // Modern browsers ignore the returnValue text but still
+      // surface their native confirm dialog when this is set.
+      event.returnValue = '';
+      return '';
+    }
+    window.addEventListener('beforeunload', onBeforeUnload);
+    return () => window.removeEventListener('beforeunload', onBeforeUnload);
+  }, [dirty]);
+  const confirmDiscard = useCallback(() => {
+    if (!REGISTRY.get(keyRef.current)) {
+      return true;
+    }
+    const message = DISCARD_MESSAGES.get(keyRef.current) || DEFAULT_DISCARD_MESSAGE;
+    // eslint-disable-next-line no-alert -- browser-native confirm is the contract
+    const ok = window.confirm(message);
+    if (ok) {
+      REGISTRY.set(keyRef.current, false);
+      setDirtyState(false);
+      const cb = DISCARD_CALLBACKS.get(keyRef.current);
+      if (cb) {
+        cb();
+      }
+    }
+    return ok;
+  }, []);
+  return {
+    isDirty: dirty,
+    setDirty,
+    confirmDiscard
+  };
+}
+
+/** True when any registered consumer has flagged itself dirty. */
+function isAnyDirty() {
+  for (const flag of REGISTRY.values()) {
+    if (flag) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Walk the registry; prompt once if any consumer is dirty. Returns
+ * `true` when the navigation may proceed (no dirty state OR user
+ * confirmed discard). The kit's `<NavigationGuardProvider>` consumes
+ * this directly — `mountDashboard` wires it as the default guard so
+ * tab-strip clicks + version-anchor clicks honor the dirty buffer
+ * without consumer wiring.
+ *
+ * On accept, invokes each dirty key's `onDiscard` callback so stores
+ * that own the actual edit buffer clear themselves.
+ */
+function confirmDiscardAny() {
+  if (!isAnyDirty()) {
+    return true;
+  }
+  // Pick the first dirty key's registered message; falls back to the
+  // English default when no consumer registered one. Distinct copy
+  // per dirty key is future-friendly but not yet needed.
+  let message = DEFAULT_DISCARD_MESSAGE;
+  for (const key of REGISTRY.keys()) {
+    if (REGISTRY.get(key) && DISCARD_MESSAGES.has(key)) {
+      message = DISCARD_MESSAGES.get(key);
+      break;
+    }
+  }
+  // eslint-disable-next-line no-alert -- browser-native confirm is the contract
+  const ok = window.confirm(message);
+  if (ok) {
+    for (const key of REGISTRY.keys()) {
+      REGISTRY.set(key, false);
+      const cb = DISCARD_CALLBACKS.get(key);
+      if (cb) {
+        cb();
+      }
+    }
+  }
+  return ok;
+}
+
+/**
+ * Test helper — wipe the registry between tests so per-test side-effects
+ * don't leak. Not exported from the public surface.
+ *
+ * @private
+ */
+function __resetDirtyRegistry() {
+  REGISTRY.clear();
+  DISCARD_CALLBACKS.clear();
+  DISCARD_MESSAGES.clear();
+}
+/* harmony default export */ var settings_useDirtyState = ((/* unused pure expression or super */ null && (useDirtyState)));
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/core/mountDashboard.jsx
+/**
+ * mountDashboard — bootstraps the dashboard SPA inside the consumer's
+ * mount node. Called once per page load.
+ *
+ * Flow:
+ *   1. Resolve `rootEl` (selector string OR element).
+ *   2. Read the PHP-localized boot payload off `window[ bootGlobal ]`.
+ *   3. Mint the consumer's filter channel names + apply the `tabs`,
+ *      `routes`, and `version-label` filters so plugin extensions land
+ *      before first render.
+ *   4. Render `<DashboardShell />` inside a `<BootProvider />`.
+ *
+ * Returns `{ unmount }` so consumers can tear down the SPA (rarely
+ * needed in WP admin; useful for tests).
+ *
+ * Config shape locked at SPEC §5.1.
+ */
+
+
+
+
+
+
+
+
+
+/**
+ * Normalize a tab entry to the shape `TabStrip` expects. Accepts a
+ * string id (treated as `{ id, label: id, hash: '#'+id }`) or a partial
+ * object. `hash` is derived from `id` when omitted.
+ *
+ * @param {string | { id: string, label?: string, hash?: string }} tab Raw tab entry.
+ * @return {{ id: string, label: string, hash: string }} Normalized tab.
+ */
+
+function toTabShape(tab) {
+  if (typeof tab === 'string') {
+    return {
+      id: tab,
+      label: tab,
+      hash: '#' + tab
+    };
+  }
+  return {
+    ...tab,
+    hash: tab.hash || '#' + tab.id
+  };
+}
+function mountDashboard(config) {
+  if (!config || typeof config !== 'object') {
+    throw new TypeError('mountDashboard: config object is required (SPEC §5.1).');
+  }
+  const {
+    rootEl,
+    bootGlobal,
+    filterNamespace,
+    // `__` is intentionally NOT destructured. SPEC §5.1 documents
+    // it as "recommended" pre-1.0 — Tier-2 components own their own
+    // label-merging via `createI18nBag`, so no kit code needs the
+    // callback yet. Consumers may still pass it in for forward
+    // compatibility; it sits in `config` unused.
+    brand,
+    baseTabs,
+    baseRoutes,
+    tabsAriaLabel,
+    helpItems,
+    helpLabels,
+    helpIcon,
+    helpItemIcon,
+    versionLabel,
+    versionHref,
+    versionAriaLabel,
+    initialRoute = '#welcome',
+    notFoundComponent,
+    fallback,
+    // `'narrow'` (default) → 1100px reading column.
+    // `'wide'`             → full viewport, DataViews-friendly. SPEC §5.1.
+    containerWidth = 'narrow'
+  } = config;
+  if (!filterNamespace) {
+    throw new TypeError('mountDashboard: `filterNamespace` is required (SPEC §5.1).');
+  }
+  const node = typeof rootEl === 'string' ? document.querySelector(rootEl) : rootEl;
+  if (!node) {
+    // eslint-disable-next-line no-console
+    console.error('[@pressmaximum/dashboard-kit] mountDashboard: rootEl not found:', rootEl);
+    return null;
+  }
+  const boot = readBoot(bootGlobal);
+  const FILTERS = createFilterNamespace(filterNamespace);
+  const tabs = (0,external_wp_hooks_namespaceObject.applyFilters)(FILTERS.tabs, Array.isArray(baseTabs) ? [...baseTabs] : []).map(toTabShape);
+  const routes = (0,external_wp_hooks_namespaceObject.applyFilters)(FILTERS.routes, {
+    ...(baseRoutes || {})
+  });
+  const filteredVersionLabel = versionLabel !== undefined ? (0,external_wp_hooks_namespaceObject.applyFilters)(FILTERS.versionLabel, versionLabel, boot) : undefined;
+  const root = (0,external_wp_element_namespaceObject.createRoot)(node);
+  root.render(/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BootProvider, {
+    boot: boot,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NavigationGuardProvider, {
+      guard: confirmDiscardAny,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DashboardShell, {
+        brand: brand,
+        tabs: tabs,
+        tabsAriaLabel: tabsAriaLabel,
+        routes: routes,
+        initialRoute: initialRoute,
+        containerWidth: containerWidth,
+        versionLabel: filteredVersionLabel,
+        versionHref: versionHref,
+        versionAriaLabel: versionAriaLabel,
+        helpItems: helpItems,
+        helpLabels: helpLabels,
+        helpIcon: helpIcon,
+        helpItemIcon: helpItemIcon,
+        notFoundComponent: notFoundComponent,
+        fallback: fallback
+      })
+    })
+  }));
+  return {
+    unmount: () => root.unmount()
+  };
+}
+/* harmony default export */ var core_mountDashboard = (mountDashboard);
+;// external ["wp","i18n"]
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Hero.jsx
+/**
+ * Hero — Welcome page greeting + tagline + primary CTA + optional
+ * illustration. SPEC §5.5 + §5.13 Tier-2 page component.
+ *
+ * Every visible string arrives via props; the kit ships zero
+ * translatable copy. SPEC §16.2 locked class: `.pmdk-hero`.
+ *
+ * Slot shape:
+ *
+ *   <Hero
+ *     greeting={ string }                        // e.g. 'Welcome, Jack'
+ *     tagline={ string? }                        // short subhead
+ *     primaryCta={ { label: string, href: string }? }
+ *     illustration={ ReactNode? }                // brand SVG / image
+ *   />
+ *
+ * Consumer reads the user's display name from the boot payload
+ * (`useBoot()`) and formats the greeting before passing it down — keeps
+ * the kit free of `sprintf` + text-domain coupling.
+ */
+
+
+
+
+function Hero({
+  greeting,
+  tagline,
+  primaryCta,
+  illustration
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("section", {
+    className: "pmdk-hero",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+      className: "pmdk-hero__content",
+      children: [greeting && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
+        className: "pmdk-hero__title",
+        children: greeting
+      }), tagline && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "pmdk-hero__tagline",
+        children: tagline
+      }), primaryCta && primaryCta.href && primaryCta.label && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: "primary",
+        href: primaryCta.href,
+        className: "pmdk-hero__cta",
+        children: primaryCta.label
+      })]
+    }), illustration && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      className: "pmdk-hero__illustration",
+      "aria-hidden": "true",
+      children: illustration
+    })]
+  });
+}
+;// ./node_modules/.pnpm/@wordpress+icons@12.2.0_react@18.3.1/node_modules/@wordpress/icons/build-module/library/check.mjs
 // packages/icons/src/library/check.tsx
 
 
@@ -62,2057 +1244,226 @@ var check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.
 
 //# sourceMappingURL=check.mjs.map
 
-;// external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
-;// ../../../../../../../dashboard-kit/build/index.mjs
-/* unused harmony import specifier */ var l;
-/* unused harmony import specifier */ var s;
-/* unused harmony import specifier */ var i;
-/* unused harmony import specifier */ var n;
-/* unused harmony import specifier */ var f;
-/* unused harmony import specifier */ var d;
-/* unused harmony import specifier */ var x;
-/* unused harmony import specifier */ var S;
-/*! For license information please see index.mjs.LICENSE.txt */
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/ChecklistItem.jsx
+/**
+ * ChecklistItem — single row in the Welcome onboarding checklist.
+ * SPEC §5.5 + §5.10b. Tier-2 page component.
+ *
+ * Status resolution: each item ships an optional `check()` callable
+ * that returns `boolean | Promise<boolean>`. The kit runs it on mount;
+ * a session-scoped module cache keeps subsequent mounts flash-free
+ * (the spike's pattern — stale-while-revalidate). When the consumer's
+ * onboarding store flips the manual-completion flag, the consumer
+ * threads that into `item.manualCompleted`; the check re-runs.
+ *
+ * The kit doesn't read the consumer's onboarding store directly —
+ * `item.manualCompleted` is the contract. Keeps the kit unaware of
+ * which store the consumer registered. Consumer typically wires:
+ *
+ *   const completedIds = useSelect((s) => s(ONBOARDING_STORE).getCompleted());
+ *   const items = baseItems.map((i) => ({
+ *       ...i,
+ *       manualCompleted: completedIds.includes(i.id),
+ *   }));
+ *
+ * Item shape:
+ *
+ *   {
+ *     id: string,
+ *     label: string,                  // already-translated
+ *     description?: string,
+ *     check?: () => boolean | Promise<boolean>,
+ *     manualCompleted?: boolean,      // from consumer's onboarding store
+ *     ctaLabel?: string,
+ *     ctaHref?: string,               // '#tab' OR external URL
+ *     icon?: ComponentType,
+ *   }
+ *
+ * Labels (English fallbacks shipped):
+ *
+ *   checking  'Checking…'
+ *   completed 'Completed'   (sr-only)
+ *   pending   'Pending'     (sr-only)
+ */
 
 
 
 
 
 
-var C = {
-    20(e, r, t) {
-      var n = t(649),
-        a = Symbol.for("react.element"),
-        i = Symbol.for("react.fragment"),
-        o = Object.prototype.hasOwnProperty,
-        s = n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,
-        l = {
-          key: !0,
-          ref: !0,
-          __self: !0,
-          __source: !0
-        };
-      function c(e, r, t) {
-        var n,
-          i = {},
-          c = null,
-          d = null;
-        for (n in void 0 !== t && (c = "" + t), void 0 !== r.key && (c = "" + r.key), void 0 !== r.ref && (d = r.ref), r) o.call(r, n) && !l.hasOwnProperty(n) && (i[n] = r[n]);
-        if (e && e.defaultProps) for (n in r = e.defaultProps) void 0 === i[n] && (i[n] = r[n]);
-        return {
-          $$typeof: a,
-          type: e,
-          key: c,
-          ref: d,
-          props: i,
-          _owner: s.current
-        };
-      }
-      r.Fragment = i, r.jsx = c, r.jsxs = c;
-    },
-    848(e, r, t) {
-      e.exports = t(20);
-    },
-    649(r) {
-      r.exports = external_React_namespaceObject_0;
-    }
-  },
-  E = {};
-function D(e) {
-  var r = E[e];
-  if (void 0 !== r) return r.exports;
-  var t = E[e] = {
-    exports: {}
-  };
-  return C[e](t, t.exports, D), t.exports;
-}
-D.d = (e, r) => {
-  for (var t in r) D.o(r, t) && !D.o(e, t) && Object.defineProperty(e, t, {
-    enumerable: !0,
-    get: r[t]
-  });
-}, D.o = (e, r) => Object.prototype.hasOwnProperty.call(e, r);
-var L = D(848);
-function T(e, r) {
-  (null == r || r > e.length) && (r = e.length);
-  for (var t = 0, n = Array(r); t < r; t++) n[t] = e[t];
-  return n;
-}
-var I = "#",
-  R = "#welcome";
-function F() {
-  var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : R;
-  if ("undefined" == typeof window) return e;
-  var r = window.location.hash || e;
-  return r.startsWith(I) ? r : I + r;
-}
-function M(e) {
-  if ("undefined" != typeof window) {
-    var r = e.startsWith(I) ? e : I + e;
-    window.location.hash !== r && (window.location.hash = r);
-  }
-}
-function B(e) {
-  return e && e.startsWith(I) ? e.slice(1) : e;
-}
-function H() {
-  var e,
-    r,
-    t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : R,
-    n = (e = (0,external_wp_element_namespaceObject.useState)(() => F(t)), r = 2, function (e) {
-      if (Array.isArray(e)) return e;
-    }(e) || function (e, r) {
-      var t = null == e ? null : "undefined" != typeof Symbol && e[Symbol.iterator] || e["@@iterator"];
-      if (null != t) {
-        var n,
-          a,
-          i,
-          o,
-          s = [],
-          l = !0,
-          c = !1;
-        try {
-          if (i = (t = t.call(e)).next, 0 === r) {
-            if (Object(t) !== t) return;
-            l = !1;
-          } else for (; !(l = (n = i.call(t)).done) && (s.push(n.value), s.length !== r); l = !0);
-        } catch (e) {
-          c = !0, a = e;
-        } finally {
-          try {
-            if (!l && null != t.return && (o = t.return(), Object(o) !== o)) return;
-          } finally {
-            if (c) throw a;
-          }
-        }
-        return s;
-      }
-    }(e, r) || function (e, r) {
-      if (e) {
-        if ("string" == typeof e) return T(e, r);
-        var t = {}.toString.call(e).slice(8, -1);
-        return "Object" === t && e.constructor && (t = e.constructor.name), "Map" === t || "Set" === t ? Array.from(e) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? T(e, r) : void 0;
-      }
-    }(e, r) || function () {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }()),
-    a = n[0],
-    o = n[1];
-  return (0,external_wp_element_namespaceObject.useEffect)(() => {
-    var e = () => o(F(t));
-    return window.addEventListener("hashchange", e), () => window.removeEventListener("hashchange", e);
-  }, [t]), a;
-}
-function U(e, r) {
-  if (!r || "object" != typeof r) return null;
-  if (r[e]) return {
-    route: e,
-    entry: r[e],
-    params: {}
-  };
-  var t = B(e).split("/").filter(Boolean);
-  for (var n of Object.keys(r)) {
-    var a = B(n).split("/").filter(Boolean);
-    if (a.length === t.length) {
-      for (var i = {}, o = !0, s = 0; s < a.length; s++) {
-        var l = a[s];
-        if (l.startsWith(":")) i[l.slice(1)] = decodeURIComponent(t[s]);else if (l !== t[s]) {
-          o = !1;
-          break;
-        }
-      }
-      if (o) return {
-        route: n,
-        entry: r[n],
-        params: i
-      };
-    }
-  }
-  return null;
-}
-function W(e) {
-  var r = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : R,
-    t = H(r),
-    n = (0,external_wp_element_namespaceObject.useMemo)(() => U(r, e) || {
-      route: r,
-      entry: null,
-      params: {}
-    }, [e, r]),
-    a = (0,external_wp_element_namespaceObject.useMemo)(() => U(t, e), [t, e]),
-    s = a || n;
-  return (0,external_wp_element_namespaceObject.useEffect)(() => {
-    a || t === n.route || M(n.route);
-  }, [t, a, n.route]), s;
-}
-function q(e) {
-  return B(e).split("/")[0] || "";
-}
-var z = () => !0,
-  $ = (0,external_wp_element_namespaceObject.createContext)(z);
-function Y(e) {
-  var r = e.guard,
-    t = e.children;
-  return (0, L.jsx)($.Provider, {
-    value: "function" == typeof r ? r : z,
-    children: t
-  });
-}
-function V() {
-  var e = (0,external_wp_element_namespaceObject.useContext)($);
-  return (0,external_wp_element_namespaceObject.useCallback)(r => t => {
-    t && t.preventDefault(), e() && M(r);
-  }, [e]);
-}
-function G(e) {
-  var r = (0,external_wp_element_namespaceObject.useRef)(null),
-    t = (0,external_wp_element_namespaceObject.useRef)(!0);
-  return (0,external_wp_element_namespaceObject.useEffect)(() => {
-    t.current ? t.current = !1 : r.current && "function" == typeof r.current.focus && r.current.focus({
-      preventScroll: !0
-    });
-  }, [e]), r;
-}
-function J(e) {
-  var r = e.items,
-    t = e.activeId,
-    n = e.ariaLabel,
-    a = e.onSelect,
-    i = e.className,
-    o = V();
-  if (!Array.isArray(r) || 0 === r.length) return null;
-  var s = "pmdk-dashboard__tabs" + (i ? " " + i : "");
-  return (0, L.jsx)("nav", {
-    className: s,
-    "aria-label": n,
-    children: r.map(e => {
-      var r = e.id === t,
-        n = "pmdk-dashboard__tab" + (r ? " is-active" : "");
-      return (0, L.jsx)("a", {
-        href: e.hash,
-        className: n,
-        "aria-current": r ? "page" : void 0,
-        onClick: r => {
-          "function" != typeof a ? o(e.hash)(r) : a({
-            id: e.id,
-            hash: e.hash,
-            event: r
-          });
-        },
-        children: e.label
-      }, e.id);
-    })
-  });
-}
-function K(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(e);
-    r && (n = n.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, n);
-  }
-  return t;
-}
-function Q(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? K(Object(t), !0).forEach(function (r) {
-      X(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : K(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-function X(e, r, t) {
-  return (r = function (e) {
-    var r = function (e) {
-      if ("object" != typeof e || !e) return e;
-      var r = e[Symbol.toPrimitive];
-      if (void 0 !== r) {
-        var t = r.call(e, "string");
-        if ("object" != typeof t) return t;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return String(e);
-    }(e);
-    return "symbol" == typeof r ? r : r + "";
-  }(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function Z(e, r) {
-  return r && "object" == typeof r ? Q(Q({}, e), r) : Q({}, e);
-}
-var ee = {
-  triggerLabel: "Open help panel",
-  heading: "Help"
+
+const ChecklistItem_DEFAULT_LABELS = {
+  checking: 'Checking…',
+  completed: 'Completed',
+  pending: 'Pending'
 };
-function re(e) {
-  var r = e.items,
-    t = e.labels,
-    n = e.icon,
-    a = void 0 === n ? help_default : n,
-    i = e.itemIcon,
-    o = void 0 === i ? page_default : i,
-    s = V();
-  if (!Array.isArray(r) || 0 === r.length) return null;
-  var l = Z(ee, t);
-  return (0, L.jsx)(external_wp_components_namespaceObject.Dropdown, {
-    className: "pmdk-dashboard__help-trigger",
-    contentClassName: "pmdk-help-panel",
-    popoverProps: {
-      placement: "bottom-end",
-      offset: 8
-    },
-    renderToggle: e => {
-      var r = e.isOpen,
-        t = e.onToggle;
-      return (0, L.jsx)(external_wp_components_namespaceObject.Button, {
-        className: "pmdk-dashboard__help-trigger-button",
-        icon: a,
-        label: l.triggerLabel,
-        onClick: t,
-        "aria-expanded": r
-      });
-    },
-    renderContent: e => {
-      var t = e.onClose;
-      return (0, L.jsxs)("div", {
-        className: "pmdk-help-panel__panel",
-        children: [(0, L.jsx)("h2", {
-          className: "pmdk-help-panel__heading",
-          children: l.heading
-        }), (0, L.jsx)("ul", {
-          className: "pmdk-help-panel__list",
-          children: r.map(e => {
-            var r,
-              n = "string" == typeof (r = e.href) && r.startsWith("#"),
-              a = "boolean" == typeof e.external ? e.external : !n;
-            return (0, L.jsx)("li", {
-              className: "pmdk-help-panel__item",
-              children: (0, L.jsxs)("a", {
-                className: "pmdk-help-panel__link",
-                href: e.href,
-                target: a ? "_blank" : void 0,
-                rel: a ? "noopener noreferrer" : void 0,
-                onClick: r => {
-                  n && s(e.href)(r), t();
-                },
-                children: [(0, L.jsx)(external_wp_components_namespaceObject.Icon, {
-                  className: "pmdk-help-panel__icon",
-                  icon: e.icon || o,
-                  size: 18
-                }), (0, L.jsx)("span", {
-                  className: "pmdk-help-panel__label",
-                  children: e.label
-                }), (0, L.jsx)(external_wp_components_namespaceObject.Icon, {
-                  className: "pmdk-help-panel__chevron",
-                  icon: n ? chevron_right_default : external_default,
-                  size: 16
-                })]
-              })
-            }, e.id);
-          })
-        })]
-      });
-    }
-  });
+
+// Session-scoped cache for auto-detect check results. Survives Welcome
+// remounts so subsequent visits render the last-known state instantly
+// (no spinner flash). The check still runs in the background and
+// updates the cache + visible state when the answer changes —
+// stale-while-revalidate.
+//
+// `undefined` = never checked → first-ever mount shows the spinner;
+// every mount after reads a `boolean` directly.
+const CHECK_CACHE = new Map();
+function ChecklistItem_isHashHref(href) {
+  return typeof href === 'string' && href.startsWith('#');
 }
-var te = "core/notices";
-function ne(e) {
-  var r = e.className,
-    t = (0,external_wp_data_namespaceObject.useSelect)(e => {
-      var r, t;
-      return null !== (r = null === (t = e(te)) || void 0 === t ? void 0 : t.getNotices()) && void 0 !== r ? r : [];
-    }, []),
-    n = ((0,external_wp_data_namespaceObject.useDispatch)(te) || {}).removeNotice || (() => {}),
-    a = t.filter(e => "snackbar" === e.type),
-    i = "pmdk-dashboard__snackbar" + (r ? " " + r : "");
-  return (0, L.jsx)(external_wp_components_namespaceObject.SnackbarList, {
-    className: i,
-    notices: a,
-    onRemove: n
-  });
-}
-function ae(e) {
-  var r = e.ActiveComponent,
-    t = e.NotFound,
-    n = e.route,
-    a = e.params,
-    i = e.entry,
-    o = e.fallback;
-  return r ? (0, L.jsx)(r, {
-    route: n,
-    params: a,
-    entry: i
-  }) : t ? (0, L.jsx)(t, {
-    route: n,
-    params: a
-  }) : o || null;
-}
-function ie(e) {
-  var r = e.brand,
-    t = e.tabs,
-    n = e.tabsAriaLabel,
-    a = e.routes,
-    i = e.initialRoute,
-    o = void 0 === i ? "#welcome" : i,
-    s = e.containerWidth,
-    l = void 0 === s ? "narrow" : s,
-    c = e.versionLabel,
-    d = e.versionHref,
-    u = e.versionAriaLabel,
-    p = e.helpItems,
-    m = e.helpLabels,
-    f = e.helpIcon,
-    h = e.helpItemIcon,
-    v = e.notFoundComponent,
-    b = e.fallback,
-    y = e.snackbar,
-    g = W(a, o),
-    j = g.route,
-    _ = g.entry,
-    x = g.params,
-    k = V(),
-    w = G(j),
-    O = null == _ ? void 0 : _.component,
-    N = q(j),
-    S = null == r ? void 0 : r.name,
-    P = null == r ? void 0 : r.icon,
-    A = null == r ? void 0 : r.href,
-    C = null == r ? void 0 : r.ariaLabel,
-    E = "wide" === l ? "wide" : "narrow",
-    D = (0, L.jsxs)(L.Fragment, {
-      children: [P && (0, L.jsx)("span", {
-        className: "pmdk-dashboard__brand-icon",
-        dangerouslySetInnerHTML: {
-          __html: P
-        }
-      }), S && (0, L.jsx)("span", {
-        className: "pmdk-dashboard__brand-text",
-        children: S
-      })]
-    });
-  return (0, L.jsxs)("div", {
-    className: "pmdk-dashboard",
-    "data-container-width": E,
-    children: [(0, L.jsxs)("header", {
-      className: "pmdk-dashboard__header",
-      children: [(0, L.jsx)("h1", {
-        className: "pmdk-dashboard__brand",
-        children: A ? (0, L.jsx)("a", {
-          className: "pmdk-dashboard__brand-link",
-          href: A,
-          "aria-label": C,
-          onClick: k(A),
-          children: D
-        }) : D
-      }), (0, L.jsx)(J, {
-        items: t,
-        activeId: N,
-        ariaLabel: n
-      }), (0, L.jsxs)("div", {
-        className: "pmdk-dashboard__header-right",
-        children: [c && (d ? (0, L.jsx)("a", {
-          className: "pmdk-dashboard__version",
-          href: d,
-          "aria-label": u,
-          onClick: k(d),
-          children: c
-        }) : (0, L.jsx)("span", {
-          className: "pmdk-dashboard__version",
-          "aria-label": u,
-          children: c
-        })), Array.isArray(p) && p.length > 0 && (0, L.jsx)(re, {
-          items: p,
-          labels: m,
-          icon: f,
-          itemIcon: h
-        })]
-      })]
-    }), (0, L.jsx)("main", {
-      ref: w,
-      className: "pmdk-dashboard__main",
-      role: "main",
-      tabIndex: -1,
-      children: ae({
-        ActiveComponent: O,
-        NotFound: v,
-        route: j,
-        params: x,
-        entry: _,
-        fallback: b
-      })
-    }), void 0 !== y ? y : (0, L.jsx)(ne, {})]
-  });
-}
-var oe = (0,external_wp_element_namespaceObject.createContext)({});
-function se(e) {
-  if ("undefined" == typeof window || !e) return {};
-  var r = window[e];
-  return r && "object" == typeof r ? r : {};
-}
-function le(e) {
-  var r = e.boot,
-    t = e.children;
-  return (0, L.jsx)(oe.Provider, {
-    value: r || {},
-    children: t
-  });
-}
-function ce() {
-  return (0,external_wp_element_namespaceObject.useContext)(oe);
-}
-function de(e) {
-  if (!e || "string" != typeof e) throw new TypeError("createFilterNamespace: `prefix` is required and must be a non-empty string.");
-  var r = "".concat(e, ".dashboard");
-  return {
-    boot: "".concat(r, ".boot"),
-    tabs: "".concat(r, ".tabs"),
-    tabsLocked: "".concat(r, ".tabs.locked"),
-    routes: "".concat(r, ".routes"),
-    welcomeSections: "".concat(r, ".welcome.sections"),
-    welcomeChecklist: "".concat(r, ".welcome.checklist"),
-    settingsPanels: "".concat(r, ".settings.panels"),
-    settingsFieldTypes: "".concat(r, ".settings.field-types"),
-    changelogSources: "".concat(r, ".changelog.sources"),
-    versionLabel: "".concat(r, ".version-label")
-  };
-}
-function ue(e, r) {
-  (null == r || r > e.length) && (r = e.length);
-  for (var t = 0, n = Array(r); t < r; t++) n[t] = e[t];
-  return n;
-}
-var pe = new Map(),
-  me = new Map(),
-  fe = new Map(),
-  he = "You have unsaved changes. Discard them?";
-function ve(e) {
-  var r,
-    t,
-    a = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {},
-    o = (r = l(() => Boolean(pe.get(e))), t = 2, function (e) {
-      if (Array.isArray(e)) return e;
-    }(r) || function (e, r) {
-      var t = null == e ? null : "undefined" != typeof Symbol && e[Symbol.iterator] || e["@@iterator"];
-      if (null != t) {
-        var n,
-          a,
-          i,
-          o,
-          s = [],
-          l = !0,
-          c = !1;
-        try {
-          if (i = (t = t.call(e)).next, 0 === r) {
-            if (Object(t) !== t) return;
-            l = !1;
-          } else for (; !(l = (n = i.call(t)).done) && (s.push(n.value), s.length !== r); l = !0);
-        } catch (e) {
-          c = !0, a = e;
-        } finally {
-          try {
-            if (!l && null != t.return && (o = t.return(), Object(o) !== o)) return;
-          } finally {
-            if (c) throw a;
-          }
-        }
-        return s;
-      }
-    }(r, t) || function (e, r) {
-      if (e) {
-        if ("string" == typeof e) return ue(e, r);
-        var t = {}.toString.call(e).slice(8, -1);
-        return "Object" === t && e.constructor && (t = e.constructor.name), "Map" === t || "Set" === t ? Array.from(e) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? ue(e, r) : void 0;
-      }
-    }(r, t) || function () {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }()),
-    c = o[0],
-    d = o[1],
-    u = s(e);
-  u.current = e;
-  var p = s(a.onDiscard);
-  p.current = a.onDiscard, a.discardMessage && fe.set(e, a.discardMessage), i(() => {
-    me.set(u.current, () => {
-      var e = p.current;
-      if ("function" == typeof e) try {
-        e();
-      } catch (e) {}
-    });
-    var e = u.current;
-    return () => {
-      me.delete(e), fe.delete(e);
-    };
-  }, []);
-  var m = n(e => {
-    var r = Boolean(e);
-    pe.set(u.current, r), d(r);
-  }, []);
-  i(() => {
-    if (c) return window.addEventListener("beforeunload", e), () => window.removeEventListener("beforeunload", e);
-    function e(e) {
-      return e.preventDefault(), e.returnValue = "", "";
-    }
-  }, [c]);
-  var f = n(() => {
-    if (!pe.get(u.current)) return !0;
-    var e = fe.get(u.current) || he,
-      r = window.confirm(e);
-    if (r) {
-      pe.set(u.current, !1), d(!1);
-      var t = me.get(u.current);
-      t && t();
-    }
-    return r;
-  }, []);
-  return {
-    isDirty: c,
-    setDirty: m,
-    confirmDiscard: f
-  };
-}
-function be() {
-  for (var e of pe.values()) if (e) return !0;
-  return !1;
-}
-function ye() {
-  if (!be()) return !0;
-  var e = he;
-  for (var r of pe.keys()) if (pe.get(r) && fe.has(r)) {
-    e = fe.get(r);
-    break;
-  }
-  var t = window.confirm(e);
-  if (t) for (var n of pe.keys()) {
-    pe.set(n, !1);
-    var a = me.get(n);
-    a && a();
-  }
-  return t;
-}
-function ge(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(e);
-    r && (n = n.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, n);
-  }
-  return t;
-}
-function je(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? ge(Object(t), !0).forEach(function (r) {
-      _e(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ge(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-function _e(e, r, t) {
-  return (r = function (e) {
-    var r = function (e) {
-      if ("object" != typeof e || !e) return e;
-      var r = e[Symbol.toPrimitive];
-      if (void 0 !== r) {
-        var t = r.call(e, "string");
-        if ("object" != typeof t) return t;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return String(e);
-    }(e);
-    return "symbol" == typeof r ? r : r + "";
-  }(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function xe(e) {
-  return "string" == typeof e ? {
-    id: e,
-    label: e,
-    hash: "#" + e
-  } : je(je({}, e), {}, {
-    hash: e.hash || "#" + e.id
-  });
-}
-const ke = function (e) {
-  if (!e || "object" != typeof e) throw new TypeError("mountDashboard: config object is required (SPEC §5.1).");
-  var r = e.rootEl,
-    n = e.bootGlobal,
-    a = e.filterNamespace,
-    i = e.brand,
-    o = e.baseTabs,
-    s = e.baseRoutes,
-    l = e.tabsAriaLabel,
-    d = e.helpItems,
-    u = e.helpLabels,
-    p = e.helpIcon,
-    m = e.helpItemIcon,
-    f = e.versionLabel,
-    h = e.versionHref,
-    v = e.versionAriaLabel,
-    b = e.initialRoute,
-    y = void 0 === b ? "#welcome" : b,
-    g = e.notFoundComponent,
-    j = e.fallback,
-    _ = e.containerWidth,
-    x = void 0 === _ ? "narrow" : _;
-  if (!a) throw new TypeError("mountDashboard: `filterNamespace` is required (SPEC §5.1).");
-  var k = "string" == typeof r ? document.querySelector(r) : r;
-  if (!k) return console.error("[@pressmaximum/dashboard-kit] mountDashboard: rootEl not found:", r), null;
-  var w = se(n),
-    O = de(a),
-    N = (0,external_wp_hooks_namespaceObject.applyFilters)(O.tabs, Array.isArray(o) ? [...o] : []).map(xe),
-    S = (0,external_wp_hooks_namespaceObject.applyFilters)(O.routes, je({}, s || {})),
-    P = void 0 !== f ? (0,external_wp_hooks_namespaceObject.applyFilters)(O.versionLabel, f, w) : void 0,
-    A = (0,external_wp_element_namespaceObject.createRoot)(k);
-  return A.render((0, L.jsx)(le, {
-    boot: w,
-    children: (0, L.jsx)(Y, {
-      guard: ye,
-      children: (0, L.jsx)(ie, {
-        brand: i,
-        tabs: N,
-        tabsAriaLabel: l,
-        routes: S,
-        initialRoute: y,
-        containerWidth: x,
-        versionLabel: P,
-        versionHref: h,
-        versionAriaLabel: v,
-        helpItems: d,
-        helpLabels: u,
-        helpIcon: p,
-        helpItemIcon: m,
-        notFoundComponent: g,
-        fallback: j
-      })
-    })
-  })), {
-    unmount: () => A.unmount()
-  };
-};
-function we(e) {
-  var r = e.children,
-    t = e.className,
-    n = "pmdk-page-wrapper" + (t ? " " + t : "");
-  return (0, L.jsx)("div", {
-    className: n,
-    children: r
-  });
-}
-function Oe(e) {
-  var r = e.title,
-    t = e.description,
-    n = e.actions;
-  return (0, L.jsxs)("header", {
-    className: "pmdk-list-page-header",
-    children: [(0, L.jsxs)("div", {
-      className: "pmdk-list-page-header__text",
-      children: [(0, L.jsx)("h2", {
-        className: "pmdk-list-page-header__title",
-        children: r
-      }), t && (0, L.jsx)("p", {
-        className: "pmdk-list-page-header__description",
-        children: t
-      })]
-    }), n && (0, L.jsx)("div", {
-      className: "pmdk-list-page-header__actions",
-      children: n
-    })]
-  });
-}
-function Ne(e) {
-  var r = e.backHref,
-    t = e.backLabel,
-    n = void 0 === t ? "Back" : t,
-    a = e.title,
-    i = e.status,
-    o = e.actions;
-  return (0, L.jsxs)("header", {
-    className: "pmdk-editor-page-header",
-    children: [(0, L.jsxs)("div", {
-      className: "pmdk-editor-page-header__left",
-      children: [r && (0, L.jsxs)("a", {
-        className: "pmdk-editor-page-header__back",
-        href: r,
-        children: ["← ", n]
-      }), (0, L.jsx)("h2", {
-        className: "pmdk-editor-page-header__title",
-        children: a
-      }), i && (0, L.jsx)("span", {
-        className: "pmdk-editor-page-header__status",
-        children: i
-      })]
-    }), o && (0, L.jsx)("div", {
-      className: "pmdk-editor-page-header__actions",
-      children: o
-    })]
-  });
-}
-function Se(e) {
-  var r = e.subNav,
-    t = e.main,
-    n = e.rail;
-  return (0, L.jsxs)("div", {
-    className: "pmdk-editor-view-layout",
-    children: [r && (0, L.jsx)("aside", {
-      className: "pmdk-editor-view-layout__subnav",
-      children: r
-    }), (0, L.jsx)("section", {
-      className: "pmdk-editor-view-layout__main",
-      children: t
-    }), n && (0, L.jsx)("aside", {
-      className: "pmdk-editor-view-layout__rail",
-      children: n
-    })]
-  });
-}
-function Pe(e) {
-  var r = e.items,
-    t = e.activeId,
-    n = e.ariaLabel,
-    a = e.onSelect,
-    i = e.className;
-  if (!Array.isArray(r) || r.length < 2) return null;
-  var o = "pmdk-subnav" + (i ? " " + i : "");
-  return (0, L.jsx)("nav", {
-    className: o,
-    "aria-label": n,
-    children: (0, L.jsx)("ul", {
-      className: "pmdk-subnav__list",
-      children: r.map(e => {
-        var r = e.id === t,
-          n = "pmdk-subnav__item" + (r ? " is-active" : "");
-        return (0, L.jsx)("li", {
-          children: (0, L.jsx)("a", {
-            href: e.hash,
-            className: n,
-            "aria-current": r ? "page" : void 0,
-            onClick: t => {
-              t.preventDefault(), r || ("function" != typeof a ? M(e.hash) : a({
-                id: e.id,
-                hash: e.hash,
-                event: t
-              }));
-            },
-            children: e.label
-          })
-        }, e.id);
-      })
-    })
-  });
-}
-function Ae(e, r, t, n, a, i, o) {
-  try {
-    var s = e[i](o),
-      l = s.value;
-  } catch (e) {
-    return void t(e);
-  }
-  s.done ? r(l) : Promise.resolve(l).then(n, a);
-}
-function Ce(e) {
-  return function () {
-    var r = this,
-      t = arguments;
-    return new Promise(function (n, a) {
-      var i = e.apply(r, t);
-      function o(e) {
-        Ae(i, n, a, o, s, "next", e);
-      }
-      function s(e) {
-        Ae(i, n, a, o, s, "throw", e);
-      }
-      o(void 0);
-    });
-  };
-}
-function Ee(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(e);
-    r && (n = n.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, n);
-  }
-  return t;
-}
-function De(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? Ee(Object(t), !0).forEach(function (r) {
-      Le(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : Ee(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-function Le(e, r, t) {
-  return (r = function (e) {
-    var r = function (e) {
-      if ("object" != typeof e || !e) return e;
-      var r = e[Symbol.toPrimitive];
-      if (void 0 !== r) {
-        var t = r.call(e, "string");
-        if ("object" != typeof t) return t;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return String(e);
-    }(e);
-    return "symbol" == typeof r ? r : r + "";
-  }(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-function Te(e, r) {
-  (null == r || r > e.length) && (r = e.length);
-  for (var t = 0, n = Array(r); t < r; t++) n[t] = e[t];
-  return n;
-}
-var Ie = "START_LOAD",
-  Re = "LOAD_SUCCESS",
-  Fe = "LOAD_ERROR",
-  Me = "EDIT",
-  Be = "START_SAVE",
-  He = "SAVE_SUCCESS",
-  Ue = "SAVE_ERROR",
-  We = "CLEAR_DIRTY";
-function qe(e, r, t) {
-  var n = String(r || "").split(".").filter(Boolean);
-  if (0 === n.length) return e;
-  var a,
-    i = function (e) {
-      if (Array.isArray(e)) return e;
-    }(a = n) || function (e) {
-      if ("undefined" != typeof Symbol && null != e[Symbol.iterator] || null != e["@@iterator"]) return Array.from(e);
-    }(a) || function (e, r) {
-      if (e) {
-        if ("string" == typeof e) return Te(e, r);
-        var t = {}.toString.call(e).slice(8, -1);
-        return "Object" === t && e.constructor && (t = e.constructor.name), "Map" === t || "Set" === t ? Array.from(e) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? Te(e, r) : void 0;
-      }
-    }(a) || function () {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-    }(),
-    o = i[0],
-    s = Te(i).slice(1);
-  if (0 === s.length) return De(De({}, e), {}, {
-    [o]: t
-  });
-  var l = qe(e && "object" == typeof e[o] ? e[o] : {}, s.join("."), t);
-  return De(De({}, e), {}, {
-    [o]: l
-  });
-}
-function ze(e, r) {
-  if (!r || "object" != typeof r) return e;
-  var t = Array.isArray(e) ? [...e] : De({}, e || {});
-  for (var n of Object.keys(r)) {
-    var a = r[n];
-    a && "object" == typeof a && !Array.isArray(a) && t[n] && "object" == typeof t[n] ? t[n] = ze(t[n], a) : t[n] = a;
-  }
-  return t;
-}
-function $e() {
-  var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-    r = e.storeName,
-    t = e.endpoint,
-    n = e.fetch,
-    a = e.seedSaved,
-    i = void 0 === a ? null : a;
-  if (!r) throw new TypeError("createSettingsStore: `storeName` is required.");
-  if (!t) throw new TypeError("createSettingsStore: `endpoint` is required.");
-  if ("function" != typeof n) throw new TypeError("createSettingsStore: `fetch` callable is required (SPEC §3.3 — kit cannot import @wordpress/api-fetch).");
-  var o = {
-      saved: i && "object" == typeof i ? i : null,
-      dirty: {},
-      loading: !1,
-      saving: !1,
-      error: null
-    },
-    s = {
-      load: () => function () {
-        var e = Ce(function* (e) {
-          var r = e.dispatch,
-            a = e.select,
-            i = a.getSavedSettings();
-          if (null !== i && !a.getError()) return i;
-          r({
-            type: Ie
-          });
-          try {
-            var o = yield n({
-              path: t
-            });
-            return r({
-              type: Re,
-              payload: o
-            }), o;
-          } catch (e) {
-            throw r({
-              type: Fe,
-              error: e
-            }), e;
-          }
-        });
-        return function (r) {
-          return e.apply(this, arguments);
-        };
-      }(),
-      edit: (e, r) => ({
-        type: Me,
-        path: e,
-        value: r
-      }),
-      save: () => function () {
-        var e = Ce(function* (e) {
-          var r = e.dispatch,
-            a = e.select.getSettings();
-          r({
-            type: Be
-          });
-          try {
-            var i = yield n({
-              path: t,
-              method: "POST",
-              data: a
-            });
-            return r({
-              type: He,
-              payload: i
-            }), i;
-          } catch (e) {
-            throw r({
-              type: Ue,
-              error: e
-            }), e;
-          }
-        });
-        return function (r) {
-          return e.apply(this, arguments);
-        };
-      }(),
-      reset: () => function () {
-        var e = Ce(function* (e) {
-          var r = e.dispatch;
-          r({
-            type: Be
-          });
-          try {
-            var a = yield n({
-              path: t,
-              method: "POST",
-              data: {}
-            });
-            return r({
-              type: He,
-              payload: a
-            }), a;
-          } catch (e) {
-            throw r({
-              type: Ue,
-              error: e
-            }), e;
-          }
-        });
-        return function (r) {
-          return e.apply(this, arguments);
-        };
-      }(),
-      clearDirty: () => ({
-        type: We
-      })
-    },
-    l = (0,external_wp_data_namespaceObject.createReduxStore)(r, {
-      reducer: function () {
-        var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : o,
-          r = arguments.length > 1 ? arguments[1] : void 0;
-        switch (r.type) {
-          case Ie:
-            return De(De({}, e), {}, {
-              loading: !0,
-              error: null
-            });
-          case Re:
-            return De(De({}, e), {}, {
-              loading: !1,
-              saved: r.payload,
-              error: null
-            });
-          case Fe:
-            return De(De({}, e), {}, {
-              loading: !1,
-              error: r.error
-            });
-          case Me:
-            return De(De({}, e), {}, {
-              dirty: qe(e.dirty, r.path, r.value)
-            });
-          case Be:
-            return De(De({}, e), {}, {
-              saving: !0,
-              error: null
-            });
-          case He:
-            return De(De({}, e), {}, {
-              saving: !1,
-              saved: r.payload,
-              dirty: {},
-              error: null
-            });
-          case Ue:
-            return De(De({}, e), {}, {
-              saving: !1,
-              error: r.error
-            });
-          case We:
-            return De(De({}, e), {}, {
-              dirty: {}
-            });
-          default:
-            return e;
-        }
-      },
-      actions: s,
-      selectors: {
-        getSettings: e => ze(e.saved || {}, e.dirty),
-        getSavedSettings: e => e.saved,
-        getDirty: e => e.dirty,
-        isDirty: e => Object.keys(e.dirty).length > 0,
-        isLoading: e => e.loading,
-        isSaving: e => e.saving,
-        getError: e => e.error
-      }
-    });
-  return {
-    STORE_NAME: r,
-    store: l
-  };
-}
-function Ye(e) {
-  var r = e.field,
-    t = e.value,
-    n = e.onChange,
-    a = e.fieldTypes;
-  if (!r || !a) return null;
-  var i = a[r.type];
-  return i ? (0, L.jsx)(i, {
-    field: r,
-    value: t,
-    onChange: n
-  }) : null;
-}
-function Ve(e, r, t) {
-  if (e && "object" == typeof e) {
-    var n = e[r];
-    if (n && "object" == typeof n) return n[t];
-  }
-}
-function Ge(e) {
-  return "pmdk-settings-panel-".concat(e);
-}
-function Je(e) {
-  var r = e.panel,
-    t = e.values,
-    n = e.onFieldChange,
-    a = e.fieldTypes;
-  if (!r) return null;
-  var i = Ge(r.id);
-  if (r.component) {
-    var o = r.component;
-    return (0, L.jsx)("div", {
-      role: "group",
-      "aria-labelledby": i,
-      children: (0, L.jsx)(o, {
-        panel: r,
-        values: t,
-        onFieldChange: n
-      })
-    });
-  }
-  return (0, L.jsx)("div", {
-    className: "pmdk-schema-form",
-    role: "group",
-    "aria-labelledby": i,
-    children: (r.fields || []).map(e => (0, L.jsx)(Ye, {
-      field: e,
-      value: Ve(t, r.id, e.id),
-      onChange: t => n(r.id, e.id, t),
-      fieldTypes: a
-    }, e.id))
-  });
-}
-var Ke = {
-  regionLabel: "Settings actions",
-  saveLabel: "Save changes",
-  savingLabel: "Saving…",
-  resetLabel: "Reset to defaults",
-  statusSaved: "No pending changes",
-  statusDirty: "Unsaved changes",
-  statusSaving: "Saving…"
-};
-function Qe(e) {
-  var r = e.isDirty,
-    t = e.isSaving,
-    n = e.labels;
-  return t ? (0, L.jsxs)("span", {
-    className: "pmdk-save-bar__status is-saving",
-    children: [(0, L.jsx)(external_wp_components_namespaceObject.Spinner, {}), (0, L.jsx)("span", {
-      children: n.statusSaving
-    })]
-  }) : r ? (0, L.jsx)("span", {
-    className: "pmdk-save-bar__status is-dirty",
-    children: n.statusDirty
-  }) : (0, L.jsxs)("span", {
-    className: "pmdk-save-bar__status is-saved",
-    children: [(0, L.jsx)(external_wp_components_namespaceObject.Icon, {
-      icon: check_default,
-      size: 16
-    }), (0, L.jsx)("span", {
-      children: n.statusSaved
-    })]
-  });
-}
-function Xe(e) {
-  var r = e.isDirty,
-    t = e.isSaving,
-    n = e.onSave,
-    a = e.onReset,
-    i = e.labels,
-    o = e.resetDisabledWhenNotDirty,
-    s = void 0 !== o && o,
-    l = Z(Ke, i),
-    c = t || s && !r;
-  return (0, L.jsx)("div", {
-    className: "pmdk-save-bar",
-    role: "region",
-    "aria-label": l.regionLabel,
-    children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
-      justify: "space-between",
-      align: "center",
-      gap: 3,
-      children: [(0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
-        children: (0, L.jsx)(Qe, {
-          isDirty: r,
-          isSaving: t,
-          labels: l
-        })
-      }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
-        children: (0, L.jsxs)(external_wp_components_namespaceObject.Flex, {
-          align: "center",
-          gap: 2,
-          children: [(0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
-            children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
-              variant: "tertiary",
-              isDestructive: !0,
-              onClick: a,
-              disabled: c,
-              children: l.resetLabel
-            })
-          }), (0, L.jsx)(external_wp_components_namespaceObject.FlexItem, {
-            children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
-              variant: "primary",
-              onClick: n,
-              disabled: !r || t,
-              children: t ? l.savingLabel : l.saveLabel
-            })
-          })]
-        })
-      })]
-    })
-  });
-}
-var Ze = {
-  boolean: function (e) {
-    var r = e.field,
-      t = e.value,
-      n = e.onChange;
-    return (0, L.jsx)(external_wp_components_namespaceObject.ToggleControl, {
-      __nextHasNoMarginBottom: !0,
-      label: r.label,
-      help: r.description,
-      checked: Boolean(t),
-      onChange: n
-    });
-  },
-  select: function (e) {
-    var r = e.field,
-      t = e.value,
-      n = e.onChange,
-      a = Array.isArray(r.options) ? r.options : [];
-    return (0, L.jsx)(external_wp_components_namespaceObject.SelectControl, {
-      __nextHasNoMarginBottom: !0,
-      __next40pxDefaultSize: !0,
-      label: r.label,
-      help: r.description,
-      value: null == t ? "" : String(t),
-      options: a.map(e => ({
-        value: e.value,
-        label: e.label
-      })),
-      onChange: n
-    });
-  },
-  radio: function (e) {
-    var r = e.field,
-      t = e.value,
-      n = e.onChange,
-      a = Array.isArray(r.options) ? r.options : [];
-    return (0, L.jsx)(external_wp_components_namespaceObject.RadioControl, {
-      label: r.label,
-      help: r.description,
-      selected: null == t ? "" : String(t),
-      options: a.map(e => ({
-        value: e.value,
-        label: e.label
-      })),
-      onChange: n
-    });
-  },
-  text: function (e) {
-    var r = e.field,
-      t = e.value,
-      n = e.onChange;
-    return (0, L.jsx)(external_wp_components_namespaceObject.TextControl, {
-      __nextHasNoMarginBottom: !0,
-      __next40pxDefaultSize: !0,
-      label: r.label,
-      help: r.description,
-      value: null == t ? "" : String(t),
-      onChange: n,
-      pattern: r.pattern,
-      maxLength: r.maxLength
-    });
-  },
-  number: function (e) {
-    var r = e.field,
-      t = e.value,
-      n = e.onChange;
-    return Number.isFinite(r.min) || Number.isFinite(r.max) ? (0, L.jsx)(external_wp_components_namespaceObject.RangeControl, {
-      __nextHasNoMarginBottom: !0,
-      __next40pxDefaultSize: !0,
-      label: r.label,
-      help: r.description,
-      value: Number(t) || 0,
-      min: Number.isFinite(r.min) ? r.min : void 0,
-      max: Number.isFinite(r.max) ? r.max : void 0,
-      step: Number.isFinite(r.step) ? r.step : 1,
-      onChange: n
-    }) : (0, L.jsx)(external_wp_components_namespaceObject.TextControl, {
-      __nextHasNoMarginBottom: !0,
-      __next40pxDefaultSize: !0,
-      type: "number",
-      label: r.label,
-      help: r.description,
-      value: null == t ? "" : String(t),
-      step: Number.isFinite(r.step) ? r.step : void 0,
-      onChange: e => n("" === e ? null : Number(e))
-    });
-  }
-};
-function er(e) {
-  var r = e.greeting,
-    t = e.tagline,
-    n = e.primaryCta,
-    a = e.illustration;
-  return (0, L.jsxs)("section", {
-    className: "pmdk-hero",
-    children: [(0, L.jsxs)("div", {
-      className: "pmdk-hero__content",
-      children: [r && (0, L.jsx)("h2", {
-        className: "pmdk-hero__title",
-        children: r
-      }), t && (0, L.jsx)("p", {
-        className: "pmdk-hero__tagline",
-        children: t
-      }), n && n.href && n.label && (0, L.jsx)(external_wp_components_namespaceObject.Button, {
-        variant: "primary",
-        href: n.href,
-        className: "pmdk-hero__cta",
-        children: n.label
-      })]
-    }), a && (0, L.jsx)("div", {
-      className: "pmdk-hero__illustration",
-      "aria-hidden": "true",
-      children: a
-    })]
-  });
-}
-function rr(e, r) {
-  return function (e) {
-    if (Array.isArray(e)) return e;
-  }(e) || function (e, r) {
-    var t = null == e ? null : "undefined" != typeof Symbol && e[Symbol.iterator] || e["@@iterator"];
-    if (null != t) {
-      var n,
-        a,
-        i,
-        o,
-        s = [],
-        l = !0,
-        c = !1;
-      try {
-        if (i = (t = t.call(e)).next, 0 === r) {
-          if (Object(t) !== t) return;
-          l = !1;
-        } else for (; !(l = (n = i.call(t)).done) && (s.push(n.value), s.length !== r); l = !0);
-      } catch (e) {
-        c = !0, a = e;
-      } finally {
-        try {
-          if (!l && null != t.return && (o = t.return(), Object(o) !== o)) return;
-        } finally {
-          if (c) throw a;
-        }
-      }
-      return s;
-    }
-  }(e, r) || function (e, r) {
-    if (e) {
-      if ("string" == typeof e) return tr(e, r);
-      var t = {}.toString.call(e).slice(8, -1);
-      return "Object" === t && e.constructor && (t = e.constructor.name), "Map" === t || "Set" === t ? Array.from(e) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? tr(e, r) : void 0;
-    }
-  }(e, r) || function () {
-    throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }();
-}
-function tr(e, r) {
-  (null == r || r > e.length) && (r = e.length);
-  for (var t = 0, n = Array(r); t < r; t++) n[t] = e[t];
-  return n;
-}
-var nr = {
-    checking: "Checking…",
-    completed: "Completed",
-    pending: "Pending"
-  },
-  ar = new Map();
-function ir(e) {
-  var r = e.item,
-    t = e.labels,
-    n = Z(nr, t),
-    a = r.id,
-    o = r.check,
-    s = r.manualCompleted,
-    c = ar.get(a),
-    u = void 0 !== c,
-    p = rr((0,external_wp_element_namespaceObject.useState)(!!u && c), 2),
-    m = p[0],
-    h = p[1],
-    v = rr((0,external_wp_element_namespaceObject.useState)(!u), 2),
-    b = v[0],
-    y = v[1];
+function ChecklistItem({
+  item,
+  labels: callerLabels
+}) {
+  const labels = createI18nBag(ChecklistItem_DEFAULT_LABELS, callerLabels);
+  // Destructure so the effect's dep array reads PRIMITIVE / FUNCTION
+  // references instead of the surrounding `item` object — the parent
+  // (Welcome page) typically rebuilds the items array on every render
+  // to inject `manualCompleted`, so depending on `item` directly would
+  // re-run the check on every parent render. With these three deps,
+  // the check runs only when (a) the user navigated to a different
+  // task, (b) the consumer's store flipped manualCompleted, or
+  // (c) the consumer provided a new check function (rare).
+  const {
+    id,
+    check,
+    manualCompleted
+  } = item;
+  const cached = CHECK_CACHE.get(id);
+  const hasCached = cached !== undefined;
+  const [completed, setCompleted] = (0,external_wp_element_namespaceObject.useState)(hasCached ? cached : false);
+  const [checking, setChecking] = (0,external_wp_element_namespaceObject.useState)(!hasCached);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    var e = !1;
+    let cancelled = false;
     try {
-      var r = !!o && o();
-      Promise.resolve(r).then(r => {
-        if (!e) {
-          var t = Boolean(r);
-          ar.set(a, t), h(t), y(!1);
+      const result = check ? check() : false;
+      Promise.resolve(result).then(value => {
+        if (cancelled) {
+          return;
         }
+        const boolValue = Boolean(value);
+        CHECK_CACHE.set(id, boolValue);
+        setCompleted(boolValue);
+        setChecking(false);
       }).catch(() => {
-        e || y(!1);
+        if (cancelled) {
+          return;
+        }
+        setChecking(false);
       });
-    } catch (e) {
-      y(!1);
+    } catch (_) {
+      setChecking(false);
     }
     return () => {
-      e = !0;
+      cancelled = true;
     };
-  }, [a, o, s]);
-  var j,
-    _ = V(),
-    k = "string" == typeof (j = r.ctaHref) && j.startsWith("#"),
-    w = "pmdk-checklist__item" + (m ? " is-complete" : "") + (b ? " is-checking" : ""),
-    O = n.pending;
-  b ? O = n.checking : m && (O = n.completed);
-  var N = (0, L.jsx)("span", {
+  }, [id, check, manualCompleted]);
+  const onNavigate = useNavigate();
+  const isHash = ChecklistItem_isHashHref(item.ctaHref);
+  const className = 'pmdk-checklist__item' + (completed ? ' is-complete' : '') + (checking ? ' is-checking' : '');
+  let statusLabel = labels.pending;
+  if (checking) {
+    statusLabel = labels.checking;
+  } else if (completed) {
+    statusLabel = labels.completed;
+  }
+  let statusIndicator = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
     className: "pmdk-checklist__bullet"
   });
-  return b ? N = (0, L.jsx)(external_wp_components_namespaceObject.Spinner, {}) : m && (N = (0, L.jsx)(external_wp_components_namespaceObject.Icon, {
-    icon: check_default
-  })), (0, L.jsxs)("li", {
-    className: w,
-    children: [(0, L.jsx)("span", {
+  if (checking) {
+    statusIndicator = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {});
+  } else if (completed) {
+    statusIndicator = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+      icon: check_default
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+    className: className,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
       className: "pmdk-checklist__status",
       "aria-hidden": "true",
       role: "presentation",
-      children: N
-    }), (0, L.jsx)("span", {
+      children: statusIndicator
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
       className: "screen-reader-text",
-      children: O
-    }), (0, L.jsxs)("div", {
+      children: statusLabel
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
       className: "pmdk-checklist__body",
-      children: [(0, L.jsx)("h3", {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h3", {
         className: "pmdk-checklist__label",
-        children: r.label
-      }), r.description && (0, L.jsx)("p", {
+        children: item.label
+      }), item.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
         className: "pmdk-checklist__description",
-        children: r.description
+        children: item.description
       })]
-    }), r.ctaHref && r.ctaLabel && (0, L.jsx)("div", {
+    }), item.ctaHref && item.ctaLabel && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "pmdk-checklist__cta",
-      children: (0, L.jsx)(external_wp_components_namespaceObject.Button, {
-        variant: m ? "tertiary" : "secondary",
-        href: r.ctaHref,
-        onClick: k ? _(r.ctaHref) : void 0,
-        children: r.ctaLabel
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        variant: completed ? 'tertiary' : 'secondary',
+        href: item.ctaHref,
+        onClick: isHash ? onNavigate(item.ctaHref) : undefined,
+        children: item.ctaLabel
       })
     })]
   });
 }
-function or(e) {
-  var r = e.items,
-    t = e.ariaLabel,
-    n = e.itemLabels;
-  return Array.isArray(r) && 0 !== r.length ? (0, L.jsx)("section", {
-    className: "pmdk-checklist",
-    "aria-label": t || "Onboarding checklist",
-    children: (0, L.jsx)("ul", {
-      className: "pmdk-checklist__list",
-      children: r.map(e => (0, L.jsx)(ir, {
-        item: e,
-        labels: n
-      }, e.id))
-    })
-  }) : null;
-}
-function sr(e, r, t, n, a, i, o) {
-  try {
-    var s = e[i](o),
-      l = s.value;
-  } catch (e) {
-    return void t(e);
-  }
-  s.done ? r(l) : Promise.resolve(l).then(n, a);
-}
-function lr(e) {
-  return function () {
-    var r = this,
-      t = arguments;
-    return new Promise(function (n, a) {
-      var i = e.apply(r, t);
-      function o(e) {
-        sr(i, n, a, o, s, "next", e);
-      }
-      function s(e) {
-        sr(i, n, a, o, s, "throw", e);
-      }
-      o(void 0);
-    });
-  };
-}
-function cr(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(e);
-    r && (n = n.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, n);
-  }
-  return t;
-}
-function dr(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? cr(Object(t), !0).forEach(function (r) {
-      ur(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : cr(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-function ur(e, r, t) {
-  return (r = function (e) {
-    var r = function (e) {
-      if ("object" != typeof e || !e) return e;
-      var r = e[Symbol.toPrimitive];
-      if (void 0 !== r) {
-        var t = r.call(e, "string");
-        if ("object" != typeof t) return t;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return String(e);
-    }(e);
-    return "symbol" == typeof r ? r : r + "";
-  }(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-var pr = {
-    completed: [],
-    dismissed: !1,
-    loaded: !1,
-    loading: !1,
-    error: null
-  },
-  mr = "START_LOAD",
-  fr = "LOAD_SUCCESS",
-  hr = "LOAD_ERROR",
-  vr = "SET_COMPLETED",
-  br = "SET_DISMISSED",
-  yr = "PATCH_ERROR";
-function gr() {
-  var e,
-    r,
-    t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : pr,
-    n = arguments.length > 1 ? arguments[1] : void 0;
-  switch (n.type) {
-    case mr:
-      return dr(dr({}, t), {}, {
-        loading: !0,
-        error: null
-      });
-    case fr:
-      return dr(dr({}, t), {}, {
-        loaded: !0,
-        loading: !1,
-        completed: Array.isArray(null === (e = n.payload) || void 0 === e ? void 0 : e.completed) ? n.payload.completed : [],
-        dismissed: Boolean(null === (r = n.payload) || void 0 === r ? void 0 : r.dismissed),
-        error: null
-      });
-    case hr:
-    case yr:
-      return dr(dr({}, t), {}, {
-        loading: !1,
-        error: n.error
-      });
-    case vr:
-      return dr(dr({}, t), {}, {
-        completed: n.payload
-      });
-    case br:
-      return dr(dr({}, t), {}, {
-        dismissed: n.payload
-      });
-    default:
-      return t;
-  }
-}
-var jr = {
-  isCompleted: (e, r) => e.completed.includes(r),
-  isDismissed: e => e.dismissed,
-  getCompleted: e => e.completed,
-  isLoading: e => e.loading,
-  isLoaded: e => e.loaded,
-  getError: e => e.error
-};
-function _r() {
-  var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-    r = e.storeName,
-    t = e.endpoint,
-    n = e.fetch;
-  if (!r) throw new TypeError("createOnboardingStore: `storeName` is required.");
-  if (!t) throw new TypeError("createOnboardingStore: `endpoint` is required.");
-  if ("function" != typeof n) throw new TypeError("createOnboardingStore: `fetch` callable is required (SPEC §3.3 — kit cannot import @wordpress/api-fetch).");
-  function a(e) {
-    return i.apply(this, arguments);
-  }
-  function i() {
-    return (i = lr(function* (e) {
-      return n({
-        path: t,
-        method: "PATCH",
-        data: e
-      });
-    })).apply(this, arguments);
-  }
-  var o = {
-    load: () => function () {
-      var e = lr(function* (e) {
-        var r = e.dispatch,
-          a = e.select;
-        if (a.isLoaded() && !a.getError()) return null;
-        r({
-          type: mr
-        });
-        try {
-          var i = yield n({
-            path: t
-          });
-          return r({
-            type: fr,
-            payload: i
-          }), i;
-        } catch (e) {
-          throw r({
-            type: hr,
-            error: e
-          }), e;
-        }
-      });
-      return function (r) {
-        return e.apply(this, arguments);
-      };
-    }(),
-    complete: e => function () {
-      var r = lr(function* (r) {
-        var t = r.dispatch,
-          n = r.select.getCompleted() || [];
-        if (n.includes(e)) return n;
-        var i = [...n, e];
-        t({
-          type: vr,
-          payload: i
-        });
-        try {
-          var o = yield a({
-            completed: i
-          });
-          return t({
-            type: fr,
-            payload: o
-          }), o.completed;
-        } catch (e) {
-          throw t({
-            type: vr,
-            payload: n
-          }), t({
-            type: yr,
-            error: e
-          }), e;
-        }
-      });
-      return function (e) {
-        return r.apply(this, arguments);
-      };
-    }(),
-    uncomplete: e => function () {
-      var r = lr(function* (r) {
-        var t = r.dispatch,
-          n = r.select.getCompleted() || [];
-        if (!n.includes(e)) return n;
-        var i = n.filter(r => r !== e);
-        t({
-          type: vr,
-          payload: i
-        });
-        try {
-          var o = yield a({
-            completed: i
-          });
-          return t({
-            type: fr,
-            payload: o
-          }), o.completed;
-        } catch (e) {
-          throw t({
-            type: vr,
-            payload: n
-          }), t({
-            type: yr,
-            error: e
-          }), e;
-        }
-      });
-      return function (e) {
-        return r.apply(this, arguments);
-      };
-    }(),
-    dismiss: e => function () {
-      var r = lr(function* (r) {
-        var t = r.dispatch,
-          n = r.select,
-          i = Boolean(e),
-          o = n.isDismissed();
-        if (o === i) return o;
-        t({
-          type: br,
-          payload: i
-        });
-        try {
-          var s = yield a({
-            dismissed: i
-          });
-          return t({
-            type: fr,
-            payload: s
-          }), s.dismissed;
-        } catch (e) {
-          throw t({
-            type: br,
-            payload: o
-          }), t({
-            type: yr,
-            error: e
-          }), e;
-        }
-      });
-      return function (e) {
-        return r.apply(this, arguments);
-      };
-    }()
-  };
-  return {
-    STORE_NAME: r,
-    store: S(r, {
-      reducer: gr,
-      actions: o,
-      selectors: jr
-    })
-  };
-}
-var xr = {
-  headFeature: "Feature",
-  headFree: "Free",
-  headPro: "Pro",
-  cellYes: "Included",
-  cellNo: "Not included"
-};
-function kr(e) {
-  var r = e.value,
-    t = e.labels;
-  if (!0 === r) return (0, L.jsx)("span", {
-    className: "pmdk-compare__check-yes",
-    "aria-label": t.cellYes,
-    children: (0, L.jsx)(f, {
-      icon: x,
-      size: 16
-    })
-  });
-  if (!1 === r || null == r) return (0, L.jsx)("span", {
-    className: "pmdk-compare__check-no",
-    "aria-label": t.cellNo,
-    children: "−"
-  });
-  if ("string" == typeof r) return (0, L.jsx)("span", {
-    className: "pmdk-compare__text",
-    children: r
-  });
-  if (r && "object" == typeof r && "value" in r) {
-    var n = "pmdk-compare__text" + (r.muted ? " is-muted" : "");
-    return (0, L.jsx)("span", {
-      className: n,
-      children: r.value
-    });
-  }
-  return null;
-}
-function wr(e) {
-  var r = e.sections,
-    t = e.footer,
-    n = e.labels;
-  if (!Array.isArray(r) || 0 === r.length) return null;
-  var a = Z(xr, n);
-  return (0, L.jsxs)("div", {
-    className: "pmdk-compare",
-    children: [(0, L.jsxs)("div", {
-      className: "pmdk-compare__head",
-      children: [(0, L.jsx)("div", {
-        className: "pmdk-compare__head-cell",
-        children: a.headFeature
-      }), (0, L.jsx)("div", {
-        className: "pmdk-compare__head-cell pmdk-compare__head-cell--center",
-        children: a.headFree
-      }), (0, L.jsx)("div", {
-        className: "pmdk-compare__head-cell pmdk-compare__head-cell--center pmdk-compare__head-cell--pro",
-        children: a.headPro
-      })]
-    }), r.map(e => (0, L.jsxs)("section", {
-      className: "pmdk-compare__section",
-      children: [(0, L.jsx)("h3", {
-        className: "pmdk-compare__section-title",
-        children: e.label
-      }), (0, L.jsx)("div", {
-        className: "pmdk-compare__rows",
-        children: e.rows.map(r => (0, L.jsxs)("div", {
-          className: "pmdk-compare__row",
-          children: [(0, L.jsx)("div", {
-            className: "pmdk-compare__feature",
-            children: r.label
-          }), (0, L.jsx)("div", {
-            className: "pmdk-compare__cell-wrap",
-            children: (0, L.jsx)(kr, {
-              value: r.free,
-              labels: a
-            })
-          }), (0, L.jsx)("div", {
-            className: "pmdk-compare__cell-wrap",
-            children: (0, L.jsx)(kr, {
-              value: r.pro,
-              labels: a
-            })
-          })]
-        }, "".concat(e.id, "-").concat(r.id)))
-      })]
-    }, e.id)), t && (0, L.jsxs)("div", {
-      className: "pmdk-compare__cta",
-      children: [(0, L.jsxs)("div", {
-        className: "pmdk-compare__cta-text",
-        children: [(0, L.jsx)("h4", {
-          className: "pmdk-compare__cta-title",
-          children: t.title
-        }), t.description && (0, L.jsx)("p", {
-          className: "pmdk-compare__cta-description",
-          children: t.description
-        })]
-      }), t.ctaHref && t.ctaLabel && (0, L.jsx)(d, {
-        variant: "primary",
-        href: t.ctaHref,
-        target: "_blank",
-        rel: "noopener noreferrer",
-        children: t.ctaLabel
-      })]
-    })]
-  });
-}
-function Or(e, r) {
-  var t = Object.keys(e);
-  if (Object.getOwnPropertySymbols) {
-    var n = Object.getOwnPropertySymbols(e);
-    r && (n = n.filter(function (r) {
-      return Object.getOwnPropertyDescriptor(e, r).enumerable;
-    })), t.push.apply(t, n);
-  }
-  return t;
-}
-function Nr(e) {
-  for (var r = 1; r < arguments.length; r++) {
-    var t = null != arguments[r] ? arguments[r] : {};
-    r % 2 ? Or(Object(t), !0).forEach(function (r) {
-      Sr(e, r, t[r]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : Or(Object(t)).forEach(function (r) {
-      Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r));
-    });
-  }
-  return e;
-}
-function Sr(e, r, t) {
-  return (r = function (e) {
-    var r = function (e) {
-      if ("object" != typeof e || !e) return e;
-      var r = e[Symbol.toPrimitive];
-      if (void 0 !== r) {
-        var t = r.call(e, "string");
-        if ("object" != typeof t) return t;
-        throw new TypeError("@@toPrimitive must return a primitive value.");
-      }
-      return String(e);
-    }(e);
-    return "symbol" == typeof r ? r : r + "";
-  }(r)) in e ? Object.defineProperty(e, r, {
-    value: t,
-    enumerable: !0,
-    configurable: !0,
-    writable: !0
-  }) : e[r] = t, e;
-}
-var Pr = {
-    added: "New",
-    new: "New",
-    changed: "Improved",
-    improved: "Improved",
-    enhancement: "Improved",
-    enhanced: "Improved",
-    fixed: "Fixed",
-    fix: "Fixed",
-    updated: "Updated",
-    update: "Updated",
-    removed: "Removed",
-    deprecated: "Deprecated",
-    security: "Security"
-  },
-  Ar = {
-    added: "new",
-    new: "new",
-    changed: "improved",
-    improved: "improved",
-    enhancement: "improved",
-    enhanced: "improved",
-    fixed: "fixed",
-    fix: "fixed",
-    updated: "updated",
-    update: "updated",
-    removed: "removed",
-    deprecated: "deprecated",
-    security: "security"
-  };
-function Cr(e) {
-  var r = e.category,
-    t = e.labels,
-    n = e.toneOverrides;
-  if (!r) return null;
-  var a = Nr(Nr({}, Pr), t || {}),
-    i = Nr(Nr({}, Ar), n || {}),
-    o = String(r).toLowerCase(),
-    s = i[o] || "neutral",
-    l = a[o] || o.toUpperCase();
-  return (0, L.jsx)("span", {
-    className: "pmdk-category-badge pmdk-category-badge--" + s,
-    children: l
-  });
-}
-var Er = {
-  currentBadge: "Current"
-};
-function Dr(e) {
-  var r = e.release,
-    t = e.labels,
-    n = e.categoryLabels,
-    a = e.categoryToneOverrides;
-  if (!r) return null;
-  var i = Z(Er, t),
-    o = Array.isArray(r.items) ? r.items : [];
-  return (0, L.jsxs)("article", {
-    className: "pmdk-release-block",
-    children: [(0, L.jsxs)("header", {
-      className: "pmdk-release-block__head",
-      children: [(0, L.jsxs)("h3", {
-        className: "pmdk-release-block__version",
-        children: ["v" + r.version, r.current && (0, L.jsx)("span", {
-          className: "pmdk-release-block__current",
-          children: i.currentBadge
-        })]
-      }), r.date && (0, L.jsx)("p", {
-        className: "pmdk-release-block__date",
-        children: r.date
-      })]
-    }), o.length > 0 && (0, L.jsx)("ul", {
-      className: "pmdk-release-block__items",
-      children: o.map((e, r) => (0, L.jsxs)("li", {
-        className: "pmdk-release-block__item",
-        children: [(0, L.jsx)(Cr, {
-          category: e.category,
-          labels: n,
-          toneOverrides: a
-        }), (0, L.jsx)("span", {
-          className: "pmdk-release-block__item-text",
-          children: e.text
-        })]
-      }, r))
-    })]
-  });
-}
-var Lr = "0.0.0";
-
-;// ../../../../../../../dashboard-kit/build/style.css
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.css
 // extracted by mini-css-extract-plugin
 
-;// external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/welcome/Checklist.jsx
+/**
+ * Checklist — Welcome page onboarding-tasks list. SPEC §5.5.
+ *
+ * Tier-2 page component: renders an `<ol>` with status indicators per
+ * item. The Card chrome around it lives in the consumer's tab page
+ * (the spike wrapped this in `<Card>` but the locked CSS class is on
+ * the kit's container, so the kit owns the semantic + a11y wrapper).
+ *
+ * SPEC §16.2 locked classes: `.pmdk-checklist`, `.pmdk-checklist__item`,
+ * `.pmdk-checklist__status`, `.pmdk-checklist__cta`.
+ *
+ * Consumer hooks the onboarding store into each item via
+ * `item.manualCompleted` (see ChecklistItem docstring) so the kit
+ * never directly reads the consumer's store name.
+ *
+ * Slot shape:
+ *
+ *   <Checklist
+ *     items={ ChecklistItem[] }
+ *     ariaLabel={ string }                  // already-translated
+ *     itemLabels={ { checking?, completed?, pending? } }
+ *   />
+ *
+ * Returns `null` when `items` is empty — Welcome pages with the
+ * checklist dismissed render nothing here, no zero-row stub.
+ */
+
+
+
+
+// SPEC §5.10b: English fallback so the section's accessible name is
+// never empty when the consumer forgets to wire `ariaLabel`.
+
+const DEFAULT_ARIA_LABEL = 'Onboarding checklist';
+function Checklist({
+  items,
+  ariaLabel,
+  itemLabels
+}) {
+  if (!Array.isArray(items) || items.length === 0) {
+    return null;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("section", {
+    className: "pmdk-checklist",
+    "aria-label": ariaLabel || DEFAULT_ARIA_LABEL,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+      className: "pmdk-checklist__list",
+      children: items.map(item => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ChecklistItem, {
+        item: item,
+        labels: itemLabels
+      }, item.id))
+    })
+  });
+}
 ;// ./src/backend/admin/dashboard-v2/data/customizerLinks.js
 
 
@@ -2244,22 +1595,6 @@ function ThemeGridCard({
     })]
   });
 }
-;// ./node_modules/@wordpress/icons/build-module/library/check.mjs
-// packages/icons/src/library/check.tsx
-
-
-var check_check_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M16.5 7.5 10 13.9l-2.5-2.4-1 1 3.5 3.6 7.5-7.6z" }) });
-
-//# sourceMappingURL=check.mjs.map
-
-;// ./node_modules/@wordpress/icons/build-module/library/external.mjs
-// packages/icons/src/library/external.tsx
-
-
-var external_external_default = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, { xmlns: "http://www.w3.org/2000/svg", viewBox: "0 0 24 24", children: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, { d: "M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z" }) });
-
-//# sourceMappingURL=external.mjs.map
-
 ;// ./src/backend/admin/dashboard-v2/data/proModules.js
 
 
@@ -2502,11 +1837,11 @@ function ModuleSubmodules({
 const SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-    icon: check_check_default,
+    icon: check_default,
     size: 14
   })
 });
-const NOTICES_STORE = 'core/notices';
+const ProModulesSection_NOTICES_STORE = 'core/notices';
 function DocsLink({
   href
 }) {
@@ -2578,7 +1913,7 @@ function ProModulesSection({
         ...prev,
         [id]: flag
       }));
-      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(next ?
+      (0,external_wp_data_namespaceObject.dispatch)(ProModulesSection_NOTICES_STORE).createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(next ?
       // translators: %s module name.
       (0,external_wp_i18n_namespaceObject.__)('"%s" activated.', 'customify') :
       // translators: %s module name.
@@ -2592,7 +1927,7 @@ function ProModulesSection({
         ...prev,
         [id]: current
       }));
-      (0,external_wp_data_namespaceObject.dispatch)(NOTICES_STORE).createErrorNotice((0,external_wp_i18n_namespaceObject.sprintf)(
+      (0,external_wp_data_namespaceObject.dispatch)(ProModulesSection_NOTICES_STORE).createErrorNotice((0,external_wp_i18n_namespaceObject.sprintf)(
       // translators: %s module name.
       (0,external_wp_i18n_namespaceObject.__)('Could not update "%s". Please try again.', 'customify'), moduleName), {
         type: 'snackbar',
@@ -2655,7 +1990,7 @@ function ProModulesSection({
         children: [showSettings && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("button", {
           type: "button",
           className: "customify-dashboard-module-link customify-dashboard-module-link--settings",
-          onClick: () => M(`#settings/${mod.id}`),
+          onClick: () => HashRouter_navigate(`#settings/${mod.id}`),
           children: (0,external_wp_i18n_namespaceObject.__)('Settings', 'customify')
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DocsLink, {
           href: mod.docHref
@@ -2674,7 +2009,7 @@ function ProModulesSection({
         href: boot?.urls?.proUpgrade || '#',
         target: "_blank",
         rel: "noopener noreferrer",
-        icon: external_external_default,
+        icon: external_default,
         iconPosition: "right",
         children: (0,external_wp_i18n_namespaceObject.__)('Upgrade now', 'customify')
       })]
@@ -2712,7 +2047,7 @@ function ProModulesSection({
 
 const SHOW_CHECKLIST = false;
 function Welcome() {
-  const boot = ce();
+  const boot = useBoot();
   const links = useCustomizerLinks(boot);
   const checklistItems = useChecklist(boot);
   const greeting = (0,external_wp_i18n_namespaceObject.__)('Welcome to Customify', 'customify');
@@ -2720,7 +2055,7 @@ function Welcome() {
   const extraSections = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.welcome.sections', [], boot);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-welcome",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(er, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Hero, {
       greeting: greeting,
       tagline: tagline,
       primaryCta: {
@@ -2734,7 +2069,7 @@ function Welcome() {
           className: "customify-dashboard-welcome__checklist-title",
           children: (0,external_wp_i18n_namespaceObject.__)('Get started', 'customify')
         })
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(or, {
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Checklist, {
         items: checklistItems,
         ariaLabel: (0,external_wp_i18n_namespaceObject.__)('Customify onboarding checklist', 'customify'),
         itemLabels: {
@@ -2774,9 +2109,887 @@ function Welcome() {
     })]
   });
 }
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaField.jsx
+
+/**
+ * SchemaField — Tier-1 layout primitive (SPEC §5.13). Dispatches on
+ * `field.type` against a consumer-supplied `fieldTypes` map; renders
+ * nothing when the type isn't registered (consumer-facing typo / Pro
+ * field type not yet loaded).
+ *
+ * Why prop-injection instead of context / hardcoded map?
+ * The consumer applies their `{ns}.dashboard.settings.field-types`
+ * filter once at the call site (typically in their Settings tab), spreads
+ * the resolved map down. Keeps the kit unaware of any specific filter
+ * namespace and lets the SchemaForm caller memoize the map.
+ *
+ * @example
+ *   <SchemaField
+ *       field={ { id: 'enable', label: 'Enable feature', type: 'boolean' } }
+ *       value={ true }
+ *       onChange={ (next) => store.edit('group.enable', next) }
+ *       fieldTypes={ FIELD_TYPES }
+ *   />
+ */
+
+function SchemaField({
+  field,
+  value,
+  onChange,
+  fieldTypes
+}) {
+  if (!field || !fieldTypes) {
+    return null;
+  }
+  const Component = fieldTypes[field.type];
+  if (!Component) {
+    return null;
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Component, {
+    field: field,
+    value: value,
+    onChange: onChange
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SchemaForm.jsx
+/**
+ * SchemaForm — Tier-1 layout primitive (SPEC §5.13). Renders ONE panel
+ * — the consumer resolves "which panel is active" externally (route
+ * param + sub-nav) so the kit doesn't own that state.
+ *
+ * SPEC §5.4 panel shape:
+ *
+ *   { id, label, description?, fields: SchemaField[] }     ← schema-driven
+ *   { id, label, component: ComponentType }                ← Pro custom takeover
+ *
+ * Custom-panel takeover (the `component` branch) is how Pro replaces a
+ * whole panel — receives `{ panel, values, onFieldChange }` exactly like
+ * SchemaForm itself, so swapping in a custom component is transparent
+ * to the parent.
+ *
+ * `values` is the merged settings snapshot from
+ * `createSettingsStore.getSettings()` (saved + dirty). The form reads
+ * `values[panel.id][field.id]` for each field — the dotted-path
+ * convention `'panelId.fieldId'` is what `store.edit(path, value)`
+ * accumulates into the dirty buffer.
+ *
+ * `fieldTypes` is the resolved map (kit `BASE_FIELD_TYPES` + consumer's
+ * filter extensions) — see `fieldTypes.jsx` for the rationale of
+ * prop-injection over context.
+ */
+
+
+
+
+function getAtPath(target, group, key) {
+  if (!target || typeof target !== 'object') {
+    return undefined;
+  }
+  const groupObj = target[group];
+  if (!groupObj || typeof groupObj !== 'object') {
+    return undefined;
+  }
+  return groupObj[key];
+}
+
+/**
+ * Stable id for the panel heading element so external CardHeader copy
+ * can reference it via `aria-labelledby`. Consumers that render their
+ * own heading outside the form pass the same id to keep the AT chain.
+ *
+ * @param {string} id Panel id, e.g. `'performance'`.
+ * @return {string} DOM id, e.g. `'pmdk-settings-panel-performance'`.
+ */
+function panelHeadingId(id) {
+  return `pmdk-settings-panel-${id}`;
+}
+function SchemaForm({
+  panel,
+  values,
+  onFieldChange,
+  fieldTypes
+}) {
+  if (!panel) {
+    return null;
+  }
+  const headingId = panelHeadingId(panel.id);
+
+  // Pro full-takeover branch: panel provides its own component instead
+  // of a `fields` array. The custom component owns rendering + edit
+  // dispatch entirely — kit just supplies the panel + merged values +
+  // the onFieldChange callback so it can write back through the same
+  // store action the schema-driven branch uses.
+  if (panel.component) {
+    const Custom = panel.component;
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      role: "group",
+      "aria-labelledby": headingId,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Custom, {
+        panel: panel,
+        values: values,
+        onFieldChange: onFieldChange
+      })
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "pmdk-schema-form",
+    role: "group",
+    "aria-labelledby": headingId,
+    children: (panel.fields || []).map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SchemaField, {
+      field: field,
+      value: getAtPath(values, panel.id, field.id),
+      onChange: next => onFieldChange(panel.id, field.id, next),
+      fieldTypes: fieldTypes
+    }, field.id))
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/SaveBar.jsx
+/**
+ * SaveBar — Tier-2 page component (SPEC §5.13). Left-aligned status text
+ * mirrors the store lifecycle (saving / dirty / saved); right cluster is
+ * a dirty-gated Save plus a Reset that prompts before dispatching.
+ *
+ * Locked CSS class per SPEC §16.2: `.pmdk-save-bar`.
+ *
+ * String surface (SPEC §5.10b — English fallbacks shipped, consumer's
+ * `__()` extraction happens at the call site via the `labels` prop):
+ *
+ *   regionLabel    aria-label on the bar (default 'Settings actions')
+ *   saveLabel      primary button copy (default 'Save changes')
+ *   savingLabel    primary button copy while saving (default 'Saving…')
+ *   resetLabel     reset button copy (default 'Reset to defaults')
+ *   statusSaved    left-side status when clean (default 'No pending changes')
+ *   statusDirty    left-side status when dirty (default 'Unsaved changes')
+ *   statusSaving   left-side status while saving (default 'Saving…')
+ *
+ * The Reset confirmation prompt lives in the consumer's onReset handler
+ * (browser-native `confirm()` with their translated copy) — keeps the
+ * kit free of the `confirm()` text. SPEC §5.10b `resetConfirmLabel` is
+ * a consumer-side string, not a kit prop.
+ *
+ * `resetDisabledWhenNotDirty` (default `false`) — when `true`, the
+ * Reset button disables alongside Save when the form is clean. Use
+ * for consumers where Reset semantically means "discard dirty edits"
+ * (per-section forms, modal settings panels). Leave `false` for
+ * factory-defaults reset semantics where the button should stay
+ * clickable even when nothing is dirty. KIT_ISSUES K-011.
+ */
+
+
+
+
+
+
+const SaveBar_DEFAULT_LABELS = {
+  regionLabel: 'Settings actions',
+  saveLabel: 'Save changes',
+  savingLabel: 'Saving…',
+  resetLabel: 'Reset to defaults',
+  // Neutral phrasing instead of the older "All changes saved" — that
+  // label read as a confirmation of a save the user never performed on
+  // first page load (KIT_ISSUES K-011). The consumer's snackbar covers
+  // the actual "just saved" cue; the SaveBar describes state.
+  statusSaved: 'No pending changes',
+  statusDirty: 'Unsaved changes',
+  statusSaving: 'Saving…'
+};
+function Status({
+  isDirty,
+  isSaving,
+  labels
+}) {
+  if (isSaving) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+      className: "pmdk-save-bar__status is-saving",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Spinner, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        children: labels.statusSaving
+      })]
+    });
+  }
+  if (isDirty) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "pmdk-save-bar__status is-dirty",
+      children: labels.statusDirty
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+    className: "pmdk-save-bar__status is-saved",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
+      icon: check_default,
+      size: 16
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      children: labels.statusSaved
+    })]
+  });
+}
+function SaveBar({
+  isDirty,
+  isSaving,
+  onSave,
+  onReset,
+  labels: callerLabels,
+  resetDisabledWhenNotDirty = false
+}) {
+  const labels = createI18nBag(SaveBar_DEFAULT_LABELS, callerLabels);
+  const resetDisabled = isSaving || resetDisabledWhenNotDirty && !isDirty;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+    className: "pmdk-save-bar",
+    role: "region",
+    "aria-label": labels.regionLabel,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
+      justify: "space-between",
+      align: "center",
+      gap: 3,
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Status, {
+          isDirty: isDirty,
+          isSaving: isSaving,
+          labels: labels
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Flex, {
+          align: "center",
+          gap: 2,
+          children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+              variant: "tertiary",
+              isDestructive: true,
+              onClick: onReset,
+              disabled: resetDisabled,
+              children: labels.resetLabel
+            })
+          }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.FlexItem, {
+            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+              variant: "primary",
+              onClick: onSave,
+              disabled: !isDirty || isSaving,
+              children: isSaving ? labels.savingLabel : labels.saveLabel
+            })
+          })]
+        })
+      })]
+    })
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/fieldTypes.jsx
+/**
+ * BASE_FIELD_TYPES — the kit's built-in field renderers for SchemaField
+ * dispatch. SPEC §5.4 + §9.1 `{ns}.dashboard.settings.field-types` filter.
+ *
+ * Each renderer receives `{ field, value, onChange }`:
+ *   - `field` — the field schema (id, label, description, type, options?,
+ *     min/max/step? for numbers, etc.)
+ *   - `value` — current resolved value (saved + dirty merge from
+ *     `createSettingsStore.getSettings()`)
+ *   - `onChange` — emits the next value; the SchemaForm caller wires
+ *     this to `store.edit(path, value)`.
+ *
+ * Consumers extend the map via their own filter — kit doesn't apply the
+ * filter itself because it would need to know the consumer's namespace.
+ * Typical usage:
+ *
+ *   import { BASE_FIELD_TYPES } from '@pressmaximum/dashboard-kit';
+ *   import { applyFilters } from '@wordpress/hooks';
+ *   import { createFilterNamespace } from '@pressmaximum/dashboard-kit';
+ *
+ *   const FILTERS = createFilterNamespace('customify');
+ *   const fieldTypes = applyFilters(
+ *       FILTERS.settingsFieldTypes,
+ *       { ...BASE_FIELD_TYPES }
+ *   );
+ *   // ...then pass `fieldTypes` to <SchemaForm>.
+ */
+
+
+
+function BooleanField({
+  field,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.ToggleControl, {
+    __nextHasNoMarginBottom: true,
+    label: field.label,
+    help: field.description,
+    checked: Boolean(value),
+    onChange: onChange
+  });
+}
+function SelectField({
+  field,
+  value,
+  onChange
+}) {
+  const options = Array.isArray(field.options) ? field.options : [];
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.SelectControl, {
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    label: field.label,
+    help: field.description,
+    value: value === null || value === undefined ? '' : String(value),
+    options: options.map(opt => ({
+      value: opt.value,
+      label: opt.label
+    })),
+    onChange: onChange
+  });
+}
+function RadioField({
+  field,
+  value,
+  onChange
+}) {
+  const options = Array.isArray(field.options) ? field.options : [];
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RadioControl, {
+    label: field.label,
+    help: field.description,
+    selected: value === null || value === undefined ? '' : String(value),
+    options: options.map(opt => ({
+      value: opt.value,
+      label: opt.label
+    })),
+    onChange: onChange
+  });
+}
+function TextField({
+  field,
+  value,
+  onChange
+}) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    label: field.label,
+    help: field.description,
+    value: value === null || value === undefined ? '' : String(value),
+    onChange: onChange,
+    pattern: field.pattern,
+    maxLength: field.maxLength
+  });
+}
+function NumberField({
+  field,
+  value,
+  onChange
+}) {
+  const hasRange = Number.isFinite(field.min) || Number.isFinite(field.max);
+  if (hasRange) {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.RangeControl, {
+      __nextHasNoMarginBottom: true,
+      __next40pxDefaultSize: true,
+      label: field.label,
+      help: field.description,
+      value: Number(value) || 0,
+      min: Number.isFinite(field.min) ? field.min : undefined,
+      max: Number.isFinite(field.max) ? field.max : undefined,
+      step: Number.isFinite(field.step) ? field.step : 1,
+      onChange: onChange
+    });
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    type: "number",
+    label: field.label,
+    help: field.description,
+    value: value === null || value === undefined ? '' : String(value),
+    step: Number.isFinite(field.step) ? field.step : undefined,
+    onChange: next => onChange(next === '' ? null : Number(next))
+  });
+}
+const BASE_FIELD_TYPES = {
+  boolean: BooleanField,
+  select: SelectField,
+  radio: RadioField,
+  text: TextField,
+  number: NumberField
+};
+/* harmony default export */ var fieldTypes = ((/* unused pure expression or super */ null && (BASE_FIELD_TYPES)));
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/editor.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/layouts/SubNav/index.jsx
+/**
+ * SubNav — Tier-1 vertical nav rail (SPEC §5.3). Two consumer
+ * patterns documented in the spec:
+ *
+ *   1. Settings-style — intra-tab panel switch. Clicking a panel
+ *      navigates within the same top-level tab (e.g.
+ *      `#settings/:panelId`); the cross-tab dirty-state guard does NOT
+ *      fire (consistent with the Settings P7.5 pattern).
+ *
+ *   2. Multi-source style — Changelog with Pro plugin sources. Hide
+ *      the SubNav when fewer than two sources are registered (single
+ *      source → render plain content with no rail).
+ *
+ * The kit handles the "fewer than 2 items" case by returning `null`,
+ * matching pattern 2's degrade rule. Consumers that want to force the
+ * rail visible at 1 item can render their own wrapper.
+ *
+ * Slot shape (SPEC §5.3):
+ *
+ *   <SubNav
+ *     items={ [ { id, label, hash } ] }
+ *     activeId={ string }
+ *     ariaLabel={ string }                // already-translated
+ *     onSelect={ ({ id, hash, event }) => void }  // optional
+ *   />
+ *
+ * Default click behavior calls `navigate( hash )` directly — INTRA-tab
+ * nav bypasses the `NavigationGuardProvider` (dirty-state guard) per
+ * SPEC §5.3 pattern 1. Consumers needing the guard wire `onSelect`
+ * themselves and call `useNavigate()(hash)(event)` to reuse the kit's
+ * guarded path.
+ */
+
+
+
+
+function SubNav({
+  items,
+  activeId,
+  ariaLabel,
+  onSelect,
+  className
+}) {
+  if (!Array.isArray(items) || items.length < 2) {
+    return null;
+  }
+  const classes = 'pmdk-subnav' + (className ? ' ' + className : '');
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("nav", {
+    className: classes,
+    "aria-label": ariaLabel,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+      className: "pmdk-subnav__list",
+      children: items.map(item => {
+        const isActive = item.id === activeId;
+        const itemClass = 'pmdk-subnav__item' + (isActive ? ' is-active' : '');
+        const handleClick = event => {
+          event.preventDefault();
+          if (isActive) {
+            return;
+          }
+          if (typeof onSelect === 'function') {
+            onSelect({
+              id: item.id,
+              hash: item.hash,
+              event
+            });
+            return;
+          }
+          HashRouter_navigate(item.hash);
+        };
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("li", {
+          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("a", {
+            href: item.hash,
+            className: itemClass,
+            "aria-current": isActive ? 'page' : undefined,
+            onClick: handleClick,
+            children: item.label
+          })
+        }, item.id);
+      })
+    })
+  });
+}
 ;// external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/settings/createSettingsStore.js
+/**
+ * createSettingsStore — `@wordpress/data` store factory for schema-driven
+ * settings forms. SPEC §5.4.
+ *
+ * State shape (locked at 0.1.0):
+ *
+ *   {
+ *     saved: Record<string, unknown> | null,  // last server-confirmed values
+ *     dirty: Record<string, unknown>,         // local-only edits, deep-merged
+ *                                             //  over `saved` by getSettings
+ *     loading: boolean,                       // GET in flight
+ *     saving:  boolean,                       // POST in flight (save or reset)
+ *     error:   unknown | null,                // last load/save/reset error
+ *   }
+ *
+ * Action sequence (also verified by tests):
+ *
+ *   load()  → START_LOAD  → LOAD_SUCCESS|LOAD_ERROR
+ *   edit()  → EDIT                    (mutates dirty buffer)
+ *   save()  → START_SAVE → SAVE_SUCCESS|SAVE_ERROR  (clears dirty on success)
+ *   reset() → START_SAVE → SAVE_SUCCESS|SAVE_ERROR  (POSTs body={}, clears dirty on success)
+ *   clearDirty() → CLEAR_DIRTY        (used by useDirtyState onDiscard)
+ *
+ * Why an injected `fetch` callable instead of `import @wordpress/api-fetch`?
+ * SPEC §3.3 forbids the kit from importing `@wordpress/api-fetch` — the
+ * consumer wires its own REST client (typically a thin wrapper around
+ * `apiFetch` with nonce + namespace handling) and hands it to the kit.
+ * Keeps the kit free of WP-specific REST plumbing and lets consumers
+ * point the store at any URL/transport.
+ *
+ * Why an optional `seedSaved`?
+ * First-mount renders run synchronously when the consumer's PHP shipped
+ * the settings inside the boot payload — no spinner flash on cold visit
+ * to the Settings tab. Falls back to `null` and the consumer dispatches
+ * `load()` to fill.
+ *
+ * @example
+ *   import { createSettingsStore } from '@pressmaximum/dashboard-kit';
+ *   import { register } from '@wordpress/data';
+ *   import apiFetch from '@wordpress/api-fetch';
+ *
+ *   const { STORE_NAME, store } = createSettingsStore({
+ *       storeName: 'customify/settings',
+ *       endpoint: '/customify/v1/settings',
+ *       fetch: ({ path, method, data }) => apiFetch({ path, method, data }),
+ *       seedSaved: boot.settings,
+ *   });
+ *   register(store);
+ */
+
+
+const TYPES = {
+  START_LOAD: 'START_LOAD',
+  LOAD_SUCCESS: 'LOAD_SUCCESS',
+  LOAD_ERROR: 'LOAD_ERROR',
+  EDIT: 'EDIT',
+  START_SAVE: 'START_SAVE',
+  SAVE_SUCCESS: 'SAVE_SUCCESS',
+  SAVE_ERROR: 'SAVE_ERROR',
+  CLEAR_DIRTY: 'CLEAR_DIRTY'
+};
+
+/**
+ * Functional immutable setter — given `{ a: { b: 1 } }` and path `'a.c'`
+ * + value `2`, returns `{ a: { b: 1, c: 2 } }`. Used by `edit()` to
+ * accumulate edits into the dirty buffer without mutating prior state.
+ *
+ * @param {Record<string, unknown>} target Source object (never mutated).
+ * @param {string}                  path   Dotted path, e.g. `'panel.field'`.
+ * @param {unknown}                 value  New value at `path`.
+ * @return {Record<string, unknown>} New object with the path set.
+ */
+function setAtPath(target, path, value) {
+  const segments = String(path || '').split('.').filter(Boolean);
+  if (segments.length === 0) {
+    return target;
+  }
+  const [head, ...rest] = segments;
+  if (rest.length === 0) {
+    return {
+      ...target,
+      [head]: value
+    };
+  }
+  const child = target && typeof target[head] === 'object' ? target[head] : {};
+  const nested = setAtPath(child, rest.join('.'), value);
+  return {
+    ...target,
+    [head]: nested
+  };
+}
+
+/**
+ * Deep-merge two plain objects — overlay wins per-key. Arrays are
+ * replaced wholesale (not concatenated) because a partial save would
+ * otherwise grow arrays unboundedly across reloads. Used by
+ * `getSettings()` to project the dirty buffer over the saved snapshot.
+ *
+ * @param {Record<string, unknown> | null} base    Underlying object.
+ * @param {Record<string, unknown> | null} overlay Object whose keys win.
+ * @return {Record<string, unknown>} Merged result (always a new object).
+ */
+function deepMerge(base, overlay) {
+  if (!overlay || typeof overlay !== 'object') {
+    return base;
+  }
+  const out = Array.isArray(base) ? [...base] : {
+    ...(base || {})
+  };
+  for (const key of Object.keys(overlay)) {
+    const value = overlay[key];
+    if (value && typeof value === 'object' && !Array.isArray(value) && out[key] && typeof out[key] === 'object') {
+      out[key] = deepMerge(out[key], value);
+    } else {
+      out[key] = value;
+    }
+  }
+  return out;
+}
+
+/**
+ * @param {Object}   config
+ * @param {string}   config.storeName   wp.data store key, e.g. `'customify/settings'`.
+ * @param {string}   config.endpoint    Path passed verbatim to `fetch({ path, ... })`.
+ * @param {Function} config.fetch       `({ path, method?, data? }) => Promise<unknown>`.
+ *                                      Consumer-owned REST client (forbidden imports
+ *                                      in the kit per SPEC §3.3).
+ * @param {Object}   [config.seedSaved] Initial `saved` value so first-mount
+ *                                      render is synchronous. Defaults to `null`.
+ * @return {{ STORE_NAME: string, store: import('@wordpress/data').StoreDescriptor }}
+ *         Store descriptor + the resolved store name, ready to `register()`.
+ */
+function createSettingsStore({
+  storeName,
+  endpoint,
+  fetch,
+  seedSaved = null
+} = {}) {
+  if (!storeName) {
+    throw new TypeError('createSettingsStore: `storeName` is required.');
+  }
+  if (!endpoint) {
+    throw new TypeError('createSettingsStore: `endpoint` is required.');
+  }
+  if (typeof fetch !== 'function') {
+    throw new TypeError('createSettingsStore: `fetch` callable is required (SPEC §3.3 — kit cannot import @wordpress/api-fetch).');
+  }
+  const DEFAULT_STATE = {
+    saved: seedSaved && typeof seedSaved === 'object' ? seedSaved : null,
+    dirty: {},
+    loading: false,
+    saving: false,
+    error: null
+  };
+  function reducer(state = DEFAULT_STATE, action) {
+    switch (action.type) {
+      case TYPES.START_LOAD:
+        return {
+          ...state,
+          loading: true,
+          error: null
+        };
+      case TYPES.LOAD_SUCCESS:
+        return {
+          ...state,
+          loading: false,
+          saved: action.payload,
+          error: null
+        };
+      case TYPES.LOAD_ERROR:
+        return {
+          ...state,
+          loading: false,
+          error: action.error
+        };
+      case TYPES.EDIT:
+        return {
+          ...state,
+          dirty: setAtPath(state.dirty, action.path, action.value)
+        };
+      case TYPES.START_SAVE:
+        return {
+          ...state,
+          saving: true,
+          error: null
+        };
+      case TYPES.SAVE_SUCCESS:
+        return {
+          ...state,
+          saving: false,
+          saved: action.payload,
+          dirty: {},
+          error: null
+        };
+      case TYPES.SAVE_ERROR:
+        return {
+          ...state,
+          saving: false,
+          error: action.error
+        };
+      case TYPES.CLEAR_DIRTY:
+        return {
+          ...state,
+          dirty: {}
+        };
+      default:
+        return state;
+    }
+  }
+  const selectors = {
+    /**
+     * Merged view: saved snapshot + dirty edits projected on top.
+     *
+     * @param {Object} state Reducer state.
+     */
+    getSettings(state) {
+      return deepMerge(state.saved || {}, state.dirty);
+    },
+    /**
+     * Last server-confirmed values — what a Reset would restore to.
+     *
+     * @param {Object} state Reducer state.
+     */
+    getSavedSettings(state) {
+      return state.saved;
+    },
+    /**
+     * Local-only edit buffer. Empty after a successful save / reset.
+     *
+     * @param {Object} state Reducer state.
+     */
+    getDirty(state) {
+      return state.dirty;
+    },
+    isDirty(state) {
+      return Object.keys(state.dirty).length > 0;
+    },
+    isLoading(state) {
+      return state.loading;
+    },
+    isSaving(state) {
+      return state.saving;
+    },
+    getError(state) {
+      return state.error;
+    }
+  };
+  const actions = {
+    /**
+     * GET the endpoint, populate `saved`. Idempotent — early-returns
+     * the cached `saved` when one exists and there's no prior error,
+     * so tab remounts don't burn a round-trip on every navigation.
+     */
+    load() {
+      return async ({
+        dispatch,
+        select
+      }) => {
+        const saved = select.getSavedSettings();
+        if (saved !== null && !select.getError()) {
+          return saved;
+        }
+        dispatch({
+          type: TYPES.START_LOAD
+        });
+        try {
+          const data = await fetch({
+            path: endpoint
+          });
+          dispatch({
+            type: TYPES.LOAD_SUCCESS,
+            payload: data
+          });
+          return data;
+        } catch (error) {
+          dispatch({
+            type: TYPES.LOAD_ERROR,
+            error
+          });
+          throw error;
+        }
+      };
+    },
+    /**
+     * Stage an edit into the dirty buffer. Path uses dotted notation
+     * (`'panelId.fieldId'` or `'panelId.field.nested'`). The reducer
+     * deep-merges into the existing buffer so accumulating edits
+     * across panels works without consumer juggling.
+     *
+     * @param {string}  path  Dotted path to the field.
+     * @param {unknown} value Next value at the field.
+     */
+    edit(path, value) {
+      return {
+        type: TYPES.EDIT,
+        path,
+        value
+      };
+    },
+    /**
+     * POST the merged settings. On success the server response
+     * replaces `saved` wholesale + clears the dirty buffer.
+     */
+    save() {
+      return async ({
+        dispatch,
+        select
+      }) => {
+        const merged = select.getSettings();
+        dispatch({
+          type: TYPES.START_SAVE
+        });
+        try {
+          const data = await fetch({
+            path: endpoint,
+            method: 'POST',
+            data: merged
+          });
+          dispatch({
+            type: TYPES.SAVE_SUCCESS,
+            payload: data
+          });
+          return data;
+        } catch (error) {
+          dispatch({
+            type: TYPES.SAVE_ERROR,
+            error
+          });
+          throw error;
+        }
+      };
+    },
+    /**
+     * POST an empty body — the server-side `SettingsControllerBase`
+     * contract (SPEC §5.10) interprets this as "reset to defaults"
+     * and replies with the defaults snapshot, which becomes the new
+     * `saved`. Dirty buffer clears on success.
+     */
+    reset() {
+      return async ({
+        dispatch
+      }) => {
+        dispatch({
+          type: TYPES.START_SAVE
+        });
+        try {
+          const data = await fetch({
+            path: endpoint,
+            method: 'POST',
+            data: {}
+          });
+          dispatch({
+            type: TYPES.SAVE_SUCCESS,
+            payload: data
+          });
+          return data;
+        } catch (error) {
+          dispatch({
+            type: TYPES.SAVE_ERROR,
+            error
+          });
+          throw error;
+        }
+      };
+    },
+    /**
+     * Discard the dirty buffer without touching `saved`. Wired into
+     * `useDirtyState.onDiscard` so accepting the nav-away confirm
+     * clears the buffer instead of letting a future remount restore
+     * the discarded edits.
+     */
+    clearDirty() {
+      return {
+        type: TYPES.CLEAR_DIRTY
+      };
+    }
+  };
+  const store = (0,external_wp_data_namespaceObject.createReduxStore)(storeName, {
+    reducer,
+    actions,
+    selectors
+  });
+  return {
+    STORE_NAME: storeName,
+    store
+  };
+}
+/* harmony default export */ var settings_createSettingsStore = ((/* unused pure expression or super */ null && (createSettingsStore)));
 ;// ./src/backend/admin/dashboard-v2/data/settingsStore.js
 
 
@@ -2798,7 +3011,7 @@ const seedSaved = boot?.settings?.values || {};
 const {
   STORE_NAME,
   store
-} = $e({
+} = createSettingsStore({
   storeName: 'customify/dashboard-settings',
   endpoint: '/customify/v1/settings',
   fetch: args => external_wp_apiFetch_default()(args),
@@ -2835,7 +3048,7 @@ const ProModuleSettingsPanel_NOTICES_STORE = 'core/notices';
 const ProModuleSettingsPanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-    icon: check_check_default,
+    icon: check_default,
     size: 14
   })
 });
@@ -2997,7 +3210,7 @@ function ProModuleSettingsPanel({
   if (!panel) {
     return null;
   }
-  const headingId = Ge(panel.id);
+  const headingId = panelHeadingId(panel.id);
   const fields = Array.isArray(panel.fields) ? panel.fields : [];
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Card, {
@@ -3017,11 +3230,11 @@ function ProModuleSettingsPanel({
           className: "pmdk-schema-form",
           role: "group",
           "aria-labelledby": headingId,
-          children: fields.map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Ye, {
+          children: fields.map(field => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SchemaField, {
             field: field,
             value: values[field.id],
             onChange: next => handleChange(field.id, next),
-            fieldTypes: Ze
+            fieldTypes: BASE_FIELD_TYPES
           }, field.id))
         }), error && error.message && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Notice, {
           status: "error",
@@ -3038,7 +3251,7 @@ function ProModuleSettingsPanel({
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "customify-dashboard-settings__panel-actions",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveBar, {
         isDirty: isDirty,
         isSaving: saving,
         onSave: handleSave,
@@ -3098,7 +3311,7 @@ const LicensePanel_NOTICES_STORE = 'core/notices';
 const LicensePanel_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-    icon: check_check_default,
+    icon: check_default,
     size: 14
   })
 });
@@ -3177,7 +3390,7 @@ function LicensePanel({
   const [busy, setBusy] = (0,external_wp_element_namespaceObject.useState)(false);
   const [error, setError] = (0,external_wp_element_namespaceObject.useState)(null);
   const isActive = 'valid' === snapshot?.status;
-  const headingId = Ge(panel?.id || 'license');
+  const headingId = panelHeadingId(panel?.id || 'license');
   const headers = method => {
     const out = method ? {
       'Content-Type': 'application/json'
@@ -3367,7 +3580,7 @@ const Settings_NOTICES_STORE = 'core/notices';
 const Settings_SUCCESS_GLYPH = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
   className: "customify-dashboard-snackbar__check",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Icon, {
-    icon: check_check_default,
+    icon: check_default,
     size: 14
   })
 });
@@ -3394,14 +3607,14 @@ function ThemePanelCard({
       "data-panel-id": panel.id,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.CardHeader, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("h2", {
-          id: Ge(panel.id),
+          id: panelHeadingId(panel.id),
           children: panel.label
         })
       }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.CardBody, {
         children: [panel.description && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
           className: "customify-dashboard-settings__description",
           children: panel.description
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Je, {
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SchemaForm, {
           panel: panel,
           values: values || {},
           onFieldChange: (panelId, fieldId, next) => edit(`${panelId}.${fieldId}`, next),
@@ -3410,7 +3623,7 @@ function ThemePanelCard({
       })]
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "customify-dashboard-settings__panel-actions",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Xe, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SaveBar, {
         isDirty: isDirty,
         isSaving: isSaving,
         onSave: onSave,
@@ -3434,7 +3647,7 @@ function ThemePanelCard({
 function Settings({
   params
 }) {
-  const boot = ce();
+  const boot = useBoot();
   const schema = boot?.settings?.schema || {
     panels: []
   };
@@ -3446,7 +3659,7 @@ function Settings({
     save,
     reset
   } = (0,external_wp_data_namespaceObject.useDispatch)(CUSTOMIFY_SETTINGS_STORE);
-  const fieldTypes = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.field-types', Ze);
+  const fieldTypes = (0,external_wp_hooks_namespaceObject.applyFilters)('customify.dashboard.settings.field-types', BASE_FIELD_TYPES);
 
   // NB: do NOT useMemo here — the panels filter list is mutated by
   // Pro / child theme bundles that load *after* this script (theme
@@ -3463,7 +3676,7 @@ function Settings({
   // registered (Free + Typekit-off case for example).
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!requestedPanelId && panels.length > 1 && activePanel) {
-      M(`#settings/${activePanel.id}`);
+      HashRouter_navigate(`#settings/${activePanel.id}`);
     }
   }, [requestedPanelId, panels, activePanel]);
   const handleSave = async () => {
@@ -3573,7 +3786,7 @@ function Settings({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-settings customify-dashboard-settings--tabbed",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Pe, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SubNav, {
       items: panels.map(p => ({
         id: p.id,
         label: p.label,
@@ -3584,6 +3797,162 @@ function Settings({
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "customify-dashboard-settings__pane",
       children: renderActivePanel()
+    })]
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/CategoryBadge.jsx
+/**
+ * CategoryBadge — small uppercase pill rendered next to each changelog
+ * item. SPEC §5.3b. Tier-2 page component.
+ *
+ * Maps a lowercase `category` string (typically from a PHP changelog
+ * parser) to:
+ *   - a display label via the kit's English fallback table + consumer's
+ *     `labels` override
+ *   - a tone modifier class via the kit's category→tone map + optional
+ *     `toneOverrides`
+ *
+ * CategoryBadge.css owns the color palette per tone — imported here so
+ * consumers using the badge standalone (without ReleaseBlock) still get
+ * styling. Tones: `new` / `improved` / `fixed` / `updated` / `removed`
+ * / `security` / `deprecated` / `neutral`.
+ *
+ * Unknown categories render with the raw category text (uppercased)
+ * and the `neutral` tone — drift-tolerant display.
+ */
+
+
+
+const CategoryBadge_DEFAULT_LABELS = {
+  added: 'New',
+  new: 'New',
+  changed: 'Improved',
+  improved: 'Improved',
+  enhancement: 'Improved',
+  enhanced: 'Improved',
+  fixed: 'Fixed',
+  fix: 'Fixed',
+  updated: 'Updated',
+  update: 'Updated',
+  removed: 'Removed',
+  deprecated: 'Deprecated',
+  security: 'Security'
+};
+const BASE_TONE = {
+  added: 'new',
+  new: 'new',
+  changed: 'improved',
+  improved: 'improved',
+  enhancement: 'improved',
+  enhanced: 'improved',
+  fixed: 'fixed',
+  fix: 'fixed',
+  updated: 'updated',
+  update: 'updated',
+  removed: 'removed',
+  deprecated: 'deprecated',
+  security: 'security'
+};
+function CategoryBadge({
+  category,
+  labels: callerLabels,
+  toneOverrides
+}) {
+  if (!category) {
+    return null;
+  }
+  const labels = {
+    ...CategoryBadge_DEFAULT_LABELS,
+    ...(callerLabels || {})
+  };
+  const tones = {
+    ...BASE_TONE,
+    ...(toneOverrides || {})
+  };
+  const key = String(category).toLowerCase();
+  const tone = tones[key] || 'neutral';
+  const label = labels[key] || key.toUpperCase();
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+    className: 'pmdk-category-badge pmdk-category-badge--' + tone,
+    children: label
+  });
+}
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.css
+// extracted by mini-css-extract-plugin
+
+;// ./node_modules/.pnpm/@pressmaximum+dashboard-kit@git+https+++github.com+PressMaximum+dashboard-kit.git+ce259_660e8ecd2705c3d8e48b0985f8efbe47/node_modules/@pressmaximum/dashboard-kit/src/changelog/ReleaseBlock.jsx
+/**
+ * ReleaseBlock — one release card. SPEC §5.3b + §5.10b. Tier-2 page
+ * component.
+ *
+ * Header: `v{version}` + optional `Current` pill + date. Body: list
+ * of items; each item shows its CategoryBadge + text. SPEC §16.2
+ * locked class: `.pmdk-release-block`.
+ *
+ * Release shape:
+ *
+ *   {
+ *     version: string,                  // '1.2.0'
+ *     date?: string,                    // already-formatted by consumer
+ *     current?: boolean,                // shows the Current pill
+ *     items: { category?: string, text: string }[],
+ *   }
+ *
+ * Labels (English fallbacks shipped):
+ *   currentBadge   'Current'
+ *
+ * Consumer passes `categoryLabels` (and optional `toneOverrides`)
+ * through to each CategoryBadge — see the badge's docstring.
+ */
+
+
+
+
+
+const ReleaseBlock_DEFAULT_LABELS = {
+  currentBadge: 'Current'
+};
+function ReleaseBlock({
+  release,
+  labels: callerLabels,
+  categoryLabels,
+  categoryToneOverrides
+}) {
+  if (!release) {
+    return null;
+  }
+  const labels = createI18nBag(ReleaseBlock_DEFAULT_LABELS, callerLabels);
+  const items = Array.isArray(release.items) ? release.items : [];
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("article", {
+    className: "pmdk-release-block",
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("header", {
+      className: "pmdk-release-block__head",
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("h3", {
+        className: "pmdk-release-block__version",
+        children: ['v' + release.version, release.current && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "pmdk-release-block__current",
+          children: labels.currentBadge
+        })]
+      }), release.date && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+        className: "pmdk-release-block__date",
+        children: release.date
+      })]
+    }), items.length > 0 && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("ul", {
+      className: "pmdk-release-block__items",
+      children: items.map((item, idx) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("li", {
+        className: "pmdk-release-block__item",
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CategoryBadge, {
+          category: item.category,
+          labels: categoryLabels,
+          toneOverrides: categoryToneOverrides
+        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+          className: "pmdk-release-block__item-text",
+          children: item.text
+        })]
+      }, idx))
     })]
   });
 }
@@ -3677,7 +4046,7 @@ function SourceReleases({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     className: "customify-dashboard-changelog__releases",
-    children: releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Dr, {
+    children: releases.map(release => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ReleaseBlock, {
       release: release,
       labels: RELEASE_LABELS,
       categoryLabels: CATEGORY_LABELS
@@ -3687,7 +4056,7 @@ function SourceReleases({
 function Changelog({
   params
 }) {
-  const boot = ce();
+  const boot = useBoot();
 
   // Recompute on every render — Pro bridge JS registers
   // `customify.dashboard.changelog.sources` AFTER the theme bundle's
@@ -3709,7 +4078,7 @@ function Changelog({
   // source — bare `#changelog` is fine for the single-source case.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!params?.sourceId && sources.length > 1 && activeSource) {
-      M(`#changelog/${activeSource.id}`);
+      HashRouter_navigate(`#changelog/${activeSource.id}`);
     }
   }, [params, sources, activeSource]);
   if (!activeSource) {
@@ -3725,7 +4094,7 @@ function Changelog({
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "customify-dashboard-changelog customify-dashboard-changelog--multi",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Pe, {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SubNav, {
       items: sources.map(s => ({
         id: s.id,
         label: s.label,
@@ -3803,7 +4172,7 @@ function mount() {
   } else {
     versionLabel = (0,external_wp_i18n_namespaceObject.__)('Free version', 'customify');
   }
-  ke({
+  core_mountDashboard({
     rootEl: '#customify-dashboard',
     bootGlobal: 'customifyDashboard',
     filterNamespace: 'customify',
@@ -3888,206 +4257,5 @@ if (document.readyState === 'loading') {
 } else {
   mount();
 }
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = __webpack_modules__;
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/chunk loaded */
-/******/ 	!function() {
-/******/ 		var deferred = [];
-/******/ 		__webpack_require__.O = function(result, chunkIds, fn, priority) {
-/******/ 			if(chunkIds) {
-/******/ 				priority = priority || 0;
-/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
-/******/ 				deferred[i] = [chunkIds, fn, priority];
-/******/ 				return;
-/******/ 			}
-/******/ 			var notFulfilled = Infinity;
-/******/ 			for (var i = 0; i < deferred.length; i++) {
-/******/ 				var chunkIds = deferred[i][0];
-/******/ 				var fn = deferred[i][1];
-/******/ 				var priority = deferred[i][2];
-/******/ 				var fulfilled = true;
-/******/ 				for (var j = 0; j < chunkIds.length; j++) {
-/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) { return __webpack_require__.O[key](chunkIds[j]); })) {
-/******/ 						chunkIds.splice(j--, 1);
-/******/ 					} else {
-/******/ 						fulfilled = false;
-/******/ 						if(priority < notFulfilled) notFulfilled = priority;
-/******/ 					}
-/******/ 				}
-/******/ 				if(fulfilled) {
-/******/ 					deferred.splice(i--, 1)
-/******/ 					var r = fn();
-/******/ 					if (r !== undefined) result = r;
-/******/ 				}
-/******/ 			}
-/******/ 			return result;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__webpack_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/create fake namespace object */
-/******/ 	!function() {
-/******/ 		var getProto = Object.getPrototypeOf ? function(obj) { return Object.getPrototypeOf(obj); } : function(obj) { return obj.__proto__; };
-/******/ 		var leafPrototypes;
-/******/ 		// create a fake namespace object
-/******/ 		// mode & 1: value is a module id, require it
-/******/ 		// mode & 2: merge all properties of value into the ns
-/******/ 		// mode & 4: return value when already ns object
-/******/ 		// mode & 16: return value when it's Promise-like
-/******/ 		// mode & 8|1: behave like require
-/******/ 		__webpack_require__.t = function(value, mode) {
-/******/ 			if(mode & 1) value = this(value);
-/******/ 			if(mode & 8) return value;
-/******/ 			if(typeof value === 'object' && value) {
-/******/ 				if((mode & 4) && value.__esModule) return value;
-/******/ 				if((mode & 16) && typeof value.then === 'function') return value;
-/******/ 			}
-/******/ 			var ns = Object.create(null);
-/******/ 			__webpack_require__.r(ns);
-/******/ 			var def = {};
-/******/ 			leafPrototypes = leafPrototypes || [null, getProto({}), getProto([]), getProto(getProto)];
-/******/ 			for(var current = mode & 2 && value; (typeof current == 'object' || typeof current == 'function') && !~leafPrototypes.indexOf(current); current = getProto(current)) {
-/******/ 				Object.getOwnPropertyNames(current).forEach(function(key) { def[key] = function() { return value[key]; }; });
-/******/ 			}
-/******/ 			def['default'] = function() { return value; };
-/******/ 			__webpack_require__.d(ns, def);
-/******/ 			return ns;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
-/******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/jsonp chunk loading */
-/******/ 	!function() {
-/******/ 		// no baseURI
-/******/ 		
-/******/ 		// object to store loaded and loading chunks
-/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
-/******/ 		var installedChunks = {
-/******/ 			397: 0,
-/******/ 			133: 0
-/******/ 		};
-/******/ 		
-/******/ 		// no chunk on demand loading
-/******/ 		
-/******/ 		// no prefetching
-/******/ 		
-/******/ 		// no preloaded
-/******/ 		
-/******/ 		// no HMR
-/******/ 		
-/******/ 		// no HMR manifest
-/******/ 		
-/******/ 		__webpack_require__.O.j = function(chunkId) { return installedChunks[chunkId] === 0; };
-/******/ 		
-/******/ 		// install a JSONP callback for chunk loading
-/******/ 		var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
-/******/ 			var chunkIds = data[0];
-/******/ 			var moreModules = data[1];
-/******/ 			var runtime = data[2];
-/******/ 			// add "moreModules" to the modules object,
-/******/ 			// then flag all "chunkIds" as loaded and fire callback
-/******/ 			var moduleId, chunkId, i = 0;
-/******/ 			if(chunkIds.some(function(id) { return installedChunks[id] !== 0; })) {
-/******/ 				for(moduleId in moreModules) {
-/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
-/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
-/******/ 					}
-/******/ 				}
-/******/ 				if(runtime) var result = runtime(__webpack_require__);
-/******/ 			}
-/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
-/******/ 			for(;i < chunkIds.length; i++) {
-/******/ 				chunkId = chunkIds[i];
-/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 					installedChunks[chunkId][0]();
-/******/ 				}
-/******/ 				installedChunks[chunkId] = 0;
-/******/ 			}
-/******/ 			return __webpack_require__.O(result);
-/******/ 		}
-/******/ 		
-/******/ 		var chunkLoadingGlobal = self["webpackChunkcustomify"] = self["webpackChunkcustomify"] || [];
-/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
-/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
-/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, [133], function() { return __webpack_require__(685); })
-/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
-/******/ 	
 /******/ })()
 ;
