@@ -306,24 +306,6 @@ function customify_layout_builder_config_default( $val, $name ) {
 				'tablet'  => array( 'fr' => array( 1, 1 ) ),
 				'mobile'  => array( 'fr' => array( 1 ) ),
 			),
-			'header_top_col_layout' => array(
-				'count'   => 3,
-				'desktop' => array( 'fr' => array( 1, 1, 1 ) ),
-				'tablet'  => array( 'fr' => array( 1, 1 ) ),
-				'mobile'  => array( 'fr' => array( 1 ) ),
-			),
-			'header_main_col_layout' => array(
-				'count'   => 3,
-				'desktop' => array( 'fr' => array( 1, 1, 1 ) ),
-				'tablet'  => array( 'fr' => array( 1, 1 ) ),
-				'mobile'  => array( 'fr' => array( 1 ) ),
-			),
-			'header_bottom_col_layout' => array(
-				'count'   => 3,
-				'desktop' => array( 'fr' => array( 1, 1, 1 ) ),
-				'tablet'  => array( 'fr' => array( 1, 1 ) ),
-				'mobile'  => array( 'fr' => array( 1 ) ),
-			),
 		);
 
 	if ( ! $val && isset( $defaults[ $name ] ) ) {

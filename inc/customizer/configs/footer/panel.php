@@ -180,15 +180,16 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 			),
 
 			array(
-				'name'       => "{$section}_col_gap",
-				'type'       => 'slider',
-				'section'    => $section,
-				'title'      => __( 'Columns Gap', 'customify' ),
-				'selector'   => $selector . ' .row-v2, ' . $selector . ' .col-v2',
-				'css_format' => 'column-gap: {{value}}; gap: {{value}}',
-				'min'        => 0,
-				'max'        => 100,
-				'default'    => 30,
+				'name'        => "{$section}_col_gap",
+				'type'        => 'slider',
+				'section'     => $section,
+				'title'       => __( 'Columns Gap', 'customify' ),
+				'description' => __( 'Default gap between columns. Per-column gap in Column Settings overrides this.', 'customify' ),
+				'selector'    => $selector . ' .row-v2, ' . $selector . ' .col-v2',
+				'css_format'  => 'column-gap: {{value}}; gap: {{value}}',
+				'min'         => 0,
+				'max'         => 100,
+				'default'     => 30,
 			),
 
 			array(
@@ -200,8 +201,13 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
 				'col_layout_setting' => $section . '_col_layout',
 				'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
+				// Footer widgets typically stack vertically inside each column,
+				// so the default per-column layout is `stack`. Users can still
+				// switch any column to flex-start/center/end/space-between.
+				'default_layout'     => 'stack',
 				'selector'           => $selector,
 				'css_format'         => 'columns_settings',
+				'sanitize_callback'  => 'customify_sanitize_columns_settings',
 			),
 
 		);
@@ -267,12 +273,6 @@ add_action(
 			$setting = $wp_customize->get_setting( $key );
 			if ( $setting ) {
 				$setting->transport = 'postMessage';
-			}
-		}
-		foreach ( array( 'footer_main_columns_settings', 'footer_bottom_columns_settings' ) as $key ) {
-			$setting = $wp_customize->get_setting( $key );
-			if ( $setting ) {
-				$setting->transport = 'refresh';
 			}
 		}
 	},

@@ -47,6 +47,17 @@ class Customify_Customizer_Control_Columns_Settings extends Customify_Customizer
 	public $forced_layout = '';
 
 	/**
+	 * Default layout used when the user hasn't picked one for a column.
+	 * Overrides the built-in position-based default (first → flex-start,
+	 * last → flex-end, middle → flex-center). The user can still pick a
+	 * different value per column. Use `forced_layout` if you need to
+	 * lock the value regardless of user input.
+	 *
+	 * @var string
+	 */
+	public $default_layout = '';
+
+	/**
 	 * Map of `colKey => CSS selector` to override the default
 	 * `{selector} .col-v2-{key}` chain. Useful for rows whose markup
 	 * doesn't follow the col-v2 pattern (e.g. mobile off-canvas sidebar).
@@ -61,6 +72,7 @@ class Customify_Customizer_Control_Columns_Settings extends Customify_Customizer
 		$this->json['column_keys']        = $this->column_keys;
 		$this->json['hide_layout']        = (bool) $this->hide_layout;
 		$this->json['forced_layout']      = (string) $this->forced_layout;
+		$this->json['default_layout']     = (string) $this->default_layout;
 		$this->json['col_selectors']      = is_array( $this->col_selectors ) ? $this->col_selectors : array();
 	}
 
@@ -77,6 +89,7 @@ class Customify_Customizer_Control_Columns_Settings extends Customify_Customizer
 			data-default='{{{ JSON.stringify( field.default ) }}}'
 			data-value='{{{ JSON.stringify( field.value ) }}}'
 			data-hide-layout="{{ field.hide_layout ? '1' : '' }}"
+			data-default-layout="{{ field.default_layout }}"
 		></div>
 		<?php
 		self::after_field();

@@ -36,11 +36,6 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			),
 			'react_control_id'      => 'header_builder_panel_v2',
 			'panel_items_container' => 'customify-hb-panel-items',
-			'row_layout_keys'       => array(
-				'top'    => 'header_top_col_layout',
-				'main'   => 'header_main_col_layout',
-				'bottom' => 'header_bottom_col_layout',
-			),
 		);
 	}
 
@@ -202,24 +197,17 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 			),
 
 			array(
-				'name'              => $section . '_col_layout',
-				'type'              => 'row_layout',
-				'section'           => $section,
-				'title'             => __( 'Columns Layout', 'customify' ),
-				'sanitize_callback' => 'customify_sanitize_row_layout',
-			),
-
-			array(
 				'name'               => $section . '_columns_settings',
 				'type'               => 'columns_settings',
 				'section'            => $section,
 				'priority'           => 999,
 				'title'              => __( 'Column Settings', 'customify' ),
 				'description'        => __( 'Per-column layout, gap and padding.', 'customify' ),
-				'col_layout_setting' => $section . '_col_layout',
-				'column_keys'        => array( 'left', 'center', 'right', 'col4', 'col5' ),
+				'col_layout_setting' => '',
+				'column_keys'        => array( 'left', 'center', 'right' ),
 				'selector'           => '.header--row.' . str_replace( '_', '-', $section ),
 				'css_format'         => 'columns_settings',
+				'sanitize_callback'  => 'customify_sanitize_columns_settings',
 			),
 
 		);
@@ -359,6 +347,7 @@ class Customify_Builder_Header extends Customify_Customize_Builder_Panel {
 				),
 				'selector'           => '#header-menu-sidebar-inner',
 				'css_format'         => 'columns_settings',
+				'sanitize_callback'  => 'customify_sanitize_columns_settings',
 			),
 
 		);
@@ -512,14 +501,13 @@ function customify_header_builder_has_item( $item_id ) {
 }
 
 /**
- * Register the row_layout control type so load_controls() includes the class file.
+ * Register the columns_settings control type so load_controls() includes
+ * the class file. The footer panel still registers `row_layout` for its
+ * own Columns Layout picker; header rows no longer expose that picker.
  */
 add_filter(
 	'customify/customize/register-controls',
 	function ( $fields ) {
-		if ( ! in_array( 'row_layout', $fields, true ) ) {
-			$fields[] = 'row_layout';
-		}
 		if ( ! in_array( 'columns_settings', $fields, true ) ) {
 			$fields[] = 'columns_settings';
 		}
@@ -528,75 +516,22 @@ add_filter(
 );
 
 /**
- * Force postMessage transport for header row col_layout settings so the
- * preview JS binding can apply grid-template-columns live, and refresh
- * transport for columns_settings (no JS auto-CSS handler yet).
+ * Sanitize callback for columns_settings fields.
+ *
+ * Customify's generic sanitize_customizer_input() strips off the `desktop`
+ * key whenever a setting has device_settings=false but its value contains
+ * one (see class-customizer-sanitize.php:236). Our columns_settings shape
+ * `{ desktop: {...}, mobile: {...} }` does include that key — without this
+ * dedicated callback the structure gets flattened to `{ <colKey>: {...} }`
+ * on Publish, so the frontend CSS generator can no longer find the saved
+ * per-column gap/padding/layout values. Round-tripping via this callback
+ * preserves both device buckets untouched.
  */
-add_action(
-	'customize_register',
-	function ( $wp_customize ) {
-		foreach ( array( 'header_top_col_layout', 'header_main_col_layout', 'header_bottom_col_layout' ) as $key ) {
-			$setting = $wp_customize->get_setting( $key );
-			if ( $setting ) {
-				$setting->transport = 'postMessage';
-			}
+if ( ! function_exists( 'customify_sanitize_columns_settings' ) ) {
+	function customify_sanitize_columns_settings( $input ) {
+		if ( is_string( $input ) ) {
+			$input = json_decode( urldecode_deep( wp_unslash( $input ) ), true );
 		}
-		foreach ( array( 'header_top_columns_settings', 'header_main_columns_settings', 'header_bottom_columns_settings', 'header_sidebar_columns_settings' ) as $key ) {
-			$setting = $wp_customize->get_setting( $key );
-			if ( $setting ) {
-				$setting->transport = 'refresh';
-			}
-		}
-	},
-	700
-);
-
-/**
- * Output grid-template-columns CSS for header rows based on saved col_layout values.
- */
-function customify_header_row_layout_css() {
-	$rows = array(
-		'header_top'    => '.header--row.header-top',
-		'header_main'   => '.header--row.header-main',
-		'header_bottom' => '.header--row.header-bottom',
-	);
-
-	$css = '';
-	foreach ( $rows as $key => $selector ) {
-		$raw = Customify()->get_setting( $key . '_col_layout' );
-		if ( ! $raw ) {
-			continue;
-		}
-		$data = is_array( $raw ) ? $raw : json_decode( $raw, true );
-		if ( ! is_array( $data ) ) {
-			continue;
-		}
-
-		$devices = array(
-			'desktop' => '',
-			'tablet'  => '@media (max-width: 1024px)',
-			'mobile'  => '@media (max-width: 767px)',
-		);
-
-		foreach ( $devices as $device => $media ) {
-			if ( empty( $data[ $device ]['fr'] ) || ! is_array( $data[ $device ]['fr'] ) ) {
-				continue;
-			}
-			$fr_parts = array_map(
-				function ( $v ) {
-					return absint( $v ) . 'fr';
-				},
-				$data[ $device ]['fr']
-			);
-			$grid_cols = implode( ' ', $fr_parts );
-
-			$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: ' . $grid_cols . '; }';
-			$css  .= $media ? $media . ' { ' . $rules . ' } ' : $rules . ' ';
-		}
-	}
-
-	if ( $css ) {
-		echo '<style id="customify-header-col-layout">' . $css . "</style>\n";
+		return is_array( $input ) ? $input : array();
 	}
 }
-add_action( 'wp_head', 'customify_header_row_layout_css', 99 );

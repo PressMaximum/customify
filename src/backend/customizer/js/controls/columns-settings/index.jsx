@@ -27,10 +27,28 @@ import { __ } from '@wordpress/i18n';
 
 function parseRaw( raw ) {
 	if ( raw === null || raw === undefined || raw === '' ) return {};
-	if ( typeof raw === 'object' ) return raw;
-	try { return JSON.parse( decodeURIComponent( raw ) ); } catch ( _ ) {}
-	try { return JSON.parse( raw ); } catch ( _ ) {}
-	return {};
+	let parsed = raw;
+	if ( typeof raw !== 'object' ) {
+		try { parsed = JSON.parse( decodeURIComponent( raw ) ); }
+		catch ( _ ) {
+			try { parsed = JSON.parse( raw ); }
+			catch ( __ ) { return {}; }
+		}
+	}
+	if ( ! parsed || typeof parsed !== 'object' ) return {};
+
+	// Legacy fallback — old saves (pre sanitize-callback fix) had the
+	// device wrapper stripped. If the value looks like raw column data
+	// instead of { desktop, mobile }, wrap it as desktop.
+	const looksDeviceWrapped = 'desktop' in parsed || 'mobile' in parsed;
+	const looksColumnData    = ! looksDeviceWrapped && Object.keys( parsed ).some( ( k ) => (
+		k === 'left' || k === 'center' || k === 'right' || k === 'col4' || k === 'col5' || k === 'sidebar'
+	) );
+	if ( looksColumnData ) {
+		return { desktop: parsed };
+	}
+
+	return parsed;
 }
 
 function useCustomizeSetting( controlId, defaultValue ) {
@@ -124,10 +142,11 @@ function usePreviewedDevice() {
 // ---------------------------------------------------------------------------
 
 const LAYOUT_OPTIONS = [
-	{ value: 'flex-start',  label: 'Flex start',  svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 9v6h11V9H9zM4 20h1.5V4H4v16z"/></svg>' },
-	{ value: 'flex-center', label: 'Flex center', svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z"/></svg>' },
-	{ value: 'flex-end',    label: 'Flex end',    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z"/></svg>' },
-	{ value: 'stack',       label: 'Stack',       svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 4v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V4H8v5a.5.5 0 0 0 .5.5h7A.5.5 0 0 0 16 9V4h1.5Zm0 16v-5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v5H8v-5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v5h1.5Z"/></svg>' },
+	{ value: 'flex-start',    label: 'Flex start',    svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 9v6h11V9H9zM4 20h1.5V4H4v16z"/></svg>' },
+	{ value: 'flex-center',   label: 'Flex center',   svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M12.5 15v5H11v-5H4V9h7V4h1.5v5h7v6h-7Z"/></svg>' },
+	{ value: 'flex-end',      label: 'Flex end',      svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 15h11V9H4v6zM18.5 4v16H20V4h-1.5z"/></svg>' },
+	{ value: 'space-between', label: 'Space between', svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M9 15h6V9H9v6zm-5 5h1.5V4H4v16zM18.5 4v16H20V4h-1.5z"/></svg>' },
+	{ value: 'stack',         label: 'Stack',         svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 4v5a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V4H8v5a.5.5 0 0 0 .5.5h7A.5.5 0 0 0 16 9V4h1.5Zm0 16v-5a2 2 0 0 0-2-2h-7a2 2 0 0 0-2 2v5H8v-5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v5h1.5Z"/></svg>' },
 ];
 
 const CHEVRON_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M17.5 11.6L12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>';
@@ -136,13 +155,13 @@ const CHEVRON_DOWN_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2
 // Sub-controls
 // ---------------------------------------------------------------------------
 
-function LayoutButtons( { value, onChange } ) {
-	const current = value || 'flex-start';
+function LayoutButtons( { value, defaultLayout, onChange } ) {
+	const current = value || defaultLayout || 'flex-start';
 	return (
 		<div className="customify--group-field ft--layout customify-cs__layout-wrap" data-field-name="layout">
 			<label className="customize-control-title customify-cs__field-label">{ __( 'Layout', 'customify' ) }</label>
 			<div className="customify-cs__btn-group" role="group">
-				<input type="hidden" className="customify-cs__layout-value" data-name="layout" value={ current } readOnly />
+				<input type="hidden" className="customify-cs__layout-value change-by-js" data-name="layout" value={ current } readOnly />
 				{ LAYOUT_OPTIONS.map( ( opt ) => {
 					const isActive = current === opt.value;
 					return (
@@ -178,6 +197,11 @@ function GapField( { value, onChange } ) {
 	const uid     = useMemo( () => `gap-${ Date.now() }-${ Math.floor( Math.random() * 1000 ) }`, [] );
 	const def     = useMemo( () => ( { unit: 'em', value: 1 } ), [] );
 
+	// Step depends on the current unit — em uses fractional 0.1 steps,
+	// px uses whole-pixel 1 steps.
+	const stepFor = ( unit ) => ( unit === 'px' ? 1 : 0.1 );
+	const step    = stepFor( v.unit || 'em' );
+
 	useEffect( () => {
 		if ( ! wrapRef.current || ! window.customifyField || ! window.jQuery ) return;
 		const $wrap = window.jQuery( wrapRef.current );
@@ -203,6 +227,21 @@ function GapField( { value, onChange } ) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [] );
 
+	// Sync the jQuery-UI slider's step option whenever the unit changes —
+	// initSlider only reads data-step on first mount, so we have to call
+	// .slider('option', ...) for later updates. The HTML number input's
+	// step attribute is React-managed via the `step` prop below.
+	useEffect( () => {
+		if ( ! wrapRef.current || ! window.jQuery ) return;
+		const $slider = window.jQuery( '.customify-input-slider', wrapRef.current );
+		if ( ! $slider.length || ! $slider.slider ) return;
+		try {
+			if ( $slider.hasClass( 'ui-slider' ) ) {
+				$slider.slider( 'option', 'step', step );
+			}
+		} catch ( _ ) {}
+	}, [ step ] );
+
 	return (
 		<div className="customify--group-field ft--slider" data-field-name="gap">
 			<div className="customify-field-header customify-field-heading">
@@ -214,15 +253,18 @@ function GapField( { value, onChange } ) {
 						className="customify-input-slider"
 						data-min="0"
 						data-default={ JSON.stringify( def ) }
-						data-step="1"
+						data-step={ step }
 						data-max="100"
 					/>
+					{ /* `change-by-js` so the customify control container's "change"
+					     delegate (which calls control.getValue() and pushes an
+					     undefined value back into the setting) skips this input. */ }
 					<input
 						type="number"
 						min="0"
-						step="1"
+						step={ step }
 						max="100"
-						className="customify--slider-input customify-input"
+						className="customify--slider-input customify-input change-by-js"
 						data-name="gap-value"
 						defaultValue={ v.value ?? '' }
 						size={ 4 }
@@ -330,7 +372,7 @@ function AccordionItem( { colKey, label, children } ) {
 // App
 // ---------------------------------------------------------------------------
 
-function App( { controlId, colLayoutSetting, columnKeys, defaultValue, hideLayout } ) {
+function App( { controlId, colLayoutSetting, columnKeys, defaultValue, hideLayout, defaultLayout } ) {
 	const [ value, setValue ] = useCustomizeSetting( controlId, defaultValue );
 	const count    = useColLayoutCount( colLayoutSetting, Math.min( 3, columnKeys.length ) );
 	const device   = usePreviewedDevice();
@@ -340,6 +382,21 @@ function App( { controlId, colLayoutSetting, columnKeys, defaultValue, hideLayou
 
 	const activeCols = columnKeys.slice( 0, Math.max( 1, Math.min( columnKeys.length, count ) ) );
 	const deviceData = ( value && value[ device ] ) || {};
+
+	// Resolve default layout for a given column index.
+	//
+	// If the field config sets `default_layout` (e.g. footer rows = 'stack'),
+	// every column inherits that value as its default. Otherwise fall back to
+	// the position-based default that mirrors the PHP CSS generator:
+	//   first → flex-start, last → flex-end, middle → flex-center
+	//   (single active column → flex-start).
+	function defaultLayoutFor( idx ) {
+		if ( defaultLayout ) return defaultLayout;
+		if ( activeCols.length === 1 ) return 'flex-start';
+		if ( idx === 0 ) return 'flex-start';
+		if ( idx === activeCols.length - 1 ) return 'flex-end';
+		return 'flex-center';
+	}
 
 	function updateColumn( colKey, partial ) {
 		setValue( ( prev ) => {
@@ -449,6 +506,7 @@ function App( { controlId, colLayoutSetting, columnKeys, defaultValue, hideLayou
 										{ ! hideLayout && (
 											<LayoutButtons
 												value={ ( deviceData[ colKey ] || {} ).layout }
+												defaultLayout={ defaultLayoutFor( idx ) }
 												onChange={ ( v ) => updateColumn( colKey, { layout: v } ) }
 											/>
 										) }
@@ -489,6 +547,7 @@ function mountOne( node ) {
 	const columnKeys       = parseAttr( node.dataset.columnKeys, [ 'left', 'center', 'right', 'col4', 'col5' ] );
 	const defaultValue     = parseAttr( node.dataset.default, {} );
 	const hideLayout       = node.dataset.hideLayout === '1';
+	const defaultLayout    = node.dataset.defaultLayout || '';
 	if ( ! controlId ) return;
 	render(
 		<App
@@ -497,6 +556,7 @@ function mountOne( node ) {
 			columnKeys={ columnKeys }
 			defaultValue={ defaultValue }
 			hideLayout={ hideLayout }
+			defaultLayout={ defaultLayout }
 		/>,
 		node
 	);

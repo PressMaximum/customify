@@ -384,9 +384,45 @@ class Customify_Customizer_Auto_CSS
 			return;
 		}
 
-		$col_selectors = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
-		$forced_layout = isset($field['forced_layout']) ? (string) $field['forced_layout'] : '';
-		$column_keys   = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+		$col_selectors  = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
+		$forced_layout  = isset($field['forced_layout']) ? (string) $field['forced_layout'] : '';
+		$default_layout = isset($field['default_layout']) ? (string) $field['default_layout'] : '';
+		$column_keys    = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+
+		// Legacy fallback — early builds of this control saved column data without
+		// a desktop/mobile wrapper (the generic sanitizer stripped it). When the
+		// stored value has column keys at the top level instead of device keys,
+		// treat the whole bag as the desktop bucket so the saved gap/padding
+		// keeps applying after the sanitize fix.
+		if ( ! empty( $values ) && ! isset( $values['desktop'] ) && ! isset( $values['mobile'] ) ) {
+			$has_col_key = false;
+			foreach ( $column_keys as $_ck ) {
+				if ( isset( $values[ $_ck ] ) ) {
+					$has_col_key = true;
+					break;
+				}
+			}
+			if ( $has_col_key ) {
+				$values = array( 'desktop' => $values );
+			}
+		}
+
+		// Active column list — count from the linked col_layout setting if any,
+		// else fall back to the full column_keys list. Drives the position-based
+		// default layout (first=flex-start, last=flex-end, middle=flex-center)
+		// applied below when the user hasn't saved an explicit layout choice.
+		$active_count = count($column_keys);
+		if (!empty($field['col_layout_setting'])) {
+			$cl_raw  = Customify()->get_setting($field['col_layout_setting']);
+			$cl_data = is_array($cl_raw) ? $cl_raw : (is_string($cl_raw) ? json_decode($cl_raw, true) : array());
+			if (is_array($cl_data) && isset($cl_data['count'])) {
+				$cnt = intval($cl_data['count']);
+				if ($cnt >= 1) {
+					$active_count = min(count($column_keys), $cnt);
+				}
+			}
+		}
+		$active_columns = array_slice($column_keys, 0, $active_count);
 
 		$device_map = array(
 			'desktop' => 'desktop',
@@ -396,13 +432,12 @@ class Customify_Customizer_Auto_CSS
 		foreach ($device_map as $device_key => $css_bucket) {
 			$device_values = (isset($values[$device_key]) && is_array($values[$device_key])) ? $values[$device_key] : array();
 
-			// When forced_layout is set, the layout CSS must always emit even
-			// without a saved value. Seed the loop with empty per-column entries.
-			if ('' !== $forced_layout) {
-				foreach ($column_keys as $ck) {
-					if (!isset($device_values[$ck])) {
-						$device_values[$ck] = array();
-					}
+			// Always seed the active columns so the position-based default
+			// layout (and any forced_layout) emits even when the user hasn't
+			// saved a value. Padding/gap remain empty until the user sets them.
+			foreach ($active_columns as $ck) {
+				if (!isset($device_values[$ck])) {
+					$device_values[$ck] = array();
 				}
 			}
 
@@ -420,21 +455,48 @@ class Customify_Customizer_Auto_CSS
 					: trim($row_selector) . ' .col-v2-' . sanitize_html_class($col_key);
 				$rules    = array();
 
-				// Layout — forced_layout (from field config) overrides whatever
-				// is in the saved value, so a row that's always vertical (e.g.
-				// the off-canvas sidebar) emits stack CSS even with empty value.
-				$layout = $forced_layout !== ''
-					? $forced_layout
-					: ( isset($col_value['layout']) ? $col_value['layout'] : '' );
+				// Position-based default layout. First column → flex-start,
+				// last → flex-end, anything else → flex-center. A single
+				// active column resolves to flex-start.
+				$col_index       = array_search($col_key, $active_columns, true);
+				$position_default = 'flex-center';
+				if ($col_index === false) {
+					$position_default = '';
+				} elseif (count($active_columns) === 1 || $col_index === 0) {
+					$position_default = 'flex-start';
+				} elseif ($col_index === count($active_columns) - 1) {
+					$position_default = 'flex-end';
+				}
+
+				// Resolve order: forced_layout (locked) > saved_layout (user)
+				// > default_layout (field-level override) > position default.
+				$saved_layout = isset($col_value['layout']) ? (string) $col_value['layout'] : '';
+				if ($forced_layout !== '') {
+					$layout = $forced_layout;
+				} elseif ('' !== $saved_layout) {
+					$layout = $saved_layout;
+				} elseif ('' !== $default_layout) {
+					$layout = $default_layout;
+				} else {
+					$layout = $position_default;
+				}
 				switch ($layout) {
 					case 'flex-center':
 						$rules[] = 'display: flex;';
+						$rules[] = 'flex-direction: row;';
 						$rules[] = 'justify-content: center;';
 						$rules[] = 'align-items: center;';
 						break;
 					case 'flex-end':
 						$rules[] = 'display: flex;';
+						$rules[] = 'flex-direction: row;';
 						$rules[] = 'justify-content: flex-end;';
+						$rules[] = 'align-items: center;';
+						break;
+					case 'space-between':
+						$rules[] = 'display: flex;';
+						$rules[] = 'flex-direction: row;';
+						$rules[] = 'justify-content: space-between;';
 						$rules[] = 'align-items: center;';
 						break;
 					case 'stack':
@@ -442,12 +504,14 @@ class Customify_Customizer_Auto_CSS
 						$rules[] = 'flex-direction: column;';
 						break;
 					case 'flex-start':
+						$rules[] = 'display: flex;';
+						$rules[] = 'flex-direction: row;';
+						$rules[] = 'justify-content: flex-start;';
+						$rules[] = 'align-items: center;';
+						break;
 					default:
-						if ('' !== $layout) {
-							$rules[] = 'display: flex;';
-							$rules[] = 'justify-content: flex-start;';
-							$rules[] = 'align-items: center;';
-						}
+						// No layout resolved — emit nothing for layout.
+						break;
 				}
 
 				// Gap — value shape: { unit, value } or scalar (legacy).
@@ -498,6 +562,12 @@ class Customify_Customizer_Auto_CSS
 				}
 
 				$this->css[$css_bucket] .= "{$selector} {\r\n\t" . join("\r\n\t", $rules) . "\r\n}\r\n";
+
+				// Stack layout: direct children take the full column width so
+				// each item lines up on its own row.
+				if ('stack' === $layout) {
+					$this->css[$css_bucket] .= "{$selector} > * {\r\n\twidth: 100%;\r\n}\r\n";
+				}
 			}
 		}
 	}

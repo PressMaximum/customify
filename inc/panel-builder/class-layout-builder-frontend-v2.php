@@ -508,6 +508,13 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		$force_all_cols  = null !== $footer_col_keys;
 		$ordered_cols    = $force_all_cols ? $footer_col_keys : array_keys( $row_settings );
 
+		// Total visible column count, used as `cc-{N}` class on every col-v2
+		// so CSS can target a row's layout density (e.g. `.col-v2.cc-5`).
+		// Footer: from col_layout.count via $footer_col_keys.
+		// Header: 3 (left/center/right slots are always considered, even if
+		// some are empty placeholders to keep flex alignment).
+		$col_count = $force_all_cols ? count( $footer_col_keys ) : 3;
+
 		foreach ( $ordered_cols as $col_id ) {
 			$col_items    = isset( $row_settings[ $col_id ] ) ? $row_settings[ $col_id ] : array();
 			$flag_key_col = $col_id . '-' . $id . '-' . $device;
@@ -525,7 +532,7 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 				$has_center = true;
 			}
 
-			echo '<div class="col-v2 col-v2-' . esc_attr( $col_id ) . '">';
+			echo '<div class="col-v2 col-v2-' . esc_attr( $col_id ) . ' cc-' . (int) $col_count . '">';
 			foreach ( $col_items as $item_index => $col_item ) {
 				$item = $this->get_render_item( $col_item['id'] );
 				if ( $item ) {
@@ -566,10 +573,10 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		// For header only: pad center with empty left/right placeholders so flex alignment works.
 		if ( ! $force_all_cols && $has_center ) {
 			if ( isset( $no_cols['no-left'] ) ) {
-				$row_innner_html = '<div class="col-v2 col-v2-left"></div>' . $row_innner_html;
+				$row_innner_html = '<div class="col-v2 col-v2-left cc-' . (int) $col_count . '"></div>' . $row_innner_html;
 			}
 			if ( isset( $no_cols['no-right'] ) ) {
-				$row_innner_html .= '<div class="col-v2 col-v2-right"></div>';
+				$row_innner_html .= '<div class="col-v2 col-v2-right cc-' . (int) $col_count . '"></div>';
 			}
 		}
 
