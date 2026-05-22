@@ -1735,19 +1735,18 @@ $text_color: #555d66;
             box-shadow: none !important;
             padding: 0 !important;
         }
-        // Iris's `.iris-picker-inner` is position:absolute with `left: 10px`,
-        // which pushes the saturation square 10px right of the hex input's
-        // left edge below. Pin it to left: 0 so the square is flush.
-        .wp-picker-container.wp-picker-active .iris-picker .iris-picker-inner {
-            padding: 0 !important;
-            margin: 0 !important;
-            left: 0 !important;
-        }
-        // Iris-picker itself has margin: 6px 0 0 — top margin offsets the
-        // picker down from the holder's padding-top. Zero the margin so
-        // top spacing matches what our popover padding already provides.
+        // Iris's `.iris-picker-inner` is position:absolute with `left: 10px`
+        // — that pushes the saturation square 10px right of where the hex
+        // input below starts. Don't touch the inner directly (it has
+        // `right: 10px` too, so overriding left stretches the whole inner
+        // and Iris repositions the strips weirdly).
+        // Instead shift the whole iris-picker 10px LEFT via margin. The
+        // 10px iris-picker-inner offset then lines up exactly with the
+        // popover's padding-left, so iris-square's left edge matches the
+        // hex input's left edge. All Iris drag math is unaffected because
+        // margin shifts the entire element including its child offsets.
         .wp-picker-container.wp-picker-active .iris-picker.iris-border {
-            margin: 0 !important;
+            margin: 0 0 0 -10px !important;
         }
         .wp-picker-container.wp-picker-active .iris-palette-container {
             display: none !important;
