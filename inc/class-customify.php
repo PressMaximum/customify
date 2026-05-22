@@ -27,6 +27,33 @@ class Customify
 		add_filter('excerpt_more', array($this, 'excerpt_more'));
 		add_filter('excerpt_length', array($this, 'excerpt_length'));
 		add_action('wp_head', array($this, 'customify_style'), 2);
+		// Print the palette tokens (:root + Base cascade rules) BEFORE
+		// wp_print_styles (priority 8). The composite styling controls
+		// (Page bg / Content Area bg / Site Content bg) emit literal
+		// `body{background-color:#hex}` via the customify-style-inline-css
+		// block at priority 10, AFTER our tokens. That ordering lets:
+		//   • Composite-saved sites: literal hex wins by cascade order
+		//   • Composite-unsaved sites: composite emits nothing (empty
+		//     default → setup_color skips), our var() cascade applies
+		// Frontend + customize preview both use this same chain.
+		add_action('wp_head', array($this, 'print_palette_tokens'), 8);
+	}
+
+	/**
+	 * Print the palette :root token block + Base composite cascade rules
+	 * BEFORE WP renders enqueued stylesheets. See the docblock above the
+	 * `wp_head` priority-8 hook in `init_hooks()` for the cascade-ordering
+	 * rationale.
+	 *
+	 * The id `customify-palette-tokens-inline-css` mirrors WP's inline-style
+	 * naming so consumers (frontend, extract_customify_css.py helper) can
+	 * find it the same way they find the auto-CSS block.
+	 */
+	function print_palette_tokens() {
+		if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
+			return;
+		}
+		echo "\n<style id='customify-palette-tokens-inline-css'>\n" . customify_color_palette_root_css() . "\n</style>\n";
 	}
 
 	function excerpt_length($length)
@@ -378,20 +405,6 @@ class Customify
 
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
 		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
-		// The :root token block lives in its OWN <style id="customify-palette-tokens-inline-css">
-		// tag, not in the auto-css inline. Reason: src/backend/customizer/js/auto-css.js
-		// (line ~195) replaces #customify-style-inline-css wholesale every time a setting
-		// changes in the Customizer preview iframe. Putting the :root block alongside the
-		// auto-css output would wipe it out on first paint inside the iframe and the var()
-		// cascade would resolve to the static fallback (looks like the page reverted to
-		// defaults). A separate handle keeps the token block stable for the iframe's life,
-		// while live preview JS updates --customify-<slot> on document.documentElement
-		// via setProperty (no need to regenerate the :root block at all).
-		if ( function_exists( 'customify_color_palette_root_css' ) ) {
-			wp_register_style( 'customify-palette-tokens', false );
-			wp_enqueue_style( 'customify-palette-tokens' );
-			wp_add_inline_style( 'customify-palette-tokens', customify_color_palette_root_css() );
-		}
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
