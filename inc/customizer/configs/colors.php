@@ -30,6 +30,13 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 
 		// CSS format strings — copied verbatim from styling.php so byte-equivalent
 		// CSS is emitted on legacy sites with saved values.
+		// Primary CSS: var(--customify-primary, fallback). The fallback hex is the
+		// substituted {{value}} (i.e. the saved theme_mod or its default), so legacy
+		// browsers without CSS-var support render the saved color directly. Modern
+		// browsers read --customify-primary from the :root block — which is fed by
+		// the same theme_mod via customify_color_get_slots(), so they render the
+		// identical hex. Safe for 30K sites; refactor lets future slot edits
+		// propagate to every primary-themed selector via :root only.
 		$primary_css = apply_filters(
 			'customify/styling/primary-color',
 			'
@@ -43,10 +50,10 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
 			.posts-layout .readmore-button:hover
 			{
-			    background-color: {{value}};
+			    background-color: var(--customify-primary, {{value}});
 			}
 			.posts-layout .readmore-button {
-				color: {{value}};
+				color: var(--customify-primary, {{value}});
 			}
 			.pagination .nav-links span,
 			.pagination .nav-links > *:hover,
@@ -54,7 +61,7 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			.posts-layout .readmore-button,
 			.posts-layout .readmore-button:hover
 			{
-			    border-color: {{value}};
+			    border-color: var(--customify-primary, {{value}});
 			}'
 		);
 
@@ -64,7 +71,7 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 
 			.customify-builder-btn
 			{
-			    background-color: {{value}};
+			    background-color: var(--customify-secondary, {{value}});
 			}'
 		);
 

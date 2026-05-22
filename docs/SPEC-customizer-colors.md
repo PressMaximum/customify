@@ -632,29 +632,31 @@ and Content Area ↔ slot `surface` are conceptually linked but **not
 two-way synced** in storage. Editing `base` slot does NOT update
 `background[normal][bg_color]`. Phase 2 follow-up if needed.
 
-### 7.4 No live preview JS for new slots
+### 7.4 Live preview JS — Phase 2.1
 
-Changing a new slot (`base`, `surface`, `text`, `accent`) requires a
-Customizer save to refresh frontend `:root`. `primary`/`secondary`
-work for existing CSS rules because they reuse legacy keys and existing
-auto-CSS live preview handles those. New slot keys would need either
-their own live-preview JS or the existing rules to be refactored to use
-`var()` references.
+Phase 2.1 added a `customize_preview_init` inline script in
+`colors-palette.php::customify_color_palette_preview_js()` that listens
+to all 6 slot settings and live-updates `--customify-<slot>` on
+`document.documentElement.style`. Modern browsers re-resolve any
+`color-mix()` derived token automatically.
 
-### 7.5 Existing 9 CSS rules still emit literal hex
+WCAG luminance picks (`--customify-on-*`) are still PHP-precomputed
+only and refresh on save, not on drag — see §8.3.
 
-The 9 css_format strings in `inc/customizer/configs/colors.php` (moved
-from `styling.php`) still output `color: #235787` etc. — not
-`color: var(--customify-primary)`. This is intentional Phase 1 conservatism
-to guarantee byte-identical CSS for 30K legacy sites. The `:root` block
-is purely additive layer; nothing currently consumes most of the new
-derived vars on the frontend (Blocksify templates and future Phase 2
-refactors will).
+### 7.5 Existing CSS rules — partial var() refactor
 
-If Phase 2 refactors to `var(--customify-XXX)`, each rule should fall
-back to the literal: `color: var(--customify-primary, {{value}});` so
-old-browser var() failures still render. Test scenarios A/B/C must
-re-pass byte-equivalent after the refactor.
+Phase 2.1 refactored `$primary_css` and `$secondary_css` to
+`color: var(--customify-primary, {{value}})` /
+`background-color: var(--customify-secondary, {{value}})`. Safe because
+the slot key == the legacy field key for these 2, and the slot default
+hex matches the legacy field default. A/B/C re-passed byte-equivalent.
+
+The 7 remaining rules — link / link-hover / text / border / meta /
+heading / widget-title — still emit literal `{{value}}`. Their legacy
+field defaults DIFFER from the slot-derived defaults (e.g. link default
+`#1e4b75` vs slot.primary `#235787`), so a naive var() refactor would
+shift fresh-install render. Requires aligning defaults first.
+See §8.3 for the deferred follow-up.
 
 ---
 
@@ -679,18 +681,41 @@ re-pass byte-equivalent after the refactor.
 - ✅ 30K-site safety verified — A/B/C all PASS byte-identical
 - ✅ Chrome MCP verification (Colors section visible, popover works, frontend unchanged)
 
-### 8.2 Phase 2 — deferred (good follow-ups)
+### 8.2 Phase 2.1 — done
+
+- ✅ Refactor `$primary_css` and `$secondary_css` to
+  `var(--customify-primary, {{value}})` / `var(--customify-secondary, {{value}})`.
+  Slot key == legacy field key for these 2, default hex matches slot default, so
+  the var resolves to identical hex on every browser for every site. Legacy
+  browsers without var() support fall back to `{{value}}` (the saved hex).
+- ✅ Live preview JS for all 6 slot settings. Listens via `wp.customize(setting).bind()`
+  and live-updates `--customify-<slot>` on `document.documentElement.style`.
+  Modern browsers re-resolve `color-mix()` derived tokens automatically.
+- ✅ Force `transport=postMessage` on the 4 new slot fields. The 2 legacy
+  slot fields already get postMessage via `class-customizer.php` css_format
+  detection; the 4 new slots have empty css_format and would default to
+  refresh — `customize_register` priority 1000 forces postMessage so the
+  preview JS above can fire.
+- ✅ Mirror Customify's value decode (`JSON.parse(decodeURI(v))`) in the
+  preview JS so wrapped values (`%22#FF00AA%22`) decode to raw hex before
+  validation.
+- ✅ Update `/tmp/compare_color_css.py` to normalize `var(--X, #hex)` →
+  `#hex` so byte-equivalent tests still pass after the var() refactor.
+- ✅ 30K-site safety re-verified — A/B/C all PASS byte-identical with the
+  refactored rules.
+
+### 8.3 Phase 2 — remaining (good follow-ups)
 
 | Item | Notes |
 |---|---|
-| Refactor 9 existing CSS rules to `var(--customify-*, {{value}})` | Lets slot edits cascade to existing rules. Must re-pass A/B/C byte tests. Recommend per-rule progressive refactor. |
-| Live preview JS for new slot keys | Currently only primary/secondary live-preview via existing auto-CSS. Add `wp.customize('customify_palette_base').bind(...)` etc. for instant frontend update without save. |
+| Refactor the 7 remaining CSS rules to `var(--customify-*, {{value}})` | Link / link-hover / text / border / meta / heading / widget-title still emit literal hex. Their legacy field defaults DIFFER from the slot-derived defaults (e.g. link default `#1e4b75` ≠ slot.primary `#235787`), so a naive refactor changes fresh-install render. Requires aligning defaults OR accepting documented design shift. Deferred until that decision lands. |
 | Read-only derived preview chips in Palette section | UX: show user what `text-muted`, `border`, `primary-hover`, etc. will look like before they pick. Needs a new control type or inline DOM hack. |
 | Refactor header/footer/blog/page-header configs to consume slot tokens | The ~30 other color/styling controls scattered across these configs still emit literal hex from their saved values. Should switch to `var(--customify-XXX)` so changing a slot updates the whole site. |
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
+| WCAG `--on-*` live-preview | Contrast picks (`--customify-on-primary` etc.) are PHP-precomputed only; they refresh on save, not on slot drag. Add JS-side luminance math to mirror PHP `customify_color_pick_on()`. |
 
-### 8.3 Phase 3 — Custom palettes / Style Packs (future)
+### 8.4 Phase 3 — Custom palettes / Style Packs (future)
 
 Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
 build the higher-level palette UX on top:

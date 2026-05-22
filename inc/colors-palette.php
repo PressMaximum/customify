@@ -472,3 +472,96 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	}
 	add_action( 'customize_controls_enqueue_scripts', 'customify_color_palette_quickpick_js' );
 }
+
+// ──────────────────────────────────────────────────────────────────
+// Force transport=postMessage on the 4 new slot settings.
+// The 2 legacy slot keys (primary, secondary) already get postMessage
+// via Customify_Customizer's css_format detection (class-customizer.php
+// L1085-1097). The 4 new slot fields have empty css_format (they only
+// feed :root vars, not auto-CSS rules) so they default to 'refresh' —
+// override here so the preview JS below can live-update :root.
+// Priority 1000 ensures Customify_Customizer::register (priority 666)
+// has already added all settings.
+// ──────────────────────────────────────────────────────────────────
+
+if ( ! function_exists( 'customify_color_palette_force_postmessage' ) ) {
+	function customify_color_palette_force_postmessage( $wp_customize ) {
+		$slot_settings = array(
+			'customify_palette_base',
+			'customify_palette_surface',
+			'customify_palette_text',
+			'customify_palette_accent',
+		);
+		foreach ( $slot_settings as $setting_id ) {
+			$setting = $wp_customize->get_setting( $setting_id );
+			if ( $setting ) {
+				$setting->transport = 'postMessage';
+			}
+		}
+	}
+	add_action( 'customize_register', 'customify_color_palette_force_postmessage', 1000 );
+}
+
+// ──────────────────────────────────────────────────────────────────
+// Preview JS: live-update --customify-<slot> on document.documentElement
+// when any of the 6 slot settings changes. Modern browsers re-resolve
+// derived tokens (text-muted, border, primary-hover, link-hover) via the
+// color-mix() lines in :root automatically. Static fallbacks and on-*
+// contrast picks don't live-update — they refresh on Customizer save.
+//
+// For primary/secondary the auto-CSS pipeline already regenerates the
+// rule strings in the preview iframe via the existing Customify auto-css
+// JS; this handler additionally keeps the :root var in sync so the
+// var(--customify-primary, ...) refactor renders the new color in
+// modern browsers.
+// ──────────────────────────────────────────────────────────────────
+
+if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
+	function customify_color_palette_preview_js() {
+		$payload = wp_json_encode( array(
+			'global_styling_color_primary'   => '--customify-primary',
+			'global_styling_color_secondary' => '--customify-secondary',
+			'customify_palette_accent'       => '--customify-accent',
+			'customify_palette_text'         => '--customify-text',
+			'customify_palette_surface'      => '--customify-surface',
+			'customify_palette_base'         => '--customify-base',
+		) );
+
+		$script = "(function(){
+	if (typeof wp === 'undefined' || ! wp.customize) return;
+	var SLOT_VARS = {$payload};
+	// Customify wraps stored setting values as urlencode(json_encode(value))
+	// so a saved hex arrives as '%22#ff00aa%22'. Mirror Customify's decode
+	// (control.js / customizer.js use the same JSON.parse(decodeURI(v))
+	// pattern) so we get the raw '#ff00aa' before validating.
+	function decode(v) {
+		if (typeof v !== 'string') return v;
+		try { return JSON.parse(decodeURI(v)); } catch(e) { return v; }
+	}
+	function normalize(v) {
+		var d = decode(v);
+		if (typeof d !== 'string') return '';
+		d = d.trim();
+		if (!d) return '';
+		if (/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\$/.test(d)) return d;
+		if (/^rgba?\\(/.test(d)) return d;
+		return '';
+	}
+	Object.keys(SLOT_VARS).forEach(function(setting){
+		wp.customize(setting, function(value){
+			value.bind(function(newval){
+				var clean = normalize(newval);
+				if (clean) {
+					document.documentElement.style.setProperty(SLOT_VARS[setting], clean);
+				} else {
+					document.documentElement.style.removeProperty(SLOT_VARS[setting]);
+				}
+			});
+		});
+	});
+})();";
+
+		wp_add_inline_script( 'customize-preview', $script );
+	}
+	add_action( 'customize_preview_init', 'customify_color_palette_preview_js' );
+}
