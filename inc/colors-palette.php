@@ -401,27 +401,30 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	});
 
 	// Monkey-patch jQuery's slide methods so Iris's wpColorPicker can't
-	// queue its slow slideToggle('fast') on our holders. We don't override
-	// globally — only when the call target is inside the Colors section.
-	// The CSS keyframe `customify-color-popover-in` provides the visual
-	// transition.
+	// queue its slow slideToggle('fast') on our color picker holders. The
+	// override is scoped to elements WITH .wp-picker-holder — never matches
+	// the styling composite control's modal panel (which also lives in the
+	// Colors section and uses slideUp/slideDown for its own toggle, and
+	// relies on the animation-end callback to remove its .modal--opening
+	// class — making it instant would strand the modal open).
 	(function patchJQuerySlide(){
 		var origDown   = \$.fn.slideDown;
 		var origUp     = \$.fn.slideUp;
 		var origToggle = \$.fn.slideToggle;
-		function inColorsSection(el){
-			return el && el.closest && el.closest('#sub-accordion-section-customify_colors');
+		function isPickerHolder(el){
+			return el && el.classList && el.classList.contains('wp-picker-holder')
+				&& el.closest && el.closest('#sub-accordion-section-customify_colors');
 		}
 		\$.fn.slideDown = function(){
-			if (this.length && inColorsSection(this[0])) return this.show();
+			if (this.length && isPickerHolder(this[0])) return this.show();
 			return origDown.apply(this, arguments);
 		};
 		\$.fn.slideUp = function(){
-			if (this.length && inColorsSection(this[0])) return this.hide();
+			if (this.length && isPickerHolder(this[0])) return this.hide();
 			return origUp.apply(this, arguments);
 		};
 		\$.fn.slideToggle = function(){
-			if (this.length && inColorsSection(this[0])) {
+			if (this.length && isPickerHolder(this[0])) {
 				return this.is(':visible') ? this.hide() : this.show();
 			}
 			return origToggle.apply(this, arguments);
