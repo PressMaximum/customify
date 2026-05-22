@@ -75,27 +75,42 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			}'
 		);
 
+		// Body / ink CSS: var(--customify-body-text, fallback). Body copy
+		// follows slot.text directly via the :root cascade chain
+		// `--customify-body-text: var(--customify-text, ...)`. Pure var()
+		// passthrough — no mix — so user's Text slot value flows through
+		// unchanged (white text on a dark base renders white body copy,
+		// not a desaturated grey). Fresh-install shift from legacy
+		// `#686868` to slot.text `#2b2b2b`. Saved body override locks
+		// the static value.
 		$text_css = apply_filters(
 			'customify/styling/text-color',
 			'
 			body
 			{
-			    color: {{value}};
+			    color: var(--customify-body-text, {{value}});
 			}
 			abbr, acronym {
-			    border-bottom-color: {{value}};
+			    border-bottom-color: var(--customify-body-text, {{value}});
 			}'
 		);
 
+		// Link CSS: var(--customify-link, fallback). Link default aligns with
+		// slot.primary so editing the Primary slot cascades to link color.
+		// Saved overrides feed both pipelines identically. See SPEC §8.6.
 		$link_css = apply_filters(
 			'customify/styling/link-color',
 			'
                 a
                 {
-                    color: {{value}};
+                    color: var(--customify-link, {{value}});
 				}'
 		);
 
+		// Link hover CSS: var(--customify-link-hover, fallback). Hover is a
+		// LIGHTER tint of link (15% white mixed in), not darker — matches
+		// the design intent that hover surfaces the link by raising
+		// luminance against most text contexts.
 		$link_hover_css = apply_filters(
 			'customify/styling/link-color-hover',
 			'
@@ -103,10 +118,15 @@ a:hover,
 a:focus,
 .link-meta:hover, .link-meta a:hover
 {
-    color: {{value}};
+    color: var(--customify-link-hover, {{value}});
 }'
 		);
 
+		// Border CSS: var(--customify-border, fallback). Same pattern as
+		// body/heading — modern browsers resolve the var() chain (cascades
+		// from slot.text + slot.base via color-mix 12%), legacy browsers
+		// fall back to the substituted hex. Fresh-install shift from
+		// `#eaecee` to `#e6e6e6` (4/6/8 RGB) — barely perceivable.
 		$border_css = apply_filters(
 			'customify/styling/color-border',
 			'
@@ -115,26 +135,26 @@ h2 + h3,
 .h2 + h3,
 .comments-area .h2 + .comments-title,
 .page-breadcrumb {
-    border-top-color: {{value}};
+    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
 }
 blockquote,
 .site-content .widget-area .menu li.current-menu-item > a:before
 {
-    border-left-color: {{value}};
+    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
 }
 
 @media screen and (min-width: 64em) {
     .comment-list .children li.comment {
-        border-left-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .comment-list .children li.comment:after {
-        background-color: {{value}};
+        background-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
 }
 
 .page-titlebar, .page-breadcrumb,
 .posts-layout .entry-inner {
-    border-bottom-color: {{value}};
+    border-bottom-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
 }
 
 .header-search-form .search-field,
@@ -150,50 +170,54 @@ article.comment .comment-meta,
 .widget-area .widget_pages li a, .widget-area .widget_categories li a, .widget-area .widget_archive li a, .widget-area .widget_meta li a, .widget-area .widget_nav_menu li a, .widget-area .widget_product_categories li a, .widget-area .widget_recent_entries li a, .widget-area .widget_rss li a,
 .widget-area .widget_recent_comments li
 {
-    border-color: {{value}};
+    border-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
 }
 
 .header-search-modal::before {
-    border-top-color: {{value}};
-    border-left-color: {{value}};
+    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
 }
 
 @media screen and (min-width: 48em) {
     .content-sidebar.sidebar_vertical_border .content-area {
-        border-right-color: {{value}};
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .sidebar-content.sidebar_vertical_border .content-area {
-        border-left-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary {
-        border-right-color: {{value}};
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
-        border-right-color: {{value}};
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary {
-        border-left-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
-        border-left-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: {{value}};
-        border-right-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
     .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: {{value}};
-        border-right-color: {{value}};
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
     }
 }
 '
 		);
 
+		// Meta CSS: var(--customify-text-muted, fallback). Meta and pagination
+		// text share the same `--customify-text-muted` token as body's
+		// secondary copy. Fresh-install shift `#6d6d6d` → `#6b6b6b`
+		// (2/2/2 RGB) — invisible to the eye.
 		$meta_css = apply_filters(
 			'customify/styling/color-meta',
 			'
 			article.comment .comment-post-author {
-				background: {{value}};
+				background: var(--customify-text-muted, {{value}});
 			}
 			.pagination .nav-links > *,
 			.link-meta,
@@ -202,7 +226,7 @@ article.comment .comment-meta,
 			.entry-single .tags-links:before,
 			.entry-single .cats-links:before
 			{
-			    color: {{value}};
+			    color: var(--customify-text-muted, {{value}});
 			}'
 		);
 
@@ -214,7 +238,10 @@ article.comment .comment-meta,
 		// same theme_mod key. Editing slot.text now also cascades to headings
 		// via the modern-browser var() path.
 		$heading_css   = apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: var(--customify-heading, {{value}});}' );
-		$w_title_css   = '.site-content .widget-title { color: {{value}};}';
+		// Widget title CSS: var(--customify-widget-title, fallback). Default
+		// shifts from `#444444` to slot.text `#2b2b2b` on fresh install
+		// (25/25/25 RGB — moderate but documented design call).
+		$w_title_css   = '.site-content .widget-title { color: var(--customify-widget-title, {{value}});}';
 
 		// Composite styling control exclusion list — only expose background-related
 		// subfields; hide text/link/padding/margin/border/shadow.
@@ -239,10 +266,14 @@ article.comment .comment-meta,
 			// ──────────────────────────────────────────────────────────
 			// Top-level Section "Colors" (root, not in any panel).
 			// ──────────────────────────────────────────────────────────
+			// Position: between Styling (60) and Typography (70) in the
+			// General Options group (divider at 50). Priority 65 keeps
+			// Colors directly above Typography — sidebar order reads
+			// General Options → Styling → Colors → Typography → Layouts ….
 			array(
 				'name'        => $section,
 				'type'        => 'section',
-				'priority'    => 21,
+				'priority'    => 65,
 				'title'       => __( 'Colors', 'customify' ),
 				'description' => __( 'Pick 6 brand colors. The theme derives everything else.', 'customify' ),
 			),
@@ -317,7 +348,11 @@ article.comment .comment-meta,
 				'css_format'  => '',
 			),
 
-			// Slot 5: Surface — NEW key.
+			// Slot 5: Surface — NEW key. Default changed from #FFFFFF to
+			// #ECECEC so the Surface slot reads as a distinct elevated
+			// container colour against the page Base (which stays white).
+			// Frontend selectors that consume `--customify-surface` will
+			// be wired in a follow-up.
 			array(
 				'name'        => 'customify_palette_surface',
 				'type'        => 'color',
@@ -325,8 +360,8 @@ article.comment .comment-meta,
 				'priority'    => 14,
 				'title'       => __( 'Surface', 'customify' ),
 				'description' => __( 'Card / elevated container background.', 'customify' ),
-				'default'     => '#FFFFFF',
-				'placeholder' => '#FFFFFF',
+				'default'     => '#ECECEC',
+				'placeholder' => '#ECECEC',
 				'selector'    => 'format',
 				'css_format'  => '',
 			),
@@ -345,16 +380,24 @@ article.comment .comment-meta,
 				'css_format'  => '',
 			),
 
-			// ── HEADING: Links ──
+			// ── HEADING: Colors (link + link-hover + heading overrides) ──
+			// Renamed from "Links" to "Colors" once the Heading override
+			// was promoted out of Legacy fine-tuning. This group now holds
+			// the every-page visible text colors that have user-friendly
+			// pickers (vs. the more obscure overrides hidden in Legacy
+			// fine-tuning below).
 			array(
 				'name'     => "{$section}_h_links",
 				'type'     => 'heading',
 				'section'  => $section,
-				'title'    => __( 'Links', 'customify' ),
+				'title'    => __( 'Colors', 'customify' ),
 				'priority' => 20,
 			),
 
-			// Link color — REUSE existing key.
+			// Link color — REUSE existing key. Default aligned with
+			// slot.primary so editing Primary cascades to links. Fresh
+			// installs shift from legacy `#1e4b75` to `#235787` (slot.primary)
+			// — small RGB delta (5/12/18), documented design change.
 			array(
 				'name'        => 'global_styling_color_link',
 				'type'        => 'color',
@@ -362,23 +405,45 @@ article.comment .comment-meta,
 				'priority'    => 25,
 				'title'       => __( 'Link color', 'customify' ),
 				'description' => __( 'Default: derived from Primary slot.', 'customify' ),
-				'default'     => '#1e4b75',
-				'placeholder' => '#1e4b75',
+				'default'     => '#235787',
+				'placeholder' => '#235787',
 				'css_format'  => $link_css,
 				'selector'    => 'format',
 			),
 
-			// Link hover color — REUSE existing key.
+			// Link hover color — REUSE existing key. Default = link lighter
+			// 15% (mix with white) so the hover state surfaces the link by
+			// raising luminance. Fresh installs shift from legacy `#111111`
+			// (near-black) to `#406F99` — a much bigger jump than other
+			// overrides; explicit design call by the project owner.
 			array(
 				'name'        => 'global_styling_color_link_hover',
 				'type'        => 'color',
 				'section'     => $section,
 				'priority'    => 26,
 				'title'       => __( 'Link hover color', 'customify' ),
-				'description' => __( 'Default: derived (Primary darken 15%).', 'customify' ),
-				'default'     => '#111111',
-				'placeholder' => '#111111',
+				'description' => __( 'Default: derived (Link color lighter 15%).', 'customify' ),
+				'default'     => '#406F99',
+				'placeholder' => '#406F99',
 				'css_format'  => $link_hover_css,
+				'selector'    => 'format',
+			),
+
+			// Heading override — REUSE existing key. Promoted out of the
+			// Legacy fine-tuning group because Heading color is a common
+			// design knob (vs. the more obscure border/widget-title/etc.
+			// that stay hidden in Legacy). Priority 27 keeps it directly
+			// below Link hover color inside the Colors group.
+			array(
+				'name'        => 'global_styling_color_heading',
+				'type'        => 'color',
+				'section'     => $section,
+				'priority'    => 27,
+				'title'       => __( 'Heading color', 'customify' ),
+				'description' => __( 'Default: derived from Text slot.', 'customify' ),
+				'placeholder' => '#2b2b2b',
+				'default'     => '#2b2b2b',
+				'css_format'  => $heading_css,
 				'selector'    => 'format',
 			),
 
@@ -392,6 +457,12 @@ article.comment .comment-meta,
 			),
 
 			// Page Background (composite) — REUSE existing key `background`.
+			// Default bg_color empty so auto-CSS doesn't emit a literal
+			// `body{background-color:#FFFFFF}` for unsaved sites. That lets
+			// the var(--customify-base) cascade in customify-palette-tokens
+			// take over the body bg when the user hasn't picked a composite.
+			// Saved sites still emit `body{background-color:<saved>}` and
+			// win the cascade (composite inline loads AFTER palette-tokens).
 			array(
 				'name'       => 'background',
 				'type'       => 'styling',
@@ -403,7 +474,7 @@ article.comment .comment-meta,
 				),
 				'default'    => array(
 					'normal' => array(
-						'bg_color' => '#FFFFFF',
+						'bg_color' => '',
 					),
 				),
 				'css_format' => 'styling',
@@ -411,6 +482,7 @@ article.comment .comment-meta,
 			),
 
 			// Content Area Background (composite) — REUSE existing key.
+			// Same empty-default pattern as Page Background.
 			array(
 				'name'       => 'site_content_styling',
 				'type'       => 'styling',
@@ -422,7 +494,7 @@ article.comment .comment-meta,
 				),
 				'default'    => array(
 					'normal' => array(
-						'bg_color' => '#FFFFFF',
+						'bg_color' => '',
 					),
 				),
 				'css_format' => 'styling',
@@ -443,25 +515,36 @@ article.comment .comment-meta,
 				'fields'     => $bg_only_fields,
 			),
 
-			// ── HEADING: Component overrides ──
+			// ── HEADING: Legacy fine-tuning (collapsible) ──
+			// Hidden by default — these are the long-standing per-component
+			// pickers from pre-Phase-1 styling.php. They still beat the
+			// Palette cascade when saved, but the new architecture pushes
+			// users toward editing the 6 slots and letting derivations flow.
+			// JS handler (in colors-palette.php quickpick script) toggles
+			// every control with priority >= 55 inside this section based
+			// on the id `customify_colors_h_overrides`.
 			array(
 				'name'        => "{$section}_h_overrides",
 				'type'        => 'heading',
 				'section'     => $section,
-				'title'       => __( 'Component overrides (advanced)', 'customify' ),
-				'description' => __( 'Override individual element colors. Leave blank to inherit from Palette.', 'customify' ),
+				'title'       => __( 'Legacy fine-tuning', 'customify' ),
+				'description' => __( 'Per-element color overrides. Beats the Palette cascade when saved. Click to expand.', 'customify' ),
 				'priority'    => 50,
 			),
 
-			// Override: body text — REUSE existing key.
+			// Override: body text — REUSE existing key. Default aligned with
+			// slot.text (`#2b2b2b`) so body copy renders exactly the Text
+			// slot value unless explicitly overridden. Inverted from the
+			// earlier color-mix(88%) approach — that desaturated user's
+			// Text picks (e.g. pure white on dark base would render ~#e0e0e0).
 			array(
 				'name'        => 'global_styling_color_text',
 				'type'        => 'color',
 				'section'     => $section,
 				'priority'    => 55,
 				'title'       => __( 'Body text override', 'customify' ),
-				'placeholder' => '#686868',
-				'default'     => '#686868',
+				'placeholder' => '#2b2b2b',
+				'default'     => '#2b2b2b',
 				'css_format'  => $text_css,
 				'selector'    => 'format',
 			),
@@ -473,47 +556,41 @@ article.comment .comment-meta,
 				'section'     => $section,
 				'priority'    => 56,
 				'title'       => __( 'Border override', 'customify' ),
-				'placeholder' => '#eaecee',
-				'default'     => '#eaecee',
+				// Border field default aligned with slot-derived
+				// `mix(text, base, 12%)` = `#e6e6e6` (was `#eaecee`).
+				'placeholder' => '#e6e6e6',
+				'default'     => '#e6e6e6',
 				'css_format'  => $border_css,
 				'selector'    => 'format',
 			),
 
-			// Override: meta — REUSE existing key.
+			// Override: meta — REUSE existing key. Default aligned with
+			// `mix(text, base, 70%)` = `#6b6b6b` (was `#6d6d6d`).
 			array(
 				'name'        => 'global_styling_color_meta',
 				'type'        => 'color',
 				'section'     => $section,
 				'priority'    => 57,
 				'title'       => __( 'Meta text override', 'customify' ),
-				'placeholder' => '#6d6d6d',
-				'default'     => '#6d6d6d',
+				'placeholder' => '#6b6b6b',
+				'default'     => '#6b6b6b',
 				'css_format'  => $meta_css,
 				'selector'    => 'format',
 			),
 
-			// Override: heading — REUSE existing key.
-			array(
-				'name'        => 'global_styling_color_heading',
-				'type'        => 'color',
-				'section'     => $section,
-				'priority'    => 58,
-				'title'       => __( 'Heading override', 'customify' ),
-				'placeholder' => '#2b2b2b',
-				'default'     => '#2b2b2b',
-				'css_format'  => $heading_css,
-				'selector'    => 'format',
-			),
+			// Heading override moved out — see "Colors" group above
+			// (priority 27, registered alongside Link / Link hover).
 
-			// Override: widget title — REUSE existing key.
+			// Override: widget title — REUSE existing key. Default aligned
+			// with slot.text `#2b2b2b` (was `#444444`).
 			array(
 				'name'        => 'global_styling_color_w_title',
 				'type'        => 'color',
 				'section'     => $section,
 				'priority'    => 59,
 				'title'       => __( 'Widget title override', 'customify' ),
-				'placeholder' => '#444444',
-				'default'     => '#444444',
+				'placeholder' => '#2b2b2b',
+				'default'     => '#2b2b2b',
 				'css_format'  => $w_title_css,
 				'selector'    => 'format',
 			),
