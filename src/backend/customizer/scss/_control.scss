@@ -1632,36 +1632,53 @@ $text_color: #555d66;
             vertical-align: middle;
         }
         .wp-picker-container .wp-color-result.button {
-            position: relative; // anchor for the .color-alpha overlay below
+            // Outer button becomes a transparent placeholder — its bg-color
+            // (set inline by Iris) and default border/checker pattern would
+            // otherwise peek out around the inner .color-alpha as a visible
+            // "second box". The inner .color-alpha overlay below paints the
+            // actual swatch with our own border + shadow.
+            position: relative;
             margin: 0;
             padding: 0;
             width: 28px;
             height: 28px;
             min-height: 28px;
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
             border-radius: 50%;
-            border: 1px solid rgba(0, 0, 0, 0.15);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
             cursor: pointer;
-            overflow: hidden; // belt-and-braces clip for the inner color span
+            overflow: visible;
 
-            // wp-color-picker renders an inner SPAN.color-alpha (30x26 with
-            // its own bordder-radius: 2px 0 0 2px) that paints the colored
-            // chip — that's why the swatch looks square even though the
-            // outer button is round. Override the inner span to fill the
-            // round button exactly.
+            // The actual visible swatch. Iris's HTML places a SPAN.color-alpha
+            // inside the button that carries the saved color as its bg —
+            // we promote it to fill the whole 28x28 round shape and put the
+            // border + shadow on it instead of the outer button.
             .color-alpha {
                 position: absolute !important;
-                inset: 0 !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
                 width: 100% !important;
                 height: 100% !important;
+                margin: 0 !important;
                 border-radius: 50% !important;
-                margin: 0;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
             }
             .wp-color-result-text {
                 display: none;
             }
             &:after {
                 display: none; // remove arrow indicator
+            }
+            &:focus {
+                outline: none;
+                .color-alpha {
+                    box-shadow: 0 0 0 2px #2271b1;
+                }
             }
         }
 
