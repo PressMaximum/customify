@@ -1623,6 +1623,10 @@ $text_color: #555d66;
         .wp-picker-input-wrap {
             display: none !important;
         }
+        // Picker container stays inline-block so the trigger swatch is
+        // compact. Its positioning context is the parent .customize-control
+        // row (which has position: relative) — so the popover below spans
+        // the row, not just the swatch.
         .wp-picker-container {
             display: inline-block;
             vertical-align: middle;
@@ -1647,12 +1651,47 @@ $text_color: #555d66;
                 display: none; // remove arrow indicator
             }
         }
+
+        // ─── Popover wrapper for the Iris picker ─────────────────────
+        // The .wp-picker-holder is the dropdown container Iris injects.
+        // Hide it by default (Iris's own stylesheet may not load in our
+        // Customizer build) and only reveal when the parent picker is
+        // .wp-picker-active. When shown, render as a floating card
+        // anchored to BOTH edges of the row so the popover always fits
+        // inside the Customizer panel regardless of slot.
+        //
+        // Iris internals (.iris-square, .iris-strip, .iris-palette) keep
+        // their native layout — overriding them breaks Iris's drag math.
+        .wp-picker-container .wp-picker-holder {
+            display: none;
+        }
+        .wp-picker-container.wp-picker-active .wp-picker-holder {
+            display: block;
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            width: auto;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.04),
+                0 12px 28px rgba(0, 0, 0, 0.16);
+            // Float above sibling rows + customize panel chrome.
+            z-index: 100;
+        }
     }
 
     // Per-control compact layout via CSS grid:
     // left column = title + description (stacked), right column = swatch.
     .customize-control-customify-color {
         padding: 6px 0;
+        // Become the positioning context for the popover so it spans the
+        // full row width (and stays inside the Customizer panel) instead
+        // of being anchored to the tiny inline-block swatch container.
+        position: relative;
         .customify--settings-wrapper {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -1698,6 +1737,15 @@ $text_color: #555d66;
         .customify-field-settings-inner {
             margin: 0;
             padding: 0;
+        }
+        // CRITICAL: Customify globally sets .customify-field-settings-inner
+        // to position: relative — that gives the inline-block (28px wide)
+        // swatch container as the popover's positioning ancestor, so
+        // `left/right: 0` collapses to a 28px hairline. Override it to
+        // static here so the popover anchors to the row's wrapper
+        // (.customify--settings-wrapper, 283px wide).
+        .customify-field-settings-inner {
+            position: static;
         }
     }
 
