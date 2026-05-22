@@ -84,8 +84,8 @@ on the same selectors after this change. See
 - Refactoring all `header/*`, `footer/*`, `blog`, `page-header` color
   fields to consume slot tokens. (Phase 2.)
 - Live Customizer preview JS for slot changes (Phase 2).
-- Custom palettes / Style Packs (Phase 3, may pick up the abandoned
-  `dev-colors-panel` branch).
+- Custom palettes / Style Packs (Phase 3 — light/dark presets, palette
+  switching, user-defined palettes).
 - Dark mode token set.
 
 ---
@@ -690,21 +690,20 @@ re-pass byte-equivalent after the refactor.
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
 
-### 8.3 Phase 3 — Custom palettes / Style Packs
+### 8.3 Phase 3 — Custom palettes / Style Packs (future)
 
-Two branches in the remote already explored this direction:
-- `origin/dev-colors` (2026-04-25) — Color_System, Palette_Manager,
-  Style_Pack, Typography_Manager classes. 6-slot model (`base/text/primary/
-  secondary/accent/surface`). theme.json + WC integration. ONE monolithic
-  commit by TruongSa.
-- `origin/dev-colors-panel` (2026-05-04) — UI layer: palette CRUD AJAX +
-  control registration. Builds on dev-colors.
+Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
+build the higher-level palette UX on top:
 
-If/when Phase 3 starts, evaluate rebasing those branches onto current
-DEV. Both are ~125 commits behind now; might be cleaner to cherry-pick
-ideas than to merge.
+- Multiple palette presets (e.g. Light + Dark) the user can switch
+  between with one click; each preset stores its own 6 slot values.
+- User-saved custom palettes (CRUD + name + thumbnail).
+- Per-site dark-mode token set wired to `prefers-color-scheme` or a
+  user toggle.
+- Style Pack concept — bundle palette + typography + spacing under a
+  single named preset that can be applied / shared / imported.
 
-`origin/dev-colors-panel-bak` — discard, superseded.
+Design when Phase 3 starts; not blocked by anything in Phase 1/2 today.
 
 ---
 
