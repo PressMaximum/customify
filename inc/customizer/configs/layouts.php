@@ -139,11 +139,16 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'theme_supports' => '',
 				'title'          => __( 'Sidebars', 'customify' ),
 			),
-			// Global sidebar layout.
+			// Global sidebar layout. Default changed from `content-sidebar`
+			// (content + right sidebar) to `content` (no sidebar) — clean
+			// out-of-the-box look that matches the "pick a few brand colors
+			// and start designing" onboarding flow. Sites that explicitly
+			// saved a layout in the Customizer still render with their
+			// saved value via the override path.
 			array(
 				'name'    => 'sidebar_layout',
 				'type'    => 'select',
-				'default' => 'content-sidebar',
+				'default' => 'content',
 				'section' => 'sidebar_layout_section',
 				'title'   => __( 'Default Sidebar Layout', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
@@ -163,11 +168,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'selector'   => 'body',
 			),
 
-			// Page sidebar layout.
+			// Page sidebar layout. Default changed from `content-sidebar` to
+			// `content` so static pages render full-width by default —
+			// matches the global sidebar_layout above.
 			array(
 				'name'    => 'page_sidebar_layout',
 				'type'    => 'select',
-				'default' => 'content-sidebar',
+				'default' => 'content',
 				'section' => 'sidebar_layout_section',
 				'title'   => __( 'Pages', 'customify' ),
 				'choices' => customify_get_config_sidebar_layouts(),
