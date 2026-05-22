@@ -1,0 +1,55 @@
+#!/usr/bin/env bash
+#
+# Sync the current worktree to the live theme directory at customify2.wp.local,
+# then flush the WP cache so the next browser refresh shows your changes.
+#
+# Usage:
+#   ./bin/sync            # rsync (no rebuild) + flush
+#   ./bin/sync -b         # npm run build first, then rsync + flush
+#   ./bin/sync --build    # same as -b
+#
+# Env overrides:
+#   CUSTOMIFY_MAIN     path to the live theme dir       (default: ~/Studio/customify2/wp-content/themes/customify)
+#   CUSTOMIFY_STUDIO   path to the Studio site root     (default: ~/Studio/customify2)
+#
+# Reminder (CLAUDE.md): the live theme dir is shared state on the DEV
+# branch. Always revert it back to clean DEV before committing here:
+#
+#   cd "$CUSTOMIFY_MAIN" && git checkout -- inc/ theme.json && rm -rf build/
+
+set -euo pipefail
+
+WORKTREE_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+MAIN_DIR="${CUSTOMIFY_MAIN:-$HOME/Studio/customify2/wp-content/themes/customify}"
+STUDIO_PATH="${CUSTOMIFY_STUDIO:-$HOME/Studio/customify2}"
+
+cd "$WORKTREE_ROOT"
+
+if [[ ! -d "$MAIN_DIR" ]]; then
+	echo "✗ Live theme dir not found: $MAIN_DIR" >&2
+	echo "  Set CUSTOMIFY_MAIN to override." >&2
+	exit 1
+fi
+
+if [[ "${1:-}" == "--build" || "${1:-}" == "-b" ]]; then
+	echo "→ webpack build..."
+	npm run build
+fi
+
+if [[ ! -d build ]]; then
+	echo "✗ build/ missing. Run with --build first, or 'npm run build' manually." >&2
+	exit 1
+fi
+
+echo "→ rsync build/ → main..."
+rsync -a --delete build/ "$MAIN_DIR/build/"
+
+echo "→ rsync inc/ → main..."
+rsync -a inc/ "$MAIN_DIR/inc/"
+
+echo "→ rsync theme.json → main..."
+rsync -a theme.json "$MAIN_DIR/theme.json"
+
+echo "→ studio wp cache flush..."
+studio wp --path "$STUDIO_PATH" cache flush >/dev/null
+echo "✓ synced. Hard-refresh customify2.wp.local to see changes."
