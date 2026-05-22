@@ -346,15 +346,42 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 
 	function injectPopupAddon(container) {
 		var \$container = \$(container);
-		removeAddons(container);
-		var \$panel = \$container.find('.customify--color-panel');
+		var \$panel     = \$container.find('.customify--color-panel');
 		if ( ! \$panel.length ) return;
 		var currentVal = (\$panel.val() || '').toLowerCase();
 		var isPalette  = PALETTE_CONTROLS.indexOf(getControlId(container)) !== -1;
-		var \$addon     = isPalette
+
+		// If an addon is already present (pre-built on init), refresh its
+		// current-value state instead of rebuilding the DOM from scratch.
+		// Cheap refresh keeps picker-open feel instant.
+		var existing = container.querySelector ? container.querySelector('.customify-color-quickpick, .customify-color-hexrow') : null;
+		if (existing) {
+			if (isPalette) {
+				var input = existing.querySelector('.customify-color-hex');
+				if (input && document.activeElement !== input) input.value = \$panel.val() || '';
+			} else {
+				existing.querySelectorAll('.customify-color-quickpick__swatch').forEach(function(sw){
+					sw.classList.toggle('is-active', (sw.getAttribute('data-color') || '').toLowerCase() === currentVal);
+				});
+			}
+			return;
+		}
+
+		var \$addon = isPalette
 			? buildHexInput(\$panel, currentVal)
 			: buildQuickPick(\$panel, currentVal);
 		\$container.find('.wp-picker-holder').append(\$addon);
+	}
+
+	// Pre-build addons for every color picker in the Colors section right
+	// after Customizer init — that way opening a picker just refreshes the
+	// already-mounted addon (single class toggle / value update) instead of
+	// building the DOM + 6-7 buttons + handlers from scratch each time.
+	function prebuildAll(section) {
+		section.querySelectorAll('.wp-picker-container').forEach(function(c){
+			if ( c.querySelector('.customify-color-quickpick, .customify-color-hexrow') ) return;
+			injectPopupAddon(c);
+		});
 	}
 
 	// Re-emit a custom event from any change on the picker so the hex input
@@ -363,15 +390,33 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		\$(this).trigger('iris-customify-hex-sync');
 	});
 
-	// Cancel Iris's jQuery .slideDown / .slideUp on the picker holders inside
-	// the Colors section — that 400ms slide is what makes the popover feel
-	// stiff/laggy. The CSS keyframe animation on .wp-picker-active provides a
-	// 120ms pop-in instead. We stop any running animation and jump to end so
-	// the holder reaches its final layout immediately.
-	\$(document).on('click', '#sub-accordion-section-customify_colors .wp-color-result.button', function(){
-		var \$container = \$(this).closest('.wp-picker-container');
-		\$container.find('.wp-picker-holder').stop(true, true);
-	});
+	// Monkey-patch jQuery's slide methods so Iris's wpColorPicker can't
+	// queue its slow slideToggle('fast') on our holders. We don't override
+	// globally — only when the call target is inside the Colors section.
+	// The CSS keyframe `customify-color-popover-in` provides the visual
+	// transition.
+	(function patchJQuerySlide(){
+		var origDown   = \$.fn.slideDown;
+		var origUp     = \$.fn.slideUp;
+		var origToggle = \$.fn.slideToggle;
+		function inColorsSection(el){
+			return el && el.closest && el.closest('#sub-accordion-section-customify_colors');
+		}
+		\$.fn.slideDown = function(){
+			if (this.length && inColorsSection(this[0])) return this.show();
+			return origDown.apply(this, arguments);
+		};
+		\$.fn.slideUp = function(){
+			if (this.length && inColorsSection(this[0])) return this.hide();
+			return origUp.apply(this, arguments);
+		};
+		\$.fn.slideToggle = function(){
+			if (this.length && inColorsSection(this[0])) {
+				return this.is(':visible') ? this.hide() : this.show();
+			}
+			return origToggle.apply(this, arguments);
+		};
+	})();
 
 	// Iris stops propagation on its click handler, so jQuery delegation on
 	// document never sees the click. Instead we observe the .wp-picker-active
@@ -383,16 +428,24 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			setTimeout( startObserver, 500 );
 			return;
 		}
+		// Pre-build addons so opens feel instant — give Customify's initColor
+		// a tick to call wpColorPicker() and produce .wp-picker-container.
+		setTimeout(function(){ prebuildAll(section); }, 100);
+		setTimeout(function(){ prebuildAll(section); }, 800);
+
 		var observer = new MutationObserver(function(mutations){
 			mutations.forEach(function(m){
 				if ( m.type !== 'attributes' || m.attributeName !== 'class' ) return;
 				var target = m.target;
 				if ( ! target.classList || ! target.classList.contains('wp-picker-container') ) return;
 				if ( target.classList.contains('wp-picker-active') ) {
+					// Picker just opened — refresh existing addon (or create
+					// the first time if pre-build hadn't run for this picker yet).
 					injectPopupAddon(target);
-				} else {
-					removeAddons(target);
 				}
+				// Note: no removeAddons on close — we keep the addon mounted
+				// so the next open is instant. wp-picker-holder is display:none
+				// via CSS when not .wp-picker-active so the addon is hidden too.
 			});
 		});
 		observer.observe(section, { attributes: true, subtree: true, attributeFilter: ['class'] });

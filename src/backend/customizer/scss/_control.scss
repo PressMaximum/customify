@@ -1717,9 +1717,11 @@ $text_color: #555d66;
                 0 0 0 1px rgba(0, 0, 0, 0.04),
                 0 12px 28px rgba(0, 0, 0, 0.16);
             z-index: 100;
-            // Snappy pop-in — replaces Iris's slow jQuery .slideDown (400ms).
-            transform-origin: top right;
-            animation: customify-color-popover-in 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+            // Snappy pop-in — replaces Iris's slow jQuery .slideToggle('fast').
+            // Just opacity (no transform) so the browser doesn't need a
+            // separate compositor layer per popover; 80ms feels instant.
+            will-change: opacity;
+            animation: customify-color-popover-in 0.08s ease-out;
         }
     }
 
@@ -1887,13 +1889,8 @@ $text_color: #555d66;
 
 
 // Animation for the Colors section color-picker popover.
+// Opacity-only keyframe — no transform — for snappy GPU-cheap fade-in.
 @keyframes customify-color-popover-in {
-    from {
-        opacity: 0;
-        transform: translateY(-4px) scale(0.96);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
