@@ -1709,7 +1709,7 @@ $text_color: #555d66;
             left: 0;
             right: 0;
             width: auto;
-            padding: 12px;
+            padding: 18px;
             background: #fff;
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 6px;
@@ -1718,10 +1718,22 @@ $text_color: #555d66;
                 0 12px 28px rgba(0, 0, 0, 0.16);
             z-index: 100;
             // Snappy pop-in — replaces Iris's slow jQuery .slideToggle('fast').
-            // Just opacity (no transform) so the browser doesn't need a
-            // separate compositor layer per popover; 80ms feels instant.
             will-change: opacity;
             animation: customify-color-popover-in 0.08s ease-out;
+        }
+
+        // ─── Iris picker chrome cleanup inside the popover ───────────
+        // Strip Iris's own white panel + border + padding — the popover
+        // wrapper already provides those. Hide the 8-swatch row at the
+        // bottom; users get a brand-aware From-Palette row instead.
+        .wp-picker-container.wp-picker-active .iris-picker.iris-border {
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+        .wp-picker-container.wp-picker-active .iris-palette-container {
+            display: none !important;
         }
     }
 
@@ -1811,27 +1823,25 @@ $text_color: #555d66;
         margin-top: 8px;
     }
     .customify-color-hexrow {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        padding: 10px 6px 4px;
-        border-top: 1px solid #ddd;
-        margin-top: 8px;
+        display: block;
+        padding: 0;
+        margin-top: 10px;
+        border: 0;
     }
-    .customify-color-hexrow__label {
-        font-size: 10px;
-        font-weight: 600;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        color: #888;
-        flex: 0 0 auto;
+    .customify-color-tokenrow {
+        display: block;
+        padding: 0;
+        margin-top: 6px;
+        border: 0;
     }
-    .customify-color-hex {
-        flex: 1 1 auto;
+    .customify-color-hex,
+    .customify-color-token {
+        display: block;
         width: 100%;
+        box-sizing: border-box;
         font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
         font-size: 12px;
-        padding: 4px 8px;
+        padding: 6px 9px;
         border: 1px solid #ccc;
         border-radius: 3px;
         background: #fff;
@@ -1842,6 +1852,11 @@ $text_color: #555d66;
             border-color: #2271b1;
             box-shadow: 0 0 0 1px #2271b1;
         }
+    }
+    .customify-color-token {
+        color: #666;
+        cursor: text;
+        user-select: all;
     }
     .customify-color-quickpick__label {
         flex: 1 1 100%;

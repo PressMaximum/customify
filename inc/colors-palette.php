@@ -319,11 +319,11 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		return \$row;
 	}
 
-	// Build the hex input row shown when editing a palette slot. Two-way
-	// sync with the wp-color-picker text input via Iris events.
-	function buildHexInput(\$panel, currentVal) {
+	// Build the hex input + read-only token var rows for a palette slot.
+	// Two-way sync the hex with wp-color-picker via Iris events; the token
+	// var is purely informational (one-tap select-all for copy/paste).
+	function buildHexInput(\$panel, currentVal, slotKey) {
 		var \$row = \$('<div class=\"customify-color-hexrow\"></div>');
-		\$row.append('<span class=\"customify-color-hexrow__label\">Hex</span>');
 		var \$input = \$('<input type=\"text\" class=\"customify-color-hex\" spellcheck=\"false\" autocomplete=\"off\" />').val(currentVal);
 		\$input.on('input', function(){
 			var v = (\$input.val() || '').trim();
@@ -333,14 +333,23 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			}
 		});
 		\$input.on('click', function(e){ e.stopPropagation(); });
-		// Mirror Iris-driven changes (drag in saturation square / hue slider).
-		// Iris fires a `change` event on the underlying hidden input via its
-		// own change callback; we re-bind on the picker container.
 		\$panel.on('iris-customify-hex-sync', function(){
 			var v = \$panel.val();
 			if ( v && document.activeElement !== \$input[0] ) \$input.val(v);
 		});
 		\$row.append(\$input);
+
+		if ( slotKey ) {
+			var \$tokenRow = \$('<div class=\"customify-color-tokenrow\"></div>');
+			var \$token = \$('<input type=\"text\" class=\"customify-color-token\" readonly />')
+				.val('var(--customify-' + slotKey + ')');
+			\$token.on('focus', function(){ this.select(); });
+			\$token.on('click', function(e){ e.stopPropagation(); this.select(); });
+			\$tokenRow.append(\$token);
+			// Wrap both rows in a fragment-like jQuery set so the caller can
+			// append in one go without changing the public API.
+			return \$row.add(\$tokenRow);
+		}
 		return \$row;
 	}
 
@@ -349,15 +358,16 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		var \$panel     = \$container.find('.customify--color-panel');
 		if ( ! \$panel.length ) return;
 		var currentVal = (\$panel.val() || '').toLowerCase();
-		var isPalette  = PALETTE_CONTROLS.indexOf(getControlId(container)) !== -1;
+		var controlId  = getControlId(container);
+		var slot       = CFY_COLORS.slots.filter(function(s){ return s.control === controlId; })[0];
+		var isPalette  = !!slot;
 
 		// If an addon is already present (pre-built on init), refresh its
 		// current-value state instead of rebuilding the DOM from scratch.
-		// Cheap refresh keeps picker-open feel instant.
 		var existing = container.querySelector ? container.querySelector('.customify-color-quickpick, .customify-color-hexrow') : null;
 		if (existing) {
 			if (isPalette) {
-				var input = existing.querySelector('.customify-color-hex');
+				var input = container.querySelector('.customify-color-hex');
 				if (input && document.activeElement !== input) input.value = \$panel.val() || '';
 			} else {
 				existing.querySelectorAll('.customify-color-quickpick__swatch').forEach(function(sw){
@@ -368,7 +378,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		}
 
 		var \$addon = isPalette
-			? buildHexInput(\$panel, currentVal)
+			? buildHexInput(\$panel, currentVal, slot.key)
 			: buildQuickPick(\$panel, currentVal);
 		\$container.find('.wp-picker-holder').append(\$addon);
 	}
