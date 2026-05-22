@@ -361,15 +361,92 @@ export default function Builder( { config } ) {
 		section.active.set( true );
 		section.focus();
 
-		function onExpandChange( expanded ) {
-			if ( ! expanded ) {
-				section.expanded.unbind( onExpandChange );
-				section.active.set( false );
-				if ( section._customifyForceHide ) {
-					section.active.bind( section._customifyForceHide );
-				}
+		// Re-hide the section only once the user has truly returned to the
+		// panel root. Doing it on every collapse breaks WP flows that
+		// momentarily collapse the section to navigate into a child
+		// context — most importantly the block widget editor's "Show
+		// more settings", which expands an `InspectorSection` and calls
+		// `parentSection.collapse({manualTransition:true})`. That
+		// manualTransition path bypasses the standard
+		// `Section.onChangeExpanded`, so `wp.customize.state('expandedSection')`
+		// is NOT updated to the inspector's id. The only reliable signal
+		// that the parent collapsed "into" its inspector is the sidebar-
+		// section method `hasSubSectionOpened()`.
+		//
+		// When the user clicks Back on the inspector, WP's
+		// `InspectorSection.onChangeExpanded(false)` calls
+		// `parentSection.expand(...)`. We must keep `_customifyForceHide`
+		// unbound throughout that flow so the re-expand actually works
+		// (otherwise the parent section appears empty on return).
+		const expandedSectionState = wp.customize?.state?.( 'expandedSection' );
+
+		function isSubSectionOpen() {
+			if ( typeof section.hasSubSectionOpened === 'function' ) {
+				try { return !! section.hasSubSectionOpened(); } catch ( _ ) {}
+			}
+			const inspector = section.inspector;
+			if ( inspector && typeof inspector.expanded === 'function' ) {
+				try { return !! inspector.expanded(); } catch ( _ ) {}
+			}
+			return false;
+		}
+
+		function finalizeHide() {
+			section.expanded.unbind( onExpandChange );
+			if ( expandedSectionState ) {
+				expandedSectionState.unbind( checkAndHide );
+			}
+			section.active.set( false );
+			if ( section._customifyForceHide ) {
+				section.active.bind( section._customifyForceHide );
 			}
 		}
+
+		function checkAndHide() {
+			// User re-expanded our section — keep it visible.
+			if ( section.expanded.get() ) {
+				if ( expandedSectionState ) {
+					expandedSectionState.unbind( checkAndHide );
+				}
+				return;
+			}
+			// A sub-section (block inspector) is open — wait until it
+			// closes. WP will re-expand the parent when it does.
+			if ( isSubSectionOpen() ) {
+				return;
+			}
+			// Some other section is expanded — user navigated sideways or
+			// deeper. Wait until they leave or return.
+			if ( expandedSectionState && expandedSectionState.get() ) {
+				return;
+			}
+			// No section expanded — user is back at the panel root. Hide.
+			finalizeHide();
+		}
+
+		function onExpandChange( expanded ) {
+			if ( expanded ) {
+				// Re-expanded; cancel any pending deferred hide listener.
+				if ( expandedSectionState ) {
+					expandedSectionState.unbind( checkAndHide );
+				}
+				return;
+			}
+			// Collapsed because a sub-section (block inspector) opened.
+			// Keep listening on `expanded` — WP re-expands the parent
+			// when the sub-section closes, which fires onExpandChange(true).
+			if ( isSubSectionOpen() ) {
+				return;
+			}
+			if ( expandedSectionState ) {
+				expandedSectionState.bind( checkAndHide );
+				// Defer the first check so WP can finish propagating state.
+				setTimeout( checkAndHide, 0 );
+			} else {
+				finalizeHide();
+			}
+		}
+
 		section.expanded.bind( onExpandChange );
 	}, [] );
 
