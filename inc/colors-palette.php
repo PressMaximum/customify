@@ -262,38 +262,44 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	function customify_color_palette_quickpick_js() {
 		$slots   = customify_color_get_slots();
+		// Brand-first display order to match the Palette section UI.
+		// `control` is the LI id (without the `customize-control-` prefix)
+		// used to detect whether an open picker is a palette slot — in that
+		// case the popup shows a hex input instead of the From-Palette row.
 		$payload = wp_json_encode( array(
 			'slots' => array(
-				array( 'key' => 'base',      'label' => 'Base',      'color' => $slots['base'] ),
-				array( 'key' => 'surface',   'label' => 'Surface',   'color' => $slots['surface'] ),
-				array( 'key' => 'text',      'label' => 'Text',      'color' => $slots['text'] ),
-				array( 'key' => 'primary',   'label' => 'Primary',   'color' => $slots['primary'] ),
-				array( 'key' => 'secondary', 'label' => 'Secondary', 'color' => $slots['secondary'] ),
-				array( 'key' => 'accent',    'label' => 'Accent',    'color' => $slots['accent'] ),
+				array( 'key' => 'primary',   'label' => 'Primary',   'color' => $slots['primary'],   'control' => 'global_styling_color_primary' ),
+				array( 'key' => 'secondary', 'label' => 'Secondary', 'color' => $slots['secondary'], 'control' => 'global_styling_color_secondary' ),
+				array( 'key' => 'accent',    'label' => 'Accent',    'color' => $slots['accent'],    'control' => 'customify_palette_accent' ),
+				array( 'key' => 'text',      'label' => 'Text',      'color' => $slots['text'],      'control' => 'customify_palette_text' ),
+				array( 'key' => 'surface',   'label' => 'Surface',   'color' => $slots['surface'],   'control' => 'customify_palette_surface' ),
+				array( 'key' => 'base',      'label' => 'Base',      'color' => $slots['base'],      'control' => 'customify_palette_base' ),
 			),
 		) );
 
 		$script = "(function(\$){
 	var CFY_COLORS = {$payload};
+	var PALETTE_CONTROLS = CFY_COLORS.slots.map(function(s){ return s.control; });
 
-	function removeQuickPick(container) {
-		var qp = container.querySelector ? container.querySelector('.customify-color-quickpick') : null;
-		if (qp) qp.parentNode.removeChild(qp);
+	function getControlId(container) {
+		var li = container.closest ? container.closest('.customize-control') : null;
+		if ( ! li || ! li.id ) return '';
+		return li.id.replace(/^customize-control-/, '');
 	}
 
-	function injectQuickPick(container) {
-		var \$container = \$(container);
-		// Always start fresh — strip any old row before adding a new one so
-		// the highlighted is-active swatch reflects the picker's current value.
-		removeQuickPick(container);
+	function removeAddons(container) {
+		var qp = container.querySelector ? container.querySelector('.customify-color-quickpick') : null;
+		if (qp) qp.parentNode.removeChild(qp);
+		var hex = container.querySelector ? container.querySelector('.customify-color-hexrow') : null;
+		if (hex) hex.parentNode.removeChild(hex);
+	}
 
-		var \$panel = \$container.find('.customify--color-panel');
-		if ( ! \$panel.length ) return;
-		var currentVal = (\$panel.val() || '').toLowerCase();
-
+	// Build the From-Palette row used by component overrides (Link, Border,
+	// Heading, etc.) so the user can override a single element from the
+	// brand palette in one click.
+	function buildQuickPick(\$panel, currentVal) {
 		var \$row = \$('<div class=\"customify-color-quickpick\"></div>');
 		\$row.append('<span class=\"customify-color-quickpick__label\">From palette</span>');
-
 		CFY_COLORS.slots.forEach(function(s){
 			var color = (s.color || '').toLowerCase();
 			var \$sw = \$('<button type=\"button\" class=\"customify-color-quickpick__swatch\"></button>')
@@ -310,16 +316,57 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			});
 			\$row.append(\$sw);
 		});
-
-		// Append inside the picker holder so wp-color-picker's own show/hide
-		// on .wp-picker-active also clips our row visually as a fallback.
-		\$container.find('.wp-picker-holder').append(\$row);
+		return \$row;
 	}
+
+	// Build the hex input row shown when editing a palette slot. Two-way
+	// sync with the wp-color-picker text input via Iris events.
+	function buildHexInput(\$panel, currentVal) {
+		var \$row = \$('<div class=\"customify-color-hexrow\"></div>');
+		\$row.append('<span class=\"customify-color-hexrow__label\">Hex</span>');
+		var \$input = \$('<input type=\"text\" class=\"customify-color-hex\" spellcheck=\"false\" autocomplete=\"off\" />').val(currentVal);
+		\$input.on('input', function(){
+			var v = (\$input.val() || '').trim();
+			if ( v && v.charAt(0) !== '#' ) v = '#' + v;
+			if ( /^#[0-9a-fA-F]{6}\$/.test(v) || /^#[0-9a-fA-F]{8}\$/.test(v) ) {
+				\$panel.wpColorPicker('color', v);
+			}
+		});
+		\$input.on('click', function(e){ e.stopPropagation(); });
+		// Mirror Iris-driven changes (drag in saturation square / hue slider).
+		// Iris fires a `change` event on the underlying hidden input via its
+		// own change callback; we re-bind on the picker container.
+		\$panel.on('iris-customify-hex-sync', function(){
+			var v = \$panel.val();
+			if ( v && document.activeElement !== \$input[0] ) \$input.val(v);
+		});
+		\$row.append(\$input);
+		return \$row;
+	}
+
+	function injectPopupAddon(container) {
+		var \$container = \$(container);
+		removeAddons(container);
+		var \$panel = \$container.find('.customify--color-panel');
+		if ( ! \$panel.length ) return;
+		var currentVal = (\$panel.val() || '').toLowerCase();
+		var isPalette  = PALETTE_CONTROLS.indexOf(getControlId(container)) !== -1;
+		var \$addon     = isPalette
+			? buildHexInput(\$panel, currentVal)
+			: buildQuickPick(\$panel, currentVal);
+		\$container.find('.wp-picker-holder').append(\$addon);
+	}
+
+	// Re-emit a custom event from any change on the picker so the hex input
+	// stays in sync while the user drags Iris's saturation / hue / alpha.
+	\$(document).on('input change', '#sub-accordion-section-customify_colors .customify--color-panel', function(){
+		\$(this).trigger('iris-customify-hex-sync');
+	});
 
 	// Iris stops propagation on its click handler, so jQuery delegation on
 	// document never sees the click. Instead we observe the .wp-picker-active
 	// class on each wp-picker-container inside the Colors section and add/
-	// remove the quick-pick row in lock-step with the picker open/close.
+	// remove our addon row in lock-step with the picker open/close.
 	function startObserver() {
 		var section = document.getElementById('sub-accordion-section-customify_colors');
 		if ( ! section ) {
@@ -332,9 +379,9 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 				var target = m.target;
 				if ( ! target.classList || ! target.classList.contains('wp-picker-container') ) return;
 				if ( target.classList.contains('wp-picker-active') ) {
-					injectQuickPick(target);
+					injectPopupAddon(target);
 				} else {
-					removeQuickPick(target);
+					removeAddons(target);
 				}
 			});
 		});

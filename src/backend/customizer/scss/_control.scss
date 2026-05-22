@@ -1756,8 +1756,10 @@ $text_color: #555d66;
     }
 
     // ──────────────────────────────────────────────────────────
-    // Palette quick-pick row injected at bottom of wp-color-picker popups
-    // (rendered via JS in initColor patch — see control.js).
+    // Popover add-on rows injected at bottom of wp-color-picker holder
+    // by JS (see customify_color_palette_quickpick_js in PHP):
+    //   - .customify-color-quickpick: "From palette" row for component overrides
+    //   - .customify-color-hexrow:    hex text input for palette slots
     // ──────────────────────────────────────────────────────────
     .customify-color-quickpick {
         display: flex;
@@ -1766,6 +1768,39 @@ $text_color: #555d66;
         padding: 10px 6px 6px;
         border-top: 1px solid #ddd;
         margin-top: 8px;
+    }
+    .customify-color-hexrow {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 6px 4px;
+        border-top: 1px solid #ddd;
+        margin-top: 8px;
+    }
+    .customify-color-hexrow__label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #888;
+        flex: 0 0 auto;
+    }
+    .customify-color-hex {
+        flex: 1 1 auto;
+        width: 100%;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        padding: 4px 8px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background: #fff;
+        color: #222;
+        outline: none;
+        transition: border-color 0.15s;
+        &:focus {
+            border-color: #2271b1;
+            box-shadow: 0 0 0 1px #2271b1;
+        }
     }
     .customify-color-quickpick__label {
         flex: 1 1 100%;
