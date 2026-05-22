@@ -1632,6 +1632,7 @@ $text_color: #555d66;
             vertical-align: middle;
         }
         .wp-picker-container .wp-color-result.button {
+            position: relative; // anchor for the .color-alpha overlay below
             margin: 0;
             padding: 0;
             width: 28px;
@@ -1641,15 +1642,32 @@ $text_color: #555d66;
             border: 1px solid rgba(0, 0, 0, 0.15);
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
             cursor: pointer;
-            // The .wp-color-result-text label inside the button is the
-            // "Select Color" / hex string text — hide it; only the bg colour
-            // remains.
+            overflow: hidden; // belt-and-braces clip for the inner color span
+
+            // wp-color-picker renders an inner SPAN.color-alpha (30x26 with
+            // its own bordder-radius: 2px 0 0 2px) that paints the colored
+            // chip — that's why the swatch looks square even though the
+            // outer button is round. Override the inner span to fill the
+            // round button exactly.
+            .color-alpha {
+                position: absolute !important;
+                inset: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                border-radius: 50% !important;
+                margin: 0;
+            }
             .wp-color-result-text {
                 display: none;
             }
             &:after {
                 display: none; // remove arrow indicator
             }
+        }
+
+        // Round the 8 standard WP swatches inside Iris too.
+        .wp-picker-container .iris-palette {
+            border-radius: 50% !important;
         }
 
         // ─── Popover wrapper for the Iris picker ─────────────────────
@@ -1664,9 +1682,11 @@ $text_color: #555d66;
         // their native layout — overriding them breaks Iris's drag math.
         .wp-picker-container .wp-picker-holder {
             display: none;
+            // Reset any leftover height jQuery's slideUp may have inlined.
+            height: auto !important;
         }
         .wp-picker-container.wp-picker-active .wp-picker-holder {
-            display: block;
+            display: block !important; // beat Iris's inline display:none mid-slide
             position: absolute;
             top: calc(100% + 8px);
             left: 0;
@@ -1679,8 +1699,10 @@ $text_color: #555d66;
             box-shadow:
                 0 0 0 1px rgba(0, 0, 0, 0.04),
                 0 12px 28px rgba(0, 0, 0, 0.16);
-            // Float above sibling rows + customize panel chrome.
             z-index: 100;
+            // Snappy pop-in — replaces Iris's slow jQuery .slideDown (400ms).
+            transform-origin: top right;
+            animation: customify-color-popover-in 0.12s cubic-bezier(0.16, 1, 0.3, 1);
         }
     }
 
@@ -1844,4 +1866,17 @@ $text_color: #555d66;
     padding: 10px 6px 6px;
     border-top: 1px solid #ddd;
     margin-top: 8px;
+}
+
+
+// Animation for the Colors section color-picker popover.
+@keyframes customify-color-popover-in {
+    from {
+        opacity: 0;
+        transform: translateY(-4px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }

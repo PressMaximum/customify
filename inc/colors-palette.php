@@ -363,6 +363,16 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		\$(this).trigger('iris-customify-hex-sync');
 	});
 
+	// Cancel Iris's jQuery .slideDown / .slideUp on the picker holders inside
+	// the Colors section — that 400ms slide is what makes the popover feel
+	// stiff/laggy. The CSS keyframe animation on .wp-picker-active provides a
+	// 120ms pop-in instead. We stop any running animation and jump to end so
+	// the holder reaches its final layout immediately.
+	\$(document).on('click', '#sub-accordion-section-customify_colors .wp-color-result.button', function(){
+		var \$container = \$(this).closest('.wp-picker-container');
+		\$container.find('.wp-picker-holder').stop(true, true);
+	});
+
 	// Iris stops propagation on its click handler, so jQuery delegation on
 	// document never sees the click. Instead we observe the .wp-picker-active
 	// class on each wp-picker-container inside the Colors section and add/
