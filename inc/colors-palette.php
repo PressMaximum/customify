@@ -126,7 +126,7 @@ if ( ! function_exists( 'customify_color_get_slots' ) ) {
 		// guard against wp-cli / external writes that bypass sanitize_callback.
 		$defaults = array(
 			'base'      => '#FFFFFF',
-			'surface'   => '#FFFFFF',
+			'surface'   => '#ECECEC',
 			'text'      => '#2b2b2b',
 			'primary'   => '#235787',
 			'secondary' => '#c3512f',
@@ -161,7 +161,18 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$text_muted_default    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
 		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 );
 		$primary_hover_default = customify_color_mix_hex( $slots['primary'], '#000000', 0.90 ); // primary at 90%, black at 10%
-		$link_hover_default    = customify_color_mix_hex( $slots['primary'], '#000000', 0.85 );
+		// Link hover = primary mixed with WHITE 15% (lighter, not darker).
+		// Hover state surfaces the link by raising luminance. Note: the
+		// existing button :hover (primary_hover) goes the other direction
+		// (darker) — different UX semantic: buttons depress, links surface.
+		$link_hover_default    = customify_color_mix_hex( $slots['primary'], '#FFFFFF', 0.85 );
+		// Body text default = slot.text directly (same pattern as heading).
+		// Earlier Phase 2.3 used mix(text, base, 88%) for a softer ink,
+		// but that desaturates the user's Text slot — e.g. setting Text to
+		// pure white on a dark base yields ~#e0e0e0 grey body copy
+		// instead of the explicit white. Use slot.text verbatim so body
+		// copy fully respects whatever the user picked.
+		$body_text_default     = $slots['text'];
 
 		// Override resolution — legacy explicit values win over computed defaults.
 		// Each override is normalized; an invalid stored value (e.g. from a
@@ -190,13 +201,21 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$ov_body_text    = customify_color_normalize_hex( $_get_saved( 'global_styling_color_text' ), '' );
 
 		$text_muted   = $ov_text_muted   ?: $text_muted_default;
-		$border       = $ov_border       ?: $border_default;
+		// Border default is NOT slot-derived anymore — when no override
+		// saved, --customify-border is omitted from :root so the CSS rule
+		// falls back to `color-mix(in srgb, currentcolor 18%, transparent)`.
+		// That makes borders adapt to the containing element's text color
+		// instead of locking to slot.text — readable on both light and
+		// dark surfaces. Saved override still wins via :root literal.
+		$border       = $ov_border;
 		$link         = $ov_link         ?: $slots['primary'];
 		$link_hover   = $ov_link_hover   ?: $link_hover_default;
 		$heading      = $ov_heading      ?: $slots['text'];
 		$widget_title = $ov_widget_title ?: $slots['text'];
-		// Body-text override stays as a slot-like value for components that need it.
-		$body_text    = $ov_body_text    ?: $text_muted_default;
+		// Body text default uses its own mix (88% ink) — stronger than
+		// text-muted (70%, used for meta / secondary copy) so body copy
+		// stays legible while headings keep contrast above it.
+		$body_text    = $ov_body_text    ?: $body_text_default;
 
 		// Contrast picks for on-* (PHP-precomputed).
 		$on_primary   = customify_color_pick_on( $slots['primary'] );
@@ -212,7 +231,6 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			"--customify-accent: {$slots['accent']}",
 			"--customify-text-muted: {$text_muted}",
 			"--customify-body-text: {$body_text}",
-			"--customify-border: {$border}",
 			"--customify-primary-hover: {$primary_hover_default}",
 			"--customify-link: {$link}",
 			"--customify-link-hover: {$link_hover}",
@@ -222,6 +240,12 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			"--customify-on-secondary: {$on_secondary}",
 			"--customify-on-accent: {$on_accent}",
 		);
+		// --customify-border only emitted when override saved; absence
+		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
+		// fallback fire so borders adapt to local text color.
+		if ( $border ) {
+			$lines[] = "--customify-border: {$border}";
+		}
 
 		// Derived-token cascade lines — added AFTER the static lines so
 		// modern browsers re-resolve them when the underlying slot changes
@@ -234,6 +258,28 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		if ( ! $ov_heading ) {
 			$lines[] = "--customify-heading: var(--customify-text, {$slots['text']})";
 		}
+		// Widget title cascade — same pattern as heading. Sites without a
+		// saved w_title override see widget titles follow slot.text. Saved
+		// override locks the static value.
+		if ( ! $ov_widget_title ) {
+			$lines[] = "--customify-widget-title: var(--customify-text, {$slots['text']})";
+		}
+		// Body text cascade — body follows slot.text directly (no mix).
+		// Same pattern as heading/widget-title: pure var() chain so user's
+		// Text slot value flows through unchanged. Saved body override
+		// suppresses this line and locks --customify-body-text to override.
+		if ( ! $ov_body_text ) {
+			$lines[] = "--customify-body-text: var(--customify-text, {$slots['text']})";
+		}
+		// Link cascade — link defaults to slot.primary directly (same
+		// pattern as heading→text). The CSS rule `a { color: var(--customify-link, ...) }`
+		// then resolves to whatever primary is set to, unless a saved
+		// link override beats it. Modern browsers see the cascade live;
+		// legacy browsers keep the static `--customify-link: <slot.primary>`
+		// emitted earlier in this block.
+		if ( ! $ov_link ) {
+			$lines[] = "--customify-link: var(--customify-primary, {$slots['primary']})";
+		}
 
 		$static_root = ':root{' . implode( ';', $lines ) . ';}';
 
@@ -244,17 +290,51 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		if ( ! $ov_text_muted ) {
 			$mix_lines[] = '--customify-text-muted: color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))';
 		}
-		if ( ! $ov_border ) {
-			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 12%, var(--customify-base))';
-		}
+		// Body text cascade removed from @supports block — body now uses a
+		// pure var() chain (see static :root section above) instead of a
+		// color-mix so the Text slot value flows through unchanged.
+		// Border cascade now happens in the CSS rule's var() fallback
+		// (`color-mix(in srgb, currentcolor 18%, transparent)`) so no
+		// :root entry needed for the no-override case. Override case
+		// emits a static :root --customify-border line above.
 		$mix_lines[] = '--customify-primary-hover: color-mix(in oklab, var(--customify-primary), black 10%)';
+		// Link hover cascade — LIGHTER variant of link (which itself cascades
+		// from primary unless overridden). 15% white mixed in oklab keeps
+		// perceived hue stable while lifting luminance. Saved override
+		// suppresses the cascade so legacy explicit values still win.
 		if ( ! $ov_link_hover ) {
-			$mix_lines[] = '--customify-link-hover: color-mix(in oklab, var(--customify-primary), black 15%)';
+			$mix_lines[] = '--customify-link-hover: color-mix(in oklab, var(--customify-link) 85%, white)';
 		}
 
 		$css = $static_root;
 		if ( $mix_lines ) {
 			$css .= '@supports (color: color-mix(in oklab, red, blue)){:root{' . implode( ';', $mix_lines ) . ';}}';
+		}
+
+		// Background composite cascade — Page bg / Content Area bg / Site
+		// Content bg all fall back to `--customify-base` when the user has
+		// NOT explicitly saved a bg_color subfield in the corresponding
+		// composite styling control. When saved, the composite's own
+		// auto-CSS rule emits the literal hex and that wins via cascade
+		// order (palette-tokens loads AFTER customify-style-inline-css,
+		// but we suppress emission here for saved composites so the
+		// literal stays the only emitter for that selector).
+		$bg_composites = array(
+			array( 'key' => 'background',           'selector' => 'body' ),
+			array( 'key' => 'site_content_styling', 'selector' => '.site-content .content-area' ),
+			array( 'key' => 'content_background',   'selector' => '.site-content' ),
+		);
+		$bg_cascade_lines = array();
+		foreach ( $bg_composites as $comp ) {
+			$saved = isset( $_saved_mods[ $comp['key'] ]['normal']['bg_color'] )
+				? trim( (string) $_saved_mods[ $comp['key'] ]['normal']['bg_color'] )
+				: '';
+			if ( '' === $saved ) {
+				$bg_cascade_lines[] = $comp['selector'] . '{background-color:var(--customify-base, ' . $slots['base'] . ')}';
+			}
+		}
+		if ( $bg_cascade_lines ) {
+			$css .= implode( '', $bg_cascade_lines );
 		}
 
 		return $css;
@@ -306,6 +386,84 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		$script = "(function(\$){
 	var CFY_COLORS = {$payload};
 	var PALETTE_CONTROLS = CFY_COLORS.slots.map(function(s){ return s.control; });
+	// Map of override settings → cascade source slot (read from wp.customize
+	// on demand). Used to visually sync each override picker's swatch with
+	// the resolved cascade value when no user override has been saved.
+	// Source value drives the swatch DOM only — the override setting stays
+	// empty so the cascade keeps applying. The user dragging the override
+	// picker writes a real value and breaks out of cascade mode.
+	var CASCADE_MAP = {
+		'global_styling_color_link':         'global_styling_color_primary',
+		'global_styling_color_heading':      'customify_palette_text',
+		'global_styling_color_w_title':      'customify_palette_text',
+		'global_styling_color_text':         'customify_palette_text'
+	};
+	// Field defaults — when an override's value equals its field default,
+	// we treat it as 'no override' and apply the cascade-sync display.
+	// Mirrors the 'default' keys in inc/customizer/configs/colors.php.
+	var FIELD_DEFAULTS = {
+		'global_styling_color_link':         '#235787',
+		'global_styling_color_heading':      '#2b2b2b',
+		'global_styling_color_w_title':      '#2b2b2b',
+		'global_styling_color_text':         '#2b2b2b'
+	};
+
+	// Decode wp.customize value if Customify wrapped it as URL-encoded JSON.
+	function decodeValue(v) {
+		if (typeof v !== 'string') return v;
+		try { return JSON.parse(decodeURI(v)); } catch (e) { return v; }
+	}
+
+	// Sync the override picker's swatch to its cascade source when the
+	// override is unset (= still equals the registered field default).
+	function syncCascadeSwatch(targetId) {
+		var sourceId = CASCADE_MAP[targetId];
+		if (!sourceId) return;
+		var li = document.getElementById('customize-control-' + targetId);
+		if (!li) return;
+		var saved = decodeValue(wp.customize(targetId).get() || '');
+		var unset = (saved === '' || saved === FIELD_DEFAULTS[targetId]);
+		if (!unset) {
+			// User override saved — let wp-color-picker paint as usual.
+			li.classList.remove('is-cascading');
+			li.style.removeProperty('--customify-cascade-display');
+			return;
+		}
+		var cascadeValue = decodeValue(wp.customize(sourceId).get() || '');
+		if (!cascadeValue) return;
+		li.classList.add('is-cascading');
+		li.style.setProperty('--customify-cascade-display', cascadeValue);
+	}
+
+	function syncAllCascadeSwatches() {
+		Object.keys(CASCADE_MAP).forEach(syncCascadeSwatch);
+	}
+
+	// Bind to each cascade SOURCE so swatches refresh when the user drags
+	// Primary or Text. Also bind each target's own setting so saving an
+	// override flips it out of cascade mode immediately.
+	function wireCascadeListeners() {
+		if (typeof wp === 'undefined' || !wp.customize) return;
+		// Bind targets — react to override save / clear.
+		Object.keys(CASCADE_MAP).forEach(function(targetId){
+			wp.customize(targetId, function(value){
+				value.bind(function(){ setTimeout(function(){ syncCascadeSwatch(targetId); }, 16); });
+			});
+		});
+		// Bind sources — react to Primary / Text slot drags.
+		var sources = {};
+		Object.keys(CASCADE_MAP).forEach(function(t){ sources[CASCADE_MAP[t]] = true; });
+		Object.keys(sources).forEach(function(sourceId){
+			wp.customize(sourceId, function(value){
+				value.bind(function(){
+					setTimeout(syncAllCascadeSwatches, 16);
+				});
+			});
+		});
+		// Initial paint once controls mount.
+		setTimeout(syncAllCascadeSwatches, 200);
+	}
+	\$(wireCascadeListeners);
 
 	function getControlId(container) {
 		var li = container.closest ? container.closest('.customize-control') : null;
@@ -390,22 +548,34 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 
 		// If an addon is already present (pre-built on init), refresh its
 		// current-value state instead of rebuilding the DOM from scratch.
+		// Overrides now carry BOTH a hex row and a quick-pick row, so refresh
+		// either / both if present.
 		var existing = container.querySelector ? container.querySelector('.customify-color-quickpick, .customify-color-hexrow') : null;
 		if (existing) {
-			if (isPalette) {
-				var input = container.querySelector('.customify-color-hex');
-				if (input && document.activeElement !== input) input.value = \$panel.val() || '';
-			} else {
-				existing.querySelectorAll('.customify-color-quickpick__swatch').forEach(function(sw){
+			var hexInput = container.querySelector('.customify-color-hex');
+			if (hexInput && document.activeElement !== hexInput) {
+				hexInput.value = \$panel.val() || '';
+			}
+			var quickpick = container.querySelector('.customify-color-quickpick');
+			if (quickpick) {
+				quickpick.querySelectorAll('.customify-color-quickpick__swatch').forEach(function(sw){
 					sw.classList.toggle('is-active', (sw.getAttribute('data-color') || '').toLowerCase() === currentVal);
 				});
 			}
 			return;
 		}
 
-		var \$addon = isPalette
-			? buildHexInput(\$panel, currentVal, slot.key)
-			: buildQuickPick(\$panel, currentVal);
+		var \$addon;
+		if (isPalette) {
+			// Palette slots: hex input + readonly token var (var(--customify-<slug>)).
+			\$addon = buildHexInput(\$panel, currentVal, slot.key);
+		} else {
+			// Component overrides (Link, Heading, Border, etc.): hex input
+			// (no token row — overrides don't have a stable slot slug to
+			// reference) PLUS the From-Palette quick-pick swatches so the
+			// user can either type a custom hex or one-tap a slot color.
+			\$addon = buildHexInput(\$panel, currentVal, null).add(buildQuickPick(\$panel, currentVal));
+		}
 		\$container.find('.wp-picker-holder').append(\$addon);
 	}
 
@@ -418,8 +588,127 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			if ( c.querySelector('.customify-color-quickpick, .customify-color-hexrow') ) return;
 			injectPopupAddon(c);
 		});
+		section.querySelectorAll('.customify-input-color').forEach(refreshDirtyState);
 	}
 
+	// Toggle `is-dirty` on the picker row when the value diverges from
+	// what was loaded at page-render time. wpColorPicker rewrites
+	// input.defaultValue on every set so we can't use it as a baseline;
+	// dataset attributes also turn out to be unreliable across DOM
+	// re-renders. Keep a closure-scoped map keyed by setting id — that
+	// snapshot survives any DOM churn. SCSS uses `.is-dirty` to reveal
+	// the small reset glyph to the left of the swatch.
+	var initialValues = {};
+	function refreshDirtyState(div) {
+		if (!div) return;
+		var li = div.closest('.customize-control');
+		if (!li || !li.id) return;
+		var settingId = li.id.replace('customize-control-', '');
+		var input = div.querySelector('input.wp-color-picker');
+		if (!input) return;
+		var cur = (input.value || '').trim().toLowerCase();
+		if (!(settingId in initialValues)) {
+			// First observation: snapshot the loaded value. Skip if empty
+			// — picker not yet initialized; next refresh will retry.
+			if (cur === '') return;
+			initialValues[settingId] = cur;
+		}
+		var initial = initialValues[settingId];
+		var dirty = cur !== '' && cur !== initial;
+		div.classList.toggle('is-dirty', dirty);
+	}
+
+	// Wire change listeners once. Two sources cover everything:
+	//   • DOM events on the underlying wp-color-picker input — fires for
+	//     Iris drag, hex paste, quickpick swatch click.
+	//   • wp.customize setting bind — fires for programmatic .set() and
+	//     for clicks on wp-picker-default (which resets value via the
+	//     customize API, not via a DOM event on the input).
+	// Either way, refreshDirtyState re-evaluates and toggles is-dirty.
+	\$(document).on('input change keyup', '#sub-accordion-section-customify_colors input.wp-color-picker, #sub-accordion-section-customify_colors .customify-color-hex', function(){
+		var li = \$(this).closest('.customify-input-color')[0];
+		refreshDirtyState(li);
+	});
+	// Bind to each picker's underlying wp.customize Setting once it's
+	// available so reset-button clicks (which go through the customize
+	// API) also refresh the dirty state. `.customify-input-color` is a
+	// DIV inside the control LI — settingId comes from the LI's id.
+	function bindSettingListeners() {
+		var section = document.getElementById('sub-accordion-section-customify_colors');
+		if (!section) return;
+		section.querySelectorAll('.customify-input-color').forEach(function(div){
+			if (div.dataset.dirtyBound) return;
+			var li = div.closest('.customize-control');
+			if (!li) return;
+			var settingId = (li.id || '').replace('customize-control-', '');
+			if (!settingId || !wp.customize(settingId)) return;
+			div.dataset.dirtyBound = '1';
+			wp.customize(settingId).bind(function(){
+				// Defer one tick so wp-color-picker has time to write the
+				// new value into the input before we read it.
+				setTimeout(function(){ refreshDirtyState(div); }, 16);
+			});
+		});
+	}
+	\$(bindSettingListeners);
+	setTimeout(bindSettingListeners, 600);
+
+
+	// Legacy fine-tuning section is collapsed by default. The .customize-control-title
+	// span inside the heading control gets a click handler; the LI itself stays
+	// inert so it doesn't pick up the browser's default focus outline (which
+	// otherwise paints a stuck rectangle around the entire heading row).
+	// State persists per-session via sessionStorage.
+	function setupLegacyCollapse() {
+		var section = document.getElementById('sub-accordion-section-customify_colors');
+		if (!section) return;
+		var heading = document.getElementById('customize-control-customify_colors_h_overrides');
+		if (!heading) return;
+		if (heading.classList.contains('customify-collapsible-heading')) return;
+		heading.classList.add('customify-collapsible-heading');
+
+		// Title span is the clickable target (chevron sits next to text).
+		var titleEl = heading.querySelector('.customize-control-title');
+		if (!titleEl) return;
+		titleEl.classList.add('customify-collapsible-toggle');
+
+		var targets = [];
+		var next = heading.nextElementSibling;
+		while (next) {
+			if (next.classList && next.classList.contains('customize-control')) targets.push(next);
+			next = next.nextElementSibling;
+		}
+		if (!targets.length) return;
+
+		var STORAGE_KEY = 'customify-legacy-collapsed';
+		var collapsed = sessionStorage.getItem(STORAGE_KEY) !== 'open';
+
+		function apply(state) {
+			targets.forEach(function(el){ el.style.display = state ? 'none' : ''; });
+			heading.classList.toggle('is-collapsed', state);
+			heading.classList.toggle('is-open',     !state);
+		}
+		apply(collapsed);
+
+		titleEl.setAttribute('role', 'button');
+		titleEl.setAttribute('tabindex', '0');
+		titleEl.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+
+		function toggle(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			collapsed = !collapsed;
+			sessionStorage.setItem(STORAGE_KEY, collapsed ? 'closed' : 'open');
+			apply(collapsed);
+			titleEl.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+		}
+		titleEl.addEventListener('click', toggle);
+		titleEl.addEventListener('keydown', function(e){
+			if (e.key === 'Enter' || e.key === ' ') toggle(e);
+		});
+	}
+	\$(setupLegacyCollapse);
+	setTimeout(setupLegacyCollapse, 400);
 
 	// Re-emit a custom event from any change on the picker so the hex input
 	// stays in sync while the user drags Iris's saturation / hue / alpha.
@@ -559,6 +848,12 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 			// the user clears the picker, our `normalize()` returns '' and
 			// removeProperty() restores the cascade.
 			'global_styling_color_heading'   => '--customify-heading',
+			'global_styling_color_text'      => '--customify-body-text',
+			'global_styling_color_link'      => '--customify-link',
+			'global_styling_color_link_hover' => '--customify-link-hover',
+			'global_styling_color_border'    => '--customify-border',
+			'global_styling_color_meta'      => '--customify-text-muted',
+			'global_styling_color_w_title'   => '--customify-widget-title',
 		) );
 
 		$script = "(function(){
