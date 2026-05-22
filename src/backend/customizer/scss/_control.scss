@@ -1616,12 +1616,136 @@ $text_color: #555d66;
 // ============================================================
 #sub-accordion-section-customify_colors {
 
+    // Override pickers in cascade mode (no override saved) paint their
+    // swatch with the resolved cascade value so the UI matches what the
+    // frontend renders. JS sets `--customify-cascade-display` and toggles
+    // the `.is-cascading` class; SCSS just overrides wp-color-picker's
+    // inline background on `.color-alpha` with the same value.
+    //   Setting underlying value stays unchanged — dragging the picker
+    //   writes a real override and flips out of cascade mode (JS handler
+    //   removes `.is-cascading`).
+    .customize-control-customify-color.is-cascading {
+        .wp-color-result .color-alpha {
+            background-color: var(--customify-cascade-display) !important;
+        }
+    }
+
+    // Legacy fine-tuning heading — collapsible. Wired by the
+    // setupLegacyCollapse() handler in colors-palette.php. The click
+    // target is JUST the .customize-control-title span (not the whole
+    // control LI) — that way the browser's default focus outline lands
+    // only on the gray title bar instead of painting a stuck rectangle
+    // around the entire heading row + description.
+    .customify-collapsible-heading {
+        // Extra space between the gray title bar and the italic
+        // description sitting just below it.
+        .description.customize-control-description {
+            margin-top: 10px;
+        }
+        .customify-collapsible-toggle {
+            display: block;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 22px;
+            outline: none;
+            // Subtle keyboard focus indicator on the title only.
+            &:focus-visible {
+                box-shadow: 0 0 0 2px #2271b1;
+                border-radius: 2px;
+            }
+            // Chevron: collapsed (right-pointing ▸) → open (down-pointing ▾).
+            // Two CSS tricks ensure the glyph stays vertically centered
+            // through the rotation:
+            //   1) Anchor the box at the row's center via `top: 50%` and
+            //      let `transform-origin: center center` (the default for
+            //      this width/height) handle the spin.
+            //   2) Use ONE `transform` declaration that composes both
+            //      `translateY(-50%)` (so the box is centered without any
+            //      magic margin offset) and the `rotate(...)`.
+            // Margin-top tricks earlier shifted the box DOWN when the user
+            // expanded the section because rotation changes the bounding
+            // box of the rotated arrow — switching to transform-only keeps
+            // the visual stable through the toggle.
+            &::after {
+                content: '';
+                position: absolute;
+                top: 62%;
+                right: 8px;
+                width: 8px;
+                height: 8px;
+                border-right: 2px solid currentColor;
+                border-bottom: 2px solid currentColor;
+                transform: translateY(-75%) rotate(-45deg);
+                transform-origin: center center;
+                opacity: 0.55;
+                transition: transform 160ms ease-out, opacity 160ms ease-out;
+            }
+            &:hover::after { opacity: 0.9; }
+        }
+        &.is-open .customify-collapsible-toggle::after {
+            transform: translateY(-91%) rotate(45deg);
+        }
+    }
+
     // Hide the wp-color-picker text input — only the circular swatch
     // button remains as the trigger. Hex can still be entered in the
-    // expanded Iris picker.
+    // expanded Iris picker via our custom .customify-color-hex input.
+    //
+    // The wp-picker-default "Reset" button is repositioned as a tiny
+    // circular icon sitting LEFT of the swatch (only when the picker
+    // row gets the `is-dirty` class — i.e. value differs from default).
+    // Default state hides the reset icon entirely so the row stays clean.
     .customify-input-color {
         .wp-picker-input-wrap {
-            display: none !important;
+            // The wrap is a sibling of the swatch trigger — we use
+            // `display:contents` so its children (text input + default
+            // button) lay out as if they were direct children of the
+            // settings row, then position the default button absolutely.
+            display: contents;
+            label,
+            input.wp-color-picker {
+                display: none !important;
+            }
+            input.wp-picker-default {
+                display: none !important;          // hidden by default; wp-color-picker.css default is inline-block
+                visibility: visible !important;    // wp-color-picker.css also sets visibility:hidden
+                position: absolute !important;     // wp-color-picker.css force-pins to inline flow
+                width: 16px !important;
+                height: 16px !important;           // wp-color-picker.css sets ~32px on input.button-small
+                min-height: 16px !important;
+                padding: 0 !important;
+                margin: -8px 0 0 !important;
+                right: 36px !important;            // 16px icon + 8px gap left of the 28px swatch
+                top: 50% !important;
+                font-size: 0 !important;           // hide "Default" text label
+                line-height: 0 !important;
+                color: transparent !important;
+                background-color: transparent !important;
+                border: 0 !important;
+                border-radius: 50% !important;
+                cursor: pointer !important;
+                z-index: 2;
+                // input doesn't render ::before/::after in most browsers, so
+                // the SVG icon goes on background-image directly.
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23606060'><path d='M10.25 1.02c5.1 0 8.75 4.04 8.75 9s-3.65 9-8.75 9c-3.2 0-6.02-1.59-7.68-3.99l2.59-1.52c1.1 1.5 2.86 2.51 4.84 2.51 3.3 0 6-2.79 6-6s-2.7-6-6-6c-1.97 0-3.72 1-4.82 2.49L7 8.02l-6 2v-7L2.89 4.6c1.69-2.17 4.36-3.58 7.36-3.58z'/></svg>") !important;
+                background-repeat: no-repeat !important;
+                background-position: center !important;
+                background-size: 14px 14px !important;
+                box-shadow: none !important;
+                transition: opacity 120ms ease-out;
+                &:hover, &:focus {
+                    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231d2327'><path d='M8 3V1L4 4l4 3V5c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4H2c0 3.3 2.7 6 6 6s6-2.7 6-6-2.7-6-6-6z'/></svg>") !important;
+                    outline: 2px solid #2271b1 !important;
+                    outline-offset: 2px;
+                }
+            }
+        }
+        // Show the reset icon only when the picker value diverges from
+        // the field default. The `.is-dirty` class is toggled by the
+        // quickpick JS (colors-palette.php) on Iris value changes.
+        &.is-dirty .wp-picker-input-wrap input.wp-picker-default {
+            display: block !important;
         }
         // Picker container stays inline-block so the trigger swatch is
         // compact. Its positioning context is the parent .customize-control
@@ -1723,39 +1847,24 @@ $text_color: #555d66;
         }
 
         // ─── Iris picker chrome cleanup inside the popover ───────────
-        // Strip Iris's own white panel + border + padding — the popover
-        // wrapper already provides those. Hide the 8-swatch row at the
-        // bottom; users get a brand-aware From-Palette row instead.
-        // Iris keeps its native 255px width — popover padding (14px each
-        // side) sizes around it so the right edge of the saturation
-        // square + hue strip aligns with the hex input below.
+        // Iris doesn't use jQuery UI slider widget — its hue/alpha drag
+        // math reads inline `offsetTop` from each strip, so the strips
+        // must stay vertical (CSS-rotate would break the drag math).
+        // Keep Iris's native vertical strips to the right of the square,
+        // strip the outer chrome so the popover wrapper provides the card.
         .wp-picker-container.wp-picker-active .iris-picker.iris-border {
             background: transparent !important;
             border: 0 !important;
             box-shadow: none !important;
             padding: 0 !important;
-        }
-        // Iris's `.iris-picker-inner` is position:absolute with `left: 10px`
-        // — that pushes the saturation square 10px right of where the hex
-        // input below starts. Don't touch the inner directly (it has
-        // `right: 10px` too, so overriding left stretches the whole inner
-        // and Iris repositions the strips weirdly).
-        // Instead shift the whole iris-picker 10px LEFT via margin. The
-        // 10px iris-picker-inner offset then lines up exactly with the
-        // popover's padding-left, so iris-square's left edge matches the
-        // hex input's left edge. All Iris drag math is unaffected because
-        // margin shifts the entire element including its child offsets.
-        .wp-picker-container.wp-picker-active .iris-picker.iris-border {
             margin: 0 0 0 -10px !important;
         }
         .wp-picker-container.wp-picker-active .iris-palette-container {
             display: none !important;
         }
-        // Align the alpha (checker) strip with the hue strip — Iris's own
-        // CSS gives the alpha-slider a different top + height than the
-        // hue-slider so the two vertical strips end up visibly offset.
-        // Force both strips to share the saturation square's top/height
-        // so they line up perfectly.
+        // Align the alpha (checker) strip with the hue strip — Iris's
+        // default CSS gives the alpha-slider a different top + height,
+        // so without this they end up visibly offset.
         .wp-picker-container.wp-picker-active .iris-picker-inner .iris-strip {
             top: 0 !important;
             margin-top: 0 !important;
