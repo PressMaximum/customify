@@ -1735,6 +1735,20 @@ $text_color: #555d66;
             box-shadow: none !important;
             padding: 0 !important;
         }
+        // Iris's `.iris-picker-inner` is position:absolute with `left: 10px`,
+        // which pushes the saturation square 10px right of the hex input's
+        // left edge below. Pin it to left: 0 so the square is flush.
+        .wp-picker-container.wp-picker-active .iris-picker .iris-picker-inner {
+            padding: 0 !important;
+            margin: 0 !important;
+            left: 0 !important;
+        }
+        // Iris-picker itself has margin: 6px 0 0 — top margin offsets the
+        // picker down from the holder's padding-top. Zero the margin so
+        // top spacing matches what our popover padding already provides.
+        .wp-picker-container.wp-picker-active .iris-picker.iris-border {
+            margin: 0 !important;
+        }
         .wp-picker-container.wp-picker-active .iris-palette-container {
             display: none !important;
         }
