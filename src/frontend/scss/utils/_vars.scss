@@ -14,14 +14,25 @@ $container_width: 1200px; // 1200px; 75em
 $background_body: #ffffff;
 
 // Colors
-$color_text:        #686868;
-$color_heading:     #2b2b2b;
-$color_primary:     #235787;
-$color_secondary:   #c3512f;
-$color_link:        #1e4b75;
-$color_link_hover:  #111111;
-$color_border:      #eaecee;
-$color_meta:        #6d6d6d;
+//
+// Every bundled SCSS rule that uses one of these variables now resolves
+// through the matching `--customify-<token>` CSS variable set by the
+// Customizer colors pipeline (inc/colors-palette.php). That means every
+// border, every heading, every link in the compiled stylesheet honors:
+//   • Saved overrides → :root --customify-<token> = saved hex → exact
+//   • No override → :root cascade chain (e.g. heading→text→slot.text)
+//     so editing the Text slot to white actually paints headings white
+// The hardcoded literal at the end of each var() is the LEGACY hex —
+// fallback for browsers without CSS-var support OR when --customify-<token>
+// is unset (e.g. body-text without override resolves the chain to slot.text).
+$color_text:        var(--customify-body-text, #686868);
+$color_heading:     var(--customify-heading, #2b2b2b);
+$color_primary:     var(--customify-primary, #235787);
+$color_secondary:   var(--customify-secondary, #c3512f);
+$color_link:        var(--customify-link, #1e4b75);
+$color_link_hover:  var(--customify-link-hover, #111111);
+$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+$color_meta:        var(--customify-text-muted, #6d6d6d);
 
 // Box Shadow
 $boxshadow_dropdown: 0 3px 30px rgba(25,30,35,.1);
