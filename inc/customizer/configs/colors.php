@@ -242,54 +242,17 @@ article.comment .comment-meta,
 				'priority' => 5,
 			),
 
-			// Slot 1: Base — NEW key.
-			array(
-				'name'        => 'customify_palette_base',
-				'type'        => 'color',
-				'section'     => $section,
-				'priority'    => 10,
-				'title'       => __( 'Base', 'customify' ),
-				'description' => __( 'Page background.', 'customify' ),
-				'default'     => '#FFFFFF',
-				'placeholder' => '#FFFFFF',
-				'selector'    => 'format',
-				'css_format'  => '',
-			),
+			// Display order is brand-first: Primary → Secondary → Accent →
+			// Text → Surface → Base. Storage keys + slot identities are
+			// unchanged — only the priority values control where each
+			// renders inside the Palette heading group.
 
-			// Slot 2: Surface — NEW key.
-			array(
-				'name'        => 'customify_palette_surface',
-				'type'        => 'color',
-				'section'     => $section,
-				'priority'    => 11,
-				'title'       => __( 'Surface', 'customify' ),
-				'description' => __( 'Card / elevated container background.', 'customify' ),
-				'default'     => '#FFFFFF',
-				'placeholder' => '#FFFFFF',
-				'selector'    => 'format',
-				'css_format'  => '',
-			),
-
-			// Slot 3: Text — NEW key (ink baseline; body uses derived muted).
-			array(
-				'name'        => 'customify_palette_text',
-				'type'        => 'color',
-				'section'     => $section,
-				'priority'    => 12,
-				'title'       => __( 'Text', 'customify' ),
-				'description' => __( 'Ink baseline. Headings inherit from this slot by default.', 'customify' ),
-				'default'     => '#2b2b2b',
-				'placeholder' => '#2b2b2b',
-				'selector'    => 'format',
-				'css_format'  => '',
-			),
-
-			// Slot 4: Primary — REUSE existing global_styling_color_primary key.
+			// Slot 1: Primary — REUSE existing global_styling_color_primary key.
 			array(
 				'name'        => 'global_styling_color_primary',
 				'type'        => 'color',
 				'section'     => $section,
-				'priority'    => 13,
+				'priority'    => 10,
 				'title'       => __( 'Primary', 'customify' ),
 				'description' => __( 'Brand color, CTAs.', 'customify' ),
 				'default'     => '#235787',
@@ -298,12 +261,12 @@ article.comment .comment-meta,
 				'selector'    => 'format',
 			),
 
-			// Slot 5: Secondary — REUSE existing global_styling_color_secondary key.
+			// Slot 2: Secondary — REUSE existing global_styling_color_secondary key.
 			array(
 				'name'        => 'global_styling_color_secondary',
 				'type'        => 'color',
 				'section'     => $section,
-				'priority'    => 14,
+				'priority'    => 11,
 				'title'       => __( 'Secondary', 'customify' ),
 				'description' => __( 'Secondary brand color.', 'customify' ),
 				'default'     => '#c3512f',
@@ -312,16 +275,58 @@ article.comment .comment-meta,
 				'selector'    => 'format',
 			),
 
-			// Slot 6: Accent — NEW key.
+			// Slot 3: Accent — NEW key.
 			array(
 				'name'        => 'customify_palette_accent',
 				'type'        => 'color',
 				'section'     => $section,
-				'priority'    => 15,
+				'priority'    => 12,
 				'title'       => __( 'Accent', 'customify' ),
 				'description' => __( 'Highlight / decorative pop.', 'customify' ),
 				'default'     => '#FFD042',
 				'placeholder' => '#FFD042',
+				'selector'    => 'format',
+				'css_format'  => '',
+			),
+
+			// Slot 4: Text — NEW key (ink baseline; body uses derived muted).
+			array(
+				'name'        => 'customify_palette_text',
+				'type'        => 'color',
+				'section'     => $section,
+				'priority'    => 13,
+				'title'       => __( 'Text', 'customify' ),
+				'description' => __( 'Ink baseline. Headings inherit from this slot by default.', 'customify' ),
+				'default'     => '#2b2b2b',
+				'placeholder' => '#2b2b2b',
+				'selector'    => 'format',
+				'css_format'  => '',
+			),
+
+			// Slot 5: Surface — NEW key.
+			array(
+				'name'        => 'customify_palette_surface',
+				'type'        => 'color',
+				'section'     => $section,
+				'priority'    => 14,
+				'title'       => __( 'Surface', 'customify' ),
+				'description' => __( 'Card / elevated container background.', 'customify' ),
+				'default'     => '#FFFFFF',
+				'placeholder' => '#FFFFFF',
+				'selector'    => 'format',
+				'css_format'  => '',
+			),
+
+			// Slot 6: Base — NEW key.
+			array(
+				'name'        => 'customify_palette_base',
+				'type'        => 'color',
+				'section'     => $section,
+				'priority'    => 15,
+				'title'       => __( 'Base', 'customify' ),
+				'description' => __( 'Page background.', 'customify' ),
+				'default'     => '#FFFFFF',
+				'placeholder' => '#FFFFFF',
 				'selector'    => 'format',
 				'css_format'  => '',
 			),
