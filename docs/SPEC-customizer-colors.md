@@ -742,11 +742,116 @@ See §8.3 for the deferred follow-up.
   otherwise be folded into the next rule's selector).
 - ✅ 30K-site safety re-verified — A/B/C all PASS byte-identical.
 
-### 8.4 Phase 2 — remaining (good follow-ups)
+### 8.4 Phase 2.3 — done (body_text direct cascade)
+
+- ✅ `$text_css` → `var(--customify-body-text, {{value}})`. Earlier
+  iteration used `color-mix(in oklab, var(--customify-text) 88%, var(--customify-base))`
+  which desaturated user-picked colors (white text on dark base produced
+  ~#e0e0e0 grey body copy). Reverted to direct var() chain so body
+  follows slot.text verbatim.
+- ✅ Cascade decl `--customify-body-text: var(--customify-text, hex)`
+  in static `$lines` (no @supports needed for pure var chain).
+- ✅ Field default `#686868` → `#2b2b2b` (slot.text). Documented
+  fresh-install shift; saved sites untouched.
+
+### 8.5 Phase 2.4 — done (link / link-hover / Surface / Legacy / reset icon)
+
+- ✅ `$link_css` → `var(--customify-link, {{value}})` + cascade decl
+  `--customify-link: var(--customify-primary, hex)`. Field default
+  aligned with slot.primary `#235787`.
+- ✅ `$link_hover_css` → `var(--customify-link-hover, {{value}})` +
+  @supports color-mix line `color-mix(in oklab, var(--customify-link) 85%, white)`
+  — link hover is LIGHTER than link (project owner's call), not darker.
+  Field default `#406F99`.
+- ✅ Slot `surface` default `#FFFFFF` → `#ECECEC` (theme.json palette
+  declaration matched).
+- ✅ "Component overrides (advanced)" renamed to "Legacy fine-tuning".
+  Collapsed by default. Click target = `.customize-control-title` span
+  (not the LI) so browser focus outline doesn't paint a stuck rectangle
+  across the row. State persists per-session via `sessionStorage`.
+- ✅ Reset icon: `.wp-picker-default` un-hidden via SCSS, repositioned
+  16×16 absolute LEFT of swatch (24px gap), paints dashicons-image-rotate
+  SVG as background-image. Visibility gated by `.customify-input-color.is-dirty`
+  — toggled by JS via closure-scoped `initialValues` map (dataset
+  attributes get rewritten by Iris on every value set, so a closure
+  Map is the only stable baseline).
+
+### 8.6 Phase 2.5 — done (Base composite cascade + border/meta/widget refactor)
+
+- ✅ 3 composites (`background`, `site_content_styling`, `content_background`)
+  default `bg_color` changed `#FFFFFF` → `''`. Customify's auto-css
+  `setup_color()` returns false for empty values → skips emit → the
+  palette-tokens cascade rule is the sole emitter for `body`, `.site-content`,
+  `.site-content .content-area`. Saved composite emits literal hex via
+  auto-css (loads AFTER palette-tokens), wins by cascade source order.
+- ✅ `$border_css` (18 declarations) → `var(--customify-border, ...)`.
+  Phase 2.6 later changes the fallback to `color-mix(currentcolor 12%, transparent)`.
+- ✅ `$meta_css` → `var(--customify-text-muted, {{value}})`. Field
+  default `#6d6d6d` → `#6b6b6b`.
+- ✅ `$w_title_css` → `var(--customify-widget-title, {{value}})` + cascade
+  decl `--customify-widget-title: var(--customify-text, hex)`. Field
+  default `#444444` → `#2b2b2b` (slot.text).
+- ✅ `$text_css` (body) gets its own cascade decl
+  `--customify-body-text: var(--customify-text, hex)` in static `$lines`.
+- ✅ Preview JS payload extended with border / meta / widget-title /
+  body-text overrides so user-driven picker drags update :root vars
+  live in the iframe.
+
+### 8.7 Phase 2.6 — done (bundled SCSS `$color_*` → CSS var expressions)
+
+The bundled stylesheet referenced 8 SCSS color variables across ~65
+rules. Refactored each to CSS-var expressions in
+`src/frontend/scss/utils/_vars.scss`:
+
+```scss
+$color_text:        var(--customify-body-text, #686868);
+$color_heading:     var(--customify-heading, #2b2b2b);
+$color_primary:     var(--customify-primary, #235787);
+$color_secondary:   var(--customify-secondary, #c3512f);
+$color_link:        var(--customify-link, #1e4b75);
+$color_link_hover:  var(--customify-link-hover, #111111);
+$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+$color_meta:        var(--customify-text-muted, #6d6d6d);
+```
+
+Result: every bundled rule (header, footer, blog, widgets, etc.) that
+uses one of these tokens automatically resolves through the :root
+cascade. Saved overrides paint correctly without per-selector chasing.
+Border specifically uses `currentcolor` mix as fallback so unsaved
+borders adapt to the element's local text color (visible on both
+light and dark surfaces).
+
+### 8.8 Phase 2.7 — done (visual cascade swatch sync in picker UI)
+
+Override pickers display their swatch in the cascade-resolved color
+when no override is saved:
+
+| Override picker | Cascade source |
+|---|---|
+| `global_styling_color_link` | `global_styling_color_primary` |
+| `global_styling_color_heading` | `customify_palette_text` |
+| `global_styling_color_w_title` | `customify_palette_text` |
+| `global_styling_color_text` (body) | `customify_palette_text` |
+
+Mechanism: JS reads source slot value, sets `--customify-cascade-display`
+CSS custom property + `.is-cascading` class on the LI; SCSS overrides
+wpColorPicker's inline background on `.color-alpha` only when that
+class is present. Setting underlying value stays untouched — user
+dragging the picker writes a real value and removes the class.
+
+`FIELD_DEFAULTS` map in the JS detects "no user override" by comparing
+the current setting value with the registered field default. If they
+match, cascade mode applies; if they differ, the user has saved an
+override and the swatch shows that value via the standard wp-color-
+picker path.
+
+### 8.9 Phase 2 — remaining (good follow-ups)
 
 | Item | Notes |
 |---|---|
-| Refactor the 6 remaining CSS rules to `var(--customify-*, {{value}})` | Link / link-hover / text / border / meta / widget-title still emit literal hex. Their legacy field defaults DIFFER from the slot-derived defaults (e.g. link default `#1e4b75` ≠ slot.primary `#235787`), so a naive refactor changes fresh-install render. Requires aligning defaults OR accepting documented design shift. Deferred until that decision lands. |
+| Iris picker UX overhaul | Project owner wants full-width saturation box + hue + alpha strips stacked vertically (modern picker look). Iris doesn't use jQuery UI slider widget — it has its own drag math reading inline `offsetTop`. CSS rotate trick breaks the drag handler. Options: patch Iris source, replace with custom React/vanilla widget, or accept Iris vertical strips. Defer until UX direction. |
+| Iris initial colorful state | When current value is grayscale (e.g. default text `#2b2b2b`), Iris's saturation square shows white→black gradient because hue is undefined for grayscale. Owner wants a colorful initial state. Approach unclear. |
+| Surface wiring | `--customify-surface` is in :root but no bundled rule consumes it. Need to wire `background-color: var(--customify-surface)` on card / widget / comment / modal selectors. |
 | Read-only derived preview chips in Palette section | UX: show user what `text-muted`, `border`, `primary-hover`, etc. will look like before they pick. Needs a new control type or inline DOM hack. |
 | Refactor header/footer/blog/page-header configs to consume slot tokens | The ~30 other color/styling controls scattered across these configs still emit literal hex from their saved values. Should switch to `var(--customify-XXX)` so changing a slot updates the whole site. |
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
@@ -754,7 +859,7 @@ See §8.3 for the deferred follow-up.
 | WCAG `--on-*` live-preview | Contrast picks (`--customify-on-primary` etc.) are PHP-precomputed only; they refresh on save, not on slot drag. Add JS-side luminance math to mirror PHP `customify_color_pick_on()`. |
 | Heading picker `.set('')` quirk | When the user clears the heading override mid-Customizer-session (without saving), the auto-css JS pipeline drops the entire h1-h6 rule because `setup_color()` returns `false` for empty values. Cascade can't apply if no rule consumes the var. Headings fall back to bundled-theme CSS until save. Cosmetic; rare. |
 
-### 8.5 Phase 3 — Custom palettes / Style Packs (future)
+### 8.10 Phase 3 — Custom palettes / Style Packs (future)
 
 Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
 build the higher-level palette UX on top:
@@ -860,30 +965,34 @@ fixes (e.g. `0ecb4baa` documents the slideToggle monkey-patch reasoning,
 
 ## 11. For the next session
 
-Quick orientation script:
+**START HERE** if you're picking up an in-flight branch:
+[`docs/handoffs/temp/2026-05-23-customizer-colors-phase-2-pickup.md`](handoffs/temp/2026-05-23-customizer-colors-phase-2-pickup.md)
+— a session-scoped ledger of every uncommitted change, the cascade
+architecture, file responsibilities, deferred items, and a pre-flight
+checklist. Read that BEFORE this file when there's an active branch.
 
-1. Read this file end-to-end.
+If you're starting fresh from `DEV`:
+
+1. Read this file end-to-end (§§1-10 are stable).
 2. Read [SPEC-customizer.md](SPEC-customizer.md) for the Customify
    Customizer architecture (config-driven, auto-CSS pipeline, control
    types).
-3. Read the memory files:
+3. Read the memory files at
+   `~/.claude/projects/-Users-kientrong-Studio-customify2-wp-content-themes-customify/memory/`:
    - `feedback_30k_sites_color_safety.md` — hard constraint
    - `project_blocksify_companion.md` — token slug contract
    - `feedback_verify_user_facing_outcome.md` — testing rigor
    - `feedback_language_no_clone_no_competitor.md` — don't name peer
      themes in code/commits/PR
+   - `feedback_kit_vs_theme_fix_split.md` — Customify Pro bugs go to
+     KIT_ISSUES.md, not the theme.
 4. Verify the test helpers in `/tmp/` still exist; re-create from §5.2
    if not.
-5. Decide which Phase 2 item to tackle (recommended order):
-   1. Refactor the 9 existing CSS rules to `var(--customify-*, {{value}})`
-      — biggest UX win (slot edits cascade), lowest user risk if A/B/C
-      tests pass byte-identical.
-   2. Live preview JS for new slot keys — immediate visible win.
-   3. Read-only derived preview chips — UX polish.
-   4. Component panels refactor — long tail, do incrementally.
+5. Decide which Phase 2 item to tackle next — see §8.9 for the
+   remaining-work table.
 
 When making any change to the color pipeline, **always** re-run
-scenarios A/B/C and confirm 0 existing color decls shifted before
+scenarios A/B/C and confirm no existing color decls shifted before
 committing. The compare_color_css.py script automates this — if it says
 PASS, you're safe; if it says FAIL, investigate immediately. Don't ship
 a regression.
