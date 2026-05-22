@@ -378,8 +378,19 @@ class Customify
 
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
 		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
+		// The :root token block lives in its OWN <style id="customify-palette-tokens-inline-css">
+		// tag, not in the auto-css inline. Reason: src/backend/customizer/js/auto-css.js
+		// (line ~195) replaces #customify-style-inline-css wholesale every time a setting
+		// changes in the Customizer preview iframe. Putting the :root block alongside the
+		// auto-css output would wipe it out on first paint inside the iframe and the var()
+		// cascade would resolve to the static fallback (looks like the page reverted to
+		// defaults). A separate handle keeps the token block stable for the iframe's life,
+		// while live preview JS updates --customify-<slot> on document.documentElement
+		// via setProperty (no need to regenerate the :root block at all).
 		if ( function_exists( 'customify_color_palette_root_css' ) ) {
-			wp_add_inline_style( 'customify-style', customify_color_palette_root_css() );
+			wp_register_style( 'customify-palette-tokens', false );
+			wp_enqueue_style( 'customify-palette-tokens' );
+			wp_add_inline_style( 'customify-palette-tokens', customify_color_palette_root_css() );
 		}
 		wp_localize_script(
 			'customify-themejs',

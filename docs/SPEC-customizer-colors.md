@@ -704,18 +704,57 @@ See §8.3 for the deferred follow-up.
 - ✅ 30K-site safety re-verified — A/B/C all PASS byte-identical with the
   refactored rules.
 
-### 8.3 Phase 2 — remaining (good follow-ups)
+### 8.3 Phase 2.2 — done (heading cascade)
+
+- ✅ Refactor `$heading_css` (h1-h6) to
+  `color: var(--customify-heading, {{value}})`. Field default `#2b2b2b` ==
+  slot.text default `#2b2b2b` → byte-equivalent for fresh installs; saved
+  overrides feed both pipelines identically.
+- ✅ Move the `:root` token block to its OWN
+  `<style id="customify-palette-tokens-inline-css">` tag (separate from
+  `customify-style-inline-css`). Necessary because
+  `src/backend/customizer/js/auto-css.js` (~L195) wholesale-replaces the
+  customify-style inline block every time a setting changes in the
+  Customizer preview iframe — keeping the tokens in their own tag means
+  the var() chain survives the regenerate. Frontend (curl) and iframe
+  both render the same block now.
+- ✅ Emit a cascade decl `--customify-heading: var(--customify-text, hex)`
+  in `:root` AFTER the static `--customify-heading: hex` line, but only
+  when there is no SAVED `global_styling_color_heading` override. Modern
+  browsers use the later (var()) decl → editing the Text slot now
+  cascades to all headings in real time. Legacy browsers without var()
+  support keep the static hex from the earlier line.
+- ✅ Use `get_theme_mods()` (saved-only array) instead of `get_theme_mod()`
+  for override detection. Critical: inside the Customizer preview,
+  `get_theme_mod()` returns the customize control's REGISTERED FIELD
+  DEFAULT when no value is saved — not the `null` argument. That would
+  always look like an explicit override, suppressing the cascade.
+  `get_theme_mods()` returns only what's actually in the DB.
+- ✅ Add `global_styling_color_heading` → `--customify-heading` to the
+  preview JS payload. When the user drags the heading picker directly,
+  the inline `style.setProperty` overrides the `:root` cascade chain.
+  Clearing the picker via `.set('')` triggers `removeProperty` and the
+  cascade resumes.
+- ✅ Update `/tmp/extract_customify_css.py` to pull BOTH inline style
+  blocks for the byte-equivalence check.
+- ✅ Update `/tmp/compare_color_css.py` to strip `/* sourceURL=... */`
+  CSS comments before regex matching (WP injects them and they would
+  otherwise be folded into the next rule's selector).
+- ✅ 30K-site safety re-verified — A/B/C all PASS byte-identical.
+
+### 8.4 Phase 2 — remaining (good follow-ups)
 
 | Item | Notes |
 |---|---|
-| Refactor the 7 remaining CSS rules to `var(--customify-*, {{value}})` | Link / link-hover / text / border / meta / heading / widget-title still emit literal hex. Their legacy field defaults DIFFER from the slot-derived defaults (e.g. link default `#1e4b75` ≠ slot.primary `#235787`), so a naive refactor changes fresh-install render. Requires aligning defaults OR accepting documented design shift. Deferred until that decision lands. |
+| Refactor the 6 remaining CSS rules to `var(--customify-*, {{value}})` | Link / link-hover / text / border / meta / widget-title still emit literal hex. Their legacy field defaults DIFFER from the slot-derived defaults (e.g. link default `#1e4b75` ≠ slot.primary `#235787`), so a naive refactor changes fresh-install render. Requires aligning defaults OR accepting documented design shift. Deferred until that decision lands. |
 | Read-only derived preview chips in Palette section | UX: show user what `text-muted`, `border`, `primary-hover`, etc. will look like before they pick. Needs a new control type or inline DOM hack. |
 | Refactor header/footer/blog/page-header configs to consume slot tokens | The ~30 other color/styling controls scattered across these configs still emit literal hex from their saved values. Should switch to `var(--customify-XXX)` so changing a slot updates the whole site. |
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
 | WCAG `--on-*` live-preview | Contrast picks (`--customify-on-primary` etc.) are PHP-precomputed only; they refresh on save, not on slot drag. Add JS-side luminance math to mirror PHP `customify_color_pick_on()`. |
+| Heading picker `.set('')` quirk | When the user clears the heading override mid-Customizer-session (without saving), the auto-css JS pipeline drops the entire h1-h6 rule because `setup_color()` returns `false` for empty values. Cascade can't apply if no rule consumes the var. Headings fall back to bundled-theme CSS until save. Cosmetic; rare. |
 
-### 8.4 Phase 3 — Custom palettes / Style Packs (future)
+### 8.5 Phase 3 — Custom palettes / Style Packs (future)
 
 Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
 build the higher-level palette UX on top:

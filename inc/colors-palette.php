@@ -167,13 +167,27 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// Each override is normalized; an invalid stored value (e.g. from a
 		// rogue wp-cli write) is treated as "no override" and the derived
 		// fallback kicks in instead of polluting the :root with garbage.
-		$ov_text_muted   = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_meta', null ), '' );
-		$ov_border       = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_border', null ), '' );
-		$ov_link         = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_link', null ), '' );
-		$ov_link_hover   = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_link_hover', null ), '' );
-		$ov_heading      = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_heading', null ), '' );
-		$ov_widget_title = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_w_title', null ), '' );
-		$ov_body_text    = customify_color_normalize_hex( get_theme_mod( 'global_styling_color_text', null ), '' );
+		//
+		// Critical: `get_theme_mod()` inside the Customizer preview iframe falls
+		// back to the customize control's registered default, NOT to our `null`
+		// argument — so passing `null` here would still resolve to the field
+		// default and look like an explicit user override, suppressing the
+		// cascade. Read straight from the raw saved-mods array so the override
+		// only counts when the user actually saved something. Outside the
+		// customizer, get_theme_mods() returns the same data as get_theme_mod().
+		$_saved_mods = get_theme_mods();
+		$_get_saved  = function ( $key ) use ( $_saved_mods ) {
+			return ( is_array( $_saved_mods ) && array_key_exists( $key, $_saved_mods ) )
+				? $_saved_mods[ $key ]
+				: null;
+		};
+		$ov_text_muted   = customify_color_normalize_hex( $_get_saved( 'global_styling_color_meta' ), '' );
+		$ov_border       = customify_color_normalize_hex( $_get_saved( 'global_styling_color_border' ), '' );
+		$ov_link         = customify_color_normalize_hex( $_get_saved( 'global_styling_color_link' ), '' );
+		$ov_link_hover   = customify_color_normalize_hex( $_get_saved( 'global_styling_color_link_hover' ), '' );
+		$ov_heading      = customify_color_normalize_hex( $_get_saved( 'global_styling_color_heading' ), '' );
+		$ov_widget_title = customify_color_normalize_hex( $_get_saved( 'global_styling_color_w_title' ), '' );
+		$ov_body_text    = customify_color_normalize_hex( $_get_saved( 'global_styling_color_text' ), '' );
 
 		$text_muted   = $ov_text_muted   ?: $text_muted_default;
 		$border       = $ov_border       ?: $border_default;
@@ -208,6 +222,18 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			"--customify-on-secondary: {$on_secondary}",
 			"--customify-on-accent: {$on_accent}",
 		);
+
+		// Derived-token cascade lines — added AFTER the static lines so
+		// modern browsers re-resolve them when the underlying slot changes
+		// (e.g. drag the Text slot → headings update without save). Legacy
+		// browsers without var() support ignore the duplicate decl as invalid
+		// and the static line above still wins, keeping the precomputed hex.
+		//
+		// Only emit when there is no explicit override saved — an override
+		// must remain a frozen static value (cf. 30K-site safety doctrine).
+		if ( ! $ov_heading ) {
+			$lines[] = "--customify-heading: var(--customify-text, {$slots['text']})";
+		}
 
 		$static_root = ':root{' . implode( ';', $lines ) . ';}';
 
@@ -525,6 +551,14 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 			'customify_palette_text'         => '--customify-text',
 			'customify_palette_surface'      => '--customify-surface',
 			'customify_palette_base'         => '--customify-base',
+			// Override-style settings whose CSS rule now consumes the var()
+			// token. Live-updating the token on drag means the user's direct
+			// picker change wins over the slot cascade (the :root cascade
+			// chain `--customify-heading: var(--customify-text, ...)` is
+			// overridden by the inline style.setProperty we do here). When
+			// the user clears the picker, our `normalize()` returns '' and
+			// removeProperty() restores the cascade.
+			'global_styling_color_heading'   => '--customify-heading',
 		) );
 
 		$script = "(function(){

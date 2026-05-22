@@ -206,7 +206,14 @@ article.comment .comment-meta,
 			}'
 		);
 
-		$heading_css   = apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: {{value}};}' );
+		// Heading CSS: var(--customify-heading, fallback). Field default `#2b2b2b`
+		// == slot.text default `#2b2b2b` and --customify-heading resolves to
+		// `$ov_heading ?: $slots['text']` — so the fallback hex and the var
+		// resolve to identical values on every fresh install. Saved overrides
+		// (legacy `global_styling_color_heading`) feed both pipelines via the
+		// same theme_mod key. Editing slot.text now also cascades to headings
+		// via the modern-browser var() path.
+		$heading_css   = apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: var(--customify-heading, {{value}});}' );
 		$w_title_css   = '.site-content .widget-title { color: {{value}};}';
 
 		// Composite styling control exclusion list — only expose background-related
