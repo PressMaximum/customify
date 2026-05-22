@@ -1706,10 +1706,10 @@ $text_color: #555d66;
             display: block !important; // beat Iris's inline display:none mid-slide
             position: absolute;
             top: calc(100% + 8px);
-            left: 0;
-            right: 0;
+            left: -10px;  // expand slightly outside row so Iris's native 255px
+            right: -10px; // saturation row fits without forcing internal scale
             width: auto;
-            padding: 18px;
+            padding: 14px;
             background: #fff;
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 6px;
@@ -1726,6 +1726,9 @@ $text_color: #555d66;
         // Strip Iris's own white panel + border + padding — the popover
         // wrapper already provides those. Hide the 8-swatch row at the
         // bottom; users get a brand-aware From-Palette row instead.
+        // Iris keeps its native 255px width — popover padding (14px each
+        // side) sizes around it so the right edge of the saturation
+        // square + hue strip aligns with the hex input below.
         .wp-picker-container.wp-picker-active .iris-picker.iris-border {
             background: transparent !important;
             border: 0 !important;
@@ -1734,6 +1737,13 @@ $text_color: #555d66;
         }
         .wp-picker-container.wp-picker-active .iris-palette-container {
             display: none !important;
+        }
+        // Align the alpha (checker) strip with the hue strip — Iris's own
+        // CSS positions iris-alpha-slider with a top offset that creates
+        // the visible vertical offset the user complained about.
+        .wp-picker-container.wp-picker-active .iris-strip.iris-alpha-slider {
+            top: 0 !important;
+            margin-top: 0 !important;
         }
     }
 
@@ -1818,9 +1828,9 @@ $text_color: #555d66;
         display: flex;
         flex-wrap: wrap;
         gap: 6px;
-        padding: 10px 6px 6px;
-        border-top: 1px solid #ddd;
-        margin-top: 8px;
+        padding: 0;
+        margin-top: 12px;
+        border: 0;
     }
     .customify-color-hexrow {
         display: block;
@@ -1831,7 +1841,7 @@ $text_color: #555d66;
     .customify-color-tokenrow {
         display: block;
         padding: 0;
-        margin-top: 6px;
+        margin-top: 10px;
         border: 0;
     }
     .customify-color-hex,

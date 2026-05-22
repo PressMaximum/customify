@@ -394,6 +394,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		});
 	}
 
+
 	// Re-emit a custom event from any change on the picker so the hex input
 	// stays in sync while the user drags Iris's saturation / hue / alpha.
 	\$(document).on('input change', '#sub-accordion-section-customify_colors .customify--color-panel', function(){
