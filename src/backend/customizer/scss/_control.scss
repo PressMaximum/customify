@@ -1706,10 +1706,10 @@ $text_color: #555d66;
             display: block !important; // beat Iris's inline display:none mid-slide
             position: absolute;
             top: calc(100% + 8px);
-            left: -10px;  // expand slightly outside row so Iris's native 255px
-            right: -10px; // saturation row fits without forcing internal scale
+            left: 0;
+            right: 0;
             width: auto;
-            padding: 14px;
+            padding: 18px;
             background: #fff;
             border: 1px solid rgba(0, 0, 0, 0.08);
             border-radius: 6px;
@@ -1739,11 +1739,15 @@ $text_color: #555d66;
             display: none !important;
         }
         // Align the alpha (checker) strip with the hue strip — Iris's own
-        // CSS positions iris-alpha-slider with a top offset that creates
-        // the visible vertical offset the user complained about.
-        .wp-picker-container.wp-picker-active .iris-strip.iris-alpha-slider {
+        // CSS gives the alpha-slider a different top + height than the
+        // hue-slider so the two vertical strips end up visibly offset.
+        // Force both strips to share the saturation square's top/height
+        // so they line up perfectly.
+        .wp-picker-container.wp-picker-active .iris-picker-inner .iris-strip {
             top: 0 !important;
             margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            height: 100% !important;
         }
     }
 
