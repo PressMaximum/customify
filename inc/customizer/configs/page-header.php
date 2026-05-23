@@ -976,35 +976,41 @@ class Customify_Page_Header {
 			return;
 		}
 
+		ob_start();
+		/**
+		 * Hook titlebar before
+		 */
+		do_action( 'customify/titlebar/before' );
+
+		// WPCS: XSS ok.
+		if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
+			if ( $args['title'] ) {
+				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+			}
+		}
+		if ( $args['titlebar_tagline'] ) {
+			if ( $args['tagline'] ) {
+				// WPCS: XSS ok.
+				echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
+			}
+		}
+		/**
+		 * Hook titlebar after
+		 */
+		do_action( 'customify/titlebar/after' );
+		$inner = ob_get_clean();
+
+		if ( '' === trim( $inner ) ) {
+			return;
+		}
+
 		$classes   = array( 'page-header--item page-titlebar' );
 		$layout    = Customify()->get_setting_tab( 'page_header_layout' );
 		$classes[] = $layout;
 		?>
 		<div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
 			<div class="page-titlebar-inner customify-container">
-				<?php
-				/**
-				 * Hook titlebar before
-				 */
-				do_action( 'customify/titlebar/before' );
-
-				// WPCS: XSS ok.
-				if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
-					if ( $args['title'] ) {
-						echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
-					}
-				}
-				if ( $args['titlebar_tagline'] ) {
-					if ( $args['tagline'] ) {
-						// WPCS: XSS ok.
-						echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
-					}
-				}
-				/**
-				 * Hook titlebar after
-				 */
-				do_action( 'customify/titlebar/after' );
-				?>
+				<?php echo $inner; // WPCS: XSS ok. ?>
 			</div>
 		</div>
 		<?php
