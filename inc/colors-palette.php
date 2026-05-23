@@ -23,9 +23,21 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'customify_color_normalize_hex' ) ) {
 	/**
-	 * Validate + normalize a color value to #rrggbb form. Accepts 3- or 6-char
-	 * hex (with or without leading #). Returns $fallback for anything else
-	 * (empty string, invalid chars, wrong length, rgba, var(), etc.).
+	 * Validate + normalize a color value. Accepts:
+	 *   • 3- or 6-char hex (with or without leading #) → returned as #rrggbb
+	 *   • rgb(r,g,b) and rgba(r,g,b,a) → returned as-is (alpha preserved)
+	 *
+	 * Returns $fallback for anything else (empty string, invalid chars,
+	 * named colors, var(), hsl, etc.).
+	 *
+	 * Name kept as `normalize_hex` for backcompat — it's been the slot
+	 * reader on every install since Phase 2 launched. The rgba support
+	 * added later (Phase 2.10) lets the WP color picker's alpha slider
+	 * round-trip correctly: when user picks a transparent brand color,
+	 * the rgba string survives the slot read so :root --customify-primary
+	 * gets the actual rgba value (not a hex fallback) — and downstream
+	 * helpers (hex_to_rgb, relative_luminance, pick_on) handle rgba by
+	 * stripping the alpha for luminance math.
 	 *
 	 * Use this on every read of a user-saved color value before feeding it into
 	 * CSS output or math helpers — wp-cli and external code can bypass the
@@ -35,7 +47,12 @@ if ( ! function_exists( 'customify_color_normalize_hex' ) ) {
 		if ( ! is_string( $value ) ) {
 			return $fallback;
 		}
-		$hex = ltrim( trim( $value ), '#' );
+		$value = trim( $value );
+		// Accept rgb()/rgba() syntax — returned verbatim (preserves alpha).
+		if ( preg_match( '/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}/i', $value ) ) {
+			return $value;
+		}
+		$hex = ltrim( $value, '#' );
 		if ( strlen( $hex ) === 3 && ctype_xdigit( $hex ) ) {
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 		}
@@ -47,8 +64,29 @@ if ( ! function_exists( 'customify_color_normalize_hex' ) ) {
 }
 
 if ( ! function_exists( 'customify_color_hex_to_rgb' ) ) {
-	function customify_color_hex_to_rgb( $hex ) {
-		$hex = ltrim( (string) $hex, '#' );
+	/**
+	 * Parse a color string to [r, g, b] integer triplet (0-255 each).
+	 * Accepts both hex (#rrggbb / #rgb) and rgb()/rgba() forms — alpha
+	 * is ignored. The function name keeps the legacy `hex_to_rgb` for
+	 * backcompat with downstream callers; new rgba support means the
+	 * on-* / container / border-strong derivations don't silently drop
+	 * to [0,0,0] when the user picks a transparent brand color.
+	 *
+	 * Returns [0, 0, 0] for invalid input — math helpers downstream
+	 * handle that as black (luminance 0).
+	 */
+	function customify_color_hex_to_rgb( $value ) {
+		$value = (string) $value;
+		// rgb()/rgba() form — capture first 3 channel ints, ignore alpha.
+		if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i', $value, $m ) ) {
+			return array(
+				max( 0, min( 255, (int) $m[1] ) ),
+				max( 0, min( 255, (int) $m[2] ) ),
+				max( 0, min( 255, (int) $m[3] ) ),
+			);
+		}
+		// Hex form.
+		$hex = ltrim( $value, '#' );
 		if ( strlen( $hex ) === 3 && ctype_xdigit( $hex ) ) {
 			$hex = $hex[0] . $hex[0] . $hex[1] . $hex[1] . $hex[2] . $hex[2];
 		}
@@ -1350,8 +1388,21 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	// per the color-token-derivation spec. Recomputes derived tokens
 	// (on-*, *-container, on-*-container, border-strong) live as the
 	// user drags any source-slot picker in the Customizer.
-	function _hexToRgb(hex) {
-		hex = (hex || '').replace(/^#/, '');
+	function _hexToRgb(value) {
+		// Accept both hex (#rrggbb / #rgb) and rgb()/rgba() input forms.
+		// Mirrors PHP customify_color_hex_to_rgb() — the rgba support is
+		// what makes on-* live-preview keep working when user drags the
+		// alpha slider in the WP color picker.
+		value = (value || '').toString().trim();
+		var m = value.match(/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i);
+		if (m) {
+			return [
+				Math.max(0, Math.min(255, parseInt(m[1], 10))),
+				Math.max(0, Math.min(255, parseInt(m[2], 10))),
+				Math.max(0, Math.min(255, parseInt(m[3], 10)))
+			];
+		}
+		var hex = value.replace(/^#/, '');
 		if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
 		if (!/^[0-9a-fA-F]{6}\$/.test(hex)) return null;
 		return [
