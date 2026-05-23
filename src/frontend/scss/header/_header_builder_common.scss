@@ -294,23 +294,48 @@
 		}
 	}
 
-	&.no-left.no-right {
-		.col-v2 {
-			&.col-v2-center {
-				flex-basis: 100%;
-			}
+	// Column-count-based layout overrides.
+	// Default (above): 3 cols visible → `1fr auto 1fr` keeps center fixed-centered,
+	// left/right ăn 1fr về phía slot edge.
+	//
+	// Empty slot rendering: PHP always emits 3 `<div class="col-v2 col-v2-{slot}">`
+	// placeholders. With `grid-template-columns: auto auto auto` an empty cell
+	// collapses to 0 width — HTML structure stays intact, CSS just hides the gap.
+
+	// ── 2 cols WITHOUT center (left + right only) ────────────────────────────
+	// 3 auto tracks; `justify-content: space-between` (inherited from .row-v2)
+	// pushes left to the start edge and right to the end edge.
+	&.no-center {
+		grid-template-columns: auto auto auto;
+
+		// Empty center placeholder has no content — kill its spacing-around-center
+		// margins so the 0-wide track really takes 0 space.
+		.col-v2-center {
+			margin-left:  0;
+			margin-right: 0;
 		}
 	}
 
-	&.no-center {
-		.col-v2 {
-			&.col-v2-left {
-				flex: auto;
-			}
-			&.col-v2-right {
-				flex: auto;
-			}
-		}
+	// ── 2 cols WITH center (.no-left only OR .no-right only) ─────────────────
+	// No override: cascade falls through to the default 3-col rule. The empty
+	// left or right cell still takes a 1fr slot, keeping center visually centered.
+
+	// ── 1 col: override justify-content per slot identity ────────────────────
+	// .no-center.no-right and .no-left.no-center inherit `auto auto auto` from
+	// the `.no-center` block above; only `.no-left.no-right` (center alone) needs
+	// an explicit template set because no `.no-center` class is present.
+
+	&.no-center.no-right {        // chỉ LEFT
+		justify-content: flex-start;
+	}
+
+	&.no-left.no-center {         // chỉ RIGHT
+		justify-content: flex-end;
+	}
+
+	&.no-left.no-right {          // chỉ CENTER
+		grid-template-columns: auto auto auto;
+		justify-content: center;
 	}
 }
 
