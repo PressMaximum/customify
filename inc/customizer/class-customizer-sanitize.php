@@ -444,7 +444,7 @@ class Customify_Sanitize_Input {
 				$value = $this->sanitize_text_field_deep( $value );
 				break;
 			case 'textarea':
-				$value = wp_kses_post( $value );
+				$value = wp_kses_post( null === $value ? '' : (string) $value );
 				break;
 			case 'number':
 					$value = floatval($value);

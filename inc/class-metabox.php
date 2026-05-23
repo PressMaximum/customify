@@ -262,11 +262,16 @@ class Customify_MetaBox {
 		 */
 		$settings = $this->field_builder->get_submitted_values();
 
+		$kses_safe = static function ( $v ) {
+			// PHP 8.1+ deprecates passing null to wp_kses_post (internal preg_replace).
+			return wp_kses_post( null === $v ? '' : (string) $v );
+		};
+
 		foreach ( $settings as $key => $value ) {
 			if ( ! is_array( $value ) ) {
-				$value = wp_kses_post( $value );
+				$value = $kses_safe( $value );
 			} else {
-				$value = array_map( 'wp_kses_post', $value );
+				$value = array_map( $kses_safe, $value );
 			}
 			// Update the meta field.
 			update_post_meta( $post_id, '_customify_' . $key, $value );
