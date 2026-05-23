@@ -1,11 +1,9 @@
 /**
  * Customify Page Settings — block editor plugin.
  *
- * Renders a PluginDocumentSettingPanel with a TabPanel UI so the content
- * fits compactly in the Document sidebar without excessive padding.
- *
- * Tabs: Layout | Page Header  (+ Breadcrumb merged into Page Header when active)
- * Disable Elements uses ToggleControl for a cleaner on/off UX.
+ * Renders a PluginDocumentSettingPanel with a flat stack of controls in the
+ * Document sidebar. Sections (Layout, Disable Elements, Page Header) are
+ * introduced by uppercase section labels rather than tabs.
  */
 
 import './style.scss';
@@ -17,7 +15,7 @@ import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
-	TabPanel,
+	Icon,
 	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
@@ -199,8 +197,20 @@ function MetaToggle( { label, metaKey, meta, setMeta } ) {
 	);
 }
 
-/** "Layout" tab content. */
-function LayoutTab( { meta, setMeta } ) {
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
+function CustomifyPageSettings() {
+	const postType = useSelect(
+		( select ) => select( 'core/editor' ).getCurrentPostType(),
+		[]
+	);
+
+	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+
+	if ( ! meta ) return null;
+
 	const get = ( key ) => meta[ `_customify_${ key }` ] ?? '';
 	const set = ( key, v ) => setMeta( { [ `_customify_${ key }` ]: v } );
 
@@ -208,7 +218,7 @@ function LayoutTab( { meta, setMeta } ) {
 	const sidebarHidden = isNoSidebarContentLayout( contentLayout );
 
 	return (
-		<div className="customify-ps-tab-content">
+		<div className="customify-ps-body">
 			<SelectControl
 				label={ __( 'Content Layout', 'customify' ) }
 				value={ contentLayout }
@@ -239,17 +249,11 @@ function LayoutTab( { meta, setMeta } ) {
 			) }
 			<MetaToggle label={ __( 'Footer Main', 'customify' ) }   metaKey="disable_footer_main"   meta={ meta } setMeta={ setMeta } />
 			<MetaToggle label={ __( 'Footer Bottom', 'customify' ) } metaKey="disable_footer_bottom" meta={ meta } setMeta={ setMeta } />
-		</div>
-	);
-}
 
-/** "Page Header" tab content — also contains Breadcrumb when the plugin is active. */
-function PageHeaderTab( { meta, setMeta } ) {
-	const get = ( key ) => meta[ `_customify_${ key }` ] ?? '';
-	const set = ( key, v ) => setMeta( { [ `_customify_${ key }` ]: v } );
+			<p className="customify-ps-section-label">
+				{ __( 'Page Header', 'customify' ) }
+			</p>
 
-	return (
-		<div className="customify-ps-tab-content">
 			<SelectControl
 				label={ __( 'Display', 'customify' ) }
 				value={ get( 'page_header_display' ) || 'default' }
@@ -270,46 +274,6 @@ function PageHeaderTab( { meta, setMeta } ) {
 }
 
 // ---------------------------------------------------------------------------
-// Main component
-// ---------------------------------------------------------------------------
-
-function CustomifyPageSettings() {
-	const postType = useSelect(
-		( select ) => select( 'core/editor' ).getCurrentPostType(),
-		[]
-	);
-
-	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
-
-	if ( ! meta ) return null;
-
-	const tabs = [
-		{
-			name:  'layout',
-			title: __( 'Layout', 'customify' ),
-		},
-		{
-			name:  'page-header',
-			title: __( 'Page Header', 'customify' ),
-		},
-	];
-
-	return (
-		<TabPanel
-			className="customify-ps-tabs"
-			tabs={ tabs }
-		>
-			{ ( tab ) => {
-				if ( tab.name === 'layout' ) {
-					return <LayoutTab meta={ meta } setMeta={ setMeta } />;
-				}
-				return <PageHeaderTab meta={ meta } setMeta={ setMeta } />;
-			} }
-		</TabPanel>
-	);
-}
-
-// ---------------------------------------------------------------------------
 // Register plugin
 // ---------------------------------------------------------------------------
 
@@ -317,9 +281,13 @@ registerPlugin( 'customify-page-settings', {
 	render: () => (
 		<PluginDocumentSettingPanel
 			name="customify-page-settings-panel"
-			title={ __( 'Customify Page Settings', 'customify' ) }
+			title={
+				<span className="customify-ps-title">
+					<Icon icon="admin-appearance" size={ 18 } />
+					{ __( 'Customify Page Settings', 'customify' ) }
+				</span>
+			}
 			className="customify-page-settings-panel"
-			icon="admin-appearance"
 		>
 			<CustomifyPageSettings />
 		</PluginDocumentSettingPanel>
