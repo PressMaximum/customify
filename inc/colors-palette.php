@@ -254,6 +254,43 @@ if ( ! function_exists( 'customify_color_solve_border_strong' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_color_chroma_cap_oklab' ) ) {
+	/**
+	 * Cap a color's OKLab chroma (= sqrt(a² + b²)) to a maximum value
+	 * while preserving its L and hue direction.
+	 *
+	 * Used to tame high-chroma brand colors (notably yellow / lime /
+	 * neon) when computing container tints. The spec §4 formula lands
+	 * containers at OKLab L = 0.93 but doesn't adjust chroma — for a
+	 * dark navy brand the OKLab-mix with white naturally desaturates
+	 * to a soft blue-grey (chroma ~0.01), but for a yellow brand the
+	 * mix preserves most of yellow's chroma (~0.10) because yellow is
+	 * already perceptually light. Result: yellow's container reads
+	 * "still very yellow" instead of "soft cream", breaking the badge
+	 * aesthetic that the container pattern targets.
+	 *
+	 * Capping chroma to ~0.04 produces a cream/peach feel for high-
+	 * chroma brands while leaving low-chroma brands unaffected (their
+	 * container chroma is already well under the cap).
+	 *
+	 * @param string $hex
+	 * @param float  $max_chroma Maximum allowed sqrt(a² + b²) in OKLab.
+	 * @return string Capped hex (same color if already under cap).
+	 */
+	function customify_color_chroma_cap_oklab( $hex, $max_chroma ) {
+		$oklab  = customify_color_srgb_to_oklab( $hex );
+		$L      = $oklab[0];
+		$a      = $oklab[1];
+		$b      = $oklab[2];
+		$chroma = sqrt( $a * $a + $b * $b );
+		if ( $chroma <= $max_chroma ) {
+			return customify_color_normalize_hex( $hex, $hex );
+		}
+		$scale = $max_chroma / $chroma;
+		return customify_color_oklab_to_srgb( array( $L, $a * $scale, $b * $scale ) );
+	}
+}
+
 if ( ! function_exists( 'customify_color_solve_container_p' ) ) {
 	/**
 	 * Spec §4 — closed-form solve for the percentage P that lands a tint
@@ -485,14 +522,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			$secondary_container_p = customify_color_solve_container_p( $slots['secondary'], $slots['base'] );
 			$accent_container_p    = customify_color_solve_container_p( $slots['accent'],    $slots['base'] );
 
-			// Precompute the resulting hex for each container — used to
-			// solve §5 on-X-container against the actual container color
-			// (NOT the brand source). The hex is also what gets exported
-			// as the theme.json palette fallback in
-			// customify_color_palette_for_theme_json().
-			$primary_container_hex   = customify_color_mix_hex( $slots['primary'],   $slots['base'], $primary_container_p );
-			$secondary_container_hex = customify_color_mix_hex( $slots['secondary'], $slots['base'], $secondary_container_p );
-			$accent_container_hex    = customify_color_mix_hex( $slots['accent'],    $slots['base'], $accent_container_p );
+			// Precompute the resulting hex for each container, then apply the
+			// chroma cap so on-X-container is solved against the ACTUAL
+			// container color that gets rendered (not the un-capped raw mix).
+			// Otherwise the L-reduction loop would optimize for a saturated
+			// container that no longer exists once the cap is applied.
+			$container_max_chroma_compute = 0.04;
+			$primary_container_hex   = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['primary'],   $slots['base'], $primary_container_p ),   $container_max_chroma_compute );
+			$secondary_container_hex = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['secondary'], $slots['base'], $secondary_container_p ), $container_max_chroma_compute );
+			$accent_container_hex    = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['accent'],    $slots['base'], $accent_container_p ),    $container_max_chroma_compute );
 
 			// §5 — on-X-container = darken brand hue (keep OKLab a, b) until
 			// the result has WCAG contrast ≥ 4.5 against the container.
@@ -583,24 +621,35 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		}
 
 		// --customify-*-container — soft tints of brand colors at OKLab
-		// L ≈ 0.93. Emitted as `color-mix(...)` expressions so they
-		// re-resolve live when the source brand var() changes (e.g.
-		// during Customizer drag). The percentage {P} is solved per-color
-		// against the saved base (closed-form per spec §4). Gated on
-		// palette opt-in for the same 30K-safety reasons as other
-		// derived tokens — fresh sites get the theme.json palette
-		// fallback (precomputed hex) inside `var()`.
+		// L ≈ 0.93 with chroma capped at 0.04 to keep high-chroma brands
+		// (yellow, lime, hot pink) from producing oversaturated tints.
+		// Gated on palette opt-in for the same 30K-safety reasons as
+		// other derived tokens — fresh sites get the theme.json palette
+		// fallback (precomputed capped hex) inside `var()`.
+		//
+		// Emit as STATIC hex (not `color-mix(...)` expression) because
+		// the chroma-cap step can't be expressed in CSS — color-mix gives
+		// us perceptual L blending but doesn't let us project the result
+		// back onto a max-chroma boundary. Static hex is fine: containers
+		// recompute on Customizer save (PHP re-renders :root) and on every
+		// live-preview slot drag (JS computes the same capped hex inline).
+		// The 30K-safe fallback in theme.json palette also uses the capped
+		// hex so picker swatches show the soft tint, not raw mix.
+		$container_max_chroma = 0.04;
 		if ( null !== $primary_container_p ) {
-			$p = round( $primary_container_p * 100, 2 );
-			$lines[] = "--customify-primary-container: color-mix(in oklab, var(--customify-primary) {$p}%, var(--customify-base))";
+			$raw     = customify_color_mix_hex( $slots['primary'], $slots['base'], $primary_container_p );
+			$capped  = customify_color_chroma_cap_oklab( $raw, $container_max_chroma );
+			$lines[] = "--customify-primary-container: {$capped}";
 		}
 		if ( null !== $secondary_container_p ) {
-			$p = round( $secondary_container_p * 100, 2 );
-			$lines[] = "--customify-secondary-container: color-mix(in oklab, var(--customify-secondary) {$p}%, var(--customify-base))";
+			$raw     = customify_color_mix_hex( $slots['secondary'], $slots['base'], $secondary_container_p );
+			$capped  = customify_color_chroma_cap_oklab( $raw, $container_max_chroma );
+			$lines[] = "--customify-secondary-container: {$capped}";
 		}
 		if ( null !== $accent_container_p ) {
-			$p = round( $accent_container_p * 100, 2 );
-			$lines[] = "--customify-accent-container: color-mix(in oklab, var(--customify-accent) {$p}%, var(--customify-base))";
+			$raw     = customify_color_mix_hex( $slots['accent'], $slots['base'], $accent_container_p );
+			$capped  = customify_color_chroma_cap_oklab( $raw, $container_max_chroma );
+			$lines[] = "--customify-accent-container: {$capped}";
 		}
 
 		// --customify-on-*-container — darkened brand-hue text for AA
@@ -1391,6 +1440,17 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		var p = (0.93 - lb) / denom;
 		return Math.max(0.02, Math.min(0.98, p));
 	}
+	// Chroma cap (Customify extension) — keeps high-chroma brand
+	// containers from staying oversaturated when mixed with white.
+	// Mirrors PHP customify_color_chroma_cap_oklab().
+	function _chromaCap(hex, maxChroma) {
+		var lab = _srgbToOklab(hex);
+		var L = lab[0], a = lab[1], b = lab[2];
+		var c = Math.sqrt(a*a + b*b);
+		if (c <= maxChroma) return hex;
+		var s = maxChroma / c;
+		return _oklabToSrgb(L, a * s, b * s);
+	}
 	// Spec §5: step OKLab L downward until contrast against bg ≥ 4.5.
 	function _lReduceUntilContrast(source, bg, target) {
 		target = target || 4.5;
@@ -1455,23 +1515,23 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		try { hasSurface = !!normalize(wp.customize('customify_palette_surface').get()); } catch(e) {}
 		de.setProperty('--customify-on-surface', _pickOn(hasSurface ? surface : '#FFFFFF'));
 
-		// §4 *-container — color-mix expression with solved P.
+		// §4 *-container — solve P, mix, apply chroma cap (0.04). Emit
+		// as static hex (NOT a color-mix expression) because the chroma
+		// cap can't be expressed in CSS color-mix. Mirrors PHP container
+		// emit logic.
+		var CONTAINER_MAX_CHROMA = 0.04;
 		var pPrim = _solveContainerP(primary,   base);
 		var pSec  = _solveContainerP(secondary, base);
 		var pAcc  = _solveContainerP(accent,    base);
-		de.setProperty('--customify-primary-container',
-			'color-mix(in oklab, var(--customify-primary) ' + (pPrim*100).toFixed(2) + '%, var(--customify-base))');
-		de.setProperty('--customify-secondary-container',
-			'color-mix(in oklab, var(--customify-secondary) ' + (pSec*100).toFixed(2) + '%, var(--customify-base))');
-		de.setProperty('--customify-accent-container',
-			'color-mix(in oklab, var(--customify-accent) ' + (pAcc*100).toFixed(2) + '%, var(--customify-base))');
+		var primContainerHex = _chromaCap(_mixHex(primary,   base, pPrim), CONTAINER_MAX_CHROMA);
+		var secContainerHex  = _chromaCap(_mixHex(secondary, base, pSec),  CONTAINER_MAX_CHROMA);
+		var accContainerHex  = _chromaCap(_mixHex(accent,    base, pAcc),  CONTAINER_MAX_CHROMA);
+		de.setProperty('--customify-primary-container',   primContainerHex);
+		de.setProperty('--customify-secondary-container', secContainerHex);
+		de.setProperty('--customify-accent-container',    accContainerHex);
 
 		// §5 on-*-container — L-reduced brand hue against the resolved
-		// container hex (sRGB mix close enough for live preview; PHP uses
-		// the same approximation).
-		var primContainerHex = _mixHex(primary,   base, pPrim);
-		var secContainerHex  = _mixHex(secondary, base, pSec);
-		var accContainerHex  = _mixHex(accent,    base, pAcc);
+		// CAPPED container hex (so the safety net matches what's rendered).
 		de.setProperty('--customify-on-primary-container',   _lReduceUntilContrast(primary,   primContainerHex));
 		de.setProperty('--customify-on-secondary-container', _lReduceUntilContrast(secondary, secContainerHex));
 		de.setProperty('--customify-on-accent-container',    _lReduceUntilContrast(accent,    accContainerHex));
@@ -1577,15 +1637,18 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 ); // spec §2: bumped 12% → 14%
 		$border_strong_hex = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
 
-		// Container fallbacks — solve P per spec §4 then mix in sRGB
-		// (close enough to OKLab for the picker swatch preview; the
-		// live :root expression uses `color-mix(in oklab, …)`).
+		// Container fallbacks — solve P per spec §4, mix, then apply the
+		// chroma cap (0.04) so the picker swatch matches what the :root
+		// emits. High-chroma brands (yellow / lime / hot pink) would
+		// otherwise yield oversaturated container tints (e.g. accent yellow
+		// → bright #ffe595 instead of soft cream #f0e6c9).
+		$container_max_chroma = 0.04;
 		$p_primary       = customify_color_solve_container_p( $slots['primary'],   $slots['base'] );
 		$p_secondary     = customify_color_solve_container_p( $slots['secondary'], $slots['base'] );
 		$p_accent        = customify_color_solve_container_p( $slots['accent'],    $slots['base'] );
-		$container_p_hex = customify_color_mix_hex( $slots['primary'],   $slots['base'], $p_primary );
-		$container_s_hex = customify_color_mix_hex( $slots['secondary'], $slots['base'], $p_secondary );
-		$container_a_hex = customify_color_mix_hex( $slots['accent'],    $slots['base'], $p_accent );
+		$container_p_hex = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['primary'],   $slots['base'], $p_primary ),   $container_max_chroma );
+		$container_s_hex = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['secondary'], $slots['base'], $p_secondary ), $container_max_chroma );
+		$container_a_hex = customify_color_chroma_cap_oklab( customify_color_mix_hex( $slots['accent'],    $slots['base'], $p_accent ),    $container_max_chroma );
 
 		// Lean 12-entry palette — every slug a real design choice a
 		// block author would reach for. Pair-order layout so each brand
