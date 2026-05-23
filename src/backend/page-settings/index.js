@@ -15,7 +15,6 @@ import { useSelect } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
-	Icon,
 	SelectControl,
 	ToggleControl,
 } from '@wordpress/components';
@@ -281,12 +280,7 @@ registerPlugin( 'customify-page-settings', {
 	render: () => (
 		<PluginDocumentSettingPanel
 			name="customify-page-settings-panel"
-			title={
-				<span className="customify-ps-title">
-					<Icon icon="admin-appearance" size={ 18 } />
-					{ __( 'Customify Page Settings', 'customify' ) }
-				</span>
-			}
+			title={ __( 'Customify Page Settings', 'customify' ) }
 			className="customify-page-settings-panel"
 		>
 			<CustomifyPageSettings />

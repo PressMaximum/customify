@@ -81,6 +81,26 @@ class Customify_Page_Settings {
 	 * exact dependency list and content hash for cache busting.
 	 */
 	public function enqueue_assets() {
+		// `enqueue_block_editor_assets` fires in every block editor context:
+		// post editor, widgets editor (WP 5.8+), site editor, customize
+		// widgets. `PluginDocumentSettingPanel` only has a slot in the post
+		// editor's Document sidebar, so loading this script anywhere else
+		// is dead weight. It also pulls in `wp-editor` as a dependency
+		// (via the `@wordpress/editor` import in src/), which trips WP's
+		// "wp-editor script should not be enqueued together with the new
+		// widgets editor" deprecation notice on the widgets screen.
+		//
+		// Screen base equals 'post' for the edit screen of every post type
+		// (post, page, custom CPTs). Widgets editor uses base 'widgets';
+		// site editor uses 'site-editor'. Skip everything that isn't a
+		// post-edit screen.
+		if ( function_exists( 'get_current_screen' ) ) {
+			$screen = get_current_screen();
+			if ( $screen && 'post' !== $screen->base ) {
+				return;
+			}
+		}
+
 		$asset_file = get_template_directory() . '/build/js/backend/page-settings.asset.php';
 
 		if ( ! file_exists( $asset_file ) ) {

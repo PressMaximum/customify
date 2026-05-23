@@ -1,16 +1,5 @@
 .customify-page-settings-panel {
 
-	// Panel header title — inline icon + label.
-	.customify-ps-title {
-		display: inline-flex;
-		align-items: center;
-		gap: 6px;
-
-		svg {
-			fill: currentColor;
-		}
-	}
-
 	// Body of the panel — consistent spacing for stacked controls.
 	.customify-ps-body {
 		padding-top: 4px;
