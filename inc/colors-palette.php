@@ -1133,10 +1133,27 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		// would compute for an unsaved site.
 		$slots = customify_color_get_slots();
 
+		// Lean 12-entry palette — every slug a real design choice a
+		// block author would reach for. Each `color` is a
+		// `var(--customify-{token}, {hex_fallback})` chain so:
+		//   • Fresh sites (no Palette opt-in): var() falls back to the
+		//     literal hex — every swatch has a valid color in the picker.
+		//   • Opt-in sites: var() resolves to the live Customizer value
+		//     — Customizer change propagates to all blocks instantly.
+		//
+		// Deliberately omitted (kept out of the picker to avoid choice
+		// fatigue and palette bloat):
+		//   • link / link-hover / heading — links and headings are
+		//     handled by global styles (link-color rule, h1-h6 cascade);
+		//     block authors rarely pick these per-block.
+		//   • primary-hover — hover STATE, picked by CSS pseudo-class
+		//     not by static color picker.
+		//   • background — legacy duplicate of `base`.
+		//   • light-gray / dark-gray — generic neutrals; if a designer
+		//     needs them they can type the hex directly.
 		return array(
-			// ─── 6 main slots — preserve existing theme.json hex fallback.
-			// These match the static palette in theme.json prior to the
-			// filter (byte-identical render for legacy sites).
+			// ─── Backgrounds (5) — solid colors a section/card/button BG
+			// would adopt.
 			array(
 				'slug'  => 'base',
 				'name'  => __( 'Base', 'customify' ),
@@ -1146,11 +1163,6 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				'slug'  => 'surface',
 				'name'  => __( 'Surface', 'customify' ),
 				'color' => 'var(--customify-surface, #ECECEC)',
-			),
-			array(
-				'slug'  => 'accent',
-				'name'  => __( 'Accent', 'customify' ),
-				'color' => 'var(--customify-accent, #FFD042)',
 			),
 			array(
 				'slug'  => 'primary',
@@ -1163,60 +1175,27 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				'color' => 'var(--customify-secondary, #c3512f)',
 			),
 			array(
+				'slug'  => 'accent',
+				'name'  => __( 'Accent', 'customify' ),
+				'color' => 'var(--customify-accent, #FFD042)',
+			),
+
+			// ─── Foreground / text (2) — the default text and its muted
+			// variant (captions / meta / secondary copy).
+			array(
 				'slug'  => 'text',
 				'name'  => __( 'Text', 'customify' ),
 				'color' => 'var(--customify-text, #686868)',
 			),
 			array(
-				'slug'  => 'link',
-				'name'  => __( 'Link', 'customify' ),
-				'color' => 'var(--customify-link, #1e4b75)',
-			),
-			array(
-				'slug'  => 'heading',
-				'name'  => __( 'Heading', 'customify' ),
-				'color' => 'var(--customify-heading, #333333)',
-			),
-			array(
-				'slug'  => 'background',
-				'name'  => __( 'Background', 'customify' ),
-				// Background is a legacy alias for base — same var, same fallback.
-				'color' => 'var(--customify-base, #ffffff)',
-			),
-
-			// ─── Semantic derived tokens (new to palette).
-			// Default values match what the bundled :root emits when
-			// no override is saved.
-			array(
 				'slug'  => 'text-muted',
 				'name'  => __( 'Text Muted', 'customify' ),
 				'color' => 'var(--customify-text-muted, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 ) . ')',
 			),
-			array(
-				'slug'  => 'link-hover',
-				'name'  => __( 'Link Hover', 'customify' ),
-				'color' => 'var(--customify-link-hover, ' . customify_color_mix_hex( $slots['primary'], '#FFFFFF', 0.85 ) . ')',
-			),
-			array(
-				'slug'  => 'primary-hover',
-				'name'  => __( 'Primary Hover', 'customify' ),
-				'color' => 'var(--customify-primary-hover, ' . customify_color_mix_hex( $slots['primary'], '#000000', 0.90 ) . ')',
-			),
 
-			// ─── Chrome.
-			array(
-				'slug'  => 'border',
-				'name'  => __( 'Border', 'customify' ),
-				// Fallback uses the same currentcolor-mix expression as the
-				// bundled SCSS so the picker swatch hints at the adaptive
-				// behavior. Saved Border slot resolves the var() to a real hex.
-				'color' => 'var(--customify-border, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 ) . ')',
-			),
-
-			// ─── WCAG on-* contrast picks (new to palette).
-			// Fallbacks computed against the unsaved slot value via the
-			// same picker (relative_luminance > 0.45 ? #1A1A1A : #FFFFFF)
-			// that the :root emit uses on palette opt-in.
+			// ─── WCAG contrast picks (4) — readable text on each of the
+			// non-neutral backgrounds. Fallback computed via the same
+			// luminance picker the :root emit uses on opt-in.
 			array(
 				'slug'  => 'on-primary',
 				'name'  => __( 'On Primary', 'customify' ),
@@ -1235,21 +1214,22 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 			array(
 				'slug'  => 'on-surface',
 				'name'  => __( 'On Surface', 'customify' ),
-				// Surface fallback always #FFFFFF (matches the SCSS var fallback
-				// in .is-style-card and similar). on-surface pick against that.
+				// Surface fallback in `.is-style-card` and other SCSS rules
+				// is `#FFFFFF`. on-surface pick against that fallback so the
+				// readable-text guarantee holds even when --customify-surface
+				// is unset (Surface slot not opted-in).
 				'color' => 'var(--customify-on-surface, ' . customify_color_pick_on( '#FFFFFF' ) . ')',
 			),
 
-			// ─── Legacy neutrals — preserved verbatim from static theme.json.
+			// ─── Chrome (1) — dividers, outlines, hairlines.
 			array(
-				'slug'  => 'light-gray',
-				'name'  => __( 'Light Gray', 'customify' ),
-				'color' => '#f2f2f2',
-			),
-			array(
-				'slug'  => 'dark-gray',
-				'name'  => __( 'Dark Gray', 'customify' ),
-				'color' => '#444444',
+				'slug'  => 'border',
+				'name'  => __( 'Border', 'customify' ),
+				// Fallback computed from slot.text/base mix — same value the
+				// :root emit would use if Border slot were saved. SCSS uses
+				// a currentcolor-mix adaptive fallback for the FRONTEND chrome,
+				// but the picker swatch shows a concrete hex for previewability.
+				'color' => 'var(--customify-border, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 ) . ')',
 			),
 		);
 	}
