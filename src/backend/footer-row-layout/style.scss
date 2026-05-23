@@ -19,12 +19,13 @@
 		cursor: pointer;
 		color: #a7aaad;
 
-		&:hover {
+		&:hover:not(.is-active) {
 			color: #1d2327;
 		}
 
 		&.is-active {
-			color: #1d2327;
+			background: var(--wp-admin-theme-color, #2271b1);
+			color: #fff;
 		}
 
 		.dashicons {

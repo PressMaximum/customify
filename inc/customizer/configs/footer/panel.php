@@ -384,15 +384,37 @@ function customify_footer_row_layout_css() {
 		}
 
 		foreach ( $devices as $device => $media ) {
-			if ( empty( $data[ $device ]['fr'] ) || ! is_array( $data[ $device ]['fr'] ) ) {
+			if ( ! isset( $data[ $device ]['fr'] ) || ! is_array( $data[ $device ]['fr'] ) || empty( $data[ $device ]['fr'] ) ) {
+				// Mobile fallback: emit a stacked rule so phones don't inherit
+				// the tablet/desktop multi-column track when the user never
+				// configured mobile. Fires ONLY for missing / null / empty
+				// data — any explicit array (even [1,1,1,1] that matches
+				// desktop) is treated as the user's choice and rendered below.
+				if ( 'mobile' === $device ) {
+					$rules = $selector . ' .row-v2 { display: grid !important; grid-template-columns: 1fr; }';
+					$css  .= $media . ' { ' . $rules . ' } ';
+				}
 				continue;
 			}
+
 			$device_data = $data[ $device ];
 
-			$fr = $count > 0 ? array_slice( $device_data['fr'], 0, $count ) : $device_data['fr'];
-			if ( $count > 0 ) {
-				while ( count( $fr ) < $count ) {
-					$fr[] = 1;
+			// A length-1 fr is the "stacked" preset's saved shape: one grid
+			// track regardless of count. Use it as-is on every device; only
+			// pad multi-track arrays when they're shorter than count (legacy
+			// data correction).
+			if ( count( $device_data['fr'] ) === 1 ) {
+				$fr = $device_data['fr'];
+			} elseif ( 'mobile' === $device ) {
+				// Mobile multi-track: respect the user's explicit array exactly,
+				// no slice/pad to count.
+				$fr = $device_data['fr'];
+			} else {
+				$fr = $count > 0 ? array_slice( $device_data['fr'], 0, $count ) : $device_data['fr'];
+				if ( $count > 0 ) {
+					while ( count( $fr ) < $count ) {
+						$fr[] = 1;
+					}
 				}
 			}
 

@@ -94,7 +94,12 @@ function parseValue( raw ) {
 }
 
 export default function RowLayout( { settingKey } ) {
-	const [ device, setDevice ] = useState( 'desktop' );
+	// Seed the device tab from the customizer's previewedDevice so opening
+	// the control while the preview is in tablet/mobile mode reflects that.
+	const [ device, setDevice ] = useState( () => {
+		const d = window.wp?.customize?.previewedDevice?.get?.();
+		return d === 'tablet' || d === 'mobile' ? d : 'desktop';
+	} );
 	const [ value, setValue ]   = useState( () => {
 		const raw = window.wp?.customize?.( settingKey )?.get?.();
 		return parseValue( raw );
@@ -115,6 +120,27 @@ export default function RowLayout( { settingKey } ) {
 		setting.bind( onChange );
 		return () => setting.unbind( onChange );
 	}, [ settingKey ] );
+
+	// Mirror the customizer's previewedDevice so clicking the footer-toolbar
+	// device buttons (or another row-layout control) keeps this tab in sync.
+	useEffect( () => {
+		const preview = window.wp?.customize?.previewedDevice;
+		if ( ! preview?.bind ) return;
+		const onPreviewDevice = ( d ) => {
+			if ( d === 'desktop' || d === 'tablet' || d === 'mobile' ) {
+				setDevice( d );
+			}
+		};
+		preview.bind( onPreviewDevice );
+		return () => preview.unbind( onPreviewDevice );
+	}, [] );
+
+	// Clicking a row-layout device button drives the preview iframe to the
+	// matching breakpoint so the user sees the layout they're editing.
+	const handleDeviceChange = ( d ) => {
+		setDevice( d );
+		window.wp?.customize?.previewedDevice?.set?.( d );
+	};
 
 	// count is global; fr is per-device.
 	const count      = value.count || 1;
@@ -146,10 +172,17 @@ export default function RowLayout( { settingKey } ) {
 		const newFr       = firstPreset.fr || Array( n ).fill( 1 );
 
 		// Active device gets the preset; inactive devices preserve their
-		// own proportions but get resized to the new count.
+		// own proportions but get resized to the new count. Mobile is
+		// special: when the active tab isn't mobile we leave mobile.fr
+		// alone so it keeps falling back to stacked (1fr) until the user
+		// picks a horizontal preset on the mobile tab themselves.
 		const next = { ...value, count: n };
 		[ 'desktop', 'tablet', 'mobile' ].forEach( ( dev ) => {
 			const cur = value[ dev ] || { fr: [], gap: 0, padding: 0 };
+			if ( dev === 'mobile' && dev !== device ) {
+				next[ dev ] = cur;
+				return;
+			}
 			next[ dev ] = {
 				...cur,
 				fr: dev === device ? newFr : resizeFr( cur.fr, n ),
@@ -190,7 +223,7 @@ export default function RowLayout( { settingKey } ) {
 			<div className="cb-row-layout__field">
 				<div className="cb-row-layout__field-header">
 					<span className="cb-row-layout__label">{ __( 'Layout', 'customify' ) }</span>
-					<DeviceSwitcher device={ device } onChange={ setDevice } />
+					<DeviceSwitcher device={ device } onChange={ handleDeviceChange } />
 				</div>
 				<div className="cb-row-layout__preset-grid">
 					{ presets.map( ( preset, idx ) => {

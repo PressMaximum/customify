@@ -309,10 +309,38 @@
 		}
 		Object.keys(breakpoints).forEach(function(device) {
 			var d = data[device];
-			if (!d || !Array.isArray(d.fr) || !d.fr.length) { return; }
-			var fr = count > 0 ? d.fr.slice(0, count) : d.fr.slice();
-			if (count > 0) {
-				while (fr.length < count) { fr.push(1); }
+			if (!d || !Array.isArray(d.fr) || !d.fr.length) {
+				// Mobile fallback: emit a stacked rule so phones don't inherit
+				// the tablet/desktop multi-column track when the user never
+				// configured mobile. Fires ONLY for missing / null / empty
+				// data — any explicit array (even [1,1,1,1] that matches
+				// desktop) is treated as the user's choice and rendered below.
+				if (device === 'mobile') {
+					var dm       = data.mobile || {};
+					var gapM     = parseInt(dm.gap, 10) || 0;
+					var paddingM = parseInt(dm.padding, 10) || 0;
+					var rulesM   = rowSelector + ' .row-v2 { display: grid !important; grid-template-columns: 1fr; column-gap: ' + gapM + 'px; }';
+					rulesM      += ' ' + rowSelector + ' .col-v2 { padding-left: ' + paddingM + 'px; padding-right: ' + paddingM + 'px; }';
+					css += '@media ' + breakpoints.mobile + ' { ' + rulesM + ' } ';
+				}
+				return;
+			}
+			var fr;
+			// A length-1 fr is the "stacked" preset's saved shape: one grid
+			// track regardless of count. Use it as-is on every device; only
+			// pad multi-track arrays when they're shorter than count (legacy
+			// data correction).
+			if (d.fr.length === 1) {
+				fr = d.fr.slice();
+			} else if (device === 'mobile') {
+				// Mobile multi-track: respect the user's explicit array exactly,
+				// no slice/pad to count.
+				fr = d.fr.slice();
+			} else {
+				fr = count > 0 ? d.fr.slice(0, count) : d.fr.slice();
+				if (count > 0) {
+					while (fr.length < count) { fr.push(1); }
+				}
 			}
 			var cols    = fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
 			var gap     = parseInt(d.gap, 10) || 0;
