@@ -1245,6 +1245,38 @@ SCSS auto-wire (Phase 2.13):
 
 ### 8.12 Phase 2 — remaining (good follow-ups)
 
+#### Investigate "shadow slug" approach for legacy back-compat
+
+After the Phase 2.13 decision to drop legacy slugs (text / link / heading /
+background / light-gray / dark-gray) from the picker, a reviewer suggested
+a Phase 3 polish: inject legacy slugs via `wp_theme_json_data_default`
+(not `_data_theme`) so WP emits `--wp--preset--color--{slug}` declarations
+without generating the `.has-{slug}-color { color: var(...) !important }`
+class rules.
+
+Hypothesis: WP global-styles engine generates the class rules only from
+the theme/user palette layers, not from the default layer. If true, this
+would let us:
+- Restore 30K back-compat for blocks using `class="has-{legacy-slug}-color"`
+- WITHOUT re-introducing the `.has-text-color` marker-class collision
+
+Verification needed:
+1. Spike a filter callback that injects legacy slugs into the default-layer
+   palette.
+2. Inspect the rendered global-styles-inline-css `<style>` block for
+   `.has-text-color { ... !important }` presence.
+3. Test a block with `has-primary-color has-text-color` — confirm primary
+   text color survives (no clobber).
+4. Test a block with `has-link-color` only (pure legacy slug pick) —
+   confirm color resolves correctly.
+
+If verification confirms, this would be a strict UX + back-compat
+improvement over the current "drop legacy entirely" approach. Defer to
+Phase 3 — current state is acceptable per project owner's stated
+trade-off preference.
+
+
+
 | Item | Notes |
 |---|---|
 | Iris picker UX overhaul | Project owner wants full-width saturation box + hue + alpha strips stacked vertically (modern picker look). Iris doesn't use jQuery UI slider widget — it has its own drag math reading inline `offsetTop`. CSS rotate trick breaks the drag handler. Options: patch Iris source, replace with custom React/vanilla widget, or accept Iris vertical strips. Defer until UX direction. |
