@@ -144,6 +144,49 @@ if ( ! function_exists( 'customify_color_relative_luminance' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_color_composite_over' ) ) {
+	/**
+	 * Composite a (possibly-transparent) color over an opaque base. Returns
+	 * the [r, g, b] of what would actually be RENDERED if `$value` were
+	 * painted on top of `$base_hex`.
+	 *
+	 * Why: when a user picks rgba(brand, alpha=0.14) for the Primary slot
+	 * in the WP color picker, the BUTTON background is rgba composited
+	 * over the page bg (the user's saved Base, usually white). The on-*
+	 * WCAG safety pick needs to contrast against THAT composite, not
+	 * against the opaque rgb component of the rgba (which would still be
+	 * the dark brand color and incorrectly pick white text).
+	 *
+	 * For opaque values (hex / rgb / rgba alpha=1) the function returns
+	 * the rgb triplet unchanged — equivalent to the bare hex_to_rgb call.
+	 *
+	 * @param string $value     Any color string accepted by hex_to_rgb plus rgba().
+	 * @param string $base_hex  The opaque background to composite over (usually slot.base).
+	 * @return array [r, g, b] integer triplet 0-255.
+	 */
+	function customify_color_composite_over( $value, $base_hex ) {
+		$value = (string) $value;
+		// rgba() with explicit alpha — composite.
+		if ( preg_match( '/^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*([\d.]+)\s*\)/i', $value, $m ) ) {
+			$r = max( 0, min( 255, (int) $m[1] ) );
+			$g = max( 0, min( 255, (int) $m[2] ) );
+			$b = max( 0, min( 255, (int) $m[3] ) );
+			$a = max( 0.0, min( 1.0, (float) $m[4] ) );
+			if ( $a >= 1.0 ) {
+				return array( $r, $g, $b );
+			}
+			$base_rgb = customify_color_hex_to_rgb( $base_hex );
+			return array(
+				(int) round( $r * $a + $base_rgb[0] * ( 1 - $a ) ),
+				(int) round( $g * $a + $base_rgb[1] * ( 1 - $a ) ),
+				(int) round( $b * $a + $base_rgb[2] * ( 1 - $a ) ),
+			);
+		}
+		// Opaque (hex or rgb without alpha) — passthrough.
+		return customify_color_hex_to_rgb( $value );
+	}
+}
+
 if ( ! function_exists( 'customify_color_wcag_contrast' ) ) {
 	/**
 	 * WCAG 2.x contrast ratio between two hex colors. Returns a value in
@@ -162,24 +205,42 @@ if ( ! function_exists( 'customify_color_wcag_contrast' ) ) {
 
 if ( ! function_exists( 'customify_color_pick_on' ) ) {
 	/**
-	 * Pick max-contrast text color for a given background.
+	 * Pick max-contrast text color (#FFFFFF or #1A1A1A) for a given background.
 	 *
-	 * Spec §3: `on-X = contrast(LIGHT, X) >= contrast(DARK, X) ? LIGHT : DARK`.
-	 * This is a max-contrast pick — pick whichever of #FFFFFF / #1A1A1A has
-	 * higher WCAG contrast against the background. This is more robust than
-	 * a fixed luminance threshold (e.g. `> 0.45`), which silently picks
-	 * white on medium-tone colors where black would be more readable.
+	 * Spec §3: `on-X = contrast(LIGHT, X') >= contrast(DARK, X') ? LIGHT : DARK`
+	 * where X' is the EFFECTIVE rendered color — for rgba inputs X' is the
+	 * composite over the page base (since that's what the user sees behind
+	 * the text), NOT the opaque rgb component of the rgba.
 	 *
-	 * Example: teal #3CAA9D
+	 * Max-contrast pick — pick whichever of #FFFFFF / #1A1A1A has higher
+	 * WCAG contrast against the effective bg. More robust than a fixed
+	 * luminance threshold (e.g. `> 0.45`), which silently picks white on
+	 * medium-tone colors where black would be more readable.
+	 *
+	 * Example 1 — teal #3CAA9D
 	 *   • Threshold (luminance > 0.45): luminance ≈ 0.34 → returns white →
 	 *     contrast 2.87 FAILS WCAG.
 	 *   • Max-contrast: contrast(white, teal)=2.87 vs contrast(black, teal)=6.16
 	 *     → returns black → PASSES.
+	 *
+	 * Example 2 — rgba(17,52,109,0.14) on white base
+	 *   • Opaque rgb component: (17,52,109) — dark navy → max-contrast picks
+	 *     WHITE (correct against opaque navy, WRONG against rendered output).
+	 *   • Effective composite over white: ~(220,225,233) — very light blue
+	 *     → max-contrast picks DARK ✓ matches what the user actually sees.
+	 *
+	 * @param string $bg_value Color string (hex, rgb, or rgba).
+	 * @param string $base_hex Opaque base to composite over for rgba inputs.
+	 *                        Defaults to #FFFFFF (white) — pass the saved
+	 *                        Palette Base for accurate dark-mode pick.
+	 * @return string '#FFFFFF' or '#1A1A1A'.
 	 */
-	function customify_color_pick_on( $bg_hex ) {
-		$contrast_light = customify_color_wcag_contrast( '#FFFFFF', $bg_hex );
-		$contrast_dark  = customify_color_wcag_contrast( '#1A1A1A', $bg_hex );
-		return $contrast_light >= $contrast_dark ? '#FFFFFF' : '#1A1A1A';
+	function customify_color_pick_on( $bg_value, $base_hex = '#FFFFFF' ) {
+		$rgb        = customify_color_composite_over( $bg_value, $base_hex );
+		$effective  = customify_color_rgb_to_hex( $rgb );
+		$c_light    = customify_color_wcag_contrast( '#FFFFFF', $effective );
+		$c_dark     = customify_color_wcag_contrast( '#1A1A1A', $effective );
+		return $c_light >= $c_dark ? '#FFFFFF' : '#1A1A1A';
 	}
 }
 
@@ -537,11 +598,13 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// over the pre-PR behavior (text was inheriting body color, often
 		// failing contrast against a brand bg).
 		//
-		// §3 — on-X = max-contrast(LIGHT vs DARK against X) via the
-		// spec §3 customify_color_pick_on() helper.
-		$on_primary   = customify_color_pick_on( $slots['primary'] );
-		$on_secondary = customify_color_pick_on( $slots['secondary'] );
-		$on_accent    = customify_color_pick_on( $slots['accent'] );
+		// §3 — on-X = max-contrast against the EFFECTIVE rendered color.
+		// Pass slot.base so rgba brand values composite correctly before
+		// the contrast pick (the helper passes opaque colors through
+		// unchanged, so this is a no-op for hex inputs).
+		$on_primary   = customify_color_pick_on( $slots['primary'],   $slots['base'] );
+		$on_secondary = customify_color_pick_on( $slots['secondary'], $slots['base'] );
+		$on_accent    = customify_color_pick_on( $slots['accent'],    $slots['base'] );
 
 		// On-surface contrast — picks against the saved Surface, or the
 		// SCSS var() fallback (#FFFFFF in `.is-style-card`) if Surface
@@ -550,7 +613,7 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$surface_effective = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
 			? $slots['surface']
 			: '#FFFFFF';
-		$on_surface = customify_color_pick_on( $surface_effective );
+		$on_surface = customify_color_pick_on( $surface_effective, $slots['base'] );
 
 		if ( $has_palette_opt_in ) {
 			// §4 — *-container = soft tint of brand at OKLab L ≈ 0.93.
@@ -1444,9 +1507,35 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		var hi = Math.max(la, lb), lo = Math.min(la, lb);
 		return (hi + 0.05) / (lo + 0.05);
 	}
-	// Spec §3: max-contrast pick (was a luminance threshold pre-spec).
-	function _pickOn(hex) {
-		return _wcagContrast('#FFFFFF', hex) >= _wcagContrast('#1A1A1A', hex)
+	// Composite a possibly-transparent color over an opaque base. Mirrors
+	// PHP customify_color_composite_over() — returns the rendered color
+	// so the max-contrast pick measures against what the user actually
+	// sees, not the opaque rgb component of an rgba.
+	function _compositeOver(value, baseHex) {
+		var v = (value || '').toString().trim();
+		var m = v.match(/^rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*([\d.]+)\s*\)/i);
+		if (m) {
+			var r = Math.max(0, Math.min(255, parseInt(m[1], 10)));
+			var g = Math.max(0, Math.min(255, parseInt(m[2], 10)));
+			var b = Math.max(0, Math.min(255, parseInt(m[3], 10)));
+			var a = Math.max(0, Math.min(1, parseFloat(m[4])));
+			if (a >= 1) return [r, g, b];
+			var baseRgb = _hexToRgb(baseHex) || [255, 255, 255];
+			return [
+				Math.round(r * a + baseRgb[0] * (1 - a)),
+				Math.round(g * a + baseRgb[1] * (1 - a)),
+				Math.round(b * a + baseRgb[2] * (1 - a))
+			];
+		}
+		// Opaque (hex / rgb passthrough).
+		return _hexToRgb(v) || [0, 0, 0];
+	}
+	// Spec §3: max-contrast pick against the EFFECTIVE (composited) bg.
+	function _pickOn(value, baseHex) {
+		baseHex = baseHex || '#FFFFFF';
+		var rgb = _compositeOver(value, baseHex);
+		var eff = _rgbToHex(rgb);
+		return _wcagContrast('#FFFFFF', eff) >= _wcagContrast('#1A1A1A', eff)
 			? '#FFFFFF' : '#1A1A1A';
 	}
 	// OKLab transforms (Ottosson) — same math as PHP customify_color_srgb_to_oklab
@@ -1558,15 +1647,15 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		var base      = _readSlot('customify_palette_base');
 		var de = document.documentElement.style;
 
-		// §3 on-* — max-contrast.
-		de.setProperty('--customify-on-primary',   _pickOn(primary));
-		de.setProperty('--customify-on-secondary', _pickOn(secondary));
-		de.setProperty('--customify-on-accent',    _pickOn(accent));
+		// §3 on-* — max-contrast against rgba-composited bg.
+		de.setProperty('--customify-on-primary',   _pickOn(primary,   base));
+		de.setProperty('--customify-on-secondary', _pickOn(secondary, base));
+		de.setProperty('--customify-on-accent',    _pickOn(accent,    base));
 		// On-surface uses #FFFFFF when --customify-surface is unset
 		// (matches the SCSS var() fallback in `.is-style-card`).
 		var hasSurface = false;
 		try { hasSurface = !!normalize(wp.customize('customify_palette_surface').get()); } catch(e) {}
-		de.setProperty('--customify-on-surface', _pickOn(hasSurface ? surface : '#FFFFFF'));
+		de.setProperty('--customify-on-surface', _pickOn(hasSurface ? surface : '#FFFFFF', base));
 
 		// §4 *-container — solve P, mix, apply chroma cap (0.04). Emit
 		// as static hex (NOT a color-mix expression) because the chroma
