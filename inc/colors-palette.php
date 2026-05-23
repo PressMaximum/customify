@@ -1133,7 +1133,7 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		// would compute for an unsaved site.
 		$slots = customify_color_get_slots();
 
-		// Lean 12-entry palette — every slug a real design choice a
+		// Lean 11-entry palette — every slug a real design choice a
 		// block author would reach for. Each `color` is a
 		// `var(--customify-{token}, {hex_fallback})` chain so:
 		//   • Fresh sites (no Palette opt-in): var() falls back to the
@@ -1141,29 +1141,28 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		//   • Opt-in sites: var() resolves to the live Customizer value
 		//     — Customizer change propagates to all blocks instantly.
 		//
+		// Order mirrors the Customizer Palette panel reading order
+		// (Primary → Secondary → Accent → Text → Surface → Base) and
+		// then groups the derived / contrast / chrome tokens at the
+		// end (Text Muted → On Primary → On Secondary → On Surface →
+		// Border) so designers scanning the picker first see what
+		// they recognize from the Customizer, then the WCAG-safety
+		// helpers, then chrome.
+		//
 		// Deliberately omitted (kept out of the picker to avoid choice
 		// fatigue and palette bloat):
-		//   • link / link-hover / heading — links and headings are
-		//     handled by global styles (link-color rule, h1-h6 cascade);
-		//     block authors rarely pick these per-block.
-		//   • primary-hover — hover STATE, picked by CSS pseudo-class
-		//     not by static color picker.
+		//   • link / link-hover / heading — handled by global styles
+		//     (link-color rule, h1-h6 cascade); block authors rarely
+		//     pick these per-block.
+		//   • primary-hover — hover STATE; CSS pseudo-class territory.
 		//   • background — legacy duplicate of `base`.
-		//   • light-gray / dark-gray — generic neutrals; if a designer
-		//     needs them they can type the hex directly.
+		//   • light-gray / dark-gray — generic neutrals; designers can
+		//     type the hex directly when needed.
+		//   • on-accent — accent backgrounds are typically short
+		//     decorative copy (badges, promo highlights); designers can
+		//     type the contrast hex directly when needed.
 		return array(
-			// ─── Backgrounds (5) — solid colors a section/card/button BG
-			// would adopt.
-			array(
-				'slug'  => 'base',
-				'name'  => __( 'Base', 'customify' ),
-				'color' => 'var(--customify-base, #FFFFFF)',
-			),
-			array(
-				'slug'  => 'surface',
-				'name'  => __( 'Surface', 'customify' ),
-				'color' => 'var(--customify-surface, #ECECEC)',
-			),
+			// ─── Customizer Palette panel order: brand → text → canvas.
 			array(
 				'slug'  => 'primary',
 				'name'  => __( 'Primary', 'customify' ),
@@ -1179,49 +1178,66 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				'name'  => __( 'Accent', 'customify' ),
 				'color' => 'var(--customify-accent, #FFD042)',
 			),
-
-			// ─── Foreground / text (2) — the default text and its muted
-			// variant (captions / meta / secondary copy).
 			array(
 				'slug'  => 'text',
 				'name'  => __( 'Text', 'customify' ),
 				'color' => 'var(--customify-text, #686868)',
 			),
 			array(
+				'slug'  => 'surface',
+				'name'  => __( 'Surface', 'customify' ),
+				'color' => 'var(--customify-surface, #ECECEC)',
+			),
+			array(
+				'slug'  => 'base',
+				'name'  => __( 'Base', 'customify' ),
+				'color' => 'var(--customify-base, #FFFFFF)',
+			),
+
+			// ─── Derived (no direct Customizer field — computed from slots).
+			array(
 				'slug'  => 'text-muted',
 				'name'  => __( 'Text Muted', 'customify' ),
+				// Derived from slot.text + slot.base (no direct Customizer
+				// field — auto-updates when Text or Base changes).
 				'color' => 'var(--customify-text-muted, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 ) . ')',
 			),
 
-			// ─── WCAG contrast picks (4) — readable text on each of the
-			// non-neutral backgrounds. Fallback computed via the same
-			// luminance picker the :root emit uses on opt-in.
+			// ─── WCAG contrast picks. Three tokens kept symmetric across
+			// the three "high-chroma backgrounds a designer would actually
+			// put text on" (primary buttons / secondary buttons / cards
+			// and elevated panels). Accent is the odd one out because
+			// accent usages are typically decorative short copy where the
+			// designer eyeballs the contrast.
 			array(
 				'slug'  => 'on-primary',
 				'name'  => __( 'On Primary', 'customify' ),
+				// Critical for primary buttons — saved Primary = dark AND
+				// saved Text = dark would make the "text" slug invisible
+				// on primary bg; on-primary's luminance picker guarantees
+				// a readable result regardless.
 				'color' => 'var(--customify-on-primary, ' . customify_color_pick_on( $slots['primary'] ) . ')',
 			),
 			array(
 				'slug'  => 'on-secondary',
 				'name'  => __( 'On Secondary', 'customify' ),
+				// Symmetric with on-primary for secondary buttons.
 				'color' => 'var(--customify-on-secondary, ' . customify_color_pick_on( $slots['secondary'] ) . ')',
-			),
-			array(
-				'slug'  => 'on-accent',
-				'name'  => __( 'On Accent', 'customify' ),
-				'color' => 'var(--customify-on-accent, ' . customify_color_pick_on( $slots['accent'] ) . ')',
 			),
 			array(
 				'slug'  => 'on-surface',
 				'name'  => __( 'On Surface', 'customify' ),
 				// Surface fallback in `.is-style-card` and other SCSS rules
-				// is `#FFFFFF`. on-surface pick against that fallback so the
-				// readable-text guarantee holds even when --customify-surface
-				// is unset (Surface slot not opted-in).
+				// is `#FFFFFF`. on-surface picks contrast against that
+				// fallback so the readable-text guarantee holds even when
+				// --customify-surface is unset (Surface slot not opted-in).
+				// Closes the dark-Palette safety gap: Base=dark + Text=white
+				// + Surface unset would make `has-text-color has-surface-bg`
+				// blocks invisible; picking on-surface gets #1A1A1A instead.
 				'color' => 'var(--customify-on-surface, ' . customify_color_pick_on( '#FFFFFF' ) . ')',
 			),
 
-			// ─── Chrome (1) — dividers, outlines, hairlines.
+			// ─── Chrome.
 			array(
 				'slug'  => 'border',
 				'name'  => __( 'Border', 'customify' ),
