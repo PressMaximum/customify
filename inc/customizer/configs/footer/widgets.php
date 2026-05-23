@@ -155,43 +155,11 @@ add_filter( 'customize_section_active', 'customify_customize_footer_widgets_show
  * @param string $footer_id
  */
 function customify_builder_footer_widget_item( $footer_id = 'footer-1' ) {
-	$show = false;
 	if ( is_active_sidebar( $footer_id ) ) {
 		echo '<div class="widget-area">';
 		dynamic_sidebar( $footer_id );
-		$show = true;
 		echo '</div>';
 	}
-
-	// Show admin notice.
-	if ( ! $show ) {
-		if ( current_user_can( 'edit_theme_options' ) ) {
-			echo '<div class="widget-area">';
-			$id = str_replace( 'footer-', '', $footer_id );
-			the_widget(
-				'WP_Widget_Text',
-				array(
-					'title'  => sprintf( __( 'Footer Widget %s', 'customify' ), $id ),
-					'text'   => sprintf( // WPCS: XSS ok.
-						/*Translators: 1: Admin URL2: Customize URL 3: Footer ID */
-						__( '<p>Replace this widget content by going to <a href="%1$s"><strong>Appearance &rarr; Customize &rarr; Footer &rarr; Footer %2$s</strong></a> and adding widgets into this widget area.</p>', 'customify' ),
-						esc_url( admin_url( 'customize.php?autofocus[section]=sidebar-widgets-footer-' . $id ) ),
-						$id
-					),
-					'filter' => true,
-					'visual' => true,
-				),
-				array(
-					'before_widget' => '<section id="placeholder-widget-text" class="widget widget_text">',
-					'after_widget'  => '</section>',
-					'before_title'  => '<h4 class="widget-title">',
-					'after_title'   => '</h4>',
-				)
-			);
-			echo '</div>';
-		}
-	}
-
 }
 
 function customify_builder_footer_1_item() {

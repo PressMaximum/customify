@@ -1,4 +1,5 @@
 = 0.4.15 =
+* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
 * NEW: Transparent header feature.
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
