@@ -120,12 +120,77 @@
 	}
 }
 
+// Box variant — restructured so Input Height, Icon Size and Icon Position
+// customizer settings can't break the layout. The button is absolutely
+// positioned over the right edge of the input wrapper so that:
+//   - it auto-stretches to the form height (Input Height stays vertically centered)
+//   - icon size scales without pushing the input around
+//   - icon position (legacy margin-left, usually negative) shifts the button
+//     inward from the right edge, matching the original visual intent.
+// Modal popup (.header-search_icon-item .header-search-modal) keeps the
+// original sibling layout — these rules are scoped here only.
+// Box variant layout overrides. Selectors here intentionally do NOT chain
+// through `.header-search-form` so they keep the same specificity as the
+// Input Styling / Icon Styling customizer controls in search-box.php — the
+// styling control's inline <style> is emitted after this stylesheet, so at
+// equal specificity it wins for any property the user changes (padding,
+// border, background, etc.). The .header-search_box-item ancestor already
+// scopes us to the box variant; the modal popup search uses .header-search_icon-item.
 .header-search_box-item {
 	.header-search-form {
-		.search-field {
-			border: 0;
-			box-shadow: none;
-			background-color: transparent;
+		position: relative;
+		align-items: stretch;
+	}
+
+	.search-form-fields {
+		flex: 1 1 auto;
+		display: flex;
+		align-items: center;
+		box-sizing: border-box;
+		// Reserve right-side space equal to the button's width so the input
+		// text never runs underneath the icon. The button is a square locked
+		// to the form height (see button rule below); the Input Height
+		// customizer setting also writes padding-right: <value> via PHP
+		// css_format. The 40px here is the SCSS-only fallback that matches
+		// the legacy default input height.
+		padding-right: 40px;
+	}
+
+	.search-field {
+		border: 0;
+		box-shadow: none;
+		background-color: transparent;
+		width: 100%;
+		height: 100%;
+		box-sizing: border-box;
+	}
+
+	.header-search-form button.search-submit {
+		position: absolute;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		// Lock the button to a square. With top:0 + bottom:0 the height
+		// equals the form height (= Input Height), and aspect-ratio:1 makes
+		// the width follow. Result: the button is always a square the same
+		// size as the input height, regardless of the icon size.
+		aspect-ratio: 1 / 1;
+		width: auto;
+		box-sizing: border-box;
+		// Clear the base `padding: 0 0.7em` from `.header-search-form
+		// button.search-submit` so the icon fills the square. Same specificity
+		// as the Icon Styling control, which is emitted later — so if the
+		// user sets padding via Icon Styling it still wins.
+		padding: 0;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		height: auto; // override any cascaded fixed heights
+		min-height: 0;
+
+		svg {
+			max-width: 100%;
+			max-height: 100%;
 		}
 	}
 }
