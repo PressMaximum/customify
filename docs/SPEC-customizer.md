@@ -678,7 +678,7 @@ WP core blocks have rendered HTML that often differs from documentation. Verify 
 grep -r 'class=' /path/to/wordpress/wp-includes/blocks/<block-name>/
 ```
 
-Known mistakes documented in the top-level `CLAUDE.md`.
+Known mistakes documented in [`SPEC-block-editor.md`](SPEC-block-editor.md) §9 + [`../AGENTS.md`](../AGENTS.md) §4.10.
 
 ---
 
@@ -774,12 +774,12 @@ Plugins should **not** edit theme files; this filter is the supported extension 
 
 ## 15. Conventions & rules
 
-These are enforced by the top-level `CLAUDE.md` — restated here for completeness:
+These are enforced by [`../AGENTS.md`](../AGENTS.md) — restated here for completeness:
 
-- **Never delete or rename existing public functions.** Mark `@deprecated` and keep the body. Customizer field names are also public API — child themes/plugins may reference them.
+- **Never delete or rename existing public functions.** Mark `@deprecated` and keep the body. Customizer field names are also public API — child themes/plugins may reference them. See [`SPEC-data-migration-policy.md`](SPEC-data-migration-policy.md) for the canonical key registry.
 - **Container width must sync to CSS custom property.** When `container_width` changes, update `--wp--style--global--wide-size` so theme.json, Customizer, and the block editor stay aligned.
 - **English-only in source.** All docblocks, inline notes, and `.md` files in the codebase are English.
-- **Edit `src/`, not `build/`.** SCSS/JS sources live in `src/`; build outputs in `build/` are artifacts.
+- **Edit `src/`, not `build/`.** SCSS/JS sources live in `src/`; build outputs in `build/` are artifacts. See [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md).
 - **CSS handle must match.** `wp_add_inline_style( 'customify-style', ... )` — never `'customify'` or any other typo.
 
 ---
@@ -817,6 +817,11 @@ These are enforced by the top-level `CLAUDE.md` — restated here for completene
 
 **Related specs**
 - [`SPEC-header-footer-builder.md`](./SPEC-header-footer-builder.md) — Header & Footer Builder dedicated spec.
+- [`SPEC-customizer-colors.md`](./SPEC-customizer-colors.md) — 6-slot palette, `:root` tokens, picker UI.
+- [`SPEC-bootstrap.md`](./SPEC-bootstrap.md) — singleton + layout system the Customizer plugs into.
+- [`SPEC-asset-pipeline.md`](./SPEC-asset-pipeline.md) — webpack entries + `customify-style` handle.
+- [`SPEC-block-editor.md`](./SPEC-block-editor.md) — Customizer → block editor CSS bridge (`Customify_Editor`).
+- [`SPEC-data-migration-policy.md`](./SPEC-data-migration-policy.md) — canonical key registry + migration patterns.
 
 **PHP**
 - [`inc/customizer/class-customizer.php`](../inc/customizer/class-customizer.php) — registration internals.

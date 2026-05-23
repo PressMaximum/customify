@@ -741,5 +741,11 @@ Items often expose their own filter for their settings array (e.g. `customify/bu
 - [`src/backend/header-builder/index.js`](../src/backend/header-builder/index.js) — React header builder entry.
 - [`src/backend/footer-builder/index.js`](../src/backend/footer-builder/index.js) — React footer builder entry.
 
+**Related specs**
+- [`SPEC-header-transparent.md`](./SPEC-header-transparent.md) — transparent header feature layered on top of this builder.
+- [`SPEC-bootstrap.md`](./SPEC-bootstrap.md) — singleton + render entry points (`customify/site-start`, `customify/site-end`).
+- [`SPEC-pro-integration.md`](./SPEC-pro-integration.md) — Pro modules that extend builder items (HTML_2, Multilingual, Header_Footer_Items, Mega_Menu).
+- [`SPEC-data-migration-policy.md`](./SPEC-data-migration-policy.md) §7.1-7.2 — V1 → V2 migration history.
+
 **Conventions**
-- [`CLAUDE.md`](../CLAUDE.md) — project-wide rules (English-only, no function deletions, CSS handle naming).
+- [`../AGENTS.md`](../AGENTS.md) — project-wide rules (English-only, no function deletions, CSS handle naming).
