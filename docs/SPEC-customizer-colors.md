@@ -216,19 +216,54 @@ Each derived value has an **override** check first: if the corresponding
 legacy theme_mod key has a saved value, that value wins; otherwise the
 computed default is used.
 
+> **Note**: this table reflects the **Phase 2.10–2.13 implementation** of
+> the [color-token-derivation spec](../../.claude/worktrees/epic-shamir-e4a2d1/docs/color-token-derivation-spec.md). Earlier rows of this section
+> (especially the on-* row and body-text row) were rewritten in Phase
+> 2.12 — see §8.11 for the migration notes.
+
 | Token | Override key | Compute formula | Used for |
 |---|---|---|---|
 | `--customify-text-muted` | `global_styling_color_meta` | `mix(text 70%, base)` | Pagination text, `.link-meta`, body paragraph copy |
-| `--customify-border` | `global_styling_color_border` | `mix(text 12%, base)` | Card borders, separators, etc. |
+| `--customify-border` | `global_styling_color_border` | `mix(text 14%, base)` (Phase 2.10 bumped 12→14% per spec §2) | Decorative borders / separators (~1.35:1, WCAG-exempt) |
+| `--customify-border-strong` | (no legacy key) | Iterate P 6%→100% until `contrast(mix(text P%, base), base) ≥ 3.0` | Form input borders, functional outlines (WCAG 1.4.11 ≥3:1) |
 | `--customify-link` | `global_styling_color_link` | `= primary` | `a { color }` |
-| `--customify-link-hover` | `global_styling_color_link_hover` | `mix(primary, black 15%)` | `a:hover/focus` |
+| `--customify-link-hover` | `global_styling_color_link_hover` | `mix(primary 85%, white)` (Phase 2.4 — surfaces, not depresses) | `a:hover/focus` |
 | `--customify-primary-hover` | (no legacy key) | `mix(primary, black 10%)` | `button:hover` (NEW, didn't exist before) |
 | `--customify-heading` | `global_styling_color_heading` | `= text` | `h1-h6` |
 | `--customify-widget-title` | `global_styling_color_w_title` | `= text` | `.site-content .widget-title` |
-| `--customify-body-text` | `global_styling_color_text` | `= text-muted default` | Body paragraph fallback |
-| `--customify-on-primary` | (no legacy key) | WCAG luminance pick: `>0.45 → #1A1A1A` else `#FFFFFF` | Text on primary buttons |
-| `--customify-on-secondary` | (no legacy key) | WCAG luminance pick | Text on secondary surfaces |
-| `--customify-on-accent` | (no legacy key) | WCAG luminance pick | Text on accent surfaces |
+| `--customify-body-text` | `global_styling_color_text` | `= text` (Phase 2.3 — rolled back from 88% mix so user's saved Text flows through unchanged) | Body paragraph fallback |
+| `--customify-on-primary` | (no legacy key) | **Max-contrast pick** (Phase 2.12, spec §3): `contrast(LIGHT, X') ≥ contrast(DARK, X') ? LIGHT : DARK` where X' = composite of bg over saved base (handles rgba) | Text on primary buttons / hero / cards |
+| `--customify-on-secondary` | (no legacy key) | Max-contrast pick (same formula) | Text on secondary surfaces |
+| `--customify-on-accent` | (no legacy key) | Max-contrast pick (same formula) | Text on accent surfaces |
+| `--customify-on-surface` | (no legacy key) | Max-contrast pick against saved Surface or `#FFFFFF` fallback | Text on `.is-style-card` (theme internal safety net) |
+| `--customify-primary-container` | (no legacy key) | Solve P at OKLab L=0.93, mix, **chroma cap 0.04** (Phase 2.12, spec §4 + Customify ext) | Soft brand tint (Ollie-style badges/chips) |
+| `--customify-secondary-container` | (no legacy key) | Same as primary-container | Soft secondary tint |
+| `--customify-accent-container` | (no legacy key) | Same; chroma cap matters most here (yellow brand) | Soft accent tint |
+| `--customify-on-primary-container` | (no legacy key) | OKLab L-reduction: keep brand hue, step L down until contrast vs container ≥ 4.5 | Theme-internal safety net for container-bg blocks |
+| `--customify-on-secondary-container` | (no legacy key) | Same L-reduction | Same |
+| `--customify-on-accent-container` | (no legacy key) | Same L-reduction | Same (accent yellow → dark gold #8B5F00) |
+
+**Phase 2.13 note on `--customify-border` emission**: pre-Phase-2.13
+the var was always emitted with the computed default. Now `:root` only
+emits `--customify-border` when the user explicitly saved the Border
+override (`global_styling_color_border`). Reason: bundled SCSS rules
+gained a smart `var(--customify-border, color-mix(in srgb,
+currentcolor 14%, transparent))` fallback that adapts to local text
+color — emitting a frozen `:root` default would break that adaptation
+for users who saved Base = dark. Sites that REFERENCE
+`var(--customify-border)` from custom CSS / page builders WITHOUT a
+fallback would resolve to the initial value (transparent for borders).
+Use `var(--customify-border, currentColor)` or a literal fallback in
+custom code.
+
+**`on-*` emission gate** (Phase 2.13): the four `on-*` solid tokens
+(`on-primary` / `on-secondary` / `on-accent` / `on-surface`) are now
+emitted UNCONDITIONALLY (dropped the 4-new-slot opt-in gate). Required
+because the SCSS auto-wire rule `.has-{brand}-background-color { color:
+var(--customify-on-{brand}, inherit) }` needs them present even when
+the user only touched legacy Primary/Secondary slots. The 3 `on-*-
+container` tokens, `border-strong`, and the 3 `*-container` tokens
+remain gated on opt-in.
 
 #### Two paths for derived values
 
@@ -251,16 +286,59 @@ computed default is used.
 
 ### 3.3 Token slug contract (Blocksify)
 
-The 6 slot slugs — **`base`, `surface`, `text`, `primary`, `secondary`,
-`accent`** — are API surface. They appear:
+#### `:root` CSS var contract — stable
 
-- In `theme.json` under `settings.color.palette` (statically declared so
-  the block editor picker always lists them).
-- As CSS var names: `--customify-<slug>`.
-- As JS payload keys passed to the customize-controls script.
+The internal CSS variable names — `--customify-base`, `--customify-surface`,
+`--customify-text`, `--customify-primary`, `--customify-secondary`,
+`--customify-accent` — are API surface and **never renamed**. They're
+referenced by:
 
-Blocksify starter templates reference these names. **Never rename a
-slug.** Add new ones if needed; don't remove or rename existing.
+- Bundled SCSS rules (`src/frontend/scss/utils/_vars.scss`).
+- Customizer auto-CSS pipeline (`inc/customizer/class-customizer-auto-css.php`).
+- JS live-preview payload (`SLOT_VARS` map in the preview script).
+- Customify Pro modules.
+- 30K user-saved custom CSS that may reference `var(--customify-text)` directly.
+
+These names are locked. Adding new ones is OK; renaming existing ones
+is not.
+
+#### `theme.json` palette slug contract — renamed in Phase 2.11
+
+The **picker slug names** (what shows up in Blocksify / WP block
+editor color picker, generated as `--wp--preset--color--{slug}` and
+`.has-{slug}-color` classes) were partially reworked in Phase 2.11 to
+dodge WP global-styles marker-class collisions:
+
+| Old slug (pre-Phase-2.11) | New slug | Reason |
+|---|---|---|
+| `text` | `body-text` | `.has-text-color` is ALSO WP's marker class for "block has text color set" — having a slug named exactly `text` makes WP generate `.has-text-color { color: var(--text) !important }` which then overrides any inline text color picks. |
+| `border` | `divider` | `.has-border-color` is ALSO WP's marker class for the Border panel — same collision. `divider` is semantically clearer too (decorative line, not "border around things"). |
+| `border-strong` | `divider-strong` | Symmetry with `divider`. |
+
+The 6 LEGACY slugs (`text` / `link` / `heading` / `background` /
+`light-gray` / `dark-gray`) that shipped in the original static
+`theme.json` are RE-LISTED in the filter output under the same names
+(marked `(legacy)` in the picker) so 30K sites with existing block
+markup using those slug classes continue to render with their saved
+colors. The legacy `text` slug retains the marker-class collision
+behavior — pre-existing WP behavior; designers picking the modern
+`body-text` slug get clean inline-override semantics.
+
+**Customify-pro / Blocksify starter templates** should prefer the new
+slug names (`body-text` / `divider` / `divider-strong`) for new designs.
+The legacy slugs remain available for backward-compat reads.
+
+#### Full 18-slug picker palette (Phase 2.13)
+
+```
+Design-purposeful (12):
+  primary · primary-container · secondary · secondary-container ·
+  accent · accent-container · body-text · surface · base ·
+  text-muted · divider · divider-strong
+
+Legacy back-compat (6, marked "(legacy)" in picker name):
+  text · link · heading · background · light-gray · dark-gray
+```
 
 See [`project_blocksify_companion.md`](../../.claude/memory/project_blocksify_companion.md).
 

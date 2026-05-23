@@ -49,7 +49,10 @@ if ( ! function_exists( 'customify_color_normalize_hex' ) ) {
 		}
 		$value = trim( $value );
 		// Accept rgb()/rgba() syntax — returned verbatim (preserves alpha).
-		if ( preg_match( '/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}/i', $value ) ) {
+		// Anchor the trailing `)` so partial inputs like `rgba(255,255,255`
+		// (cut off) don't pass the validator. composite_over already does
+		// this; keeping the regexes consistent across helpers.
+		if ( preg_match( '/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*[\d.]+)?\s*\)$/i', $value ) ) {
 			return $value;
 		}
 		$hex = ltrim( $value, '#' );
@@ -78,7 +81,9 @@ if ( ! function_exists( 'customify_color_hex_to_rgb' ) ) {
 	function customify_color_hex_to_rgb( $value ) {
 		$value = (string) $value;
 		// rgb()/rgba() form — capture first 3 channel ints, ignore alpha.
-		if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i', $value, $m ) ) {
+		// Anchor trailing `)` so cut-off inputs don't pass — keeps the
+		// regex consistent with normalize_hex and composite_over.
+		if ( preg_match( '/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*[\d.]+)?\s*\)$/i', $value, $m ) ) {
 			return array(
 				max( 0, min( 255, (int) $m[1] ) ),
 				max( 0, min( 255, (int) $m[2] ) ),
@@ -175,7 +180,15 @@ if ( ! function_exists( 'customify_color_composite_over' ) ) {
 			if ( $a >= 1.0 ) {
 				return array( $r, $g, $b );
 			}
+			// When base_hex is invalid (returns [0,0,0] from hex_to_rgb),
+			// substitute white instead — base is overwhelmingly the page
+			// background, so an invalid/empty base reading composites the
+			// rgba over the visual "page color" that most users have. Same
+			// fallback as the JS mirror (_compositeOver) for parity.
 			$base_rgb = customify_color_hex_to_rgb( $base_hex );
+			if ( 0 === $base_rgb[0] && 0 === $base_rgb[1] && 0 === $base_rgb[2] && '#000000' !== strtolower( (string) $base_hex ) ) {
+				$base_rgb = array( 255, 255, 255 );
+			}
 			return array(
 				(int) round( $r * $a + $base_rgb[0] * ( 1 - $a ) ),
 				(int) round( $g * $a + $base_rgb[1] * ( 1 - $a ) ),
@@ -1457,7 +1470,8 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		// what makes on-* live-preview keep working when user drags the
 		// alpha slider in the WP color picker.
 		value = (value || '').toString().trim();
-		var m = value.match(/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})/i);
+		// Anchored trailing `)` to reject cut-off inputs (parity with PHP).
+		var m = value.match(/^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*[\d.]+)?\s*\)\$/i);
 		if (m) {
 			return [
 				Math.max(0, Math.min(255, parseInt(m[1], 10))),
@@ -1911,6 +1925,61 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				// any boundary that's the ONLY cue identifying a control.
 				// Spec §2 (solved P).
 				'color' => 'var(--customify-border-strong, ' . $border_strong_hex . ')',
+			),
+
+			// ─── Legacy slugs — preserved so blocks created on 30K
+			// sites pre-Phase-2 (those that picked `has-text-color`,
+			// `has-link-color`, etc. via the OLD static theme.json
+			// palette) continue to render their saved colors. Without
+			// these entries the filter would wipe the WP-generated
+			// `--wp--preset--color--{slug}` declarations and any
+			// `class="has-{slug}-color"` block would lose its color
+			// (fall back to the body cascade). Spec §3.7 explicitly
+			// promises "existing entries unchanged so any posts
+			// using .has-<slug>-color keep working" — that contract
+			// is upheld by re-listing them here.
+			//
+			// They still appear in the Blocksify picker, but designers
+			// of NEW sites should prefer the design-purposeful slugs
+			// above (body-text instead of text, divider instead of
+			// border-via-text, etc.) — these legacy entries are kept
+			// primarily for backward compat with existing block markup.
+			//
+			// Slug `text` keeps its name (the .has-text-color marker
+			// collision is a known pre-existing WP behavior — same as
+			// the static palette had before this filter; not a
+			// regression of this PR). Designer workaround: pick the
+			// `body-text` slug or use inline style with !important.
+			array(
+				'slug'  => 'text',
+				'name'  => __( 'Text (legacy)', 'customify' ),
+				'color' => 'var(--customify-text, ' . $slots['text'] . ')',
+			),
+			array(
+				'slug'  => 'link',
+				'name'  => __( 'Link (legacy)', 'customify' ),
+				'color' => 'var(--customify-link, ' . $slots['primary'] . ')',
+			),
+			array(
+				'slug'  => 'heading',
+				'name'  => __( 'Heading (legacy)', 'customify' ),
+				'color' => 'var(--customify-heading, ' . $slots['text'] . ')',
+			),
+			array(
+				'slug'  => 'background',
+				'name'  => __( 'Background (legacy)', 'customify' ),
+				// Background is an alias of base — same var() target.
+				'color' => 'var(--customify-base, ' . $slots['base'] . ')',
+			),
+			array(
+				'slug'  => 'light-gray',
+				'name'  => __( 'Light Gray (legacy)', 'customify' ),
+				'color' => '#f2f2f2',
+			),
+			array(
+				'slug'  => 'dark-gray',
+				'name'  => __( 'Dark Gray (legacy)', 'customify' ),
+				'color' => '#444444',
 			),
 		);
 	}
