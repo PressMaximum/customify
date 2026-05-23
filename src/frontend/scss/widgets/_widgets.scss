@@ -72,7 +72,12 @@
 		table,
 		th,
 		td {
-			border: 1px solid #eaecee;
+			// Widget-area table borders — same bright-line problem as the
+			// main `.wp-block-table` cells: hard-coded `#eaecee` light gray
+			// becomes a stark divider on dark Palette bases. Use
+			// $color_border so the border adapts (saved Border slot →
+			// currentcolor 10% tint fallback).
+			border: 1px solid $color_border;
 		}
 
 		&.aligncenter {
@@ -131,8 +136,15 @@
 
 					.count {
 						right: 0;
-						background: #eaecee;
-						color: #999999;
+						// Category/tag count badge pill — `#eaecee` bg + `#999999`
+						// text were hard-coded light grays that became near-
+						// invisible on dark Palette bases. Use $surface_strong
+						// (saved Surface → currentcolor 10% tint fallback) for
+						// the pill bg and $color_meta (saved text-muted token)
+						// for the count number so the badge stays readable on
+						// any canvas.
+						background: $surface_strong;
+						color: $color_meta;
 						padding: 0px 0.5em;
 						border-radius: 0.9em;
 						font-size: 12px;
@@ -201,12 +213,18 @@
 				overflow: hidden;
 				box-shadow: none;
 				background: transparent;
-				color: #aaaaaa;
+				// Sidebar search icon — `#aaaaaa` default + `#444444` hover were
+				// hard-coded grays that disappeared on dark Palette bases (a
+				// near-black icon on a dark canvas is invisible). Use the
+				// muted/text tokens so the icon adapts: muted color for resting
+				// (matches the de-emphasized search button intent), full text
+				// color on hover for the affordance.
+				color: $color_meta;
 				line-height: 0px;
 
 				&:hover {
 					svg #svg-search {
-						fill: #444444;
+						fill: $color_text;
 					}
 				}
 
@@ -316,8 +334,9 @@
 		}
 
 		&__input {
-			color: #282828;
-			border: 1px solid #e5e5e5;
+			color: $color_text;
+			background-color: $surface_medium;
+			border: 1px solid $color_border;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 			padding: 0 .75em;
 			height: 2.6em;
@@ -329,7 +348,7 @@
 			-webkit-appearance: none;
 
 			&:focus {
-				background-color: #fff;
+				background-color: $surface_subtle;
 			}
 		}
 
@@ -449,7 +468,13 @@
 /* Tagcloud widget (classic) */
 .tagcloud {
 	a {
-		border: 1px solid currentColor;
+		// `currentColor` here painted every tag with a bright outline
+		// of the link color — visually busy + too prominent on dark
+		// Palette bases. Use $color_border so each tag's outline uses
+		// the adaptive currentcolor-tint (10%). The :hover transition
+		// below uses currentColor explicitly to highlight the active
+		// tag with a saturated border.
+		border: 1px solid $color_border;
 		border-radius: 2px;
 		display: inline-block;
 		font-size: 0.875em !important;
@@ -668,7 +693,13 @@
 		caption-side: top;
 	}
 
+	// WP core's block-library/style.css forces `color: #40464d` on
+	// `:where(.wp-block-calendar table:not(.has-text-color))` (selector
+	// specificity 0). On dark Palette bases that dark text becomes
+	// invisible against the dark canvas. Override with $color_text so
+	// the calendar inherits the body-text cascade.
 	table {
+		color: $color_text;
 		width: 100%;
 		border-collapse: collapse;
 		font-size: 0.85em;
@@ -680,10 +711,18 @@
 			border: 1px solid $color_border;
 		}
 
-		th {
+		// Header row (M T W T F S S) — strong surface tint mirrors the
+		// pattern used for `.wp-block-table thead th` so calendar headers
+		// stay readable on dark + light palette bases.
+		thead th {
 			font-weight: 500;
+			background-color: $surface_strong;
 		}
 
+		// "Today" cell — fall back to border token (subtle distinction
+		// from header tint). Note: `background: $color_border` resolves
+		// through the same adaptive currentcolor expression so it remains
+		// visible on dark bases.
 		#today {
 			font-weight: 700;
 			background: $color_border;

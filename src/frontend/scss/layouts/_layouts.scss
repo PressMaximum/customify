@@ -64,7 +64,16 @@
 }
 
 .site-content {
-    background: #fff;
+    // Hard-coded `#fff` overrode the body bg and broke dark-Palette sites:
+    // setting Base=#000 made the body dark but `.site-content` still painted
+    // a white wrapper over it, hiding the dark canvas everywhere except
+    // header/footer. Wire to --customify-base with `#fff` as the var()
+    // fallback so:
+    //   • Existing 30K sites (no Base saved): wrapper stays `#fff` — same
+    //     render as before the change.
+    //   • Sites with saved Palette Base: wrapper adopts the saved base
+    //     color, so dark-mode palettes actually paint the content area dark.
+    background: var(--customify-base, #fff);
     &.content-full-width {
         .customify-container {
             max-width: 100%;

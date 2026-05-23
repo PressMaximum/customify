@@ -596,6 +596,29 @@ border: none !important; box-shadow: none !important`) and promote
 `.color-alpha` to fill 100% with our own 50% radius + border + shadow.
 One clean circle per swatch, no overlap.
 
+### 6.6 Reset icon overflow on wrapped descriptions (Phase 2.9)
+
+Picker LI uses a 2-column grid (`1fr | swatch`). The reset icon
+(`input.wp-picker-default`) is `position: absolute right: 36px` so it
+sits ~12px inside column 1's territory. Short descriptions: icon over
+whitespace, fine. Long descriptions that wrap (e.g. "Ink baseline.
+Headings inherit from this slot by default."): icon body lands on top
+of the wrapped text. Fix: when `.customify-input-color.is-dirty` is
+set (icon visible), reserve `padding-right: 24px` on both
+`.customize-control-title` and `.customize-control-description` via
+`:has()`. Text wraps earlier and leaves a clear gutter. Padding only
+applies when the icon is actually visible.
+
+### 6.7 Slot-name tooltip on quickpick swatches (Phase 2.9)
+
+The "From palette" row in override pickers now shows a dark tooltip
+above the hovered swatch with the slot name (Primary / Secondary /
+Accent / Text / Surface / Base). JS sets `data-label="<name>"` on each
+swatch; SCSS `::before` reads `content: attr(data-label)`. Uses
+`::before` to leave `::after` available for the existing `.is-active`
+selection ring. `title` attribute also carries the slot name for
+screen-reader accessibility.
+
 ---
 
 ## 7. Known issues / loose ends
@@ -632,7 +655,7 @@ and Content Area ↔ slot `surface` are conceptually linked but **not
 two-way synced** in storage. Editing `base` slot does NOT update
 `background[normal][bg_color]`. Phase 2 follow-up if needed.
 
-### 7.4 Live preview JS — Phase 2.1
+### 7.4 Live preview JS — Phase 2.1 + 2.8
 
 Phase 2.1 added a `customize_preview_init` inline script in
 `colors-palette.php::customify_color_palette_preview_js()` that listens
@@ -640,23 +663,34 @@ to all 6 slot settings and live-updates `--customify-<slot>` on
 `document.documentElement.style`. Modern browsers re-resolve any
 `color-mix()` derived token automatically.
 
-WCAG luminance picks (`--customify-on-*`) are still PHP-precomputed
-only and refresh on save, not on drag — see §8.3.
+Phase 2.8 extended this with JS WCAG luminance helpers (`_hexToRgb` /
+`_relativeLuminance` / `_pickOn`) and an `ON_MAP` listener for the 3
+brand slots so `--customify-on-primary|secondary|accent` flip live
+between `#1A1A1A` and `#FFFFFF` as the user drags. JS math mirrors
+PHP `customify_color_pick_on()` byte-for-byte.
 
-### 7.5 Existing CSS rules — partial var() refactor
+Phase 2.9 (polish) added a `CASCADE_FALLBACK` map so clearing an
+override picker mid-session (`.set('')`) re-applies the cascade
+expression (e.g. `var(--customify-text)`) instead of falling through
+to the PHP-baked `:root` rule — fixes the "cleared override keeps
+showing old value until save" quirk.
 
-Phase 2.1 refactored `$primary_css` and `$secondary_css` to
-`color: var(--customify-primary, {{value}})` /
-`background-color: var(--customify-secondary, {{value}})`. Safe because
-the slot key == the legacy field key for these 2, and the slot default
-hex matches the legacy field default. A/B/C re-passed byte-equivalent.
+### 7.5 Existing CSS rules — full var() refactor done (Phase 2.5–2.8)
 
-The 7 remaining rules — link / link-hover / text / border / meta /
-heading / widget-title — still emit literal `{{value}}`. Their legacy
-field defaults DIFFER from the slot-derived defaults (e.g. link default
-`#1e4b75` vs slot.primary `#235787`), so a naive var() refactor would
-shift fresh-install render. Requires aligning defaults first.
-See §8.3 for the deferred follow-up.
+Phase 2.1 first refactored `$primary_css` and `$secondary_css` to
+`var(--customify-primary, {{value}})`. Phase 2.5–2.6 extended the
+refactor to the remaining 7 rules (link / link-hover / text / border /
+meta / heading / widget-title) plus aligned field defaults so the
+fresh-install render shifts are intentional (documented per phase).
+Phase 2.8 wired 11 button selectors to `--customify-on-primary` /
+`--customify-on-secondary` for auto-contrast text.
+
+All `$color_*` SCSS variables in `src/frontend/scss/utils/_vars.scss`
+now resolve through `--customify-<token>` with the legacy hex as
+fallback. Saved overrides paint the entire theme correctly (byte-
+equivalent for 30K sites with saved values); slot drag cascades the
+whole site in modern browsers; legacy browsers without `var()` support
+keep the static fallback.
 
 ---
 
@@ -845,20 +879,108 @@ match, cascade mode applies; if they differ, the user has saved an
 override and the swatch shows that value via the standard wp-color-
 picker path.
 
-### 8.9 Phase 2 — remaining (good follow-ups)
+### 8.9 Phase 2.8 — done (WCAG `--on-*` live preview + opt-in gate + button consumer wiring)
+
+- ✅ JS WCAG luminance math mirrors PHP `customify_color_pick_on()`
+  (sRGB linear gamma decode, Rec.709 luma weights, `> 0.45 ? #1A1A1A : #FFFFFF`).
+  Listens to the 3 brand slot settings (`global_styling_color_primary`,
+  `global_styling_color_secondary`, `customify_palette_accent`) and
+  setProperty's `--customify-on-primary|secondary|accent` inline on the
+  iframe's `documentElement` so auto-contrast text colors update on
+  every drag.
+- ✅ Opt-in gate for the 3 on-* tokens in `:root`. PHP only emits the
+  tokens when the user has saved any of the 4 truly-new slot keys
+  (`customify_palette_base|surface|text|accent` — none existed pre-
+  Phase 2). Sites that only touched the long-standing `global_styling_color_*`
+  keys remain in legacy mode → no on-* lines in `:root` → bundled
+  rules of the form `color: var(--customify-on-X, #fff)` fall back to
+  the literal `#fff` hex. Byte-equivalent to pre-refactor for 30K+
+  sites that never engaged with the new Palette panel.
+- ✅ Bundled SCSS wired across 11 button selectors:
+  - `base/_base.scss` — universal `.button` / `button` / `input[type=submit]` /
+    `.wp-block-button__link` / `.wp-element-button` rule + `:hover` + `:focus`
+    variants → `--customify-on-primary`
+  - `layouts/_blogs.scss` — `.readmore-button:hover`, pagination hover +
+    current `span` → `--customify-on-primary`
+  - `widgets/_widgets.scss` — `.wp-block-search__button` → `--customify-on-primary`
+  - `header/builder_items/_button.scss` — `.customify-builder-btn` + `:hover` →
+    `--customify-on-secondary`
+  - `compatibility/wc/_wc-cart.scss` — `.customify-wc-total-qty` badge →
+    `--customify-on-secondary`
+  - `compatibility/wc/_wc-elements.scss` — 7 WC product button classes;
+    added explicit `color: var(--customify-on-secondary, ...)` + override
+    `:hover/:focus` because these otherwise inherit on-primary from the
+    base rule above (wrong contrast on secondary bg).
+- ✅ `--customify-on-accent` declared as API surface but no bundled rule
+  consumes it yet (no accent-bg button exists). Sketched for future use
+  (Blocksify pattern, custom CSS, or future button variant).
+- ✅ 30K-site safety verified via full upgrade simulation: brand-new
+  Studio site → install customify 0.4.13 from wp.org → save 9 color
+  overrides + custom header/footer content → rsync worktree over →
+  compare. 10 representative elements (body/h1/h2/link/searchBtn/
+  postMeta/entryInner/readmore/widgetTitle/copyright) all render
+  pixel-identical pre/post upgrade. Header items (7 builder items)
+  100% identical. Footer items 100% identical (after reverting the
+  footer skin default — see §8.10).
+
+### 8.10 Phase 2.9 — done (picker UI polish + heading-clear cascade fallback + footer skin revert)
+
+Three small fixes that don't fit a Phase 2.x slot but ship in the same
+batch:
+
+- ✅ **Reset icon overflow** when description wraps. Picker LI uses a
+  2-column grid (`1fr | swatch`); the reset icon is `position: absolute
+  right: 36px` which lands 12px inside column 1's territory. With short
+  descriptions the icon sits over whitespace; with a long wrapped
+  description (e.g. "Ink baseline. Headings inherit from this slot by
+  default.") the icon body lands on top of the wrapped text. Fix: when
+  the picker has `.customify-input-color.is-dirty` (icon visible),
+  reserve 24px right-padding on `.customize-control-title` and
+  `.customize-control-description`. Text wraps 24px earlier and leaves
+  a clear gutter for the icon. Uses `:has()` (Baseline 2023). When not
+  dirty, no padding reserved so non-dirty pickers keep full column-1 width.
+- ✅ **Slot-name tooltip on quickpick swatches**. Hovering a swatch in
+  the "From palette" row now shows a small dark tooltip with the slot
+  name (Primary / Secondary / Accent / Text / Surface / Base). JS sets
+  `data-label="Primary"` (etc.); CSS `::before` renders the tooltip
+  via `content: attr(data-label)`. Uses `::before` to leave `::after`
+  free for the existing `.is-active` selection ring. `title` attribute
+  also kept = slot name for screen-reader accessibility.
+- ✅ **Heading-clear mid-session cascade fallback**. When the user
+  clears an override picker (e.g. heading) via `.set('')` mid-session,
+  removing the inline style used to fall through to the PHP-baked
+  `:root` rule — which still held the SAVED override hex (palette-
+  tokens block renders once at page load, not regenerated on setting
+  change). Result: cleared overrides kept showing the old value until
+  next save+reload. Fix: new `CASCADE_FALLBACK` map in the preview JS
+  for derived override tokens. When `normalize()` returns empty for one
+  of these tokens (heading, body-text, widget-title, link, link-hover,
+  text-muted), set the inline value to the cascade expression
+  (e.g. `var(--customify-text)`) instead of `removeProperty`. CSS
+  custom-property values support nested `var()` / `color-mix()`, so the
+  cascade chain re-engages immediately and the rendered value tracks
+  the source slot in real time.
+- ✅ **Footer skin default — tested as `light-mode` then reverted**.
+  Project owner initially requested `footer_main_text_mode` +
+  `footer_bottom_text_mode` default flip from `dark-mode` to
+  `light-mode`. Regression test on Studio site confirmed this would
+  shift footer bg dark→light for any 30K legacy site that never saved
+  `footer_*_text_mode`. Per the 30K-safety doctrine, reverted to keep
+  `dark-mode` default and left the change for a future minor-version
+  bump with explicit migration messaging.
+
+### 8.11 Phase 2 — remaining (good follow-ups)
 
 | Item | Notes |
 |---|---|
 | Iris picker UX overhaul | Project owner wants full-width saturation box + hue + alpha strips stacked vertically (modern picker look). Iris doesn't use jQuery UI slider widget — it has its own drag math reading inline `offsetTop`. CSS rotate trick breaks the drag handler. Options: patch Iris source, replace with custom React/vanilla widget, or accept Iris vertical strips. Defer until UX direction. |
 | Iris initial colorful state | When current value is grayscale (e.g. default text `#2b2b2b`), Iris's saturation square shows white→black gradient because hue is undefined for grayscale. Owner wants a colorful initial state. Approach unclear. |
-| Surface wiring | `--customify-surface` is in :root but no bundled rule consumes it. Need to wire `background-color: var(--customify-surface)` on card / widget / comment / modal selectors. |
-| Refactor header/footer/blog/page-header configs to consume slot tokens | The ~30 other color/styling controls scattered across these configs still emit literal hex from their saved values. Should switch to `var(--customify-XXX)` so changing a slot updates the whole site. |
+| Surface wiring | `--customify-surface` is in :root but no bundled rule consumes it. Need to wire `background-color: var(--customify-surface)` on card / widget / comment / modal selectors. Apply opt-in gate same as on-*. |
+| Refactor header/footer/blog/page-header configs to consume slot tokens | The ~50 other color/styling sub-fields scattered across these configs still emit literal hex. Should switch to `var(--customify-XXX, {{value}})` so saved values still emit and slot drag cascades. Detailed matrix in [§13 Appendix — refactor matrix](#13-appendix--refactor-matrix-for-header--footer--blog--page-header-configs). |
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
-| WCAG `--on-*` live-preview | Contrast picks (`--customify-on-primary` etc.) are PHP-precomputed only; they refresh on save, not on slot drag. Add JS-side luminance math to mirror PHP `customify_color_pick_on()`. |
-| Heading picker `.set('')` quirk | When the user clears the heading override mid-Customizer-session (without saving), the auto-css JS pipeline drops the entire h1-h6 rule because `setup_color()` returns `false` for empty values. Cascade can't apply if no rule consumes the var. Headings fall back to bundled-theme CSS until save. Cosmetic; rare. |
 
-### 8.10 Phase 3 — Custom palettes / Style Packs (future)
+### 8.12 Phase 3 — Custom palettes / Style Packs (future)
 
 Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
 build the higher-level palette UX on top:
@@ -879,8 +1001,8 @@ Design when Phase 3 starts; not blocked by anything in Phase 1/2 today.
 
 ### 9.1 Branch & worktree
 
-- Branch: `customizer-colors-improve` (off `origin/DEV`)
-- Worktree: `/Users/kientrong/Studio/customify2/wp-content/themes/customify/.claude/worktrees/unruffled-feistel-7be968/`
+- Branch: `customizer-colors-improve` (off `origin/DEV`). PR [#392](https://github.com/PressMaximum/customify/pull/392).
+- Active worktree: `/Users/kientrong/Studio/customify2/wp-content/themes/customify/.claude/worktrees/epic-shamir-e4a2d1/`
 - Main theme dir: `/Users/kientrong/Studio/customify2/wp-content/themes/customify/` — on branch `DEV`
 - `node_modules` is symlinked into the worktree from main theme
 
@@ -938,7 +1060,10 @@ returned value (short string, no big JSON objects) to bypass.
 
 In chronological order:
 
+In chronological order (Phase 1 → Phase 2.x → polish):
+
 ```
+Phase 1 — original PR landing (top-level Colors section + 6-slot palette)
 96ba6119  feat(customizer): add top-level Colors section with 6-slot palette
 b7e44910  feat(customizer-colors): compact picker UI + palette quick-pick popup
 499bdcfc  fix(customizer-colors): clean up quick-pick row on picker close
@@ -954,25 +1079,42 @@ e2a9c8ee  fix(customizer-colors): Backgrounds styling modal no longer stuck open
 000c364f  fix(customizer-colors): revert popover sizing, fix iris-strip alignment
 7a90aaee  fix(customizer-colors): align iris-square left edge with hex input
 03791cda  fix(customizer-colors): align iris-square left without breaking strip layout
+
+Phase 2 — cascade pipeline + var() refactor
+e3d8c82b  docs(customizer-colors): add SPEC for Colors panel + Phase 2 handoff
+04896060  docs(customizer-colors): drop dev-colors* branch references
+86d21509  feat(customizer-colors): live preview + var() refactor for primary/secondary (Phase 2.1)
+26e13b25  chore(dev): add bin/sync to one-shot rsync worktree → live theme + flush cache
+5d336555  feat(customizer-colors): heading cascade — drag Text slot updates h1-h6 live (Phase 2.2)
+98cc470b  chore(layouts): default Sidebar Layout = Content (no sidebar)
+cacffc3a  fix(customizer): inline focus-section / focus-control delegated handlers
+186f4327  chore(customizer-colors): Surface palette default #FFFFFF → #ECECEC
+1849795f  feat(customizer-colors): separate :root token block + Base composite cascade (Phase 2.5)
+525c5ec6  feat(customizer-colors): :root cascade pipeline + preview JS + UI handlers
+99ef0e00  feat(customizer-colors): config — cascades + group reorg + Legacy fine-tuning
+0433efaa  feat(customizer-colors): bundled SCSS $color_* → CSS var expressions (Phase 2.6)
+a01e4c41  feat(customizer-colors): UI polish — Legacy collapsible + reset icon + cascade swatch (Phase 2.7)
+12531802  docs(customizer-colors): SPEC §8 Phase 2 progress + handoff for next session
+
+Phase 2.8 + polish — WCAG --on-* + picker UI fixes
+418eb982  feat(customizer-colors): Phase 2.8 — WCAG --on-* live preview + opt-in gate
+b4ca6ebc  fix(customizer-colors): picker UI — reset icon overflow + quickpick tooltip
+f47ed6fb  docs(customizer-colors): SPEC — drop derived preview chips followup
 ```
 
 The commit messages contain detailed rationale for the non-obvious
 fixes (e.g. `0ecb4baa` documents the slideToggle monkey-patch reasoning,
-`e2a9c8ee` documents the slide-patch scope regression).
+`e2a9c8ee` documents the slide-patch scope regression, `418eb982`
+documents the opt-in gate doctrine + WCAG math byte-equivalence).
 
 ---
 
 ## 11. For the next session
 
-**START HERE** if you're picking up an in-flight branch:
-[`docs/handoffs/temp/2026-05-23-customizer-colors-phase-2-pickup.md`](handoffs/temp/2026-05-23-customizer-colors-phase-2-pickup.md)
-— a session-scoped ledger of every uncommitted change, the cascade
-architecture, file responsibilities, deferred items, and a pre-flight
-checklist. Read that BEFORE this file when there's an active branch.
+Phase 1 + Phase 2 + Phase 2.8 + polish are all landed in PR #392 as of
+commit `f47ed6fb`. If you're picking up Phase 2.9+ work:
 
-If you're starting fresh from `DEV`:
-
-1. Read this file end-to-end (§§1-10 are stable).
+1. Read this file end-to-end (§§1-10 are stable, §§8.11-8.12 list remaining work).
 2. Read [SPEC-customizer.md](SPEC-customizer.md) for the Customify
    Customizer architecture (config-driven, auto-CSS pipeline, control
    types).
@@ -987,8 +1129,9 @@ If you're starting fresh from `DEV`:
      KIT_ISSUES.md, not the theme.
 4. Verify the test helpers in `/tmp/` still exist; re-create from §5.2
    if not.
-5. Decide which Phase 2 item to tackle next — see §8.9 for the
-   remaining-work table.
+5. Decide which Phase 2.9+ item to tackle next — see §8.11 for the
+   remaining-work table and §13 for the detailed header/footer/blog/
+   page-header refactor matrix.
 
 When making any change to the color pipeline, **always** re-run
 scenarios A/B/C and confirm no existing color decls shifted before
@@ -1007,3 +1150,82 @@ a regression.
 - [AGENTS.md](../../../../AGENTS.md) — project-wide agent rules
 - PR: https://github.com/PressMaximum/customify/pull/392
 - Memory: `~/.claude/projects/-Users-kientrong-Studio-customify2-wp-content-themes-customify/memory/`
+
+---
+
+## 13. Appendix — refactor matrix for header / footer / blog / page-header configs
+
+Scope of §8.11 "Refactor header/footer/blog/page-header configs to
+consume slot tokens". Each field listed converts literal-hex emission
+to `var(--customify-<slot>, {{value}})` so saved values still emit
+identically (byte-equivalent for 30K legacy sites — Phase 2.1 doctrine)
+AND a slot edit cascades to the whole site.
+
+### 13.1 Header items
+
+| # | File:line | Field / sub-key | Selector | Recommend slot |
+|---|---|---|---|---|
+| A.1 | [header/button.php:104](../inc/customizer/configs/header/button.php#L104) | `*_styling` normal.bg_color | `.customify-builder-btn` | `var(--customify-secondary)` |
+| | | normal.text_color | | `var(--customify-on-secondary)` |
+| | | normal.border_color | | `var(--customify-secondary)` |
+| | | hover.bg / text / border_color | `.customify-builder-btn:hover` | secondary / on-secondary / secondary |
+| A.2 | [header/menus.php:104](../inc/customizer/configs/header/menus.php#L104) | `*_style_border_color` | hover/active menu underline | `var(--customify-primary)` |
+| | [header/menus.php:152](../inc/customizer/configs/header/menus.php#L152) | `*_item_styling` normal.text_color | menu link | `var(--customify-heading)` |
+| | | normal.bg_color | | `var(--customify-base)` |
+| | | hover.text_color | | `var(--customify-primary)` |
+| | | hover.bg_color | | `var(--customify-surface)` |
+| A.3 | [header/nav-icon.php:76+86](../inc/customizer/configs/header/nav-icon.php#L76) | `nav_icon_item_color` | nav icon | `var(--customify-text)` |
+| | | `nav_icon_item_color_hover` | hover | `var(--customify-primary)` |
+| A.4 | [header/search-box.php:147+198](../inc/customizer/configs/header/search-box.php#L147) | `*_input_styling` text / bg / border | search input | text / surface / border |
+| | | hover/focus.border | | `var(--customify-primary)` |
+| | | `*_icon_styling` text / hover | search icon | text / primary |
+| A.5 | [header/search-icon.php:77,129,233,270](../inc/customizer/configs/header/search-icon.php#L77) | 4 styling composites | search icon + modal | text / surface / primary pattern |
+| A.6 | [header/panel.php:197+297](../inc/customizer/configs/header/panel.php#L197) | `header_*_styling` bg / text / border | header row | `var(--customify-base)` / text / border |
+| | | `header_*_sidebar_styling` | menu sidebar | base / text |
+| A.7 | [header/transparent.php:66](../inc/customizer/configs/header/transparent.php#L66) | `header_*_transparent_styling` | over-page header | Defer — needs `--on-base` token |
+| A.8 | [header/logo.php](../inc/customizer/configs/header/logo.php) | text-logo `text_color` | site title text | `var(--customify-heading)` |
+| A.9 | [header/social-icons.php:219-300](../inc/customizer/configs/header/social-icons.php#L219) | color-custom primary (bg) | `.color-custom li a` | `var(--customify-primary)` |
+| | | secondary (icon) | | `var(--customify-on-primary)` |
+| | | hover primary / hover secondary | | `--customify-primary-hover` / on-primary |
+| | | border | | `var(--customify-border)` |
+
+### 13.2 Footer items
+
+| # | File:line | Field | Selector | Recommend slot |
+|---|---|---|---|---|
+| B.1 | [footer/panel.php:179](../inc/customizer/configs/footer/panel.php#L179) | `footer_*_background_color` (per row) | `.footer--row-inner` | `var(--customify-surface)` |
+| B.2 | footer/widgets.php / copyright.php / social-icons.php | (no direct color fields — typography + alignment + skin-class only) | — | No refactor needed |
+
+### 13.3 Blog / Single post
+
+| # | File:line | Field / sub-key | Selector | Recommend slot |
+|---|---|---|---|---|
+| C.1 | [blogs.php:75](../inc/customizer/configs/blogs.php#L75) | `*_a_item` normal.bg / text / border | post-entry card | surface / body-text / border |
+| | | hover.bg / border | | surface / primary |
+| C.2 | [blogs.php:362](../inc/customizer/configs/blogs.php#L362) | `*_more_styling` normal.bg / text / border | read-more button | primary / on-primary / primary |
+| | | hover.bg / text | | primary-hover / on-primary |
+| C.3 | single-blog-post.php | (typography + layout only) | — | No refactor |
+| C.4 | related-posts.php | (no color fields) | — | No refactor |
+
+### 13.4 Page header
+
+| # | File:line | Field | Selector | Recommend slot |
+|---|---|---|---|---|
+| D.1 | [page-header.php:354+363](../inc/customizer/configs/page-header.php#L354) | `*_title_color` | `.titlebar-title` | `var(--customify-heading)` |
+| | | `*_tagline_color` | `.titlebar-tagline` | `var(--customify-text-muted)` |
+| D.2 | [page-header.php:444+452+536](../inc/customizer/configs/page-header.php#L444) | cover `title_color` | `.page-cover-title` | `var(--customify-on-primary)` (overlay is primary) |
+| | | cover `tagline_color` | `.page-cover-tagline` | `var(--customify-on-primary)` |
+| | | `overlay` bg-color | `.page-cover:before` | `var(--customify-primary)` |
+
+### 13.5 Recommended batch execution order
+
+| Batch | Items | Effort | Risk |
+|---|---|---|---|
+| **1** Quick wins | A.3 + A.8 + D.1 + A.1 + C.2 (~16 fields) | half-day | LOW |
+| **2** Visual wins | A.9 + B.1 + A.4 + A.5 (~18 fields) | day | LOW-MEDIUM |
+| **3** Careful | A.2 + C.1 + A.6 (~15 fields) | day | MEDIUM (test per skin) |
+| **4** Defer | D.2 + A.7 | — | needs design direction |
+
+Each batch should run scenarios A/B/C byte-equivalence + a real-upgrade
+visual test (per §5) before commit. Apply opt-in gate same pattern as
+on-* if any field's default value shift would affect fresh-install sites.

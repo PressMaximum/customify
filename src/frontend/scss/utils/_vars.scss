@@ -31,8 +31,25 @@ $color_primary:     var(--customify-primary, #235787);
 $color_secondary:   var(--customify-secondary, #c3512f);
 $color_link:        var(--customify-link, #1e4b75);
 $color_link_hover:  var(--customify-link-hover, #111111);
-$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 10%, transparent));
 $color_meta:        var(--customify-text-muted, #6d6d6d);
+
+// Surface tints — adaptive `currentcolor` fallback so block elements
+// (table rows, code blocks, calendar headers, form inputs) stay readable
+// on any page background. Saved Palette Surface slot wins when set; the
+// fallback expression mixes a slight tint of the inherited text color
+// with transparent, so:
+//   • Dark text on light bg → subtle dark tint (visible as light gray)
+//   • Light text on dark bg → subtle light tint (visible as faint white)
+// Three intensities for visual hierarchy: subtle (row alternation),
+// medium (code blocks, inputs), strong (headers — matches border 12%).
+// Same hybrid pattern as $color_border above. 30K-site safety: legacy
+// sites without saved Surface get the adaptive fallback, which is a
+// modest visual improvement over the previous hard-coded WP-default
+// gray that broke on dark backgrounds.
+$surface_subtle:    var(--customify-surface, color-mix(in srgb, currentcolor 4%, transparent));
+$surface_medium:    var(--customify-surface, color-mix(in srgb, currentcolor 6%, transparent));
+$surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 10%, transparent));
 
 // Box Shadow
 $boxshadow_dropdown: 0 3px 30px rgba(25,30,35,.1);

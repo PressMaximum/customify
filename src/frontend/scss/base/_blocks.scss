@@ -128,6 +128,56 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .wp-block-table td,
 .wp-block-table th {
 	padding: 0.5em;
+	// WP / bundled SCSS leave `border: 1px solid` with no color, so the
+	// browser falls back to `currentcolor` — which on dark Palette bases
+	// is the white text color, producing bright white grid lines.
+	// Explicit border-color via the $color_border token gives the
+	// adaptive currentcolor-tint border (10%) we use elsewhere.
+	border-color: $color_border;
+}
+// WP core block-library also adds `border-bottom: 3px solid` on
+// `.wp-block-table thead` and `border-top: 3px solid` on `tfoot` with
+// no color — same currentcolor-fallback problem produces a bright
+// 3px white bar between header/footer and body on dark bases. Set
+// border-color so those separators use the adaptive token.
+.wp-block-table thead,
+.wp-block-table tfoot {
+	border-color: $color_border;
+}
+
+// WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
+// #f9f9f9 light greys AND force dark `#40464d` text via a `:where()`
+// reset (selector specificity 0). On dark Palette bases the greys wash
+// out into the canvas and the dark text becomes unreadable. Override:
+//   1. `color: $color_text` on `.wp-block-table table` cascades through
+//      the body-text token so cells inherit the theme palette text
+//      color and beat WP's 0-specificity `:where()` reset.
+//   2. Surface adaptive tints on cells/headers stay readable on any
+//      background — saved Palette Surface wins, unsaved → currentcolor
+//      mix.
+.wp-block-table table {
+	color: $color_text;
+}
+.wp-block-table thead th {
+	background-color: $surface_strong;
+}
+.wp-block-table tbody td {
+	background-color: $surface_subtle;
+}
+.wp-block-table tbody tr:nth-child(2n) td {
+	background-color: $surface_medium;
+}
+.wp-block-table tfoot td {
+	background-color: $surface_strong;
+}
+
+// Code / preformatted / verse blocks — same WP-default-gray problem as
+// tables. Use medium tint so the block stands out from prose without
+// dominating it.
+.wp-block-code,
+.wp-block-preformatted,
+.wp-block-verse {
+	background-color: $surface_medium;
 }
 
 .entry-content li:not(.wp-block-navigation li) {
@@ -200,8 +250,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 .wp-block-pullquote {
-	border-bottom: 4px solid currentColor;
-	border-top: 4px solid currentColor;
+	// `currentColor` here produces a bright 4px white bar above/below
+	// the pullquote on dark Palette bases. Use $color_border so it
+	// adapts via the currentcolor-mix token (10%) — visible enough to
+	// frame the quote without dominating the canvas.
+	border-bottom: 4px solid $color_border;
+	border-top: 4px solid $color_border;
 	padding: 3em 0;
 	text-align: center;
 	> p:first-child {
@@ -220,7 +274,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .wp-block-separator {
 	margin: 3em auto;
 	border: none;
-	border-bottom: 2px solid currentColor;
+	// `currentColor` made the separator a bright 2px white line on dark
+	// Palette bases. Use $color_border for the adaptive currentcolor-tint
+	// (10%) — still visible as a divider but doesn't dominate the canvas.
+	border-bottom: 2px solid $color_border;
 	&:not(.is-style-wide) {
 		max-width: 100px;
 	}
@@ -330,8 +387,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 // Quote: Accent border
+// `#235787` was the literal primary hex. `$color_primary` resolves through
+// `var(--customify-primary, #235787)` — 30K-safe (existing sites with no
+// saved primary still render the same #235787) AND saved-primary-aware
+// (user palette primary takes over when set).
 .wp-block-quote.is-style-accent {
-	border-left: 4px solid #235787;
+	border-left: 4px solid $color_primary;
 	padding-left: 1.5em;
 	font-style: normal;
 }
@@ -342,12 +403,49 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 // Group: Card
+// `#fff` background and `#e0e0e0` border were the hard-coded card chrome
+// that made cards invisible on dark Palette bases (white card + thin gray
+// border on a dark canvas reads as a near-blank rectangle, hiding the
+// card's content). Wire to the Surface + Border tokens with the original
+// literals as the var() fallback so:
+//   • Existing 30K sites (no Surface saved): card stays `#fff` / `#e0e0e0`
+//     — byte-identical to the previous render.
+//   • Sites with saved Palette Surface: card adopts the user's surface
+//     color, so a dark Base + dark Surface palette gets a properly
+//     visible elevated card instead of a stark white panel.
+// The box-shadow stays as-is — subtle drop shadow reads correctly on
+// both light and dark surfaces.
+//
+// `color: var(--customify-on-surface, inherit)` solves the white-on-white
+// case: when the user saves Palette opt-in (Base + Text) but NOT Surface,
+// the card bg falls back to `#fff` but the Text token cascade resolves to
+// the saved (potentially white) text color — producing invisible text.
+// `--customify-on-surface` is set by the WCAG luminance picker on the
+// :root tokens block (inc/colors-palette.php) and flips dark↔light based
+// on the surface color, so:
+//   • No Palette opt-in: `--customify-on-surface` is unset → inherits
+//     body text color (legacy render, byte-identical).
+//   • Palette opt-in, no Surface saved: Surface defaults to `#FFFFFF`
+//     → picker computes on-surface = `#1A1A1A` (dark text on the white
+//     card fallback) — readable.
+//   • Palette opt-in + Surface=dark: picker computes on-surface = `#FFF`
+//     → light text on the dark card — readable.
 .wp-block-group.is-style-card {
-	background: #fff;
-	border: 1px solid #e0e0e0;
+	background: var(--customify-surface, #fff);
+	color: var(--customify-on-surface, inherit);
+	border: 1px solid var(--customify-border, #e0e0e0);
 	border-radius: 8px;
 	padding: 2em;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+
+	// Headings inside the card have their own `color: var(--customify-heading)`
+	// rule at global scope, which bypasses the parent `.is-style-card` color
+	// override. Explicit `h1-h6 { color: ... }` here wins because it's a
+	// deeper selector path and matches the global heading rule's specificity.
+	// Same on-surface picker → readable text on any saved surface.
+	h1, h2, h3, h4, h5, h6 {
+		color: var(--customify-on-surface, inherit);
+	}
 }
 
 // Columns: No gap

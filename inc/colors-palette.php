@@ -245,13 +245,42 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			$on_primary   = customify_color_pick_on( $slots['primary'] );
 			$on_secondary = customify_color_pick_on( $slots['secondary'] );
 			$on_accent    = customify_color_pick_on( $slots['accent'] );
+
+			// On-surface contrast: when the user saves Surface, pick the
+			// readable text color for THAT surface. When Surface is NOT
+			// saved but the user opted in, the bundled
+			// `var(--customify-surface, #fff)` in rules like `.is-style-card`
+			// falls back to literal #fff — pick against that fallback so
+			// the card text stays readable regardless of saved Text color.
+			// This solves the "saved dark Base + white Text + no Surface"
+			// → invisible white-on-white card text case, while preserving
+			// 30K safety: when palette opt-in is false, on-surface is left
+			// UNSET and `var(--customify-on-surface, inherit)` resolves to
+			// inherit (legacy body text cascade), so byte-equivalent output.
+			$surface_effective = array_key_exists( 'customify_palette_surface', $_saved_mods )
+				? $slots['surface']
+				: '#FFFFFF';
+			$on_surface = customify_color_pick_on( $surface_effective );
 		} else {
-			$on_primary = $on_secondary = $on_accent = null;
+			$on_primary = $on_secondary = $on_accent = $on_surface = null;
 		}
+
+		// Surface slot is the elevated-container background (cards / table
+		// cells / code blocks / form inputs / calendar headers). Only emit
+		// to :root when the user EXPLICITLY saved palette_surface — for
+		// unsaved sites the bundled SCSS fallback resolves to
+		// `color-mix(in srgb, currentcolor 6-12%, transparent)` which
+		// auto-adapts to the page background. Emitting the slot default
+		// `#ECECEC` here would bake a light gray into :root and break that
+		// adaptive behavior for users who saved Base = dark but didn't
+		// touch Surface. Same gate doctrine as --customify-on-* (Phase 2.8)
+		// and --customify-border (Phase 2.6).
+		$ov_surface = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
+			? $slots['surface']
+			: null;
 
 		$lines = array(
 			"--customify-base: {$slots['base']}",
-			"--customify-surface: {$slots['surface']}",
 			"--customify-text: {$slots['text']}",
 			"--customify-primary: {$slots['primary']}",
 			"--customify-secondary: {$slots['secondary']}",
@@ -277,11 +306,23 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		if ( null !== $on_accent ) {
 			$lines[] = "--customify-on-accent: {$on_accent}";
 		}
+		if ( null !== $on_surface ) {
+			$lines[] = "--customify-on-surface: {$on_surface}";
+		}
 		// --customify-border only emitted when override saved; absence
 		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
 		// fallback fire so borders adapt to local text color.
 		if ( $border ) {
 			$lines[] = "--customify-border: {$border}";
+		}
+		// --customify-surface only emitted when user explicitly saved
+		// palette_surface (see $ov_surface above). Absence lets the
+		// bundled SCSS `$surface_subtle/medium/strong` fallback expressions
+		// (color-mix in srgb, currentcolor X%, transparent) fire so surface
+		// tints (table cells, code blocks, calendar headers, form inputs)
+		// adapt to the page background automatically.
+		if ( null !== $ov_surface ) {
+			$lines[] = "--customify-surface: {$ov_surface}";
 		}
 
 		// Derived-token cascade lines — added AFTER the static lines so
@@ -992,18 +1033,33 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	var ON_MAP = {
 		'global_styling_color_primary':   '--customify-on-primary',
 		'global_styling_color_secondary': '--customify-on-secondary',
-		'customify_palette_accent':       '--customify-on-accent'
+		'customify_palette_accent':       '--customify-on-accent',
+		'customify_palette_surface':      '--customify-on-surface'
+	};
+	// When a slot is cleared, the matching --customify-on-X token should
+	// stay in sync with the SCSS var() fallback that rules consume:
+	//   • Surface: `var(--customify-surface, #fff)` paints #fff in
+	//     `.is-style-card` etc. → on-surface picks against #fff → #1A1A1A.
+	//   • Primary/Secondary/Accent: buttons & similar use the saved hex
+	//     directly; when cleared, the SCSS rule's var() fallback paints
+	//     the legacy default hex and the corresponding on-* should pick
+	//     against that. Keeping the map clean: only Surface needs a
+	//     non-null clear value here.
+	var ON_CLEAR_FALLBACK = {
+		'--customify-on-surface': _pickOn('#FFFFFF')
 	};
 	Object.keys(ON_MAP).forEach(function(setting){
 		wp.customize(setting, function(value){
 			value.bind(function(newval){
 				var clean = normalize(newval);
+				var prop  = ON_MAP[setting];
 				if (clean && clean.charAt(0) === '#') {
-					document.documentElement.style.setProperty(
-						ON_MAP[setting], _pickOn(clean)
-					);
+					document.documentElement.style.setProperty(prop, _pickOn(clean));
+				} else if (ON_CLEAR_FALLBACK[prop]) {
+					// Clear → fall back to picking against the SCSS var() default.
+					document.documentElement.style.setProperty(prop, ON_CLEAR_FALLBACK[prop]);
 				} else {
-					document.documentElement.style.removeProperty(ON_MAP[setting]);
+					document.documentElement.style.removeProperty(prop);
 				}
 			});
 		});
