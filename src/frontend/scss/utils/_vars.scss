@@ -31,7 +31,7 @@ $color_primary:     var(--customify-primary, #235787);
 $color_secondary:   var(--customify-secondary, #c3512f);
 $color_link:        var(--customify-link, #1e4b75);
 $color_link_hover:  var(--customify-link-hover, #111111);
-$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 10%, transparent));
+$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 14%, transparent));
 $color_meta:        var(--customify-text-muted, #6d6d6d);
 
 // Surface tints — adaptive `currentcolor` fallback so block elements

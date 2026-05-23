@@ -106,12 +106,208 @@ if ( ! function_exists( 'customify_color_relative_luminance' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_color_wcag_contrast' ) ) {
+	/**
+	 * WCAG 2.x contrast ratio between two hex colors. Returns a value in
+	 * [1.0, 21.0] where higher = more contrast. Used as the foundation
+	 * for max-contrast picks (§3) and L-reduction loops (§5) per the
+	 * color-token-derivation spec.
+	 */
+	function customify_color_wcag_contrast( $a_hex, $b_hex ) {
+		$la = customify_color_relative_luminance( $a_hex );
+		$lb = customify_color_relative_luminance( $b_hex );
+		$hi = max( $la, $lb );
+		$lo = min( $la, $lb );
+		return ( $hi + 0.05 ) / ( $lo + 0.05 );
+	}
+}
+
 if ( ! function_exists( 'customify_color_pick_on' ) ) {
 	/**
-	 * Pick contrast-safe text color (#1A1A1A or #FFFFFF) for a given background.
+	 * Pick max-contrast text color for a given background.
+	 *
+	 * Spec §3: `on-X = contrast(LIGHT, X) >= contrast(DARK, X) ? LIGHT : DARK`.
+	 * This is a max-contrast pick — pick whichever of #FFFFFF / #1A1A1A has
+	 * higher WCAG contrast against the background. This is more robust than
+	 * a fixed luminance threshold (e.g. `> 0.45`), which silently picks
+	 * white on medium-tone colors where black would be more readable.
+	 *
+	 * Example: teal #3CAA9D
+	 *   • Threshold (luminance > 0.45): luminance ≈ 0.34 → returns white →
+	 *     contrast 2.87 FAILS WCAG.
+	 *   • Max-contrast: contrast(white, teal)=2.87 vs contrast(black, teal)=6.16
+	 *     → returns black → PASSES.
 	 */
 	function customify_color_pick_on( $bg_hex ) {
-		return customify_color_relative_luminance( $bg_hex ) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+		$contrast_light = customify_color_wcag_contrast( '#FFFFFF', $bg_hex );
+		$contrast_dark  = customify_color_wcag_contrast( '#1A1A1A', $bg_hex );
+		return $contrast_light >= $contrast_dark ? '#FFFFFF' : '#1A1A1A';
+	}
+}
+
+if ( ! function_exists( 'customify_color_srgb_to_oklab' ) ) {
+	/**
+	 * Convert sRGB hex → OKLab (L, a, b). Standard Ottosson transform.
+	 * L is in roughly [0, 1] (0 = black, 1 = white). a, b are unbounded
+	 * chromaticity channels.
+	 *
+	 * Used by §4 (container P solve) — measures L of source + base to
+	 * solve the percentage that lands the container at TARGET_CONTAINER_L.
+	 * Used by §5 (on-container L-reduction) — keeps a, b (hue) constant
+	 * while stepping L down until contrast meets AA.
+	 */
+	function customify_color_srgb_to_oklab( $hex ) {
+		list( $r, $g, $b ) = customify_color_hex_to_rgb( $hex );
+		// sRGB → linear.
+		$f = function ( $v ) {
+			$v = $v / 255;
+			return $v <= 0.04045 ? $v / 12.92 : pow( ( $v + 0.055 ) / 1.055, 2.4 );
+		};
+		$rl = $f( $r );
+		$gl = $f( $g );
+		$bl = $f( $b );
+		// Linear sRGB → LMS (Ottosson).
+		$l = 0.4122214708 * $rl + 0.5363325363 * $gl + 0.0514459929 * $bl;
+		$m = 0.2119034982 * $rl + 0.6806995451 * $gl + 0.1073969566 * $bl;
+		$s = 0.0883024619 * $rl + 0.2817188376 * $gl + 0.6299787005 * $bl;
+		// Cube-root.
+		$l_ = $l < 0 ? -pow( -$l, 1.0 / 3.0 ) : pow( $l, 1.0 / 3.0 );
+		$m_ = $m < 0 ? -pow( -$m, 1.0 / 3.0 ) : pow( $m, 1.0 / 3.0 );
+		$s_ = $s < 0 ? -pow( -$s, 1.0 / 3.0 ) : pow( $s, 1.0 / 3.0 );
+		// LMS' → OKLab.
+		return array(
+			0.2104542553 * $l_ + 0.7936177850 * $m_ - 0.0040720468 * $s_, // L
+			1.9779984951 * $l_ - 2.4285922050 * $m_ + 0.4505937099 * $s_, // a
+			0.0259040371 * $l_ + 0.7827717662 * $m_ - 0.8086757660 * $s_, // b
+		);
+	}
+}
+
+if ( ! function_exists( 'customify_color_oklab_to_srgb' ) ) {
+	/**
+	 * Convert OKLab (L, a, b) → sRGB hex. Inverse of srgb_to_oklab.
+	 * Clamps the output to valid sRGB [0, 255] range so out-of-gamut
+	 * results don't crash — they get pinned to the nearest representable
+	 * color, which is acceptable for our derivation use case.
+	 */
+	function customify_color_oklab_to_srgb( $oklab ) {
+		list( $L, $a, $b ) = $oklab;
+		// OKLab → LMS'.
+		$l_ = $L + 0.3963377774 * $a + 0.2158037573 * $b;
+		$m_ = $L - 0.1055613458 * $a - 0.0638541728 * $b;
+		$s_ = $L - 0.0894841775 * $a - 1.2914855480 * $b;
+		// Cube.
+		$l = $l_ * $l_ * $l_;
+		$m = $m_ * $m_ * $m_;
+		$s = $s_ * $s_ * $s_;
+		// LMS → linear sRGB.
+		$rl =  4.0767416621 * $l - 3.3077115913 * $m + 0.2309699292 * $s;
+		$gl = -1.2684380046 * $l + 2.6097574011 * $m - 0.3413193965 * $s;
+		$bl = -0.0041960863 * $l - 0.7034186147 * $m + 1.7076147010 * $s;
+		// Linear → sRGB.
+		$g = function ( $v ) {
+			$v = max( 0.0, min( 1.0, $v ) );
+			return $v <= 0.0031308 ? $v * 12.92 : 1.055 * pow( $v, 1.0 / 2.4 ) - 0.055;
+		};
+		return customify_color_rgb_to_hex( array(
+			$g( $rl ) * 255,
+			$g( $gl ) * 255,
+			$g( $bl ) * 255,
+		) );
+	}
+}
+
+if ( ! function_exists( 'customify_color_oklab_l' ) ) {
+	/**
+	 * Extract just the OKLab L channel (lightness) from a hex color.
+	 * Thin wrapper used by §4 P-solve readability.
+	 */
+	function customify_color_oklab_l( $hex ) {
+		$oklab = customify_color_srgb_to_oklab( $hex );
+		return $oklab[0];
+	}
+}
+
+if ( ! function_exists( 'customify_color_solve_border_strong' ) ) {
+	/**
+	 * Spec §2 — solve P (text-vs-base mix percentage) such that the
+	 * resulting color has WCAG contrast ≥ 3.0 against base.
+	 *
+	 * UI_CONTRAST = 3.0 per WCAG 1.4.11 for non-text content (form input
+	 * borders, button outlines — anything where the boundary is the only
+	 * cue that there's a control).
+	 *
+	 * Iterates P from 6% upward in 1% steps (closed-form solve is messy
+	 * across the sRGB gamma curve; iterative is simpler and fast). For
+	 * the default (text=#2b2b2b, base=#FFFFFF) palette lands ~47% → ~#949494.
+	 */
+	function customify_color_solve_border_strong( $text_hex, $base_hex ) {
+		for ( $p = 6; $p <= 100; $p++ ) {
+			$mix      = customify_color_mix_hex( $text_hex, $base_hex, $p / 100 );
+			$contrast = customify_color_wcag_contrast( $mix, $base_hex );
+			if ( $contrast >= 3.0 ) {
+				return $mix;
+			}
+		}
+		// Fallback if base ≈ text (shouldn't happen with sane palettes).
+		return $text_hex;
+	}
+}
+
+if ( ! function_exists( 'customify_color_solve_container_p' ) ) {
+	/**
+	 * Spec §4 — closed-form solve for the percentage P that lands a tint
+	 * of `source` mixed with `base` at OKLab lightness TARGET_CONTAINER_L
+	 * (= 0.93, the perceptual lightness for soft-tint badges).
+	 *
+	 *   P = clamp( (TARGET_L - L_oklab(base)) / (L_oklab(source) - L_oklab(base)),
+	 *              0.02, 0.98 )
+	 *
+	 * Returns a float in [0.02, 0.98] (the percentage as a 0..1 fraction).
+	 * Multiply by 100 when emitting into a `color-mix(in oklab, A {P}%, B)`
+	 * expression. Clamped so we never hit pathological 0%/100% mixes.
+	 */
+	function customify_color_solve_container_p( $source_hex, $base_hex, $target_l = 0.93 ) {
+		$l_source = customify_color_oklab_l( $source_hex );
+		$l_base   = customify_color_oklab_l( $base_hex );
+		$denom    = $l_source - $l_base;
+		if ( abs( $denom ) < 1e-6 ) {
+			// source ≈ base lightness → can't make a meaningful tint. Pin to 50%.
+			return 0.5;
+		}
+		$p = ( $target_l - $l_base ) / $denom;
+		return max( 0.02, min( 0.98, $p ) );
+	}
+}
+
+if ( ! function_exists( 'customify_color_l_reduce_until_contrast' ) ) {
+	/**
+	 * Spec §5 — keep source hue (a, b) in OKLab, step L downward until the
+	 * resulting color has contrast ≥ $target_contrast against $bg_hex.
+	 *
+	 * Used to produce `on-X-container` from a brand color X. For a dark
+	 * brand (primary navy), the loop barely steps L because contrast is
+	 * already adequate → result ≈ source. For a light brand (accent
+	 * yellow), L drops significantly → dark gold result.
+	 *
+	 * If no L in [0, source_L] passes the target, returns #1A1A1A as the
+	 * unconditional fallback.
+	 */
+	function customify_color_l_reduce_until_contrast( $source_hex, $bg_hex, $target_contrast = 4.5 ) {
+		$oklab = customify_color_srgb_to_oklab( $source_hex );
+		$L     = $oklab[0];
+		$a     = $oklab[1];
+		$b     = $oklab[2];
+		// Step L downward in 0.02 increments (50 steps from L=1 to L=0 worst case).
+		while ( $L > 0 ) {
+			$candidate = customify_color_oklab_to_srgb( array( $L, $a, $b ) );
+			$contrast  = customify_color_wcag_contrast( $candidate, $bg_hex );
+			if ( $contrast >= $target_contrast ) {
+				return $candidate;
+			}
+			$L -= 0.02;
+		}
+		return '#1A1A1A';
 	}
 }
 
@@ -158,8 +354,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$slots = customify_color_get_slots();
 
 		// Static hex fallbacks for derived vars (PHP-precomputed).
+		// `border` mix bumped 12% → 14% per the color-token-derivation spec §2.
+		// Lands at ~1.35:1 contrast vs base — decorative-only (WCAG-exempt);
+		// functional-control borders should use `border-strong` instead.
 		$text_muted_default    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
-		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 );
+		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 );
+		// `border-strong` solved per spec §2 — smallest P where WCAG contrast
+		// vs base ≥ 3.0. Used by form input borders / button outlines / any
+		// boundary that's the ONLY cue identifying a functional control.
+		$border_strong_default = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
 		$primary_hover_default = customify_color_mix_hex( $slots['primary'], '#000000', 0.90 ); // primary at 90%, black at 10%
 		// Link hover = primary mixed with WHITE 15% (lighter, not darker).
 		// Hover state surfaces the link by raising luminance. Note: the
@@ -242,6 +445,9 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			)
 		);
 		if ( $has_palette_opt_in ) {
+			// §3 — on-X = max-contrast(LIGHT vs DARK against X). The
+			// customify_color_pick_on() helper now implements the
+			// max-contrast pick (was a luminance threshold pre-spec).
 			$on_primary   = customify_color_pick_on( $slots['primary'] );
 			$on_secondary = customify_color_pick_on( $slots['secondary'] );
 			$on_accent    = customify_color_pick_on( $slots['accent'] );
@@ -261,8 +467,48 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 				? $slots['surface']
 				: '#FFFFFF';
 			$on_surface = customify_color_pick_on( $surface_effective );
+
+			// §4 — *-container = soft tint of brand at OKLab L ≈ 0.93.
+			// Each `customify_color_solve_container_p()` returns the
+			// percentage that lands the source color's mix-with-base at
+			// the target lightness. We emit the result as a `color-mix`
+			// expression with the percentage frozen at compute time, so
+			// the container var() chain looks like:
+			//   --customify-primary-container: color-mix(in oklab,
+			//       var(--customify-primary) {P}%, var(--customify-base));
+			// Browsers re-resolve the var() at render time → when the
+			// user drags Primary in the Customizer, the container updates
+			// without a full PHP re-emit (the live-preview JS still has
+			// to call the same solver to recompute {P} when the source
+			// brand changes — handled in palette_preview_js).
+			$primary_container_p   = customify_color_solve_container_p( $slots['primary'],   $slots['base'] );
+			$secondary_container_p = customify_color_solve_container_p( $slots['secondary'], $slots['base'] );
+			$accent_container_p    = customify_color_solve_container_p( $slots['accent'],    $slots['base'] );
+
+			// Precompute the resulting hex for each container — used to
+			// solve §5 on-X-container against the actual container color
+			// (NOT the brand source). The hex is also what gets exported
+			// as the theme.json palette fallback in
+			// customify_color_palette_for_theme_json().
+			$primary_container_hex   = customify_color_mix_hex( $slots['primary'],   $slots['base'], $primary_container_p );
+			$secondary_container_hex = customify_color_mix_hex( $slots['secondary'], $slots['base'], $secondary_container_p );
+			$accent_container_hex    = customify_color_mix_hex( $slots['accent'],    $slots['base'], $accent_container_p );
+
+			// §5 — on-X-container = darken brand hue (keep OKLab a, b) until
+			// the result has WCAG contrast ≥ 4.5 against the container.
+			// For dark brands (primary navy) the loop barely moves L → result
+			// ≈ source. For light brands (accent yellow) L drops significantly
+			// → dark gold result. Either way, AA against the container is
+			// guaranteed. NOT exposed in the Blocksify picker (theme internals
+			// only) per the user's design decision — block authors typically
+			// pick the source brand color directly as text on its container.
+			$on_primary_container   = customify_color_l_reduce_until_contrast( $slots['primary'],   $primary_container_hex );
+			$on_secondary_container = customify_color_l_reduce_until_contrast( $slots['secondary'], $secondary_container_hex );
+			$on_accent_container    = customify_color_l_reduce_until_contrast( $slots['accent'],    $accent_container_hex );
 		} else {
 			$on_primary = $on_secondary = $on_accent = $on_surface = null;
+			$primary_container_p = $secondary_container_p = $accent_container_p = null;
+			$on_primary_container = $on_secondary_container = $on_accent_container = null;
 		}
 
 		// Surface slot is the elevated-container background (cards / table
@@ -323,6 +569,56 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// adapt to the page background automatically.
 		if ( null !== $ov_surface ) {
 			$lines[] = "--customify-surface: {$ov_surface}";
+		}
+
+		// --customify-border-strong — emitted on palette opt-in, gated the
+		// same as other derived tokens. Theme.json palette fallback inside
+		// `var(--customify-border-strong, {hex})` covers the no-opt-in case
+		// so block authors still get a usable color in the picker.
+		// Future SCSS work will wire this to form input borders (per spec
+		// §2: form inputs need WCAG 1.4.11's ≥3:1 contrast, not the
+		// decorative ~1.35:1 of `--customify-border`).
+		if ( $has_palette_opt_in ) {
+			$lines[] = "--customify-border-strong: {$border_strong_default}";
+		}
+
+		// --customify-*-container — soft tints of brand colors at OKLab
+		// L ≈ 0.93. Emitted as `color-mix(...)` expressions so they
+		// re-resolve live when the source brand var() changes (e.g.
+		// during Customizer drag). The percentage {P} is solved per-color
+		// against the saved base (closed-form per spec §4). Gated on
+		// palette opt-in for the same 30K-safety reasons as other
+		// derived tokens — fresh sites get the theme.json palette
+		// fallback (precomputed hex) inside `var()`.
+		if ( null !== $primary_container_p ) {
+			$p = round( $primary_container_p * 100, 2 );
+			$lines[] = "--customify-primary-container: color-mix(in oklab, var(--customify-primary) {$p}%, var(--customify-base))";
+		}
+		if ( null !== $secondary_container_p ) {
+			$p = round( $secondary_container_p * 100, 2 );
+			$lines[] = "--customify-secondary-container: color-mix(in oklab, var(--customify-secondary) {$p}%, var(--customify-base))";
+		}
+		if ( null !== $accent_container_p ) {
+			$p = round( $accent_container_p * 100, 2 );
+			$lines[] = "--customify-accent-container: color-mix(in oklab, var(--customify-accent) {$p}%, var(--customify-base))";
+		}
+
+		// --customify-on-*-container — darkened brand-hue text for AA
+		// contrast on the corresponding container. Emitted to :root but
+		// deliberately omitted from the Blocksify picker (theme internals).
+		// Block authors typically use the source brand color (`primary`,
+		// `secondary`, `accent`) directly as the text-on-container choice;
+		// these on-* tokens are the safety net for edge cases (e.g. user
+		// saves a pastel-light brand where the source-as-text pattern
+		// would fail AA).
+		if ( null !== $on_primary_container ) {
+			$lines[] = "--customify-on-primary-container: {$on_primary_container}";
+		}
+		if ( null !== $on_secondary_container ) {
+			$lines[] = "--customify-on-secondary-container: {$on_secondary_container}";
+		}
+		if ( null !== $on_accent_container ) {
+			$lines[] = "--customify-on-accent-container: {$on_accent_container}";
 		}
 
 		// Derived-token cascade lines — added AFTER the static lines so
@@ -999,13 +1295,10 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		});
 	});
 
-	// WCAG on-* live preview — mirrors PHP customify_color_pick_on().
-	// Listens to the 3 brand slot pickers and recomputes the auto-contrast
-	// text color on every drag. Always runs in the preview iframe regardless
-	// of opt-in status: the user actively dragging IS engagement, and
-	// showing the cascade behavior in preview informs the design choice.
-	// On save, the PHP opt-in gate determines whether the on-* tokens
-	// persist into the frontend :root block.
+	// Live preview math — mirrors the PHP helpers in colors-palette.php
+	// per the color-token-derivation spec. Recomputes derived tokens
+	// (on-*, *-container, on-*-container, border-strong) live as the
+	// user drags any source-slot picker in the Customizer.
 	function _hexToRgb(hex) {
 		hex = (hex || '').replace(/^#/, '');
 		if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
@@ -1016,6 +1309,25 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 			parseInt(hex.slice(4,6), 16)
 		];
 	}
+	function _rgbToHex(rgb) {
+		var c = function(v) {
+			v = Math.max(0, Math.min(255, Math.round(v)));
+			var h = v.toString(16);
+			return h.length === 1 ? '0' + h : h;
+		};
+		return '#' + c(rgb[0]) + c(rgb[1]) + c(rgb[2]);
+	}
+	function _mixHex(a, b, weightA) {
+		weightA = Math.max(0, Math.min(1, weightA));
+		var wb = 1 - weightA;
+		var ra = _hexToRgb(a), rb = _hexToRgb(b);
+		if (!ra || !rb) return a;
+		return _rgbToHex([
+			ra[0]*weightA + rb[0]*wb,
+			ra[1]*weightA + rb[1]*wb,
+			ra[2]*weightA + rb[2]*wb
+		]);
+	}
 	function _relativeLuminance(hex) {
 		var rgb = _hexToRgb(hex);
 		if (!rgb) return 0;
@@ -1025,45 +1337,168 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		};
 		return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
 	}
+	function _wcagContrast(a, b) {
+		var la = _relativeLuminance(a), lb = _relativeLuminance(b);
+		var hi = Math.max(la, lb), lo = Math.min(la, lb);
+		return (hi + 0.05) / (lo + 0.05);
+	}
+	// Spec §3: max-contrast pick (was a luminance threshold pre-spec).
 	function _pickOn(hex) {
-		// Mirror PHP: relative_luminance > 0.45 ? '#1A1A1A' : '#FFFFFF'.
-		return _relativeLuminance(hex) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+		return _wcagContrast('#FFFFFF', hex) >= _wcagContrast('#1A1A1A', hex)
+			? '#FFFFFF' : '#1A1A1A';
+	}
+	// OKLab transforms (Ottosson) — same math as PHP customify_color_srgb_to_oklab
+	// / customify_color_oklab_to_srgb. Needed for §4 P-solve and §5 L-reduction.
+	function _srgbToOklab(hex) {
+		var rgb = _hexToRgb(hex);
+		if (!rgb) return [0, 0, 0];
+		var f = function(v) {
+			v = v / 255;
+			return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+		};
+		var rl = f(rgb[0]), gl = f(rgb[1]), bl = f(rgb[2]);
+		var l = 0.4122214708*rl + 0.5363325363*gl + 0.0514459929*bl;
+		var m = 0.2119034982*rl + 0.6806995451*gl + 0.1073969566*bl;
+		var s = 0.0883024619*rl + 0.2817188376*gl + 0.6299787005*bl;
+		var cbrt = function(x){ return x < 0 ? -Math.pow(-x, 1/3) : Math.pow(x, 1/3); };
+		var l_ = cbrt(l), m_ = cbrt(m), s_ = cbrt(s);
+		return [
+			0.2104542553*l_ + 0.7936177850*m_ - 0.0040720468*s_,
+			1.9779984951*l_ - 2.4285922050*m_ + 0.4505937099*s_,
+			0.0259040371*l_ + 0.7827717662*m_ - 0.8086757660*s_
+		];
+	}
+	function _oklabToSrgb(L, a, b) {
+		var l_ = L + 0.3963377774*a + 0.2158037573*b;
+		var m_ = L - 0.1055613458*a - 0.0638541728*b;
+		var s_ = L - 0.0894841775*a - 1.2914855480*b;
+		var l = l_*l_*l_, m = m_*m_*m_, s = s_*s_*s_;
+		var rl =  4.0767416621*l - 3.3077115913*m + 0.2309699292*s;
+		var gl = -1.2684380046*l + 2.6097574011*m - 0.3413193965*s;
+		var bl = -0.0041960863*l - 0.7034186147*m + 1.7076147010*s;
+		var g = function(v) {
+			v = Math.max(0, Math.min(1, v));
+			return v <= 0.0031308 ? v * 12.92 : 1.055 * Math.pow(v, 1/2.4) - 0.055;
+		};
+		return _rgbToHex([g(rl)*255, g(gl)*255, g(bl)*255]);
+	}
+	function _oklabL(hex) { return _srgbToOklab(hex)[0]; }
+	// Spec §4: closed-form P solve for container tints at OKLab L = 0.93.
+	function _solveContainerP(source, base) {
+		var ls = _oklabL(source), lb = _oklabL(base);
+		var denom = ls - lb;
+		if (Math.abs(denom) < 1e-6) return 0.5;
+		var p = (0.93 - lb) / denom;
+		return Math.max(0.02, Math.min(0.98, p));
+	}
+	// Spec §5: step OKLab L downward until contrast against bg ≥ 4.5.
+	function _lReduceUntilContrast(source, bg, target) {
+		target = target || 4.5;
+		var lab = _srgbToOklab(source);
+		var L = lab[0], a = lab[1], b = lab[2];
+		while (L > 0) {
+			var candidate = _oklabToSrgb(L, a, b);
+			if (_wcagContrast(candidate, bg) >= target) return candidate;
+			L -= 0.02;
+		}
+		return '#1A1A1A';
+	}
+	// Spec §2: iterate P from 6% upward until contrast vs base ≥ 3.0.
+	function _solveBorderStrong(text, base) {
+		for (var p = 6; p <= 100; p++) {
+			var mix = _mixHex(text, base, p/100);
+			if (_wcagContrast(mix, base) >= 3.0) return mix;
+		}
+		return text;
 	}
 
-	var ON_MAP = {
-		'global_styling_color_primary':   '--customify-on-primary',
-		'global_styling_color_secondary': '--customify-on-secondary',
-		'customify_palette_accent':       '--customify-on-accent',
-		'customify_palette_surface':      '--customify-on-surface'
+	// Helper: read a slot's current effective value from wp.customize.
+	// Falls back to the spec default when the user hasn't saved the slot
+	// (mirrors PHP slot resolver). Used by recomputeDerived() so a
+	// container update fires correctly even mid-drag of a non-source slot.
+	var SLOT_DEFAULTS = {
+		'global_styling_color_primary':   '#235787',
+		'global_styling_color_secondary': '#c3512f',
+		'customify_palette_accent':       '#FFD042',
+		'customify_palette_text':         '#2b2b2b',
+		'customify_palette_surface':      '#ECECEC',
+		'customify_palette_base':         '#FFFFFF'
 	};
-	// When a slot is cleared, the matching --customify-on-X token should
-	// stay in sync with the SCSS var() fallback that rules consume:
-	//   • Surface: `var(--customify-surface, #fff)` paints #fff in
-	//     `.is-style-card` etc. → on-surface picks against #fff → #1A1A1A.
-	//   • Primary/Secondary/Accent: buttons & similar use the saved hex
-	//     directly; when cleared, the SCSS rule's var() fallback paints
-	//     the legacy default hex and the corresponding on-* should pick
-	//     against that. Keeping the map clean: only Surface needs a
-	//     non-null clear value here.
-	var ON_CLEAR_FALLBACK = {
-		'--customify-on-surface': _pickOn('#FFFFFF')
-	};
-	Object.keys(ON_MAP).forEach(function(setting){
+	function _readSlot(setting) {
+		try {
+			var val = wp.customize(setting).get();
+			var clean = normalize(val);
+			return clean || SLOT_DEFAULTS[setting];
+		} catch(e) {
+			return SLOT_DEFAULTS[setting];
+		}
+	}
+
+	// Recompute every derived token. Called from every source-slot
+	// listener so a drag on Primary updates container/on-container/etc.
+	function recomputeDerived() {
+		var primary   = _readSlot('global_styling_color_primary');
+		var secondary = _readSlot('global_styling_color_secondary');
+		var accent    = _readSlot('customify_palette_accent');
+		var text      = _readSlot('customify_palette_text');
+		var surface   = _readSlot('customify_palette_surface');
+		var base      = _readSlot('customify_palette_base');
+		var de = document.documentElement.style;
+
+		// §3 on-* — max-contrast.
+		de.setProperty('--customify-on-primary',   _pickOn(primary));
+		de.setProperty('--customify-on-secondary', _pickOn(secondary));
+		de.setProperty('--customify-on-accent',    _pickOn(accent));
+		// On-surface uses #FFFFFF when --customify-surface is unset
+		// (matches the SCSS var() fallback in `.is-style-card`).
+		var hasSurface = false;
+		try { hasSurface = !!normalize(wp.customize('customify_palette_surface').get()); } catch(e) {}
+		de.setProperty('--customify-on-surface', _pickOn(hasSurface ? surface : '#FFFFFF'));
+
+		// §4 *-container — color-mix expression with solved P.
+		var pPrim = _solveContainerP(primary,   base);
+		var pSec  = _solveContainerP(secondary, base);
+		var pAcc  = _solveContainerP(accent,    base);
+		de.setProperty('--customify-primary-container',
+			'color-mix(in oklab, var(--customify-primary) ' + (pPrim*100).toFixed(2) + '%, var(--customify-base))');
+		de.setProperty('--customify-secondary-container',
+			'color-mix(in oklab, var(--customify-secondary) ' + (pSec*100).toFixed(2) + '%, var(--customify-base))');
+		de.setProperty('--customify-accent-container',
+			'color-mix(in oklab, var(--customify-accent) ' + (pAcc*100).toFixed(2) + '%, var(--customify-base))');
+
+		// §5 on-*-container — L-reduced brand hue against the resolved
+		// container hex (sRGB mix close enough for live preview; PHP uses
+		// the same approximation).
+		var primContainerHex = _mixHex(primary,   base, pPrim);
+		var secContainerHex  = _mixHex(secondary, base, pSec);
+		var accContainerHex  = _mixHex(accent,    base, pAcc);
+		de.setProperty('--customify-on-primary-container',   _lReduceUntilContrast(primary,   primContainerHex));
+		de.setProperty('--customify-on-secondary-container', _lReduceUntilContrast(secondary, secContainerHex));
+		de.setProperty('--customify-on-accent-container',    _lReduceUntilContrast(accent,    accContainerHex));
+
+		// §2 border-strong — solved P.
+		de.setProperty('--customify-border-strong', _solveBorderStrong(text, base));
+	}
+
+	// Hook recomputeDerived to every source-slot change. Each derived
+	// token depends on at least one source, so any drag fires a full
+	// recompute (cheap — all formulas are closed-form or short loops).
+	var SOURCE_SLOTS = [
+		'global_styling_color_primary',
+		'global_styling_color_secondary',
+		'customify_palette_accent',
+		'customify_palette_text',
+		'customify_palette_surface',
+		'customify_palette_base'
+	];
+	SOURCE_SLOTS.forEach(function(setting){
 		wp.customize(setting, function(value){
-			value.bind(function(newval){
-				var clean = normalize(newval);
-				var prop  = ON_MAP[setting];
-				if (clean && clean.charAt(0) === '#') {
-					document.documentElement.style.setProperty(prop, _pickOn(clean));
-				} else if (ON_CLEAR_FALLBACK[prop]) {
-					// Clear → fall back to picking against the SCSS var() default.
-					document.documentElement.style.setProperty(prop, ON_CLEAR_FALLBACK[prop]);
-				} else {
-					document.documentElement.style.removeProperty(prop);
-				}
-			});
+			value.bind(recomputeDerived);
 		});
 	});
+	// Prime the initial state on load so the preview iframe shows
+	// derived values immediately (without waiting for the first drag).
+	try { recomputeDerived(); } catch(e) {}
 })();";
 
 		wp_add_inline_script( 'customize-preview', $script );
@@ -1133,119 +1568,122 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		// would compute for an unsaved site.
 		$slots = customify_color_get_slots();
 
-		// Lean 11-entry palette — every slug a real design choice a
-		// block author would reach for. Each `color` is a
-		// `var(--customify-{token}, {hex_fallback})` chain so:
-		//   • Fresh sites (no Palette opt-in): var() falls back to the
-		//     literal hex — every swatch has a valid color in the picker.
-		//   • Opt-in sites: var() resolves to the live Customizer value
-		//     — Customizer change propagates to all blocks instantly.
+		// Precompute fallback hexes per the color-token-derivation spec
+		// formulas. Fresh sites (no Palette opt-in) get the literal hex
+		// inside `var(--customify-X, {hex})` — block authors still see
+		// concrete swatches in the picker. Opt-in sites resolve through
+		// to the live Customizer value via the cascade.
+		$text_muted_hex    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
+		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 ); // spec §2: bumped 12% → 14%
+		$border_strong_hex = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
+
+		// Container fallbacks — solve P per spec §4 then mix in sRGB
+		// (close enough to OKLab for the picker swatch preview; the
+		// live :root expression uses `color-mix(in oklab, …)`).
+		$p_primary       = customify_color_solve_container_p( $slots['primary'],   $slots['base'] );
+		$p_secondary     = customify_color_solve_container_p( $slots['secondary'], $slots['base'] );
+		$p_accent        = customify_color_solve_container_p( $slots['accent'],    $slots['base'] );
+		$container_p_hex = customify_color_mix_hex( $slots['primary'],   $slots['base'], $p_primary );
+		$container_s_hex = customify_color_mix_hex( $slots['secondary'], $slots['base'], $p_secondary );
+		$container_a_hex = customify_color_mix_hex( $slots['accent'],    $slots['base'], $p_accent );
+
+		// Lean 12-entry palette — every slug a real design choice a
+		// block author would reach for. Pair-order layout so each brand
+		// color sits next to its container partner in the picker:
 		//
-		// Order mirrors the Customizer Palette panel reading order
-		// (Primary → Secondary → Accent → Text → Surface → Base) and
-		// then groups the derived / contrast / chrome tokens at the
-		// end (Text Muted → On Primary → On Secondary → On Surface →
-		// Border) so designers scanning the picker first see what
-		// they recognize from the Customizer, then the WCAG-safety
-		// helpers, then chrome.
+		//   Primary · Primary Container · Secondary · Secondary Container
+		//   · Accent · Accent Container · Text · Surface · Base
+		//   · Text Muted · Border · Border Strong
 		//
-		// Deliberately omitted (kept out of the picker to avoid choice
-		// fatigue and palette bloat):
-		//   • link / link-hover / heading — handled by global styles
-		//     (link-color rule, h1-h6 cascade); block authors rarely
-		//     pick these per-block.
+		// Hidden from picker (still emitted to :root as theme internals):
+		//   on-primary, on-secondary, on-accent, on-surface,
+		//   on-primary-container, on-secondary-container, on-accent-container.
+		//
+		// The on-* family is for theme CSS rules (button text, .is-style-card
+		// foreground safety net, etc.) — block authors typically don't pick
+		// "text on primary" from a palette swatch; they use the source
+		// brand color directly as text on the container, and theme button
+		// rules auto-apply on-* via `.has-X-background-color` matchers.
+		//
+		// Deliberately omitted from the picker entirely:
+		//   • link / link-hover / heading — handled by global styles.
 		//   • primary-hover — hover STATE; CSS pseudo-class territory.
-		//   • background — legacy duplicate of `base`.
-		//   • light-gray / dark-gray — generic neutrals; designers can
-		//     type the hex directly when needed.
-		//   • on-accent — accent backgrounds are typically short
-		//     decorative copy (badges, promo highlights); designers can
-		//     type the contrast hex directly when needed.
+		//   • background / light-gray / dark-gray — legacy noise.
 		return array(
-			// ─── Customizer Palette panel order: brand → text → canvas.
+			// ─── Brand + container pairs (per Material Design 3).
 			array(
 				'slug'  => 'primary',
 				'name'  => __( 'Primary', 'customify' ),
-				'color' => 'var(--customify-primary, #235787)',
+				'color' => 'var(--customify-primary, ' . $slots['primary'] . ')',
+			),
+			array(
+				'slug'  => 'primary-container',
+				'name'  => __( 'Primary Container', 'customify' ),
+				// Soft tint of primary (spec §4). Default palette → ~light
+				// blue-grey; user-saved primary → tinted accordingly.
+				'color' => 'var(--customify-primary-container, ' . $container_p_hex . ')',
 			),
 			array(
 				'slug'  => 'secondary',
 				'name'  => __( 'Secondary', 'customify' ),
-				'color' => 'var(--customify-secondary, #c3512f)',
+				'color' => 'var(--customify-secondary, ' . $slots['secondary'] . ')',
+			),
+			array(
+				'slug'  => 'secondary-container',
+				'name'  => __( 'Secondary Container', 'customify' ),
+				'color' => 'var(--customify-secondary-container, ' . $container_s_hex . ')',
 			),
 			array(
 				'slug'  => 'accent',
 				'name'  => __( 'Accent', 'customify' ),
-				'color' => 'var(--customify-accent, #FFD042)',
+				'color' => 'var(--customify-accent, ' . $slots['accent'] . ')',
 			),
+			array(
+				'slug'  => 'accent-container',
+				'name'  => __( 'Accent Container', 'customify' ),
+				'color' => 'var(--customify-accent-container, ' . $container_a_hex . ')',
+			),
+
+			// ─── Text + canvas axis.
 			array(
 				'slug'  => 'text',
 				'name'  => __( 'Text', 'customify' ),
-				'color' => 'var(--customify-text, #686868)',
+				'color' => 'var(--customify-text, ' . $slots['text'] . ')',
 			),
 			array(
 				'slug'  => 'surface',
 				'name'  => __( 'Surface', 'customify' ),
-				'color' => 'var(--customify-surface, #ECECEC)',
+				'color' => 'var(--customify-surface, ' . $slots['surface'] . ')',
 			),
 			array(
 				'slug'  => 'base',
 				'name'  => __( 'Base', 'customify' ),
-				'color' => 'var(--customify-base, #FFFFFF)',
+				'color' => 'var(--customify-base, ' . $slots['base'] . ')',
 			),
 
-			// ─── Derived (no direct Customizer field — computed from slots).
+			// ─── Derived / chrome.
 			array(
 				'slug'  => 'text-muted',
 				'name'  => __( 'Text Muted', 'customify' ),
-				// Derived from slot.text + slot.base (no direct Customizer
-				// field — auto-updates when Text or Base changes).
-				'color' => 'var(--customify-text-muted, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 ) . ')',
+				// Derived from text + base (spec §2). Auto-updates when
+				// Text or Base changes.
+				'color' => 'var(--customify-text-muted, ' . $text_muted_hex . ')',
 			),
-
-			// ─── WCAG contrast picks. Three tokens kept symmetric across
-			// the three "high-chroma backgrounds a designer would actually
-			// put text on" (primary buttons / secondary buttons / cards
-			// and elevated panels). Accent is the odd one out because
-			// accent usages are typically decorative short copy where the
-			// designer eyeballs the contrast.
-			array(
-				'slug'  => 'on-primary',
-				'name'  => __( 'On Primary', 'customify' ),
-				// Critical for primary buttons — saved Primary = dark AND
-				// saved Text = dark would make the "text" slug invisible
-				// on primary bg; on-primary's luminance picker guarantees
-				// a readable result regardless.
-				'color' => 'var(--customify-on-primary, ' . customify_color_pick_on( $slots['primary'] ) . ')',
-			),
-			array(
-				'slug'  => 'on-secondary',
-				'name'  => __( 'On Secondary', 'customify' ),
-				// Symmetric with on-primary for secondary buttons.
-				'color' => 'var(--customify-on-secondary, ' . customify_color_pick_on( $slots['secondary'] ) . ')',
-			),
-			array(
-				'slug'  => 'on-surface',
-				'name'  => __( 'On Surface', 'customify' ),
-				// Surface fallback in `.is-style-card` and other SCSS rules
-				// is `#FFFFFF`. on-surface picks contrast against that
-				// fallback so the readable-text guarantee holds even when
-				// --customify-surface is unset (Surface slot not opted-in).
-				// Closes the dark-Palette safety gap: Base=dark + Text=white
-				// + Surface unset would make `has-text-color has-surface-bg`
-				// blocks invisible; picking on-surface gets #1A1A1A instead.
-				'color' => 'var(--customify-on-surface, ' . customify_color_pick_on( '#FFFFFF' ) . ')',
-			),
-
-			// ─── Chrome.
 			array(
 				'slug'  => 'border',
 				'name'  => __( 'Border', 'customify' ),
-				// Fallback computed from slot.text/base mix — same value the
-				// :root emit would use if Border slot were saved. SCSS uses
-				// a currentcolor-mix adaptive fallback for the FRONTEND chrome,
-				// but the picker swatch shows a concrete hex for previewability.
-				'color' => 'var(--customify-border, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 ) . ')',
+				// Decorative-only (~1.35:1 vs base, WCAG-exempt). For
+				// functional control boundaries (form input borders,
+				// button outlines) use `border-strong`. Spec §2.
+				'color' => 'var(--customify-border, ' . $border_hex . ')',
+			),
+			array(
+				'slug'  => 'border-strong',
+				'name'  => __( 'Border Strong', 'customify' ),
+				// WCAG 1.4.11 ≥3:1 vs base — for form input borders and
+				// any boundary that's the ONLY cue identifying a control.
+				// Spec §2 (solved P).
+				'color' => 'var(--customify-border-strong, ' . $border_strong_hex . ')',
 			),
 		);
 	}
