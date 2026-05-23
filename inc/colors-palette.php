@@ -218,9 +218,36 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$body_text    = $ov_body_text    ?: $body_text_default;
 
 		// Contrast picks for on-* (PHP-precomputed).
-		$on_primary   = customify_color_pick_on( $slots['primary'] );
-		$on_secondary = customify_color_pick_on( $slots['secondary'] );
-		$on_accent    = customify_color_pick_on( $slots['accent'] );
+		//
+		// 30K-site safety gate: only emit auto-contrast on-* tokens when the
+		// user has explicitly engaged with the new Palette panel (saved any
+		// of the 4 truly-new slot keys: base, surface, text, accent — none
+		// of which existed pre-Phase-2). For legacy sites that have only
+		// touched the long-standing primary/secondary keys (or nothing),
+		// leaving the on-* tokens UNSET means bundled rules of the form
+		// `color: var(--customify-on-primary, #fff)` fall back to the
+		// literal #fff hex — byte-equivalent to the pre-refactor hard-coded
+		// `color: #fff;` everywhere buttons consume these tokens.
+		//
+		// The 4 slot keys are checked via array_key_exists() on the raw
+		// saved-mods array (NOT get_theme_mod() — that returns field defaults
+		// inside the customize preview and would falsely look "saved"; see
+		// the same lesson in the override-resolution block above).
+		$has_palette_opt_in = (
+			is_array( $_saved_mods ) && (
+				array_key_exists( 'customify_palette_base',    $_saved_mods ) ||
+				array_key_exists( 'customify_palette_surface', $_saved_mods ) ||
+				array_key_exists( 'customify_palette_text',    $_saved_mods ) ||
+				array_key_exists( 'customify_palette_accent',  $_saved_mods )
+			)
+		);
+		if ( $has_palette_opt_in ) {
+			$on_primary   = customify_color_pick_on( $slots['primary'] );
+			$on_secondary = customify_color_pick_on( $slots['secondary'] );
+			$on_accent    = customify_color_pick_on( $slots['accent'] );
+		} else {
+			$on_primary = $on_secondary = $on_accent = null;
+		}
 
 		$lines = array(
 			"--customify-base: {$slots['base']}",
@@ -236,10 +263,20 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			"--customify-link-hover: {$link_hover}",
 			"--customify-heading: {$heading}",
 			"--customify-widget-title: {$widget_title}",
-			"--customify-on-primary: {$on_primary}",
-			"--customify-on-secondary: {$on_secondary}",
-			"--customify-on-accent: {$on_accent}",
 		);
+		// On-* contrast tokens — only emitted when user has opted into the
+		// new Palette panel (see $has_palette_opt_in above). Absence on
+		// legacy sites means bundled `var(--customify-on-X, #fff)` falls
+		// back to literal #fff, preserving byte-equivalent button rendering.
+		if ( null !== $on_primary ) {
+			$lines[] = "--customify-on-primary: {$on_primary}";
+		}
+		if ( null !== $on_secondary ) {
+			$lines[] = "--customify-on-secondary: {$on_secondary}";
+		}
+		if ( null !== $on_accent ) {
+			$lines[] = "--customify-on-accent: {$on_accent}";
+		}
 		// --customify-border only emitted when override saved; absence
 		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
 		// fallback fire so borders adapt to local text color.
@@ -488,7 +525,8 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			var color = (s.color || '').toLowerCase();
 			var \$sw = \$('<button type=\"button\" class=\"customify-color-quickpick__swatch\"></button>')
 				.css('background-color', color)
-				.attr('title', s.label + ' — ' + color)
+				.attr('title', s.label)
+				.attr('data-label', s.label)
 				.attr('data-color', color);
 			if (color === currentVal) \$sw.addClass('is-active');
 			\$sw.on('click', function(e){
@@ -859,6 +897,34 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		$script = "(function(){
 	if (typeof wp === 'undefined' || ! wp.customize) return;
 	var SLOT_VARS = {$payload};
+	// Cascade expressions for derived override tokens. When the user CLEARS
+	// an override picker mid-session via .set(''), removing the inline style
+	// would fall through to the PHP-baked :root rule — which still holds the
+	// SAVED override hex (palette-tokens block is rendered once at page load,
+	// not regenerated on setting change). Result: cleared overrides keep
+	// showing the old value until next save+reload.
+	//
+	// Fix: when normalize() returns empty for one of these tokens, set the
+	// inline value to the cascade expression instead of removeProperty. CSS
+	// custom-property values support nested var()/color-mix(), so the cascade
+	// chain re-engages immediately and the rendered value tracks the source
+	// slot in real time. After save+reload, PHP re-renders :root cleanly so
+	// the inline override is no longer needed.
+	//
+	// Tokens NOT in this map fall back to the old removeProperty behavior:
+	//   - slot tokens (primary/secondary/accent/text/surface/base): their
+	//     :root values come from PHP defaults/saved slots — removing the
+	//     inline override correctly reverts to those.
+	//   - border: bundled CSS rule already has a smart fallback
+	//     (color-mix(currentcolor 12%, transparent)) so absence is correct.
+	var CASCADE_FALLBACK = {
+		'--customify-heading':      'var(--customify-text)',
+		'--customify-body-text':    'var(--customify-text)',
+		'--customify-widget-title': 'var(--customify-text)',
+		'--customify-link':         'var(--customify-primary)',
+		'--customify-link-hover':   'color-mix(in oklab, var(--customify-link) 85%, white)',
+		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))'
+	};
 	// Customify wraps stored setting values as urlencode(json_encode(value))
 	// so a saved hex arrives as '%22#ff00aa%22'. Mirror Customify's decode
 	// (control.js / customizer.js use the same JSON.parse(decodeURI(v))
@@ -880,10 +946,64 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		wp.customize(setting, function(value){
 			value.bind(function(newval){
 				var clean = normalize(newval);
+				var token = SLOT_VARS[setting];
 				if (clean) {
-					document.documentElement.style.setProperty(SLOT_VARS[setting], clean);
+					document.documentElement.style.setProperty(token, clean);
+				} else if (CASCADE_FALLBACK[token]) {
+					document.documentElement.style.setProperty(token, CASCADE_FALLBACK[token]);
 				} else {
-					document.documentElement.style.removeProperty(SLOT_VARS[setting]);
+					document.documentElement.style.removeProperty(token);
+				}
+			});
+		});
+	});
+
+	// WCAG on-* live preview — mirrors PHP customify_color_pick_on().
+	// Listens to the 3 brand slot pickers and recomputes the auto-contrast
+	// text color on every drag. Always runs in the preview iframe regardless
+	// of opt-in status: the user actively dragging IS engagement, and
+	// showing the cascade behavior in preview informs the design choice.
+	// On save, the PHP opt-in gate determines whether the on-* tokens
+	// persist into the frontend :root block.
+	function _hexToRgb(hex) {
+		hex = (hex || '').replace(/^#/, '');
+		if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+		if (!/^[0-9a-fA-F]{6}\$/.test(hex)) return null;
+		return [
+			parseInt(hex.slice(0,2), 16),
+			parseInt(hex.slice(2,4), 16),
+			parseInt(hex.slice(4,6), 16)
+		];
+	}
+	function _relativeLuminance(hex) {
+		var rgb = _hexToRgb(hex);
+		if (!rgb) return 0;
+		var f = function(v) {
+			v = v / 255;
+			return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+		};
+		return 0.2126 * f(rgb[0]) + 0.7152 * f(rgb[1]) + 0.0722 * f(rgb[2]);
+	}
+	function _pickOn(hex) {
+		// Mirror PHP: relative_luminance > 0.45 ? '#1A1A1A' : '#FFFFFF'.
+		return _relativeLuminance(hex) > 0.45 ? '#1A1A1A' : '#FFFFFF';
+	}
+
+	var ON_MAP = {
+		'global_styling_color_primary':   '--customify-on-primary',
+		'global_styling_color_secondary': '--customify-on-secondary',
+		'customify_palette_accent':       '--customify-on-accent'
+	};
+	Object.keys(ON_MAP).forEach(function(setting){
+		wp.customize(setting, function(value){
+			value.bind(function(newval){
+				var clean = normalize(newval);
+				if (clean && clean.charAt(0) === '#') {
+					document.documentElement.style.setProperty(
+						ON_MAP[setting], _pickOn(clean)
+					);
+				} else {
+					document.documentElement.style.removeProperty(ON_MAP[setting]);
 				}
 			});
 		});
