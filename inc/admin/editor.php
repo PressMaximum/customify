@@ -44,6 +44,20 @@ class Customify_Editor {
 	 * @return string CSS code.
 	 */
 	public function css() {
+		// Mirror the frontend :root palette tokens block (printed at wp_head
+		// priority 8 by Customify::print_palette_tokens) into the editor
+		// canvas so var(--customify-X) expressions in bundled SCSS + cascade
+		// chains (heading→text, link→primary, link-hover color-mix, etc.)
+		// resolve identically. Without this, the editor iframe falls back
+		// to each var()'s literal-hex fallback — which is the field default,
+		// not the user-saved or cascade-resolved value. Result: opted-in
+		// users (Phase 2.8 Palette panel) see frontend cascade ≠ editor
+		// preview, breaking the WYSIWYG promise.
+		$css = '';
+		if ( function_exists( 'customify_color_palette_root_css' ) ) {
+			$css .= customify_color_palette_root_css();
+		}
+
 		$fields = array();
 		$keys   = array(
 			'container_width',
@@ -110,7 +124,7 @@ class Customify_Editor {
 		}
 
 		$c   = new Customify_Customizer_Auto_CSS();
-		$css = $c->render_css( $fields );
+		$css .= $c->render_css( $fields );
 
 		// Metabox compatibility (selectors stable in WP 6.x).
 		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
