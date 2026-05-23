@@ -324,21 +324,44 @@ colors. The legacy `text` slug retains the marker-class collision
 behavior — pre-existing WP behavior; designers picking the modern
 `body-text` slug get clean inline-override semantics.
 
-**Customify-pro / Blocksify starter templates** should prefer the new
-slug names (`body-text` / `divider` / `divider-strong`) for new designs.
-The legacy slugs remain available for backward-compat reads.
+**Customify-pro / Blocksify starter templates** should reference the
+12 design-purposeful slugs below.
 
-#### Full 18-slug picker palette (Phase 2.13)
+#### Final 12-slug picker palette (Phase 2.13)
 
 ```
-Design-purposeful (12):
+Brand + container pairs (6):
   primary · primary-container · secondary · secondary-container ·
-  accent · accent-container · body-text · surface · base ·
-  text-muted · divider · divider-strong
+  accent · accent-container
 
-Legacy back-compat (6, marked "(legacy)" in picker name):
-  text · link · heading · background · light-gray · dark-gray
+Text + canvas axis (3):
+  body-text · surface · base
+
+Helpers (3):
+  text-muted · divider · divider-strong
 ```
+
+#### Legacy slugs — DELIBERATELY OMITTED
+
+The original static theme.json palette listed 6 additional slugs
+(`text` / `link` / `heading` / `background` / `light-gray` /
+`dark-gray`). They are NOT re-listed in the filter output.
+
+**Trade-off (project owner decision)**: clean picker UX wins over
+backward compat with the legacy slug class names. 30K sites with
+block markup using `class="has-text-color"`, `has-link-color`,
+`has-heading-color`, `has-background-color`, `has-light-gray-color`,
+or `has-dark-gray-color` (the slug-pick variants, not the marker
+class) lose their saved color — block text falls back to the body
+text cascade.
+
+This is a **conscious regression** documented in §3.7. Designer
+workflow for migrating legacy blocks: re-pick a swatch from the new
+12-slug palette (e.g. `text` → `body-text`, `heading` → `body-text`
+or `text-muted`, `background` → `base`, the two grays → custom hex).
+
+Sites that need the legacy slugs back can override the filter via
+`wp_theme_json_data_theme` at a later priority and re-add them.
 
 See [`project_blocksify_companion.md`](../../.claude/memory/project_blocksify_companion.md).
 

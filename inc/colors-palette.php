@@ -1926,62 +1926,30 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				// Spec §2 (solved P).
 				'color' => 'var(--customify-border-strong, ' . $border_strong_hex . ')',
 			),
-
-			// ─── Legacy slugs — preserved so blocks created on 30K
-			// sites pre-Phase-2 (those that picked `has-text-color`,
-			// `has-link-color`, etc. via the OLD static theme.json
-			// palette) continue to render their saved colors. Without
-			// these entries the filter would wipe the WP-generated
-			// `--wp--preset--color--{slug}` declarations and any
-			// `class="has-{slug}-color"` block would lose its color
-			// (fall back to the body cascade). Spec §3.7 explicitly
-			// promises "existing entries unchanged so any posts
-			// using .has-<slug>-color keep working" — that contract
-			// is upheld by re-listing them here.
-			//
-			// They still appear in the Blocksify picker, but designers
-			// of NEW sites should prefer the design-purposeful slugs
-			// above (body-text instead of text, divider instead of
-			// border-via-text, etc.) — these legacy entries are kept
-			// primarily for backward compat with existing block markup.
-			//
-			// Slug `text` keeps its name (the .has-text-color marker
-			// collision is a known pre-existing WP behavior — same as
-			// the static palette had before this filter; not a
-			// regression of this PR). Designer workaround: pick the
-			// `body-text` slug or use inline style with !important.
-			array(
-				'slug'  => 'text',
-				'name'  => __( 'Text (legacy)', 'customify' ),
-				'color' => 'var(--customify-text, ' . $slots['text'] . ')',
-			),
-			array(
-				'slug'  => 'link',
-				'name'  => __( 'Link (legacy)', 'customify' ),
-				'color' => 'var(--customify-link, ' . $slots['primary'] . ')',
-			),
-			array(
-				'slug'  => 'heading',
-				'name'  => __( 'Heading (legacy)', 'customify' ),
-				'color' => 'var(--customify-heading, ' . $slots['text'] . ')',
-			),
-			array(
-				'slug'  => 'background',
-				'name'  => __( 'Background (legacy)', 'customify' ),
-				// Background is an alias of base — same var() target.
-				'color' => 'var(--customify-base, ' . $slots['base'] . ')',
-			),
-			array(
-				'slug'  => 'light-gray',
-				'name'  => __( 'Light Gray (legacy)', 'customify' ),
-				'color' => '#f2f2f2',
-			),
-			array(
-				'slug'  => 'dark-gray',
-				'name'  => __( 'Dark Gray (legacy)', 'customify' ),
-				'color' => '#444444',
-			),
 		);
+
+		// ───────────────────────────────────────────────────────────
+		// Legacy slugs (text / link / heading / background / light-gray /
+		// dark-gray) — DELIBERATELY OMITTED per project owner decision.
+		//
+		// The original static theme.json palette listed these slugs and
+		// 30K sites with block markup `class="has-{slug}-color"` rely
+		// on the WP-generated `--wp--preset--color--{slug}` declarations
+		// + `.has-{slug}-color { color: var(...) !important }` rules.
+		// Removing the slugs means those rules are no longer emitted,
+		// so legacy block markup falls back to the body text cascade
+		// (loses the explicitly-picked color).
+		//
+		// Trade-off explicitly accepted by the project owner: clean
+		// picker UX wins over backward compat. Old block markup that
+		// loses color can be manually re-picked using one of the 12
+		// design-purposeful slugs above (e.g. `text` → `body-text`,
+		// `heading` → `body-text` or whatever the designer intended).
+		//
+		// This is a CONSCIOUS regression. Documented as such in
+		// SPEC §3.7 + §8.11. Sites that need the legacy slugs back
+		// can override the filter via wp_theme_json_data_theme
+		// (priority > default) and re-add them.
 	}
 }
 
