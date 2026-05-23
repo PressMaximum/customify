@@ -97,8 +97,15 @@ class Customify_Editor {
 
 		if ( $fields['global_styling_color_heading'] ) {
 			// WP 6.0+: post title is now a block (.wp-block-post-title).
+			// css_format wraps {{value}} in var(--customify-heading, ...) so
+			// the post title participates in the heading cascade chain
+			// (heading → text slot) — same as h1-h6 on the frontend. A
+			// literal `color: {{value}}` here would lock the post title to
+			// the saved-or-default hex and skip the cascade, so dragging
+			// the Text slot wouldn't update the post title even though
+			// other headings cascade correctly.
 			$fields['global_styling_color_heading']['selector']   = '.editor-styles-wrapper .wp-block-post-title';
-			$fields['global_styling_color_heading']['css_format'] = 'color: {{value}};';
+			$fields['global_styling_color_heading']['css_format'] = 'color: var(--customify-heading, {{value}});';
 		}
 
 		if ( $fields['container_width'] ) {
