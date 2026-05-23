@@ -75,6 +75,45 @@
 	margin-bottom: 1.41575em;
 }
 
+// Auto-wire WCAG-safe foreground for blocks using brand-color backgrounds.
+//
+// When a designer in Blocksify / WP block editor picks a brand bg
+// (Primary / Secondary / Accent) from the picker and DOES NOT pick a
+// text color manually, the block would inherit body text color (which
+// is the saved Text slot — could be dark on dark primary = invisible).
+//
+// These rules set `color: var(--customify-on-X)` so text auto-flips
+// to a WCAG-readable value based on the brand's luminance. The on-*
+// tokens are computed via the spec §3 max-contrast picker and emitted
+// to :root on palette opt-in.
+//
+// Designer's explicit text-color pick still wins — WP generates
+// `.has-{slug}-color { color: var(...) !important }` which beats this
+// rule via both specificity (more classes) and `!important`. So this
+// is purely a DEFAULT, not a lock.
+//
+// `inherit` fallback for the var() chain: when on-X is unset (fresh
+// install, palette not opted in), text inherits from parent (body
+// cascade) — byte-identical to the pre-PR behavior for 30K legacy
+// sites. Once user opts into Palette panel, on-X is emitted and
+// auto-flip kicks in live.
+//
+// Heading rules at global scope (`h1-h6 { color: var(--customify-heading) }`)
+// have lower specificity than `.has-X-bg h1` so the descendant rules
+// here win automatically.
+.has-primary-background-color,
+.has-primary-background-color :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--customify-on-primary, inherit);
+}
+.has-secondary-background-color,
+.has-secondary-background-color :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--customify-on-secondary, inherit);
+}
+.has-accent-background-color,
+.has-accent-background-color :is(h1, h2, h3, h4, h5, h6) {
+	color: var(--customify-on-accent, inherit);
+}
+
 .wp-block-video video {
 	max-width: 100%;
 }

@@ -481,30 +481,40 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 				array_key_exists( 'customify_palette_accent',  $_saved_mods )
 			)
 		);
+		// §3 on-* tokens — UNCONDITIONALLY emitted, NOT gated on the
+		// 4-new-slot-keys palette opt-in. Rationale: the SCSS auto-wire
+		// (`.has-primary-background-color { color: var(--customify-on-primary,
+		// inherit) }`) needs on-* present at render time even when the
+		// user only changed legacy Primary/Secondary/Accent slots (not the
+		// new Phase 2 slots). With the old gate, changing Primary in the
+		// Customizer didn't make text auto-flip because on-primary stayed
+		// unset → fallback `inherit` → body text color (dark on dark = bad).
+		//
+		// 30K safety preserved: the on-* tokens are CONSUMED only by the
+		// new auto-wire SCSS rule on the new picker slugs. Legacy sites
+		// without `.has-primary-background-color` blocks see no behavioral
+		// change — the var() is set in :root but no rule references it.
+		// Sites that DO have `.has-primary-background-color` blocks gain
+		// the auto-readability safety net; this is a strict UX improvement
+		// over the pre-PR behavior (text was inheriting body color, often
+		// failing contrast against a brand bg).
+		//
+		// §3 — on-X = max-contrast(LIGHT vs DARK against X) via the
+		// spec §3 customify_color_pick_on() helper.
+		$on_primary   = customify_color_pick_on( $slots['primary'] );
+		$on_secondary = customify_color_pick_on( $slots['secondary'] );
+		$on_accent    = customify_color_pick_on( $slots['accent'] );
+
+		// On-surface contrast — picks against the saved Surface, or the
+		// SCSS var() fallback (#FFFFFF in `.is-style-card`) if Surface
+		// isn't saved. Same unconditional emit rationale as the on-X
+		// solid picks above.
+		$surface_effective = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
+			? $slots['surface']
+			: '#FFFFFF';
+		$on_surface = customify_color_pick_on( $surface_effective );
+
 		if ( $has_palette_opt_in ) {
-			// §3 — on-X = max-contrast(LIGHT vs DARK against X). The
-			// customify_color_pick_on() helper now implements the
-			// max-contrast pick (was a luminance threshold pre-spec).
-			$on_primary   = customify_color_pick_on( $slots['primary'] );
-			$on_secondary = customify_color_pick_on( $slots['secondary'] );
-			$on_accent    = customify_color_pick_on( $slots['accent'] );
-
-			// On-surface contrast: when the user saves Surface, pick the
-			// readable text color for THAT surface. When Surface is NOT
-			// saved but the user opted in, the bundled
-			// `var(--customify-surface, #fff)` in rules like `.is-style-card`
-			// falls back to literal #fff — pick against that fallback so
-			// the card text stays readable regardless of saved Text color.
-			// This solves the "saved dark Base + white Text + no Surface"
-			// → invisible white-on-white card text case, while preserving
-			// 30K safety: when palette opt-in is false, on-surface is left
-			// UNSET and `var(--customify-on-surface, inherit)` resolves to
-			// inherit (legacy body text cascade), so byte-equivalent output.
-			$surface_effective = array_key_exists( 'customify_palette_surface', $_saved_mods )
-				? $slots['surface']
-				: '#FFFFFF';
-			$on_surface = customify_color_pick_on( $surface_effective );
-
 			// §4 — *-container = soft tint of brand at OKLab L ≈ 0.93.
 			// Each `customify_color_solve_container_p()` returns the
 			// percentage that lands the source color's mix-with-base at
@@ -544,7 +554,6 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			$on_secondary_container = customify_color_l_reduce_until_contrast( $slots['secondary'], $secondary_container_hex );
 			$on_accent_container    = customify_color_l_reduce_until_contrast( $slots['accent'],    $accent_container_hex );
 		} else {
-			$on_primary = $on_secondary = $on_accent = $on_surface = null;
 			$primary_container_p = $secondary_container_p = $accent_container_p = null;
 			$on_primary_container = $on_secondary_container = $on_accent_container = null;
 		}
@@ -577,22 +586,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			"--customify-heading: {$heading}",
 			"--customify-widget-title: {$widget_title}",
 		);
-		// On-* contrast tokens — only emitted when user has opted into the
-		// new Palette panel (see $has_palette_opt_in above). Absence on
-		// legacy sites means bundled `var(--customify-on-X, #fff)` falls
-		// back to literal #fff, preserving byte-equivalent button rendering.
-		if ( null !== $on_primary ) {
-			$lines[] = "--customify-on-primary: {$on_primary}";
-		}
-		if ( null !== $on_secondary ) {
-			$lines[] = "--customify-on-secondary: {$on_secondary}";
-		}
-		if ( null !== $on_accent ) {
-			$lines[] = "--customify-on-accent: {$on_accent}";
-		}
-		if ( null !== $on_surface ) {
-			$lines[] = "--customify-on-surface: {$on_surface}";
-		}
+		// On-* contrast tokens — emitted UNCONDITIONALLY (see rationale
+		// above the $on_primary computation). Consumed by the SCSS
+		// auto-wire `.has-{brand}-background-color { color: var(--customify-on-{brand}, inherit) }`
+		// so brand-bg blocks get WCAG-readable text out of the box, with
+		// real-time recompute as user drags slot pickers in the Customizer.
+		$lines[] = "--customify-on-primary: {$on_primary}";
+		$lines[] = "--customify-on-secondary: {$on_secondary}";
+		$lines[] = "--customify-on-accent: {$on_accent}";
+		$lines[] = "--customify-on-surface: {$on_surface}";
 		// --customify-border only emitted when override saved; absence
 		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
 		// fallback fire so borders adapt to local text color.
