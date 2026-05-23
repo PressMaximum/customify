@@ -128,6 +128,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .wp-block-table td,
 .wp-block-table th {
 	padding: 0.5em;
+	// WP / bundled SCSS leave `border: 1px solid` with no color, so the
+	// browser falls back to `currentcolor` — which on dark Palette bases
+	// is the white text color, producing bright white grid lines.
+	// Explicit border-color via the $color_border token gives the
+	// adaptive currentcolor-tint border (10%) we use elsewhere.
+	border-color: $color_border;
 }
 
 // WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
