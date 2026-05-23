@@ -72,7 +72,12 @@
 		table,
 		th,
 		td {
-			border: 1px solid #eaecee;
+			// Widget-area table borders — same bright-line problem as the
+			// main `.wp-block-table` cells: hard-coded `#eaecee` light gray
+			// becomes a stark divider on dark Palette bases. Use
+			// $color_border so the border adapts (saved Border slot →
+			// currentcolor 10% tint fallback).
+			border: 1px solid $color_border;
 		}
 
 		&.aligncenter {
@@ -131,8 +136,15 @@
 
 					.count {
 						right: 0;
-						background: #eaecee;
-						color: #999999;
+						// Category/tag count badge pill — `#eaecee` bg + `#999999`
+						// text were hard-coded light grays that became near-
+						// invisible on dark Palette bases. Use $surface_strong
+						// (saved Surface → currentcolor 10% tint fallback) for
+						// the pill bg and $color_meta (saved text-muted token)
+						// for the count number so the badge stays readable on
+						// any canvas.
+						background: $surface_strong;
+						color: $color_meta;
 						padding: 0px 0.5em;
 						border-radius: 0.9em;
 						font-size: 12px;
@@ -201,12 +213,18 @@
 				overflow: hidden;
 				box-shadow: none;
 				background: transparent;
-				color: #aaaaaa;
+				// Sidebar search icon — `#aaaaaa` default + `#444444` hover were
+				// hard-coded grays that disappeared on dark Palette bases (a
+				// near-black icon on a dark canvas is invisible). Use the
+				// muted/text tokens so the icon adapts: muted color for resting
+				// (matches the de-emphasized search button intent), full text
+				// color on hover for the affordance.
+				color: $color_meta;
 				line-height: 0px;
 
 				&:hover {
 					svg #svg-search {
-						fill: #444444;
+						fill: $color_text;
 					}
 				}
 

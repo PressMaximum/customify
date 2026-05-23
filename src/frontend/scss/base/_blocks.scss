@@ -387,8 +387,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 // Quote: Accent border
+// `#235787` was the literal primary hex. `$color_primary` resolves through
+// `var(--customify-primary, #235787)` — 30K-safe (existing sites with no
+// saved primary still render the same #235787) AND saved-primary-aware
+// (user palette primary takes over when set).
 .wp-block-quote.is-style-accent {
-	border-left: 4px solid #235787;
+	border-left: 4px solid $color_primary;
 	padding-left: 1.5em;
 	font-style: normal;
 }
@@ -399,9 +403,21 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 // Group: Card
+// `#fff` background and `#e0e0e0` border were the hard-coded card chrome
+// that made cards invisible on dark Palette bases (white card + thin gray
+// border on a dark canvas reads as a near-blank rectangle, hiding the
+// card's content). Wire to the Surface + Border tokens with the original
+// literals as the var() fallback so:
+//   • Existing 30K sites (no Surface saved): card stays `#fff` / `#e0e0e0`
+//     — byte-identical to the previous render.
+//   • Sites with saved Palette Surface: card adopts the user's surface
+//     color, so a dark Base + dark Surface palette gets a properly
+//     visible elevated card instead of a stark white panel.
+// The box-shadow stays as-is — subtle drop shadow reads correctly on
+// both light and dark surfaces.
 .wp-block-group.is-style-card {
-	background: #fff;
-	border: 1px solid #e0e0e0;
+	background: var(--customify-surface, #fff);
+	border: 1px solid var(--customify-border, #e0e0e0);
 	border-radius: 8px;
 	padding: 2em;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);

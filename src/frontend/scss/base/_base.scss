@@ -175,7 +175,11 @@ body {
 }
 
 hr {
-    background-color: #ccc;
+    // `#ccc` is a plain mid-gray that becomes a bright divider on dark
+    // Palette bases. Use $color_border (saved Border slot → currentcolor 10%
+    // tint fallback) so the divider stays visible on any canvas without
+    // dominating it.
+    background-color: $color_border;
     border: 0;
     height: 1px;
     margin: 0 0 ms(2);
@@ -382,7 +386,11 @@ select {
         }
     }
     .select2-dropdown {
-        border: 1px solid #e5e5e5;
+        // Match the Select2 input border to the rest of the form controls —
+        // `#e5e5e5` was a hard-coded light gray that didn't track dark
+        // Palette bases. Use $color_border so the dropdown panel border
+        // adapts (saved Border slot → currentcolor 10% fallback).
+        border: 1px solid $color_border;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
     }
 }
