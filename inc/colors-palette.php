@@ -1070,3 +1070,227 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	}
 	add_action( 'customize_preview_init', 'customify_color_palette_preview_js' );
 }
+
+// ──────────────────────────────────────────────────────────────────
+// theme.json palette injection — make Customify Palette tokens
+// available to the block editor color picker (WP core, Blocksify,
+// Gutenberg blocks, child themes, etc.) via `--wp--preset--color--X`.
+// ──────────────────────────────────────────────────────────────────
+//
+// Why: block editor color pickers (and Blocksify's ColorSections
+// composite) read the palette via `useSetting('color.palette.theme')`,
+// which returns whatever theme.json declares under
+// settings.color.palette. Without this filter the static palette in
+// theme.json contains hard-coded hex values — block previews don't
+// reflect the saved Customizer Palette, and authors picking "Primary"
+// in the editor get the literal #235787 baked in at theme.json author
+// time instead of the user's currently-saved primary slot value.
+//
+// What: replace the palette at runtime with the same slugs but each
+// `color` field reads a `var(--customify-X, {literal_hex_fallback})`
+// reference. WP 6.1+ accepts var() in palette color → propagates the
+// var into the generated `--wp--preset--color--X` declaration → user
+// blocks that picked "Primary" automatically follow the saved
+// Customizer Primary, no rebuild required.
+//
+// 30K safety: the literal hex fallback inside each var() expression
+// is the SAME value that the static theme.json palette previously
+// declared. Sites with no saved Palette resolve the chain to the
+// literal — byte-identical block render to before the filter.
+//
+// WP version gate: var() in palette color is WP 6.1+. Older WP
+// renders the swatch as a raw "var(--customify-...)" text string in
+// the picker (broken UX). Early-return on <6.1 keeps the static
+// theme.json palette intact for those sites.
+if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
+	/**
+	 * Build the palette array consumed by `wp_theme_json_data_theme`.
+	 *
+	 * Each entry uses `var(--customify-{token}, {hex_fallback})` so the
+	 * block editor picker swatch + every block that picks this slug
+	 * track the live Customizer value when set, and fall back to the
+	 * legacy hex (byte-identical to the pre-filter render) when not.
+	 *
+	 * Token sources:
+	 *   • Static slots (always emitted to :root): base / surface / text
+	 *     / primary / secondary / accent / link / heading / text-muted
+	 *     / link-hover / primary-hover.
+	 *   • Gated slots (emitted only on palette opt-in): on-primary /
+	 *     on-secondary / on-accent / on-surface / border / surface.
+	 *
+	 * Existing slugs (already in static theme.json) preserve their
+	 * legacy hex fallback so currently-rendered block colors don't
+	 * shift. New slugs (link-hover, primary-hover, text-muted, border,
+	 * on-*) use the PHP-computed default from `customify_color_*`
+	 * helpers as the var() fallback.
+	 *
+	 * @return array
+	 */
+	function customify_color_palette_for_theme_json() {
+		// Slot values resolve to: saved theme_mod, else slot default.
+		// We use these to seed the var() fallback for derived slugs so
+		// the literal in the fallback matches what the bundled SCSS
+		// would compute for an unsaved site.
+		$slots = customify_color_get_slots();
+
+		return array(
+			// ─── 6 main slots — preserve existing theme.json hex fallback.
+			// These match the static palette in theme.json prior to the
+			// filter (byte-identical render for legacy sites).
+			array(
+				'slug'  => 'base',
+				'name'  => __( 'Base', 'customify' ),
+				'color' => 'var(--customify-base, #FFFFFF)',
+			),
+			array(
+				'slug'  => 'surface',
+				'name'  => __( 'Surface', 'customify' ),
+				'color' => 'var(--customify-surface, #ECECEC)',
+			),
+			array(
+				'slug'  => 'accent',
+				'name'  => __( 'Accent', 'customify' ),
+				'color' => 'var(--customify-accent, #FFD042)',
+			),
+			array(
+				'slug'  => 'primary',
+				'name'  => __( 'Primary', 'customify' ),
+				'color' => 'var(--customify-primary, #235787)',
+			),
+			array(
+				'slug'  => 'secondary',
+				'name'  => __( 'Secondary', 'customify' ),
+				'color' => 'var(--customify-secondary, #c3512f)',
+			),
+			array(
+				'slug'  => 'text',
+				'name'  => __( 'Text', 'customify' ),
+				'color' => 'var(--customify-text, #686868)',
+			),
+			array(
+				'slug'  => 'link',
+				'name'  => __( 'Link', 'customify' ),
+				'color' => 'var(--customify-link, #1e4b75)',
+			),
+			array(
+				'slug'  => 'heading',
+				'name'  => __( 'Heading', 'customify' ),
+				'color' => 'var(--customify-heading, #333333)',
+			),
+			array(
+				'slug'  => 'background',
+				'name'  => __( 'Background', 'customify' ),
+				// Background is a legacy alias for base — same var, same fallback.
+				'color' => 'var(--customify-base, #ffffff)',
+			),
+
+			// ─── Semantic derived tokens (new to palette).
+			// Default values match what the bundled :root emits when
+			// no override is saved.
+			array(
+				'slug'  => 'text-muted',
+				'name'  => __( 'Text Muted', 'customify' ),
+				'color' => 'var(--customify-text-muted, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 ) . ')',
+			),
+			array(
+				'slug'  => 'link-hover',
+				'name'  => __( 'Link Hover', 'customify' ),
+				'color' => 'var(--customify-link-hover, ' . customify_color_mix_hex( $slots['primary'], '#FFFFFF', 0.85 ) . ')',
+			),
+			array(
+				'slug'  => 'primary-hover',
+				'name'  => __( 'Primary Hover', 'customify' ),
+				'color' => 'var(--customify-primary-hover, ' . customify_color_mix_hex( $slots['primary'], '#000000', 0.90 ) . ')',
+			),
+
+			// ─── Chrome.
+			array(
+				'slug'  => 'border',
+				'name'  => __( 'Border', 'customify' ),
+				// Fallback uses the same currentcolor-mix expression as the
+				// bundled SCSS so the picker swatch hints at the adaptive
+				// behavior. Saved Border slot resolves the var() to a real hex.
+				'color' => 'var(--customify-border, ' . customify_color_mix_hex( $slots['text'], $slots['base'], 0.12 ) . ')',
+			),
+
+			// ─── WCAG on-* contrast picks (new to palette).
+			// Fallbacks computed against the unsaved slot value via the
+			// same picker (relative_luminance > 0.45 ? #1A1A1A : #FFFFFF)
+			// that the :root emit uses on palette opt-in.
+			array(
+				'slug'  => 'on-primary',
+				'name'  => __( 'On Primary', 'customify' ),
+				'color' => 'var(--customify-on-primary, ' . customify_color_pick_on( $slots['primary'] ) . ')',
+			),
+			array(
+				'slug'  => 'on-secondary',
+				'name'  => __( 'On Secondary', 'customify' ),
+				'color' => 'var(--customify-on-secondary, ' . customify_color_pick_on( $slots['secondary'] ) . ')',
+			),
+			array(
+				'slug'  => 'on-accent',
+				'name'  => __( 'On Accent', 'customify' ),
+				'color' => 'var(--customify-on-accent, ' . customify_color_pick_on( $slots['accent'] ) . ')',
+			),
+			array(
+				'slug'  => 'on-surface',
+				'name'  => __( 'On Surface', 'customify' ),
+				// Surface fallback always #FFFFFF (matches the SCSS var fallback
+				// in .is-style-card and similar). on-surface pick against that.
+				'color' => 'var(--customify-on-surface, ' . customify_color_pick_on( '#FFFFFF' ) . ')',
+			),
+
+			// ─── Legacy neutrals — preserved verbatim from static theme.json.
+			array(
+				'slug'  => 'light-gray',
+				'name'  => __( 'Light Gray', 'customify' ),
+				'color' => '#f2f2f2',
+			),
+			array(
+				'slug'  => 'dark-gray',
+				'name'  => __( 'Dark Gray', 'customify' ),
+				'color' => '#444444',
+			),
+		);
+	}
+}
+
+if ( ! function_exists( 'customify_palette_inject_into_theme_json' ) ) {
+	/**
+	 * Replace the theme.json color palette at runtime with the
+	 * Customify dynamic palette. Hooks `wp_theme_json_data_theme`
+	 * which fires BEFORE WP renders `--wp--preset--color--*` so the
+	 * generated declarations carry the var() reference (not a frozen
+	 * hex snapshot).
+	 *
+	 * The replacement is conditional:
+	 *   • WP <6.1: skip (var() in palette color unsupported; would
+	 *     render raw "var(--customify-X)" text in the picker).
+	 *   • WP >=6.1: replace the entire `settings.color.palette` array.
+	 *
+	 * @param WP_Theme_JSON_Data $theme_json
+	 * @return WP_Theme_JSON_Data
+	 */
+	function customify_palette_inject_into_theme_json( $theme_json ) {
+		if ( version_compare( get_bloginfo( 'version' ), '6.1', '<' ) ) {
+			return $theme_json;
+		}
+
+		$palette = customify_color_palette_for_theme_json();
+
+		// update_with() merges; passing the palette array under the
+		// same path replaces it wholesale (arrays in theme.json don't
+		// merge per-element, they replace).
+		$theme_json->update_with( array(
+			'version'  => 3,
+			'settings' => array(
+				'color' => array(
+					'palette' => $palette,
+				),
+			),
+		) );
+
+		return $theme_json;
+	}
+	add_filter( 'wp_theme_json_data_theme', 'customify_palette_inject_into_theme_json' );
+}
