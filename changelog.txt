@@ -4,6 +4,9 @@
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
 * NEW: has-page-cover body class; scope transparent header styles.
+* IMPROVED: WordPress 7.0 ready.
+
+* IMPROVED: Editor style now support customizer settings.
 * IMPROVED: Header/footer builder UI — sizing, title display, popover width and column layout.
 * IMPROVED: Header layout.
 * IMPROVED: Decouple Post Content Max Width from .content-inner wrapper; apply theme.json contentSize to frontend .entry-content.

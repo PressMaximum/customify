@@ -119,7 +119,7 @@ address {
 }
 
 pre {
-    background: color.adjust($background_body, $lightness: -5%);
+    background-color: $surface_medium;
     font-family: "Courier 10 Pitch", Courier, monospace;
     margin-bottom: ms(3);
     padding: ms(2);
@@ -131,7 +131,7 @@ code:not(pre code),
 kbd,
 tt,
 var {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: $surface_medium;
     font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
     padding: 0.15em ms(-3);
     border-radius: 2px;
@@ -175,7 +175,11 @@ body {
 }
 
 hr {
-    background-color: #ccc;
+    // `#ccc` is a plain mid-gray that becomes a bright divider on dark
+    // Palette bases. Use $color_border (saved Border slot → currentcolor 10%
+    // tint fallback) so the divider stays visible on any canvas without
+    // dominating it.
+    background-color: $color_border;
     border: 0;
     height: 1px;
     margin: 0 0 ms(2);
@@ -259,7 +263,7 @@ table {
         font-weight: 600;
     }
     th {
-        background: color.adjust($background_body, $lightness: -5%);
+        background-color: $surface_strong;
         font-weight: 500;
     }
     th,
@@ -274,10 +278,10 @@ table {
     }
     tbody {
         td {
-            background: color.adjust($background_body, $lightness: -2%);
+            background-color: $surface_subtle;
         }
         tr:nth-child(2n) td {
-            background: color.adjust($background_body, $lightness: -3%);
+            background-color: $surface_medium;
         }
     }
 }
@@ -334,8 +338,9 @@ input[type="color"],
 select,
 textarea,
 .select2-container .select2-selection--single {
-    color: #282828;
-    border: 1px solid #e5e5e5;
+    color: $color_text;
+    background-color: $surface_medium;
+    border: 1px solid $color_border;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
     padding: 0 0.75em;
     height: 2.6em;
@@ -346,9 +351,8 @@ textarea,
     -moz-appearance: none;
     -webkit-appearance: none;
     &:focus {
-        border-color: rgba(0, 0, 0, 0.1);
+        background-color: $surface_subtle;
         outline: none;
-        background-color: #f9f9f9;
     }
 }
 
@@ -382,7 +386,11 @@ select {
         }
     }
     .select2-dropdown {
-        border: 1px solid #e5e5e5;
+        // Match the Select2 input border to the rest of the form controls —
+        // `#e5e5e5` was a hard-coded light gray that didn't track dark
+        // Palette bases. Use $color_border so the dropdown panel border
+        // adapts (saved Border slot → currentcolor 10% fallback).
+        border: 1px solid $color_border;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
     }
 }
@@ -502,7 +510,7 @@ fieldset {
 }
 
 label {
-    color: #252525;
+    color: $color_text;
 }
 
 
