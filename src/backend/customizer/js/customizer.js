@@ -287,11 +287,34 @@
 		}
 
 		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 767px)' };
+		// Normalize fr length to row's column count. Matches the PHP
+		// `customify_footer_row_layout_css()` defensive truncation so legacy
+		// data (fr longer than count after a count reduction) renders the
+		// same on customizer preview as it does on the published frontend.
+		var rawCount = parseInt(data.count, 10);
+		var count    = ( rawCount >= 1 && rawCount <= 5 ) ? rawCount : 0;
 		var css = '';
+
+		// Hide column placeholders beyond the active count. The HTML in the
+		// preview iframe was rendered server-side with the previous count, so
+		// when the user shrinks count via postMessage the stale col4/col5
+		// divs would otherwise wrap onto a new grid row below. PHP mirrors
+		// this exact rule for non-customizer page loads as a defensive guard.
+		var ALL_COL_SLOTS = ['left', 'center', 'right', 'col4', 'col5'];
+		if (count > 0 && count < ALL_COL_SLOTS.length) {
+			var hideSelectors = ALL_COL_SLOTS.slice(count).map(function(c) {
+				return rowSelector + ' .col-v2-' + c;
+			});
+			css += hideSelectors.join(', ') + ' { display: none !important; } ';
+		}
 		Object.keys(breakpoints).forEach(function(device) {
 			var d = data[device];
 			if (!d || !Array.isArray(d.fr) || !d.fr.length) { return; }
-			var cols    = d.fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
+			var fr = count > 0 ? d.fr.slice(0, count) : d.fr.slice();
+			if (count > 0) {
+				while (fr.length < count) { fr.push(1); }
+			}
+			var cols    = fr.map(function(v) { return parseInt(v, 10) + 'fr'; }).join(' ');
 			var gap     = parseInt(d.gap, 10) || 0;
 			var padding = parseInt(d.padding, 10) || 0;
 			var rules   = rowSelector + ' .row-v2 { display: grid !important; grid-template-columns: ' + cols + '; column-gap: ' + gap + 'px; }';

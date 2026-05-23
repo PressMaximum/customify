@@ -129,10 +129,34 @@ export default function RowLayout( { settingKey } ) {
 		isCommitting.current = false;
 	};
 
+	// Truncate or pad an fr array to a target length, preserving leading
+	// proportions. Used when column count changes so every device's fr
+	// stays in sync with `count`. Without this, switching count on one
+	// device tab leaves the other devices with a stale fr length, which
+	// the renderer then emits as extra/empty grid tracks on those
+	// breakpoints (the "col4 still renders after 4→3" bug).
+	const resizeFr = ( oldFr, newCount ) => {
+		const arr = Array.isArray( oldFr ) ? oldFr.slice( 0, newCount ) : [];
+		while ( arr.length < newCount ) arr.push( 1 );
+		return arr;
+	};
+
 	const handleCountChange = ( n ) => {
 		const firstPreset = ( PRESETS[ n ] || [ { fr: Array( n ).fill( 1 ) } ] )[ 0 ];
 		const newFr       = firstPreset.fr || Array( n ).fill( 1 );
-		commit( { ...value, count: n, [ device ]: { ...deviceData, fr: newFr } } );
+
+		// Active device gets the preset; inactive devices preserve their
+		// own proportions but get resized to the new count.
+		const next = { ...value, count: n };
+		[ 'desktop', 'tablet', 'mobile' ].forEach( ( dev ) => {
+			const cur = value[ dev ] || { fr: [], gap: 0, padding: 0 };
+			next[ dev ] = {
+				...cur,
+				fr: dev === device ? newFr : resizeFr( cur.fr, n ),
+			};
+		} );
+
+		commit( next );
 	};
 
 	const handlePreset = ( preset ) => {

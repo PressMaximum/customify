@@ -117,15 +117,25 @@ class  Customify_Customizer {
 		if ( is_customize_preview() ) {
 			$suffix = Customify()->get_asset_suffix();
 
-			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/auto-css.js', array( 'customize-preview' ), '20151215', true );
+			// Use webpack-emitted content hashes so browsers refetch the bundle
+			// after every rebuild. The hardcoded '20151215' used previously
+			// meant `?ver=` never changed, so users had to hard-refresh to
+			// see JS updates (e.g. footer col-layout live-preview fixes).
+			$auto_css_asset = require get_template_directory() . '/build/js/backend/customizer/auto-css.asset.php';
+			$customizer_asset = require get_template_directory() . '/build/js/backend/customizer/customizer.asset.php';
+
+			wp_enqueue_script(
+				'customify-customizer-auto-css',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/auto-css.js',
+				array_merge( array( 'customize-preview' ), $auto_css_asset['dependencies'] ),
+				$auto_css_asset['version'],
+				true
+			);
 			wp_enqueue_script(
 				'customify-customizer',
 				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/customizer.js',
-				array(
-					'customize-preview',
-					'customize-selective-refresh',
-				),
-				'20151215',
+				array_merge( array( 'customize-preview', 'customize-selective-refresh' ), $customizer_asset['dependencies'] ),
+				$customizer_asset['version'],
 				true
 			);
 			wp_localize_script(

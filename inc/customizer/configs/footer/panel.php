@@ -361,14 +361,44 @@ function customify_footer_row_layout_css() {
 			'mobile'  => '@media (max-width: 767px)',
 		);
 
+		// Normalize fr length to the row's column count. Legacy data from
+		// before RowLayout.jsx synced all devices on count change can have
+		// per-device fr arrays longer (or shorter) than count, which would
+		// emit extra empty grid tracks (the "col4 still renders after 4→3"
+		// bug). Clamp count to the 1–5 range that matches get_footer_col_keys().
+		$count = isset( $data['count'] ) ? max( 1, min( 5, intval( $data['count'] ) ) ) : 0;
+
+		// Hide column placeholders beyond the active count. Server-side
+		// `render_row()` already skips emitting non-active cols, but in
+		// customizer live preview the HTML is the snapshot rendered with
+		// the previous count — only CSS reacts to `postMessage` changes.
+		// Without this rule, col4/col5 from the stale HTML wrap onto a new
+		// grid row below when grid-template-columns shrinks.
+		$all_col_slots = array( 'left', 'center', 'right', 'col4', 'col5' );
+		if ( $count > 0 && $count < count( $all_col_slots ) ) {
+			$hide_selectors = array();
+			foreach ( array_slice( $all_col_slots, $count ) as $hide_col ) {
+				$hide_selectors[] = $selector . ' .col-v2-' . $hide_col;
+			}
+			$css .= implode( ', ', $hide_selectors ) . ' { display: none !important; } ';
+		}
+
 		foreach ( $devices as $device => $media ) {
 			if ( empty( $data[ $device ]['fr'] ) || ! is_array( $data[ $device ]['fr'] ) ) {
 				continue;
 			}
 			$device_data = $data[ $device ];
+
+			$fr = $count > 0 ? array_slice( $device_data['fr'], 0, $count ) : $device_data['fr'];
+			if ( $count > 0 ) {
+				while ( count( $fr ) < $count ) {
+					$fr[] = 1;
+				}
+			}
+
 			$fr_parts  = array_map(
 				function ( $v ) { return absint( $v ) . 'fr'; },
-				$device_data['fr']
+				$fr
 			);
 			$grid_cols = implode( ' ', $fr_parts );
 

@@ -512,7 +512,33 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 			$footer_col_keys = $this->get_footer_col_keys( $id );
 			$force_all_cols  = true;
 			$ordered_cols    = $footer_col_keys;
-			$col_count       = count( $footer_col_keys );
+			$col_count       = is_array( $footer_col_keys ) ? count( $footer_col_keys ) : 0;
+
+			// Skip the whole row when NONE of the active footer cols has items.
+			// Mirrors the header guard further down. Same root cause: the
+			// `render_items()` pre-pass sets `flag_rows` for any col key found
+			// in saved data, so a row with items left over in stray keys
+			// (e.g. col4/col5 from a previous col_layout that's since shrunk)
+			// still passes the top-level `flag_rows` guard at the start of
+			// this method. Without this re-check the footer would emit N
+			// empty `col-v2` placeholder divs for an effectively empty row.
+			//
+			// Guard `is_array()` so a missing `footer_{row}_col_layout`
+			// setting (get_footer_col_keys() returns null) preserves current
+			// fall-through behaviour instead of silently hiding the row.
+			if ( is_array( $ordered_cols ) && ! empty( $ordered_cols ) ) {
+				$footer_has_item = false;
+				foreach ( $ordered_cols as $_check_col ) {
+					if ( isset( $this->flag_cols[ $_check_col . '-' . $id . '-' . $device ] ) ) {
+						$footer_has_item = true;
+						break;
+					}
+				}
+				if ( ! $footer_has_item ) {
+					ob_end_clean();
+					return false;
+				}
+			}
 		} else {
 			$force_all_cols = false;
 			$ordered_cols   = array( 'left', 'center', 'right' );
