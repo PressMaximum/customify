@@ -1708,9 +1708,21 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 			),
 
 			// ─── Text + canvas axis.
+			// Slug intentionally named `body-text` NOT `text` to avoid the
+			// `.has-text-color` collision: WP auto-generates
+			// `.has-{slug}-color { color: var(--wp--preset--color--{slug}) !important; }`
+			// for every palette slug. When the slug is literally `text`,
+			// the generated rule (`.has-text-color { color: var(--text) !important }`)
+			// matches the WP marker class that's added to ANY block whose
+			// text color was set manually (inline style or a different
+			// slug pick) — overriding the user's actual color choice with
+			// the text slot value. Renaming the slug to `body-text` keeps
+			// the picker swatch labelled "Body Text" while sidestepping
+			// the marker-class collision. The CSS var() target stays
+			// `--customify-text` (the underlying slot key is unchanged).
 			array(
-				'slug'  => 'text',
-				'name'  => __( 'Text', 'customify' ),
+				'slug'  => 'body-text',
+				'name'  => __( 'Body Text', 'customify' ),
 				'color' => 'var(--customify-text, ' . $slots['text'] . ')',
 			),
 			array(
@@ -1732,17 +1744,27 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 				// Text or Base changes.
 				'color' => 'var(--customify-text-muted, ' . $text_muted_hex . ')',
 			),
+			// Slugs `divider` / `divider-strong` are renamed from spec's
+			// `border` / `border-strong` to dodge the same WP marker-class
+			// collision that hit the `text` slug (see body-text note above):
+			// WP adds `has-border-color` as a marker class to ANY block whose
+			// border color was set via the Border panel — so a generated
+			// `.has-border-color { color: var(--border) !important }` rule
+			// would force the text color to the border value on every
+			// border-styled block. The :root token names (--customify-border,
+			// --customify-border-strong) stay unchanged because they're
+			// theme-internal — only the picker slug is renamed.
 			array(
-				'slug'  => 'border',
-				'name'  => __( 'Border', 'customify' ),
+				'slug'  => 'divider',
+				'name'  => __( 'Divider', 'customify' ),
 				// Decorative-only (~1.35:1 vs base, WCAG-exempt). For
 				// functional control boundaries (form input borders,
-				// button outlines) use `border-strong`. Spec §2.
+				// button outlines) use `divider-strong`. Spec §2.
 				'color' => 'var(--customify-border, ' . $border_hex . ')',
 			),
 			array(
-				'slug'  => 'border-strong',
-				'name'  => __( 'Border Strong', 'customify' ),
+				'slug'  => 'divider-strong',
+				'name'  => __( 'Divider Strong', 'customify' ),
 				// WCAG 1.4.11 ≥3:1 vs base — for form input borders and
 				// any boundary that's the ONLY cue identifying a control.
 				// Spec §2 (solved P).
