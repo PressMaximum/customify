@@ -250,8 +250,12 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 }
 
 .wp-block-pullquote {
-	border-bottom: 4px solid currentColor;
-	border-top: 4px solid currentColor;
+	// `currentColor` here produces a bright 4px white bar above/below
+	// the pullquote on dark Palette bases. Use $color_border so it
+	// adapts via the currentcolor-mix token (10%) — visible enough to
+	// frame the quote without dominating the canvas.
+	border-bottom: 4px solid $color_border;
+	border-top: 4px solid $color_border;
 	padding: 3em 0;
 	text-align: center;
 	> p:first-child {
@@ -270,7 +274,10 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 .wp-block-separator {
 	margin: 3em auto;
 	border: none;
-	border-bottom: 2px solid currentColor;
+	// `currentColor` made the separator a bright 2px white line on dark
+	// Palette bases. Use $color_border for the adaptive currentcolor-tint
+	// (10%) — still visible as a divider but doesn't dominate the canvas.
+	border-bottom: 2px solid $color_border;
 	&:not(.is-style-wide) {
 		max-width: 100px;
 	}

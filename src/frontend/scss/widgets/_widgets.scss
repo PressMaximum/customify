@@ -450,7 +450,13 @@
 /* Tagcloud widget (classic) */
 .tagcloud {
 	a {
-		border: 1px solid currentColor;
+		// `currentColor` here painted every tag with a bright outline
+		// of the link color — visually busy + too prominent on dark
+		// Palette bases. Use $color_border so each tag's outline uses
+		// the adaptive currentcolor-tint (10%). The :hover transition
+		// below uses currentColor explicitly to highlight the active
+		// tag with a saturated border.
+		border: 1px solid $color_border;
 		border-radius: 2px;
 		display: inline-block;
 		font-size: 0.875em !important;
