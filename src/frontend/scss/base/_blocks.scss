@@ -135,6 +135,15 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	// adaptive currentcolor-tint border (10%) we use elsewhere.
 	border-color: $color_border;
 }
+// WP core block-library also adds `border-bottom: 3px solid` on
+// `.wp-block-table thead` and `border-top: 3px solid` on `tfoot` with
+// no color — same currentcolor-fallback problem produces a bright
+// 3px white bar between header/footer and body on dark bases. Set
+// border-color so those separators use the adaptive token.
+.wp-block-table thead,
+.wp-block-table tfoot {
+	border-color: $color_border;
+}
 
 // WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
 // #f9f9f9 light greys AND force dark `#40464d` text via a `:where()`
