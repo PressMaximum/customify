@@ -969,7 +969,180 @@ batch:
   `dark-mode` default and left the change for a future minor-version
   bump with explicit migration messaging.
 
-### 8.11 Phase 2 — remaining (good follow-ups)
+### 8.11 Phase 2.10–2.13 — done (MD3 container pattern + theme.json injection + auto-wire + rgba composite)
+
+Final batch of palette engine work — implements the
+[color-token-derivation spec](https://olliewp.com/docs/ollie-block-theme/ollie-color-palette/#ollies-color-system)
+formulas with Customify-specific extensions (chroma cap, naming
+conventions that dodge WP marker-class collisions). PRs `#395` (editor
+canvas merged) + `#396` (this batch — 14 commits, ~900 LOC across PHP
++ SCSS + JS + docs).
+
+**§ Phase 2.10 — Surface adaptive wiring + comprehensive hex audit**
+- ✅ Wired `--customify-surface` to `.is-style-card`, code blocks,
+  preformatted, verse blocks, form inputs, table headers (thead/tbody
+  alternation), calendar header, `.wp-block-search__input`,
+  `.wp-block-pullquote`, `.wp-block-separator`. Surface tints use
+  hybrid `var(--customify-surface, color-mix(in srgb, currentcolor
+  X%, transparent))` — saved value wins, fallback adapts to local
+  text color.
+- ✅ Three surface intensity tiers (`$surface_subtle` 4%, `_medium`
+  6%, `_strong` 10%) for visual hierarchy across block types.
+- ✅ Bumped `$color_border` 10% → 14% currentcolor mix per spec §2
+  (~1.35:1 vs base — decorative, WCAG-exempt).
+- ✅ Hex audit across `_base.scss` / `_blocks.scss` / `_layouts.scss`
+  / `_widgets.scss` — converted 15+ hard-coded hex to var() chains:
+  - `.site-content { background: var(--customify-base, #fff) }`
+  - `.wp-block-quote.is-style-accent` border → `$color_primary`
+  - `.wp-block-group.is-style-card` bg + border + color (with
+    `var(--customify-on-surface, inherit)` safety net for white-on-
+    white card case)
+  - `hr`, `.select2-dropdown`, widget table borders, category count
+    badges, sidebar search submit icon — all wired to slot tokens
+- ✅ Intentionally kept literal hex documented (skin-scoped header/
+  footer hexes, sticky-post Bootstrap-style highlights, `.has-*-color`
+  WP block palette legacy classes, social brand colors, a11y skip-
+  link focus pill, WP brand blue Customizer-edit overlays).
+
+**§ Phase 2.11 — Picker palette injection + slug refactor**
+- ✅ New `wp_theme_json_data_theme` filter
+  (`customify_palette_inject_into_theme_json`) replaces theme.json
+  static palette at runtime with `var(--customify-X, hex)` chains.
+  Block editor color pickers (Blocksify, WP core, Gutenberg, child
+  themes) auto-track Customizer Palette changes via `useSetting('color.palette.theme')`.
+- ✅ WP version gate: WP ≥6.1 only — older WP renders `var()` strings
+  literally in picker swatches.
+- ✅ 12-slug lean picker, pair order:
+  ```
+  Primary · Primary Container · Secondary · Secondary Container
+  · Accent · Accent Container · Body Text · Surface · Base
+  · Text Muted · Divider · Divider Strong
+  ```
+- ✅ Hidden from picker (theme internals only): on-primary / on-
+  secondary / on-accent / on-surface / on-primary-container / on-
+  secondary-container / on-accent-container. Used by SCSS internals
+  + Phase 2.13 auto-wire.
+
+- ⚠️ **CRITICAL FIX — WP marker-class slug collision**: WP global-
+  styles engine auto-generates `.has-{slug}-color { color:
+  var(--wp--preset--color--{slug}) !important; }` for every palette
+  slug. This silently breaks inline color picks when a slug is
+  named exactly `text` or `border`:
+  - `.has-text-color` is ALSO WP's marker class for ANY block
+    setting text color → generated rule overrides the inline pick
+    with `!important`.
+  - `.has-border-color` is ALSO WP's marker class for border-panel
+    pick → same override.
+  - **Fix**: rename picker slugs `text` → `body-text`, `border` →
+    `divider`, `border-strong` → `divider-strong`. The `:root` token
+    names (`--customify-text` / `--customify-border` /
+    `--customify-border-strong`) stay unchanged because they're
+    theme-internal — only the picker slug is renamed. `divider`
+    semantically clearer too (it's the WCAG-exempt decorative line
+    for `<hr>`, card edges, table cell separators).
+
+**§ Phase 2.12 — Implement color-token-derivation spec**
+- ✅ Per-spec formulas implemented in PHP + JS:
+  - §2 `text-muted` = `mix(text 70%, base)` (CSS live)
+  - §2 `border` = `mix(text 14%, base)` (CSS live, decorative)
+  - §2 `border-strong` = smallest P where contrast(mix(text P%,
+    base), base) ≥ 3.0 (PHP iterates 6%→100%)
+  - §3 on-* = max-contrast pick (`contrast(LIGHT, X) >=
+    contrast(DARK, X) ? LIGHT : DARK`) — replaces pre-spec
+    luminance-threshold formula that misfired on medium-luminance
+    colors like teal `#3CAA9D`
+  - §4 *-container P = closed-form OKLab solve landing at L=0.93,
+    clamped [0.02, 0.98]
+  - §5 on-*-container = OKLab L-reduction (keep hue, step L
+    downward until contrast ≥ 4.5)
+- ✅ OKLab transform helpers (Ottosson) — sRGB ↔ OKLab via
+  `customify_color_srgb_to_oklab()` / `customify_color_oklab_to_srgb()`
+  in PHP, `_srgbToOklab()` / `_oklabToSrgb()` in JS.
+- ✅ Container chroma cap (Customify extension to spec §4) — projects
+  container OKLab (a, b) onto 0.04 max-chroma circle. Without cap,
+  high-chroma brands (yellow / lime / hot pink) produce oversaturated
+  container tints because they're already perceptually light and
+  mixing with white preserves chroma. Cap=0.04 keeps low-chroma
+  brands unchanged (primary navy → 0.011, unaffected) but tames
+  high-chroma cases (accent yellow → 0.103 → 0.040, soft cream).
+
+**§ Phase 2.13 — Auto-wire + rgba composite + opt-in gate drop**
+- ✅ SCSS auto-wire (`_blocks.scss`): `.has-{brand}-background-color`
+  + descendant headings get `color: var(--customify-on-{brand},
+  inherit)`. Designer's explicit text pick still wins via WP's
+  `.has-{slug}-color { ... !important }` rule (higher specificity +
+  `!important`). The `inherit` fallback preserves 30K-safety: when
+  on-* is unset (legacy site, no opt-in), text inherits from body
+  cascade — byte-identical pre-PR behavior.
+- ✅ Dropped opt-in gate for `--customify-on-*` family (now emitted
+  unconditionally). Required because the auto-wire SCSS rule
+  references on-* and needs it present even when user only touches
+  legacy Primary/Secondary slots (not the 4 new opt-in slot keys).
+  30K-safe because on-* is CONSUMED only by the new auto-wire on
+  the new picker slugs — legacy sites without those blocks see no
+  behavioral change.
+- ✅ rgba slot value support — extended `customify_color_normalize_hex()`
+  to passthrough rgb()/rgba() strings + `customify_color_hex_to_rgb()`
+  to parse them. JS `_hexToRgb` mirror.
+- ⚠️ **CRITICAL FIX — rgba composite over base**: First-pass rgba
+  fix only stripped the alpha channel and ran the max-contrast pick
+  against the opaque rgb component. That breaks for transparent
+  brands: user picks `rgba(17,52,109,0.14)` (dark navy, 14% alpha),
+  the BUTTON bg actually composites to `~#dee3eb` (near-white) on a
+  light page, but the picker saw the opaque navy and chose WHITE
+  text → invisible white-on-near-white.
+  - **Fix**: new `customify_color_composite_over($value, $base)`
+    helper applies standard alpha blend `out = src×a + base×(1−a)`.
+    `customify_color_pick_on()` gained a `$base_hex` parameter and
+    composites first, then runs max-contrast pick against the
+    rendered color. JS `_compositeOver()` + `_pickOn(value, baseHex)`
+    mirror. All call-sites updated to pass `$slots['base']`.
+  - Verification matrix:
+    - `rgba(17,52,109,0.14)` on white → composite `#dee3eb` → DARK ✓
+    - `rgba(17,52,109,0.14)` on dark  → composite `#191e26` → WHITE ✓
+    - `rgba(255,209,220,1)` opaque    → passthrough `#ffd1dc` → DARK ✓
+    - Hex `#235787` no alpha          → passthrough → WHITE ✓
+    - Teal `#3CAA9D`                  → passthrough → DARK ✓
+
+**§ Final architecture summary**
+
+```
+:root tokens (19 total, theme internals):
+├─ source slots (6):       primary, secondary, accent, text, surface, base
+├─ derived static (6):     link, link-hover, primary-hover, heading,
+│                           body-text, widget-title, text-muted
+├─ on-* unconditional (4): on-primary, on-secondary, on-accent, on-surface
+└─ opt-in gated (5):       border-strong, primary-container,
+                            secondary-container, accent-container,
+                            + 3 on-*-container (theme internals only)
+
+theme.json picker (12 slugs, Blocksify-facing):
+├─ Brand+Container pairs (6): primary · primary-container · secondary ·
+│                              secondary-container · accent · accent-container
+├─ Text+canvas axis (3):      body-text · surface · base
+└─ Helpers (3):               text-muted · divider · divider-strong
+
+SCSS auto-wire (Phase 2.13):
+└─ `.has-{primary|secondary|accent}-background-color {
+     color: var(--customify-on-{slug}, inherit);
+   }`
+   (+ descendant h1-h6 to beat global heading rule specificity)
+```
+
+**§ Verified spot-checks (default palette)**
+
+| Token | Computed | Spec target |
+|---|---|---|
+| text-muted | #6b6b6b | #646464 (~7Δ sRGB-mix; OKLab in browser = exact) |
+| border (14%) | #e1e1e1 | #DEDEDE (~3Δ same source) |
+| border-strong | #939393 | ~#949494 ✓ |
+| on-primary | #FFFFFF | #FFFFFF ✓ |
+| on-accent | #1A1A1A | #1A1A1A ✓ |
+| accent P (un-capped) | 56.1% | ~56% ✓ |
+| accent-container chroma | 0.040 (capped from 0.103) | — (Customify extension) |
+| on-accent-container | #8B5F00 | ~#8B5F00 (dark gold) ✓ |
+
+### 8.12 Phase 2 — remaining (good follow-ups)
 
 | Item | Notes |
 |---|---|
@@ -980,7 +1153,7 @@ batch:
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
 
-### 8.12 Phase 3 — Custom palettes / Style Packs (future)
+### 8.13 Phase 3 — Custom palettes / Style Packs (future)
 
 Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
 build the higher-level palette UX on top:
