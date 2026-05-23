@@ -316,8 +316,9 @@
 		}
 
 		&__input {
-			color: #282828;
-			border: 1px solid #e5e5e5;
+			color: $color_text;
+			background-color: $surface_medium;
+			border: 1px solid $color_border;
 			box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 			padding: 0 .75em;
 			height: 2.6em;
@@ -329,7 +330,7 @@
 			-webkit-appearance: none;
 
 			&:focus {
-				background-color: #fff;
+				background-color: $surface_subtle;
 			}
 		}
 
@@ -680,10 +681,18 @@
 			border: 1px solid $color_border;
 		}
 
-		th {
+		// Header row (M T W T F S S) — strong surface tint mirrors the
+		// pattern used for `.wp-block-table thead th` so calendar headers
+		// stay readable on dark + light palette bases.
+		thead th {
 			font-weight: 500;
+			background-color: $surface_strong;
 		}
 
+		// "Today" cell — fall back to border token (subtle distinction
+		// from header tint). Note: `background: $color_border` resolves
+		// through the same adaptive currentcolor expression so it remains
+		// visible on dark bases.
 		#today {
 			font-weight: 700;
 			background: $color_border;

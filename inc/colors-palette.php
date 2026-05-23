@@ -249,9 +249,22 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			$on_primary = $on_secondary = $on_accent = null;
 		}
 
+		// Surface slot is the elevated-container background (cards / table
+		// cells / code blocks / form inputs / calendar headers). Only emit
+		// to :root when the user EXPLICITLY saved palette_surface — for
+		// unsaved sites the bundled SCSS fallback resolves to
+		// `color-mix(in srgb, currentcolor 6-12%, transparent)` which
+		// auto-adapts to the page background. Emitting the slot default
+		// `#ECECEC` here would bake a light gray into :root and break that
+		// adaptive behavior for users who saved Base = dark but didn't
+		// touch Surface. Same gate doctrine as --customify-on-* (Phase 2.8)
+		// and --customify-border (Phase 2.6).
+		$ov_surface = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
+			? $slots['surface']
+			: null;
+
 		$lines = array(
 			"--customify-base: {$slots['base']}",
-			"--customify-surface: {$slots['surface']}",
 			"--customify-text: {$slots['text']}",
 			"--customify-primary: {$slots['primary']}",
 			"--customify-secondary: {$slots['secondary']}",
@@ -282,6 +295,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// fallback fire so borders adapt to local text color.
 		if ( $border ) {
 			$lines[] = "--customify-border: {$border}";
+		}
+		// --customify-surface only emitted when user explicitly saved
+		// palette_surface (see $ov_surface above). Absence lets the
+		// bundled SCSS `$surface_subtle/medium/strong` fallback expressions
+		// (color-mix in srgb, currentcolor X%, transparent) fire so surface
+		// tints (table cells, code blocks, calendar headers, form inputs)
+		// adapt to the page background automatically.
+		if ( null !== $ov_surface ) {
+			$lines[] = "--customify-surface: {$ov_surface}";
 		}
 
 		// Derived-token cascade lines — added AFTER the static lines so

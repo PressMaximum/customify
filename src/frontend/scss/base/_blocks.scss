@@ -130,6 +130,33 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	padding: 0.5em;
 }
 
+// WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
+// #f9f9f9 light grays. On dark palette bases those wash out into the
+// canvas and make table content unreadable. Wire to adaptive surface
+// tints so cells stay readable on any background — saved Palette
+// Surface slot wins, unsaved sites get a currentcolor-based tint.
+.wp-block-table thead th {
+	background-color: $surface_strong;
+}
+.wp-block-table tbody td {
+	background-color: $surface_subtle;
+}
+.wp-block-table tbody tr:nth-child(2n) td {
+	background-color: $surface_medium;
+}
+.wp-block-table tfoot td {
+	background-color: $surface_strong;
+}
+
+// Code / preformatted / verse blocks — same WP-default-gray problem as
+// tables. Use medium tint so the block stands out from prose without
+// dominating it.
+.wp-block-code,
+.wp-block-preformatted,
+.wp-block-verse {
+	background-color: $surface_medium;
+}
+
 .entry-content li:not(.wp-block-navigation li) {
 	margin-left: 2.5em;
 	margin-bottom: 6px;
