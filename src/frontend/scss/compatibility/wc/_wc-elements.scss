@@ -11,8 +11,13 @@
 .button.product_type_external,
 .button.product_type_variable {
 	background: $color_secondary;
+	color: var(--customify-on-secondary, #ffffff);
 	position: relative;
 	cursor: pointer;
+	&:hover,
+	&:focus {
+		color: var(--customify-on-secondary, #ffffff);
+	}
 	&.added {
 		i {
 			&::before {

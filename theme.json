@@ -11,6 +11,21 @@
 			"defaultPalette": false,
 			"palette": [
 				{
+					"slug": "base",
+					"name": "Base",
+					"color": "#FFFFFF"
+				},
+				{
+					"slug": "surface",
+					"name": "Surface",
+					"color": "#ECECEC"
+				},
+				{
+					"slug": "accent",
+					"name": "Accent",
+					"color": "#FFD042"
+				},
+				{
 					"slug": "primary",
 					"name": "Primary",
 					"color": "#235787"

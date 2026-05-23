@@ -149,7 +149,7 @@ $blog_gutter: $gl-gutter;
         font-weight: 500;
         &:hover {
             background: $color_primary;
-            color: #FFFFFF;
+            color: var(--customify-on-primary, #FFFFFF);
             border-color: $color_primary;
         }
     }
@@ -317,13 +317,13 @@ $blog_gutter: $gl-gutter;
             &:hover {
                 border-color: $color_primary;
                 background: $color_primary;
-                color: #FFFFFF;
+                color: var(--customify-on-primary, #FFFFFF);
             }
         }
         span {
             border-color: $color_primary;
             background: $color_primary;
-            color: #FFFFFF;
+            color: var(--customify-on-primary, #FFFFFF);
         }
     }
 }

@@ -27,6 +27,33 @@ class Customify
 		add_filter('excerpt_more', array($this, 'excerpt_more'));
 		add_filter('excerpt_length', array($this, 'excerpt_length'));
 		add_action('wp_head', array($this, 'customify_style'), 2);
+		// Print the palette tokens (:root + Base cascade rules) BEFORE
+		// wp_print_styles (priority 8). The composite styling controls
+		// (Page bg / Content Area bg / Site Content bg) emit literal
+		// `body{background-color:#hex}` via the customify-style-inline-css
+		// block at priority 10, AFTER our tokens. That ordering lets:
+		//   • Composite-saved sites: literal hex wins by cascade order
+		//   • Composite-unsaved sites: composite emits nothing (empty
+		//     default → setup_color skips), our var() cascade applies
+		// Frontend + customize preview both use this same chain.
+		add_action('wp_head', array($this, 'print_palette_tokens'), 8);
+	}
+
+	/**
+	 * Print the palette :root token block + Base composite cascade rules
+	 * BEFORE WP renders enqueued stylesheets. See the docblock above the
+	 * `wp_head` priority-8 hook in `init_hooks()` for the cascade-ordering
+	 * rationale.
+	 *
+	 * The id `customify-palette-tokens-inline-css` mirrors WP's inline-style
+	 * naming so consumers (frontend, extract_customify_css.py helper) can
+	 * find it the same way they find the auto-CSS block.
+	 */
+	function print_palette_tokens() {
+		if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
+			return;
+		}
+		echo "\n<style id='customify-palette-tokens-inline-css'>\n" . customify_color_palette_root_css() . "\n</style>\n";
 	}
 
 	function excerpt_length($length)
@@ -405,6 +432,8 @@ class Customify
 			// Metabox settings.
 			'/inc/template-class.php',
 			// Template element classes.
+			'/inc/colors-palette.php',
+			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',
@@ -493,6 +522,7 @@ class Customify
 			'typography',
 			'page-header',
 			'background',
+			'colors',
 			'compatibility',
 			// Header Builder Panel.
 			'header/transparent',
