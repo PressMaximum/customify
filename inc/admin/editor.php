@@ -44,9 +44,42 @@ class Customify_Editor {
 	 * @return string CSS code.
 	 */
 	public function css() {
+		// Mirror the frontend :root palette tokens block (printed at wp_head
+		// priority 8 by Customify::print_palette_tokens) into the editor
+		// canvas so var(--customify-X) expressions in bundled SCSS + cascade
+		// chains (heading→text, link→primary, link-hover color-mix, etc.)
+		// resolve identically. Without this, the editor iframe falls back
+		// to each var()'s literal-hex fallback — which is the field default,
+		// not the user-saved or cascade-resolved value. Result: opted-in
+		// users (Phase 2.8 Palette panel) see frontend cascade ≠ editor
+		// preview, breaking the WYSIWYG promise.
+		$css = '';
+		if ( function_exists( 'customify_color_palette_root_css' ) ) {
+			$css .= customify_color_palette_root_css();
+
+			// Editor-canvas-specific overrides. The palette-tokens block emits
+			// `body{background-color:var(--customify-base, hex)}` for the
+			// frontend, but the block editor iframe ships at least 2 LATER-in-
+			// source-order `body{background:white}` defaults (one from
+			// `:where(body)` reset, one from the iframe canvas stylesheet) that
+			// outrank a plain `body` selector by source order. Bump specificity
+			// to `.editor-styles-wrapper` — WP's canonical "this content gets
+			// theme styling" wrapper, more specific than `body` and scoped to
+			// the editor canvas. Same cascade chain, same saved-vs-default
+			// resolution as frontend.
+			$base_default = '#ffffff';
+			$slots_fn     = 'customify_color_get_slots';
+			if ( function_exists( $slots_fn ) ) {
+				$slots        = $slots_fn();
+				$base_default = $slots['base'] ?? $base_default;
+			}
+			$css .= '.editor-styles-wrapper{background-color:var(--customify-base, ' . esc_attr( $base_default ) . ');}';
+		}
+
 		$fields = array();
 		$keys   = array(
 			'container_width',
+			'background',                       // Page bg composite — re-scoped to .editor-styles-wrapper below
 			'site_content_styling',
 			'content_background',
 			'single_blog_post_content_width',
@@ -109,8 +142,21 @@ class Customify_Editor {
 			);
 		}
 
+		if ( isset( $fields['background'] ) && $fields['background'] ) {
+			// Page-bg composite — frontend targets `body`, but editor canvas
+			// has WP/theme.json `body { background: white }` defaults loaded
+			// AFTER the auto-CSS inline block (source order beats `body`-on-
+			// `body` specificity). Re-scope to .editor-styles-wrapper so the
+			// composite's saved bg_color, bg_image, bg_position etc. show in
+			// the editor canvas. Same wrapper used by site_content_styling +
+			// content_background above.
+			$fields['background']['selector'] = array(
+				'normal' => '.editor-styles-wrapper',
+			);
+		}
+
 		$c   = new Customify_Customizer_Auto_CSS();
-		$css = $c->render_css( $fields );
+		$css .= $c->render_css( $fields );
 
 		// Metabox compatibility (selectors stable in WP 6.x).
 		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
