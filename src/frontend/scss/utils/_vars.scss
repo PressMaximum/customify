@@ -31,7 +31,7 @@ $color_primary:     var(--customify-primary, #235787);
 $color_secondary:   var(--customify-secondary, #c3512f);
 $color_link:        var(--customify-link, #1e4b75);
 $color_link_hover:  var(--customify-link-hover, #111111);
-$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+$color_border:      var(--customify-border, color-mix(in srgb, currentcolor 8%, transparent));
 $color_meta:        var(--customify-text-muted, #6d6d6d);
 
 // Surface tints — adaptive `currentcolor` fallback so block elements
@@ -47,9 +47,9 @@ $color_meta:        var(--customify-text-muted, #6d6d6d);
 // sites without saved Surface get the adaptive fallback, which is a
 // modest visual improvement over the previous hard-coded WP-default
 // gray that broke on dark backgrounds.
-$surface_subtle:    var(--customify-surface, color-mix(in srgb, currentcolor 6%, transparent));
-$surface_medium:    var(--customify-surface, color-mix(in srgb, currentcolor 8%, transparent));
-$surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 12%, transparent));
+$surface_subtle:    var(--customify-surface, color-mix(in srgb, currentcolor 3%, transparent));
+$surface_medium:    var(--customify-surface, color-mix(in srgb, currentcolor 5%, transparent));
+$surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 8%, transparent));
 
 // Box Shadow
 $boxshadow_dropdown: 0 3px 30px rgba(25,30,35,.1);
