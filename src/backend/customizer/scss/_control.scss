@@ -1922,6 +1922,21 @@ $text_color: #555d66;
             align-self: center;
             margin: 0;
         }
+        // Reserve right-side gutter for the reset icon when picker is dirty.
+        // The icon is position: absolute right: 36px on the LI (16px wide +
+        // 8px gap + 28px swatch = 52px clear of the right edge) — that 16px
+        // icon body extends 12px into the description column (1fr) and
+        // overlaps wrapped text. Padding both title + description shifts
+        // their right edge inside the icon's track. Only applied when the
+        // picker actually has the icon visible (.is-dirty) so non-dirty
+        // pickers keep the full column-1 width.
+        &:has(.customify-input-color.is-dirty) {
+            .customize-control-title,
+            .customize-control-description,
+            > .customify--settings-wrapper > .description {
+                padding-right: 24px;
+            }
+        }
         .customify--field,
         .customify-field-settings-inner {
             margin: 0;
@@ -2015,6 +2030,29 @@ $text_color: #555d66;
         transition: transform 0.1s;
         &:hover {
             transform: scale(1.1);
+        }
+        // Tooltip showing slot name on hover. Uses ::before so ::after is
+        // free for the .is-active ring below. data-label is set by the
+        // quickpick JS (colors-palette.php) to s.label (Primary, Secondary,
+        // etc.). White-space: nowrap keeps the label one line; pointer-
+        // events: none prevents the tooltip from intercepting the hover
+        // and triggering a flicker.
+        &:hover::before {
+            content: attr(data-label);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 3px 8px;
+            background: #1d2327;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            font-weight: 500;
+            border-radius: 3px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
         }
         &.is-active::after {
             content: '';
