@@ -415,12 +415,37 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 //     visible elevated card instead of a stark white panel.
 // The box-shadow stays as-is — subtle drop shadow reads correctly on
 // both light and dark surfaces.
+//
+// `color: var(--customify-on-surface, inherit)` solves the white-on-white
+// case: when the user saves Palette opt-in (Base + Text) but NOT Surface,
+// the card bg falls back to `#fff` but the Text token cascade resolves to
+// the saved (potentially white) text color — producing invisible text.
+// `--customify-on-surface` is set by the WCAG luminance picker on the
+// :root tokens block (inc/colors-palette.php) and flips dark↔light based
+// on the surface color, so:
+//   • No Palette opt-in: `--customify-on-surface` is unset → inherits
+//     body text color (legacy render, byte-identical).
+//   • Palette opt-in, no Surface saved: Surface defaults to `#FFFFFF`
+//     → picker computes on-surface = `#1A1A1A` (dark text on the white
+//     card fallback) — readable.
+//   • Palette opt-in + Surface=dark: picker computes on-surface = `#FFF`
+//     → light text on the dark card — readable.
 .wp-block-group.is-style-card {
 	background: var(--customify-surface, #fff);
+	color: var(--customify-on-surface, inherit);
 	border: 1px solid var(--customify-border, #e0e0e0);
 	border-radius: 8px;
 	padding: 2em;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+
+	// Headings inside the card have their own `color: var(--customify-heading)`
+	// rule at global scope, which bypasses the parent `.is-style-card` color
+	// override. Explicit `h1-h6 { color: ... }` here wins because it's a
+	// deeper selector path and matches the global heading rule's specificity.
+	// Same on-surface picker → readable text on any saved surface.
+	h1, h2, h3, h4, h5, h6 {
+		color: var(--customify-on-surface, inherit);
+	}
 }
 
 // Columns: No gap
