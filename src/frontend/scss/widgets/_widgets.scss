@@ -669,7 +669,13 @@
 		caption-side: top;
 	}
 
+	// WP core's block-library/style.css forces `color: #40464d` on
+	// `:where(.wp-block-calendar table:not(.has-text-color))` (selector
+	// specificity 0). On dark Palette bases that dark text becomes
+	// invisible against the dark canvas. Override with $color_text so
+	// the calendar inherits the body-text cascade.
 	table {
+		color: $color_text;
 		width: 100%;
 		border-collapse: collapse;
 		font-size: 0.85em;
