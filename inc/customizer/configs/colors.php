@@ -123,13 +123,19 @@ a:focus,
 		);
 
 		// Border CSS: var(--customify-border, fallback). The :root token
-		// is now emitted UNCONDITIONALLY (Phase 2.13 follow-up), so the
-		// `color-mix(currentcolor 12%, transparent)` fallback only fires
+		// is emitted UNCONDITIONALLY (Phase 2.13 follow-up), so the
+		// `color-mix(currentcolor 9%, transparent)` fallback only fires
 		// when modern browsers see an inherited token (`unset` / `initial`)
 		// and on legacy browsers without var() support. Token value is
-		// `mix(slot.text, slot.base, 14%)` per spec §2 — fresh-install
-		// shift from `#e6e6e6` (old 12% mix) to `#e1e1e1` (new 14% mix);
-		// 5/255 per channel, ΔE ≈ 2 (just-perceptible threshold).
+		// `mix(slot.text, slot.base, 9%)` — fallback + slot mix held at
+		// the SAME 9% so the legacy-browser path renders match modern.
+		//
+		// History: Phase 2.0 used 12% for both paths. Spec §2 bumped slot
+		// mix to 14% (`#e1e1e1`) but left the fallback at 12% — created
+		// drift, and rendered borders perceptibly darker than the original
+		// hardcoded `#eaecee`. PR #398 tuned both paths to 9% so render
+		// (`#ECECEC` on default install) is grayscale-equivalent of legacy
+		// `#eaecee` average — ΔE ≈ 1.1, imperceptible.
 		$border_css = apply_filters(
 			'customify/styling/color-border',
 			'
@@ -138,26 +144,26 @@ h2 + h3,
 .h2 + h3,
 .comments-area .h2 + .comments-title,
 .page-breadcrumb {
-    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 }
 blockquote,
 .site-content .widget-area .menu li.current-menu-item > a:before
 {
-    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 }
 
 @media screen and (min-width: 64em) {
     .comment-list .children li.comment {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .comment-list .children li.comment:after {
-        background-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        background-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
 }
 
 .page-titlebar, .page-breadcrumb,
 .posts-layout .entry-inner {
-    border-bottom-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-bottom-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 }
 
 .header-search-form .search-field,
@@ -173,40 +179,40 @@ article.comment .comment-meta,
 .widget-area .widget_pages li a, .widget-area .widget_categories li a, .widget-area .widget_archive li a, .widget-area .widget_meta li a, .widget-area .widget_nav_menu li a, .widget-area .widget_product_categories li a, .widget-area .widget_recent_entries li a, .widget-area .widget_rss li a,
 .widget-area .widget_recent_comments li
 {
-    border-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 }
 
 .header-search-modal::before {
-    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
-    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
+    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 }
 
 @media screen and (min-width: 48em) {
     .content-sidebar.sidebar_vertical_border .content-area {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .sidebar-content.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
     .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 12%, transparent));
+        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
+        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
     }
 }
 '
@@ -560,13 +566,13 @@ article.comment .comment-meta,
 				'priority'    => 56,
 				'title'       => __( 'Border override', 'customify' ),
 				// Border field default aligned with slot-derived
-				// `mix(text, base, 14%)` = `#e1e1e1` (was `#e6e6e6` at the
-				// old 12% mix; spec §2 bumped to 14%, so the field default
-				// follows for picker dirty-state consistency — typing the
-				// rendered slot-mix value into the picker no longer
-				// false-flags as dirty).
-				'placeholder' => '#e1e1e1',
-				'default'     => '#e1e1e1',
+				// `mix(text, base, 9%)` = `#ECECEC` — grayscale equivalent
+				// of legacy hardcoded `#eaecee`. Picker dirty-state compares
+				// `input.value` to this `data-default`; aligning here means
+				// typing the rendered slot-mix into the picker doesn't
+				// false-flag as dirty.
+				'placeholder' => '#ECECEC',
+				'default'     => '#ECECEC',
 				'css_format'  => $border_css,
 				'selector'    => 'format',
 			),

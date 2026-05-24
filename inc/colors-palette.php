@@ -503,11 +503,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$slots = customify_color_get_slots();
 
 		// Static hex fallbacks for derived vars (PHP-precomputed).
-		// `border` mix bumped 12% → 14% per the color-token-derivation spec §2.
-		// Lands at ~1.35:1 contrast vs base — decorative-only (WCAG-exempt);
-		// functional-control borders should use `border-strong` instead.
+		// `border` mix at 9% — lighter than the spec-§2 14% the project briefly
+		// shipped (which renders #e1e1e1 on default install vs the legacy
+		// #eaecee, a perceptible darkening). 9% lands render at #ECECEC, the
+		// grayscale equivalent of legacy avg (ΔE ≈ 1.1 vs #eaecee). Decorative-
+		// only (WCAG-exempt) per spec — functional-control borders should use
+		// `border-strong` instead. The fallback expressions in inc/customizer/
+		// configs/colors.php are kept in sync at the same 9% percentage.
 		$text_muted_default    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
-		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 );
+		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.09 );
 		// `border-strong` solved per spec §2 — smallest P where WCAG contrast
 		// vs base ≥ 3.0. Used by form input borders / button outlines / any
 		// boundary that's the ONLY cue identifying a functional control.
@@ -562,7 +566,7 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// to ~14% of white on dark bg ≈ invisible — leading to the
 		// reported "page-titlebar lost its border" issue.
 		//
-		// Using the slot-derived default (mix(text, base, 14%) per spec
+		// Using the slot-derived default (mix(text, base, 9%) — see border
 		// §2) gives a concrete hex value that's visible regardless of
 		// the consuming element's text color. Saved override still wins.
 		// 30K safety: same logic as Phase 2.13 on-* gate drop — the
@@ -724,7 +728,7 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$lines[] = "--customify-on-surface: {$on_surface}";
 		// --customify-border emitted UNCONDITIONALLY since the Phase 2.13
 		// follow-up — see the $border resolution block above for the full
-		// rationale. The slot-derived default (`mix(text, base, 14%)`) gives
+		// rationale. The slot-derived default (`mix(text, base, 9%)`) gives
 		// a concrete hex that's visible on any surface, instead of the
 		// pre-fix currentcolor-12% fallback that turned invisible on dark
 		// containers. Saved override is honored 1:1 by $border = $ov_border.
@@ -848,15 +852,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// color-mix so the Text slot value flows through unchanged.
 		//
 		// Border live-resolve: when no override saved, the static line
-		// emits a baked hex mix(text, base, 14%). That works at page-load
+		// emits a baked hex mix(text, base, 9%). That works at page-load
 		// but does NOT update when the user drags Text or Base in the
 		// Customizer live preview (the static value was computed once at
 		// PHP render time). The @supports block here re-emits the same
 		// value as a color-mix expression with var() refs — modern
 		// browsers re-resolve when the underlying slot vars change, so
-		// the live preview updates without a re-render. Per spec §2.
+		// the live preview updates without a re-render.
 		if ( ! $ov_border ) {
-			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 14%, var(--customify-base))';
+			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))';
 		}
 		$mix_lines[] = '--customify-primary-hover: color-mix(in oklab, var(--customify-primary), black 10%)';
 		// Link hover cascade — LIGHTER variant of link (which itself cascades
@@ -1450,7 +1454,7 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		'--customify-link':         'var(--customify-primary)',
 		'--customify-link-hover':   'color-mix(in oklab, var(--customify-link) 85%, white)',
 		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))',
-		'--customify-border':       'color-mix(in oklab, var(--customify-text) 14%, var(--customify-base))'
+		'--customify-border':       'color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))'
 	};
 	// Customify wraps stored setting values as urlencode(json_encode(value))
 	// so a saved hex arrives as '%22#ff00aa%22'. Mirror Customify's decode
@@ -1815,7 +1819,7 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		// concrete swatches in the picker. Opt-in sites resolve through
 		// to the live Customizer value via the cascade.
 		$text_muted_hex    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
-		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 ); // spec §2: bumped 12% → 14%
+		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.09 ); // 9% — see border_default in customify_color_palette_root_css(); matches grayscale equivalent of legacy #eaecee
 		$border_strong_hex = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
 
 		// Container fallbacks — solve P per spec §4, mix, then apply the
