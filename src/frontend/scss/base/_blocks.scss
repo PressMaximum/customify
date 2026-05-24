@@ -75,6 +75,120 @@
 	margin-bottom: 1.41575em;
 }
 
+// Auto-wire WCAG-safe foreground for blocks using brand-color backgrounds.
+//
+// When a designer in Blocksify / WP block editor picks a brand bg
+// (Primary / Secondary / Accent) from the picker and DOES NOT pick a
+// text color manually, the block would inherit body text color (which
+// is the saved Text slot — could be dark on dark primary = invisible).
+//
+// These rules set `color: var(--customify-on-X)` so text auto-flips
+// to a WCAG-readable value based on the brand's luminance. The on-*
+// tokens are computed via the spec §3 max-contrast picker and emitted
+// to :root on palette opt-in.
+//
+// Designer's explicit text-color pick still wins — WP generates
+// `.has-{slug}-color { color: var(...) !important }` which beats this
+// rule via both specificity (more classes) and `!important`. So this
+// is purely a DEFAULT, not a lock.
+//
+// `inherit` fallback for the var() chain: when on-X is unset (fresh
+// install, palette not opted in), text inherits from parent (body
+// cascade) — byte-identical to the pre-PR behavior for 30K legacy
+// sites. Once user opts into Palette panel, on-X is emitted and
+// auto-flip kicks in live.
+//
+// Heading rules at global scope (`h1-h6 { color: var(--customify-heading) }`)
+// have lower specificity than `.has-X-bg h1` so the descendant rules
+// here win automatically.
+// ──────────────────────────────────────────────────────────────────
+// Legacy palette-slug back-compat shims (Phase 2.13).
+//
+// The Phase 2.11 theme.json filter intentionally omits 6 legacy slugs
+// (text / link / heading / background / light-gray / dark-gray) from
+// the editor picker — they bloated the UX and didn't represent
+// design-purposeful choices. But 30K sites have block markup with
+// `class="has-{legacy-slug}-color"` (saved when those slugs WERE in
+// the static theme.json palette). Without the slug in palette, WP no
+// longer generates `.has-{slug}-color { color: var(...) !important }`
+// rules → legacy block markup loses its color.
+//
+// These shim rules restore the rendering — DELIBERATELY WITHOUT
+// `!important`. The specificity table (assuming all single-class
+// selectors == 0,1,0):
+//
+//   Designer flow              | What wins
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `primary` slug:      | WP `.has-primary-color !important`
+//   block has has-primary-color| beats our shim (no !important)
+//   has-text-color (marker)    | → primary color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `text` slug pre-PR:  | Only our shim matches the saved
+//   block has has-text-color   | `has-text-color` class →
+//   only                        | text-slot color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Inline custom hex:         | Inline specificity (1,0,0,0) beats
+//   style="color:#fff"         | our shim (0,1,0) → white renders ✓
+//   has-text-color (marker)    |
+//
+// The shim is a strict UX + back-compat improvement over the
+// "drop legacy entirely" approach. No marker-class collision because
+// we never add `!important`.
+.has-text-color    { color: var(--customify-text); }
+.has-link-color    { color: var(--customify-link); }
+.has-heading-color { color: var(--customify-heading); }
+.has-background-color { background-color: var(--customify-base); }
+.has-light-gray-color { color: #f2f2f2; }
+.has-dark-gray-color  { color: #444444; }
+
+// Background variants of the legacy slugs.
+.has-text-background-color    { background-color: var(--customify-text); }
+.has-link-background-color    { background-color: var(--customify-link); }
+.has-heading-background-color { background-color: var(--customify-heading); }
+.has-background-background-color { background-color: var(--customify-base); }
+.has-light-gray-background-color { background-color: #f2f2f2; }
+.has-dark-gray-background-color  { background-color: #444444; }
+
+// Border variants of the legacy slugs.
+.has-text-border-color    { border-color: var(--customify-text); }
+.has-link-border-color    { border-color: var(--customify-link); }
+.has-heading-border-color { border-color: var(--customify-heading); }
+.has-background-border-color { border-color: var(--customify-base); }
+.has-light-gray-border-color { border-color: #f2f2f2; }
+.has-dark-gray-border-color  { border-color: #444444; }
+
+// Descendant list intentionally includes both headings (h1-h6) AND text
+// elements (p, li, blockquote, figcaption, cite). Two reasons:
+//
+// 1. Global heading rules (`h1-h6 { color: var(--customify-heading) }`) at
+//    body scope would otherwise win specificity against the bare class
+//    selector — without the descendant rule, headings inside a primary
+//    bg block render at heading-slot color (often unreadable on saturated
+//    brand bg).
+//
+// 2. Legacy shim rules (`.has-text-color { color: var(--customify-text) }`)
+//    apply DIRECTLY to paragraphs / list items / quotes that have the
+//    has-text-color marker class. Specificity tie at (0,1,0) means the
+//    direct rule wins via source order over the inherited group rule.
+//    Including text elements in the descendant rule bumps specificity
+//    to (0,1,1) — beats the shim's (0,1,0) reliably.
+//
+// Designer's explicit slug pick still wins via WP's
+// `.has-{slug}-color { color: var(...) !important }` rule (specificity
+// (0,1,0) but !important beats no-!important regardless).
+.has-primary-background-color,
+.has-primary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-primary, inherit);
+}
+.has-secondary-background-color,
+.has-secondary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-secondary, inherit);
+}
+.has-accent-background-color,
+.has-accent-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-accent, inherit);
+}
+
 .wp-block-video video {
 	max-width: 100%;
 }
