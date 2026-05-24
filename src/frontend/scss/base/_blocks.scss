@@ -157,16 +157,35 @@
 .has-light-gray-border-color { border-color: #f2f2f2; }
 .has-dark-gray-border-color  { border-color: #444444; }
 
+// Descendant list intentionally includes both headings (h1-h6) AND text
+// elements (p, li, blockquote, figcaption, cite). Two reasons:
+//
+// 1. Global heading rules (`h1-h6 { color: var(--customify-heading) }`) at
+//    body scope would otherwise win specificity against the bare class
+//    selector — without the descendant rule, headings inside a primary
+//    bg block render at heading-slot color (often unreadable on saturated
+//    brand bg).
+//
+// 2. Legacy shim rules (`.has-text-color { color: var(--customify-text) }`)
+//    apply DIRECTLY to paragraphs / list items / quotes that have the
+//    has-text-color marker class. Specificity tie at (0,1,0) means the
+//    direct rule wins via source order over the inherited group rule.
+//    Including text elements in the descendant rule bumps specificity
+//    to (0,1,1) — beats the shim's (0,1,0) reliably.
+//
+// Designer's explicit slug pick still wins via WP's
+// `.has-{slug}-color { color: var(...) !important }` rule (specificity
+// (0,1,0) but !important beats no-!important regardless).
 .has-primary-background-color,
-.has-primary-background-color :is(h1, h2, h3, h4, h5, h6) {
+.has-primary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
 	color: var(--customify-on-primary, inherit);
 }
 .has-secondary-background-color,
-.has-secondary-background-color :is(h1, h2, h3, h4, h5, h6) {
+.has-secondary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
 	color: var(--customify-on-secondary, inherit);
 }
 .has-accent-background-color,
-.has-accent-background-color :is(h1, h2, h3, h4, h5, h6) {
+.has-accent-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
 	color: var(--customify-on-accent, inherit);
 }
 

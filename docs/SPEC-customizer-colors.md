@@ -479,39 +479,90 @@ an inline script via `wp_add_inline_script('customize-controls', …)` that:
 
 The script depends only on jQuery (which Customizer ships).
 
-### 3.7 theme.json palette
+### 3.7 theme.json palette — filter-injected (Phase 2.11)
 
-Three new entries appended to the existing 8 in `theme.json`
-`settings.color.palette`:
+> **History note**: Phase 1 (PR #392) appended 3 new slugs (`base`,
+> `surface`, `accent`) statically to the existing 8 in `theme.json`.
+> Phase 2.11 (PR #396) rewrote this to use `wp_theme_json_data_theme`
+> filter injection — see §8.11. Today the static `theme.json` palette
+> is irrelevant; the filter wholesale-replaces it at runtime.
 
-```json
-{
-  "slug": "base",     "name": "Base",     "color": "#FFFFFF"
-},
-{
-  "slug": "surface",  "name": "Surface",  "color": "#FFFFFF"
-},
-{
-  "slug": "accent",   "name": "Accent",   "color": "#FFD042"
-}
+The Phase 2.13 final palette is **12 design-purposeful slugs**
+injected via `customify_palette_inject_into_theme_json()`:
+
+```
+Brand + container pairs (6):
+  primary · primary-container · secondary · secondary-container ·
+  accent · accent-container
+
+Text + canvas axis (3):
+  body-text · surface · base
+
+Helpers (3):
+  text-muted · divider · divider-strong
 ```
 
-Existing entries (`primary`, `secondary`, `text`, `link`, `heading`,
-`background`, `light-gray`, `dark-gray`) are unchanged so any posts
-using `.has-<slug>-color` keep working.
+Each entry's `color` field is `var(--customify-{token}, {hex_fallback})`,
+so block markup using `.has-{slug}-color` resolves to the live
+Customizer value (or the literal hex fallback for fresh installs).
+WP 6.1+ only; older WP early-returns from the filter and keeps the
+static `theme.json` palette.
 
-Note: we tried the `wp_theme_json_data_theme` filter first to inject
-the 3 new entries dynamically. WP's filter origin tracking misbehaved on
-append — the existing 8 theme entries got shadowed in the rendered CSS
-preset output (only `--wp--preset--color--base/surface/accent` + WP
-defaults appeared, the 8 theme entries disappeared). Static
-declarations in theme.json avoid this entirely.
+#### 30K back-compat for legacy slug class names
 
-Trade-off: when the user changes a slot value in the Customizer,
-`:root --customify-<slot>` updates but `--wp--preset--color--<slug>`
-stays at the static default. This matches Customify's pre-Phase 1
-behavior (Customizer color changes never propagated to the block editor
-palette either).
+The original static `theme.json` listed 6 additional slugs (`text`,
+`link`, `heading`, `background`, `light-gray`, `dark-gray`). These
+are DELIBERATELY OMITTED from the filter palette — they bloated the
+picker UX without representing design-purposeful choices.
+
+Block markup from 30K sites that picked these slugs (saved as
+`class="has-{legacy-slug}-color"`) is preserved via **CSS shim rules
+in `_blocks.scss`** rather than palette entries. The shim:
+
+```scss
+.has-text-color    { color: var(--customify-text); }
+.has-link-color    { color: var(--customify-link); }
+.has-heading-color { color: var(--customify-heading); }
+.has-background-color    { background-color: var(--customify-base); }
+.has-light-gray-color    { color: #f2f2f2; }
+.has-dark-gray-color     { color: #444444; }
+// + matching .has-{slug}-background-color and .has-{slug}-border-color
+```
+
+**Critical**: shim rules emit WITHOUT `!important`. This is what
+sidesteps the WP marker-class collision that plagued Phase 2.10:
+
+| Cascade actor | Specificity | `!important` |
+|---|---|---|
+| `<element style="color:#fff">` | `(1,0,0,0)` | — |
+| `.has-primary-color` (WP-generated from palette slug) | `(0,1,0)` | **yes** |
+| `.has-text-color` (our shim) | `(0,1,0)` | **no** |
+
+Result per scenario:
+
+- **Designer picks `primary` slug** (new design flow) — block markup
+  is `class="has-primary-color has-text-color"`. WP's `!important`
+  rule for `.has-primary-color` beats our shim → primary renders ✓
+- **Designer picks `text` slug pre-PR** (legacy flow) — block has
+  only `class="has-text-color"`. Only our shim matches → text-slot
+  color renders ✓
+- **Designer uses inline custom hex** — `<element style="color:#fff">`
+  has highest specificity → inline wins ✓
+
+No collision because the shim never adds `!important`. It only
+applies when no other rule (WP slug rule, inline style) outranks it.
+
+#### Customizer ↔ block editor sync
+
+When the user changes a slot value in the Customizer:
+- `:root --customify-<slot>` updates live (via the preview JS).
+- `--wp--preset--color--<slug>` updates via the var() chain in the
+  filter output (no PHP re-render needed, the chain is `var(--customify-X)`).
+- Block editor canvas + frontend both reflect the change.
+
+This is a **strict improvement** over Phase 1, which had the
+Customizer-to-block-editor disconnect documented in the original
+§3.7 note. The Phase 2.11 filter resolved that limitation.
 
 ---
 
