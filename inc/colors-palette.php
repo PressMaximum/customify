@@ -503,11 +503,15 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$slots = customify_color_get_slots();
 
 		// Static hex fallbacks for derived vars (PHP-precomputed).
-		// `border` mix bumped 12% → 14% per the color-token-derivation spec §2.
-		// Lands at ~1.35:1 contrast vs base — decorative-only (WCAG-exempt);
-		// functional-control borders should use `border-strong` instead.
+		// `border` mix at 9% — lighter than the spec-§2 14% the project briefly
+		// shipped (which renders #e1e1e1 on default install vs the legacy
+		// #eaecee, a perceptible darkening). 9% lands render at #ECECEC, the
+		// grayscale equivalent of legacy avg (ΔE ≈ 1.1 vs #eaecee). Decorative-
+		// only (WCAG-exempt) per spec — functional-control borders should use
+		// `border-strong` instead. The fallback expressions in inc/customizer/
+		// configs/colors.php are kept in sync at the same 9% percentage.
 		$text_muted_default    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
-		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 );
+		$border_default        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.09 );
 		// `border-strong` solved per spec §2 — smallest P where WCAG contrast
 		// vs base ≥ 3.0. Used by form input borders / button outlines / any
 		// boundary that's the ONLY cue identifying a functional control.
@@ -553,13 +557,23 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$ov_body_text    = customify_color_normalize_hex( $_get_saved( 'global_styling_color_text' ), '' );
 
 		$text_muted   = $ov_text_muted   ?: $text_muted_default;
-		// Border default is NOT slot-derived anymore — when no override
-		// saved, --customify-border is omitted from :root so the CSS rule
-		// falls back to `color-mix(in srgb, currentcolor 18%, transparent)`.
-		// That makes borders adapt to the containing element's text color
-		// instead of locking to slot.text — readable on both light and
-		// dark surfaces. Saved override still wins via :root literal.
-		$border       = $ov_border;
+		// Border emitted UNCONDITIONALLY (Phase 2.13 follow-up — was
+		// previously gated on saved override per Phase 2.6, which left
+		// dozens of `var(--customify-border, color-mix(currentcolor X%,
+		// transparent))` consumers in inc/customizer/configs/colors.php
+		// falling back to the currentcolor mix. On dark headers / dark
+		// page-titlebars / dark hero sections, that fallback resolves
+		// to ~14% of white on dark bg ≈ invisible — leading to the
+		// reported "page-titlebar lost its border" issue.
+		//
+		// Using the slot-derived default (mix(text, base, 9%) — see border
+		// §2) gives a concrete hex value that's visible regardless of
+		// the consuming element's text color. Saved override still wins.
+		// 30K safety: same logic as Phase 2.13 on-* gate drop — the
+		// CSS rules that consume this var have always been there with a
+		// fallback; emitting a concrete value just makes them render
+		// reliably instead of relying on context-dependent currentcolor.
+		$border       = $ov_border       ?: $border_default;
 		$link         = $ov_link         ?: $slots['primary'];
 		$link_hover   = $ov_link_hover   ?: $link_hover_default;
 		$heading      = $ov_heading      ?: $slots['text'];
@@ -680,8 +694,11 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// auto-adapts to the page background. Emitting the slot default
 		// `#ECECEC` here would bake a light gray into :root and break that
 		// adaptive behavior for users who saved Base = dark but didn't
-		// touch Surface. Same gate doctrine as --customify-on-* (Phase 2.8)
-		// and --customify-border (Phase 2.6).
+		// touch Surface. (Note: --customify-border used to follow this same
+		// opt-in gate per Phase 2.6, but was switched to unconditional emit
+		// in Phase 2.13 to fix invisible-border-on-dark-surface regressions —
+		// surface stays gated because cards/widgets/code blocks consume the
+		// adaptive 6-12% fallback that the rigid hex would suppress.)
 		$ov_surface = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
 			? $slots['surface']
 			: null;
@@ -709,12 +726,13 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$lines[] = "--customify-on-secondary: {$on_secondary}";
 		$lines[] = "--customify-on-accent: {$on_accent}";
 		$lines[] = "--customify-on-surface: {$on_surface}";
-		// --customify-border only emitted when override saved; absence
-		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
-		// fallback fire so borders adapt to local text color.
-		if ( $border ) {
-			$lines[] = "--customify-border: {$border}";
-		}
+		// --customify-border emitted UNCONDITIONALLY since the Phase 2.13
+		// follow-up — see the $border resolution block above for the full
+		// rationale. The slot-derived default (`mix(text, base, 9%)`) gives
+		// a concrete hex that's visible on any surface, instead of the
+		// pre-fix currentcolor-12% fallback that turned invisible on dark
+		// containers. Saved override is honored 1:1 by $border = $ov_border.
+		$lines[] = "--customify-border: {$border}";
 		// --customify-surface only emitted when user explicitly saved
 		// palette_surface (see $ov_surface above). Absence lets the
 		// bundled SCSS `$surface_subtle/medium/strong` fallback expressions
@@ -832,10 +850,18 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// Body text cascade removed from @supports block — body now uses a
 		// pure var() chain (see static :root section above) instead of a
 		// color-mix so the Text slot value flows through unchanged.
-		// Border cascade now happens in the CSS rule's var() fallback
-		// (`color-mix(in srgb, currentcolor 18%, transparent)`) so no
-		// :root entry needed for the no-override case. Override case
-		// emits a static :root --customify-border line above.
+		//
+		// Border live-resolve: when no override saved, the static line
+		// emits a baked hex mix(text, base, 9%). That works at page-load
+		// but does NOT update when the user drags Text or Base in the
+		// Customizer live preview (the static value was computed once at
+		// PHP render time). The @supports block here re-emits the same
+		// value as a color-mix expression with var() refs — modern
+		// browsers re-resolve when the underlying slot vars change, so
+		// the live preview updates without a re-render.
+		if ( ! $ov_border ) {
+			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))';
+		}
 		$mix_lines[] = '--customify-primary-hover: color-mix(in oklab, var(--customify-primary), black 10%)';
 		// Link hover cascade — LIGHTER variant of link (which itself cascades
 		// from primary unless overridden). 15% white mixed in oklab keeps
@@ -1131,30 +1157,28 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		section.querySelectorAll('.customify-input-color').forEach(refreshDirtyState);
 	}
 
-	// Toggle `is-dirty` on the picker row when the value diverges from
-	// what was loaded at page-render time. wpColorPicker rewrites
-	// input.defaultValue on every set so we can't use it as a baseline;
-	// dataset attributes also turn out to be unreliable across DOM
-	// re-renders. Keep a closure-scoped map keyed by setting id — that
-	// snapshot survives any DOM churn. SCSS uses `.is-dirty` to reveal
-	// the small reset glyph to the left of the swatch.
-	var initialValues = {};
+	// Toggle is-dirty on the picker row when the saved value diverges
+	// from the field's REGISTERED DEFAULT (data-default attribute, set
+	// from field.default in the color control template). SCSS uses
+	// is-dirty to reveal the small reset glyph next to the swatch.
+	//
+	// Pre-fix bug: this comparison used the value LOADED at page-render
+	// time (initialValues snapshot). When a user had already saved a
+	// non-default value (e.g. Base = #000000) before opening Customizer,
+	// the snapshot captured that as initial. Then current === initial
+	// meant the picker was never marked dirty, so the reset glyph
+	// never appeared and the user could not revert to the default.
+	//
+	// Fix: compare against data-default. Any saved override that differs
+	// from the registered default toggles is-dirty regardless of when
+	// the value was saved.
 	function refreshDirtyState(div) {
 		if (!div) return;
-		var li = div.closest('.customize-control');
-		if (!li || !li.id) return;
-		var settingId = li.id.replace('customize-control-', '');
 		var input = div.querySelector('input.wp-color-picker');
 		if (!input) return;
 		var cur = (input.value || '').trim().toLowerCase();
-		if (!(settingId in initialValues)) {
-			// First observation: snapshot the loaded value. Skip if empty
-			// — picker not yet initialized; next refresh will retry.
-			if (cur === '') return;
-			initialValues[settingId] = cur;
-		}
-		var initial = initialValues[settingId];
-		var dirty = cur !== '' && cur !== initial;
+		var def = (div.getAttribute('data-default') || '').trim().toLowerCase();
+		var dirty = cur !== '' && cur !== def;
 		div.classList.toggle('is-dirty', dirty);
 	}
 
@@ -1414,18 +1438,23 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	// the inline override is no longer needed.
 	//
 	// Tokens NOT in this map fall back to the old removeProperty behavior:
-	//   - slot tokens (primary/secondary/accent/text/surface/base): their
-	//     :root values come from PHP defaults/saved slots — removing the
-	//     inline override correctly reverts to those.
-	//   - border: bundled CSS rule already has a smart fallback
-	//     (color-mix(currentcolor 12%, transparent)) so absence is correct.
+	//   slot tokens (primary/secondary/accent/text/surface/base) — their
+	//   :root values come from PHP defaults/saved slots, so removing the
+	//   inline override correctly reverts to those.
+	//
+	// `--customify-border` IS in this map (since the Phase 2.13 unconditional-
+	// emit shift): it's always present in :root, so removeProperty would
+	// fall back to the PHP-baked static line — which still holds the SAVED
+	// override hex on mid-session clears. The cascade expression here mirrors
+	// the @supports color-mix line so cleared borders track Text+Base live.
 	var CASCADE_FALLBACK = {
 		'--customify-heading':      'var(--customify-text)',
 		'--customify-body-text':    'var(--customify-text)',
 		'--customify-widget-title': 'var(--customify-text)',
 		'--customify-link':         'var(--customify-primary)',
 		'--customify-link-hover':   'color-mix(in oklab, var(--customify-link) 85%, white)',
-		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))'
+		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))',
+		'--customify-border':       'color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))'
 	};
 	// Customify wraps stored setting values as urlencode(json_encode(value))
 	// so a saved hex arrives as '%22#ff00aa%22'. Mirror Customify's decode
@@ -1790,7 +1819,7 @@ if ( ! function_exists( 'customify_color_palette_for_theme_json' ) ) {
 		// concrete swatches in the picker. Opt-in sites resolve through
 		// to the live Customizer value via the cascade.
 		$text_muted_hex    = customify_color_mix_hex( $slots['text'], $slots['base'], 0.70 );
-		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.14 ); // spec §2: bumped 12% → 14%
+		$border_hex        = customify_color_mix_hex( $slots['text'], $slots['base'], 0.09 ); // 9% — see border_default in customify_color_palette_root_css(); matches grayscale equivalent of legacy #eaecee
 		$border_strong_hex = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
 
 		// Container fallbacks — solve P per spec §4, mix, then apply the
