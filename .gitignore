@@ -31,4 +31,3 @@ npm-debug.log
 # the file gets dropped from the branch before merging to main.
 # See docs/handoffs/README.md for the convention.
 /docs/handoffs/temp/
-

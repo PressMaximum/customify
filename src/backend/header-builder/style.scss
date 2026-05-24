@@ -81,6 +81,11 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 }
 
 // Each placed item row
+.customify-hb__avail-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
 .customify-hb__panel-item {
 	display: flex;
 	align-items: center;
@@ -97,6 +102,7 @@ $hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-S
 	color: $hb-text;
 	text-align: left;
 	transition: background $hb-transition, border-color $hb-transition;
+
 
 	&.is-clickable {
 		cursor: pointer;
@@ -487,17 +493,22 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 
 .customify-hb__col {
 	flex: 1;
-	min-height: 38px;
+	min-height: 46px;
 	border: none;
 	border-left: 1px solid $hb-border;
-	
+	position: relative; // anchor for absolute-positioned sortable transforms
 	border-radius: 0;
 	padding: 3px;
 	background: transparent;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 3px;
-	// align-content: flex-start;
+	gap: 4px;
+	// `align-content: flex-start` packs wrapped rows toward the top of
+	// the column. Default `stretch` distributes leftover height across
+	// rows, which makes sortable transforms (calculated from initial
+	// chip rects) land chips in the wrong vertical band when items
+	// wrap, causing visual overlap.
+	align-content: flex-start;
 	align-items: center;
 	cursor: pointer;
 	transition: border-color $hb-transition, background $hb-transition;
@@ -515,11 +526,12 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	&:not(:first-child):not(:last-child) { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
 	&:last-child:not(:first-child)  { flex: 1; justify-content: flex-end; }
 
-	&:hover, &.is-drag-over {
-		// border-left-color: $hb-text-muted;
-		// border-right-color: $hb-text-muted;
+	// Hover (mouse over, no drag) AND drag-over (cursor + active drag)
+	// share the same background-only highlight. Background does not affect
+	// box dimensions, so chips never re-flow while the highlight toggles.
+	&:hover,
+	&.is-drag-over {
 		background-color: $hb-accent-hover;
-		// border-color: $hb-accent;
 	}
 }
 
@@ -535,17 +547,122 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	pointer-events: none;
 }
 
+// Drop-line indicator — slotted between chips inside a DropZone to show
+// where the dragged item will land. Zero-size on the active axis so it
+// never shifts surrounding chips.
+//
+// IMPORTANT: parent containers use `gap` (column = 4px, off-canvas =
+// 3px). Inserting a new flex item adds gap BEFORE and AFTER it (one
+// fresh pair), which would push adjacent chips by `gap` even though
+// the line itself is zero-width. The negative cross-axis margins below
+// reclaim exactly that pair so chips stay rock-still while the line
+// fades in/out.
+//
+//   --horizontal: 40px tall, 0px wide → vertical bar between chips
+//                 that flow horizontally in a header column.
+//   --vertical:   full width, 0px tall → horizontal bar between chips
+//                 that stack vertically in the off-canvas sidebar.
+.customify-hb__drop-line {
+	position: relative;
+	pointer-events: none;
+	flex: 0 0 auto;
+
+	&--horizontal {
+		height: $hb-item-size;
+		width: 0;
+		// Cancel the column's 4px gap (2px each side) added by inserting
+		// this extra flex item.
+		margin-left:  -2px;
+		margin-right: -2px;
+	}
+
+	&--vertical {
+		width: 100%;
+		height: 0;
+		// Off-canvas uses `gap: 4px`. Insert adds gap before AND after the
+		// drop-line slot (2 × 4px), so two -2px margins reclaim exactly
+		// that extra pair → surrounding chips never shift.
+		margin-top:    -2px;
+		margin-bottom: -2px;
+	}
+}
+
+.customify-hb__drop-line__bar {
+	position: absolute;
+	background: $hb-accent;
+	border-radius: 1px;
+	pointer-events: none;
+
+	.customify-hb__drop-line--horizontal & {
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		transform: translateX( -1px );
+	}
+
+	.customify-hb__drop-line--vertical & {
+		left: 0;
+		right: 0;
+		height: 3px;
+		transform: translateY( -1px );
+	}
+}
+
+// Drag handle — the floating chip rendered inside <DragOverlay> that
+// follows the cursor while a sortable item is being dragged.
+//
+// dnd-kit portals the overlay element directly under <body>, which means
+// inherited properties (font-family, font-size, line-height, box-sizing)
+// can differ from the chip's original parent inside `.customify-hb__col`.
+// In particular, `.customify-hb__item-name` has `line-height: 2` and the
+// name inherits its computed font-size from whichever container the chip
+// happens to land in — outside the builder context that line-height
+// blows the chip past the 40px min-height of the base class.
+//
+// To guarantee dimensional parity with the source chip, force the exact
+// $hb-item-size box (height + min/max-height), pin a tight line-height
+// on the name, and lock box-sizing so padding stays inside the 40px box.
+// Explicit z-index belt-and-suspenders the prop set on <DragOverlay> in
+// case the Customizer wraps body content in a stacking context that
+// limits portal-element z-index escape.
+.customify-hb__item--overlay {
+	box-sizing: border-box;
+	height: $hb-item-size;
+	min-height: $hb-item-size;
+	max-height: $hb-item-size;
+	line-height: 1.2;
+	cursor: grabbing;
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.18 );
+	z-index: 99999999;
+	position: relative;
+
+	*, *::before, *::after { box-sizing: border-box; }
+
+	// Override the line-height: 2 from .customify-hb__item-name so the
+	// text never measures taller than the chip's content area.
+	.customify-hb__item-name {
+		line-height: 1;
+		align-self: center;
+	}
+}
+
 // ── Off Canvas ──
 .customify-hb__offcanvas {
 	flex: 1;
 	min-height: 42px;
+	position: relative; // anchor for absolute-positioned .customify-hb__drop-line
 	// border: 1px dashed $hb-border;
 	border-radius: $hb-radius;
-	padding: 3px;
+	padding: 5px 3px;
 	background: #fff;
 	display: flex;
+	// Items stack vertically (each chip is width:100%). Explicit column
+	// direction ensures the JS axis detector (reads getComputedStyle
+	// flexDirection) renders the drop-line as a horizontal bar across the
+	// container instead of a vertical bar between non-existent ngang chips.
+	flex-direction: column;
 	flex-wrap: wrap;
-	gap: 3px;
+	gap: 4px;
 	align-content: flex-start;
 	cursor: pointer;
 	transition: border-color $hb-transition, background $hb-transition;
@@ -554,10 +671,10 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 
 	&:hover { border-color: $hb-text-muted; }
 
+	// Drop target highlight when a drag is hovering over the off-canvas.
+	// Background-only so chips never shift during the toggle.
 	&.is-drag-over {
-		border-color: $hb-accent;
-		background: #f0f4ff;
-		border-style: solid;
+		background: $hb-accent-hover;
 	}
 }
 
@@ -567,6 +684,32 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	font-style: italic;
 	padding: 4px 6px;
 	pointer-events: none;
+}
+
+// While a drag is in flight (Builder.jsx toggles `customify-hb-is-dragging`
+// on <body>), suppress :hover treatment on placed chips and available
+// rows. Cursor gliding across a chip on its way to the drop point would
+// otherwise trigger that chip's hover ring + lift, competing visually
+// with the drop-line indicator.
+//
+// NOTE: column hover is intentionally NOT suppressed — we WANT the
+// destination column to light up (same as `:hover` background) so the
+// user can see which column the chip will land in. `.customify-hb__col`
+// already styles both `:hover` and `.is-drag-over` identically, so the
+// highlight flows naturally during drag.
+body.customify-hb-is-dragging {
+	.customify-hb__item:hover {
+		border-color: $hb-item-border;
+		box-shadow: none;
+	}
+
+	.customify-hb__panel-item--available:hover {
+		background: $hb-item-bg;
+		border-color: $hb-item-border;
+		color: $hb-text-muted;
+
+		.customify-hb__drag-handle { color: #c3c4c7; }
+	}
 }
 
 // ── Item chip ──
@@ -579,14 +722,43 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	border-radius: $hb-radius;
 	padding: 3px 4px;
 	min-height: $hb-item-size;
+	box-sizing: border-box; // sortable rect math expects border-box width
 	font-weight: 500;
 	color: $hb-text;
+	cursor: grab;            // signal the chip is draggable from anywhere
 	user-select: none;
-	transition: border-color $hb-transition, box-shadow $hb-transition;
+	transition: border-color $hb-transition, box-shadow $hb-transition, opacity $hb-transition;
+	will-change: transform;  // hint browser to GPU-composite chip during drag
+
+	*, *::before, *::after { box-sizing: border-box; }
 
 	&:hover {
 		border-color: $hb-accent;
-		box-shadow: 0 0 0 1px $hb-accent;
+		// box-shadow: 0 0 0 1px $hb-accent;
+	}
+
+	// Source-of-drag visual treatment. The chip stays in place (the drag
+	// ghost is a separate browser-rendered image) but dims so the user
+	// sees which item is being moved. Hover + focus rings are suppressed
+	// so the chip reads as "in-flight" rather than "interactive".
+	// z-index raises the source above neighbours so transform animations
+	// of surrounding chips can't visually cross over it mid-flight.
+	&.is-dragging {
+		opacity: 0.4;
+		cursor: grabbing;
+		border-color: $hb-item-border;
+		box-shadow: none;
+		z-index: 10;
+		position: relative;
+		outline: none;
+
+		&,
+		*,
+		*:focus,
+		*:focus-visible {
+			outline: none !important;
+			box-shadow: none !important;
+		}
 	}
 }
 
@@ -597,7 +769,7 @@ ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordi
 	justify-content: center;
 	flex-shrink: 0;
 	opacity: 0.5;
-	width: $hb-icon-size;
+	width: $hb-icon-size + 8px;
 	height: $hb-icon-size;
 	cursor: grab;
 

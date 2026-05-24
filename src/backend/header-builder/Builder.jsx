@@ -12,10 +12,31 @@
  * The setting value is stored as encodeURIComponent(JSON.stringify(data)).
  */
 
-import { useState, useEffect, useRef, useCallback, createPortal } from '@wordpress/element';
+import { useState, useEffect, useRef, useCallback, createPortal, Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { Icon, Popover } from '@wordpress/components';
 import { dragHandle, settings, close, plus } from '@wordpress/icons';
+import {
+	DndContext,
+	DragOverlay,
+	PointerSensor,
+	KeyboardSensor,
+	useSensor,
+	useSensors,
+	useDraggable,
+	useDroppable,
+	useDndMonitor,
+	pointerWithin,
+	rectIntersection,
+} from '@dnd-kit/core';
+import {
+	SortableContext,
+	useSortable,
+	sortableKeyboardCoordinates,
+	rectSortingStrategy,
+	verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import TemplatesPanel from './TemplatesPanel';
 
 // ---------------------------------------------------------------------------
@@ -185,8 +206,91 @@ export default function Builder( { config } ) {
 	const [ data,          setData          ] = useState( initialData );
 	const [ innerLeft,     setInnerLeft     ] = useState( 0 );
 	const [ popover,       setPopover       ] = useState( null );
-	const lastSaved  = useRef( initialData );
-	const dragRef    = useRef( null );
+	const lastSaved = useRef( initialData );
+	// activeDrag holds the snapshot needed to render the floating ghost.
+	// Shape: { itemId, name }
+	const [ activeDrag, setActiveDrag ] = useState( null );
+	// Cursor position tracked manually so the ghost (portaled to body)
+	// can follow the pointer. dnd-kit's <DragOverlay> handles this for us
+	// in normal contexts, but the Customizer chrome creates a stacking
+	// context that traps DragOverlay's z-index — rendering our own ghost
+	// directly under <body> sidesteps the trap.
+	const [ cursorPos, setCursorPos ] = useState( null );
+
+	useEffect( () => {
+		if ( ! activeDrag ) return;
+		const onMove = ( e ) => setCursorPos( { x: e.clientX, y: e.clientY } );
+		window.addEventListener( 'pointermove', onMove );
+		return () => window.removeEventListener( 'pointermove', onMove );
+	}, [ activeDrag ] );
+
+	// Toggle a body class for the duration of an active drag. SCSS uses
+	// it to suppress chip / available-row :hover styles so the cursor
+	// gliding over another chip doesn't trigger that chip's hover ring
+	// (which would compete with the drop-line indicator). Class auto-
+	// clears when activeDrag becomes null (drop or cancel).
+	useEffect( () => {
+		if ( ! activeDrag ) return;
+		document.body.classList.add( 'customify-hb-is-dragging' );
+		return () => document.body.classList.remove( 'customify-hb-is-dragging' );
+	}, [ activeDrag ] );
+
+	const sensors = useSensors(
+		// Require a small drag distance before activating so plain click on
+		// the handle doesn't initiate a drag (keeps settings/remove buttons
+		// usable from inside the chip).
+		useSensor( PointerSensor, { activationConstraint: { distance: 4 } } ),
+		useSensor( KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates } )
+	);
+
+	function handleDragStart( event ) {
+		const d = event.active?.data?.current;
+		if ( ! d ) return;
+		setActiveDrag( { itemId: d.itemId, name: allItems[ d.itemId ]?.name || d.itemId } );
+		// Seed cursor at the activator event so the ghost shows up at the
+		// correct spot on the very first paint (before pointermove fires).
+		const ev = event.activatorEvent;
+		if ( ev && typeof ev.clientX === 'number' ) {
+			setCursorPos( { x: ev.clientX, y: ev.clientY } );
+		}
+	}
+
+	function handleDragCancel() {
+		setActiveDrag( null );
+		setCursorPos( null );
+	}
+
+	// Drop happens on dragEnd only. The drop-line indicator rendered by
+	// each DropZoneInner via useDndMonitor tells the user where the item
+	// will land — chips never shift during the drag.
+	function handleDragEnd( event ) {
+		setActiveDrag( null );
+		setCursorPos( null );
+
+		const { active, over } = event;
+		if ( ! active || ! over ) return;
+		if ( active.id === over.id ) return;
+
+		const activeData = active.data?.current;
+		const overData   = over.data?.current;
+		if ( ! activeData || ! overData ) return;
+
+		const itemId = activeData.itemId;
+		const from = activeData.type === 'available' ? 'available' : activeData.location;
+
+		let to, insertIndex;
+		if ( overData.type === 'placed' ) {
+			to = overData.location;
+			insertIndex = overData.index;
+		} else if ( overData.type === 'column' ) {
+			to = overData.location;
+			insertIndex = -1;
+		} else {
+			return;
+		}
+
+		moveItem( itemId, from, to, insertIndex );
+	}
 
 	// Show/hide when the panel expands.
 	useEffect( () => {
@@ -325,9 +429,30 @@ export default function Builder( { config } ) {
 		document.querySelector( selector )?.click();
 	}, [] );
 
-	const moveItem = useCallback( ( itemId, from, to ) => {
+	const moveItem = useCallback( ( itemId, from, to, insertIndex = -1 ) => {
 		setData( ( prev ) => {
 			const next = JSON.parse( JSON.stringify( prev ) );
+
+			// If reordering within the same column, adjust the insert index to
+			// compensate for the upcoming removal: any insertion point that
+			// sits AFTER the item's current position effectively shifts by one
+			// once the source slot is removed. Without this, dropping an item
+			// just below its current row would no-op visually.
+			let adjustedIndex = insertIndex;
+			if (
+				from !== 'available'
+				&& to !== 'available'
+				&& from.device === to.device
+				&& from.row === to.row
+				&& from.col === to.col
+				&& insertIndex >= 0
+			) {
+				const sourceCol = next[ from.device ][ from.row ][ from.col ];
+				const currentIdx = sourceCol.findIndex( ( i ) => i.id === itemId );
+				if ( currentIdx >= 0 && insertIndex > currentIdx ) {
+					adjustedIndex = insertIndex - 1;
+				}
+			}
 
 			if ( from !== 'available' ) {
 				const { device: fd, row: fr, col: fc } = from;
@@ -345,7 +470,11 @@ export default function Builder( { config } ) {
 				}
 			}
 
-			next[ td ][ tr ][ tc ].push( { id: itemId } );
+			const targetCol = next[ td ][ tr ][ tc ];
+			const finalIdx  = adjustedIndex < 0 || adjustedIndex > targetCol.length
+				? targetCol.length
+				: adjustedIndex;
+			targetCol.splice( finalIdx, 0, { id: itemId } );
 			return next;
 		} );
 	}, [] );
@@ -499,7 +628,14 @@ export default function Builder( { config } ) {
 		} );
 
 	return (
-		<>
+		<DndContext
+			sensors={ sensors }
+			collisionDetection={ pointerWithin }
+			autoScroll={ false }
+			onDragStart={ handleDragStart }
+			onDragEnd={ handleDragEnd }
+			onDragCancel={ handleDragCancel }
+		>
 		{ builderOpen && <div className="customify-hb customify--panel-v2" style={ { left: innerLeft } }>
 			<div className="customify-hb__inner">
 
@@ -536,7 +672,6 @@ export default function Builder( { config } ) {
 							<OffCanvasRow
 								items={ data.mobile.sidebar.sidebar }
 								allItems={ allItems }
-								dragRef={ dragRef }
 								onMove={ moveItem }
 								onOpenSection={ openSection }
 								onOpenRowSection={ openRowSection }
@@ -553,7 +688,6 @@ export default function Builder( { config } ) {
 									cols={ data[ device ][ rowId ] }
 									device={ device }
 									allItems={ allItems }
-									dragRef={ dragRef }
 									onMove={ moveItem }
 									onOpenSection={ openSection }
 									onOpenRowSection={ openRowSection }
@@ -585,7 +719,6 @@ export default function Builder( { config } ) {
 				device={ device }
 				allItems={ allItems }
 				availableItems={ availableItems }
-				dragRef={ dragRef }
 				containerId={ panelItemsContainerId }
 				builderTitle={ config?.title || builderId }
 				builderOpen={ builderOpen }
@@ -611,13 +744,48 @@ export default function Builder( { config } ) {
 
 		{ /* Slot for Popover components (tooltips, etc.) */ }
 		<Popover.Slot />
-		</>
+
+		{ /* Floating ghost rendered directly under <body> via portal so it
+			lives outside any Customizer stacking context (the chrome's
+			.wp-full-overlay / sidebar layers otherwise win z-index even
+			against 99 million). Cursor position is tracked manually via
+			pointermove during the drag — we replace dnd-kit's
+			<DragOverlay> entirely so we have full control over the portal
+			target and stacking. */ }
+		{ activeDrag && cursorPos && createPortal(
+			<div
+				style={ {
+					position: 'fixed',
+					left: cursorPos.x,
+					top:  cursorPos.y,
+					transform: 'translate(-20px, -20px)', // small offset from cursor
+					pointerEvents: 'none',
+					zIndex: 2147483647, // max int — guaranteed top
+				} }
+			>
+				<ChipPreview name={ activeDrag.name } />
+			</div>,
+			document.body
+		) }
+		</DndContext>
 	);
 }
 
 // ---------------------------------------------------------------------------
 // Helper: find an item's location within a device
 // ---------------------------------------------------------------------------
+
+// String key used to compare container identities (device/row/col).
+// `'available'` is reserved for the Available items panel.
+function locationKey( loc ) {
+	if ( loc === 'available' || ! loc ) return 'available';
+	return `${ loc.device }::${ loc.row }::${ loc.col }`;
+}
+
+function sameLocation( a, b ) {
+	if ( ! a || ! b ) return false;
+	return a.device === b.device && a.row === b.row && a.col === b.col;
+}
 
 function findItemLocation( data, device, itemId ) {
 	for ( const row of Object.keys( data[ device ] || {} ) ) {
@@ -634,7 +802,7 @@ function findItemLocation( data, device, itemId ) {
 // PanelItemsListPortal — renders into the builder panel items container
 // ---------------------------------------------------------------------------
 
-function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef, containerId, builderTitle, builderOpen, onOpenBuilder, onOpenSection, onRemove, onAdd } ) {
+function PanelItemsListPortal( { data, device, allItems, availableItems, containerId, builderTitle, builderOpen, onOpenBuilder, onOpenSection, onRemove, onAdd } ) {
 	// The container lives inside a WP Customizer Underscore.js template rendered
 	// lazily (only when the panel first opens) — watch for it via MutationObserver.
 	const [ container, setContainer ] = useState( () => document.getElementById( containerId ) );
@@ -719,7 +887,9 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 				</div>
 			</div>
 
-			{ /* Available items — drag-only */ }
+			{ /* Available items — drag-only source. Each item is a dnd-kit
+				draggable; dragging it lands the item in whichever column
+				the cursor releases over. */ }
 			{ availableItems.length > 0 && (
 				<div className="customify-hb__panel-section">
 					<div className="customify-hb__panel-section-label">
@@ -727,20 +897,7 @@ function PanelItemsListPortal( { data, device, allItems, availableItems, dragRef
 					</div>
 					<div className="customify-hb__panel-items">
 						{ availableItems.map( ( item ) => (
-							<div
-								key={ item.id }
-								className="customify-hb__panel-item customify-hb__panel-item--available"
-								draggable
-								title={ __( 'Drag to add to builder', 'customify' ) }
-								onDragStart={ ( e ) => {
-									dragRef.current = { id: item.id, from: 'available' };
-									e.dataTransfer.effectAllowed = 'move';
-								} }
-								onDragEnd={ () => { dragRef.current = null; } }
-							>
-								<Icon icon={ dragHandle } className="customify-hb__drag-handle" />
-								<span className="customify-hb__panel-item-name">{ item.name }</span>
-							</div>
+							<AvailableItem key={ item.id } itemId={ item.id } name={ item.name } />
 						) ) }
 					</div>
 				</div>
@@ -763,7 +920,53 @@ function parseColLayout( raw ) {
 	}
 }
 
-function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove, onOpenSection, onOpenRowSection, onOpenPopover, colLayoutKey } ) {
+// Drag source for the Available panel (items not yet placed in any
+// column). useDraggable instead of useSortable because available rows
+// don't need internal reordering — they're just sources that, when
+// dropped on a column, get inserted via the root onDragEnd handler.
+//
+// IMPORTANT: We intentionally do NOT apply useDraggable's `transform`
+// to the source element. The Available panel lives inside the
+// Customizer sidebar (overflow:auto + Customizer's own scroll bridge);
+// translating the source row inside that container causes the entire
+// sidebar to be visually pulled along with the drag, and the panel
+// cannot restore its scroll/layout cleanly after drop. The floating
+// <DragOverlay> already renders a chip-shaped ghost that follows the
+// cursor — that is effectively the "clone" needed for visual feedback,
+// so the source row stays rock-still in the panel (just dimmed).
+function AvailableItem( { itemId, name } ) {
+	const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging } = useDraggable( {
+		id:   `avail::${ itemId }`,
+		data: { type: 'available', itemId },
+	} );
+
+	const style = {
+		opacity: isDragging ? 0.4 : 1,
+	};
+
+	return (
+		<div
+			ref={ setNodeRef }
+			style={ style }
+			className="customify-hb__panel-item customify-hb__panel-item--available"
+			title={ __( 'Drag to add to builder', 'customify' ) }
+			{ ...attributes }
+			{ ...listeners }
+		>
+			{ /* Keep the activator ref on the icon so keyboard focus
+				(Tab → Space) still lands on a sensible target, but the
+				pointer listeners now live on the row wrapper so a user
+				can grab the whole item from anywhere — clicking the
+				name area or empty space also initiates the drag. */ }
+			<span ref={ setActivatorNodeRef } className="customify-hb__avail-handle">
+				<Icon icon={ dragHandle } className="customify-hb__drag-handle" />
+			</span>
+			<span className="customify-hb__panel-item-name">{ name }</span>
+		</div>
+	);
+}
+
+function BuilderRow( { rowId, rowLabel, cols, device, allItems, onMove, onOpenSection, onOpenRowSection, onOpenPopover, colLayoutKey } ) {
 	const [ hovered, setHovered ] = useState( false );
 	const rowRef = useRef( null );
 
@@ -830,7 +1033,6 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove,
 						device={ device }
 						items={ cols[ colId ] || [] }
 						allItems={ allItems }
-						dragRef={ dragRef }
 						onMove={ onMove }
 						onOpenSection={ onOpenSection }
 						onOpenPopover={ onOpenPopover }
@@ -845,10 +1047,8 @@ function BuilderRow( { rowId, rowLabel, cols, device, allItems, dragRef, onMove,
 // OffCanvasRow (mobile sidebar — header only)
 // ---------------------------------------------------------------------------
 
-function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpenRowSection, onOpenPopover } ) {
-	const [ isDragOver, setIsDragOver ] = useState( false );
+function OffCanvasRow( { items, allItems, onMove, onOpenSection, onOpenRowSection, onOpenPopover } ) {
 	const location = { device: 'mobile', row: 'sidebar', col: 'sidebar' };
-
 	return (
 		<div className="customify-hb__row customify-hb__row--sidebar">
 			<div className="customify-hb__row-header">
@@ -862,45 +1062,22 @@ function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpen
 				</button>
 				<span className="customify-hb__row-title">{ __( 'Off Canvas', 'customify' ) }</span>
 			</div>
-			<div
-				className={ `customify-hb__offcanvas${ isDragOver ? ' is-drag-over' : '' }` }
-				onDragOver={ ( e ) => { e.preventDefault(); setIsDragOver( true ); } }
-				onDragLeave={ () => setIsDragOver( false ) }
-				onDrop={ ( e ) => {
-					e.preventDefault();
-					setIsDragOver( false );
-					if ( ! dragRef.current ) return;
-					const { id, from } = dragRef.current;
-					onMove( id, from, location );
-					dragRef.current = null;
-				} }
-				onClick={ ( e ) => {
-					if ( e.target.closest( '.customify-hb__item' ) ) return;
-					onOpenPopover( location, e.currentTarget.getBoundingClientRect() );
-				} }
-			>
-				{ items.map( ( item ) => {
-					const info = allItems[ item.id ] || { name: item.id, section: '' };
-					return (
-						<ItemChip
-							key={ item.id }
-							id={ item.id }
-							name={ info.name }
-							section={ info.section }
-							layoutSection={ info.layout_section }
-							from={ location }
-							dragRef={ dragRef }
-							onRemove={ ( id ) => onMove( id, location, 'available' ) }
-							onOpenSection={ onOpenSection }
-						/>
-					);
-				} ) }
-				{ items.length === 0 && (
+			<DropZoneInner
+				containerClass="customify-hb__offcanvas"
+				strategy={ verticalListSortingStrategy }
+				orientation="vertical"
+				location={ location }
+				items={ items }
+				allItems={ allItems }
+				onMove={ onMove }
+				onOpenSection={ onOpenSection }
+				onOpenPopover={ onOpenPopover }
+				emptyHint={
 					<span className="customify-hb__drop-hint" style={ { pointerEvents: 'none' } }>
 						{ __( 'Click to add items', 'customify' ) }
 					</span>
-				) }
-			</div>
+				}
+			/>
 		</div>
 	);
 }
@@ -909,47 +1086,116 @@ function OffCanvasRow( { items, allItems, dragRef, onMove, onOpenSection, onOpen
 // DropZone (column)
 // ---------------------------------------------------------------------------
 
-function DropZone( { colId, rowId, device, items, allItems, dragRef, onMove, onOpenSection, onOpenPopover } ) {
-	const [ isDragOver, setIsDragOver ] = useState( false );
+function DropZone( { colId, rowId, device, items, allItems, onMove, onOpenSection, onOpenPopover } ) {
 	const location = { device, row: rowId, col: colId };
+	return (
+		<DropZoneInner
+			containerClass={ `customify-hb__col customify-hb__col--${ colId }` }
+			strategy={ rectSortingStrategy }
+			orientation="horizontal"
+			location={ location }
+			items={ items }
+			allItems={ allItems }
+			onMove={ onMove }
+			onOpenSection={ onOpenSection }
+			onOpenPopover={ onOpenPopover }
+			emptyHint={ <span className="customify-hb__col-empty" style={ { pointerEvents: 'none' } }>+</span> }
+		/>
+	);
+}
+
+// Shared body for column + off-canvas. Wraps a SortableContext for the
+// chip drag mechanics and a useDroppable target (so empty cols still
+// accept drops from the Available panel or other cols). Inside, a thin
+// <DropLine> indicator is rendered between chips at the cursor position
+// while a drag is over this column. Chips DO NOT shift — the line is
+// the only visual cue, which keeps the layout stable even when the
+// column wraps to multiple rows.
+function DropZoneInner( { containerClass, strategy, orientation, location, items, allItems, onMove, onOpenSection, onOpenPopover, emptyHint } ) {
+	const containerId = `col::${ location.device }::${ location.row }::${ location.col }`;
+	const itemIds = items.map( ( i ) => `placed::${ i.id }` );
+
+	const { setNodeRef, isOver } = useDroppable( {
+		id:   containerId,
+		data: { type: 'column', location, itemIds },
+	} );
+
+	// dropAt:
+	//   { type: 'before', index: N } — render line BEFORE chip N
+	//   { type: 'end' }              — render line AFTER the last chip
+	//   null                         — no line in this column
+	const [ dropAt, setDropAt ] = useState( null );
+
+	useDndMonitor( {
+		onDragOver( { over } ) {
+			if ( ! over ) { setDropAt( null ); return; }
+			const d = over.data?.current;
+			if ( ! d || ! d.location || ! sameLocation( d.location, location ) ) {
+				setDropAt( null );
+				return;
+			}
+			if ( d.type === 'placed' ) {
+				setDropAt( { type: 'before', index: d.index } );
+			} else if ( d.type === 'column' ) {
+				setDropAt( { type: 'end' } );
+			} else {
+				setDropAt( null );
+			}
+		},
+		onDragEnd()    { setDropAt( null ); },
+		onDragCancel() { setDropAt( null ); },
+	} );
 
 	return (
-		<div
-			className={ `customify-hb__col customify-hb__col--${ colId }${ isDragOver ? ' is-drag-over' : '' }` }
-			onDragOver={ ( e ) => { e.preventDefault(); setIsDragOver( true ); } }
-			onDragLeave={ () => setIsDragOver( false ) }
-			onDrop={ ( e ) => {
-				e.preventDefault();
-				setIsDragOver( false );
-				if ( ! dragRef.current ) return;
-				const { id, from } = dragRef.current;
-				onMove( id, from, location );
-				dragRef.current = null;
-			} }
-			onClick={ ( e ) => {
-				if ( e.target.closest( '.customify-hb__item' ) ) return;
-				onOpenPopover( location, e.currentTarget.getBoundingClientRect() );
-			} }
-		>
-			{ items.map( ( item ) => {
-				const info = allItems[ item.id ] || { name: item.id, section: '' };
-				return (
-					<ItemChip
-						key={ item.id }
-						id={ item.id }
-						name={ info.name }
-						section={ info.section }
-						layoutSection={ info.layout_section }
-						from={ location }
-						dragRef={ dragRef }
-						onRemove={ ( id ) => onMove( id, location, 'available' ) }
-						onOpenSection={ onOpenSection }
-					/>
-				);
-			} ) }
-			{ items.length === 0 && (
-				<span className="customify-hb__col-empty" style={ { pointerEvents: 'none' } }>+</span>
-			) }
+		<SortableContext items={ itemIds } strategy={ strategy }>
+			<div
+				ref={ setNodeRef }
+				className={ `${ containerClass }${ isOver ? ' is-drag-over' : '' }` }
+				onClick={ ( e ) => {
+					if ( e.target.closest( '.customify-hb__item' ) ) return;
+					onOpenPopover( location, e.currentTarget.getBoundingClientRect() );
+				} }
+			>
+				{ items.map( ( item, idx ) => {
+					const info = allItems[ item.id ] || { name: item.id, section: '' };
+					return (
+						<Fragment key={ item.id }>
+							{ dropAt && dropAt.type === 'before' && dropAt.index === idx && (
+								<DropLine orientation={ orientation } />
+							) }
+							<SortableItemChip
+								sortableId={ `placed::${ item.id }` }
+								itemId={ item.id }
+								name={ info.name }
+								section={ info.section }
+								layoutSection={ info.layout_section }
+								location={ location }
+								index={ idx }
+								onRemove={ ( id ) => onMove( id, location, 'available' ) }
+								onOpenSection={ onOpenSection }
+							/>
+						</Fragment>
+					);
+				} ) }
+				{ dropAt && dropAt.type === 'end' && <DropLine orientation={ orientation } /> }
+				{ items.length === 0 && emptyHint }
+			</div>
+		</SortableContext>
+	);
+}
+
+// Drop-line indicator. Per the chosen UX:
+//   horizontal column → zero-width slot (40px tall) with a 3px absolute
+//                       inner bar (vertical line between chips).
+//   vertical sidebar  → zero-height slot (full width) with a 3px absolute
+//                       inner bar (horizontal line between stacked chips).
+// Zero size in the active axis means inserting/removing the line never
+// shifts the surrounding chips' positions.
+function DropLine( { orientation } ) {
+	const className = `customify-hb__drop-line customify-hb__drop-line--${ orientation || 'horizontal' }`;
+	return (
+		<div className={ className } aria-hidden="true">
+			<div className="customify-hb__drop-line__bar" />
 		</div>
 	);
 }
@@ -958,23 +1204,38 @@ function DropZone( { colId, rowId, device, items, allItems, dragRef, onMove, onO
 // ItemChip
 // ---------------------------------------------------------------------------
 
-function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, onOpenSection } ) {
+// Sortable chip — placed in a column. Registers with the nearest
+// SortableContext via useSortable. The drag handle gets the listeners; the
+// rest of the chip stays clickable (settings + remove buttons).
+//
+// We intentionally do NOT apply useSortable's `transform`/`transition` to
+// the chip style. The classic "shift-aside" preview that the sortable
+// preset provides does not survive flex-wrap multi-row layouts (chips
+// pile up because translates can't simulate wrap). Instead, sibling chips
+// stay put and DropZoneInner renders a thin `<DropLine>` between chips
+// at the cursor position via useDndMonitor — same UX intent, no overlap.
+function SortableItemChip( { sortableId, itemId, name, section, layoutSection, location, index, onRemove, onOpenSection } ) {
 	const settingsTarget = layoutSection || section;
+	const { attributes, listeners, setNodeRef, setActivatorNodeRef, isDragging } = useSortable( {
+		id:   sortableId,
+		data: { type: 'placed', itemId, location, index },
+	} );
+
+	const style = {
+		opacity: isDragging ? 0.4 : 1,
+	};
+
 	return (
-		<div className="customify-hb__item">
+		<div
+			ref={ setNodeRef }
+			style={ style }
+			className={ `customify-hb__item${ isDragging ? ' is-dragging' : '' }` }
+			{ ...attributes }
+		>
 			<span
+				ref={ setActivatorNodeRef }
 				className="customify-hb__item-handle"
-				draggable
-				onDragStart={ ( e ) => {
-					dragRef.current = { id, from };
-					e.dataTransfer.effectAllowed = 'move';
-					// Use the whole chip as the drag ghost instead of just the handle span.
-					const chip = e.currentTarget.closest( '.customify-hb__item' );
-					if ( chip ) {
-						const rect = chip.getBoundingClientRect();
-						e.dataTransfer.setDragImage( chip, e.clientX - rect.left, e.clientY - rect.top );
-					}
-				} }
+				{ ...listeners }
 			>
 				<Icon icon={ dragHandle } />
 			</span>
@@ -993,10 +1254,33 @@ function ItemChip( { id, name, section, layoutSection, from, dragRef, onRemove, 
 			<button
 				type="button" className="customify-hb__item-btn customify-hb__item-remove"
 				title={ __( 'Remove', 'customify' ) }
-				onClick={ ( e ) => { e.stopPropagation(); onRemove( id ); } }
+				onClick={ ( e ) => { e.stopPropagation(); onRemove( itemId ); } }
 			>
 				<Icon icon={ close } />
 			</button>
+		</div>
+	);
+}
+
+// Visual-only preview rendered inside <DragOverlay> while a chip or
+// available item is being dragged. Mirrors the placed-chip DOM exactly
+// (handle + name + remove button) so the ghost's intrinsic width and
+// height match the source — without the trailing button slot the
+// inline-flex measurement collapses to a narrower box and the user sees
+// a smaller ghost than the original chip.
+function ChipPreview( { name } ) {
+	return (
+		<div className="customify-hb__item customify-hb__item--overlay">
+			<span className="customify-hb__item-handle">
+				<Icon icon={ dragHandle } />
+			</span>
+			<span className="customify-hb__item-name">{ name }</span>
+			<span
+				className="customify-hb__item-btn customify-hb__item-remove"
+				aria-hidden="true"
+			>
+				<Icon icon={ close } />
+			</span>
 		</div>
 	);
 }
