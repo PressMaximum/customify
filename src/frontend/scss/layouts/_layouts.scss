@@ -109,6 +109,19 @@
     padding-bottom: ms(4);
 }
 
+// Per-page opt-out for landing pages that build with full-bleed sections.
+// Toggled via the "Content Vertical Padding" item in the page's
+// "Disable Elements" metabox / block-editor panel. Body class is emitted
+// from customify_body_classes() in inc/element-classes.php only when the
+// post meta is set, so the default reading-room padding above is the
+// out-of-the-box behavior for ordinary content pages.
+body.disable-content-vertical-padding {
+    #sidebar-secondary, #sidebar-primary, #main {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+}
+
 
 .sidebar-content-sidebar {
     #main {

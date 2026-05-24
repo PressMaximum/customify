@@ -33,7 +33,7 @@ class Customify_Page_Header {
 		$section      = 'page_header';
 		$name         = 'page_header';
 		$choices      = array(
-			'default'  => __( 'Default', 'customify' ),
+			'default'  => __( 'Default - inside main content', 'customify' ),
 			'cover'    => __( 'Cover', 'customify' ),
 			'titlebar' => __( 'Titlebar', 'customify' ),
 			'none'     => __( 'Hide', 'customify' ),
@@ -1039,6 +1039,22 @@ class Customify_Page_Header {
 		}
 
 		if ( in_array( $args['display'], array( 'cover', 'titlebar', 'shortcode' ), true ) ) {
+			// Titlebar mode bails when there's no resolved title text. The
+			// titlebar buffer also collects auxiliary content via the
+			// `customify/titlebar/before|after` hooks (e.g. the breadcrumb
+			// renderer when "Display Position = Inside cover/titlebar"), so
+			// the existing "is buffer empty?" gate in render_titlebar() lets
+			// the wrapper render with just a thin breadcrumb strip and no
+			// title — which looks like a stray empty bar on landing pages
+			// that intentionally omit the page title.
+			//
+			// Gating on `$args['title']` here makes the titlebar an
+			// all-or-nothing element keyed off the page's primary title.
+			// Callers (body_class, etc.) also benefit because will_render()
+			// now reflects what render() actually outputs.
+			if ( 'titlebar' === $args['display'] && '' === trim( (string) $args['title'] ) ) {
+				return '';
+			}
 			return $args['display'];
 		}
 

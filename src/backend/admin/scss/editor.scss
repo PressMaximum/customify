@@ -17,6 +17,22 @@
 // _blogs.scss is intentionally excluded — it contains only frontend blog-listing
 // layout styles (.entry-title, .entry-meta, etc.) that are irrelevant in the editor.
 
+// Post title wrapper — WP block editor inlines `style="margin-top: 4rem"`
+// on .editor-visual-editor__post-title-wrapper (and the older alias
+// .edit-post-visual-editor__post-title-wrapper). Bottom margin defaults
+// to 0, so the H1 sits flush against the first content block — visually
+// the title looks weighted toward the bottom on long pages and crowded
+// against the next paragraph. Add a matching bottom margin so the title
+// has symmetric breathing room and reads as a distinct heading rather
+// than a label glued to the first paragraph. !important is required only
+// for `margin-top` (to override the inline style); margin-bottom wins on
+// specificity alone since no inline bottom is set.
+.editor-visual-editor__post-title-wrapper,
+.edit-post-visual-editor__post-title-wrapper {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem;
+}
+
 // Editor equivalents for .entry-content selectors defined in _blocks.scss.
 // Those selectors do not exist inside the block editor canvas; .editor-styles-wrapper
 // is the correct root scope here.
