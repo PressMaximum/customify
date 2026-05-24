@@ -26,6 +26,11 @@ class Customify
 		add_action('wp_enqueue_scripts', array($this, 'scripts'), 95);
 		add_filter('excerpt_more', array($this, 'excerpt_more'));
 		add_filter('excerpt_length', array($this, 'excerpt_length'));
+		// Font resource hints (preconnect for Google Fonts hosts and a
+		// preload for the body font) run at priority 1 — earlier than
+		// any stylesheet emission so the browser can start the network
+		// work in parallel with CSS parsing. See class-customizer-font-loader.php.
+		add_action('wp_head', array($this, 'print_font_resource_hints'), 1);
 		add_action('wp_head', array($this, 'customify_style'), 2);
 		// Print the palette tokens (:root + Base cascade rules) BEFORE
 		// wp_print_styles (priority 8). The composite styling controls
@@ -49,6 +54,31 @@ class Customify
 	 * naming so consumers (frontend, extract_customify_css.py helper) can
 	 * find it the same way they find the auto-CSS block.
 	 */
+	/**
+	 * Emit network resource hints for fonts as early as possible in
+	 * <head>. Two hints:
+	 *   - preconnect to Google Fonts hosts (fonts.googleapis.com +
+	 *     fonts.gstatic.com) when any Google font is active — saves
+	 *     ~100-300ms TTFB on cold visits.
+	 *   - preload for the body font's woff2 file when it's local
+	 *     (Theme or Library) — saves ~200-500ms LCP by starting the
+	 *     font fetch in parallel with CSS parse.
+	 *
+	 * Both helpers short-circuit to empty when nothing applies, so
+	 * the only cost on pages without fonts is a single class load.
+	 */
+	function print_font_resource_hints() {
+		if ( ! class_exists( 'Customify_Customizer_Font_Loader' ) ) {
+			return;
+		}
+		$out = Customify_Customizer_Font_Loader::preconnect_tags()
+			 . Customify_Customizer_Font_Loader::preload_body_font_tag();
+		if ( '' === $out ) {
+			return;
+		}
+		echo $out; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside builders
+	}
+
 	function print_palette_tokens() {
 		if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			return;
@@ -404,6 +434,12 @@ class Customify
 		}
 
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
+		// Must run AFTER auto_css() — that's where setup_font() populates
+		// the theme_fonts / library_fonts buckets from active typography
+		// settings. Order doesn't matter between theme/library; both
+		// emit standalone @font-face declarations.
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_theme_fonts_css() );
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_library_fonts_css() );
 		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
 		wp_localize_script(
 			'customify-themejs',

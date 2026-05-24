@@ -34,6 +34,14 @@ class  Customify_Customizer {
 	function init() {
 
 		require_once get_template_directory() . '/inc/customizer/class-customizer-sanitize.php';
+		// Theme + Font Library bridges must load before auto-css because
+		// the CSS generator references them from frontend render
+		// (guests included, no admin guard). Font Loader sits at the
+		// same level — used by auto-css for dedupe and by enqueue
+		// hooks for preconnect / preload.
+		require_once get_template_directory() . '/inc/customizer/class-customizer-theme-fonts.php';
+		require_once get_template_directory() . '/inc/customizer/class-customizer-font-library.php';
+		require_once get_template_directory() . '/inc/customizer/class-customizer-font-loader.php';
 		require_once get_template_directory() . '/inc/customizer/class-customizer-auto-css.php';
 
 		if ( is_admin() || is_customize_preview() ) {
@@ -45,6 +53,13 @@ class  Customify_Customizer {
 			// doesn't auto-hide it (default behaviour hides sections with no controls).
 			add_action( 'customize_controls_print_footer_scripts', array( $this, 'print_divider_section_constructor' ) );
 			add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
+			// Inject every theme.json + Font Library family into the
+			// preview iframe head so users can switch to any registered
+			// font and see it render immediately — the frontend code
+			// path only emits @font-face for fonts already saved into
+			// settings.
+			add_action( 'customize_preview_init', array( $this, 'preview_theme_fonts' ) );
+			add_action( 'customize_preview_init', array( $this, 'preview_library_fonts' ) );
 			add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
 
 			require_once get_template_directory() . '/inc/customizer/class-customizer-fonts.php';
@@ -113,6 +128,95 @@ class  Customify_Customizer {
 	/**
 	 * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
 	 */
+	/**
+	 * Counterpart to preview_library_fonts() for theme.json fonts.
+	 * Same rationale (cheap to ship, browsers lazy-load font files).
+	 */
+	function preview_theme_fonts() {
+		if ( ! class_exists( 'Customify_Customizer_Theme_Fonts' ) ) {
+			return;
+		}
+		add_action( 'wp_head', function () {
+			$theme = ( new Customify_Customizer_Theme_Fonts() )->get_for_frontend();
+			if ( empty( $theme ) ) {
+				return;
+			}
+			// Skip families WP auto-prints — see same dedupe in
+			// get_theme_fonts_css(). The preview iframe runs WP core
+			// hooks too, so wp_print_font_faces() already emitted the
+			// CSS we'd otherwise duplicate here.
+			$handled = class_exists( 'Customify_Customizer_Font_Loader' )
+				? Customify_Customizer_Font_Loader::wp_handled_names()
+				: array();
+			$buf = '';
+			foreach ( $theme as $name => $data ) {
+				if ( isset( $handled[ $name ] ) ) {
+					continue;
+				}
+				if ( empty( $data['font_faces'] ) ) {
+					continue;
+				}
+				foreach ( $data['font_faces'] as $face ) {
+					$buf .= sprintf(
+						"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+						esc_attr( $name ),
+						esc_attr( $face['style'] ),
+						esc_attr( $face['weight'] ),
+						esc_url( $face['src'] )
+					);
+				}
+			}
+			if ( '' === $buf ) {
+				return;
+			}
+			echo '<style id="customify-theme-fonts-preview">' . $buf . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}, 100 );
+	}
+
+	/**
+	 * Print @font-face declarations for every WP Font Library family
+	 * into the customize preview iframe so the user can preview any
+	 * uploaded font even before saving it. Browsers only download
+	 * font files when a matching font-family is actually used, so
+	 * shipping the full catalogue costs CSS bytes but no HTTP traffic.
+	 */
+	function preview_library_fonts() {
+		if ( ! class_exists( 'Customify_Customizer_Font_Library' ) ) {
+			return;
+		}
+		add_action( 'wp_head', function () {
+			$library = ( new Customify_Customizer_Font_Library() )->get_for_frontend();
+			if ( empty( $library ) ) {
+				return;
+			}
+			// Skip families WP auto-prints (activated Library fonts in
+			// global settings). The preview iframe runs WP core hooks
+			// so wp_print_font_faces() already emitted those.
+			$handled = class_exists( 'Customify_Customizer_Font_Loader' )
+				? Customify_Customizer_Font_Loader::wp_handled_names()
+				: array();
+			echo '<style id="customify-library-fonts-preview">';
+			foreach ( $library as $name => $data ) {
+				if ( isset( $handled[ $name ] ) ) {
+					continue;
+				}
+				if ( empty( $data['font_faces'] ) ) {
+					continue;
+				}
+				foreach ( $data['font_faces'] as $face ) {
+					printf(
+						"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+						esc_attr( $name ),
+						esc_attr( $face['style'] ),
+						esc_attr( $face['weight'] ),
+						esc_url( $face['src'] )
+					);
+				}
+			}
+			echo '</style>';
+		}, 100 );
+	}
+
 	function preview_js() {
 		if ( is_customize_preview() ) {
 			$suffix = Customify()->get_asset_suffix();

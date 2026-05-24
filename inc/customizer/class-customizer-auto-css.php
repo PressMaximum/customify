@@ -9,6 +9,20 @@ class Customify_Customizer_Auto_CSS
 	public $variants = array();
 	public $subsets = array();
 
+	// WP Font Library buckets. Separate from $fonts/$variants because
+	// they emit @font-face inline instead of building a Google Fonts URL.
+	public $library_fonts = array();
+	public $library_variants = array();
+
+	// theme.json typography.fontFamilies buckets — same idea as the
+	// Library buckets but the data comes from WP_Theme_JSON_Resolver
+	// and the family CSS may be a stack ("Inter, sans-serif") rather
+	// than a single name, so we keep both the picker name and the raw
+	// fontFamily string for frontend output.
+	public $theme_fonts = array();
+	public $theme_variants = array();
+	private $theme_fonts_resolver = null;
+
 	static $code = null;
 	static $font_url = null;
 	/**
@@ -860,11 +874,68 @@ class Customify_Customizer_Auto_CSS
 			if ($value['subsets']) {
 				$this->subsets = array_merge($this->subsets, $value['subsets']);
 			}
+		} elseif ('library' === $value['type']) {
+			// WP Font Library fonts are uploaded locally; we resolve
+			// their files in get_library_fonts_css() and emit @font-face
+			// inline. Collect only the variants actually used so we
+			// don't ship CSS for unused weight/style combinations.
+			$this->library_fonts[$value['font']] = $value['font'];
+			if ($value['variant']) {
+				$variants = is_array($value['variant']) ? array_values($value['variant']) : array($value['variant']);
+				if (!isset($this->library_variants[$value['font']])) {
+					$this->library_variants[$value['font']] = array();
+				}
+				$this->library_variants[$value['font']] = array_unique(
+					array_merge($this->library_variants[$value['font']], $variants)
+				);
+			}
+		} elseif ('theme' === $value['type']) {
+			// theme.json-declared fonts. Same bucket pattern as Library,
+			// but the font-family CSS uses the theme.json `fontFamily`
+			// stack (e.g. "Inter, sans-serif") so unloaded fonts fall
+			// back to the next family in the stack gracefully.
+			$this->theme_fonts[$value['font']] = $value['font'];
+			if ($value['variant']) {
+				$variants = is_array($value['variant']) ? array_values($value['variant']) : array($value['variant']);
+				if (!isset($this->theme_variants[$value['font']])) {
+					$this->theme_variants[$value['font']] = array();
+				}
+				$this->theme_variants[$value['font']] = array_unique(
+					array_merge($this->theme_variants[$value['font']], $variants)
+				);
+			}
+
+			// Use the raw fontFamily declaration from theme.json when
+			// it differs from the picker name. Falls back to the name
+			// (quoted) so unknown fonts still emit valid CSS.
+			$resolver = $this->theme_fonts_resolver();
+			if ($resolver) {
+				$theme_data = $resolver->get_for_frontend();
+				if (!empty($theme_data[$value['font']]['font_family_css'])) {
+					return "font-family: {$theme_data[$value['font']]['font_family_css']};";
+				}
+			}
 		} else {
 			$this->custom_fonts[$value['font']] = $value['font'];
 		}
 
 		return "font-family: \"{$value['font']}\";";
+	}
+
+	/**
+	 * Lazy-instantiate the theme-fonts resolver so callers above don't
+	 * pay for object construction unless a theme font is actually used.
+	 *
+	 * @return Customify_Customizer_Theme_Fonts|null
+	 */
+	private function theme_fonts_resolver()
+	{
+		if (null === $this->theme_fonts_resolver) {
+			$this->theme_fonts_resolver = class_exists('Customify_Customizer_Theme_Fonts')
+				? new Customify_Customizer_Theme_Fonts()
+				: false;
+		}
+		return $this->theme_fonts_resolver ?: null;
 	}
 
 
@@ -1084,6 +1155,122 @@ class Customify_Customizer_Auto_CSS
 		if (!empty($code)) {
 			$this->css['all'] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $code) . "\r\n}";
 		}
+	}
+
+	/**
+	 * Build the @font-face CSS for WP Font Library families that are
+	 * actually referenced by the current configuration. Auto_CSS must
+	 * have run first so $library_fonts / $library_variants are
+	 * populated by setup_font(). Returns an empty string when nothing
+	 * is in use — keep wp_add_inline_style happy.
+	 *
+	 * @return string
+	 */
+	function get_library_fonts_css()
+	{
+		if (empty($this->library_fonts)) {
+			return '';
+		}
+		if (!class_exists('Customify_Customizer_Font_Library')) {
+			return '';
+		}
+
+		$library = (new Customify_Customizer_Font_Library())->get_for_frontend();
+		if (empty($library)) {
+			return '';
+		}
+
+		// Dedupe with WP core. Library fonts that the user has
+		// "activated" in wp-admin/site-editor end up in
+		// wp_get_global_settings() and WP auto-emits @font-face for
+		// them. Skip those; emit only the un-activated ones (uploaded
+		// but not turned on in the editor) that WP wouldn't reach.
+		$handled = class_exists('Customify_Customizer_Font_Loader')
+			? Customify_Customizer_Font_Loader::wp_handled_names()
+			: array();
+
+		$css = '';
+		foreach ($this->library_fonts as $name) {
+			if (isset($handled[$name])) {
+				continue; // WP will print this
+			}
+			if (empty($library[$name]['font_faces'])) {
+				continue;
+			}
+			$used = isset($this->library_variants[$name]) ? $this->library_variants[$name] : array();
+			foreach ($library[$name]['font_faces'] as $face) {
+				// When the user picked specific variants, restrict to
+				// those. With no explicit variant in storage we ship
+				// every face the family owns so font-weight CSS
+				// elsewhere can still resolve.
+				if (!empty($used) && !in_array($face['variant'], $used, true)) {
+					continue;
+				}
+				$css .= sprintf(
+					"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+					esc_attr($name),
+					esc_attr($face['style']),
+					esc_attr($face['weight']),
+					esc_url($face['src'])
+				);
+			}
+		}
+		return $css;
+	}
+
+	/**
+	 * Build @font-face CSS for theme.json fontFamilies that are
+	 * actually used. Mirrors get_library_fonts_css() but reads from
+	 * the theme-fonts resolver, and skips families with no font-face
+	 * declarations (system-font stacks need no @font-face).
+	 *
+	 * @return string
+	 */
+	function get_theme_fonts_css()
+	{
+		if (empty($this->theme_fonts)) {
+			return '';
+		}
+		$resolver = $this->theme_fonts_resolver();
+		if (!$resolver) {
+			return '';
+		}
+		$theme = $resolver->get_for_frontend();
+		if (empty($theme)) {
+			return '';
+		}
+
+		// Dedupe with WP core's wp_print_font_faces() output. On WP 6.5+
+		// theme.json fonts get auto-emitted; re-emitting them here only
+		// ships duplicate bytes. Helper returns empty on older WP so
+		// legacy installs continue to receive theme-emitted CSS.
+		$handled = class_exists('Customify_Customizer_Font_Loader')
+			? Customify_Customizer_Font_Loader::wp_handled_names()
+			: array();
+
+		$css = '';
+		foreach ($this->theme_fonts as $name) {
+			if (isset($handled[$name])) {
+				continue; // WP will print this
+			}
+			if (empty($theme[$name]['font_faces'])) {
+				continue; // system-font stack — no @font-face to emit
+			}
+			$used = isset($this->theme_variants[$name]) ? $this->theme_variants[$name] : array();
+			foreach ($theme[$name]['font_faces'] as $face) {
+				if (!empty($used) && !in_array($face['variant'], $used, true)) {
+					continue;
+				}
+				$css .= sprintf(
+					"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+					esc_attr($name),
+					esc_attr($face['style']),
+					esc_attr($face['weight']),
+					esc_url($face['src'])
+				);
+			}
+		}
+		return $css;
 	}
 
 	function get_google_fonts_url()

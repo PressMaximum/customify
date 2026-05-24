@@ -204,6 +204,36 @@ $builder_active_color: #0073aa;
 	}
 }
 
+// Font picker popup styling. Two layered goals:
+//
+// 1. Pin width to 200px. Select2 defaults the popup width to the
+//    trigger's width and sets it inline; `!important` overrides
+//    that. The class added via dropdownCssClass lands on the
+//    .select2-dropdown element (the user-visible popup), so this
+//    rule reaches it directly. The outer .select2-container--open
+//    wrapper is sized to match in typography-control.js.
+//
+// 2. Make the popup look like a real floating menu. The existing
+//    rule `.wp-customizer .select2-container .select2-dropdown` in
+//    this file drops `border-top` and zeroes `border-radius` —
+//    that's correct for the default left-aligned flush popup whose
+//    top edge butts up against the trigger's bottom border, but
+//    wrong for our right-aligned detached popup, which loses its
+//    top edge and looks "cut off". We restore a full 1px border
+//    on all four sides, round the corners, and add an outer drop
+//    shadow so the popup floats above the customizer panel.
+//
+// Selector specificity (0,4,0) outranks the existing
+// .wp-customizer .select2-container .select2-dropdown rule (0,3,0)
+// so the styles apply without needing !important everywhere.
+.wp-customizer .select2-container .select2-dropdown.customify-font-dropdown {
+	width: 200px !important; // beat Select2's inline width
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	overflow: hidden; // clip search field + last option to the rounded corners
+}
+
 @import "control";
 @import "header_footer_builder";
 @import "_builder_v1";

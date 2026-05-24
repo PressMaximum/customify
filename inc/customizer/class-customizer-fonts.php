@@ -25,15 +25,49 @@ class Customify_Fonts {
 			wp_send_json_error( 'forbidden', 403 );
 		}
 
-		$fonts = array(
-			'normal' => array(
-				'title' => __( 'Default Web Fonts', 'customify' ),
-				'fonts' => $this->get_normal_fonts(),
-			),
-			'google' => array(
-				'title' => __( 'Google Web Fonts', 'customify' ),
-				'fonts' => $this->get_google_fonts(),
-			),
+		// Group order: theme → library → normal → google. Theme is the
+		// theme.json-declared canonical set, surfaced first. Library is
+		// user-uploaded via wp-admin Font Library. On name collisions
+		// the EARLIER group wins (the user-mental-model "what's at the
+		// top is what I'm trying to use"). Concretely:
+		//   - Theme wins over Library + Google
+		//   - Library wins over Google
+		$theme   = ( new Customify_Customizer_Theme_Fonts() )->get_for_picker();
+		$library = ( new Customify_Customizer_Font_Library() )->get_for_picker();
+		$google  = $this->get_google_fonts();
+
+		if ( ! empty( $theme ) ) {
+			if ( is_array( $library ) ) {
+				$library = array_diff_key( $library, $theme );
+			}
+			if ( is_array( $google ) ) {
+				$google = array_diff_key( $google, $theme );
+			}
+		}
+		if ( ! empty( $library ) && is_array( $google ) ) {
+			$google = array_diff_key( $google, $library );
+		}
+
+		$fonts = array();
+		if ( ! empty( $theme ) ) {
+			$fonts['theme'] = array(
+				'title' => __( 'Theme', 'customify' ),
+				'fonts' => $theme,
+			);
+		}
+		if ( ! empty( $library ) ) {
+			$fonts['library'] = array(
+				'title' => __( 'Font Library', 'customify' ),
+				'fonts' => $library,
+			);
+		}
+		$fonts['normal'] = array(
+			'title' => __( 'Default Web Fonts', 'customify' ),
+			'fonts' => $this->get_normal_fonts(),
+		);
+		$fonts['google'] = array(
+			'title' => __( 'Google Web Fonts', 'customify' ),
+			'fonts' => $google,
 		);
 
 		wp_send_json_success( apply_filters( 'customify/list-fonts', $fonts ) );
