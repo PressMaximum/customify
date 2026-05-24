@@ -167,7 +167,7 @@ const SIDEBAR_OPTIONS = [
 
 const PAGE_HEADER_OPTIONS = [
 	{ label: __( 'Inherit from Customizer', 'customify' ), value: 'default' },
-	{ label: __( 'Default', 'customify' ),                 value: 'normal' },
+	{ label: __( 'Default - inside main content', 'customify' ), value: 'normal' },
 	{ label: __( 'Cover', 'customify' ),                   value: 'cover' },
 	{ label: __( 'Titlebar', 'customify' ),                value: 'titlebar' },
 	{ label: __( 'Hide', 'customify' ),                    value: 'none' },
@@ -225,6 +225,23 @@ function CustomifyPageSettings() {
 				onChange={ ( v ) => set( 'content_layout', v ) }
 			/>
 
+			{ /*
+			 * Page Title Layout used to live under a separate "Page Header"
+			 * section heading below "Disable Elements". Moved up next to
+			 * Content Layout because it's a primary layout decision — same
+			 * cognitive group, and most users were missing it buried under
+			 * the toggle stack. Label renamed from "Display" → "Page Title
+			 * Layout" so the dropdown describes what it controls (where the
+			 * page title renders: inside main content, as a cover hero, as
+			 * a titlebar strip, or hidden).
+			 */ }
+			<SelectControl
+				label={ __( 'Page Title Layout', 'customify' ) }
+				value={ get( 'page_header_display' ) || 'default' }
+				options={ PAGE_HEADER_OPTIONS }
+				onChange={ ( v ) => set( 'page_header_display', v ) }
+			/>
+
 			{ ! sidebarHidden && (
 				<SelectControl
 					label={ __( 'Sidebar', 'customify' ) }
@@ -239,34 +256,36 @@ function CustomifyPageSettings() {
 			</p>
 
 			<MetaToggle label={ __( 'Header', 'customify' ) }        metaKey="disable_header"        meta={ meta } setMeta={ setMeta } />
-			<MetaToggle label={ __( 'Page Title', 'customify' ) }    metaKey="disable_page_title"    meta={ meta } setMeta={ setMeta } />
 			<MetaToggle label={ __( 'Header Top', 'customify' ) }    metaKey="disable_header_top"    meta={ meta } setMeta={ setMeta } />
 			<MetaToggle label={ __( 'Header Main', 'customify' ) }   metaKey="disable_header_main"   meta={ meta } setMeta={ setMeta } />
 			<MetaToggle label={ __( 'Header Bottom', 'customify' ) } metaKey="disable_header_bottom" meta={ meta } setMeta={ setMeta } />
+			<MetaToggle label={ __( 'Page Title', 'customify' ) }    metaKey="disable_page_title"    meta={ meta } setMeta={ setMeta } />
+			<MetaToggle label={ __( 'Content Vertical Padding', 'customify' ) } metaKey="disable_content_vertical_padding" meta={ meta } setMeta={ setMeta } />
 			{ config.hasProFeatures && (
 				<MetaToggle label={ __( 'Footer Top', 'customify' ) } metaKey="disable_footer_top"   meta={ meta } setMeta={ setMeta } />
 			) }
 			<MetaToggle label={ __( 'Footer Main', 'customify' ) }   metaKey="disable_footer_main"   meta={ meta } setMeta={ setMeta } />
 			<MetaToggle label={ __( 'Footer Bottom', 'customify' ) } metaKey="disable_footer_bottom" meta={ meta } setMeta={ setMeta } />
 
-			<p className="customify-ps-section-label">
-				{ __( 'Page Header', 'customify' ) }
-			</p>
-
-			<SelectControl
-				label={ __( 'Display', 'customify' ) }
-				value={ get( 'page_header_display' ) || 'default' }
-				options={ PAGE_HEADER_OPTIONS }
-				onChange={ ( v ) => set( 'page_header_display', v ) }
-			/>
-
+			{ /*
+			 * "Page Header" section heading is conditional now — Page Title
+			 * Layout moved up next to Content Layout, so only Breadcrumb
+			 * lives down here. When the user has no breadcrumb plugin
+			 * active, the section would be empty and the heading would
+			 * dangle.
+			 */ }
 			{ config.hasBreadcrumb && (
-				<SelectControl
-					label={ __( 'Breadcrumb', 'customify' ) }
-					value={ get( 'breadcrumb_display' ) || 'default' }
-					options={ BREADCRUMB_OPTIONS }
-					onChange={ ( v ) => set( 'breadcrumb_display', v ) }
-				/>
+				<>
+					<p className="customify-ps-section-label">
+						{ __( 'Page Header', 'customify' ) }
+					</p>
+					<SelectControl
+						label={ __( 'Breadcrumb', 'customify' ) }
+						value={ get( 'breadcrumb_display' ) || 'default' }
+						options={ BREADCRUMB_OPTIONS }
+						onChange={ ( v ) => set( 'breadcrumb_display', v ) }
+					/>
+				</>
 			) }
 		</div>
 	);
