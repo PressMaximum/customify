@@ -842,10 +842,18 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// Body text cascade removed from @supports block — body now uses a
 		// pure var() chain (see static :root section above) instead of a
 		// color-mix so the Text slot value flows through unchanged.
-		// Border cascade now happens in the CSS rule's var() fallback
-		// (`color-mix(in srgb, currentcolor 18%, transparent)`) so no
-		// :root entry needed for the no-override case. Override case
-		// emits a static :root --customify-border line above.
+		//
+		// Border live-resolve: when no override saved, the static line
+		// emits a baked hex mix(text, base, 14%). That works at page-load
+		// but does NOT update when the user drags Text or Base in the
+		// Customizer live preview (the static value was computed once at
+		// PHP render time). The @supports block here re-emits the same
+		// value as a color-mix expression with var() refs — modern
+		// browsers re-resolve when the underlying slot vars change, so
+		// the live preview updates without a re-render. Per spec §2.
+		if ( ! $ov_border ) {
+			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 14%, var(--customify-base))';
+		}
 		$mix_lines[] = '--customify-primary-hover: color-mix(in oklab, var(--customify-primary), black 10%)';
 		// Link hover cascade — LIGHTER variant of link (which itself cascades
 		// from primary unless overridden). 15% white mixed in oklab keeps
