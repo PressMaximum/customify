@@ -101,6 +101,62 @@
 // Heading rules at global scope (`h1-h6 { color: var(--customify-heading) }`)
 // have lower specificity than `.has-X-bg h1` so the descendant rules
 // here win automatically.
+// ──────────────────────────────────────────────────────────────────
+// Legacy palette-slug back-compat shims (Phase 2.13).
+//
+// The Phase 2.11 theme.json filter intentionally omits 6 legacy slugs
+// (text / link / heading / background / light-gray / dark-gray) from
+// the editor picker — they bloated the UX and didn't represent
+// design-purposeful choices. But 30K sites have block markup with
+// `class="has-{legacy-slug}-color"` (saved when those slugs WERE in
+// the static theme.json palette). Without the slug in palette, WP no
+// longer generates `.has-{slug}-color { color: var(...) !important }`
+// rules → legacy block markup loses its color.
+//
+// These shim rules restore the rendering — DELIBERATELY WITHOUT
+// `!important`. The specificity table (assuming all single-class
+// selectors == 0,1,0):
+//
+//   Designer flow              | What wins
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `primary` slug:      | WP `.has-primary-color !important`
+//   block has has-primary-color| beats our shim (no !important)
+//   has-text-color (marker)    | → primary color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `text` slug pre-PR:  | Only our shim matches the saved
+//   block has has-text-color   | `has-text-color` class →
+//   only                        | text-slot color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Inline custom hex:         | Inline specificity (1,0,0,0) beats
+//   style="color:#fff"         | our shim (0,1,0) → white renders ✓
+//   has-text-color (marker)    |
+//
+// The shim is a strict UX + back-compat improvement over the
+// "drop legacy entirely" approach. No marker-class collision because
+// we never add `!important`.
+.has-text-color    { color: var(--customify-text); }
+.has-link-color    { color: var(--customify-link); }
+.has-heading-color { color: var(--customify-heading); }
+.has-background-color { background-color: var(--customify-base); }
+.has-light-gray-color { color: #f2f2f2; }
+.has-dark-gray-color  { color: #444444; }
+
+// Background variants of the legacy slugs.
+.has-text-background-color    { background-color: var(--customify-text); }
+.has-link-background-color    { background-color: var(--customify-link); }
+.has-heading-background-color { background-color: var(--customify-heading); }
+.has-background-background-color { background-color: var(--customify-base); }
+.has-light-gray-background-color { background-color: #f2f2f2; }
+.has-dark-gray-background-color  { background-color: #444444; }
+
+// Border variants of the legacy slugs.
+.has-text-border-color    { border-color: var(--customify-text); }
+.has-link-border-color    { border-color: var(--customify-link); }
+.has-heading-border-color { border-color: var(--customify-heading); }
+.has-background-border-color { border-color: var(--customify-base); }
+.has-light-gray-border-color { border-color: #f2f2f2; }
+.has-dark-gray-border-color  { border-color: #444444; }
+
 .has-primary-background-color,
 .has-primary-background-color :is(h1, h2, h3, h4, h5, h6) {
 	color: var(--customify-on-primary, inherit);
