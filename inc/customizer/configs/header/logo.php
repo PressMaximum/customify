@@ -121,8 +121,25 @@ class Customify_Builder_Item_Logo {
 		$show_name      = Customify()->get_setting( 'header_logo_name' );
 		$show_desc      = Customify()->get_setting( 'header_logo_desc' );
 		$image_position = Customify()->get_setting( 'header_logo_pos' );
+
+		// Detect a usable logo image — match the same resolution logic the
+		// logo() method uses, so an orphaned attachment ID (image deleted from
+		// the media library) is treated as "no logo".
+		$custom_logo_id = get_theme_mod( 'custom_logo' );
+		$has_logo       = $custom_logo_id && Customify()->get_media( $custom_logo_id, 'full' );
+
+		// Auto fallback: when there is no usable logo image AND the user hid
+		// the site title, force the title to render so the header is never
+		// visually empty. No additional settings are introduced.
+		if ( ! $has_logo && 'no' === $show_name ) {
+			$show_name = 'yes';
+		}
+
 		$logo_classes   = array( 'site-branding' );
 		$logo_classes[] = 'logo-' . $image_position;
+		if ( ! $has_logo ) {
+			$logo_classes[] = 'no-logo';
+		}
 		$logo_classes   = apply_filters( 'customify/logo-classes', $logo_classes );
 		$tag = is_customize_preview() ? 'h2' : '__site_device_tag__';
 		?>
