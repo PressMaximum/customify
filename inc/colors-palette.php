@@ -1141,30 +1141,28 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 		section.querySelectorAll('.customify-input-color').forEach(refreshDirtyState);
 	}
 
-	// Toggle `is-dirty` on the picker row when the value diverges from
-	// what was loaded at page-render time. wpColorPicker rewrites
-	// input.defaultValue on every set so we can't use it as a baseline;
-	// dataset attributes also turn out to be unreliable across DOM
-	// re-renders. Keep a closure-scoped map keyed by setting id — that
-	// snapshot survives any DOM churn. SCSS uses `.is-dirty` to reveal
-	// the small reset glyph to the left of the swatch.
-	var initialValues = {};
+	// Toggle is-dirty on the picker row when the saved value diverges
+	// from the field's REGISTERED DEFAULT (data-default attribute, set
+	// from field.default in the color control template). SCSS uses
+	// is-dirty to reveal the small reset glyph next to the swatch.
+	//
+	// Pre-fix bug: this comparison used the value LOADED at page-render
+	// time (initialValues snapshot). When a user had already saved a
+	// non-default value (e.g. Base = #000000) before opening Customizer,
+	// the snapshot captured that as initial. Then current === initial
+	// meant the picker was never marked dirty, so the reset glyph
+	// never appeared and the user could not revert to the default.
+	//
+	// Fix: compare against data-default. Any saved override that differs
+	// from the registered default toggles is-dirty regardless of when
+	// the value was saved.
 	function refreshDirtyState(div) {
 		if (!div) return;
-		var li = div.closest('.customize-control');
-		if (!li || !li.id) return;
-		var settingId = li.id.replace('customize-control-', '');
 		var input = div.querySelector('input.wp-color-picker');
 		if (!input) return;
 		var cur = (input.value || '').trim().toLowerCase();
-		if (!(settingId in initialValues)) {
-			// First observation: snapshot the loaded value. Skip if empty
-			// — picker not yet initialized; next refresh will retry.
-			if (cur === '') return;
-			initialValues[settingId] = cur;
-		}
-		var initial = initialValues[settingId];
-		var dirty = cur !== '' && cur !== initial;
+		var def = (div.getAttribute('data-default') || '').trim().toLowerCase();
+		var dirty = cur !== '' && cur !== def;
 		div.classList.toggle('is-dirty', dirty);
 	}
 
