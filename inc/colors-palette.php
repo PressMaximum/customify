@@ -690,8 +690,11 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// auto-adapts to the page background. Emitting the slot default
 		// `#ECECEC` here would bake a light gray into :root and break that
 		// adaptive behavior for users who saved Base = dark but didn't
-		// touch Surface. Same gate doctrine as --customify-on-* (Phase 2.8)
-		// and --customify-border (Phase 2.6).
+		// touch Surface. (Note: --customify-border used to follow this same
+		// opt-in gate per Phase 2.6, but was switched to unconditional emit
+		// in Phase 2.13 to fix invisible-border-on-dark-surface regressions —
+		// surface stays gated because cards/widgets/code blocks consume the
+		// adaptive 6-12% fallback that the rigid hex would suppress.)
 		$ov_surface = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
 			? $slots['surface']
 			: null;
@@ -719,12 +722,13 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$lines[] = "--customify-on-secondary: {$on_secondary}";
 		$lines[] = "--customify-on-accent: {$on_accent}";
 		$lines[] = "--customify-on-surface: {$on_surface}";
-		// --customify-border only emitted when override saved; absence
-		// lets the CSS rule's `var(--customify-border, color-mix(currentcolor, ...))`
-		// fallback fire so borders adapt to local text color.
-		if ( $border ) {
-			$lines[] = "--customify-border: {$border}";
-		}
+		// --customify-border emitted UNCONDITIONALLY since the Phase 2.13
+		// follow-up — see the $border resolution block above for the full
+		// rationale. The slot-derived default (`mix(text, base, 14%)`) gives
+		// a concrete hex that's visible on any surface, instead of the
+		// pre-fix currentcolor-12% fallback that turned invisible on dark
+		// containers. Saved override is honored 1:1 by $border = $ov_border.
+		$lines[] = "--customify-border: {$border}";
 		// --customify-surface only emitted when user explicitly saved
 		// palette_surface (see $ov_surface above). Absence lets the
 		// bundled SCSS `$surface_subtle/medium/strong` fallback expressions
@@ -1430,18 +1434,23 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	// the inline override is no longer needed.
 	//
 	// Tokens NOT in this map fall back to the old removeProperty behavior:
-	//   - slot tokens (primary/secondary/accent/text/surface/base): their
-	//     :root values come from PHP defaults/saved slots — removing the
-	//     inline override correctly reverts to those.
-	//   - border: bundled CSS rule already has a smart fallback
-	//     (color-mix(currentcolor 12%, transparent)) so absence is correct.
+	//   slot tokens (primary/secondary/accent/text/surface/base) — their
+	//   :root values come from PHP defaults/saved slots, so removing the
+	//   inline override correctly reverts to those.
+	//
+	// `--customify-border` IS in this map (since the Phase 2.13 unconditional-
+	// emit shift): it's always present in :root, so removeProperty would
+	// fall back to the PHP-baked static line — which still holds the SAVED
+	// override hex on mid-session clears. The cascade expression here mirrors
+	// the @supports color-mix line so cleared borders track Text+Base live.
 	var CASCADE_FALLBACK = {
 		'--customify-heading':      'var(--customify-text)',
 		'--customify-body-text':    'var(--customify-text)',
 		'--customify-widget-title': 'var(--customify-text)',
 		'--customify-link':         'var(--customify-primary)',
 		'--customify-link-hover':   'color-mix(in oklab, var(--customify-link) 85%, white)',
-		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))'
+		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))',
+		'--customify-border':       'color-mix(in oklab, var(--customify-text) 14%, var(--customify-base))'
 	};
 	// Customify wraps stored setting values as urlencode(json_encode(value))
 	// so a saved hex arrives as '%22#ff00aa%22'. Mirror Customify's decode

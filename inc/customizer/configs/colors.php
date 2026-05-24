@@ -122,11 +122,14 @@ a:focus,
 }'
 		);
 
-		// Border CSS: var(--customify-border, fallback). Same pattern as
-		// body/heading — modern browsers resolve the var() chain (cascades
-		// from slot.text + slot.base via color-mix 12%), legacy browsers
-		// fall back to the substituted hex. Fresh-install shift from
-		// `#eaecee` to `#e6e6e6` (4/6/8 RGB) — barely perceivable.
+		// Border CSS: var(--customify-border, fallback). The :root token
+		// is now emitted UNCONDITIONALLY (Phase 2.13 follow-up), so the
+		// `color-mix(currentcolor 12%, transparent)` fallback only fires
+		// when modern browsers see an inherited token (`unset` / `initial`)
+		// and on legacy browsers without var() support. Token value is
+		// `mix(slot.text, slot.base, 14%)` per spec §2 — fresh-install
+		// shift from `#e6e6e6` (old 12% mix) to `#e1e1e1` (new 14% mix);
+		// 5/255 per channel, ΔE ≈ 2 (just-perceptible threshold).
 		$border_css = apply_filters(
 			'customify/styling/color-border',
 			'
@@ -557,9 +560,13 @@ article.comment .comment-meta,
 				'priority'    => 56,
 				'title'       => __( 'Border override', 'customify' ),
 				// Border field default aligned with slot-derived
-				// `mix(text, base, 12%)` = `#e6e6e6` (was `#eaecee`).
-				'placeholder' => '#e6e6e6',
-				'default'     => '#e6e6e6',
+				// `mix(text, base, 14%)` = `#e1e1e1` (was `#e6e6e6` at the
+				// old 12% mix; spec §2 bumped to 14%, so the field default
+				// follows for picker dirty-state consistency — typing the
+				// rendered slot-mix value into the picker no longer
+				// false-flags as dirty).
+				'placeholder' => '#e1e1e1',
+				'default'     => '#e1e1e1',
 				'css_format'  => $border_css,
 				'selector'    => 'format',
 			),
