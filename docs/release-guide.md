@@ -62,9 +62,11 @@ When the version changes, these files must update in lockstep:
 | `composer.lock` | (composer install regenerates) | ✓ (by `composer install` step) |
 | `languages/customify.pot` | metadata | ✓ (by `npm run makepot`) |
 | **`readme.txt`** | **`Stable tag:`** | ✗ **MANUAL** — see Issue #1 |
-| `build/` | (rebuilt) | ✓ (by `npm run release:assets`) |
+| `build/` | (rebuilt locally; NOT committed — see note below) | ✓ (by `npm run release:assets`) |
 
-Grunt commits this exact file list: `package.json style.css build/ languages/customify.pot composer.lock`.
+Grunt commits this exact file list: `package.json style.css languages/customify.pot composer.lock`.
+
+`build/` is .gitignored (commit `c1a725ac` — "stop tracking build/ folder"). It is rebuilt locally before staging, packed into the release zip, and shipped through the GitHub Release asset — but NOT pushed to the repo.
 
 **`readme.txt` is NOT in the commit list.** Currently at `Stable tag: 0.3.7` (severely stale — actual version is 0.4.15-beta.2). For WordPress.org distribution this MUST be updated to the released version BEFORE running `grunt release`. See [§9 Known issues](#9-known-issues--gotchas).
 
@@ -123,7 +125,7 @@ What `grunt release [--ver=<x.y.z>]` does, step by step:
    └── release-staging/customify-<x.y.z>.zip
 
 7. Commit + tag + push
-   ├── git add package.json style.css build/ languages/customify.pot composer.lock
+   ├── git add package.json style.css languages/customify.pot composer.lock
    ├── git commit -m "Release version <x.y.z>"
    ├── git tag <x.y.z>
    ├── git push origin HEAD
@@ -262,7 +264,7 @@ git tag -d 0.4.16                # remove local tag (if not pushed)
 
 ### Issue #2 — `readme.txt` not in commit list
 
-`grunt release` commits `package.json style.css build/ languages/customify.pot composer.lock` — **does NOT include `readme.txt`**. Manual `git add readme.txt && git commit --amend --no-edit` if the file changed in the same release. Or commit it as a separate commit before running `grunt release`.
+`grunt release` commits `package.json style.css languages/customify.pot composer.lock` — **does NOT include `readme.txt`** (and not `build/`, which is .gitignored). Manual `git add readme.txt && git commit --amend --no-edit` if the file changed in the same release. Or commit it as a separate commit before running `grunt release`.
 
 ### Issue #3 — `vendor/` is intentionally included
 

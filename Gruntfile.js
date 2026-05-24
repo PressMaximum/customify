@@ -422,17 +422,18 @@ module.exports = function ( grunt ) {
 		if ( grunt.option( 'no-publish' ) ) {
 			grunt.log.subhead( '⚠ Skipping publish (--no-publish set).' );
 			grunt.log.writeln( '  Manual publish later:' );
-			grunt.log.writeln( '    git add package.json style.css build/ languages/customify.pot composer.lock' );
+			grunt.log.writeln( '    git add package.json style.css languages/customify.pot composer.lock' );
 			grunt.log.writeln( '    git commit -m "Release version ' + v + '"' );
 			grunt.log.writeln( '    git tag -a ' + tag + ' -m "Release ' + tag + '" && git push --follow-tags' );
 			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
 			return;
 		}
 
-		// Stage the canonical release-touched paths. `git add` on an
-		// unchanged tracked path is a no-op; new files inside build/ get
-		// picked up automatically.
-		shellSync( 'git add package.json style.css build/ languages/customify.pot composer.lock' );
+		// Stage the canonical release-touched paths. `build/` is .gitignored
+		// (see commit c1a725ac — "stop tracking build/ folder") so it's
+		// intentionally omitted; the built bundle ships inside the GitHub
+		// Release zip, not the repo.
+		shellSync( 'git add package.json style.css languages/customify.pot composer.lock' );
 
 		// Commit only if there are actually staged changes. Rare edge
 		// case: re-running release with the same version + no asset diff.
