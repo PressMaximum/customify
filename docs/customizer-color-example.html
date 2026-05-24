@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customify — Palette System Example</title>
+<!--
+  Interactive reference for the Customify palette derivation engine
+  shipped in PR #397 (Phase 2.10–2.13). Open this HTML in a browser
+  to see how the 6 source slots derive into 19 :root CSS vars +
+  the 12 Blocksify picker slugs.
+
+  Algorithm mirrors inc/colors-palette.php — verify your spec
+  understanding by tweaking the 6 source pickers and watching the
+  output.
+
+  Saved standalone (no asset folder) — fonts loaded from Google CDN.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Schibsted+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{--ink:#15181d;--mut:#5b6471;--line:#e6e8ec;--soft:#f5f6f8;--card:#fff;--brand:#235787;--ok:#1a8f4a;--warn:#b7791f;--bad:#c0392b}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Schibsted Grotesk",sans-serif;background:var(--soft);color:var(--ink);line-height:1.55;padding:40px 24px 90px}
+  .mono{font-family:"JetBrains Mono",monospace}
+  .wrap{max-width:1060px;margin:0 auto}
+  header.top h1{font-size:1.8rem;letter-spacing:-.02em}
+  header.top p{color:var(--mut);font-size:.98rem;margin-top:8px;max-width:72ch}
+
+  .rules{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px;margin:24px 0 26px}
+  .rules h2{font-family:"JetBrains Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin-bottom:14px}
+  .rules ul{list-style:none;display:grid;gap:10px}
+  .rules li{display:grid;grid-template-columns:200px 1fr;gap:14px;font-size:.92rem;align-items:baseline}
+  .rules li .k{font-family:"JetBrains Mono";font-size:.82rem;font-weight:600;color:var(--brand)}
+  .rules li .d{color:var(--ink)}
+  .rules li .d span{color:var(--mut)}
+  .rules li .d code{font-family:"JetBrains Mono";font-size:.82rem;background:var(--soft);padding:1px 6px;border-radius:4px}
+
+  .sect{font-family:"JetBrains Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--mut);margin:30px 0 14px}
+  .src{display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+  .ci{display:flex;flex-direction:column;gap:7px}
+  .ci label{font-size:.78rem;font-weight:600;color:var(--mut);font-family:"JetBrains Mono"}
+  .ci .row{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:11px;padding:6px 9px;background:var(--card)}
+  .ci input[type=color]{width:32px;height:32px;border:none;border-radius:8px;padding:0;background:none;cursor:pointer;flex-shrink:0}
+  .ci input[type=color]::-webkit-color-swatch-wrapper{padding:0}
+  .ci input[type=color]::-webkit-color-swatch{border:1px solid var(--line);border-radius:8px}
+  .ci input[type=text]{border:none;outline:none;width:100%;font-family:"JetBrains Mono";font-size:.82rem;color:var(--ink);text-transform:uppercase;background:none}
+  .hint{font-size:.86rem;color:var(--mut);margin-top:12px}
+  .hint b{color:var(--ink)}
+
+  .brands{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .bc{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .bc .hd{padding:16px 18px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline}
+  .bc .hd .nm{font-family:"JetBrains Mono";font-weight:600;font-size:.9rem}
+  .bc .hd .lm{font-family:"JetBrains Mono";font-size:.7rem;color:var(--mut)}
+  .pair{padding:15px 18px;border-bottom:1px solid var(--line)}
+  .pair:last-child{border-bottom:none}
+  .pair .pk{font-family:"JetBrains Mono";font-size:.64rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin-bottom:9px;display:flex;justify-content:space-between}
+  .pair .pk .pct{color:var(--brand)}
+  .sample{border-radius:11px;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .sample .t{font-weight:600;font-size:.96rem}
+  .sample .chipx{width:26px;height:26px;border-radius:7px;display:grid;place-items:center;font-size:.68rem;font-weight:700;font-family:"JetBrains Mono"}
+  .meta{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:9px;font-family:"JetBrains Mono";font-size:.66rem;color:var(--mut);align-items:center}
+  .meta b{color:var(--ink)}
+  .cr{display:inline-flex;font-family:"JetBrains Mono";font-size:.64rem;font-weight:600;padding:2px 8px;border-radius:999px}
+  .cr.aaa{background:#e6f4ec;color:var(--ok)}.cr.aa{background:#e6f4ec;color:var(--ok)}.cr.mid{background:#fff4e0;color:var(--warn)}.cr.bad{background:#fbe9e7;color:var(--bad)}
+
+  .neu{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .nq{border:1px solid var(--line);border-radius:13px;overflow:hidden;background:var(--card)}
+  .nq .sw{height:50px;border-bottom:1px solid var(--line)}
+  .nq .b{padding:11px 13px}
+  .nq .b .s{font-family:"JetBrains Mono";font-size:.78rem;font-weight:600}
+  .nq .b .h{font-family:"JetBrains Mono";font-size:.72rem;color:var(--mut);margin-top:2px}
+  .nq .b .f{font-size:.72rem;color:var(--mut);margin-top:7px;line-height:1.45;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+
+  .out{background:#0d1117;border-radius:14px;padding:18px 20px;position:relative;margin-top:14px}
+  .out pre{font-family:"JetBrains Mono";font-size:.76rem;line-height:1.75;color:#cdd6e4;overflow-x:auto;white-space:pre}
+  .out .cm{color:#6b7686}.out .nm{color:#79c0ff}.out .vl{color:#ffd042}
+  .copy{position:absolute;top:14px;right:14px;background:#1c2330;color:#cdd6e4;border:1px solid #2b3340;border-radius:8px;padding:6px 13px;font-family:"JetBrains Mono";font-size:.72rem;cursor:pointer}
+  .lim{font-size:.84rem;color:var(--mut);margin-top:16px;line-height:1.6}
+  .lim b{color:var(--ink)}
+
+  .slug-map{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-top:12px;font-size:.86rem}
+  .slug-map h3{font-family:"JetBrains Mono";font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--mut);margin-bottom:12px}
+  .slug-map table{width:100%;border-collapse:collapse;font-size:.84rem}
+  .slug-map th,.slug-map td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+  .slug-map th{font-family:"JetBrains Mono";font-size:.7rem;text-transform:uppercase;color:var(--mut);letter-spacing:.06em;font-weight:600}
+  .slug-map td.k{font-family:"JetBrains Mono";color:var(--brand);font-weight:600}
+  .slug-map td.note{color:var(--mut);font-size:.78rem}
+
+  @media(max-width:840px){.src{grid-template-columns:repeat(3,1fr)}.brands,.neu{grid-template-columns:1fr}.rules li{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>Customify — Palette System (Phase 2.10–2.13)</h1>
+    <p>Interactive reference for the palette derivation engine in <code class="mono">inc/colors-palette.php</code>. User picks 6 source slots — the theme derives 13 more tokens via the rules below. Spec source: <code class="mono">docs/color-token-derivation-spec.md</code> + Customify chroma-cap extension. Tweak the 6 pickers to stress-test: every brand pair should land ≥ AA contrast on the matching foreground.</p>
+  </header>
+
+  <div class="rules">
+    <h2>Derivation rules — baked in (mirrors theme implementation)</h2>
+    <ul>
+      <li><span class="k">on-*</span><span class="d">Solid foreground (text on brand bg): <b>max-contrast pick</b> between <code>#FFFFFF</code> and <code>#1A1A1A</code> against the rendered color. <span>For rgba sources: composite over base first, then pick.</span></span></li>
+      <li><span class="k">*-container</span><span class="d">Soft brand tint: <b>solve % to land at OKLab L ≈ 0.93</b>, then <b>cap OKLab chroma at 0.04</b> <span>(Customify extension — keeps high-chroma brands like yellow from staying saturated).</span></span></li>
+      <li><span class="k">on-*-container</span><span class="d"><b>Darken brand tone (keep hue) until ≥ 4.5:1</b> vs the capped container. <span>Guarantees AA regardless of brand luminance.</span></span></li>
+      <li><span class="k">text-muted</span><span class="d"><code>mix(in oklab, text 70%, base)</code></span></li>
+      <li><span class="k">border</span><span class="d"><code>mix(in oklab, text 14%, base)</code> <span>— decorative divider, ~1.35:1 vs base (WCAG-exempt).</span></span></li>
+      <li><span class="k">border-strong</span><span class="d"><b>Solve % to reach 3:1 vs base</b> (iterative). <span>For form input borders / functional control outlines (WCAG 1.4.11).</span></span></li>
+    </ul>
+  </div>
+
+  <div class="sect">Source colors — the only input (6 slots in Customizer)</div>
+  <div class="src" id="src"></div>
+  <p class="hint"><b>Stress test:</b> change secondary to teal <span class="mono">#3CAA9D</span> (medium-luminance — old "luminance threshold" picker would have failed WCAG here, max-contrast picks correctly) or accent to pastel pink <span class="mono">#FFD1DC</span> — every badge stays AA+.</p>
+
+  <div class="sect">Brand pairs — solid &amp; tonal (chroma-capped)</div>
+  <div class="brands" id="brands"></div>
+
+  <div class="sect">Neutrals &amp; borders</div>
+  <div class="neu" id="neu"></div>
+
+  <div class="sect">Generated :root (CSS var names mirror theme — <code class="mono">--customify-*</code> prefix)</div>
+  <div class="out"><button class="copy" id="copyBtn">Copy</button><pre id="cssOut"></pre></div>
+
+  <div class="slug-map">
+    <h3>Theme.json picker slugs (12 design + WP marker collision dodging)</h3>
+    <table>
+      <thead><tr><th>Picker slug</th><th>:root var</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td class="k">primary</td><td class="k">--customify-primary</td><td class="note">User direct (Customizer slot)</td></tr>
+        <tr><td class="k">primary-container</td><td class="k">--customify-primary-container</td><td class="note">Soft tint (capped)</td></tr>
+        <tr><td class="k">secondary</td><td class="k">--customify-secondary</td><td class="note">User direct</td></tr>
+        <tr><td class="k">secondary-container</td><td class="k">--customify-secondary-container</td><td class="note">Soft tint (capped)</td></tr>
+        <tr><td class="k">accent</td><td class="k">--customify-accent</td><td class="note">User direct</td></tr>
+        <tr><td class="k">accent-container</td><td class="k">--customify-accent-container</td><td class="note">Soft tint (capped) — yellow accent → cream</td></tr>
+        <tr><td class="k">body-text</td><td class="k">--customify-text</td><td class="note">Renamed from <code class="mono">text</code> (WP <code class="mono">.has-text-color</code> marker class collision)</td></tr>
+        <tr><td class="k">surface</td><td class="k">--customify-surface</td><td class="note">User direct (opt-in gated)</td></tr>
+        <tr><td class="k">base</td><td class="k">--customify-base</td><td class="note">User direct</td></tr>
+        <tr><td class="k">text-muted</td><td class="k">--customify-text-muted</td><td class="note">Derived</td></tr>
+        <tr><td class="k">divider</td><td class="k">--customify-border</td><td class="note">Renamed from <code class="mono">border</code> (WP <code class="mono">.has-border-color</code> collision)</td></tr>
+        <tr><td class="k">divider-strong</td><td class="k">--customify-border-strong</td><td class="note">Renamed from <code class="mono">border-strong</code> (symmetry)</td></tr>
+      </tbody>
+    </table>
+    <p class="lim" style="margin-top:14px"><b>Hidden from picker</b> (theme internals only): <code class="mono">--customify-on-primary</code>, <code class="mono">--on-secondary</code>, <code class="mono">--on-accent</code>, <code class="mono">--on-surface</code>, <code class="mono">--on-primary-container</code>, <code class="mono">--on-secondary-container</code>, <code class="mono">--on-accent-container</code>. Consumed by SCSS auto-wire (<code class="mono">.has-{brand}-background-color → color: var(--customify-on-{brand})</code>) so brand-bg blocks auto-flip text without designer picking.</p>
+    <p class="lim" style="margin-top:8px"><b>Legacy back-compat</b> (6 slugs: text, link, heading, background, light-gray, dark-gray): NOT in palette filter. Instead, SCSS shim rules in <code class="mono">_blocks.scss</code> emit <code class="mono">.has-{legacy-slug}-color { color: var(--customify-X) }</code> <em>without</em> <code class="mono">!important</code> — preserves 30K rendering while letting modern designer picks win.</p>
+  </div>
+
+  <p class="lim"><b>Two honest limits:</b> (1) The lightness target + chroma cap give consistent contrast &amp; perception, but they <b>can't fix "reads as brand vs grey"</b> for low-chroma sources — a muted navy primary will produce a slightly grey container. That's perceptual physics, not a bug. (2) Whole derivation assumes <b>light base</b>; with a dark base, the container P-solve clamps to ~0.98 and containers ≈ pure brand. Dark-mode design requires inverted logic — documented in SPEC §8.12 as a Phase 3 follow-up.</p>
+</div>
+
+<script>
+const hx = h => { h=h.replace('#',''); if(h.length===3)h=h.split('').map(c=>c+c).join(''); return {r:parseInt(h.slice(0,2),16),g:parseInt(h.slice(2,4),16),b:parseInt(h.slice(4,6),16)}; };
+const toHex = (r,g,b)=>'#'+[r,g,b].map(v=>Math.round(Math.min(255,Math.max(0,v))).toString(16).padStart(2,'0')).join('').toUpperCase();
+const s2l = c => { c/=255; return c<=0.04045 ? c/12.92 : Math.pow((c+0.055)/1.055,2.4); };
+const l2s = c => { const v=c<=0.0031308?12.92*c:1.055*Math.pow(c,1/2.4)-0.055; return v*255; };
+function lum(hex){ const {r,g,b}=hx(hex); return 0.2126*s2l(r)+0.7152*s2l(g)+0.0722*s2l(b); }
+function contrast(a,b){ const L1=lum(a),L2=lum(b),hi=Math.max(L1,L2),lo=Math.min(L1,L2); return (hi+0.05)/(lo+0.05); }
+function rgb2oklab(r,g,b){ r=s2l(r);g=s2l(g);b=s2l(b);
+  const l=0.4122214708*r+0.5363325363*g+0.0514459929*b, m=0.2119034982*r+0.6806995451*g+0.1073969566*b, s=0.0883024619*r+0.2817188376*g+0.6299787005*b;
+  const l_=Math.cbrt(l),m_=Math.cbrt(m),s_=Math.cbrt(s);
+  return [0.2104542553*l_+0.7936177850*m_-0.0040720468*s_, 1.9779984951*l_-2.4285922050*m_+0.4505937099*s_, 0.0259040371*l_+0.7827717662*m_-0.8086757660*s_]; }
+function oklab2hex(L,a,b){ const l_=L+0.3963377774*a+0.2158037573*b, m_=L-0.1055613458*a-0.0638541728*b, s_=L-0.0894841775*a-1.2914855480*b;
+  const l=l_**3,m=m_**3,s=s_**3;
+  return toHex(l2s(4.0767416621*l-3.3077115913*m+0.2309699292*s), l2s(-1.2684380046*l+2.6097574011*m-0.3413193965*s), l2s(-0.0041960863*l-0.7034186147*m+1.7076147010*s)); }
+function mix(hexA,hexB,pctA){ const A=hx(hexA),B=hx(hexB),oa=rgb2oklab(A.r,A.g,A.b),ob=rgb2oklab(B.r,B.g,B.b),w=pctA/100;
+  return oklab2hex(oa[0]*w+ob[0]*(1-w), oa[1]*w+ob[1]*(1-w), oa[2]*w+ob[2]*(1-w)); }
+const oklabL = hex => { const c=hx(hex); return rgb2oklab(c.r,c.g,c.b)[0]; };
+
+// Customify extension: cap OKLab chroma at maxChroma to keep high-chroma
+// brands (yellow / lime / hot pink) from producing oversaturated container
+// tints. Mirrors PHP customify_color_chroma_cap_oklab().
+function chromaCap(hex, maxChroma){
+  const c=hx(hex), lab=rgb2oklab(c.r,c.g,c.b);
+  const L=lab[0], a=lab[1], b=lab[2];
+  const ch=Math.sqrt(a*a+b*b);
+  if (ch<=maxChroma) return hex;
+  const s=maxChroma/ch;
+  return oklab2hex(L, a*s, b*s);
+}
+
+/* ---- FINAL RULES (mirrors theme implementation) ---- */
+const TARGET_L = 0.93, AA = 4.5, UI_CR = 3.0, CONTAINER_MAX_CHROMA = 0.04;
+
+const onSolid = brand => contrast('#FFFFFF',brand) >= contrast('#1A1A1A',brand) ? '#FFFFFF' : '#1A1A1A';
+
+// Spec §4 + Customify chroma cap: solve P to land at OKLab L=0.93,
+// then project (a,b) onto max-chroma circle. The cap is the key
+// addition over the bare spec — without it, yellow accent stays
+// bright #FFE6A3 instead of becoming soft cream #F0E6C9.
+function container(brand, base){
+  const p = Math.max(0.02, Math.min(0.98, (TARGET_L - oklabL(base)) / (oklabL(brand) - oklabL(base))));
+  const raw = mix(brand, base, p*100);
+  const capped = chromaCap(raw, CONTAINER_MAX_CHROMA);
+  return { hex: capped, raw: raw, pct: Math.round(p*100) };
+}
+function onContainer(brand, cont){
+  const c=hx(brand), o=rgb2oklab(c.r,c.g,c.b);
+  for(let l=o[0]; l>=-0.001; l-=0.01){ const cand=oklab2hex(Math.max(0,l),o[1],o[2]); if(contrast(cand,cont)>=AA) return cand; }
+  return '#1A1A1A';
+}
+function solveBorder(text, base, target){
+  for(let p=6; p<=100; p+=1){ const c=mix(text,base,p); if(contrast(c,base)>=target) return {hex:c,pct:p}; }
+  return {hex:mix(text,base,100),pct:100};
+}
+
+/* ---- state & inputs ---- */
+const S={primary:'#235787',secondary:'#c3512f',accent:'#FFD042',text:'#2b2b2b',surface:'#ECECEC',base:'#FFFFFF'};
+const srcEl=document.getElementById('src');
+['primary','secondary','accent','text','surface','base'].forEach(k=>{
+  srcEl.insertAdjacentHTML('beforeend',
+    `<div class="ci"><label>${k}</label><div class="row"><input type="color" data-k="${k}" value="${S[k]}"><input type="text" data-kt="${k}" value="${S[k]}"></div></div>`);
+});
+
+function badge(r){ const t=r.toFixed(2); if(r>=4.5)return `<span class="cr aa">${t} · AA✓</span>`; if(r>=3)return `<span class="cr mid">${t} · AA Large</span>`; return `<span class="cr bad">${t} · Fail</span>`; }
+function uiBadge(r,label){ const t=r.toFixed(2); return r>=3 ? `<span class="cr aa">${t}:1 · ${label}✓</span>` : `<span class="cr mid">${t}:1 · ${label}</span>`; }
+
+function render(){
+  const brands=document.getElementById('brands'); brands.innerHTML='';
+  ['primary','secondary','accent'].forEach(k=>{
+    const base=S[k], onS=onSolid(base), cont=container(base,S.base), onC=onContainer(base,cont.hex);
+    const capNote = cont.hex !== cont.raw ? `<span class="lm" style="color:#b7791f">chroma capped</span>` : '';
+    brands.insertAdjacentHTML('beforeend',`
+      <div class="bc">
+        <div class="hd"><span class="nm">--customify-${k}</span><span class="lm">${base.toUpperCase()} · lum ${lum(base).toFixed(2)}</span></div>
+        <div class="pair">
+          <div class="pk"><span>solid · on-${k}</span></div>
+          <div class="sample" style="background:${base};color:${onS}"><span class="t">Solid button</span><span class="chipx" style="background:${onS};color:${base}">Aa</span></div>
+          <div class="meta"><span>text <b>${onS}</b></span>${badge(contrast(base,onS))}</div>
+        </div>
+        <div class="pair">
+          <div class="pk"><span>tonal · ${k}-container</span><span class="pct">${cont.pct}%${cont.hex !== cont.raw ? ' (capped)' : ''}</span></div>
+          <div class="sample" style="background:${cont.hex};color:${onC}"><span class="t">Soft button</span><span class="chipx" style="background:${onC};color:${cont.hex}">Aa</span></div>
+          <div class="meta"><span>bg <b>${cont.hex.toUpperCase()}</b></span><span>text <b>${onC.toUpperCase()}</b></span>${badge(contrast(cont.hex,onC))}</div>
+        </div>
+      </div>`);
+  });
+
+  const tm=mix(S.text,S.base,70), bd=mix(S.text,S.base,14), bs=solveBorder(S.text,S.base,UI_CR);
+  const neu=document.getElementById('neu'); neu.innerHTML='';
+  [['customify-text',S.text,'user pick',''],
+   ['customify-text-muted',tm,'mix(text 70%, base)', badge(contrast(tm,S.base))],
+   ['customify-surface',S.surface,'user pick',''],
+   ['customify-on-surface',onSolid(S.surface),'max-contrast on surface', badge(contrast(S.surface,onSolid(S.surface)))],
+   ['customify-border',bd,'mix(text 14%, base) · divider slug', uiBadge(contrast(bd,S.base),'1.4.11')],
+   ['customify-border-strong',bs.hex,`solve → ${bs.pct}% · divider-strong slug`, uiBadge(contrast(bs.hex,S.base),'1.4.11')]
+  ].forEach(([s,v,f,b])=>{
+    neu.insertAdjacentHTML('beforeend',`<div class="nq"><div class="sw" style="background:${v}"></div><div class="b"><div class="s">--${s}</div><div class="h">${v.toUpperCase()}</div><div class="f"><span>${f}</span>${b}</div></div></div>`);
+  });
+
+  const c1=container(S.primary,S.base),c2=container(S.secondary,S.base),c3=container(S.accent,S.base);
+  document.getElementById('cssOut').innerHTML=
+`<span class="cm">/* 6 user-direct slots */</span>
+<span class="nm">--customify-primary</span>: <span class="vl">${S.primary}</span>;  <span class="nm">--customify-secondary</span>: <span class="vl">${S.secondary}</span>;  <span class="nm">--customify-accent</span>: <span class="vl">${S.accent}</span>;
+<span class="nm">--customify-text</span>: <span class="vl">${S.text}</span>;  <span class="nm">--customify-surface</span>: <span class="vl">${S.surface}</span>;  <span class="nm">--customify-base</span>: <span class="vl">${S.base}</span>;
+
+<span class="cm">/* on-* solid — max-contrast pick (theme internals, not in picker) */</span>
+<span class="nm">--customify-on-primary</span>: <span class="vl">${onSolid(S.primary)}</span>;  <span class="nm">--customify-on-secondary</span>: <span class="vl">${onSolid(S.secondary)}</span>;  <span class="nm">--customify-on-accent</span>: <span class="vl">${onSolid(S.accent)}</span>;  <span class="nm">--customify-on-surface</span>: <span class="vl">${onSolid(S.surface)}</span>;
+
+<span class="cm">/* containers — OKLab L=${TARGET_L} target, chroma capped at ${CONTAINER_MAX_CHROMA} (Customify ext) */</span>
+<span class="nm">--customify-primary-container</span>: <span class="vl">${c1.hex}</span>;  <span class="cm">/* raw mix ${c1.pct}% = ${c1.raw}${c1.hex !== c1.raw ? ' → capped' : ''} */</span>
+<span class="nm">--customify-secondary-container</span>: <span class="vl">${c2.hex}</span>;  <span class="cm">/* raw mix ${c2.pct}% = ${c2.raw}${c2.hex !== c2.raw ? ' → capped' : ''} */</span>
+<span class="nm">--customify-accent-container</span>: <span class="vl">${c3.hex}</span>;  <span class="cm">/* raw mix ${c3.pct}% = ${c3.raw}${c3.hex !== c3.raw ? ' → capped' : ''} */</span>
+
+<span class="cm">/* on-*-container — brand tone darkened to ≥ ${AA} (theme internals, not in picker) */</span>
+<span class="nm">--customify-on-primary-container</span>: <span class="vl">${onContainer(S.primary,c1.hex)}</span>;  <span class="nm">--customify-on-secondary-container</span>: <span class="vl">${onContainer(S.secondary,c2.hex)}</span>;  <span class="nm">--customify-on-accent-container</span>: <span class="vl">${onContainer(S.accent,c3.hex)}</span>;
+
+<span class="cm">/* neutrals */</span>
+<span class="nm">--customify-text-muted</span>: color-mix(in oklab, var(--customify-text) 70%, var(--customify-base));  <span class="cm">→ ${tm}</span>
+<span class="nm">--customify-border</span>: color-mix(in oklab, var(--customify-text) 14%, var(--customify-base));  <span class="cm">→ ${bd} · slug: divider</span>
+<span class="nm">--customify-border-strong</span>: color-mix(in oklab, var(--customify-text) ${bs.pct}%, var(--customify-base));  <span class="cm">→ ${bs.hex} · slug: divider-strong · solved for 3:1</span>`;
+}
+
+srcEl.addEventListener('input',e=>{
+  const c=e.target.dataset.k, t=e.target.dataset.kt;
+  if(c){ S[c]=e.target.value; srcEl.querySelector(`[data-kt="${c}"]`).value=e.target.value.toUpperCase(); render(); }
+  if(t!==undefined){ let v=e.target.value.trim(); if(/^#?[0-9a-fA-F]{6}$/.test(v)){ v=v[0]==='#'?v:'#'+v; S[t]=v; srcEl.querySelector(`[data-k="${t}"]`).value=v; render(); } }
+});
+document.getElementById('copyBtn').addEventListener('click',()=>{ navigator.clipboard.writeText(document.getElementById('cssOut').innerText); const b=document.getElementById('copyBtn'); b.textContent='Copied'; setTimeout(()=>b.textContent='Copy',1200); });
+render();
+</script>
+</body>
+</html>
