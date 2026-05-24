@@ -205,9 +205,14 @@ module.exports = function ( grunt ) {
 			},
 		},
 
-		// Fallback .pot generator used when WP-CLI is not on PATH. Runs via
-		// grunt-wp-i18n which only needs PHP (bundled MakePOT.php). The
-		// preferred path is `wp i18n make-pot` via the npm `makepot` script.
+		// `.pot` generator. Runs via grunt-wp-i18n which only needs PHP
+		// (bundled MakePOT.php). Invoked by `npm run makepot` (see
+		// package.json) — no WP-CLI dependency, runs consistently across
+		// every dev environment + CI.
+		//
+		// `exclude` compiles each entry as `new RegExp(entry)` and tests
+		// against the file path. Add new exclusions here only — there is no
+		// secondary path to keep in lockstep.
 		makepot: {
 			target: {
 				options: {
@@ -219,6 +224,23 @@ module.exports = function ( grunt ) {
 					},
 					type:            'wp-theme',
 					updateTimestamp: true,
+					exclude:         [
+						// Build artifacts + vendor
+						'node_modules/.*', 'vendor/.*', 'build/.*', 'release-staging/.*',
+						// Non-translatable source assets
+						'src/.*',
+						// Test folders — every common naming convention
+						'tests/.*', 'php-tests/.*', 'test/.*', '__tests__/.*',
+						'spec/.*', '__mocks__/.*',
+						// Tooling / docs
+						'bin/.*', 'docs/.*',
+						// Any hidden folder (name starts with `.`), at any depth.
+						// The double-escaped dot is required because each entry is
+						// compiled with `new RegExp()`. Catches .git, .github,
+						// .claude, .vscode, .idea, and any future hidden folders
+						// without manual updates.
+						'\\..+/.*', '.*/\\..+/.*',
+					],
 				},
 			},
 		},
