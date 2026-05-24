@@ -553,13 +553,23 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$ov_body_text    = customify_color_normalize_hex( $_get_saved( 'global_styling_color_text' ), '' );
 
 		$text_muted   = $ov_text_muted   ?: $text_muted_default;
-		// Border default is NOT slot-derived anymore — when no override
-		// saved, --customify-border is omitted from :root so the CSS rule
-		// falls back to `color-mix(in srgb, currentcolor 18%, transparent)`.
-		// That makes borders adapt to the containing element's text color
-		// instead of locking to slot.text — readable on both light and
-		// dark surfaces. Saved override still wins via :root literal.
-		$border       = $ov_border;
+		// Border emitted UNCONDITIONALLY (Phase 2.13 follow-up — was
+		// previously gated on saved override per Phase 2.6, which left
+		// dozens of `var(--customify-border, color-mix(currentcolor X%,
+		// transparent))` consumers in inc/customizer/configs/colors.php
+		// falling back to the currentcolor mix. On dark headers / dark
+		// page-titlebars / dark hero sections, that fallback resolves
+		// to ~14% of white on dark bg ≈ invisible — leading to the
+		// reported "page-titlebar lost its border" issue.
+		//
+		// Using the slot-derived default (mix(text, base, 14%) per spec
+		// §2) gives a concrete hex value that's visible regardless of
+		// the consuming element's text color. Saved override still wins.
+		// 30K safety: same logic as Phase 2.13 on-* gate drop — the
+		// CSS rules that consume this var have always been there with a
+		// fallback; emitting a concrete value just makes them render
+		// reliably instead of relying on context-dependent currentcolor.
+		$border       = $ov_border       ?: $border_default;
 		$link         = $ov_link         ?: $slots['primary'];
 		$link_hover   = $ov_link_hover   ?: $link_hover_default;
 		$heading      = $ov_heading      ?: $slots['text'];
