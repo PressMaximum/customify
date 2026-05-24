@@ -55,12 +55,22 @@ class Customify_Fonts {
 				'fonts' => $theme,
 			);
 		}
-		if ( ! empty( $library ) ) {
-			$fonts['library'] = array(
-				'title' => __( 'Font Library', 'customify' ),
-				'fonts' => $library,
-			);
-		}
+		// Always show the WP Font Library group label so users see the
+		// integration point exists. When no fonts are activated, emit
+		// a disabled placeholder explaining how to add them — picker
+		// JS renders `_disabled: true` entries as <option disabled>
+		// and reads `label` for the visible text.
+		$fonts['library'] = array(
+			'title' => __( 'WP Font Library', 'customify' ),
+			'fonts' => ! empty( $library )
+				? $library
+				: array(
+					'__customify_no_library_fonts__' => array(
+						'label'     => __( 'No fonts activated — manage via Appearance → Fonts', 'customify' ),
+						'_disabled' => true,
+					),
+				),
+		);
 		$fonts['normal'] = array(
 			'title' => __( 'Default Web Fonts', 'customify' ),
 			'fonts' => $this->get_normal_fonts(),

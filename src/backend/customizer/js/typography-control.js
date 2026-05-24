@@ -29,7 +29,7 @@ export function setupTypographyControl(deps) {
 		config: {}, // Config to disable fields
 		container: null,
 		fields: {},
-		load: function () {
+		load: function (callback) {
 			var that = this;
 			$.get(
 				Customify_Control_Args.ajax,
@@ -42,6 +42,9 @@ export function setupTypographyControl(deps) {
 				function (res) {
 					if (res.success) {
 						that.fonts = res.data;
+					}
+					if (typeof callback === "function") {
+						callback();
 					}
 				}
 			);
@@ -184,11 +187,29 @@ export function setupTypographyControl(deps) {
 			_.each(that.fonts, function (group, type) {
 				that.optionHtml += '<optgroup label="' + group.title + '">';
 				_.each(group.fonts, function (font, font_name) {
-					var label = _.isString(font) ? font : font_name;
+					// Three shapes accepted:
+					//   - string          → use as the visible label
+					//   - object with .label + ._disabled → placeholder
+					//     row (eg. "No fonts activated…" in the WP Font
+					//     Library group when nothing is uploaded yet)
+					//   - any other object → use font_name as label
+					var label, disabled;
+					if (_.isString(font)) {
+						label = font;
+						disabled = false;
+					} else if (_.isObject(font) && font.label) {
+						label = font.label;
+						disabled = !!font._disabled;
+					} else {
+						label = font_name;
+						disabled = false;
+					}
 					that.optionHtml +=
 						'<option value="' +
 						font_name +
-						'">' +
+						'"' +
+						(disabled ? " disabled" : "") +
+						">" +
 						label +
 						"</option>";
 				});
@@ -419,6 +440,21 @@ export function setupTypographyControl(deps) {
 				that.container.slideDown(300, function () {
 					that.$el.addClass("modal--opening");
 					$(".action--reset", that.$el).show();
+					// Re-fetch the font catalogue every time the modal
+					// opens so variant lists stay in sync with the
+					// wp-admin Font Library — users can add/remove
+					// font-face files in another tab while the
+					// customizer is open, and the old behaviour cached
+					// `that.fonts` once at doc-ready forever. When the
+					// fetch returns, re-trigger init-change on the
+					// font picker so the font_weight dropdown rebuilds
+					// from the fresh variants for the active font.
+					that.load(function () {
+						$(
+							'.customify-typo-input[data-name="font"]',
+							that.container
+						).trigger("init-change");
+					});
 				});
 			} else {
 				$(".customify-modal-settings", $el).slideUp(300, function () {
