@@ -80,11 +80,17 @@
 }
 
 // Titlebar
+// Background follows --customify-surface when the user has opted in to
+// the Palette panel (saved palette_surface). Fallback `#f9f9f9` matches
+// the historical hardcoded value so 30K legacy sites render byte-identical.
+// The Customizer "Titlebar Background" field (page-header.php) emits a
+// higher-specificity `#page-titlebar { background-color: <hex> }` rule
+// that wins over this declaration when set.
 .page-titlebar {
 	padding: 21px 0px 22px;
 	border-bottom: 1px solid $color_border;
 	word-break: break-word;
-	background: #f9f9f9;
+	background: var(--customify-surface, #f9f9f9);
 	@include for_device(tablet) {
 		padding: 19px 0px 20px;
 	}

@@ -469,9 +469,16 @@ if ( ! function_exists( 'customify_color_get_slots' ) ) {
 		// Slot primary / secondary reuse existing legacy theme_mod keys to keep
 		// storage compatibility with 30K+ sites. Every read is normalized to
 		// guard against wp-cli / external writes that bypass sanitize_callback.
+		// Surface default `#f9f9f9` aligns with the canvas-tinted SCSS hardcode
+		// historically used on `.page-titlebar` (and similar elevated chrome).
+		// Wiring the titlebar SCSS to `var(--customify-surface, #f9f9f9)` means
+		// 30K legacy sites keep the byte-identical render (fallback fires when
+		// the surface var isn't emitted to :root), while palette-opt-in sites
+		// pick up a coherent surface tone — e.g. dark-base saved → surface
+		// auto-tones with it instead of leaving the titlebar stuck at light gray.
 		$defaults = array(
 			'base'      => '#FFFFFF',
-			'surface'   => '#ECECEC',
+			'surface'   => '#f9f9f9',
 			'text'      => '#2b2b2b',
 			'primary'   => '#235787',
 			'secondary' => '#c3512f',
@@ -687,16 +694,18 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		}
 
 		// Surface slot is the elevated-container background (cards / table
-		// cells / code blocks / form inputs / calendar headers). Only emit
-		// to :root when the user EXPLICITLY saved palette_surface — for
-		// unsaved sites the bundled SCSS fallback resolves to
-		// `color-mix(in srgb, currentcolor 6-12%, transparent)` which
-		// auto-adapts to the page background. Emitting the slot default
-		// `#ECECEC` here would bake a light gray into :root and break that
-		// adaptive behavior for users who saved Base = dark but didn't
-		// touch Surface. (Note: --customify-border used to follow this same
-		// opt-in gate per Phase 2.6, but was switched to unconditional emit
-		// in Phase 2.13 to fix invisible-border-on-dark-surface regressions —
+		// cells / code blocks / form inputs / calendar headers / page
+		// titlebar). Only emit to :root when the user EXPLICITLY saved
+		// palette_surface — for unsaved sites the bundled SCSS fallback
+		// resolves to `color-mix(in srgb, currentcolor 6-12%, transparent)`
+		// for the card/widget/code surface tints, while `.page-titlebar`
+		// uses the slot default `#f9f9f9` as its fallback (matches the
+		// historical hardcoded SCSS). Emitting the slot default here would
+		// bake a fixed light gray into :root and break the adaptive
+		// fallback for users who saved Base = dark but didn't touch Surface.
+		// (Note: --customify-border used to follow this same opt-in gate
+		// per Phase 2.6, but was switched to unconditional emit in Phase
+		// 2.13 to fix invisible-border-on-dark-surface regressions —
 		// surface stays gated because cards/widgets/code blocks consume the
 		// adaptive 6-12% fallback that the rigid hex would suppress.)
 		$ov_surface = ( is_array( $_saved_mods ) && array_key_exists( 'customify_palette_surface', $_saved_mods ) )
@@ -1666,7 +1675,7 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		'global_styling_color_secondary': '#c3512f',
 		'customify_palette_accent':       '#FFD042',
 		'customify_palette_text':         '#2b2b2b',
-		'customify_palette_surface':      '#ECECEC',
+		'customify_palette_surface':      '#f9f9f9',
 		'customify_palette_base':         '#FFFFFF'
 	};
 	function _readSlot(setting) {

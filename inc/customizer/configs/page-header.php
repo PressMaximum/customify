@@ -369,6 +369,23 @@ class Customify_Page_Header {
 				'css_format' => 'color: {{value}};',
 			),
 
+			// Titlebar Background — explicit override. When set, the
+			// generated CSS rule `#page-titlebar { background-color: <hex> }`
+			// wins by id-selector specificity over the SCSS fallback chain
+			// `.page-titlebar { background: var(--customify-surface, #f9f9f9) }`.
+			// When empty (default for 30K legacy sites), the SCSS chain
+			// applies — surface var if user opted in to Palette, else the
+			// historical `#f9f9f9` hex.
+			array(
+				'name'        => $name . '_bg_color',
+				'type'        => 'color',
+				'section'     => $section,
+				'label'       => __( 'Titlebar Background', 'customify' ),
+				'description' => __( 'Override the titlebar background. Leave empty to follow the Palette Surface color (or the legacy #f9f9f9 fallback when Palette is not used).', 'customify' ),
+				'selector'    => "$selector",
+				'css_format'  => 'background-color: {{value}};',
+			),
+
 			array(
 				'name'            => "{$name}_align",
 				'type'            => 'text_align_no_justify',
