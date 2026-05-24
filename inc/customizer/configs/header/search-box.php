@@ -42,13 +42,7 @@ class Customify_Builder_Item_Search_Box {
 
 		$icon_postion_css = "$selector .search-submit{margin-left: {{value}};} $selector .woo_bootster_search .search-submit{margin-left: {{value}};} $selector .header-search-form button.search-submit{margin-left:{{value}};}";
 		if ( is_rtl() ) {
-			// In RTL we swap the axis: the icon should inset from the LEFT edge
-			// of the input, which means the saved value drives margin-right (and
-			// margin-left needs to be released to auto so the button sits at the
-			// flex start). The previous template wrote `margin-left: {value};
-			// margin-left:auto` on two of the three selectors — a duplicate
-			// margin-left that left RTL with no working position control.
-			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left: auto;} .rtl $selector .woo_bootster_search .search-submit{margin-right: {{value}}; margin-left: auto;} .rtl $selector .header-search-form button.search-submit{margin-right: {{value}}; margin-left: auto;}";
+			$icon_postion_css = ".rtl $selector .search-submit{margin-right: {{value}}; margin-left:auto;} .rtl $selector .woo_bootster_search .search-submit{margin-left: {{value}};margin-left:auto;} .rtl $selector .header-search-form button.search-submit{margin-left: {{value}};margin-left:auto;}";
 		}
 
 		$config   = array(
@@ -90,15 +84,8 @@ class Customify_Builder_Item_Search_Box {
 				'min'             => 25,
 				'step'            => 1,
 				'max'             => 100,
-				// Apply height to the wrapper only. The inner .search-field
-				// fills the wrapper via `height: 100%` from the SCSS so the
-				// input scales without picking up the wrapper's border twice.
-				// padding-right is set to the same value so the input text
-				// reserves exactly the icon button's width — the button is
-				// locked to a square at form height via aspect-ratio:1 in
-				// _search.scss, so width == height == this value.
-				'selector'        => "$selector .search-form-fields",
-				'css_format'      => 'height: {{value}}; padding-right: {{value}};',
+				'selector'        => "$selector .search-form-fields, $selector .search-form-fields .search-field",
+				'css_format'      => 'height: {{value}};',
 				'label'           => __( 'Input Height', 'customify' ),
 				'priority'        => 20,
 			),
@@ -165,10 +152,7 @@ class Customify_Builder_Item_Search_Box {
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
 					'normal'            => "{$selector} .search-form-fields",
-					// Hover selector must include `:hover` — without it, hover
-					// values would override normal values on every render, the
-					// same bug fixed in header/button.php and search-icon.php.
-					'hover'             => "{$selector} .search-form-fields:hover",
+					'hover'             => "{$selector} .search-form-fields",
 					'normal_text_color' => "{$selector} .search-form-fields,
 											{$selector} .search-form-fields input.search-field::placeholder,
 											.dark-mode {$selector} .search-form-fields .search-field,
@@ -218,22 +202,9 @@ class Customify_Builder_Item_Search_Box {
 				'title'       => __( 'Icon Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
 				'selector'    => array(
-					// Prepend `body` to bring specificity to (0,3,2) — matching the
-					// generic primary-button rule in base/_base.scss (which uses
-					// `body:not(.fl-builder-edit) button:not(...)`) so cascade
-					// order lets the user's Icon Styling values win. Without this
-					// the styling control sat at (0,3,1) and was beaten by the
-					// generic rule for any selector branch we'd missed in the
-					// :not() exclusion list.
-					'normal' => "body {$selector} .header-search-form button.search-submit",
-					// Hover selector must include `:hover` — without it, hover
-					// values would override normal values on every render.
-					'hover'  => "body {$selector} .header-search-form button.search-submit:hover",
-					// text_color must apply in BOTH light and dark modes. The
-					// previous version listed only the dark-mode selector, so
-					// changing Icon Styling text color did nothing on light mode
-					// sites (base SCSS `color: $color_meta` kept winning).
-					'normal_text_color' => "body {$selector} .header-search-form button.search-submit, body .dark-mode {$selector} .header-search-form button.search-submit",
+					'normal' => "{$selector} .header-search-form button.search-submit",
+					'hover'  => "{$selector} .header-search-form button.search-submit",
+					'normal_text_color' => ".dark-mode {$selector} .header-search-form button.search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
