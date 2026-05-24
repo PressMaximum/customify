@@ -53,6 +53,16 @@ module.exports = function ( grunt ) {
 	const STAGE_DIR  = 'release-staging';
 	const STAGE_PATH = STAGE_DIR + '/' + SLUG + '/';
 
+	// Read the canonical theme version from style.css. We treat style.css
+	// as the single source of truth (WP loads the version from there) and
+	// no longer write to package.json during release — `package.json` is
+	// left untouched so it doesn't keep landing in release commits.
+	function readThemeVersion() {
+		const css = grunt.file.read( 'style.css' );
+		const m   = css.match( /^\s*Version:\s*(\S+)/m );
+		return m ? m[ 1 ] : null;
+	}
+
 	// One canonical list of patterns the wp.org zip must NOT contain.
 	// NOTE: `vendor/` is intentionally KEPT — it is loaded at runtime via
 	// `vendor/autoload.php` (see functions.php) to expose
@@ -315,6 +325,20 @@ module.exports = function ( grunt ) {
 
 	grunt.registerTask( 'default', [ 'watch' ] );
 
+	// ── set-version ─────────────────────────────────────────────────────────
+	// In-memory version setter. Replaces `bumpup:<ver>` for the release
+	// pipeline: writes the target version to grunt's `pkg.version` config
+	// so downstream tasks (`replace:theme_main` for style.css, the
+	// `compress:release` archive filename) pick it up — WITHOUT touching
+	// package.json on disk. Keeps package.json out of every release commit.
+	grunt.registerTask( 'set-version', 'Set pkg.version in memory (does not modify package.json).', function ( ver ) {
+		if ( ! ver ) {
+			grunt.fail.fatal( 'set-version requires a version arg, e.g. set-version:0.4.16-beta.1' );
+		}
+		grunt.config( 'pkg.version', ver );
+		grunt.log.writeln( '  pkg.version (in-memory) = ' + ver + '  (package.json untouched)' );
+	} );
+
 	// ── Google Fonts list refresh ───────────────────────────────────────────
 	grunt.registerTask( 'google-fonts', function () {
 		const done    = this.async();
@@ -422,18 +446,19 @@ module.exports = function ( grunt ) {
 		if ( grunt.option( 'no-publish' ) ) {
 			grunt.log.subhead( '⚠ Skipping publish (--no-publish set).' );
 			grunt.log.writeln( '  Manual publish later:' );
-			grunt.log.writeln( '    git add package.json style.css languages/customify.pot composer.lock' );
+			grunt.log.writeln( '    git add style.css languages/customify.pot composer.lock' );
 			grunt.log.writeln( '    git commit -m "Release version ' + v + '"' );
 			grunt.log.writeln( '    git tag -a ' + tag + ' -m "Release ' + tag + '" && git push --follow-tags' );
 			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
 			return;
 		}
 
-		// Stage the canonical release-touched paths. `build/` is .gitignored
-		// (see commit c1a725ac — "stop tracking build/ folder") so it's
-		// intentionally omitted; the built bundle ships inside the GitHub
-		// Release zip, not the repo.
-		shellSync( 'git add package.json style.css languages/customify.pot composer.lock' );
+		// Stage the canonical release-touched paths.
+		//  - `build/` is .gitignored (commit c1a725ac).
+		//  - `package.json` is intentionally NOT modified during release
+		//    (set-version is in-memory only), so it never lands in this
+		//    commit; manage the npm version separately if desired.
+		shellSync( 'git add style.css languages/customify.pot composer.lock' );
 
 		// Commit only if there are actually staged changes. Rare edge
 		// case: re-running release with the same version + no asset diff.
@@ -609,7 +634,7 @@ module.exports = function ( grunt ) {
 
 		const ver = grunt.option( 'ver' );
 		if ( ver ) {
-			grunt.task.run( 'bumpup:' + ver );
+			grunt.task.run( 'set-version:' + ver );
 		}
 		grunt.task.run( 'replace:theme_main' );
 		grunt.task.run( 'composer:install:prod' );
@@ -637,7 +662,7 @@ module.exports = function ( grunt ) {
 	grunt.registerTask( 'build-zip', 'Build assets and produce the shippable zip without touching git.', function () {
 		const ver = grunt.option( 'ver' );
 		if ( ver ) {
-			grunt.task.run( 'bumpup:' + ver );
+			grunt.task.run( 'set-version:' + ver );
 		}
 		grunt.task.run( 'replace:theme_main' );
 		grunt.task.run( 'composer:install:prod' );
@@ -669,7 +694,14 @@ module.exports = function ( grunt ) {
 		if ( explicit ) {
 			target = explicit;
 		} else {
-			const current   = pkgInfo.version;
+			// Derive from style.css (canonical theme version) instead of
+			// package.json — release no longer writes to package.json, so
+			// pkgInfo.version is stale across runs and would produce
+			// duplicate beta tags. style.css gets updated each release.
+			const current = readThemeVersion();
+			if ( ! current ) {
+				grunt.fail.fatal( 'Cannot read Version: header from style.css. Pass --ver=X.Y.Z-beta.N explicitly.' );
+			}
 			const betaMatch = current.match( /^(\d+\.\d+\.\d+)-beta\.(\d+)$/ );
 
 			if ( betaMatch ) {
@@ -678,7 +710,7 @@ module.exports = function ( grunt ) {
 				const stable = current.match( /^(\d+)\.(\d+)\.(\d+)$/ );
 				if ( ! stable ) {
 					grunt.fail.fatal(
-						'Cannot derive a beta version from current package.json version "' + current +
+						'Cannot derive a beta version from style.css Version "' + current +
 						'". Pass --ver=X.Y.Z-beta.N explicitly.'
 					);
 				}
@@ -687,7 +719,7 @@ module.exports = function ( grunt ) {
 		}
 
 		grunt.log.subhead( '▶ beta-release → version ' + target );
-		grunt.task.run( 'bumpup:' + target );
+		grunt.task.run( 'set-version:' + target );
 		grunt.task.run( 'replace:theme_main' );
 		grunt.task.run( 'composer:install:prod' );
 		grunt.task.run( 'release:assets' );
