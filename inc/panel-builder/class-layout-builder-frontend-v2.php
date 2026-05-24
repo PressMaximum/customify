@@ -326,7 +326,9 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		ob_start();
 		$has_cb = false;
 		$return_render = false;
-		$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
+		$item_config = self::normalize_item_config(
+			isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array()
+		);
 
 		/**
 		 * Hook before builder item
@@ -373,8 +375,12 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		 */
 		do_action( 'customify/builder/' . $this->id . '/after-item/' . $item_id );
 
-		// Get item output.
-		$ob_render = ob_get_clean();
+		// Get item output. Trim so whitespace-only output (blank lines from
+		// empty PHP tag blocks, lone `echo "\n"`, etc.) is treated as
+		// empty — downstream `if ( $content )` checks then correctly skip
+		// these items and the empty-row guard in render_row() can hide
+		// rows where every item produces nothing meaningful.
+		$ob_render = trim( (string) ob_get_clean() );
 		// END render builder item.
 		if ( ! $return_render ) {
 			if ( $ob_render ) {
@@ -447,19 +453,73 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 	}
 
 	/**
-	 * Get rendered item
+	 * Canonical shape returned by render_item() and get_render_item().
+	 * Centralised so every caller can dereference `['content']` etc. without
+	 * an `is_array()` guard — a missing item returns this shape instead of
+	 * `false`, eliminating an entire class of PHP 8 fatals.
+	 *
+	 * @return array
+	 */
+	public static function empty_render_item() {
+		return array(
+			'_row_id' => '',
+			'_col_id' => '',
+			'_id'     => '',
+			'_device' => '',
+			'content' => false,
+		);
+	}
+
+	/**
+	 * Coerce an item config (registered via Customify_Builder_Item_*::item())
+	 * into a guaranteed shape. Third-party items may omit any of these keys;
+	 * normalising once at the consumption site lets the renderer skip per-key
+	 * isset() patches.
+	 *
+	 * @param mixed $config
+	 * @return array
+	 */
+	public static function normalize_item_config( $config ) {
+		$defaults = array(
+			'name'    => '',
+			'id'      => '',
+			'width'   => '',
+			'section' => '',
+		);
+		if ( ! is_array( $config ) ) {
+			return $defaults;
+		}
+		$out = $config; // preserve extra keys for forward compat.
+		foreach ( $defaults as $key => $default ) {
+			if ( ! isset( $out[ $key ] ) || ! is_scalar( $out[ $key ] ) ) {
+				$out[ $key ] = $default;
+			} else {
+				$out[ $key ] = (string) $out[ $key ];
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Get rendered item.
+	 *
+	 * Always returns the canonical shape — see empty_render_item() — so
+	 * callers can read `['content']` without a truthy check on the item
+	 * itself. An unrecognised id (e.g. a stale layout entry pointing at
+	 * an item the active theme no longer registers) yields an item whose
+	 * `content` is `false`, which existing `if ( $content )` guards drop.
 	 *
 	 * @param string $item_id
-	 * @return array|bool
+	 * @return array
 	 */
 	public function get_render_item( $item_id ) {
 		if ( is_null( $this->render_items ) ) {
 			$this->render_items();
 		}
-		if ( isset( $this->render_items[ $item_id ] ) ) {
+		if ( isset( $this->render_items[ $item_id ] ) && is_array( $this->render_items[ $item_id ] ) ) {
 			return $this->render_items[ $item_id ];
 		}
-		return false;
+		return self::empty_render_item();
 	}
 
 	/**
@@ -511,8 +571,14 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 		if ( 'footer' === $this->id ) {
 			$footer_col_keys = $this->get_footer_col_keys( $id );
 			$force_all_cols  = true;
-			$ordered_cols    = $footer_col_keys;
-			$col_count       = is_array( $footer_col_keys ) ? count( $footer_col_keys ) : 0;
+			// Fall back to all 5 slots when `footer_{row}_col_layout` is absent
+			// or malformed — matches the pre-col_layout behaviour and keeps
+			// $ordered_cols a non-empty array so the foreach below can never
+			// receive null (PHP 8 turns that into a TypeError).
+			$ordered_cols    = is_array( $footer_col_keys ) && ! empty( $footer_col_keys )
+				? $footer_col_keys
+				: array( 'left', 'center', 'right', 'col4', 'col5' );
+			$col_count       = count( $ordered_cols );
 
 			// Skip the whole row when NONE of the active footer cols has items.
 			// Mirrors the header guard further down. Same root cause: the
@@ -522,22 +588,16 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 			// still passes the top-level `flag_rows` guard at the start of
 			// this method. Without this re-check the footer would emit N
 			// empty `col-v2` placeholder divs for an effectively empty row.
-			//
-			// Guard `is_array()` so a missing `footer_{row}_col_layout`
-			// setting (get_footer_col_keys() returns null) preserves current
-			// fall-through behaviour instead of silently hiding the row.
-			if ( is_array( $ordered_cols ) && ! empty( $ordered_cols ) ) {
-				$footer_has_item = false;
-				foreach ( $ordered_cols as $_check_col ) {
-					if ( isset( $this->flag_cols[ $_check_col . '-' . $id . '-' . $device ] ) ) {
-						$footer_has_item = true;
-						break;
-					}
+			$footer_has_item = false;
+			foreach ( $ordered_cols as $_check_col ) {
+				if ( isset( $this->flag_cols[ $_check_col . '-' . $id . '-' . $device ] ) ) {
+					$footer_has_item = true;
+					break;
 				}
-				if ( ! $footer_has_item ) {
-					ob_end_clean();
-					return false;
-				}
+			}
+			if ( ! $footer_has_item ) {
+				ob_end_clean();
+				return false;
 			}
 		} else {
 			$force_all_cols = false;
@@ -564,8 +624,17 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 			}
 		}
 
+		$has_any_content = false;
+
 		foreach ( $ordered_cols as $col_id ) {
-			$col_items    = isset( $row_settings[ $col_id ] ) ? $row_settings[ $col_id ] : array();
+			// Even though get_settings()/normalize_layout_data() guarantee a
+			// well-formed shape from saved data, `render_row()` can be called
+			// with row_settings from `migrate_v1_data()` or filter overrides
+			// that bypass the normalizer — keep the is_array() guard so a
+			// scalar slot value never throws in the inner foreach.
+			$col_items    = isset( $row_settings[ $col_id ] ) && is_array( $row_settings[ $col_id ] )
+				? $row_settings[ $col_id ]
+				: array();
 			$flag_key_col = $col_id . '-' . $id . '-' . $device;
 			$has_items    = isset( $this->flag_cols[ $flag_key_col ] );
 
@@ -586,41 +655,50 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 
 			echo '<div class="col-v2 col-v2-' . esc_attr( $col_id ) . ' cc-' . (int) $col_count . '">';
 			foreach ( $col_items as $item_index => $col_item ) {
-				$item = $this->get_render_item( $col_item['id'] );
-				if ( $item ) {
-					$item_id = $col_item['id'];
-					$content = $item['content'];
-					if ( $content ) {
-						$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
-						if ( ! isset( $item_config['section'] ) ) {
-							$item_config['section'] = '';
-						}
-						$item_classes   = array();
-						$item_classes[] = 'item--inner';
-						$item_classes[] = 'builder-item--' . $item_id;
-						if ( strpos( $item_id, '-menu' ) ) {
-							$item_classes[] = 'has_menu';
-						}
-						if ( is_customize_preview() ) {
-							$item_classes[] = ' builder-item-focus';
-						}
+				if ( ! is_array( $col_item ) || empty( $col_item['id'] ) || ! is_string( $col_item['id'] ) ) {
+					continue;
+				}
+				$item_id = $col_item['id'];
+				$item    = $this->get_render_item( $item_id );
+				$content = $item['content'];
+				if ( $content ) {
+					$has_any_content = true;
+					$item_config     = self::normalize_item_config(
+						isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array()
+					);
 
-						$item_classes   = join( ' ', $item_classes );
-						$row_items_html = '';
-						$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . esc_attr( $item_config['section'] ) . '" data-item-id="' . esc_attr( $item_id ) . '" >';
-						$row_items_html .= $this->setup_item_content( $content, $id, $device );
-						if ( is_customize_preview() ) {
-							$row_items_html .= '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
-						}
-						$row_items_html .= '</div>';
-						echo $row_items_html;
+					$item_classes   = array();
+					$item_classes[] = 'item--inner';
+					$item_classes[] = 'builder-item--' . $item_id;
+					if ( strpos( $item_id, '-menu' ) ) {
+						$item_classes[] = 'has_menu';
 					}
+					if ( is_customize_preview() ) {
+						$item_classes[] = ' builder-item-focus';
+					}
+
+					$item_classes   = join( ' ', $item_classes );
+					$row_items_html = '';
+					$row_items_html .= '<div class="' . esc_attr( $item_classes ) . '" data-section="' . esc_attr( $item_config['section'] ) . '" data-item-id="' . esc_attr( $item_id ) . '" >';
+					$row_items_html .= $this->setup_item_content( $content, $id, $device );
+					if ( is_customize_preview() ) {
+						$row_items_html .= '<span class="item--preview-name">' . esc_html( $item_config['name'] ) . '</span>';
+					}
+					$row_items_html .= '</div>';
+					echo $row_items_html;
 				}
 			}
 			echo '</div>';
 		}
 
 		$row_innner_html = ob_get_clean();
+
+		// Hide the whole row when no item in any column produced content.
+		// The pre-pass flags only know which item ids were placed; this is
+		// the first point we know if anything actually rendered.
+		if ( ! $has_any_content ) {
+			return false;
+		}
 
 		// `no-{col}` classes added to row wrapper for CSS targeting of
 		// empty slots. The actual empty `<div class="col-v2 col-v2-X">`
@@ -780,17 +858,21 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 			echo '<div id="header-menu-sidebar-inner" class="header-menu-sidebar-inner">';
 
 			foreach ( $mobile_items as $row_id => $col_items ) {
-				foreach ( $col_items as $item_index => $item ) {
-					$item_id     = $item['id'];
-					$item        = $this->get_render_item( $item_id );
-					$content     = $item['content'];
-					$item_config = isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array();
-					$item_config = wp_parse_args(
-						$item_config,
-						array(
-							'section' => '',
-							'name'    => '',
-						)
+				if ( ! is_array( $col_items ) ) {
+					continue;
+				}
+				foreach ( $col_items as $item_index => $sidebar_item ) {
+					if ( ! is_array( $sidebar_item ) || empty( $sidebar_item['id'] ) || ! is_string( $sidebar_item['id'] ) ) {
+						continue;
+					}
+					$item_id     = $sidebar_item['id'];
+					$render      = $this->get_render_item( $item_id );
+					$content     = $render['content'];
+					if ( ! $content ) {
+						continue;
+					}
+					$item_config = self::normalize_item_config(
+						isset( $this->config_items[ $item_id ] ) ? $this->config_items[ $item_id ] : array()
 					);
 					$classes = 'builder-item-sidebar mobile-item--' . $item_id;
 					if ( strpos( $item_id, 'menu' ) ) {
