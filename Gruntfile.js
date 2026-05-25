@@ -155,6 +155,7 @@ module.exports = function ( grunt ) {
 		'!**/*.js.map',
 
 		// Project-internal docs
+		'!AGENTS.md',
 		'!CLAUDE.md',
 		'!README.md',
 
