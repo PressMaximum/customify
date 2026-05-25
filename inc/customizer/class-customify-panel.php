@@ -28,7 +28,7 @@ class Customify_Header_Builder_Panel extends WP_Customize_Panel {
 				<span class="preview-notice"><?php
 					printf(
 						/* translators: %s: panel title */
-						__( 'You are customizing %s', 'default' ),
+						esc_html__( 'You are customizing %s', 'customify' ),
 						'<strong class="panel-title">{{ data.title }}</strong>'
 					);
 				?></span>
@@ -71,7 +71,7 @@ class Customify_Footer_Builder_Panel extends WP_Customize_Panel {
 				<span class="preview-notice"><?php
 					printf(
 						/* translators: %s: panel title */
-						__( 'You are customizing %s', 'default' ),
+						esc_html__( 'You are customizing %s', 'customify' ),
 						'<strong class="panel-title">{{ data.title }}</strong>'
 					);
 				?></span>

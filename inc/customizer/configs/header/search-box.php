@@ -272,7 +272,7 @@ class Customify_Builder_Item_Search_Box {
 
 		echo '<div class="header-' . esc_attr( $this->id ) . '-item item--' . esc_attr( $this->id ) . '">';
 		?>
-		<form role="search" class="header-search-form <?php echo esc_attr( implode( ' ', $form_extra_class ) ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<form class="header-search-form <?php echo esc_attr( implode( ' ', $form_extra_class ) ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<div class="search-form-fields">
 				<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ); ?></span>
 				<?php

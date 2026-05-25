@@ -449,8 +449,8 @@ module.exports = function ( grunt ) {
 			grunt.log.writeln( '  Manual publish later:' );
 			grunt.log.writeln( '    git add style.css languages/customify.pot composer.lock' );
 			grunt.log.writeln( '    git commit -m "Release version ' + v + '"' );
-			grunt.log.writeln( '    git tag -a ' + tag + ' -m "Release ' + tag + '" && git push --follow-tags' );
-			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
+			grunt.log.writeln( '    git push' );
+			grunt.log.writeln( '    gh release create ' + tag + ' ' + zip + ' --target $(git rev-parse HEAD) --title "' + tag + '" --generate-notes ' + ( isPrerelease ? '--prerelease' : '--latest' ) );
 			return;
 		}
 
@@ -469,16 +469,18 @@ module.exports = function ( grunt ) {
 			shellSync( 'git commit -m "Release version ' + v + '"' );
 		}
 
-		// Annotated tag (-a -m): required for `git push --follow-tags` to
-		// actually push the tag, plus carries author/date/message for the
-		// GitHub Release page.
-		shellSync( 'git tag -a ' + tag + ' -m "Release ' + tag + '"' );
-		shellSync( 'git push --follow-tags' );
+		// Push the release commit to origin. NO local tag is created —
+		// `gh release create` below creates the tag directly on GitHub
+		// pointing at the just-pushed commit SHA, so the developer's
+		// local repo never accumulates a tag namespace that drifts from
+		// the remote (and never blocks a re-run with "tag already exists").
+		shellSync( 'git push' );
 
+		const sha = execSync( 'git rev-parse HEAD', { cwd: path.resolve( __dirname ) } ).toString().trim();
 		const ghFlags = isPrerelease ? '--prerelease' : '--latest';
-		shellSync( 'gh release create ' + tag + ' ' + zip + ' --title "' + tag + '" --generate-notes ' + ghFlags );
+		shellSync( 'gh release create ' + tag + ' ' + zip + ' --target ' + sha + ' --title "' + tag + '" --generate-notes ' + ghFlags );
 
-		grunt.log.subhead( '✅ Release ' + tag + ' published.' );
+		grunt.log.subhead( '✅ Release ' + tag + ' published (remote tag only — no local tag).' );
 	} );
 
 	// ── Vendor strip helpers ────────────────────────────────────────────────

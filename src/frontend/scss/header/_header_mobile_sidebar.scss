@@ -60,10 +60,13 @@ body {
             padding: 0px;
         }
     }
-    .nav-menu-mobile .nav-toggle-icon {
-        color: currentColor;
-        &:hover, &:focus {
-            background: rgba(0,0,0,0.01);
+    .nav-menu-mobile {
+        width: 100%;
+        .nav-toggle-icon {
+            color: currentColor;
+            &:hover, &:focus {
+                background: rgba(0,0,0,0.01);
+            }
         }
     }
 

@@ -127,6 +127,41 @@ const filteredPlugins = defaultConfig.plugins.filter(
 		plugin.constructor.name !== 'RtlCssPlugin'
 );
 
+// ── Normalize emitted-asset line endings to LF ───────────────────────────────
+// Some npm dependencies (e.g. `@dnd-kit/utilities` ships its ESM build with
+// CRLF) leak their source line endings through webpack's concat into bundled
+// chunks. Mixed CRLF/LF in `build/**` is a hard block for WP.org theme review
+// (SVN can't resolve diffs across mixed-ending files). Rather than patching
+// each upstream package, normalize every text asset webpack emits. Runs at
+// the REPORT stage so it catches output from MiniCssExtractPlugin, RtlCss,
+// and the `.min.*` siblings written by EmitMinifiedAssetsPlugin.
+class NormalizeLineEndingsPlugin {
+	apply( compiler ) {
+		compiler.hooks.compilation.tap( 'NormalizeLineEndingsPlugin', ( compilation ) => {
+			compilation.hooks.processAssets.tap(
+				{
+					name:  'NormalizeLineEndingsPlugin',
+					stage: compilation.PROCESS_ASSETS_STAGE_REPORT,
+				},
+				( assets ) => {
+					for ( const filename of Object.keys( assets ) ) {
+						if ( ! /\.(js|css|map|json|html|svg|txt|md|asset\.php)$/.test( filename ) ) {
+							continue;
+						}
+						const raw  = compilation.assets[ filename ].source();
+						const text = typeof raw === 'string' ? raw : raw.toString();
+						if ( ! text.includes( '\r' ) ) {
+							continue;
+						}
+						const normalized = text.replace( /\r\n/g, '\n' ).replace( /\r/g, '\n' );
+						compilation.updateAsset( filename, new webpack.sources.RawSource( normalized ) );
+					}
+				}
+			);
+		} );
+	}
+}
+
 // ── Emit .min siblings alongside every JS/CSS output ─────────────────────────
 // Runs in production only (`npm run build`). `npm start` (development /
 // watch) skips minification so the watch loop stays fast and only emits
@@ -384,6 +419,10 @@ module.exports = {
 
 		// Only minify in production — `npm start` produces readable bundles only.
 		...( isDevelopment ? [] : [ new EmitMinifiedAssetsPlugin() ] ),
+
+		// Runs after every other asset producer (REPORT stage) so it
+		// catches CRLF that crept in via bundled deps + RTL + .min siblings.
+		new NormalizeLineEndingsPlugin(),
 
 		new CopyPlugin( {
 			patterns: [

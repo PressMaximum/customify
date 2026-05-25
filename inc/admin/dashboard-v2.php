@@ -36,50 +36,56 @@ const CUSTOMIFY_DASHBOARD_V2_SLUG = 'customify';
 const CUSTOMIFY_DASHBOARD_V2_HANDLE = 'customify-dashboard';
 
 /**
- * Resolve the WP admin menu icon for the Customify top-level entry.
+ * Register the top-level menu.
  *
- * Returns a `data:image/svg+xml;base64,...` URI — the form documented by
- * `add_menu_page()` that gets recolored to match the user's admin color
- * scheme. WP's `setIconColor` (wp-admin/js/common.js) swaps the SVG's
- * `#a7aaad` fill tokens with the active scheme's icon color; URL-based
- * background-image icons are NOT recolored and also render at intrinsic
- * size (which this SVG lacks, so it renders huge).
- *
- * The SVG bytes are read once per PHP process and cached in a static so
- * repeat hook fires (e.g. network admin) don't re-stat or re-encode.
+ * Icon is the SVG asset served from the theme. `get_theme_file_uri()`
+ * is the WP-native lookup (child-theme aware). WP renders icon URLs in
+ * an `<img>` tag without sizing it, so the companion `admin_head` CSS
+ * below constrains the rendered size to the standard 20px menu icon.
  * Falls back to a dashicon if the build artifact is missing.
  */
-function customify_dashboard_v2_menu_icon(): string {
-	static $cached = null;
-	if ( null !== $cached ) {
-		return $cached;
-	}
-
-	$path = get_template_directory() . '/build/images/admin/customify-logo.svg';
-	$svg  = is_readable( $path ) ? file_get_contents( $path ) : false;
-	if ( false === $svg || '' === $svg ) {
-		$cached = 'dashicons-admin-customizer';
-		return $cached;
-	}
-
-	$cached = 'data:image/svg+xml;base64,' . base64_encode( $svg );
-	return $cached;
-}
-
-/**
- * Register the top-level menu.
- */
 function customify_dashboard_v2_add_menu(): void {
+	$icon_rel  = 'build/images/admin/menu.svg';
+	$icon_path = get_theme_file_path( $icon_rel );
+	$icon      = is_readable( $icon_path )
+		? get_theme_file_uri( $icon_rel )
+		: 'dashicons-admin-customizer';
+
 	add_menu_page(
 		__( 'Customify', 'customify' ),
 		__( 'Customify', 'customify' ),
 		'manage_options',
 		CUSTOMIFY_DASHBOARD_V2_SLUG,
 		'customify_dashboard_v2_render',
-		customify_dashboard_v2_menu_icon(),
+		$icon,
 		59
 	);
 }
+
+/**
+ * Size the top-level menu icon. WP only auto-sizes SVG icons passed as
+ * `data:image/svg+xml;base64,` URIs (the `.wp-menu-image.svg` class
+ * path); URL-based icons render in `<img>` at intrinsic size, which is
+ * huge for our viewBox-only SVG without explicit width/height.
+ */
+function customify_dashboard_v2_menu_icon_style(): void {
+	?>
+	<style>
+		#adminmenu #toplevel_page_<?php echo esc_attr( CUSTOMIFY_DASHBOARD_V2_SLUG ); ?> .wp-menu-image {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#adminmenu #toplevel_page_<?php echo esc_attr( CUSTOMIFY_DASHBOARD_V2_SLUG ); ?> .wp-menu-image img {
+			width: 20px;
+			height: 20px;
+			padding: 0;
+			opacity: 1;
+		}
+	</style>
+	<?php
+}
+add_action( 'admin_head', 'customify_dashboard_v2_menu_icon_style' );
 // Priority 9 (one before default 10) ensures the `customify` parent
 // menu exists in $menu by the time WP core's `_add_post_type_submenus`
 // (admin_menu prio 10) iterates CPTs that declared `show_in_menu =>

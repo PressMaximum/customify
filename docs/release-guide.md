@@ -126,23 +126,29 @@ What `grunt release [--ver=<x.y.z>]` does, step by step:
 6. Zip
    └── release-staging/customify-<x.y.z>.zip
 
-7. Commit + tag + push
+7. Commit + push (commit only — NO local tag)
    ├── git add style.css languages/customify.pot composer.lock
    ├── git commit -m "Release version <x.y.z>"
-   ├── git tag <x.y.z>
-   ├── git push origin HEAD
-   └── git push origin <x.y.z>
+   └── git push
 
-8. GitHub release
-   └── gh release create <x.y.z> release-staging/customify-<x.y.z>.zip --latest
-       (uses --prerelease instead of --latest for beta-release)
+8. GitHub release + tag (one call)
+   └── gh release create v<x.y.z> release-staging/customify-<x.y.z>.zip
+       --target <HEAD sha>
+       --title "v<x.y.z>"
+       --generate-notes
+       --latest                           (or --prerelease for beta)
+
+   `gh` creates the tag on GitHub pointing at the just-pushed
+   commit SHA. NO local tag is created — re-runs of the release
+   never fail with "tag already exists" on the developer's machine.
+   Pull tags with `git fetch --tags` if you want a local mirror.
 ```
 
 Pass `--no-publish` to stop after step 6 (zip exists, nothing pushed).
 
 ### 5.1 Idempotency
 
-The `git commit` in step 7 is gated — if no files changed (re-running release with the same version + no asset diff), the commit is skipped. The git tag is created unconditionally; re-running with the same version will fail at the tag step if the tag exists.
+The `git commit` in step 7 is gated — if no files changed (re-running release with the same version + no asset diff), the commit is skipped. The `gh release create` call in step 8 WILL fail if a GitHub Release already exists for the tag; manually `gh release delete v<x.y.z>` before re-running, or pass a new `--ver` to release a different version.
 
 ---
 
@@ -218,12 +224,13 @@ If a release breaks something serious:
 ### 8.1 If shipped less than ~1 hour ago AND no users have downloaded yet
 
 ```bash
-# Delete the GitHub release
-gh release delete <x.y.z> --yes
+# Delete the GitHub release (this also removes the tag on remote
+# when --cleanup-tag is passed, since the tag was created by gh
+# in the first place).
+gh release delete v<x.y.z> --yes --cleanup-tag
 
-# Delete the git tag locally + remote
-git tag -d <x.y.z>
-git push origin :refs/tags/<x.y.z>
+# (Optional) remove any locally-mirrored tag pulled in by `git fetch --tags`
+git tag -d v<x.y.z> 2>/dev/null || true
 
 # Revert the release commit
 git revert HEAD                  # creates a revert commit

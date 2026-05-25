@@ -431,7 +431,7 @@ add_filter( 'get_the_archive_title', 'customify_get_the_archive_title', 15 );
 
 function customify_search_form( $form ) {
 	$form = '
-		<form role="search" class="sidebar-search-form" action="' . esc_url( home_url( '/' ) ) . '">
+		<form class="sidebar-search-form" action="' . esc_url( home_url( '/' ) ) . '">
             <label>
                 <span class="screen-reader-text">' . _x( 'Search for:', 'label', 'customify' ) . '</span>
                 <input type="search" class="search-field" placeholder="' . esc_attr__( 'Search &hellip;', 'customify' ) . '" value="' . get_search_query() . '" name="s" title="' . esc_attr_x( 'Search for:', 'label', 'customify' ) . '" />

@@ -201,6 +201,33 @@ Use CSS custom properties from `theme.json`. Do NOT use the `transform: translat
 }
 ```
 
+### 4.14 LF-only line endings
+
+**Every file created or modified in this repo — regardless of type or purpose — must use LF (`\n`) line endings only.** Never commit CRLF, CR, or mixed CR/LF + LF in the same file. Applies to: `*.php`, `*.js`, `*.jsx`, `*.ts`, `*.tsx`, `*.scss`, `*.css`, `*.json`, `*.md`, `*.yml`, `*.txt`, dotfiles — everything. `.editorconfig` already declares `end_of_line = lf`; keep your editor honouring it and avoid pasting from sources that inject CRLF (Notepad, some Windows shells, certain copy-paste paths from RDP/terminals).
+
+Mixed endings cause real downstream breakage:
+
+- `webpack` preserves whatever endings the input file used — a single CRLF SCSS partial or JS module (or upstream npm package, e.g. `@dnd-kit/utilities` ESM build) poisons the bundled `build/**` output.
+- Diff tools, code review surfaces, `git blame`, and SVN all treat a CRLF↔LF flip as a full-file change, hiding the real edit.
+- Some PHP `heredoc`/regex paths behave differently across `\n` vs `\r\n`.
+
+`webpack.config.js` ships a `NormalizeLineEndingsPlugin` (PROCESS_ASSETS_STAGE_REPORT) that rewrites every emitted text asset (`.js`, `.css`, `.map`, `.asset.php`, etc.) to LF before write — keep it in place. It's the only thing standing between CRLF-shipping deps and the WP.org SVN reviewer.
+
+Audit and fix:
+
+```bash
+# audit the working tree (returns nothing when clean)
+find . -type f \
+  -not -path "./node_modules/*" -not -path "./vendor/*" \
+  -not -path "./release-staging/*" -not -path "./.git/*" \
+  -exec file {} \; | grep -i "crlf\|cr line"
+
+# convert a single file in place (macOS / Linux)
+perl -i -pe 's/\r\n/\n/g' path/to/file
+```
+
+After fixing sources, `npm run build` so `build/` is regenerated from clean inputs.
+
 ---
 
 ## 5. Storage key registry (high-level)
