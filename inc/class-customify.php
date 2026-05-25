@@ -530,6 +530,7 @@ class Customify
 			'/inc/admin/editor.php',       // Block editor style integration.
 			'/inc/admin/dashboard.php',    // Legacy PHP dashboard (Appearance → Customify Options (Legacy)).
 			'/inc/admin/dashboard-v2.php', // New SPA dashboard (top-level Customify) — @pressmaximum/dashboard-kit.
+			'/inc/admin/pro-bridge/pro-bridge.php', // Fallback bridge for Customify Pro < 0.4.16 (self-disables on newer Pro).
 		);
 
 		foreach ($files as $file) {
