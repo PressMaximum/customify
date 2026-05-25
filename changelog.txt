@@ -5,12 +5,12 @@
 * FIXED: Customizer pencil edit-shortcut not opening the matching header/footer builder item section.
 
 = 0.4.15 =
-* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
 * NEW: Transparent header feature.
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
 * NEW: has-page-cover body class; scope transparent header styles.
 * NEW: WordPress Font Library and theme.json fonts in the typography picker.
+* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
 * IMPROVED: WordPress 7.0 ready.
 * IMPROVED: Editor style now support customizer settings.
 * IMPROVED: Header/footer builder UI — sizing, title display, popover width and column layout.
