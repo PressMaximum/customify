@@ -1,0 +1,2085 @@
+$text_color: #555d66;
+
+// Device tabs settings
+.customify--hide {
+    display: none !important;
+}
+.customify--clear {
+    clear: both;
+}
+
+.customify-control-field-header {
+    cursor: pointer;
+}
+.customize-control-customify-modal,
+.customize-control-customify-typography,
+.customize-control-customify-styling{
+    .customify-control-field-header {
+        margin-right: 25px;
+    }
+}
+.customify-control--heading {
+    padding: 5px 12px;
+    background: #BBBBBB;
+    //border-bottom: 1px solid #dddddd;
+    //border-top: 1px solid #dddddd;
+    margin: 10px -12px 2px;
+    .customize-control-title {
+        margin: 0px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 500;
+        font-size: 12px;
+        color: #FFFFFF;
+    }
+}
+.customify--field {
+    .customify-field--heading {
+        padding: 7px 12px;
+        background: #fff;
+        border-bottom: 1px solid #dddddd;
+        border-top: 1px solid #dddddd;
+        margin: 10px -15px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 400;
+        font-size: 12px;
+        color: #444444;
+    }
+}
+
+#customize-controls {
+    .customify--field {
+        .customify-field--heading {
+            font-size: 12px;
+        }
+    }
+    .customify-modal-settings {
+        h3.customify-field--heading {
+            font-size: 11px;
+        }
+        .wp-picker-container  {
+            z-index: -1;
+            &.wp-picker-active {
+                z-index: 69;
+            }
+        }
+    }
+}
+
+.customize-control {
+    .customize-control-description {
+        margin-bottom: 15px;
+        margin-top: -3px;
+    }
+    &.control--bg {
+        &.bottom-0 {
+            margin-bottom: 0px;
+        }
+        .customify--settings-wrapper {
+            background: #fff;
+            margin-left: -12px;
+            margin-right: -12px;
+            min-height: 15px;
+            padding: 10px 10px 8px 14px;
+            border-bottom: 1px solid #ddd;
+            > .customize-control-description {
+                display: none;
+            }
+            .customify-actions {
+                top: 13px;
+                right: 10px;
+                margin-top: 0px;
+                .action--edit {
+                    padding: 0px;
+                    border: none;
+                    &:focus {
+                        box-shadow: none;
+                    }
+                    span {
+                        transition: all .2s linear;
+                        transform: rotate(-90deg);
+                        &:before {
+                            content: "\f347";
+                        }
+                    }
+                }
+            }
+        }
+        .customify-modal-settings {
+            margin-left: -12px;
+            margin-right: -12px;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            box-shadow: none;
+            background: transparent;
+            border-bottom: 1px solid #ddd;
+            z-index: 2;
+            &:before {
+                display: none !important;
+            }
+            .modal--tabs span.tab--active {
+                background-color: #eee;
+                border-bottom-color: #eee;
+            }
+        }
+
+        &.modal--opening {
+            .customify--settings-wrapper {
+                .customify-actions {
+                    .action--edit {
+                        span {
+                            transform: rotate(-180deg);
+                            &:before {
+                                content: "\f347";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+
+.customify-field-heading{
+    &::after {
+        display: block;
+        content: ""; clear: both;
+    }
+    label {
+        display: inline-block;
+    }
+    .customify-devices {
+        display: inline-block;
+        margin-left: 0px;
+        float: right;
+        @include rtl(){
+            float: left;
+        }
+        button {
+            cursor: pointer;
+            background: 0 0;
+            border: none;
+            height: 23px;
+            padding: 0 0px;
+            margin: 0 0 0 1px;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            outline: none !important;
+            transition: .15s color ease-in-out,.15s background-color ease-in-out,.15s border-color ease-in-out;
+            color: #bbbbbb;
+            &:before {
+                display: inline-block;
+                -webkit-font-smoothing: antialiased;
+                font: 400 16px/4px dashicons;
+                vertical-align: top;
+                margin: 0;
+                padding: 5px 0px 3px;
+                //color: #656a6f;
+            }
+
+            &.preview-desktop:before {
+                content: "\f472";
+            }
+
+            &.preview-tablet:before {
+                content: "\f471";
+            }
+            &.preview-mobile:before {
+                content: "\f470";
+            }
+
+        }
+    }
+}
+
+/**
+* Group Field
+ */
+.customize-control-customify-group {
+    .customify--settings-wrapper {
+        .customify--settings-fields {
+            border: 2px dashed #ccc;
+            padding:  15px;
+        }
+        .customify--group-field {
+            margin-bottom: 15px;
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+
+    }
+}
+
+.customify--multiple-devices .customify-field-settings-inner {
+    display: none;
+    .customify-field-settings-inner {
+        display: block;
+    }
+}
+.preview-desktop  {
+    .customify-devices .preview-desktop{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-desktop {
+            display: block;
+        }
+    }
+}
+.preview-tablet {
+    .customify-devices .preview-tablet{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-tablet {
+            display: block;
+        }
+    }
+}
+.preview-mobile {
+    .customify-devices .preview-mobile{ border-color: #191e23; color: #191e23; }
+    .customify-field-settings-inner {
+        &.customify--for-mobile {
+            display: block;
+        }
+    }
+}
+
+.customify--repeater-actions {
+    text-align: right;
+    .customify--repeater-add-new {
+        margin-left: 15px;
+        &:before {
+            content: "\f132";
+            display: inline-block;
+            position: relative;
+            left: -2px;
+            top: -1px;
+            font: 400 20px/1 dashicons;
+            vertical-align: middle;
+            transition: all .2s;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    }
+    .customify--repeater-reorder {
+        line-height: 27px;
+
+    }
+}
+.customify--repeater-items {
+    margin-top: 15px;
+    margin-bottom: 15px;
+    .customify--repeater-field {
+        margin-bottom: 15px;
+    }
+    .customify--repeater-item-inner {
+        padding: 10px;
+    }
+    .customify--remove {
+        padding: 0 10px 10px;
+        display: inline-block;
+    }
+    .customify--repeater-visible {
+        display: inline-block;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        border-right: 1px solid #dddddd;
+        @include rtl(){
+            left: auto;
+            right: 0px;
+            border-right: 0px none;
+            border-left: 1px solid #dddddd;
+        }
+        width: 35px;
+        text-align: center;
+        .r-visible-icon {
+            &:before {
+                -moz-osx-font-smoothing: grayscale;
+                border: none;
+                content: "\f530";
+                display: block;
+                font: 14px/34px dashicons;
+                padding: 5px;
+                text-decoration: none !important;
+                text-indent: 0;
+            }
+        }
+        input:checked + span.r-visible-icon {
+            &:before {
+                content: "\f177";
+            }
+        }
+        input {
+            display: none;
+        }
+    }
+
+    .customify--repeater-item-heading {
+        background: #FFF;
+        padding: 15px;
+        position: relative;
+        display: block;
+        line-height: 1;
+        font-size: 1em;
+        cursor: pointer;
+    }
+    .item---visible-hidden {
+        .customify--repeater-item-heading {
+            background: #f1f1f1;
+        }
+    }
+    .ui-sortable-helper {
+        .customify--repeater-item-heading {
+            cursor: grabbing;
+            cursor: -webkit-grabbing;
+            cursor: -moz-grabbing;
+        }
+    }
+    .customify--repeater-live-title {
+        white-space: nowrap;
+        margin-right: 35px;
+        margin-left: 30px;
+        @include rtl(){
+            margin-left: 35px;
+            margin-right: 30px;
+        }
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        font-weight: 600;
+        line-height: 1;
+    }
+
+    .customify-nav-reorder {
+        display: none;
+        float: right;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background-color: #fafafa;
+        > span {
+            position: relative;
+            overflow: hidden;
+            float: left;
+            display: block;
+            width: 33px;
+            height: 43px;
+            color: #82878c;
+            text-indent: -9999px;
+            cursor: pointer;
+            outline: 0;
+            &:hover {
+                color: #191e23;
+                background: #eee;
+            }
+            &:before {
+                display: inline-block;
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+                font: 400 20px/43px dashicons;
+                text-align: center;
+                text-indent: 0;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+            }
+        }
+        .customify--down {
+            &:before {
+                content: "\f347";
+            }
+        }
+        .customify--up {
+            &:before {
+                content: "\f343";
+            }
+        }
+    }
+
+    &.reorder-active {
+        .customify-nav-reorder {
+            display: block;
+        }
+        .customify--repeater-item-toggle {
+            display: none !important;
+        }
+    }
+
+    .customify--repeater-item {
+        border: 1px solid #ddd;
+        background: #ffffff;
+        margin-bottom: 10px;
+        &:last-child {
+            margin-bottom: 0px;
+            .customify-nav-reorder > span {
+                &.customify--down {
+                    background: #ffffff;
+                }
+            }
+        }
+
+        &:first-child {
+            .customify-nav-reorder > span {
+                &.customify--up {
+                    background: #ffffff;
+                }
+            }
+        }
+
+        .customify--repeater-item-toggle {
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+            right: 0px;
+            @include rtl(){
+                right: auto;
+                left: 0px;
+            }
+            text-decoration: none;
+            width: 32px;
+            display: block;
+            text-align: center;
+            color: $text_color;
+            box-shadow: none !important;
+            &:before {
+                font: 400 20px/2 dashicons;
+                content: "\f140";
+            }
+        }
+        .customify--repeater-item-settings {
+            display: none;
+        }
+        &.customify--open {
+            .customify--repeater-item-heading {
+                border-bottom: 1px solid #ddd;
+            }
+            .customify--repeater-item-settings {
+                display: block;
+            }
+            .customify--repeater-item-toggle {
+                &:before {
+                    content: "\f142";
+                }
+            }
+        }
+    }
+}
+
+.customify--group-field {
+    &.ft--hr {
+        clear: both;
+    }
+    &.field-half {
+        width: 50%;
+        float: left;
+    }
+    &.field-half-left {
+        width: 50%;
+        float: left;
+        .customify--field {
+            padding-right: 5px;
+        }
+
+    }
+    &.field-half-right {
+        width: 50%;
+        float: left;
+
+        .customify--field {
+            padding-left: 5px;
+        }
+    }
+}
+.customify--field {
+    margin-bottom: 15px;
+    width: 100%;
+    &:last-child {
+        margin-bottom: 0px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+    &.customify--field-color {
+    }
+    label {
+
+    }
+    textarea {
+        width: 100%;
+    }
+    .wp-picker-container input[type=text].wp-color-picker {
+        width: 65px !important;
+    }
+}
+.customify-text-align {
+    input {
+        display: none;
+    }
+    input:checked + .button {
+        background: #ccc;
+    }
+}
+
+.customify--css-unit {
+    margin-bottom: 5px;
+    label {
+        display: none;
+        margin-right: 5px;
+        text-transform: uppercase;
+        padding: 0px 5px;
+        font-size: 11px;
+        &:first-child {
+            margin-left: -5px;
+            @include rtl() {
+                margin-left: 0px;
+            }
+
+        }
+        &.customify--label-active {
+            font-weight: bold;
+        }
+    }
+    input {
+        display: none;
+    }
+}
+.customify--gr-inputs {
+    display: flex;
+    margin-left: -2px;
+    margin-right: -2px;
+    > span {
+        padding: 0px 2px;
+    }
+    .customify--small-label {
+        font-size: 10px;
+        display: block;
+        text-transform: uppercase;
+    }
+    span.input {
+        height: 28px;
+        display: block;
+        vertical-align: middle;
+        line-height: 28px;
+        text-align: center;
+    }
+    label {
+        cursor: pointer;
+        input{
+            display: none;
+        }
+        width: 25px;
+        flex: none;
+        position: relative;
+        &:before {
+            font: 400 18px/37px dashicons;
+            content: "\f225";
+            position: absolute;
+            top: -3px;
+            left: 5px;
+            display: block;
+        }
+        &.customify--label-active {
+            &:before {
+                content: "\f103";
+            }
+        }
+
+    }
+}
+.customify-image-preview {
+    margin: 0px 0 12px;
+    display: block;
+    &:before {
+        content: attr(data-no-file-text);
+        display: block;
+        border: 1px dashed #DDDDDD;
+        padding: 9px 0px;
+        text-align: center;
+    }
+    &.customify--has-file {
+        &:before {
+            display: none;
+        }
+    }
+}
+.customify-input-slider-wrapper {
+    position: relative;
+    margin-top: 35px;
+    display: block;
+    .customify--css-unit {
+        text-align: right;
+        margin-top: -23px;
+        margin-bottom: 0px;
+    }
+    .customify--slider-input {
+        width: 60px;
+        max-width: 60px;
+		padding-right: 0;
+        position: absolute;
+        top: -9px;
+        right: 41px;
+        @include rtl(){
+            left: 41px; right: auto;
+        }
+        height: 24px;
+        line-height: 18px;
+		min-height: auto;
+		border: 1px solid #ddd;
+		background: #fff;
+		border-radius: 0;
+        &.no-unit {
+            right: 18px;
+        }
+    }
+    .customify--label-active {
+        display: block;
+        top: -9px;
+        right: 18px;
+        @include rtl(){
+            left: 17px; right: auto;
+        }
+        line-height: 22px;
+        position: absolute;
+        margin-right: 0px;
+        border: 1px solid #ddd;
+        background: #fff;
+        font-weight: normal;
+        font-size: 10px;
+        cursor: default;
+        min-width: 24px;
+        text-align: center;
+    }
+    .reset {
+        text-decoration: none;
+        display: inline-block;
+        color: #555d66;
+        top: -9px;
+        right: -5px;
+        @include rtl(){
+            left: -5px; right: auto;
+        }
+        line-height: 22px;
+        position: absolute;
+        margin-right: 0px;
+        border: 1px solid #ddd;
+        background: #fff;
+        font-weight: normal;
+        &:before {
+            -moz-osx-font-smoothing: grayscale;
+            border: none;
+            content: "\f531";
+            display: block;
+            font: 12px/1 dashicons;
+            padding: 5px;
+            text-decoration: none !important;
+            text-indent: 0;
+        }
+    }
+}
+.customify-input-slider {
+    position: relative;
+    margin: 11px 118px 20px 4px;
+    @include rtl(){
+        margin: 11px 4px 20px 118px;
+    }
+    height: 5px;
+    display: block;
+    background: #CCCCCC;
+    .ui-slider-range {
+        width: 100%;
+        display: block;
+        height: 5px;
+        background: var(--wp-admin-theme-color, #3068af);
+        @include rtl(){
+            position: absolute;
+            left: 0px;
+        }
+    }
+    .ui-slider-handle {
+        width: 18px;
+        height: 18px;
+        display: block;
+        position: absolute;
+        top: -7px;
+        background: #ffffff;
+        border: 1px solid #CCCCCC;
+        border-radius: 50%;
+        cursor: pointer;
+        transform: translateX(-5px);
+    }
+}
+
+.customify--field-shadow {
+    .customify--gr-inputs {
+        margin-top: 10px;
+    }
+}
+
+.customify--icon-picker {
+    display: flex;
+    .customify--icon-preview {
+        flex: 1;
+        border: 1px solid #ddd;
+        border-right: 0px;
+        @include rtl(){
+            border-right: 1px solid #ddd;
+            border-left: 0px;
+        }
+        cursor: pointer;
+        position: relative;
+    }
+    .customify--icon-preview-icon {
+        width: 35px; display: block;
+        border-right: 0px;
+        text-align: center;
+        height: 100%;
+        position: relative;
+        background: #FFFFFF;
+        i {
+            position: absolute;
+            top: 50%;
+            left: 13px;
+            transform:  translateY(-50%);
+        }
+    }
+    input {
+        box-shadow: none !important;
+        outline: none !important;
+        background: #ffffff;
+    }
+    .customify--icon-remove {
+        cursor: pointer;
+        flex: 1;
+        border: 1px solid #ddd;
+        border-left: 0px;
+        @include rtl(){
+            border-left: 1px solid #ddd;
+            border-right: 0px;
+        }
+        font-size: 18px;
+        .dashicons {
+            width: 30px;
+            display: block;
+            transform: translateY(2px);
+        }
+    }
+}
+
+#customify--sidebar-icons {
+    position: fixed;
+    left: -300px;
+    border-right: 1px solid #ddd;
+    @include rtl(){
+        left: auto; right: -300px;
+        border-right: 0px none;
+        border-left: 1px solid #ddd;
+    }
+    transition: all .5s ease;
+    &.customify--active {
+        left: 300px;
+        @include rtl(){
+            left: auto;
+            right: 300px;
+        }
+    }
+    width: 300px;
+    bottom: 0px;
+    top: 0px;
+    display: block;
+    z-index: 230;
+    background: #EBEBEB;
+
+    *{
+        box-sizing: border-box;
+    }
+    .customify--sidebar-header {
+        height: 46px;
+        display: block;
+        border-bottom: 1px solid #ddd;
+    }
+    .customify--icon-type-inner {
+        padding: 10px 10px 10px 50px;
+        display: block;
+    }
+    .customize-controls-icon-close {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 45px;
+        height: 41px;
+        padding: 0 2px 0 0;
+        background: #eee;
+        border: none;
+        border-top: 4px solid #eee;
+        border-right: 1px solid #ddd;
+        color: #444;
+        text-align: left;
+        cursor: pointer;
+        transition: color .15s ease-in-out,border-color .15s ease-in-out,background .15s ease-in-out;
+        box-sizing: content-box;
+        text-decoration: none;
+        &:before {
+            font: 400 22px/45px dashicons;
+            content: "\f335";
+            position: relative;
+            top: -3px;
+            left: 13px;
+        }
+    }
+    #customify--sidebar-icon-type {
+        display: block;
+        width: 100%;
+        height: 26px;
+    }
+    .customify--sidebar-search {
+        background: #ffffff;
+        padding: 10px;
+        input {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    #customify--icon-browser {
+        position: absolute;
+        top: 100px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        overflow: auto;
+    }
+    .customify--list-icons {
+        li {
+            width: 20%;
+            float: left;
+            font-size: 24px;
+            text-align: center;
+            padding: 10px 10px;
+            overflow: hidden;
+            cursor: pointer;
+            transition:all 0.3s ease;
+            &:hover {
+                transform: scale(1.5);
+            }
+
+        }
+        &:after {
+            clear: both; content: ""; display: block;
+        }
+    }
+}
+
+/* Typography */
+.customify--font-style {
+    .button {
+        input {
+            display: none;
+        }
+        span {
+            line-height: inherit;
+            &:before {
+                line-height: inherit;
+            }
+        }
+        &.customify--checked {
+            background: #ccc;
+        }
+    }
+}
+
+/* Text Align */
+.customify-text-align {
+    .button {
+        padding-top: 3px;
+    }
+}
+
+.custom-control-image_select, .custom-control-radio_group  {
+    .customify-radio-list {
+        input {
+            display: none;
+        }
+        p {
+            margin: 0px 0 10px;
+        }
+        p, label {
+            display: inline-block;
+        }
+
+    }
+}
+.custom-control-image_select .customify-radio-list{
+    display: flex;
+    flex-wrap: wrap;
+     > p {
+         label {
+             position: relative;
+         }
+         .label {
+             display: inline-block;
+             margin-top: 3px;
+             position: relative;
+         }
+         flex-basis: 33.333%;
+         .bubble {
+            position: absolute;
+             top: 0px;
+             right: 0px;
+             padding: 6px 3px;
+             border: 1px solid #ca4a1f;
+             background: #fff;
+             font-size: 9px;
+             line-height: 12px;
+             text-transform: uppercase;
+             border-radius: 20px;
+             transform: translate(9px, -6px);
+         }
+         &.input-disabled {
+             img {
+                 opacity: 0.5;
+             }
+         }
+     }
+}
+
+/**
+ Radio Group
+ */
+.custom-control-radio_group {
+    .customify-radio-list {
+        display: flex;
+        p {
+            flex: 1;
+            &:last-child {
+                span.label {
+                    border-right: 1px solid #ccc;
+                    border-top-right-radius: 3px;
+                    border-bottom-right-radius: 3px;
+                    @include rtl(){
+                        border-right: 0px none;
+                        border-left: 1px solid #ccc;
+                        border-top-right-radius: 0px;
+                        border-bottom-right-radius: 0px;
+                        border-top-left-radius: 3px;
+                        border-bottom-left-radius: 3px;
+                    }
+                }
+            }
+            &:first-child {
+                span.label {
+                    border-top-left-radius: 3px;
+                    border-bottom-left-radius: 3px;
+                    @include rtl(){
+                        border-right: 1px solid #ccc;
+                        border-top-left-radius: 0px;
+                        border-bottom-left-radius: 0px;
+                        border-top-right-radius: 3px;
+                        border-bottom-right-radius: 3px;
+                    }
+                }
+            }
+        }
+        label {
+            width: 100%;
+            display: block;
+            text-align: center;
+        }
+        span.label {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 5px;
+            width: 100%;
+            border-right: none;
+        }
+        input:checked + span.label {
+            border-color: var(--wp-admin-theme-color, #0085ba);
+            background: var(--wp-admin-theme-color, #0085ba);
+            color: #fff;
+        }
+    }
+}
+
+/**
+ Image Select
+ */
+.custom-control-image_select {
+    .customify-radio-list {
+        img {
+            line-height: 0px;
+            display: block;
+        }
+        span.label {
+            display: inline-block;
+            padding: 4px;
+            max-width: 80px;
+            border-radius: 5px;
+            span {
+                display: inline-block;
+                margin-top: 3px;
+            }
+        }
+        input:checked + span.label {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+            background: #FFF;
+        }
+    }
+}
+
+/*Background field*/
+.customize-control {
+    &.customify-background-control--- {
+        .customify-group-device-fields {
+            position: relative;
+            &::after {
+                clear: both; content: ""; display: block;
+            }
+        }
+
+        .customify--settings-fields {
+            position: relative;
+            min-height: 160px;
+            display: block;
+            margin-top: 7px;
+            &::after {
+                clear: both; content: ""; display: block;
+            }
+            .customify--field {
+                select {
+                    width: 135px;
+                }
+
+                &.customify--field-name-color{
+                    .wp-picker-container {
+                        position: relative;
+                        z-index: 35;
+                    }
+
+                    .wp-picker-holder {
+                        position: absolute;
+                        right: 0px;
+                        z-index: 10;
+                    }
+
+
+                }
+
+                &.customify--field-name-image {
+                    width: 115px;
+                    display: block;
+                    position: absolute;
+                    top: 35px;
+                    left: 0px;
+                    .customify-field-header{
+                        display: none;
+                    }
+                    .button {
+                        overflow: hidden;
+                        width: 35px;
+                        vertical-align: middle;
+                        &:before {
+                            font-family: dashicons;
+                            margin-right: 35px;
+                            display: inline-block;
+                        }
+                        &.customify--change, &.customify--add {
+                            &:before {
+                                content: "\f317";
+                            }
+                        }
+                        &.customify--remove {
+                            &:before {
+                                content: "\f335";
+                            }
+                        }
+                    }
+                    .customify-image-preview {
+                        margin: 0px 0px 10px;
+                        &:before {
+                            padding: 35px 20px;
+                        }
+                    }
+                    .customify-field-header {
+                        display: none;
+                    }
+                    img {
+                        width: 115px;
+                        height: 115px;
+                        display: block;
+                        object-fit: cover;
+                    }
+                }
+
+                &.customify--field-name-position {
+                    .customify-field-header{ display: none; }
+                    position: absolute;
+                    top: 60px;
+                    right: 0px;
+                }
+
+                &.customify--field-name-repeat {
+                    .customify-field-header { display: none; }
+                    position: absolute;
+                    top: 100px;
+                    right: 0px;
+                }
+
+                &.customify--field-name-cover {
+                   clear: both;
+                    position: absolute;
+                    top: 140px;
+                    right: 0px;
+                }
+
+                &.customify--field-name-attachment {
+                    .customify-field-header { display: none; }
+                    clear: both;
+                    position: absolute;
+                    top: 170px;
+                    right: 0px;
+                }
+
+            }
+
+        }
+        .customify-group-device-fields {
+
+        }
+    }
+}
+
+
+// Modal Style
+.customify--settings-wrapper {
+    position: relative;
+    display: block;
+    .customify-actions {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        @include rtl(){
+            right: auto; left: 0px;
+        }
+        vertical-align: middle;
+        margin-top: 5px;
+        a {
+            text-decoration: none;
+            display: inline-block;
+        }
+        .action--reset {
+            font-size: 12px;
+            margin-right: 10px;
+            display: none;
+            span {
+                font-size: inherit;
+                width: auto;
+                height: auto;
+                vertical-align: middle;
+                margin-top: 0px;
+                &:before {
+                    font-size: 12px;
+                    width: auto;
+                    height: auto;
+                }
+            }
+        }
+        .action--edit {
+            background: #FFFFFF;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            padding: 5px;
+
+            .modal--opening & {
+                span {
+                    &:before {
+                        content: "\f335";
+                    }
+                }
+            }
+        }
+    }
+
+	&:not(.show-short-desc) {
+		.customify--field-typography,
+		.customify--field-styling {
+			.customify-actions {
+				margin-top: -3.5px;
+			}
+		}
+	}
+}
+
+.modal--tabs {
+    display: flex;
+    margin-left: -12px;
+    margin-right: -12px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 15px;
+    div {
+
+        flex-basis: 100%;
+        max-width: 100%;
+        text-align: center;
+        padding: 5px 5px 0px;
+        &:first-child {
+            padding-left: 10px;
+        }
+        &:last-child {
+            padding-right: 10px;
+        }
+    }
+    span {
+        display: block;
+        border: 1px solid #dddddd;
+        padding: 5px;
+        cursor: pointer;
+        margin-bottom: -1px;
+        font-weight: 600;
+        &.tab--active {
+            background: #ffffff;
+            border-bottom-color: #fff;
+        }
+    }
+}
+.modal-tab-content {
+    display: none;
+    &.tab--active {
+        display: block;
+    }
+}
+#customize-theme-controls .customize-pane-child.accordion-section-content {
+    min-height: 100%;
+    display: block;
+}
+.customize-control-customify-typography {
+    .customize-control-description {
+        margin-bottom: 0px;
+    }
+    .ft--checkboxes[data-field-name="languages"] {
+        margin-bottom: 0px;
+    }
+    .list-subsets {
+        p {
+            margin-top: 0px;
+            width: 50%;
+            float: left;
+        }
+        @include clearfix();
+    }
+    .customify--group-field {
+        @include clearfix();
+        .customify-field-header {
+            width: 50%;
+            float: left;
+        }
+        .customify-field-settings-inner {
+            width: 50%;
+            float: right;
+        }
+        &.customify--multiple-devices {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
+
+        .customify--field-slider, .customify--field-name-languages  {
+            .customify-field-header, .customify-field-settings-inner {
+                width: auto;
+                float: none;
+            }
+        }
+    }
+}
+
+.customify-field-settings-inner {
+    position: relative;
+}
+.customify-modal--inside {
+    position: relative;
+    .description {
+        margin-bottom: 0px;
+    }
+}
+.customize-control-customify-styling, .customize-control-customify-typography, .customize-control-customify-modal {
+    .customify--settings-wrapper {
+        > .customize-control-description {
+            margin-bottom: 0px;
+        }
+    }
+    .customify--settings-wrapper {
+        min-height: 40px;
+        display: block;
+    }
+}
+.ft--heading {
+    clear: both;
+}
+.control--bg {
+    .customify-modal-settings {
+        .customify--field-heading{
+            h3.customify-field--heading {
+                background: #fff;
+            }
+        }
+    }
+}
+.customify-modal-settings {
+    box-shadow: 0 2px 15px rgba(0,0,0,.3);
+    background: #fff;
+    padding: 12px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    left: 0px;
+    right: 0px;
+    z-index: 9;
+    position: relative;
+    &:before {
+        content: '';
+        position: absolute;
+        top: -6px;
+        right: 5px;
+        @include rtl(){
+            right: auto;
+            left: 5px;
+        }
+        width: 15px;
+        height: 15px;
+        background: #fff;
+        transform: rotate(45deg);
+        border-radius: 3px;
+	}
+	&::after{
+		content: '';
+		display: table;
+		clear: both;
+	}
+    .wp-color-result-text {
+        line-height: 28px;
+    }
+    .customify--field-heading{
+        h3.customify-field--heading {
+            font-size: 11px;
+            margin: 10px -12px;
+            padding: 5px 12px 4px;
+            background: #eeeeee;
+        }
+    }
+
+    .customize-control-title {
+        font-weight: 600;
+        font-size: 13px;
+    }
+    .customify--group-field {
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+    .lb-left {
+        @include clearfix();
+        .customify-typography {
+            &--field-header {
+                width: 50%;
+                float: left;
+            }
+
+            &--field-settings {
+                float: right;
+                width: 50%;
+            }
+        }
+    }
+}
+
+/* Checkbox */
+.customify--field-checkbox {
+    .customify-field-settings-inner {
+        padding-right: 30px;
+        position: relative;
+        font-size: 14px;
+        line-height: 24px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        .onoffswitch {
+            float: right;
+            position: absolute;
+            top: 3px;
+            right: 0px;
+        }
+    }
+}
+
+.customize-control-customify-checkbox {
+    .has-title-desc {
+        .customify--settings-fields {
+            position: absolute;
+            top: -6px;
+            right: 0px;
+        }
+        .customify-control-field-header {
+            cursor: pointer;
+            margin-right: 30px;
+        }
+        .checkbox-field-text {
+            display: none !important;
+        }
+    }
+}
+
+.preview-desktop {
+    .customify--field-checkbox {
+        .customify--for-tablet,
+        .customify--for-mobile {
+            display: none;
+        }
+    }
+}
+
+.preview-tablet {
+    .customify--field-checkbox {
+        .customify--for-desktop,
+        .customify--for-mobile {
+            display: none;
+        }
+    }
+}
+
+.preview-mobile {
+    .customify--field-checkbox {
+        .customify--for-desktop,
+        .customify--for-tablet {
+            display: none;
+        }
+    }
+}
+
+
+/* OnOff Button */
+.onoffswitch {
+    position: relative; width: 25px;
+    display: inline-block;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none !important;
+}
+.onoffswitch-label {
+    display: block;
+    overflow: hidden;
+    cursor: pointer;
+    border: 0px none;
+    border-radius: 10px;
+    position: relative;
+    top: 3px;
+    transition: all 0.3s ease-in 0s;
+    opacity: 1;
+}
+.onoffswitch-inner {
+    display: block; width: 200%; margin-left: -100%;
+    transition: margin 0.3s ease-in 0s;
+}
+.onoffswitch-inner:before, .onoffswitch-inner:after {
+    display: block; float: left;
+    width: 50%; height: 15px; padding: 0;
+    box-sizing: border-box;
+}
+.onoffswitch-inner:before {
+    content: "";
+    padding-left: 10px;
+    background-color: var(--wp-admin-theme-color, #00aadc); color: #FFFFFF;
+}
+.onoffswitch-inner:after {
+    content: "";
+    padding-right: 10px;
+    background-color: #CCCCCC;
+    text-align: right;
+}
+.onoffswitch-switch {
+    display: block; width: 11px; margin: 0px 3px 0px 1px;
+    background: #FFFFFF;
+    position: absolute; top: 2px; bottom: 2px;
+    right: 8px;
+    border-radius: 10px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-inner {
+    margin-left: 0;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
+    right: 0px;
+}
+.onoffswitch-checkbox:disabled + .onoffswitch-label {
+    opacity: 0.4;
+    cursor: default;
+}
+
+
+
+/* Customify Pro section */
+#customize-controls #accordion-section-customify-pro {
+    border-top: 1px solid #ca4a1f;
+    border-bottom: 1px solid #ca4a1f;
+}
+#customize-controls #accordion-section-customify-pro h3 {
+    margin: 0;
+    position: relative;
+}
+#customize-controls #accordion-section-customify-pro h3 a {
+    padding: 10px 10px 11px 14px;
+    line-height: 20px;
+    display: block;
+    background: #ffffff;
+    color: #ca4a1f;
+    text-decoration: none;
+    position: relative;
+}
+#customize-controls #accordion-section-customify-pro h3 a:hover {
+    background: #f5f5f5;
+}
+#customize-controls #accordion-section-customify-pro h3 a:after {
+    content: "\f345";
+    position: absolute;
+    color: #ca4a1f;
+    top: 11px;
+    right: 10px;
+    z-index: 1;
+    float: right;
+    border: none;
+    background: none;
+    font: normal 20px/1 dashicons;
+    speak: none;
+    display: block;
+    padding: 0;
+    text-indent: 0;
+    text-align: center;
+}
+
+.customify-pro-teaser {
+    margin: 1em 0px;
+    position: relative;
+    padding: .75rem 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-radius: .25rem;
+    ul {
+        margin-bottom: 1em;
+    }
+    .button {
+        // Flex container so the trailing external-link icon sits inline
+        // with the text and spaced consistently regardless of label length.
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+    }
+    .customify-pro-teaser__external-icon {
+        flex-shrink: 0;
+        width: 16px;
+        height: 16px;
+    }
+}
+.customize-control {
+    &.customize-control-pro {
+        float: none;
+        padding-top: 1em;
+    }
+    .customify-pro-teaser {
+        margin-left: -12px;
+        margin-right: -12px;
+
+    }
+}
+
+// ============================================================
+// Compact color picker UI for the top-level "Colors" section.
+// Scoped to #sub-accordion-section-customify_colors so the rest
+// of the Customizer keeps the existing wp-color-picker layout.
+//
+// Actual DOM structure rendered by Customify color control:
+//   LI.customize-control.customize-control-customify-color
+//     DIV.customify--settings-wrapper
+//       DIV.customify-control-field-header     ← title <label>
+//       SPAN.customize-control-description     ← description
+//       DIV.customify--settings-fields
+//         DIV.customify--field
+//           DIV.customify-field-settings-inner
+//             DIV.customify-input-color
+//               (wpColorPicker turns this into .wp-picker-container)
+// ============================================================
+#sub-accordion-section-customify_colors {
+
+    // Override pickers in cascade mode (no override saved) paint their
+    // swatch with the resolved cascade value so the UI matches what the
+    // frontend renders. JS sets `--customify-cascade-display` and toggles
+    // the `.is-cascading` class; SCSS just overrides wp-color-picker's
+    // inline background on `.color-alpha` with the same value.
+    //   Setting underlying value stays unchanged — dragging the picker
+    //   writes a real override and flips out of cascade mode (JS handler
+    //   removes `.is-cascading`).
+    .customize-control-customify-color.is-cascading {
+        .wp-color-result .color-alpha {
+            background-color: var(--customify-cascade-display) !important;
+        }
+    }
+
+    // Legacy fine-tuning heading — collapsible. Wired by the
+    // setupLegacyCollapse() handler in colors-palette.php. The click
+    // target is JUST the .customize-control-title span (not the whole
+    // control LI) — that way the browser's default focus outline lands
+    // only on the gray title bar instead of painting a stuck rectangle
+    // around the entire heading row + description.
+    .customify-collapsible-heading {
+        // Extra space between the gray title bar and the italic
+        // description sitting just below it.
+        .description.customize-control-description {
+            margin-top: 10px;
+        }
+        .customify-collapsible-toggle {
+            display: block;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            padding-right: 22px;
+            outline: none;
+            // Subtle keyboard focus indicator on the title only.
+            &:focus-visible {
+                box-shadow: 0 0 0 2px #2271b1;
+                border-radius: 2px;
+            }
+            // Chevron: collapsed (right-pointing ▸) → open (down-pointing ▾).
+            // Two CSS tricks ensure the glyph stays vertically centered
+            // through the rotation:
+            //   1) Anchor the box at the row's center via `top: 50%` and
+            //      let `transform-origin: center center` (the default for
+            //      this width/height) handle the spin.
+            //   2) Use ONE `transform` declaration that composes both
+            //      `translateY(-50%)` (so the box is centered without any
+            //      magic margin offset) and the `rotate(...)`.
+            // Margin-top tricks earlier shifted the box DOWN when the user
+            // expanded the section because rotation changes the bounding
+            // box of the rotated arrow — switching to transform-only keeps
+            // the visual stable through the toggle.
+            &::after {
+                content: '';
+                position: absolute;
+                top: 62%;
+                right: 8px;
+                width: 8px;
+                height: 8px;
+                border-right: 2px solid currentColor;
+                border-bottom: 2px solid currentColor;
+                transform: translateY(-75%) rotate(-45deg);
+                transform-origin: center center;
+                opacity: 0.55;
+                transition: transform 160ms ease-out, opacity 160ms ease-out;
+            }
+            &:hover::after { opacity: 0.9; }
+        }
+        &.is-open .customify-collapsible-toggle::after {
+            transform: translateY(-91%) rotate(45deg);
+        }
+    }
+
+    // Hide the wp-color-picker text input — only the circular swatch
+    // button remains as the trigger. Hex can still be entered in the
+    // expanded Iris picker via our custom .customify-color-hex input.
+    //
+    // The wp-picker-default "Reset" button is repositioned as a tiny
+    // circular icon sitting LEFT of the swatch (only when the picker
+    // row gets the `is-dirty` class — i.e. value differs from default).
+    // Default state hides the reset icon entirely so the row stays clean.
+    .customify-input-color {
+        .wp-picker-input-wrap {
+            // The wrap is a sibling of the swatch trigger — we use
+            // `display:contents` so its children (text input + default
+            // button) lay out as if they were direct children of the
+            // settings row, then position the default button absolutely.
+            display: contents;
+            label,
+            input.wp-color-picker {
+                display: none !important;
+            }
+            input.wp-picker-default {
+                display: none !important;          // hidden by default; wp-color-picker.css default is inline-block
+                visibility: visible !important;    // wp-color-picker.css also sets visibility:hidden
+                position: absolute !important;     // wp-color-picker.css force-pins to inline flow
+                width: 16px !important;
+                height: 16px !important;           // wp-color-picker.css sets ~32px on input.button-small
+                min-height: 16px !important;
+                padding: 0 !important;
+                margin: -8px 0 0 !important;
+                right: 36px !important;            // 16px icon + 8px gap left of the 28px swatch
+                top: 50% !important;
+                font-size: 0 !important;           // hide "Default" text label
+                line-height: 0 !important;
+                color: transparent !important;
+                background-color: transparent !important;
+                border: 0 !important;
+                border-radius: 50% !important;
+                cursor: pointer !important;
+                z-index: 2;
+                // input doesn't render ::before/::after in most browsers, so
+                // the SVG icon goes on background-image directly.
+                background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23606060'><path d='M10.25 1.02c5.1 0 8.75 4.04 8.75 9s-3.65 9-8.75 9c-3.2 0-6.02-1.59-7.68-3.99l2.59-1.52c1.1 1.5 2.86 2.51 4.84 2.51 3.3 0 6-2.79 6-6s-2.7-6-6-6c-1.97 0-3.72 1-4.82 2.49L7 8.02l-6 2v-7L2.89 4.6c1.69-2.17 4.36-3.58 7.36-3.58z'/></svg>") !important;
+                background-repeat: no-repeat !important;
+                background-position: center !important;
+                background-size: 14px 14px !important;
+                box-shadow: none !important;
+                transition: opacity 120ms ease-out;
+                &:hover, &:focus {
+                    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231d2327'><path d='M8 3V1L4 4l4 3V5c2.2 0 4 1.8 4 4s-1.8 4-4 4-4-1.8-4-4H2c0 3.3 2.7 6 6 6s6-2.7 6-6-2.7-6-6-6z'/></svg>") !important;
+                    outline: 2px solid #2271b1 !important;
+                    outline-offset: 2px;
+                }
+            }
+        }
+        // Show the reset icon only when the picker value diverges from
+        // the field default. The `.is-dirty` class is toggled by the
+        // quickpick JS (colors-palette.php) on Iris value changes.
+        &.is-dirty .wp-picker-input-wrap input.wp-picker-default {
+            display: block !important;
+        }
+        // Picker container stays inline-block so the trigger swatch is
+        // compact. Its positioning context is the parent .customize-control
+        // row (which has position: relative) — so the popover below spans
+        // the row, not just the swatch.
+        .wp-picker-container {
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .wp-picker-container .wp-color-result.button {
+            // Outer button becomes a transparent placeholder — its bg-color
+            // (set inline by Iris) and default border/checker pattern would
+            // otherwise peek out around the inner .color-alpha as a visible
+            // "second box". The inner .color-alpha overlay below paints the
+            // actual swatch with our own border + shadow.
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            min-height: 28px;
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            border-radius: 50%;
+            cursor: pointer;
+            overflow: visible;
+
+            // The actual visible swatch. Iris's HTML places a SPAN.color-alpha
+            // inside the button that carries the saved color as its bg —
+            // we promote it to fill the whole 28x28 round shape and put the
+            // border + shadow on it instead of the outer button.
+            .color-alpha {
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                margin: 0 !important;
+                border-radius: 50% !important;
+                border: 1px solid rgba(0, 0, 0, 0.15);
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+            }
+            .wp-color-result-text {
+                display: none;
+            }
+            &:after {
+                display: none; // remove arrow indicator
+            }
+            &:focus {
+                outline: none;
+                .color-alpha {
+                    box-shadow: 0 0 0 2px #2271b1;
+                }
+            }
+        }
+
+        // Round the 8 standard WP swatches inside Iris too.
+        .wp-picker-container .iris-palette {
+            border-radius: 50% !important;
+        }
+
+        // ─── Popover wrapper for the Iris picker ─────────────────────
+        // The .wp-picker-holder is the dropdown container Iris injects.
+        // Hide it by default (Iris's own stylesheet may not load in our
+        // Customizer build) and only reveal when the parent picker is
+        // .wp-picker-active. When shown, render as a floating card
+        // anchored to BOTH edges of the row so the popover always fits
+        // inside the Customizer panel regardless of slot.
+        //
+        // Iris internals (.iris-square, .iris-strip, .iris-palette) keep
+        // their native layout — overriding them breaks Iris's drag math.
+        .wp-picker-container .wp-picker-holder {
+            display: none;
+            // Reset any leftover height jQuery's slideUp may have inlined.
+            height: auto !important;
+        }
+        .wp-picker-container.wp-picker-active .wp-picker-holder {
+            display: block !important; // beat Iris's inline display:none mid-slide
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 0;
+            right: 0;
+            width: auto;
+            padding: 18px;
+            background: #fff;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 6px;
+            box-shadow:
+                0 0 0 1px rgba(0, 0, 0, 0.04),
+                0 12px 28px rgba(0, 0, 0, 0.16);
+            z-index: 100;
+            // Snappy pop-in — replaces Iris's slow jQuery .slideToggle('fast').
+            will-change: opacity;
+            animation: customify-color-popover-in 0.08s ease-out;
+        }
+
+        // ─── Iris picker chrome cleanup inside the popover ───────────
+        // Iris doesn't use jQuery UI slider widget — its hue/alpha drag
+        // math reads inline `offsetTop` from each strip, so the strips
+        // must stay vertical (CSS-rotate would break the drag math).
+        // Keep Iris's native vertical strips to the right of the square,
+        // strip the outer chrome so the popover wrapper provides the card.
+        .wp-picker-container.wp-picker-active .iris-picker.iris-border {
+            background: transparent !important;
+            border: 0 !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            margin: 0 0 0 -10px !important;
+        }
+        .wp-picker-container.wp-picker-active .iris-palette-container {
+            display: none !important;
+        }
+        // Align the alpha (checker) strip with the hue strip — Iris's
+        // default CSS gives the alpha-slider a different top + height,
+        // so without this they end up visibly offset.
+        .wp-picker-container.wp-picker-active .iris-picker-inner .iris-strip {
+            top: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            height: 100% !important;
+        }
+    }
+
+    // Per-control compact layout via CSS grid:
+    // left column = title + description (stacked), right column = swatch.
+    .customize-control-customify-color {
+        padding: 6px 0;
+        // Become the positioning context for the popover so it spans the
+        // full row width (and stays inside the Customizer panel) instead
+        // of being anchored to the tiny inline-block swatch container.
+        position: relative;
+        .customify--settings-wrapper {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            column-gap: 12px;
+            align-items: center;
+        }
+        .customify-control-field-header {
+            grid-column: 1;
+            grid-row: 1;
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            border: 0;
+            label {
+                margin: 0;
+            }
+            .customize-control-title {
+                font-size: 13px;
+                font-weight: 500;
+                line-height: 1.3;
+                margin: 0;
+                text-transform: none;
+                letter-spacing: 0;
+            }
+        }
+        .customize-control-description,
+        > .customify--settings-wrapper > .description {
+            grid-column: 1;
+            grid-row: 2;
+            font-size: 11px;
+            margin: 2px 0 0;
+            color: #777;
+            line-height: 1.3;
+            font-style: normal;
+        }
+        .customify--settings-fields {
+            grid-column: 2;
+            grid-row: 1 / 3;
+            align-self: center;
+            margin: 0;
+        }
+        // Reserve right-side gutter for the reset icon when picker is dirty.
+        // The icon is position: absolute right: 36px on the LI (16px wide +
+        // 8px gap + 28px swatch = 52px clear of the right edge) — that 16px
+        // icon body extends 12px into the description column (1fr) and
+        // overlaps wrapped text. Padding both title + description shifts
+        // their right edge inside the icon's track. Only applied when the
+        // picker actually has the icon visible (.is-dirty) so non-dirty
+        // pickers keep the full column-1 width.
+        &:has(.customify-input-color.is-dirty) {
+            .customize-control-title,
+            .customize-control-description,
+            > .customify--settings-wrapper > .description {
+                padding-right: 24px;
+            }
+        }
+        .customify--field,
+        .customify-field-settings-inner {
+            margin: 0;
+            padding: 0;
+        }
+        // CRITICAL: Customify globally sets .customify-field-settings-inner
+        // to position: relative — that gives the inline-block (28px wide)
+        // swatch container as the popover's positioning ancestor, so
+        // `left/right: 0` collapses to a 28px hairline. Override it to
+        // static here so the popover anchors to the row's wrapper
+        // (.customify--settings-wrapper, 283px wide).
+        .customify-field-settings-inner {
+            position: static;
+        }
+    }
+
+    // Heading dividers — slightly tighter so the compact layout breathes.
+    .customify-control--heading {
+        margin: 14px -12px 6px;
+        padding: 6px 12px;
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // Popover add-on rows injected at bottom of wp-color-picker holder
+    // by JS (see customify_color_palette_quickpick_js in PHP):
+    //   - .customify-color-quickpick: "From palette" row for component overrides
+    //   - .customify-color-hexrow:    hex text input for palette slots
+    // ──────────────────────────────────────────────────────────
+    .customify-color-quickpick {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 0;
+        margin-top: 12px;
+        border: 0;
+    }
+    .customify-color-hexrow {
+        display: block;
+        padding: 0;
+        margin-top: 10px;
+        border: 0;
+    }
+    .customify-color-tokenrow {
+        display: block;
+        padding: 0;
+        margin-top: 10px;
+        border: 0;
+    }
+    .customify-color-hex,
+    .customify-color-token {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 12px;
+        padding: 6px 9px;
+        border: 1px solid #ccc;
+        border-radius: 3px;
+        background: #fff;
+        color: #222;
+        outline: none;
+        transition: border-color 0.15s;
+        &:focus {
+            border-color: #2271b1;
+            box-shadow: 0 0 0 1px #2271b1;
+        }
+    }
+    .customify-color-token {
+        color: #666;
+        cursor: text;
+        user-select: all;
+    }
+    .customify-color-quickpick__label {
+        flex: 1 1 100%;
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #888;
+        margin: 0 0 4px;
+    }
+    .customify-color-quickpick__swatch {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        cursor: pointer;
+        padding: 0;
+        background: transparent;
+        position: relative;
+        transition: transform 0.1s;
+        &:hover {
+            transform: scale(1.1);
+        }
+        // Tooltip showing slot name on hover. Uses ::before so ::after is
+        // free for the .is-active ring below. data-label is set by the
+        // quickpick JS (colors-palette.php) to s.label (Primary, Secondary,
+        // etc.). White-space: nowrap keeps the label one line; pointer-
+        // events: none prevents the tooltip from intercepting the hover
+        // and triggering a flicker.
+        &:hover::before {
+            content: attr(data-label);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 3px 8px;
+            background: #1d2327;
+            color: #fff;
+            font-size: 11px;
+            line-height: 1.4;
+            font-weight: 500;
+            border-radius: 3px;
+            white-space: nowrap;
+            pointer-events: none;
+            z-index: 10;
+        }
+        &.is-active::after {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border: 2px solid #2271b1;
+            border-radius: 50%;
+        }
+    }
+}
+
+// The wp-color-picker popup container also lives outside the section li in
+// some cases; the .customify-color-quickpick element is always inside the
+// container so we scope from there too as a fallback.
+.wp-picker-container .customify-color-quickpick {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 10px 6px 6px;
+    border-top: 1px solid #ddd;
+    margin-top: 8px;
+}
+
+
+// Animation for the Colors section color-picker popover.
+// Opacity-only keyframe — no transform — for snappy GPU-cheap fade-in.
+@keyframes customify-color-popover-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}

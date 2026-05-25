@@ -1,0 +1,603 @@
+.single-post .content-inner {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.entry-content > * {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+// Default blocks are constrained to --wp--style--global--content-size, which is set by
+// theme.json on body and overridden per layout via customify_layout_content_size_css()
+// (inc/template-functions.php). Skip when `.site-content.content-full-stretched` is
+// the context — stretched mode disables content-width constraints so blocks expand
+// to fit the container.
+.site-content:not(.content-full-stretched)
+	.entry-content
+	> *:not(.alignwide):not(.alignfull) {
+	max-width: var(--wp--style--global--content-size, 863px);
+}
+.entry-content {
+	.alignleft {
+		margin-right: 1.41575em;
+	}
+}
+
+// alignwide / alignfull — modern margin-based approach (no transform hack).
+// Works for all layouts. Uses CSS vars from theme.json when available.
+.entry-content > .alignwide {
+	max-width: var(--wp--style--global--wide-size, 1200px);
+	width: 100%;
+	box-sizing: border-box;
+	// margin-left/right: auto is already inherited from `.entry-content > *` above.
+}
+
+.entry-content > .alignfull {
+	// Expand to full viewport width from a centered content area.
+	width: 100vw;
+	max-width: 100vw;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
+	margin-left: calc(50% - 50vw) !important;
+	margin-right: calc(50% - 50vw) !important;
+	box-sizing: border-box;
+}
+
+// Right sidebar(s)
+.main-layout-content-sidebar,
+.main-layout-content-sidebar-sidebar {
+	&.single-post .content-inner {
+		margin-left: 0px;
+	}
+}
+
+// Left sidebar(s)
+.main-layout-sidebar-content,
+.main-layout-sidebar-sidebar-content {
+	&.single-post .content-inner {
+		margin-right: 0px;
+	}
+}
+
+.entry-content ul:not(:is(ul, ol) ul),
+.entry-content ol:not(:is(ul, ol) ol) {
+	margin: 1.5em auto;
+	list-style-position: outside;
+}
+
+// Top-level block divs (wp-block-columns, group, buttons, cover, gallery,
+// media-text, etc.) lack default vertical rhythm — give them the same
+// bottom spacing that p/heading/list elements carry naturally.
+// Scoped to `.entry-content` so the rule is frontend-only; the editor canvas
+// uses .editor-styles-wrapper / .is-root-container scope instead.
+.entry-content > div[class*="wp-block-"] {
+	margin-bottom: 1.41575em;
+}
+
+// Auto-wire WCAG-safe foreground for blocks using brand-color backgrounds.
+//
+// When a designer in Blocksify / WP block editor picks a brand bg
+// (Primary / Secondary / Accent) from the picker and DOES NOT pick a
+// text color manually, the block would inherit body text color (which
+// is the saved Text slot — could be dark on dark primary = invisible).
+//
+// These rules set `color: var(--customify-on-X)` so text auto-flips
+// to a WCAG-readable value based on the brand's luminance. The on-*
+// tokens are computed via the spec §3 max-contrast picker and emitted
+// to :root on palette opt-in.
+//
+// Designer's explicit text-color pick still wins — WP generates
+// `.has-{slug}-color { color: var(...) !important }` which beats this
+// rule via both specificity (more classes) and `!important`. So this
+// is purely a DEFAULT, not a lock.
+//
+// `inherit` fallback for the var() chain: when on-X is unset (fresh
+// install, palette not opted in), text inherits from parent (body
+// cascade) — byte-identical to the pre-PR behavior for 30K legacy
+// sites. Once user opts into Palette panel, on-X is emitted and
+// auto-flip kicks in live.
+//
+// Heading rules at global scope (`h1-h6 { color: var(--customify-heading) }`)
+// have lower specificity than `.has-X-bg h1` so the descendant rules
+// here win automatically.
+// ──────────────────────────────────────────────────────────────────
+// Legacy palette-slug back-compat shims (Phase 2.13).
+//
+// The Phase 2.11 theme.json filter intentionally omits 6 legacy slugs
+// (text / link / heading / background / light-gray / dark-gray) from
+// the editor picker — they bloated the UX and didn't represent
+// design-purposeful choices. But 30K sites have block markup with
+// `class="has-{legacy-slug}-color"` (saved when those slugs WERE in
+// the static theme.json palette). Without the slug in palette, WP no
+// longer generates `.has-{slug}-color { color: var(...) !important }`
+// rules → legacy block markup loses its color.
+//
+// These shim rules restore the rendering — DELIBERATELY WITHOUT
+// `!important`. The specificity table (assuming all single-class
+// selectors == 0,1,0):
+//
+//   Designer flow              | What wins
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `primary` slug:      | WP `.has-primary-color !important`
+//   block has has-primary-color| beats our shim (no !important)
+//   has-text-color (marker)    | → primary color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Picks `text` slug pre-PR:  | Only our shim matches the saved
+//   block has has-text-color   | `has-text-color` class →
+//   only                        | text-slot color renders ✓
+//   ───────────────────────────┼─────────────────────────────────────
+//   Inline custom hex:         | Inline specificity (1,0,0,0) beats
+//   style="color:#fff"         | our shim (0,1,0) → white renders ✓
+//   has-text-color (marker)    |
+//
+// The shim is a strict UX + back-compat improvement over the
+// "drop legacy entirely" approach. No marker-class collision because
+// we never add `!important`.
+.has-text-color    { color: var(--customify-text); }
+.has-link-color    { color: var(--customify-link); }
+.has-heading-color { color: var(--customify-heading); }
+.has-background-color { background-color: var(--customify-base); }
+.has-light-gray-color { color: #f2f2f2; }
+.has-dark-gray-color  { color: #444444; }
+
+// Background variants of the legacy slugs.
+.has-text-background-color    { background-color: var(--customify-text); }
+.has-link-background-color    { background-color: var(--customify-link); }
+.has-heading-background-color { background-color: var(--customify-heading); }
+.has-background-background-color { background-color: var(--customify-base); }
+.has-light-gray-background-color { background-color: #f2f2f2; }
+.has-dark-gray-background-color  { background-color: #444444; }
+
+// Border variants of the legacy slugs.
+.has-text-border-color    { border-color: var(--customify-text); }
+.has-link-border-color    { border-color: var(--customify-link); }
+.has-heading-border-color { border-color: var(--customify-heading); }
+.has-background-border-color { border-color: var(--customify-base); }
+.has-light-gray-border-color { border-color: #f2f2f2; }
+.has-dark-gray-border-color  { border-color: #444444; }
+
+// Descendant list intentionally includes both headings (h1-h6) AND text
+// elements (p, li, blockquote, figcaption, cite). Two reasons:
+//
+// 1. Global heading rules (`h1-h6 { color: var(--customify-heading) }`) at
+//    body scope would otherwise win specificity against the bare class
+//    selector — without the descendant rule, headings inside a primary
+//    bg block render at heading-slot color (often unreadable on saturated
+//    brand bg).
+//
+// 2. Legacy shim rules (`.has-text-color { color: var(--customify-text) }`)
+//    apply DIRECTLY to paragraphs / list items / quotes that have the
+//    has-text-color marker class. Specificity tie at (0,1,0) means the
+//    direct rule wins via source order over the inherited group rule.
+//    Including text elements in the descendant rule bumps specificity
+//    to (0,1,1) — beats the shim's (0,1,0) reliably.
+//
+// Designer's explicit slug pick still wins via WP's
+// `.has-{slug}-color { color: var(...) !important }` rule (specificity
+// (0,1,0) but !important beats no-!important regardless).
+.has-primary-background-color,
+.has-primary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-primary, inherit);
+}
+.has-secondary-background-color,
+.has-secondary-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-secondary, inherit);
+}
+.has-accent-background-color,
+.has-accent-background-color :is(h1, h2, h3, h4, h5, h6, p, li, blockquote, figcaption, cite) {
+	color: var(--customify-on-accent, inherit);
+}
+
+.wp-block-video video {
+	max-width: 100%;
+}
+
+.wp-block-image img {
+	display: block;
+}
+
+.wp-block-image.alignleft,
+.wp-block-image.alignright {
+	width: 100%;
+}
+.alignleft,
+.wp-block-pullquote.alignleft {
+	text-align: left;
+}
+.alignright,
+.wp-block-pullquote.alignright {
+	text-align: right;
+}
+.wp-block-image.alignfull img {
+	width: 100vw;
+	width: calc(var(--vw, 1vw) * 100);
+}
+
+.wp-block-gallery:not(.components-placeholder) {
+	margin: 1.5em auto;
+}
+
+.wp-block-cover-text p {
+	padding: 1.5em 14px;
+}
+
+ul.wp-block-latest-posts.alignwide,
+ul.wp-block-latest-posts.alignfull,
+ul.wp-block-latest-posts.is-grid.alignwide,
+ul.wp-block-latest-posts.is-grid.alignwide {
+	padding: 0 14px;
+}
+
+.wp-block-table {
+	display: block;
+	overflow-x: auto;
+}
+
+.wp-block-table table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.wp-block-table td,
+.wp-block-table th {
+	padding: 0.5em;
+	// WP / bundled SCSS leave `border: 1px solid` with no color, so the
+	// browser falls back to `currentcolor` — which on dark Palette bases
+	// is the white text color, producing bright white grid lines.
+	// Explicit border-color via the $color_border token gives the
+	// adaptive currentcolor-tint border (10%) we use elsewhere.
+	border-color: $color_border;
+}
+// WP core block-library also adds `border-bottom: 3px solid` on
+// `.wp-block-table thead` and `border-top: 3px solid` on `tfoot` with
+// no color — same currentcolor-fallback problem produces a bright
+// 3px white bar between header/footer and body on dark bases. Set
+// border-color so those separators use the adaptive token.
+.wp-block-table thead,
+.wp-block-table tfoot {
+	border-color: $color_border;
+}
+
+// WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
+// #f9f9f9 light greys AND force dark `#40464d` text via a `:where()`
+// reset (selector specificity 0). On dark Palette bases the greys wash
+// out into the canvas and the dark text becomes unreadable. Override:
+//   1. `color: $color_text` on `.wp-block-table table` cascades through
+//      the body-text token so cells inherit the theme palette text
+//      color and beat WP's 0-specificity `:where()` reset.
+//   2. Surface adaptive tints on cells/headers stay readable on any
+//      background — saved Palette Surface wins, unsaved → currentcolor
+//      mix.
+.wp-block-table table {
+	color: $color_text;
+}
+.wp-block-table thead th {
+	background-color: $surface_strong;
+}
+.wp-block-table tbody td {
+	background-color: $surface_subtle;
+}
+.wp-block-table tbody tr:nth-child(2n) td {
+	background-color: $surface_medium;
+}
+.wp-block-table tfoot td {
+	background-color: $surface_strong;
+}
+
+// Code / preformatted / verse blocks — same WP-default-gray problem as
+// tables. Use medium tint so the block stands out from prose without
+// dominating it.
+.wp-block-code,
+.wp-block-preformatted,
+.wp-block-verse {
+	background-color: $surface_medium;
+}
+
+.entry-content li:not(.wp-block-navigation li) {
+	margin-left: 2.5em;
+	margin-bottom: 6px;
+}
+
+.entry-content ul ul:not(.wp-block-navigation ul),
+.entry-content ol ol,
+.entry-content ul ol,
+.entry-content ol ul:not(.wp-block-navigation ul) {
+	margin-bottom: 0px;
+	margin-top: 0px;
+	margin-left: 2.5em;
+}
+
+.entry-content ul ul li,
+.entry-content ol ol li,
+.entry-content ul ol li,
+.entry-content ol ul li {
+	margin-left: 0;
+}
+
+.wp-block-embed.is-type-video {
+	> .wp-block-embed__wrapper {
+		position: relative;
+		width: 100%;
+		height: 0;
+		padding-top: 56.25%;
+		iframe,
+		> object {
+			position: absolute;
+			width: 100%;
+			height: 100%;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+		}
+	}
+}
+
+.wp-block-quote {
+	&.is-style-large {
+		cite {
+			font-size: 13px;
+		}
+		padding: 0px;
+	}
+	padding: 0px ms(1);
+	margin: ms(1) ms(2);
+	border-width: 0;
+	border-left: 3px solid $color_border;
+	font-style: italic;
+	font-weight: 200;
+	font-size: 1.2em;
+	p:last-of-type {
+			margin-bottom: 0px;
+	}
+	> * {
+		margin-left: 16px;
+		margin-right: 16px;
+	}
+	cite {
+		font-style: normal;
+		margin-top: 1em;
+		position: relative;
+		font-size: 13px;
+	}
+}
+
+.wp-block-pullquote {
+	// `currentColor` here produces a bright 4px white bar above/below
+	// the pullquote on dark Palette bases. Use $color_border so it
+	// adapts via the currentcolor-mix token (10%) — visible enough to
+	// frame the quote without dominating the canvas.
+	border-bottom: 4px solid $color_border;
+	border-top: 4px solid $color_border;
+	padding: 3em 0;
+	text-align: center;
+	> p:first-child {
+		margin-top: 0;
+	}
+	cite {
+		font-size: 13px;
+		font-style: normal;
+		text-transform: uppercase;
+	}
+	blockquote {
+		border-left: 0px;
+	}
+}
+
+.wp-block-separator {
+	margin: 3em auto;
+	border: none;
+	// `currentColor` made the separator a bright 2px white line on dark
+	// Palette bases. Use $color_border for the adaptive currentcolor-tint
+	// (10%) — still visible as a divider but doesn't dominate the canvas.
+	border-bottom: 2px solid $color_border;
+	&:not(.is-style-wide) {
+		max-width: 100px;
+	}
+	&.is-style-dots {
+		border-bottom: none !important;
+		text-align: center;
+		&::before {
+			padding-left: 0px;
+			font-size: 30px;
+		}
+	}
+}
+
+@media screen and (min-width: 768px) {
+	.wp-block-cover-text p {
+		padding: 1.5em 0;
+	}
+}
+
+/*--------------------------------------------------------------
+  # Custom Block Styles (registered via register_block_style)
+  --------------------------------------------------------------*/
+
+// Button: Ghost
+.wp-block-button.is-style-ghost .wp-block-button__link {
+	background: transparent;
+	border: 2px solid currentColor;
+	color: inherit;
+	&:hover {
+		background: currentColor;
+	}
+}
+
+// Image: Rounded corners
+.wp-block-image.is-style-rounded img {
+	border-radius: 12px;
+}
+
+// Image: Shadow
+.wp-block-image.is-style-shadow img {
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+// Image: lightbox fallback.
+// Why: WP core's per-block stylesheet (wp-includes/blocks/image/style.css)
+// is loaded lazily on render_block and may be missing in Customizer preview
+// or selective-refresh contexts — leaving the trigger button visible inline
+// and the overlay markup as a visible block below the footer. Mirroring the
+// rules here is a no-op when the core stylesheet is present and a safety
+// net when it is not.
+.wp-lightbox-container {
+	display: flex;
+	flex-direction: column;
+	position: relative;
+
+	img {
+		cursor: zoom-in;
+	}
+
+	img:hover + button {
+		opacity: 1;
+	}
+
+	button {
+		align-items: center;
+		backdrop-filter: blur(16px) saturate(180%);
+		background-color: #5a5a5a40;
+		border: none;
+		border-radius: 4px;
+		cursor: zoom-in;
+		display: flex;
+		height: 20px;
+		justify-content: center;
+		opacity: 0;
+		padding: 0;
+		position: absolute;
+		right: 16px;
+		text-align: center;
+		top: 16px;
+		width: 20px;
+		min-width: 35px;
+		min-height: 35px;
+		padding: 0;
+		z-index: 100;
+
+		&:hover,
+		&:focus {
+			opacity: 1;
+		}
+	}
+}
+
+.wp-lightbox-overlay {
+	box-sizing: border-box;
+	cursor: zoom-out;
+	height: 100vh;
+	left: 0;
+	overflow: hidden;
+	position: fixed;
+	top: 0;
+	visibility: hidden;
+	width: 100%;
+	z-index: 100000;
+}
+.wp-lightbox-overlay.active {
+	visibility: visible;
+}
+
+// Quote: Accent border
+// `#235787` was the literal primary hex. `$color_primary` resolves through
+// `var(--customify-primary, #235787)` — 30K-safe (existing sites with no
+// saved primary still render the same #235787) AND saved-primary-aware
+// (user palette primary takes over when set).
+.wp-block-quote.is-style-accent {
+	border-left: 4px solid $color_primary;
+	padding-left: 1.5em;
+	font-style: normal;
+}
+
+// Separator: Thick
+.wp-block-separator.is-style-thick {
+	border-bottom-width: 4px;
+}
+
+// Group: Card
+// `#fff` background and `#e0e0e0` border were the hard-coded card chrome
+// that made cards invisible on dark Palette bases (white card + thin gray
+// border on a dark canvas reads as a near-blank rectangle, hiding the
+// card's content). Wire to the Surface + Border tokens with the original
+// literals as the var() fallback so:
+//   • Existing 30K sites (no Surface saved): card stays `#fff` / `#e0e0e0`
+//     — byte-identical to the previous render.
+//   • Sites with saved Palette Surface: card adopts the user's surface
+//     color, so a dark Base + dark Surface palette gets a properly
+//     visible elevated card instead of a stark white panel.
+// The box-shadow stays as-is — subtle drop shadow reads correctly on
+// both light and dark surfaces.
+//
+// `color: var(--customify-on-surface, inherit)` solves the white-on-white
+// case: when the user saves Palette opt-in (Base + Text) but NOT Surface,
+// the card bg falls back to `#fff` but the Text token cascade resolves to
+// the saved (potentially white) text color — producing invisible text.
+// `--customify-on-surface` is set by the WCAG luminance picker on the
+// :root tokens block (inc/colors-palette.php) and flips dark↔light based
+// on the surface color, so:
+//   • No Palette opt-in: `--customify-on-surface` is unset → inherits
+//     body text color (legacy render, byte-identical).
+//   • Palette opt-in, no Surface saved: Surface defaults to `#FFFFFF`
+//     → picker computes on-surface = `#1A1A1A` (dark text on the white
+//     card fallback) — readable.
+//   • Palette opt-in + Surface=dark: picker computes on-surface = `#FFF`
+//     → light text on the dark card — readable.
+.wp-block-group.is-style-card {
+	background: var(--customify-surface, #fff);
+	color: var(--customify-on-surface, inherit);
+	border: 1px solid var(--customify-border, #e0e0e0);
+	border-radius: 8px;
+	padding: 2em;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+
+	// Headings inside the card have their own `color: var(--customify-heading)`
+	// rule at global scope, which bypasses the parent `.is-style-card` color
+	// override. Explicit `h1-h6 { color: ... }` here wins because it's a
+	// deeper selector path and matches the global heading rule's specificity.
+	// Same on-surface picker → readable text on any saved surface.
+	h1, h2, h3, h4, h5, h6 {
+		color: var(--customify-on-surface, inherit);
+	}
+}
+
+// Columns: No gap
+.wp-block-columns.is-style-no-gap {
+	gap: 0;
+}
+
+/*--------------------------------------------------------------
+  # Block Color Palette Colors
+  --------------------------------------------------------------*/
+.has-strong-blue-color {
+	color: #0073aa;
+}
+
+.has-strong-blue-background-color {
+	background-color: #0073aa;
+}
+
+.has-lighter-blue-color {
+	color: #229fd8;
+}
+
+.has-lighter-blue-background-color {
+	background-color: #229fd8;
+}
+
+.has-very-light-gray-color {
+	color: #eee;
+}
+
+.has-very-light-gray-background-color {
+	background-color: #eee;
+}
+
+.has-very-dark-gray-color {
+	color: #444;
+}
+
+.has-very-dark-gray-background-color {
+	background-color: #444;
+}

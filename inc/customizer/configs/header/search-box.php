@@ -47,10 +47,10 @@ class Customify_Builder_Item_Search_Box {
 
 		$config   = array(
 			array(
-				'name'  => $this->section,
-				'type'  => 'section',
-				'panel' => 'header_settings',
-				'title' => $this->label,
+				'name'            => $this->section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'title'           => $this->label,
 			),
 
 			array(
@@ -201,10 +201,32 @@ class Customify_Builder_Item_Search_Box {
 				'css_format'  => 'styling',
 				'title'       => __( 'Icon Styling', 'customify' ),
 				'description' => __( 'Search input styling', 'customify' ),
+				// Three fixes packed into these selectors — all of them prevent
+				// Icon Styling values from taking effect on the search submit
+				// button:
+				//
+				// 1) `body` prefix lifts specificity from (0,3,1) to (0,3,2),
+				//    tying with the generic primary-button rule in
+				//    base/_base.scss (`body:not(.fl-builder-edit) :is(...)`).
+				//    At equal specificity, cascade order decides; Customify
+				//    inline styles are emitted after the base stylesheet, so
+				//    Icon Styling wins (background-color, border, etc.).
+				//
+				// 2) `hover` selector must include `:hover`. Previously it
+				//    duplicated the `normal` selector, so any hover values
+				//    were re-emitted at equal specificity later in the same
+				//    inline <style> block and overrode the normal state on
+				//    every render.
+				//
+				// 3) `normal_text_color` must target BOTH light and dark mode.
+				//    The previous version listed only `.dark-mode`, which
+				//    meant changing the Icon Styling text color did nothing
+				//    on light-mode sites — the base `color: $color_meta` from
+				//    _search.scss kept winning.
 				'selector'    => array(
-					'normal' => "{$selector} .header-search-form button.search-submit",
-					'hover'  => "{$selector} .header-search-form button.search-submit",
-					'normal_text_color' => ".dark-mode {$selector} .header-search-form button.search-submit",
+					'normal' => "body {$selector} .header-search-form button.search-submit",
+					'hover'  => "body {$selector} .header-search-form button.search-submit:hover",
+					'normal_text_color' => "body {$selector} .header-search-form button.search-submit, body .dark-mode {$selector} .header-search-form button.search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
@@ -250,7 +272,7 @@ class Customify_Builder_Item_Search_Box {
 
 		echo '<div class="header-' . esc_attr( $this->id ) . '-item item--' . esc_attr( $this->id ) . '">';
 		?>
-		<form role="search" class="header-search-form <?php echo esc_attr( implode( ' ', $form_extra_class ) ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<form class="header-search-form <?php echo esc_attr( implode( ' ', $form_extra_class ) ); ?>" action="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<div class="search-form-fields">
 				<span class="screen-reader-text"><?php echo _x( 'Search for:', 'label', 'customify' ); ?></span>
 				<?php

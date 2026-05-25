@@ -1,0 +1,95 @@
+@import '../utils/vars';
+@import "../utils/mixins";
+@import 'wc/woocommerce-mixins';
+@import 'wc/woocommerce-vars';
+@import 'wc/woocommerce-animation';
+@import 'wc/woocommerce-fonts';
+@import "wc/woocommerce-layout";
+@import "wc/woocommerce-main";
+@import "wc/wc-loop";
+@import "wc/wc-widgets";
+@import "wc/wc-cart";
+@import "wc/wc-single-product";
+@import "wc/wc-elements";
+@import "wc/wc-product";
+@import "wc/wc-order";
+@import "wc/wc-forms";
+@import "wc/wc-reviews";
+@import "wc/wc-cart-checkout";
+
+
+/* Sale on badge */
+.woocommerce span.onsale {
+    padding: .202em .602em;
+}
+
+/* Single Product */
+.single-product div.product table.variations td, .single-product div.product table.variations th {
+    display: list-item;
+    padding: 0;
+    list-style: none;
+    background-color: transparent;
+}
+.single-product div.product .single_variation .price {
+    margin-bottom: 1em;
+    display: block;
+}
+
+/* My account navigation & content */
+.woocommerce-account {
+    .woocommerce-MyAccount-navigation {
+        width: 24%;
+        ul {
+            list-style: none;
+            margin-left: 0px;
+            li {
+                a {
+                    display: block;
+                    padding: 10px 0px 11px;
+                    border-bottom: 1px solid $color_border;
+                }
+                &.is-active {
+                    a {
+                        color: $color_link_hover;
+                    }
+                }
+            }
+        }
+    }
+    .woocommerce-MyAccount-content {
+        width: 72%;
+    }
+}
+
+.footer_payment_methods {
+    display: inline-block;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    font-size: 25px;
+    line-height: 0px;
+    li {
+         i:before {
+             line-height: 0px;
+         }
+        line-height: 0px;
+        &:last-child {
+            margin-right: 0px;
+        }
+        &:first-child {
+            margin-left: 0px;
+        }
+        display: inline-block;
+    }
+}
+.woocommerce-pagination{
+	.customify-infinity-loader{
+		.customify-infinity-button.button{
+			&.loading{
+				&::after{
+					content: none!important;
+				}
+			}
+		}
+	}
+}

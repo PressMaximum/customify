@@ -1,0 +1,87 @@
+
+@import "../../../frontend/scss/utils/vars";
+@import "../../../frontend/scss/utils/mixins";
+@import "../../../frontend/scss/vendors/vendors";
+@import "../../../frontend/scss/vendors/gridlex/gridlex-vars";
+
+@import "../../../frontend/scss/base/base";
+@import "../../../frontend/scss/base/blocks";
+
+// Block-widget styles (.wp-block-archives-list, .wp-block-categories-list,
+// .wp-block-tag-cloud, .wp-block-latest-posts, .wp-block-latest-comments,
+// .wp-block-rss, .wp-block-calendar, .wp-block-search) so the editor
+// preview matches the frontend. Sidebar-scoped rules (.widget_block,
+// .widget-area) inside the file are inert here without a parent class.
+@import "../../../frontend/scss/widgets/widgets";
+
+// _blogs.scss is intentionally excluded — it contains only frontend blog-listing
+// layout styles (.entry-title, .entry-meta, etc.) that are irrelevant in the editor.
+
+// Post title wrapper — WP block editor inlines `style="margin-top: 4rem"`
+// on .editor-visual-editor__post-title-wrapper (and the older alias
+// .edit-post-visual-editor__post-title-wrapper). Bottom margin defaults
+// to 0, so the H1 sits flush against the first content block — visually
+// the title looks weighted toward the bottom on long pages and crowded
+// against the next paragraph. Add a matching bottom margin so the title
+// has symmetric breathing room and reads as a distinct heading rather
+// than a label glued to the first paragraph. !important is required only
+// for `margin-top` (to override the inline style); margin-bottom wins on
+// specificity alone since no inline bottom is set.
+.editor-visual-editor__post-title-wrapper,
+.edit-post-visual-editor__post-title-wrapper {
+    margin-top: 2rem !important;
+    margin-bottom: 2rem;
+}
+
+// Editor equivalents for .entry-content selectors defined in _blocks.scss.
+// Those selectors do not exist inside the block editor canvas; .editor-styles-wrapper
+// is the correct root scope here.
+.editor-styles-wrapper {
+    > * {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    > .alignwide {
+        max-width: var(--wp--style--global--wide-size, 1200px);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    > .alignfull {
+        width: 100vw;
+        max-width: 100vw;
+        margin-top: 1.5em;
+        margin-bottom: 1.5em;
+        margin-left: calc(50% - 50vw) !important;
+        margin-right: calc(50% - 50vw) !important;
+        box-sizing: border-box;
+    }
+
+    ul,
+    ol {
+        margin: 1.5em auto;
+        list-style-position: outside;
+    }
+
+    li:not(.wp-block-navigation li) {
+        margin-left: 2.5em;
+        margin-bottom: 6px;
+    }
+
+    ul ul:not(.wp-block-navigation ul),
+    ol ol,
+    ul ol,
+    ol ul:not(.wp-block-navigation ul) {
+        margin-bottom: 0;
+        margin-top: 0;
+        margin-left: 2.5em;
+    }
+
+    ul ul li,
+    ol ol li,
+    ul ol li,
+    ol ul li {
+        margin-left: 0;
+    }
+}

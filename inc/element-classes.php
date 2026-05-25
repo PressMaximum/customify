@@ -55,6 +55,27 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 		}
 		$classes[] = $animate;
 
+		// Mirror Customify_Page_Header::render() gating so the body class is in
+		// sync with whether <div id="page-cover"> will actually be output.
+		if ( class_exists( 'Customify_Page_Header' ) && did_action( 'wp' ) ) {
+			if ( 'cover' === Customify_Page_Header::get_instance()->will_render() ) {
+				$classes[] = 'has-page-cover';
+			}
+		}
+
+		// Per-page opt-in to strip the default vertical padding around
+		// #main / #sidebar-primary / #sidebar-secondary. Designed for
+		// landing pages that build with full-bleed sections — the
+		// theme's reading-room padding produces dead bands between the
+		// header and the first section otherwise. Default behavior
+		// (padding on) preserved for content pages.
+		if ( is_singular() ) {
+			$disable_padding = get_post_meta( get_the_ID(), '_customify_disable_content_vertical_padding', true );
+			if ( '1' === (string) $disable_padding ) {
+				$classes[] = 'disable-content-vertical-padding';
+			}
+		}
+
 		return $classes;
 	}
 }

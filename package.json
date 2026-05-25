@@ -1,12 +1,16 @@
 {
     "name": "customify",
-    "version": "0.4.13",
+    "version": "0.4.15",
     "main": "Gruntfile.js",
     "engines": {
         "node": ">= 0.10.0"
     },
     "devDependencies": {
+        "@wordpress/components": "^32.6.0",
+        "@wordpress/icons": "^12.2.0",
+        "@wordpress/scripts": "^32.0.0",
         "autoprefixer": "latest",
+        "copy-webpack-plugin": "^14.0.0",
         "grunt": "^1.6.1",
         "grunt-bumpup": "latest",
         "grunt-contrib-clean": "latest",
@@ -24,14 +28,25 @@
         "grunt-rtlcss": "latest",
         "grunt-text-replace": "latest",
         "grunt-wp-i18n": "latest",
-        "request": "^2.88.2"
+        "request": "^2.88.2",
+        "rtlcss": "^4.3.0"
     },
     "dependencies": {
+        "@dnd-kit/core": "^6.3.1",
+        "@dnd-kit/sortable": "^10.0.0",
+        "@dnd-kit/utilities": "^3.2.2",
+        "@pressmaximum/dashboard-kit": "git+ssh://git@github.com/PressMaximum/dashboard-kit.git",
         "copy": "^0.0.1",
-        "element-qsa-scope": "^1.1.0",
-        "rtlcss": "latest"
+        "element-qsa-scope": "^1.1.0"
     },
     "browserslist": [
         "defaults"
-    ]
+    ],
+    "scripts": {
+        "start": "wp-scripts start --config webpack.config.js",
+        "build": "wp-scripts build --config webpack.config.js",
+        "makepot": "grunt makepot",
+        "release:assets": "npm run build && npm run makepot",
+        "lint:js": "wp-scripts lint-js src"
+    }
 }

@@ -1,0 +1,624 @@
+// Import custom controls
+$border: 1px solid #ddd;
+$bg: #f1f1f1;
+$builder_active_color: #0073aa;
+
+#customize-controls.wp-full-overlay-sidebar {
+	z-index: 380;
+}
+.in-sub-panel
+	#customize-theme-controls
+	.customize-pane-child.current-panel-parent,
+#customize-theme-controls .customize-pane-child.current-section-parent {
+	-webkit-transform: translateX(-100%);
+	-ms-transform: translateX(-100%);
+	transform: translateX(-100%);
+}
+
+@mixin clearfix {
+	&:before,
+	&:after {
+		content: "";
+		display: block;
+		clear: both;
+	}
+	&:after {
+		clear: both;
+	}
+}
+@mixin rtl() {
+	html[dir="rtl"] & {
+		@content;
+	}
+}
+
+@-webkit-keyframes spinnerRotate {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(-360deg);
+	}
+}
+@-moz-keyframes spinnerRotate {
+	from {
+		-moz-transform: rotate(0deg);
+	}
+	to {
+		-moz-transform: rotate(-360deg);
+	}
+}
+@-ms-keyframes spinnerRotate {
+	from {
+		-ms-transform: rotate(0deg);
+	}
+	to {
+		-ms-transform: rotate(-360deg);
+	}
+}
+
+.customize--reset-section {
+	background: 0 0;
+	border: none;
+	color: #555;
+	cursor: pointer;
+	margin: 0;
+	padding: 20px;
+	position: absolute;
+	right: 0;
+	top: 30px;
+	@include rtl() {
+		right: auto;
+		left: 0px;
+	}
+	&:focus,
+	&:visited,
+	&:active {
+		outline: none !important;
+	}
+	&:before {
+		-moz-osx-font-smoothing: grayscale;
+		border: none;
+		content: "\f531";
+		display: block;
+		font: 18px/1 dashicons;
+		padding: 5px;
+		text-align: center;
+		text-decoration: none !important;
+		text-indent: 0;
+		left: 6px;
+		position: absolute;
+		top: 6px;
+	}
+	&.loading {
+		-webkit-animation-name: spinnerRotate;
+		-webkit-animation-duration: 2s;
+		-webkit-animation-iteration-count: infinite;
+		-webkit-animation-timing-function: linear;
+		-moz-animation-name: spinnerRotate;
+		-moz-animation-duration: 2s;
+		-moz-animation-iteration-count: infinite;
+		-moz-animation-timing-function: linear;
+		-ms-animation-name: spinnerRotate;
+		-ms-animation-duration: 2s;
+		-ms-animation-iteration-count: infinite;
+		-ms-animation-timing-function: linear;
+	}
+}
+
+.customize-control {
+	.wp-color-result {
+		.color-alpha {
+			height: 100% !important;
+		}
+	}
+
+	.customify-input,
+	.customify-modal-input,
+	.customify--field-select select,
+	.customify--field-select .select2-selection {
+		font-size: 14px;
+		border-radius: 0;
+		border: 1px solid #ddd;
+		padding-right: 0;
+		background-color: #fff;
+		color: #32373c;
+		&:disabled {
+			background: rgba(255, 255, 255, 0.5);
+			border-color: rgba(222, 222, 222, 0.75);
+			color: rgba(51, 51, 51, 0.5);
+		}
+	}
+
+	select.customify-modal-input,
+	input[type="number"].customify-modal-input,
+	input[type="text"].customify-modal-input,
+	.customify--field-select select,
+	.customify--field-select .select2-selection {
+		min-height: 39px;
+		display: flex;
+		align-items: center;
+	}
+
+	.select2-container {
+		display: flex;
+		align-items: center;
+		.selection {
+			width: 100%;
+		}
+	}
+
+	.select2-selection__arrow {
+		b {
+			display: none !important;
+		}
+	}
+	
+	.select2-container--default
+		.select2-selection--single
+		.select2-selection__arrow {
+		height: 37px;
+		background: #fff url(data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2220%22%20height%3D%2220%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M5%206l5%205%205-5%202%201-7%207-7-7%202-1z%22%20fill%3D%22%231e1e1e%22%2F%3E%3C%2Fsvg%3E) no-repeat right 8px top 55%;
+    background-size: 16px 16px;
+		width: 28px;	
+	}
+}
+
+.wp-customizer {
+	.select2-search__field {
+		min-height: 39px;
+	}
+	ul.select2-results__options {
+		.select2-results__option {
+			padding-left: 10px;
+			margin-bottom: 0;
+		}
+		li.select2-results__option[role="list"] {
+			padding-left: 0;
+			padding-right: 0;
+		}
+	}
+
+	.select2-container--default {
+		.select2-results > .select2-results__options {
+			overflow-x: hidden;
+		}
+	}
+	.select2-container {
+		.select2-dropdown {
+			border: 1px solid #ddd;
+			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.07);
+			padding-right: 0;
+			background-color: #fff;
+			color: #32373c;
+			border-radius: 0;
+			border-top: 0;
+		}
+	}
+
+	.wp-block-table {
+		width: 100%;
+		table {
+			width: 100% !important;
+		}
+	}
+}
+
+// Font picker popup styling. Two layered goals:
+//
+// 1. Pin width to 200px. Select2 defaults the popup width to the
+//    trigger's width and sets it inline; `!important` overrides
+//    that. The class added via dropdownCssClass lands on the
+//    .select2-dropdown element (the user-visible popup), so this
+//    rule reaches it directly. The outer .select2-container--open
+//    wrapper is sized to match in typography-control.js.
+//
+// 2. Make the popup look like a real floating menu. The existing
+//    rule `.wp-customizer .select2-container .select2-dropdown` in
+//    this file drops `border-top` and zeroes `border-radius` —
+//    that's correct for the default left-aligned flush popup whose
+//    top edge butts up against the trigger's bottom border, but
+//    wrong for our right-aligned detached popup, which loses its
+//    top edge and looks "cut off". We restore a full 1px border
+//    on all four sides, round the corners, and add an outer drop
+//    shadow so the popup floats above the customizer panel.
+//
+// Selector specificity (0,4,0) outranks the existing
+// .wp-customizer .select2-container .select2-dropdown rule (0,3,0)
+// so the styles apply without needing !important everywhere.
+.wp-customizer .select2-container .select2-dropdown.customify-font-dropdown {
+	width: 200px !important; // beat Select2's inline width
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+	overflow: hidden; // clip search field + last option to the rounded corners
+}
+
+@import "control";
+@import "header_footer_builder";
+@import "_builder_v1";
+@import "_builder_v2";
+
+// Columns Settings modal — device switcher row.
+//
+// Replaces the old "Editing for: <Device>" static text. Now hosts a
+// real device switcher (`.customify-devices`) so the maintainer can
+// hop between previewed devices without reaching for the customizer's
+// footer-action bar. The 2-device (header builder) variant is
+// prefixed with a "Layout" label; the 3-device (footer builder)
+// variant is buttons only — see the JSX comment for the rationale.
+//
+// The original `.customify-devices` rules in `_control.scss` are
+// scoped under three specific control classes (typography / styling /
+// modal); columns_settings doesn't match any of them, so the icon +
+// active-state CSS is replicated here to keep this block self-contained
+// instead of widening that scope.
+.customify-cs__device-note {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	font-size: 11px;
+	color: #777;
+	padding: 4px 10px;
+	margin-bottom: 8px;
+	min-height: 28px;
+
+	.customify-devices {
+		display: inline-flex;
+		margin: 0 0 0 auto;
+		gap: 1px;
+
+		button {
+			cursor: pointer;
+			background: 0 0;
+			border: 1px solid transparent;
+			height: 24px;
+			width: 28px;
+			padding: 0;
+			margin: 0;
+			box-shadow: none;
+			outline: none !important;
+			color: #bbbbbb;
+			border-radius: 2px;
+			transition: color .15s ease-in-out, border-color .15s ease-in-out, background-color .15s ease-in-out;
+
+			// Dashicons font glyph for each device.
+			&::before {
+				display: inline-block;
+				-webkit-font-smoothing: antialiased;
+				font: 400 18px/1 dashicons;
+				vertical-align: middle;
+				margin: 0;
+			}
+
+			&.preview-desktop::before { content: "\f472"; }
+			&.preview-tablet::before  { content: "\f471"; }
+			&.preview-mobile::before  { content: "\f470"; }
+
+			&:hover,
+			&:focus {
+				color: var(--wp-admin-theme-color, #2271b1);
+			}
+
+			// Active state — when WP customize sets previewedDevice the
+			// button's own `aria-pressed="true"` flips. No need to rely
+			// on a parent `body.preview-{device}` class.
+			&[aria-pressed="true"] {
+				color: #1d2327;
+				border-color: #c3c4c7;
+				background: #fff;
+			}
+		}
+	}
+}
+
+.customify-cs__device-switcher-label {
+	font-weight: 600;
+	color: #1d2327;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	font-size: 11px;
+}
+
+.customify-cs__accordion {
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+	.customify-cs__item {
+		border: 1px solid #ddd;
+		background: #fff;
+		margin-bottom: 10px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	.customify-cs__head {
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding: 8px;
+		background: #fff;
+		cursor: pointer;
+		user-select: none;
+		font-size: 1em;
+		font-weight: 600;
+		line-height: 1;
+		color: #555d66;
+		text-align: left;
+	}
+
+	.customify-cs__head-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		color: #555d66;
+		transition: transform 0.2s;
+		transform: rotate(0deg);
+
+		svg {
+			fill: currentColor;
+		}
+	}
+
+	.customify-cs__item.is-open {
+		.customify-cs__head {
+			border-bottom: 1px solid #ddd;
+		}
+		.customify-cs__head-toggle {
+			transform: rotate(180deg);
+		}
+		.customify-cs__body {
+			display: block;
+		}
+	}
+
+	.customify-cs__body {
+		display: none;
+		padding: 8px;
+		background: #fff;
+
+		.customify--group-field {
+			margin-bottom: 15px;
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	// Off-canvas (single-column) variant: no accordion head, no border,
+	// and zero padding so the inline body sits flush with the modal edges.
+	.customify-cs__item--single {
+		border: none;
+
+		.customify-cs__body {
+			padding: 0;
+			border: none;
+		}
+	}
+}
+
+// Gap slider — override default absolute layout so the em/px unit picker
+// can sit beside the value input without overlapping it.
+.customify-cs__body {
+	.customify-input-slider-wrapper {
+		display: flex;
+		align-items: center;
+		gap: 0px;
+		margin-top: 8px;
+		position: relative;
+
+		.customify-input-slider {
+			flex: 1 1 auto;
+			margin: 0;
+			min-width: 60px;
+		}
+
+		.customify--slider-input {
+			position: static;
+			top: auto;
+			right: auto;
+			flex: 0 0 50px;
+			width: 50px;
+			max-width: 50px;
+			height: 26px;
+			padding: 0 4px;
+			margin-left: 6px;
+			margin-right: -1px;
+		}
+
+		.customify--css-unit {
+			position: static;
+			top: auto;
+			right: auto;
+			margin: 0;
+			display: inline-flex;
+			gap: 0;
+			border: 1px solid #ddd;
+
+			border-top-right-radius: 3px;
+			border-bottom-right-radius: 3px;
+			overflow: hidden;
+			background: #fff;
+			text-align: left;
+
+			label {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				position: static;
+				top: auto;
+				right: auto;
+				min-width: 24px;
+				height: 24px;
+				padding: 0 6px;
+				margin: 0;
+				border: 0;
+				background: transparent;
+				color: #1d2327;
+				font-size: 10px;
+				font-weight: 500;
+				text-transform: uppercase;
+				cursor: pointer;
+				box-shadow: none;
+				border-right: 1px solid #ddd;
+
+				&:last-of-type {
+					border-right: 0;
+				}
+
+				&.customify--label-active {
+					display: inline-flex;
+					background: var(--wp-admin-theme-color, #2271b1);
+					color: #fff;
+					border-color: var(--wp-admin-theme-color, #2271b1);
+				}
+			}
+
+			.reset {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				position: static;
+				top: auto;
+				right: auto;
+				width: 24px;
+				height: 24px;
+				border: 0;
+				border-left: 1px solid #ddd;
+				background: #fff;
+			}
+		}
+	}
+}
+
+// Layout button group — compact icon buttons styled like @wordpress/components ButtonGroup.
+.customify-cs__layout-wrap {
+	.customify-cs__field-label {
+		display: block;
+		font-size: 12px;
+		font-weight: 600;
+		color: #1d2327;
+		margin-bottom: 4px;
+	}
+}
+
+.customify-cs__btn-group {
+	display: inline-flex;
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	overflow: hidden;
+	background: #fff;
+
+	.customify-cs__layout-btn {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 28px;
+		height: 28px;
+		min-width: 28px;
+		padding: 0;
+		margin: 0;
+		background: #fff;
+		border: 0;
+		border-right: 1px solid #ddd;
+		color: #1d2327;
+		cursor: pointer;
+		line-height: 1;
+		transition: background 0.1s ease;
+
+		&:last-child {
+			border-right: 0;
+		}
+
+		.customify-cs__layout-btn-icon {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 20px;
+			height: 20px;
+			line-height: 0;
+			pointer-events: none;
+		}
+
+		svg {
+			display: block;
+			width: 20px;
+			height: 20px;
+			fill: currentColor;
+			pointer-events: none;
+		}
+
+		&:hover {
+			background: #f0f0f0;
+		}
+
+		&.is-pressed,
+		&.is-primary {
+			background: var(--wp-admin-theme-color, #2271b1);
+			color: #fff;
+		}
+	}
+}
+
+// ── Panel focus ring: keyboard-only ──────────────────────────────────────────
+// Default WP customizer paints a 2px blue box-shadow ring on every panel /
+// section button on `:focus`, which also fires on mouse-click. The lingering
+// ring after a click is visually noisy. `:focus-visible` lets us suppress it
+// for pointer focus while keeping the full ring for keyboard Tab navigation
+// (WCAG 2.4.7-compliant).
+#customize-controls .accordion-section-title button.accordion-trigger:focus:not(:focus-visible) {
+	box-shadow: none;
+	outline: none;
+}
+
+// ── Panel group divider ──────────────────────────────────────────────────────
+// Non-clickable section rendered as a visual heading in the Customizer panel
+// list. Used to separate top-level panels into logical groups (General
+// Options / Layouts / Post Types / Core & Plugins).
+//
+// Paired with Customify_WP_Customize_Section_Divider (PHP) and the priority
+// scheme in Customify_Customizer::register_panel_groups().
+//
+// Alignment & spacing reasoning:
+//   - padding-left: 18px → matches WP panel title text x-position
+//     (panel <h3><button class="accordion-trigger"> button has
+//     padding-left 14px sitting at LI x=4px; text-left therefore at x=18px).
+//   - padding-top: 14px → breathing room above the label.
+//   - padding-bottom: 6px → tight to the first panel of the group so the
+//     label visually attaches to "the items below me".
+//   - transparent bg + no border → reads as a gap-with-label between cards,
+//     not as another card row. Panel rows themselves are transparent <li>s
+//     with a white-bg <button> inside; matching that absence keeps the
+//     hierarchy clean.
+//   - colour #646970 + 11px / 600 / uppercase + 0.5px letter-spacing →
+//     standard WP-admin subordinate label (one tier below the panel title
+//     which is #50575e / 14px / 600 / sentence case).
+#customize-controls .customify-divider {
+	margin: 0;
+	padding: 14px 18px 13px;
+	background: transparent;
+	border: none;
+	// Match the panel row separator (same colour as the 1px line on every
+	// .accordion-section-title) so the divider sits in the same horizontal
+	// rule rhythm as the panels below.
+	border-bottom: 1px solid #dcdcde;
+	cursor: default;
+	pointer-events: none;
+
+	h3 {
+		margin: 0;
+		padding: 0;
+		font-size: 11px;
+		font-weight: 600;
+		line-height: 1.4;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+		color: #646970;
+		border: none;
+		background: none;
+	}
+}

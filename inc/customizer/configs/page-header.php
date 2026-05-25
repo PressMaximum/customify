@@ -33,7 +33,7 @@ class Customify_Page_Header {
 		$section      = 'page_header';
 		$name         = 'page_header';
 		$choices      = array(
-			'default'  => __( 'Default', 'customify' ),
+			'default'  => __( 'Default - inside main content', 'customify' ),
 			'cover'    => __( 'Cover', 'customify' ),
 			'titlebar' => __( 'Titlebar', 'customify' ),
 			'none'     => __( 'Hide', 'customify' ),
@@ -369,6 +369,23 @@ class Customify_Page_Header {
 				'css_format' => 'color: {{value}};',
 			),
 
+			// Titlebar Background — explicit override. When set, the
+			// generated CSS rule `#page-titlebar { background-color: <hex> }`
+			// wins by id-selector specificity over the SCSS fallback chain
+			// `.page-titlebar { background: var(--customify-surface, #f9f9f9) }`.
+			// When empty (default for 30K legacy sites), the SCSS chain
+			// applies — surface var if user opted in to Palette, else the
+			// historical `#f9f9f9` hex.
+			array(
+				'name'        => $name . '_bg_color',
+				'type'        => 'color',
+				'section'     => $section,
+				'label'       => __( 'Titlebar Background', 'customify' ),
+				'description' => __( 'Override the titlebar background. Leave empty to follow the Palette Surface color (or the legacy #f9f9f9 fallback when Palette is not used).', 'customify' ),
+				'selector'    => "$selector",
+				'css_format'  => 'background-color: {{value}};',
+			),
+
 			array(
 				'name'            => "{$name}_align",
 				'type'            => 'text_align_no_justify',
@@ -432,7 +449,7 @@ class Customify_Page_Header {
 					'normal' => array(
 						'bg_image' => array(
 							'id'  => '',
-							'url' => esc_url( get_template_directory_uri() ) . '/assets/images/default-cover.jpg',
+							'url' => esc_url( get_template_directory_uri() ) . '/build/images/default-cover.jpg',
 						),
 					),
 				),
@@ -976,47 +993,99 @@ class Customify_Page_Header {
 			return;
 		}
 
+		ob_start();
+		/**
+		 * Hook titlebar before
+		 */
+		do_action( 'customify/titlebar/before' );
+
+		// WPCS: XSS ok.
+		if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
+			if ( $args['title'] ) {
+				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
+			}
+		}
+		if ( $args['titlebar_tagline'] ) {
+			if ( $args['tagline'] ) {
+				// WPCS: XSS ok.
+				echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
+			}
+		}
+		/**
+		 * Hook titlebar after
+		 */
+		do_action( 'customify/titlebar/after' );
+		$inner = ob_get_clean();
+
+		if ( '' === trim( $inner ) ) {
+			return;
+		}
+
 		$classes   = array( 'page-header--item page-titlebar' );
 		$layout    = Customify()->get_setting_tab( 'page_header_layout' );
 		$classes[] = $layout;
 		?>
 		<div id="page-titlebar" class="<?php echo esc_attr( join( ' ', $classes ) ); ?>">
 			<div class="page-titlebar-inner customify-container">
-				<?php
-				/**
-				 * Hook titlebar before
-				 */
-				do_action( 'customify/titlebar/before' );
-
-				// WPCS: XSS ok.
-				if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
-					if ( $args['title'] ) {
-						echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
-					}
-				}
-				if ( $args['titlebar_tagline'] ) {
-					if ( $args['tagline'] ) {
-						// WPCS: XSS ok.
-						echo '<div class="titlebar-tagline">' . apply_filters( 'customify_the_title', wp_kses_post( $args['tagline'] ) ) . '</div>';
-					}
-				}
-				/**
-				 * Hook titlebar after
-				 */
-				do_action( 'customify/titlebar/after' );
-				?>
+				<?php echo $inner; // WPCS: XSS ok. ?>
 			</div>
 		</div>
 		<?php
 	}
 
-	function render() {
+	/**
+	 * Resolve which page-header element will render on the current request.
+	 *
+	 * Mirrors the gating logic of render() so callers (e.g. body_class filter)
+	 * can know the outcome without triggering output.
+	 *
+	 * @return string  One of 'cover', 'titlebar', 'shortcode', or '' when nothing renders.
+	 */
+	function will_render() {
 		$args = $this->get_settings();
-		if ( 'none' == $args['display'] ) {
+
+		if ( 'none' === $args['display'] ) {
 			return '';
 		}
 
-		switch ( $args['display'] ) {
+		if ( is_singular() ) {
+			$disable = get_post_meta( get_the_ID(), '_customify_disable_page_title', true );
+			if ( '1' === $disable ) {
+				return '';
+			}
+		}
+
+		if ( in_array( $args['display'], array( 'cover', 'titlebar', 'shortcode' ), true ) ) {
+			// Titlebar mode bails when there's no resolved title text. The
+			// titlebar buffer also collects auxiliary content via the
+			// `customify/titlebar/before|after` hooks (e.g. the breadcrumb
+			// renderer when "Display Position = Inside cover/titlebar"), so
+			// the existing "is buffer empty?" gate in render_titlebar() lets
+			// the wrapper render with just a thin breadcrumb strip and no
+			// title — which looks like a stray empty bar on landing pages
+			// that intentionally omit the page title.
+			//
+			// Gating on `$args['title']` here makes the titlebar an
+			// all-or-nothing element keyed off the page's primary title.
+			// Callers (body_class, etc.) also benefit because will_render()
+			// now reflects what render() actually outputs.
+			if ( 'titlebar' === $args['display'] && '' === trim( (string) $args['title'] ) ) {
+				return '';
+			}
+			return $args['display'];
+		}
+
+		return '';
+	}
+
+	function render() {
+		$mode = $this->will_render();
+		if ( ! $mode ) {
+			return '';
+		}
+
+		$args = $this->get_settings();
+		switch ( $mode ) {
 			case 'cover':
 				$this->render_cover( $args );
 				break;

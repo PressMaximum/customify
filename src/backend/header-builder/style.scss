@@ -1,0 +1,965 @@
+/**
+ * Customify Header Builder — Customizer UI styles.
+ * Design language follows WordPress Customizer controls pane.
+ */
+
+// ─── Tokens (mirror WP admin) ────────────────────────────────────────────────
+$hb-accent:      var( --wp-admin-theme-color, #3858e9 );
+$hb-accent-hover: color-mix(
+	in srgb,
+	var(--wp-admin-theme-color, #3858e9) 15%,
+	transparent
+);
+$hb-item-size:   40px;           
+$hb-icon-size:   18px;           
+$hb-bg:          #f0f0f1;           // WP controls pane bg
+$hb-bg-row:      #f6f7f7;
+$hb-border:      #dcdcde;           // WP control border
+$hb-text:        #1e1e1e;
+$hb-text-muted:  #646970;           // WP muted text
+$hb-item-bg:     #fff;
+$hb-item-border: #c3c4c7;
+$hb-radius:      2px;               // WP uses 2px mostly
+$hb-transition:  0.12s ease;
+$hb-font:        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+
+
+// ─── Panel sidebar items (shared between header & footer builder panels) ─────
+// Applied via .customify-builder-panel-items on both #customify-hb-panel-items
+// and #customify-fb-panel-items divs.
+
+.customify-builder-panel-items {
+	padding: 8px 12px 12px;
+	border-top: 1px solid $hb-border;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	box-sizing: border-box;
+
+	*, *::before, *::after { box-sizing: border-box; }
+}
+
+.customify-hb__open-builder {
+	display: block;
+	width: 100%;
+	margin-bottom: 12px;
+	text-align: center;
+}
+
+.customify-hb__panel-section {
+	border: none;
+	border-radius: $hb-radius;
+	background: $hb-bg;
+	overflow: hidden;
+}
+
+.customify-hb__panel-section-label {
+	padding: 6px 0 4px;
+	font-family: $hb-font;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: $hb-text-muted;
+}
+
+.customify-hb__panel-items {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 0;
+	border: none;
+}
+
+.customify-hb__panel-items-empty {
+	padding: 4px 6px 6px;
+	font-family: $hb-font;
+	font-size: 12px;
+	color: $hb-text-muted;
+	font-style: italic;
+}
+
+// Each placed item row
+.customify-hb__avail-handle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.customify-hb__panel-item {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 0 8px;
+	min-height: $hb-item-size;
+	gap: 6px;
+	background: $hb-item-bg;
+	border: 1px solid $hb-item-border;
+	border-radius: $hb-radius;
+	font-family: $hb-font;
+	font-size: 13px;
+	font-weight: 400;
+	color: $hb-text;
+	text-align: left;
+	transition: background $hb-transition, border-color $hb-transition;
+
+
+	&.is-clickable {
+		cursor: pointer;
+
+		&:hover {
+			border-color: $hb-accent;
+			color: $hb-accent;
+
+			.customify-hb__panel-item-icon {
+				opacity: 0.7;
+				color: $hb-accent;
+			}
+		}
+	}
+}
+
+.customify-hb__panel-item-name {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+// Small gear icon shown on hover
+.customify-hb__panel-item-icon {
+	flex-shrink: 0;
+	width: $hb-icon-size;
+	height: $hb-icon-size;
+	opacity: 0.25;
+	color: $hb-text-muted;
+	transition: opacity $hb-transition, color $hb-transition;
+
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
+}
+
+.customify-hb__panel-item-btn {
+	flex-shrink: 0;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 2px;
+	color: $hb-text-muted;
+	display: inline-flex;
+	align-items: center;
+	border-radius: $hb-radius;
+	transition: color $hb-transition, background $hb-transition;
+
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
+
+	&:hover {
+		color: $hb-accent;
+		background: rgba( 0, 0, 0, 0.05 );
+	}
+}
+
+.customify-hb__panel-item-remove {
+	svg {
+		fill: currentColor;
+	}
+	&:hover { color: #cc1818; }
+}
+
+// Available items — individual bordered rows, draggable
+.customify-hb__panel-item--available {
+	display: flex;
+	width: 100%;
+	padding: 0 8px;
+	min-height: $hb-item-size;
+	gap: 8px;
+	align-items: center;
+	background: $hb-item-bg;
+	border: 1px solid $hb-item-border;
+	border-radius: $hb-radius;
+	font-family: $hb-font;
+	font-size: 13px;
+	color: $hb-text-muted;
+	cursor: grab;
+	text-align: left;
+	transition: background $hb-transition, color $hb-transition, border-color $hb-transition;
+
+	&:active { cursor: grabbing; }
+
+	.customify-hb__drag-handle {
+		width: $hb-icon-size;
+		height: $hb-icon-size;
+		flex-shrink: 0;
+		color: #c3c4c7;
+	}
+
+	&:hover {
+		background: #f0f4ff;
+		color: $hb-accent;
+		border-color: $hb-accent;
+
+		.customify-hb__drag-handle { color: $hb-accent; }
+	}
+}
+
+
+// ─── Shared mixin: WP Customizer accordion sections inside builder panels ────
+// Applied to both header_settings and footer_settings panel section lists.
+
+@mixin builder-panel-accordion-sections {
+	> .accordion-section:not( .control-section-customify-pro ):not( .cannot-expand ) {
+		margin: 0 12px 12px !important;
+		padding: 0 !important;
+
+		> h3.accordion-section-title,
+		> .accordion-section-title {
+			display: flex !important;
+			align-items: center !important;
+			min-height: $hb-item-size !important;
+			padding: 0 8px !important;
+			background: $hb-item-bg !important;
+			border: 1px solid $hb-item-border !important;
+			border-bottom: 1px solid $hb-item-border !important;
+			border-radius: $hb-radius !important;
+			font-family: $hb-font !important;
+			font-size: 13px !important;
+			font-weight: 400 !important;
+			color: $hb-text !important;
+			cursor: pointer !important;
+			box-sizing: border-box !important;
+			position: relative !important;
+			transition: border-color $hb-transition, color $hb-transition !important;
+
+			&::after {
+				content: "\f345" !important; // dashicons-arrow-right-alt2
+				font-family: dashicons !important;
+				display: block !important;
+				font-size: 18px !important;
+				line-height: 1 !important;
+				color: $hb-text-muted !important;
+				flex-shrink: 0 !important;
+				position: static !important;
+				transform: none !important;
+				top: auto !important;
+				right: auto !important;
+				transition: color $hb-transition !important;
+			}
+
+			button {
+				background: none !important;
+				border: none !important;
+				font-family: $hb-font !important;
+				font-size: 13px !important;
+				font-weight: 400 !important;
+				color: inherit !important;
+				padding: 0 !important;
+				flex: 1 !important;
+				text-align: left !important;
+				float: none !important;
+				width: auto !important;
+				cursor: pointer !important;
+				outline: none !important;
+				box-shadow: none;
+				
+			}
+
+			&:hover {
+				border-color: $hb-accent !important;
+				color: $hb-accent !important;
+
+				&::after { color: $hb-accent !important; }
+			}
+		}
+
+		&.open > h3.accordion-section-title,
+		&.open > .accordion-section-title {
+			border-color: $hb-accent !important;
+			color: $hb-accent !important;
+
+			&::after { color: $hb-accent !important; }
+		}
+	}
+}
+
+// Apply to both header and footer builder panel section lists.
+ul.control-panel-customify_header_builder_panel { @include builder-panel-accordion-sections; }
+ul.control-panel-customify_footer_builder_panel { @include builder-panel-accordion-sections; padding-bottom: $hb-item-size; }
+
+
+// ─── Builder panel (fixed bottom bar) ────────────────────────────────────────
+
+#customify-header-builder-root,
+#customify-footer-builder-root {
+	z-index: 100;
+	position: relative;
+}
+
+.customify-hb {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 99986;
+	background: $hb-bg;
+	border-top: 1px solid $hb-border;
+	box-shadow: 0 -2px 12px rgba( 0, 0, 0, 0.08 );
+	font-family: $hb-font;
+
+	*, *::before, *::after { box-sizing: border-box; }
+	button { line-height: 1; transition: all $hb-transition; }
+}
+
+.customify-hb__inner { max-width: 100%; }
+
+// ── Top bar (device tabs + close) ──
+.customify-hb__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 4px 12px;
+	background: #fff;
+	border-bottom: 1px solid $hb-border;
+	min-height: 40px;
+}
+
+.customify-hb__title {
+	font-weight: 600;
+	font-size: 13px;
+	color: $hb-text;
+	white-space: nowrap;
+	margin-right: 8px;
+}
+
+.customify-hb__devices { display: flex; gap: 8px; }
+
+.customify-hb__device-btn {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 4px 10px;
+	border: 1px solid transparent;
+	background: transparent;
+	border-radius: $hb-radius;
+	cursor: pointer;
+	font-size: 12px;
+	font-weight: 500;
+	color: $hb-text-muted;
+
+	.dashicons { font-size: 15px; width: 15px; height: 15px; }
+
+	&.is-active {
+		background: $hb-accent;
+		color: #fff;
+	}
+
+	&:hover:not( .is-active ) {
+		background: $hb-bg;
+		color: $hb-text;
+	}
+}
+
+.customify-hb__actions { display: flex; gap: 6px; align-items: center; }
+
+.customify-hb__close {
+	font-size: 12px;
+	height: 28px;
+	line-height: 1;
+	padding: 0 10px;
+}
+
+// ── Body ──
+.customify-hb__body { padding: 25px 12px; }
+
+// ── Grid ──
+.customify-hb__grid {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	margin-bottom: 0;
+
+	&--mobile {
+		flex-direction: row;
+		align-items: stretch;
+		gap: 8px;
+
+		.customify-hb__row--sidebar {
+			flex-direction: column;
+			width: 260px;
+			min-width: 260px;
+			flex-shrink: 0;
+			align-items: flex-start;
+			align-items: center;
+			gap: 0px;
+			.customify-hb__row-label { writing-mode: horizontal-tb; }
+			.customify-hb__offcanvas { flex: 1; width: 100%; min-height: 80px; }
+			.customify-hb__row-header {
+				width: 100%;
+				display: flex;
+				align-items: center;
+				padding: 5px 0px;
+			}
+		}
+	}
+}
+
+.customify-hb__rows {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+// ── Row ──
+.customify-hb__row {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	background: $hb-bg-row;
+	border: 1px solid $hb-border;
+	border-radius: $hb-radius;
+	padding: 0;
+	position: relative;
+	transition: border-color $hb-transition;
+
+	// Hover highlight
+	&:hover {
+		border-color: $hb-accent;
+	}
+}
+
+// ── Row tooltip (WP Popover component) ──
+.customify-hb__row-tooltip {
+	z-index: 100020 !important;
+
+	.components-popover__content {
+		background: var( --wp-admin-theme-color, #3858e9 ) !important;
+		border: none !important;
+		border-top-left-radius: $hb-radius !important;
+		border-top-right-radius: $hb-radius !important;
+		border-bottom-left-radius: $hb-radius !important;
+		border-bottom-right-radius: 0 !important;
+		box-shadow: none !important;
+		min-width: 0 !important;
+		padding: 4px 10px !important;
+		font-family: $hb-font;
+		font-size: 11px !important;
+		font-weight: 500 !important;
+		color: #fff !important;
+		white-space: nowrap;
+		pointer-events: none;
+	}
+}
+
+.customify-hb__row-header {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.customify-hb__row-title {
+	font-size: 10px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.06em;
+	color: $hb-text-muted;
+	white-space: nowrap;
+}
+
+.customify-hb__row-label {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	min-width: 24px;
+	height: 24px;
+	margin-left: 4px;
+	color: $hb-text-muted;
+	background: none;
+	border: 1px solid transparent;
+	border-radius: $hb-radius;
+	cursor: pointer;
+	padding: 0;
+
+	.dashicons { font-size: 15px; width: 15px; height: 15px; }
+
+	&:hover {
+		color: $hb-accent;
+		border-color: $hb-border;
+		background: #fff;
+	}
+}
+
+// ── Columns ──
+.customify-hb__cols { flex: 1; display: flex; gap: 0px; }
+
+.customify-hb__col {
+	flex: 1;
+	min-height: 46px;
+	border: none;
+	border-left: 1px solid $hb-border;
+	position: relative; // anchor for absolute-positioned sortable transforms
+	border-radius: 0;
+	padding: 3px;
+	background: transparent;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	// `align-content: flex-start` packs wrapped rows toward the top of
+	// the column. Default `stretch` distributes leftover height across
+	// rows, which makes sortable transforms (calculated from initial
+	// chip rects) land chips in the wrong vertical band when items
+	// wrap, causing visual overlap.
+	align-content: flex-start;
+	align-items: center;
+	cursor: pointer;
+	transition: border-color $hb-transition, background $hb-transition;
+
+	&:last-child {
+		border-right: 1px solid $hb-border;
+	
+	}
+
+	// &--left   { flex: 1; justify-content: flex-start; }
+	// &--center { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
+	// &--right  { flex: 1; justify-content: flex-end; }
+
+	&:first-child:not(:last-child)   { flex: 1; justify-content: flex-start; }
+	&:not(:first-child):not(:last-child) { flex: 0 0 auto; min-width: 50px; justify-content: center; padding-left: 30px; padding-right: 30px; }
+	&:last-child:not(:first-child)  { flex: 1; justify-content: flex-end; }
+
+	// Hover (mouse over, no drag) AND drag-over (cursor + active drag)
+	// share the same background-only highlight. Background does not affect
+	// box dimensions, so chips never re-flow while the highlight toggles.
+	&:hover,
+	&.is-drag-over {
+		background-color: $hb-accent-hover;
+	}
+}
+
+.customify-hb__col-empty {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	font-size: 18px;
+	font-weight: 300;
+	color: #c3c4c7;
+	min-height: 38px;
+	pointer-events: none;
+}
+
+// Drop-line indicator — slotted between chips inside a DropZone to show
+// where the dragged item will land. Zero-size on the active axis so it
+// never shifts surrounding chips.
+//
+// IMPORTANT: parent containers use `gap` (column = 4px, off-canvas =
+// 3px). Inserting a new flex item adds gap BEFORE and AFTER it (one
+// fresh pair), which would push adjacent chips by `gap` even though
+// the line itself is zero-width. The negative cross-axis margins below
+// reclaim exactly that pair so chips stay rock-still while the line
+// fades in/out.
+//
+//   --horizontal: 40px tall, 0px wide → vertical bar between chips
+//                 that flow horizontally in a header column.
+//   --vertical:   full width, 0px tall → horizontal bar between chips
+//                 that stack vertically in the off-canvas sidebar.
+.customify-hb__drop-line {
+	position: relative;
+	pointer-events: none;
+	flex: 0 0 auto;
+
+	&--horizontal {
+		height: $hb-item-size;
+		width: 0;
+		// Cancel the column's 4px gap (2px each side) added by inserting
+		// this extra flex item.
+		margin-left:  -2px;
+		margin-right: -2px;
+	}
+
+	&--vertical {
+		width: 100%;
+		height: 0;
+		// Off-canvas uses `gap: 4px`. Insert adds gap before AND after the
+		// drop-line slot (2 × 4px), so two -2px margins reclaim exactly
+		// that extra pair → surrounding chips never shift.
+		margin-top:    -2px;
+		margin-bottom: -2px;
+	}
+}
+
+.customify-hb__drop-line__bar {
+	position: absolute;
+	background: $hb-accent;
+	border-radius: 1px;
+	pointer-events: none;
+
+	.customify-hb__drop-line--horizontal & {
+		top: 0;
+		bottom: 0;
+		width: 3px;
+		transform: translateX( -1px );
+	}
+
+	.customify-hb__drop-line--vertical & {
+		left: 0;
+		right: 0;
+		height: 3px;
+		transform: translateY( -1px );
+	}
+}
+
+// Drag handle — the floating chip rendered inside <DragOverlay> that
+// follows the cursor while a sortable item is being dragged.
+//
+// dnd-kit portals the overlay element directly under <body>, which means
+// inherited properties (font-family, font-size, line-height, box-sizing)
+// can differ from the chip's original parent inside `.customify-hb__col`.
+// In particular, `.customify-hb__item-name` has `line-height: 2` and the
+// name inherits its computed font-size from whichever container the chip
+// happens to land in — outside the builder context that line-height
+// blows the chip past the 40px min-height of the base class.
+//
+// To guarantee dimensional parity with the source chip, force the exact
+// $hb-item-size box (height + min/max-height), pin a tight line-height
+// on the name, and lock box-sizing so padding stays inside the 40px box.
+// Explicit z-index belt-and-suspenders the prop set on <DragOverlay> in
+// case the Customizer wraps body content in a stacking context that
+// limits portal-element z-index escape.
+.customify-hb__item--overlay {
+	box-sizing: border-box;
+	height: $hb-item-size;
+	min-height: $hb-item-size;
+	max-height: $hb-item-size;
+	line-height: 1.2;
+	cursor: grabbing;
+	box-shadow: 0 4px 12px rgba( 0, 0, 0, 0.18 );
+	z-index: 99999999;
+	position: relative;
+
+	*, *::before, *::after { box-sizing: border-box; }
+
+	// Override the line-height: 2 from .customify-hb__item-name so the
+	// text never measures taller than the chip's content area.
+	.customify-hb__item-name {
+		line-height: 1;
+		align-self: center;
+	}
+}
+
+// ── Off Canvas ──
+.customify-hb__offcanvas {
+	flex: 1;
+	min-height: 42px;
+	position: relative; // anchor for absolute-positioned .customify-hb__drop-line
+	// border: 1px dashed $hb-border;
+	border-radius: $hb-radius;
+	padding: 5px 3px;
+	background: #fff;
+	display: flex;
+	// Items stack vertically (each chip is width:100%). Explicit column
+	// direction ensures the JS axis detector (reads getComputedStyle
+	// flexDirection) renders the drop-line as a horizontal bar across the
+	// container instead of a vertical bar between non-existent ngang chips.
+	flex-direction: column;
+	flex-wrap: wrap;
+	gap: 4px;
+	align-content: flex-start;
+	cursor: pointer;
+	transition: border-color $hb-transition, background $hb-transition;
+
+	.customify-hb__item { width: 100%; }
+
+	&:hover { border-color: $hb-text-muted; }
+
+	// Drop target highlight when a drag is hovering over the off-canvas.
+	// Background-only so chips never shift during the toggle.
+	&.is-drag-over {
+		background: $hb-accent-hover;
+	}
+}
+
+.customify-hb__drop-hint {
+	font-size: 11px;
+	color: #c3c4c7;
+	font-style: italic;
+	padding: 4px 6px;
+	pointer-events: none;
+}
+
+// While a drag is in flight (Builder.jsx toggles `customify-hb-is-dragging`
+// on <body>), suppress :hover treatment on placed chips and available
+// rows. Cursor gliding across a chip on its way to the drop point would
+// otherwise trigger that chip's hover ring + lift, competing visually
+// with the drop-line indicator.
+//
+// NOTE: column hover is intentionally NOT suppressed — we WANT the
+// destination column to light up (same as `:hover` background) so the
+// user can see which column the chip will land in. `.customify-hb__col`
+// already styles both `:hover` and `.is-drag-over` identically, so the
+// highlight flows naturally during drag.
+body.customify-hb-is-dragging {
+	.customify-hb__item:hover {
+		border-color: $hb-item-border;
+		box-shadow: none;
+	}
+
+	.customify-hb__panel-item--available:hover {
+		background: $hb-item-bg;
+		border-color: $hb-item-border;
+		color: $hb-text-muted;
+
+		.customify-hb__drag-handle { color: #c3c4c7; }
+	}
+}
+
+// ── Item chip ──
+.customify-hb__item {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	background: $hb-item-bg;
+	border: 1px solid $hb-item-border;
+	border-radius: $hb-radius;
+	padding: 3px 4px;
+	min-height: $hb-item-size;
+	box-sizing: border-box; // sortable rect math expects border-box width
+	font-weight: 500;
+	color: $hb-text;
+	cursor: grab;            // signal the chip is draggable from anywhere
+	user-select: none;
+	transition: border-color $hb-transition, box-shadow $hb-transition, opacity $hb-transition;
+	will-change: transform;  // hint browser to GPU-composite chip during drag
+
+	*, *::before, *::after { box-sizing: border-box; }
+
+	&:hover {
+		border-color: $hb-accent;
+		// box-shadow: 0 0 0 1px $hb-accent;
+	}
+
+	// Source-of-drag visual treatment. The chip stays in place (the drag
+	// ghost is a separate browser-rendered image) but dims so the user
+	// sees which item is being moved. Hover + focus rings are suppressed
+	// so the chip reads as "in-flight" rather than "interactive".
+	// z-index raises the source above neighbours so transform animations
+	// of surrounding chips can't visually cross over it mid-flight.
+	&.is-dragging {
+		opacity: 0.4;
+		cursor: grabbing;
+		border-color: $hb-item-border;
+		box-shadow: none;
+		z-index: 10;
+		position: relative;
+		outline: none;
+
+		&,
+		*,
+		*:focus,
+		*:focus-visible {
+			outline: none !important;
+			box-shadow: none !important;
+		}
+	}
+}
+
+// dragHandle span — the actual drag-initiating element
+.customify-hb__item-handle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+	opacity: 0.5;
+	width: $hb-icon-size + 8px;
+	height: $hb-icon-size;
+	cursor: grab;
+
+	&:active { cursor: grabbing; }
+
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
+}
+
+.customify-hb__item-name {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	line-height: 2;
+}
+
+// <button> variant — clickable name opens the item's settings section.
+button.customify-hb__item-name--clickable {
+	background: none;
+	border: none;
+	padding: 0;
+	margin: 0;
+	font: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+	transition: color $hb-transition;
+
+	&:hover,
+	&:focus-visible {
+		color: $hb-accent;
+	}
+
+	&:focus { outline: none; }
+	&:focus-visible { outline: 1px solid $hb-accent; outline-offset: 1px; }
+}
+
+.customify-hb__item-btn {
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 1px;
+	color: $hb-text-muted;
+	display: inline-flex;
+	align-items: center;
+	border-radius: $hb-radius;
+	transition: color $hb-transition, background $hb-transition;
+
+	svg { width: 14px; height: 14px; }
+
+	&:hover {
+		color: $hb-accent;
+		background: rgba( 0, 0, 0, 0.06 );
+	}
+}
+
+.customify-hb__item-remove:hover { color: #cc1818; }
+
+// Remove button: hidden by default, revealed on chip hover or keyboard focus.
+.customify-hb__item-remove {
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity $hb-transition, visibility $hb-transition, color $hb-transition, background $hb-transition;
+
+	.customify-hb__item:hover &,
+	&:focus-visible {
+		opacity: 1;
+		visibility: visible;
+	}
+}
+
+// dragHandle icon in available-items pool (panel sidebar)
+.customify-hb__drag-handle {
+	flex-shrink: 0;
+	width: $hb-icon-size;
+	height: $hb-icon-size;
+	svg { width: $hb-icon-size; height: $hb-icon-size; }
+}
+
+
+// ─── Item Picker Popover ─────────────────────────────────────────────────────
+
+.customify-hb__popover {
+	position: fixed;
+	z-index: 100010;
+	background: #fff;
+	border: 1px solid $hb-border;
+	border-radius: $hb-radius;
+	box-shadow: 0 4px 20px rgba( 0, 0, 0, 0.13 );
+	width: 300px;
+	max-width: 100%;
+	overflow: visible;
+}
+
+.customify-hb__popover-arrow {
+	position: absolute;
+	width: 0;
+	height: 0;
+
+	.is-above & {
+		bottom: -9px;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-top: 8px solid $hb-border;
+
+		&::after {
+			content: '';
+			position: absolute;
+			top: -9px;
+			left: -7px;
+			border-left: 7px solid transparent;
+			border-right: 7px solid transparent;
+			border-top: 7px solid #fff;
+		}
+	}
+
+	.is-below & {
+		top: -9px;
+		border-left: 8px solid transparent;
+		border-right: 8px solid transparent;
+		border-bottom: 8px solid $hb-border;
+
+		&::after {
+			content: '';
+			position: absolute;
+			bottom: -9px;
+			left: -7px;
+			border-left: 7px solid transparent;
+			border-right: 7px solid transparent;
+			border-bottom: 7px solid #fff;
+		}
+	}
+}
+
+.customify-hb__popover-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	max-height: 200px;
+	overflow-y: auto;
+	padding: 12px;
+}
+
+.customify-hb__popover-item {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	width: auto;
+	text-align: left;
+	padding: 4px 10px 4px 6px;
+	min-height: $hb-item-size;
+	background: $hb-bg;
+	border: 1px solid $hb-border;
+	border-radius: $hb-radius;
+	font-family: $hb-font;
+	font-size: 12px;
+	color: $hb-text;
+	cursor: pointer;
+	white-space: nowrap;
+
+	&:hover {
+		background: #f0f4ff;
+		border-color: $hb-accent;
+		color: $hb-accent;
+	}
+
+	.customify-hb__popover-item-icon {
+		width: $hb-icon-size;
+		height:  $hb-icon-size;
+		flex-shrink: 0;
+		opacity: 0.7;
+	}
+
+	&:hover .customify-hb__popover-item-icon {
+		opacity: 1;
+	}
+}
+
+.customify-hb__popover-empty {
+	font-size: 12px;
+	color: $hb-text-muted;
+	font-style: italic;
+	padding: 8px 10px;
+}
+
+
+.customize-control-customify-columns_settings {
+	.customify-field-heading, 
+	.description {
+		padding-right: 40px;
+	}
+}

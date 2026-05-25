@@ -19,9 +19,9 @@ class Customify_Customize_Layout_Builder {
 
 		if ( is_admin() ) {
 			add_action( 'customize_controls_enqueue_scripts', array( $this, 'scripts' ) );
-			add_action( 'customize_controls_print_footer_scripts', array( $this, 'template' ) );
 			add_action( 'wp_ajax_customify_builder_save_template', array( $this, 'ajax_save_template' ) );
 			add_action( 'wp_ajax_customify_builder_export_template', array( $this, 'ajax_export_template' ) );
+			add_filter( 'customize_section_active', array( $this, 'hide_builder_item_sections' ), 20, 2 );
 		}
 
 	}
@@ -195,6 +195,52 @@ class Customify_Customize_Layout_Builder {
 	}
 
 	/**
+	 * Collect every section ID that belongs to a builder item across all registered builders.
+	 *
+	 * @return array<string,true>  Section ID → true map for fast lookup.
+	 */
+	public function get_all_item_sections() {
+		$sections = array();
+		foreach ( $this->registered_items as $builder_id => $items ) {
+			foreach ( $items as $obj ) {
+				if ( ! method_exists( $obj, 'item' ) ) {
+					continue;
+				}
+				$item = $obj->item();
+				foreach ( array( 'section', 'layout_section' ) as $key ) {
+					if ( ! empty( $item[ $key ] ) ) {
+						$sections[ $item[ $key ] ] = true;
+					}
+				}
+			}
+		}
+		return $sections;
+	}
+
+	/**
+	 * Hide all builder item sections from the Customizer panel navigation.
+	 * They are only accessible via the builder UI (gear icon on placed items).
+	 *
+	 * @param bool                 $active
+	 * @param WP_Customize_Section $section
+	 * @return bool
+	 */
+	public function hide_builder_item_sections( $active, $section ) {
+		// Never override WP sidebar section active state via PHP.
+		// Sidebar sections (type 'sidebar') control widget rendering and data sync in the
+		// Customizer preview — forcing them inactive breaks widget display and causes reloads.
+		// JS handles hiding them from the UI via permanentlyHideSection instead.
+		if ( $section instanceof WP_Customize_Sidebar_Section ) {
+			return $active;
+		}
+		$item_sections = $this->get_all_item_sections();
+		if ( isset( $item_sections[ $section->id ] ) ) {
+			return false;
+		}
+		return $active;
+	}
+
+	/**
 	 * Handle event save template
 	 */
 	function ajax_save_template() {
@@ -238,18 +284,42 @@ class Customify_Customize_Layout_Builder {
 			wp_send_json_success();
 		}
 
-		$config            = call_user_func_array( $fn, array() );
 		$new_template_data = array();
+		$allowed_keys      = array_keys( $this->get_builder_setting_defaults( $id ) );
 
-		foreach ( $config as $k => $field ) {
-			if ( 'panel' != $field['type'] && 'section' != $field['type'] ) {
-				$name  = $field['name'];
-				$value = get_theme_mod( $name );
-				if ( is_array( $value ) ) {
-					$value = array_filter( $value );
-				}
-				if ( $value && ! empty( $value ) ) {
+		// Prefer client-supplied data (captures live, unpublished customizer state);
+		// fall back to theme_mod-based capture so the endpoint stays compatible
+		// with callers that don't send a `data` payload.
+		if ( ! empty( $_POST['data'] ) ) {
+			$client_raw  = wp_unslash( $_POST['data'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			$client_data = json_decode( $client_raw, true );
+			if ( is_array( $client_data ) ) {
+				$allowed_map = array_flip( $allowed_keys );
+				foreach ( $client_data as $name => $value ) {
+					if ( ! isset( $allowed_map[ $name ] ) ) {
+						continue;
+					}
+					$value = self::deep_sanitize_template_value( $value );
+					if ( '' === $value || null === $value || ( is_array( $value ) && empty( $value ) ) ) {
+						continue;
+					}
 					$new_template_data[ $name ] = $value;
+				}
+			}
+		}
+
+		if ( empty( $new_template_data ) ) {
+			$config = call_user_func_array( $fn, array() );
+			foreach ( $config as $k => $field ) {
+				if ( 'panel' != $field['type'] && 'section' != $field['type'] ) {
+					$name  = $field['name'];
+					$value = get_theme_mod( $name );
+					if ( is_array( $value ) ) {
+						$value = array_filter( $value );
+					}
+					if ( $value && ! empty( $value ) ) {
+						$new_template_data[ $name ] = $value;
+					}
 				}
 			}
 		}
@@ -268,12 +338,11 @@ class Customify_Customize_Layout_Builder {
 		);
 
 		update_option( $option_name, $saved_templates );
-		$html = '<li class="saved_template li-boxed" data-control-id="' . esc_attr( $control ) . '" data-id="' . esc_attr( $key_id ) . '" data-data="' . esc_attr( wp_json_encode( $new_template_data ) ) . '">' . esc_html( $save_name ) . ' <a href="#" class="load-tpl">' . __( 'Load', 'customify' ) . '</a><a href="#" class="remove-tpl">' . __( 'Remove', 'customify' ) . '</a></li>'; // WPCS: XSS OK.
 		wp_send_json_success(
 			array(
 				'key_id' => $key_id,
 				'name'   => $save_name,
-				'li'     => $html,
+				'data'   => $new_template_data,
 			)
 		);
 		die();
@@ -289,23 +358,29 @@ class Customify_Customize_Layout_Builder {
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			wp_send_json_error( __( 'Access denied', 'customify' ) );
 		}
-		$id   = isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : false;
-		$name = isset( $_GET['name'] ) ? sanitize_text_field( wp_unslash( $_GET['name'] ) ) : false;
+
+		// Accept id/name from POST (safer than GET for state-reading admin actions).
+		$id   = isset( $_REQUEST['id'] )   ? sanitize_key( wp_unslash( $_REQUEST['id'] ) )   : false;
+		$name = isset( $_REQUEST['name'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['name'] ) ) : false;
+
+		// Validate $id against registered builders to prevent arbitrary option probing.
+		if ( ! $id || ! array_key_exists( $id, $this->registered_builders ) ) {
+			wp_send_json_error( __( 'Invalid builder id', 'customify' ) );
+		}
 
 		$theme_name  = wp_get_theme()->get( 'Name' );
 		$option_name = "{$theme_name}_{$id}_saved_templates";
 		$data        = get_option( $option_name );
-		$var         = null;
+		$payload     = null;
 		if ( $name ) {
-			if ( isset( $data[ $name ] ) ) {
-				$var = $data[ $name ]['data'];
-				$var = array_filter( $var );
+			if ( is_array( $data ) && isset( $data[ $name ] ) ) {
+				$payload = array_filter( (array) $data[ $name ]['data'] );
 			}
 		} else {
-			$var = $data;
+			$payload = $data;
 		}
-		var_export( $var ); // phpcs:ignore
-		die();
+
+		wp_send_json_success( $payload );
 	}
 
 	/**
@@ -316,76 +391,150 @@ class Customify_Customize_Layout_Builder {
 	public function get_builders() {
 		$builders = array();
 		foreach ( $this->registered_builders as $id => $builder ) {
-			$config          = $builder->get_config();
-			$config['items'] = apply_filters( 'customify/builder/' . $id . '/items', $this->get_builder_items( $id ) );
-			$config['rows']  = apply_filters( 'customify/builder/' . $id . '/rows', $builder->get_rows_config() );
-			$builders[ $id ] = $config;
+			$config                     = $builder->get_config();
+			$config['items']            = apply_filters( 'customify/builder/' . $id . '/items', $this->get_builder_items( $id ) );
+			$config['rows']             = apply_filters( 'customify/builder/' . $id . '/rows', $builder->get_rows_config() );
+			$config['saved_templates']  = $this->get_saved_templates( $id );
+			$config['setting_defaults'] = $this->get_builder_setting_defaults( $id );
+			$builders[ $id ]            = $config;
 		}
 
 		return $builders;
 	}
 
 	/**
-	 * Add script to Customize
+	 * Read the saved templates option for a given builder.
+	 *
+	 * Newest first so the React UI can render them in reverse-chronological order
+	 * without an extra reverse step on the client.
+	 *
+	 * @param string $builder_id Builder id (e.g. 'header', 'footer').
+	 * @return array<string,array{name:string,image:string,data:array}>
+	 */
+	public function get_saved_templates( $builder_id ) {
+		$theme_name  = wp_get_theme()->get( 'Name' );
+		$option_name = "{$theme_name}_{$builder_id}_saved_templates";
+		$saved       = get_option( $option_name );
+		if ( ! is_array( $saved ) ) {
+			return array();
+		}
+		return array_reverse( $saved, true );
+	}
+
+	/**
+	 * Deep-sanitize a value supplied by the client when saving a template.
+	 *
+	 * Keys are sanitized as setting names; scalars become sanitized text;
+	 * nested arrays are walked recursively. Values are stored as PHP arrays
+	 * so reading them back via wp_localize_script produces the expected JS
+	 * shape on Load.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	private static function deep_sanitize_template_value( $value ) {
+		if ( is_array( $value ) ) {
+			$out = array();
+			foreach ( $value as $k => $v ) {
+				// Numeric keys preserve order (e.g. item lists); string keys are sanitized.
+				$key       = is_int( $k ) ? $k : sanitize_text_field( (string) $k );
+				$out[ $key ] = self::deep_sanitize_template_value( $v );
+			}
+			return $out;
+		}
+		if ( is_bool( $value ) || is_int( $value ) || is_float( $value ) ) {
+			return $value;
+		}
+		if ( is_string( $value ) ) {
+			// Use wp_kses_post so styling values (e.g. CSS strings, rgba colors) survive.
+			return wp_kses_post( $value );
+		}
+		return '';
+	}
+
+	/**
+	 * Build a `name => default` map of every setting that belongs to a builder.
+	 *
+	 * Used by the React Templates panel to reset settings on Load: keys present
+	 * in the template are written from the template; keys absent from the
+	 * template are reset to their default so loading effectively replaces the
+	 * entire builder state.
+	 *
+	 * @param string $builder_id Builder id (e.g. 'header', 'footer').
+	 * @return array<string,mixed>
+	 */
+	public function get_builder_setting_defaults( $builder_id ) {
+		if ( ! isset( $this->registered_builders[ $builder_id ] ) ) {
+			return array();
+		}
+		$config   = call_user_func_array( array( $this->registered_builders[ $builder_id ], '_customize' ), array() );
+		$defaults = array();
+		foreach ( (array) $config as $field ) {
+			if ( ! is_array( $field ) || empty( $field['name'] ) || empty( $field['type'] ) ) {
+				continue;
+			}
+			// Skip wrappers and pure UI elements that have no underlying setting.
+			if ( in_array( $field['type'], array( 'panel', 'section', 'custom_html', 'heading' ), true ) ) {
+				continue;
+			}
+			$defaults[ $field['name'] ] = isset( $field['default'] ) ? $field['default'] : '';
+		}
+		return $defaults;
+	}
+
+	/**
+	 * Enqueue the React header and footer builders and pass builder config to JS.
 	 */
 	function scripts() {
-		global $wp_version;
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_script(
-			'customify-builder-v1',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v1' . $suffix . '.js',
-			array(
-				'customize-controls',
-				'jquery-ui-resizable',
-				'jquery-ui-droppable',
-				'jquery-ui-draggable',
-			),
-			false,
-			true
-		);
-		wp_enqueue_script(
-			'customify-builder-v2',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder-v2' . $suffix . '.js',
-			array(
-				'customize-controls',
-				'jquery-ui-resizable',
-				'jquery-ui-droppable',
-				'jquery-ui-draggable',
-			),
-			false,
-			true
-		);
-		wp_enqueue_script(
-			'customify-layout-builder',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/builder' . $suffix . '.js',
-			array(
-				'customify-builder-v1',
-				'customify-builder-v2',
-			),
-			false,
-			true
+		$builders_data = array(
+			'builders' => $this->get_builders(),
+			'is_rtl'   => is_rtl(),
+			'nonce'    => wp_create_nonce( 'Customify_Layout_Builder' ),
 		);
 
-		$hide_sw = get_theme_mod( 'hide_header_builder_switcher' );
-
-		$handle = 'jquery';
-		if ( '5.5' == $wp_version ) {
-			$handle = 'customify-layout-builder';
+		// Header builder.
+		$header_asset_file = get_template_directory() . '/build/js/backend/header-builder.asset.php';
+		if ( file_exists( $header_asset_file ) ) {
+			$asset = require $header_asset_file;
+			wp_enqueue_script(
+				'customify-header-builder',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/header-builder.js',
+				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
+				$asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'customify-header-builder',
+				esc_url( get_template_directory_uri() ) . '/build/css/backend/style-header-builder.css',
+				array( 'dashicons', 'wp-components' ),
+				$asset['version']
+			);
+			wp_localize_script( 'customify-header-builder', 'Customify_Layout_Builder', $builders_data );
+			wp_set_script_translations( 'customify-header-builder', 'customify' );
 		}
-		wp_localize_script(
-			$handle,
-			'Customify_Layout_Builder',
-			array(
-				'footer_moved_widgets_text' => '',
-				'builders'                  => $this->get_builders(),
-				'is_rtl'                    => is_rtl(),
-				'change_version_nonce'      => wp_create_nonce( 'change_version_nonce' ),
-				'swicth_version'            => __( 'Switch Builder Version', 'customify' ),
-				'hide_switcher'             => apply_filters( 'customify_hide_header_builder_switcher', get_theme_mod( 'hide_header_builder_switcher', 'no' ) ), // Use get theme mod `hide_header_builder_switcher` for hide switcher.
-				'header_builder_version'    => get_theme_mod( 'header_builder_version', $hide_sw ? 'v2' : '' ),
-				'nonce'                     => wp_create_nonce( 'Customify_Layout_Builder' ),
-			)
-		);
+
+		// Footer builder.
+		$footer_asset_file = get_template_directory() . '/build/js/backend/footer-builder.asset.php';
+		if ( file_exists( $footer_asset_file ) ) {
+			$asset = require $footer_asset_file;
+			wp_enqueue_script(
+				'customify-footer-builder',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/footer-builder.js',
+				array_merge( $asset['dependencies'], array( 'customize-controls' ) ),
+				$asset['version'],
+				true
+			);
+			wp_enqueue_style(
+				'customify-footer-builder',
+				esc_url( get_template_directory_uri() ) . '/build/css/backend/style-footer-builder.css',
+				array( 'dashicons', 'wp-components' ),
+				$asset['version']
+			);
+			// Reuse the same global; footer builder reads from it too.
+			wp_localize_script( 'customify-footer-builder', 'Customify_Layout_Builder', $builders_data );
+			wp_set_script_translations( 'customify-footer-builder', 'customify' );
+		}
+
 	}
 
 	static function get_instance() {

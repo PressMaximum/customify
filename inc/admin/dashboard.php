@@ -13,14 +13,26 @@ class Customify_Dashboard
 		add_action('wp_ajax_customify_dashboard_settings', array(__CLASS__, 'ajax'));
 		if (is_null(self::$_instance)) {
 			self::$_instance      = new self();
-			self::$_instance->url = admin_url('admin.php');
+			// Legacy dashboard slug — renamed to `customify-legacy` so the new
+			// kit-powered top-level page (registered in inc/admin/dashboard-v2.php)
+			// can claim the canonical `customify` slug.
+			self::$_instance->url = admin_url('themes.php');
 			self::$_instance->url = add_query_arg(
-				array('page' => 'customify'),
+				array('page' => 'customify-legacy'),
 				self::$_instance->url
 			);
 
 
-			add_action('admin_menu', array(self::$_instance, 'add_menu'), 5);
+			// REMOVED: the "Customify Options (Legacy)" submenu under
+			// Appearance is no longer surfaced — the kit-powered top-level
+			// "Customify" menu (inc/admin/dashboard-v2.php) is the canonical
+			// entry. The Customify_Dashboard class + add_menu() method are
+			// kept intact (back-compat for any child theme / plugin that
+			// instantiates them directly); only the auto-registration is
+			// dropped here. Full class removal lands with the rest of the
+			// legacy-dashboard sweep — see docs/SPEC-dashboard.md §1
+			// "Replaces".
+			// add_action('admin_menu', array(self::$_instance, 'add_menu'), 5);
 			add_action('admin_enqueue_scripts', array(self::$_instance, 'scripts'));
 			add_action('customify/dashboard/main', array(self::$_instance, 'copy_theme_settings'), 5);
 			add_action('customify/dashboard/main', array(self::$_instance, 'box_links'), 10);
@@ -56,18 +68,18 @@ class Customify_Dashboard
 			<div class="customify-notice-wrapper notice is-dismissible">
 				<div class="customify-notice">
 					<div class="customify-notice-img">
-						<img src="<?php echo esc_url(get_template_directory_uri() . '/assets/images/admin/customify_logo@2x.png'); ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
+						<img src="<?php echo esc_url(get_template_directory_uri() . '/build/images/admin/customify_logo@2x.png'); ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
 					</div>
 					<div class="customify-notice-content">
 						<div class="customify-notice-heading"><?php _e('Thanks for installing Customify, you rock! <img draggable="false" class="emoji" alt="" src="https://s.w.org/images/core/emoji/2.4/svg/1f918.svg">', 'customify'); ?></div>
-						<p><?php printf(__('To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify'), esc_url(admin_url('themes.php?page=customify'))); ?></p>
+						<p><?php printf(__('To fully take advantage of the best our theme can offer please make sure you visit our <a href="%1$s">Customify options page</a>.', 'customify'), esc_url(admin_url('admin.php?page=customify'))); ?></p>
 						<?php if (is_child_theme()) { ?>
 							<?php $child_theme = wp_get_theme(); ?>
 							<?php printf(esc_html__('You\'re using %1$s theme, It\'s a child theme of %2$s.', 'customify'), '<strong>' . $child_theme->Name . '</strong>', '<strong>' . esc_html__('Customify', 'customify') . '</strong>'); // phpcs:ignore
 							?>
 							<?php
 							$copy_link_args = array(
-								'page' => 'customify',
+								'page' => 'customify-legacy',
 								'action' => 'show_copy_settings',
 							);
 							$copy_link = add_query_arg($copy_link_args, admin_url('themes.php'));
@@ -90,12 +102,12 @@ class Customify_Dashboard
 
 	function add_menu()
 	{
-		self::$_instance->title = __('Customify Options', 'customify');
+		self::$_instance->title = __('Customify Options (Legacy)', 'customify');
 		add_theme_page(
 			$this->title,
 			$this->title,
 			'manage_options',
-			'customify',
+			'customify-legacy',
 			array($this, 'page')
 		);
 	}
@@ -107,12 +119,11 @@ class Customify_Dashboard
 	 */
 	function scripts($id)
 	{
-		if ('appearance_page_customify' != $id && 'themes.php' != $id) {
+		if ('appearance_page_customify-legacy' != $id && 'themes.php' != $id) {
 			return;
 		}
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_style('customify-admin', esc_url(get_template_directory_uri()) . '/assets/css/admin/dashboard' . $suffix . '.css', false, Customify::$version);
-		wp_enqueue_script('customify-admin', esc_url(get_template_directory_uri()) . '/assets/js/admin/dashboard.js', array('jquery'), Customify::$version);
+		wp_enqueue_style('customify-admin', esc_url(get_template_directory_uri()) . '/build/css/backend/admin/dashboard.css', false, Customify::$version);
+		wp_enqueue_script('customify-admin', esc_url(get_template_directory_uri()) . '/build/js/backend/admin/dashboard.js', array('jquery'), Customify::$version);
 		if ('themes' != $id) {
 			wp_enqueue_style('plugin-install');
 			wp_enqueue_script('plugin-install');
@@ -139,7 +150,13 @@ class Customify_Dashboard
 			'success' => false,
 		);
 
-		if ($option) {
+		// Allowlist: only permit known Customify dashboard options to prevent
+		// arbitrary option overwrites via this AJAX endpoint.
+		$allowed_options = array(
+			'customify_fa_ver',
+		);
+
+		if ( $option && in_array( $option, $allowed_options, true ) ) {
 			update_option($option, $value);
 			$args['success'] = true;
 		}
@@ -189,7 +206,7 @@ class Customify_Dashboard
 			<div class="cd-row">
 				<div class="cd-header-inner">
 					<a href="https://pressmaximum.com" target="_blank" class="cd-branding">
-						<img src="<?php echo esc_url(get_template_directory_uri()) . '/assets/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
+						<img src="<?php echo esc_url(get_template_directory_uri()) . '/build/images/admin/customify_logo@2x.png'; ?>" alt="<?php esc_attr_e('logo', 'customify'); ?>">
 					</a>
 					<span class="cd-version"><?php echo esc_html($this->config['version']); ?></span>
 					<a class="cd-top-link" href="<?php echo esc_url($this->add_url_args(array('tab' => 'changelog'))); ?>"><?php _e('Changelog', 'customify'); ?></a>
@@ -248,12 +265,12 @@ class Customify_Dashboard
 	{
 		if (is_child_theme() && isset($_GET['action']) && 'show_copy_settings' == $_GET['action']) {
 			$child_theme = wp_get_theme();
-			$current_action_link = admin_url('themes.php?page=customify');
+			$current_action_link = admin_url('themes.php?page=customify-legacy');
 		?>
 			<div class="cd-box copy-theme-settings">
 				<div class="cd-box-top">
 					<?php _e('Copy Settings', 'customify'); ?>
-					<button type="button" class="notice-dismiss js-dismiss-notice" data-base_url="<?php echo esc_url(admin_url('themes.php?page=customify')); ?>"></button>
+					<button type="button" class="notice-dismiss js-dismiss-notice" data-base_url="<?php echo esc_url(admin_url('themes.php?page=customify-legacy')); ?>"></button>
 				</div>
 				<div class="cd-box-content">
 					<form method="post" action="<?php echo esc_attr($current_action_link); ?>" class="demo-import-boxed copy-settings-form">
@@ -406,7 +423,7 @@ class Customify_Dashboard
 		<div class="cd-box box-plugins">
 			<div class="cd-box-top"><?php _e('Customify ready to import sites', 'customify'); ?></div>
 			<div class="cd-sites-thumb">
-				<img src="<?php echo esc_url(get_template_directory_uri()) . '/assets/images/admin/sites_thumbnail.jpg'; ?>">
+				<img src="<?php echo esc_url(get_template_directory_uri()) . '/build/images/admin/sites_thumbnail.jpg'; ?>">
 			</div>
 			<div class="cd-box-content">
 				<p><?php _e('<strong>Customify Sites</strong> is a free add-on for the Customify theme which help you browse and import ready made websites with few clicks.', 'customify'); ?></p>

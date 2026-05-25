@@ -137,6 +137,11 @@ abstract class Customify_Abstract_Layout_Frontend {
 	 * @return mixed
 	 */
 	public function setup_item_content( $content, $id, $device ) {
+		// Defensive cast: an item render callback may return null, false, or
+		// even an array. str_replace() emits a deprecation notice (PHP 8.1+)
+		// or a TypeError on non-string input — normalize once here so every
+		// downstream replacement is safe.
+		$content = is_scalar( $content ) ? (string) $content : '';
 		$content = str_replace( '__id__', $id, $content );
 		$content = str_replace( '__device__', $device, $content );
 		/**

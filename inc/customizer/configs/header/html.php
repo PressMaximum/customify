@@ -51,14 +51,15 @@ class Customify_Builder_Item_HTML {
 	 */
 	function customize() {
 		// Render callback function.
-		$fn     = array( $this, 'render' );
-		$config = array(
+		$fn      = array( $this, 'render' );
+		$item_id = $this->id;
+		$config  = array(
 			array(
-				'name'     => $this->section,
-				'type'     => 'section',
-				'panel'    => $this->panel,
-				'priority' => $this->priority,
-				'title'    => $this->label,
+				'name'            => $this->section,
+				'type'            => 'section',
+				'panel'           => $this->panel,
+				'priority'        => $this->priority,
+				'title'           => $this->label,
 			),
 
 			array(
@@ -92,7 +93,7 @@ class Customify_Builder_Item_HTML {
 	 * Optional. Render item content
 	 */
 	function render() {
-		$content = Customify()->get_setting( $this->name );
+		$content = (string) Customify()->get_setting( $this->name );
 		echo '<div class="builder-header-' . esc_attr( $this->id ) . '-item item--html">';
 		echo apply_filters( 'customify_the_content', wp_kses_post( balanceTags( $content, true ) ) );
 		echo '</div>';

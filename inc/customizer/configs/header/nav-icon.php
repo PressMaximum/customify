@@ -19,11 +19,11 @@ class Customify_Builder_Item_Nav_Icon {
 		$selector = '.menu-mobile-toggle';
 		$config   = array(
 			array(
-				'name'           => $section,
-				'type'           => 'section',
-				'panel'          => 'header_settings',
-				'theme_supports' => '',
-				'title'          => __( 'Menu Icon', 'customify' ),
+				'name'            => $section,
+				'type'            => 'section',
+				'panel'           => 'header_settings',
+				'theme_supports'  => '',
+				'title'           => __( 'Menu Icon', 'customify' ),
 			),
 
 			array(

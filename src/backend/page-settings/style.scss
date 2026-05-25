@@ -1,0 +1,34 @@
+.customify-page-settings-panel {
+
+	// Body of the panel — consistent spacing for stacked controls.
+	.customify-ps-body {
+		padding-top: 4px;
+
+		.components-base-control {
+			margin-bottom: 10px;
+		}
+
+		// Section group heading (Disable Elements, Page Header, …).
+		.customify-ps-section-label {
+			font-size: 11px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.5px;
+			color: #757575;
+			margin: 16px 0 6px;
+		}
+
+		// ToggleControl rows — compact, no excess vertical space.
+		.components-toggle-control {
+			margin-bottom: 4px;
+
+			.components-flex {
+				gap: 8px;
+			}
+
+			.components-toggle-control__label {
+				font-size: 13px;
+			}
+		}
+	}
+}

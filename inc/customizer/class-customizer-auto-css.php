@@ -9,6 +9,20 @@ class Customify_Customizer_Auto_CSS
 	public $variants = array();
 	public $subsets = array();
 
+	// WP Font Library buckets. Separate from $fonts/$variants because
+	// they emit @font-face inline instead of building a Google Fonts URL.
+	public $library_fonts = array();
+	public $library_variants = array();
+
+	// theme.json typography.fontFamilies buckets — same idea as the
+	// Library buckets but the data comes from WP_Theme_JSON_Resolver
+	// and the family CSS may be a stack ("Inter, sans-serif") rather
+	// than a single name, so we keep both the picker name and the raw
+	// fontFamily string for frontend output.
+	public $theme_fonts = array();
+	public $theme_variants = array();
+	private $theme_fonts_resolver = null;
+
 	static $code = null;
 	static $font_url = null;
 	/**
@@ -361,6 +375,265 @@ class Customify_Customizer_Auto_CSS
 		}
 	}
 
+	/**
+	 * Emit CSS for a `columns_settings` field.
+	 *
+	 * Saved value:
+	 *   { desktop: { <colKey>: { direction, align, gap, padding: { top, right, bottom, left, unit } }, ... },
+	 *     mobile:  { <colKey>: { ... }, ... } }
+	 *
+	 * `direction` is `'row'` or `'column'`. `align` is one of
+	 * `flex-start | flex-center | flex-end | space-between` and maps to
+	 * `justify-content` on the main axis defined by `direction`.
+	 *
+	 * Selector: `{$field['selector']} .col-v2-<colKey>`
+	 *
+	 * @since 0.5.0
+	 */
+	function columns_settings($field, $values = null)
+	{
+		$values = Customify()->get_setting($field['name']);
+		if (!is_array($values)) {
+			$values = array();
+		}
+
+		$row_selector = isset($field['selector']) ? $field['selector'] : '';
+		if (!$row_selector) {
+			return;
+		}
+
+		$col_selectors     = isset($field['col_selectors']) && is_array($field['col_selectors']) ? $field['col_selectors'] : array();
+		$forced_direction  = isset($field['forced_direction']) ? (string) $field['forced_direction'] : '';
+		$forced_align      = isset($field['forced_align']) ? (string) $field['forced_align'] : '';
+		$default_direction = isset($field['default_direction']) ? (string) $field['default_direction'] : '';
+		$default_align     = isset($field['default_align']) ? (string) $field['default_align'] : '';
+		$column_keys       = isset($field['column_keys']) && is_array($field['column_keys']) ? $field['column_keys'] : array();
+		// Field-level device list — drives which buckets the CSS pipeline
+		// iterates. Header rows default to `[desktop, mobile]`; footer
+		// rows declare the full `[desktop, tablet, mobile]` set.
+		$devices_list      = isset($field['devices']) && is_array($field['devices']) && ! empty($field['devices'])
+			? $field['devices']
+			: array( 'desktop', 'mobile' );
+		// Optional per-device class-scoping. When a device maps to a class
+		// here, its CSS is scoped through that class (between the row
+		// selector and `.col-v2-{key}`) and lands in the unwrapped `all`
+		// bucket — used for builders that double-render markup per
+		// device, e.g. header wraps desktop items in `.cb-row--desktop`
+		// and mobile items in `.cb-row--mobile`.
+		$device_scope      = isset($field['device_scope']) && is_array($field['device_scope']) ? $field['device_scope'] : array();
+
+		// Legacy fallback — early builds of this control saved column data without
+		// a desktop/mobile wrapper (the generic sanitizer stripped it). When the
+		// stored value has column keys at the top level instead of device keys,
+		// treat the whole bag as the desktop bucket so the saved gap/padding
+		// keeps applying after the sanitize fix.
+		if ( ! empty( $values ) && ! isset( $values['desktop'] ) && ! isset( $values['mobile'] ) ) {
+			$has_col_key = false;
+			foreach ( $column_keys as $_ck ) {
+				if ( isset( $values[ $_ck ] ) ) {
+					$has_col_key = true;
+					break;
+				}
+			}
+			if ( $has_col_key ) {
+				$values = array( 'desktop' => $values );
+			}
+		}
+
+		// Active column list — count from the linked col_layout setting if any,
+		// else fall back to the full column_keys list. Drives the position-based
+		// default align (first=flex-start, last=flex-end, middle=flex-center)
+		// applied below when the user hasn't saved an explicit align choice.
+		$active_count = count($column_keys);
+		if (!empty($field['col_layout_setting'])) {
+			$cl_raw  = Customify()->get_setting($field['col_layout_setting']);
+			$cl_data = is_array($cl_raw) ? $cl_raw : (is_string($cl_raw) ? json_decode($cl_raw, true) : array());
+			if (is_array($cl_data) && isset($cl_data['count'])) {
+				$cnt = intval($cl_data['count']);
+				if ($cnt >= 1) {
+					$active_count = min(count($column_keys), $cnt);
+				}
+			}
+		}
+		$active_columns = array_slice($column_keys, 0, $active_count);
+
+		// Build device_map from field's `devices` config. Each device
+		// becomes the saved-value bucket key. The CSS bucket defaults to
+		// the same device name (wrapped by the matching media query at
+		// render time) — but for devices in `$device_scope`, we instead
+		// land in the unwrapped `all` bucket and inject the scope class
+		// into the selector below.
+		$device_map = array();
+		foreach ( $devices_list as $_d ) {
+			$device_map[ $_d ] = isset( $device_scope[ $_d ] ) && $device_scope[ $_d ] ? 'all' : $_d;
+		}
+
+		foreach ($device_map as $device_key => $css_bucket) {
+			$device_values = (isset($values[$device_key]) && is_array($values[$device_key])) ? $values[$device_key] : array();
+
+			// Always seed the active columns so direction/align defaults emit
+			// even when the user hasn't saved a value. Padding/gap remain empty
+			// until the user sets them.
+			foreach ($active_columns as $ck) {
+				if (!isset($device_values[$ck])) {
+					$device_values[$ck] = array();
+				}
+			}
+
+			if (empty($device_values)) {
+				continue;
+			}
+
+			foreach ($device_values as $col_key => $col_value) {
+				if (!is_array($col_value)) {
+					$col_value = array();
+				}
+
+				if ( isset( $col_selectors[ $col_key ] ) && $col_selectors[ $col_key ] ) {
+					$selector = $col_selectors[ $col_key ];
+				} else {
+					$scope    = isset( $device_scope[ $device_key ] ) && $device_scope[ $device_key ]
+						? ' ' . trim( $device_scope[ $device_key ] )
+						: '';
+					$selector = trim( $row_selector ) . $scope . ' .col-v2-' . sanitize_html_class( $col_key );
+				}
+				$rules    = array();
+
+				// Resolve direction. Order: forced > saved > field default > 'row'.
+				$saved_direction = isset($col_value['direction']) ? (string) $col_value['direction'] : '';
+				if ('' !== $forced_direction) {
+					$direction = $forced_direction;
+				} elseif ('' !== $saved_direction) {
+					$direction = $saved_direction;
+				} elseif ('' !== $default_direction) {
+					$direction = $default_direction;
+				} else {
+					$direction = 'row';
+				}
+				if ('row' !== $direction && 'column' !== $direction) {
+					$direction = 'row';
+				}
+
+				// Position-based default align. First column → flex-start,
+				// last → flex-end, anything else → flex-center. A single
+				// active column resolves to flex-start.
+				$col_index    = array_search($col_key, $active_columns, true);
+				$position_align = 'flex-center';
+				if ($col_index === false) {
+					$position_align = '';
+				} elseif (count($active_columns) === 1 || $col_index === 0) {
+					$position_align = 'flex-start';
+				} elseif ($col_index === count($active_columns) - 1) {
+					$position_align = 'flex-end';
+				}
+
+				// Resolve align. Order: forced > saved > field default > position-based.
+				$saved_align = isset($col_value['align']) ? (string) $col_value['align'] : '';
+				if ('' !== $forced_align) {
+					$align = $forced_align;
+				} elseif ('' !== $saved_align) {
+					$align = $saved_align;
+				} elseif ('' !== $default_align) {
+					$align = $default_align;
+				} else {
+					$align = $position_align;
+				}
+
+				// Map align → justify-content keyword (shared between the
+				// column-slot rule and the per-item rule below).
+				$justify_value = '';
+				switch ($align) {
+					case 'flex-start':    $justify_value = 'flex-start';    break;
+					case 'flex-center':   $justify_value = 'center';        break;
+					case 'flex-end':      $justify_value = 'flex-end';      break;
+					case 'space-between': $justify_value = 'space-between'; break;
+				}
+
+				// Emit flexbox rules on the column slot.
+				//
+				// Row direction: align maps to justify-content on the column
+				// so items distribute horizontally inside the slot.
+				//
+				// Column direction: align does NOT go on the column (items
+				// just stack vertically). Instead it's applied below to each
+				// `.item--inner` so the chosen value aligns the item's own
+				// internal content (icon vs label, image vs caption, …)
+				// along the horizontal axis.
+				$rules[] = 'display: flex;';
+				$rules[] = 'flex-direction: ' . $direction . ';';
+				if ('row' === $direction) {
+					if ('' !== $justify_value) {
+						$rules[] = 'justify-content: ' . $justify_value . ';';
+					}
+					$rules[] = 'align-items: center;';
+				}
+
+				// Gap — value shape: { unit, value } or scalar (legacy).
+				if (isset($col_value['gap'])) {
+					$gap_val  = $col_value['gap'];
+					$gap_num  = null;
+					$gap_unit = 'em';
+					if (is_array($gap_val)) {
+						if (isset($gap_val['value']) && '' !== $gap_val['value'] && null !== $gap_val['value']) {
+							$gap_num  = $gap_val['value'];
+							$gap_unit = isset($gap_val['unit']) && $gap_val['unit'] ? $gap_val['unit'] : 'em';
+						}
+					} elseif ('' !== $gap_val && null !== $gap_val) {
+						$gap_num = $gap_val;
+					}
+					if (null !== $gap_num) {
+						$rules[] = 'gap: ' . floatval($gap_num) . sanitize_text_field($gap_unit) . ';';
+					}
+				}
+
+				// Padding.
+				if (isset($col_value['padding']) && is_array($col_value['padding'])) {
+					$padding = wp_parse_args(
+						$col_value['padding'],
+						array(
+							'top'    => null,
+							'right'  => null,
+							'bottom' => null,
+							'left'   => null,
+							'unit'   => 'px',
+						)
+					);
+					$unit  = $padding['unit'] ? $padding['unit'] : 'px';
+					$sides = array();
+					foreach (array('top', 'right', 'bottom', 'left') as $side) {
+						if (null === $padding[$side] || '' === $padding[$side]) {
+							continue;
+						}
+						$sides[$side] = 'padding-' . $side . ': ' . floatval($padding[$side]) . $unit . ';';
+					}
+					if ($sides) {
+						$rules = array_merge($rules, array_values($sides));
+					}
+				}
+
+				if (empty($rules)) {
+					continue;
+				}
+
+				$this->css[$css_bucket] .= "{$selector} {\r\n\t" . join("\r\n\t", $rules) . "\r\n}\r\n";
+
+				// Column direction extras:
+				//   1. Each item takes the full column width so stacked
+				//      items line up on their own row.
+				//   2. Each `.item--inner` becomes its own flex container
+				//      with the resolved `justify-content`, so the user's
+				//      align choice controls horizontal placement of the
+				//      item's internal content.
+				if ('column' === $direction) {
+					$this->css[$css_bucket] .= "{$selector} > * {\r\n\twidth: 100%;\r\n}\r\n";
+					if ('' !== $justify_value) {
+						$this->css[$css_bucket] .= "{$selector} .item--inner {\r\n\tdisplay: flex;\r\n\tjustify-content: " . $justify_value . ";\r\n}\r\n";
+					}
+				}
+			}
+		}
+	}
+
 	function styling($field, $values = null)
 	{
 		$values = Customify()->get_setting($field['name'], 'all');
@@ -601,11 +874,68 @@ class Customify_Customizer_Auto_CSS
 			if ($value['subsets']) {
 				$this->subsets = array_merge($this->subsets, $value['subsets']);
 			}
+		} elseif ('library' === $value['type']) {
+			// WP Font Library fonts are uploaded locally; we resolve
+			// their files in get_library_fonts_css() and emit @font-face
+			// inline. Collect only the variants actually used so we
+			// don't ship CSS for unused weight/style combinations.
+			$this->library_fonts[$value['font']] = $value['font'];
+			if ($value['variant']) {
+				$variants = is_array($value['variant']) ? array_values($value['variant']) : array($value['variant']);
+				if (!isset($this->library_variants[$value['font']])) {
+					$this->library_variants[$value['font']] = array();
+				}
+				$this->library_variants[$value['font']] = array_unique(
+					array_merge($this->library_variants[$value['font']], $variants)
+				);
+			}
+		} elseif ('theme' === $value['type']) {
+			// theme.json-declared fonts. Same bucket pattern as Library,
+			// but the font-family CSS uses the theme.json `fontFamily`
+			// stack (e.g. "Inter, sans-serif") so unloaded fonts fall
+			// back to the next family in the stack gracefully.
+			$this->theme_fonts[$value['font']] = $value['font'];
+			if ($value['variant']) {
+				$variants = is_array($value['variant']) ? array_values($value['variant']) : array($value['variant']);
+				if (!isset($this->theme_variants[$value['font']])) {
+					$this->theme_variants[$value['font']] = array();
+				}
+				$this->theme_variants[$value['font']] = array_unique(
+					array_merge($this->theme_variants[$value['font']], $variants)
+				);
+			}
+
+			// Use the raw fontFamily declaration from theme.json when
+			// it differs from the picker name. Falls back to the name
+			// (quoted) so unknown fonts still emit valid CSS.
+			$resolver = $this->theme_fonts_resolver();
+			if ($resolver) {
+				$theme_data = $resolver->get_for_frontend();
+				if (!empty($theme_data[$value['font']]['font_family_css'])) {
+					return "font-family: {$theme_data[$value['font']]['font_family_css']};";
+				}
+			}
 		} else {
 			$this->custom_fonts[$value['font']] = $value['font'];
 		}
 
 		return "font-family: \"{$value['font']}\";";
+	}
+
+	/**
+	 * Lazy-instantiate the theme-fonts resolver so callers above don't
+	 * pay for object construction unless a theme font is actually used.
+	 *
+	 * @return Customify_Customizer_Theme_Fonts|null
+	 */
+	private function theme_fonts_resolver()
+	{
+		if (null === $this->theme_fonts_resolver) {
+			$this->theme_fonts_resolver = class_exists('Customify_Customizer_Theme_Fonts')
+				? new Customify_Customizer_Theme_Fonts()
+				: false;
+		}
+		return $this->theme_fonts_resolver ?: null;
 	}
 
 
@@ -827,6 +1157,122 @@ class Customify_Customizer_Auto_CSS
 		}
 	}
 
+	/**
+	 * Build the @font-face CSS for WP Font Library families that are
+	 * actually referenced by the current configuration. Auto_CSS must
+	 * have run first so $library_fonts / $library_variants are
+	 * populated by setup_font(). Returns an empty string when nothing
+	 * is in use — keep wp_add_inline_style happy.
+	 *
+	 * @return string
+	 */
+	function get_library_fonts_css()
+	{
+		if (empty($this->library_fonts)) {
+			return '';
+		}
+		if (!class_exists('Customify_Customizer_Font_Library')) {
+			return '';
+		}
+
+		$library = (new Customify_Customizer_Font_Library())->get_for_frontend();
+		if (empty($library)) {
+			return '';
+		}
+
+		// Dedupe with WP core. Library fonts that the user has
+		// "activated" in wp-admin/site-editor end up in
+		// wp_get_global_settings() and WP auto-emits @font-face for
+		// them. Skip those; emit only the un-activated ones (uploaded
+		// but not turned on in the editor) that WP wouldn't reach.
+		$handled = class_exists('Customify_Customizer_Font_Loader')
+			? Customify_Customizer_Font_Loader::wp_handled_names()
+			: array();
+
+		$css = '';
+		foreach ($this->library_fonts as $name) {
+			if (isset($handled[$name])) {
+				continue; // WP will print this
+			}
+			if (empty($library[$name]['font_faces'])) {
+				continue;
+			}
+			$used = isset($this->library_variants[$name]) ? $this->library_variants[$name] : array();
+			foreach ($library[$name]['font_faces'] as $face) {
+				// When the user picked specific variants, restrict to
+				// those. With no explicit variant in storage we ship
+				// every face the family owns so font-weight CSS
+				// elsewhere can still resolve.
+				if (!empty($used) && !in_array($face['variant'], $used, true)) {
+					continue;
+				}
+				$css .= sprintf(
+					"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+					esc_attr($name),
+					esc_attr($face['style']),
+					esc_attr($face['weight']),
+					esc_url($face['src'])
+				);
+			}
+		}
+		return $css;
+	}
+
+	/**
+	 * Build @font-face CSS for theme.json fontFamilies that are
+	 * actually used. Mirrors get_library_fonts_css() but reads from
+	 * the theme-fonts resolver, and skips families with no font-face
+	 * declarations (system-font stacks need no @font-face).
+	 *
+	 * @return string
+	 */
+	function get_theme_fonts_css()
+	{
+		if (empty($this->theme_fonts)) {
+			return '';
+		}
+		$resolver = $this->theme_fonts_resolver();
+		if (!$resolver) {
+			return '';
+		}
+		$theme = $resolver->get_for_frontend();
+		if (empty($theme)) {
+			return '';
+		}
+
+		// Dedupe with WP core's wp_print_font_faces() output. On WP 6.5+
+		// theme.json fonts get auto-emitted; re-emitting them here only
+		// ships duplicate bytes. Helper returns empty on older WP so
+		// legacy installs continue to receive theme-emitted CSS.
+		$handled = class_exists('Customify_Customizer_Font_Loader')
+			? Customify_Customizer_Font_Loader::wp_handled_names()
+			: array();
+
+		$css = '';
+		foreach ($this->theme_fonts as $name) {
+			if (isset($handled[$name])) {
+				continue; // WP will print this
+			}
+			if (empty($theme[$name]['font_faces'])) {
+				continue; // system-font stack — no @font-face to emit
+			}
+			$used = isset($this->theme_variants[$name]) ? $this->theme_variants[$name] : array();
+			foreach ($theme[$name]['font_faces'] as $face) {
+				if (!empty($used) && !in_array($face['variant'], $used, true)) {
+					continue;
+				}
+				$css .= sprintf(
+					"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+					esc_attr($name),
+					esc_attr($face['style']),
+					esc_attr($face['weight']),
+					esc_url($face['src'])
+				);
+			}
+		}
+		return $css;
+	}
+
 	function get_google_fonts_url()
 	{
 		$url = '//fonts.googleapis.com/css?family=';
@@ -926,6 +1372,9 @@ class Customify_Customizer_Auto_CSS
 								break;
 							case 'styling':
 								$this->styling($field, $v);
+								break;
+							case 'columns_settings':
+								$this->columns_settings($field, $v);
 								break;
 							case 'modal':
 								$this->modal($field, $v);

@@ -212,17 +212,16 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			wp_enqueue_script( 'jquery-ui-sortable' );
 		}
 
-		$suffix = Customify()->get_asset_suffix();
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_script( 'jquery-ui-slider' );
-		wp_enqueue_style( 'customify-customizer-control', esc_url( get_template_directory_uri() ) . '/assets/css/admin/customizer/customizer' . $suffix . '.css' ); // phpcs:ignore
-		wp_enqueue_style( 'select2', esc_url( get_template_directory_uri() ) . '/assets/css/admin/select2' . $suffix . '.css' ); // phpcs:ignore
-		wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/color-picker-alpha' . $suffix . '.js', array( 'wp-color-picker' ), false, true ); // phpcs:ignore
-		wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ) . '/assets/js/select2' . $suffix . '.js', array( 'jquery' ), false, true ); // phpcs:ignore
+		wp_enqueue_style( 'customify-customizer-control', esc_url( get_template_directory_uri() ) . '/build/css/backend/customizer/customizer.css' ); // phpcs:ignore
+		wp_enqueue_style( 'select2', esc_url( get_template_directory_uri() ) . '/build/vendor/select2.min.css' ); // phpcs:ignore
+		wp_enqueue_script( 'customify-color-picker-alpha', esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/color-picker-alpha.js', array( 'wp-color-picker' ), false, true ); // phpcs:ignore
+		wp_enqueue_script( 'select2', esc_url( get_template_directory_uri() ) . '/build/vendor/select2.min.js', array( 'jquery' ), false, true ); // phpcs:ignore
 		wp_enqueue_script( // phpcs:ignore
 			'customify-customizer-control',
-			esc_url( get_template_directory_uri() ) . '/assets/js/customizer/control' . $suffix . '.js',
+			esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/control.js',
 			array(
 				'jquery',
 				'customize-base',
@@ -231,6 +230,30 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 			),
 			false,
 			true
+		);
+		// `.focus-section` / `.focus-control` click delegates — used by
+		// description anchors such as "Assign Menu Location" in
+		// configs/header/menus.php. The handlers exist in
+		// src/backend/customizer/js/builder.js but enqueueing that whole
+		// bundle here pulls in the layout-builder version-switcher code,
+		// which assumes header/footer builder controls are already
+		// registered and crashes elsewhere. Just emit the two tiny
+		// delegated handlers inline; cheaper, no extra HTTP request, no
+		// side-effects from the larger bundle.
+		wp_add_inline_script(
+			'customify-customizer-control',
+			"(function(\$){
+	\$(document).on('click', '.focus-section', function(e){
+		e.preventDefault();
+		var id = \$(this).attr('data-id') || (\$(this).attr('href') || '').replace('#', '');
+		if (id && wp.customize.section(id)) wp.customize.section(id).focus();
+	});
+	\$(document).on('click', '.focus-control', function(e){
+		e.preventDefault();
+		var id = \$(this).attr('data-id') || (\$(this).attr('href') || '').replace('#', '');
+		if (id && wp.customize.control(id)) wp.customize.control(id).focus();
+	});
+})(jQuery);"
 		);
 		if ( is_null( self::$_args_loaded ) ) {
 

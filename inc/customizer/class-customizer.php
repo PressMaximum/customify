@@ -34,11 +34,32 @@ class  Customify_Customizer {
 	function init() {
 
 		require_once get_template_directory() . '/inc/customizer/class-customizer-sanitize.php';
+		// Theme + Font Library bridges must load before auto-css because
+		// the CSS generator references them from frontend render
+		// (guests included, no admin guard). Font Loader sits at the
+		// same level — used by auto-css for dedupe and by enqueue
+		// hooks for preconnect / preload.
+		require_once get_template_directory() . '/inc/customizer/class-customizer-theme-fonts.php';
+		require_once get_template_directory() . '/inc/customizer/class-customizer-font-library.php';
+		require_once get_template_directory() . '/inc/customizer/class-customizer-font-loader.php';
 		require_once get_template_directory() . '/inc/customizer/class-customizer-auto-css.php';
 
 		if ( is_admin() || is_customize_preview() ) {
 			add_action( 'customize_register', array( $this, 'register' ), 666 );
+			// Run last so every panel (core, plugins, third-party) is already registered
+			// when we slot panels into groups and bump foreign items below the divider.
+			add_action( 'customize_register', array( $this, 'register_panel_groups' ), 99999 );
+			// Override JS section constructor for the divider type so WP customizer
+			// doesn't auto-hide it (default behaviour hides sections with no controls).
+			add_action( 'customize_controls_print_footer_scripts', array( $this, 'print_divider_section_constructor' ) );
 			add_action( 'customize_preview_init', array( $this, 'preview_js' ) );
+			// Inject every theme.json + Font Library family into the
+			// preview iframe head so users can switch to any registered
+			// font and see it render immediately — the frontend code
+			// path only emits @font-face for fonts already saved into
+			// settings.
+			add_action( 'customize_preview_init', array( $this, 'preview_theme_fonts' ) );
+			add_action( 'customize_preview_init', array( $this, 'preview_library_fonts' ) );
 			add_action( 'wp_ajax_customify/customizer/ajax/get_icons', array( $this, 'get_icons' ) );
 
 			require_once get_template_directory() . '/inc/customizer/class-customizer-fonts.php';
@@ -83,11 +104,20 @@ class  Customify_Customizer {
 	}
 
 	/**
-	 * Reset Customize section
+	 * AJAX: return the registered icon library for the Customizer's
+	 * font-icon picker. Gated by the Customizer preview nonce because
+	 * the picker only runs inside that iframe.
 	 */
 	function get_icons() {
+		// The customize-preview iframe ships its WP-issued preview nonce
+		// as `_nonce` (see _wpCustomizeSettings.nonce.preview). Match the
+		// stylesheet-bound action WP_Customize_Manager registers.
+		$nonce = isset( $_REQUEST['_nonce'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['_nonce'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		if ( ! wp_verify_nonce( $nonce, 'preview-customize_' . get_stylesheet() ) ) {
+			wp_send_json_error( 'invalid_nonce', 403 );
+		}
 		if ( ! current_user_can( 'customize' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( 'forbidden', 403 );
 		}
 
 		require_once get_template_directory() . '/inc/customizer/class-customizer-icons.php';
@@ -98,19 +128,118 @@ class  Customify_Customizer {
 	/**
 	 * Binds JS handlers to make Theme Customizer preview reload changes asynchronously.
 	 */
+	/**
+	 * Counterpart to preview_library_fonts() for theme.json fonts.
+	 * Same rationale (cheap to ship, browsers lazy-load font files).
+	 */
+	function preview_theme_fonts() {
+		if ( ! class_exists( 'Customify_Customizer_Theme_Fonts' ) ) {
+			return;
+		}
+		add_action( 'wp_head', function () {
+			$theme = ( new Customify_Customizer_Theme_Fonts() )->get_for_frontend();
+			if ( empty( $theme ) ) {
+				return;
+			}
+			// Skip families WP auto-prints — see same dedupe in
+			// get_theme_fonts_css(). The preview iframe runs WP core
+			// hooks too, so wp_print_font_faces() already emitted the
+			// CSS we'd otherwise duplicate here.
+			$handled = class_exists( 'Customify_Customizer_Font_Loader' )
+				? Customify_Customizer_Font_Loader::wp_handled_names()
+				: array();
+			$buf = '';
+			foreach ( $theme as $name => $data ) {
+				if ( isset( $handled[ $name ] ) ) {
+					continue;
+				}
+				if ( empty( $data['font_faces'] ) ) {
+					continue;
+				}
+				foreach ( $data['font_faces'] as $face ) {
+					$buf .= sprintf(
+						"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+						esc_attr( $name ),
+						esc_attr( $face['style'] ),
+						esc_attr( $face['weight'] ),
+						esc_url( $face['src'] )
+					);
+				}
+			}
+			if ( '' === $buf ) {
+				return;
+			}
+			echo '<style id="customify-theme-fonts-preview">' . $buf . '</style>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}, 100 );
+	}
+
+	/**
+	 * Print @font-face declarations for every WP Font Library family
+	 * into the customize preview iframe so the user can preview any
+	 * uploaded font even before saving it. Browsers only download
+	 * font files when a matching font-family is actually used, so
+	 * shipping the full catalogue costs CSS bytes but no HTTP traffic.
+	 */
+	function preview_library_fonts() {
+		if ( ! class_exists( 'Customify_Customizer_Font_Library' ) ) {
+			return;
+		}
+		add_action( 'wp_head', function () {
+			$library = ( new Customify_Customizer_Font_Library() )->get_for_frontend();
+			if ( empty( $library ) ) {
+				return;
+			}
+			// Skip families WP auto-prints (activated Library fonts in
+			// global settings). The preview iframe runs WP core hooks
+			// so wp_print_font_faces() already emitted those.
+			$handled = class_exists( 'Customify_Customizer_Font_Loader' )
+				? Customify_Customizer_Font_Loader::wp_handled_names()
+				: array();
+			echo '<style id="customify-library-fonts-preview">';
+			foreach ( $library as $name => $data ) {
+				if ( isset( $handled[ $name ] ) ) {
+					continue;
+				}
+				if ( empty( $data['font_faces'] ) ) {
+					continue;
+				}
+				foreach ( $data['font_faces'] as $face ) {
+					printf(
+						"@font-face{font-family:'%s';font-style:%s;font-weight:%s;font-display:swap;src:url('%s');}",
+						esc_attr( $name ),
+						esc_attr( $face['style'] ),
+						esc_attr( $face['weight'] ),
+						esc_url( $face['src'] )
+					);
+				}
+			}
+			echo '</style>';
+		}, 100 );
+	}
+
 	function preview_js() {
 		if ( is_customize_preview() ) {
 			$suffix = Customify()->get_asset_suffix();
 
-			wp_enqueue_script( 'customify-customizer-auto-css', esc_url( get_template_directory_uri() ) . '/assets/js/customizer/auto-css' . $suffix . '.js', array( 'customize-preview' ), '20151215', true );
+			// Use webpack-emitted content hashes so browsers refetch the bundle
+			// after every rebuild. The hardcoded '20151215' used previously
+			// meant `?ver=` never changed, so users had to hard-refresh to
+			// see JS updates (e.g. footer col-layout live-preview fixes).
+			$auto_css_asset = require get_template_directory() . '/build/js/backend/customizer/auto-css.asset.php';
+			$customizer_asset = require get_template_directory() . '/build/js/backend/customizer/customizer.asset.php';
+
+			wp_enqueue_script(
+				'customify-customizer-auto-css',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/auto-css.js',
+				array_merge( array( 'customize-preview' ), $auto_css_asset['dependencies'] ),
+				$auto_css_asset['version'],
+				true
+			);
 			wp_enqueue_script(
 				'customify-customizer',
-				esc_url( get_template_directory_uri() ) . '/assets/js/customizer/customizer' . $suffix . '.js',
-				array(
-					'customize-preview',
-					'customize-selective-refresh',
-				),
-				'20151215',
+				esc_url( get_template_directory_uri() ) . '/build/js/backend/customizer/customizer.js',
+				array_merge( array( 'customize-preview', 'customize-selective-refresh' ), $customizer_asset['dependencies'] ),
+				$customizer_asset['version'],
 				true
 			);
 			wp_localize_script(
@@ -972,6 +1101,8 @@ class  Customify_Customizer {
 
 		// Register new panel and section type.
 		$wp_customize->register_panel_type( 'Customify_WP_Customize_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Header_Builder_Panel' );
+		$wp_customize->register_panel_type( 'Customify_Footer_Builder_Panel' );
 		$wp_customize->register_section_type( 'Customify_WP_Customize_Section' );
 
 		// Register section type.
@@ -992,7 +1123,14 @@ class  Customify_Customizer {
 					}
 					unset( $args['name'] );
 					unset( $args['type'] );
-					$panel = new Customify_WP_Customize_Panel( $wp_customize, $name, $args );
+					if ( 'header_settings' === $name ) {
+						$panel_class = 'Customify_Header_Builder_Panel';
+					} elseif ( 'footer_settings' === $name ) {
+						$panel_class = 'Customify_Footer_Builder_Panel';
+					} else {
+						$panel_class = 'Customify_WP_Customize_Panel';
+					}
+					$panel = new $panel_class( $wp_customize, $name, $args );
 					$wp_customize->add_panel( $panel );
 					break;
 				case 'section':
@@ -1159,6 +1297,176 @@ class  Customify_Customizer {
 		);
 
 		do_action( 'customify/customize/register_completed', $this );
+	}
+
+	/**
+	 * Definition of panel groups shown in the Customizer side list.
+	 *
+	 * Each group renders a non-clickable divider section (see
+	 * Customify_WP_Customize_Section_Divider) at its `priority`, and every
+	 * panel/top-level-section named under `panels` is re-priorit­ised to sit
+	 * directly under that divider.
+	 *
+	 * Extend via the `customify/customizer/panel_groups` filter — e.g. a
+	 * companion plugin can append its own panels to the `post_types` group
+	 * without forking this list.
+	 *
+	 * Priority budget: each group has a 100-priority window for its panels
+	 * (`group_priority + 10, +20, +30, …`). The bump applied to foreign
+	 * panels (+2000) sits comfortably above this range.
+	 *
+	 * @return array<string, array{title:string, priority:int, panels:string[]}>
+	 */
+	public function get_panel_groups() {
+		$groups = array(
+			'general_options' => array(
+				'title'    => __( 'General Options', 'customify' ),
+				'priority' => 50,
+				'panels'   => array(
+					'styling_panel',
+					'typography_panel',
+				),
+			),
+			'layouts'         => array(
+				'title'    => __( 'Layouts', 'customify' ),
+				'priority' => 200,
+				'panels'   => array(
+					'layout_panel',
+					'header_settings',
+					'footer_settings',
+				),
+			),
+			'post_types'      => array(
+				'title'    => __( 'Post Types', 'customify' ),
+				'priority' => 350,
+				'panels'   => array(
+					'blog_panel',
+					// `portfolio_panel` is added by the Pro Portfolio module — if the module
+					// is inactive the panel won't exist and `get_panel()` returns null below.
+					'portfolio_panel',
+				),
+			),
+			'core_plugins'    => array(
+				'title'    => __( 'Core & Plugins', 'customify' ),
+				'priority' => 1000,
+				'panels'   => array(
+					// Compatibility is a theme panel but conceptually belongs with the
+					// plugin-integration settings, so it heads the Core & Plugins group.
+					'compatibility_panel',
+				),
+			),
+		);
+
+		/**
+		 * Filter the Customizer panel groups.
+		 *
+		 * @param array $groups Group definitions keyed by group slug.
+		 */
+		return apply_filters( 'customify/customizer/panel_groups', $groups );
+	}
+
+	/**
+	 * Insert group dividers in the Customizer panel list and push everything
+	 * not managed by Customify (WordPress core, plugins) into the bottom group.
+	 *
+	 * Runs at `customize_register` priority 99999 so every other extension has
+	 * already registered its panels and sections by the time we sweep.
+	 *
+	 * @param WP_Customize_Manager $wp_customize
+	 */
+	public function register_panel_groups( $wp_customize ) {
+		require_once get_template_directory() . '/inc/customizer/class-customify-section-divider.php';
+		$wp_customize->register_section_type( 'Customify_WP_Customize_Section_Divider' );
+
+		$groups = $this->get_panel_groups();
+
+		// 1. Add each divider section + re-priorit­ise its panels to follow it.
+		foreach ( $groups as $group_key => $group ) {
+			$divider_id = 'customify_divider_' . $group_key;
+
+			$wp_customize->add_section(
+				new Customify_WP_Customize_Section_Divider(
+					$wp_customize,
+					$divider_id,
+					array(
+						'title'    => $group['title'],
+						'priority' => $group['priority'],
+					)
+				)
+			);
+
+			$offset = 10;
+			foreach ( $group['panels'] as $name ) {
+				$obj = $wp_customize->get_panel( $name );
+				if ( ! $obj ) {
+					// Fall back to a top-level section with the same name (the upsell
+					// strip in upsell.php uses this shape — kept here for symmetry even
+					// though no current group references a top-level section).
+					$section = $wp_customize->get_section( $name );
+					if ( $section && empty( $section->panel ) ) {
+						$obj = $section;
+					}
+				}
+				if ( $obj ) {
+					$obj->priority = $group['priority'] + $offset;
+					$offset       += 10;
+				}
+			}
+		}
+
+		// 2. Bump anything not managed by Customify into the Core & Plugins zone.
+		$managed       = self::get_config();
+		$divider_token = 'customify_divider_';
+
+		foreach ( $wp_customize->panels() as $panel_id => $panel ) {
+			if ( isset( $managed[ 'panel|' . $panel_id ] ) ) {
+				continue;
+			}
+			$panel->priority = (int) $panel->priority + 2000;
+		}
+
+		foreach ( $wp_customize->sections() as $section_id => $section ) {
+			// Sections nested under a panel only appear when their parent is
+			// expanded; they have no effect on the top-level order.
+			if ( ! empty( $section->panel ) ) {
+				continue;
+			}
+			if ( isset( $managed[ 'section|' . $section_id ] ) ) {
+				continue;
+			}
+			// Skip the dividers we just registered.
+			if ( strpos( $section_id, $divider_token ) === 0 ) {
+				continue;
+			}
+			$section->priority = (int) $section->priority + 2000;
+		}
+	}
+
+	/**
+	 * Print the JS section constructor for the divider type.
+	 *
+	 * Why: by default WP's wp.customize.Section sets `display: none` on any
+	 * section whose `isContextuallyActive()` returns false — and a section with
+	 * zero controls is, by definition, not contextually active. The divider
+	 * carries no controls (it's purely visual), so the default constructor
+	 * would always hide it. We extend the prototype to force the section to
+	 * count as contextually active.
+	 */
+	public function print_divider_section_constructor() {
+		?>
+		<script>
+		( function () {
+			if ( typeof wp === 'undefined' || ! wp.customize || ! wp.customize.Section ) {
+				return;
+			}
+			wp.customize.sectionConstructor['customify-divider'] = wp.customize.Section.extend( {
+				isContextuallyActive: function () {
+					return true;
+				}
+			} );
+		} )();
+		</script>
+		<?php
 	}
 
 }

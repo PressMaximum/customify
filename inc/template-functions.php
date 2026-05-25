@@ -17,6 +17,86 @@ if ( ! function_exists( 'customify_get_config_sidebar_layouts' ) ) {
 		);
 	}
 }
+
+if ( ! function_exists( 'customify_get_layout_content_sizes' ) ) {
+	/**
+	 * Single source of truth for the layout-driven block contentSize.
+	 *
+	 * Consumed by:
+	 *   - inc/admin/editor.php           — block editor inline CSS
+	 *   - inc/admin/page-settings.php    — localized to JS for live updates
+	 *   - customify_layout_content_size_css() — frontend inline CSS below
+	 *
+	 * Filterable so a child theme / plugin can override values in one place.
+	 *
+	 * @return array{no_sidebar:string,one_sidebar:string,two_sidebars:string} CSS lengths.
+	 */
+	function customify_get_layout_content_sizes() {
+		return apply_filters(
+			'customify/layout_content_sizes',
+			array(
+				'no_sidebar'   => '1184px',
+				'one_sidebar'  => '863px',
+				'two_sidebars' => '542px',
+			)
+		);
+	}
+}
+
+if ( ! function_exists( 'customify_get_content_size_for_layout' ) ) {
+	/**
+	 * Resolve the contentSize CSS length for a sidebar layout slug.
+	 *
+	 * @param string $layout Sidebar layout slug.
+	 * @return string CSS length (with unit).
+	 */
+	function customify_get_content_size_for_layout( $layout ) {
+		$sizes        = customify_get_layout_content_sizes();
+		$two_sidebars = array(
+			'sidebar-content-sidebar',
+			'sidebar-sidebar-content',
+			'content-sidebar-sidebar',
+		);
+		if ( in_array( $layout, $two_sidebars, true ) ) {
+			return $sizes['two_sidebars'];
+		}
+		if ( 'content' === $layout ) {
+			return $sizes['no_sidebar'];
+		}
+		return $sizes['one_sidebar'];
+	}
+}
+
+if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
+	/**
+	 * Frontend CSS that maps body.main-layout-* classes to the matching
+	 * --wp--style--global--content-size, so blocks shrink/expand with the
+	 * active sidebar layout. Kept here (not in SCSS) so all values come
+	 * from customify_get_layout_content_sizes().
+	 *
+	 * Per-page Content Layout (.site-content.content-full-{width,stretched})
+	 * forces the no-sidebar size — these rules are scoped to .site-content
+	 * which is closer in the inheritance chain than body, so they win the
+	 * variable resolution regardless of body.main-layout-* specificity.
+	 *
+	 * Hooked into customify-style via wp_add_inline_style in class-customify.php.
+	 *
+	 * @return string CSS.
+	 */
+	function customify_layout_content_size_css() {
+		$sizes = customify_get_layout_content_sizes();
+		return sprintf(
+			'body.main-layout-content{--wp--style--global--content-size:%1$s}'
+			. 'body.main-layout-sidebar-content-sidebar,'
+			. 'body.main-layout-sidebar-sidebar-content,'
+			. 'body.main-layout-content-sidebar-sidebar{--wp--style--global--content-size:%2$s}'
+			. '.site-content.content-full-width,'
+			. '.site-content.content-full-stretched{--wp--style--global--content-size:%1$s}',
+			esc_attr( $sizes['no_sidebar'] ),
+			esc_attr( $sizes['two_sidebars'] )
+		);
+	}
+}
 if ( ! function_exists( 'customify_get_all_image_sizes' ) ) {
 	/**
 	 * Get all the registered image sizes along with their dimensions
@@ -115,6 +195,40 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 		return $layout;
 	}
 }
+
+if ( ! function_exists( 'customify_force_no_sidebar_for_full_content_layout' ) ) {
+	/**
+	 * Force no-sidebar layout when the per-post Content Layout is full-width
+	 * or full-stretched. These modes hide the sidebar regardless of the
+	 * separate sidebar meta — the sidebar dropdown is also hidden in the
+	 * block editor's Page Settings panel for the same reason.
+	 *
+	 * Hooked early on customify_get_layout so the resulting layout flows
+	 * through customify_body_classes() (main-layout-content) and
+	 * customify_get_sidebars() (no get_sidebar() calls) consistently.
+	 *
+	 * @param string|null $layout Existing layout from earlier filters.
+	 * @return string|null Layout slug or pass-through.
+	 */
+	function customify_force_no_sidebar_for_full_content_layout( $layout ) {
+		if ( $layout ) {
+			return $layout;
+		}
+		if ( ! customify_is_support_meta() ) {
+			return $layout;
+		}
+		$post_id = customify_get_support_meta_id();
+		if ( ! $post_id ) {
+			return $layout;
+		}
+		$content_layout = get_post_meta( $post_id, '_customify_content_layout', true );
+		if ( in_array( $content_layout, array( 'full-width', 'full-stretched' ), true ) ) {
+			return 'content';
+		}
+		return $layout;
+	}
+}
+add_filter( 'customify_get_layout', 'customify_force_no_sidebar_for_full_content_layout' );
 
 if ( ! function_exists( 'customify_get_sidebars' ) ) {
 	/**
@@ -317,7 +431,7 @@ add_filter( 'get_the_archive_title', 'customify_get_the_archive_title', 15 );
 
 function customify_search_form( $form ) {
 	$form = '
-		<form role="search" class="sidebar-search-form" action="' . esc_url( home_url( '/' ) ) . '">
+		<form class="sidebar-search-form" action="' . esc_url( home_url( '/' ) ) . '">
             <label>
                 <span class="screen-reader-text">' . _x( 'Search for:', 'label', 'customify' ) . '</span>
                 <input type="search" class="search-field" placeholder="' . esc_attr__( 'Search &hellip;', 'customify' ) . '" value="' . get_search_query() . '" name="s" title="' . esc_attr_x( 'Search for:', 'label', 'customify' ) . '" />

@@ -27,7 +27,7 @@ class Customify_Sanitize_Input {
 	 * @return string
 	 */
 	static function sanitize_css_code( $val ) {
-		return wp_kses_post( $val );
+		return wp_kses_post( null === $val ? '' : (string) $val );
 	}
 
 	/**
@@ -160,12 +160,14 @@ class Customify_Sanitize_Input {
 
 	private function sanitize_text_field_deep( $value, $html = false ) {
 		if ( ! is_array( $value ) ) {
-			$value = wp_kses_post( $value );
+			// PHP 8.1+ deprecates passing null to string-typed params (wp_kses_post
+			// internally calls preg_replace which now warns on null subjects).
+			// Coerce to string up-front; an unset setting becomes '' instead of null,
+			// which is the same end result wp_kses_post produces anyway.
+			$value = wp_kses_post( null === $value ? '' : (string) $value );
 		} else {
-			if ( is_array( $value ) ) {
-				foreach ( $value as $k => $v ) {
-					$value[ $k ] = $this->sanitize_text_field_deep( $v );
-				}
+			foreach ( $value as $k => $v ) {
+				$value[ $k ] = $this->sanitize_text_field_deep( $v );
 			}
 		}
 
@@ -442,7 +444,7 @@ class Customify_Sanitize_Input {
 				$value = $this->sanitize_text_field_deep( $value );
 				break;
 			case 'textarea':
-				$value = wp_kses_post( $value );
+				$value = wp_kses_post( null === $value ? '' : (string) $value );
 				break;
 			case 'number':
 					$value = floatval($value);

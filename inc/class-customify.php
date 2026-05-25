@@ -26,7 +26,64 @@ class Customify
 		add_action('wp_enqueue_scripts', array($this, 'scripts'), 95);
 		add_filter('excerpt_more', array($this, 'excerpt_more'));
 		add_filter('excerpt_length', array($this, 'excerpt_length'));
+		// Font resource hints (preconnect for Google Fonts hosts and a
+		// preload for the body font) run at priority 1 — earlier than
+		// any stylesheet emission so the browser can start the network
+		// work in parallel with CSS parsing. See class-customizer-font-loader.php.
+		add_action('wp_head', array($this, 'print_font_resource_hints'), 1);
 		add_action('wp_head', array($this, 'customify_style'), 2);
+		// Print the palette tokens (:root + Base cascade rules) BEFORE
+		// wp_print_styles (priority 8). The composite styling controls
+		// (Page bg / Content Area bg / Site Content bg) emit literal
+		// `body{background-color:#hex}` via the customify-style-inline-css
+		// block at priority 10, AFTER our tokens. That ordering lets:
+		//   • Composite-saved sites: literal hex wins by cascade order
+		//   • Composite-unsaved sites: composite emits nothing (empty
+		//     default → setup_color skips), our var() cascade applies
+		// Frontend + customize preview both use this same chain.
+		add_action('wp_head', array($this, 'print_palette_tokens'), 8);
+	}
+
+	/**
+	 * Print the palette :root token block + Base composite cascade rules
+	 * BEFORE WP renders enqueued stylesheets. See the docblock above the
+	 * `wp_head` priority-8 hook in `init_hooks()` for the cascade-ordering
+	 * rationale.
+	 *
+	 * The id `customify-palette-tokens-inline-css` mirrors WP's inline-style
+	 * naming so consumers (frontend, extract_customify_css.py helper) can
+	 * find it the same way they find the auto-CSS block.
+	 */
+	/**
+	 * Emit network resource hints for fonts as early as possible in
+	 * <head>. Two hints:
+	 *   - preconnect to Google Fonts hosts (fonts.googleapis.com +
+	 *     fonts.gstatic.com) when any Google font is active — saves
+	 *     ~100-300ms TTFB on cold visits.
+	 *   - preload for the body font's woff2 file when it's local
+	 *     (Theme or Library) — saves ~200-500ms LCP by starting the
+	 *     font fetch in parallel with CSS parse.
+	 *
+	 * Both helpers short-circuit to empty when nothing applies, so
+	 * the only cost on pages without fonts is a single class load.
+	 */
+	function print_font_resource_hints() {
+		if ( ! class_exists( 'Customify_Customizer_Font_Loader' ) ) {
+			return;
+		}
+		$out = Customify_Customizer_Font_Loader::preconnect_tags()
+			 . Customify_Customizer_Font_Loader::preload_body_font_tag();
+		if ( '' === $out ) {
+			return;
+		}
+		echo $out; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped inside builders
+	}
+
+	function print_palette_tokens() {
+		if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
+			return;
+		}
+		echo "\n<style id='customify-palette-tokens-inline-css'>\n" . customify_color_palette_root_css() . "\n</style>\n";
 	}
 
 	function excerpt_length($length)
@@ -188,16 +245,50 @@ class Customify
 		add_theme_support('wc-product-gallery-slider');
 
 		/**
-		 * Support Gutenberg.
+		 * Support Gutenberg / Block Editor.
 		 *
 		 * @since 0.2.6
+		 * @since 0.4.14 Added responsive-embeds, block-template-parts, editor-color-palette.
 		 */
-		add_theme_support('align-wide');
-
-		/**
-		 * Add editor style support.
-		 */
-		add_theme_support('editor-styles');
+		add_theme_support( 'align-wide' );
+		add_theme_support( 'editor-styles' );
+		add_theme_support( 'responsive-embeds' );
+		add_theme_support( 'block-template-parts' );
+		add_theme_support( 'appearance-tools' );
+		add_theme_support( 'editor-color-palette',
+			array(
+				array(
+					'name'  => __( 'Primary', 'customify' ),
+					'slug'  => 'primary',
+					'color' => '#235787',
+				),
+				array(
+					'name'  => __( 'Secondary', 'customify' ),
+					'slug'  => 'secondary',
+					'color' => '#c3512f',
+				),
+				array(
+					'name'  => __( 'Text', 'customify' ),
+					'slug'  => 'text',
+					'color' => '#686868',
+				),
+				array(
+					'name'  => __( 'Link', 'customify' ),
+					'slug'  => 'link',
+					'color' => '#1e4b75',
+				),
+				array(
+					'name'  => __( 'Light Gray', 'customify' ),
+					'slug'  => 'light-gray',
+					'color' => '#f2f2f2',
+				),
+				array(
+					'name'  => __( 'Dark Gray', 'customify' ),
+					'slug'  => 'dark-gray',
+					'color' => '#444444',
+				),
+			)
+		);
 	}
 
 	/**
@@ -262,33 +353,6 @@ class Customify
 	}
 
 	/**
-	 * Get theme style.css url
-	 *
-	 * @return string
-	 */
-	function get_style_uri()
-	{
-		$suffix     = $this->get_asset_suffix();
-		$style_dir  = get_template_directory();
-		$suffix_css = $suffix;
-		$css_file   = false;
-		if (is_rtl()) {
-			$suffix_css = '-rtl' . $suffix;
-		}
-
-		$min_file = $style_dir . '/style' . $suffix_css . '.css';
-		if (file_exists($min_file)) {
-			$css_file = esc_url(get_template_directory_uri()) . '/style' . $suffix_css . '.css';
-		}
-
-		if (! $css_file) {
-			$css_file = get_stylesheet_uri();
-		}
-
-		return $css_file;
-	}
-
-	/**
 	 * Enqueue scripts and styles.
 	 */
 	function scripts()
@@ -307,7 +371,7 @@ class Customify
 			'customify/theme/css',
 			array(
 				'google-font' => Customify_Customizer_Auto_CSS::get_instance()->get_font_url(),
-				'style'       => $this->get_style_uri(),
+				'style'       => esc_url(get_template_directory_uri()) . '/build/css/frontend/style-theme' . $suffix . '.css',
 			)
 		);
 
@@ -315,7 +379,7 @@ class Customify
 			'customify/theme/js',
 			array(
 				'customify-themejs' => array(
-					'url' => esc_url(get_template_directory_uri()) . '/assets/js/theme' . $suffix . '.js',
+					'url' => esc_url(get_template_directory_uri()) . '/build/js/frontend/theme' . $suffix . '.js',
 					'ver' => self::$version,
 				),
 			)
@@ -369,7 +433,14 @@ class Customify
 			wp_enqueue_script('comment-reply');
 		}
 
-		wp_add_inline_style('customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css());
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->auto_css() );
+		// Must run AFTER auto_css() — that's where setup_font() populates
+		// the theme_fonts / library_fonts buckets from active typography
+		// settings. Order doesn't matter between theme/library; both
+		// emit standalone @font-face declarations.
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_theme_fonts_css() );
+		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_library_fonts_css() );
+		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
@@ -397,6 +468,8 @@ class Customify
 			// Metabox settings.
 			'/inc/template-class.php',
 			// Template element classes.
+			'/inc/colors-palette.php',
+			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',
@@ -416,6 +489,13 @@ class Customify
 			'/inc/blog/class-posts-layout.php',
 			// Blog posts layout.
 			'/inc/blog/functions-posts-layout.php',
+			// Block editor enhancements (block styles, patterns category).
+			'/inc/admin/block-styles.php',
+			// Block editor Page Settings panel (also registers meta for REST API).
+			'/inc/admin/page-settings.php',
+			'/inc/admin/dashboard-v2-rest.php',
+			// Dashboard v2 REST controller — loads on every request (REST
+			// handlers don't run in admin context).
 		);
 
 		foreach ($files as $file) {
@@ -447,8 +527,9 @@ class Customify
 		}
 
 		$files = array(
-			'/inc/admin/editor.php',  // Metabox settings.
-			'/inc/admin/dashboard.php',  // Metabox settings.
+			'/inc/admin/editor.php',       // Block editor style integration.
+			'/inc/admin/dashboard.php',    // Legacy PHP dashboard (Appearance → Customify Options (Legacy)).
+			'/inc/admin/dashboard-v2.php', // New SPA dashboard (top-level Customify) — @pressmaximum/dashboard-kit.
 		);
 
 		foreach ($files as $file) {
@@ -477,8 +558,10 @@ class Customify
 			'typography',
 			'page-header',
 			'background',
+			'colors',
 			'compatibility',
 			// Header Builder Panel.
+			'header/transparent',
 			'header/panel',
 			'header/html',
 			'header/logo',
@@ -523,6 +606,7 @@ class Customify
 	{
 
 		$compatibility_config_files = array(
+			'customify-pro',     // Disable Pro modules implemented natively by the theme.
 			'elementor',         // Plugin breadcrumb-navxt & Yoat Seo.
 			'breadcrumb',         // Plugin breadcrumb-navxt & Yoat Seo.
 			'woocommerce/woocommerce',  // Plugin WooCommerce.

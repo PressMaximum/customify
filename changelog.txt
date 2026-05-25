@@ -1,3 +1,28 @@
+= 0.4.15 =
+* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
+* NEW: Transparent header feature.
+* NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
+* NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
+* NEW: has-page-cover body class; scope transparent header styles.
+* NEW: WordPress Font Library and theme.json fonts in the typography picker.
+* IMPROVED: WordPress 7.0 ready.
+* IMPROVED: Editor style now support customizer settings.
+* IMPROVED: Header/footer builder UI — sizing, title display, popover width and column layout.
+* IMPROVED: Header layout.
+* IMPROVED: Customizer control UI.
+* IMPROVED: Decouple Post Content Max Width from .content-inner wrapper; apply theme.json contentSize to frontend .entry-content.
+* IMPROVED: Block widget styles and theme.json cleanup for block widget support.
+* IMPROVED: Emit .min and unminified assets side-by-side; load per WP_DEBUG. Source maps only in development mode.
+* IMPROVED: Font loading — dedupe @font-face with WP core, preconnect Google Fonts, preload body font.
+* IMPROVED: Admin dashboard UI refresh.
+* FIXED: Reset section not working for option-type / multi-setting controls.
+* FIXED: core/image lightbox styling.
+* FIXED: Duplicate border for Latest Posts widget.
+* FIXED: Footer default padding for tablet/mobile.
+* FIXED: Security vulnerabilities found in security review.
+* FIXED: Sass deprecation warnings and customify-style CSS handle.
+* FIXED: Out of date WooCommerce templates #379.
+
 = 0.4.13 =
 * UPDATED: WooCommerce template files.
 * FIXED: Product grid mobile columns not changing. 

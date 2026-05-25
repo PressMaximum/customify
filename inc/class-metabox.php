@@ -71,6 +71,28 @@ class Customify_MetaBox {
 			)
 		);
 
+		// Page Title Layout (formerly "Display" under the Page Header tab).
+		// Promoted into the Layout tab next to Content Layout because it's
+		// the same kind of decision — where does the page title render —
+		// and the rest of "Page Header" tab (Transparent Header) is a
+		// secondary concern. Stays as a `select` whose values feed
+		// `_customify_page_header_display`, so existing data still resolves.
+		$this->field_builder->add_field(
+			array(
+				'title'   => __( 'Page Title Layout', 'customify' ),
+				'name'    => 'page_header_display',
+				'tab'     => 'layout',
+				'type'    => 'select',
+				'choices' => array(
+					'default'  => __( 'Inherit from customize settings', 'customify' ),
+					'normal'   => __( 'Default - inside main content', 'customify' ),
+					'cover'    => __( 'Cover', 'customify' ),
+					'titlebar' => __( 'Titlebar', 'customify' ),
+					'none'     => __( 'Hide', 'customify' ),
+				),
+			)
+		);
+
 		$this->field_builder->add_field(
 			array(
 				'title'         => __( 'Sidebar', 'customify' ),
@@ -82,14 +104,23 @@ class Customify_MetaBox {
 				'default_label' => __( 'Inherit from customize settings', 'customify' ),
 			)
 		);
+		// Display order groups header-related toggles together (Header →
+		// Header Top/Main/Bottom), then page-content toggles (Page Title,
+		// Content Vertical Padding), then footer toggles below. Mirrors the
+		// block-editor sidebar order in src/backend/page-settings/index.js
+		// so users see the same layout in classic + block editors.
 		$disable_elements_choices = array(
-			'disable_header'     => __( 'Disable Header', 'customify' ),
-			'disable_page_title' => __( 'Disable Title', 'customify' ),
+			'disable_header'        => __( 'Disable Header', 'customify' ),
+			'disable_header_top'    => __( 'Disable Header Top', 'customify' ),
+			'disable_header_main'   => __( 'Disable Header Main', 'customify' ),
+			'disable_header_bottom' => __( 'Disable Header Bottom', 'customify' ),
+			'disable_page_title'    => __( 'Disable Title', 'customify' ),
+			// Strips the vertical padding from #main / #sidebar-primary /
+			// #sidebar-secondary so full-width landing-page sections sit
+			// flush against the header and footer. Default body cascade
+			// keeps the padding so content pages still get reading-room.
+			'disable_content_vertical_padding' => __( 'Disable Content Vertical Padding', 'customify' ),
 		);
-
-		$disable_elements_choices['disable_header_top']    = __( 'Disable Header Top', 'customify' );
-		$disable_elements_choices['disable_header_main']   = __( 'Disable Header Main', 'customify' );
-		$disable_elements_choices['disable_header_bottom'] = __( 'Disable Header Bottom', 'customify' );
 
 		if ( class_exists( 'Customify_Pro' ) ) {
 			$disable_elements_choices['disable_footer_top'] = __( 'Disable Footer Top', 'customify' );
@@ -106,18 +137,24 @@ class Customify_MetaBox {
 			)
 		);
 
+		// Page Title Layout was previously registered here under the
+		// 'page_header' tab as "Display". Moved up into the 'layout' tab
+		// next to Content Layout (see the field above) and renamed
+		// "Page Title Layout" so the dropdown title describes what it
+		// actually controls. The underlying meta key
+		// `_customify_page_header_display` is unchanged — saved values on
+		// existing sites still load correctly.
+
 		$this->field_builder->add_field(
 			array(
-				'title'   => __( 'Display', 'customify' ),
-				'name'    => 'page_header_display',
+				'title'   => __( 'Transparent Header', 'customify' ),
+				'name'    => 'header_transparent_display',
 				'tab'     => 'page_header',
 				'type'    => 'select',
 				'choices' => array(
-					'default'  => __( 'Inherit from customize settings', 'customify' ),
-					'normal'   => __( 'Default', 'customify' ),
-					'cover'    => __( 'Cover', 'customify' ),
-					'titlebar' => __( 'Titlebar', 'customify' ),
-					'none'     => __( 'Hide', 'customify' ),
+					'default' => __( 'Inherit from Customizer settings', 'customify' ),
+					'show'    => __( 'Force transparent', 'customify' ),
+					'hide'    => __( 'Force opaque', 'customify' ),
 				),
 			)
 		);
@@ -151,9 +188,8 @@ class Customify_MetaBox {
 		if ( 'post.php' != $hook && 'post-new.php' != $hook ) {
 			return;
 		}
-		$suffix = Customify()->get_asset_suffix();
-		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/js/admin/metabox' . $suffix . '.js', array( 'jquery' ), Customify::$version, true );
-		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/assets/css/admin/metabox' . $suffix . '.css', false, Customify::$version );
+		wp_enqueue_script( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/js/backend/admin/metabox.js', array( 'jquery' ), Customify::$version, true );
+		wp_enqueue_style( 'customify-metabox', esc_url( get_template_directory_uri() ) . '/build/css/backend/admin/metabox.css', false, Customify::$version );
 	}
 
 	public function get_support_post_types() {
@@ -169,12 +205,26 @@ class Customify_MetaBox {
 	}
 
 	/**
+	 * Returns true when the current screen is the block editor.
+	 *
+	 * @return bool
+	 */
+	private function is_block_editor() {
+		$screen = get_current_screen();
+		return $screen && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor();
+	}
+
+	/**
 	 * Adds the meta box container.
+	 * Only rendered in the classic editor; the block editor uses the React plugin instead.
 	 *
 	 * @param string $post_type Post Type.
 	 */
 	public function add_meta_box( $post_type ) {
-		// Limit meta box to certain post types.
+		if ( $this->is_block_editor() ) {
+			return;
+		}
+
 		$post_types = $this->get_support_post_types();
 		if ( in_array( $post_type, $post_types ) ) {
 			add_meta_box(
@@ -235,11 +285,16 @@ class Customify_MetaBox {
 		 */
 		$settings = $this->field_builder->get_submitted_values();
 
+		$kses_safe = static function ( $v ) {
+			// PHP 8.1+ deprecates passing null to wp_kses_post (internal preg_replace).
+			return wp_kses_post( null === $v ? '' : (string) $v );
+		};
+
 		foreach ( $settings as $key => $value ) {
 			if ( ! is_array( $value ) ) {
-				$value = wp_kses_post( $value );
+				$value = $kses_safe( $value );
 			} else {
-				$value = array_map( 'wp_kses_post', $value );
+				$value = array_map( $kses_safe, $value );
 			}
 			// Update the meta field.
 			update_post_meta( $post_id, '_customify_' . $key, $value );
