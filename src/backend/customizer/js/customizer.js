@@ -270,6 +270,68 @@
 			});
 		}
 	};
+
+	// Builder item sections (logo, copyright, menus, …) are kept inactive by
+	// `_customifyForceHide` so they only surface via the gear icon on the
+	// builder UI. WP's default partial.showControl() → control.focus() path
+	// re-activates the section, but the force-hide binding flips it back to
+	// false before the expand can complete — so the pencil edit-shortcut
+	// silently does nothing. Route those clicks through
+	// customifyBuilderOpenSection (parent window) which unbinds the marker,
+	// expands the section, and re-installs the deferred re-hide listener;
+	// then focus the matching control so the sidebar scrolls to it.
+	var defaultShowControl = wp.customize.selectiveRefresh.Partial.prototype.showControl;
+	wp.customize.selectiveRefresh.Partial.prototype.showControl = function() {
+		var partial    = this;
+		var parentWin  = (window.parent && window.parent !== window) ? window.parent : null;
+		var settingIds = (typeof partial.settings === "function") ? partial.settings() : [];
+		var settingId  = settingIds && settingIds.length ? settingIds[0] : null;
+
+		if (
+			settingId &&
+			parentWin &&
+			parentWin.wp &&
+			parentWin.wp.customize &&
+			typeof parentWin.customifyBuilderOpenSection === "function"
+		) {
+			var matchedControl;
+			parentWin.wp.customize.control.each(function(control) {
+				if (matchedControl) return;
+				var settings = control.settings || {};
+				for (var key in settings) {
+					if (
+						Object.prototype.hasOwnProperty.call(settings, key) &&
+						settings[key] &&
+						settings[key].id === settingId
+					) {
+						matchedControl = control;
+						break;
+					}
+				}
+			});
+			if (matchedControl) {
+				var sectionId = (typeof matchedControl.section === "function")
+					? matchedControl.section()
+					: matchedControl.section;
+				var section   = sectionId && parentWin.wp.customize.section(sectionId);
+				if (section && section._customifyForceHide) {
+					parentWin.customifyBuilderOpenSection(sectionId);
+					// Wait out the section's slide-down before asking WP to
+					// scroll the sidebar to the specific control — focusing
+					// mid-transition leaves the control off-screen.
+					setTimeout(function() {
+						var c = parentWin.wp.customize.control(matchedControl.id);
+						if (c && typeof c.focus === "function") {
+							c.focus();
+						}
+					}, 350);
+					return;
+				}
+			}
+		}
+
+		return defaultShowControl.apply(partial, arguments);
+	};
 	// Live preview for footer row col_layout (postMessage transport).
 	function applyFooterColLayout(rowSelector, valueStr) {
 		var data;

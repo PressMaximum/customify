@@ -1,5 +1,6 @@
 = 0.4.16 =
 * FIXED: Page Header "Cover" display and cover background image disappearing on pages that have the "Disable Title" toggle enabled (regression introduced in 0.4.15). The toggle now hides only the title text, as it did before, while the cover wrapper and background image continue to render.
+* FIXED: Selective refresh edit-shortcut (pencil icon) in the Customizer preview not opening the matching section for header/footer builder items such as footer copyright text, logo and menus. Clicks now expand the hidden builder item section and scroll the sidebar to the corresponding control.
 
 = 0.4.15 =
 * IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
