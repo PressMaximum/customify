@@ -1,5 +1,6 @@
 = 0.4.16 =
 * NEW: Fallback bridge wires legacy Customify Pro (< 0.4.16) into the new dashboard — module toggles and per-module settings work without modifying the Pro plugin.
+* FIXED: Theme button styling leaking into WP default block chrome (Search, File, Embed, etc.) in editor + frontend.
 * FIXED: Page Header "Cover" and background image disappearing when "Disable Title" is on (0.4.15 regression).
 * FIXED: Customizer pencil edit-shortcut not opening the matching header/footer builder item section.
 

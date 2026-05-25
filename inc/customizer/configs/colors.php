@@ -37,13 +37,20 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 		// the same theme_mod via customify_color_get_slots(), so they render the
 		// identical hex. Safe for 30K sites; refactor lets future slot edits
 		// propagate to every primary-themed selector via :root only.
+		// `[class*="wp-block-"]` negation in every button/input slot below
+		// mirrors src/frontend/scss/base/_base.scss button rules — keeps the
+		// primary-color background off WP default-block chrome buttons
+		// (Search submit, File download, Embed "Try again", etc.) both on
+		// the frontend and inside the block editor canvas. `.wp-block-button__link`
+		// stays themed because it isn't matched here — Button-block color
+		// comes from theme.json + the explicit rule in _base.scss.
 		$primary_css = apply_filters(
 			'customify/styling/primary-color',
 			'
 			.header-top .header--row-inner,
-			body:not(.fl-builder-edit) :is(.button, button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon), input[type="button"]:not(.ed_button)),
-			button.button,
-			:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button),
+			body:not(.fl-builder-edit) :is(.button:not([class*="wp-block-"]), button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]), input[type="button"]:not(.ed_button, [class*="wp-block-"])),
+			button.button:not([class*="wp-block-"]),
+			:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 			.pagination .nav-links span,
 			.pagination .nav-links > *:hover,
 			.nav-menu-desktop.style-full-height .primary-menu-ul > li:is(.current-menu-item, .current-menu-ancestor) > a,
