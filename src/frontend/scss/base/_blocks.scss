@@ -312,25 +312,16 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	background-color: $surface_medium;
 }
 
-.entry-content li:not([class*="wp-block-"] li) {
-	margin-left: 2.5em;
+.wp-block-list li {
+	margin-left: 1em;
 	margin-bottom: 6px;
-}
-
-.entry-content ul ul:not([class*="wp-block-"] ul),
-.entry-content ol ol,
-.entry-content ul ol,
-.entry-content ol ul:not([class*="wp-block-"] ul) {
-	margin-bottom: 0px;
-	margin-top: 0px;
-	margin-left: 2.5em;
-}
-
-.entry-content ul ul li,
-.entry-content ol ol li,
-.entry-content ul ol li,
-.entry-content ol ul li {
-	margin-left: 0;
+	li {
+		margin-left: 2.5em;
+	}
+	ol, ul {
+		margin-top: 0px;
+		margin-left: 0px;
+	}
 }
 
 .wp-block-embed.is-type-video {

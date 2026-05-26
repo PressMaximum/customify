@@ -243,56 +243,6 @@ class Customify_Editor {
 			// toggle responsive.
 		}
 
-		$css .= '.editor-styles-wrapper ul,
-		.editor-styles-wrapper ol {
-			margin: 1.5em auto;
-			list-style-position: outside;
-		}
-
-		.editor-styles-wrapper .wp-block-list,
-		.editor-styles-wrapper .wp-block-categories__list,
-		.editor-styles-wrapper .wp-block-archives-list {
-			padding-left: 2.5em;
-		}
-
-		.editor-styles-wrapper ul ul:not(.wp-block-navigation ul),
-		.editor-styles-wrapper ol ol,
-		.editor-styles-wrapper ul ol,
-		.editor-styles-wrapper ol ul:not(.wp-block-navigation ul) {
-			margin-bottom: 0;
-			margin-top: 0;
-			margin-left: 2.5em;
-		}
-
-		.editor-styles-wrapper .wp-block-table table,
-		.editor-styles-wrapper .wp-block-table tr,
-		.editor-styles-wrapper .wp-block-table th,
-		.editor-styles-wrapper .wp-block-table td {
-			border: 0;
-		}
-
-		.editor-styles-wrapper .wp-block-quote {
-			border-left-width: 4px;
-			border-left-style: solid;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote {
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote.alignleft {
-			margin: 0 1.41575em 1em 2.5em;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote.alignright {
-			margin: 0 2.5em 1em 1.41575em;
-		}
-
-		.editor-styles-wrapper .wp-block-separator.is-style-dots {
-			max-width: 205px;
-		}
-		';
 		return $css;
 	}
 
