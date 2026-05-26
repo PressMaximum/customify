@@ -83,12 +83,20 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 			/**
 			 * @since 0.2.6 Change css_format and selector.
+			 *
+			 * Default 1248 matches the SCSS hardcode in
+			 * src/frontend/scss/layouts/_layouts.scss `.customify-container, .layout-contained { max-width: 1248px }`.
+			 * Auto-CSS skips emission when the saved value equals the field default,
+			 * so when the Customizer is unsaved the SCSS hardcode is what actually
+			 * renders. Aligning the default avoids a visual mismatch between the
+			 * Customizer slider position and the rendered container outer width.
+			 * Saved-explicit values are unaffected — they still persist as-is.
 			 */
 			array(
 				'name'            => 'container_width',
 				'type'            => 'slider',
 				'device_settings' => false,
-				'default'         => 1200,
+				'default'         => 1248,
 				'min'             => 700,
 				'step'            => 10,
 				'max'             => 2000,
