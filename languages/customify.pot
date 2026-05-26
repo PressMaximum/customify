@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.4.16\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-05-25 12:20:56+00:00\n"
+"POT-Creation-Date: 2026-05-26 16:08:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -506,36 +506,36 @@ msgstr ""
 msgid "Customify Pro module settings"
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:385
+#: inc/admin/pro-bridge/pro-bridge.php:384
 msgid "Sorry, you are not allowed to access this page."
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:401
+#: inc/admin/pro-bridge/pro-bridge.php:400
 msgid "Module settings unavailable"
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:402
+#: inc/admin/pro-bridge/pro-bridge.php:401
 msgid "This module is not registered, not enabled, or does not expose any settings."
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:406
+#: inc/admin/pro-bridge/pro-bridge.php:405
 msgid "Back to dashboard"
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:417
+#: inc/admin/pro-bridge/pro-bridge.php:416
 msgid "Form fields class missing."
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:460
+#: inc/admin/pro-bridge/pro-bridge.php:459
 #. translators: %s: Pro module name.
 msgid "%s Settings"
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:467
+#: inc/admin/pro-bridge/pro-bridge.php:466
 msgid "← Back to dashboard"
 msgstr ""
 
-#: inc/admin/pro-bridge/pro-bridge.php:473
+#: inc/admin/pro-bridge/pro-bridge.php:472
 msgid "Settings saved."
 msgstr ""
 
@@ -1139,27 +1139,19 @@ msgstr ""
 msgid "Products per row on mobile"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/colors.php:15
+#: inc/compatibility/woocommerce/config/colors.php:16
 msgid "Shop Colors"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/colors.php:22
-msgid "Shop Buttons"
-msgstr ""
-
-#: inc/compatibility/woocommerce/config/colors.php:25
-msgid "Color for add to cart, checkout buttons. Default is Secondary Color."
-msgstr ""
-
-#: inc/compatibility/woocommerce/config/colors.php:46
+#: inc/compatibility/woocommerce/config/colors.php:23
 msgid "Rating Stars"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/colors.php:47
+#: inc/compatibility/woocommerce/config/colors.php:24
 msgid "Color for rating stars, default is Secondary Color."
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/colors.php:70
+#: inc/compatibility/woocommerce/config/colors.php:47
 msgid "On Sale"
 msgstr ""
 
