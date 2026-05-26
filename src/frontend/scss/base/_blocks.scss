@@ -294,15 +294,15 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	background-color: $surface_medium;
 }
 
-.entry-content li:not(.wp-block-navigation li) {
+.entry-content li:not([class*="wp-block-"] li) {
 	margin-left: 2.5em;
 	margin-bottom: 6px;
 }
 
-.entry-content ul ul:not(.wp-block-navigation ul),
+.entry-content ul ul:not([class*="wp-block-"] ul),
 .entry-content ol ol,
 .entry-content ul ol,
-.entry-content ol ul:not(.wp-block-navigation ul) {
+.entry-content ol ul:not([class*="wp-block-"] ul) {
 	margin-bottom: 0px;
 	margin-top: 0px;
 	margin-left: 2.5em;
