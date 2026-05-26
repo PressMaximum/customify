@@ -63,6 +63,22 @@
     margin: 0 auto;
 }
 
+// Site content full-width mode — mirrors the header `.layout-fullwidth`
+// pattern (`_header_builder_common.scss:34-38`). Customizer field
+// `site_content_layout` writes class `site-content-fullwidth` onto
+// `.site-content`; this rule lets the inner container escape the
+// default 1248px max-width and span the viewport.
+//
+// The companion class `site-content-boxed` deliberately has no rule —
+// boxed = default behavior of `.customify-container` above. Setting
+// default is `site-content-boxed`, so 30K legacy sites that never
+// touched the radio keep rendering the same boxed layout.
+.site-content-fullwidth {
+    .customify-container {
+        max-width: initial;
+    }
+}
+
 .site-content {
     // Hard-coded `#fff` overrode the body bg and broke dark-Palette sites:
     // setting Base=#000 made the body dark but `.site-content` still painted
