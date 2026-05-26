@@ -66,6 +66,7 @@ class Customify_MetaBox {
 				'choices'      => array(
 					'full-width'     => __( 'Full Width', 'customify' ),
 					'full-stretched' => __( 'Full Width - Stretched', 'customify' ),
+					'narrow'         => __( 'Narrow', 'customify' ),
 				),
 				'show_default' => true,
 			)

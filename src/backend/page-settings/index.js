@@ -11,7 +11,7 @@ import './style.scss';
 import { registerPlugin } from '@wordpress/plugins';
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import { useEntityProp } from '@wordpress/core-data';
-import { useSelect } from '@wordpress/data';
+import { useSelect, dispatch, select, subscribe } from '@wordpress/data';
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import {
@@ -34,7 +34,10 @@ const TWO_SIDEBAR_LAYOUTS = [
 
 // Content Layout values that disable the sidebar entirely — both visually
 // (we hide the dropdown) and for contentSize purposes (force no_sidebar).
-const NO_SIDEBAR_CONTENT_LAYOUTS = [ 'full-width', 'full-stretched' ];
+// `narrow` joins this list because narrow content is a focused-reading layout
+// — combining it with a sidebar looks lopsided. PHP's
+// customify_force_no_sidebar_for_full_content_layout() applies the same gate.
+const NO_SIDEBAR_CONTENT_LAYOUTS = [ 'full-width', 'full-stretched', 'narrow' ];
 
 function isNoSidebarContentLayout( contentLayout ) {
 	return NO_SIDEBAR_CONTENT_LAYOUTS.includes( contentLayout );
@@ -74,22 +77,34 @@ function injectStyle( doc, id, css ) {
 }
 
 /**
- * Inject the layout-driven --wp--style--global--content-size into both the
- * outer document and the editor canvas iframe (post-WP 6.3 layout).
- *
- * Uses `body` + `!important` because theme.json emits `body { ... }` for
- * global CSS variables — a `:root` rule loses to that within body's scope.
- */
-/**
  * Build the inline CSS payload for a given size + content_layout combo.
- * Full-stretched additionally drops max-width on root blocks so they fill
- * the container, matching inc/admin/editor.php.
+ *
+ * The `max-width: none` override for full-width / full-stretched layouts lives
+ * here (not in PHP editor.php) so toggling content_layout in the metabox can
+ * actually undo it. A PHP-emitted static override would stay applied even
+ * after JS removes it from this style block.
+ *
+ * No !important on the body rule — custom-property inheritance lets the
+ * body-scoped declaration override the theme.json :root baseline for
+ * everything inside body without needing to win specificity. Matches the
+ * frontend cascade in customify_layout_content_size_css().
  */
 function buildContentSizeCss( size, contentLayout ) {
 	let css = '';
 	if ( size ) {
-		css += `body{--wp--style--global--content-size:${ size } !important;}`;
+		css += `body{--wp--style--global--content-size:${ size };}`;
 	}
+	// full-width: block fills canvas with a 32px gap each side, mirroring
+	// the frontend's `.customify-container { padding: 2em }` breathing room.
+	// In the editor there is no .customify-container wrapper, so we subtract
+	// the padding from the block's max-width explicitly.
+	if ( contentLayout === 'full-width' ) {
+		css +=
+			'.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide){max-width:calc(100% - 64px);}';
+	}
+	// full-stretched: block fills canvas edge-to-edge — frontend version sets
+	// `.content-full-stretched > .customify-container { padding: 0 }`, so the
+	// editor matches by removing the cap entirely.
 	if ( contentLayout === 'full-stretched' ) {
 		css +=
 			'.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide){max-width:none;}';
@@ -103,6 +118,50 @@ function applyContentSizeCss( css ) {
 	if ( iframe && iframe.contentDocument ) {
 		injectStyle( iframe.contentDocument, CONTENT_SIZE_STYLE_ID, css );
 	}
+}
+
+/**
+ * Push runtime contentSize + wideSize into the block-editor settings store so
+ * block toolbar dropdown hints (e.g., "None — Max 863px wide") reflect what the
+ * CSS variable actually resolves to. Without this the labels read from
+ * theme.json's static value (`contentSize: "863px"`) regardless of the
+ * runtime override we inject via CSS, which misleads authors.
+ *
+ * The canonical write target is `__experimentalFeatures.layout` — that's what
+ * core blocks AND third-party blocks (Blocksify Section, etc.) read when
+ * rendering the alignment dropdown. Updating the top-level `layout` key alone
+ * is not enough; both must move in lockstep to stay self-consistent.
+ *
+ * Bailing-out semantics: only write when values actually changed, to avoid
+ * triggering a no-op re-render of every component that selects from settings.
+ */
+function syncEditorLayoutSettings( contentSize, wideSize ) {
+	const store = select( 'core/block-editor' );
+	if ( ! store ) return;
+	const settings = store.getSettings();
+	const expFeatures = settings.__experimentalFeatures || {};
+	const expLayout = expFeatures.layout || {};
+	const topLayout = settings.layout || {};
+
+	const nextContent = contentSize || expLayout.contentSize;
+	const nextWide = wideSize || expLayout.wideSize;
+
+	if (
+		expLayout.contentSize === nextContent &&
+		expLayout.wideSize === nextWide &&
+		topLayout.contentSize === nextContent &&
+		topLayout.wideSize === nextWide
+	) {
+		return;
+	}
+
+	dispatch( 'core/block-editor' ).updateSettings( {
+		layout: { ...topLayout, contentSize: nextContent, wideSize: nextWide },
+		__experimentalFeatures: {
+			...expFeatures,
+			layout: { ...expLayout, contentSize: nextContent, wideSize: nextWide },
+		},
+	} );
 }
 
 /**
@@ -127,11 +186,67 @@ function ContentSizeSync() {
 	const layout = isNoSidebarContentLayout( contentLayout )
 		? 'content'
 		: sidebarMeta || config.fallbackLayout || 'content-sidebar';
-	const size = layoutToContentSize( layout );
+	const layoutSize = layoutToContentSize( layout );
+
+	// Resolution priority (highest wins):
+	//   1. Full-Width / Full-Stretched Content Layout — viewport-bound, mirrors
+	//      .site-content.content-full-{width,stretched} frontend rule.
+	//   2. Narrow Content Layout — uses Customizer narrow_width regardless of layout.
+	//      Mirrors .site-content.content-narrow frontend rule.
+	//   3. Single-post override — for post type, single_blog_post_content_width wins.
+	//      Mirrors body.single-post frontend rule.
+	//   4. Layout-derived size from sidebar layout map.
+	let size;
+	if ( contentLayout === 'full-width' ) {
+		size = 'calc(100vw - 64px)';
+	} else if ( contentLayout === 'full-stretched' ) {
+		size = '100vw';
+	} else if ( contentLayout === 'narrow' && config.narrowWidth ) {
+		size = config.narrowWidth;
+	} else if ( config.postType === 'post' && config.postContentSize ) {
+		size = config.postContentSize;
+	} else {
+		size = layoutSize;
+	}
 	const css = buildContentSizeCss( size, contentLayout );
+
+	// Dynamic wide-size per layout (matches PHP customify_layout_content_size_css):
+	//   - Full-Width / Full-Stretched (size is calc() or 100vw) → wide = content
+	//     (alignwide visually = align=none — viewport-bound layouts don't break out)
+	//   - No-sidebar / Narrow (numeric px size) → size + 400 (200px breakout each side)
+	//   - Sidebar layouts → wide = content (parent-constrained, no overlap)
+	// Used to push into __experimentalFeatures.layout.wideSize so alignment
+	// dropdown labels show the right "Max Xpx wide" hint.
+	const isViewportBoundSize =
+		typeof size === 'string' && /calc|vw/.test( size );
+	const sizeNum =
+		size && ! isViewportBoundSize ? parseInt( size, 10 ) : null;
+	const isNoSidebarFamily =
+		isNoSidebarContentLayout( contentLayout ) || layout === 'content';
+	let wideSize;
+	if ( isViewportBoundSize ) {
+		wideSize = size;
+	} else if ( sizeNum && isNoSidebarFamily ) {
+		wideSize = `${ sizeNum + 400 }px`;
+	} else {
+		wideSize = size || config.wideSize;
+	}
 
 	useEffect( () => {
 		applyContentSizeCss( css );
+
+		// Keep block-editor settings.layout in lockstep with the CSS variable so
+		// alignment dropdown labels (e.g., "None — Max 863px wide") reflect the
+		// resolved size, not theme.json's static one. The initial dispatch can
+		// be overwritten by editor bootstrap loading theme.json after our mount,
+		// so subscribe and re-apply on every settings change — syncEditor-
+		// LayoutSettings has internal bail-out so it's a no-op once our values
+		// have stuck. Subscription is scoped to core/block-editor so we don't
+		// fire on unrelated store updates.
+		const applyLayoutSync = () =>
+			syncEditorLayoutSettings( size, wideSize );
+		applyLayoutSync();
+		const unsubscribeSync = subscribe( applyLayoutSync, 'core/block-editor' );
 
 		// Editor canvas iframe mounts asynchronously and may reload (e.g.
 		// when toggling device preview). Watch for its load event so we
@@ -140,12 +255,18 @@ function ContentSizeSync() {
 		if ( ! iframe ) {
 			// Iframe may not exist yet — retry once after it likely mounts.
 			const timer = setTimeout( () => applyContentSizeCss( css ), 500 );
-			return () => clearTimeout( timer );
+			return () => {
+				clearTimeout( timer );
+				unsubscribeSync();
+			};
 		}
 		const onLoad = () => applyContentSizeCss( css );
 		iframe.addEventListener( 'load', onLoad );
-		return () => iframe.removeEventListener( 'load', onLoad );
-	}, [ css ] );
+		return () => {
+			iframe.removeEventListener( 'load', onLoad );
+			unsubscribeSync();
+		};
+	}, [ css, size, wideSize ] );
 
 	return null;
 }
@@ -158,6 +279,7 @@ const CONTENT_LAYOUT_OPTIONS = [
 	{ label: __( 'Default', 'customify' ),                 value: '' },
 	{ label: __( 'Full Width', 'customify' ),               value: 'full-width' },
 	{ label: __( 'Full Width – Stretched', 'customify' ),   value: 'full-stretched' },
+	{ label: __( 'Narrow', 'customify' ),                   value: 'narrow' },
 ];
 
 const SIDEBAR_OPTIONS = [

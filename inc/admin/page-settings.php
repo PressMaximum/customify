@@ -141,15 +141,66 @@ class Customify_Page_Settings {
 			? Customify_Editor::customizer_sidebar_layout_for_post_type( $post_type )
 			: 'content-sidebar';
 
+		// Single-post user override: matches the frontend body.single-post rule
+		// from inc/customizer/configs/single-blog-post.php — when editing a post,
+		// the user's saved single_blog_post_content_width takes precedence over
+		// the layout-derived size. Scoped to post_type === 'post' only; other
+		// post types fall through to the layout map. Sent as the normalized
+		// CSS length string (e.g., "600px") so JS doesn't have to recreate the
+		// {value, unit} → length logic.
+		$post_content_size = null;
+		if ( 'post' === $post_type ) {
+			$pcw = Customify()->get_setting( 'single_blog_post_content_width' );
+			if ( is_array( $pcw ) && isset( $pcw['value'] ) && '' !== $pcw['value'] ) {
+				$pcw_unit          = ! empty( $pcw['unit'] ) ? $pcw['unit'] : 'px';
+				$post_content_size = $pcw['value'] . $pcw_unit;
+			}
+		}
+
+		// wideSize for the editor's layout settings sync — pushed into
+		// getSettings().__experimentalFeatures.layout so block dropdown labels
+		// (e.g., "Wide width — Max 1200px wide") match the runtime CSS variable.
+		//
+		// Resolution mirrors what `--wp--style--global--wide-size` actually
+		// resolves to in the editor iframe:
+		//   - container_width has a saved value → editor.php's container_width
+		//     branch emits `:root { --wp--style--global--wide-size: VALUE }`
+		//     via the auto-CSS pipeline. wideSize === saved value.
+		//   - container_width is unsaved → auto-CSS skips emission; only
+		//     theme.json's static wideSize (1200px) applies. Read it via
+		//     wp_get_global_settings() so any theme.json overrides upstream
+		//     stay authoritative.
+		$wide_size = null;
+		$cw_raw    = get_theme_mod( 'container_width' );
+		if ( is_array( $cw_raw ) && ! empty( $cw_raw['value'] ) ) {
+			$wide_size = (int) $cw_raw['value'] . ( ! empty( $cw_raw['unit'] ) ? $cw_raw['unit'] : 'px' );
+		} elseif ( is_numeric( $cw_raw ) && (int) $cw_raw > 0 ) {
+			$wide_size = (int) $cw_raw . 'px';
+		} else {
+			$global_settings = function_exists( 'wp_get_global_settings' ) ? wp_get_global_settings() : array();
+			$wide_size       = $global_settings['layout']['wideSize'] ?? '1200px';
+		}
+
+		// narrowWidth — used when content_layout meta is 'narrow'. Mirrors
+		// customify_get_narrow_width_value() + the .site-content.content-narrow
+		// frontend rule, so editor + frontend stay in sync.
+		$narrow_width = function_exists( 'customify_get_narrow_width_value' )
+			? customify_get_narrow_width_value()
+			: '800px';
+
 		wp_localize_script(
 			'customify-page-settings',
 			'customifyPageSettings',
 			array(
-				'sidebarLayouts' => customify_get_config_sidebar_layouts(),
-				'hasProFeatures' => (bool) class_exists( 'Customify_Pro' ),
-				'hasBreadcrumb'  => (bool) $has_breadcrumb,
-				'fallbackLayout' => $fallback_layout,
-				'contentSizeMap' => customify_get_layout_content_sizes(),
+				'sidebarLayouts'  => customify_get_config_sidebar_layouts(),
+				'hasProFeatures'  => (bool) class_exists( 'Customify_Pro' ),
+				'hasBreadcrumb'   => (bool) $has_breadcrumb,
+				'fallbackLayout'  => $fallback_layout,
+				'contentSizeMap'  => customify_get_layout_content_sizes(),
+				'postType'        => $post_type,
+				'postContentSize' => $post_content_size,
+				'wideSize'        => $wide_size,
+				'narrowWidth'     => $narrow_width,
 			)
 		);
 

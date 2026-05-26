@@ -83,12 +83,20 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 			/**
 			 * @since 0.2.6 Change css_format and selector.
+			 *
+			 * Default 1248 matches the SCSS hardcode in
+			 * src/frontend/scss/layouts/_layouts.scss `.customify-container, .layout-contained { max-width: 1248px }`.
+			 * Auto-CSS skips emission when the saved value equals the field default,
+			 * so when the Customizer is unsaved the SCSS hardcode is what actually
+			 * renders. Aligning the default avoids a visual mismatch between the
+			 * Customizer slider position and the rendered container outer width.
+			 * Saved-explicit values are unaffected — they still persist as-is.
 			 */
 			array(
 				'name'            => 'container_width',
 				'type'            => 'slider',
 				'device_settings' => false,
-				'default'         => 1200,
+				'default'         => 1248,
 				'min'             => 700,
 				'step'            => 10,
 				'max'             => 2000,
@@ -97,6 +105,33 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'description'     => __( 'Max width of the site container.', 'customify' ),
 				'selector'        => 'format',
 				'css_format'      => ':root { --wp--style--global--wide-size: {{value}}; } .customify-container, .layout-contained, .site-framed .site, .site-boxed .site { max-width: {{value}}; }',
+			),
+
+			// Narrow content width — paired with the "Narrow" Content Layout
+			// option (per-post metabox). Mirrors the Full Width / Full Width –
+			// Stretched pattern: a content_layout value that overrides sidebar
+			// layout to no-sidebar and constrains content-size to this value.
+			// .site-content.content-narrow CSS rule consumes the saved value;
+			// see customify_layout_content_size_css() in inc/template-functions.php.
+			//
+			// Wide-size for narrow = narrow_width + 400 (200px breakout each side)
+			// per the dynamic wide-size design — see the same SPEC in
+			// customify_layout_content_size_css(). `calc({{value}} + 400px)` lets
+			// the Customizer live-preview auto-CSS rebuild keep wide-size in sync
+			// without a separate handler.
+			array(
+				'name'            => 'narrow_width',
+				'type'            => 'slider',
+				'device_settings' => false,
+				'default'         => 800,
+				'min'             => 400,
+				'step'            => 10,
+				'max'             => 1000,
+				'section'         => 'global_layout_section',
+				'title'           => __( 'Narrow Content Width', 'customify' ),
+				'description'     => __( 'Max width when a post uses the "Narrow" Content Layout option in the Page Settings panel.', 'customify' ),
+				'selector'        => 'format',
+				'css_format'      => '.site-content.content-narrow { --wp--style--global--content-size: {{value}}; --wp--style--global--wide-size: calc({{value}} + 400px); }',
 			),
 
 			// Site content layout.
