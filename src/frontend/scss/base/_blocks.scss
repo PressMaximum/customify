@@ -8,12 +8,13 @@
 	margin-right: auto;
 }
 
-// Default blocks are constrained to --wp--style--global--content-size, which is set by
-// theme.json on body and overridden per layout via customify_layout_content_size_css()
-// (inc/template-functions.php). Skip when `.site-content.content-full-stretched` is
-// the context — stretched mode disables content-width constraints so blocks expand
-// to fit the container.
-.site-content:not(.content-full-stretched)
+// Default blocks are constrained to --wp--style--global--content-size, which is
+// set per layout by customify_layout_content_size_css() (inc/template-functions.php):
+//   - reading-column layouts (default no-sidebar, single sidebars, two sidebars) →
+//     fixed-px value capped at the typography readability target
+//   - full-width / full-stretched / narrow → viewport-bound or Customizer-driven
+// No exclusion list needed here — the content-size var itself adapts to context.
+.site-content
 	.entry-content
 	> *:not(.alignwide):not(.alignfull) {
 	max-width: var(--wp--style--global--content-size, 863px);
@@ -26,11 +27,28 @@
 
 // alignwide / alignfull — modern margin-based approach (no transform hack).
 // Works for all layouts. Uses CSS vars from theme.json when available.
+//
+// alignwide: dynamic breakout (per Customizer narrow_width / container_width).
+//   - --wp--style--global--wide-size is set per layout by customify_layout_content_size_css()
+//     (no-sidebar = content+400, narrow = narrow_width+400, sidebar = content).
+//   - The block is centered via negative margin when wider than its parent.
+//   - max() floor at 100% ensures wide is never narrower than the parent content
+//     column (so a narrow viewport never makes alignwide visually shrink BELOW
+//     align=none — keeps cascade intent: "wide ≥ none, always").
+//   - min() ceiling at (100vw - 32px) prevents the breakout from overflowing the
+//     viewport — the block dynamically shrinks the breakout (down to 0/side at
+//     tiny viewports) instead of triggering horizontal scroll.
+//   - Negative inline margins center the over-wide box back across the parent's
+//     midline. Same approach as alignfull's calc(50% - 50vw) but bounded.
 .entry-content > .alignwide {
-	max-width: var(--wp--style--global--wide-size, 1200px);
-	width: 100%;
+	--customify-alignwide-actual: max(
+		100%,
+		min(var(--wp--style--global--wide-size, 1200px), calc(100vw - 32px))
+	);
+	width: var(--customify-alignwide-actual);
+	margin-left: calc((100% - var(--customify-alignwide-actual)) / 2);
+	margin-right: calc((100% - var(--customify-alignwide-actual)) / 2);
 	box-sizing: border-box;
-	// margin-left/right: auto is already inherited from `.entry-content > *` above.
 }
 
 .entry-content > .alignfull {
