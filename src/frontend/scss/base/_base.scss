@@ -407,9 +407,9 @@ select {
 // `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
 // `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
 // so they still need their own slot.
-body:not(.fl-builder-edit) .button:not([class*="wp-block-"]),
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-body:not(.fl-builder-edit) input[type="button"]:not(.ed_button, [class*="wp-block-"]),
+.button:not([class*="wp-block-"]),
+button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"]),
 .button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
 input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
@@ -474,9 +474,9 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
 
 // Same `[class*="wp-block-"]` carve-out as above so WP default-block
 // chrome doesn't inherit the primary-color background fill.
-body:not(.fl-builder-edit) .button:not([class*="wp-block-"]),
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-body:not(.fl-builder-edit) input[type="button"]:not(.ed_button, [class*="wp-block-"]),
+.button:not([class*="wp-block-"]),
+button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"]),
 .button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),

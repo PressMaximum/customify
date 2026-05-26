@@ -48,7 +48,7 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			'customify/styling/primary-color',
 			'
 			.header-top .header--row-inner,
-			body:not(.fl-builder-edit) :is(.button:not([class*="wp-block-"]), button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]), input[type="button"]:not(.ed_button, [class*="wp-block-"])),
+			:is(.button:not([class*="wp-block-"]), button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]), input[type="button"]:not(.ed_button, [class*="wp-block-"])),
 			button.button:not([class*="wp-block-"]),
 			:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 			.pagination .nav-links span,
