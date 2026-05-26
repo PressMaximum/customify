@@ -26,7 +26,7 @@ function DeviceSwitcher( { device, onChange } ) {
 	);
 }
 
-function LayoutSvg( { fr, stacked, count } ) {
+function LayoutSvg( { fr, stacked, count, rows } ) {
 	const W   = 48;
 	const H   = 30;
 	const GAP = 2;
@@ -45,16 +45,24 @@ function LayoutSvg( { fr, stacked, count } ) {
 		);
 	}
 
-	const total  = fr.reduce( ( a, b ) => a + b, 0 );
-	const totalG = GAP * ( fr.length - 1 );
-	let x        = 0;
+	const total   = fr.reduce( ( a, b ) => a + b, 0 );
+	const totalGX = GAP * ( fr.length - 1 );
+	const nRows   = Math.max( 1, parseInt( rows, 10 ) || 1 );
+	const totalGY = GAP * ( nRows - 1 );
+	const rowH    = ( H - 4 - totalGY ) / nRows;
 
-	const rects = fr.map( ( f, i ) => {
-		const w    = ( f / total ) * ( W - totalG );
-		const rect = <rect key={ i } x={ x } y={ 2 } width={ Math.max( w, 1 ) } height={ H - 4 } rx={ 2 } />;
-		x += w + GAP;
-		return rect;
-	} );
+	const rects = [];
+	for ( let r = 0; r < nRows; r++ ) {
+		let x = 0;
+		const y = 2 + r * ( rowH + GAP );
+		fr.forEach( ( f, i ) => {
+			const w = ( f / total ) * ( W - totalGX );
+			rects.push(
+				<rect key={ `${ r }-${ i }` } x={ x } y={ y } width={ Math.max( w, 1 ) } height={ Math.max( rowH, 1 ) } rx={ 2 } />
+			);
+			x += w + GAP;
+		} );
+	}
 
 	return (
 		<svg width={ W } height={ H } viewBox={ `0 0 ${ W } ${ H }` } fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -231,15 +239,25 @@ export default function RowLayout( { settingKey } ) {
 						const active    = isStacked
 							? fr.length === 1
 							: JSON.stringify( fr ) === JSON.stringify( preset.fr );
+						const title     = isStacked
+							? 'stacked'
+							: preset.rows
+								? `${ preset.rows }×${ preset.fr.length } (${ preset.fr.join( ':' ) })`
+								: preset.fr.join( ':' );
 						return (
 							<button
 								key={ idx }
 								type="button"
 								className={ `cb-row-layout__preset-btn${ active ? ' is-active' : '' }` }
-								title={ isStacked ? 'stacked' : preset.fr.join( ':' ) }
+								title={ title }
 								onClick={ () => handlePreset( preset ) }
 							>
-								<LayoutSvg fr={ preset.fr || [ 1 ] } stacked={ isStacked } count={ count } />
+								<LayoutSvg
+									fr={ preset.fr || [ 1 ] }
+									stacked={ isStacked }
+									count={ count }
+									rows={ preset.rows }
+								/>
 							</button>
 						);
 					} ) }

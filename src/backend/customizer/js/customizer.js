@@ -388,15 +388,18 @@
 				return;
 			}
 			var fr;
-			// A length-1 fr is the "stacked" preset's saved shape: one grid
-			// track regardless of count. Use it as-is on every device; only
-			// pad multi-track arrays when they're shorter than count (legacy
-			// data correction).
-			if (d.fr.length === 1) {
-				fr = d.fr.slice();
-			} else if (device === 'mobile') {
-				// Mobile multi-track: respect the user's explicit array exactly,
-				// no slice/pad to count.
+			var frLen = d.fr.length;
+			// Preserve fr as-is when it represents an intentional layout:
+			//   length 1            = stacked preset
+			//   length == count     = normal one-row layout
+			//   length divides count = wrap preset (e.g. fr=[1,1] with count=4
+			//                          → 2×2 grid via grid auto-flow)
+			//   mobile device       = respect user's explicit mobile choice
+			// Other lengths are legacy stale data — slice/pad to count.
+			var isIntentional = frLen === 1
+				|| frLen === count
+				|| ( frLen > 1 && count > 0 && frLen < count && count % frLen === 0 );
+			if (isIntentional || device === 'mobile') {
 				fr = d.fr.slice();
 			} else {
 				fr = count > 0 ? d.fr.slice(0, count) : d.fr.slice();

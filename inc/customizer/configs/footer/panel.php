@@ -399,15 +399,20 @@ function customify_footer_row_layout_css() {
 
 			$device_data = $data[ $device ];
 
-			// A length-1 fr is the "stacked" preset's saved shape: one grid
-			// track regardless of count. Use it as-is on every device; only
-			// pad multi-track arrays when they're shorter than count (legacy
-			// data correction).
-			if ( count( $device_data['fr'] ) === 1 ) {
-				$fr = $device_data['fr'];
-			} elseif ( 'mobile' === $device ) {
-				// Mobile multi-track: respect the user's explicit array exactly,
-				// no slice/pad to count.
+			$fr_len = count( $device_data['fr'] );
+
+			// Preserve fr as-is when it represents an intentional layout:
+			//   length 1            = stacked preset (one track, items stack)
+			//   length == count     = normal one-row layout
+			//   length divides count = wrap preset (e.g. fr=[1,1] with count=4
+			//                          → 2×2 grid via grid auto-flow)
+			//   mobile device       = respect user's explicit mobile choice
+			// Other lengths are legacy stale data — slice/pad to count.
+			$is_intentional = $fr_len === 1
+				|| $fr_len === $count
+				|| ( $fr_len > 1 && $fr_len < $count && $count % $fr_len === 0 );
+
+			if ( $is_intentional || 'mobile' === $device ) {
 				$fr = $device_data['fr'];
 			} else {
 				$fr = $count > 0 ? array_slice( $device_data['fr'], 0, $count ) : $device_data['fr'];
