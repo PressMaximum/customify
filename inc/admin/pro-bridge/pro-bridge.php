@@ -331,7 +331,6 @@ function customify_pro_bridge_enqueue_settings_assets( string $hook ): void {
 		return;
 	}
 
-	$theme_suffix  = Customify()->get_asset_suffix();
 	$theme_version = Customify::$version ? (string) Customify::$version : (string) wp_get_theme()->get( 'Version' );
 	$pro_version   = customify_pro_bridge_get_pro_version();
 	$pro_url       = Customify_Pro::$url;
@@ -339,14 +338,14 @@ function customify_pro_bridge_enqueue_settings_assets( string $hook ): void {
 	wp_enqueue_media();
 	wp_enqueue_script(
 		'customify-metabox',
-		get_template_directory_uri() . '/assets/js/admin/metabox' . $theme_suffix . '.js',
+		esc_url( get_template_directory_uri() ) . '/build/js/backend/admin/metabox.js',
 		array( 'jquery' ),
 		$theme_version,
 		true
 	);
 	wp_enqueue_style(
 		'customify-metabox',
-		get_template_directory_uri() . '/assets/css/admin/metabox' . $theme_suffix . '.css',
+		esc_url( get_template_directory_uri() ) . '/build/css/backend/admin/metabox.css',
 		array(),
 		$theme_version
 	);
