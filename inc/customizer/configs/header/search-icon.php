@@ -55,7 +55,12 @@ class Customify_Builder_Item_Search_Icon {
 				'min'             => 5,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector svg",
+				// `body` prefix lifts specificity (0,1,1) → (0,1,2) so this
+				// rule beats `.search-icon svg { width:18px; height:18px }`
+				// in src/frontend/scss/header/builder_items/_search.scss:18
+				// which sits at the same (0,1,1) and was winning by source
+				// order, leaving the Icon Size slider with no visible effect.
+				'selector'        => "body $selector svg",
 				'css_format'      => 'height: {{value}}; width: {{value}};',
 				'label'           => __( 'Icon Size', 'customify' ),
 			),
@@ -68,7 +73,11 @@ class Customify_Builder_Item_Search_Icon {
 				'min'             => 0,
 				'step'            => 1,
 				'max'             => 100,
-				'selector'        => "$selector .search-icon",
+				// `body` prefix mirrors the Icon Size + Icon Styling fix in
+				// this file: bump specificity (0,2,0) → (0,2,1) so the
+				// padding slider wins against any same-specificity rule
+				// targeting `.search-icon` (skin/base sheets).
+				'selector'        => "body $selector .search-icon",
 				'css_format'      => 'padding: {{value}};',
 				'label'           => __( 'Icon Padding', 'customify' ),
 			),
@@ -80,11 +89,18 @@ class Customify_Builder_Item_Search_Icon {
 				'css_format'  => 'styling',
 				'title'       => __( 'Icon Styling', 'customify' ),
 				'description' => __( 'Search icon styling', 'customify' ),
+				// `body` prefix lifts specificity from (0,2,0) to (0,2,1) so
+				// the user-saved values beat the light/dark-mode skin rules
+				// in base/_skins.scss:40, :139 — `.dark-mode .search-icon`
+				// and `.light-mode .search-icon` both sit at (0,2,0) and,
+				// at equal specificity, source order leaves the skin
+				// stylesheet winning. Mirrors the same fix applied to
+				// header/search-box.php's icon styling (commit c66fa299).
 				'selector'    => array(
-					'normal'            => "{$selector} .search-icon",
-					'hover'             => "{$selector} .search-icon:hover",
-					'normal_box_shadow' => "{$selector} .search-icon",
-					'normal_text_color' => "{$selector} .search-icon",
+					'normal'            => "body {$selector} .search-icon",
+					'hover'             => "body {$selector} .search-icon:hover",
+					'normal_box_shadow' => "body {$selector} .search-icon",
+					'normal_text_color' => "body {$selector} .search-icon",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
