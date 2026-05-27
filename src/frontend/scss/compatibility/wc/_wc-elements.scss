@@ -28,6 +28,15 @@
 	}
 }
 
+// Ported from WC compat filter `customify/styling/secondary-color`. The
+// `.button.add_to_cart_button` rule above is higher-specificity and includes
+// color+hover; this bare-class rule mirrors the filter declaration exactly
+// (background-color only) for any `.add_to_cart_button` element that lacks
+// the `.button` compound class.
+.add_to_cart_button {
+	background-color: $color_secondary;
+}
+
 .products {
 	.button.add_to_cart_button,
 	.button.added_to_cart,

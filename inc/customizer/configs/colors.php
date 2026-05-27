@@ -28,208 +28,31 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 	function customify_customizer_colors_config( $configs ) {
 		$section = 'customify_colors';
 
-		// CSS format strings — copied verbatim from styling.php so byte-equivalent
-		// CSS is emitted on legacy sites with saved values.
-		// Primary CSS: var(--customify-primary, fallback). The fallback hex is the
-		// substituted {{value}} (i.e. the saved theme_mod or its default), so legacy
-		// browsers without CSS-var support render the saved color directly. Modern
-		// browsers read --customify-primary from the :root block — which is fed by
-		// the same theme_mod via customify_color_get_slots(), so they render the
-		// identical hex. Safe for 30K sites; refactor lets future slot edits
-		// propagate to every primary-themed selector via :root only.
-		// `[class*="wp-block-"]` negation in every button/input slot below
-		// mirrors src/frontend/scss/base/_base.scss button rules — keeps the
-		// primary-color background off WP default-block chrome buttons
-		// (Search submit, File download, Embed "Try again", etc.) both on
-		// the frontend and inside the block editor canvas. `.wp-block-button__link`
-		// stays themed because it isn't matched here — Button-block color
-		// comes from theme.json + the explicit rule in _base.scss.
-		$primary_css = apply_filters(
-			'customify/styling/primary-color',
-			':root {--customify-primary: {{value}}; }'
-		);
-
-		$secondary_css = apply_filters(
-			'customify/styling/secondary-color',
-			':root {--customify-secondary: {{value}}; }'
-		);
-
-		// Body / ink CSS: var(--customify-body-text, fallback). Body copy
-		// follows slot.text directly via the :root cascade chain
-		// `--customify-body-text: var(--customify-text, ...)`. Pure var()
-		// passthrough — no mix — so user's Text slot value flows through
-		// unchanged (white text on a dark base renders white body copy,
-		// not a desaturated grey). Fresh-install shift from legacy
-		// `#686868` to slot.text `#2b2b2b`. Saved body override locks
-		// the static value.
-		$text_css = apply_filters(
-			'customify/styling/text-color',
-			'
-			body
-			{
-			    color: var(--customify-body-text, {{value}});
-			}
-			abbr, acronym {
-			    border-bottom-color: var(--customify-body-text, {{value}});
-			}'
-		);
-
-		// Link CSS: var(--customify-link, fallback). Link default aligns with
-		// slot.primary so editing the Primary slot cascades to link color.
-		// Saved overrides feed both pipelines identically. See SPEC §8.6.
-		$link_css = apply_filters(
-			'customify/styling/link-color',
-			'
-                a
-                {
-                    color: var(--customify-link, {{value}});
-				}'
-		);
-
-		// Link hover CSS: var(--customify-link-hover, fallback). Hover is a
-		// LIGHTER tint of link (15% white mixed in), not darker — matches
-		// the design intent that hover surfaces the link by raising
-		// luminance against most text contexts.
-		$link_hover_css = apply_filters(
-			'customify/styling/link-color-hover',
-			'
-a:hover,
-a:focus,
-.link-meta:hover, .link-meta a:hover
-{
-    color: var(--customify-link-hover, {{value}});
-}'
-		);
-
-		// Border CSS: var(--customify-border, fallback). The :root token
-		// is emitted UNCONDITIONALLY (Phase 2.13 follow-up), so the
-		// `color-mix(currentcolor 9%, transparent)` fallback only fires
-		// when modern browsers see an inherited token (`unset` / `initial`)
-		// and on legacy browsers without var() support. Token value is
-		// `mix(slot.text, slot.base, 9%)` — fallback + slot mix held at
-		// the SAME 9% so the legacy-browser path renders match modern.
+		// Inline CSS templates intentionally removed in the colors→SCSS migration.
+		// Every per-selector rule that lived in $primary_css / $secondary_css /
+		// $text_css / $link_css / $link_hover_css / $border_css / $meta_css /
+		// $heading_css / $w_title_css now lives in the bundled SCSS, consuming
+		// the same `--customify-*` tokens via the `$color_*` SCSS variables
+		// declared in src/frontend/scss/utils/_vars.scss.
 		//
-		// History: Phase 2.0 used 12% for both paths. Spec §2 bumped slot
-		// mix to 14% (`#e1e1e1`) but left the fallback at 12% — created
-		// drift, and rendered borders perceptibly darker than the original
-		// hardcoded `#eaecee`. PR #398 tuned both paths to 9% so render
-		// (`#ECECEC` on default install) is grayscale-equivalent of legacy
-		// `#eaecee` average — ΔE ≈ 1.1, imperceptible.
-		$border_css = apply_filters(
-			'customify/styling/color-border',
-			'
-h2 + h3,
-.comments-area h2 + .comments-title,
-.h2 + h3,
-.comments-area .h2 + .comments-title,
-.page-breadcrumb {
-    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-}
-blockquote,
-.site-content .widget-area .menu li.current-menu-item > a:before
-{
-    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-}
-
-@media screen and (min-width: 64em) {
-    .comment-list .children li.comment {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .comment-list .children li.comment:after {
-        background-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-}
-
-.page-titlebar, .page-breadcrumb,
-.posts-layout .entry-inner {
-    border-bottom-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-}
-
-.header-search-form .search-field,
-.entry-content .page-links a,
-.header-search-modal,
-.pagination .nav-links > *,
-.entry-footer .tags-links a, .entry-footer .cat-links a,
-.search .content-area article,
-.site-content .widget-area .menu li.current-menu-item > a,
-.posts-layout .entry-inner,
-.post-navigation .nav-links,
-article.comment .comment-meta,
-.widget-area .widget_pages li a, .widget-area .widget_categories li a, .widget-area .widget_archive li a, .widget-area .widget_meta li a, .widget-area .widget_nav_menu li a, .widget-area .widget_product_categories li a, .widget-area .widget_recent_entries li a, .widget-area .widget_rss li a,
-.widget-area .widget_recent_comments li
-{
-    border-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-}
-
-.header-search-modal::before {
-    border-top-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-}
-
-@media screen and (min-width: 48em) {
-    .content-sidebar.sidebar_vertical_border .content-area {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .sidebar-content.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .sidebar-sidebar-content.sidebar_vertical_border .sidebar-primary {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .sidebar-sidebar-content.sidebar_vertical_border .sidebar-secondary {
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .content-sidebar-sidebar.sidebar_vertical_border .sidebar-primary {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .content-sidebar-sidebar.sidebar_vertical_border .sidebar-secondary {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-    .sidebar-content-sidebar.sidebar_vertical_border .content-area {
-        border-left-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-        border-right-color: var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
-    }
-}
-'
-		);
-
-		// Meta CSS: var(--customify-text-muted, fallback). Meta and pagination
-		// text share the same `--customify-text-muted` token as body's
-		// secondary copy. Fresh-install shift `#6d6d6d` → `#6b6b6b`
-		// (2/2/2 RGB) — invisible to the eye.
-		$meta_css = apply_filters(
-			'customify/styling/color-meta',
-			'
-			article.comment .comment-post-author {
-				background: var(--customify-text-muted, {{value}});
-			}
-			.pagination .nav-links > *,
-			.link-meta,
-			.link-meta a,
-			.color-meta,
-			.entry-single .tags-links:before,
-			.entry-single .cats-links:before
-			{
-			    color: var(--customify-text-muted, {{value}});
-			}'
-		);
-
-		// Heading CSS: var(--customify-heading, fallback). Field default `#2b2b2b`
-		// == slot.text default `#2b2b2b` and --customify-heading resolves to
-		// `$ov_heading ?: $slots['text']` — so the fallback hex and the var
-		// resolve to identical values on every fresh install. Saved overrides
-		// (legacy `global_styling_color_heading`) feed both pipelines via the
-		// same theme_mod key. Editing slot.text now also cascades to headings
-		// via the modern-browser var() path.
-		$heading_css   = apply_filters( 'customify/styling/color-heading', 'h1, h2, h3, h4, h5, h6 { color: var(--customify-heading, {{value}});}' );
-		// Widget title CSS: var(--customify-widget-title, fallback). Default
-		// shifts from `#444444` to slot.text `#2b2b2b` on fresh install
-		// (25/25/25 RGB — moderate but documented design call).
-		$w_title_css   = '.site-content .widget-title { color: var(--customify-widget-title, {{value}});}';
+		// :root variables themselves continue to be emitted UNCONDITIONALLY by
+		// inc/colors-palette.php (`:root{--customify-primary: …; --customify-link: …; …}`)
+		// on every page render, so saved theme_mod overrides keep flowing into
+		// the same tokens. Customizer live preview drives the same vars via
+		// document.documentElement.style.setProperty (see colors-palette.php
+		// preview JS at the bottom of that file) — no inline CSS template is
+		// consulted in either path.
+		//
+		// 30K-site safety: storage keys unchanged. Modern browsers read the
+		// `:root` var; legacy browsers without var() support read the
+		// `$color_X = var(--customify-X, fallback_hex)` fallback baked into the
+		// compiled stylesheet. Fallback hexes in _vars.scss were aligned to the
+		// PHP defaults during this migration so the two paths render identical.
+		//
+		// WC selector additions previously hooked via the per-token filters
+		// (customify/styling/{primary-color,secondary-color,link-color,color-border,color-meta})
+		// now live in src/frontend/scss/compatibility/wc/*.scss alongside the
+		// rest of the WooCommerce visual chrome.
 
 		// Composite styling control exclusion list — only expose background-related
 		// subfields; hide text/link/padding/margin/border/shadow.
@@ -290,7 +113,7 @@ article.comment .comment-meta,
 				'description' => __( 'Brand color, CTAs.', 'customify' ),
 				'default'     => '#235787',
 				'placeholder' => '#235787',
-				'css_format'  => $primary_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -304,7 +127,7 @@ article.comment .comment-meta,
 				'description' => __( 'Secondary brand color.', 'customify' ),
 				'default'     => '#c3512f',
 				'placeholder' => '#c3512f',
-				'css_format'  => $secondary_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -395,7 +218,7 @@ article.comment .comment-meta,
 				'description' => __( 'Default: derived from Primary slot.', 'customify' ),
 				'default'     => '#235787',
 				'placeholder' => '#235787',
-				'css_format'  => $link_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -413,7 +236,7 @@ article.comment .comment-meta,
 				'description' => __( 'Default: derived (Link color lighter 15%).', 'customify' ),
 				'default'     => '#406F99',
 				'placeholder' => '#406F99',
-				'css_format'  => $link_hover_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -431,7 +254,7 @@ article.comment .comment-meta,
 				'description' => __( 'Default: derived from Text slot.', 'customify' ),
 				'placeholder' => '#2b2b2b',
 				'default'     => '#2b2b2b',
-				'css_format'  => $heading_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -533,7 +356,7 @@ article.comment .comment-meta,
 				'title'       => __( 'Body text override', 'customify' ),
 				'placeholder' => '#2b2b2b',
 				'default'     => '#2b2b2b',
-				'css_format'  => $text_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -552,7 +375,7 @@ article.comment .comment-meta,
 				// false-flag as dirty.
 				'placeholder' => '#ECECEC',
 				'default'     => '#ECECEC',
-				'css_format'  => $border_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -566,7 +389,7 @@ article.comment .comment-meta,
 				'title'       => __( 'Meta text override', 'customify' ),
 				'placeholder' => '#6b6b6b',
 				'default'     => '#6b6b6b',
-				'css_format'  => $meta_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -583,7 +406,7 @@ article.comment .comment-meta,
 				'title'       => __( 'Widget title override', 'customify' ),
 				'placeholder' => '#2b2b2b',
 				'default'     => '#2b2b2b',
-				'css_format'  => $w_title_css,
+				'css_format'  => '',
 				'selector'    => 'format',
 			),
 
@@ -594,3 +417,87 @@ article.comment .comment-meta,
 }
 
 add_filter( 'customify/customizer/config', 'customify_customizer_colors_config' );
+
+// ──────────────────────────────────────────────────────────────────
+// Customizer preview wiring for the 13 color settings.
+//
+// The Customify framework auto-detects postMessage transport from a
+// field's css_format (class-customizer.php:1199-1211). After the colors→SCSS
+// migration the 13 color controls have `css_format => ''`, leaving transport
+// at the framework default `refresh` — Customizer would reload the whole
+// preview on every picker drag.
+//
+// This function:
+//   1. Forces transport=postMessage on all 13 color settings (idempotent
+//      overlap with customify_color_palette_force_postmessage() in
+//      colors-palette.php which already covers the 4 new slot keys —
+//      re-setting postMessage on the same setting is a no-op).
+//   2. Registers a single selective_refresh partial whose selector is the
+//      `<style id='customify-palette-tokens-inline-css'>` tag printed by
+//      Customify::print_palette_tokens(). Render callback re-runs the same
+//      customify_color_palette_root_css() PHP that generated the initial
+//      block, so every derived/computed token (--customify-on-primary,
+//      --customify-{primary,secondary,accent}-container, container chroma
+//      caps, on-X-container contrast picks, etc.) is recomputed live in the
+//      preview rather than staying stale until save+reload.
+//
+// Pairing with the existing setProperty preview JS in colors-palette.php:
+//   - That JS handles BASE tokens (--customify-primary, --customify-text,
+//     etc.) instantly during drag via document.documentElement.style.
+//   - This partial fires after the setting-change debounce (~250ms) and
+//     replaces the style-tag innerHTML with the full re-rendered :root
+//     block, so PHP-only computed tokens catch up without a save.
+//   - End state is identical regardless of which mechanism wins each frame:
+//     both read the same previewed theme_mod values.
+//
+// `container_inclusive => false` means the partial replaces the inner CSS
+// content of the <style> tag, not the tag itself. customify_color_palette_root_css()
+// returns the CSS body without a <style> wrapper (matches the way
+// class-customify.php prints it).
+//
+// Priority 1100 runs after the framework registration (default 10) and
+// after customify_color_palette_force_postmessage (priority 1000), so all
+// settings exist when this hook fires.
+// ──────────────────────────────────────────────────────────────────
+
+if ( ! function_exists( 'customify_colors_register_preview_refresh' ) ) {
+	function customify_colors_register_preview_refresh( $wp_customize ) {
+		$color_settings = array(
+			// 6 palette slots
+			'global_styling_color_primary',
+			'global_styling_color_secondary',
+			'customify_palette_accent',
+			'customify_palette_text',
+			'customify_palette_surface',
+			'customify_palette_base',
+			// 7 component overrides
+			'global_styling_color_link',
+			'global_styling_color_link_hover',
+			'global_styling_color_heading',
+			'global_styling_color_text',
+			'global_styling_color_meta',
+			'global_styling_color_border',
+			'global_styling_color_w_title',
+		);
+
+		foreach ( $color_settings as $setting_id ) {
+			$setting = $wp_customize->get_setting( $setting_id );
+			if ( $setting ) {
+				$setting->transport = 'postMessage';
+			}
+		}
+
+		if ( isset( $wp_customize->selective_refresh ) && function_exists( 'customify_color_palette_root_css' ) ) {
+			$wp_customize->selective_refresh->add_partial(
+				'customify_palette_tokens',
+				array(
+					'selector'            => '#customify-palette-tokens-inline-css',
+					'settings'            => $color_settings,
+					'render_callback'     => 'customify_color_palette_root_css',
+					'container_inclusive' => false,
+				)
+			);
+		}
+	}
+	add_action( 'customize_register', 'customify_colors_register_preview_refresh', 1100 );
+}

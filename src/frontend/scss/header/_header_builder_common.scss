@@ -112,6 +112,11 @@
 // Breadcrumbs
 .page-breadcrumb {
 	padding: 9px 0px 9px;
+	// Ported from colors.php $border_css. `border-top-color` only takes
+	// visible effect when a border-top width/style is defined elsewhere
+	// (e.g. inline customizer styling); preserved here so any such border
+	// inherits the same Border token.
+	border-top-color: $color_border;
 	border-bottom: 1px solid $color_border;
 	color: $color_meta;
 	line-height: 1.6;

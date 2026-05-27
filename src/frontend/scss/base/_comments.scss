@@ -71,6 +71,10 @@ article.comment {
 		margin: 12px 0px 12px;
 		padding-bottom: 4px;
 		border-bottom: 1px solid $color_border;
+		// Ported from colors.php $border_css. All-sides `border-color`
+		// only takes effect when other rules add border width/style on
+		// the remaining sides; preserves the Border token wiring.
+		border-color: $color_border;
 		.comment-edit-link {
 			margin-left: 10px;
 		}

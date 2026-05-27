@@ -70,6 +70,12 @@ h2,
         border-top: 1px solid $color_border;
         padding-top: ms(-3);
     }
+    // Ported from colors.php $border_css. Comments title (typically `h2.comments-title`)
+    // sibling-after `h2` or `.h2` inside `.comments-area` gets the same divider
+    // pattern as `h2 + h3` above.
+    .comments-area &+.comments-title {
+        border-top-color: $color_border;
+    }
     @include for_device(tablet) {
         font-size: 1.9em;
     }
@@ -960,6 +966,9 @@ article.comment {
     color: $color_meta;
 }
 
+// Ported from colors.php $link_hover_css. Bare `.link-meta:hover`
+// (parent hover) shares the same link-hover token as the anchor child.
+.link-meta:hover,
 .link-meta a:hover {
     color: $color_link_hover;
 }

@@ -53,12 +53,14 @@ class Customify_WC {
 			 */
 			add_action( 'wp', array( $this, 'wp' ) );
 
-			// Custom styling.
-			add_filter( 'customify/styling/primary-color', array( $this, 'styling_primary' ) );
-			add_filter( 'customify/styling/secondary-color', array( $this, 'styling_secondary' ) );
-			add_filter( 'customify/styling/link-color', array( $this, 'styling_linkcolor' ) );
-			add_filter( 'customify/styling/color-border', array( $this, 'styling_border_color' ) );
-			add_filter( 'customify/styling/color-meta', array( $this, 'styling_meta_color' ) );
+			// Custom styling filters removed in the colors→SCSS migration.
+			// Every WC-specific selector that styling_primary / styling_secondary /
+			// styling_linkcolor / styling_border_color / styling_meta_color used to
+			// append to the inline color templates now lives in the bundled WC
+			// SCSS (src/frontend/scss/compatibility/wc/*.scss) consuming the same
+			// `$color_primary` / `$color_secondary` / `$color_link` / `$color_border`
+			// / `$color_meta` variables, which resolve through the `--customify-*`
+			// :root tokens emitted by inc/colors-palette.php.
 
 			// Shopping Cart.
 			require_once get_template_directory() . '/inc/compatibility/woocommerce/config/header/cart.php';
@@ -368,79 +370,6 @@ class Customify_WC {
 		$cart_fragments['.customify-wc-total-qty'] = '<span class="' . $class . '">' . $qty . '</span>';
 
 		return $cart_fragments;
-	}
-
-	function styling_primary( $selector ) {
-		$selector .= ' 
-        
-        .wc-svg-btn.active,
-        .woocommerce-tabs.wc-tabs-horizontal ul.tabs li.active,
-        #review_form {
-            border-color: {{value}};
-        }
-        
-        .wc-svg-btn.active,
-        .wc-single-tabs ul.tabs li.active a,
-        .wc-single-tabs .tab-section.active .tab-section-heading a {
-            color: {{value}};
-        }';
-
-		return $selector;
-	}
-
-	function styling_secondary( $selector ) {
-		$selector .= ' 
-        
-        .add_to_cart_button
-        {
-            background-color: {{value}};
-        }';
-
-		return $selector;
-	}
-
-	function styling_linkcolor( $selector ) {
-		$selector .= '
-		 
-		.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
-        .woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
-            color: {{value}};
-        }';
-
-		return $selector;
-	}
-
-	function styling_border_color( $selector ) {
-		$selector .= '
-		.widget_price_filter .price_slider_wrapper .ui-widget-content {
-		    background-color: {{value}};
-		}
-		.product_list_widget li,
-		#reviews #comments ol.commentlist li .comment-text,
-		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li,
-		.product_meta > span,
-		.woocommerce-tabs.wc-tabs-horizontal ul.tabs,
-		.woocommerce-tabs.wc-tabs-vertical .wc-tabs li:first-child {
-            border-color: {{value}};
-        }';
-
-		return $selector;
-	}
-
-	function styling_meta_color( $selector ) {
-		$selector .= '
-		.widget_price_filter .ui-slider .ui-slider-handle {
-		    border-color: {{value}};
-		}
-		.wc-product-inner .wc-product__category a {
-		    color: {{value}};
-		}
-		.widget_price_filter .ui-slider .ui-slider-range,
-		.widget_price_filter .price_slider_amount .button {
-            background-color: {{value}};
-        }';
-
-		return $selector;
 	}
 
 	function wp() {

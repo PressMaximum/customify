@@ -91,6 +91,10 @@
 		width: 100%;
 		border-radius: 2px;
 		height: 2.4em;
+		// Ported from colors.php $border_css. `border-color` here applies
+		// when the input has a default UA border or when other rules add
+		// border width/style — preserves the Border token wiring.
+		border-color: $color_border;
 
 		&:focus {
 			background-color: transparent;
