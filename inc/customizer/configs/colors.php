@@ -46,40 +46,12 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 		// comes from theme.json + the explicit rule in _base.scss.
 		$primary_css = apply_filters(
 			'customify/styling/primary-color',
-			'
-			.header-top .header--row-inner,
-			:is(.button:not([class*="wp-block-"]), button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]), input[type="button"]:not(.ed_button, [class*="wp-block-"])),
-			button.button:not([class*="wp-block-"]),
-			:is(input[type="button"]:not(.ed_button), input[type="reset"], input[type="submit"]):not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-			.pagination .nav-links span,
-			.pagination .nav-links > *:hover,
-			.nav-menu-desktop.style-full-height .primary-menu-ul > li:is(.current-menu-item, .current-menu-ancestor) > a,
-			.nav-menu-desktop.style-full-height .primary-menu-ul > li > a:hover,
-			.posts-layout .readmore-button:hover
-			{
-			    background-color: var(--customify-primary, {{value}});
-			}
-			.posts-layout .readmore-button {
-				color: var(--customify-primary, {{value}});
-			}
-			.pagination .nav-links span,
-			.pagination .nav-links > *:hover,
-			.entry-single :is(.tags-links, .cat-links) a:hover,
-			.posts-layout .readmore-button,
-			.posts-layout .readmore-button:hover
-			{
-			    border-color: var(--customify-primary, {{value}});
-			}'
+			':root {--customify-primary: {{value}}; }'
 		);
 
 		$secondary_css = apply_filters(
 			'customify/styling/secondary-color',
-			'
-
-			.customify-builder-btn
-			{
-			    background-color: var(--customify-secondary, {{value}});
-			}'
+			':root {--customify-secondary: {{value}}; }'
 		);
 
 		// Body / ink CSS: var(--customify-body-text, fallback). Body copy

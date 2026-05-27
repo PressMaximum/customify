@@ -407,12 +407,14 @@ select {
 // `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
 // `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
 // so they still need their own slot.
-.button:not([class*="wp-block-"]),
-button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+.button:not(
+    [class*="wp-block-"],
+    .menu-mobile-toggle,
+    .components-button,
+    .customize-partial-edit-shortcut-button
+),
 button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"]),
 input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 .wc-block-cart__submit .wp-element-button,
 .wp-block-button__link,
