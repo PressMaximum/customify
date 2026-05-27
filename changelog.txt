@@ -1,11 +1,11 @@
 = 0.4.17 =
-* NEW: Two extra Footer Builder row-layout presets for 4-column mode — 40/20/20/20 (wider first column) and 2×2 grid (items wrap onto two rows at 50/50).
-* FIXED: Pro Bridge settings screen failing to load metabox JS/CSS (404 on legacy /assets/ paths — now points at /build/).
-* FIXED: Nested lists inside core blocks (Quote, Pullquote, Cover, etc.) inheriting extra .entry-content margin/spacing; selector now excludes any descendant of [class*="wp-block-"], not just .wp-block-navigation.
-* IMPROVED: Removed orphaned "Shop Buttons" color control from the WooCommerce customizer config (was unreachable since the unified Colors section refactor in 0.4.15).
-* FIXED: WooCommerce mobile-only styles (table-cell stacking, 2-column product grid, hidden product thumbnail in cart, etc.) were leaking onto desktop viewports — now correctly scoped inside a @media (max-width: 560px) query. Likely the root cause of the cart row appearing oversized on desktop after upgrading from 0.4.13.
-* IMPROVED: WooCommerce cart "remove item" column constrained to 20px so the row layout stays tight.
-* IMPROVED: WooCommerce quantity picker (+/− buttons) now square via aspect-ratio and uses the muted text token; selector scoped under .woocommerce so the picker styling no longer leaks to non-WC contexts.
+* NEW: Two extra Footer Builder row-layout presets for 4-column mode — 40/20/20/20 and 2×2 grid.
+* FIXED: Header Search Icon — Icon Size, Icon Padding, and Icon Styling controls now apply to the rendered icon.
+* FIXED: WooCommerce mobile-only styles (stacked cart cells, 2-column product grid, hidden cart thumbnails) were leaking onto desktop — now scoped to @media (max-width: 560px). Likely root cause of oversized cart rows after upgrading from 0.4.13.
+* FIXED: Pro Bridge settings screen 404 on metabox JS/CSS (legacy /assets/ paths replaced with /build/).
+* FIXED: Nested lists inside core blocks (Quote, Pullquote, Cover, etc.) inheriting extra .entry-content margin; list-block styling unified under .wp-block-list for editor + frontend parity.
+* IMPROVED: WooCommerce cart — "remove item" column narrower, quantity picker (+/−) now square via aspect-ratio and uses the muted text token, scoped under .woocommerce.
+* IMPROVED: Removed orphaned "Shop Buttons" color control from the customizer (unreachable since the unified Colors section in 0.4.15).
 
 = 0.4.16 =
 * NEW: Fallback bridge wires legacy Customify Pro (< 0.4.16) into the new dashboard — module toggles and per-module settings work without modifying the Pro plugin.
