@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.4.16\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-05-26 16:08:34+00:00\n"
+"POT-Creation-Date: 2026-05-27 03:36:45+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -606,18 +606,18 @@ msgid "Feed for all posts filed under %s"
 msgstr ""
 
 #: inc/class-customify.php:199 inc/class-customify.php:261
-#: inc/colors-palette.php:1873 inc/customizer/configs/colors.php:317
+#: inc/colors-palette.php:1873 inc/customizer/configs/colors.php:289
 msgid "Primary"
 msgstr ""
 
 #: inc/class-customify.php:266 inc/colors-palette.php:1885
-#: inc/customizer/configs/colors.php:331
+#: inc/customizer/configs/colors.php:303
 msgid "Secondary"
 msgstr ""
 
 #: inc/class-customify.php:271
 #: inc/compatibility/woocommerce/config/catalog-designer.php:393
-#: inc/customizer/configs/colors.php:359
+#: inc/customizer/configs/colors.php:331
 #: inc/customizer/configs/header/button.php:46
 msgid "Text"
 msgstr ""
@@ -666,7 +666,7 @@ msgstr ""
 #: inc/customizer/class-customizer.php:747
 #: inc/customizer/class-customizer.php:842
 #: inc/customizer/configs/header/social-icons.php:271
-#: inc/customizer/configs/layouts.php:238
+#: inc/customizer/configs/layouts.php:273
 #: inc/customizer/configs/page-header.php:219
 #: inc/customizer/configs/page-header.php:260
 #: inc/customizer/configs/page-header.php:271
@@ -699,7 +699,7 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/single-product.php:187
 #: inc/customizer/configs/blogs.php:29 inc/customizer/configs/blogs.php:36
 #: inc/customizer/configs/footer/panel.php:135
-#: inc/customizer/configs/footer/panel.php:499
+#: inc/customizer/configs/footer/panel.php:504
 #: inc/customizer/configs/header/panel.php:122
 #: inc/customizer/configs/page-header.php:214
 msgid "Layout"
@@ -724,104 +724,108 @@ msgstr ""
 msgid "Full Width - Stretched"
 msgstr ""
 
-#: inc/class-metabox.php:82
+#: inc/class-metabox.php:69
+msgid "Narrow"
+msgstr ""
+
+#: inc/class-metabox.php:83
 msgid "Page Title Layout"
 msgstr ""
 
-#: inc/class-metabox.php:87 inc/class-metabox.php:104 inc/class-metabox.php:177
+#: inc/class-metabox.php:88 inc/class-metabox.php:105 inc/class-metabox.php:178
 msgid "Inherit from customize settings"
 msgstr ""
 
-#: inc/class-metabox.php:88 inc/customizer/configs/page-header.php:36
+#: inc/class-metabox.php:89 inc/customizer/configs/page-header.php:36
 msgid "Default - inside main content"
 msgstr ""
 
-#: inc/class-metabox.php:89 inc/customizer/class-customizer.php:675
+#: inc/class-metabox.php:90 inc/customizer/class-customizer.php:675
 #: inc/customizer/configs/page-header.php:37
 #: inc/customizer/configs/page-header.php:490
 msgid "Cover"
 msgstr ""
 
-#: inc/class-metabox.php:90 inc/customizer/configs/page-header.php:38
+#: inc/class-metabox.php:91 inc/customizer/configs/page-header.php:38
 msgid "Titlebar"
 msgstr ""
 
-#: inc/class-metabox.php:91 inc/class-metabox.php:178
+#: inc/class-metabox.php:92 inc/class-metabox.php:179
 #: inc/customizer/configs/page-header.php:39
 msgid "Hide"
 msgstr ""
 
-#: inc/class-metabox.php:98
+#: inc/class-metabox.php:99
 msgid "Sidebar"
 msgstr ""
 
-#: inc/class-metabox.php:113
+#: inc/class-metabox.php:114
 msgid "Disable Header"
 msgstr ""
 
-#: inc/class-metabox.php:114
+#: inc/class-metabox.php:115
 msgid "Disable Header Top"
 msgstr ""
 
-#: inc/class-metabox.php:115
+#: inc/class-metabox.php:116
 msgid "Disable Header Main"
 msgstr ""
 
-#: inc/class-metabox.php:116
+#: inc/class-metabox.php:117
 msgid "Disable Header Bottom"
 msgstr ""
 
-#: inc/class-metabox.php:117
+#: inc/class-metabox.php:118
 msgid "Disable Title"
 msgstr ""
 
-#: inc/class-metabox.php:122
+#: inc/class-metabox.php:123
 msgid "Disable Content Vertical Padding"
 msgstr ""
 
-#: inc/class-metabox.php:126
+#: inc/class-metabox.php:127
 msgid "Disable Footer Top"
 msgstr ""
 
-#: inc/class-metabox.php:128
+#: inc/class-metabox.php:129
 msgid "Disable Footer Main"
 msgstr ""
 
-#: inc/class-metabox.php:129
+#: inc/class-metabox.php:130
 msgid "Disable Footer Bottom"
 msgstr ""
 
-#: inc/class-metabox.php:132
+#: inc/class-metabox.php:133
 msgid "Disable Elements"
 msgstr ""
 
-#: inc/class-metabox.php:150 inc/customizer/configs/header/transparent.php:168
+#: inc/class-metabox.php:151 inc/customizer/configs/header/transparent.php:168
 msgid "Transparent Header"
 msgstr ""
 
-#: inc/class-metabox.php:155
+#: inc/class-metabox.php:156
 msgid "Inherit from Customizer settings"
 msgstr ""
 
-#: inc/class-metabox.php:156
+#: inc/class-metabox.php:157
 msgid "Force transparent"
 msgstr ""
 
-#: inc/class-metabox.php:157
+#: inc/class-metabox.php:158
 msgid "Force opaque"
 msgstr ""
 
-#: inc/class-metabox.php:166 inc/class-metabox.php:172
+#: inc/class-metabox.php:167 inc/class-metabox.php:173
 #: inc/compatibility/breadcrumb.php:90
 msgid "Breadcrumb"
 msgstr ""
 
-#: inc/class-metabox.php:179
+#: inc/class-metabox.php:180
 #: inc/customizer/controls/class-control-repeater.php:23
 msgid "Show"
 msgstr ""
 
-#: inc/class-metabox.php:232
+#: inc/class-metabox.php:233
 msgid "Customify Settings"
 msgstr ""
 
@@ -833,7 +837,7 @@ msgstr ""
 msgid "Secondary Container"
 msgstr ""
 
-#: inc/colors-palette.php:1895 inc/customizer/configs/colors.php:345
+#: inc/colors-palette.php:1895 inc/customizer/configs/colors.php:317
 msgid "Accent"
 msgstr ""
 
@@ -845,11 +849,11 @@ msgstr ""
 msgid "Body Text"
 msgstr ""
 
-#: inc/colors-palette.php:1924 inc/customizer/configs/colors.php:377
+#: inc/colors-palette.php:1924 inc/customizer/configs/colors.php:349
 msgid "Surface"
 msgstr ""
 
-#: inc/colors-palette.php:1929 inc/customizer/configs/colors.php:391
+#: inc/colors-palette.php:1929 inc/customizer/configs/colors.php:363
 #: inc/customizer/configs/typography.php:29
 msgid "Base"
 msgstr ""
@@ -1183,7 +1187,7 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/header/cart.php:103
 #: inc/customizer/configs/header/button.php:67
 #: inc/customizer/configs/header/search-box.php:131
-#: inc/customizer/configs/header/search-icon.php:229
+#: inc/customizer/configs/header/search-icon.php:245
 msgid "Icon Position"
 msgstr ""
 
@@ -1240,8 +1244,8 @@ msgstr ""
 #: inc/compatibility/woocommerce/config/header/cart.php:225
 #: inc/customizer/configs/header/nav-icon.php:61
 #: inc/customizer/configs/header/search-box.php:103
-#: inc/customizer/configs/header/search-icon.php:60
-#: inc/customizer/configs/header/search-icon.php:202
+#: inc/customizer/configs/header/search-icon.php:65
+#: inc/customizer/configs/header/search-icon.php:218
 msgid "Icon Size"
 msgstr ""
 
@@ -1930,105 +1934,105 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:293 inc/customizer/configs/colors.php:409
+#: inc/customizer/configs/colors.php:265 inc/customizer/configs/colors.php:381
 msgid "Colors"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:294
+#: inc/customizer/configs/colors.php:266
 msgid "Pick 6 brand colors. The theme derives everything else."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:302
+#: inc/customizer/configs/colors.php:274
 msgid "Palette"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:318
+#: inc/customizer/configs/colors.php:290
 msgid "Brand color, CTAs."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:332
+#: inc/customizer/configs/colors.php:304
 msgid "Secondary brand color."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:346
+#: inc/customizer/configs/colors.php:318
 msgid "Highlight / decorative pop."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:360
+#: inc/customizer/configs/colors.php:332
 msgid "Ink baseline. Headings inherit from this slot by default."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:378
+#: inc/customizer/configs/colors.php:350
 msgid "Card / elevated container background."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:392
+#: inc/customizer/configs/colors.php:364
 msgid "Page background."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:422
+#: inc/customizer/configs/colors.php:394
 msgid "Link color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:423
+#: inc/customizer/configs/colors.php:395
 msgid "Default: derived from Primary slot."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:440
+#: inc/customizer/configs/colors.php:412
 msgid "Link hover color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:441
+#: inc/customizer/configs/colors.php:413
 msgid "Default: derived (Link color lighter 15%)."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:458
+#: inc/customizer/configs/colors.php:430
 msgid "Heading color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:459
+#: inc/customizer/configs/colors.php:431
 msgid "Default: derived from Text slot."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:471
+#: inc/customizer/configs/colors.php:443
 msgid "Backgrounds"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:487
+#: inc/customizer/configs/colors.php:459
 msgid "Page Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:507
+#: inc/customizer/configs/colors.php:479
 msgid "Content Area Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:526
+#: inc/customizer/configs/colors.php:498
 msgid "Site Content Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:546
+#: inc/customizer/configs/colors.php:518
 msgid "Legacy fine-tuning"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:547
+#: inc/customizer/configs/colors.php:519
 msgid ""
 "Per-element color overrides. Beats the Palette cascade when saved. Click to "
 "expand."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:561
+#: inc/customizer/configs/colors.php:533
 msgid "Body text override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:574
+#: inc/customizer/configs/colors.php:546
 msgid "Border override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:594
+#: inc/customizer/configs/colors.php:566
 msgid "Meta text override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:611
+#: inc/customizer/configs/colors.php:583
 msgid "Widget title override"
 msgstr ""
 
@@ -2219,14 +2223,14 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:55
 #: inc/customizer/configs/header/logo.php:69
-#: inc/customizer/configs/layouts.php:54 inc/customizer/configs/layouts.php:163
+#: inc/customizer/configs/layouts.php:54 inc/customizer/configs/layouts.php:198
 msgid "Yes"
 msgstr ""
 
 #: inc/customizer/configs/header/logo.php:56
 #: inc/customizer/configs/header/logo.php:70
 #: inc/customizer/configs/header/panel.php:469
-#: inc/customizer/configs/layouts.php:55 inc/customizer/configs/layouts.php:164
+#: inc/customizer/configs/layouts.php:55 inc/customizer/configs/layouts.php:199
 msgid "No"
 msgstr ""
 
@@ -2462,12 +2466,12 @@ msgid "Search Box"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:62
-#: inc/customizer/configs/header/search-icon.php:124
+#: inc/customizer/configs/header/search-icon.php:140
 msgid "Placeholder"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:63
-#: inc/customizer/configs/header/search-icon.php:125
+#: inc/customizer/configs/header/search-icon.php:141
 msgid "Search ..."
 msgstr ""
 
@@ -2480,35 +2484,35 @@ msgid "Note: The width can not greater than grid width."
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:89
-#: inc/customizer/configs/header/search-icon.php:169
+#: inc/customizer/configs/header/search-icon.php:185
 msgid "Input Height"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:141
-#: inc/customizer/configs/header/search-icon.php:188
+#: inc/customizer/configs/header/search-icon.php:204
 msgid "Input Text Typography"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:142
-#: inc/customizer/configs/header/search-icon.php:189
+#: inc/customizer/configs/header/search-icon.php:205
 msgid "Typography for search input"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:151
-#: inc/customizer/configs/header/search-icon.php:237
+#: inc/customizer/configs/header/search-icon.php:253
 msgid "Input Styling"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:152
 #: inc/customizer/configs/header/search-box.php:203
-#: inc/customizer/configs/header/search-icon.php:238
-#: inc/customizer/configs/header/search-icon.php:275
+#: inc/customizer/configs/header/search-icon.php:254
+#: inc/customizer/configs/header/search-icon.php:291
 msgid "Search input styling"
 msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:202
-#: inc/customizer/configs/header/search-icon.php:81
-#: inc/customizer/configs/header/search-icon.php:274
+#: inc/customizer/configs/header/search-icon.php:90
+#: inc/customizer/configs/header/search-icon.php:290
 msgid "Icon Styling"
 msgstr ""
 
@@ -2520,35 +2524,35 @@ msgstr ""
 msgid "Search Icon"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:73
+#: inc/customizer/configs/header/search-icon.php:82
 msgid "Icon Padding"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:82
+#: inc/customizer/configs/header/search-icon.php:91
 msgid "Search icon styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:115
+#: inc/customizer/configs/header/search-icon.php:131
 msgid "Modal Settings"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:133
+#: inc/customizer/configs/header/search-icon.php:149
 msgid "Form Styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:134
+#: inc/customizer/configs/header/search-icon.php:150
 msgid "Form modal styling"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:179
+#: inc/customizer/configs/header/search-icon.php:195
 msgid "Search Modal Width"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:317
+#: inc/customizer/configs/header/search-icon.php:333
 msgid "open search tool"
 msgstr ""
 
-#: inc/customizer/configs/header/search-icon.php:334
+#: inc/customizer/configs/header/search-icon.php:350
 msgid "submit search"
 msgstr ""
 
@@ -2682,7 +2686,7 @@ msgstr ""
 msgid "Select global site layout."
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:110
+#: inc/customizer/configs/layouts.php:43 inc/customizer/configs/layouts.php:145
 msgid "Boxed"
 msgstr ""
 
@@ -2698,63 +2702,73 @@ msgstr ""
 msgid "Site framed margin"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:96
+#: inc/customizer/configs/layouts.php:104
 msgid "Container Width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:97
+#: inc/customizer/configs/layouts.php:105
 msgid "Max width of the site container."
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:107
+#: inc/customizer/configs/layouts.php:131
+msgid "Narrow Content Width"
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:132
+msgid ""
+"Max width when a post uses the \"Narrow\" Content Layout option in the Page "
+"Settings panel."
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:142
 msgid "Site content layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:109
+#: inc/customizer/configs/layouts.php:144
 msgid "Full width"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:121
+#: inc/customizer/configs/layouts.php:156
 msgid "Site content padding"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:140
+#: inc/customizer/configs/layouts.php:175
 msgid "Sidebars"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:153
+#: inc/customizer/configs/layouts.php:188
 msgid "Default Sidebar Layout"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:161
+#: inc/customizer/configs/layouts.php:196
 msgid "Sidebar with vertical border"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:179
+#: inc/customizer/configs/layouts.php:214
 msgid "Pages"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:188
+#: inc/customizer/configs/layouts.php:223
 msgid "Blog posts"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:197
+#: inc/customizer/configs/layouts.php:232
 msgid "Blog Archive Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:206
+#: inc/customizer/configs/layouts.php:241
 msgid "Search Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:215
+#: inc/customizer/configs/layouts.php:250
 msgid "404 Page"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:227
+#: inc/customizer/configs/layouts.php:262
 msgid "Post Type Settings"
 msgstr ""
 
-#: inc/customizer/configs/layouts.php:236
+#: inc/customizer/configs/layouts.php:271
 msgid "Single %s"
 msgstr ""
 
@@ -3496,7 +3510,7 @@ msgstr ""
 msgid "Content / Sidebar / Sidebar"
 msgstr ""
 
-#: inc/template-functions.php:437
+#: inc/template-functions.php:633
 msgid "Search &hellip;"
 msgstr ""
 
@@ -3714,9 +3728,9 @@ msgstr ""
 
 #: inc/customizer/configs/header/search-box.php:277
 #: inc/customizer/configs/header/search-box.php:287
-#: inc/customizer/configs/header/search-icon.php:331
-#: inc/customizer/configs/header/search-icon.php:332
-#: inc/template-functions.php:436 inc/template-functions.php:437
+#: inc/customizer/configs/header/search-icon.php:347
+#: inc/customizer/configs/header/search-icon.php:348
+#: inc/template-functions.php:632 inc/template-functions.php:633
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
@@ -3731,17 +3745,17 @@ msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:415
+#: inc/template-functions.php:611
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:417
+#: inc/template-functions.php:613
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:419
+#: inc/template-functions.php:615
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
