@@ -440,7 +440,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-    &:not(.menu-mobile-toggle):hover {
+    &:not(.menu-mobile-toggle, .search-submit):hover {
         box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
     }
     &:hover {
