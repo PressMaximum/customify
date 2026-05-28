@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.16\n"
+"Project-Id-Version: Customify 0.4.17\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-05-27 03:36:45+00:00\n"
+"POT-Creation-Date: 2026-05-27 14:31:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -606,18 +606,18 @@ msgid "Feed for all posts filed under %s"
 msgstr ""
 
 #: inc/class-customify.php:199 inc/class-customify.php:261
-#: inc/colors-palette.php:1873 inc/customizer/configs/colors.php:289
+#: inc/colors-palette.php:1873 inc/customizer/configs/colors.php:112
 msgid "Primary"
 msgstr ""
 
 #: inc/class-customify.php:266 inc/colors-palette.php:1885
-#: inc/customizer/configs/colors.php:303
+#: inc/customizer/configs/colors.php:126
 msgid "Secondary"
 msgstr ""
 
 #: inc/class-customify.php:271
 #: inc/compatibility/woocommerce/config/catalog-designer.php:393
-#: inc/customizer/configs/colors.php:331
+#: inc/customizer/configs/colors.php:154
 #: inc/customizer/configs/header/button.php:46
 msgid "Text"
 msgstr ""
@@ -640,8 +640,8 @@ msgstr ""
 
 #: inc/class-customify.php:305 inc/class-customify.php:316
 #: inc/class-customify.php:330
-#: inc/compatibility/woocommerce/woocommerce.php:650
-#: inc/compatibility/woocommerce/woocommerce.php:661
+#: inc/compatibility/woocommerce/woocommerce.php:579
+#: inc/compatibility/woocommerce/woocommerce.php:590
 msgid "Add widgets here."
 msgstr ""
 
@@ -837,7 +837,7 @@ msgstr ""
 msgid "Secondary Container"
 msgstr ""
 
-#: inc/colors-palette.php:1895 inc/customizer/configs/colors.php:317
+#: inc/colors-palette.php:1895 inc/customizer/configs/colors.php:140
 msgid "Accent"
 msgstr ""
 
@@ -849,11 +849,11 @@ msgstr ""
 msgid "Body Text"
 msgstr ""
 
-#: inc/colors-palette.php:1924 inc/customizer/configs/colors.php:349
+#: inc/colors-palette.php:1924 inc/customizer/configs/colors.php:172
 msgid "Surface"
 msgstr ""
 
-#: inc/colors-palette.php:1929 inc/customizer/configs/colors.php:363
+#: inc/colors-palette.php:1929 inc/customizer/configs/colors.php:186
 #: inc/customizer/configs/typography.php:29
 msgid "Base"
 msgstr ""
@@ -1391,19 +1391,19 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:602
+#: inc/compatibility/woocommerce/woocommerce.php:531
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:610
+#: inc/compatibility/woocommerce/woocommerce.php:539
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:648
+#: inc/compatibility/woocommerce/woocommerce.php:577
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:659
+#: inc/compatibility/woocommerce/woocommerce.php:588
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -1934,105 +1934,105 @@ msgstr ""
 msgid "Blog"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:265 inc/customizer/configs/colors.php:381
+#: inc/customizer/configs/colors.php:88 inc/customizer/configs/colors.php:204
 msgid "Colors"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:266
+#: inc/customizer/configs/colors.php:89
 msgid "Pick 6 brand colors. The theme derives everything else."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:274
+#: inc/customizer/configs/colors.php:97
 msgid "Palette"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:290
+#: inc/customizer/configs/colors.php:113
 msgid "Brand color, CTAs."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:304
+#: inc/customizer/configs/colors.php:127
 msgid "Secondary brand color."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:318
+#: inc/customizer/configs/colors.php:141
 msgid "Highlight / decorative pop."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:332
+#: inc/customizer/configs/colors.php:155
 msgid "Ink baseline. Headings inherit from this slot by default."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:350
+#: inc/customizer/configs/colors.php:173
 msgid "Card / elevated container background."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:364
+#: inc/customizer/configs/colors.php:187
 msgid "Page background."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:394
+#: inc/customizer/configs/colors.php:217
 msgid "Link color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:395
+#: inc/customizer/configs/colors.php:218
 msgid "Default: derived from Primary slot."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:412
+#: inc/customizer/configs/colors.php:235
 msgid "Link hover color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:413
+#: inc/customizer/configs/colors.php:236
 msgid "Default: derived (Link color lighter 15%)."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:430
+#: inc/customizer/configs/colors.php:253
 msgid "Heading color"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:431
+#: inc/customizer/configs/colors.php:254
 msgid "Default: derived from Text slot."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:443
+#: inc/customizer/configs/colors.php:266
 msgid "Backgrounds"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:459
+#: inc/customizer/configs/colors.php:282
 msgid "Page Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:479
+#: inc/customizer/configs/colors.php:302
 msgid "Content Area Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:498
+#: inc/customizer/configs/colors.php:321
 msgid "Site Content Background"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:518
+#: inc/customizer/configs/colors.php:341
 msgid "Legacy fine-tuning"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:519
+#: inc/customizer/configs/colors.php:342
 msgid ""
 "Per-element color overrides. Beats the Palette cascade when saved. Click to "
 "expand."
 msgstr ""
 
-#: inc/customizer/configs/colors.php:533
+#: inc/customizer/configs/colors.php:356
 msgid "Body text override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:546
+#: inc/customizer/configs/colors.php:369
 msgid "Border override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:566
+#: inc/customizer/configs/colors.php:389
 msgid "Meta text override"
 msgstr ""
 
-#: inc/customizer/configs/colors.php:583
+#: inc/customizer/configs/colors.php:406
 msgid "Widget title override"
 msgstr ""
 
