@@ -348,7 +348,10 @@
 			document.head.appendChild(styleEl);
 		}
 
-		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 767px)' };
+		// Breakpoints match Customify_Customizer_Auto_CSS::$media_queries
+		// and PHP customify_footer_row_layout_css() so the live-preview
+		// CSS is byte-equivalent to what ships on the published frontend.
+		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 568px)' };
 		// Normalize fr length to row's column count. Matches the PHP
 		// `customify_footer_row_layout_css()` defensive truncation so legacy
 		// data (fr longer than count after a count reduction) renders the
@@ -419,15 +422,18 @@
 		styleEl.textContent = css;
 	}
 
-	wp.customize('footer_main_col_layout', function(setting) {
-		setting.bind(function(value) {
-			applyFooterColLayout('#cb-row--footer-main', value);
-		});
-	});
-
-	wp.customize('footer_bottom_col_layout', function(setting) {
-		setting.bind(function(value) {
-			applyFooterColLayout('#cb-row--footer-bottom', value);
-		});
-	});
+	// Bind a live-preview handler for every footer row's col_layout
+	// setting. The row list is sourced from Customify_Preview_Config
+	// (PHP customify_get_footer_row_ids()), so Pro / child-theme / 3rd-
+	// party rows added via the `customify/builder/footer/rows` filter
+	// pick up the same live-update treatment without further JS changes.
+	var __footerRows = ( window.Customify_Preview_Config && window.Customify_Preview_Config.footer_rows )
+		|| [ 'main', 'bottom' ];
+	__footerRows.forEach( function ( rowId ) {
+		wp.customize( 'footer_' + rowId + '_col_layout', function ( setting ) {
+			setting.bind( function ( value ) {
+				applyFooterColLayout( '#cb-row--footer-' + rowId, value );
+			} );
+		} );
+	} );
 })(jQuery, wp.customize);

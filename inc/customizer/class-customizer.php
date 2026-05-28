@@ -250,6 +250,13 @@ class  Customify_Customizer {
 					'devices'        => $this->devices,
 					'typo_fields'    => $this->get_typo_fields(),
 					'styling_config' => $this->get_styling_config(),
+					// Filtered footer row IDs (top/main/bottom + 3rd-party
+					// additions). customizer.js iterates this to bind a
+					// live-preview handler on every footer row's
+					// col_layout setting.
+					'footer_rows'    => function_exists( 'customify_get_footer_row_ids' )
+						? customify_get_footer_row_ids()
+						: array( 'main', 'bottom' ),
 				)
 			);
 		}

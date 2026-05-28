@@ -16,6 +16,25 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 	public $id = 'footer';
 
 	function get_config() {
+		// Derive row_layout_keys from the same filtered row list the rest
+		// of the builder pipeline sees — Pro / child theme add rows via
+		// `customify/builder/footer/rows` (e.g. Customify Pro adds `top`),
+		// and the React Builder uses this map to wire one Columns Layout
+		// control per row. Hardcoding the array would silently drop the
+		// control for any extension-added row.
+		//
+		// Inline filter here (instead of customify_get_footer_row_ids())
+		// because this method runs DURING builder registration — the
+		// builder isn't in `$registered_builders` yet, so the helper's
+		// `get_builder()` lookup would return null.
+		$rows            = apply_filters( 'customify/builder/' . $this->id . '/rows', $this->get_rows_config() );
+		$row_layout_keys = array();
+		if ( is_array( $rows ) ) {
+			foreach ( array_keys( $rows ) as $row_id ) {
+				$row_layout_keys[ $row_id ] = "{$this->id}_{$row_id}_col_layout";
+			}
+		}
+
 		return array(
 			'id'         => $this->id,
 			'title'      => __( 'Footer Layout', 'customify' ),
@@ -27,10 +46,7 @@ class Customify_Builder_Footer extends Customify_Customize_Builder_Panel {
 			),
 			'react_control_id'      => 'footer_builder_panel_v2',
 			'panel_items_container' => 'customify-fb-panel-items',
-			'row_layout_keys'       => array(
-				'main'   => 'footer_main_col_layout',
-				'bottom' => 'footer_bottom_col_layout',
-			),
+			'row_layout_keys'       => $row_layout_keys,
 		);
 	}
 
@@ -278,6 +294,37 @@ function customify_footer_layout_settings( $item_id, $section ) {
 Customify_Customize_Layout_Builder()->register_builder( 'footer', new Customify_Builder_Footer() );
 
 /**
+ * Resolve the active footer row IDs in canonical render order.
+ *
+ * Single source of truth for every place that needs to enumerate footer
+ * rows (settings registration, CSS emitters, display gates, renderer).
+ * Pulls the registered builder's base `get_rows_config()` and applies the
+ * `customify/builder/footer/rows` filter so Pro / child theme / 3rd-party
+ * rows (e.g. `top`, or any custom row) are included automatically.
+ *
+ * Returns `['main','bottom']` as a defensive fallback when the builder
+ * hasn't registered yet — should never happen at the call sites this
+ * helper serves (frontend render, customize_register, wp_head CSS) but
+ * keeps the contract a guaranteed non-empty array.
+ *
+ * @return string[] Ordered list of row ids (e.g. ['top','main','bottom']).
+ */
+function customify_get_footer_row_ids() {
+	if ( ! function_exists( 'Customify_Customize_Layout_Builder' ) ) {
+		return array( 'main', 'bottom' );
+	}
+	$builder = Customify_Customize_Layout_Builder()->get_builder( 'footer' );
+	if ( ! $builder || ! method_exists( $builder, 'get_rows_config' ) ) {
+		return array( 'main', 'bottom' );
+	}
+	$rows = apply_filters( 'customify/builder/footer/rows', $builder->get_rows_config() );
+	if ( ! is_array( $rows ) || empty( $rows ) ) {
+		return array( 'main', 'bottom' );
+	}
+	return array_keys( $rows );
+}
+
+/**
  * Enforce footer row ordering: Top → Main → Bottom.
  *
  * The theme's `get_rows_config()` declares only `main` and `bottom`.
@@ -318,6 +365,7 @@ add_filter(
 	}
 );
 
+
 /**
  * Force postMessage transport for footer row col_layout settings so that the
  * preview JS binding (in customizer.js) can apply grid-template-columns live.
@@ -325,8 +373,13 @@ add_filter(
 add_action(
 	'customize_register',
 	function ( $wp_customize ) {
-		foreach ( array( 'footer_main_col_layout', 'footer_bottom_col_layout' ) as $key ) {
-			$setting = $wp_customize->get_setting( $key );
+		// Walk the filtered row list (Pro/child themes can add rows via
+		// `customify/builder/footer/rows`) so any new row's col_layout
+		// setting picks up the same postMessage transport as the built-in
+		// rows. Without this, extension-added rows fall back to the default
+		// `refresh` transport and the live preview can't react to changes.
+		foreach ( customify_get_footer_row_ids() as $row_id ) {
+			$setting = $wp_customize->get_setting( "footer_{$row_id}_col_layout" );
 			if ( $setting ) {
 				$setting->transport = 'postMessage';
 			}
@@ -339,10 +392,14 @@ add_action(
  * Output grid-template-columns CSS for footer rows based on saved col_layout values.
  */
 function customify_footer_row_layout_css() {
-	$rows = array(
-		'footer_main'   => '#cb-row--footer-main',
-		'footer_bottom' => '#cb-row--footer-bottom',
-	);
+	// Build the row → row-selector map from the same filtered row list
+	// the React Builder + Customizer setup use, so every footer row
+	// (built-in OR extension-added via `customify/builder/footer/rows`)
+	// gets its grid-template-columns CSS emitted automatically.
+	$rows = array();
+	foreach ( customify_get_footer_row_ids() as $row_id ) {
+		$rows[ "footer_{$row_id}" ] = "#cb-row--footer-{$row_id}";
+	}
 
 	$css = '';
 	foreach ( $rows as $key => $selector ) {
@@ -355,10 +412,16 @@ function customify_footer_row_layout_css() {
 			continue;
 		}
 
+		// Breakpoints mirror Customify_Customizer_Auto_CSS::$media_queries
+		// (tablet ≤ 1024px, mobile ≤ 568px) so footer col_layout CSS aligns
+		// with every other auto-CSS field across the theme. Mobile cap at
+		// 568 is well below WP's customizer "tablet" preview width (720),
+		// so the two ranges don't overlap inside the preview iframe and
+		// the tablet preset renders the tablet rule (not mobile).
 		$devices = array(
 			'desktop' => '',
 			'tablet'  => '@media (max-width: 1024px)',
-			'mobile'  => '@media (max-width: 767px)',
+			'mobile'  => '@media (max-width: 568px)',
 		);
 
 		// Normalize fr length to the row's column count. Legacy data from

@@ -226,32 +226,10 @@
 	}
 }
 
-// Responsive fallbacks — used when the PHP col_layout CSS is absent (e.g. old saved data).
-// PHP-generated CSS (id+class specificity) overrides these when col_layout is configured.
-@media (max-width: 1024px) {
-	#cb-row--footer-main,
-	#cb-row--footer-bottom {
-		.row-v2 {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	// Class-based tablet fallback: 2 equal columns.
-	.footer--row .row-v2[class*="no-col"] {
-		grid-template-columns: repeat(2, 1fr);
-	}
-}
-
-@media (max-width: 767px) {
-	#cb-row--footer-main,
-	#cb-row--footer-bottom {
-		.row-v2 {
-			grid-template-columns: 1fr;
-		}
-	}
-
-	// Class-based mobile fallback: single column.
-	.footer--row .row-v2[class*="no-col"] {
-		grid-template-columns: 1fr;
-	}
-}
+// Tablet/mobile responsive fallbacks intentionally removed: PHP
+// customify_footer_row_layout_css() always emits grid-template-columns
+// for every footer row now (config-default.php seeds a per-row default
+// when nothing is saved), so a SCSS fallback only competed with the
+// PHP rule and risked confusion on extension-added rows. If a 3rd-party
+// row needs a different mobile/tablet collapse, it should register a
+// matching default via the `customify/customize/settings-default` filter.

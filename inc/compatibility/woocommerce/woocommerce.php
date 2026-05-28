@@ -433,7 +433,11 @@ class Customify_WC {
 
 	function show_shop_footer( $show = true ) {
 		if ( $this->is_shop_pages() ) {
-			$rows    = array( 'main', 'bottom' );
+			// Mirror customify_is_footer_display() — use the filtered
+			// row list so Pro/child-theme rows are counted too.
+			$rows    = function_exists( 'customify_get_footer_row_ids' )
+				? customify_get_footer_row_ids()
+				: array( 'main', 'bottom' );
 			$count   = 0;
 			$shop_id = wc_get_page_id( 'shop' );
 			foreach ( $rows as $row_id ) {

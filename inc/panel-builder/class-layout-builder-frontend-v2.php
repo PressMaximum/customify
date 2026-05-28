@@ -524,22 +524,33 @@ class Customify_Layout_Builder_Frontend_V2  extends Customify_Abstract_Layout_Fr
 
 	/**
 	 * Returns ordered column keys for a footer row based on the col_layout setting.
-	 * Returns null when the setting is absent (triggers old column-hiding behaviour).
 	 *
-	 * @param string $row_id  Row identifier, e.g. 'main' or 'bottom'.
-	 * @return array|null
+	 * When no value is saved (user dropped items into a row but never opened
+	 * the Columns Layout control), fall back to the SAME default the React
+	 * builder uses — `DEFAULT_VALUE.count = 4` in
+	 * src/backend/footer-row-layout/presets.js. Returning null + letting the
+	 * renderer fall back to all 5 slots makes the frontend render 5 cols
+	 * while the builder shows 4 → items appear dropped or in the wrong
+	 * column. The mismatch was especially visible on the Pro-added `top`
+	 * row, which rarely has explicit col_layout saved.
+	 *
+	 * @param string $row_id  Row identifier, e.g. 'top', 'main', 'bottom'.
+	 * @return array
 	 */
 	protected function get_footer_col_keys( $row_id ) {
 		static $all_cols = array( 'left', 'center', 'right', 'col4', 'col5' );
+		// Mirror DEFAULT_VALUE.count in src/backend/footer-row-layout/presets.js.
+		// Keep in sync if the React default ever changes.
+		static $default_count = 4;
 
 		$raw = Customify()->get_setting( 'footer_' . $row_id . '_col_layout' );
 		if ( ! $raw ) {
-			return null;
+			return array_slice( $all_cols, 0, $default_count );
 		}
 
 		$data = is_array( $raw ) ? $raw : json_decode( $raw, true );
 		if ( ! is_array( $data ) || empty( $data['count'] ) ) {
-			return null;
+			return array_slice( $all_cols, 0, $default_count );
 		}
 
 		$count = max( 1, min( 5, intval( $data['count'] ) ) );

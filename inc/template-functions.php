@@ -524,10 +524,13 @@ if ( ! function_exists( 'customify_is_footer_display' ) ) {
 	function customify_is_footer_display() {
 		$show = true;
 		if ( customify_is_support_meta() ) {
-			$rows  = array( 'main', 'bottom' );
-			if ( class_exists( 'Customify_Pro' ) ) {
-				$rows[] = 'top';
-			}
+			// Derive rows from the same filter the builder pipeline uses so
+			// Pro/child-theme/3rd-party rows count toward "is there anything
+			// to show?". Hardcoding `main + bottom + maybe top` skipped any
+			// other extension row entirely.
+			$rows  = function_exists( 'customify_get_footer_row_ids' )
+				? customify_get_footer_row_ids()
+				: array( 'main', 'bottom' );
 			$count = 0;
 			foreach ( $rows as $row_id ) {
 				if ( ! customify_is_builder_row_display( 'footer', $row_id ) ) {
