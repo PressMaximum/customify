@@ -1,5 +1,6 @@
 = 0.4.18 =
 * IMPROVED: Footer builder rows made fully generic — Pro's `top` row and any extension-added row now work identically to built-in main/bottom.
+* IMPROVED: Dropped unnecessary `!important` on `.alignfull` margins so child themes and user CSS can override the full-bleed behavior through normal cascade.
 
 = 0.4.17 =
 * NEW: Two extra Footer Builder row-layout presets for 4-column mode — 40/20/20/20 and 2×2 grid.
