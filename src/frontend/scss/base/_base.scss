@@ -441,7 +441,18 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     justify-content: center;
     gap: 0.5em;
     &:not(.menu-mobile-toggle, .search-submit):hover {
-        box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+        // State-layer hover (matches Blocksify): overlay 13% of the button's own
+        // text color on top of the LIVE background via a translucent
+        // background-image. Background-agnostic — it adapts to the primary native
+        // fill, the secondary WooCommerce / header-builder fill, and any custom
+        // background. A named color-mix() on background-color can't read the live
+        // background and would wrong-colour those non-primary buttons on hover.
+        // Needs color-mix() (Chrome 111+ / FF 113+ / Safari 16.2+); older
+        // browsers just show no hover shift.
+        background-image: linear-gradient(
+            color-mix(in srgb, currentColor 13%, transparent),
+            color-mix(in srgb, currentColor 13%, transparent)
+        );
     }
     &:hover {
         color: var(--customify-on-primary, #ffffff);

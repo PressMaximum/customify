@@ -207,6 +207,30 @@
 	color: var(--customify-on-accent, inherit);
 }
 
+// Blocksify Fill button — auto-contrast label color.
+//
+// Blocksify tags a slug-bg button with `bsy-bg-{slug}` (NOT WP's
+// `.has-{slug}-background-color`, which ships `background-color !important`
+// that would lock the fill and block the hover state). Its label reads the
+// custom property `--blocksify--button--text-color` (unset → Blocksify's own
+// white fallback). We point that property at the matching
+// `--customify-on-{slug}` token so the label auto-flips for WCAG contrast and
+// tracks live Customizer slot edits.
+//
+// Scoped to `[class*="bsy-button-"]` so the var only lands on the button
+// element itself — it must not inherit down to children. A designer's
+// explicit label-color pick still wins (Blocksify sets the property inline).
+//
+// Solid brand slugs only: `--customify-on-{primary,secondary,accent}` are
+// emitted to :root unconditionally. The `*-container` on-tokens are gated on
+// Palette opt-in (usually unset on default installs), so they are
+// deliberately omitted here rather than risk an unreadable white-on-tint
+// fallback. Additive + inert when Blocksify is absent (nothing carries these
+// classes).
+[class*="bsy-button-"].bsy-bg-primary   { --blocksify--button--text-color: var(--customify-on-primary); }
+[class*="bsy-button-"].bsy-bg-secondary { --blocksify--button--text-color: var(--customify-on-secondary); }
+[class*="bsy-button-"].bsy-bg-accent    { --blocksify--button--text-color: var(--customify-on-accent); }
+
 .wp-block-video video {
 	max-width: 100%;
 }
