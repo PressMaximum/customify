@@ -441,7 +441,14 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     justify-content: center;
     gap: 0.5em;
     &:not(.menu-mobile-toggle, .search-submit):hover {
-        box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
+        // State-layer hover (matches Blocksify): mix the button fill 13% toward
+        // its own text color (currentColor). Adaptive — a dark fill with light
+        // text lifts, a light fill with dark text deepens. The fill must be named
+        // explicitly because color-mix() can't read the live background; native
+        // buttons default to the primary fill, hence var(--customify-primary).
+        // Keep 13% in sync with Blocksify. Needs color-mix() (Chrome 111+ /
+        // FF 113+ / Safari 16.2+); older browsers just show no hover shift.
+        background-color: color-mix(in srgb, var(--customify-primary), currentColor 13%);
     }
     &:hover {
         color: var(--customify-on-primary, #ffffff);
