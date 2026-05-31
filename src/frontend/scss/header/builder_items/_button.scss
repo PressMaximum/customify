@@ -11,13 +11,15 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-weight: 600;
-    transition: background-color 0.2s;
     &:hover {
-        // State-layer hover (matches Blocksify): mix the fill 13% toward the text
-        // color. This builder button defaults to the secondary fill, so the base
-        // is var(--customify-secondary) (color-mix can't read the live bg). Keep
-        // 13% in sync with Blocksify.
-        background-color: color-mix(in srgb, var(--customify-secondary), currentColor 13%);
+        // State-layer hover (matches Blocksify): translucent 13%-of-text overlay
+        // on the live background — background-agnostic, adapts to the secondary
+        // default or any custom builder background. Same mechanism as the native
+        // button. Keep 13% in sync with Blocksify.
+        background-image: linear-gradient(
+            color-mix(in srgb, currentColor 13%, transparent),
+            color-mix(in srgb, currentColor 13%, transparent)
+        );
         color: var(--customify-on-secondary, #ffffff);
     }
 

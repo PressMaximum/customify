@@ -1294,6 +1294,74 @@ SCSS auto-wire (Phase 2.13):
 | accent-container chroma | 0.040 (capped from 0.103) | — (Customify extension) |
 | on-accent-container | #8B5F00 | ~#8B5F00 (dark gold) ✓ |
 
+### 8.14 Phase 2.14 — Blocksify button text auto-contrast + button hover state layer (PR #407)
+
+Two frontend-only additions. Both consume EXISTING palette tokens — no new
+`theme_mod` keys, no storage change, no selector renames.
+
+**A. Blocksify Fill button label auto-contrast** (`src/frontend/scss/base/_blocks.scss`).
+
+Blocksify's Fill button is tagged `bsy-button-{uid}` + `bsy-bg-{slug}` and reads
+its label color from the custom property `--blocksify--button--text-color`
+(falling back to white when unset). Three rules point that property at the
+matching auto-contrast token so a brand-background button gets a WCAG-readable
+label that tracks Customizer slot edits:
+
+```scss
+[class*="bsy-button-"].bsy-bg-primary   { --blocksify--button--text-color: var(--customify-on-primary); }
+[class*="bsy-button-"].bsy-bg-secondary { --blocksify--button--text-color: var(--customify-on-secondary); }
+[class*="bsy-button-"].bsy-bg-accent    { --blocksify--button--text-color: var(--customify-on-accent); }
+```
+
+- Scoped to `[class*="bsy-button-"]` so the var lands only on the button element
+  (it must not inherit to children). A designer's explicit label-color pick still
+  wins (Blocksify sets the property inline at higher specificity).
+- **Solid brand slugs only.** `on-{primary,secondary,accent}` are emitted to
+  `:root` unconditionally (§3.2 note). The `*-container` slugs are deliberately
+  NOT mapped — their `on-*-container` tokens are gated on Palette opt-in, so a
+  theme default could not be guaranteed; container buttons rely on the designer's
+  text pick, which already tracks the palette via `var(--wp--preset--color--X)`.
+- NOT WP's `.has-{slug}-background-color` — that ships `background-color
+  !important` (locks the fill, blocks hover); Blocksify uses its own
+  `bsy-bg-{slug}` precisely to avoid it.
+- Additive + inert when Blocksify is absent (nothing carries these classes).
+- Verified end-to-end on Blocksify dev (PR #211 — per-page CSS + the consumer
+  var): on a custom palette, secondary→dark label 4.89:1, accent→dark 5.28:1,
+  primary→white 5.17:1 (all ≥ AA). Note: Blocksify keys its per-instance CSS by
+  the block `uid`, which must be a valid 8-hex string — hand-authored markup with
+  a malformed uid makes Blocksify fall the fill back to primary.
+
+**B. Native + header-builder button hover → adaptive "state layer"**
+(`base/_base.scss`, `header/builder_items/_button.scss`).
+
+Replaces the legacy darken overlay (`box-shadow: inset 0 0 0 120px
+rgba(0,0,0,.18)`) with a translucent 13%-of-text layer painted on top of the
+LIVE background (matches Blocksify's current button hover):
+
+```scss
+&:hover {
+    background-image: linear-gradient(
+        color-mix(in srgb, currentColor 13%, transparent),
+        color-mix(in srgb, currentColor 13%, transparent)
+    );
+}
+```
+
+- **Background-agnostic by design.** The overlay sits over whatever the actual
+  background is, so it adapts: a dark fill with light text lifts, a light fill
+  with dark text deepens — correct for the primary native fill, the secondary
+  builder/WooCommerce fill, AND any custom background. A named `color-mix()` on
+  `background-color` was rejected: it can't read the live background, so it
+  wrong-colours non-primary / custom-background buttons on hover.
+- Trade-off: `background-image` is not animatable → the overlay appears instantly
+  (no fade). Accepted for a subtle 13% layer.
+- `13%` matches Blocksify — keep in sync if the plugin changes it.
+- Needs `color-mix()` (Chrome 111+ / FF 113+ / Safari 16.2+, Baseline 2023);
+  older browsers show no hover shift (graceful).
+- 30K-safety: no storage/selector change. Only the transient hover *appearance*
+  changes site-wide (darken → adaptive lift/deepen); resting + saved colors render
+  identically.
+
 ### 8.12 Phase 2 — remaining (good follow-ups)
 
 #### Investigate "shadow slug" approach for legacy back-compat
