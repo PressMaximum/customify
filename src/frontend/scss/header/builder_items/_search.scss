@@ -73,6 +73,7 @@
 // Apply for all search form at header
 .header-search-form {
 	display: flex;
+	align-items: center;
 	margin-bottom: 0px;
 	width: 100%;
 	max-width: 100%;
@@ -85,25 +86,30 @@
 		border-color: rgba(127, 127, 127, 0.2);
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 		border-radius: 2px;
+		height: 100%;
 	}
 	.search-field {
 		display: block;
 		width: 100%;
 		border-radius: 2px;
 		height: 2.4em;
+		// Ported from colors.php $border_css. `border-color` here applies
+		// when the input has a default UA border or when other rules add
+		// border width/style — preserves the Border token wiring.
+		border-color: $color_border;
 
 		&:focus {
 			background-color: transparent;
 		}
 	}
-	button.search-submit {
+	.search-submit {
 		overflow: hidden;
 		box-shadow: none;
 		margin-left: -40px;
 		background: transparent;
 		color: $color_meta;
 		line-height: 0px;
-		padding: 0px 0.7em;
+		padding: 0.6em 0.7em;
 		min-height: auto;
 		&:hover {
 			box-shadow: none;
@@ -177,6 +183,7 @@
 			overflow: hidden;
 			.search-form-fields {
 				background-color: transparent;
+				height: 100%;
 				min-height: auto;
 				-ms-flex-preferred-size: 100%;
 				flex-basis: 100%;

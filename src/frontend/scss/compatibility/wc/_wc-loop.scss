@@ -146,6 +146,11 @@
     .wc-product__rating {
         line-height: 1;
     }
+    // Ported from WC compat filter `customify/styling/color-meta`.
+    // Category link inside the product card consumes the muted text token.
+    .wc-product__category a {
+        color: $color_meta;
+    }
 }
 
 // Secondary image when hover if exist

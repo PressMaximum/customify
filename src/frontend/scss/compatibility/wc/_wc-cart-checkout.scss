@@ -72,6 +72,9 @@ form.woocommerce-checkout {
 .woocommerce-checkout,
 #add_payment_method {
     table.cart {
+        .product-remove {
+            width: 20px;
+        }
         .product-thumbnail {
             width: 100px;
         }

@@ -966,7 +966,7 @@ class Customify_Page_Header {
 				<?php
 				do_action( 'customify/page-cover/before' );
 
-				if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
+				if ( Customify()->get_setting( 'header_cover_show_title' ) && 'hide' !== $args['force_display_single_title'] ) {
 					if ( $args['title'] ) {
 						// WPCS: XSS ok.
 						echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
@@ -1000,7 +1000,7 @@ class Customify_Page_Header {
 		do_action( 'customify/titlebar/before' );
 
 		// WPCS: XSS ok.
-		if ( Customify()->get_setting( 'titlebar_show_title' ) ) {
+		if ( Customify()->get_setting( 'titlebar_show_title' ) && 'hide' !== $args['force_display_single_title'] ) {
 			if ( $args['title'] ) {
 				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
 			}
@@ -1048,13 +1048,12 @@ class Customify_Page_Header {
 			return '';
 		}
 
-		if ( is_singular() ) {
-			$disable = get_post_meta( get_the_ID(), '_customify_disable_page_title', true );
-			if ( '1' === $disable ) {
-				return '';
-			}
-		}
-
+		// `_customify_disable_page_title` hides the title TEXT only, not the
+		// whole #page-cover / #page-titlebar wrapper. get_settings() already
+		// translates that meta into `force_display_single_title='hide'`, and
+		// render_cover()/render_titlebar() honour it to suppress just the
+		// title echo. Returning '' here would also hide the cover background
+		// image, which is a separate Customizer feature.
 		if ( in_array( $args['display'], array( 'cover', 'titlebar', 'shortcode' ), true ) ) {
 			// Titlebar mode bails when there's no resolved title text. The
 			// titlebar buffer also collects auxiliary content via the

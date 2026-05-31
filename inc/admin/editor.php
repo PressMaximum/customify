@@ -82,11 +82,15 @@ class Customify_Editor {
 			'background',                       // Page bg composite — re-scoped to .editor-styles-wrapper below
 			'site_content_styling',
 			'content_background',
-			'single_blog_post_content_width',
 			'global_typography_heading_h1',
 			'global_typography_base_heading',
 			'global_styling_color_heading',
 		);
+		// `single_blog_post_content_width` intentionally NOT in $keys: a :root rule
+		// emitted via the standard pipeline would be shadowed by the body-scoped
+		// content-size rule the layout-driven block below emits. The user value is
+		// folded into that branch when editing a single post, mirroring how the
+		// frontend `body.single-post` rule wins by cascade source-order.
 
 		foreach ( $keys as $k ) {
 			$f = Customify()->customizer->get_field_setting( $k );
@@ -112,19 +116,6 @@ class Customify_Editor {
 			// Sync wide-size CSS var into editor so theme.json + customizer stay in sync.
 			$fields['container_width']['selector']   = ':root';
 			$fields['container_width']['css_format'] = '--wp--style--global--wide-size: {{value}};';
-		}
-
-		if ( $fields['single_blog_post_content_width'] ) {
-			// Sync content-size CSS var only when editing a post (setting is single-post scoped);
-			// pages and other post types keep theme.json's default to match frontend behavior.
-			$screen            = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-			$editing_post_type = $screen ? $screen->post_type : '';
-			if ( 'post' === $editing_post_type ) {
-				$fields['single_blog_post_content_width']['selector']   = ':root';
-				$fields['single_blog_post_content_width']['css_format'] = '--wp--style--global--content-size: {{value}};';
-			} else {
-				unset( $fields['single_blog_post_content_width'] );
-			}
 		}
 
 		if ( $fields['global_typography_base_heading'] ) {
@@ -172,6 +163,17 @@ class Customify_Editor {
 		.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) {
 			max-width: var(--wp--style--global--content-size, 780px);
 		}
+		.editor-styles-wrapper > .is-root-container > .alignwide {
+			--customify-alignwide-actual: max(
+				100%,
+				min(var(--wp--style--global--wide-size, 1200px), calc(100vw - 32px))
+			);
+			width: var(--customify-alignwide-actual);
+			margin-left: calc((100% - var(--customify-alignwide-actual)) / 2);
+			margin-right: calc((100% - var(--customify-alignwide-actual)) / 2);
+			max-width: none;
+			box-sizing: border-box;
+		}
 		';
 
 		$post_id = isset( $_GET['post'] ) ? absint( $_GET['post'] ) : 0;
@@ -182,83 +184,65 @@ class Customify_Editor {
 
 		// Layout-driven contentSize: keep block max-width in sync with the active
 		// sidebar layout so what the user sees in the editor matches the frontend
-		// column width. Applied last so it wins over single_blog_post_content_width
-		// and theme.json. Targets `body` with `!important` because theme.json emits
-		// the variable on `body` — a `:root` rule loses to that within body's scope.
+		// column width. Targets `body` (no !important): the variable is custom-
+		// property-inheritable, so the closer-ancestor body rule overrides the
+		// theme.json :root baseline for any element inside body without needing
+		// to win specificity.
 		//
 		// Content Layout meta (full-width / full-stretched) overrides the sidebar
 		// layout to the no-sidebar size — these modes hide the sidebar regardless
 		// of the per-post sidebar setting.
 		//
+		// Single-post override: when editing a post, the user's
+		// single_blog_post_content_width Customizer setting (if saved) wins over
+		// the layout-derived size. Mirrors the frontend `body.single-post` rule
+		// (inc/customizer/configs/single-blog-post.php) so editor matches render.
+		//
 		// Live-reactive counterpart lives in src/backend/page-settings/index.js.
 		if ( $post_id ) {
 			$content_layout = get_post_meta( $post_id, '_customify_content_layout', true );
-			if ( in_array( $content_layout, array( 'full-width', 'full-stretched' ), true ) ) {
+			if ( in_array( $content_layout, array( 'full-width', 'full-stretched', 'narrow' ), true ) ) {
 				$layout = 'content';
 			} else {
 				$layout = self::resolve_post_sidebar_layout( $post_id );
 			}
 			$size = customify_get_content_size_for_layout( $layout );
-			$css .= "body { --wp--style--global--content-size: {$size} !important; }";
 
-			// Full-stretched additionally drops the max-width so blocks fill the
-			// container, matching the frontend `.site-content.content-full-stretched`
-			// rule in src/frontend/scss/base/_blocks.scss.
-			if ( 'full-stretched' === $content_layout ) {
-				$css .= '.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) { max-width: none; }';
+			// Content Layout overrides for content-size — match the per-layout
+			// rules emitted by customify_layout_content_size_css() so the editor
+			// canvas matches the frontend. Full-Width uses calc(100vw - 64px)
+			// (container content-box at 100% with 2em padding each side);
+			// Full-Stretched uses 100vw (no container padding); Narrow uses the
+			// Customizer narrow_width value.
+			if ( 'narrow' === $content_layout ) {
+				$size = customify_get_narrow_width_value();
+			} elseif ( 'full-width' === $content_layout ) {
+				$size = 'calc(100vw - 64px)';
+			} elseif ( 'full-stretched' === $content_layout ) {
+				$size = '100vw';
 			}
+
+			$screen            = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+			$editing_post_type = $screen ? $screen->post_type : '';
+			if ( 'post' === $editing_post_type ) {
+				$user_cw = Customify()->get_setting( 'single_blog_post_content_width' );
+				if ( is_array( $user_cw ) && isset( $user_cw['value'] ) && '' !== $user_cw['value'] ) {
+					$unit = ! empty( $user_cw['unit'] ) ? $user_cw['unit'] : 'px';
+					$size = $user_cw['value'] . $unit;
+				}
+			}
+
+			$css .= "body { --wp--style--global--content-size: {$size}; }";
+
+			// Block max-width override for full-width / full-stretched is emitted
+			// from JS (src/backend/page-settings/index.js::buildContentSizeCss), NOT
+			// here. PHP-emitted CSS is static for the page load — if it included the
+			// override based on the saved meta, toggling content_layout in the
+			// editor sidebar wouldn't be able to undo it because the PHP rule keeps
+			// applying. Letting JS own the dynamic override keeps the metabox
+			// toggle responsive.
 		}
 
-		$css .= '.editor-styles-wrapper ul,
-		.editor-styles-wrapper ol {
-			margin: 1.5em auto;
-			list-style-position: outside;
-		}
-
-		.editor-styles-wrapper .wp-block-list,
-		.editor-styles-wrapper .wp-block-categories__list,
-		.editor-styles-wrapper .wp-block-archives-list {
-			padding-left: 2.5em;
-		}
-
-		.editor-styles-wrapper ul ul:not(.wp-block-navigation ul),
-		.editor-styles-wrapper ol ol,
-		.editor-styles-wrapper ul ol,
-		.editor-styles-wrapper ol ul:not(.wp-block-navigation ul) {
-			margin-bottom: 0;
-			margin-top: 0;
-			margin-left: 2.5em;
-		}
-
-		.editor-styles-wrapper .wp-block-table table,
-		.editor-styles-wrapper .wp-block-table tr,
-		.editor-styles-wrapper .wp-block-table th,
-		.editor-styles-wrapper .wp-block-table td {
-			border: 0;
-		}
-
-		.editor-styles-wrapper .wp-block-quote {
-			border-left-width: 4px;
-			border-left-style: solid;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote {
-			margin-left: auto;
-			margin-right: auto;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote.alignleft {
-			margin: 0 1.41575em 1em 2.5em;
-		}
-
-		.editor-styles-wrapper .wp-block-pullquote.alignright {
-			margin: 0 2.5em 1em 1.41575em;
-		}
-
-		.editor-styles-wrapper .wp-block-separator.is-style-dots {
-			max-width: 205px;
-		}
-		';
 		return $css;
 	}
 

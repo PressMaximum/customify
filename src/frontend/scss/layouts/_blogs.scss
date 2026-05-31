@@ -45,6 +45,11 @@ $blog_gutter: $gl-gutter;
         align-items: stretch;
         width: 100%;
         border-bottom: 1px solid $color_border;
+        // Ported from colors.php $border_css. All-sides `border-color` only
+        // takes effect when other rules (theme.json, customizer styling)
+        // add border width/style on the remaining sides; preserves the
+        // Border token wiring for those cases.
+        border-color: $color_border;
         padding-bottom: 2em;
         @include for_device( mobile ){
             display: block;
@@ -441,6 +446,19 @@ $blog_gutter: $gl-gutter;
     .author-bio-desc p:last-child {
         margin-bottom: 0.72em;
     }
+}
+
+// Ported from colors.php $border_css. These selectors set color-only
+// (`border-color`) on elements whose border width/style is supplied by
+// other stylesheets (UA defaults, theme.json, customizer styling). The
+// Border token (`$color_border`) keeps them on the same palette as the
+// rest of the blog chrome. `.cat-links` retained verbatim from the
+// legacy template for parity — markup uses `.cats-links` (with s), so
+// this selector is currently dead but kept to mirror the inline source.
+.entry-footer .tags-links a,
+.entry-footer .cat-links a,
+.search .content-area article {
+    border-color: $color_border;
 }
 
 .post-navigation .nav-links {

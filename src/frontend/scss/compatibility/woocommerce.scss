@@ -61,6 +61,16 @@
     }
 }
 
+// Ported from WC compat filter `customify/styling/link-color`. Wins over the
+// `.is-active a { color: $color_link_hover }` rule above via source order —
+// matches the legacy behavior where the inline filter rule was always emitted
+// after the bundled stylesheet. Also covers `a:hover` which the SCSS block
+// above does not set explicitly.
+.woocommerce-account .woocommerce-MyAccount-navigation ul li.is-active a,
+.woocommerce-account .woocommerce-MyAccount-navigation ul li a:hover {
+    color: $color_link;
+}
+
 .footer_payment_methods {
     display: inline-block;
     margin: 0px;

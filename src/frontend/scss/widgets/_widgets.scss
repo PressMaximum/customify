@@ -7,6 +7,14 @@
 	margin-bottom: 20px;
 }
 
+// Ported from colors.php $w_title_css. Scope `.site-content` preserved
+// from inline rule so footer/header dark-theme widget-titles keep
+// inheriting their context color (currentColor on bare `.widget-title`).
+// Token bound via --customify-widget-title at :root by colors-palette.php.
+.site-content .widget-title {
+	color: $color_widget_title;
+}
+
 .widget_block {
 
 	h1,

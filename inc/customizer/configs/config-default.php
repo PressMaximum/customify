@@ -294,6 +294,17 @@ function customify_layout_builder_config_default( $val, $name ) {
 					),
 				),
 			),
+			// Match DEFAULT_VALUE.count = 4 in
+			// src/backend/footer-row-layout/presets.js so the renderer's
+			// fallback (when nothing is saved) lines up with the React
+			// builder's initial render. Especially relevant for the Pro-
+			// added `top` row, which rarely has explicit col_layout saved.
+			'footer_top_col_layout' => array(
+				'count'   => 4,
+				'desktop' => array( 'fr' => array( 1, 1, 1, 1 ) ),
+				'tablet'  => array( 'fr' => array( 1, 1 ) ),
+				'mobile'  => array( 'fr' => array( 1 ) ),
+			),
 			'footer_main_col_layout' => array(
 				'count'   => 4,
 				'desktop' => array( 'fr' => array( 1, 1, 1, 1 ) ),

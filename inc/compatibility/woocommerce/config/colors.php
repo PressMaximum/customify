@@ -6,6 +6,7 @@ class Customify_WC_Colors {
 	}
 
 	function config( $configs ) {
+		
 		$section = 'global_styling';
 
 		$configs[] = array(
@@ -13,30 +14,6 @@ class Customify_WC_Colors {
 			'type'    => 'heading',
 			'section' => $section,
 			'title'   => __( 'Shop Colors', 'customify' ),
-		);
-
-		$configs[] = array(
-			'name'        => "{$section}_shop_primary",
-			'type'        => 'color',
-			'section'     => $section,
-			'title'       => __( 'Shop Buttons', 'customify' ),
-			'placeholder' => '#c3512f',
-			'default'     => '#c3512f',
-			'description' => __( 'Color for add to cart, checkout buttons. Default is Secondary Color.', 'customify' ),
-			'css_format'  => apply_filters(
-				'customify/styling/shop-buttons',
-				'
-					.woocommerce .button.add_to_cart_button, 
-					.woocommerce .button.alt,
-					.woocommerce .button.added_to_cart, 
-					.woocommerce .button.checkout, 
-					.woocommerce .button.product_type_variable,
-					.item--wc_cart .cart-icon .cart-qty .customify-wc-total-qty
-					{
-					    background-color: {{value}};
-					}'
-			),
-			'selector'    => 'format',
 		);
 
 		$configs[] = array(

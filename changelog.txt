@@ -1,10 +1,32 @@
+= 0.4.18 =
+* IMPROVED: Footer builder rows made fully generic — Pro's `top` row and any extension-added row now work identically to built-in main/bottom.
+* IMPROVED: Dropped unnecessary `!important` on `.alignfull` margins so child themes and user CSS can override the full-bleed behavior through normal cascade.
+
+= 0.4.17 =
+* NEW: Two extra Footer Builder row-layout presets for 4-column mode — 40/20/20/20 and 2×2 grid.
+* FIXED: Header Search Icon — Icon Size, Icon Padding, and Icon Styling controls now apply to the rendered icon.
+* FIXED: Header Search submit button (magnifying glass) vertical alignment with the search input field.
+* FIXED: Container width default 1248 + dynamic content-size/wide-size for Narrow layout.
+* FIXED: WooCommerce mobile-only styles leaking onto desktop — now scoped to @media (max-width: 560px).
+* FIXED: Pro Bridge settings screen 404 on metabox JS/CSS (legacy /assets/ paths replaced with /build/).
+* FIXED: Nested lists inside core blocks (Quote, Pullquote, Cover, etc.) inheriting extra .entry-content margin; list-block styling unified under .wp-block-list for editor + frontend parity.
+* IMPROVED: Updated color palette customizer settings — live preview without page reload.
+* IMPROVED: WooCommerce cart — narrower "remove" column + square quantity picker.
+* IMPROVED: Removed orphaned "Shop Buttons" color control from the customizer (unreachable since the unified Colors section in 0.4.15).
+
+= 0.4.16 =
+* NEW: Fallback bridge wires legacy Customify Pro (< 0.4.16) into the new dashboard — module toggles and per-module settings work without modifying the Pro plugin.
+* FIXED: Theme button styling leaking into WP default block chrome (Search, File, Embed, etc.) in editor + frontend.
+* FIXED: Page Header "Cover" and background image disappearing when "Disable Title" is on (0.4.15 regression).
+* FIXED: Customizer pencil edit-shortcut not opening the matching header/footer builder item section.
+
 = 0.4.15 =
-* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
 * NEW: Transparent header feature.
 * NEW: Footer Builder V2 with row layout control, gap/padding slider controls and center column grid alignment.
 * NEW: Block editor Page Settings panel; modernize Gutenberg support and fix #page-cover visibility.
 * NEW: has-page-cover body class; scope transparent header styles.
 * NEW: WordPress Font Library and theme.json fonts in the typography picker.
+* IMPROVED: Remove "Footer Widget X" placeholder shown to admins in empty footer sidebar columns.
 * IMPROVED: WordPress 7.0 ready.
 * IMPROVED: Editor style now support customizer settings.
 * IMPROVED: Header/footer builder UI — sizing, title display, popover width and column layout.

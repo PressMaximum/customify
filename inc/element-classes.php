@@ -101,12 +101,30 @@ if ( ! function_exists( 'customify_site_content_classes' ) ) {
 	/**
 	 * Adds custom classes to the array of site content classes.
 	 *
+	 * Mirrors the header builder pattern: the Customizer field
+	 * `site_content_layout` (radio: `site-content-fullwidth` / `site-content-boxed`)
+	 * uses `css_format = 'html_class'`, which is a no-op marker in the
+	 * auto-CSS pipeline. The class has to be pushed into the element's
+	 * class array manually here — same wiring as `site_layout` above and
+	 * the header `header_main_layout` field.
+	 *
+	 * Was orphaned since the setting first shipped in 2017 (b04c6a44):
+	 * UI saved the value but no handler ever applied the class. The
+	 * paired SCSS rule (`.site-content-fullwidth .customify-container
+	 * { max-width: initial }`) lives in `src/frontend/scss/layouts/_layouts.scss`,
+	 * mirroring the existing `.layout-fullwidth` pattern in the header SCSS.
+	 *
 	 * @param array $classes Classes for the site content element.
 	 *
 	 * @return array
 	 */
 	function customify_site_content_classes( $classes ) {
 		$classes[] = 'site-content';
+
+		$site_content_layout = sanitize_text_field( Customify()->get_setting( 'site_content_layout' ) );
+		if ( $site_content_layout ) {
+			$classes[] = $site_content_layout;
+		}
 
 		return $classes;
 	}

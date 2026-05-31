@@ -270,6 +270,68 @@
 			});
 		}
 	};
+
+	// Builder item sections (logo, copyright, menus, …) are kept inactive by
+	// `_customifyForceHide` so they only surface via the gear icon on the
+	// builder UI. WP's default partial.showControl() → control.focus() path
+	// re-activates the section, but the force-hide binding flips it back to
+	// false before the expand can complete — so the pencil edit-shortcut
+	// silently does nothing. Route those clicks through
+	// customifyBuilderOpenSection (parent window) which unbinds the marker,
+	// expands the section, and re-installs the deferred re-hide listener;
+	// then focus the matching control so the sidebar scrolls to it.
+	var defaultShowControl = wp.customize.selectiveRefresh.Partial.prototype.showControl;
+	wp.customize.selectiveRefresh.Partial.prototype.showControl = function() {
+		var partial    = this;
+		var parentWin  = (window.parent && window.parent !== window) ? window.parent : null;
+		var settingIds = (typeof partial.settings === "function") ? partial.settings() : [];
+		var settingId  = settingIds && settingIds.length ? settingIds[0] : null;
+
+		if (
+			settingId &&
+			parentWin &&
+			parentWin.wp &&
+			parentWin.wp.customize &&
+			typeof parentWin.customifyBuilderOpenSection === "function"
+		) {
+			var matchedControl;
+			parentWin.wp.customize.control.each(function(control) {
+				if (matchedControl) return;
+				var settings = control.settings || {};
+				for (var key in settings) {
+					if (
+						Object.prototype.hasOwnProperty.call(settings, key) &&
+						settings[key] &&
+						settings[key].id === settingId
+					) {
+						matchedControl = control;
+						break;
+					}
+				}
+			});
+			if (matchedControl) {
+				var sectionId = (typeof matchedControl.section === "function")
+					? matchedControl.section()
+					: matchedControl.section;
+				var section   = sectionId && parentWin.wp.customize.section(sectionId);
+				if (section && section._customifyForceHide) {
+					parentWin.customifyBuilderOpenSection(sectionId);
+					// Wait out the section's slide-down before asking WP to
+					// scroll the sidebar to the specific control — focusing
+					// mid-transition leaves the control off-screen.
+					setTimeout(function() {
+						var c = parentWin.wp.customize.control(matchedControl.id);
+						if (c && typeof c.focus === "function") {
+							c.focus();
+						}
+					}, 350);
+					return;
+				}
+			}
+		}
+
+		return defaultShowControl.apply(partial, arguments);
+	};
 	// Live preview for footer row col_layout (postMessage transport).
 	function applyFooterColLayout(rowSelector, valueStr) {
 		var data;
@@ -286,7 +348,10 @@
 			document.head.appendChild(styleEl);
 		}
 
-		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 767px)' };
+		// Breakpoints match Customify_Customizer_Auto_CSS::$media_queries
+		// and PHP customify_footer_row_layout_css() so the live-preview
+		// CSS is byte-equivalent to what ships on the published frontend.
+		var breakpoints = { desktop: '', tablet: '(max-width: 1024px)', mobile: '(max-width: 568px)' };
 		// Normalize fr length to row's column count. Matches the PHP
 		// `customify_footer_row_layout_css()` defensive truncation so legacy
 		// data (fr longer than count after a count reduction) renders the
@@ -326,15 +391,18 @@
 				return;
 			}
 			var fr;
-			// A length-1 fr is the "stacked" preset's saved shape: one grid
-			// track regardless of count. Use it as-is on every device; only
-			// pad multi-track arrays when they're shorter than count (legacy
-			// data correction).
-			if (d.fr.length === 1) {
-				fr = d.fr.slice();
-			} else if (device === 'mobile') {
-				// Mobile multi-track: respect the user's explicit array exactly,
-				// no slice/pad to count.
+			var frLen = d.fr.length;
+			// Preserve fr as-is when it represents an intentional layout:
+			//   length 1            = stacked preset
+			//   length == count     = normal one-row layout
+			//   length divides count = wrap preset (e.g. fr=[1,1] with count=4
+			//                          → 2×2 grid via grid auto-flow)
+			//   mobile device       = respect user's explicit mobile choice
+			// Other lengths are legacy stale data — slice/pad to count.
+			var isIntentional = frLen === 1
+				|| frLen === count
+				|| ( frLen > 1 && count > 0 && frLen < count && count % frLen === 0 );
+			if (isIntentional || device === 'mobile') {
 				fr = d.fr.slice();
 			} else {
 				fr = count > 0 ? d.fr.slice(0, count) : d.fr.slice();
@@ -354,15 +422,18 @@
 		styleEl.textContent = css;
 	}
 
-	wp.customize('footer_main_col_layout', function(setting) {
-		setting.bind(function(value) {
-			applyFooterColLayout('#cb-row--footer-main', value);
-		});
-	});
-
-	wp.customize('footer_bottom_col_layout', function(setting) {
-		setting.bind(function(value) {
-			applyFooterColLayout('#cb-row--footer-bottom', value);
-		});
-	});
+	// Bind a live-preview handler for every footer row's col_layout
+	// setting. The row list is sourced from Customify_Preview_Config
+	// (PHP customify_get_footer_row_ids()), so Pro / child-theme / 3rd-
+	// party rows added via the `customify/builder/footer/rows` filter
+	// pick up the same live-update treatment without further JS changes.
+	var __footerRows = ( window.Customify_Preview_Config && window.Customify_Preview_Config.footer_rows )
+		|| [ 'main', 'bottom' ];
+	__footerRows.forEach( function ( rowId ) {
+		wp.customize( 'footer_' + rowId + '_col_layout', function ( setting ) {
+			setting.bind( function ( value ) {
+				applyFooterColLayout( '#cb-row--footer-' + rowId, value );
+			} );
+		} );
+	} );
 })(jQuery, wp.customize);

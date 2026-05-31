@@ -102,6 +102,11 @@ Product Slider
         display: block;
         padding: 6px 0px;
         border-top: 1px dotted $color_border;
+        // Ported from WC compat filter `customify/styling/color-border`.
+        // All-sides `border-color` only takes effect when other rules add
+        // border width/style on the remaining sides; preserves the Border
+        // token wiring exactly as the inline filter emitted it.
+        border-color: $color_border;
     }
 }
 
@@ -127,6 +132,9 @@ Product Slider
     &.wc-tabs-horizontal {
         ul.tabs {
             border-bottom: 1px solid $color_border;
+            // Ported from WC compat filter `customify/styling/color-border`.
+            // All-sides preservation; only affects sides with width/style.
+            border-color: $color_border;
             li {
                 border-bottom: 1px solid transparent;
                 display: inline-block;
@@ -148,6 +156,11 @@ Product Slider
                 &.active {
                     z-index: 2;
                     border-bottom-color: $color_primary;
+                    // Ported from WC compat filter `customify/styling/primary-color`.
+                    // All-sides `border-color` takes effect when other rules add
+                    // border width/style on the remaining sides; preserves the
+                    // Primary token wiring for active tabs in all border directions.
+                    border-color: $color_primary;
                     a {
                         color: $color_primary;
                         text-shadow: inherit;
@@ -173,8 +186,15 @@ Product Slider
             }
             li {
                 border-bottom: 1px solid $color_border;
+                // Ported from WC compat filter `customify/styling/color-border`.
+                // All-sides preservation per inline filter declaration.
+                border-color: $color_border;
                 &:first-child {
                     border-top: 1px solid $color_border;
+                    // Same all-sides preservation as parent — filter selector
+                    // `.wc-tabs-vertical .wc-tabs li:first-child` distinct from
+                    // the general `.wc-tabs li` rule above.
+                    border-color: $color_border;
                 }
                 &:after {
                     content: '';
@@ -309,6 +329,16 @@ Section and Toggle
 }
 .tab-section-content {
     padding-top: 1em;
+}
+
+// Ported from WC compat filter `customify/styling/primary-color`. `.wc-single-tabs`
+// is a WC-specific single-product tabs container; active tab anchor and section
+// heading anchor consume the Primary token.
+.wc-single-tabs {
+    ul.tabs li.active a,
+    .tab-section.active .tab-section-heading a {
+        color: $color_primary;
+    }
 }
 
 

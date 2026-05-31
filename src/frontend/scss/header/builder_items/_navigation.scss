@@ -213,6 +213,18 @@
                  }
              }
         }
+        // Ported from pre-4b5acc73 colors.php $primary_css. `.primary-menu-ul`
+        // is the canonical class for the desktop primary menu (see
+        // inc/customizer/configs/header/menus.php). The generic `.nav-menu`
+        // rules above use `$color_link`; this primary-scoped rule uses
+        // `$color_primary` so the actual brand menu honors the Primary token
+        // even when the Link token is overridden separately.
+        .primary-menu-ul {
+            > li:is(.current-menu-item, .current-menu-ancestor) > a,
+            > li > a:hover {
+                background-color: $color_primary;
+            }
+        }
     } // End style full height
 
     // Menu style border bottom

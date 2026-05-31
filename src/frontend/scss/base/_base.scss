@@ -70,6 +70,12 @@ h2,
         border-top: 1px solid $color_border;
         padding-top: ms(-3);
     }
+    // Ported from colors.php $border_css. Comments title (typically `h2.comments-title`)
+    // sibling-after `h2` or `.h2` inside `.comments-area` gets the same divider
+    // pattern as `h2 + h3` above.
+    .comments-area &+.comments-title {
+        border-top-color: $color_border;
+    }
     @include for_device(tablet) {
         font-size: 1.9em;
     }
@@ -395,17 +401,31 @@ select {
     }
 }
 
-body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
-body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
-.button:not(.components-button, .customize-partial-edit-shortcut-button),
-button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
-input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button),
+// `[class*="wp-block-"]` in the :not() lists peels off ANY element whose
+// class contains a `wp-block-*` token — that's how WP default blocks
+// (Search submit, File download, Embed "Try again", Latest Posts CTA,
+// etc.) render their internal chrome buttons. Editor canvas + frontend
+// both stop applying the broad theme button styling to those, while the
+// intentionally-styled content buttons (`.wp-block-button__link`,
+// `.wp-element-button`, `.wc-block-cart__submit .wp-element-button`)
+// stay listed explicitly so they still pick up the theme look.
+// The single-class exclusions kept below (`.components-button`,
+// `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
+// `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
+// so they still need their own slot.
+.button:not(
+    [class*="wp-block-"],
+    .menu-mobile-toggle,
+    .components-button,
+    .customize-partial-edit-shortcut-button
+),
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"]),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 .wc-block-cart__submit .wp-element-button,
 .wp-block-button__link,
 .wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button) {
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
     border: none;
     cursor: pointer;
     padding: 0px 1.3em;
@@ -420,7 +440,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     align-items: center;
     justify-content: center;
     gap: 0.5em;
-    &:not(.menu-mobile-toggle):hover {
+    &:not(.menu-mobile-toggle, .search-submit):hover {
         box-shadow: inset 0 0 0 120px rgba(0, 0, 0, 0.18);
     }
     &:hover {
@@ -460,16 +480,17 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     }
 }
 
-body:not(.fl-builder-edit) .button,
-body:not(.fl-builder-edit) button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, .wp-block-navigation__submenu-icon),
-body:not(.fl-builder-edit) input[type="button"]:not(.ed_button),
-.button:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="button"]:not(.ed_button),
-input[type="button"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-input[type="reset"]:not(.components-button):not(.customize-partial-edit-shortcut-button),
+// Same `[class*="wp-block-"]` carve-out as above so WP default-block
+// chrome doesn't inherit the primary-color background fill.
+.button:not([class*="wp-block-"]),
+button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"]),
+.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
 .wp-block-button__link,
 .wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
     color: var(--customify-on-primary, #ffffff);
     background: $color_primary;
     &:focus {
@@ -477,10 +498,10 @@ input[type="submit"]:not(.components-button):not(.customize-partial-edit-shortcu
     }
 }
 
-.button[disabled]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-button[disabled]:not(.components-button):not(.customize-partial-edit-shortcut-button),
-button.disabled:not(.components-button):not(.customize-partial-edit-shortcut-button),
-.button.disabled:not(.components-button):not(.customize-partial-edit-shortcut-button) {
+.button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+.button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
     opacity: 0.5;
 }
 
@@ -945,6 +966,9 @@ article.comment {
     color: $color_meta;
 }
 
+// Ported from colors.php $link_hover_css. Bare `.link-meta:hover`
+// (parent hover) shares the same link-hover token as the anchor child.
+.link-meta:hover,
 .link-meta a:hover {
     color: $color_link_hover;
 }

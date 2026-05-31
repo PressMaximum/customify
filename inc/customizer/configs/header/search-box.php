@@ -224,9 +224,9 @@ class Customify_Builder_Item_Search_Box {
 				//    on light-mode sites — the base `color: $color_meta` from
 				//    _search.scss kept winning.
 				'selector'    => array(
-					'normal' => "body {$selector} .header-search-form button.search-submit",
-					'hover'  => "body {$selector} .header-search-form button.search-submit:hover",
-					'normal_text_color' => "body {$selector} .header-search-form button.search-submit, body .dark-mode {$selector} .header-search-form button.search-submit",
+					'normal' => "{$selector} .header-search-form button.search-submit",
+					'hover'  => "{$selector} .header-search-form button.search-submit:hover",
+					'normal_text_color' => "{$selector} .header-search-form button.search-submit, .dark-mode {$selector} .header-search-form button.search-submit",
 				),
 				'fields'      => array(
 					'normal_fields' => array(
