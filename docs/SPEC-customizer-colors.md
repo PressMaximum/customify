@@ -227,7 +227,7 @@ computed default is used.
 | `--customify-border` | `global_styling_color_border` | `mix(text 14%, base)` (Phase 2.10 bumped 12→14% per spec §2) | Decorative borders / separators (~1.35:1, WCAG-exempt) |
 | `--customify-border-strong` | (no legacy key) | Iterate P 6%→100% until `contrast(mix(text P%, base), base) ≥ 3.0` | Form input borders, functional outlines (WCAG 1.4.11 ≥3:1) |
 | `--customify-link` | `global_styling_color_link` | `= primary` | `a { color }` |
-| `--customify-link-hover` | `global_styling_color_link_hover` | `mix(primary 85%, white)` (Phase 2.4 — surfaces, not depresses) | `a:hover/focus` |
+| `--customify-link-hover` | `global_styling_color_link_hover` | `= link` (Phase 3 — follows Link → Primary; was `mix(primary 85%, white)`) | `a:hover/focus` |
 | `--customify-primary-hover` | (no legacy key) | `mix(primary, black 10%)` | `button:hover` (NEW, didn't exist before) |
 | `--customify-heading` | `global_styling_color_heading` | `= text` | `h1-h6` |
 | `--customify-widget-title` | `global_styling_color_w_title` | `= text` | `.site-content .widget-title` |
