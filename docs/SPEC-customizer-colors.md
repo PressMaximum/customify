@@ -1405,20 +1405,106 @@ trade-off preference.
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
 
-### 8.13 Phase 3 — Custom palettes / Style Packs (future)
+### 8.13 Phase 3 — Palette switcher (done)
 
-Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
-build the higher-level palette UX on top:
+A card-based palette switcher at the top of the Colors section. The user
+applies a named palette (preset or custom) in one click; the cards drive the
+6 existing slot pickers — no new render path, no new rendered token.
 
-- Multiple palette presets (e.g. Light + Dark) the user can switch
-  between with one click; each preset stores its own 6 slot values.
-- User-saved custom palettes (CRUD + name + thumbnail).
-- Per-site dark-mode token set wired to `prefers-color-scheme` or a
-  user toggle.
-- Style Pack concept — bundle palette + typography + spacing under a
-  single named preset that can be applied / shared / imported.
+**New file:** `inc/color-palette-switcher.php` (registered in
+`inc/class-customify.php` `includes()` right after `colors-palette.php`).
 
-Design when Phase 3 starts; not blocked by anything in Phase 1/2 today.
+**A. Storage — two NEW `theme_mod` keys (the only storage added).**
+
+| Key | Type | Default | Purpose |
+|---|---|---|---|
+| `customify_active_palette` | string | `''` | id of the palette the slots currently match (e.g. `sunrise`). Bookkeeping only — nothing renders from it. |
+| `customify_color_palettes` | JSON string | `'[]'` | user-saved custom palettes: `[{id,name,slots:{…}}]`. |
+
+The 6 slots keep their EXISTING keys — the switcher writes THROUGH to them,
+it does not introduce a parallel store:
+
+```
+primary   → global_styling_color_primary    (legacy)
+secondary → global_styling_color_secondary  (legacy)
+accent    → customify_palette_accent
+text      → customify_palette_text
+surface   → customify_palette_surface
+base      → customify_palette_base
+```
+
+**B. Presets — Sunrise (light) + Midnight (dark).**
+
+```
+Sunrise   base #ffffff  surface #ECECEC  text #2b2b2b  primary #235787  secondary #c3512f  accent #ffd042
+Midnight  base #0f1217  surface #1a1e25  text #e8eaed  primary #5a8fc2  secondary #db6a44  accent #ffd042
+```
+
+Sunrise's slot values equal the theme's per-field picker defaults
+(`surface #ECECEC`, `primary #235787`, …), so a fresh install reads as
+"Sunrise linked" without writing anything — the active state is INFERRED
+from slot equality, never auto-persisted on a clean open (see D).
+
+**C. Apply mechanism — drive the existing pickers, no new path.**
+
+Applying a palette calls `$panel.wpColorPicker('color', hex)` on each of the
+6 existing pickers (the canonical, already-proven write path). That fires the
+normal picker `change` → Customizer setting → live-preview cascade. The
+switcher adds ZERO new rendering: the frontend output is byte-identical to a
+user manually setting those 6 pickers to the same values.
+
+**D. Active-determination / reconciliation (the 30K-safety core).**
+
+`render()` infers which card is "active" from the live slot values, in three
+cases:
+
+1. **stored id matches current slots** → that palette is active + linked.
+2. **no stored id, but a preset/custom matches current slots** → adopt it as
+   active + linked; persist the id ONLY if the customizer is already dirty
+   (`wp.customize.state('saved').get() === false`). On a clean open this never
+   writes — a legacy site is never silently dirtied.
+3. **nothing matches** → no card active, no "modified" strip, no write. This
+   is the legacy saved-custom-colors case: the site shows its colors with no
+   palette chrome.
+
+This three-case model replaced an earlier `DEFAULT_ACTIVE` fallback that
+wrongly showed a legacy saved-custom site as "Sunrise active + Modified +
+reset-to-Sunrise". `syncSlotDefaults()` re-anchors each picker's reset
+baseline (`wpColorPicker('option','defaultColor', …)` + `data-default`) to the
+active palette's value — but ONLY when a palette is active; with no active
+palette (case 3) it is skipped, so legacy reset behavior is untouched.
+
+**E. Custom palettes.** Create-from-current, rename, delete, import/export
+(JSON). `customify_color_sanitize_palettes()` hardens imported JSON:
+`sanitize_text_field` on name, `customify_color_normalize_hex` on every slot,
+array capped at 100. The inline JS escapes every user value through an `esc()`
+helper before `innerHTML`. A custom palette auto-absorbs later slot edits
+while active (`maybeSyncCustom`), so editing a slot doesn't desync the card.
+
+**F. Default shift — link-hover now follows link.** As part of this phase the
+`global_styling_color_link_hover` field default changed from `#406F99` (a
+lighter mix) to "same as link" (`#235787`), and the cascade resolves
+link-hover → link → primary. 30K-impact: a site that saved a link color but
+never saved a link-hover now renders link-hover = its link color on hover
+(previously a lighter shade). Intentional, documented default shift
+(project-owner requested) — saved link-hover values are untouched.
+
+**G. WP-native styling.** All "selected/active" accents use
+`var(--wp-admin-theme-color, #3858e9)` (the admin's own accent); buttons and
+borders use WP admin tokens. The 6 existing wp-color-pickers are left as-is.
+
+**30K-safety summary.** Additive only — 2 new bookkeeping keys, 6 slots reuse
+existing keys, apply path is the existing picker write. No saved hex changes,
+no key renamed/removed. The only render delta for any existing site is the
+link-hover default shift (F), affecting only sites that never saved a
+link-hover. Verified on a saved-custom site: front-end render unchanged;
+customizer shows no active card / no modified strip / no dirty-on-open.
+
+**Still deferred (Phase 4+).** Per-site dark-mode token set wired to
+`prefers-color-scheme` / a user toggle; the Style Pack concept (bundle palette
++ typography + spacing). Applying a dark palette deliberately does NOT touch
+header Skin Mode (project-owner decision — a palette shouldn't mutate
+unrelated skin settings).
 
 ---
 
