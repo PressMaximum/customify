@@ -470,6 +470,8 @@ class Customify
 			// Template element classes.
 			'/inc/colors-palette.php',
 			// Colors palette CSS var emitter for the new top-level Colors section.
+			'/inc/color-palette-switcher.php',
+			// Palettes UI (presets + custom palettes) at the top of the Colors section.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',

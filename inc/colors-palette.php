@@ -524,11 +524,10 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		// boundary that's the ONLY cue identifying a functional control.
 		$border_strong_default = customify_color_solve_border_strong( $slots['text'], $slots['base'] );
 		$primary_hover_default = customify_color_mix_hex( $slots['primary'], '#000000', 0.90 ); // primary at 90%, black at 10%
-		// Link hover = primary mixed with WHITE 15% (lighter, not darker).
-		// Hover state surfaces the link by raising luminance. Note: the
-		// existing button :hover (primary_hover) goes the other direction
-		// (darker) — different UX semantic: buttons depress, links surface.
-		$link_hover_default    = customify_color_mix_hex( $slots['primary'], '#FFFFFF', 0.85 );
+		// Link hover defaults to the SAME as link (which itself defaults to the
+		// Primary slot) — hovering keeps the link colour unless the user saves a
+		// Link-hover override. Project-owner decision (was: link lighter 15%).
+		$link_hover_default    = $slots['primary'];
 		// Body text default = slot.text directly (same pattern as heading).
 		// Earlier Phase 2.3 used mix(text, base, 88%) for a softer ink,
 		// but that desaturates the user's Text slot — e.g. setting Text to
@@ -846,6 +845,12 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		if ( ! $ov_link ) {
 			$lines[] = "--customify-link: var(--customify-primary, {$slots['primary']})";
 		}
+		// Link-hover cascade — follows Link (which follows Primary) so hovering
+		// keeps the link colour unless a Link-hover override is saved. Pure var()
+		// chain (no color-mix) now that hover == link.
+		if ( ! $ov_link_hover ) {
+			$lines[] = "--customify-link-hover: var(--customify-link, {$link_hover_default})";
+		}
 
 		$static_root = ':root{' . implode( ';', $lines ) . ';}';
 
@@ -872,13 +877,8 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 			$mix_lines[] = '--customify-border: color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))';
 		}
 		$mix_lines[] = '--customify-primary-hover: color-mix(in oklab, var(--customify-primary), black 10%)';
-		// Link hover cascade — LIGHTER variant of link (which itself cascades
-		// from primary unless overridden). 15% white mixed in oklab keeps
-		// perceived hue stable while lifting luminance. Saved override
-		// suppresses the cascade so legacy explicit values still win.
-		if ( ! $ov_link_hover ) {
-			$mix_lines[] = '--customify-link-hover: color-mix(in oklab, var(--customify-link) 85%, white)';
-		}
+		// Link-hover is now a pure var() chain (= Link) emitted in the static
+		// $lines block above — no @supports color-mix line needed.
 
 		$css = $static_root;
 		if ( $mix_lines ) {
@@ -968,6 +968,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	// picker writes a real value and breaks out of cascade mode.
 	var CASCADE_MAP = {
 		'global_styling_color_link':         'global_styling_color_primary',
+		'global_styling_color_link_hover':   'global_styling_color_link',
 		'global_styling_color_heading':      'customify_palette_text',
 		'global_styling_color_w_title':      'customify_palette_text',
 		'global_styling_color_text':         'customify_palette_text'
@@ -977,6 +978,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	// Mirrors the 'default' keys in inc/customizer/configs/colors.php.
 	var FIELD_DEFAULTS = {
 		'global_styling_color_link':         '#235787',
+		'global_styling_color_link_hover':   '#235787',
 		'global_styling_color_heading':      '#2b2b2b',
 		'global_styling_color_w_title':      '#2b2b2b',
 		'global_styling_color_text':         '#2b2b2b'
@@ -986,6 +988,19 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	function decodeValue(v) {
 		if (typeof v !== 'string') return v;
 		try { return JSON.parse(decodeURI(v)); } catch (e) { return v; }
+	}
+
+	// Resolve a setting's EFFECTIVE cascade value by walking the chain when the
+	// setting is itself unset (= empty or its field default). e.g. link-hover
+	// cascades from link, which cascades from primary — so the link-hover swatch
+	// tracks Primary even though its direct source is Link.
+	function resolveCascadeValue(id) {
+		var val = decodeValue(wp.customize(id).get() || '');
+		var src = CASCADE_MAP[id];
+		if (src && (val === '' || val === FIELD_DEFAULTS[id])) {
+			return resolveCascadeValue(src);
+		}
+		return val;
 	}
 
 	// Sync the override picker's swatch to its cascade source when the
@@ -1003,7 +1018,7 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 			li.style.removeProperty('--customify-cascade-display');
 			return;
 		}
-		var cascadeValue = decodeValue(wp.customize(sourceId).get() || '');
+		var cascadeValue = resolveCascadeValue(sourceId);
 		if (!cascadeValue) return;
 		li.classList.add('is-cascading');
 		li.style.setProperty('--customify-cascade-display', cascadeValue);
@@ -1461,7 +1476,7 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		'--customify-body-text':    'var(--customify-text)',
 		'--customify-widget-title': 'var(--customify-text)',
 		'--customify-link':         'var(--customify-primary)',
-		'--customify-link-hover':   'color-mix(in oklab, var(--customify-link) 85%, white)',
+		'--customify-link-hover':   'var(--customify-link)',
 		'--customify-text-muted':   'color-mix(in oklab, var(--customify-text) 70%, var(--customify-base))',
 		'--customify-border':       'color-mix(in oklab, var(--customify-text) 9%, var(--customify-base))'
 	};
@@ -1745,9 +1760,15 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 		'customify_palette_surface',
 		'customify_palette_base'
 	];
+	// Debounce: a palette switch changes all six slots at once; binding the raw
+	// recomputeDerived would run the OKLab derivation six times back-to-back and
+	// block the preview paint (~100ms+). Coalesce into ONE recompute ~24ms after
+	// the last slot settles — imperceptible for a drag, snappy for a switch.
+	var _cfyRderiveT;
+	function recomputeDerivedDebounced(){ clearTimeout(_cfyRderiveT); _cfyRderiveT = setTimeout(recomputeDerived, 24); }
 	SOURCE_SLOTS.forEach(function(setting){
 		wp.customize(setting, function(value){
-			value.bind(recomputeDerived);
+			value.bind(recomputeDerivedDebounced);
 		});
 	});
 	// Prime the initial state on load so the preview iframe shows
