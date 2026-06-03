@@ -613,6 +613,35 @@ docs/
 Build artifacts in `build/css/backend/customizer/customizer.css` are git-
 ignored. Run `npm run build` after a fresh clone.
 
+> **Note:** the tree above is the Phase-1 snapshot. Later phases added more
+> files — see the §8.x phase logs for the rationale behind each.
+
+```
+inc/
+├── color-palette-switcher.php          NEW (Phase 3) — palette switcher UI:
+│                                          built-in presets + custom palettes
+│                                          (create/rename/delete, import/export),
+│                                          customify_color_sanitize_palettes(),
+│                                          inline controls JS + CSS. Registered
+│                                          in includes() right after
+│                                          colors-palette.php.
+└── colors-palette.php                  MODIFIED (Phase 2.x–3) — derived-token
+                                           engine (on-*, *-container, OKLab),
+                                           link-hover → link cascade, live-
+                                           preview recompute debounce, quick-
+                                           pick swatch cascade resolution.
+
+src/frontend/scss/
+├── base/_base.scss                     MODIFIED (Phase 2.14) — background-
+│                                          agnostic native-button hover state
+│                                          layer (color-mix overlay).
+├── base/_blocks.scss                   MODIFIED (Phase 2.14) — block bg auto-
+│                                          contrast text + Blocksify button
+│                                          text colour (on-* tokens).
+└── header/builder_items/_button.scss   MODIFIED (Phase 2.14) — header builder
+                                           button hover state layer.
+```
+
 ---
 
 ## 5. 30K-site safety — verification suite
@@ -1445,6 +1474,11 @@ Sunrise's slot values equal the theme's per-field picker defaults
 "Sunrise linked" without writing anything — the active state is INFERRED
 from slot equality, never auto-persisted on a clean open (see D).
 
+Presets come from `customify_color_preset_palettes()` and are **filterable**
+via `customify/color/preset_palettes` — a plugin or child theme can add,
+remove, or replace presets (each entry: `{ id, name, slots:{6} }`). The
+sanitizer prefixes any custom id that collides with a preset id (`user-…`).
+
 **C. Apply mechanism — drive the existing pickers, no new path.**
 
 Applying a palette calls `$panel.wpColorPicker('color', hex)` on each of the
@@ -1452,6 +1486,11 @@ Applying a palette calls `$panel.wpColorPicker('color', hex)` on each of the
 normal picker `change` → Customizer setting → live-preview cascade. The
 switcher adds ZERO new rendering: the frontend output is byte-identical to a
 user manually setting those 6 pickers to the same values.
+
+Because a switch changes all six slots at once, the live preview's derived-
+token recompute (`on-*`, `*-container`, OKLab math) is coalesced into ONE pass
+via a ~24 ms debounce (`recomputeDerivedDebounced`) instead of running six
+times back-to-back — imperceptible for a drag, snappy for a switch.
 
 **D. Active-determination / reconciliation (the 30K-safety core).**
 
