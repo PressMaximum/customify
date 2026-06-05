@@ -330,7 +330,9 @@ class Customify_Dashboard
 			),
 			array(
 				'label' => __('Styling', 'customify'),
-				'url'   => add_query_arg(array('autofocus' => array('panel' => 'styling_panel')), $url),
+				// Styling panel retired; colors/styling now live in the top-level
+				// "Colors" section (inc/customizer/configs/colors.php).
+				'url'   => add_query_arg(array('autofocus' => array('section' => 'customify_colors')), $url),
 			),
 			array(
 				'label' => __('Typography', 'customify'),
