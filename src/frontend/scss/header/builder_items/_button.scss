@@ -6,14 +6,11 @@
     border-radius: 2px;
     display: inline-block;
     position: relative;
-    text-decoration: var(--customify-typo-header-button-text-decoration, none);
-    font-size: var(--customify-typo-header-button-font-size, 0.85em);
-    text-transform: var(--customify-typo-header-button-text-transform, uppercase);
-    letter-spacing: var(--customify-typo-header-button-letter-spacing, 0.5px);
-    font-weight: var(--customify-typo-header-button-font-weight, 600);
-    font-family: var(--customify-typo-header-button-font-family, inherit);
-    line-height: var(--customify-typo-header-button-line-height, inherit);
-    font-style: var(--customify-typo-header-button-font-style, normal);
+    text-decoration: none;
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
     &:hover {
         // State-layer hover (matches Blocksify): translucent 13%-of-text overlay
         // on the live background — background-agnostic, adapts to the secondary

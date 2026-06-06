@@ -1041,6 +1041,34 @@ class Customify_Customizer_Auto_CSS
 	}
 
 	/**
+	 * Whether a typography field emits :root CSS variables (vars mode)
+	 * or selector-scoped literal CSS (legacy). Vars are restricted to
+	 * fields registered under the Global Typography panel — sections
+	 * `global_typography_base`, `global_typography_site_tt`, and
+	 * `global_typography_content`. Per-component typography (header
+	 * builder items, footer copyright, blog read-more, breadcrumb,
+	 * WC cart) keeps the legacy selector-scoped output because their
+	 * SCSS layer doesn't carry generic consumer rules.
+	 *
+	 * Sites can override the decision with the
+	 * `customify/typography/field_uses_vars` filter — return false
+	 * to force a specific field through the legacy path, or true to
+	 * opt a non-global field into vars (requires adding an SCSS
+	 * consumer at the matching selector).
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param array $field  The field config (must include `section`).
+	 * @return bool
+	 */
+	public function typography_field_uses_vars($field)
+	{
+		$section   = isset($field['section']) ? (string) $field['section'] : '';
+		$is_global = ('' !== $section && 0 === strpos($section, 'global_typography_'));
+		return (bool) apply_filters('customify/typography/field_uses_vars', $is_global, $field);
+	}
+
+	/**
 	 * Build the CSS custom-property name for a typography setting +
 	 * property pair. Strips well-known prefixes/suffixes so the name
 	 * stays short and predictable, then kebabs the remainder.
@@ -1216,9 +1244,14 @@ class Customify_Customizer_Auto_CSS
 
 		$devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
 
-		if ($this->legacy_typography_enabled()) {
-			// Legacy: selector-scoped literal CSS. Preserved verbatim
-			// for sites that opted back in via the filter.
+		// Vars mode is opt-in per field — only fields in the Global
+		// Typography panel sections emit :root vars. Per-component
+		// typography (header builder items, footer copyright, etc.)
+		// falls through to selector-scoped output because its SCSS
+		// layer doesn't carry generic consumer rules. The global
+		// legacy filter (customify/typography/legacy_output) overrides
+		// everything.
+		if ($this->legacy_typography_enabled() || ! $this->typography_field_uses_vars($field)) {
 			foreach ($devices_css as $device => $els) {
 				if (!empty($els)) {
 					$this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";

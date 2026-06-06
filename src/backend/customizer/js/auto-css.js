@@ -85,6 +85,17 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
     };
 
     /**
+     * Mirror of PHP typography_field_uses_vars(). Vars are restricted
+     * to fields whose `section` starts with `global_typography_` — the
+     * three sections of the Global Typography panel (base, site_tt,
+     * content). Per-component typography stays in legacy mode.
+     */
+    CustomifyAutoCSS.prototype.typography_field_uses_vars = function( field ){
+        var section = ( field && field.section ) ? String( field.section ) : '';
+        return section.indexOf( 'global_typography_' ) === 0;
+    };
+
+    /**
      * Mirror of PHP typography_var_name(). Keep the strip rule in
      * lockstep with class-customizer-auto-css.php typography_var_name().
      */
@@ -1470,7 +1481,11 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             }
         }
 
-        if ( that.legacy_typography_enabled() ) {
+        // Vars mode is opt-in per field — only fields in the Global
+        // Typography panel sections emit :root vars. Per-component
+        // typography falls through to selector-scoped output. The
+        // global legacy filter overrides everything.
+        if ( that.legacy_typography_enabled() || ! that.typography_field_uses_vars( field ) ) {
             _.each( devices_css, function( els, device ){
                 that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
             } );

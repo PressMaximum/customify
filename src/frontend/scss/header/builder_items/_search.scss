@@ -87,9 +87,6 @@
 		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
 		border-radius: 2px;
 		height: 100%;
-		// Consumes vars emitted by inc/customizer/configs/header/search-box.php
-		// (search_box_font_size — a typography field despite the legacy name).
-		@include customify-typography('search-box');
 	}
 	.search-field {
 		display: block;
@@ -100,9 +97,6 @@
 		// when the input has a default UA border or when other rules add
 		// border width/style — preserves the Border token wiring.
 		border-color: $color_border;
-		// Consumes vars emitted by inc/customizer/configs/header/search-icon.php
-		// (search_icon_modal_font_size — typography for the modal search input).
-		@include customify-typography('search-icon');
 
 		&:focus {
 			background-color: transparent;
