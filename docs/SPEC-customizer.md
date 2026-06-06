@@ -118,7 +118,7 @@ add_filter( 'customify/customizer/config', function ( $items ) {
     $items[] = array(
         'name'     => 'my_feature_section',
         'type'     => 'section',
-        'panel'    => 'styling_panel',
+        'panel'    => 'typography_panel',
         'title'    => __( 'My Feature', 'customify' ),
         'priority' => 50,
     );
@@ -158,11 +158,11 @@ No code in `functions.php`, no manual `add_setting()` calls, no separate CSS fil
 
 ```php
 array(
-    'name'        => 'styling_panel',
+    'name'        => 'example_panel',
     'type'        => 'panel',
-    'title'       => __( 'Styling', 'customify' ),
+    'title'       => __( 'Example', 'customify' ),
     'priority'    => 22,
-    'description' => __( 'Colors, typography, layouts', 'customify' ),  // optional
+    'description' => __( 'My custom panel', 'customify' ),  // optional
 )
 ```
 
@@ -172,7 +172,7 @@ array(
 array(
     'name'     => 'global_styling',
     'type'     => 'section',
-    'panel'    => 'styling_panel',         // required to nest inside a panel
+    'panel'    => 'example_panel',         // required to nest inside a panel
     'title'    => __( 'Global Colors', 'customify' ),
     'priority' => 10,
 )

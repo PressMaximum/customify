@@ -296,12 +296,14 @@ function customify_dashboard_v2_boot_data(): array {
 				array( 'autofocus' => array( 'panel' => 'footer_settings' ) ),
 				$customize
 			),
+			// Styling panel retired; deep-link to the top-level "Colors" section
+			// (inc/customizer/configs/colors.php) which now owns styling/colors.
 			'styling'        => add_query_arg(
-				array( 'autofocus' => array( 'panel' => 'styling_panel' ) ),
+				array( 'autofocus' => array( 'section' => 'customify_colors' ) ),
 				$customize
 			),
 			'typography'     => add_query_arg(
-				array( 'autofocus' => array( 'panel' => 'typography_panel' ) ),
+				array( 'autofocus' => array( 'section' => 'typography_panel' ) ),
 				$customize
 			),
 			'sidebar'        => add_query_arg(

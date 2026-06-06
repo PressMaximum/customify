@@ -585,10 +585,10 @@ inc/
         │                                       dividers + 6 slot pickers +
         │                                       relocated link/background/
         │                                       override fields
-        ├── styling.php                   MODIFIED — stripped to just the
-        │                                            styling_panel
-        │                                            registration (Typography/
-        │                                            Layouts still use it)
+        ├── styling.php                   MODIFIED — styling_panel registration
+        │                                            removed (panel is empty after
+        │                                            the colors move); callback
+        │                                            kept as a no-op stub
         └── background.php                MODIFIED — class stub with no-op
                                                      config() (3 composites
                                                      moved to colors.php;

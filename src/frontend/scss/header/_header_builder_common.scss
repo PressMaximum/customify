@@ -206,7 +206,11 @@
 		flex-direction: column;
 		justify-content: center;
 		z-index: 5;
-		margin-top: var(--transparent-header-height, 50px);
+		// Fallback 0 (not 50px): the var is only set by theme.js when the header
+		// is transparent (gated on body.is-header-transparent). On normal opaque
+		// headers the var is unset, so a non-zero fallback would push the cover
+		// content down and break vertical centering.
+		margin-top: var(--transparent-header-height, 0px);
 		padding: 1em 30px;
 		@include for_device(desktop) {
 			min-height: 300px;

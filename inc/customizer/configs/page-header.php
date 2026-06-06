@@ -149,7 +149,7 @@ class Customify_Page_Header {
 			),
 		);
 
-		$post_types = Customify()->get_post_types( false );
+		$post_types = customify_get_content_post_types();
 		if ( count( $post_types ) > 0 ) {
 			foreach ( $post_types as $pt => $label ) {
 				$display_fields[] = array(
@@ -806,14 +806,20 @@ class Customify_Page_Header {
 
 		if ( is_tax() ) {
 			$queried_object = get_queried_object();
-			if ( isset( $display[ $queried_object->taxonomy ] ) ) {
-				$args['display'] = $display['product_tag'];
+			$tax            = $queried_object->taxonomy;
+			// Use the queried taxonomy's OWN slice. Previously this assigned
+			// $display['product_tag'] for any taxonomy, and assigned a title
+			// string to ['display'] — a bug that stopped custom-taxonomy page
+			// headers from working. Guarded on non-empty so an unset slice falls
+			// through to the is_archive() defaults resolved above.
+			if ( ! empty( $display[ $tax ] ) ) {
+				$args['display'] = $display[ $tax ];
 			}
-			if ( isset( $titles[ $queried_object->taxonomy ] ) ) {
-				$args['display'] = $titles[ $queried_object->taxonomy ];
+			if ( isset( $titles[ $tax ] ) && '' !== $titles[ $tax ] ) {
+				$args['title'] = $titles[ $tax ];
 			}
-			if ( isset( $taglines[ $queried_object->taxonomy ] ) ) {
-				$args['tagline'] = $taglines[ $queried_object->taxonomy ];
+			if ( isset( $taglines[ $tax ] ) && '' !== $taglines[ $tax ] ) {
+				$args['tagline'] = $taglines[ $tax ];
 			}
 			$args['_page'] = 'tax_' . $queried_object->taxonomy;
 		}
