@@ -1232,17 +1232,21 @@ class Customify_Customizer_Auto_CSS
 			return;
 		}
 
-		// Vars mode (default): emit each property as a :root custom
-		// property, bucketed per device. SCSS layer consumes via
-		// var(--customify-typo-..., fallback) at the same selectors
-		// PHP used to target.
+		// Vars mode (default): accumulate the raw `--var: value;` lines
+		// into the device bucket. render_css() wraps each non-empty
+		// bucket in a single :root { ... } block so multiple typography
+		// fields collapse into one rule per device instead of one rule
+		// per field.
 		foreach ($devices_css as $device => $els) {
 			if (empty($els)) {
 				continue;
 			}
 			$vars = $this->code_to_root_vars($field['name'], $els);
 			if (!empty($vars)) {
-				$this->css_root[$device] .= ":root {\r\n\t" . join("\r\n\t", $vars) . "\r\n}";
+				if ('' !== $this->css_root[$device]) {
+					$this->css_root[$device] .= "\r\n\t";
+				}
+				$this->css_root[$device] .= join("\r\n\t", $vars);
 			}
 		}
 
@@ -1250,7 +1254,10 @@ class Customify_Customizer_Auto_CSS
 		if (!empty($code)) {
 			$vars = $this->code_to_root_vars($field['name'], $code);
 			if (!empty($vars)) {
-				$this->css_root['all'] .= ":root {\r\n\t" . join("\r\n\t", $vars) . "\r\n}";
+				if ('' !== $this->css_root['all']) {
+					$this->css_root['all'] .= "\r\n\t";
+				}
+				$this->css_root['all'] .= join("\r\n\t", $vars);
 			}
 		}
 	}
@@ -1565,11 +1572,13 @@ class Customify_Customizer_Auto_CSS
 		$css_code = '';
 
 		// Flush :root custom-property buckets first so the literal CSS
-		// downstream can refer to them via var(). Per-device buckets
-		// get wrapped in the matching media query template.
+		// downstream can refer to them via var(). Each non-empty device
+		// bucket gets wrapped in a single :root { ... } block — many
+		// typography fields collapse into one rule per device — and the
+		// whole block is wrapped in the matching media query template.
 		$i = 0;
-		foreach ($this->css_root as $device => $code) {
-			if ('' === $code) {
+		foreach ($this->css_root as $device => $vars_chunk) {
+			if ('' === $vars_chunk) {
 				$i++;
 				continue;
 			}
@@ -1577,7 +1586,8 @@ class Customify_Customizer_Auto_CSS
 			if ($i > 0) {
 				$new_line = "\r\n/* Typography vars for {$device} */\r\n";
 			}
-			$css_code .= $new_line . sprintf($this->media_queries[$device], $code) . "\r\n";
+			$root_block = ":root {\r\n\t" . $vars_chunk . "\r\n}";
+			$css_code  .= $new_line . sprintf($this->media_queries[$device], $root_block) . "\r\n";
 			$i++;
 		}
 

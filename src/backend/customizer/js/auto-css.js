@@ -245,11 +245,14 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
 
         var css_code = '';
 
-        // Flush :root typography variable buckets first, wrapped in
-        // the same media query template as the literal CSS below.
+        // Flush :root typography variable buckets first. Each device's
+        // accumulated `--var: value;` lines get wrapped in a single
+        // :root { ... } block, then wrapped in the matching media
+        // query template — multiple typography fields collapse into
+        // one rule per device.
         var ri = 0;
-        _.each( that.css_root, function( code, device ){
-            if ( code === '' ) {
+        _.each( that.css_root, function( vars_chunk, device ){
+            if ( vars_chunk === '' ) {
                 ri++;
                 return;
             }
@@ -257,7 +260,8 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             if ( ri > 0 ) {
                 new_line = "\r\n\r\n";
             }
-            css_code += new_line + that.media_queries[ device ].replace( /%s/g, code ) + "\r\n";
+            var root_block = ":root {\r\n\t" + vars_chunk + "\r\n}";
+            css_code += new_line + that.media_queries[ device ].replace( /%s/g, root_block ) + "\r\n";
             ri++;
         } );
 
@@ -1474,17 +1478,26 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             return;
         }
 
-        // Vars mode: emit each property as a :root custom property.
+        // Vars mode: accumulate raw `--var: value;` lines into the
+        // per-device bucket. The flush step in run() wraps each
+        // non-empty bucket in a single :root { ... } block so multiple
+        // typography fields collapse into one rule per device.
         _.each( devices_css, function( els, device ){
             var vars = that.code_to_root_vars( field.name, els );
             if ( vars.length ) {
-                that.css_root[ device ] += " :root {\r\n\t" + vars.join( "\r\n\t" ) + "\r\n}";
+                if ( that.css_root[ device ] !== '' ) {
+                    that.css_root[ device ] += "\r\n\t";
+                }
+                that.css_root[ device ] += vars.join( "\r\n\t" );
             }
         } );
 
         var allVars = that.code_to_root_vars( field.name, code );
         if ( allVars.length ) {
-            that.css_root[ 'all' ] += " :root {\r\n\t" + allVars.join( "\r\n\t" ) + "\r\n}";
+            if ( that.css_root[ 'all' ] !== '' ) {
+                that.css_root[ 'all' ] += "\r\n\t";
+            }
+            that.css_root[ 'all' ] += allVars.join( "\r\n\t" );
         }
     };
 
