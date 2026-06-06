@@ -20,9 +20,9 @@
 
 body {
     color: $color_text;
-    font-family: $font_main;
-    font-weight: 400;
-    line-height: 1.618;
+    font-family: var(--customify-typo-base-p-font-family, #{$font_main});
+    font-weight: var(--customify-typo-base-p-font-weight, 400);
+    line-height: var(--customify-typo-base-p-line-height, 1.618);
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -43,8 +43,8 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-weight: 400;
-    font-family: $font_main;
+    font-weight: var(--customify-typo-base-heading-font-weight, 400);
+    font-family: var(--customify-typo-base-heading-font-family, #{$font_main});
     margin: 0 0 ms(-3);
     color: $color_heading;
     clear: both;
@@ -52,20 +52,20 @@ h6,
 
 h1,
 .h1 {
-    font-size: 2.42em;
-    line-height: 1.216;
+    font-size: var(--customify-typo-heading-h1-font-size, 2.42em);
+    line-height: var(--customify-typo-heading-h1-line-height, 1.216);
     @include for_device(tablet) {
-        font-size: 2.1em;
+        font-size: var(--customify-typo-heading-h1-font-size, 2.1em);
     }
     @include for_device(mobile) {
-        font-size: 1.8em;
+        font-size: var(--customify-typo-heading-h1-font-size, 1.8em);
     }
 }
 
 h2,
 .h2 {
-    font-size: 2.1em;
-    line-height: 1.216;
+    font-size: var(--customify-typo-heading-h2-font-size, 2.1em);
+    line-height: var(--customify-typo-heading-h2-line-height, 1.216);
     &+h3 {
         border-top: 1px solid $color_border;
         padding-top: ms(-3);
@@ -77,21 +77,21 @@ h2,
         border-top-color: $color_border;
     }
     @include for_device(tablet) {
-        font-size: 1.9em;
+        font-size: var(--customify-typo-heading-h2-font-size, 1.9em);
     }
     @include for_device(mobile) {
-        font-size: 1.7em;
+        font-size: var(--customify-typo-heading-h2-font-size, 1.7em);
     }
 }
 
 h3,
 .h3 {
-    font-size: ms(2);
+    font-size: var(--customify-typo-heading-h3-font-size, ms(2));
 }
 
 h4,
 .h4 {
-    font-size: ms(1);
+    font-size: var(--customify-typo-heading-h4-font-size, ms(1));
 }
 
 

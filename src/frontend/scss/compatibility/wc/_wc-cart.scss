@@ -1,3 +1,12 @@
+// Header builder cart item — consumes vars emitted by
+// inc/compatibility/woocommerce/config/header/cart.php
+// (wc_cart_typography). PHP previously targeted these
+// selectors with selector-scoped CSS; in vars mode the
+// consumers live here.
+.builder-header-cart-item {
+	@include customify-typography('wc-cart');
+}
+
 // Mini cart
 /**
  * Cart sidebar

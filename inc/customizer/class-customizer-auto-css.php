@@ -50,6 +50,19 @@ class Customify_Customizer_Auto_CSS
 	);
 
 	/**
+	 * CSS variables emitted at :root scope, bucketed per device so each
+	 * bucket can be wrapped in its own media query at flush time.
+	 *
+	 * @var array
+	 */
+	private $css_root = array(
+		'all'     => '',
+		'desktop' => '',
+		'tablet'  => '',
+		'mobile'  => '',
+	);
+
+	/**
 	 * Default shadow fields
 	 *
 	 * @var array
@@ -1015,6 +1028,63 @@ class Customify_Customizer_Auto_CSS
 		return join("\r\n\t", $css);
 	}
 
+	/**
+	 * Whether the legacy selector-scoped typography output is enabled.
+	 * Default false (vars mode). Sites can re-enable by returning true.
+	 *
+	 * @since 0.5.0
+	 * @return bool
+	 */
+	public function legacy_typography_enabled()
+	{
+		return (bool) apply_filters('customify/typography/legacy_output', false);
+	}
+
+	/**
+	 * Build the CSS custom-property name for a typography setting +
+	 * property pair. Strips well-known prefixes/suffixes so the name
+	 * stays short and predictable, then kebabs the remainder.
+	 *
+	 *   global_typography_base_p, font-size
+	 *     → --customify-typo-base-p-font-size
+	 *   header_menus_typography, line-height
+	 *     → --customify-typo-header-menus-line-height
+	 *   blog_default_more_typography, font-family
+	 *     → --customify-typo-blog-default-more-font-family
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param string $setting_name  Raw Customizer setting name.
+	 * @param string $property      Kebab-case CSS property.
+	 * @return string
+	 */
+	public function typography_var_name($setting_name, $property)
+	{
+		$name = (string) $setting_name;
+
+		if (0 === strpos($name, 'global_typography_')) {
+			$name = substr($name, strlen('global_typography_'));
+		}
+
+		$suffix_strips = array(
+			'_modal_font_size',
+			'_typography',
+			'_font_size',
+			'_typo',
+		);
+		foreach ($suffix_strips as $suffix) {
+			$len = strlen($suffix);
+			if (strlen($name) > $len && substr($name, -$len) === $suffix) {
+				$name = substr($name, 0, -$len);
+				break;
+			}
+		}
+
+		$name = str_replace('_', '-', $name);
+
+		return '--customify-typo-' . $name . '-' . $property;
+	}
+
 	function typography($field)
 	{
 		$values = Customify()->get_setting($field['name']);
@@ -1145,16 +1215,74 @@ class Customify_Customizer_Auto_CSS
 		}
 
 		$devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
+
+		if ($this->legacy_typography_enabled()) {
+			// Legacy: selector-scoped literal CSS. Preserved verbatim
+			// for sites that opted back in via the filter.
+			foreach ($devices_css as $device => $els) {
+				if (!empty($els)) {
+					$this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
+				}
+			}
+
+			$code = array_filter($code);
+			if (!empty($code)) {
+				$this->css['all'] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $code) . "\r\n}";
+			}
+			return;
+		}
+
+		// Vars mode (default): emit each property as a :root custom
+		// property, bucketed per device. SCSS layer consumes via
+		// var(--customify-typo-..., fallback) at the same selectors
+		// PHP used to target.
 		foreach ($devices_css as $device => $els) {
-			if (!empty($els)) {
-				$this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
+			if (empty($els)) {
+				continue;
+			}
+			$vars = $this->code_to_root_vars($field['name'], $els);
+			if (!empty($vars)) {
+				$this->css_root[$device] .= ":root {\r\n\t" . join("\r\n\t", $vars) . "\r\n}";
 			}
 		}
 
 		$code = array_filter($code);
 		if (!empty($code)) {
-			$this->css['all'] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $code) . "\r\n}";
+			$vars = $this->code_to_root_vars($field['name'], $code);
+			if (!empty($vars)) {
+				$this->css_root['all'] .= ":root {\r\n\t" . join("\r\n\t", $vars) . "\r\n}";
+			}
 		}
+	}
+
+	/**
+	 * Convert an array of literal "property: value;" CSS lines (the
+	 * shape typography() builds for legacy emit) into custom-property
+	 * lines scoped to a typography setting. Property name is parsed
+	 * from each line so we don't need to special-case the array keys.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param string $setting_name  The Customizer setting name.
+	 * @param array  $code_map      Map of arbitrary keys → "prop: val;" CSS lines.
+	 * @return array  List of "--customify-typo-…-prop: val;" lines.
+	 */
+	private function code_to_root_vars($setting_name, $code_map)
+	{
+		$vars = array();
+		foreach ((array) $code_map as $css_line) {
+			$css_line = trim($css_line);
+			if ('' === $css_line) {
+				continue;
+			}
+			if (!preg_match('/^([a-z-]+)\s*:\s*(.+?);?\s*$/i', $css_line, $m)) {
+				continue;
+			}
+			$property = strtolower($m[1]);
+			$value    = trim($m[2]);
+			$vars[]   = $this->typography_var_name($setting_name, $property) . ': ' . $value . ';';
+		}
+		return $vars;
 	}
 
 	/**
@@ -1435,7 +1563,25 @@ class Customify_Customizer_Auto_CSS
 	{
 		$this->loop_fields($fields);
 		$css_code = '';
-		$i        = 0;
+
+		// Flush :root custom-property buckets first so the literal CSS
+		// downstream can refer to them via var(). Per-device buckets
+		// get wrapped in the matching media query template.
+		$i = 0;
+		foreach ($this->css_root as $device => $code) {
+			if ('' === $code) {
+				$i++;
+				continue;
+			}
+			$new_line = '';
+			if ($i > 0) {
+				$new_line = "\r\n/* Typography vars for {$device} */\r\n";
+			}
+			$css_code .= $new_line . sprintf($this->media_queries[$device], $code) . "\r\n";
+			$i++;
+		}
+
+		$i = 0;
 		foreach ($this->css as $device => $code) {
 			$new_line = '';
 			if ($i > 0) {

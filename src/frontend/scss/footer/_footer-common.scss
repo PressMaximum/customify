@@ -184,7 +184,16 @@
 }
 
 .footer-copyright {
-	font-size: 0.875em;
+	font-size: var(--customify-typo-footer-copyright-font-size, 0.875em);
+}
+
+// Header/footer builder item for the copyright slot. Consumes the
+// typography vars emitted by inc/customizer/configs/footer/copyright.php
+// (footer_copyright_typography). PHP previously targeted these selectors
+// with selector-scoped CSS; in vars mode the consumers live here.
+.builder-item--footer_copyright,
+.builder-item--footer_copyright p {
+	@include customify-typography('footer-copyright');
 }
 
 // Footer grid layout.

@@ -37,6 +37,13 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         mobile: ''
     };
 
+    CustomifyAutoCSS.prototype.css_root = {
+        all: '',
+        desktop: '',
+        tablet : '',
+        mobile: ''
+    };
+
     CustomifyAutoCSS.prototype.box_shadow_fields = {
         color:  null,
         x:  0,
@@ -56,6 +63,74 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             tablet : '',
             mobile: ''
         };
+        this.css_root = {
+            all: '',
+            desktop: '',
+            tablet : '',
+            mobile: ''
+        };
+    };
+
+    /**
+     * Mirror of PHP Customify_Customizer_Auto_CSS::legacy_typography_enabled().
+     * Reads the localized flag injected by wp_localize_script — see
+     * Customify_Customizer::live_preview_data() (PHP side).
+     */
+    CustomifyAutoCSS.prototype.legacy_typography_enabled = function(){
+        if ( typeof Customify_Preview_Config !== 'undefined'
+            && ! _.isUndefined( Customify_Preview_Config.legacy_typography_output ) ) {
+            return !! Customify_Preview_Config.legacy_typography_output;
+        }
+        return false;
+    };
+
+    /**
+     * Mirror of PHP typography_var_name(). Keep the strip rule in
+     * lockstep with class-customizer-auto-css.php typography_var_name().
+     */
+    CustomifyAutoCSS.prototype.typography_var_name = function( setting_name, property ){
+        var name = String( setting_name || '' );
+        var prefix = 'global_typography_';
+        if ( name.indexOf( prefix ) === 0 ) {
+            name = name.substr( prefix.length );
+        }
+        var suffixes = [ '_modal_font_size', '_typography', '_font_size', '_typo' ];
+        for ( var i = 0; i < suffixes.length; i++ ) {
+            var s = suffixes[ i ];
+            if ( name.length > s.length && name.substr( -s.length ) === s ) {
+                name = name.substr( 0, name.length - s.length );
+                break;
+            }
+        }
+        name = name.replace( /_/g, '-' );
+        return '--customify-typo-' + name + '-' + property;
+    };
+
+    /**
+     * Convert a map of "property: value;" CSS lines into custom-property
+     * lines scoped to the given typography setting. Mirrors the PHP
+     * code_to_root_vars() helper.
+     */
+    CustomifyAutoCSS.prototype.code_to_root_vars = function( setting_name, code_map ){
+        var vars = [];
+        var that = this;
+        _.each( code_map, function( css_line ){
+            if ( ! _.isString( css_line ) ) {
+                return;
+            }
+            var line = css_line.replace( /^\s+|\s+$/g, '' );
+            if ( line === '' ) {
+                return;
+            }
+            var m = line.match( /^([a-z-]+)\s*:\s*(.+?);?\s*$/i );
+            if ( ! m ) {
+                return;
+            }
+            var property = m[1].toLowerCase();
+            var value = m[2].replace( /^\s+|\s+$/g, '' );
+            vars.push( that.typography_var_name( setting_name, property ) + ': ' + value + ';' );
+        } );
+        return vars;
     };
 
     CustomifyAutoCSS.prototype.encodeValue =function( value ){
@@ -169,6 +244,23 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         that.loop_fields( Customify_Preview_Config.fields );
 
         var css_code = '';
+
+        // Flush :root typography variable buckets first, wrapped in
+        // the same media query template as the literal CSS below.
+        var ri = 0;
+        _.each( that.css_root, function( code, device ){
+            if ( code === '' ) {
+                ri++;
+                return;
+            }
+            var new_line = '';
+            if ( ri > 0 ) {
+                new_line = "\r\n\r\n";
+            }
+            css_code += new_line + that.media_queries[ device ].replace( /%s/g, code ) + "\r\n";
+            ri++;
+        } );
+
         var i = 0;
         _.each( that.css, function( code, device ){
             var new_line = '';
@@ -1374,11 +1466,26 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             }
         }
 
+        if ( that.legacy_typography_enabled() ) {
+            _.each( devices_css, function( els, device ){
+                that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
+            } );
+            that.css['all'] += " "+field['selector']+" {\r\n\t"+that.join( code, "\r\n\t" )+"\r\n}";
+            return;
+        }
+
+        // Vars mode: emit each property as a :root custom property.
         _.each( devices_css, function( els, device ){
-            that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
+            var vars = that.code_to_root_vars( field.name, els );
+            if ( vars.length ) {
+                that.css_root[ device ] += " :root {\r\n\t" + vars.join( "\r\n\t" ) + "\r\n}";
+            }
         } );
 
-        that.css['all'] += " "+field['selector']+" {\r\n\t"+that.join( code, "\r\n\t" )+"\r\n}";
+        var allVars = that.code_to_root_vars( field.name, code );
+        if ( allVars.length ) {
+            that.css_root[ 'all' ] += " :root {\r\n\t" + allVars.join( "\r\n\t" ) + "\r\n}";
+        }
     };
 
     var CustomifyAutoCSSInit = new CustomifyAutoCSS();

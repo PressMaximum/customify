@@ -58,6 +58,7 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 | `customify/customizer/auto_css` | filter | `(array $css_lines, $field, Customify_Customizer_Auto_CSS $instance)` | [`inc/customizer/class-customizer-auto-css.php:790`](../inc/customizer/class-customizer-auto-css.php) |
 | `customify/auto-css` | filter | `string $css` — final assembled CSS before `wp_add_inline_style` | [`inc/customizer/class-customizer-auto-css.php:1261`](../inc/customizer/class-customizer-auto-css.php) |
 | `customify/styling/<field>` | filter | `string $css` — append CSS template to a specific field (e.g. `customify/styling/primary-color`) | dynamic — emitted per-field by auto-CSS |
+| `customify/typography/legacy_output` | filter | `bool` (default `false`) — return `true` to revert typography emit to pre-`0.5.0` selector-scoped CSS instead of `:root { --customify-typo-*: … }` vars. Resolved value is also localized to `Customify_Preview_Config.legacy_typography_output` for the JS live preview. | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `legacy_typography_enabled()` |
 
 Example — extend the primary color CSS targets without forking the config file:
 
@@ -65,6 +66,12 @@ Example — extend the primary color CSS targets without forking the config file
 add_filter( 'customify/styling/primary-color', function ( $css ) {
     return $css . '.my-element { color: {{value}}; }';
 } );
+```
+
+Example — re-enable legacy typography output (selector-scoped CSS) site-wide; useful when child-theme overrides depend on the pre-`0.5.0` cascade. See [`SPEC-typography.md`](SPEC-typography.md) for full details:
+
+```php
+add_filter( 'customify/typography/legacy_output', '__return_true' );
 ```
 
 ### 2.3 Fonts & icons

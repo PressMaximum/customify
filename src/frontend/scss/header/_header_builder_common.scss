@@ -119,8 +119,15 @@
 	border-top-color: $color_border;
 	border-bottom: 1px solid $color_border;
 	color: $color_meta;
-	line-height: 1.6;
+	line-height: var(--customify-typo-breadcrumb-line-height, 1.6);
 	background: #fff;
+	font-family: var(--customify-typo-breadcrumb-font-family, inherit);
+	font-weight: var(--customify-typo-breadcrumb-font-weight, inherit);
+	font-size: var(--customify-typo-breadcrumb-font-size, inherit);
+	letter-spacing: var(--customify-typo-breadcrumb-letter-spacing, normal);
+	text-decoration: var(--customify-typo-breadcrumb-text-decoration, none);
+	text-transform: var(--customify-typo-breadcrumb-text-transform, none);
+	font-style: var(--customify-typo-breadcrumb-font-style, normal);
 	.page-breadcrumb-inner {
 		width: 100%;
 	}

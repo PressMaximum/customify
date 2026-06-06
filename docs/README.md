@@ -75,6 +75,7 @@ The big picture — request flow + which subsystem owns which path. Deep-dive ea
 | webpack entries, asset.php sidecar, CSS handle | [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md) |
 | Customizer config + auto-CSS + JS contexts | [`SPEC-customizer.md`](SPEC-customizer.md) |
 | 6-slot color palette + `:root` token pipeline | [`SPEC-customizer-colors.md`](SPEC-customizer-colors.md) |
+| Typography `--customify-typo-*` vars + legacy filter | [`SPEC-typography.md`](SPEC-typography.md) |
 | Header / Footer Builder V2 (storage + render + items) | [`SPEC-header-footer-builder.md`](SPEC-header-footer-builder.md) |
 | Transparent header conditional + Pro takeover | [`SPEC-header-transparent.md`](SPEC-header-transparent.md) |
 | `theme.json`, block editor CSS bridge, patterns | [`SPEC-block-editor.md`](SPEC-block-editor.md) |
@@ -95,6 +96,7 @@ Each SPEC owns one subsystem end-to-end: storage shape, render pipeline, design 
 | [`SPEC-asset-pipeline.md`](SPEC-asset-pipeline.md) | webpack, `index.asset.php` pattern, CSS handle, `src/` vs `build/` vs `assets/` |
 | [`SPEC-customizer.md`](SPEC-customizer.md) | Customizer architecture, config-driven registration, auto-CSS, fonts, controls |
 | [`SPEC-customizer-colors.md`](SPEC-customizer-colors.md) | 6-slot palette, `:root` token pipeline, `theme.json` sync, picker UI |
+| [`SPEC-typography.md`](SPEC-typography.md) | Typography `:root` vars pipeline (`--customify-typo-*`), legacy escape hatch, mixin |
 | [`SPEC-header-footer-builder.md`](SPEC-header-footer-builder.md) | Builder V2 storage, render pipeline, item registration, column settings |
 | [`SPEC-header-transparent.md`](SPEC-header-transparent.md) | Transparent header conditional chain, per-page metabox, Pro handoff |
 | [`SPEC-block-editor.md`](SPEC-block-editor.md) | `theme.json` sync, `Customify_Editor` CSS injection, block styles, patterns |
