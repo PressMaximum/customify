@@ -336,7 +336,8 @@ class Customify_Dashboard
 			),
 			array(
 				'label' => __('Typography', 'customify'),
-				'url'   => add_query_arg(array('autofocus' => array('panel' => 'typography_panel')), $url),
+				// Typography is now a top-level section (was a panel); deep-link to it.
+				'url'   => add_query_arg(array('autofocus' => array('section' => 'typography_panel')), $url),
 			),
 			array(
 				'label' => __('Sidebar Settings', 'customify'),

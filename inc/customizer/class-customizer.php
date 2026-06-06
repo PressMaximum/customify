@@ -1347,8 +1347,11 @@ class  Customify_Customizer {
 					'footer_settings',
 				),
 			),
+			// Group KEY stays `post_types` — it's a documented
+			// `customify/customizer/panel_groups` extension point (companion plugins
+			// append panels to it), so only the display title changed to "Content".
 			'post_types'      => array(
-				'title'    => __( 'Post Types', 'customify' ),
+				'title'    => __( 'Content', 'customify' ),
 				'priority' => 350,
 				'panels'   => array(
 					'blog_panel',
@@ -1357,21 +1360,29 @@ class  Customify_Customizer {
 					'portfolio_panel',
 				),
 			),
-			'core_plugins'    => array(
-				'title'    => __( 'Core & Plugins', 'customify' ),
-				'priority' => 1000,
+			// Theme + plugin integration settings, sitting above the WP-core group.
+			'plugins'         => array(
+				'title'    => __( 'Plugins', 'customify' ),
+				'priority' => 600,
 				'panels'   => array(
-					// Compatibility is a theme panel but conceptually belongs with the
-					// plugin-integration settings, so it heads the Core & Plugins group.
-					'compatibility_panel',
 					// WooCommerce registers its own panel (id `woocommerce`) OUTSIDE
-					// Customify's config, so register_panel_groups() would otherwise
-					// bump it +2000 to the bottom of the foreign zone. Listing it here
-					// pins it directly under Compatibility; the same method now exempts
-					// grouped panels from that bump. Harmless when WC is inactive (the
-					// panel simply doesn't exist).
+					// Customify's config; register_panel_groups() exempts grouped panels
+					// from the +2000 foreign bump, so it sits here cleanly. Absent (no-op)
+					// when WooCommerce is inactive — Compatibility still anchors the group.
 					'woocommerce',
+					// Compatibility is the theme's plugin-SUPPORT panel, so it belongs with
+					// the plugin integrations — not with the WP-core group.
+					'compatibility_panel',
 				),
+			),
+			// Key stays `core_plugins` (kept for any external panel_groups filter);
+			// title is now just "Core" — the WP-core items (Menus, Widgets, Homepage
+			// Settings, Additional CSS) get bumped into this zone. Compatibility +
+			// WooCommerce now live in the "Plugins" group above.
+			'core_plugins'    => array(
+				'title'    => __( 'Core', 'customify' ),
+				'priority' => 1000,
+				'panels'   => array(),
 			),
 		);
 

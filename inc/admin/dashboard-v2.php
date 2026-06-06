@@ -303,7 +303,7 @@ function customify_dashboard_v2_boot_data(): array {
 				$customize
 			),
 			'typography'     => add_query_arg(
-				array( 'autofocus' => array( 'panel' => 'typography_panel' ) ),
+				array( 'autofocus' => array( 'section' => 'typography_panel' ) ),
 				$customize
 			),
 			'sidebar'        => add_query_arg(

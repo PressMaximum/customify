@@ -327,6 +327,34 @@ if ( ! function_exists( 'customify_get_all_image_sizes' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_get_content_post_types' ) ) {
+	/**
+	 * Custom post types that warrant per-type Customizer settings (sidebar layout,
+	 * Page Header display/title/tagline).
+	 *
+	 * Tightens Customify()->get_post_types( false ) — which only filters
+	 * publicly_queryable + non-builtin, too loose — to types with a real front-end
+	 * presence: a public archive ( has_archive ) OR shown in nav menus
+	 * ( show_in_nav_menus ). Drops utility CPTs that are merely publicly_queryable
+	 * with no archive and hidden from menus (e.g. the Pro Hooks store
+	 * `customify_hook`) — they have no browsable page, so a per-type control like
+	 * "Single Customify Hook" sidebar would only be noise.
+	 *
+	 * @return array<string, array{name:string, singular_name:string}>
+	 */
+	function customify_get_content_post_types() {
+		$post_types = Customify()->get_post_types( false );
+		foreach ( $post_types as $pt => $label ) {
+			$obj = get_post_type_object( $pt );
+			if ( ! $obj || ! ( $obj->has_archive || $obj->show_in_nav_menus ) ) {
+				unset( $post_types[ $pt ] );
+			}
+		}
+
+		return $post_types;
+	}
+}
+
 if ( ! function_exists( 'customify_get_layout' ) ) {
 	/**
 	 * Get the layout for the current page from Customizer setting or individual page/post.

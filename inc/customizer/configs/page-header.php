@@ -149,7 +149,7 @@ class Customify_Page_Header {
 			),
 		);
 
-		$post_types = Customify()->get_post_types( false );
+		$post_types = customify_get_content_post_types();
 		if ( count( $post_types ) > 0 ) {
 			foreach ( $post_types as $pt => $label ) {
 				$display_fields[] = array(

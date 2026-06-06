@@ -252,7 +252,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 		);
 
-		$post_types = Customify()->get_post_types( false );
+		$post_types = customify_get_content_post_types();
 
 		if ( count( $post_types ) ) {
 			$config[] = array(
