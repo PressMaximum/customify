@@ -161,6 +161,23 @@ class Customify_Page_Header {
 					'choices'     => $choices,
 				);
 
+				// Per-CPT archive display. Only for types with a real archive;
+				// WooCommerce owns the `product` shop archive (the is_shop branch in
+				// get_settings()), so skip it. Empty value inherits the generic
+				// "archive" slice in the resolver, so sites that never set it are
+				// unchanged.
+				$pt_object = get_post_type_object( $pt );
+				if ( 'product' !== $pt && $pt_object && $pt_object->has_archive ) {
+					$display_fields[] = array(
+						'name'        => "{$pt}_archive",
+						'type'        => 'select',
+						'label'       => sprintf( __( 'Display on %s archive', 'customify' ), $label['singular_name'] ),
+						'description' => sprintf( __( 'Apply when viewing the %s archive', 'customify' ), $label['singular_name'] ),
+						'default'     => '',
+						'choices'     => $choices,
+					);
+				}
+
 				$taxonomy_filter_args = [
 					'show_in_nav_menus' => true,
 				];
@@ -802,6 +819,25 @@ class Customify_Page_Header {
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'archive';
 			$post_id         = 0;
+
+			// Per-CPT archive override (e.g. the Tours archive). Mirrors the
+			// is_tax() pattern below: only override the generic 'archive' slice
+			// when a per-type value is set, so sites that never set it are
+			// unchanged.
+			if ( is_post_type_archive() ) {
+				$pt = get_query_var( 'post_type' );
+				if ( is_array( $pt ) ) {
+					$pt = reset( $pt );
+				}
+				if ( ! $pt ) {
+					$queried = get_queried_object();
+					$pt      = ( $queried instanceof WP_Post_Type ) ? $queried->name : '';
+				}
+				if ( $pt && ! empty( $display[ "{$pt}_archive" ] ) ) {
+					$args['display'] = $display[ "{$pt}_archive" ];
+					$args['_page']   = 'archive_' . $pt;
+				}
+			}
 		}
 
 		if ( is_tax() ) {
