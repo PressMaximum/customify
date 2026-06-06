@@ -94,6 +94,24 @@ h4,
     font-size: var(--customify-typo-heading-h4-font-size, ms(1));
 }
 
+// h5/h6 have no theme-default font-size in legacy SCSS — they
+// inherited the browser default and PHP's selector-scoped emit
+// supplied the user-set value. In vars mode the consumer must
+// be explicit or the heading_h5 / heading_h6 Customizer fields
+// silently no-op. Fallback `inherit` keeps the pre-`0.5.0`
+// "no-override" behavior when the user hasn't saved a value.
+h5,
+.h5 {
+    font-size: var(--customify-typo-heading-h5-font-size, inherit);
+    line-height: var(--customify-typo-heading-h5-line-height, inherit);
+}
+
+h6,
+.h6 {
+    font-size: var(--customify-typo-heading-h6-font-size, inherit);
+    line-height: var(--customify-typo-heading-h6-line-height, inherit);
+}
+
 
 /* # Copy */
 
