@@ -383,6 +383,47 @@ if ( ! function_exists( 'customify_get_content_post_types' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_get_meta_support_post_types' ) ) {
+	/**
+	 * Post types that get the Customify per-post settings (the "Customify Page
+	 * Settings" metabox / block-editor panel: Content Layout, Page Title Layout,
+	 * Sidebar, Disable Elements).
+	 *
+	 * Broader than customify_get_content_post_types() — these settings affect a
+	 * singular front-end view, so the list keeps built-in `page` / `post` and any
+	 * public CPT with a viewable single. It only drops no-front-end utility CPTs:
+	 * `customify_hook` (the Pro Hooks store) is public + publicly_queryable but
+	 * has no browsable page, and the theme can't rely on how a given Pro version
+	 * flags it, so it is deny-listed; types flagged `exclude_from_search` (the
+	 * registering plugin's "not browsable content" signal) are dropped too.
+	 *
+	 * Render-safe: a post type omitted here only loses the editor UI; any saved
+	 * `_customify_*` meta is still read at render via get_post_meta.
+	 *
+	 * @return string[] Indexed array of post type slugs.
+	 */
+	function customify_get_meta_support_post_types() {
+		$post_types = get_post_types( array( 'public' => true ), 'names', 'and' );
+
+		$excluded = array( 'customify_hook' );
+		foreach ( $post_types as $pt ) {
+			$obj = get_post_type_object( $pt );
+			if ( ! $obj || in_array( $pt, $excluded, true ) || $obj->exclude_from_search ) {
+				unset( $post_types[ $pt ] );
+			}
+		}
+
+		/**
+		 * Filter the post types that receive the Customify per-post settings
+		 * metabox / block-editor panel. Add a CPT the heuristics dropped, or
+		 * remove one they kept.
+		 *
+		 * @param string[] $post_types Indexed array of post type slugs.
+		 */
+		return apply_filters( 'customify/meta_support_post_types', array_values( $post_types ) );
+	}
+}
+
 if ( ! function_exists( 'customify_get_layout' ) ) {
 	/**
 	 * Get the layout for the current page from Customizer setting or individual page/post.
