@@ -53,7 +53,9 @@ class Customify_Page_Settings {
 	 * Register every meta key with show_in_rest so the block editor can read/write them.
 	 */
 	public function register_meta() {
-		$post_types = get_post_types( array( 'public' => true ), 'names' );
+		$post_types = function_exists( 'customify_get_meta_support_post_types' )
+			? customify_get_meta_support_post_types()
+			: get_post_types( array( 'public' => true ), 'names' );
 
 		foreach ( $post_types as $post_type ) {
 			foreach ( $this->get_meta_keys() as $key ) {
@@ -98,6 +100,15 @@ class Customify_Page_Settings {
 		if ( function_exists( 'get_current_screen' ) ) {
 			$screen = get_current_screen();
 			if ( $screen && 'post' !== $screen->base ) {
+				return;
+			}
+			// No-front-end utility CPTs (e.g. the Pro Hooks store) don't get the
+			// Customify per-post settings panel — match the metabox gate.
+			if (
+				$screen && $screen->post_type
+				&& function_exists( 'customify_get_meta_support_post_types' )
+				&& ! in_array( $screen->post_type, customify_get_meta_support_post_types(), true )
+			) {
 				return;
 			}
 		}
