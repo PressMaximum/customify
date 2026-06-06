@@ -216,11 +216,12 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 	 * --wp--style--global--content-size and --wp--style--global--wide-size,
 	 * so default-aligned AND wide-aligned blocks both follow the active
 	 * sidebar layout. Kept here (not in SCSS) so all values come from
-	 * customify_get_layout_content_sizes() + customify_get_narrow_width_value().
+	 * customify_get_layout_content_sizes().
 	 *
 	 * Wide-size design (per user spec):
 	 *   - No-sidebar layouts: wide-size = content-size + 400 (200px breakout each side)
-	 *   - Narrow content_layout: wide-size = narrow_width + 400
+	 *   - Narrow content_layout: wide-size = narrow_width + 400 (emitted from the
+	 *     narrow_width field's `css_format`, not here — see Customizer-coupling note).
 	 *   - Sidebar layouts: wide-size = content-size (parent-constrained — wide stays
 	 *     inside the content column, doesn't overlap sidebars per Q2 confirmation)
 	 *
@@ -228,24 +229,35 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 	 * negative margins with a max(100%, min(wide-size, 100vw - 32px)) clamp so the
 	 * wide block can't overflow the viewport — see src/frontend/scss/base/_blocks.scss).
 	 *
-	 * Per-page Content Layout (.site-content.content-{full-width,full-stretched,narrow})
+	 * Per-page Content Layout (.site-content.content-{full-width,full-stretched})
 	 * forces a specific content+wide-size — these rules are scoped to .site-content
 	 * which is closer in the inheritance chain than body, so they win the variable
 	 * resolution regardless of body.main-layout-* specificity.
 	 *
-	 * Hooked into customify-style via wp_add_inline_style in class-customify.php.
+	 * Customizer-coupling note: this output is enqueued into its OWN inline style
+	 * (`customify-layout-style-inline-css`) — NOT the main `customify-style-inline-css`
+	 * that the live-preview JS (`src/backend/customizer/js/auto-css.js`) overwrites
+	 * on every setting change. Putting the body.main-layout-* rules here would let
+	 * the JS rebuild wipe them, falling content-size back to the theme.json default
+	 * (863px) and visibly shrinking layout on non-narrow pages while the user drags
+	 * the `narrow_width` slider — UX read: "narrow width is being applied to all
+	 * pages", which it is not.
+	 *
+	 * For the same reason the `.site-content.content-narrow` rule is NOT emitted
+	 * here — it has a per-field `css_format` (see layouts.php narrow_width) so the
+	 * live-preview JS owns it and rebuilds with the dragged value. Emitting it here
+	 * too would only matter if the JS bundle failed to load, and the same field's
+	 * PHP `auto_css()` output already covers that path.
 	 *
 	 * @return string CSS.
 	 */
 	function customify_layout_content_size_css() {
-		$sizes  = customify_get_layout_content_sizes();
-		$narrow = customify_get_narrow_width_value();
+		$sizes = customify_get_layout_content_sizes();
 
-		// Compute wide-size = content-size + 400 (px) for breakout layouts.
+		// Compute wide-size = content-size + 400 (px) for the no-sidebar breakout.
 		// `customify_layout_content_size_value_plus()` keeps unit handling local
-		// so '800px' + 400 stays as '1200px'.
+		// so '1184px' + 400 stays as '1584px'.
 		$no_sidebar_wide = customify_layout_content_size_value_plus( $sizes['no_sidebar'], 400 );
-		$narrow_wide     = customify_layout_content_size_value_plus( $narrow, 400 );
 
 		// Full-Width / Full-Stretched content_layout: content-size + wide-size are
 		// viewport-bound, not capped at the reading-column no_sidebar value. This
@@ -262,14 +274,11 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 			. 'body.main-layout-sidebar-sidebar-content,'
 			. 'body.main-layout-content-sidebar-sidebar{--wp--style--global--content-size:%4$s;--wp--style--global--wide-size:%4$s}'
 			. '.site-content.content-full-width{--wp--style--global--content-size:calc(100vw - 64px);--wp--style--global--wide-size:calc(100vw - 64px)}'
-			. '.site-content.content-full-stretched{--wp--style--global--content-size:100vw;--wp--style--global--wide-size:100vw}'
-			. '.site-content.content-narrow{--wp--style--global--content-size:%5$s;--wp--style--global--wide-size:%6$s}',
+			. '.site-content.content-full-stretched{--wp--style--global--content-size:100vw;--wp--style--global--wide-size:100vw}',
 			esc_attr( $sizes['no_sidebar'] ),
 			esc_attr( $no_sidebar_wide ),
 			esc_attr( $sizes['one_sidebar'] ),
-			esc_attr( $sizes['two_sidebars'] ),
-			esc_attr( $narrow ),
-			esc_attr( $narrow_wide )
+			esc_attr( $sizes['two_sidebars'] )
 		);
 	}
 }

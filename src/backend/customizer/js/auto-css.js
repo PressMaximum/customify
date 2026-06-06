@@ -483,6 +483,20 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
     };
 
     CustomifyAutoCSS.prototype.setup_slider = function ( value, format ){
+        // Mirror PHP setup_slider(): slider fields declare their `default`
+        // as a bare scalar (e.g. narrow_width => 800) which is what the
+        // live-preview reads via `api.get()` until the user actually drags
+        // the slider. Without this cast, `_.isObject( 800 )` is false →
+        // `value = {}` → `value.value` is null → empty string returned →
+        // the `css_format` rule never renders. Visible symptom on
+        // narrow_width: dragging the slider does nothing on a fresh page
+        // because the rule was missing in the first place; the per-field
+        // baseline gets restored only after the first save flips the
+        // option to `{value, unit}` shape. Cast the scalar here so first-
+        // paint preview matches a saved-state preview.
+        if ( ( typeof value === 'number' || typeof value === 'string' ) && value !== '' ) {
+            value = { value: value, unit: 'px' };
+        }
         if ( ! _.isObject( value ) ) {
             value = {};
         }

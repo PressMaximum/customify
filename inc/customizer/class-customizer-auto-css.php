@@ -190,6 +190,25 @@ class Customify_Customizer_Auto_CSS
 
 	function setup_slider($value, $format)
 	{
+		// Slider control normally saves `{value, unit}` once the user drags
+		// it. But the field's `default` is declared as a bare scalar
+		// (e.g. `'default' => 800` on narrow_width / 1248 on container_width),
+		// which is what `get_theme_mod()` returns until a save happens. Pass
+		// that scalar straight to `wp_parse_args()` and it returns the
+		// defaults (`value => null`) — so `setup_slider` returns false and
+		// the entire `css_format` rule never reaches the page. Visible
+		// symptom: a fresh install with no Customizer save would silently
+		// drop narrow_width and container_width rules, falling layout back
+		// to theme.json's 863px/1200px instead of the field defaults.
+		// Cast the scalar to the canonical shape here so the rule lands on
+		// first paint without needing a manual Customizer save.
+		if (is_scalar($value) && !is_bool($value) && '' !== $value) {
+			$value = array(
+				'value' => $value,
+				'unit'  => 'px',
+			);
+		}
+
 		$value = wp_parse_args(
 			$value,
 			array(

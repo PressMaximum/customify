@@ -111,14 +111,21 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			// option (per-post metabox). Mirrors the Full Width / Full Width –
 			// Stretched pattern: a content_layout value that overrides sidebar
 			// layout to no-sidebar and constrains content-size to this value.
-			// .site-content.content-narrow CSS rule consumes the saved value;
-			// see customify_layout_content_size_css() in inc/template-functions.php.
+			//
+			// The `.site-content.content-narrow` rule below is the SINGLE source of
+			// truth for this layout's CSS — emitted on the frontend by the field's
+			// PHP `auto_css()` output and live-rebuilt in Customizer preview by
+			// `src/backend/customizer/js/auto-css.js`. Keeping the rule inside the
+			// per-field `css_format` (not the static `customify_layout_content_size_css()`
+			// block) is deliberate: the preview JS overwrites the per-field stylesheet
+			// on every drag, so a static duplicate would either (a) win source order
+			// and freeze the preview at the saved value, or (b) lose source order
+			// and force callers to ensure they enqueue customify-layout-style after
+			// customify-style. Owning the rule here removes both traps.
 			//
 			// Wide-size for narrow = narrow_width + 400 (200px breakout each side)
-			// per the dynamic wide-size design — see the same SPEC in
-			// customify_layout_content_size_css(). `calc({{value}} + 400px)` lets
-			// the Customizer live-preview auto-CSS rebuild keep wide-size in sync
-			// without a separate handler.
+			// per the dynamic wide-size design. `calc({{value}} + 400px)` lets the
+			// auto-CSS rebuild keep wide-size in sync without a separate handler.
 			array(
 				'name'            => 'narrow_width',
 				'type'            => 'slider',
