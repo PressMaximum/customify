@@ -81,7 +81,7 @@ These emit `:root { --customify-typo-…: value }` at frontend. SCSS consumers l
 | `global_typography_base_widget_title` | `global_typography_base` | `base-widget-title` | `.widget-title` |
 | `global_typography_site_tt_title` | `global_typography_site_tt` | `site-tt-title` | `.site-branding .site-title` |
 | `global_typography_site_tt_desc` | `global_typography_site_tt` | `site-tt-desc` | `.site-branding .site-description` |
-| `global_typography_heading_h1` … `h6` | `global_typography_content` | `heading-h1` … `heading-h6` | `h1, .h1` … `h6, .h6` (with `@include for_device` responsive blocks for h1/h2) |
+| `global_typography_heading_h1` … `h6` | `global_typography_content` | `h1` … `h6` | `h1, .h1` … `h6, .h6` (with `@include for_device` responsive blocks for h1/h2) |
 
 #### Legacy mode — Per-component (9 settings)
 
@@ -109,9 +109,10 @@ These emit selector-scoped literal CSS at the field's `selector` exactly as pre-
 
 **Semantic name** derives from the setting `name` via these strips (in order — PHP helper `Customify_Customizer_Auto_CSS::typography_var_name()`):
 
-1. Strip prefix `global_typography_`
-2. Strip the **first matching** suffix: `_modal_font_size`, `_typography`, `_font_size`, `_typo`
-3. Replace `_` with `-`
+1. Strip prefix `global_typography_` (if present)
+2. Strip prefix `heading_` (if still present after step 1 — collapses `heading_h1` → `h1`)
+3. Strip the **first matching** suffix: `_modal_font_size`, `_typography`, `_font_size`, `_typo`
+4. Replace `_` with `-`
 
 CSS properties (already kebab): `font-family`, `font-style`, `font-weight`, `font-size`, `line-height`, `letter-spacing`, `text-decoration`, `text-transform`.
 
@@ -120,7 +121,7 @@ Worked examples (only Global Typography fields actually emit vars today; the str
 | Setting | Property | Resulting var |
 |---|---|---|
 | `global_typography_base_p` | font-family | `--customify-typo-base-p-font-family` |
-| `global_typography_heading_h1` | font-size | `--customify-typo-heading-h1-font-size` |
+| `global_typography_heading_h1` | font-size | `--customify-typo-h1-font-size` |
 | `header_button_typography` (legacy by default) | font-weight | `--customify-typo-header-button-font-weight` |
 | `search_icon_modal_font_size` (legacy by default) | font-family | `--customify-typo-search-icon-font-family` |
 
@@ -134,10 +135,10 @@ Non-device properties land in the `all` bucket at `:root`:
 :root {
     --customify-typo-base-p-font-family: "Inter";
     --customify-typo-base-p-font-weight: 400;
-    --customify-typo-heading-h1-font-family: "Inter";
-    --customify-typo-heading-h1-font-weight: 700;
-    --customify-typo-heading-h1-font-size: 2.5rem;
-    --customify-typo-heading-h1-line-height: 1.2;
+    --customify-typo-h1-font-family: "Inter";
+    --customify-typo-h1-font-weight: 700;
+    --customify-typo-h1-font-size: 2.5rem;
+    --customify-typo-h1-line-height: 1.2;
 }
 ```
 
@@ -146,12 +147,12 @@ Device-scoped properties (`font_size`, `line_height`) wrap in the matching media
 ```css
 @media screen and (max-width: 1024px) {
     :root {
-        --customify-typo-heading-h1-font-size: 1.8rem;
+        --customify-typo-h1-font-size: 1.8rem;
     }
 }
 @media screen and (max-width: 568px) {
     :root {
-        --customify-typo-heading-h1-font-size: 1.2rem;
+        --customify-typo-h1-font-size: 1.2rem;
     }
 }
 ```
@@ -187,9 +188,9 @@ For the 11 Global Typography settings, **SCSS owns the selector** — vars at `:
 - **Direct `var(...)` calls** — preferred for selectors that already had typography literals. Preserves breakpoint-specific fallbacks (e.g. h1 `font-size` differs per `@include for_device`):
   ```scss
   h1, .h1 {
-      font-size: var(--customify-typo-heading-h1-font-size, 2.42em);
+      font-size: var(--customify-typo-h1-font-size, 2.42em);
       @include for_device(tablet) {
-          font-size: var(--customify-typo-heading-h1-font-size, 2.1em);
+          font-size: var(--customify-typo-h1-font-size, 2.1em);
       }
   }
   ```
@@ -386,7 +387,7 @@ This is **public API** under the 30k-sites rule. See [`SPEC-pro-integration.md`]
 
 | I want to… | Code |
 |---|---|
-| Override a typography value site-wide | Child theme CSS: `:root { --customify-typo-heading-h1-font-size: 3rem; }` |
+| Override a typography value site-wide | Child theme CSS: `:root { --customify-typo-h1-font-size: 3rem; }` |
 | Override at a specific page | `body.page-id-42 { --customify-typo-base-p-font-size: 18px; }` |
 | Re-enable pre-`0.5.0` CSS output | `add_filter( 'customify/typography/legacy_output', '__return_true' );` |
 | Inspect the resolved var in the browser | DevTools → `<html>` → Computed → search `--customify-typo-` |

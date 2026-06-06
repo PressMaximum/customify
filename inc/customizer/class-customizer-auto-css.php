@@ -1090,8 +1090,19 @@ class Customify_Customizer_Auto_CSS
 	{
 		$name = (string) $setting_name;
 
-		if (0 === strpos($name, 'global_typography_')) {
-			$name = substr($name, strlen('global_typography_'));
+		// Prefix strips, applied in order. 'heading_' is collapsed
+		// after 'global_typography_' so `global_typography_heading_h1`
+		// becomes `h1` (not `heading-h1`) — shorter var names for the
+		// per-level heading settings.
+		$prefix_strips = array(
+			'global_typography_',
+			'heading_',
+		);
+		foreach ($prefix_strips as $prefix) {
+			$len = strlen($prefix);
+			if (strlen($name) > $len && 0 === strpos($name, $prefix)) {
+				$name = substr($name, $len);
+			}
 		}
 
 		$suffix_strips = array(

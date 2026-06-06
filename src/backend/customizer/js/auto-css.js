@@ -101,9 +101,14 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
      */
     CustomifyAutoCSS.prototype.typography_var_name = function( setting_name, property ){
         var name = String( setting_name || '' );
-        var prefix = 'global_typography_';
-        if ( name.indexOf( prefix ) === 0 ) {
-            name = name.substr( prefix.length );
+        // Prefix strips, in order — `heading_` collapses
+        // `global_typography_heading_h1` → `h1`.
+        var prefixes = [ 'global_typography_', 'heading_' ];
+        for ( var p = 0; p < prefixes.length; p++ ) {
+            var pr = prefixes[ p ];
+            if ( name.length > pr.length && name.indexOf( pr ) === 0 ) {
+                name = name.substr( pr.length );
+            }
         }
         var suffixes = [ '_modal_font_size', '_typography', '_font_size', '_typo' ];
         for ( var i = 0; i < suffixes.length; i++ ) {
