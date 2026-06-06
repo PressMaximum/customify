@@ -18,6 +18,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import Welcome from './tabs/Welcome.jsx';
 import FreeVsPro from './tabs/FreeVsPro.jsx';
 import Settings from './tabs/Settings.jsx';
+import StarterTemplates from './tabs/StarterTemplates.jsx';
 import Changelog from './tabs/Changelog.jsx';
 
 import './dashboard-v2.scss';
@@ -111,6 +112,7 @@ function mount() {
 		baseTabs: [
 			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
 			{ id: 'settings', label: __( 'Settings', 'customify' ) },
+			{ id: 'starter-templates', label: __( 'Starter Templates', 'customify' ) },
 			...( proActive
 				? []
 				: [ { id: 'free-vs-pro', label: __( 'Free vs Pro', 'customify' ) } ] ),
@@ -120,6 +122,7 @@ function mount() {
 			'#welcome': { component: Welcome, type: 'page' },
 			'#settings': { component: Settings, type: 'page' },
 			'#settings/:panelId': { component: Settings, type: 'page' },
+			'#starter-templates': { component: StarterTemplates, type: 'page' },
 			...( proActive
 				? {}
 				: { '#free-vs-pro': { component: FreeVsPro, type: 'page' } } ),
