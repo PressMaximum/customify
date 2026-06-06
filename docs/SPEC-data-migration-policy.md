@@ -46,6 +46,8 @@ Three things matter most:
 | `single_blog_post_sidebar_layout` | string | inherits | Layout for `is_single()` |
 | `archive_sidebar_layout` | string | inherits | Layout for `is_archive()` |
 | `page_sidebar_layout` | string | inherits | Layout for `is_page()` |
+| `{post_type}_sidebar_layout` | string | `content` | Per-CPT **single** sidebar layout (`is_singular()`). Dynamic — one key per content post type; `default` choice inherits the global `sidebar_layout` |
+| `{post_type}_archive_sidebar_layout` | string | `content` | Per-CPT **archive** sidebar layout (`is_post_type_archive()`). Dynamic — only registered for types with `has_archive`; excludes WC `product` (shop owned by WC). Defaults to no-sidebar like the per-CPT single; the `Default` choice (value `default`) inherits `posts_archives_sidebar_layout` |
 | `container_width` | int + unit (slider) | `1200px` | Site container max-width; MUST sync to `--wp--style--global--wide-size` |
 
 ### 2.2 Builder layouts

@@ -81,6 +81,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					array( 'site_layout', '=', 'site-framed' ),
 				),
 			),
+			array(
+				'name'    => 'global_layout_h_width',
+				'type'    => 'heading',
+				'section' => 'global_layout_section',
+				'title'   => __( 'Width', 'customify' ),
+			),
+
 			/**
 			 * @since 0.2.6 Change css_format and selector.
 			 *
@@ -134,6 +141,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'css_format'      => '.site-content.content-narrow { --wp--style--global--content-size: {{value}}; --wp--style--global--wide-size: calc({{value}} + 400px); }',
 			),
 
+			array(
+				'name'    => 'global_layout_h_content',
+				'type'    => 'heading',
+				'section' => 'global_layout_section',
+				'title'   => __( 'Content Area', 'customify' ),
+			),
+
 			// Site content layout.
 			array(
 				'name'       => 'site_content_layout',
@@ -174,6 +188,14 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'theme_supports' => '',
 				'title'          => __( 'Sidebars', 'customify' ),
 			),
+
+			array(
+				'name'    => 'sidebar_layout_h_general',
+				'type'    => 'heading',
+				'section' => 'sidebar_layout_section',
+				'title'   => __( 'General', 'customify' ),
+			),
+
 			// Global sidebar layout. Default changed from `content-sidebar`
 			// (content + right sidebar) to `content` (no sidebar) — clean
 			// out-of-the-box look that matches the "pick a few brand colors
@@ -201,6 +223,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'default'    => 'sidebar_vertical_border',
 				'css_format' => 'html_class',
 				'selector'   => 'body',
+			),
+
+			array(
+				'name'    => 'sidebar_layout_h_pages',
+				'type'    => 'heading',
+				'section' => 'sidebar_layout_section',
+				'title'   => __( 'Page Types', 'customify' ),
 			),
 
 			// Page sidebar layout. Default changed from `content-sidebar` to
@@ -274,6 +303,30 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 						customify_get_config_sidebar_layouts()
 					),
 				);
+
+				// Per-CPT archive sidebar layout. Only registered for post types
+				// with a real archive ( has_archive ). WooCommerce owns the
+				// `product` shop/archive sidebar via its own customify_get_layout
+				// filter, so a control here would be dead — skip it. Default
+				// 'content' (no sidebar) mirrors the per-CPT single default
+				// ( {$pt}_sidebar_layout ) for a clean out-of-the-box look; sites
+				// that explicitly saved a value keep it. Choosing the "Default"
+				// option (value 'default') inherits the global "Blog Archive Page"
+				// layout via the resolver in customify_get_layout().
+				$pt_object = get_post_type_object( $pt );
+				if ( 'product' !== $pt && $pt_object && $pt_object->has_archive ) {
+					$config[] = array(
+						'name'    => "{$pt}_archive_sidebar_layout",
+						'type'    => 'select',
+						'default' => 'content',
+						'section' => 'sidebar_layout_section',
+						'title'   => sprintf( __( '%s Archive', 'customify' ), $label['singular_name'] ),
+						'choices' => array_merge(
+							array( 'default' => __( 'Default', 'customify' ) ),
+							customify_get_config_sidebar_layouts()
+						),
+					);
+				}
 			}
 		}
 

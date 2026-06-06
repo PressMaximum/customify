@@ -332,26 +332,54 @@ if ( ! function_exists( 'customify_get_content_post_types' ) ) {
 	 * Custom post types that warrant per-type Customizer settings (sidebar layout,
 	 * Page Header display/title/tagline).
 	 *
-	 * Tightens Customify()->get_post_types( false ) — which only filters
-	 * publicly_queryable + non-builtin, too loose — to types with a real front-end
-	 * presence: a public archive ( has_archive ) OR shown in nav menus
-	 * ( show_in_nav_menus ). Drops utility CPTs that are merely publicly_queryable
-	 * with no archive and hidden from menus (e.g. the Pro Hooks store
-	 * `customify_hook`) — they have no browsable page, so a per-type control like
-	 * "Single Customify Hook" sidebar would only be noise.
+	 * Starts from Customify()->get_post_types( false ) (publicly_queryable,
+	 * non-builtin) and keeps only types with a real, browsable front-end. A type
+	 * is dropped when any of these holds:
+	 *   - it is a known Customify Pro utility CPT (`customify_hook`, the Hooks
+	 *     snippet store) that is publicly_queryable but has no browsable page;
+	 *   - it declares `exclude_from_search` (the registering plugin's signal that
+	 *     the type is not browsable content);
+	 *   - it has neither a public archive (`has_archive`) nor menu visibility
+	 *     (`show_in_nav_menus`).
+	 *
+	 * A CPT that registers itself to look exactly like content (public + in nav
+	 * menus + searchable) can only be removed via `customify/content_post_types`.
 	 *
 	 * @return array<string, array{name:string, singular_name:string}>
 	 */
 	function customify_get_content_post_types() {
 		$post_types = Customify()->get_post_types( false );
+
+		// Customify Pro utility CPTs that are publicly_queryable but have no
+		// browsable front-end. Only `customify_hook` (the Hooks snippet store)
+		// reaches this list — `customify_ms` / `font` register
+		// publicly_queryable=false and are filtered out upstream. Excluded by
+		// slug because the theme can't depend on how a given Pro version sets
+		// show_in_nav_menus on it (Pro is a separate codebase / release cycle).
+		$excluded = array( 'customify_hook' );
+
 		foreach ( $post_types as $pt => $label ) {
 			$obj = get_post_type_object( $pt );
-			if ( ! $obj || ! ( $obj->has_archive || $obj->show_in_nav_menus ) ) {
+			if (
+				! $obj
+				|| in_array( $pt, $excluded, true )
+				|| $obj->exclude_from_search
+				|| ! ( $obj->has_archive || $obj->show_in_nav_menus )
+			) {
 				unset( $post_types[ $pt ] );
 			}
 		}
 
-		return $post_types;
+		/**
+		 * Filter the content post types that receive per-type Customizer settings
+		 * (sidebar layout, Page Header display/title/tagline). Use it to add a CPT
+		 * the heuristics dropped, or remove a no-front-end CPT they kept (one that
+		 * registers as public + in nav menus + searchable, indistinguishable from
+		 * content by its flags).
+		 *
+		 * @param array $post_types Map of post_type slug => labels array.
+		 */
+		return apply_filters( 'customify/content_post_types', $post_types );
 	}
 }
 
@@ -376,6 +404,25 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 			} elseif ( is_search() ) { // Search.
 				$search = Customify()->get_setting( 'search_sidebar_layout' );
 				$layout = $search;
+			} elseif ( is_post_type_archive() ) { // Custom post type archive.
+				$pt = get_query_var( 'post_type' );
+				if ( is_array( $pt ) ) {
+					$pt = reset( $pt );
+				}
+				if ( ! $pt ) {
+					$queried = get_queried_object();
+					$pt      = ( $queried instanceof WP_Post_Type ) ? $queried->name : '';
+				}
+				$cpt_archive = $pt ? Customify()->get_setting( "{$pt}_archive_sidebar_layout" ) : '';
+				// Value 'default' (the "Default" choice) or empty inherits the
+				// generic "Blog Archive Page" layout; any other value applies
+				// directly. The field default is 'content' (no sidebar), matching
+				// the per-CPT single layout.
+				if ( $cpt_archive && 'default' !== $cpt_archive ) {
+					$layout = $cpt_archive;
+				} else {
+					$layout = Customify()->get_setting( 'posts_archives_sidebar_layout' );
+				}
 			} elseif ( is_archive() ) { // Archive.
 				$archive = Customify()->get_setting( 'posts_archives_sidebar_layout' );
 				$layout  = $archive;
