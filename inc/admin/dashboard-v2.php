@@ -115,10 +115,15 @@ add_action( 'admin_menu', 'customify_dashboard_v2_add_menu', 9 );
  */
 function customify_dashboard_v2_register_submenu(): void {
 	$tabs = array(
-		array( 'hash' => '#welcome',           'label' => __( 'Dashboard', 'customify' ) ),
-		array( 'hash' => '#settings',          'label' => __( 'Settings', 'customify' ) ),
-		array( 'hash' => '#starter-templates', 'label' => __( 'Starter Templates', 'customify' ) ),
+		array( 'hash' => '#welcome',  'label' => __( 'Dashboard', 'customify' ) ),
+		array( 'hash' => '#settings', 'label' => __( 'Settings', 'customify' ) ),
 	);
+	if ( customify_dashboard_v2_use_starter_templates() ) {
+		$tabs[] = array(
+			'hash'  => '#starter-templates',
+			'label' => __( 'Starter Templates', 'customify' ),
+		);
+	}
 	foreach ( $tabs as $tab ) {
 		add_submenu_page(
 			CUSTOMIFY_DASHBOARD_V2_SLUG,
@@ -259,6 +264,33 @@ function customify_dashboard_v2_admin_body_class( string $classes ): string {
 add_filter( 'admin_body_class', 'customify_dashboard_v2_admin_body_class' );
 
 /**
+ * Whether to expose the Starter Templates tab + activation flow.
+ *
+ * Off by default so the tab + submenu are hidden entirely. Two switches
+ * turn it on:
+ *
+ *   1. `define( 'CUSTOMIFY_USE_STARTER_TEMPLATES', true );` in
+ *      wp-config.php — the dev/QA escape hatch.
+ *   2. `add_filter( 'customify_use_starter_templates', '__return_true' );`
+ *      — for programmatic control (Pro, child themes, site-specific MU
+ *      plugins).
+ *
+ * Filter runs last so it can either reveal or hide the flow regardless
+ * of the constant.
+ */
+function customify_dashboard_v2_use_starter_templates(): bool {
+	$enabled = defined( 'CUSTOMIFY_USE_STARTER_TEMPLATES' ) && constant( 'CUSTOMIFY_USE_STARTER_TEMPLATES' );
+
+	/**
+	 * Filter whether the Starter Templates tab + activation CTA are
+	 * exposed in the dashboard.
+	 *
+	 * @param bool $enabled True to show the tab, false to hide it.
+	 */
+	return (bool) apply_filters( 'customify_use_starter_templates', $enabled );
+}
+
+/**
  * Build the boot data payload localized to window.customifyDashboard.
  *
  * @return array<string, mixed>
@@ -348,6 +380,14 @@ function customify_dashboard_v2_boot_data(): array {
 		 * affordance per module instead of the marketing list.
 		 */
 		'proActive'    => (bool) apply_filters( 'customify_dashboard_pro_active', false ),
+		/**
+		 * Reveal the Starter Templates tab + activation flow (FameThemes
+		 * Demo Importer install/activate CTA). Gated off by default so the
+		 * tab + submenu are hidden; flip on via the
+		 * `CUSTOMIFY_USE_STARTER_TEMPLATES` constant in wp-config.php for
+		 * internal dev/QA, or hook the filter for programmatic control.
+		 */
+		'useStarterTemplates' => customify_dashboard_v2_use_starter_templates(),
 	);
 
 	/**

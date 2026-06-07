@@ -1,7 +1,14 @@
 /**
  * Starter Templates tab.
  *
- * Two modes, picked from the boot payload:
+ * Three modes, picked from the boot payload:
+ *
+ *   - Default (`boot.useStarterTemplates` falsy) → render a "Coming soon"
+ *     placeholder with a disabled button. This is the public-facing
+ *     state while the activation flow isn't ready to ship. Gate is
+ *     flipped on by `define( 'CUSTOMIFY_USE_STARTER_TEMPLATES', true )`
+ *     in wp-config.php or the `customify_use_starter_templates` filter
+ *     (see inc/admin/dashboard-v2.php).
  *
  *   - `boot.importer.active` set by the FameThemes Demo Importer plugin's
  *     Customify adapter (hooks `customify_dashboard_localize`) →
@@ -31,10 +38,11 @@ export default function StarterTemplates() {
 	const boot = useBoot();
 	const slotRef = useRef( null );
 
+	const useStarterTemplates = !! boot?.useStarterTemplates;
 	const importerActive = !! boot?.importer?.active;
 
 	useEffect( () => {
-		if ( ! importerActive ) {
+		if ( ! useStarterTemplates || ! importerActive ) {
 			return undefined;
 		}
 		const el = slotRef.current;
@@ -46,7 +54,11 @@ export default function StarterTemplates() {
 		return () => {
 			api.unmount?.( el );
 		};
-	}, [ importerActive ] );
+	}, [ useStarterTemplates, importerActive ] );
+
+	if ( ! useStarterTemplates ) {
+		return <ComingSoon />;
+	}
 
 	if ( importerActive ) {
 		return (
@@ -61,6 +73,39 @@ export default function StarterTemplates() {
 	}
 
 	return <InstallCta boot={ boot } />;
+}
+
+/**
+ * Public-facing placeholder while the activation flow isn't shipping
+ * yet. Mirrors the hero shell of InstallCta so the tab keeps the same
+ * visual rhythm — only the CTA copy changes and the button is disabled.
+ */
+function ComingSoon() {
+	return (
+		<div className="customify-dashboard-starter-templates">
+			<section className="pmdk-hero">
+				<div className="pmdk-hero__content">
+					<h2 className="pmdk-hero__title">
+						{ __( 'Starter Templates', 'customify' ) }
+					</h2>
+					<p className="pmdk-hero__tagline">
+						{ __(
+							'Create and customize professionally designed websites in minutes. Simply choose your template, choose your colors, and import. Done!',
+							'customify',
+						) }
+					</p>
+					<Button
+						variant="primary"
+						className="pmdk-hero__cta"
+						disabled
+						aria-disabled="true"
+					>
+						{ __( 'Coming soon', 'customify' ) }
+					</Button>
+				</div>
+			</section>
+		</div>
+	);
 }
 
 /**
