@@ -65,7 +65,7 @@ function customify_customize_render_header() {
  * Strategy: force overwrite. The v1->v2 flag prevents re-running, so subsequent
  * user edits in the React builder are preserved.
  *
- * @since 0.5.0
+ * @since 0.4.19
  */
 function customify_migrate_footer_v1_to_v2() {
 	if ( get_theme_mod( 'footer_v1_to_v2_migrated' ) ) {
