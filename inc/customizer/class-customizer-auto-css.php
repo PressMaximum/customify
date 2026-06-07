@@ -420,7 +420,7 @@ class Customify_Customizer_Auto_CSS
 	 *
 	 * Selector: `{$field['selector']} .col-v2-<colKey>`
 	 *
-	 * @since 0.5.0
+	 * @since 0.4.19
 	 */
 	function columns_settings($field, $values = null)
 	{
@@ -1048,26 +1048,20 @@ class Customify_Customizer_Auto_CSS
 	}
 
 	/**
-	 * Whether the legacy selector-scoped typography output is enabled.
-	 * Default false (vars mode). Sites can re-enable by returning true.
-	 *
-	 * @since 0.5.0
-	 * @return bool
-	 */
-	public function legacy_typography_enabled()
-	{
-		return (bool) apply_filters('customify/typography/legacy_output', false);
-	}
-
-	/**
 	 * Whether a typography field emits :root CSS variables (vars mode)
 	 * or selector-scoped literal CSS (legacy). Vars are restricted to
-	 * fields registered under the Global Typography panel — sections
-	 * `global_typography_base`, `global_typography_site_tt`, and
-	 * `global_typography_content`. Per-component typography (header
-	 * builder items, footer copyright, blog read-more, breadcrumb,
-	 * WC cart) keeps the legacy selector-scoped output because their
-	 * SCSS layer doesn't carry generic consumer rules.
+	 * fields whose setting `name` starts with `global_typography_` —
+	 * the Base / Site Title & Tagline / Heading family registered in
+	 * the Typography section. Per-component typography (header builder
+	 * items, footer copyright, blog read-more, breadcrumb, WC cart)
+	 * keeps the legacy selector-scoped output because their SCSS layer
+	 * doesn't carry generic consumer rules.
+	 *
+	 * Gate is keyed off the field `name` (not `section`) because the
+	 * Typography IA was flattened from a panel into a single section
+	 * (`typography_panel`), so the section id no longer encodes which
+	 * group a field belongs to — only the `global_typography_` name
+	 * prefix does.
 	 *
 	 * Sites can override the decision with the
 	 * `customify/typography/field_uses_vars` filter — return false
@@ -1075,15 +1069,15 @@ class Customify_Customizer_Auto_CSS
 	 * opt a non-global field into vars (requires adding an SCSS
 	 * consumer at the matching selector).
 	 *
-	 * @since 0.5.0
+	 * @since 0.4.19
 	 *
-	 * @param array $field  The field config (must include `section`).
+	 * @param array $field  The field config (must include `name`).
 	 * @return bool
 	 */
 	public function typography_field_uses_vars($field)
 	{
-		$section   = isset($field['section']) ? (string) $field['section'] : '';
-		$is_global = ('' !== $section && 0 === strpos($section, 'global_typography_'));
+		$name      = isset($field['name']) ? (string) $field['name'] : '';
+		$is_global = ('' !== $name && 0 === strpos($name, 'global_typography_'));
 		return (bool) apply_filters('customify/typography/field_uses_vars', $is_global, $field);
 	}
 
@@ -1099,7 +1093,7 @@ class Customify_Customizer_Auto_CSS
 	 *   blog_default_more_typography, font-family
 	 *     → --customify-typo-blog-default-more-font-family
 	 *
-	 * @since 0.5.0
+	 * @since 0.4.19
 	 *
 	 * @param string $setting_name  Raw Customizer setting name.
 	 * @param string $property      Kebab-case CSS property.
@@ -1168,6 +1162,17 @@ class Customify_Customizer_Auto_CSS
 		$devices_css = array();
 		foreach (Customify()->customizer->get_typo_fields() as $f) {
 			$fields[$f['name']] = $f;
+		}
+
+		// Honor per-field `fields` overrides — disabling a key (=> false)
+		// drops it from the emit loop so saved-but-unsupported values
+		// don't leak into the output. Mirrored in auto-css.js.
+		if (!empty($field['fields']) && is_array($field['fields'])) {
+			foreach ($field['fields'] as $key => $enabled) {
+				if (false === $enabled) {
+					unset($fields[$key]);
+				}
+			}
 		}
 
 		if (isset($fields['font'])) {
@@ -1274,14 +1279,13 @@ class Customify_Customizer_Auto_CSS
 
 		$devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
 
-		// Vars mode is opt-in per field — only fields in the Global
-		// Typography panel sections emit :root vars. Per-component
+		// Vars mode is opt-in per field — only fields whose setting
+		// `name` starts with `global_typography_` (Base / Site Title &
+		// Tagline / Heading family) emit :root vars. Per-component
 		// typography (header builder items, footer copyright, etc.)
 		// falls through to selector-scoped output because its SCSS
-		// layer doesn't carry generic consumer rules. The global
-		// legacy filter (customify/typography/legacy_output) overrides
-		// everything.
-		if ($this->legacy_typography_enabled() || ! $this->typography_field_uses_vars($field)) {
+		// layer doesn't carry generic consumer rules.
+		if (! $this->typography_field_uses_vars($field)) {
 			foreach ($devices_css as $device => $els) {
 				if (!empty($els)) {
 					$this->css[$device] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $els) . "\r\n}";
@@ -1331,7 +1335,7 @@ class Customify_Customizer_Auto_CSS
 	 * lines scoped to a typography setting. Property name is parsed
 	 * from each line so we don't need to special-case the array keys.
 	 *
-	 * @since 0.5.0
+	 * @since 0.4.19
 	 *
 	 * @param string $setting_name  The Customizer setting name.
 	 * @param array  $code_map      Map of arbitrary keys → "prop: val;" CSS lines.

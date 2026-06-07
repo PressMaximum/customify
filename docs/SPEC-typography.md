@@ -2,7 +2,7 @@
 
 Customify renders **Global Typography panel settings** (font family, size, weight, line-height, letter-spacing, text-decoration, text-transform, font-style) as **`:root { --customify-typo-*: value }` CSS custom properties**. SCSS layer consumes the vars via `var(--customify-typo-…, fallback)` at the matching selectors. **Per-component typography** (header builder items, footer copyright, blog read-more, breadcrumb, WC cart) keeps the legacy selector-scoped output because its SCSS layer doesn't carry generic consumer rules — vars mode would silently drop the user's value. Landed in theme `0.5.0`.
 
-The scope boundary is the field's `section`: vars emit only when `section` starts with `global_typography_` (covers `global_typography_base`, `global_typography_site_tt`, `global_typography_content`). Everything else falls through to the legacy emit path.
+The scope boundary is the field's setting `name`: vars emit only when `name` starts with `global_typography_` (the Base / Site Title & Tagline / Heading family — 11 settings). Everything else falls through to the legacy emit path. The gate keys off `name` rather than `section` because the Typography IA was flattened into a single `typography_panel` section, so the section id no longer encodes which group a field belongs to.
 
 Related references:
 - [`SPEC-customizer.md`](SPEC-customizer.md) — underlying Customizer architecture and the typography control type registration (`§5.3`).
@@ -25,9 +25,8 @@ This file is permanent. For the in-flight rollout notes used during implementati
 | `src/frontend/scss/*` consumers | Read vars via `var(--customify-typo-…, fallback)` at the relevant selectors — only for the 11 global settings |
 | Block editor canvas | Inherits via [`src/backend/admin/scss/editor.scss`](../src/backend/admin/scss/editor.scss) which imports the frontend `_base`/`_blocks`/`_widgets` partials |
 
-**Default mode is vars for global typography only.** Two filter knobs:
-- `customify/typography/legacy_output` (default `false`) — global kill switch; return `true` to revert ALL typography (global + per-component) to selector-scoped output.
-- `customify/typography/field_uses_vars` (default = section starts with `global_typography_`) — per-field override. Return `false` to force a global field through legacy, or `true` to opt a per-component field into vars (requires adding an SCSS consumer at the matching selector). See §7.
+**Default mode is vars for global typography only.** One filter knob:
+- `customify/typography/field_uses_vars` (default = setting `name` starts with `global_typography_`) — per-field override. Return `false` to force a global field through legacy, or `true` to opt a per-component field into vars (requires adding an SCSS consumer at the matching selector). See §7.
 
 ---
 
@@ -35,9 +34,8 @@ This file is permanent. For the in-flight rollout notes used during implementati
 
 | File | Lines | Responsibility |
 |---|---|---|
-| [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) | `typography()` ~1088-1228, `code_to_root_vars()` ~1230-1265, `typography_var_name()` ~1061-1086, `legacy_typography_enabled()` ~1038-1048, `$css_root` bucket + `render_css()` flush | PHP generator + helpers |
-| [`src/backend/customizer/js/auto-css.js`](../src/backend/customizer/js/auto-css.js) | Helpers ~73-160, `typography()` rewrite ~1382-1408, `css_root` flush ~196-210 | JS live preview mirror |
-| [`inc/customizer/class-customizer.php`](../inc/customizer/class-customizer.php) | ~245-265 `wp_localize_script` payload | Pipes the legacy-filter resolved value to JS as `Customify_Preview_Config.legacy_typography_output` |
+| [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) | `typography()`, `code_to_root_vars()`, `typography_var_name()`, `typography_field_uses_vars()`, `$css_root` bucket + `render_css()` flush | PHP generator + helpers |
+| [`src/backend/customizer/js/auto-css.js`](../src/backend/customizer/js/auto-css.js) | `typography()`, `code_to_root_vars()`, `typography_var_name()`, `typography_field_uses_vars()`, `css_root` flush | JS live preview mirror |
 | [`src/frontend/scss/utils/_mixins.scss`](../src/frontend/scss/utils/_mixins.scss) | `@mixin customify-typography($name, $props, $fallbacks)` | Emits 8 var consumers in one call for selectors without existing typography literals |
 | ~10 frontend SCSS partials (see §4) | inline | Var consumers — direct `var(...)` calls or via the mixin |
 | [`inc/admin/editor.php`](../inc/admin/editor.php) | Unchanged for vars mode | Editor inline CSS via `Customify_Editor::css()` + `load_style()`; both call `Customify_Customizer_Auto_CSS::render_css()` which flushes `$css_root` automatically |
@@ -74,16 +72,18 @@ See [`SPEC-customizer.md §5.3`](SPEC-customizer.md) for the full per-field conf
 
 These emit `:root { --customify-typo-…: value }` at frontend. SCSS consumers live in `_base.scss`, `_widgets.scss`, `_logo_site_identity.scss`.
 
-| Setting name | Section | Semantic name | SCSS consumer selector |
-|---|---|---|---|
-| `global_typography_base_p` | `global_typography_base` | `base-p` | `body` |
-| `global_typography_base_heading` | `global_typography_base` | `base-heading` | `h1..h6, .h1..h6` (family/weight only) |
-| `global_typography_base_widget_title` | `global_typography_base` | `base-widget-title` | `.widget-title` |
-| `global_typography_site_tt_title` | `global_typography_site_tt` | `site-tt-title` | `.site-branding .site-title` |
-| `global_typography_site_tt_desc` | `global_typography_site_tt` | `site-tt-desc` | `.site-branding .site-description` |
-| `global_typography_heading_h1` … `h6` | `global_typography_content` | `h1` … `h6` | `h1, .h1` … `h6, .h6` (with `@include for_device` responsive blocks for h1/h2) |
+All 11 settings live in the flattened `typography_panel` section (the former Base / Site Title & Tagline / Content sub-sections are now `heading` separators inside it).
 
-#### Legacy mode — Per-component (9 settings)
+| Setting name | Semantic name | SCSS consumer selector |
+|---|---|---|
+| `global_typography_base_p` | `base-p` | `body` |
+| `global_typography_base_heading` | `base-heading` | `h1..h6, .h1..h6` (family/weight only) |
+| `global_typography_base_widget_title` | `base-widget-title` | `.widget-title` |
+| `global_typography_site_tt_title` | `site-tt-title` | `.site-branding .site-title` |
+| `global_typography_site_tt_desc` | `site-tt-desc` | `.site-branding .site-description` |
+| `global_typography_heading_h1` … `h6` | `h1` … `h6` | `h1, .h1` … `h6, .h6` (with `@include for_device` responsive blocks for h1/h2) |
+
+#### Selector-scoped mode — Per-component (9 settings)
 
 These emit selector-scoped literal CSS at the field's `selector` exactly as pre-`0.5.0`. No SCSS var consumers exist for these — adding one and toggling `customify/typography/field_uses_vars` for the field is the opt-in path.
 
@@ -163,7 +163,7 @@ Device-scoped properties (`font_size`, `line_height`) wrap in the matching media
 2. `setup_font()` runs **regardless of mode** — it populates `$this->fonts`, `$this->library_fonts`, `$this->theme_fonts` for Google Fonts URL / WP Font Library / theme.json `@font-face` emission. **These side effects must always run.**
 3. Non-device props built into `$code` (literal `property: value;` lines); device props into `$devices_css[device]` (same shape).
 4. `apply_filters('customify/customizer/auto_css', $devices_css, $field, $this)` — contract unchanged.
-5. **Route decision** — if `legacy_typography_enabled()` returns `true` OR `typography_field_uses_vars($field)` returns `false` (i.e. field's `section` doesn't start with `global_typography_`), emit selector-scoped CSS into `$this->css[device]` (legacy path — byte-identical to pre-`0.5.0` for that field).
+5. **Route decision** — if `typography_field_uses_vars($field)` returns `false` (i.e. field's setting `name` doesn't start with `global_typography_`), emit selector-scoped CSS into `$this->css[device]` (legacy path — byte-identical to pre-`0.5.0` for that field).
 6. Otherwise → `code_to_root_vars()` parses each `property: value;` line, derives the var name via `typography_var_name()`, and **appends the raw `--var: value;` lines** to `$this->css_root[device]`. Multiple fields accumulate into the same bucket.
 7. `render_css()` wraps each non-empty `$this->css_root[device]` in a **single** `:root { ... }` block and the matching media query, then flushes `$this->css[device]` afterwards.
 8. Final CSS lands inline via `wp_add_inline_style('customify-style', ...)` — handle unchanged.
@@ -215,9 +215,10 @@ Every `var(...)` must be 2-arg (1-arg banned per [`../AGENTS.md`](../AGENTS.md))
 
 ### 5.1 Decision: vars only, no parallel emission
 
-- **Chose**: Default to `:root` vars; gate legacy selector-scoped output behind a filter (`customify/typography/legacy_output`).
+- **Chose**: Always emit `:root` vars for Global Typography fields. Per-component fields stay selector-scoped (no SCSS consumers exist for them — see §5.3).
+- **Rejected**: A global `customify/typography/legacy_output` kill switch to revert all typography to selector-scoped output.
 - **Rejected**: Emit BOTH `:root { --var: ... }` and `{selector} { property: var(--var) }` in PHP.
-- **Reason**: Single source of truth. Child themes and JS read the same `:root` variable name regardless of which selector binds it. Parallel emission would double the inline CSS payload and re-introduce the specificity fight the migration aims to remove.
+- **Reason**: Single source of truth. Child themes and JS read the same `:root` variable name regardless of which selector binds it. The kill switch was originally designed to coordinate with the Pro plugin during rollout; since the Pro plugin doesn't reference these vars at all, the escape hatch added complexity without buying anything.
 
 ### 5.2 Decision: prefix `--customify-typo-` (not `--cfy-`)
 
@@ -227,7 +228,7 @@ Every `var(...)` must be 2-arg (1-arg banned per [`../AGENTS.md`](../AGENTS.md))
 
 ### 5.3 Decision: vars limited to the Global Typography panel
 
-- **Chose**: Only fields whose `section` starts with `global_typography_` (the 11 Global panel settings — Base, Site Title & Tagline, Content) emit `:root` vars. Per-component typography (header builder items, footer copyright, blog read-more, breadcrumb, WC cart — 9 fields) stays in legacy selector-scoped output.
+- **Chose**: Only fields whose setting `name` starts with `global_typography_` (the 11 Global settings — Base, Site Title & Tagline, Heading family) emit `:root` vars. Per-component typography (header builder items, footer copyright, blog read-more, breadcrumb, WC cart — 9 fields) stays in legacy selector-scoped output.
 - **Rejected**: Emit vars for ALL 20 fields, with SCSS consumers everywhere.
 - **Reason**: Per-component selectors are dynamic (`a.item--button`, `.builder-header-cart-item`, `#blog-posts .entry-readmore a`) and often paired with **hardcoded** field prefixes — there's no per-instance setting, so a single var would apply uniformly across every button / cart / read-more on the page. Mixing this with the Global panel's "single source of truth" promise creates confusion: users would expect their per-button typography to differ per instance, but the var-mode plumbing can't deliver that. Legacy emit keeps the existing per-component selectors authoritative without inventing instance vars.
 
@@ -298,7 +299,7 @@ To override the fallback for a specific property (e.g. theme-default font-weight
 
 ### 6.3 Register a new typography field
 
-See [`SPEC-customizer.md §5.3`](SPEC-customizer.md) — register a `'type' => 'typography'` field with `'css_format' => 'typography'`. The generator routes it through the same pipeline. **Emit mode is decided by `section`:** if `section` starts with `global_typography_` the field emits `:root` vars (and you must add an SCSS consumer at the matching selector — see §6.2); otherwise it emits selector-scoped CSS at `$field['selector']` exactly as pre-`0.5.0`.
+See [`SPEC-customizer.md §5.3`](SPEC-customizer.md) — register a `'type' => 'typography'` field with `'css_format' => 'typography'`. The generator routes it through the same pipeline. **Emit mode is decided by the setting `name`:** if `name` starts with `global_typography_` the field emits `:root` vars (and you must add an SCSS consumer at the matching selector — see §6.2); otherwise it emits selector-scoped CSS at `$field['selector']` exactly as pre-`0.5.0`.
 
 ### 6.4 Opt a per-component field into vars mode
 
@@ -324,35 +325,19 @@ Without step 1 the var lands at `:root` but no selector consumes it — the user
 
 | Hook | Type | Payload | Purpose |
 |---|---|---|---|
-| `customify/typography/legacy_output` | filter | `bool` (default `false`) | **Global kill switch.** Return `true` to revert ALL typography (global + per-component) to pre-`0.5.0` selector-scoped output. Localized to JS as `Customify_Preview_Config.legacy_typography_output` so the live preview stays in sync. |
-| `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` (default = `section` starts with `global_typography_`) | **Per-field route override.** Return `false` to force a Global field through legacy emit, or `true` to opt a per-component field into vars mode. The vars-mode field still needs an SCSS consumer at the matching selector — see §6.4. |
-| `customify/customizer/auto_css` | filter | `(array $devices_css, $field, Customify_Customizer_Auto_CSS $instance)` | Unchanged — runs before the route decision. In vars mode, modifying a CSS line here changes the var value that gets emitted; in legacy mode, it changes the selector-scoped CSS line. |
+| `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` (default = setting `name` starts with `global_typography_`) | **Per-field route override.** Return `false` to force a Global field through selector-scoped emit, or `true` to opt a per-component field into vars mode. The vars-mode field still needs an SCSS consumer at the matching selector — see §6.4. |
+| `customify/customizer/auto_css` | filter | `(array $devices_css, $field, Customify_Customizer_Auto_CSS $instance)` | Unchanged — runs before the route decision. In vars mode, modifying a CSS line here changes the var value that gets emitted; in selector-scoped mode, it changes the CSS line. |
 | `customify/auto-css` | filter | `string $css` — final assembled CSS | Unchanged. Receives the `:root { ... }` blocks ahead of any selector-scoped CSS in vars mode. |
-
-Example — re-enable legacy CSS site-wide:
-
-```php
-// functions.php or mu-plugin
-add_filter( 'customify/typography/legacy_output', '__return_true' );
-```
-
-After applying, the inline CSS reverts to the pre-`0.5.0` shape and any child-theme overrides on the Customizer selectors continue to work as before.
 
 ---
 
 ## 8. Known issues / edge cases
 
-### Issue #1 — Per-component typography stays in legacy mode
+### Issue #1 — Per-component typography stays in selector-scoped mode
 
 This is **intentional**. The 9 per-component fields (header menu/button/HTML/search, footer copyright, blog read-more, breadcrumb, WC cart) all emit selector-scoped CSS at their field `selector` — byte-identical to pre-`0.5.0`. Sites opting them into vars mode must add SCSS consumers and toggle `customify/typography/field_uses_vars` — see §6.4. Don't simply flip the filter without adding the consumer, or the user's saved value silently no-ops.
 
-### Issue #2 — Theme version 0.5.0 must NOT be tagged until Pro lands the version-gate helper
-
-Customify Pro plans to ship `customify_pro_theme_supports_vars()` that checks `version_compare( customify_theme_version, '0.5.0', '>=' )` and switches Pro's own typography emission to vars mode when true. The helper does not exist yet. If the theme is tagged `0.5.0` while Pro still emits legacy CSS, Pro typography will run alongside the theme's vars — both modes active, double payload, possible cascade conflict.
-
-**Hold the version tag** until the Pro session lands. See [`SPEC-pro-integration.md`](SPEC-pro-integration.md).
-
-### Issue #3 — Naming collision: `_font_size` strip on a setting named `*_font_size`
+### Issue #2 — Naming collision: `_font_size` strip on a setting named `*_font_size`
 
 The strip rule trims `_font_size` from the suffix to handle the misleadingly-named `search_box_font_size` / `search_icon_modal_font_size` typography fields. If a future setting genuinely IS a single `font_size` field named `something_font_size`, its var would also lose the `_font_size` suffix. Today no such setting exists. If one is added, prefer a non-conflicting name (e.g. `something_size`) or update `typography_var_name()` to special-case it.
 
@@ -360,13 +345,9 @@ The strip rule trims `_font_size` from the suffix to handle the misleadingly-nam
 
 ## 9. Pro plugin handoff
 
-Pro typography fields all use `'css_format' => 'typography'` and route through the theme's `typography()` generator — no separate Pro emission path. Once Pro adds `customify_pro_theme_supports_vars()`:
+Pro typography fields all use `'css_format' => 'typography'` and route through the theme's `typography()` generator — no separate Pro emission path. They follow the same `typography_field_uses_vars()` gate: Pro fields whose setting `name` starts with `global_typography_` would emit `:root` vars; everything else falls through to selector-scoped CSS at `$field['selector']`.
 
-- Pro's own inline-CSS callsites (currently selector-scoped) check the helper and switch to vars mode when the active theme is `>= 0.5.0`.
-- Pro's SCSS partials (blog, header-footer-items, scrolltop per memory `typography-vars-migration`) rewrite to consume `--customify-typo-*` vars with `var(..., fallback)`.
-- Pro fields automatically gain the same `customify/typography/legacy_output` escape hatch via the theme generator.
-
-This is **public API** under the 30k-sites rule. See [`SPEC-pro-integration.md`](SPEC-pro-integration.md).
+Pro's own inline-CSS callsites (header builder items, scrolltop, blog) write literal CSS at component selectors — no `--customify-typo-*` references today. The migration to read theme typography vars from Pro's SCSS is a separate task tracked in [`SPEC-pro-integration.md`](SPEC-pro-integration.md).
 
 ---
 
@@ -374,12 +355,10 @@ This is **public API** under the 30k-sites rule. See [`SPEC-pro-integration.md`]
 
 | Symptom | Likely cause |
 |---|---|
-| Customizer setting saves but nothing changes on frontend | Setting's CSS field schema disables the property (e.g. `base_heading` has font_size disabled — only family/weight emit). Verify via the field config. |
+| Customizer setting saves but nothing changes on frontend | Setting's CSS field schema disables the property (e.g. `base_heading` only enables family + weight — see [`typography.php`](../inc/customizer/configs/typography.php)). Verify via the field config. |
 | Setting changes apply on frontend but not in block editor | Editor canvas selector differs from frontend. Add an editor-specific consumer rule in [`src/backend/admin/scss/editor.scss`](../src/backend/admin/scss/editor.scss) targeting `.editor-styles-wrapper {your-selector}`. |
 | Per-device font-size value ignored on smaller screen | The SCSS consumer's `@include for_device(tablet) { ... }` block sets a literal value AFTER the base rule, winning by source order. Convert the responsive block to also use `var(..., breakpoint-fallback)` — see h1/h2 in `_base.scss` for the pattern. |
-| Google Fonts URL missing after migration | `setup_font()` skipped. The vars-mode emit path MUST still call `setup_font()` unconditionally — see §4.3 step 2. |
-| Live preview iframe doesn't reflect typography changes | Check `Customify_Preview_Config.legacy_typography_output` in the browser console. If `undefined`, [`class-customizer.php`](../inc/customizer/class-customizer.php) localization didn't run; verify the typography fields are enqueued with `customify-customizer-auto-css`. |
-| Sites breaking on `0.5.0` upgrade (child theme override stopped working) | Suggest the legacy filter as a stopgap:<br>`add_filter( 'customify/typography/legacy_output', '__return_true' );` |
+| Google Fonts URL missing | `setup_font()` skipped. The vars-mode emit path MUST still call `setup_font()` unconditionally — see §4.3 step 2. |
 
 ---
 
@@ -389,7 +368,6 @@ This is **public API** under the 30k-sites rule. See [`SPEC-pro-integration.md`]
 |---|---|
 | Override a typography value site-wide | Child theme CSS: `:root { --customify-typo-h1-font-size: 3rem; }` |
 | Override at a specific page | `body.page-id-42 { --customify-typo-base-p-font-size: 18px; }` |
-| Re-enable pre-`0.5.0` CSS output | `add_filter( 'customify/typography/legacy_output', '__return_true' );` |
 | Inspect the resolved var in the browser | DevTools → `<html>` → Computed → search `--customify-typo-` |
 | Get the var name for a setting programmatically | `Customify_Customizer_Auto_CSS::get_instance()->typography_var_name( $setting, $property );` |
 

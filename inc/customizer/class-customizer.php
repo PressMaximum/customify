@@ -257,10 +257,6 @@ class  Customify_Customizer {
 					'footer_rows'    => function_exists( 'customify_get_footer_row_ids' )
 						? customify_get_footer_row_ids()
 						: array( 'main', 'bottom' ),
-					// Mirrors the PHP filter `customify/typography/legacy_output`.
-					// JS preview reads this to stay in lockstep with the
-					// PHP generator's emit mode (selector-scoped vs :root vars).
-					'legacy_typography_output' => (bool) apply_filters( 'customify/typography/legacy_output', false ),
 				)
 			);
 		}

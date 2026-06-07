@@ -22,7 +22,12 @@ body {
     color: $color_text;
     font-family: var(--customify-typo-base-p-font-family, #{$font_main});
     font-weight: var(--customify-typo-base-p-font-weight, 400);
+    font-size: var(--customify-typo-base-p-font-size, inherit);
     line-height: var(--customify-typo-base-p-line-height, 1.618);
+    letter-spacing: var(--customify-typo-base-p-letter-spacing, normal);
+    font-style: var(--customify-typo-base-p-font-style, normal);
+    text-decoration: var(--customify-typo-base-p-text-decoration, none);
+    text-transform: var(--customify-typo-base-p-text-transform, none);
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -87,11 +92,13 @@ h2,
 h3,
 .h3 {
     font-size: var(--customify-typo-h3-font-size, ms(2));
+    line-height: var(--customify-typo-h3-line-height, inherit);
 }
 
 h4,
 .h4 {
     font-size: var(--customify-typo-h4-font-size, ms(1));
+    line-height: var(--customify-typo-h4-line-height, inherit);
 }
 
 // h5/h6 have no theme-default font-size in legacy SCSS — they

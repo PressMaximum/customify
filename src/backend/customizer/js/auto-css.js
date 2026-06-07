@@ -72,27 +72,15 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
     };
 
     /**
-     * Mirror of PHP Customify_Customizer_Auto_CSS::legacy_typography_enabled().
-     * Reads the localized flag injected by wp_localize_script — see
-     * Customify_Customizer::live_preview_data() (PHP side).
-     */
-    CustomifyAutoCSS.prototype.legacy_typography_enabled = function(){
-        if ( typeof Customify_Preview_Config !== 'undefined'
-            && ! _.isUndefined( Customify_Preview_Config.legacy_typography_output ) ) {
-            return !! Customify_Preview_Config.legacy_typography_output;
-        }
-        return false;
-    };
-
-    /**
      * Mirror of PHP typography_field_uses_vars(). Vars are restricted
-     * to fields whose `section` starts with `global_typography_` — the
-     * three sections of the Global Typography panel (base, site_tt,
-     * content). Per-component typography stays in legacy mode.
+     * to fields whose setting `name` starts with `global_typography_`
+     * (base / site_tt / heading family). Per-component typography
+     * (header builder items, footer copyright, blog read-more,
+     * breadcrumb, WC cart) stays in legacy mode.
      */
     CustomifyAutoCSS.prototype.typography_field_uses_vars = function( field ){
-        var section = ( field && field.section ) ? String( field.section ) : '';
-        return section.indexOf( 'global_typography_' ) === 0;
+        var name = ( field && field.name ) ? String( field.name ) : '';
+        return name.indexOf( 'global_typography_' ) === 0;
     };
 
     /**
@@ -1396,6 +1384,16 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             fields[ f.name ] = f;
         } );
 
+        // Honor per-field `fields` overrides — keep in lockstep with
+        // PHP typography() so vars/legacy emit match.
+        if ( field && _.isObject( field.fields ) ) {
+            _.each( field.fields, function( enabled, key ){
+                if ( enabled === false ) {
+                    delete fields[ key ];
+                }
+            } );
+        }
+
         if ( ! _.isUndefined( fields.font ) ) {
             code.font = this.setup_font( {
                 font: values.font,
@@ -1500,11 +1498,11 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             }
         }
 
-        // Vars mode is opt-in per field — only fields in the Global
-        // Typography panel sections emit :root vars. Per-component
-        // typography falls through to selector-scoped output. The
-        // global legacy filter overrides everything.
-        if ( that.legacy_typography_enabled() || ! that.typography_field_uses_vars( field ) ) {
+        // Vars mode is opt-in per field — only fields whose setting
+        // `name` starts with `global_typography_` emit :root vars.
+        // Per-component typography falls through to selector-scoped
+        // output.
+        if ( ! that.typography_field_uses_vars( field ) ) {
             _.each( devices_css, function( els, device ){
                 that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
             } );

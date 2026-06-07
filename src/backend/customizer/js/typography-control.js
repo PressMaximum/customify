@@ -192,6 +192,15 @@ export function setupTypographyControl(deps) {
 				that.fields = Customify_Control_Args.typo_fields;
 			}
 
+			// `languages` visibility is driven by the font picker's
+			// change event (setUpFont() toggles it based on font type).
+			// If the field config hides the font picker, that event
+			// never fires and `languages` would render visible by
+			// default — drop it here so the modal stays consistent.
+			if (_.isUndefined(that.fields.font)) {
+				delete that.fields.languages;
+			}
+
 			$(".customify-modal-settings--fields", that.container).append(
 				'<input type="hidden" class="customify--font-type">'
 			);
