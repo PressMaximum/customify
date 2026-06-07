@@ -12,7 +12,7 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 10.1.11
+ * @version 10.8.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -27,10 +27,10 @@ do_action( 'woocommerce_before_cart' ); ?>
 			<tr>
 				<th class="product-remove"><span class="screen-reader-text"><?php esc_html_e( 'Remove item', 'customify' ); ?></span></th>
 				<th class="product-thumbnail"><span class="screen-reader-text"><?php esc_html_e( 'Thumbnail image', 'customify' ); ?></span></th>
-				<th class="product-name"><?php esc_html_e( 'Product', 'customify' ); ?></th>
-				<th class="product-price"><?php esc_html_e( 'Price', 'customify' ); ?></th>
-				<th class="product-quantity"><?php esc_html_e( 'Quantity', 'customify' ); ?></th>
-				<th class="product-subtotal"><?php esc_html_e( 'Subtotal', 'customify' ); ?></th>
+				<th scope="col" class="product-name"><?php esc_html_e( 'Product', 'customify' ); ?></th>
+				<th scope="col" class="product-price"><?php esc_html_e( 'Price', 'customify' ); ?></th>
+				<th scope="col" class="product-quantity"><?php esc_html_e( 'Quantity', 'customify' ); ?></th>
+				<th scope="col" class="product-subtotal"><?php esc_html_e( 'Subtotal', 'customify' ); ?></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -41,7 +41,26 @@ do_action( 'woocommerce_before_cart' ); ?>
 				$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 				$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
-				if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+				/**
+				 * Filter whether this cart item is visible in the cart.
+				 *
+				 * @since 2.1.0
+				 * @param bool   $visible     Whether the cart item is visible. Default true.
+				 * @param array  $cart_item     The cart item data.
+				 * @param string $cart_item_key The cart item key.
+				 */
+				$visible = apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key );
+
+				if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && $visible ) {
+					/**
+					 * Filter the product name.
+					 *
+					 * @since 2.1.0
+					 * @param string $product_name Name of the product in the cart.
+					 * @param array $cart_item The product in the cart.
+					 * @param string $cart_item_key Key for the product in the cart.
+					 */
+					$product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
 					$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 					?>
 					<tr class="woocommerce-cart-form__cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
@@ -51,7 +70,7 @@ do_action( 'woocommerce_before_cart' ); ?>
 								echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 									'woocommerce_cart_item_remove_link',
 									sprintf(
-										'<a href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
+										'<a role="button" href="%s" class="remove" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
 										esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
 										esc_html__( 'Remove this item', 'customify' ),
 										esc_attr( $product_id ),
@@ -64,6 +83,19 @@ do_action( 'woocommerce_before_cart' ); ?>
 
 						<td class="product-thumbnail">
 						<?php
+						/**
+						 * Filter the product thumbnail displayed in the WooCommerce cart.
+						 *
+						 * This filter allows developers to customize the HTML output of the product
+						 * thumbnail. It passes the product image along with cart item data
+						 * for potential modifications before being displayed in the cart.
+						 *
+						 * @param string $thumbnail     The HTML for the product image.
+						 * @param array  $cart_item     The cart item data.
+						 * @param string $cart_item_key Unique key for the cart item.
+						 *
+						 * @since 2.1.0
+						 */
 						$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
 						if ( ! $product_permalink ) {
@@ -74,11 +106,16 @@ do_action( 'woocommerce_before_cart' ); ?>
 						?>
 						</td>
 
-						<td class="product-name" data-title="<?php esc_attr_e( 'Product', 'customify' ); ?>">
+						<td scope="row" role="rowheader" class="product-name" data-title="<?php esc_attr_e( 'Product', 'customify' ); ?>">
 						<?php
 						if ( ! $product_permalink ) {
-							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key ) . '&nbsp;' );
+							echo wp_kses_post( $product_name . '&nbsp;' );
 						} else {
+							/**
+							 * This filter is documented above.
+							 *
+							 * @since 2.1.0
+							 */
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $_product->get_name() ), $cart_item, $cart_item_key ) );
 						}
 
@@ -103,20 +140,24 @@ do_action( 'woocommerce_before_cart' ); ?>
 						<td class="product-quantity" data-title="<?php esc_attr_e( 'Quantity', 'customify' ); ?>">
 						<?php
 						if ( $_product->is_sold_individually() ) {
-							$product_quantity = sprintf( '1 <input type="hidden" name="cart[%s][qty]" value="1" />', $cart_item_key );
+							$min_quantity = 1;
+							$max_quantity = 1;
 						} else {
-							$product_quantity = woocommerce_quantity_input(
-								array(
-									'input_name'   => "cart[{$cart_item_key}][qty]",
-									'input_value'  => $cart_item['quantity'],
-									'max_value'    => $_product->get_max_purchase_quantity(),
-									'min_value'    => '0',
-									'product_name' => $_product->get_name(),
-								),
-								$_product,
-								false
-							);
+							$min_quantity = 0;
+							$max_quantity = $_product->get_max_purchase_quantity();
 						}
+
+						$product_quantity = woocommerce_quantity_input(
+							array(
+								'input_name'   => "cart[{$cart_item_key}][qty]",
+								'input_value'  => $cart_item['quantity'],
+								'max_value'    => $max_quantity,
+								'min_value'    => $min_quantity,
+								'product_name' => $product_name,
+							),
+							$_product,
+							false
+						);
 
 						echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ); // PHPCS: XSS ok.
 						?>
