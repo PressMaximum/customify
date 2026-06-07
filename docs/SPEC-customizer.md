@@ -243,7 +243,7 @@ All control classes live in `inc/customizer/controls/`. The `type` field picks t
 |---|---|
 | `font` | Google Fonts dropdown |
 | `font_style` | Font-weight + variant |
-| `typography` | Composite: font + weight + size + line-height + letter-spacing. Renders as a single control with a dedicated CSS pipeline. |
+| `typography` | Composite: font + weight + size + line-height + letter-spacing. Renders as a single control with a dedicated CSS pipeline. **As of theme `0.5.0`**, emits `:root { --customify-typo-*: value }` CSS variables instead of selector-scoped CSS. See [`SPEC-typography.md`](SPEC-typography.md) for var naming rules, the `customify/typography/legacy_output` escape hatch, and the SCSS consumer pattern. |
 | `css_ruler` | Margin / padding quad editor (`top right bottom left`). Stored as object. |
 | `shadow` | Box-shadow builder (x / y / blur / spread / color). |
 

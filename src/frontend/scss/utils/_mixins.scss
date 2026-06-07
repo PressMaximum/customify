@@ -81,3 +81,35 @@
     }
 }
 
+/************************
+   Customify Typography
+*************************/
+
+// Emit Customizer typography consumer rules for a typography setting
+// whose semantic name is $name (kebab — e.g. "site-tt-desc",
+// "header-menus", "footer-copyright"). PHP generator publishes the
+// matching --customify-typo-{name}-{prop} variables at :root (and
+// inside per-device media queries for font-size / line-height).
+//
+// Pass $props to limit which properties get consumers — useful when
+// a selector only needs family/weight/size (e.g. tagline). Default
+// covers every property the typography field schema can produce.
+@mixin customify-typography(
+    $name,
+    $props: (font-family, font-weight, font-size, line-height, letter-spacing, text-decoration, text-transform, font-style)
+) {
+    $fallbacks: (
+        font-family: inherit,
+        font-weight: inherit,
+        font-size: inherit,
+        line-height: inherit,
+        letter-spacing: normal,
+        text-decoration: none,
+        text-transform: none,
+        font-style: normal,
+    );
+    @each $prop in $props {
+        #{$prop}: var(--customify-typo-#{$name}-#{$prop}, #{map.get($fallbacks, $prop)});
+    }
+}
+
