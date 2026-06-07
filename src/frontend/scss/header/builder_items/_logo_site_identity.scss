@@ -16,19 +16,21 @@
         line-height: 1;
     }
     .site-title {
-        font-size: var(--customify-typo-site-tt-title-font-size, 1.5em);
+        // Leaf component — not tokenized. font-family reuses the shared
+        // heading token; size/weight/line-height are literal defaults the
+        // generator overrides with selector-scoped CSS when the user sets
+        // Site Title typography.
+        font-family: var(--customify-typo-heading-font-family, inherit);
+        font-size: 1.5em;
+        font-weight: 600;
+        line-height: 1.216;
         margin: 0;
-        font-weight: var(--customify-typo-site-tt-title-font-weight, 600);
-        line-height: var(--customify-typo-site-tt-title-line-height, 1.216);
-        font-family: var(--customify-typo-site-tt-title-font-family, inherit);
-        letter-spacing: var(--customify-typo-site-tt-title-letter-spacing, normal);
-        text-decoration: var(--customify-typo-site-tt-title-text-decoration, none);
-        text-transform: var(--customify-typo-site-tt-title-text-transform, none);
-        font-style: var(--customify-typo-site-tt-title-font-style, normal);
     }
     .site-description {
+        // Leaf component — not tokenized. Inherits the body font; the
+        // generator emits selector-scoped CSS when the user sets Tagline
+        // typography.
         margin: 5px 0px 7px 0px;
-        @include customify-typography('site-tt-desc');
     }
     &.logo-left {
         .logo-link {

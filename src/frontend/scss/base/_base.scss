@@ -20,14 +20,13 @@
 
 body {
     color: $color_text;
-    font-family: var(--customify-typo-base-p-font-family, #{$font_main});
-    font-weight: var(--customify-typo-base-p-font-weight, 400);
-    font-size: var(--customify-typo-base-p-font-size, inherit);
-    line-height: var(--customify-typo-base-p-line-height, 1.618);
-    letter-spacing: var(--customify-typo-base-p-letter-spacing, normal);
-    font-style: var(--customify-typo-base-p-font-style, normal);
-    text-decoration: var(--customify-typo-base-p-text-decoration, none);
-    text-transform: var(--customify-typo-base-p-text-transform, none);
+    // Core typography tokens only. Cosmetic props (letter-spacing,
+    // font-style, text-decoration, text-transform) are emitted as
+    // selector-scoped literal CSS by the generator, only when set.
+    font-family: var(--customify-typo-body-font-family, #{$font_main});
+    font-weight: var(--customify-typo-body-font-weight, 400);
+    font-size: var(--customify-typo-body-font-size, inherit);
+    line-height: var(--customify-typo-body-line-height, 1.618);
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -48,8 +47,8 @@ h6,
 .h4,
 .h5,
 .h6 {
-    font-weight: var(--customify-typo-base-heading-font-weight, 400);
-    font-family: var(--customify-typo-base-heading-font-family, #{$font_main});
+    font-weight: var(--customify-typo-heading-font-weight, 400);
+    font-family: var(--customify-typo-heading-font-family, #{$font_main});
     margin: 0 0 ms(-3);
     color: $color_heading;
     clear: both;
