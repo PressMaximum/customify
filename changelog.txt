@@ -1,3 +1,13 @@
+= 0.4.19 =
+* NEW: Page Header + per-CPT archive sidebar layout overrides for post types with a real archive.
+* IMPROVED: Customizer panels regrouped — Content/Plugins/Core, Typography as section, WC under Compatibility.
+* IMPROVED: Layouts panel grouped with heading separators; Colors section moved to first General Options entry.
+* IMPROVED: CPT gate tightened — utility CPTs dropped from per-type sidebar, Page Header, Page Settings metabox.
+* IMPROVED: Typography pipeline overhauled — :root CSS vars, weight backfill, and slider default emission fixes.
+* FIXED: Page Header is_tax() now reads its own slice for custom taxonomies (was hardcoded to product_tag).
+* FIXED: `.page-cover-inner` margin-top fallback set to 0 so opaque headers don't offset cover content.
+* FIXED: Headings h5 / h6 now have SCSS var consumers — were silently no-op in the new typography vars mode.
+
 = 0.4.18 =
 * IMPROVED: Footer builder rows made fully generic — Pro's `top` row and any extension-added row now work identically to built-in main/bottom.
 * IMPROVED: Dropped unnecessary `!important` on `.alignfull` margins so child themes and user CSS can override the full-bleed behavior through normal cascade.

@@ -1,8 +1,13 @@
 /* Widget Common */
 .widget-title {
-	font-size: 16px;
-	text-transform: uppercase;
-	font-weight: 500;
+	font-size: var(--customify-typo-base-widget-title-font-size, 16px);
+	text-transform: var(--customify-typo-base-widget-title-text-transform, uppercase);
+	font-weight: var(--customify-typo-base-widget-title-font-weight, 500);
+	font-family: var(--customify-typo-base-widget-title-font-family, inherit);
+	line-height: var(--customify-typo-base-widget-title-line-height, inherit);
+	letter-spacing: var(--customify-typo-base-widget-title-letter-spacing, normal);
+	text-decoration: var(--customify-typo-base-widget-title-text-decoration, none);
+	font-style: var(--customify-typo-base-widget-title-font-style, normal);
 	color: currentColor;
 	margin-bottom: 20px;
 }

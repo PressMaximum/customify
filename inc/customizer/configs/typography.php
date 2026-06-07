@@ -57,10 +57,17 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'description' => __( 'Apply to all heading elements.', 'customify' ),
 				'css_format'  => 'typography',
 				'selector'    => 'h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6',
+				// Only family + weight are consumed by SCSS (`_base.scss` shared
+				// heading rule). Size / line-height / letter-spacing / style /
+				// decoration / transform fall to per-level h1–h6 below if needed,
+				// or to the browser default — UI hides them to avoid silent no-ops.
 				'fields'      => array(
-					'font_size'      => false,
-					'line_height'    => false,
-					'letter_spacing' => false,
+					'font_size'       => false,
+					'line_height'     => false,
+					'letter_spacing'  => false,
+					'style'           => false,
+					'text_decoration' => false,
+					'text_transform'  => false,
 				),
 			),
 			array(
@@ -107,61 +114,34 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'title'   => __( 'Content', 'customify' ),
 			),
 
-			array(
-				'name'       => "{$section}_heading_h1",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H1', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h1, .wp-block h1, .entry-single .entry-title',
-			),
-
-			array(
-				'name'       => "{$section}_heading_h2",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H2', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h2, .wp-block h2',
-			),
-
-			array(
-				'name'       => "{$section}_heading_h3",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H3', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h3, .wp-block h3',
-			),
-
-			array(
-				'name'       => "{$section}_heading_h4",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H4', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h4, .wp-block h4',
-			),
-
-			array(
-				'name'       => "{$section}_heading_h5",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H5', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h5, .wp-block h5',
-			),
-
-			array(
-				'name'       => "{$section}_heading_h6",
-				'type'       => 'typography',
-				'section'    => 'typography_panel',
-				'title'      => __( 'Heading H6', 'customify' ),
-				'css_format' => 'typography',
-				'selector'   => '.entry-content h6, .wp-block h6',
-			),
-
 		);
+
+		// Per-level h1–h6 expose only font-size + line-height. Family /
+		// weight / style / decoration / transform are owned by the
+		// `base_heading` shared rule (see above) — letting the user
+		// re-pick them per level would silently no-op because `_base.scss`
+		// doesn't carry per-level consumers for those properties.
+		$h_fields = array(
+			'font'            => false,
+			'font_weight'     => false,
+			'letter_spacing'  => false,
+			'style'           => false,
+			'text_decoration' => false,
+			'text_transform'  => false,
+		);
+
+		foreach ( array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6' ) as $tag ) {
+			$config[] = array(
+				'name'       => "{$section}_heading_{$tag}",
+				'type'       => 'typography',
+				'section'    => 'typography_panel',
+				/* translators: %s: heading tag name (H1, H2, etc.). */
+				'title'      => sprintf( __( 'Heading %s', 'customify' ), strtoupper( $tag ) ),
+				'css_format' => 'typography',
+				'selector'   => ".entry-content {$tag}, .wp-block {$tag}" . ( 'h1' === $tag ? ', .entry-single .entry-title' : '' ),
+				'fields'     => $h_fields,
+			);
+		}
 
 		return array_merge( $configs, $config );
 	}

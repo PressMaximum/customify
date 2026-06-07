@@ -115,8 +115,9 @@ add_action( 'admin_menu', 'customify_dashboard_v2_add_menu', 9 );
  */
 function customify_dashboard_v2_register_submenu(): void {
 	$tabs = array(
-		array( 'hash' => '#welcome',  'label' => __( 'Dashboard', 'customify' ) ),
-		array( 'hash' => '#settings', 'label' => __( 'Settings', 'customify' ) ),
+		array( 'hash' => '#welcome',           'label' => __( 'Dashboard', 'customify' ) ),
+		array( 'hash' => '#settings',          'label' => __( 'Settings', 'customify' ) ),
+		array( 'hash' => '#starter-templates', 'label' => __( 'Starter Templates', 'customify' ) ),
 	);
 	foreach ( $tabs as $tab ) {
 		add_submenu_page(
@@ -318,6 +319,7 @@ function customify_dashboard_v2_boot_data(): array {
 				array( 'autofocus' => array( 'section' => 'static_front_page' ) ),
 				$customize
 			),
+			'starterTemplatesInstall' => admin_url( 'plugin-install.php?tab=search&s=starter+templates' ),
 			'legacyDashboard' => admin_url( 'themes.php?page=customify-legacy' ),
 			'docs'           => 'https://pressmaximum.com/docs/customify/',
 			'proUpgrade'     => 'https://pressmaximum.com/customify/pro-upgrade/?utm_source=theme_dashboard&utm_medium=links&utm_campaign=pro_modules',
