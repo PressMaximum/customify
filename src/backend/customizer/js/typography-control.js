@@ -60,11 +60,19 @@ export function setupTypographyControl(deps) {
 			// font-face children in to_google_variant()). System fonts
 			// fall through to the generic 100..900 weight ladder below.
 			if (type === "google" || type === "library" || type === "theme") {
+				// Track rendered weight tokens so we can backfill
+				// 400 (regular) and 700 (bold) when the font ships
+				// with a minimal variant list (e.g. a Library font
+				// declaring only `regular`). Browsers synthesise the
+				// missing weights via faux-bold, so exposing the
+				// option is more useful than locking the user out.
+				var rendered = {};
 				_.each(options, function (value) {
 					var selected = "";
 					if (value === v) {
 						selected = ' selected="selected" ';
 					}
+					rendered[String(value).toLowerCase()] = true;
 					html +=
 						"<option" +
 						selected +
@@ -74,6 +82,25 @@ export function setupTypographyControl(deps) {
 						value +
 						"</option>";
 				});
+
+				var hasRegular =
+					rendered["400"] ||
+					rendered["regular"] ||
+					rendered["normal"] ||
+					rendered["default"];
+				if (!hasRegular) {
+					html +=
+						"<option" +
+						(v === "400" ? ' selected="selected" ' : "") +
+						' value="400">400</option>';
+				}
+				var hasBold = rendered["700"] || rendered["bold"];
+				if (!hasBold) {
+					html +=
+						"<option" +
+						(v === "700" ? ' selected="selected" ' : "") +
+						' value="700">700</option>';
+				}
 			} else {
 				_.each(Customify_Control_Args.list_font_weight, function (
 					value,
@@ -163,6 +190,15 @@ export function setupTypographyControl(deps) {
 				});
 			} else {
 				that.fields = Customify_Control_Args.typo_fields;
+			}
+
+			// `languages` visibility is driven by the font picker's
+			// change event (setUpFont() toggles it based on font type).
+			// If the field config hides the font picker, that event
+			// never fires and `languages` would render visible by
+			// default — drop it here so the modal stays consistent.
+			if (_.isUndefined(that.fields.font)) {
+				delete that.fields.languages;
 			}
 
 			$(".customify-modal-settings--fields", that.container).append(

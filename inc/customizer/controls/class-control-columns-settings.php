@@ -15,7 +15,7 @@
  * `align` is one of `flex-start | flex-center | flex-end | space-between`
  * and maps to `justify-content` on the main axis defined by `direction`.
  *
- * @since 0.5.0
+ * @since 0.4.19
  */
 class Customify_Customizer_Control_Columns_Settings extends Customify_Customizer_Control_Base {
 

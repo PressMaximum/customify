@@ -16,13 +16,19 @@
         line-height: 1;
     }
     .site-title {
-        font-size: 1.5em;
+        font-size: var(--customify-typo-site-tt-title-font-size, 1.5em);
         margin: 0;
-        font-weight: 600;
-        line-height: 1.216;
+        font-weight: var(--customify-typo-site-tt-title-font-weight, 600);
+        line-height: var(--customify-typo-site-tt-title-line-height, 1.216);
+        font-family: var(--customify-typo-site-tt-title-font-family, inherit);
+        letter-spacing: var(--customify-typo-site-tt-title-letter-spacing, normal);
+        text-decoration: var(--customify-typo-site-tt-title-text-decoration, none);
+        text-transform: var(--customify-typo-site-tt-title-text-transform, none);
+        font-style: var(--customify-typo-site-tt-title-font-style, normal);
     }
     .site-description {
         margin: 5px 0px 7px 0px;
+        @include customify-typography('site-tt-desc');
     }
     &.logo-left {
         .logo-link {

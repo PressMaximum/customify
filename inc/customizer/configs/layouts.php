@@ -81,6 +81,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					array( 'site_layout', '=', 'site-framed' ),
 				),
 			),
+			array(
+				'name'    => 'global_layout_h_width',
+				'type'    => 'heading',
+				'section' => 'global_layout_section',
+				'title'   => __( 'Width', 'customify' ),
+			),
+
 			/**
 			 * @since 0.2.6 Change css_format and selector.
 			 *
@@ -111,14 +118,21 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			// option (per-post metabox). Mirrors the Full Width / Full Width –
 			// Stretched pattern: a content_layout value that overrides sidebar
 			// layout to no-sidebar and constrains content-size to this value.
-			// .site-content.content-narrow CSS rule consumes the saved value;
-			// see customify_layout_content_size_css() in inc/template-functions.php.
+			//
+			// The `.site-content.content-narrow` rule below is the SINGLE source of
+			// truth for this layout's CSS — emitted on the frontend by the field's
+			// PHP `auto_css()` output and live-rebuilt in Customizer preview by
+			// `src/backend/customizer/js/auto-css.js`. Keeping the rule inside the
+			// per-field `css_format` (not the static `customify_layout_content_size_css()`
+			// block) is deliberate: the preview JS overwrites the per-field stylesheet
+			// on every drag, so a static duplicate would either (a) win source order
+			// and freeze the preview at the saved value, or (b) lose source order
+			// and force callers to ensure they enqueue customify-layout-style after
+			// customify-style. Owning the rule here removes both traps.
 			//
 			// Wide-size for narrow = narrow_width + 400 (200px breakout each side)
-			// per the dynamic wide-size design — see the same SPEC in
-			// customify_layout_content_size_css(). `calc({{value}} + 400px)` lets
-			// the Customizer live-preview auto-CSS rebuild keep wide-size in sync
-			// without a separate handler.
+			// per the dynamic wide-size design. `calc({{value}} + 400px)` lets the
+			// auto-CSS rebuild keep wide-size in sync without a separate handler.
 			array(
 				'name'            => 'narrow_width',
 				'type'            => 'slider',
@@ -132,6 +146,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'description'     => __( 'Max width when a post uses the "Narrow" Content Layout option in the Page Settings panel.', 'customify' ),
 				'selector'        => 'format',
 				'css_format'      => '.site-content.content-narrow { --wp--style--global--content-size: {{value}}; --wp--style--global--wide-size: calc({{value}} + 400px); }',
+			),
+
+			array(
+				'name'    => 'global_layout_h_content',
+				'type'    => 'heading',
+				'section' => 'global_layout_section',
+				'title'   => __( 'Content Area', 'customify' ),
 			),
 
 			// Site content layout.
@@ -174,6 +195,14 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'theme_supports' => '',
 				'title'          => __( 'Sidebars', 'customify' ),
 			),
+
+			array(
+				'name'    => 'sidebar_layout_h_general',
+				'type'    => 'heading',
+				'section' => 'sidebar_layout_section',
+				'title'   => __( 'General', 'customify' ),
+			),
+
 			// Global sidebar layout. Default changed from `content-sidebar`
 			// (content + right sidebar) to `content` (no sidebar) — clean
 			// out-of-the-box look that matches the "pick a few brand colors
@@ -201,6 +230,13 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'default'    => 'sidebar_vertical_border',
 				'css_format' => 'html_class',
 				'selector'   => 'body',
+			),
+
+			array(
+				'name'    => 'sidebar_layout_h_pages',
+				'type'    => 'heading',
+				'section' => 'sidebar_layout_section',
+				'title'   => __( 'Page Types', 'customify' ),
 			),
 
 			// Page sidebar layout. Default changed from `content-sidebar` to
@@ -252,7 +288,7 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 		);
 
-		$post_types = Customify()->get_post_types( false );
+		$post_types = customify_get_content_post_types();
 
 		if ( count( $post_types ) ) {
 			$config[] = array(
@@ -274,6 +310,30 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 						customify_get_config_sidebar_layouts()
 					),
 				);
+
+				// Per-CPT archive sidebar layout. Only registered for post types
+				// with a real archive ( has_archive ). WooCommerce owns the
+				// `product` shop/archive sidebar via its own customify_get_layout
+				// filter, so a control here would be dead — skip it. Default
+				// 'content' (no sidebar) mirrors the per-CPT single default
+				// ( {$pt}_sidebar_layout ) for a clean out-of-the-box look; sites
+				// that explicitly saved a value keep it. Choosing the "Default"
+				// option (value 'default') inherits the global "Blog Archive Page"
+				// layout via the resolver in customify_get_layout().
+				$pt_object = get_post_type_object( $pt );
+				if ( 'product' !== $pt && $pt_object && $pt_object->has_archive ) {
+					$config[] = array(
+						'name'    => "{$pt}_archive_sidebar_layout",
+						'type'    => 'select',
+						'default' => 'content',
+						'section' => 'sidebar_layout_section',
+						'title'   => sprintf( __( '%s Archive', 'customify' ), $label['singular_name'] ),
+						'choices' => array_merge(
+							array( 'default' => __( 'Default', 'customify' ) ),
+							customify_get_config_sidebar_layouts()
+						),
+					);
+				}
 			}
 		}
 

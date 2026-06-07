@@ -194,15 +194,14 @@ class Customify_MetaBox {
 	}
 
 	public function get_support_post_types() {
-		$args = array(
-			'public' => true,
-		);
+		// Delegate to the shared gate so the classic metabox and the block-editor
+		// panel (inc/admin/page-settings.php) support exactly the same post types,
+		// and both exclude no-front-end utility CPTs (e.g. the Pro Hooks store).
+		if ( function_exists( 'customify_get_meta_support_post_types' ) ) {
+			return customify_get_meta_support_post_types();
+		}
 
-		$output     = 'names'; // Names or objects, note names is the default.
-		$operator   = 'and'; // Can use 'and' or 'or'.
-		$post_types = get_post_types( $args, $output, $operator );
-
-		return array_values( $post_types );
+		return array_values( get_post_types( array( 'public' => true ), 'names', 'and' ) );
 	}
 
 	/**

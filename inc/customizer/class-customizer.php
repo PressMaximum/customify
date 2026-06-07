@@ -1330,7 +1330,11 @@ class  Customify_Customizer {
 				'title'    => __( 'General Options', 'customify' ),
 				'priority' => 50,
 				'panels'   => array(
-					'styling_panel',
+					// Colors is a top-level SECTION (not a panel) — the
+					// get_section() fallback in register_panel_groups() positions
+					// it deterministically (priority 60) as the first entry here.
+					// Replaces the now-removed empty `styling_panel`.
+					'customify_colors',
 					'typography_panel',
 				),
 			),
@@ -1343,8 +1347,11 @@ class  Customify_Customizer {
 					'footer_settings',
 				),
 			),
+			// Group KEY stays `post_types` — it's a documented
+			// `customify/customizer/panel_groups` extension point (companion plugins
+			// append panels to it), so only the display title changed to "Content".
 			'post_types'      => array(
-				'title'    => __( 'Post Types', 'customify' ),
+				'title'    => __( 'Content', 'customify' ),
 				'priority' => 350,
 				'panels'   => array(
 					'blog_panel',
@@ -1353,14 +1360,29 @@ class  Customify_Customizer {
 					'portfolio_panel',
 				),
 			),
-			'core_plugins'    => array(
-				'title'    => __( 'Core & Plugins', 'customify' ),
-				'priority' => 1000,
+			// Theme + plugin integration settings, sitting above the WP-core group.
+			'plugins'         => array(
+				'title'    => __( 'Plugins', 'customify' ),
+				'priority' => 600,
 				'panels'   => array(
-					// Compatibility is a theme panel but conceptually belongs with the
-					// plugin-integration settings, so it heads the Core & Plugins group.
+					// WooCommerce registers its own panel (id `woocommerce`) OUTSIDE
+					// Customify's config; register_panel_groups() exempts grouped panels
+					// from the +2000 foreign bump, so it sits here cleanly. Absent (no-op)
+					// when WooCommerce is inactive — Compatibility still anchors the group.
+					'woocommerce',
+					// Compatibility is the theme's plugin-SUPPORT panel, so it belongs with
+					// the plugin integrations — not with the WP-core group.
 					'compatibility_panel',
 				),
+			),
+			// Key stays `core_plugins` (kept for any external panel_groups filter);
+			// title is now just "Core" — the WP-core items (Menus, Widgets, Homepage
+			// Settings, Additional CSS) get bumped into this zone. Compatibility +
+			// WooCommerce now live in the "Plugins" group above.
+			'core_plugins'    => array(
+				'title'    => __( 'Core', 'customify' ),
+				'priority' => 1000,
+				'panels'   => array(),
 			),
 		);
 
@@ -1406,9 +1428,10 @@ class  Customify_Customizer {
 			foreach ( $group['panels'] as $name ) {
 				$obj = $wp_customize->get_panel( $name );
 				if ( ! $obj ) {
-					// Fall back to a top-level section with the same name (the upsell
-					// strip in upsell.php uses this shape — kept here for symmetry even
-					// though no current group references a top-level section).
+					// Fall back to a top-level section with the same name. The
+					// "General Options" group relies on this to position the Colors
+					// section (`customify_colors`); the upsell strip in upsell.php
+					// uses the same shape.
 					$section = $wp_customize->get_section( $name );
 					if ( $section && empty( $section->panel ) ) {
 						$obj = $section;
@@ -1425,8 +1448,18 @@ class  Customify_Customizer {
 		$managed       = self::get_config();
 		$divider_token = 'customify_divider_';
 
+		// Panels explicitly placed into a group in step 1 keep that position — do
+		// NOT bump them even when foreign (e.g. the WooCommerce panel, pinned under
+		// Compatibility). Without this, step 1's positioning would be undone here.
+		$grouped_panels = array();
+		foreach ( $groups as $group ) {
+			foreach ( $group['panels'] as $name ) {
+				$grouped_panels[ $name ] = true;
+			}
+		}
+
 		foreach ( $wp_customize->panels() as $panel_id => $panel ) {
-			if ( isset( $managed[ 'panel|' . $panel_id ] ) ) {
+			if ( isset( $managed[ 'panel|' . $panel_id ] ) || isset( $grouped_panels[ $panel_id ] ) ) {
 				continue;
 			}
 			$panel->priority = (int) $panel->priority + 2000;

@@ -440,7 +440,23 @@ class Customify
 		// emit standalone @font-face declarations.
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_theme_fonts_css() );
 		wp_add_inline_style( 'customify-style', Customify_Customizer_Auto_CSS::get_instance()->get_library_fonts_css() );
-		wp_add_inline_style( 'customify-style', customify_layout_content_size_css() );
+
+		// `customify_layout_content_size_css()` ships static body.main-layout-*
+		// rules that depend only on the migration-time anchor option, not on
+		// any live-tweakable Customizer setting. The Customizer preview JS
+		// (src/backend/customizer/js/auto-css.js) rebuilds and OVERWRITES
+		// `#customify-style-inline-css` on every setting change, so anything
+		// glued onto the main customify-style handle gets wiped — that's how
+		// the `narrow_width` slider used to drag content-size down to the
+		// theme.json default (863px) on non-narrow pages, reading as "narrow
+		// width is being applied everywhere". Hosting the layout CSS in its
+		// own inline-only handle keeps the body.main-layout-* rules out of
+		// the JS rewrite path. False-source `wp_register_style()` is the
+		// canonical WP inline-only pattern (no `<link>` printed, only the
+		// `id="customify-layout-style-inline-css"` <style> element).
+		wp_register_style( 'customify-layout-style', false, array(), self::$version );
+		wp_enqueue_style( 'customify-layout-style' );
+		wp_add_inline_style( 'customify-layout-style', customify_layout_content_size_css() );
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
@@ -470,6 +486,8 @@ class Customify
 			// Template element classes.
 			'/inc/colors-palette.php',
 			// Colors palette CSS var emitter for the new top-level Colors section.
+			'/inc/color-palette-switcher.php',
+			// Palettes UI (presets + custom palettes) at the top of the Colors section.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',

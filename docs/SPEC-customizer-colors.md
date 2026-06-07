@@ -227,7 +227,7 @@ computed default is used.
 | `--customify-border` | `global_styling_color_border` | `mix(text 14%, base)` (Phase 2.10 bumped 12→14% per spec §2) | Decorative borders / separators (~1.35:1, WCAG-exempt) |
 | `--customify-border-strong` | (no legacy key) | Iterate P 6%→100% until `contrast(mix(text P%, base), base) ≥ 3.0` | Form input borders, functional outlines (WCAG 1.4.11 ≥3:1) |
 | `--customify-link` | `global_styling_color_link` | `= primary` | `a { color }` |
-| `--customify-link-hover` | `global_styling_color_link_hover` | `mix(primary 85%, white)` (Phase 2.4 — surfaces, not depresses) | `a:hover/focus` |
+| `--customify-link-hover` | `global_styling_color_link_hover` | `= link` (Phase 3 — follows Link → Primary; was `mix(primary 85%, white)`) | `a:hover/focus` |
 | `--customify-primary-hover` | (no legacy key) | `mix(primary, black 10%)` | `button:hover` (NEW, didn't exist before) |
 | `--customify-heading` | `global_styling_color_heading` | `= text` | `h1-h6` |
 | `--customify-widget-title` | `global_styling_color_w_title` | `= text` | `.site-content .widget-title` |
@@ -585,10 +585,10 @@ inc/
         │                                       dividers + 6 slot pickers +
         │                                       relocated link/background/
         │                                       override fields
-        ├── styling.php                   MODIFIED — stripped to just the
-        │                                            styling_panel
-        │                                            registration (Typography/
-        │                                            Layouts still use it)
+        ├── styling.php                   MODIFIED — styling_panel registration
+        │                                            removed (panel is empty after
+        │                                            the colors move); callback
+        │                                            kept as a no-op stub
         └── background.php                MODIFIED — class stub with no-op
                                                      config() (3 composites
                                                      moved to colors.php;
@@ -612,6 +612,35 @@ docs/
 
 Build artifacts in `build/css/backend/customizer/customizer.css` are git-
 ignored. Run `npm run build` after a fresh clone.
+
+> **Note:** the tree above is the Phase-1 snapshot. Later phases added more
+> files — see the §8.x phase logs for the rationale behind each.
+
+```
+inc/
+├── color-palette-switcher.php          NEW (Phase 3) — palette switcher UI:
+│                                          built-in presets + custom palettes
+│                                          (create/rename/delete, import/export),
+│                                          customify_color_sanitize_palettes(),
+│                                          inline controls JS + CSS. Registered
+│                                          in includes() right after
+│                                          colors-palette.php.
+└── colors-palette.php                  MODIFIED (Phase 2.x–3) — derived-token
+                                           engine (on-*, *-container, OKLab),
+                                           link-hover → link cascade, live-
+                                           preview recompute debounce, quick-
+                                           pick swatch cascade resolution.
+
+src/frontend/scss/
+├── base/_base.scss                     MODIFIED (Phase 2.14) — background-
+│                                          agnostic native-button hover state
+│                                          layer (color-mix overlay).
+├── base/_blocks.scss                   MODIFIED (Phase 2.14) — block bg auto-
+│                                          contrast text + Blocksify button
+│                                          text colour (on-* tokens).
+└── header/builder_items/_button.scss   MODIFIED (Phase 2.14) — header builder
+                                           button hover state layer.
+```
 
 ---
 
@@ -1294,6 +1323,74 @@ SCSS auto-wire (Phase 2.13):
 | accent-container chroma | 0.040 (capped from 0.103) | — (Customify extension) |
 | on-accent-container | #8B5F00 | ~#8B5F00 (dark gold) ✓ |
 
+### 8.14 Phase 2.14 — Blocksify button text auto-contrast + button hover state layer (PR #407)
+
+Two frontend-only additions. Both consume EXISTING palette tokens — no new
+`theme_mod` keys, no storage change, no selector renames.
+
+**A. Blocksify Fill button label auto-contrast** (`src/frontend/scss/base/_blocks.scss`).
+
+Blocksify's Fill button is tagged `bsy-button-{uid}` + `bsy-bg-{slug}` and reads
+its label color from the custom property `--blocksify--button--text-color`
+(falling back to white when unset). Three rules point that property at the
+matching auto-contrast token so a brand-background button gets a WCAG-readable
+label that tracks Customizer slot edits:
+
+```scss
+[class*="bsy-button-"].bsy-bg-primary   { --blocksify--button--text-color: var(--customify-on-primary); }
+[class*="bsy-button-"].bsy-bg-secondary { --blocksify--button--text-color: var(--customify-on-secondary); }
+[class*="bsy-button-"].bsy-bg-accent    { --blocksify--button--text-color: var(--customify-on-accent); }
+```
+
+- Scoped to `[class*="bsy-button-"]` so the var lands only on the button element
+  (it must not inherit to children). A designer's explicit label-color pick still
+  wins (Blocksify sets the property inline at higher specificity).
+- **Solid brand slugs only.** `on-{primary,secondary,accent}` are emitted to
+  `:root` unconditionally (§3.2 note). The `*-container` slugs are deliberately
+  NOT mapped — their `on-*-container` tokens are gated on Palette opt-in, so a
+  theme default could not be guaranteed; container buttons rely on the designer's
+  text pick, which already tracks the palette via `var(--wp--preset--color--X)`.
+- NOT WP's `.has-{slug}-background-color` — that ships `background-color
+  !important` (locks the fill, blocks hover); Blocksify uses its own
+  `bsy-bg-{slug}` precisely to avoid it.
+- Additive + inert when Blocksify is absent (nothing carries these classes).
+- Verified end-to-end on Blocksify dev (PR #211 — per-page CSS + the consumer
+  var): on a custom palette, secondary→dark label 4.89:1, accent→dark 5.28:1,
+  primary→white 5.17:1 (all ≥ AA). Note: Blocksify keys its per-instance CSS by
+  the block `uid`, which must be a valid 8-hex string — hand-authored markup with
+  a malformed uid makes Blocksify fall the fill back to primary.
+
+**B. Native + header-builder button hover → adaptive "state layer"**
+(`base/_base.scss`, `header/builder_items/_button.scss`).
+
+Replaces the legacy darken overlay (`box-shadow: inset 0 0 0 120px
+rgba(0,0,0,.18)`) with a translucent 13%-of-text layer painted on top of the
+LIVE background (matches Blocksify's current button hover):
+
+```scss
+&:hover {
+    background-image: linear-gradient(
+        color-mix(in srgb, currentColor 13%, transparent),
+        color-mix(in srgb, currentColor 13%, transparent)
+    );
+}
+```
+
+- **Background-agnostic by design.** The overlay sits over whatever the actual
+  background is, so it adapts: a dark fill with light text lifts, a light fill
+  with dark text deepens — correct for the primary native fill, the secondary
+  builder/WooCommerce fill, AND any custom background. A named `color-mix()` on
+  `background-color` was rejected: it can't read the live background, so it
+  wrong-colours non-primary / custom-background buttons on hover.
+- Trade-off: `background-image` is not animatable → the overlay appears instantly
+  (no fade). Accepted for a subtle 13% layer.
+- `13%` matches Blocksify — keep in sync if the plugin changes it.
+- Needs `color-mix()` (Chrome 111+ / FF 113+ / Safari 16.2+, Baseline 2023);
+  older browsers show no hover shift (graceful).
+- 30K-safety: no storage/selector change. Only the transient hover *appearance*
+  changes site-wide (darken → adaptive lift/deepen); resting + saved colors render
+  identically.
+
 ### 8.12 Phase 2 — remaining (good follow-ups)
 
 #### Investigate "shadow slug" approach for legacy back-compat
@@ -1337,20 +1434,116 @@ trade-off preference.
 | Background composite ↔ slot two-way sync | When user edits `bg_color` subfield of `background` composite, also update `customify_palette_base` (or vice versa). Right now editing one doesn't propagate. |
 | `content_background` slot | If used in practice, add a 7th slot or a deeper-content surface. Currently has no slot equivalent. |
 
-### 8.13 Phase 3 — Custom palettes / Style Packs (future)
+### 8.13 Phase 3 — Palette switcher (done)
 
-Once Phase 2 stabilizes the slot ↔ everything-else cascade, Phase 3 can
-build the higher-level palette UX on top:
+A card-based palette switcher at the top of the Colors section. The user
+applies a named palette (preset or custom) in one click; the cards drive the
+6 existing slot pickers — no new render path, no new rendered token.
 
-- Multiple palette presets (e.g. Light + Dark) the user can switch
-  between with one click; each preset stores its own 6 slot values.
-- User-saved custom palettes (CRUD + name + thumbnail).
-- Per-site dark-mode token set wired to `prefers-color-scheme` or a
-  user toggle.
-- Style Pack concept — bundle palette + typography + spacing under a
-  single named preset that can be applied / shared / imported.
+**New file:** `inc/color-palette-switcher.php` (registered in
+`inc/class-customify.php` `includes()` right after `colors-palette.php`).
 
-Design when Phase 3 starts; not blocked by anything in Phase 1/2 today.
+**A. Storage — two NEW `theme_mod` keys (the only storage added).**
+
+| Key | Type | Default | Purpose |
+|---|---|---|---|
+| `customify_active_palette` | string | `''` | id of the palette the slots currently match (e.g. `sunrise`). Bookkeeping only — nothing renders from it. |
+| `customify_color_palettes` | JSON string | `'[]'` | user-saved custom palettes: `[{id,name,slots:{…}}]`. |
+
+The 6 slots keep their EXISTING keys — the switcher writes THROUGH to them,
+it does not introduce a parallel store:
+
+```
+primary   → global_styling_color_primary    (legacy)
+secondary → global_styling_color_secondary  (legacy)
+accent    → customify_palette_accent
+text      → customify_palette_text
+surface   → customify_palette_surface
+base      → customify_palette_base
+```
+
+**B. Presets — Sunrise (light) + Midnight (dark).**
+
+```
+Sunrise   base #ffffff  surface #ECECEC  text #2b2b2b  primary #235787  secondary #c3512f  accent #ffd042
+Midnight  base #0f1217  surface #1a1e25  text #e8eaed  primary #5a8fc2  secondary #db6a44  accent #ffd042
+```
+
+Sunrise's slot values equal the theme's per-field picker defaults
+(`surface #ECECEC`, `primary #235787`, …), so a fresh install reads as
+"Sunrise linked" without writing anything — the active state is INFERRED
+from slot equality, never auto-persisted on a clean open (see D).
+
+Presets come from `customify_color_preset_palettes()` and are **filterable**
+via `customify/color/preset_palettes` — a plugin or child theme can add,
+remove, or replace presets (each entry: `{ id, name, slots:{6} }`). The
+sanitizer prefixes any custom id that collides with a preset id (`user-…`).
+
+**C. Apply mechanism — drive the existing pickers, no new path.**
+
+Applying a palette calls `$panel.wpColorPicker('color', hex)` on each of the
+6 existing pickers (the canonical, already-proven write path). That fires the
+normal picker `change` → Customizer setting → live-preview cascade. The
+switcher adds ZERO new rendering: the frontend output is byte-identical to a
+user manually setting those 6 pickers to the same values.
+
+Because a switch changes all six slots at once, the live preview's derived-
+token recompute (`on-*`, `*-container`, OKLab math) is coalesced into ONE pass
+via a ~24 ms debounce (`recomputeDerivedDebounced`) instead of running six
+times back-to-back — imperceptible for a drag, snappy for a switch.
+
+**D. Active-determination / reconciliation (the 30K-safety core).**
+
+`render()` infers which card is "active" from the live slot values, in three
+cases:
+
+1. **stored id matches current slots** → that palette is active + linked.
+2. **no stored id, but a preset/custom matches current slots** → adopt it as
+   active + linked; persist the id ONLY if the customizer is already dirty
+   (`wp.customize.state('saved').get() === false`). On a clean open this never
+   writes — a legacy site is never silently dirtied.
+3. **nothing matches** → no card active, no "modified" strip, no write. This
+   is the legacy saved-custom-colors case: the site shows its colors with no
+   palette chrome.
+
+This three-case model replaced an earlier `DEFAULT_ACTIVE` fallback that
+wrongly showed a legacy saved-custom site as "Sunrise active + Modified +
+reset-to-Sunrise". `syncSlotDefaults()` re-anchors each picker's reset
+baseline (`wpColorPicker('option','defaultColor', …)` + `data-default`) to the
+active palette's value — but ONLY when a palette is active; with no active
+palette (case 3) it is skipped, so legacy reset behavior is untouched.
+
+**E. Custom palettes.** Create-from-current, rename, delete, import/export
+(JSON). `customify_color_sanitize_palettes()` hardens imported JSON:
+`sanitize_text_field` on name, `customify_color_normalize_hex` on every slot,
+array capped at 100. The inline JS escapes every user value through an `esc()`
+helper before `innerHTML`. A custom palette auto-absorbs later slot edits
+while active (`maybeSyncCustom`), so editing a slot doesn't desync the card.
+
+**F. Default shift — link-hover now follows link.** As part of this phase the
+`global_styling_color_link_hover` field default changed from `#406F99` (a
+lighter mix) to "same as link" (`#235787`), and the cascade resolves
+link-hover → link → primary. 30K-impact: a site that saved a link color but
+never saved a link-hover now renders link-hover = its link color on hover
+(previously a lighter shade). Intentional, documented default shift
+(project-owner requested) — saved link-hover values are untouched.
+
+**G. WP-native styling.** All "selected/active" accents use
+`var(--wp-admin-theme-color, #3858e9)` (the admin's own accent); buttons and
+borders use WP admin tokens. The 6 existing wp-color-pickers are left as-is.
+
+**30K-safety summary.** Additive only — 2 new bookkeeping keys, 6 slots reuse
+existing keys, apply path is the existing picker write. No saved hex changes,
+no key renamed/removed. The only render delta for any existing site is the
+link-hover default shift (F), affecting only sites that never saved a
+link-hover. Verified on a saved-custom site: front-end render unchanged;
+customizer shows no active card / no modified strip / no dirty-on-open.
+
+**Still deferred (Phase 4+).** Per-site dark-mode token set wired to
+`prefers-color-scheme` / a user toggle; the Style Pack concept (bundle palette
++ typography + spacing). Applying a dark palette deliberately does NOT touch
+header Skin Mode (project-owner decision — a palette shouldn't mutate
+unrelated skin settings).
 
 ---
 

@@ -77,10 +77,13 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			// ──────────────────────────────────────────────────────────
 			// Top-level Section "Colors" (root, not in any panel).
 			// ──────────────────────────────────────────────────────────
-			// Position: between Styling (60) and Typography (70) in the
-			// General Options group (divider at 50). Priority 65 keeps
-			// Colors directly above Typography — sidebar order reads
-			// General Options → Styling → Colors → Typography → Layouts ….
+			// Position: anchored as the FIRST entry of the "General Options"
+			// panel group (divider at 50) by get_panel_groups() in
+			// inc/customizer/class-customizer.php, which assigns it priority 60
+			// at customize_register:99999 — sidebar order reads
+			// General Options → Colors → Typography → Layouts ….
+			// The 65 below is only a fallback for the unlikely case the group
+			// registration is filtered out; the group mechanism overrides it.
 			array(
 				'name'        => $section,
 				'type'        => 'section',
@@ -222,20 +225,20 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 				'selector'    => 'format',
 			),
 
-			// Link hover color — REUSE existing key. Default = link lighter
-			// 15% (mix with white) so the hover state surfaces the link by
-			// raising luminance. Fresh installs shift from legacy `#111111`
-			// (near-black) to `#406F99` — a much bigger jump than other
-			// overrides; explicit design call by the project owner.
+			// Link hover color — REUSE existing key. Default = same as Link color
+			// (which itself cascades from the Primary slot), so hovering keeps the
+			// link colour unless the user overrides it. Fresh installs shift from
+			// legacy `#111111` to `#235787` (Primary); saved overrides untouched.
+			// Project-owner decision (was: Link lighter 15% = `#406F99`).
 			array(
 				'name'        => 'global_styling_color_link_hover',
 				'type'        => 'color',
 				'section'     => $section,
 				'priority'    => 26,
 				'title'       => __( 'Link hover color', 'customify' ),
-				'description' => __( 'Default: derived (Link color lighter 15%).', 'customify' ),
-				'default'     => '#406F99',
-				'placeholder' => '#406F99',
+				'description' => __( 'Default: same as Link color.', 'customify' ),
+				'default'     => '#235787',
+				'placeholder' => '#235787',
 				'css_format'  => '',
 				'selector'    => 'format',
 			),

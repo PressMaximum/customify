@@ -216,11 +216,12 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 	 * --wp--style--global--content-size and --wp--style--global--wide-size,
 	 * so default-aligned AND wide-aligned blocks both follow the active
 	 * sidebar layout. Kept here (not in SCSS) so all values come from
-	 * customify_get_layout_content_sizes() + customify_get_narrow_width_value().
+	 * customify_get_layout_content_sizes().
 	 *
 	 * Wide-size design (per user spec):
 	 *   - No-sidebar layouts: wide-size = content-size + 400 (200px breakout each side)
-	 *   - Narrow content_layout: wide-size = narrow_width + 400
+	 *   - Narrow content_layout: wide-size = narrow_width + 400 (emitted from the
+	 *     narrow_width field's `css_format`, not here — see Customizer-coupling note).
 	 *   - Sidebar layouts: wide-size = content-size (parent-constrained — wide stays
 	 *     inside the content column, doesn't overlap sidebars per Q2 confirmation)
 	 *
@@ -228,24 +229,35 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 	 * negative margins with a max(100%, min(wide-size, 100vw - 32px)) clamp so the
 	 * wide block can't overflow the viewport — see src/frontend/scss/base/_blocks.scss).
 	 *
-	 * Per-page Content Layout (.site-content.content-{full-width,full-stretched,narrow})
+	 * Per-page Content Layout (.site-content.content-{full-width,full-stretched})
 	 * forces a specific content+wide-size — these rules are scoped to .site-content
 	 * which is closer in the inheritance chain than body, so they win the variable
 	 * resolution regardless of body.main-layout-* specificity.
 	 *
-	 * Hooked into customify-style via wp_add_inline_style in class-customify.php.
+	 * Customizer-coupling note: this output is enqueued into its OWN inline style
+	 * (`customify-layout-style-inline-css`) — NOT the main `customify-style-inline-css`
+	 * that the live-preview JS (`src/backend/customizer/js/auto-css.js`) overwrites
+	 * on every setting change. Putting the body.main-layout-* rules here would let
+	 * the JS rebuild wipe them, falling content-size back to the theme.json default
+	 * (863px) and visibly shrinking layout on non-narrow pages while the user drags
+	 * the `narrow_width` slider — UX read: "narrow width is being applied to all
+	 * pages", which it is not.
+	 *
+	 * For the same reason the `.site-content.content-narrow` rule is NOT emitted
+	 * here — it has a per-field `css_format` (see layouts.php narrow_width) so the
+	 * live-preview JS owns it and rebuilds with the dragged value. Emitting it here
+	 * too would only matter if the JS bundle failed to load, and the same field's
+	 * PHP `auto_css()` output already covers that path.
 	 *
 	 * @return string CSS.
 	 */
 	function customify_layout_content_size_css() {
-		$sizes  = customify_get_layout_content_sizes();
-		$narrow = customify_get_narrow_width_value();
+		$sizes = customify_get_layout_content_sizes();
 
-		// Compute wide-size = content-size + 400 (px) for breakout layouts.
+		// Compute wide-size = content-size + 400 (px) for the no-sidebar breakout.
 		// `customify_layout_content_size_value_plus()` keeps unit handling local
-		// so '800px' + 400 stays as '1200px'.
+		// so '1184px' + 400 stays as '1584px'.
 		$no_sidebar_wide = customify_layout_content_size_value_plus( $sizes['no_sidebar'], 400 );
-		$narrow_wide     = customify_layout_content_size_value_plus( $narrow, 400 );
 
 		// Full-Width / Full-Stretched content_layout: content-size + wide-size are
 		// viewport-bound, not capped at the reading-column no_sidebar value. This
@@ -262,14 +274,11 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 			. 'body.main-layout-sidebar-sidebar-content,'
 			. 'body.main-layout-content-sidebar-sidebar{--wp--style--global--content-size:%4$s;--wp--style--global--wide-size:%4$s}'
 			. '.site-content.content-full-width{--wp--style--global--content-size:calc(100vw - 64px);--wp--style--global--wide-size:calc(100vw - 64px)}'
-			. '.site-content.content-full-stretched{--wp--style--global--content-size:100vw;--wp--style--global--wide-size:100vw}'
-			. '.site-content.content-narrow{--wp--style--global--content-size:%5$s;--wp--style--global--wide-size:%6$s}',
+			. '.site-content.content-full-stretched{--wp--style--global--content-size:100vw;--wp--style--global--wide-size:100vw}',
 			esc_attr( $sizes['no_sidebar'] ),
 			esc_attr( $no_sidebar_wide ),
 			esc_attr( $sizes['one_sidebar'] ),
-			esc_attr( $sizes['two_sidebars'] ),
-			esc_attr( $narrow ),
-			esc_attr( $narrow_wide )
+			esc_attr( $sizes['two_sidebars'] )
 		);
 	}
 }
@@ -327,6 +336,103 @@ if ( ! function_exists( 'customify_get_all_image_sizes' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_get_content_post_types' ) ) {
+	/**
+	 * Custom post types that warrant per-type Customizer settings (sidebar layout,
+	 * Page Header display/title/tagline).
+	 *
+	 * Starts from Customify()->get_post_types( false ) (publicly_queryable,
+	 * non-builtin) and keeps only types with a real, browsable front-end. A type
+	 * is dropped when any of these holds:
+	 *   - it is a known Customify Pro utility CPT (`customify_hook`, the Hooks
+	 *     snippet store) that is publicly_queryable but has no browsable page;
+	 *   - it declares `exclude_from_search` (the registering plugin's signal that
+	 *     the type is not browsable content);
+	 *   - it has neither a public archive (`has_archive`) nor menu visibility
+	 *     (`show_in_nav_menus`).
+	 *
+	 * A CPT that registers itself to look exactly like content (public + in nav
+	 * menus + searchable) can only be removed via `customify/content_post_types`.
+	 *
+	 * @return array<string, array{name:string, singular_name:string}>
+	 */
+	function customify_get_content_post_types() {
+		$post_types = Customify()->get_post_types( false );
+
+		// Customify Pro utility CPTs that are publicly_queryable but have no
+		// browsable front-end. Only `customify_hook` (the Hooks snippet store)
+		// reaches this list — `customify_ms` / `font` register
+		// publicly_queryable=false and are filtered out upstream. Excluded by
+		// slug because the theme can't depend on how a given Pro version sets
+		// show_in_nav_menus on it (Pro is a separate codebase / release cycle).
+		$excluded = array( 'customify_hook' );
+
+		foreach ( $post_types as $pt => $label ) {
+			$obj = get_post_type_object( $pt );
+			if (
+				! $obj
+				|| in_array( $pt, $excluded, true )
+				|| $obj->exclude_from_search
+				|| ! ( $obj->has_archive || $obj->show_in_nav_menus )
+			) {
+				unset( $post_types[ $pt ] );
+			}
+		}
+
+		/**
+		 * Filter the content post types that receive per-type Customizer settings
+		 * (sidebar layout, Page Header display/title/tagline). Use it to add a CPT
+		 * the heuristics dropped, or remove a no-front-end CPT they kept (one that
+		 * registers as public + in nav menus + searchable, indistinguishable from
+		 * content by its flags).
+		 *
+		 * @param array $post_types Map of post_type slug => labels array.
+		 */
+		return apply_filters( 'customify/content_post_types', $post_types );
+	}
+}
+
+if ( ! function_exists( 'customify_get_meta_support_post_types' ) ) {
+	/**
+	 * Post types that get the Customify per-post settings (the "Customify Page
+	 * Settings" metabox / block-editor panel: Content Layout, Page Title Layout,
+	 * Sidebar, Disable Elements).
+	 *
+	 * Broader than customify_get_content_post_types() — these settings affect a
+	 * singular front-end view, so the list keeps built-in `page` / `post` and any
+	 * public CPT with a viewable single. It only drops no-front-end utility CPTs:
+	 * `customify_hook` (the Pro Hooks store) is public + publicly_queryable but
+	 * has no browsable page, and the theme can't rely on how a given Pro version
+	 * flags it, so it is deny-listed; types flagged `exclude_from_search` (the
+	 * registering plugin's "not browsable content" signal) are dropped too.
+	 *
+	 * Render-safe: a post type omitted here only loses the editor UI; any saved
+	 * `_customify_*` meta is still read at render via get_post_meta.
+	 *
+	 * @return string[] Indexed array of post type slugs.
+	 */
+	function customify_get_meta_support_post_types() {
+		$post_types = get_post_types( array( 'public' => true ), 'names', 'and' );
+
+		$excluded = array( 'customify_hook' );
+		foreach ( $post_types as $pt ) {
+			$obj = get_post_type_object( $pt );
+			if ( ! $obj || in_array( $pt, $excluded, true ) || $obj->exclude_from_search ) {
+				unset( $post_types[ $pt ] );
+			}
+		}
+
+		/**
+		 * Filter the post types that receive the Customify per-post settings
+		 * metabox / block-editor panel. Add a CPT the heuristics dropped, or
+		 * remove one they kept.
+		 *
+		 * @param string[] $post_types Indexed array of post type slugs.
+		 */
+		return apply_filters( 'customify/meta_support_post_types', array_values( $post_types ) );
+	}
+}
+
 if ( ! function_exists( 'customify_get_layout' ) ) {
 	/**
 	 * Get the layout for the current page from Customizer setting or individual page/post.
@@ -348,6 +454,25 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 			} elseif ( is_search() ) { // Search.
 				$search = Customify()->get_setting( 'search_sidebar_layout' );
 				$layout = $search;
+			} elseif ( is_post_type_archive() ) { // Custom post type archive.
+				$pt = get_query_var( 'post_type' );
+				if ( is_array( $pt ) ) {
+					$pt = reset( $pt );
+				}
+				if ( ! $pt ) {
+					$queried = get_queried_object();
+					$pt      = ( $queried instanceof WP_Post_Type ) ? $queried->name : '';
+				}
+				$cpt_archive = $pt ? Customify()->get_setting( "{$pt}_archive_sidebar_layout" ) : '';
+				// Value 'default' (the "Default" choice) or empty inherits the
+				// generic "Blog Archive Page" layout; any other value applies
+				// directly. The field default is 'content' (no sidebar), matching
+				// the per-CPT single layout.
+				if ( $cpt_archive && 'default' !== $cpt_archive ) {
+					$layout = $cpt_archive;
+				} else {
+					$layout = Customify()->get_setting( 'posts_archives_sidebar_layout' );
+				}
 			} elseif ( is_archive() ) { // Archive.
 				$archive = Customify()->get_setting( 'posts_archives_sidebar_layout' );
 				$layout  = $archive;

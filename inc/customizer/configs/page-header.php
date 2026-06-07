@@ -149,7 +149,7 @@ class Customify_Page_Header {
 			),
 		);
 
-		$post_types = Customify()->get_post_types( false );
+		$post_types = customify_get_content_post_types();
 		if ( count( $post_types ) > 0 ) {
 			foreach ( $post_types as $pt => $label ) {
 				$display_fields[] = array(
@@ -160,6 +160,23 @@ class Customify_Page_Header {
 					'default'     => '',
 					'choices'     => $choices,
 				);
+
+				// Per-CPT archive display. Only for types with a real archive;
+				// WooCommerce owns the `product` shop archive (the is_shop branch in
+				// get_settings()), so skip it. Empty value inherits the generic
+				// "archive" slice in the resolver, so sites that never set it are
+				// unchanged.
+				$pt_object = get_post_type_object( $pt );
+				if ( 'product' !== $pt && $pt_object && $pt_object->has_archive ) {
+					$display_fields[] = array(
+						'name'        => "{$pt}_archive",
+						'type'        => 'select',
+						'label'       => sprintf( __( 'Display on %s archive', 'customify' ), $label['singular_name'] ),
+						'description' => sprintf( __( 'Apply when viewing the %s archive', 'customify' ), $label['singular_name'] ),
+						'default'     => '',
+						'choices'     => $choices,
+					);
+				}
 
 				$taxonomy_filter_args = [
 					'show_in_nav_menus' => true,
@@ -802,18 +819,43 @@ class Customify_Page_Header {
 			$args['tagline'] = get_the_archive_description();
 			$args['_page']   = 'archive';
 			$post_id         = 0;
+
+			// Per-CPT archive override (e.g. the Tours archive). Mirrors the
+			// is_tax() pattern below: only override the generic 'archive' slice
+			// when a per-type value is set, so sites that never set it are
+			// unchanged.
+			if ( is_post_type_archive() ) {
+				$pt = get_query_var( 'post_type' );
+				if ( is_array( $pt ) ) {
+					$pt = reset( $pt );
+				}
+				if ( ! $pt ) {
+					$queried = get_queried_object();
+					$pt      = ( $queried instanceof WP_Post_Type ) ? $queried->name : '';
+				}
+				if ( $pt && ! empty( $display[ "{$pt}_archive" ] ) ) {
+					$args['display'] = $display[ "{$pt}_archive" ];
+					$args['_page']   = 'archive_' . $pt;
+				}
+			}
 		}
 
 		if ( is_tax() ) {
 			$queried_object = get_queried_object();
-			if ( isset( $display[ $queried_object->taxonomy ] ) ) {
-				$args['display'] = $display['product_tag'];
+			$tax            = $queried_object->taxonomy;
+			// Use the queried taxonomy's OWN slice. Previously this assigned
+			// $display['product_tag'] for any taxonomy, and assigned a title
+			// string to ['display'] — a bug that stopped custom-taxonomy page
+			// headers from working. Guarded on non-empty so an unset slice falls
+			// through to the is_archive() defaults resolved above.
+			if ( ! empty( $display[ $tax ] ) ) {
+				$args['display'] = $display[ $tax ];
 			}
-			if ( isset( $titles[ $queried_object->taxonomy ] ) ) {
-				$args['display'] = $titles[ $queried_object->taxonomy ];
+			if ( isset( $titles[ $tax ] ) && '' !== $titles[ $tax ] ) {
+				$args['title'] = $titles[ $tax ];
 			}
-			if ( isset( $taglines[ $queried_object->taxonomy ] ) ) {
-				$args['tagline'] = $taglines[ $queried_object->taxonomy ];
+			if ( isset( $taglines[ $tax ] ) && '' !== $taglines[ $tax ] ) {
+				$args['tagline'] = $taglines[ $tax ];
 			}
 			$args['_page'] = 'tax_' . $queried_object->taxonomy;
 		}
