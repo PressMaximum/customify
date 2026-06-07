@@ -77,6 +77,26 @@ class Customify_Customizer_Auto_CSS
 	);
 
 	/**
+	 * Foundational typography settings that emit :root tokens.
+	 * setting name => semantic var segment. Single source of truth for
+	 * both typography_field_uses_vars() (route gate) and
+	 * typography_var_name() (token name). Keep in lockstep with the JS
+	 * mirror's TYPO_VAR_MAP in src/backend/customizer/js/auto-css.js.
+	 *
+	 * @var array
+	 */
+	const TYPO_VAR_MAP = array(
+		'global_typography_base_p'       => 'body',
+		'global_typography_base_heading' => 'heading',
+		'global_typography_heading_h1'   => 'h1',
+		'global_typography_heading_h2'   => 'h2',
+		'global_typography_heading_h3'   => 'h3',
+		'global_typography_heading_h4'   => 'h4',
+		'global_typography_heading_h5'   => 'h5',
+		'global_typography_heading_h6'   => 'h6',
+	);
+
+	/**
 	 * Get intance.
 	 *
 	 * @return Customify_Customizer_Auto_CSS
@@ -1049,24 +1069,25 @@ class Customify_Customizer_Auto_CSS
 
 	/**
 	 * Whether a typography field emits :root CSS variables (vars mode)
-	 * or selector-scoped literal CSS (legacy). Vars are restricted to
-	 * fields whose setting `name` starts with `global_typography_` —
-	 * the Base / Site Title & Tagline / Heading family registered in
-	 * the Typography section. Per-component typography (header builder
-	 * items, footer copyright, blog read-more, breadcrumb, WC cart)
-	 * keeps the legacy selector-scoped output because their SCSS layer
-	 * doesn't carry generic consumer rules.
+	 * or selector-scoped literal CSS (legacy). Vars (tokens) are
+	 * restricted to the FOUNDATIONAL typography — Base body
+	 * (`global_typography_base_p`), the shared Heading family/weight
+	 * (`global_typography_base_heading`) and the h1–h6 type scale
+	 * (`global_typography_heading_h{1..6}`). These are 1-to-many
+	 * (inherited document-wide / shared across every heading) so a
+	 * :root token earns its place.
 	 *
-	 * Gate is keyed off the field `name` (not `section`) because the
-	 * Typography IA was flattened from a panel into a single section
-	 * (`typography_panel`), so the section id no longer encodes which
-	 * group a field belongs to — only the `global_typography_` name
-	 * prefix does.
+	 * Component-leaf typography — site title, tagline, widget title —
+	 * plus per-component typography (header builder items, footer
+	 * copyright, blog read-more, breadcrumb, WC cart) is 1-to-1, so it
+	 * keeps the legacy selector-scoped literal output. The leaf SCSS
+	 * rules still reuse the foundational tokens (e.g. site title reads
+	 * `--customify-typo-heading-font-family`) without minting their own.
 	 *
 	 * Sites can override the decision with the
 	 * `customify/typography/field_uses_vars` filter — return false
 	 * to force a specific field through the legacy path, or true to
-	 * opt a non-global field into vars (requires adding an SCSS
+	 * opt a non-foundational field into vars (requires adding an SCSS
 	 * consumer at the matching selector).
 	 *
 	 * @since 0.4.19
@@ -1076,22 +1097,24 @@ class Customify_Customizer_Auto_CSS
 	 */
 	public function typography_field_uses_vars($field)
 	{
-		$name      = isset($field['name']) ? (string) $field['name'] : '';
-		$is_global = ('' !== $name && 0 === strpos($name, 'global_typography_'));
-		return (bool) apply_filters('customify/typography/field_uses_vars', $is_global, $field);
+		$name = isset($field['name']) ? (string) $field['name'] : '';
+		// Foundational typography only (see self::TYPO_VAR_MAP): Base
+		// body, shared Heading family/weight, h1–h6 type scale. Leaf
+		// roles (site title, tagline, widget title) fall through to
+		// selector-scoped literal.
+		$tokenized = isset(self::TYPO_VAR_MAP[$name]);
+		return (bool) apply_filters('customify/typography/field_uses_vars', $tokenized, $field);
 	}
 
 	/**
 	 * Build the CSS custom-property name for a typography setting +
-	 * property pair. Strips well-known prefixes/suffixes so the name
-	 * stays short and predictable, then kebabs the remainder.
+	 * property pair. The foundational typography settings (Base body,
+	 * Heading, h1–h6) map to short, explicit semantic names; other
+	 * (opted-in) fields fall back to a prefix-strip + kebab.
 	 *
-	 *   global_typography_base_p, font-size
-	 *     → --customify-typo-base-p-font-size
-	 *   header_menus_typography, line-height
-	 *     → --customify-typo-header-menus-line-height
-	 *   blog_default_more_typography, font-family
-	 *     → --customify-typo-blog-default-more-font-family
+	 *   global_typography_base_p, font-size      → --customify-typo-body-font-size
+	 *   global_typography_base_heading, weight    → --customify-typo-heading-font-weight
+	 *   global_typography_heading_h1, font-size   → --customify-typo-h1-font-size
 	 *
 	 * @since 0.4.19
 	 *
@@ -1103,21 +1126,19 @@ class Customify_Customizer_Auto_CSS
 	{
 		$name = (string) $setting_name;
 
-		// Prefix strips, applied in order. 'heading_' is collapsed
-		// after 'global_typography_' so `global_typography_heading_h1`
-		// becomes `h1` (not `heading-h1`) — shorter var names for the
-		// per-level heading settings.
-		$prefix_strips = array(
-			'global_typography_',
-			'heading_',
-		);
-		foreach ($prefix_strips as $prefix) {
-			$len = strlen($prefix);
-			if (strlen($name) > $len && 0 === strpos($name, $prefix)) {
-				$name = substr($name, $len);
-			}
+		// Foundational settings map to short, explicit semantic names —
+		// single source of truth in self::TYPO_VAR_MAP (lockstep w/ JS).
+		if (isset(self::TYPO_VAR_MAP[$name])) {
+			return '--customify-typo-' . self::TYPO_VAR_MAP[$name] . '-' . $property;
 		}
 
+		// Fallback for fields opted into vars mode via
+		// customify/typography/field_uses_vars that aren't foundation
+		// settings: strip the known prefix/suffixes, then kebab.
+		$prefix = 'global_typography_';
+		if (strlen($name) > strlen($prefix) && 0 === strpos($name, $prefix)) {
+			$name = substr($name, strlen($prefix));
+		}
 		$suffix_strips = array(
 			'_modal_font_size',
 			'_typography',
@@ -1186,11 +1207,11 @@ class Customify_Customizer_Auto_CSS
 			);
 		}
 
-		if (isset($values['style']) && $values['style']) {
-
-			if ($values['style'] && 'default' !== $values['style']) {
-				$code['style'] = 'font-style: ' . $values['style'] . ';';
-			}
+		// Gate on $fields['style'] too — a role that disabled the style
+		// sub-field (e.g. base_heading) must not leak a saved font-style
+		// into the output. Mirrors how font_weight / text_* are gated.
+		if (isset($fields['style']) && isset($values['style']) && $values['style'] && 'default' !== $values['style']) {
+			$code['style'] = 'font-style: ' . $values['style'] . ';';
 		}
 
 		// Font Weight.
@@ -1279,12 +1300,12 @@ class Customify_Customizer_Auto_CSS
 
 		$devices_css = apply_filters('customify/customizer/auto_css', $devices_css, $field, $this);
 
-		// Vars mode is opt-in per field — only fields whose setting
-		// `name` starts with `global_typography_` (Base / Site Title &
-		// Tagline / Heading family) emit :root vars. Per-component
-		// typography (header builder items, footer copyright, etc.)
-		// falls through to selector-scoped output because its SCSS
-		// layer doesn't carry generic consumer rules.
+		// Only foundational typography (Base body, shared Heading,
+		// h1–h6 scale — see typography_field_uses_vars) emits :root
+		// tokens. Component-leaf global typography (site title, tagline,
+		// widget title) and per-component typography (header builder
+		// items, footer copyright, etc.) fall through to selector-scoped
+		// literal output here.
 		if (! $this->typography_field_uses_vars($field)) {
 			foreach ($devices_css as $device => $els) {
 				if (!empty($els)) {
@@ -1299,11 +1320,16 @@ class Customify_Customizer_Auto_CSS
 			return;
 		}
 
-		// Vars mode (default): accumulate the raw `--var: value;` lines
-		// into the device bucket. render_css() wraps each non-empty
-		// bucket in a single :root { ... } block so multiple typography
-		// fields collapse into one rule per device instead of one rule
-		// per field.
+		// Vars mode (default): split per-property. Core font-identity
+		// props (family / weight / size / line-height) emit :root vars —
+		// the typography token surface. Cosmetic props (letter-spacing,
+		// text-decoration, text-transform, font-style) are NOT tokenized;
+		// they emit as selector-scoped literal CSS at $field['selector']
+		// only when the user set them. The setting keeps working exactly
+		// as before without inflating the :root token namespace.
+		//
+		// Only font_size / line_height are device-scoped, and both are
+		// core, so every $devices_css entry goes straight to :root vars.
 		foreach ($devices_css as $device => $els) {
 			if (empty($els)) {
 				continue;
@@ -1318,8 +1344,19 @@ class Customify_Customizer_Auto_CSS
 		}
 
 		$code = array_filter($code);
-		if (!empty($code)) {
-			$vars = $this->code_to_root_vars($field['name'], $code);
+
+		// Cosmetic props → selector-scoped literal CSS (no token).
+		$cosmetic_keys = array('style', 'text_decoration', 'text_transform', 'letter_spacing');
+		$cosmetic_flip = array_flip($cosmetic_keys);
+		$cosmetic      = array_intersect_key($code, $cosmetic_flip);
+		if (!empty($cosmetic)) {
+			$this->css['all'] .= "{$field['selector']} {\r\n\t" . join("\r\n\t", $cosmetic) . "\r\n}";
+		}
+
+		// Core props → :root vars.
+		$core = array_diff_key($code, $cosmetic_flip);
+		if (!empty($core)) {
+			$vars = $this->code_to_root_vars($field['name'], $core);
 			if (!empty($vars)) {
 				if ('' !== $this->css_root['all']) {
 					$this->css_root['all'] .= "\r\n\t";

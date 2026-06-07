@@ -55,10 +55,10 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 
 | Hook | Type | Payload | File |
 |---|---|---|---|
-| `customify/customizer/auto_css` | filter | `(array $css_lines, $field, Customify_Customizer_Auto_CSS $instance)` | [`inc/customizer/class-customizer-auto-css.php:790`](../inc/customizer/class-customizer-auto-css.php) |
-| `customify/auto-css` | filter | `string $css` — final assembled CSS before `wp_add_inline_style` | [`inc/customizer/class-customizer-auto-css.php:1261`](../inc/customizer/class-customizer-auto-css.php) |
+| `customify/customizer/auto_css` | filter | `(array $css_lines, $field, Customify_Customizer_Auto_CSS $instance)` | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `maybe_devices_setup()` / `typography()` |
+| `customify/auto-css` | filter | `string $css` — final assembled CSS before `wp_add_inline_style` | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `render_css()` |
 | `customify/styling/<field>` | filter | `string $css` — append CSS template to a specific field (e.g. `customify/styling/primary-color`) | dynamic — emitted per-field by auto-CSS |
-| `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` — **per-field route.** Default is `true` when the field's setting `name` starts with `global_typography_`. Return `false` to force a Global field through selector-scoped emit, or `true` to opt a per-component field into vars (also requires an SCSS consumer at the matching selector — see [`SPEC-typography.md §6.4`](SPEC-typography.md)). | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `typography_field_uses_vars()` |
+| `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` — **per-field route.** Default is `true` only for the 8 foundation roles in `TYPO_VAR_MAP` (`global_typography_base_p`, `global_typography_base_heading`, `global_typography_heading_h1`…`h6`); leaf-global roles (site title, tagline, widget title) and per-component fields default `false`. Return `false` to force a foundation field through selector-scoped emit, or `true` to opt a non-foundation field into tokens (also requires an SCSS consumer at the matching selector — see [`SPEC-typography.md §6.4`](SPEC-typography.md)). | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `typography_field_uses_vars()` |
 
 Example — extend the primary color CSS targets without forking the config file:
 
