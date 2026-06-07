@@ -32,10 +32,22 @@ const CopyPlugin           = require( 'copy-webpack-plugin' );
  * Git installs omit `build/` (created by dashboard-kit prepublish/build).
  * Alias to `src/` and stub `style.css` so webpack matches package exports rules.
  */
-const dashboardKitRoot         = path.resolve(
-	__dirname,
-	'node_modules/@pressmaximum/dashboard-kit'
-);
+const dashboardKitRoot = ( () => {
+	// A git worktree's own node_modules is gitignored (never copied on creation),
+	// so a path hardcoded to __dirname won't exist there. Resolve wherever Node
+	// can actually find the package: a worktree nested under the main checkout
+	// walks up to the parent's node_modules. Fall back to the local path.
+	try {
+		return path.dirname(
+			require.resolve( '@pressmaximum/dashboard-kit/package.json' )
+		);
+	} catch ( _err ) {
+		return path.resolve(
+			__dirname,
+			'node_modules/@pressmaximum/dashboard-kit'
+		);
+	}
+} )();
 const dashboardKitBuildEntry   = path.join( dashboardKitRoot, 'build', 'index.mjs' );
 const dashboardKitSrcDir     = path.join( dashboardKitRoot, 'src' );
 const dashboardKitGitStyleNoopPath = path.resolve(
