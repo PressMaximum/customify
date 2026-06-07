@@ -14,11 +14,16 @@
     .dark-mode {
         background: $color_primary;
     }
-    // Ported from pre-4b5acc73 colors.php $primary_css. Inner row picks up
-    // the Primary token regardless of light/dark mode of the row chrome.
-    // (Commit 4b5acc73 dropped this when collapsing primary CSS to :root —
-    // recorded as a known follow-up in that commit message.)
-    .header--row-inner {
+    // The header-top inner row uses the Primary brand colour by default
+    // (dark skin + the no-skin fallback). It must NOT override the light
+    // skin, so it is scoped with `:not(.light-mode)`, which also raises it
+    // to specificity (0,3,0) for the dark/fallback case while leaving
+    // light-mode rows to the `.light-mode { background: #f0f0f0 }` rule
+    // above. Previously this rule was unconditional and sat last in source
+    // order, silently overriding the light skin background (the row stayed
+    // Primary even when the user selected the light skin). Ported from
+    // pre-4b5acc73 colors.php $primary_css.
+    .header--row-inner:not(.light-mode) {
         background-color: $color_primary;
     }
 }
