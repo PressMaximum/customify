@@ -71,16 +71,31 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
         };
     };
 
+    // Foundational typography settings that emit :root tokens — single
+    // source of truth for typography_field_uses_vars() (route gate) and
+    // typography_var_name() (token name). Keep in lockstep with PHP
+    // Customify_Customizer_Auto_CSS::TYPO_VAR_MAP.
+    var TYPO_VAR_MAP = {
+        'global_typography_base_p':       'body',
+        'global_typography_base_heading': 'heading',
+        'global_typography_heading_h1':   'h1',
+        'global_typography_heading_h2':   'h2',
+        'global_typography_heading_h3':   'h3',
+        'global_typography_heading_h4':   'h4',
+        'global_typography_heading_h5':   'h5',
+        'global_typography_heading_h6':   'h6'
+    };
+
     /**
-     * Mirror of PHP typography_field_uses_vars(). Vars are restricted
-     * to fields whose setting `name` starts with `global_typography_`
-     * (base / site_tt / heading family). Per-component typography
-     * (header builder items, footer copyright, blog read-more,
-     * breadcrumb, WC cart) stays in legacy mode.
+     * Mirror of PHP typography_field_uses_vars(). Tokens are restricted
+     * to the foundational typography (TYPO_VAR_MAP) — Base body, shared
+     * Heading family/weight, h1–h6 type scale. Component-leaf roles
+     * (site title, tagline, widget title) and per-component typography
+     * stay in legacy selector-scoped (literal) mode.
      */
     CustomifyAutoCSS.prototype.typography_field_uses_vars = function( field ){
         var name = ( field && field.name ) ? String( field.name ) : '';
-        return name.indexOf( 'global_typography_' ) === 0;
+        return !! TYPO_VAR_MAP[ name ];
     };
 
     /**
@@ -89,14 +104,15 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
      */
     CustomifyAutoCSS.prototype.typography_var_name = function( setting_name, property ){
         var name = String( setting_name || '' );
-        // Prefix strips, in order — `heading_` collapses
-        // `global_typography_heading_h1` → `h1`.
-        var prefixes = [ 'global_typography_', 'heading_' ];
-        for ( var p = 0; p < prefixes.length; p++ ) {
-            var pr = prefixes[ p ];
-            if ( name.length > pr.length && name.indexOf( pr ) === 0 ) {
-                name = name.substr( pr.length );
-            }
+        // Foundational settings map to explicit semantic names via the
+        // shared TYPO_VAR_MAP (lockstep with PHP).
+        if ( TYPO_VAR_MAP[ name ] ) {
+            return '--customify-typo-' + TYPO_VAR_MAP[ name ] + '-' + property;
+        }
+        // Fallback for opted-in non-foundational fields.
+        var gp = 'global_typography_';
+        if ( name.length > gp.length && name.indexOf( gp ) === 0 ) {
+            name = name.substr( gp.length );
         }
         var suffixes = [ '_modal_font_size', '_typography', '_font_size', '_typo' ];
         for ( var i = 0; i < suffixes.length; i++ ) {
@@ -1498,10 +1514,11 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             }
         }
 
-        // Vars mode is opt-in per field — only fields whose setting
-        // `name` starts with `global_typography_` emit :root vars.
-        // Per-component typography falls through to selector-scoped
-        // output.
+        // Only foundational typography (Base body, shared Heading,
+        // h1–h6 scale) emits :root tokens. Component-leaf global
+        // typography (site title, tagline, widget title) and
+        // per-component typography fall through to selector-scoped
+        // literal output here.
         if ( ! that.typography_field_uses_vars( field ) ) {
             _.each( devices_css, function( els, device ){
                 that.css[device] += " "+field['selector']+" {\r\n\t"+that.join( els, "\r\n\t" )+"\r\n}";
@@ -1510,10 +1527,12 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             return;
         }
 
-        // Vars mode: accumulate raw `--var: value;` lines into the
-        // per-device bucket. The flush step in run() wraps each
-        // non-empty bucket in a single :root { ... } block so multiple
-        // typography fields collapse into one rule per device.
+        // Vars mode: split per-property. Core props (family/weight/
+        // size/line-height) → :root vars. Cosmetic props (letter-spacing,
+        // text-decoration, text-transform, font-style) → selector-scoped
+        // literal CSS (no token). Keep in lockstep with PHP typography().
+        // Only font_size / line_height are device-scoped (both core), so
+        // every devices_css entry goes straight to :root vars.
         _.each( devices_css, function( els, device ){
             var vars = that.code_to_root_vars( field.name, els );
             if ( vars.length ) {
@@ -1524,7 +1543,23 @@ var CustomifyAutoCSS = window.CustomifyAutoCSS || null;
             }
         } );
 
-        var allVars = that.code_to_root_vars( field.name, code );
+        var cosmeticKeys = [ 'style', 'text_decoration', 'text_transform', 'letter_spacing' ];
+        var cosmetic = {};
+        var core = {};
+        _.each( code, function( line, key ){
+            if ( ! line ) { return; } // mirror PHP array_filter($code) — drop empty lines
+            if ( _.contains( cosmeticKeys, key ) ) {
+                cosmetic[ key ] = line;
+            } else {
+                core[ key ] = line;
+            }
+        } );
+
+        if ( ! _.isEmpty( cosmetic ) ) {
+            that.css[ 'all' ] += " " + field['selector'] + " {\r\n\t" + that.join( cosmetic, "\r\n\t" ) + "\r\n}";
+        }
+
+        var allVars = that.code_to_root_vars( field.name, core );
         if ( allVars.length ) {
             if ( that.css_root[ 'all' ] !== '' ) {
                 that.css_root[ 'all' ] += "\r\n\t";

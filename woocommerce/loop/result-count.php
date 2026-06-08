@@ -15,27 +15,29 @@
  * @see         https://docs.woocommerce.com/document/template-structure/
  * @author      WooThemes
  * @package     WooCommerce/Templates
- * @version     9.9.0
+ * @version     10.8.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 ?>
-<p class="woocommerce-result-count text-uppercase text-xsmall">
+<p class="woocommerce-result-count text-uppercase text-xsmall" role="status" aria-relevant="all" <?php echo ( empty( $orderedby ) || 1 === intval( $total ) ) ? '' : 'data-is-sorted-by="true"'; ?>>
 	<?php
-
-	if ( 1 === $total ) {
+	// phpcs:disable WordPress.Security
+	if ( 1 === intval( $total ) ) {
 		_e( 'Showing the single result', 'customify' );
 	} elseif ( $total <= $per_page || -1 === $per_page ) {
-		/* translators: %d: total results */
-		printf( _n( 'Showing all %d result', 'Showing all %d results', $total, 'customify' ), $total );
+		$orderedby_placeholder = empty( $orderedby ) ? '%2$s' : '<span class="screen-reader-text">%2$s</span>';
+		/* translators: 1: total results 2: sorted by */
+		printf( _n( 'Showing all %1$d result', 'Showing all %1$d results', $total, 'customify' ) . $orderedby_placeholder, $total, esc_html( $orderedby ) );
 	} else {
-		$first = ( $per_page * $current ) - $per_page + 1;
-		$last  = min( $total, $per_page * $current );
-		/* translators: 1: first result 2: last result 3: total results */
-		printf( _nx( 'Showing %1$d&ndash;%2$d of %3$d result', 'Showing %1$d&ndash;%2$d of %3$d results', $total, 'with first and last result', 'customify' ), $first, $last, $total );
+		$first                 = ( $per_page * $current ) - $per_page + 1;
+		$last                  = min( $total, $per_page * $current );
+		$orderedby_placeholder = empty( $orderedby ) ? '%4$s' : '<span class="screen-reader-text">%4$s</span>';
+		/* translators: 1: first result 2: last result 3: total results 4: sorted by */
+		printf( _nx( 'Showing %1$d&ndash;%2$d of %3$d result', 'Showing %1$d&ndash;%2$d of %3$d results', $total, 'with first and last result', 'customify' ) . $orderedby_placeholder, $first, $last, $total, esc_html( $orderedby ) );
 	}
-
+	// phpcs:enable WordPress.Security
 	?>
 </p>

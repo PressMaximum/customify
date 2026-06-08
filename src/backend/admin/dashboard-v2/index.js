@@ -33,7 +33,8 @@ function mount() {
 	// to inject `proVersion`; the header label switches to that version +
 	// "Pro version" suffix. Falls back to the theme's own version label
 	// for the Free path.
-	const proActive    = !! boot.proActive;
+	const proActive           = !! boot.proActive;
+	const useStarterTemplates = !! boot.useStarterTemplates;
 	const proVersion   = ( boot.proVersion || '' ) + '';
 	const themeVersion = ( boot.themeVersion || '' ) + '';
 	let versionLabel;
@@ -112,7 +113,9 @@ function mount() {
 		baseTabs: [
 			{ id: 'welcome', label: __( 'Welcome', 'customify' ) },
 			{ id: 'settings', label: __( 'Settings', 'customify' ) },
-			{ id: 'starter-templates', label: __( 'Starter Templates', 'customify' ) },
+			...( useStarterTemplates
+				? [ { id: 'starter-templates', label: __( 'Starter Templates', 'customify' ) } ]
+				: [] ),
 			...( proActive
 				? []
 				: [ { id: 'free-vs-pro', label: __( 'Free vs Pro', 'customify' ) } ] ),
@@ -122,7 +125,9 @@ function mount() {
 			'#welcome': { component: Welcome, type: 'page' },
 			'#settings': { component: Settings, type: 'page' },
 			'#settings/:panelId': { component: Settings, type: 'page' },
-			'#starter-templates': { component: StarterTemplates, type: 'page' },
+			...( useStarterTemplates
+				? { '#starter-templates': { component: StarterTemplates, type: 'page' } }
+				: {} ),
 			...( proActive
 				? {}
 				: { '#free-vs-pro': { component: FreeVsPro, type: 'page' } } ),
