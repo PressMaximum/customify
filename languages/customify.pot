@@ -2,9 +2,9 @@
 # This file is distributed under the GNU General Public License v2 or later.=!>
 msgid ""
 msgstr ""
-"Project-Id-Version: Customify 0.4.19\n"
+"Project-Id-Version: Customify 0.4.20\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-06-07 04:31:19+00:00\n"
+"POT-Creation-Date: 2026-06-08 02:48:53+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -116,7 +116,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: inc/admin/dashboard-v2.php:120
+#: inc/admin/dashboard-v2.php:124
 msgid "Starter Templates"
 msgstr ""
 
@@ -1126,7 +1126,7 @@ msgid "Rating"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:184
-#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:97
+#: woocommerce/cart/cart.php:31 woocommerce/cart/cart.php:134
 msgid "Price"
 msgstr ""
 
@@ -1343,7 +1343,7 @@ msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:161
 #: inc/compatibility/woocommerce/config/header/cart.php:262
-#: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:103
+#: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:140
 msgid "Quantity"
 msgstr ""
 
@@ -3688,36 +3688,36 @@ msgstr ""
 msgid "Thumbnail image"
 msgstr ""
 
-#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:77
+#: woocommerce/cart/cart.php:30 woocommerce/cart/cart.php:109
 msgid "Product"
 msgstr ""
 
-#: woocommerce/cart/cart.php:33 woocommerce/cart/cart.php:125
+#: woocommerce/cart/cart.php:33 woocommerce/cart/cart.php:166
 #: woocommerce/cart/mini-cart.php:92
 msgid "Subtotal"
 msgstr ""
 
-#: woocommerce/cart/cart.php:56 woocommerce/cart/mini-cart.php:72
+#: woocommerce/cart/cart.php:75 woocommerce/cart/mini-cart.php:72
 msgid "Remove this item"
 msgstr ""
 
-#: woocommerce/cart/cart.php:92
+#: woocommerce/cart/cart.php:129
 msgid "Available on backorder"
 msgstr ""
 
-#: woocommerce/cart/cart.php:143
+#: woocommerce/cart/cart.php:184
 msgid "Coupon:"
 msgstr ""
 
-#: woocommerce/cart/cart.php:143 woocommerce/checkout/form-coupon.php:35
+#: woocommerce/cart/cart.php:184 woocommerce/checkout/form-coupon.php:35
 msgid "Coupon code"
 msgstr ""
 
-#: woocommerce/cart/cart.php:143 woocommerce/checkout/form-coupon.php:36
+#: woocommerce/cart/cart.php:184 woocommerce/checkout/form-coupon.php:36
 msgid "Apply coupon"
 msgstr ""
 
-#: woocommerce/cart/cart.php:148
+#: woocommerce/cart/cart.php:189
 msgid "Update cart"
 msgstr ""
 
@@ -3745,10 +3745,10 @@ msgstr ""
 msgid "Showing the single result"
 msgstr ""
 
-#: woocommerce/loop/result-count.php:32
-#. translators: %d: total results
-msgid "Showing all %d result"
-msgid_plural "Showing all %d results"
+#: woocommerce/loop/result-count.php:33
+#. translators: 1: total results 2: sorted by
+msgid "Showing all %1$d result"
+msgid_plural "Showing all %1$d results"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -4004,8 +4004,8 @@ msgctxt "Pattern placeholder"
 msgid "Jane Doe, CEO at Example Co."
 msgstr ""
 
-#: woocommerce/loop/result-count.php:37
-#. translators: 1: first result 2: last result 3: total results
+#: woocommerce/loop/result-count.php:39
+#. translators: 1: first result 2: last result 3: total results 4: sorted by
 msgctxt "with first and last result"
 msgid "Showing %1$d&ndash;%2$d of %3$d result"
 msgid_plural "Showing %1$d&ndash;%2$d of %3$d results"
