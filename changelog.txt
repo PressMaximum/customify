@@ -1,6 +1,5 @@
 = 0.4.20 =
 * IMPROVED: Typography output streamlined — body and heading tokens shared across related elements, less redundant CSS.
-* IMPROVED: Starter Templates tab hidden by default while the activation flow is finalizing (re-enable via `CUSTOMIFY_USE_STARTER_TEMPLATES`).
 * FIXED: Header top row light skin background now applies correctly (was stuck on Primary color).
 * FIXED: WooCommerce cart and result-count templates updated to 10.8.0 — no longer flagged as outdated in WC Status.
 
