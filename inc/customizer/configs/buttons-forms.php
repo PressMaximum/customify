@@ -105,15 +105,16 @@ if ( ! function_exists( 'customify_customizer_buttons_forms_config' ) ) {
 
 			// ──────────────────────────────────────────────────────────
 			// Top-level Section "Buttons & Form Fields" (root, not in any
-			// panel). Positioned as the FIRST entry of the "General Options"
+			// panel). Positioned as the LAST entry of the "General Options"
 			// panel group by get_panel_groups(), which overrides this priority
-			// to 60 (above Colors at 70). The 58 here is only the pre-override
-			// value used before register_panel_groups() runs at 99999.
+			// to 80 (below Colors 60 and Typography 70). The 85 here is only the
+			// pre-override fallback used before register_panel_groups() runs at
+			// 99999 — kept above Colors/Typography so it still sorts last there.
 			// ──────────────────────────────────────────────────────────
 			array(
 				'name'     => $section,
 				'type'     => 'section',
-				'priority' => 58,
+				'priority' => 85,
 				'title'    => __( 'Buttons & Form Fields', 'customify' ),
 			),
 

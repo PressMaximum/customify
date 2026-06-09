@@ -1330,15 +1330,15 @@ class  Customify_Customizer {
 				'title'    => __( 'General Options', 'customify' ),
 				'priority' => 50,
 				'panels'   => array(
-					// Buttons & Form Fields and Colors are top-level SECTIONS
-					// (not panels) — the get_section() fallback in
-					// register_panel_groups() positions them deterministically by
-					// list order: 'customify_buttons_forms' first (priority 60),
-					// then 'customify_colors' (70). Replaces the now-removed empty
-					// `styling_panel`.
-					'customify_buttons_forms',
+					// Colors is a top-level SECTION (not a panel) — the
+					// get_section() fallback in register_panel_groups() positions
+					// it (and the Buttons & Form Fields section) by list order:
+					// 'customify_colors' (priority 60), 'typography_panel' (70),
+					// then 'customify_buttons_forms' (80, below Typography).
+					// Replaces the now-removed empty `styling_panel`.
 					'customify_colors',
 					'typography_panel',
+					'customify_buttons_forms',
 				),
 			),
 			'layouts'         => array(

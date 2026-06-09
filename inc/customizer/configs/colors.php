@@ -77,12 +77,11 @@ if ( ! function_exists( 'customify_customizer_colors_config' ) ) {
 			// ──────────────────────────────────────────────────────────
 			// Top-level Section "Colors" (root, not in any panel).
 			// ──────────────────────────────────────────────────────────
-			// Position: the SECOND entry of the "General Options" panel group
+			// Position: the FIRST entry of the "General Options" panel group
 			// (divider at 50) by get_panel_groups() in
-			// inc/customizer/class-customizer.php, which assigns it priority 70
-			// at customize_register:99999 (Buttons & Form Fields takes 60 ahead
-			// of it) — sidebar order reads
-			// General Options → Buttons & Form Fields → Colors → Typography → Layouts ….
+			// inc/customizer/class-customizer.php, which assigns it priority 60
+			// at customize_register:99999 — sidebar order reads
+			// General Options → Colors → Typography → Buttons & Form Fields → Layouts ….
 			// The 65 below is only a fallback for the unlikely case the group
 			// registration is filtered out; the group mechanism overrides it.
 			array(
