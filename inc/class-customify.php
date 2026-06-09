@@ -260,7 +260,7 @@ class Customify
 				array(
 					'name'  => __( 'Primary', 'customify' ),
 					'slug'  => 'primary',
-					'color' => '#235787',
+					'color' => '#0e7c7b',
 				),
 				array(
 					'name'  => __( 'Secondary', 'customify' ),
@@ -578,6 +578,7 @@ class Customify
 			'page-header',
 			'background',
 			'colors',
+			'buttons-forms',
 			'compatibility',
 			// Header Builder Panel.
 			'header/transparent',
