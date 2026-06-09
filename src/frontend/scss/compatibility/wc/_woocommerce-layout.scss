@@ -82,10 +82,10 @@
     margin-left: 0px;
     select {
         padding: 0 2em 0 15px;
-        border: 1px solid $color_border;
-        border-radius: 0px;
+        border: 1px solid $color_border_medium;   // match the modernized form fields
+        border-radius: 3px;
         position: relative;
-        height: 2.3em;
+        height: 2.6em;
         font-size: 0.95em;
         @include for_device(mobile) {
             min-width: 150px;

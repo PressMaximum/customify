@@ -1,4 +1,12 @@
 @import "../../../frontend/scss/utils/vars";
+
+// Skip the "# Forms" partial (raw input/select/textarea + the global
+// button/.button reset) when compiling the editor canvas. Must be set BEFORE
+// base/base imports `base/_forms`. Raw form controls + global buttons clash
+// with Gutenberg block + .components-* UI; the core Button block is restyled
+// cleanly at the bottom of this file. (Astra / GeneratePress do the same.)
+$editor_context: true;
+
 @import "../../../frontend/scss/utils/mixins";
 @import "../../../frontend/scss/vendors/vendors";
 @import "../../../frontend/scss/vendors/gridlex/gridlex-vars";
@@ -30,4 +38,28 @@
 .edit-post-visual-editor__post-title-wrapper {
 	margin-top: 2rem !important;
 	margin-bottom: 2rem;
+}
+
+// --------------------------------------------------------------------------
+// Core Button block — the base "# Forms" reset is skipped in the editor
+// ($editor_context above), so the default (solid) Button block needs its own
+// canvas rule to stay WYSIWYG with the frontend. Targets ONLY the block
+// classes — never raw <button> or .components-* editor UI — so it can't
+// collide with editor chrome. Outline / ghost variants keep their core +
+// _blocks.scss styling. WP prefixes these selectors with `.editor-styles-wrapper`.
+// --------------------------------------------------------------------------
+.wp-block-button__link,
+.wp-element-button:not(.components-button) {
+	border: none;
+	border-radius: 3px;
+	padding: 0 1.3em;
+	min-height: 2.6em;
+	line-height: 2.5em;
+	font-weight: 500;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+	color: var(--customify-on-primary, #ffffff);
+	background: $color_primary;
 }

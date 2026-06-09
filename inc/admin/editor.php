@@ -159,7 +159,6 @@ class Customify_Editor {
 		// Metabox compatibility (selectors stable in WP 6.x).
 		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
 		.editor-styles-wrapper .wp-block-post-title { min-height: 0; }
-		.block-editor-page .editor-styles-wrapper button:not(.components-button) { background: none; }
 		.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) {
 			max-width: var(--wp--style--global--content-size, 780px);
 		}

@@ -82,24 +82,34 @@
 	}
 
 	.search-form-fields {
-		border: 1px solid;
-		border-color: rgba(127, 127, 127, 0.2);
-		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-		border-radius: 2px;
+		border: 1px solid $color_border_medium;
+		box-shadow: none;
+		border-radius: 3px;
 		height: 100%;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
+		&:focus-within {
+			border-color: $color_primary;
+			box-shadow: 0 0 0 3px color-mix(in srgb, $color_primary 18%, transparent);
+		}
 	}
 	.search-field {
 		display: block;
 		width: 100%;
-		border-radius: 2px;
 		height: 2.4em;
-		// Ported from colors.php $border_css. `border-color` here applies
-		// when the input has a default UA border or when other rules add
-		// border width/style — preserves the Border token wiring.
-		border-color: $color_border;
+		// Modal/popover search has NO .search-form-fields wrapper, so the field
+		// itself carries the outlined border + focus ring. The inline-box variant
+		// (.header-search_box-item) overrides this to border:0 since its wrapper
+		// carries them.
+		border: 1px solid $color_border_medium;
+		border-radius: 3px;
+		background-color: transparent;
+		box-shadow: none;
+		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
 		&:focus {
 			background-color: transparent;
+			border-color: $color_primary;
+			box-shadow: 0 0 0 3px color-mix(in srgb, $color_primary 18%, transparent);
 		}
 	}
 	.search-submit {
@@ -132,6 +142,9 @@
 			border: 0;
 			box-shadow: none;
 			background-color: transparent;
+			&:focus {
+				box-shadow: none;   // the .search-form-fields wrapper carries the focus ring
+			}
 		}
 	}
 }
