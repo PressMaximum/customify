@@ -480,7 +480,7 @@ if ( ! function_exists( 'customify_color_get_slots' ) ) {
 			'base'      => '#FFFFFF',
 			'surface'   => '#f9f9f9',
 			'text'      => '#2b2b2b',
-			'primary'   => '#235787',
+			'primary'   => '#0e7c7b',
 			'secondary' => '#c3512f',
 			'accent'    => '#FFD042',
 		);
@@ -977,8 +977,8 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	// we treat it as 'no override' and apply the cascade-sync display.
 	// Mirrors the 'default' keys in inc/customizer/configs/colors.php.
 	var FIELD_DEFAULTS = {
-		'global_styling_color_link':         '#235787',
-		'global_styling_color_link_hover':   '#235787',
+		'global_styling_color_link':         '#0e7c7b',
+		'global_styling_color_link_hover':   '#0e7c7b',
 		'global_styling_color_heading':      '#2b2b2b',
 		'global_styling_color_w_title':      '#2b2b2b',
 		'global_styling_color_text':         '#2b2b2b'
@@ -1686,7 +1686,7 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	// (mirrors PHP slot resolver). Used by recomputeDerived() so a
 	// container update fires correctly even mid-drag of a non-source slot.
 	var SLOT_DEFAULTS = {
-		'global_styling_color_primary':   '#235787',
+		'global_styling_color_primary':   '#0e7c7b',
 		'global_styling_color_secondary': '#c3512f',
 		'customify_palette_accent':       '#FFD042',
 		'customify_palette_text':         '#2b2b2b',

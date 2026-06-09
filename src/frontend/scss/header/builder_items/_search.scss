@@ -88,8 +88,7 @@
 		height: 100%;
 		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 		&:focus-within {
-			border-color: $color_primary;
-			box-shadow: 0 0 0 3px color-mix(in srgb, $color_primary 18%, transparent);
+			border-color: color-mix(in srgb, currentcolor 50%, transparent);
 		}
 	}
 	.search-field {
@@ -108,8 +107,7 @@
 
 		&:focus {
 			background-color: transparent;
-			border-color: $color_primary;
-			box-shadow: 0 0 0 3px color-mix(in srgb, $color_primary 18%, transparent);
+			border-color: color-mix(in srgb, currentcolor 50%, transparent);
 		}
 	}
 	.search-submit {

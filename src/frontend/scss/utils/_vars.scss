@@ -27,9 +27,9 @@ $background_body: #ffffff;
 // is unset (e.g. body-text without override resolves the chain to slot.text).
 $color_text:        var(--customify-body-text, #686868);
 $color_heading:     var(--customify-heading, #2b2b2b);
-$color_primary:     var(--customify-primary, #235787);
+$color_primary:     var(--customify-primary, #0e7c7b);
 $color_secondary:   var(--customify-secondary, #c3512f);
-$color_link:        var(--customify-link, #235787);
+$color_link:        var(--customify-link, #0e7c7b);
 $color_link_hover:  var(--customify-link-hover, #111111);
 $color_border:      var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
 // Stronger border for OUTLINED controls (a fill-less form field needs a more

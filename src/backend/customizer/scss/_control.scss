@@ -1309,8 +1309,15 @@ $text_color: #555d66;
 }
 .customize-control-customify-styling, .customize-control-customify-typography, .customize-control-customify-modal {
     .customify--settings-wrapper {
+        // Reserve room on the right so the title/description never run under the
+        // absolutely-positioned edit + reset buttons (.customify-actions, pinned
+        // top-right of the wrapper; ~54px wide when the reset button is visible).
         > .customize-control-description {
             margin-bottom: 0px;
+            padding-right: 56px;
+        }
+        > .customify-control-field-header {
+            padding-right: 56px;
         }
     }
     .customify--settings-wrapper {
