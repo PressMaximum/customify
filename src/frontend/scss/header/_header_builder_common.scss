@@ -80,9 +80,10 @@
 }
 
 // Titlebar
-// Background follows --customify-surface when the user has opted in to
-// the Palette panel (saved palette_surface). Fallback `#f9f9f9` matches
-// the historical hardcoded value so 30K legacy sites render byte-identical.
+// Default background removed — flat/transparent title area. The legacy gray
+// (the `#f9f9f9` fallback OR the `--customify-surface` palette tint) read as
+// dated. 30k: every site without a saved "Titlebar Background" loses the gray
+// fill (intentional default refresh).
 // The Customizer "Titlebar Background" field (page-header.php) emits a
 // higher-specificity `#page-titlebar { background-color: <hex> }` rule
 // that wins over this declaration when set.
@@ -90,7 +91,10 @@
 	padding: 21px 0px 22px;
 	border-bottom: 1px solid $color_border;
 	word-break: break-word;
-	background: var(--customify-surface, #f9f9f9);
+	// Remove ONLY the default fill. The "Titlebar Background" Customizer field
+	// emits `#page-titlebar { background-color: <hex> }` (ID, 1-0-0) which beats
+	// this class rule (0-1-0), so sites with a custom bg are untouched.
+	background-color: transparent;
 	@include for_device(tablet) {
 		padding: 19px 0px 20px;
 	}

@@ -32,6 +32,11 @@ $color_secondary:   var(--customify-secondary, #c3512f);
 $color_link:        var(--customify-link, #235787);
 $color_link_hover:  var(--customify-link-hover, #111111);
 $color_border:      var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
+// Stronger border for OUTLINED controls (a fill-less form field needs a more
+// defined edge than the 9% hairline). Own var slot for future theming; fallback
+// ~22% currentcolor. 30k-safety: new token — consumed by the modernized field
+// rule + the WC quantity stepper, kept in sync so they don't clash.
+$color_border_medium: var(--customify-border-medium, color-mix(in srgb, currentcolor 22%, transparent));
 $color_meta:        var(--customify-text-muted, #6d6d6d);
 $color_widget_title: var(--customify-widget-title, #2b2b2b);
 
@@ -93,6 +98,12 @@ $gl-devices-list: (
         tablet: "screen and (max-width: 1024px)", // 568px - 1024px
         mobile: "screen and (max-width: 568px)" // from to 568px to smaller
 ) !default;
+
+// Compile-context flag. Frontend builds leave it false; the block-editor
+// stylesheet (src/backend/admin/scss/editor.scss) sets it true BEFORE
+// importing base/base so the "# Forms" partial (raw input/select/textarea +
+// global button reset) is skipped in the editor canvas. See base/_forms.scss.
+$editor_context: false !default;
 
 
 

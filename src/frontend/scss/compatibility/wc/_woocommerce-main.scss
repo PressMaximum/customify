@@ -62,42 +62,79 @@ p.demo_store,
 
 .woocommerce {
     /**
-    * Quantity input 
-    */
+     * Quantity +/- stepper (single product & cart).
+     * Clean rounded pill: one surface, no inner dividers, glyph-only controls
+     * with a subtle neutral hover that clips to the corners. Height mirrors
+     * .single_add_to_cart_button (height 2.6em @ font-size 1.04em) so the two
+     * line up. Token-driven so it adapts to surface / brand colors.
+     */
     .input-qty-pm {
-        border-radius: 1px;
         display: inline-flex;
-        align-items: center;
-        flex-wrap: wrap;
-        border: 1px solid #E5E5E5;
-        background-color: #f2f2f2;
+        flex-wrap: nowrap;          // never let +/- wrap onto a second line
+        align-items: stretch;       // segments fill the pill height
+        overflow: hidden;           // clip the hover fill to the rounded corners
+        box-sizing: border-box;
+        font-size: 1.04em;          // same type scale as the add-to-cart button
+        height: 2.6em;              // -> identical rendered height to that button
+        border: 1px solid $color_border_medium;   // shared with form fields so they don't clash
+        border-radius: 4px;
+        background-color: transparent;
         color: inherit;
+        line-height: normal;
+
+        // Number field: borderless & transparent, vertically centered
         input, input[type="text"] {
+            height: auto;           // stretch to the pill height
+            align-self: stretch;
+            width: 2.6em;
+            margin: 0;
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: transparent;
             box-shadow: none !important;
-            border-radius: 0px;
-            border-top: none;
-            border-bottom: none;
-        }
-        .input-pm-act, input.input-pm-act{
+            color: $color_text;
             text-align: center;
-            line-height: 2.2em;
-            min-height: 2.6em;
-            padding: 0px 0.2em;
-            min-width: 1.5em;
+            font-weight: normal;
+        }
+
+        // - / + controls: glyph only, vertically balanced; clean subtle hover
+        .input-pm-act, input.input-pm-act {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 2em;
+            min-width: 2em;
+            min-height: 0;          // drop the global .button min-height
+            padding: 0;
+            border: 0;
+            border-radius: 0;
+            background: none;
+            color: $color_meta;
+            font-size: 1.1em;
+            font-weight: 400;
+            line-height: 1;
+            position: relative;
+            top: -0.06em;           // optical-center the +/- (math axis sits low)
             cursor: pointer;
-            aspect-ratio: 1/1;
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
-            box-shadow: none;
-            font-weight: 400;
-            background: #f9f9f9;
-            color: var(--customify-text-muted, #686868);
-            &:hover {
-                background: #f0f0f0;
-                color: inherit;
+            transition: color 0.15s ease;
+            // Neutralize the theme's global .button:hover state-layer (a
+            // translucent background-image overlay) so hover stays flat —
+            // no background at all, only a subtle glyph-color shift.
+            &:hover, &:focus {
+                background: none;
+                background-image: none;
+                color: $color_text;
+                outline: none;
             }
+        }
+
+        &:focus-within {
+            border-color: $color_primary;
         }
     }
 

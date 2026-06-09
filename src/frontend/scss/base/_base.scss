@@ -92,31 +92,30 @@ h2,
 h3,
 .h3 {
     font-size: var(--customify-typo-h3-font-size, ms(2));
-    line-height: var(--customify-typo-h3-line-height, inherit);
+    line-height: var(--customify-typo-h3-line-height, 1.3);
 }
 
 h4,
 .h4 {
     font-size: var(--customify-typo-h4-font-size, ms(1));
-    line-height: var(--customify-typo-h4-line-height, inherit);
+    line-height: var(--customify-typo-h4-line-height, 1.3);
 }
 
-// h5/h6 have no theme-default font-size in legacy SCSS — they
-// inherited the browser default and PHP's selector-scoped emit
-// supplied the user-set value. In vars mode the consumer must
-// be explicit or the heading_h5 / heading_h6 Customizer fields
-// silently no-op. Fallback `inherit` keeps the pre-`0.5.0`
-// "no-override" behavior when the user hasn't saved a value.
+// h5/h6 now ship explicit default sizes + a tighter line-height for a clearer
+// heading hierarchy. Previously the fallback was `inherit` → ≈ body size and
+// body line-height (1.618), which made h5/h6 indistinguishable from body copy
+// and loose on wrap. §4.1: sites that never saved a heading_h5 / heading_h6
+// size adopt these defaults; any saved value still wins via the CSS variable.
 h5,
 .h5 {
-    font-size: var(--customify-typo-h5-font-size, inherit);
-    line-height: var(--customify-typo-h5-line-height, inherit);
+    font-size: var(--customify-typo-h5-font-size, 1.1em);
+    line-height: var(--customify-typo-h5-line-height, 1.3);
 }
 
 h6,
 .h6 {
-    font-size: var(--customify-typo-h6-font-size, inherit);
-    line-height: var(--customify-typo-h6-line-height, inherit);
+    font-size: var(--customify-typo-h6-font-size, 0.95em);
+    line-height: var(--customify-typo-h6-line-height, 1.3);
 }
 
 
@@ -138,7 +137,7 @@ blockquote {
     margin: ms(1) ms(2);
     border-left: 3px solid $color_border;
     font-style: italic;
-    font-weight: 200;
+    font-weight: 400;
     font-size: 1.2em;
     p:last-of-type {
         margin-bottom: 0px;
@@ -287,33 +286,36 @@ table {
     width: 100%;
     max-width: 100%;
     margin-bottom: ms(3);
-    border-spacing: 0;
-    border-collapse: separate;
+    border-collapse: collapse;
     caption {
         padding: ms(1);
         font-weight: 600;
     }
-    th {
-        background-color: $surface_strong;
-        font-weight: 500;
-    }
     th,
     td {
         padding: ms(0) ms(2);
-        vertical-align: top;
         text-align: left;
         font-size: 0.9em;
+        border-bottom: 1px solid $color_border;
     }
-    thead th {
+    // Header reads distinctly from the body: heavier weight, heading color,
+    // a light fill and a stronger 2px baseline rule.
+    th {
         vertical-align: middle;
+        font-weight: 600;
+        color: $color_heading;
+        background-color: $surface_medium;
+        border-bottom-width: 2px;
     }
-    tbody {
-        td {
-            background-color: $surface_subtle;
-        }
-        tr:nth-child(2n) td {
-            background-color: $surface_medium;
-        }
+    td {
+        vertical-align: top;
+        transition: background-color 0.15s ease;
+    }
+    // Visible row hover — brand-tinted so it clearly stands out (the old
+    // neutral 10% tint was too faint). Swap for $surface_strong if a neutral
+    // hover is preferred.
+    tbody tr:hover td {
+        background-color: color-mix(in srgb, $color_primary 8%, transparent);
     }
 }
 
@@ -344,231 +346,11 @@ table {
 
 
 /*--------------------------------------------------------------
-# Forms
+# Forms  — extracted to base/_forms.scss (frontend-only; the block-editor
+# canvas skips it via $editor_context). See src/backend/admin/scss/editor.scss
+# + docs/SPEC-editor-style.md.
 --------------------------------------------------------------*/
-
-form {
-    margin-bottom: 2em;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="url"],
-input[type="password"],
-input[type="search"],
-input[type="number"],
-input[type="tel"],
-input[type="range"],
-input[type="date"],
-input[type="month"],
-input[type="week"],
-input[type="time"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="color"],
-select,
-textarea,
-.select2-container .select2-selection--single {
-    color: $color_text;
-    background-color: $surface_medium;
-    border: 1px solid $color_border;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-    padding: 0 0.75em;
-    height: 2.6em;
-    width: 100%;
-    max-width: 100%;
-    vertical-align: middle;
-    border-radius: 1px;
-    -moz-appearance: none;
-    -webkit-appearance: none;
-    &:focus {
-        background-color: $surface_subtle;
-        outline: none;
-    }
-}
-
-select {
-    box-shadow: none;
-    background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
-    background-position: center right 8px;
-    background-repeat: no-repeat;
-    padding-right: 1.5em;
-    cursor: pointer;
-}
-
-.select2-container--default {
-    .select2-selection--single {
-        box-shadow: none;
-        .select2-selection__rendered {
-            line-height: 2.4em;
-            min-height: 2.6em;
-            padding-left: 0px;
-        }
-        .select2-selection__arrow {
-            top: 46%;
-            right: 1px;
-            transform: translateY(-38%);
-            background-image: url(data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMS4xLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDEwMCAxMDA7IiB4bWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iMTZweCIgaGVpZ2h0PSIxNnB4Ij4KPGc+Cgk8cGF0aCBkPSJNNDkuOTk4LDBMMjcsMzYuNDk4bDQ2LDAuMDA0TDQ5Ljk5OCwweiBNNTAuMDA0LDEwMEw3Myw2My41MDJsLTQ2LTAuMDA0TDUwLjAwNCwxMDB6IiBmaWxsPSIjMDAwMDAwIi8+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPGc+CjwvZz4KPC9zdmc+Cg==);
-            background-position: center right 8px;
-            background-repeat: no-repeat;
-            b {
-                display: none;
-            }
-        }
-    }
-    .select2-dropdown {
-        // Match the Select2 input border to the rest of the form controls —
-        // `#e5e5e5` was a hard-coded light gray that didn't track dark
-        // Palette bases. Use $color_border so the dropdown panel border
-        // adapts (saved Border slot → currentcolor 10% fallback).
-        border: 1px solid $color_border;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.12) inset;
-    }
-}
-
-// `[class*="wp-block-"]` in the :not() lists peels off ANY element whose
-// class contains a `wp-block-*` token — that's how WP default blocks
-// (Search submit, File download, Embed "Try again", Latest Posts CTA,
-// etc.) render their internal chrome buttons. Editor canvas + frontend
-// both stop applying the broad theme button styling to those, while the
-// intentionally-styled content buttons (`.wp-block-button__link`,
-// `.wp-element-button`, `.wc-block-cart__submit .wp-element-button`)
-// stay listed explicitly so they still pick up the theme look.
-// The single-class exclusions kept below (`.components-button`,
-// `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
-// `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
-// so they still need their own slot.
-.button:not(
-    [class*="wp-block-"],
-    .menu-mobile-toggle,
-    .components-button,
-    .customize-partial-edit-shortcut-button
-),
-button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.wc-block-cart__submit .wp-element-button,
-.wp-block-button__link,
-.wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
-    border: none;
-    cursor: pointer;
-    padding: 0px 1.3em;
-    line-height: 2.5em;
-    min-height: 2.6em;
-    max-width: 100%;
-    font-weight: bolder;
-    text-transform: uppercase;
-    transition: transform 0.3s, border 0.3s, background 0.3s, box-shadow 0.3s, opacity 0.3s, color 0.3s;
-    border-radius: 1px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    &:not(.menu-mobile-toggle, .search-submit):hover {
-        // State-layer hover (matches Blocksify): overlay 13% of the button's own
-        // text color on top of the LIVE background via a translucent
-        // background-image. Background-agnostic — it adapts to the primary native
-        // fill, the secondary WooCommerce / header-builder fill, and any custom
-        // background. A named color-mix() on background-color can't read the live
-        // background and would wrong-colour those non-primary buttons on hover.
-        // Needs color-mix() (Chrome 111+ / FF 113+ / Safari 16.2+); older
-        // browsers just show no hover shift.
-        background-image: linear-gradient(
-            color-mix(in srgb, currentColor 13%, transparent),
-            color-mix(in srgb, currentColor 13%, transparent)
-        );
-    }
-    &:hover {
-        color: var(--customify-on-primary, #ffffff);
-        outline: none;
-    }
-    &:active,
-    &:focus {
-        outline: none;
-    }
-    &.loading {
-        position: relative;
-        i,
-        svg,
-        .icon-label,
-        .hide-on-loading,
-        .button-label {
-            visibility: hidden;
-        }
-        &:after {
-            content: "" !important;
-            height: 16px;
-            width: 16px;
-            animation: spin 0.6s linear infinite;
-            border: 2px solid rgba(0, 0, 0, 0.3);
-            border-left-color: currentColor;
-            border-radius: 50%;
-            display: block;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-top: -8px;
-            margin-left: -8px;
-            padding: 0px;
-            line-height: 0px;
-        }
-    }
-}
-
-// Same `[class*="wp-block-"]` carve-out as above so WP default-block
-// chrome doesn't inherit the primary-color background fill.
-.button:not([class*="wp-block-"]),
-button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.wp-block-button__link,
-.wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
-    color: var(--customify-on-primary, #ffffff);
-    background: $color_primary;
-    &:focus {
-        color: var(--customify-on-primary, #ffffff);
-    }
-}
-
-.button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
-    opacity: 0.5;
-}
-
-textarea {
-    padding: 0.575em 0.875em 0;
-    min-height: 130px;
-}
-
-button::-moz-focus-inner,
-input::-moz-focus-inner {
-    border: 0;
-    padding: 0;
-}
-
-select {
-    //border: 1px solid darken( $background_body,5% );
-}
-
-fieldset {
-    border: none;
-    margin: ms(3) 0;
-    padding: 0;
-    legend {
-        margin-bottom: ms(-3);
-        font-weight: 600;
-    }
-}
-
-label {
-    color: $color_text;
-}
+@import "forms";
 
 
 /*--------------------------------------------------------------
