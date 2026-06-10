@@ -205,6 +205,7 @@ Universal keys (most types accept all of these):
 | `min` / `max` / `step` | – | int\|float | For `slider`. |
 | `units` | – | array | For `slider`, opt-in: `array( 'px' => array( 'min' => 1, 'max' => 120, 'step' => 1 ), 'em' => …, '-' => … )` renders a mini unit `<select>` with per-unit ranges (`-` = unitless sentinel, emits a bare number). Absent ⇒ legacy single-px markup, byte-identical. See [`SPEC-typography.md §3.1`](SPEC-typography.md). |
 | `display_defaults` | – | array | For `typography`, display-only: `array( sub_field => string \| array( 'desktop' => …, 'tablet' => …, 'mobile' => … ) )`. Feeds trigger previews, placeholders and slider handle seeding; never stored, never reaches the CSS generator. See [`SPEC-typography.md §3.3`](SPEC-typography.md). |
+| `popover_chrome` | – | bool | For `modal`, opt-in: render the styling-style per-tab trigger rows + floating popover instead of the pencil + accordion. Only for modals whose fields are style values (colors/border/background) — data-only modals (Display, Title & Tagline) must stay on the accordion. `styling` controls get the chrome unconditionally. |
 
 ---
 
@@ -255,9 +256,9 @@ All control classes live in `inc/customizer/controls/`. The `type` field picks t
 
 | `type` | Use case |
 |---|---|
-| `styling` | Normal/Hover tabs combining color, background, border. Powers the global color groups. |
+| `styling` | Normal/Hover tabs combining color, background, border. Powers the global color groups. Renders per-tab trigger rows (saved-color swatches + one-word tail) opening a floating popover — same chrome as `typography`, applied unconditionally. |
 | `repeater` | Multi-item list with sub-`fields`. See §7. |
-| `modal` | Multi-tab modal hosting nested controls. See §7. |
+| `modal` | Multi-tab modal hosting nested controls. See §7. Style-data modals may opt into the trigger + popover chrome via `popover_chrome` (§4.3); data-only modals keep the pencil + accordion. |
 | `columns_settings` | Grid column ratio/gap editor. |
 | `row_layout` | Grid row layout — used by the Header/Footer Builder V1. |
 | `pro` | Upsell placeholder for paid-only features. |
@@ -585,6 +586,8 @@ The `'_visibility' => 'hidden'` value is treated specially — auto-CSS emits `d
 ### 7.2 Modal
 
 Use when one logical setting needs many sub-controls (e.g. styling = colors + borders + shadows in one button). Sub-fields are grouped into tabs; the saved value is an object keyed by sub-field name.
+
+Modals whose fields are pure style values can set `'popover_chrome' => true` to swap the pencil + accordion for the per-tab trigger rows + floating popover (theme adopters: `header_cover_bg`, the header/footer social-icons Custom Color and Border modals). The storage shape, `get()` serialization and CSS emit are identical either way — the flag is chrome-only.
 
 ```php
 array(
