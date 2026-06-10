@@ -1405,6 +1405,116 @@ $text_color: #555d66;
     }
 }
 
+// ── Typography trigger + popover chrome ────────────────────────────────
+// The typography control renders a select-like trigger that previews the
+// saved value (family + size/weight); clicking it opens the existing
+// .customify-modal-settings panel as a floating popover overlaying the
+// controls below, instead of the legacy inline accordion. Styling/modal
+// controls keep the accordion — every rule here is scoped to the
+// typography control only. Open/close is class-driven (`is-open`), see
+// openPopover()/closePopover() in typography-control.js.
+.customize-control-customify-typography {
+    .customify-typo-trigger {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        padding: 7px 10px;
+        border: 1px solid #dcdcde;
+        border-radius: 2px;
+        background: #fff;
+        text-decoration: none;
+        color: #2c3338;
+        line-height: 1.4;
+        cursor: pointer;
+        transition: border-color .15s ease, box-shadow .15s ease;
+        &:hover {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            color: #2c3338;
+        }
+        &:focus {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af);
+            outline: none;
+            color: #2c3338;
+        }
+    }
+    .customify-trigger--family {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .customify-trigger--meta {
+        flex: 0 0 auto;
+        color: #787c82;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .customify-trigger--arrow {
+        flex: 0 0 auto;
+        font-size: 14px;
+        width: auto;
+        height: auto;
+        line-height: 1;
+        color: #787c82;
+        transition: transform .18s ease;
+    }
+    &.modal--opening {
+        .customify-typo-trigger {
+            border-color: var(--wp-admin-theme-color, #3068af);
+        }
+        .customify-trigger--arrow {
+            transform: rotate(180deg);
+        }
+    }
+
+    // Popover state — overrides the shared accordion styles above.
+    // JS sets `top` (anchored under the trigger; above it when flipped
+    // via `is-above`).
+    .customify-modal-settings {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0;
+        z-index: 30;
+        border-radius: 4px;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-6px);
+        pointer-events: none;
+        transition:
+            opacity .18s ease,
+            transform .18s ease,
+            visibility 0s linear .18s;
+        &:before {
+            right: 14px;
+            @include rtl() {
+                right: auto;
+                left: 14px;
+            }
+        }
+        &.is-above {
+            transform: translateY(6px);
+            &:before {
+                top: auto;
+                bottom: -6px;
+            }
+        }
+        &.is-open {
+            visibility: visible;
+            opacity: 1;
+            transform: none;
+            pointer-events: auto;
+            transition:
+                opacity .18s ease,
+                transform .18s ease,
+                visibility 0s;
+        }
+    }
+}
+
 /* Checkbox */
 .customify--field-checkbox {
     .customify-field-settings-inner {
