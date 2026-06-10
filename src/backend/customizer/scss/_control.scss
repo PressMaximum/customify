@@ -1658,24 +1658,27 @@ $text_color: #555d66;
     }
 }
 
-// ── Typography trigger + popover chrome ────────────────────────────────
-// The typography control renders a select-like trigger that previews the
-// saved value (family + size/weight); clicking it opens the existing
-// .customify-modal-settings panel as a floating popover overlaying the
-// controls below, instead of the legacy inline accordion. Styling/modal
-// controls keep the accordion — every rule here is scoped to the
-// typography control only. Open/close is class-driven (`is-open`), see
-// openPopover()/closePopover() in typography-control.js.
-.customize-control-customify-typography {
-    .customify-typo-trigger {
+// ── Composite trigger + popover chrome (typography + styling) ──────────
+// Typography and styling controls render select-like triggers that
+// preview the saved value (font family + size/weight, or per-tab color
+// swatches); clicking one opens the existing .customify-modal-settings
+// panel as a floating popover overlaying the controls below, instead of
+// the legacy inline accordion. The modal control type keeps the
+// accordion — every rule here is scoped to the chrome'd control types
+// only. Open/close is class-driven (`is-open`), see popover-chrome.js.
+.customize-control-customify-typography,
+.customize-control-customify-styling {
+    .customify-typo-trigger,
+    .customify-styling-trigger {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-top: 8px;
-        padding: 7px 10px;
+        padding: 9px 10px;
         border: 1px solid #dcdcde;
         border-radius: 2px;
         background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
         text-decoration: none;
         color: #2c3338;
         line-height: 1.4;
@@ -1687,12 +1690,13 @@ $text_color: #555d66;
         }
         &:focus {
             border-color: var(--wp-admin-theme-color, #3068af);
-            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af), 0 1px 3px rgba(0, 0, 0, .1);
             outline: none;
             color: #2c3338;
         }
     }
-    .customify-trigger--family {
+    .customify-trigger--family,
+    .customify-trigger--label {
         flex: 1 1 auto;
         min-width: 0;
         overflow: hidden;
@@ -1713,14 +1717,6 @@ $text_color: #555d66;
         line-height: 1;
         color: #787c82;
         transition: transform .18s ease;
-    }
-    &.modal--opening {
-        .customify-typo-trigger {
-            border-color: var(--wp-admin-theme-color, #3068af);
-        }
-        .customify-trigger--arrow {
-            transform: rotate(180deg);
-        }
     }
 
     // Popover state — overrides the shared accordion styles above.
@@ -1765,6 +1761,96 @@ $text_color: #555d66;
                 transform .18s ease,
                 visibility 0s;
         }
+    }
+}
+
+// Typography's single trigger reflects the open state via the li class;
+// styling rows carry their own per-tab `is-open` (see below).
+.customize-control-customify-typography.modal--opening {
+    .customify-typo-trigger {
+        border-color: var(--wp-admin-theme-color, #3068af);
+    }
+    .customify-trigger--arrow {
+        transform: rotate(180deg);
+    }
+}
+
+// ── Styling trigger rows ────────────────────────────────────────────────
+// One row per tab (Normal / Hover / …): tab label left, saved-color
+// swatches + a one-word meta right, shared arrow. Built by
+// ensureStylingRows()/paintStylingRows() in control.js.
+.customize-control-customify-styling {
+    .customify-styling-triggers {
+        margin-top: 8px;
+    }
+    .customify-styling-trigger {
+        margin-top: 6px;
+        &:first-child {
+            margin-top: 0;
+        }
+        &.is-open {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            .customify-trigger--arrow {
+                transform: rotate(180deg);
+            }
+        }
+    }
+    .customify-trigger--preview {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 0 0 auto;
+    }
+    .customify-trigger--spacer {
+        flex: 1 1 auto;
+    }
+    .customify-trigger--swatch {
+        position: relative;
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+        // Transparency checker shows through alpha colors.
+        background-color: #fff;
+        background-image:
+            linear-gradient(45deg, #c3c4c7 25%, transparent 25%),
+            linear-gradient(-45deg, #c3c4c7 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #c3c4c7 75%),
+            linear-gradient(-45deg, transparent 75%, #c3c4c7 75%);
+        background-size: 8px 8px;
+        background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+        i {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: block;
+            // Hairline edge instead of a border, so light fills (white)
+            // keep a visible rim; the ring variant's inline shadow
+            // replaces it.
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+        }
+        // Border colors render as a ring — the inset box-shadow set
+        // inline by paintStylingRows() carries the color — over a plain
+        // center so they don't read as a fill.
+        &.is-ring i {
+            background: #fff;
+        }
+    }
+    .customify-trigger--meta {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 50%;
+        &.is-default {
+            color: #a7aaad;
+        }
+    }
+    // The per-tab trigger rows replace the in-popover tab bar.
+    .customify-modal-settings .modal--tabs {
+        display: none;
     }
 }
 
