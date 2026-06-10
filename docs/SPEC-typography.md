@@ -63,6 +63,16 @@ Each typography setting stores a JSON object (or URL-encoded variant) with the s
 | `font_size` | object `{value, unit, desktop, tablet, mobile}` | **Yes** |
 | `line_height` | object `{value, unit, desktop, tablet, mobile}` | **Yes** |
 
+Allowed `unit` values per sub-field (the `units` config declared in `Customify_Customizer::get_typo_fields()` — see `SPEC-customizer.md` §4.3):
+
+| Sub-field | Units |
+|---|---|
+| `font_size` | `px`, `em`, `rem` |
+| `line_height` | `px`, `em`, `-` |
+| `letter_spacing` | `px`, `em` |
+
+`-` is the **unitless sentinel**: `setup_slider()` in PHP and its [`auto-css.js`](../src/backend/customizer/js/auto-css.js) mirror (keep in lockstep) map it to an empty suffix and emit a bare number — the standard unitless line-height. Units in already-saved data round-trip losslessly: an unknown unit renders as its own selected option in the control and is emitted verbatim. An empty value still stores `{unit, value: ""}` and emits nothing; when the value is empty the control derives its initial unit from the placeholder suffix (`2.42em` → `em`, bare `1.216` → `-`).
+
 See [`SPEC-customizer.md §5.3`](SPEC-customizer.md) for the full per-field config recipe.
 
 ### 3.2 Registered typography settings (20 total)
@@ -106,6 +116,21 @@ These emit selector-scoped literal CSS at the field's `selector`. No SCSS token 
 | `footer_copyright_typography` ([copyright.php](../inc/customizer/configs/footer/copyright.php)) | `footer-copyright` | `.builder-item--footer_copyright, .builder-item--footer_copyright p` |
 | `blog_post_more_typography` ([blogs.php](../inc/customizer/configs/blogs.php)) | `blog-post-more` | `#blog-posts .entry-readmore a` |
 | `breadcrumb_typo` ([breadcrumb.php](../inc/compatibility/breadcrumb.php)) | `breadcrumb` | `#page-breadcrumb` |
+
+### 3.3 `display_defaults` — display-only metadata (never stored)
+
+Typography fields may declare display-only defaults in their config ([`typography.php`](../inc/customizer/configs/typography.php)):
+
+```php
+'display_defaults' => array(
+    'font_size'   => array( 'desktop' => '2.42em', 'tablet' => '2.1em', 'mobile' => '1.8em' ), // _base.scss h1
+    'line_height' => '1.216', // _base.scss h1
+),
+```
+
+Values are strings (`'17px'`, `'1.6'`) or per-device arrays, and **mirror the literal compiled SCSS fallbacks** — each entry carries a lockstep comment naming the stylesheet it was copied from (`_base.scss`, `_logo_site_identity.scss`, `_widgets.scss`). When an SCSS default changes, update the config value and its comment in the same commit. Static declaration is deliberate: no hidden DOM probes or runtime computed-style reads (same doctrine as `TYPO_VAR_MAP`).
+
+The metadata is exported in the control json (`Customify_Control_Base::$display_defaults`) and feeds three UI affordances only: the trigger-row preview fallbacks, input placeholders, and slider handle seeding (a programmatic `.slider( "value" )` fires no `slide` event, so nothing is saved). It is **never written to settings and never reaches the CSS generator** — the empty-value shape from §3.1 stays empty and emits nothing. The trigger/popover chrome itself is documented in [`SPEC-customizer.md §5.3`](SPEC-customizer.md).
 
 ---
 
