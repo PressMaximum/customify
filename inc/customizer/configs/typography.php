@@ -1,4 +1,138 @@
 <?php
+if ( ! function_exists( 'customify_typography_presets' ) ) {
+	/**
+	 * Font-pair presets for the Typography Presets control.
+	 *
+	 * Clicking a preset patches ONLY the family bits (font / font_type /
+	 * variant) of `global_typography_base_p` (body) and
+	 * `global_typography_base_heading` (headings) — see
+	 * typography-presets.js. Sizes, weights and every other sub-value the
+	 * user tuned stay untouched, and this control stores no value of its
+	 * own.
+	 *
+	 * Pairs are well-established Google Fonts pairings (editorial serif +
+	 * humanist sans, geometric sans + serif body, condensed display, …).
+	 * `variants` lists the variants written into the setting, trimmed to
+	 * regular/italic/600/700 INTERSECTED with what each family actually
+	 * ships per src/fonts/google-fonts.json — keep both in lockstep when
+	 * changing a pair (css2 rejects requests for missing variants).
+	 *
+	 * @return array
+	 */
+	function customify_typography_presets() {
+		return array(
+			array(
+				'name'    => 'Playfair Display / Source Sans Pro',
+				'heading' => array(
+					'family'   => 'Playfair Display',
+					'fallback' => 'serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Source Sans Pro',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Montserrat / Merriweather',
+				'heading' => array(
+					'family'   => 'Montserrat',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Merriweather',
+					'fallback' => 'serif',
+					// Merriweather ships no 600.
+					'variants' => array( 'regular', 'italic', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Oswald / Open Sans',
+				'heading' => array(
+					'family'   => 'Oswald',
+					'fallback' => 'sans-serif',
+					// Oswald ships no italics.
+					'variants' => array( 'regular', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Open Sans',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Poppins / Inter',
+				'heading' => array(
+					'family'   => 'Poppins',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Inter',
+					'fallback' => 'sans-serif',
+					// Inter ships no italics in the catalogue.
+					'variants' => array( 'regular', '600', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Lora / Roboto',
+				'heading' => array(
+					'family'   => 'Lora',
+					'fallback' => 'serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Roboto',
+					'fallback' => 'sans-serif',
+					// Roboto ships no 600.
+					'variants' => array( 'regular', 'italic', '700' ),
+				),
+			),
+			array(
+				'name'    => 'DM Serif Display / Work Sans',
+				'heading' => array(
+					'family'   => 'DM Serif Display',
+					'fallback' => 'serif',
+					// DM Serif Display ships regular + italic only.
+					'variants' => array( 'regular', 'italic' ),
+				),
+				'body'    => array(
+					'family'   => 'Work Sans',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+			),
+		);
+	}
+}
+
+if ( ! function_exists( 'customify_typography_preset_fonts' ) ) {
+	/**
+	 * Load the preset families inside the Customizer CONTROLS frame so the
+	 * preset cards render with their real fonts. css2 `text=` subsets the
+	 * files to the card glyphs ("Aa" / "Font Family"), so the whole grid
+	 * costs a few KB. Frontend/preview loading is untouched — applying a
+	 * preset goes through the normal typography pipeline.
+	 */
+	function customify_typography_preset_fonts() {
+		$families = array();
+		foreach ( customify_typography_presets() as $preset ) {
+			$families[ $preset['heading']['family'] ] = true;
+			$families[ $preset['body']['family'] ]    = true;
+		}
+		$query = array();
+		foreach ( array_keys( $families ) as $family ) {
+			$query[] = 'family=' . str_replace( ' ', '+', $family );
+		}
+		$url = 'https://fonts.googleapis.com/css2?' . implode( '&', $query )
+			. '&display=swap&text=' . rawurlencode( 'AaFont mily' );
+		wp_enqueue_style( 'customify-typo-preset-fonts', $url, array(), null );
+	}
+}
+add_action( 'customize_controls_enqueue_scripts', 'customify_typography_preset_fonts' );
+
 if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 	/**
 	 * Add typograhy settings.
@@ -29,6 +163,18 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 				'type'     => 'section',
 				'priority' => 22,
 				'title'    => __( 'Typography', 'customify' ),
+			),
+
+			// ───────── Presets ─────────
+			// Quick-start font pairs. The control is chrome-only: clicking a
+			// card patches the family bits of the Body/Heading settings (see
+			// typography-presets.js); its own setting is never written.
+			array(
+				'name'    => 'typography_presets',
+				'type'    => 'typography_presets',
+				'section' => 'typography_panel',
+				'title'   => __( 'Presets', 'customify' ),
+				'fields'  => customify_typography_presets(),
 			),
 
 			// ───────── Base ─────────

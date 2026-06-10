@@ -338,7 +338,7 @@ class  Customify_Customizer {
 						}
 
 						if ( isset( $f['fields'] ) ) {
-							if ( ! in_array( $f['type'], array( 'typography', 'styling', 'modal' ) ) ) { //phpcs:ignore
+							if ( ! in_array( $f['type'], array( 'typography', 'typography_presets', 'styling', 'modal' ) ) ) { //phpcs:ignore
 								$types = wp_list_pluck( $f['fields'], 'type' );
 								if ( in_array( 'icon', $types ) ) { //phpcs:ignore
 									self::$has_icon = true;
@@ -1105,6 +1105,7 @@ class  Customify_Customizer {
 			'hidden',
 			'heading',
 			'typography',
+			'typography_presets',
 			'modal',
 			'styling',
 			'hr',

@@ -3,6 +3,7 @@ import { observeAndMount as observeAndMountColumnsSettings } from './controls/co
 // Typography control split out into its own file for readability;
 // still bundled into this entry, still called inside IIFE 2 below.
 import { setupTypographyControl } from './typography-control';
+import { setupTypographyPresets } from './typography-presets';
 import { attachPopoverChrome } from './popover-chrome';
 
 (function (api) {
@@ -2946,6 +2947,7 @@ import { attachPopoverChrome } from './popover-chrome';
 	};
 
 	var typoControl = setupTypographyControl({ $: $, $document: $document, wpcustomize: wpcustomize, customifyField: customifyField });
+	var typoPresets = setupTypographyPresets({ $: $, $document: $document, wpcustomize: wpcustomize });
 	var FontSelector = typoControl.FontSelector;
 	var intTypos = typoControl.intTypos;
 
@@ -4248,6 +4250,7 @@ import { attachPopoverChrome } from './popover-chrome';
 			initStyling();
 			initModal();
 			intTypos();
+			typoPresets.init();
 			// Expose helpers used by React-based controls (e.g. Column Settings)
 			// to drive the jQuery slider + css_ruler renderers.
 			window.customifyField = customifyField;

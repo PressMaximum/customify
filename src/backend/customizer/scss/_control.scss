@@ -1859,6 +1859,119 @@ $text_color: #555d66;
     }
 }
 
+// ── Typography presets ──────────────────────────────────────────────────
+// Font-pair quick picks: a 3-column grid of cards, each previewing the
+// pair via inline SVG ("Aa" in the heading family, "Font Family" in the
+// body family — families load from the css2 stylesheet enqueued in
+// configs/typography.php). Active card mirrors the current Body+Heading
+// settings; hover shows the pair name as a tooltip.
+.customize-control-customify-typography_presets {
+    .customify-presets-reset {
+        color: #a7aaad;
+        text-decoration: none;
+        span {
+            font-size: 16px;
+            width: auto;
+            height: auto;
+        }
+        &:hover {
+            color: #d63638;
+        }
+    }
+    .customify-typo-presets {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .customify-typo-preset {
+        position: relative;
+        background: #fff;
+        border: 1px solid #dcdcde;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+        padding: 6px 2px;
+        cursor: pointer;
+        transition: border-color .15s ease, background .15s ease;
+        &:hover {
+            border-color: var(--wp-admin-theme-color, #3068af);
+        }
+        &:focus {
+            outline: none;
+            border-color: var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af), 0 1px 3px rgba(0, 0, 0, .1);
+        }
+        &.is-active {
+            background: #f0f0f1;
+            border-color: #8c8f94;
+        }
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .customify-preset--aa {
+            font-size: 26px;
+            fill: #1d2327;
+        }
+        .customify-preset--name {
+            font-size: 10.5px;
+            fill: #50575e;
+        }
+        // Pair-name tooltip (data-tooltip), WP-admin blue. Edge columns
+        // pin to their card edge so the bubble stays inside the sidebar.
+        &:after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2271b1;
+            color: #fff;
+            font-size: 12px;
+            line-height: 1.4;
+            padding: 6px 10px;
+            border-radius: 4px;
+            width: max-content;
+            max-width: 150px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .12s ease;
+            pointer-events: none;
+            z-index: 40;
+        }
+        &:before {
+            content: "";
+            position: absolute;
+            bottom: calc(100% - 3px);
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #2271b1;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .12s ease;
+            pointer-events: none;
+            z-index: 40;
+        }
+        &:nth-child(3n + 1):after {
+            left: 0;
+            transform: none;
+        }
+        &:nth-child(3n):after {
+            left: auto;
+            right: 0;
+            transform: none;
+        }
+        &:hover:after,
+        &:hover:before {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+}
+
 /* Checkbox */
 .customify--field-checkbox {
     .customify-field-settings-inner {
