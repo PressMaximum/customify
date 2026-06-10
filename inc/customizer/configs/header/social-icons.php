@@ -201,8 +201,9 @@ class Customify_Builder_Item_Social_Icons {
 			),
 
 			array(
-				'name'       => $prefix . '_custom_color',
-				'type'       => 'modal',
+				'name'           => $prefix . '_custom_color',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'    => $section,
 				'selector'   => "{$this->selector} li a",
 				'required'   => array( $prefix . '_color_type', '==', 'custom' ),
@@ -249,8 +250,9 @@ class Customify_Builder_Item_Social_Icons {
 			),
 
 			array(
-				'name'        => $prefix . '_border',
-				'type'        => 'modal',
+				'name'           => $prefix . '_border',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'     => $section,
 				'selector'    => "{$this->selector} li a",
 				'css_format'  => 'styling',

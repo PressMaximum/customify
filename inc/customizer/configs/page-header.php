@@ -456,8 +456,9 @@ class Customify_Page_Header {
 			),
 
 			array(
-				'name'       => $name . '_bg',
-				'type'       => 'modal',
+				'name'           => $name . '_bg',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'    => $section,
 				'title'      => __( 'Color & Background', 'customify' ),
 				'selector'   => $selector,
