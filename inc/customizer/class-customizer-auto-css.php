@@ -241,6 +241,15 @@ class Customify_Customizer_Auto_CSS
 			$value['unit'] = 'px';
 		}
 
+		// Unitless sentinel: multi-unit sliders (see get_typo_fields())
+		// store '-' when the user picks the unitless option (line-height
+		// multiplier). Emit the bare number. The empty-unit coercion above
+		// stays first so legacy ''/missing units keep resolving to px.
+		// Mirrored in auto-css.js setup_slider().
+		if ('-' === $value['unit']) {
+			$value['unit'] = '';
+		}
+
 		if ($format) {
 			if (!is_null($value['value']) && '' !== $value['value']) {
 				$v = $value['value'] . $value['unit'];

@@ -807,13 +807,18 @@ import { setupTypographyControl } from './typography-control';
 
 					break;
 				case "slider":
+					// Multi-unit sliders render the unit as a <select>;
+					// legacy sliders keep the hidden checked radio. Read
+					// whichever exists so saved units round-trip exactly.
 					if (support_devices) {
 						value = {};
 						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								unit: $(
-									'input[data-name="' +
+									'select[data-name="' +
+									_name +
+									'-unit"], input[data-name="' +
 									_name +
 									'-unit"]:checked',
 									$field
@@ -827,7 +832,11 @@ import { setupTypographyControl } from './typography-control';
 					} else {
 						value = {
 							unit: $(
-								'input[data-name="' + name + '-unit"]:checked',
+								'select[data-name="' +
+								name +
+								'-unit"], input[data-name="' +
+								name +
+								'-unit"]:checked',
 								$field
 							).val(),
 							value: $(
@@ -1718,7 +1727,26 @@ import { setupTypographyControl } from './typography-control';
 						step = 1;
 					}
 
+					// Display-only handle seeding: with no saved value, park
+					// the handle at the field's placeholder (the effective
+					// CSS default) so the user starts dragging from the
+					// documented starting point. Programmatic .slider("value")
+					// does NOT fire `slide`, so the input stays empty and
+					// nothing is saved until the user actually interacts.
+					var seedHandle = function () {
+						var ph = parseFloat(input.attr("placeholder"));
+						if (!isNaN(ph)) {
+							slider.slider("value", ph);
+						}
+					};
+
 					var current_val = input.val();
+					if ("" === current_val) {
+						var _ph = parseFloat(input.attr("placeholder"));
+						if (!isNaN(_ph)) {
+							current_val = _ph;
+						}
+					}
 					slider.slider({
 						range: "min",
 						value: current_val,
@@ -1731,6 +1759,13 @@ import { setupTypographyControl } from './typography-control';
 					});
 
 					input.on("change", function () {
+						if ("" === $(this).val()) {
+							// Cleared (or never set) — fall back to the
+							// placeholder starting point instead of
+							// dropping the handle to the range minimum.
+							seedHandle();
+							return;
+						}
 						slider.slider("value", $(this).val());
 					});
 
@@ -1750,16 +1785,131 @@ import { setupTypographyControl } from './typography-control';
 
 						$(".customify--slider-input", wrapper).val(d.value);
 						slider.slider("option", "value", d.value);
-						$(
-							'.customify--css-unit input.customify-input[value="' +
-							d.unit +
-							'"]',
+						var $unitSelect = $(
+							".customify--unit-select",
 							wrapper
-						).trigger("click");
+						);
+						if ($unitSelect.length) {
+							var targetUnit = d.unit || "px";
+							// No default VALUE → reset = pristine state:
+							// re-derive the unit from the display default
+							// (the same rule the template applies on first
+							// render) so the seeded handle lands on e.g.
+							// 2.1em — not 2.1 on the px scale, which reads
+							// as zero.
+							if (
+								_.isUndefined(d.value) ||
+								null === d.value ||
+								"" === d.value
+							) {
+								var phm = String(
+									input.attr("placeholder") || ""
+								).match(/^-?[0-9.]+\s*([a-z%]+)?$/i);
+								var pranges = slider.data("units");
+								if (phm && _.isObject(pranges)) {
+									var pu = phm[1]
+										? phm[1].toLowerCase()
+										: "-";
+									if (pranges[pu]) {
+										targetUnit = pu;
+									}
+								}
+							}
+							// Restore via the select — re-ranges through
+							// its own change handler below.
+							$unitSelect.val(targetUnit).trigger("change");
+						} else {
+							$(
+								'.customify--css-unit input.customify-input[value="' +
+								d.unit +
+								'"]',
+								wrapper
+							).trigger("click");
+						}
 						$(".customify--slider-input", wrapper).trigger(
 							"change"
 						);
 					});
+
+					// Multi-unit slider: `data-units` maps unit =>
+					// {min, max, step} (see `units` in get_typo_fields()).
+					// Switching the unit re-ranges the slider + number
+					// input and clamps the current value into the new
+					// range. Saved shape stays {value, unit} — a unit is
+					// only written when the user actively changes it. An
+					// unknown saved unit (rendered as its own option for
+					// lossless round-trip) has no range entry: keep the
+					// current range untouched.
+					var unitRanges = slider.data("units");
+					var $unitSelect = $(".customify--unit-select", wrapper);
+					if (_.isObject(unitRanges) && $unitSelect.length) {
+						// Track the outgoing unit so a switch can CONVERT
+						// the current number instead of reusing it raw —
+						// 2.42em becomes ≈39px, not a near-zero 2.42px.
+						$unitSelect.data("prevUnit", $unitSelect.val());
+						// px-equivalence factors. em/rem/unitless treat
+						// 1 ≈ 16px — an approximation, but it keeps the
+						// value in the same visual ballpark on switch.
+						// Conversion only runs on an explicit user unit
+						// change with a non-empty value, through the
+						// normal save path — never silently on load.
+						var UNIT_PX_FACTOR = {
+							px: 1,
+							em: 16,
+							rem: 16,
+							"-": 16
+						};
+						$unitSelect.on("change", function () {
+							var next = $(this).val();
+							var prev = $(this).data("prevUnit");
+							$(this).data("prevUnit", next);
+							var r = unitRanges[next];
+							if (!_.isObject(r)) {
+								return;
+							}
+							var rMin = parseFloat(r.min);
+							var rMax = parseFloat(r.max);
+							var rStep = parseFloat(r.step);
+							slider.slider("option", {
+								min: rMin,
+								max: rMax,
+								step: rStep
+							});
+							input.attr({
+								min: rMin,
+								max: rMax,
+								step: rStep
+							});
+							var v = input.val();
+							if (v !== "") {
+								v = parseFloat(v);
+								if (
+									prev !== next &&
+									UNIT_PX_FACTOR[prev] &&
+									UNIT_PX_FACTOR[next]
+								) {
+									v =
+										(v * UNIT_PX_FACTOR[prev]) /
+										UNIT_PX_FACTOR[next];
+									v =
+										"px" === next
+											? Math.round(v)
+											: Math.round(v * 100) / 100;
+								}
+								var clamped = Math.min(
+									Math.max(v, rMin),
+									rMax
+								);
+								input.val(clamped);
+								slider.slider("value", clamped);
+							}
+							// Persist the new unit: the select itself is
+							// `.change-by-js` (ignored by the standalone
+							// control's save delegate); the number input
+							// is not — its change reaches every context.
+							input.trigger("change");
+						});
+					}
 				});
 			}
 		},
@@ -2020,6 +2170,10 @@ import { setupTypographyControl } from './typography-control';
 			} finally {
 				control._customifyRefreshing = false;
 			}
+
+			// Chrome hooks (e.g. the typography trigger preview) re-render
+			// from the freshly painted DOM on this event.
+			control.container.trigger("customify/control/refreshed");
 		},
 		addParamsURL: function (url, data) {
 			if (!$.isEmptyObject(data)) {
