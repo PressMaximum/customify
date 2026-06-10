@@ -1918,8 +1918,45 @@ $text_color: #555d66;
             font-size: 10.5px;
             fill: #50575e;
         }
-        // Pair name shows via the native title tooltip (template) — no
-        // custom bubble.
+        // Pair-name tooltip (data-tooltip), styled after the block
+        // editor's dark tooltip (no arrow). Edge columns pin to their
+        // card edge so the bubble stays inside the sidebar.
+        &:after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e1e1e;
+            color: #f0f0f1;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.4;
+            padding: 4px 8px;
+            border-radius: 2px;
+            width: max-content;
+            max-width: 150px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .1s ease .1s;
+            pointer-events: none;
+            z-index: 40;
+        }
+        &:nth-child(3n + 1):after {
+            left: 0;
+            transform: none;
+        }
+        &:nth-child(3n):after {
+            left: auto;
+            right: 0;
+            transform: none;
+        }
+        &:hover:after,
+        &:focus-visible:after {
+            opacity: 1;
+            visibility: visible;
+        }
     }
 }
 

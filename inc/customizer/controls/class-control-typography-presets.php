@@ -25,8 +25,14 @@ class Customify_Customizer_Control_Typography_Presets extends Customify_Customiz
 		</div>
 		<div class="customify-typo-presets" data-control="{{ field.name }}">
 			<# _.each( field.fields, function( preset, index ) { #>
-			<?php // Pair name via native title tooltip — same convention as the core Customizer buttons. ?>
-			<button type="button" class="customify-typo-preset" data-index="{{ index }}" title="{{ preset.name }}">
+			<?php
+			// Pair name via a CSS tooltip styled like the block editor's
+			// (dark, no arrow) — the native title tooltip is too slow and
+			// subtle to read as feedback here. data-tooltip feeds the
+			// ::after bubble in _control.scss; aria-label keeps the
+			// accessible name.
+			?>
+			<button type="button" class="customify-typo-preset" data-index="{{ index }}" data-tooltip="{{ preset.name }}" aria-label="{{ preset.name }}">
 				<svg viewBox="0 0 84 56" aria-hidden="true" focusable="false">
 					<text class="customify-preset--aa" x="42" y="30" text-anchor="middle" style="font-family: '{{ preset.heading.family }}', {{ preset.heading.fallback }};">Aa</text>
 					<text class="customify-preset--name" x="42" y="47" text-anchor="middle" style="font-family: '{{ preset.body.family }}', {{ preset.body.fallback }};">Font Family</text>
