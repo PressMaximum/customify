@@ -10,8 +10,8 @@ if ( ! function_exists( 'customify_typography_presets' ) ) {
 	 * user tuned stay untouched, and this control stores no value of its
 	 * own.
 	 *
-	 * Pairs are well-established Google Fonts pairings (editorial serif +
-	 * humanist sans, geometric sans + serif body, condensed display, …).
+	 * Pairs stick to the most widely used, style-neutral Google Fonts
+	 * (no condensed/display faces) so they work as safe starting points.
 	 * `variants` lists the variants written into the setting, trimmed to
 	 * regular/italic/600/700 INTERSECTED with what each family actually
 	 * ships per src/fonts/google-fonts.json — keep both in lockstep when
@@ -22,39 +22,11 @@ if ( ! function_exists( 'customify_typography_presets' ) ) {
 	function customify_typography_presets() {
 		return array(
 			array(
-				'name'    => 'Playfair Display / Source Sans Pro',
-				'heading' => array(
-					'family'   => 'Playfair Display',
-					'fallback' => 'serif',
-					'variants' => array( 'regular', 'italic', '600', '700' ),
-				),
-				'body'    => array(
-					'family'   => 'Source Sans Pro',
-					'fallback' => 'sans-serif',
-					'variants' => array( 'regular', 'italic', '600', '700' ),
-				),
-			),
-			array(
-				'name'    => 'Montserrat / Merriweather',
+				'name'    => 'Montserrat / Open Sans',
 				'heading' => array(
 					'family'   => 'Montserrat',
 					'fallback' => 'sans-serif',
 					'variants' => array( 'regular', 'italic', '600', '700' ),
-				),
-				'body'    => array(
-					'family'   => 'Merriweather',
-					'fallback' => 'serif',
-					// Merriweather ships no 600.
-					'variants' => array( 'regular', 'italic', '700' ),
-				),
-			),
-			array(
-				'name'    => 'Oswald / Open Sans',
-				'heading' => array(
-					'family'   => 'Oswald',
-					'fallback' => 'sans-serif',
-					// Oswald ships no italics.
-					'variants' => array( 'regular', '600', '700' ),
 				),
 				'body'    => array(
 					'family'   => 'Open Sans',
@@ -77,10 +49,10 @@ if ( ! function_exists( 'customify_typography_presets' ) ) {
 				),
 			),
 			array(
-				'name'    => 'Lora / Roboto',
+				'name'    => 'Raleway / Roboto',
 				'heading' => array(
-					'family'   => 'Lora',
-					'fallback' => 'serif',
+					'family'   => 'Raleway',
+					'fallback' => 'sans-serif',
 					'variants' => array( 'regular', 'italic', '600', '700' ),
 				),
 				'body'    => array(
@@ -91,15 +63,42 @@ if ( ! function_exists( 'customify_typography_presets' ) ) {
 				),
 			),
 			array(
-				'name'    => 'DM Serif Display / Work Sans',
+				'name'    => 'Lato / Merriweather',
 				'heading' => array(
-					'family'   => 'DM Serif Display',
-					'fallback' => 'serif',
-					// DM Serif Display ships regular + italic only.
-					'variants' => array( 'regular', 'italic' ),
+					'family'   => 'Lato',
+					'fallback' => 'sans-serif',
+					// Lato ships no 600.
+					'variants' => array( 'regular', 'italic', '700' ),
 				),
 				'body'    => array(
-					'family'   => 'Work Sans',
+					'family'   => 'Merriweather',
+					'fallback' => 'serif',
+					// Merriweather ships no 600.
+					'variants' => array( 'regular', 'italic', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Playfair Display / Source Sans Pro',
+				'heading' => array(
+					'family'   => 'Playfair Display',
+					'fallback' => 'serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Source Sans Pro',
+					'fallback' => 'sans-serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+			),
+			array(
+				'name'    => 'Lora / Open Sans',
+				'heading' => array(
+					'family'   => 'Lora',
+					'fallback' => 'serif',
+					'variants' => array( 'regular', 'italic', '600', '700' ),
+				),
+				'body'    => array(
+					'family'   => 'Open Sans',
 					'fallback' => 'sans-serif',
 					'variants' => array( 'regular', 'italic', '600', '700' ),
 				),

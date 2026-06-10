@@ -1918,57 +1918,8 @@ $text_color: #555d66;
             font-size: 10.5px;
             fill: #50575e;
         }
-        // Pair-name tooltip (data-tooltip), WP-admin blue. Edge columns
-        // pin to their card edge so the bubble stays inside the sidebar.
-        &:after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2271b1;
-            color: #fff;
-            font-size: 12px;
-            line-height: 1.4;
-            padding: 6px 10px;
-            border-radius: 4px;
-            width: max-content;
-            max-width: 150px;
-            text-align: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .12s ease;
-            pointer-events: none;
-            z-index: 40;
-        }
-        &:before {
-            content: "";
-            position: absolute;
-            bottom: calc(100% - 3px);
-            left: 50%;
-            transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: #2271b1;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .12s ease;
-            pointer-events: none;
-            z-index: 40;
-        }
-        &:nth-child(3n + 1):after {
-            left: 0;
-            transform: none;
-        }
-        &:nth-child(3n):after {
-            left: auto;
-            right: 0;
-            transform: none;
-        }
-        &:hover:after,
-        &:hover:before {
-            opacity: 1;
-            visibility: visible;
-        }
+        // Pair name shows via the native title tooltip (template) — no
+        // custom bubble.
     }
 }
 
