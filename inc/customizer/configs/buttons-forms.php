@@ -137,7 +137,7 @@ if ( ! function_exists( 'customify_customizer_buttons_forms_config' ) ) {
 				'section'     => $section,
 				'priority'    => 11,
 				'title'       => __( 'Button Styling', 'customify' ),
-				'description' => __( 'All theme buttons, incl. WooCommerce.', 'customify' ),
+				'description' => __( 'All theme buttons.', 'customify' ),
 				'selector'    => array(
 					'normal' => $button_selector,
 					'hover'  => $button_hover,
