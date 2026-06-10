@@ -2959,6 +2959,10 @@ import { attachPopoverChrome } from './popover-chrome';
 		$el: null,
 		container: null,
 		controlID: "",
+		// True when the control opted into the trigger + popover chrome
+		// via `'popover_chrome' => true` (style-data modals only).
+		chrome: false,
+		activeTab: "",
 		addFields: function (values) {
 			var that = this;
 			if (!_.isObject(that.values)) {
@@ -3063,11 +3067,92 @@ import { attachPopoverChrome } from './popover-chrome';
 				.eq(0)
 				.trigger("click");
 
-			this.container.slideUp(0);
+			// Chrome'd modals float as a popover (visibility-driven CSS)
+			// — an inline display:none from slideUp would keep the panel
+			// invisible even with is-open set.
+			if (!this.chrome) {
+				this.container.slideUp(0);
+			}
+		},
+
+		// ── Popover chrome (popover_chrome modals only) ────────────────
+		// Same per-tab trigger rows as the styling control; the only
+		// difference is where the field definitions live — the control's
+		// own config instead of the resolved global styling_config.
+		fieldsFor: function (key) {
+			return this.config[key + "_fields"];
+		},
+
+		visibleTabs: function () {
+			var that = this;
+			that.config = _.defaults(that.config || {}, { tabs: {} });
+			var out = [];
+			_.each(that.config.tabs, function (label, key) {
+				if (
+					label &&
+					_.isObject(that.config[key + "_fields"]) &&
+					!_.isEmpty(that.config[key + "_fields"])
+				) {
+					out.push({ key: key, label: label });
+				}
+			});
+			return out;
+		},
+
+		ensurePanel: function () {
+			var that = this;
+			that.$el.addClass("customify-modal--inside");
+			if (!$(".customify-modal-settings", that.$el).length) {
+				var $wrap = $($("#tmpl-customify-modal-settings").html());
+				that.container = $wrap;
+				that.$el.append($wrap);
+				that.addFields();
+			} else {
+				that.container = $(".customify-modal-settings", that.$el);
+			}
+		},
+
+		selectTab: function (key) {
+			var that = this;
+			that.activeTab = key;
+			$(
+				'.modal--tab[data-tab="' + key + '"]',
+				that.container
+			).trigger("click");
+			$(".customify-styling-trigger", that.$el)
+				.removeClass("is-open")
+				.filter('[data-tab="' + key + '"]')
+				.addClass("is-open");
+		},
+
+		// Chrome counterpart of open(): popover anchored under the `tab`
+		// trigger row — toggle on the open row, switch on a sibling row.
+		openTab: function (tab) {
+			var that = this;
+			var isOpen = "opening" === that.$el.attr("data-opening");
+			if (isOpen && tab === that.activeTab) {
+				that.closePopover();
+				return;
+			}
+
+			that.values = $(
+				".customify-hidden-modal-input",
+				that.$el
+			).val();
+			try {
+				that.values = JSON.parse(that.values);
+			} catch (e) { }
+			that.ensurePanel();
+			that.selectTab(tab);
+			that.openPopover();
 		},
 
 		close: function () {
 			var that = this;
+			if (that.chrome) {
+				that.closePopover();
+				return;
+			}
 			that.container.slideUp(300, function () {
 				that.$el.removeClass("modal--opening");
 				that.$el.attr("data-opening", "");
@@ -3077,6 +3162,29 @@ import { attachPopoverChrome } from './popover-chrome';
 
 		reset: function () {
 			var that = this;
+
+			if (that.chrome) {
+				// Mirror the styling reset: rebuild from the default and
+				// keep the popover open for continuity.
+				var wasOpen = "opening" === that.$el.attr("data-opening");
+				$(".customify-modal-settings", that.$el).remove();
+				try {
+					that.values = wpcustomize.control(that.controlID).params
+						.default;
+				} catch (e) {
+					that.values = {};
+				}
+				that.ensurePanel();
+				$(".customify-hidden-modal-input", that.$el)
+					.val(JSON.stringify(that.values))
+					.trigger("change");
+				if (wasOpen) {
+					that.selectTab(that.activeTab);
+					that.openPopover();
+				}
+				return;
+			}
+
 			$(".customify-modal-settings", that.$el).remove();
 			try {
 				var _default = wpcustomize.control(that.controlID).params
@@ -3171,36 +3279,161 @@ import { attachPopoverChrome } from './popover-chrome';
 		}
 	};
 
+	// Popover lifecycle for popover_chrome modals — same shared chrome as
+	// styling/typography (one popover at a time across all three). The
+	// methods are inert for legacy modals: only openTab()/the chrome
+	// branches ever call them.
+	attachPopoverChrome(customifyModal, {
+		$: $,
+		anchor: function (that) {
+			return $(
+				'.customify-styling-trigger[data-tab="' +
+				that.activeTab +
+				'"]',
+				that.$el
+			);
+		},
+		onClose: function (that) {
+			$(".customify-styling-trigger", that.$el).removeClass(
+				"is-open"
+			);
+		}
+	});
+
 	var initModalControls = {};
+
+	// Create (or fetch) the runtime for a modal control li. Mirrors the
+	// legacy lazy click-init, but also runs at batch-init time so
+	// chrome'd controls paint their trigger rows before any interaction.
+	var modalRuntime = function ($el) {
+		var controlID = ($el.attr("id") || "").replace(
+			/^customize-control-/,
+			""
+		);
+		if (!controlID) {
+			return null;
+		}
+		if (!_.isUndefined(initModalControls[controlID])) {
+			return initModalControls[controlID];
+		}
+		var c = wpcustomize.control(controlID);
+		if (_.isUndefined(c)) {
+			return null;
+		}
+		var m = _.clone(customifyModal);
+		m.config = c.params.fields;
+		m.chrome = !!c.params.popover_chrome;
+		m.$el = $el;
+		m.controlID = controlID;
+		if (m.chrome) {
+			// Scope hook for the popover/trigger CSS — keeps legacy
+			// modals (no flag, accordion) out of the chrome styles.
+			$el.addClass("customify-popover-chrome");
+		}
+		initModalControls[controlID] = m;
+		return m;
+	};
+
 	var initModal = function () {
+		// Legacy pencil / header toggle — chrome'd controls render no
+		// .action--edit, so this only ever fires for accordion modals.
 		$document.on(
 			"click",
-			".customize-control-customify-modal .action--edit, .customize-control-customify-modal .action--reset, .customize-control-customify-modal .customify-control-field-header",
+			".customize-control-customify-modal .action--edit, .customize-control-customify-modal .customify-control-field-header",
 			function (e) {
 				e.preventDefault();
-				var controlID = $(this).attr("data-control") || "";
-				if (_.isUndefined(initModalControls[controlID])) {
-					var c = wpcustomize.control(controlID);
-					if (controlID && !_.isUndefined(c)) {
-						var m = _.clone(customifyModal);
-						m.config = c.params.fields;
-						m.$el = $(this)
-							.closest(".customize-control-customify-modal")
-							.eq(0);
-						m.controlID = controlID;
-						initModalControls[controlID] = m;
-					}
-				}
-
-				if (!_.isUndefined(initModalControls[controlID])) {
-					if ($(this).hasClass("action--reset")) {
-						initModalControls[controlID].reset();
-					} else {
-						initModalControls[controlID].open();
-					}
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && !m.chrome) {
+					m.open();
 				}
 			}
 		);
+
+		$document.on(
+			"click",
+			".customize-control-customify-modal .action--reset",
+			function (e) {
+				e.preventDefault();
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m) {
+					m.reset();
+				}
+			}
+		);
+
+		// Chrome trigger rows: open that row's tab in the popover.
+		$document.on(
+			"click",
+			".customize-control-customify-modal .customify-styling-trigger",
+			function (e) {
+				e.preventDefault();
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && m.chrome) {
+					m.openTab($(this).attr("data-tab") || "");
+				}
+			}
+		);
+
+		// Repaint chrome'd rows on every value round-trip.
+		$document.on(
+			"change data-change",
+			".customize-control-customify-modal .customify-hidden-modal-input",
+			function () {
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && m.chrome) {
+					ensureStylingRows(m);
+					paintStylingRows(m);
+				}
+			}
+		);
+
+		// External setting write → the field DOM (trigger rows included)
+		// was re-rendered and the parked panel is stale — drop it so the
+		// next open rebuilds from the fresh value.
+		$document.on(
+			"customify/control/refreshed",
+			".customize-control-customify-modal",
+			function () {
+				var m = modalRuntime($(this));
+				if (!m || !m.chrome) {
+					return;
+				}
+				if ("opening" === m.$el.attr("data-opening")) {
+					m.closePopover();
+				}
+				$(".customify-modal-settings", m.$el).remove();
+				m.container = null;
+				m.$el.addClass("customify-popover-chrome");
+				ensureStylingRows(m);
+				paintStylingRows(m);
+			}
+		);
+
+		// First paint for chrome'd modals — controls are batch-initialized
+		// at document.ready before initModal() runs.
+		$(".customize-control-customify-modal").each(function () {
+			var m = modalRuntime($(this));
+			if (m && m.chrome) {
+				ensureStylingRows(m);
+				paintStylingRows(m);
+			}
+		});
 	};
 
 	//---------------------------------------------------------------------------
@@ -3366,6 +3599,12 @@ import { attachPopoverChrome } from './popover-chrome';
 				}
 			});
 			return out;
+		},
+
+		// Resolved field list for a tab — the styling type resolves
+		// against the global styling_config in setupConfig().
+		fieldsFor: function (key) {
+			return this[key + "_fields"];
 		},
 
 		// Build the floating panel once (lazily, exactly like the legacy
@@ -3606,7 +3845,7 @@ import { attachPopoverChrome } from './popover-chrome';
 
 		var colors = [];
 		var others = [];
-		_.each(runtime[key + "_fields"], function (f) {
+		_.each(runtime.fieldsFor(key), function (f) {
 			if (!_.isObject(f) || "heading" === f.type || !effective(f)) {
 				return;
 			}

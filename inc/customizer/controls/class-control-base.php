@@ -29,6 +29,17 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 	 * @var array
 	 */
 	public $display_defaults = array();
+
+	/**
+	 * Opt-in trigger + popover chrome for modal-type controls. The styling
+	 * type gets the chrome wholesale; modal controls hold arbitrary data,
+	 * so only controls whose fields are style values should set
+	 * `'popover_chrome' => true` in their config — data-only modals keep
+	 * the legacy pencil + accordion.
+	 *
+	 * @var bool
+	 */
+	public $popover_chrome = false;
 	public $choices = array();
 	public $default = null;
 	public $default_value = null;
@@ -124,6 +135,7 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		$this->json['placeholder']      = $this->placeholder;
 		$this->json['fields']           = $this->fields;
 		$this->json['display_defaults'] = $this->display_defaults;
+		$this->json['popover_chrome']   = $this->popover_chrome;
 		$this->json['setting_type']     = $this->setting_type;
 		$this->json['required']         = $this->required;
 		$this->json['devices']          = $this->devices;

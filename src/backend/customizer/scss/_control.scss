@@ -1658,16 +1658,19 @@ $text_color: #555d66;
     }
 }
 
-// ── Composite trigger + popover chrome (typography + styling) ──────────
+// ── Composite trigger + popover chrome (typography + styling + modal) ──
 // Typography and styling controls render select-like triggers that
 // preview the saved value (font family + size/weight, or per-tab color
 // swatches); clicking one opens the existing .customify-modal-settings
 // panel as a floating popover overlaying the controls below, instead of
-// the legacy inline accordion. The modal control type keeps the
-// accordion — every rule here is scoped to the chrome'd control types
-// only. Open/close is class-driven (`is-open`), see popover-chrome.js.
+// the legacy inline accordion. Modal controls join ONLY via the
+// `popover_chrome` config flag (style-data modals — modalRuntime() adds
+// the .customify-popover-chrome scope class); data-only modals keep the
+// accordion. Open/close is class-driven (`is-open`), see
+// popover-chrome.js.
 .customize-control-customify-typography,
-.customize-control-customify-styling {
+.customize-control-customify-styling,
+.customize-control-customify-modal.customify-popover-chrome {
     .customify-typo-trigger,
     .customify-styling-trigger {
         display: flex;
@@ -1778,8 +1781,10 @@ $text_color: #555d66;
 // ── Styling trigger rows ────────────────────────────────────────────────
 // One row per tab (Normal / Hover / …): tab label left, saved-color
 // swatches + a one-word meta right, shared arrow. Built by
-// ensureStylingRows()/paintStylingRows() in control.js.
-.customize-control-customify-styling {
+// ensureStylingRows()/paintStylingRows() in control.js. Also applies to
+// modal controls that opted in via popover_chrome.
+.customize-control-customify-styling,
+.customize-control-customify-modal.customify-popover-chrome {
     .customify-styling-triggers {
         margin-top: 8px;
     }
