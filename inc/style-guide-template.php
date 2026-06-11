@@ -55,7 +55,39 @@ $customify_sg_derived = array(
 		--csg-muted: color-mix(in srgb, currentColor 55%, transparent);
 		max-width: 1120px;
 		margin: 0 auto;
-		padding: 26px 36px 60px;
+		padding: 40px 48px 72px;
+	}
+
+	/* The guide's own chrome buttons are UI, not specimens — the theme's
+	   Button Styling (bare `button` selector + the user's saved colors)
+	   must never skin them. !important beats the emitted styling rules
+	   regardless of their specificity. */
+	.csg .csg-edit,
+	.csg .csg-close {
+		padding: 0 !important;
+		margin: 0 !important;
+		border: none !important;
+		min-height: 0 !important;
+		line-height: 1 !important;
+		letter-spacing: 0 !important;
+		text-transform: none !important;
+		text-decoration: none !important;
+	}
+	.csg .csg-edit {
+		background: #fff !important;
+		color: #1d2327 !important;
+	}
+	.csg .csg-edit:hover {
+		background: var(--csg-primary, #2271b1) !important;
+		color: #fff !important;
+	}
+	.csg .csg-close {
+		background: transparent !important;
+		color: inherit !important;
+		box-shadow: inset 0 0 0 1px var(--csg-line) !important;
+	}
+	.csg .csg-close:hover {
+		background: var(--csg-hover) !important;
 	}
 	.csg-sec-label {
 		font-size: 11px;
@@ -66,7 +98,7 @@ $customify_sg_derived = array(
 		margin-bottom: 14px;
 	}
 	.csg-section {
-		padding: 26px 0;
+		padding: 32px 0;
 		border-top: 1px solid var(--csg-line);
 	}
 	.csg-section:first-of-type {
@@ -77,7 +109,7 @@ $customify_sg_derived = array(
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 30px;
+		margin-bottom: 36px;
 	}
 	.csg-header .csg-title {
 		font-size: 17px;
@@ -153,7 +185,7 @@ $customify_sg_derived = array(
 		transform: scale(1);
 	}
 	.csg-edit:hover {
-		background: var(--customify-primary, #2271b1);
+		background: var(--csg-primary, #2271b1);
 		color: #fff;
 	}
 
@@ -185,7 +217,7 @@ $customify_sg_derived = array(
 		width: 44px;
 		height: 44px;
 		border-radius: 11px;
-		background: var(--customify-primary, #2271b1);
+		background: var(--csg-primary, #2271b1);
 		color: var(--customify-on-primary, #fff);
 		display: grid;
 		place-items: center;
@@ -211,7 +243,7 @@ $customify_sg_derived = array(
 		width: 15px;
 		height: 15px;
 		border-radius: 4px;
-		background: var(--customify-primary, #2271b1);
+		background: var(--csg-primary, #2271b1);
 		color: var(--customify-on-primary, #fff);
 		display: grid;
 		place-items: center;
@@ -272,14 +304,14 @@ $customify_sg_derived = array(
 	.csg-elements {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 12px;
+		gap: 16px;
 		align-items: center;
 	}
 	.csg-el {
-		padding: 10px 14px;
+		padding: 16px 48px 16px 16px;
 		display: inline-flex;
 		align-items: center;
-		gap: 10px;
+		gap: 12px;
 	}
 	.csg-type-grid {
 		display: grid;
@@ -354,7 +386,14 @@ $customify_sg_derived = array(
 </head>
 <body <?php body_class( 'customify-style-guide' ); ?>>
 
-<div class="csg">
+<?php
+// Guide-scoped primary accent: prefer the live token, fall back to the
+// saved slot so the chrome never depends on cascade health (see the
+// token-rescue note in the script below).
+$customify_sg_primary = get_theme_mod( 'global_styling_color_primary' );
+$customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customify_sg_primary ) ? $customify_sg_primary : '#2271b1';
+?>
+<div class="csg" style="--csg-primary: var(--customify-primary, <?php echo esc_attr( $customify_sg_primary ); ?>);">
 
 	<div class="csg-header">
 		<p class="csg-title"><?php esc_html_e( 'Style Guide', 'customify' ); ?><em><?php bloginfo( 'name' ); ?></em></p>
@@ -393,9 +432,16 @@ $customify_sg_derived = array(
 	<div class="csg-section">
 		<div class="csg-sec-label"><?php esc_html_e( 'Colors', 'customify' ); ?></div>
 		<div class="csg-colors">
-			<?php foreach ( $customify_sg_slots as $customify_sg_slot ) : ?>
+			<?php
+			foreach ( $customify_sg_slots as $customify_sg_slot ) :
+				// Inline fallback from the saved setting: not every slot
+				// token is emitted by the palette engine (e.g.
+				// --customify-surface), and the chip must still show.
+				$customify_sg_fb = get_theme_mod( $customify_sg_slot[1] );
+				$customify_sg_fb = ( is_string( $customify_sg_fb ) && '' !== $customify_sg_fb ) ? $customify_sg_fb : '';
+				?>
 				<div class="csg-ccard csg-editable">
-					<div class="csg-chip" style="background: var(<?php echo esc_attr( $customify_sg_slot[2] ); ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"></div>
+					<div class="csg-chip" data-setting="<?php echo esc_attr( $customify_sg_slot[1] ); ?>" style="background: var(<?php echo esc_attr( $customify_sg_slot[2] ); ?><?php echo $customify_sg_fb ? ', ' . esc_attr( $customify_sg_fb ) : ''; ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"></div>
 					<div class="csg-cmeta">
 						<div class="csg-cname"><?php echo esc_html( $customify_sg_slot[0] ); ?></div>
 						<div class="csg-cvalue" data-token="<?php echo esc_attr( $customify_sg_slot[2] ); ?>">&nbsp;</div>
@@ -534,10 +580,40 @@ $customify_sg_derived = array(
 		} ).join( '' ) ).toUpperCase();
 	}
 
+	// Cascade rescue: mid-session the palette token <style> can stop
+	// participating in the cascade (its values are still in the tag's
+	// text, the vars just stop resolving — observed during live palette
+	// edits in the preview). Parse the token straight out of the style
+	// text, substituting one level of var() references, so the chips can
+	// always paint.
+	function tokenFromStyleText( token, depth ) {
+		var st = document.getElementById( 'customify-palette-tokens-inline-css' );
+		if ( ! st || depth > 2 ) {
+			return '';
+		}
+		var m = st.textContent.match( new RegExp( token + ':\\s*([^;}]+)' ) );
+		if ( ! m ) {
+			return '';
+		}
+		return m[1].trim().replace( /var\((--[a-z0-9-]+)\)/gi, function( _all, ref ) {
+			return tokenFromStyleText( ref, ( depth || 0 ) + 1 ) || _all;
+		} );
+	}
+
 	function refreshMeta() {
 		document.querySelectorAll( '.csg-cvalue[data-token]' ).forEach( function( el ) {
 			var chip = el.closest( '.csg-ccard' ).querySelector( '.csg-chip' );
-			el.textContent = toHex( getComputedStyle( chip ).backgroundColor );
+			var bg = getComputedStyle( chip ).backgroundColor;
+			if ( ( 'rgba(0, 0, 0, 0)' === bg || 'transparent' === bg ) && ! chip.hasAttribute( 'data-setting' ) ) {
+				var rescued = tokenFromStyleText( el.getAttribute( 'data-token' ), 0 );
+				if ( rescued ) {
+					chip.style.background = rescued;
+					bg = getComputedStyle( chip ).backgroundColor;
+				}
+			}
+			el.closest( '.csg-ccard' ).style.display =
+				( 'rgba(0, 0, 0, 0)' === bg || 'transparent' === bg ) ? 'none' : '';
+			el.textContent = toHex( bg );
 		} );
 		document.querySelectorAll( '[data-spec]' ).forEach( function( el ) {
 			var tag = el.getAttribute( 'data-spec' );
@@ -577,12 +653,40 @@ $customify_sg_derived = array(
 	// rewrite <head> style nodes asynchronously — and the token style is
 	// briefly blank mid-replace — so also watch the head and add a late
 	// settle pass instead of trusting one debounce window.
+	// Setting values written by controls are encodeURI(JSON) strings;
+	// values straight from storage are plain. Normalize to the raw color.
+	function decodeSettingValue( v ) {
+		if ( 'string' === typeof v ) {
+			try {
+				var d = JSON.parse( decodeURI( v ) );
+				return 'string' === typeof d ? d : v;
+			} catch ( e ) {
+				return v;
+			}
+		}
+		return v;
+	}
+
 	window.addEventListener( 'load', function() {
 		refreshMeta();
 		if ( window.wp && wp.customize && wp.customize.bind ) {
 			wp.customize.bind( 'change', function() {
 				refreshSoon();
 				setTimeout( refreshMeta, 900 );
+			} );
+
+			// Editable slot chips also follow their setting directly —
+			// covers tokens the palette engine doesn't emit (Surface).
+			document.querySelectorAll( '.csg-chip[data-setting]' ).forEach( function( chip ) {
+				wp.customize( chip.getAttribute( 'data-setting' ), function( setting ) {
+					setting.bind( function( v ) {
+						var val = decodeSettingValue( v );
+						if ( 'string' === typeof val && val ) {
+							chip.style.background = val;
+						}
+						refreshSoon();
+					} );
+				} );
 			} );
 		}
 		if ( window.MutationObserver ) {

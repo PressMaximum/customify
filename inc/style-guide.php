@@ -47,23 +47,41 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 		$guide_url = add_query_arg( 'customify-style-guide', '1', home_url( '/' ) );
 		?>
 		<style>
-			#customize-header-actions .customify-style-guide-toggle {
-				float: right;
-				margin: 8px 8px 0 0;
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
+			/* Icon tab next to the customizer close button (Astra-style):
+			   same 45px square as .customize-controls-close, separated by
+			   the same border. */
+			#customize-controls .customify-style-guide-toggle {
+				position: absolute;
+				top: 0;
+				left: 45px;
+				width: 45px;
+				height: 41px;
+				padding: 0;
+				margin: 0;
+				border: 0;
+				border-right: 1px solid #ddd;
+				border-radius: 0;
+				background: #fff;
+				color: #50575e;
+				cursor: pointer;
+				z-index: 11;
 			}
-			#customize-header-actions .customify-style-guide-toggle .dashicons {
-				font-size: 16px;
-				width: 16px;
-				height: 16px;
-				line-height: 1.2;
+			#customize-controls .customify-style-guide-toggle .dashicons {
+				font-size: 20px;
+				width: 20px;
+				height: 20px;
+				line-height: 1;
+				vertical-align: middle;
 			}
-			#customize-header-actions .customify-style-guide-toggle.is-active {
-				background: #2c3338;
-				border-color: #2c3338;
-				color: #fff;
+			#customize-controls .customify-style-guide-toggle:hover,
+			#customize-controls .customify-style-guide-toggle:focus {
+				color: #2271b1;
+				outline: none;
+				box-shadow: none;
+			}
+			#customize-controls .customify-style-guide-toggle.is-active {
+				color: #2271b1;
+				box-shadow: inset 0 -3px 0 0 #2271b1;
 			}
 		</style>
 		<script>
@@ -77,12 +95,12 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 
 			api.bind( 'ready', function() {
 				var $btn = $(
-					'<button type="button" class="button customify-style-guide-toggle" aria-pressed="false">' +
+					'<button type="button" class="customify-style-guide-toggle" aria-pressed="false" title="<?php echo esc_attr( __( 'Style Guide', 'customify' ) ); ?>">' +
 					'<span class="dashicons dashicons-art"></span>' +
-					'<?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?>' +
+					'<span class="screen-reader-text"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></span>' +
 					'</button>'
 				);
-				$( '#customize-header-actions' ).append( $btn );
+				$( '#customize-controls' ).append( $btn );
 
 				$btn.on( 'click', function() {
 					var current = api.previewer.previewUrl.get();
