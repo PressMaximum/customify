@@ -182,6 +182,34 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 					section.expanded.bind( onCollapse );
 				}
 
+				// Landing on the control is only half the trip — open its
+				// editing UI too: the trigger-row popover on chrome'd
+				// composite controls (typography / styling / flagged
+				// modals), or the color picker on color controls. Guarded
+				// so a second jump to an already-open control doesn't
+				// toggle it closed. Media controls (logo, site icon) stay
+				// closed on purpose — auto-launching the media library
+				// overlay would be too aggressive.
+				function autoOpenControlUi( id ) {
+					var control = api.control( id );
+					if ( ! control || ! control.container ) {
+						return;
+					}
+					var $li = control.container;
+					if ( 'opening' === $li.attr( 'data-opening' ) ) {
+						return;
+					}
+					var $trigger = $li.find( '.customify-typo-trigger, .customify-styling-trigger' ).first();
+					if ( $trigger.length ) {
+						$trigger.trigger( 'click' );
+						return;
+					}
+					if ( $li.find( '.wp-picker-active' ).length ) {
+						return;
+					}
+					$li.find( '.wp-color-result' ).first().trigger( 'click' );
+				}
+
 				// Pencil buttons inside the guide ask the controls frame to
 				// focus the matching control/section.
 				api.previewer.bind( 'customify-style-guide-focus', function( data ) {
@@ -204,11 +232,18 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 								if ( c ) {
 									c.focus();
 								}
+								autoOpenControlUi( data.id );
 							}, 500 );
 						}
 						return;
 					}
 					target.focus();
+					if ( 'control' === data.type ) {
+						// After the section expand + scroll settle.
+						setTimeout( function() {
+							autoOpenControlUi( data.id );
+						}, 550 );
+					}
 				} );
 
 				api.previewer.bind( 'customify-style-guide-close', function() {
