@@ -47,41 +47,70 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 		$guide_url = add_query_arg( 'customify-style-guide', '1', home_url( '/' ) );
 		?>
 		<style>
-			/* Icon tab next to the customizer close button (Astra-style):
-			   same 45px square as .customize-controls-close, separated by
-			   the same border. */
-			#customize-controls .customify-style-guide-toggle {
+			/* Header tab — mirrors Astra's #astra-tour button 1:1 (only
+			   the icon differs): a 45px tab pinned next to the close
+			   button inside #customize-header-actions, with a 4px top
+			   accent and a small tooltip below. */
+			#customize-header-actions button.customify-style-guide-toggle {
+				display: block;
 				position: absolute;
 				top: 0;
-				left: 45px;
+				bottom: 0;
+				left: 48px;
 				width: 45px;
-				height: 41px;
+				margin-top: 0 !important;
 				padding: 0;
-				margin: 0;
-				border: 0;
-				border-right: 1px solid #ddd;
+				background: #f0f0f1;
+				border: none;
 				border-radius: 0;
-				background: #fff;
-				color: #50575e;
+				border-top: 4px solid #f0f0f1;
+				border-right: 1px solid #dcdcde;
+				color: #3c434a;
 				cursor: pointer;
-				z-index: 11;
 			}
-			#customize-controls .customify-style-guide-toggle .dashicons {
-				font-size: 20px;
-				width: 20px;
-				height: 20px;
+			#customize-header-actions button.customify-style-guide-toggle:hover,
+			#customize-header-actions button.customify-style-guide-toggle:focus,
+			#customize-header-actions button.customify-style-guide-toggle.is-active {
+				background: #fff;
+				color: #2271b1;
+				border-top-color: #2271b1;
+				box-shadow: none;
+				outline: none;
+			}
+			#customize-header-actions button.customify-style-guide-toggle .dashicons {
+				font-size: 18px;
+				width: 18px;
+				height: 18px;
 				line-height: 1;
 				vertical-align: middle;
 			}
-			#customize-controls .customify-style-guide-toggle:hover,
-			#customize-controls .customify-style-guide-toggle:focus {
-				color: #2271b1;
-				outline: none;
-				box-shadow: none;
+			.customify-sg-tooltip {
+				display: none;
+				position: absolute;
+				left: 50%;
+				transform: translateX( -50% );
+				margin-bottom: 5px;
+				background-color: #e5e5e5;
+				color: #494948;
+				border-radius: 3px;
+				white-space: nowrap;
+				font-size: 12px;
+				z-index: 1000;
+				opacity: 0;
+				transition: opacity 0.3s ease;
+				padding: 0 8px;
+				top: 45px;
+				box-shadow: rgba( 0, 0, 0, 0.02 ) 0px 1px 3px 0px, rgba( 27, 31, 35, 0.15 ) 0px 0px 0px 1px;
+				line-height: 2;
 			}
-			#customize-controls .customify-style-guide-toggle.is-active {
-				color: #2271b1;
-				box-shadow: inset 0 -3px 0 0 #2271b1;
+			#customize-header-actions button.customify-style-guide-toggle:hover .customify-sg-tooltip {
+				display: block;
+				opacity: 1;
+			}
+			@media screen and ( max-width: 640px ) {
+				#customize-header-actions button.customify-style-guide-toggle {
+					left: 153px;
+				}
 			}
 		</style>
 		<script>
@@ -95,12 +124,13 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 
 			api.bind( 'ready', function() {
 				var $btn = $(
-					'<button type="button" class="customify-style-guide-toggle" aria-pressed="false" title="<?php echo esc_attr( __( 'Style Guide', 'customify' ) ); ?>">' +
+					'<button type="button" class="customify-style-guide-toggle button-secondary button" aria-pressed="false">' +
 					'<span class="dashicons dashicons-art"></span>' +
+					'<div class="customify-sg-tooltip"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></div>' +
 					'<span class="screen-reader-text"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></span>' +
 					'</button>'
 				);
-				$( '#customize-controls' ).append( $btn );
+				$( '#customize-header-actions' ).append( $btn );
 
 				$btn.on( 'click', function() {
 					var current = api.previewer.previewUrl.get();
@@ -112,10 +142,45 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 					}
 				} );
 
-				api.previewer.previewUrl.bind( function( url ) {
+				var syncToggleState = function( url ) {
 					var on = isGuideUrl( url );
 					$btn.toggleClass( 'is-active', on ).attr( 'aria-pressed', on ? 'true' : 'false' );
-				} );
+				};
+				api.previewer.previewUrl.bind( syncToggleState );
+				// bind() only fires on changes — reflect the initial URL too
+				// (the customizer restores the last previewed page, which
+				// may already be the guide).
+				syncToggleState( api.previewer.previewUrl.get() );
+
+				// Builder item sections (title_tagline & friends) are
+				// force-hidden: hide_builder_item_sections() deactivates
+				// them server-side and the header builder binds a
+				// _customifyForceHide handler that re-hides on every
+				// active.set(true) — plain focus()/activate() silently
+				// no-op. Route through the builder's own opener when it is
+				// mounted; otherwise replicate its unbind → activate →
+				// focus → re-hide-on-collapse cycle.
+				function openHiddenSection( section ) {
+					if ( typeof window.customifyBuilderOpenSection === 'function' ) {
+						window.customifyBuilderOpenSection( section.id );
+						return;
+					}
+					if ( section._customifyForceHide ) {
+						section.active.unbind( section._customifyForceHide );
+					}
+					section.active.set( true );
+					section.focus();
+					var onCollapse = function( expanded ) {
+						if ( ! expanded ) {
+							section.expanded.unbind( onCollapse );
+							section.active.set( false );
+							if ( section._customifyForceHide ) {
+								section.active.bind( section._customifyForceHide );
+							}
+						}
+					};
+					section.expanded.bind( onCollapse );
+				}
 
 				// Pencil buttons inside the guide ask the controls frame to
 				// focus the matching control/section.
@@ -124,9 +189,26 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 						return;
 					}
 					var target = 'section' === data.type ? api.section( data.id ) : api.control( data.id );
-					if ( target ) {
-						target.focus();
+					if ( ! target ) {
+						return;
 					}
+					var section = 'section' === data.type
+						? target
+						: ( target.section && target.section() ? api.section( target.section() ) : null );
+					if ( section && section.active && ! section.active() ) {
+						openHiddenSection( section );
+						if ( 'control' === data.type ) {
+							// Scroll to the control once the section landed.
+							setTimeout( function() {
+								var c = api.control( data.id );
+								if ( c ) {
+									c.focus();
+								}
+							}, 500 );
+						}
+						return;
+					}
+					target.focus();
 				} );
 
 				api.previewer.bind( 'customify-style-guide-close', function() {

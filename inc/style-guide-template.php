@@ -101,7 +101,9 @@ $customify_sg_derived = array(
 		padding: 32px 0;
 		border-top: 1px solid var(--csg-line);
 	}
-	.csg-section:first-of-type {
+	/* No divider between the guide header and the first section —
+	   :first-of-type would miss here because .csg-header is also a div. */
+	.csg-header + .csg-section {
 		border-top: none;
 		padding-top: 0;
 	}
