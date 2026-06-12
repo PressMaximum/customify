@@ -714,6 +714,259 @@ $text_color: #555d66;
     }
 }
 
+// Multi-unit slider (`units` in the field config): a mini unit select
+// replaces the static px label. The row becomes a flex line —
+// [slider][value input][unit select][reset] — with centered alignment,
+// replacing the legacy absolute-positioning offsets that drifted across
+// DPI/zoom/admin-css variations.
+.customify-input-slider-wrapper.customify--has-units {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    // The base wrapper reserves 35px for the legacy absolute-positioned
+    // value row beside the label; the flex row is in-flow, so a small
+    // gap is enough.
+    margin-top: 8px;
+
+    // DOM order is [unit area][slider][input]; flex `order` rebuilds the
+    // visual row. RTL flips automatically with the document direction.
+    // The value cluster [input 68][unit 34][reset 26] + gaps totals
+    // 136px — the same column width the popover selects use below, so
+    // every control's right edge lines up.
+    .customify-input-slider {
+        order: 1;
+        flex: 1 1 auto;
+        // Extra breathing room between the track and the value input.
+        margin: 0 10px 0 0;
+        @include rtl(){
+            margin: 0 0 0 10px;
+        }
+    }
+    .customify--slider-input {
+        order: 2;
+        position: static;
+        flex: 0 0 auto;
+        box-sizing: border-box;
+        width: 68px;
+        max-width: 68px;
+        height: 28px;
+        min-height: 28px;
+        border: 1px solid #dcdcde;
+        border-radius: 2px;
+        font-size: 11px;
+        line-height: 26px;
+        text-align: center;
+        // The slider already handles stepping — drop the native number
+        // spinners so the narrow input keeps room for values like
+        // "2.42em" without clipping.
+        -moz-appearance: textfield;
+        appearance: textfield;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+    .customify--css-unit {
+        order: 3;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        margin: 0;
+        position: static;
+    }
+    .customify--unit-select {
+        flex: 0 0 auto;
+        box-sizing: border-box;
+        width: 34px;
+        height: 28px;
+        min-height: 28px;
+        padding: 0 12px 0 3px;
+        border: 1px solid #dcdcde;
+        border-radius: 2px;
+        background-color: #fff;
+        // Replace wp-admin's 16px select chevron with a 7px caret that
+        // fits the mini control.
+        -webkit-appearance: none;
+        appearance: none;
+        background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23787c82' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 3px center;
+        background-size: 7px 7px;
+        font-size: 10px;
+        line-height: 26px;
+        text-transform: uppercase;
+        cursor: pointer;
+        @include rtl(){
+            padding: 0 3px 0 12px;
+            background-position: left 3px center;
+        }
+    }
+    .reset {
+        position: static;
+        flex: 0 0 auto;
+        box-sizing: border-box;
+        width: 26px;
+        height: 28px;
+        border-radius: 2px;
+        border-color: #dcdcde;
+        text-align: center;
+        &:before {
+            font: 12px/26px dashicons;
+            padding: 0;
+        }
+    }
+}
+
+// Typography popover form controls: the native selects (font weight /
+// style / decoration / transform) and the Select2 font picker share the
+// value-cluster column width (136px) and the same box style, so the
+// whole popover reads as one aligned two-column form.
+.customize-control-customify-typography .customify-modal-settings {
+    // Quieter field labels — the values are the stars here.
+    .customize-control-title {
+        font-weight: 500;
+        font-size: 12px;
+    }
+    .customify--field-select {
+        // The generic 50/50 split breaks at narrow sidebars: a 50% label
+        // plus the 136px control exceeds the row and the select wraps to
+        // its own line. Fix the control column at 142px and let the
+        // label take the remainder, so every row stays on one line.
+        .customify-field-header {
+            width: calc(100% - 142px);
+        }
+        .customify-field-settings-inner {
+            // Shrink-wrap (the generic rule pins 50% — narrower than the
+            // control column, which made the select overflow its box and
+            // bleed past the cluster column). The float keeps it flush
+            // right; the select defines the width. flow-root makes the
+            // box CONTAIN the floated Select2 widget — without it the box
+            // collapses to zero height and the dropdown anchored to it
+            // (top:100%, below) lands at the row top instead of under
+            // the trigger.
+            width: auto;
+            float: right;
+            display: flow-root;
+            select {
+                display: block;
+                margin-left: auto;
+                box-sizing: border-box;
+                width: 136px;
+                max-width: 136px;
+                height: 28px;
+                min-height: 28px;
+                padding: 0 20px 0 8px;
+                border: 1px solid #dcdcde;
+                border-radius: 2px;
+                background-color: #fff;
+                font-size: 12px;
+                line-height: 26px;
+                -webkit-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23787c82' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 6px center;
+                background-size: 8px 8px;
+                @include rtl(){
+                    margin-left: 0;
+                    margin-right: auto;
+                    padding: 0 8px 0 20px;
+                    background-position: left 6px center;
+                }
+            }
+        }
+    }
+    // Select2-enhanced font picker — the VISIBLE widget only (the raw
+    // <select> is hidden; the dropdown attaches elsewhere, see below).
+    // Scoped under the field box so the rule never hits the popup's own
+    // .select2-container wrapper.
+    .customify--field-select .customify-field-settings-inner .select2-container {
+        width: 136px !important;
+        float: right;
+        @include rtl(){
+            float: left;
+        }
+        .select2-selection--single {
+            box-sizing: border-box;
+            height: 28px;
+            border: 1px solid #dcdcde;
+            border-radius: 2px;
+            .select2-selection__rendered {
+                line-height: 26px;
+                font-size: 12px;
+                padding-left: 8px;
+                padding-right: 20px;
+            }
+            .select2-selection__arrow {
+                top: 0 !important;
+                height: 100% !important;
+                width: 20px;
+                background-color: transparent;
+                // Same 7px caret as the native selects — Select2's
+                // default <b> triangle reads as a different control.
+                background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 8 8'%3E%3Cpath fill='%23787c82' d='M0 2l4 4 4-4z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: 8px 8px;
+                b {
+                    display: none;
+                }
+            }
+        }
+    }
+    // Font Family stacks on its own two lines — label, then the picker
+    // at full width: font names are long, and the full-width dropdown
+    // underneath is much easier to scan.
+    .customify--field-name-font {
+        .customify-field-header {
+            width: 100%;
+            float: none;
+        }
+        .customify-field-settings-inner {
+            width: 100%;
+            float: none;
+        }
+        .customify-field-settings-inner .select2-container {
+            width: 100% !important;
+            float: none;
+            @include rtl(){
+                float: none;
+            }
+        }
+    }
+    // The popup attaches inside the font row's settings box via
+    // dropdownParent (see typography-control.js): on open, Select2
+    // appends a SECOND .select2-container (holding .select2-dropdown) as
+    // the box's last child. Pin it under the trigger with !important —
+    // beating Select2's inline left/top, whose math mis-anchors inside
+    // the absolutely-positioned popover. While open the visible widget
+    // also carries --open but is never :last-child, and when closed the
+    // (then-last) widget lacks --open — so this rule can only ever hit
+    // the popup wrapper.
+    .customify--field-select .customify-field-settings-inner {
+        position: relative;
+
+        > .select2-container.select2-container--open:last-child {
+            position: absolute !important;
+            top: 100% !important;
+            left: 0 !important;
+            right: 0 !important;
+            margin-top: 2px;
+            // The inner dropdown span carries Select2's own absolute
+            // coordinates — neutralize them so it simply fills the
+            // pinned wrapper.
+            .select2-dropdown {
+                position: static !important;
+                top: auto !important;
+                left: auto !important;
+                width: 100% !important;
+                border-radius: 2px;
+            }
+        }
+    }
+}
+
 .customify--field-shadow {
     .customify--gr-inputs {
         margin-top: 10px;
@@ -1401,6 +1654,308 @@ $text_color: #555d66;
                 float: right;
                 width: 50%;
             }
+        }
+    }
+}
+
+// ── Composite trigger + popover chrome (typography + styling + modal) ──
+// Typography and styling controls render select-like triggers that
+// preview the saved value (font family + size/weight, or per-tab color
+// swatches); clicking one opens the existing .customify-modal-settings
+// panel as a floating popover overlaying the controls below, instead of
+// the legacy inline accordion. Modal controls join ONLY via the
+// `popover_chrome` config flag (style-data modals — modalRuntime() adds
+// the .customify-popover-chrome scope class); data-only modals keep the
+// accordion. Open/close is class-driven (`is-open`), see
+// popover-chrome.js.
+.customize-control-customify-typography,
+.customize-control-customify-styling,
+.customize-control-customify-modal.customify-popover-chrome {
+    .customify-typo-trigger,
+    .customify-styling-trigger {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 8px;
+        padding: 9px 10px;
+        border: 1px solid #dcdcde;
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+        text-decoration: none;
+        color: #2c3338;
+        line-height: 1.4;
+        cursor: pointer;
+        transition: border-color .15s ease, box-shadow .15s ease;
+        &:hover {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            color: #2c3338;
+        }
+        &:focus {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af), 0 1px 3px rgba(0, 0, 0, .1);
+            outline: none;
+            color: #2c3338;
+        }
+    }
+    .customify-trigger--family,
+    .customify-trigger--label {
+        flex: 1 1 auto;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .customify-trigger--meta {
+        flex: 0 0 auto;
+        color: #787c82;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+    .customify-trigger--arrow {
+        flex: 0 0 auto;
+        font-size: 14px;
+        width: auto;
+        height: auto;
+        line-height: 1;
+        color: #787c82;
+        transition: transform .18s ease;
+    }
+
+    // Popover state — overrides the shared accordion styles above.
+    // JS sets `top` (anchored under the trigger; above it when flipped
+    // via `is-above`).
+    .customify-modal-settings {
+        position: absolute;
+        left: 0;
+        right: 0;
+        margin: 0;
+        z-index: 30;
+        border-radius: 4px;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateY(-6px);
+        pointer-events: none;
+        transition:
+            opacity .18s ease,
+            transform .18s ease,
+            visibility 0s linear .18s;
+        &:before {
+            right: 14px;
+            @include rtl() {
+                right: auto;
+                left: 14px;
+            }
+        }
+        &.is-above {
+            transform: translateY(6px);
+            &:before {
+                top: auto;
+                bottom: -6px;
+            }
+        }
+        &.is-open {
+            visibility: visible;
+            opacity: 1;
+            transform: none;
+            pointer-events: auto;
+            transition:
+                opacity .18s ease,
+                transform .18s ease,
+                visibility 0s;
+        }
+    }
+}
+
+// Typography's single trigger reflects the open state via the li class;
+// styling rows carry their own per-tab `is-open` (see below).
+.customize-control-customify-typography.modal--opening {
+    .customify-typo-trigger {
+        border-color: var(--wp-admin-theme-color, #3068af);
+    }
+    .customify-trigger--arrow {
+        transform: rotate(180deg);
+    }
+}
+
+// ── Styling trigger rows ────────────────────────────────────────────────
+// One row per tab (Normal / Hover / …): tab label left, saved-color
+// swatches + a one-word meta right, shared arrow. Built by
+// ensureStylingRows()/paintStylingRows() in control.js. Also applies to
+// modal controls that opted in via popover_chrome.
+.customize-control-customify-styling,
+.customize-control-customify-modal.customify-popover-chrome {
+    .customify-styling-triggers {
+        margin-top: 8px;
+    }
+    .customify-styling-trigger {
+        margin-top: 6px;
+        &:first-child {
+            margin-top: 0;
+        }
+        &.is-open {
+            border-color: var(--wp-admin-theme-color, #3068af);
+            .customify-trigger--arrow {
+                transform: rotate(180deg);
+            }
+        }
+    }
+    .customify-trigger--preview {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        flex: 0 0 auto;
+    }
+    .customify-trigger--spacer {
+        flex: 1 1 auto;
+    }
+    .customify-trigger--swatch {
+        position: relative;
+        flex: 0 0 auto;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        overflow: hidden;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+        // Transparency checker shows through alpha colors.
+        background-color: #fff;
+        background-image:
+            linear-gradient(45deg, #c3c4c7 25%, transparent 25%),
+            linear-gradient(-45deg, #c3c4c7 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #c3c4c7 75%),
+            linear-gradient(-45deg, transparent 75%, #c3c4c7 75%);
+        background-size: 8px 8px;
+        background-position: 0 0, 0 4px, 4px -4px, -4px 0;
+        i {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: block;
+            // Hairline edge instead of a border, so light fills (white)
+            // keep a visible rim; the ring variant's inline shadow
+            // replaces it.
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, .08);
+        }
+        // Border colors render as a ring — the inset box-shadow set
+        // inline by paintStylingRows() carries the color — over a plain
+        // center so they don't read as a fill.
+        &.is-ring i {
+            background: #fff;
+        }
+    }
+    .customify-trigger--meta {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 50%;
+        &.is-default {
+            color: #a7aaad;
+        }
+    }
+    // The per-tab trigger rows replace the in-popover tab bar.
+    .customify-modal-settings .modal--tabs {
+        display: none;
+    }
+}
+
+// ── Typography presets ──────────────────────────────────────────────────
+// Font-pair quick picks: a 3-column grid of cards, each previewing the
+// pair via inline SVG ("Aa" in the heading family, "Font Family" in the
+// body family — families load from the css2 stylesheet enqueued in
+// configs/typography.php). Active card mirrors the current Body+Heading
+// settings; hover shows the pair name as a tooltip.
+.customize-control-customify-typography_presets {
+    .customify-presets-reset {
+        color: #a7aaad;
+        text-decoration: none;
+        span {
+            font-size: 16px;
+            width: auto;
+            height: auto;
+        }
+        &:hover {
+            color: #d63638;
+        }
+    }
+    .customify-typo-presets {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+    }
+    .customify-typo-preset {
+        position: relative;
+        background: #fff;
+        border: 1px solid #dcdcde;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+        padding: 6px 2px;
+        cursor: pointer;
+        transition: border-color .15s ease, background .15s ease;
+        &:hover {
+            border-color: var(--wp-admin-theme-color, #3068af);
+        }
+        &:focus {
+            outline: none;
+            border-color: var(--wp-admin-theme-color, #3068af);
+            box-shadow: 0 0 0 1px var(--wp-admin-theme-color, #3068af), 0 1px 3px rgba(0, 0, 0, .1);
+        }
+        &.is-active {
+            background: #f0f0f1;
+            border-color: #8c8f94;
+        }
+        svg {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .customify-preset--aa {
+            font-size: 26px;
+            fill: #1d2327;
+        }
+        .customify-preset--name {
+            font-size: 10.5px;
+            fill: #50575e;
+        }
+        // Pair-name tooltip (data-tooltip), styled after the block
+        // editor's dark tooltip (no arrow). Edge columns pin to their
+        // card edge so the bubble stays inside the sidebar.
+        &:after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: calc(100% + 6px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e1e1e;
+            color: #f0f0f1;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.4;
+            padding: 4px 8px;
+            border-radius: 2px;
+            width: max-content;
+            max-width: 150px;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .1s ease .1s;
+            pointer-events: none;
+            z-index: 40;
+        }
+        &:nth-child(3n + 1):after {
+            left: 0;
+            transform: none;
+        }
+        &:nth-child(3n):after {
+            left: auto;
+            right: 0;
+            transform: none;
+        }
+        &:hover:after,
+        &:focus-visible:after {
+            opacity: 1;
+            visibility: visible;
         }
     }
 }
