@@ -72,8 +72,8 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 			#customize-header-actions button.customify-style-guide-toggle:focus,
 			#customize-header-actions button.customify-style-guide-toggle.is-active {
 				background: #fff;
-				color: #2271b1;
-				border-top-color: #2271b1;
+				color: var( --wp-admin-theme-color, #2271b1 );
+				border-top-color: var( --wp-admin-theme-color, #2271b1 );
 				box-shadow: none;
 				outline: none;
 			}

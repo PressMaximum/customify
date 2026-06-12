@@ -33,12 +33,31 @@ $customify_sg_slots = array(
 	array( 'Base', 'customify_palette_base', '--customify-base' ),
 );
 
+// Link follows Primary until the user overrides it via its own control
+// — rendered as an editable card with a live follow-the-primary
+// fallback (see the JS below).
+$customify_sg_link_mod    = get_theme_mod( 'global_styling_color_link' );
+$customify_sg_link_mod    = ( is_string( $customify_sg_link_mod ) && '' !== $customify_sg_link_mod ) ? $customify_sg_link_mod : '';
+// Value equal to the field default means "no override — cascade from
+// Primary". Lockstep with FIELD_DEFAULTS in inc/colors-palette.php and
+// the 'default' key in inc/customizer/configs/colors.php.
+if ( '#0e7c7b' === strtolower( $customify_sg_link_mod ) ) {
+	$customify_sg_link_mod = '';
+}
+$customify_sg_primary_mod = get_theme_mod( 'global_styling_color_primary' );
+$customify_sg_primary_mod = ( is_string( $customify_sg_primary_mod ) && '' !== $customify_sg_primary_mod ) ? $customify_sg_primary_mod : '';
+$customify_sg_link_fb     = $customify_sg_link_mod ? $customify_sg_link_mod : $customify_sg_primary_mod;
+
 // Derived tokens (read-only, computed by the palette engine).
 $customify_sg_derived = array(
+	array( 'Primary Container', '--customify-primary-container' ),
+	array( 'Secondary Container', '--customify-secondary-container' ),
+	array( 'Accent Container', '--customify-accent-container' ),
 	array( 'Text Muted', '--customify-text-muted' ),
-	array( 'Link', '--customify-link' ),
 	array( 'Heading', '--customify-heading' ),
 	array( 'On Primary', '--customify-on-primary' ),
+	array( 'Border', '--customify-border' ),
+	array( 'Border Strong', '--customify-border-strong' ),
 );
 ?>
 <!DOCTYPE html>
@@ -48,6 +67,19 @@ $customify_sg_derived = array(
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php wp_head(); ?>
 <style>
+	/* Fallback consumer for the Base slot: the palette sheet owns the
+	   real `body { background-color: var(--customify-base) }` rule, but
+	   that sheet can go cascade-dead mid-session (see the token rescue
+	   in the script below) — then editing Base looks like a no-op.
+	   :where() keeps specificity at zero, so any real body background
+	   rule (a saved Page Background, the live palette sheet) still
+	   wins; this only catches the dead-sheet case. The JS mirrors the
+	   slot settings onto <html> inline custom properties, which keeps
+	   var(--customify-base) itself live. */
+	:where(body.customify-style-guide) {
+		background-color: var(--customify-base, #ffffff);
+	}
+
 	/* Guide chrome only — specimens inherit the theme styles untouched. */
 	.csg {
 		--csg-line: color-mix(in srgb, currentColor 14%, transparent);
@@ -215,16 +247,19 @@ $customify_sg_derived = array(
 		max-width: 80%;
 		width: auto;
 	}
-	.csg-logo-mark {
-		width: 44px;
-		height: 44px;
-		border-radius: 11px;
-		background: var(--csg-primary, #2271b1);
-		color: var(--customify-on-primary, #fff);
-		display: grid;
-		place-items: center;
-		font-size: 20px;
-		font-weight: 700;
+	.csg-logo-empty {
+		width: 150px;
+		height: 56px;
+		border-radius: 8px;
+		box-shadow: inset 0 0 0 1px var(--csg-line);
+		background-color: #fff;
+		background-image:
+			linear-gradient(45deg, #e3e3e3 25%, transparent 25%),
+			linear-gradient(-45deg, #e3e3e3 25%, transparent 25%),
+			linear-gradient(45deg, transparent 75%, #e3e3e3 75%),
+			linear-gradient(-45deg, transparent 75%, #e3e3e3 75%);
+		background-size: 14px 14px;
+		background-position: 0 0, 0 7px, 7px -7px, -7px 0;
 	}
 	.csg-browser-tab {
 		display: flex;
@@ -409,7 +444,8 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 			<?php if ( $customify_sg_logo_url ) : ?>
 				<img class="csg-logo-img" src="<?php echo esc_url( $customify_sg_logo_url ); ?>" alt="">
 			<?php else : ?>
-				<div class="csg-logo-mark"><?php echo esc_html( strtoupper( mb_substr( get_bloginfo( 'name' ), 0, 1 ) ) ); ?></div>
+				<?php // No logo yet: a PNG-style transparency checker, not a fake mark. ?>
+				<div class="csg-logo-empty" aria-hidden="true"></div>
 			<?php endif; ?>
 			<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="custom_logo" aria-label="<?php esc_attr_e( 'Edit site logo', 'customify' ); ?>"></button>
 		</div>
@@ -443,7 +479,7 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 				$customify_sg_fb = ( is_string( $customify_sg_fb ) && '' !== $customify_sg_fb ) ? $customify_sg_fb : '';
 				?>
 				<div class="csg-ccard csg-editable">
-					<div class="csg-chip" data-setting="<?php echo esc_attr( $customify_sg_slot[1] ); ?>" style="background: var(<?php echo esc_attr( $customify_sg_slot[2] ); ?><?php echo $customify_sg_fb ? ', ' . esc_attr( $customify_sg_fb ) : ''; ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"></div>
+					<div class="csg-chip" data-setting="<?php echo esc_attr( $customify_sg_slot[1] ); ?>" data-token="<?php echo esc_attr( $customify_sg_slot[2] ); ?>" style="background: var(<?php echo esc_attr( $customify_sg_slot[2] ); ?><?php echo $customify_sg_fb ? ', ' . esc_attr( $customify_sg_fb ) : ''; ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"></div>
 					<div class="csg-cmeta">
 						<div class="csg-cname"><?php echo esc_html( $customify_sg_slot[0] ); ?></div>
 						<div class="csg-cvalue" data-token="<?php echo esc_attr( $customify_sg_slot[2] ); ?>">&nbsp;</div>
@@ -451,6 +487,19 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 					<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="<?php echo esc_attr( $customify_sg_slot[1] ); ?>" aria-label="<?php echo esc_attr( $customify_sg_slot[0] ); ?>"></button>
 				</div>
 			<?php endforeach; ?>
+			<?php
+			// Link is NOT auto: it follows Primary until the user
+			// overrides it through its own control, so it gets a pencil
+			// and a live follow-the-primary chip (JS below).
+			?>
+			<div class="csg-ccard csg-editable">
+				<div class="csg-chip" data-setting="global_styling_color_link" data-link-follows="global_styling_color_primary" style="background: var(--customify-link<?php echo $customify_sg_link_fb ? ', ' . esc_attr( $customify_sg_link_fb ) : ''; ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"></div>
+				<div class="csg-cmeta">
+					<div class="csg-cname"><?php esc_html_e( 'Link', 'customify' ); ?></div>
+					<div class="csg-cvalue" data-token="--customify-link">&nbsp;</div>
+				</div>
+				<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="global_styling_color_link" aria-label="<?php esc_attr_e( 'Edit link color', 'customify' ); ?>"></button>
+			</div>
 			<?php foreach ( $customify_sg_derived as $customify_sg_d ) : ?>
 				<div class="csg-ccard">
 					<div class="csg-chip" style="background: var(<?php echo esc_attr( $customify_sg_d[1] ); ?>); box-shadow: inset 0 0 0 1px var(--csg-line);"><span class="csg-auto"><?php esc_html_e( 'Auto', 'customify' ); ?></span></div>
@@ -501,14 +550,17 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 					<p class="csg-spec" style="margin: 8px 0 0;" data-spec="p">&nbsp;</p>
 					<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="global_typography_base_p" aria-label="<?php esc_attr_e( 'Edit body typography', 'customify' ); ?>"></button>
 				</div>
-				<div class="csg-quote-block csg-editable">
+				<?php
+				// Pure specimens — no dedicated settings exist for quotes
+				// or lists, so no edit pencil.
+				?>
+				<div class="csg-quote-block">
 					<blockquote>
 						<?php esc_html_e( 'The future belongs to those who believe in the beauty of their dreams.', 'customify' ); ?>
 						<cite>Eleanor Roosevelt</cite>
 					</blockquote>
-					<button type="button" class="csg-edit" data-focus-type="section" data-focus-id="typography_panel" aria-label="<?php esc_attr_e( 'Edit typography', 'customify' ); ?>"></button>
 				</div>
-				<div class="csg-lists-block csg-editable">
+				<div class="csg-lists-block">
 					<ul>
 						<li><?php esc_html_e( 'Unordered item', 'customify' ); ?></li>
 						<li><?php esc_html_e( 'Unordered item', 'customify' ); ?></li>
@@ -517,7 +569,6 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 						<li><?php esc_html_e( 'Ordered item', 'customify' ); ?></li>
 						<li><?php esc_html_e( 'Ordered item', 'customify' ); ?></li>
 					</ol>
-					<button type="button" class="csg-edit" data-focus-type="section" data-focus-id="typography_panel" aria-label="<?php esc_attr_e( 'Edit typography', 'customify' ); ?>"></button>
 				</div>
 			</div>
 		</div>
@@ -679,17 +730,61 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 
 			// Editable slot chips also follow their setting directly —
 			// covers tokens the palette engine doesn't emit (Surface).
+			// Mirroring the value onto <html> as an inline custom
+			// property keeps every var() consumer live (body background
+			// for Base, the guide accents) even while the palette token
+			// sheet is cascade-dead.
 			document.querySelectorAll( '.csg-chip[data-setting]' ).forEach( function( chip ) {
+				if ( chip.hasAttribute( 'data-link-follows' ) ) {
+					// The Link chip has its own cascade-aware updater below.
+					return;
+				}
 				wp.customize( chip.getAttribute( 'data-setting' ), function( setting ) {
 					setting.bind( function( v ) {
 						var val = decodeSettingValue( v );
 						if ( 'string' === typeof val && val ) {
 							chip.style.background = val;
+							var token = chip.getAttribute( 'data-token' );
+							if ( token ) {
+								document.documentElement.style.setProperty( token, val );
+							}
 						}
 						refreshSoon();
 					} );
 				} );
 			} );
+
+			// Link is not auto: it follows Primary until its own control
+			// overrides it. A value equal to the field default means "no
+			// override — cascade from Primary" (lockstep with
+			// FIELD_DEFAULTS in inc/colors-palette.php), and the setting
+			// reports that default even when nothing was saved.
+			var linkChip = document.querySelector( '.csg-chip[data-link-follows]' );
+			if ( linkChip ) {
+				var LINK_FIELD_DEFAULT = '#0e7c7b';
+				var updateLinkChip = function() {
+					var link = wp.customize( 'global_styling_color_link' );
+					var primary = wp.customize( 'global_styling_color_primary' );
+					var linkVal = link ? decodeSettingValue( link.get() ) : '';
+					var isOverride =
+						'string' === typeof linkVal &&
+						linkVal &&
+						linkVal.toLowerCase() !== LINK_FIELD_DEFAULT;
+					var val = isOverride
+						? linkVal
+						: ( primary ? decodeSettingValue( primary.get() ) : '' );
+					if ( 'string' === typeof val && val ) {
+						linkChip.style.background = val;
+					}
+					refreshSoon();
+				};
+				[ 'global_styling_color_link', 'global_styling_color_primary' ].forEach( function( sid ) {
+					wp.customize( sid, function( s ) {
+						s.bind( updateLinkChip );
+					} );
+				} );
+				updateLinkChip();
+			}
 		}
 		if ( window.MutationObserver ) {
 			new MutationObserver( refreshSoon ).observe( document.head, {
