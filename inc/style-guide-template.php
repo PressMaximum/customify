@@ -247,10 +247,14 @@ $customify_sg_derived = array(
 		max-width: 80%;
 		width: auto;
 	}
+	/* No-logo state: the transparency checker fills the whole card. */
 	.csg-logo-empty {
-		width: 150px;
-		height: 56px;
-		border-radius: 8px;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-radius: 12px;
 		box-shadow: inset 0 0 0 1px var(--csg-line);
 		background-color: #fff;
 		background-image:
@@ -260,6 +264,16 @@ $customify_sg_derived = array(
 			linear-gradient(-45deg, transparent 75%, #e3e3e3 75%);
 		background-size: 14px 14px;
 		background-position: 0 0, 0 7px, 7px -7px, -7px 0;
+	}
+	.csg-identity > div {
+		display: flex;
+		flex-direction: column;
+	}
+	.csg-identity .csg-sec-label {
+		margin-bottom: 10px;
+	}
+	.csg-identity .csg-id-card {
+		flex: 1;
 	}
 	.csg-browser-tab {
 		display: flex;
@@ -440,30 +454,39 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 	</div>
 
 	<div class="csg-section csg-identity" style="padding-top: 0;">
-		<div class="csg-id-card csg-editable">
-			<?php if ( $customify_sg_logo_url ) : ?>
-				<img class="csg-logo-img" src="<?php echo esc_url( $customify_sg_logo_url ); ?>" alt="">
-			<?php else : ?>
-				<?php // No logo yet: a PNG-style transparency checker, not a fake mark. ?>
-				<div class="csg-logo-empty" aria-hidden="true"></div>
-			<?php endif; ?>
-			<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="custom_logo" aria-label="<?php esc_attr_e( 'Edit site logo', 'customify' ); ?>"></button>
-		</div>
-		<div class="csg-id-card csg-editable">
-			<div class="site-title" style="margin: 0;"><?php bloginfo( 'name' ); ?></div>
-			<div class="site-description" style="margin: 0;"><?php bloginfo( 'description' ); ?></div>
-			<button type="button" class="csg-edit" data-focus-type="section" data-focus-id="title_tagline" aria-label="<?php esc_attr_e( 'Edit site title and tagline', 'customify' ); ?>"></button>
-		</div>
-		<div class="csg-id-card csg-editable">
-			<div class="csg-browser-tab">
-				<?php if ( $customify_sg_icon_url ) : ?>
-					<img src="<?php echo esc_url( $customify_sg_icon_url ); ?>" alt="">
+		<div>
+			<div class="csg-sec-label"><?php esc_html_e( 'Logo', 'customify' ); ?></div>
+			<div class="csg-id-card csg-editable">
+				<?php if ( $customify_sg_logo_url ) : ?>
+					<img class="csg-logo-img" src="<?php echo esc_url( $customify_sg_logo_url ); ?>" alt="">
 				<?php else : ?>
-					<span class="csg-dot"><?php echo esc_html( strtoupper( mb_substr( get_bloginfo( 'name' ), 0, 1 ) ) ); ?></span>
+					<?php // No logo yet: a PNG-style transparency checker, not a fake mark. ?>
+					<div class="csg-logo-empty" aria-hidden="true"></div>
 				<?php endif; ?>
-				<?php bloginfo( 'name' ); ?>
+				<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="custom_logo" aria-label="<?php esc_attr_e( 'Edit site logo', 'customify' ); ?>"></button>
 			</div>
-			<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="site_icon" aria-label="<?php esc_attr_e( 'Edit site icon', 'customify' ); ?>"></button>
+		</div>
+		<div>
+			<div class="csg-sec-label"><?php esc_html_e( 'Site Title & Tagline', 'customify' ); ?></div>
+			<div class="csg-id-card csg-editable">
+				<div class="site-title" style="margin: 0;"><?php bloginfo( 'name' ); ?></div>
+				<div class="site-description" style="margin: 0;"><?php bloginfo( 'description' ); ?></div>
+				<button type="button" class="csg-edit" data-focus-type="section" data-focus-id="title_tagline" aria-label="<?php esc_attr_e( 'Edit site title and tagline', 'customify' ); ?>"></button>
+			</div>
+		</div>
+		<div>
+			<div class="csg-sec-label"><?php esc_html_e( 'Favicon', 'customify' ); ?></div>
+			<div class="csg-id-card csg-editable">
+				<div class="csg-browser-tab">
+					<?php if ( $customify_sg_icon_url ) : ?>
+						<img src="<?php echo esc_url( $customify_sg_icon_url ); ?>" alt="">
+					<?php else : ?>
+						<span class="csg-dot"><?php echo esc_html( strtoupper( mb_substr( get_bloginfo( 'name' ), 0, 1 ) ) ); ?></span>
+					<?php endif; ?>
+					<?php bloginfo( 'name' ); ?>
+				</div>
+				<button type="button" class="csg-edit" data-focus-type="control" data-focus-id="site_icon" aria-label="<?php esc_attr_e( 'Edit site icon', 'customify' ); ?>"></button>
+			</div>
 		</div>
 	</div>
 
@@ -734,6 +757,30 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 			// property keeps every var() consumer live (body background
 			// for Base, the guide accents) even while the palette token
 			// sheet is cascade-dead.
+			// Desired live slot values. The palette engine rewrites the
+			// <html> style attribute WHOLESALE on its own recomputes,
+			// wiping any property we set — so keep the wanted values
+			// here and re-assert after every attribute write. The
+			// value-equality guard breaks the observer cycle.
+			var slotProps = {};
+			var assertSlotProps = function() {
+				Object.keys( slotProps ).forEach( function( token ) {
+					var val = slotProps[ token ];
+					if ( val && document.documentElement.style.getPropertyValue( token ).trim() !== val ) {
+						document.documentElement.style.setProperty( token, val );
+					}
+				} );
+			};
+			if ( window.MutationObserver ) {
+				new MutationObserver( function() {
+					assertSlotProps();
+					refreshSoon();
+				} ).observe( document.documentElement, {
+					attributes: true,
+					attributeFilter: [ 'style' ]
+				} );
+			}
+
 			document.querySelectorAll( '.csg-chip[data-setting]' ).forEach( function( chip ) {
 				if ( chip.hasAttribute( 'data-link-follows' ) ) {
 					// The Link chip has its own cascade-aware updater below.
@@ -746,7 +793,8 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 							chip.style.background = val;
 							var token = chip.getAttribute( 'data-token' );
 							if ( token ) {
-								document.documentElement.style.setProperty( token, val );
+								slotProps[ token ] = val;
+								assertSlotProps();
 							}
 						}
 						refreshSoon();
