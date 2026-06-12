@@ -76,14 +76,24 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 				letter-spacing: .02em;
 				white-space: nowrap;
 			}
+			<?php
+			// :focus-visible, NOT :focus — a mouse click leaves the
+			// button focused, so plain :focus kept the tab looking
+			// active after toggling the guide off until the next
+			// outside click. Keyboard focus still shows.
+			?>
 			#customize-header-actions button.customify-style-guide-toggle:hover,
-			#customize-header-actions button.customify-style-guide-toggle:focus,
+			#customize-header-actions button.customify-style-guide-toggle:focus-visible,
 			#customize-header-actions button.customify-style-guide-toggle.is-active {
 				background: #fff;
 				color: var( --wp-admin-theme-color, #2271b1 );
 				border-top-color: var( --wp-admin-theme-color, #2271b1 );
 				box-shadow: none;
 				outline: none;
+			}
+			#customize-header-actions button.customify-style-guide-toggle:focus {
+				outline: none;
+				box-shadow: none;
 			}
 			#customize-header-actions button.customify-style-guide-toggle .dashicons {
 				font-size: 18px;
