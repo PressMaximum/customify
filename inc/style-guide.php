@@ -52,14 +52,16 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 			   button inside #customize-header-actions, with a 4px top
 			   accent and a small tooltip below. */
 			#customize-header-actions button.customify-style-guide-toggle {
-				display: block;
+				display: flex;
+				align-items: center;
+				gap: 5px;
 				position: absolute;
 				top: 0;
 				bottom: 0;
 				left: 48px;
-				width: 45px;
+				width: auto;
 				margin-top: 0 !important;
-				padding: 0;
+				padding: 0 12px;
 				background: #f0f0f1;
 				border: none;
 				border-radius: 0;
@@ -67,6 +69,12 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 				border-right: 1px solid #dcdcde;
 				color: #3c434a;
 				cursor: pointer;
+			}
+			#customize-header-actions button.customify-style-guide-toggle .customify-sg-label {
+				font-size: 11px;
+				font-weight: 500;
+				letter-spacing: .02em;
+				white-space: nowrap;
 			}
 			#customize-header-actions button.customify-style-guide-toggle:hover,
 			#customize-header-actions button.customify-style-guide-toggle:focus,
@@ -83,29 +91,6 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 				height: 18px;
 				line-height: 1;
 				vertical-align: middle;
-			}
-			.customify-sg-tooltip {
-				display: none;
-				position: absolute;
-				left: 50%;
-				transform: translateX( -50% );
-				margin-bottom: 5px;
-				background-color: #e5e5e5;
-				color: #494948;
-				border-radius: 3px;
-				white-space: nowrap;
-				font-size: 12px;
-				z-index: 1000;
-				opacity: 0;
-				transition: opacity 0.3s ease;
-				padding: 0 8px;
-				top: 45px;
-				box-shadow: rgba( 0, 0, 0, 0.02 ) 0px 1px 3px 0px, rgba( 27, 31, 35, 0.15 ) 0px 0px 0px 1px;
-				line-height: 2;
-			}
-			#customize-header-actions button.customify-style-guide-toggle:hover .customify-sg-tooltip {
-				display: block;
-				opacity: 1;
 			}
 			@media screen and ( max-width: 640px ) {
 				#customize-header-actions button.customify-style-guide-toggle {
@@ -126,8 +111,7 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 				var $btn = $(
 					'<button type="button" class="customify-style-guide-toggle button-secondary button" aria-pressed="false">' +
 					'<span class="dashicons dashicons-art"></span>' +
-					'<div class="customify-sg-tooltip"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></div>' +
-					'<span class="screen-reader-text"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></span>' +
+					'<span class="customify-sg-label"><?php echo esc_js( __( 'Style Guide', 'customify' ) ); ?></span>' +
 					'</button>'
 				);
 				$( '#customize-header-actions' ).append( $btn );
@@ -145,6 +129,21 @@ if ( ! function_exists( 'customify_style_guide_controls_assets' ) ) {
 				var syncToggleState = function( url ) {
 					var on = isGuideUrl( url );
 					$btn.toggleClass( 'is-active', on ).attr( 'aria-pressed', on ? 'true' : 'false' );
+					// The customizer's own address bar keeps the boot-time
+					// ?url= param; if it points at the guide, a refresh
+					// reopens it even after closing — feels like the
+					// toggle never closed. Drop the stale param once the
+					// guide is off.
+					if ( ! on ) {
+						try {
+							var u = new URL( window.location.href );
+							var previewParam = u.searchParams.get( 'url' );
+							if ( previewParam && previewParam.indexOf( 'customify-style-guide=1' ) !== -1 ) {
+								u.searchParams.delete( 'url' );
+								window.history.replaceState( {}, '', u.toString() );
+							}
+						} catch ( e ) { }
+					}
 				};
 				api.previewer.previewUrl.bind( syncToggleState );
 				// bind() only fires on changes — reflect the initial URL too
