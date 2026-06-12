@@ -220,6 +220,28 @@ export function setupTypographyControl(deps) {
 						(v === "700" ? ' selected="selected" ' : "") +
 						' value="700">700</option>';
 				}
+
+				// Lossless display for a saved weight the family doesn't
+				// ship (e.g. 600 carried across a switch to Roboto): the
+				// native select would silently show the FIRST option
+				// while the emitted CSS keeps font-weight at the saved
+				// value (browser-synthesized) — control, preview and
+				// render disagree. Same rule as the multi-unit slider's
+				// unknown units: render the saved value as its own
+				// selected option.
+				var savedHandled =
+					!v ||
+					rendered[String(v).toLowerCase()] ||
+					(!hasRegular && "400" === String(v)) ||
+					(!hasBold && "700" === String(v));
+				if (!savedHandled) {
+					html +=
+						'<option selected="selected" value="' +
+						v +
+						'">' +
+						v +
+						"</option>";
+				}
 			} else {
 				_.each(Customify_Control_Args.list_font_weight, function (
 					value,

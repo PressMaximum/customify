@@ -475,7 +475,7 @@ $customify_sg_primary = ( is_string( $customify_sg_primary ) && '' !== $customif
 			</div>
 		</div>
 		<div>
-			<div class="csg-sec-label"><?php esc_html_e( 'Favicon', 'customify' ); ?></div>
+			<div class="csg-sec-label"><?php esc_html_e( 'Site Icon', 'customify' ); ?></div>
 			<div class="csg-id-card csg-editable">
 				<div class="csg-browser-tab">
 					<?php if ( $customify_sg_icon_url ) : ?>
