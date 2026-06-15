@@ -80,7 +80,8 @@
 
 .entry-content ul:not(:is(ul, ol) ul),
 .entry-content ol:not(:is(ul, ol) ol) {
-	margin: 1.5em auto;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
 	list-style-position: outside;
 }
 
