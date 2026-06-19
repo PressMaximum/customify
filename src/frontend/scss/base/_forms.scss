@@ -15,6 +15,28 @@ form {
     margin-bottom: 2em;
 }
 
+// Bundled normalize (v4–v7) forces `font-family: sans-serif` on form controls,
+// so inputs / selects / textareas / <button>s ignore the site typeface and fall
+// back to the generic sans stack. Restore inheritance — what normalize v8 and
+// Astra both do — so form controls render in the theme font like everything
+// else. (Verified: without this, an <input>/<select>/<button> computes
+// `font-family: sans-serif` while <body> uses the configured font.)
+input,
+select,
+textarea,
+button {
+    font-family: inherit;
+}
+
+// The broad button rule further down sets `display: inline-flex`; its
+// specificity (0,1,1) outranks the UA/normalize `[hidden] { display: none }`
+// (0,1,0), so a `<button hidden>` — or any element a theme display rule
+// targets — stays visible despite the valid HTML `hidden` attribute. Force
+// `[hidden]` to win so plugins/markup can rely on it.
+[hidden] {
+    display: none !important;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="url"],
