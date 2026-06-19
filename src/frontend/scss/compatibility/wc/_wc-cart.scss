@@ -238,19 +238,25 @@
 			}
 		}
 		.widget {
-			border: 1px solid #eaecee;
+			border: 1px solid $popover_border;
 			background: #ffffff;
 			box-shadow: $boxshadow_dropdown;
+			border-radius: $popover_radius;
 			position: relative;
+			// Caret — small rounded-tip diamond matching the popover surface +
+			// border ($popover_border, transparent by default → clean). Default
+			// position is overridden per alignment (d-align-right/left below).
 			&::before {
-				border-top: 1px solid $color_border;
-				border-left: 1px solid $color_border;
-				background: #fff;
 				content: "";
-				display: block;
 				position: absolute;
-				width: 15px;
-				height: 15px;
+				top: -7px;
+				left: 18px;
+				width: 12px;
+				height: 12px;
+				background: #ffffff;
+				border-top: 1px solid $popover_border;
+				border-left: 1px solid $popover_border;
+				border-top-left-radius: 3px;
 				transform: rotate(45deg);
 				z-index: 27;
 			}
@@ -279,11 +285,9 @@
 		.cart-dropdown-box {
 			left: auto;
 			right: -8px;
-			.widget {
-				&:before {
-					top: -8px;
-					right: 15px;
-				}
+			.widget::before {
+				left: auto;
+				right: 18px;
 			}
 		}
 	}
@@ -291,12 +295,6 @@
 		.cart-dropdown-box {
 			left: 0px;
 			right: auto;
-			.widget {
-				&:before {
-					top: -8px;
-					left: 15px;
-				}
-			}
 		}
 	}
 

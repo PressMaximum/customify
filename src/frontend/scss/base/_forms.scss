@@ -76,11 +76,14 @@ textarea,
 
 // Small / native-UI controls shouldn't be forced full-width — a date, number,
 // time or color picker stretched to 100% looks wrong and fights inline form
-// layouts. Match Astra, which only makes text-like fields, textarea & search
-// full-width: revert these to their natural control width. The text-like inputs
-// (text/email/url/password/search/tel), select & textarea keep `width: 100%`
-// from the group rule above, so comment/contact forms — what the 30k base
-// relies on — are unaffected.
+// layouts. Match Astra, which only makes text-like fields & textarea full-width:
+// revert these to their natural control width (capped by the group's
+// max-width:100% so they never overflow a narrow container like a sidebar
+// filter). `select` is included — a forced-100% native select stretched and
+// broke sidebar/filter layouts; Astra likewise only caps select with
+// max-width, never width. The text-like inputs (text/email/url/password/search/
+// tel) & textarea keep `width: 100%` from the group rule, so comment/contact
+// forms — what the 30k base relies on — are unaffected.
 input[type="number"],
 input[type="date"],
 input[type="month"],
@@ -88,7 +91,8 @@ input[type="week"],
 input[type="time"],
 input[type="datetime"],
 input[type="datetime-local"],
-input[type="color"] {
+input[type="color"],
+select {
     width: auto;
 }
 
