@@ -53,14 +53,18 @@ if ( ! function_exists( 'customify_customizer_buttons_forms_config' ) ) {
 		// Buttons: mirror the global button rule in base/_forms.scss so the
 		// composite output ties its specificity and wins by load order. Built
 		// once, then a `:hover` variant is derived for the Hover tab.
-		// The bare `button` part also excludes the Customizer preview's
-		// selective-refresh edit-shortcut buttons (round pencil icons WP
-		// injects next to editable partials inside the preview iframe) —
-		// they are plain <button>s and would otherwise get the full theme
-		// button skin. Keep every :not() comma-free ($suffix_each below
-		// splits on commas).
-		$button_selector = '.button:not([class*="wp-block-"]), '
-			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button), '
+		// The bare `button` part also excludes:
+		//   - the Customizer preview's selective-refresh edit-shortcut buttons
+		//     (round pencil icons WP injects next to editable partials inside
+		//     the preview iframe) — they are plain <button>s and would
+		//     otherwise get the full theme button skin;
+		//   - `.menu-mobile-toggle` — the hamburger trigger is a <button> with
+		//     its own dedicated nav-icon styling (transparent bg, no padding,
+		//     custom hover). Letting Button Styling reach it paints the
+		//     hamburger with the brand button background.
+		// Keep every :not() comma-free ($suffix_each below splits on commas).
+		$button_selector = '.button:not([class*="wp-block-"]):not(.menu-mobile-toggle), '
+			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button):not(.menu-mobile-toggle), '
 			. 'input[type="button"]:not([class*="wp-block-"]), '
 			. 'input[type="reset"]:not([class*="wp-block-"]), '
 			. 'input[type="submit"]:not([class*="wp-block-"]), '
