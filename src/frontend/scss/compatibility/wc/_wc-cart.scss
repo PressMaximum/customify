@@ -238,22 +238,11 @@
 			}
 		}
 		.widget {
-			border: 1px solid #eaecee;
+			border: 1px solid $color_border;
 			background: #ffffff;
 			box-shadow: $boxshadow_dropdown;
+			border-radius: 10px;
 			position: relative;
-			&::before {
-				border-top: 1px solid $color_border;
-				border-left: 1px solid $color_border;
-				background: #fff;
-				content: "";
-				display: block;
-				position: absolute;
-				width: 15px;
-				height: 15px;
-				transform: rotate(45deg);
-				z-index: 27;
-			}
 		}
 		// When cart empty
 		.woocommerce-mini-cart__empty-message {
@@ -279,24 +268,12 @@
 		.cart-dropdown-box {
 			left: auto;
 			right: -8px;
-			.widget {
-				&:before {
-					top: -8px;
-					right: 15px;
-				}
-			}
 		}
 	}
 	&.d-align-left {
 		.cart-dropdown-box {
 			left: 0px;
 			right: auto;
-			.widget {
-				&:before {
-					top: -8px;
-					left: 15px;
-				}
-			}
 		}
 	}
 
