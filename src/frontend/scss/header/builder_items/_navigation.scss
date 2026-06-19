@@ -113,7 +113,7 @@
         background: #ffffff;
         box-shadow: $boxshadow_dropdown;
         text-align: left;
-        border-radius: 10px;
+        border-radius: $popover_radius;
         //&:before {
         //    position: absolute;
         //    content: "";

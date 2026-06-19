@@ -52,6 +52,10 @@
 			left: auto;
 			right: -0.9em;
 		}
+		.header-search-modal::before {
+			left: auto;
+			right: 18px;
+		}
 	}
 	&.active {
 		.header-search-modal-wrapper {
@@ -151,13 +155,13 @@
 }
 
 .header-search-modal {
-	border: 1px solid $color_border;
+	border: 1px solid $popover_border;
 	padding: 1.25em;
 	background: #fff;
 	width: 280px;
 	position: relative;
 	margin-top: 15px;
-	border-radius: 10px;
+	border-radius: $popover_radius;
 	box-shadow: $boxshadow_dropdown;
 	@include for_device(mobile) {
 		width: 220px;
@@ -165,6 +169,23 @@
 
 	label {
 		flex-basis: 100%;
+	}
+	// Caret — small diamond with a rounded tip; bg matches the popover and the
+	// two leading edges use $popover_border so it tracks a user-set border
+	// (invisible by default since that token is transparent).
+	&::before {
+		content: "";
+		position: absolute;
+		top: -7px;
+		left: 18px;
+		width: 12px;
+		height: 12px;
+		background: #fff;
+		border-top: 1px solid $popover_border;
+		border-left: 1px solid $popover_border;
+		border-top-left-radius: 3px;
+		transform: rotate(45deg);
+		z-index: 27;
 	}
 }
 

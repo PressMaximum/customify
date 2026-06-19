@@ -62,6 +62,17 @@ $surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 10%
 // modern floating-card feel (replaces the single flat 2018-era drop shadow).
 $boxshadow_dropdown: 0 8px 28px -6px rgba(17,24,39,.16), 0 2px 8px -4px rgba(17,24,39,.10);
 
+// Shared header-popover chrome (mini-cart, search, submenu + their carets).
+// Border is TRANSPARENT by default so a resting popover is shadow-only and
+// clean — NOT bound to the global --customify-border (palette Border slot is
+// used for dividers and would bleed a gray hairline = "dirty"). When the user
+// sets a popover/item border in the Customizer, that control emits its own
+// `border-color` rule onto BOTH the popover and its `:before` caret (see
+// search-icon.php), so the caret always matches a user-set border. Radius kept
+// small/subtle.
+$popover_border: transparent;
+$popover_radius: 6px;
+
 // Helper
 $submenu_width: 14em;
 
