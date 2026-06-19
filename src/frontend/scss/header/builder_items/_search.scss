@@ -52,12 +52,6 @@
 			left: auto;
 			right: -0.9em;
 		}
-		.header-search-modal {
-			&::before {
-				left: auto;
-				right: 15px;
-			}
-		}
 	}
 	&.active {
 		.header-search-modal-wrapper {
@@ -163,6 +157,7 @@
 	width: 280px;
 	position: relative;
 	margin-top: 15px;
+	border-radius: 10px;
 	box-shadow: $boxshadow_dropdown;
 	@include for_device(mobile) {
 		width: 220px;
@@ -170,20 +165,6 @@
 
 	label {
 		flex-basis: 100%;
-	}
-	&::before {
-		border-top: 1px solid $color_border;
-		border-left: 1px solid $color_border;
-		background: #fff;
-		content: "";
-		display: block;
-		position: absolute;
-		top: -8px;
-		left: 15px;
-		width: 15px;
-		height: 15px;
-		transform: rotate(45deg);
-		z-index: 27;
 	}
 }
 
