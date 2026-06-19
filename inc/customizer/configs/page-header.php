@@ -806,7 +806,13 @@ class Customify_Page_Header {
 					}
 				} elseif ( 'current' == $advanced['post_title_tagline'] ) {
 					$post_id = get_queried_object_id();
-					if ( 'default' != $args['display'] ) {
+					// Only hide inline when the cover/titlebar wrapper will
+					// actually show the title and duplicate it. Comparing to
+					// 'default' is unsafe here: $display['post'] may still be
+					// the unset '' sentinel, which becomes 'default' later via
+					// the bottom-of-function fallback. An empty value must
+					// behave like 'default' (inline mode).
+					if ( in_array( $args['display'], array( 'cover', 'titlebar' ), true ) ) {
 						$args['force_display_single_title'] = 'hide';
 					} else {
 						$args['force_display_single_title'] = 'show';
@@ -823,10 +829,14 @@ class Customify_Page_Header {
 							// No (valid) blog page and no Customizer post
 							// title: fall back to the current post so the
 							// cover/titlebar shows something meaningful
-							// instead of an empty heading. Hide inline in
-							// cover/titlebar mode to avoid duplication.
+							// instead of an empty heading. Hide inline only
+							// when the cover/titlebar wrapper will actually
+							// render and duplicate the title — NOT when
+							// display is '' (the unset sentinel that the
+							// bottom-of-function fallback rewrites to
+							// 'default', i.e. inline mode).
 							$post_id = get_queried_object_id();
-							if ( 'default' !== $args['display'] ) {
+							if ( in_array( $args['display'], array( 'cover', 'titlebar' ), true ) ) {
 								$args['force_display_single_title'] = 'hide';
 							}
 						}
