@@ -144,7 +144,7 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
         );
     }
     &:hover {
-        color: var(--customify-on-primary, #ffffff);
+        color: var(--customify-btn-on-primary, #ffffff);
         outline: none;
     }
     &:active,
@@ -191,10 +191,10 @@ input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-but
 .wp-block-button__link,
 .wp-element-button:not(.components-button),
 input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
-    color: var(--customify-on-primary, #ffffff);
+    color: var(--customify-btn-on-primary, #ffffff);
     background: $color_primary;
     &:focus {
-        color: var(--customify-on-primary, #ffffff);
+        color: var(--customify-btn-on-primary, #ffffff);
     }
 }
 
