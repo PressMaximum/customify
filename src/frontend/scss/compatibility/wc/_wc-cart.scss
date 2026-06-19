@@ -238,11 +238,28 @@
 			}
 		}
 		.widget {
-			border: 1px solid $color_border;
+			border: 1px solid $popover_border;
 			background: #ffffff;
 			box-shadow: $boxshadow_dropdown;
-			border-radius: 10px;
+			border-radius: $popover_radius;
 			position: relative;
+			// Caret — small rounded-tip diamond matching the popover surface +
+			// border ($popover_border, transparent by default → clean). Default
+			// position is overridden per alignment (d-align-right/left below).
+			&::before {
+				content: "";
+				position: absolute;
+				top: -7px;
+				left: 18px;
+				width: 12px;
+				height: 12px;
+				background: #ffffff;
+				border-top: 1px solid $popover_border;
+				border-left: 1px solid $popover_border;
+				border-top-left-radius: 3px;
+				transform: rotate(45deg);
+				z-index: 27;
+			}
 		}
 		// When cart empty
 		.woocommerce-mini-cart__empty-message {
@@ -268,6 +285,10 @@
 		.cart-dropdown-box {
 			left: auto;
 			right: -8px;
+			.widget::before {
+				left: auto;
+				right: 18px;
+			}
 		}
 	}
 	&.d-align-left {
