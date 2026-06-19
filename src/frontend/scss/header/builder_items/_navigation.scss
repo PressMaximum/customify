@@ -111,9 +111,12 @@
     .sub-menu {
         width: $submenu_width;
         background: #ffffff;
-        box-shadow: $boxshadow_dropdown;
+        // Submenu keeps its original shadow + radius — left untouched on purpose
+        // (it already read fine; only the mini-cart/search popovers needed the
+        // refresh).
+        box-shadow: 0 2px 4px -2px rgba(0, 0, 0, 0.1), 0px 4px 15px 0px rgba(0, 0, 0, 0.1);
         text-align: left;
-        border-radius: $popover_radius;
+        border-radius: 2px;
         //&:before {
         //    position: absolute;
         //    content: "";

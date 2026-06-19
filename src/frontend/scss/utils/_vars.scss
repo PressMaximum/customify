@@ -57,10 +57,11 @@ $surface_subtle:    var(--customify-surface, color-mix(in srgb, currentcolor 4%,
 $surface_medium:    var(--customify-surface, color-mix(in srgb, currentcolor 6%, transparent));
 $surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 10%, transparent));
 
-// Box Shadow — shared by the header popovers (mini-cart, search, nav submenu).
-// Two-layer soft diffuse: a tight contact shadow + a wide ambient one, for a
-// modern floating-card feel (replaces the single flat 2018-era drop shadow).
-$boxshadow_dropdown: 0 6px 20px -6px rgba(17,24,39,.12), 0 2px 6px -4px rgba(17,24,39,.07);
+// Box Shadow — shared by the mini-cart + search header popovers (submenu keeps
+// its own). Even/all-direction soft shadow: a centered ambient layer (offset 0
+// so the TOP edge gets shadow too, not just the bottom) plus a faint grounding
+// layer for a hint of depth. Modern floating-card feel.
+$boxshadow_dropdown: 0 0 18px rgba(17,24,39,.12), 0 2px 8px -2px rgba(17,24,39,.07);
 
 // Shared header-popover chrome (mini-cart, search, submenu + their carets).
 // Border is TRANSPARENT by default so a resting popover is shadow-only and
