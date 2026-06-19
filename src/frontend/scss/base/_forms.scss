@@ -15,6 +15,28 @@ form {
     margin-bottom: 2em;
 }
 
+// Bundled normalize (v4–v7) forces `font-family: sans-serif` on form controls,
+// so inputs / selects / textareas / <button>s ignore the site typeface and fall
+// back to the generic sans stack. Restore inheritance — what normalize v8 and
+// Astra both do — so form controls render in the theme font like everything
+// else. (Verified: without this, an <input>/<select>/<button> computes
+// `font-family: sans-serif` while <body> uses the configured font.)
+input,
+select,
+textarea,
+button {
+    font-family: inherit;
+}
+
+// The broad button rule further down sets `display: inline-flex`; its
+// specificity (0,1,1) outranks the UA/normalize `[hidden] { display: none }`
+// (0,1,0), so a `<button hidden>` — or any element a theme display rule
+// targets — stays visible despite the valid HTML `hidden` attribute. Force
+// `[hidden]` to win so plugins/markup can rely on it.
+[hidden] {
+    display: none !important;
+}
+
 input[type="text"],
 input[type="email"],
 input[type="url"],
@@ -50,6 +72,24 @@ textarea,
         border-color: color-mix(in srgb, currentcolor 50%, transparent);
         outline: none;
     }
+}
+
+// Small / native-UI controls shouldn't be forced full-width — a date, number,
+// time or color picker stretched to 100% looks wrong and fights inline form
+// layouts. Match Astra, which only makes text-like fields, textarea & search
+// full-width: revert these to their natural control width. The text-like inputs
+// (text/email/url/password/search/tel), select & textarea keep `width: 100%`
+// from the group rule above, so comment/contact forms — what the 30k base
+// relies on — are unaffected.
+input[type="number"],
+input[type="date"],
+input[type="month"],
+input[type="week"],
+input[type="time"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="color"] {
+    width: auto;
 }
 
 select {
