@@ -29,12 +29,19 @@ if ( ! function_exists( 'customify_customizer_single_blog_config' ) ) {
 				'max'         => 1200,
 				'default'     => 863,
 				'label'       => __( 'Post Content Max Width', 'customify' ),
-				'description' => __( 'Max width of default blocks and aligned siblings inside post content. Drives --wp--style--global--content-size. Keep this value BELOW Container Width so .alignwide blocks can break out to the wider column.', 'customify' ),
+				'description' => __( 'Max width of the content column on single posts. Keep it below Container Width so wide-aligned blocks can still break out wider.', 'customify' ),
 				// Set only the CSS var — no wrapper max-width. `.content-inner` stays at
 				// container_width so .alignwide (wide-size) inside .entry-content can reach
 				// its intended size. Block max-width is applied in _blocks.scss via
 				// .site-content:not(.content-full-stretched) .entry-content > *:not(...).
 				// Scoped to `body.single-post` so pages/archives keep theme.json default.
+				// NOTE: this css_format lands on the `customify-style` handle, which is
+				// emitted BEFORE the `customify-layout-style` body.main-layout-content
+				// rule of equal specificity — so on a no-sidebar single post it would
+				// lose by source order. The winning copy (gated on an explicit save) is
+				// re-emitted on the later handle by customify_single_post_content_size_css()
+				// in inc/template-functions.php; this rule still drives live preview and
+				// sidebar single posts.
 				'selector'    => 'format',
 				'css_format'  => 'body.single-post { --wp--style--global--content-size: {{value}}; }',
 			),

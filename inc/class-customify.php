@@ -457,6 +457,15 @@ class Customify
 		wp_register_style( 'customify-layout-style', false, array(), self::$version );
 		wp_enqueue_style( 'customify-layout-style' );
 		wp_add_inline_style( 'customify-layout-style', customify_layout_content_size_css() );
+		// "Post Content Max Width" override: emitted on the SAME handle, AFTER
+		// the layout rule, so for a no-sidebar single post `body.single-post`
+		// (equal specificity to `body.main-layout-content`) wins by source
+		// order. Gated on an explicit save inside the function, so the 30K
+		// install base that never touched the slider keeps the layout-derived
+		// width; the Customizer live-preview <style> still loads later and wins.
+		if ( function_exists( 'customify_single_post_content_size_css' ) ) {
+			wp_add_inline_style( 'customify-layout-style', customify_single_post_content_size_css() );
+		}
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
