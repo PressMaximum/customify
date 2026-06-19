@@ -44,7 +44,7 @@ if ( ! function_exists( 'customify_color_preset_palettes' ) ) {
 					// — no spurious "Modified" strip on first open.
 					'surface'   => '#ECECEC',
 					'text'      => '#2b2b2b',
-					'primary'   => '#235787',
+					'primary'   => '#0e7c7b',
 					'secondary' => '#c3512f',
 					'accent'    => '#ffd042',
 				),

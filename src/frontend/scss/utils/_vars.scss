@@ -27,11 +27,16 @@ $background_body: #ffffff;
 // is unset (e.g. body-text without override resolves the chain to slot.text).
 $color_text:        var(--customify-body-text, #686868);
 $color_heading:     var(--customify-heading, #2b2b2b);
-$color_primary:     var(--customify-primary, #235787);
+$color_primary:     var(--customify-primary, #0e7c7b);
 $color_secondary:   var(--customify-secondary, #c3512f);
-$color_link:        var(--customify-link, #235787);
+$color_link:        var(--customify-link, #0e7c7b);
 $color_link_hover:  var(--customify-link-hover, #111111);
 $color_border:      var(--customify-border, color-mix(in srgb, currentcolor 9%, transparent));
+// Stronger border for OUTLINED controls (a fill-less form field needs a more
+// defined edge than the 9% hairline). Own var slot for future theming; fallback
+// ~22% currentcolor. 30k-safety: new token — consumed by the modernized field
+// rule + the WC quantity stepper, kept in sync so they don't clash.
+$color_border_medium: var(--customify-border-medium, color-mix(in srgb, currentcolor 22%, transparent));
 $color_meta:        var(--customify-text-muted, #6d6d6d);
 $color_widget_title: var(--customify-widget-title, #2b2b2b);
 
@@ -52,8 +57,22 @@ $surface_subtle:    var(--customify-surface, color-mix(in srgb, currentcolor 4%,
 $surface_medium:    var(--customify-surface, color-mix(in srgb, currentcolor 6%, transparent));
 $surface_strong:    var(--customify-surface, color-mix(in srgb, currentcolor 10%, transparent));
 
-// Box Shadow
-$boxshadow_dropdown: 0 3px 30px rgba(25,30,35,.1);
+// Box Shadow — shared by the mini-cart + search header popovers (submenu keeps
+// its own). Even/all-direction soft shadow: a centered ambient layer (offset 0
+// so the TOP edge gets shadow too, not just the bottom) plus a faint grounding
+// layer for a hint of depth. Modern floating-card feel.
+$boxshadow_dropdown: 0 0 18px rgba(17,24,39,.12), 0 2px 8px -2px rgba(17,24,39,.07);
+
+// Shared header-popover chrome (mini-cart, search, submenu + their carets).
+// Border is TRANSPARENT by default so a resting popover is shadow-only and
+// clean — NOT bound to the global --customify-border (palette Border slot is
+// used for dividers and would bleed a gray hairline = "dirty"). When the user
+// sets a popover/item border in the Customizer, that control emits its own
+// `border-color` rule onto BOTH the popover and its `:before` caret (see
+// search-icon.php), so the caret always matches a user-set border. Radius kept
+// small/subtle.
+$popover_border: transparent;
+$popover_radius: 6px;
 
 // Helper
 $submenu_width: 14em;
@@ -93,6 +112,12 @@ $gl-devices-list: (
         tablet: "screen and (max-width: 1024px)", // 568px - 1024px
         mobile: "screen and (max-width: 568px)" // from to 568px to smaller
 ) !default;
+
+// Compile-context flag. Frontend builds leave it false; the block-editor
+// stylesheet (src/backend/admin/scss/editor.scss) sets it true BEFORE
+// importing base/base so the "# Forms" partial (raw input/select/textarea +
+// global button reset) is skipped in the editor canvas. See base/_forms.scss.
+$editor_context: false !default;
 
 
 

@@ -154,7 +154,7 @@ $blog_gutter: $gl-gutter;
         font-weight: 500;
         &:hover {
             background: $color_primary;
-            color: var(--customify-on-primary, #FFFFFF);
+            color: var(--customify-btn-on-primary, #FFFFFF);
             border-color: $color_primary;
         }
     }
@@ -311,10 +311,10 @@ $blog_gutter: $gl-gutter;
     display: block;
     .nav-links {
         > * {
-            border: 1px solid $color_border;
+            border: 1px solid $color_border_medium;
             color: $color_meta;
             padding: 4px 12px 4px;
-            border-radius: 1px;
+            border-radius: 3px;
             text-transform: uppercase;
             font-weight: 500;
             letter-spacing: 0.8px;
@@ -322,13 +322,13 @@ $blog_gutter: $gl-gutter;
             &:hover {
                 border-color: $color_primary;
                 background: $color_primary;
-                color: var(--customify-on-primary, #FFFFFF);
+                color: var(--customify-btn-on-primary, #FFFFFF);
             }
         }
         span {
             border-color: $color_primary;
             background: $color_primary;
-            color: var(--customify-on-primary, #FFFFFF);
+            color: var(--customify-btn-on-primary, #FFFFFF);
         }
     }
 }

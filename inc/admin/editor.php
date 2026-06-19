@@ -159,7 +159,6 @@ class Customify_Editor {
 		// Metabox compatibility (selectors stable in WP 6.x).
 		$css .= '.interface-interface-skeleton__footer { background: #FFF; }
 		.editor-styles-wrapper .wp-block-post-title { min-height: 0; }
-		.block-editor-page .editor-styles-wrapper button:not(.components-button) { background: none; }
 		.editor-styles-wrapper > .is-root-container > *:not(.alignfull):not(.alignwide) {
 			max-width: var(--wp--style--global--content-size, 780px);
 		}
@@ -195,8 +194,11 @@ class Customify_Editor {
 		//
 		// Single-post override: when editing a post, the user's
 		// single_blog_post_content_width Customizer setting (if saved) wins over
-		// the layout-derived size. Mirrors the frontend `body.single-post` rule
-		// (inc/customizer/configs/single-blog-post.php) so editor matches render.
+		// the layout-derived size. Mirrors the frontend override emitted by
+		// customify_single_post_content_size_css() (inc/template-functions.php),
+		// which re-emits `body.single-post` on the customify-layout-style handle
+		// AFTER the layout rule so it wins by source order — same saved-only
+		// gate as the `is_array` check below, so editor matches render.
 		//
 		// Live-reactive counterpart lives in src/backend/page-settings/index.js.
 		if ( $post_id ) {

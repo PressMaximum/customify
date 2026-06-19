@@ -480,7 +480,7 @@ if ( ! function_exists( 'customify_color_get_slots' ) ) {
 			'base'      => '#FFFFFF',
 			'surface'   => '#f9f9f9',
 			'text'      => '#2b2b2b',
-			'primary'   => '#235787',
+			'primary'   => '#0e7c7b',
 			'secondary' => '#c3512f',
 			'accent'    => '#FFD042',
 		);
@@ -734,6 +734,21 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$lines[] = "--customify-on-secondary: {$on_secondary}";
 		$lines[] = "--customify-on-accent: {$on_accent}";
 		$lines[] = "--customify-on-surface: {$on_surface}";
+		// Button label tokens — GATED on Palette opt-in. Theme buttons read
+		// `var(--customify-btn-on-{primary,secondary}, #fff)`, so the 30K
+		// legacy install base that never engaged the Palette panel falls back
+		// to the historical hard-coded white — a saved light brand color no
+		// longer silently flips button labels to black on update. Opt-in sites
+		// ALIAS the unconditional on-* tokens, so labels keep the WCAG-contrast
+		// auto-flip and the alias re-resolves live when the preview JS drives
+		// --customify-on-* during slot drags (no extra preview JS needed). The
+		// block brand-bg auto-wire (.has-X-background-color) and the Blocksify
+		// fill-button rule keep reading the raw unconditional on-* tokens — they
+		// are intentionally NOT gated (see colors-palette $on_primary rationale).
+		if ( $has_palette_opt_in ) {
+			$lines[] = '--customify-btn-on-primary: var(--customify-on-primary)';
+			$lines[] = '--customify-btn-on-secondary: var(--customify-on-secondary)';
+		}
 		// --customify-border emitted UNCONDITIONALLY since the Phase 2.13
 		// follow-up — see the $border resolution block above for the full
 		// rationale. The slot-derived default (`mix(text, base, 9%)`) gives
@@ -977,8 +992,8 @@ if ( ! function_exists( 'customify_color_palette_quickpick_js' ) ) {
 	// we treat it as 'no override' and apply the cascade-sync display.
 	// Mirrors the 'default' keys in inc/customizer/configs/colors.php.
 	var FIELD_DEFAULTS = {
-		'global_styling_color_link':         '#235787',
-		'global_styling_color_link_hover':   '#235787',
+		'global_styling_color_link':         '#0e7c7b',
+		'global_styling_color_link_hover':   '#0e7c7b',
 		'global_styling_color_heading':      '#2b2b2b',
 		'global_styling_color_w_title':      '#2b2b2b',
 		'global_styling_color_text':         '#2b2b2b'
@@ -1686,7 +1701,7 @@ if ( ! function_exists( 'customify_color_palette_preview_js' ) ) {
 	// (mirrors PHP slot resolver). Used by recomputeDerived() so a
 	// container update fires correctly even mid-drag of a non-source slot.
 	var SLOT_DEFAULTS = {
-		'global_styling_color_primary':   '#235787',
+		'global_styling_color_primary':   '#0e7c7b',
 		'global_styling_color_secondary': '#c3512f',
 		'customify_palette_accent':       '#FFD042',
 		'customify_palette_text':         '#2b2b2b',

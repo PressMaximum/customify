@@ -718,10 +718,16 @@ if (!Element.prototype.closest) {
                     var inputField = container.querySelector('.search-field');
                     if (!container.classList.contains('active')) {
                         container.classList.add('active');
-                        inputField.blur();
+                        // Auto-focus the field on open so the user can type
+                        // straight away. Focus synchronously (NOT via rAF —
+                        // rAF is suspended in background tabs, so the focus
+                        // would silently never fire); the `.active` rule sets
+                        // the wrapper to height:auto immediately, so the field
+                        // is focusable right away.
+                        inputField.focus();
                     } else {
                         this.removeClass(container, 'active');
-                        inputField.focus();
+                        inputField.blur();
                     }
                 };
 

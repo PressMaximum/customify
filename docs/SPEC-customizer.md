@@ -203,6 +203,9 @@ Universal keys (most types accept all of these):
 | `choices` | – | array | For `select` / `radio`: `array( 'value' => 'Label' )`. |
 | `placeholder` | – | string | For text/color inputs. |
 | `min` / `max` / `step` | – | int\|float | For `slider`. |
+| `units` | – | array | For `slider`, opt-in: `array( 'px' => array( 'min' => 1, 'max' => 120, 'step' => 1 ), 'em' => …, '-' => … )` renders a mini unit `<select>` with per-unit ranges (`-` = unitless sentinel, emits a bare number). Absent ⇒ legacy single-px markup, byte-identical. See [`SPEC-typography.md §3.1`](SPEC-typography.md). |
+| `display_defaults` | – | array | For `typography`, display-only: `array( sub_field => string \| array( 'desktop' => …, 'tablet' => …, 'mobile' => … ) )`. Feeds trigger previews, placeholders and slider handle seeding; never stored, never reaches the CSS generator. See [`SPEC-typography.md §3.3`](SPEC-typography.md). |
+| `popover_chrome` | – | bool | For `modal`, opt-in: render the styling-style per-tab trigger rows + floating popover instead of the pencil + accordion. Only for modals whose fields are style values (colors/border/background) — data-only modals (Display, Title & Tagline) must stay on the accordion. `styling` controls get the chrome unconditionally. |
 
 ---
 
@@ -228,7 +231,7 @@ All control classes live in `inc/customizer/controls/`. The `type` field picks t
 | `type` | Use case |
 |---|---|
 | `color` | Color picker |
-| `slider` | Numeric range with unit; supports `device_settings` |
+| `slider` | Numeric range with unit; supports `device_settings`. Opt-in multi-unit via the `units` config key (per-unit ranges, ×16 px↔em conversion on switch, `-` = unitless) — see §4.3; without `units` the legacy single-px markup is unchanged |
 | `image` | Media library picker filtered to images |
 | `video` | Media library picker filtered to video |
 | `media` | Media library picker (any type) |
@@ -246,14 +249,17 @@ All control classes live in `inc/customizer/controls/`. The `type` field picks t
 | `typography` | Composite: font + weight + size + line-height + letter-spacing. Renders as a single control with a dedicated CSS pipeline. **As of theme `0.4.19`**, only the foundation typography settings (`global_typography_base_p`, `global_typography_base_heading`, `global_typography_heading_h1`–`h6` — see `Customify_Customizer_Auto_CSS::TYPO_VAR_MAP`) emit `:root { --customify-typo-*: value }` CSS variables; leaf-global typography (site title, tagline, widget title) and per-component typography (header builder items, footer copyright, blog read-more, breadcrumb, WC cart) keep selector-scoped literal CSS. See [`SPEC-typography.md`](SPEC-typography.md) for var naming rules, the `customify/typography/field_uses_vars` route filter, and the SCSS consumer pattern. |
 | `css_ruler` | Margin / padding quad editor (`top right bottom left`). Stored as object. |
 | `shadow` | Box-shadow builder (x / y / blur / spread / color). |
+| `typography_presets` | Font-pair quick picks (grid of SVG cards). Chrome-only: clicking patches the family bits (font / font_type / variant) of the Body + Heading typography settings via their bound controls — its own setting is never written. Pairs declared in `customify_typography_presets()` ([typography.php](../inc/customizer/configs/typography.php)); preview families load in the controls frame via a glyph-subset css2 stylesheet. |
+
+**Typography control chrome (trigger + popover).** The `typography` control renders a select-like trigger row — `a.action--edit.customify-typo-trigger` with `.customify-trigger--family/--meta/--arrow` spans; the legacy `action--edit` class is preserved so the delegated click handler keeps working. The summary is painted only by JS (`renderTypoTrigger` in [`typography-control.js`](../src/backend/customizer/js/typography-control.js)): saved family (else `Inherit`/`Default` per the field's `fields` gating) plus `size / weight` (the weight slot renders only when the field offers a weight control), each part falling back to `display_defaults`. Clicking opens a floating popover (`.customify-modal-settings.is-open`, anchored under the trigger, flipping above via `is-above`; dismissed by capture-phase outside `mousedown`, capture-phase ESC, and window `blur` — clicks inside the preview iframe never reach the controls document; one popover at a time). The open-transition kick uses a forced synchronous reflow (`void el.offsetWidth`), **never `requestAnimationFrame`** — rAF does not fire in hidden tabs. The Select2 font picker attaches inside the popover row via `dropdownParent`. All of this is chrome-level: setting names, value shapes, sanitize and emitted CSS are unchanged. Styles live in [`_control.scss`](../src/backend/customizer/scss/_control.scss), scoped to `.customize-control-customify-typography` so the `styling`/`modal` accordions are untouched.
 
 ### 5.4 Compound controls
 
 | `type` | Use case |
 |---|---|
-| `styling` | Normal/Hover tabs combining color, background, border. Powers the global color groups. |
+| `styling` | Normal/Hover tabs combining color, background, border. Powers the global color groups. Renders per-tab trigger rows (saved-color swatches + one-word tail) opening a floating popover — same chrome as `typography`, applied unconditionally. |
 | `repeater` | Multi-item list with sub-`fields`. See §7. |
-| `modal` | Multi-tab modal hosting nested controls. See §7. |
+| `modal` | Multi-tab modal hosting nested controls. See §7. Style-data modals may opt into the trigger + popover chrome via `popover_chrome` (§4.3); data-only modals keep the pencil + accordion. |
 | `columns_settings` | Grid column ratio/gap editor. |
 | `row_layout` | Grid row layout — used by the Header/Footer Builder V1. |
 | `pro` | Upsell placeholder for paid-only features. |
@@ -581,6 +587,8 @@ The `'_visibility' => 'hidden'` value is treated specially — auto-CSS emits `d
 ### 7.2 Modal
 
 Use when one logical setting needs many sub-controls (e.g. styling = colors + borders + shadows in one button). Sub-fields are grouped into tabs; the saved value is an object keyed by sub-field name.
+
+Modals whose fields are pure style values can set `'popover_chrome' => true` to swap the pencil + accordion for the per-tab trigger rows + floating popover (theme adopters: `header_cover_bg`, the header/footer social-icons Custom Color and Border modals). The storage shape, `get()` serialization and CSS emit are identical either way — the flag is chrome-only.
 
 ```php
 array(

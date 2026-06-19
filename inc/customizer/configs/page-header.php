@@ -456,8 +456,9 @@ class Customify_Page_Header {
 			),
 
 			array(
-				'name'       => $name . '_bg',
-				'type'       => 'modal',
+				'name'           => $name . '_bg',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'    => $section,
 				'title'      => __( 'Color & Background', 'customify' ),
 				'selector'   => $selector,
@@ -644,7 +645,14 @@ class Customify_Page_Header {
 			'tagline'                    => '',
 			'image'                      => '',
 			'title_tag'                  => 'h1',
-			'force_display_single_title' => '', // Show || or hide.
+			// Inline single-title control consumed by display_page_title():
+			// '' = default rule (based on `display`), 'show' = force inline title,
+			// 'hide' = suppress inline title only (cover/titlebar still render their title).
+			'force_display_single_title' => '',
+			// When true, hide the title TEXT in cover/titlebar AND inline. Set by
+			// the per-post `_customify_disable_page_title` meta. Wrappers still render
+			// so the cover background image / titlebar breadcrumb area survive.
+			'disable_page_title'         => false,
 			'show_title'                 => false, // force show post title.
 			'shortcode'                  => false, // force show post title.
 			'cover_tagline'              => 1, // Display tagline in cover.
@@ -742,14 +750,36 @@ class Customify_Page_Header {
 			$args['display']   = $display['post'];
 			$args['title_tag'] = 'h2';
 
+			// Resolve per-post display meta UP FRONT so subsequent title
+			// gating (e.g. "hide inline to avoid duplicating the wrapper
+			// heading") sees the effective display mode for THIS post,
+			// not the global default. The is_using_post() block below
+			// re-applies the same meta — that's a harmless idempotent
+			// reassignment, not a duplicate code path.
+			$post_meta_display = get_post_meta( get_queried_object_id(), '_customify_page_header_display', true );
+			if ( $post_meta_display && 'default' !== $post_meta_display ) {
+				$args['display'] = ( 'normal' === $post_meta_display ) ? 'default' : $post_meta_display;
+			}
+
+			// Resolve the blog page once and defensively: only honour
+			// `page_for_posts` when it actually points to a published `page`.
+			// If the option holds a stale id (deleted page, or a non-page
+			// record such as an attachment id), treat it as unset — otherwise
+			// `get_the_title()` would echo an unrelated record (e.g. an
+			// attachment titled "logo1") as the cover/titlebar heading.
+			$blog_page_id = (int) get_option( 'page_for_posts' );
+			if ( $blog_page_id && 'page' !== get_post_type( $blog_page_id ) ) {
+				$blog_page_id = 0;
+			}
+
 			// Setup single post bg for cover.
 			if ( 'blog_page' == $advanced['post_bg'] ) {
-				$post_id           = get_option( 'page_for_posts' );
-				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+				$post_id           = $blog_page_id;
+				$post_thumbnail_id = $post_id ? get_post_thumbnail_id( $post_id ) : false;
 			} elseif ( 'featured' == $advanced['post_bg'] ) {
 				$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
 			} else {
-				$post_id = get_option( 'page_for_posts' );
+				$post_id = $blog_page_id;
 				if ( $post_id ) {
 					$post_thumbnail_id = get_post_thumbnail_id( get_the_ID() );
 				}
@@ -758,24 +788,57 @@ class Customify_Page_Header {
 			if ( 'none' != $args['display'] ) {
 
 				if ( 'blog_page' == $advanced['post_title_tagline'] ) {
-					$post_id                            = get_option( 'page_for_posts' );
+					$post_id                            = $blog_page_id;
 					$args['force_display_single_title'] = 'show';
+					if ( ! $post_id ) {
+						// Blog page invalid/unset. Respect the user's
+						// explicit "use blog page title" choice — do NOT
+						// substitute the current post's title (that would
+						// override their stated intent and silently turn this
+						// option into the 'current' option). Fall back to the
+						// Customizer "Title for single post" text only,
+						// otherwise leave the heading blank so the
+						// cover/titlebar renders without a misleading title.
+						if ( $titles['post'] || $taglines['post'] ) {
+							$args['title']   = $titles['post'];
+							$args['tagline'] = $taglines['post'];
+						}
+					}
 				} elseif ( 'current' == $advanced['post_title_tagline'] ) {
-					$post_id = get_the_ID();
-					if ( 'default' != $args['display'] ) {
+					$post_id = get_queried_object_id();
+					// Only hide inline when the cover/titlebar wrapper will
+					// actually show the title and duplicate it. Comparing to
+					// 'default' is unsafe here: $display['post'] may still be
+					// the unset '' sentinel, which becomes 'default' later via
+					// the bottom-of-function fallback. An empty value must
+					// behave like 'default' (inline mode).
+					if ( in_array( $args['display'], array( 'cover', 'titlebar' ), true ) ) {
 						$args['force_display_single_title'] = 'hide';
 					} else {
 						$args['force_display_single_title'] = 'show';
 					}
 					$args['title_tag'] = 'h1';
 				} else {
-					$post_id                            = get_option( 'page_for_posts' );
+					$post_id                            = $blog_page_id;
 					$args['force_display_single_title'] = 'show';
 					if ( ! $post_id ) {
-						$args['force_display_single_title'] = 'show';
 						if ( $titles['post'] || $taglines['post'] ) {
 							$args['title']   = $titles['post'];
 							$args['tagline'] = $taglines['post'];
+						} else {
+							// No (valid) blog page and no Customizer post
+							// title: fall back to the current post so the
+							// cover/titlebar shows something meaningful
+							// instead of an empty heading. Hide inline only
+							// when the cover/titlebar wrapper will actually
+							// render and duplicate the title — NOT when
+							// display is '' (the unset sentinel that the
+							// bottom-of-function fallback rewrites to
+							// 'default', i.e. inline mode).
+							$post_id = get_queried_object_id();
+							if ( in_array( $args['display'], array( 'cover', 'titlebar' ), true ) ) {
+								$args['force_display_single_title'] = 'hide';
+							}
 						}
 					}
 				}
@@ -917,7 +980,7 @@ class Customify_Page_Header {
 			// If Disable page title.
 			$disable = get_post_meta( $post_id, '_customify_disable_page_title', true );
 			if ( $disable ) {
-				$args['force_display_single_title'] = 'hide';
+				$args['disable_page_title'] = true;
 			}
 
 			// If has custom field custom title.
@@ -975,9 +1038,13 @@ class Customify_Page_Header {
 		} elseif ( 'cover' == $args['display'] || 'titlebar' == $args['display'] || 'none' == $args['display'] ) {
 			$show = false;
 		}
-		if ( 'hide' == $args['force_display_single_title'] ) {
+		// disable_page_title meta wins over everything: hide inline title too.
+		if ( ! empty( $args['disable_page_title'] ) ) {
+			return false;
+		}
+		if ( 'hide' === $args['force_display_single_title'] ) {
 			$show = false;
-		} elseif ( 'show' == $args['force_display_single_title'] ) {
+		} elseif ( 'show' === $args['force_display_single_title'] ) {
 			$show = true;
 		}
 
@@ -1008,7 +1075,7 @@ class Customify_Page_Header {
 				<?php
 				do_action( 'customify/page-cover/before' );
 
-				if ( Customify()->get_setting( 'header_cover_show_title' ) && 'hide' !== $args['force_display_single_title'] ) {
+				if ( Customify()->get_setting( 'header_cover_show_title' ) && empty( $args['disable_page_title'] ) ) {
 					if ( $args['title'] ) {
 						// WPCS: XSS ok.
 						echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
@@ -1031,10 +1098,6 @@ class Customify_Page_Header {
 	function render_titlebar( $args = array() ) {
 		$args = $this->get_settings();
 
-		if ( is_array( $args ) && isset( $args['force_display_single_title'] ) && $args['force_display_single_title'] != '' && 'hide' != trim( $args['force_display_single_title'] ) ) {
-			return;
-		}
-
 		ob_start();
 		/**
 		 * Hook titlebar before
@@ -1042,7 +1105,7 @@ class Customify_Page_Header {
 		do_action( 'customify/titlebar/before' );
 
 		// WPCS: XSS ok.
-		if ( Customify()->get_setting( 'titlebar_show_title' ) && 'hide' !== $args['force_display_single_title'] ) {
+		if ( Customify()->get_setting( 'titlebar_show_title' ) && empty( $args['disable_page_title'] ) ) {
 			if ( $args['title'] ) {
 				echo '<' . $args['title_tag'] . ' class="titlebar-title h4">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
 			}
@@ -1091,11 +1154,11 @@ class Customify_Page_Header {
 		}
 
 		// `_customify_disable_page_title` hides the title TEXT only, not the
-		// whole #page-cover / #page-titlebar wrapper. get_settings() already
-		// translates that meta into `force_display_single_title='hide'`, and
+		// whole #page-cover / #page-titlebar wrapper. get_settings() translates
+		// that meta into `$args['disable_page_title'] = true`, and
 		// render_cover()/render_titlebar() honour it to suppress just the
 		// title echo. Returning '' here would also hide the cover background
-		// image, which is a separate Customizer feature.
+		// image / titlebar breadcrumb strip, which are separate features.
 		if ( in_array( $args['display'], array( 'cover', 'titlebar', 'shortcode' ), true ) ) {
 			// Titlebar mode bails when there's no resolved title text. The
 			// titlebar buffer also collects auxiliary content via the

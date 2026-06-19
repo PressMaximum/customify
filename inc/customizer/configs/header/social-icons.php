@@ -175,7 +175,7 @@ class Customify_Builder_Item_Social_Icons {
 				'type'            => 'select',
 				'section'         => $section,
 				'selector'        => '.header-social-icons',
-				'default'         => 'circle',
+				'default'         => 'none',
 				'render_callback' => $fn,
 				'title'           => __( 'Shape', 'customify' ),
 				'choices'         => array(
@@ -191,7 +191,7 @@ class Customify_Builder_Item_Social_Icons {
 				'type'            => 'select',
 				'section'         => $section,
 				'selector'        => $this->selector,
-				'default'         => 'default',
+				'default'         => 'custom',
 				'render_callback' => $fn,
 				'title'           => __( 'Color', 'customify' ),
 				'choices'         => array(
@@ -201,8 +201,9 @@ class Customify_Builder_Item_Social_Icons {
 			),
 
 			array(
-				'name'       => $prefix . '_custom_color',
-				'type'       => 'modal',
+				'name'           => $prefix . '_custom_color',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'    => $section,
 				'selector'   => "{$this->selector} li a",
 				'required'   => array( $prefix . '_color_type', '==', 'custom' ),
@@ -249,8 +250,9 @@ class Customify_Builder_Item_Social_Icons {
 			),
 
 			array(
-				'name'        => $prefix . '_border',
-				'type'        => 'modal',
+				'name'           => $prefix . '_border',
+				'type'           => 'modal',
+				'popover_chrome' => true,
 				'section'     => $section,
 				'selector'    => "{$this->selector} li a",
 				'css_format'  => 'styling',

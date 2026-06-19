@@ -28,7 +28,7 @@
 				{
 					"slug": "primary",
 					"name": "Primary",
-					"color": "#235787"
+					"color": "#0e7c7b"
 				},
 				{
 					"slug": "secondary",
@@ -126,7 +126,7 @@
 			},
 			"core/image": {
 				"lightbox": {
-					"enabled": true,
+					"enabled": false,
 					"allowEditing": true
 				}
 			},

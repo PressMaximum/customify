@@ -1,3 +1,22 @@
+= 0.4.21 =
+* NEW: Buttons & Form Fields Customizer section with modernized default style, teal brand color, and refreshed social icons.
+* NEW: Typography presets — font-pair quick picks with native tooltips.
+* NEW: Multi-unit typography sliders (px, em, rem, unitless).
+* NEW: Display-only typography defaults — shown in the UI, not written to theme_mod until edited.
+* NEW: Live Style Guide page in the Customizer preview; pencil icons open the matching control popover.
+* NEW: Floating "popover chrome" UI for typography, styling (per-tab Normal/Hover), cover background, and social icon modals.
+* IMPROVED: Customizer trigger row and slider polish — value row layout, 4px radius, refined triggers and swatches.
+* IMPROVED: Search field outline softened and form fields gain subtle inset depth.
+* FIXED: Page Header cover/titlebar leaking unrelated content when `page_for_posts` points to an invalid record; titlebar restored on the default single-post case (refs #426).
+* FIXED: Single Blog Post Width ignored on no-sidebar posts (saved sites only; live-preview supported).
+* FIXED: Button text turning black on sites with light Primary/Secondary that hadn't opted into Palette tokens.
+* FIXED: Core image lightbox forced on after update — restored to opt-in default.
+* FIXED: WooCommerce block cart quantity stepper +/- inheriting theme button hover/focus.
+* FIXED: Blog grid class no longer applied when all responsive breakpoints are 1 column.
+* FIXED: Core list block — vertical-only margin; dropped auto horizontal centering.
+* FIXED: Redundant tablet horizontal padding override on `.footer--row-inner`.
+* FIXED: Customizer Site Icon label clarified; saved font weight roundtrip is lossless.
+
 = 0.4.20 =
 * IMPROVED: Typography output streamlined — body and heading tokens shared across related elements, less redundant CSS.
 * FIXED: Header top row light skin background now applies correctly (was stuck on Primary color).

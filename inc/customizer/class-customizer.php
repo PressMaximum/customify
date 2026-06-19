@@ -338,7 +338,7 @@ class  Customify_Customizer {
 						}
 
 						if ( isset( $f['fields'] ) ) {
-							if ( ! in_array( $f['type'], array( 'typography', 'styling', 'modal' ) ) ) { //phpcs:ignore
+							if ( ! in_array( $f['type'], array( 'typography', 'typography_presets', 'styling', 'modal' ) ) ) { //phpcs:ignore
 								$types = wp_list_pluck( $f['fields'], 'type' );
 								if ( in_array( 'icon', $types ) ) { //phpcs:ignore
 									self::$has_icon = true;
@@ -538,23 +538,71 @@ class  Customify_Customizer {
 				'type'  => 'checkboxes',
 				'label' => __( 'Font Languages', 'customify' ),
 			),
+			// `units` opts a slider into the multi-unit UI (a mini select
+			// next to the value input — see class-control-slider.php).
+			// Keys are the STORED `unit` strings; `-` is the unitless
+			// sentinel (setup_slider emits the bare number — used for
+			// line-height multipliers). Each unit carries its own slider
+			// range. Top-level min/max/step stay as the px fallback.
+			//
+			// Saved-data safety: the stored shape is unchanged
+			// ({value, unit} per device). Every existing value carries
+			// 'px' (the UI never offered anything else) and keeps
+			// rendering identically; a non-px unit is only ever written
+			// when the user explicitly picks it. The emit pipeline
+			// (setup_slider PHP + JS) already concatenates value+unit, so
+			// no output change for existing data.
 			array(
 				'name'            => 'font_size',
 				'type'            => 'slider',
 				'label'           => __( 'Font Size', 'customify' ),
 				'device_settings' => true,
-				'min'             => 9,
-				'max'             => 80,
+				'min'             => 1,
+				'max'             => 120,
 				'step'            => 1,
+				'units'           => array(
+					'px'  => array(
+						'min'  => 1,
+						'max'  => 120,
+						'step' => 1,
+					),
+					'em'  => array(
+						'min'  => 0.1,
+						'max'  => 10,
+						'step' => 0.01,
+					),
+					'rem' => array(
+						'min'  => 0.1,
+						'max'  => 10,
+						'step' => 0.01,
+					),
+				),
 			),
 			array(
 				'name'            => 'line_height',
 				'type'            => 'slider',
 				'label'           => __( 'Line Height', 'customify' ),
 				'device_settings' => true,
-				'min'             => 9,
-				'max'             => 80,
+				'min'             => 1,
+				'max'             => 120,
 				'step'            => 1,
+				'units'           => array(
+					'px' => array(
+						'min'  => 1,
+						'max'  => 120,
+						'step' => 1,
+					),
+					'em' => array(
+						'min'  => 0.1,
+						'max'  => 5,
+						'step' => 0.01,
+					),
+					'-'  => array(
+						'min'  => 0.1,
+						'max'  => 5,
+						'step' => 0.01,
+					),
+				),
 			),
 			array(
 				'name'  => 'letter_spacing',
@@ -563,6 +611,18 @@ class  Customify_Customizer {
 				'min'   => - 10,
 				'max'   => 10,
 				'step'  => 0.1,
+				'units' => array(
+					'px' => array(
+						'min'  => -10,
+						'max'  => 10,
+						'step' => 0.1,
+					),
+					'em' => array(
+						'min'  => -1,
+						'max'  => 1,
+						'step' => 0.01,
+					),
+				),
 			),
 			array(
 				'name'    => 'style',
@@ -1045,6 +1105,7 @@ class  Customify_Customizer {
 			'hidden',
 			'heading',
 			'typography',
+			'typography_presets',
 			'modal',
 			'styling',
 			'hr',
@@ -1332,10 +1393,13 @@ class  Customify_Customizer {
 				'panels'   => array(
 					// Colors is a top-level SECTION (not a panel) — the
 					// get_section() fallback in register_panel_groups() positions
-					// it deterministically (priority 60) as the first entry here.
+					// it (and the Buttons & Form Fields section) by list order:
+					// 'customify_colors' (priority 60), 'typography_panel' (70),
+					// then 'customify_buttons_forms' (80, below Typography).
 					// Replaces the now-removed empty `styling_panel`.
 					'customify_colors',
 					'typography_panel',
+					'customify_buttons_forms',
 				),
 			),
 			'layouts'         => array(

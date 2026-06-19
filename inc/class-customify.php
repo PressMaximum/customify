@@ -260,7 +260,7 @@ class Customify
 				array(
 					'name'  => __( 'Primary', 'customify' ),
 					'slug'  => 'primary',
-					'color' => '#235787',
+					'color' => '#0e7c7b',
 				),
 				array(
 					'name'  => __( 'Secondary', 'customify' ),
@@ -457,6 +457,15 @@ class Customify
 		wp_register_style( 'customify-layout-style', false, array(), self::$version );
 		wp_enqueue_style( 'customify-layout-style' );
 		wp_add_inline_style( 'customify-layout-style', customify_layout_content_size_css() );
+		// "Post Content Max Width" override: emitted on the SAME handle, AFTER
+		// the layout rule, so for a no-sidebar single post `body.single-post`
+		// (equal specificity to `body.main-layout-content`) wins by source
+		// order. Gated on an explicit save inside the function, so the 30K
+		// install base that never touched the slider keeps the layout-derived
+		// width; the Customizer live-preview <style> still loads later and wins.
+		if ( function_exists( 'customify_single_post_content_size_css' ) ) {
+			wp_add_inline_style( 'customify-layout-style', customify_single_post_content_size_css() );
+		}
 		wp_localize_script(
 			'customify-themejs',
 			'Customify_JS',
@@ -488,6 +497,8 @@ class Customify
 			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/color-palette-switcher.php',
 			// Palettes UI (presets + custom palettes) at the top of the Colors section.
+			'/inc/style-guide.php',
+			// Customizer Style Guide: live specimen page in the preview + header toggle.
 			'/inc/extras.php',
 			// Custom functions that act independently of the theme templates.
 			'/inc/element-classes.php',
@@ -578,6 +589,7 @@ class Customify
 			'page-header',
 			'background',
 			'colors',
+			'buttons-forms',
 			'compatibility',
 			// Header Builder Panel.
 			'header/transparent',

@@ -18,6 +18,28 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 
 	public $setting_type = 'group';
 	public $fields = array();
+
+	/**
+	 * Display-only defaults for composite controls (typography): fills the
+	 * trigger preview + empty popover inputs' placeholders with the
+	 * effective CSS fallback values. Never written to the setting, never
+	 * consumed by the CSS generator. Shape: sub-field name => string, or
+	 * a {desktop, tablet, mobile} map for device-scoped sub-fields.
+	 *
+	 * @var array
+	 */
+	public $display_defaults = array();
+
+	/**
+	 * Opt-in trigger + popover chrome for modal-type controls. The styling
+	 * type gets the chrome wholesale; modal controls hold arbitrary data,
+	 * so only controls whose fields are style values should set
+	 * `'popover_chrome' => true` in their config — data-only modals keep
+	 * the legacy pencil + accordion.
+	 *
+	 * @var bool
+	 */
+	public $popover_chrome = false;
 	public $choices = array();
 	public $default = null;
 	public $default_value = null;
@@ -108,14 +130,16 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 		}
 		$this->json['value'] = $value;
 
-		$this->json['_pro']           = class_exists( 'Customify_Pro' );
-		$this->json['default']        = $this->default_value;
-		$this->json['placeholder']    = $this->placeholder;
-		$this->json['fields']         = $this->fields;
-		$this->json['setting_type']   = $this->setting_type;
-		$this->json['required']       = $this->required;
-		$this->json['devices']        = $this->devices;
-		$this->json['reset_controls'] = $this->reset_controls;
+		$this->json['_pro']             = class_exists( 'Customify_Pro' );
+		$this->json['default']          = $this->default_value;
+		$this->json['placeholder']      = $this->placeholder;
+		$this->json['fields']           = $this->fields;
+		$this->json['display_defaults'] = $this->display_defaults;
+		$this->json['popover_chrome']   = $this->popover_chrome;
+		$this->json['setting_type']     = $this->setting_type;
+		$this->json['required']         = $this->required;
+		$this->json['devices']          = $this->devices;
+		$this->json['reset_controls']   = $this->reset_controls;
 
 		if ( $this->no_setup ) {
 			return;
@@ -283,6 +307,10 @@ class Customify_Customizer_Control_Base extends WP_Customize_Control {
 				'ajax'             => admin_url( 'admin-ajax.php' ),
 				'is_rtl'           => is_rtl(),
 				'theme_default'    => __( 'Theme Default', 'customify' ),
+				'inherit'          => __( 'Inherit', 'customify' ),
+				// Short label for the trigger preview (the in-popover font
+				// select keeps the longer "Theme Default" option text).
+				'default_label'    => __( 'Default', 'customify' ),
 				'reset'            => __( 'Reset this section settings', 'customify' ),
 				'untitled'         => __( 'Untitled', 'customify' ),
 				'confirm_reset'    => __( 'Do you want to reset this section settings?', 'customify' ),

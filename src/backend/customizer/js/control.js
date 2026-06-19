@@ -3,6 +3,8 @@ import { observeAndMount as observeAndMountColumnsSettings } from './controls/co
 // Typography control split out into its own file for readability;
 // still bundled into this entry, still called inside IIFE 2 below.
 import { setupTypographyControl } from './typography-control';
+import { setupTypographyPresets } from './typography-presets';
+import { attachPopoverChrome } from './popover-chrome';
 
 (function (api) {
 	// Extends our custom "example-1" section.
@@ -807,13 +809,18 @@ import { setupTypographyControl } from './typography-control';
 
 					break;
 				case "slider":
+					// Multi-unit sliders render the unit as a <select>;
+					// legacy sliders keep the hidden checked radio. Read
+					// whichever exists so saved units round-trip exactly.
 					if (support_devices) {
 						value = {};
 						_.each(control.allDevices, function (device) {
 							var _name = name + "-" + device;
 							value[device] = {
 								unit: $(
-									'input[data-name="' +
+									'select[data-name="' +
+									_name +
+									'-unit"], input[data-name="' +
 									_name +
 									'-unit"]:checked',
 									$field
@@ -827,7 +834,11 @@ import { setupTypographyControl } from './typography-control';
 					} else {
 						value = {
 							unit: $(
-								'input[data-name="' + name + '-unit"]:checked',
+								'select[data-name="' +
+								name +
+								'-unit"], input[data-name="' +
+								name +
+								'-unit"]:checked',
 								$field
 							).val(),
 							value: $(
@@ -1718,7 +1729,26 @@ import { setupTypographyControl } from './typography-control';
 						step = 1;
 					}
 
+					// Display-only handle seeding: with no saved value, park
+					// the handle at the field's placeholder (the effective
+					// CSS default) so the user starts dragging from the
+					// documented starting point. Programmatic .slider("value")
+					// does NOT fire `slide`, so the input stays empty and
+					// nothing is saved until the user actually interacts.
+					var seedHandle = function () {
+						var ph = parseFloat(input.attr("placeholder"));
+						if (!isNaN(ph)) {
+							slider.slider("value", ph);
+						}
+					};
+
 					var current_val = input.val();
+					if ("" === current_val) {
+						var _ph = parseFloat(input.attr("placeholder"));
+						if (!isNaN(_ph)) {
+							current_val = _ph;
+						}
+					}
 					slider.slider({
 						range: "min",
 						value: current_val,
@@ -1731,6 +1761,13 @@ import { setupTypographyControl } from './typography-control';
 					});
 
 					input.on("change", function () {
+						if ("" === $(this).val()) {
+							// Cleared (or never set) — fall back to the
+							// placeholder starting point instead of
+							// dropping the handle to the range minimum.
+							seedHandle();
+							return;
+						}
 						slider.slider("value", $(this).val());
 					});
 
@@ -1750,16 +1787,131 @@ import { setupTypographyControl } from './typography-control';
 
 						$(".customify--slider-input", wrapper).val(d.value);
 						slider.slider("option", "value", d.value);
-						$(
-							'.customify--css-unit input.customify-input[value="' +
-							d.unit +
-							'"]',
+						var $unitSelect = $(
+							".customify--unit-select",
 							wrapper
-						).trigger("click");
+						);
+						if ($unitSelect.length) {
+							var targetUnit = d.unit || "px";
+							// No default VALUE → reset = pristine state:
+							// re-derive the unit from the display default
+							// (the same rule the template applies on first
+							// render) so the seeded handle lands on e.g.
+							// 2.1em — not 2.1 on the px scale, which reads
+							// as zero.
+							if (
+								_.isUndefined(d.value) ||
+								null === d.value ||
+								"" === d.value
+							) {
+								var phm = String(
+									input.attr("placeholder") || ""
+								).match(/^-?[0-9.]+\s*([a-z%]+)?$/i);
+								var pranges = slider.data("units");
+								if (phm && _.isObject(pranges)) {
+									var pu = phm[1]
+										? phm[1].toLowerCase()
+										: "-";
+									if (pranges[pu]) {
+										targetUnit = pu;
+									}
+								}
+							}
+							// Restore via the select — re-ranges through
+							// its own change handler below.
+							$unitSelect.val(targetUnit).trigger("change");
+						} else {
+							$(
+								'.customify--css-unit input.customify-input[value="' +
+								d.unit +
+								'"]',
+								wrapper
+							).trigger("click");
+						}
 						$(".customify--slider-input", wrapper).trigger(
 							"change"
 						);
 					});
+
+					// Multi-unit slider: `data-units` maps unit =>
+					// {min, max, step} (see `units` in get_typo_fields()).
+					// Switching the unit re-ranges the slider + number
+					// input and clamps the current value into the new
+					// range. Saved shape stays {value, unit} — a unit is
+					// only written when the user actively changes it. An
+					// unknown saved unit (rendered as its own option for
+					// lossless round-trip) has no range entry: keep the
+					// current range untouched.
+					var unitRanges = slider.data("units");
+					var $unitSelect = $(".customify--unit-select", wrapper);
+					if (_.isObject(unitRanges) && $unitSelect.length) {
+						// Track the outgoing unit so a switch can CONVERT
+						// the current number instead of reusing it raw —
+						// 2.42em becomes ≈39px, not a near-zero 2.42px.
+						$unitSelect.data("prevUnit", $unitSelect.val());
+						// px-equivalence factors. em/rem/unitless treat
+						// 1 ≈ 16px — an approximation, but it keeps the
+						// value in the same visual ballpark on switch.
+						// Conversion only runs on an explicit user unit
+						// change with a non-empty value, through the
+						// normal save path — never silently on load.
+						var UNIT_PX_FACTOR = {
+							px: 1,
+							em: 16,
+							rem: 16,
+							"-": 16
+						};
+						$unitSelect.on("change", function () {
+							var next = $(this).val();
+							var prev = $(this).data("prevUnit");
+							$(this).data("prevUnit", next);
+							var r = unitRanges[next];
+							if (!_.isObject(r)) {
+								return;
+							}
+							var rMin = parseFloat(r.min);
+							var rMax = parseFloat(r.max);
+							var rStep = parseFloat(r.step);
+							slider.slider("option", {
+								min: rMin,
+								max: rMax,
+								step: rStep
+							});
+							input.attr({
+								min: rMin,
+								max: rMax,
+								step: rStep
+							});
+							var v = input.val();
+							if (v !== "") {
+								v = parseFloat(v);
+								if (
+									prev !== next &&
+									UNIT_PX_FACTOR[prev] &&
+									UNIT_PX_FACTOR[next]
+								) {
+									v =
+										(v * UNIT_PX_FACTOR[prev]) /
+										UNIT_PX_FACTOR[next];
+									v =
+										"px" === next
+											? Math.round(v)
+											: Math.round(v * 100) / 100;
+								}
+								var clamped = Math.min(
+									Math.max(v, rMin),
+									rMax
+								);
+								input.val(clamped);
+								slider.slider("value", clamped);
+							}
+							// Persist the new unit: the select itself is
+							// `.change-by-js` (ignored by the standalone
+							// control's save delegate); the number input
+							// is not — its change reaches every context.
+							input.trigger("change");
+						});
+					}
 				});
 			}
 		},
@@ -2020,6 +2172,10 @@ import { setupTypographyControl } from './typography-control';
 			} finally {
 				control._customifyRefreshing = false;
 			}
+
+			// Chrome hooks (e.g. the typography trigger preview) re-render
+			// from the freshly painted DOM on this event.
+			control.container.trigger("customify/control/refreshed");
 		},
 		addParamsURL: function (url, data) {
 			if (!$.isEmptyObject(data)) {
@@ -2791,6 +2947,7 @@ import { setupTypographyControl } from './typography-control';
 	};
 
 	var typoControl = setupTypographyControl({ $: $, $document: $document, wpcustomize: wpcustomize, customifyField: customifyField });
+	var typoPresets = setupTypographyPresets({ $: $, $document: $document, wpcustomize: wpcustomize });
 	var FontSelector = typoControl.FontSelector;
 	var intTypos = typoControl.intTypos;
 
@@ -2804,6 +2961,10 @@ import { setupTypographyControl } from './typography-control';
 		$el: null,
 		container: null,
 		controlID: "",
+		// True when the control opted into the trigger + popover chrome
+		// via `'popover_chrome' => true` (style-data modals only).
+		chrome: false,
+		activeTab: "",
 		addFields: function (values) {
 			var that = this;
 			if (!_.isObject(that.values)) {
@@ -2908,11 +3069,92 @@ import { setupTypographyControl } from './typography-control';
 				.eq(0)
 				.trigger("click");
 
-			this.container.slideUp(0);
+			// Chrome'd modals float as a popover (visibility-driven CSS)
+			// — an inline display:none from slideUp would keep the panel
+			// invisible even with is-open set.
+			if (!this.chrome) {
+				this.container.slideUp(0);
+			}
+		},
+
+		// ── Popover chrome (popover_chrome modals only) ────────────────
+		// Same per-tab trigger rows as the styling control; the only
+		// difference is where the field definitions live — the control's
+		// own config instead of the resolved global styling_config.
+		fieldsFor: function (key) {
+			return this.config[key + "_fields"];
+		},
+
+		visibleTabs: function () {
+			var that = this;
+			that.config = _.defaults(that.config || {}, { tabs: {} });
+			var out = [];
+			_.each(that.config.tabs, function (label, key) {
+				if (
+					label &&
+					_.isObject(that.config[key + "_fields"]) &&
+					!_.isEmpty(that.config[key + "_fields"])
+				) {
+					out.push({ key: key, label: label });
+				}
+			});
+			return out;
+		},
+
+		ensurePanel: function () {
+			var that = this;
+			that.$el.addClass("customify-modal--inside");
+			if (!$(".customify-modal-settings", that.$el).length) {
+				var $wrap = $($("#tmpl-customify-modal-settings").html());
+				that.container = $wrap;
+				that.$el.append($wrap);
+				that.addFields();
+			} else {
+				that.container = $(".customify-modal-settings", that.$el);
+			}
+		},
+
+		selectTab: function (key) {
+			var that = this;
+			that.activeTab = key;
+			$(
+				'.modal--tab[data-tab="' + key + '"]',
+				that.container
+			).trigger("click");
+			$(".customify-styling-trigger", that.$el)
+				.removeClass("is-open")
+				.filter('[data-tab="' + key + '"]')
+				.addClass("is-open");
+		},
+
+		// Chrome counterpart of open(): popover anchored under the `tab`
+		// trigger row — toggle on the open row, switch on a sibling row.
+		openTab: function (tab) {
+			var that = this;
+			var isOpen = "opening" === that.$el.attr("data-opening");
+			if (isOpen && tab === that.activeTab) {
+				that.closePopover();
+				return;
+			}
+
+			that.values = $(
+				".customify-hidden-modal-input",
+				that.$el
+			).val();
+			try {
+				that.values = JSON.parse(that.values);
+			} catch (e) { }
+			that.ensurePanel();
+			that.selectTab(tab);
+			that.openPopover();
 		},
 
 		close: function () {
 			var that = this;
+			if (that.chrome) {
+				that.closePopover();
+				return;
+			}
 			that.container.slideUp(300, function () {
 				that.$el.removeClass("modal--opening");
 				that.$el.attr("data-opening", "");
@@ -2922,6 +3164,29 @@ import { setupTypographyControl } from './typography-control';
 
 		reset: function () {
 			var that = this;
+
+			if (that.chrome) {
+				// Mirror the styling reset: rebuild from the default and
+				// keep the popover open for continuity.
+				var wasOpen = "opening" === that.$el.attr("data-opening");
+				$(".customify-modal-settings", that.$el).remove();
+				try {
+					that.values = wpcustomize.control(that.controlID).params
+						.default;
+				} catch (e) {
+					that.values = {};
+				}
+				that.ensurePanel();
+				$(".customify-hidden-modal-input", that.$el)
+					.val(JSON.stringify(that.values))
+					.trigger("change");
+				if (wasOpen) {
+					that.selectTab(that.activeTab);
+					that.openPopover();
+				}
+				return;
+			}
+
 			$(".customify-modal-settings", that.$el).remove();
 			try {
 				var _default = wpcustomize.control(that.controlID).params
@@ -3016,36 +3281,161 @@ import { setupTypographyControl } from './typography-control';
 		}
 	};
 
+	// Popover lifecycle for popover_chrome modals — same shared chrome as
+	// styling/typography (one popover at a time across all three). The
+	// methods are inert for legacy modals: only openTab()/the chrome
+	// branches ever call them.
+	attachPopoverChrome(customifyModal, {
+		$: $,
+		anchor: function (that) {
+			return $(
+				'.customify-styling-trigger[data-tab="' +
+				that.activeTab +
+				'"]',
+				that.$el
+			);
+		},
+		onClose: function (that) {
+			$(".customify-styling-trigger", that.$el).removeClass(
+				"is-open"
+			);
+		}
+	});
+
 	var initModalControls = {};
+
+	// Create (or fetch) the runtime for a modal control li. Mirrors the
+	// legacy lazy click-init, but also runs at batch-init time so
+	// chrome'd controls paint their trigger rows before any interaction.
+	var modalRuntime = function ($el) {
+		var controlID = ($el.attr("id") || "").replace(
+			/^customize-control-/,
+			""
+		);
+		if (!controlID) {
+			return null;
+		}
+		if (!_.isUndefined(initModalControls[controlID])) {
+			return initModalControls[controlID];
+		}
+		var c = wpcustomize.control(controlID);
+		if (_.isUndefined(c)) {
+			return null;
+		}
+		var m = _.clone(customifyModal);
+		m.config = c.params.fields;
+		m.chrome = !!c.params.popover_chrome;
+		m.$el = $el;
+		m.controlID = controlID;
+		if (m.chrome) {
+			// Scope hook for the popover/trigger CSS — keeps legacy
+			// modals (no flag, accordion) out of the chrome styles.
+			$el.addClass("customify-popover-chrome");
+		}
+		initModalControls[controlID] = m;
+		return m;
+	};
+
 	var initModal = function () {
+		// Legacy pencil / header toggle — chrome'd controls render no
+		// .action--edit, so this only ever fires for accordion modals.
 		$document.on(
 			"click",
-			".customize-control-customify-modal .action--edit, .customize-control-customify-modal .action--reset, .customize-control-customify-modal .customify-control-field-header",
+			".customize-control-customify-modal .action--edit, .customize-control-customify-modal .customify-control-field-header",
 			function (e) {
 				e.preventDefault();
-				var controlID = $(this).attr("data-control") || "";
-				if (_.isUndefined(initModalControls[controlID])) {
-					var c = wpcustomize.control(controlID);
-					if (controlID && !_.isUndefined(c)) {
-						var m = _.clone(customifyModal);
-						m.config = c.params.fields;
-						m.$el = $(this)
-							.closest(".customize-control-customify-modal")
-							.eq(0);
-						m.controlID = controlID;
-						initModalControls[controlID] = m;
-					}
-				}
-
-				if (!_.isUndefined(initModalControls[controlID])) {
-					if ($(this).hasClass("action--reset")) {
-						initModalControls[controlID].reset();
-					} else {
-						initModalControls[controlID].open();
-					}
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && !m.chrome) {
+					m.open();
 				}
 			}
 		);
+
+		$document.on(
+			"click",
+			".customize-control-customify-modal .action--reset",
+			function (e) {
+				e.preventDefault();
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m) {
+					m.reset();
+				}
+			}
+		);
+
+		// Chrome trigger rows: open that row's tab in the popover.
+		$document.on(
+			"click",
+			".customize-control-customify-modal .customify-styling-trigger",
+			function (e) {
+				e.preventDefault();
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && m.chrome) {
+					m.openTab($(this).attr("data-tab") || "");
+				}
+			}
+		);
+
+		// Repaint chrome'd rows on every value round-trip.
+		$document.on(
+			"change data-change",
+			".customize-control-customify-modal .customify-hidden-modal-input",
+			function () {
+				var m = modalRuntime(
+					$(this)
+						.closest(".customize-control-customify-modal")
+						.eq(0)
+				);
+				if (m && m.chrome) {
+					ensureStylingRows(m);
+					paintStylingRows(m);
+				}
+			}
+		);
+
+		// External setting write → the field DOM (trigger rows included)
+		// was re-rendered and the parked panel is stale — drop it so the
+		// next open rebuilds from the fresh value.
+		$document.on(
+			"customify/control/refreshed",
+			".customize-control-customify-modal",
+			function () {
+				var m = modalRuntime($(this));
+				if (!m || !m.chrome) {
+					return;
+				}
+				if ("opening" === m.$el.attr("data-opening")) {
+					m.closePopover();
+				}
+				$(".customify-modal-settings", m.$el).remove();
+				m.container = null;
+				m.$el.addClass("customify-popover-chrome");
+				ensureStylingRows(m);
+				paintStylingRows(m);
+			}
+		);
+
+		// First paint for chrome'd modals — controls are batch-initialized
+		// at document.ready before initModal() runs.
+		$(".customize-control-customify-modal").each(function () {
+			var m = modalRuntime($(this));
+			if (m && m.chrome) {
+				ensureStylingRows(m);
+				paintStylingRows(m);
+			}
+		});
 	};
 
 	//---------------------------------------------------------------------------
@@ -3060,6 +3450,7 @@ import { setupTypographyControl } from './typography-control';
 		controlID: "",
 		$el: "",
 		contailner: "",
+		activeTab: "",
 		setupFields: function (fields, list) {
 			var newfs;
 			var i;
@@ -3195,21 +3586,72 @@ import { setupTypographyControl } from './typography-control';
 			$(".modal--tabs .modal--tab", that.container)
 				.eq(0)
 				.trigger("click");
+		},
 
-			this.container.slideUp(0);
+		// Tabs that actually render: label truthy (false/null disables
+		// the tab) and a non-empty resolved field list — mirrors the
+		// addFields() loop, so trigger rows and tab contents always
+		// agree.
+		visibleTabs: function () {
+			var that = this;
+			var out = [];
+			_.each(that.tabs, function (label, key) {
+				if (label && !_.isEmpty(that[key + "_fields"])) {
+					out.push({ key: key, label: label });
+				}
+			});
+			return out;
+		},
+
+		// Resolved field list for a tab — the styling type resolves
+		// against the global styling_config in setupConfig().
+		fieldsFor: function (key) {
+			return this[key + "_fields"];
+		},
+
+		// Build the floating panel once (lazily, exactly like the legacy
+		// accordion did on first open) or re-acquire it after a rebuild.
+		ensurePanel: function () {
+			var that = this;
+			that.$el.addClass("customify-modal--inside");
+			if (!$(".customify-modal-settings", that.$el).length) {
+				var $wrap = $($("#tmpl-customify-modal-settings").html());
+				that.container = $wrap;
+				that.$el.append($wrap);
+				that.addFields();
+			} else {
+				that.container = $(".customify-modal-settings", that.$el);
+			}
+		},
+
+		// Show one tab's fields inside the popover. The legacy tab bar is
+		// still built (hidden by CSS under the trigger chrome) —
+		// re-triggering its click handler keeps the tab--active
+		// bookkeeping, and with it get(), untouched.
+		selectTab: function (key) {
+			var that = this;
+			that.activeTab = key;
+			$(
+				'.modal--tab[data-tab="' + key + '"]',
+				that.container
+			).trigger("click");
+			$(".customify-styling-trigger", that.$el)
+				.removeClass("is-open")
+				.filter('[data-tab="' + key + '"]')
+				.addClass("is-open");
 		},
 
 		close: function () {
-			var that = this;
-			that.container.slideUp(300, function () {
-				that.$el.removeClass("modal--opening");
-				that.$el.attr("data-opening", "");
-				$(".action--reset", that.$el).hide();
-			});
+			this.closePopover();
 		},
 
 		reset: function () {
 			var that = this;
+
+			// Reset is only reachable while the popover is open (the
+			// button is hidden otherwise) — rebuilding removes the panel,
+			// so re-open it afterwards for continuity.
+			var wasOpen = "opening" === that.$el.attr("data-opening");
 
 			$(".customify-modal-settings", that.$el).remove();
 			try {
@@ -3219,21 +3661,14 @@ import { setupTypographyControl } from './typography-control';
 			} catch (e) {
 				that.values = {};
 			}
-			if (!$(".customify-modal-settings", that.$el).length) {
-				var $wrap = $($("#tmpl-customify-modal-settings").html());
-				that.container = $wrap;
-				that.$el.append($wrap);
-				that.addFields();
-			} else {
-				that.container = $(".customify-modal-settings", that.$el);
-			}
-
-			that.$el.addClass("customify-modal--inside");
-			that.$el.addClass("modal--opening");
-			that.container.show(0);
+			that.ensurePanel();
 			$(".customify-hidden-modal-input", that.$el)
 				.val(JSON.stringify(that.values))
 				.trigger("change");
+			if (wasOpen) {
+				that.selectTab(that.activeTab);
+				that.openPopover();
+			}
 		},
 
 		get: function () {
@@ -3268,91 +3703,442 @@ import { setupTypographyControl } from './typography-control';
 			return data;
 		},
 
-		open: function () {
+		// Open the popover anchored under the `tab` trigger row — or
+		// close it when that row's popover is already open (the trigger
+		// is a toggle). Clicking a sibling row while open just switches
+		// the visible tab and re-anchors; the panel itself stays open.
+		open: function (tab) {
 			var that = this;
-			var status = that.$el.attr("data-opening") || false;
-			if (status !== "opening") {
-				that.$el.attr("data-opening", "opening");
-
-				that.values = $(
-					".customify-hidden-modal-input",
-					that.$el
-				).val();
-				try {
-					that.values = JSON.parse(that.values);
-				} catch (e) { }
-				that.$el.addClass("customify-modal--inside");
-				if (!$(".customify-modal-settings", that.$el).length) {
-					var $wrap = $($("#tmpl-customify-modal-settings").html());
-					$wrap.hide();
-					that.container = $wrap;
-					that.$el.append($wrap);
-					that.addFields();
-				} else {
-					that.container = $(".customify-modal-settings", that.$el);
-				}
-
-				this.container.slideDown(300);
-				that.$el.addClass("modal--opening");
-				$(".action--reset", that.$el).show();
-			} else {
-				that.container.slideUp(300, function () {
-					that.$el.attr("data-opening", "");
-					$(".customify-modal-settings", that.$el).hide();
-					that.$el.removeClass("modal--opening");
-					$(".action--reset", that.$el).hide();
-				});
+			var isOpen = "opening" === that.$el.attr("data-opening");
+			if (isOpen && tab === that.activeTab) {
+				that.closePopover();
+				return;
 			}
+
+			that.values = $(
+				".customify-hidden-modal-input",
+				that.$el
+			).val();
+			try {
+				that.values = JSON.parse(that.values);
+			} catch (e) { }
+			that.ensurePanel();
+			that.selectTab(tab);
+			that.openPopover();
 		}
 	};
 
+	// Popover lifecycle from the shared chrome (one popover at a time
+	// across styling AND typography controls). Attached to the base
+	// object so the per-control clones made in stylingRuntime() inherit
+	// the methods.
+	attachPopoverChrome(customifyStyling, {
+		$: $,
+		anchor: function (that) {
+			return $(
+				'.customify-styling-trigger[data-tab="' +
+				that.activeTab +
+				'"]',
+				that.$el
+			);
+		},
+		onClose: function (that) {
+			$(".customify-styling-trigger", that.$el).removeClass(
+				"is-open"
+			);
+		}
+	});
+
+	// ── Styling trigger rows ───────────────────────────────────────────
+	// One select-like trigger row per visible tab (Normal / Hover / …);
+	// each row previews that tab's saved colors as swatches plus a
+	// one-word tail for non-color edits. Chrome only: rows read the
+	// hidden input JSON the runtime already round-trips — value plumbing
+	// (get()/storage shape) is untouched.
+
+	// Fixed swatch order; color fields added by the styling_config filter
+	// keep their config order after these.
+	var STYLING_SWATCH_ORDER = [
+		"text_color",
+		"link_color",
+		"bg_color",
+		"border_color"
+	];
+
+	// First name with a saved value wins — the tail is a single word.
+	var STYLING_TAIL_WORDS = [
+		["padding", "padding"],
+		["margin", "margin"],
+		["border_style", "border"],
+		["border_width", "border"],
+		["border_radius", "radius"],
+		["box_shadow", "shadow"],
+		["bg_image", "image"],
+		["bg_cover", "image"],
+		["bg_position", "image"],
+		["bg_repeat", "image"],
+		["bg_attachment", "image"]
+	];
+
+	// Does a saved sub-value hold anything the user actually set? Wrapper
+	// keys that exist even on untouched fields (css_ruler's
+	// `unit`/`link`, shadow's `inset`, media's `id`/`mime`) are skipped
+	// so an empty ruler ({unit:'px', top:'', …}) doesn't count as set.
+	var stylingHasValue = function (v) {
+		if (v === null || _.isUndefined(v) || false === v) {
+			return false;
+		}
+		if (true === v) {
+			return true;
+		}
+		if (_.isNumber(v)) {
+			return true;
+		}
+		if (_.isString(v)) {
+			return $.trim(v) !== "";
+		}
+		if (_.isObject(v)) {
+			var found = false;
+			_.each(v, function (sub, key) {
+				if (
+					found ||
+					"unit" === key ||
+					"link" === key ||
+					"inset" === key ||
+					"id" === key ||
+					"mime" === key
+				) {
+					return;
+				}
+				found = stylingHasValue(sub);
+			});
+			return found;
+		}
+		return false;
+	};
+
+	// One tab's preview model: { swatches: [{color, title, ring}], meta,
+	// isDefault }.
+	var stylingTabPreview = function (runtime, key, values, singleTab) {
+		var sub =
+			_.isObject(values) && _.isObject(values[key])
+				? values[key]
+				: {};
+
+		// A field only counts when its `required` condition passes against
+		// the tab's current values — a value left behind by a gated-off
+		// field (e.g. border_color after border_style went back to
+		// Default) stays in the JSON but has no effect, so it must not
+		// show in the preview either.
+		var effective = function (f) {
+			if (_.isUndefined(f.required) || _.isEmpty(f.required)) {
+				return true;
+			}
+			try {
+				return customifyField.multiple_compare(
+					f.required,
+					sub,
+					false
+				);
+			} catch (e) {
+				return true;
+			}
+		};
+
+		var colors = [];
+		var others = [];
+		_.each(runtime.fieldsFor(key), function (f) {
+			if (!_.isObject(f) || "heading" === f.type || !effective(f)) {
+				return;
+			}
+			if ("color" === f.type) {
+				colors.push(f);
+			} else {
+				others.push(f);
+			}
+		});
+
+		colors.sort(function (a, b) {
+			var ra = _.indexOf(STYLING_SWATCH_ORDER, a.name);
+			var rb = _.indexOf(STYLING_SWATCH_ORDER, b.name);
+			return (
+				(ra === -1 ? STYLING_SWATCH_ORDER.length : ra) -
+				(rb === -1 ? STYLING_SWATCH_ORDER.length : rb)
+			);
+		});
+
+		var swatches = [];
+		_.each(colors, function (f) {
+			var v = sub[f.name];
+			if (_.isString(v) && $.trim(v) !== "" && swatches.length < 4) {
+				swatches.push({
+					color: v,
+					title: (f.label || f.name) + ": " + v,
+					ring: String(f.name).indexOf("border") !== -1
+				});
+			}
+		});
+
+		var meta = "";
+		var isDefault = false;
+
+		// Single-tab, single-color controls (the Colors-section
+		// backgrounds) echo the picked value next to their swatch.
+		if (singleTab && 1 === colors.length && 1 === swatches.length) {
+			meta = swatches[0].color;
+		}
+
+		if (!meta) {
+			_.each(STYLING_TAIL_WORDS, function (pair) {
+				if (meta) {
+					return;
+				}
+				var f = _.find(others, function (o) {
+					return o.name === pair[0];
+				});
+				if (f && stylingHasValue(sub[f.name])) {
+					meta = "+ " + pair[1];
+				}
+			});
+		}
+		if (!meta) {
+			// Unknown fields (added via the styling_config filter): fall
+			// back to the field's own label.
+			var known = _.map(STYLING_TAIL_WORDS, function (p) {
+				return p[0];
+			});
+			_.each(others, function (f) {
+				if (meta || _.indexOf(known, f.name) !== -1) {
+					return;
+				}
+				if (stylingHasValue(sub[f.name])) {
+					meta = "+ " + String(f.label || f.name).toLowerCase();
+				}
+			});
+		}
+
+		if (!swatches.length && !meta) {
+			meta = Customify_Control_Args.default_label || "Default";
+			isDefault = true;
+		}
+
+		return { swatches: swatches, meta: meta, isDefault: isDefault };
+	};
+
+	// Skeleton rows are built once per control; repaints only swap the
+	// preview/meta contents so focus and the is-open state survive.
+	var ensureStylingRows = function (runtime) {
+		var $wrap = $(".customify-styling-triggers", runtime.$el);
+		if (!$wrap.length || $wrap.children().length) {
+			return;
+		}
+		var tabs = runtime.visibleTabs();
+		var single = 1 === tabs.length;
+		_.each(tabs, function (t) {
+			var $row = $(
+				'<a href="#" class="customify-styling-trigger"></a>'
+			).attr("data-tab", t.key);
+			// Single-tab controls render a label-less row (the control
+			// title right above already names it); `_` is the explicit
+			// no-label sentinel some configs use.
+			if (!single && "_" !== t.label) {
+				$row.append(
+					$(
+						'<span class="customify-trigger--label"></span>'
+					).text(t.label)
+				);
+			}
+			$row.append('<span class="customify-trigger--preview"></span>');
+			$row.append('<span class="customify-trigger--meta"></span>');
+			if (single || "_" === t.label) {
+				$row.append(
+					'<span class="customify-trigger--spacer"></span>'
+				);
+			}
+			$row.append(
+				'<span class="customify-trigger--arrow dashicons dashicons-arrow-down-alt2"></span>'
+			);
+			$wrap.append($row);
+		});
+	};
+
+	var paintStylingRows = function (runtime) {
+		var $wrap = $(".customify-styling-triggers", runtime.$el);
+		if (!$wrap.length) {
+			return;
+		}
+		var values = {};
+		try {
+			values = JSON.parse(
+				$(".customify-hidden-modal-input", runtime.$el).val() || ""
+			);
+		} catch (e) { }
+		var tabs = runtime.visibleTabs();
+		var single = 1 === tabs.length;
+		_.each(tabs, function (t) {
+			var $row = $(
+				'.customify-styling-trigger[data-tab="' + t.key + '"]',
+				$wrap
+			);
+			if (!$row.length) {
+				return;
+			}
+			var view = stylingTabPreview(runtime, t.key, values, single);
+			var $preview = $(".customify-trigger--preview", $row).empty();
+			_.each(view.swatches, function (s) {
+				var $sw = $(
+					'<span class="customify-trigger--swatch"><i></i></span>'
+				).attr("title", s.title);
+				if (s.ring) {
+					// Border colors render as a ring so they don't read
+					// as a fill; the inset shadow carries the color.
+					$sw.addClass("is-ring");
+					$("i", $sw).css(
+						"box-shadow",
+						"inset 0 0 0 3px " + s.color
+					);
+				} else {
+					$("i", $sw).css("background-color", s.color);
+				}
+				$preview.append($sw);
+			});
+			$(".customify-trigger--meta", $row)
+				.text(view.meta)
+				.toggleClass("is-default", view.isDefault);
+		});
+	};
+
 	var initStylingControls = {};
+	// Create (or fetch) the runtime for a styling control li. Mirrors the
+	// legacy lazy click-init, but also runs at batch-init time so the
+	// trigger rows can paint before any interaction.
+	var stylingRuntime = function ($el) {
+		var controlID = ($el.attr("id") || "").replace(
+			/^customize-control-/,
+			""
+		);
+		if (!controlID) {
+			return null;
+		}
+		if (!_.isUndefined(initStylingControls[controlID])) {
+			return initStylingControls[controlID];
+		}
+		var c = wpcustomize.control(controlID);
+		if (_.isUndefined(c)) {
+			return null;
+		}
+		var s = _.clone(customifyStyling);
+		var tabs = null,
+			normal_fields = -1,
+			hover_fields = -1;
+		if (
+			!_.isUndefined(c.params.fields) &&
+			_.isObject(c.params.fields)
+		) {
+			if (!_.isUndefined(c.params.fields.tabs)) {
+				tabs = c.params.fields.tabs;
+			}
+			if (!_.isUndefined(c.params.fields.normal_fields)) {
+				normal_fields = c.params.fields.normal_fields;
+			}
+			if (!_.isUndefined(c.params.fields.hover_fields)) {
+				hover_fields = c.params.fields.hover_fields;
+			}
+		}
+		s.$el = $el;
+		s.setupConfig(tabs, normal_fields, hover_fields);
+		s.controlID = controlID;
+		initStylingControls[controlID] = s;
+		return s;
+	};
+
 	var initStyling = function () {
+		// Trigger rows: open that row's tab in the floating popover.
 		$document.on(
 			"click",
-			".customize-control-customify-styling .action--edit, .customize-control-customify-styling .action--reset",
+			".customize-control-customify-styling .customify-styling-trigger",
 			function (e) {
 				e.preventDefault();
-				var controlID = $(this).attr("data-control") || "";
-				if (_.isUndefined(initStylingControls[controlID])) {
-					var c = wpcustomize.control(controlID);
-					var s = _.clone(customifyStyling);
-					var tabs = null,
-						normal_fields = -1,
-						hover_fields = -1;
-					if (controlID && !_.isUndefined(c)) {
-						if (
-							!_.isUndefined(c.params.fields) &&
-							_.isObject(c.params.fields)
-						) {
-							if (!_.isUndefined(c.params.fields.tabs)) {
-								tabs = c.params.fields.tabs;
-							}
-							if (!_.isUndefined(c.params.fields.normal_fields)) {
-								normal_fields = c.params.fields.normal_fields;
-							}
-							if (!_.isUndefined(c.params.fields.hover_fields)) {
-								hover_fields = c.params.fields.hover_fields;
-							}
-						}
-					}
-					s.$el = $(this)
+				var s = stylingRuntime(
+					$(this)
 						.closest(".customize-control-customify-styling")
-						.eq(0);
-					s.setupConfig(tabs, normal_fields, hover_fields);
-					s.controlID = controlID;
-					initStylingControls[controlID] = s;
-				}
-
-				if (!_.isUndefined(initStylingControls[controlID])) {
-					if ($(this).hasClass("action--reset")) {
-						initStylingControls[controlID].reset();
-					} else {
-						initStylingControls[controlID].open();
-					}
+						.eq(0)
+				);
+				if (s) {
+					s.open($(this).attr("data-tab") || "");
 				}
 			}
 		);
+
+		// Reset keeps its legacy delegated binding (the button is only
+		// visible while the popover is open).
+		$document.on(
+			"click",
+			".customize-control-customify-styling .action--reset",
+			function (e) {
+				e.preventDefault();
+				var s = stylingRuntime(
+					$(this)
+						.closest(".customize-control-customify-styling")
+						.eq(0)
+				);
+				if (s) {
+					s.reset();
+				}
+			}
+		);
+
+		// Every value write round-trips through the hidden input —
+		// repaint the row previews there.
+		$document.on(
+			"change data-change",
+			".customize-control-customify-styling .customify-hidden-modal-input",
+			function () {
+				var s = stylingRuntime(
+					$(this)
+						.closest(".customize-control-customify-styling")
+						.eq(0)
+				);
+				if (s) {
+					ensureStylingRows(s);
+					paintStylingRows(s);
+				}
+			}
+		);
+
+		// External setting write → refreshFromSetting() re-rendered the
+		// field DOM (trigger rows included) and the hidden input now
+		// holds the new value; the floating panel (parked on the li,
+		// outside the re-rendered area) is stale — drop it so the next
+		// open rebuilds from the fresh value.
+		$document.on(
+			"customify/control/refreshed",
+			".customize-control-customify-styling",
+			function () {
+				var s = stylingRuntime($(this));
+				if (!s) {
+					return;
+				}
+				if ("opening" === s.$el.attr("data-opening")) {
+					s.closePopover();
+				}
+				$(".customify-modal-settings", s.$el).remove();
+				s.container = null;
+				ensureStylingRows(s);
+				paintStylingRows(s);
+			}
+		);
+
+		// First paint — controls are batch-initialized at document.ready
+		// before initStyling() runs, so every styling control's hidden
+		// input + trigger wrap exist by now.
+		$(".customize-control-customify-styling").each(function () {
+			var s = stylingRuntime($(this));
+			if (s) {
+				ensureStylingRows(s);
+				paintStylingRows(s);
+			}
+		});
 	};
 
 	//---------------------------------------------------------------------------
@@ -3464,6 +4250,7 @@ import { setupTypographyControl } from './typography-control';
 			initStyling();
 			initModal();
 			intTypos();
+			typoPresets.init();
 			// Expose helpers used by React-based controls (e.g. Column Settings)
 			// to drive the jQuery slider + css_ruler renderers.
 			window.customifyField = customifyField;
