@@ -138,6 +138,37 @@ p.demo_store,
         }
     }
 
+    // Block cart/checkout quantity stepper (Cart/Checkout blocks). The +/- are
+    // bare <button>s carrying a `wc-block-…` class (NOT `wp-block-…`), so the
+    // global theme button rule's `:not([class*="wp-block-"])` carve-out does
+    // NOT exclude them — its hover state leaks in and sets
+    // `color: --customify-on-primary` (white) + a `currentColor`-based
+    // state-layer `background-image` gradient. That turns the ＋/－ glyph white
+    // (invisible) and paints a gray fill behind it. Neutralize like .input-pm-act
+    // so the glyph stays visible and the stepper stays flat (no hover fill),
+    // matching the single-product stepper.
+    //
+    // Specificity note: the theme's state-layer rule is
+    // `button:not(…):not(.menu-mobile-toggle, .search-submit):hover` = (0,3,1),
+    // so the extra `.wc-block-components-quantity-selector` ancestor below is
+    // REQUIRED to reach (0,4,0) and actually drop the gradient — a single-class
+    // override (0,3,0) loses to it and the gray fill survives.
+    .wc-block-components-quantity-selector .wc-block-components-quantity-selector__button {
+        &:hover,
+        &:focus,
+        &:active {
+            color: $color_text;
+            background: none;
+            background-image: none;
+            // Kill both focus indicators: the theme button `outline` AND the
+            // Cart-block's own `box-shadow: currentColor 0 0 1px 1px inset` ring
+            // (cart.css, (0,3,0)) — the (0,4,0) selector here outranks it — so
+            // the +/- stay borderless like the single-product stepper.
+            outline: none;
+            box-shadow: none;
+        }
+    }
+
     .blockUI.blockOverlay {
         position: relative;
         z-index: 35 !important;
