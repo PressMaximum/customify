@@ -298,41 +298,42 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 			'text_transform'  => false,
 		);
 
-		// Display-only defaults per level — the compiled `_base.scss`
-		// fallbacks (h1/h2 carry per-device variants; h4 is the modular
-		// scale value 1.41575em, rounded for display). Keep in lockstep
-		// with the SCSS.
+		// Display-only defaults per level — must match the compiled `_base.scss`
+		// fallbacks (h1/h2 carry per-device variants). Keep in lockstep with the
+		// SCSS. The scale was trimmed/evened (h1 2.42→2.2, h2 2.1→1.8, h3/h4 off
+		// the modular scale onto explicit ems, h6 0.95→1.0) for a lighter,
+		// smoother heading rhythm — see _base.scss.
 		$h_display = array(
 			'h1' => array(
 				'font_size'   => array(
-					'desktop' => '2.42em',
-					'tablet'  => '2.1em',
-					'mobile'  => '1.8em',
+					'desktop' => '2.2em',
+					'tablet'  => '1.9em',
+					'mobile'  => '1.65em',
 				),
 				'line_height' => '1.216',
 			),
 			'h2' => array(
 				'font_size'   => array(
-					'desktop' => '2.1em',
-					'tablet'  => '1.9em',
-					'mobile'  => '1.7em',
+					'desktop' => '1.8em',
+					'tablet'  => '1.6em',
+					'mobile'  => '1.5em',
 				),
 				'line_height' => '1.216',
 			),
 			'h3' => array(
-				'font_size'   => '1.618em',
+				'font_size'   => '1.55em',
 				'line_height' => '1.3',
 			),
 			'h4' => array(
-				'font_size'   => '1.42em',
+				'font_size'   => '1.35em',
 				'line_height' => '1.3',
 			),
 			'h5' => array(
-				'font_size'   => '1.1em',
+				'font_size'   => '1.15em',
 				'line_height' => '1.3',
 			),
 			'h6' => array(
-				'font_size'   => '0.95em',
+				'font_size'   => '1.0em',
 				'line_height' => '1.3',
 			),
 		);
