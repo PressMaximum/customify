@@ -398,7 +398,9 @@ class Customify_Posts_Layout
 				$this->args['columns'][$d] = $v;
 				$atts['data-col-' . $d]    = $v;
 			}
-			$classes['grid'] = sprintf('customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile']);
+			if ( max( $this->args['columns'] ) > 1 ) {
+				$classes['grid'] = sprintf('customify-grid-%1$s_sm-%2$s_xs-%3$s', $this->args['columns']['desktop'], $this->args['columns']['tablet'], $this->args['columns']['mobile']);
+			}
 		}
 
 		$classes[] = 'posts-layout';

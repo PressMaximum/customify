@@ -25,10 +25,6 @@
 	.customify-grid {
 		margin: 0;
 	}
-	@include for_device(tablet) {
-		padding-left: 15px;
-		padding-right: 15px;
-	}
 }
 // Footer Top — share the Footer Main skin colors so the Pro-registered
 // top row inherits the same default appearance as the main row.
