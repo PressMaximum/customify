@@ -1009,7 +1009,13 @@ class Customify_Page_Header {
 				<?php
 				do_action( 'customify/page-cover/before' );
 
-				if ( Customify()->get_setting( 'header_cover_show_title' ) && 'hide' !== $args['force_display_single_title'] ) {
+				// Cover title visibility is owned solely by the Cover "Show Title"
+				// toggle (header_cover_show_title), NOT by force_display_single_title.
+				// The "use current post title" option and the per-post "Disable Page
+				// Title" meta both set that flag to hide the IN-CONTENT title, not the
+				// cover hero. Gating the cover h1 on it (regression from 38dab4f9)
+				// blanked the title users asked to show in the cover/header image.
+				if ( Customify()->get_setting( 'header_cover_show_title' ) ) {
 					if ( $args['title'] ) {
 						// WPCS: XSS ok.
 						echo '<' . $args['title_tag'] . ' class="page-cover-title">' . apply_filters( 'customify_the_title', wp_kses_post( $args['title'] ) ) . '</' . $args['title_tag'] . '>';
