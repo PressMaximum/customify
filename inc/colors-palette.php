@@ -734,6 +734,21 @@ if ( ! function_exists( 'customify_color_palette_root_css' ) ) {
 		$lines[] = "--customify-on-secondary: {$on_secondary}";
 		$lines[] = "--customify-on-accent: {$on_accent}";
 		$lines[] = "--customify-on-surface: {$on_surface}";
+		// Button label tokens — GATED on Palette opt-in. Theme buttons read
+		// `var(--customify-btn-on-{primary,secondary}, #fff)`, so the 30K
+		// legacy install base that never engaged the Palette panel falls back
+		// to the historical hard-coded white — a saved light brand color no
+		// longer silently flips button labels to black on update. Opt-in sites
+		// ALIAS the unconditional on-* tokens, so labels keep the WCAG-contrast
+		// auto-flip and the alias re-resolves live when the preview JS drives
+		// --customify-on-* during slot drags (no extra preview JS needed). The
+		// block brand-bg auto-wire (.has-X-background-color) and the Blocksify
+		// fill-button rule keep reading the raw unconditional on-* tokens — they
+		// are intentionally NOT gated (see colors-palette $on_primary rationale).
+		if ( $has_palette_opt_in ) {
+			$lines[] = '--customify-btn-on-primary: var(--customify-on-primary)';
+			$lines[] = '--customify-btn-on-secondary: var(--customify-on-secondary)';
+		}
 		// --customify-border emitted UNCONDITIONALLY since the Phase 2.13
 		// follow-up — see the $border resolution block above for the full
 		// rationale. The slot-derived default (`mix(text, base, 9%)`) gives

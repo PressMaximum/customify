@@ -2,7 +2,7 @@
 .customify-builder-btn {
     padding: ms(-3) ms(0);
     background: $color_secondary;
-    color: var(--customify-on-secondary, #FFFFFF);
+    color: var(--customify-btn-on-secondary, #FFFFFF);
     border-radius: 2px;
     display: inline-block;
     position: relative;
@@ -20,7 +20,7 @@
             color-mix(in srgb, currentColor 13%, transparent),
             color-mix(in srgb, currentColor 13%, transparent)
         );
-        color: var(--customify-on-secondary, #ffffff);
+        color: var(--customify-btn-on-secondary, #ffffff);
     }
 
     &.is-icon-before i {

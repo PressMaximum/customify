@@ -283,6 +283,98 @@ if ( ! function_exists( 'customify_layout_content_size_css' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_single_post_content_size_css' ) ) {
+	/**
+	 * Frontend CSS that lets the "Post Content Max Width" Customizer setting
+	 * actually win on single posts.
+	 *
+	 * The field's own css_format (`body.single-post { --…-content-size }`, on
+	 * the `customify-style` handle) is emitted BEFORE the layout rule
+	 * `body.main-layout-content { --…-content-size }` (on the later
+	 * `customify-layout-style` handle). The two selectors have EQUAL
+	 * specificity, so on a no-sidebar single post the later layout rule wins by
+	 * source order and the user's width is silently ignored — the bug behind
+	 * "works in Customize, not on the actual post". (Posts WITH a sidebar are
+	 * unaffected: the layout rule only sets content-size for the no-sidebar
+	 * `main-layout-content` class.)
+	 *
+	 * Fix: re-emit the same `body.single-post` rule on the SAME
+	 * `customify-layout-style` handle, AFTER the layout rule, so it wins by
+	 * source order. No specificity bump is used on purpose, so (a) the
+	 * per-post Content Layout overrides on `.site-content` still win by
+	 * proximity, and (b) the Customizer live-preview <style> — which uses the
+	 * same low-specificity selector and loads later still — keeps live drags
+	 * working.
+	 *
+	 * 30K-site safety: emitted ONLY when the user explicitly saved the slider
+	 * (a saved value is the `{value, unit}` array; an unsaved field is the bare
+	 * `863` scalar default). Sites that never touched it keep the
+	 * layout-derived width they render today. Mirrors the saved-gate in
+	 * Customify_Editor::css() so the block editor and the frontend agree.
+	 *
+	 * @return string CSS (empty string when the setting is unsaved).
+	 */
+	function customify_single_post_content_size_css() {
+		$cw = Customify()->get_setting( 'single_blog_post_content_width' );
+		if ( ! is_array( $cw ) || ! isset( $cw['value'] ) || '' === $cw['value'] ) {
+			return '';
+		}
+		$unit = ! empty( $cw['unit'] ) ? $cw['unit'] : 'px';
+		$size = $cw['value'] . $unit;
+
+		return 'body.single-post{--wp--style--global--content-size:' . esc_attr( $size ) . ';}';
+	}
+}
+
+if ( ! function_exists( 'customify_single_post_content_size_preview_js' ) ) {
+	/**
+	 * Live-preview shim for the "Post Content Max Width" setting.
+	 *
+	 * The frontend override (customify_single_post_content_size_css()) lives in
+	 * the #customify-layout-style-inline-css block, which auto-css.js never
+	 * rebuilds — so dragging the slider would leave the preview frozen: the
+	 * static rule keeps winning by source order over the live-rebuilt
+	 * #customify-style block (same specificity, later wins). This appends a
+	 * winning `body.single-post` rule at the END of <head> on each change so the
+	 * preview tracks the drag. It fires only via setting.bind (user changes),
+	 * matching the saved-only frontend gate: untouched leaves the layout default
+	 * (or the static saved rule) in place; dragged shows the pending value;
+	 * cleared removes the override.
+	 */
+	function customify_single_post_content_size_preview_js() {
+		$js = <<<'JS'
+( function ( api ) {
+	if ( ! api ) { return; }
+	api( 'single_blog_post_content_width', function ( setting ) {
+		setting.bind( function ( val ) {
+			// The slider stores its live value as URL-encoded JSON
+			// ( encodeURIComponent( JSON.stringify( { unit, value } ) ) ), so the
+			// changeset hands the bind a string — decode it before reading.
+			if ( typeof val === 'string' ) {
+				try { val = JSON.parse( decodeURIComponent( val ) ); } catch ( e ) { val = null; }
+			}
+			var size = '';
+			if ( val && typeof val === 'object' && val.value !== '' && val.value != null ) {
+				var unit = ( val.unit && val.unit !== '-' ) ? val.unit : ( val.unit === '-' ? '' : 'px' );
+				size = String( val.value ) + unit;
+			}
+			var id = 'customify-single-post-cw-live';
+			var el = document.getElementById( id );
+			if ( ! el ) {
+				el = document.createElement( 'style' );
+				el.id = id;
+				document.head.appendChild( el );
+			}
+			el.textContent = size ? ( 'body.single-post{--wp--style--global--content-size:' + size + ';}' ) : '';
+		} );
+	} );
+} )( window.wp && window.wp.customize );
+JS;
+		wp_add_inline_script( 'customify-customizer-auto-css', $js );
+	}
+	add_action( 'customize_preview_init', 'customify_single_post_content_size_preview_js', 20 );
+}
+
 if ( ! function_exists( 'customify_layout_content_size_value_plus' ) ) {
 	/**
 	 * Add a pixel delta to a CSS length string, preserving the unit. Used to
