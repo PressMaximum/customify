@@ -82,8 +82,15 @@
 	}
 
 	.search-form-fields {
-		border: 1px solid $color_border_medium;
-		box-shadow: none;
+		// Softened outline for the header chrome. The generic form fields keep
+		// the stronger $color_border_medium (~22%), but on the header/sidebar
+		// search that read too gray — so use the faint hairline $color_border
+		// (~9%) plus a LIGHT inset shadow (half the legacy 0.12 strength) to
+		// restore the subtle recessed depth of the pre-0.4 look without the
+		// heavy gray edge. 30k-safe: resting state lands close to the old box,
+		// just lighter.
+		border: 1px solid $color_border;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) inset;
 		border-radius: 3px;
 		height: 100%;
 		transition: border-color 0.15s ease, box-shadow 0.15s ease;
@@ -96,13 +103,15 @@
 		width: 100%;
 		height: 2.4em;
 		// Modal/popover search has NO .search-form-fields wrapper, so the field
-		// itself carries the outlined border + focus ring. The inline-box variant
-		// (.header-search_box-item) overrides this to border:0 since its wrapper
-		// carries them.
-		border: 1px solid $color_border_medium;
+		// itself carries the outlined border + focus ring. Same softened look as
+		// the wrapper above (faint hairline + light inset shadow) — lighter than
+		// the generic ~22% field border so the header chrome doesn't read gray.
+		// The inline-box variant (.header-search_box-item) overrides this to
+		// border:0 since its wrapper carries them.
+		border: 1px solid $color_border;
 		border-radius: 3px;
 		background-color: transparent;
-		box-shadow: none;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) inset;
 		transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
 		&:focus {

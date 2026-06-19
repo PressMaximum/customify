@@ -219,6 +219,22 @@
 			.search-field {
 				width: 100%;
 				display: block;
+				// Soften the sidebar search box to match the header search item:
+				// faint hairline ($color_border ~9%) + a light inset shadow
+				// instead of the generic field's stronger ~22% border, so the
+				// sidebar search reads lighter (not gray) while the other form
+				// fields keep their default border. Mirrors
+				// builder_items/_search.scss.
+				border: 1px solid $color_border;
+				border-radius: 3px;
+				background-color: transparent;
+				box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06) inset;
+				transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+				&:focus {
+					background-color: transparent;
+					border-color: color-mix(in srgb, currentcolor 50%, transparent);
+				}
 			}
 
 			.search-submit {
