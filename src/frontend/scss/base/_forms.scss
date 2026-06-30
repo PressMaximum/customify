@@ -135,31 +135,34 @@ select {
     }
 }
 
-// `[class*="wp-block-"]` in the :not() lists peels off ANY element whose
-// class contains a `wp-block-*` token — that's how WP default blocks
-// (Search submit, File download, Embed "Try again", Latest Posts CTA,
-// etc.) render their internal chrome buttons. Editor canvas + frontend
-// both stop applying the broad theme button styling to those, while the
-// intentionally-styled content buttons (`.wp-block-button__link`,
-// `.wp-element-button`, `.wc-block-cart__submit .wp-element-button`)
-// stay listed explicitly so they still pick up the theme look.
+// `[class*="wp-block-"]` (and `[class*="wc-block-"]`) in the :not() lists
+// peel off ANY element whose class contains a `wp-block-*` / `wc-block-*`
+// token — that's how WP default blocks (Search submit, File download,
+// Embed "Try again", Latest Posts CTA, etc.) AND WooCommerce blocks
+// (product-filters overlay open/close toggles, etc.) render their internal
+// chrome buttons. Editor canvas + frontend both stop applying the broad
+// theme button styling to those, while the intentionally-styled content
+// buttons (`.wp-block-button__link`, `.wp-element-button`,
+// `.wc-block-cart__submit .wp-element-button`) stay listed explicitly so
+// they still pick up the theme look.
 // The single-class exclusions kept below (`.components-button`,
 // `.customize-partial-edit-shortcut-button`, `.lightbox-trigger`,
-// `.ed_button`, `.menu-mobile-toggle`) are not `wp-block-` prefixed,
-// so they still need their own slot.
+// `.ed_button`, `.menu-mobile-toggle`) are not block-prefixed, so they
+// still need their own slot.
 .button:not(
     [class*="wp-block-"],
+    [class*="wc-block-"],
     .menu-mobile-toggle,
     .components-button,
     .customize-partial-edit-shortcut-button
 ),
-button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+button:not(.components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"], [class*="wc-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"], [class*="wc-block-"]),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
 .wc-block-cart__submit .wp-element-button,
 .wp-block-button__link,
 .wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]) {
     border: none;
     cursor: pointer;
     padding: 0px 1.3em;
@@ -224,17 +227,17 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     }
 }
 
-// Same `[class*="wp-block-"]` carve-out as above so WP default-block
-// chrome doesn't inherit the primary-color background fill.
-.button:not([class*="wp-block-"]),
-button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, [class*="wp-block-"]),
-.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
+// Same `[class*="wp-block-"]` / `[class*="wc-block-"]` carve-out as above
+// so WP / WooCommerce block chrome doesn't inherit the primary-color fill.
+.button:not([class*="wp-block-"], [class*="wc-block-"]),
+button:not(.menu-mobile-toggle, .components-button, .customize-partial-edit-shortcut-button, .lightbox-trigger, [class*="wp-block-"], [class*="wc-block-"]),
+input[type="button"]:not(.ed_button, [class*="wp-block-"], [class*="wc-block-"]),
+.button:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
+input[type="button"]:not(.ed_button, .components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
+input[type="reset"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
 .wp-block-button__link,
 .wp-element-button:not(.components-button),
-input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]) {
     color: var(--customify-btn-on-primary, #ffffff);
     background: $color_primary;
     &:focus {
@@ -242,10 +245,10 @@ input[type="submit"]:not(.components-button, .customize-partial-edit-shortcut-bu
     }
 }
 
-.button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]),
-.button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"]) {
+.button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
+button[disabled]:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
+button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]),
+.button.disabled:not(.components-button, .customize-partial-edit-shortcut-button, [class*="wp-block-"], [class*="wc-block-"]) {
     opacity: 0.5;
 }
 

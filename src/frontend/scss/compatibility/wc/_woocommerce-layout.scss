@@ -98,9 +98,6 @@
 .woocommerce-result-count {
     margin-left: auto;
     margin-right: 1em;
-    @include for_device(mobile) {
-        display: none;
-    }
 }
 
 .woocommerce, .woocommerce-page {
@@ -301,4 +298,29 @@
             }
         }
     }
+}
+
+// ── Blocksify general WC builder — placed-block tweaks ───────────────────────
+// "Sort by" label spacing on the catalog-sorting BLOCK. Margin on the LABEL so
+// hiding the label (block "useLabel" off) leaves the select untouched.
+.wc-block-catalog-sorting .woocommerce-ordering label {
+    margin-inline-end: 0.5em;
+}
+
+// Un-trap the WooCommerce product-filters overlay from a Blocksify Section's
+// stacking context (.bsy-section__inner has position:relative; z-index:2 for its
+// shape/bg layering, which traps the overlay's position:fixed below the header).
+// Drop the stacking context only WHILE the overlay is open — the full-screen
+// modal covers the section content anyway, and z-index:2 restores on close.
+// (Ideally lives in Blocksify for cross-theme coverage; kept in theme for now.)
+.bsy-section__inner:has(.wc-block-product-filters.is-overlay-opened) {
+    z-index: auto;
+}
+
+// Price-filter min/max inputs ($20 / $247): WC sets border-color:currentColor
+// (the dark text colour) → too heavy. Follow the theme's input border instead.
+// `body` prefix beats WC's inlined block rule (specificity 0,3,1); border-color
+// only, so the slider box sizing/radius stays WC's.
+body .wc-block-product-filter-price-slider .text input[type="text"] {
+    border-color: $color_border;
 }
