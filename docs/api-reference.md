@@ -147,6 +147,7 @@ Note: the result is cached on first call. Register the filter as early as possib
 | `customify/wc-product/before-media` | action | — | same `:438` |
 | `customify/wc-product/after-media` | action | — | same |
 | `customify_after_loop_product_media` | action | — | same `:442` |
+| `customify/wc_cart/render_dropdown` | filter | `(bool $render_dropdown, Customify_Builder_Item_WC_Cart $item)` — print the header cart item's inline mini-cart dropdown? Default `true`. Customify Pro's Cart Drawer returns `false` to suppress the inline dropdown when it takes the item over with an off-canvas drawer. | [`inc/compatibility/woocommerce/config/header/cart.php`](../inc/compatibility/woocommerce/config/header/cart.php) `render()` |
 
 ---
 
