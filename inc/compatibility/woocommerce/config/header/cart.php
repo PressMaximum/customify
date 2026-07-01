@@ -433,18 +433,33 @@ class Customify_Builder_Item_WC_Cart {
 		echo $html; // WPCS: XSS OK.
 		echo '</a>';
 
-		add_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
+		/**
+		 * Filter whether the header cart item prints its inline mini-cart
+		 * dropdown. Default true, so the hover dropdown is unchanged for every
+		 * existing site. Customify Pro's Cart Drawer feature returns false when
+		 * it takes over the cart item with an off-canvas drawer, so the
+		 * mini-cart content is not rendered twice (the drawer prints its own
+		 * WC_Widget_Cart in the footer while sharing the same AJAX fragments).
+		 *
+		 * @param bool                           $render_dropdown Whether to print the inline dropdown. Default true.
+		 * @param Customify_Builder_Item_WC_Cart $item            The cart builder item instance.
+		 */
+		$render_dropdown = apply_filters( 'customify/wc_cart/render_dropdown', true, $this );
 
-		echo '<div class="cart-dropdown-box widget-area">';
-		the_widget(
-			'WC_Widget_Cart',
-			array(
-				'hide_if_empty' => 0,
-			)
-		);
-		echo '</div>';
+		if ( $render_dropdown ) {
+			add_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
 
-		remove_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
+			echo '<div class="cart-dropdown-box widget-area">';
+			the_widget(
+				'WC_Widget_Cart',
+				array(
+					'hide_if_empty' => 0,
+				)
+			);
+			echo '</div>';
+
+			remove_filter( 'woocommerce_widget_cart_is_hidden', '__return_false', 999 );
+		}
 
 		echo '</div>';
 	}
