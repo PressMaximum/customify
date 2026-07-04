@@ -33,6 +33,21 @@ class Customify_Builder_Item_WC_Cart {
 	 */
 	public function __construct() {
 		$this->label = __( 'Shopping Cart', 'customify' );
+
+		// Cart drawer: when the Cart Behavior is set to Drawer, suppress the
+		// inline hover dropdown (through the public render_dropdown seam) and
+		// print the off-canvas panel near </body>.
+		add_filter( 'customify/wc_cart/render_dropdown', array( $this, 'maybe_suppress_dropdown' ), 10, 2 );
+
+		// Don't ship the drawer's inline dynamic CSS to sites that aren't using
+		// the drawer: its style controls carry defaults that Customify's auto-CSS
+		// would otherwise print (inert) on every WooCommerce page. Kept in drawer
+		// mode and in the Customizer preview so switching behavior previews live.
+		add_filter( 'customify/customizer/auto_css', array( $this, 'gate_drawer_auto_css' ), 10, 2 );
+
+		if ( ! is_admin() ) {
+			add_action( 'wp_footer', array( $this, 'render_cart_drawer' ) );
+		}
 	}
 
 	/**
@@ -282,11 +297,35 @@ class Customify_Builder_Item_WC_Cart {
 				),
 			),
 
+			// -------------------------------------------------------- Cart behavior
+			// Off-canvas drawer as an alternative to the hover dropdown. Default
+			// 'dropdown' keeps every existing site identical.
 			array(
-				'name'    => "{$this->name}_d_h",
+				'name'    => "{$this->name}_behavior_h",
 				'type'    => 'heading',
 				'section' => $this->section,
-				'title'   => __( 'Dropdown Settings', 'customify' ),
+				'title'   => __( 'Cart Behavior', 'customify' ),
+			),
+
+			array(
+				'name'    => "{$this->name}_behavior",
+				'type'    => 'select',
+				'section' => $this->section,
+				'title'   => __( 'Behavior', 'customify' ),
+				'default' => 'dropdown',
+				'choices' => array(
+					'dropdown' => __( 'Dropdown', 'customify' ),
+					'drawer'   => __( 'Off-Canvas Drawer', 'customify' ),
+				),
+			),
+
+			// ----------------------------------------------------- Dropdown (gated)
+			array(
+				'name'     => "{$this->name}_d_h",
+				'type'     => 'heading',
+				'section'  => $this->section,
+				'title'    => __( 'Dropdown Settings', 'customify' ),
+				'required' => array( "{$this->name}_behavior", '=', 'dropdown' ),
 			),
 
 			array(
@@ -297,6 +336,7 @@ class Customify_Builder_Item_WC_Cart {
 				'selector'        => '.builder-header-' . $this->id . '-item',
 				'render_callback' => $fn,
 				'default'         => array(),
+				'required'        => array( "{$this->name}_behavior", '=', 'dropdown' ),
 				'choices'         => array(
 					'left'  => __( 'Left', 'customify' ),
 					'right' => __( 'Right', 'customify' ),
@@ -314,6 +354,128 @@ class Customify_Builder_Item_WC_Cart {
 				'selector'        => '.builder-header-' . $this->id . '-item  .cart-dropdown-box',
 				'css_format'      => 'width: {{value}};',
 				'default'         => array(),
+				'required'        => array( "{$this->name}_behavior", '=', 'dropdown' ),
+			),
+
+			// ------------------------------------------------------- Drawer (gated)
+			// width / bg / backdrop / radius / offset are Customizer-owned; their
+			// defaults emit as dynamic CSS on first paint (see _wc-cart-drawer.scss),
+			// so the SCSS never hardcodes them.
+			array(
+				'name'     => "{$this->name}_drawer_h",
+				'type'     => 'heading',
+				'section'  => $this->section,
+				'title'    => __( 'Drawer Settings', 'customify' ),
+				'required' => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'     => "{$this->name}_drawer_position",
+				'type'     => 'select',
+				'section'  => $this->section,
+				'title'    => __( 'Drawer Position', 'customify' ),
+				'default'  => 'right',
+				'required' => array( "{$this->name}_behavior", '=', 'drawer' ),
+				'choices'  => array(
+					'right' => __( 'Right', 'customify' ),
+					'left'  => __( 'Left', 'customify' ),
+				),
+			),
+
+			array(
+				'name'            => "{$this->name}_drawer_width",
+				'type'            => 'slider',
+				'section'         => $this->section,
+				'title'           => __( 'Drawer Width', 'customify' ),
+				'unit'            => '%',
+				'min'             => 20,
+				'max'             => 100,
+				'device_settings' => true,
+				'default'         => array(
+					'desktop' => 26,
+					'tablet'  => 65,
+					'mobile'  => 90,
+				),
+				'selector'        => '.customify-cart-drawer',
+				'css_format'      => 'width: {{value_no_unit}}%;',
+				'required'        => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'     => "{$this->name}_drawer_auto_open",
+				'type'     => 'checkbox',
+				'section'  => $this->section,
+				'title'    => __( 'Auto-open on Add to Cart', 'customify' ),
+				'default'  => 0,
+				'required' => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'            => "{$this->name}_drawer_offset",
+				'type'            => 'css_ruler',
+				'section'         => $this->section,
+				'title'           => __( 'Drawer Offset', 'customify' ),
+				'description'     => __( 'Gap from the screen edges. Set values to float the drawer away from the edge.', 'customify' ),
+				'device_settings' => true,
+				'default'         => array(
+					'desktop' => array( 'unit' => 'px', 'top' => 18, 'right' => 18, 'bottom' => 18, 'left' => 18, 'link' => 1 ),
+					'tablet'  => array( 'unit' => 'px', 'top' => 18, 'right' => 18, 'bottom' => 18, 'left' => 18, 'link' => 1 ),
+					'mobile'  => array( 'unit' => 'px', 'top' => 18, 'right' => 18, 'bottom' => 18, 'left' => 18, 'link' => 1 ),
+				),
+				'selector'        => '.customify-cart-drawer',
+				'css_format'      => array(
+					'top'    => 'margin-top: {{value}};',
+					'right'  => 'margin-right: {{value}};',
+					'bottom' => 'margin-bottom: {{value}};',
+					'left'   => 'margin-left: {{value}};',
+				),
+				'required'        => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'       => "{$this->name}_drawer_radius",
+				'type'       => 'slider',
+				'section'    => $this->section,
+				'title'      => __( 'Corner Radius', 'customify' ),
+				'unit'       => 'px',
+				'min'        => 0,
+				'max'        => 40,
+				'default'    => array( 'value' => 7, 'unit' => 'px' ),
+				'selector'   => '.customify-cart-drawer',
+				'css_format' => 'border-radius: {{value_no_unit}}px;',
+				'required'   => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'       => "{$this->name}_drawer_backdrop",
+				'type'       => 'color',
+				'section'    => $this->section,
+				'title'      => __( 'Backdrop Color', 'customify' ),
+				'default'    => 'rgba(0,0,0,0.5)',
+				'selector'   => '.customify-cart-drawer-overlay',
+				'css_format' => 'background-color: {{value}};',
+				'required'   => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'       => "{$this->name}_drawer_bg",
+				'type'       => 'color',
+				'section'    => $this->section,
+				'title'      => __( 'Panel Background', 'customify' ),
+				'default'    => '#ffffff',
+				'selector'   => '.customify-cart-drawer',
+				'css_format' => 'background-color: {{value}};',
+				'required'   => array( "{$this->name}_behavior", '=', 'drawer' ),
+			),
+
+			array(
+				'name'       => "{$this->name}_drawer_head_color",
+				'type'       => 'color',
+				'section'    => $this->section,
+				'title'      => __( 'Heading Color', 'customify' ),
+				'selector'   => '.customify-cart-drawer__head',
+				'css_format' => 'color: {{value}};',
+				'required'   => array( "{$this->name}_behavior", '=', 'drawer' ),
 			),
 
 		);
@@ -462,6 +624,96 @@ class Customify_Builder_Item_WC_Cart {
 		}
 
 		echo '</div>';
+	}
+
+	/**
+	 * When the Cart Behavior is set to Drawer, don't print the inline hover
+	 * dropdown — the off-canvas drawer takes over the cart item. Routed through
+	 * the public `customify/wc_cart/render_dropdown` seam so third-party
+	 * consumers keep working.
+	 *
+	 * @param bool                                $render Whether to print the inline dropdown.
+	 * @param Customify_Builder_Item_WC_Cart|null $item   The cart builder item (unused).
+	 *
+	 * @return bool
+	 */
+	public function maybe_suppress_dropdown( $render, $item = null ) {
+		if ( 'drawer' === Customify()->get_setting( "{$this->name}_behavior" ) ) {
+			return false;
+		}
+
+		return $render;
+	}
+
+	/**
+	 * Suppress the drawer style controls' dynamic CSS when the drawer isn't the
+	 * active behavior, so a dropdown-mode site (the 30k default) doesn't ship
+	 * inert `.customify-cart-drawer{…}` inline rules on every page. Still emitted
+	 * in drawer mode and in the Customizer preview so switching previews live.
+	 * Only the `wc_cart_drawer_*` fields are touched; every other field passes
+	 * through unchanged.
+	 *
+	 * @param array $code_array The generated CSS pieces for a field.
+	 * @param array $field      The field config.
+	 *
+	 * @return array
+	 */
+	public function gate_drawer_auto_css( $code_array, $field ) {
+		if ( empty( $field['name'] ) || 0 !== strpos( $field['name'], "{$this->name}_drawer_" ) ) {
+			return $code_array;
+		}
+		if ( is_customize_preview() ) {
+			return $code_array;
+		}
+		if ( 'drawer' !== Customify()->get_setting( "{$this->name}_behavior" ) ) {
+			return array();
+		}
+
+		return $code_array;
+	}
+
+	/**
+	 * Print the off-canvas drawer panel + overlay once, near </body>, when the
+	 * Cart Behavior is Drawer. Skipped on Cart/Checkout (nothing to preview
+	 * there — the cart link just follows its href). The body reuses WooCommerce
+	 * core's own `.widget_shopping_cart_content` + woocommerce_mini_cart() so
+	 * the AJAX fragments keep it in live sync on add/remove.
+	 */
+	public function render_cart_drawer() {
+		if ( ! function_exists( 'WC' ) || is_cart() || is_checkout() ) {
+			return;
+		}
+
+		if ( 'drawer' !== Customify()->get_setting( "{$this->name}_behavior" ) ) {
+			return;
+		}
+
+		$position = 'left' === Customify()->get_setting( "{$this->name}_drawer_position" ) ? 'left' : 'right';
+		?>
+		<div class="customify-cart-drawer-overlay" hidden></div>
+		<aside id="customify-cart-drawer" class="customify-cart-drawer" data-position="<?php echo esc_attr( $position ); ?>"
+			role="dialog" aria-modal="true" aria-label="<?php esc_attr_e( 'Shopping cart', 'customify' ); ?>" hidden>
+			<div class="customify-cart-drawer__head">
+				<span class="customify-cart-drawer__title"><?php esc_html_e( 'Shopping Cart', 'customify' ); ?></span>
+				<?php // Same markup/class as the Quick View close (theme's a.remove2x) so it looks identical. ?>
+				<a href="#" class="remove2x customify-cart-drawer__close" role="button" aria-label="<?php esc_attr_e( 'Close', 'customify' ); ?>">&times;</a>
+			</div>
+			<div class="customify-cart-drawer__body">
+				<?php
+				// Match WooCommerce core's own fragment exactly (see
+				// WC_AJAX::get_refreshed_fragments): a `.widget_shopping_cart_content`
+				// wrapper around woocommerce_mini_cart(). Keeps the AJAX live-sync
+				// working AND avoids the second "Cart" heading that
+				// the_widget( 'WC_Widget_Cart' ) prints.
+				?>
+				<div class="widget_shopping_cart_content"><?php woocommerce_mini_cart(); ?></div>
+			</div>
+			<?php // Shown only when the cart is empty (JS toggles .is-cart-empty). ?>
+			<div class="customify-cart-drawer__continue">
+				<a href="<?php echo esc_url( wc_get_page_permalink( 'shop' ) ); ?>" class="button"><?php esc_html_e( 'Continue Shopping', 'customify' ); ?></a>
+			</div>
+		</aside>
+		<?php
 	}
 }
 
