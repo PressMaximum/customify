@@ -343,6 +343,10 @@ class Customify_WC {
 			$args['wc_open_cart'] = true;
 		}
 
+		// Cart drawer auto-open (only meaningful when Cart Behavior = drawer;
+		// the drawer JS reads this off the localized Customify_JS object).
+		$args['wc_cart_drawer_auto_open'] = (bool) Customify()->get_setting( 'wc_cart_drawer_auto_open' );
+
 		return $args;
 	}
 
