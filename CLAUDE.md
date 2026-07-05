@@ -61,3 +61,28 @@ Don't. Pro is a separate codebase. From the theme, integrate via shared options 
 ### When the user says "release"
 
 Read [`docs/release-guide.md`](docs/release-guide.md) — they have an automated pipeline (`grunt release`). Don't manually re-implement what's already in Gruntfile.js.
+
+---
+
+## PressMaximum ecosystem
+
+PressMaximum is the umbrella brand. A session on this repo sometimes needs to read or
+change a sibling product — this is the stable, machine-agnostic map.
+
+| Product | Type | Repo |
+|---|---|---|
+| Blocksify | Free block plugin | https://github.com/PressMaximum/blocksify |
+| Blocksify Pro | Pro plugin — extends Blocksify via its hook surface (Blocksify `docs/FOUNDATION.md` §8) | https://github.com/PressMaximum/blocksify-pro |
+| Customify | Free theme ← **this repo** | https://github.com/PressMaximum/customify |
+| Customify Pro | Pro companion **plugin** for the Customify theme (a plugin, not a theme) | https://github.com/PressMaximum/customify-pro |
+| PressListing | Premium standalone plugin for listing sites (tours, jobs, real estate, directories, …) | https://github.com/PressMaximum/PressListing |
+
+Shared infrastructure (not a sellable product): `@pressmaximum/dashboard-kit` — the
+admin-dashboard kit consumed by the products' dashboards — https://github.com/PressMaximum/dashboard-kit
+
+- **Branch convention: PRs target the repo's active dev branch — standard name is `dev`.**
+  Not yet normalized everywhere: Customify theme uses `DEV`, Customify Pro uses `Dev`,
+  PressListing develops on `main`.
+- Local checkout paths + Studio dev sites are machine-specific — NEVER commit them into
+  this file. Each dev keeps their own map in `~/.claude/CLAUDE.md` (user-level, per
+  machine) or a gitignored `CLAUDE.local.md`.
