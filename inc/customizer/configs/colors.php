@@ -430,33 +430,43 @@ add_filter( 'customify/customizer/config', 'customify_customizer_colors_config' 
 // at the framework default `refresh` — Customizer would reload the whole
 // preview on every picker drag.
 //
-// This function:
-//   1. Forces transport=postMessage on all 13 color settings (idempotent
-//      overlap with customify_color_palette_force_postmessage() in
-//      colors-palette.php which already covers the 4 new slot keys —
-//      re-setting postMessage on the same setting is a no-op).
-//   2. Registers a single selective_refresh partial whose selector is the
-//      `<style id='customify-palette-tokens-inline-css'>` tag printed by
-//      Customify::print_palette_tokens(). Render callback re-runs the same
-//      customify_color_palette_root_css() PHP that generated the initial
-//      block, so every derived/computed token (--customify-on-primary,
-//      --customify-{primary,secondary,accent}-container, container chroma
-//      caps, on-X-container contrast picks, etc.) is recomputed live in the
-//      preview rather than staying stale until save+reload.
+// This function forces transport=postMessage on all 13 color settings
+// (idempotent overlap with customify_color_palette_force_postmessage() in
+// colors-palette.php which already covers the 4 new slot keys — re-setting
+// postMessage on the same setting is a no-op).
 //
-// Pairing with the existing setProperty preview JS in colors-palette.php:
-//   - That JS handles BASE tokens (--customify-primary, --customify-text,
-//     etc.) instantly during drag via document.documentElement.style.
-//   - This partial fires after the setting-change debounce (~250ms) and
-//     replaces the style-tag innerHTML with the full re-rendered :root
-//     block, so PHP-only computed tokens catch up without a save.
-//   - End state is identical regardless of which mechanism wins each frame:
-//     both read the same previewed theme_mod values.
+// It deliberately does NOT register a selective_refresh partial for the
+// `<style id='customify-palette-tokens-inline-css'>` block. An earlier fix
+// did (selector `#customify-palette-tokens-inline-css`,
+// `container_inclusive => false`) and that registration was the ROOT CAUSE of
+// the "page body goes white when the Header builder opens" bug:
 //
-// `container_inclusive => false` means the partial replaces the inner CSS
-// content of the <style> tag, not the tag itself. customify_color_palette_root_css()
-// returns the CSS body without a <style> wrapper (matches the way
-// class-customify.php prints it).
+//   Once a <head> `<style>` is a registered partial *container*, WP's
+//   selective refresh re-evaluates its placement inside EVERY refresh
+//   transaction — including ones triggered by unrelated settings (opening the
+//   Header builder re-renders the header rows). A `container_inclusive => false`
+//   placement is refreshed by emptying the element and re-injecting the
+//   render output; when the palette style is swept into the header-builder
+//   transaction (its bound settings didn't change, so the fresh render isn't
+//   applied to it) the element is left EMPTIED. Result: `--customify-base` and
+//   every `--customify-*` var on :root resolve to '', so
+//   `background-color: var(--customify-base)` becomes transparent and the body
+//   flashes unstyled — exactly the DOM-confirmed failure.
+//
+// The clean fix: the palette tokens are a PERSISTENT <head> node (printed by
+// Customify::print_palette_tokens() at wp_head priority 8) with NO partial
+// registered against it, so no refresh transaction can ever touch it. Live
+// updates are fully covered without a partial:
+//   - colors-palette.php's preview JS (customify_color_palette_preview_js)
+//     drives BASE tokens instantly on drag via document.documentElement.style
+//     .setProperty(), and recomputeDerived() recomputes EVERY PHP-derived
+//     token live (on-*, *-container, on-*-container, border-strong) — the same
+//     math as the PHP emitter.
+//   - auto-css.js rebuilds `#customify-style-inline-css` in <head> on every
+//     setting change, so literal color/background rules stay live too.
+// The partial only ever duplicated what that JS already does, at the cost of
+// making the whole palette fragile to sibling refreshes. Dropping it is the
+// root fix.
 //
 // Priority 1100 runs after the framework registration (default 10) and
 // after customify_color_palette_force_postmessage (priority 1000), so all
@@ -490,61 +500,58 @@ if ( ! function_exists( 'customify_colors_register_preview_refresh' ) ) {
 			}
 		}
 
-		if ( isset( $wp_customize->selective_refresh ) && function_exists( 'customify_color_palette_root_css' ) ) {
-			$wp_customize->selective_refresh->add_partial(
-				'customify_palette_tokens',
-				array(
-					'selector'            => '#customify-palette-tokens-inline-css',
-					'settings'            => $color_settings,
-					'render_callback'     => 'customify_color_palette_root_css',
-					'container_inclusive' => false,
-				)
-			);
-		}
+		// NOTE: no selective_refresh partial here on purpose — see the block
+		// comment above. A partial over the palette-tokens <style> is what let
+		// the Header-builder refresh empty `--customify-*`. The tokens live as a
+		// persistent <head> node and update live via postMessage JS instead.
 	}
 	add_action( 'customize_register', 'customify_colors_register_preview_refresh', 1100 );
 }
 
 // ──────────────────────────────────────────────────────────────────
-// Standalone body / content-background block for Customizer-preview
-// resilience.
+// Persistent <head> copy of the body / content-background block.
 //
 // The page-level background rules (Page Background → `body`, Content Area
 // Background → `.site-content .content-area`, Site Content Background →
-// `.site-content`) are emitted by auto_css() onto the `customify-style`
-// inline handle at wp_enqueue_scripts. A WP selective-refresh partial
-// (opening the Header builder, changing the colour palette, …) re-renders
-// ONLY the matched partial's HTML — it does NOT re-run wp_enqueue_scripts,
-// so that inline block is neither preserved (if it sat inside a replaced
-// container) nor re-emitted. Result: the moment the user touches the header
-// builder or the palette, the page body loses its background/section styling
-// and flashes unstyled, while the header still looks right.
+// `.site-content`) ship inside auto_css() on the `customify-style` inline
+// handle at wp_enqueue_scripts. In the Customizer preview, a selective-refresh
+// transaction (opening the Header builder, opening the Footer builder, a
+// palette change, …) re-renders matched containers WITHOUT re-running
+// wp_enqueue_scripts, so if that inline block sat inside a replaced container
+// it is dropped — the page body loses its background/section styling and
+// flashes unstyled.
 //
-// Fix: also print these rules as a STANDALONE `<style id="customify-auto-css">`
-// in <head> (outside every builder/selective-refresh container) and register
-// a selective_refresh partial for it — the exact pattern the palette-tokens
-// partial already proves at customify_colors_register_preview_refresh() above
-// (`container_inclusive => false`, render callback re-runs the same PHP that
-// produced the initial block). Now a header/footer/palette partial swap
-// re-renders this block instead of stripping it, so the body background
-// survives. On first load the rules duplicate auto_css()'s output verbatim
-// (identical selectors/values); this tag prints later so it wins by source
-// order with zero visual difference.
+// Root fix — make the visual CSS immune to EVERY selective refresh by emitting
+// it once in a place no partial ever replaces, and registering NO partial
+// against it:
+//   - Print these rules as a standalone `<style id="customify-auto-css">` in
+//     <head> (via wp_head), OUTSIDE every builder / selective-refresh
+//     container. There is deliberately no add_partial() for this node — a
+//     partial over a <head> <style> is exactly what let the Header-builder
+//     refresh empty the sibling palette tokens (see the block comment above
+//     customify_colors_register_preview_refresh). With no partial, no refresh
+//     transaction — header, footer, or palette — can ever touch it.
+//   - Live updates need no partial: auto-css.js rebuilds
+//     `#customify-style-inline-css` in <head> on every setting change, so
+//     background/color edits stay live there; this standalone copy is the
+//     persistent safety net that survives when a partial swap drops the inline
+//     handle. On first load the rules duplicate auto_css()'s output verbatim
+//     (identical selectors/values); this tag prints later (priority 96) so it
+//     wins by source order with zero visual difference.
 //
-// (Blocksify ships the matching fix for its own dynamic per-instance CSS —
-// separate handoff.)
+// (Blocksify ships the matching head-persistent fix for its own dynamic
+// per-instance CSS — separate PR.)
 // ──────────────────────────────────────────────────────────────────
 
 if ( ! function_exists( 'customify_body_background_css' ) ) {
 	/**
 	 * Render the page-level background rules (Page / Content Area / Site
 	 * Content backgrounds) via the auto-CSS engine. Same output as the
-	 * matching slice of auto_css(), but callable on its own so it can be a
-	 * re-renderable selective-refresh partial. Returns '' when nothing is
-	 * saved (empty-default composites emit nothing — unchanged behaviour).
+	 * matching slice of auto_css(), but callable on its own for the standalone
+	 * <head> emit. Returns '' when nothing is saved (empty-default composites
+	 * emit nothing — unchanged behaviour).
 	 *
-	 * @return string CSS body (no <style> wrapper — matches how the palette
-	 *                tokens partial returns bare CSS).
+	 * @return string CSS body (no <style> wrapper).
 	 */
 	function customify_body_background_css() {
 		if ( ! function_exists( 'Customify' ) || ! Customify()->customizer ) {
@@ -568,75 +575,25 @@ if ( ! function_exists( 'customify_body_background_css' ) ) {
 
 if ( ! function_exists( 'customify_print_body_background_style' ) ) {
 	/**
-	 * Print the standalone `<style id="customify-auto-css">` block. Runs at
-	 * wp_head priority 96 — AFTER the scripts hook (priority 95 emits
-	 * auto_css() onto customify-style) so this identical, re-renderable copy
-	 * wins by source order and is the one selective-refresh keeps alive.
+	 * Print the standalone, partial-free `<style id="customify-auto-css">`
+	 * block in <head>. Runs at wp_head priority 96 — AFTER the scripts hook
+	 * (priority 95 emits auto_css() onto customify-style) so this identical
+	 * copy wins by source order. Because no selective-refresh partial is
+	 * registered against it, it persists across every header/footer/palette
+	 * refresh — that is what keeps the body background alive when the Header
+	 * builder opens. Skips an empty block on both frontend and preview (nothing
+	 * to protect when no background is saved; auto-css.js still handles any
+	 * later live edit on `#customify-style-inline-css`).
 	 */
 	function customify_print_body_background_style() {
 		if ( ! function_exists( 'customify_body_background_css' ) ) {
 			return;
 		}
-		// Always emit the tag (even empty) in the customize preview so the
-		// selective-refresh partial always has its container to re-render into;
-		// on the frontend skip an empty block to avoid a pointless <style>.
 		$css = customify_body_background_css();
-		if ( '' === $css && ! is_customize_preview() ) {
+		if ( '' === $css ) {
 			return;
 		}
 		echo "\n<style id='customify-auto-css'>\n" . $css . "\n</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by the auto-CSS engine (values sanitised at save + render).
 	}
 	add_action( 'wp_head', 'customify_print_body_background_style', 96 );
-}
-
-if ( ! function_exists( 'customify_register_body_background_partial' ) ) {
-	/**
-	 * Register the selective-refresh partial for `#customify-auto-css` so a
-	 * palette / header-builder / footer partial swap re-renders the body
-	 * background instead of dropping it. Bound to the colour settings AND the
-	 * three background composites that feed the block. Priority 1101 runs just
-	 * after customify_colors_register_preview_refresh (1100) so its settings
-	 * list is the authority.
-	 *
-	 * @param WP_Customize_Manager $wp_customize Customizer manager.
-	 */
-	function customify_register_body_background_partial( $wp_customize ) {
-		if ( ! isset( $wp_customize->selective_refresh ) || ! function_exists( 'customify_body_background_css' ) ) {
-			return;
-		}
-		$settings = array(
-			// Palette slots — the body background derives from the Base slot
-			// var cascade, so a palette change must re-render it.
-			'global_styling_color_primary',
-			'global_styling_color_secondary',
-			'customify_palette_accent',
-			'customify_palette_text',
-			'customify_palette_surface',
-			'customify_palette_base',
-			// The three background composites themselves.
-			'background',
-			'site_content_styling',
-			'content_background',
-			// Palette store/active markers (a card switch rewrites the slots).
-			'customify_active_palette',
-			'customify_color_palettes',
-		);
-		// Bind the full list unconditionally — the sibling palette-tokens
-		// partial (customify_colors_register_preview_refresh, priority 1100)
-		// binds the same colour settings the same way, proving they are all
-		// registered by the time this priority-1101 hook fires (Customify's
-		// own register() runs at 666). WP selective refresh tolerates a
-		// setting id it can look up here.
-
-		$wp_customize->selective_refresh->add_partial(
-			'customify_auto_css',
-			array(
-				'selector'            => '#customify-auto-css',
-				'settings'            => $settings,
-				'render_callback'     => 'customify_body_background_css',
-				'container_inclusive' => false,
-			)
-		);
-	}
-	add_action( 'customize_register', 'customify_register_body_background_partial', 1101 );
 }
