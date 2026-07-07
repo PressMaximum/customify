@@ -229,6 +229,9 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 				'applied'    => __( 'Palette applied', 'customify' ),
 				'noCustom'   => __( 'No custom palettes yet — create one first.', 'customify' ),
 				'linkedTip'  => __( 'Linked to palette', 'customify' ),
+				// Palette-loss guard confirm() copy. Keep the OK/Cancel meaning
+				// explicit — OK saves the unsaved colours first, Cancel discards.
+				'confirmDiscard' => __( 'You have unsaved brand colors that are not saved to any palette. Switching will discard them.' . "\n\n" . 'OK = save them as a palette first.' . "\n" . 'Cancel = discard and switch.', 'customify' ),
 			),
 		);
 
@@ -433,10 +436,66 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		} );
 	}
 
+	// ── Palette-loss guard (auto-persist) ──────────────────────────────
+	// The six slots can hold brand colours that don't byte-match any preset —
+	// this happens whenever ANYONE edits them: a customer by hand, an importer,
+	// or an AI tool that writes the slot theme_mods directly. In that state the
+	// colours are loose slot values bound to no saved palette, and clicking any
+	// preset card overwrites all six → the brand colours are gone, with only a
+	// passive "Modified" strip as warning.
+	//
+	// Harden the theme so a colour change is safe by default: when the live
+	// slots diverge from EVERY palette (preset + custom) and no custom palette
+	// is active, mint a custom "Custom colors" card (id `user-auto-…`) from the
+	// current slots and mark it active. Now the colours are a real saved card —
+	// clicking a preset switches AWAY but the custom card stays one click from
+	// restore; nothing is silently lost.
+	//
+	// Returns the created palette object (so the caller can treat it as active
+	// this frame without re-reading the store), or null when nothing was done.
+	function maybeAutoPersistDiverged() {
+		// Never while applyPalette() is driving the pickers — the transient
+		// mid-switch slot values are not a user's brand colours.
+		if ( applying ) { return null; }
+		var cur = currentSlots();
+		// All six slots must be real hexes; a half-initialised picker set (some
+		// slots still empty during boot) must not be frozen into a palette.
+		if ( ! SLOT_KEYS.every( function( k ) { return !! cur[ k ]; } ) ) { return null; }
+
+		var all = allPalettes();
+		// Diverged only when the live slots match NO palette at all.
+		if ( all.some( function( p ) { return slotsMatch( cur, p.slots ); } ) ) { return null; }
+
+		// If a custom palette is already active, the colours are already saved
+		// (maybeSyncCustom keeps it in lockstep) — leave it alone.
+		var act = findPalette( getActive() );
+		if ( act && act.kind === 'user' ) { return null; }
+
+		// Reuse an existing auto card that already carries these exact colours
+		// instead of minting a duplicate on every render.
+		var customs = getCustoms();
+		var existing = customs.filter( function( p ) {
+			return /^user-auto-/.test( p.id || '' ) && slotsMatch( cur, p.slots );
+		} )[ 0 ];
+		if ( existing ) {
+			if ( getActive() !== existing.id ) { setActive( existing.id ); }
+			return { id: existing.id, name: existing.name, kind: 'user', slots: existing.slots };
+		}
+
+		var slots = {};
+		SLOT_KEYS.forEach( function( k ) { slots[ k ] = cur[ k ]; } );
+		var pal = { id: 'user-auto-' + Date.now(), name: T.custom || 'Custom colors', slots: slots };
+		customs.push( { id: pal.id, name: pal.name, slots: pal.slots } );
+		setCustoms( customs );
+		setActive( pal.id );
+		return pal;
+	}
+
 	function render() {
 		if ( ! window.wp || ! wp.customize ) { return; }
 		var section = document.getElementById( SECTION_ID );
 		if ( ! section ) { return; }
+		maybeAutoPersistDiverged();
 		var host = document.getElementById( 'customify-palette-switcher' );
 		if ( ! host ) {
 			host = document.createElement( 'li' );
@@ -695,6 +754,36 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		// so a click/drag on the name can select its text (and no needless
 		// "unsaved changes" from re-applying what's already shown).
 		if ( slotsMatch( currentSlots(), p.slots ) ) { return; }
+
+		// Palette-loss guard (confirm-on-switch). maybeAutoPersistDiverged() in
+		// render() normally captures diverged brand colours into a custom card
+		// before the user can reach here, so this is a last-resort net for the
+		// race where the slots were changed and a preset is clicked before any
+		// render fired. If the live colours still match NO palette and no custom
+		// is active, they are about to be overwritten and lost — offer to save
+		// them first rather than discarding silently.
+		var curNow = currentSlots();
+		var allNow = allPalettes();
+		var matchesAny = allNow.some( function( q ) { return slotsMatch( curNow, q.slots ); } );
+		var activeNow = findPalette( getActive() );
+		var customActive = !! ( activeNow && activeNow.kind === 'user' );
+		if ( ! matchesAny && ! customActive && SLOT_KEYS.every( function( k ) { return !! curNow[ k ]; } ) ) {
+			var keep = window.confirm(
+				( T.confirmDiscard ) ||
+				'You have unsaved brand colors that are not saved to any palette. ' +
+				'Switching will discard them.\n\nOK = save them as a palette first.\nCancel = discard and switch.'
+			);
+			if ( keep ) {
+				// Save current slots as a custom card, then continue to the
+				// clicked palette — the brand colours remain one click to restore.
+				var saved = {};
+				SLOT_KEYS.forEach( function( k ) { saved[ k ] = curNow[ k ]; } );
+				var cs = getCustoms();
+				cs.push( { id: 'user-auto-' + Date.now(), name: T.custom || 'Custom colors', slots: saved } );
+				setCustoms( cs );
+			}
+		}
+
 		applyPalette( p.slots );  // drive the pickers (≈7ms) — slots are now the palette
 		setActive( pid );
 		render();                 // instant active-state feedback (no 60ms wait)

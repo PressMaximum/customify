@@ -74,6 +74,41 @@
 			"customFontSize": true,
 			"dropCap": false,
 			"defaultFontSizes": false,
+			"fontFamilies": [
+				{
+					"slug": "system",
+					"name": "System",
+					"fontFamily": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif"
+				},
+				{
+					"slug": "oswald",
+					"name": "Oswald",
+					"fontFamily": "Oswald, sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "Oswald",
+							"fontStyle": "normal",
+							"fontWeight": "200 700",
+							"fontDisplay": "swap",
+							"src": [ "https://fonts.gstatic.com/s/oswald/v57/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlWHYg.woff2" ]
+						}
+					]
+				},
+				{
+					"slug": "ibm-plex-sans",
+					"name": "IBM Plex Sans",
+					"fontFamily": "\"IBM Plex Sans\", sans-serif",
+					"fontFace": [
+						{
+							"fontFamily": "IBM Plex Sans",
+							"fontStyle": "normal",
+							"fontWeight": "100 700",
+							"fontDisplay": "swap",
+							"src": [ "https://fonts.gstatic.com/s/ibmplexsans/v23/zYXzKVElMYYaJe8bpLHnCwDKr932-G7dytD-Dmu1syxeKYY.woff2" ]
+						}
+					]
+				}
+			],
 			"fontSizes": [
 				{
 					"slug": "small",

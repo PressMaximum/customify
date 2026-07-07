@@ -504,3 +504,139 @@ if ( ! function_exists( 'customify_colors_register_preview_refresh' ) ) {
 	}
 	add_action( 'customize_register', 'customify_colors_register_preview_refresh', 1100 );
 }
+
+// ──────────────────────────────────────────────────────────────────
+// Standalone body / content-background block for Customizer-preview
+// resilience.
+//
+// The page-level background rules (Page Background → `body`, Content Area
+// Background → `.site-content .content-area`, Site Content Background →
+// `.site-content`) are emitted by auto_css() onto the `customify-style`
+// inline handle at wp_enqueue_scripts. A WP selective-refresh partial
+// (opening the Header builder, changing the colour palette, …) re-renders
+// ONLY the matched partial's HTML — it does NOT re-run wp_enqueue_scripts,
+// so that inline block is neither preserved (if it sat inside a replaced
+// container) nor re-emitted. Result: the moment the user touches the header
+// builder or the palette, the page body loses its background/section styling
+// and flashes unstyled, while the header still looks right.
+//
+// Fix: also print these rules as a STANDALONE `<style id="customify-auto-css">`
+// in <head> (outside every builder/selective-refresh container) and register
+// a selective_refresh partial for it — the exact pattern the palette-tokens
+// partial already proves at customify_colors_register_preview_refresh() above
+// (`container_inclusive => false`, render callback re-runs the same PHP that
+// produced the initial block). Now a header/footer/palette partial swap
+// re-renders this block instead of stripping it, so the body background
+// survives. On first load the rules duplicate auto_css()'s output verbatim
+// (identical selectors/values); this tag prints later so it wins by source
+// order with zero visual difference.
+//
+// (Blocksify ships the matching fix for its own dynamic per-instance CSS —
+// separate handoff.)
+// ──────────────────────────────────────────────────────────────────
+
+if ( ! function_exists( 'customify_body_background_css' ) ) {
+	/**
+	 * Render the page-level background rules (Page / Content Area / Site
+	 * Content backgrounds) via the auto-CSS engine. Same output as the
+	 * matching slice of auto_css(), but callable on its own so it can be a
+	 * re-renderable selective-refresh partial. Returns '' when nothing is
+	 * saved (empty-default composites emit nothing — unchanged behaviour).
+	 *
+	 * @return string CSS body (no <style> wrapper — matches how the palette
+	 *                tokens partial returns bare CSS).
+	 */
+	function customify_body_background_css() {
+		if ( ! function_exists( 'Customify' ) || ! Customify()->customizer ) {
+			return '';
+		}
+		$keys   = array( 'background', 'site_content_styling', 'content_background' );
+		$fields = array();
+		foreach ( $keys as $k ) {
+			$f = Customify()->customizer->get_field_setting( $k );
+			if ( $f ) {
+				$fields[ $k ] = $f;
+			}
+		}
+		if ( empty( $fields ) ) {
+			return '';
+		}
+		$c = new Customify_Customizer_Auto_CSS();
+		return (string) $c->render_css( $fields );
+	}
+}
+
+if ( ! function_exists( 'customify_print_body_background_style' ) ) {
+	/**
+	 * Print the standalone `<style id="customify-auto-css">` block. Runs at
+	 * wp_head priority 96 — AFTER the scripts hook (priority 95 emits
+	 * auto_css() onto customify-style) so this identical, re-renderable copy
+	 * wins by source order and is the one selective-refresh keeps alive.
+	 */
+	function customify_print_body_background_style() {
+		if ( ! function_exists( 'customify_body_background_css' ) ) {
+			return;
+		}
+		// Always emit the tag (even empty) in the customize preview so the
+		// selective-refresh partial always has its container to re-render into;
+		// on the frontend skip an empty block to avoid a pointless <style>.
+		$css = customify_body_background_css();
+		if ( '' === $css && ! is_customize_preview() ) {
+			return;
+		}
+		echo "\n<style id='customify-auto-css'>\n" . $css . "\n</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSS built by the auto-CSS engine (values sanitised at save + render).
+	}
+	add_action( 'wp_head', 'customify_print_body_background_style', 96 );
+}
+
+if ( ! function_exists( 'customify_register_body_background_partial' ) ) {
+	/**
+	 * Register the selective-refresh partial for `#customify-auto-css` so a
+	 * palette / header-builder / footer partial swap re-renders the body
+	 * background instead of dropping it. Bound to the colour settings AND the
+	 * three background composites that feed the block. Priority 1101 runs just
+	 * after customify_colors_register_preview_refresh (1100) so its settings
+	 * list is the authority.
+	 *
+	 * @param WP_Customize_Manager $wp_customize Customizer manager.
+	 */
+	function customify_register_body_background_partial( $wp_customize ) {
+		if ( ! isset( $wp_customize->selective_refresh ) || ! function_exists( 'customify_body_background_css' ) ) {
+			return;
+		}
+		$settings = array(
+			// Palette slots — the body background derives from the Base slot
+			// var cascade, so a palette change must re-render it.
+			'global_styling_color_primary',
+			'global_styling_color_secondary',
+			'customify_palette_accent',
+			'customify_palette_text',
+			'customify_palette_surface',
+			'customify_palette_base',
+			// The three background composites themselves.
+			'background',
+			'site_content_styling',
+			'content_background',
+			// Palette store/active markers (a card switch rewrites the slots).
+			'customify_active_palette',
+			'customify_color_palettes',
+		);
+		// Bind the full list unconditionally — the sibling palette-tokens
+		// partial (customify_colors_register_preview_refresh, priority 1100)
+		// binds the same colour settings the same way, proving they are all
+		// registered by the time this priority-1101 hook fires (Customify's
+		// own register() runs at 666). WP selective refresh tolerates a
+		// setting id it can look up here.
+
+		$wp_customize->selective_refresh->add_partial(
+			'customify_auto_css',
+			array(
+				'selector'            => '#customify-auto-css',
+				'settings'            => $settings,
+				'render_callback'     => 'customify_body_background_css',
+				'container_inclusive' => false,
+			)
+		);
+	}
+	add_action( 'customize_register', 'customify_register_body_background_partial', 1101 );
+}

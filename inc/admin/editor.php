@@ -394,8 +394,98 @@ class Customify_Editor {
 		$c             = new Customify_Customizer_Auto_CSS();
 		$css_code      = $c->render_css( $config_fields );
 
+		// Get the ACTIVE fonts' files into the editor iframe. WP 6.5+ renders
+		// the canvas in an iframe; only theme.json fontFamilies (auto-@font-face)
+		// and `editor_settings['styles']` CSS reach inside it — a `<link>`
+		// enqueued in the outer shell (see assets()) never downloads there. The
+		// same $c instance just ran setup_font() for every active typography
+		// field while rendering above, so its font buckets are populated: reuse
+		// them to emit the @font-face / @import the iframe needs, so demos using
+		// arbitrary per-template Google fonts render in the editor without a
+		// per-demo theme.json edit. Google fonts arrive as an @import (must lead
+		// the stylesheet); Theme/Library fonts as standalone @font-face.
+		$font_import = '';
+		if ( method_exists( $c, 'get_google_fonts_url' ) ) {
+			$google_url = $c->get_google_fonts_url();
+			if ( $google_url ) {
+				// get_google_fonts_url() returns a protocol-relative `//` URL.
+				// esc_url_raw (not esc_url) — this lands inside a CSS
+				// `@import url('…')` string, so the `&` between query args must
+				// stay literal; esc_url would HTML-entity it (`&#038;`) and break
+				// the request. Single quotes are stripped by the URL escaper.
+				$font_import .= "@import url('" . esc_url_raw( set_url_scheme( $google_url, 'https' ) ) . "');\n";
+			}
+		}
+		$font_faces = '';
+		if ( method_exists( $c, 'get_theme_fonts_css' ) ) {
+			$font_faces .= (string) $c->get_theme_fonts_css();
+		}
+		if ( method_exists( $c, 'get_library_fonts_css' ) ) {
+			$font_faces .= (string) $c->get_library_fonts_css();
+		}
+		// @import must precede all other rules in the stylesheet.
+		$file_contents  = $font_import . $file_contents . $font_faces;
+
 		$file_contents .= $css_code;
+
+		// The config render above emits the `:root { --customify-typo-*-* }`
+		// tokens (Base body / Heading / h1–h6), but the RULES that consume
+		// them (`body{font-family:var(--customify-typo-body-font-family,…)}`,
+		// `h1..h6{font-family:var(--customify-typo-heading-font-family,…)}`)
+		// live only in the FRONTEND stylesheet (src/frontend/scss/base/_base.scss)
+		// — they are never compiled into the editor canvas. Worse, WP core
+		// ships `.editor-styles-wrapper` typography that out-specifies any
+		// bare `body`/`h1` consumer we could add, so the buyer edits in a
+		// fallback font even when the token is set. Emit the missing consumer
+		// rules here, scoped to `.editor-styles-wrapper` (same wrapper the
+		// color/background re-scoping above already uses) so they resolve the
+		// same token cascade as the frontend and win over core typography.
+		$file_contents .= $this->typography_scope_css();
+
 		return $file_contents;
+	}
+
+	/**
+	 * Editor-canvas consumer rules for the typography tokens.
+	 *
+	 * Mirrors the frontend `body` / `h1..h6` font rules from
+	 * `src/frontend/scss/base/_base.scss`, but scoped to
+	 * `.editor-styles-wrapper` so they out-specify WP core's canvas
+	 * typography (bare `body`/`h1` would lose the cascade inside the
+	 * editor iframe). Font-family + weight are the only foundational
+	 * tokens the shared Heading field emits; the literal fallbacks match
+	 * `$font_main` / the per-level SCSS defaults so an unset site renders
+	 * identically to the frontend. The `@font-face` that makes the chosen
+	 * family actually paint is emitted separately (theme.json fontFamilies
+	 * + the preview/editor font bridges).
+	 *
+	 * @return string CSS code.
+	 */
+	private function typography_scope_css() {
+		$font_main = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+		$w         = '.editor-styles-wrapper';
+
+		$css  = "{$w},{$w} p{"
+			. "font-family:var(--customify-typo-body-font-family, {$font_main});"
+			. 'font-weight:var(--customify-typo-body-font-weight, 400);'
+			. 'line-height:var(--customify-typo-body-line-height, 1.618);'
+			. '}';
+
+		$headings = 'h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6';
+		$sel      = array();
+		foreach ( explode( ',', $headings ) as $h ) {
+			$sel[] = $w . ' ' . $h;
+		}
+		// The post title is a block (.wp-block-post-title) that stands in for
+		// the page's h1 in the canvas — include it so the title also follows
+		// the heading family (matches the h1 re-scoping in css()).
+		$sel[] = $w . ' .wp-block-post-title';
+		$css  .= implode( ',', $sel ) . '{'
+			. "font-family:var(--customify-typo-heading-font-family, {$font_main});"
+			. 'font-weight:var(--customify-typo-heading-font-weight, 400);'
+			. '}';
+
+		return $css;
 	}
 
 }
