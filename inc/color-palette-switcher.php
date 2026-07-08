@@ -229,6 +229,9 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 				'applied'    => __( 'Palette applied', 'customify' ),
 				'noCustom'   => __( 'No custom palettes yet — create one first.', 'customify' ),
 				'linkedTip'  => __( 'Linked to palette', 'customify' ),
+				'switchTitle' => __( 'Save current colors?', 'customify' ),
+				'switchSave'  => __( 'These colors are not saved as a palette. Save them before switching so you can recover them later.', 'customify' ),
+				'saveSwitch'  => __( 'Save & switch', 'customify' ),
 			),
 		);
 
@@ -267,14 +270,21 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 	}
 	function decodeVal( v ) {
 		if ( typeof v !== 'string' ) { return v; }
-		try { return JSON.parse( decodeURI( v ) ); } catch ( e ) { return v; }
+		try { return JSON.parse( decodeURIComponent( v ) ); } catch ( e ) {}
+		try { return JSON.parse( decodeURI( v ) ); } catch ( e ) {}
+		try { return decodeURIComponent( v ); } catch ( e ) {}
+		try { return decodeURI( v ); } catch ( e ) {}
+		return v;
+	}
+	function normalizeSlotVal( v ) {
+		var decoded = decodeVal( v );
+		return ( typeof decoded === 'string' && decoded ) ? decoded.trim().toLowerCase() : '';
 	}
 	function readSetting( id ) {
 		try { return wp.customize( id ).get(); } catch ( e ) { return undefined; }
 	}
 	function readSlotHex( key ) {
-		var v = decodeVal( readSetting( SLOTMAP[ key ] ) );
-		return ( typeof v === 'string' && v ) ? v.toLowerCase() : '';
+		return normalizeSlotVal( readSetting( SLOTMAP[ key ] ) );
 	}
 	function currentSlots() {
 		var s = {};
@@ -300,7 +310,9 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		return null;
 	}
 	function slotsMatch( a, b ) {
-		return SLOT_KEYS.every( function( k ) { return ( a[ k ] || '' ).toLowerCase() === ( b[ k ] || '' ).toLowerCase(); } );
+		a = a || {};
+		b = b || {};
+		return SLOT_KEYS.every( function( k ) { return normalizeSlotVal( a[ k ] ) === normalizeSlotVal( b[ k ] ); } );
 	}
 
 	// Apply a palette by driving the existing slot color pickers — the exact
@@ -340,6 +352,7 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 
 	// ---- panels (add / import / export) ----
 	var panel = null;       // 'add' | 'import' | 'export' | null
+	var pendingSwitch = null;
 	var fromSel = 'current';
 	var exportSel = 'all';
 
@@ -352,6 +365,14 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		} ).join( '' );
 	}
 	function panelHtml() {
+		if ( pendingSwitch ) {
+			return '<div class="cps-form" role="alertdialog" aria-labelledby="cps-switch-title" aria-describedby="cps-switch-copy">'
+				+ '<label id="cps-switch-title">' + esc( T.switchTitle ) + '</label>'
+				+ '<p class="cps-confirm-text" id="cps-switch-copy">' + esc( T.switchSave ) + '</p>'
+				+ '<div class="cps-row"><button type="button" class="button-link" data-act="switch-cancel">' + esc( T.cancel ) + '</button>'
+				+ '<button type="button" class="button button-primary" data-act="switch-ok">' + esc( T.saveSwitch || 'Save & switch' ) + '</button></div>'
+				+ '</div>';
+		}
 		if ( panel === 'add' ) {
 			return '<div class="cps-form">'
 				+ '<label>' + esc( T.name ) + '</label>'
@@ -450,6 +471,7 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 				content.insertBefore( host, content.firstChild );
 			}
 		}
+		host.classList.toggle( 'is-switch-pending', !! pendingSwitch );
 
 		var cur = currentSlots();
 		var pals = allPalettes();
@@ -525,6 +547,7 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		// Keep the 6 slot pickers' reset/dirty baseline pointed at the active
 		// palette (see syncSlotDefaults).
 		syncSlotDefaults( activePal );
+		if ( pendingSwitch ) { focusSwitchConfirm(); }
 	}
 
 	// ---- event delegation ----
@@ -534,6 +557,28 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		var act = this.getAttribute( 'data-act' );
 		var id = this.getAttribute( 'data-id' );
 		var host = document.getElementById( 'customify-palette-switcher' );
+
+		if ( act === 'switch-cancel' ) { pendingSwitch = null; render(); return; }
+		if ( act === 'switch-ok' ) {
+			var target = findPalette( pendingSwitch );
+			if ( ! target ) { pendingSwitch = null; render(); return; }
+			var curSlots = currentSlots();
+			var alreadySaved = allPalettes().some( function( palette ) { return slotsMatch( curSlots, palette.slots ); } );
+			if ( ! alreadySaved ) {
+				var savedSlots = {};
+				SLOT_KEYS.forEach( function( k ) { savedSlots[ k ] = curSlots[ k ] || '#000000'; } );
+				var customsPending = getCustoms();
+				customsPending.push( { id: 'user-' + Date.now(), name: ( T.custom || 'Custom colors' ), slots: savedSlots } );
+				setCustoms( customsPending );
+			}
+			var pid = pendingSwitch;
+			pendingSwitch = null;
+			applyPalette( target.slots );
+			setActive( pid );
+			render();
+			return;
+		}
+		if ( pendingSwitch ) { return; }
 
 		if ( act === 'add' ) { panel = ( panel === 'add' ? null : 'add' ); fromSel = 'current'; render(); focusFirst(); return; }
 		if ( act === 'import' ) { panel = ( panel === 'import' ? null : 'import' ); render(); focusFirst(); return; }
@@ -688,13 +733,21 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 
 	// apply a palette by clicking its card (ignore clicks on inner buttons/inputs)
 	function cardActivate( card ) {
+		if ( pendingSwitch ) { return; }
 		var pid = card.getAttribute( 'data-id' );
 		var p = findPalette( pid );
 		if ( ! p ) { return; }
+		var cur = currentSlots();
 		// Colours already match this palette — nothing to apply. Skip the re-render
 		// so a click/drag on the name can select its text (and no needless
 		// "unsaved changes" from re-applying what's already shown).
-		if ( slotsMatch( currentSlots(), p.slots ) ) { return; }
+		if ( slotsMatch( cur, p.slots ) ) { return; }
+		var unsaved = ! allPalettes().some( function( palette ) { return slotsMatch( cur, palette.slots ); } );
+		if ( unsaved ) {
+			pendingSwitch = pid;
+			render();
+			return;
+		}
 		applyPalette( p.slots );  // drive the pickers (≈7ms) — slots are now the palette
 		setActive( pid );
 		render();                 // instant active-state feedback (no 60ms wait)
@@ -709,11 +762,24 @@ if ( ! function_exists( 'customify_color_palette_switcher_assets' ) ) {
 		if ( e.target && e.target.tagName === 'INPUT' ) { return; } // don't hijack typing in the rename field
 		if ( e.key === 'Enter' || e.key === ' ' ) { e.preventDefault(); cardActivate( this ); }
 	} );
+	$( document ).on( 'keydown', function( e ) {
+		if ( e.key === 'Escape' && pendingSwitch ) {
+			e.preventDefault();
+			pendingSwitch = null;
+			render();
+		}
+	} );
 
 	function focusFirst() {
 		var host = document.getElementById( 'customify-palette-switcher' );
 		if ( ! host ) { return; }
 		var el = host.querySelector( '.cps-name-in, .cps-json' );
+		if ( el ) { el.focus(); }
+	}
+	function focusSwitchConfirm() {
+		var host = document.getElementById( 'customify-palette-switcher' );
+		if ( ! host ) { return; }
+		var el = host.querySelector( '[data-act="switch-ok"]' );
 		if ( el ) { el.focus(); }
 	}
 
@@ -845,9 +911,12 @@ if ( ! function_exists( 'customify_color_palette_switcher_css' ) ) {
 .customify-cps .cps-form label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: #646970; }
 .customify-cps .cps-form input[type=text], .customify-cps .cps-form textarea, .customify-cps .cps-form select { width: 100%; box-sizing: border-box; }
 .customify-cps .cps-form textarea { font-family: ui-monospace, Menlo, monospace; font-size: 11px; }
+.customify-cps .cps-confirm-text { margin: 0; color: #50575e; font-size: 12px; line-height: 1.45; }
 .customify-cps .cps-row { display: flex; gap: 6px; justify-content: flex-end; align-items: center; }
 .customify-cps .cps-err { color: #d63638; font-size: 11px; min-height: 13px; }
 .customify-cps .cps-err:empty { min-height: 0; }
+.customify-cps.is-switch-pending .cps-cards,
+.customify-cps.is-switch-pending .cps-modified { opacity: .55; pointer-events: none; }
 .customify-cps .cps-from { display: flex; flex-wrap: wrap; gap: 5px; }
 .customify-cps .cps-chip { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px 3px 5px; border-radius: 12px; background: #f6f7f7; border: 1.5px solid transparent; cursor: pointer; font-size: 12px; color: #50575e; }
 .customify-cps .cps-chip.is-sel { border-color: var(--wp-admin-theme-color, #3858e9); background: color-mix(in srgb, var(--wp-admin-theme-color, #3858e9) 8%, #fff); color: #1d2327; }
