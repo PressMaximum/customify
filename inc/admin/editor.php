@@ -337,7 +337,9 @@ class Customify_Editor {
 	public function editor_settings( $editor_settings ) {
 
 		$editor_settings['styles'][] = array(
-			'css' => $this->load_style(),
+			'css'              => $this->load_style(),
+			'__unstableType'   => 'theme',
+			'source'           => 'customify',
 		);
 
 		return $editor_settings;
@@ -394,8 +396,66 @@ class Customify_Editor {
 		$c             = new Customify_Customizer_Auto_CSS();
 		$css_code      = $c->render_css( $config_fields );
 
+		$file_contents = $this->editor_font_files_css( $c ) . $file_contents;
 		$file_contents .= $css_code;
+		$file_contents .= $this->editor_typography_consumer_css();
 		return $file_contents;
+	}
+
+	/**
+	 * Build active font-file declarations for the editor iframe.
+	 *
+	 * @param Customify_Customizer_Auto_CSS $auto_css Auto CSS renderer after render_css().
+	 * @return string
+	 */
+	private function editor_font_files_css( $auto_css ) {
+		$css        = '';
+		$google_url = $auto_css->get_google_fonts_url();
+
+		if ( $google_url ) {
+			$css .= "@import url('" . esc_url_raw( set_url_scheme( $google_url, 'https' ) ) . "');\n";
+		}
+
+		$font_faces = $auto_css->get_theme_fonts_css() . $auto_css->get_library_fonts_css();
+		if ( $font_faces ) {
+			$css .= $font_faces . "\n";
+		}
+
+		return $css;
+	}
+
+	/**
+	 * Mirror frontend typography consumers inside the editor canvas.
+	 *
+	 * @return string
+	 */
+	private function editor_typography_consumer_css() {
+		$font_main = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+
+		return "
+.editor-styles-wrapper {
+	font-family: var(--customify-typo-body-font-family, {$font_main});
+	font-weight: var(--customify-typo-body-font-weight, 400);
+	font-size: var(--customify-typo-body-font-size, inherit);
+	line-height: var(--customify-typo-body-line-height, 1.618);
+}
+.editor-styles-wrapper h1,
+.editor-styles-wrapper h2,
+.editor-styles-wrapper h3,
+.editor-styles-wrapper h4,
+.editor-styles-wrapper h5,
+.editor-styles-wrapper h6,
+.editor-styles-wrapper .h1,
+.editor-styles-wrapper .h2,
+.editor-styles-wrapper .h3,
+.editor-styles-wrapper .h4,
+.editor-styles-wrapper .h5,
+.editor-styles-wrapper .h6,
+.editor-styles-wrapper .wp-block-post-title {
+	font-weight: var(--customify-typo-heading-font-weight, 400);
+	font-family: var(--customify-typo-heading-font-family, {$font_main});
+}
+";
 	}
 
 }
