@@ -148,7 +148,7 @@
 			"lineHeight": "1.75"
 		},
 		"spacing": {
-			"blockGap": "1.5rem"
+			"blockGap": false
 		},
 		"blocks": {
 			"core/search": {
