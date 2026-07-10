@@ -55,8 +55,11 @@
 	// Expand to full viewport width from a centered content area.
 	width: 100vw;
 	max-width: 100vw;
-	margin-top: 1.5em;
-	margin-bottom: 1.5em;
+	// Vertical rhythm driven by theme.json → styles.spacing.blockGap.
+	// Variable is emitted only when blockGap has a value; when blockGap is
+	// false the variable is absent and the fallback 0 applies — i.e. no spacing.
+	margin-top: var(--wp--style--block-gap, 0);
+	margin-bottom: var(--wp--style--block-gap, 0);
 	margin-left: calc(50% - 50vw);
 	margin-right: calc(50% - 50vw);
 	box-sizing: border-box;
@@ -90,8 +93,12 @@
 // bottom spacing that p/heading/list elements carry naturally.
 // Scoped to `.entry-content` so the rule is frontend-only; the editor canvas
 // uses .editor-styles-wrapper / .is-root-container scope instead.
+//
+// Acts as a flag off theme.json → styles.spacing.blockGap:
+//   - blockGap: <value> → WP emits `--wp--style--block-gap` → margin auto-uses it
+//   - blockGap: false   → variable absent → fallback 0 applies → no block spacing
 .entry-content > div[class*="wp-block-"] {
-	margin-bottom: 1.41575em;
+	margin-bottom: var(--wp--style--block-gap, 0);
 }
 
 // Auto-wire WCAG-safe foreground for blocks using brand-color backgrounds.
