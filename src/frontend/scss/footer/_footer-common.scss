@@ -183,6 +183,16 @@
 	font-size: 0.875em;
 }
 
+// Copyright links carry a visible underline so they are distinguishable from
+// surrounding body text without relying on color alone (WCAG SC 1.4.1 "Use of
+// Color" — Lighthouse `link-in-text-block`). The copyright block emits a plain
+// `<a>` inside a `<p>`; without this rule the link inherits body color and
+// fails contrast between link and prose text.
+.builder-footer-copyright-item a {
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
 // Footer grid layout.
 // .row-v2 normally uses display:flex (from header builder common).
 // For footer we switch to CSS Grid so that col_layout settings control widths.
