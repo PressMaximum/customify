@@ -28,14 +28,6 @@ button {
     font-family: inherit;
 }
 
-// The broad button rule further down sets `display: inline-flex`; its
-// specificity (0,1,1) outranks the UA/normalize `[hidden] { display: none }`
-// (0,1,0), so a `<button hidden>` — or any element a theme display rule
-// targets — stays visible despite the valid HTML `hidden` attribute. Force
-// `[hidden]` to win so plugins/markup can rely on it.
-[hidden] {
-    display: none !important;
-}
 
 input[type="text"],
 input[type="email"],
