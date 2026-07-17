@@ -169,6 +169,15 @@ p.demo_store,
         }
     }
 
+    // Customify gives number fields a fixed height, while the Add To Cart
+    // stepper adds vertical padding to its quantity input. WooCommerce also
+    // switches that input to content-box, which otherwise adds both values
+    // together and stretches the whole purchase row.
+    .wc-block-add-to-cart-form--stepper .wc-block-components-quantity-selector input.qty {
+        box-sizing: border-box;
+        height: auto;
+    }
+
     .blockUI.blockOverlay {
         position: relative;
         z-index: 35 !important;
@@ -618,5 +627,4 @@ td.product-quantity {
     margin: 0.5em 0 0;
     display: block;
 }
-
 
