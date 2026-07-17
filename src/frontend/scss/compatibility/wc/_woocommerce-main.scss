@@ -169,6 +169,17 @@ p.demo_store,
         }
     }
 
+    // Customify gives number fields a fixed height, while the Add To Cart
+    // stepper adds vertical padding to its quantity input. Keep the input from
+    // setting the grid row height so the stepper follows the adjacent button.
+    .wc-block-add-to-cart-form.wc-block-add-to-cart-form--stepper
+    .wc-block-components-quantity-selector
+    input[type="number"].input-text.qty.text {
+        box-sizing: border-box;
+        height: 100%;
+        padding-block: 0;
+    }
+
     .blockUI.blockOverlay {
         position: relative;
         z-index: 35 !important;
@@ -618,5 +629,3 @@ td.product-quantity {
     margin: 0.5em 0 0;
     display: block;
 }
-
-
