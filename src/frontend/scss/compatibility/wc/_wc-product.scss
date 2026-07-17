@@ -344,8 +344,9 @@ div.product {
                 margin-right: 1em;
                 color: #444444;
             }
-            td.label {
-                padding-right: 1em;
+            td.label,
+            th.label {
+                padding-inline-end: 1em;
             }
         }
 
@@ -399,6 +400,14 @@ div.product {
             }
         }
     }
+}
+
+// The block can render this table in a narrow content column. Let the select
+// size to its option text and reserve enough room for the native arrow.
+div.product.wc-block-add-to-cart-form form.cart .variations select {
+    min-width: 12em;
+    padding-inline-end: 2em;
+    width: auto;
 }
 
 span.onsale {
