@@ -323,6 +323,11 @@ div.product {
             td,
             th {
                 border: 0;
+                // Add To Cart blocks reuse WooCommerce's classic variations
+                // table outside a native single-product page. Neutralize the
+                // theme's global table surface and spacing in both contexts.
+                background-color: transparent;
+                padding: 0;
                 vertical-align: top;
                 line-height: 2em;
             }
