@@ -82,6 +82,13 @@ jQuery(document).ready(function($) {
 	$.fn._wc_plus_minus = function() {
 		this.each(function() {
 			var input = $(this);
+
+			// WooCommerce add-to-cart blocks own their quantity markup and
+			// interactivity. Do not wrap the input or add a theme +/- pair.
+			if (input.closest(".wc-block-add-to-cart-form, .wc-block-add-to-cart-with-options").length) {
+				return;
+			}
+
 			var check = input.data("qty-added") || false;
 			if (!check) {
 				input.data("qty-added", 1);
