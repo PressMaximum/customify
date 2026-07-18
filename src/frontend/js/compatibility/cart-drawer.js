@@ -20,7 +20,7 @@
 
 	var FOCUSABLE = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-	var drawer, overlay, lastFocused, autoOpenArmed = false;
+	var drawer, overlay, lastFocused, autoOpenArmed = false, autoOpenTimer = null;
 
 	function getScrollbarWidth() {
 		return window.innerWidth - document.documentElement.clientWidth;
@@ -145,6 +145,35 @@
 		);
 	}
 
+	// Arm the drawer until WooCommerce's refreshed mini-cart fragments arrive.
+	// The timeout is a safety net for fragment plugins that omit the completion
+	// event; it is intentionally longer for Store API requests because their
+	// classic mini-cart fragments are refreshed as a second request.
+	function armAutoOpen( fallbackDelay ) {
+		if ( ! autoOpen ) {
+			return;
+		}
+
+		autoOpenArmed = true;
+		window.clearTimeout( autoOpenTimer );
+		autoOpenTimer = window.setTimeout( function () {
+			if ( autoOpenArmed ) {
+				autoOpenArmed = false;
+				open( true );
+			}
+		}, fallbackDelay );
+	}
+
+	function openWhenFragmentsAreReady() {
+		if ( ! autoOpenArmed ) {
+			return;
+		}
+
+		autoOpenArmed = false;
+		window.clearTimeout( autoOpenTimer );
+		open( true );
+	}
+
 	function bind() {
 		// Belt-and-suspenders against a double enqueue: bind the delegated
 		// handlers / auto-open listeners only once.
@@ -189,33 +218,31 @@
 		// Capture phase so ESC wins over other handlers.
 		document.addEventListener( 'keydown', onKeydown, true );
 
-		// Auto-open after add-to-cart — wait for fresh fragments so the drawer
-		// shows updated contents, and don't yank focus off the page. Two-step:
-		// arm on added_to_cart, open on the fragment refresh. The setTimeout is
-		// a script-order safety net: WooCommerce can fire wc_fragments_loaded
-		// synchronously inside the SAME added_to_cart dispatch, before this arm
-		// handler runs — the fragment listener would then miss it. WC replaces
-		// the fragments BEFORE firing added_to_cart, so opening on the next tick
-		// still shows fresh contents; the fragment listener handles the normal
-		// case and clears the flag so this never double-opens.
-		if ( autoOpen ) {
-			$( document.body ).on( 'added_to_cart', function () {
-				autoOpenArmed = true;
-				window.setTimeout( function () {
-					if ( autoOpenArmed ) {
-						autoOpenArmed = false;
-						open( true );
-					}
-				}, 0 );
-			} );
+		// Classic product-loop buttons already replace mini-cart fragments before
+		// `added_to_cart`, so the next-tick fallback is enough if the fragment
+		// event happened earlier in the same dispatch.
+		$( document.body ).on( 'added_to_cart', function () {
+			armAutoOpen( 0 );
+		} );
 
-			$( document.body ).on( 'wc_fragments_refreshed wc_fragments_loaded', function () {
-				if ( autoOpenArmed ) {
-					autoOpenArmed = false;
-					open( true );
-				}
-			} );
-		}
+		$( document.body ).on(
+			'wc_fragments_refreshed wc_fragments_loaded',
+			openWhenFragmentsAreReady
+		);
+
+		// Woo blocks and compatible third-party blocks use the native event
+		// contract. Store API cart state does not update this classic mini-cart
+		// markup, so ask WooCommerce fragments to refresh it before opening. The
+		// preserveCartData flag distinguishes a real Store API completion from
+		// Woo Blocks' jQuery-to-native bridge for classic added_to_cart events.
+		document.body.addEventListener( 'wc-blocks_added_to_cart', function ( e ) {
+			if ( ! e.detail || e.detail.preserveCartData !== true ) {
+				return;
+			}
+
+			armAutoOpen( 2000 );
+			$( document.body ).trigger( 'wc_fragment_refresh' );
+		} );
 
 		// Tear down a stuck-open drawer restored from the bfcache (back button).
 		window.addEventListener( 'pageshow', function ( e ) {
