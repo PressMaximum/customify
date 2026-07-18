@@ -1,4 +1,31 @@
 jQuery(document).ready(function($) {
+	var cartActiveTimer = null;
+	var nativeCartRefreshArmed = false;
+	var nativeCartRefreshTimer = null;
+
+	function activateCartDropdown() {
+		var cart = $(".item--wc_cart");
+		if (!cart.length) {
+			return;
+		}
+
+		cart.addClass("cart-active");
+		clearTimeout(cartActiveTimer);
+		cartActiveTimer = setTimeout(function() {
+			cart.removeClass("cart-active");
+		}, 4000);
+	}
+
+	function activateDropdownWhenFragmentsAreReady() {
+		if (!nativeCartRefreshArmed) {
+			return;
+		}
+
+		nativeCartRefreshArmed = false;
+		clearTimeout(nativeCartRefreshTimer);
+		activateCartDropdown();
+	}
+
 	if ($.blockUI) {
 		$.blockUI.defaults.overlayCSS.backgroundColor = "#FFF";
 		$.blockUI.defaults.overlayCSS.opacity = 0.7;
@@ -13,11 +40,35 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$(document.body).on("added_to_cart", function(event, fragments, cart_hash) {
-		$(".item--wc_cart").addClass("cart-active");
-		setTimeout(function() {
-			$(".item--wc_cart").removeClass("cart-active");
-		}, 4000);
+	$(document.body).on("added_to_cart", function() {
+		activateCartDropdown();
+	});
+
+	$(document.body).on(
+		"wc_fragments_refreshed wc_fragments_loaded",
+		activateDropdownWhenFragmentsAreReady
+	);
+
+	// Woo blocks and compatible third-party blocks emit a native event after a
+	// Store API add. Dropdown mode has no cart-drawer listener, so refresh the
+	// classic mini-cart fragment here and reveal it only when its contents are
+	// current. Ignore Woo Blocks' classic jQuery bridge (no preserveCartData) to
+	// avoid processing the same legacy add twice.
+	document.body.addEventListener("wc-blocks_added_to_cart", function(event) {
+		if (
+			!event.detail ||
+			event.detail.preserveCartData !== true ||
+			!document.querySelector(".item--wc_cart .cart-dropdown-box")
+		) {
+			return;
+		}
+
+		nativeCartRefreshArmed = true;
+		clearTimeout(nativeCartRefreshTimer);
+		nativeCartRefreshTimer = setTimeout(function() {
+			activateDropdownWhenFragmentsAreReady();
+		}, 2000);
+		$(document.body).trigger("wc_fragment_refresh");
 	});
 
 	if (Customify_JS.wc_open_cart) {
