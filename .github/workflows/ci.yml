@@ -1,0 +1,89 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches:
+      - dev
+      - master
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**"
+      - ".claude/**"
+      - ".codex/**"
+      - ".github/ISSUE_TEMPLATE/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Validate production theme
+    if: github.event.pull_request.draft == false && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, macOS, ARM64, pressmaximum-ci]
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          package-manager-cache: false
+
+      - name: Install JavaScript dependencies
+        run: npm ci --legacy-peer-deps --prefer-offline --no-audit
+
+      - name: Use PHP 8.3
+        run: |
+          set -euo pipefail
+          export PATH="/opt/homebrew/opt/php@8.3/bin:$PATH"
+          echo "/opt/homebrew/opt/php@8.3/bin" >> "$GITHUB_PATH"
+          php -r 'if (PHP_MAJOR_VERSION !== 8 || PHP_MINOR_VERSION !== 3) { fwrite(STDERR, "Expected PHP 8.3, got " . PHP_VERSION . PHP_EOL); exit(1); }'
+          php --version
+          composer --version
+
+      - name: Validate Composer manifest
+        run: composer validate --no-check-publish --no-check-lock
+
+      - name: Lint PHP
+        run: bash scripts/ci/lint-php.sh
+
+      - name: Lint changed source files
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: bash scripts/ci/lint-changed.sh "$BASE_SHA" "$GITHUB_SHA"
+
+      - name: Build production assets
+        run: npm run build
+
+      - name: Install production Composer dependencies
+        run: |
+          set -euo pipefail
+          composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction
+          test -f vendor/autoload.php
+          test -f vendor/pressmaximum/dashboard-kit/includes/Boot.php
+
+      - name: Build production ZIP
+        run: npx grunt zipfile
+
+      - name: Validate production ZIP
+        run: bash scripts/ci/validate-zip.sh
+
+      - name: Smoke-test WordPress latest
+        run: bash scripts/ci/runtime-smoke.sh
+
+      - name: Stop WordPress test environment
+        if: always()
+        run: |
+          npx --yes @wordpress/env@11.11.0 stop --config=.wp-env.json || true
+          rm -rf -- "$GITHUB_WORKSPACE/.ci-runtime"

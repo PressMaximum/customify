@@ -39,6 +39,13 @@ Full setup, prerequisites, troubleshooting: [`docs/DEVELOPMENT.md`](docs/DEVELOP
 
 Never use Grunt for CSS/JS compilation. Grunt is packaging-only.
 
+### CI policy
+
+- Open feature and fix PRs against `dev`. Promote tested release work from `dev` to `master`.
+- CI runs only for non-draft, same-repository PRs targeting `dev` or `master`; documentation-only changes are ignored.
+- The self-hosted gate uses WordPress latest on PHP 8.3. It lints changed source files, builds production assets, validates the release ZIP, and activates that ZIP in WordPress.
+- Full-source JavaScript/style lint is not yet a merge gate because the legacy tree has baseline violations. Do not broaden incremental lint without first paying down that baseline.
+
 ---
 
 ## 4. Hard rules
