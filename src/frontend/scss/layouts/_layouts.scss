@@ -138,6 +138,18 @@ body.disable-content-vertical-padding {
     }
 }
 
+body.content-area-spacing-top-only {
+    #sidebar-secondary, #sidebar-primary, #main {
+        padding-bottom: 0;
+    }
+}
+
+body.content-area-spacing-bottom-only {
+    #sidebar-secondary, #sidebar-primary, #main {
+        padding-top: 0;
+    }
+}
+
 
 .sidebar-content-sidebar {
     #main {
@@ -293,5 +305,4 @@ body.disable-content-vertical-padding {
         display: inline-block;
     }
 }
-
 
