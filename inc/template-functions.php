@@ -525,6 +525,45 @@ if ( ! function_exists( 'customify_get_meta_support_post_types' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_get_taxonomy_archive_post_type' ) ) {
+	/**
+	 * Get the single content CPT associated with a taxonomy archive.
+	 *
+	 * Taxonomies shared by multiple post types are intentionally unresolved so
+	 * their archives continue to use the generic archive sidebar setting.
+	 *
+	 * @param string $taxonomy_name Taxonomy slug.
+	 * @return string Post type slug, or an empty string when unresolved.
+	 */
+	function customify_get_taxonomy_archive_post_type( $taxonomy_name ) {
+		$taxonomy = get_taxonomy( $taxonomy_name );
+		if ( ! $taxonomy ) {
+			return '';
+		}
+
+		$object_types = array_values( array_unique( array_filter( (array) $taxonomy->object_type ) ) );
+		if ( 1 !== count( $object_types ) ) {
+			return '';
+		}
+
+		$post_type          = reset( $object_types );
+		$content_post_types = customify_get_content_post_types();
+		$post_type_object   = get_post_type_object( $post_type );
+
+		// WooCommerce owns product archive layouts through its shop-page filter.
+		if (
+			'product' === $post_type
+			|| ! isset( $content_post_types[ $post_type ] )
+			|| ! $post_type_object
+			|| ! $post_type_object->has_archive
+		) {
+			return '';
+		}
+
+		return $post_type;
+	}
+}
+
 if ( ! function_exists( 'customify_get_layout' ) ) {
 	/**
 	 * Get the layout for the current page from Customizer setting or individual page/post.
@@ -564,6 +603,18 @@ if ( ! function_exists( 'customify_get_layout' ) ) {
 					$layout = $cpt_archive;
 				} else {
 					$layout = Customify()->get_setting( 'posts_archives_sidebar_layout' );
+				}
+			} elseif ( is_tax() ) { // Custom taxonomy archive.
+				$layout         = Customify()->get_setting( 'posts_archives_sidebar_layout' );
+				$queried_object = get_queried_object();
+				$taxonomy_name  = ( $queried_object instanceof WP_Term ) ? $queried_object->taxonomy : '';
+				$post_type      = $taxonomy_name ? customify_get_taxonomy_archive_post_type( $taxonomy_name ) : '';
+
+				if ( $post_type ) {
+					$cpt_archive = Customify()->get_setting( "{$post_type}_archive_sidebar_layout" );
+					if ( $cpt_archive && 'default' !== $cpt_archive ) {
+						$layout = $cpt_archive;
+					}
 				}
 			} elseif ( is_archive() ) { // Archive.
 				$archive = Customify()->get_setting( 'posts_archives_sidebar_layout' );
