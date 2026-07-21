@@ -32,8 +32,9 @@ $GLOBALS['customify_test_types']   = array(
 	'product' => new WP_Post_Type( 'product', true ),
 );
 $GLOBALS['customify_test_taxonomies'] = array(
-	'book_genre' => array( 'book' ),
-	'shared'     => array( 'book', 'post' ),
+	'book_genre'  => array( 'book' ),
+	'product_cat' => array( 'product' ),
+	'shared'      => array( 'book', 'post' ),
 );
 
 function __( $text ) {
@@ -126,6 +127,14 @@ function get_queried_object() {
 
 function get_post_type_object( $post_type ) {
 	return isset( $GLOBALS['customify_test_types'][ $post_type ] ) ? $GLOBALS['customify_test_types'][ $post_type ] : null;
+}
+
+function get_taxonomy( $taxonomy ) {
+	if ( ! isset( $GLOBALS['customify_test_taxonomies'][ $taxonomy ] ) ) {
+		return false;
+	}
+
+	return (object) array( 'object_type' => $GLOBALS['customify_test_taxonomies'][ $taxonomy ] );
 }
 
 function get_post_meta( $post_id, $key ) {
@@ -253,10 +262,25 @@ customify_test_reset(
 	array(
 		'post_type_archive' => true,
 		'post_type'         => 'product',
-	)
+	),
+	array( 'posts_archives_content_area_spacing' => 'disabled' )
 );
 $context = customify_get_content_area_spacing_context();
-customify_test_assert_same( 'posts_archives_content_area_spacing', $context['setting'], 'The WooCommerce-owned archive keeps the general archive fallback.' );
+customify_test_assert_same( 'none', $context['key'], 'The WooCommerce-owned archive has no Customify spacing context.' );
+customify_test_assert_same( '', $context['setting'], 'The WooCommerce-owned archive does not read Blog Archives.' );
+customify_test_assert_same( array(), customify_get_content_area_spacing_body_classes( $context ), 'Disabling Blog Archives does not change Shop spacing.' );
+
+customify_test_reset(
+	array(
+		'tax'            => true,
+		'queried_object' => new WP_Term( 'product_cat' ),
+	),
+	array( 'posts_archives_content_area_spacing' => 'disabled' )
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( 'none', $context['key'], 'A product-only taxonomy has no Customify spacing context.' );
+customify_test_assert_same( '', $context['setting'], 'A product-only taxonomy does not read Blog Archives.' );
+customify_test_assert_same( array(), customify_get_content_area_spacing_body_classes( $context ), 'Disabling Blog Archives does not change product taxonomy spacing.' );
 
 customify_test_reset(
 	array(

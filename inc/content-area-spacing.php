@@ -27,8 +27,7 @@ if ( ! function_exists( 'customify_get_content_area_spacing_archive_post_types' 
 	 * Get content post types whose archives are owned by Customify.
 	 *
 	 * WooCommerce owns the Product archive through its existing shop-page
-	 * integration, so it intentionally continues to inherit the general archive
-	 * setting instead of receiving a dead per-CPT control.
+	 * integration, so it intentionally receives no per-CPT control here.
 	 *
 	 * @return array<string, array{name:string, singular_name:string}>
 	 */
@@ -48,6 +47,31 @@ if ( ! function_exists( 'customify_get_content_area_spacing_archive_post_types' 
 		 * @param array $post_types Map of post type slug to labels array.
 		 */
 		return apply_filters( 'customify/content_area_spacing/archive_post_types', $post_types );
+	}
+}
+
+if ( ! function_exists( 'customify_content_area_spacing_archive_owned_elsewhere' ) ) {
+	/**
+	 * Check whether a content CPT archive was excluded from Customify ownership.
+	 *
+	 * Removing a real archive from the filtered archive list is the generic
+	 * product seam for integrations that own that request context themselves.
+	 *
+	 * @param string     $post_type         Post type slug.
+	 * @param array|null $archive_post_types Optional resolved archive list.
+	 * @return bool
+	 */
+	function customify_content_area_spacing_archive_owned_elsewhere( $post_type, $archive_post_types = null ) {
+		$content_post_types = customify_get_content_post_types();
+		$archive_post_types = is_array( $archive_post_types )
+			? $archive_post_types
+			: customify_get_content_area_spacing_archive_post_types();
+		$object             = get_post_type_object( $post_type );
+
+		return isset( $content_post_types[ $post_type ] )
+			&& $object
+			&& $object->has_archive
+			&& ! isset( $archive_post_types[ $post_type ] );
 	}
 }
 
@@ -130,6 +154,10 @@ if ( ! function_exists( 'customify_get_content_area_spacing_context' ) ) {
 			if ( $post_type && isset( $archive_post_types[ $post_type ] ) ) {
 				$context['key']       = 'post_type_archive';
 				$context['post_type'] = $post_type;
+			} elseif ( customify_content_area_spacing_archive_owned_elsewhere( $post_type, $archive_post_types ) ) {
+				// Leave the context setting empty for archives owned by an
+				// established integration such as WooCommerce's Shop.
+				$context['post_type'] = $post_type;
 			} else {
 				$context['key'] = 'blog_archive';
 			}
@@ -143,7 +171,19 @@ if ( ! function_exists( 'customify_get_content_area_spacing_context' ) ) {
 				$context['key']       = 'post_type_archive';
 				$context['post_type'] = $post_type;
 			} else {
-				$context['key'] = 'blog_archive';
+				$taxonomy_object = $taxonomy ? get_taxonomy( $taxonomy ) : false;
+				$object_types    = $taxonomy_object
+					? array_values( array_unique( array_filter( (array) $taxonomy_object->object_type ) ) )
+					: array();
+				$sole_post_type  = 1 === count( $object_types ) ? reset( $object_types ) : '';
+
+				if ( customify_content_area_spacing_archive_owned_elsewhere( $sole_post_type, $archive_types ) ) {
+					// A taxonomy owned by an externally managed CPT archive keeps
+					// the untouched global spacing unless that integration opts in.
+					$context['post_type'] = $sole_post_type;
+				} else {
+					$context['key'] = 'blog_archive';
+				}
 			}
 		} elseif ( is_category() || is_tag() || is_archive() ) {
 			$context['key'] = 'blog_archive';

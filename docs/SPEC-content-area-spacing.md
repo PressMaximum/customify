@@ -46,8 +46,9 @@ Pages, Blog Posts, Blog Archives, Search and 404 modes.
 controls. The CPT source is `customify_get_content_post_types()`, so internal
 utility types and plugin-specific exclusions remain centralized. A CPT archive
 control is added only when the type has a real archive and Customify owns that
-archive. WooCommerce's Product archive keeps its established shop-page
-ownership and falls back to Blog Archives.
+archive. WooCommerce's Product archive and product-only taxonomies keep their
+established ownership, receive no context setting, and leave the global spacing
+unchanged.
 
 ---
 
@@ -60,8 +61,9 @@ ownership and falls back to Blog Archives.
 3. Page or blog-post single.
 4. Supported CPT archive.
 5. Custom taxonomy owned by exactly one supported archive CPT.
-6. Built-in/shared/unresolved archive → Blog Archives.
-7. Supported CPT single.
+6. Archive/taxonomy owned by an excluded integration → no context setting.
+7. Built-in/shared/unresolved archive → Blog Archives.
+8. Supported CPT single.
 
 `customify_resolve_content_area_spacing_mode()` then applies this precedence:
 
