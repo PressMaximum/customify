@@ -208,7 +208,7 @@
 
 	// Once the divider and its clearance padding are gone, the leftover 0.6em
 	// li-margin plus that padding used to stack to ~1.2em between links, which
-	// read as too tall/airy for a footer nav. Collapse it to a single ~0.75em
+	// read as too tall/airy for a footer nav. Collapse it to a single ~0.875em
 	// gap so each column reads as one grouped set of links. .widget_rss is left
 	// out — its entries carry a title + date and keep their own larger rhythm.
 	.widget_pages li,
@@ -218,7 +218,7 @@
 	.widget_nav_menu li,
 	.widget_product_categories li,
 	.widget_recent_entries li {
-		margin-bottom: 0.75em;
+		margin-bottom: 0.875em;
 	}
 }
 
