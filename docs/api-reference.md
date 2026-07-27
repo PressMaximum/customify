@@ -24,6 +24,11 @@ For storage keys (`theme_mod` / `wp_options` / `post_meta`) see [`SPEC-data-migr
 | `customify_is_post_title_display` | filter | `bool` — render the page/post title? | [`inc/template-functions.php:391`](../inc/template-functions.php) |
 | `customify_is_builder_row_display` | filter | `bool` — render builder row? (`$builder_id`, `$row_id`, `$post_id` passed) | [`inc/template-functions.php:374`](../inc/template-functions.php) |
 | `customify_builder_row_display_get_post_id` | filter | `int` — post ID used for builder row display logic | [`inc/template-functions.php:365`](../inc/template-functions.php) |
+| `customify/content_area_spacing/archive_post_types` | filter | `array` — content CPT archives owned by the spacing UI/resolver | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/context` | filter | `array` — request context (`key`, `post_type`, `post_id`, `singular`, `setting`) | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/mode` | filter | `(string $mode, array $context, string $setting)` — non-legacy resolved mode | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/components` | filter | `(array $components, string $mode, array $context)` — top/bottom booleans | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
+| `customify/content_area_spacing/body_classes` | filter | `(array $classes, array $components, array $context)` | [`inc/content-area-spacing.php`](../inc/content-area-spacing.php) |
 
 Example — override layout for a specific page:
 

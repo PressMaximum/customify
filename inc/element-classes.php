@@ -63,16 +63,12 @@ if ( ! function_exists( 'customify_body_classes' ) ) {
 			}
 		}
 
-		// Per-page opt-in to strip the default vertical padding around
-		// #main / #sidebar-primary / #sidebar-secondary. Designed for
-		// landing pages that build with full-bleed sections — the
-		// theme's reading-room padding produces dead bands between the
-		// header and the first section otherwise. Default behavior
-		// (padding on) preserved for content pages.
-		if ( is_singular() ) {
-			$disable_padding = get_post_meta( get_the_ID(), '_customify_disable_content_vertical_padding', true );
-			if ( '1' === (string) $disable_padding ) {
-				$classes[] = 'disable-content-vertical-padding';
+		// Context settings default to inherit, so sites that have not opted in
+		// receive no new body class. The resolver also preserves the existing
+		// singular per-post disable flag as the highest-priority override.
+		foreach ( customify_get_content_area_spacing_body_classes() as $spacing_class ) {
+			if ( ! in_array( $spacing_class, $classes, true ) ) {
+				$classes[] = $spacing_class;
 			}
 		}
 

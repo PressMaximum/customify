@@ -493,6 +493,8 @@ class Customify
 			// Metabox settings.
 			'/inc/template-class.php',
 			// Template element classes.
+			'/inc/content-area-spacing.php',
+			// Context-aware content area vertical spacing.
 			'/inc/colors-palette.php',
 			// Colors palette CSS var emitter for the new top-level Colors section.
 			'/inc/color-palette-switcher.php',

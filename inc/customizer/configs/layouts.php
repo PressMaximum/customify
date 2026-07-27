@@ -29,6 +29,15 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 				'theme_supports' => '',
 				'title'          => __( 'Global', 'customify' ),
 			),
+
+			// Content area spacing section.
+			array(
+				'name'           => 'content_area_spacing_section',
+				'type'           => 'section',
+				'panel'          => 'layout_panel',
+				'theme_supports' => '',
+				'title'          => __( 'Content Area Spacing', 'customify' ),
+			),
 			array(
 				'name'        => 'site_layout',
 				'type'        => 'radio_group',
@@ -171,9 +180,16 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 
 			array(
+				'name'    => 'content_area_spacing_h_general',
+				'type'    => 'heading',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'General', 'customify' ),
+			),
+
+			array(
 				'name'            => 'site_content_padding',
 				'type'            => 'css_ruler',
-				'section'         => 'global_layout_section',
+				'section'         => 'content_area_spacing_section',
 				'title'           => __( 'Site content padding', 'customify' ),
 				'device_settings' => true,
 				'fields_disabled' => array(
@@ -185,6 +201,47 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 					'bottom' => 'padding-bottom: {{value}};',
 				),
 				'selector'        => '#sidebar-secondary, #sidebar-primary, #main',
+			),
+
+			array(
+				'name'    => 'page_content_area_spacing',
+				'type'    => 'select',
+				'default' => 'inherit',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'Pages', 'customify' ),
+				'choices' => customify_get_content_area_spacing_choices(),
+			),
+			array(
+				'name'    => 'posts_content_area_spacing',
+				'type'    => 'select',
+				'default' => 'inherit',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'Blog Posts', 'customify' ),
+				'choices' => customify_get_content_area_spacing_choices(),
+			),
+			array(
+				'name'    => 'posts_archives_content_area_spacing',
+				'type'    => 'select',
+				'default' => 'inherit',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'Blog Archives', 'customify' ),
+				'choices' => customify_get_content_area_spacing_choices(),
+			),
+			array(
+				'name'    => 'search_content_area_spacing',
+				'type'    => 'select',
+				'default' => 'inherit',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'Search', 'customify' ),
+				'choices' => customify_get_content_area_spacing_choices(),
+			),
+			array(
+				'name'    => '404_content_area_spacing',
+				'type'    => 'select',
+				'default' => 'inherit',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( '404', 'customify' ),
+				'choices' => customify_get_content_area_spacing_choices(),
 			),
 
 			// Page layout.
@@ -288,9 +345,41 @@ if ( ! function_exists( 'customify_customizer_layouts_config' ) ) {
 			),
 		);
 
-		$post_types = customify_get_content_post_types();
+		$post_types                 = customify_get_content_post_types();
+		$archive_spacing_post_types = customify_get_content_area_spacing_archive_post_types();
 
 		if ( count( $post_types ) ) {
+			$config[] = array(
+				'name'    => 'content_area_spacing_h_post_types',
+				'type'    => 'heading',
+				'section' => 'content_area_spacing_section',
+				'title'   => __( 'Post Type Settings', 'customify' ),
+			);
+
+			foreach ( $post_types as $pt => $label ) {
+				$config[] = array(
+					'name'    => "{$pt}_content_area_spacing",
+					'type'    => 'select',
+					'default' => 'inherit',
+					'section' => 'content_area_spacing_section',
+					/* translators: %s: singular post type label. */
+					'title'   => sprintf( __( 'Single %s', 'customify' ), $label['singular_name'] ),
+					'choices' => customify_get_content_area_spacing_choices(),
+				);
+
+				if ( isset( $archive_spacing_post_types[ $pt ] ) ) {
+					$config[] = array(
+						'name'    => "{$pt}_archive_content_area_spacing",
+						'type'    => 'select',
+						'default' => 'inherit',
+						'section' => 'content_area_spacing_section',
+						/* translators: %s: singular post type label. */
+						'title'   => sprintf( __( '%s Archive', 'customify' ), $label['singular_name'] ),
+						'choices' => customify_get_content_area_spacing_choices(),
+					);
+				}
+			}
+
 			$config[] = array(
 				'name'    => 'post_types_sidebar_h_tb',
 				'type'    => 'heading',

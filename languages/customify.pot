@@ -4170,3 +4170,31 @@ msgstr[1] ""
 msgctxt "submit button"
 msgid "Search"
 msgstr ""
+
+#: inc/customizer/configs/layouts.php:243
+msgid "404"
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:39
+msgid "Content Area Spacing"
+msgstr ""
+
+#: inc/content-area-spacing.php:17
+msgid "Top & Bottom"
+msgstr ""
+
+#: inc/content-area-spacing.php:18
+msgid "Top Only"
+msgstr ""
+
+#: inc/content-area-spacing.php:19
+msgid "Bottom Only"
+msgstr ""
+
+#: inc/content-area-spacing.php:20
+msgid "Disabled"
+msgstr ""
+
+#: inc/customizer/configs/layouts.php:227
+msgid "Blog Archives"
+msgstr ""
