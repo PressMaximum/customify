@@ -97,7 +97,7 @@ These live in the `typography_panel` section and start with `global_typography_`
 |---|---|---|
 | `global_typography_site_tt_title` | `.site-branding .site-title, .site-branding .site-title a` | reuses `var(--customify-typo-heading-font-family, inherit)` |
 | `global_typography_site_tt_desc` (tagline) | `.site-branding .site-description` | none — `.site-description` has no typography var consumer; inherits the body font |
-| `global_typography_base_widget_title` | `.site-content .widget-title` | reuses `var(--customify-typo-heading-font-family, inherit)` |
+| `global_typography_base_widget_title` | `.widget-area .widget-title` | reuses `var(--customify-typo-heading-font-family, inherit)` |
 
 All 11 panel settings (8 foundation + 3 leaf) live in the flattened `typography_panel` section (the former Base / Site Title & Tagline / Content sub-sections are now `heading` separators inside it).
 
@@ -216,7 +216,7 @@ For the 8 foundation settings, **SCSS owns the selector** — tokens at `:root` 
 
 **Leaf reuse note.** Leaf selectors don't mint their own tokens but two of them *reuse* the foundation heading token as their default font-family:
 
-- `.site-branding .site-title` (and `.widget-title` / `.site-content .widget-title`) default to `font-family: var(--customify-typo-heading-font-family, inherit)` — see [`header/builder_items/_logo_site_identity.scss`](../src/frontend/scss/header/builder_items/_logo_site_identity.scss) and [`widgets/_widgets.scss`](../src/frontend/scss/widgets/_widgets.scss). When the user sets Site Title / Widget Title typography, PHP emits selector-scoped literal CSS that overrides these defaults.
+- `.site-branding .site-title` and `.widget-title` default to `font-family: var(--customify-typo-heading-font-family, inherit)` — see [`header/builder_items/_logo_site_identity.scss`](../src/frontend/scss/header/builder_items/_logo_site_identity.scss) and [`widgets/_widgets.scss`](../src/frontend/scss/widgets/_widgets.scss). When the user sets Site Title / Widget Title typography, PHP emits selector-scoped literal CSS (`.widget-area .widget-title` for Widget Title) that overrides these defaults.
 - The tagline `.site-description` carries **no** typography var consumer (only `margin`); it inherits the body font and is overridden by the literal CSS that the Tagline field emits when set.
 
 **Consumer pattern — direct 2-arg `var(...)`.** Preferred for selectors that already had typography literals. Preserves breakpoint-specific fallbacks (e.g. h1 `font-size` differs per `@include for_device`):
