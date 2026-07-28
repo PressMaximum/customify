@@ -180,6 +180,16 @@ p.demo_store,
         padding-block: 0;
     }
 
+    // The standard WooCommerce Add to Cart Form stretches the quantity wrapper
+    // to the adjacent button, but its number input keeps a font-relative height.
+    // Fill the wrapper without changing the theme's field skin.
+    .wc-block-add-to-cart-form
+    .quantity:not(.wc-block-components-quantity-selector)
+    input[type="number"].input-text.qty.text {
+        box-sizing: border-box;
+        height: 100%;
+    }
+
     .blockUI.blockOverlay {
         position: relative;
         z-index: 35 !important;
