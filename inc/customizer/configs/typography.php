@@ -359,9 +359,9 @@ if ( ! function_exists( 'customify_customizer_typography_config' ) ) {
 			'type'             => 'typography',
 			'section'          => 'typography_panel',
 			'title'            => __( 'Widget Title', 'customify' ),
-			'description'      => __( 'Apply to all widget title in site content.', 'customify' ),
+			'description'      => __( 'Apply to widget titles in all widget areas.', 'customify' ),
 			'css_format'       => 'typography',
-			'selector'         => '.site-content .widget-title',
+			'selector'         => '.widget-area .widget-title',
 			// Mirrors widgets/_widgets.scss `.widget-title` literals.
 			'display_defaults' => array(
 				'font_size'   => '16px',
