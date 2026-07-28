@@ -64,7 +64,11 @@ All settings live under panel `header_settings`, section `header_transparent` ("
 | `header_{row}_transparent` | checkbox | **Enable transparent on this row** |
 | `header_{row}_transparent_styling` | styling | Background + border + colors; targets `.header--row.header-{row}.header--transparent .customify-container, …` |
 
-The styling control disables `padding`, `margin`, `text_color`, `link_color`, `bg_heading`, `bg_cover`, `bg_image`, `bg_repeat`, `border_radius`, `box_shadow`, and hover state — it is a deliberately minimal styling form because the row layout fields are owned by the builder's per-row settings.
+The styling control enables `text_color` and disables `padding`, `margin`, `link_color`, `bg_heading`, `bg_cover`, `bg_image`, `bg_repeat`, `border_radius`, `box_shadow`, and hover state — it is a deliberately minimal styling form because the row layout fields are owned by the builder's per-row settings.
+
+`text_color` uses a dedicated `#masthead:not(.sticky-active) .header--row.header-{row}.header--transparent …` selector list. It targets the row text plus each builder item's primary link/button, site title, top-level menu links, social/search/nav/cart icons, HTML/contact/icon-box links, CTA buttons, and search-box text. The ID-scoped selector deliberately outranks skin-mode and per-item normal/hover/active colors. It stops matching during `.sticky-active`, so sticky-header colors remain the only higher-priority color context. Dropdown/submenu links are intentionally not included.
+
+The regular `Header Top/Main/Bottom → Advanced Styling` rule also targets the transparent row's layout surface. When a Transparent Styling sub-field is empty, it emits no CSS and the regular row value remains visible and live-previewable. An explicit Transparent Styling value uses the ID-scoped, non-sticky selector above and overrides the inherited row value. During `.sticky-active`, the explicit Transparent rule stops matching and the regular row styling becomes the fallback.
 
 ### 3.2 Global settings
 
@@ -436,7 +440,7 @@ $logo_url   = Customify()->get_media( $logo_value, 'full' );       // string URL
 The styling control stores either:
 
 - `""` (empty string) when no fields have been set, or
-- an array with sub-keys for each enabled field (background, border, …). Per-row config in this feature disables most fields ([§3.1](#31-per-row-settings-repeated-for-top-main-bottom)), so only the active subset is ever populated.
+- an array with sub-keys for each enabled field (text color, background, border, …). The text color is stored at `normal.text_color`. Per-row config in this feature disables most fields ([§3.1](#31-per-row-settings-repeated-for-top-main-bottom)), so only the active subset is ever populated.
 
 Auto-CSS generation reads this shape via `Customify_Customizer_Auto_CSS` — no need to parse it manually in feature code.
 
