@@ -1,3 +1,19 @@
+= 0.4.22 =
+* NEW: Native off-canvas cart drawer for the WooCommerce header cart item.
+* NEW: Contextual Content Area Spacing — per-context top/bottom content padding (blog, archives, singles, CPTs, WooCommerce) under Layouts, inherit-first defaults.
+* NEW: Customizer fonts loaded into the block editor canvas for typography parity.
+* IMPROVED: Font Awesome CSS loads async, main stylesheet gains fetchpriority, plus small accessibility fixes.
+* IMPROVED: Block vertical rhythm driven by --wp--style--block-gap; root blockGap disabled so element margins own spacing.
+* IMPROVED: Requires PHP lowered to 5.3 so PHP 7.x sites can install.
+* FIXED: Color palette lost when switching palette presets in the Customizer.
+* FIXED: WooCommerce block quantity stepper and variation table styling; block-owned quantity controls no longer skinned by the theme.
+* FIXED: Header cart dropdown/drawer not reacting to WooCommerce block cart add/remove events.
+* FIXED: WooCommerce blocks theme compatibility inside the general builder.
+* FIXED: Sidebar layout not applying on CPT taxonomy archives.
+* FIXED: Footer widget menus — noisy per-item dividers removed, widget-list gap tuned.
+* FIXED: Customizer widget edit-shortcut now opens force-hidden footer/header widget areas.
+* FIXED: alignleft/alignright images float again instead of stretching full width.
+
 = 0.4.21 =
 * NEW: Buttons & Form Fields Customizer section with modernized default style, teal brand color, and refreshed social icons.
 * NEW: Typography presets — font-pair quick picks with native tooltips.
