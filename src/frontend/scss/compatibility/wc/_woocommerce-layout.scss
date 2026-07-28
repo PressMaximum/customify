@@ -307,6 +307,17 @@
     margin-inline-end: 0.5em;
 }
 
+.wc-block-product-gallery-thumbnails__scrollable,
+.wp-block-woocommerce-product-gallery {
+    gap: 1em;
+}
+
+// WooCommerce applies this through a zero-specificity `:where()` selector,
+// which lets the theme's list spacing win in block-based product galleries.
+.wc-block-product-gallery-large-image__container {
+    margin: 0;
+}
+
 // Un-trap the WooCommerce product-filters overlay from a Blocksify Section's
 // stacking context (.bsy-section__inner has position:relative; z-index:2 for its
 // shape/bg layering, which traps the overlay's position:fixed below the header).

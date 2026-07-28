@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Customify 0.4.21\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/customify\n"
-"POT-Creation-Date: 2026-06-19 16:51:42+00:00\n"
+"POT-Creation-Date: 2026-07-28 15:57:46+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -22,7 +22,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
-"X-Generator: grunt-wp-i18n 1.0.3\n"
+"X-Generator: grunt-wp-i18n 1.0.4\n"
 
 #: 404.php:19
 msgid "Oops! That page can&rsquo;t be found."
@@ -228,17 +228,17 @@ msgstr ""
 
 #: inc/admin/dashboard.php:332 inc/compatibility/breadcrumb.php:213
 #: inc/compatibility/woocommerce/config/catalog-designer.php:408
-#: inc/compatibility/woocommerce/config/header/cart.php:179
-#: inc/compatibility/woocommerce/config/header/cart.php:235
+#: inc/compatibility/woocommerce/config/header/cart.php:194
+#: inc/compatibility/woocommerce/config/header/cart.php:250
 #: inc/customizer/configs/blogs.php:371
 #: inc/customizer/configs/header/button.php:107
-#: inc/customizer/configs/header/panel.php:300
-#: inc/customizer/configs/header/transparent.php:69
+#: inc/customizer/configs/header/panel.php:308
+#: inc/customizer/configs/header/transparent.php:101
 msgid "Styling"
 msgstr ""
 
 #: inc/admin/dashboard.php:338 inc/compatibility/breadcrumb.php:203
-#: inc/compatibility/woocommerce/config/header/cart.php:206
+#: inc/compatibility/woocommerce/config/header/cart.php:221
 #: inc/customizer/configs/blogs.php:357
 #: inc/customizer/configs/header/button.php:96
 #: inc/customizer/configs/typography.php:164 inc/style-guide-template.php:554
@@ -375,7 +375,7 @@ msgstr ""
 msgid "Take advantage of the Blog Pro module to show off your posts in any layouts."
 msgstr ""
 
-#: inc/admin/dashboard.php:714 inc/customizer/configs/header/panel.php:200
+#: inc/admin/dashboard.php:714 inc/customizer/configs/header/panel.php:208
 msgid "Advanced Styling"
 msgstr ""
 
@@ -644,8 +644,8 @@ msgstr ""
 
 #: inc/class-customify.php:305 inc/class-customify.php:316
 #: inc/class-customify.php:330
-#: inc/compatibility/woocommerce/woocommerce.php:583
-#: inc/compatibility/woocommerce/woocommerce.php:594
+#: inc/compatibility/woocommerce/woocommerce.php:587
+#: inc/compatibility/woocommerce/woocommerce.php:598
 msgid "Add widgets here."
 msgstr ""
 
@@ -706,7 +706,7 @@ msgstr ""
 #: inc/customizer/configs/blogs.php:29 inc/customizer/configs/blogs.php:36
 #: inc/customizer/configs/footer/panel.php:151
 #: inc/customizer/configs/footer/panel.php:567
-#: inc/customizer/configs/header/panel.php:122
+#: inc/customizer/configs/header/panel.php:130
 #: inc/customizer/configs/page-header.php:231
 msgid "Layout"
 msgstr ""
@@ -720,7 +720,7 @@ msgid "Content Layout"
 msgstr ""
 
 #: inc/class-metabox.php:67 inc/customizer/configs/footer/panel.php:158
-#: inc/customizer/configs/header/panel.php:129
+#: inc/customizer/configs/header/panel.php:137
 #: inc/customizer/configs/layouts.php:42
 #: inc/customizer/configs/page-header.php:238
 msgid "Full Width"
@@ -805,7 +805,7 @@ msgstr ""
 msgid "Disable Elements"
 msgstr ""
 
-#: inc/class-metabox.php:151 inc/customizer/configs/header/transparent.php:168
+#: inc/class-metabox.php:151 inc/customizer/configs/header/transparent.php:201
 msgid "Transparent Header"
 msgstr ""
 
@@ -922,6 +922,7 @@ msgid "Download"
 msgstr ""
 
 #: inc/color-palette-switcher.php:223
+#: inc/compatibility/woocommerce/config/header/cart.php:699
 #: inc/customizer/controls/class-control-repeater.php:33
 #: inc/panel-builder/class-abstract-layout-frontend.php:122
 #: inc/panel-builder/class-layout-builder.php:565
@@ -960,6 +961,20 @@ msgstr ""
 
 #: inc/color-palette-switcher.php:231
 msgid "Linked to palette"
+msgstr ""
+
+#: inc/color-palette-switcher.php:232
+msgid "Save current colors?"
+msgstr ""
+
+#: inc/color-palette-switcher.php:233
+msgid ""
+"These colors are not saved as a palette. Save them before switching so you "
+"can recover them later."
+msgstr ""
+
+#: inc/color-palette-switcher.php:234
+msgid "Save & switch"
 msgstr ""
 
 #: inc/colors-palette.php:1914
@@ -1075,15 +1090,15 @@ msgid "Hide on product tag"
 msgstr ""
 
 #: inc/compatibility/breadcrumb.php:188 inc/compatibility/breadcrumb.php:193
-#: inc/customizer/configs/header/transparent.php:180
-#: inc/customizer/configs/header/transparent.php:185
+#: inc/customizer/configs/header/transparent.php:213
+#: inc/customizer/configs/header/transparent.php:218
 #: inc/customizer/configs/page-header.php:254
 #: inc/customizer/configs/page-header.php:265
 msgid "Display"
 msgstr ""
 
 #: inc/compatibility/breadcrumb.php:189
-#: inc/customizer/configs/header/transparent.php:181
+#: inc/customizer/configs/header/transparent.php:214
 #: inc/customizer/configs/page-header.php:255
 msgid "Settings display for special pages."
 msgstr ""
@@ -1097,7 +1112,7 @@ msgid "Styling for breadcrumb"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/cart.php:46
-#: inc/compatibility/woocommerce/config/header/cart.php:76
+#: inc/compatibility/woocommerce/config/header/cart.php:91
 msgid "Cart"
 msgstr ""
 
@@ -1249,7 +1264,7 @@ msgid "Discount value"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/catalog-designer.php:400
-#: inc/customizer/configs/header/panel.php:266
+#: inc/customizer/configs/header/panel.php:274
 msgid "Display Type"
 msgstr ""
 
@@ -1286,88 +1301,89 @@ msgid "On Sale"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/header/cart.php:35
+#: inc/compatibility/woocommerce/config/header/cart.php:697
 msgid "Shopping Cart"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:75
+#: inc/compatibility/woocommerce/config/header/cart.php:90
 #: inc/customizer/configs/header/nav-icon.php:36
 msgid "Label"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:89
+#: inc/compatibility/woocommerce/config/header/cart.php:104
 #: inc/customizer/configs/header/button.php:57
 #: inc/customizer/configs/header/social-icons.php:104
 msgid "Icon"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:100
+#: inc/compatibility/woocommerce/config/header/cart.php:115
 #: inc/customizer/configs/header/button.php:69
 msgid "Before"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:101
+#: inc/compatibility/woocommerce/config/header/cart.php:116
 #: inc/customizer/configs/header/button.php:70
 msgid "After"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:103
+#: inc/compatibility/woocommerce/config/header/cart.php:118
 #: inc/customizer/configs/header/button.php:67
 #: inc/customizer/configs/header/search-box.php:131
 #: inc/customizer/configs/header/search-icon.php:245
 msgid "Icon Position"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:114
+#: inc/compatibility/woocommerce/config/header/cart.php:129
 msgid "Cart Page"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:115
+#: inc/compatibility/woocommerce/config/header/cart.php:130
 msgid "Checkout"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:117
+#: inc/compatibility/woocommerce/config/header/cart.php:132
 msgid "Link To"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:132
-#: inc/compatibility/woocommerce/config/header/cart.php:133
+#: inc/compatibility/woocommerce/config/header/cart.php:147
+#: inc/compatibility/woocommerce/config/header/cart.php:148
 #: inc/customizer/configs/header/nav-icon.php:52
 msgid "Show Label"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:144
+#: inc/compatibility/woocommerce/config/header/cart.php:159
 msgid "Sub Total"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:145
+#: inc/compatibility/woocommerce/config/header/cart.php:160
 msgid "Show Sub Total"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:161
-#: inc/compatibility/woocommerce/config/header/cart.php:262
+#: inc/compatibility/woocommerce/config/header/cart.php:176
+#: inc/compatibility/woocommerce/config/header/cart.php:277
 #: woocommerce/cart/cart.php:32 woocommerce/cart/cart.php:140
 msgid "Quantity"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:162
+#: inc/compatibility/woocommerce/config/header/cart.php:177
 msgid "Show Quantity"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:171
+#: inc/compatibility/woocommerce/config/header/cart.php:186
 #: inc/customizer/configs/blogs.php:245
 #: inc/customizer/configs/single-blog-post.php:150
 msgid "Separator"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:172
+#: inc/compatibility/woocommerce/config/header/cart.php:187
 msgid "/"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:216
+#: inc/compatibility/woocommerce/config/header/cart.php:231
 msgid "Icon Settings"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:225
+#: inc/compatibility/woocommerce/config/header/cart.php:240
 #: inc/customizer/configs/header/nav-icon.php:61
 #: inc/customizer/configs/header/search-box.php:103
 #: inc/customizer/configs/header/search-icon.php:65
@@ -1375,38 +1391,106 @@ msgstr ""
 msgid "Icon Size"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:236
+#: inc/compatibility/woocommerce/config/header/cart.php:251
 msgid "Advanced styling for cart icon"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:263
+#: inc/compatibility/woocommerce/config/header/cart.php:278
 msgid "Advanced styling for cart quantity"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:289
+#: inc/compatibility/woocommerce/config/header/cart.php:307
+msgid "Cart Behavior"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:314
+msgid "Behavior"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:317
+msgid "Dropdown"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:318
+msgid "Off-Canvas Drawer"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:327
 msgid "Dropdown Settings"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:296
+#: inc/compatibility/woocommerce/config/header/cart.php:335
 msgid "Dropdown Alignment"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:301
+#: inc/compatibility/woocommerce/config/header/cart.php:341
+#: inc/compatibility/woocommerce/config/header/cart.php:381
 #: inc/customizer/configs/header/logo.php:84
 #: inc/customizer/configs/related-posts.php:93
 #: inc/customizer/controls/class-control-css-ruler.php:70
 msgid "Left"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:302
+#: inc/compatibility/woocommerce/config/header/cart.php:342
+#: inc/compatibility/woocommerce/config/header/cart.php:380
 #: inc/customizer/configs/header/logo.php:85
 #: inc/customizer/configs/related-posts.php:94
 #: inc/customizer/controls/class-control-css-ruler.php:62
 msgid "Right"
 msgstr ""
 
-#: inc/compatibility/woocommerce/config/header/cart.php:313
+#: inc/compatibility/woocommerce/config/header/cart.php:353
 msgid "Dropdown Width"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:368
+msgid "Drawer Settings"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:376
+msgid "Drawer Position"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:389
+msgid "Drawer Width"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:408
+msgid "Auto-open on Add to Cart"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:417
+msgid "Drawer Offset"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:418
+msgid ""
+"Gap from the screen edges. Set values to float the drawer away from the "
+"edge."
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:439
+msgid "Corner Radius"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:453
+msgid "Backdrop Color"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:464
+msgid "Panel Background"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:475
+msgid "Heading Color"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:695
+msgid "Shopping cart"
+msgstr ""
+
+#: inc/compatibility/woocommerce/config/header/cart.php:713
+msgid "Continue Shopping"
 msgstr ""
 
 #: inc/compatibility/woocommerce/config/single-product.php:156
@@ -1517,19 +1601,19 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:535
+#: inc/compatibility/woocommerce/woocommerce.php:539
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:543
+#: inc/compatibility/woocommerce/woocommerce.php:547
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:581
+#: inc/compatibility/woocommerce/woocommerce.php:585
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:592
+#: inc/compatibility/woocommerce/woocommerce.php:596
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
@@ -1683,7 +1767,7 @@ msgid "Link Color"
 msgstr ""
 
 #: inc/customizer/class-customizer.php:702
-#: inc/customizer/configs/header/panel.php:432
+#: inc/customizer/configs/header/panel.php:440
 msgid "Margin"
 msgstr ""
 
@@ -2248,19 +2332,19 @@ msgid "Footer Top"
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:157
-#: inc/customizer/configs/header/panel.php:128
+#: inc/customizer/configs/header/panel.php:136
 #: inc/customizer/configs/page-header.php:237
 msgid "Full width - Contained"
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:159
-#: inc/customizer/configs/header/panel.php:130
+#: inc/customizer/configs/header/panel.php:138
 #: inc/customizer/configs/page-header.php:239
 msgid "Contained"
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:168
-#: inc/customizer/configs/header/panel.php:139
+#: inc/customizer/configs/header/panel.php:147
 msgid ""
 "Layout <code>Full width - Contained</code> and <code>Full Width</code> will "
 "not fit browser width because you've selected <a class='focus-control' "
@@ -2269,8 +2353,8 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:180
-#: inc/customizer/configs/header/panel.php:182
-#: inc/customizer/configs/header/panel.php:282
+#: inc/customizer/configs/header/panel.php:190
+#: inc/customizer/configs/header/panel.php:290
 msgid "Skin Mode"
 msgstr ""
 
@@ -2289,12 +2373,12 @@ msgid ""
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:229
-#: inc/customizer/configs/header/panel.php:223
+#: inc/customizer/configs/header/panel.php:231
 msgid "Column Settings"
 msgstr ""
 
 #: inc/customizer/configs/footer/panel.php:230
-#: inc/customizer/configs/header/panel.php:224
+#: inc/customizer/configs/header/panel.php:232
 msgid "Per-column direction, align, gap and padding."
 msgstr ""
 
@@ -2393,7 +2477,7 @@ msgstr ""
 
 #: inc/customizer/configs/header/logo.php:56
 #: inc/customizer/configs/header/logo.php:70
-#: inc/customizer/configs/header/panel.php:469
+#: inc/customizer/configs/header/panel.php:477
 #: inc/customizer/configs/layouts.php:55 inc/customizer/configs/layouts.php:228
 msgid "No"
 msgstr ""
@@ -2531,17 +2615,17 @@ msgstr ""
 
 #: inc/customizer/configs/header/panel.php:44
 #: inc/customizer/configs/header/panel.php:92
-#: inc/customizer/configs/header/transparent.php:194
+#: inc/customizer/configs/header/transparent.php:227
 msgid "Header Top"
 msgstr ""
 
 #: inc/customizer/configs/header/panel.php:45
-#: inc/customizer/configs/header/transparent.php:195
+#: inc/customizer/configs/header/transparent.php:228
 msgid "Header Main"
 msgstr ""
 
 #: inc/customizer/configs/header/panel.php:46
-#: inc/customizer/configs/header/transparent.php:196
+#: inc/customizer/configs/header/transparent.php:229
 msgid "Header Bottom"
 msgstr ""
 
@@ -2553,75 +2637,75 @@ msgstr ""
 msgid "Header"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:154
+#: inc/customizer/configs/header/panel.php:162
 msgid "Height"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:172
+#: inc/customizer/configs/header/panel.php:180
 msgid "Column Gap"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:173
+#: inc/customizer/configs/header/panel.php:181
 msgid "Spacing between header columns."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:201
-#: inc/customizer/configs/header/panel.php:301
+#: inc/customizer/configs/header/panel.php:209
+#: inc/customizer/configs/header/panel.php:309
 msgid "Advanced styling for %s"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:269
+#: inc/customizer/configs/header/panel.php:277
 msgid "Slide From Left"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:270
+#: inc/customizer/configs/header/panel.php:278
 msgid "Slide From Right"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:271
+#: inc/customizer/configs/header/panel.php:279
 msgid "Full-screen Overlay"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:272
+#: inc/customizer/configs/header/panel.php:280
 msgid "Toggle Dropdown"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:347
+#: inc/customizer/configs/header/panel.php:355
 msgid "Do not copy parent menu to submenu."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:359
-#: inc/customizer/configs/header/panel.php:448
+#: inc/customizer/configs/header/panel.php:367
+#: inc/customizer/configs/header/panel.php:456
 msgid "Align"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:367
+#: inc/customizer/configs/header/panel.php:375
 msgid "Off-canvas Settings"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:368
+#: inc/customizer/configs/header/panel.php:376
 msgid "Align, gap and padding for the off-canvas."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:416
+#: inc/customizer/configs/header/panel.php:424
 msgid "Item Layout"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:466
+#: inc/customizer/configs/header/panel.php:474
 msgid "Merge Item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:467
+#: inc/customizer/configs/header/panel.php:475
 msgid ""
 "If you choose to merge this item, the alignment setting will inherit from "
 "the item you are merging."
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:470
+#: inc/customizer/configs/header/panel.php:478
 msgid "Merge with left item"
 msgstr ""
 
-#: inc/customizer/configs/header/panel.php:471
+#: inc/customizer/configs/header/panel.php:479
 msgid "Merge with right item"
 msgstr ""
 
@@ -2770,71 +2854,71 @@ msgstr ""
 msgid "Border & border radius"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:63
+#: inc/customizer/configs/header/transparent.php:95
 msgid "Transparent %s"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:70
+#: inc/customizer/configs/header/transparent.php:102
 msgid "Transparent styling for %s"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:106
+#: inc/customizer/configs/header/transparent.php:139
 msgid "Disable on index"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:111
+#: inc/customizer/configs/header/transparent.php:144
 msgid "Disable on categories"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:116
+#: inc/customizer/configs/header/transparent.php:149
 msgid "Disable on search"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:121
+#: inc/customizer/configs/header/transparent.php:154
 msgid "Disable on archive"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:126
+#: inc/customizer/configs/header/transparent.php:159
 msgid "Disable on single page"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:131
+#: inc/customizer/configs/header/transparent.php:164
 msgid "Disable on single post"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:136
+#: inc/customizer/configs/header/transparent.php:169
 msgid "Disable on singular"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:141
+#: inc/customizer/configs/header/transparent.php:174
 msgid "Disable on 404 page"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:149
+#: inc/customizer/configs/header/transparent.php:182
 msgid "Disable on product page"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:154
+#: inc/customizer/configs/header/transparent.php:187
 msgid "Disable on product category"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:159
+#: inc/customizer/configs/header/transparent.php:192
 msgid "Disable on product tag"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:174
+#: inc/customizer/configs/header/transparent.php:207
 msgid "Advanced Settings"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:219
+#: inc/customizer/configs/header/transparent.php:252
 msgid "Transparent Logo"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:230
+#: inc/customizer/configs/header/transparent.php:263
 msgid "Transparent Logo Retina"
 msgstr ""
 
-#: inc/customizer/configs/header/transparent.php:241
+#: inc/customizer/configs/header/transparent.php:274
 msgid "Transparent Logo Max Width"
 msgstr ""
 
@@ -3383,7 +3467,7 @@ msgid "Widget Title"
 msgstr ""
 
 #: inc/customizer/configs/typography.php:362
-msgid "Apply to all widget title in site content."
+msgid "Apply to widget titles in all widget areas."
 msgstr ""
 
 #: inc/customizer/configs/upsell.php:17
@@ -3784,7 +3868,7 @@ msgstr ""
 msgid "Content / Sidebar / Sidebar"
 msgstr ""
 
-#: inc/template-functions.php:853
+#: inc/template-functions.php:904
 msgid "Search &hellip;"
 msgstr ""
 
@@ -4004,7 +4088,7 @@ msgstr ""
 #: inc/customizer/configs/header/search-box.php:287
 #: inc/customizer/configs/header/search-icon.php:347
 #: inc/customizer/configs/header/search-icon.php:348
-#: inc/template-functions.php:852 inc/template-functions.php:853
+#: inc/template-functions.php:903 inc/template-functions.php:904
 msgctxt "label"
 msgid "Search for:"
 msgstr ""
@@ -4019,17 +4103,17 @@ msgctxt "customify-font-weight"
 msgid "Bold"
 msgstr ""
 
-#: inc/template-functions.php:831
+#: inc/template-functions.php:882
 msgctxt "yearly archives date format"
 msgid "Y"
 msgstr ""
 
-#: inc/template-functions.php:833
+#: inc/template-functions.php:884
 msgctxt "monthly archives date format"
 msgid "F Y"
 msgstr ""
 
-#: inc/template-functions.php:835
+#: inc/template-functions.php:886
 msgctxt "daily archives date format"
 msgid "F j, Y"
 msgstr ""
