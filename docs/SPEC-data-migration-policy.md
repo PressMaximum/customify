@@ -392,7 +392,7 @@ Customify's `image` control stores `{ id, mime, url }` object — NOT a plain at
 
 ### Issue #4 — Composite control sub-key drift
 
-The `styling` composite control's enabled sub-fields change between feature contexts (e.g. `header_transparent_styling` disables `padding`, `margin`, `text_color`, etc.). Saved values from a context that had sub-fields A+B+C should not break when re-read in a context that only allows A+B. Sanitize accepts wider shape than emits.
+The `styling` composite control's enabled sub-fields change between feature contexts (e.g. `header_transparent_styling` disables `padding`, `margin`, `link_color`, etc.). Saved values from a context that had sub-fields A+B+C should not break when re-read in a context that only allows A+B. Sanitize accepts wider shape than emits.
 
 ### Issue #5 — Customizer `get_setting()` returns registered default, not `null`
 
