@@ -49,6 +49,38 @@ class Customify_Header_Transparent {
 		$section      = 'header_transparent';
 		$row_selector = ".header--row.header-{$args['id']}.header--transparent";
 
+		// Explicit Transparent styling sits above inherited row/item styling.
+		// Excluding `.sticky-active` leaves the sticky header as the only
+		// higher-priority styling context.
+		$transparent_style_root = "#masthead:not(.sticky-active) {$row_selector}";
+		$text_color_selector    = implode(
+			', ',
+			array(
+				$transparent_style_root,
+				"{$transparent_style_root} .header--row-inner",
+				"{$transparent_style_root} .item--inner > a",
+				"{$transparent_style_root} .item--inner > button",
+				"{$transparent_style_root} .customify-builder-btn",
+				"{$transparent_style_root} .builder-contact--item",
+				"{$transparent_style_root} .builder-contact--item a",
+				"{$transparent_style_root} .site-title",
+				"{$transparent_style_root} .site-title a",
+				"{$transparent_style_root} .customify-builder-social-icons li a",
+				"{$transparent_style_root} .search-icon",
+				"{$transparent_style_root} .menu-mobile-toggle",
+				"{$transparent_style_root} .nav-menu > li > a",
+				"{$transparent_style_root} .icon-box a",
+				"{$transparent_style_root} .item--html a",
+				"{$transparent_style_root} .cart-item-link",
+				"{$transparent_style_root} .cart-item-link .cart-icon",
+				"{$transparent_style_root} .cart-item-link .cart-icon i",
+				"{$transparent_style_root} .cart-item-link .cart-icon svg",
+				"{$transparent_style_root} .header-search_box-item .search-field",
+				"{$transparent_style_root} .header-search_box-item .search-field::placeholder",
+				"{$transparent_style_root} .header-search_box-item .search-submit",
+			)
+		);
+
 		return array(
 			array(
 				'name'    => 'header_' . $args['id'] . '_transparent_h',
@@ -70,14 +102,15 @@ class Customify_Header_Transparent {
 				'description'      => sprintf( __( 'Transparent styling for %s', 'customify' ), $args['name'] ),
 				'live_title_field' => 'title',
 				'selector'         => array(
-					'normal' => "{$row_selector} .customify-container, {$row_selector}.layout-full-contained, {$row_selector}.layout-fullwidth",
+					'normal'            => "{$transparent_style_root} .customify-container, {$transparent_style_root}.layout-full-contained, {$transparent_style_root}.layout-fullwidth",
+					'normal_text_color' => $text_color_selector,
 				),
 				'css_format'       => 'styling',
 				'fields'           => array(
 					'normal_fields' => array(
 						'padding'       => false,
 						'margin'        => false,
-						'text_color'    => false,
+						'text_color'    => true,
 						'link_color'    => false,
 						'bg_heading'    => false,
 						'bg_cover'      => false,
