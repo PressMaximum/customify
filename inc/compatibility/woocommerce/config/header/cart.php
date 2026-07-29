@@ -674,13 +674,14 @@ class Customify_Builder_Item_WC_Cart {
 
 	/**
 	 * Print the off-canvas drawer panel + overlay once, near </body>, when the
-	 * Cart Behavior is Drawer. Skipped on Cart/Checkout (nothing to preview
-	 * there — the cart link just follows its href). The body reuses WooCommerce
-	 * core's own `.widget_shopping_cart_content` + woocommerce_mini_cart() so
-	 * the AJAX fragments keep it in live sync on add/remove.
+	 * Cart Behavior is Drawer. Skipped when the cart is unavailable and on
+	 * Cart/Checkout (nothing to preview there — the cart link just follows its
+	 * href). The body reuses WooCommerce core's own
+	 * `.widget_shopping_cart_content` + woocommerce_mini_cart() so the AJAX
+	 * fragments keep it in live sync on add/remove.
 	 */
 	public function render_cart_drawer() {
-		if ( ! function_exists( 'WC' ) || is_cart() || is_checkout() ) {
+		if ( ! function_exists( 'WC' ) || ! WC()->cart || is_cart() || is_checkout() ) {
 			return;
 		}
 
