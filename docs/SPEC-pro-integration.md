@@ -368,7 +368,7 @@ Filters that exist primarily for Pro consumption — changing signatures require
 | `customify/customizer/config` | filter | Append config items (Pro's primary extension point) |
 | `customify/builder/<builder>/items` | filter | Register builder items (Pro extends header + footer) |
 | `customify/builder/<builder>/rows` | filter | Override builder rows (Pro can add new rows) |
-| `customify/render_header/is-transparent` | filter | Final transparent-header override |
+| `customify/render_header/is-transparent` | filter | Filter the inherited transparent-header result before the final per-page override |
 | `customify/breadcrumb/is-showing` | filter | Conditional breadcrumb rendering |
 | `customify_dashboard_pro_active` | filter | Pro flips to `true` |
 | `customify_dashboard_localize` | filter | Pro injects boot payload extras |

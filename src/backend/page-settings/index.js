@@ -2,8 +2,8 @@
  * Customify Page Settings — block editor plugin.
  *
  * Renders a PluginDocumentSettingPanel with a flat stack of controls in the
- * Document sidebar. Sections (Layout, Disable Elements, Page Header) are
- * introduced by uppercase section labels rather than tabs.
+ * Document sidebar. Related toggle controls are introduced by a field-style
+ * label rather than a separate tab.
  */
 
 import './style.scss';
@@ -295,6 +295,12 @@ const PAGE_HEADER_OPTIONS = [
 	{ label: __( 'Hide', 'customify' ),                    value: 'none' },
 ];
 
+const TRANSPARENT_HEADER_OPTIONS = [
+	{ label: __( 'Default', 'customify' ), value: 'default' },
+	{ label: __( 'Enable', 'customify' ), value: 'show' },
+	{ label: __( 'Disable', 'customify' ), value: 'hide' },
+];
+
 const BREADCRUMB_OPTIONS = [
 	{ label: __( 'Inherit from Customizer', 'customify' ), value: 'default' },
 	{ label: __( 'Hide', 'customify' ),                    value: 'hide' },
@@ -390,23 +396,32 @@ function CustomifyPageSettings() {
 			<MetaToggle label={ __( 'Footer Bottom', 'customify' ) } metaKey="disable_footer_bottom" meta={ meta } setMeta={ setMeta } />
 
 			{ /*
-			 * "Page Header" section heading is conditional now — Page Title
-			 * Layout moved up next to Content Layout, so only Breadcrumb
-			 * lives down here. When the user has no breadcrumb plugin
-			 * active, the section would be empty and the heading would
-			 * dangle.
+			 * Both controls depend on optional features. Transparent Header
+			 * follows the native/Pro module gate localized by PHP; Breadcrumb
+			 * follows its plugin compatibility gate.
 			 */ }
-			{ config.hasBreadcrumb && (
+			{ ( config.hasHeaderTransparent || config.hasBreadcrumb ) && (
 				<>
-					<p className="customify-ps-section-label">
-						{ __( 'Page Header', 'customify' ) }
-					</p>
-					<SelectControl
-						label={ __( 'Breadcrumb', 'customify' ) }
-						value={ get( 'breadcrumb_display' ) || 'default' }
-						options={ BREADCRUMB_OPTIONS }
-						onChange={ ( v ) => set( 'breadcrumb_display', v ) }
-					/>
+					{ config.hasHeaderTransparent && (
+						<SelectControl
+							label={ __( 'Transparent Header', 'customify' ) }
+							value={
+								get( 'header_transparent_display' ) || 'default'
+							}
+							options={ TRANSPARENT_HEADER_OPTIONS }
+							onChange={ ( v ) =>
+								set( 'header_transparent_display', v )
+							}
+						/>
+					) }
+					{ config.hasBreadcrumb && (
+						<SelectControl
+							label={ __( 'Breadcrumb', 'customify' ) }
+							value={ get( 'breadcrumb_display' ) || 'default' }
+							options={ BREADCRUMB_OPTIONS }
+							onChange={ ( v ) => set( 'breadcrumb_display', v ) }
+						/>
+					) }
 				</>
 			) }
 		</div>

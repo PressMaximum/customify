@@ -146,19 +146,28 @@ class Customify_MetaBox {
 		// `_customify_page_header_display` is unchanged — saved values on
 		// existing sites still load correctly.
 
-		$this->field_builder->add_field(
-			array(
-				'title'   => __( 'Transparent Header', 'customify' ),
-				'name'    => 'header_transparent_display',
-				'tab'     => 'page_header',
-				'type'    => 'select',
-				'choices' => array(
-					'default' => __( 'Inherit from Customizer settings', 'customify' ),
-					'show'    => __( 'Force transparent', 'customify' ),
-					'hide'    => __( 'Force opaque', 'customify' ),
-				),
-			)
-		);
+		// Pro registers the classic-editor field itself when its module is
+		// enabled. The theme supplies the field only for the native fallback,
+		// avoiding a duplicate control when Pro owns the feature.
+		if (
+			function_exists( 'customify_is_header_transparent_module_enabled' )
+			&& customify_is_header_transparent_module_enabled()
+			&& ! class_exists( 'Customify_Pro_Module_Header_Transparent' )
+		) {
+			$this->field_builder->add_field(
+				array(
+					'title'   => __( 'Transparent Header', 'customify' ),
+					'name'    => 'header_transparent_display',
+					'tab'     => 'page_header',
+					'type'    => 'select',
+					'choices' => array(
+						'default' => __( 'Default', 'customify' ),
+						'show'    => __( 'Enable', 'customify' ),
+						'hide'    => __( 'Disable', 'customify' ),
+					),
+				)
+			);
+		}
 
 		if ( Customify_Breadcrumb::get_instance()->support_plugins_active() ) {
 			$this->field_builder->add_tab(
