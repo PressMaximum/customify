@@ -21,6 +21,7 @@ Context controls store one of `inherit`, `both`, `top`, `bottom`, or `disabled`:
 | Pages | `page_content_area_spacing` |
 | Blog posts | `posts_content_area_spacing` |
 | Blog archives | `posts_archives_content_area_spacing` |
+| Shop archive and product taxonomies | `shop_content_area_spacing` |
 | Search | `search_content_area_spacing` |
 | 404 | `404_content_area_spacing` |
 | CPT single | `{post_type}_content_area_spacing` |
@@ -32,7 +33,9 @@ before this feature.
 
 The existing singular post meta
 `_customify_disable_content_vertical_padding=1` remains supported and has
-absolute precedence over the context setting.
+absolute precedence over the context setting. On Shop and product taxonomy
+archives, the same meta on the assigned Shop Page takes precedence over
+`shop_content_area_spacing`.
 
 ---
 
@@ -40,17 +43,16 @@ absolute precedence over the context setting.
 
 The `Content Area Spacing` section lives under the existing `Layouts` panel.
 The `General` group contains the unchanged global spacing magnitude followed by
-Pages, Blog Posts, Blog Archives, Search and 404 modes.
+Pages, Blog Posts, Blog Archives, Shop Archive when WooCommerce is active,
+Search and 404 modes.
 
 `Post Type Settings` is a heading control above dynamically generated CPT
 controls. The CPT source is `customify_get_content_post_types()`, so internal
 utility types and plugin-specific exclusions remain centralized. A CPT archive
 control is added only when the type has a real archive and Customify owns that
 archive. WooCommerce's Product archive and product-only taxonomies keep their
-established ownership, receive no context setting, and leave the global spacing
-unchanged. Their assigned Shop Page's legacy
-`_customify_disable_content_vertical_padding` override is still honored through
-the WooCommerce integration.
+established ownership and resolve through the dedicated `Shop Archive` control
+registered by the WooCommerce integration.
 
 ---
 
@@ -63,7 +65,7 @@ the WooCommerce integration.
 3. Page or blog-post single.
 4. Supported CPT archive.
 5. Custom taxonomy owned by exactly one supported archive CPT.
-6. Archive/taxonomy owned by an excluded integration → no context setting.
+6. Archive/taxonomy owned by an excluded integration → no core context setting.
 7. Built-in/shared/unresolved archive → Blog Archives.
 8. Supported CPT single.
 
@@ -72,6 +74,16 @@ the WooCommerce integration.
 1. Existing singular disable meta → `disabled`.
 2. Context theme mod.
 3. Invalid/empty value → `inherit`.
+
+For Shop and WooCommerce product taxonomy archives, the integration resolves
+its owned context after the core resolver:
+
+1. Assigned Shop Page legacy disable meta → `disabled`.
+2. `shop_content_area_spacing`.
+3. `inherit` → unchanged global `site_content_padding`.
+
+Single Product requests do not enter this archive path. They continue to use
+`product_content_area_spacing` and the individual product's legacy meta.
 
 Taxonomies shared by multiple post types intentionally fall back to Blog
 Archives. This avoids guessing ownership and matches the sidebar resolver.
@@ -115,7 +127,8 @@ its existing precedence cannot be weakened accidentally.
 
 Focused resolver coverage lives in `tests/content-area-spacing-test.php` and
 includes page, blog post, CPT single, CPT archive, owning taxonomy, shared
-taxonomy, search, 404 and legacy meta precedence. Run:
+taxonomy, Shop, WooCommerce product taxonomies, search, 404 and legacy meta
+precedence. Run:
 
 ```bash
 php tests/content-area-spacing-test.php

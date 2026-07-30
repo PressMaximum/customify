@@ -649,8 +649,8 @@ msgstr ""
 
 #: inc/class-customify.php:305 inc/class-customify.php:316
 #: inc/class-customify.php:330
-#: inc/compatibility/woocommerce/woocommerce.php:587
-#: inc/compatibility/woocommerce/woocommerce.php:598
+#: inc/compatibility/woocommerce/woocommerce.php:645
+#: inc/compatibility/woocommerce/woocommerce.php:656
 msgid "Add widgets here."
 msgstr ""
 
@@ -1606,19 +1606,23 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:539
+#: inc/compatibility/woocommerce/woocommerce.php:571
 msgid "Display on product taxonomies (categories/tags,..)"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:547
+#: inc/compatibility/woocommerce/woocommerce.php:579
 msgid "Display on single product"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:585
+#: inc/compatibility/woocommerce/woocommerce.php:616
+msgid "Shop Archive"
+msgstr ""
+
+#: inc/compatibility/woocommerce/woocommerce.php:643
 msgid "WooCommerce Primary Sidebar"
 msgstr ""
 
-#: inc/compatibility/woocommerce/woocommerce.php:596
+#: inc/compatibility/woocommerce/woocommerce.php:654
 msgid "WooCommerce Secondary Sidebar"
 msgstr ""
 
