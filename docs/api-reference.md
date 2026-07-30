@@ -135,7 +135,7 @@ add_filter( 'customify/styling/primary-color', function ( $css ) {
 
 | Hook | Type | Payload | File |
 |---|---|---|---|
-| `customify/render_header/is-transparent` | filter | `bool $is_tran` — final override before result is cached | [`inc/customizer/configs/header/transparent.php`](../inc/customizer/configs/header/transparent.php) |
+| `customify/render_header/is-transparent` | filter | `bool $is_tran` — filters the inherited result before the final per-page metabox override and caching | [`inc/customizer/configs/header/transparent.php`](../inc/customizer/configs/header/transparent.php) |
 
 Note: the result is cached on first call. Register the filter as early as possible (`after_setup_theme`, `init`) — late hooks won't run.
 
@@ -204,6 +204,7 @@ Template tags are PHP functions you call from theme template files. Most live in
 | `customify_get_layout()` | Resolves to one of the 4 layout values |
 | `Customify()->get_setting( $key, $device = null )` | Read a Customizer setting (device-aware) |
 | `Customify()->customizer->get_field_setting( $name )` | Read the config definition for a field |
+| `customify_is_header_transparent_module_enabled()` | Whether the native or Pro Transparent Header implementation is enabled |
 | `Customify()->is_woocommerce_active()` | Boolean — WC plugin active |
 | `Customify()->is_using_post()` | Boolean — current request is a singular post-like context |
 | `Customify()->get_current_post_id()` | Best-guess current post ID across is_singular / blog page / etc. |

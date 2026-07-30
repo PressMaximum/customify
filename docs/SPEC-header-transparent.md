@@ -176,75 +176,66 @@ if ( $hide ) $is_tran = false;
 
 ### 4.3 Tier 3 — Per-page metabox override
 
-Runs **inside** the tier-1 `if ( $is_tran ) { … }` block ([`transparent.php:338-348`](../inc/customizer/configs/header/transparent.php#L338-L348)):
+The value is read from `_customify_header_transparent_display` and applied
+after the inherited Customizer result and the compatibility filter. This makes
+an explicit metabox choice the final display decision for that page:
 
 ```php
-if ( Customify()->is_using_post() ) {
-    $id = Customify()->get_current_post_id();
-    if ( $id ) {
-        $meta = get_post_meta( $id, '_customify_header_transparent_display', true );
-        if ( $meta === 'hide' )       $is_tran = false;
-        elseif ( $meta === 'show' )   $is_tran = true;
-    }
+if ( 'hide' === $override ) {
+    $is_tran = false;
+} elseif ( 'show' === $override && $has_transparent_row ) {
+    $is_tran = true;
 }
 ```
 
-The metabox UI field is `header_transparent_display` on tab `page_header` ([`class-metabox.php:125-137`](../inc/class-metabox.php#L125-L137)) with three choices:
+The metabox UI field is `header_transparent_display`. It is rendered in both
+the classic-editor Page Header tab and the block editor's **Customify Page
+Settings** panel, but only while a Transparent Header
+implementation is enabled. The free theme port is always enabled when Pro
+does not own the feature; when Pro is present, its module toggle is
+authoritative.
 
 | Choice | Stored value | Effect |
 |---|---|---|
-| Inherit from Customizer settings | `'default'` (or empty) | Use tier 1 + 2 result |
-| Force transparent | `'show'` | Override tier 2 only — **does not bypass tier 1** |
-| Force opaque | `'hide'` | Override tier 2 — force opaque header |
+| Default | `'default'` (or empty) | Use the filtered tier 1 + 2 result |
+| Enable | `'show'` | Final display override when at least one row is configured transparent; adds `is-header-transparent-forced` so the header overlays pages without a page cover |
+| Disable | `'hide'` | Final display override — force opaque header |
 
-### 4.4 Final filter
+### 4.4 Compatibility filter
 
 ```php
-self::$is_transparent = apply_filters( 'customify/render_header/is-transparent', $is_tran );
+$is_tran = apply_filters( 'customify/render_header/is-transparent', $is_tran );
 ```
 
-Last word goes to the filter. **The result is cached** — any callback added after the first `is_transparent()` call of the request is ignored. See §7 issue #6.
+The filter can change the inherited result, but an explicit per-page `show` or
+`hide` value is applied afterward. **The final result is cached** — any callback
+added after the first `is_transparent()` call of the request is ignored. See §7
+issue #6.
 
 ### 4.5 Resolution flowchart
 
 ```
-                ┌─────────────────────────────┐
-                │ Any row toggle ON?          │
-                │ header_{top|main|bottom}_   │
-                │ transparent                 │
-                └──────────────┬──────────────┘
-                  No           │  Yes
-                  ▼            ▼
-              return ◀──────────────────────┐
-              false                          │
-                                             ▼
-                      ┌──────────────────────────────┐
-                      │ Resolve page-type key (§4.2) │
-                      │ Check display['<key>']        │
-                      └──────────────┬───────────────┘
-                        Excluded     │  Allowed
-                        ▼            ▼
-                  $is_tran = false   │
-                        │            │
-                        └────►──────┐│
-                                    ▼▼
-                          ┌──────────────────────┐
-                          │ Per-page meta?       │
-                          │ '_customify_header_  │
-                          │ transparent_display' │
-                          └──────────┬───────────┘
-                'hide' │ ''/default │ 'show'
-                   ▼   ▼            ▼
-              false  keep          true
-                          │
-                          ▼
-                ┌─────────────────────────────┐
-                │ apply_filters(              │
-                │ 'customify/render_header/   │
-                │  is-transparent', …)         │
-                └──────────────┬──────────────┘
-                               ▼
-                          cached result
+┌─────────────────────────────┐
+│ Any row toggle ON?          │
+│ Establish inherited result  │
+└──────────────┬──────────────┘
+               ▼
+┌─────────────────────────────┐
+│ Apply page-type exclusions  │
+└──────────────┬──────────────┘
+               ▼
+┌─────────────────────────────┐
+│ Apply compatibility filter  │
+└──────────────┬──────────────┘
+               ▼
+┌─────────────────────────────┐
+│ Apply per-page meta last    │
+│ hide → false                │
+│ show + configured row → true│
+│ default → keep result       │
+└──────────────┬──────────────┘
+               ▼
+          cached result
 ```
 
 ---
@@ -300,7 +291,7 @@ The `--transparent-header-height` CSS variable and `.has-transparent-offset` bod
 
 | Hook | Type | Arguments | Use case |
 |---|---|---|---|
-| `customify/render_header/is-transparent` | filter | `(bool $is_tran)` | Final override; runs once per request before caching |
+| `customify/render_header/is-transparent` | filter | `(bool $is_tran)` | Filter the inherited display result before the final per-page override |
 | `customify/builder/row-classes` | filter | `(array $classes, string $row_id, $builder)` | Where this feature itself injects `.header--transparent` |
 | `customify/logo-classes` | filter | `(array $classes)` | Where this feature injects `.has-tran-logo` / `.no-tran-logo` |
 | `customizer/after-logo-img` | action | none | Where this feature outputs `<img class="site-img-logo-tran">` |
@@ -330,11 +321,15 @@ Workaround: document this in support, or add a dedicated `front` key on the next
 
 `is_shop()` is checked in the WC branch and maps to `display['page']`. There is no dedicated `shop` key. Users have to disable "Single page" to also disable shop — which then also disables all static pages. No workaround without adding a new key.
 
-### Issue #3 — Per-page metabox `show` cannot bypass tier 1
+### Issue #3 — Per-page metabox `show` requires a configured row
 
-The metabox override runs **inside** the `if ( $is_tran )` block ([`transparent.php:280`](../inc/customizer/configs/header/transparent.php#L280)). If every row toggle is off, `is_transparent()` returns `false` before reaching the metabox check, so a "Force transparent" choice on a specific page is ignored.
+The metabox is the final display override, but it does not choose which header
+rows use the transparent skin. If every row toggle is off, a page-level
+`show` value cannot enable the feature because there is no configured
+transparent row.
 
-For "Force transparent" to be respected, **at least one** row toggle must be enabled in the Customizer.
+For `Enable` to take effect, **at least one** row toggle must be enabled in the
+Customizer.
 
 ### Issue #4 — Per-page metabox `show` does not choose which row is transparent
 
@@ -382,8 +377,8 @@ Pro typically extends with: sticky transparent behaviour, scroll-triggered anima
 | I want to… | Code |
 |---|---|
 | Check programmatically whether transparent is active on the current request | `Customify_Header_Transparent::get_instance()->is_transparent()` |
-| Force-disable transparent header in a specific scenario | `add_filter( 'customify/render_header/is-transparent', '__return_false' );` (register early) |
-| Force-enable transparent header in a specific scenario | `add_filter( 'customify/render_header/is-transparent', '__return_true' );` (register early; also requires at least one row toggle ON) |
+| Filter-disable transparent header when the page uses `Default` | `add_filter( 'customify/render_header/is-transparent', '__return_false' );` (register early) |
+| Filter-enable transparent header when the page uses `Default` | `add_filter( 'customify/render_header/is-transparent', '__return_true' );` (register early; rows still control which skins are transparent) |
 | Read whether a specific row is currently transparent | `Customify()->get_setting( "header_{$row}_transparent" )` + `is_transparent()` |
 | Read the per-page override | `get_post_meta( $post_id, '_customify_header_transparent_display', true )` returns `''`, `'show'`, or `'hide'` |
 | Find which display keys are excluded | `Customify()->get_setting_tab( 'header_transparent_display_pages', 'display' )` |

@@ -2,7 +2,9 @@
 
 // Position the header absolutely so page content flows beneath it.
 .is-header-transparent {
-	&.has-page-cover, &.home {
+	&.has-page-cover,
+	&.home,
+	&.is-header-transparent-forced {
 		#masthead {
 			position: absolute;
 			top: 0;

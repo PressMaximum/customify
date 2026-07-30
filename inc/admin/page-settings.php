@@ -138,6 +138,8 @@ class Customify_Page_Settings {
 
 		$has_breadcrumb = class_exists( 'Customify_Breadcrumb' ) &&
 		                  Customify_Breadcrumb::get_instance()->support_plugins_active();
+		$has_header_transparent = function_exists( 'customify_is_header_transparent_module_enabled' )
+			&& customify_is_header_transparent_module_enabled();
 
 		// Resolve the layout to use when the per-post sidebar meta is empty
 		// (i.e. "Inherit from Customizer"). Computed server-side because the
@@ -206,6 +208,7 @@ class Customify_Page_Settings {
 				'sidebarLayouts'  => customify_get_config_sidebar_layouts(),
 				'hasProFeatures'  => (bool) class_exists( 'Customify_Pro' ),
 				'hasBreadcrumb'   => (bool) $has_breadcrumb,
+				'hasHeaderTransparent' => (bool) $has_header_transparent,
 				'fallbackLayout'  => $fallback_layout,
 				'contentSizeMap'  => customify_get_layout_content_sizes(),
 				'postType'        => $post_type,
