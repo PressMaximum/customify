@@ -37,6 +37,7 @@ class Customify_WC {
 			add_filter( 'customify_is_header_display', array( $this, 'show_shop_header' ), 15 );
 			add_filter( 'customify_is_footer_display', array( $this, 'show_shop_footer' ), 15 );
 			add_filter( 'customify_site_content_class', array( $this, 'shop_content_layout' ), 15 );
+			add_filter( 'customify/content_area_spacing/mode', array( $this, 'shop_content_area_spacing_mode' ), 15, 3 );
 			add_filter( 'customify_builder_row_display_get_post_id', array( $this, 'builder_row_get_id' ), 15 );
 
 			add_filter( 'customify/titlebar/args', array( $this, 'titlebar_args' ) );
@@ -422,6 +423,29 @@ class Customify_WC {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Apply the Shop Page's legacy vertical-padding override to Woo archives.
+	 *
+	 * Product archives are intentionally excluded from the generic contextual
+	 * spacing settings because WooCommerce already owns their layout through
+	 * the assigned Shop Page. Product singles keep their own contextual setting
+	 * and per-product legacy override.
+	 *
+	 * @param string $mode    Resolved content area spacing mode.
+	 * @param array  $context Resolved request context.
+	 * @param string $setting Resolved Customizer setting name.
+	 * @return string
+	 */
+	function shop_content_area_spacing_mode( $mode, $context = array(), $setting = '' ) {
+		if ( ! $this->is_shop_pages() || is_product() ) {
+			return $mode;
+		}
+
+		$disable_padding = $this->get_shop_page_meta( '_customify_disable_content_vertical_padding' );
+
+		return '1' === (string) $disable_padding ? 'disabled' : $mode;
 	}
 
 	function show_shop_header( $show = true ) {
