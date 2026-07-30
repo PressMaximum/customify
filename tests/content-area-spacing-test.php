@@ -26,6 +26,7 @@ class WP_Term {
 $GLOBALS['customify_test_request'] = array();
 $GLOBALS['customify_test_mods']    = array();
 $GLOBALS['customify_test_meta']    = array();
+$GLOBALS['customify_test_filters'] = array();
 $GLOBALS['customify_test_types']   = array(
 	'book'    => new WP_Post_Type( 'book', true ),
 	'profile' => new WP_Post_Type( 'profile', false ),
@@ -41,7 +42,30 @@ function __( $text ) {
 	return $text;
 }
 
+function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+	$GLOBALS['customify_test_filters'][ $hook ][ $priority ][] = array(
+		'callback'      => $callback,
+		'accepted_args' => $accepted_args,
+	);
+}
+
 function apply_filters( $hook, $value ) {
+	$args = func_get_args();
+	array_shift( $args );
+
+	if ( empty( $GLOBALS['customify_test_filters'][ $hook ] ) ) {
+		return $value;
+	}
+
+	ksort( $GLOBALS['customify_test_filters'][ $hook ] );
+	foreach ( $GLOBALS['customify_test_filters'][ $hook ] as $callbacks ) {
+		foreach ( $callbacks as $registered ) {
+			$call_args = array_slice( $args, 0, $registered['accepted_args'] );
+			$value     = call_user_func_array( $registered['callback'], $call_args );
+			$args[0]   = $value;
+		}
+	}
+
 	return $value;
 }
 
@@ -109,6 +133,22 @@ function is_archive() {
 	return customify_test_flag( 'archive' );
 }
 
+function is_shop() {
+	return customify_test_flag( 'shop' );
+}
+
+function is_product_category() {
+	return customify_test_flag( 'product_category' );
+}
+
+function is_product_tag() {
+	return customify_test_flag( 'product_tag' );
+}
+
+function is_product() {
+	return customify_test_flag( 'product' );
+}
+
 function get_the_ID() {
 	return isset( $GLOBALS['customify_test_request']['post_id'] ) ? $GLOBALS['customify_test_request']['post_id'] : 0;
 }
@@ -139,6 +179,16 @@ function get_taxonomy( $taxonomy ) {
 
 function get_post_meta( $post_id, $key ) {
 	return isset( $GLOBALS['customify_test_meta'][ $post_id ][ $key ] ) ? $GLOBALS['customify_test_meta'][ $post_id ][ $key ] : '';
+}
+
+function wc_get_page_id( $page ) {
+	if ( 'shop' !== $page ) {
+		return 0;
+	}
+
+	return isset( $GLOBALS['customify_test_request']['shop_page_id'] )
+		? (int) $GLOBALS['customify_test_request']['shop_page_id']
+		: 0;
 }
 
 function customify_get_content_post_types() {
@@ -178,6 +228,10 @@ class Customify_Content_Area_Spacing_Test_Theme {
 			? $GLOBALS['customify_test_mods'][ $setting ]
 			: 'inherit';
 	}
+
+	public function is_woocommerce_active() {
+		return false;
+	}
 }
 
 function Customify() {
@@ -189,6 +243,11 @@ function Customify() {
 }
 
 require dirname( __DIR__ ) . '/inc/content-area-spacing.php';
+require dirname( __DIR__ ) . '/inc/compatibility/woocommerce/woocommerce.php';
+
+$customify_test_woo_reflection = new ReflectionClass( 'Customify_WC' );
+$customify_test_woo            = $customify_test_woo_reflection->newInstanceWithoutConstructor();
+add_filter( 'customify/content_area_spacing/mode', array( $customify_test_woo, 'shop_content_area_spacing_mode' ), 15, 3 );
 
 function customify_test_reset( $request, $mods = array(), $meta = array() ) {
 	$GLOBALS['customify_test_request'] = $request;
@@ -262,6 +321,8 @@ customify_test_reset(
 	array(
 		'post_type_archive' => true,
 		'post_type'         => 'product',
+		'shop'              => true,
+		'shop_page_id'      => 16,
 	),
 	array( 'posts_archives_content_area_spacing' => 'disabled' )
 );
@@ -272,8 +333,25 @@ customify_test_assert_same( array(), customify_get_content_area_spacing_body_cla
 
 customify_test_reset(
 	array(
-		'tax'            => true,
-		'queried_object' => new WP_Term( 'product_cat' ),
+		'post_type_archive' => true,
+		'post_type'         => 'product',
+		'shop'              => true,
+		'shop_page_id'      => 16,
+	),
+	array(),
+	array(
+		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
+	)
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( array( 'disable-content-vertical-padding' ), customify_get_content_area_spacing_body_classes( $context ), 'The Shop Page legacy override disables spacing on the product archive.' );
+
+customify_test_reset(
+	array(
+		'tax'              => true,
+		'queried_object'   => new WP_Term( 'product_cat' ),
+		'product_category' => true,
+		'shop_page_id'     => 16,
 	),
 	array( 'posts_archives_content_area_spacing' => 'disabled' )
 );
@@ -281,6 +359,38 @@ $context = customify_get_content_area_spacing_context();
 customify_test_assert_same( 'none', $context['key'], 'A product-only taxonomy has no Customify spacing context.' );
 customify_test_assert_same( '', $context['setting'], 'A product-only taxonomy does not read Blog Archives.' );
 customify_test_assert_same( array(), customify_get_content_area_spacing_body_classes( $context ), 'Disabling Blog Archives does not change product taxonomy spacing.' );
+
+customify_test_reset(
+	array(
+		'tax'              => true,
+		'queried_object'   => new WP_Term( 'product_cat' ),
+		'product_category' => true,
+		'shop_page_id'     => 16,
+	),
+	array(),
+	array(
+		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
+	)
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( array( 'disable-content-vertical-padding' ), customify_get_content_area_spacing_body_classes( $context ), 'The Shop Page legacy override disables spacing on product categories.' );
+
+customify_test_reset(
+	array(
+		'singular'     => true,
+		'product'      => true,
+		'post_type'    => 'product',
+		'post_id'      => 17,
+		'shop_page_id' => 16,
+	),
+	array( 'product_content_area_spacing' => 'top' ),
+	array(
+		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
+	)
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( 'product_content_area_spacing', $context['setting'], 'Product singles retain their own contextual spacing setting.' );
+customify_test_assert_same( array( 'content-area-spacing-top-only' ), customify_get_content_area_spacing_body_classes( $context ), 'The Shop Page legacy override does not replace product-single spacing.' );
 
 customify_test_reset(
 	array(

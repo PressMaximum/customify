@@ -48,7 +48,9 @@ utility types and plugin-specific exclusions remain centralized. A CPT archive
 control is added only when the type has a real archive and Customify owns that
 archive. WooCommerce's Product archive and product-only taxonomies keep their
 established ownership, receive no context setting, and leave the global spacing
-unchanged.
+unchanged. Their assigned Shop Page's legacy
+`_customify_disable_content_vertical_padding` override is still honored through
+the WooCommerce integration.
 
 ---
 
