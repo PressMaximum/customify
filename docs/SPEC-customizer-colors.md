@@ -564,6 +564,95 @@ This is a **strict improvement** over Phase 1, which had the
 Customizer-to-block-editor disconnect documented in the original
 §3.7 note. The Phase 2.11 filter resolved that limitation.
 
+### 3.8 Palette-linked pickers (component colors follow a token)
+
+Every eligible color picker in the Customizer offers the 12 palette
+tokens as swatches. Picking one stores the **token reference itself**:
+
+```
+footer_main_background_color = var(--customify-secondary, #c3512f)
+```
+
+so the field FOLLOWS the palette — editing the Secondary slot recolors
+it without touching the field. The baked fallback is what renders where
+the token is not emitted (the derived-token opt-in gate, §3.2).
+
+**Storage.** No new key, no shape change. The field keeps its existing
+`theme_mod` / composite-subfield slot and simply holds a different string
+form. Composite subfields work the same way (`customify_button_styling`
+→ `normal.bg_color`).
+
+**Sanitize.** `Customify_Sanitize_Input::sanitize_color()` gained an
+additive branch: a value matching `var(--customify-<token>[, <fallback>])`
+is accepted when the token name is in
+`Customify_Sanitize_Input::allowed_color_tokens()` (filter:
+`customify/color/allowed_tokens`) AND the fallback passes the ordinary
+hex/rgba validation. Everything else falls through to the original path
+unchanged, so no previously-valid value sanitizes differently. The
+fallback is re-validated, not trusted: `var(--customify-primary,
+javascript:alert(1))` normalizes to `var(--customify-primary)`.
+
+**Render.** `Customify_Customizer_Auto_CSS::setup_color()` runs the same
+sanitizer, so the token passes into `css_format` verbatim and the browser
+resolves it against the `:root` block.
+
+**Eligibility.** Everything registered in the `customify_colors` section
+is excluded (`customify_color_link_excluded_controls()`, derived from the
+live config, filter: `customify/color/palette_link_excluded`):
+
+| Excluded | Why |
+|---|---|
+| 6 palette slots | They DEFINE the tokens — `--customify-primary: var(--customify-primary)` is circular. |
+| 7 component overrides | The derived-token engine reads them through `customify_color_normalize_hex()`, which is hex-only; a `var()` there reads as "no override saved" and silently does nothing. The section's own "From palette" quick-pick is the right affordance for an override. |
+| 3 background composites | They already have a slot cascade keyed off whether `bg_color` was saved (§3.2). |
+
+**Where the code lives.** `initColor()` in
+`src/backend/customizer/js/control.js` — the single point every Customify
+color input passes through (standalone controls, `styling` composite
+subfields, `modal` subfields, repeater rows). `inc/color-palette-link.php`
+is data only: it resolves each token to a literal preview color by parsing
+back what `customify_color_palette_root_css()` actually emitted, and ships
+the list on the existing `Customify_Control_Args` payload.
+
+Two non-obvious constraints that the implementation exists to satisfy:
+
+1. **Iris cannot parse `var()`.** Left alone, `wpColorPicker()` reads the
+   token as empty and fires its `clear` callback, blanking the hidden
+   input the control reads — a later `getValue()` would then push `''`
+   over the saved token. `initColor()` seeds the VISIBLE input with the
+   resolved hex before init and restores the token on the hidden input
+   after.
+2. **`wpColorPicker()` fires `change` during init.** That callback pushes
+   the picker's hex to the setting whenever it differs from `current_val`,
+   which would rewrite a linked field to its fallback hex on every
+   re-render (e.g. `refreshFromSetting()`). `current_val` is therefore
+   seeded with the resolved hex so the init callback is a no-op. Net
+   effect: rendering a linked control writes nothing and never dirties the
+   Customizer.
+3. **The trigger chip is painted inline by `color-picker-alpha.js`.** The
+   sync pass may only UNDO an override it applied itself; clearing the
+   inline background unconditionally wipes the alpha script's paint and
+   leaves the chip transparent after an ordinary hex pick.
+4. **wp-color-picker slides `.iris-picker`, not `.wp-picker-holder`.** An
+   interrupted slideUp leaves an inline `display: none` on the picker while
+   the container still carries `.wp-picker-active` — the card then opens
+   showing the palette row with no picker above it. The SCSS ties
+   `.iris-picker` visibility to the container state instead
+   (`&.wp-picker-active .iris-picker { display: block !important }`).
+
+**Token matching is by NAME, never by whole string.** The stored value
+carries a fallback baked in at pick time, but the token list is rebuilt
+from live slot values on every page load — comparing whole strings would
+"unlink" every Accent-linked field the moment someone edits the Accent
+slot.
+
+**Known rough edge.** The baked fallback goes stale after a slot edit
+(the value box shows `var(--customify-accent, #ffd042)` while Accent is
+now `#7c3aed`). Harmless — the fallback only applies when the token is
+absent — but a follow-up could refresh it when the Customizer is already
+dirty, using the same "never write on a clean open" doctrine as the
+palette switcher (§8.13 D).
+
 ---
 
 ## 4. File inventory
@@ -1390,6 +1479,40 @@ LIVE background (matches Blocksify's current button hover):
 - 30K-safety: no storage/selector change. Only the transient hover *appearance*
   changes site-wide (darken → adaptive lift/deepen); resting + saved colors render
   identically.
+
+### 8.15 Phase 4 — palette-linked pickers (done)
+
+Component colors can follow a palette token instead of freezing a hex —
+full mechanism in §3.8. Rolled out to every color input outside the
+Colors section: 26 top-level `color` controls (13 eligible after the
+exclusions), 13 colors nested in `modal` composites, and the 8 color
+subfields of each of the 26 `styling` composites.
+
+**Files.** `inc/color-palette-link.php` (NEW — token list + preview
+resolution + eligibility + `Customify_Control_Args` payload);
+`inc/customizer/class-customizer-sanitize.php` (`sanitize_color()` split
+into `sanitize_color_token()` + `sanitize_color_literal()`, plus
+`allowed_color_tokens()`); `src/backend/customizer/js/control.js`
+(`initColor()` + the `customifyPaletteLink` helper);
+`src/backend/customizer/scss/_control.scss` (popover card + swatch row,
+scoped to the `.has-palette-link` class the JS adds).
+
+**30K-site verification** (see §5 for the method):
+
+| Check | Result |
+|---|---|
+| Scenario A — fresh install, zero saved mods | Generated CSS byte-identical to baseline |
+| Scenario B — 11 saved keys incl. legacy 9 + a per-row color | Byte-identical |
+| Scenario C — partial save (2 keys) | Byte-identical |
+| `sanitize_color()` equivalence, 48-input corpus (hex 3/6/8-char, rgba shapes, empty/null/array/bool, junk, injection attempts) | 0 regressions; 5 newly-accepted token shapes, all previously returning `null` or the malformed `rgba(,,,)` the old sscanf path produced |
+| Injection through the new branch | `var(--evil)`, `var(--customify-nope)`, `var(--customify-primary); background:url(x)` → rejected; bad fallback stripped |
+| Dirty-on-open (linked and unlinked fields) | Customizer stays clean |
+| Existing hex picking | Unchanged — stores hex, not linked |
+| Colors section | Untouched: no `.has-palette-link`, keeps its own quick-pick row |
+| Cost at scale | Swatch row is built on first popover open, not at mount — 0 rows in the DOM after a Customizer load |
+
+Baseline for the byte-diff was the same tree at `HEAD` installed as a
+second theme, so only the change under test differed.
 
 ### 8.12 Phase 2 — remaining (good follow-ups)
 

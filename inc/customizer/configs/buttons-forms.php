@@ -62,9 +62,23 @@ if ( ! function_exists( 'customify_customizer_buttons_forms_config' ) ) {
 		//     its own dedicated nav-icon styling (transparent bg, no padding,
 		//     custom hover). Letting Button Styling reach it paints the
 		//     hamburger with the brand button background.
+		//   - `.input-pm-act` — the WooCommerce quantity stepper's +/- pair
+		//     (injected by `_wc_plus_minus()` in
+		//     src/frontend/js/compatibility/woocommerce.js, used on cart,
+		//     mini-cart and single product). They are plain <button>s sitting
+		//     directly against the qty input, so the brand button background
+		//     painted them as if they were CTAs.
+		//   - `.wc-block-components-quantity-selector__button` — the same
+		//     stepper in the Cart/Checkout blocks. Its class is `wc-block-…`,
+		//     NOT `wp-block-…`, so the carve-out above does not cover it. The
+		//     SCSS neutralizer in
+		//     src/frontend/scss/compatibility/wc/_woocommerce-main.scss only
+		//     handles the bundled :hover state layer — the Customizer's inline
+		//     CSS outranks any bundled rule, so the normal-state background has
+		//     to be excluded here at the source.
 		// Keep every :not() comma-free ($suffix_each below splits on commas).
 		$button_selector = '.button:not([class*="wp-block-"]):not(.menu-mobile-toggle), '
-			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button):not(.menu-mobile-toggle), '
+			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):not(.input-pm-act):not(.wc-block-components-quantity-selector__button), '
 			. 'input[type="button"]:not([class*="wp-block-"]), '
 			. 'input[type="reset"]:not([class*="wp-block-"]), '
 			. 'input[type="submit"]:not([class*="wp-block-"]), '

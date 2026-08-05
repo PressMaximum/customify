@@ -101,19 +101,94 @@ class Customify_Sanitize_Input {
 	}
 
 	/**
-	 * Sanitize color
+	 * Palette token names accepted inside a `var()` color value.
 	 *
-	 * Output can be rgba or hex color code
+	 * Mirrors the tokens emitted by `customify_color_palette_root_css()`.
+	 * Hardcoded (not derived) so the sanitizer never depends on load order or
+	 * on the derived-token opt-in gate — an allowlisted token whose var is not
+	 * emitted still renders via its baked fallback.
+	 *
+	 * @return string[]
+	 */
+	static function allowed_color_tokens() {
+		$tokens = array(
+			'--customify-base',
+			'--customify-surface',
+			'--customify-text',
+			'--customify-primary',
+			'--customify-secondary',
+			'--customify-accent',
+			'--customify-primary-container',
+			'--customify-secondary-container',
+			'--customify-accent-container',
+			'--customify-body-text',
+			'--customify-text-muted',
+			'--customify-heading',
+			'--customify-widget-title',
+			'--customify-border',
+			'--customify-border-strong',
+			'--customify-link',
+			'--customify-link-hover',
+			'--customify-primary-hover',
+			'--customify-on-primary',
+			'--customify-on-secondary',
+			'--customify-on-accent',
+			'--customify-on-surface',
+			'--customify-on-primary-container',
+			'--customify-on-secondary-container',
+			'--customify-on-accent-container',
+			'--customify-btn-on-primary',
+			'--customify-btn-on-secondary',
+		);
+
+		return apply_filters( 'customify/color/allowed_tokens', $tokens );
+	}
+
+	/**
+	 * Sanitize a palette token reference — `var(--customify-<token>[, <fallback>])`.
+	 *
+	 * Written by the Customizer palette-link picker so a component color can
+	 * follow a palette token instead of freezing a hex. Both parts are
+	 * validated: the token name against the allowlist above, the fallback
+	 * through the same hex/rgba path as any other color. Anything else returns
+	 * '' so the caller falls through to the literal-color path — no CSS can be
+	 * smuggled into the stylesheet through this branch.
+	 *
+	 * @param string $value
+	 *
+	 * @return string Normalized `var(...)` string, or '' when not a valid token.
+	 */
+	static function sanitize_color_token( $value ) {
+		if ( ! is_string( $value ) ) {
+			return '';
+		}
+
+		$value = trim( $value );
+		if ( ! preg_match( '/^var\(\s*(--customify-[a-z0-9-]+)\s*(?:,\s*(.+?)\s*)?\)$/i', $value, $matches ) ) {
+			return '';
+		}
+
+		$name = strtolower( $matches[1] );
+		if ( ! in_array( $name, self::allowed_color_tokens(), true ) ) {
+			return '';
+		}
+
+		$fallback = isset( $matches[2] ) ? self::sanitize_color_literal( $matches[2] ) : '';
+
+		return $fallback ? 'var(' . $name . ', ' . $fallback . ')' : 'var(' . $name . ')';
+	}
+
+	/**
+	 * Sanitize a literal color — hex or rgba.
+	 *
+	 * Extracted from sanitize_color() so the token fallback runs through the
+	 * exact same validation. Behavior for existing values is unchanged.
 	 *
 	 * @param string $color
 	 *
 	 * @return string
 	 */
-	static function sanitize_color( $color ) {
-		if ( empty( $color ) || is_array( $color ) ) {
-			return '';
-		}
-
+	static function sanitize_color_literal( $color ) {
 		// If string does not start with 'rgba', then treat as hex.
 		// sanitize the hex color and finally convert hex to rgba.
 		if ( false === strpos( $color, 'rgba' ) ) {
@@ -125,6 +200,31 @@ class Customify_Sanitize_Input {
 		sscanf( $color, 'rgba(%d,%d,%d,%f)', $red, $green, $blue, $alpha );
 
 		return 'rgba(' . $red . ',' . $green . ',' . $blue . ',' . $alpha . ')';
+	}
+
+	/**
+	 * Sanitize color
+	 *
+	 * Output can be rgba, hex color code, or an allowlisted palette token
+	 * reference (`var(--customify-primary, #235787)`).
+	 *
+	 * @param string $color
+	 *
+	 * @return string
+	 */
+	static function sanitize_color( $color ) {
+		if ( empty( $color ) || is_array( $color ) ) {
+			return '';
+		}
+
+		// Additive branch: no value that was valid before this check reaches
+		// it, since a leading `var(` never survived the hex/rgba path.
+		$token = self::sanitize_color_token( $color );
+		if ( '' !== $token ) {
+			return $token;
+		}
+
+		return self::sanitize_color_literal( $color );
 	}
 
 	private function sanitize_media( $value ) {

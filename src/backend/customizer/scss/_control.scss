@@ -560,12 +560,27 @@ $text_color: #555d66;
         display: block;
         text-transform: uppercase;
     }
+    // Each column is `span.input` (the control) above `.customify--small-label`
+    // (the X / Y / BLUR / SPREAD / INSET caption). The height used to be a
+    // hardcoded 28px, so once the number inputs moved to the control-height
+    // token the 16px INSET checkbox — which centres inside this box, not
+    // inside the input — sat above the row and dragged its caption up with
+    // it. Track the token and centre, so every column shares one baseline
+    // whatever the control inside it is.
     span.input {
-        height: 28px;
-        display: block;
-        vertical-align: middle;
-        line-height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: var(--customify-control-h, 28px);
+        line-height: normal;
         text-align: center;
+
+        // WP admin ships checkboxes with `margin: -4px 4px 0 0`, meant for
+        // inline text baselines. Inside a centred flex column that offset is
+        // pure misalignment.
+        input[type="checkbox"] {
+            margin: 0;
+        }
     }
     label {
         cursor: pointer;
@@ -823,6 +838,17 @@ $text_color: #555d66;
 // value-cluster column width (136px) and the same box style, so the
 // whole popover reads as one aligned two-column form.
 .customize-control-customify-typography .customify-modal-settings {
+    // This popover deliberately runs a more compact scale than the styling
+    // composite: it stacks ~11 fields (family, size, weight, line-height,
+    // letter-spacing, style, decoration, transform, …) and the roomier
+    // 36px rhythm would push it past the sidebar. Re-declaring the tokens
+    // here keeps every control in this panel — including the Select2 font
+    // picker, which resolves them through the shared rule in
+    // customizer.scss — on ONE scale instead of leaving the font box
+    // taller than the fields beneath it.
+    --customify-control-h: 28px;
+    --customify-control-radius: 2px;
+
     // Quieter field labels — the values are the stars here.
     .customize-control-title {
         font-weight: 500;
@@ -1590,6 +1616,50 @@ $text_color: #555d66;
         }
     }
 }
+// ──────────────────────────────────────────────────────────────────
+// Composite-modal form controls.
+//
+// A styling modal used to mix three scales in one panel: the colour row
+// (32px, rounded), the css_ruler number boxes for padding / border
+// radius / box-shadow offsets (39px, square), and the Border Style
+// select (40px, square) — twelve fields, three heights, two corner
+// styles, stacked vertically.
+//
+// The scale tokens (--customify-control-h / -radius / -border) are
+// declared once on `.customize-control` in customizer.scss; everything
+// here just resolves them, so there is one number to change.
+// ──────────────────────────────────────────────────────────────────
+.customify-modal-settings {
+    input[type="text"],
+    input[type="number"],
+    input[type="search"],
+    input[type="email"],
+    input[type="url"],
+    input[type="button"],
+    select,
+    .wp-color-result {
+        height: var(--customify-control-h);
+        min-height: var(--customify-control-h);
+        border-radius: var(--customify-control-radius);
+        border-color: var(--customify-control-border);
+        box-shadow: none;
+        font-size: 13px;
+    }
+
+    // Number boxes sit under their own TOP/RIGHT/BOTTOM/LEFT captions, so
+    // centring reads better than WP's default left alignment at this width.
+    input[type="number"] {
+        padding: 0 6px;
+        text-align: center;
+    }
+
+    select {
+        padding-top: 0;
+        padding-bottom: 0;
+        line-height: calc(var(--customify-control-h) - 2px);
+    }
+}
+
 .customify-modal-settings {
     box-shadow: 0 2px 15px rgba(0,0,0,.3);
     background: #fff;
@@ -2644,4 +2714,385 @@ $text_color: #555d66;
 @keyframes customify-color-popover-in {
     from { opacity: 0; }
     to   { opacity: 1; }
+}
+
+
+// ──────────────────────────────────────────────────────────────────
+// Palette link — token swatch row inside any eligible color picker.
+//
+// Behaviour lives in src/backend/customizer/js/control.js
+// (initColor() + the customifyPaletteLink helper); data comes from
+// Customify_Control_Args.palette_link (inc/color-palette-link.php).
+//
+// Everything here is scoped to `.has-palette-link`, a class the JS adds
+// only to pickers it decorates — pickers in the Colors section and any
+// excluded control keep their existing appearance untouched.
+// ──────────────────────────────────────────────────────────────────
+
+// The Colors section renders `.wp-picker-holder` as a floating card, but
+// that rule is scoped to #sub-accordion-section-customify_colors. Elsewhere
+// the holder is an unstyled block sitting in the section body, so anything
+// appended to it reads as "outside the picker". Same card, scoped to us.
+.customify-input-color.has-palette-link {
+    position: relative;
+}
+
+.wp-picker-container.has-palette-link {
+    // Trigger row — WP lays the swatch button, the hex input and Clear out as
+    // three independently-sized inline-blocks, so they sit at different heights
+    // and baselines. One flex row with a shared control height lines them up.
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+
+    // One shared control height for all three parts, taken from the same
+    // custom property the composite modal uses so a colour row matches the
+    // number inputs it sits between. `min-height` has to be reset
+    // explicitly: Customify's global Customizer field styling puts
+    // `min-height: 39px` on text inputs, which otherwise wins over `height`
+    // and leaves the hex box taller than the swatch button and Clear.
+    .wp-color-result,
+    input[type="text"].wp-color-picker,
+    .wp-picker-clear {
+        height: var(--customify-control-h, 36px);
+        min-height: var(--customify-control-h, 36px);
+        border-radius: var(--customify-control-radius, 4px);
+    }
+
+    // Swatch-only trigger. WP's "Select Color" label needs ~90px on top of the
+    // colour chip, which does not fit next to the hex field + Clear in a
+    // narrow panel (the styling-composite modal is ~260px) — the label ends up
+    // truncated mid-word. The chip alone already reads as "pick a colour", so
+    // the text is hidden VISUALLY ONLY, the accessible name is kept.
+    .wp-color-result {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 auto;
+        // Square chip — same edge as the control height so it reads as one
+        // token in the row rather than a differently-proportioned box.
+        width: var(--customify-control-h, 36px);
+        margin: 0;
+        padding: 0;
+        border-radius: var(--customify-control-radius, 4px);
+        overflow: hidden;
+
+        // wp-color-picker's own stylesheet pins the chip to a fixed 30px,
+        // which leaves a transparent sliver of the button showing down the
+        // right-hand edge of a 36px swatch. Same `!important` treatment the
+        // height already needs in customizer.scss.
+        .color-alpha {
+            width: 100% !important;
+            height: 100% !important;
+            border-radius: 0;
+        }
+
+        .wp-color-result-text {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            border: 0;
+            overflow: hidden;
+            white-space: nowrap;
+            clip-path: inset(50%);
+        }
+    }
+
+    .wp-picker-input-wrap {
+        display: flex;
+        align-items: center;
+        flex: 1 1 auto;
+        gap: 6px;
+        min-width: 0;
+        margin: 0;
+
+        label {
+            display: block;
+            flex: 1 1 auto;
+            min-width: 0;
+            margin: 0;
+        }
+    }
+
+    // wp-color-picker's JS writes an inline `width` on the hex field during
+    // init, so this needs `!important` to fill the row instead of leaving dead
+    // space between the field and Clear — no stylesheet rule can outrank an
+    // inline style.
+    input[type="text"].wp-color-picker {
+        width: 100% !important;
+        min-width: 0;
+        margin: 0;
+        border-radius: var(--customify-control-radius, 4px);
+        font-family: Menlo, Consolas, monospace;
+        font-size: 11px;
+        text-align: center;
+    }
+
+    .wp-picker-clear {
+        flex: 0 0 auto;
+        margin: 0;
+        padding: 0 10px;
+        border-radius: var(--customify-control-radius, 4px);
+        line-height: calc(var(--customify-control-h, 36px) - 2px);
+    }
+
+    .wp-picker-holder {
+        display: none;
+        // Reset any leftover height jQuery's slideUp may have inlined.
+        height: auto !important;
+    }
+
+    // Iris ships 8 default swatches inside the picker — redundant next to
+    // the theme palette row.
+    .iris-palette-container {
+        display: none !important;
+    }
+
+    &.wp-picker-active .wp-picker-holder {
+        display: block !important; // beat Iris's inline display:none mid-slide
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        width: auto;
+        padding: 16px;
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        border-radius: 6px;
+        box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.04),
+            0 12px 28px rgba(0, 0, 0, 0.16);
+        z-index: 100;
+        animation: customify-color-popover-in 0.08s ease-out;
+    }
+
+    // wp-color-picker slides `.iris-picker` itself (not the holder), so it can
+    // be left with an inline `display: none` from an interrupted slideUp while
+    // the container is still `.wp-picker-active` — the card then opens showing
+    // only the palette row, with no picker above it. Tie the picker's
+    // visibility to the container state instead of to the animation.
+    &.wp-picker-active .iris-picker {
+        display: block !important;
+    }
+
+    // Iris chrome cleanup — the card provides the surface now, so Iris must
+    // not draw its own bordered box inside it. Its internals (.iris-square /
+    // .iris-strip) keep their native layout: the drag math reads
+    // offsetWidth/offsetTop, so resizing them breaks hue + alpha drag.
+    //
+    // Iris renders at a FIXED 255px regardless of its container, and a picker
+    // row is narrower than that in most panels (~251px in a composite modal),
+    // so it always overhangs by a few px. Centre it with the width baked into
+    // the offset — `(100% - 255px) / 2` resolves against the content box, so
+    // the overhang splits evenly (~2px a side) whatever the container width.
+    // A fixed negative margin cannot do this: the -10px value this rule
+    // carried was copied from the Colors section, whose rows are ~283px wide,
+    // and in a narrower panel it dragged the whole picker left and pushed the
+    // alpha strip hard against the card's right edge.
+    &.wp-picker-active .iris-picker.iris-border {
+        background: transparent !important;
+        border: 0 !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 calc((100% - 255px) / 2) !important;
+    }
+
+    &.wp-picker-active .iris-picker-inner .iris-strip {
+        top: 0 !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+        height: 100% !important;
+    }
+
+    // Drag handles — appearance only. Iris positions these by writing
+    // `top`/`left` in px, and its own CSS pairs each size with a matching
+    // negative margin, so the BOX SIZE must not change: restyling borders,
+    // radius and shadow is safe, resizing would offset the handle from the
+    // colour it points at.
+    //
+    // Stock look is a 5px solid ring on the square handle and a flat
+    // grey jQuery-UI pill on the strips. Both read as unfinished next to
+    // the rest of the panel.
+    .iris-square-handle {
+        border-width: 2px;
+        border-color: #fff;
+        background: transparent;
+        box-shadow:
+            0 0 0 1px rgba(0, 0, 0, 0.3),
+            0 1px 3px rgba(0, 0, 0, 0.35);
+    }
+
+    .iris-slider-offset .ui-slider-handle {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.25);
+        border-radius: 3px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+    }
+}
+
+.customify-palette-link {
+    margin-top: 14px;
+}
+
+.customify-palette-link__value {
+    position: relative;
+    margin-bottom: 14px;
+}
+
+.customify-palette-link__value-input {
+    width: 100%;
+    padding-right: 30px !important;
+    font-family: Menlo, Consolas, monospace;
+    font-size: 11px;
+
+    &[readonly] {
+        background: #f6f7f7;
+    }
+}
+
+.customify-palette-link__copy {
+    position: absolute;
+    top: 50%;
+    right: 4px;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: #787c82;
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+
+    &:hover {
+        color: var(--wp-admin-theme-color, #3858e9);
+    }
+}
+
+// Every token in one compact block — 12 tokens at 6 per line = two rows.
+.customify-palette-link__row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    justify-items: center;
+    gap: 9px;
+    margin-bottom: 12px;
+}
+
+.customify-palette-link__swatch {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+
+    &:focus {
+        outline: none;
+        box-shadow:
+            inset 0 0 0 1px rgba(0, 0, 0, 0.12),
+            0 0 0 2px var(--wp-admin-theme-color, #3858e9);
+    }
+
+    // Selected state: white ring lifts the swatch off the card, and the
+    // dashicon check still reads at 24px where a border alone would not.
+    &.is-active {
+        box-shadow:
+            inset 0 0 0 1px rgba(0, 0, 0, 0.12),
+            0 0 0 2px #fff,
+            0 0 0 4px var(--wp-admin-theme-color, #3858e9);
+
+        &::after {
+            content: '\f147';
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: dashicons;
+            font-size: 16px;
+            line-height: 1;
+            color: #fff;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+        }
+    }
+
+    // Token-name tooltip — same interaction as the Colors section quick-pick
+    // swatches (SPEC-customizer-colors §6.7).
+    &::before {
+        content: attr(data-label);
+        position: absolute;
+        bottom: calc(100% + 7px);
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 3px 7px;
+        border-radius: 3px;
+        background: #1d2327;
+        color: #fff;
+        font-size: 10px;
+        line-height: 1.4;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.12s ease-out;
+        z-index: 5;
+    }
+
+    &:hover::before {
+        opacity: 1;
+    }
+}
+
+.customify-palette-link__status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: #787c82;
+
+    &.is-linked {
+        color: #1d2327;
+    }
+}
+
+.customify-palette-link__dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.15);
+}
+
+.customify-palette-link__unlink {
+    margin-left: auto;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--wp-admin-theme-color, #3858e9);
+    font-size: 11px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+// Linked fields read differently at a glance from custom-hex ones: the
+// trigger swatch carries the same accent marker used by the active swatch.
+// The dot sits INSIDE the button so the trigger row can keep `overflow:
+// hidden` (which is what clips the colour chip to the rounded corners).
+.customify-input-color.is-palette-linked .wp-color-result {
+    position: relative;
+
+    &::after {
+        content: '';
+        position: absolute;
+        right: 3px;
+        bottom: 3px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--wp-admin-theme-color, #3858e9);
+        box-shadow: 0 0 0 2px #fff;
+    }
 }
