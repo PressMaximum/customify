@@ -76,9 +76,14 @@ if ( ! function_exists( 'customify_customizer_buttons_forms_config' ) ) {
 		//     handles the bundled :hover state layer — the Customizer's inline
 		//     CSS outranks any bundled rule, so the normal-state background has
 		//     to be excluded here at the source.
+		//   - `.show-password-input` — WooCommerce's show/hide password toggle,
+		//     an empty <button> overlaying the right edge of every password
+		//     field (login, register, checkout, edit-account). It is an icon
+		//     control, so a brand background turns it into a solid square.
+		//     Styled in src/frontend/scss/compatibility/wc/_wc-forms.scss.
 		// Keep every :not() comma-free ($suffix_each below splits on commas).
 		$button_selector = '.button:not([class*="wp-block-"]):not(.menu-mobile-toggle), '
-			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):not(.input-pm-act):not(.wc-block-components-quantity-selector__button), '
+			. 'button:not([class*="wp-block-"]):not(.customize-partial-edit-shortcut-button):not(.menu-mobile-toggle):not(.input-pm-act):not(.wc-block-components-quantity-selector__button):not(.show-password-input), '
 			. 'input[type="button"]:not([class*="wp-block-"]), '
 			. 'input[type="reset"]:not([class*="wp-block-"]), '
 			. 'input[type="submit"]:not([class*="wp-block-"]), '

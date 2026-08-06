@@ -207,3 +207,103 @@ ul#shipping_method {
         min-height: auto;
     }
 }
+/**
+* Show / hide password toggle.
+*
+* WooCommerce injects this control from JS (`assets/js/frontend/woocommerce.js`):
+* it wraps every password field in `span.password-input` and appends an EMPTY
+* `<button class="show-password-input">`, then styles both in
+* `woocommerce-layout.css` — positioning the button over the field's right edge
+* and drawing the eye through a `::before` background image.
+*
+* Customify removes `woocommerce-layout.css` entirely (see `custom_styles()` in
+* inc/compatibility/woocommerce/woocommerce.php), so none of that arrives. The
+* button ends up unpositioned and iconless: `.password-input` is a column flex
+* container, so it drops BELOW the field, and the theme's own button skin
+* paints the empty box in the brand colour — a solid square under every
+* password input on login, register, checkout and edit-account.
+*
+* Everything below is nested under `.password-input` on purpose. The bundled
+* button rules in base/_forms.scss are `button:not(.components-button, …)`,
+* which `:not()` lifts to (0,1,1) — a bare `.show-password-input` (0,1,0)
+* loses to them. The descendant form is (0,2,0) and wins without `!important`.
+*
+* The icon is drawn with a mask + `currentColor` rather than WooCommerce's
+* hardcoded `#111111` fill, so it follows the field's text colour on dark
+* palettes instead of disappearing.
+*/
+.password-input {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+
+    // Keep typed characters clear of the toggle.
+    input[type="password"],
+    input[type="text"] {
+        padding-right: 2.5rem;
+    }
+
+    // Edge/IE render their own reveal control — two toggles is worse than none.
+    input::-ms-reveal {
+        display: none;
+    }
+
+    .show-password-input {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 50%;
+        right: 0.7em;
+        transform: translateY(-50%);
+        width: 22px;
+        height: 22px;
+        min-height: 0; // drop the global button min-height
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: none;
+        box-shadow: none;
+        color: inherit;
+        cursor: pointer;
+        opacity: 0.55;
+        transition: opacity 0.15s ease;
+        -webkit-appearance: none;
+        appearance: none;
+
+        @include rtl() {
+            right: auto;
+            left: 0.7em;
+        }
+
+        // Neutralize the global button hover state layer (a translucent
+        // background-image overlay) — this control is an icon, not a surface.
+        &:hover,
+        &:focus {
+            background: none;
+            background-image: none;
+            opacity: 1;
+        }
+
+        &::before {
+            content: '';
+            display: block;
+            width: 22px;
+            height: 22px;
+            background-color: currentColor;
+            -webkit-mask: var(--customify-eye-icon) no-repeat center / 22px 22px;
+            mask: var(--customify-eye-icon) no-repeat center / 22px 22px;
+
+            // Struck-through eye — "password is hidden, click to show".
+            --customify-eye-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.3 3.3C16.9 2.9 16.2 2.9 15.7 3.3L13.3 5.7C12.2437 5.3079 11.1267 5.1048 10 5.1C6.2 5.2 2.8 7.2 1 10.5C1.2 10.9 1.5 11.3 1.8 11.7C2.6 12.8 3.6 13.7 4.7 14.4L3 16.1C2.6 16.5 2.5 17.2 3 17.7C3.4 18.1 4.1 18.2 4.6 17.7L17.3 4.9C17.7 4.4 17.7 3.7 17.3 3.3ZM6.7 12.3L5.4 13.6C4.2 12.9 3.1 11.9 2.3 10.7C3.5 9 5.1 7.8 7 7.2C5.7 8.6 5.6 10.8 6.7 12.3ZM10.1 9C9.6 8.5 9.7 7.7 10.2 7.2C10.7 6.8 11.4 6.8 11.9 7.2L10.1 9ZM18.3 9.5C17.8 8.8 17.2 8.1 16.5 7.6L15.5 8.6C16.3 9.2 17 9.9 17.6 10.8C15.9 13.4 13 15 9.9 15H9.1L8.1 16C8.8 15.9 9.4 16 10 16C13.3 16 16.4 14.4 18.3 11.7C18.6 11.3 18.8 10.9 19.1 10.5C18.8 10.2 18.6 9.8 18.3 9.5ZM14 10L10 14C12.2 14 14 12.2 14 10Z"/></svg>');
+        }
+
+        // Toggled on — plain eye, "password is visible, click to hide".
+        &.display-password::before {
+            --customify-eye-icon: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M18.3 9.49999C15 4.89999 8.50002 3.79999 3.90002 7.19999C2.70002 8.09999 1.70002 9.29999 0.900024 10.6C1.10002 11 1.40002 11.4 1.70002 11.8C5.00002 16.4 11.3 17.4 15.9 14.2C16.8 13.5 17.6 12.8 18.3 11.8C18.6 11.4 18.8 11 19.1 10.6C18.8 10.2 18.6 9.79999 18.3 9.49999ZM10.1 7.19999C10.6 6.69999 11.4 6.69999 11.9 7.19999C12.4 7.69999 12.4 8.49999 11.9 8.99999C11.4 9.49999 10.6 9.49999 10.1 8.99999C9.60003 8.49999 9.60003 7.69999 10.1 7.19999ZM10 14.9C6.90002 14.9 4.00002 13.3 2.30002 10.7C3.50002 8.99999 5.10002 7.79999 7.00002 7.19999C6.30002 7.99999 6.00002 8.89999 6.00002 9.89999C6.00002 12.1 7.70002 14 10 14C12.2 14 14.1 12.3 14.1 9.99999V9.89999C14.1 8.89999 13.7 7.89999 13 7.19999C14.9 7.79999 16.5 8.99999 17.7 10.7C16 13.3 13.1 14.9 10 14.9Z"/></svg>');
+        }
+    }
+}
