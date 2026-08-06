@@ -307,3 +307,76 @@ ul#shipping_method {
         }
     }
 }
+
+/**
+* My Account — login / register columns.
+*
+* `myaccount/form-login.php` renders `#customer_login.u-columns.col2-set` with a
+* `.col-1` (Login) and `.col-2` (Register). Two inherited quirks made that read
+* as misaligned:
+*
+* 1. `form.login / form.register` above carry `padding: 20px`, ported from
+*    WooCommerce's stock rule — where the form is a BORDERED card and the
+*    padding clears that border. Customify drops the border but kept the
+*    padding, so every field sat indented ~20px from its own <h2> with nothing
+*    to justify the inset.
+* 2. `.col2-set .col-1 / .col-2` are `float` + `width: 48%`, a shared checkout
+*    rule. Floats give no control over the gutter and let the two columns end
+*    at different heights.
+*
+* The padding reset is scoped to `.woocommerce-account` rather than to
+* `#customer_login`: that wrapper only exists when registration is enabled
+* (see the `woocommerce_enable_myaccount_registration` guard in the template),
+* so scoping the reset to it would leave the far more common registration-off
+* layout still indented. Checkout keeps its own boxed treatment either way —
+* `form.checkout_coupon` genuinely has a border, and the checkout login toggle
+* is outside this scope.
+*/
+.woocommerce-account {
+    form.login,
+    form.register {
+        margin: 0;
+        padding: 0;
+    }
+
+    // `form .form-row` adds 3px on every side; drop the horizontal part so the
+    // inputs line up flush with the heading, and keep the vertical rhythm.
+    form.login .form-row,
+    form.register .form-row {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+#customer_login {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 clamp(24px, 4vw, 56px);
+    align-items: start;
+
+    // `.col2-set` carries a clearfix, whose ::before/::after become GRID ITEMS
+    // here — they take the first and last cells, pushing Login into column 2
+    // and wrapping Register onto a second row. The grid needs no clearing.
+    &::before,
+    &::after {
+        content: none;
+    }
+
+    // Neutralize the shared float layout — the grid owns placement now.
+    > .col-1,
+    > .col-2 {
+        float: none;
+        width: auto;
+    }
+
+    // Headings align with the fields below them, not with a phantom inset.
+    > .col-1 > h2,
+    > .col-2 > h2 {
+        margin-top: 0;
+    }
+
+    @include mq(max-sm) {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 40px 0;
+    }
+}
