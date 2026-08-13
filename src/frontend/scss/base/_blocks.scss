@@ -56,8 +56,14 @@
 	width: 100vw;
 	max-width: 100vw;
 	// Vertical rhythm driven by theme.json → styles.spacing.blockGap.
-	// Variable is emitted only when blockGap has a value; when blockGap is
-	// false the variable is absent and the fallback 0 applies — i.e. no spacing.
+	//
+	// NOTE on the mechanism, which is not what it looks like: with
+	// `blockGap: false` WordPress still EMITS `--wp--style--block-gap`, with an
+	// empty value. An empty-but-declared custom property makes the declaration
+	// invalid at computed-value time rather than falling back, so the `0` here
+	// is never actually used — the property just resolves to its initial value,
+	// which is also 0. Same result, different route. Do not rely on the
+	// fallback slot to carry a NON-zero value: it will silently never apply.
 	margin-top: var(--wp--style--block-gap, 0);
 	margin-bottom: var(--wp--style--block-gap, 0);
 	margin-left: calc(50% - 50vw);
@@ -81,11 +87,31 @@
 	}
 }
 
-.entry-content ul:not(:is(ul, ol) ul),
-.entry-content ol:not(:is(ul, ol) ol) {
+// Top-level content lists get their own vertical rhythm, distinct from the
+// generic `ul, ol` rule in `base/_base.scss`.
+//
+// `.entry-content` only exists on the frontend, so in editor context the same
+// declarations are emitted unscoped — WordPress rewrites every selector in an
+// injected theme editor stylesheet to sit under `.editor-styles-wrapper`, which
+// supplies the boundary. Without this split the canvas gave lists the base
+// `ms(2)` margin while the frontend gave them 1.5em, so list spacing visibly
+// changed between writing and publishing.
+@mixin customify-content-list-rhythm {
 	margin-top: 1.5em;
 	margin-bottom: 1.5em;
 	list-style-position: outside;
+}
+
+@if $editor_context {
+	ul:not(:is(ul, ol) ul):not(.wp-block-comment-template):not(.wp-block-post-template),
+	ol:not(:is(ul, ol) ol):not(.wp-block-comment-template):not(.wp-block-post-template) {
+		@include customify-content-list-rhythm;
+	}
+} @else {
+	.entry-content ul:not(:is(ul, ol) ul),
+	.entry-content ol:not(:is(ul, ol) ol) {
+		@include customify-content-list-rhythm;
+	}
 }
 
 // Top-level block divs (wp-block-columns, group, buttons, cover, gallery,
@@ -95,8 +121,11 @@
 // uses .editor-styles-wrapper / .is-root-container scope instead.
 //
 // Acts as a flag off theme.json → styles.spacing.blockGap:
-//   - blockGap: <value> → WP emits `--wp--style--block-gap` → margin auto-uses it
-//   - blockGap: false   → variable absent → fallback 0 applies → no block spacing
+//   - blockGap: <value> → WP emits `--wp--style--block-gap` → margin uses it
+//   - blockGap: false   → WP emits the property EMPTY (not absent), so the
+//     declaration is invalid at computed-value time and the margin resolves to
+//     its initial 0. The written fallback is never reached — see the longer
+//     note on `.alignfull` above before changing that `0` to anything else.
 .entry-content > div[class*="wp-block-"] {
 	margin-bottom: var(--wp--style--block-gap, 0);
 }
@@ -285,50 +314,82 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 	width: 100%;
 }
 
+// Cells. Core draws a 1px border on ALL FOUR sides of every cell with no
+// color, so the browser falls back to `currentcolor` — on a dark Palette base
+// that is the white text color, producing bright white grid lines.
+//
+// The color was only half the problem. This file used to also tint every cell
+// (header 10%, odd rows 4%, even rows 6%, footer 10%), and a boxed grid plus a
+// fill on every cell reads as one grey slab — the ink competes with the data
+// instead of organising it.
+//
+// Horizontal rules only, no fills. The row is the unit of meaning in almost
+// every table an editor writes, so the row division is the only one worth
+// drawing; vertical rules and per-cell tints add weight without adding
+// structure. Dropping the blanket fills also un-breaks Core's own cell colour
+// classes (`.has-subtle-pale-blue-background-color` and friends), which the
+// old `.wp-block-table tbody td` rule silently outranked.
 .wp-block-table td,
 .wp-block-table th {
-	padding: 0.5em;
-	// WP / bundled SCSS leave `border: 1px solid` with no color, so the
-	// browser falls back to `currentcolor` — which on dark Palette bases
-	// is the white text color, producing bright white grid lines.
-	// Explicit border-color via the $color_border token gives the
-	// adaptive currentcolor-tint border (10%) we use elsewhere.
-	border-color: $color_border;
-}
-// WP core block-library also adds `border-bottom: 3px solid` on
-// `.wp-block-table thead` and `border-top: 3px solid` on `tfoot` with
-// no color — same currentcolor-fallback problem produces a bright
-// 3px white bar between header/footer and body on dark bases. Set
-// border-color so those separators use the adaptive token.
-.wp-block-table thead,
-.wp-block-table tfoot {
-	border-color: $color_border;
+	padding: 0.75em 0.85em;
+	border: 0;
+	border-bottom: 1px solid $color_border;
+	background-color: transparent;
 }
 
-// WP block defaults paint table cells/headers with hard-coded #f0f0f0 /
-// #f9f9f9 light greys AND force dark `#40464d` text via a `:where()`
-// reset (selector specificity 0). On dark Palette bases the greys wash
-// out into the canvas and the dark text becomes unreadable. Override:
-//   1. `color: $color_text` on `.wp-block-table table` cascades through
-//      the body-text token so cells inherit the theme palette text
-//      color and beat WP's 0-specificity `:where()` reset.
-//   2. Surface adaptive tints on cells/headers stay readable on any
-//      background — saved Palette Surface wins, unsaved → currentcolor
-//      mix.
+// Header and footer keep a heavier rule so they read as the frame around the
+// data rather than as another row of it. Core's own 3px is brought down to 2px:
+// with no cell fills left to balance it, a 3px bar dominates the table.
+.wp-block-table thead {
+	border-bottom: 2px solid $color_border_medium;
+}
+
+.wp-block-table tfoot {
+	border-top: 1px solid $color_border_medium;
+}
+
+.wp-block-table thead th {
+	color: $color_heading;
+	font-weight: 600;
+	text-align: left;
+}
+
+.wp-block-table tfoot td {
+	font-weight: 600;
+	border-bottom: 0;
+}
+
+// The last body row's rule is redundant against the table's own closing edge.
+.wp-block-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+// WP forces a dark `#40464d` onto cells through a `:where()` reset (specificity
+// 0), which is unreadable on dark Palette bases. One token'd declaration on the
+// table beats it and cascades to every cell.
 .wp-block-table table {
 	color: $color_text;
 }
-.wp-block-table thead th {
-	background-color: $surface_strong;
-}
-.wp-block-table tbody td {
-	background-color: $surface_subtle;
-}
-.wp-block-table tbody tr:nth-child(2n) td {
-	background-color: $surface_medium;
-}
-.wp-block-table tfoot td {
-	background-color: $surface_strong;
+
+// Zebra striping belongs to the block style that asks for it, and only there.
+// Core hard-codes `#f0f0f0`, which washes out on a dark base; the Surface token
+// tints from the current text color instead so it stays visible either way.
+// Core already makes the cell borders transparent in this style, so the stripes
+// carry the structure on their own — the row rules would double up with them.
+//
+// Same specificity as Core's rule; the theme stylesheet is enqueued after the
+// block-library styles, so it wins the tie.
+.wp-block-table.is-style-stripes {
+	border-bottom-color: $color_border;
+
+	tbody tr:nth-child(odd) {
+		background-color: $surface_subtle;
+	}
+
+	td,
+	th {
+		border-bottom: 0;
+	}
 }
 
 // Code / preformatted / verse blocks — same WP-default-gray problem as
@@ -637,4 +698,157 @@ ul.wp-block-latest-posts.is-grid.alignwide {
 
 .has-very-dark-gray-background-color {
 	background-color: #444;
+}
+
+/*--------------------------------------------------------------
+  # Layout gaps for Core blocks (blockGap is disabled in theme.json)
+  --------------------------------------------------------------*/
+//
+// `theme.json` does not opt into `settings.spacing.blockGap`, so WordPress
+// emits no layout `gap` for ANY flex or grid block on the site. Worse, it still
+// emits the custom property — with an EMPTY value:
+//
+//     :root { --wp--style--block-gap: ; }
+//
+// An empty-but-declared custom property makes a declaration invalid at
+// computed-value time instead of falling back, so every `var( --wp--style--
+// block-gap, <default> )` that Core writes as a safety net silently resolves to
+// nothing. The blocks below are the ones where that visibly breaks the block:
+// their items end up touching, and in the Gallery's case the block stops
+// laying out altogether.
+//
+// The values restated here are CORE'S OWN defaults, not a Customify opinion —
+// `2em` is `core/columns`' `spacing.blockGap.__experimentalDefault`, and `0.5em`
+// is the fallback Core writes into its own `calc()` expressions for buttons,
+// social links and the gallery.
+//
+// Every rule is wrapped in `:where()` (specificity 0) so that:
+//   • a site that DOES enable blockGap keeps Core's `.wp-container-*{gap:…}`,
+//   • a per-block gap set in the editor still wins,
+//   • and any custom CSS an existing site already wrote to work around this
+//     keeps winning too — which is what makes the change safe on installs that
+//     have been living with the broken rendering.
+
+// Gallery. Core sizes each tile with
+//   width: calc( 33.33% - var( --wp--style--unstable-gallery-gap, 16px ) * .667 )
+// and resolves that variable through a chain ending at `--wp--style--block-gap`.
+// With the empty value the calc() is invalid, `width` falls back to `auto`, and
+// because Core also sets `flex-grow: 1` on the tiles EVERY image takes a full
+// row — a three-image gallery renders as three stacked full-width images.
+// Re-declaring the variable on the gallery itself skips the empty link in the
+// chain. A gallery-specific gap from theme.json (`--wp--style--gallery-gap-
+// default`) is still honoured first, and a gap set on one gallery in the editor
+// serialises as an inline custom property on this same element.
+// WordPress emits the chain itself, per gallery instance, as
+//   .wp-block-gallery.wp-block-gallery-N {
+//     --wp--style--unstable-gallery-gap:
+//        var( --wp--style--gallery-gap-default,
+//        var( --gallery-block--gutter-size,
+//        var( --wp--style--block-gap, 0.5em ) ) );
+//     gap: var( --wp--style--unstable-gallery-gap );
+//   }
+// so overriding the RESULT would mean out-specifying a two-class rule and would
+// also clobber a gap the user set on an individual gallery. Instead, fill in the
+// first link of Core's own chain — `--wp--style--gallery-gap-default` is exactly
+// the extension point for "what a gallery's gap should be by default", and
+// WordPress leaves it undefined here. Core's rule then resolves cleanly, the
+// calc() becomes valid, and the tiles get their widths back.
+//
+// Declared on the block rather than `:root` because the editor stylesheet is
+// injected with every selector prefixed by `.editor-styles-wrapper`, which would
+// turn a `:root` rule into one that matches nothing in the canvas.
+//
+// A gap set on one gallery in the editor serialises as a literal value in that
+// same Core rule, so it still wins.
+.wp-block-gallery {
+	--wp--style--gallery-gap-default: 0.5em;
+}
+
+// Columns sit flush against each other without this.
+:where(.wp-block-columns) {
+	gap: 2em;
+}
+
+// Buttons and social icons run together into one blob.
+:where(.wp-block-buttons),
+:where(.wp-block-social-links) {
+	gap: 0.5em;
+}
+
+// Query Loop results. Two problems at once: no grid gap, and — because the
+// block renders as a `<ul>` — the `ul, ol { margin: 0 0 ms(2) ms(4) }` content-
+// list rule in `base/_base.scss` pushes the whole result grid ~42px to the
+// right of the column it belongs to. Same defect the comment thread had.
+.wp-block-post-template {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+:where(.wp-block-post-template) {
+	gap: 1.5em;
+}
+
+// Remaining flex/grid layout containers in the main content column — most
+// often a Group the author set to a row. Flow layouts are deliberately left
+// alone: there the block's own element margins still provide vertical rhythm,
+// so adding a gap would double it. Flex and grid have no such fallback, so
+// without this every horizontal Group renders as touching items.
+//
+// Scoped to `.content-area` rather than `.entry-content` so it reaches BOTH
+// frontend paths: the classic post body and a block template's own groups (a
+// dynamic template's meta row is a sibling of `.entry-content`, not inside it).
+// The header and footer builders keep their own class names and are untouched.
+//
+// The editor canvas has no `.content-area` — WordPress injects theme editor
+// styles with EVERY selector rewritten to sit under `.editor-styles-wrapper`,
+// so a `.content-area`-scoped rule would match nothing there and the canvas
+// would show touching items while the frontend showed spaced ones. In editor
+// context the rule is therefore written unscoped and WordPress's own prefixing
+// supplies the boundary.
+@if $editor_context {
+	:where(.is-layout-flex, .is-layout-grid) {
+		gap: 1em;
+	}
+} @else {
+	:where(.content-area .is-layout-flex, .content-area .is-layout-grid) {
+		gap: 1em;
+	}
+}
+
+// Accordion (WordPress 7.0). Core ships the toggle button's typography, the
+// +/× icon and the open/close transition, but nothing that separates one item
+// from the next — a two-question FAQ renders as two bare lines of text with no
+// indication that they are separate, clickable rows. A hairline per item, in
+// the same Border token the rest of the theme's dividers use, is enough.
+.wp-block-accordion-item {
+	border-bottom: 1px solid var(--customify-border, rgba(0, 0, 0, 0.09));
+
+	&:first-child {
+		border-top: 1px solid var(--customify-border, rgba(0, 0, 0, 0.09));
+	}
+}
+
+// `wp_link_pages()` — the front-end counterpart of `core/nextpage`. Rendered by
+// the theme's own singular templates, never in the editor. Without this it is a
+// bare run of text ("Pages: 1 2") in body copy size, with the current page
+// indistinguishable from the links.
+.post-nav-links {
+	margin-top: 2em;
+	font-size: 0.875em;
+
+	.post-page-numbers {
+		display: inline-block;
+		padding: 0 0.5em;
+		text-decoration: none;
+
+		&:hover,
+		&:focus-visible {
+			text-decoration: underline;
+		}
+	}
+
+	.current {
+		font-weight: 600;
+		color: var(--customify-heading, #2b2b2b);
+	}
 }

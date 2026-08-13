@@ -101,11 +101,20 @@ if ( ! function_exists( 'customify_comment' ) ) :
 					<div class="comment-wrap">
 						<header class="comment-header">
 							<?php
+							// If current post author is also comment author, make it known visually.
+							// Guest comments carry `user_id` 0, and a post whose author was
+							// deleted (or that was inserted programmatically) carries
+							// `post_author` 0 — the old strict comparison matched 0 === 0 and
+							// badged EVERY guest comment as "Post author". Require a real
+							// account, and compare as integers because the two values do not
+							// reliably arrive with the same type.
+							$customify_is_post_author = $post instanceof WP_Post
+								&& (int) $comment->user_id > 0
+								&& (int) $comment->user_id === (int) $post->post_author;
 							printf(
 								'<cite class="comment-author fn vcard">%1$s %2$s</cite>',
 								get_comment_author_link(),
-								// If current post author is also comment author, make it known visually.
-								( $comment->user_id === $post->post_author ) ? '<span class="comment-post-author text-uppercase text-xsmall">' . __( 'Post author', 'customify' ) . '</span>' : ''
+								$customify_is_post_author ? '<span class="comment-post-author text-uppercase text-xsmall">' . __( 'Post author', 'customify' ) . '</span>' : ''
 							);
 							?>
 							<div class="comment-meta text-uppercase text-xsmall link-meta">

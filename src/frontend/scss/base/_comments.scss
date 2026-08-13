@@ -26,6 +26,25 @@
 		list-style: none;
 		margin: 0;
 	}
+	// The reset above is aimed at the nested REPLY lists, but it also matches a
+	// list a commenter wrote inside their own comment, leaving it with no
+	// markers and no indent — three bullet points read as one run-on
+	// paragraph. Restore normal list rendering inside the comment body only.
+	// (`base/_comment-blocks.scss` fixes the same defect on the block markup,
+	// where it comes from Core's own `.wp-block-comment-template ol` rule.)
+	.comment-content {
+		ul,
+		ol {
+			margin: 1em 0;
+			padding-left: 1.5em;
+		}
+		ul {
+			list-style: disc;
+		}
+		ol {
+			list-style: decimal;
+		}
+	}
 	.children li.comment {
 		padding-left: 30px;
 		@include mq(min-md) {
@@ -110,6 +129,20 @@ article.comment {
 	}
 	.comment-form-url {
 		margin-right: 0px;
+	}
+	// The three fields above are the form's only floats, and nothing after them
+	// clears. Everything that follows — the cookie-consent row and the submit
+	// button — therefore wraps into the sliver of space left beside the last
+	// float instead of starting a new row: the consent checkbox and its label
+	// end up stacked one word per line in a ~40px column.
+	//
+	// This affects the classic `comments.php` markup and the `core/comments`
+	// block form equally, because WordPress gives both `id="respond"`. `clear`
+	// is inert when the floats are off (below the min-md breakpoint), so the
+	// rule is safe to declare unconditionally.
+	.comment-form-cookies-consent,
+	.form-submit {
+		clear: both;
 	}
 	.comment-form-cookies-consent {
 		#wp-comment-cookies-consent {
