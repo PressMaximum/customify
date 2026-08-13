@@ -33,9 +33,10 @@ $GLOBALS['customify_test_types']   = array(
 	'product' => new WP_Post_Type( 'product', true ),
 );
 $GLOBALS['customify_test_taxonomies'] = array(
-	'book_genre'  => array( 'book' ),
-	'product_cat' => array( 'product' ),
-	'shared'      => array( 'book', 'post' ),
+	'book_genre'    => array( 'book' ),
+	'product_cat'   => array( 'product' ),
+	'product_brand' => array( 'product' ),
+	'shared'        => array( 'book', 'post' ),
 );
 
 function __( $text ) {
@@ -143,6 +144,10 @@ function is_product_category() {
 
 function is_product_tag() {
 	return customify_test_flag( 'product_tag' );
+}
+
+function is_product_taxonomy() {
+	return customify_test_flag( 'product_taxonomy' ) || is_product_category() || is_product_tag();
 }
 
 function is_product() {
@@ -265,6 +270,15 @@ function customify_test_assert_same( $expected, $actual, $message ) {
 	}
 }
 
+$customify_test_configs = $customify_test_woo->customize_shop_sidebars(
+	array(
+		array( 'name' => 'posts_archives_content_area_spacing' ),
+		array( 'name' => 'search_content_area_spacing' ),
+	)
+);
+customify_test_assert_same( 'shop_content_area_spacing', $customify_test_configs[1]['name'], 'Shop Archive is registered after Blog Archives.' );
+customify_test_assert_same( 'inherit', $customify_test_configs[1]['default'], 'Shop Archive defaults to inherit.' );
+
 customify_test_reset(
 	array(
 		'page'      => true,
@@ -338,7 +352,19 @@ customify_test_reset(
 		'shop'              => true,
 		'shop_page_id'      => 16,
 	),
-	array(),
+	array( 'shop_content_area_spacing' => 'top' )
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( array( 'content-area-spacing-top-only' ), customify_get_content_area_spacing_body_classes( $context ), 'Shop Archive controls the product archive.' );
+
+customify_test_reset(
+	array(
+		'post_type_archive' => true,
+		'post_type'         => 'product',
+		'shop'              => true,
+		'shop_page_id'      => 16,
+	),
+	array( 'shop_content_area_spacing' => 'bottom' ),
 	array(
 		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
 	)
@@ -367,7 +393,19 @@ customify_test_reset(
 		'product_category' => true,
 		'shop_page_id'     => 16,
 	),
-	array(),
+	array( 'shop_content_area_spacing' => 'bottom' )
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( array( 'content-area-spacing-bottom-only' ), customify_get_content_area_spacing_body_classes( $context ), 'Shop Archive controls product categories.' );
+
+customify_test_reset(
+	array(
+		'tax'              => true,
+		'queried_object'   => new WP_Term( 'product_cat' ),
+		'product_category' => true,
+		'shop_page_id'     => 16,
+	),
+	array( 'shop_content_area_spacing' => 'top' ),
 	array(
 		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
 	)
@@ -377,13 +415,29 @@ customify_test_assert_same( array( 'disable-content-vertical-padding' ), customi
 
 customify_test_reset(
 	array(
+		'tax'              => true,
+		'queried_object'   => new WP_Term( 'product_brand' ),
+		'product_taxonomy' => true,
+		'shop_page_id'     => 16,
+	),
+	array( 'shop_content_area_spacing' => 'disabled' )
+);
+$context = customify_get_content_area_spacing_context();
+customify_test_assert_same( 'none', $context['key'], 'A WooCommerce product taxonomy remains owned by the integration.' );
+customify_test_assert_same( array( 'disable-content-vertical-padding' ), customify_get_content_area_spacing_body_classes( $context ), 'Shop Archive controls all WooCommerce product taxonomies.' );
+
+customify_test_reset(
+	array(
 		'singular'     => true,
 		'product'      => true,
 		'post_type'    => 'product',
 		'post_id'      => 17,
 		'shop_page_id' => 16,
 	),
-	array( 'product_content_area_spacing' => 'top' ),
+	array(
+		'product_content_area_spacing' => 'top',
+		'shop_content_area_spacing'    => 'disabled',
+	),
 	array(
 		16 => array( '_customify_disable_content_vertical_padding' => '1' ),
 	)

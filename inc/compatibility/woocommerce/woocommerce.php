@@ -31,7 +31,7 @@ class Customify_WC {
 			add_filter( 'get_post_metadata', array( $this, 'get_post_metadata' ), 999, 4 );
 
 			add_action( 'widgets_init', array( $this, 'register_sidebars' ) );
-			add_filter( 'customify/customizer/config', array( $this, 'customize_shop_sidebars' ) );
+			add_filter( 'customify/customizer/config', array( $this, 'customize_shop_sidebars' ), 15 );
 			add_filter( 'customify/sidebar-id', array( $this, 'shop_sidebar_id' ), 15, 2 );
 
 			add_filter( 'customify_is_header_display', array( $this, 'show_shop_header' ), 15 );
@@ -426,12 +426,13 @@ class Customify_WC {
 	}
 
 	/**
-	 * Apply the Shop Page's legacy vertical-padding override to Woo archives.
+	 * Resolve content area spacing for WooCommerce archives.
 	 *
 	 * Product archives are intentionally excluded from the generic contextual
 	 * spacing settings because WooCommerce already owns their layout through
-	 * the assigned Shop Page. Product singles keep their own contextual setting
-	 * and per-product legacy override.
+	 * the assigned Shop Page. The Shop Page's legacy disable flag takes
+	 * precedence over the Shop Archive Customizer setting. Product singles keep
+	 * their own contextual setting and per-product legacy override.
 	 *
 	 * @param string $mode    Resolved content area spacing mode.
 	 * @param array  $context Resolved request context.
@@ -439,13 +440,20 @@ class Customify_WC {
 	 * @return string
 	 */
 	function shop_content_area_spacing_mode( $mode, $context = array(), $setting = '' ) {
-		if ( ! $this->is_shop_pages() || is_product() ) {
+		if ( ! is_shop() && ! is_product_taxonomy() ) {
 			return $mode;
 		}
 
 		$disable_padding = $this->get_shop_page_meta( '_customify_disable_content_vertical_padding' );
+		if ( '1' === (string) $disable_padding ) {
+			return 'disabled';
+		}
 
-		return '1' === (string) $disable_padding ? 'disabled' : $mode;
+		$shop_mode = customify_sanitize_content_area_spacing_mode(
+			Customify()->get_setting( 'shop_content_area_spacing' )
+		);
+
+		return 'inherit' === $shop_mode ? $mode : $shop_mode;
 	}
 
 	function show_shop_header( $show = true ) {
@@ -600,6 +608,32 @@ class Customify_WC {
 	}
 
 	function customize_shop_sidebars( $configs = array() ) {
+		$shop_spacing_config = array(
+			'name'    => 'shop_content_area_spacing',
+			'type'    => 'select',
+			'default' => 'inherit',
+			'section' => 'content_area_spacing_section',
+			'title'   => __( 'Shop Archive', 'customify' ),
+			'choices' => customify_get_content_area_spacing_choices(),
+		);
+		$insert_at           = null;
+
+		foreach ( $configs as $index => $config ) {
+			$name = isset( $config['name'] ) ? $config['name'] : '';
+			if ( 'shop_content_area_spacing' === $name ) {
+				return $configs;
+			}
+			if ( 'posts_archives_content_area_spacing' === $name ) {
+				$insert_at = $index + 1;
+			}
+		}
+
+		if ( is_null( $insert_at ) ) {
+			$configs[] = $shop_spacing_config;
+		} else {
+			array_splice( $configs, $insert_at, 0, array( $shop_spacing_config ) );
+		}
+
 		return $configs;
 	}
 

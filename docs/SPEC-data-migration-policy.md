@@ -53,6 +53,7 @@ Three things matter most:
 | `page_content_area_spacing` | string | `inherit` | Pages: `inherit` / `both` / `top` / `bottom` / `disabled` |
 | `posts_content_area_spacing` | string | `inherit` | Blog-post singles |
 | `posts_archives_content_area_spacing` | string | `inherit` | Blog home, built-in archives, and shared/unresolved taxonomies |
+| `shop_content_area_spacing` | string | `inherit` | WooCommerce Shop and product taxonomy archives; assigned Shop Page legacy disable meta wins |
 | `search_content_area_spacing` | string | `inherit` | Search results |
 | `404_content_area_spacing` | string | `inherit` | 404 requests |
 | `{post_type}_content_area_spacing` | string | `inherit` | Per-CPT single; generated from `customify_get_content_post_types()` |
