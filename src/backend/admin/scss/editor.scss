@@ -14,6 +14,13 @@ $editor_context: true;
 @import "../../../frontend/scss/base/base";
 @import "../../../frontend/scss/base/blocks";
 
+// Core Comments blocks. The editor canvas renders `core/comment-template` and
+// friends with the SAME class names as the frontend, so importing the one
+// partial keeps the two in step. `base/_comments.scss` is deliberately NOT
+// imported here — it targets the classic `comments.php` walker markup, which
+// never exists inside the editor.
+@import "../../../frontend/scss/base/comment-blocks";
+
 // Block-widget styles (.wp-block-archives-list, .wp-block-categories-list,
 // .wp-block-tag-cloud, .wp-block-latest-posts, .wp-block-latest-comments,
 // .wp-block-rss, .wp-block-calendar, .wp-block-search) so the editor
