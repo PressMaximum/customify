@@ -17,6 +17,44 @@
     margin-top: 1.5em;
 }
 
+/* On-page search form
+--------------------------------------------- */
+// Layout only: the field and the button keep whatever the theme's form and
+// button styles give them, so skins and the Customizer form settings stay in
+// charge of the look. Logical-property free (flex + gap) so the RTL build needs
+// no flipping.
+.cfy-search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    max-width: 520px;
+    margin: 1.25em 0;
+
+    label {
+        // The label wraps the field, so it is the element that has to grow.
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .cfy-search-form-field {
+        width: 100%;
+        margin: 0;
+    }
+
+    .cfy-search-form-submit {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 1em;
+            height: 1em;
+        }
+    }
+}
+
 /* Content type tabs
 --------------------------------------------- */
 .cfy-search-tabs {

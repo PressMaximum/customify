@@ -233,6 +233,168 @@ if ( ! function_exists( 'customify_search_get_current_scope' ) ) {
 	}
 }
 
+if ( ! function_exists( 'customify_search_get_default_scope' ) ) {
+	/**
+	 * Content type unscoped searches should land on.
+	 *
+	 * Shop first sites want `?s=term` to open the product results directly
+	 * instead of the mixed page with its products teaser - one click less
+	 * between the search box and a product listing.
+	 *
+	 * @return string Valid post type slug, empty string when unscoped searches
+	 *                stay on the mixed "Everything" page.
+	 */
+	function customify_search_get_default_scope() {
+		$scope = Customify()->get_setting( 'search_results_default_scope' );
+		$scope = is_string( $scope ) ? sanitize_key( $scope ) : '';
+
+		if ( '' === $scope ) {
+			return '';
+		}
+
+		$types = customify_search_get_result_types();
+
+		return isset( $types[ $scope ] ) ? $scope : '';
+	}
+}
+
+if ( ! function_exists( 'customify_search_maybe_redirect_to_scope' ) ) {
+	/**
+	 * Send an unscoped search to the configured default scope.
+	 *
+	 * Why a URL level redirect and not a `pre_get_posts` mutation
+	 * ----------------------------------------------------------
+	 * Forcing the scope by setting `post_type` on the main search query would
+	 * violate the second invariant of this file: scoped template resolvers
+	 * (Blocksify `query_scoped_to_post_type()`) match with
+	 * `in_array( $type, (array) $qv )`, so a silently scoped main query hands
+	 * the page to whatever template is registered for `search:<type>` while the
+	 * URL still says "everything" - and WP_Query writes `any` back into that
+	 * same var on unscoped searches, so the state is not even stable to read
+	 * back. A redirect keeps query and URL in agreement: the browser lands on a
+	 * genuinely scoped request that every downstream consumer - tabs, template
+	 * resolvers, WooCommerce, pagination, canonical URLs, analytics - reads the
+	 * same way, and the visitor can see and undo the scope.
+	 *
+	 * Never redirects into an empty surface: when the term has no matches in
+	 * the configured type the mixed page, with its no results block and its
+	 * products teaser, is the better landing.
+	 *
+	 * `cfy_all` is the explicit bypass the All tab carries, so clicking "All"
+	 * from a scoped view does not bounce straight back.
+	 */
+	function customify_search_maybe_redirect_to_scope() {
+		if ( is_admin() || ! is_search() || is_feed() ) {
+			return;
+		}
+
+		global $wp_query;
+
+		// Chrome rendered by a secondary query context is none of our business.
+		if ( ! is_a( $wp_query, 'WP_Query' ) || ! $wp_query->is_main_query() ) {
+			return;
+		}
+
+		// Only ever act on the mixed page - a scoped request is already where
+		// somebody wanted it.
+		if ( '' !== customify_search_get_current_scope() ) {
+			return;
+		}
+
+		// Loop guard. The scope check above reads the QUERY VAR, which can be
+		// empty even though the URL asked for a type - core strips post_type
+		// vars it considers non public, and the restore filter in this file
+		// deliberately does not override a third party's removal. Redirecting
+		// then would rebuild the very same URL, forever. A request that already
+		// names a post_type is somebody's explicit choice either way.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read only query var on a public search request.
+		if ( ! empty( $_GET['post_type'] ) ) {
+			return;
+		}
+
+		$method = isset( $_SERVER['REQUEST_METHOD'] ) ? strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) ) : 'GET';
+
+		if ( 'GET' !== $method ) {
+			return;
+		}
+
+		// The bypass is a presence flag: the value is never read, so there is
+		// nothing to sanitize beyond the key lookup itself.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read only marker on a public search request.
+		if ( isset( $_GET['cfy_all'] ) ) {
+			return;
+		}
+
+		$term = get_search_query( false );
+
+		if ( ! is_string( $term ) || '' === trim( $term ) ) {
+			return;
+		}
+
+		$scope = customify_search_get_default_scope();
+
+		if ( '' === $scope ) {
+			return;
+		}
+
+		$counts = customify_search_get_type_counts( $term );
+
+		if ( empty( $counts[ $scope ] ) || (int) $counts[ $scope ] < 1 ) {
+			return;
+		}
+
+		// No URL argument: both helpers then operate on the current
+		// REQUEST_URI, so unrelated params (language, tracking, pagination)
+		// survive the redirect.
+		$url = add_query_arg( 'post_type', rawurlencode( $scope ), remove_query_arg( 'cfy_all' ) );
+
+		wp_safe_redirect( $url, 302 );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'customify_search_maybe_redirect_to_scope', 1 );
+
+if ( ! function_exists( 'customify_search_results_form' ) ) {
+	/**
+	 * Search form rendered on the results page itself.
+	 *
+	 * Refining a query should not mean going back to the header search. On a
+	 * scoped view the current scope rides along in a hidden field so refining a
+	 * product search stays on products.
+	 *
+	 * Chrome, not listing: every call site prints it before the loop opens, so
+	 * it never enters the swap window described at the top of this file.
+	 */
+	function customify_search_results_form() {
+		if ( ! is_search() ) {
+			return;
+		}
+
+		if ( ! Customify()->get_setting( 'search_results_show_search_form' ) ) {
+			return;
+		}
+
+		$scope = customify_search_get_current_scope();
+		?>
+		<form role="search" method="get" class="cfy-search-form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<label>
+				<span class="screen-reader-text"><?php echo esc_html_x( 'Search for:', 'label', 'customify' ); ?></span>
+				<input type="search" class="cfy-search-form-field" name="s" value="<?php echo esc_attr( get_search_query( false ) ); ?>" placeholder="<?php echo esc_attr__( 'Search …', 'customify' ); ?>" />
+			</label>
+			<?php if ( '' !== $scope ) : ?>
+				<input type="hidden" name="post_type" value="<?php echo esc_attr( $scope ); ?>" />
+			<?php endif; ?>
+			<button type="submit" class="cfy-search-form-submit">
+				<svg aria-hidden="true" focusable="false" role="presentation" xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21">
+					<path fill="currentColor" fill-rule="evenodd" d="M12.514 14.906a8.264 8.264 0 0 1-4.322 1.21C3.668 16.116 0 12.513 0 8.07 0 3.626 3.668.023 8.192.023c4.525 0 8.193 3.603 8.193 8.047 0 2.033-.769 3.89-2.035 5.307l4.999 5.552-1.775 1.597-5.06-5.62zm-4.322-.843c3.37 0 6.102-2.684 6.102-5.993 0-3.31-2.732-5.994-6.102-5.994S2.09 4.76 2.09 8.07c0 3.31 2.732 5.993 6.102 5.993z"></path>
+				</svg>
+				<span class="screen-reader-text"><?php esc_html_e( 'Search', 'customify' ); ?></span>
+			</button>
+		</form>
+		<?php
+	}
+}
+
 if ( ! function_exists( 'customify_search_restore_scoped_post_type' ) ) {
 	/**
 	 * Keep a search scoped to a public but not publicly queryable post type.
@@ -432,15 +594,30 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 			$all_count = max( 0, $all_count - (int) $counts['product'] );
 		}
 
-		$tabs = array(
-			array(
+		$all_args = array( 's' => urlencode( $term ) );
+
+		// With a default scope armed, a bare `?s=term` would be redirected back
+		// into that scope the moment the All tab is clicked - the bypass marker
+		// is what makes "show me everything" reachable at all. Scoped tab URLs
+		// need nothing: they are never redirected.
+		if ( '' !== customify_search_get_default_scope() ) {
+			$all_args['cfy_all'] = 1;
+		}
+
+		$tabs = array();
+
+		// A zero-count All tab (teaser mode, term matching only products) leads
+		// to an empty mixed page - drop it. With one tab left the whole bar is
+		// suppressed below, which is right: nothing to navigate between.
+		if ( $all_count > 0 ) {
+			$tabs[] = array(
 				'key'    => 'all',
 				'label'  => __( 'All', 'customify' ),
 				'count'  => $all_count,
-				'url'    => add_query_arg( 's', urlencode( $term ), home_url( '/' ) ),
+				'url'    => add_query_arg( $all_args, home_url( '/' ) ),
 				'active' => ( '' === $current ),
-			),
-		);
+			);
+		}
 
 		foreach ( customify_search_get_result_types() as $slug => $type ) {
 			if ( empty( $counts[ $slug ] ) ) {
@@ -1309,6 +1486,7 @@ if ( ! function_exists( 'customify_search_wc_heading' ) ) {
 
 		echo '<div class="cfy-search-results cfy-search-results--wc">';
 		customify_blog_posts_heading();
+		customify_search_results_form();
 		customify_search_tabs();
 		echo '</div>';
 	}

@@ -15,6 +15,7 @@ get_header(); ?>
 		?>
 		<div class="cfy-search-results">
 			<?php
+			customify_search_results_form();
 			do_action( 'customify/search/before_results' );
 			customify_search_tabs();
 			customify_search_results_layout();

@@ -52,6 +52,31 @@ if ( ! function_exists( 'customify_customizer_search_config' ) ) {
 			),
 
 			array(
+				'name'            => $args['id'] . '_default_scope',
+				'type'            => 'select',
+				'section'         => $level_2_panel,
+				'default'         => '',
+				// Built at Customizer registration time, well after `init`, so
+				// every custom post type is already registered. Same lazy shape
+				// as the header search items' scope select.
+				'choices'         => function_exists( 'customify_search_get_scope_choices' ) ? customify_search_get_scope_choices() : array( '' => __( 'Everything', 'customify' ) ),
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'label'           => __( 'Default results scope', 'customify' ),
+				'description'     => __( 'Land unscoped searches on this content type\'s results (falls back to Everything when the term has no matches there).', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_show_search_form',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show search form on the results page', 'customify' ),
+			),
+
+			array(
 				'name'            => $args['id'] . '_show_media',
 				'type'            => 'checkbox',
 				'section'         => $level_2_panel,
