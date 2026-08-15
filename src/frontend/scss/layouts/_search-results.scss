@@ -111,16 +111,18 @@
     }
 
     .is-active {
+        // Primary-container treatment: a tint of the primary carries the
+        // selection without competing with solid-primary CTAs (add to cart).
         > a {
-            border-color: $color_primary;
-            background: $color_primary;
-            color: #fff;
+            border-color: color-mix(in srgb, #{$color_primary} 30%, transparent);
+            background: color-mix(in srgb, #{$color_primary} 11%, transparent);
+            color: $color_primary;
             font-weight: 600;
         }
 
         .cfy-search-tab-count {
-            background: rgba(255, 255, 255, 0.22);
-            color: #fff;
+            background: color-mix(in srgb, #{$color_primary} 16%, transparent);
+            color: $color_primary;
         }
     }
 }
