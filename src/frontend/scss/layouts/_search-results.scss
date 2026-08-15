@@ -1,0 +1,215 @@
+/**
+* Search results
+*
+* Mixed listing: generic content cards (posts / pages / CPTs) sitting next to
+* native WooCommerce product cards in the same grid. Only the generic card is
+* styled here - the product card internals belong to the Catalog Designer and
+* must not be restyled from this file.
+*/
+
+.cfy-search-result-count {
+    margin: 0.4em 0 0;
+    font-size: 0.875em;
+    color: $color_meta;
+}
+
+.cfy-search-results {
+    margin-top: 1.5em;
+}
+
+/* Content type tabs
+--------------------------------------------- */
+.cfy-search-tabs {
+    margin: 0 0 1.75em;
+    border-bottom: 1px solid $color_border;
+
+    ul {
+        display: flex;
+        flex-wrap: nowrap;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    li {
+        flex: none;
+        margin: 0;
+        list-style: none;
+    }
+
+    a {
+        display: flex;
+        align-items: center;
+        padding: 0.65em 1em;
+        border-bottom: 2px solid transparent;
+        color: $color_text;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus {
+            color: $color_link_hover;
+        }
+    }
+
+    .cfy-search-tab-count {
+        margin-left: 0.5em;
+        padding: 0.2em 0.5em;
+        border-radius: 10em;
+        background: $surface_medium;
+        color: $color_meta;
+        font-size: 0.75em;
+        line-height: 1.5;
+    }
+
+    .is-active {
+        > a {
+            border-bottom-color: $color_primary;
+            color: $color_primary;
+            font-weight: 600;
+        }
+
+        .cfy-search-tab-count {
+            color: $color_primary;
+        }
+    }
+}
+
+/* Results grid
+--------------------------------------------- */
+.cfy-search-results-grid {
+    // Gridlex owns the horizontal gutters whenever a `customify-grid-*` class
+    // is present (container negative margin + `customify-col` padding); the
+    // vertical rhythm and the list reset are ours. The WooCommerce `ul.products`
+    // reset does not apply here because a mixed search page has no
+    // `.woocommerce` body class.
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none outside;
+
+    > li {
+        margin: 0 0 2.5em;
+        list-style: none outside;
+    }
+}
+
+/* Generic content card
+--------------------------------------------- */
+.cfy-search-card {
+    display: flex;
+
+    .cfy-search-card-inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .cfy-search-card-body {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+}
+
+.cfy-search-card-media {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    background: $surface_subtle;
+    aspect-ratio: 16 / 10;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        object-fit: cover;
+    }
+}
+
+.cfy-search-card-badge {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    color: $color_meta;
+    font-size: 0.6875em;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.cfy-search-card-title {
+    // Sized close to `.woocommerce-loop-product__title` so mixed rows read as
+    // one grid rather than two different listings.
+    margin: 0 0 0.4em;
+    padding: 0;
+    font-size: 1.1em;
+    line-height: 1.35;
+    word-wrap: break-word;
+}
+
+.cfy-search-card-date {
+    display: block;
+    margin-bottom: 0.5em;
+    color: $color_meta;
+    font-size: 0.8125em;
+}
+
+.cfy-search-card-excerpt {
+    color: $color_meta;
+    font-size: 0.875em;
+
+    p {
+        margin-bottom: 0.5em;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+/* Single column - horizontal rows
+--------------------------------------------- */
+.cfy-search-list {
+    .cfy-search-card-inner {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .cfy-search-card-media {
+        flex: none;
+        width: 220px;
+        margin-bottom: 0;
+        margin-right: 1.5em;
+    }
+
+    @include for_device( mobile ) {
+        .cfy-search-card-inner {
+            flex-direction: column;
+        }
+
+        .cfy-search-card-media {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+/* No results - popular products
+--------------------------------------------- */
+.cfy-search-no-results-products {
+    margin-top: 2.5em;
+
+    .cfy-search-no-results-title {
+        margin: 0 0 1em;
+        font-size: 1.25em;
+    }
+}

@@ -12,16 +12,16 @@ get_header(); ?>
 		<?php
 		do_action( 'customify/content/before' );
 		customify_blog_posts_heading();
-		customify_blog_posts(
-			array(
-				'_overwrite' => array(
-					'media_hide'     => 1,
-					'excerpt_type'   => Customify()->get_setting( 'search_results_excerpt_type' ),
-					'excerpt_length' => Customify()->get_setting( 'search_results_excerpt_length' ),
-					'excerpt_more'   => Customify()->get_setting( 'search_results_excerpt_more' ),
-				),
-			)
-		);
+		?>
+		<div class="cfy-search-results">
+			<?php
+			do_action( 'customify/search/before_results' );
+			customify_search_tabs();
+			customify_search_results_layout();
+			do_action( 'customify/search/after_results' );
+			?>
+		</div><!-- /.cfy-search-results -->
+		<?php
 		do_action( 'customify/content/after' );
 		?>
 	</div><!-- #.content-inner -->

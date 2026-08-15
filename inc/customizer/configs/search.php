@@ -22,6 +22,72 @@ if ( ! function_exists( 'customify_customizer_search_config' ) ) {
 			),
 
 			array(
+				'name'            => $args['id'] . '_columns',
+				'type'            => 'select',
+				'section'         => $level_2_panel,
+				'default'         => 3,
+				'choices'         => array(
+					1 => __( '1 Column', 'customify' ),
+					2 => __( '2 Columns', 'customify' ),
+					3 => __( '3 Columns', 'customify' ),
+					4 => __( '4 Columns', 'customify' ),
+				),
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'label'           => __( 'Columns', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_show_media',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show featured images', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_show_tabs',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show content type tabs', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_show_counts',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show result counts', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_show_type_badge',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show content type badge', 'customify' ),
+			),
+
+			array(
+				'name'            => $args['id'] . '_no_results_products',
+				'type'            => 'checkbox',
+				'section'         => $level_2_panel,
+				'default'         => 1,
+				'selector'        => $args['selector'],
+				'render_callback' => $args['cb'],
+				'checkbox_label'  => __( 'Show popular products when nothing matches', 'customify' ),
+			),
+
+			array(
 				'name'            => $args['id'] . '_excerpt_type',
 				'type'            => 'select',
 				'section'         => $level_2_panel,
