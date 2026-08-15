@@ -98,8 +98,7 @@
 
         &:hover,
         &:focus {
-            border-color: $color_primary;
-            color: $color_primary;
+            border-color: $color_border_medium;
         }
     }
 
@@ -114,17 +113,11 @@
     }
 
     .is-active {
-        // Selection = the hover border, nothing heavier: outlined chip with
-        // primary text, no fill, so it never competes with solid-primary CTAs.
+        // Selection stays neutral: the hover border held plus weight - no
+        // primary anywhere in the chip row, so nothing competes with CTAs.
         > a {
-            border-color: $color_primary;
-            color: $color_primary;
+            border-color: $color_border_medium;
             font-weight: 600;
-        }
-
-        .cfy-search-tab-count {
-            background: color-mix(in srgb, #{$color_primary} 14%, transparent);
-            color: $color_primary;
         }
     }
 }
