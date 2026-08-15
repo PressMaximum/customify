@@ -82,6 +82,66 @@
     }
 }
 
+/* Products teaser
+--------------------------------------------- */
+// Shown instead of inline product cards when the mixed listing is set to link
+// out to the product scoped results.
+.cfy-search-products-teaser {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4em 1em;
+    margin: 0 0 1.75em;
+    padding: 0.75em 1em;
+    border: 1px solid $color_border;
+    border-radius: 4px;
+
+    .cfy-search-products-teaser-label {
+        color: $color_meta;
+        font-size: 0.9375em;
+    }
+
+    .cfy-search-products-teaser-link {
+        color: $color_primary;
+        font-size: 0.9375em;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}
+
+/* Type group sections
+--------------------------------------------- */
+.cfy-search-section-title {
+    // Deliberately modest: a section label, not a page heading - it must not
+    // compete with the card titles below it in either grid or list mode.
+    margin: 0 0 1em;
+    padding: 0;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.4;
+
+    .cfy-search-section-count {
+        margin-left: 0.35em;
+        color: $color_meta;
+        font-size: 0.9em;
+        font-weight: 400;
+    }
+}
+
+// Only a section that FOLLOWS another group needs separating space; the first
+// one sits flush under the tabs / teaser, which carry their own bottom margin.
+// Grid items already add 2.5em below the previous group.
+.cfy-search-results-grid + .cfy-search-section-title {
+    margin-top: 1.5em;
+}
+
 /* Results grid
 --------------------------------------------- */
 .cfy-search-results-grid {

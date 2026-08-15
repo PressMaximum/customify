@@ -2,19 +2,30 @@
 /**
  * Search results framework.
  *
- * Renders the search results page as a mixed listing: a generic content card
- * for posts / pages / CPTs and the native WooCommerce product card for
- * products, plus a content type tab bar and per type result counts.
+ * Renders the search results page as a type grouped listing: results are
+ * ordered by content type and each type gets its own section - a generic
+ * content card for posts / pages / CPTs and the native WooCommerce product
+ * card for products - plus a content type tab bar and per type result counts.
+ *
+ * Sites whose product listings are driven by an external template system can
+ * drop product cards from the mixed page entirely (Search Results > "Products
+ * in mixed results" = teaser) and link into the product scoped surface
+ * instead.
  *
  * Swap window safety
  * ------------------
  * The listing is emitted as ONE pass over the MAIN query. Block based page
  * builders (Blocksify and friends) buffer the `loop_start` -> `loop_end`
  * window of the main query and swap the content inside it, so every piece of
- * per result markup must be printed from inside the loop iterations. Never
- * buffer the listing and print it after the loop, and never run a secondary
- * WP_Query inside the listing region. Tabs and heading render before the
- * loop, pagination after it - both are outside the swap window.
+ * listing markup must be printed from inside the loop iterations. That covers
+ * the per result cards AND the structural markup around them: every section
+ * heading, every group `<ul>` opening tag and every closing tag is printed
+ * from inside an iteration - a group closes at the top of the iteration that
+ * starts the next group, and the last group closes inside the final
+ * iteration. Never buffer the listing and print it after the loop, and never
+ * run a secondary WP_Query inside the listing region. Tabs, heading and the
+ * products teaser render before the loop, pagination after it - all outside
+ * the swap window.
  *
  * @package customify
  */
@@ -55,6 +66,56 @@ if ( ! function_exists( 'customify_search_get_result_types' ) ) {
 		$types = apply_filters( 'customify/search/content_types', $types );
 
 		return is_array( $types ) ? $types : array();
+	}
+}
+
+if ( ! function_exists( 'customify_search_get_type_order' ) ) {
+	/**
+	 * Order the result type sections are rendered in.
+	 *
+	 * Products lead on shops - they are the highest intent match on a store -
+	 * followed by posts and pages, then every remaining searchable type in
+	 * registration order.
+	 *
+	 * @return string[] Post type slugs, most important first.
+	 */
+	function customify_search_get_type_order() {
+		$types = customify_search_get_result_types();
+		$order = array();
+
+		if ( Customify()->is_woocommerce_active() && isset( $types['product'] ) ) {
+			$order[] = 'product';
+		}
+
+		foreach ( array( 'post', 'page' ) as $slug ) {
+			if ( isset( $types[ $slug ] ) && ! in_array( $slug, $order, true ) ) {
+				$order[] = $slug;
+			}
+		}
+
+		foreach ( $types as $slug => $type ) {
+			if ( ! in_array( $slug, $order, true ) ) {
+				$order[] = $slug;
+			}
+		}
+
+		/**
+		 * Filter the order of the search result type sections.
+		 *
+		 * Types missing from the list still render - they sort after every
+		 * listed type, in registration order.
+		 *
+		 * @since 0.5.0
+		 *
+		 * @param string[] $order Post type slugs, most important first.
+		 */
+		$order = apply_filters( 'customify/search/type_order', $order );
+
+		if ( ! is_array( $order ) ) {
+			return array();
+		}
+
+		return array_values( array_unique( array_filter( $order, 'is_string' ) ) );
 	}
 }
 
@@ -160,9 +221,193 @@ if ( ! function_exists( 'customify_search_get_current_scope' ) ) {
 			$current = ( 1 === count( $current ) ) ? reset( $current ) : '';
 		}
 
-		return is_string( $current ) ? $current : '';
+		if ( ! is_string( $current ) ) {
+			return '';
+		}
+
+		// WP_Query::get_posts() writes `any` back into the main query's
+		// `post_type` var while executing an unscoped search, so by render
+		// time an unscoped page reads `any`, not ''. Same normalization as
+		// customify_search_query_is_type_scoped().
+		return ( 'any' === $current ) ? '' : $current;
 	}
 }
+
+if ( ! function_exists( 'customify_search_restore_scoped_post_type' ) ) {
+	/**
+	 * Keep a search scoped to a public but not publicly queryable post type.
+	 *
+	 * `WP::parse_request()` limits the public `post_type` query var to types
+	 * registered with `publicly_queryable => true` - see the "Limit publicly
+	 * queried post_types to those that are 'publicly_queryable'" block in
+	 * wp-includes/class-wp.php. Core registers `page` as `public => true,
+	 * publicly_queryable => false`, so `?s=term&post_type=page` reaches the
+	 * theme as a plain `?s=term`: the Pages tab silently searched everything.
+	 * `post` and `product` ARE queryable, which is why only some tabs broke.
+	 *
+	 * The `request` filter runs after that stripping, so a value restored here
+	 * sticks - and the restored query var is what scoped template resolvers
+	 * (Blocksify `search:page` conditions) read as well.
+	 *
+	 * Nothing new is exposed: the whitelist is customify_search_get_result_types(),
+	 * i.e. public types that are not excluded from search, so every accepted
+	 * type is one the unscoped search page already lists.
+	 *
+	 * @param array $query_vars Parsed public query vars.
+	 *
+	 * @return array
+	 */
+	function customify_search_restore_scoped_post_type( $query_vars ) {
+		if ( ! is_array( $query_vars ) || ! array_key_exists( 's', $query_vars ) ) {
+			return $query_vars;
+		}
+
+		// Something survived the strip (a queryable type, or another plugin's
+		// value) - leave it alone.
+		if ( ! empty( $query_vars['post_type'] ) ) {
+			return $query_vars;
+		}
+
+		// Only the single type form the tabs and the header search forms emit.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read only query var on a public search request.
+		if ( empty( $_GET['post_type'] ) || ! is_string( $_GET['post_type'] ) ) {
+			return $query_vars;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read only query var on a public search request.
+		$type = sanitize_key( wp_unslash( $_GET['post_type'] ) );
+
+		if ( '' === $type ) {
+			return $query_vars;
+		}
+
+		$types = customify_search_get_result_types();
+
+		if ( ! isset( $types[ $type ] ) ) {
+			return $query_vars;
+		}
+
+		// A queryable type was never stripped by core, so its absence here is
+		// somebody else's decision - do not override it.
+		if ( ! empty( $types[ $type ]->publicly_queryable ) ) {
+			return $query_vars;
+		}
+
+		$query_vars['post_type'] = $type;
+
+		return $query_vars;
+	}
+}
+add_filter( 'request', 'customify_search_restore_scoped_post_type' );
+
+if ( ! function_exists( 'customify_search_query_is_type_scoped' ) ) {
+	/**
+	 * Is a query narrowed to ONE post type?
+	 *
+	 * A scoped search (`?s=term&post_type=product`) is somebody else's surface:
+	 * it must keep the plain relevance order and its own product handling. An
+	 * empty scope, `any`, or a multi type list is the mixed page.
+	 *
+	 * @param WP_Query|null $query Query object.
+	 *
+	 * @return bool
+	 */
+	function customify_search_query_is_type_scoped( $query = null ) {
+		if ( ! is_a( $query, 'WP_Query' ) ) {
+			return false;
+		}
+
+		$post_type = $query->get( 'post_type' );
+
+		if ( is_array( $post_type ) ) {
+			$post_type = array_values( array_filter( $post_type ) );
+
+			if ( 1 !== count( $post_type ) ) {
+				return false;
+			}
+
+			$post_type = $post_type[0];
+		}
+
+		if ( ! is_string( $post_type ) ) {
+			return false;
+		}
+
+		$post_type = trim( $post_type );
+
+		return ( '' !== $post_type && 'any' !== $post_type );
+	}
+}
+
+if ( ! function_exists( 'customify_search_group_main_query_posts' ) ) {
+	/**
+	 * Group the mixed search results by content type.
+	 *
+	 * Relevance ordering interleaves product cards with content cards, which
+	 * reads as a messy page. Sorting the fetched posts by type turns the same
+	 * result set into readable sections without a second query - the listing
+	 * still makes ONE pass over the main query.
+	 *
+	 * Relevance order INSIDE each type is preserved: `usort()` is not stable in
+	 * PHP 7.4, so each post carries its original index as the tie breaker.
+	 *
+	 * @param WP_Post[]     $posts Posts fetched by the query.
+	 * @param WP_Query|null $query Query object.
+	 *
+	 * @return WP_Post[]
+	 */
+	function customify_search_group_main_query_posts( $posts, $query = null ) {
+		if ( ! is_array( $posts ) || count( $posts ) < 2 ) {
+			return $posts;
+		}
+
+		if ( is_admin() || ! is_a( $query, 'WP_Query' ) ) {
+			return $posts;
+		}
+
+		if ( ! $query->is_main_query() || ! $query->is_search() ) {
+			return $posts;
+		}
+
+		if ( customify_search_query_is_type_scoped( $query ) ) {
+			return $posts;
+		}
+
+		$order     = array_flip( customify_search_get_type_order() );
+		$unknown   = count( $order );
+		$decorated = array();
+
+		foreach ( array_values( $posts ) as $index => $post ) {
+			$type = get_post_type( $post );
+
+			$decorated[] = array(
+				'rank'  => ( $type && isset( $order[ $type ] ) ) ? (int) $order[ $type ] : $unknown,
+				'index' => $index,
+				'post'  => $post,
+			);
+		}
+
+		usort(
+			$decorated,
+			function ( $a, $b ) {
+				if ( $a['rank'] === $b['rank'] ) {
+					return $a['index'] <=> $b['index'];
+				}
+
+				return $a['rank'] <=> $b['rank'];
+			}
+		);
+
+		$sorted = array();
+
+		foreach ( $decorated as $item ) {
+			$sorted[] = $item['post'];
+		}
+
+		return $sorted;
+	}
+}
+add_filter( 'the_posts', 'customify_search_group_main_query_posts', 10, 2 );
 
 if ( ! function_exists( 'customify_search_tabs' ) ) {
 	/**
@@ -178,11 +423,20 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 		$show_counts = Customify()->get_setting( 'search_results_show_counts' );
 		$current     = customify_search_get_current_scope();
 
+		$all_count = isset( $counts['all'] ) ? (int) $counts['all'] : 0;
+
+		// In teaser mode the mixed page lists no product cards, so the All tab
+		// counts content only - the Products tab and the teaser banner carry
+		// the product number.
+		if ( customify_search_is_products_teaser() && ! empty( $counts['product'] ) ) {
+			$all_count = max( 0, $all_count - (int) $counts['product'] );
+		}
+
 		$tabs = array(
 			array(
 				'key'    => 'all',
 				'label'  => __( 'All', 'customify' ),
-				'count'  => isset( $counts['all'] ) ? (int) $counts['all'] : 0,
+				'count'  => $all_count,
 				'url'    => add_query_arg( 's', urlencode( $term ), home_url( '/' ) ),
 				'active' => ( '' === $current ),
 			),
@@ -258,6 +512,155 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 				?>
 			</ul>
 		</nav>
+		<?php
+	}
+}
+
+if ( ! function_exists( 'customify_search_get_product_display' ) ) {
+	/**
+	 * How products behave in the mixed (unscoped) search listing.
+	 *
+	 * @return string `cards` - render product cards inline, or `teaser` - drop
+	 *                them and link to the product scoped results instead.
+	 */
+	function customify_search_get_product_display() {
+		$mode = Customify()->get_setting( 'search_results_product_display' );
+		$mode = is_string( $mode ) ? sanitize_key( $mode ) : '';
+
+		return ( 'teaser' === $mode ) ? 'teaser' : 'cards';
+	}
+}
+
+if ( ! function_exists( 'customify_search_is_products_teaser' ) ) {
+	/**
+	 * Are products replaced by a teaser link on the mixed search page?
+	 *
+	 * Meaningless without WooCommerce, where the setting simply no-ops.
+	 *
+	 * @return bool
+	 */
+	function customify_search_is_products_teaser() {
+		return ( Customify()->is_woocommerce_active() && 'teaser' === customify_search_get_product_display() );
+	}
+}
+
+if ( ! function_exists( 'customify_search_exclude_products_from_main_query' ) ) {
+	/**
+	 * Drop products from the unscoped main search query in teaser mode.
+	 *
+	 * Sites whose product loops are built by an external template system get a
+	 * design system clash when theme styled product cards sit in the mixed
+	 * listing. Excluding products here keeps the mixed page purely editorial;
+	 * the teaser banner then routes shoppers to the product scoped surface,
+	 * which the owning system still renders.
+	 *
+	 * Scoped searches, feeds, admin and secondary queries are never touched.
+	 *
+	 * @param WP_Query $query Query object.
+	 */
+	function customify_search_exclude_products_from_main_query( $query ) {
+		if ( is_admin() || ! is_a( $query, 'WP_Query' ) ) {
+			return;
+		}
+
+		if ( ! $query->is_main_query() || ! $query->is_search() || $query->is_feed() ) {
+			return;
+		}
+
+		if ( customify_search_query_is_type_scoped( $query ) ) {
+			return;
+		}
+
+		if ( ! customify_search_is_products_teaser() ) {
+			return;
+		}
+
+		// Flag only - the SQL lands in posts_where below. Setting `post_type`
+		// here would make the query LOOK type scoped: template resolvers match
+		// scoped search conditions with `in_array( $type, (array) $qv )`
+		// (Blocksify `query_scoped_to_post_type()`), so a template scoped to
+		// e.g. `search:post` would hijack the unscoped mixed page the moment
+		// the query var carries an array containing `post`.
+		$query->set( 'customify_search_teaser_exclude_products', true );
+	}
+}
+add_action( 'pre_get_posts', 'customify_search_exclude_products_from_main_query' );
+
+if ( ! function_exists( 'customify_search_teaser_posts_where' ) ) {
+	/**
+	 * SQL side of the teaser mode product exclusion.
+	 *
+	 * Runs only for queries flagged by
+	 * customify_search_exclude_products_from_main_query() and filters products
+	 * out at the WHERE level, leaving every public query var untouched.
+	 *
+	 * @param string        $where WHERE clause.
+	 * @param WP_Query|null $query Query object.
+	 *
+	 * @return string
+	 */
+	function customify_search_teaser_posts_where( $where, $query = null ) {
+		if ( ! is_a( $query, 'WP_Query' ) || ! $query->get( 'customify_search_teaser_exclude_products' ) ) {
+			return $where;
+		}
+
+		global $wpdb;
+
+		$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_type <> %s", 'product' );
+
+		return $where;
+	}
+}
+add_filter( 'posts_where', 'customify_search_teaser_posts_where', 10, 2 );
+
+if ( ! function_exists( 'customify_search_products_teaser' ) ) {
+	/**
+	 * Banner linking to the product scoped results, for teaser mode.
+	 *
+	 * Chrome, not listing: it renders before the loop opens, next to the tabs,
+	 * and never from inside the swap window.
+	 */
+	function customify_search_products_teaser() {
+		if ( ! is_search() || '' !== customify_search_get_current_scope() ) {
+			return;
+		}
+
+		if ( ! customify_search_is_products_teaser() ) {
+			return;
+		}
+
+		// The counts helper runs its own per type queries, so it still sees the
+		// products the main query just excluded.
+		$term   = get_search_query( false );
+		$counts = customify_search_get_type_counts( $term );
+		$count  = isset( $counts['product'] ) ? (int) $counts['product'] : 0;
+
+		if ( $count < 1 ) {
+			return;
+		}
+
+		$url = add_query_arg(
+			array(
+				's'         => urlencode( $term ),
+				'post_type' => 'product',
+			),
+			home_url( '/' )
+		);
+		?>
+		<div class="cfy-search-products-teaser">
+			<span class="cfy-search-products-teaser-label">
+				<?php
+				printf(
+					/* translators: %s: number of products matching the search term. */
+					esc_html( _n( '%s product matches your search', '%s products match your search', $count, 'customify' ) ),
+					esc_html( number_format_i18n( $count ) )
+				);
+				?>
+			</span>
+			<a class="cfy-search-products-teaser-link" href="<?php echo esc_url( $url ); ?>">
+				<?php esc_html_e( 'View products', 'customify' ); ?> &rarr;
+			</a>
+		</div>
 		<?php
 	}
 }
@@ -547,30 +950,71 @@ if ( ! function_exists( 'customify_search_wc_setup_loop' ) ) {
 	}
 }
 
-if ( ! function_exists( 'customify_search_results_layout' ) ) {
+if ( ! function_exists( 'customify_search_section_title' ) ) {
 	/**
-	 * Render the search results listing.
+	 * Heading that opens one result type section.
 	 *
-	 * One pass over the main query - see the swap window note at the top of
-	 * this file before restructuring anything in here.
+	 * Printed from INSIDE a loop iteration - see the swap window note at the
+	 * top of this file.
+	 *
+	 * @param string $type   Post type slug of the group.
+	 * @param array  $counts Per type counts from customify_search_get_type_counts().
 	 */
-	function customify_search_results_layout() {
-		if ( ! have_posts() ) {
-			get_template_part( 'template-parts/content', 'none' );
+	function customify_search_section_title( $type, $counts = array() ) {
+		$type_obj = get_post_type_object( $type );
 
+		if ( ! $type_obj || empty( $type_obj->labels->name ) ) {
 			return;
 		}
 
-		$columns = customify_search_get_columns();
-		$wc      = Customify()->is_woocommerce_active();
+		// The count is the TOTAL for the type, not the number on this page, so
+		// it matches the tab bar. Missing counts (empty search term, filtered
+		// helper) simply drop the badge.
+		$count = ( is_array( $counts ) && ! empty( $counts[ $type ] ) ) ? (int) $counts[ $type ] : 0;
+
+		echo '<h2 class="cfy-search-section-title">' . esc_html( $type_obj->labels->name );
+
+		if ( $count > 0 ) {
+			echo ' <span class="cfy-search-section-count">(' . esc_html( number_format_i18n( $count ) ) . ')</span>';
+		}
+
+		echo '</h2>';
+	}
+}
+
+if ( ! function_exists( 'customify_search_group_list_open' ) ) {
+	/**
+	 * Opening `<ul>` tag for one result type section.
+	 *
+	 * The product group keeps the WooCommerce loop classes so the Catalog
+	 * Designer styles apply to its cards; every other group gets the plain cfy
+	 * grid classes - `products` used to leak onto content items when the whole
+	 * listing shared one list element.
+	 *
+	 * Side effect by design: the product group primes the WooCommerce loop
+	 * props here, at the exact point that group opens, because product cards
+	 * read those props and they must exist before the first card.
+	 *
+	 * @param string $type    Post type slug of the group.
+	 * @param int    $columns Grid column count.
+	 *
+	 * @return string
+	 */
+	function customify_search_group_list_open( $type, $columns = 3 ) {
+		$columns = absint( $columns );
+
+		if ( $columns < 1 ) {
+			$columns = 3;
+		}
+
 		$classes = array();
 		$atts    = '';
 
-		if ( $wc ) {
+		if ( 'product' === $type && Customify()->is_woocommerce_active() ) {
 			// `products` + the view mode class let the WooCommerce and Catalog
 			// Designer styles apply to the embedded product cards. A single
 			// column listing uses the native list view so product cards lay out
-			// media-left like the generic cards next to them.
+			// media-left like the generic cards above or below them.
 			$classes[] = 'products';
 			$classes[] = ( $columns > 1 ) ? 'wc-grid-view' : 'wc-list-view';
 
@@ -585,29 +1029,88 @@ if ( ! function_exists( 'customify_search_results_layout' ) ) {
 		} else {
 			$classes[] = 'cfy-search-list';
 		}
+
+		return '<ul class="' . esc_attr( join( ' ', $classes ) ) . '"' . $atts . '>';
+	}
+}
+
+if ( ! function_exists( 'customify_search_results_layout' ) ) {
+	/**
+	 * Render the search results listing.
+	 *
+	 * One pass over the main query - see the swap window note at the top of
+	 * this file before restructuring anything in here.
+	 */
+	function customify_search_results_layout() {
+		// Chrome, before the early return on purpose: a teaser mode search that
+		// only matched products has an empty main query, and "nothing found"
+		// with no pointer to the matching products would be a dead end.
+		customify_search_products_teaser();
+
+		if ( ! have_posts() ) {
+			get_template_part( 'template-parts/content', 'none' );
+
+			return;
+		}
+
 		global $wp_query;
 
-		// The <ul> opens inside the FIRST loop iteration and closes inside the
-		// LAST one, so the whole list element lives inside the main query's
-		// `loop_start` -> `loop_end` window. A page builder swapping that window
-		// (Blocksify Dynamic Templates) then replaces the entire listing; if the
-		// <ul> wrapped the loop from outside, the builder's markup would be
-		// injected INSIDE a grid-styled list element and break its layout.
-		$ul_open = '<ul class="' . esc_attr( join( ' ', $classes ) ) . '"' . $atts . '>';
-		$opened  = false;
+		$columns = customify_search_get_columns();
+
+		// Distinct types on THIS page, in the order the (already grouped)
+		// result list holds them. Reading the fetched posts prints nothing, so
+		// it is safe to do before the loop opens.
+		$page_types = array();
+
+		foreach ( (array) $wp_query->posts as $result ) {
+			$slug = get_post_type( $result );
+
+			if ( $slug && ! in_array( $slug, $page_types, true ) ) {
+				$page_types[] = $slug;
+			}
+		}
+
+		// A single type page keeps the plain one list layout it had before -
+		// section headings only earn their space when there is more than one.
+		$grouped = ( count( $page_types ) > 1 );
+		$counts  = $grouped ? customify_search_get_type_counts( get_search_query( false ) ) : array();
+
+		// Section heading, `<ul>` open and `</ul>` close are all emitted from
+		// inside loop iterations, so the whole listing lives inside the main
+		// query's `loop_start` -> `loop_end` window. A page builder swapping
+		// that window (Blocksify Dynamic Templates) then replaces the entire
+		// listing; markup printed around the loop would survive the swap and
+		// leave the builder output wrapped in a stray grid element.
+		$open_type = null;
 
 		while ( have_posts() ) {
 			the_post();
 
-			if ( ! $opened ) {
-				echo $ul_open; // WPCS: XSS ok.
-				$opened = true;
+			$post = get_post();
+			$type = get_post_type( $post );
+
+			if ( null === $open_type || ( $grouped && $type !== $open_type ) ) {
+				if ( null !== $open_type ) {
+					// Close the group that just ended - still inside the loop.
+					echo '</ul>';
+				}
+
+				if ( $grouped ) {
+					customify_search_section_title( $type, $counts );
+				}
+
+				echo customify_search_group_list_open( $type, $columns ); // WPCS: XSS ok.
+
+				$open_type = $type;
 			}
 
-			customify_search_render_card( get_post() );
+			customify_search_render_card( $post );
 
 			if ( (int) $wp_query->current_post + 1 >= (int) $wp_query->post_count ) {
+				// Last group closes inside the final iteration.
 				echo '</ul>';
+
+				$open_type = null;
 			}
 		}
 
