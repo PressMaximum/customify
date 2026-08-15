@@ -32,7 +32,7 @@
     gap: 0.5em;
     max-width: 560px;
     // Centered: the search chrome reads as one calm, symmetric block.
-    margin: 1.5em auto 1.25em;
+    margin: 1.75em auto 1.5em;
 
     label {
         // The label wraps the field, so it is the element that has to grow.
@@ -62,7 +62,7 @@
 /* Content type tabs - centered chip row
 --------------------------------------------- */
 .cfy-search-tabs {
-    margin: 0 0 2em;
+    margin: 0 0 2.5em;
 
     ul {
         display: flex;
@@ -84,14 +84,17 @@
         display: inline-flex;
         align-items: center;
         padding: 0.35em 1em;
-        border: 1px solid $color_border;
+        // Transparent border in the resting state: chips read as plain text
+        // until interacted with, and the reserved 1px avoids layout shift when
+        // the hover / active border appears.
+        border: 1px solid transparent;
         border-radius: 999px;
         color: $color_text;
         font-size: 0.9375em;
         line-height: 1.6;
         text-decoration: none;
         white-space: nowrap;
-        transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+        transition: color 0.15s ease, border-color 0.15s ease;
 
         &:hover,
         &:focus {
@@ -111,17 +114,16 @@
     }
 
     .is-active {
-        // Primary-container treatment: a tint of the primary carries the
-        // selection without competing with solid-primary CTAs (add to cart).
+        // Selection = the hover border, nothing heavier: outlined chip with
+        // primary text, no fill, so it never competes with solid-primary CTAs.
         > a {
-            border-color: color-mix(in srgb, #{$color_primary} 30%, transparent);
-            background: color-mix(in srgb, #{$color_primary} 11%, transparent);
+            border-color: $color_primary;
             color: $color_primary;
             font-weight: 600;
         }
 
         .cfy-search-tab-count {
-            background: color-mix(in srgb, #{$color_primary} 16%, transparent);
+            background: color-mix(in srgb, #{$color_primary} 14%, transparent);
             color: $color_primary;
         }
     }
