@@ -7,10 +7,13 @@
 * must not be restyled from this file.
 */
 
+// Caption fallback: rendered only when the chip bar is suppressed (single
+// result type), so the total is not lost. Centered to sit under the form.
 .cfy-search-result-count {
-    margin: 0.4em 0 0;
+    margin: 0 0 1.5em;
     font-size: 0.875em;
     color: $color_meta;
+    text-align: center;
 }
 
 .cfy-search-results {
@@ -27,8 +30,9 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
-    max-width: 520px;
-    margin: 1.25em 0;
+    max-width: 560px;
+    // Centered: the search chrome reads as one calm, symmetric block.
+    margin: 1.5em auto 1.25em;
 
     label {
         // The label wraps the field, so it is the element that has to grow.
@@ -55,25 +59,19 @@
     }
 }
 
-/* Content type tabs
+/* Content type tabs - centered chip row
 --------------------------------------------- */
 .cfy-search-tabs {
-    margin: 0 0 1.75em;
-    border-bottom: 1px solid $color_border;
+    margin: 0 0 2em;
 
     ul {
         display: flex;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5em;
         margin: 0;
         padding: 0;
         list-style: none;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            display: none;
-        }
     }
 
     li {
@@ -83,23 +81,28 @@
     }
 
     a {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        padding: 0.65em 1em;
-        border-bottom: 2px solid transparent;
+        padding: 0.35em 1em;
+        border: 1px solid $color_border;
+        border-radius: 999px;
         color: $color_text;
+        font-size: 0.9375em;
+        line-height: 1.6;
         text-decoration: none;
         white-space: nowrap;
+        transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
 
         &:hover,
         &:focus {
-            color: $color_link_hover;
+            border-color: $color_primary;
+            color: $color_primary;
         }
     }
 
     .cfy-search-tab-count {
-        margin-left: 0.5em;
-        padding: 0.2em 0.5em;
+        margin-left: 0.45em;
+        padding: 0.1em 0.55em;
         border-radius: 10em;
         background: $surface_medium;
         color: $color_meta;
@@ -109,13 +112,15 @@
 
     .is-active {
         > a {
-            border-bottom-color: $color_primary;
-            color: $color_primary;
+            border-color: $color_primary;
+            background: $color_primary;
+            color: #fff;
             font-weight: 600;
         }
 
         .cfy-search-tab-count {
-            color: $color_primary;
+            background: rgba(255, 255, 255, 0.22);
+            color: #fff;
         }
     }
 }

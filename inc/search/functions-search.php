@@ -653,7 +653,26 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 		$tabs = apply_filters( 'customify/search/tabs', $tabs, $term );
 
 		if ( ! is_array( $tabs ) || count( $tabs ) < 2 ) {
-			// A lone "All" tab carries no information, skip the whole bar.
+			// A lone tab carries no navigation value, so the bar is skipped.
+			// The chips normally carry the result counts - without them, fall
+			// back to a small caption so the total is not lost entirely.
+			if ( $show_counts && ! empty( $counts ) ) {
+				$shown = ( '' !== $current && isset( $counts[ $current ] ) ) ? (int) $counts[ $current ] : $all_count;
+
+				if ( $shown > 0 ) {
+					printf(
+						'<p class="cfy-search-result-count">%s</p>',
+						esc_html(
+							sprintf(
+								/* translators: %s: number of search results. */
+								_n( '%s result found', '%s results found', $shown, 'customify' ),
+								number_format_i18n( $shown )
+							)
+						)
+					);
+				}
+			}
+
 			return;
 		}
 		?>

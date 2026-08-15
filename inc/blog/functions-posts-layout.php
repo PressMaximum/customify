@@ -43,22 +43,6 @@ if ( ! function_exists( 'customify_blog_posts_heading' ) ) {
 						);
 						?>
 					</h1>
-					<?php
-					if ( Customify()->get_setting( 'search_results_show_counts' ) ) {
-						global $wp_query;
-						$found = isset( $wp_query->found_posts ) ? (int) $wp_query->found_posts : 0;
-						printf(
-							'<p class="cfy-search-result-count">%s</p>',
-							esc_html(
-								sprintf(
-									/* translators: %s: number of search results. */
-									_n( '%s result found', '%s results found', $found, 'customify' ),
-									number_format_i18n( $found )
-								)
-							)
-						);
-					}
-					?>
 				</header>
 				<?php
 			} elseif ( is_archive() ) {
