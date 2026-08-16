@@ -32,7 +32,7 @@
     gap: 0.5em;
     max-width: 560px;
     // Centered: the search chrome reads as one calm, symmetric block.
-    margin: 1.75em auto 1.5em;
+    margin: 2.5em auto 1.5em;
 
     label {
         // The label wraps the field, so it is the element that has to grow.
@@ -62,7 +62,7 @@
 /* Content type tabs - centered chip row
 --------------------------------------------- */
 .cfy-search-tabs {
-    margin: 0 0 2.5em;
+    margin: 0 0 3.25em;
 
     ul {
         display: flex;
