@@ -23,15 +23,21 @@
  *
  * Region takeover
  * ---------------
- * search.php additionally brackets its whole chrome with
+ * A search view additionally brackets its whole chrome with
  * `customify/search/region_start` / `customify/search/region_end`, and
  * customify_search_template_region_swap() offers that pair to Blocksify as a
  * WIDE swap seam. When a Dynamic Template wins a search view the theme's entire
  * search experience is replaced - heading, form, tabs, listing, pagination -
  * because the template IS the experience and theme chrome would only duplicate
- * it. Everything in this file therefore has to keep working under BOTH windows:
- * the wide region one on search.php, and the narrow loop one everywhere else
- * (the WooCommerce scoped search page, and any site without a template).
+ * it.
+ *
+ * The bracket is emitted on BOTH search paths, so the takeover is symmetrical:
+ * search.php prints the actions inline, and a product scoped search
+ * (`?s=…&post_type=product`, routed to woocommerce.php by WooCommerce's template
+ * loader) gets them from customify_search_wc_region_start() / _end() around the
+ * chrome customify_search_wc_heading() injects. Everything in this file
+ * therefore has to keep working under BOTH windows: the wide region one when a
+ * template wins, and the narrow loop one on any site without a template.
  *
  * @package customify
  */
@@ -1364,9 +1370,27 @@ if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 	 * `.content-inner`, not inside a loop grid wrapper, so the injected template
 	 * spans the content edge on its own and needs no neutralizer element.
 	 *
-	 * Never clobbers a seam somebody else already claimed - the WooCommerce
-	 * module widens a product scoped search to its own catalog bracket, and
-	 * first claimant wins.
+	 * Both search paths are claimed
+	 * ---------------------------------------------------------------------
+	 * A search renders through one of two templates, and the region actions are
+	 * emitted on BOTH, so one seam covers both:
+	 *
+	 *   - search.php            - brackets its chrome inline.
+	 *   - woocommerce.php       - a product scoped search
+	 *                             (`?s=…&post_type=product`) is routed there by
+	 *                             WooCommerce's template loader. The chrome is
+	 *                             injected by customify_search_wc_heading() on
+	 *                             `customify/content/before`, so
+	 *                             customify_search_wc_region_start() / _end()
+	 *                             emit the same pair around that injection AND
+	 *                             the WooCommerce content region.
+	 *
+	 * Never clobbers a seam somebody else already claimed - first claimant wins.
+	 * Blocksify's WooCommerce module widens product ARCHIVE views (shop, product
+	 * taxonomy) to its own `woocommerce_before/after_shop_loop` catalog bracket;
+	 * it declines on `is_search()` precisely because that bracket is too narrow
+	 * to reach the theme's search chrome. The two claims are therefore disjoint:
+	 * catalog views are its, search views are ours.
 	 *
 	 * Why the resolved template is checked by STRUCTURE, not by
 	 * customify_search_current_template()
@@ -1374,15 +1398,11 @@ if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 	 * Blocksify applies this filter from its resolver on `wp`, which runs long
 	 * before `template_include` - so the tracker is still empty when we are
 	 * asked, and reading it here would bail on every request. The guarantee is
-	 * enforced by the bracket hooks themselves instead: only search.php fires
-	 * `customify/search/region_start` / `customify/search/region_end`, so the
-	 * wide seam can only ever swap a region search.php actually printed.
-	 *
-	 * The one case that must NOT be claimed is therefore the one where handing
-	 * back these hooks would leave Blocksify with a seam that never fires: a
-	 * product scoped search renders through woocommerce.php, which brackets
-	 * nothing of ours. That view keeps the default loop_start/loop_end swap and
-	 * its injected heading exactly as before.
+	 * enforced by the bracket hooks themselves instead: only a search template
+	 * of ours emits `customify/search/region_start` / `region_end`, so the wide
+	 * seam can only ever swap a region the theme actually printed. If neither
+	 * path emits them the buffer never opens and the swap simply does not
+	 * happen - the request renders untouched rather than breaking.
 	 *
 	 * Publishing no template changes nothing: the filter only runs once a
 	 * template has already won this view, and the two actions stay inert
@@ -1405,14 +1425,6 @@ if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 			return $seam;
 		}
 
-		// Product scoped search: WooCommerce's template loader routes
-		// `is_post_type_archive( 'product' )` to its own template, which never
-		// fires the region actions. Same predicate customify_search_is_wc_scoped()
-		// uses, minus the template check that is not answerable this early.
-		if ( Customify()->is_woocommerce_active() && is_post_type_archive( 'product' ) ) {
-			return $seam;
-		}
-
 		return array(
 			// PHP_INT_MIN / PHP_INT_MAX so anything a child theme or plugin
 			// hangs on the region actions is captured by the same buffer - the
@@ -1424,6 +1436,63 @@ if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
 	}
 }
 add_filter( 'blocksify_tb_classic_archive_swap', 'customify_search_template_region_swap' );
+
+if ( ! function_exists( 'customify_search_wc_region_start' ) ) {
+	/**
+	 * Open the search region bracket on the woocommerce.php path.
+	 *
+	 * search.php prints `customify/search/region_start` inline, but a product
+	 * scoped search never reaches it: WooCommerce's template loader routes
+	 * `is_post_type_archive( 'product' )` to woocommerce.php instead. Without an
+	 * emitter there, a page builder holding the region seam would be handed a
+	 * pair of hooks that never fire on half the search surface - so the theme's
+	 * injected chrome would survive and the winning template would render
+	 * stacked underneath it.
+	 *
+	 * woocommerce.php brackets its whole content region with
+	 * `customify/content/before` -> `customify/content/after`, and the chrome is
+	 * injected on the former at the default priority 10. Emitting at PHP_INT_MIN
+	 * therefore opens the region BEFORE the chrome exists, so a buffer opened
+	 * here captures the chrome, the WooCommerce catalog and anything else on
+	 * those two actions.
+	 *
+	 * Inert with nothing hooked, exactly like the search.php emitter: with no
+	 * template published, this fires an action nobody listens to and the page
+	 * renders byte for byte as before.
+	 *
+	 * @since 0.5.0
+	 */
+	function customify_search_wc_region_start() {
+		if ( ! customify_search_is_wc_scoped() ) {
+			return;
+		}
+
+		/** This action is documented in search.php */
+		do_action( 'customify/search/region_start' );
+	}
+}
+add_action( 'customify/content/before', 'customify_search_wc_region_start', PHP_INT_MIN );
+
+if ( ! function_exists( 'customify_search_wc_region_end' ) ) {
+	/**
+	 * Close the search region bracket on the woocommerce.php path.
+	 *
+	 * Mirror of customify_search_wc_region_start(): PHP_INT_MAX on
+	 * `customify/content/after` so the region closes only once the WooCommerce
+	 * content region and every other content/after callback have printed.
+	 *
+	 * @since 0.5.0
+	 */
+	function customify_search_wc_region_end() {
+		if ( ! customify_search_is_wc_scoped() ) {
+			return;
+		}
+
+		/** This action is documented in search.php */
+		do_action( 'customify/search/region_end' );
+	}
+}
+add_action( 'customify/content/after', 'customify_search_wc_region_end', PHP_INT_MAX );
 
 if ( ! function_exists( 'customify_search_wc_heading' ) ) {
 	/**
