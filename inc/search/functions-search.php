@@ -7,11 +7,6 @@
  * content card for posts / pages / CPTs and the native WooCommerce product
  * card for products - plus a content type tab bar and per type result counts.
  *
- * Sites whose product listings are driven by an external template system can
- * drop product cards from the mixed page entirely (Search Results > "Products
- * in mixed results" = teaser) and link into the product scoped surface
- * instead.
- *
  * Swap window safety
  * ------------------
  * The listing is emitted as ONE pass over the MAIN query. Block based page
@@ -23,9 +18,20 @@
  * from inside an iteration - a group closes at the top of the iteration that
  * starts the next group, and the last group closes inside the final
  * iteration. Never buffer the listing and print it after the loop, and never
- * run a secondary WP_Query inside the listing region. Tabs, heading and the
- * products teaser render before the loop, pagination after it - all outside
- * the swap window.
+ * run a secondary WP_Query inside the listing region. Tabs and heading render
+ * before the loop, pagination after it - all outside the swap window.
+ *
+ * Region takeover
+ * ---------------
+ * search.php additionally brackets its whole chrome with
+ * `customify/search/region_start` / `customify/search/region_end`, and
+ * customify_search_template_region_swap() offers that pair to Blocksify as a
+ * WIDE swap seam. When a Dynamic Template wins a search view the theme's entire
+ * search experience is replaced - heading, form, tabs, listing, pagination -
+ * because the template IS the experience and theme chrome would only duplicate
+ * it. Everything in this file therefore has to keep working under BOTH windows:
+ * the wide region one on search.php, and the narrow loop one everywhere else
+ * (the WooCommerce scoped search page, and any site without a template).
  *
  * @package customify
  */
@@ -238,8 +244,8 @@ if ( ! function_exists( 'customify_search_get_default_scope' ) ) {
 	 * Content type unscoped searches should land on.
 	 *
 	 * Shop first sites want `?s=term` to open the product results directly
-	 * instead of the mixed page with its products teaser - one click less
-	 * between the search box and a product listing.
+	 * instead of the mixed page - one click less between the search box and a
+	 * product listing.
 	 *
 	 * @return string Valid post type slug, empty string when unscoped searches
 	 *                stay on the mixed "Everything" page.
@@ -277,8 +283,8 @@ if ( ! function_exists( 'customify_search_maybe_redirect_to_scope' ) ) {
 	 * same way, and the visitor can see and undo the scope.
 	 *
 	 * Never redirects into an empty surface: when the term has no matches in
-	 * the configured type the mixed page, with its no results block and its
-	 * products teaser, is the better landing.
+	 * the configured type the mixed page, with its no results block, is the
+	 * better landing.
 	 *
 	 * `cfy_all` is the explicit bypass the All tab carries, so clicking "All"
 	 * from a scoped view does not bounce straight back.
@@ -587,13 +593,6 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 
 		$all_count = isset( $counts['all'] ) ? (int) $counts['all'] : 0;
 
-		// In teaser mode the mixed page lists no product cards, so the All tab
-		// counts content only - the Products tab and the teaser banner carry
-		// the product number.
-		if ( customify_search_is_products_teaser() && ! empty( $counts['product'] ) ) {
-			$all_count = max( 0, $all_count - (int) $counts['product'] );
-		}
-
 		$all_args = array( 's' => urlencode( $term ) );
 
 		// With a default scope armed, a bare `?s=term` would be redirected back
@@ -606,9 +605,11 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 
 		$tabs = array();
 
-		// A zero-count All tab (teaser mode, term matching only products) leads
-		// to an empty mixed page - drop it. With one tab left the whole bar is
-		// suppressed below, which is right: nothing to navigate between.
+		// An All tab counting nothing leads to an empty mixed page - drop it.
+		// The total is the sum of the per type counts, so this only happens when
+		// the term matched nothing at all and no type tab follows either: with
+		// fewer than two tabs the whole bar is suppressed below, which is right
+		// - there is nothing to navigate between.
 		if ( $all_count > 0 ) {
 			$tabs[] = array(
 				'key'    => 'all',
@@ -708,155 +709,6 @@ if ( ! function_exists( 'customify_search_tabs' ) ) {
 				?>
 			</ul>
 		</nav>
-		<?php
-	}
-}
-
-if ( ! function_exists( 'customify_search_get_product_display' ) ) {
-	/**
-	 * How products behave in the mixed (unscoped) search listing.
-	 *
-	 * @return string `cards` - render product cards inline, or `teaser` - drop
-	 *                them and link to the product scoped results instead.
-	 */
-	function customify_search_get_product_display() {
-		$mode = Customify()->get_setting( 'search_results_product_display' );
-		$mode = is_string( $mode ) ? sanitize_key( $mode ) : '';
-
-		return ( 'teaser' === $mode ) ? 'teaser' : 'cards';
-	}
-}
-
-if ( ! function_exists( 'customify_search_is_products_teaser' ) ) {
-	/**
-	 * Are products replaced by a teaser link on the mixed search page?
-	 *
-	 * Meaningless without WooCommerce, where the setting simply no-ops.
-	 *
-	 * @return bool
-	 */
-	function customify_search_is_products_teaser() {
-		return ( Customify()->is_woocommerce_active() && 'teaser' === customify_search_get_product_display() );
-	}
-}
-
-if ( ! function_exists( 'customify_search_exclude_products_from_main_query' ) ) {
-	/**
-	 * Drop products from the unscoped main search query in teaser mode.
-	 *
-	 * Sites whose product loops are built by an external template system get a
-	 * design system clash when theme styled product cards sit in the mixed
-	 * listing. Excluding products here keeps the mixed page purely editorial;
-	 * the teaser banner then routes shoppers to the product scoped surface,
-	 * which the owning system still renders.
-	 *
-	 * Scoped searches, feeds, admin and secondary queries are never touched.
-	 *
-	 * @param WP_Query $query Query object.
-	 */
-	function customify_search_exclude_products_from_main_query( $query ) {
-		if ( is_admin() || ! is_a( $query, 'WP_Query' ) ) {
-			return;
-		}
-
-		if ( ! $query->is_main_query() || ! $query->is_search() || $query->is_feed() ) {
-			return;
-		}
-
-		if ( customify_search_query_is_type_scoped( $query ) ) {
-			return;
-		}
-
-		if ( ! customify_search_is_products_teaser() ) {
-			return;
-		}
-
-		// Flag only - the SQL lands in posts_where below. Setting `post_type`
-		// here would make the query LOOK type scoped: template resolvers match
-		// scoped search conditions with `in_array( $type, (array) $qv )`
-		// (Blocksify `query_scoped_to_post_type()`), so a template scoped to
-		// e.g. `search:post` would hijack the unscoped mixed page the moment
-		// the query var carries an array containing `post`.
-		$query->set( 'customify_search_teaser_exclude_products', true );
-	}
-}
-add_action( 'pre_get_posts', 'customify_search_exclude_products_from_main_query' );
-
-if ( ! function_exists( 'customify_search_teaser_posts_where' ) ) {
-	/**
-	 * SQL side of the teaser mode product exclusion.
-	 *
-	 * Runs only for queries flagged by
-	 * customify_search_exclude_products_from_main_query() and filters products
-	 * out at the WHERE level, leaving every public query var untouched.
-	 *
-	 * @param string        $where WHERE clause.
-	 * @param WP_Query|null $query Query object.
-	 *
-	 * @return string
-	 */
-	function customify_search_teaser_posts_where( $where, $query = null ) {
-		if ( ! is_a( $query, 'WP_Query' ) || ! $query->get( 'customify_search_teaser_exclude_products' ) ) {
-			return $where;
-		}
-
-		global $wpdb;
-
-		$where .= $wpdb->prepare( " AND {$wpdb->posts}.post_type <> %s", 'product' );
-
-		return $where;
-	}
-}
-add_filter( 'posts_where', 'customify_search_teaser_posts_where', 10, 2 );
-
-if ( ! function_exists( 'customify_search_products_teaser' ) ) {
-	/**
-	 * Banner linking to the product scoped results, for teaser mode.
-	 *
-	 * Chrome, not listing: it renders before the loop opens, next to the tabs,
-	 * and never from inside the swap window.
-	 */
-	function customify_search_products_teaser() {
-		if ( ! is_search() || '' !== customify_search_get_current_scope() ) {
-			return;
-		}
-
-		if ( ! customify_search_is_products_teaser() ) {
-			return;
-		}
-
-		// The counts helper runs its own per type queries, so it still sees the
-		// products the main query just excluded.
-		$term   = get_search_query( false );
-		$counts = customify_search_get_type_counts( $term );
-		$count  = isset( $counts['product'] ) ? (int) $counts['product'] : 0;
-
-		if ( $count < 1 ) {
-			return;
-		}
-
-		$url = add_query_arg(
-			array(
-				's'         => urlencode( $term ),
-				'post_type' => 'product',
-			),
-			home_url( '/' )
-		);
-		?>
-		<div class="cfy-search-products-teaser">
-			<span class="cfy-search-products-teaser-label">
-				<?php
-				printf(
-					/* translators: %s: number of products matching the search term. */
-					esc_html( _n( '%s product matches your search', '%s products match your search', $count, 'customify' ) ),
-					esc_html( number_format_i18n( $count ) )
-				);
-				?>
-			</span>
-			<a class="cfy-search-products-teaser-link" href="<?php echo esc_url( $url ); ?>">
-				<?php esc_html_e( 'View products', 'customify' ); ?> &rarr;
-			</a>
-		</div>
 		<?php
 	}
 }
@@ -1238,11 +1090,6 @@ if ( ! function_exists( 'customify_search_results_layout' ) ) {
 	 * this file before restructuring anything in here.
 	 */
 	function customify_search_results_layout() {
-		// Chrome, before the early return on purpose: a teaser mode search that
-		// only matched products has an empty main query, and "nothing found"
-		// with no pointer to the matching products would be a dead end.
-		customify_search_products_teaser();
-
 		if ( ! have_posts() ) {
 			get_template_part( 'template-parts/content', 'none' );
 
@@ -1489,6 +1336,94 @@ if ( ! function_exists( 'customify_search_is_wc_scoped' ) ) {
 		return 'search.php' !== basename( customify_search_current_template() );
 	}
 }
+
+if ( ! function_exists( 'customify_search_template_region_swap' ) ) {
+	/**
+	 * Hand the WHOLE search region to a Blocksify Dynamic Template.
+	 *
+	 * Blocksify swaps a classic theme's listing by buffering the main query's
+	 * `loop_start` -> `loop_end` window and echoing the winning template
+	 * instead. On a search page that window is too narrow: the theme's heading,
+	 * results form and tab bar sit OUTSIDE it, so a template designed as a
+	 * complete search experience ends up stacked below a duplicate set of theme
+	 * chrome. A search template IS the whole experience - if the site owner
+	 * built one, the theme has nothing left to contribute.
+	 *
+	 * `blocksify_tb_classic_archive_swap` is Blocksify's seam for exactly this:
+	 * an integration returns a WIDER pair of bracket hooks and the resolver
+	 * buffers between them instead. Contract, mirrored from the WooCommerce
+	 * module (`Blocksify_CL_Woo_Hooks::archive_swap_seam()`):
+	 *
+	 *     array(
+	 *         'open'  => array( <hook>, <priority> ), // ob_start() here
+	 *         'close' => array( <hook>, <priority> ), // discard + echo template
+	 *         'frame' => bool,                        // grid-bleed neutralizer
+	 *     )
+	 *
+	 * `frame` is false here: the region actions fire directly inside
+	 * `.content-inner`, not inside a loop grid wrapper, so the injected template
+	 * spans the content edge on its own and needs no neutralizer element.
+	 *
+	 * Never clobbers a seam somebody else already claimed - the WooCommerce
+	 * module widens a product scoped search to its own catalog bracket, and
+	 * first claimant wins.
+	 *
+	 * Why the resolved template is checked by STRUCTURE, not by
+	 * customify_search_current_template()
+	 * ---------------------------------------------------------------------
+	 * Blocksify applies this filter from its resolver on `wp`, which runs long
+	 * before `template_include` - so the tracker is still empty when we are
+	 * asked, and reading it here would bail on every request. The guarantee is
+	 * enforced by the bracket hooks themselves instead: only search.php fires
+	 * `customify/search/region_start` / `customify/search/region_end`, so the
+	 * wide seam can only ever swap a region search.php actually printed.
+	 *
+	 * The one case that must NOT be claimed is therefore the one where handing
+	 * back these hooks would leave Blocksify with a seam that never fires: a
+	 * product scoped search renders through woocommerce.php, which brackets
+	 * nothing of ours. That view keeps the default loop_start/loop_end swap and
+	 * its injected heading exactly as before.
+	 *
+	 * Publishing no template changes nothing: the filter only runs once a
+	 * template has already won this view, and the two actions stay inert
+	 * markers otherwise.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param mixed $seam Seam claimed so far - null when nothing claimed it.
+	 *
+	 * @return mixed Seam array when the theme's search region should be swapped
+	 *               whole, otherwise the incoming value untouched.
+	 */
+	function customify_search_template_region_swap( $seam ) {
+		// Somebody else owns this view's seam already.
+		if ( ! empty( $seam ) ) {
+			return $seam;
+		}
+
+		if ( ! is_search() ) {
+			return $seam;
+		}
+
+		// Product scoped search: WooCommerce's template loader routes
+		// `is_post_type_archive( 'product' )` to its own template, which never
+		// fires the region actions. Same predicate customify_search_is_wc_scoped()
+		// uses, minus the template check that is not answerable this early.
+		if ( Customify()->is_woocommerce_active() && is_post_type_archive( 'product' ) ) {
+			return $seam;
+		}
+
+		return array(
+			// PHP_INT_MIN / PHP_INT_MAX so anything a child theme or plugin
+			// hangs on the region actions is captured by the same buffer - the
+			// takeover is the whole region or nothing.
+			'open'  => array( 'customify/search/region_start', PHP_INT_MIN ),
+			'close' => array( 'customify/search/region_end', PHP_INT_MAX ),
+			'frame' => false,
+		);
+	}
+}
+add_filter( 'blocksify_tb_classic_archive_swap', 'customify_search_template_region_swap' );
 
 if ( ! function_exists( 'customify_search_wc_heading' ) ) {
 	/**
