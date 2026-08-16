@@ -1,0 +1,315 @@
+/**
+* Search results
+*
+* Mixed listing: generic content cards (posts / pages / CPTs) sitting next to
+* native WooCommerce product cards in the same grid. Only the generic card is
+* styled here - the product card internals belong to the Catalog Designer and
+* must not be restyled from this file.
+*/
+
+// Caption fallback: rendered only when the chip bar is suppressed (single
+// result type), so the total is not lost. Centered to sit under the form.
+.cfy-search-result-count {
+    margin: 0 0 1.5em;
+    font-size: 0.875em;
+    color: $color_meta;
+    text-align: center;
+}
+
+.cfy-search-results {
+    margin-top: 1.5em;
+}
+
+/* On-page search form
+--------------------------------------------- */
+// Layout only: the field and the button keep whatever the theme's form and
+// button styles give them, so skins and the Customizer form settings stay in
+// charge of the look. Logical-property free (flex + gap) so the RTL build needs
+// no flipping.
+.cfy-search-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    max-width: 560px;
+    // Centered: the search chrome reads as one calm, symmetric block.
+    margin: 2.5em auto 1.5em;
+
+    label {
+        // The label wraps the field, so it is the element that has to grow.
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .cfy-search-form-field {
+        width: 100%;
+        margin: 0;
+    }
+
+    .cfy-search-form-submit {
+        flex: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 1em;
+            height: 1em;
+        }
+    }
+}
+
+/* Content type tabs - centered chip row
+--------------------------------------------- */
+.cfy-search-tabs {
+    margin: 0 0 3.25em;
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5em;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        flex: none;
+        margin: 0;
+        list-style: none;
+    }
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.35em 1em;
+        // Transparent border in the resting state: chips read as plain text
+        // until interacted with, and the reserved 1px avoids layout shift when
+        // the hover / active border appears.
+        border: 1px solid transparent;
+        border-radius: 999px;
+        color: $color_text;
+        font-size: 0.9375em;
+        line-height: 1.6;
+        text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.15s ease, border-color 0.15s ease;
+
+        &:hover,
+        &:focus {
+            border-color: $color_border_medium;
+        }
+    }
+
+    .cfy-search-tab-count {
+        margin-left: 0.45em;
+        padding: 0.1em 0.55em;
+        border-radius: 10em;
+        background: $surface_medium;
+        color: $color_meta;
+        font-size: 0.75em;
+        line-height: 1.5;
+    }
+
+    .is-active {
+        // Selection stays neutral: the hover border held plus weight - no
+        // primary anywhere in the chip row, so nothing competes with CTAs.
+        > a {
+            border-color: $color_border_medium;
+            font-weight: 600;
+        }
+    }
+}
+
+/* Products teaser
+--------------------------------------------- */
+// Shown instead of inline product cards when the mixed listing is set to link
+// out to the product scoped results.
+.cfy-search-products-teaser {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4em 1em;
+    margin: 0 0 1.75em;
+    padding: 0.75em 1em;
+    border: 1px solid $color_border;
+    border-radius: 4px;
+
+    .cfy-search-products-teaser-label {
+        color: $color_meta;
+        font-size: 0.9375em;
+    }
+
+    .cfy-search-products-teaser-link {
+        color: $color_primary;
+        font-size: 0.9375em;
+        font-weight: 600;
+        text-decoration: none;
+        white-space: nowrap;
+
+        &:hover,
+        &:focus {
+            text-decoration: underline;
+        }
+    }
+}
+
+/* Type group sections
+--------------------------------------------- */
+.cfy-search-section-title {
+    // Deliberately modest: a section label, not a page heading - it must not
+    // compete with the card titles below it in either grid or list mode.
+    margin: 0 0 1em;
+    padding: 0;
+    font-size: 1.05em;
+    font-weight: 600;
+    line-height: 1.4;
+
+    .cfy-search-section-count {
+        margin-left: 0.35em;
+        color: $color_meta;
+        font-size: 0.9em;
+        font-weight: 400;
+    }
+}
+
+// Only a section that FOLLOWS another group needs separating space; the first
+// one sits flush under the tabs / teaser, which carry their own bottom margin.
+// Grid items already add 2.5em below the previous group.
+.cfy-search-results-grid + .cfy-search-section-title {
+    margin-top: 1.5em;
+}
+
+/* Results grid
+--------------------------------------------- */
+.cfy-search-results-grid {
+    // Gridlex owns the horizontal gutters whenever a `customify-grid-*` class
+    // is present (container negative margin + `customify-col` padding); the
+    // vertical rhythm and the list reset are ours. The WooCommerce `ul.products`
+    // reset does not apply here because a mixed search page has no
+    // `.woocommerce` body class.
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none outside;
+
+    > li {
+        margin: 0 0 2.5em;
+        list-style: none outside;
+    }
+}
+
+/* Generic content card
+--------------------------------------------- */
+.cfy-search-card {
+    display: flex;
+
+    .cfy-search-card-inner {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .cfy-search-card-body {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+}
+
+.cfy-search-card-media {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 1em;
+    border-radius: 4px;
+    background: $surface_subtle;
+    aspect-ratio: 16 / 10;
+
+    img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        object-fit: cover;
+    }
+}
+
+.cfy-search-card-badge {
+    display: inline-block;
+    margin-bottom: 0.5em;
+    color: $color_meta;
+    font-size: 0.6875em;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+.cfy-search-card-title {
+    // Sized close to `.woocommerce-loop-product__title` so mixed rows read as
+    // one grid rather than two different listings.
+    margin: 0 0 0.4em;
+    padding: 0;
+    font-size: 1.1em;
+    line-height: 1.35;
+    word-wrap: break-word;
+}
+
+.cfy-search-card-date {
+    display: block;
+    margin-bottom: 0.5em;
+    color: $color_meta;
+    font-size: 0.8125em;
+}
+
+.cfy-search-card-excerpt {
+    color: $color_meta;
+    font-size: 0.875em;
+
+    p {
+        margin-bottom: 0.5em;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+/* Single column - horizontal rows
+--------------------------------------------- */
+.cfy-search-list {
+    .cfy-search-card-inner {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .cfy-search-card-media {
+        flex: none;
+        width: 220px;
+        margin-bottom: 0;
+        margin-right: 1.5em;
+    }
+
+    @include for_device( mobile ) {
+        .cfy-search-card-inner {
+            flex-direction: column;
+        }
+
+        .cfy-search-card-media {
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 1em;
+        }
+    }
+}
+
+/* No results - popular products
+--------------------------------------------- */
+.cfy-search-no-results-products {
+    margin-top: 2.5em;
+
+    .cfy-search-no-results-title {
+        margin: 0 0 1em;
+        font-size: 1.25em;
+    }
+}

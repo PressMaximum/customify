@@ -41,6 +41,27 @@
 			get_search_form();
 			echo '</div>';
 
+			/**
+			 * Hook: customify/search/no_results_before
+			 *
+			 * Fires before the extra suggestions shown when a search returns
+			 * nothing.
+			 *
+			 * @since 0.5.0
+			 */
+			do_action( 'customify/search/no_results_before' );
+
+			if ( function_exists( 'customify_search_no_results_products' ) ) {
+				customify_search_no_results_products();
+			}
+
+			/**
+			 * Hook: customify/search/no_results_after
+			 *
+			 * @since 0.5.0
+			 */
+			do_action( 'customify/search/no_results_after' );
+
 		else :
 			?>
 

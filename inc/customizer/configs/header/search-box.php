@@ -65,6 +65,21 @@ class Customify_Builder_Item_Search_Box {
 			),
 
 			array(
+				'name'            => $this->section . '_search_scope',
+				'type'            => 'select',
+				'section'         => $this->section,
+				'selector'        => "$selector",
+				'render_callback' => $fn,
+				'title'           => __( 'Search scope', 'customify' ),
+				'description'     => __( 'Limit this search form to a single content type.', 'customify' ),
+				'default'         => '',
+				// Built at Customizer registration time, well after `init`, so
+				// every custom post type is already registered.
+				'choices'         => function_exists( 'customify_search_get_scope_choices' ) ? customify_search_get_scope_choices() : array( '' => __( 'Everything', 'customify' ) ),
+				'priority'        => 12,
+			),
+
+			array(
 				'name'            => $this->section . '_width',
 				'type'            => 'slider',
 				'device_settings' => true,
@@ -282,6 +297,11 @@ class Customify_Builder_Item_Search_Box {
 				 * @since 0.2.8
 				 */
 				do_action( 'customify/builder_item/search-box/html_content/before_input' );
+
+				// Scope the form to a single content type when configured.
+				if ( function_exists( 'customify_search_scope_hidden_input' ) ) {
+					customify_search_scope_hidden_input( $this->id );
+				}
 				?>
 
 				<input type="search" class="search-field" placeholder="<?php echo esc_attr( $placeholder ); ?>" value="<?php echo get_search_query(); ?>" name="s" title="<?php echo esc_attr_x( 'Search for:', 'label', 'customify' ); ?>" />
