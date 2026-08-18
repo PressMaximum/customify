@@ -38,20 +38,6 @@ if ( ! function_exists( 'customify_customizer_search_config' ) ) {
 			),
 
 			array(
-				'name'            => $args['id'] . '_product_display',
-				'type'            => 'select',
-				'section'         => $level_2_panel,
-				'default'         => 'cards',
-				'choices'         => array(
-					'cards'  => __( 'Show product cards', 'customify' ),
-					'teaser' => __( 'Only link to product results', 'customify' ),
-				),
-				'selector'        => $args['selector'],
-				'render_callback' => $args['cb'],
-				'label'           => __( 'Products in mixed results', 'customify' ),
-			),
-
-			array(
 				'name'            => $args['id'] . '_default_scope',
 				'type'            => 'select',
 				'section'         => $level_2_panel,
