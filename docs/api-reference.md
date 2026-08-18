@@ -55,6 +55,7 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 | `customify/customize/register_completed` | action | `(Customify_Customizer $customizer)` — fires after all registration | [`inc/customizer/class-customizer.php:1195`](../inc/customizer/class-customizer.php) |
 | `customify/customizer/panel_groups` | filter | `array` — panel grouping for UI organization | [`inc/customizer/class-customizer.php:1261`](../inc/customizer/class-customizer.php) |
 | `customify/get_styling_config` | filter | `array` — styling field config | [`inc/customizer/class-customizer.php:791`](../inc/customizer/class-customizer.php) |
+| `customify/buttons_forms/button_selector` | filter | `string $selector` — the global Button Styling scope (comma-separated selector list) | [`inc/customizer/configs/buttons-forms.php`](../inc/customizer/configs/buttons-forms.php) `customify_get_button_styling_selectors()` |
 
 ### 2.2 Auto-CSS pipeline
 
@@ -64,6 +65,18 @@ add_filter( 'customify_get_layout', function ( $layout ) {
 | `customify/auto-css` | filter | `string $css` — final assembled CSS before `wp_add_inline_style` | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `render_css()` |
 | `customify/styling/<field>` | filter | `string $css` — append CSS template to a specific field (e.g. `customify/styling/primary-color`) | dynamic — emitted per-field by auto-CSS |
 | `customify/typography/field_uses_vars` | filter | `(bool $uses_vars, array $field)` — **per-field route.** Default is `true` only for the 8 foundation roles in `TYPO_VAR_MAP` (`global_typography_base_p`, `global_typography_base_heading`, `global_typography_heading_h1`…`h6`); leaf-global roles (site title, tagline, widget title) and per-component fields default `false`. Return `false` to force a foundation field through selector-scoped emit, or `true` to opt a non-foundation field into tokens (also requires an SCSS consumer at the matching selector — see [`SPEC-typography.md §6.4`](SPEC-typography.md)). | [`inc/customizer/class-customizer-auto-css.php`](../inc/customizer/class-customizer-auto-css.php) `typography_field_uses_vars()` |
+
+Example — bring a page builder's button class into the global Button Styling
+scope. The scope is an allowlist by design: bare `<button>` elements are only
+matched when they are a submit/reset control, are unclassed, or sit in a form
+with no `type` attribute, so component chrome (galleries, lightboxes, steppers,
+icon toggles) is never repainted. Anything else opts in explicitly:
+
+```php
+add_filter( 'customify/buttons_forms/button_selector', function ( $selector ) {
+    return $selector . ', .elementor-button';
+} );
+```
 
 Example — extend the primary color CSS targets without forking the config file:
 
