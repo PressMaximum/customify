@@ -38,8 +38,15 @@
 // `backend/admin/scss/editor.scss` — the blocks render with the same class
 // names in the editor canvas, so a single source keeps editor/frontend parity.
 
+// `.comments-area` is included so the classic `.comment-list` walker
+// (`base/_comments.scss`) resolves the same tokens as the Comments blocks —
+// one set of values drives the thread indent, guide color and avatar size
+// across both markup paths. The block wrappers still declare the tokens
+// too so a page rendering ONLY the block (no classic walker present) keeps
+// working on its own.
 .wp-block-comments,
-.wp-block-post-comments-form {
+.wp-block-post-comments-form,
+.comments-area {
 	// Gutter between an avatar and the comment body, and between the items of
 	// any flex row inside a comment (author / date / edit link).
 	--customify-comment-gap: 1rem;
@@ -105,83 +112,58 @@
 		margin-top: var(--customify-comment-reply-gap);
 		// `base/_base.scss` `li > ul, li > ol { margin-left: ms(4) }` adds ~42px
 		// here on top of the indent below, at EVERY level. Zeroed so the indent
-		// is exactly what this file declares and nothing else.
+		// is exactly what this file declares and nothing else. The reply's
+		// own `padding-left` (see the `> li` rule below) gives the indent
+		// instead — same shape as classic's `.comment-list .children li.comment
+		// { padding-left: 30px|85px }`.
 		margin-left: 0;
 		margin-bottom: 0;
-		padding-left: var(--customify-comment-indent);
+		padding-left: 0;
 
 		> li + li {
 			margin-top: var(--customify-comment-reply-gap);
 		}
 
-		// Thread line. Drawn down the CENTRE of the parent's avatar, so it reads
-		// as descending from that person rather than as a rule floating in the
-		// margin — a `border-left` on this list would sit on the parent
-		// avatar's left EDGE, alongside it, touching nothing.
+		// Thread line + elbow — SAME pattern as classic `.comment-list .children
+		// li.comment` in `base/_comments.scss`, so a page using block markup
+		// and a page using the walker render an identical thread visual.
 		//
-		// Deliberately no horizontal elbow into each reply: the indent leaves
-		// only ~16px between the line and the reply's own avatar, so a
-		// connector drawn across it collides with the avatar instead of
-		// pointing at it. The reply's avatar sitting just to the right of the
-		// line is enough to read as attached, which is how threaded comment
-		// UIs generally handle it.
-		//
-		// The line is indentation's PARTNER, not its replacement: it is what
-		// lets the indent stay modest on narrow viewports (see the max-sm
-		// block) without the thread losing its structure.
+		// Classic paints `border-left` on the child LI and a horizontal
+		// `::after` elbow reaching to the avatar. We mirror it on the block
+		// LI here — `padding-left` widens the reply row to make room for the
+		// border, `::before` draws the elbow (::after is already reserved by
+		// other rules that might latch onto the LI).
 		> li {
 			position: relative;
+			padding-left: var(--customify-comment-indent);
+			border-left: 1px solid var(--customify-comment-guide);
 
-			// Every reply paints from one reply-gap ABOVE itself down to its
-			// own bottom, so the segments chain into one unbroken line with no
-			// special case for `:first-child`.
-			&::after {
+			// Horizontal elbow — from the border-left out to where the reply's
+			// avatar begins, level with the avatar's vertical centre. Same
+			// visual role as classic's `::after { top: ms(2); left: 0;
+			// width: ms(2); height: 1px }`.
+			&::before {
 				content: "";
 				position: absolute;
-				top: calc(var(--customify-comment-reply-gap) * -1);
-				bottom: 0;
-				left: calc(
-					var(--customify-comment-avatar-size) / 2 -
-						var(--customify-comment-indent)
-				);
-				width: 1px;
+				top: calc(var(--customify-comment-avatar-size) / 2);
+				left: 0;
+				width: calc(var(--customify-comment-indent) / 2);
+				height: 1px;
 				background: var(--customify-comment-guide);
 			}
-
-			// The last reply ends the branch: the line stops level with the
-			// centre of that reply's avatar instead of trailing off past it.
-			&:last-child::after {
-				bottom: auto;
-				height: calc(
-					var(--customify-comment-reply-gap) +
-						var(--customify-comment-avatar-size) / 2
-				);
-			}
 		}
+
 	}
 
-	// Bridge the parent's own comment body, so the line is continuous from the
-	// bottom of the parent's avatar all the way down to the last reply rather
-	// than restarting below the parent's text.
-	//
-	// The reply list's top margin is what separates it from the comment body,
-	// so a segment spanning the body element covers exactly the missing run.
-	// `:first-child` is "whatever the comment renders before its reply list",
-	// which holds for any composition. Browsers without `:has()` just skip this
-	// segment — the thread still reads, it simply starts at the reply list.
-	li.comment:has(> ol) > :first-child {
-		position: relative;
-
-		&::after {
-			content: "";
-			position: absolute;
-			top: calc(var(--customify-comment-avatar-size) + 0.375rem);
-			bottom: 0;
-			left: calc(var(--customify-comment-avatar-size) / 2);
-			width: 1px;
-			background: var(--customify-comment-guide);
-		}
-	}
+	// NOTE: the classic `.comment-list` walker (`base/_comments.scss`) draws
+	// the thread line only on the nested reply itself — one continuous line
+	// down the reply column, starting at the first reply. No bridge segment
+	// spans the parent's own body. Comments-block markup mirrors that here:
+	// the reply guide above is enough, and a bridge rule on the parent's
+	// first-child (previously drawn via `li.comment:has(> ol) > :first-child`)
+	// was overlapping the parent's content when that content is tall (rich
+	// text, lists, tables), leaving a stray vertical line running through the
+	// reading column. Deliberately omitted to keep the two paths in sync.
 }
 
 // Flex rows inside the comments area (the avatar row, the author/date meta
@@ -315,6 +297,43 @@
 		margin: 1em 0;
 		padding-left: 1em;
 		border-left: 2px solid var(--customify-comment-guide);
+	}
+}
+
+// Vertical rhythm INSIDE one Comments-block comment.
+//
+// `_base.scss` sets `p { margin-bottom: ms(1) }` (~22.6px) for article body,
+// and every other block-level element inside comment content sits on a
+// different rhythm — ul/ol at 1em (from the rule above), .table-wrapper at 0,
+// bare <table> at ms(3). A rich comment mixing prose + lists + a table ends
+// up with three visible gap sizes stacked on top of each other, and the table
+// touches the paragraph above it.
+//
+// Normalise to 1em for every direct block-level child, but ONLY inside the
+// Comments-template list-item chain — `.wp-block-comment-template .comment
+// .wp-block-comment-content > *`. Three anchors, no false positives:
+//
+//   • `.wp-block-comment-template` is the OL Core emits for the comments
+//     block itself — never appears on a widget list or an article body.
+//   • `.comment` is the per-item class WP walker gives each LI — narrows to
+//     the Comments block DOM even when a page nests another template inside.
+//   • Direct-child (`>`) — only touches the top level of a comment's own
+//     content wrapper, so a nested list inside the comment keeps its own
+//     margins from the `ul, ol { margin: 1em 0 }` rule above.
+//
+// Article body, widgets, sidebars, and any orphan `.wp-block-comment-content`
+// outside a Comments Template all keep their existing rhythm untouched.
+.wp-block-comment-template .comment .wp-block-comment-content {
+	> p,
+	> ul,
+	> ol,
+	> blockquote,
+	> pre,
+	> figure,
+	> .table-wrapper,
+	> table {
+		margin-top: 0;
+		margin-bottom: 1em;
 	}
 }
 

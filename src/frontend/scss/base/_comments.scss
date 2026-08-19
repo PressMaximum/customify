@@ -45,29 +45,29 @@
 			list-style: decimal;
 		}
 	}
+	// Nested reply indent. Kept in lockstep with the Comments-block equivalent
+	// in `base/_comment-blocks.scss` — same indent token, same border, same
+	// elbow — so a page using this walker and a page using core/comments block
+	// render an identical thread visual. Previously desktop used `padding-left:
+	// 85px` which pushed the reply column so far right that a depth-3 thread
+	// collapsed the reading area, forcing the max-sm branch to zero the indent
+	// on levels 3+ (which broke thread structure on narrow viewports the
+	// moment more than two replies stacked).
 	.children li.comment {
-		padding-left: 30px;
-		@include mq(min-md) {
-			padding-left: 85px;
-			border-left: 1px solid $color_border;
-			position: relative;
-			width: 100%;
-			&:after {
-				content: "";
-				display: block;
-				position: absolute;
-				float: left;
-				top: ms(2);
-				left: 0;
-				width: ms(2);
-				height: 1px;
-				background-color: $color_border;
-			}
-		}
-		@include mq(max-sm) {
-			li.comment li.comment li.comment {
-				padding-left: 0px;
-			}
+		padding-left: var(--customify-comment-indent, 2.5rem);
+		border-left: 1px solid var(--customify-comment-guide, #{$color_border});
+		position: relative;
+		width: 100%;
+
+		&:after {
+			content: "";
+			display: block;
+			position: absolute;
+			top: calc(var(--customify-comment-avatar-size, 48px) / 2);
+			left: 0;
+			width: calc(var(--customify-comment-indent, 2.5rem) / 2);
+			height: 1px;
+			background-color: var(--customify-comment-guide, #{$color_border});
 		}
 	}
 }
