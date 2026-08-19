@@ -1,3 +1,15 @@
+= 0.4.23 =
+* NEW: Redesigned Search Results page with type-aware cards, tabs and on-page search form.
+* NEW: Search Results can be fully replaced by Blocksify Dynamic Templates.
+* NEW: Color pickers can now follow palette tokens so fields update when the palette changes.
+* NEW: Shop archive content spacing control.
+* NEW: Per-page transparent header override.
+* IMPROVED: Global Button Styling no longer leaks into plugin UI controls.
+* IMPROVED: Polished Customizer form controls and search results chrome.
+* FIXED: Core blocks spacing issues (Gallery, Columns, Buttons, Query Loop, etc.).
+* FIXED: Core Comments blocks styling and related discussion elements.
+* FIXED: Various WooCommerce fixes — My Account layout, password toggle, quantity steppers, shop spacing, cart in widget REST.
+
 = 0.4.22 =
 * NEW: Native off-canvas cart drawer for the WooCommerce header cart item.
 * NEW: Contextual Content Area Spacing — per-context top/bottom content padding (blog, archives, singles, CPTs, WooCommerce) under Layouts, inherit-first defaults.
